@@ -2,340 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B23490642
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1BB490643
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238767AbiAQKuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiAQKuj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:50:39 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA264C061574;
-        Mon, 17 Jan 2022 02:50:38 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 65E1A1F42063
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642416637;
-        bh=ptiEFjXjhoBJsX0S13oN/2lvPYOFqtq8gyPRviCgm60=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=FAEGTZraxddVLjoujpmzgnSd9KLr7FjNwLAV+yAVPuClpARIKHBMsOh88ehA+L2wh
-         dHlXJJveXAvt4RLAPcPesyOeKew9lEp/oDUV0pszTBhSMFiER5h8AMZGEHknf3MXQk
-         9VOHG91RQaO2i2UxtGbs3Xgv81febwN8b0fDsv6prWFwpXeui1I9/WMjV1297JlSCB
-         7bzZCVCJtbPgHaWrq9jOZorTTJOR+aB3kC35KYpNa/DDa7Bzk1J/PCfguV3EvJoLu/
-         GF4FVoxZHbBFs4vKcVBW0k8ezmHPmQdEFlt6vVi7sHs7rH681frfna3h58rqpt//BA
-         sGLUXDUSXr8kw==
-Subject: Re: [PATCH 3/3] mmc: mediatek: add support for SDIO eint IRQ
-To:     Axe Yang <axe.yang@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Yong Mao <yong.mao@mediatek.com>
-References: <20220117071220.17330-1-axe.yang@mediatek.com>
- <20220117071220.17330-4-axe.yang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <754779eb-71f9-2083-a204-1d98b4a04a08@collabora.com>
-Date:   Mon, 17 Jan 2022 11:50:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236194AbiAQKvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:51:55 -0500
+Received: from mga02.intel.com ([134.134.136.20]:4116 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231277AbiAQKvy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 05:51:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642416714; x=1673952714;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=36H2drjwpOY4IU2f8ScW/ajOBwnGkRxRYemk8d7v1T4=;
+  b=hBlC6FHk1JtUQwx0MlghSwhlxAAQQFC5B25S8D5KhzCpbLd/ZY3K/OHF
+   ALoudRo1EKdBIRPgsCxPiDF2IpyRa4Svmg6EG3jBNwag74LWH4qRQxpfc
+   5vq2IRBL/qawFuYHM5Bp0iqapaCHuGFx/F/lBqGphjkRLIAbbI8kCCAmU
+   dITOCrYowJcGni1KlPbvxzcAf85Y2EAr1KRo318+1NTpXKWebdF7vuPE6
+   Ojtth4htkZdw/NXMIH4hZ+Px7/9fgdqN51JRPnPgH6IbXZlBy6nYdToCF
+   8D5VHsoShcxY1+lReHadQuODy+2Ouk/dLesL55gZf39GZZIASVR3VGDjB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="231958928"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="231958928"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:51:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="693032267"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 02:51:31 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9Pbm-000BUN-QQ; Mon, 17 Jan 2022 10:51:30 +0000
+Date:   Mon, 17 Jan 2022 18:51:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: ERROR: modpost: "gpmc_omap_get_nand_ops"
+ [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
+Message-ID: <202201171805.5HeoR4rS-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220117071220.17330-4-axe.yang@mediatek.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/01/22 08:12, Axe Yang ha scritto:
-> Add support for eint IRQ when MSDC is used as an SDIO host. This
-> feature requires SDIO device support async IRQ function. With this
-> feature, SDIO host can be awakened by SDIO card in suspend state,
-> without additional pin.
-> 
-> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> resume, switch GPIO function back to DAT1 mode then turn on clock.
-> 
-> Some device tree property should be added or modified in MSDC node
-> to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-> are mandatory. And cap-sdio-async-irq flag is necessary since this
-> feature depends on asynchronous interrupt:
->          &mmcX {
->                  ...
->                  pinctrl-names = "default", "state_uhs", "state_eint",
->                                  "state_dat1";
->                  ...
->                  pinctrl-2 = <&mmc2_pins_eint>;
->                  pinctrl-3 = <&mmc2_pins_dat1>;
->                  ...
->                  cap-sdio-async-irq;
->                  ...
->          };
-> 
-> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-> ---
->   drivers/mmc/host/mtk-sd.c | 125 +++++++++++++++++++++++++++++++++++---
->   1 file changed, 117 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index 65037e1d7723..cbdbcce99fd9 100644
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -1,6 +1,6 @@
->   // SPDX-License-Identifier: GPL-2.0-only
->   /*
-> - * Copyright (c) 2014-2015 MediaTek Inc.
-> + * Copyright (c) 2022 MediaTek Inc.
->    * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
->    */
->   
-> @@ -9,6 +9,7 @@
->   #include <linux/clk.h>
->   #include <linux/delay.h>
->   #include <linux/dma-mapping.h>
-> +#include <linux/gpio/consumer.h>
->   #include <linux/iopoll.h>
->   #include <linux/ioport.h>
->   #include <linux/irq.h>
-> @@ -440,8 +441,12 @@ struct msdc_host {
->   	struct pinctrl *pinctrl;
->   	struct pinctrl_state *pins_default;
->   	struct pinctrl_state *pins_uhs;
-> +	struct pinctrl_state *pins_eint;
-> +	struct pinctrl_state *pins_dat1;
->   	struct delayed_work req_timeout;
->   	int irq;		/* host interrupt */
-> +	int eint_irq;		/* device interrupt */
-> +	int sdio_irq_cnt;	/* irq enable cnt */
->   	struct reset_control *reset;
->   
->   	struct clk *src_clk;	/* msdc source clock */
-> @@ -465,6 +470,7 @@ struct msdc_host {
->   	bool hs400_tuning;	/* hs400 mode online tuning */
->   	bool internal_cd;	/* Use internal card-detect logic */
->   	bool cqhci;		/* support eMMC hw cmdq */
-> +	bool sdio_eint_ready;	/* Ready to support SDIO eint interrupt */
->   	struct msdc_save_para save_para; /* used when gate HCLK */
->   	struct msdc_tune_para def_tune_para; /* default tune setting */
->   	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
-> @@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
->   	__msdc_enable_sdio_irq(host, enb);
->   	spin_unlock_irqrestore(&host->lock, flags);
->   
-> -	if (enb)
-> -		pm_runtime_get_noresume(host->dev);
-> -	else
-> -		pm_runtime_put_noidle(host->dev);
-> +	if (mmc->card && !mmc->card->cccr.enable_async_irq) {
-> +		if (enb)
-> +			pm_runtime_get_noresume(host->dev);
-> +		else
-> +			pm_runtime_put_noidle(host->dev);
-> +	}
->   }
->   
->   static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
-> @@ -2461,6 +2469,50 @@ static const struct mmc_host_ops mt_msdc_ops = {
->   	.hw_reset = msdc_hw_reset,
->   };
->   
-> +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
-> +{
-> +	struct msdc_host *host = dev_id;
-> +	struct mmc_host *mmc = mmc_from_priv(host);
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&host->lock, flags);
-> +	if (likely(host->sdio_irq_cnt > 0)) {
-> +		disable_irq_nosync(host->eint_irq);
-> +		disable_irq_wake(host->eint_irq);
-> +		host->sdio_irq_cnt--;
-> +	}
-> +	spin_unlock_irqrestore(&host->lock, flags);
-> +
-> +	sdio_signal_irq(mmc);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int msdc_request_dat1_eint_irq(struct msdc_host *host)
-> +{
-> +	struct gpio_desc *desc;
-> +	int irq, ret;
-> +
-> +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-> +	if (IS_ERR(desc))
-> +		return PTR_ERR(desc);
-> +
-> +	ret = gpiod_to_irq(desc);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	irq = ret;
-> +	ret = devm_request_threaded_irq(host->dev, irq, NULL, msdc_sdio_eint_irq,
-> +					IRQF_TRIGGER_LOW | IRQF_ONESHOT | IRQF_NO_AUTOEN,
-> +					"sdio-eint", host);
-> +	if (ret)
-> +		return ret;
-> +
-> +	host->eint_irq = irq;
-> +
-> +	return 0;
-> +}
-> +
->   static const struct cqhci_host_ops msdc_cmdq_ops = {
->   	.enable         = msdc_cqe_enable,
->   	.disable        = msdc_cqe_disable,
-> @@ -2631,6 +2683,23 @@ static int msdc_drv_probe(struct platform_device *pdev)
->   		goto host_free;
->   	}
->   
-> +	if (!(mmc->caps2 & MMC_CAP2_NO_SDIO)) {
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0c947b893d69231a9add855939da7c66237ab44f
+commit: dbcb124acebd8148e9e858a231f1798956dd3ca6 mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
+date:   4 weeks ago
+config: arm64-randconfig-r001-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171805.5HeoR4rS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dbcb124acebd8148e9e858a231f1798956dd3ca6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dbcb124acebd8148e9e858a231f1798956dd3ca6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Please, also check for the async irq capability here:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-if (!(mmc->caps2 & MMC_CAP2_NO_SDIO) && (mmc->caps2 & MMC_CAP2_SDIO_ASYNC_IRQ)) {
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-...because if we have "state_eint" specified in DT, but we didn't *also* specify
-cap-sdio-async-irq, then clearly we don't want to use this functionality - hence
-it becomes useless to register the interrupt handler for that because we're never
-enabling the CCCR_INTERRUPT_EXT on the card (from drivers/mmc/core/host.c).
+>> ERROR: modpost: "gpmc_omap_get_nand_ops" [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
 
-Regards,
-Angelo
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP_GPMC
+   Depends on MEMORY && OF_ADDRESS
+   Selected by
+   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST && HAS_IOMEM && ARCH_K3
 
-> +		/* Support for SDIO eint irq */
-> +		host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
-> +		if (IS_ERR(host->pins_eint)) {
-> +			dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
-> +		} else {
-> +			host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
-> +			if (IS_ERR(host->pins_dat1)) {
-> +				ret = dev_err_probe(&pdev->dev, PTR_ERR(host->pins_dat1),
-> +						    "Cannot find pinctrl dat1!\n");
-> +				goto host_free;
-> +			}
-> +
-> +			host->sdio_eint_ready = true;
-> +		}
-> +	}
-> +
->   	msdc_of_property_parse(pdev, host);
->   
->   	host->dev = &pdev->dev;
-> @@ -2722,6 +2791,16 @@ static int msdc_drv_probe(struct platform_device *pdev)
->   	if (ret)
->   		goto release;
->   
-> +	if (host->sdio_eint_ready) {
-> +		ret = msdc_request_dat1_eint_irq(host);
-> +		if (ret) {
-> +			dev_err(host->dev, "Failed to register data1 eint irq!\n");
-> +			goto release;
-> +		}
-> +
-> +		pinctrl_select_state(host->pinctrl, host->pins_dat1);
-> +	}
-> +
->   	pm_runtime_set_active(host->dev);
->   	pm_runtime_set_autosuspend_delay(host->dev, MTK_MMC_AUTOSUSPEND_DELAY);
->   	pm_runtime_use_autosuspend(host->dev);
-> @@ -2841,16 +2920,31 @@ static void msdc_restore_reg(struct msdc_host *host)
->   
->   static int __maybe_unused msdc_runtime_suspend(struct device *dev)
->   {
-> +	unsigned long flags;
->   	struct mmc_host *mmc = dev_get_drvdata(dev);
->   	struct msdc_host *host = mmc_priv(mmc);
->   
->   	msdc_save_reg(host);
-> +
-> +	if (host->sdio_eint_ready) {
-> +		disable_irq(host->irq);
-> +		pinctrl_select_state(host->pinctrl, host->pins_eint);
-> +		spin_lock_irqsave(&host->lock, flags);
-> +		if (host->sdio_irq_cnt == 0) {
-> +			enable_irq(host->eint_irq);
-> +			enable_irq_wake(host->eint_irq);
-> +			host->sdio_irq_cnt++;
-> +		}
-> +		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-> +		spin_unlock_irqrestore(&host->lock, flags);
-> +	}
->   	msdc_gate_clock(host);
->   	return 0;
->   }
->   
->   static int __maybe_unused msdc_runtime_resume(struct device *dev)
->   {
-> +	unsigned long flags;
->   	struct mmc_host *mmc = dev_get_drvdata(dev);
->   	struct msdc_host *host = mmc_priv(mmc);
->   	int ret;
-> @@ -2860,10 +2954,25 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
->   		return ret;
->   
->   	msdc_restore_reg(host);
-> +
-> +	if (host->sdio_eint_ready) {
-> +		spin_lock_irqsave(&host->lock, flags);
-> +		if (host->sdio_irq_cnt > 0) {
-> +			disable_irq_nosync(host->eint_irq);
-> +			disable_irq_wake(host->eint_irq);
-> +			host->sdio_irq_cnt--;
-> +			sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-> +		} else {
-> +			sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INTEN_SDIOIRQ);
-> +		}
-> +		spin_unlock_irqrestore(&host->lock, flags);
-> +		pinctrl_select_state(host->pinctrl, host->pins_uhs);
-> +		enable_irq(host->irq);
-> +	}
->   	return 0;
->   }
->   
-> -static int __maybe_unused msdc_suspend(struct device *dev)
-> +static int __maybe_unused msdc_suspend_noirq(struct device *dev)
->   {
->   	struct mmc_host *mmc = dev_get_drvdata(dev);
->   	int ret;
-> @@ -2877,13 +2986,13 @@ static int __maybe_unused msdc_suspend(struct device *dev)
->   	return pm_runtime_force_suspend(dev);
->   }
->   
-> -static int __maybe_unused msdc_resume(struct device *dev)
-> +static int __maybe_unused msdc_resume_noirq(struct device *dev)
->   {
->   	return pm_runtime_force_resume(dev);
->   }
->   
->   static const struct dev_pm_ops msdc_dev_pm_ops = {
-> -	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq, msdc_resume_noirq)
->   	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume, NULL)
->   };
->   
-> 
-
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

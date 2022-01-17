@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC62C490C48
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B81490C4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240945AbiAQQNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S240951AbiAQQNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240920AbiAQQNb (ORCPT
+        with ESMTP id S240935AbiAQQNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:13:31 -0500
+        Mon, 17 Jan 2022 11:13:33 -0500
 Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54559C06173F;
-        Mon, 17 Jan 2022 08:13:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3595C061574;
+        Mon, 17 Jan 2022 08:13:32 -0800 (PST)
 Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jcxls3bzRzQkh2;
-        Mon, 17 Jan 2022 17:13:29 +0100 (CET)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jcxlt1PXKzQkjD;
+        Mon, 17 Jan 2022 17:13:30 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1642436007;
+        t=1642436008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TLpQq05ojJBubdnMnqxCtN2iVnQY5tMp3JI97HMSq1o=;
-        b=ElkNY3tDtG5g/CDiNellX8CP8G14hnTB/UCfUbe2O8AHe+QFbRI70ZKZfiMFTMx49TDimM
-        dLJNBQR7GDeg0N05kj2XIScFqADb2n5PItC/0bJKmkmhdfd33L+hTIS48tn5M4XKdcersM
-        1MHsGrLfTNhbL4kGxCpeoj+NfMxG57fnXjUYxkUhXWxirH1CO80Y5oK9S/ZTOR49yQJiGu
-        jVpyMBVCreKm3/WLVsqpAf5naUQRXd0YZadpdpVVNsWRRjzrdMq0ygIYczZHgxAik2aifS
-        HEdXidxp6YIWW97cFNMJBrL9S2zEVdswR+k5+Sar51WVQUM7ouCe9s5R8RbecA==
+        bh=5bVOXCL2pZNunkAFXt1lXg86764+54YuO1hqIIS1yLY=;
+        b=1ivOzRS/ndOFvUhV3eT53xTajKVkINaGrlRRubrtttZXI58xzF5xJ1MjDpBD8tfPQtHMfr
+        JRE/9oQJHDxKfiu5fM0dZDbZXlyVVPTtzPYo+UV3G1TJ2hKQU1OLvQn+R5G3Q744hUlxzl
+        WKdYtXtb+ZhsxhIWY57guW+sr2xmJHtXlD21kes7O5PJ0pv8bFtl2BDk3o+yWsznOxTGPx
+        Rikf+wMFWPOXW5zVidDu/mlx7feh88ot+MIL75mXjGN9kdivlaOeqr00c8TzZ/PgPWcdn9
+        vO+elHfDT4E3aUEhp8qORQiqBZRwBtbgBdlr/qqm11UHvYNCx24QJP/lvD3z9A==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/4] dt-bindings: hwmon/pmbus: Add vicor,bcm6123 Bus Converter
-Date:   Mon, 17 Jan 2022 17:12:48 +0100
-Message-Id: <ba6346942dfed14440e0243a6da510581389fbdd.1642434222.git.sylv@sylv.io>
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 3/4] pmbus: remove trailing whitespaces
+Date:   Mon, 17 Jan 2022 17:12:49 +0100
+Message-Id: <c984b88b136a1cde16ce52c5f818886653b0f84a.1642434222.git.sylv@sylv.io>
 In-Reply-To: <cover.1642434222.git.sylv@sylv.io>
 References: <cover.1642434222.git.sylv@sylv.io>
 MIME-Version: 1.0
@@ -52,61 +50,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for BCM6123 Bus Converter from Vicor Corporation.
+Fix checkpatch issues by removing trailing whitespaces in Kconfig.
 
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 ---
- .../bindings/hwmon/pmbus/vicor,bcm6123.yaml   | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
+ drivers/hwmon/pmbus/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
-new file mode 100644
-index 000000000000..5559d22e00f1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/pmbus/vicor,bcm6123.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Vicor Corporation BCM6123 Bus Converter
-+
-+description: |
-+  The BCM6123 is an isolated Fixed-Ratio DC-DC Converter,
-+  operating from a 260V to 410V primary bus to deliver an unregulated
-+  ratiometric secondary voltage.
-+
-+  Datasheet: https://www.vicorpower.com/documents/datasheets/ds_BCM6123xD1E5135yzz.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - vicor,bcm6123
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        bcm6123@5f {
-+            compatible = "vicor,bcm6123";
-+            reg = <0x5f>;
-+        };
-+    };
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 41f6cbf96d3b..c96f7b7338bd 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -189,8 +189,8 @@ config SENSORS_LTC2978_REGULATOR
+ 	depends on SENSORS_LTC2978 && REGULATOR
+ 	help
+ 	  If you say yes here you get regulator support for Linear Technology
+-	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880, 
+-	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686, 
++	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880,
++	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686,
+ 	  and LTM4700.
+ 
+ config SENSORS_LTC3815
 -- 
 2.33.1
 

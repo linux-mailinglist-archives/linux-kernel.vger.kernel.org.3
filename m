@@ -2,66 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CFC490008
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1249F49000C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbiAQBkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 20:40:31 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16713 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiAQBka (ORCPT
+        id S234040AbiAQBpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 20:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233996AbiAQBpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 20:40:30 -0500
-Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JcZJG1SYXzZdwP;
-        Mon, 17 Jan 2022 09:36:46 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 09:40:28 +0800
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 09:40:27 +0800
-Subject: Re: [PATCH v6 15/15] ubi: fastmap: Fix high cpu usage of ubi_bgt by
- making sure wl_pool not empty
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
-        <s.hauer@pengutronix.de>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20211227032246.2886878-1-chengzhihao1@huawei.com>
- <20211227032246.2886878-16-chengzhihao1@huawei.com>
-Message-ID: <e37980e5-962a-1223-cd46-b793a2caac6c@huawei.com>
-Date:   Mon, 17 Jan 2022 09:40:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Sun, 16 Jan 2022 20:45:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA58C061574;
+        Sun, 16 Jan 2022 17:45:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F94461035;
+        Mon, 17 Jan 2022 01:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 405A5C36AE3;
+        Mon, 17 Jan 2022 01:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642383911;
+        bh=DJAEq4o1jXgP9EWCpcvSu2ghyXyiKdYLzoB1nCwGiNw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B6iRZheW5ytv+6Z642c0d4i1vOORubSMquzUJ45cnPwMnEhia6oFVmANU/B3onUeZ
+         HXEjSx+phfmMKyd51FQTXRWz2l4o+7N59s/lpofv/8Azdg8KZX62mbiwtcWIrOa1AW
+         hP7nZbF27g2ihbOAkRCq+3/l4tfW5CXSFgKyp3ZLiNkvDy86ISmDgie4/EPLdxmU8Q
+         CSwSV/uqJA6Xn6wQI3I1CRgYILSmmG4XhI3LpLIkfWX5PvMqQ1TmOQfOyq70dpWVgb
+         /NCfWYuHk65IZ5jCLh1JZ8bLqgC6RqS+G+iqgpoMuk/2s06/RP0qlJWvdFgrJ00TMl
+         caxUKCjIGIrlg==
+Date:   Mon, 17 Jan 2022 03:44:59 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tadeusz Struk <tstruk@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
+ noneexisting handle
+Message-ID: <YeTKG3qPxm2DJGCN@iki.fi>
+References: <20220116012627.2031-1-tstruk@gmail.com>
+ <20220116012627.2031-2-tstruk@gmail.com>
+ <YeQs7Fy5NaK6m6Ar@iki.fi>
+ <YeR6Z9a4Z3Xz79Tp@iki.fi>
+ <070044a5-5468-1095-334f-67cf98eb30b3@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211227032246.2886878-16-chengzhihao1@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <070044a5-5468-1095-334f-67cf98eb30b3@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
-> Fix it by:
->    1) Adding 2 PEBs reserved for fm_anchor and fm_next_anchor.
->    2) Abandoning filling wl_pool until free count belows beb_rsvd_pebs.
-> Then, there are at least 2(EBA_RESERVED_PEBS + MIN_FASTMAP_RESERVED_PEBS -
-> MIN_FASTMAP_TAKEN_PEBS[1]) PEBs in pool and 1(WL_RESERVED_PEBS) PEB in
-> wl_pool after calling ubi_refill_pools() with all erase works done.
+On Sun, Jan 16, 2022 at 02:43:32PM -0800, Tadeusz Struk wrote:
+> On 1/16/22 12:04, Jarkko Sakkinen wrote:
+> > $ b4 am20220116012627.2031-2-tstruk@gmail.com
+> > Looking uphttps://lore.kernel.org/r/20220116012627.2031-2-tstruk%40gmail.com
+> > Grabbing thread from lore.kernel.org/all/20220116012627.2031-2-tstruk%40gmail.com/t.mbox.gz
+> > Analyzing 4 messages in the thread
+> > Will use the latest revision: v4
+> > You can pick other revisions using the -vN flag
+> > Checking attestation on all messages, may take a moment...
+> > ---
+> >    ✓ [PATCH v4 1/2] tpm: Fix error handling in async work
+> >      ✓ Signed: DKIM/gmail.com
+> >      + Reviewed-by: Jarkko Sakkinen<jarkko@kernel.org>  (✓ DKIM/kernel.org)
+> >    ERROR: missing [2/2]!
+> > ---
+> > Total patches: 1
+> > ---
+> > WARNING: Thread incomplete!
+> >   Link:https://lore.kernel.org/r/20220116012627.2031-1-tstruk@gmail.com
+> >   Base: applies clean to current tree
+> >         git am ./v4_20220115_tstruk_tpm_fix_error_handling_in_async_work.mbx
+> > 
+> > The patch set is broken. It has patches from two different patch sets.
+> > 
+> > I saved the 2nd patch from my email client.
 > 
-> This modification will cause a compatibility problem with old UBI image.
-> If UBI volumes take the maximun number of PEBs for one certain UBI device,
-> there are no available PEBs to satisfy 2 new reserved PEBs, bad reserved
-> PEBs are taken firstly, if still not enough, ENOSPC will returned from ubi
-> initialization.
+> I'm not sure why it doesn't like it. They both are generated with the same
+> git format-patch command. If you look at the source, the first one is:
 > 
-Can you come up with a better solution that can be compatible with old 
-images? In other words, can we solve this problem not by adding new 
-reserved PEBs?
+> Message-Id: <20220116012627.2031-1-tstruk@gmail.com>
+> 
+> and the second is:
+> 
+> Message-Id: <20220116012627.2031-2-tstruk@gmail.com>
+> 
+> and contains:
+> 
+> In-Reply-To: <20220116012627.2031-1-tstruk@gmail.com>
+> References: <20220116012627.2031-1-tstruk@gmail.com>
+> 
+> Maybe it doesn't like the fact that the first in v4 and the second in v3?
+> Do you need me to do anything else to get that applied?
+> 
+> --
+> Thanks,
+> Tadeusz
+
+NP, Both are applied now.
+
+BR, Jarkko

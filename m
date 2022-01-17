@@ -2,133 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669E64900B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 05:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EF64900B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 05:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiAQEJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 23:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S237038AbiAQEJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 23:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234170AbiAQEJJ (ORCPT
+        with ESMTP id S234170AbiAQEJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 23:09:09 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B75CC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:09:09 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j7so11704687edr.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:09:09 -0800 (PST)
+        Sun, 16 Jan 2022 23:09:43 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A7DC061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:09:42 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id y4so28244890uad.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:09:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0WB+LgnJSS3hnM17Xj+1ne0yeZq89g0wCwK7AtuIg40=;
-        b=V22sKlKs4nxuYvo8EFX2si4W+sV8vMlB9WO7CrX/ZSxO9ZYXOMbjYwgkBxukaadWQB
-         kOeMifpfd9dSnAwlULPWuCzNnobPdeXjLIydPcX1o4VoqY27zYB6EkCeA8sOXXJuJmdY
-         I/HMjFqM2ZyfIYQrlo1GtOH5hYse0GsQhYFTY=
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZmmkS3q8ZkXEFM/EfahUjYOnFrF8f8Sbt6FKWsNonmM=;
+        b=CBkXYlkHam9W5jNovje/cCHa4ISIYJRBd//Z+sGOHZXu26YSjLN61ge/FaMsKuqPA0
+         8/I8Q6gOUHHxkCq9FVusyMiZgvIbM9QfTA4z1gBKvnM989qDdOjwbdnFQaw6aib06TfD
+         yBpr5NQlRbV5IBGKYf7z0hL2fTifWAzfRBdbXKvVmBUPFfI7VOveJS+q0R9cHz2GiBXE
+         QMBDXlUHa6g2qZS77tZVgCT0tDDz3SOFxJTZKEltgOMFLfb1bmjRhAwpkEgr0GpKHEnm
+         dxuOToZUFrW5CQz4EOioJ3pGybxJb0v5GufR/xbDcATxSTKj5CYcq1IGy1XjEKjDO9Tu
+         +liQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0WB+LgnJSS3hnM17Xj+1ne0yeZq89g0wCwK7AtuIg40=;
-        b=lPZtYjjZTbSAna16oGZVF+EDjXvcbVb8llmfMLaeV3fBPnc00fDR6+t1PgJJv93DA/
-         QFgnseD9NiYN7Q9VdTNIc6edtLaoikLBaEZVcoyfS02VOQhWAu0MJu5EN25FShPyOlxQ
-         F1LiOTFbJJhjqOVNeV/HR8u1RgYdsbzWHZ60y0M6uBBI689guUMUeTNuovK+eaqWyQ01
-         8L1T32iBuxvgf/aQBXuj+mSLRPX4mYkSOxH+FHaYjbgcgPhRXJ0fbkP+Dw1/w5+g4IH3
-         bodwUwumFtfs9U16fLN9eHK5up6ZNAybPx25JHKD9kmNjnXb2XD7PluMebb2iNom8QDq
-         jqBg==
-X-Gm-Message-State: AOAM532TDFfZJuE3vdISIaJA7zUhn0TtizKQpeNR1WbGoMGv5+ceYxIO
-        Iql5Iannuz40bipRLw3Xn/LQR1mhR1Vw2S6g
-X-Google-Smtp-Source: ABdhPJxHBGt0lW/7W29eYXgSiSYWKETfSYC2zhPh16JMw7KNLpDnz+nY+rV1PrfssUriC/qAoVH4Og==
-X-Received: by 2002:a17:907:a414:: with SMTP id sg20mr15122623ejc.42.1642392547721;
-        Sun, 16 Jan 2022 20:09:07 -0800 (PST)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id ju16sm6974ejc.197.2022.01.16.20.09.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 20:09:06 -0800 (PST)
-Received: by mail-wm1-f41.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso20665116wmj.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:09:06 -0800 (PST)
-X-Received: by 2002:a5d:6951:: with SMTP id r17mr17035192wrw.274.1642392545859;
- Sun, 16 Jan 2022 20:09:05 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ZmmkS3q8ZkXEFM/EfahUjYOnFrF8f8Sbt6FKWsNonmM=;
+        b=L+pV5BaY+teFM0zIH61pbdVOhwgr1PlOABIgkl8AWI6jTM25oaA2W8zH6RyeWGh93t
+         YCljHdD0Qtv76m2yhwZ9+r2Rr3UbIDoXufUHaDTaiKQsL9129sjeA9Sw+ogQS0i+P1Yj
+         SIZn+sH9js+tBl1b4amfeqdvnzJu0kLKRRW5I1dYDSMU3gdJASlnTWsfHoVPV2aUpPKf
+         rB8GClbRnKRkTtEJW59COf29/MbHEfBcNBj4tLUyVOf5VoE54Z1GrmPE02v0nvDzclM/
+         Icj3uMKbcoVuW9fSQU03y5bjG5i4MA03ZS+XeeM0EWMUAIa1qNHzFvGMuPLZ7EVjdDlB
+         J8Gw==
+X-Gm-Message-State: AOAM532P1sVfqG739FQ1beFWnd5UfJmwlCCxfy/2xueqZ+dLPZyGdsbl
+        nKCFdvVFBwMU3g4ZH7xLrCA=
+X-Google-Smtp-Source: ABdhPJxe+snmvv0fxYJqzx5jT9nGR2K5zVmSV0xqGaj5QsWFwqijOndsPTwAeVCOa5C7AkbEOKB3TA==
+X-Received: by 2002:a05:6102:cc7:: with SMTP id g7mr5891753vst.37.1642392581744;
+        Sun, 16 Jan 2022 20:09:41 -0800 (PST)
+Received: from kubuntu-desktop.. ([67.8.38.84])
+        by smtp.gmail.com with ESMTPSA id 188sm2117451vkb.24.2022.01.16.20.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 20:09:41 -0800 (PST)
+Sender: Julian Braha <julian.braha@gmail.com>
+From:   Julian Braha <julianbraha@gmail.com>
+To:     patches@armlinux.org.uk, arnd@arndb.de, linus.walleij@linaro.org,
+        geert+renesas@glider.be, mark.rutland@arm.com,
+        akpm@linux-foundation.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fazilyildiran@gmail.com
+Subject: [PATCH v2 RESEND] ARM: fix unmet dependency on BITREVERSE for HAVE_ARCH_BITREVERSE
+Date:   Sun, 16 Jan 2022 23:09:40 -0500
+Message-Id: <20220117040940.59557-1-julianbraha@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <878rvhlvh2.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <878rvhlvh2.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 17 Jan 2022 06:08:49 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wgS865kHU=4NO=AvK07fcK7M6C6EYGdk80R1tkPKTLyhQ@mail.gmail.com>
-Message-ID: <CAHk-=wgS865kHU=4NO=AvK07fcK7M6C6EYGdk80R1tkPKTLyhQ@mail.gmail.com>
-Subject: Re: [GIT PULL] signal/exit/ptrace changes for v5.17
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 2:00 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> I am currently investigating to figure out if wake_up_interruptible
-> (instead of simply wake_up) ever makes sense outside of the signal code.
+Resending this to properly add it to the patch tracker - thanks for letting
+me know, Arnd :)
 
-It may not be a huge deal, but it *absolutely* makes sense.
+When ARM is enabled, and BITREVERSE is disabled,
+Kbuild gives the following warning:
 
-Any subsystem that uses "wait_event_interruptible()" (or variations of
-that) should by default only use "wake_up_interruptible()" to wake the
-wait queue.
+WARNING: unmet direct dependencies detected for HAVE_ARCH_BITREVERSE
+  Depends on [n]: BITREVERSE [=n]
+  Selected by [y]:
+  - ARM [=y] && (CPU_32v7M [=n] || CPU_32v7 [=y]) && !CPU_32v6 [=n]
 
-The reason? Being (interruptibly) on one wait-queue does *NOT* make it
-impossible that the very same process isn't waiting non-interruptibly
-on another one.
+This is because ARM selects HAVE_ARCH_BITREVERSE
+without selecting BITREVERSE, despite
+HAVE_ARCH_BITREVERSE depending on BITREVERSE.
 
-It's not hugely common, but the Linux kernel wait-queues have very
-much been designed for the whole "one process can be on multiple wait
-queues for different reasons at the same time" model. That is *very*
-core.
+This unmet dependency bug was found by Kismet,
+a static analysis tool for Kconfig. Please advise if this
+is not the appropriate solution.
 
-People sometimes think that is just a "poll/select()" thing, but
-that's not at all true. It's quite valid to do things like
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
+---
+v2:
+Changed this fix to remove the dependency on BITREVERSE from
+HAVE_ARCH_BITREVERSE, since it isn't actually necessary.
 
-        add_wait_queue(..)
-        for (.. some loop ..) {
-                set_current_state(TASK_INTERRUPTIBLE);
-                ... do various things, checking state etc ..
-               schedule();
-        }
-        set_current_state(TASK_RUNNABLE);
-        remove_wait_queue();
+v1 link:
+https://lore.kernel.org/linux-arm-kernel/20211029203110.8343-1-julianbraha@gmail.com/
 
-and part of that "do various things" is obviously checking for signals
-and other "exit this wait loop", but other things can be things like
-taking a page fault because you copied data from user space etc.
+KernelVersion: v5.16-rc5
 
-And that in turn may end up having a nested wait on another waitqueue
-(for the IO), and the outer wait queue should basically strive to not
-wake up unrelated "deeper" sleeps, because that is pointless and just
-causes extra wakeups.
+ lib/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-So the page fault event will cause a nested TASK_UNINTERRUPTIBLE
-sleep, and when that IO has completed, it goes into TASK_RUNNABLE, so
-the outer (interruptible) loop above will have a "dummy schedule()"
-and loop around again to be put back into TASK_INTERRUPTIBLE sleep
-next time around.
-
-But note how it would be pointless to use a "wake_up()" on this outer
-wait queue - it would wake up the deeper IO sleep too, and that would
-just see "oh, the IO I'm waiting for hasn't completed, so I'll just
-have to go to sleep again".
-
-Would it still _work_? Yes. Is the above _common_? No. But it's a
-really fundamnetal pattern in the kernel, and it's fundamentally how
-wait queues work, and how they should work, and an interruptible sleep
-should generally be seen as pairing with an interruptible wake,
-because that's just how things are.
-
-Why would you want to change something basic like that? Yes, using
-"wake_up()" instead of "wake_up_interruptible()" would still result in
-a working kernel, but it's just _pointless_.
-
-             Linus
+diff --git a/lib/Kconfig b/lib/Kconfig
+index c80fde816a7e..9b5a692ce00c 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -45,7 +45,6 @@ config BITREVERSE
+ config HAVE_ARCH_BITREVERSE
+ 	bool
+ 	default n
+-	depends on BITREVERSE
+ 	help
+ 	  This option enables the use of hardware bit-reversal instructions on
+ 	  architectures which support such operations.
+--
+2.32.0

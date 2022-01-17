@@ -2,123 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A203490BA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6027490BAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240585AbiAQPmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237263AbiAQPmc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:42:32 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2134AC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:42:32 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id n8so8444644plc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:42:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BtOfUVwTLdIOXT8a0g5ckSpi7c+ofEftPzF8DVvjq7w=;
-        b=DSj3EgDScSimidVnItWhtOJzPUaZYBJzmUix6/8XulxD9eh7oQ92ArhOGtIA+dm+Ii
-         W1jMtwbG1VSSajJDNgj0TX7eeprVE6JObDSFVX+T2cFloG0XgLYVOVbbi0iNrWsJcWpg
-         FDj83SQW5k1fff003y6ytsL6Zlqfv0aj/yq4g1aS5iSfx5R4RYxNInCcqfO/3vJuzhsX
-         eVMHbV97c2I/CQmrbKnE5FnALpzl/VxqKR+2Kacp2IYF3WxIv0uikbYRoMqeHR6XHjyD
-         1K/VrhxKdBY0QjB/kacXlJwBsgX+v4zVz21wU+hQV74M63c/d+TjlBxdWrP08+4DNELS
-         uB6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BtOfUVwTLdIOXT8a0g5ckSpi7c+ofEftPzF8DVvjq7w=;
-        b=NWb5/KW6gAhDc6SC3aL7AMMGjw57JxsqOWDiudX4iJ4uEYAiEcmVQGWcgkCNuTUEty
-         PhL66CZt/scHmVfJo/adIXraKDwLC5P18fhEFR6nZLGa4HC5+SbgRKLiIDbFjKECcaAG
-         pqqec0DBOu60cl6OFKdH01gGOKYidTYWPPwV+jlj6beCfGPkHuFk8DGwXwHe+HvpgEgQ
-         3WcoQb5N+7SlZ82r8HivXwV4lMFxms6IRIggA8YCBqxlydDDq1ihfMJPFgkez+Nw1p8a
-         c9tNOrQs1yaSlqyIZVUd+VBGvpWZIIPQ38kdSgozyembZfcuuHsk/hB67uUPNJ6sWBNl
-         pvjA==
-X-Gm-Message-State: AOAM532UVJvb7NZ4erMArrZcjjeI3kGfc9VbQePTMV6mvZ8sgodkWK4E
-        9S7kdu2ASynJShhfkOcxCzU=
-X-Google-Smtp-Source: ABdhPJz5G1+u67lsrh8eLZfD2KUC2fJ5ASHhWSnK4O/r6glXQvoCoXYTisCmW19QxJfNIyNqGIK3+w==
-X-Received: by 2002:a17:902:9a42:b0:14a:baa1:c7ee with SMTP id x2-20020a1709029a4200b0014abaa1c7eemr5657642plv.58.1642434151549;
-        Mon, 17 Jan 2022 07:42:31 -0800 (PST)
-Received: from localhost.localdomain (211-75-30-246.hinet-ip.hinet.net. [211.75.30.246])
-        by smtp.gmail.com with ESMTPSA id q22sm15582949pfu.153.2022.01.17.07.42.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 07:42:30 -0800 (PST)
-From:   Zhiming Liu <lzmlzmhh@gmail.com>
-To:     narmstrong@baylibre.com, robert.foss@linaro.org
-Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Zhiming Liu <lzmlzmhh@gmail.com>
-Subject: [PATCH v3] drm/bridge: Remove extra device acquisition method of i2c client in lt9611 driver
-Date:   Mon, 17 Jan 2022 23:41:50 +0800
-Message-Id: <20220117154150.5145-1-lzmlzmhh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S240618AbiAQPnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:43:47 -0500
+Received: from mout.gmx.net ([212.227.17.21]:40483 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240608AbiAQPnq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 10:43:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642434186;
+        bh=+TVQ+7UtVks/m9/GncR3RWLn+/OJtfPHJr9nYMoiJRM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=GSI0JVZbbWFXMMmRZTFd+5sMOk1Jo9br/Giflzjlx8P2hwht8eqFMj8PKuToH6dcz
+         OT41bhaFZoCG4xoi8oMaEutYlB+ohSzSsctkAroUmykNOr3jJmR96aPKBVqh2EWd46
+         OpWW/Oj6QmAUFoWA13YVsHOOgKgJhRBg9Ep0+w4M=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5fIQ-1nGdpg0yTa-007FjN; Mon, 17
+ Jan 2022 16:43:06 +0100
+Message-ID: <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
+Date:   Mon, 17 Jan 2022 16:42:00 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tfVvt5d3VZ1s/Z+29Gkdp0lLmE4BSkXR4U8/Uz9LDjTtXSYfQl8
+ BVfikzp0D2U5HHoqUaCTRXmi72Tt32PLwEyA2uuoJ2BwJwKHUyfcfiMS9DFsi3pqojy9OB4
+ cy7yi2Rsg10MADz4XqKWlRnn5nN4zZb+JNlRcU80YQk2T9MqGMUHHhwHtx8+Wf5hF6hrOpz
+ OvruOcYgqMP1gXbe4+65w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qPR5NpcXXbY=:I8Rj0ZHtJKgKVsRntLdOei
+ coJroARINzvdAi7UQfHqshCaDgD5pkCnCSGwwIiW1lnIocMt+1RuAYY3reby8R3q1tDPvT8nY
+ jM0eVRMkKynnMhStgCWQ5RebFEJ19MGJJhqFjKNXSBUXF8ZQS3OfG8TSDisd41mG7fOyic+a9
+ 0a1u5xAYllzNH0ShcQpxBT1AVBmgXE2Y0xg3WJ1V1W5wkTPP1CJo5NJsCOlILnttv226C/grp
+ mbSUN0RUf55VONtix6PSMD9byMPeKCLfhHLKh/fFfoeuGlPAlq4ek1iOQnTNgbBAhsHgPAfr5
+ DC4PnDJEL52z7fmWlNmS6oMQ5gR1yP3Y1NKBNt3cXjBr7Lv4qqM4xLcQhGzEbM/EV6ea7PcTL
+ 3xMiyE/zeWWtfhdiH8qbEnVc8+7zPG7Y/5tG042gnIMYVmTIU8iKnk+WpofcAKOB6rXd/OIoK
+ fwquo/f3syNLR2U/FRq+6hl7RZh3eGkkSoxpsJkNvxYeFIjX6qhQyBipNEDvN6uC6zdBUqq41
+ TsqJTMbYvwx9J0yxeDZ6u7rDuZA7XS1Ht44pkZRqPEqK8DtXFo50awjESFnp1j+SJFagWpiEv
+ Y4LtcG0i5mK5Ipt0rb8Pz4T0nP96iUfibBzrHcArfxXlgMa3/wYBcgh1rHt3X+2i6+OHgrEK7
+ yiSMmUFInXQPQGxufJPMW7iU8sjrluLcYj8i2JGWrRCLQyWvWBqLmxF/stFmLYv133su7zZh4
+ wBfESrZhU41z+jQ3nHY6we6+p+um9mb1FxcGG84pjD794w+Al9Ha/QtDLoHhEXVNIpEdWqSeU
+ gE7NB6H33ctqYtpm3qTOUwcpqgpAOH+8YAj4RilFRqlz0wn4Zf/Lx6fug4sBTLwq12KMbppRX
+ thvHjU52wgU7a1oWqkGIiMx9LNJGuLGkLYCXJVhZ4/ij5o0Z5KVME65u6U86Gj6DoXA7Ubnt+
+ AMJyL4Hxe5o9Fw7Q8qtCafwrDYWdkAzMeNLtOthBmrHD1GEbEV8x0/ndzv4JxuGXarF+zwlP4
+ T0rtn6TcWeKCn3pI3Dp3d+s01ox8GbLK6Vc0rd4wz3PZqATnBVVhJr8kLogDzAPlelgLRPnqv
+ 43378dZqwZ+Qa0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm/bridge: Remove extra device acquisition method of i2c client in lt9611 driver.
+On 1/17/22 16:00, Daniel Vetter wrote:
+> On Mon, Jan 17, 2022 at 1:16 PM Helge Deller <deller@gmx.de> wrote:
+>>
+>> Hello Daniel,
+>>
+>> On 1/17/22 11:02, Daniel Vetter wrote:
+>>> Hi Helge
+>>>
+>>> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
+>>>>
+>>>> The fbdev layer is orphaned, but seems to need some care.
+>>>> So I'd like to step up as new maintainer.
+>>>>
+>>>> Signed-off-by: Helge Deller <deller@gmx.de>
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 5d0cd537803a..ce47dbc467cc 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/=
+emulator/index.html
+>>>>  F:     arch/x86/math-emu/
+>>>>
+>>>>  FRAMEBUFFER LAYER
+>>>> -L:     dri-devel@lists.freedesktop.org
+>>>> +M:     Helge Deller <deller@gmx.de>
+>>>>  L:     linux-fbdev@vger.kernel.org
+>>>> -S:     Orphan
+>>>
+>>> Maybe don't rush maintainer changes in over the w/e without even bothe=
+ring
+>>> to get any input from the people who've been maintaining it before.
+>>>
+>>> Because the status isn't entirely correct, fbdev core code and fbcon a=
+nd
+>>> all that has been maintained, but in bugfixes only mode. And there's v=
+ery
+>>> solid&important reasons to keep merging these patches through a drm tr=
+ee,
+>>> because that's where all the driver development happens, and hence als=
+o
+>>> all the testing (e.g. the drm test suite has some fbdev tests - the on=
+ly
+>>> automated ones that exist to my knowledge - and we run them in CI). So
+>>> moving that into an obscure new tree which isn't even in linux-next ye=
+t is
+>>> no good at all.
+>>>
+>>> Now fbdev driver bugfixes is indeed practically orphaned and I very mu=
+ch
+>>> welcome anyone stepping up for that, but the simplest approach there w=
+ould
+>>> be to just get drm-misc commit rights and push the oddball bugfix in t=
+here
+>>> directly. But also if you want to do your own pull requests to Linus f=
+or
+>>> that I don't care and there's really no interference I think, so
+>>> whatever floats.
+>>>
+>>> But any code that is relevant for drm drivers really needs to go in th=
+rough
+>>> drm trees, nothing else makes much sense.
+>>>
+>>> I guess you're first action as newly minted fbdev maintainer is going =
+to be to
+>>> clean up the confusion you just created.
+>>
+>> Most of my machines depend on a working fbdev layer since drm isn't (an=
+d probably
+>> -due to technical requirements of DRM- won't be) available for those.
+>> So, since the fbdev drivers were marked orphaned, I decided to step up =
+as maintainer.
+>>
+>> I see your point that at least the fbdev core code and fbcon are shared=
+ between DRM and fbdev.
+>> For me it's really not important to drive any patches through a seperat=
+e tree, so
+>> I'd be happy to join the drm-misc tree if you feel it's necessary. (By =
+the way,
+>> adding my tree to for-next was on my todo list...)
+>>
+>> What's important for me though is, to keep fbdev actively maintained, w=
+hich means:
+>> a) to get fixes which were posted to fbdev mailing list applied if they=
+ are useful & correct,
+>
+> Yeah it'd be great if we have that, for a while Bart took care of
+> these, but had to step down again. drm-misc is maintained with the dim
+> scrip suite, which comes with docs and bash completion and everything.
+> Good starting pointer is here:
+>
+> https://drm.pages.freedesktop.org/maintainer-tools/getting-started.html
+>
+> Process for getting commit rights is documented here:
+>
+> https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#dr=
+m-misc
+>
+> But there's a pile more. I think once we've set that up and got it
+> going we can look at the bigger items. Some of them are fairly
+> low-hanging fruit, but the past 5+ years absolutely no one bothered to
+> step up and sort them out. Other problem areas in fbdev are extremely
+> hard to fix properly, without only doing minimal security-fixes only
+> support, so fair warning there. I think a good starting point would be
+> to read the patches and discussions for some of the things you've
+> reverted in your tree.
+>
+> Anyway I hope this gets you started, and hopefully after a minor
+> detour: Welcome to dri-devel, we're happy to take any help we can get,
+> there's lots to do!
+>
 
-We have got the device of i2c client in probe function.So we should remove extra
-device acquisition method of i2c client.
+Hello Daniel,
 
-Signed-off-by: Zhiming Liu <lzmlzmhh@gmail.com>
----
- drivers/gpu/drm/bridge/lontium-lt9611.c    | 4 ++--
- drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+you somehow missed to answer my main topics below...:
 
-diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-index dafb1b47c15f..feb128a4557d 100644
---- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-@@ -1090,7 +1090,7 @@ static int lt9611_probe(struct i2c_client *client,
- 	if (!lt9611)
- 		return -ENOMEM;
- 
--	lt9611->dev = &client->dev;
-+	lt9611->dev = dev;
- 	lt9611->client = client;
- 	lt9611->sleep = false;
- 
-@@ -1100,7 +1100,7 @@ static int lt9611_probe(struct i2c_client *client,
- 		return PTR_ERR(lt9611->regmap);
- 	}
- 
--	ret = lt9611_parse_dt(&client->dev, lt9611);
-+	ret = lt9611_parse_dt(dev, lt9611);
- 	if (ret) {
- 		dev_err(dev, "failed to parse device tree\n");
- 		return ret;
-diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-index 33f9716da0ee..3d62e6bf6892 100644
---- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-@@ -860,7 +860,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
- 	if (!lt9611uxc)
- 		return -ENOMEM;
- 
--	lt9611uxc->dev = &client->dev;
-+	lt9611uxc->dev = dev;
- 	lt9611uxc->client = client;
- 	mutex_init(&lt9611uxc->ocm_lock);
- 
-@@ -870,7 +870,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
- 		return PTR_ERR(lt9611uxc->regmap);
- 	}
- 
--	ret = lt9611uxc_parse_dt(&client->dev, lt9611uxc);
-+	ret = lt9611uxc_parse_dt(dev, lt9611uxc);
- 	if (ret) {
- 		dev_err(dev, "failed to parse device tree\n");
- 		return ret;
--- 
-2.25.1
+>
+>> b) to include new drivers (for old hardware) if they arrive (probably h=
+appens rarely but there can be).
+>>    I know of at least one driver which won't be able to support DRM....
+>>    Of course, if the hardware is capable to support DRM, it should be w=
+ritten for DRM and not applied for fbdev.
+>> c) reintroduce the state where fbcon is fast on fbdev. This is importan=
+t for non-DRM machines,
+>>    either when run on native hardware or in an emulator.
+>> d) not break DRM development
+>>
+>> Especially regarding c) I complained in [1] and got no feedback. I real=
+ly would like to
+>> understand where the actual problems were and what's necessary to fix t=
+hem.
+>>
+>> Helge
+>>
+>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.=
+de
+>
+>
+>
 

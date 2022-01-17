@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BB5490B7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A3A490B76
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiAQPf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:35:57 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:42957 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240489AbiAQPfs (ORCPT
+        id S240493AbiAQPfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:35:46 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:44686 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240489AbiAQPfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:35:48 -0500
-Received: by mail-ot1-f41.google.com with SMTP id z25-20020a0568301db900b005946f536d85so11254080oti.9;
-        Mon, 17 Jan 2022 07:35:47 -0800 (PST)
+        Mon, 17 Jan 2022 10:35:45 -0500
+Received: by mail-oi1-f176.google.com with SMTP id s9so23894945oib.11;
+        Mon, 17 Jan 2022 07:35:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=uz9rWH9EExEde9e83L6Ci5xDXHmn67olZ/Bo1AaALIk=;
-        b=mskP4pawIKONJuzpHhQk7qFFaJFpeY2odfRfUpBgrGO0kk4og6k4JuhtFtJXot18wo
-         Zo0qbBM3noJLU7D+bXMop5aI5hWRMERNOwdu11BzWV/+pPzxI+4Vv85y8RIbrRDGQ2wD
-         daYzfcIqNFXaTQuRk90/zIZLsJPNhpzafKR69eJgRAhZ9IUffBppzveQMuGPyAFXWdcI
-         91A4pXPTpewzBFtntKwn9nv+3KOZahV/RHFJ17aACYs+EigfoZ7Ozxlb/ESW51OVD6OJ
-         IkqU/oDqJ7RswTV/8fPiYFMDmNkN8OUSOOPZNC11SFHLN4GHR1SDEOxlVlbbj+Zxm+4+
-         bwsA==
-X-Gm-Message-State: AOAM531Vf6GiUPxGG/cmzcIrwSHzzgULZwyU46LVR+5ZUu71BD2nCL3r
-        HJ32i6PCtnNTLXEARYycmA==
-X-Google-Smtp-Source: ABdhPJzAopoamav84cvKKv308QfSUylWTMQX34XDs9D8wI7eeXkkB7i7iaF0ajflyRA76l5dpV6RKg==
-X-Received: by 2002:a05:6830:1f56:: with SMTP id u22mr9420465oth.138.1642433746928;
-        Mon, 17 Jan 2022 07:35:46 -0800 (PST)
+        bh=PdccHlgr3Zdp1814HhFMrvJGIRgozixSM54SKvkFpnA=;
+        b=O9OfO7H6ehw2Fz7bnljDHfrVq+M8DdT3STpMcAPMhr3l6vcDBCK7ikieQ1t4bFINlN
+         Q9FbMmcxrqTqjz2p71JlE8aegdBOK9qsVFRGlWn77Ntwr6WGe690W/aNOOiexuRPVnE1
+         J/S7g25jn7wfTDPkn0o5aXG0leQfx6sA/ES/aarBlqmun4xIeryx2tdkzlOrMEsVd9xQ
+         0m+aQayb+88/6vvPg1FcqeVZMeyvd3GTpAXlSL4P9nNZbqOOz9X/2xISZ7s2YRKWEuwG
+         iKy80YesuUI8GlX6MBDSPfwlC/itByEnoOTxGbWnbuTzsRyh6e0/+BvE+z+Lz/xYFwBQ
+         CHig==
+X-Gm-Message-State: AOAM530+EKqZer71pICWhIK5nsrU+m8346X/iS27DwoQMpUl32PWad6N
+        MsPnogSdMdHQFLeg/26koQ==
+X-Google-Smtp-Source: ABdhPJyI7ICuL0OHDG+r1tYSyFFYh4imjg3J5ue8rDUn7lNU4uKpyUkRvJ3l09fkM1OiRFnGsbLg2A==
+X-Received: by 2002:a54:4402:: with SMTP id k2mr9876742oiw.131.1642433744862;
+        Mon, 17 Jan 2022 07:35:44 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bg17sm7015383oib.25.2022.01.17.07.35.45
+        by smtp.gmail.com with ESMTPSA id a28sm6389929oiy.4.2022.01.17.07.35.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 07:35:45 -0800 (PST)
-Received: (nullmailer pid 3923087 invoked by uid 1000);
+        Mon, 17 Jan 2022 07:35:44 -0800 (PST)
+Received: (nullmailer pid 3923084 invoked by uid 1000);
         Mon, 17 Jan 2022 15:35:42 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     srv_heupstream@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+To:     Irui Wang <irui.wang@mediatek.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>, linux-media@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-kernel@vger.kernel.org, Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        Tomasz Figa <tfiga@google.com>, Yong Wu <yong.wu@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
         linux-mediatek@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com, macpaul.lin@mediatek.com,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        Jose Abreu <joabreu@synopsys.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dkirjanov@suse.de, Maxime Coquelin <mcoquelin.stm32@gmail.com>
-In-Reply-To: <20220117070706.17853-8-biao.huang@mediatek.com>
-References: <20220117070706.17853-1-biao.huang@mediatek.com> <20220117070706.17853-8-biao.huang@mediatek.com>
-Subject: Re: [PATCH net-next v12 7/7] net: dt-bindings: dwmac: add support for mt8195
+        linux-arm-kernel@lists.infradead.org,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220117120615.21687-4-irui.wang@mediatek.com>
+References: <20220117120615.21687-1-irui.wang@mediatek.com> <20220117120615.21687-4-irui.wang@mediatek.com>
+Subject: Re: [PATCH v2, 03/10] dt-bindings: media: mtk-vcodec: Adds encoder cores dt-bindings for mt8195
 Date:   Mon, 17 Jan 2022 09:35:42 -0600
-Message-Id: <1642433742.934070.3923086.nullmailer@robh.at.kernel.org>
+Message-Id: <1642433742.919482.3923083.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 15:07:06 +0800, Biao Huang wrote:
-> Add binding document for the ethernet on mt8195.
+On Mon, 17 Jan 2022 20:06:08 +0800, Irui Wang wrote:
+> Adds encoder cores dt-bindings for mt8195
 > 
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 > ---
->  .../bindings/net/mediatek-dwmac.yaml          | 28 ++++++++++++++++---
->  1 file changed, 24 insertions(+), 4 deletions(-)
+>  .../media/mediatek,vcodec-encoder-core.yaml   | 214 ++++++++++++++++++
+>  1 file changed, 214 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1580608
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.example.dts:20:18: fatal error: dt-bindings/memory/mt8195-memory-port.h: No such file or directory
+   20 |         #include <dt-bindings/memory/mt8195-memory-port.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1413: dt_binding_check] Error 2
 
+doc reference errors (make refcheckdocs):
 
-ethernet@1101c000: clock-names: ['axi', 'apb', 'mac_main', 'ptp_ref'] is too short
-	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
+See https://patchwork.ozlabs.org/patch/1580741
 
-ethernet@1101c000: clocks: [[27, 34], [27, 37], [6, 154], [6, 155]] is too short
-	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-ethernet@1101c000: compatible: ['mediatek,mt2712-gmac'] does not contain items matching the given schema
-	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-ethernet@1101c000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
+pip3 install dtschema --upgrade
 
-ethernet@1101c000: Unevaluated properties are not allowed ('compatible', 'reg', 'interrupts', 'interrupt-names', 'mac-address', 'clock-names', 'clocks', 'power-domains', 'snps,axi-config', 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,txpbl', 'snps,rxpbl', 'clk_csr', 'phy-mode', 'phy-handle', 'snps,reset-gpio', 'mdio' were unexpected)
-	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
+Please check and re-submit.
 

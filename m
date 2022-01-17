@@ -2,166 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1517948FFB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 01:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCD248FFB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 01:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236484AbiAQAHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 19:07:21 -0500
-Received: from mga04.intel.com ([192.55.52.120]:57103 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233951AbiAQAHT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 19:07:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642378039; x=1673914039;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v0ox1EzZUEN6ZRNiCjKVYNl6s/iSfQwQBzcZXTTsmUM=;
-  b=KV47oXkCPw7IipgwbBIuHhW8fYiFvsJuR0SEstuWhRCBX3TCaxhoRjDk
-   B5cnhw5cmvVInsHxObdzauLEaRNBpxL97wyY7aKQBCYtGcDh8nO91EGSB
-   St5DzUxQMHB71RBlUrThnN0LPKe4Qi4QEuSpgFAsjRJTCbPOllx2MGqkS
-   mZjKIdg8OcxU9Jlo2HbxpSVdU8hyKxhzEcqk5AtlMpY4c8DuhDGcUUwBj
-   0/79yZ1dwYjvz0gQI53BViQKItaFle+5dKAzIvxOMQ8aO0aMlK1ZTay77
-   uG7uSGTD15vldTJWioOiBunFYWvZ6tmTxLQZ8JGZd21g7EUF4Pg/cYrf3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="243348164"
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="243348164"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 16:07:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="692885672"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Jan 2022 16:07:17 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9FYL-000B4k-5t; Mon, 17 Jan 2022 00:07:17 +0000
-Date:   Mon, 17 Jan 2022 08:06:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 195/2384] init/main.c:947:34: error: no
- member named 'scoped_addresses' in 'struct kcsan_ctx'; did you mean
- 'scoped_accesses'?
-Message-ID: <202201170819.f8ENBRJK-lkp@intel.com>
+        id S233954AbiAQAMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 19:12:30 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:48880
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231480AbiAQAM3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 19:12:29 -0500
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 581E7402A3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642378343;
+        bh=rwscmfN2VvXFl57KIDylnXT4uFX0erZr3MxoMOgqhYc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=SJz9Egycd22hPcDWzZ0UTmn5X3Zsb1AFGwbtEu/lC67VmKAbUuLSeN+ZL4FzAljxt
+         mHXXidOmlu/lO+BYHZfgWWACZyz0lfmefcxrQqxXvaGrbTM2okBJyQuguSjdZC11OI
+         w9dNPB6xzHAIsD8HcpPrpfugD/aQk46q0SoXSykzgerHNePc8RCu941B50Msid9vgt
+         ESY9OKiM52BiLJ8APfrK3KNZxVasmdRFZJuW89yxF+SSkiFV2N7XkRd2zbi1oAAdgh
+         g8IJsZZmvdrucX7aag3LOIEzSFi2tpGCH7lekrG+BXOt4rjvo+e5PmWctk4AwHKul5
+         HUGiSti8ZlY6A==
+Received: by mail-ot1-f69.google.com with SMTP id v21-20020a05683018d500b00590a3479c4eso4988550ote.11
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 16:12:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rwscmfN2VvXFl57KIDylnXT4uFX0erZr3MxoMOgqhYc=;
+        b=xGk6wDlfObV5q9gTKULHvgR9aXnpwfMTfRJDMyxSEUlOZ6xnSCHMzJ/JLxZg2ULvGn
+         k/TZYoBlwUXIITsz5CxLGhpaAsm5gsb50vUYg033ocUj/1E8qvCgQ5hZXd0AMRipI9or
+         bi16C7GA9KR4QOC3qVURkcxX+AXrY+bLVO4gfK2anTBnycqugeigGILpjX9FW15zWKzA
+         mFBIIdiWL/OEVmeD2cqCitpWlRIbdf1bigN0y2k7TIU92uB7zY0W9wNjpBk+ret/z8+c
+         QsaEJ3fUXQrhqJm2cT3zSX84e8VDDS8+5B0pw9apjNVZSmuUT+F/cj1fgbCQuyK9WhAs
+         zCxw==
+X-Gm-Message-State: AOAM532L5fXWumTK7BNgDnkuKit8P6qeGgdwK9FgJGknYrs0zibK+0ug
+        e8MGTMngD2boRpgSomXqi6uPVA2lYUaTyiT6lSQsm0Ix5QEbCO9KU/FQjg4z7z5BdmF10KG1W0r
+        6K1mPY0OglPtXTY/vCK+4TUpRhlRjnKm/pLxjvudA1t90FXE5IrEaHAEJWQ==
+X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr14466569oth.233.1642378339918;
+        Sun, 16 Jan 2022 16:12:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzmTa4OSW+e+tPUzL+uPusjNQWVVyJk3wNYGeLJ1mjMfv2VVEg30AAbV0RtwuN/5IKjzG/RX3WJYkoKoLj6hlg=
+X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr14466553oth.233.1642378339620;
+ Sun, 16 Jan 2022 16:12:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220114164904.lgj7yimbei6fmloe@localhost.localdomain>
+ <20220114165050.ouw2nknuspclynro@localhost.localdomain> <CAAd53p6KXD2mEHgkU_TpTrsU-vQ9Vxdip+6sPfDaVoSOkmaz-g@mail.gmail.com>
+ <20220115163208.xmvum6ehqcadonj7@localhost.localdomain>
+In-Reply-To: <20220115163208.xmvum6ehqcadonj7@localhost.localdomain>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 17 Jan 2022 08:12:08 +0800
+Message-ID: <CAAd53p64w38NCo7c0cnKCyjaswa0_Rns-CjWBwOnph3V5J2taQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] ALSA: hda/realtek: fix speakers and micmute on HP
+ 855 G8
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: 358c0016c619cb96065fc10b25be736053481392 [195/2384] headers/deps: kcsan: Move task_struct::kcsan_ctx to per_task()
-config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220117/202201170819.f8ENBRJK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=358c0016c619cb96065fc10b25be736053481392
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 358c0016c619cb96065fc10b25be736053481392
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Sun, Jan 16, 2022 at 12:26 AM Alexander Sergeyev
+<sergeev917@gmail.com> wrote:
+>
+> On Sat, Jan 15, 2022 at 11:47:40PM +0800, Kai-Heng Feng wrote:
+> > > Note that the device can boot up with working speakers and micmute LED
+> > > without this patch, but the success rate would be quite low (order of
+> > > 16 working boots across 709 boots) at least for the built-in drivers
+> > > scenario. This also means that there are some timing issues during early
+> > > boot and this patch is a workaround.
+> >
+> > Does this issue happen to warm boot (reboot) or cold boot?
+>
+> The issue is definitely not limited to warm boots only. I can confirm cold
+> boots with no sound and also warm boots with functioning sound. With this in
+> mind, the provided numbers (16 good boots across 709 boots) are largely coming
+> from reboots since the testing was scripted and driven by SSH.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If this issue also happens to cold boot it seems to be a BIOS issue.
 
-All errors (new ones prefixed by >>):
+>
+> > If the issue only happen to warm boot, please try reverting commit
+> > 9d3fcb28f9b9 "Revert "PM: ACPI: reboot: Use S5 for reboot"".
+> > Many HP systems requires it to have a functional reboot.
+>
+> Interesting. I haven't noticed anything breaking with reboots on this
+> particular system (at least so far).
 
-   init/main.c:790:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:790:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
->> init/main.c:947:34: error: no member named 'scoped_addresses' in 'struct kcsan_ctx'; did you mean 'scoped_accesses'?
-           per_task(&init_task, kcsan_ctx).scoped_addresses.next = LIST_POISON1;
-                                           ^~~~~~~~~~~~~~~~
-                                           scoped_accesses
-   include/linux/kcsan.h:55:19: note: 'scoped_accesses' declared here
-           struct list_head scoped_accesses;
-                            ^
-   init/main.c:891:13: warning: no previous prototype for function 'init_per_task_early' [-Wmissing-prototypes]
-   void __init init_per_task_early(void)
-               ^
-   init/main.c:891:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_per_task_early(void)
-   ^
-   static 
-   2 warnings and 1 error generated.
+If possible, please still give that commit a try.
 
-
-vim +947 init/main.c
-
-   890	
-   891	void __init init_per_task_early(void)
-   892	{
-   893	#ifdef CONFIG_POSIX_TIMERS
-   894		per_task(&init_task, posix_cputimers) = (struct posix_cputimers) __INIT_CPU_TIMERS(init_task);
-   895	#endif
-   896		task_thread(&init_task) = (struct thread_struct) INIT_THREAD;
-   897	
-   898		INIT_LIST_HEAD(&per_task(&init_task, rt).run_list);
-   899		per_task(&init_task, rt).time_slice = RR_TIMESLICE;
-   900	
-   901		INIT_LIST_HEAD(&per_task(&init_task, se).group_node);
-   902	
-   903		per_task(&init_task, stack) = init_stack;
-   904	
-   905		refcount_set(&per_task(&init_task, usage), 2);
-   906	#ifdef CONFIG_THREAD_INFO_IN_TASK
-   907		refcount_set(&per_task(&init_task, stack_refcount), 1);
-   908	#endif
-   909	#ifdef CONFIG_CGROUP_SCHED
-   910		per_task(&init_task, sched_task_group) = &root_task_group;
-   911	#endif
-   912	#ifdef CONFIG_TASKS_RCU
-   913		per_task(&init_task, rcu_tasks_idle_cpu) = -1;
-   914		INIT_LIST_HEAD(&per_task(&init_task, rcu_tasks_holdout_list));
-   915	#endif
-   916	#ifdef CONFIG_CPUSETS
-   917		per_task(&init_task, mems_allowed_seq) = (seqcount_spinlock_t) SEQCNT_SPINLOCK_ZERO(init_task.mems_allowed_seq,
-   918							 &per_task(&init_task, alloc_lock));
-   919	#endif
-   920		per_task(&init_task, restart_block).fn = do_no_restart_syscall;
-   921	#ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
-   922		seqcount_init(&per_task(&init_task, vtime).seqcount);
-   923		per_task(&init_task, vtime).state = VTIME_SYS;
-   924	#endif
-   925	#ifdef CONFIG_PERF_EVENTS
-   926		mutex_init(&per_task(&init_task, perf_event_mutex));
-   927		INIT_LIST_HEAD(&per_task(&init_task, perf_event_list));
-   928	#endif
-   929	#ifdef CONFIG_SMP
-   930		plist_node_init(&per_task(&init_task, pushable_tasks), MAX_PRIO);
-   931	#endif
-   932	#ifdef CONFIG_AUDIT
-   933		per_task(&init_task, loginuid) = INVALID_UID;
-   934	#endif
-   935		per_task(&init_task, cpus_mask) = CPU_MASK_ALL;
-   936		per_task(&init_task, cpus_ptr) = &per_task(&init_task, cpus_mask);
-   937		INIT_LIST_HEAD(&per_task(&init_task, pending).list);
-   938	#ifdef CONFIG_RT_MUTEXES
-   939		per_task(&init_task, pi_waiters) = RB_ROOT_CACHED;
-   940	#endif
-   941	#ifndef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
-   942		raw_spin_lock_init(&per_task(&init_task, prev_cputime).lock);
-   943	#endif
-   944		spin_lock_init(&per_task(&init_task, alloc_lock));
-   945		raw_spin_lock_init(&per_task(&init_task, pi_lock));
-   946	#ifdef CONFIG_KCSAN
- > 947		per_task(&init_task, kcsan_ctx).scoped_addresses.next = LIST_POISON1;
-   948	#endif
-   949	}
-   950	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kai-Heng

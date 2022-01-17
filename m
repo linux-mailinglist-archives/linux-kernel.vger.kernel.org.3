@@ -2,139 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7B8490AA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6585A490AA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbiAQOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:38:31 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:61605 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiAQOi2 (ORCPT
+        id S237148AbiAQOjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234367AbiAQOjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:38:28 -0500
+        Mon, 17 Jan 2022 09:39:03 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BB3C061574;
+        Mon, 17 Jan 2022 06:39:03 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id g81so46359468ybg.10;
+        Mon, 17 Jan 2022 06:39:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642430308; x=1673966308;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/wDgTOF9nD7qJTc2/BsA6bElbpP6tW+QytfeDJS27YY=;
-  b=C0EepcS3/ekrhwuHlJhh9te+VirEkSGBOupOI2IiLbfdRda8/Z/PuG78
-   Zjfsw0txq5JOiymPOQLklUMrTqeU47inz3BUneF/9jngJx3tB6V1zkgts
-   MdJ+XRMGSzxx9BUNH90RKqvNCrdhQYDUSLVWmDkXOnZTTCP3ubwMcsFuf
-   I=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 17 Jan 2022 06:38:27 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 06:38:26 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 17 Jan 2022 06:38:25 -0800
-Received: from [10.216.12.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 17 Jan
- 2022 06:38:19 -0800
-Message-ID: <bd284863-3643-4a8e-beb6-f47cc60ea1b5@quicinc.com>
-Date:   Mon, 17 Jan 2022 20:08:15 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kHhCRgvF9Wf+R6yEgWiaK5gOZflCu4gFexOOmAZwK3A=;
+        b=YsHtL+blfxwmFULnGvT3ULZ4xkuIYMK/Pd/Zg8NTRgLF6XqOZdWNT0SzetQ/F01GQo
+         6Dld83r6NDOqox7MsT8O765x4oqVXIZD6EuiS7gZ0tJU+IlRB/C3veG4LcHqIwTrOUrO
+         6HZA5rNpF4+dyXvRhpV6GxtZ6uRY/afq/4vyRWf4Wos3kZ5SEwwXgruJD2VBqTyRsmDi
+         kEkd/HDGq3rYUHneKgp9Ik3B3yA+1EniOwtbuJ6yEdgckNeRbaEvJhGHXLdoEOUYihAs
+         9XXDzpdCuxTxtSsjzAOmpMo6T5Qiqo8MDQfHpp56eqBtzDgrYiFzC5t4nVd+p7p99C2d
+         9nKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kHhCRgvF9Wf+R6yEgWiaK5gOZflCu4gFexOOmAZwK3A=;
+        b=uJy4XWwpqLWeCZ+AmnjzaLl1Tva5HtkyYMjT8SgapMiHuO4ORKMTXLPSSXjFds+jdC
+         oSkXtg17rUc+0JwQWE4g4pFES0A4wj77lDDkFzth3ZqHiuyhOp4sytrr5a/Xqs2mgm6V
+         8DlCmPsf629GKzokC6+s7VLjSLfQoQT+pOGKSMAsD/BsBVtfdQIBEDL7xQUwYjYHmAqI
+         QIdgm7ss/BJWp4OcZIZmwRNrdutq0OdWHmW1NrPPoF6voaQK70wUreZws4qqi+tAv+Fa
+         WhJo96CaKLmTxOdZAfcxPx+k+t+IgmmYZfBHc6uTLP8pAOhuNNTGUt5y8nWE7N6hYjHd
+         3OAw==
+X-Gm-Message-State: AOAM5305CNU+yizbswBZkeZGxftnTu+4eXIJPhNmImkagrXKsuZfbsRA
+        u005aCA4NOv9HsjRI+USduohlpVaxYBvlLfajZc=
+X-Google-Smtp-Source: ABdhPJyJ+PolclN9RQf6xwmgvGfwBqjnkvt5u/uY1RWTKSTVwNniNgVw5KppymYp82qhh17PSy5Z9SnKj28hDizciBY=
+X-Received: by 2002:a25:6d06:: with SMTP id i6mr26656526ybc.216.1642430342223;
+ Mon, 17 Jan 2022 06:39:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 3/4] drm/msm/adreno: Expose speedbin to userspace
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>
-CC:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
- <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
- <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
- <CAA8EJpokgiUbqj9BOF52a9QjJK53PinNHfxy_6nbNq53JnO2Og@mail.gmail.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <CAA8EJpokgiUbqj9BOF52a9QjJK53PinNHfxy_6nbNq53JnO2Og@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <20210728135534.703028-1-pgwipeout@gmail.com> <20210728135534.703028-6-pgwipeout@gmail.com>
+ <C3AE0A81-A829-4241-A65E-EB28825E3C33@gmail.com> <CAMdYzYo2gkNvNYjU9_kc4cTwNBFU+kg3bRwaS3yCCAsMdo-Tow@mail.gmail.com>
+ <E3AA167E-1E40-45CD-8CBB-3EB280856604@gmail.com>
+In-Reply-To: <E3AA167E-1E40-45CD-8CBB-3EB280856604@gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Mon, 17 Jan 2022 09:38:50 -0500
+Message-ID: <CAMdYzYqsPgAbLBt+xwDL2s7ViLDJw5mnzDnupimRVESt0xFksQ@mail.gmail.com>
+Subject: Re: [PATCH 5/9] arm64: dts: rockchip: add rk3568 tsadc nodes
+To:     Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/2022 12:43 PM, Dmitry Baryshkov wrote:
-> On Thu, 13 Jan 2022 at 00:19, Rob Clark <robdclark@gmail.com> wrote:
->> On Tue, Jan 11, 2022 at 1:31 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->>> Expose speedbin through MSM_PARAM_CHIP_ID parameter to help userspace
->>> identify the sku.
->>>
->>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->>> ---
->>>
->>>   drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +++++----
->>>   1 file changed, 5 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>> index f33cfa4..e970e6a 100644
->>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>> @@ -242,10 +242,11 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_t param, uint64_t *value)
->>>                  *value = !adreno_is_a650_family(adreno_gpu) ? 0x100000 : 0;
->>>                  return 0;
->>>          case MSM_PARAM_CHIP_ID:
->>> -               *value = adreno_gpu->rev.patchid |
->>> -                               (adreno_gpu->rev.minor << 8) |
->>> -                               (adreno_gpu->rev.major << 16) |
->>> -                               (adreno_gpu->rev.core << 24);
->>> +               *value = (uint64_t) adreno_gpu->rev.patchid |
->>> +                               (uint64_t) (adreno_gpu->rev.minor << 8) |
->>> +                               (uint64_t) (adreno_gpu->rev.major << 16) |
->>> +                               (uint64_t) (adreno_gpu->rev.core << 24) |
->>> +                               (((uint64_t) adreno_gpu->rev.sku) << 32);
->> How about this instead, so we are only changing the behavior for
->> new/unreleased devices:
-
-I thought this property was only used for new devices whereas the 
-existing devices rely on REVN.
-
--Akhil.
-
->>
->> *value = adreno_gpu->rev.patchid |
->> (adreno_gpu->rev.minor << 8) |
->> (adreno_gpu->rev.major << 16) |
->> (adreno_gpu->rev.core << 24);
->> if (!adreno_gpu->info->revn)
->> *value |= (((uint64_t) adreno_gpu->rev.sku) << 32);
->>
->> (sorry about the butchered indentation.. somehow gmail has become
->> antagonistic about pasting code)
-> I assume that you would like to keep userspace compat for older chips.
-> thus the if.
-> Maybe we should introduce MSM_PARAM_CHIP_ID_SKU instead (and gradually
-> make userspace switch to it)?
->
->> BR,
->> -R
->>
->>>                  return 0;
->>>          case MSM_PARAM_MAX_FREQ:
->>>                  *value = adreno_gpu->base.fast_rate;
->>> --
->>> 2.7.4
->>>
+On Mon, Jan 17, 2022 at 9:13 AM Piotr Oniszczuk
+<piotr.oniszczuk@gmail.com> wrote:
 >
 >
+>
+> > Wiadomo=C5=9B=C4=87 napisana przez Peter Geis <pgwipeout@gmail.com> w d=
+niu 17.01.2022, o godz. 14:49:
+> >
+> >>
+> >> Peter,
+> >>
+> >> I'm trying to use this series to get thermal on rk3566 based tvbox (x9=
+6-x6).
+> >> Driver loads but i'm getting following error:
+> >>
+> >> [  132.873979] rockchip-thermal fe710000.tsadc: failed to register sen=
+sor 0: -517
+> >> [  132.874650] rockchip-thermal fe710000.tsadc: failed to register sen=
+sor[0] : error =3D -517
+> >>
+> >> Maybe you have some hints here?
+> >
+> > Error -517 means -EPROBE_DEFER, a device it relies on hasn't probed.
+> > TSADC doesn't directly rely on anything that shouldn't already be
+> > enabled. (Pinctrl, clocks, and grf all break a lot more than tsadc if
+> > disabled)
+> > Does your kernel config have all of the rockchip elements enabled?
+> >
+>
+> Peter,
+> For sure I can't say 'yes' with 100% confidence.
+> I'm trying do my best for rk3566 (currently have working: SD/Eth/HDMI/Sou=
+nd/USB2port0/BT).
+>
+> Maybe you may point me pls for good reference of rk356x defconfig?
+>
+> btw: a bit of  context:
+> In my application (https://github.com/warpme/minimyth2) i have target to =
+have single OS binary for all supported Allwinner/Amlogic/Rockchip/Broadcom=
+ devices.
+> By this kernel config i'm using is painfully assembled to have minimal wo=
+rking kernel for all targets.
+> It's a painful road....but still want to go this route for: minimal image=
+ size; shortest build time & one-for-all binary.
+> my current config: https://github.com/warpme/minimyth2/blob/master/script=
+/kernel/linux-5.16/files/linux-5.16-arm64-armv8.config
 
+I recommend you use `make savedefconfig`.
+It produces a simplified defconfig based on your .config.
+
+Your issue is in your dts.
+You have retained the quartz64-a &cpu_thermal active thermal node
+without tying in an active thermal control device (a fan).
+By default the rk356x dtsi passive thermal trips are hooked up and
+will throttle the device in case of overtemp.
+If your device has no active thermal control, you don't need to add
+the &cpu_thermal node at all to your dts.
+
+>
+> btw2: for rk3566 i'm using majority of your patches!
+> Great work of you!
+>
+>
+>
+>
+>
+>
+>

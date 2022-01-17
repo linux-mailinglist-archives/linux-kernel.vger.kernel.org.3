@@ -2,292 +2,527 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3CD4909AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482994909B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiAQNoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234400AbiAQNo3 (ORCPT
+        id S234346AbiAQNpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:45:12 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:53794 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232815AbiAQNpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:44:29 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDD0C061574;
-        Mon, 17 Jan 2022 05:44:29 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id y10so19216745qtw.1;
-        Mon, 17 Jan 2022 05:44:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Qsy9iO5QNpvhH9vyZT3hQoa7mdrCF0c+4JFfeVVUuQM=;
-        b=IZyW5y1GdwVl4px0QbEDSD5Och9801oxJf/NX9GACC+pgxTDmHVKIslQUql6bJ5S6x
-         /HSbFuxd3e+t6P5ZIBj2PQ89oXpA7aj/r6swB7g3IUlOgWPgem7G6Cq3q97sEsWymI42
-         4aP4JUNgPO1UepFxMEXuang0gitNPKSqOMAugWbCAyR5BTqxEs7dXy4e4WSAdg0CW2+Z
-         becCt/znlJBnsH7Nx3IL0CoEe4M3YW9s3Qolk76ke5kGj8bue2KLiFCVI0nMuRh0q1nq
-         HX5VnDg3Vejeeu9oyEIfT95UkOtVCHTO/V8gKE5N3IwyWZ2d6WKZj98b0/yHZRjDaqap
-         +Xrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Qsy9iO5QNpvhH9vyZT3hQoa7mdrCF0c+4JFfeVVUuQM=;
-        b=jbHvsflZcpCqhE/qYThi0rQXKdO9NNYe944jecfVkVt+WtcTQsXKDyfFRoRaOKi3mr
-         9+siUdhZAWoibPrLNMu3pKwzJBU5AkWLcqHLggH7Y7gx+qRjOMTX6wyQ0suagbiUraqD
-         m8h2sAAVhdUmKoL6omjVAAWCkoIkeTIAH6hiSgfMDH5M+n8XTV3hX3tXvQKv5uhjyJ9T
-         Lg7MKpq6nyI5oDbKHMEtHWnaA24YYfm3zPIUn9MEq3V2bGG9XEeIjyMgwHv7xvvyZWZG
-         J7dh3jD9TSA4TGrIcDXkMKyrt2hh9kF0timykSG6l/7OAF5vOE5db0Sqmc6YxvpxiKmx
-         QQzQ==
-X-Gm-Message-State: AOAM531Q81xa2Bmn7OHb7qYp25CvQ3CtMXxDEYSRlSpcIRAhIfiJcOKO
-        cX+nzhRJBmSEf0rRXMIfoEA=
-X-Google-Smtp-Source: ABdhPJxQsWdKsWj/NjJjvb51fnkcnvopF7I1gnuJ1RN6LMTotZtbNsNDsA6oh8XfU7+xCe/MqRhwGA==
-X-Received: by 2002:a05:622a:512:: with SMTP id l18mr17146823qtx.120.1642427068243;
-        Mon, 17 Jan 2022 05:44:28 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s1sm9124073qtw.25.2022.01.17.05.44.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 05:44:27 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: zhang.yunkai@zte.com.cn
-To:     mhiramat@kernel.org
-Cc:     viro@zeniv.linux.org.uk, keescook@chromium.org,
-        samitolvanen@google.com, ojeda@kernel.org, johan@kernel.org,
-        bhelgaas@google.com, elver@google.com, masahiroy@kernel.org,
-        zhang.yunkai@zte.com.cn, axboe@kernel.dk, vgoyal@redhat.com,
-        jack@suse.cz, leon@kernel.org, akpm@linux-foundation.org,
-        rppt@kernel.org, linux@rasmusvillemoes.dk,
-        palmerdabbelt@google.com, f.fainelli@gmail.com,
-        wangkefeng.wang@huawei.com, rostedt@goodmis.org,
-        ahalaney@redhat.com, valentin.schneider@arm.com,
-        peterz@infradead.org, geert@linux-m68k.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dong.menglong@zte.com.cn
-Subject: [PATCH v7 2/2] init/do_mounts.c: create second mount for initramfs
-Date:   Mon, 17 Jan 2022 13:43:52 +0000
-Message-Id: <20220117134352.866706-3-zhang.yunkai@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220117134352.866706-1-zhang.yunkai@zte.com.cn>
-References: <20220117134352.866706-1-zhang.yunkai@zte.com.cn>
+        Mon, 17 Jan 2022 08:45:06 -0500
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220117134505epoutp047b6ce01dfe5e13c82e0a793908316830~LEsAJxRkC0561705617epoutp04G
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:45:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220117134505epoutp047b6ce01dfe5e13c82e0a793908316830~LEsAJxRkC0561705617epoutp04G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642427105;
+        bh=P9imqKvslcA+cZOU0mvTMWnovqPbsTO5Tpzlt9qvTYE=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=O+UcqK/3ojBidTUsXZHidqxlnS0Cb8akjN6nNRCuPeUAKSYaNMAPk96y8FdEa8pME
+         ZrxDy1bwFSMw0rOGQ7K2ezpo8P1ARdj71uGe2xybJJc3/q+uwrrlVzUyKbsgBIpUcU
+         QrIOPQsTTudPhJoU3+Rhnd2Hj1a/bP1/FVd374BY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220117134504epcas5p4d08d61bbc64bba85647bc65cfff27f41~LEr-fzVKy3152631526epcas5p4x;
+        Mon, 17 Jan 2022 13:45:04 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4JctSX6LJpz4x9Q1; Mon, 17 Jan
+        2022 13:45:00 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DC.49.46822.FA275E16; Mon, 17 Jan 2022 22:44:15 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220117134459epcas5p2f356d000f3a790c65926167cd6ddd7f5~LEr7Q97pr0193501935epcas5p2F;
+        Mon, 17 Jan 2022 13:44:59 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220117134459epsmtrp102d38f3fdbbb8f2b49831a85a9274104~LEr7P-Nps2968729687epsmtrp1a;
+        Mon, 17 Jan 2022 13:44:59 +0000 (GMT)
+X-AuditID: b6c32a4a-dfbff7000000b6e6-65-61e572af5bb8
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        01.BA.08738.BD275E16; Mon, 17 Jan 2022 22:44:59 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220117134456epsmtip2096fdabe7eff909cc7028861c76650cf~LEr4IDtRX1286912869epsmtip2_;
+        Mon, 17 Jan 2022 13:44:56 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Cc:     <soc@kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <olof@lixom.net>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
+        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
+        <linux-fsd@tesla.com>,
+        "'Shashank Prashar'" <s.prashar@samsung.com>,
+        "'Aswani Reddy'" <aswani.reddy@samsung.com>
+In-Reply-To: <2927c34e-3259-4e9a-a657-aeeebf9089d2@canonical.com>
+Subject: RE: [PATCH 15/23] arm64: dts: fsd: Add initial pinctrl support
+Date:   Mon, 17 Jan 2022 19:14:53 +0530
+Message-ID: <00ca01d80ba8$6b9b9800$42d2c800$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgJL1gp6AanHgoQCI2LlgqqKGQKQ
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTZxzN19veXnDFa4H4CXOrd8PXArY8ulsnwrYGrzImgSXE/TG4gZtC
+        KL1dH0yNmyiTl4DDMB8NomPCJmMbFhAsDg2t5eVgOp6JskEhBlxRXgEmc2u5bOO/8zs55/xy
+        vgeGiAdRPyxNY2B0GlpNoJ78G9Yd2wJrdeO01LqZbK1rEJJPqwoBednWLSCvOxd5ZOnyNzzS
+        7OgXkNOFwwJyZDKB/NVShpIXelp4ZOfALEpWNMwJyVM/2YSk9Y9cAVnedAmQjoFlNBKnaspr
+        AGXKKkIpc3U+Sj3sv4VSdVePU73tJwVUcX01oF6cvCSkZs2vxHp8mL4nlaFTGJ2E0SSzKWka
+        VTgRHZ/4bmKYXCoLlCnINwmJhs5gwgnle7GBUWlqVwlCkkmrjS4qltbriV179+hYo4GRpLJ6
+        QzjBaFPU2lBtkJ7O0Bs1qiANY9gtk0qDw1zCpPTUvhedQm1p/GGbbQRkgfF3CoAHBvFQmD9/
+        Hi0AnpgYbwZwsPkhjxtmAJzKLRBwwyyATmejS4atWIYe8zneAuBF6+cIN0wAWNrchrhzUTwQ
+        Nn2ds5Lrg+cD+N3C0kougp9C4P2WIb5b5YG/Dc/0FwN3rDe+D1puU26ajwfA3gdNQjcW4QrY
+        lX8f4fAG2HFxbMWK4G/Aqq+eIFwJCVwarxK4sQ8eBStv/ryq2Qgn7tqE7r0Qf4bBoW/NfM6g
+        hLMjc6vYG0621Qs57AcnzuQIuZrpsNASwtHHYGW5fVUeAe/0lvHdEgTfAX+07OJWecGi52M8
+        zimCeTliTh0As6f6Vp3+sOT0aQGHKfjo+z7kC7DFtKaYaU0x05oCpv+XXQH8arCJ0eozVIw+
+        TBusYT75776T2QwzWHniOw80gZHfnwW1Ah4GWgHEEMJHZF83RotFKfSRo4yOTdQZ1Yy+FYS5
+        TrsE8fNNZl1/RGNIlIUqpKFyuTxUESKXERtFXapaWoyraAOTzjBaRvevj4d5+GXxotdfT1pa
+        FxfDJtT+svdc93nPuGuR9rmaOwicf2urytntuNcT3PPysb+H7V7k4uvqUeWBEwdFdmq6eaa+
+        sXd7m+/63Qmx2+bhVPvBpufDn1rOsosf3Z1sDCiOwLwev1bhfIlpr5XqwrytC49y8zZZszqv
+        dj543yEu+/LyXzeVy+zy5jTU/4PtM6PK+bqI9Ns3DkllnYd9+5Js7LWt51izrTLybLzR/6ii
+        JfXQgjbbmfc0oLVjVJc2SjYwJySCwg0xkuhbRdoBx5Ut3iX5IeIgnk/HZ0P75QPiaZNfR2b2
+        YF9VlXH/n9EVrzriFL8dcdR33RvGTD9ExVyA+54ct8URmR8TfH0qLduJ6PT0PwUiASprBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEIsWRmVeSWpSXmKPExsWy7bCSvO7toqeJBld/6lkc2ryV3eL9sh5G
+        i/lHzrFabHz7g8liyp/lTBabHl9jtfjYc4/V4uGrcIvLu+awWcw4v4/J4tT1z2wWi7Z+Ybdo
+        3XuE3eLwm3ZWi3k75jJaPL7+h81BwGPNvDWMHrMaetk8Nq3qZPO4c20Pm8fmJfUeV040sXr0
+        bVnF6PGvaS67x+dNcgGcUVw2Kak5mWWpRfp2CVwZk/9sZyzY6F/RuKiPsYGxxb6LkYNDQsBE
+        4uZzli5GLg4hgR2MEu1ne1m7GDmB4tIS1zdOYIewhSVW/nvODlH0nFFix9TnYEVsAroSOxa3
+        sYEkRAS6GSWu9MxkBEkwC0xmlmibpA/R8ZVR4tWu+2CjOAUcJfqv9TGCrBYWcJfYtd8DJMwi
+        oCpx5dIOsBJeAUuJ050XmSFsQYmTM5+wQMzUluh92MoIYy9b+JoZ4joFiZ9Pl4EdJCLgJrF0
+        51moenGJl0ePsE9gFJ6FZNQsJKNmIRk1C0nLAkaWVYySqQXFuem5xYYFRnmp5XrFibnFpXnp
+        esn5uZsYwdGspbWDcc+qD3qHGJk4GA8xSnAwK4nwHuN+kijEm5JYWZValB9fVJqTWnyIUZqD
+        RUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QD04x7XbqOaya9Kijt9YiS3TGhVK4j+0uc6+dQ
+        efuEF4bvrR4Xrt2RqXWgwvZNyf6CRck/Xj6497Ppq89znloGRs9LIlLBOntdlwZyVy38KrxR
+        IyXXd9mqqNDl6wotNp4JMFrwYaXVN6fJv9cWmTLeP/1mk+T50CwFpkUzNTacYxBVMPpvxZE2
+        Y9eiDSlGWzbGb2v9MDEvsimRWeXbWhnJ2ecCfBP+zfue36c4YVXAt9VZNSGn6vPPxCdx5rNN
+        +L80KoDpsqLG9pe6cUzXfN9KyV99bh9gdUS8Z+er3DR3i2YprQ1rlxTl9dcmhTlOldwiXFZw
+        rPv11+uJiWnVcQmmxfstN9QrfZl+95+60IHZSizFGYmGWsxFxYkAhodyOFUDAAA=
+X-CMS-MailID: 20220117134459epcas5p2f356d000f3a790c65926167cd6ddd7f5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220113122417epcas5p47398a5190cdf4c574c6f1762918b549f
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+        <CGME20220113122417epcas5p47398a5190cdf4c574c6f1762918b549f@epcas5p4.samsung.com>
+        <20220113121143.22280-16-alim.akhtar@samsung.com>
+        <2927c34e-3259-4e9a-a657-aeeebf9089d2@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+Hi Krzysztof
 
-If using container platforms such as Docker, upon initialization it
-wants to use pivot_root() so that currently mounted devices do not
-propagate to containers. An example of value in this is that
-a USB device connected prior to the creation of a containers on the
-host gets disconnected after a container is created; if the
-USB device was mounted on containers, but already removed and
-umounted on the host, the mount point will not go away until all
-containers unmount the USB device.
+>-----Original Message-----
+>From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
+>Sent: Thursday, January 13, 2022 6:50 PM
+>To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
+>kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
+>Cc: soc=40kernel.org; linux-clk=40vger.kernel.org; devicetree=40vger.kerne=
+l.org;
+>olof=40lixom.net; linus.walleij=40linaro.org; catalin.marinas=40arm.com;
+>robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
+>soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.com;
+>Shashank Prashar <s.prashar=40samsung.com>; Aswani Reddy
+><aswani.reddy=40samsung.com>
+>Subject: Re: =5BPATCH 15/23=5D arm64: dts: fsd: Add initial pinctrl suppor=
+t
+>
+>On 13/01/2022 13:11, Alim Akhtar wrote:
+>> Add initial pin configuration nodes for FSD SoC.
+>>
+>> Cc: linux-fsd=40tesla.com
+>> Signed-off-by: Shashank Prashar <s.prashar=40samsung.com>
+>> Signed-off-by: Aswani Reddy <aswani.reddy=40samsung.com>
+>> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
+>> ---
+>>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi =7C 338
+>+++++++++++++++++++++
+>>  arch/arm64/boot/dts/tesla/fsd.dtsi         =7C  22 ++
+>>  2 files changed, 360 insertions(+)
+>>  create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+>> b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+>> new file mode 100644
+>> index 000000000000..ec8d944af636
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+>> =40=40 -0,0 +1,338 =40=40
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Tesla Full Self-Driving SoC device tree source
+>> + *
+>> + * Copyright (c) 2017-2021 Samsung Electronics Co., Ltd.
+>> + *		https://www.samsung.com
+>> + * Copyright (c) 2017-2021 Tesla, Inc.
+>> + *		https://www.tesla.com
+>> + */
+>> +
+>> +=23include <dt-bindings/pinctrl/samsung.h>
+>> +
+>> +&pinctrl_fsys0 =7B
+>> +
+>
+>No need for empty line.
+>
+Noted
 
-Another reason for container platforms such as Docker to use pivot_root
-is that upon initialization the net-namspace is mounted under
-/var/run/docker/netns/ on the host by dockerd. Without pivot_root
-Docker must either wait to create the network namespace prior to
-the creation of containers or simply deal with leaking this to each
-container.
+>> +	gpf0: gpf0 =7B
+>
+>FYI:
+>It's ok now, but the nodes will have to be renamed to =22xxx-gpio-bank=22 =
+later.
+>
+Have rebased my v2 on your pinmux schema update, so these and below comment=
+s are addressed.
+Thanks
 
-pivot_root is supported if the rootfs is a initrd or block device, but
-it's not supported if the rootfs uses an initramfs (tmpfs). This means
-container platforms today must resort to using block devices if
-they want to pivot_root from the rootfs. A workaround to use chroot()
-is not a clean viable option given every container will have a
-duplicate of every mount point on the host.
-
-In order to support using container platforms such as Docker on
-all the supported rootfs types we must extend Linux to support
-pivot_root on initramfs as well. This patch does the work to do
-just that.
-
-pivot_root will unmount the mount of the rootfs from its parent mount
-and mount the new root to it. However, when it comes to initramfs, it
-donesn't work, because the root filesystem has not parent mount, which
-makes initramfs not supported by pivot_root.
-
-In order to make pivot_root supported on initramfs, we create a second
-mount with type of rootfs before unpacking cpio, and change root to
-this mount after unpacking.
-
-While mounting the second rootfs, 'rootflags' is passed, and it means
-that we can set options for the mount of rootfs in boot cmd now.
-For example, the size of tmpfs can be set with 'rootflags=size=1024M'.
-
-This patch is from:
-[init/initramfs.c: make initramfs support pivot_root]
-https://lore.kernel.org/all/20210605034447.92917-3-dong.menglong@zte.com.cn/
-I fix some console bugs.
-
-Reported-by: dong.menglong@zte.com.cn
-Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
----
- init/do_mounts.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- init/do_mounts.h | 17 ++++++++++++++++-
- init/initramfs.c | 12 +++++++++++-
- usr/Kconfig      | 10 ++++++++++
- 4 files changed, 82 insertions(+), 2 deletions(-)
-
-diff --git a/init/do_mounts.c b/init/do_mounts.c
-index 762b534978d9..8a72c1fe17c8 100644
---- a/init/do_mounts.c
-+++ b/init/do_mounts.c
-@@ -650,6 +650,50 @@ void __init prepare_namespace(void)
- }
- 
- static bool is_tmpfs;
-+#ifdef CONFIG_INITRAMFS_MOUNT
-+
-+/*
-+ * Give systems running from the initramfs and making use of pivot_root a
-+ * proper mount so it can be umounted during pivot_root.
-+ */
-+int __init prepare_mount_rootfs(void)
-+{
-+	char *rootfs = "ramfs";
-+
-+	if (is_tmpfs)
-+		rootfs = "tmpfs";
-+
-+	init_mkdir("/root", 0700);
-+	return do_mount_root(rootfs, rootfs,
-+				root_mountflags & ~MS_RDONLY,
-+				root_mount_data);
-+}
-+
-+/*
-+ * Revert to previous mount by chdir to '/' and unmounting the second
-+ * mount.
-+ */
-+void __init revert_mount_rootfs(void)
-+{
-+	init_chdir("/");
-+	init_umount(".", MNT_DETACH);
-+}
-+
-+/*
-+ * Change root to the new rootfs that mounted in prepare_mount_rootfs()
-+ * if cpio is unpacked successfully and 'ramdisk_execute_command' exist.
-+ */
-+void __init finish_mount_rootfs(void)
-+{
-+	init_mount(".", "/", NULL, MS_MOVE, NULL);
-+	if (likely(ramdisk_exec_exist()))
-+		init_chroot(".");
-+	else
-+		revert_mount_rootfs();
-+}
-+
-+#define rootfs_init_fs_context ramfs_init_fs_context
-+#else
- static int rootfs_init_fs_context(struct fs_context *fc)
- {
- 	if (IS_ENABLED(CONFIG_TMPFS) && is_tmpfs)
-@@ -657,6 +701,7 @@ static int rootfs_init_fs_context(struct fs_context *fc)
- 
- 	return ramfs_init_fs_context(fc);
- }
-+#endif
- 
- struct file_system_type rootfs_fs_type = {
- 	.name		= "rootfs",
-diff --git a/init/do_mounts.h b/init/do_mounts.h
-index 7a29ac3e427b..ae4ab306caa9 100644
---- a/init/do_mounts.h
-+++ b/init/do_mounts.h
-@@ -10,9 +10,24 @@
- #include <linux/root_dev.h>
- #include <linux/init_syscalls.h>
- 
-+extern int root_mountflags;
-+
- void  mount_block_root(char *name, int flags);
- void  mount_root(void);
--extern int root_mountflags;
-+
-+#ifdef CONFIG_INITRAMFS_MOUNT
-+
-+int  prepare_mount_rootfs(void);
-+void finish_mount_rootfs(void);
-+void revert_mount_rootfs(void);
-+
-+#else
-+
-+static inline int  prepare_mount_rootfs(void) { return 0; }
-+static inline void finish_mount_rootfs(void) { }
-+static inline void revert_mount_rootfs(void) { }
-+
-+#endif
- 
- static inline __init int create_dev(char *name, dev_t dev)
- {
-diff --git a/init/initramfs.c b/init/initramfs.c
-index 2f3d96dc3db6..881fb8ea4352 100644
---- a/init/initramfs.c
-+++ b/init/initramfs.c
-@@ -17,6 +17,8 @@
- #include <linux/init_syscalls.h>
- #include <linux/umh.h>
- 
-+#include "do_mounts.h"
-+
- static ssize_t __init xwrite(struct file *file, const char *p, size_t count,
- 		loff_t *pos)
- {
-@@ -671,7 +673,12 @@ static void __init populate_initrd_image(char *err)
- static void __init do_populate_rootfs(void *unused, async_cookie_t cookie)
- {
- 	/* Load the built in initramfs */
--	char *err = unpack_to_rootfs(__initramfs_start, __initramfs_size);
-+	char *err;
-+
-+	if (prepare_mount_rootfs())
-+		panic("Failed to mount rootfs\n");
-+
-+	err = unpack_to_rootfs(__initramfs_start, __initramfs_size);
- 	if (err)
- 		panic_show_mem("%s", err); /* Failed to decompress INTERNAL initramfs */
- 
-@@ -685,11 +692,14 @@ static void __init do_populate_rootfs(void *unused, async_cookie_t cookie)
- 
- 	err = unpack_to_rootfs((char *)initrd_start, initrd_end - initrd_start);
- 	if (err) {
-+		revert_mount_rootfs();
- #ifdef CONFIG_BLK_DEV_RAM
- 		populate_initrd_image(err);
- #else
- 		printk(KERN_EMERG "Initramfs unpacking failed: %s\n", err);
- #endif
-+	} else {
-+		finish_mount_rootfs();
- 	}
- 
- done:
-diff --git a/usr/Kconfig b/usr/Kconfig
-index 8bbcf699fe3b..af2aeeef8635 100644
---- a/usr/Kconfig
-+++ b/usr/Kconfig
-@@ -52,6 +52,16 @@ config INITRAMFS_ROOT_GID
- 
- 	  If you are not sure, leave it set to "0".
- 
-+config INITRAMFS_MOUNT
-+       bool "Create second mount to make pivot_root() supported"
-+       default y
-+       help
-+         Before unpacking cpio, create a second mount and make it become
-+         the root filesystem. Therefore, initramfs will be supported by
-+         pivot_root().
-+
-+         If container platforms is used with initramfs, say Y.
-+
- config RD_GZIP
- 	bool "Support initial ramdisk/ramfs compressed using gzip"
- 	default y
--- 
-2.25.1
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpf1: gpf1 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpf6: gpf6 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpf4: gpf4 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpf5: gpf5 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +=7D;
+>> +
+>> +&pinctrl_peric =7B
+>> +
+>
+>No need for empty line.
+>
+>> +	gpc8: gpc8 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpf2: gpf2 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpf3: gpf3 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpd0: gpd0 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpb0: gpb0 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpb1: gpb1 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpb4: gpb4 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpb5: gpb5 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpb6: gpb6 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpb7: gpb7 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpd1: gpd1 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpd2: gpd2 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpd3: gpd3 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg0: gpg0 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg1: gpg1 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg2: gpg2 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg3: gpg3 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg4: gpg4 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg5: gpg5 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg6: gpg6 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	gpg7: gpg7 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +
+>> +		interrupt-controller;
+>> +		=23interrupt-cells =3D <2>;
+>> +	=7D;
+>> +
+>> +	pwm0_out: pwm0-out =7B
+>
+>All pin configuretion node names with =22-pins=22 suffix. Upcoming dtschem=
+a will
+>require this.
+>
+>> +		samsung,pins =3D =22gpb6-1=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV2>;
+>> +	=7D;
+>> +
+>> +	pwm1_out: pwm1-out =7B
+>> +		samsung,pins =3D =22gpb6-5=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV2>;
+>> +	=7D;
+>> +
+>> +	hs_i2c0_bus: hs-i2c0-bus =7B
+>> +		samsung,pins =3D =22gpb0-0=22, =22gpb0-1=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c1_bus: hs-i2c1-bus =7B
+>> +		samsung,pins =3D =22gpb0-2=22, =22gpb0-3=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c2_bus: hs-i2c2-bus =7B
+>> +		samsung,pins =3D =22gpb0-4=22, =22gpb0-5=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c3_bus: hs-i2c3-bus =7B
+>> +		samsung,pins =3D =22gpb0-6=22, =22gpb0-7=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c4_bus: hs-i2c4-bus =7B
+>> +		samsung,pins =3D =22gpb1-0=22, =22gpb1-1=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c5_bus: hs-i2c5-bus =7B
+>> +		samsung,pins =3D =22gpb1-2=22, =22gpb1-3=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c6_bus: hs-i2c6-bus =7B
+>> +		samsung,pins =3D =22gpb1-4=22, =22gpb1-5=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	hs_i2c7_bus: hs-i2c7-bus =7B
+>> +		samsung,pins =3D =22gpb1-6=22, =22gpb1-7=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	uart0_data: uart0-data =7B
+>> +		samsung,pins =3D =22gpb7-0=22, =22gpb7-1=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_NONE>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	uart1_data: uart1-data =7B
+>> +		samsung,pins =3D =22gpb7-4=22, =22gpb7-5=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_NONE>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	spi0_bus: spi0-bus =7B
+>> +		samsung,pins =3D =22gpb4-0=22, =22gpb4-2=22, =22gpb4-3=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	spi1_bus: spi1-bus =7B
+>> +		samsung,pins =3D =22gpb4-4=22, =22gpb4-6=22, =22gpb4-7=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +
+>> +	spi2_bus: spi2-bus =7B
+>> +		samsung,pins =3D =22gpb5-0=22, =22gpb5-2=22, =22gpb5-3=22;
+>> +		samsung,pin-function =3D <EXYNOS_PIN_FUNC_2>;
+>> +		samsung,pin-pud =3D <EXYNOS_PIN_PULL_UP>;
+>> +		samsung,pin-drv =3D <EXYNOS4_PIN_DRV_LV1>;
+>> +	=7D;
+>> +=7D;
+>> +
+>> +&pinctrl_pmu =7B
+>> +
+>
+>No need for empty line.
+>
+>> +	gpq0: gpq0 =7B
+>> +		gpio-controller;
+>> +		=23gpio-cells =3D <2>;
+>> +	=7D;
+>
+>
+>
+>
+>Best regards,
+>Krzysztof
 

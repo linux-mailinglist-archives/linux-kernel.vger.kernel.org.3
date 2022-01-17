@@ -2,117 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F7A491009
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9C6490F42
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242234AbiAQSG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:06:56 -0500
-Received: from mga05.intel.com ([192.55.52.43]:51931 "EHLO mga05.intel.com"
+        id S242721AbiAQRSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:18:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:33262 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232426AbiAQSGz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:06:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642442815; x=1673978815;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=XXFdFLVJY5KBBZp6WHS4dhJVYZEvhL9b7ul4U2y0o8U=;
-  b=YlworV7VmHXEo1lGFTPV2bdPnrhuBn7O28ES7MEG1IwsPPOdts3IiBJ0
-   ZT7T5n5HVxksiTb6/EYpCQf3oXglsUveOQ8DzC5pIjpnwDvsagMYF5eE2
-   veZZ3own5i2KOGUIthpTk/k+3samnYouSLD+ocKUIGX4hccT2gjQeuD9h
-   vYbGIzHHCcvRjWf5JGWQo1awRczU4zMNlsXGXcKMuuzVunHwjK9oaz878
-   RfN0fsIH2pTPU4KAwh0IwAJFvPx4wFTJV6J1yKa6QWjuSw5XlaaKmyYEL
-   b+YT8q9dDIbfq268pVL0zBX1h4PccW2ty/9vX6Yutn6i8+S3hOhMk222J
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="331022070"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="331022070"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:06:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="625260176"
-Received: from pthompso-mobl1.amr.corp.intel.com (HELO [10.213.168.97]) ([10.213.168.97])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:06:54 -0800
-Subject: Re: [PATCH] ASoC: soc-pcm: use GFP_ATOMIC in
- dpcm_create_debugfs_state()
-To:     Takashi Iwai <tiwai@suse.de>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     alsa-devel@alsa-project.org,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-References: <ed322b8821fa787907c1a4cce879564d1281b69d.1642331884.git.christophe.jaillet@wanadoo.fr>
- <s5hwniy21cl.wl-tiwai@suse.de>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <bbe18490-fba4-9307-fe5f-b02c00433d07@linux.intel.com>
-Date:   Mon, 17 Jan 2022 11:11:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S243001AbiAQRQv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:16:51 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA7F16D;
+        Mon, 17 Jan 2022 09:16:49 -0800 (PST)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC2943F766;
+        Mon, 17 Jan 2022 09:16:48 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Yihao Wu <wuyihao@linux.alibaba.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Shanpei Chen <shanpeic@linux.alibaba.com>,
+        =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/fair: Again ignore percpu threads for imbalance pulls
+In-Reply-To: <5f8497cd-aeaf-906d-a2d8-2e0a752fed4b@linux.alibaba.com>
+References: <20211211094808.109295-1-wuyihao@linux.alibaba.com> <87k0g48kyp.mognet@arm.com> <5f8497cd-aeaf-906d-a2d8-2e0a752fed4b@linux.alibaba.com>
+Date:   Mon, 17 Jan 2022 17:16:42 +0000
+Message-ID: <87ee56705h.mognet@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <s5hwniy21cl.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/01/22 22:50, Yihao Wu wrote:
+> Thanks a lot for the help, Valentin and Peter!
+>
+> On 2021/12/17 2:26am, Valentin Schneider wrote:
+>> On 11/12/21 17:48, Yihao Wu wrote:
+>>> commit 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance
+>>> pulls") was meant to fix a performance issue, when load balance tries to
+>>> migrate pinned kernel threads at MC domain level. This was destined to
+>>> fail.
+>> 
+>>> After it fails, it further makes wakeup balance at NUMA domain level
+>>> messed up. The most severe case that I noticed and frequently occurs:
+>>>      |sum_nr_running(node1) - sum_nr_running(node2)| > 100
+>>>
+>> 
+>> Wakeup balance (aka find_idlest_cpu()) is different from periodic load
+>> balance (aka load_balance()) and doesn't use can_migrate_task(), so the
+>> incriminated commit shouldn't have impacted it (at least not in obvious
+>> ways...). Do you have any more details on that issue
+>
+> The original bugfix concerns only about load balance. While I found wake
+> up balance is impacted too, after I observed regression in lmbench3 test
+> suite. This is how it's impacted:
+>
+> - Periodic load balance
+> - kthread_is_per_cpu? No
+> - env->flags |= LBF_SOME_PINNED
+> - sd_parent..imbalance being set to 1 because of LBF_SOME_PINNED
+>
+> So far exactly the same as what Chandrasekhar describes in 2f5f4cce496e.
+> Then imbalance connects periodic and wakeup balance.
+>
+> - Wakeup balance(find_idlest_group)
+> - update_sg_wakeup_stats classifies local_sgs as group_imbalanced
+> - find_idlest_group chooses another NUMA node
+>
+> wakeup balance keeps doing this until another NUMA node becomes so busy.
+> And another periodic load balance just shifts it around, makeing the 
+> previously overloaded node completely idle now.
+>
 
+Oooh, right, I came to the same conclusion when I got that stress-ng
+regression report back then:
 
-On 1/17/22 2:49 AM, Takashi Iwai wrote:
-> On Sun, 16 Jan 2022 12:18:17 +0100,
-> Christophe JAILLET wrote:
->>
->> The commit below states that dpcm_be_connect() may be called from atomic
->> context. It changes a GFP_KERNEL into a GFP_ATOMIC to deal with it.
->>
->> Another memory allocation is done in dpcm_create_debugfs_state() which is
->> called by dpcm_be_connect(). Also use GFP_ATOMIC there to be consistent
->> and be compliant with atomic context.
->>
->> Fixes: d8a9c6e1f676 ("ASoC: soc-pcm: use GFP_ATOMIC for dpcm structure")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> Not clear to me how dpcm_be_connect() can be called from an atomic context,
->> though. But better safe than sorry.
-> 
-> I don't think this no longer valid for the very latest code.
-> The commit b7898396f4bb dropped the spurious dpcm_lock spinlock, so
-> the code path you touched must be always sleepable.
-> 
-> Similarly, the commit d8a9c6e1f676 can be reverted now.
+https://lore.kernel.org/all/871rajkfkn.mognet@arm.com/
 
-Can we really revert d8a9c6e1f676?
+I pretty much gave up on that as the regression we caused by removing an
+obscure/accidental balance which I couldn't properly codify. I can give it
+another shot, but AFAICT that only affects fork/exec heavy workloads (that
+-13% was on something doing almost only forks) which is an odd case to
+support.
 
-We did propagate the non-atomic FE property to the BE, but if both FE
-and BE are both atomic that constraint would be required, no?
+> (Thanks to the great schedviz tool, I observed that all workloads as a 
+> whole, is migrated between the two NUMA nodes in a ping-pong pattern, 
+> and with a period around 3ms)
+>
+> The reason wake up balance suffers more is, in fork+exit test case, 
+> wakeup balance happens with much higher frequency. It exists in real 
+> world applications too I believe.
+>
+>> 
+>>> However the original bugfix failed, because it covers only case 1) below.
+>>>    1) Created by create_kthread
+>>>    2) Created by kernel_thread
+>>> No kthread is assigned to task_struct in case 2 (Please refer to comments
+>>> in free_kthread_struct) so it simply won't work.
+>>>
+>>> The easist way to cover both cases is to check nr_cpus_allowed, just as
+>>> discussed in the mailing list of the v1 version of the original fix.
+>>>
+>>> * lmbench3.lat_proc -P 104 fork (2 NUMA, and 26 cores, 2 threads)
+>>>
+>> 
+>> Reasoning about "proper" pcpu kthreads was simpler since they are static,
+>> see 3a7956e25e1d ("kthread: Fix PF_KTHREAD vs to_kthread() race")
+>> 
+> Get it. Thanks.
+>
+>>>                           w/out patch                 w/ patch
+>>> fork+exit latency            1660 ms                  1520 ms (   8.4%)
+>>>
+>>> Fixes: 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance pulls")
+>>> Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
+>>> ---
+>>>   kernel/kthread.c | 6 +-----
+>>>   1 file changed, 1 insertion(+), 5 deletions(-)
+>>>
+>>> diff --git a/kernel/kthread.c b/kernel/kthread.c
+>>> index 4a4d7092a2d8..cb05d3ff2de4 100644
+>>> --- a/kernel/kthread.c
+>>> +++ b/kernel/kthread.c
+>>> @@ -543,11 +543,7 @@ void kthread_set_per_cpu(struct task_struct *k, int cpu)
+>>>
+>>>   bool kthread_is_per_cpu(struct task_struct *p)
+>>>   {
+>>> -	struct kthread *kthread = __to_kthread(p);
+>>> -	if (!kthread)
+>>> -		return false;
+>>> -
+>>> -	return test_bit(KTHREAD_IS_PER_CPU, &kthread->flags);
+>>> +	return (p->flags & PF_KTHREAD) && p->nr_cpus_allowed == 1;
+>>>   }
+>> 
+>> As Peter said, this is going to cause issues. If you look at
+>> kthread_set_per_cpu(), we also store a CPU value which we expect to be
+>> valid when kthread_is_per_cpu(), which that change is breaking.
+>> 
+>> AIUI what you want to patch is the actual usage in can_migrate_task()
+>> 
+>
+> Get it. Some may want a consistent view of kthread_is_per_cpu, 
+> kthread->cpu, and KTHREAD_IS_PER_CPU.
+>
+> Are you suggesting to patch only can_migrate_task to check 
+> nr_cpus_allowed?
 
+Yes
 
-> 
-> thanks,
-> 
-> Takashi
-> 
->> ---
->>  sound/soc/soc-pcm.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
->> index 7abfc48b26ca..1a536a2b9dc3 100644
->> --- a/sound/soc/soc-pcm.c
->> +++ b/sound/soc/soc-pcm.c
->> @@ -212,7 +212,7 @@ static void dpcm_create_debugfs_state(struct snd_soc_dpcm *dpcm, int stream)
->>  {
->>  	char *name;
->>  
->> -	name = kasprintf(GFP_KERNEL, "%s:%s", dpcm->be->dai_link->name,
->> +	name = kasprintf(GFP_ATOMIC, "%s:%s", dpcm->be->dai_link->name,
->>  			 stream ? "capture" : "playback");
->>  	if (name) {
->>  		dpcm->debugfs_state = debugfs_create_dir(
->> -- 
->> 2.32.0
->>
+> Wouldn't it be confusing if it uses an alternative way 
+> to tell if p is a per-cpu kthread?
+>
+
+Well then it wouldn't catch just per-CPU kthreads, but rather any pinned
+task (kernel or otherwise). But then you have to check/test if that's a
+sane thing to :)
+
+> I haven't a better solution though. :(
+>
+>
+> Thanks,
+> Yihao Wu
+>
+>>>
+>>>   /**
+>>> --
+>>> 2.32.0.604.gb1f3e1269

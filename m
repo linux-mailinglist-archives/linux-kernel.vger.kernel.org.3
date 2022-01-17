@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D305049072A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFD649072C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239114AbiAQLbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:31:52 -0500
-Received: from azure-sdnproxy.icoremail.net ([52.237.72.81]:33733 "HELO
-        azure-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S233787AbiAQLbv (ORCPT
+        id S239123AbiAQLdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:33:37 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54680 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233803AbiAQLdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:31:51 -0500
-X-Greylist: delayed 107656 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 06:31:50 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=l5EI56No/cQANz7j6X94ZegR9mUHB+wL+gPQh6Mrqo4=; b=H
-        qqgaPWZLHc1AOqiiaGkO68Jwmq6bNr1wCLSm2yKgOdNYMQ/0MfvDEDAq70VZC3Qs
-        7q6jNwRi0Zp/PBn424tNOF57EN2IWn8VjecD3HF/JExh5gqaVpzHvlLwl4YFIIiG
-        CP2vKfOMzCRDEbVeg8lJj8uzLtYEn9xnSzBjAz1Vfs=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogAnEDmyUuVhl05nAA--.43916S2;
-        Mon, 17 Jan 2022 19:27:46 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, lyz_cs@pku.edu.cn
-Subject: [PATCH] driver core: Add missing pm_runtime_put_noidle
-Date:   Mon, 17 Jan 2022 03:27:42 -0800
-Message-Id: <1642418862-5868-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 5oFpogAnEDmyUuVhl05nAA--.43916S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYF7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
-        82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEEBlPy7t9+qgAZsd
+        Mon, 17 Jan 2022 06:33:35 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5A3991F39A;
+        Mon, 17 Jan 2022 11:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642419214; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6AT+BcSng3mCjm3YV8NAWDfJaHk3WflmRlnyGIs2osU=;
+        b=W9fQoUk6ynN8A9SUKYIzk+1u9jMKeIkiIk30Qy2MmF2K2mc8MRRpBph23eyBNuPULQJYo1
+        GZAu82TYgSznNB+DKbd/DbZzZoI+YxFT4s2D4C1WyAK94WGmS9yg31YFEdl2VPXqAeuD0e
+        lorOsIyOTPijwQW/AGlgGOJXgAekaRE=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B21BBA3B84;
+        Mon, 17 Jan 2022 11:33:33 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 12:33:33 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Joel Savitz <jsavitz@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        Nico Pache <npache@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+Message-ID: <YeVUDVV4Z5ur9Flh@dhcp22.suse.cz>
+References: <20211207214902.772614-1-jsavitz@redhat.com>
+ <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
+ <YbB0d6T8RbHW48sZ@dhcp22.suse.cz>
+ <YbDX16LAkvzgYHpH@dhcp22.suse.cz>
+ <CAL1p7m4ka1v-Zoi-RpDy5ME-bMikGPX5V_4Hod-Y0KHOq_G8zA@mail.gmail.com>
+ <YbG1mu0CLONo+Z7l@dhcp22.suse.cz>
+ <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pm_runtime_get_noresume() in device_shutdown increments the
-runtime PM usage counter, thus a matching decrement is needed
-to keep the counter balanced.
+I have only noticed your email now after replying to v3 so our emails
+have crossed.
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/base/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Fri 14-01-22 09:39:55, Joel Savitz wrote:
+> > What has happened to the oom victim and why it has never exited?
+> 
+> What appears to happen is that the oom victim is sent SIGKILL by the
+> process that triggers the oom while also being marked as an oom
+> victim.
+> 
+> As you mention in your patchset introducing the oom reaper in commit
+> aac4536355496 ("mm, oom: introduce oom reaper"), the purpose the the
+> oom reaper is to try and free more memory more quickly than it
+> otherwise would have been by assuming anonymous or swapped out pages
+> won't be needed in the exit path as the owner is already dying.
+> However, this assumption is violated by the futex_cleanup() path,
+> which needs access to userspace in fetch_robust_entry() when it is
+> called in exit_robust_list(). Trace_printk()s in this failure path
+> reveal an apparent race between the oom reaper thread reaping the
+> victim's mm and the futex_cleanup() path. There may be other ways that
+> this race manifests but we have been most consistently able to trace
+> that one.
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 7bb957b..d41be8a 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -4533,6 +4533,8 @@ void device_shutdown(void)
- 			dev->driver->shutdown(dev);
- 		}
- 
-+		pm_runtime_put_noidle(dev);
-+
- 		device_unlock(dev);
- 		if (parent)
- 			device_unlock(parent);
+Please let's continue the discussion in the v3 email thread:
+http://lkml.kernel.org/r/20220114180135.83308-1-npache@redhat.com
 -- 
-2.7.4
-
+Michal Hocko
+SUSE Labs

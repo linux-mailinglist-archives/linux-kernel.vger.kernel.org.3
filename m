@@ -2,234 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E14A490DD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD25A490D59
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241315AbiAQRFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S242104AbiAQRCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242333AbiAQRDu (ORCPT
+        with ESMTP id S241703AbiAQRBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:03:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E11C061749;
-        Mon, 17 Jan 2022 09:02:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02FFA611E0;
-        Mon, 17 Jan 2022 17:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4BDCC36AEC;
-        Mon, 17 Jan 2022 17:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642438970;
-        bh=fgpNcpGwTQOlUCWiGZGZm/cuplCzU4SORglq/H8Knog=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sn/5D8HIa2xg7ZUOcBqACG2Ksld12GGFGzDemTMfbpbAKKrjWiQy2lSLz3PgmwrRD
-         D88q3sZbT5TiXQsFiXhxf7RP7EOgvIA32l4RBcGo+0TLDY1sXt6eiVqE+CgQ83C4zI
-         dhce2W4ZQP+gxn7ydA11iXJoTDQR28Vw5KCN85jxMUafBfwKG6Ll6H34S4vuN6/IBG
-         Gjq8j4s1nl1I8RV2bGviLw6WphsJ0p8gsDTQr68utTgJBXsi8b7uJjKTi3RYFmDUPz
-         M5gcqca+PUC8ACfot+SUYDI1oQSJ+yWdYqe4rLC+7y10FL3aIsgG3/JaB5SBfVZtfS
-         qEQGurZTcGVCQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 33/44] selftests/powerpc: Add a test of sigreturning to the kernel
-Date:   Mon, 17 Jan 2022 12:01:16 -0500
-Message-Id: <20220117170127.1471115-33-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220117170127.1471115-1-sashal@kernel.org>
-References: <20220117170127.1471115-1-sashal@kernel.org>
+        Mon, 17 Jan 2022 12:01:20 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6BC06175F;
+        Mon, 17 Jan 2022 09:01:20 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so3399498otu.0;
+        Mon, 17 Jan 2022 09:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EBGqX//gdJ9dDcyQcFJ1+S8K91sxfz9HwY6Hed4kq/8=;
+        b=UuA1oVC7z1sbz8HicmtlVZV62sByxjLCTo9CbQOHcxdtu6HpNBJCU+o2whEj0xf2Yh
+         Z8RFPYYPxkjhQOBbkfTBbpPs+H89H3vNmVzg3twiQ5KkHACvIS1ZHYbuO6X6oV5j7Xjy
+         r0B1gKDITLihuf/j4+5ixn7Cot1a8CYN46wf6yL9YBahtumUR8yjlaCHaHNGFT6/ghsE
+         XRpFGnWg/fEpCi2PILQFLleUoyvKogTGLY+AfoGQ6la6XzD0wefBNxtkFO3SdmNNbFkT
+         WwgQ0pmmMgqbdRTw4Iw00urwSqYV2K9/j077tve73Hv7SyJ8x7359Tl7HmvwSmpyDV8I
+         woug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EBGqX//gdJ9dDcyQcFJ1+S8K91sxfz9HwY6Hed4kq/8=;
+        b=b9N33F9KmgmrQbbvcx9EhGdjGvQdRYn+8XTIpKme9C/0OU5R2d3lj2GwCTESA5hxL3
+         5GFIvOMrJmkeQ4jJmcUv3LA9/1InVN6M2OgmcOjGnWe5ZVS70RJzzzFac05AMb/r7NuP
+         6+RQnArvd1pKAyZlA8n3ee6ilPdTdEZqCYghen5N5I0y4vo3O/VlKBxjUqF2LF+qzKuj
+         x4UNXr+ahq+j0MmAx2stg3IAhWIyE1MXTT6GUqs9oRKMsr3oDgMYf8/TOOFpU+BvGyk2
+         KbcTslVwmYE9kGaK9qjGgLPGGyelpWVeU9apWwuj9M+kNbihSuSfIJaa6V+ceqDC/WW+
+         61jw==
+X-Gm-Message-State: AOAM533qdLQuDYeQyfM+lKxjo9ED7xVQkQWkvcAg5th2DsFZBrHytjuF
+        dFBz/9Vg4X0X0EXSEpjujEJWQz13qD4=
+X-Google-Smtp-Source: ABdhPJwiKeQ2ObSK4DghQ2YRGrtrnfscg7tzal3Mq0R1vRT5apNN48kFo16NeVPWSdDVcSE2vLTThg==
+X-Received: by 2002:a05:6830:1d47:: with SMTP id p7mr1755167oth.211.1642438879445;
+        Mon, 17 Jan 2022 09:01:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d12sm5140476otl.80.2022.01.17.09.01.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 09:01:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+References: <cover.1642434222.git.sylv@sylv.io>
+ <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 4/4] pmbus: Add support for bcm6123 Bus Converter
+Message-ID: <c04086b8-7948-c1d9-56ee-e20455e8c92b@roeck-us.net>
+Date:   Mon, 17 Jan 2022 09:01:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+On 1/17/22 8:12 AM, Marcello Sylvester Bauer wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> 
+> BCM6123 is an Fixed-Ratio DC-DC Converter.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> ---
+>   drivers/hwmon/pmbus/Kconfig   |  9 ++++
+>   drivers/hwmon/pmbus/Makefile  |  1 +
+>   drivers/hwmon/pmbus/bcm6123.c | 90 +++++++++++++++++++++++++++++++++++
 
-[ Upstream commit a8968521cfdc3e339fe69473d6632e0aa8d7202a ]
+Documentation/hwmon/bcm6123 is missing.
 
-We have a general signal fuzzer, sigfuz, which can modify the MSR & NIP
-before sigreturn. But the chance of it hitting a kernel address and also
-clearing MSR_PR is fairly slim.
+>   3 files changed, 100 insertions(+)
+>   create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index c96f7b7338bd..62dac90631c5 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -48,6 +48,15 @@ config SENSORS_ADM1275
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called adm1275.
+>   
+> +config SENSORS_BCM6123
+> +	tristate "Vicor BCM6123 Compatible Power Supplies"
 
-So add a specific test of sigreturn to a kernel address, both with and
-without attempting to clear MSR_PR (which the kernel must block).
+Is this a power supply or a chip ? It can't be both.
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211209115944.4062384-1-mpe@ellerman.id.au
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../selftests/powerpc/signal/.gitignore       |   1 +
- .../testing/selftests/powerpc/signal/Makefile |   1 +
- .../powerpc/signal/sigreturn_kernel.c         | 132 ++++++++++++++++++
- 3 files changed, 134 insertions(+)
- create mode 100644 tools/testing/selftests/powerpc/signal/sigreturn_kernel.c
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Vicor
+> +	  BCM6123 Power Supplies.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called bcm6123.
+> +
+>   config SENSORS_BEL_PFE
+>   	tristate "Bel PFE Compatible Power Supplies"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index e5935f70c9e0..2918c2ea7bc5 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -7,6 +7,7 @@ obj-$(CONFIG_PMBUS)		+= pmbus_core.o
+>   obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+>   obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+>   obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+> +obj-$(CONFIG_SENSORS_BCM6123)	+= bcm6123.o
+>   obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+>   obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
+>   obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
+> diff --git a/drivers/hwmon/pmbus/bcm6123.c b/drivers/hwmon/pmbus/bcm6123.c
+> new file mode 100644
+> index 000000000000..78fc259bc40f
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/bcm6123.c
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Infineon bcm6123
+> + *
+Infineon ?
 
-diff --git a/tools/testing/selftests/powerpc/signal/.gitignore b/tools/testing/selftests/powerpc/signal/.gitignore
-index ce3375cd8e73e..8f6c816099a48 100644
---- a/tools/testing/selftests/powerpc/signal/.gitignore
-+++ b/tools/testing/selftests/powerpc/signal/.gitignore
-@@ -4,3 +4,4 @@ signal_tm
- sigfuz
- sigreturn_vdso
- sig_sc_double_restart
-+sigreturn_kernel
-diff --git a/tools/testing/selftests/powerpc/signal/Makefile b/tools/testing/selftests/powerpc/signal/Makefile
-index d6ae54663aed7..84e201572466d 100644
---- a/tools/testing/selftests/powerpc/signal/Makefile
-+++ b/tools/testing/selftests/powerpc/signal/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- TEST_GEN_PROGS := signal signal_tm sigfuz sigreturn_vdso sig_sc_double_restart
-+TEST_GEN_PROGS += sigreturn_kernel
- 
- CFLAGS += -maltivec
- $(OUTPUT)/signal_tm: CFLAGS += -mhtm
-diff --git a/tools/testing/selftests/powerpc/signal/sigreturn_kernel.c b/tools/testing/selftests/powerpc/signal/sigreturn_kernel.c
-new file mode 100644
-index 0000000000000..0a1b6e591eeed
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/signal/sigreturn_kernel.c
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test that we can't sigreturn to kernel addresses, or to kernel mode.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "utils.h"
-+
-+#define MSR_PR (1ul << 14)
-+
-+static volatile unsigned long long sigreturn_addr;
-+static volatile unsigned long long sigreturn_msr_mask;
-+
-+static void sigusr1_handler(int signo, siginfo_t *si, void *uc_ptr)
-+{
-+	ucontext_t *uc = (ucontext_t *)uc_ptr;
-+
-+	if (sigreturn_addr)
-+		UCONTEXT_NIA(uc) = sigreturn_addr;
-+
-+	if (sigreturn_msr_mask)
-+		UCONTEXT_MSR(uc) &= sigreturn_msr_mask;
-+}
-+
-+static pid_t fork_child(void)
-+{
-+	pid_t pid;
-+
-+	pid = fork();
-+	if (pid == 0) {
-+		raise(SIGUSR1);
-+		exit(0);
-+	}
-+
-+	return pid;
-+}
-+
-+static int expect_segv(pid_t pid)
-+{
-+	int child_ret;
-+
-+	waitpid(pid, &child_ret, 0);
-+	FAIL_IF(WIFEXITED(child_ret));
-+	FAIL_IF(!WIFSIGNALED(child_ret));
-+	FAIL_IF(WTERMSIG(child_ret) != 11);
-+
-+	return 0;
-+}
-+
-+int test_sigreturn_kernel(void)
-+{
-+	struct sigaction act;
-+	int child_ret, i;
-+	pid_t pid;
-+
-+	act.sa_sigaction = sigusr1_handler;
-+	act.sa_flags = SA_SIGINFO;
-+	sigemptyset(&act.sa_mask);
-+
-+	FAIL_IF(sigaction(SIGUSR1, &act, NULL));
-+
-+	for (i = 0; i < 2; i++) {
-+		// Return to kernel
-+		sigreturn_addr = 0xcull << 60;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return to kernel virtual
-+		sigreturn_addr = 0xc008ull << 48;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return out of range
-+		sigreturn_addr = 0xc010ull << 48;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return to no-man's land, just below PAGE_OFFSET
-+		sigreturn_addr = (0xcull << 60) - (64 * 1024);
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return to no-man's land, above TASK_SIZE_4PB
-+		sigreturn_addr = 0x1ull << 52;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return to 0xd space
-+		sigreturn_addr = 0xdull << 60;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return to 0xe space
-+		sigreturn_addr = 0xeull << 60;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Return to 0xf space
-+		sigreturn_addr = 0xfull << 60;
-+		pid = fork_child();
-+		expect_segv(pid);
-+
-+		// Attempt to set PR=0 for 2nd loop (should be blocked by kernel)
-+		sigreturn_msr_mask = ~MSR_PR;
-+	}
-+
-+	printf("All children killed as expected\n");
-+
-+	// Don't change address, just MSR, should return to user as normal
-+	sigreturn_addr = 0;
-+	sigreturn_msr_mask = ~MSR_PR;
-+	pid = fork_child();
-+	waitpid(pid, &child_ret, 0);
-+	FAIL_IF(!WIFEXITED(child_ret));
-+	FAIL_IF(WIFSIGNALED(child_ret));
-+	FAIL_IF(WEXITSTATUS(child_ret) != 0);
-+
-+	return 0;
-+}
-+
-+int main(void)
-+{
-+	return test_harness(test_sigreturn_kernel, "sigreturn_kernel");
-+}
--- 
-2.34.1
+> + * Copyright (c) 2021 9elements GmbH
+> + *
+> + * VOUT_MODE is not supported by the device. The driver fakes VOUT linear16
+> + * mode with exponent value -8 as direct mode with m=256/b=0/R=0.
+> + *
+
+Does it not ? The datasheet doesn't say, and the code below doesn't match
+this description.
+
+> + * The device supports VOUT_PEAK, IOUT_PEAK, and TEMPERATURE_PEAK, however
+> + * this driver does not currently support them.
+
+Does it ? There is no reference for this in the datasheet.
+
+Overall it seems like there is a lot of cut-and-paste. Please clean this up.
+
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include "pmbus.h"
+> +
+> +static struct pmbus_platform_data bcm6123_plat_data = {
+> +	.flags = PMBUS_NO_CAPABILITY,
+> +};
+
+We should only set this flag if it is really needed.
+
+> +
+> +static struct pmbus_driver_info bcm6123_info = {
+> +	.pages = 2,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_IN] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.m[PSC_VOLTAGE_IN] = 1,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 1,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 1,
+> +	.m[PSC_CURRENT_IN] = 1,
+> +	.b[PSC_CURRENT_IN] = 0,
+> +	.R[PSC_CURRENT_IN] = 3,
+> +	.m[PSC_CURRENT_OUT] = 1,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_CURRENT_OUT] = 2,
+> +	.func[0] = 0, /* Summing page without voltage readings */
+
+This needs further explanation. The public datasheet doesn't say anything
+about multiple pages, and it doesn't really make much sense to have an
+"empty" page with no information in it.
+
+> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +	    | PMBUS_HAVE_IIN | PMBUS_HAVE_POUT,
+> +};
+> +
+> +static int bcm6123_probe(struct i2c_client *client)
+> +{
+> +	client->dev.platform_data = &bcm6123_plat_data;
+> +
+> +	return pmbus_do_probe(client, &bcm6123_info);
+> +}
+> +
+> +static const struct i2c_device_id bcm6123_id[] = {
+> +	{"bcm6123", 0},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, bcm6123_id);
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id bcm6123_of_match[] = {
+> +	{ .compatible = "vicor,bcm6123" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, bcm6123_of_match);
+> +#endif
+> +
+> +/* This is the driver that will be inserted */
+> +static struct i2c_driver bcm6123_driver = {
+> +	.driver = {
+> +		   .name = "bcm6123",
+> +		   .of_match_table = of_match_ptr(bcm6123_of_match),
+> +		   },
+> +	.probe_new = bcm6123_probe,
+> +	.id_table = bcm6123_id,
+> +};
+> +
+> +module_i2c_driver(bcm6123_driver);
+> +
+> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Vicor bcm6123");
+> +MODULE_LICENSE("GPL");
+> 
 

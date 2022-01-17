@@ -2,116 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A484902FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE53A490302
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbiAQHiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:38:10 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46654 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233071AbiAQHiJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:38:09 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20GMK1XY032410;
-        Mon, 17 Jan 2022 08:37:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=/SNGdY3EQVSNuahotUyAeXgj55tr+Btw2r79mHMIAqs=;
- b=1n5+bzmuzkeFRtr/AHIYVezYaItONZpCk3sXbbJCAqqNMboi4El2Yq7X3PgS7AvNb3GU
- k2yOQ0w8dA1DCssdFBIxlxf0Vip4mftOdyOk5oN1h7kgZcYetaQstLa4Lmo8/+fMnUqf
- b6m1s8ceQzS9FaJBKYAxHKi7sTlznjkf6B+WCLSeRLN6vdn6vWmRIM+MJnIR+Mum5V9D
- m88IEaHa7IWtRCfykPkaP4w9Y20uB4G2ZkTtUQrxgXH/Y0333WuSh0VaNLODQzQ/gmgN
- uUrJWkBg9wtlR85nLKM0bg0abvthzetMYcs+hwU6G3nHcpuKWhJ7Y5xy7waEya6yAPDQ Tg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dmq5g2vph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 08:37:47 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FED7100034;
-        Mon, 17 Jan 2022 08:37:46 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5E0B820DD0E;
-        Mon, 17 Jan 2022 08:37:46 +0100 (CET)
-Received: from lmecxl0573.lme.st.com (10.75.127.44) by SFHDAG2NODE1.st.com
- (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 17 Jan
- 2022 08:37:45 +0100
-Subject: Re: [PATCH v2] spi: stm32-qspi: Update spi registering
-To:     Lukas Wunner <lukas@wunner.de>
-CC:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <stable@vger.kernel.org>
-References: <20220112144424.5278-1-patrice.chotard@foss.st.com>
- <20220116125205.GA18267@wunner.de>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <b07ba47f-2709-6b10-2332-7a0d163401bc@foss.st.com>
-Date:   Mon, 17 Jan 2022 08:37:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S237607AbiAQHir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:38:47 -0500
+Received: from mga03.intel.com ([134.134.136.65]:61042 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237596AbiAQHin (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 02:38:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642405123; x=1673941123;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fMSUlL6VTDJ09rj4Ax0FCoS+F/i5R5IUB6nWBoPCOns=;
+  b=Q/h7Joq5lZEo7mmtSlSjaMy7aQ0UFJpjSCuc5OeX0fu83OutYEm8O775
+   PR+o58Lim38Xqjs6REo55UU2p6S0Eu/9eP9JuhIXwRCW0UXuzlb/7tXQf
+   IT6Inx7CMKeyZUn542bIwAZqnyx4q4cqsd6hY53Mz5zHf/6U2jMj0evds
+   KUawtSG8p7QZb/+wzfPJW9bIQLunOms0wr+QPOhMsQOzbEwCtWX2QemkS
+   LdMLg9lVssmIKdqw+hFjehLBxUZqGtQWIHakszLCkI+eWSF/d7jd+cZIc
+   /Ou9EFvWX7zwHh6Gixn2qOwZ72/9GQio0+etRY8PzDiuKcdXeOryY0RwC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244528625"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="244528625"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 23:38:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
+   d="scan'208";a="614969277"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jan 2022 23:38:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9Maw-000BM4-9T; Mon, 17 Jan 2022 07:38:26 +0000
+Date:   Mon, 17 Jan 2022 15:38:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sander Vanheule <sander@svanheule.net>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>
+Subject: Re: [PATCH 2/2] clocksource/drivers: Add Realtek Otto timer driver
+Message-ID: <202201171557.EmiIHtdJ-lkp@intel.com>
+References: <2fb4aa29e8c581f5c7e97ab7678ccb34e99e5c6e.1642369117.git.sander@svanheule.net>
 MIME-Version: 1.0
-In-Reply-To: <20220116125205.GA18267@wunner.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE1.st.com
- (10.75.127.4)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_02,2022-01-14_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fb4aa29e8c581f5c7e97ab7678ccb34e99e5c6e.1642369117.git.sander@svanheule.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas
+Hi Sander,
 
-On 1/16/22 1:52 PM, Lukas Wunner wrote:
-> On Wed, Jan 12, 2022 at 03:44:24PM +0100, patrice.chotard@foss.st.com wrote:
->> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
->> index 514337c86d2c..09839a3dbb26 100644
->> --- a/drivers/spi/spi-stm32-qspi.c
->> +++ b/drivers/spi/spi-stm32-qspi.c
->> @@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
->>  	struct resource *res;
->>  	int ret, irq;
->>  
->> -	ctrl = spi_alloc_master(dev, sizeof(*qspi));
->> +	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
->>  	if (!ctrl)
->>  		return -ENOMEM;
->>  
->> @@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
->>  	pm_runtime_enable(dev);
->>  	pm_runtime_get_noresume(dev);
->>  
->> -	ret = devm_spi_register_master(dev, ctrl);
->> +	ret = spi_register_master(ctrl);
->>  	if (ret)
->>  		goto err_pm_runtime_free;
->>
-> 
-> Unfortunately this patch is still not correct:  It introduces a
-> double free in the probe error path.
+I love your patch! Yet something to improve:
 
-Argh yes, my bad.
+[auto build test ERROR on next-20220116]
+[cannot apply to tip/timers/core linux/master linus/master daniel-lezcano/clockevents/next v5.16 v5.16-rc8 v5.16-rc7 v5.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> 
-> You need to remove this...
-> 
-> err_master_put:
-> 	spi_master_put(qspi->ctrl);
-> 
-> ...and replace all the gotos in stm32_qspi_probe() which jump
-> to the err_master_put label with a return statement.
-> 
-> Thanks,
-> 
-> Lukas
-> 
-Thanks 
-Patrice
+url:    https://github.com/0day-ci/linux/commits/Sander-Vanheule/Realtek-Otto-timer-counter-support/20220117-054003
+base:    70e6f1b39929bf6755a9c55b79fe720f7c8b9436
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220117/202201171557.EmiIHtdJ-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1c346209c6655c06ab28df22f821ffa06a792a14
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sander-Vanheule/Realtek-Otto-timer-counter-support/20220117-054003
+        git checkout 1c346209c6655c06ab28df22f821ffa06a792a14
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/clocksource/timer-realtek-otto.c: In function 'otto_tc_init':
+>> drivers/clocksource/timer-realtek-otto.c:182:16: error: implicit declaration of function 'kzalloc'; did you mean 'd_alloc'? [-Werror=implicit-function-declaration]
+     182 |         ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+         |                ^~~~~~~
+         |                d_alloc
+   drivers/clocksource/timer-realtek-otto.c:182:14: warning: assignment to 'struct otto_tc_ctrl *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     182 |         ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+         |              ^
+>> drivers/clocksource/timer-realtek-otto.c:212:9: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
+     212 |         kfree(ctrl);
+         |         ^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +182 drivers/clocksource/timer-realtek-otto.c
+
+   176	
+   177	static int __init otto_tc_init(struct device_node *node)
+   178	{
+   179		struct otto_tc_ctrl *ctrl;
+   180		int err;
+   181	
+ > 182		ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+   183		if (!ctrl)
+   184			return -ENOMEM;
+   185	
+   186		spin_lock_init(&ctrl->lock);
+   187	
+   188		ctrl->to.flags = TIMER_OF_BASE | TIMER_OF_IRQ | TIMER_OF_CLOCK;
+   189		ctrl->to.of_clk.name = "bus";
+   190		ctrl->to.of_irq.flags = IRQF_TIMER;
+   191		ctrl->to.of_irq.handler = otto_tc_handler;
+   192	
+   193		err = timer_of_init(node, &ctrl->to);
+   194		if (err)
+   195			goto err_out;
+   196	
+   197		/* Reset timer state */
+   198		writel(0, OTTO_TC_REG_CTL(&ctrl->to));
+   199		writel(0, OTTO_TC_REG_DATA(&ctrl->to));
+   200	
+   201		/* TODO Replace by a real derived clock */
+   202		otto_tc_set_divisor(ctrl, OTTO_TC_MIN_DIVISOR);
+   203		ctrl->to.of_clk.rate /= OTTO_TC_MIN_DIVISOR;
+   204		ctrl->to.of_clk.period /= OTTO_TC_MIN_DIVISOR;
+   205	
+   206		otto_tc_irq_enable_clear(&ctrl->to);
+   207		otto_tc_init_clkevt(&ctrl->to);
+   208	
+   209		return 0;
+   210	
+   211	err_out:
+ > 212		kfree(ctrl);
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

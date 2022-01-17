@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D4A49108C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 20:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E89849108F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 20:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241643AbiAQTFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 14:05:48 -0500
-Received: from mga12.intel.com ([192.55.52.136]:50715 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233286AbiAQTFs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 14:05:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642446347; x=1673982347;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sRMk2gWpOK/4IUMHyxonrVJ6i0vyNFHcpoY/g5RvRBE=;
-  b=GHTo9L9LCyZkG2lUy8gblv2qukgNe7oBWqpB2YGXFGazJ9pE9LSHEhjB
-   CdaOxz6ZijXzZf+t+vqz8UFeASsZehN041ewjfsfcDtgynzJZEVBhBA5E
-   5EBPe+/IktzleumIoabHIXoVcso5bMIxJ4kNEimQAQdMwG1vYUbOE+RkT
-   aTz6CxbxynAZfy3T8314X/gpau8NMnPZUC216nrrzjJZsGsxrqGW63bWB
-   fdHk9LzAZqcnjhpyf11u8zaHu7EttemXVw9CA0AgJ5dGhp38GAj3dyLZQ
-   pUhggCf5CjpAk/mKOulGo/IdzHfJmC5LzKB1jogBl++bZTQGdpGcyEbDj
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224659900"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="224659900"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 11:05:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="517504440"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 11:05:45 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9XK4-000BnQ-St; Mon, 17 Jan 2022 19:05:44 +0000
-Date:   Tue, 18 Jan 2022 03:05:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [drm-misc:drm-misc-next 3/5] analogix_dp_core.c:undefined reference
- to `drm_dp_dpcd_read'
-Message-ID: <202201180232.qDi3QkrX-lkp@intel.com>
+        id S242738AbiAQTGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 14:06:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51768 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233286AbiAQTGc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 14:06:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1F47B811C1;
+        Mon, 17 Jan 2022 19:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C299C36AE3;
+        Mon, 17 Jan 2022 19:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642446390;
+        bh=jPsm71XEp6TrnU8p92pXK9/eIp0Z/kNU0eB8BEV/BIU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kpw2AnTDynkkCJcW+N0T96YbwIFbkvZkRh02dpMteTjTscXm3xZUGSfEcG5YgYEUf
+         BkMzH7V1Ntr2XZAujbnKsEMNjoUNFA4ky+k1hxvSLDrZq1JpC0y4NxL81sHALtBNUj
+         KhTE/8lIYptwGIMttqIJO/stxCuAX+IiaWBs7XgLom/KmcJcrQ8+abFhTyGpTgxanY
+         Kh3EjiAOM4oWK/nv7uFbky0Zi/+/pqJURVM/CxneLh+3MmW6LUdDPoVa+e5UbneWuC
+         6N/xoFcbelKlZ5PhlfJQuB3jz4cVqTjDkWyQ1hUkpBoTnXgj6uGgGUtCrW3d9S5m54
+         EO0Zv+tn6/brA==
+Date:   Mon, 17 Jan 2022 21:06:18 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
+Subject: Re: [PATCH rdma-rc] RDMA/cma: Clear all multicast request fields
+Message-ID: <YeW+KoN8zrpWw22d@unreal>
+References: <1876bacbbcb6f82af3948e5c37a09da6ea3fcae5.1641474841.git.leonro@nvidia.com>
+ <20220106173941.GA2963550@nvidia.com>
+ <YdrTbNDTg7VdR2iu@unreal>
+ <20220110153619.GC2328285@nvidia.com>
+ <Ydx1dDSa1JDJGFdJ@unreal>
+ <20220117161621.GC84788@nvidia.com>
+ <YeWzeA/8TgXalrD8@unreal>
+ <20220117183832.GD84788@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220117183832.GD84788@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   032a125904995985334766911de9e26ee2bbd646
-commit: adb9d5a2cc77e8aefe98fe4c11656c5b7025c248 [3/5] drm/dp: Move DisplayPort helpers into separate helper module
-config: arm-exynos_defconfig (https://download.01.org/0day-ci/archive/20220118/202201180232.qDi3QkrX-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout adb9d5a2cc77e8aefe98fe4c11656c5b7025c248
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On Mon, Jan 17, 2022 at 02:38:32PM -0400, Jason Gunthorpe wrote:
+> On Mon, Jan 17, 2022 at 08:20:40PM +0200, Leon Romanovsky wrote:
+> > On Mon, Jan 17, 2022 at 12:16:21PM -0400, Jason Gunthorpe wrote:
+> > > On Mon, Jan 10, 2022 at 08:05:40PM +0200, Leon Romanovsky wrote:
+> > > 
+> > > > > We should probably check the PS even earlier to prevent the IB side
+> > > > > from having the same issue.
+> > > > 
+> > > > What do you think about this?
+> > > 
+> > > IB is a bit different, it has a bunch of PS's that are UD compatible..
+> > > 
+> > > Probably what we really want here is to check/restrict the CM ID to
+> > > SIDR mode, which does have the qkey and is the only mode that makes
+> > > sense to be mixed with multicast, and then forget about port space
+> > > entirely.
+> > > 
+> > > It may be that port space indirectly restricts the CM ID to SIDR mode,
+> > > but the language here should be 'is in sidr mode', not some confusing
+> > > open coded port space check.
+> > > 
+> > > I'm also not sure of the lifecycle of the qkey, qkeys only exist in
+> > > SIDR mode so obviously anything that sets/gets a qkey should be
+> > > restriced to SIDR CM IDs..
+> > > 
+> > > > diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+> > > > index 835ac54d4a24..0a1f008ca929 100644
+> > > > +++ b/drivers/infiniband/core/cma.c
+> > > > @@ -4669,12 +4669,8 @@ static int cma_join_ib_multicast(struct rdma_id_private *id_priv,
+> > > >         if (ret)
+> > > >                 return ret;
+> > > > 
+> > > > -       ret = cma_set_qkey(id_priv, 0);
+> > > > -       if (ret)
+> > > > -               return ret;
+> > > > -
+> > > >         cma_set_mgid(id_priv, (struct sockaddr *) &mc->addr, &rec.mgid);
+> > > > -       rec.qkey = cpu_to_be32(id_priv->qkey);
+> > > > +       rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
+> > > 
+> > > And I'm not sure this makes sense? The UD qkey should still be
+> > > negotiated right?
+> > 
+> > Yes, I think so, it will be changed in SIDR phase.
+> > 
+> > The original code has "cma_set_qkey(id_priv, 0)" call, that in IB case will
+> > execute this switch anyway:
+> >    515         switch (id_priv->id.ps) {
+> >    516         case RDMA_PS_UDP:
+> >    517         case RDMA_PS_IB:
+> >    518                 id_priv->qkey = RDMA_UDP_QKEY;
+> > 
+> > The difference is that we won't store RDMA_UDP_QKEY in id_priv->qkey,
+> > but I'm unsure that this is right.
+> 
+> Well the whoele cma_set_qkey() function appears to be complete
+> jumblied nonsense as if qkey is zero then it doesn't do anything if
+> the qkey was already set.
+> 
+> When called with 0 it is really some sort of 'make a default qkey if
+> the user hasn't set one already' and in that case defaulting to
+> RDMA_UDP_QKEY does makes some kind of sense.
+> 
+> The functions purposes should be split into two functions really.
+> 
+> So, we end up with 'make sure the cm id is in SDIR mode' then 'if the
+> qkey is not set, set it to a default', so that the net result is the
+> qkey is always set once the function returns.
+> 
+> Though, I'm not sure what the semantics are for qkey during SIDR
+> negotiation, that should be checked in the spec.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+There is no negotiation. Device simply sends its qkey to another side
+and expects to get this qkey in every packet.
 
-All errors (new ones prefixed by >>):
+---------------------------------
+Queue Key (Q_Key): Enforces access rights for reliable and unreliable
+datagram service (RAW datagram service type not included). Administered
+by the channel adapter. During communication establishment for datagram
+service, nodes exchange Q_Keys for particular queue pairs and a node uses
+the value it was passed for a remote QP in all packets it sends to that
+remote QP. Likewise, the remote node uses the Q_Key it was provided.
+Receipt of a packet with a different Q_Key than the one the node provided
+to the remote queue pair means that packet is not valid and thus rejected.
+-----------------------------------
 
-   arm-linux-gnueabi-ld: drivers/gpu/drm/panel/panel-edp.o: in function `panel_edp_probe':
-   panel-edp.c:(.text+0xf2c): undefined reference to `drm_panel_dp_aux_backlight'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_set_enhanced_mode':
->> analogix_dp_core.c:(.text+0x1e4): undefined reference to `drm_dp_dpcd_read'
->> arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x20c): undefined reference to `drm_dp_dpcd_read'
->> arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x284): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x2b0): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x2e4): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_bind':
->> analogix_dp_core.c:(.text+0x624): undefined reference to `drm_dp_aux_register'
->> arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x6a0): undefined reference to `drm_dp_aux_unregister'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_stop_crc':
->> analogix_dp_core.c:(.text+0x6c8): undefined reference to `drm_dp_stop_crc'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_start_crc':
->> analogix_dp_core.c:(.text+0x7c4): undefined reference to `drm_dp_start_crc'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_link_start':
->> analogix_dp_core.c:(.text+0x868): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x928): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x95c): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_reduce_link_rate':
-   analogix_dp_core.c:(.text+0xa94): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_process_clock_recovery':
-   analogix_dp_core.c:(.text+0xb08): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0xb24): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0xb9c): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0xbf0): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_unbind':
->> analogix_dp_core.c:(.text+0x13b8): undefined reference to `drm_dp_aux_unregister'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_process_equalizer_training':
-   analogix_dp_core.c:(.text+0x1420): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1484): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x14a0): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1538): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x160c): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1664): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_full_link_train':
-   analogix_dp_core.c:(.text+0x1738): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1754): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_commit':
-   analogix_dp_core.c:(.text+0x1968): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1a9c): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1ae0): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1b54): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1b94): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1bc4): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1bf0): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x1c1c): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_bridge_atomic_enable':
-   analogix_dp_core.c:(.text+0x1ffc): undefined reference to `drm_dp_dpcd_write'
-   arm-linux-gnueabi-ld: analogix_dp_core.c:(.text+0x2068): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_core.o: in function `analogix_dp_bridge_atomic_post_disable':
-   analogix_dp_core.c:(.text+0x25a0): undefined reference to `drm_dp_dpcd_read'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/bridge/analogix/analogix_dp_reg.o: in function `analogix_dp_send_psr_spd':
->> analogix_dp_reg.c:(.text+0x1658): undefined reference to `drm_dp_dpcd_read'
->> arm-linux-gnueabi-ld: analogix_dp_reg.c:(.text+0x16e0): undefined reference to `drm_dp_dpcd_read'
+Thanks
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Jason

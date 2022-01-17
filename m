@@ -2,92 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF80449031F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBE2490323
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237678AbiAQHra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237671AbiAQHr2 (ORCPT
+        id S237684AbiAQHrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:47:48 -0500
+Received: from smtpbg704.qq.com ([203.205.195.105]:34749 "EHLO
+        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235240AbiAQHrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:47:28 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09EBC06161C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 23:47:27 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id b13so62059114edn.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 23:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KxaKd126ds9B/hqHoJr3I0DdwvzQ+yakIqTbnoGSuO8=;
-        b=RGXdV4HyYc3xaX2rdnh+hAKPvPMFKV81qHTYLnM9kE6m4ww5iFzzJhvkM+GlTCXgm4
-         ZokwaT+e53zJt/1DXVTyJxkad79H3Eh05BUmTyYG8YMTO182roVXLBbdNIAzvTxe8TWX
-         8mdvIHdvuFPgQbda+EO/U/kRqlj5jS7Vae7u4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KxaKd126ds9B/hqHoJr3I0DdwvzQ+yakIqTbnoGSuO8=;
-        b=hv+olE2cplLOFFqbGGPBsLDwYkLpqX7wcXJV8Xa30h+zv6Ln4DPJcfNgqTJryic37V
-         6GaxM8nj8V4TPW5yoNiKZNzLrxWDQ4xPrJgVIvt64Y6y5BQg/QSfrCvyS1SegYKEw8wo
-         3Ts5n9gr7LfmEjRfpCkRQ71zfcaEICNHvjsbs42CXkpjGam9U85lkpljP7Rk2PUCuW+o
-         ciSwnXkuku4T58JuoqAGSLl6un8GCrgsZYUce6eWggdBn1aJdeN3KLDlshlQGLYzFjqd
-         uHiAuwEhrQrG0Tue/MrUpIxHEvqoSYcGZD/4q965tj4YFCWO80qu+BpK+wB6fK1d7BH/
-         OqUQ==
-X-Gm-Message-State: AOAM530racyFEbngVn8MbfzSko5Nt2/ixS6Ug+LuzJOI0MiUkbhmyJV6
-        xvpm8qEnTY8zrp7j4rLLDWnXzmYikGhKQ/5X
-X-Google-Smtp-Source: ABdhPJwJLorDGX9xj2Xrs3KdXXbvJeElDWHM4dJ7iXMN7BRMFZChEKLyH1AoujGAIaGXZvuNWvK56w==
-X-Received: by 2002:a50:da48:: with SMTP id a8mr19115089edk.146.1642405646296;
-        Sun, 16 Jan 2022 23:47:26 -0800 (PST)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id j5sm4164432ejo.177.2022.01.16.23.47.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 23:47:24 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id d187-20020a1c1dc4000000b003474b4b7ebcso20593678wmd.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 23:47:24 -0800 (PST)
-X-Received: by 2002:a05:6000:1787:: with SMTP id e7mr4294373wrg.281.1642405644098;
- Sun, 16 Jan 2022 23:47:24 -0800 (PST)
+        Mon, 17 Jan 2022 02:47:48 -0500
+X-QQ-mid: bizesmtp37t1642405658tdskzx5s
+Received: from localhost.localdomain (unknown [111.207.172.18])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 17 Jan 2022 15:47:32 +0800 (CST)
+X-QQ-SSF: 01400000002000B0F000B00E0000000
+X-QQ-FEAT: vmnbzJorTWTgkQ7DWUHbMUg6c+p2EVa1iwQeuJc8z5eKeQySQBOoCsunHtT3G
+        mzT2Emv+ANyWCsJ8UXxzXWSzMaBJVOxLSxIjpy5v2UnWf+Q3ryU5ck4gdDJnUqLVbxnwt3Q
+        pmbqFAYQ/hRxi2ngXdplqXsPu2RZ4fcrTD7nBS1TT71Ph84qJwaEaED2UkA34RqJuE8c44u
+        XHyMajZbIVvcoCSSRBqE3kQJdEcxtxo3zO5hNGNAIaHCmStEx5G0k88XIGsWYri7bvexWwC
+        1n1tSixwomDe2P9tp0AhNGkwj0m+5tSDpHXsNdGmBS7nmV2Z/b4sQCPulDiazx5gZwBoe7S
+        DWaSInlUPo8h/OBRU4=
+X-QQ-GoodBg: 2
+From:   Qiang Ma <maqianga@uniontech.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Qiang Ma <maqianga@uniontech.com>
+Subject: [PATCH] drm/radeon: fix UVD suspend error
+Date:   Mon, 17 Jan 2022 15:47:31 +0800
+Message-Id: <20220117074731.29882-1-maqianga@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
- <20211213125906.ngqbjsywxwibvcuq@wittgenstein> <YbexPXpuI8RdOb8q@technoir>
- <20211214101207.6yyp7x7hj2nmrmvi@wittgenstein> <Ybik5dWF2w06JQM6@technoir>
- <20211214141824.fvmtwvp57pqg7ost@wittgenstein> <164237084692.24166.3761469608708322913@noble.neil.brown.name>
-In-Reply-To: <164237084692.24166.3761469608708322913@noble.neil.brown.name>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 17 Jan 2022 09:47:08 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wiLi2_JJ1+VnhZ3aWr_cag7rVxbhpf6zKVrOuRHMsfQ4Q@mail.gmail.com>
-Message-ID: <CAHk-=wiLi2_JJ1+VnhZ3aWr_cag7rVxbhpf6zKVrOuRHMsfQ4Q@mail.gmail.com>
-Subject: Re: [PATCH - resend] devtmpfs regression fix: reconfigure on each mount
-To:     NeilBrown <neilb@suse.de>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Anthony Iliopoulos <ailiop@suse.com>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 12:07 AM NeilBrown <neilb@suse.de> wrote:
->
-> Since that was changed, the mount options used for devtmpfs are ignored.
-> This is a regression which affect systemd - which mounts devtmpfs
-> with "-o mode=755,size=4m,nr_inodes=1m".
+I met a bug recently and the kernel log:
 
-Hmm, I've applied this, but I'd have loved to see what the actual
-symptoms of the problem were. Particularly since it's apparently been
-broken for 18 months with this being the first I hear of it.
+[  330.171875] radeon 0000:03:00.0: couldn't schedule ib
+[  330.175781] [drm:radeon_uvd_suspend [radeon]] *ERROR* Error destroying UVD (-22)!
 
-Yes, yes, I could (and did) search for this on the mailing lists, and
-found the discussion and more information, but I think that info
-should have been in the commit message rather than me having to go
-look for it just to see the clarifications..
+In radeon drivers, using UVD suspend is as follows:
 
-                Linus
+if (rdev->has_uvd) {
+        uvd_v1_0_fini(rdev);
+        radeon_uvd_suspend(rdev);
+}
+
+In radeon_ib_schedule function, we check the 'ring->ready' state,
+but in uvd_v1_0_fini funciton, we've cleared the ready state.
+So, just modify the suspend code flow to fix error.
+
+Signed-off-by: Qiang Ma <maqianga@uniontech.com>
+---
+ drivers/gpu/drm/radeon/cik.c       | 2 +-
+ drivers/gpu/drm/radeon/evergreen.c | 2 +-
+ drivers/gpu/drm/radeon/ni.c        | 2 +-
+ drivers/gpu/drm/radeon/r600.c      | 2 +-
+ drivers/gpu/drm/radeon/rv770.c     | 2 +-
+ drivers/gpu/drm/radeon/si.c        | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
+index 81b4de7be9f2..5819737c21c6 100644
+--- a/drivers/gpu/drm/radeon/cik.c
++++ b/drivers/gpu/drm/radeon/cik.c
+@@ -8517,8 +8517,8 @@ int cik_suspend(struct radeon_device *rdev)
+ 	cik_cp_enable(rdev, false);
+ 	cik_sdma_enable(rdev, false);
+ 	if (rdev->has_uvd) {
+-		uvd_v1_0_fini(rdev);
+ 		radeon_uvd_suspend(rdev);
++		uvd_v1_0_fini(rdev);
+ 	}
+ 	if (rdev->has_vce)
+ 		radeon_vce_suspend(rdev);
+diff --git a/drivers/gpu/drm/radeon/evergreen.c b/drivers/gpu/drm/radeon/evergreen.c
+index eeb590d2dec2..455f8036aa54 100644
+--- a/drivers/gpu/drm/radeon/evergreen.c
++++ b/drivers/gpu/drm/radeon/evergreen.c
+@@ -5156,8 +5156,8 @@ int evergreen_suspend(struct radeon_device *rdev)
+ 	radeon_pm_suspend(rdev);
+ 	radeon_audio_fini(rdev);
+ 	if (rdev->has_uvd) {
+-		uvd_v1_0_fini(rdev);
+ 		radeon_uvd_suspend(rdev);
++		uvd_v1_0_fini(rdev);
+ 	}
+ 	r700_cp_stop(rdev);
+ 	r600_dma_stop(rdev);
+diff --git a/drivers/gpu/drm/radeon/ni.c b/drivers/gpu/drm/radeon/ni.c
+index 4a364ca7a1be..927e5f42e97d 100644
+--- a/drivers/gpu/drm/radeon/ni.c
++++ b/drivers/gpu/drm/radeon/ni.c
+@@ -2323,8 +2323,8 @@ int cayman_suspend(struct radeon_device *rdev)
+ 	cayman_cp_enable(rdev, false);
+ 	cayman_dma_stop(rdev);
+ 	if (rdev->has_uvd) {
+-		uvd_v1_0_fini(rdev);
+ 		radeon_uvd_suspend(rdev);
++		uvd_v1_0_fini(rdev);
+ 	}
+ 	evergreen_irq_suspend(rdev);
+ 	radeon_wb_disable(rdev);
+diff --git a/drivers/gpu/drm/radeon/r600.c b/drivers/gpu/drm/radeon/r600.c
+index ca3fcae2adb5..dd78fc499402 100644
+--- a/drivers/gpu/drm/radeon/r600.c
++++ b/drivers/gpu/drm/radeon/r600.c
+@@ -3232,8 +3232,8 @@ int r600_suspend(struct radeon_device *rdev)
+ 	radeon_audio_fini(rdev);
+ 	r600_cp_stop(rdev);
+ 	if (rdev->has_uvd) {
+-		uvd_v1_0_fini(rdev);
+ 		radeon_uvd_suspend(rdev);
++		uvd_v1_0_fini(rdev);
+ 	}
+ 	r600_irq_suspend(rdev);
+ 	radeon_wb_disable(rdev);
+diff --git a/drivers/gpu/drm/radeon/rv770.c b/drivers/gpu/drm/radeon/rv770.c
+index e592e57be1bb..38796af4fadd 100644
+--- a/drivers/gpu/drm/radeon/rv770.c
++++ b/drivers/gpu/drm/radeon/rv770.c
+@@ -1894,8 +1894,8 @@ int rv770_suspend(struct radeon_device *rdev)
+ 	radeon_pm_suspend(rdev);
+ 	radeon_audio_fini(rdev);
+ 	if (rdev->has_uvd) {
+-		uvd_v1_0_fini(rdev);
+ 		radeon_uvd_suspend(rdev);
++		uvd_v1_0_fini(rdev);
+ 	}
+ 	r700_cp_stop(rdev);
+ 	r600_dma_stop(rdev);
+diff --git a/drivers/gpu/drm/radeon/si.c b/drivers/gpu/drm/radeon/si.c
+index 013e44ed0f39..8d5e4b25609d 100644
+--- a/drivers/gpu/drm/radeon/si.c
++++ b/drivers/gpu/drm/radeon/si.c
+@@ -6800,8 +6800,8 @@ int si_suspend(struct radeon_device *rdev)
+ 	si_cp_enable(rdev, false);
+ 	cayman_dma_stop(rdev);
+ 	if (rdev->has_uvd) {
+-		uvd_v1_0_fini(rdev);
+ 		radeon_uvd_suspend(rdev);
++		uvd_v1_0_fini(rdev);
+ 	}
+ 	if (rdev->has_vce)
+ 		radeon_vce_suspend(rdev);
+-- 
+2.20.1
+
+
+

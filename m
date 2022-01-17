@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9147491081
+	by mail.lfdr.de (Postfix) with ESMTP id 39627491080
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242794AbiAQSzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:55:52 -0500
-Received: from mga09.intel.com ([134.134.136.24]:11989 "EHLO mga09.intel.com"
+        id S242770AbiAQSzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 13:55:49 -0500
+Received: from mga06.intel.com ([134.134.136.31]:52857 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230519AbiAQSzr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:55:47 -0500
+        id S233296AbiAQSzq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 13:55:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642445747; x=1673981747;
+  t=1642445746; x=1673981746;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rSSDTIAen0zDd6kEhdfoILJM56+4S6HFTy7KKtUouJM=;
-  b=aZGXvDZyHrryTyb0QhJRkjLvdcjgUHlqwIjcGmYajIxabdyMIrmT02pP
-   wxsDNIHcQxyrKdseAF8rHIvDI45MsIlYUhA7bw2fOyKMLfQ34DdSinY2s
-   G86EqwpRYgrg/BGhPheE6oVLeBm0mkB1cbNmTU6ldSq2PShn+vQpaZMs/
-   COL2aujh3PE8oUz0MJ3dinTbqNCCYnWLA6T0WzP/q0K/6a35AKZ4LMu0j
-   sJduiWpXbxL4A3iGGd4njHJ7zFpT12L6+GBTQDBGXFjmQclgxfYy9sOC7
-   6oj6IZev5lhMDxYZr9LjAD96MBaOGT9x8Cz/oOWtC8I9sFO+cAgX/6odF
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244475536"
+  bh=OOvDBzf/x/mAjHZWTgT2oB2UUi0ZTBgH/ykCE1wtCDU=;
+  b=D5nYQ8SdSgHAwjaLqhzBg5fyW2gyfvCDfLDOopgJrB58z0vodAT09meW
+   dnDLgqMqmwEARdZuhUmPxVaDQ+lU7bHVzw+bpiwaFJwQhMc1l1ot2wj2b
+   WXjsbVblKMYP3XH+I0l+ylI3No6L7VmGFBMy9ZiLSVFyFtb1wwYR/8AR/
+   XW3lJhQtXy8fdvIwBBseUOwKIWaFMYfoUJsq4c4A4GzfYnfL7aygxVMMG
+   aDta7OAdYTR8kKbsVvkWCjl3JRotuZgo+v/LbVUdUHjk1D4WVd3G/Bq22
+   55ckaSwyYZVA4fyLJpRSwZzZA+KNE7GfORW/7GT+UR0Yekzc459dTV9KB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="305411291"
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="244475536"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:55:46 -0800
+   d="scan'208";a="305411291"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:55:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="594872834"
+   d="scan'208";a="476737854"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jan 2022 10:55:45 -0800
+  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2022 10:55:45 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n9XAO-000Bmq-QO; Mon, 17 Jan 2022 18:55:44 +0000
-Date:   Tue, 18 Jan 2022 02:54:49 +0800
+        id 1n9XAO-000Bmd-NP; Mon, 17 Jan 2022 18:55:44 +0000
+Date:   Tue, 18 Jan 2022 02:54:52 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 20/24]
- xtensa-linux-ld: fs/fscache/stats.o:undefined reference to
- `netfs_stats_show'
-Message-ID: <202201180236.bFOg48wO-lkp@intel.com>
+Subject: [drm-misc:drm-misc-next 3/5] ERROR: modpost:
+ "drm_dp_dump_sideband_msg_req_body"
+ [drivers/gpu/drm/selftests/test-drm_modeset.ko] undefined!
+Message-ID: <202201180225.QB8esALn-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -53,30 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   12617e48874cc7e301b04f65b22b762cca3aea01
-commit: d775438577aaab8808eaf4cfb2963d941a439b8b [20/24] netfs, fscache: Make netfslib depend on fscache
-config: xtensa-randconfig-r021-20220116 (https://download.01.org/0day-ci/archive/20220118/202201180236.bFOg48wO-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   032a125904995985334766911de9e26ee2bbd646
+commit: adb9d5a2cc77e8aefe98fe4c11656c5b7025c248 [3/5] drm/dp: Move DisplayPort helpers into separate helper module
+config: x86_64-randconfig-a004-20220117 (https://download.01.org/0day-ci/archive/20220118/202201180225.QB8esALn-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/d775438577aaab8808eaf4cfb2963d941a439b8b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout d775438577aaab8808eaf4cfb2963d941a439b8b
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc drm-misc-next
+        git checkout adb9d5a2cc77e8aefe98fe4c11656c5b7025c248
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> xtensa-linux-ld: fs/fscache/stats.o:(.text+0xac): undefined reference to `netfs_stats_show'
-   xtensa-linux-ld: fs/fscache/stats.o: in function `fscache_stats_show':
->> stats.c:(.text+0x1a7): undefined reference to `netfs_stats_show'
+>> ERROR: modpost: "drm_dp_dump_sideband_msg_req_body" [drivers/gpu/drm/selftests/test-drm_modeset.ko] undefined!
+>> ERROR: modpost: "drm_dp_decode_sideband_req" [drivers/gpu/drm/selftests/test-drm_modeset.ko] undefined!
+>> ERROR: modpost: "drm_dp_encode_sideband_req" [drivers/gpu/drm/selftests/test-drm_modeset.ko] undefined!
+>> ERROR: modpost: "drm_dp_calc_pbn_mode" [drivers/gpu/drm/selftests/test-drm_modeset.ko] undefined!
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

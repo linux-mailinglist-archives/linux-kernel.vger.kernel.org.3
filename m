@@ -2,127 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7DB4905D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2619A4905D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238503AbiAQKT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:19:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57010 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237275AbiAQKT4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:19:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642414796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M2Jwh6X9L+KjOaA4kG9lgML07Ljz7RAuTmgyF2gmzTk=;
-        b=ia8CocW+aU7CrEnviYKCfmitlsW6lKnE94+YbNxRfW4THV7s3IAOdS4bgvyPqfq4H2NyWQ
-        HjIaeMf5230zrXfeNlcYlX+d4Adze6k84JNjBrryl/RWmNx8NGFl+cd5jCIskJlBTPZyBK
-        e1jpNUX1BEm3nWN4ds+fgxVMf+a4ceQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-yoINiyZfMkywE2a75pL7Tg-1; Mon, 17 Jan 2022 05:19:53 -0500
-X-MC-Unique: yoINiyZfMkywE2a75pL7Tg-1
-Received: by mail-wm1-f72.google.com with SMTP id p14-20020a1c544e000000b003490705086bso4846779wmi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:19:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M2Jwh6X9L+KjOaA4kG9lgML07Ljz7RAuTmgyF2gmzTk=;
-        b=LbzHjmSaZamakZRQ9XV5i3A9dSTrtKXmvvkVl1a8KBQ2oMo+7/e5fkSQeiad9Pe8h2
-         ZwiPKK22ISUDgoqxte50gT+4Q0JYFfiDuX1IDs+MdoZkCdgjyN5M3O9qepTpozgERgrT
-         tlBFMsqp3611dWQxc0waW4Me4N+mgtGPgui8bkfRF9/Bq5vOWVDe+FPt0qPu0nEwvk3s
-         2+AMT/AYw3s7XWUzaOq3fPDwmfVjhX6X+ubUXyNHab9jZuIz9IUh/CD8pXCCsKGRohYe
-         U6ZrSKhO2MV75vSn7bNr/ZsEJUlRS7PGaulpTJd27z9TWCzCb0RqTAFvCtitU+AQcEQA
-         eSxw==
-X-Gm-Message-State: AOAM5307A2YmPmGk0iYq7ZqO4KeDBhMESipVmbyT6SqDBhkQyaMIXfug
-        l9T9uDe+sXjXLOKzZxnFXOGWQmDelsfjsy/YH2VFoRF2fAukYipXAHtWdGiDCjzxih4VSNa7yRD
-        hAS9DYMlmdKtXoWkrbMM/MqDv
-X-Received: by 2002:adf:b60d:: with SMTP id f13mr8447986wre.225.1642414791822;
-        Mon, 17 Jan 2022 02:19:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzjvQUUb/H0EZLSZ3Ie0h6oeM1z//4qUyAexcNH+Hmg6QGgAM53E0ZxOy6w07KCaNZAYcAt7Q==
-X-Received: by 2002:adf:b60d:: with SMTP id f13mr8447972wre.225.1642414791578;
-        Mon, 17 Jan 2022 02:19:51 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z7sm15283605wrm.117.2022.01.17.02.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 02:19:51 -0800 (PST)
-Message-ID: <fa7d7b0e-50bf-dc1b-a708-408de47b1e66@redhat.com>
-Date:   Mon, 17 Jan 2022 11:19:50 +0100
+        id S238541AbiAQKUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:20:37 -0500
+Received: from mga03.intel.com ([134.134.136.65]:9377 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236091AbiAQKUe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 05:20:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642414834; x=1673950834;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jDJBF+me4UIpCdYvrGk9WtsHjzrNIKyPA0OTav0+y4c=;
+  b=Y0WkvS6l4v+tlZw8kidzKcIOSBkrFokKe+GW3K0pHIdSh5K+/vZKUZqF
+   C3G4JH/86EXxzFn/RnXHrDEOaB1Zn1aVLCZ8OEjidOnnsW9LNUX+/lodz
+   VClEF3sjAyGd3vFKwk8dBnPkOB+BudDeNaeJV9I2uyYBdLypEOHejXazG
+   p5JwhH6w0r8J9y4lYltb0paKDKvpeMTNHmih5TR0uKSCwlIENZQlF5DYr
+   94sRW5D1ehQFiEqcfWJTa0eie8BlQcMgAwat1ZVYCKhXiX1MFpU06BDbc
+   yrgsi1DE4HLRl9vDIzevvROW3JahEPQigXXzlYYmZfCK48cduNEp9uhSM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244554880"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="244554880"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:20:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="693025931"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 02:20:31 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9P7m-000BTI-DB; Mon, 17 Jan 2022 10:20:30 +0000
+Date:   Mon, 17 Jan 2022 18:20:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Landley <rob@landley.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH] Wire up CONFIG_DEVTMPFS_MOUNT to initramfs.
+Message-ID: <202201171822.FDXweWsH-lkp@intel.com>
+References: <d53f041a-83f7-57f7-28ae-eb7b23034f83@landley.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d53f041a-83f7-57f7-28ae-eb7b23034f83@landley.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 11:02, Daniel Vetter wrote:
+Hi Rob,
 
-[snip]
+Thank you for the patch! Perhaps something to improve:
 
->>  FRAMEBUFFER LAYER
->> -L:     dri-devel@lists.freedesktop.org
->> +M:     Helge Deller <deller@gmx.de>
->>  L:     linux-fbdev@vger.kernel.org
->> -S:     Orphan
-> 
-> Maybe don't rush maintainer changes in over the w/e without even bothering
-> to get any input from the people who've been maintaining it before.
-> 
-> Because the status isn't entirely correct, fbdev core code and fbcon and
-> all that has been maintained, but in bugfixes only mode. And there's very
-> solid&important reasons to keep merging these patches through a drm tree,
-> because that's where all the driver development happens, and hence also
-> all the testing (e.g. the drm test suite has some fbdev tests - the only
-> automated ones that exist to my knowledge - and we run them in CI). So
-> moving that into an obscure new tree which isn't even in linux-next yet is
-> no good at all.
-> 
-> Now fbdev driver bugfixes is indeed practically orphaned and I very much
-> welcome anyone stepping up for that, but the simplest approach there would
-> be to just get drm-misc commit rights and push the oddball bugfix in there
-> directly. But also if you want to do your own pull requests to Linus for
-> that I don't care and there's really no interference I think, so
-> whatever floats.
->
+[auto build test WARNING on linux/master]
+[also build test WARNING on linus/master v5.16 next-20220117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I second that getting commit rights in drm-misc and pushing the changes
-there makes much more sense than keeping a separate tree for fbdev.
+url:    https://github.com/0day-ci/linux/commits/Rob-Landley/Wire-up-CONFIG_DEVTMPFS_MOUNT-to-initramfs/20220117-023610
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git daadb3bd0e8d3e317e36bc2c1542e86c528665e5
+config: h8300-randconfig-s032-20220116 (https://download.01.org/0day-ci/archive/20220117/202201171822.FDXweWsH-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/c6b7e8ccdf2b0a9620c9dc0b5e5b2a719b223817
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rob-Landley/Wire-up-CONFIG_DEVTMPFS_MOUNT-to-initramfs/20220117-023610
+        git checkout c6b7e8ccdf2b0a9620c9dc0b5e5b2a719b223817
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-Not only for the fbdev core and fbcon but also for fbdev drivers. There
-is common for fbdev drivers bugs to be exposed after DRM changes, so it
-is more convenient to push fixes for these through the same tree as well.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-As an example, just last week I had to fix issues in the vga16fb driver
-that started to occur after a change to support simpledrm in aarch64:
 
-https://lore.kernel.org/all/20220111131601.u36j6grsvnir5gvp@houat/T/
+sparse warnings: (new ones prefixed by >>)
+>> init/main.c:1624:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected char const [noderef] __user *pathname @@     got char * @@
+   init/main.c:1624:27: sparse:     expected char const [noderef] __user *pathname
+   init/main.c:1624:27: sparse:     got char *
 
-If there is a separate tree for fbdev, then this would require to do
-some coordination, share and merge immutable branches, etc for no
-clear benefit.
+vim +1624 init/main.c
 
-Best regards,-- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+  1579	
+  1580	static noinline void __init kernel_init_freeable(void)
+  1581	{
+  1582		/* Now the scheduler is fully set up and can do blocking allocations */
+  1583		gfp_allowed_mask = __GFP_BITS_MASK;
+  1584	
+  1585		/*
+  1586		 * init can allocate pages on any node
+  1587		 */
+  1588		set_mems_allowed(node_states[N_MEMORY]);
+  1589	
+  1590		cad_pid = get_pid(task_pid(current));
+  1591	
+  1592		smp_prepare_cpus(setup_max_cpus);
+  1593	
+  1594		workqueue_init();
+  1595	
+  1596		init_mm_internals();
+  1597	
+  1598		rcu_init_tasks_generic();
+  1599		do_pre_smp_initcalls();
+  1600		lockup_detector_init();
+  1601	
+  1602		smp_init();
+  1603		sched_init_smp();
+  1604	
+  1605		padata_init();
+  1606		page_alloc_init_late();
+  1607		/* Initialize page ext after all struct pages are initialized. */
+  1608		page_ext_init();
+  1609	
+  1610		do_basic_setup();
+  1611	
+  1612		kunit_run_all_tests();
+  1613	
+  1614		wait_for_initramfs();
+  1615	
+  1616		/*
+  1617		 * check if there is an early userspace init.  If yes, let it do all
+  1618		 * the work
+  1619		 */
+  1620		if (init_eaccess(ramdisk_execute_command) != 0) {
+  1621			ramdisk_execute_command = NULL;
+  1622			prepare_namespace();
+  1623		} else if (IS_ENABLED(CONFIG_DEVTMPFS_MOUNT)) {
+> 1624			sys_mkdir("/dev", 0755);
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,170 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EFE49073D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5572A490819
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbiAQLm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:42:57 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16717 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239124AbiAQLm4 (ORCPT
+        id S239469AbiAQMBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:01:46 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41204
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239453AbiAQMBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:42:56 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JcqgM1r7hzZdkl;
-        Mon, 17 Jan 2022 19:39:11 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 19:42:48 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-Date:   Mon, 17 Jan 2022 20:01:02 +0800
-Message-ID: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Jan 2022 07:01:44 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E88E73F1C9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642420902;
+        bh=bAUdRzIm9/2z1tZx93HbZGiaxfI165En29R890ewPoU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=UzlMSriAYt/VsMIgB5iS7dgfqnUpuc4K003Eqk3icTMVlFhZeypeYslrPoYz8heKk
+         s8hkL2lnLwti4r4cZzhWi/yCOBqRWFiAFEbfSxEasnJypcoGPpK6GOcR4o9gYBxGxJ
+         Aj9fvfqTzub8eTmjbAbtEDjBvGqzi4q3joABviMGxfBDAV2R4DylJDpC2d0N0J+j+1
+         SiyFoyEucLelrM3G60Z+9EZin8iTo2V09qyzGYUomOkaZPXPIKww8dxH0AlmKmHbYF
+         lr5eNIePqx9TemfGthh/DI0dFaLTSOGN/Nl+h2p0yYM1IUJp2+hmZNsw/odh9nUllO
+         Ud0CBpdeP3lVw==
+Received: by mail-ed1-f69.google.com with SMTP id s9-20020aa7d789000000b004021d03e2dfso3761101edq.18
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 04:01:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bAUdRzIm9/2z1tZx93HbZGiaxfI165En29R890ewPoU=;
+        b=4yRCQd9X3LKnr3ckteHdRWEoyc48jaAG3v4XVHg6ZevMT34JurUjLec1ZoGe9HSWgm
+         nJhIUq4S8rlfrRbg0PuQLhdV+Kk2+yM3WC22lruyBZGW7AbdWJUjjq58gQyDWIQpmqN0
+         GXHgK1ag3K+1YNARH0bf+hHHfH7abRDa9DcCFYd++IES/pEZFcA+k8nt5L9SzNoGxNsl
+         II2PHo5qFLXVwBFN6L6eanZHIAqcO5GZ8FM8WxHzS+j3JfqVGLuGFJM/0Na7hhXh661R
+         Slx2RqiDMwIO24vOToEn5n6p6r7UE7qdZebzYT498c77kyrDruJCUZHp2gMd8htPVCGS
+         swjA==
+X-Gm-Message-State: AOAM530ypAodiqMzmuT3umeX9Q6PRs/D+u+ctvG/yjaQH1hrVflvdrMw
+        /x2X1YtDllZGkIRDmypaHdQ34yms6LC2xaP/ys2D7yl9dfFAiq2F/F1PipRUsaWIRQWL6sf8J/X
+        xcHJjs3Wd1XZQe10VHSNJNcFkLwmLXsN/Z9c2Iw0wzg==
+X-Received: by 2002:a17:906:e249:: with SMTP id gq9mr14818924ejb.258.1642420902484;
+        Mon, 17 Jan 2022 04:01:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwdZgJNSpG3yPSHuygPWHopeMLD3qUZtx1G/vR+ammoYPGm5EgWxjMpAsCvVrMFa/M0hof7+A==
+X-Received: by 2002:a17:906:e249:: with SMTP id gq9mr14818904ejb.258.1642420902250;
+        Mon, 17 Jan 2022 04:01:42 -0800 (PST)
+Received: from [192.168.0.37] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id r15sm1766230ejz.39.2022.01.17.04.01.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 04:01:41 -0800 (PST)
+Message-ID: <7370f18b-e273-69f2-1cc9-a42495e04874@canonical.com>
+Date:   Mon, 17 Jan 2022 13:01:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 5/7] memory: mtk-smi: Fix the return value for
+ clk_bulk_prepare_enable
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
+        anthony.huang@mediatek.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20220113111057.29918-1-yong.wu@mediatek.com>
+ <20220113111057.29918-6-yong.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220113111057.29918-6-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When receive a FF, the current code logic does not consider the real
-so->rx.state but set so->rx.state to ISOTP_IDLE directly. That will
-make so->rx accessed by multiple receiving processes concurrently.
+On 13/01/2022 12:10, Yong Wu wrote:
+> Function clk_bulk_prepare_enable() returns 0 for success or a negative
+> number for error. Fix this code style issue.
 
-The following syz problem is one of the scenarios. so->rx.len is
-changed by isotp_rcv_ff() during isotp_rcv_cf(), so->rx.len equals
-0 before alloc_skb() and equals 4096 after alloc_skb(). That will
-trigger skb_over_panic() in skb_put().
+The message does not really make sense. If negative is returned, then
+the check (ret < 0) was correct.
 
-=======================================================
-CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:118 [inline]
- skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
- isotp_rcv_cf net/can/isotp.c:570 [inline]
- isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
+I guess you wanted to say that common code style is to check for any
+non-zero return value, just like it's implementation in clk.h does.
 
-Check so->rx.state equals ISOTP_IDLE firstly in isotp_rcv_ff().
-Make sure so->rx idle when receive another new packet. And set
-so->rx.state to ISOTP_IDLE after whole packet being received.
+I'll adjust the commit msg when applying.
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- net/can/isotp.c | 28 +++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/memory/mtk-smi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+> index b883dcc0bbfa..e7b1a22b12ea 100644
+> --- a/drivers/memory/mtk-smi.c
+> +++ b/drivers/memory/mtk-smi.c
+> @@ -480,7 +480,7 @@ static int __maybe_unused mtk_smi_larb_resume(struct device *dev)
+>  	int ret;
+>  
+>  	ret = clk_bulk_prepare_enable(larb->smi.clk_num, larb->smi.clks);
+> -	if (ret < 0)
+> +	if (ret)
+>  		return ret;
+>  
+>  	/* Configure the basic setting for this larb */
+> 
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index df6968b28bf4..a4b174f860f3 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -443,8 +443,10 @@ static int isotp_rcv_ff(struct sock *sk, struct canfd_frame *cf, int ae)
- 	int off;
- 	int ff_pci_sz;
- 
-+	if (so->rx.state != ISOTP_IDLE)
-+		return 0;
-+
- 	hrtimer_cancel(&so->rxtimer);
--	so->rx.state = ISOTP_IDLE;
- 
- 	/* get the used sender LL_DL from the (first) CAN frame data length */
- 	so->rx.ll_dl = padlen(cf->len);
-@@ -518,8 +520,6 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
- 		so->lastrxcf_tstamp = skb->tstamp;
- 	}
- 
--	hrtimer_cancel(&so->rxtimer);
--
- 	/* CFs are never longer than the FF */
- 	if (cf->len > so->rx.ll_dl)
- 		return 1;
-@@ -531,15 +531,15 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
- 			return 1;
- 	}
- 
-+	hrtimer_cancel(&so->rxtimer);
-+
- 	if ((cf->data[ae] & 0x0F) != so->rx.sn) {
- 		/* wrong sn detected - report 'illegal byte sequence' */
- 		sk->sk_err = EILSEQ;
- 		if (!sock_flag(sk, SOCK_DEAD))
- 			sk_error_report(sk);
- 
--		/* reset rx state */
--		so->rx.state = ISOTP_IDLE;
--		return 1;
-+		goto err_out;
- 	}
- 	so->rx.sn++;
- 	so->rx.sn %= 16;
-@@ -551,21 +551,18 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
- 	}
- 
- 	if (so->rx.idx >= so->rx.len) {
--		/* we are done */
--		so->rx.state = ISOTP_IDLE;
--
- 		if ((so->opt.flags & ISOTP_CHECK_PADDING) &&
- 		    check_pad(so, cf, i + 1, so->opt.rxpad_content)) {
- 			/* malformed PDU - report 'not a data message' */
- 			sk->sk_err = EBADMSG;
- 			if (!sock_flag(sk, SOCK_DEAD))
- 				sk_error_report(sk);
--			return 1;
-+			goto err_out;
- 		}
- 
- 		nskb = alloc_skb(so->rx.len, gfp_any());
- 		if (!nskb)
--			return 1;
-+			goto err_out;
- 
- 		memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
- 		       so->rx.len);
-@@ -573,6 +570,10 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
- 		nskb->tstamp = skb->tstamp;
- 		nskb->dev = skb->dev;
- 		isotp_rcv_skb(nskb, sk);
-+
-+		/* we are done */
-+		so->rx.state = ISOTP_IDLE;
-+
- 		return 0;
- 	}
- 
-@@ -591,6 +592,11 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
- 	/* we reached the specified blocksize so->rxfc.bs */
- 	isotp_send_fc(sk, ae, ISOTP_FC_CTS);
- 	return 0;
-+
-+err_out:
-+	/* reset rx state */
-+	so->rx.state = ISOTP_IDLE;
-+	return 1;
- }
- 
- static void isotp_rcv(struct sk_buff *skb, void *data)
--- 
-2.25.1
 
+Best regards,
+Krzysztof

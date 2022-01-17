@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D96D6491174
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8548649117E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiAQVy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 16:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiAQVyx (ORCPT
+        id S243410AbiAQV4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 16:56:02 -0500
+Received: from mail-io1-f51.google.com ([209.85.166.51]:45849 "EHLO
+        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231401AbiAQVzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:54:53 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CA8C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:54:53 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id h2so427860qkp.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:54:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KmBygC3q5AQG8qkNJvnSnx+ggl7+9U+ombjnJKusFG4=;
-        b=BBYk7pWCxTpa4e9gEBi36zq0wZnDK1j8g3Khe3W2pLKftHSHr/CXDUEoyfqz3ooNbi
-         Glv8rYMWVGazEcND3kjnCvRMhHh/gu6xQWjwk8OJcUpOewIl+l/ejIwlhSRThY2N0OVs
-         mwTbFhmbf+K+mhRd0FmNjgwoVw20osV7MBe8U=
+        Mon, 17 Jan 2022 16:55:53 -0500
+Received: by mail-io1-f51.google.com with SMTP id s11so15153112ioe.12;
+        Mon, 17 Jan 2022 13:55:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KmBygC3q5AQG8qkNJvnSnx+ggl7+9U+ombjnJKusFG4=;
-        b=cQc17qxMrV6XqM4MwTDlQkL1kJ2dyVezV3YOn3GjPZkFn47zKHHXVQimxTYto+C6q3
-         1keZhI+1eCLuC5aeay+CgFeCs+2mItxhAMt2GqwINSp6jUz7BStnKP9/KVjqkxrVgrmj
-         4YsEurlKfxT6FHnF4JuPoSNCTE5+o9auLTfPLxSXI3ju++guPDnOh1NF7okMqIGdXj7t
-         O5Mkdyhdx+9zrWcjSf8gfaocbgt2Ltr+ph5rduTM3CVYfWY5UZ/jjuEFrKS68XlZ2dp3
-         yS618Vem5HE4ku/BsEJ+xg6UctrkG5iz22/0YoRAyQdkhQelZgysiRh7SJDU4fx6Lwyr
-         6PAg==
-X-Gm-Message-State: AOAM533Ym99CJwcS8ufrYXwADCaFukFTENPHsGJMZ75Zc8XRxY/2CqT/
-        ocilIFAqoKm1T4n4lPOLVNOEYw==
-X-Google-Smtp-Source: ABdhPJxaMz1oYURs6e5lMt7vVVBbGEnFSB7TjiLRH+xlZuiq3V/0TG+DoST9VWbXv6HeYfW5osR6TA==
-X-Received: by 2002:a37:aad8:: with SMTP id t207mr15930861qke.216.1642456492290;
-        Mon, 17 Jan 2022 13:54:52 -0800 (PST)
-Received: from nitro.local (bras-base-mtrlpq5031w-grc-32-216-209-220-181.dsl.bell.ca. [216.209.220.181])
-        by smtp.gmail.com with ESMTPSA id f9sm9371606qkp.94.2022.01.17.13.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 13:54:51 -0800 (PST)
-Date:   Mon, 17 Jan 2022 16:54:49 -0500
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, ebiggers@kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Message-ID: <20220117215449.2qboqd3nmsky2g3w@nitro.local>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <20220117165933.l3762ppcbj5jxicc@meerkat.local>
- <392d28fa-7a2c-867a-5fbb-640064461eb7@maciej.szmigiero.name>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iq6XuonlfOcKR4C7CyNJxsO+5s/Hfb7aV3tDFA0gEZI=;
+        b=QFKnHq8U87cAj0Ze3W6PCEOe8eCb7In4/Qb14+v3Lb0ayakzL+ZM0kcQHp0ypyDVHE
+         gKjki8RLuropeK0L5AO9SB6MXDfW9pPEM1wEM2HjfW6ERqHoSl/agt0xEJv8AH4uTaf3
+         Td2PCxdYU6u48sxP+WqaOke2qJiBZRLj5nTpaLRvB/n7EwV+ViJud/q7yJz3bH3UxdTm
+         29Ot/0Abd3Bc621YGBzg9U78LHvBR1uHFmJ4p/VGykls3khfRskYuSL8Is66HQavleXs
+         dxa6SF2z1L9Gen9WTMZkBTN+l26lfh82x2PRJ8Z+NDQO9l5KicxV6wEAwv8YN7PiDhoI
+         hNnQ==
+X-Gm-Message-State: AOAM533i2uZ/A5oaI0Zupo5BT9GMIpiZ3ZPlA/t01yD3vO+Rnr3Z8hNx
+        oVacECmjndxf04Xh+7cCVhLQ8yAj1+TDT0ikP8Y=
+X-Google-Smtp-Source: ABdhPJxxA9k4MZckhnsZSeaXrceoVg6qNVBBjDPdSuqgeM5leXyBs8XmXDdISpGBE5qYe2hXdGaekksgj3MT3OVtZY0=
+X-Received: by 2002:a05:6638:c1:: with SMTP id w1mr4478075jao.113.1642456552694;
+ Mon, 17 Jan 2022 13:55:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <392d28fa-7a2c-867a-5fbb-640064461eb7@maciej.szmigiero.name>
+References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+ <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
+ <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de> <e4242fe9-13b1-91b5-d254-992f48115589@gmx.de>
+In-Reply-To: <e4242fe9-13b1-91b5-d254-992f48115589@gmx.de>
+From:   Ilia Mirkin <imirkin@alum.mit.edu>
+Date:   Mon, 17 Jan 2022 16:55:41 -0500
+Message-ID: <CAKb7UvgXaeX7FRUK_Q35N=2zBms8WgCe=ZBKr3dHrixoJWtvqw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Helge Deller <deller@gmx.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-fbdev <linux-fbdev@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 09:59:22PM +0100, Maciej S. Szmigiero wrote:
-> > I am concerned that ed25519 private key management is very rudimentary -- more
-> > often than not it is just kept somewhere on disk, often without any passphrase
-> > encryption.
-> > 
-> > With all its legacy warts, GnuPG at least has decent support for hardware
-> > off-load via OpenPGP smartcards or TPM integration in GnuPG 2.3, but the best
-> > we have with ed25519 is passhprase protection as implemented in minisign (and
-> 
-> I am not sure that I understood your point here correctly, but GnuPG
-> already supports ed25519 keys, including stored on a smartcard - for
-> example, on a YubiKey [1].
+On Mon, Jan 17, 2022 at 2:47 PM Helge Deller <deller@gmx.de> wrote:
+>
+> On 1/17/22 17:21, Helge Deller wrote:
+> > On 1/17/22 16:58, Thomas Zimmermann wrote:
+> >> Hi
+> >>
+> >> Am 17.01.22 um 16:42 schrieb Helge Deller:
+> >>> [...]
+> >>>>> c) reintroduce the state where fbcon is fast on fbdev. This is important for non-DRM machines,
+> >>>>>     either when run on native hardware or in an emulator.
+> >>>>> d) not break DRM development
+> >>>>>
+> >>>>> Especially regarding c) I complained in [1] and got no feedback. I really would like to
+> >>>>> understand where the actual problems were and what's necessary to fix them.
+> >>>>>
+> >>>>> Helge
+> >>>>>
+> >>>>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
+> >>
+> >> Seems like few people read linux-fbdev these days.
+> >> I suggest to partly revert the patch to the point were performance
+> >> gets better again.
+> > Yes, *please*!
+> > That would solve my biggest concern.
+> >
+> > As far as I can see that's only 2 commits to be reverted:
+> > b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, part 1 (from TODO list)"
+> > 39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
+> >
+> > I think both were not related to any 0-day bug reports (but again, I might be wrong).
+>
+> I did some more checking...
+>
+> Both patches are not related to DRM, since no DRM driver sets the
+> FBINFO_HWACCEL_COPYAREA or FBINFO_HWACCEL_FILLRECT flags.
 
-Yes, I know, but you cannot use ed25519-capable OpenPGP smartcards to create
-non-PGP signatures. The discussion was about using ed25519 signatures
-directly (e.g. like signify/minisign do). Jason pointed out to me on IRC that
-it's possible to do it with YubiHSM, but it's an expensive device ($650 USD
-from Yubico).
+These used to be set by, at least, nouveau (which is a drm driver).
+And yeah, console responsiveness is _way_ worse without that. People
+keep pushing the messaging that it's the same speed to do it as
+memcpy, but that's just not the case in my experience, on a pretty
+bog-standard x86 desktop. The support got dumped, and it felt pretty
+clear from the messaging at the time, "too bad". Would love to see it
+come back.
 
-> While the current software support for ed25519 might be limited, there
-> is certainly progress being made, RFC 8410 allowed these algos for X.509
-> certificates.
-> Support for such certificates is already implemented in OpenSSL [2].
-> 
-> ECDSA, on the other hand, is very fragile with respect to random number
-> generation at signing time.
-> We know that people got burned here in the past.
+Cheers,
 
-I think this is taking us far away from the main topic (which
-signing/verification standards to use in-kernel).
-
--K
+  -ilia

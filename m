@@ -2,158 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBE2490323
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC80490325
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237684AbiAQHrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:47:48 -0500
-Received: from smtpbg704.qq.com ([203.205.195.105]:34749 "EHLO
-        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235240AbiAQHrs (ORCPT
+        id S237696AbiAQHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:48:22 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:30284 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235240AbiAQHsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:47:48 -0500
-X-QQ-mid: bizesmtp37t1642405658tdskzx5s
-Received: from localhost.localdomain (unknown [111.207.172.18])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 17 Jan 2022 15:47:32 +0800 (CST)
-X-QQ-SSF: 01400000002000B0F000B00E0000000
-X-QQ-FEAT: vmnbzJorTWTgkQ7DWUHbMUg6c+p2EVa1iwQeuJc8z5eKeQySQBOoCsunHtT3G
-        mzT2Emv+ANyWCsJ8UXxzXWSzMaBJVOxLSxIjpy5v2UnWf+Q3ryU5ck4gdDJnUqLVbxnwt3Q
-        pmbqFAYQ/hRxi2ngXdplqXsPu2RZ4fcrTD7nBS1TT71Ph84qJwaEaED2UkA34RqJuE8c44u
-        XHyMajZbIVvcoCSSRBqE3kQJdEcxtxo3zO5hNGNAIaHCmStEx5G0k88XIGsWYri7bvexWwC
-        1n1tSixwomDe2P9tp0AhNGkwj0m+5tSDpHXsNdGmBS7nmV2Z/b4sQCPulDiazx5gZwBoe7S
-        DWaSInlUPo8h/OBRU4=
-X-QQ-GoodBg: 2
-From:   Qiang Ma <maqianga@uniontech.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Qiang Ma <maqianga@uniontech.com>
-Subject: [PATCH] drm/radeon: fix UVD suspend error
-Date:   Mon, 17 Jan 2022 15:47:31 +0800
-Message-Id: <20220117074731.29882-1-maqianga@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 17 Jan 2022 02:48:21 -0500
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JckX76vvlzbk0g;
+        Mon, 17 Jan 2022 15:47:35 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 15:48:19 +0800
+Subject: Re: [PATCH] pipe: Fix endless sleep problem due to the out-of-order
+To:     "miaoxie (A)" <miaoxie@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+References: <31566e37493540ada2dda862fe8fb32b@huawei.com>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <61E51F42.8030202@huawei.com>
+Date:   Mon, 17 Jan 2022 15:48:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
+In-Reply-To: <31566e37493540ada2dda862fe8fb32b@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I met a bug recently and the kernel log:
-
-[  330.171875] radeon 0000:03:00.0: couldn't schedule ib
-[  330.175781] [drm:radeon_uvd_suspend [radeon]] *ERROR* Error destroying UVD (-22)!
-
-In radeon drivers, using UVD suspend is as follows:
-
-if (rdev->has_uvd) {
-        uvd_v1_0_fini(rdev);
-        radeon_uvd_suspend(rdev);
-}
-
-In radeon_ib_schedule function, we check the 'ring->ready' state,
-but in uvd_v1_0_fini funciton, we've cleared the ready state.
-So, just modify the suspend code flow to fix error.
-
-Signed-off-by: Qiang Ma <maqianga@uniontech.com>
----
- drivers/gpu/drm/radeon/cik.c       | 2 +-
- drivers/gpu/drm/radeon/evergreen.c | 2 +-
- drivers/gpu/drm/radeon/ni.c        | 2 +-
- drivers/gpu/drm/radeon/r600.c      | 2 +-
- drivers/gpu/drm/radeon/rv770.c     | 2 +-
- drivers/gpu/drm/radeon/si.c        | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
-index 81b4de7be9f2..5819737c21c6 100644
---- a/drivers/gpu/drm/radeon/cik.c
-+++ b/drivers/gpu/drm/radeon/cik.c
-@@ -8517,8 +8517,8 @@ int cik_suspend(struct radeon_device *rdev)
- 	cik_cp_enable(rdev, false);
- 	cik_sdma_enable(rdev, false);
- 	if (rdev->has_uvd) {
--		uvd_v1_0_fini(rdev);
- 		radeon_uvd_suspend(rdev);
-+		uvd_v1_0_fini(rdev);
- 	}
- 	if (rdev->has_vce)
- 		radeon_vce_suspend(rdev);
-diff --git a/drivers/gpu/drm/radeon/evergreen.c b/drivers/gpu/drm/radeon/evergreen.c
-index eeb590d2dec2..455f8036aa54 100644
---- a/drivers/gpu/drm/radeon/evergreen.c
-+++ b/drivers/gpu/drm/radeon/evergreen.c
-@@ -5156,8 +5156,8 @@ int evergreen_suspend(struct radeon_device *rdev)
- 	radeon_pm_suspend(rdev);
- 	radeon_audio_fini(rdev);
- 	if (rdev->has_uvd) {
--		uvd_v1_0_fini(rdev);
- 		radeon_uvd_suspend(rdev);
-+		uvd_v1_0_fini(rdev);
- 	}
- 	r700_cp_stop(rdev);
- 	r600_dma_stop(rdev);
-diff --git a/drivers/gpu/drm/radeon/ni.c b/drivers/gpu/drm/radeon/ni.c
-index 4a364ca7a1be..927e5f42e97d 100644
---- a/drivers/gpu/drm/radeon/ni.c
-+++ b/drivers/gpu/drm/radeon/ni.c
-@@ -2323,8 +2323,8 @@ int cayman_suspend(struct radeon_device *rdev)
- 	cayman_cp_enable(rdev, false);
- 	cayman_dma_stop(rdev);
- 	if (rdev->has_uvd) {
--		uvd_v1_0_fini(rdev);
- 		radeon_uvd_suspend(rdev);
-+		uvd_v1_0_fini(rdev);
- 	}
- 	evergreen_irq_suspend(rdev);
- 	radeon_wb_disable(rdev);
-diff --git a/drivers/gpu/drm/radeon/r600.c b/drivers/gpu/drm/radeon/r600.c
-index ca3fcae2adb5..dd78fc499402 100644
---- a/drivers/gpu/drm/radeon/r600.c
-+++ b/drivers/gpu/drm/radeon/r600.c
-@@ -3232,8 +3232,8 @@ int r600_suspend(struct radeon_device *rdev)
- 	radeon_audio_fini(rdev);
- 	r600_cp_stop(rdev);
- 	if (rdev->has_uvd) {
--		uvd_v1_0_fini(rdev);
- 		radeon_uvd_suspend(rdev);
-+		uvd_v1_0_fini(rdev);
- 	}
- 	r600_irq_suspend(rdev);
- 	radeon_wb_disable(rdev);
-diff --git a/drivers/gpu/drm/radeon/rv770.c b/drivers/gpu/drm/radeon/rv770.c
-index e592e57be1bb..38796af4fadd 100644
---- a/drivers/gpu/drm/radeon/rv770.c
-+++ b/drivers/gpu/drm/radeon/rv770.c
-@@ -1894,8 +1894,8 @@ int rv770_suspend(struct radeon_device *rdev)
- 	radeon_pm_suspend(rdev);
- 	radeon_audio_fini(rdev);
- 	if (rdev->has_uvd) {
--		uvd_v1_0_fini(rdev);
- 		radeon_uvd_suspend(rdev);
-+		uvd_v1_0_fini(rdev);
- 	}
- 	r700_cp_stop(rdev);
- 	r600_dma_stop(rdev);
-diff --git a/drivers/gpu/drm/radeon/si.c b/drivers/gpu/drm/radeon/si.c
-index 013e44ed0f39..8d5e4b25609d 100644
---- a/drivers/gpu/drm/radeon/si.c
-+++ b/drivers/gpu/drm/radeon/si.c
-@@ -6800,8 +6800,8 @@ int si_suspend(struct radeon_device *rdev)
- 	si_cp_enable(rdev, false);
- 	cayman_dma_stop(rdev);
- 	if (rdev->has_uvd) {
--		uvd_v1_0_fini(rdev);
- 		radeon_uvd_suspend(rdev);
-+		uvd_v1_0_fini(rdev);
- 	}
- 	if (rdev->has_vce)
- 		radeon_vce_suspend(rdev);
--- 
-2.20.1
+Gentel ping....
 
 
+On 2021/12/12 0:51, miaoxie (A) wrote:
+> Thers is a out-of-order access problem which would cause endless sleep
+> when we use pipe with epoll.
+>
+> The story is following, we assume the ring size is 2, the ring head
+> is 1, the ring tail is 0, task0 is write task, task1 is read task,
+> task2 is write task.
+> Task0					Task1		Task2
+> epoll_ctl(fd, EPOLL_CTL_ADD, ...)
+>    pipe_poll()
+>      poll_wait()
+>      tail = READ_ONCE(pipe->tail);
+>      	// Re-order and get tail=0
+> 				  	pipe_read
+> 					tail++ //tail=1
+> 							pipe_write
+> 							head++ //head=2
+>      head = READ_ONCE(pipe->head);
+>      	// head = 2
+>      check ring is full by head - tail
+> Task0 get head = 2 and tail = 0, so it mistake that the pipe ring is
+> full, then task0 is not add into ready list. If the ring is not full
+> anymore, task0 would not be woken up forever
+>
+> The reason of this problem is that we got inconsistent head/tail value
+> of the pipe ring, so we fix the problem by getting them by atomic.
+>
+> It seems that pipe_readable and pipe_writable is safe, so we don't
+> change them.
+>
+> Signed-off-by: Miao Xie <miaoxie@huawei.com>
+> ---
+>   fs/pipe.c                 |  6 ++++--
+>   include/linux/pipe_fs_i.h | 32 ++++++++++++++++++++++++++++++--
+>   2 files changed, 34 insertions(+), 4 deletions(-)
+>
+> diff --git a/fs/pipe.c b/fs/pipe.c
+> index 6d4342bad9f1..454056b1eaad 100644
+> --- a/fs/pipe.c
+> +++ b/fs/pipe.c
+> @@ -649,6 +649,7 @@ pipe_poll(struct file *filp, poll_table *wait)
+>   	__poll_t mask;
+>   	struct pipe_inode_info *pipe = filp->private_data;
+>   	unsigned int head, tail;
+> +	u64 ring_idxs;
+>   
+>   	/* Epoll has some historical nasty semantics, this enables them */
+>   	pipe->poll_usage = 1;
+> @@ -669,8 +670,9 @@ pipe_poll(struct file *filp, poll_table *wait)
+>   	 * if something changes and you got it wrong, the poll
+>   	 * table entry will wake you up and fix it.
+>   	 */
+> -	head = READ_ONCE(pipe->head);
+> -	tail = READ_ONCE(pipe->tail);
+> +	ring_idxs = (u64)atomic64_read(&pipe->ring_idxs);
+> +	head = pipe_get_ring_head(ring_idxs);
+> +	tail = pipe_get_ring_tail(ring_idxs);
+>   
+>   	mask = 0;
+>   	if (filp->f_mode & FMODE_READ) {
+> diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+> index fc5642431b92..9a7cb8077dc8 100644
+> --- a/include/linux/pipe_fs_i.h
+> +++ b/include/linux/pipe_fs_i.h
+> @@ -58,8 +58,18 @@ struct pipe_buffer {
+>   struct pipe_inode_info {
+>   	struct mutex mutex;
+>   	wait_queue_head_t rd_wait, wr_wait;
+> -	unsigned int head;
+> -	unsigned int tail;
+> +	union {
+> +		/*
+> +		 * If someone want to change this structure, you should also
+> +		 * change the macro *PIPE_GET_DOORBELL* that is used to
+> +		 * generate the ring head/tail access function.
+> +		 */
+> +		struct {
+> +			unsigned int head;
+> +			unsigned int tail;
+> +		};
+> +		atomic64_t ring_idxs;
+> +	};
+>   	unsigned int max_usage;
+>   	unsigned int ring_size;
+>   #ifdef CONFIG_WATCH_QUEUE
+> @@ -82,6 +92,24 @@ struct pipe_inode_info {
+>   #endif
+>   };
+>   
+> +#define PIPE_GET_DOORBELL(bellname)					\
+> +static inline unsigned int pipe_get_ring_##bellname(u64 ring_idxs)	\
+> +{									\
+> +	unsigned int doorbell;						\
+> +	unsigned char *ptr = ((char *)&ring_idxs);			\
+> +	int offset;							\
+> +									\
+> +	offset = (int)offsetof(struct pipe_inode_info, bellname);	\
+> +	offset -= (int)offsetof(struct pipe_inode_info, ring_idxs);	\
+> +	ptr += offset;							\
+> +	doorbell = *((unsigned int *)ptr);				\
+> +									\
+> +	return doorbell;						\
+> +}
+> +
+> +PIPE_GET_DOORBELL(head)
+> +PIPE_GET_DOORBELL(tail)
+> +
+>   /*
+>    * Note on the nesting of these functions:
+>    *
 

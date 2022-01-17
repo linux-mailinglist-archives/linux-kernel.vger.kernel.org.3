@@ -2,105 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8BF490089
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC8749008D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbiAQD1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 22:27:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48378 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236934AbiAQD1j (ORCPT
+        id S236954AbiAQDdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 22:33:46 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:60347 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236944AbiAQDdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 22:27:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D04CB80C8B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80078C36AE3;
-        Mon, 17 Jan 2022 03:27:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642390056;
-        bh=GdLTfX9lUGWAaixcKHHob3vDx9b7y5jXsEHjYxzV4Ws=;
-        h=To:Cc:From:Subject:Date:From;
-        b=SQe87uyFqBEaRfoGnpU//aWF3OggeZy3arw9MO3NAiczN76qCJzlWSYcyxihSdNYR
-         7r1l0Jz4i6TyQ8yjwwvo4cojSPOTUjAtfvuRS4mpdctkMH0mxn2IkGDcAIpEuA4f+A
-         D3TEI3QnrRpGEnGRoGTrGQrixQv+8pUUVxef2jdzJhH35XSP3BudhOVfMFxjWk7gdE
-         kSM0lFwQdrQA75VY3XAfJ+69a5Z3jCIuBmxmXklJYdGBw/h9FWtzBrI/P9mzVwaoTT
-         WPX8j5Lgri0rUJh+vvp6imVVFCjMYNQATXqbsxAisNmuQiAkwWutceh0TeNIWHBwu0
-         X2auQ+lO7fvZg==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        abrodkin@synopsys.com, Yihao Han <hanyihao@vivo.com>,
-        Kees Cook <keescook@chromium.org>, colin.i.king@googlemail.com,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Vladimir Isaev <isaev@synopsys.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-From:   Vineet Gupta <vgupta@kernel.org>
-Subject: [GIT PULL] ARC updates for 5.17-rc1
-Message-ID: <4af6c0e7-03a3-702c-f364-b0ebe0f8923a@kernel.org>
-Date:   Sun, 16 Jan 2022 19:27:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 16 Jan 2022 22:33:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642390425; x=1673926425;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7P2Y6BLvKakDneSI0GRGRq3YhuwdMfOK5WaaMV/79xw=;
+  b=jtUXsvOB352cB+4XaZbBND1RswNFE4ZgLDEH8yMR44zo0Qnr8Xhc71cQ
+   TDKwdaYymoprglIN9jeKVfxm0KaQJ3DAjrmx0JA9EP2EZd/+AfCP316Rk
+   CDiODGYroRS6OjZMkSU2JtMZ6jAcCvUgoc5L9Ec7bXm82e3U7zE+7pDQQ
+   I=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Jan 2022 19:33:44 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 19:33:44 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 16 Jan 2022 19:33:44 -0800
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 16 Jan 2022 19:33:39 -0800
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     gregkh <gregkh@linuxfoundation.org>, <quic_psodagud@quicinc.com>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>
+Subject: [PATCHv8 0/5] lib/rwmmio/arm64: Add support to trace register reads/writes
+Date:   Mon, 17 Jan 2022 09:02:49 +0530
+Message-ID: <cover.1642309054.git.quic_saipraka@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+are typically used to read/write from/to memory mapped registers
+and can cause hangs or some undefined behaviour in following cases,
 
-ARC fixes for 5.17. Nothing too exciting for now.
+* If the access to the register space is unclocked, for example: if
+  there is an access to multimedia(MM) block registers without MM
+  clocks.
 
-Thx,
--Vineet
-------------------------------------------->
-The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+* If the register space is protected and not set to be accessible from
+  non-secure world, for example: only EL3 (EL: Exception level) access
+  is allowed and any EL2/EL1 access is forbidden.
 
-   Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+* If xPU(memory/register protection units) is controlling access to
+  certain memory/register space for specific clients.
 
-are available in the Git repository at:
+and more...
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git/ 
-tags/arc-5.17-rc1
+Such cases usually results in instant reboot/SErrors/NOC or interconnect
+hangs and tracing these register accesses can be very helpful to debug
+such issues during initial development stages and also in later stages.
 
-for you to fetch changes up to 8f67f65d121cc3bbb4ffaae80e880aeb307d49f4:
+So use ftrace trace events to log such MMIO register accesses which
+provides rich feature set such as early enablement of trace events,
+filtering capability, dumping ftrace logs on console and many more.
 
-   arc: use swap() to make code cleaner (2021-12-28 19:49:44 -0800)
+Sample output:
 
-----------------------------------------------------------------
-Fixes for ARC for 5.17
+rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
 
-----------------------------------------------------------------
-Alexey Brodkin (1):
-       arc: perf: Move static structs to where they're really used
+This series is a follow-up for the series [1] and a recent series [2] making use
+of both.
 
-Colin Ian King (1):
-       ARC: perf: Remove redundant initialization of variable idx
+[1] https://lore.kernel.org/lkml/cover.1536430404.git.saiprakash.ranjan@codeaurora.org/
+[2] https://lore.kernel.org/lkml/1604631386-178312-1-git-send-email-psodagud@codeaurora.org/
 
-Kees Cook (1):
-       arc: Replace lkml.org links with lore
+Note in previous v4 version, Arnd suggested to benchmark and compare size with callback
+based implementation, please see [3] for more details on that with brief comparison below.
 
-Randy Dunlap (1):
-       ARC: thread_info.h: correct two typos in a comment
 
-Vineet Gupta (1):
-       ARC: perf: fix misleading comment about pmu vs counter stop
+**Inline version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+   text           data             bss     dec             hex         filename
+ 23884219        14284468         532568 38701255        24e88c7        vmlinux
 
-Yihao Han (1):
-       arc: use swap() to make code cleaner
+**Callback version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+    text          data             bss     dec             hex        filename
+ 24108179        14279596         532568 38920343        251e097       vmlinux
 
-  arch/arc/include/asm/irqflags-compact.h |   8 +-
-  arch/arc/include/asm/perf_event.h       | 162 
--------------------------------
-  arch/arc/include/asm/thread_info.h      |   4 +-
-  arch/arc/kernel/perf_event.c            | 166 
-+++++++++++++++++++++++++++++++-
-  arch/arc/kernel/unwind.c                |  11 +--
-  arch/arc/mm/dma.c                       |   2 +-
-  arch/arc/plat-axs10x/axs10x.c           |   2 +-
-  arch/arc/plat-hsdk/platform.c           |   2 +-
-  8 files changed, 178 insertions(+), 179 deletions(-)
+$ ./scripts/bloat-o-meter inline-vmlinux callback-vmlinux
+add/remove: 8/3 grow/shrink: 4889/89 up/down: 242244/-11564 (230680)
+Total: Before=25812612, After=26043292, chg +0.89%
+
+[3] https://lore.kernel.org/lkml/466449a1-36da-aaa9-7e4f-477f36b52c9e@quicinc.com/
+
+Changes in v8:
+ * Fix build error reported by kernel test robot.
+
+Changes in v7:
+ * Use lib/ instead of kernel/trace/ based on review comment by Steven Rostedt.
+
+Changes in v6:
+ * Implemented suggestions by Arnd Bergmann:
+   - Use arch independent IO barriers in arm64/asm
+   - Add ARCH_HAVE_TRACE_MMIO_ACCESS
+   - Add post read and post write logging support
+   - Remove tracepoint_active check
+ * Fix build error reported by kernel test robot.
+
+Changes in v5:
+ * Move arm64 to use asm-generic provided high level MMIO accessors (Arnd).
+ * Add inline logging for MMIO relaxed and non-relaxed accessors.
+ * Move nVHE KVM comment to makefile (Marc).
+ * Fix overflow warning due to switch to inline accessors instead of macro.
+ * Modify trace event field to include caller and parent details for more detailed logs.
+
+Changes in v4:
+ * Drop dynamic debug based filter support since that will be developed later with
+   the help from Steven (Ftrace maintainer).
+ * Drop value passed to writel as it is causing hangs when tracing is enabled.
+ * Code cleanup for trace event as suggested by Steven for earlier version.
+ * Fixed some build errors reported by 0-day bot.
+
+Changes in v3:
+ * Create a generic mmio header for instrumented version (Earlier suggested in [1]
+   by Will Deacon and recently [2] by Greg to have a generic version first).
+ * Add dynamic debug support to filter out traces which can be very useful for targeted
+   debugging specific to subsystems or drivers.
+ * Few modifications to the rwmmio trace event fields to include the mmio width and print
+   addresses in hex.
+ * Rewrote commit msg to explain some more about usecases.
+
+Prasad Sodagudi (1):
+  lib: Add register read/write tracing support
+
+Sai Prakash Ranjan (4):
+  arm64: io: Use asm-generic high level MMIO accessors
+  irqchip/tegra: Fix overflow implicit truncation warnings
+  drm/meson: Fix overflow implicit truncation warnings
+  asm-generic/io: Add logging support for MMIO accessors
+
+ arch/Kconfig                      |   3 +
+ arch/arm64/Kconfig                |   1 +
+ arch/arm64/include/asm/io.h       |  41 +++--------
+ arch/arm64/kvm/hyp/nvhe/Makefile  |   7 +-
+ drivers/gpu/drm/meson/meson_viu.c |  22 +++---
+ drivers/irqchip/irq-tegra.c       |  10 +--
+ include/asm-generic/io.h          |  82 ++++++++++++++++++++--
+ include/trace/events/rwmmio.h     | 112 ++++++++++++++++++++++++++++++
+ lib/Kconfig                       |   7 ++
+ lib/Makefile                      |   2 +
+ lib/trace_readwrite.c             |  47 +++++++++++++
+ 11 files changed, 280 insertions(+), 54 deletions(-)
+ create mode 100644 include/trace/events/rwmmio.h
+ create mode 100644 lib/trace_readwrite.c
+
+
+base-commit: bd8d9cef2a7932e688ca267ea1adf5ea6557c777
+-- 
+2.33.1
+

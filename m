@@ -2,222 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B89F4910D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EFC4910D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243069AbiAQUFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242976AbiAQUFO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:05:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E2AC06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:05:14 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9YFT-0001Jt-03; Mon, 17 Jan 2022 21:05:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9YFP-00AsTd-45; Mon, 17 Jan 2022 21:04:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9YFN-0003Uv-PR; Mon, 17 Jan 2022 21:04:57 +0100
-Date:   Mon, 17 Jan 2022 21:04:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        sboyd@kernel.org, linus.walleij@linaro.org, masneyb@onstation.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 2/2] pwm: Add clock based PWM output driver
-Message-ID: <20220117200454.ksd65ljmrje63sqg@pengutronix.de>
-References: <20211213150335.51888-1-nikita@trvn.ru>
- <20211213150335.51888-3-nikita@trvn.ru>
- <20220117155817.4bu2zwpjijtwlfvi@pengutronix.de>
- <b3add53c417506044a8e13c4bbf84ced@trvn.ru>
+        id S243041AbiAQUFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:05:07 -0500
+Received: from mail-mw2nam12on2044.outbound.protection.outlook.com ([40.107.244.44]:31168
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242976AbiAQUFG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 15:05:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DobbKKYQTEqThgl77GDveWuyXBpYlf2CkJVF2KQfyGmFKahOhfP7GFUQqiY2xePhaVcLd7NblGlBe834ZIcUHt7AwTNrZWT5RP+m9XlEjwwidBDwWKxz3F87WSmClmeWgA1kEijn2ypZHN3HYcUB29A0JRZ+E1B1jDxndoc62y9EPbzfJD1zJdgv1czPrqf8terdqxPrSKhEoV8hk9Ky8NAbEHkc4wGLodQZnW68WivOxBasCTy/LWoCzJhPA7GanPkOF6o/cXiFPs63PA412QcVZXQXG7/yCsh+cuMnWTorJDP2MobBQEcJUv3AnvCChHbkWe8/D+e65JM0xCXldw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GZUjAq6uk7zsUqiPrnxcicyMzVJhLQ+j9psHS8fv+Wg=;
+ b=H0t8jFEUZDFggRn/c0JAZd9yFrhm3e5IS8aZRXDMoPB6fDHzkrh7S+rsMFw40gIXq6lntBfEdqZdApUYQto+dHuJaZRyo0a0pbbqg5Q4YA8aYu2pCZnLQEAWXCDfr5Tt9RMPPsn1Lw+k5sFYsA8gptny51pcfGUhaC7/8rX66RYFB4N0tfnFywKfJdds2kq7l4GQwcJIDGclSZ17sH0D/QbBKfPGL5RvZpOPkgNQweOZNdoGfAQ6D76Kb6LIMqZ2wKV2w3O+rk1XOGWJa8ZRsrRMeCgQR3T0flcEGplhmDJl3geh2WIOFMOj2cA2pMBhXA+pbEHNqF7NfzHepgccpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GZUjAq6uk7zsUqiPrnxcicyMzVJhLQ+j9psHS8fv+Wg=;
+ b=0rQmyo049B+o8zfrjIPDgRpCwJ4eYyKUCy/1qU52+6qu4/D7dAagQdgtrTkUhEVDBLI7HXVis1HacHhZ77n5lngAbm9ZHDRUFoJlezk5hEP7mOEq1/jtCNbgUKQ4sl2YblBBt9izjNsI4TzAMwxkH1ZE2fJnxDN04e865U9HOUk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5399.namprd12.prod.outlook.com (2603:10b6:8:34::5) by
+ CY4PR12MB1158.namprd12.prod.outlook.com (2603:10b6:903:40::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.10; Mon, 17 Jan 2022 20:05:03 +0000
+Received: from DM8PR12MB5399.namprd12.prod.outlook.com
+ ([fe80::9467:c769:4d1c:56f3]) by DM8PR12MB5399.namprd12.prod.outlook.com
+ ([fe80::9467:c769:4d1c:56f3%6]) with mapi id 15.20.4888.014; Mon, 17 Jan 2022
+ 20:05:03 +0000
+Subject: Re: [PATCH] drm/radeon: fix UVD suspend error
+To:     Qiang Ma <maqianga@uniontech.com>, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220117074731.29882-1-maqianga@uniontech.com>
+From:   Leo Liu <leo.liu@amd.com>
+Message-ID: <581d4658-0f12-f355-0c4c-4b0da9b23d61@amd.com>
+Date:   Mon, 17 Jan 2022 15:05:00 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20220117074731.29882-1-maqianga@uniontech.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-ClientProxiedBy: YTOPR0101CA0045.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b00:14::22) To DM8PR12MB5399.namprd12.prod.outlook.com
+ (2603:10b6:8:34::5)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w2isnweh5r7hwpux"
-Content-Disposition: inline
-In-Reply-To: <b3add53c417506044a8e13c4bbf84ced@trvn.ru>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 318d0b4b-181c-414e-a68f-08d9d9f4a604
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1158:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1158F183D1AA25696D1C27A1E5579@CY4PR12MB1158.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0VSoW1EUO6oODEqQvQIyg5Kfqc6TlOMnHoDghOQOSbHmZSNrxyWNOi1FAG+t6Sbn3b1qQ5k7ZOjWq/QgdN6DHELssD3hsa8464UIMkUkXrWKSlQM+nOyudIMTpl6KBKGe4Gw65yEz/xj53e2CCTuSaj+MgCCBV0jTYiUYcULdpcjrV972gt82egYgDjGdeVac6ban0Hmnf0w1XNvh11xi+exOyGbxcxMo4lmEhBD9NriGqv+n/Dcq2FBlz5WnACKcynwpA/DMny2xNH3/7IoczCWmvIz6cGRowxTi+xhg2jn6vHDrto9miX/YI6UMTKWOzKkw/nvkSCAgf3XNnBOyAdryIyRYmI6ebrXHNTadAzL6S9wkSlxA9I6GhTX6gouRUjQgjPCnvjw2yodqYgJSlrNzaOS0lY6g8iaVA/8UYSdguhIFm1Tf4ZkVAsn7Os6lJMs9tgUm227oLuk4GlkKP15cpq0tlXAv0207KHckERbX+m3nj4SKtQ7v5ZUu4w56ssq88BUSzFgHSoBh8shyClyCl/4Kn2LxgaUvYCLawBMEKrgixOTAwtz7WsMWbCFfER2NwgImeiHRwvxsjhkoOzdJy0UPEJxpXC9QJMRUERFpbDD4adxp6aW/bxvsq8wm/luW1ZctOxlLHJKX8CPjfWVQ/6lgObcPxK690wSUav3Q4JtEFHdAIwdJe+3wzsgd2/6Gdsz9i120V/X/+uTj+2MIMw5Ptl3pTZPZPWS20s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5399.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(53546011)(86362001)(8936002)(2906002)(31696002)(26005)(5660300002)(6486002)(2616005)(15650500001)(8676002)(44832011)(186003)(508600001)(36756003)(83380400001)(66946007)(31686004)(4326008)(6512007)(38100700002)(66556008)(66476007)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnVSSlc5aitrSnF3M3hIY3F6S0kySGljeEU4N0wwTFluRVhtYlNJWlo0MkJN?=
+ =?utf-8?B?SlNYTUV5OU5hV1VMT0N3elZJYUN1Tm1UNnhBRm0wT0JPbmtCS2FQclQ0bEc5?=
+ =?utf-8?B?SVFsNDRDUjI1U20xdWw2VERTc2lKOGxqR0ppVXlzUndodlFGb3ZZZ0trSGRJ?=
+ =?utf-8?B?Q2hCYWNMYlZwWU1DVDNnZmo1N3p1NCtVVlBVSVNTWmlBZHV2dzFEMUdzdjk0?=
+ =?utf-8?B?NnZ1RlFWVmIxZld3UW9OMlVaRXdVM2VEZlpNVkJNSVV6aEpIYVNjZ2dsUk9P?=
+ =?utf-8?B?ajk5cmx2dFRpTE1HMnVxQXlkdEZHeGZ1blF3aWxkZ2h4NnBlV05XcTl3azZr?=
+ =?utf-8?B?aFNGdkNGU1dHaXhBd0NxMTVzUnNTYU5hYTYvK2J2eWMrbVR2L1BCSzlldDhH?=
+ =?utf-8?B?NWI0MkZrNS9OdkFIbHdva1l0R0hHK2lCVTk3VVFRRHp1cEZCWlZNMGV5OTFp?=
+ =?utf-8?B?clh5MkhrdGNSVUFVcGNNNjBBNkZkQ0FyWDdITURLSzRVVkJuMkltSTlUVTRn?=
+ =?utf-8?B?aE5GYlEyaDA0YjNzRWRHSG5BRjFJRUFrOUEvVERaRVNsVmNkTmdhenV1Qisy?=
+ =?utf-8?B?M3FPTGs0ZDBwbk9XYXBSMVZWZmU5c2RGaFNiQmtSQkZndDFNeERHZmRmWmRr?=
+ =?utf-8?B?ZUlEeFZlaW1hd3p4MkEwZC9iV2hrb0MwOS90M0hNQUtFdnlKdDd4SFEwSUpn?=
+ =?utf-8?B?N2lONTJDOW5vOEtaaFZlLzYxOTJOalU4dGxEMXU3QUdDOFZZMjRseW5XaWQy?=
+ =?utf-8?B?TDRzd0tzcmV6bGNvemRXR2hicE1OalRJV1RiRHAyeE1aSC96WXZ5djhtOFl4?=
+ =?utf-8?B?eXpKaHJyYk9hT2xHTEd0anI5YUdKeHVYRU5kcEJJUGl3M3pxY0paNEZxYXNo?=
+ =?utf-8?B?eTk5aURNV0M3UlczTHlZcWVSUmFzaVV4M3hqK0c5VTE2Y3hlK1Q5cEI2WTNj?=
+ =?utf-8?B?eG1MZml3V3luaVhMUjBiQWE2NXUvZVZjZnRBZmdWZ1ZxUUJETjRlTXlHNEI5?=
+ =?utf-8?B?R3ZQK0FwdUxzZTQ3eUc5TUNiQkJzREhOeE45RzdqZzkzZkFLTEwvSC9jcEpH?=
+ =?utf-8?B?WlhXc3JxNzlNUTloLzB1dE1NWVdUa3NyVzNxZ0FGYjNvcldNOUZpREs1Zm81?=
+ =?utf-8?B?WmNpTkg1bE9KY0pSZUl2ZWg5SkRLL2xVVUt3Q0Vsdk1GaTMxMzZyR1J3aXZN?=
+ =?utf-8?B?OWtoRG1DSEFNRUlGL2JGcCtpVXIva3ZXalFNMmtUZFdEaTErZFRIVWxCTjNq?=
+ =?utf-8?B?ejlyYlF3Z2RGTWR6M3pQSHpwN3BkYzRnOWJUaDBoY3pIakJvTDR0Q2pGMXEz?=
+ =?utf-8?B?R3VlTGVDMmpKRjE1cUdWd2MxRGlSVWtkVXhldHFaK3M0SGp3U2VPU0tTZFhh?=
+ =?utf-8?B?QXM2MFVISEluMnRmM2FVVkVVMFRzYk14VHlSc2dUNG5mbnlSM09ab21LVHBV?=
+ =?utf-8?B?QmlqVVNIVXh2U1JCSllUWFlrb1pKTkUvdytkdGdVNHNlQ1F2ZTFUcUFoakJj?=
+ =?utf-8?B?U0RrdU1LMHRZTTFyL2JOL3NwQUU3K3pTOUx1eUEvMEFCMGh5MUd3OXNMQ2Fk?=
+ =?utf-8?B?OGNTZmg3WGxyMlpQdEl0emhUS0NBVXg2UWN0L1M2T0s2VzE2anQxQ25qRmVp?=
+ =?utf-8?B?SHI3bFowOWxyOFZoWFIzVlJqem8wU3VWc0xhZzB2dW9CbSt1d0VYTzQ3SFh1?=
+ =?utf-8?B?dVgxS2J5UDgwbTgvTGpXRXV5Q0t2QmR4Ym5ZeUZnVTNmand4d1RwNndjMkww?=
+ =?utf-8?B?WTdOQ2g5dmp3ekwzZ0FlZVY1T1pWZjdXRzBTemhMYlJZYUNtcjdEeVBVTlhH?=
+ =?utf-8?B?d2E0bGc0WkxTWXZqNkRPWmpTaWlJQmN6MCtzUVppOTFVNWtCRnpSQWpxVzZr?=
+ =?utf-8?B?VzY2NzRuYlJXaTFiQVBiYXZiQmdXMFFMOU80dGQ1VWtiODVsMWFrNjNzbWk3?=
+ =?utf-8?B?SmNYT2VYMUJTb2drYVZjU2NZQjVVT0YycStRS0h4cEVyWkl5SS9xdkNzeGp5?=
+ =?utf-8?B?MHZlWG1yVmFjYTZBYjZ4U3lTV05GQVQ5Mld1OXRZNW9iQ2hUcjZFT1NUbFhL?=
+ =?utf-8?B?cG1nVjhHR09BbVNOd29EblhPdU43cHVRQ1llTFpUdGg5OUJXVnc3YVV6aW9Z?=
+ =?utf-8?Q?AU5k=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 318d0b4b-181c-414e-a68f-08d9d9f4a604
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5399.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 20:05:03.2226
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pHjsoINx0ksRGjp438Tv0YWBclecunZmekHqckRmfSkg60xTEBfAMoWlEekPeLI/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1158
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---w2isnweh5r7hwpux
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2022-01-17 2:47 a.m., Qiang Ma wrote:
+> I met a bug recently and the kernel log:
+>
+> [  330.171875] radeon 0000:03:00.0: couldn't schedule ib
+> [  330.175781] [drm:radeon_uvd_suspend [radeon]] *ERROR* Error destroying UVD (-22)!
+>
+> In radeon drivers, using UVD suspend is as follows:
+>
+> if (rdev->has_uvd) {
+>          uvd_v1_0_fini(rdev);
+>          radeon_uvd_suspend(rdev);
+> }
+>
+> In radeon_ib_schedule function, we check the 'ring->ready' state,
+> but in uvd_v1_0_fini funciton, we've cleared the ready state.
+> So, just modify the suspend code flow to fix error.
 
-On Mon, Jan 17, 2022 at 11:04:31PM +0500, Nikita Travkin wrote:
-> Hi,
->=20
-> Uwe Kleine-K=C3=B6nig =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 17.01.2022 2=
-0:58:
-> > Hello,
-> >=20
-> > On Mon, Dec 13, 2021 at 08:03:35PM +0500, Nikita Travkin wrote:
-> >> Some systems have clocks exposed to external devices. If the clock
-> >> controller supports duty-cycle configuration, such clocks can be used =
-as
-> >> pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
-> >> similar way and an "opposite" driver already exists (clk-pwm). Add a
-> >> driver that would enable pwm devices to be used via clk subsystem.
-> >>
-> >> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> >> --
-> >>
-> >> Changes in v2:
-> >>  - Address Uwe's review comments:
-> >>    - Round set clk rate up
-> >>    - Add a description with limitations of the driver
-> >>    - Disable and unprepare clock before removing pwmchip
-> >> ---
-> >>  drivers/pwm/Kconfig   |  10 +++
-> >>  drivers/pwm/Makefile  |   1 +
-> >>  drivers/pwm/pwm-clk.c | 143 ++++++++++++++++++++++++++++++++++++++++++
-> >>  3 files changed, 154 insertions(+)
-> >>  create mode 100644 drivers/pwm/pwm-clk.c
-> >>
-> >> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> >> index 21e3b05a5153..daa2491a4054 100644
-> >> --- a/drivers/pwm/Kconfig
-> >> +++ b/drivers/pwm/Kconfig
-> >> @@ -140,6 +140,16 @@ config PWM_BRCMSTB
-> >>  	  To compile this driver as a module, choose M Here: the module
-> >>  	  will be called pwm-brcmstb.c.
-> >>
-> >> +config PWM_CLK
-> >> +	tristate "Clock based PWM support"
-> >> +	depends on HAVE_CLK || COMPILE_TEST
-> >> +	help
-> >> +	  Generic PWM framework driver for outputs that can be
-> >> +	  muxed to clocks.
-> >> +
-> >> +	  To compile this driver as a module, choose M here: the module
-> >> +	  will be called pwm-clk.
-> >> +
-> >>  config PWM_CLPS711X
-> >>  	tristate "CLPS711X PWM support"
-> >>  	depends on ARCH_CLPS711X || COMPILE_TEST
-> >> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> >> index 708840b7fba8..4a860103c470 100644
-> >> --- a/drivers/pwm/Makefile
-> >> +++ b/drivers/pwm/Makefile
-> >> @@ -10,6 +10,7 @@ obj-$(CONFIG_PWM_BCM_KONA)	+=3D pwm-bcm-kona.o
-> >>  obj-$(CONFIG_PWM_BCM2835)	+=3D pwm-bcm2835.o
-> >>  obj-$(CONFIG_PWM_BERLIN)	+=3D pwm-berlin.o
-> >>  obj-$(CONFIG_PWM_BRCMSTB)	+=3D pwm-brcmstb.o
-> >> +obj-$(CONFIG_PWM_CLK)		+=3D pwm-clk.o
-> >>  obj-$(CONFIG_PWM_CLPS711X)	+=3D pwm-clps711x.o
-> >>  obj-$(CONFIG_PWM_CRC)		+=3D pwm-crc.o
-> >>  obj-$(CONFIG_PWM_CROS_EC)	+=3D pwm-cros-ec.o
-> >> diff --git a/drivers/pwm/pwm-clk.c b/drivers/pwm/pwm-clk.c
-> >> new file mode 100644
-> >> index 000000000000..55fd320b9c19
-> >> --- /dev/null
-> >> +++ b/drivers/pwm/pwm-clk.c
-> >> @@ -0,0 +1,143 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Clock based PWM controller
-> >> + *
-> >> + * Copyright (c) 2021 Nikita Travkin <nikita@trvn.ru>
-> >> + *
-> >> + * This is an "adapter" driver that allows PWM consumers to use
-> >> + * system clocks with duty cycle control as PWM outputs.
-> >> + *
-> >> + * Limitations:
-> >> + * - There is no way to atomically set both clock rate and
-> >> + *   duty-cycle so glitches are possible when new pwm state
-> >> + *   is applied.
-> >> + * - Period depends on the underlying clock driver and,
-> >> + *   in general, not guaranteed.
-> >> + * - Underlying clock may not be able to give 100%
-> >> + *   duty cycle (constant on) and only set the closest
-> >> + *   possible duty cycle. (e.g. 99.9%)
-> >=20
-> > What about 0%?
->=20
-> You're right, this is also a problematic case that I should've
-> mentioned here. In fact I *did* have problems with zero written
-> into the duty cycle register of my clock. I decided that it
-> should be solved by the hardware driver so I sent a patch
-> with a zero check there. (As otherwise there might be a clock
-> that would properly support 0% and 100% cycles so making the
-> write like this impossible is not a job of this driver I think)
->=20
-> >=20
-> >  - Periods are not completed on changes in general.
->=20
-> I suppose I should reword the limitation, dropping
-> the reference to impossible atomic operations and
-> just state that glitches are inevitable.
->=20
-> >  - Behaviour on disable depends on the underlaying clk, don't assume it
-> >    to provide the inactive level.
-> >=20
->=20
-> Hm, now thinking of it, I'm not sure if the clock line
-> was set to logic 0 or was left floating (which is what I assume
-> you mean by the undefined behavior here) on the clock I was
-> debugging this on with an oscilloscope. (nor am I sure
-> if I even can make such a conclusion by looking at that...)
->=20
-> Do you think that this should be just documented in the
-> limitations? Like:
->=20
->   - Underlying clock may not be able to give 0% or 100%
->     duty cycle (constant off or on) and only set the
->     closest possible duty cycle. (e.g. 0.1% or 99.9%)
+It seems reasonable to me. The suspend sends the destroy message if 
+there is still incomplete job, so it should be before the fini which 
+stops the hardware.
 
-I would not bet on this. Maybe in such a case clk_set_duty_cycle might
-also fail. The clk API isn't (TTBOMK) well-defined enough to make
-promises like that.
+The series are:
 
->   - When the PWM is disabled, the clock will be disabled
->     as well. User should take care of properly pulling=20
->     the line down in case the disabled clock leaves it
->     floating.
+Reviewed-by: Leo Liu <leo.liu@amd.com>
 
-This isn't universally true. I'd expect that just freezing (i.e. driving
-either high or low depending on the state when the clk was stopped) is a
-very usual behaviour. So a pull isn't always a good idea.
 
-I would just keep that unspecified.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---w2isnweh5r7hwpux
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHly+MACgkQwfwUeK3K
-7Akgigf/af6bEdagOkor/9KNqYkDZBuK3/FgGZihYr2i+hPcBAYXIKUdSbD8yR6t
-MX+1RjcwAqzX2DcxtbPwMfeCGMAYefd+58tY2zUp6JvpT14HfH0YziiI78Evp4CG
-SGBb1AmvjZY8ZW4yvj68UycOI4S5gnjZcHYdU6+/9C+igpSOv0AhWqPdQiHflCU1
-yvoZy3KSo0S3Q6h+Hgan67ZX/JSL1M8SGHUvZ8AJfSsfwSFdBRiuahVX2BFosB1L
-MdCPtyXGa7WZoAOz3e6Mwmk/zpBNMvzFz7c87Jr9dRRiy/8mfzxclAj5Fldfer8K
-R59DfxwBnYvCt1fJPlk6JdQO0JXdPg==
-=L6NG
------END PGP SIGNATURE-----
-
---w2isnweh5r7hwpux--
+>
+> Signed-off-by: Qiang Ma <maqianga@uniontech.com>
+> ---
+>   drivers/gpu/drm/radeon/cik.c       | 2 +-
+>   drivers/gpu/drm/radeon/evergreen.c | 2 +-
+>   drivers/gpu/drm/radeon/ni.c        | 2 +-
+>   drivers/gpu/drm/radeon/r600.c      | 2 +-
+>   drivers/gpu/drm/radeon/rv770.c     | 2 +-
+>   drivers/gpu/drm/radeon/si.c        | 2 +-
+>   6 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
+> index 81b4de7be9f2..5819737c21c6 100644
+> --- a/drivers/gpu/drm/radeon/cik.c
+> +++ b/drivers/gpu/drm/radeon/cik.c
+> @@ -8517,8 +8517,8 @@ int cik_suspend(struct radeon_device *rdev)
+>   	cik_cp_enable(rdev, false);
+>   	cik_sdma_enable(rdev, false);
+>   	if (rdev->has_uvd) {
+> -		uvd_v1_0_fini(rdev);
+>   		radeon_uvd_suspend(rdev);
+> +		uvd_v1_0_fini(rdev);
+>   	}
+>   	if (rdev->has_vce)
+>   		radeon_vce_suspend(rdev);
+> diff --git a/drivers/gpu/drm/radeon/evergreen.c b/drivers/gpu/drm/radeon/evergreen.c
+> index eeb590d2dec2..455f8036aa54 100644
+> --- a/drivers/gpu/drm/radeon/evergreen.c
+> +++ b/drivers/gpu/drm/radeon/evergreen.c
+> @@ -5156,8 +5156,8 @@ int evergreen_suspend(struct radeon_device *rdev)
+>   	radeon_pm_suspend(rdev);
+>   	radeon_audio_fini(rdev);
+>   	if (rdev->has_uvd) {
+> -		uvd_v1_0_fini(rdev);
+>   		radeon_uvd_suspend(rdev);
+> +		uvd_v1_0_fini(rdev);
+>   	}
+>   	r700_cp_stop(rdev);
+>   	r600_dma_stop(rdev);
+> diff --git a/drivers/gpu/drm/radeon/ni.c b/drivers/gpu/drm/radeon/ni.c
+> index 4a364ca7a1be..927e5f42e97d 100644
+> --- a/drivers/gpu/drm/radeon/ni.c
+> +++ b/drivers/gpu/drm/radeon/ni.c
+> @@ -2323,8 +2323,8 @@ int cayman_suspend(struct radeon_device *rdev)
+>   	cayman_cp_enable(rdev, false);
+>   	cayman_dma_stop(rdev);
+>   	if (rdev->has_uvd) {
+> -		uvd_v1_0_fini(rdev);
+>   		radeon_uvd_suspend(rdev);
+> +		uvd_v1_0_fini(rdev);
+>   	}
+>   	evergreen_irq_suspend(rdev);
+>   	radeon_wb_disable(rdev);
+> diff --git a/drivers/gpu/drm/radeon/r600.c b/drivers/gpu/drm/radeon/r600.c
+> index ca3fcae2adb5..dd78fc499402 100644
+> --- a/drivers/gpu/drm/radeon/r600.c
+> +++ b/drivers/gpu/drm/radeon/r600.c
+> @@ -3232,8 +3232,8 @@ int r600_suspend(struct radeon_device *rdev)
+>   	radeon_audio_fini(rdev);
+>   	r600_cp_stop(rdev);
+>   	if (rdev->has_uvd) {
+> -		uvd_v1_0_fini(rdev);
+>   		radeon_uvd_suspend(rdev);
+> +		uvd_v1_0_fini(rdev);
+>   	}
+>   	r600_irq_suspend(rdev);
+>   	radeon_wb_disable(rdev);
+> diff --git a/drivers/gpu/drm/radeon/rv770.c b/drivers/gpu/drm/radeon/rv770.c
+> index e592e57be1bb..38796af4fadd 100644
+> --- a/drivers/gpu/drm/radeon/rv770.c
+> +++ b/drivers/gpu/drm/radeon/rv770.c
+> @@ -1894,8 +1894,8 @@ int rv770_suspend(struct radeon_device *rdev)
+>   	radeon_pm_suspend(rdev);
+>   	radeon_audio_fini(rdev);
+>   	if (rdev->has_uvd) {
+> -		uvd_v1_0_fini(rdev);
+>   		radeon_uvd_suspend(rdev);
+> +		uvd_v1_0_fini(rdev);
+>   	}
+>   	r700_cp_stop(rdev);
+>   	r600_dma_stop(rdev);
+> diff --git a/drivers/gpu/drm/radeon/si.c b/drivers/gpu/drm/radeon/si.c
+> index 013e44ed0f39..8d5e4b25609d 100644
+> --- a/drivers/gpu/drm/radeon/si.c
+> +++ b/drivers/gpu/drm/radeon/si.c
+> @@ -6800,8 +6800,8 @@ int si_suspend(struct radeon_device *rdev)
+>   	si_cp_enable(rdev, false);
+>   	cayman_dma_stop(rdev);
+>   	if (rdev->has_uvd) {
+> -		uvd_v1_0_fini(rdev);
+>   		radeon_uvd_suspend(rdev);
+> +		uvd_v1_0_fini(rdev);
+>   	}
+>   	if (rdev->has_vce)
+>   		radeon_vce_suspend(rdev);

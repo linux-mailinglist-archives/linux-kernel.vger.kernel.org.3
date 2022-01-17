@@ -2,156 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7DB491014
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FE7491018
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242312AbiAQSKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:10:11 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:34318 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238138AbiAQSKF (ORCPT
+        id S242297AbiAQSKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 13:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232426AbiAQSKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:10:05 -0500
-Received: by mail-qt1-f171.google.com with SMTP id y10so19989482qtw.1;
-        Mon, 17 Jan 2022 10:10:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=+gX+6EZFnPH0WFg52hMFqitJk0/W3pruPDYiBt6+qX4=;
-        b=bsk6noTyVlrggN4cU9seAOdFV+JjHW38gJj7FtDPjsroZPr8PcdTA4+HO0dHpDqpC6
-         L0HBm1fjZxDXnWKraS8iYxjCK83DpM6OFgQPvww6YaaH73G+sWOQgf5Li+f1ZlbFMtHS
-         boZgkcdk/14JGhJosRBga6Y5OJLUEhiUNnmWbLUkcCE8EntZG004dgliiFf05ynglOE1
-         hs5P/r9GqIp+1XG2fankyIO/VVI1Dc3XX6882838BtdNEbNX97uAbWgtFgaJdW86k0ZI
-         pR3yPpnUIq2uqFHbmc3fjCfZ49E4RBsUDtii9/1W90azbaUEWLQKZ98d9r0qY+56Vul6
-         Uttg==
-X-Gm-Message-State: AOAM530OGXb6ns4emksrLfyYlL8Y7EBcyEsMVCS23pJ3q4sMa2slUyWE
-        L8DrVLjSWxhwIyCl8iivu4zVFAx9xdP9u/D675g=
-X-Google-Smtp-Source: ABdhPJxEHcXaXeIMEtK9tfhgAY7BqRWKoWmTshdQCLDeHFwbBDrr2ytiScou+KuQywMa1NOaEgxzE+xNulyCeVFuQHQ=
-X-Received: by 2002:ac8:578d:: with SMTP id v13mr3961180qta.472.1642443004229;
- Mon, 17 Jan 2022 10:10:04 -0800 (PST)
+        Mon, 17 Jan 2022 13:10:43 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB59C061574;
+        Mon, 17 Jan 2022 10:10:43 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9WSi-002cYU-40; Mon, 17 Jan 2022 18:10:36 +0000
+Date:   Mon, 17 Jan 2022 18:10:36 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>
+Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
+Message-ID: <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
+References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
+ <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+ <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
+ <YeV+zseKGNqnSuKR@bfoster>
+ <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 Jan 2022 19:09:53 +0100
-Message-ID: <CAJZ5v0iD_Ar15npwR8Cp2oEKF3DgPVo2KaKqfYax5RmTBkbZmg@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v5.17-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Jan 17, 2022 at 04:28:52PM +0000, Al Viro wrote:
 
-Please pull from the tag
+> IOW, ->free_inode() is RCU-delayed part of ->destroy_inode().  If both
+> are present, ->destroy_inode() will be called synchronously, followed
+> by ->free_inode() from RCU callback, so you can have both - moving just
+> the "finally mark for reuse" part into ->free_inode() would be OK.
+> Any blocking stuff (if any) can be left in ->destroy_inode()...
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.17-rc1-2
+BTW, we *do* have a problem with ext4 fast symlinks.  Pathwalk assumes that
+strings it parses are not changing under it.  There are rather delicate
+dances in dcache lookups re possibility of ->d_name contents changing under
+it, but the search key is assumed to be stable.
 
-with top-most commit e3daa2607b1f4bb1d09a5a8ad89ad9f7327a2e63
+What's more, there's a correctness issue even if we do not oops.  Currently
+we do not recheck ->d_seq of symlink dentry when we dismiss the symlink from
+the stack.  After all, we'd just finished traversing what used to be the
+contents of a symlink that used to be in the right place.  It might have been
+unlinked while we'd been traversing it, but that's not a correctness issue.
 
- Merge branch 'acpi-pfrut'
+But that critically depends upon the contents not getting mangled.  If it
+*can* be screwed by such unlink, we risk successful lookup leading to the
+wrong place, with nothing to tell us that it's happening.  We could handle
+that by adding a check to fs/namei.c:put_link(), and propagating the error
+to callers.  It's not impossible, but it won't be pretty.
 
-on top of commit bca21755b9fc00dbe371994b53389eb5d70b8e72
-
- Merge tag 'acpi-5.17-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more ACPI updates for 5.17-rc1.
-
-The most significant item here is the Platform Firmware Runtime
-Update and Telemetry (PFRUT) support designed to allow certain
-pieces of the platform firmware to be updated on the fly, among
-other things.
-
-Also important is the e820 handling change on x86 that should work
-around PCI BAR allocation issues on some systems shipping since
-2019.
-
-The rest is just a handful of assorted fixes and cleanups on top
-of the ACPI material merged previously.
-
-Specifics:
-
- - Add support for the the Platform Firmware Runtime Update and
-   Telemetry (PFRUT) interface based on ACPI to allow certain pieces
-   of the platform firmware to be updated without restarting the
-   system and to provide a mechanism for collecting platform firmware
-   telemetry data (Chen Yu, Dan Carpenter, Yang Yingliang).
-
- - Ignore E820 reservations covering PCI host bridge windows on
-   sufficiently recent x86 systems to avoid issues with allocating
-   PCI BARs on systems where the E820 reservations cover the entire
-   PCI host bridge memory window returned by the _CRS object in the
-   system's ACPI tables (Hans de Goede).
-
- - Fix and clean up acpi_scan_init() (Rafael Wysocki).
-
- - Add more sanity checking to ACPI SPCR tables parsing (Mark
-   Langsdorf).
-
- - Fix up ACPI APD (AMD Soc) driver initialization (Jiasheng Jiang).
-
- - Drop unnecessary "static" from the ACPI PCC address space handling
-   driver added recently (kernel test robot).
-
-Thanks!
-
-
----------------
-
-Chen Yu (4):
-      efi: Introduce EFI_FIRMWARE_MANAGEMENT_CAPSULE_HEADER and
-corresponding structures
-      ACPI: Introduce Platform Firmware Runtime Update device driver
-      ACPI: Introduce Platform Firmware Runtime Telemetry driver
-      ACPI: tools: Introduce utility for firmware updates/telemetry
-
-Dan Carpenter (1):
-      ACPI: pfr_telemetry: Fix info leak in pfrt_log_ioctl()
-
-Hans de Goede (1):
-      x86/PCI: Ignore E820 reservations for bridge windows on newer systems
-
-Jiasheng Jiang (1):
-      ACPI: APD: Check for NULL pointer after calling devm_ioremap()
-
-Mark Langsdorf (1):
-      ACPI: SPCR: check if table->serial_port.access_width is too wide
-
-Rafael J. Wysocki (3):
-      ACPI: scan: Change acpi_scan_init() return value type to void
-      ACPI: scan: Simplify initialization of power and sleep buttons
-      ACPI: scan: Rename label in acpi_scan_init()
-
-Yang Yingliang (1):
-      ACPI: pfr_update: Fix return value check in pfru_write()
-
-kernel test robot (1):
-      ACPI: PCC: pcc_ctx can be static
-
----------------
-
- Documentation/userspace-api/ioctl/ioctl-number.rst |   1 +
- arch/x86/kernel/resource.c                         |  23 +-
- drivers/acpi/Kconfig                               |  22 +
- drivers/acpi/Makefile                              |   1 +
- drivers/acpi/acpi_apd.c                            |   2 +
- drivers/acpi/acpi_pcc.c                            |   2 +-
- drivers/acpi/internal.h                            |   2 +-
- drivers/acpi/pfr_telemetry.c                       | 435 ++++++++++++++++
- drivers/acpi/pfr_update.c                          | 575 +++++++++++++++++++++
- drivers/acpi/scan.c                                |  76 +--
- drivers/acpi/spcr.c                                |   9 +-
- include/linux/efi.h                                |  46 ++
- include/uapi/linux/pfrut.h                         | 262 ++++++++++
- tools/power/acpi/.gitignore                        |   1 +
- tools/power/acpi/Makefile                          |  16 +-
- tools/power/acpi/Makefile.rules                    |   2 +-
- tools/power/acpi/man/pfrut.8                       | 137 +++++
- tools/power/acpi/tools/pfrut/Makefile              |  23 +
- tools/power/acpi/tools/pfrut/pfrut.c               | 424 +++++++++++++++
- 19 files changed, 1997 insertions(+), 62 deletions(-)
+And that assumes we avoid oopsen on string changing under us in the first
+place.  Which might or might not be true - I hadn't finished the audit yet.
+Note that it's *NOT* just fs/namei.c + fs/dcache.c + some fs methods -
+we need to make sure that e.g. everything called by ->d_hash() instances
+is OK with strings changing right under them.  Including utf8_to_utf32(),
+crc32_le(), utf8_casefold_hash(), etc.

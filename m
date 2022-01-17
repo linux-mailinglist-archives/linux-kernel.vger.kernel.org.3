@@ -2,243 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038DD4911C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F0F4911C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243630AbiAQWco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 17:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S243640AbiAQWeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 17:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243622AbiAQWcm (ORCPT
+        with ESMTP id S243622AbiAQWeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 17:32:42 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC676C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 14:32:41 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id g205so25719622oif.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 14:32:41 -0800 (PST)
+        Mon, 17 Jan 2022 17:34:00 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E1FC061574;
+        Mon, 17 Jan 2022 14:33:59 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id m90so33227259uam.2;
+        Mon, 17 Jan 2022 14:33:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D/J052/7DxEQiqaUZqwqhtE5Bv0OFiyXqeykY1SUoqI=;
-        b=bmuxq/xx64m6+VBkCdJmTqXMbE2AYvvG/dbXUQ7yUlBIz3JzNsIEA4m3GrzsrYwjr+
-         ht0MdMHdQiQz1HtcIeqHJIZUGFqqqsFdkwb/0FT2dO8FsPKHEIw5Kj3kFpTZzYnFZc3D
-         BnRqZ///E+XFo09qKhNy4ztP7G3JAU6eSLnyCrPhEHwZFiV4atCg5mQrAq0a/O5HcqmQ
-         vg7li1e8lVU6nJBO8iTivdXgiqvxSHVli6DGDk6URCSDXL+u3Sz/u5iiANZIm2IBj/e1
-         COxfsACPPHxwGlxu1J3oFM1iUvFZvUOJ1qJAiC6/bxLiVfjCtrBzQgnjB8RkEgyK7Wth
-         gPwQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J6GKKmupfWWlnbgXJKPfzJduT4T53vFjxxafbxuWCWg=;
+        b=petsnc8lPMN850o8bB7rXXqsr7jTek96Ibwh+lLVqGy1nC6IOknt0HnjXjpcmfOEqm
+         N/8+yo35F8ZgjCaaeqzv1NMEfg7Pt8yXnHz6muenSeqEVoSTHjOUb8xy/SD9+ryVqwn6
+         Fj5lk09WqWsy0Kf+4puiN1ivWTVcYpLYEq9dkw1ntuRXpuYJsqjg/5AdiWeRYvAMh/iN
+         k7pZNkMA5uha61nx/Z/SLrNpCkLup0vmUItmGaIpaQHallceNw9mza3k38ierx/W2LY8
+         aPSdCBM1OrasuuvSjuu8RVtTHKm6rIkCTLJs18gthrAO1slm8npdnXZLDIRFkAoEm8T9
+         4tSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D/J052/7DxEQiqaUZqwqhtE5Bv0OFiyXqeykY1SUoqI=;
-        b=tRieIWkqdlOXsGDt/OkwfsShs2DAgUGH1J4ez12So+iokJiSbvY+QKZHjVId3tAWTD
-         JF8uN6kirkIiTKaAcSkuvUzvzlisn9NbeDcIFKE5yksA8KBRDBatAdE1GCqAIgfqB1/C
-         AYsyzWVemOttORjG8+k7S8rY05w2PWWwqBmqZXgFuC9CYrOCPU1imZt8PcfhXHvfhZ8B
-         Xgd2N2pgBKS4gERbU00hlO28pGtv8HsbOXoa/ahr9l9ZxN2JfG9uiOY3oh+qcsQX+R4S
-         qdFPeFnMQQ/IMFndNa42/+9NaM+VF8dvdoYaWjZ2ApaVgyaj4NNLcHSKnZIti0aS/c8q
-         9FDA==
-X-Gm-Message-State: AOAM5318hC3r8tOvnNrAaoTGUDkFjQwa4x4i8uQiP+Pe5Lh9kWabd9L3
-        zKTkJmIbmFzlxoj77cvmsb98vg==
-X-Google-Smtp-Source: ABdhPJwelesxWK0Ycd7ezTwfbCelxQl40slAy0ZL2w0WkN/vwhxGvN8YjqN5VGsg82SXWRPyeX4uBg==
-X-Received: by 2002:aca:c08a:: with SMTP id q132mr24805444oif.82.1642458761244;
-        Mon, 17 Jan 2022 14:32:41 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b24sm6180394oti.68.2022.01.17.14.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 14:32:40 -0800 (PST)
-Date:   Mon, 17 Jan 2022 16:32:38 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh
-Subject: Re: [PATCH v8 01/13] rpmsg: char: Export eptdev create an destroy
- functions
-Message-ID: <YeXuhoIuanXbVxI2@builder.lan>
-References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
- <20211207080843.21222-2-arnaud.pouliquen@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J6GKKmupfWWlnbgXJKPfzJduT4T53vFjxxafbxuWCWg=;
+        b=Zk0L9Vy+w1wKF7NyZezZg6A0ZWJd4GAK12pysRr11xEoR8cBwR3qWAyFRermwB9chH
+         i4N6RN0noLa8haNJD6whkT8CNpTkvlfuNe8WR5iB2SJfxxezOT/V950B/FDYKOsEONXb
+         AjImBRD/1GShpHj8dYYnyJwkW5qV+22t4JrYosKcpdAsrqT3otEk3vfsTI02x2KToMjM
+         HtxCd/Wrm7lzYc025XNHLJxsIrhY2OfzteulXqHEpCjKoNCi21pMRDN4U5rToGh6UD6v
+         059cOFdJs20wzrvjv9D89j25DF4HSXdAziFijnRpAPAu9fBi/PP9msfyx0DfySzNwgbT
+         zMJA==
+X-Gm-Message-State: AOAM531LCUdEfe6HOx/pUsNy8Tx2MpgJ5rotVr4AIc/TC9AY7xOkhxRm
+        4tkDCxEPaVYdYPoowTBkLP0s+l7q6tNhhQRvuUw=
+X-Google-Smtp-Source: ABdhPJxWhkcwjL2R6hpGY61yBJ6r2FktnPVmLesfV1BZdfVRhtY/6a2CDJAHrMsl0L46bPttGQkAEE28ovqTC/SSiYI=
+X-Received: by 2002:a05:6102:3f56:: with SMTP id l22mr7888725vsv.20.1642458839004;
+ Mon, 17 Jan 2022 14:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207080843.21222-2-arnaud.pouliquen@foss.st.com>
+References: <20220107052942.1349447-1-jim.cromie@gmail.com>
+ <20220107052942.1349447-2-jim.cromie@gmail.com> <20220114115718.GB23983@axis.com>
+In-Reply-To: <20220114115718.GB23983@axis.com>
+From:   jim.cromie@gmail.com
+Date:   Mon, 17 Jan 2022 15:33:33 -0700
+Message-ID: <CAJfuBxw1scH7xS7-RfxZ369wVQ8umP+0MHqz1U_3cW-BLPsDkg@mail.gmail.com>
+Subject: Re: [PATCH v11 01/19] dyndbg: add _DPRINTK_FLAGS_ENABLED
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     "jbaron@akamai.com" <jbaron@akamai.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_saipraka@quicinc.com" <quic_saipraka@quicinc.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "quic_psodagud@quicinc.com" <quic_psodagud@quicinc.com>,
+        "maz@kernel.org" <maz@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 07 Dec 02:08 CST 2021, Arnaud Pouliquen wrote:
+On Fri, Jan 14, 2022 at 4:57 AM Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+>
+> On Fri, Jan 07, 2022 at 06:29:24AM +0100, Jim Cromie wrote:
+> >  #ifdef CONFIG_JUMP_LABEL
+> > -                     if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+> > -                             if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
+> > +                     if (dp->flags & _DPRINTK_FLAGS_ENABLED) {
+> > +                             if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLED))
+> >                                       static_branch_disable(&dp->key.dd_key_true);
+> > -                     } else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
+> > +                     } else if (modifiers->flags & _DPRINTK_FLAGS_ENABLED)
+> >                               static_branch_enable(&dp->key.dd_key_true);
+> >  #endif
+> >                       dp->flags = newflags;
+> > --
+> > 2.33.1
+> >
+>
+> I haven't tested it so I could be mistaken, but when
+> _DPRINTK_FLAGS_ENABLED gets two flags in the next patch, it looks like
+> this code still has the problem which I mentioned in
+> https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/?
+>
 
-> To prepare the split of the code related to the control (ctrldev)
-> and the endpoint (eptdev) devices in 2 separate files:
-> 
-> - Rename and export the functions in rpmsg_char.h.
-> 
-> - Suppress the dependency with the rpmsg_ctrldev struct in the
->   rpmsg_eptdev_create function.
-> 
-> Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Yes, thanks for noticing.  I missed that detail.
+Apriori, I dont know why bit-and of bit-or'd flags doesnt cover it,
+but I will take a careful look.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> ---
-> Update vs previous revision:
-> - suppress WARN_ON when CONFIG_RPMSG_CHAR not defined and return -ENXIO
-> ---
->  drivers/rpmsg/rpmsg_char.c | 18 +++++++++------
->  drivers/rpmsg/rpmsg_char.h | 46 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 57 insertions(+), 7 deletions(-)
->  create mode 100644 drivers/rpmsg/rpmsg_char.h
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index d6214cb66026..f7aa2dd302a5 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> + * Copyright (C) 2021, STMicroelectronics
->   * Copyright (c) 2016, Linaro Ltd.
->   * Copyright (c) 2012, Michal Simek <monstr@monstr.eu>
->   * Copyright (c) 2012, PetaLogix
-> @@ -25,6 +26,8 @@
->  #include <linux/uaccess.h>
->  #include <uapi/linux/rpmsg.h>
->  
-> +#include "rpmsg_char.h"
-> +
->  #define RPMSG_DEV_MAX	(MINORMASK + 1)
->  
->  static dev_t rpmsg_major;
-> @@ -79,7 +82,7 @@ struct rpmsg_eptdev {
->  	wait_queue_head_t readq;
->  };
->  
-> -static int rpmsg_eptdev_destroy(struct device *dev, void *data)
-> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
->  {
->  	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
->  
-> @@ -98,6 +101,7 @@ static int rpmsg_eptdev_destroy(struct device *dev, void *data)
->  
->  	return 0;
->  }
-> +EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
->  
->  static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
->  			void *priv, u32 addr)
-> @@ -281,7 +285,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
->  	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
->  		return -EINVAL;
->  
-> -	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
-> +	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
->  }
->  
->  static const struct file_operations rpmsg_eptdev_fops = {
-> @@ -340,10 +344,9 @@ static void rpmsg_eptdev_release_device(struct device *dev)
->  	kfree(eptdev);
->  }
->  
-> -static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
-> +int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
->  			       struct rpmsg_channel_info chinfo)
->  {
-> -	struct rpmsg_device *rpdev = ctrldev->rpdev;
->  	struct rpmsg_eptdev *eptdev;
->  	struct device *dev;
->  	int ret;
-> @@ -363,7 +366,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
->  
->  	device_initialize(dev);
->  	dev->class = rpmsg_class;
-> -	dev->parent = &ctrldev->dev;
-> +	dev->parent = parent;
->  	dev->groups = rpmsg_eptdev_groups;
->  	dev_set_drvdata(dev, eptdev);
->  
-> @@ -406,6 +409,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
->  
->  static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
->  {
-> @@ -445,7 +449,7 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
->  	chinfo.src = eptinfo.src;
->  	chinfo.dst = eptinfo.dst;
->  
-> -	return rpmsg_eptdev_create(ctrldev, chinfo);
-> +	return rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
->  };
->  
->  static const struct file_operations rpmsg_ctrldev_fops = {
-> @@ -531,7 +535,7 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
->  	int ret;
->  
->  	/* Destroy all endpoints */
-> -	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_eptdev_destroy);
-> +	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
->  	if (ret)
->  		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
->  
-> diff --git a/drivers/rpmsg/rpmsg_char.h b/drivers/rpmsg/rpmsg_char.h
-> new file mode 100644
-> index 000000000000..dd0a16f2acd1
-> --- /dev/null
-> +++ b/drivers/rpmsg/rpmsg_char.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) STMicroelectronics 2021.
-> + */
-> +
-> +#ifndef __RPMSG_CHRDEV_H__
-> +#define __RPMSG_CHRDEV_H__
-> +
-> +#if IS_ENABLED(CONFIG_RPMSG_CHAR)
-> +/**
-> + * rpmsg_chrdev_eptdev_create() - register char device based on an endpoint
-> + * @rpdev:  prepared rpdev to be used for creating endpoints
-> + * @parent: parent device
-> + * @chinfo: associated endpoint channel information.
-> + *
-> + * This function create a new rpmsg char endpoint device to instantiate a new
-> + * endpoint based on chinfo information.
-> + */
-> +int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
-> +			       struct rpmsg_channel_info chinfo);
-> +
-> +/**
-> + * rpmsg_chrdev_eptdev_destroy() - destroy created char device endpoint.
-> + * @data: private data associated to the endpoint device
-> + *
-> + * This function destroys a rpmsg char endpoint device created by the RPMSG_DESTROY_EPT_IOCTL
-> + * control.
-> + */
-> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data);
-> +
-> +#else  /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
-> +
-> +static inline int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
-> +					     struct rpmsg_channel_info chinfo)
-> +{
-> +	return -ENXIO;
-> +}
-> +
-> +static inline int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
-> +{
-> +	return -ENXIO;
-> +}
-> +
-> +#endif /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
-> +
-> +#endif /*__RPMSG_CHRDEV_H__ */
-> -- 
-> 2.17.1
-> 
+> | I noticed a bug inside the CONFIG_JUMP_LABEL handling (also present
+> | in the last version I posted) which should be fixed as part of the
+> | diff below (I've added a comment).
+> | [...]
+> |  #ifdef CONFIG_JUMP_LABEL
+> | -                     if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+> | -                             if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
+> | +                     if (dp->flags & _DPRINTK_FLAGS_ENABLE) {
+> | +                             /*
+> | +                              * The newflags check is to ensure that the
+> | +                              * static branch doesn't get disabled in step
+> | +                              * 3:
+> | +                              *
+> | +                              * (1) +pf
+> | +                              * (2) +x
+> | +                              * (3) -pf
+> | +                              */
+> | +                             if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLE) &&
+> | +                                 !(newflags & _DPRINTK_FLAGS_ENABLE)) {
+> |                                       static_branch_disable(&dp->key.dd_key_true);
+> | -                     } else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
+> | +                             }
+> | +                     } else if (modifiers->flags & _DPRINTK_FLAGS_ENABLE) {
+> |                               static_branch_enable(&dp->key.dd_key_true);
+> | +                     }
+> |  #endif

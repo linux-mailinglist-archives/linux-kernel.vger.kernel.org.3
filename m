@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F0F4911C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFDF4911CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243640AbiAQWeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 17:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243622AbiAQWeA (ORCPT
+        id S243643AbiAQWgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 17:36:23 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:37797 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232161AbiAQWgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 17:34:00 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E1FC061574;
-        Mon, 17 Jan 2022 14:33:59 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id m90so33227259uam.2;
-        Mon, 17 Jan 2022 14:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J6GKKmupfWWlnbgXJKPfzJduT4T53vFjxxafbxuWCWg=;
-        b=petsnc8lPMN850o8bB7rXXqsr7jTek96Ibwh+lLVqGy1nC6IOknt0HnjXjpcmfOEqm
-         N/8+yo35F8ZgjCaaeqzv1NMEfg7Pt8yXnHz6muenSeqEVoSTHjOUb8xy/SD9+ryVqwn6
-         Fj5lk09WqWsy0Kf+4puiN1ivWTVcYpLYEq9dkw1ntuRXpuYJsqjg/5AdiWeRYvAMh/iN
-         k7pZNkMA5uha61nx/Z/SLrNpCkLup0vmUItmGaIpaQHallceNw9mza3k38ierx/W2LY8
-         aPSdCBM1OrasuuvSjuu8RVtTHKm6rIkCTLJs18gthrAO1slm8npdnXZLDIRFkAoEm8T9
-         4tSA==
+        Mon, 17 Jan 2022 17:36:21 -0500
+Received: by mail-il1-f200.google.com with SMTP id l15-20020a056e021aaf00b002b7ed7d8cb4so12003852ilv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 14:36:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J6GKKmupfWWlnbgXJKPfzJduT4T53vFjxxafbxuWCWg=;
-        b=Zk0L9Vy+w1wKF7NyZezZg6A0ZWJd4GAK12pysRr11xEoR8cBwR3qWAyFRermwB9chH
-         i4N6RN0noLa8haNJD6whkT8CNpTkvlfuNe8WR5iB2SJfxxezOT/V950B/FDYKOsEONXb
-         AjImBRD/1GShpHj8dYYnyJwkW5qV+22t4JrYosKcpdAsrqT3otEk3vfsTI02x2KToMjM
-         HtxCd/Wrm7lzYc025XNHLJxsIrhY2OfzteulXqHEpCjKoNCi21pMRDN4U5rToGh6UD6v
-         059cOFdJs20wzrvjv9D89j25DF4HSXdAziFijnRpAPAu9fBi/PP9msfyx0DfySzNwgbT
-         zMJA==
-X-Gm-Message-State: AOAM531LCUdEfe6HOx/pUsNy8Tx2MpgJ5rotVr4AIc/TC9AY7xOkhxRm
-        4tkDCxEPaVYdYPoowTBkLP0s+l7q6tNhhQRvuUw=
-X-Google-Smtp-Source: ABdhPJxWhkcwjL2R6hpGY61yBJ6r2FktnPVmLesfV1BZdfVRhtY/6a2CDJAHrMsl0L46bPttGQkAEE28ovqTC/SSiYI=
-X-Received: by 2002:a05:6102:3f56:: with SMTP id l22mr7888725vsv.20.1642458839004;
- Mon, 17 Jan 2022 14:33:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=rFPvMIgMBi0cfHpcVjBnGzE0dFNesFQwlxraGbUKUxI=;
+        b=b1miSGwSf8rimpZtTGRwJKgBNNms/BQo90MlqJny3c1TXj79/aK8zHR866OvqUevTs
+         w7Va8w+BR6U8kH6jeqTM3D9tHGUuMgnDTxI2RyCzv8CoU0xfzRnD1/QzAWGERzotYt+H
+         zJGsW9QGLsHB5M61vue2J5g9qYHflWcV7N0lkfYLa5Uj/jy6LXTiJAV04jT/ZdNkTM1b
+         L8otgh9b/GMkEnk8HxqwlQi2tKQ7Tyu4Ex0tW5NIXpOBFt7DNjnaWuXc6RWyYo4b1W2E
+         HhvRSKFhLnTyG8VhAS0d4ZTOtSTJneYEvsCpCOlzoqO7DaNwKucULADrXjSlBFDz3XL5
+         0M2Q==
+X-Gm-Message-State: AOAM532uNOC1YyAyc7n6snXJZFuS5tJeRG9FDvVHhLvuvdFey3JQ3Ezn
+        zlF/LYcmK9GdtnsFNzYvqoR4htPCBTrFHK6igDL22aj8cSgf
+X-Google-Smtp-Source: ABdhPJzPIevfHh2H2So4HyGtkuouW9DKQn0fJ/tjzbY4ASxHffBzGjiKmBB2i9+52KmgLlwswMyVhPPmm25pCj4/jLG379o4OH6H
 MIME-Version: 1.0
-References: <20220107052942.1349447-1-jim.cromie@gmail.com>
- <20220107052942.1349447-2-jim.cromie@gmail.com> <20220114115718.GB23983@axis.com>
-In-Reply-To: <20220114115718.GB23983@axis.com>
-From:   jim.cromie@gmail.com
-Date:   Mon, 17 Jan 2022 15:33:33 -0700
-Message-ID: <CAJfuBxw1scH7xS7-RfxZ369wVQ8umP+0MHqz1U_3cW-BLPsDkg@mail.gmail.com>
-Subject: Re: [PATCH v11 01/19] dyndbg: add _DPRINTK_FLAGS_ENABLED
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "jbaron@akamai.com" <jbaron@akamai.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_saipraka@quicinc.com" <quic_saipraka@quicinc.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "quic_psodagud@quicinc.com" <quic_psodagud@quicinc.com>,
-        "maz@kernel.org" <maz@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>
+X-Received: by 2002:a05:6602:1801:: with SMTP id t1mr3997621ioh.50.1642458980478;
+ Mon, 17 Jan 2022 14:36:20 -0800 (PST)
+Date:   Mon, 17 Jan 2022 14:36:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000016f4ae05d5cec832@google.com>
+Subject: [syzbot] WARNING in component_del
+From:   syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>
+To:     dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 4:57 AM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> On Fri, Jan 07, 2022 at 06:29:24AM +0100, Jim Cromie wrote:
-> >  #ifdef CONFIG_JUMP_LABEL
-> > -                     if (dp->flags & _DPRINTK_FLAGS_PRINT) {
-> > -                             if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
-> > +                     if (dp->flags & _DPRINTK_FLAGS_ENABLED) {
-> > +                             if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLED))
-> >                                       static_branch_disable(&dp->key.dd_key_true);
-> > -                     } else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
-> > +                     } else if (modifiers->flags & _DPRINTK_FLAGS_ENABLED)
-> >                               static_branch_enable(&dp->key.dd_key_true);
-> >  #endif
-> >                       dp->flags = newflags;
-> > --
-> > 2.33.1
-> >
->
-> I haven't tested it so I could be mistaken, but when
-> _DPRINTK_FLAGS_ENABLED gets two flags in the next patch, it looks like
-> this code still has the problem which I mentioned in
-> https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/?
->
+Hello,
 
-Yes, thanks for noticing.  I missed that detail.
-Apriori, I dont know why bit-and of bit-or'd flags doesnt cover it,
-but I will take a careful look.
+syzbot found the following issue on:
 
-> | I noticed a bug inside the CONFIG_JUMP_LABEL handling (also present
-> | in the last version I posted) which should be fixed as part of the
-> | diff below (I've added a comment).
-> | [...]
-> |  #ifdef CONFIG_JUMP_LABEL
-> | -                     if (dp->flags & _DPRINTK_FLAGS_PRINT) {
-> | -                             if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
-> | +                     if (dp->flags & _DPRINTK_FLAGS_ENABLE) {
-> | +                             /*
-> | +                              * The newflags check is to ensure that the
-> | +                              * static branch doesn't get disabled in step
-> | +                              * 3:
-> | +                              *
-> | +                              * (1) +pf
-> | +                              * (2) +x
-> | +                              * (3) -pf
-> | +                              */
-> | +                             if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLE) &&
-> | +                                 !(newflags & _DPRINTK_FLAGS_ENABLE)) {
-> |                                       static_branch_disable(&dp->key.dd_key_true);
-> | -                     } else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
-> | +                             }
-> | +                     } else if (modifiers->flags & _DPRINTK_FLAGS_ENABLE) {
-> |                               static_branch_enable(&dp->key.dd_key_true);
-> | +                     }
-> |  #endif
+HEAD commit:    a33f5c380c4b Merge tag 'xfs-5.17-merge-3' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17c4eb7fb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dc846445c1d2060e
+dashboard link: https://syzkaller.appspot.com/bug?extid=60df062e1c41940cae0f
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 11050 at drivers/base/component.c:767 component_del+0xe2/0x480 drivers/base/component.c:765
+Modules linked in:
+CPU: 1 PID: 11050 Comm: syz-executor.5 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:component_del+0xe2/0x480 drivers/base/component.c:767
+Code: 03 fd 48 8b 6d 00 4c 39 ed 74 07 e8 88 bc b7 fc eb 86 e8 81 bc b7 fc eb 05 e8 7a bc b7 fc 48 c7 c7 20 16 29 8d e8 be b5 47 05 <0f> 0b 31 ed 48 89 ef 48 83 c4 20 5b 41 5c 41 5d 41 5e 41 5f 5d e9
+RSP: 0018:ffffc90004a97550 EFLAGS: 00010246
+RAX: c095017d97055900 RBX: ffff888023b8b6b0 RCX: ffffffff8d291620
+RDX: 0000000000000001 RSI: 0000000000000008 RDI: ffffc90004a974c0
+RBP: ffffffff8d291720 R08: dffffc0000000000 R09: fffff52000952e99
+R10: fffff52000952e99 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffffff8d291720 R14: ffffffff8b27aea0 R15: ffff88807ac5a008
+FS:  00007f5f620ee700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2eb22000 CR3: 000000007da2d000 CR4: 00000000003526e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_hub_remove_port_device+0x1bf/0x2d0 drivers/usb/core/port.c:653
+ hub_disconnect+0x171/0x480 drivers/usb/core/hub.c:1737
+ usb_unbind_interface+0x1f2/0x860 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x523/0x7b0 drivers/base/dd.c:1237
+ proc_ioctl+0x53c/0x640 drivers/usb/core/devio.c:2332
+ proc_ioctl_default drivers/usb/core/devio.c:2375 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2731 [inline]
+ usbdev_ioctl+0x3f4a/0x6d00 drivers/usb/core/devio.c:2791
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f5f637dbfe9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5f620ee168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f5f638ef1d0 RCX: 00007f5f637dbfe9
+RDX: 0000000020000380 RSI: 00000000c0105512 RDI: 0000000000000005
+RBP: 00007f5f6383608d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffef2b2329f R14: 00007f5f620ee300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

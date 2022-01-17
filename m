@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2744491202
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D187491207
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243709AbiAQW4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 17:56:12 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39612 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbiAQW4L (ORCPT
+        id S243724AbiAQW5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 17:57:36 -0500
+Received: from mail.hugovil.com ([162.243.120.170]:47626 "EHLO
+        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243714AbiAQW5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 17:56:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52750611EC
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:56:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2023C36AE7;
-        Mon, 17 Jan 2022 22:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642460169;
-        bh=qvmPclBKDpmSxW957MvT1pemDeU3jcl+8YWb+YVrSO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o3ezhzSIXZqON9LT8WXqJ8NBBUmHy36LF3NDeiS6txvIi1gRIu3YqY2NPpk8cCxZs
-         iERN3SjX2xxkRrueQRXrsg+gCrf8q2/ldFp2MWnRf8y0nuJIWEi237POaHra3nZcDT
-         oUSC16vvJSSflW7t0Ta7Bs/HfZLUASR/lVlRwH5iP9Qf2hM96K1Pm+E2lFCENmOPAc
-         tIb1iCd7OA4kddPHM3dbTL5QwCHfso0rVp+d4Cn8BNGNoKsl9QQ3bwHsYgppLhxrNx
-         fhxNaN7OrEXuQd5cZGoesbV+2kmGJGzpeNg8Q+wVlaI7SHCpUrtRE26Rm9UDFjC4Xl
-         2t2A5iyWLaLog==
-Date:   Mon, 17 Jan 2022 15:56:05 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Yinan Liu <yinan@linux.alibaba.com>
-Cc:     rostedt@goodmis.org, mingo@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] script/sorttable: fix some initialization problems
-Message-ID: <YeX0BQOQYKI+95eP@archlinux-ax161>
-References: <20220115225920.0e5939aa@gandalf.local.home>
- <20220117062344.15633-1-yinan@linux.alibaba.com>
- <20220117062344.15633-2-yinan@linux.alibaba.com>
+        Mon, 17 Jan 2022 17:57:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=lYvTF/25cdLyhwma94gJzi2/3ahZEKEEqHXKbvbNM4w=; b=h
+        VtpwJKgX8UDKLEjdziaK3s6P64HJLzen0N33uEA+S7Ol4r9orx8ebOL5faCMwL1GP6VIfeb688j35
+        ledL7H/Pv8yZ+vmOLoFpiaQ0lngpiE0T24BXG5oWy2h4juDO42KZb8xZALWxTCbthl0oiYLOA4yNr
+        kl1oBK02YIUnzX48=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:54812 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1n9awN-0005lm-Fb; Mon, 17 Jan 2022 17:57:32 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 17 Jan 2022 17:56:24 -0500
+Message-Id: <20220117225625.1252233-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117062344.15633-2-yinan@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
+X-Spam-Level: 
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: dimonoff.com]
+        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.2
+Subject: [PATCH] rtc: pcf2127: add error checking and message when disabling POR0
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 02:23:44PM +0800, Yinan Liu wrote:
-> elf_mcount_loc and mcount_sort_thread definitions are not
-> initialized immediately within the function, which can cause
-> the judgment logic to use uninitialized values when the
-> initialization logic of subsequent code fails.
-> 
-> Link: https://lkml.kernel.org/r/20211212113358.34208-2-yinan@linux.alibaba.com
-> 
-> Fixes:72b3942a173c (scripts: ftrace - move the sort-processing in ftrace_init)
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-This should be:
+If PCF2127 device is absent from the I2C bus, or if there is a
+communication problem, disabling POR0 may fail silently and we
+still continue with probing the device. In that case, abort probe
+operation and display an error message.
 
-Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-You can add an alias to always get the format right, like:
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 81a5b1f2e68c..e6d0838ccfe3 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -690,8 +690,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 	 * The "Power-On Reset Override" facility prevents the RTC to do a reset
+ 	 * after power on. For normal operation the PORO must be disabled.
+ 	 */
+-	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
++	ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+ 				PCF2127_BIT_CTRL1_POR_OVRD);
++	if (ret < 0) {
++		dev_err(dev, "PORO disabling failed\n");
++		return ret;
++	}
+ 
+ 	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CLKOUT, &val);
+ 	if (ret < 0)
+-- 
+2.30.2
 
-$ git config --global alias.fixes 'show -s --format="Fixes: %h (\"%s\")"'
-
-$ git fixes 72b3942a173c387b27860ba1069636726e208777
-Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
-
-> Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
-
-This resolves the warnings I reported and does not introduce any new
-ones. It seems reasonable to me.
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  scripts/sorttable.h | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/sorttable.h b/scripts/sorttable.h
-> index 1e8b77928fa4..13ae3262ec96 100644
-> --- a/scripts/sorttable.h
-> +++ b/scripts/sorttable.h
-> @@ -199,6 +199,8 @@ static int compare_extable(const void *a, const void *b)
->  	return 0;
->  }
->  #ifdef MCOUNT_SORT_ENABLED
-> +pthread_t mcount_sort_thread;
-> +
->  struct elf_mcount_loc {
->  	Elf_Ehdr *ehdr;
->  	Elf_Shdr *init_data_sec;
-> @@ -282,10 +284,9 @@ static int do_sort(Elf_Ehdr *ehdr,
->  	unsigned int shnum;
->  	unsigned int shstrndx;
->  #ifdef MCOUNT_SORT_ENABLED
-> -	struct elf_mcount_loc mstruct;
-> +	struct elf_mcount_loc mstruct = {NULL, NULL, 0, 0};
-
-Wonder if this would be better using either '= {}' or '= {0}'?
-
->  	uint_t _start_mcount_loc = 0;
->  	uint_t _stop_mcount_loc = 0;
-> -	pthread_t mcount_sort_thread;
->  #endif
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  	unsigned int orc_ip_size = 0;
-> -- 
-> 2.19.1.6.gb485710b
-> 
-> 

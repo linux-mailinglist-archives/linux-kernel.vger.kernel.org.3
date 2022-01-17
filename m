@@ -2,149 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEE2490FD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC4B490FD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240127AbiAQRpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238566AbiAQRpM (ORCPT
+        id S241137AbiAQRpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:45:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41690 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235374AbiAQRpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:45:12 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF7DC061574;
-        Mon, 17 Jan 2022 09:45:12 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id s13-20020a4aa38d000000b002e28c5100cbso1170383ool.12;
-        Mon, 17 Jan 2022 09:45:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=d1XPYUu2DVsH+3Kz9XrYtlypSTvPCVH2n5Gq/9uSXNE=;
-        b=RxPXDrkQTmR8hnlL8FuoL6/ulwyoibbX7KzYLtzc4RUIrfY9Yppl/lZPW+IWU7c8X+
-         /89NEeXnEraRIV+zkVVF0IzzEHLc1WNRcsBSX6bxHYsFa83rBKJbn7X1orNrRxd+MuUs
-         VFKVkmx0ez+ZuJLLe83XgmQf+h+3I7ozcIkU06HXnPNkZ8rhKV9vkKjUInd81CZDLjRP
-         WNqsfERj87z7sAYhSLWDESzpT1PURJXUhrHNYylxxUBMhT3Pg88OEzyceRIK6jTGYgpD
-         5rfTgxsTgOvAIleZPFgRKv6fDiI8fUu89z8ZIH9r+2NLEovhjDQx0bYmswXj4GxmGR8Z
-         YYZg==
+        Mon, 17 Jan 2022 12:45:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642441542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g4GDA0IUvWhhcky7T0HTZUXu5KWeN95yhvrj+pk935s=;
+        b=SQpRF2pYlK4kQ4w9Gkg7l2e7f2tPVfY4MPMFc4m4W8TgidhehfwhzUZ6w8hhMwWeFOI5yZ
+        D6TPPy4uU+QDynWYxQm3s93n3Vo2kNscg1qCA/jEOXhpn0KRMltS+yof86coLiEJVRxefa
+        2Wnii5T4ZT0rGcbB6wSNOgECde/Iot4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-231-9SV0cg8SNOC7Xam8F3SPyA-1; Mon, 17 Jan 2022 12:45:40 -0500
+X-MC-Unique: 9SV0cg8SNOC7Xam8F3SPyA-1
+Received: by mail-wm1-f71.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso293846wmb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:45:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=d1XPYUu2DVsH+3Kz9XrYtlypSTvPCVH2n5Gq/9uSXNE=;
-        b=AAwyylSOwgUF/pA0DchW5aYLJofRwzAPxafYhe9xs9w1/OiVbovyqjSa4vvvUzMQJG
-         jxBIKCThz6l1jf3Ihot/db/8xpsOwXLk5LR/xZZNMuoieboAowiS2xQ6Shs4zrbK3e/C
-         3Oq/eBjTIE/anhqsdjTQirH6EyEMopSAczIHl05W1rCPOlbqb7hK7Xp+FXj8r41U07Yt
-         AaIGFsjPmzo8qeVRoE6+uRpnZ1obVN2Y8luKg+GgHTAQmQSa61WZsLocenaZiunFXYk+
-         XGkBa+IaDTcWEE0v5T+iZ/iiHFPlOJLKwHwTGLTYq5z6ysAaeHeU77hR8av8nTQoY0Ax
-         xyfQ==
-X-Gm-Message-State: AOAM532BSrP7RgIdxMrBKZyW9YqQ7BXRAn5bHaSpRd9Et/HFcvk8m6FT
-        WPTHjhD2FSdkr1JdvTe0f+mf0Az6pvE=
-X-Google-Smtp-Source: ABdhPJwy3aRzKPc7tYpWvWtlYnrzSu/EnOn5hytDPFDvXNKo0DrjMhAnSImO6Pl+LrZpHnP7tdd4sw==
-X-Received: by 2002:a4a:e87a:: with SMTP id m26mr15597252oom.41.1642441511427;
-        Mon, 17 Jan 2022 09:45:11 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q5sm7247321oiv.2.2022.01.17.09.45.09
+        bh=g4GDA0IUvWhhcky7T0HTZUXu5KWeN95yhvrj+pk935s=;
+        b=CvQWL7JQKTNaiKr/OaG/E/kEAzBQeZcogcBvhrcx9Oza3mVn0kglw1CclCUGvPjOEq
+         RPOTQyNmeymMwoiiJ/kiwYH8u3nuB7WvYDhJhohVlQpezqMPfIfOZdO2n2gwasJ3fsF+
+         bh1+WGl3eD9DKLJSRrQVII0YA/7N6KD2K/QRvctOV1sM7K71bkAbg9V4Phk+v20I8HWD
+         k81u+i7+aYWTA6+HWAX/72Igdm1VAQ5/NxnCipqFD3c0VSImDmjI/dZEj69otKiKJalC
+         n6KZDuCE8MlYToA6EoqwaEEZ7fFebfx3usx04jMksiqCI5O0ajLhEcGnji9WrNYS0aQ+
+         b56Q==
+X-Gm-Message-State: AOAM530799NbbV7E/5MfdIv5Bzo2Q3tMLUvDf8eDzSdyeqHeMPhSbjEO
+        ZXH7RwOcsxuMBG+Hq4somunTFSEyqbJ9HsLJZQNdMOLA3HwcSxNSd+78AGtleD5AHwuS9bmwI1F
+        oEdm4+V+gHj26kaQjXavBBnlL
+X-Received: by 2002:adf:d0ce:: with SMTP id z14mr19867266wrh.48.1642441539524;
+        Mon, 17 Jan 2022 09:45:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwgkvq3SKcG5Ln75eIGYRH0iLxGvcr0OxQQNkLYP5yKBD5lv8kPaNE8lD0JUnmC89kdC/2UXQ==
+X-Received: by 2002:adf:d0ce:: with SMTP id z14mr19867254wrh.48.1642441539309;
+        Mon, 17 Jan 2022 09:45:39 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id r15sm40119wmq.3.2022.01.17.09.45.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 09:45:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: watchdog: improve QCOM compatible parsing
- for modern chips
-To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Cc:     ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220111212310.97566-1-david@ixit.cz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a24227a0-c0eb-be20-c545-906439edf3f1@roeck-us.net>
-Date:   Mon, 17 Jan 2022 09:45:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 17 Jan 2022 09:45:38 -0800 (PST)
+Message-ID: <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
+Date:   Mon, 17 Jan 2022 18:45:36 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220111212310.97566-1-david@ixit.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
 Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup.patel@wdc.com,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
+        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
+        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
+        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+References: <20220111153539.2532246-1-mark.rutland@arm.com>
+ <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
+ <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
+ <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
+ <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
+ <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
+ <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 1:23 PM, David Heidelberg wrote:
-> Parse compatible as expected for modern QCOMs.
-> 
-> Fixes warnings as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
->          From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
->          From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+On 1/14/22 16:19, Mark Rutland wrote:
+> I also think there is another issue here. When an IRQ is taken from SIE, will
+> user_mode(regs) always be false, or could it be true if the guest userspace is
+> running? If it can be true I think tha context tracking checks can complain,
+> and it*might*  be possible to trigger a panic().
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I think that it would be false, because the guest PSW is in the SIE 
+block and switched on SIE entry and exit, but I might be incorrect.
 
-> ---
-> v2:
->   - updated compatible list as two compatibles has been added upstream
->   -> resolve merge conflict
-> ---
->   .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
->   1 file changed, 21 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 16c6f82a13ca..4ff8c59c59ab 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -14,22 +14,27 @@ allOf:
->   
->   properties:
->     compatible:
-> -    enum:
-> -      - qcom,apss-wdt-qcs404
-> -      - qcom,apss-wdt-sc7180
-> -      - qcom,apss-wdt-sc7280
-> -      - qcom,apss-wdt-sdm845
-> -      - qcom,apss-wdt-sdx55
-> -      - qcom,apss-wdt-sm6350
-> -      - qcom,apss-wdt-sm8150
-> -      - qcom,apss-wdt-sm8250
-> -      - qcom,kpss-timer
-> -      - qcom,kpss-wdt
-> -      - qcom,kpss-wdt-apq8064
-> -      - qcom,kpss-wdt-ipq4019
-> -      - qcom,kpss-wdt-ipq8064
-> -      - qcom,kpss-wdt-msm8960
-> -      - qcom,scss-timer
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - qcom,apss-wdt-qcs404
-> +              - qcom,apss-wdt-sc7180
-> +              - qcom,apss-wdt-sc7280
-> +              - qcom,apss-wdt-sdm845
-> +              - qcom,apss-wdt-sdx55
-> +              - qcom,apss-wdt-sm6350
-> +              - qcom,apss-wdt-sm8150
-> +              - qcom,apss-wdt-sm8250
-> +          - const: qcom,kpss-wdt
-> +      - items:
-> +          - enum:
-> +              - qcom,kpss-wdt
-> +              - qcom,kpss-timer
-> +              - qcom,kpss-wdt-apq8064
-> +              - qcom,kpss-wdt-ipq4019
-> +              - qcom,kpss-wdt-ipq8064
-> +              - qcom,kpss-wdt-msm8960
-> +              - qcom,scss-timer
->   
->     reg:
->       maxItems: 1
-> 
+Paolo
+
+> In irqentry_enter(), if user_mode(regs) == true, we call
+> irqentry_enter_from_user_mode -> __enter_from_user_mode(). There we check that
+> the context is CONTEXT_USER, but IIUC that will be CONTEXT_GUEST at this point.
+> We also call arch_check_user_regs(), and IIUC this might permit a malicious
+> guest to trigger a host panic by way of debug_user_asce(), but I may have
+> misunderstood and that might not be possible.
 

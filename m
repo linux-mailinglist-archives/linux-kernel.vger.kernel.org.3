@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E17B490071
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9083C490075
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiAQDAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 22:00:22 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51866
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234088AbiAQDAU (ORCPT
+        id S234144AbiAQDEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 22:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234146AbiAQDEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 22:00:20 -0500
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 430013F19C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642388419;
-        bh=tbFdbl3a6wyFWQoCr2QHMITY6WUY2RtOQOu/UXgg7ZI=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=fKAj44UmJp6l2yXiWHuECM13MhUxIVk8LMdOzIVD/pDhQPlJuR5y4d9wYiAirtR/M
-         ePVfLMM0uA+3GIYJpObkzbOavwjzTpJ7hvUmY1DLz4UrNiIhYi17bYvrDZM/vKQ3mz
-         BpzQJzdh5eqEu2arZRJG4xkIAG1tduzY9a5zEyMwnpn/x8J/wu5h3Jp169O4I5AQdZ
-         t647fKNYxPxXCRmjS0HZ9Sl2WkaMUVcHCzLVJg5wusGQ8fBadaRGqLy4vXGuZh8qDk
-         WKED2RQDQqgMmUONfxF1lT7IysdMDB2pLum3Gcb2aiEA3fzsSmjI9XuUCDwmKPvZOy
-         AOkAYXYH1lBDg==
-Received: by mail-oi1-f200.google.com with SMTP id g4-20020acab604000000b002c8b24c3964so10479184oif.22
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 19:00:19 -0800 (PST)
+        Sun, 16 Jan 2022 22:04:31 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4140AC061574;
+        Sun, 16 Jan 2022 19:04:31 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id p27so40680679lfa.1;
+        Sun, 16 Jan 2022 19:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=BcLWSCFxcIxXuHQd2ZX9wwZMoc7+0eTGm4EM3OR4jpU=;
+        b=ZaYjBcoytcgYu0YN53yR2+fkLtowk5L8XQrd3YiWdvpWRMdSuV+UiGQWRqZglFwrxL
+         nywXxwAMzJynw9HACRFMOllznNjNePAsByIFVs+g78yNBgqaRe2A9dV32wAspZvqXISi
+         KmyVLzXj9mlQM5ZZupLPyx+3ynUKXuws0mCzgyM4ZrqghLrCbkP/DWJzEMFwmefjT9+t
+         g+wlmuZJgiE3HQrBlFZGhhR7aD9Yk2HwmfeoRUs1eGUVNRDb7FAQlqxs2DWFQzb60iaJ
+         6XLCYkEdxisU4Zc8UpzIeNbWtn6k3FdHtQ3JHKRwkn1KXA3cWHmH8hYEOGFzLV20fLpd
+         IIvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tbFdbl3a6wyFWQoCr2QHMITY6WUY2RtOQOu/UXgg7ZI=;
-        b=D8sGDdNIzfrGO8rY4dJWxAmeej129oEv788LrGYjpWWYURuNqgSmF1n0bvyKCgBvNS
-         UYAzIOjevJRg6ZIggdRSErMAsECc0fk5P6rRykuf86o/4zh5DxTff+XX8+hegmUzoHET
-         g8W1ARx6Y7H2L1VP3Ug5nUTQrrfLt8QLr6F65D9ZKm/N0AkS/2L9crPl7MkQuAzA+Q+d
-         354EoVK2ZiR32U4TJaby3RJDMjf8VQG+NnGSHVENerVgzGNIIUhQs3JU+f4WmG9hA2vR
-         ZO2sEYydpo7U8dJ7ACxdOtqGtLwF3unBcOMgx7MqAIFinQMlQtGTYlwSfIjjmO9FVMzy
-         MtBQ==
-X-Gm-Message-State: AOAM531fEV0w4J/uaK5lt/jlMhiAeTJcNcxOD6rS3nXHiMUr6/4U2RUh
-        VPwJnojAZZiQcSTb3Gb7kpGUwRkpLgbOcvOsc5EvBDSOzZ4V2mrCxTJFKFIWLPkU1T1AbvPYWud
-        uvev1rRMZ5zCvlXelbcBCrYy5JQ2TFmiU1rM3tPW134ibr7PZZZNFw2dfjQ==
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr14796109oth.233.1642388417993;
-        Sun, 16 Jan 2022 19:00:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy1QTZiASpuDes7BN+zVFAzK/CfctQWh69kH+opon159gi/rJ0OyWyyCiCx0ejSAwa1FVur/IxA+NmYd5yZkT4=
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr14796090oth.233.1642388417639;
- Sun, 16 Jan 2022 19:00:17 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=BcLWSCFxcIxXuHQd2ZX9wwZMoc7+0eTGm4EM3OR4jpU=;
+        b=fvU7etFEfMzX4yIWd8ktYiTDq0agB3CVyHrivYcT9tt3e7jga9XTPPqaU0Ft+NM2fT
+         58y9U6MLe5kDzJdCGR4Ua5aLN64J02+rx74jvILfKpd+xmGXvY8JXu3c/R/acUq2AE59
+         md1V+VAoM6o3/AYLm02xDFKZCSC8GRJ36PpHEGM0ux/7emD+q5h6Lp04EgMZZrqvaFrk
+         sRgrKT2UIHcbBg1mQLkgcs1RF69KR7uf3+XnZGqtWKwLYeXrquFdpXL3TB/WNHiTl/HT
+         2aW3to2F3eZ8AjbJjIx1LyllAVP+uz/GyfYSYTvlA1F/iAmLPhvV4npflr6SSpwa3AnJ
+         kibg==
+X-Gm-Message-State: AOAM5331ms7CpIwcgHb3+UyixmmwMPC/1XosvCKFHnrA0okhmco25B6t
+        z1S9toSWr7A+bEoOYszy2DnKwrXiYAQmT7LqZg2txqpID8c=
+X-Google-Smtp-Source: ABdhPJz4uUl+FXb01sRnnkK7Rxg2VDSdVajRNqiRCXRw5oGeSNRQP49xOMe53sf7wPJJQPyYgOM+qr8r1nbY3pkSCgE=
+X-Received: by 2002:a19:8c4a:: with SMTP id i10mr14679181lfj.537.1642388668824;
+ Sun, 16 Jan 2022 19:04:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20211230052811.650191-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20211230052811.650191-1-kai.heng.feng@canonical.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 17 Jan 2022 11:00:05 +0800
-Message-ID: <CAAd53p6ev+yQT+jf32UrTMWQXwDPYtmZSrW0zCQnKuUaBbtXUg@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: core: Bail out when port is stuck in reset loop
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 16 Jan 2022 21:04:17 -0600
+Message-ID: <CAH2r5mu=D=hnvdUTnZg8fYYRUbnGkOLzzo667XxmbYw8ZOBTxA@mail.gmail.com>
+Subject: [GIT PULL] cifs/smb3 fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 1:28 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> Unplugging USB device may cause an incorrect warm reset loop and the
-> port can no longer be used:
-> [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-> [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-> [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-> [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-> [  143.039096] usb usb2-port3: link state change
-> [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-> [  143.039101] usb usb2-port3: do warm reset
-> [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-> [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-> [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-> [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-> [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-> [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
->
-> The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
-> state per "USB3 Root Hub Port State Machine". It's reasonable to perform
-> warm reset several times, but if the port is still not enabled after
-> many attempts, consider it's gone and treat it as disconnected.
->
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Please pull the following changes since commit
+c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
 
-A gentle ping...
+  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
 
-> ---
->  drivers/usb/core/hub.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 00070a8a65079..f618d86d526d1 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2979,7 +2979,8 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
->                 }
->
->                 /* Check for disconnect or reset */
-> -               if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
-> +               if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
-> +                   (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
->                         usb_clear_port_feature(hub->hdev, port1,
->                                         USB_PORT_FEAT_C_RESET);
->
-> --
-> 2.33.1
->
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc-part1-smb3-fixes
+
+for you to fetch changes up to 9bbf8662a27b56358366027d1a77c0676f85b222:
+
+  cifs: fix FILE_BOTH_DIRECTORY_INFO definition (2022-01-15 10:08:47 -0600)
+
+----------------------------------------------------------------
+13 cifs/smb3 fixes
+
+- 9 multichannel patches mostly related to improving reconnect behavior
+- 4 minor cleanup patches
+
+There are a similar number of additional patches that I will send later
+in the week that are still being tested and reviewed, and hopefully that
+will also include the integration with the new fscache that Dave Howell's
+is working with me on.
+----------------------------------------------------------------
+Colin Ian King (1):
+      cifs: remove redundant assignment to pointer p
+
+Enzo Matsumiya (1):
+      cifs: fix hang on cifs_get_next_mid()
+
+Eugene Korenevsky (1):
+      cifs: fix FILE_BOTH_DIRECTORY_INFO definition
+
+Jeff Layton (1):
+      cifs: move superblock magic defitions to magic.h
+
+Shyam Prasad N (8):
+      cifs: track individual channel status using chans_need_reconnect
+      cifs: use the chans_need_reconnect bitmap for reconnect status
+      cifs: adjust DebugData to use chans_need_reconnect for conn status
+      cifs: add WARN_ON for when chan_count goes below minimum
+      cifs: reconnect only the connection and not smb session where possible
+      cifs: take cifs_tcp_ses_lock for status checks
+      cifs: maintain a state machine for tcp/smb/tcon sessions
+      cifs: avoid race during socket reconnect between send and recv
+
+Yang Li (1):
+      cifs: Fix smb311_update_preauth_hash() kernel-doc comment
+
+ fs/cifs/cifs_debug.c       |   8 ++-
+ fs/cifs/cifs_spnego.c      |   4 +-
+ fs/cifs/cifs_spnego.h      |   3 +-
+ fs/cifs/cifs_swn.c         |   4 +-
+ fs/cifs/cifsencrypt.c      |   6 +-
+ fs/cifs/cifsfs.c           |   5 +-
+ fs/cifs/cifsglob.h         |  79 +++++++++++--------------
+ fs/cifs/cifspdu.h          |   2 +-
+ fs/cifs/cifsproto.h        |  31 ++++++++--
+ fs/cifs/cifssmb.c          |  94 +++++++++++++++++++++++------
+ fs/cifs/connect.c          | 230
+++++++++++++++++++++++++++++++++++++++++++++++++++---------------------
+ fs/cifs/netmisc.c          |   4 +-
+ fs/cifs/ntlmssp.h          |   2 +
+ fs/cifs/sess.c             | 183
+++++++++++++++++++++++++++++++++++++++------------------
+ fs/cifs/smb1ops.c          |  24 +++++---
+ fs/cifs/smb2glob.h         |   2 -
+ fs/cifs/smb2misc.c         |   5 +-
+ fs/cifs/smb2ops.c          |  34 +++++++----
+ fs/cifs/smb2pdu.c          | 179
++++++++++++++++++++++++++++++++++++++------------------
+ fs/cifs/smb2proto.h        |   6 +-
+ fs/cifs/smb2transport.c    |  61 ++++++++++++++-----
+ fs/cifs/transport.c        |  78 ++++++++++++++++--------
+ include/uapi/linux/magic.h |   4 ++
+ 23 files changed, 723 insertions(+), 325 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve

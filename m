@@ -2,70 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F09490AB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7997E490AC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbiAQOsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbiAQOsM (ORCPT
+        id S237190AbiAQOvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:51:00 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:52561 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237195AbiAQOu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:48:12 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315ADC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:48:12 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id z22so66613196edd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=B0Omc0ilFzl4+b+OhuNRuE6e84M7Qa4K64aAauxZR0s=;
-        b=OKQxagx6e0Wcgz4OBV2dLT0Y2w5nTHqbmIPJch8ZC80R0670udjedYLsddIacU0nT7
-         eQuAcOZIPek2COTqbl4uHLoycZq2IM0Q2EbE36t9Liqqst2L/jHVugHEgagiOpPrjG2w
-         zU6FfF2BosYkaULem+GD6Yi9Q5b+eCaRBBhPcnOUwkue6gg9fbTgBJ7AVpYutoRLQrC1
-         0nciOAynh7I/qevpPv6UiDQNJLCxQW2eLFAdqU8w6NbgS19Ca9H3OMcqvnx/Sibesmqj
-         Oded6wXSpbzwvUE1XKN0WCGfL9IziFzVdrfGfgrLgojZXGqcdlUyIk1qprNoQcyZ2H5i
-         /Kbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=B0Omc0ilFzl4+b+OhuNRuE6e84M7Qa4K64aAauxZR0s=;
-        b=zIHIO8dtEu53uY8KL5IMdvjdNwOmG3XNchlSht11wT62DzcwT+LurDeb/p13WH3Kmv
-         ASxT+bWyRyjszLrqDH/q1nQR92DYCDhLBPbRef4OIczIJHojKzaueJnZU3/sP0D6Telr
-         RqOhdZ2RKoR8ThMenEEsTU7sdm0ltwaQcSky06v+wLmw0wBqElUwO6olh43C7GUoOKIW
-         G3LZXEI8HEZKyBgn9juxZwSmdiVbBQ81XVdYnedJIU6OKnQVDaGM+HM9utkvQ5fNr/Ep
-         WK1VjBTbmeMg+V3apTwSLEVMEfmM0rxYTYrutil+L+f2BFfVqzv+94ZwLTwUbVEJWd08
-         0uuA==
-X-Gm-Message-State: AOAM533LJUF0idsoDFgvdunouuXRYepSXixZspYVI9YKoMmhJzOjey1U
-        ny91v428omIYjUIFFOD+uIjvPzqtnHPEwms5iIo=
-X-Google-Smtp-Source: ABdhPJzI+7Sfjb0VXfotLOgJka+e17voLiSTAT4Cj6U/MMgdFJBOjRSLECqP9DgadMkVg3gR3ORXKGNgGanDN0BtnrQ=
-X-Received: by 2002:a17:906:b6d1:: with SMTP id ec17mr17088890ejb.21.1642430890745;
- Mon, 17 Jan 2022 06:48:10 -0800 (PST)
+        Mon, 17 Jan 2022 09:50:59 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=wuyihao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V27uN1Z_1642431056;
+Received: from B-V5AVMD6P-1927.local(mailfrom:wuyihao@linux.alibaba.com fp:SMTPD_---0V27uN1Z_1642431056)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 17 Jan 2022 22:50:56 +0800
+Subject: Re: [PATCH] sched/fair: Again ignore percpu threads for imbalance
+ pulls
+To:     Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Shanpei Chen <shanpeic@linux.alibaba.com>,
+        =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+References: <20211211094808.109295-1-wuyihao@linux.alibaba.com>
+ <87k0g48kyp.mognet@arm.com>
+From:   Yihao Wu <wuyihao@linux.alibaba.com>
+Message-ID: <5f8497cd-aeaf-906d-a2d8-2e0a752fed4b@linux.alibaba.com>
+Date:   Mon, 17 Jan 2022 22:50:55 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-Received: by 2002:ab4:a1a1:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 06:48:10
- -0800 (PST)
-Reply-To: susancarter0102@gmail.com
-From:   Susan Carter <stevewalka02@gmail.com>
-Date:   Mon, 17 Jan 2022 15:48:10 +0100
-Message-ID: <CAOcFL_rqHcVm7inz=x1g2cZM_2dLy4Bik8xuGW5wR8Hcq-yxog@mail.gmail.com>
-Subject: This is Susan
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87k0g48kyp.mognet@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am Mrs Susan Carter, a 60 years old widow. I was married to the
-late Engr. Martins Carter, who worked with ExxonMobil in London for
-Twenty-Six years before he died in the year 2007 after a brief illness
-that lasted only five days. When my late husband was alive he
-deposited the sum of US$50 Million in a bank. Following my
-health(Bronchogenic Carcinomas), my Doctor told me that I may not live
-longer than required due to my health condition. I am looking forward
-to seeing someone who can use this money in charitable works. More
-details will be made known to you upon your response.
+Thanks a lot for the help, Valentin and Peter!
 
-May God Bless You
-Mrs Susan Carter.
+On 2021/12/17 2:26am, Valentin Schneider wrote:
+> On 11/12/21 17:48, Yihao Wu wrote:
+>> commit 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance
+>> pulls") was meant to fix a performance issue, when load balance tries to
+>> migrate pinned kernel threads at MC domain level. This was destined to
+>> fail.
+> 
+>> After it fails, it further makes wakeup balance at NUMA domain level
+>> messed up. The most severe case that I noticed and frequently occurs:
+>>      |sum_nr_running(node1) - sum_nr_running(node2)| > 100
+>>
+> 
+> Wakeup balance (aka find_idlest_cpu()) is different from periodic load
+> balance (aka load_balance()) and doesn't use can_migrate_task(), so the
+> incriminated commit shouldn't have impacted it (at least not in obvious
+> ways...). Do you have any more details on that issue
+
+The original bugfix concerns only about load balance. While I found wake
+up balance is impacted too, after I observed regression in lmbench3 test
+suite. This is how it's impacted:
+
+- Periodic load balance
+- kthread_is_per_cpu? No
+- env->flags |= LBF_SOME_PINNED
+- sd_parent..imbalance being set to 1 because of LBF_SOME_PINNED
+
+So far exactly the same as what Chandrasekhar describes in 2f5f4cce496e.
+Then imbalance connects periodic and wakeup balance.
+
+- Wakeup balance(find_idlest_group)
+- update_sg_wakeup_stats classifies local_sgs as group_imbalanced
+- find_idlest_group chooses another NUMA node
+
+wakeup balance keeps doing this until another NUMA node becomes so busy.
+And another periodic load balance just shifts it around, makeing the 
+previously overloaded node completely idle now.
+
+(Thanks to the great schedviz tool, I observed that all workloads as a 
+whole, is migrated between the two NUMA nodes in a ping-pong pattern, 
+and with a period around 3ms)
+
+The reason wake up balance suffers more is, in fork+exit test case, 
+wakeup balance happens with much higher frequency. It exists in real 
+world applications too I believe.
+
+> 
+>> However the original bugfix failed, because it covers only case 1) below.
+>>    1) Created by create_kthread
+>>    2) Created by kernel_thread
+>> No kthread is assigned to task_struct in case 2 (Please refer to comments
+>> in free_kthread_struct) so it simply won't work.
+>>
+>> The easist way to cover both cases is to check nr_cpus_allowed, just as
+>> discussed in the mailing list of the v1 version of the original fix.
+>>
+>> * lmbench3.lat_proc -P 104 fork (2 NUMA, and 26 cores, 2 threads)
+>>
+> 
+> Reasoning about "proper" pcpu kthreads was simpler since they are static,
+> see 3a7956e25e1d ("kthread: Fix PF_KTHREAD vs to_kthread() race")
+> 
+Get it. Thanks.
+
+>>                           w/out patch                 w/ patch
+>> fork+exit latency            1660 ms                  1520 ms (   8.4%)
+>>
+>> Fixes: 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance pulls")
+>> Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
+>> ---
+>>   kernel/kthread.c | 6 +-----
+>>   1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/kernel/kthread.c b/kernel/kthread.c
+>> index 4a4d7092a2d8..cb05d3ff2de4 100644
+>> --- a/kernel/kthread.c
+>> +++ b/kernel/kthread.c
+>> @@ -543,11 +543,7 @@ void kthread_set_per_cpu(struct task_struct *k, int cpu)
+>>
+>>   bool kthread_is_per_cpu(struct task_struct *p)
+>>   {
+>> -	struct kthread *kthread = __to_kthread(p);
+>> -	if (!kthread)
+>> -		return false;
+>> -
+>> -	return test_bit(KTHREAD_IS_PER_CPU, &kthread->flags);
+>> +	return (p->flags & PF_KTHREAD) && p->nr_cpus_allowed == 1;
+>>   }
+> 
+> As Peter said, this is going to cause issues. If you look at
+> kthread_set_per_cpu(), we also store a CPU value which we expect to be
+> valid when kthread_is_per_cpu(), which that change is breaking.
+> 
+> AIUI what you want to patch is the actual usage in can_migrate_task()
+> 
+
+Get it. Some may want a consistent view of kthread_is_per_cpu, 
+kthread->cpu, and KTHREAD_IS_PER_CPU.
+
+Are you suggesting to patch only can_migrate_task to check 
+nr_cpus_allowed? Wouldn't it be confusing if it uses an alternative way 
+to tell if p is a per-cpu kthread?
+
+I haven't a better solution though. :(
+
+
+Thanks,
+Yihao Wu
+
+>>
+>>   /**
+>> --
+>> 2.32.0.604.gb1f3e1269

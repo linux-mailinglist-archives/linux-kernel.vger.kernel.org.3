@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA361490A33
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4793490A37
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbiAQOVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S237538AbiAQOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234429AbiAQOVk (ORCPT
+        with ESMTP id S236869AbiAQOY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:21:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D419EC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:21:39 -0800 (PST)
-Date:   Mon, 17 Jan 2022 14:21:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1642429297;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OzeiKFPvpQ7m+A8DOuIBKCgoDD+P+7sKHN5LSfqJpJ4=;
-        b=Rr0kJKnE2OhSx6vbG1G81b7q5sSYSaOrPfyGvJJaIXkIjklSvBrZzBYtHsFdKAfdEp9QHe
-        9X6gVagJF8VmQF2gOT55ORawZGE5Ei7MnK06nBRz5SO1anvIgooEQYCIfdzQOjM6Q58OYK
-        a3oWx9dvelDVhwfviPNdUzm7az3jzpu0H4hwMGeBA/oBKSPJ3QdcEG68btnodMlavAn9Es
-        IyZRhh0Ozr8u7IqirwAVJ3HnF1OkjIiiNUAeAv0B5rsfXMXaoNtd+3lsAZNwCYdgj1P933
-        khITfoSy/iCqK7zR4d9o5NGCDVjoNQHIPSbfNA5w20ManrCNxCNYV8dEDcRoCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1642429297;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OzeiKFPvpQ7m+A8DOuIBKCgoDD+P+7sKHN5LSfqJpJ4=;
-        b=sVAklS6ankV/HfRN1a7JL4XCE8pDd6Wpcq3O7Os+A6JYoTMDBMALlvZgR9lCKYDPkmscrV
-        mCZypUsNXtYHcnBw==
-From:   "irqchip-bot for Christophe JAILLET" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/loongson-pch-ms: Use
- bitmap_free() to free bitmap
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: =?utf-8?q?=3C0b982ab54844803049c217b2899baa59602faacd=2E16405?=
- =?utf-8?q?29916=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
-References: =?utf-8?q?=3C0b982ab54844803049c217b2899baa59602faacd=2E164052?=
- =?utf-8?q?9916=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
+        Mon, 17 Jan 2022 09:24:29 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370CEC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:24:29 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id v1so21611464ioj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:24:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=QnlVfGau/F7tZrXmAnNOwZCm2aBpNZJtPAdbXap2B9Q=;
+        b=Hnn1u4Nhy6WmbGVhJOFNJ35nZpV/fua3WdbWMI73tb+kYpCujMzmHh6XpfMJ5KzOE1
+         zsCPoZuSVIveBBCJWUtAeQYq9Rrb2DaIJuyC/OvfxItSq2Tu6ILC8sA32TkIm+OIuzIb
+         jk36xVOARsEYsWVKP/k02/aaS09EW9L/jWaavEjJAjDWF3QxSw+y9kYn/otg3keknkBq
+         QoiLbrvOnV2KZWdpqa35WJf4MxmJfd3z4Bmuv6FzHwzQnJSJa7Dht3grbWdIZeryHe3v
+         K8ooJ/rPT1EtMOAjNr4TULKlRvSYLG2UFhGQPEzuRDhAMPKy0+wxUw+5n8nfk/zebfbS
+         8NJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=QnlVfGau/F7tZrXmAnNOwZCm2aBpNZJtPAdbXap2B9Q=;
+        b=jK97LUhfYWpWNfDodtDa3sB4Ma264IOl3j6/1q7XF1oBV8nLZg2MMp97RU/EqZQU3O
+         ML2i45QeiBW4ifEeqErHmXQWor4oW7ym3KdYvo+qRpMIoD2ylbop5nv7MmvGZfD/Rmf0
+         rRxtl50MVvHtXRjZcwP9s/XH52fm36sBHv2XbpaI2f0wq9yB9LqWnnJtNlhhA0KJnMa5
+         mqMlLvCIe6Y5v0etHhpEA6HE37OzTAbq5WlILS1NQDggt3y75fMZluQAKq+jTICA4x5U
+         Ah5+o/UjvhnlblR9n05tRkc6L1c86zvD66xy7KpD+wGU31MhUEJ4J/dRPYCFs4kzwPNU
+         Vk2Q==
+X-Gm-Message-State: AOAM531JthZMPOgE2W/OaK1jhYUAfbaju60GoJe1UeupUNHHU82Y7E3N
+        +GEGN/CRDhDexLEtwV2cjBISp4N+O/MtOg==
+X-Google-Smtp-Source: ABdhPJw0Xr+2cSDlHKmpA6oGpcW0KAAJowPBue1b9VJ3CQ1eci4T/Mizn6EDn2eny3u4IbJoQJwr1A==
+X-Received: by 2002:a02:cf90:: with SMTP id w16mr9815336jar.94.1642429468615;
+        Mon, 17 Jan 2022 06:24:28 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id a2sm1271589iow.7.2022.01.17.06.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 06:24:28 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     GuoYong Zheng <zhenggy@chinatelecom.cn>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1642414957-6785-1-git-send-email-zhenggy@chinatelecom.cn>
+References: <1642414957-6785-1-git-send-email-zhenggy@chinatelecom.cn>
+Subject: Re: [PATCH] block: Remove unnecessary variable assignment
+Message-Id: <164242946547.334981.10563658391509061106.b4-ty@kernel.dk>
+Date:   Mon, 17 Jan 2022 07:24:25 -0700
 MIME-Version: 1.0
-Message-ID: <164242929604.16921.18409641400144291653.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+On Mon, 17 Jan 2022 18:22:37 +0800, GuoYong Zheng wrote:
+> The parameter "ret" should be zero when running to this line,
+> no need to set to zero again, remove it.
+> 
+> 
 
-Commit-ID:     c831d92890e037aafee662e66172d406804e4818
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c831d92890e037aafee662e66172d406804e4818
-Author:        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-AuthorDate:    Sun, 26 Dec 2021 15:46:21 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 17 Jan 2022 13:16:26 
+Applied, thanks!
 
-irqchip/loongson-pch-ms: Use bitmap_free() to free bitmap
+[1/1] block: Remove unnecessary variable assignment
+      commit: e6a2e5116e07ce5acc8698785c29e9e47f010fd5
 
-kfree() and bitmap_free() are the same. But using the latter is more
-consistent when freeing memory allocated with bitmap_zalloc().
+Best regards,
+-- 
+Jens Axboe
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/0b982ab54844803049c217b2899baa59602faacd.1640529916.git.christophe.jaillet@wanadoo.fr
----
- drivers/irqchip/irq-loongson-pch-msi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-msi.c b/drivers/irqchip/irq-loongson-pch-msi.c
-index 32562b7..e3801c4 100644
---- a/drivers/irqchip/irq-loongson-pch-msi.c
-+++ b/drivers/irqchip/irq-loongson-pch-msi.c
-@@ -241,7 +241,7 @@ static int pch_msi_init(struct device_node *node,
- 	return 0;
- 
- err_map:
--	kfree(priv->msi_map);
-+	bitmap_free(priv->msi_map);
- err_priv:
- 	kfree(priv);
- 	return ret;

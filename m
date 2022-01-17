@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 277844910FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D6049110B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243122AbiAQUa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:30:26 -0500
-Received: from mail.efficios.com ([167.114.26.124]:43262 "EHLO
+        id S243160AbiAQUjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:39:48 -0500
+Received: from mail.efficios.com ([167.114.26.124]:46642 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbiAQUaZ (ORCPT
+        with ESMTP id S232138AbiAQUjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:30:25 -0500
+        Mon, 17 Jan 2022 15:39:40 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 40B2F3048DC;
-        Mon, 17 Jan 2022 15:30:24 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id 5EDA6304AB5;
+        Mon, 17 Jan 2022 15:39:39 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id oWV3qCxQNE33; Mon, 17 Jan 2022 15:30:23 -0500 (EST)
+        with ESMTP id 1E9gyScGOIpY; Mon, 17 Jan 2022 15:39:38 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9027A3046D7;
-        Mon, 17 Jan 2022 15:30:23 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9027A3046D7
+        by mail.efficios.com (Postfix) with ESMTP id A7FFA3048F0;
+        Mon, 17 Jan 2022 15:39:38 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com A7FFA3048F0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1642451423;
-        bh=Fuss6rxEbY9C0XsqWjuiCNTFvR+z4EdHL0f9IdHH/Qc=;
+        s=default; t=1642451978;
+        bh=fA1tSXSI/GSpIODrqN7cBniamSWFZWSgV+id3EAP820=;
         h=From:To:Date:Message-Id;
-        b=eiYoObBNuJtLPqAAn8GfV9zXCA8p1raPikETP/ceWx6Zi8Tkt72JrvS6izhw+hZpM
-         g51LKd5gvyQ1U0hrlN7ii0hyUGsYoev0i97vBcp13sTV/8ZN6mMLYLc2Rphy62z1V9
-         BKlT4zt4ErtzOQ9unq+cV06De3BwEgTzZbAHQ0eoap5ONK/lm4WapYLpkLXkOPtAB8
-         bPdsCpoXtWVRAio5xJYfE997m+Xb60ktQQIaSsQxpF+y8j+Lutlr9MXDLV3TpoMmMb
-         4paQCrZ1l2QtCACCtJqgC3no7Zr6cRiYgWoLTd8v1z3HUbDe1hB9Mt000Q7J7YCZGP
-         /vE4IwB6Yrs0g==
+        b=YPSvp4SCq69YIMqWnDGpaLUoa6FJcXstKl1Zafgj8D6D/SdPad4iZqTceYwIscQtv
+         APkVmPDbYR/rQfwa3DeLA+8mr2r9xZb5CdNofqX0TUseIDIAmS3emWIdQJVL3okIP9
+         spM6KIx6+kZ+bJWBKnu4vfyh/Ndcrfs1zRfaxAZVwpPWba271/nUMgSeBn7Y7IEn2s
+         1biP39D6gX8mCMgqKJB22qrYU6mAXMuD3YmhndhFHgLA0Rg2v9XtKg3RCnI8KwAqu8
+         b6iwEF2zIPnYO2c8RznsQA6MuhAFxwKGi8QHwR1wLLIfbdaSqZDuofzOWymoa4aJrK
+         xsb02PFAFX4yw==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id UcqkJhrEUucV; Mon, 17 Jan 2022 15:30:23 -0500 (EST)
+        with ESMTP id zchlrbzLWw3J; Mon, 17 Jan 2022 15:39:38 -0500 (EST)
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id 0742A3048DB;
-        Mon, 17 Jan 2022 15:30:23 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTPSA id 2611F304866;
+        Mon, 17 Jan 2022 15:39:38 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Chris Metcalf <cmetcalf@ezchip.com>,
-        Christoph Lameter <cl@linux.com>,
-        Kirill Tkhai <tkhai@yandex.ru>, Mike Galbraith <efault@gmx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Oskolkov <posk@google.com>, stable@vger.kernel.org
-Subject: [PATCH] sched/membarrier: Fix membarrier-rseq fence command missing from query bitmask
-Date:   Mon, 17 Jan 2022 15:30:10 -0500
-Message-Id: <20220117203010.30129-1-mathieu.desnoyers@efficios.com>
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH 0/5] RSEQ selftests uplift for glibc-2.35 compatibility
+Date:   Mon, 17 Jan 2022 15:39:20 -0500
+Message-Id: <20220117203925.12164-1-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The membarrier command MEMBARRIER_CMD_QUERY allows querying the
-available membarrier commands. When the membarrier-rseq fence commands
-were added, a new MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK was
-introduced with the intent to expose them with the MEMBARRIER_CMD_QUERY
-command, the but it was never added to MEMBARRIER_CMD_BITMASK.
+glibc-2.35 will be released on 2022-02-01. It introduces a user-space ABI
+based on the thread pointer to access a reserved area of the TCB.
 
-The membarrier-rseq fence commands are therefore not wired up with the
-query command.
+The rseq selftests originally expected the rseq thread data to sit in a
+__rseq_abi TLS variable.
 
-Rename MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK to
-MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK (the bitmask is not a command
-per-se), and change the erroneous
-MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_BITMASK (which does not
-actually exist) to MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ.
+Considering that the rseq ABI only allows a single rseq registration per
+thread, both cannot actively coexist in a process.
 
-Wire up MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK in
-MEMBARRIER_CMD_BITMASK. Fixing this allows discovering availability of
-the membarrier-rseq fence feature.
+Adapt the selftests librseq implementation to become compatible with
+glibc-2.35. Keep a fallback implementation based on TLS available when
+an older glibc is detected.
 
-Fixes: 2a36ab717e8f ("rseq/membarrier: Add MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Oskolkov <posk@google.com>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: <stable@vger.kernel.org> # 5.10+
----
- kernel/sched/membarrier.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Feedback is welcome,
 
-diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-index b5add64d9698..3d2825408e3a 100644
---- a/kernel/sched/membarrier.c
-+++ b/kernel/sched/membarrier.c
-@@ -147,11 +147,11 @@
- #endif
- 
- #ifdef CONFIG_RSEQ
--#define MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK		\
-+#define MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK		\
- 	(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ			\
--	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
-+	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ)
- #else
--#define MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ_BITMASK	0
-+#define MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK	0
- #endif
- 
- #define MEMBARRIER_CMD_BITMASK						\
-@@ -159,7 +159,8 @@
- 	| MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED			\
- 	| MEMBARRIER_CMD_PRIVATE_EXPEDITED				\
- 	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED			\
--	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK)
-+	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK		\
-+	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
- 
- static void ipi_mb(void *info)
- {
+Thanks,
+
+Mathieu
+
+Mathieu Desnoyers (5):
+  selftests/rseq: Remove useless assignment to cpu variable
+  selftests/rseq: Remove volatile from __rseq_abi
+  selftests/rseq: Introduce rseq_get_abi() helper
+  selftests/rseq: Introduce thread pointer getters
+  selftests/rseq: Uplift rseq selftests for compatibility with
+    glibc-2.35
+
+ tools/testing/selftests/rseq/Makefile         |   2 +-
+ tools/testing/selftests/rseq/param_test.c     |   4 +-
+ tools/testing/selftests/rseq/rseq-arm.h       |  32 ++--
+ tools/testing/selftests/rseq/rseq-arm64.h     |  32 ++--
+ .../rseq/rseq-generic-thread-pointer.h        |  25 +++
+ tools/testing/selftests/rseq/rseq-mips.h      |  32 ++--
+ .../selftests/rseq/rseq-ppc-thread-pointer.h  |  30 ++++
+ tools/testing/selftests/rseq/rseq-ppc.h       |  32 ++--
+ tools/testing/selftests/rseq/rseq-s390.h      |  24 +--
+ .../selftests/rseq/rseq-thread-pointer.h      |  19 +++
+ .../selftests/rseq/rseq-x86-thread-pointer.h  |  40 +++++
+ tools/testing/selftests/rseq/rseq-x86.h       |  30 ++--
+ tools/testing/selftests/rseq/rseq.c           | 161 +++++++++---------
+ tools/testing/selftests/rseq/rseq.h           |  24 ++-
+ 14 files changed, 302 insertions(+), 185 deletions(-)
+ create mode 100644 tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
+
 -- 
 2.17.1
 

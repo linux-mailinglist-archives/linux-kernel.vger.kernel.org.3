@@ -2,108 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A10490C93
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F4E490C95
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241102AbiAQQii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbiAQQih (ORCPT
+        id S241108AbiAQQi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:38:59 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:38554 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240955AbiAQQi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:38:37 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D5EC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:38:37 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id y14so24244083oia.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TI+T6c0N7K3peD5+tx0Z05C/5JTL5JQSb7+Gvq9P/90=;
-        b=HQGZtxqrdYuyGFZCoIvTbvoyDbXOEqvEXtal37kXs0fwaT8d5+UBqIyUt03jdv+LWO
-         YTghMijy/JpjTAiDS1lH/dgiOJTG8ZqcJ/YNZ+hCWHG9ArTln0xRRiNFQnToVrr3UKbu
-         cFRDl3Edik/s2Uzs5ZHZggDK4AJW0zTqhLH+U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TI+T6c0N7K3peD5+tx0Z05C/5JTL5JQSb7+Gvq9P/90=;
-        b=B2L+mtp83swNVQH9MAjA9t2eVKrbbSsLLtY7OBMyxE5MagB8mM3rhOb3w1wELY5ppA
-         gBfByS/kCAjtTaws3N0DAszJgXXQ4xkPoTYPIfacLM1jPpzwm/Vf58DRQtOe7QwbMZ//
-         nRhBy8F5EwjD3jIfGlqg8kjA6RiQ6ZHeCLx1mXtRiYyKMvngenRwBc6bbRueoZhf78w9
-         XV1JYcoKuHXmNgzB4n1touKmIybx95nBtbpzxUEzAbwnZQcckmWea4EnNqx/QZiIZvPB
-         bEsHVltZ+18pLf87Ekmm86dXZwNpQGSncaMT3CCPyzQ6m04GWUq2zfpwurqQ3Dle81f4
-         Bmvw==
-X-Gm-Message-State: AOAM532Dw80h2AGvXrdurcn7rG7WG68LRPOW3UGh9rXJrmCSwd++rBBm
-        Yibqt8HUPNQUar1G1xT59Qshg8vEqc7zvP4ROI8RMA==
-X-Google-Smtp-Source: ABdhPJwtZw3vr6mz2n3FOqglwVtWUYAgk2YKpHpdVERnXV0uo5vcLRo2/BjpnL+iKV8aeXnIyLfjH1gWrAF+/H/EIvA=
-X-Received: by 2002:a05:6808:3a3:: with SMTP id n3mr9217462oie.128.1642437516512;
- Mon, 17 Jan 2022 08:38:36 -0800 (PST)
+        Mon, 17 Jan 2022 11:38:58 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DF10021128;
+        Mon, 17 Jan 2022 16:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642437536; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=46+aTYyORS42IEh3fuIrSiQpTrbZxIhHkbdtfpF5rr8=;
+        b=SgGcyCqz70+ak+69wdrKJ8N4Mk//ON1ygriSE4RPO8ifMGEjyaWy+Gbe/TFZ+sV3MjhXTy
+        JjObYt/cHRQjm2iuULSsS26rr2eML4CsfHaLMsNcyfnOaKkb+iHHvioaXoPKEJ+kBfqogf
+        u9pKl+w5BGocnKd1OSOIeCLxaYyCBkU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642437536;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=46+aTYyORS42IEh3fuIrSiQpTrbZxIhHkbdtfpF5rr8=;
+        b=H2YJQNCjNpQnCidTAhsemTwTerFsEWE7n5xRtcIiciWvCQUy6AseSHTcSxayMG/IWvpdBE
+        QteCQi4JenSdXWCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5821613DB5;
+        Mon, 17 Jan 2022 16:38:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8sDAE6Cb5WHAZwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 17 Jan 2022 16:38:56 +0000
+Message-ID: <d2520b56-953b-2552-149b-41f232a7fc0b@suse.cz>
+Date:   Mon, 17 Jan 2022 17:38:55 +0100
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
- <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
-In-Reply-To: <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 17 Jan 2022 17:38:25 +0100
-Message-ID: <CAKMK7uECQU2ALkLHuFfPCjDcH456R6yJ4N_yKbHJ6PiFZ6fiow@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Helge Deller <deller@gmx.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-24-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 23/66] mm/mmap: Use advanced maple tree API for
+ mmap_region()
+In-Reply-To: <20211201142918.921493-24-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 5:22 PM Helge Deller <deller@gmx.de> wrote:
->
-> On 1/17/22 16:58, Thomas Zimmermann wrote:
-> > Hi
-> >
-> > Am 17.01.22 um 16:42 schrieb Helge Deller:
-> >> [...]
-> >>>> c) reintroduce the state where fbcon is fast on fbdev. This is important for non-DRM machines,
-> >>>>     either when run on native hardware or in an emulator.
-> >>>> d) not break DRM development
-> >>>>
-> >>>> Especially regarding c) I complained in [1] and got no feedback. I really would like to
-> >>>> understand where the actual problems were and what's necessary to fix them.
-> >>>>
-> >>>> Helge
-> >>>>
-> >>>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
-> >
-> > Seems like few people read linux-fbdev these days.
-> > I suggest to partly revert the patch to the point were performance
-> > gets better again.
-> Yes, *please*!
-> That would solve my biggest concern.
->
-> As far as I can see that's only 2 commits to be reverted:
-> b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, part 1 (from TODO list)"
-> 39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
->
-> I think both were not related to any 0-day bug reports (but again, I might be wrong).
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> Changing mmap_region() to use the maple tree state and the advanced
+> maple tree interface allows for a lot less tree walking.
+> 
+> This change removes the last caller of munmap_vma_range(), so drop this
+> unused function.
+> 
+> Add vma_expand() to expand a VMA if possible by doing the necessary
+> hugepage check, uprobe_munmap of files, dcache flush, modifications then
+> undoing the detaches, etc.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> ---
+>  mm/mmap.c | 227 +++++++++++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 175 insertions(+), 52 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index c06c5b850e1e..b0b7e327bf8b 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -496,29 +496,6 @@ static inline struct vm_area_struct *__vma_next(struct mm_struct *mm,
+>  	return vma->vm_next;
+>  }
+>  
+> -/*
+> - * munmap_vma_range() - munmap VMAs that overlap a range.
+> - * @mm: The mm struct
+> - * @start: The start of the range.
+> - * @len: The length of the range.
+> - * @pprev: pointer to the pointer that will be set to previous vm_area_struct
+> - *
+> - * Find all the vm_area_struct that overlap from @start to
+> - * @end and munmap them.  Set @pprev to the previous vm_area_struct.
+> - *
+> - * Returns: -ENOMEM on munmap failure or 0 on success.
+> - */
+> -static inline int
+> -munmap_vma_range(struct mm_struct *mm, unsigned long start, unsigned long len,
+> -		 struct vm_area_struct **pprev, struct list_head *uf)
+> -{
+> -	// Needs optimization.
+> -	while (range_has_overlap(mm, start, start + len, pprev))
+> -		if (do_munmap(mm, start, len, uf))
+> -			return -ENOMEM;
+> -	return 0;
+> -}
+> -
+>  static unsigned long count_vma_pages_range(struct mm_struct *mm,
+>  		unsigned long addr, unsigned long end)
+>  {
+> @@ -619,6 +596,101 @@ static void __insert_vm_struct(struct mm_struct *mm, struct vm_area_struct *vma)
+>  	mm->map_count++;
+>  }
+>  
+> +/*
+> + * vma_expand - Expand an existing VMA
+> + * @mas: The maple state
+> + * @vma: The vma to expand
+> + * @start: The start of the vma
+> + * @end: The exclusive end of the vma
+> + */
 
-syzbot, not 0day, and there's like a sea of them unfortunately.
-There's all kinds of funny races going on when resizing consoles (due
-to bad locking design) which then blow up, especially in less tested
-code. For the sw rendering we've merged a bunch of patches, but you
-pretty much have to assume that it's all fairly broken code until it's
-rewritten and fully covered with tests. Shadowfb + memcpy is probably
-much faster for restoring scrolling performance than anything else
-really.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Looks like this, similarly to the brk case, replaces one path calling
+vma_merge->__vma_adjust() with something else. But this one is better
+encapsulated and visible, so less likely to be forgotten in case something
+changes. Would be even better if the brk case used it too :) seems like it
+doesn't, at least as of this patch.
+
+But it would be great to improve the documentation here - some params are
+not documented, notably 'next', and I would explicitly state which scenarios
+it does cover - i.e. vma_merge() lists 8 scenarios and I assume this can
+handlea subset of those?
+And scenarios not covered could be VM_WARN_ON'd?
+Without such stated assumptions, it's hard/impossible to review both the
+implementation against them and, and the callers against them.
+
+> +inline int vma_expand(struct ma_state *mas, struct vm_area_struct *vma,
+> +		      unsigned long start, unsigned long end, pgoff_t pgoff,
+> +		      struct vm_area_struct *next)
+> +{
+> +	struct mm_struct *mm = vma->vm_mm;
+> +	struct address_space *mapping = NULL;
+> +	struct rb_root_cached *root = NULL;
+> +	struct anon_vma *anon_vma = vma->anon_vma;
+> +	struct file *file = vma->vm_file;
+> +	bool remove_next = false;
+> +	int error;
+> +
+> +	if (next && (vma != next) && (end == next->vm_end)) {
+
+For example here this suggests that a case of 'end > next->vm_end' case is
+not covered? How do I know whether it's intended or a bug?
+

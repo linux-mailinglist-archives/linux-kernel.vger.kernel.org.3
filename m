@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83770490991
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54495490996
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiAQNaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:30:02 -0500
-Received: from mail-ua1-f53.google.com ([209.85.222.53]:33625 "EHLO
-        mail-ua1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbiAQNaB (ORCPT
+        id S234339AbiAQNap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234121AbiAQNan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:30:01 -0500
-Received: by mail-ua1-f53.google.com with SMTP id u6so30503638uaq.0;
-        Mon, 17 Jan 2022 05:30:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aw/HNeVnfTRxU1ZQlE8UIYhuVJjuteUvt0Niy9Bfiz0=;
-        b=KnWbplvLSljCNRNiCCRHJ5K41GoWVGxg0ZKT2Zk5Zv6a1bfbDL4NXiHK/bxUI97u2A
-         PmPxp6//kL4Ki3IBCDI0BiwJ4S6jJ2F89Fthl57OdP/Bh9hM7Db4ZNKr+A25tGqq0P7d
-         ylBjyFrQH8iUj/9VMGsee8hsPD++I3Lju7LGdxi2pp3RCgU1vI2lYRWH1H0t2T/4p2NZ
-         g1JXl7r4HnT82FL7b2bXxPq0PTxAdSy5GSb/bIJEioqaU/fuwVEyku4qrzy64k7yA+rV
-         msQ0Hqgros7NhcZUH916UxohaJ7Tr2I6yndULKQgpf9pausPEs3S/3VaT8P9adIAFSRV
-         23ZA==
-X-Gm-Message-State: AOAM533CLI62sOU9V2ouxrNv3UNRNxSGESior0FktVykc7yAAFWbqpOM
-        lQPT7EnexyDwxPYbk+SNdu0wQ4YNqlQo2A==
-X-Google-Smtp-Source: ABdhPJxmxqUu4KEcgcj7zfNS5xmD58Wd8gVDwVrroulabAdvKck6ib/U6w55VqhYbk0Enjht+OUiiQ==
-X-Received: by 2002:a05:6102:ed5:: with SMTP id m21mr7381704vst.56.1642426200221;
-        Mon, 17 Jan 2022 05:30:00 -0800 (PST)
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
-        by smtp.gmail.com with ESMTPSA id s32sm3526190uas.3.2022.01.17.05.29.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 05:29:59 -0800 (PST)
-Received: by mail-vk1-f169.google.com with SMTP id 191so10375349vkc.1;
-        Mon, 17 Jan 2022 05:29:59 -0800 (PST)
-X-Received: by 2002:ac5:c967:: with SMTP id t7mr8120473vkm.20.1642426198916;
- Mon, 17 Jan 2022 05:29:58 -0800 (PST)
+        Mon, 17 Jan 2022 08:30:43 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E1C061574;
+        Mon, 17 Jan 2022 05:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DEDlOvAxf5W8MkgN2U6MW75EWRQeMQMQaovnQRcgffo=; b=sWeOK+ACOkqqrSHFGcOcHtqNUt
+        affW2E23Y5H4gus5QTI9RNzR2H8EFMA+ssyXPEH7r0ChvHKzzQZMM6GhvSo9Y6sSIYLuUHknRms35
+        r4m4Ukllxqdjth6/xEcNDXSsNRIKty4SfiLeQ8WlVQaGLQ9nHIgFuvZKcOEU2QaAvMn3xKQx8Is36
+        wrlnbO+VINuUCt6Ifo4R91YldO2uIRPsLZbnaqNcpdpZpstOVzNqmwYWKYxnovCJ0GDEMR54Ffti6
+        jldfxY4Dt7+NOyW8Fv26ursPmOgw9jR1Mp4KN89hlw3J5Uicwo4lbSZWBnUkV7lQwn2lq4D66VNBa
+        0SAtDMtw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9S5F-008EUB-2d; Mon, 17 Jan 2022 13:30:05 +0000
+Date:   Mon, 17 Jan 2022 13:30:05 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Dave Wysochanski <dwysocha@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Omar Sandoval <osandov@osandov.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cachefs@redhat.com, CIFS <linux-cifs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Out of order read() completion and buffer filling beyond
+ returned amount
+Message-ID: <YeVvXToTxCsMzHZv@casper.infradead.org>
+References: <2752208.1642413437@warthog.procyon.org.uk>
+ <CAHk-=wjQG5HnwQD98z8de1EvRzDnebZxh=gQUVTKCn0DOp7PQw@mail.gmail.com>
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
-In-Reply-To: <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Jan 2022 14:29:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
-Message-ID: <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjQG5HnwQD98z8de1EvRzDnebZxh=gQUVTKCn0DOp7PQw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gerd,
+On Mon, Jan 17, 2022 at 12:19:29PM +0200, Linus Torvalds wrote:
+> On Mon, Jan 17, 2022 at 11:57 AM David Howells <dhowells@redhat.com> wrote:
+> >
+> > Do you have an opinion on whether it's permissible for a filesystem to write
+> > into the read() buffer beyond the amount it claims to return, though still
+> > within the specified size of the buffer?
+> 
+> I'm pretty sure that would seriously violate POSIX in the general
+> case, and maybe even break some programs that do fancy buffer
+> management (ie I could imagine some circular buffer thing that expects
+> any "unwritten" ('unread'?) parts to stay with the old contents)
+> 
+> That said, that's for generic 'read()' cases for things like tty's or
+> pipes etc that can return partial reads in the first place.
+> 
+> If it's a regular file, then any partial read *already* violates
+> POSIX, and nobody sane would do any such buffer management because
+> it's supposed to be a 'can't happen' thing.
+> 
+> And since you mention DIO, that's doubly true, and is already outside
+> basic POSIX, and has already violated things like "all or nothing"
+> rules for visibility of writes-vs-reads (which admittedly most Linux
+> filesystems have violated even outside of DIO, since the strictest
+> reading of the rules are incredibly nasty anyway). But filesystems
+> like XFS which took some of the strict rules more seriously already
+> ignored them for DIO, afaik.
 
-On Mon, Jan 17, 2022 at 1:57 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
-> > b) to include new drivers (for old hardware) if they arrive (probably happens rarely but there can be).
-> >    I know of at least one driver which won't be able to support DRM....
->
-> Hmm?  I seriously doubt that.  There is always the option to use a
-> shadow framebuffer, then convert from standard drm formats to whatever
-> esoteric pixel format your hardware expects.
->
-> Been there, done that.  Have a look at the cirrus driver.  The physical
-> hardware was designed in the early 90-ies, almost 30 years ago.  These
-> days it exists in virtual form only (qemu emulates it).  Thanks to the
-> drm driver it runs wayland just fine even though it has a bunch of
-> constrains dictated by the hardware design.
-
-The Cirrus DRM driver supports TrueColor (RGB565/888 and ARGB8888)
-modes only.  The Cirrus fbdev driver also supports mochrome and 256
-color modes.
-
-There exist some DRM drivers that do support DRM_FORMAT_C8, but none of
-the "tiny" ones do. Same for DRM_FORMAT_RGB{332,233}.  Using a shadow
-frame buffer to convert from truecolor to 256 colors would be doable,
-but would give bad results. And what about less colors?
-Adding support for e.g. DRM_FORMAT_C4 is not straight-forward, as
-the DRM core assumes in many places that a pixel is at least 1 byte,
-and would crash otherwise (yes I tried).  Other modes needed are
-DRM_FORMAT_Y4 and DRM_FORMAT_{BW,WB} (monochrome).
-This not only to support "old" hardware, but also modern small OLED
-and e-ink displays.
-
-On the positive side: DRM would force e.g. the Amiga and Atari
-bitplane formats to become internal to the kernel driver, with the
-kernel driver converting from packed pixels to bitplanes.  Hence
-userspace would no longer have to care about bitplanes.
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I think for DIO, you're sacrificing the entire buffer with any filesystem.
+If the underlying file is split across multiple drives, or is even
+just fragmented on a single drive, we'll submit multiple BIOs which
+will complete independently (even for SCSI which writes sequentially;
+never mind NVMe which can DMA blocks asynchronously).  It might be
+more apparent in a networking situation where errors are more common,
+but it's always been a possibility since Linux introduced DIO.

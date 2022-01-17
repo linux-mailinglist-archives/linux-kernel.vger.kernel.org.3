@@ -2,299 +2,488 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7112B490FBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216C0490FCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238344AbiAQRgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:36:51 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26772 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235412AbiAQRgu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:36:50 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20HHSepN014901;
-        Mon, 17 Jan 2022 17:36:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=fZQkE1DDasLMmh67inIsfaJeHVo2qdPvkpXmCpfqNuE=;
- b=DKF4Jo3eyo1lj4erSAbgI0goTpdxKEmR97dDYeFvG1HdzdsQzoNwUzaOGRC/48P2dEEj
- evvpXqa2QYf4cTKxfuDQwW6MElxXFJ3rhzatBDf/YfWESlmUjKtoPm0XBA0m7rCi++jJ
- 3p3LxExHflpFwWEJ2FAgnFqtK5CaYHYEp7/p6VGECLIURPzhfhQRPe7vk/oU6xhtU0WN
- t3Hx6sL9LSEgqYom49zAOOzt1n8EXC49Q6w1ohSFenB9nITJA2TO4YnXm5wsCDFn48fF
- i+rlLbLA36qjKJsAc3d4DNvzg7LudRKhC/Lhf6C4DZ/WVELb5Zi11hmnFV13cBzMoYDp Sg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dncvwr3sm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 17:36:49 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20HHStxd015284;
-        Mon, 17 Jan 2022 17:36:48 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dncvwr3s9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 17:36:48 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HHXGaK025393;
-        Mon, 17 Jan 2022 17:36:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dknw8xa7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 17:36:46 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HHafrF29557016
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jan 2022 17:36:41 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 473B44C046;
-        Mon, 17 Jan 2022 17:36:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F03E54C044;
-        Mon, 17 Jan 2022 17:36:39 +0000 (GMT)
-Received: from [9.171.80.201] (unknown [9.171.80.201])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Jan 2022 17:36:39 +0000 (GMT)
-Message-ID: <956b3be4-2792-7bd9-e735-bb2d9ea3b8da@linux.ibm.com>
-Date:   Mon, 17 Jan 2022 18:38:23 +0100
+        id S235466AbiAQRnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:43:47 -0500
+Received: from mail-mw2nam12on2070.outbound.protection.outlook.com ([40.107.244.70]:61588
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241269AbiAQRnp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:43:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oRmyFLAjURIDdpezhfj1Wuu4dQtYNZnwQprHJS1LjbuT9HigvQgZb1oPSw+SmjDCTvCRg/HlB1YmpWLOdIkYzO8zHyKVS69EhdctBvSTW6uZZsMABbU+RqcwLpqY/775XD/M29RP7o/I6ZVcES8cGM+D3zikk8YOKgkB3HQwvQhjg4DH4wAi2fgKATDoas5/g2/3e3g47a43XHKat+snRVXFP+kwvtsjMTfG401pHozpVuu3an73EiRDW+V5qdRoHW+EJxE1PeZVkjAXm8xUrQ1fwLGYEse7p+KWqggJ0of0j6CaoAh8XgFnZCjy1p4txCb2bG/t/rCFowxsjgJ3qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2GD6B655wP7i7H7GAMRac4Y0wl5N+anzOhY92hAHKAA=;
+ b=fmsQrXo3JSwu3+ACA/31R9FtrtLC6vg9D6XLfgbQmLzXSvOhI+XKB9VhlmNYaDdQwU+qM5A+i8Vwo40NWX9v3tPVMC4sVzOq4+ZSb0E594DOvXYxkzp9E3oxAzGhjWTJ3UOMp6izj6V9VWi8p8C9mJlSgysBVeFWDquCTxx9eRC3oAphhwCOktjBT/T3V81WqrF3IG76k8H+MhKu/1Qv7cykdRphUZNfY41NpEbKbnXxLXW1k9iMZDijTi/zm9wD7JnBL5nWKHwo04Agp64bpMjuVUtwsyxOOZXNSemJ4gMTQmID+hpSyPOrGFwc22mG1W4ocI08kLC9tEflYznfVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2GD6B655wP7i7H7GAMRac4Y0wl5N+anzOhY92hAHKAA=;
+ b=G+jF4kDuNmANCoQJhjcVTh126DHf/iVr1HoI96u7X/HcTrl+7XO0OnsQC80UPxkblaENZAw71g2D4r7S3ssOiM9wWFvE52Hbne6Pfkakxvjz9QGF0vkqs4uzUV53kQXv+ieyI+wr+RDFZpzdMG5WeFlDK35HN2/dmN1BrmT8JQY=
+Received: from BN9PR03CA0089.namprd03.prod.outlook.com (2603:10b6:408:fc::34)
+ by BN8PR02MB5796.namprd02.prod.outlook.com (2603:10b6:408:b8::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Mon, 17 Jan
+ 2022 17:43:41 +0000
+Received: from BN1NAM02FT034.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:fc:cafe::2a) by BN9PR03CA0089.outlook.office365.com
+ (2603:10b6:408:fc::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
+ Transport; Mon, 17 Jan 2022 17:43:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT034.mail.protection.outlook.com (10.13.2.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4888.9 via Frontend Transport; Mon, 17 Jan 2022 17:43:40 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 17 Jan 2022 09:43:40 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 17 Jan 2022 09:43:40 -0800
+Envelope-to: dwmw2@infradead.org,
+ robh@kernel.org,
+ mdf@kernel.org,
+ trix@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ yilun.xu@intel.com
+Received: from [10.17.2.60] (port=43594)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1n9W2e-00046U-ET; Mon, 17 Jan 2022 09:43:40 -0800
+Subject: Re: [PATCH V4 XRT Alveo Infrastructure 5/5] fpga: xrt: management
+ physical function driver
+To:     Xu Yilun <yilun.xu@intel.com>, Lizhi Hou <lizhi.hou@xilinx.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <maxz@xilinx.com>, <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
+        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
+        <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
+        <robh@kernel.org>, <dwmw2@infradead.org>,
+        Max Zhen <max.zhen@xilinx.com>
+References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
+ <20220105225013.1567871-6-lizhi.hou@xilinx.com>
+ <20220111070000.GC979169@yilunxu-OptiPlex-7050>
+ <446d9abb-b1ee-b0e7-9c48-aa7e960ec1e9@xilinx.com>
+ <20220114014339.GA1027147@yilunxu-OptiPlex-7050>
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+Message-ID: <cd6210bb-2189-eace-0522-da4b338110c9@xilinx.com>
+Date:   Mon, 17 Jan 2022 09:43:40 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 16/30] KVM: s390: pci: enable host forwarding of
- Adapter Event Notifications
+In-Reply-To: <20220114014339.GA1027147@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-17-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220114203145.242984-17-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 14FouNZBSBztx-rECwU7GPTdBe8Bdtme
-X-Proofpoint-ORIG-GUID: INkELJlpe7lClCHEnC5BP1m5otsOYnd4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_07,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 clxscore=1015 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201170109
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aaa19602-e214-4d9a-cf9f-08d9d9e0e663
+X-MS-TrafficTypeDiagnostic: BN8PR02MB5796:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR02MB57963EBA269CE742528D418FA1579@BN8PR02MB5796.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hw4z/aIO+NDPjIy5GxD6GQV/aC/WLnGwlDkCTNPsTfS8XHre1vUg4nAUGwOeNLyxyzUnzu3z63givcdGeakIRvCRTo6SEpkNduoqUlwcMbyILpCL673jQXQE1CTz6kxglni43WNyuVGglL1JcyyMNwoHedGMSIOuHfHXy9zhjVv5LyGW9TDMLm1ODYTMvBvce36YPMrTna87oegWCUUggb9OUm12zjo5EJwSqv2BUsLvrcex3/o/TSCXBHdr1a+wpBaoLPZFzbzLTJCGPNyaSgnLm8iUItiiAWUmuJHq6yvGlxRXRjqyLoVcUZ9gmFedfHwKdegUlxffvBcbgPiVvc7ZLCFgtVd8fuERtmeHwcx66TvkDtueRHbDNIFj59uMHN20yJYdsa1cHLBOZUGG553pUmpKBFFZm6vK6hoCc0GJ3aTkNV4/up+avAIgdsqRphZqbEkH9F6qqGRuhzknwN8K5N59g2PqNXCW4cjyD+VyXSCc0jFckp0lkoIszHCfjR86pjpluXNszN+Cm8YdIpeW5xTlzwmRNCr3y/oKsMyfwdNnoDCvgnqiNiz3LYD8BbbtJFmIKELJlMHJmC+HyJom/oy/3xpUnHK19CxUIGz2DZt/uyY5tZCDI1Br+n2NfyhW46g1qRzq9aoB+/kCb03kAy5etccqyTQJqoyNqS2brA09A+CBLVOEcp0qKrmd2JPWmmLh3zFgQClu98A3KvCgx76+OBolJ/ch4tGOr1CIEIjmDlgoL6XGjwsLR/Nv8k/nHCk5cpFhNnBHOkKG9Y6oL3GQjB1jWvzhEJhscgFFHlUAgU8u+UMOPABlGonFxeQo8KVKGFhjUWIvzBVP3w==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(110136005)(8676002)(36860700001)(2906002)(316002)(36756003)(966005)(508600001)(356005)(336012)(53546011)(31696002)(186003)(83380400001)(9786002)(47076005)(5660300002)(7636003)(4326008)(426003)(70206006)(54906003)(26005)(82310400004)(30864003)(31686004)(107886003)(2616005)(70586007)(44832011)(8936002)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 17:43:40.9119
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aaa19602-e214-4d9a-cf9f-08d9d9e0e663
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT034.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5796
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 1/13/22 5:43 PM, Xu Yilun wrote:
+> On Thu, Jan 13, 2022 at 03:41:47PM -0800, Lizhi Hou wrote:
+>> On 1/10/22 11:00 PM, Xu Yilun wrote:
+>>> =
+>>>
+>>> On Wed, Jan 05, 2022 at 02:50:13PM -0800, Lizhi Hou wrote:
+>>>> The PCIE device driver which attaches to management function on Alveo
+>>>> devices. It instantiates one or more partition. Each partition consists
+>>>> a set of hardward endpoints. A flat device tree is associated with each
+>>>> partition. The first version of this driver uses test version flat device
+>>>> tree and call xrt lib API to unflatten it.
+>>>>
+>>>> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+>>>> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+>>>> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+>>>> ---
+>>>>    drivers/fpga/Makefile             |   1 +
+>>>>    drivers/fpga/xrt/Kconfig          |   1 +
+>>>>    drivers/fpga/xrt/mgmt/Kconfig     |  14 +++
+>>>>    drivers/fpga/xrt/mgmt/Makefile    |  16 +++
+>>>>    drivers/fpga/xrt/mgmt/dt-test.dts |  12 +++
+>>>>    drivers/fpga/xrt/mgmt/dt-test.h   |  15 +++
+>>>>    drivers/fpga/xrt/mgmt/xmgmt-drv.c | 158 ++++++++++++++++++++++++++++++
+>>>>    7 files changed, 217 insertions(+)
+>>>>    create mode 100644 drivers/fpga/xrt/mgmt/Kconfig
+>>>>    create mode 100644 drivers/fpga/xrt/mgmt/Makefile
+>>>>    create mode 100644 drivers/fpga/xrt/mgmt/dt-test.dts
+>>>>    create mode 100644 drivers/fpga/xrt/mgmt/dt-test.h
+>>>>    create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-drv.c
+>>>>
+>>>> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+>>>> index 5bd41cf4c7ec..544e2144878f 100644
+>>>> --- a/drivers/fpga/Makefile
+>>>> +++ b/drivers/fpga/Makefile
+>>>> @@ -52,3 +52,4 @@ obj-$(CONFIG_FPGA_DFL_PCI)          += dfl-pci.o
+>>>>
+>>>>    # XRT drivers for Alveo
+>>>>    obj-$(CONFIG_FPGA_XRT_LIB)           += xrt/lib/
+>>>> +obj-$(CONFIG_FPGA_XRT_XMGMT)         += xrt/mgmt/
+>>>> diff --git a/drivers/fpga/xrt/Kconfig b/drivers/fpga/xrt/Kconfig
+>>>> index 04c3bb5aaf4f..50422f77c6df 100644
+>>>> --- a/drivers/fpga/xrt/Kconfig
+>>>> +++ b/drivers/fpga/xrt/Kconfig
+>>>> @@ -4,3 +4,4 @@
+>>>>    #
+>>>>
+>>>>    source "drivers/fpga/xrt/lib/Kconfig"
+>>>> +source "drivers/fpga/xrt/mgmt/Kconfig"
+>>>> diff --git a/drivers/fpga/xrt/mgmt/Kconfig b/drivers/fpga/xrt/mgmt/Kconfig
+>>>> new file mode 100644
+>>>> index 000000000000..a978747482be
+>>>> --- /dev/null
+>>>> +++ b/drivers/fpga/xrt/mgmt/Kconfig
+>>>> @@ -0,0 +1,14 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0-only
+>>>> +#
+>>>> +# Xilinx XRT FPGA device configuration
+>>>> +#
+>>>> +
+>>>> +config FPGA_XRT_XMGMT
+>>>> +     tristate "Xilinx Alveo Management Driver"
+>>>> +     depends on FPGA_XRT_LIB
+>>>> +     select FPGA_BRIDGE
+>>>> +     select FPGA_REGION
+>>>> +     help
+>>>> +       Select this option to enable XRT PCIe driver for Xilinx Alveo FPGA.
+>>>> +       This driver provides interfaces for userspace application to access
+>>>> +       Alveo FPGA device.
+>>>> diff --git a/drivers/fpga/xrt/mgmt/Makefile b/drivers/fpga/xrt/mgmt/Makefile
+>>>> new file mode 100644
+>>>> index 000000000000..c5134bf71cca
+>>>> --- /dev/null
+>>>> +++ b/drivers/fpga/xrt/mgmt/Makefile
+>>>> @@ -0,0 +1,16 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0
+>>>> +#
+>>>> +# Copyright (C) 2020-2022 Xilinx, Inc. All rights reserved.
+>>>> +#
+>>>> +# Authors: Sonal.Santan@xilinx.com
+>>>> +#
+>>>> +
+>>>> +FULL_XRT_PATH=$(srctree)/$(src)/..
+>>>> +
+>>>> +obj-$(CONFIG_FPGA_XRT_LIB) += xrt-mgmt.o
+>>>> +
+>>>> +xrt-mgmt-objs :=             \
+>>>> +     xmgmt-drv.o             \
+>>>> +     dt-test.dtb.o
+>>>> +
+>>>> +ccflags-y := -I$(FULL_XRT_PATH)/include
+>>>> diff --git a/drivers/fpga/xrt/mgmt/dt-test.dts b/drivers/fpga/xrt/mgmt/dt-test.dts
+>>>> new file mode 100644
+>>>> index 000000000000..68dbcb7fd79d
+>>>> --- /dev/null
+>>>> +++ b/drivers/fpga/xrt/mgmt/dt-test.dts
+>>>> @@ -0,0 +1,12 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +/dts-v1/;
+>>>> +
+>>>> +/ {
+>>>> +     compatible = "xlnx,alveo-partition", "simple-bus";
+>>>> +     #address-cells = <2>;
+>>>> +     #size-cells = <2>;
+>>>> +     pr_isolate_ulp@0,41000 {
+>>>> +             compatible = "xlnx,alveo-pr-isolation";
+>>>> +             reg = <0x0 0x41000 0x0 0x1000>;
+>>>> +     };
+>>>> +};
+>>> I remember Rob's comments:
+>>>
+>>> "we'd need to create a base tree (if there isn't one) with nodes
+>>> for the USB or PCI device(s) and then an overlay for the device can be
+>>> applied to those nodes."
+>>>
+>>> https://lore.kernel.org/linux-fpga/CAL_JsqJfyRymB=VxLuQqLpep+Q1Eie48dobv9sC5OizDz0d2DQ@mail.gmail.com/
+>>>
+>>> So could we firstly create a pci device node under the of_root when
+>>> the driver probing, then add the partition DTs under the pci device node
+>>> by overlay machenism.
+>>>
+>>> I'm considering if finally we could leverage the existing of-fpga-region
+>>> that reprograms and enumerates FPGA sub devices by overlay.
+>>>
+>>> Open for discussion.
+>> I would list the main ideas of our implementation
+>>
+>> 1. “alveo-partition (simple-bus)” node is created under of_root in xmgmt
+>> probe function. “simple-bus” is used as it fits well and we can modify it to
+>> “fpga-region” when we refactor fpga-mgr/region/bridge part.
+> OK. "fpga-region" for an independent reprogramable region. And
+> "simple-bus" for static board components.
+>
+>> 2. we are the first pcie device using flatten device tree to describe sub
+>> devices. Adding device tree nodes for all pcie device sounds intrusive. We
+>> can expend to all pcie device when we have another user of this feature.
+> I don't mean we create DT nodes for all pcie devices in system, it is the
+> device driver's choice to create the node for DT style enumeration of its
+> sub devices. This is mainly for pcie based fpga cards. Now there exsits
+Glad to know this.
+> plenty of these cards in the world, and the enumeration of their sub
+> devices could be a common concern. I think it's good we have a clear
+> design at the beginning.
 
-On 1/14/22 21:31, Matthew Rosato wrote:
-> In cases where interrupts are not forwarded to the guest via firmware,
-> KVM is responsible for ensuring delivery.  When an interrupt presents
-> with the forwarding bit, we must process the forwarding tables until
-> all interrupts are delivered.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/asm/kvm_host.h |  1 +
->   arch/s390/include/asm/tpi.h      | 13 ++++++
->   arch/s390/kvm/interrupt.c        | 76 +++++++++++++++++++++++++++++++-
->   arch/s390/kvm/kvm-s390.c         |  3 +-
->   arch/s390/kvm/pci.h              |  9 ++++
->   5 files changed, 100 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index a604d51acfc8..3f147b8d050b 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -757,6 +757,7 @@ struct kvm_vm_stat {
->   	u64 inject_pfault_done;
->   	u64 inject_service_signal;
->   	u64 inject_virtio;
-> +	u64 aen_forward;
->   };
->   
->   struct kvm_arch_memory_slot {
-> diff --git a/arch/s390/include/asm/tpi.h b/arch/s390/include/asm/tpi.h
-> index 1ac538b8cbf5..f76e5fdff23a 100644
-> --- a/arch/s390/include/asm/tpi.h
-> +++ b/arch/s390/include/asm/tpi.h
-> @@ -19,6 +19,19 @@ struct tpi_info {
->   	u32 :12;
->   } __packed __aligned(4);
->   
-> +/* I/O-Interruption Code as stored by TPI for an Adapter I/O */
-> +struct tpi_adapter_info {
-> +	u32 aism:8;
-> +	u32 :22;
-> +	u32 error:1;
-> +	u32 forward:1;
-> +	u32 reserved;
-> +	u32 adapter_IO:1;
-> +	u32 directed_irq:1;
-> +	u32 isc:3;
-> +	u32 :27;
-> +} __packed __aligned(4);
-> +
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _ASM_S390_TPI_H */
-> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-> index a591b8cd662f..07743c6a67c4 100644
-> --- a/arch/s390/kvm/interrupt.c
-> +++ b/arch/s390/kvm/interrupt.c
-> @@ -3263,11 +3263,85 @@ int kvm_s390_gisc_unregister(struct kvm *kvm, u32 gisc)
->   }
->   EXPORT_SYMBOL_GPL(kvm_s390_gisc_unregister);
->   
-> +static void aen_host_forward(unsigned long si)
-> +{
-> +	struct kvm_s390_gisa_interrupt *gi;
-> +	struct zpci_gaite *gaite;
-> +	struct kvm *kvm;
-> +
-> +	gaite = (struct zpci_gaite *)aift->gait +
-> +		(si * sizeof(struct zpci_gaite));
-> +	if (gaite->count == 0)
-> +		return;
-> +	if (gaite->aisb != 0)
-> +		set_bit_inv(gaite->aisbo, (unsigned long *)gaite->aisb);
-> +
-> +	kvm = kvm_s390_pci_si_to_kvm(aift, si);
-> +	if (kvm == 0)
-> +		return;
-> +	gi = &kvm->arch.gisa_int;
-> +
-> +	if (!(gi->origin->g1.simm & AIS_MODE_MASK(gaite->gisc)) ||
-> +	    !(gi->origin->g1.nimm & AIS_MODE_MASK(gaite->gisc))) {
-> +		gisa_set_ipm_gisc(gi->origin, gaite->gisc);
-> +		if (hrtimer_active(&gi->timer))
-> +			hrtimer_cancel(&gi->timer);
-> +		hrtimer_start(&gi->timer, 0, HRTIMER_MODE_REL);
-> +		kvm->stat.aen_forward++;
-> +	}
-> +}
-> +
-> +static void aen_process_gait(u8 isc)
-> +{
-> +	bool found = false, first = true;
-> +	union zpci_sic_iib iib = {{0}};
-> +	unsigned long si, flags;
-> +
-> +	spin_lock_irqsave(&aift->gait_lock, flags);
-> +
-> +	if (!aift->gait) {
-> +		spin_unlock_irqrestore(&aift->gait_lock, flags);
-> +		return;
-> +	}
-> +
-> +	for (si = 0;;) {
-> +		/* Scan adapter summary indicator bit vector */
-> +		si = airq_iv_scan(aift->sbv, si, airq_iv_end(aift->sbv));
-> +		if (si == -1UL) {
-> +			if (first || found) {
-> +				/* Reenable interrupts. */
-> +				if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, isc,
-> +						      &iib))
-> +					break;
+For single Alveo card on system, we are thinking this structure
 
-AFAIU this code is VFIO interpretation specific code and facility 12 is 
-a precondition for it, so I think this break will never occur.
-If I am right we should not test the return value which will make the 
-code clearer.
+of_root -----alveo-part@0 (simple-bus or fpga-region)
 
-> +				first = found = false;
-> +			} else {
-> +				/* Interrupts on and all bits processed */
-> +				break;
-> +			}
+              |---alveo-part@1 (fpga-region or fpga-region)
 
-May be add a comment: "rescan after re-enabling interrupts"
+               .....
 
-> +			found = false;
-> +			si = 0;
-> +			continue;
-> +		}
-> +		found = true;
-> +		aen_host_forward(si);
-> +	}
-> +
-> +	spin_unlock_irqrestore(&aift->gait_lock, flags);
-> +}
-> +
->   static void gib_alert_irq_handler(struct airq_struct *airq,
->   				  struct tpi_info *tpi_info)
->   {
-> +	struct tpi_adapter_info *info = (struct tpi_adapter_info *)tpi_info;
-> +
->   	inc_irq_stat(IRQIO_GAL);
-> -	process_gib_alert_list();
-> +
-> +	if (IS_ENABLED(CONFIG_PCI) && (info->forward || info->error)) {
-> +		aen_process_gait(info->isc);
-> +		if (info->aism != 0)
-> +			process_gib_alert_list();
-> +	} else
-> +		process_gib_alert_list();
+Are you suggesting to add a pcie device layer. e.g.
 
-NIT: I think we need braces around this statement
+of_root----alveo-fpga@<addr>----alveo-part@0
 
->   }
->   
->   static struct airq_struct gib_alert_irq = {
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 01dc3f6883d0..ab8b56deed11 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -65,7 +65,8 @@ const struct _kvm_stats_desc kvm_vm_stats_desc[] = {
->   	STATS_DESC_COUNTER(VM, inject_float_mchk),
->   	STATS_DESC_COUNTER(VM, inject_pfault_done),
->   	STATS_DESC_COUNTER(VM, inject_service_signal),
-> -	STATS_DESC_COUNTER(VM, inject_virtio)
-> +	STATS_DESC_COUNTER(VM, inject_virtio),
-> +	STATS_DESC_COUNTER(VM, aen_forward)
->   };
->   
->   const struct kvm_stats_header kvm_vm_stats_header = {
-> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
-> index b2000ed7b8c3..387b637863c9 100644
-> --- a/arch/s390/kvm/pci.h
-> +++ b/arch/s390/kvm/pci.h
-> @@ -12,6 +12,7 @@
->   
->   #include <linux/pci.h>
->   #include <linux/mutex.h>
-> +#include <linux/kvm_host.h>
->   #include <asm/airq.h>
->   #include <asm/kvm_pci.h>
->   
-> @@ -34,6 +35,14 @@ struct zpci_aift {
->   
->   extern struct zpci_aift *aift;
->   
-> +static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
-> +						 unsigned long si)
-> +{
-> +	if (!IS_ENABLED(CONFIG_PCI) || aift->kzdev == 0 || aift->kzdev[si] == 0)
+                                                  |--alveo-part@1
 
-Shouldn't it be better CONFIG_VFIO_PCI ?
 
-> +		return 0;
-> +	return aift->kzdev[si]->kvm;
-> +};
-> +
->   int kvm_s390_pci_aen_init(u8 nisc);
->   void kvm_s390_pci_aen_exit(void);
->   
-> 
+Thanks,
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Lizhi
+
+>
+>> 3. of_overlay_fdt_apply() does not support overlaying to a dynamic generated
+> Yes that's the problem we have.
+>
+>> parent node. Thus, we use of_dynamic functions of_changeset_attach_node()
+>> instead. (similar to drivers/pci/hotplug/pnv_php.c,) . If needed ,we can
+>> consider to add parameter “parent node” to of_overlay_fdt_apply() to support
+>> dynamical overlay case.
+> I agree we do some investigation for this.
+>
+> Thanks,
+> Yilun
+>
+>>
+>> Thanks,
+>>
+>> Lizhi
+>>
+>>> Thanks,
+>>> Yilun
+>>>
+>>>> diff --git a/drivers/fpga/xrt/mgmt/dt-test.h b/drivers/fpga/xrt/mgmt/dt-test.h
+>>>> new file mode 100644
+>>>> index 000000000000..6ec4203afbd2
+>>>> --- /dev/null
+>>>> +++ b/drivers/fpga/xrt/mgmt/dt-test.h
+>>>> @@ -0,0 +1,15 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>> +/*
+>>>> + * Copyright (C) 2020-2022 Xilinx, Inc.
+>>>> + *
+>>>> + * Authors:
+>>>> + *   Lizhi Hou <lizhih@xilinx.com>
+>>>> + */
+>>>> +
+>>>> +#ifndef _DT_TEST_H_
+>>>> +#define _DT_TEST_H_
+>>>> +
+>>>> +extern u8 __dtb_dt_test_begin[];
+>>>> +extern u8 __dtb_dt_test_end[];
+>>>> +
+>>>> +#endif       /* _DT_TEST_H_ */
+>>>> diff --git a/drivers/fpga/xrt/mgmt/xmgmt-drv.c b/drivers/fpga/xrt/mgmt/xmgmt-drv.c
+>>>> new file mode 100644
+>>>> index 000000000000..87abe5b86e0b
+>>>> --- /dev/null
+>>>> +++ b/drivers/fpga/xrt/mgmt/xmgmt-drv.c
+>>>> @@ -0,0 +1,158 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +/*
+>>>> + * Xilinx Alveo Management Function Driver
+>>>> + *
+>>>> + * Copyright (C) 2020-2022 Xilinx, Inc.
+>>>> + *
+>>>> + * Authors:
+>>>> + *   Cheng Zhen <maxz@xilinx.com>
+>>>> + *   Lizhi Hou <lizhih@xilinx.com>
+>>>> + */
+>>>> +
+>>>> +#include <linux/module.h>
+>>>> +#include <linux/pci.h>
+>>>> +#include <linux/aer.h>
+>>>> +#include <linux/vmalloc.h>
+>>>> +#include <linux/delay.h>
+>>>> +#include "xpartition.h"
+>>>> +#include "dt-test.h"
+>>>> +
+>>>> +#define XMGMT_MODULE_NAME    "xrt-mgmt"
+>>>> +
+>>>> +#define XMGMT_PDEV(xm)               ((xm)->pdev)
+>>>> +#define XMGMT_DEV(xm)                (&(XMGMT_PDEV(xm)->dev))
+>>>> +#define xmgmt_err(xm, fmt, args...)  \
+>>>> +     dev_err(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>>> +#define xmgmt_warn(xm, fmt, args...) \
+>>>> +     dev_warn(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>>> +#define xmgmt_info(xm, fmt, args...) \
+>>>> +     dev_info(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>>> +#define xmgmt_dbg(xm, fmt, args...)  \
+>>>> +     dev_dbg(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
+>>>> +#define XMGMT_DEV_ID(_pcidev)                        \
+>>>> +     ({ typeof(_pcidev) (pcidev) = (_pcidev);        \
+>>>> +     ((pci_domain_nr((pcidev)->bus) << 16) | \
+>>>> +     PCI_DEVID((pcidev)->bus->number, (pcidev)->devfn)); })
+>>>> +
+>>>> +#define XRT_MAX_READRQ               512
+>>>> +
+>>>> +/* PCI Device IDs */
+>>>> +#define PCI_DEVICE_ID_U50            0x5020
+>>>> +static const struct pci_device_id xmgmt_pci_ids[] = {
+>>>> +     { PCI_DEVICE(PCI_VENDOR_ID_XILINX, PCI_DEVICE_ID_U50), }, /* Alveo U50 */
+>>>> +     { 0, }
+>>>> +};
+>>>> +
+>>>> +struct xmgmt {
+>>>> +     struct pci_dev *pdev;
+>>>> +     void *base_partition;
+>>>> +
+>>>> +     bool ready;
+>>>> +};
+>>>> +
+>>>> +static int xmgmt_config_pci(struct xmgmt *xm)
+>>>> +{
+>>>> +     struct pci_dev *pdev = XMGMT_PDEV(xm);
+>>>> +     int rc;
+>>>> +
+>>>> +     rc = pcim_enable_device(pdev);
+>>>> +     if (rc < 0) {
+>>>> +             xmgmt_err(xm, "failed to enable device: %d", rc);
+>>>> +             return rc;
+>>>> +     }
+>>>> +
+>>>> +     rc = pci_enable_pcie_error_reporting(pdev);
+>>>> +     if (rc)
+>>>> +             xmgmt_warn(xm, "failed to enable AER: %d", rc);
+>>>> +
+>>>> +     pci_set_master(pdev);
+>>>> +
+>>>> +     rc = pcie_get_readrq(pdev);
+>>>> +     if (rc > XRT_MAX_READRQ)
+>>>> +             pcie_set_readrq(pdev, XRT_MAX_READRQ);
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>> +static int xmgmt_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>>>> +{
+>>>> +     struct xrt_partition_range ranges[PCI_NUM_RESOURCES];
+>>>> +     struct xrt_partition_info xp_info = { 0 };
+>>>> +     struct device *dev = &pdev->dev;
+>>>> +     int ret, i, idx = 0;
+>>>> +     struct xmgmt *xm;
+>>>> +
+>>>> +     xm = devm_kzalloc(dev, sizeof(*xm), GFP_KERNEL);
+>>>> +     if (!xm)
+>>>> +             return -ENOMEM;
+>>>> +     xm->pdev = pdev;
+>>>> +     pci_set_drvdata(pdev, xm);
+>>>> +
+>>>> +     ret = xmgmt_config_pci(xm);
+>>>> +     if (ret)
+>>>> +             goto failed;
+>>>> +
+>>>> +     for (i = 0; i < PCI_NUM_RESOURCES; i++) {
+>>>> +             if (pci_resource_len(pdev, i) > 0) {
+>>>> +                     ranges[idx].bar_idx = i;
+>>>> +                     ranges[idx].base = pci_resource_start(pdev, i);
+>>>> +                     ranges[idx].size = pci_resource_len(pdev, i);
+>>>> +                     idx++;
+>>>> +             }
+>>>> +     }
+>>>> +     xp_info.num_range = idx;
+>>>> +     xp_info.ranges = ranges;
+>>>> +     xp_info.fdt = __dtb_dt_test_begin;
+>>>> +     xp_info.fdt_len = (u32)(__dtb_dt_test_end - __dtb_dt_test_begin);
+>>>> +     ret = xrt_partition_create(&pdev->dev, &xp_info, &xm->base_partition);
+>>>> +     if (ret)
+>>>> +             goto failed;
+>>>> +
+>>>> +     xmgmt_info(xm, "%s started successfully", XMGMT_MODULE_NAME);
+>>>> +     return 0;
+>>>> +
+>>>> +failed:
+>>>> +     if (xm->base_partition)
+>>>> +             xrt_partition_destroy(xm->base_partition);
+>>>> +     pci_set_drvdata(pdev, NULL);
+>>>> +     return ret;
+>>>> +}
+>>>> +
+>>>> +static void xmgmt_remove(struct pci_dev *pdev)
+>>>> +{
+>>>> +     struct xmgmt *xm = pci_get_drvdata(pdev);
+>>>> +
+>>>> +     xrt_partition_destroy(xm->base_partition);
+>>>> +     pci_disable_pcie_error_reporting(xm->pdev);
+>>>> +     xmgmt_info(xm, "%s cleaned up successfully", XMGMT_MODULE_NAME);
+>>>> +}
+>>>> +
+>>>> +static struct pci_driver xmgmt_driver = {
+>>>> +     .name = XMGMT_MODULE_NAME,
+>>>> +     .id_table = xmgmt_pci_ids,
+>>>> +     .probe = xmgmt_probe,
+>>>> +     .remove = xmgmt_remove,
+>>>> +};
+>>>> +
+>>>> +static int __init xmgmt_init(void)
+>>>> +{
+>>>> +     int res = 0;
+>>>> +
+>>>> +     res = pci_register_driver(&xmgmt_driver);
+>>>> +     if (res)
+>>>> +             return res;
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>> +static __exit void xmgmt_exit(void)
+>>>> +{
+>>>> +     pci_unregister_driver(&xmgmt_driver);
+>>>> +}
+>>>> +
+>>>> +module_init(xmgmt_init);
+>>>> +module_exit(xmgmt_exit);
+>>>> +
+>>>> +MODULE_DEVICE_TABLE(pci, xmgmt_pci_ids);
+>>>> +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
+>>>> +MODULE_DESCRIPTION("Xilinx Alveo management function driver");
+>>>> +MODULE_LICENSE("GPL v2");
+>>>> --
+>>>> 2.27.0

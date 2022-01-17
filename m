@@ -2,154 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DA5490566
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A62490571
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237678AbiAQJtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:49:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22095 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236027AbiAQJtW (ORCPT
+        id S237945AbiAQJwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:52:02 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42344 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235893AbiAQJwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:49:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642412961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 17 Jan 2022 04:52:00 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 345E41F398;
+        Mon, 17 Jan 2022 09:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642413119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=L6UhCfxh0kYRjvMOUSeeMixfl9rDKRgr6zR9cysLT+s=;
-        b=fc2Ia8mg4GOeqXs8KRvvBKt99VcEG2cbn/0hYTYVSYLe8fxyNTxZhYZqIUmBXgsVKorglX
-        pvWLVgmfj+5Sx6KjIvj/qJp2G/WRUB8s7TJa4ct7iQe2gMjVjoimv4TdtVQkAm5k9NJSzW
-        et7i1XmIj1oQyR3nQzA19qJCw7COPHo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-219-0-6hmoLiPGWWpD1fLwPpLg-1; Mon, 17 Jan 2022 04:49:20 -0500
-X-MC-Unique: 0-6hmoLiPGWWpD1fLwPpLg-1
-Received: by mail-ed1-f69.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso13671529edt.20
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:49:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L6UhCfxh0kYRjvMOUSeeMixfl9rDKRgr6zR9cysLT+s=;
-        b=r3WZh+V9YOdVj14wZ0b/FYBV6NXQjexWgZ5M/8nehkVBihKvqqiMDsug/HYyKJVGdb
-         zOcXzrv/bdEKi7DswV7OSDuqbQsixVd9dh6MXOicm6tw1OFV0S1eMgF7Yh/v25qc+HcM
-         4dcfs8WN6F/dZKTzDizV1d+xXgWyAntadnAxKVRHtUaSX4vjl5b8CAob6lM41fNt+ZIw
-         NjkKOqRaFFQZzMxCOG4Ngi4u64h94VpxfM9NGFpy3cSgshP/0wnGdWeWUSW6xbx6Djzz
-         vw41X3g2JnD32OByANGPVhGe8RMH7IOyLKxg2GbRygkXk5EeOk7r6gCLnjKgZyZCZ5vm
-         nb8w==
-X-Gm-Message-State: AOAM532mf1y+vpxVYjxGoaKs/HY2PhM1ApezkPZced6yawmO5bZZGF/1
-        jWhNJjGJnlBVoP1fsjYmXeBMvoqTYpr6ucLdjdj4YNGBJlGiS1hHCInochjkmJWoTmtMh6MZH2X
-        rsbdcxJf+N9Yc2e8ZO4SIco4V
-X-Received: by 2002:a05:6402:518d:: with SMTP id q13mr20011000edd.377.1642412959281;
-        Mon, 17 Jan 2022 01:49:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJznkw/kzkt83FlVdPD+srXP4wOHPNVBlFm7pWhqZcdQJh+8gc3cC8kPbTgfzRMPOGqkQtXbyA==
-X-Received: by 2002:a05:6402:518d:: with SMTP id q13mr20010987edd.377.1642412959116;
-        Mon, 17 Jan 2022 01:49:19 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id l8sm1650172edv.52.2022.01.17.01.49.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 01:49:18 -0800 (PST)
-Message-ID: <e49ac79d-eca1-e404-922b-48129f8a7e54@redhat.com>
-Date:   Mon, 17 Jan 2022 10:49:18 +0100
+        bh=QssX3qy45EBop2wt4yRjxi92IzoJivyohNdN3f5hNiw=;
+        b=kOhALxsMoJnaaXNJF63lQgEXwc4lNu56pgVFV5TAN+m6lg13Dq4yYHTkHckIvdaA6Ya5Vf
+        NJm/iD5oNpr+X9PIVlVDU6pDNPHGXY6T5vryFcfBmsRxVKYWK/SFIQ3ssrnwBYiMzSB00h
+        LnRSsgtEhcwrLCLdNULQWIV+mhyDwhg=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id ACA58A3B83;
+        Mon, 17 Jan 2022 09:51:58 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 10:51:58 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] lib/string_helpers: Use the given gfp flag when
+ allocating memory
+Message-ID: <YeU8PhtvvXIWtTk/@dhcp22.suse.cz>
+References: <30a0c2011f8034378639883339fa7d7c55e034a5.1642337349.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] platform/x86: intel_scu_ipc: Keep polling IPC status if
- it reads IPC_STATUS_ERR
-Content-Language: en-US
-To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "Westerberg, Mika" <mika.westerberg@intel.com>
-References: <20211230082353.2585-1-rajat.khandelwal@intel.com>
- <CO1PR11MB48359C6EC7DAC17F7FDD91D896459@CO1PR11MB4835.namprd11.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CO1PR11MB48359C6EC7DAC17F7FDD91D896459@CO1PR11MB4835.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30a0c2011f8034378639883339fa7d7c55e034a5.1642337349.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/30/21 09:30, Khandelwal, Rajat wrote:
-> Hi Mika
-> I hope this annotation is correct? Sorry for the multiple errors! 
+On Sun 16-01-22 13:49:22, Christophe JAILLET wrote:
+> kstrdup_quotable_cmdline() is given a gfp flag that is passed and used for
+> memory allocation in kstrdup_quotable() just a few lines below.
 > 
-> -----Original Message-----
-> From: Khandelwal, Rajat <rajat.khandelwal@intel.com> 
-> Sent: Thursday, December 30, 2021 1:54 PM
-> To: mika.westerberg@linux.intel.com
-> Cc: linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org; Khandelwal, Rajat <rajat.khandelwal@intel.com>; Westerberg, Mika <mika.westerberg@intel.com>
-> Subject: [PATCH] platform/x86: intel_scu_ipc: Keep polling IPC status if it reads IPC_STATUS_ERR
+> It looks reasonable to use this gfp value for the buffer allocated and
+> freed in kstrdup_quotable_cmdline() as well.
 > 
-> The current implementation returns -EIO if and when IPC_STATUS_ERR is returned and returns -ETIMEDOUT even if the status is busy.
-> This patch polls the IPC status even if IPC_STATUS_ERR is returned until timeout expires and returns -EBUSY if the status shows busy.
-> Observed in multiple scenarios, trying to fetch the status of IPC after it shows ERR sometimes eradicates the ERR status.
+> Fixes: 0ee931c4e31a ("mm: treewide: remove GFP_TEMPORARY allocation flag")
 
-So what this is doing is continue to poll,
-even though the SCU says it is ready,
-when the ERR bit is set ?
+I do not think this commit is changing much here. It just replaces
+GFP_TEMPORARY with GFP_KERNEL so the code has ignored the gfp mask even
+before that change.
 
-Are we sure the IPC does not just simply clear the err bit after some
-time becuse it expects it to be "consumed" within X msec after dropping
-busy low?
+All existing callers of kstrdup_quotable_cmdline use GFP_KERNEL so would
+it make more sense to simply drop the gfp argument altogether and use
+GFP_KERNEL internally?
 
-IOW what guarantees are there that this new behavior of ipc_data_readl()
-is not actually causing us to ignore actual errors ?
+Normally it is better to have a full control of the allocation mask but
+if we have any non-GFP_KERNEL caller then I would rather have the
+argument added and the function checked whether all internal paths are
+gfp mask aware.
 
-Regards,
-
-Hans
-
-
-
-
-
-> 
-> Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/platform/x86/intel_scu_ipc.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+> According to what I've found in 5.16, all callers use GFP_KERNEL, so this
+> patch should be a no-op.
+> But who knows how it will be used in the future. Better safe than sorry.
+> ---
+>  lib/string_helpers.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/platform/x86/intel_scu_ipc.c b/drivers/platform/x86/intel_scu_ipc.c
-> index 7cc9089d1e14..1f90acaa7212 100644
-> --- a/drivers/platform/x86/intel_scu_ipc.c
-> +++ b/drivers/platform/x86/intel_scu_ipc.c
-> @@ -233,17 +233,23 @@ static inline u32 ipc_data_readl(struct intel_scu_ipc_dev *scu, u32 offset)  static inline int busy_loop(struct intel_scu_ipc_dev *scu)  {
->  	unsigned long end = jiffies + IPC_TIMEOUT;
-> +	u32 status;
+> diff --git a/lib/string_helpers.c b/lib/string_helpers.c
+> index 90f9f1b7afec..7aceeb40dfd7 100644
+> --- a/lib/string_helpers.c
+> +++ b/lib/string_helpers.c
+> @@ -624,7 +624,7 @@ char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp)
+>  	char *buffer, *quoted;
+>  	int i, res;
 >  
->  	do {
-> -		u32 status;
-> -
->  		status = ipc_read_status(scu);
-> -		if (!(status & IPC_STATUS_BUSY))
-> -			return (status & IPC_STATUS_ERR) ? -EIO : 0;
-> +		if (!(status & IPC_STATUS_BUSY)) {
-> +			if (!(status & IPC_STATUS_ERR))
-> +				return 0;
-> +		}
+> -	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+> +	buffer = kmalloc(PAGE_SIZE, gfp);
+>  	if (!buffer)
+>  		return NULL;
 >  
->  		usleep_range(50, 100);
->  	} while (time_before(jiffies, end));
->  
-> +	if (status & IPC_STATUS_BUSY)
-> +		return -EBUSY;
-> +	if (status & IPC_STATUS_ERR)
-> +		return -EIO;
-> +
->  	return -ETIMEDOUT;
->  }
->  
-> --
-> 2.17.1
-> 
+> -- 
+> 2.32.0
 
+-- 
+Michal Hocko
+SUSE Labs

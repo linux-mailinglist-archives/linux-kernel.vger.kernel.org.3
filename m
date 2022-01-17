@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4B94910F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ADF4910F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243097AbiAQU1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:27:49 -0500
-Received: from mga12.intel.com ([192.55.52.136]:55705 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235244AbiAQU1t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:27:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642451269; x=1673987269;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6J7EAmc3BVCdekV+9fAAd4SfvYLQlJjb0v5rHGXaptc=;
-  b=kN+7rvC3fpZ8sEv3gydCBFKLKWSGump5nd1C7PrhUP5/ZZMHWs0kekH8
-   j0myBaUgX/ytXYUH9W8Ovvs00JQ/lF/QsHb+1TklEmi4t18jOrv7TJJtg
-   OCo7PfHlt/J4dpq+hlyjL6nXECh+OEjSh10ovP9SkgQ5yaRFrR0RYayls
-   /k0IJNFRNVIbt92jrq4sPw+p+Hryxq1szJvfmcXH+Zquo3ndXsC/A2kww
-   dJBYkxZH9Ei0WYl4hIcS2OI3P8Efg/ZuGeeArq4MOC2ZyOufrqV912zz9
-   KH/JfOWPYjXVzOYwidjI99CirC22SySCae2Ul6yW6apLkjhIVEQeavX0Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224669290"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="224669290"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:27:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="625289742"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2022 12:27:47 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9YbS-000Bqo-Nm; Mon, 17 Jan 2022 20:27:46 +0000
-Date:   Tue, 18 Jan 2022 04:26:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [drm-misc:drm-misc-next 3/5] ld.lld: error: undefined symbol:
- drm_dp_calc_pbn_mode
-Message-ID: <202201180447.2T9OteXU-lkp@intel.com>
+        id S243086AbiAQU1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232553AbiAQU1O (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 15:27:14 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A80C061574;
+        Mon, 17 Jan 2022 12:27:14 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id bu18so39044489lfb.5;
+        Mon, 17 Jan 2022 12:27:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UvHJLX7IdGzz1pAEtv5SH8by2bDEnibSRbenuruMozU=;
+        b=nD6UwUsWlWWn3+8gIxQfzwEte1mhQ83mOiZ+3vV1xc5HfFrToq2AaEPGH+oXHW836J
+         /N3bzIZ3AFgdrNva4+qXJLPUEkFmr9or/lsmG4lfox1sI7QHUVEN1h510+NXEDLdsMLf
+         J5mk/XXTQHcXCTS/uBriOCXz+qCc1J6PlGnS+1chS8pkOPRC3vDAXF2hva6AFxfpXeZ1
+         cH5Ie0JtAbATuayIBP4uv4+CJPFinP2DLHQgcHmlLfk1MOD+lxp7pRhoSua0Fkx7wS28
+         nbbXTTmnTOEnE+G1l2Del9r6UOH6/0G5IJTbGXBuAamiBDfoz6BvbK6gH+iV8FcogjgX
+         DtpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UvHJLX7IdGzz1pAEtv5SH8by2bDEnibSRbenuruMozU=;
+        b=KwS1hurd1zcYVZs5mOR2/I4wBlBFtButTlolo8soR8uzugOI19KCDwLWG2bmPb1XMY
+         aR5Ei5j1vs2dndrYdMXBM+piBbmlOpG6KZbGdLco1D6jN/e8KMIJduLoCTiF+1Smlegu
+         9xQoUDhm1Y3CZmKg6oXvbcXRslG/AgM7qzVQKNffdk2MRC+sF/2WNaHdIoI4uvm6/bqE
+         /w1zOAWN1OgvZ29x7auTtedSaLu1n4QRGh251QvQ9ExAGSDyNUOvKvgEVchJg/BPlYMc
+         wsuAEH947Df9Nmh6gjGqInjQerPABjAxzwdbqfrjeiDj4SI1zhz6JvvxO+iY/eFGw5d5
+         1/yw==
+X-Gm-Message-State: AOAM533YdzBMoqM79e4Y3t+X1wy8rGLjTM78cr7OkFCg3nl0en6MIOrX
+        blpXAnZJUGknzjydYY4HgYMBY7G5xu66EwPvuzc=
+X-Google-Smtp-Source: ABdhPJzSjj3jXK0JEgHFned13cyE7P7wdzpQ11/VjVcSoX3gLfiDYpRXata+lJUvxbMQTujI2IxyTJXRGpAP6SzaV9E=
+X-Received: by 2002:a05:6512:3090:: with SMTP id z16mr11502446lfd.601.1642451232764;
+ Mon, 17 Jan 2022 12:27:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
+In-Reply-To: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 17 Jan 2022 14:26:58 -0600
+Message-ID: <CAH2r5msz3iUwJVirtSmpZNbxpbtD3A8t7YfeGHDLtko6u4w+-g@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Replace one-element array with flexible-array member
+To:     cgel.zte@gmail.com
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   032a125904995985334766911de9e26ee2bbd646
-commit: adb9d5a2cc77e8aefe98fe4c11656c5b7025c248 [3/5] drm/dp: Move DisplayPort helpers into separate helper module
-config: hexagon-randconfig-r041-20220116 (https://download.01.org/0day-ci/archive/20220118/202201180447.2T9OteXU-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout adb9d5a2cc77e8aefe98fe4c11656c5b7025c248
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Doesn't this change the address of the assignment in this line in the
+function (smb2_ioctl_query_info)?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+        /* Close */
+        rqst[2].rq_iov = &vars->close_iov[0];
 
-All errors (new ones prefixed by >>):
+On Fri, Jan 14, 2022 at 8:44 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+>
+> There is a regular need in the kernel to provide a way to declare having
+> a dynamically sized set of trailing elements in a structure. Kernel code
+> should always use "flexible array members" for these cases. The older
+> style of one-element or zero-length arrays should no longer be used.
+> Reference:
+> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>  fs/cifs/smb2ops.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index af5d0830bc8a..5c104b2f308a 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -1609,10 +1609,10 @@ struct iqi_vars {
+>         struct smb_rqst rqst[3];
+>         struct kvec rsp_iov[3];
+>         struct kvec open_iov[SMB2_CREATE_IOV_SIZE];
+> -       struct kvec qi_iov[1];
+> +       struct kvec qi_iov[];
+>         struct kvec io_iov[SMB2_IOCTL_IOV_SIZE];
+>         struct kvec si_iov[SMB2_SET_INFO_IOV_SIZE];
+> -       struct kvec close_iov[1];
+> +       struct kvec close_iov[];
+>  };
+>
+>  static int
+> --
+> 2.25.1
+>
 
->> ld.lld: error: undefined symbol: drm_dp_calc_pbn_mode
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
-   >>> referenced 7 more times
---
->> ld.lld: error: undefined symbol: drm_dp_encode_sideband_req
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_dp_decode_sideband_req
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_dp_dump_sideband_msg_req_body
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced by test-drm_dp_mst_helper.c
-   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
-   >>> referenced 1 more times
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Thanks,
+
+Steve

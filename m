@@ -2,491 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFB64901BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BCD4901C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234408AbiAQFt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 00:49:56 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:29337 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233482AbiAQFtz (ORCPT
+        id S234450AbiAQFue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 00:50:34 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:48953 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234429AbiAQFud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 00:49:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642398595; x=1673934595;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=R8MZ1+Qs1qIMcUr4jtwrbhH0GB48Ogod/qsGRwU42iA=;
-  b=Es0C8zvhucUaiJ3QX1UUFpvCEPGgME+OLXOjZc3JkkRZhABPH4B5nrFk
-   sG1cT7BTLPB8wQLFE8owxBhKfT6s/GdPuRfNqEVXeLKAKts73qQmNu1V2
-   IN0C7YETbS3MZ5XZPqUXcuAbLYS6F7uBTJkLJhVP965xu6qRDPiv2NZWp
-   k=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Jan 2022 21:49:55 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 21:49:54 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 16 Jan 2022 21:49:53 -0800
-Received: from [10.50.10.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 16 Jan
- 2022 21:49:48 -0800
-Message-ID: <c0f792f4-522e-f1fd-5b58-579389c2c48d@quicinc.com>
-Date:   Mon, 17 Jan 2022 11:19:43 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V6 2/7] soc: qcom: dcc:Add driver support for Data Capture
- and Compare unit(DCC)
-Content-Language: en-CA
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Souradeep Chowdhury <schowdhu@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 17 Jan 2022 00:50:33 -0500
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220117055027epoutp032409e37ea8aad193bc7844e85386987b~K_NmMOQ4A0524905249epoutp03Z
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:50:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220117055027epoutp032409e37ea8aad193bc7844e85386987b~K_NmMOQ4A0524905249epoutp03Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642398627;
+        bh=OzJYV5gOP+WABFx6a1RfmNLwW2IYIAyFhAR0Zif3KlM=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=R9QC48MJo9BgdzGgRsxK9zjn0PofnCxyfiRNza/Ue373idl07A5pyPYPTtTHvPati
+         sAaVOmLwE2B0YOZp8xoPs5plLs6jJOB2tiUn3NzWwCJ4HHka9oZWkVZVNbPFtkYA5V
+         I1vYMeECFObmAMmwlEennYmXWAK+diaNoGrOyYio=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220117055026epcas5p32976903e6cdac57468435fbd12bd3ca5~K_NloiCsU2704227042epcas5p3K;
+        Mon, 17 Jan 2022 05:50:26 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Jcgwm5tQWz4x9Qb; Mon, 17 Jan
+        2022 05:50:16 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A9.4B.46822.87305E16; Mon, 17 Jan 2022 14:49:44 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220117055014epcas5p11103f5a411f695664ebf05134dc23531~K_NaMgjH01465614656epcas5p1w;
+        Mon, 17 Jan 2022 05:50:14 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220117055014epsmtrp2dd4492e1e00c3bbcbc8c34d632177faa~K_NaLm3w21339913399epsmtrp2g;
+        Mon, 17 Jan 2022 05:50:14 +0000 (GMT)
+X-AuditID: b6c32a4a-de5ff7000000b6e6-00-61e503783bc3
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A0.55.08738.69305E16; Mon, 17 Jan 2022 14:50:14 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220117055010epsmtip2f9ae8aeec2c5743db7b44ec2b4ddb3d4~K_NWmo92k2333123331epsmtip2j;
+        Mon, 17 Jan 2022 05:50:09 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Henrik Grimler'" <henrik@grimler.se>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>
+Cc:     <semen.protsenko@linaro.org>, <virag.david003@gmail.com>,
+        <martin.juecker@gmail.com>, <cw00.choi@samsung.com>,
+        <m.szyprowski@samsung.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <saiprakash.ranjan@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>, <vkoul@kernel.org>
-References: <cover.1628617260.git.schowdhu@codeaurora.org>
- <fc69469f26983d373d5ad7dc2dc83df207967eda.1628617260.git.schowdhu@codeaurora.org>
- <YbzvD+FFHuDWzCtZ@yoga> <caccb6da-2024-db4e-700c-9b4c13946ca0@quicinc.com>
- <YdeC456prDBG7tBA@ripper> <77a2ef02-384d-ce67-ae84-02c385eccd60@quicinc.com>
- <Ydhi1/SH5ySDLNfI@ripper>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <Ydhi1/SH5ySDLNfI@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+        <linux-kernel@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>
+In-Reply-To: <YeSHNCywXhp8gHC7@L14.lan>
+Subject: RE: [PATCH v3 3/3] ARM: dts: Add support for Samsung Chagall WiFi
+Date:   Mon, 17 Jan 2022 11:20:08 +0530
+Message-ID: <001301d80b66$190901a0$4b1b04e0$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKTrlzLhJbN5e22s0Ks3rGJhMIi0gCNReXFAo1zs98Cp4BzmQGZbeD4qrSO3zA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDJsWRmVeSWpSXmKPExsWy7bCmhm4F89NEgzurJC2uf3nOajH/yDlW
+        i7dLdjFabHz7g8li0+NrrBaXd81hs5hxfh+Txdojd9ktzvybymLRuvcIu8XzPqDY8fePGS02
+        f//L6MDrMauhl81j56y77B5Hr9xj9di0qpPN4861PWwem5fUe/y/s5bdo2/LKkaPz5vkAjij
+        sm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgO5WUihL
+        zCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRn
+        7F50j7mgRbhi3YtlzA2M1/m7GDk5JARMJPY++8PWxcjFISSwm1FiyqFNrBDOJ0aJuzu3skM4
+        nxklFnxaxATTMvHGcWaIxC5Gia7Hs6BaXjJKHJmxjhWkik1AV2LH4jY2EFtEIFPi+asesA5m
+        gYdMErd+dYGN4hRQl/iydzUziC0s4CXx8+5vsGYWAVWJvi8/2UFsXgFLiVt/LrFC2IISJ2c+
+        YQGxmQXkJba/ncMMcZKCxM+ny1ghlvlJnPo+lwmiRlzi5dEjYD9ICDzgkFh55TcLRIOLxM7b
+        H6BsYYlXx7ewQ9hSEp/f7QW6mgPIzpbo2WUMEa6RWDrvGFS5vcSBK3NYQEqYBTQl1u/Sh1jF
+        J9H7+wkTRCevREebEES1qkTzu6tQndISE7u7WSFsD4mXLTtZJjAqzkLy2Cwkj81C8sAshGUL
+        GFlWMUqmFhTnpqcWmxYY5aWWwyM8OT93EyM4WWt57WB8+OCD3iFGJg7GQ4wSHMxKIrzHuJ8k
+        CvGmJFZWpRblxxeV5qQWH2I0BYb2RGYp0eR8YL7IK4k3NLE0MDEzMzOxNDYzVBLnPZ2+IVFI
+        ID2xJDU7NbUgtQimj4mDU6qBKS9rI4sCU7dVw36hmQk7W8JWGP5zrHp8S+x0bvfR7Pdiqpy3
+        Xyyd8M/B9l7sNgWHItPn4vaLpH7fLC3wncyiNuEUu4zotKtHq6YqZOtvUlE5+H6j4Dr/+LXz
+        8t0f/H70pFMxsvHNhIpZq9gOR0Wdrzk69a/ylFUdC4SKZprPDLhps6f4lsL1WO6u5zNLNBSa
+        58guNXGZHCG2WOPxjlsuzRVGeQFHTf3fOzx+9ENc1eaqTt6c2KUTtvjbbY6f4Sux3LBdePu5
+        Wdvsv/++2H3n/pLgeYviY3lL9ayCYpZv0jJbbrV0//QNyT+uKRS35sW90Kt5v1XN8cbEvT4n
+        Wnae1zN79+MSf/tvES7Hj1elI5VYijMSDbWYi4oTAVkJ4DZfBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsWy7bCSvO405qeJBiuviltc//Kc1WL+kXOs
+        Fm+X7GK02Pj2B5PFpsfXWC0u75rDZjHj/D4mi7VH7rJbnPk3lcWide8RdovnfUCx4+8fM1ps
+        /v6X0YHXY1ZDL5vHzll32T2OXrnH6rFpVSebx51re9g8Ni+p9/h/Zy27R9+WVYwenzfJBXBG
+        cdmkpOZklqUW6dslcGXsXnSPuaBFuGLdi2XMDYzX+bsYOTkkBEwkJt44ztzFyMUhJLCDUWLr
+        lz8sEAlpiesbJ7BD2MISK/89Z4coes4oceLfTEaQBJuArsSOxW1sILaIQKbE9bntrCA2s8Br
+        Jok3jX4QDa1MEk+WHGACSXAKqEt82buaGcQWFvCS+Hn3N1gDi4CqRN+Xn2DbeAUsJW79ucQK
+        YQtKnJz5BOgiDqChehJtGxkh5stLbH87hxniOAWJn0+XsULc4Cdx6vtcJogacYmXR4+wT2AU
+        noVk0iyESbOQTJqFpGMBI8sqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzgeNXS2sG4
+        Z9UHvUOMTByMhxglOJiVRHiPcT9JFOJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJ
+        anZqakFqEUyWiYNTqoFJb6ZRvdU25lXxnXb3J9ZNFlq56rfKB+ejuRqlUXs+1FxofVymsizI
+        ryTgOctTV48Ai+x/S1bWq8zdu4XB4NiV/TdMgpgZJi552tjrOSWq8AzPpj+HZz9rjon69elw
+        zJHo7WXCIVGCxRmKOey9H1n27rp5/qx5o9ukFcdnCR3miIpcoJ2bsGvfr8SN9fPOOH88uG9W
+        2SnP8C0tFko8Bi8Wltlt9o4XTjwWrHryRQfjdQ4ZngcTPLfopa+d+NUv95DY95SeNvbNy3j3
+        McUV5tjLqBmFudW//nLZNHvGBkFGmzfPf07zlX2hmJnQOSNIT5OjeUZflah+fut5uZNhgQHv
+        Z03b6JwslvNenyN1er0SS3FGoqEWc1FxIgDtCF7/RgMAAA==
+X-CMS-MailID: 20220117055014epcas5p11103f5a411f695664ebf05134dc23531
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220116205940epcas5p3dbab01fb6bb7a4af76169231e6d94469
+References: <20220116165035.437274-1-henrik@grimler.se>
+        <20220116165035.437274-4-henrik@grimler.se>
+        <ca8c4613-a058-6cde-f9e6-8530f142a821@canonical.com>
+        <CGME20220116205940epcas5p3dbab01fb6bb7a4af76169231e6d94469@epcas5p3.samsung.com>
+        <YeSHNCywXhp8gHC7@L14.lan>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Henrik,
 
-On 1/7/2022 9:27 PM, Bjorn Andersson wrote:
-> On Fri 07 Jan 07:27 PST 2022, Souradeep Chowdhury wrote:
+>-----Original Message-----
+>From: Henrik Grimler [mailto:henrik@grimler.se]
+>Sent: Monday, January 17, 2022 2:30 AM
+>To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>Cc: semen.protsenko@linaro.org; virag.david003@gmail.com;
+>martin.juecker@gmail.com; cw00.choi@samsung.com;
+>m.szyprowski@samsung.com; alim.akhtar@samsung.com;
+>robh+dt@kernel.org; devicetree@vger.kernel.org; linux-samsung-
+>soc@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>kernel@vger.kernel.org; ~postmarketos/upstreaming@lists.sr.ht
+>Subject: Re: [PATCH v3 3/3] ARM: dts: Add support for Samsung Chagall WiFi
 >
->> On 1/7/2022 5:31 AM, Bjorn Andersson wrote:
->>> On Wed 05 Jan 23:57 PST 2022, Souradeep Chowdhury wrote:
->>>
->>>> On 12/18/2021 1:41 AM, Bjorn Andersson wrote:
->>>>> On Tue 10 Aug 12:54 CDT 2021, Souradeep Chowdhury wrote:
->>>>>
->>>>>> The DCC is a DMA Engine designed to capture and store data
->>>>>> during system crash or software triggers.The DCC operates
->>>>> Please include a space after '.'
->>>> Ack
->>>>>> based on user inputs via the sysfs interface.The user gives
->>>>>> addresses as inputs and these addresses are stored in the
->>>>>> form of linkedlists.In case of a system crash or a manual
->>>>> I think the user configures the DCC hardware with "a sequence of
->>>>> operations to be performed as DCC is triggered".
->>>>>
->>>>> Afaict the sequence is stored just as a sequence of operations in SRAM,
->>>>> there's no linked list involved - except in your intermediate
->>>>> implementation.
->>>> The user just enters the addresses as input whereas the sequence of
->>>> operations takes
->>>>
->>>> place as per configuration code inside the driver. The end result is storage
->>>> of these
->>>>
->>>> addresses inside the DCC SRAM. The DCC hardware will capture the value at
->>>> these
->>>>
->>>> addresses on a crash or manual trigger by the user.
->>>>
->>>>>> software trigger by the user through the sysfs interface,
->>>>>> the dcc captures and stores the values at these addresses.
->>>>>> This patch contains the driver which has all the methods
->>>>>> pertaining to the sysfs interface, auxiliary functions to
->>>>>> support all the four fundamental operations of dcc namely
->>>>>> read, write, first read then write and loop.The probe method
->>>>> "first read then write" is called "read/modify/write"
->>>> Ack
->>>>>> here instantiates all the resources necessary for dcc to
->>>>>> operate mainly the dedicated dcc sram where it stores the
->>>>>> values.The DCC driver can be used for debugging purposes
->>>>>> without going for a reboot since it can perform manual
->>>>>> triggers.
->>>>>>
->>>>>> Also added the documentation for sysfs entries
->>>>>> and explained the functionalities of each sysfs file that
->>>>>> has been created for dcc.
->>>>>>
->>>>>> The following is the justification of using sysfs interface
->>>>>> over the other alternatives like ioctls
->>>>>>
->>>>>> i) As can be seen from the sysfs attribute descriptions,
->>>>>> most of it does basic hardware manipulations like dcc_enable,
->>>>>> dcc_disable, config reset etc. As a result sysfs is preferred
->>>>>> over ioctl as we just need to enter a 0 or 1.
->>>>>>
->>>>> As I mentioned in our chat, using sysfs allows us to operate the
->>>>> interface using the shell without additional tools.
->>>>>
->>>>> But I don't think that it's easy to implement enable/disable/reset using
->>>>> sysfs is a strong argument. The difficult part of this ABI is the
->>>>> operations to manipulate the sequence of operations, so that's what you
->>>>> need to have a solid plan for.
->>>> The sysfs interface is being used to get the addresses values entered by the
->>>> user
->>>>
->>>> and to also go for manual triggers. The sequence of operations are kept as a
->>>> part of
->>>>
->>>> fixed driver code which is called when the user enters the data.
->>>>
->>> But does the hardware really just operate on "addresses values entered
->>> by the user". Given the various types of operations: read, write,
->>> read-modify-write and loop I get the feeling that the hardware
->>> "executes" a series of actions.
->>>
->>> I'm don't think the proposed sysfs interface best exposes this to the
->>> user and I don't think that "it's easy to implement enable/disable
->>> attributes in sysfs" is reason enough to go with that approach.
->> So the sysfs interface here has been introduced keeping in mind how the
->> DCC_SRAM needs to be
->>
->> programmed for the dcc hardware to work. We are maintaining a list here
->> based on the address
->>
->> entry. The 4 cases for the type of addresses are as follows-:
->>
->> i) READ ADDRESSES
->>
->> user enters something like "echo <addr> <len> > config"
->>
->> DCC driver stores the <addr> along with the length information in the
->> DCC_SRAM.
->>
->> ii) WRITE ADDRESSES
->>
->> User enters something like "echo <addr> <write_val> 1  > config_write"
->>
->> DCC stores the <addr> first in sram followed by <write_val>.
->>
->> For the above 2 type of addresses there won't be much difference if we use
->> IOCTL.
->>
->> However, for the next 2 type of addresses
->>
->> iii) LOOP ADDRESSES
->>
->> user has to enter something like below
->>
->> echo 9 > loop
->> echo 0x01741010 1 > config
->> echo 0x01741014 1 > config
->> echo 1 > loop
->>
->> The DCC SRAM will be programmed precisely like the above entries where the
->> loop count will be stored first
->>
->> followed by loop addresses and then again a "echo 1 > loop " marks the end
->> of loop addresses.
->>
->> in DCC_SRAM.
->>
->> iv) READ_WRITE ADDRESSES
->>
->> User has to enter something like below
->>
->> echo <addr> > /sys/bus/platform/devices/../config
->>
->> echo <mask> <val> > /sys/bus/platform/devices/../rd_mod_wr
->>
->> Here first the  <addr> is stored in DCC_SRAM followed by <mask> and then the
->> <val>.
->>
->> The above representation to the user space is consistent with the dcc
->> hardware in terms of
->>
->> the way the sequence of values are programmed in the DCC SRAM . Moving to
->> IOCTL will
->>
->> only change the way the READ_WRITE address is represented although user will
->> have to enter
->>
->> multiple parameters at once, let me know if we still need to go for the
->> same.
->>
-> So if I understand correctly, my concern is that if I would like to
-> perform something like (in pseudo code):
+>Hi Krzysztof,
 >
-> readl(X)
-> write(1, Y)
-> readl(Z) 5 times
->
-> then I will do this as:
->
-> echo X > config
-> echo Y 1 > config_write
-> echo 5 > loop
-> echo Z > config
-> echo 1 > loop
->
-> And the DCC driver will then write this to SRAM as something like:
->
-> read X
-> write Y, 1
-> loop 5
-> read Z
-> loop
->
->
-> In other words, my mind and the DCC has the same representation of this
-> sequence of operations, but I have to shuffle the information into 4
-> different sysfs attributes to get there.
->
-> The design guideline for sysfs is that each attribute should hold one
-> value per attribute, but in your model the attributes are tangled and
-> writing things to them depends on what has been written in that or other
-> attributes previously.
->
-> I simply don't think that's a good ABI.
-
-Ack.
-
-Should I change this to have separate sysfs files dealing with separate 
-type of instructions?
-
-For example I can have separate files like config_read, 
-config_write(already exists), config_loop
-
-and config_read_write to handle 4 different type of instructions with 
-inputs like
-
-echo <loop_offset> <loop_address_numbers> <loop_address_1> 
-<loop_address_2>.. > config_loop
-
-echo <address> <mask> <val> > config_read_write
-
-and so on
-
->
-> [..]
->>>>>> +		The address argument should
->>>>>> +		be given of the form <mask> <value>.For debugging
->>>>>> +		purposes sometimes we need to first read from a register
->>>>>> +		and then set some values to the register.
->>>>>> +		Example:
->>>>>> +		echo 0x80000000 > /sys/bus/platform/devices/.../config
->>>>>> +		(Set the address in config file)
->>>>>> +		echo 0xF 0xA > /sys/bus/platform/devices/.../rd_mod_wr
->>>>>> +		(Provide the mask and the value to write)
->>>>>> +
->>>>>> +What:           /sys/bus/platform/devices/.../ready
->>>>>> +Date:           March 2021
->>>>>> +Contact:        Souradeep Chowdhury<schowdhu@codeaurora.org>
->>>>>> +Description:
->>>>>> +		This file is used to check the status of the dcc
->>>>>> +		hardware if it's ready to take the inputs.
->>>>> When will this read "false"?
->>>> This will give false if the DCC hardware is not in an operational state.
->>>>
->>>> Will update accordingly.
->>>>
->>>>>> +		Example:
->>>>>> +		cat /sys/bus/platform/devices/.../ready
->>>>>> +
->>>>>> +What:		/sys/bus/platform/devices/.../curr_list
->>>>>> +Date:		February 2021
->>>>>> +Contact:	Souradeep Chowdhury<schowdhu@codeaurora.org>
->>>>>> +Description:
->>>>>> +		This attribute is used to enter the linklist to be
->>>>> I think it would be more appropriate to use the verb "select" here and
->>>>> afaict it's a "list" as the "linked" part only relates to your
->>>>> implementation).
->>>>>
->>>>> But that said, I don't like this ABI. I think it would be cleaner if you
->>>>> had specific attributes for each of the lists. That way it would be
->>>>> clear that you have N lists and they can be configured and enabled
->>>>> independently, and there's no possible race conditions.
->>>> So we do have attributes for independent lists in this case. The user is
->>>> given the option
->>>>
->>>> to configure multiple lists at one go. For example I can do
->>>>
->>>> echo 1 > curr_list
->>>>
->>>> echo 0x18000010 1 > config
->>>> echo 0x18000024 1 > config
->>>>
->>>> Then followed by
->>>>
->>>> echo 2 > curr_list
->>>>
->>>> echo 0x18010038 6 > config
->>>> echo 0x18020010 1 > config
->>>>
->>>> We will get the output in terms of two separate list of registers values.
->>>>
->>> I understand that this will define two lists of operations and that we
->>> will get 2 and 7 registers dumped, respectively. Perhaps unlikely, but
->>> what happens if you try to do these two operations concurrently?
->>>
->>>
->>> What I'm suggesting here is that if you have N contexts, you should have
->>> N interfaces to modify each one independently - simply because that's
->>> generally a very good thing.
->> Not sure if there will ever be a concurrency issue in this case.
->> This is just about programming the DCC SRAM from the user entries
->> sequentially.
-> So you've decided that two such sequences must not happen at the same
-> time. (I know it's unlikely, but there's nothing preventing me from
-> running the two snippets of echos concurrently and the outcome will be
-> unexpected)
-
-So as per the dcc hardware configuration document, parallel programming 
-of lists are not
-
-supported for dcc. We program the lists sequentially one after the other.
-
->
->> The curr_list number is nothing but some register writes
->> done in the dcc so that the dcc_hardware knows the beginning and end
->> of a particular list and can dump the captured data according. Even if
->> an user chooses multiple curr_list entries, it will be programmed
->> sequentially in DCC_SRAM.
+>> > +/* External sdcard */
+>> > +&mmc_2 {
+>> > +	status = "okay";
+>> > +	bus-width = <4>;
+>> > +	cap-sd-highspeed;
+>> > +	card-detect-delay = <200>;
+>> > +	pinctrl-0 = <&sd2_clk &sd2_cmd &mmc2_cd &sd2_bus1 &sd2_bus4>;
+>> > +	pinctrl-names = "default";
+>> > +	samsung,dw-mshc-ciu-div = <3>;
+>> > +	samsung,dw-mshc-ddr-timing = <0 2>;
+>> > +	samsung,dw-mshc-sdr-timing = <0 4>;
+>> > +	sd-uhs-sdr50;
+>> > +	vmmc-supply = <&ldo19_reg>;
+>> > +	vqmmc-supply = <&ldo13_reg>;
+>> > +};
+>> > +
+>> > +&pinctrl_0 {
+>> > +	mmc2_cd: sd2-cd-pins {
+>> > +		samsung,pins = "gpx2-4";
 >>
-> So there's no separation between the lists in the hardware?
->
-> Looking at the driver I get a sense that we have N lists that can be
-> configured independently and will be run "independently" upon a trigger.
->
-> If this isn't the case, what's the purpose of the multiple lists?
-
-Lists are programmed sequentially from the driver perspective.
-
-We have multiple lists in case of dcc because multiple software 
-components may be using
-
-dcc hardware at once in which case there are individual lists allotted 
-for each individual components.
-
-For example kernel might have a few lists to access whereas the rest 
-maybe used by SDI which is a
-
-separate component. Each list is of arbitrary length as entered by the 
-user and one list can be updated
-
-with it's base address after the previous list has been programmed in 
-DCC_SRAM like below :-
-
-                 ret = __dcc_ll_cfg(drvdata, list);
-                 if (ret) {
-                         dcc_writel(drvdata, 0, DCC_LL_LOCK(list));
-                         goto err;
-                 }
-
-                 /* 3. program DCC_RAM_CFG reg */
-                 dcc_writel(drvdata, ram_cfg_base +
-                         drvdata->ram_offset/4, DCC_LL_BASE(list));
-  
-
->
->>>>>> +		used while appending addresses.The range of values
->>>>>> +		for this can be from 0 to 3.This feature is given in
->>>>>> +		order to use certain linkedlist for certain debugging
->>>>>> +		purposes.
->>>>>> +		Example:
->>>>>> +		echo 0 > /sys/bus/platform/devices/10a2000.dcc/curr_list
->>>>>> +
->>> [..]
->>>>>> diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
->>> [..]
->>>>>> +static int dcc_valid_list(struct dcc_drvdata *drvdata, int curr_list)
->>>>>> +{
->>>>>> +	u32 lock_reg;
->>>>>> +
->>>>>> +	if (list_empty(&drvdata->cfg_head[curr_list]))
->>>>>> +		return -EINVAL;
->>>>>> +
->>>>>> +	if (drvdata->enable[curr_list]) {
->>>>>> +		dev_err(drvdata->dev, "List %d is already enabled\n",
->>>>>> +				curr_list);
->>>>>> +		return -EINVAL;
->>>>>> +	}
->>>>>> +
->>>>>> +	lock_reg = dcc_readl(drvdata, DCC_LL_LOCK(curr_list));
->>>>> Under what circumstances would this differ from
->>>>> drvdata->enable[curr_list}?
->>>> So locking the list is done on the register as soon as the user enters the
->>>> curr_list entry whereas
->>>>
->>>> the list is marked as enabled only on successfully programming the SRAM
->>>> contents. So a list can
->>>>
->>>> be locked and not marked enabled in certain cases. The first is used so that
->>>> the user doesn't
->>>>
->>>> mistakenly enter the same curr_list twice whereas the later is used to mark
->>>> that the list has been
->>>>
->>>> successfully configured.
->>>>
->>> So this will mark the list as "actively in use, but disabled"? Why is
->>> this kept in the hardware? When is this not the same as the list of
->>> operations for that list being non-empty?
->> So this is in accordance with the dcc hardware configuration
->> requirement. We have to lock the list first and after that proceed
->> with the subsequent writes.
-> But what does this mean? What happens when I lock a list?
->
-> Afacit we have a "lock" bit and an "enable" bit. So in what circumstance
-> does the hardware care about a list being locked? Wouldn't it be
-> sufficient to just have the enable bit?
-
-As explained above multiple software components might be using DCC 
-hardware for which lock bit is
-
-necessary. From only kernel perspective enable bit alone suffices for 
-the operation.
-
->
->> As per the driver code below
+>> Interesting... I looked at vendor sources to board-chagall and
+>> standard pin gpc2-2 is mentioned as PULL down and not-connected
+>comment.
 >>
->>                 /* 1. Take ownership of the list */
->>                  dcc_writel(drvdata, BIT(0), DCC_LL_LOCK(list));
->>
->>                  /* 2. Program linked-list in the SRAM */
->>                  ram_cfg_base = drvdata->ram_cfg;
->>                  ret = __dcc_ll_cfg(drvdata, list);
->>                  if (ret) {
->>                          dcc_writel(drvdata, 0, DCC_LL_LOCK(list));
->>                          goto err;
->>                  }
->>
->>                  /* 3. program DCC_RAM_CFG reg */
->>                  dcc_writel(drvdata, ram_cfg_base +
->>                          drvdata->ram_offset/4, DCC_LL_BASE(list));
->>                  dcc_writel(drvdata, drvdata->ram_start +
->>                          drvdata->ram_offset/4, DCC_FD_BASE(list));
->>                  dcc_writel(drvdata, 0xFFF, DCC_LL_TIMEOUT(list));
->>
->>                  /* 4. Clears interrupt status register */
->>                  dcc_writel(drvdata, 0, DCC_LL_INT_ENABLE(list));
->>                  dcc_writel(drvdata, (BIT(0) | BIT(1) | BIT(2)),
->>                                          DCC_LL_INT_STATUS(list));
->>
->> In case of any errors we again unlock the list before exiting.
->>
-> So it needs to be locked while SRAM contains a valid sequence of
-> operations?
+>> gpx2-4 seems not mentioned at all, unless other board files are
+>> actually used.
 >
-> Or does it need to be locked while we write to SRAM? If so, why is that?
+>Gpio seems to be spread out. GPIO_T_FLASH_DETECT is defined as gpx2-4 in
+>board-universal5420-mmc.c, and then used for card detection.
+>(Looking at it now again I see that write protection through sd2_wp should
+>also be supported for mmc_2, can add that in next patch set.)
+>
+Card detect pin is generally a special function (dedicated pin) pin,
+directly connected from SoC to card external slot.
+And for exynos5420 it is gpc2-2 as pointed by Krzysztof.
+Also PIN_FUNC_2 for gpx2-4 indicate that it is wakeup_int2 function.
+Do you get a card detect interrupt when removing and inserting the card to
+the card slot?
+Also to avoid confusion, probably you can change the node name as "mmc2_cd:
+mmc2-cd-pins" 
+(as sd2-cd-pins is gpc2-2 for this SoC)
 
-So it needs to be locked while SRAM contains a valid sequence of operations.
 
-The reason has been explained as above.
+>> Anyway, if it works for you, it's good.
+>>
+>> Rest looks ok, I'll apply after the merge window.
+>
+>Thanks!
+>
+>> Best regards,
+>> Krzysztof
+>
+>Best regards,
+>Henrik Grimler
 
-> Regards,
-> Bjorn

@@ -2,207 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE1D490504
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BA5490502
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiAQJia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:38:30 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:52175 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiAQJi3 (ORCPT
+        id S235697AbiAQJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:38:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58521 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235947AbiAQJiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:38:29 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 20H9UkAT086347;
-        Mon, 17 Jan 2022 17:30:46 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 Jan
- 2022 17:37:40 +0800
-Message-ID: <dbfebef8-89e6-c2e1-e81a-57640f6764e7@aspeedtech.com>
-Date:   Mon, 17 Jan 2022 17:37:41 +0800
+        Mon, 17 Jan 2022 04:38:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642412286;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=87TQKP21MvIUTnFRp1IlMrCnN3l9CJpODRDFyyIfhfE=;
+        b=jEuVqSk2f6TE2KlcTHfpNo+kxQymExMhJR9S65a7w3TW4R44KvXbq6dBVENRm6DSIgXaXL
+        uZNldEMY1vaozc/EfA3N6cXF2tDej9ntS8onqX0gGtFFlpyXxt21W4yAQeal2/+KxYwQg/
+        SgNSPC20d8hOFTfAZyLyoe4qaPunnVI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-CsDmz-WPND-nQudKReXabw-1; Mon, 17 Jan 2022 04:38:03 -0500
+X-MC-Unique: CsDmz-WPND-nQudKReXabw-1
+Received: by mail-ed1-f72.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so13712566edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:38:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=87TQKP21MvIUTnFRp1IlMrCnN3l9CJpODRDFyyIfhfE=;
+        b=4RzogqtIa0Al5nG2S4pIuPAZ2UoCL3rXTCmg2/KCoF3s5f5uzJd6Qse6H4hp/Ddsu+
+         uLGDbdhCxZVxoV6gHUGVNJ5hr6YTFgf+ioFrzFAwtSk/HJbo5z4hNjyOUIU/4Ig316FE
+         XNeDNd6mMlq2sy+SxUbVptefH8zConkE0QWummORbu1ngRgDiSEo9L/25eYf3eMYeRqJ
+         1MQ0DhI/ieGozBonbwddT0C6qXnOwX5EvjAKFYk7JOFuj5KS2comkSVfNcYSFqOz4ZeE
+         /rZXxk94P+RRuUY8l4NI2WbrPERq8rzgCfi93d/oES2nbFTmqwPlxRkyXl6q8R+J93Gs
+         C5+A==
+X-Gm-Message-State: AOAM530OvDEr/fOgrr7Q1ALRFyNQ5y/YbCU60cVL2MawMup6dRrl0FDu
+        WFEmhtWblJ4iEszRXWozRbCzlkRzIzK6ZG1s4H+iaboOsH5WLAQsIGViPmvT6qbJIWRvckrOBeR
+        FttuuY718eetc6yQSUUfhiB1P
+X-Received: by 2002:a17:906:b286:: with SMTP id q6mr11945526ejz.496.1642412282167;
+        Mon, 17 Jan 2022 01:38:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz2KK/fmStojUMqn34rE0EHBYoqOqN0OB1KrIqmFJam0AvqPc5evTRU+IpJZucQ2ivN2RAQ+g==
+X-Received: by 2002:a17:906:b286:: with SMTP id q6mr11945515ejz.496.1642412281936;
+        Mon, 17 Jan 2022 01:38:01 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id y2sm5686084eda.45.2022.01.17.01.38.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 01:38:01 -0800 (PST)
+Message-ID: <a8bb5224-e77d-fc3e-4619-2ca5f46305a5@redhat.com>
+Date:   Mon, 17 Jan 2022 10:38:00 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8 1/4] media: v4l: Add definition for the Aspeed JPEG
- format
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] platform/surface: Reinstate platform dependency
 Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Joel Stanley <joel@jms.id.au>
-CC:     "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
- <20211224012738.1551-2-jammy_huang@aspeedtech.com>
- <703ff71e-c76a-9df1-c644-04efed0199ca@xs4all.nl>
- <609cfe9e-2fd8-b31a-9d71-b83d61693f84@aspeedtech.com>
- <CACPK8XeJQHLWfVbBjArxV_QMDDnRXfccOeXdsn6aBEG7gd8yvw@mail.gmail.com>
- <98096e97-68cc-18fd-d2b6-3477f57f05bd@aspeedtech.com>
- <d4ccf803-3736-d95d-19a9-f3593465b81e@xs4all.nl>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <d4ccf803-3736-d95d-19a9-f3593465b81e@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 20H9UkAT086347
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Jarrett Schultz <jaschultz@microsoft.com>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220115140849.269479-1-geert@linux-m68k.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220115140849.269479-1-geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+Hi,
 
-On 2022/1/17 下午 05:28, Hans Verkuil wrote:
-> Hi Jammy,
->
-> On 1/17/22 08:18, Jammy Huang wrote:
->> On 2022/1/17 上午 10:24, Joel Stanley wrote:
->>> On Mon, 17 Jan 2022 at 02:00, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
->>>> Hi Hans,
->>>>
->>>> On 2022/1/14 下午 04:11, Hans Verkuil wrote:
->>>>> On 24/12/2021 02:27, Jammy Huang wrote:
->>>>>> This introduces support for the Aspeed JPEG format, where the new frame
->>>>>> can refer to previous frame to reduce the amount of compressed data. The
->>>>>> concept is similar to I/P frame of video compression. It will compare the
->>>>>> new frame with previous one to decide which macroblock's data is
->>>>>> changed, and only the changed macroblocks will be compressed.
->>>>>>
->>>>>> This Aspeed JPEG format is used by the video engine on Aspeed platforms,
->>>>>> which is generally adapted for remote KVM.
->>>>>>
->>>>>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->>>>>> ---
->>>>>> v8:
->>>>>>      - Add decoder information for aspeed-jpeg
->>>>>> v7:
->>>>>>      - Add more information for aspeed-jpeg
->>>>>> v6:
->>>>>>      - Update description for new format, aspeed-jpeg, in Documentation.
->>>>>> v5:
->>>>>>      - no update
->>>>>> v4:
->>>>>>      - new
->>>>>> ---
->>>>>>     .../media/uapi/v4l/pixfmt-reserved.rst          | 17 +++++++++++++++++
->>>>>>     drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
->>>>>>     include/uapi/linux/videodev2.h                  |  1 +
->>>>>>     3 files changed, 19 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/media/uapi/v4l/pixfmt-reserved.rst b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->>>>> This is the wrong file! It should be:
->>>>>
->>>>> Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
->>>> Thanks, I just used git format-patch to generate the cover-letter and
->>>> didn't notice this.
->>>>
->>>> It looks like the file, pixfmt-reserved.rst, has different path in
->>>> different Linux kernel,
->>>>
->>>> * 5.4:           Documentation/media/uapi/v4l/pixfmt-reserved.rst
->>>>
->>>> * 5.10/5.15: Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
->>>>
->>>> 5.4 is the one I based to submit the patches.
->>>>
->>>> Could you suggest the kernel that I should based to submit these patches??
->>> You should always submit based on the latest release.
->>>
->>> There are sometimes exceptions where you will base your patches on
->>> something even newer, but generally you should grab the latest.
->>>
->>> Be sure to re-test on the latest kernel before submitting.
->> OK, thank you.
-> I recommend waiting until later this week. I hope to have a PR for other outstanding
-> aspeed patches ready in a few days. It is easiest if you base your v9 on top of that
-> series, this to avoid merge conflicts.
+On 1/15/22 15:08, Geert Uytterhoeven wrote:
+> Microsoft Surface platform-specific devices are only present on
+> Microsoft Surface platforms, which are currently limited to arm64 and
+> x86.  Hence add a dependency on ARM64 || X86, to prevent asking the user
+> about drivers for these devices when configuring a kernel for an
+> architecture that does not support Microsoft Surface platforms.
+> 
+> Fixes: 272479928172edf0 ("platform: surface: Propagate ACPI Dependency")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Sure, no problem. Thanks for your help.
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
 Regards,
 
-Jammy
+Hans
 
->
-> Regards,
->
-> 	Hans
->
->>> Cheers,
->>>
->>> Joel
->>>
->>>> I will need to change the number of V4L2_CID_USER_ASPEED_BASE per different
->>>>
->>>> linux kernel as well.
->>>>
->>>>> Regards,
->>>>>
->>>>>         Hans
->>>>>
->>>>>> index b2cd155e691b..1d0dc8d86ed7 100644
->>>>>> --- a/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->>>>>> +++ b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->>>>>> @@ -264,6 +264,23 @@ please make a proposal on the linux-media mailing list.
->>>>>>        of tiles, resulting in 32-aligned resolutions for the luminance plane
->>>>>>        and 16-aligned resolutions for the chrominance plane (with 2x2
->>>>>>        subsampling).
->>>>>> +    * .. _V4L2-PIX-FMT-AJPG:
->>>>>> +
->>>>>> +      - ``V4L2_PIX_FMT_AJPG``
->>>>>> +      - 'AJPG'
->>>>>> +      - ASPEED JPEG format used by the aspeed-video driver on Aspeed platforms,
->>>>>> +        which is generally adapted for remote KVM.
->>>>>> +        On each frame compression, I will compare the new frame with previous
->>>>>> +        one to decide which macroblock's data is changed, and only the changed
->>>>>> +        macroblocks will be compressed.
->>>>>> +
->>>>>> +        The implementation is based on AST2600 A3 datasheet, revision 0.9, which
->>>>>> +        is not publicly available. Or you can reference Video stream data format
->>>>>> +        – ASPEED mode compression of SDK_User_Guide which available on
->>>>>> +        AspeedTech-BMC/openbmc/releases.
->>>>>> +
->>>>>> +        Decoder's implementation can be found here,
->>>>>> +        `https://github.com/AspeedTech-BMC/aspeed_codec/ <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
->>>>>>
->>>>>>     .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
->>>>>>
->>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->>>>>> index 24db33f803c0..00dde01d2f97 100644
->>>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->>>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->>>>>> @@ -1378,6 +1378,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->>>>>>                case V4L2_PIX_FMT_S5C_UYVY_JPG: descr = "S5C73MX interleaved UYVY/JPEG"; break;
->>>>>>                case V4L2_PIX_FMT_MT21C:        descr = "Mediatek Compressed Format"; break;
->>>>>>                case V4L2_PIX_FMT_SUNXI_TILED_NV12: descr = "Sunxi Tiled NV12 Format"; break;
->>>>>> +            case V4L2_PIX_FMT_AJPG:         descr = "Aspeed JPEG"; break;
->>>>>>                default:
->>>>>>                        if (fmt->description[0])
->>>>>>                                return;
->>>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->>>>>> index 3210b3c82a4a..994eb6155ea9 100644
->>>>>> --- a/include/uapi/linux/videodev2.h
->>>>>> +++ b/include/uapi/linux/videodev2.h
->>>>>> @@ -726,6 +726,7 @@ struct v4l2_pix_format {
->>>>>>     #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
->>>>>>     #define V4L2_PIX_FMT_SUNXI_TILED_NV12 v4l2_fourcc('S', 'T', '1', '2') /* Sunxi Tiled NV12 Format */
->>>>>>     #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
->>>>>> +#define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
->>>>>>
->>>>>>     /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
->>>>>>     #define V4L2_PIX_FMT_IPU3_SBGGR10  v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
->>>> -- 
->>>> Best Regards
->>>> Jammy
->>>>
+
+> ---
+>  drivers/platform/surface/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/platform/surface/Kconfig b/drivers/platform/surface/Kconfig
+> index 5f0578e25f718f14..463f1ec5c14e9fa9 100644
+> --- a/drivers/platform/surface/Kconfig
+> +++ b/drivers/platform/surface/Kconfig
+> @@ -5,6 +5,7 @@
+>  
+>  menuconfig SURFACE_PLATFORMS
+>  	bool "Microsoft Surface Platform-Specific Device Drivers"
+> +	depends on ARM64 || X86 || COMPILE_TEST
+>  	default y
+>  	help
+>  	  Say Y here to get to see options for platform-specific device drivers
+> 
+

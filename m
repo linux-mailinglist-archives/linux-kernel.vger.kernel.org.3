@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C57490C09
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF896490C11
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240689AbiAQQGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237342AbiAQQF7 (ORCPT
+        id S237623AbiAQQHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:07:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49994 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235180AbiAQQHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:05:59 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD721C06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:05:58 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id e3so56638550lfc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/8mQ26icbv/X+xjUK5EuBssp15+UZVQvU7z9wm1s+VU=;
-        b=y4LkLPToOBlnbqiNxg1SV3Wm0LkYQ8dPL0Om/Ts1G+wBefAKhwPikq/43UY0lvLLNL
-         rIdV9JOcimmlKBcILN79asMQZi/OiRzQMtJoObAK7oHSxobLDIo54TibCvHxFhYSF/Iw
-         /qPaLSlaA1bYt6dPXmXeTjOS1mMf9WWMRnu0gR/8f4t+Ljohx+TY1slEyXgQen02xjBn
-         oSAVwIbPKXQyfEI7rgsxzEl4bETkrAonlGn2vXAE7FQBVj1Fce35F6ZYJ2rK0eNjrobr
-         4LpDVGWgoSO5yeWGPf1r3PrmcnZJJTpZdvrKQRZbRoEvWAJBbiD1odsV1cRn6NBDJZjb
-         GHZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/8mQ26icbv/X+xjUK5EuBssp15+UZVQvU7z9wm1s+VU=;
-        b=CS+D4Z6LbavUsNqbbC1MHXs3dZ/eFUIrwj+FWfEbQz4w30Db02gvRCf2GkgGfrsjng
-         6FSLiWZWJMfAsMuYHPF0ynPm9LB3rbgeDIus4LdhdkBRyW1HDKN4t09iEmH49uXjq+f6
-         vGLQn0zvAQV4cX5ndAcbQYVaGkfiTTRFSdCryB52xrasW+vOxwXmuxFAd/YicAmBrRRF
-         DZYm/mwSdMyDbxgO3wVKRJqlRehk4Qx7mA1fmyq+HFWs5UQ/t2s9GKnu4k/8FWN8WTCw
-         mGvkoHvDK7MdS4HivCkLSWhsB8X4xiJca0PnNn2atJzUf/jMdulf5vahgXMWg37SJMbL
-         /wGA==
-X-Gm-Message-State: AOAM5323pc0n82SjGmNZ6IORFzYaueSKbSbTCHOAthZO5AcrVB+JDp+Q
-        Sg9yXMn4cbRXY+BA0NEfDDPx+Q==
-X-Google-Smtp-Source: ABdhPJyzoqLDfFVobgvsBI+4cTEP0RjqyjuLETC90ErunX0xTAUNCEvDAu4Yeu5iaQ3hp2lqQtJ0FQ==
-X-Received: by 2002:a05:6512:3a96:: with SMTP id q22mr12143245lfu.14.1642435557024;
-        Mon, 17 Jan 2022 08:05:57 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id q9sm1154818lfd.266.2022.01.17.08.05.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 08:05:56 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 1C34D10387E; Mon, 17 Jan 2022 19:06:25 +0300 (+03)
-Date:   Mon, 17 Jan 2022 19:06:25 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 04/12] mm/vmscan: Free non-shmem folios without splitting
- them
-Message-ID: <20220117160625.oofpzl7tqm5udwaj@box.shutemov.name>
-References: <20220116121822.1727633-1-willy@infradead.org>
- <20220116121822.1727633-5-willy@infradead.org>
+        Mon, 17 Jan 2022 11:07:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AA4161034;
+        Mon, 17 Jan 2022 16:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD6EC36AE3;
+        Mon, 17 Jan 2022 16:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642435631;
+        bh=savEbw0Fq5jjf0eRzSMg5CUeza/UcrBnw+kG0Zx0SQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qAGiC9WQQQRyt4g9rn98cyXAzcF1q1Xg9AGoWlQE+ukoM49QGVXM/MCvPNt+T6Ily
+         AIBHiC9Ft8zm7rNCfuWmXK5ND4/YGdCCe2GM6UvCXPt+0ff3xwvAjffpyWOAc1P2px
+         5nmcNhoKVfAZo7+Kn1P5LLY8mFjvcoNNvSFHSAyHtWz4RC79cNerjR/msPFwQw6lWB
+         1RRRkzo8waubeN9xphJUEJ75CodbF7hIrSZ9lyYVkuxEXoMf0vOMpt1cZqA/i0EdpU
+         3W48TMw8uO54uuaCEfwkRK3yrJWIN3jQtzjN3k6dYU83CH6pLAWhgruEpWuYtJk5ib
+         CJhcQP/xSYUeg==
+Date:   Mon, 17 Jan 2022 21:37:05 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH net v2] For default mechanism, product would use
+ default MRU 3500 if they didn't define it. But for Foxconn SDX55, there is a
+ known issue which MRU 3500 would lead to data connection lost. So we align
+ it with Qualcomm default MRU settings.
+Message-ID: <20220117160705.GC4209@thinkpad>
+References: <20220117081644.21121-1-slark_xiao@163.com>
+ <20220117084432.GB4209@thinkpad>
+ <50e92997.386b.17e6775c20b.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220116121822.1727633-5-willy@infradead.org>
+In-Reply-To: <50e92997.386b.17e6775c20b.Coremail.slark_xiao@163.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 12:18:14PM +0000, Matthew Wilcox (Oracle) wrote:
-> We have to allocate memory in order to split a file-backed folio, so
-> it's not a good idea to split them in the memory freeing path.
-
-Could elaborate on why split a file-backed folio requires memory
-allocation?
-
-> It also
-> doesn't work for XFS because pages have an extra reference count from
-> page_has_private() and split_huge_page() expects that reference to have
-> already been removed.
-
-Need to adjust can_split_huge_page()?
-
-> Unfortunately, we still have to split shmem THPs
-> because we can't handle swapping out an entire THP yet.
-
-... especially if the system doesn't have swap :P
-
+On Mon, Jan 17, 2022 at 05:54:37PM +0800, Slark Xiao wrote:
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  mm/vmscan.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 700434db5735..45665874082d 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -1728,8 +1728,8 @@ static unsigned int shrink_page_list(struct list_head *page_list,
->  				/* Adding to swap updated mapping */
->  				mapping = page_mapping(page);
->  			}
-> -		} else if (unlikely(PageTransHuge(page))) {
-> -			/* Split file THP */
-> +		} else if (PageSwapBacked(page) && PageTransHuge(page)) {
-> +			/* Split shmem THP */
->  			if (split_huge_page_to_list(page, page_list))
->  				goto keep_locked;
->  		}
-> -- 
-> 2.34.1
 > 
+> 
+> 
+> 
+> At 2022-01-17 16:44:32, "Manivannan Sadhasivam" <mani@kernel.org> wrote:
+> >On Mon, Jan 17, 2022 at 04:16:44PM +0800, Slark Xiao wrote:
+> >> Fixes: 5c2c85315948 ("bus: mhi: pci-generic: configurable network interface MRU")
+> >
+> >You have messed up the patch subject, please fix it. Also, the correct fixes tag
+> >should be the one added the Foxconn modem support, precisely "aac426562f56".
+> >
+> Yes, sorry for this mistake. 
+> >One more thing, please make sure this MRU value works well for other Foxconn
+> >modems supported by this config.
+> >
+> I am sure this would work for all  our device. BTW, I want to add this mru_default to 
+> cinterion-mv31 PRODUCT. Shall I use v3 or create a new version for that? It's confirmed 
+> that this change could help fix issue on that product.
 
--- 
- Kirill A. Shutemov
+Please submit individual patches with Fixes tag each.
+
+> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> >
+> >You should have added my Reviewed-by tag too...
+> Shall I add reviewd-by tag if I add changes on MV31 product?
+> >
+
+No, only to this patch since I haven't reviewed the MV31 patch.
+
+Thanks,
+Mani
+
+> >Thanks,
+> >Mani
+> >
+> >> 
+> >> ---
+> >> v2: Add Fixes tag
+> >> ---
+> >>  drivers/bus/mhi/pci_generic.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >> 
+> >> diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
+> >> index 3a258a677df8..74e8fc342cfd 100644
+> >> --- a/drivers/bus/mhi/pci_generic.c
+> >> +++ b/drivers/bus/mhi/pci_generic.c
+> >> @@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
+> >>  	.config = &modem_foxconn_sdx55_config,
+> >>  	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
+> >>  	.dma_data_width = 32,
+> >> +	.mru_default = 32768,
+> >>  	.sideband_wake = false,
+> >>  };
+> >>  
+> >> -- 
+> >> 2.25.1
+> >> 

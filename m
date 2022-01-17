@@ -2,140 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018B04909DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FC44909E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236644AbiAQN6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:58:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:58574 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233038AbiAQN6n (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:58:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D0091FB;
-        Mon, 17 Jan 2022 05:58:43 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.38.30])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C12D83F766;
-        Mon, 17 Jan 2022 05:58:41 -0800 (PST)
-Date:   Mon, 17 Jan 2022 13:58:39 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: arch/powerpc/kernel/stacktrace.c:171:9: error: implicit
- declaration of function 'nmi_cpu_backtrace'
-Message-ID: <20220117135839.GF87485@C02TD0UTHF1T.local>
-References: <202201140631.ZuSwa9QF-lkp@intel.com>
- <YeE2VWwHO50gFw9M@hirez.programming.kicks-ass.net>
+        id S236869AbiAQOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:02:11 -0500
+Received: from mail-qt1-f174.google.com ([209.85.160.174]:36370 "EHLO
+        mail-qt1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232569AbiAQOCK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 09:02:10 -0500
+Received: by mail-qt1-f174.google.com with SMTP id c19so19241877qtx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:02:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9QRx22hVTpWNuhkrYGZ7CDOh8Y4c3T4FUaJHNtJ9xko=;
+        b=uRy+y3CDyoh09gkVC4w9oyN5TpuquUMaveWeX3Y5xNk+nkbjTSt0lMc0DNJL0dcCTh
+         udiLAUSjp5W49UwPMgws4numk3Mhta8ZQPSZIjGYrKUibgWakciPY9iUguSbkmU51I/e
+         xxT73aJkM/Lg4FbelPgfFvq+63sEXiCEUM0jYxQpWitfIAXlP7MmmJLGQgKs/1a94fln
+         GjcbG91IwM88zrYbr6do/lPaK2riCaDnEyzmfznKGCPpNMe8xiu50/1uyGHDwfkM09SP
+         +jeQXvp6iYftlAfzWCIlrMSDJWeac7++l/PH8eQsYPGsnWqSM2XGc3fJv5dyYesqMgiI
+         XhTQ==
+X-Gm-Message-State: AOAM5313jVzkaJERZYPfts8R7dr7n1ElN8JaB1ijNSJsHGdYPqieicaD
+        rXbZ+TuqEB0LPXxQQLPYoAWolxtSBidFVyki2dPhklT6
+X-Google-Smtp-Source: ABdhPJyHFuUFItOyXZ4vJMv1xBfwgk3TBsfAWgXcXtNsvd3HFIu/y5SOcQEfhCKhxad9mRvFjcOfd/DQlzeBvV5/IGE=
+X-Received: by 2002:a05:622a:118b:: with SMTP id m11mr3119641qtk.369.1642428129276;
+ Mon, 17 Jan 2022 06:02:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeE2VWwHO50gFw9M@hirez.programming.kicks-ass.net>
+References: <1642417623-5393-1-git-send-email-lyz_cs@pku.edu.cn>
+In-Reply-To: <1642417623-5393-1-git-send-email-lyz_cs@pku.edu.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 17 Jan 2022 15:01:54 +0100
+Message-ID: <CAJZ5v0heMSa82qSVrrjrv2ioz5y-18rCKThjbPBACJ6xuXQQQg@mail.gmail.com>
+Subject: Re: [PATCH] driver core: Add missing pm_runtime_put_noidle
+To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 09:37:41AM +0100, Peter Zijlstra wrote:
-> On Fri, Jan 14, 2022 at 06:13:37AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   fb3b0673b7d5b477ed104949450cd511337ba3c6
-> > commit: 1614b2b11fab29dd4ff31ebba9d266961f5af69e arch: Make ARCH_STACKWALK independent of STACKTRACE
-> > date:   5 weeks ago
-> > config: powerpc64-randconfig-r025-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140631.ZuSwa9QF-lkp@intel.com/config)
-> > compiler: powerpc64-linux-gcc (GCC) 11.2.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1614b2b11fab29dd4ff31ebba9d266961f5af69e
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 1614b2b11fab29dd4ff31ebba9d266961f5af69e
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    arch/powerpc/kernel/stacktrace.c: In function 'handle_backtrace_ipi':
-> > >> arch/powerpc/kernel/stacktrace.c:171:9: error: implicit declaration of function 'nmi_cpu_backtrace' [-Werror=implicit-function-declaration]
-> >      171 |         nmi_cpu_backtrace(regs);
-> >          |         ^~~~~~~~~~~~~~~~~
-> >    arch/powerpc/kernel/stacktrace.c: At top level:
-> >    arch/powerpc/kernel/stacktrace.c:224:6: warning: no previous prototype for 'arch_trigger_cpumask_backtrace' [-Wmissing-prototypes]
-> >      224 | void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-> >          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    arch/powerpc/kernel/stacktrace.c: In function 'arch_trigger_cpumask_backtrace':
-> > >> arch/powerpc/kernel/stacktrace.c:226:9: error: implicit declaration of function 'nmi_trigger_cpumask_backtrace'; did you mean 'arch_trigger_cpumask_backtrace'? [-Werror=implicit-function-declaration]
-> >      226 |         nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_backtrace_ipi);
-> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >          |         arch_trigger_cpumask_backtrace
-> >    cc1: some warnings being treated as errors
-> 
-> I suppose this ought to cure things...
-> 
-> diff --git a/arch/powerpc/kernel/stacktrace.c b/arch/powerpc/kernel/stacktrace.c
-> index a2443d61728e..bde1aaedeb72 100644
-> --- a/arch/powerpc/kernel/stacktrace.c
-> +++ b/arch/powerpc/kernel/stacktrace.c
-> @@ -165,7 +165,7 @@ int __no_sanitize_address arch_stack_walk_reliable(stack_trace_consume_fn consum
->  	return 0;
->  }
->  
-> -#if defined(CONFIG_PPC_BOOK3S_64) && defined(CONFIG_NMI_IPI)
-> +#if defined(CONFIG_PPC_BOOK3S_64) && defined(CONFIG_NMI_IPI) && defined(CONFIG_STACKTRACE)
->  static void handle_backtrace_ipi(struct pt_regs *regs)
->  {
->  	nmi_cpu_backtrace(regs);
+On Mon, Jan 17, 2022 at 12:08 PM Yongzhi Liu <lyz_cs@pku.edu.cn> wrote:
+>
+> pm_runtime_get_noresume() in device_shutdown increments the
+> runtime PM usage counter,
 
-Hmm...
+This is on purpose, to prevent devices from being runtime-suspended
+after their shutdown callbacks have run.
 
-In include/linux/nmi.h we have:
+> thus a matching decrement is needed
 
-| #ifdef arch_trigger_cpumask_backtrace
-| ...
-| bool nmi_cpu_backtrace(struct pt_regs *regs);
-| #else
-| ...
-| #endif 
+No, it is not, AFAICS.
 
-... and in lib/nmi_backtrace.c we have:
-
-| #ifdef arch_trigger_cpumask_backtrace
-| ...
-| bool nmi_cpu_backtrace(struct pt_regs *regs)
-| {
-|    ...
-| }
-| ...
-| #endif 
-
-In arch/powerpc/include/asm/nmi.h we have:
-
-| #if defined(CONFIG_NMI_IPI) && defined(CONFIG_STACKTRACE)
-| extern void arch_trigger_cpumask_backtrace(const cpumask_t *mask,
-|                                            bool exclude_self);
-| #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
-| #endif
-
-Either it's sufficient to check only CONFIG_NMI_IPI &&
-CONFIG_STACKTRACE, or there's a latent bug when CONFIG_NMI_IPI &&
-CONFIG_STACKTRACE && !CONFIG_PPC_BOOK3S_64.
-
-For consistency with teh other ifedeffery I reckon this should be:
-
-| #if defined(CONFIG_NMI_IPI) && defined(CONFIG_STACKTRACE)
-
-... and we need to adjust the comment for hte #endif, too.
-
-Otherwise, this makes sense to me -- did you plan to send this as a
-patch, or did you want someone else to spin one?
-
-Thanks,
-Mark.
+> to keep the counter balanced.
+>
+> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+> ---
+>  drivers/base/core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index fd034d7..29950bd 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -4523,6 +4523,8 @@ void device_shutdown(void)
+>                         dev->driver->shutdown(dev);
+>                 }
+>
+> +               pm_runtime_put_noidle(dev);
+> +
+>                 device_unlock(dev);
+>                 if (parent)
+>                         device_unlock(parent);
+> --
+> 2.7.4
+>

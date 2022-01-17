@@ -2,172 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 241E8490AF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252C5490AFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbiAQPAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiAQPAp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:00:45 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856ABC06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:00:45 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so2891724otu.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:00:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/dxZvD461SlMfyeHYzrFRmG+0lHmJjYtARJeJQLPvpY=;
-        b=lWRjQkiGCj+cTGTeXbOuRbrEMphiURVSpENiEBC0prgzVPEt0g8iXSfTDmshf+ViTD
-         CIjoFMzlGXB7oJSSoq0W5kXmTUcSRHhur2KTpXyIbekYrhC+nJS9YFMUx9a0EKRF2F15
-         dMtZKZCCYLoW+ULl/4YVAuX/Mk6zWOwbLrHx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/dxZvD461SlMfyeHYzrFRmG+0lHmJjYtARJeJQLPvpY=;
-        b=rLprGQAleqfkTFKGivp7INRx4JKzf67fEOZfbg3f81lG7vHibLHEcdfZZzxGIMOT6T
-         z9lJA4IRI7py1ZmUtl11bUlCWGvEhwhHEJ3EgUbvTwLENtRbDW4GFLxWx31Bg+93MjzN
-         rbGR/YMNGy9y/E/kv//0MUabmbct60JxGNCABWdJuzUqkssbnrNHjEvcwtbrkKDIfSvZ
-         cTyPDOA/eVKash+hTJbtJBiIiFLEDgw30eiWt1uHxPo27tYaUmtGhPepmqr2xaqvQU8h
-         NkBMTy3VAZJ80bL/4iT2ZGy2qhubx3poh/XYZImOQanXOrjsRFerhr+0VsMfCVp81dq1
-         LWHg==
-X-Gm-Message-State: AOAM530ffDXfZcI3IG6tAybzotILkZJYflN7NtTMuwzlvdvggCJESZd0
-        FdXPyv1MG/m9CYN3RmEEWWXkcvQPGSKv+IWbKgMiig==
-X-Google-Smtp-Source: ABdhPJyjl9zZGHl5jLCvJP/Li+7kpC1gjq+uBoXlAxknMVKszuG/kGjLQ+TET5p0Sgcor7GmumXL5rsNoxy7CE3/xvY=
-X-Received: by 2002:a9d:685a:: with SMTP id c26mr16484836oto.239.1642431644611;
- Mon, 17 Jan 2022 07:00:44 -0800 (PST)
+        id S237257AbiAQPB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:01:28 -0500
+Received: from mail-mw2nam08on2089.outbound.protection.outlook.com ([40.107.101.89]:44897
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234686AbiAQPB0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 10:01:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mKvPyuwRaPuovMSXX0GOSOH3XVh4VWX/F2t8WM/0gPsDHvJPcyUHSiDrmvYfEpi+f1oqpIH/Gl6fn5gXCJqsre6lYWHCWjJ3IiGZXv7lKhYAGV8XKZRjYoHDQfKBa4q4be+yNckK9ztMja0Wa+gQlsKUpsO7pCb+EfcvjqpBEgj7ug9s+n6u96SOKSxB7jNC1AQSjv+MV1aKkj3m7Sj38zJOKdXH6hUeoWwHGXw6CR1cNYC1a9VH72zmsRZowynjUMgDGcrY/zpwgjSR7XAf9Jcz/rimmE6Ec7t+o8mq0UqNt3pYi2eF4vUOb0SR10nwkzOabqThChrlFG44+59upw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/Cx7bWS2pRq6Y613DdQYMRNcGLfA9G8tuuMQDpIQ1Fw=;
+ b=mFuMLSGcHnabaLdOJKrxg6prhJvRNErwKbcIiJF5fxrOinfzMonDY0iyyE77wvgEglKnR9eJSTgnmbED12HhX7uWaPv9xlhyPgacGbD+y3xX8gQPO1U1P2EnzTrYupuPwxM4/eHA953Hz6iMqWf3KCc0DHUUaWsOkjpWjiJYvY/Kz6hYv64HmHGgzG4xOUaIx/AA1sdA0hWvbvq1spkh2NrPMZogqlQ0UU3rTvQ14SNWkn4ia6jhrNwsiyQSeVQN6HJZpCmNkVQkc9uv4tcDchc9yJYOkudIrAdeMIAZ4hzubIBzoncC2NCqHAV+q2XNgxnX/8qp/QS5lsjx19EmPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Cx7bWS2pRq6Y613DdQYMRNcGLfA9G8tuuMQDpIQ1Fw=;
+ b=Y1cwOf1WOo2GRjai7DD469jv2VbM3NEOAq6wn1Vq+36ngDLZWoZDwQIHMgWLbpOWz0WmLA0OnGNGiqdrJkZIrk4Xn5QcGlRxx880oRQiqrQlLH27GM4vzIeTs5f1JGpD4JHeqseZN8WPRKeVzoXgAJ1MNYth45YWcKpA1WbKrK1tMhK8am22OyCTat7Opt6W0+qkLSP2ZHatTUsiM4vNIxoTcGg6OQvcD8eqmcHCZKrBYPXr7sIaEeHWQHDUYqqX1Y4CVeg0g3kg2HxfnG+rs+MWBv7x91aUz8w6ojErghCOCDXp3TMiXWcyfSXMRDuDty+lACck0nI6bItDVQTQmA==
+Received: from BN0PR04CA0128.namprd04.prod.outlook.com (2603:10b6:408:ed::13)
+ by DM6PR12MB2617.namprd12.prod.outlook.com (2603:10b6:5:4a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Mon, 17 Jan
+ 2022 15:01:25 +0000
+Received: from BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::2) by BN0PR04CA0128.outlook.office365.com
+ (2603:10b6:408:ed::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10 via Frontend
+ Transport; Mon, 17 Jan 2022 15:01:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT066.mail.protection.outlook.com (10.13.177.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4888.9 via Frontend Transport; Mon, 17 Jan 2022 15:01:24 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 17 Jan
+ 2022 15:01:03 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 17 Jan
+ 2022 15:01:03 +0000
+Received: from moonraker.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Mon, 17 Jan 2022 15:01:01 +0000
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH V2] usb: common: ulpi: Fix crash in ulpi_match()
+Date:   Mon, 17 Jan 2022 15:00:39 +0000
+Message-ID: <20220117150039.44058-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
-In-Reply-To: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 17 Jan 2022 16:00:33 +0100
-Message-ID: <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 06dce57d-551e-46f3-c762-08d9d9ca3aff
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2617:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB26179AE6052761EE2622BC49D9579@DM6PR12MB2617.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iSZFvxydmekXqSm6g+27IvbUYFMMJk7+MJavbmO/0ua8MHk9J4vxELdmcgVsW8BlPu85uXYRchkdf3KSy4UCAqTV6xfM05ri0hWrTzaBJ/E1qUVA1CWBGWB8Ogn3B28yFpNLtC7uqv+DRLLq+KlKxPsQRNlaTiItt764PvjILxayRrEPkLhLWbhseoo0PRHuo3X44eKVNksTYbH8eMsrmWcPxQWu7HXpHvF/miq+FouqJrKA/uYqys6IGkyjX+E38cLxsui6C+k5XKjP0b6FSajxNI6Eq2W9FXhc1tNXryUEUbkz0p1tnrBodUWCw3wwpDHSkmOcIeiPo4CsnF8oCLk88d05dcKpbYBs90Bbdv2WCKWAlCIIbC0axBwInbz0dPJNG826x97Tp2UTguMKRoaUBoGSoNN/0+YRsGrCfcnMWAbsh1g+hNOrBfOxnLG7luJIb/vjVZrgq2RmkmxhXuuWT1ZLv8vpiJTFO93RVe1zvoJooqF6ONa/IzD+2BjnS0mIled2POV7sGaN33JbX9l58gZe3palCUtWLSjrpQb3pkHmkR4JOP1vofeDheWVABH9CFqghfAzTKesLJ85ReNfd4Ixp6wN7YPvPF6gsVbY1xZpsKHrSP3WVp2+R6VqmXGTBu8hJfSPewWeAra3NelnSy2rGzUc7CRgUcHV20duljyzErWY+kSHibFEQtf3pGy4WeSEQ0LXNyHz7t6bKCGIWQzet6SoAgiaLB+rJCtLm7Xs34zCkdGi1IoILQq/yYk59WcE68FU3ypjduVH1fisx/GgeU6f1Jx7yvm1YdE=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(36860700001)(4326008)(54906003)(81166007)(82310400004)(6666004)(26005)(40460700001)(47076005)(508600001)(2906002)(1076003)(107886003)(316002)(5660300002)(110136005)(36756003)(426003)(356005)(186003)(83380400001)(336012)(70586007)(8676002)(70206006)(8936002)(2616005)(86362001)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 15:01:24.4223
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06dce57d-551e-46f3-c762-08d9d9ca3aff
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2617
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 1:16 PM Helge Deller <deller@gmx.de> wrote:
->
-> Hello Daniel,
->
-> On 1/17/22 11:02, Daniel Vetter wrote:
-> > Hi Helge
-> >
-> > On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
-> >>
-> >> The fbdev layer is orphaned, but seems to need some care.
-> >> So I'd like to step up as new maintainer.
-> >>
-> >> Signed-off-by: Helge Deller <deller@gmx.de>
-> >>
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index 5d0cd537803a..ce47dbc467cc 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/emulator/index.html
-> >>  F:     arch/x86/math-emu/
-> >>
-> >>  FRAMEBUFFER LAYER
-> >> -L:     dri-devel@lists.freedesktop.org
-> >> +M:     Helge Deller <deller@gmx.de>
-> >>  L:     linux-fbdev@vger.kernel.org
-> >> -S:     Orphan
-> >
-> > Maybe don't rush maintainer changes in over the w/e without even bothering
-> > to get any input from the people who've been maintaining it before.
-> >
-> > Because the status isn't entirely correct, fbdev core code and fbcon and
-> > all that has been maintained, but in bugfixes only mode. And there's very
-> > solid&important reasons to keep merging these patches through a drm tree,
-> > because that's where all the driver development happens, and hence also
-> > all the testing (e.g. the drm test suite has some fbdev tests - the only
-> > automated ones that exist to my knowledge - and we run them in CI). So
-> > moving that into an obscure new tree which isn't even in linux-next yet is
-> > no good at all.
-> >
-> > Now fbdev driver bugfixes is indeed practically orphaned and I very much
-> > welcome anyone stepping up for that, but the simplest approach there would
-> > be to just get drm-misc commit rights and push the oddball bugfix in there
-> > directly. But also if you want to do your own pull requests to Linus for
-> > that I don't care and there's really no interference I think, so
-> > whatever floats.
-> >
-> > But any code that is relevant for drm drivers really needs to go in through
-> > drm trees, nothing else makes much sense.
-> >
-> > I guess you're first action as newly minted fbdev maintainer is going to be to
-> > clean up the confusion you just created.
->
-> Most of my machines depend on a working fbdev layer since drm isn't (and probably
-> -due to technical requirements of DRM- won't be) available for those.
-> So, since the fbdev drivers were marked orphaned, I decided to step up as maintainer.
->
-> I see your point that at least the fbdev core code and fbcon are shared between DRM and fbdev.
-> For me it's really not important to drive any patches through a seperate tree, so
-> I'd be happy to join the drm-misc tree if you feel it's necessary. (By the way,
-> adding my tree to for-next was on my todo list...)
->
-> What's important for me though is, to keep fbdev actively maintained, which means:
-> a) to get fixes which were posted to fbdev mailing list applied if they are useful & correct,
+Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+on the Tegra20 Ventana platform in the ulpi_match() function.
 
-Yeah it'd be great if we have that, for a while Bart took care of
-these, but had to step down again. drm-misc is maintained with the dim
-scrip suite, which comes with docs and bash completion and everything.
-Good starting pointer is here:
+The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+registers a ulpi_driver but this driver does not provide an 'id_table',
+so when ulpi_match() is called on the Tegra20 Ventana platform, it
+crashes when attempting to deference the id_table pointer which is not
+valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+ULPI driver with the device and so fix this crash by using device-tree
+for matching if the id_table is not valid.
 
-https://drm.pages.freedesktop.org/maintainer-tools/getting-started.html
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+---
+Changes since V1:
+- Added fixes tag
 
-Process for getting commit rights is documented here:
+ drivers/usb/common/ulpi.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
-
-But there's a pile more. I think once we've set that up and got it
-going we can look at the bigger items. Some of them are fairly
-low-hanging fruit, but the past 5+ years absolutely no one bothered to
-step up and sort them out. Other problem areas in fbdev are extremely
-hard to fix properly, without only doing minimal security-fixes only
-support, so fair warning there. I think a good starting point would be
-to read the patches and discussions for some of the things you've
-reverted in your tree.
-
-Anyway I hope this gets you started, and hopefully after a minor
-detour: Welcome to dri-devel, we're happy to take any help we can get,
-there's lots to do!
-
-Cheers, Daniel
-
-> b) to include new drivers (for old hardware) if they arrive (probably happens rarely but there can be).
->    I know of at least one driver which won't be able to support DRM....
->    Of course, if the hardware is capable to support DRM, it should be written for DRM and not applied for fbdev.
-> c) reintroduce the state where fbcon is fast on fbdev. This is important for non-DRM machines,
->    either when run on native hardware or in an emulator.
-> d) not break DRM development
->
-> Especially regarding c) I complained in [1] and got no feedback. I really would like to
-> understand where the actual problems were and what's necessary to fix them.
->
-> Helge
->
-> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
-
-
-
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index 4169cf40a03b..8f8405b0d608 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev, struct device_driver *driver)
+ 	struct ulpi *ulpi = to_ulpi_dev(dev);
+ 	const struct ulpi_device_id *id;
+ 
+-	/* Some ULPI devices don't have a vendor id so rely on OF match */
+-	if (ulpi->id.vendor == 0)
++	/*
++	 * Some ULPI devices don't have a vendor id
++	 * or provide an id_table so rely on OF match.
++	 */
++	if (ulpi->id.vendor == 0 || !drv->id_table)
+ 		return of_driver_match_device(dev, driver);
+ 
+ 	for (id = drv->id_table; id->vendor; id++)
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.25.1
+

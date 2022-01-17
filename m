@@ -2,117 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCD4490428
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0543B490429
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238351AbiAQImK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbiAQImH (ORCPT
+        id S238327AbiAQImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:42:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58643 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238330AbiAQImH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Jan 2022 03:42:07 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49DFC061574;
-        Mon, 17 Jan 2022 00:42:06 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id ie23-20020a17090b401700b001b38a5318easo21423765pjb.2;
-        Mon, 17 Jan 2022 00:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5onbuFYOFRTdmiOefhelTPb1vtwXuvBGEeko4zL+Gus=;
-        b=lTFBGVb3VI9Pp2XzCX2o8oK0JNGpsLGozrM3M1pjfrgUTyKilWjfe018znEQQv00kV
-         uCJ9mZYr2imldsl/X7kKLT/qOTkXfTGSVPjsHAj0hnD5X0jhxQF6pY8Vin51SsJOmeFH
-         M79mBIFgVl02iGw6F8gXajYURE5fbTboA6l6Qctc8hRcIdEsAqLNzvPTvnLVJlIa2K2w
-         P4aFuwve2uJhkrbDpOESzn8uZUoZdO1BaVxYm5yvxvGRCXcf/QNl9pSPUJ1axlU7jpA6
-         IK9On/cYQtiTwawot8vSXJ7AjbBUGfq/B3vtkjSBgMVRtncEg0OqgxJ6T+Am3FQ1FO7E
-         DFAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642408926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XGK1SlpJXhWBG+NMFQFueBq+YAxFBORg6nehgEQYpqw=;
+        b=Zd+y0zN3aYj7Z1zv5oI6R2PRqZlb9NgeiwlKARPFuwWwrtf7HHHpA1nWv1CepPAJh417Ap
+        g1sIvTnaVEFNpjBdo16G8kB6Bu3o8bRfsGTJnsnuOd92obDgsoy0O5v/3qK2NYODRY/Boy
+        Gn1wBO/Vdw3R+BIsnTjIYKm+jNWINZI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-413-QMngAcABM3m5UqQ4s22PJw-1; Mon, 17 Jan 2022 03:42:05 -0500
+X-MC-Unique: QMngAcABM3m5UqQ4s22PJw-1
+Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso13510983edt.20
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:42:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5onbuFYOFRTdmiOefhelTPb1vtwXuvBGEeko4zL+Gus=;
-        b=h2Pl1iySROm2WA887ymNoG+9FSBXUDeyIm5nU8953lv9L6FbtoRlWML4qLXpswcepw
-         Za5NKrzjJr74qiaFpOrISoF1KqI4XKr9e82IdoGFhgEUg0BxqAHHi8BDJb93w78RGz3c
-         GaMYnMgZokTrTbwnBgs5PzWVrD6Ru40CPeadeLP/By5LP5AcMt95ZW3AeqkIMwmnALFe
-         puCooOwIj6IjHhXREY1S9YlYn9enoI9fW/JK0rXPPkiA/WBpH2f4BuFoNZatkD+U6LZB
-         bkzsy+xfJiBqacKQqQ7Qv9La3LBKPZ6UarukIC3Tudm4lzRRuryUni6LcdvGKrEpi2OW
-         vJVQ==
-X-Gm-Message-State: AOAM530CxDTYl2JOrHyNQlowe9jBb7zo0+32RoiLPdcDWUrT4xwU0q6T
-        Jn0aauupGbbPuA5ZTilX8n0IwW3hByY7Fw==
-X-Google-Smtp-Source: ABdhPJyUyt6ygJ1Q5CL/MBBOFkS0XS5iZbCH1+5RzfcHne//TAXKgwCe8S9+NnrYFtBqbf2mb0udFA==
-X-Received: by 2002:a17:90a:380b:: with SMTP id w11mr23856163pjb.113.1642408926493;
-        Mon, 17 Jan 2022 00:42:06 -0800 (PST)
-Received: from nj08008nbu.spreadtrum.com ([240e:47b:800:d5d1:d9c9:3c3f:6ba3:517a])
-        by smtp.gmail.com with ESMTPSA id b7sm6385498pff.61.2022.01.17.00.42.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jan 2022 00:42:05 -0800 (PST)
-From:   Kevin Tang <kevin3.tang@gmail.com>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, mark.rutland@arm.com,
-        javierm@redhat.com, tzimmermann@suse.de, lukas.bulwahn@gmail.com
-Cc:     zou_wei@huawei.com, kevin3.tang@gmail.com, pony1.wu@gmail.com,
-        orsonzhai@gmail.com, dan.carpenter@oracle.com,
-        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 3/3] drm/sprd: check the platform_get_resource() return value
-Date:   Mon, 17 Jan 2022 16:41:56 +0800
-Message-Id: <20220117084156.9338-1-kevin3.tang@gmail.com>
-X-Mailer: git-send-email 2.29.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=XGK1SlpJXhWBG+NMFQFueBq+YAxFBORg6nehgEQYpqw=;
+        b=kJPthfDO1R0bBub+XLZdGiS/iMKYyUdci1c7I/j6km+/VioVzeYIwOyXLjIBa+O+ox
+         HzINH/ZJW2YUoIPaSfxK7NyOmHewyqmZhBVY5UT+3oAzWjYURwDOdOHX254fXwvPoZhl
+         tZhZXAHRaZ2pLgt7rvORGBMWs6MDImIiKN/f4x32VTdO3KiqpDQzdSNt6yu9l/gAmHxn
+         XUlEr+7hQZJN6OAIogP5s6+m69MCeznGnxkfMQwZd7NYguFoU6ySQYWtUjXthNgLuHVv
+         xFKUyCXGtssjaSd2WTLXi3YOM1b3R0UtgYqRkGvysKqDgmSlzPc4BgyScJPbT54PC2KM
+         tZYw==
+X-Gm-Message-State: AOAM530uI65wzI+iCtfs6DlbqwP3KGwCn6VbqpleFLVYpqqZ9mqEjbeV
+        efj7WLDhw0a57q9mfPa/9OGCPdWTtgU2RHB82Kit8Y6DNNr8Fsugj9mpKg+LAZ+W+mLytaAEz4X
+        zT4Eyb8BVapUjI8rzA1fD5qTG
+X-Received: by 2002:aa7:d88d:: with SMTP id u13mr12929566edq.217.1642408923695;
+        Mon, 17 Jan 2022 00:42:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQaNHnu9csjbqL/rvTKocAVaWQGdF9eKIb7dk2s05zyxmDzJTWikk+EcxQrUKDwpxHigdkag==
+X-Received: by 2002:aa7:d88d:: with SMTP id u13mr12929556edq.217.1642408923485;
+        Mon, 17 Jan 2022 00:42:03 -0800 (PST)
+Received: from janakin.usersys.redhat.com ([83.148.38.137])
+        by smtp.gmail.com with ESMTPSA id y7sm4989329edq.27.2022.01.17.00.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 00:42:02 -0800 (PST)
+Date:   Mon, 17 Jan 2022 09:42:01 +0100
+From:   Jan Stancek <jstancek@redhat.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>, amd-gfx@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: RIP: 0010:radeon_vm_fini+0x15/0x220 [radeon]
+Message-ID: <20220117084158.GA2673957@janakin.usersys.redhat.com>
+References: <YeLyToEyBFnQqQGB@zn.tnic>
+ <1049939c-422f-787a-7481-21a2598eeedd@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <1049939c-422f-787a-7481-21a2598eeedd@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource() may fail and return NULL, so check it's value
-before using it.
+On Mon, Jan 17, 2022 at 08:16:09AM +0100, Christian König wrote:
+>Hi Borislav,
+>
+>Am 15.01.22 um 17:11 schrieb Borislav Petkov:
+>>Hi folks,
+>>
+>>so this is a *very* old K8 laptop - yap, you read it right, family 0xf.
+>>
+>>[   31.353032] powernow_k8: fid 0xa (1800 MHz), vid 0xa
+>>[   31.353569] powernow_k8: fid 0x8 (1600 MHz), vid 0xc
+>>[   31.354081] powernow_k8: fid 0x0 (800 MHz), vid 0x16
+>>[   31.354844] powernow_k8: Found 1 AMD Turion(tm) 64 Mobile Technology MT-34 (1 cpu cores) (version 2.20.00)
+>>
+>>This is true story.
+>
+>well, that hardware is ancient ^^.
+>
+>Interesting to see that even that old stuff is still used.
+>
+>>Anyway, it blows up, see below.
+>>
+>>Kernel is latest Linus tree, top commit is:
+>>
+>>a33f5c380c4b ("Merge tag 'xfs-5.17-merge-3' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux")
+>>
+>>I can bisect if you don't see it immediately why it blows up.
+>
+>Immediately I see that code is called which isn't for this hardware 
+>generation.
+>
+>This is extremely odd because it means that we either have recently 
+>added a logic bug or the detection of the hardware generation doesn't 
+>work as expected any more.
+>
+>Please bisect,
+>Christian.
 
-Reported-by: Zou Wei <zou_wei@huawei.com>
-Signed-off-by: Kevin Tang <kevin.tang@unisoc.com>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+I'm see panics like this one as well on multiple systems in lab (e.g. ProLiant SL390s G7,
+PowerEdge R805). Looks same to what Bruno reported here:
+  https://lore.kernel.org/all/CA+QYu4rt2VHWzbOt-SegA9yABqC-D36PoqTZmy6DscWvp+6ZMQ@mail.gmail.com/
 
-v1 -> v2:
-- new patch
----
- drivers/gpu/drm/sprd/sprd_dpu.c | 5 +++++
- drivers/gpu/drm/sprd/sprd_dsi.c | 5 +++++
- 2 files changed, 10 insertions(+)
+It started around 8d0749b4f83b - Merge tag 'drm-next-2022-01-07', running a bisect atm.
 
-diff --git a/drivers/gpu/drm/sprd/sprd_dpu.c b/drivers/gpu/drm/sprd/sprd_dpu.c
-index 06a3414ee..1637203ea 100644
---- a/drivers/gpu/drm/sprd/sprd_dpu.c
-+++ b/drivers/gpu/drm/sprd/sprd_dpu.c
-@@ -790,6 +790,11 @@ static int sprd_dpu_context_init(struct sprd_dpu *dpu,
- 	int ret;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		dev_err(dev, "failed to get I/O resource\n");
-+		return -EINVAL;
-+	}
-+
- 	ctx->base = devm_ioremap(dev, res->start, resource_size(res));
- 	if (!ctx->base) {
- 		dev_err(dev, "failed to map dpu registers\n");
-diff --git a/drivers/gpu/drm/sprd/sprd_dsi.c b/drivers/gpu/drm/sprd/sprd_dsi.c
-index 911b3cddc..12b67a5d5 100644
---- a/drivers/gpu/drm/sprd/sprd_dsi.c
-+++ b/drivers/gpu/drm/sprd/sprd_dsi.c
-@@ -907,6 +907,11 @@ static int sprd_dsi_context_init(struct sprd_dsi *dsi,
- 	struct resource *res;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		dev_err(dev, "failed to get I/O resource\n");
-+		return -EINVAL;
-+	}
-+
- 	ctx->base = devm_ioremap(dev, res->start, resource_size(res));
- 	if (!ctx->base) {
- 		drm_err(dsi->drm, "failed to map dsi host registers\n");
--- 
-2.29.0
+[   15.230105] SGI XFS with ACLs, security attributes, scrub, quota, no debug enabled 
+[   15.234816] XFS (sdb1): Mounting V5 Filesystem 
+[   15.342261] [drm] ib test succeeded in 0 usecs 
+[   15.343311] [drm] No TV DAC info found in BIOS 
+[   15.344061] [drm] Radeon Display Connectors 
+[   15.344330] [drm] Connector 0: 
+[   15.344961] [drm]   VGA-1 
+[   15.345174] [drm]   DDC: 0x60 0x60 0x60 0x60 0x60 0x60 0x60 0x60 
+[   15.345991] [drm]   Encoders: 
+[   15.346617] [drm]     CRT1: INTERNAL_DAC1 
+[   15.346942] [drm] Connector 1: 
+[   15.347561] [drm]   VGA-2 
+[   15.347746] [drm]   DDC: 0x6c 0x6c 0x6c 0x6c 0x6c 0x6c 0x6c 0x6c 
+[   15.348598] [drm]   Encoders: 
+[   15.349217] [drm]     CRT2: INTERNAL_DAC2 
+[   15.349521] BUG: kernel NULL pointer dereference, address: 0000000000000000 
+[   15.349974] #PF: supervisor read access in kernel mode 
+[   15.350305] #PF: error_code(0x0000) - not-present page 
+[   15.350675] PGD 0 P4D 0  
+[   15.350814] Oops: 0000 [#[   15.431048] CPU: 0 PID: 410 Comm: systemd-udevd Tainted: G          I       5.16.0 #1 
+[   15.443401] XFS (sdb1): Ending clean mount 
+[   15.451541] Hardware name: HP ProLiant SL390s G7/, BIOS P69 07/02/2013 
+[   15.451545] RIP: 0010:radeon_vm_fini+0x174/0x300 [radeon] 
+[   15.452689] Code: e8 74 cc 7a c1 eb d1 4c 8b 24 24 4d 8d 74 24 48 49 8b 5c 24 48 49 39 de 74 38 66 2e 0f 1f 84 00 00 00 00 00 66 90 4c 8d 7b a8 <48> 8b 2b 48 8d 7b 18 e8 30 1e f4 ff 48 83 c3 c0 48 89 df e8 34 f3 
+[   15.454412] RSP: 0018:ffffa3494800001 R08: 0000000000200000 R09: 0000000000000000 
+[   15.533944] R10: 0000000000000000 R11: ffffffffc04f7810 R12: ffff979b4ba46730 
+[   15.533945] R13: ffff979d5c260000 R14: ffff979b4ba46778 R15: ffffffffffffffa8 
+[   15.533947] FS:  00007f3a13141500(0000) GS:ffff979d4ba00000(0000) knlGS:0000000000000000 
+[   15.533948] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033 
+[   15.533950] CR2: 0000000000000000 CR3: 000000031c7fc005 CR4: 00000000000206f0 
+[   15.533952] Call Trace: 
+[   15.533956]  <TASK> 
+[   15.533959]  radeon_driver_open_kms+0x118/0x180 [radeon] 
+[   15.533998]  drm_file_alloc+0x1a8/0x230 [drm] 
+[      
+  OK   [[   15.961755]  drm_client_init+0x99/0x130 [drm] 
+  [   15.961777]  drm_fb_helper_init+0x32/0x50 [drm_kms_helper] 
+  [   15.961809]  radeon_fbdev_init+0xbc/0x110 [radeon] 
+  [   15.963653]  radeon_modeset_init+0x857/0x9e0 [radeon] 
+  0m] Mounted  [0;[   15.964003]  radeon_driver_load_kms+0x19b/0x290 [radeon] 
+  [   15.964474]  drm_dev_register+0xf5/0x2d0 [drm] 
+  1;39msysroot.mou[   15.965196]  radeon_pci_probe+0xc3/0x120 [radeon] 
+  [   15.965972]  pci_device_probe+0x185/0x220 
+  [   15.966225]  call_driver_probe+0x32/0xd0 
+  [   15.966505]  really_probe+0x157/0x380 
+  [   15.99bus_add_driver+0x111/0x210 
+  [   16.467150]  ? 0xffffffffc0412000 
+  [   16.467805]  driver_register+0x81/0x120 
+  [   16.468069]  do_one_initcall+0xb0/0x290 
+  [   16.468359]  ? down_write+0xe/0x40 
+  [   16.469008]  ? kernfs_activate+0x28/0x130 
+  [   16.469267]  ? kernfs_add_one+0x1c8/0x210 
+  [   16.469563]  ? vunmap_p4d_range+0x3dc/0x420 
+  [   16.469858]  ? __vunmap+0x1df/0x2a0 
+  [   16.470466]  ? kmem_cache_alloc_trace+0x1a4/0x330 
+  [   16.471224]  ? do_init_module+0x24/0x230 
+  [   16.471485]  do_init_module+0x5a/0x230 
+  [   16.471779]  load_module+0x145f/0x1630 
+  [   16.472022]  ? kernel_read_file_from_fd+0x5d/0x80 
+  [   16.472762]  __se_sys_finit_module+0x9f/0xd0 
+  [   16.473480]  do_syscall_64+0x43/0x90 
+  [   16.473778]  entry_SYSCALL_64_after_hwframe+0x44/0xae 
+  [   16.474123] RIP: 0033:0x7f3a13d11e2d 
+  [   16.474422] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d bb 7f 0e 00 f7 d8 64 89 01 48 
+  [   16.476010] RSP: 002b:00007fff9cb92b78 EFLAGS: 00000246 ORIG_RAX: 000000 R08: 0000000000000000 R09: 0000000000000002 
+  [   16.977414] R10: 0000000000000012 R11: 0000000000000246 R12: 00007f3a13e6d43c 
+  [   16.978320] R13: 0000555c5eba3080 R14: 0000000000000007 R15: 0000555c5eba3d70 
+  [   16.979218]  </TASK> 
+  [   16.979381] Modules linked in: xfs radeon(+) drm_ttm_helper ttm i2c_algo_bit drm_kms_helper crct10dif_pclmul crc32_pclmul crc32c_intel cec ata_generic ghash_clmulni_intel drm serio_raw pata_acpi hpwdt 
+  [   16.980516] CR2: 0000000000000000 
+  [   16.981179] ---[ end trace d6f7f573dad76bd2 ]--- 
+  [   16.981861] RIP: 0010:radeon_vm_fini+0x174/0x300 [radeon] 
+  [   16.982257] Code: e8 74 cc 7a c1 eb d1 4c 8b 24 24 4d 8d 74 24 48 49 8b 5c 24 48 49 39 de 74 38 66 2e 0f 1f 84 00 00 00 00 00 66 90 4c 8d 7b a8 <48> 8b 2b 48 8d 7b 18 e8 30 1e f4 ff 48 83 c3 c0 48 89 df e8 34 f3 
+  [   16.983766] RSP: 0018:ffffa3494801f8e8 EFLAGS: 00010286 
+  [   16.984124] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000 
+  nt   
+   - /sysroo[   16.984981] RDX: 0000000000000001 RSI: ffff979b4ba46730 RDI: ffff979b4ba46750 
+   [   16.985898] RBP: 0000000000000001 R08: 0000000000200000 R09: 0000000000000000 
+   [   16.986730] R10: 0000000000000000 R11: ffffffffc04f7810 R12: 0 ES: 0000 CR0: 0000000080050033 
+   [   17.488057] CR2: 0000000000000000 CR3: 000000031c7fc005 CR4: 00000000000206f0 
+   [   17.489013] Kernel panic - not syncing: Fatal exception 
+   [   17.489404] Kernel Offset: 0x0 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff) 
+   [   17.490485] ---[ end Kernel panic - not syncing: Fatal exception ]--- 
+
 

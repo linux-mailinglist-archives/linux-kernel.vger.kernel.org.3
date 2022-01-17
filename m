@@ -2,149 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C43C490707
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DD349070B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbiAQLSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238938AbiAQLSm (ORCPT
+        id S236238AbiAQLTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:19:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58389 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236728AbiAQLTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:18:42 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5170C061401
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:18:41 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m4so63982790edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:18:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1U+MO7BClWc4cGfvNBl6cQXhNHZ2EpawrE7wpyjmSlU=;
-        b=H68wnCWCkg20QgNO8XJpB6pf6OSiPm1Nv2FITEANqlmGTdw2efMMfOEbbWmNs9ajC9
-         46SEzeFfEUUG1Q/9PaOAZouyJ8WfFBMtiGHqKWTh4ATWtEAnoAmpTTA7L0zQqcpY85gy
-         RCaHaQrgR8L7gGP6hTcWXy4Wk0mTaW2Y4VInA=
+        Mon, 17 Jan 2022 06:19:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642418344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jNK4+oxv+4tUoh6c7iPxH0pa9jSuShrN6epRZwOx+g8=;
+        b=iYne2BeWRIJvo17MaDfV0Rvy1SxwDEtqAgGUgdDGC/H/+5YowMT5Rp2vfE6+pS+Px2qdDw
+        C/FmlXexI8gGc/GNJMkUHDShx9fMRrdbFHP8nxMeXFGJUJLNX59vsiwEkiGIJjKnWL9APV
+        3OIiOlzcsWr3B3KpShp0/z1S/+n6z9U=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-168-MGjgVKL2PKeyaDT0rxv0Vg-1; Mon, 17 Jan 2022 06:19:02 -0500
+X-MC-Unique: MGjgVKL2PKeyaDT0rxv0Vg-1
+Received: by mail-wm1-f70.google.com with SMTP id 20-20020a05600c22d400b00349067fe7b7so5104348wmg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:19:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1U+MO7BClWc4cGfvNBl6cQXhNHZ2EpawrE7wpyjmSlU=;
-        b=nG0t9bwRUsadel7ATqWNnVzTvZq3H57XH24C85daIjG1KtFAglQhhP443PjOfl/gbv
-         X6Q88vywsd7M+vHd3A2zvH0jdALeTQUB9mSogbp42n9myMQYrlnOiO/LjSgYE6BGJwwW
-         CEuLtYVYi9NVaSIl9/dc9A79iHajMWhw5XWC805xJ5ALIOR420Egwz+ykR2jmmxrrM1G
-         xYANGfLwvrTv70r66X/0wj/DVCX7Rzi7A0cLhne5PVN5rVBjkIEFY0le1Y/dB5tgwNyo
-         uA9oXbGZqkXIV4qbq28+e2KTwEhLB3stHCvitN3ap0vnAinfU7PiKPmVP2dI9JKb6lBB
-         zEHg==
-X-Gm-Message-State: AOAM5311rgqQk4kFQiVxQpZ3yV1zxpK10OAOOqB1Q8Rldd/Ey4dxpJ0P
-        tNKl1DxtXGUruALaN38rgZKSQWlPhh7xDg==
-X-Google-Smtp-Source: ABdhPJwYitGMTeD2cK5kj6+zGxi4gy5j3Ikqrx28OOGxKCPjSf2TZwLzdfYgk1MnXae2y9supUWsRQ==
-X-Received: by 2002:a17:906:8cf:: with SMTP id o15mr15146840eje.603.1642418320033;
-        Mon, 17 Jan 2022 03:18:40 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-52-8-210.retail.telecomitalia.it. [82.52.8.210])
-        by smtp.gmail.com with ESMTPSA id f11sm5142713edv.67.2022.01.17.03.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 03:18:39 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Michael Trimarchi <michael@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Han Xu <han.xu@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: [RFC PATCH v2 5/5] mtd: rawnand: gpmi: support fast edo timings for mx28
-Date:   Mon, 17 Jan 2022 12:18:29 +0100
-Message-Id: <20220117111829.1811997-6-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220117111829.1811997-1-dario.binacchi@amarulasolutions.com>
-References: <20220117111829.1811997-1-dario.binacchi@amarulasolutions.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jNK4+oxv+4tUoh6c7iPxH0pa9jSuShrN6epRZwOx+g8=;
+        b=c8aede8p/t+hZgVOZ0vou9Mcy3IUBUBjgVrxGPgcUOl2H0s6OHuHJSyv5uso+SHRc9
+         lxud6XGJkUBPL21fCuXJacGVNTnBoenwl8c/Rs7rH6lDjjofcmcIJZg0Ga0dn6DJRem0
+         59eZV0pyceQmdsLhFYFlvECxt9r+xhDNBL9e9hkex+jKUBOAa6Aw6LB6/uCc0xxgHYtx
+         HfYfOiTzjYsA1CzKz8esLcPUur1UzNmunF8O5SL6bQXDKK+AvhMT075x1JJufNx4U5JV
+         oilo8U9LPIYtoLvFzY2Be4FIJnmJZ7/2K+7HErmvI9ZqZ8eyBgEyiDjdORZsIMPs/yoM
+         2z0g==
+X-Gm-Message-State: AOAM533atGYHgivuaLrJ0IkKgNBPBU9yY9sQbn29MCREKeDD+5f8rZe0
+        rgsmY3RqeTTXJsmwvX7+OHVb9Wf2NkLM0y9I07K7GQaJBf2kPT1vy1mYtmyhi16R9ryTuQLgSTj
+        WqnWgiVsEtQUQVeTejOi/LojB
+X-Received: by 2002:a05:6000:1d84:: with SMTP id bk4mr18138804wrb.708.1642418341560;
+        Mon, 17 Jan 2022 03:19:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxkySeRJ518V0ql4/t4EDjr/Kj0bMU4K2b+p+m/zTp+DSVcerQx3GdHw1LNVoPty+m2NvmyfA==
+X-Received: by 2002:a05:6000:1d84:: with SMTP id bk4mr18138781wrb.708.1642418341354;
+        Mon, 17 Jan 2022 03:19:01 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id b6sm6340753wri.108.2022.01.17.03.19.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 03:19:00 -0800 (PST)
+Message-ID: <0d7ed850-8791-42b4-ef9a-bbaa8c52279e@redhat.com>
+Date:   Mon, 17 Jan 2022 12:18:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] KVM: x86: Fix the #GP(0) and #UD conditions for XSETBV
+ emulation
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220117072456.71155-1-likexu@tencent.com>
+ <a133d6e2-34de-8a41-475e-3858fc2902bf@redhat.com>
+ <9c655b21-640f-6ce8-61b4-c6444995091e@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <9c655b21-640f-6ce8-61b4-c6444995091e@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the i.MX28 manual (MCIMX28RM, Rev. 1, 2010) you can find an example
-(15.2.4 High-Speed NAND Timing) of how to configure the GPMI controller
-to manage High-Speed ​​NAND devices, so it was wrong to assume that only
-i.MX6 can achieve EDO timings.
+On 1/17/22 10:44, Like Xu wrote:
+>> Also, the "Fixes" tag is not really correct as the behavior was the 
+>> same before.  Rather, it fixes commit 02d4160fbd76 ("x86: KVM: add 
+>> xsetbv to the 
+> 
+> It seems the original code comes from 81dd35d42c9a ("KVM: SVM: Add 
+> xsetbv intercept").
+> 2acf923e38 ("KVM: VMX: Enable XSAVE/XRSTOR for guest") and 92f9895c146d.
+> 
+>> emulator", 2019-08-22).  Checking OSXSAVE is a bug in the emulator 
+>> path, even though it's not needed in the XSETBV vmexit case.
+> 
+> The kvm_emulate_xsetbv() has been removed from the emulator path.
+> I'm not really sure why it's not needed in the XSETBV vmexit case. More 
+> details ?
 
-This patch has been tested on a 2048/64 byte NAND (Micron MT29F2G08ABAEAH4).
-Kernel mtd tests:
- - mtd_nandbiterrs
- - mtd_nandecctest
- - mtd_oobtest
- - mtd_pagetest
- - mtd_readtest
- - mtd_speedtest
- - mtd_stresstest
- - mtd_subpagetest
- - mtd_torturetest [cycles_count = 10000000]
-run without errors.
+Nevermind, I confused AMD (where #UD is generated before checking for 
+exceptions) with Intel where it's unconditional.
 
-Before this patch (mode 0):
----------------------------
-eraseblock write speed is 2098 KiB/s
-eraseblock read speed is 2680 KiB/s
-page write speed is 1689 KiB/s
-page read speed is 2522 KiB/s
-2 page write speed is 1899 KiB/s
-2 page read speed is 2579 KiB/s
-erase speed is 128000 KiB/s
-2x multi-block erase speed is 73142 KiB/s
-4x multi-block erase speed is 204800 KiB/s
-8x multi-block erase speed is 256000 KiB/s
-16x multi-block erase speed is 256000 KiB/s
-32x multi-block erase speed is 256000 KiB/s
-64x multi-block erase speed is 256000 KiB/s
+So the bug should be there since 2acf923e38 by executing XSETBV with 
+CR4.XSAVE=0.  If so, please include a testcase.
 
-After this patch (mode 5):
--------------------------
-eraseblock write speed is 3390 KiB/s
-eraseblock read speed is 5688 KiB/s
-page write speed is 2680 KiB/s
-page read speed is 4876 KiB/s
-2 page write speed is 2909 KiB/s
-2 page read speed is 5224 KiB/s
-erase speed is 170666 KiB/s
-2x multi-block erase speed is 204800 KiB/s
-4x multi-block erase speed is 256000 KiB/s
-8x multi-block erase speed is 256000 KiB/s
-16x multi-block erase speed is 256000 KiB/s
-32x multi-block erase speed is 256000 KiB/s
-64x multi-block erase speed is 256000 KiB/s
+Paolo
 
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
----
-
-Changes in v2:
-- Improve the commit message.
-- Move the patch to the end of the series.
-
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index 7ae7a37775a3..7b9191a70ed1 100644
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -806,8 +806,8 @@ static int gpmi_setup_interface(struct nand_chip *chip, int chipnr,
- 	if (IS_ERR(sdr))
- 		return PTR_ERR(sdr);
- 
--	/* Only MX6 GPMI controller can reach EDO timings */
--	if (sdr->tRC_min <= 25000 && !GPMI_IS_MX6(this))
-+	/* Only MX28/MX6 GPMI controller can reach EDO timings */
-+	if (sdr->tRC_min <= 25000 && !GPMI_IS_MX28(this) && !GPMI_IS_MX6(this))
- 		return -ENOTSUPP;
- 
- 	/* Stop here if this call was just a check */
--- 
-2.32.0
+>>
+>> Thanks,
+>>
+>> Paolo
+>>
+>>> +    if ((is_protmode(vcpu) && static_call(kvm_x86_get_cpl)(vcpu) != 
+>>> 0) ||
+>>>           __kvm_set_xcr(vcpu, kvm_rcx_read(vcpu), 
+>>> kvm_read_edx_eax(vcpu))) {
+>>>           kvm_inject_gp(vcpu, 0);
+>>>           return 1;
+>>
+>>
+> 
 

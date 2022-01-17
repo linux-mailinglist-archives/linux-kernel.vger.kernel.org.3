@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5344903A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AFA4903A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238041AbiAQIWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:22:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51489 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238032AbiAQIWN (ORCPT
+        id S238049AbiAQIXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:23:33 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:35343 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235422AbiAQIXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:22:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642407732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sg8p8AHi3UJdK9z4yX9nhx3FRx/VOIBzKvjT8S0Q3JM=;
-        b=BLYO01mWMZQfbK88AihTaKEINUI0Y5nJMTwkvUxYoNJu0SV/XqZmrSH9azCjxeAQ6nOHG+
-        /9O8bkv0p3HRazOQtPFTtXoxNGSxi1I9ZNIcX+CTxfA6YEi2sQB5hzkB/Rad6fapoU/HfA
-        n3JWU3MXLfapU1AqRinE2hXJzeLgZBQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-AlQXLA8ZPUWP2WKVl-OGSQ-1; Mon, 17 Jan 2022 03:22:10 -0500
-X-MC-Unique: AlQXLA8ZPUWP2WKVl-OGSQ-1
-Received: by mail-wm1-f69.google.com with SMTP id x10-20020a7bc20a000000b0034c3d77f277so2708237wmi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:22:10 -0800 (PST)
+        Mon, 17 Jan 2022 03:23:30 -0500
+Received: by mail-il1-f198.google.com with SMTP id z17-20020a926511000000b002b43c84f5d3so11448072ilb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:23:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sg8p8AHi3UJdK9z4yX9nhx3FRx/VOIBzKvjT8S0Q3JM=;
-        b=OtPgoBKlbLND2OzKbRK+exU7ojZn6dyeGpvWK4KVxPOjiXrzgTwPOJ90q7SNUbOPOg
-         879K6AictJhw9V4XoIHqY5z4DQv/12XPqOj4wWFiMvDP6IdFw4/JxBqQCe0w/zIgmVZw
-         L14q3g64olN6AinOUaJZ5NUq5Vn5wY7pilHoTNNcYriuGoDPZpsfYnBoXxAt26Dt+6ab
-         aFwOxgtjUAYuYyMbZpoobFaR9WpyJdif4XbJt/hqXVKSMi/9+J+pBJdx/xw5uLO1uZXi
-         i8O0Kct3V8BI26PxZaYAn9LfSkKAljW1aFyp197uwd+VSQWgKmaA4Q62grxfUvR0Ybhy
-         jZMA==
-X-Gm-Message-State: AOAM530JsiBsa/YxlOCpunRBbXq4Eq1D/8ceZIaH1F+m2Wznky1Tp2V/
-        yXwzZI4/LYgyn1kC4PjjtmmdgJRnIo+jhYEVMlXbbQ6KrsTA4e1b6m5kWoYqvc/LT9+378T61iA
-        eN+XxxaqLlYeoAKeOGZb5c74a
-X-Received: by 2002:adf:e78e:: with SMTP id n14mr18512276wrm.631.1642407729385;
-        Mon, 17 Jan 2022 00:22:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyfX6DyGdjNVfeccUpaF9Hfqtqa45OuD18xrFo42Uf+iDexJ9TwGxZgQm8IYyKvOJYF6w6HHw==
-X-Received: by 2002:adf:e78e:: with SMTP id n14mr18512267wrm.631.1642407729203;
-        Mon, 17 Jan 2022 00:22:09 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id u1sm7671679wrs.97.2022.01.17.00.22.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 00:22:08 -0800 (PST)
-Message-ID: <b8c2663b-69df-913f-8da1-de6b7bd189ce@redhat.com>
-Date:   Mon, 17 Jan 2022 09:22:04 +0100
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=QxKMT5LAEmZnn1r9W6tJTXOl8V4rMwLHQiGSEFo1LBI=;
+        b=f8ud/TQp5Zsa+AUX4kh1N7phJUGiNlw+p3afI6bv8OMCEooSH1ubDwqcXNMpov3lwi
+         3sx3A2Ey6vMGfRzsXmOoiO/e7TQ9mmfBs1DzLTKgY1rZWs/KCXukdpYW+nCXGplsf0Je
+         POxbVa7pg8C7OXMTKJo48V0I7OuZLDYH4tYhZSRxZbzvl6FyLoBoZdmyJra79TC9kqIv
+         bC19/qip3t79Uol+umGni8sIHIYHqSrxo9ozkVXN/07ryIEGP5F5o1lBko4NDisQCsft
+         qbjSS2OqGkusX11o/EO8bdz5IezFgyYH1xVwKzS0Dv10dcVA5u/n3+NDdTTV3GLRT3nj
+         LOQg==
+X-Gm-Message-State: AOAM5318BbpaywNEcCbirVv81vL6rp+lMC/TRJd63vo/zJm+jM3HzLui
+        jotr21BIvGPVWKcWi6XEgXiSdeXTN5TbKAYrz3nIhTdGD9kT
+X-Google-Smtp-Source: ABdhPJymNz+PB5dyl0t/6clsWCsNl1aXfQ2IWqsnKuGaxrLcEhBn6C53z43D7zU3uErX+5g6St0xkeMCJeyiUxJ792SY7E922wiP
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: linux-next: manual merge of the kvm tree with the risc-v tree
-Content-Language: en-US
-To:     Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paul Walmsley <paul@pwsan.com>, KVM <kvm@vger.kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-References: <20220112114024.7be8aac6@canb.auug.org.au>
- <20220117085431.7bef9ebc@canb.auug.org.au>
- <CAAhSdy3gEW+SC1GCH0V4iVA9h1sxeVV-V=x4kG7w_9tcVTtamw@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CAAhSdy3gEW+SC1GCH0V4iVA9h1sxeVV-V=x4kG7w_9tcVTtamw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6638:22bb:: with SMTP id z27mr454733jas.199.1642407810434;
+ Mon, 17 Jan 2022 00:23:30 -0800 (PST)
+Date:   Mon, 17 Jan 2022 00:23:30 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001e0ba105d5c2dede@google.com>
+Subject: [syzbot] general protection fault in ext4_fill_super
+From:   syzbot <syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 05:13, Anup Patel wrote:
-> The commit c62a76859723 ("RISC-V: KVM: Add SBI v0.2 base extension")
-> is already merged in Linus' tree.
-> 
-> Since you are yet to send PR for 5.17, we have two options:
-> 1) Rebase your for-next branch upon latest Linus' tree master branch
-> 2) Send "RISC-V: Use SBI SRST extension when available" in the
-> next batch of changes for 5.17 after 5.17-rc1
-> 
-> Let me know if you want me to rebase and send v8 patch of
-> "RISC-V: Use SBI SRST extension when available"
-> 
-> In future, we should coordinate and use a shared tag for such
-> conflicting changes.
+Hello,
 
-Palmer should just send it to Linus and note "enum sbi_ext_id has a 
-trivial conflict" in the pull request message.
+syzbot found the following issue on:
 
-We'll sort it out better in the future, but it's such a minor conflict 
-that it is not even a nuisance.
+HEAD commit:    daadb3bd0e8d Merge tag 'locking_core_for_v5.17_rc1' of git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=122fc6f7b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec2807b2e9360dbb
+dashboard link: https://syzkaller.appspot.com/bug?extid=138c9e58e3cb22eae3b4
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Paolo
+Unfortunately, I don't have any reproducer for this issue yet.
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+138c9e58e3cb22eae3b4@syzkaller.appspotmail.com
+
+RBP: 00007f283db0b1d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007fffb1b01d5f R14: 00007f283db0b300 R15: 0000000000022000
+ </TASK>
+general protection fault, probably for non-canonical address 0xdffffc0000000012: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000090-0x0000000000000097]
+CPU: 0 PID: 32175 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ext4_fill_super+0x240/0x770 fs/ext4/super.c:5551
+Code: 3b 4c 89 6c 24 20 49 8d bd a8 06 00 00 be 2f 00 00 00 ba 21 00 00 00 e8 5e 6d d8 01 4d 8d af 90 00 00 00 4d 89 ec 49 c1 ec 03 <41> 80 3c 2c 00 74 08 4c 89 ef e8 11 4e 97 ff 49 c7 45 00 01 00 00
+RSP: 0018:ffffc9000b5cfbe8 EFLAGS: 00010206
+RAX: ffff8880234c46ac RBX: ffff888090bc7cf0 RCX: 0000000000040000
+RDX: ffffc9000abd9000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: dffffc0000000000 R08: ffffffff8411122e R09: fffffbfff197f727
+R10: fffffbfff197f727 R11: 0000000000000000 R12: 0000000000000012
+R13: 0000000000000090 R14: ffff888071347b00 R15: 0000000000000000
+FS:  00007f283db0b700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6db90cb558 CR3: 000000008fafc000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ get_tree_bdev+0x406/0x630 fs/super.c:1295
+ vfs_get_tree+0x86/0x270 fs/super.c:1500
+ do_new_mount fs/namespace.c:2994 [inline]
+ path_mount+0x1986/0x2c30 fs/namespace.c:3324
+ do_mount fs/namespace.c:3337 [inline]
+ __do_sys_mount fs/namespace.c:3545 [inline]
+ __se_sys_mount+0x308/0x3c0 fs/namespace.c:3522
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f283f195eb9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f283db0b168 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007f283f2a8f60 RCX: 00007f283f195eb9
+RDX: 0000000020000240 RSI: 0000000020000000 RDI: 0000000020000100
+RBP: 00007f283db0b1d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007fffb1b01d5f R14: 00007f283db0b300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 2017ba6e0452af99 ]---
+RIP: 0010:ext4_fill_super+0x240/0x770 fs/ext4/super.c:5551
+Code: 3b 4c 89 6c 24 20 49 8d bd a8 06 00 00 be 2f 00 00 00 ba 21 00 00 00 e8 5e 6d d8 01 4d 8d af 90 00 00 00 4d 89 ec 49 c1 ec 03 <41> 80 3c 2c 00 74 08 4c 89 ef e8 11 4e 97 ff 49 c7 45 00 01 00 00
+RSP: 0018:ffffc9000b5cfbe8 EFLAGS: 00010206
+RAX: ffff8880234c46ac RBX: ffff888090bc7cf0 RCX: 0000000000040000
+RDX: ffffc9000abd9000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: dffffc0000000000 R08: ffffffff8411122e R09: fffffbfff197f727
+R10: fffffbfff197f727 R11: 0000000000000000 R12: 0000000000000012
+R13: 0000000000000090 R14: ffff888071347b00 R15: 0000000000000000
+FS:  00007f283db0b700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f8eb615a718 CR3: 000000008fafc000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	3b 4c 89 6c          	cmp    0x6c(%rcx,%rcx,4),%ecx
+   4:	24 20                	and    $0x20,%al
+   6:	49 8d bd a8 06 00 00 	lea    0x6a8(%r13),%rdi
+   d:	be 2f 00 00 00       	mov    $0x2f,%esi
+  12:	ba 21 00 00 00       	mov    $0x21,%edx
+  17:	e8 5e 6d d8 01       	callq  0x1d86d7a
+  1c:	4d 8d af 90 00 00 00 	lea    0x90(%r15),%r13
+  23:	4d 89 ec             	mov    %r13,%r12
+  26:	49 c1 ec 03          	shr    $0x3,%r12
+* 2a:	41 80 3c 2c 00       	cmpb   $0x0,(%r12,%rbp,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	4c 89 ef             	mov    %r13,%rdi
+  34:	e8 11 4e 97 ff       	callq  0xff974e4a
+  39:	49                   	rex.WB
+  3a:	c7                   	.byte 0xc7
+  3b:	45 00 01             	add    %r8b,(%r9)
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

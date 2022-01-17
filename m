@@ -2,123 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61450490631
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDC94905D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbiAQKpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:45:55 -0500
-Received: from unknown-3-146.windriver.com ([147.11.3.146]:10400 "EHLO
-        mail1.wrs.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233757AbiAQKpy (ORCPT
+        id S238551AbiAQKWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:22:48 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.228]:34492 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236030AbiAQKWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:45:54 -0500
-X-Greylist: delayed 1571 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 05:45:54 EST
-Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 20HALxbZ025167
-        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Mon, 17 Jan 2022 02:21:59 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 20HALowg008849
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Jan 2022 02:21:51 -0800 (PST)
-Received: from pek-lpggp7.wrs.com (128.224.153.21) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Mon, 17 Jan 2022 02:21:47 -0800
-From:   Xiaolei Wang <xiaolei.wang@windriver.com>
-To:     <hongxing.zhu@nxp.com>, <l.stach@pengutronix.de>,
-        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
-        <festevam@gmail.com>
-CC:     <linux-imx@nxp.com>, <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] pci: imx: disable reglator when imx6_pcie_probe fails
-Date:   Mon, 17 Jan 2022 18:21:37 +0800
-Message-ID: <20220117102137.3513439-1-xiaolei.wang@windriver.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [128.224.153.21]
-X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
- ala-exchng01.corp.ad.wrs.com (147.11.82.252)
+        Mon, 17 Jan 2022 05:22:47 -0500
+HMM_SOURCE_IP: 172.18.0.218:40054.314030182
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-110.86.5.92 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id EA8F928010C;
+        Mon, 17 Jan 2022 18:22:39 +0800 (CST)
+X-189-SAVE-TO-SEND: +zhenggy@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 0a8b46872b874d5ba8d8193b7295806d for axboe@kernel.dk;
+        Mon, 17 Jan 2022 18:22:41 CST
+X-Transaction-ID: 0a8b46872b874d5ba8d8193b7295806d
+X-Real-From: zhenggy@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: zhenggy@chinatelecom.cn
+From:   GuoYong Zheng <zhenggy@chinatelecom.cn>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        GuoYong Zheng <zhenggy@chinatelecom.cn>
+Subject: [PATCH] block: Remove unnecessary variable assignment
+Date:   Mon, 17 Jan 2022 18:22:37 +0800
+Message-Id: <1642414957-6785-1-git-send-email-zhenggy@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
+The parameter "ret" should be zero when running to this line,
+no need to set to zero again, remove it.
 
-disable reglator when imx6_pcie_probe fails,
-otherwise the following calltrace will appear
-
-[ 3.785075] ------------[ cut here ]------------
-[ 3.788142] Registering SWP/SWPB emulation handler
-[ 3.789853] WARNING: CPU: 0 PID: 7 at drivers/regulator/core.c:2257 _regulator_put.part.0+0x1bc/0x1e0
-[ 3.795680] Loading compiled-in X.509 certificates
-[ 3.803947] Modules linked in:
-[ 3.811922] CPU: 0 PID: 7 Comm: kworker/u8:0 Not tainted 5.16.0-10645-g3c750c7b6143-dirty #9
-[ 3.820393] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-[ 3.826945] Workqueue: events_unbound async_run_entry_fn
-[ 3.832304] unwind_backtrace from show_stack+0x10/0x14
-[ 3.837569] show_stack from dump_stack_lvl+0x58/0x70
-[ 3.842663] dump_stack_lvl from __warn+0xd8/0x114
-[ 3.847493] __warn from warn_slowpath_fmt+0x5c/0xc4
-[ 3.852490] warn_slowpath_fmt from _regulator_put.part.0+0x1bc/0x1e0
-[ 3.858968] _regulator_put.part.0 from regulator_put+0x2c/0x3c
-[ 3.864918] regulator_put from release_nodes+0x50/0x178
-[ 3.870270] release_nodes from devres_release_all+0x80/0xd0
-[ 3.875968] devres_release_all from really_probe+0xdc/0x30c
-[ 3.881661] really_probe from __driver_probe_device+0x80/0xe4
-[ 3.887522] __driver_probe_device from driver_probe_device+0x30/0xd4
-[ 3.893991] driver_probe_device from __driver_attach_async_helper+0x20/0x38
-[ 3.901068] __driver_attach_async_helper from async_run_entry_fn+0x20/0xb4
-[ 3.908059] async_run_entry_fn from process_one_work+0x298/0x7d0
-[ 3.914188] process_one_work from worker_thread+0x30/0x510
-[ 3.919792] worker_thread from kthread+0x128/0x14c
-[ 3.924705] kthread from ret_from_fork+0x14/0x38
-[ 3.929443] Exception stack(0xc20cbfb0 to 0xc20cbff8)
-[ 3.934521] bfa0: 00000000 00000000 00000000 00000000
-[ 3.942722] bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[ 3.950922] bfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[ 3.957677] irq event stamp: 1207
-[ 3.961024] hardirqs last enabled at (1215): [<c0198270>] __up_console_sem+0x50/0x60
-[ 3.968974] hardirqs last disabled at (1224): [<c019825c>] __up_console_sem+0x3c/0x60
-[ 3.976911] softirqs last enabled at (1206): [<c010150c>] __do_softirq+0x2ec/0x5a4
-[ 3.984669] softirqs last disabled at (1197): [<c012ef08>] irq_exit+0x18c/0x20c
-[ 3.992021] ---[ end trace 45a52c023bf8fb33 ]---
-
-Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
 ---
- drivers/pci/controller/dwc/pci-imx6.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ block/blk-sysfs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 6974bd5aa116..f8279a15463b 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -1216,7 +1216,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index e20eadf..bed4a2f 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -887,7 +887,6 @@ int blk_register_queue(struct gendisk *disk)
+ 		kobject_uevent(&q->elevator->kobj, KOBJ_ADD);
+ 	mutex_unlock(&q->sysfs_lock);
  
- 	ret = dw_pcie_host_init(&pci->pp);
- 	if (ret < 0)
--		return ret;
-+		goto err_vpcie;
+-	ret = 0;
+ unlock:
+ 	mutex_unlock(&q->sysfs_dir_lock);
  
- 	if (pci_msi_enabled()) {
- 		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-@@ -1226,6 +1226,11 @@ static int imx6_pcie_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
-+
-+err_vpcie:
-+	regulator_disable(imx6_pcie->vpcie);
-+
-+	return ret;
- }
- 
- static void imx6_pcie_shutdown(struct platform_device *pdev)
 -- 
-2.25.1
+1.8.3.1
 

@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BE249065E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0BB49069F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbiAQLEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236213AbiAQLEG (ORCPT
+        id S238871AbiAQLGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:06:55 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:47795 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238956AbiAQLGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:04:06 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3906AC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:04:06 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id d11so6076960qkj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:04:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dVVFFLPkAhrjO1v7t1aDsmduyj0ieOuL7PziCjm6/tg=;
-        b=W/81fg0Hk0sIXPbIeJrLwn4SfVlAT+y3A5lZ5OhghM9yR6857m0qZvilEcG4GRNMo4
-         EivmcO1ftmIggwQWWMfy4xd0lQ50oEeHCuhyk2b8I+5J8HkWiKMA75V8BvI6ij6LYcbd
-         +fMOayUylLTB3E/E/FeCSwm1Y+548SOr36hRT5npIbu+rtSsUgVX0/KARLfhBxsgdLS9
-         aO7c0AuwPk5R5STzHDRQe+Lty80mQ6dC31Z+IvT3+lHIbDS5JSn9D/Tkvs3D3cAwKs2s
-         Ez0G/nit80T9J9DlqthpEHh0raJKH+C/bZzKCQCh/vSPY8UdMDRejTVBhgLGOFJcQirK
-         N6vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dVVFFLPkAhrjO1v7t1aDsmduyj0ieOuL7PziCjm6/tg=;
-        b=Wxf+QZsJEGN+D6UbMJfafLG2SHEFBCIlOe09kszWhYz9ljy26nIyilnlJK6LfqbfbR
-         OuCTLPyZUvP8DNbQLVq71/TAGZa6v+FPE5AzzA5tmhAKXRHTBVmUexVVLDat9yVEkqX+
-         PUMckePK6fKdsmh3TMOu6xiJUeUacrQtFggpdZQYnPzNzEESibfPBaTFf5iMpxVpwHgT
-         drwfhmtEbR81VANKzXC+h3g2gqRqTt/zLFTpBW4/uYLUojR+tUlOiDc2vak9UWg9t3KM
-         3Uu4qwqIEB51T2coLIR7FiZy4BwIvaEMIKSZOkCburZTBXio78jmRPQdNQ0IBhZyBHeO
-         IQ4g==
-X-Gm-Message-State: AOAM531SkVn905ZenctCWwPSfavvedIcp+1Lh9SgKQFKOUWqjWASwBBc
-        lxfZysyMGxGbCTYL+vvkJx8=
-X-Google-Smtp-Source: ABdhPJz/pAE65j0ZQrMN/H6l9uLJ86U3AgN3jVqlcUFlNN1OGK6FGXX48zniSP4M+enymXdqkWSPcw==
-X-Received: by 2002:a05:620a:4707:: with SMTP id bs7mr6890633qkb.69.1642417445471;
-        Mon, 17 Jan 2022 03:04:05 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l16sm8198120qkl.114.2022.01.17.03.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 03:04:05 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     krzysztof.kozlowski@canonical.com
-Cc:     s.nawrocki@samsung.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] sound/soc/samsung: remove unneeded ret variable
-Date:   Mon, 17 Jan 2022 11:03:57 +0000
-Message-Id: <20220117110357.863990-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Jan 2022 06:06:39 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V249G5w_1642417595;
+Received: from 30.225.24.118(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V249G5w_1642417595)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 17 Jan 2022 19:06:36 +0800
+Message-ID: <41c0cadc-a623-b013-24f0-410af2a6dc64@linux.alibaba.com>
+Date:   Mon, 17 Jan 2022 19:06:35 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [RFC PATCH] PCI: Add "pci=reassign_all_bus" boot parameter
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220112154310.GA259954@bhelgaas>
+From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
+In-Reply-To: <20220112154310.GA259954@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value from io_remap_pfn_range() directly instead
-of taking this in another redundant variable.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- sound/soc/samsung/idma.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+在 2022/1/12 下午11:43, Bjorn Helgaas 写道:
+> On Thu, Dec 30, 2021 at 05:30:13PM +0800, Yao Hongbo wrote:
+>> PCI bridges may be misconfigured by te system BIOS, and then the OS
+>> scan the bridges that need to be reconfigured.
+>> However, the PCI bus topology configured by the bios may be wrong:
+>>
+>> [   19.376273] pci 0000:40:00.0: bridge configuration invalid ([bus
+>> 00-00]), reconfiguring
+>> [   19.384443] pci_bus 0000:47: busn_res: can not insert [bus 47-46]
+>> under [bus 40-46] (conflicts with (null) [bus 40-46])
+>>
+>> The primary bus number and subordinate bus number written by the bios
+>> were wrong, and the OS continues to add bridges on the wrong bus
+>> topology.
+>>
+>> In order to avoid such problems, a kernel cmdline needs to be
+>> added to support the os to fully configure the pci bus.
+> 
+> Why can't we make Linux smart enough to fix this by itself, without
+> forcing the user to boot with "pci=reassign_all_bus"?
+> 
 
-diff --git a/sound/soc/samsung/idma.c b/sound/soc/samsung/idma.c
-index c3f1b054e238..402ccadad46c 100644
---- a/sound/soc/samsung/idma.c
-+++ b/sound/soc/samsung/idma.c
-@@ -244,17 +244,14 @@ static int idma_mmap(struct snd_soc_component *component,
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	unsigned long size, offset;
--	int ret;
- 
- 	/* From snd_pcm_lib_mmap_iomem */
- 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
- 	size = vma->vm_end - vma->vm_start;
- 	offset = vma->vm_pgoff << PAGE_SHIFT;
--	ret = io_remap_pfn_range(vma, vma->vm_start,
-+	return io_remap_pfn_range(vma, vma->vm_start,
- 			(runtime->dma_addr + offset) >> PAGE_SHIFT,
- 			size, vma->vm_page_prot);
--
--	return ret;
- }
- 
- static irqreturn_t iis_irq(int irqno, void *dev_id)
--- 
-2.25.1
+   Hi, Bjorn.
 
+   You're right, it's better for us to make pci enumeration more smart.
+
+   But i think it's better to provide an additional option for users on ACPI systems,
+
+which can quickly distingguish the issues between the BIOS and the OS.
+>> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
+>> ---
+>>  Documentation/admin-guide/kernel-parameters.txt | 1 +
+>>  drivers/acpi/pci_root.c                         | 3 +++
+>>  drivers/pci/pci.c                               | 5 +++++
+>>  include/linux/pci.h                             | 2 ++
+>>  4 files changed, 11 insertions(+)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 2fba824..c83a2e5 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -4084,6 +4084,7 @@
+>>  		nomio		[S390] Do not use MIO instructions.
+>>  		norid		[S390] ignore the RID field and force use of
+>>  				one PCI domain per PCI function
+>> +		reassign_all_bus	The OS fully configure the PCI bus.
+>>  
+>>  	pcie_aspm=	[PCIE] Forcibly enable or disable PCIe Active State Power
+>>  			Management.
+>> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+>> index ab2f7df..e21ac25 100644
+>> --- a/drivers/acpi/pci_root.c
+>> +++ b/drivers/acpi/pci_root.c
+>> @@ -592,6 +592,9 @@ static int acpi_pci_root_add(struct acpi_device *device,
+>>  	is_pcie = strcmp(acpi_device_hid(device), "PNP0A08") == 0;
+>>  	negotiate_os_control(root, &no_aspm, is_pcie);
+>>  
+>> +	if (pci_reassign_all_bus)
+>> +		pci_add_flags(PCI_REASSIGN_ALL_BUS);
+>> +
+>>  	/*
+>>  	 * TBD: Need PCI interface for enumeration/configuration of roots.
+>>  	 */
+>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>> index 3d2fb39..5746e88 100644
+>> --- a/drivers/pci/pci.c
+>> +++ b/drivers/pci/pci.c
+>> @@ -142,6 +142,9 @@ bool pci_reset_supported(struct pci_dev *dev)
+>>  /* If set, the PCI config space of each device is printed during boot. */
+>>  bool pci_early_dump;
+>>  
+>> +/* If set, the pci will reassign resources*/
+>> +bool pci_reassign_all_bus;
+>> +
+>>  bool pci_ats_disabled(void)
+>>  {
+>>  	return pcie_ats_disabled;
+>> @@ -6846,6 +6849,8 @@ static int __init pci_setup(char *str)
+>>  				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
+>>  			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
+>>  				disable_acs_redir_param = str + 18;
+>> +			} else if (!strncmp(str, "reassign_all_bus", 16)) {
+>> +				pci_reassign_all_bus = true;
+>>  			} else {
+>>  				pr_err("PCI: Unknown option `%s'\n", str);
+>>  			}
+>> diff --git a/include/linux/pci.h b/include/linux/pci.h
+>> index 18a75c8e..ad0e3e9 100644
+>> --- a/include/linux/pci.h
+>> +++ b/include/linux/pci.h
+>> @@ -2119,6 +2119,8 @@ int pcim_iomap_regions_request_all(struct pci_dev *pdev, int mask,
+>>  extern u8 pci_dfl_cache_line_size;
+>>  extern u8 pci_cache_line_size;
+>>  
+>> +extern bool pci_reassign_all_bus;
+>> +
+>>  /* Architecture-specific versions may override these (weak) */
+>>  void pcibios_disable_device(struct pci_dev *dev);
+>>  void pcibios_set_master(struct pci_dev *dev);
+>> -- 
+>> 1.8.3.1
+>>

@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3215491156
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E30F491159
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243284AbiAQVdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 16:33:41 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:32773 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiAQVdj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:33:39 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jd4sF2Cbrz4y3l;
-        Tue, 18 Jan 2022 08:33:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642455218;
-        bh=dxyMmoCI2iamV+K5AOg8Gxn3QgQLQ9oGvW3JSc/Fx/Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=u3QTJzyYj9f74EpGWPVpTu1GEeXkSxremR6bzTXJuVgry5a1urXilru4wmR4sW9IK
-         cRBjbvl0M2ochO5Ahw2vCu53y/g9I7DrHiR86w98bnPlI8lDQF3lfxSJivAPJHqWEN
-         +I/hww9POMm6ZwamLRawSBzoQUURBjs+IJFQHDiI9tIOq+3euyfGcHeZ5gESP9xa1b
-         MCP5DblbwuUF5M7R92wxNkh8exOP5oSsfI0dS47P4cy6ryE0T4kyqgOUP6BsGsJLz8
-         CUrfEcOnHHjNAZuDS+5V1R5d/ctXSLmTkKVIkYBHKxLnefU1oZv+w/JihTkbH/hoAI
-         sDUGh82cydI+A==
-Date:   Tue, 18 Jan 2022 08:33:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Helge Deller <deller@gmx.de>
-Cc:     "Z. Liu" <liuzx@knownsec.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the fbdev tree
-Message-ID: <20220118083336.25b0bcd6@canb.auug.org.au>
+        id S243298AbiAQVix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 16:38:53 -0500
+Received: from mga09.intel.com ([134.134.136.24]:45887 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230312AbiAQViv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 16:38:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642455531; x=1673991531;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lRvcJ3YccmJnwh4LZ5knDv+F74644MGKq1W3e+EB/q0=;
+  b=JXk9xYomXfrUgGzSib98i4ZXYdiuu5nBFbEESPWuDeisIgdrf2TrF+D1
+   lRsXObt2kYFh5qGMHmtQJ9D3Nl0larjjqlwSur0sst6MUDXWd6mTs29j8
+   q7IfubgAMJJI1EB3XB/7vT/drjuBJjukZfIomq4vxCkqgqj176JAv0zFx
+   3J1TQBG0o9XQJgmFgbeTW7YKhLEkpOuORuEYDlWXrBpBoWOVSJCA54z+n
+   80WF93oxFTIUrk7pSDTeQwTIc2z7Vrh3WXihRRMyVuebuRgPCFdlKo7QM
+   OcyrqXpHN6q761HNtcbN/d9nNxOBn6dsH+/t+WtePn54ybJw21OUiyn9i
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244492825"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="244492825"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 13:38:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="693187899"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 13:38:49 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9ZiD-000BtK-89; Mon, 17 Jan 2022 21:38:49 +0000
+Date:   Tue, 18 Jan 2022 05:38:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: samsung-keypad.c:undefined reference to `devm_ioremap'
+Message-ID: <202201180526.k3xQvHVO-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OgB5UjU7QKeZxbB2dVsuSr4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OgB5UjU7QKeZxbB2dVsuSr4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+FYI, the error/warning still remains.
 
-In commit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0c947b893d69231a9add855939da7c66237ab44f
+commit: bbd7ffdbef6888459f301c5889f3b14ada38b913 clk: Allow the common clk framework to be selectable
+date:   1 year, 8 months ago
+config: s390-randconfig-c023-20220117 (https://download.01.org/0day-ci/archive/20220118/202201180526.k3xQvHVO-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbd7ffdbef6888459f301c5889f3b14ada38b913
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bbd7ffdbef6888459f301c5889f3b14ada38b913
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-  a274f635669a ("matroxfb: set maxvram of vbG200eW to the same as vbG200 to=
- avoid black screen")
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes tag
+All errors (new ones prefixed by >>):
 
-  Fixes: 1be60bd66d54 ("matroxfb: add Matrox MGA-G200eW board support")
+   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
+   irq-imx-intmux.c:(.text+0x19c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x3ae): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0x112): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x43e): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/ks-sa-rng.o: in function `ks_sa_rng_probe':
+   ks-sa-rng.c:(.text+0x546): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/npcm-rng.o:npcm-rng.c:(.text+0x2e2): more undefined references to `devm_platform_ioremap_resource' follow
+   s390-linux-ld: drivers/input/keyboard/samsung-keypad.o: in function `samsung_keypad_probe':
+>> samsung-keypad.c:(.text+0x92a): undefined reference to `devm_ioremap'
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
+   sirfsoc_wdt.c:(.text+0x1ee): undefined reference to `devm_platform_ioremap_resource'
 
-has these problem(s):
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
+   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
+   Selected by
+   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
+   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
 
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 11be60bd66d5 ("matroxfb: add Matrox MGA-G200eW board support")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OgB5UjU7QKeZxbB2dVsuSr4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHl4LAACgkQAVBC80lX
-0Gzt+Af9HvSu9x9USKClaQ/r0/8O96HYqfasU+oCQyTHOilRYZ7IsbQEtNynS2w6
-NVRFBc2w1Wz06EYV3Xfq7I0vnsYHMKRvwy4mfJlU28L9DIkoJyyNiytKucFMRNWM
-VaXl5eS/7lqV3rD+4NBi48SDIcAgRhsngz4SI5E//oF2iU2KCdFZ5ttx8XjhZpFU
-1Swm1JT3onNgcNQATH/G/lyAQVTbsmXxozaB3I3q8JRxaYbbyJ8xkO9oA+8/DDgI
-dGJcdsr+xXsRUSyrdSlZO8SZN8yGckPTYphTC2fp+uPBeFU6vDPdPY9tY4uxFvEJ
-7D9DankQyNznj7ewXeiXvt6Q+lNbrQ==
-=7RIH
------END PGP SIGNATURE-----
-
---Sig_/OgB5UjU7QKeZxbB2dVsuSr4--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

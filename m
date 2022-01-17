@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4793490A37
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6498490A0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237538AbiAQOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236869AbiAQOY3 (ORCPT
+        id S234993AbiAQOMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:12:47 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:31099 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234397AbiAQOMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:24:29 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370CEC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:24:29 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id v1so21611464ioj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=QnlVfGau/F7tZrXmAnNOwZCm2aBpNZJtPAdbXap2B9Q=;
-        b=Hnn1u4Nhy6WmbGVhJOFNJ35nZpV/fua3WdbWMI73tb+kYpCujMzmHh6XpfMJ5KzOE1
-         zsCPoZuSVIveBBCJWUtAeQYq9Rrb2DaIJuyC/OvfxItSq2Tu6ILC8sA32TkIm+OIuzIb
-         jk36xVOARsEYsWVKP/k02/aaS09EW9L/jWaavEjJAjDWF3QxSw+y9kYn/otg3keknkBq
-         QoiLbrvOnV2KZWdpqa35WJf4MxmJfd3z4Bmuv6FzHwzQnJSJa7Dht3grbWdIZeryHe3v
-         K8ooJ/rPT1EtMOAjNr4TULKlRvSYLG2UFhGQPEzuRDhAMPKy0+wxUw+5n8nfk/zebfbS
-         8NJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=QnlVfGau/F7tZrXmAnNOwZCm2aBpNZJtPAdbXap2B9Q=;
-        b=jK97LUhfYWpWNfDodtDa3sB4Ma264IOl3j6/1q7XF1oBV8nLZg2MMp97RU/EqZQU3O
-         ML2i45QeiBW4ifEeqErHmXQWor4oW7ym3KdYvo+qRpMIoD2ylbop5nv7MmvGZfD/Rmf0
-         rRxtl50MVvHtXRjZcwP9s/XH52fm36sBHv2XbpaI2f0wq9yB9LqWnnJtNlhhA0KJnMa5
-         mqMlLvCIe6Y5v0etHhpEA6HE37OzTAbq5WlILS1NQDggt3y75fMZluQAKq+jTICA4x5U
-         Ah5+o/UjvhnlblR9n05tRkc6L1c86zvD66xy7KpD+wGU31MhUEJ4J/dRPYCFs4kzwPNU
-         Vk2Q==
-X-Gm-Message-State: AOAM531JthZMPOgE2W/OaK1jhYUAfbaju60GoJe1UeupUNHHU82Y7E3N
-        +GEGN/CRDhDexLEtwV2cjBISp4N+O/MtOg==
-X-Google-Smtp-Source: ABdhPJw0Xr+2cSDlHKmpA6oGpcW0KAAJowPBue1b9VJ3CQ1eci4T/Mizn6EDn2eny3u4IbJoQJwr1A==
-X-Received: by 2002:a02:cf90:: with SMTP id w16mr9815336jar.94.1642429468615;
-        Mon, 17 Jan 2022 06:24:28 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id a2sm1271589iow.7.2022.01.17.06.24.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 06:24:28 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     GuoYong Zheng <zhenggy@chinatelecom.cn>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <1642414957-6785-1-git-send-email-zhenggy@chinatelecom.cn>
-References: <1642414957-6785-1-git-send-email-zhenggy@chinatelecom.cn>
-Subject: Re: [PATCH] block: Remove unnecessary variable assignment
-Message-Id: <164242946547.334981.10563658391509061106.b4-ty@kernel.dk>
-Date:   Mon, 17 Jan 2022 07:24:25 -0700
+        Mon, 17 Jan 2022 09:12:46 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Jcv0F5Gl5z1FClb;
+        Mon, 17 Jan 2022 22:09:01 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 22:12:44 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 22:12:44 +0800
+From:   Chen Wandun <chenwandun@huawei.com>
+To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <guillaume.tucker@collabora.com>
+Subject: [PATCH] Revert "mm/page_isolation: unset migratetype directly for non Buddy page"
+Date:   Mon, 17 Jan 2022 22:27:12 +0800
+Message-ID: <20220117142712.3967624-1-chenwandun@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 18:22:37 +0800, GuoYong Zheng wrote:
-> The parameter "ret" should be zero when running to this line,
-> no need to set to zero again, remove it.
-> 
-> 
+This reverts commit 075782149abff45ee22f27315eced44d02b96779.
 
-Applied, thanks!
+commit 075782149abf ("mm/page_isolation: unset migratetype directly for
+non Buddy page") will result memory that should in buddy disappear by
+mistake. move_freepages_block move all pages in pageblock instead of
+pages indicated by input parameter, so if input pages is not in buddy
+but other pages in pageblock is in buddy, it will result in page out of
+control.
 
-[1/1] block: Remove unnecessary variable assignment
-      commit: e6a2e5116e07ce5acc8698785c29e9e47f010fd5
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+---
+ mm/page_isolation.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
+diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+index 6a0ddda6b3c5..f67c4c70f17f 100644
+--- a/mm/page_isolation.c
++++ b/mm/page_isolation.c
+@@ -115,7 +115,7 @@ static void unset_migratetype_isolate(struct page *page, unsigned migratetype)
+ 	 * onlining - just onlined memory won't immediately be considered for
+ 	 * allocation.
+ 	 */
+-	if (!isolated_page && PageBuddy(page)) {
++	if (!isolated_page) {
+ 		nr_pages = move_freepages_block(zone, page, migratetype, NULL);
+ 		__mod_zone_freepage_state(zone, nr_pages, migratetype);
+ 	}
 -- 
-Jens Axboe
-
+2.18.0.huawei.25
 

@@ -2,116 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B98AE49059A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF5B490597
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238416AbiAQKA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:00:59 -0500
-Received: from mga09.intel.com ([134.134.136.24]:36835 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232590AbiAQKA5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:00:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642413657; x=1673949657;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1uoyrp3eIEAIF6bYh4g52Jc2dFepbnqicFJBUSwG1XQ=;
-  b=S1IcdyXpp28WqE8brlsNdnKjBTsGH+HVpYh2cJ6sLI7b71jgPlTtDPkA
-   V+j0YGweFgCqM40RjZHjDy7yrXKsDcrg2FZArAJomiTuH+cO6YKoM01ea
-   43b3OHVyld1M8ISW2SATgbVNAxp/HNMmyS7E22GVKB4fuaWAh8+8rePLY
-   XUo4NzKmoN57sJLndSLKZd3vF5M29h+/lEk0n8STKkR7DKqJyMnqgUFgm
-   +la24x5LCB9to7XZxVWOucCQfnVgX8g+B1eACPV11y0xFs0gCnJ+oHZdk
-   D73Or+2e6D2Le+WqD6PGfeVygeN+O3UdvveZZ2/gzODErAfgflim6DBc2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244393361"
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="244393361"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:00:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="476592974"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2022 02:00:30 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9OoP-000BRi-HW; Mon, 17 Jan 2022 10:00:29 +0000
-Date:   Mon, 17 Jan 2022 18:00:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
- packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
- an unaligned pointer value
-Message-ID: <202201171718.7ZCI4YeQ-lkp@intel.com>
+        id S238441AbiAQJ7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:59:48 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43215 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238416AbiAQJ7m (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 04:59:42 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 26CF01C0010;
+        Mon, 17 Jan 2022 09:59:37 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 11:00:40 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: dt-bindings: media: renesas,csi2: Update
+ data-lanes property
+Message-ID: <20220117100040.wa3ple6meahebtni@uno.localdomain>
+References: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain>
+ <YeU1kDee7L26QJ86@oden.dyn.berto.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YeU1kDee7L26QJ86@oden.dyn.berto.se>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0c947b893d69231a9add855939da7c66237ab44f
-commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
-date:   8 months ago
-config: mips-randconfig-r002-20220116 (https://download.01.org/0day-ci/archive/20220117/202201171718.7ZCI4YeQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/adc/ drivers/usb/gadget/
+Hi Niklas,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Jan 17, 2022 at 10:23:28AM +0100, Niklas Söderlund wrote:
+> Hello Jacopo,
+>
+> On 2022-01-17 09:11:10 +0100, Jacopo Mondi wrote:
+> > Hello Prabhakar,
+> >
+> > On Thu, Jan 13, 2022 at 10:32:14AM +0000, Lad Prabhakar wrote:
+> > > CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
+> > > handled by rcar-csi2.c driver. This patch updates the data-lanes property
+> > > to describe the same.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > >  .../devicetree/bindings/media/renesas,csi2.yaml          | 9 ++++++++-
+> > >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > index e6a036721082..064a0a4c5737 100644
+> > > --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > @@ -67,7 +67,14 @@ properties:
+> > >                  maxItems: 1
+> > >
+> > >                data-lanes:
+> > > -                maxItems: 1
+> > > +                items:
+> > > +                  minItems: 1
+> > > +                  maxItems: 4
+> > > +                  items:
+> > > +                    - const: 1
+> > > +                    - const: 2
+> > > +                    - const: 3
+> > > +                    - const: 4
+> >
+> > Seeing "maxItems: 1" there confuses me too, as the property is an
+> > array of data-lanes, but I'm afraid your change does not what you
+> > intend as it would allow you to specify the number of data lanes as an
+> > integer rather than as an array.
+> >
+> > I think it would probably be correct to set
+> >
+> >                 data-lanes: true
+> >
+> > (maybe maxItems: 1 is correct already)
+> >
+> > And restrict the number of valid combinations in the board DTS file
+> > with a construct like:
+> >
+> >     data-lanes:
+> >       oneOf:
+> >         - items:
+> >             - const: 1
+> >             - const: 2
+> >             - const: 3
+> >             - const: 4
+> >         - items:
+> >             - const: 1
+> >             - const: 2
+>
+> I don't think this is correct, what if data lanes 2 and 3 are used?
+>
 
-All warnings (new ones prefixed by >>):
+These were examples that allow you to accept <1 2> and <1 2 3 4> as
+valid properties. If other combinations are accepted they can be
+specified there, in your example, <2 3> with
 
->> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-                                                                       ^~~~~~~~~
-   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                                           ^~~~
-   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-                                                      ^~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                                            ^~~~
-   include/linux/compiler_types.h:328:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:316:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   1 warning generated.
+             - items:
+               - const: 2
+               - const: 3
 
+As lane re-reordering is quite unusual as a feature (afaik) there are
+usually just an handful of supported combinations for 1, 2 and 4 data
+lanes setups.
 
-vim +242 drivers/iio/adc/ti-tsc2046.c
+If full lane re-ordering is supported then it's enough to set
+data-lanes: true and accepts all combinations.
 
-   239	
-   240	static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
-   241	{
- > 242		return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-   243	}
-   244	
+Also, the reason why imho the property should go in the board DTS and
+not in the SoC .dtsi is that not all the available data lanes of the
+IP-core might be routed out on a specific board.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+That's at least my understanding which I would be glad to be disproved
+as specifying the valid combinations in each board dts is rather
+un-convenient.
+
+Thanks
+   j
+
+> >
+> > Thanks
+> >    j
+> >
+> > >
+> > >              required:
+> > >                - clock-lanes
+> > > --
+> > > 2.17.1
+> > >
+>
+> --
+> Kind Regards,
+> Niklas Söderlund

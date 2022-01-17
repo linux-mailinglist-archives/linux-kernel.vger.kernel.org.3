@@ -2,165 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C31C4904E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43BC4904EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbiAQJ3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:29:39 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16716 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235753AbiAQJ3e (ORCPT
+        id S233509AbiAQJad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235753AbiAQJac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:29:34 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JcmjT5dH7zZfBC;
-        Mon, 17 Jan 2022 17:25:49 +0800 (CST)
-Received: from dggpeml100016.china.huawei.com (7.185.36.216) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 17:29:32 +0800
-Received: from DESKTOP-27KDQMV.china.huawei.com (10.174.148.223) by
- dggpeml100016.china.huawei.com (7.185.36.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 17:29:31 +0800
-From:   "Longpeng(Mike)" <longpeng2@huawei.com>
-To:     <jasowang@redhat.com>, <mst@redhat.com>, <sgarzare@redhat.com>,
-        <stefanha@redhat.com>
-CC:     <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
-        <huangzhichao@huawei.com>, Longpeng <longpeng2@huawei.com>
-Subject: [RFC 3/3] vdpasim_net: control virtqueue support
-Date:   Mon, 17 Jan 2022 17:29:21 +0800
-Message-ID: <20220117092921.1573-4-longpeng2@huawei.com>
-X-Mailer: git-send-email 2.25.0.windows.1
-In-Reply-To: <20220117092921.1573-1-longpeng2@huawei.com>
-References: <20220117092921.1573-1-longpeng2@huawei.com>
+        Mon, 17 Jan 2022 04:30:32 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD7C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:30:32 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id l21-20020a17090b079500b001b49df5c4dfso3056924pjz.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CypZ2O0aOlLYoEWjzj8LBaIlTHfP284kF/aI9kD9Oi0=;
+        b=F0lYJHcNkJ4Tt8/+tLCR2AdNzLJeYYHixlTpRYn8nq8A9eQ3MC/AqMUv2sQY54+FCk
+         MbElzvIO5ON3FF2RMklVS3uFQVF/GVEYjbiS8OMTm2km4AMVFNeERUFC8RRh9Z9TgZEu
+         pTWbldJd/DlasbIpzIkbkviL7rPcKjrksiIUtgaoJfwRtHhTeyNJMdIZ3m6kqftr52vH
+         Yd66AK6GGfA7Np9TU/6M6V8mAXVwQV7N2vpm2qMTi2ygJ91yrZw0Kp5KkiZPIPh9ApHv
+         HkMr9OJbH77gY3ihOVAzdmW2dSaDkURsBx1/fcPzjXT00zhg2/K8/dk6/0PWQ1Qxf6Y3
+         J0fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CypZ2O0aOlLYoEWjzj8LBaIlTHfP284kF/aI9kD9Oi0=;
+        b=pNTjxdd1FN/OdMZ/F3AV85hagQWS6U64kxuTUHqG4g0Q+PKJHXPTtpsGZMRn3ipzwp
+         G7NkacfeZz2SvK0PNi9vde9O52BiVK4vpkFidgVvCXZUj7S3K8u9zvouP2ZSQ+F53qW7
+         c9toTAFR46Gekj9CXs7fqEjTHbUqXV6CWMeBBfP3/zKBk1+IffkAWP8sbi+tyvyiRLo8
+         cmJ5Hcq9OCFFfd8tgjoDjCccBxkY636/wtQA4loB7UAemYqm20fo66X44giOE4c6OORM
+         6WvOWNch/zBonJgdvOFqTfzjEIUp4KW5H8mdsAe0VUjFzjdRyrkH3aRmodGORn6LRqz7
+         njmQ==
+X-Gm-Message-State: AOAM532JYBpXGDwdtRpD9eZb40XQVk5PZc2oMc72A+qimeTCPvmNPxSQ
+        wKlCSvj3yojimX6FSVdQCXRFdw28qSoLXdQgM6sexOXLBxZe8w==
+X-Google-Smtp-Source: ABdhPJxK0U9MlTiUUxHtfSgC3lqiJHtxmlZTFYZyL0/lOpEOPkoo9p85ByTfesogvIVuCUA+0pqLXr+igjTH2NjHqdU=
+X-Received: by 2002:a17:90b:3e8e:: with SMTP id rj14mr17855889pjb.179.1642411831985;
+ Mon, 17 Jan 2022 01:30:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml100016.china.huawei.com (7.185.36.216)
-X-CFilter-Loop: Reflected
+References: <20220117052146.75811-1-julianbraha@gmail.com>
+In-Reply-To: <20220117052146.75811-1-julianbraha@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 17 Jan 2022 10:30:20 +0100
+Message-ID: <CAG3jFyvs_J218R0q=geUaO7V25bkdu_zjW7GMKBoP+phHnXACQ@mail.gmail.com>
+Subject: Re: [PATCH v3] drm: bridge: fix unmet dependency on DRM_KMS_HELPER
+ for DRM_PANEL_BRIDGE
+To:     Julian Braha <julianbraha@gmail.com>
+Cc:     narmstrong@baylibre.com, jonas@kwiboo.se, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, jagan@amarulasolutions.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        fazilyildiran@gmail.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Longpeng <longpeng2@huawei.com>
+On Mon, 17 Jan 2022 at 06:22, Julian Braha <julianbraha@gmail.com> wrote:
+>
+> When DRM_CHIPONE_ICN6211 is selected, and DRM_KMS_HELPER is not selected,
+> Kbuild gives the following warning:
+>
+> WARNING: unmet direct dependencies detected for DRM_PANEL_BRIDGE
+>   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && DRM_KMS_HELPER [=n]
+>   Selected by [y]:
+>   - DRM_CHIPONE_ICN6211 [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_BRIDGE [=y] && OF [=y]
+>
+> This is because DRM_CHIPONE_ICN6211 selects DRM_PANEL_BRIDGE
+> without depending on or selecting DRM_KMS_HELPER,
+> despite DRM_PANEL_BRIDGE depending on DRM_KMS_HELPER.
+>
+> This unmet dependency bug was detected by Kismet,
+> a static analysis tool for Kconfig.
+> Please advise if this is not the appropriate solution.
+>
+> Fixes: ce517f18944e ("drm: bridge: Add Chipone ICN6211 MIPI-DSI to RGB bridge")
+> Reviewed-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Julian Braha <julianbraha@gmail.com>
+> ---
+> v2:
+> - changed from "select" to "depends on"
+>
+> v3:
+> - new line now uses tabs instead of spaces.
+>
+>  drivers/gpu/drm/bridge/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+> index 61db5a66b493..a1b52eaf26e0 100644
+> --- a/drivers/gpu/drm/bridge/Kconfig
+> +++ b/drivers/gpu/drm/bridge/Kconfig
+> @@ -30,6 +30,7 @@ config DRM_CDNS_DSI
+>  config DRM_CHIPONE_ICN6211
+>         tristate "Chipone ICN6211 MIPI-DSI/RGB Converter bridge"
+>         depends on OF
+> +       depends on DRM_KMS_HELPER
+>         select DRM_MIPI_DSI
+>         select DRM_PANEL_BRIDGE
+>         help
+> --
 
-Introduces the control virtqueue support for vdpasim_net, based on
-Jason's RFC [1].
-
-[1] https://patchwork.kernel.org/project/kvm/patch/20200924032125.18619-25-jasowang@redhat.com/
-
-Signed-off-by: Longpeng <longpeng2@huawei.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 83 +++++++++++++++++++++++++++-
- 1 file changed, 81 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 76dd24abc791..e9e388fd3cff 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -26,9 +26,85 @@
- #define DRV_LICENSE  "GPL v2"
- 
- #define VDPASIM_NET_FEATURES	(VDPASIM_FEATURES | \
--				 (1ULL << VIRTIO_NET_F_MAC))
-+				 (1ULL << VIRTIO_NET_F_MAC) | \
-+				 (1ULL << VIRTIO_NET_F_CTRL_VQ) | \
-+				 (1ULL << VIRTIO_NET_F_CTRL_MAC_ADDR))
- 
--#define VDPASIM_NET_VQ_NUM	2
-+#define VDPASIM_NET_VQ_NUM	3
-+
-+virtio_net_ctrl_ack vdpasim_net_handle_ctrl_mac(struct vdpasim *vdpasim,
-+						u8 cmd)
-+{
-+	struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
-+	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
-+	struct virtio_net_config *config = vdpasim->config;
-+	size_t read;
-+
-+	switch (cmd) {
-+	case VIRTIO_NET_CTRL_MAC_ADDR_SET:
-+		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->out_iov,
-+					     (void *)config->mac, ETH_ALEN);
-+		if (read == ETH_ALEN)
-+			status = VIRTIO_NET_OK;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return status;
-+}
-+
-+static void vdpasim_net_handle_cvq(struct vdpasim *vdpasim)
-+{
-+	struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
-+	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
-+	struct virtio_net_ctrl_hdr ctrl;
-+	size_t read, write;
-+	int err;
-+
-+	if (!(vdpasim->features & (1ULL << VIRTIO_NET_F_CTRL_VQ)))
-+		return;
-+
-+	if (!cvq->ready)
-+		return;
-+
-+	while (true) {
-+		err = vringh_getdesc_iotlb(&cvq->vring, &cvq->out_iov, &cvq->in_iov,
-+					   &cvq->head, GFP_ATOMIC);
-+		if (err <= 0)
-+			break;
-+
-+		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->in_iov, &ctrl,
-+					     sizeof(ctrl));
-+		if (read != sizeof(ctrl))
-+			break;
-+
-+		switch (ctrl.class) {
-+		case VIRTIO_NET_CTRL_MAC:
-+			status = vdpasim_net_handle_ctrl_mac(vdpasim, ctrl.cmd);
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		/* Make sure data is wrote before advancing index */
-+		smp_wmb();
-+
-+		write = vringh_iov_push_iotlb(&cvq->vring, &cvq->out_iov,
-+					      &status, sizeof (status));
-+		vringh_complete_iotlb(&cvq->vring, cvq->head, write);
-+		vringh_kiov_cleanup(&cvq->in_iov);
-+		vringh_kiov_cleanup(&cvq->out_iov);
-+
-+		/* Make sure used is visible before rasing the interrupt. */
-+		smp_wmb();
-+
-+		local_bh_disable();
-+		if (vringh_need_notify_iotlb(&cvq->vring) > 0)
-+			vringh_notify(&cvq->vring);
-+		local_bh_enable();
-+	}
-+}
- 
- static void vdpasim_net_work(struct work_struct *work)
- {
-@@ -42,6 +118,9 @@ static void vdpasim_net_work(struct work_struct *work)
- 
- 	spin_lock(&vdpasim->lock);
- 
-+	/* process ctrl vq first */
-+	vdpasim_net_handle_cvq(vdpasim);
-+
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
--- 
-2.23.0
-
+Applied to drm-misc-next.

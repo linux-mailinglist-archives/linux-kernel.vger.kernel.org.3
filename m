@@ -2,132 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E959B49087D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6DF490882
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbiAQMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239765AbiAQMOz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:14:55 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA6DC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 04:14:55 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id c190so17670332qkg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 04:14:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uUCg1YItvyrIw9CiOXyM/OuBol/sDAALpX7c8j0fvaI=;
-        b=7SlHDseHUVpPddEzwv+4fXqO4TdfNIF9mfH025WwpQ1ebXVTobjMduO9FCh0VaiDYe
-         SMH4EBWzX5vIT5/qoLvLepJC3YMrdqoKUyBsUO+9Q96wNnSN1hoU03OKYVFkaAGHFx1T
-         fj/vk3ZG45CrQYaznO+Mlf/4L0Q36j2dqV5S7yILS8ESJFDIRAJ4J8UtLyJ7+LWOZcIg
-         TTf7N7ovIdIJ9GyT2uG030JMPCXTdIJRnBXNM59F6+nlYgoa+J7RHYzKGNzsYu8cVLyA
-         8qY+rL1MKV8uM7M9Oz57ZHECNOPmZUWF24rDZp/Z7uKH+EJ0VvP2lYufxpyVnyUbcdSl
-         +g8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uUCg1YItvyrIw9CiOXyM/OuBol/sDAALpX7c8j0fvaI=;
-        b=MS2lIG2FNhGZ5h9YwpxfIJRtkRPe9xFAYdkT2P8UVNCHb5nzkw3oRg2es6u5RgnjyR
-         Ym6wO4mA74BmoBT78k6Yk6eqJxDFYIDGXGLISgj0iomGdaNI75uCUsAt5ogs91as+RnK
-         6OsSZVncSNzUTjwZ4OnKl6a6rC36xbIQi6W/A1SRQAZG0p5KDIh3rfp2Eb5kHylCUEjY
-         n3qYDBFJQzqURHk1y270fygi10vCmkTVFircStpCxIkN21TB3DqqLV9Ejp364vGgbWC2
-         k+bTlJEWMo+nZWzT6m0851gbrB2lSEG7/+asSfFbQskvhezq0zE92CPRJgFOSl7ms8rh
-         H7BQ==
-X-Gm-Message-State: AOAM532ZvqGOSHjuhVdjBxoLGb/iCfn2z0kqWQajvvnDZqyByepbld8S
-        B7C/W381I7ougImfiqXaig1dhw==
-X-Google-Smtp-Source: ABdhPJx537Oz6IfeVhDgAwlyGXWeK9OlLGcahtEwqIPOZeC75pvWMLMNQyiaqPc0LZaMaJ5aDqBRng==
-X-Received: by 2002:a05:620a:4086:: with SMTP id f6mr126915qko.146.1642421694623;
-        Mon, 17 Jan 2022 04:14:54 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id bp42sm8871383qtb.61.2022.01.17.04.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 04:14:54 -0800 (PST)
-Date:   Mon, 17 Jan 2022 07:14:53 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     cgel.zte@gmail.com
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] psi: Treat ksm swapping in copy as memstall
-Message-ID: <YeVdvVVBvrXH5U0L@cmpxchg.org>
-References: <20220116152150.859520-1-yang.yang29@zte.com.cn>
+        id S239799AbiAQMQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:16:31 -0500
+Received: from mout.gmx.net ([212.227.17.22]:40493 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239559AbiAQMQa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 07:16:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642421781;
+        bh=0umTTU4XfVVX+KXxZBAd7v3zaeX2hoWPbrIx01aJkMM=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=dTam736OkShsJUDXUaKisxBZIIRwJ4/ptbwrL8lRSVSkkpHPwOHDjKOXtJSjTFFkR
+         XL72Id8Yh8G5/Dhig9vZhcWYrky8E+fxWB4Q3oCvzHEPgs9EsNbETCzQdKyZrwv4sv
+         x+Lbd5lT3TvJxpTnvf9Pmxa8cqEDb5gDlu6rAEe4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRTRN-1mulpA1Q85-00NPv8; Mon, 17
+ Jan 2022 13:16:21 +0100
+Message-ID: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+Date:   Mon, 17 Jan 2022 13:15:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220116152150.859520-1-yang.yang29@zte.com.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+In-Reply-To: <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:D2eGrpuAUbVVzZrhjRVJ3cJjkjGmaGCwoincAiE9iwih9KDLXNU
+ 29l6dw5iBTUHU1WPz48pV4an0QAJy/hP2fmgokflBgIwptu2HWBmg4/2fi9/R2uPqLxtPPK
+ d2WroLO/yK/49QqHe6lwRcz+KzE3QhZSDPxhY27X8aRsd2nMpNh4Hn+5uE5warHJiMrPVEs
+ YYR/NhMPjBw+2kFNgZG1A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+f37p3vPXP4=:wyoDRTccsWKM6CQP0NxMjQ
+ tD9j8iMD2H9Qv32t0kd0TIVpEDZvC7D5vBW7+uIRf7qURHwhEoLrJ57SK2XMPqxuLzTdGl5ET
+ UiN4xPP50lLaqmenQb/cw7fwaIQiXlUYA69kKVRYqz81LzYZa9yKEQNwu9D1MNstGjQn8F1kE
+ DWzDX68i3LhfwXlJhEsCketjgDeZfLN+Zmb2tUY5wnBNrxtq+l5X1APKgNf97wR2H0Ju6L2Im
+ T1wid4TJqXWUmx+oKu7Svm/VWD5UdDJHlJfCAawo5Q+HNiS0YPgD+c8AIaHGpvk0+LVfrqQRu
+ 7EZEOtlI/1TQ/Zf5wxfbVXWJzFIA85X4RFLODqbTMjep5LXS6A0xumCZ8q+aPwHwHAA5U7igd
+ lGAhCjLRpNbJUbbUE3A5NvMzJJmle/9jyKeiArme6sm7WzMCo8WeM7TRmhvRqseatgTd+G2Vr
+ ZSgHzMkuI5i7AcPdSzFkEGMG5Uy2hFlj8bUPL+S/OcFX1fq2/6VJiB6QdoaGZHvgpRUvMjK8s
+ 5zpxvI11OpqV6pjmbeadQwUwxHqaDA57emWKOYZ7yR+TVmoAQHDwl8BZt/7/ERfCChKeypNsz
+ lZ0qNWV46MwQWgavaxW/TwEK6oFTPWRWKpmxtRRvk3mKuS58lGWv6M55HDV7oQjwCravf585m
+ EyZwMPQZaUtlsivuk8V2tgOjLleAnjqj3a+oOX1XIAvapQlen9GdV492oHjzx22i1jIDAoKzW
+ JqX6YWHb2Y/JPdKMRNCQvbav9+eEEtANUNt5PoNO7k6zVLWnVhQVbllT7RgKpPYD4xIpD/4HU
+ uz4Dbj1cRyUUi5REHfKlEaMiX/bKlnrqJFGH4yH2lWiBgqBZp++DK6bSa1hurRel3gfKMLuno
+ r9UviaH01J8HzQ54n2qU1JO0/iSVD8zSnOI25IJPbaOpkreO/aZwhXgLHRgFB/cgFmt2J+Fpg
+ ORxGdhoYY1N/yU3fFKSWKqttM0BDLAr5tSifkts/WZE7N8dt/SXNb3LE7TkLortOTbrWbOEvc
+ ye8E2R7RoG3A/tr2KZbsJycis1s6EHysWZVyoqCYM76ZbawCf9hN4FQE22UKpNnRjQ2bnwTKH
+ VGJi6W/QCLr2X4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yang,
+Hello Daniel,
 
-On Sun, Jan 16, 2022 at 03:21:51PM +0000, cgel.zte@gmail.com wrote:
-> From: Yang Yang <yang.yang29@zte.com.cn>
-> 
-> When faults in from swap what used to be a ksm page and that page
-> had been swapped in before, system has to make a copy. Obviously
-> this kind of copy is related to high memory pressure, so we treat
-> it as memstall. Although ksm page merging is not because of high
-> memory pressure.
-> 
-> Information of this new kind of stall will help psi to account
-> memory pressure more precise.
+On 1/17/22 11:02, Daniel Vetter wrote:
+> Hi Helge
+>
+> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
+>>
+>> The fbdev layer is orphaned, but seems to need some care.
+>> So I'd like to step up as new maintainer.
+>>
+>> Signed-off-by: Helge Deller <deller@gmx.de>
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5d0cd537803a..ce47dbc467cc 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/em=
+ulator/index.html
+>>  F:     arch/x86/math-emu/
+>>
+>>  FRAMEBUFFER LAYER
+>> -L:     dri-devel@lists.freedesktop.org
+>> +M:     Helge Deller <deller@gmx.de>
+>>  L:     linux-fbdev@vger.kernel.org
+>> -S:     Orphan
+>
+> Maybe don't rush maintainer changes in over the w/e without even botheri=
+ng
+> to get any input from the people who've been maintaining it before.
+>
+> Because the status isn't entirely correct, fbdev core code and fbcon and
+> all that has been maintained, but in bugfixes only mode. And there's ver=
+y
+> solid&important reasons to keep merging these patches through a drm tree=
+,
+> because that's where all the driver development happens, and hence also
+> all the testing (e.g. the drm test suite has some fbdev tests - the only
+> automated ones that exist to my knowledge - and we run them in CI). So
+> moving that into an obscure new tree which isn't even in linux-next yet =
+is
+> no good at all.
+>
+> Now fbdev driver bugfixes is indeed practically orphaned and I very much
+> welcome anyone stepping up for that, but the simplest approach there wou=
+ld
+> be to just get drm-misc commit rights and push the oddball bugfix in the=
+re
+> directly. But also if you want to do your own pull requests to Linus for
+> that I don't care and there's really no interference I think, so
+> whatever floats.
+>
+> But any code that is relevant for drm drivers really needs to go in thro=
+ugh
+> drm trees, nothing else makes much sense.
+>
+> I guess you're first action as newly minted fbdev maintainer is going to=
+ be to
+> clean up the confusion you just created.
 
-Thanks for your patch. I'm curious if you have a concrete use case
-where this makes a difference, or if this is something you found while
-reading the code?
+Most of my machines depend on a working fbdev layer since drm isn't (and p=
+robably
+-due to technical requirements of DRM- won't be) available for those.
+So, since the fbdev drivers were marked orphaned, I decided to step up as =
+maintainer.
 
-> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-> ---
->  mm/ksm.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/mm/ksm.c b/mm/ksm.c
-> index 4a7f8614e57d..d4ec6773f9b8 100644
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -39,6 +39,7 @@
->  #include <linux/freezer.h>
->  #include <linux/oom.h>
->  #include <linux/numa.h>
-> +#include <linux/psi.h>
->  
->  #include <asm/tlbflush.h>
->  #include "internal.h"
-> @@ -2569,6 +2570,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
->  {
->  	struct anon_vma *anon_vma = page_anon_vma(page);
->  	struct page *new_page;
-> +	unsigned long pflags;
->  
->  	if (PageKsm(page)) {
->  		if (page_stable_node(page) &&
-> @@ -2583,6 +2585,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
->  	if (!PageUptodate(page))
->  		return page;		/* let do_swap_page report the error */
->  
-> +	psi_memstall_enter(&pflags);
->  	new_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, address);
->  	if (new_page &&
->  	    mem_cgroup_charge(page_folio(new_page), vma->vm_mm, GFP_KERNEL)) {
-> @@ -2600,6 +2603,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
->  #endif
->  	}
->  
-> +	psi_memstall_leave(&pflags);
+I see your point that at least the fbdev core code and fbcon are shared be=
+tween DRM and fbdev.
+For me it's really not important to drive any patches through a seperate t=
+ree, so
+I'd be happy to join the drm-misc tree if you feel it's necessary. (By the=
+ way,
+adding my tree to for-next was on my todo list...)
 
-This does unconditional stall accounting for a swapin operation. But
-if you take a look at workingset_refault() -> folio_wait_bit_common(),
-we only count memory stalls when the page is thrashing, not when it's
-a transitionary refault (which happen even when there is enough memory
-to hold the workingset). You need to check PageWorkingset() at least.
+What's important for me though is, to keep fbdev actively maintained, whic=
+h means:
+a) to get fixes which were posted to fbdev mailing list applied if they ar=
+e useful & correct,
+b) to include new drivers (for old hardware) if they arrive (probably happ=
+ens rarely but there can be).
+   I know of at least one driver which won't be able to support DRM....
+   Of course, if the hardware is capable to support DRM, it should be writ=
+ten for DRM and not applied for fbdev.
+c) reintroduce the state where fbcon is fast on fbdev. This is important f=
+or non-DRM machines,
+   either when run on native hardware or in an emulator.
+d) not break DRM development
 
-But again I'd be curious first if this is a practical concern. Swapins
-should be IO dominated - or in the case of zswap dominated by the
-decompression. Does a page copy really matter?
+Especially regarding c) I complained in [1] and got no feedback. I really =
+would like to
+understand where the actual problems were and what's necessary to fix them=
+.
+
+Helge
+
+[1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de

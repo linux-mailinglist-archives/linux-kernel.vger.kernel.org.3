@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75517490214
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9D9490217
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234788AbiAQGkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 01:40:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45715 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231189AbiAQGka (ORCPT
+        id S234815AbiAQGls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 01:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231189AbiAQGlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:40:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642401629;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1E8hjpydB+1Ebcg5NG3WSQev5EeNdXP/CDEeZweK/0=;
-        b=Mo+PLf4nDmfcqsVXw82i8XU2mQpHgmp5/fkWpR8FxLIDu2ejGlWm/j86ebHZx0VaOfFjev
-        1mmWXDVacm4s5T8m3AFBo4Huej33e/74dCRLBPbDu40mrC70CgK0XEl96Do/sc/H8z+tIe
-        jAHRVldsw9rhV/VFDFd8MU5UOKyqY0U=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-jfmFyGU3ME6c7CKQOzSb7w-1; Mon, 17 Jan 2022 01:40:20 -0500
-X-MC-Unique: jfmFyGU3ME6c7CKQOzSb7w-1
-Received: by mail-pj1-f72.google.com with SMTP id a4-20020a17090a70c400b001b21d9c8bc8so16234060pjm.7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 22:40:18 -0800 (PST)
+        Mon, 17 Jan 2022 01:41:47 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A86EC06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 22:41:47 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id s15so9374382pfw.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 22:41:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=81bQSQb3wEEPINMq19rfFYIhQtFYQQaxVg6e3I6g4Z8=;
+        b=zRlJ7/jj2U4qgugcmf+lCbQLOC/npaAeyYwnwxnSYfnoqT9MjGZJn7+/Sah0MGNRo9
+         k9n0BS1t+1Wx951XTGmvHTE2R/0QsukC8N4ajrHwdhTLpL0D9Pis9+e1J4Qy7r1wT1L9
+         FituuSQhiMuI9IUmL6mB/m4K5C+gyd3dSswo1SjcV2AIc1zkdKLGP3YEyw9uRbSTnyef
+         6uwLkkG6P1sPu9QpABrojghmOds3GpdzgLuSlG5/5QmDALF4W9Z0yzUVDOZ69CFgJFC0
+         dPjpDpGxrLPA2mSW4+hEq0yXGGZSlbeNywVBg0rvb3znVIsa1Qhiq92tqSGqeU0jIHcq
+         LNCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z1E8hjpydB+1Ebcg5NG3WSQev5EeNdXP/CDEeZweK/0=;
-        b=Vjhl1KdMErPGfnnuuMSjrF3aF/3WQgQ2vQU5KPQCsJm6gkTMjk4+3ogh6s/YEsXZhq
-         KL9N+88ee3jFK2jCGepE/Rj2LnwqxDHKPsEPydupv7dYUi/ATbu9KTIDKbFBQ0odti70
-         h2Zr6eYVIv3Eq8SIlsQ3Btni9URVd+4KH0egdCu7vYyB6K015M2Op551nH/4QDpVbDhU
-         Xa2nD/mnp4usMbkFbzn81NvExbglp5oQeZ+/2zWkXaRu2azrs0njq0D6eYi5wIv31SdN
-         1cjSmIqEp6V7sfzmjF11zCeDCeBa+J9ZU/1ljYc/o6ySdt9XUdu3hlEigLG71wsfW5Dw
-         cZlg==
-X-Gm-Message-State: AOAM530HH8zNm97i080VIyoez7UePIQofJ5NiVQbZ5GgoWrzUSGDXv09
-        tKtBB43BCvkKYI6AmsA/qrDX7CbYX4Adj+AjeQ3ykjprk25RLcWe8hGB6SEhW+Yzjlbq+44BrII
-        z39ZvjZA9G2sviZOYOk8c+Qy1
-X-Received: by 2002:a17:903:11d0:b0:149:a969:400c with SMTP id q16-20020a17090311d000b00149a969400cmr21317007plh.120.1642401616150;
-        Sun, 16 Jan 2022 22:40:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwuBZ9AYJjw5KpCOAVuPoXkf9CMob/mn9UwVMIe1y13FBPLr9fe56+zJZi7vmL3oQex3gPhfQ==
-X-Received: by 2002:a17:903:11d0:b0:149:a969:400c with SMTP id q16-20020a17090311d000b00149a969400cmr21316998plh.120.1642401615926;
-        Sun, 16 Jan 2022 22:40:15 -0800 (PST)
-Received: from [10.72.13.251] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id z29sm3431743pfg.87.2022.01.16.22.40.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 22:40:15 -0800 (PST)
-Message-ID: <1f703ebf-0f78-e530-0fe1-163613397cad@redhat.com>
-Date:   Mon, 17 Jan 2022 14:40:11 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=81bQSQb3wEEPINMq19rfFYIhQtFYQQaxVg6e3I6g4Z8=;
+        b=OoNk9oRmvY8ulNIZOtbippMLJO+B7l55nU/HVN73RGWbprTA0PNpQDFpFRrQ5Ie472
+         Ekpo3bQI0DR7AtaeX/2Lndprj25y5Z+Vy5Zd0FzGaPYnCy4w9Y9wyDqlkjqjKqeOzWNg
+         NNpl6HbEXVHV7ZnyWvrGNmSi2dJ8md5nFtOtinK0iWjqH3ZSlePjdjxZIu42pckKtug4
+         tW5De03+0vtWx/O92+IP54psLIrmOnwcr+JNtoymcN8obovt/jttw9GE8yvDziSqm5q2
+         Ps7fcWkukRLeq8lLJeD1HBIIgBVJnKJlGwLUwJBL1lJt2iu/uLk/ljYoChEDRc6Z6AOw
+         lg+g==
+X-Gm-Message-State: AOAM530lrZrAa4IHqUVGTDiDjdN3+MhvaJyoxE25AnoHpFVyeGzjyc4v
+        gVX+tGDNXNSL7mMWpafpGKvA07wdsiWvig==
+X-Google-Smtp-Source: ABdhPJxCw4H0p4bJRCX4gflrN+anKXbVzdknmZomTRYKNMoouhPMB/DkmE9sAQGSEYWiSnDXypLjwA==
+X-Received: by 2002:a63:a745:: with SMTP id w5mr17851937pgo.374.1642401706728;
+        Sun, 16 Jan 2022 22:41:46 -0800 (PST)
+Received: from localhost ([223.184.90.234])
+        by smtp.gmail.com with ESMTPSA id c6sm12967468pfv.62.2022.01.16.22.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 22:41:46 -0800 (PST)
+Date:   Mon, 17 Jan 2022 12:11:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH] selftests: cpufreq: Write test output to stdout as well
+Message-ID: <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
+References: <20220114232126.92043-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] virtio_mem: break device on remove
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        virtualization@lists.linux-foundation.org
-References: <20220114214324.239444-1-mst@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220114214324.239444-1-mst@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220114232126.92043-1-nfraprado@collabora.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/1/15 上午5:43, Michael S. Tsirkin 写道:
-> A common pattern for device reset is currently:
-> vdev->config->reset(vdev);
-> .. cleanup ..
->
-> reset prevents new interrupts from arriving and waits for interrupt
-> handlers to finish.
->
-> However if - as is common - the handler queues a work request which is
-> flushed during the cleanup stage, we have code adding buffers / trying
-> to get buffers while device is reset. Not good.
->
-> This was reproduced by running
-> 	modprobe virtio_console
-> 	modprobe -r virtio_console
-> in a loop, and this reasoning seems to apply to virtio mem though
-> I could not reproduce it there.
->
-> Fix this up by calling virtio_break_device + flush before reset.
->
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+On 14-01-22, 18:21, N�colas F. R. A. Prado wrote:
+> Use 'tee' to send the test output to stdout in addition to the current
+> output file. This makes the output easier to handle in automated test
+> systems and is superior to only later dumping the output file contents
+> to stdout, since this way the test output can be interleaved with other
+> log messages, like from the kernel, so that chronology is preserved,
+> making it easier to detect issues.
+> 
+> Signed-off-by: N�colas F. R. A. Prado <nfraprado@collabora.com>
 > ---
->   drivers/virtio/virtio_mem.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-> index 38becd8d578c..33b8a118a3ae 100644
-> --- a/drivers/virtio/virtio_mem.c
-> +++ b/drivers/virtio/virtio_mem.c
-> @@ -2888,6 +2888,8 @@ static void virtio_mem_remove(struct virtio_device *vdev)
->   		virtio_mem_deinit_hotplug(vm);
->   
->   	/* reset the device and cleanup the queues */
-> +	virtio_break_device(vdev);
-> +	flush_work(&vm->wq);
+>  tools/testing/selftests/cpufreq/main.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+> index 31f8c9a76c5f..60ce18ed0666 100755
+> --- a/tools/testing/selftests/cpufreq/main.sh
+> +++ b/tools/testing/selftests/cpufreq/main.sh
+> @@ -194,5 +194,5 @@ prerequisite
+>  
+>  # Run requested functions
+>  clear_dumps $OUTFILE
+> -do_test >> $OUTFILE.txt
+> +do_test | tee -a $OUTFILE.txt
+>  dmesg_dumps $OUTFILE
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-We set vm->removing to true and call cancel_work_sync() in 
-virtio_mem_deinit_hotplug(). Isn't is sufficient?
-
-Thanks
-
-
->   	virtio_reset_device(vdev);
->   	vdev->config->del_vqs(vdev);
->   
-
+-- 
+viresh

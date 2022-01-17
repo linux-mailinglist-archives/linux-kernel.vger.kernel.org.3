@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5408B4902EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193F74902F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237539AbiAQHZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S237523AbiAQHec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237523AbiAQHZH (ORCPT
+        with ESMTP id S232208AbiAQHea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:25:07 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A447C06161C;
-        Sun, 16 Jan 2022 23:25:07 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id i17so9455621pfk.11;
-        Sun, 16 Jan 2022 23:25:07 -0800 (PST)
+        Mon, 17 Jan 2022 02:34:30 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837D9C061574;
+        Sun, 16 Jan 2022 23:34:30 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id o3so19874208pjs.1;
+        Sun, 16 Jan 2022 23:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hg9JEbF93yOirT0i1PqEL2GAy0mjKH1xF5tCZqOwYkA=;
-        b=le4cDKdnkLHCXSal+0sNyEjoiGK0X3PQkjGYxVjok1uBNsoY03UcKH6EQSX/Sl+Byg
-         W63VbHCFyeUcxK2oQfytXOYQar6qDS+COW+COQpPpE4ROP0hUiIg/b6whdi/dzFDSkqo
-         /GK8PBHDkbydCniZvZK5FFLa3yz8rdrA/lNJ1hYo9OiDklCLpTpaqz8kXe/o+BYYs+Hm
-         x/WqASoFxgSgo/GyIZFopL+rd7VF+dZ7h5fhEHXPcE3ewjyaWfQtY6bCihyAhY1MmfBK
-         CQEtbBbRRVNYsvZHiCJSf3rLhveEwkBi66RahAlV7l8yzxf4v0s4/kfUqyKVNQD9mIZX
-         zvUQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Pk9g25WRpFPs48r7zm5sUpEVslQaRknFfz4t/FLVEiU=;
+        b=RaGTC0aQ3uz4reKKahJfMLLELsVCu2ayEhM/j6nlOodNLeNB5a/XNVlAD4+KhlbcO+
+         M0Dvs0si/7pissOORAeiEKmGPo+QNS2bv8c4B4LMGewDMU1Db4ZhbWwLbe+MNvGVRp+g
+         CIdvcXmNpbgDbHEr1iAAj1mMgpny9mz7LgSqHbAsLdg3uUKO0SybWgGAJLQwFKy5H2yh
+         VKgPrGLZcIaQSLqhvM4XEzVoGBBUsdmxikuzDJu37j0rvK3oN7JaU/hU8GxRDPO7vdGN
+         9Padw/MmOeWK/BmCpkcDEEHj/6TEPfxtPLvVigtj9iSwE9WVKxozKmwkewr+BdS8b07L
+         1A/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hg9JEbF93yOirT0i1PqEL2GAy0mjKH1xF5tCZqOwYkA=;
-        b=Wbi7GL1yMDDZrz4N/ExXLNC62MW0cFupHGPG0ZEL0ZUqI7RSKRERrMOqHLBexd51iR
-         KTiajQFUQi54nzehNnRU45TxUc3WQvfuTv2QzFIm0Ew8uZEMkmjyxpNUBbEDF1hU42om
-         2uhWGi2NC/wAWmlw0gfbZiWlEvmO3xxbMm2WaxaBVpUKEQANPRRfIWi3iAGWEQklivTQ
-         UVGoHoFDnnRNT9itN0PTX9pHVEV+x4UTpmGLPy5eBTSSnVdwsWdmg1qyzLeK/BoOM6wc
-         Jd+N3XdOLPya9Q9jgY4YmAk4AnnaZWljjGq/u2QItMu9EfoIpFLqm9qycvMCUqMiiJCc
-         AFQg==
-X-Gm-Message-State: AOAM532GOBTFR1bjzHZfnHeA0lgBfZyKbweenQxJX+JwwzWsOR7uqrny
-        Nn8WKXzEvDbZ3rOciRRXREE=
-X-Google-Smtp-Source: ABdhPJzecYpPu7ynpUVr8Sc01lyFp20Oc04LQanRefauwZ0etJm3v0mAxOui/JF875/R4daV0K8psg==
-X-Received: by 2002:a05:6a00:2444:b0:4a3:239f:d58a with SMTP id d4-20020a056a00244400b004a3239fd58amr19581924pfj.85.1642404306644;
-        Sun, 16 Jan 2022 23:25:06 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id s5sm12437631pfe.117.2022.01.16.23.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 23:25:06 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Fix the #GP(0) and #UD conditions for XSETBV emulation
-Date:   Mon, 17 Jan 2022 15:24:56 +0800
-Message-Id: <20220117072456.71155-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pk9g25WRpFPs48r7zm5sUpEVslQaRknFfz4t/FLVEiU=;
+        b=IMP/D6TRpvf4V2HvVyQbXxnwz/3GOkd4I9DY4gY/0gZ05lT1fzDfwIL2TVCBYLRXNU
+         EyM47QAGlT/DZ3+WKvkXAQemPaDJEUM0PdlgaBZAuQzGZsXv8XlK+3bYc5jvNFOOh5GT
+         yUXOopxuDHhQXDGGDV3wSVoNVO/4IZrKchAhI8w+P7YqjNolBJUV+yfqQfJ7wsUB3164
+         MVSXvHWsbpPAj7qqK707Yfwnpr7OThUYTI4k1O4//Bb7LPmdzQ+FQIEFxnkF0U4fDdGA
+         9zW0nwsMrbMcyIZtQ5tB+ocR1xrxlayePzV4+7TyqxDUCr+DS1Ds9z0zuTCU9k60RR05
+         sRPw==
+X-Gm-Message-State: AOAM530g9lWnUGzeTN+s4G0jssfi2D++8xhjVeQNaZ8MMt8LYP+MYLW1
+        gRRsu2LcurmD4Ajd1Z1XGEJSDJ47KJgtdoiEXbE=
+X-Google-Smtp-Source: ABdhPJyWuXvmcne1WqXieam6JNmqq2ZZ0W/8Ne39V+bOQAHKd5WhhZcfBApGxHuEqQjqC/DBL9LP14JpYLJ3tIlpmXQ=
+X-Received: by 2002:a17:902:bcc1:b0:149:a13f:af62 with SMTP id
+ o1-20020a170902bcc100b00149a13faf62mr21072936pls.147.1642404869850; Sun, 16
+ Jan 2022 23:34:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <YcJZWiQ407ZxMM+y@bombadil.infradead.org> <20211222132332.7817-1-vimal.agrawal@sophos.com>
+ <YcRRQCMZFepB/hzX@infradead.org> <CALkUMdRxTm6STT4CncTuvQ9hM_bez+B91TsuenEj71KPxFgMsg@mail.gmail.com>
+ <YcVtG26b/sO9k7ox@infradead.org> <CALkUMdSY3XCHqhH9dDQ+0VHykv9AiBiqLgoC+cj5P=9Q1jdXrg@mail.gmail.com>
+ <Yd2nJZRtc3OjPb0w@bombadil.infradead.org> <CALkUMdSc8eNbqptTihwzqhpL9qhGS0xUFr=AFXs3COvpyBoQiw@mail.gmail.com>
+ <YeBEAavbBh/MnbEF@bombadil.infradead.org>
+In-Reply-To: <YeBEAavbBh/MnbEF@bombadil.infradead.org>
+From:   Vimal Agrawal <avimalin@gmail.com>
+Date:   Mon, 17 Jan 2022 13:04:18 +0530
+Message-ID: <CALkUMdRQ+mJfUVDw5bLWaDkfni1bti0Dd3qk0eupjFZ+eKCrZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kernel/module.c: heuristic enhancement when
+ INSTALL_MOD_STRIP= "--strip-unneeded" is used
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Vimal Agrawal <vimal.Agrawal@sophos.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jan Beulich <JBeulich@suse.com>, Jeff Mahoney <jeffm@suse.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Luis,
 
-According to Intel SDM "XSETBV—Set Extended Control Register",
-the #UD exception is raised if CPUID.01H:ECX.XSAVE[bit 26] = 0
-or if CR4.OSXSAVE[bit 18] = 0, and the #GP(0) exception for the
-reason "if the current privilege level is not 0" is only valid
-in the protected mode. Translate them into KVM terms.
+On Thu, Jan 13, 2022 at 8:53 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 
-Fixes: 92f9895c146d ("Move XSETBV emulation to common code")
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/x86.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> You mean it is safe for that case too? If so can you add this to the
+> commit log as well?
+>
+yes. updated in the commit log.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 76b4803dd3bd..7d8622e592bb 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1024,7 +1024,11 @@ static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
- 
- int kvm_emulate_xsetbv(struct kvm_vcpu *vcpu)
- {
--	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 ||
-+	if (!guest_cpuid_has(vcpu, X86_FEATURE_XSAVE) ||
-+	    !kvm_read_cr4_bits(vcpu, X86_CR4_OSXSAVE))
-+		return kvm_handle_invalid_op(vcpu);
-+
-+	if ((is_protmode(vcpu) && static_call(kvm_x86_get_cpl)(vcpu) != 0) ||
- 	    __kvm_set_xcr(vcpu, kvm_rcx_read(vcpu), kvm_read_edx_eax(vcpu))) {
- 		kvm_inject_gp(vcpu, 0);
- 		return 1;
--- 
-2.33.1
+> Can you also use the modules-next tree? I'll still have to test this.
+>
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ branch modules-next
+>
+I am not sure of modules-next but I created the patch (v3) on latest
+linux-next (next-20220116). Hope it suffices. Sent patch v3 already.
 
+Vimal

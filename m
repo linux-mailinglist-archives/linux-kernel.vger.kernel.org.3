@@ -2,114 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE4C49038D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3FD490394
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237995AbiAQIQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:16:00 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16715 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237985AbiAQIP7 (ORCPT
+        id S238012AbiAQIRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:17:25 -0500
+Received: from mail-m975.mail.163.com ([123.126.97.5]:24218 "EHLO
+        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231253AbiAQIRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:15:59 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jcl4b05S4zZfB6;
-        Mon, 17 Jan 2022 16:12:15 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 16:15:57 +0800
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-To:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Guo Yang <guoyang2@huawei.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>
-Subject: [PATCH] cpuidle: menu: Fix long delay issue when tick stopped
-Date:   Mon, 17 Jan 2022 16:16:15 +0800
-Message-ID: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
-X-Mailer: git-send-email 2.33.0
+        Mon, 17 Jan 2022 03:17:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zGy/c
+        +rMZ+YP77HHohIlehh2vF9jVqV2GGfASZ90qrc=; b=Y0hhUnkIIbKqhF/cQjIIY
+        YN+dfq3qrYZexbFVW4K0xXFknnyeGhfjfERPLo/L38MmskdBcXsc+/UkNnaqrCnT
+        L02nBzU4eKD+1pcVbPajfixjQd2c4VKu2JIdzFgfMzCe8BC6a/xa7lAjKN39IORG
+        G3XXYqC3Es2nEMDrYSB9/k=
+Received: from localhost.localdomain (unknown [112.97.49.17])
+        by smtp5 (Coremail) with SMTP id HdxpCgAXT6DzJeVh5THMAQ--.604S2;
+        Mon, 17 Jan 2022 16:16:53 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, hemantk@codeaurora.org
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH net v2] For default mechanism, product would use default MRU 3500 if they didn't define it. But for Foxconn SDX55, there is a known issue which MRU 3500 would lead to data connection lost. So we align it with Qualcomm default MRU settings.
+Date:   Mon, 17 Jan 2022 16:16:44 +0800
+Message-Id: <20220117081644.21121-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgAXT6DzJeVh5THMAQ--.604S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Gw18tr4xGF1kWw4fCFy5twb_yoWxtrg_Cr
+        ZxGF97Gws8WryDGw1vqan5JrWrKa4rWr1kAF1Iqrn8J342vwnxXwnYqr18JFnIgF45CF9r
+        J3s5Zr1rAw4YgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbasj7UUUUU==
+X-Originating-IP: [112.97.49.17]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiNQCLZFrPfDWNuwABsx
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Yang <guoyang2@huawei.com>
+Fixes: 5c2c85315948 ("bus: mhi: pci-generic: configurable network interface MRU")
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-The network delay was always big on arm server tested by qperf,
-the reason was that the cpu entered deep power down idle state(like intel
-C6) and can't goto a shallow one.
-
-The intervals in @get_typical_interval() was much smaller than predicted_ns
-in @menu_select(), so the predict state is always deepest and cause long
-time network delay.
-
-Every time when the cpu got an interrupt from the network, the cpu was
-waken up and did the IRQ, after that the cpu enter @menu_select()
-but the @tick_nohz_tick_stopped() was true and get a big data->next_timer_ns,
-the cpu can never goto a shallow state util the data->next_timer_ns timeout.
-Below was the print when the issue occurrence.
-
-[   37.082861] intervals = 36us
-[   37.082875] intervals = 15us
-[   37.082888] intervals = 22us
-[   37.082902] intervals = 35us
-[   37.082915] intervals = 34us
-[   37.082929] intervals = 39us
-[   37.082942] intervals = 39us
-[   37.082956] intervals = 35us
-[   37.082970] target_residency_ns = 10000, predicted_ns = 35832710
-[   37.082998] target_residency_ns = 600000, predicted_ns = 35832710
-[   37.083037] intervals = 36us
-[   37.083050] intervals = 15us
-[   37.083064] intervals = 22us
-[   37.083077] intervals = 35us
-[   37.083091] intervals = 34us
-[   37.083104] intervals = 39us
-[   37.083118] intervals = 39us
-[   37.083131] intervals = 35us
-[   37.083145] target_residency_ns = 10000, predicted_ns = 35657420
-[   37.083174] target_residency_ns = 600000, predicted_ns = 35657420
-[   37.083212] intervals = 36us
-[   37.083225] intervals = 15us
-[   37.083239] intervals = 22us
-[   37.083253] intervals = 35us
-[   37.083266] intervals = 34us
-[   37.083279] intervals = 39us
-[   37.083293] intervals = 39us
-[   37.083307] intervals = 35us
-[   37.083320] target_residency_ns = 10000, predicted_ns = 35482140
-[   37.083349] target_residency_ns = 600000, predicted_ns = 35482140
-
-Add idle tick wakeup judge before change predicted_ns.
-
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Guo Yang <guoyang2@huawei.com>
-Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
 ---
- drivers/cpuidle/governors/menu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: Add Fixes tag
+---
+ drivers/bus/mhi/pci_generic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
-index c492268..3f03843 100644
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -313,7 +313,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 				get_typical_interval(data, predicted_us)) *
- 				NSEC_PER_USEC;
+diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
+index 3a258a677df8..74e8fc342cfd 100644
+--- a/drivers/bus/mhi/pci_generic.c
++++ b/drivers/bus/mhi/pci_generic.c
+@@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
+ 	.config = &modem_foxconn_sdx55_config,
+ 	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
+ 	.dma_data_width = 32,
++	.mru_default = 32768,
+ 	.sideband_wake = false,
+ };
  
--	if (tick_nohz_tick_stopped()) {
-+	if (tick_nohz_tick_stopped() && data->tick_wakeup) {
- 		/*
- 		 * If the tick is already stopped, the cost of possible short
- 		 * idle duration misprediction is much higher, because the CPU
 -- 
-1.8.3.1
+2.25.1
 

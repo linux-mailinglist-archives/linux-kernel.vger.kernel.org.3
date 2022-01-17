@@ -2,139 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 958224901C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AC84901C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiAQF4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 00:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S234464AbiAQF5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 00:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiAQF4I (ORCPT
+        with ESMTP id S232040AbiAQF5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 00:56:08 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3F8C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:56:07 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id 30so60965680edv.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:56:07 -0800 (PST)
+        Mon, 17 Jan 2022 00:57:13 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D72C061574;
+        Sun, 16 Jan 2022 21:57:13 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id l21-20020a17090b079500b001b49df5c4dfso2632028pjz.2;
+        Sun, 16 Jan 2022 21:57:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zRK/0z1pNzIoVcKbrmsaM4+gypDDyPNW8G8QLN7lLpU=;
-        b=O04pFd1Av+HFa2y7toxjGyGq/OBY4BDKvdL8NOgVGrI2ylQooEl/RGe3RNuEOudKaB
-         j9F/+ELni0Q5Lli2EIlFwVrA6OXdH1kl9t9h1MJHTjo4BWF6ftuRU2gTfCgq0YQ3wokT
-         zX/zUD1TI1km1ilWoBJIzqBPSwTR7jI824Mh8=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e4gdSmCj7yWsd2DI5GqBWLTuv6FfWDIo04+u9VO8cm4=;
+        b=PcgDDloMAp6QKvrj36ECnpXVIibceDFsT7PNQ2qvcbiGtlW79G7BTQXhbR0Aa9a4il
+         /21lr8MtQKlTRDv+l4Aw9pAVW8uigPfBvQK8rsL5BIe8MpsNKBPaWHi12b7zclZoXk2a
+         4LBuzaiZzq0lf/maokSz6k2nGsdQdpubarEKNkY8yGp+JmQeEro2hm9SQgX8oXc9Tc/i
+         9zDpVsgFBE/UtMhhUaICWLT2aMgvSgtKonw1pMHhHg7tNY8q3WhbdwttG08y/KrZ1ltn
+         6hwAVFEcx218pzJavGW06NTE0eNFv51kVK5Es/Ulfu3gTknMc3CIPXgjQAqw050L8AX9
+         S+hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zRK/0z1pNzIoVcKbrmsaM4+gypDDyPNW8G8QLN7lLpU=;
-        b=qNNOmgHCCiwV0u23+Bb+uw6wGN5iaWT4/qumsu/vWXDlFveZ6yaLXYUXbf/ZZ1ghRN
-         g/ChurElsNLvXmXIR/1qscQ0wPyOLx3YuAKPWujdM8IXpTiTGEg0jdCQDv2Fv33kf5st
-         gC3HRAZ7HcV4ruEk7C7wJYsxwwxSByuGZclvEueoco86j0jlQvOYBhYXeqvUpdp8uW73
-         I1FXb0pIWItS6jswVG4Cq1jPj1ENA6pySW5PNqwuKroy1hU31FS7gSkNyxylF3B81BoB
-         +RooOp2gx/dbzjfr0+EYuwCESw9sOjV8y3rM2ugZ0KNg29ItCHwom3S6M/b6TmPrWwJd
-         l2Rg==
-X-Gm-Message-State: AOAM533WIfkMv6GKC/k0PJmOa9nl+z746qeor5z4J8s64NjWqOOtG2PO
-        LtMUO/gKIU6g0Jd5Kv+4sTeaz3Wfv1K6mZHb
-X-Google-Smtp-Source: ABdhPJztNbU+Ud1G8Q3PqmpECrwbGT2fof6eIdKJ5L3XOP01QQAUlDOCHIq3Y3RkXkqJqfYxKffGAQ==
-X-Received: by 2002:aa7:dc15:: with SMTP id b21mr18966148edu.237.1642398965949;
-        Sun, 16 Jan 2022 21:56:05 -0800 (PST)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id c19sm5343770ede.47.2022.01.16.21.56.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 21:56:05 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id s6-20020a7bc386000000b0034a89445406so17960994wmj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:56:05 -0800 (PST)
-X-Received: by 2002:a05:600c:1908:: with SMTP id j8mr4207602wmq.155.1642398965019;
- Sun, 16 Jan 2022 21:56:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e4gdSmCj7yWsd2DI5GqBWLTuv6FfWDIo04+u9VO8cm4=;
+        b=0Ae0N1a9QTu2jlXjmBy2egu3mp86Z0YHXtH3HeLjU9tQyXzd4S83HxxjnV8m26nmW2
+         kULo/YyDaXQ1hN0AE3/SkTyslIQaSwKnte7zY1YTRNRYIOvs9xFV5Ij69ztPGY+595Fn
+         qFdNaY9w14kRch5AtchBHjHzKFCnOGJhnAUe7wXcyMoB/O6opDKycrTPQuhnev5mnN1G
+         hTo72cGi18xnC54joOlrbhHvY3kJd2cIvkf8Sbv1mf5IZtHxdHwMOmD+LYF8SRoZWrKl
+         nRB7PzLru9t1w6RuO8jXg5x4mXnDY6DGIXxiLowGfbKEBxRSAb2Mq1ETCcSa7ve2wf4j
+         8raw==
+X-Gm-Message-State: AOAM5326Z0lCLxkxEfzFNq49PoRPw+Pssth4YOaosRbPWJjfZIS+cxIG
+        aJI4snRgM6rnz7FlaL4WaK4=
+X-Google-Smtp-Source: ABdhPJwhbs0rnWj5qoUD0bcXPUTHc0ski6pPar3m8WCgklO4hGcqIg+G1ZJcIkr8UVmRhZ1LlWZcqw==
+X-Received: by 2002:a17:902:b784:b0:14a:2fec:dda2 with SMTP id e4-20020a170902b78400b0014a2fecdda2mr21111673pls.118.1642399033104;
+        Sun, 16 Jan 2022 21:57:13 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id b12sm13144744pfl.121.2022.01.16.21.57.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 21:57:12 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Ananth Narayan <ananth.narayan@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Clear reserved bit PERF_CTL2[43] for AMD erratum 1292
+Date:   Mon, 17 Jan 2022 13:57:03 +0800
+Message-Id: <20220117055703.52020-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <87a6g11zq9.fsf@collabora.com>
-In-Reply-To: <87a6g11zq9.fsf@collabora.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 17 Jan 2022 07:55:49 +0200
-X-Gmail-Original-Message-ID: <CAHk-=whX5gamPwDcZhV-ejWatq6eFCp7Q7ZEL8XiQMh8ZARN-g@mail.gmail.com>
-Message-ID: <CAHk-=whX5gamPwDcZhV-ejWatq6eFCp7Q7ZEL8XiQMh8ZARN-g@mail.gmail.com>
-Subject: Re: [GIT PULL] unicode patches for 5.17
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Chao Yu <chao@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 3:59 AM Gabriel Krisman Bertazi
-<krisman@collabora.com> wrote:
->
-> This branch has patches from Christoph Hellwig to split the large data
-> tables of the unicode subsystem into a loadable module, which allow
-> users to not have them around if case-insensitive filesystems are not to
-> be used.
+From: Like Xu <likexu@tencent.com>
 
-As seen by the pr-tracker-bot, I've merged this, but it had several rough spots.
+The AMD Family 19h Models 00h-0Fh Processors may experience sampling
+inaccuracies that cause the following performance counters to overcount
+retire-based events. To count the non-FP affected PMC events correctly,
+a patched guest with a target vCPU model would:
 
-One of them was around the renaming of the utf8data.h file to a .c
-file: I fixed up the .gitignore problem myself, but the incorrect
-comments still remain.
+    - Use Core::X86::Msr::PERF_CTL2 to count the events, and
+    - Program Core::X86::Msr::PERF_CTL2[43] to 1b, and
+    - Program Core::X86::Msr::PERF_CTL2[20] to 0b.
 
-The Kconfig thing is also just plain badly done.
+To support this use of AMD guests, KVM should not reserve bit 43
+only for counter #2. Treatment of other cases remains unchanged.
 
-It's completely pointless and stupid to first have a "bool UNICODE"
-question, and then have a "tristate UNICODE_UTF8_DATA" question that
-depends on it.
+Note, the host's perf subsystem will decide which hardware counter
+will be used for the guest counter, based on its own physical CPU
+model and its own workaround(s) in the host perf context.
 
-The Kconfig file even *knows* it's pointless and stupid, because it
-has comment to the effect, but despite writing that comment,
-apparently nobody spent the five seconds actually thinking about how
-to do it properly.
+Reported-by: Jim Mattson <jmattson@google.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/svm/pmu.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-The sane and proper thing would have been to have *one* single
-tristate question ("unicode y/m/n"), and that's used for the unicode
-data module status.
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 12d8b301065a..1111b12adcca 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -18,6 +18,17 @@
+ #include "pmu.h"
+ #include "svm.h"
+ 
++/*
++ * As a workaround of "Retire Based Events May Overcount" for erratum 1292,
++ * some patched guests may set PERF_CTL2[43] to 1b and PERF_CTL2[20] to 0b
++ * to count the non-FP affected PMC events correctly.
++ */
++static inline bool vcpu_overcount_retire_events(struct kvm_vcpu *vcpu)
++{
++	return guest_cpuid_family(vcpu) == 0x19 &&
++		guest_cpuid_model(vcpu) < 0x10;
++}
++
+ enum pmu_type {
+ 	PMU_TYPE_COUNTER = 0,
+ 	PMU_TYPE_EVNTSEL,
+@@ -252,6 +263,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	struct kvm_pmc *pmc;
+ 	u32 msr = msr_info->index;
+ 	u64 data = msr_info->data;
++	u64 reserved_bits;
+ 
+ 	/* MSR_PERFCTRn */
+ 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
+@@ -264,7 +276,10 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	if (pmc) {
+ 		if (data == pmc->eventsel)
+ 			return 0;
+-		if (!(data & pmu->reserved_bits)) {
++		reserved_bits = pmu->reserved_bits;
++		if (pmc->idx == 2 && vcpu_overcount_retire_events(vcpu))
++			reserved_bits &= ~BIT_ULL(43);
++		if (!(data & reserved_bits)) {
+ 			reprogram_gp_counter(pmc, data);
+ 			return 0;
+ 		}
+-- 
+2.33.1
 
-Then the "core unicode" option (currently that "UNICODE" bool
-question) would become something just computed off the modular
-question:
-
-  config UNICODE
-         def_bool UNICODE_UTF8_DATA != n
-
-with no actual user input being needed for it.
-
-And yes, it might be even nicer to just make "UNICODE" itself be the
-tristate, and not have a separate config variable at all, but that
-would require changes to the users.
-
-In particular, the filesystems that have
-
-    #ifdef CONFIG_UNICODE
-
-would have to be updated to use something like
-
-    #ifdef IS_ENABLED(CONFIG_UNICODE)
-
-instead.
-
-That would probably be a good change, though, and then the 'UNICODE'
-config option could just be a tristate, with the support code being
-built in for the module case, with just the data being (potentially)
-modular.
-
-ANYWAY. I didn't do the above, I only fixed up the trivially annoying
-gitconfig thing.
-
-I've said this before, and I'll probably have to say it again: the
-kernel config part is likely one of the most painful barriers to
-people building their own kernel. Some of it is just because we have
-*so* many modules, and there's just a lot of configuration you can do.
-
-But the fact that it's already painful is no excuse to then ask people
-_stupid_ questions and making the whole process unnecessarily even
-more painful.
-
-                  Linus

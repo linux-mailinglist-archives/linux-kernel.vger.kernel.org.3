@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A4C490D79
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6B5490DA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242291AbiAQRDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:03:33 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37324 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241987AbiAQRBu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:01:50 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DC9BE1F3BB;
-        Mon, 17 Jan 2022 17:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642438908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vUro+vBrEtOPltJXb/j5rFQPgbGEJcIyQQ4tFFRIyow=;
-        b=xSbpYCI0D+Ef6ahN6zNklS5qSkiiVFdaHbiOuwQ9nPQN045ZcQA7PL9F3OgITsSF87pILK
-        oRGf0Ha6ljns4ZNCAby2JaMptf9bZHxmF4wjBWBBu1BHRdXqoyphOWSMf3UTZUcCbszKAP
-        8oO/diYEKoEGzCt91FlGOblKlrxxNFI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642438908;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vUro+vBrEtOPltJXb/j5rFQPgbGEJcIyQQ4tFFRIyow=;
-        b=THOqs4thRjkIdtgOa6DRUp+5+HVDd67dZ48nfonM8JngHbuFotAjQkPWvTcVy7oVMNQqQA
-        yEBMdzKz1d7LVMCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7AEEE13DBA;
-        Mon, 17 Jan 2022 17:01:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6nXfHPyg5WGvdAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 17 Jan 2022 17:01:48 +0000
-Message-ID: <848e85b8-208d-cefe-6674-4534a2d181ac@suse.cz>
-Date:   Mon, 17 Jan 2022 18:01:48 +0100
+        id S242411AbiAQREQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:04:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:60952 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241831AbiAQRCb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:02:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01A756D;
+        Mon, 17 Jan 2022 09:02:30 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.38.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B57253F766;
+        Mon, 17 Jan 2022 09:02:28 -0800 (PST)
+Date:   Mon, 17 Jan 2022 17:02:25 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Boris Lysov <arzamas-16@mail.ee>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: Missing ARM TWD Watchdog driver?
+Message-ID: <20220117170225.GB94025@C02TD0UTHF1T.local>
+References: <20220117190112.2b2c2f53@pc>
+ <60dceae6-5c7c-9f2d-9fcb-5e849f1d8ce5@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v4 24/66] mm: Remove vmacache
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-25-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-25-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60dceae6-5c7c-9f2d-9fcb-5e849f1d8ce5@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On Mon, Jan 17, 2022 at 08:34:57AM -0800, Guenter Roeck wrote:
+> On 1/17/22 8:01 AM, Boris Lysov wrote:
+> > Hello everyone,
+> > 
+> > I stumbled upon the ARM TWD Watchdog driver which seems to be missing (or I'm
+> > just blind).
+> > 
+> > As per commit a33f5c380c4bd3fa5278d690421b72052456d9fe ("Merge tag
+> > 'xfs-5.17-merge-3' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux"), multiple
+> > device trees declare usage of arm-twd:
+> > 
+> > arch/arm/boot/dts/arm-realview-eb-mp.dtsi
+> > arch/arm/boot/dts/arm-realview-pb11mp.dts
+> > arch/arm/boot/dts/arm-realview-pbx-a9.dts
+> > arch/arm/boot/dts/bcm5301x.dtsi
+> > arch/arm/boot/dts/bcm63138.dtsi
+> > arch/arm/boot/dts/bcm-hr2.dtsi
+> > arch/arm/boot/dts/bcm-nsp.dtsi
+> > arch/arm/boot/dts/berlin2cd.dtsi
+> > arch/arm/boot/dts/highbank.dts
+> > arch/arm/boot/dts/mmp3.dtsi
+> > arch/arm/boot/dts/owl-s500.dtsi
+> > arch/arm/boot/dts/spear13xx.dtsi
+> > arch/arm/boot/dts/ste-dbx5x0.dtsi
+> > arch/arm/boot/dts/vexpress-v2p-ca5s.dts
+> > arch/arm/boot/dts/vexpress-v2p-ca9.dts
+> > 
+> > and it is documented in
+> > Documentation/devicetree/bindings/watchdog/arm,twd-wdt.yaml
+> > 
+> > However I could not find the driver itself. I tried running case-insensitive
+> > grep and ripgrep to no avail. Does this driver actually exist? Is it gone?
+> > 
 > 
-> By using the maple tree and the maple tree state, the vmacache is no
-> longer beneficial and is complicating the VMA code.  Remove the vmacache
-> to reduce the work in keeping it up to date and code complexity.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> I may be missing it, but I do not see any evidence that it ever existed.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Likewise, AFAICT we added the binding but never the driver.
 
-"git grep -i vmacache" found these leftovers:
+Looking at the git history, that schema was introduced in commit:
 
-include/linux/mm_types_task.h:#define VMACACHE_BITS 2
-include/linux/mm_types_task.h:#define VMACACHE_SIZE (1U << VMACACHE_BITS)
-include/linux/mm_types_task.h:#define VMACACHE_MASK (VMACACHE_SIZE - 1)
+  50e02e9a030a9ae3 ("dt-bindings: timer: arm,twd: Convert to json-schema")
 
+... and replaced Documentation/devicetree/bindings/timer/arm,twd.txt
+
+Per:
+
+  $ git log --follow Documentation/devicetree/bindings/timer/arm,twd.txt
+
+That was introduced alongside a driver in commit:
+
+  d8e0364364d333fe ("ARM: smp_twd: add device tree support")
+
+... which only introduced a driver for the timer, and not the watchdog,
+as the commit message notes.
+
+Thanks.
+Mark.

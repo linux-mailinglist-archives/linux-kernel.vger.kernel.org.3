@@ -2,37 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B91B749084A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E9049083D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239575AbiAQMHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:07:05 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:48456 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S239622AbiAQMGn (ORCPT
+        id S239606AbiAQMGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:06:47 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:37034 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S239636AbiAQMGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:06:43 -0500
-X-UUID: 5b29f4de2f754f4ca724638f3879a06e-20220117
-X-UUID: 5b29f4de2f754f4ca724638f3879a06e-20220117
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        Mon, 17 Jan 2022 07:06:45 -0500
+X-UUID: 4231c94e96db4edf8439762bc09b432d-20220117
+X-UUID: 4231c94e96db4edf8439762bc09b432d-20220117
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 78366877; Mon, 17 Jan 2022 20:06:40 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 17 Jan 2022 20:06:38 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 Jan
- 2022 20:06:38 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 813468978; Mon, 17 Jan 2022 20:06:41 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 17 Jan 2022 20:06:39 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 17 Jan 2022 20:06:36 +0800
+ Transport; Mon, 17 Jan 2022 20:06:38 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tzung-Bi Shih <tzungbi@chromium.org>,
         Alexandre Courbot <acourbot@chromium.org>,
-        "Tiffany Lin" <tiffany.lin@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -51,9 +47,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2, 06/10] media: mtk-vcodec: Add venc power on/off interface
-Date:   Mon, 17 Jan 2022 20:06:11 +0800
-Message-ID: <20220117120615.21687-7-irui.wang@mediatek.com>
+Subject: [PATCH v2, 07/10] media: mtk-vcodec: Rewrite venc clock interface
+Date:   Mon, 17 Jan 2022 20:06:12 +0800
+Message-ID: <20220117120615.21687-8-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220117120615.21687-1-irui.wang@mediatek.com>
 References: <20220117120615.21687-1-irui.wang@mediatek.com>
@@ -65,221 +61,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dual-core mode power on/off all venc available power, pm_runtime_xx
-helper is not appropriate called directly, add new power on/off
-interface for it.
+Dual core mode need enable the specific core's clk, add an
+another param for clock_on/clock_off interface.
 
 Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 ---
- .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 20 +----
- .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  7 ++
- .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   | 83 +++++++++++++++++++
- .../platform/mtk-vcodec/mtk_vcodec_enc_pm.h   |  5 ++
- 4 files changed, 98 insertions(+), 17 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   | 96 ++++++++++++++++---
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.h   |  4 +-
+ .../media/platform/mtk-vcodec/venc_drv_if.c   | 10 +-
+ 3 files changed, 86 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 134dc53e4855..df231e67cdb2 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -13,6 +13,7 @@
- 
- #include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_enc.h"
-+#include "mtk_vcodec_enc_pm.h"
- #include "mtk_vcodec_intr.h"
- #include "mtk_vcodec_util.h"
- #include "venc_drv_if.h"
-@@ -850,7 +851,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- {
- 	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(q);
- 	struct venc_enc_param param;
--	int ret, pm_ret;
-+	int ret;
- 	int i;
- 
- 	/* Once state turn into MTK_STATE_ABORT, we need stop_streaming
-@@ -858,7 +859,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 	  */
- 	if ((ctx->state == MTK_STATE_ABORT) || (ctx->state == MTK_STATE_FREE)) {
- 		ret = -EIO;
--		goto err_start_stream;
-+		goto err_set_param;
- 	}
- 
- 	/* Do the initialization when both start_streaming have been called */
-@@ -870,12 +871,6 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 			return 0;
- 	}
- 
--	ret = pm_runtime_resume_and_get(&ctx->dev->plat_dev->dev);
--	if (ret < 0) {
--		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
--		goto err_start_stream;
--	}
--
- 	mtk_venc_set_param(ctx, &param);
- 	ret = venc_if_set_param(ctx, VENC_SET_PARAM_ENC, &param);
- 	if (ret) {
-@@ -902,11 +897,6 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 	return 0;
- 
- err_set_param:
--	pm_ret = pm_runtime_put(&ctx->dev->plat_dev->dev);
--	if (pm_ret < 0)
--		mtk_v4l2_err("pm_runtime_put fail %d", pm_ret);
--
--err_start_stream:
- 	for (i = 0; i < q->num_buffers; ++i) {
- 		struct vb2_buffer *buf = vb2_get_buffer(q, i);
- 
-@@ -989,10 +979,6 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 	if (ret)
- 		mtk_v4l2_err("venc_if_deinit failed=%d", ret);
- 
--	ret = pm_runtime_put(&ctx->dev->plat_dev->dev);
--	if (ret < 0)
--		mtk_v4l2_err("pm_runtime_put fail %d", ret);
--
- 	ctx->state = MTK_STATE_FREE;
- }
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index a601d534d26b..cef134bb6e83 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -174,6 +174,12 @@ static int fops_vcodec_open(struct file *file)
- 		mtk_v4l2_debug(0, "encoder capability %x", dev->enc_capability);
- 	}
- 
-+	ret = mtk_vcodec_enc_pw_on(dev);
-+	if (ret < 0) {
-+		mtk_v4l2_err("encoder power on failed %d", ret);
-+		goto err_load_fw;
-+	}
-+
- 	mtk_v4l2_debug(2, "Create instance [%d]@%p m2m_ctx=%p ",
- 			ctx->id, ctx, ctx->m2m_ctx);
- 
-@@ -208,6 +214,7 @@ static int fops_vcodec_release(struct file *file)
- 
- 	v4l2_m2m_ctx_release(ctx->m2m_ctx);
- 	mtk_vcodec_enc_release(ctx);
-+	mtk_vcodec_enc_pw_off(dev);
- 	v4l2_fh_del(&ctx->fh);
- 	v4l2_fh_exit(&ctx->fh);
- 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-index c8a7042d7830..dfaef884e6e3 100644
+index dfaef884e6e3..4e37d68f75dd 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-@@ -10,6 +10,7 @@
- #include <linux/pm_runtime.h>
- #include <soc/mediatek/smi.h>
+@@ -83,17 +83,42 @@ int mtk_vcodec_init_enc_clk(struct platform_device *pdev,
+ }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_init_enc_clk);
  
-+#include "mtk_vcodec_enc_core.h"
- #include "mtk_vcodec_enc_pm.h"
- #include "mtk_vcodec_util.h"
+-void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
++void mtk_vcodec_enc_clock_on(struct mtk_vcodec_dev *dev, int core_id)
+ {
+-	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
++	struct mtk_venc_core_dev *core;
++	struct mtk_vcodec_pm *enc_pm;
++	struct mtk_vcodec_clk *enc_clk;
++	struct clk              *clk;
+ 	int ret, i = 0;
  
-@@ -119,3 +120,85 @@ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm)
+-	for (i = 0; i < enc_clk->clk_num; i++) {
+-		ret = clk_prepare_enable(enc_clk->clk_info[i].vcodec_clk);
+-		if (ret) {
+-			mtk_v4l2_err("venc clk_prepare_enable %d %s fail %d", i,
+-				enc_clk->clk_info[i].clk_name, ret);
+-			goto clkerr;
++	if (dev->venc_pdata->core_mode == VENC_DUAL_CORE_MODE) {
++		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[core_id];
++		enc_pm = &core->pm;
++		enc_clk = &enc_pm->venc_clk;
++
++		for (i = 0; i < enc_clk->clk_num; i++) {
++			clk = enc_clk->clk_info[i].vcodec_clk;
++			ret = clk_enable(clk);
++			if (ret) {
++				mtk_v4l2_err("clk_enable %d %s fail %d", i,
++					     enc_clk->clk_info[i].clk_name,
++					     ret);
++				goto core_clk_err;
++			}
++		}
++	} else {
++		enc_pm = &dev->pm;
++		enc_clk = &enc_pm->venc_clk;
++
++		for (i = 0; i < enc_clk->clk_num; i++) {
++			clk = enc_clk->clk_info[i].vcodec_clk;
++			ret = clk_prepare_enable(clk);
++			if (ret) {
++				mtk_v4l2_err("clk_prepare %d %s fail %d",
++					     i, enc_clk->clk_info[i].clk_name,
++					     ret);
++				goto clkerr;
++			}
+ 		}
+ 	}
+ 
+@@ -104,27 +129,49 @@ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
+ 	}
+ 	return;
+ 
++core_clk_err:
++	for (i -= 1; i >= 0; i--)
++		clk_disable(enc_clk->clk_info[i].vcodec_clk);
++
++	return;
++
+ clkerr:
+ 	for (i -= 1; i >= 0; i--)
  		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
  }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_enc_clock_on);
+ 
+-void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm)
++void mtk_vcodec_enc_clock_off(struct mtk_vcodec_dev *dev, int core_id)
+ {
+-	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
++	struct mtk_venc_core_dev *core;
++	struct mtk_vcodec_pm *enc_pm;
++	struct mtk_vcodec_clk *enc_clk;
+ 	int i = 0;
+ 
+ 	mtk_smi_larb_put(pm->larbvenc);
+-	for (i = enc_clk->clk_num - 1; i >= 0; i--)
+-		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
++
++	if (dev->venc_pdata->core_mode == VENC_DUAL_CORE_MODE) {
++		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[core_id];
++		enc_pm = &core->pm;
++		enc_clk = &enc_pm->venc_clk;
++
++		for (i = enc_clk->clk_num - 1; i >= 0; i--)
++			clk_disable(enc_clk->clk_info[i].vcodec_clk);
++	} else {
++		enc_pm = &dev->pm;
++		enc_clk = &enc_pm->venc_clk;
++
++		for (i = enc_clk->clk_num - 1; i >= 0; i--)
++			clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
++	}
+ }
  EXPORT_SYMBOL_GPL(mtk_vcodec_enc_clock_off);
+ 
+ int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev)
+ {
+-	int i, ret;
++	int i, ret, j = 0;
+ 	struct mtk_venc_core_dev *core;
++	struct mtk_vcodec_clk *clk;
+ 
+ 	/* power on all available venc cores */
+ 	for (i = 0; i < MTK_VENC_CORE_MAX; i++) {
+@@ -137,12 +184,28 @@ int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev)
+ 			mtk_v4l2_err("power on core[%d] fail %d", i, ret);
+ 			goto pw_on_fail;
+ 		}
 +
-+int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev)
-+{
-+	int i, ret;
-+	struct mtk_venc_core_dev *core;
-+
-+	/* power on all available venc cores */
-+	for (i = 0; i < MTK_VENC_CORE_MAX; i++) {
-+		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
-+		if (!core)
-+			return 0;
-+
-+		ret = pm_runtime_resume_and_get(&core->plat_dev->dev);
-+		if (ret < 0) {
-+			mtk_v4l2_err("power on core[%d] fail %d", i, ret);
-+			goto pw_on_fail;
++		clk = &core->pm.venc_clk;
++		for (j = 0; j < clk->clk_num; j++) {
++			ret = clk_prepare(clk->clk_info[j].vcodec_clk);
++			if (ret) {
++				mtk_v4l2_err("prepare clk [%s] fail %d",
++					     clk->clk_info[j].clk_name,
++					     ret);
++				goto pw_on_fail;
++			}
 +		}
-+	}
-+	return 0;
+ 	}
+ 	return 0;
+ 
+ pw_on_fail:
+ 	for (i -= 1; i >= 0; i--) {
+ 		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
 +
-+pw_on_fail:
-+	for (i -= 1; i >= 0; i--) {
-+		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
-+		pm_runtime_put_sync(&core->plat_dev->dev);
-+	}
-+	return ret;
-+}
++		clk = &core->pm.venc_clk;
++		for (j -= 1; j >= 0; j--)
++			clk_unprepare(clk->clk_info[j].vcodec_clk);
 +
-+int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev)
-+{
-+	int i, ret;
-+	struct mtk_venc_core_dev *core;
+ 		pm_runtime_put_sync(&core->plat_dev->dev);
+ 	}
+ 	return ret;
+@@ -150,8 +213,9 @@ int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev)
+ 
+ int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev)
+ {
+-	int i, ret;
++	int i, ret, j;
+ 	struct mtk_venc_core_dev *core;
++	struct mtk_vcodec_clk *clk;
+ 
+ 	/* power off all available venc cores */
+ 	for (i = 0; i < MTK_VENC_CORE_MAX; i++) {
+@@ -159,6 +223,10 @@ int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev)
+ 		if (!core)
+ 			return 0;
+ 
++		clk = &core->pm.venc_clk;
++		for (j = clk->clk_num - 1; j >= 0; j--)
++			clk_unprepare(clk->clk_info[j].vcodec_clk);
 +
-+	/* power off all available venc cores */
-+	for (i = 0; i < MTK_VENC_CORE_MAX; i++) {
-+		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
-+		if (!core)
-+			return 0;
-+
-+		ret = pm_runtime_put_sync(&core->plat_dev->dev);
-+		if (ret < 0)
-+			mtk_v4l2_err("power off core[%d] fail %d", i, ret);
-+	}
-+	return ret;
-+}
-+
-+int mtk_vcodec_enc_pw_on(struct mtk_vcodec_dev *dev)
-+{
-+	int ret;
-+
-+	if (dev->venc_pdata->core_mode == VENC_DUAL_CORE_MODE) {
-+		ret = mtk_venc_core_pw_on(dev);
-+		if (ret < 0) {
-+			mtk_v4l2_err("venc core power on fail: %d", ret);
-+			return ret;
-+		}
-+	} else {
-+		ret = pm_runtime_resume_and_get(&dev->plat_dev->dev);
-+		if (ret < 0) {
-+			mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
-+			return ret;
-+		}
-+	}
-+	return 0;
-+}
-+
-+int mtk_vcodec_enc_pw_off(struct mtk_vcodec_dev *dev)
-+{
-+	int ret;
-+
-+	if (dev->venc_pdata->core_mode == VENC_DUAL_CORE_MODE) {
-+		ret = mtk_venc_core_pw_off(dev);
-+		if (ret < 0)
-+			mtk_v4l2_err("venc core power off fail: %d", ret);
-+
-+	} else {
-+		ret = pm_runtime_put_sync(&dev->plat_dev->dev);
-+		if (ret < 0)
-+			mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
-+	}
-+	return ret;
-+}
+ 		ret = pm_runtime_put_sync(&core->plat_dev->dev);
+ 		if (ret < 0)
+ 			mtk_v4l2_err("power off core[%d] fail %d", i, ret);
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-index 97a394c68f4e..99b6b6e29e35 100644
+index 99b6b6e29e35..5113ed8a869e 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-@@ -14,4 +14,9 @@ int mtk_vcodec_init_enc_clk(struct platform_device *pdev,
- void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm);
+@@ -11,8 +11,8 @@
  
-+int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev);
-+int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev);
-+int mtk_vcodec_enc_pw_on(struct mtk_vcodec_dev *dev);
-+int mtk_vcodec_enc_pw_off(struct mtk_vcodec_dev *dev);
-+
- #endif /* _MTK_VCODEC_ENC_PM_H_ */
+ int mtk_vcodec_init_enc_clk(struct platform_device *pdev,
+ 			    struct mtk_vcodec_pm *pm);
+-void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm);
+-void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm);
++void mtk_vcodec_enc_clock_on(struct mtk_vcodec_dev *dev, int core_id);
++void mtk_vcodec_enc_clock_off(struct mtk_vcodec_dev *dev, int core_id);
+ 
+ int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev);
+ int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev);
+diff --git a/drivers/media/platform/mtk-vcodec/venc_drv_if.c b/drivers/media/platform/mtk-vcodec/venc_drv_if.c
+index ce0bce811615..6cbdb7e30bb3 100644
+--- a/drivers/media/platform/mtk-vcodec/venc_drv_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc_drv_if.c
+@@ -32,9 +32,7 @@ int venc_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ 	}
+ 
+ 	mtk_venc_lock(ctx);
+-	mtk_vcodec_enc_clock_on(&ctx->dev->pm);
+ 	ret = ctx->enc_if->init(ctx);
+-	mtk_vcodec_enc_clock_off(&ctx->dev->pm);
+ 	mtk_venc_unlock(ctx);
+ 
+ 	return ret;
+@@ -46,9 +44,7 @@ int venc_if_set_param(struct mtk_vcodec_ctx *ctx,
+ 	int ret = 0;
+ 
+ 	mtk_venc_lock(ctx);
+-	mtk_vcodec_enc_clock_on(&ctx->dev->pm);
+ 	ret = ctx->enc_if->set_param(ctx->drv_handle, type, in);
+-	mtk_vcodec_enc_clock_off(&ctx->dev->pm);
+ 	mtk_venc_unlock(ctx);
+ 
+ 	return ret;
+@@ -68,10 +64,10 @@ int venc_if_encode(struct mtk_vcodec_ctx *ctx,
+ 	ctx->dev->curr_ctx = ctx;
+ 	spin_unlock_irqrestore(&ctx->dev->irqlock, flags);
+ 
+-	mtk_vcodec_enc_clock_on(&ctx->dev->pm);
++	mtk_vcodec_enc_clock_on(ctx->dev, 0);
+ 	ret = ctx->enc_if->encode(ctx->drv_handle, opt, frm_buf,
+ 				  bs_buf, result);
+-	mtk_vcodec_enc_clock_off(&ctx->dev->pm);
++	mtk_vcodec_enc_clock_off(ctx->dev, 0);
+ 
+ 	spin_lock_irqsave(&ctx->dev->irqlock, flags);
+ 	ctx->dev->curr_ctx = NULL;
+@@ -89,9 +85,7 @@ int venc_if_deinit(struct mtk_vcodec_ctx *ctx)
+ 		return 0;
+ 
+ 	mtk_venc_lock(ctx);
+-	mtk_vcodec_enc_clock_on(&ctx->dev->pm);
+ 	ret = ctx->enc_if->deinit(ctx->drv_handle);
+-	mtk_vcodec_enc_clock_off(&ctx->dev->pm);
+ 	mtk_venc_unlock(ctx);
+ 
+ 	ctx->drv_handle = NULL;
 -- 
 2.18.0
 

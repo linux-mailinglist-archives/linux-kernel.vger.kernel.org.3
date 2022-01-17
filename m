@@ -2,118 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 172BC490592
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D76490598
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238414AbiAQJ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:59:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:55928 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233637AbiAQJ7U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:59:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDF306D;
-        Mon, 17 Jan 2022 01:59:19 -0800 (PST)
-Received: from [10.57.36.122] (unknown [10.57.36.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07BDA3F73D;
-        Mon, 17 Jan 2022 01:59:15 -0800 (PST)
-Subject: Re: [PATCH] perf record/arm-spe: Override attr->sample_period for
- non-libpfm4 events
-To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Cc:     Chase Conklin <chase.conklin@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, "acme@kernel.org" <acme@kernel.org>
-References: <20220114212102.179209-1-german.gomez@arm.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
-Date:   Mon, 17 Jan 2022 09:59:12 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220114212102.179209-1-german.gomez@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S235982AbiAQKAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:00:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238440AbiAQKAE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 05:00:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FAFC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:00:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 409D5B80E9B
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 10:00:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C0CC36AE7;
+        Mon, 17 Jan 2022 10:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642413601;
+        bh=7q+x1K1rxmYCqg2mihv9+oensLQS2nDre3yISnN9tbQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MKBrKVFHZ7ORQ2Svavzy6Ms7FwhS7tRTa3op6b+VBjxPr9pGke8R8BEfN/gw+L7+f
+         ZqyScyBKAREXJSTTyrmn74CUB4UZPoE++9YDp2skxiyXql3STGIw+ECMM7aH98pcTL
+         qHLY/m0SD13mCM/pw34OeAVCir4phXNqrCJ69UjM5W1Gw4JfjzeRxuLHc9e3PN/hx+
+         +0JZokBLMt1i2QirR2YRxkEMevvqJVxFupbnXrXGBCeEN4+/YuHJNAzlrcRivdezGU
+         rRsPh34Mq1h227oTDAVPSabJnUUFflqvzyZ4H6cuIfpjbeYWPDydSMAocGNWSVoP0V
+         6GWR+u3WVxseQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n9Onu-000u4W-TW; Mon, 17 Jan 2022 09:59:59 +0000
+Date:   Mon, 17 Jan 2022 09:59:58 +0000
+Message-ID: <87ilui8yxt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Tong Zhang <ztong0001@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] genirq/msi: fix crash when handling Multi-MSI
+In-Reply-To: <20220117092759.1619771-1-ztong0001@gmail.com>
+References: <20220117092759.1619771-1-ztong0001@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ztong0001@gmail.com, tglx@linutronix.de, jgg@ziepe.ca, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 17 Jan 2022 09:27:59 +0000,
+Tong Zhang <ztong0001@gmail.com> wrote:
+> 
+> pci_msi_domain_check_cap() could return 1 when domain does not support
+> multi MSI and user request multi MSI. This positive value will be used by
+> __pci_enable_msi_range(). In previous refactor, this positive value is
+> handled as error case which will cause kernel crash.
+> 
+> [    1.197953] BUG: KASAN: use-after-free in __pci_enable_msi_range+0x234/0x320
+> [    1.198327] Freed by task 1:
+> [    1.198327]  kfree+0x8f/0x2b0
+> [    1.198327]  msi_free_msi_descs_range+0xf5/0x130
+> [    1.198327]  msi_domain_alloc_irqs_descs_locked+0x8d/0xa0
+> [    1.198327]  __pci_enable_msi_range+0x1a4/0x320
+> [    1.198327]  pci_alloc_irq_vectors_affinity+0x135/0x1a0
+> [    1.198327]  pcie_port_device_register+0x4a1/0x5c0
+> [    1.198327]  pcie_portdrv_probe+0x50/0x100
 
+I'm sorry, but you'll have to be a bit clearer in your commit message,
+because I cannot relate what you describe with the patch.
 
-On 14/01/2022 21:21, German Gomez wrote:
-> A previous commit preventing attr->sample_period values from being
-> overridden in pfm events changed a related behaviour in arm_spe.
-> 
-> Before this patch:
-> perf record -c 10000 -e arm_spe_0// -- sleep 1
-> 
-> Would not yield an SPE event with period=10000, because the arm-spe code
+The real issue seems to be that a domain_alloc_irqs callback can
+return a positive, non-zero value, and I don't think this is expected.
 
-Just to clarify, this seems like it should say "Would yield", not "Would not yield",
-as in it was previously working?
+How about this instead? If I am barking up the wrong tree, please
+provide a more accurate description of the problem you are seeing.
 
-> initializes sample_period to a non-0 value, so the "-c 10000" is ignored.
-> 
-> This patch restores the previous behaviour for non-libpfm4 events.
-> 
-> Reported-by: Chase Conklin <chase.conklin@arm.com>
-> Fixes: ae5dcc8abe31 (“perf record: Prevent override of attr->sample_period for libpfm4 events”)
-> Signed-off-by: German Gomez <german.gomez@arm.com>
-> ---
->  tools/perf/util/evsel.c | 25 +++++++++++++++++--------
->  1 file changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index a59fb2ecb84e..86ab038f020f 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -1065,6 +1065,17 @@ void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr __maybe_un
->  {
->  }
->  
-> +static void evsel__set_default_freq_period(struct record_opts *opts,
-> +					   struct perf_event_attr *attr)
-> +{
-> +	if (opts->freq) {
-> +		attr->freq = 1;
-> +		attr->sample_freq = opts->freq;
-> +	} else {
-> +		attr->sample_period = opts->default_interval;
-> +	}
-> +}
-> +
->  /*
->   * The enable_on_exec/disabled value strategy:
->   *
-> @@ -1131,14 +1142,12 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
->  	 * We default some events to have a default interval. But keep
->  	 * it a weak assumption overridable by the user.
->  	 */
-> -	if (!attr->sample_period) {
-> -		if (opts->freq) {
-> -			attr->freq		= 1;
-> -			attr->sample_freq	= opts->freq;
-> -		} else {
-> -			attr->sample_period = opts->default_interval;
-> -		}
-> -	}
-> +	if ((evsel->is_libpfm_event && !attr->sample_period) ||
-> +	    (!evsel->is_libpfm_event && (!attr->sample_period ||
-> +					 opts->user_freq != UINT_MAX ||
-> +					 opts->user_interval != ULLONG_MAX)))
-> +		evsel__set_default_freq_period(opts, attr);
-> +
->  	/*
->  	 * If attr->freq was set (here or earlier), ask for period
->  	 * to be sampled.
-> 
+Thanks,
+
+	M.
+
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index 2bdfce5edafd..da8bb6135627 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -878,8 +878,10 @@ int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
+ 		virq = __irq_domain_alloc_irqs(domain, -1, desc->nvec_used,
+ 					       dev_to_node(dev), &arg, false,
+ 					       desc->affinity);
+-		if (virq < 0)
+-			return msi_handle_pci_fail(domain, desc, allocated);
++		if (virq < 0) {
++			ret = msi_handle_pci_fail(domain, desc, allocated);
++			return ret < 0 ? ret : 0;
++		}
+ 
+ 		for (i = 0; i < desc->nvec_used; i++) {
+ 			irq_set_msi_desc_off(virq, i, desc);
+
+-- 
+Without deviation from the norm, progress is not possible.

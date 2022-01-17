@@ -2,320 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D320A4903BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAD14903C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbiAQI0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:26:08 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:46824 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238088AbiAQI0D (ORCPT
+        id S238115AbiAQI0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:26:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28194 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238117AbiAQI02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:26:03 -0500
-X-UUID: df510c161fc147e0862465085b8131cd-20220117
-X-UUID: df510c161fc147e0862465085b8131cd-20220117
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1859028150; Mon, 17 Jan 2022 16:25:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 17 Jan 2022 16:25:57 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 17 Jan 2022 16:25:56 +0800
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Subject: [RESEND v3 3/3] mmc: mediatek: add support for SDIO eint IRQ
-Date:   Mon, 17 Jan 2022 16:25:39 +0800
-Message-ID: <20220117082539.18713-4-axe.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220117082539.18713-1-axe.yang@mediatek.com>
-References: <20220117082539.18713-1-axe.yang@mediatek.com>
+        Mon, 17 Jan 2022 03:26:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642407988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DNQKbEtegSIWSosG5uGlKNCts0oURQOmirK/2YJ0xMQ=;
+        b=iX1TAAZNjHMfP/vuRE5cWqb2e7Y2531l04a/QiaN04BYU7aeAjwuVa8T2SB588g8ftnvFU
+        QMtXcRQZHc6I5864vE97a2LnV9Xekuzl5REkBieqlKwwoLnfCxT0McDBM9D+mfZnCbmuHY
+        9/HQo4EKhqCDpg15sPmn+osJwhU+uks=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-WuniyQFoOeOy2YVIC5e4Gg-1; Mon, 17 Jan 2022 03:26:26 -0500
+X-MC-Unique: WuniyQFoOeOy2YVIC5e4Gg-1
+Received: by mail-wm1-f70.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so4082010wmb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:26:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DNQKbEtegSIWSosG5uGlKNCts0oURQOmirK/2YJ0xMQ=;
+        b=4Be59CTENnPIZpJyJ5hi7M14B6ArGco1UtLybJFjZSCE7e9cOWFs4BCY/DACpPKbkm
+         aN4UmCKbMeuktulaJhVVMiPIs1XTQz8L6KcpfhLB+IGxuNU7JwYuHsRwFNRRE8ph2Ywq
+         wIBckqQ3n2r0e38zF/EgC30f0V/op3I+POVaPUwCNaWkZyfdhdTiXSt8Ublbd0SFtn01
+         40PbtKpM9+hZ7VdiXuhBVaQRJpFoiFdCDeruZ68Q8l9Y8vv7PeloTmFmzZ9380i+jy/L
+         UDQuMcFwkK66UGx9LD0XkQpSFJPZY2zOeiqRGt+s/rTRgSCMu2Y4h4B+IG4ONVhCwuMR
+         P+PA==
+X-Gm-Message-State: AOAM533hmprZwKFi65kzSJx2QKmXx2e9/umdJxgRznuqDU53lJYVrxhD
+        aGW3mgHG1msNTHNjPrlkPjy3EG7sht6QO5tcETR7vEjV4O9/xrIyb2Ug4LHmDDuq36GVy0k++D6
+        r0ZxCnN9axnvwbjP5oGSAMH0Q
+X-Received: by 2002:a7b:c386:: with SMTP id s6mr26121315wmj.132.1642407985529;
+        Mon, 17 Jan 2022 00:26:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzyGOrrGupepsSg3nWADHPX7L3TERLID7WqvxnbS25Vx07PFaNvht3nsEkdR5w3oAVH1VcL8g==
+X-Received: by 2002:a7b:c386:: with SMTP id s6mr26121303wmj.132.1642407985332;
+        Mon, 17 Jan 2022 00:26:25 -0800 (PST)
+Received: from redhat.com ([2.55.154.241])
+        by smtp.gmail.com with ESMTPSA id p10sm1776322wrr.10.2022.01.17.00.26.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 00:26:24 -0800 (PST)
+Date:   Mon, 17 Jan 2022 03:26:21 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] virtio: acknowledge all features before access
+Message-ID: <20220117032429-mutt-send-email-mst@kernel.org>
+References: <20220114200744.150325-1-mst@redhat.com>
+ <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for eint IRQ when MSDC is used as an SDIO host. This
-feature requires SDIO device support async IRQ function. With this
-feature, SDIO host can be awakened by SDIO card in suspend state,
-without additional pin.
+On Mon, Jan 17, 2022 at 02:31:49PM +0800, Jason Wang wrote:
+> 
+> 在 2022/1/15 上午4:09, Michael S. Tsirkin 写道:
+> > The feature negotiation was designed in a way that
+> > makes it possible for devices to know which config
+> > fields will be accessed by drivers.
+> > 
+> > This is broken since commit 404123c2db79 ("virtio: allow drivers to
+> > validate features") with fallout in at least block and net.
+> > We have a partial work-around in commit 2f9a174f918e ("virtio: write
+> > back F_VERSION_1 before validate") which at least lets devices
+> > find out which format should config space have, but this
+> > is a partial fix: guests should not access config space
+> > without acknowledging features since otherwise we'll never
+> > be able to change the config space format.
+> > 
+> > As a side effect, this also reduces the amount of hypervisor accesses -
+> > we now only acknowledge features once unless we are clearing any
+> > features when validating.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 404123c2db79 ("virtio: allow drivers to validate features")
+> > Fixes: 2f9a174f918e ("virtio: write back F_VERSION_1 before validate")
+> > Cc: "Halil Pasic" <pasic@linux.ibm.com>
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> > 
+> > Halil, I thought hard about our situation with transitional and
+> > today I finally thought of something I am happy with.
+> > Pls let me know what you think. Testing on big endian would
+> > also be much appreciated!
+> > 
+> >   drivers/virtio/virtio.c | 31 +++++++++++++++++--------------
+> >   1 file changed, 17 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> > index d891b0a354b0..2ed6e2451fd8 100644
+> > --- a/drivers/virtio/virtio.c
+> > +++ b/drivers/virtio/virtio.c
+> > @@ -168,12 +168,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
+> >   static int virtio_finalize_features(struct virtio_device *dev)
+> >   {
+> > -	int ret = dev->config->finalize_features(dev);
+> >   	unsigned status;
+> > +	int ret;
+> >   	might_sleep();
+> > -	if (ret)
+> > -		return ret;
+> >   	ret = arch_has_restricted_virtio_memory_access();
+> >   	if (ret) {
+> > @@ -244,17 +242,6 @@ static int virtio_dev_probe(struct device *_d)
+> >   		driver_features_legacy = driver_features;
+> >   	}
+> > -	/*
+> > -	 * Some devices detect legacy solely via F_VERSION_1. Write
+> > -	 * F_VERSION_1 to force LE config space accesses before FEATURES_OK for
+> > -	 * these when needed.
+> > -	 */
+> > -	if (drv->validate && !virtio_legacy_is_little_endian()
+> > -			  && device_features & BIT_ULL(VIRTIO_F_VERSION_1)) {
+> > -		dev->features = BIT_ULL(VIRTIO_F_VERSION_1);
+> > -		dev->config->finalize_features(dev);
+> > -	}
+> > -
+> >   	if (device_features & (1ULL << VIRTIO_F_VERSION_1))
+> >   		dev->features = driver_features & device_features;
+> >   	else
+> > @@ -265,10 +252,22 @@ static int virtio_dev_probe(struct device *_d)
+> >   		if (device_features & (1ULL << i))
+> >   			__virtio_set_bit(dev, i);
+> > +	err = dev->config->finalize_features(dev);
+> > +	if (err)
+> > +		goto err;
+> > +
+> >   	if (drv->validate) {
+> > +		u64 features = dev->features;
+> > +
+> >   		err = drv->validate(dev);
+> >   		if (err)
+> >   			goto err;
+> > +
+> > +		if (features != dev->features) {
+> > +			err = dev->config->finalize_features(dev);
+> > +			if (err)
+> > +				goto err;
+> > +		}
+> >   	}
+> >   	err = virtio_finalize_features(dev);
+> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
+> >   	/* We have a driver! */
+> >   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
+> > +	ret = dev->config->finalize_features(dev);
+> > +	if (ret)
+> > +		goto err;
+> 
+> 
+> Is this part of code related?
+> 
+> Thanks
+> 
 
-MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-resume, switch GPIO function back to DAT1 mode then turn on clock.
+Yes. virtio_finalize_features no longer calls dev->config->finalize_features.
 
-Some device tree property should be added or modified in MSDC node
-to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-are mandatory. And cap-sdio-async-irq flag is necessary since this
-feature depends on asynchronous interrupt:
-        &mmcX {
-                ...
-                pinctrl-names = "default", "state_uhs", "state_eint",
-                                "state_dat1";
-                ...
-                pinctrl-2 = <&mmc2_pins_eint>;
-                pinctrl-3 = <&mmc2_pins_dat1>;
-                ...
-                cap-sdio-async-irq;
-                ...
-        };
+I think the dev->config->finalize_features callback is actually
+a misnomer now, it just sends the features to device,
+finalize is FEATURES_OK. Renaming that is a bigger
+patch though, and I'd like this one to be cherry-pickable
+to stable.
 
-Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-Signed-off-by: Yong Mao <yong.mao@mediatek.com>
----
- drivers/mmc/host/mtk-sd.c | 125 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 117 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 65037e1d7723..cbdbcce99fd9 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2015 MediaTek Inc.
-+ * Copyright (c) 2022 MediaTek Inc.
-  * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-  */
- 
-@@ -9,6 +9,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/iopoll.h>
- #include <linux/ioport.h>
- #include <linux/irq.h>
-@@ -440,8 +441,12 @@ struct msdc_host {
- 	struct pinctrl *pinctrl;
- 	struct pinctrl_state *pins_default;
- 	struct pinctrl_state *pins_uhs;
-+	struct pinctrl_state *pins_eint;
-+	struct pinctrl_state *pins_dat1;
- 	struct delayed_work req_timeout;
- 	int irq;		/* host interrupt */
-+	int eint_irq;		/* device interrupt */
-+	int sdio_irq_cnt;	/* irq enable cnt */
- 	struct reset_control *reset;
- 
- 	struct clk *src_clk;	/* msdc source clock */
-@@ -465,6 +470,7 @@ struct msdc_host {
- 	bool hs400_tuning;	/* hs400 mode online tuning */
- 	bool internal_cd;	/* Use internal card-detect logic */
- 	bool cqhci;		/* support eMMC hw cmdq */
-+	bool sdio_eint_ready;	/* Ready to support SDIO eint interrupt */
- 	struct msdc_save_para save_para; /* used when gate HCLK */
- 	struct msdc_tune_para def_tune_para; /* default tune setting */
- 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
-@@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
- 	__msdc_enable_sdio_irq(host, enb);
- 	spin_unlock_irqrestore(&host->lock, flags);
- 
--	if (enb)
--		pm_runtime_get_noresume(host->dev);
--	else
--		pm_runtime_put_noidle(host->dev);
-+	if (mmc->card && !mmc->card->cccr.enable_async_irq) {
-+		if (enb)
-+			pm_runtime_get_noresume(host->dev);
-+		else
-+			pm_runtime_put_noidle(host->dev);
-+	}
- }
- 
- static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
-@@ -2461,6 +2469,50 @@ static const struct mmc_host_ops mt_msdc_ops = {
- 	.hw_reset = msdc_hw_reset,
- };
- 
-+static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
-+{
-+	struct msdc_host *host = dev_id;
-+	struct mmc_host *mmc = mmc_from_priv(host);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&host->lock, flags);
-+	if (likely(host->sdio_irq_cnt > 0)) {
-+		disable_irq_nosync(host->eint_irq);
-+		disable_irq_wake(host->eint_irq);
-+		host->sdio_irq_cnt--;
-+	}
-+	spin_unlock_irqrestore(&host->lock, flags);
-+
-+	sdio_signal_irq(mmc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int msdc_request_dat1_eint_irq(struct msdc_host *host)
-+{
-+	struct gpio_desc *desc;
-+	int irq, ret;
-+
-+	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-+	if (IS_ERR(desc))
-+		return PTR_ERR(desc);
-+
-+	ret = gpiod_to_irq(desc);
-+	if (ret < 0)
-+		return ret;
-+
-+	irq = ret;
-+	ret = devm_request_threaded_irq(host->dev, irq, NULL, msdc_sdio_eint_irq,
-+					IRQF_TRIGGER_LOW | IRQF_ONESHOT | IRQF_NO_AUTOEN,
-+					"sdio-eint", host);
-+	if (ret)
-+		return ret;
-+
-+	host->eint_irq = irq;
-+
-+	return 0;
-+}
-+
- static const struct cqhci_host_ops msdc_cmdq_ops = {
- 	.enable         = msdc_cqe_enable,
- 	.disable        = msdc_cqe_disable,
-@@ -2631,6 +2683,23 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 		goto host_free;
- 	}
- 
-+	if (!(mmc->caps2 & MMC_CAP2_NO_SDIO)) {
-+		/* Support for SDIO eint irq */
-+		host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
-+		if (IS_ERR(host->pins_eint)) {
-+			dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
-+		} else {
-+			host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
-+			if (IS_ERR(host->pins_dat1)) {
-+				ret = dev_err_probe(&pdev->dev, PTR_ERR(host->pins_dat1),
-+						    "Cannot find pinctrl dat1!\n");
-+				goto host_free;
-+			}
-+
-+			host->sdio_eint_ready = true;
-+		}
-+	}
-+
- 	msdc_of_property_parse(pdev, host);
- 
- 	host->dev = &pdev->dev;
-@@ -2722,6 +2791,16 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto release;
- 
-+	if (host->sdio_eint_ready) {
-+		ret = msdc_request_dat1_eint_irq(host);
-+		if (ret) {
-+			dev_err(host->dev, "Failed to register data1 eint irq!\n");
-+			goto release;
-+		}
-+
-+		pinctrl_select_state(host->pinctrl, host->pins_dat1);
-+	}
-+
- 	pm_runtime_set_active(host->dev);
- 	pm_runtime_set_autosuspend_delay(host->dev, MTK_MMC_AUTOSUSPEND_DELAY);
- 	pm_runtime_use_autosuspend(host->dev);
-@@ -2841,16 +2920,31 @@ static void msdc_restore_reg(struct msdc_host *host)
- 
- static int __maybe_unused msdc_runtime_suspend(struct device *dev)
- {
-+	unsigned long flags;
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	struct msdc_host *host = mmc_priv(mmc);
- 
- 	msdc_save_reg(host);
-+
-+	if (host->sdio_eint_ready) {
-+		disable_irq(host->irq);
-+		pinctrl_select_state(host->pinctrl, host->pins_eint);
-+		spin_lock_irqsave(&host->lock, flags);
-+		if (host->sdio_irq_cnt == 0) {
-+			enable_irq(host->eint_irq);
-+			enable_irq_wake(host->eint_irq);
-+			host->sdio_irq_cnt++;
-+		}
-+		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+		spin_unlock_irqrestore(&host->lock, flags);
-+	}
- 	msdc_gate_clock(host);
- 	return 0;
- }
- 
- static int __maybe_unused msdc_runtime_resume(struct device *dev)
- {
-+	unsigned long flags;
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	struct msdc_host *host = mmc_priv(mmc);
- 	int ret;
-@@ -2860,10 +2954,25 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
- 		return ret;
- 
- 	msdc_restore_reg(host);
-+
-+	if (host->sdio_eint_ready) {
-+		spin_lock_irqsave(&host->lock, flags);
-+		if (host->sdio_irq_cnt > 0) {
-+			disable_irq_nosync(host->eint_irq);
-+			disable_irq_wake(host->eint_irq);
-+			host->sdio_irq_cnt--;
-+			sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+		} else {
-+			sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INTEN_SDIOIRQ);
-+		}
-+		spin_unlock_irqrestore(&host->lock, flags);
-+		pinctrl_select_state(host->pinctrl, host->pins_uhs);
-+		enable_irq(host->irq);
-+	}
- 	return 0;
- }
- 
--static int __maybe_unused msdc_suspend(struct device *dev)
-+static int __maybe_unused msdc_suspend_noirq(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	int ret;
-@@ -2877,13 +2986,13 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- 	return pm_runtime_force_suspend(dev);
- }
- 
--static int __maybe_unused msdc_resume(struct device *dev)
-+static int __maybe_unused msdc_resume_noirq(struct device *dev)
- {
- 	return pm_runtime_force_resume(dev);
- }
- 
- static const struct dev_pm_ops msdc_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq, msdc_resume_noirq)
- 	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume, NULL)
- };
- 
--- 
-2.25.1
+> > +
+> >   	ret = virtio_finalize_features(dev);
+> >   	if (ret)
+> >   		goto err;
 

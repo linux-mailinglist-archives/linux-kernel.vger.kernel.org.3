@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6DF490882
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD8E49087F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbiAQMQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:16:31 -0500
-Received: from mout.gmx.net ([212.227.17.22]:40493 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239559AbiAQMQa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:16:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642421781;
-        bh=0umTTU4XfVVX+KXxZBAd7v3zaeX2hoWPbrIx01aJkMM=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=dTam736OkShsJUDXUaKisxBZIIRwJ4/ptbwrL8lRSVSkkpHPwOHDjKOXtJSjTFFkR
-         XL72Id8Yh8G5/Dhig9vZhcWYrky8E+fxWB4Q3oCvzHEPgs9EsNbETCzQdKyZrwv4sv
-         x+Lbd5lT3TvJxpTnvf9Pmxa8cqEDb5gDlu6rAEe4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRTRN-1mulpA1Q85-00NPv8; Mon, 17
- Jan 2022 13:16:21 +0100
-Message-ID: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
-Date:   Mon, 17 Jan 2022 13:15:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>,
+        id S239794AbiAQMQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:16:06 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13446 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S239765AbiAQMQF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 07:16:05 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20H9vnfq026678;
+        Mon, 17 Jan 2022 12:15:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=3a6XeSsdk/gF/5MxcgUQfE5YMHf39nUtcYBoI8X+tZQ=;
+ b=fT7WmRMXvktXHp4JBuINW9JapuDmpsVTaPm4kOQeBDYPopHeVUSKAX5PZwdwz3uEmBUf
+ JjECpVgthhB6SOUuKBKevThF+FUunjLgaT16HoFxG3QmhX6AEaNagdagFQR2LL/qI/3E
+ bK3/V0Mh38Lhm1GeVaMGm41vuTNFLgIbeX/aWBvY4T7Somm250X4fNGNhqp68GVVDLMW
+ bymjDPBnWlVUAYq4HQoGS35x7jGaH013kAwMgIniejLrOCf583bXiKWpG5GuoE4MFeBw
+ mbKSkkCZwVU7+T24rA73aBjNMNgdNwFFbfoObSn+N7smYJhI6UVLhzbWUCvSxICUjzMB Mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dn69mk460-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 12:15:51 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20HC1G8c012770;
+        Mon, 17 Jan 2022 12:15:50 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dn69mk45b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 12:15:50 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HCD300008145;
+        Mon, 17 Jan 2022 12:15:49 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dknhj3tf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 12:15:48 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HCFj4Z41615734
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Jan 2022 12:15:45 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CA4EF4205C;
+        Mon, 17 Jan 2022 12:15:45 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4418342041;
+        Mon, 17 Jan 2022 12:15:45 +0000 (GMT)
+Received: from osiris (unknown [9.145.81.191])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 17 Jan 2022 12:15:45 +0000 (GMT)
+Date:   Mon, 17 Jan 2022 13:15:43 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-In-Reply-To: <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:D2eGrpuAUbVVzZrhjRVJ3cJjkjGmaGCwoincAiE9iwih9KDLXNU
- 29l6dw5iBTUHU1WPz48pV4an0QAJy/hP2fmgokflBgIwptu2HWBmg4/2fi9/R2uPqLxtPPK
- d2WroLO/yK/49QqHe6lwRcz+KzE3QhZSDPxhY27X8aRsd2nMpNh4Hn+5uE5warHJiMrPVEs
- YYR/NhMPjBw+2kFNgZG1A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+f37p3vPXP4=:wyoDRTccsWKM6CQP0NxMjQ
- tD9j8iMD2H9Qv32t0kd0TIVpEDZvC7D5vBW7+uIRf7qURHwhEoLrJ57SK2XMPqxuLzTdGl5ET
- UiN4xPP50lLaqmenQb/cw7fwaIQiXlUYA69kKVRYqz81LzYZa9yKEQNwu9D1MNstGjQn8F1kE
- DWzDX68i3LhfwXlJhEsCketjgDeZfLN+Zmb2tUY5wnBNrxtq+l5X1APKgNf97wR2H0Ju6L2Im
- T1wid4TJqXWUmx+oKu7Svm/VWD5UdDJHlJfCAawo5Q+HNiS0YPgD+c8AIaHGpvk0+LVfrqQRu
- 7EZEOtlI/1TQ/Zf5wxfbVXWJzFIA85X4RFLODqbTMjep5LXS6A0xumCZ8q+aPwHwHAA5U7igd
- lGAhCjLRpNbJUbbUE3A5NvMzJJmle/9jyKeiArme6sm7WzMCo8WeM7TRmhvRqseatgTd+G2Vr
- ZSgHzMkuI5i7AcPdSzFkEGMG5Uy2hFlj8bUPL+S/OcFX1fq2/6VJiB6QdoaGZHvgpRUvMjK8s
- 5zpxvI11OpqV6pjmbeadQwUwxHqaDA57emWKOYZ7yR+TVmoAQHDwl8BZt/7/ERfCChKeypNsz
- lZ0qNWV46MwQWgavaxW/TwEK6oFTPWRWKpmxtRRvk3mKuS58lGWv6M55HDV7oQjwCravf585m
- EyZwMPQZaUtlsivuk8V2tgOjLleAnjqj3a+oOX1XIAvapQlen9GdV492oHjzx22i1jIDAoKzW
- JqX6YWHb2Y/JPdKMRNCQvbav9+eEEtANUNt5PoNO7k6zVLWnVhQVbllT7RgKpPYD4xIpD/4HU
- uz4Dbj1cRyUUi5REHfKlEaMiX/bKlnrqJFGH4yH2lWiBgqBZp++DK6bSa1hurRel3gfKMLuno
- r9UviaH01J8HzQ54n2qU1JO0/iSVD8zSnOI25IJPbaOpkreO/aZwhXgLHRgFB/cgFmt2J+Fpg
- ORxGdhoYY1N/yU3fFKSWKqttM0BDLAr5tSifkts/WZE7N8dt/SXNb3LE7TkLortOTbrWbOEvc
- ye8E2R7RoG3A/tr2KZbsJycis1s6EHysWZVyoqCYM76ZbawCf9hN4FQE22UKpNnRjQ2bnwTKH
- VGJi6W/QCLr2X4=
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH 03/10] exit: Move oops specific logic from do_exit into
+ make_task_dead
+Message-ID: <YeVd7xj2Lwyp4QB1@osiris>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211208202532.16409-3-ebiederm@xmission.com>
+ <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
+ <87tuefwewa.fsf@email.froward.int.ebiederm.org>
+ <YeUjVZX764zLm9/K@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeUjVZX764zLm9/K@infradead.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xINXz-bmWCwqN2vRiMBHUjzzyNw3PA0R
+X-Proofpoint-GUID: k1yIDPKElVbS_MVkl7Z1RwZ35S4nA9_8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-17_05,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=573 adultscore=0
+ suspectscore=0 priorityscore=1501 bulkscore=0 impostorscore=0 mlxscore=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201170077
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel,
 
-On 1/17/22 11:02, Daniel Vetter wrote:
-> Hi Helge
->
-> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
->>
->> The fbdev layer is orphaned, but seems to need some care.
->> So I'd like to step up as new maintainer.
->>
->> Signed-off-by: Helge Deller <deller@gmx.de>
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5d0cd537803a..ce47dbc467cc 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/em=
-ulator/index.html
->>  F:     arch/x86/math-emu/
->>
->>  FRAMEBUFFER LAYER
->> -L:     dri-devel@lists.freedesktop.org
->> +M:     Helge Deller <deller@gmx.de>
->>  L:     linux-fbdev@vger.kernel.org
->> -S:     Orphan
->
-> Maybe don't rush maintainer changes in over the w/e without even botheri=
-ng
-> to get any input from the people who've been maintaining it before.
->
-> Because the status isn't entirely correct, fbdev core code and fbcon and
-> all that has been maintained, but in bugfixes only mode. And there's ver=
-y
-> solid&important reasons to keep merging these patches through a drm tree=
-,
-> because that's where all the driver development happens, and hence also
-> all the testing (e.g. the drm test suite has some fbdev tests - the only
-> automated ones that exist to my knowledge - and we run them in CI). So
-> moving that into an obscure new tree which isn't even in linux-next yet =
-is
-> no good at all.
->
-> Now fbdev driver bugfixes is indeed practically orphaned and I very much
-> welcome anyone stepping up for that, but the simplest approach there wou=
-ld
-> be to just get drm-misc commit rights and push the oddball bugfix in the=
-re
-> directly. But also if you want to do your own pull requests to Linus for
-> that I don't care and there's really no interference I think, so
-> whatever floats.
->
-> But any code that is relevant for drm drivers really needs to go in thro=
-ugh
-> drm trees, nothing else makes much sense.
->
-> I guess you're first action as newly minted fbdev maintainer is going to=
- be to
-> clean up the confusion you just created.
+On Mon, Jan 17, 2022 at 12:05:41AM -0800, Christoph Hellwig wrote:
+> On Fri, Jan 07, 2022 at 12:59:33PM -0600, Eric W. Biederman wrote:
+> > Assuming it won't be too much longer before the rest of the arches have
+> > set_fs/get_fs removed it looks like it makes sense to leave the
+> > force_uaccess_begin where it is, and just let force_uaccess_begin be
+> > removed when set_fs/get_fs are removed from the tree.
+> > 
+> > Christoph does it look like the set_fs/get_fs removal work is going
+> > to stall indefinitely on some architectures?  If so I think we want to
+> > find a way to get kernel threads to run with set_fs(USER_DS) on the
+> > stalled architectures.  Otherwise I think we have a real hazard of
+> > introducing bugs that will only show up on the stalled architectures.
+> 
+> I really need help from the arch maintainers to finish the set_fs
+> removal.  There have been very few arch maintainers helping with that
+> work (arm, arm64, parisc, m68k) in addition to the ones I did because
+> I have the test setups and knowledge.  I'll send out another ping,
 
-Most of my machines depend on a working fbdev layer since drm isn't (and p=
-robably
--due to technical requirements of DRM- won't be) available for those.
-So, since the fbdev drivers were marked orphaned, I decided to step up as =
-maintainer.
-
-I see your point that at least the fbdev core code and fbcon are shared be=
-tween DRM and fbdev.
-For me it's really not important to drive any patches through a seperate t=
-ree, so
-I'd be happy to join the drm-misc tree if you feel it's necessary. (By the=
- way,
-adding my tree to for-next was on my todo list...)
-
-What's important for me though is, to keep fbdev actively maintained, whic=
-h means:
-a) to get fixes which were posted to fbdev mailing list applied if they ar=
-e useful & correct,
-b) to include new drivers (for old hardware) if they arrive (probably happ=
-ens rarely but there can be).
-   I know of at least one driver which won't be able to support DRM....
-   Of course, if the hardware is capable to support DRM, it should be writ=
-ten for DRM and not applied for fbdev.
-c) reintroduce the state where fbcon is fast on fbdev. This is important f=
-or non-DRM machines,
-   either when run on native hardware or in an emulator.
-d) not break DRM development
-
-Especially regarding c) I complained in [1] and got no feedback. I really =
-would like to
-understand where the actual problems were and what's necessary to fix them=
-.
-
-Helge
-
-[1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
+Just in case you missed it: s390 was converted with commit 87d598634521
+("s390/mm: remove set_fs / rework address space handling").

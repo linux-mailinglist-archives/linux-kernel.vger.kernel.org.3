@@ -2,143 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3294C490BA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0899490BAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240605AbiAQPn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S240625AbiAQPoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237299AbiAQPnZ (ORCPT
+        with ESMTP id S240621AbiAQPo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:43:25 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FF2C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:43:25 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id l13so17226878qvz.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:43:25 -0800 (PST)
+        Mon, 17 Jan 2022 10:44:28 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADDFC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:44:28 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id b13so67558792edn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:44:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xP9+nNeU0pPJaNyxSHM1rhH01w3/wZxyHMR8TSEhtmc=;
-        b=HI+dCws7RQMLYP9FBlt/2mFcL0vyCtoCwfD9I0VStsOrIN6g8+Fo9xE/YelF6Pbxu3
-         XiFr/vbnUpBGg7toREDqQ8zDaFgRoAOqG5NzYjJDCX2HnP6Fq1POJ1aa7hBDy6HLVbqM
-         MIWNj3C6u1IiBvd+9vOsrxLcTiJyYHZjrZEPPhIJAcX1+pyyOKg8WTdoRzGKyPQcZMLy
-         gtn/B++uXwvZzVzljfwRvGRn3Uw3l/zbG641yc+3FPnNx8v6tuJ8mbiU9+FD0JW2fC6H
-         BjSries8Zi7VLqiWZ6yWEChcWLiahxcOMv0MKIXzDQl9x0iGC+oey6o28L26CQchYmud
-         1y3g==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Upvi0XzdCvtFkL0JqzI8bfZ5QWNaqy4SwHM8pYcOg9o=;
+        b=Oo3Mrt6RPkDmTxg2P0tYbcMjVUYNHyWStbREGMl4xyj/FFC8q9haK3chg8iL1KD2ud
+         zHwjiryWVt8bDldfcWm8lrzXMaEqff9Ddyn7NFXmH/47eK6SxG1yw6DfhyjNZ2TgSbO2
+         pGHIQn1dTo8dLg4F2xKpbZeeTx7woU4UXsqgY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xP9+nNeU0pPJaNyxSHM1rhH01w3/wZxyHMR8TSEhtmc=;
-        b=nvkFN96tRHNvbWQstXFs3TgUafgsZh2bynoSlnSjVixAjNCjc9UhVKO7gX9EykxBsO
-         YlkXdMC8ErYVA4laLJlgr1I+j1AalarIhDiIw3PifW7ls6Ap2Rxvyg8Jjz5lkfK2ECDL
-         MecttCRFPLabqoDagscB8IesEZtNHFMKCueBN3U2oNE62EQnHf1RPLCXUlYI3hh3tKTM
-         Z+txJ43Jd2R5kFQLB2HGIx/jRl4uzCMMct/w420UKSByfzF6zKzon8VB3crxXjWUNEZF
-         Mve35gUTLSfWWqZv+SMP3RrK3FD7LiLfuBDQz/5uHuo3OWQ1R5SSNmRSyKafMLpfoNvY
-         LigA==
-X-Gm-Message-State: AOAM533gsB6MxQkloMjT8XmQm674jYKl4c9IxbiroinbysFomHlzR4a4
-        svj9xC/gM2hV2hDMgW/dB7qP+9rPtT2eBMcG
-X-Google-Smtp-Source: ABdhPJyuIYYJkAmO78IaACd35H7++l0ftE0t2n1dbEcW++BwwQmlTQhzXYiFoGGUv/HzUQyK31Z0aQ==
-X-Received: by 2002:a05:6214:4001:: with SMTP id kd1mr18390236qvb.13.1642434204942;
-        Mon, 17 Jan 2022 07:43:24 -0800 (PST)
-Received: from WRT-WX9.. ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id i11sm3978507qti.55.2022.01.17.07.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 07:43:24 -0800 (PST)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH] sysrq: do not omit current cpu when showing backtrace of all active CPUs
-Date:   Mon, 17 Jan 2022 23:43:00 +0800
-Message-Id: <20220117154300.2808-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Upvi0XzdCvtFkL0JqzI8bfZ5QWNaqy4SwHM8pYcOg9o=;
+        b=3TfWCADPwv9ctnuH9Fxhw36Xs0E/VWj6iZxFdOGVG5B0UPy0Y6vSoj3lYg0kgiwTgH
+         ID4ns2Rm0iDQi614CHhBb8j0KSUXtH9iWs2myOnCdH9/qk9LjzsjTPjj4ExscK4vN4/+
+         G//25ge1ouVAxM1ctQeMoOMBqj7JZ7Td0IaYa06FxYGjjQRiXvn3xvAVT1ZSRq1+z7zs
+         kb375jY9yDkzH2Nszj+5kszMStzxz9k2FNochjbRMzJhCzeg3m2JbYa21IBfvWA/UI77
+         /1dcZ56JuAbFmk7+G07ySM9VWUKDdTCewO+saL4g5vol1n+C5oLnjSlXymo77Wl9ks5+
+         CcSw==
+X-Gm-Message-State: AOAM530KIgWlmjnpacQML2xET+R6pg696oMWMUJphY9ROnD/IGj3Yg7m
+        Wb0I5EdTrgfsY9j9m97eQ+qnJ6aDCYqvA+Sf
+X-Google-Smtp-Source: ABdhPJwZCapNcP5m5+FX3mgamhi+OQ13bF1tf/iwF0bahHYEspuzvXp03nvWoWp8tJqafgxjymwXrg==
+X-Received: by 2002:aa7:c609:: with SMTP id h9mr21831610edq.248.1642434266668;
+        Mon, 17 Jan 2022 07:44:26 -0800 (PST)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id k11sm2633627ejr.143.2022.01.17.07.44.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 07:44:25 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id f141-20020a1c1f93000000b003497aec3f86so455899wmf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:44:25 -0800 (PST)
+X-Received: by 2002:a7b:ca42:: with SMTP id m2mr20661692wml.144.1642434264852;
+ Mon, 17 Jan 2022 07:44:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <878rvhlvh2.fsf@email.froward.int.ebiederm.org>
+ <CAHk-=wgS865kHU=4NO=AvK07fcK7M6C6EYGdk80R1tkPKTLyhQ@mail.gmail.com> <87bl0aidjv.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87bl0aidjv.fsf@email.froward.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 17 Jan 2022 17:44:08 +0200
+X-Gmail-Original-Message-ID: <CAHk-=wju6gEi3faCozsfuE07KsHsqgvfXHLeETXO0QJa7eN+fQ@mail.gmail.com>
+Message-ID: <CAHk-=wju6gEi3faCozsfuE07KsHsqgvfXHLeETXO0QJa7eN+fQ@mail.gmail.com>
+Subject: Re: [GIT PULL] signal/exit/ptrace changes for v5.17
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The backtrace of current CPU also should be printed as it is active. This
-change add stack trace for current CPU and print a hint for idle CPU for
-the generic workqueue based printing. (x86 already does this)
+On Mon, Jan 17, 2022 at 5:32 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> I would like to have a version of pipe_write that sleeps in
+> TASK_KILLABLE.
 
-Now it looks like below:
-[  279.401567] sysrq: Show backtrace of all active CPUs
-[  279.407234] sysrq: CPU5:
-[  279.407505] Call Trace:
-[  279.408789] [<ffffffff8000606c>] dump_backtrace+0x2c/0x3a
-[  279.411698] [<ffffffff800060ac>] show_stack+0x32/0x3e
-[  279.411809] [<ffffffff80542258>] sysrq_handle_showallcpus+0x4c/0xc6
-[  279.411929] [<ffffffff80542f16>] __handle_sysrq+0x106/0x26c
-[  279.412034] [<ffffffff805436a8>] write_sysrq_trigger+0x64/0x74
-[  279.412139] [<ffffffff8029cd48>] proc_reg_write+0x8e/0xe2
-[  279.412252] [<ffffffff8021a8f8>] vfs_write+0x90/0x2be
-[  279.412362] [<ffffffff8021acd2>] ksys_write+0xa6/0xce
-[  279.412467] [<ffffffff8021ad24>] sys_write+0x2a/0x38
-[  279.412689] [<ffffffff80003ff8>] ret_from_syscall+0x0/0x2
-[  279.417173] sysrq: CPU6: backtrace skipped as idling
-[  279.417185] sysrq: CPU4: backtrace skipped as idling
-[  279.417187] sysrq: CPU0: backtrace skipped as idling
-[  279.417181] sysrq: CPU7: backtrace skipped as idling
-[  279.417190] sysrq: CPU1: backtrace skipped as idling
-[  279.417193] sysrq: CPU3: backtrace skipped as idling
-[  279.417219] sysrq: CPU2:
-[  279.419179] Call Trace:
-[  279.419440] [<ffffffff8000606c>] dump_backtrace+0x2c/0x3a
-[  279.419782] [<ffffffff800060ac>] show_stack+0x32/0x3e
-[  279.420015] [<ffffffff80542b30>] showacpu+0x5c/0x96
-[  279.420317] [<ffffffff800ba71c>] flush_smp_call_function_queue+0xd6/0x218
-[  279.420569] [<ffffffff800bb438>] generic_smp_call_function_single_interrupt+0x14/0x1c
-[  279.420798] [<ffffffff800079ae>] handle_IPI+0xaa/0x13a
-[  279.421024] [<ffffffff804dcb92>] riscv_intc_irq+0x56/0x70
-[  279.421274] [<ffffffff80a05b70>] generic_handle_arch_irq+0x6a/0xfa
-[  279.421518] [<ffffffff80004006>] ret_from_exception+0x0/0x10
-[  279.421750] [<ffffffff80096492>] rcu_idle_enter+0x16/0x1e
+That would actually be horrible for another reason - now it would
+count towards the load average. That's another difference between
+interruptible waits and non-interruptible ones.
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
----
- drivers/tty/sysrq.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+Admittedly it's an entirely arbitrary one, but it's part of the whole
+semantic difference between TASK_INTERRUPTIBLE and
+TASK_UNINTERRUPTIBLE.
 
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index bbfd004449b5..34cfdda4aff5 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -232,8 +232,10 @@ static void showacpu(void *dummy)
- 	unsigned long flags;
- 
- 	/* Idle CPUs have no interesting backtrace. */
--	if (idle_cpu(smp_processor_id()))
-+	if (idle_cpu(smp_processor_id())) {
-+		pr_info("CPU%d: backtrace skipped as idling\n", smp_processor_id());
- 		return;
-+	}
- 
- 	raw_spin_lock_irqsave(&show_lock, flags);
- 	pr_info("CPU%d:\n", smp_processor_id());
-@@ -260,10 +262,13 @@ static void sysrq_handle_showallcpus(int key)
- 
- 		if (in_hardirq())
- 			regs = get_irq_regs();
--		if (regs) {
--			pr_info("CPU%d:\n", smp_processor_id());
-+
-+		pr_info("CPU%d:\n", smp_processor_id());
-+		if (regs)
- 			show_regs(regs);
--		}
-+		else
-+			show_stack(NULL, NULL, KERN_INFO);
-+
- 		schedule_work(&sysrq_showallcpus);
- 	}
- }
--- 
-2.32.0
+You can play with TASK_NOLOAD of course, so it's something that can be
+worked around, but it gets a bit ugly.
 
+>  I want the I/O wake-ups and I want the SIGKILL wake ups
+> but I don't want any other wake-ups.  Unfortunately the I/O wake-ups in
+> the pipe code are sent with wake_up_interruptible.  So a task sleeping
+> in TASK_KILLABLE won't get them.
+
+Yeah. The code *could* use the non-interruptible 'wake_up()', and
+everything should work - because waking things up too much doesn't
+change semantics, it's just a slight pessimization. Plus the whole
+"nested waitqueues" isn't actually any remotely normal case, so it
+doesn't really matter for performance either.
+
+But I really think it's wrong.
+
+You're trying to work around a problem the wrong way around. If a task
+is dead, and is dumping core, then signals just shouldn't matter in
+the first place, and thus the whole "TASK_INTERRUPTIBLE vs
+TASK_UNINTERRUPTIBLE" really shouldn't be an issue. The fact that it
+is an issue means there's something wrong in signaling, not in the
+pipe code.
+
+So I really think that's where the fix should be - on the signal delivery side.
+
+             Linus

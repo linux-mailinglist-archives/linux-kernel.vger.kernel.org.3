@@ -2,172 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA723490015
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4471490018
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiAQCB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:01:26 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:62930 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbiAQCBZ (ORCPT
+        id S236754AbiAQCCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:02:07 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:59352 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236739AbiAQCCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:01:25 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 20H1rPTO046430;
-        Mon, 17 Jan 2022 09:53:25 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 Jan
- 2022 10:00:17 +0800
-Message-ID: <609cfe9e-2fd8-b31a-9d71-b83d61693f84@aspeedtech.com>
-Date:   Mon, 17 Jan 2022 09:59:58 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v8 1/4] media: v4l: Add definition for the Aspeed JPEG
- format
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
- <20211224012738.1551-2-jammy_huang@aspeedtech.com>
- <703ff71e-c76a-9df1-c644-04efed0199ca@xs4all.nl>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <703ff71e-c76a-9df1-c644-04efed0199ca@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 20H1rPTO046430
+        Sun, 16 Jan 2022 21:02:06 -0500
+X-IronPort-AV: E=Sophos;i="5.88,294,1635174000"; 
+   d="scan'208";a="107257767"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 17 Jan 2022 11:02:04 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2CEB8400855F;
+        Mon, 17 Jan 2022 11:02:03 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] ata: pata_platform: Make use of platform_get_mem_or_io()
+Date:   Mon, 17 Jan 2022 02:01:34 +0000
+Message-Id: <20220117020134.3279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+Make use of platform_get_mem_or_io() to simplify the code.
 
-On 2022/1/14 下午 04:11, Hans Verkuil wrote:
-> On 24/12/2021 02:27, Jammy Huang wrote:
->> This introduces support for the Aspeed JPEG format, where the new frame
->> can refer to previous frame to reduce the amount of compressed data. The
->> concept is similar to I/P frame of video compression. It will compare the
->> new frame with previous one to decide which macroblock's data is
->> changed, and only the changed macroblocks will be compressed.
->>
->> This Aspeed JPEG format is used by the video engine on Aspeed platforms,
->> which is generally adapted for remote KVM.
->>
->> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->> ---
->> v8:
->>    - Add decoder information for aspeed-jpeg
->> v7:
->>    - Add more information for aspeed-jpeg
->> v6:
->>    - Update description for new format, aspeed-jpeg, in Documentation.
->> v5:
->>    - no update
->> v4:
->>    - new
->> ---
->>   .../media/uapi/v4l/pixfmt-reserved.rst          | 17 +++++++++++++++++
->>   drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
->>   include/uapi/linux/videodev2.h                  |  1 +
->>   3 files changed, 19 insertions(+)
->>
->> diff --git a/Documentation/media/uapi/v4l/pixfmt-reserved.rst b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
-> This is the wrong file! It should be:
->
-> Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+While at it, drop use of unlikely() from pata_platform_probe()
+as it isn't a hotpath.
 
-Thanks, I just used git format-patch to generate the cover-letter and 
-didn't notice this.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+---
+Hi All,
 
-It looks like the file, pixfmt-reserved.rst, has different path in 
-different Linux kernel,
+This patch is part of series [1]. Just sending this lone patch
+for now.
 
-* 5.4:           Documentation/media/uapi/v4l/pixfmt-reserved.rst
+[1] http://patchwork.ozlabs.org/project/linux-ide/list/?series=278349
 
-* 5.10/5.15: Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+Cheers,
+Prabhakar
+---
+ drivers/ata/pata_platform.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-5.4 is the one I based to submit the patches.
-
-Could you suggest the kernel that I should based to submit these patches??
-
-I will need to change the number of V4L2_CID_USER_ASPEED_BASE per different
-
-linux kernel as well.
-
->
-> Regards,
->
-> 	Hans
->
->> index b2cd155e691b..1d0dc8d86ed7 100644
->> --- a/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->> +++ b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->> @@ -264,6 +264,23 @@ please make a proposal on the linux-media mailing list.
->>   	of tiles, resulting in 32-aligned resolutions for the luminance plane
->>   	and 16-aligned resolutions for the chrominance plane (with 2x2
->>   	subsampling).
->> +    * .. _V4L2-PIX-FMT-AJPG:
->> +
->> +      - ``V4L2_PIX_FMT_AJPG``
->> +      - 'AJPG'
->> +      - ASPEED JPEG format used by the aspeed-video driver on Aspeed platforms,
->> +        which is generally adapted for remote KVM.
->> +        On each frame compression, I will compare the new frame with previous
->> +        one to decide which macroblock's data is changed, and only the changed
->> +        macroblocks will be compressed.
->> +
->> +        The implementation is based on AST2600 A3 datasheet, revision 0.9, which
->> +        is not publicly available. Or you can reference Video stream data format
->> +        – ASPEED mode compression of SDK_User_Guide which available on
->> +        AspeedTech-BMC/openbmc/releases.
->> +
->> +        Decoder's implementation can be found here,
->> +        `https://github.com/AspeedTech-BMC/aspeed_codec/ <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
->>   
->>   .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
->>   
->> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->> index 24db33f803c0..00dde01d2f97 100644
->> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->> @@ -1378,6 +1378,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->>   		case V4L2_PIX_FMT_S5C_UYVY_JPG:	descr = "S5C73MX interleaved UYVY/JPEG"; break;
->>   		case V4L2_PIX_FMT_MT21C:	descr = "Mediatek Compressed Format"; break;
->>   		case V4L2_PIX_FMT_SUNXI_TILED_NV12: descr = "Sunxi Tiled NV12 Format"; break;
->> +		case V4L2_PIX_FMT_AJPG:		descr = "Aspeed JPEG"; break;
->>   		default:
->>   			if (fmt->description[0])
->>   				return;
->> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->> index 3210b3c82a4a..994eb6155ea9 100644
->> --- a/include/uapi/linux/videodev2.h
->> +++ b/include/uapi/linux/videodev2.h
->> @@ -726,6 +726,7 @@ struct v4l2_pix_format {
->>   #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
->>   #define V4L2_PIX_FMT_SUNXI_TILED_NV12 v4l2_fourcc('S', 'T', '1', '2') /* Sunxi Tiled NV12 Format */
->>   #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
->> +#define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
->>   
->>   /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
->>   #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
-
+diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
+index 028329428b75..29902001e223 100644
+--- a/drivers/ata/pata_platform.c
++++ b/drivers/ata/pata_platform.c
+@@ -198,22 +198,16 @@ static int pata_platform_probe(struct platform_device *pdev)
+ 	/*
+ 	 * Get the I/O base first
+ 	 */
+-	io_res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+-	if (io_res == NULL) {
+-		io_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-		if (unlikely(io_res == NULL))
+-			return -EINVAL;
+-	}
++	io_res = platform_get_mem_or_io(pdev, 0);
++	if (!io_res)
++		return -EINVAL;
+ 
+ 	/*
+ 	 * Then the CTL base
+ 	 */
+-	ctl_res = platform_get_resource(pdev, IORESOURCE_IO, 1);
+-	if (ctl_res == NULL) {
+-		ctl_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-		if (unlikely(ctl_res == NULL))
+-			return -EINVAL;
+-	}
++	ctl_res = platform_get_mem_or_io(pdev, 1);
++	if (!ctl_res)
++		return -EINVAL;
+ 
+ 	/*
+ 	 * And the IRQ
 -- 
-Best Regards
-Jammy
+2.17.1
 

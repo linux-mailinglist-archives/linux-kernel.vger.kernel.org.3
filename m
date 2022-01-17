@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663CE490332
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4009490335
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiAQHxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:53:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35104 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235240AbiAQHxb (ORCPT
+        id S237737AbiAQHyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235240AbiAQHyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:53:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 17 Jan 2022 02:54:54 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02275C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 23:54:53 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD0C3B80C85;
-        Mon, 17 Jan 2022 07:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AD0CC36AE7;
-        Mon, 17 Jan 2022 07:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642406009;
-        bh=iu1k0J2dstX5JKGc9BAbgYSZ/hfzhsGK1TRakxtPmbo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uNG43bgSCih6ZoUxi1NyQQ39SYJMf1hNUs5vv+t5QwhrKKuD7vEwGnOwRI1hgYCn7
-         hL5E+bZTlpir47fVeNHPzyVd1w7tlHttEpWwtsf8PEuDN5/QgQ63848yedIGrlfMcL
-         4bcrNZVP9w6JUww+IKlSQYY0b9Y7t2nBOyedWLcUT5HdT554Il5tSAPPJdkUoO5wZH
-         8VtI0F5w3/9tsimhUSFw5hLm0Yf/ejLmufrbAwv9VdwiiRdiECVr0mLdTN9XAIcQSc
-         gzrsopNOf4TWWyI1ScLIoMERmtPFxxxOyxWFdcYOKSkVS5MwAcj+GQb1nadoz1oxti
-         Suunu/WyqkVig==
-Date:   Mon, 17 Jan 2022 13:23:23 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] bus: mhi: Add mru_default for Foxconn SDX55
-Message-ID: <20220117075323.GA4209@thinkpad>
-References: <20220115103912.3775-1-slark_xiao@163.com>
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5C75F1F43428;
+        Mon, 17 Jan 2022 07:54:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642406086;
+        bh=Ruxz52GcOQAu6AptUfv1ReGiDTTFDcgWyb0TxyTLhh8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e84ZFONaA5ZPi7C+AabqaK/tr/OISWLE0uiysgtphJOcc+fuEEM3tOfx1XZun9Xgz
+         6SJrJjFuga7QU/XWXd51VhbMNauqOmJ1V2sxNs5KpkZMuG/CaffomsK5LWuHVAySXT
+         3qoUlqWbSwP40h9iWPslRwza6g5VsWDY7/66jD4cnyFAgU8Z480hL3TDqC7oEzV7wi
+         ABhCGtBgsL9XHhBfzcRdC6urNRnRs5TlYHMX533v2bKzMpOXhjfDIl+bJUCSorokIL
+         MknKDYMGN2GtWXc9mULCLXAa3JG6tK5Yo7t9fUFN2elRIA4ZpJbW/4zsvM0mZKOJcu
+         9BeNu0b47IzCQ==
+Date:   Mon, 17 Jan 2022 08:54:42 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: protect access to rawnand devices while
+ in suspend
+Message-ID: <20220117085442.7f19182e@collabora.com>
+In-Reply-To: <20220117074339.ctuaxnetz47j45z4@skn-laptop.hadsten>
+References: <20211220130015.3630975-1-sean@geanix.com>
+        <20220117074339.ctuaxnetz47j45z4@skn-laptop.hadsten>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220115103912.3775-1-slark_xiao@163.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 06:39:12PM +0800, Slark Xiao wrote:
-> For default mechanism, product would use default MRU 3500 if
-> they didn't define it. But for Foxconn SDX55, there is a known
-> issue which MRU 3500 would lead to data connection lost.
-> So we align it with Qualcomm default MRU settings.
+On Mon, 17 Jan 2022 08:43:39 +0100
+Sean Nyekjaer <sean@geanix.com> wrote:
+
+> On Mon, Dec 20, 2021 at 02:00:15PM +0100, Sean Nyekjaer wrote:
+> > Prevent rawnend access while in a suspended state.
+> > 
+> > Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
+> > rawnand layer to return errors rather than waiting in a blocking wait.
+> > 
+> > Tested on a iMX6ULL.
+> > 
+> > Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
+> > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> > ---  
 > 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-
-You need to add Fixes tag so that I can queue this patch for v5.17 RCs.
-
-Thanks,
-Mani
-
-> ---
->  drivers/bus/mhi/pci_generic.c | 1 +
->  1 file changed, 1 insertion(+)
+> Hi Boris and Miquel,
 > 
-> diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-> index 3a258a677df8..74e8fc342cfd 100644
-> --- a/drivers/bus/mhi/pci_generic.c
-> +++ b/drivers/bus/mhi/pci_generic.c
-> @@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
->  	.config = &modem_foxconn_sdx55_config,
->  	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
->  	.dma_data_width = 32,
-> +	.mru_default = 32768,
->  	.sideband_wake = false,
->  };
->  
-> -- 
-> 2.25.1
-> 
+> I know the kernel test robot is complaining a bit about uninitialized
+> values.
+> But is this OK? If I fix the unitialized values?
+
+With the 'uninitialized ret' issue fixed, it looks good to me:
+
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+
+But you probably want to add a Cc:stable tag.

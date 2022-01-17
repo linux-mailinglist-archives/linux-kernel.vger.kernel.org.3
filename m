@@ -2,186 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFCB4901FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8FF490205
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbiAQGb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 01:31:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39093 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231189AbiAQGb5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:31:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642401116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ermpWLzpnf2+eleUkI4QP6TV2e0rXLT1tCR2h6immvo=;
-        b=Dbm3yQlWZTRM22P1PEXwk//n4CfIGWxmQ3Ub+ejKubuPc87saaImL7R3xdW7jtWPu/z0K4
-        Uo7YCZEBCYm06eLBrLAMWJw0zXetm+aehEsVrYDjtEDnvGaaDMywtkjROJXOWNf6QmfI8J
-        wcY3pL6FpMNj1hc5w7UT0b4ub6Y4VhQ=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-374-fGZRJ1eiN4eqHMYhZrQFsg-1; Mon, 17 Jan 2022 01:31:55 -0500
-X-MC-Unique: fGZRJ1eiN4eqHMYhZrQFsg-1
-Received: by mail-pg1-f197.google.com with SMTP id u133-20020a63798b000000b0034c0630b044so2526088pgc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 22:31:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ermpWLzpnf2+eleUkI4QP6TV2e0rXLT1tCR2h6immvo=;
-        b=ZWFUS9c3SGmnsp2lEZuLW5budV4JZrUkzeoEOsNBG8a/cHXNWH4/oYKSJmqvDWrl/9
-         qo55Et66HO6CN2hr9i0bdY0HrkwX97Mx28vdRs042iO9VERv5KHBOo7XV5ejGYXM5BZZ
-         Ya0Bthfu85ZQJI1oRUjPVMkggqCj7cxgj1dITPkz+SirPoE4BZu9aRPy8kd7mWt3GbgD
-         8mKDB0WeJp5RO/MWBsWDbNsz3z2jgVIzgA0EwhjoBo/rr99Wqv0zK6/Awgw6xYVqqcfF
-         vHYUB2kHIYyhi/YGymheKzhaf3jn1Vdm06IrHTvW23B4bu7Wgcy3J9grEqaFpgyTkFRL
-         iTkw==
-X-Gm-Message-State: AOAM532ElYySIeX3T7cJ9Aj35PLDeb9PbOk0/I5BoyKwtxfayfJ0rTbs
-        vgM8DrfmtLmK3TA5TfzKuwhh5PfKJPf1Wy/1FAsOjA1rlZuRrSkvGDpMmqsRvDv3bWPLP9Gh6Z6
-        Dk6Z7KUc3TwJBP9Qdf8pBzUkX
-X-Received: by 2002:a17:902:7d93:b0:14a:bf7b:926d with SMTP id a19-20020a1709027d9300b0014abf7b926dmr2435719plm.22.1642401113986;
-        Sun, 16 Jan 2022 22:31:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzLp3KK5P487dKrJwjLXyn+WyRptyT5BInGR0/0DC3SjMnJck3fOlyrG7lDXwsfJXpGMaMLlA==
-X-Received: by 2002:a17:902:7d93:b0:14a:bf7b:926d with SMTP id a19-20020a1709027d9300b0014abf7b926dmr2435694plm.22.1642401113728;
-        Sun, 16 Jan 2022 22:31:53 -0800 (PST)
-Received: from [10.72.13.251] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id o184sm12743628pfb.90.2022.01.16.22.31.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 22:31:53 -0800 (PST)
-Message-ID: <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
-Date:   Mon, 17 Jan 2022 14:31:49 +0800
+        id S234726AbiAQGgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 01:36:22 -0500
+Received: from marcansoft.com ([212.63.210.85]:51534 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231189AbiAQGgV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 01:36:21 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 3D4D73FA5E;
+        Mon, 17 Jan 2022 06:36:11 +0000 (UTC)
+Subject: Re: [PATCH v2 09/35] brcmfmac: pcie: Perform firmware selection for
+ Apple platforms
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-10-marcan@marcan.st>
+ <0e169c4e-ce51-3592-f114-46cb3cde1f7d@broadcom.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <61e21977-656c-86b1-9005-a9c792fa824b@marcan.st>
+Date:   Mon, 17 Jan 2022 15:36:09 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] virtio: acknowledge all features before access
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        virtualization@lists.linux-foundation.org
-References: <20220114200744.150325-1-mst@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220114200744.150325-1-mst@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <0e169c4e-ce51-3592-f114-46cb3cde1f7d@broadcom.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/01/2022 05.03, Arend van Spriel wrote:
+>> The chip revision nominally comes from OTP on Apple platforms, but it
+>> can be mapped to the PCI revision number, so we ignore the OTP revision
+>> and continue to use the existing PCI revision mechanism to identify chip
+>> revisions, as the driver already does for other chips. Unfortunately,
+>> the mapping is not consistent between different chip types, so this has
+>> to be determined experimentally.
+> 
+> Not sure I understand this. The chip revision comes from the chipcommon 
+> register [1]. Maybe that is what you mean by "PCI revision number". For 
+> some chips it is possible OTP is used to override that.
 
-在 2022/1/15 上午4:09, Michael S. Tsirkin 写道:
-> The feature negotiation was designed in a way that
-> makes it possible for devices to know which config
-> fields will be accessed by drivers.
->
-> This is broken since commit 404123c2db79 ("virtio: allow drivers to
-> validate features") with fallout in at least block and net.
-> We have a partial work-around in commit 2f9a174f918e ("virtio: write
-> back F_VERSION_1 before validate") which at least lets devices
-> find out which format should config space have, but this
-> is a partial fix: guests should not access config space
-> without acknowledging features since otherwise we'll never
-> be able to change the config space format.
->
-> As a side effect, this also reduces the amount of hypervisor accesses -
-> we now only acknowledge features once unless we are clearing any
-> features when validating.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 404123c2db79 ("virtio: allow drivers to validate features")
-> Fixes: 2f9a174f918e ("virtio: write back F_VERSION_1 before validate")
-> Cc: "Halil Pasic" <pasic@linux.ibm.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
->
-> Halil, I thought hard about our situation with transitional and
-> today I finally thought of something I am happy with.
-> Pls let me know what you think. Testing on big endian would
-> also be much appreciated!
->
->   drivers/virtio/virtio.c | 31 +++++++++++++++++--------------
->   1 file changed, 17 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> index d891b0a354b0..2ed6e2451fd8 100644
-> --- a/drivers/virtio/virtio.c
-> +++ b/drivers/virtio/virtio.c
-> @@ -168,12 +168,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
->   
->   static int virtio_finalize_features(struct virtio_device *dev)
->   {
-> -	int ret = dev->config->finalize_features(dev);
->   	unsigned status;
-> +	int ret;
->   
->   	might_sleep();
-> -	if (ret)
-> -		return ret;
->   
->   	ret = arch_has_restricted_virtio_memory_access();
->   	if (ret) {
-> @@ -244,17 +242,6 @@ static int virtio_dev_probe(struct device *_d)
->   		driver_features_legacy = driver_features;
->   	}
->   
-> -	/*
-> -	 * Some devices detect legacy solely via F_VERSION_1. Write
-> -	 * F_VERSION_1 to force LE config space accesses before FEATURES_OK for
-> -	 * these when needed.
-> -	 */
-> -	if (drv->validate && !virtio_legacy_is_little_endian()
-> -			  && device_features & BIT_ULL(VIRTIO_F_VERSION_1)) {
-> -		dev->features = BIT_ULL(VIRTIO_F_VERSION_1);
-> -		dev->config->finalize_features(dev);
-> -	}
-> -
->   	if (device_features & (1ULL << VIRTIO_F_VERSION_1))
->   		dev->features = driver_features & device_features;
->   	else
-> @@ -265,10 +252,22 @@ static int virtio_dev_probe(struct device *_d)
->   		if (device_features & (1ULL << i))
->   			__virtio_set_bit(dev, i);
->   
-> +	err = dev->config->finalize_features(dev);
-> +	if (err)
-> +		goto err;
-> +
->   	if (drv->validate) {
-> +		u64 features = dev->features;
-> +
->   		err = drv->validate(dev);
->   		if (err)
->   			goto err;
-> +
-> +		if (features != dev->features) {
-> +			err = dev->config->finalize_features(dev);
-> +			if (err)
-> +				goto err;
-> +		}
->   	}
->   
->   	err = virtio_finalize_features(dev);
-> @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
->   	/* We have a driver! */
->   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
->   
-> +	ret = dev->config->finalize_features(dev);
-> +	if (ret)
-> +		goto err;
+What I mean is the Apple custom OTP segment stores a textual revision
+number, like "C0". Apple's driver uses this to pick a firmware. There is
+an ad-hoc mapping between this and the numeric revision (which as you
+say is present in chipcommon but AFAICT the same number also ends up as
+the Revision ID in PCI config space).
 
+> 
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>> ---
+>>   .../broadcom/brcm80211/brcmfmac/pcie.c        | 58 ++++++++++++++++++-
+>>   1 file changed, 56 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> index 74c9a4f74813..250e0bd40cb3 100644
+>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> @@ -2094,8 +2094,62 @@ brcmf_pcie_prepare_fw_request(struct brcmf_pciedev_info *devinfo)
+>>   	fwreq->domain_nr = pci_domain_nr(devinfo->pdev->bus) + 1;
+>>   	fwreq->bus_nr = devinfo->pdev->bus->number;
+>>   
+>> -	brcmf_dbg(PCIE, "Board: %s\n", devinfo->settings->board_type);
+>> -	fwreq->board_types[0] = devinfo->settings->board_type;
+>> +	/* Apple platforms with fancy firmware/NVRAM selection */
+>> +	if (devinfo->settings->board_type &&
+>> +	    devinfo->settings->antenna_sku &&
+>> +	    devinfo->otp.valid) {
+>> +		char *buf;
+>> +		int len;
+>> +
+>> +		brcmf_dbg(PCIE, "Apple board: %s\n",
+>> +			  devinfo->settings->board_type);
+> 
+> maybe good to use local reference for devinfo->settings->board_type, 
+> which is used several times below.
 
-Is this part of code related?
+Yup, and also antenna_sku.
 
-Thanks
-
-
-> +
->   	ret = virtio_finalize_features(dev);
->   	if (ret)
->   		goto err;
-
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

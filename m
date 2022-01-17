@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0206D4900BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 05:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E92E4900CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 05:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbiAQEPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 23:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S234265AbiAQEdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 23:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237042AbiAQEPb (ORCPT
+        with ESMTP id S229563AbiAQEdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 23:15:31 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30842C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:15:31 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id r15so28269269uao.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:15:31 -0800 (PST)
+        Sun, 16 Jan 2022 23:33:46 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2CFC06161C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:33:45 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id 30so60369512edv.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:33:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jrz0bdG4iCzX8XfyvV8meTCqb9+YcvxN13g6lpUSlzE=;
-        b=d9ldkTPNkSTz+T7svFprrBD1WZjllUGXGOADq/pmke0uEIsS9A1I66kyYKB2PGT5AJ
-         uehCo2noX7bRZiaDd2j3mj5hnmGGbvVNom1pX5EFrIIR59PuDeHFoVKiMn8bG5rzpWJv
-         s/xfOS8Xobhmh5qj/ra8DWsDlD5e1w8onpISUoE5z+mbHpiOOZwkee8JPXnpXzJCGq/D
-         bs7KgYM+YPltmwI+2G2QY9o7SO6Alf1ZB/YYkOFh6wZowlB75q+dt5ZH8qI8iJ6xJSd3
-         9QY5gZ6biIgqWjamqsC8AapsfmV5cWqshxpmJMEOGV0PBkCOlzphuLf65T8psyVN4Zlo
-         WbTQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7jrKjyT1kUm6YgYqjVjGNp13+22Ic721iKzftS1kH20=;
+        b=JHCBzpxZO0qDrU3BMMl1rhqj69ppdwRjuS+PkPO9ZkTDdHFBPcx/CtuYLr3cXB6HYx
+         pm0L+DGXBsrNR41zE5UgmfDxVI8wvQo8NUJ4yGog5vvaO5AeuJ9ZKbwTVKVdokvQda0Q
+         9ke31ZMGpJy9T9e4TAO8pxV8x5sJTk+wdB15Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=Jrz0bdG4iCzX8XfyvV8meTCqb9+YcvxN13g6lpUSlzE=;
-        b=a6Nn1ytp5w3ef2fCJz1fU9EYvsxRD0rBbCBj82VImnw13VyBx+laNIlYADhevKAGT2
-         S8rJycjbOrlNxaei8La6nXM2Oq2rEKIuHEi/P4nCYeRU4UZfQa+7Dbijks4yRBDMgAtG
-         QZqbmeOVH+SG1pBEvIDMyqM0EPwy+lfw7fywErwgY+v7a6IE+dynezA9FYylNOVVWm5I
-         L6REP0Nv2OywqFYZS4s2fba1ljTxzgBnsbC6LgJklkDiM/kI5rHHj/NFNXa27QSPwduT
-         HQWQMk2TxqeaqvW3lC9wUZCavD8QeRq3fYC3qHy9wA7A/D5pUv92nNfPLY5f3BL2q8Nm
-         Aazw==
-X-Gm-Message-State: AOAM533sJrZIkaFot03U+i62VaRXZR9xHNRYAdmqEI34DuGVU5lwioDM
-        /tWDJOzxDp015voGkvLOoTI=
-X-Google-Smtp-Source: ABdhPJz4KANYV21BxWjGA0rg4pA9/Ui5A7Fywh8jZw1U7X/Id8un1fH3f2ZOuxMr8eC/L8It5ekOrA==
-X-Received: by 2002:ab0:5a46:: with SMTP id m6mr6835835uad.104.1642392930274;
-        Sun, 16 Jan 2022 20:15:30 -0800 (PST)
-Received: from kubuntu-desktop.. ([67.8.38.84])
-        by smtp.gmail.com with ESMTPSA id x75sm3708463vkc.36.2022.01.16.20.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 20:15:29 -0800 (PST)
-Sender: Julian Braha <julian.braha@gmail.com>
-From:   Julian Braha <julianbraha@gmail.com>
-To:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, Vijendar.Mukunda@amd.com, AjitKumar.Pandey@amd.com,
-        pierre-louis.bossart@linux.intel.com, kai.vehmanen@linux.intel.com,
-        tanureal@opensource.cirrus.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        fazilyildiran@gmail.com
-Subject: [PATCH] ASoC: amd: fix unmet dependency on GPIOLIB for SND_SOC_DMIC
-Date:   Sun, 16 Jan 2022 23:15:28 -0500
-Message-Id: <20220117041528.59958-1-julianbraha@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7jrKjyT1kUm6YgYqjVjGNp13+22Ic721iKzftS1kH20=;
+        b=FF+0hiUu5gT4D0SKkYtizOo85hbwGjWWcYnmKGMPAqYYMZoyEROwL+dGbYsBAGZfKr
+         28+fcAG0hzgpBRbGA7yDG13h02UXTRR8pYxDkYH09Q1pvYgdN0RUYfH9tmX7T7OaaYTU
+         YL8+rxYcfSLUBTwZGwj9VdK54Md9iQy7YcyWb/SgK04tw1t6bYj3mYajq0ZGg7PybHTV
+         p5xMvjPmzMDKyUfzhkz1Qh39zFWNBVEBD8VrUfpIQRh/uULLGKzAk1hVqR+ua8AEZgEk
+         sF2mkyzOg0iMVSMn0Mwk4Pv44eSmqv3Sow8DR2aGpwoohyy33HkMq2cgYykIjE65tPVS
+         WrTQ==
+X-Gm-Message-State: AOAM530FfRcmb2ZaCyc6JdRH8uZJk2WIt167lzdQMMk0rbrrtRPgv3tE
+        AYjWhNkiX0ozFemdSvS8cD16MZw9JZUeX2wz
+X-Google-Smtp-Source: ABdhPJzYiO/OUV5RQN5msBFHQi45z4fjwAJnO0WasyLu4IT7nZy+j1wPJuD/pua0Z+NtqCj841qTbw==
+X-Received: by 2002:a17:907:6d9b:: with SMTP id sb27mr13496682ejc.222.1642394023918;
+        Sun, 16 Jan 2022 20:33:43 -0800 (PST)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id q19sm1722753ejt.198.2022.01.16.20.33.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 20:33:42 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id r82-20020a1c4455000000b0034cd1acd9b5so273453wma.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 20:33:42 -0800 (PST)
+X-Received: by 2002:a05:600c:2253:: with SMTP id a19mr4527780wmm.8.1642394022326;
+ Sun, 16 Jan 2022 20:33:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <YeRyfaesC2kxkgZC@ls3530>
+In-Reply-To: <YeRyfaesC2kxkgZC@ls3530>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 17 Jan 2022 06:33:26 +0200
+X-Gmail-Original-Message-ID: <CAHk-=whE5gmEKLt+rtEn2MV=BN8p+QTU56VaPdSD_kmxkx7smQ@mail.gmail.com>
+Message-ID: <CAHk-=whE5gmEKLt+rtEn2MV=BN8p+QTU56VaPdSD_kmxkx7smQ@mail.gmail.com>
+Subject: Re: [GIT PULL] fbdev updates for v5.17-rc1
+To:     Helge Deller <deller@gmx.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When SND_SOC_AMD_YC_MACH is selected,
-and GPIOLIB is not selected,
-Kbuild gives the following warning:
+On Sun, Jan 16, 2022 at 9:32 PM Helge Deller <deller@gmx.de> wrote:
+>
+> This pull request contains only one single initial patch which adds
+> myself to the MAINTAINERS file for the FRAMBUFFER LAYER.
 
-WARNING: unmet direct dependencies detected for SND_SOC_DMIC
-  Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && GPIOLIB [=n]
-  Selected by [y]:
-  - SND_SOC_AMD_YC_MACH [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_AMD_ACP6x [=y]
+I'll pull this (as my test builds for other things complete), but this
+is just a note to say that this pull request email was marked as spam
+for me, with gmail saying something along the lines of "lots of emails
+from gmx.de have been marked as spam"
 
-This is because SND_SOC_AMD_YC_MACH selects SND_SOC_DMIC,
-without selecting or depending on GPIOLIB, despite
-SND_SOC_DMIC depending on GPIOLIB.
+I see nothing odd in the email itself, and it has proper SPF and DKIM,
+but it's possible that you end up sharing a subnet (or an ISP) with
+spammers...
 
-This unmet dependency bug was detected by Kismet,
-a static analysis tool for Kconfig. Please advise
-if this is not the appropriate solution.
+Or maybe it was a random one-off. We'll see. I check spam filters
+enough that I _usually_ tend to catch these things.
 
-Signed-off-by: Julian Braha <julianbraha@gmail.com>
----
- sound/soc/amd/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-index 7a9e45094f37..4aa067c5f054 100644
---- a/sound/soc/amd/Kconfig
-+++ b/sound/soc/amd/Kconfig
-@@ -88,7 +88,7 @@ config SND_SOC_AMD_ACP6x
- config SND_SOC_AMD_YC_MACH
- 	tristate "AMD YC support for DMIC"
- 	select SND_SOC_DMIC
--	depends on SND_SOC_AMD_ACP6x
-+	depends on SND_SOC_AMD_ACP6x && GPIOLIB
- 	help
- 	  This option enables machine driver for Yellow Carp platform
- 	  using dmic. ACP IP has PDM Decoder block with DMA controller.
--- 
-2.32.0
-
+                Linus

@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE8A49055F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3FE490562
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236003AbiAQJra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:47:30 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4415 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiAQJr2 (ORCPT
+        id S236072AbiAQJsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236027AbiAQJsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:47:28 -0500
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JcnBC5TTSz67jnf;
-        Mon, 17 Jan 2022 17:47:15 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 10:47:26 +0100
-Received: from localhost (10.47.77.46) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Mon, 17 Jan
- 2022 09:47:25 +0000
-Date:   Mon, 17 Jan 2022 09:47:28 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-CC:     Alim Akhtar <alim.akhtar@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <olof@lixom.net>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <robh+dt@kernel.org>,
-        <s.nawrocki@samsung.com>, <linux-samsung-soc@vger.kernel.org>,
-        <pankaj.dubey@samsung.com>, <linux-fsd@tesla.com>,
-        Tamseel Shams <m.shams@samsung.com>
-Subject: Re: [PATCH 20/23] dt-bindings: iio: adc: exynos-adc: Add ADC-V3
- variant
-Message-ID: <20220117094728.000051b8@Huawei.com>
-In-Reply-To: <75ae8b8c-e416-5007-b995-f1317ef207d4@canonical.com>
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122447epcas5p266d44c8df143229d22dfa700c285a786@epcas5p2.samsung.com>
-        <20220113121143.22280-21-alim.akhtar@samsung.com>
-        <75ae8b8c-e416-5007-b995-f1317ef207d4@canonical.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 17 Jan 2022 04:48:06 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA9C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:48:05 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id u21so63065345edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:48:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Hvs7wdHNk9d6evPXMTRPHKlvNS1pd2jeBhpDZL4yqgM=;
+        b=j2eUcRSqjv8rz+GGyoypRLAiAp5ByKbji3UGDPaismYVEFznjzB0AqxcwnFSnIa5XG
+         b0cBStOP4jQD2Zw/3wYoPLGO+9ULjkL+mz7s1pp8yfHTSVx67v6T6OxrVIq6AbOZHk2L
+         j7v7/kvJC9ch+PZ4wTRPp0dRN2QdlGFNNfhcM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=Hvs7wdHNk9d6evPXMTRPHKlvNS1pd2jeBhpDZL4yqgM=;
+        b=RmyqNbDKy1vVJA5wNL2A7kBhuiB33RrPlJjb4u1TPW4IzV37NGKN7b8ZkEt47Cvi1J
+         c+J8pNJh0DYJ45XjuBnbdTT57R3t1MPd6640XT43mlerovyLR+H4+7Yx36MjVReUIZUo
+         veLGI2w/uwa3sBN04px7cKGIYkFWeA+MdjhvEkutOg4uSkp+qfTCIBQfKw0EjW8dzsmy
+         XxVonGryttM0CTRsiRdE2D0QbH+Xitv0F6HtB4ZVm5B376F2qLjKcMIpz0UdxMruTYeH
+         vTsJFkgS1DyTvpL1l8VWHoZQtnhFRNip/Wsf9AwehH8NqtVllZATCV2/8Bj4kkcdySnV
+         Dwpw==
+X-Gm-Message-State: AOAM531XRjxvOf2XdIcJxfOGWPqvcu9vn/3dzFle/qsP49qGOsjG3vr4
+        dMhiDa0CG0EWQSGR9ZYpcBM8ZoZKuUBiXg==
+X-Google-Smtp-Source: ABdhPJzgzyXyFgTeax+VBjmTswOv7LJ3YOfVs1bNjMWWzVqPATfGKipEN5KgjwU4FLcDhpQ8YuNBeA==
+X-Received: by 2002:a17:907:3e07:: with SMTP id hp7mr7400211ejc.469.1642412883687;
+        Mon, 17 Jan 2022 01:48:03 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id p4sm2887048ejl.78.2022.01.17.01.48.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 01:48:03 -0800 (PST)
+Date:   Mon, 17 Jan 2022 10:48:01 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Helge Deller <deller@gmx.de>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Message-ID: <CAKMK7uFnhK7pnfiMzz-UY1UYv3WG=sVOCe24bz0xROhQOxY+eA@mail.gmail.com>
+Mail-Followup-To: Helge Deller <deller@gmx.de>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <YeG8ydoJNWWkGrTb@ls3530>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.77.46]
-X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeG8ydoJNWWkGrTb@ls3530>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 14:32:12 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+Hi Helge
 
-> On 13/01/2022 13:11, Alim Akhtar wrote:
-> > This patch adds a new compatible string for exynos's ADC-V3 variant.
-> > 
-> > Cc: linux-fsd@tesla.com
-> > Signed-off-by: Tamseel Shams <m.shams@samsung.com>
-> > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
+>
+> The fbdev layer is orphaned, but seems to need some care.
+> So I'd like to step up as new maintainer.
+>
+> Signed-off-by: Helge Deller <deller@gmx.de>
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5d0cd537803a..ce47dbc467cc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/emulator/index.html
+>  F:     arch/x86/math-emu/
+>
+>  FRAMEBUFFER LAYER
+> -L:     dri-devel@lists.freedesktop.org
+> +M:     Helge Deller <deller@gmx.de>
+>  L:     linux-fbdev@vger.kernel.org
+> -S:     Orphan
+> +L:     dri-devel@lists.freedesktop.org
+> +S:     Maintained
+>  Q:     http://patchwork.kernel.org/project/linux-fbdev/list/
+> -T:     git git://anongit.freedesktop.org/drm/drm-misc
+> +T:     git git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
 
-Please cc linux-iio@vger.kernel.org for next version...
+Maybe don't rush maintainer changes in over the w/e without even bothering
+to get any input from the people who've been maintaining it before.
 
-> > ---
-> >  .../devicetree/bindings/iio/adc/samsung,exynos-adc.yaml          | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> > index 81c87295912c..9303053759ca 100644
-> > --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> > +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> > @@ -14,6 +14,7 @@ properties:
-> >      enum:
-> >        - samsung,exynos-adc-v1                 # Exynos5250
-> >        - samsung,exynos-adc-v2
-> > +      - samsung,exynos-adc-v3  
-> 
-> Please use SoC-specific compatible. IP block versions are tricky because:
-> 1. Documentation/datasheet mentioning which SoC has which block version
-> are not public.
-> 2. Neither are public the datasheets for ADC blocks.
-> 3. The versioning of IP blocks can be inaccurate.
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Because the status isn't entirely correct, fbdev core code and fbcon and
+all that has been maintained, but in bugfixes only mode. And there's very
+solid&important reasons to keep merging these patches through a drm tree,
+because that's where all the driver development happens, and hence also
+all the testing (e.g. the drm test suite has some fbdev tests - the only
+automated ones that exist to my knowledge - and we run them in CI). So
+moving that into an obscure new tree which isn't even in linux-next yet is
+no good at all.
 
+Now fbdev driver bugfixes is indeed practically orphaned and I very much
+welcome anyone stepping up for that, but the simplest approach there would
+be to just get drm-misc commit rights and push the oddball bugfix in there
+directly. But also if you want to do your own pull requests to Linus for
+that I don't care and there's really no interference, so whatever floats.
+
+But any code that is relevant for drm drivers really needs to in through
+drm trees, nothing else makes much sense.
+
+I guess you're first action as newly minted maintainer is going to be to
+clean up the confusion you just created.
+
+Cheers, Daniel
+
+>  F:     Documentation/fb/
+>  F:     drivers/video/
+>  F:     include/linux/fb.h
+
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

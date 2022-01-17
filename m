@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC4B490FD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D822490FDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241137AbiAQRpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:45:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41690 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235374AbiAQRpm (ORCPT
+        id S241327AbiAQRso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237954AbiAQRsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:45:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642441542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g4GDA0IUvWhhcky7T0HTZUXu5KWeN95yhvrj+pk935s=;
-        b=SQpRF2pYlK4kQ4w9Gkg7l2e7f2tPVfY4MPMFc4m4W8TgidhehfwhzUZ6w8hhMwWeFOI5yZ
-        D6TPPy4uU+QDynWYxQm3s93n3Vo2kNscg1qCA/jEOXhpn0KRMltS+yof86coLiEJVRxefa
-        2Wnii5T4ZT0rGcbB6wSNOgECde/Iot4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-9SV0cg8SNOC7Xam8F3SPyA-1; Mon, 17 Jan 2022 12:45:40 -0500
-X-MC-Unique: 9SV0cg8SNOC7Xam8F3SPyA-1
-Received: by mail-wm1-f71.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso293846wmb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:45:40 -0800 (PST)
+        Mon, 17 Jan 2022 12:48:43 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644CBC061574;
+        Mon, 17 Jan 2022 09:48:42 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id b13so69022334edn.0;
+        Mon, 17 Jan 2022 09:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lOU3pr5yfa0z0mv7uHkVulXBdRCWTTF3cmfmVLsfcOc=;
+        b=fzqGIJMUPblqrzxjAw33Ffqrwo8GQ0sbibYBH0a9FMdyoVec4BChUAw+C6tMHqxSHt
+         WDjVDuQG8VPVYywCb4aGn3oC8ODugmgHmdihlvPamuSaZ0cokYFKVe+6NQ1/1Oeu/if4
+         Zx2nJBW8N/Ld/jZuHCbeGOj3tpYVOoBAKyDU0mLYrRA3YfEVXx5RUZn4JU7Bp+XOSPdb
+         W2L5raJUqAjo4HngBm7tBIH+onx5zJzagVys+WOAY73PQRgUOBRa0U8mAgAuW2Am2XDY
+         PpMUDw16/kbpOnyc4AiIt8yowq0pmbtqjoRMMETXIIEdu1en/M2Et+ChCSz9drU0rwXG
+         DNzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g4GDA0IUvWhhcky7T0HTZUXu5KWeN95yhvrj+pk935s=;
-        b=CvQWL7JQKTNaiKr/OaG/E/kEAzBQeZcogcBvhrcx9Oza3mVn0kglw1CclCUGvPjOEq
-         RPOTQyNmeymMwoiiJ/kiwYH8u3nuB7WvYDhJhohVlQpezqMPfIfOZdO2n2gwasJ3fsF+
-         bh1+WGl3eD9DKLJSRrQVII0YA/7N6KD2K/QRvctOV1sM7K71bkAbg9V4Phk+v20I8HWD
-         k81u+i7+aYWTA6+HWAX/72Igdm1VAQ5/NxnCipqFD3c0VSImDmjI/dZEj69otKiKJalC
-         n6KZDuCE8MlYToA6EoqwaEEZ7fFebfx3usx04jMksiqCI5O0ajLhEcGnji9WrNYS0aQ+
-         b56Q==
-X-Gm-Message-State: AOAM530799NbbV7E/5MfdIv5Bzo2Q3tMLUvDf8eDzSdyeqHeMPhSbjEO
-        ZXH7RwOcsxuMBG+Hq4somunTFSEyqbJ9HsLJZQNdMOLA3HwcSxNSd+78AGtleD5AHwuS9bmwI1F
-        oEdm4+V+gHj26kaQjXavBBnlL
-X-Received: by 2002:adf:d0ce:: with SMTP id z14mr19867266wrh.48.1642441539524;
-        Mon, 17 Jan 2022 09:45:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwgkvq3SKcG5Ln75eIGYRH0iLxGvcr0OxQQNkLYP5yKBD5lv8kPaNE8lD0JUnmC89kdC/2UXQ==
-X-Received: by 2002:adf:d0ce:: with SMTP id z14mr19867254wrh.48.1642441539309;
-        Mon, 17 Jan 2022 09:45:39 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r15sm40119wmq.3.2022.01.17.09.45.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 09:45:38 -0800 (PST)
-Message-ID: <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
-Date:   Mon, 17 Jan 2022 18:45:36 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lOU3pr5yfa0z0mv7uHkVulXBdRCWTTF3cmfmVLsfcOc=;
+        b=gD5/8u58yqfGIOyLHm5AxX1kvrRlTN0SJfSlKwyoo6rdWA0ZonGftKgciDJJGpwPK0
+         7iBMmonzQSC+paufcBzJ8uCKSFBPee3QdN3ska3B+vfiOxqaZCrCVxdJ1UGxLW0yRjh7
+         LHs5yr9bIGaa8ysHDCfXT/Fj9lPY5oJCf+8B//Ac9Om60ulTShq+7PvPQGxiqP0M6h1q
+         fYKmGM+76z50LGukWJoH4L/YN6lNlgCzBm6h6vsK3V64V2PZG5UCyZDbeyoEaphx45ek
+         t7CaqjdPPHrJVzinqqmeLJFHYWUBHdpZ0tktMyxEa+iQxf3ksPbK/NS1ryOC3Vg+cDAT
+         KoBg==
+X-Gm-Message-State: AOAM5330XsOj2J7ufvzGSfxJQhFFS2EH+u70vnLHNblfcaer/porNOFU
+        2PHDevgMQBDD2NDvPv/WKHUxBTTzkV4UT5DiFAs=
+X-Google-Smtp-Source: ABdhPJxgACcFgbsJOGLEl1dGwIFoAAsPkFHuLnCSx4EtJIuHxSphQJRCkiR0qUqGim1saDLm7gX7qE/y8trHqorq7mE=
+X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr7002466edc.29.1642441720972;
+ Mon, 17 Jan 2022 09:48:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
-        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
-        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
-        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
-        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
- <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
- <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
- <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
- <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
- <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220114234825.110502-1-martin.blumenstingl@googlemail.com>
+ <20220114234825.110502-2-martin.blumenstingl@googlemail.com> <87k0eysgs9.fsf@kernel.org>
+In-Reply-To: <87k0eysgs9.fsf@kernel.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 17 Jan 2022 18:48:30 +0100
+Message-ID: <CAFBinCCnvO-CjjzSr0wkv6d-nin2Wa=GUbMMoUh02KD5aQWFoQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] rtw88: pci: Change type of rtw_hw_queue_mapping() and
+ ac_to_hwq to enum
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pkshih <pkshih@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22 16:19, Mark Rutland wrote:
-> I also think there is another issue here. When an IRQ is taken from SIE, will
-> user_mode(regs) always be false, or could it be true if the guest userspace is
-> running? If it can be true I think tha context tracking checks can complain,
-> and it*might*  be possible to trigger a panic().
+Hi Kalle,
 
-I think that it would be false, because the guest PSW is in the SIE 
-block and switched on SIE entry and exit, but I might be incorrect.
+On Mon, Jan 17, 2022 at 1:11 PM Kalle Valo <kvalo@kernel.org> wrote:
+[...]
+> > -static u8 ac_to_hwq[] = {
+> > +static enum rtw_tx_queue_type ac_to_hwq[] = {
+> >       [IEEE80211_AC_VO] = RTW_TX_QUEUE_VO,
+> >       [IEEE80211_AC_VI] = RTW_TX_QUEUE_VI,
+> >       [IEEE80211_AC_BE] = RTW_TX_QUEUE_BE,
+>
+> Shouldn't ac_to_hwq be static const?
+Good point, thanks for this suggestion!
+I will include that in v2 of this series (which I will send in a few
+days so others can share their thoughts about these patches as well).
 
-Paolo
 
-> In irqentry_enter(), if user_mode(regs) == true, we call
-> irqentry_enter_from_user_mode -> __enter_from_user_mode(). There we check that
-> the context is CONTEXT_USER, but IIUC that will be CONTEXT_GUEST at this point.
-> We also call arch_check_user_regs(), and IIUC this might permit a malicious
-> guest to trigger a host panic by way of debug_user_asce(), but I may have
-> misunderstood and that might not be possible.
-
+Best regards,
+Martin

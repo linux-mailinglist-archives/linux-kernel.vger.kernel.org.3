@@ -2,137 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A108449063F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B23490642
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238756AbiAQKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:49:59 -0500
-Received: from mga14.intel.com ([192.55.52.115]:29944 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231277AbiAQKt6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:49:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642416598; x=1673952598;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=+F3cr2LC9C2ZI7Rd8QEaWqzsRs3Pay43Ar9tUq2gZg8=;
-  b=du/2Bu+HOsxISVEc2SZWEqB27NjdOuOGd27FuJvqPvpSyev4P4BDX/Oc
-   xoFO6eA6tbv1V6x992+mxUBE+nv6OVIV6Y1WV/6Ow6zD/lLehW7cCQaso
-   U1WTHBS4KWB5gJ0466NqvI/aX9KTjDj/OSMLp9AyQldZPDZbsSqsc2//L
-   kscHoztU6jsx/yrWyVJbcgpUBkM56ghyO2rSyV69gxLDGxRBusUB1+8yi
-   x9MzI5704KGd8LUrY17Ioagjn5yzLSTS+I4Cu1O8vfzGuvHj3F/U8PWaj
-   IjwaYnAv499gSnvjWwJ5bJTxYIVeYyM9oHm6/1J9DxRuWOctqEK8JV9lk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244797820"
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="244797820"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:49:58 -0800
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="476605640"
-Received: from nsilva2-mobl1.amr.corp.intel.com (HELO localhost) ([10.252.2.18])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:49:54 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-In-Reply-To: <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
-Date:   Mon, 17 Jan 2022 12:49:45 +0200
-Message-ID: <87o84a63hy.fsf@intel.com>
+        id S238767AbiAQKuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231277AbiAQKuj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 05:50:39 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA264C061574;
+        Mon, 17 Jan 2022 02:50:38 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 65E1A1F42063
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642416637;
+        bh=ptiEFjXjhoBJsX0S13oN/2lvPYOFqtq8gyPRviCgm60=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=FAEGTZraxddVLjoujpmzgnSd9KLr7FjNwLAV+yAVPuClpARIKHBMsOh88ehA+L2wh
+         dHlXJJveXAvt4RLAPcPesyOeKew9lEp/oDUV0pszTBhSMFiER5h8AMZGEHknf3MXQk
+         9VOHG91RQaO2i2UxtGbs3Xgv81febwN8b0fDsv6prWFwpXeui1I9/WMjV1297JlSCB
+         7bzZCVCJtbPgHaWrq9jOZorTTJOR+aB3kC35KYpNa/DDa7Bzk1J/PCfguV3EvJoLu/
+         GF4FVoxZHbBFs4vKcVBW0k8ezmHPmQdEFlt6vVi7sHs7rH681frfna3h58rqpt//BA
+         sGLUXDUSXr8kw==
+Subject: Re: [PATCH 3/3] mmc: mediatek: add support for SDIO eint IRQ
+To:     Axe Yang <axe.yang@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Yong Mao <yong.mao@mediatek.com>
+References: <20220117071220.17330-1-axe.yang@mediatek.com>
+ <20220117071220.17330-4-axe.yang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <754779eb-71f9-2083-a204-1d98b4a04a08@collabora.com>
+Date:   Mon, 17 Jan 2022 11:50:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20220117071220.17330-4-axe.yang@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022, Daniel Vetter <daniel@ffwll.ch> wrote:
-> Hi Helge
->
-> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
->>
->> The fbdev layer is orphaned, but seems to need some care.
->> So I'd like to step up as new maintainer.
->>
->> Signed-off-by: Helge Deller <deller@gmx.de>
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5d0cd537803a..ce47dbc467cc 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/emulator/index.html
->>  F:     arch/x86/math-emu/
->>
->>  FRAMEBUFFER LAYER
->> -L:     dri-devel@lists.freedesktop.org
->> +M:     Helge Deller <deller@gmx.de>
->>  L:     linux-fbdev@vger.kernel.org
->> -S:     Orphan
->
-> Maybe don't rush maintainer changes in over the w/e without even bothering
-> to get any input from the people who've been maintaining it before.
->
-> Because the status isn't entirely correct, fbdev core code and fbcon and
-> all that has been maintained, but in bugfixes only mode. And there's very
-> solid&important reasons to keep merging these patches through a drm tree,
-> because that's where all the driver development happens, and hence also
-> all the testing (e.g. the drm test suite has some fbdev tests - the only
-> automated ones that exist to my knowledge - and we run them in CI). So
-> moving that into an obscure new tree which isn't even in linux-next yet is
-> no good at all.
->
-> Now fbdev driver bugfixes is indeed practically orphaned and I very much
-> welcome anyone stepping up for that, but the simplest approach there would
-> be to just get drm-misc commit rights and push the oddball bugfix in there
-> directly. But also if you want to do your own pull requests to Linus for
-> that I don't care and there's really no interference I think, so
-> whatever floats.
->
-> But any code that is relevant for drm drivers really needs to go in through
-> drm trees, nothing else makes much sense.
->
-> I guess you're first action as newly minted fbdev maintainer is going to be to
-> clean up the confusion you just created.
+Il 17/01/22 08:12, Axe Yang ha scritto:
+> Add support for eint IRQ when MSDC is used as an SDIO host. This
+> feature requires SDIO device support async IRQ function. With this
+> feature, SDIO host can be awakened by SDIO card in suspend state,
+> without additional pin.
+> 
+> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+> resume, switch GPIO function back to DAT1 mode then turn on clock.
+> 
+> Some device tree property should be added or modified in MSDC node
+> to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
+> are mandatory. And cap-sdio-async-irq flag is necessary since this
+> feature depends on asynchronous interrupt:
+>          &mmcX {
+>                  ...
+>                  pinctrl-names = "default", "state_uhs", "state_eint",
+>                                  "state_dat1";
+>                  ...
+>                  pinctrl-2 = <&mmc2_pins_eint>;
+>                  pinctrl-3 = <&mmc2_pins_dat1>;
+>                  ...
+>                  cap-sdio-async-irq;
+>                  ...
+>          };
+> 
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+> ---
+>   drivers/mmc/host/mtk-sd.c | 125 +++++++++++++++++++++++++++++++++++---
+>   1 file changed, 117 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index 65037e1d7723..cbdbcce99fd9 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -1,6 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /*
+> - * Copyright (c) 2014-2015 MediaTek Inc.
+> + * Copyright (c) 2022 MediaTek Inc.
+>    * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
+>    */
+>   
+> @@ -9,6 +9,7 @@
+>   #include <linux/clk.h>
+>   #include <linux/delay.h>
+>   #include <linux/dma-mapping.h>
+> +#include <linux/gpio/consumer.h>
+>   #include <linux/iopoll.h>
+>   #include <linux/ioport.h>
+>   #include <linux/irq.h>
+> @@ -440,8 +441,12 @@ struct msdc_host {
+>   	struct pinctrl *pinctrl;
+>   	struct pinctrl_state *pins_default;
+>   	struct pinctrl_state *pins_uhs;
+> +	struct pinctrl_state *pins_eint;
+> +	struct pinctrl_state *pins_dat1;
+>   	struct delayed_work req_timeout;
+>   	int irq;		/* host interrupt */
+> +	int eint_irq;		/* device interrupt */
+> +	int sdio_irq_cnt;	/* irq enable cnt */
+>   	struct reset_control *reset;
+>   
+>   	struct clk *src_clk;	/* msdc source clock */
+> @@ -465,6 +470,7 @@ struct msdc_host {
+>   	bool hs400_tuning;	/* hs400 mode online tuning */
+>   	bool internal_cd;	/* Use internal card-detect logic */
+>   	bool cqhci;		/* support eMMC hw cmdq */
+> +	bool sdio_eint_ready;	/* Ready to support SDIO eint interrupt */
+>   	struct msdc_save_para save_para; /* used when gate HCLK */
+>   	struct msdc_tune_para def_tune_para; /* default tune setting */
+>   	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+> @@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
+>   	__msdc_enable_sdio_irq(host, enb);
+>   	spin_unlock_irqrestore(&host->lock, flags);
+>   
+> -	if (enb)
+> -		pm_runtime_get_noresume(host->dev);
+> -	else
+> -		pm_runtime_put_noidle(host->dev);
+> +	if (mmc->card && !mmc->card->cccr.enable_async_irq) {
+> +		if (enb)
+> +			pm_runtime_get_noresume(host->dev);
+> +		else
+> +			pm_runtime_put_noidle(host->dev);
+> +	}
+>   }
+>   
+>   static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
+> @@ -2461,6 +2469,50 @@ static const struct mmc_host_ops mt_msdc_ops = {
+>   	.hw_reset = msdc_hw_reset,
+>   };
+>   
+> +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
+> +{
+> +	struct msdc_host *host = dev_id;
+> +	struct mmc_host *mmc = mmc_from_priv(host);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&host->lock, flags);
+> +	if (likely(host->sdio_irq_cnt > 0)) {
+> +		disable_irq_nosync(host->eint_irq);
+> +		disable_irq_wake(host->eint_irq);
+> +		host->sdio_irq_cnt--;
+> +	}
+> +	spin_unlock_irqrestore(&host->lock, flags);
+> +
+> +	sdio_signal_irq(mmc);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int msdc_request_dat1_eint_irq(struct msdc_host *host)
+> +{
+> +	struct gpio_desc *desc;
+> +	int irq, ret;
+> +
+> +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
+> +	if (IS_ERR(desc))
+> +		return PTR_ERR(desc);
+> +
+> +	ret = gpiod_to_irq(desc);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	irq = ret;
+> +	ret = devm_request_threaded_irq(host->dev, irq, NULL, msdc_sdio_eint_irq,
+> +					IRQF_TRIGGER_LOW | IRQF_ONESHOT | IRQF_NO_AUTOEN,
+> +					"sdio-eint", host);
+> +	if (ret)
+> +		return ret;
+> +
+> +	host->eint_irq = irq;
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct cqhci_host_ops msdc_cmdq_ops = {
+>   	.enable         = msdc_cqe_enable,
+>   	.disable        = msdc_cqe_disable,
+> @@ -2631,6 +2683,23 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>   		goto host_free;
+>   	}
+>   
+> +	if (!(mmc->caps2 & MMC_CAP2_NO_SDIO)) {
 
-As much as I like folks stepping up as maintainers, I've got to say this
-is not a style I appreciate at all.
+Please, also check for the async irq capability here:
 
-Thursday: Object a recent fbdev change [1].
+if (!(mmc->caps2 & MMC_CAP2_NO_SDIO) && (mmc->caps2 & MMC_CAP2_SDIO_ASYNC_IRQ)) {
 
-Friday: Step up as fbdev maintainer, change git tree (this thread) [2].
+...because if we have "state_eint" specified in DT, but we didn't *also* specify
+cap-sdio-async-irq, then clearly we don't want to use this functionality - hence
+it becomes useless to register the interrupt handler for that because we're never
+enabling the CCCR_INTERRUPT_EXT on the card (from drivers/mmc/core/host.c).
 
-Sunday: Send the maintainer change to Linus [3].
+Regards,
+Angelo
 
-Later Sunday: Start reverting the changes objected to on Thursday, with
-no discussion, no acks, no reviews, in the new git tree [4].
+> +		/* Support for SDIO eint irq */
+> +		host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
+> +		if (IS_ERR(host->pins_eint)) {
+> +			dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
+> +		} else {
+> +			host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
+> +			if (IS_ERR(host->pins_dat1)) {
+> +				ret = dev_err_probe(&pdev->dev, PTR_ERR(host->pins_dat1),
+> +						    "Cannot find pinctrl dat1!\n");
+> +				goto host_free;
+> +			}
+> +
+> +			host->sdio_eint_ready = true;
+> +		}
+> +	}
+> +
+>   	msdc_of_property_parse(pdev, host);
+>   
+>   	host->dev = &pdev->dev;
+> @@ -2722,6 +2791,16 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		goto release;
+>   
+> +	if (host->sdio_eint_ready) {
+> +		ret = msdc_request_dat1_eint_irq(host);
+> +		if (ret) {
+> +			dev_err(host->dev, "Failed to register data1 eint irq!\n");
+> +			goto release;
+> +		}
+> +
+> +		pinctrl_select_state(host->pinctrl, host->pins_dat1);
+> +	}
+> +
+>   	pm_runtime_set_active(host->dev);
+>   	pm_runtime_set_autosuspend_delay(host->dev, MTK_MMC_AUTOSUSPEND_DELAY);
+>   	pm_runtime_use_autosuspend(host->dev);
+> @@ -2841,16 +2920,31 @@ static void msdc_restore_reg(struct msdc_host *host)
+>   
+>   static int __maybe_unused msdc_runtime_suspend(struct device *dev)
+>   {
+> +	unsigned long flags;
+>   	struct mmc_host *mmc = dev_get_drvdata(dev);
+>   	struct msdc_host *host = mmc_priv(mmc);
+>   
+>   	msdc_save_reg(host);
+> +
+> +	if (host->sdio_eint_ready) {
+> +		disable_irq(host->irq);
+> +		pinctrl_select_state(host->pinctrl, host->pins_eint);
+> +		spin_lock_irqsave(&host->lock, flags);
+> +		if (host->sdio_irq_cnt == 0) {
+> +			enable_irq(host->eint_irq);
+> +			enable_irq_wake(host->eint_irq);
+> +			host->sdio_irq_cnt++;
+> +		}
+> +		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
+> +		spin_unlock_irqrestore(&host->lock, flags);
+> +	}
+>   	msdc_gate_clock(host);
+>   	return 0;
+>   }
+>   
+>   static int __maybe_unused msdc_runtime_resume(struct device *dev)
+>   {
+> +	unsigned long flags;
+>   	struct mmc_host *mmc = dev_get_drvdata(dev);
+>   	struct msdc_host *host = mmc_priv(mmc);
+>   	int ret;
+> @@ -2860,10 +2954,25 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
+>   		return ret;
+>   
+>   	msdc_restore_reg(host);
+> +
+> +	if (host->sdio_eint_ready) {
+> +		spin_lock_irqsave(&host->lock, flags);
+> +		if (host->sdio_irq_cnt > 0) {
+> +			disable_irq_nosync(host->eint_irq);
+> +			disable_irq_wake(host->eint_irq);
+> +			host->sdio_irq_cnt--;
+> +			sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
+> +		} else {
+> +			sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INTEN_SDIOIRQ);
+> +		}
+> +		spin_unlock_irqrestore(&host->lock, flags);
+> +		pinctrl_select_state(host->pinctrl, host->pins_uhs);
+> +		enable_irq(host->irq);
+> +	}
+>   	return 0;
+>   }
+>   
+> -static int __maybe_unused msdc_suspend(struct device *dev)
+> +static int __maybe_unused msdc_suspend_noirq(struct device *dev)
+>   {
+>   	struct mmc_host *mmc = dev_get_drvdata(dev);
+>   	int ret;
+> @@ -2877,13 +2986,13 @@ static int __maybe_unused msdc_suspend(struct device *dev)
+>   	return pm_runtime_force_suspend(dev);
+>   }
+>   
+> -static int __maybe_unused msdc_resume(struct device *dev)
+> +static int __maybe_unused msdc_resume_noirq(struct device *dev)
+>   {
+>   	return pm_runtime_force_resume(dev);
+>   }
+>   
+>   static const struct dev_pm_ops msdc_dev_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq, msdc_resume_noirq)
+>   	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume, NULL)
+>   };
+>   
+> 
 
-Monday: Continue reverting the changes [5].
 
-I'm heavily in favor of maintainers who are open, transparent,
-collaborative, who seek consensus through discussion, and only put their
-foot down when required.
-
-I really don't like the optics here. I'd expect some pretty good
-explanations.
-
-
-BR,
-Jani.
-
-
-[1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
-[2] https://lore.kernel.org/r/YeG8ydoJNWWkGrTb@ls3530
-[3] https://lore.kernel.org/r/YeRyfaesC2kxkgZC@ls3530
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?h=for-next&id=a8005a65d06cfb89585574d956d80b6e23012caa
-[5] https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?h=for-next&id=9a89eeda722231fd1079dbfab4a9769b4beb868d
-
-
--- 
-Jani Nikula, Intel Open Source Graphics Center

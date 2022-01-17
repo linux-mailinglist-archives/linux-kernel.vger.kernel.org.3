@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D822490FDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA585490FDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241327AbiAQRso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:48:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237954AbiAQRsn (ORCPT
+        id S241497AbiAQRuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:50:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25576 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237954AbiAQRuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:48:43 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644CBC061574;
-        Mon, 17 Jan 2022 09:48:42 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id b13so69022334edn.0;
-        Mon, 17 Jan 2022 09:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lOU3pr5yfa0z0mv7uHkVulXBdRCWTTF3cmfmVLsfcOc=;
-        b=fzqGIJMUPblqrzxjAw33Ffqrwo8GQ0sbibYBH0a9FMdyoVec4BChUAw+C6tMHqxSHt
-         WDjVDuQG8VPVYywCb4aGn3oC8ODugmgHmdihlvPamuSaZ0cokYFKVe+6NQ1/1Oeu/if4
-         Zx2nJBW8N/Ld/jZuHCbeGOj3tpYVOoBAKyDU0mLYrRA3YfEVXx5RUZn4JU7Bp+XOSPdb
-         W2L5raJUqAjo4HngBm7tBIH+onx5zJzagVys+WOAY73PQRgUOBRa0U8mAgAuW2Am2XDY
-         PpMUDw16/kbpOnyc4AiIt8yowq0pmbtqjoRMMETXIIEdu1en/M2Et+ChCSz9drU0rwXG
-         DNzg==
+        Mon, 17 Jan 2022 12:50:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642441821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DHr5F7iVcMk8lV/C6Jf/vXeVh5XGajAE5JpfIYvkqFo=;
+        b=aCxiEz+Y9DKaTESe8+jCqZquZRpFRBM89FfU/IL8lsicHilMdRbbRRUMWyxor4QURo/TdX
+        ltLezOikFifRXMeKRcAqP1aciK0xX3qL5tvUhqDwmpWbMsGikv+yKa69BKV9W6YB0mntFi
+        tPonWC4BsN+bSVKAmj4cHVkgCkHTDIA=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-GtTSPkFoPyC0aPZ6R0PTpQ-1; Mon, 17 Jan 2022 12:50:20 -0500
+X-MC-Unique: GtTSPkFoPyC0aPZ6R0PTpQ-1
+Received: by mail-ot1-f69.google.com with SMTP id v21-20020a05683018d500b00590a3479c4eso6446898ote.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:50:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lOU3pr5yfa0z0mv7uHkVulXBdRCWTTF3cmfmVLsfcOc=;
-        b=gD5/8u58yqfGIOyLHm5AxX1kvrRlTN0SJfSlKwyoo6rdWA0ZonGftKgciDJJGpwPK0
-         7iBMmonzQSC+paufcBzJ8uCKSFBPee3QdN3ska3B+vfiOxqaZCrCVxdJ1UGxLW0yRjh7
-         LHs5yr9bIGaa8ysHDCfXT/Fj9lPY5oJCf+8B//Ac9Om60ulTShq+7PvPQGxiqP0M6h1q
-         fYKmGM+76z50LGukWJoH4L/YN6lNlgCzBm6h6vsK3V64V2PZG5UCyZDbeyoEaphx45ek
-         t7CaqjdPPHrJVzinqqmeLJFHYWUBHdpZ0tktMyxEa+iQxf3ksPbK/NS1ryOC3Vg+cDAT
-         KoBg==
-X-Gm-Message-State: AOAM5330XsOj2J7ufvzGSfxJQhFFS2EH+u70vnLHNblfcaer/porNOFU
-        2PHDevgMQBDD2NDvPv/WKHUxBTTzkV4UT5DiFAs=
-X-Google-Smtp-Source: ABdhPJxgACcFgbsJOGLEl1dGwIFoAAsPkFHuLnCSx4EtJIuHxSphQJRCkiR0qUqGim1saDLm7gX7qE/y8trHqorq7mE=
-X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr7002466edc.29.1642441720972;
- Mon, 17 Jan 2022 09:48:40 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHr5F7iVcMk8lV/C6Jf/vXeVh5XGajAE5JpfIYvkqFo=;
+        b=rWph8LIobiNifNdI4b+Kr+PNLT9DPgjLCVbhwQ4fQ3BBLF03R27Q+PxcimzwIuHb5U
+         p2QUINadVBNDnIAju0swgeR2irN7Xzmp5KulmLmrEp0mB/VQQwHlHNqFdTG8KXoLD5pU
+         jetuNV5QRy9nf7TEUsBKnPCGrQxPpZe7qKdZBh61aPALCyXCxv1sPYNI+Co2RIp1LJv8
+         /YE+unfrz2Ri7idDrwKZf9zdiiKgQdnaES8zt/A/fMPCLVdU5ZBjYAStoX3KFFAy07ss
+         z8vQKKsVL+R+KuEODZ4ZadelDV989yl9mB2hxvGbewLuyQdZgbztMjysBMdJg9lkBIvh
+         o34g==
+X-Gm-Message-State: AOAM531t9BzPzWeaVVJcVhd0kiejkh9k8cowK5ON8dMNR9PHsu0hpRhr
+        GaUQWhGPtld/6fF4tqQZxRaaogDeSkCGMQiqe2/Qb9vQs5U9wvHwNhrVTdfV8bUvd54EqnZrKbC
+        DSvSVh1BLq67USnFxDdkMSQew
+X-Received: by 2002:a05:6830:1d90:: with SMTP id y16mr6129401oti.200.1642441819392;
+        Mon, 17 Jan 2022 09:50:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfoHLT2VluFpbGdw0eAxO840GGJ98frT2HHodEBOu10qfb7mpkIRsg52x+GJUUozW6kA+G8g==
+X-Received: by 2002:a05:6830:1d90:: with SMTP id y16mr6129384oti.200.1642441819220;
+        Mon, 17 Jan 2022 09:50:19 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id v41sm5516771ooi.0.2022.01.17.09.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 09:50:18 -0800 (PST)
+From:   trix@redhat.com
+To:     trond.myklebust@hammerspace.com, anna.schumaker@netapp.com
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] NFS: simplify check for freeing cn_resp
+Date:   Mon, 17 Jan 2022 09:50:10 -0800
+Message-Id: <20220117175010.529161-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <20220114234825.110502-1-martin.blumenstingl@googlemail.com>
- <20220114234825.110502-2-martin.blumenstingl@googlemail.com> <87k0eysgs9.fsf@kernel.org>
-In-Reply-To: <87k0eysgs9.fsf@kernel.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 17 Jan 2022 18:48:30 +0100
-Message-ID: <CAFBinCCnvO-CjjzSr0wkv6d-nin2Wa=GUbMMoUh02KD5aQWFoQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] rtw88: pci: Change type of rtw_hw_queue_mapping() and
- ac_to_hwq to enum
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pkshih <pkshih@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalle,
+From: Tom Rix <trix@redhat.com>
 
-On Mon, Jan 17, 2022 at 1:11 PM Kalle Valo <kvalo@kernel.org> wrote:
-[...]
-> > -static u8 ac_to_hwq[] = {
-> > +static enum rtw_tx_queue_type ac_to_hwq[] = {
-> >       [IEEE80211_AC_VO] = RTW_TX_QUEUE_VO,
-> >       [IEEE80211_AC_VI] = RTW_TX_QUEUE_VI,
-> >       [IEEE80211_AC_BE] = RTW_TX_QUEUE_BE,
->
-> Shouldn't ac_to_hwq be static const?
-Good point, thanks for this suggestion!
-I will include that in v2 of this series (which I will send in a few
-days so others can share their thoughts about these patches as well).
+nfs42_files_from_same_server() is called to check if freeing
+cn_resp is required, just do the free.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+v2: remove if check, just do the free
 
-Best regards,
-Martin
+fs/nfs/nfs4file.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
+index e79ae4cbc395e..ba117592a95b9 100644
+--- a/fs/nfs/nfs4file.c
++++ b/fs/nfs/nfs4file.c
+@@ -180,8 +180,8 @@ static ssize_t __nfs4_copy_file_range(struct file *file_in, loff_t pos_in,
+ 	ret = nfs42_proc_copy(file_in, pos_in, file_out, pos_out, count,
+ 				nss, cnrs, sync);
+ out:
+-	if (!nfs42_files_from_same_server(file_in, file_out))
+-		kfree(cn_resp);
++	kfree(cn_resp);
++
+ 	if (ret == -EAGAIN)
+ 		goto retry;
+ 	return ret;
+-- 
+2.26.3
+

@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 209D8490649
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D0F49064C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238778AbiAQKyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiAQKyu (ORCPT
+        id S238789AbiAQK4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:56:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57918 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229503AbiAQK4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:54:50 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D33C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:54:49 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id f21so6738612eds.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=rXarSKXjLvTr86CMHjdFWEkfCv6OvQ6EIg7MWpF4IVo=;
-        b=GXUcRRfYasjF6RAq55FQUhjbSfEg1mvxvXQJthsfvrY4DIZiDdY1oPlMZXIxU1wOLN
-         aM5OME6v7VibgRzjQ26+/fCfS/2AES7I6lLoCevusUQ9FI2ivH5ejP5VkOi3zHp3cKsV
-         AsxG62w9YAzjCy0J/Mb00uoabielZepbL6FJ/lpRG1kOBfuh889vc4dZY/LwWKqrI/mO
-         snyyLb6Mj8fXohh/uDfgmPDoaBjbW9DuycMg5HlWefQT3dyAUD7bYWvPDoKNcaORmf8H
-         6i29hmZuPRiMTskekNbOuUpoKxN3et2/NcENPdGHoQn9Eh4J/GeVKFfFLYQdv4p+Sw5m
-         25Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=rXarSKXjLvTr86CMHjdFWEkfCv6OvQ6EIg7MWpF4IVo=;
-        b=1FfClFkSPm+oeBp8o4YzsFYEv69yEyquK4jVbQ1y0w/sW0OIhG8FSeJ8aOpG089L3O
-         4T0AAaLH1StAssM39WolBNCzQT2rdDpfwK20g2QEYwLv1YUX9mxxcKG34FZVCId8QJgY
-         S6loIibLtM00b6PQmPt0PQYNg1MVA+jZzXvujC3KPBVAlg6lRvkKF35LmzSmOuH+CqnP
-         P+8TrnpfzthYQahZ/wsqf7r/GvHbyjQW2Ezf6KY8mbS/l68yrhHZWf6/adbxQVVgmAyd
-         9MzARGwSaZY3/ssO5uP+DG5iEGGScxkfpXtkphROesl8s8oX6HahhgIpKrp0od2jinBH
-         Zq/A==
-X-Gm-Message-State: AOAM532N+fSm/S5Ut4gBhJyWf+Ml4zxDIY4juKZVvMBMZZWM9l/zdK/1
-        7EDomr10hfxnVC/2yfPop/MMYcXr3EU0o6RaT6k=
-X-Google-Smtp-Source: ABdhPJxyQdOXlJnCOfQ+CW3dVijalplO4x7hQFRaHNqJvkyOW0mEPX+qcf+4yov30x47yC9HMv6ZyUREcAnNAuPSplo=
-X-Received: by 2002:a17:906:d555:: with SMTP id cr21mr16959719ejc.299.1642416888375;
- Mon, 17 Jan 2022 02:54:48 -0800 (PST)
+        Mon, 17 Jan 2022 05:56:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0964460FE8;
+        Mon, 17 Jan 2022 10:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0F6C36AE7;
+        Mon, 17 Jan 2022 10:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642416971;
+        bh=WyPJvdRmUEPwRoLB14a6aObUcdcSgZBUxYOv6PmK66E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WOJ7Mq1g21hn5lAnuRXnhsSIsJe7Q5UD3AEdAhkk6F0ZFFampyGRfr0J6nI0YITWS
+         TyTRUN59zdVVukOzE2m1aOnE5Yt36n27x3of1zmX1PBxiAcItWc0EZXuwBcAbY6ErW
+         h5HKkIp4EuBiyokFdArbhOt0JZUiKy5XfInxgAOhAHjvtMX94anV8P99Xr+rQ5BZlz
+         ZNdw9+ZF07ybL9svsVxBICN7pLrgz4ilGetxGvwVMEkF0ZbxYY8Ry4/uQXxXshpZwz
+         osrsjQViITL7XNUg+QyMXorCJtUyPqRd2LjkCyoHKrC71MOrBnc0ig/2CXyS7W0+z1
+         AsGYw3vFwHQ1g==
+Date:   Mon, 17 Jan 2022 11:56:07 +0100
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>
+Subject: Re: [PATCH 1/2] iio: imu: st_lsm6dsx: Limit requested watermark
+ value to hwfifo size
+Message-ID: <YeVLRzmUw/U9GRC3@lore-desk>
+References: <20220117102512.31725-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Received: by 2002:a54:2ec1:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 02:54:47
- -0800 (PST)
-Reply-To: ibrahimidewu4@gmail.com
-From:   "Mr. Ibrahim Idewu" <lawal.asim@gmail.com>
-Date:   Mon, 17 Jan 2022 11:54:47 +0100
-Message-ID: <CAH7GpkW472xAtM-qexzUz4XcsFUu7ejkokr+OJX4DspchfCiKw@mail.gmail.com>
-Subject: URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bP2/75p4uu4UIPkj"
+Content-Disposition: inline
+In-Reply-To: <20220117102512.31725-1-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear Friend,
 
-My name is Mr.Ibrahim Idewu. I have decided to seek a confidential
-co-operation  with you in the execution of the deal described
-here-under for our both  mutual benefit and I hope you will keep it a
-top secret because of the nature  of the transaction, During the
-course of our bank year auditing, I discovered  an unclaimed/abandoned
-fund, sum total of {US$19.3 Million United State  Dollars} in the bank
-account that belongs to a Saudi Arabia businessman Who unfortunately
-lost his life and entire family in a Motor Accident.
+--bP2/75p4uu4UIPkj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Now our bank has been waiting for any of the relatives to come-up for
-the claim but nobody has done that. I personally has been unsuccessful
-in locating any of the relatives, now, I sincerely seek your consent
-to present you as the next of kin / Will Beneficiary to the deceased
-so that the proceeds of this account valued at {US$19.3 Million United
-State Dollars} can be paid to you, which we will share in these
-percentages ratio, 60% to me and 40% to you. All I request is your
-utmost sincere co-operation; trust and maximum confidentiality to
-achieve this project successfully. I have carefully mapped out the
-moralities for execution of this transaction under a legitimate
-arrangement to protect you from any breach of the law both in your
-country and here in Burkina Faso when the fund is being transferred to
-your bank account.
+> Instead of returning an error if the watermark value is too high, which
+> the core will silently ignore anyway, limit the value to the hardware
+> FIFO size; a lower-than-requested value is still better than using the
+> default, which is usually 1.
+>=20
 
-I will have to provide all the relevant document that will be
-requested to indicate that you are the rightful beneficiary of this
-legacy and our bank will release the fund to you without any further
-delay, upon your consideration and acceptance of this offer, please
-send me the following information as stated below so we can proceed
-and get this fund transferred to your designated bank account
-immediately.
+Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
 
--Your Full Name:
--Your Contact Address:
--Your direct Mobile telephone Number:
--Your Date of Birth:
--Your occupation:
+> Cc: Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c b/drivers/iio/i=
+mu/st_lsm6dsx/st_lsm6dsx_core.c
+> index 727b4b6ac696..5fd46bf1a11b 100644
+> --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
+> +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
+> @@ -54,6 +54,7 @@
+>  #include <linux/iio/sysfs.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/irq.h>
+> +#include <linux/minmax.h>
+>  #include <linux/pm.h>
+>  #include <linux/property.h>
+>  #include <linux/regmap.h>
+> @@ -1607,8 +1608,7 @@ int st_lsm6dsx_set_watermark(struct iio_dev *iio_de=
+v, unsigned int val)
+>  	struct st_lsm6dsx_hw *hw =3D sensor->hw;
+>  	int err;
+> =20
+> -	if (val < 1 || val > hw->settings->fifo_ops.max_size)
+> -		return -EINVAL;
+> +	val =3D clamp_val(val, 1, hw->settings->fifo_ops.max_size);
+> =20
+>  	mutex_lock(&hw->conf_lock);
+> =20
+> --=20
+> 2.34.1
+>=20
 
-I await your swift response and re-assurance.
+--bP2/75p4uu4UIPkj
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Mr.Ibrahim Idewu.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYeVLRgAKCRA6cBh0uS2t
+rM07AP4nFkyIdNtLaE6ZhYiaSwvF1FlkQJNl3Hsa7eTwNQwWSwD/e6jifcjD2e53
+sQcPYAXSVQEW/aPuHbAoY8i8f/GO8Q4=
+=Gqbr
+-----END PGP SIGNATURE-----
+
+--bP2/75p4uu4UIPkj--

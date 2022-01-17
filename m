@@ -2,245 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A36C14902F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A484902FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbiAQHgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:36:09 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60936
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237558AbiAQHgI (ORCPT
+        id S237580AbiAQHiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:38:10 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46654 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233071AbiAQHiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:36:08 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 79E0B3F1C8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642404959;
-        bh=LzQEUQFhjrXuC3r9u+Skj35mFkTJiuPnDN7KQoYYWN0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=kzcksVTbjDJauOkH1S262Zm3Lim8v8LN8UrLqClkICuuhOTgSzlw3Aov2wIC4cFLR
-         wDYQcXXdz2fxz/xCizjO/UXaFcZtfZ+1kBiksjQH9177SuzWTRbD3z1kmAqrThBOlw
-         ccsAagiiIJnnAHyMt2PA9EkyFIk79BJY06j0o9CrmOWFnyRjPbLaLLZvkOS8kWe0gA
-         e/geLMDAJq2B1TPG6vAHepHWl6wdYtM7hRSx4WFKEctEzk8X3dwOSgo223KJjGwvUF
-         1jKWPOwrb4ITByy4mQPXu/87iAy4Q2kSZCmuV431kSHXTKIYqGQettUkCa7RkFrgdA
-         FeHSs1pcZ5w6w==
-Received: by mail-ed1-f71.google.com with SMTP id c11-20020a056402120b00b0040321cea9d4so271248edw.23
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 23:35:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LzQEUQFhjrXuC3r9u+Skj35mFkTJiuPnDN7KQoYYWN0=;
-        b=j939+HRTEyLpmHCeKcrh685hGJMgqr3buU0j2fWGtXstukbwty+ccU3h381FEiYOlw
-         Ht16dnBF9Ja7pnxoRlQlH6t9APF57yKX5E+aAChcYG+89z5nRu/DshJBetEbbbxgyBnE
-         taxeXb7XwK6nh6iVPSiGBFAvxLCXUWEwHSoxVISxvLscGnTox2SR9ff61WdML+eNhlTD
-         HtDYsVTrMCtsopWocaw0oLo2mYJfK3il2qxdB3N2aJNMXyZZg1k/t7fxDqR+KQOJho/9
-         BXWOlH+9O6aX79Ih00IikaTFfvZtvN/JlDzha16VZKpYmWyWNFogLABNklzyH7jCoYh6
-         2f4w==
-X-Gm-Message-State: AOAM532nwKP+/rnBxsK+wHKe7Rv1fJo/DuP++wRpMb9QIFBxwRl0LSIP
-        HDjMn4uReKfXULdPbBUDn7Ecq5mCZbiVJqaOC2g2EOHtdwNSNL9omy8VQ3DLyIxP3SzzAQrDwjL
-        eYLp/VfgnlQ+LL5hJmWuXY4nZ1GnyhQhyQqXbwMxhzw==
-X-Received: by 2002:a05:6402:195:: with SMTP id r21mr19110294edv.174.1642404959051;
-        Sun, 16 Jan 2022 23:35:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwtW4aKRa07u+PD8YQUUdOj7Pn5EMPQTCrjLxPt5cNsJh/j5t2paT7FHSCYeLH25QctZWxWbA==
-X-Received: by 2002:a05:6402:195:: with SMTP id r21mr19110283edv.174.1642404958877;
-        Sun, 16 Jan 2022 23:35:58 -0800 (PST)
-Received: from [192.168.0.35] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 14sm4091325ejk.215.2022.01.16.23.35.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 23:35:58 -0800 (PST)
-Message-ID: <d9691d32-40f5-14ee-027f-e7d431c94084@canonical.com>
-Date:   Mon, 17 Jan 2022 08:35:57 +0100
+        Mon, 17 Jan 2022 02:38:09 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20GMK1XY032410;
+        Mon, 17 Jan 2022 08:37:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=/SNGdY3EQVSNuahotUyAeXgj55tr+Btw2r79mHMIAqs=;
+ b=1n5+bzmuzkeFRtr/AHIYVezYaItONZpCk3sXbbJCAqqNMboi4El2Yq7X3PgS7AvNb3GU
+ k2yOQ0w8dA1DCssdFBIxlxf0Vip4mftOdyOk5oN1h7kgZcYetaQstLa4Lmo8/+fMnUqf
+ b6m1s8ceQzS9FaJBKYAxHKi7sTlznjkf6B+WCLSeRLN6vdn6vWmRIM+MJnIR+Mum5V9D
+ m88IEaHa7IWtRCfykPkaP4w9Y20uB4G2ZkTtUQrxgXH/Y0333WuSh0VaNLODQzQ/gmgN
+ uUrJWkBg9wtlR85nLKM0bg0abvthzetMYcs+hwU6G3nHcpuKWhJ7Y5xy7waEya6yAPDQ Tg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dmq5g2vph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 08:37:47 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FED7100034;
+        Mon, 17 Jan 2022 08:37:46 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5E0B820DD0E;
+        Mon, 17 Jan 2022 08:37:46 +0100 (CET)
+Received: from lmecxl0573.lme.st.com (10.75.127.44) by SFHDAG2NODE1.st.com
+ (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 17 Jan
+ 2022 08:37:45 +0100
+Subject: Re: [PATCH v2] spi: stm32-qspi: Update spi registering
+To:     Lukas Wunner <lukas@wunner.de>
+CC:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <stable@vger.kernel.org>
+References: <20220112144424.5278-1-patrice.chotard@foss.st.com>
+ <20220116125205.GA18267@wunner.de>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+Message-ID: <b07ba47f-2709-6b10-2332-7a0d163401bc@foss.st.com>
+Date:   Mon, 17 Jan 2022 08:37:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [syzbot] general protection fault in nfc_alloc_send_skb
+In-Reply-To: <20220116125205.GA18267@wunner.de>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com>,
-        nixiaoming@huawei.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000b5eac805d4d686d4@google.com>
- <20220116114236.2135-1-hdanton@sina.com>
- <20220117011137.2254-1-hdanton@sina.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220117011137.2254-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE1.st.com
+ (10.75.127.4)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-17_02,2022-01-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2022 02:11, Hillf Danton wrote:
-> On Sun, 16 Jan 2022 17:56:51 +0100 Krzysztof Kozlowski wrote:
->> On 16/01/2022 12:42, Hillf Danton wrote:
->>> On Wed, 05 Jan 2022 06:25:31 -0800
->>>> Hello,
->>>>
->>>> syzbot found the following issue on:
->>>>
->>>> HEAD commit:    eec4df26e24e Merge tag 's390-5.16-6' of git://git.kernel.o..
->>>> git tree:       upstream
->>>> console output: https://syzkaller.appspot.com/x/log.txt?x=149771a5b00000
->>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=dc943eeb68074e3
->>>> dashboard link: https://syzkaller.appspot.com/bug?extid=7f23bcddf626e0593a39
->>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133e5e2bb00000
->>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152e6571b00000
->>>>
->>>> The issue was bisected to:
->>>>
->>>> commit c33b1cc62ac05c1dbb1cdafe2eb66da01c76ca8d
->>>> Author: Xiaoming Ni <nixiaoming@huawei.com>
->>>> Date:   Thu Mar 25 03:51:10 2021 +0000
->>>>
->>>>     nfc: fix refcount leak in llcp_sock_bind()
->>>>
->>>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16b92ba3b00000
->>>> final oops:     https://syzkaller.appspot.com/x/report.txt?x=15b92ba3b00000
->>>> console output: https://syzkaller.appspot.com/x/log.txt?x=11b92ba3b00000
->>>>
->>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>>> Reported-by: syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
->>>> Fixes: c33b1cc62ac0 ("nfc: fix refcount leak in llcp_sock_bind()")
->>>>
->>>> general protection fault, probably for non-canonical address 0xdffffc00000000c2: 0000 [#1] PREEMPT SMP KASAN
->>>> KASAN: null-ptr-deref in range [0x0000000000000610-0x0000000000000617]
->>>> CPU: 1 PID: 7219 Comm: syz-executor408 Not tainted 5.16.0-rc7-syzkaller #0
->>>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
->>>> RIP: 0010:nfc_alloc_send_skb+0x3a/0x190 net/nfc/core.c:722
->>>> Code: 54 41 89 d4 55 53 48 89 fb 48 8d ab 10 06 00 00 48 83 ec 08 e8 47 53 92 f8 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 14 01 00 00 48 8d bb 14 06 00
->>>> RSP: 0018:ffffc9000ca97888 EFLAGS: 00010202
->>>> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
->>>> RDX: 00000000000000c2 RSI: ffffffff88e474b9 RDI: 0000000000000000
->>>> RBP: 0000000000000610 R08: ffffc9000ca97938 R09: 0000000000000880
->>>> R10: ffffffff88e6031d R11: 000000000000087f R12: 0000000000000000
->>>> R13: 0000000000000082 R14: ffff88807ca8b000 R15: ffffc9000ca97938
->>>> FS:  00007f6b81ae2700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
->>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>> CR2: 00007fff1b2fd960 CR3: 000000007ca3a000 CR4: 00000000003506e0
->>>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>> Call Trace:
->>>>  <TASK>
->>>>  nfc_llcp_send_ui_frame+0x2c0/0x430 net/nfc/llcp_commands.c:759
->>>>  llcp_sock_sendmsg+0x2b9/0x3a0 net/nfc/llcp_sock.c:803
->>>>  sock_sendmsg_nosec net/socket.c:704 [inline]
->>>>  sock_sendmsg+0xcf/0x120 net/socket.c:724
->>>>  ____sys_sendmsg+0x331/0x810 net/socket.c:2409
->>>>  ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
->>>>  __sys_sendmmsg+0x195/0x470 net/socket.c:2549
->>>>  __do_sys_sendmmsg net/socket.c:2578 [inline]
->>>>  __se_sys_sendmmsg net/socket.c:2575 [inline]
->>>>  __x64_sys_sendmmsg+0x99/0x100 net/socket.c:2575
->>>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
->>>> RIP: 0033:0x7f6b81b51f89
->>>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
->>>> RSP: 002b:00007f6b81ae22f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
->>>> RAX: ffffffffffffffda RBX: 0000000000000033 RCX: 00007f6b81b51f89
->>>> RDX: 0000000000000006 RSI: 0000000020004540 RDI: 0000000000000003
->>>> RBP: 00007f6b81bdb3f8 R08: 0000000000000000 R09: 0000000000000000
->>>> R10: 0000000000000040 R11: 0000000000000246 R12: 00007f6b81bdb3f0
->>>> R13: 93cb663f6753dadd R14: 4b973dfbaeacdab3 R15: f981dd66eb1318f7
->>>>  </TASK>
->>>> Modules linked in:
->>>> ---[ end trace 570920f865b173be ]---
->>>> RIP: 0010:nfc_alloc_send_skb+0x3a/0x190 net/nfc/core.c:722
->>>> Code: 54 41 89 d4 55 53 48 89 fb 48 8d ab 10 06 00 00 48 83 ec 08 e8 47 53 92 f8 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 14 01 00 00 48 8d bb 14 06 00
->>>> RSP: 0018:ffffc9000ca97888 EFLAGS: 00010202
->>>> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
->>>> RDX: 00000000000000c2 RSI: ffffffff88e474b9 RDI: 0000000000000000
->>>> RBP: 0000000000000610 R08: ffffc9000ca97938 R09: 0000000000000880
->>>> R10: ffffffff88e6031d R11: 000000000000087f R12: 0000000000000000
->>>> R13: 0000000000000082 R14: ffff88807ca8b000 R15: ffffc9000ca97938
->>>> FS:  00007f6b81ae2700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
->>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>> CR2: 00007fff1b2fd960 CR3: 000000007ca3a000 CR4: 00000000003506e0
->>>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>> ----------------
->>>> Code disassembly (best guess):
->>>>    0:	54                   	push   %rsp
->>>>    1:	41 89 d4             	mov    %edx,%r12d
->>>>    4:	55                   	push   %rbp
->>>>    5:	53                   	push   %rbx
->>>>    6:	48 89 fb             	mov    %rdi,%rbx
->>>>    9:	48 8d ab 10 06 00 00 	lea    0x610(%rbx),%rbp
->>>>   10:	48 83 ec 08          	sub    $0x8,%rsp
->>>>   14:	e8 47 53 92 f8       	callq  0xf8925360
->>>>   19:	48 89 ea             	mov    %rbp,%rdx
->>>>   1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
->>>>   23:	fc ff df
->>>>   26:	48 c1 ea 03          	shr    $0x3,%rdx
->>>> * 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
->>>>   2e:	84 c0                	test   %al,%al
->>>>   30:	74 08                	je     0x3a
->>>>   32:	3c 03                	cmp    $0x3,%al
->>>>   34:	0f 8e 14 01 00 00    	jle    0x14e
->>>>   3a:	48                   	rex.W
->>>>   3b:	8d                   	.byte 0x8d
->>>>   3c:	bb                   	.byte 0xbb
->>>>   3d:	14 06                	adc    $0x6,%al
->>>>
->>>>
->>>> ---
->>>> This report is generated by a bot. It may contain errors.
->>>> See https://goo.gl/tpsmEJ for more information about syzbot.
->>>> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>>>
->>>> syzbot will keep track of this issue. See:
->>>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->>>> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->>>> syzbot can test patches for this issue, for details see:
->>>> https://goo.gl/tpsmEJ#testing-patches
->>>
->>> Before sending frame out, check llcp dev bond to llcp sock and bail out in
->>> case of invalid device.
->>>
->>> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>>
->>> --- a/net/nfc/llcp_sock.c
->>> +++ b/net/nfc/llcp_sock.c
->>> @@ -798,6 +798,10 @@ static int llcp_sock_sendmsg(struct sock
->>>  			return -EINVAL;
->>>  		}
->>>  
->>> +		if (llcp_sock->dev == NULL) {
->>> +			release_sock(sk);
->>> +			return -EBADFD;
->>> +		}
->>>  		release_sock(sk);
->>>  
+Hi Lukas
+
+On 1/16/22 1:52 PM, Lukas Wunner wrote:
+> On Wed, Jan 12, 2022 at 03:44:24PM +0100, patrice.chotard@foss.st.com wrote:
+>> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+>> index 514337c86d2c..09839a3dbb26 100644
+>> --- a/drivers/spi/spi-stm32-qspi.c
+>> +++ b/drivers/spi/spi-stm32-qspi.c
+>> @@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>>  	struct resource *res;
+>>  	int ret, irq;
+>>  
+>> -	ctrl = spi_alloc_master(dev, sizeof(*qspi));
+>> +	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
+>>  	if (!ctrl)
+>>  		return -ENOMEM;
+>>  
+>> @@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>>  	pm_runtime_enable(dev);
+>>  	pm_runtime_get_noresume(dev);
+>>  
+>> -	ret = devm_spi_register_master(dev, ctrl);
+>> +	ret = spi_register_master(ctrl);
+>>  	if (ret)
+>>  		goto err_pm_runtime_free;
 >>
->> The patch looks the same as mine, except the test for ->dev is slightly
->> later. Why sending the same set?
 > 
-> Why did you use the words like looks and except here in addition to same?
-> I feel free to fix the syzbot report, clear?
+> Unfortunately this patch is still not correct:  It introduces a
+> double free in the probe error path.
 
-It's just confusing to hear that a patch is not working while sending
-almost the same one a moment later with Cc to all...
+Argh yes, my bad.
 
-> Did you post your patch with Hillf on the Cc list?
 > 
->> My patch was already tested:
+> You need to remove this...
 > 
-> Fine, feel free to show us the tag below you had received.
+> err_master_put:
+> 	spi_master_put(qspi->ctrl);
 > 
-> Reported-and-tested-by: syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
-
-I got email confirmation from syzbot later, so I mentioned this in a
-reply to my patch.
-
-
-Best regards,
-Krzysztof
+> ...and replace all the gotos in stm32_qspi_probe() which jump
+> to the err_master_put label with a return statement.
+> 
+> Thanks,
+> 
+> Lukas
+> 
+Thanks 
+Patrice

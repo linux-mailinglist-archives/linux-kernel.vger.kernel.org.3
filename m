@@ -2,108 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A12490C33
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2279E490C36
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbiAQQLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:11:09 -0500
-Received: from mail-out.m-online.net ([212.18.0.9]:41750 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237430AbiAQQLF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:11:05 -0500
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4Jcxj127Sfz1qxHZ;
-        Mon, 17 Jan 2022 17:11:01 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4Jcxj11LGyz1qqkB;
-        Mon, 17 Jan 2022 17:11:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id Q6HIU5Zbaqg4; Mon, 17 Jan 2022 17:11:00 +0100 (CET)
-X-Auth-Info: WBIdWVkrdSiGmO+QDBQxoTmVr79e6qe1UsEYV5yN1imGIbBKMcVHNSoaZeLM3kUt
-Received: from igel.home (ppp-46-244-183-111.dynamic.mnet-online.de [46.244.183.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon, 17 Jan 2022 17:11:00 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id 1E58D2C3ABC; Mon, 17 Jan 2022 17:10:59 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: eliminate unreliable __builtin_frame_address(1)
-References: <20220117154433.3124-1-changbin.du@gmail.com>
-X-Yow:  Where's the Coke machine?  Tell me a joke!!
-Date:   Mon, 17 Jan 2022 17:10:59 +0100
-In-Reply-To: <20220117154433.3124-1-changbin.du@gmail.com> (Changbin Du's
-        message of "Mon, 17 Jan 2022 23:44:33 +0800")
-Message-ID: <87czkq7370.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.91 (gnu/linux)
+        id S240814AbiAQQLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:11:35 -0500
+Received: from out1.migadu.com ([91.121.223.63]:33674 "EHLO out1.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237430AbiAQQLf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 11:11:35 -0500
+Date:   Tue, 18 Jan 2022 00:11:23 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1642435893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TR1Rqj9G1NiwuvZQW+k8MsaJSXqQZgpQ0AFCS2DTpzE=;
+        b=PfFCw8kSxevEgpFRQlR7oFdcAg9s9uo+vrMi+tm6vlRe98fJaCxj1GEONR/UQztQ8MGG4/
+        BqNxOzZztddwruMoAwhKZuAUJNRO8pSMmjbWsTJExQhp+afr9OkKgBHfseE+WaIx63+ZO9
+        T3lHSCTjjzeGMg9KYTJp4sPkdkyefjM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        valentin.schneider@arm.com, morten.rasmussen@arm.com,
+        chris.redpath@arm.com, qperret@google.com, lukasz.luba@arm.com,
+        Tao Zhou <tao.zhou@linux.dev>
+Subject: Re: [PATCH v2 1/7] sched/fair: Provide u64 read for 32-bits arch
+ helper
+Message-ID: <YeWVK8EY/s1TMOD4@geo.homenetwork>
+References: <20220112161230.836326-1-vincent.donnefort@arm.com>
+ <20220112161230.836326-2-vincent.donnefort@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112161230.836326-2-vincent.donnefort@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jan 17 2022, Changbin Du wrote:
+Hi,
 
-> I tried different pieces of code which uses __builtin_frame_address(1)
-> (with both gcc version 7.5.0 and 10.3.0) to verify whether it works as
-> expected on riscv64. The result is negative.
->
-> What the compiler had generated is as below:
-> 31                      fp = (unsigned long)__builtin_frame_address(1);
->    0xffffffff80006024 <+200>:   ld      s1,0(s0)
->
-> It takes '0(s0)' as the address of frame 1 (caller), but the actual address
-> should be '-16(s0)'.
->
->           |       ...       | <-+
->           +-----------------+   |
->           | return address  |   |
->           | previous fp     |   |
->           | saved registers |   |
->           | local variables |   |
->   $fp --> |       ...       |   |
->           +-----------------+   |
->           | return address  |   |
->           | previous fp --------+
->           | saved registers |
->   $sp --> | local variables |
->           +-----------------+
->
-> This leads the kernel can not dump the full stack trace on riscv.
->
-> [    7.222126][    T1] Call Trace:
-> [    7.222804][    T1] [<ffffffff80006058>] dump_backtrace+0x2c/0x3a
->
-> This problem is not exposed on most riscv builds just because the '0(s0)'
-> occasionally is the address frame 2 (caller's caller), if only ra and fp
-> are stored in frame 1 (caller).
->
->           |       ...       | <-+
->           +-----------------+   |
->           | return address  |   |
->   $fp --> | previous fp     |   |
->           +-----------------+   |
->           | return address  |   |
->           | previous fp --------+
->           | saved registers |
->   $sp --> | local variables |
->           +-----------------+
->
-> This could be a *bug* of gcc that should be fixed.
+On Wed, Jan 12, 2022 at 04:12:24PM +0000, Vincent Donnefort wrote:
 
-Yes, it would be nice to get this fixed.  The riscv target does not
-override DYNAMIC_CHAIN_ADDRESS, thus the default is used, which has the
-noted effect.
+> Introducing macro helpers u64_u32_{store,load}() to factorize lockless
+> accesses to u64 variables for 32-bits architectures.
+> 
+> Users are for now cfs_rq.min_vruntime and sched_avg.last_update_time. To
+> accommodate the later where the copy lies outside of the structure
+> (cfs_rq.last_udpate_time_copy instead of sched_avg.last_update_time_copy),
+> use the _copy() version of those helpers.
+> 
+> Those new helpers encapsulate smp_rmb() and smp_wmb() synchronization and
+> therefore, have a small penalty in set_task_rq_fair() and init_cfs_rq().
+> 
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 095b0aa378df..99ea9540ece4 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -568,11 +568,8 @@ static void update_min_vruntime(struct cfs_rq *cfs_rq)
+>  	}
+>  
+>  	/* ensure we never gain time by being placed backwards. */
+> -	cfs_rq->min_vruntime = max_vruntime(cfs_rq->min_vruntime, vruntime);
+> -#ifndef CONFIG_64BIT
+> -	smp_wmb();
+> -	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
+> -#endif
+> +	u64_u32_store(cfs_rq->min_vruntime,
+> +		      max_vruntime(cfs_rq->min_vruntime, vruntime));
+>  }
+>  
+>  static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
+> @@ -3246,6 +3243,11 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
+>  }
+>  
+>  #ifdef CONFIG_SMP
+> +static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+> +{
+> +	return u64_u32_load_copy(cfs_rq->avg.last_update_time,
+> +				 cfs_rq->last_update_time_copy);
+> +}
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+>  /*
+>   * Because list_add_leaf_cfs_rq always places a child cfs_rq on the list
+> @@ -3356,27 +3358,9 @@ void set_task_rq_fair(struct sched_entity *se,
+>  	if (!(se->avg.last_update_time && prev))
+>  		return;
+>  
+> -#ifndef CONFIG_64BIT
+> -	{
+> -		u64 p_last_update_time_copy;
+> -		u64 n_last_update_time_copy;
+> -
+> -		do {
+> -			p_last_update_time_copy = prev->load_last_update_time_copy;
+> -			n_last_update_time_copy = next->load_last_update_time_copy;
+> -
+> -			smp_rmb();
+> +	p_last_update_time = cfs_rq_last_update_time(prev);
+> +	n_last_update_time = cfs_rq_last_update_time(next);
+>  
+> -			p_last_update_time = prev->avg.last_update_time;
+> -			n_last_update_time = next->avg.last_update_time;
+> -
+> -		} while (p_last_update_time != p_last_update_time_copy ||
+> -			 n_last_update_time != n_last_update_time_copy);
+> -	}
+> -#else
+> -	p_last_update_time = prev->avg.last_update_time;
+> -	n_last_update_time = next->avg.last_update_time;
+> -#endif
+>  	__update_load_avg_blocked_se(p_last_update_time, se);
+>  	se->avg.last_update_time = n_last_update_time;
+>  }
+> @@ -3700,8 +3684,9 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+>  	decayed |= __update_load_avg_cfs_rq(now, cfs_rq);
+>  
+>  #ifndef CONFIG_64BIT
+> -	smp_wmb();
+> -	cfs_rq->load_last_update_time_copy = sa->last_update_time;
+> +	u64_u32_store_copy(sa->last_update_time,
+> +			   cfs_rq->last_update_time_copy,
+> +			   sa->last_update_time);
+>  #endif
+>  
+>  	return decayed;
+> @@ -3834,27 +3819,6 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+>  	}
+>  }
+>  
+> -#ifndef CONFIG_64BIT
+> -static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+> -{
+> -	u64 last_update_time_copy;
+> -	u64 last_update_time;
+> -
+> -	do {
+> -		last_update_time_copy = cfs_rq->load_last_update_time_copy;
+> -		smp_rmb();
+> -		last_update_time = cfs_rq->avg.last_update_time;
+> -	} while (last_update_time != last_update_time_copy);
+> -
+> -	return last_update_time;
+> -}
+> -#else
+> -static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+> -{
+> -	return cfs_rq->avg.last_update_time;
+> -}
+> -#endif
+> -
+>  /*
+>   * Synchronize entity load avg of dequeued entity without locking
+>   * the previous rq.
+> @@ -6904,21 +6868,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>  	if (READ_ONCE(p->__state) == TASK_WAKING) {
+>  		struct sched_entity *se = &p->se;
+>  		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> -		u64 min_vruntime;
+>  
+> -#ifndef CONFIG_64BIT
+> -		u64 min_vruntime_copy;
+> -
+> -		do {
+> -			min_vruntime_copy = cfs_rq->min_vruntime_copy;
+> -			smp_rmb();
+> -			min_vruntime = cfs_rq->min_vruntime;
+> -		} while (min_vruntime != min_vruntime_copy);
+> -#else
+> -		min_vruntime = cfs_rq->min_vruntime;
+> -#endif
+> -
+> -		se->vruntime -= min_vruntime;
+> +		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+>  	}
+>  
+>  	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+> @@ -11362,10 +11313,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+>  void init_cfs_rq(struct cfs_rq *cfs_rq)
+>  {
+>  	cfs_rq->tasks_timeline = RB_ROOT_CACHED;
+> -	cfs_rq->min_vruntime = (u64)(-(1LL << 20));
+> -#ifndef CONFIG_64BIT
+> -	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
+> -#endif
+> +	u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
+>  #ifdef CONFIG_SMP
+>  	raw_spin_lock_init(&cfs_rq->removed.lock);
+>  #endif
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index de53be905739..f1a445efdc63 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -528,6 +528,45 @@ struct cfs_bandwidth { };
+>  
+>  #endif	/* CONFIG_CGROUP_SCHED */
+>  
+> +/*
+> + * u64_u32_load/u64_u32_store
+> + *
+> + * Use a copy of a u64 value to protect against data race. This is only
+> + * applicable for 32-bits architectures.
+> + */
+> +#ifdef CONFIG_64BIT
+> +# define u64_u32_load_copy(var, copy)       var
+> +# define u64_u32_store_copy(var, copy, val) (var = val)
+> +#else
+> +# define u64_u32_load_copy(var, copy)					\
+> +({									\
+> +	u64 __val, __val_copy;						\
+> +	do {								\
+> +		__val_copy = copy;					\
+> +		/*							\
+> +		 * paired with u64_u32_store, ordering access		\
+> +		 * to var and copy.					\
+> +		 */							\
+> +		smp_rmb();						\
+> +		__val = var;						\
+> +	} while (__val != __val_copy);					\
+> +	__val;								\
+> +})
+> +# define u64_u32_store_copy(var, copy, val)				\
+> +do {									\
+> +	typeof(val) __val = (val);					\
+> +	var = __val;							\
+> +	/*								\
+> +	 * paired with u64_u32_load, ordering access to var and		\
+> +	 * copy.							\
+> +	 */								\
+> +	smp_wmb();							\
+> +	copy = __val;							\
+> +} while (0)
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+Code stay there some time from me. Just from my crude review;
+The above macro need a variable to load @var temporarily for
+later store; that means the @copy value is from @var not @val.
+
+  # define u64_u32_store_copy(var, copy, val)				\
+  do {									\
+    typeof(val) __val = (val), __var = (var);					\
+    var = __val;							\
+    /*								\
+     * paired with u64_u32_load, ordering access to var and		\
+     * copy.							\
+     */								\
+    smp_wmb();							\
+    copy = __var;							\
+  } while (0)
+
+
+
+Thanks,
+Tao
+> +#endif
+> +# define u64_u32_load(var)      u64_u32_load_copy(var, var##_copy)
+> +# define u64_u32_store(var, val) u64_u32_store_copy(var, var##_copy, val)
+> +
+>  /* CFS-related fields in a runqueue */
+>  struct cfs_rq {
+>  	struct load_weight	load;
+> @@ -568,7 +607,7 @@ struct cfs_rq {
+>  	 */
+>  	struct sched_avg	avg;
+>  #ifndef CONFIG_64BIT
+> -	u64			load_last_update_time_copy;
+> +	u64			last_update_time_copy;
+>  #endif
+>  	struct {
+>  		raw_spinlock_t	lock ____cacheline_aligned;
+> -- 
+> 2.25.1
+> 

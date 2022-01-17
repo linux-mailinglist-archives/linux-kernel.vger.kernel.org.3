@@ -2,56 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8DD490372
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865E649037C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237911AbiAQIJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:09:15 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42920 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiAQIJP (ORCPT
+        id S237930AbiAQILV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230177AbiAQILU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:09:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 92862CE0F72;
-        Mon, 17 Jan 2022 08:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF8AC36AE7;
-        Mon, 17 Jan 2022 08:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642406950;
-        bh=+ker6gPqXQx23Br01jW9fxItorIHv0lFU3htpl/ApUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OfnzylFJBmQV9Y73T0iNxTjqdDQABm/h3OndI613+xpDaE06QBLu8lMjkVgnwS1f8
-         KLzZrnjL0zE/Xn6XTxourrPFYRiuKagDS2VhZmXjWcBrgEu1JIzcaHN2MWYghtuzix
-         JkFK5kkiW16iBTgUOg93vgA/Y2w5r59Tr5RM0qUY=
-Date:   Mon, 17 Jan 2022 09:09:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "James D. Turner" <linuxkernel.foss@dmarc-none.turner.link>
-Cc:     Alex Williamson <alex.williamson@redhat.com>, kvm@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
- PCI-passed-through to Windows VM
-Message-ID: <YeUkIyAsrYHOuaKt@kroah.com>
-References: <87ee57c8fu.fsf@turner.link>
+        Mon, 17 Jan 2022 03:11:20 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F1AC061574;
+        Mon, 17 Jan 2022 00:11:19 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id E8675240033;
+        Mon, 17 Jan 2022 08:10:08 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 09:11:10 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: dt-bindings: media: renesas,csi2: Update
+ data-lanes property
+Message-ID: <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain>
+References: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87ee57c8fu.fsf@turner.link>
+In-Reply-To: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 09:12:21PM -0500, James D. Turner wrote:
-> So, the issue was introduced between v5.13 and v5.14-rc1. I'm willing to
-> bisect the commit history to narrow it down further, if that would be
-> helpful.
+Hello Prabhakar,
 
-Bisection would be great as that is a very large range of commits there
-from many months ago, so people might not remember what could have
-caused this issue.
+On Thu, Jan 13, 2022 at 10:32:14AM +0000, Lad Prabhakar wrote:
+> CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
+> handled by rcar-csi2.c driver. This patch updates the data-lanes property
+> to describe the same.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  .../devicetree/bindings/media/renesas,csi2.yaml          | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> index e6a036721082..064a0a4c5737 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> @@ -67,7 +67,14 @@ properties:
+>                  maxItems: 1
+>
+>                data-lanes:
+> -                maxItems: 1
+> +                items:
+> +                  minItems: 1
+> +                  maxItems: 4
+> +                  items:
+> +                    - const: 1
+> +                    - const: 2
+> +                    - const: 3
+> +                    - const: 4
 
-thanks,
+Seeing "maxItems: 1" there confuses me too, as the property is an
+array of data-lanes, but I'm afraid your change does not what you
+intend as it would allow you to specify the number of data lanes as an
+integer rather than as an array.
 
-greg k-h
+I think it would probably be correct to set
+
+                data-lanes: true
+
+(maybe maxItems: 1 is correct already)
+
+And restrict the number of valid combinations in the board DTS file
+with a construct like:
+
+    data-lanes:
+      oneOf:
+        - items:
+            - const: 1
+            - const: 2
+            - const: 3
+            - const: 4
+        - items:
+            - const: 1
+            - const: 2
+
+Thanks
+   j
+
+>
+>              required:
+>                - clock-lanes
+> --
+> 2.17.1
+>

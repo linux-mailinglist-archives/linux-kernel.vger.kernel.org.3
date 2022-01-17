@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77766490364
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD16B490368
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235386AbiAQIDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbiAQIDG (ORCPT
+        id S235439AbiAQIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:04:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40036 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235351AbiAQIED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:03:06 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0651C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:03:05 -0800 (PST)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 17 Jan 2022 03:04:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id AEA36292D68;
-        Mon, 17 Jan 2022 09:03:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1642406584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g9w7PulPPLRlTJVcQdu+QnSXqkryxLolbx56eUS2RH8=;
-        b=gXOLTME2JjTs3VZRe1vx1jxwIInKgCKw2QbS1oo6f8z5oP8P9ZBKiMn4PALx//0XtDokTe
-        aP0lvkoUzoLfCFnfCYGh7ArKp9ahfe2jSeABcCTPpHcQ65uviGkrYHsjvNSa0az+35NPtH
-        S87R80QcKqiIn2UrIVI4O2aKcI0JUfKIVQLtbq1CLJsm3Ay2l6VivilTw0CWKvbP4Wqcu8
-        uQD12+qwggtjFFd1kltMrkQPzhHdQdpjUabZd8zNYZFe1fIUXScXqiTFZru2rJeHK2Chsm
-        XlU3jCinX1R2WAiOV9IkyITQKNkyYol7UNT/nQLKGvu7XMIQ5dRHZl9Yy/5FWw==
-Message-ID: <722bbfb582ab948fd994de880e4fa98c49f8bece.camel@svanheule.net>
-Subject: Re: [PATCH 2/2] clocksource/drivers: Add Realtek Otto timer driver
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Date:   Mon, 17 Jan 2022 09:03:02 +0100
-In-Reply-To: <202201170911.q3u7GptA-lkp@intel.com>
-References: <2fb4aa29e8c581f5c7e97ab7678ccb34e99e5c6e.1642369117.git.sander@svanheule.net>
-         <202201170911.q3u7GptA-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7582B80E0D;
+        Mon, 17 Jan 2022 08:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77F9C36AE3;
+        Mon, 17 Jan 2022 08:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642406641;
+        bh=2JCOslLMhe3KWhnV/JB85orDa5Y/1s3SfbLP8qvgU8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DKK7QiWToJ3FUFgSeozzMB8De9peOLcm+Z0LBxLm0yXi3KittG4jbOjtoD/8Zqrqg
+         mxDMW1UqXAk88r3rjLHZoFDVbavd8F7FNtFrKWdUZfIyXF3mMCrzPFag5yeUY8xAPC
+         sYOZd9iOj4u6QjBOakH/11pCMoF6yL2FJit6H+kA=
+Date:   Mon, 17 Jan 2022 09:03:58 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        torvalds@linux-foundation.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Anthony Iliopoulos <ailiop@suse.com>,
+        David Howells <dhowells@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH - resend] devtmpfs regression fix: reconfigure on each
+ mount
+Message-ID: <YeUi7rqkC99CODU+@kroah.com>
+References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
+ <20211213125906.ngqbjsywxwibvcuq@wittgenstein>
+ <YbexPXpuI8RdOb8q@technoir>
+ <20211214101207.6yyp7x7hj2nmrmvi@wittgenstein>
+ <Ybik5dWF2w06JQM6@technoir>
+ <20211214141824.fvmtwvp57pqg7ost@wittgenstein>
+ <164237084692.24166.3761469608708322913@noble.neil.brown.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164237084692.24166.3761469608708322913@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-17 at 09:28 +0800, kernel test robot wrote:
->    drivers/clocksource/timer-realtek-otto.c: In function 'otto_tc_init':
->    drivers/clocksource/timer-realtek-otto.c:182:16: error: implicit
-> declaration of function 'kzalloc'; did you mean 'd_alloc'? [-Werror=implicit-
-> function-declaration]
->      182 |         ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
->          |                ^~~~~~~
->          |                d_alloc
-> > > drivers/clocksource/timer-realtek-otto.c:182:14: warning: assignment to
-> > > 'struct otto_tc_ctrl *' from 'int' makes pointer from integer without a
-> > > cast [-Wint-conversion]
->      182 |         ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
->          |              ^
->    drivers/clocksource/timer-realtek-otto.c:212:9: error: implicit declaration
-> of function 'kfree' [-Werror=implicit-function-declaration]
->      212 |         kfree(ctrl);
->          |         ^~~~~
->    cc1: some warnings being treated as errors
+On Mon, Jan 17, 2022 at 09:07:26AM +1100, NeilBrown wrote:
 > 
+> Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
+> mount options as "remount" options, so it updates the configuration of the
+> single super_block on each mount.
+> Since that was changed, the mount options used for devtmpfs are ignored.
+> This is a regression which affect systemd - which mounts devtmpfs
+> with "-o mode=755,size=4m,nr_inodes=1m".
 > 
-> vim +182 drivers/clocksource/timer-realtek-otto.c
+> This patch restores the "remount" effect by calling reconfigure_single()
 > 
->    176  
->    177  static int __init otto_tc_init(struct device_node *node)
->    178  {
->    179          struct otto_tc_ctrl *ctrl;
->    180          int err;
->    181  
->  > 182          ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+> Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mount_single()")
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Signed-off-by: NeilBrown <neilb@suse.de>
+> ---
+>  drivers/base/devtmpfs.c    | 7 +++++++
+>  fs/super.c                 | 4 ++--
+>  include/linux/fs_context.h | 2 ++
+>  3 files changed, 11 insertions(+), 2 deletions(-)
 
-I'll include linux/slab.h in v2.
+Sorry, I thought Al was going to take this as the regression came from
+his tree, I should have picked it up earlier.  I'll queue it up after
+5.17-rc1 is out.
 
-Best,
-Sander
+thanks,
+
+greg k-h

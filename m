@@ -2,69 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 103004903F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5344903A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbiAQIgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:36:05 -0500
-Received: from m1397.mail.163.com ([220.181.13.97]:45498 "EHLO
-        m1397.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbiAQIgE (ORCPT
+        id S238041AbiAQIWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:22:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51489 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238032AbiAQIWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:36:04 -0500
-X-Greylist: delayed 925 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 03:35:56 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=U6AJg
-        RT9yEKALKqy71zPTJhLAEDKSAmRLqeRA/LEZqI=; b=og+G4EDMAh4i2EurjCB65
-        teC8pAYUU5c4O0ADKf3qc8RxMr7UEwDepXJOswqKL5CyZcY+U93HKNLyFaB6+kLP
-        us5VJOosw9eK37s4Ry1Nd8ZwGezVY7NMjnOXCAt/l5W6V5vBg75r7+48C6BSMI5P
-        WDLiTOA9hIKs3f+JLqwlKY=
-Received: from slark_xiao$163.com ( [112.97.53.17] ) by ajax-webmail-wmsvr97
- (Coremail) ; Mon, 17 Jan 2022 16:20:12 +0800 (CST)
-X-Originating-IP: [112.97.53.17]
-Date:   Mon, 17 Jan 2022 16:20:12 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Manivannan Sadhasivam" <mani@kernel.org>
-Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH net] bus: mhi: Add mru_default for Foxconn SDX55
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <20220117075323.GA4209@thinkpad>
-References: <20220115103912.3775-1-slark_xiao@163.com>
- <20220117075323.GA4209@thinkpad>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 17 Jan 2022 03:22:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642407732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sg8p8AHi3UJdK9z4yX9nhx3FRx/VOIBzKvjT8S0Q3JM=;
+        b=BLYO01mWMZQfbK88AihTaKEINUI0Y5nJMTwkvUxYoNJu0SV/XqZmrSH9azCjxeAQ6nOHG+
+        /9O8bkv0p3HRazOQtPFTtXoxNGSxi1I9ZNIcX+CTxfA6YEi2sQB5hzkB/Rad6fapoU/HfA
+        n3JWU3MXLfapU1AqRinE2hXJzeLgZBQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-AlQXLA8ZPUWP2WKVl-OGSQ-1; Mon, 17 Jan 2022 03:22:10 -0500
+X-MC-Unique: AlQXLA8ZPUWP2WKVl-OGSQ-1
+Received: by mail-wm1-f69.google.com with SMTP id x10-20020a7bc20a000000b0034c3d77f277so2708237wmi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:22:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sg8p8AHi3UJdK9z4yX9nhx3FRx/VOIBzKvjT8S0Q3JM=;
+        b=OtPgoBKlbLND2OzKbRK+exU7ojZn6dyeGpvWK4KVxPOjiXrzgTwPOJ90q7SNUbOPOg
+         879K6AictJhw9V4XoIHqY5z4DQv/12XPqOj4wWFiMvDP6IdFw4/JxBqQCe0w/zIgmVZw
+         L14q3g64olN6AinOUaJZ5NUq5Vn5wY7pilHoTNNcYriuGoDPZpsfYnBoXxAt26Dt+6ab
+         aFwOxgtjUAYuYyMbZpoobFaR9WpyJdif4XbJt/hqXVKSMi/9+J+pBJdx/xw5uLO1uZXi
+         i8O0Kct3V8BI26PxZaYAn9LfSkKAljW1aFyp197uwd+VSQWgKmaA4Q62grxfUvR0Ybhy
+         jZMA==
+X-Gm-Message-State: AOAM530JsiBsa/YxlOCpunRBbXq4Eq1D/8ceZIaH1F+m2Wznky1Tp2V/
+        yXwzZI4/LYgyn1kC4PjjtmmdgJRnIo+jhYEVMlXbbQ6KrsTA4e1b6m5kWoYqvc/LT9+378T61iA
+        eN+XxxaqLlYeoAKeOGZb5c74a
+X-Received: by 2002:adf:e78e:: with SMTP id n14mr18512276wrm.631.1642407729385;
+        Mon, 17 Jan 2022 00:22:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyfX6DyGdjNVfeccUpaF9Hfqtqa45OuD18xrFo42Uf+iDexJ9TwGxZgQm8IYyKvOJYF6w6HHw==
+X-Received: by 2002:adf:e78e:: with SMTP id n14mr18512267wrm.631.1642407729203;
+        Mon, 17 Jan 2022 00:22:09 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id u1sm7671679wrs.97.2022.01.17.00.22.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 00:22:08 -0800 (PST)
+Message-ID: <b8c2663b-69df-913f-8da1-de6b7bd189ce@redhat.com>
+Date:   Mon, 17 Jan 2022 09:22:04 +0100
 MIME-Version: 1.0
-Message-ID: <76f0a70a.2e7f.17e671f4eb0.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: YcGowABHbCu8JuVhoh8NAA--.52392W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJRaLZGAJmDy6WgABsw
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: linux-next: manual merge of the kvm tree with the risc-v tree
+Content-Language: en-US
+To:     Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paul Walmsley <paul@pwsan.com>, KVM <kvm@vger.kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <20220112114024.7be8aac6@canb.auug.org.au>
+ <20220117085431.7bef9ebc@canb.auug.org.au>
+ <CAAhSdy3gEW+SC1GCH0V4iVA9h1sxeVV-V=x4kG7w_9tcVTtamw@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAAhSdy3gEW+SC1GCH0V4iVA9h1sxeVV-V=x4kG7w_9tcVTtamw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpBdCAyMDIyLTAxLTE3IDE1OjUzOjIzLCAiTWFuaXZhbm5hbiBTYWRoYXNpdmFtIiA8bWFuaUBr
-ZXJuZWwub3JnPiB3cm90ZToKPk9uIFNhdCwgSmFuIDE1LCAyMDIyIGF0IDA2OjM5OjEyUE0gKzA4
-MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEZvciBkZWZhdWx0IG1lY2hhbmlzbSwgcHJvZHVjdCB3
-b3VsZCB1c2UgZGVmYXVsdCBNUlUgMzUwMCBpZgo+PiB0aGV5IGRpZG4ndCBkZWZpbmUgaXQuIEJ1
-dCBmb3IgRm94Y29ubiBTRFg1NSwgdGhlcmUgaXMgYSBrbm93bgo+PiBpc3N1ZSB3aGljaCBNUlUg
-MzUwMCB3b3VsZCBsZWFkIHRvIGRhdGEgY29ubmVjdGlvbiBsb3N0Lgo+PiBTbyB3ZSBhbGlnbiBp
-dCB3aXRoIFF1YWxjb21tIGRlZmF1bHQgTVJVIHNldHRpbmdzLgo+PiAKPj4gU2lnbmVkLW9mZi1i
-eTogU2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29tPgo+Cj5SZXZpZXdlZC1ieTogTWFuaXZh
-bm5hbiBTYWRoYXNpdmFtIDxtYW5pQGtlcm5lbC5vcmc+Cj4KPllvdSBuZWVkIHRvIGFkZCBGaXhl
-cyB0YWcgc28gdGhhdCBJIGNhbiBxdWV1ZSB0aGlzIHBhdGNoIGZvciB2NS4xNyBSQ3MuCj4KPlRo
-YW5rcywKPk1hbmkKPgpIaSBNYW5pLAogIE5ldyBwYXRjaCBpcyBjb21taXR0ZWQuIFBsZWFzZSBo
-ZWxwIGRvIGEgY2hlY2sgYWdhaW4uCgpUaGFua3MhCj4+IC0tLQo+PiAgZHJpdmVycy9idXMvbWhp
-L3BjaV9nZW5lcmljLmMgfCAxICsKPj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+
-PiAKPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jIGIvZHJpdmVy
-cy9idXMvbWhpL3BjaV9nZW5lcmljLmMKPj4gaW5kZXggM2EyNThhNjc3ZGY4Li43NGU4ZmMzNDJj
-ZmQgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jCj4+ICsrKyBi
-L2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jCj4+IEBAIC0zNjYsNiArMzY2LDcgQEAgc3Rh
-dGljIGNvbnN0IHN0cnVjdCBtaGlfcGNpX2Rldl9pbmZvIG1oaV9mb3hjb25uX3NkeDU1X2luZm8g
-PSB7Cj4+ICAJLmNvbmZpZyA9ICZtb2RlbV9mb3hjb25uX3NkeDU1X2NvbmZpZywKPj4gIAkuYmFy
-X251bSA9IE1ISV9QQ0lfREVGQVVMVF9CQVJfTlVNLAo+PiAgCS5kbWFfZGF0YV93aWR0aCA9IDMy
-LAo+PiArCS5tcnVfZGVmYXVsdCA9IDMyNzY4LAo+PiAgCS5zaWRlYmFuZF93YWtlID0gZmFsc2Us
-Cj4+ICB9Owo+PiAgCj4+IC0tIAo+PiAyLjI1LjEKPj4gCg==
+On 1/17/22 05:13, Anup Patel wrote:
+> The commit c62a76859723 ("RISC-V: KVM: Add SBI v0.2 base extension")
+> is already merged in Linus' tree.
+> 
+> Since you are yet to send PR for 5.17, we have two options:
+> 1) Rebase your for-next branch upon latest Linus' tree master branch
+> 2) Send "RISC-V: Use SBI SRST extension when available" in the
+> next batch of changes for 5.17 after 5.17-rc1
+> 
+> Let me know if you want me to rebase and send v8 patch of
+> "RISC-V: Use SBI SRST extension when available"
+> 
+> In future, we should coordinate and use a shared tag for such
+> conflicting changes.
+
+Palmer should just send it to Linus and note "enum sbi_ext_id has a 
+trivial conflict" in the pull request message.
+
+We'll sort it out better in the future, but it's such a minor conflict 
+that it is not even a nuisance.
+
+Paolo
+

@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BDA4903D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DB24903CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238135AbiAQI3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S238142AbiAQI2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238138AbiAQI3B (ORCPT
+        with ESMTP id S238144AbiAQI2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:29:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2972C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:29:01 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n9NNm-0007eS-Fs; Mon, 17 Jan 2022 09:28:54 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n9NNl-00E8vt-QK; Mon, 17 Jan 2022 09:28:53 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v3 2/2] iio: adc: tsc2046: add sanity check to avoid to big allocations
-Date:   Mon, 17 Jan 2022 09:28:52 +0100
-Message-Id: <20220117082852.3370869-2-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220117082852.3370869-1-o.rempel@pengutronix.de>
-References: <20220117082852.3370869-1-o.rempel@pengutronix.de>
+        Mon, 17 Jan 2022 03:28:13 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726ECC06161C;
+        Mon, 17 Jan 2022 00:28:12 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id BCAEAE0014;
+        Mon, 17 Jan 2022 08:28:05 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 09:29:07 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: [PATCH 1/2] dt-bindings: media: video-interfaces: add support
+ for dual edge sampling
+Message-ID: <20220117082907.hxauz4bfbwwevmge@uno.localdomain>
+References: <20220114105755.730200-1-michael.riesch@wolfvision.net>
+ <20220114105755.730200-2-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220114105755.730200-2-michael.riesch@wolfvision.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid problematic devicetree configurations. Set allocation limit
-with error message and suggestion on what can be done to solve this
-issue.
+Hi Michael,
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/iio/adc/ti-tsc2046.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Fri, Jan 14, 2022 at 11:57:54AM +0100, Michael Riesch wrote:
+> Some devices support sampling of the parallel data at both edges of the
+> interface pixel clock in order to reduce the pixel clock by two.
+> Use the pclk-sample property to reflect this feature in the device tree.
+>
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 
-diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-index 95771ceba206..55b35570ad8b 100644
---- a/drivers/iio/adc/ti-tsc2046.c
-+++ b/drivers/iio/adc/ti-tsc2046.c
-@@ -679,6 +679,12 @@ static int tsc2046_adc_setup_spi_msg(struct tsc2046_adc_priv *priv)
- 	for (ch_idx = 0; ch_idx < ARRAY_SIZE(priv->l); ch_idx++)
- 		size += tsc2046_adc_group_set_layout(priv, ch_idx, ch_idx);
- 
-+	if (size > PAGE_SIZE) {
-+		dev_err(&priv->spi->dev,
-+			"Calculated scan buffer is too big. Try to reduce spi-max-frequency, settling-time-us or oversampling-ratio\n");
-+		return -ENOSPC;
-+	}
-+
- 	priv->tx = devm_kzalloc(&priv->spi->dev, size, GFP_KERNEL);
- 	if (!priv->tx)
- 		return -ENOMEM;
--- 
-2.30.2
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
+Thanks
+  j
+
+> ---
+>  .../devicetree/bindings/media/video-interfaces.yaml          | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> index 4391dce2caee..b7f77a255778 100644
+> --- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> +++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> @@ -144,9 +144,10 @@ properties:
+>
+>    pclk-sample:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> -    enum: [ 0, 1 ]
+> +    enum: [ 0, 1, 2 ]
+>      description:
+> -      Sample data on rising (1) or falling (0) edge of the pixel clock signal.
+> +      Sample data on falling (0), rising (1) or both (2) edges of the pixel
+> +      clock signal.
+>
+>    sync-on-green-active:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> --
+> 2.30.2
+>

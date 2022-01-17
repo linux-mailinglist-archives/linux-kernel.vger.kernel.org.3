@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B36490C61
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009CD490C65
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241046AbiAQQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:19:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24274 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233071AbiAQQT2 (ORCPT
+        id S241059AbiAQQV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237650AbiAQQV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:19:28 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20HEH8xl025512;
-        Mon, 17 Jan 2022 16:19:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=bDXcVQsbeCywWDYBlSvldtS7B0/2MOSts88Qrins7Ks=;
- b=rjgmzSi52LKUxBgBfuJEy1bGz3WdJ0Wh4w3z/R19rREtuXhk2mpG6UzXCP3vYmFgsARz
- 4yyGvN5Umvetrp051KuYwVcBemFtB6bkA68auDQzvbdgzxAOpRMD3su9G6HPBfyPyUJb
- WkLCjBpNjwMoANyM6XAUjBV5tqfOcNEvYnlTgxnYv1Y70MBABNUxgyQP28DFT2NaGjfU
- AF4zhZtf7wPcF4eBtjjOW82NcjxyN+4DxygNUUKx87ng57f2JDBYsbxravOVRunvwpWc
- U152CypKgZk6N3ZZA4G4O7jbronqOyCFiwUmVd05VLewyBdEb7Rr6OpM4ocX8bJvIzzJ qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dn7kcpdrw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 16:19:28 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20HFMkgS000852;
-        Mon, 17 Jan 2022 16:19:27 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dn7kcpdqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 16:19:27 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HGCxSQ006299;
-        Mon, 17 Jan 2022 16:19:24 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 3dknw94y56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 16:19:24 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HGA4DT18678136
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jan 2022 16:10:04 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99A154C05C;
-        Mon, 17 Jan 2022 16:19:19 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 800734C04A;
-        Mon, 17 Jan 2022 16:19:18 +0000 (GMT)
-Received: from sig-9-145-177-193.de.ibm.com (unknown [9.145.177.193])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Jan 2022 16:19:18 +0000 (GMT)
-Message-ID: <7f919a0f11d4381bb14ab7d0204db43a32a96517.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 07/30] s390/pci: externalize the SIC operation
- controls and routine
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 17 Jan 2022 17:19:18 +0100
-In-Reply-To: <20220114203145.242984-8-mjrosato@linux.ibm.com>
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
-         <20220114203145.242984-8-mjrosato@linux.ibm.com>
+        Mon, 17 Jan 2022 11:21:56 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63BAC06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:21:55 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id x15so15189271ilc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:21:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sp+0eoECInU2wfkdrbVWkaKUDKICynVO7ICEtzkqDx8=;
+        b=G7gYml8dmiEYly+hsWDEJkbGtJsKpyLr2bmYQH7r+pHbSZBANaq3j/K1PRU8rlVMTG
+         zpOd1VFgDUX7J6RvXrbCyRUOO5bPURbgl18lr7YyP9y0LObLswmSte7COLutEbl1nkKo
+         mA9CAkIhzzh9JaSFgIRXG2Oc7mYX3yWSaj8wJLkmhYOhM3FwVwSSjaLSrtYTdm7BA2yF
+         YhVsTtT3j8D7IEQ8BYZBTnjdJTUN6jZB5nr7einp2i5em+F7zF/kMIT+enAwnnFT7U5I
+         fySbn8gjekMICzahIiA9HNkyz4TQ3erGhTI39hl6ehrKug2L2OQw5IZ8f7fLp2pRGcFL
+         5x8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sp+0eoECInU2wfkdrbVWkaKUDKICynVO7ICEtzkqDx8=;
+        b=oP1wOE9jOfdn5DBQCOQhBZ1JQ2QGR+27az1eEpW2rdMd36h+RFyvqxUnAu73XIQ7Ay
+         tWrHdCsux5wlZv1ubRBFMUmpuQTzJ0Xhv5b+3cua1KteGN/4SXAGaG5vSskP0RCHVur4
+         6wpnk6TI/0tWc2P1iOjOp4fWKhOBRJeo5nPinU5VJDdbs98k2an8OPsLDn8Yx/jPjZQY
+         2Sl889dkbulDrqlKdSkspsBHn/5zoPCNWr9eaj/gXePN9ba6KMyvHB4ogt41shgksOTx
+         kZAwEIyt0I5w2OTH4HgzBd9wIOHEGOplb2ZXFS8CQkpFEf7Cb72/F/zgS1KwxXzm7rcC
+         B2iQ==
+X-Gm-Message-State: AOAM530HHAelqCaYHHw9AEIW/VNemceyt3rxCa+ohdm58U0AY/JqH1eI
+        MMRviNG4fXhJUCz02ot5L+OYfgx+CgCKqsnSbH2STw==
+X-Google-Smtp-Source: ABdhPJxveX9u51mv7LPmfFastALckkh2LfMODqyoJi+VTjmGfs3BSYZOA8O3DwAF3uqjWOfP8CxcKlinlIF/pdO11Y8=
+X-Received: by 2002:a05:6e02:19cd:: with SMTP id r13mr11713421ill.89.1642436515137;
+ Mon, 17 Jan 2022 08:21:55 -0800 (PST)
+MIME-Version: 1.0
+References: <1642432215-234089-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1642432215-234089-1-git-send-email-john.garry@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 17 Jan 2022 08:21:42 -0800
+Message-ID: <CAP-5=fXONfbx6GzWaT21XzDyCcPkSR2hjEOO0ARVhwiSY5oKjA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] perf: Support event alias in form foo-bar-baz
+To:     John Garry <john.garry@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, kjain@linux.ibm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, liuqi115@huawei.com,
+        zhangshaokun@hisilicon.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WEaDADvDbA0FqNj6XOfQ1gbiWIGE4185
-X-Proofpoint-GUID: Ubz-2jd02iDDB7ijCdpIFU4yRjAJ-y3m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_07,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1011 mlxlogscore=823
- adultscore=0 bulkscore=0 malwarescore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201170102
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-14 at 15:31 -0500, Matthew Rosato wrote:
-> A subsequent patch will be issuing SIC from KVM -- export the necessary
-> routine and make the operation control definitions available from a header.
-> Because the routine will now be exported, let's rename __zpci_set_irq_ctrl
-> to zpci_set_irq_ctrl and get rid of the zero'd iib wrapper function of
-> the same name.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+On Mon, Jan 17, 2022 at 7:15 AM John Garry <john.garry@huawei.com> wrote:
+>
+> Currently event aliases in the form foo-bar-baz are not supported.
+>
+> The HiSilicon D06 platform has uncore event aliases in that form, and
+> using those aliases fail:
+>
+> $ ./perf list sdir-home-migrate
+>
+> List of pre-defined events (to be used in -e):
+>
+> uncore hha:
+>   sdir-home-migrate
+>  [Unit: hisi_sccl,hha]
+>
+> $ sudo ./perf stat -e sdir-home-migrate
+> event syntax error: 'sdir-home-migrate'
+>                         \___ parser error
+> Run 'perf list' for a list of valid events
+>
+>  Usage: perf stat [<options>] [<command>]
+>
+>  -e, --event <event>event selector. use 'perf list' to list available events
+>
+> This series added support for such an event alias form.
+>
+> I am no expert on l+y, so any and all review here would be appreciated,
+> especially the last patch which is marked as RFC (for that same reason).
+>
+> The series is based on acme perf/core @ 9bce13ea88f8.
+>
+> John Garry (3):
+>   perf parse-events: Support event alias in form foo-bar-baz
+>   perf test: Add pmu-events test for aliases with hyphens
+>   perf test: Add parse-events test for aliases with hyphens
 
-Looks good thank you!
+The whole set:
 
-Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Acked-by: Ian Rogers <irogers@google.com>
 
-> ---
->  arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
->  arch/s390/pci/pci_insn.c         |  3 ++-
->  arch/s390/pci/pci_irq.c          | 26 ++++++++++++--------------
->  3 files changed, 23 insertions(+), 23 deletions(-)
-> 
-> 
----8<---
+The additional code is no worse than the existing code. The testing is
+a great addition!
 
+Thanks,
+Ian
+
+>  .../arch/test/test_soc/cpu/uncore.json        | 16 +++++
+>  tools/perf/tests/parse-events.c               | 49 ++++++++++++++
+>  tools/perf/tests/pmu-events.c                 | 32 +++++++++
+>  tools/perf/util/parse-events.c                | 67 ++++++++++++++++---
+>  tools/perf/util/parse-events.h                |  1 +
+>  tools/perf/util/parse-events.l                |  2 +
+>  tools/perf/util/parse-events.y                | 17 ++++-
+>  7 files changed, 171 insertions(+), 13 deletions(-)
+>
+> --
+> 2.26.2
+>

@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CF64902B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930924902B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237473AbiAQHHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:07:38 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48402 "EHLO
+        id S237528AbiAQHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:07:59 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48694 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237393AbiAQHH1 (ORCPT
+        with ESMTP id S237404AbiAQHHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:07:27 -0500
-X-UUID: ed35a4e554b9472794df07a6e645e9ab-20220117
-X-UUID: ed35a4e554b9472794df07a6e645e9ab-20220117
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        Mon, 17 Jan 2022 02:07:36 -0500
+X-UUID: aab92e32206244d29f0c9ca42004be8d-20220117
+X-UUID: aab92e32206244d29f0c9ca42004be8d-20220117
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2014408673; Mon, 17 Jan 2022 15:07:24 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 363911253; Mon, 17 Jan 2022 15:07:31 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 17 Jan 2022 15:07:23 +0800
+ 15.2.792.15; Mon, 17 Jan 2022 15:07:30 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 17 Jan 2022 15:07:21 +0800
+ Transport; Mon, 17 Jan 2022 15:07:28 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Hans Verkuil <hverkuil@xs4all.nl>,
@@ -58,9 +58,9 @@ CC:     Evan Green <evgreen@chromium.org>,
         <libo.kang@mediatek.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v10 11/13] memory: mtk-smi: Get rid of mtk_smi_larb_get/put
-Date:   Mon, 17 Jan 2022 15:05:08 +0800
-Message-ID: <20220117070510.17642-12-yong.wu@mediatek.com>
+Subject: [PATCH v10 12/13] arm: dts: mediatek: Get rid of mediatek,larb for MM nodes
+Date:   Mon, 17 Jan 2022 15:05:09 +0800
+Message-ID: <20220117070510.17642-13-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220117070510.17642-1-yong.wu@mediatek.com>
 References: <20220117070510.17642-1-yong.wu@mediatek.com>
@@ -71,79 +71,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After adding device_link between the iommu consumer and smi-larb,
-the pm_runtime_get(_sync) of smi-larb and smi-common will be called
-automatically. we can get rid of mtk_smi_larb_get/put.
+After adding device_link between the IOMMU consumer and smi, the
+mediatek,larb is unnecessary now.
 
 CC: Matthias Brugger <matthias.bgg@gmail.com>
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: Evan Green <evgreen@chromium.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
-Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/memory/mtk-smi.c   | 14 --------------
- include/soc/mediatek/smi.h | 20 --------------------
- 2 files changed, 34 deletions(-)
+ arch/arm/boot/dts/mt2701.dtsi  | 2 --
+ arch/arm/boot/dts/mt7623n.dtsi | 5 -----
+ 2 files changed, 7 deletions(-)
 
-diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-index b883dcc0bbfa..1b348bb93f0b 100644
---- a/drivers/memory/mtk-smi.c
-+++ b/drivers/memory/mtk-smi.c
-@@ -149,20 +149,6 @@ struct mtk_smi_larb { /* larb: local arbiter */
- 	unsigned char			*bank;
- };
+diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
+index 4776f85d6d5b..ef583cfd3baf 100644
+--- a/arch/arm/boot/dts/mt2701.dtsi
++++ b/arch/arm/boot/dts/mt2701.dtsi
+@@ -564,7 +564,6 @@
+ 		clock-names = "jpgdec-smi",
+ 			      "jpgdec";
+ 		power-domains = <&scpsys MT2701_POWER_DOMAIN_ISP>;
+-		mediatek,larb = <&larb2>;
+ 		iommus = <&iommu MT2701_M4U_PORT_JPGDEC_WDMA>,
+ 			 <&iommu MT2701_M4U_PORT_JPGDEC_BSDMA>;
+ 	};
+@@ -577,7 +576,6 @@
+ 		clocks =  <&imgsys CLK_IMG_VENC>;
+ 		clock-names = "jpgenc";
+ 		power-domains = <&scpsys MT2701_POWER_DOMAIN_ISP>;
+-		mediatek,larb = <&larb2>;
+ 		iommus = <&iommu MT2701_M4U_PORT_JPGENC_RDMA>,
+ 			 <&iommu MT2701_M4U_PORT_JPGENC_BSDMA>;
+ 	};
+diff --git a/arch/arm/boot/dts/mt7623n.dtsi b/arch/arm/boot/dts/mt7623n.dtsi
+index bcb0846e29fd..3adab5cd1fef 100644
+--- a/arch/arm/boot/dts/mt7623n.dtsi
++++ b/arch/arm/boot/dts/mt7623n.dtsi
+@@ -121,7 +121,6 @@
+ 		clock-names = "jpgdec-smi",
+ 			      "jpgdec";
+ 		power-domains = <&scpsys MT2701_POWER_DOMAIN_ISP>;
+-		mediatek,larb = <&larb2>;
+ 		iommus = <&iommu MT2701_M4U_PORT_JPGDEC_WDMA>,
+ 			 <&iommu MT2701_M4U_PORT_JPGDEC_BSDMA>;
+ 	};
+@@ -144,7 +143,6 @@
+ 		interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&mmsys CLK_MM_DISP_OVL>;
+ 		iommus = <&iommu MT2701_M4U_PORT_DISP_OVL_0>;
+-		mediatek,larb = <&larb0>;
+ 	};
  
--int mtk_smi_larb_get(struct device *larbdev)
--{
--	int ret = pm_runtime_resume_and_get(larbdev);
--
--	return (ret < 0) ? ret : 0;
--}
--EXPORT_SYMBOL_GPL(mtk_smi_larb_get);
--
--void mtk_smi_larb_put(struct device *larbdev)
--{
--	pm_runtime_put_sync(larbdev);
--}
--EXPORT_SYMBOL_GPL(mtk_smi_larb_put);
--
- static int
- mtk_smi_larb_bind(struct device *dev, struct device *master, void *data)
- {
-diff --git a/include/soc/mediatek/smi.h b/include/soc/mediatek/smi.h
-index 15e3397cec58..11f7d6b59642 100644
---- a/include/soc/mediatek/smi.h
-+++ b/include/soc/mediatek/smi.h
-@@ -19,26 +19,6 @@ struct mtk_smi_larb_iommu {
- 	unsigned char  bank[32];
- };
+ 	rdma0: rdma@14008000 {
+@@ -154,7 +152,6 @@
+ 		interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&mmsys CLK_MM_DISP_RDMA>;
+ 		iommus = <&iommu MT2701_M4U_PORT_DISP_RDMA>;
+-		mediatek,larb = <&larb0>;
+ 	};
  
--/*
-- * mtk_smi_larb_get: Enable the power domain and clocks for this local arbiter.
-- *                   It also initialize some basic setting(like iommu).
-- * mtk_smi_larb_put: Disable the power domain and clocks for this local arbiter.
-- * Both should be called in non-atomic context.
-- *
-- * Returns 0 if successful, negative on failure.
-- */
--int mtk_smi_larb_get(struct device *larbdev);
--void mtk_smi_larb_put(struct device *larbdev);
--
--#else
--
--static inline int mtk_smi_larb_get(struct device *larbdev)
--{
--	return 0;
--}
--
--static inline void mtk_smi_larb_put(struct device *larbdev) { }
--
- #endif
+ 	wdma@14009000 {
+@@ -164,7 +161,6 @@
+ 		interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&mmsys CLK_MM_DISP_WDMA>;
+ 		iommus = <&iommu MT2701_M4U_PORT_DISP_WDMA>;
+-		mediatek,larb = <&larb0>;
+ 	};
  
- #endif
+ 	bls: pwm@1400a000 {
+@@ -215,7 +211,6 @@
+ 		interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&mmsys CLK_MM_DISP_RDMA1>;
+ 		iommus = <&iommu MT2701_M4U_PORT_DISP_RDMA1>;
+-		mediatek,larb = <&larb0>;
+ 	};
+ 
+ 	dpi0: dpi@14014000 {
 -- 
 2.18.0
 

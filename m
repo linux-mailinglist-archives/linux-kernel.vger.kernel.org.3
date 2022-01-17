@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF896490C11
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BAB490C17
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237623AbiAQQHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:07:12 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49994 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbiAQQHM (ORCPT
+        id S240774AbiAQQIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:08:51 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:25470 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S240728AbiAQQIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:07:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AA4161034;
-        Mon, 17 Jan 2022 16:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD6EC36AE3;
-        Mon, 17 Jan 2022 16:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642435631;
-        bh=savEbw0Fq5jjf0eRzSMg5CUeza/UcrBnw+kG0Zx0SQA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qAGiC9WQQQRyt4g9rn98cyXAzcF1q1Xg9AGoWlQE+ukoM49QGVXM/MCvPNt+T6Ily
-         AIBHiC9Ft8zm7rNCfuWmXK5ND4/YGdCCe2GM6UvCXPt+0ff3xwvAjffpyWOAc1P2px
-         5nmcNhoKVfAZo7+Kn1P5LLY8mFjvcoNNvSFHSAyHtWz4RC79cNerjR/msPFwQw6lWB
-         1RRRkzo8waubeN9xphJUEJ75CodbF7hIrSZ9lyYVkuxEXoMf0vOMpt1cZqA/i0EdpU
-         3W48TMw8uO54uuaCEfwkRK3yrJWIN3jQtzjN3k6dYU83CH6pLAWhgruEpWuYtJk5ib
-         CJhcQP/xSYUeg==
-Date:   Mon, 17 Jan 2022 21:37:05 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH net v2] For default mechanism, product would use
- default MRU 3500 if they didn't define it. But for Foxconn SDX55, there is a
- known issue which MRU 3500 would lead to data connection lost. So we align
- it with Qualcomm default MRU settings.
-Message-ID: <20220117160705.GC4209@thinkpad>
-References: <20220117081644.21121-1-slark_xiao@163.com>
- <20220117084432.GB4209@thinkpad>
- <50e92997.386b.17e6775c20b.Coremail.slark_xiao@163.com>
+        Mon, 17 Jan 2022 11:08:49 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20HFFYHA025138;
+        Mon, 17 Jan 2022 10:08:34 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=KUv7ngvVuTUvfvAzKJH6kDlqhmw0mCvg7E2LNqztcsg=;
+ b=aH9gWWxrwrp06o1iVySEwmvNsSTgYwG3Ih6PrPl5mQK2OtTIVgSJFBtnMcZPvx00KLEn
+ lRu8ZMc5ZG30X8sOOqm8/9U/SpXt5iqCalnGKyCWQPLtnQo4aqDOF/Zv34oBSfhjynjB
+ nUfSTmghIHhMDnPaEJyI8mFgtQ4C0a2X07Mi1Ce7mo/Ed5eji2bJuDbRWPGdnh+1/mw3
+ oT97g+6BEWL/ncFLmgaI4RmRAKspU393prnqPwJbN7MAJl1K6iKvA2OSJvkZ5Zmenx/y
+ BvLKRy8mDHfj81LDZBm/Ew4d25Hg9VBjxWNsHMQfMTsJB52T1XMr0HjyT4CF1mysj8hl mQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dnaxhr22c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 17 Jan 2022 10:08:34 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 17 Jan
+ 2022 16:08:32 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Mon, 17 Jan 2022 16:08:32 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D679E459;
+        Mon, 17 Jan 2022 16:08:31 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v2 1/6] ALSA: hda: cs35l41: Avoid overwriting register patch
+Date:   Mon, 17 Jan 2022 16:08:25 +0000
+Message-ID: <20220117160830.709403-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50e92997.386b.17e6775c20b.Coremail.slark_xiao@163.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: ZQoJ3bLYtcWhv2KkilNAPdRESf1c6SdB
+X-Proofpoint-ORIG-GUID: ZQoJ3bLYtcWhv2KkilNAPdRESf1c6SdB
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 05:54:37PM +0800, Slark Xiao wrote:
-> 
-> 
-> 
-> 
-> 
-> 
-> At 2022-01-17 16:44:32, "Manivannan Sadhasivam" <mani@kernel.org> wrote:
-> >On Mon, Jan 17, 2022 at 04:16:44PM +0800, Slark Xiao wrote:
-> >> Fixes: 5c2c85315948 ("bus: mhi: pci-generic: configurable network interface MRU")
-> >
-> >You have messed up the patch subject, please fix it. Also, the correct fixes tag
-> >should be the one added the Foxconn modem support, precisely "aac426562f56".
-> >
-> Yes, sorry for this mistake. 
-> >One more thing, please make sure this MRU value works well for other Foxconn
-> >modems supported by this config.
-> >
-> I am sure this would work for all  our device. BTW, I want to add this mru_default to 
-> cinterion-mv31 PRODUCT. Shall I use v3 or create a new version for that? It's confirmed 
-> that this change could help fix issue on that product.
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Please submit individual patches with Fixes tag each.
+regmap_register_patch can't be used to apply the probe sequence as a
+patch is already registers with the regmap by
+cs35l41_register_errata_patch and only a single patch can be attached to
+a single regmap. The driver doesn't currently rely on a cache sync to
+re-apply this probe sequence so simply switch it to a multi write.
 
-> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> >
-> >You should have added my Reviewed-by tag too...
-> Shall I add reviewd-by tag if I add changes on MV31 product?
-> >
+Fixes: 7b2f3eb492da ("ALSA: hda: cs35l41: Add support for CS35L41 in HDA systems")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+---
 
-No, only to this patch since I haven't reviewed the MV31 patch.
+V2: Add Fixes tag
 
-Thanks,
-Mani
+---
+ sound/pci/hda/cs35l41_hda.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >Thanks,
-> >Mani
-> >
-> >> 
-> >> ---
-> >> v2: Add Fixes tag
-> >> ---
-> >>  drivers/bus/mhi/pci_generic.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >> 
-> >> diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-> >> index 3a258a677df8..74e8fc342cfd 100644
-> >> --- a/drivers/bus/mhi/pci_generic.c
-> >> +++ b/drivers/bus/mhi/pci_generic.c
-> >> @@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
-> >>  	.config = &modem_foxconn_sdx55_config,
-> >>  	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
-> >>  	.dma_data_width = 32,
-> >> +	.mru_default = 32768,
-> >>  	.sideband_wake = false,
-> >>  };
-> >>  
-> >> -- 
-> >> 2.25.1
-> >> 
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index 30b40d865863..c47c5f0b4e59 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -480,7 +480,7 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
+ 	acpi_hw_cfg = NULL;
+ 
+ 	if (cs35l41->reg_seq->probe) {
+-		ret = regmap_register_patch(cs35l41->regmap, cs35l41->reg_seq->probe,
++		ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41->reg_seq->probe,
+ 					    cs35l41->reg_seq->num_probe);
+ 		if (ret) {
+ 			dev_err(cs35l41->dev, "Fail to apply probe reg patch: %d\n", ret);
+-- 
+2.34.1
+

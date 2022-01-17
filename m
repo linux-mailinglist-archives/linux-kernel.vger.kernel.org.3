@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFFD4901D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4FE4901D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234620AbiAQGD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 01:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S234410AbiAQGIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 01:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiAQGDW (ORCPT
+        with ESMTP id S232310AbiAQGID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:03:22 -0500
-Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [IPv6:2001:67c:2050:1::465:107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30DEC06173F
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 22:03:21 -0800 (PST)
-Received: from smtp202.mailbox.org (unknown [91.198.250.118])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4JchCp6LDzzQjkl;
-        Mon, 17 Jan 2022 07:03:18 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Message-ID: <506398f4-94a8-f2d4-999c-1c14863cd78f@denx.de>
-Date:   Mon, 17 Jan 2022 07:03:14 +0100
+        Mon, 17 Jan 2022 01:08:03 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8387C061574;
+        Sun, 16 Jan 2022 22:08:02 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id h11so28546557uar.5;
+        Sun, 16 Jan 2022 22:08:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jfic68I58oAdYQE6st8yUtkeQd/b8yHt8As/UNfzHgY=;
+        b=pMndv7IEtBwVrVbJUtdwOetT8PRD/GIH1C326Awqgj6aRcjOGqOetv7M9EhmxjQk0J
+         SljI+44KPBbFCxr2Ps76s/iboYZX6MFnLJ12JJtesJxNDTSFXDWcjvnetH2tMaPBMnOz
+         TSn2GOPdgIRiLTKFB7d9QWroafYuRfn3EnbyAbyWYLec4aRINyf2SjI+mHf6mhgWtJ/A
+         kMty4u8eDQR5DkmPSwdf3xQv3OETZPpzWnOe3zPpnXCYFu0R+7r8bEaV4AgZL2gE4ako
+         N1RuvECZA5Q7CrlJydTgzmqBO61vzhtILTiH3irdsYnWwchCi+tCj0DvXXniWaSKqLkA
+         nAKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Jfic68I58oAdYQE6st8yUtkeQd/b8yHt8As/UNfzHgY=;
+        b=tk8KccTmEGlPeozfSlurLM8ZuFxHyY2nziB7ZgU4kf7vtyS/U/vJ4ThVT+YoCu8pRW
+         FoAJvSFnVvZwsebE9VvsaeL1Lj/0wulOpFbXgIkLOYxPh/QKKrZMfutcHY9ckVryQdDY
+         durua2uPg3AX3kIJwekjY0tV5kz/aBnvqFKpk8Qlf2pnlCfti7JkZj1v3m139Sz6CKmk
+         mmCoy5Cop12rh3/Z51IJOVk8LKG3B3HRJtRvKkoXdXVDkyt/Q8XX6YqaPl+dcJiO3H4j
+         oOytCiw2q/X2q5BB5OIPLpy9g1dy1zAa0lpks2jHkn+ABn2rvGXsY7wTMLAu3OsGk/Bk
+         Lwuw==
+X-Gm-Message-State: AOAM533ONT0yEvCIOiLZd38mC91BlzUK9ORkw72049AJPc9WBubV7F8p
+        lbLGc/dGCz5hspSffJPbTUawQEV0RajWS44X
+X-Google-Smtp-Source: ABdhPJyFqYcL0o7EL0cDhQby3v34SWlMvpheXtNw66AbZrKOusGcZdge89z7dmgrnOPAUUAozdoz7w==
+X-Received: by 2002:a67:e057:: with SMTP id n23mr5015149vsl.6.1642399681736;
+        Sun, 16 Jan 2022 22:08:01 -0800 (PST)
+Received: from kubuntu-desktop.. ([67.8.38.84])
+        by smtp.gmail.com with ESMTPSA id s32sm3430087uas.3.2022.01.16.22.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 22:08:01 -0800 (PST)
+Sender: Julian Braha <julian.braha@gmail.com>
+From:   Julian Braha <julianbraha@gmail.com>
+To:     dmitry.torokhov@gmail.com, johannes.berg@intel.com, richard@nod.at,
+        oleg@kaa.org.ua, cand@gmx.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fazilyildiran@gmail.com
+Subject: [PATCH] input: fix Kconfig dependency on IIO_BUFFER
+Date:   Mon, 17 Jan 2022 01:07:59 -0500
+Message-Id: <20220117060759.84924-1-julianbraha@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: Re: [PATCH] dmaengine: altera-msgdma: Remove useless DMA-32 fallback
- configuration
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Olivier Dautricourt <olivier.dautricourt@orolia.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        dmaengine@vger.kernel.org
-References: <01058ada3a0dea207212182ca7525060a204f1e1.1642232423.git.christophe.jaillet@wanadoo.fr>
-From:   Stefan Roese <sr@denx.de>
-In-Reply-To: <01058ada3a0dea207212182ca7525060a204f1e1.1642232423.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/15/22 08:40, Christophe JAILLET wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
-> 
-> Simplify code and remove some dead code accordingly.
-> 
-> [1]: https://lore.kernel.org/linux-kernel/YL3vSPK5DXTNvgdx@infradead.org/#t
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+When JOYSTICK_ADC is enabled, and IIO_BUFFER is disabled,
+Kbuild gives the following warning:
 
-Reviewed-by: Stefan Roese <sr@denx.de>
+WARNING: unmet direct dependencies detected for IIO_BUFFER_CB
+  Depends on [n]: IIO [=y] && IIO_BUFFER [=n]
+  Selected by [y]:
+  - JOYSTICK_ADC [=y] && !UML && INPUT [=y] && INPUT_JOYSTICK [=y] && IIO [=y]
 
-Thanks,
-Stefan
+This is because JOYSTICK_ADC selects IIO_BUFFER_CB
+without selecting or depending on IIO_BUFFER,
+despite IIO_BUFFER_CB depending on IIO_BUFFER.
 
-> ---
->   drivers/dma/altera-msgdma.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/dma/altera-msgdma.c b/drivers/dma/altera-msgdma.c
-> index f5b885d69cd3..6f56dfd375e3 100644
-> --- a/drivers/dma/altera-msgdma.c
-> +++ b/drivers/dma/altera-msgdma.c
-> @@ -891,9 +891,7 @@ static int msgdma_probe(struct platform_device *pdev)
->   	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
->   	if (ret) {
->   		dev_warn(&pdev->dev, "unable to set coherent mask to 64");
-> -		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> -		if (ret)
-> -			goto fail;
-> +		goto fail;
->   	}
->   
->   	msgdma_reset(mdev);
-> 
+This unmet dependency bug was detected by Kismet,
+a static analysis tool for Kconfig. Please advise
+if this is not the appropriate solution.
 
-Viele Grüße,
-Stefan Roese
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
+---
+ drivers/input/joystick/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
+index 3b23078bc7b5..db4135bbd279 100644
+--- a/drivers/input/joystick/Kconfig
++++ b/drivers/input/joystick/Kconfig
+@@ -46,6 +46,7 @@ config JOYSTICK_A3D
+ config JOYSTICK_ADC
+ 	tristate "Simple joystick connected over ADC"
+ 	depends on IIO
++	select IIO_BUFFER
+ 	select IIO_BUFFER_CB
+ 	help
+ 	  Say Y here if you have a simple joystick connected over ADC.
 -- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
+2.32.0
+

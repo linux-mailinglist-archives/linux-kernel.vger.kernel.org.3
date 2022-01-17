@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D69BC4904AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D641A4904AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbiAQJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:18:03 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48614 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233321AbiAQJR6 (ORCPT
+        id S235444AbiAQJUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233695AbiAQJUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:17:58 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20H7cUn3026280;
-        Mon, 17 Jan 2022 10:17:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=fH92PNsO8X+nTytDGMeCCrtRCxn6Df2D+woMj6i38/M=;
- b=Y6nMLSn8xL02wxIcny9f/TIZ3XKn2amtQWcAqZ7e72RfRczkHgL5c2rzJLlzEpIgeyGu
- Cgw0chsa8xx5fvuAcOOcxOuabNw/obuZIj3/HsuYwr3NHmfClY47ea2Ib4ejFDR5u+98
- t6NvwR0XLhOhH29Bzlsl9oOJEXd72EkIwNy34ATZtKD2tihk12d7pP6MqG4Vw5iti353
- xN9Gm7L7k9VDf+GjUDjrho8EHFQ1aMSG+XT1ZhdTJKdoUc7AC5k/cQFNqa0w8UJJf6gw
- aXkNyRcxGGFfwvGuBxyfVQYXb2RrFtwm2NyCvCbvM8zrp0sGj4fIvC+E6Aa7A5toRjaa OA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dmnse3p58-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 10:17:44 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 686AF100038;
-        Mon, 17 Jan 2022 10:17:43 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6006F20F6D3;
-        Mon, 17 Jan 2022 10:17:43 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE1.st.com (10.75.127.4)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 17 Jan 2022 10:17:42
- +0100
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH] dmaengine: stm32-dma: set dma_device max_sg_burst
-Date:   Mon, 17 Jan 2022 10:17:40 +0100
-Message-ID: <20220117091740.11064-1-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Jan 2022 04:20:03 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A4C061574;
+        Mon, 17 Jan 2022 01:20:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FxsJjdfKuu5bMpXR0hew/7OYz/lzco51HZJYdo8kNlI=; b=UUjoeWidKnxmT0H8VFs6CIVpR2
+        1+Bu5gzqg+I9eL+G+KtR+IHQ2bIy+s8dn4Q2aV2B+H1iAfF5i1jlGPjhBX5Au0Hd0V/Uc/C1NZS3l
+        ZSK2QHgJRH9R59nPcLm6P+Y5bHyuAtQ19JVYFq07+gzN4HrTPAtJ5PPhVxUZlZ1+jGl7aLFHQQZBr
+        mGsSVGfbjjfgGxYyFGxtJfmciMtstDSqb9FYSEtOBrEZnmenlMFwzdYe8dtzPtB9CcdCC/bNjpS1y
+        mA4autKfmCFWgs49z1PqRD2cd3avmn3DSfE8aPcSJvWKnVNzEJm6N2v+VTUi5WP+VOxZp1Sg2M1ur
+        tRoUWEhw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9OAj-007zug-Bm; Mon, 17 Jan 2022 09:19:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0FE09300222;
+        Mon, 17 Jan 2022 10:19:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8F4B82C707D18; Mon, 17 Jan 2022 10:19:26 +0100 (CET)
+Date:   Mon, 17 Jan 2022 10:19:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@google.com>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, avagin@google.com, jannh@google.com,
+        tdelisle@uwaterloo.ca, posk@posk.io
+Subject: Re: [RFC PATCH v2 4/5] sched: UMCG: add a blocked worker list
+Message-ID: <YeU0nr6DfBCaH6UF@hirez.programming.kicks-ass.net>
+References: <20220113233940.3608440-1-posk@google.com>
+ <20220113233940.3608440-5-posk@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE1.st.com
- (10.75.127.4)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_03,2022-01-14_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113233940.3608440-5-posk@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some stm32-dma consumers [1] rather use dma_get_slave_caps() to get
-max_sg_burst of their DMA channel as dma_get_max_seg_size() is specific to
-the DMA controller.
-All stm32-dma channels have the same features so, don't need to implement
-device_caps ops. Let dma_get_slave_caps() relies on dma_device
-configuration.
-That's why this patch sets dma_device max_sg_burst to the maximum segment
-size, which is the maximum of data items that can be transferred without
-software intervention.
+On Thu, Jan 13, 2022 at 03:39:39PM -0800, Peter Oskolkov wrote:
+> The original idea of a UMCG server was that it was used as a proxy
+> for a CPU, so if a worker associated with the server is RUNNING,
+> the server itself is never ever was allowed to be RUNNING as well;
+> when umcg_wait() returned for a server, it meant that its worker
+> became BLOCKED.
+> 
+> In the new (old?) "per server runqueues" model implemented in
+> the previous patch in this patchset, servers are woken when
+> a previously blocked worker on their runqueue finishes its blocking
+> operation, even if the currently RUNNING worker continues running.
+> 
+> As now a server may run while a worker assigned to it is running,
+> the original idea of having at most a single worker RUNNING per
+> server, as a means to control the number of running workers, is
+> not really enforced, and the server, woken by a worker
+> doing BLOCKED=>RUNNABLE transition, may then call sys_umcg_wait()
+> with a second/third/etc. worker to run.
+> 
+> Support this scenario by adding a blocked worker list:
+> when a worker transitions RUNNING=>BLOCKED, not only its server
+> is woken, but the worker is also added to the blocked worker list
+> of its server.
+> 
+> This change introduces the following benefits:
+> - block detection how behaves similarly to wake detection;
+>   without this patch worker wakeups added wakees to the list
+>   and woke the server, while worker blocks only woke the server
+>   without adding blocked workers to a list, forcing servers
+>   to explicitly check worker's state;
+> - if the blocked worker woke sufficiently quickly, the server
+>   woken on the block event would observe its worker now as
+>   RUNNABLE, so the block event had to be inferred rather than
+>   explicitly signalled by the worker being added to the blocked
+>   worker list;
+> - it is now possible for a single server to control several
+>   RUNNING workers, which makes writing userspace schedulers
+>   simpler for smaller processes that do not need to scale beyond
+>   one "server";
+> - if the userspace wants to keep at most a single RUNNING worker
+>   per server, and have multiple servers with their own runqueues,
+>   this model is also naturally supported here.
+> 
+> So this change basically decouples block/wake detection from
+> M:N threading in the sense that the number of servers is now
+> does not have to be M or N, but is more driven by the scalability
+> needs of the userspace application.
 
-[1] https://lore.kernel.org/lkml/20220110103739.118426-1-alain.volmat@foss.st.com/
-    "media: stm32: dcmi: create a dma scatterlist based on DMA max_sg_burst value"
+So I don't object to having this blocking list, we had that early on in
+the discussions.
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/dma/stm32-dma.c | 1 +
- 1 file changed, 1 insertion(+)
+*However*, combined with WF_CURRENT_CPU this 1:N userspace model doesn't
+really make sense, also combined with Proxy-Exec (if we ever get that
+sorted) it will fundamentally not work.
 
-diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
-index 83a37a6955a3..d2365fab1b7a 100644
---- a/drivers/dma/stm32-dma.c
-+++ b/drivers/dma/stm32-dma.c
-@@ -1389,6 +1389,7 @@ static int stm32_dma_probe(struct platform_device *pdev)
- 	dd->residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;
- 	dd->copy_align = DMAENGINE_ALIGN_32_BYTES;
- 	dd->max_burst = STM32_DMA_MAX_BURST;
-+	dd->max_sg_burst = STM32_DMA_ALIGNED_MAX_DATA_ITEMS;
- 	dd->descriptor_reuse = true;
- 	dd->dev = &pdev->dev;
- 	INIT_LIST_HEAD(&dd->channels);
--- 
-2.25.1
-
+More consideration is needed I think...

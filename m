@@ -2,163 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CFE490B84
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5E6490B87
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbiAQPhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S240533AbiAQPhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237296AbiAQPhC (ORCPT
+        with ESMTP id S240516AbiAQPhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:37:02 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE20C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:37:02 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id w5-20020a1cf605000000b0034b8cb1f55eso5190179wmc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:37:02 -0800 (PST)
+        Mon, 17 Jan 2022 10:37:16 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1B4C061574;
+        Mon, 17 Jan 2022 07:37:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id x22so59000338lfd.10;
+        Mon, 17 Jan 2022 07:37:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=1thsq464ntZ1Q6hN1oNhhbpxlas4Ufptak2u+5NaEgg=;
-        b=Mu/4nG9MsWYJC0F8RgjvHauRdNem04cKRH+xztrPCTh8xwBL3zS9lULs+kndSOLPeg
-         DCY1B7EiOfqzKPw5+gzRCFB/kqf1/Et/m0GCDDjCDo1KKkYmkFqlBfmhol/1RO4PGsFX
-         vQy2wtJu4HzXh/XG1T88ibpsyL3WkYqxxDegotZDOkoy4Kuo+Q4JUBj+xxxXkDXHX8o+
-         oWmfg+Ou3VNd9Rwlk6zCBxYsLyi+l7Fhn9N7jhCWMHMNVN0/Nf7Hicrr+Jjb7sRWm/oZ
-         to02tjLEO5wgUISZBZwXTyP6AzT4h6LjKeNTeIQqlHAStRY89nm5+gNWCHzz6wdtjpBe
-         RPtg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OL7Y+hrIynkrqQt6obRsxcKwMEddn/APo3kKvBE1hy0=;
+        b=D0MmIgPKLNGF0PNzm0QWbFHV7P80RcAkUYHSs+OGOZECTww3hV82/aB7v+N8QtWPDw
+         ToP9IYGDRW5fQwApZRK2wONbpfTaI67OrOp3MQ+ZJuQoeoOVYRnkuK4JsCn9kM/uo5xf
+         vRgJLCMH2xqggaWMKMgmxExoQi3GbljwB9gsbyjDv3bmWdFYU40yWhxyvQ2+cRUj9ydb
+         MhjrxJI3IvvJ/gM8Epg6hNn8fPhXw5Z1gAG5TgVqYPdy+8UF3m+DhTMZ4mRCk0mfTF+D
+         1t3eYNuHtA057tpW6HW4h2exSCHGZ130eCPSS1HOkmSLCCg/oDEiyEykmXiNP8St6Yoj
+         nN0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=1thsq464ntZ1Q6hN1oNhhbpxlas4Ufptak2u+5NaEgg=;
-        b=E8z51Rzyggk9LxFrArQ1TzxrAW9wyZV5G+QxH5WSy/vtPuuHzDVhhUWZLRI2oPfgsn
-         tp7df144i/V5Nti5xwE7SKLq3LQwceni+yEhklMbEFGVNE2GbI9SrQNgdZR2I8Y4Y4UA
-         zqWKo6SMHPLEPdM0af5qsbRRvABwCFO6ng/SZ614DZUwmsLjOLOnbzJGgligbgRLc/gz
-         VboT8hH+C9mR7etUELI2/h1HuH3Px8/oL35LE8Tug+SFv37ju0r4CoZqrmNe4EDHJvMy
-         itR9Zw6ElOfT/7hAdVk2OmdrL7iC56pp/sb0YVNIAFCO/rLygejXvZOKpQx/cE63BzsN
-         Cu2A==
-X-Gm-Message-State: AOAM533+mJmYQzdHYNBLJCtykqczJVSUxY+t6H7h7BQMyJBE21uCmzSK
-        lvYRWple/6mRSU9z6zv/rp10d32Er9A=
-X-Google-Smtp-Source: ABdhPJyeOOYVbaUb669nA1YMRKxEqaGjPJjSEmytoc6GRzTaslfSLpD5JOlE0QEasuDhzg3ORCJRsiGtLYc=
-X-Received: from nogikh-hp.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:200d])
- (user=nogikh job=sendgmr) by 2002:a05:600c:33a7:: with SMTP id
- o39mr20091461wmp.6.1642433820772; Mon, 17 Jan 2022 07:37:00 -0800 (PST)
-Date:   Mon, 17 Jan 2022 15:36:34 +0000
-In-Reply-To: <20220117153634.150357-1-nogikh@google.com>
-Message-Id: <20220117153634.150357-3-nogikh@google.com>
-Mime-Version: 1.0
-References: <20220117153634.150357-1-nogikh@google.com>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH v3 2/2] kcov: properly handle subsequent mmap calls
-From:   Aleksandr Nogikh <nogikh@google.com>
-To:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org
-Cc:     dvyukov@google.com, andreyknvl@gmail.com, elver@google.com,
-        glider@google.com, tarasmadan@google.com, bigeasy@linutronix.de,
-        nogikh@google.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OL7Y+hrIynkrqQt6obRsxcKwMEddn/APo3kKvBE1hy0=;
+        b=Hm5uWCdt683eX2zKvsSO2UoE1WkeSy2bMuLsL/A+dOhX4OhTeBpK2PV+wYq5NfdR+a
+         jlSObsYkPJOpIl12jrTA6Ydy987zN+7mEQw/QHnHgWKu2i1xFOHc8vQH2cAKbImGeayF
+         R89V/1sVgEFQpltTo0/LJFAoiGdfN5HeYigbmE83CkDZnBlu6PSdki3oksmcd+9Ml/ph
+         CLmCUtpExG0bzx3+Gf8IFEw4phYdUy5mTHv1h7fuZZsic2yQhsH9X11UEEne54CTR+fU
+         UZx5vHwK0NLq/NZBf6bxZ9yOITC1asYqDHyvc9hLE1WuXucOSwDZKWK1Di1u1/e4DxfT
+         SLWQ==
+X-Gm-Message-State: AOAM533+9rYyynUyTg4eXjIah7uJ9rZb5F+yRMylwS/veUbRjOlx/JdJ
+        yzpHGjx3XNZpTPk2dAofgXA=
+X-Google-Smtp-Source: ABdhPJyvCIHIxihGy//3IJnSQB5nqEhHeefHDn4ChkAdTLzcGWZY60C8xhndAUwjPYK8/6+1fXR55A==
+X-Received: by 2002:a05:6512:c1f:: with SMTP id z31mr17465053lfu.613.1642433834710;
+        Mon, 17 Jan 2022 07:37:14 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id r14sm355385lfp.59.2022.01.17.07.37.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 07:37:14 -0800 (PST)
+Message-ID: <9ca5caed-a68f-f131-dfb6-d187614ff9ee@gmail.com>
+Date:   Mon, 17 Jan 2022 18:37:12 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/2] i2c: tegra: allow compiling out support for Tegra's
+ special constrollers
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
+ <ea9ab0b7-022b-93e2-ed7d-dccfa95bd900@gmail.com>
+ <YeRd90gLqtsz2zVV@qmqm.qmqm.pl>
+ <e7a9a48b-e924-9e14-a4ff-b13853c5033e@gmail.com>
+ <YeSQj/f94IH4SAQ/@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <YeSQj/f94IH4SAQ/@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate the kcov buffer during KCOV_MODE_INIT in order to untie mmapping
-of a kcov instance and the actual coverage collection process. Modify
-kcov_mmap, so that it can be reliably used any number of times once
-KCOV_MODE_INIT has succeeded.
+17.01.2022 00:39, Michał Mirosław пишет:
+> On Sun, Jan 16, 2022 at 09:34:42PM +0300, Dmitry Osipenko wrote:
+>> 16.01.2022 21:03, Michał Mirosław пишет:
+>>> On Sun, Jan 16, 2022 at 08:54:08PM +0300, Dmitry Osipenko wrote:
+>>>> 16.01.2022 19:02, Michał Mirosław пишет:
+>>>>> To patches that, combined, reduce I2C driver's code by ~2kB and a bit
+>>>>> from runtime overhead for non-Tegra20 or non-Tegra210 builds.
+>>>>>
+>>>>> Michał Mirosław (2):
+>>>>>   i2c: tegra: allow DVC support to be compiled out
+>>>>>   i2c: tegra: allow VI support to be compiled out
+>>>>>
+>>>>>  drivers/i2c/busses/Kconfig     | 16 ++++++++++++++++
+>>>>>  drivers/i2c/busses/i2c-tegra.c | 35 +++++++++++++++++++++-------------
+>>>>>  2 files changed, 38 insertions(+), 13 deletions(-)
+>>>>>
+>>>>
+>>>> 2KB is a too small difference to justify the ifdefs and Kconfig entries,
+>>>> IMO.
+>>>
+>>> Maybe I should have mentioned that it's ~20%? With my "embedded" hat on:
+>>> I think it might be small, but sometimes it is the difference between
+>>> bootable kernel or one too big.
+>>
+>> 10KB is a small size too. I'm very doubtful that such changes make any
+>> real difference in practice.
+>>
+>> Much more practical should be to modularize more kernel code. You should
+>> be able to squeeze zImage down to 3MB without any code changes by
+>> toggling more kernel config options to =m. Try to use grate_defconfig
+>> [1] for the base, that is what postmarketOS kernel build uses.
+> 
+> For normal system this solution is workable. But for recovery, where you
+> have to fit kernel+initrd in whatever small partition is provided (like
+> eg. in Transformers 8MiB), it becomes a problem from time to time.
+> (In this case, modules make it worse due to additional overhead in
+> kernel and userspace).
 
-These changes to the user-facing interface of the tool only weaken the
-preconditions, so all existing user space code should remain compatible
-with the new version.
-
-Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
----
- kernel/kcov.c | 34 +++++++++++++++-------------------
- 1 file changed, 15 insertions(+), 19 deletions(-)
-
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index e1be7301500b..475524bd900a 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -459,37 +459,28 @@ void kcov_task_exit(struct task_struct *t)
- static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
- {
- 	int res = 0;
--	void *area;
- 	struct kcov *kcov = vma->vm_file->private_data;
- 	unsigned long size, off;
- 	struct page *page;
- 	unsigned long flags;
- 
--	area = vmalloc_user(vma->vm_end - vma->vm_start);
--	if (!area)
--		return -ENOMEM;
--
- 	spin_lock_irqsave(&kcov->lock, flags);
- 	size = kcov->size * sizeof(unsigned long);
--	if (kcov->mode != KCOV_MODE_INIT || vma->vm_pgoff != 0 ||
-+	if (kcov->area == NULL || vma->vm_pgoff != 0 ||
- 	    vma->vm_end - vma->vm_start != size) {
- 		res = -EINVAL;
- 		goto exit;
- 	}
--	if (!kcov->area) {
--		kcov->area = area;
--		vma->vm_flags |= VM_DONTEXPAND;
--		spin_unlock_irqrestore(&kcov->lock, flags);
--		for (off = 0; off < size; off += PAGE_SIZE) {
--			page = vmalloc_to_page(kcov->area + off);
--			if (vm_insert_page(vma, vma->vm_start + off, page))
--				WARN_ONCE(1, "vm_insert_page() failed");
--		}
--		return 0;
-+	spin_unlock_irqrestore(&kcov->lock, flags);
-+	vma->vm_flags |= VM_DONTEXPAND;
-+	for (off = 0; off < size; off += PAGE_SIZE) {
-+		page = vmalloc_to_page(kcov->area + off);
-+		if (vm_insert_page(vma, vma->vm_start + off, page))
-+			WARN_ONCE(1, "vm_insert_page() failed");
- 	}
-+	return 0;
- exit:
- 	spin_unlock_irqrestore(&kcov->lock, flags);
--	vfree(area);
- 	return res;
- }
- 
-@@ -674,6 +665,7 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	unsigned int remote_num_handles;
- 	unsigned long remote_arg_size;
- 	unsigned long size, flags;
-+	void *area;
- 
- 	kcov = filep->private_data;
- 	switch (cmd) {
-@@ -683,17 +675,21 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 		 * Must happen before anything else.
- 		 *
- 		 * First check the size argument - it must be at least 2
--		 * to hold the current position and one PC. Later we allocate
--		 * size * sizeof(unsigned long) memory, that must not overflow.
-+		 * to hold the current position and one PC.
- 		 */
- 		size = arg;
- 		if (size < 2 || size > INT_MAX / sizeof(unsigned long))
- 			return -EINVAL;
-+		area = vmalloc_user(size * sizeof(unsigned long));
-+		if (area == NULL)
-+			return -ENOMEM;
- 		spin_lock_irqsave(&kcov->lock, flags);
- 		if (kcov->mode != KCOV_MODE_DISABLED) {
- 			spin_unlock_irqrestore(&kcov->lock, flags);
-+			vfree(area);
- 			return -EBUSY;
- 		}
-+		kcov->area = area;
- 		kcov->size = size;
- 		kcov->mode = KCOV_MODE_INIT;
- 		spin_unlock_irqrestore(&kcov->lock, flags);
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+My point is that 2KB very likely won't change anything for you. I'd
+suggest to take a look at a more "fat" drivers, like DRM/host1x for
+example. I suppose it should be possible to save at least couple
+hundreds KB by trimming those fat drivers.

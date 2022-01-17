@@ -2,171 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F9C4911A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA584911AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243572AbiAQWKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 17:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234020AbiAQWKc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 17:10:32 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC49C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 14:10:32 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id s127so25645926oig.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 14:10:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0wHEClbaoLpWxCk4WR9pAVhItlqzJGA8f6LdA8ExZCI=;
-        b=asTLhMt2KIrEwgDj6GhhXKzwpsMH2V4hZpP0IaPG8u9i1I/g0DA6d389IseFcnUO/b
-         yhbo+9PuammaV5NEzSpzNlTyx3NSn1ne2HS1dzYDW9Hw27ON1RHlMIoayUphVY/ieV+m
-         131CUuhEFCIM6ieuUmFDs9AlHXtplwB/iBErsgCSpj2lC7ENlxk/ImZhPmuEUD5SZn7M
-         f4ykThE3lBf0sNiCR7nmqqt/0UUZht4pWfifEgWTvrtKKQm/Itd8t4gXQ8u2Mo5ZKxmN
-         TpmP/P8zWnBHD6RyKcl8FIOxbIIKJmO+BA0ylRu7fz/rIK0HS4k9PY4DsWRrfblUJ0Ey
-         kllA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0wHEClbaoLpWxCk4WR9pAVhItlqzJGA8f6LdA8ExZCI=;
-        b=wXPY8TBZdkEbeAzl0UAV18CdQRx+1omKM22C7YoPwYoZvcvxsyaOfoSYHHbkOqFvSq
-         Qy6fbzh0nv9THFqeW/E7974cJzCzXBBDdTPxL45Xv7voL7ImW3VDrTTzj3XYS2Ebaa3W
-         S7TMf/+aHR5L5vlUS9md+1nKQUoQ+DIyHcxN0cPPXAz26AWAdrdkLS8tVznLplo7wYl1
-         F2KW/MmnWK3dS7WGFub2ST//F3OSW+8Tc3MVZCzyzun90Z/Q+FZNhzLuvJwUeypl6SPD
-         7UzTw5Q00ucwNzZ8Ig9oaaRSYJzpYE1AlP7B1cRUtrER/IOnXa5gh5pjAFtqmJ3G/zvA
-         nBgA==
-X-Gm-Message-State: AOAM532WunZ+I+DMDbhY/p+o/H7fNj3vaIISTYd2lbbDjTeRCzyvBpc+
-        yBQ5iNbzNnLYSsrEMGc/q8LMqA==
-X-Google-Smtp-Source: ABdhPJwkZlkeaKC5UZeuKvRNtRn5ZllA43DqXJCLMeGqLodF1naGBPSGRQuJMihMBHVvH9Crgoch8g==
-X-Received: by 2002:aca:ef08:: with SMTP id n8mr18545244oih.61.1642457431848;
-        Mon, 17 Jan 2022 14:10:31 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bh18sm4207675oib.24.2022.01.17.14.10.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 14:10:31 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Julien Massot <julien.massot@iot.bzh>,
-        Hari Nagalla <hnagalla@ti.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [GIT PULL] remoteproc updates for v5.17
-Date:   Mon, 17 Jan 2022 16:10:27 -0600
-Message-Id: <20220117221027.1695011-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        id S231617AbiAQWTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 17:19:52 -0500
+Received: from mga03.intel.com ([134.134.136.65]:63018 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230178AbiAQWTw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 17:19:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642457992; x=1673993992;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pcwn9sc6zy/5FPTqZEkOnm98mBAo/AMZfKVc4/nr3oM=;
+  b=E02cHvLFryxdUsZBSkoRh1s3aNLN0Ob7Hz+5ZkGhvdDI95g0mkJ7yNJl
+   QTGS73bUhMez/EpzsFQJD9HrWkSpYLSTYW/yy3Sz87OqMuyx24Y07k3NT
+   0K66C5vL1yya19kEPLV3cY180MqdXJ1LPJMVK9QHY8emJsmpfei4QUruP
+   y0mBU/ldmot/yW8LB+/fHM1EOp1MOobpaIuLjAVbt+bCL891ty/HfJ/0K
+   sAmuaSOkV7TYf5Lan7LGDQSg6wr7JpnwEFDvVUwT9wGXEvV0df6EVVlzu
+   bDQ73kc915o/VBZ/MPxlKnaMKFdzHM7SNuUCKtZYjb9cpFhhhs3gh5mI5
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244657180"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="244657180"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 14:19:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="693196191"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 14:19:50 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9aLt-000Bum-QF; Mon, 17 Jan 2022 22:19:49 +0000
+Date:   Tue, 18 Jan 2022 06:18:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
+ expression
+Message-ID: <202201180628.2dv8SAp3-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0c947b893d69231a9add855939da7c66237ab44f
+commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
+date:   5 months ago
+config: arc-randconfig-s031-20220118 (https://download.01.org/0day-ci/archive/20220118/202201180628.2dv8SAp3-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e188f3330a13df904d77003846eafd3edf99009d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v5.17
+sparse warnings: (new ones prefixed by >>)
+   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
+   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
+   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
+   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
+   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
+   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
+   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
+   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
+   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
+   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
 
-for you to fetch changes up to cfcabbb24d5f4e52ce2e7797cbcfacd8fe932fb6:
+vim +279 arch/arc/kernel/smp.c
 
-  remoteproc: stm32: Improve crash recovery time (2022-01-03 11:40:45 -0700)
+41195d236e8445 Vineet Gupta    2013-01-18  261  
+ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
+41195d236e8445 Vineet Gupta    2013-01-18  263  {
+f2a4aa5646687f Vineet Gupta    2013-11-26  264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
+41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
+41195d236e8445 Vineet Gupta    2013-01-18  267  
+f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
+f2a4aa5646687f Vineet Gupta    2013-11-26  269  
+41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  271  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
+6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
+d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
+41195d236e8445 Vineet Gupta    2013-01-18  280  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
+82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
+ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
+41195d236e8445 Vineet Gupta    2013-01-18  291  
+41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  293  }
+41195d236e8445 Vineet Gupta    2013-01-18  294  
 
-----------------------------------------------------------------
-remoteproc updates for v5.17
+:::::: The code at line 279 was first introduced by commit
+:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
 
-This introduces support for controlling the Cortex R7 co-processor in
-Renesas Gen3, support for R5F clusters and C71x DSPs on TI J721S2 and
-compute, audio and modem subsystems on Qualcomm SM6350.
+:::::: TO: Vineet Gupta <vgupta@synopsys.com>
+:::::: CC: Vineet Gupta <vgupta@synopsys.com>
 
-It fixes a couple of sparse errors related to memcpy_to/fromio and
-corrects the kerneldoc spelling of "Return:".
-
-The stm32 driver no longer attempts to communicate with the remote after
-the firmware has crashed.
-
-----------------------------------------------------------------
-Arnaud Pouliquen (2):
-      remoteproc: Fix remaining wrong return formatting in documentation
-      remoteproc: stm32: Improve crash recovery time
-
-Christophe JAILLET (1):
-      remoteproc: imx_rproc: Fix a resource leak in the remove function
-
-Hari Nagalla (4):
-      dt-bindings: remoteproc: k3-r5f: Update bindings for J721S2 SoCs
-      dt-bindings: remoteproc: k3-dsp: Update bindings for J721S2 SoCs
-      remoteproc: k3-dsp: Extend support for C71x DSPs on J721S2 SoCs
-      remoteproc: k3-r5: Extend support for R5F clusters on J721S2 SoCs
-
-Julien Massot (5):
-      soc: renesas: rcar-rst: Add support to set rproc boot address
-      dt-bindings: remoteproc: Add Renesas R-Car
-      remoteproc: Add Renesas rcar driver
-      remoteproc: rcar_rproc: Fix pm_runtime_get_sync error check
-      remoteproc: rcar_rproc: Remove trailing semicolon
-
-Lars-Peter Clausen (1):
-      remoteproc: ingenic: Request IRQ disabled
-
-Luca Weiss (4):
-      dt-bindings: remoteproc: qcom: pas: Add SM6350 adsp, cdsp & mpss
-      remoteproc: qcom: pas: Add SM6350 MPSS support
-      remoteproc: qcom: pas: Add SM6350 ADSP support
-      remoteproc: qcom: pas: Add SM6350 CDSP support
-
-Mark-PK Tsai (1):
-      remoteproc: Use %pe format string to print return error code
-
-Mathieu Poirier (2):
-      MAINTAINERS: Removing Ohad from remoteproc/rpmsg maintenance
-      Merge tag 'rcar_rst_rproc-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into rproc-next
-
-Peng Fan (2):
-      remoteproc: coredump: Correct argument 2 type for memcpy_fromio
-      remoteproc: imx_rproc: correct firmware reload
-
-Sibi Sankar (1):
-      remoteproc: qcom: pas: Add missing power-domain "mxc" for CDSP
-
-Stephen Boyd (1):
-      remoteproc: qcom: pil_info: Don't memcpy_toio more than is provided
-
- CREDITS                                            |   5 +
- .../devicetree/bindings/remoteproc/qcom,adsp.yaml  |  28 +++
- .../bindings/remoteproc/renesas,rcar-rproc.yaml    |  65 ++++++
- .../bindings/remoteproc/ti,k3-dsp-rproc.yaml       |   3 +
- .../bindings/remoteproc/ti,k3-r5f-rproc.yaml       |   8 +-
- MAINTAINERS                                        |   2 -
- drivers/remoteproc/Kconfig                         |  11 +
- drivers/remoteproc/Makefile                        |   1 +
- drivers/remoteproc/imx_rproc.c                     |   9 +-
- drivers/remoteproc/ingenic_rproc.c                 |   5 +-
- drivers/remoteproc/mtk_scp_ipi.c                   |   4 +-
- drivers/remoteproc/qcom_pil_info.c                 |   2 +-
- drivers/remoteproc/qcom_q6v5_pas.c                 |  38 ++++
- drivers/remoteproc/rcar_rproc.c                    | 224 +++++++++++++++++++++
- drivers/remoteproc/remoteproc_core.c               |   4 +-
- drivers/remoteproc/remoteproc_coredump.c           |   2 +-
- drivers/remoteproc/st_slim_rproc.c                 |   2 +-
- drivers/remoteproc/stm32_rproc.c                   |   2 +-
- drivers/remoteproc/ti_k3_dsp_remoteproc.c          |   1 +
- drivers/remoteproc/ti_k3_r5_remoteproc.c           |   5 +-
- drivers/soc/renesas/rcar-rst.c                     |  43 +++-
- include/linux/soc/renesas/rcar-rst.h               |   2 +
- 22 files changed, 442 insertions(+), 24 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/renesas,rcar-rproc.yaml
- create mode 100644 drivers/remoteproc/rcar_rproc.c
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,88 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4BA4910DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFA44910E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243060AbiAQUGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:06:09 -0500
-Received: from mga04.intel.com ([192.55.52.120]:30123 "EHLO mga04.intel.com"
+        id S236431AbiAQUQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:16:50 -0500
+Received: from mga02.intel.com ([134.134.136.20]:47152 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235671AbiAQUGI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:06:08 -0500
+        id S231964AbiAQUQu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 15:16:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642449968; x=1673985968;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bkKHnyJ7fNQ9UDJcRCjjrULZ9FpJnVUdJPwib2T8Bi4=;
-  b=nl7zN2vNXd/L5RcZBbhLyHDogoAxhIWcZsUeOeBf04Zdti6YaLKLyRvS
-   XHPe5sfHATHk7COdRVfMzh7W4wna/reYmoGyycRPykI4TPKY3+5P0TCST
-   W6WgdFa34yHh6JgIiL44R7SMcX2hyR8pAdPm37sUdmTmfc9zMG4N/IGCw
-   uWQKxVtP4nA//K7I5IZOySSgdnSPgWhE4Oq9aE/vchzn4ebPYmwwu5uVg
-   V+VPHKnPciJD6nAjUQHyy3V0b9MNaziBsjbf7mBvSF2/HUxrQQV+gZlQu
-   yHgpd4+AlSLAHTtgYHb6oz/se73P/JsTItOmZTzA2Q4oLZCo+n8ci8oQl
+  t=1642450609; x=1673986609;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XtKJoyZe/wSrssxI2D+Qir9509RjqqW96adLlF6m/ek=;
+  b=M9cFhdrP7e8aceCfn4p55tdnIsq4iFNTH/iDwXKNwQRaLEXNMU58/9MF
+   ZZqfACFKChu5ja+oJgzcTdPPySeVNEvEHeHPnAy7nPgp7KaDt6Xt63kzL
+   ym0giAR2pIdUpz9ujHpQ0b7qz0Dot3cNxhh+4X/oNNbLUkcu0F3XqCm0D
+   AUnFznbTtwcDKHAJVL0XIB405FixmbZKwSLTV8b2L2Gv55V5kKw7Tf75X
+   KmzLz9c9HAONBUJ8oSem3E9ubXKG6azCHWOnuAHqaUxLETOZYE8btInAh
+   FyIHT9DGJlmgeCtH4iF8tACqSpUSkoVDMsz4m+sjEoh4MRk3iRPS5UH40
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="243511786"
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="232045947"
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="243511786"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:06:08 -0800
+   d="scan'208";a="232045947"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:16:49 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="625284468"
-Received: from sycha-mobl1.amr.corp.intel.com (HELO [10.209.168.94]) ([10.209.168.94])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:06:07 -0800
-Message-ID: <123e3681-d247-80a3-a40d-884603c7ee16@intel.com>
-Date:   Mon, 17 Jan 2022 13:06:06 -0700
+   d="scan'208";a="474550867"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Jan 2022 12:16:47 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9YQo-000BqR-KV; Mon, 17 Jan 2022 20:16:46 +0000
+Date:   Tue, 18 Jan 2022 04:16:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: drivers/spi/spi-lp8841-rtc.c:63:28: sparse: sparse: incorrect type
+ in argument 1 (different address spaces)
+Message-ID: <202201180418.XVpvcyjG-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] dmaengine: idxd: Remove useless DMA-32 fallback
- configuration
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        dmaengine@vger.kernel.org
-References: <009c80294dba72858cd8a6ed2ed81041df1b1e82.1642231430.git.christophe.jaillet@wanadoo.fr>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <009c80294dba72858cd8a6ed2ed81041df1b1e82.1642231430.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0c947b893d69231a9add855939da7c66237ab44f
+commit: 8f28ca6bd8211214faf717677bbffe375c2a6072 iomap: constify ioreadX() iomem argument (as in generic implementation)
+date:   1 year, 5 months ago
+config: alpha-randconfig-s031-20220117 (https://download.01.org/0day-ci/archive/20220118/202201180418.XVpvcyjG-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f28ca6bd8211214faf717677bbffe375c2a6072
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8f28ca6bd8211214faf717677bbffe375c2a6072
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/pci/controller/ drivers/spi/
 
-On 1/15/2022 12:24 AM, Christophe JAILLET wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
->
-> Simplify code and remove some dead code accordingly.
->
-> [1]: https://lore.kernel.org/linux-kernel/YL3vSPK5DXTNvgdx@infradead.org/#t
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
 
-Thanks.
+sparse warnings: (new ones prefixed by >>)
+   drivers/spi/spi-lp8841-rtc.c:112:41: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:112:41: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:112:41: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:121:41: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:121:41: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:121:41: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:143:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:143:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:143:33: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:147:41: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:147:41: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:147:41: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:209:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *iomem @@     got void [noderef] __iomem * @@
+   drivers/spi/spi-lp8841-rtc.c:209:21: sparse:     expected void *iomem
+   drivers/spi/spi-lp8841-rtc.c:209:21: sparse:     got void [noderef] __iomem *
+   drivers/spi/spi-lp8841-rtc.c:57:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:57:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:57:33: sparse:     got void *iomem
+>> drivers/spi/spi-lp8841-rtc.c:63:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:63:28: sparse:     expected void const [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:63:28: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:57:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:57:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:57:33: sparse:     got void *iomem
+>> drivers/spi/spi-lp8841-rtc.c:63:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:63:28: sparse:     expected void const [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:63:28: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     got void *iomem
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *iomem @@
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/spi/spi-lp8841-rtc.c:47:33: sparse:     got void *iomem
 
-> ---
->   drivers/dma/idxd/init.c | 2 --
->   1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index 08a5f4310188..993a5dcca24f 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -604,8 +604,6 @@ static int idxd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   
->   	dev_dbg(dev, "Set DMA masks\n");
->   	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> -	if (rc)
-> -		rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
->   	if (rc)
->   		goto err;
->   
+vim +63 drivers/spi/spi-lp8841-rtc.c
+
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23  59  
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23  60  static inline int
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23  61  getmiso(struct spi_lp8841_rtc *data)
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23  62  {
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23 @63  	return ioread8(data->iomem) & SPI_LP8841_RTC_MISO;
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23  64  }
+7ecbfff6711fb3 Sergei Ianovich 2016-02-23  65  
+
+:::::: The code at line 63 was first introduced by commit
+:::::: 7ecbfff6711fb331591003ac32c002ce55a0758f spi: master driver to enable RTC on ICPDAS LP-8841
+
+:::::: TO: Sergei Ianovich <ynvich@gmail.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

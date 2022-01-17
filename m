@@ -2,163 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0DC4909C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DF24909C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiAQNud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:50:33 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44740
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232312AbiAQNuZ (ORCPT
+        id S235104AbiAQNvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:51:17 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:43684 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231328AbiAQNvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:50:25 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        Mon, 17 Jan 2022 08:51:09 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1474A3F1E1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642427422;
-        bh=ePAMBME9OoqmLqu9TGmOOJDOdAhBTNGeiMQzo5Zcwk8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=p2L2naqWUq4zjq9/tg6HP3ypMaxh6QA/ZQqPNgq8J+075Lg1ef6dOjX3hmVILJYLG
-         0VLzaro4l9yp9dhARyc3dmmb2HI0YhLaPoblvnOzKSQ1/hWrK8w/Lai3kVdfBOc4i3
-         q9QEZaecc1HECKMtwruxwbJdq9wuE7fDsfiRp3QZ63PkDgJrXgxaXewGOAHMaV1AL2
-         lT5ZZGafpKtbCYLGIW9HdIAcsb7dhPB0fFjr2zdf0HUbRC7fB/j2oEMXHKnv9jHu1q
-         d3esT3Ndf9RiTGP9d3SlYo/pLf4qOITeGZIT5YDzGwaOM+HbIYwLPHbIUyBbzEoBeb
-         VB27KXLEcTGZw==
-Received: by mail-ed1-f71.google.com with SMTP id s9-20020aa7d789000000b004021d03e2dfso3989421edq.18
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:50:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ePAMBME9OoqmLqu9TGmOOJDOdAhBTNGeiMQzo5Zcwk8=;
-        b=wncLOMfc8K2qP++oF065dmRavrS37S+Ej0fszfwvCqn10GypKbu8JDLPMKhetmqMVg
-         kxjTcNCMQafi1LGwJ4G2njnMLK3FAnHY0AVzmUuIvFOORPzCSBW5IwhNCg6ZoVxfDd1M
-         jTkumwtRgobiXnHUljwVjoLAYSb6VVlputR74Y+u06uGBGExnAu611pQlN1eK3CwZ+vl
-         sX/gDInHbAz+6ehRma1NFGdUww20vijlAH0GvzrjzJ5SQj48zUeJP2PTmlGDR8KZxDlB
-         L8+3eSUQWlrtSDxvwrN74BWAXX2x+Y4fV8BLSB8Nio41aRpjf7SNRjEuomgQM/G998dH
-         ylWg==
-X-Gm-Message-State: AOAM533ZPDPpgsF0gdszT6vIrgWxEK/rdl3PgWJKwWzVl9oNG+osS75i
-        HxpT4vqqMVEpmIMnqOyTuSKweTqqLpfBMgHrc/Oo4SeYlFl2Q7CRk6zvjTXyNRKJa5xnCdiZhpk
-        47zsJXn/qxJ7iI6+FPxAkpSwBilvwermGJf0xz4Q2Lw==
-X-Received: by 2002:a17:906:5d16:: with SMTP id g22mr5071268ejt.295.1642427419808;
-        Mon, 17 Jan 2022 05:50:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxq9DzOXYxEW3Jq0YclwQkYlU99PzXh2g5H9926DHwMIx90PvG8ZqFXXD4IU5OjfMoVVLw8EQ==
-X-Received: by 2002:a17:906:5d16:: with SMTP id g22mr5071248ejt.295.1642427419602;
-        Mon, 17 Jan 2022 05:50:19 -0800 (PST)
-Received: from [192.168.0.38] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id p10sm4535501ejo.14.2022.01.17.05.50.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 05:50:19 -0800 (PST)
-Message-ID: <b8040d39-cd4d-e5b0-8aec-f03c5257d63e@canonical.com>
-Date:   Mon, 17 Jan 2022 14:50:18 +0100
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AB9261F399;
+        Mon, 17 Jan 2022 13:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642427468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0mK1vTdh/N1JGSY5RLEBdcoglPVme0D3aV+HDcYBmm8=;
+        b=vi+8Dmi9KMQxUAlbbbEJkXgg0xPCHSnKQnYA5jU9G6QbAlF1HIXYf4HX5AqygOML7gS/od
+        tjHMmR5GcXWl8nW9i17bpc4y+nA/NdcGegolk56jq3gXFA1zdDPdjZqTFozd8y5XksPycs
+        fRyOAi+FETwecOp2P1ukbvrEk+ME/9E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642427468;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0mK1vTdh/N1JGSY5RLEBdcoglPVme0D3aV+HDcYBmm8=;
+        b=DmVqlP1Omwvlgfg60OiHiNeuVO8zyg8do0/v3Xvvn1SSOmQiKj99E71h568tzmCKhcc8s1
+        2Mi3irK7umWxR+BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 73D4B13D94;
+        Mon, 17 Jan 2022 13:51:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id A+DTGkx05WHPUwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Jan 2022 13:51:08 +0000
+Message-ID: <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+Date:   Mon, 17 Jan 2022 14:51:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 15/23] arm64: dts: fsd: Add initial pinctrl support
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
 Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, 'Shashank Prashar' <s.prashar@samsung.com>,
-        'Aswani Reddy' <aswani.reddy@samsung.com>
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122417epcas5p47398a5190cdf4c574c6f1762918b549f@epcas5p4.samsung.com>
- <20220113121143.22280-16-alim.akhtar@samsung.com>
- <2927c34e-3259-4e9a-a657-aeeebf9089d2@canonical.com>
- <00ca01d80ba8$6b9b9800$42d2c800$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <00ca01d80ba8$6b9b9800$42d2c800$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------KsZMdQUxiibxK2wrIo0AAOOd"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2022 14:44, Alim Akhtar wrote:
-> Hi Krzysztof
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->> Sent: Thursday, January 13, 2022 6:50 PM
->> To: Alim Akhtar <alim.akhtar@samsung.com>; linux-arm-
->> kernel@lists.infradead.org; linux-kernel@vger.kernel.org
->> Cc: soc@kernel.org; linux-clk@vger.kernel.org; devicetree@vger.kernel.org;
->> olof@lixom.net; linus.walleij@linaro.org; catalin.marinas@arm.com;
->> robh+dt@kernel.org; s.nawrocki@samsung.com; linux-samsung-
->> soc@vger.kernel.org; pankaj.dubey@samsung.com; linux-fsd@tesla.com;
->> Shashank Prashar <s.prashar@samsung.com>; Aswani Reddy
->> <aswani.reddy@samsung.com>
->> Subject: Re: [PATCH 15/23] arm64: dts: fsd: Add initial pinctrl support
->>
->> On 13/01/2022 13:11, Alim Akhtar wrote:
->>> Add initial pin configuration nodes for FSD SoC.
->>>
->>> Cc: linux-fsd@tesla.com
->>> Signed-off-by: Shashank Prashar <s.prashar@samsung.com>
->>> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
->>> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->>> ---
->>>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 338
->> +++++++++++++++++++++
->>>  arch/arm64/boot/dts/tesla/fsd.dtsi         |  22 ++
->>>  2 files changed, 360 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>> b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>> new file mode 100644
->>> index 000000000000..ec8d944af636
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
->>> @@ -0,0 +1,338 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Tesla Full Self-Driving SoC device tree source
->>> + *
->>> + * Copyright (c) 2017-2021 Samsung Electronics Co., Ltd.
->>> + *		https://www.samsung.com
->>> + * Copyright (c) 2017-2021 Tesla, Inc.
->>> + *		https://www.tesla.com
->>> + */
->>> +
->>> +#include <dt-bindings/pinctrl/samsung.h>
->>> +
->>> +&pinctrl_fsys0 {
->>> +
->>
->> No need for empty line.
->>
-> Noted
-> 
->>> +	gpf0: gpf0 {
->>
->> FYI:
->> It's ok now, but the nodes will have to be renamed to "xxx-gpio-bank" later.
->>
-> Have rebased my v2 on your pinmux schema update, so these and below comments are addressed.
-> Thanks
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------KsZMdQUxiibxK2wrIo0AAOOd
+Content-Type: multipart/mixed; boundary="------------LDzgbro4DDuoxg4TzhAhBU08";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Gerd Hoffmann <kraxel@redhat.com>
+Cc: Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ "airlied@gmail.com" <airlied@gmail.com>,
+ Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ Javier Martinez Canillas <javierm@redhat.com>
+Message-ID: <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+In-Reply-To: <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
 
-OK, but have in mind that -gpio-bank suffix is not needed now. This
-depends on support in the pinctrl driver, which will be applied after
-the merge window to different tree or branches than DTS is going to.
-Therefore if I apply your DTS with "-gpio-bank" to my next/dt64, the
-kernel won't find GPIo banks and won't properly boot. The linux-next
-will be fine, just my next/dt64 won't be.
+--------------LDzgbro4DDuoxg4TzhAhBU08
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-If you're fine with it - use "-gpio-bank" suffix. If you prefer my
-next/dt64 to have a fully working Tesla SoC DTS, then stick to old node
-naming and let's replace it later.
+SGkNCg0KQW0gMTcuMDEuMjIgdW0gMTQ6Mjkgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQo+IEhpIEdlcmQsDQo+IA0KPiBPbiBNb24sIEphbiAxNywgMjAyMiBhdCAxOjU3IFBNIEdl
+cmQgSG9mZm1hbm4gPGtyYXhlbEByZWRoYXQuY29tPiB3cm90ZToNCj4+PiBiKSB0byBpbmNs
+dWRlIG5ldyBkcml2ZXJzIChmb3Igb2xkIGhhcmR3YXJlKSBpZiB0aGV5IGFycml2ZSAocHJv
+YmFibHkgaGFwcGVucyByYXJlbHkgYnV0IHRoZXJlIGNhbiBiZSkuDQo+Pj4gICAgIEkga25v
+dyBvZiBhdCBsZWFzdCBvbmUgZHJpdmVyIHdoaWNoIHdvbid0IGJlIGFibGUgdG8gc3VwcG9y
+dCBEUk0uLi4uDQo+Pg0KPj4gSG1tPyAgSSBzZXJpb3VzbHkgZG91YnQgdGhhdC4gIFRoZXJl
+IGlzIGFsd2F5cyB0aGUgb3B0aW9uIHRvIHVzZSBhDQo+PiBzaGFkb3cgZnJhbWVidWZmZXIs
+IHRoZW4gY29udmVydCBmcm9tIHN0YW5kYXJkIGRybSBmb3JtYXRzIHRvIHdoYXRldmVyDQo+
+PiBlc290ZXJpYyBwaXhlbCBmb3JtYXQgeW91ciBoYXJkd2FyZSBleHBlY3RzLg0KPj4NCj4+
+IEJlZW4gdGhlcmUsIGRvbmUgdGhhdC4gIEhhdmUgYSBsb29rIGF0IHRoZSBjaXJydXMgZHJp
+dmVyLiAgVGhlIHBoeXNpY2FsDQo+PiBoYXJkd2FyZSB3YXMgZGVzaWduZWQgaW4gdGhlIGVh
+cmx5IDkwLWllcywgYWxtb3N0IDMwIHllYXJzIGFnby4gIFRoZXNlDQo+PiBkYXlzIGl0IGV4
+aXN0cyBpbiB2aXJ0dWFsIGZvcm0gb25seSAocWVtdSBlbXVsYXRlcyBpdCkuICBUaGFua3Mg
+dG8gdGhlDQo+PiBkcm0gZHJpdmVyIGl0IHJ1bnMgd2F5bGFuZCBqdXN0IGZpbmUgZXZlbiB0
+aG91Z2ggaXQgaGFzIGEgYnVuY2ggb2YNCj4+IGNvbnN0cmFpbnMgZGljdGF0ZWQgYnkgdGhl
+IGhhcmR3YXJlIGRlc2lnbi4NCj4gDQo+IFRoZSBDaXJydXMgRFJNIGRyaXZlciBzdXBwb3J0
+cyBUcnVlQ29sb3IgKFJHQjU2NS84ODggYW5kIEFSR0I4ODg4KQ0KPiBtb2RlcyBvbmx5LiAg
+VGhlIENpcnJ1cyBmYmRldiBkcml2ZXIgYWxzbyBzdXBwb3J0cyBtb2Nocm9tZSBhbmQgMjU2
+DQo+IGNvbG9yIG1vZGVzLg0KPiANCj4gVGhlcmUgZXhpc3Qgc29tZSBEUk0gZHJpdmVycyB0
+aGF0IGRvIHN1cHBvcnQgRFJNX0ZPUk1BVF9DOCwgYnV0IG5vbmUgb2YNCj4gdGhlICJ0aW55
+IiBvbmVzIGRvLiBTYW1lIGZvciBEUk1fRk9STUFUX1JHQnszMzIsMjMzfS4gIFVzaW5nIGEg
+c2hhZG93DQo+IGZyYW1lIGJ1ZmZlciB0byBjb252ZXJ0IGZyb20gdHJ1ZWNvbG9yIHRvIDI1
+NiBjb2xvcnMgd291bGQgYmUgZG9hYmxlLA0KPiBidXQgd291bGQgZ2l2ZSBiYWQgcmVzdWx0
+cy4gQW5kIHdoYXQgYWJvdXQgbGVzcyBjb2xvcnM/DQo+IEFkZGluZyBzdXBwb3J0IGZvciBl
+LmcuIERSTV9GT1JNQVRfQzQgaXMgbm90IHN0cmFpZ2h0LWZvcndhcmQsIGFzDQo+IHRoZSBE
+Uk0gY29yZSBhc3N1bWVzIGluIG1hbnkgcGxhY2VzIHRoYXQgYSBwaXhlbCBpcyBhdCBsZWFz
+dCAxIGJ5dGUsDQo+IGFuZCB3b3VsZCBjcmFzaCBvdGhlcndpc2UgKHllcyBJIHRyaWVkKS4g
+IE90aGVyIG1vZGVzIG5lZWRlZCBhcmUNCj4gRFJNX0ZPUk1BVF9ZNCBhbmQgRFJNX0ZPUk1B
+VF97QlcsV0J9IChtb25vY2hyb21lKS4NCg0KV2UgZXhwb3J0IFhSR0IzMiBmcm9tIGVhY2gg
+ZHJpdmVyLCBiZWNhdXNlIHVzZXJzcGFjZSBleHBlY3RzIGl0LiBCdXQgDQp0aGF0IGlzIG5v
+dCBhIGhhcmQgcmVxdWlyZW1lbnQuIFVzZXJzcGFjZSBjYW4gdXNlIGFueSBmb3JtYXQuIEl0
+J3MganVzdCANCnRoYXQgbm8gb25lIHNlZW1zIHRvIGhhdmUgYW55IHVzZSBjYXNlcyBzbyBm
+YXIsIHNvIG5vIHdvcmsgaGFzIGJlZW4gDQpkb25lLiBUaGluayBvZiBYUkdCMzIgYXMgYSBm
+YWxsYmFjay4NCg0KUGVyc29uYWxseSwgSSdkIG11Y2ggYXBwcmVjaWF0ZSBpZiB1c2Vyc3Bh
+Y2Ugd291bGQgc3VwcG9ydCBtb3JlIG9mIHRoZSANCm5hdGl2ZSBmb3JtYXRzIGFuZCBub3Qg
+cmVseSBvbiBYUkdCMzIuDQoNCg0KPiBUaGlzIG5vdCBvbmx5IHRvIHN1cHBvcnQgIm9sZCIg
+aGFyZHdhcmUsIGJ1dCBhbHNvIG1vZGVybiBzbWFsbCBPTEVEDQo+IGFuZCBlLWluayBkaXNw
+bGF5cy4NCg0KVGhlcmUncyBhIERSTSBkcml2ZXIgZm9yIFJlcGFwZXIgZS1JbmsgZGlzcGxh
+eXMuIFNvIGl0IHNlZW1zIGRvYWJsZSBhdCANCmxlYXN0Lg0KDQpCZXN0IHJlZ2FyZHMNClRo
+b21hcw0KDQo+IA0KPiBPbiB0aGUgcG9zaXRpdmUgc2lkZTogRFJNIHdvdWxkIGZvcmNlIGUu
+Zy4gdGhlIEFtaWdhIGFuZCBBdGFyaQ0KPiBiaXRwbGFuZSBmb3JtYXRzIHRvIGJlY29tZSBp
+bnRlcm5hbCB0byB0aGUga2VybmVsIGRyaXZlciwgd2l0aCB0aGUNCj4ga2VybmVsIGRyaXZl
+ciBjb252ZXJ0aW5nIGZyb20gcGFja2VkIHBpeGVscyB0byBiaXRwbGFuZXMuICBIZW5jZQ0K
+PiB1c2Vyc3BhY2Ugd291bGQgbm8gbG9uZ2VyIGhhdmUgdG8gY2FyZSBhYm91dCBiaXRwbGFu
+ZXMuDQo+IA0KPiANCj4gR3J7b2V0amUsZWV0aW5nfXMsDQo+IA0KPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgR2VlcnQNCj4gDQo+IC0tDQo+IEdlZXJ0IFV5dHRlcmhvZXZlbiAtLSBU
+aGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0gZ2VlcnRAbGludXgtbTY4ay5v
+cmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZlcnNhdGlvbnMgd2l0aCB0ZWNobmljYWwgcGVv
+cGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLiBCdXQNCj4gd2hlbiBJJ20gdGFsa2luZyB0
+byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFtbWVyIiBvciBzb21ldGhpbmcgbGlr
+ZSB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAtLSBMaW51cyBU
+b3J2YWxkcw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
+dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Best regards,
-Krzysztof
+--------------LDzgbro4DDuoxg4TzhAhBU08--
+
+--------------KsZMdQUxiibxK2wrIo0AAOOd
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHldEsFAwAAAAAACgkQlh/E3EQov+AH
+Tg/7BhfzrXcUXwFax2XWiYFiFFGTavb4EbcPO3rUNNF7U1S2Oe1newd1hMxyk9OCE2aHc04GP1qn
+5S/ifcVOWVUEmuX7qhdIR15NkiEW5atEdIL384OSKsPIg46ZmMCeMm346LPuOtivYY2khwMVmkz6
+P7Sq1QU+DukWJMNFjHmeBKuN039fy+RXgCjAsLi90CZjz6qbFTs3cGZCCpJ7ch6tq/TRX064lUtC
+dx+pRMhrRK3rzof3g+A/R829/dTvArNplNkP1dUI5mssqR0Cle9lkrT2EmSKW9KNAnyRHvZUMhy1
+UcQQX0CqtXMf5ta9q+hadJS+TcyT/hJUHQCT7J1OnxphLRlEpnRKJXi47fl/ww6doLtjlQkF4o4I
+rVa8vIAuokyS1HBc9/HI4H/Ia+dcJZuQ39d9xZ6HhyxoroZUakpR2R//fF19vCXem/HAKQMGh/nL
+OnH3koMoTp57TbZsd5ceKtXSpLk+gzaKJ1yPRb7+Wgvo9sjjyZdp9DF+jFBWlUIZ1X/p/yjMHFyv
+6fbBIFObigMPRtFXOjsAdd5t3meDrLSBd1c8um6nmOfZbMsIBklKnRcWu2iBoi8IPt2+TrDJvlsV
+kYCIMHAQN9BJf8C24E2Pi29mo2m2EHUC23yCJx0suX7vWZ4JDTYPl0QKFWHAD7Y+SQo3ooPfavtE
+7tM=
+=3nPB
+-----END PGP SIGNATURE-----
+
+--------------KsZMdQUxiibxK2wrIo0AAOOd--

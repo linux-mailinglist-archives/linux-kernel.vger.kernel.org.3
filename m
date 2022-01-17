@@ -2,204 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E7E490BD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38BA490BCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240683AbiAQP4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
+        id S240668AbiAQP4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240675AbiAQP4X (ORCPT
+        with ESMTP id S237414AbiAQP4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:56:23 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9061EC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:56:23 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id w188so23963914oiw.13
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:56:23 -0800 (PST)
+        Mon, 17 Jan 2022 10:56:16 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC43C06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:56:15 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id p27so47593617lfa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xb6Xz/p6AOnoqXyB/drggXWeBac9JwzmuHmNubGerzg=;
-        b=Sc4bFJ6kmqbF0nE/+hvj3odKgssDSJ1bp81szybNpUwN5yMpdGlm9MWppbHy3TaWuZ
-         jgbYomFnHa3MfzYnTtUloN3yuggyCQ9hF4OQp4tJiUvbT8VIOYcZobWvZ9+YzOtey6V4
-         L+HnZ7nHk1vFMw43Rj/kn5vd5r0cv0ZYWFaFQ=
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hLXVfGuqokAhjQPquljpv4IuCQa5SRFe/JWEcrZu/DE=;
+        b=vWlPwu36tQDWXefh3AbPXuoJBEob07beXqKflgEp+7ZAnJW5ToHIDMHJIor8471x1c
+         nFYXIH7cEZDVMG3Ad1Imes4RlH8Ydng8D3FkDW5MMRCK22hHEVThHKgMd85wVsb7GFYN
+         NjF51iRPH0L/P/djgibOK7lcyHSKmyAdtxFeBBJf6FY8PPwF7Tw2bYnIWeB4Xuf5pF2j
+         gac7TcyYTjXdsC0I9fClYQR/2Xm0R2RHuY/uCppEBkwPgNSHe4J3imjM2CYIZYS9qZe3
+         9CkqPiTksIsEa0tVVl3iEHdCi5/WLw/yxczM5hZetsHNeD8jc+DfAsoK7XK+iNuiLe/v
+         ECHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xb6Xz/p6AOnoqXyB/drggXWeBac9JwzmuHmNubGerzg=;
-        b=42SIFICbbjCvuzG2HCDTgDYbdEyb6rDrndxeuowysLI5rUxN4VOCl9nWKtwsmXIkxq
-         ToT3wTgeqgK3hpQDQfFZ2cUbRwtQrv9xitrGow/EqSpo+Wd7zho9uJ+zAlnVFyS3zl8O
-         ilrxQykypDW+qCKtunt45tXMh6zsY9pgd1i6raYFBWDPR82cZP/aXBT/azMVGYcTzWBG
-         nPYXLZG8mXbGZUIJ4dtG2LlYH3+dJtTvo+isW+06NHkqpplWRYb2mI9RSkc1QFa/dUYp
-         mBqTqVaFJe+yLb/IRiSwBftGWXOp+5ec43VHU55kWg48Y/CKszjd82d69PchzplNThaP
-         tuwQ==
-X-Gm-Message-State: AOAM531W3GJLMcHDKtIpLAgHtPUvnOF8nw66XE4W4bhZw3S7tKKCN1/y
-        9d3DVDmrYc0bUIfP2vx801vUpLCowuD/aX4OsUchLw==
-X-Google-Smtp-Source: ABdhPJx1XNoj/auN9WB8eElBbn65/9VfAneARXUJGeHBvX3UzZPZRBQ2lfupt1uTB3k1/ANqLQst3bmJ+oX5h1rjG4U=
-X-Received: by 2002:a05:6808:1188:: with SMTP id j8mr23202940oil.101.1642434982892;
- Mon, 17 Jan 2022 07:56:22 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hLXVfGuqokAhjQPquljpv4IuCQa5SRFe/JWEcrZu/DE=;
+        b=XEFo1qR8QwvYylHuOhzy/T7ezRcZ0II2FfukxZ+U4vYGlYTXti5AfGG3Lfp0AO8ap3
+         zn/puFJ//4h7n2ynkCXlCS0PsEStH7ptu7Iuu6C54LqTDIzKblcmTCBGtGtJBxy+xwH3
+         J0TOG60xPoNaDnFBUISFBpOvlqCQTaWOa9igNOed5MwT/7DgU6JtPavSzdtxFIvuvb22
+         N8+PwppYOf3CICpZG0p1Vc+SiAMKAtpTlw8M91YT2EOSLyYlnesyAVIHIUeh92nld4Jo
+         WSuNzi1tBfx9J4lV/WspIgX54uKhImDJqToRs+gdU0+4sa61YPXlrLsfiRAmtQzvA2Q0
+         y+qg==
+X-Gm-Message-State: AOAM531kJTF2j5sQ5nGD1q7yr1gvSl6GyraJEJXwxiB0W8eddQETxsKa
+        yH8BXxM4dcdf16g8pvdlhQo8Dg==
+X-Google-Smtp-Source: ABdhPJz7FbfdpZdmtC5Jx84Ckv5DAebrmkY0nZUOV+wJaKhApnBN6pH5FhbND8E1a+JvKqJk7BwvRw==
+X-Received: by 2002:ac2:5597:: with SMTP id v23mr16906486lfg.477.1642434974035;
+        Mon, 17 Jan 2022 07:56:14 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id k19sm1425334lfu.176.2022.01.17.07.56.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 07:56:13 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 84A7810387E; Mon, 17 Jan 2022 18:56:41 +0300 (+03)
+Date:   Mon, 17 Jan 2022 18:56:41 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 02/12] filemap: Use folio_put_refs() in
+ filemap_free_folio()
+Message-ID: <20220117155641.u5ysambg72nq2p6y@box.shutemov.name>
+References: <20220116121822.1727633-1-willy@infradead.org>
+ <20220116121822.1727633-3-willy@infradead.org>
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
-In-Reply-To: <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 17 Jan 2022 16:56:11 +0100
-Message-ID: <CAKMK7uEDcTTURyL6=VOJdjrVh7CszL_AqGogzHjfQqdDMMCr=g@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220116121822.1727633-3-willy@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 4:43 PM Helge Deller <deller@gmx.de> wrote:
->
-> On 1/17/22 16:00, Daniel Vetter wrote:
-> > On Mon, Jan 17, 2022 at 1:16 PM Helge Deller <deller@gmx.de> wrote:
-> >>
-> >> Hello Daniel,
-> >>
-> >> On 1/17/22 11:02, Daniel Vetter wrote:
-> >>> Hi Helge
-> >>>
-> >>> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
-> >>>>
-> >>>> The fbdev layer is orphaned, but seems to need some care.
-> >>>> So I'd like to step up as new maintainer.
-> >>>>
-> >>>> Signed-off-by: Helge Deller <deller@gmx.de>
-> >>>>
-> >>>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>>> index 5d0cd537803a..ce47dbc467cc 100644
-> >>>> --- a/MAINTAINERS
-> >>>> +++ b/MAINTAINERS
-> >>>> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/emulator/index.html
-> >>>>  F:     arch/x86/math-emu/
-> >>>>
-> >>>>  FRAMEBUFFER LAYER
-> >>>> -L:     dri-devel@lists.freedesktop.org
-> >>>> +M:     Helge Deller <deller@gmx.de>
-> >>>>  L:     linux-fbdev@vger.kernel.org
-> >>>> -S:     Orphan
-> >>>
-> >>> Maybe don't rush maintainer changes in over the w/e without even bothering
-> >>> to get any input from the people who've been maintaining it before.
-> >>>
-> >>> Because the status isn't entirely correct, fbdev core code and fbcon and
-> >>> all that has been maintained, but in bugfixes only mode. And there's very
-> >>> solid&important reasons to keep merging these patches through a drm tree,
-> >>> because that's where all the driver development happens, and hence also
-> >>> all the testing (e.g. the drm test suite has some fbdev tests - the only
-> >>> automated ones that exist to my knowledge - and we run them in CI). So
-> >>> moving that into an obscure new tree which isn't even in linux-next yet is
-> >>> no good at all.
-> >>>
-> >>> Now fbdev driver bugfixes is indeed practically orphaned and I very much
-> >>> welcome anyone stepping up for that, but the simplest approach there would
-> >>> be to just get drm-misc commit rights and push the oddball bugfix in there
-> >>> directly. But also if you want to do your own pull requests to Linus for
-> >>> that I don't care and there's really no interference I think, so
-> >>> whatever floats.
-> >>>
-> >>> But any code that is relevant for drm drivers really needs to go in through
-> >>> drm trees, nothing else makes much sense.
-> >>>
-> >>> I guess you're first action as newly minted fbdev maintainer is going to be to
-> >>> clean up the confusion you just created.
-> >>
-> >> Most of my machines depend on a working fbdev layer since drm isn't (and probably
-> >> -due to technical requirements of DRM- won't be) available for those.
-> >> So, since the fbdev drivers were marked orphaned, I decided to step up as maintainer.
-> >>
-> >> I see your point that at least the fbdev core code and fbcon are shared between DRM and fbdev.
-> >> For me it's really not important to drive any patches through a seperate tree, so
-> >> I'd be happy to join the drm-misc tree if you feel it's necessary. (By the way,
-> >> adding my tree to for-next was on my todo list...)
-> >>
-> >> What's important for me though is, to keep fbdev actively maintained, which means:
-> >> a) to get fixes which were posted to fbdev mailing list applied if they are useful & correct,
-> >
-> > Yeah it'd be great if we have that, for a while Bart took care of
-> > these, but had to step down again. drm-misc is maintained with the dim
-> > scrip suite, which comes with docs and bash completion and everything.
-> > Good starting pointer is here:
-> >
-> > https://drm.pages.freedesktop.org/maintainer-tools/getting-started.html
-> >
-> > Process for getting commit rights is documented here:
-> >
-> > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
-> >
-> > But there's a pile more. I think once we've set that up and got it
-> > going we can look at the bigger items. Some of them are fairly
-> > low-hanging fruit, but the past 5+ years absolutely no one bothered to
-> > step up and sort them out. Other problem areas in fbdev are extremely
-> > hard to fix properly, without only doing minimal security-fixes only
-> > support, so fair warning there. I think a good starting point would be
-> > to read the patches and discussions for some of the things you've
-> > reverted in your tree.
-> >
-> > Anyway I hope this gets you started, and hopefully after a minor
-> > detour: Welcome to dri-devel, we're happy to take any help we can get,
-> > there's lots to do!
-> >
->
-> Hello Daniel,
->
-> you somehow missed to answer my main topics below...:
+On Sun, Jan 16, 2022 at 12:18:12PM +0000, Matthew Wilcox (Oracle) wrote:
+> This shrinks filemap_free_folio() by 55 bytes in my .config; 24 bytes
+> from removing the VM_BUG_ON_FOLIO() and 31 bytes from unifying the
+> small/large folio paths.
+> 
+> We could just use folio_ref_sub() here since the caller should hold a
+> reference (as the VM_BUG_ON_FOLIO() was asserting), but that's fragile.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  mm/filemap.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 2fd9b2f24025..afc8f5ca85ac 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -231,17 +231,15 @@ void __filemap_remove_folio(struct folio *folio, void *shadow)
+>  void filemap_free_folio(struct address_space *mapping, struct folio *folio)
+>  {
+>  	void (*freepage)(struct page *);
+> +	int refs = 1;
+>  
+>  	freepage = mapping->a_ops->freepage;
+>  	if (freepage)
+>  		freepage(&folio->page);
+>  
+> -	if (folio_test_large(folio) && !folio_test_hugetlb(folio)) {
+> -		folio_ref_sub(folio, folio_nr_pages(folio));
+> -		VM_BUG_ON_FOLIO(folio_ref_count(folio) <= 0, folio);
+> -	} else {
+> -		folio_put(folio);
+> -	}
+> +	if (folio_test_large(folio) && !folio_test_hugetlb(folio))
+> +		refs = folio_nr_pages(folio);
 
-Well others replied on some specifics already, but for your reverts
-really read the commit message first. fbcon is full or broken locking
-and crashes that syzbot hits, so if you want to resurrect that code,
-those bugs need to be fixed first. Or at least some way to make sure
-that only people who don't care about serious issues in their kernel
-can use the code. We haven't done much maintainering, but we've tried
-to at least somewhat stay on top of the oopses and issues syzbot
-discovers (not even all of them unfortunately).
+Isn't folio_test_large() check redundant? folio_nr_pages() would return 1
+for non-large folio, wouldn't it?
 
-Wrt useable console: shadow buffer + memcpy tends to be most
-performant, actually useful 2d acceleration is really hard. See the
-blog post Thomas linked. If you go with that, drm has you fully
-covered.
-
-None of the things you bring up are anything new really, and have been
-discussed at length over the past 5-10 years here on dri-devel. That's
-why I suggested that a good start is to focus on the simple fixes
-first, and meanwhile ramp up on the complexity you're volunteering
-for. There's some really tricky things going on here.
--Daniel
-
-> >
-> >> b) to include new drivers (for old hardware) if they arrive (probably happens rarely but there can be).
-> >>    I know of at least one driver which won't be able to support DRM....
-> >>    Of course, if the hardware is capable to support DRM, it should be written for DRM and not applied for fbdev.
-> >> c) reintroduce the state where fbcon is fast on fbdev. This is important for non-DRM machines,
-> >>    either when run on native hardware or in an emulator.
-> >> d) not break DRM development
-> >>
-> >> Especially regarding c) I complained in [1] and got no feedback. I really would like to
-> >> understand where the actual problems were and what's necessary to fix them.
-> >>
-> >> Helge
-> >>
-> >> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
-> >
-> >
-> >
->
-
+> +	folio_put_refs(folio, refs);
+>  }
+>  
+>  /**
+> -- 
+> 2.34.1
+> 
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+ Kirill A. Shutemov

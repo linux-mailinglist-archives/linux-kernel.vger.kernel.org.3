@@ -2,253 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25A1490FFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1820E490FFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242060AbiAQR5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:57:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22346 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241957AbiAQR5S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:57:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642442237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K9kCXO7ufS1sgHwDNkwg1B3hoEyZ/1T3PNCqsxyfB6M=;
-        b=DdSxClg1zHdki5CjuFC9/JdwteDOI4Ca2eUBki0hIb+pyaGyyCW6uBbmJ9IYCZhxRSHUGy
-        Xf241aN1Vlwbolbz3YTGbEhCilMbp8XhdfrG+nHNUP3mfsAv6xtkpcdjJ3xoE/DCDZwbTg
-        YwaY4Drupl9bWDBoKvCvxAQSYSfBcwY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-300-P2IX7-XgPLy5qLLoEb2xNA-1; Mon, 17 Jan 2022 12:57:16 -0500
-X-MC-Unique: P2IX7-XgPLy5qLLoEb2xNA-1
-Received: by mail-wm1-f71.google.com with SMTP id p7-20020a05600c1d8700b0034a0c77dad6so318633wms.7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:57:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K9kCXO7ufS1sgHwDNkwg1B3hoEyZ/1T3PNCqsxyfB6M=;
-        b=2CCqiG8XyYLNlSBA99RjLqLX9XAJgQ9q1oI183d4tCpIklbzYVGfLMKnoXZeBNjkIn
-         EApwwmOwjn9/lMbwtmFhK1p2Qhjgfo96EsjtDnHm9HwvgXwfeAexRQg68QN0orTNdRya
-         I1sZ3TXQwRS493l62NtCVwC0oBxYv2Mrq67wq/lacMSxdmvAi4HtD4nk2NowgxeEKrzV
-         ZS0E2s6b9Zsjb6OpI+0+EmggKRWx9f1FOyMRErymzZyuB4Sghb8UcCvililbht4U/GjI
-         RsCMPwLN3dhNfjqIQ5CApHRAYivt5r3GYTNMCDZbyOG7X8IIFIVznZfNx8VsnFzxUzYI
-         ypAg==
-X-Gm-Message-State: AOAM531qGYrba47TS4AtOr7eHFOpQ/5U8ArIfEOlECiQXVKfqJQToOD9
-        ucK6ztav34ghWSfTUr/Q6ecUEpcad+490zFcpahBGVU+WXxG5WSgRnkyS8D/+7PC5FQVbbLiwB1
-        AoQFcrnlhvTMl2IBNUAVILk2J
-X-Received: by 2002:a05:600c:154b:: with SMTP id f11mr11952590wmg.62.1642442234965;
-        Mon, 17 Jan 2022 09:57:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy9poqi18K22C4DLmX3arn0dWMU5OIx+f4+yE7QU/e7Wxcc8+4kRtHO8FGVVmVxA4ig9BVqyQ==
-X-Received: by 2002:a05:600c:154b:: with SMTP id f11mr11952576wmg.62.1642442234751;
-        Mon, 17 Jan 2022 09:57:14 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id h2sm72101wmq.2.2022.01.17.09.57.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 09:57:14 -0800 (PST)
-Message-ID: <42dd21d1-8300-3101-4870-bf772783588b@redhat.com>
-Date:   Mon, 17 Jan 2022 18:57:13 +0100
+        id S241957AbiAQR6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:58:35 -0500
+Received: from mail-eopbgr60114.outbound.protection.outlook.com ([40.107.6.114]:28950
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233365AbiAQR6e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:58:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PlKu57I/FubDJc1b1nAJq8EJJv9vzH8DHQAHacljTZMhZqZchpnxGoQgSPmCz8ZguUXO5H4Av8v4YmGCkL2D84HIArjfCbiWzvlslbsaZbAJPNBxOHmvNrzYcCt9pHooIqK2+zzjb52s1tfFMgp2mSEaXAjYfvLPw0snQl90sb5w0wi7Xq+mjzF3VwEs/cs1fWSfsM/OliUmLCIJNMFPOJkDnDMDbuCLqoBncaADJd/NOHJM5PmFVRs+SKTpIU9+XaarRYKUGFbdJgbuvWQZxreMHmButZmgBP2NL2Wbxc78WDydLmLF0cenLABiXivxPL1iWV2XmsHxFmUOdmaY9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DSGrO/bv44DA623PSDCEWuM2s1fQDwC1PjrhVe+FyKc=;
+ b=SukXP2xDwr3/izuP4aWonYGbrBteIHgJyDd3nEU4oUGMqJJk2KdtCyfPBefoHROpHEPgwZDtsNXDQhpKSdr6+KQSpo5t27rV8WMRm40EaGuS+Ux8v4z6RvN2iqdrBtHC713UGkFKHwsN+FKRm5aAxO/TrW26pgOIFTweUApGFMdvWWBkj7PK83lE/HLdz71m/WVJPhJUc6MakUVkQx2ic3fzuHteiFlnfrUBX3APQYrWS+gXrfawTbfedhPpquRhPmMrI/aFzCg2y7fuU0TcFarxPSo4nb1NYT6Q7BMCQBazyKBP381x0e0bTb3S4H7gpSub1Mfq3oQ8UAHaBpeFeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DSGrO/bv44DA623PSDCEWuM2s1fQDwC1PjrhVe+FyKc=;
+ b=Os/g6qiASYdZpFJ18hmbHJwDkUX3LUrqPRcHEn7TOExl/xc4jGycC+/cTLi9M1mlSeO9EwYILQv0EYLxK2j7R9xtcQ8L2juT8CTR6tJcExAyKsIdpJCtmTe4qVNGznyPwqwc+UZM3YVI3QkTfGpKoSbLvpxQL114tuBEfw7ViJc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by AM8PR07MB8309.eurprd07.prod.outlook.com (2603:10a6:20b:328::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.2; Mon, 17 Jan
+ 2022 17:58:32 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::9d2:7ba2:9045:2acf]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::9d2:7ba2:9045:2acf%5]) with mapi id 15.20.4909.007; Mon, 17 Jan 2022
+ 17:58:32 +0000
+Date:   Mon, 17 Jan 2022 18:58:26 +0100
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Matija Glavinic-Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: move efi_reboot to restart handler
+Message-ID: <YeWuQh6+OC02nbsg@localhost.localdomain>
+References: <YeVhtL2gCLkhTPdv@localhost.localdomain>
+ <20220117131056.GC87485@C02TD0UTHF1T.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220117131056.GC87485@C02TD0UTHF1T.local>
+X-ClientProxiedBy: HE1PR05CA0255.eurprd05.prod.outlook.com
+ (2603:10a6:3:fb::31) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] KVM: x86: Making the module parameter of vPMU more common
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111073823.21885-1-likexu@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220111073823.21885-1-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6813e59a-8859-4d73-d248-08d9d9e2f915
+X-MS-TrafficTypeDiagnostic: AM8PR07MB8309:EE_
+X-Microsoft-Antispam-PRVS: <AM8PR07MB8309312170D1CE4BC954F0E1EF579@AM8PR07MB8309.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bFx07zYyfQP2/SxU0qxO47ukQCSQOQLez+Dc0YXzvy+m+C0DZJ2zzG25/PRCgIEPOJO151embxTORHm56vf3oxnqLJLAjSQUwzjh9JxIf1+bvZlU6XJjX5uKokMeRrAEflypBQvhn8TgZsxjiAdAAbuM9wr7u5rjZOtGbaVIBrJmHyPENzqbqFNXoVu/Qn7YA3+V0vX4BorWaGipDox9XWmWHPBnTajdzw7qU3M+BKYWyITEqbS/RuMbpo1K4ISLlEwWmbZM/FSK+PsQpS9mmzKA+2tgxF62Pm/WRU+dCaeCOigyWJVlm3CiIqz9L5HbEey4hy2HX/kiIkUOG2fDSnYNgsPEIhfbkvtjoumGxKXMx942Wdaot70OslBgyaNeHsDAqbEclFnJ4CERPDwlSbJlYxAEu3aURQG5h/eaquyW6xd4x+4IuKYhbNaWvt1h4f45ZdzrcLzG4F8wqanGeMSh4QXFW6ZkLLIInoiabJptQ+lQm+9SRKLBkxrmuVWx6AcYbgOGSlBcDLQoYTj8UHnN8o0XdwRATee/oLdw137/By6ifzu6cZ6vq5yWpJ+3H+hlSQf8LyhWhVc+OXF0gna+yB3+GPvE5PUIChye2QN+qYwGHZyvKDZQZgzNLrs91tIWRTor21/WqXSpyc4CMIgCFX6K2S61XFlmTPwnLzjsS0O1XFUAVtid5EnRNS6nCtMehyHRN5Cd2KZVenWnADxBbhMra72zBwkKuFkIwPU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(6506007)(54906003)(44832011)(2906002)(6512007)(9686003)(86362001)(6666004)(316002)(508600001)(6486002)(5660300002)(52116002)(186003)(66946007)(26005)(38350700002)(82960400001)(8676002)(66476007)(38100700002)(66556008)(8936002)(4326008)(83380400001)(67856001)(20210929001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YzQ1Y0FKZ2NCb3pob1B5bmg4L0ZvbTY2U011dnpHUHZ5ZjlYUUJtQ0VCTjBC?=
+ =?utf-8?B?cWNpU3VHYXoxK01IVVZ0bzRYMHc4RWtXV0dIWm8wN1lyemYzNzVScERwdnpq?=
+ =?utf-8?B?bnhxQ3BGNnNTdUMzdHpXZTNxbm9EV0VYV2hKZlBieWg2VzJHYmh6VnQydEZC?=
+ =?utf-8?B?TW45QmVvS2NLUmdnUy9BOFF5dmZRUUZxemtqdm5YMzZ6Myt5V3ZiZnpBaDdG?=
+ =?utf-8?B?VTV0NUI1ZXJScWwwck9zcXh5QkVRdFdJWmhqcWhuRUdyQml4L0szZDg5cVNO?=
+ =?utf-8?B?YjZuQ0lTdVAwVmgwakFEOWl0YTBadUlYM0dQbnFYNWdSblMxcHpVcGV3V2t2?=
+ =?utf-8?B?aC9xYWJDcGl0eVk3TzVJKy9nOTN6QzBac2duVFg2RCtxQnNqam00RjZ4TmZj?=
+ =?utf-8?B?MGRXT1BmMGZobGMxd0MxQmdSZDRDVFB2aDZZOG9HR3plL3ZucDJTQ2Rva05o?=
+ =?utf-8?B?VUVtZUh1NXVURlZBc2U2ckQrTzV0TTBTR3o0VkpxV0ZTSG5ib0ZCZEpjOFh6?=
+ =?utf-8?B?U25Mdmd2R1dGc1NSaEx3VnJ1Q20rNGZIK21FQzc5SkFXL21rek5YcWp0YStN?=
+ =?utf-8?B?eWhPeGNwSlppUmNtNVhTTi9ZcUxLNnNoczdNcFljUnpOaHcvNWkyR3hkQms0?=
+ =?utf-8?B?TWQrY0VlSk9lUTBQYnZMUWU3dUh6SXNaZ0lheXh1Y2xpWTh3N0I4bXIwZ1po?=
+ =?utf-8?B?U3h1UWs3a2tkNkJ4b2w1LzFwRHBGSkZ2U1B6Y1QrT25XWTc1VDJDWm04OUFq?=
+ =?utf-8?B?T1FXUDN1aVYvYWVWaDNJS2ZsUFRtSFAyeU85SFlCbWNGRFJGenJ1dlNHUEh1?=
+ =?utf-8?B?bmV5MmdUSWF5aFZTdmNrQ0VpYXhGZ2wvUFQ3cW12NjZITzNzMkZGaXhvUGll?=
+ =?utf-8?B?VWVvSnRQcUluY01peWx0c0dQaEpFbUVxSjZHdmZxOFdPb0ROSlhsc0xhVDIv?=
+ =?utf-8?B?WkRNOXVSNDJyTnY0QkZHS2RrcG42S0ttaHVBenV6dld0bHh6VVd2R0Zqa3B0?=
+ =?utf-8?B?Rnk2YVpQbTU2SzdtdGFtMlczMGZzUzdBK0VtSGRpMDVxN2thVlpjU3BHRmFu?=
+ =?utf-8?B?UzBTKzdpUm1EajRDMjJNcmpxV2MzaVFPMGhzT1NHM1F0Tkt6WXRRdTR2Nlp4?=
+ =?utf-8?B?UlBkbFBaTlhUVXJZbzlEUThPcFl2RHptQlNRWlVBMDZ1eU91bUVrZmMrSG5h?=
+ =?utf-8?B?Y3MzMEJWOS9kYTRkNzJPajF4am1PWXFoTXljN2t0UWo2dy9kRU1zVnpjSmo0?=
+ =?utf-8?B?cVF0K05WelZmbC9EMUJyZ0k3SWUzUHBYRzY4WHEwZE5US1M0aHUwZ3FtZ3JN?=
+ =?utf-8?B?NW1lWnZXaUJuTzgvUm1pd0RaRFpoNkg5VDFnejkrMTQ4L2NORlhMY1RBZEw0?=
+ =?utf-8?B?ZVJPeVRHZ3o3elpoUG9mZTJ4WU5OTHNhWE1PRitmbkZmSSticmg1OHZDd01Y?=
+ =?utf-8?B?RWlZaWFrVEs5WGk3ZE1zc0g4Mk50VFZzWUJVdXI0REZCd0N6YjhXVHAxSXAz?=
+ =?utf-8?B?UnBKUEVNWTJHYTRJbEZMZ3NOMW4wd0ZHOW16SURyUkVNWTZ0VFg2eFhBcnFa?=
+ =?utf-8?B?eDh3dWhoQ0dMejV0NFVQVzdDaElsSjB0NGdkUGNIV3N6VytkUWl2Kys2WnVZ?=
+ =?utf-8?B?SGYxRzhERHhNQzA0dnZXcGd1UG41ZnVFZlN1Q010TENTbzIrSW56dUhoUXdC?=
+ =?utf-8?B?UmpaMXRidW5rSlMvejZCU3RGQlk4N0FXZ1FDNmNrYWpUSDJYOWZjQUllNWFB?=
+ =?utf-8?B?RHpWQmlQR3JBQ3RwdDMxb1MyenRvaWZSMlpGLzdtcVpMNFpNRUgvVXRUb09C?=
+ =?utf-8?B?c2s2Z1lGd2YxeHdSWG5hb0Q4NVI1NThsemgzSEpQbFZncDJPakF2Wm56YVN6?=
+ =?utf-8?B?SUQwWTlxQlZ3a0tWK1FQd1ZzNU1XUVB2REt2Vit1UTBBbEJoVmQ3NDBiMDFh?=
+ =?utf-8?B?ZVEvUExIUzB6U0JtM2NJeDhQTFMzbHhEc0VWcTI0OGJKZzBXc21pK2IyK1RZ?=
+ =?utf-8?B?T2tpRDlPVDdDaTM0NjRYaHFEY2pFQ2ZjUzhhSktTU1ZQSFR1d1IrZHYvRmFS?=
+ =?utf-8?B?bEVnVmhvZTNKWkV1NkdyYWhvczdyRjhBWSsvU3BkRnhCRHdsSExBdnA4ZW9j?=
+ =?utf-8?B?a21FaWVNUlVZNUwyUExJSlpxUkJ2Q054RnVzdS85QlVmcld3TllDUFNYck90?=
+ =?utf-8?B?Wk80L3lUSmtWR3ZGSjlCMHIrN3R1b3hhRmRYVFFTdnU2YmlESHpCRjIxUWF3?=
+ =?utf-8?B?QmEyM0NxNUEzeEZIOFZ5dHc4WGdRPT0=?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6813e59a-8859-4d73-d248-08d9d9e2f915
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 17:58:32.0535
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J4YT0y0sTMfhHTnCDBs3vb5OgyyvHJ9vmRVf3P70N921QftTUVdC5vCBX8N8vKKhyyihVbUU7pkgGW76yQ9ldknupP7pzz26YdpVEBHO6SU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR07MB8309
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 08:38, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> The new module parameter to control PMU virtualization should apply
-> to Intel as well as AMD, for situations where userspace is not trusted.
-> If the module parameter allows PMU virtualization, there could be a
-> new KVM_CAP or guest CPUID bits whereby userspace can enable/disable
-> PMU virtualization on a per-VM basis.
-> 
-> If the module parameter does not allow PMU virtualization, there
-> should be no userspace override, since we have no precedent for
-> authorizing that kind of override. If it's false, other counter-based
-> profiling features (such as LBR including the associated CPUID bits
-> if any) will not be exposed.
-> 
-> Change its name from "pmu" to "enable_pmu" as we have temporary
-> variables with the same name in our code like "struct kvm_pmu *pmu".
-> 
-> Fixes: b1d66dad65dc ("KVM: x86/svm: Add module param to control PMU virtualization")
-> Suggested-by : Jim Mattson <jmattson@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->   arch/x86/kvm/cpuid.c            | 6 +++---
->   arch/x86/kvm/svm/pmu.c          | 2 +-
->   arch/x86/kvm/svm/svm.c          | 8 ++------
->   arch/x86/kvm/svm/svm.h          | 1 -
->   arch/x86/kvm/vmx/capabilities.h | 4 ++++
->   arch/x86/kvm/vmx/pmu_intel.c    | 2 +-
->   arch/x86/kvm/x86.c              | 5 +++++
->   arch/x86/kvm/x86.h              | 1 +
->   8 files changed, 17 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 0b920e12bb6d..b2ff8bfd8220 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -770,10 +770,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   		perf_get_x86_pmu_capability(&cap);
->   
->   		/*
-> -		 * Only support guest architectural pmu on a host
-> -		 * with architectural pmu.
-> +		 * The guest architecture pmu is only supported if the architecture
-> +		 * pmu exists on the host and the module parameters allow it.
->   		 */
-> -		if (!cap.version)
-> +		if (!cap.version || !enable_pmu)
->   			memset(&cap, 0, sizeof(cap));
->   
->   		eax.split.version_id = min(cap.version, 2);
-> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> index 12d8b301065a..5aa45f13b16d 100644
-> --- a/arch/x86/kvm/svm/pmu.c
-> +++ b/arch/x86/kvm/svm/pmu.c
-> @@ -101,7 +101,7 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
->   {
->   	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
->   
-> -	if (!pmu)
-> +	if (!enable_pmu)
->   		return NULL;
->   
->   	switch (msr) {
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 6cb38044a860..549f73ce5ebc 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -192,10 +192,6 @@ module_param(vgif, int, 0444);
->   static int lbrv = true;
->   module_param(lbrv, int, 0444);
->   
-> -/* enable/disable PMU virtualization */
-> -bool pmu = true;
-> -module_param(pmu, bool, 0444);
-> -
->   static int tsc_scaling = true;
->   module_param(tsc_scaling, int, 0444);
->   
-> @@ -4573,7 +4569,7 @@ static __init void svm_set_cpu_caps(void)
->   		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
->   
->   	/* AMD PMU PERFCTR_CORE CPUID */
-> -	if (pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
-> +	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->   		kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
->   
->   	/* CPUID 0x8000001F (SME/SEV features) */
-> @@ -4712,7 +4708,7 @@ static __init int svm_hardware_setup(void)
->   			pr_info("LBR virtualization supported\n");
->   	}
->   
-> -	if (!pmu)
-> +	if (!enable_pmu)
->   		pr_info("PMU virtualization is disabled\n");
->   
->   	svm_set_cpu_caps();
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index daa8ca84afcc..47ef8f4a9358 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -32,7 +32,6 @@
->   extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
->   extern bool npt_enabled;
->   extern bool intercept_smi;
-> -extern bool pmu;
->   
->   /*
->    * Clean bits in VMCB.
-> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-> index c8029b7845b6..959b59d13b5a 100644
-> --- a/arch/x86/kvm/vmx/capabilities.h
-> +++ b/arch/x86/kvm/vmx/capabilities.h
-> @@ -5,6 +5,7 @@
->   #include <asm/vmx.h>
->   
->   #include "lapic.h"
-> +#include "x86.h"
->   
->   extern bool __read_mostly enable_vpid;
->   extern bool __read_mostly flexpriority_enabled;
-> @@ -389,6 +390,9 @@ static inline u64 vmx_get_perf_capabilities(void)
->   {
->   	u64 perf_cap = 0;
->   
-> +	if (!enable_pmu)
-> +		return perf_cap;
-> +
->   	if (boot_cpu_has(X86_FEATURE_PDCM))
->   		rdmsrl(MSR_IA32_PERF_CAPABILITIES, perf_cap);
->   
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index ffccfd9823c0..466d18fc0c5d 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -487,7 +487,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->   	pmu->reserved_bits = 0xffffffff00200000ull;
->   
->   	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
-> -	if (!entry)
-> +	if (!entry || !enable_pmu)
->   		return;
->   	eax.full = entry->eax;
->   	edx.full = entry->edx;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index c194a8cbd25f..bff2ff8cb35f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -187,6 +187,11 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
->   int __read_mostly pi_inject_timer = -1;
->   module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
->   
-> +/* Enable/disable PMU virtualization */
-> +bool __read_mostly enable_pmu = true;
-> +EXPORT_SYMBOL_GPL(enable_pmu);
-> +module_param(enable_pmu, bool, 0444);
-> +
->   /*
->    * Restoring the host value for MSRs that are only consumed when running in
->    * usermode, e.g. SYSCALL MSRs and TSC_AUX, can be deferred until the CPU
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index da7031e80f23..1ebd5a7594da 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -336,6 +336,7 @@ extern u64 host_xcr0;
->   extern u64 supported_xcr0;
->   extern u64 host_xss;
->   extern u64 supported_xss;
-> +extern bool enable_pmu;
->   
->   static inline bool kvm_mpx_supported(void)
->   {
+Dnia Mon, Jan 17, 2022 at 01:10:56PM +0000, Mark Rutland napisał(a):
+>Hi,
+>
+>On Mon, Jan 17, 2022 at 01:31:48PM +0100, Krzysztof Adamski wrote:
+>> On EFI enabled arm64 systems, efi_reboot was called before
+>> do_kernel_restart, completely omitting the reset_handlers functionality.
+>> By registering efi_reboot as part of the chain with slightly elevated
+>> priority, we make it run before the default handler but still allow
+>> plugging in other handlers.
+>> Thanks to that, things like gpio_restart, restart handlers in
+>> watchdog_core, mmc or mtds are working on those platforms.
+>>
+>> The priority 129 should be high enough as we will likely be the first
+>> one to register on this prio so we will be called before others, like
+>> PSCI handler.
+>
+>I apprecaiate that this is kinda nice for consistency, but if adds more
+>lines and reduces certainty down to "likely", neither of which seem
+>ideal.
 
-Queued, thanks.
+Well, my choosing of the word "likely" might not be ideal. What I meant
+is that it is unlikely that anybody would ever add another restart
+handler with priority 129 in earlier code, as it would also have to be
+done in arch setup.
 
-Paolo
+We can, however, bump the priority to a larger value, of course. I just
+wanted to use tha smallest sensible value. Choosing the right priority
+is the hardest part of using reset_handlers mechanism, though. The
+direct mapping of the previous code to the restart handlers would use
+the maximal priority of 255, but this wouldn't make sense as the whole
+point of using restart_handler is to be able to register something with
+higer priority than default (in this case efi) reset mechanism.
 
+>
+>What do we gain by changing this? e.g. does this enable some further
+>rework?
+>
+>Do we actually need to change this?
+
+Well, it is not just nice, it is very useful. Without this change, the
+whole mechanism of restart_handlers does not work on a whole class of
+systems. We use this mechanism to inject our custom handler that should
+run just before restart but this is also used by a handful of mainline
+drivers that I mentioned in my commit message - none of them is gonna
+work in EFI based ARM64 systems right now - this includes the MTD/MMC
+drivers trying to do some work just before restart, gpio_restart driver
+that is used in many systems to trigger some external events just before
+restart, etc.
+
+So, for everybody who uses restart_handlers mechanism, this change is
+needed.
+
+>
+>>
+>> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>> ---
+>>  arch/arm64/kernel/process.c |  7 -------
+>>  arch/arm64/kernel/setup.c   | 21 +++++++++++++++++++++
+>>  2 files changed, 21 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+>> index 5369e649fa79..b86ef77bb0c8 100644
+>> --- a/arch/arm64/kernel/process.c
+>> +++ b/arch/arm64/kernel/process.c
+>> @@ -130,13 +130,6 @@ void machine_restart(char *cmd)
+>>  	local_irq_disable();
+>>  	smp_send_stop();
+>>
+>> -	/*
+>> -	 * UpdateCapsule() depends on the system being reset via
+>> -	 * ResetSystem().
+>> -	 */
+>> -	if (efi_enabled(EFI_RUNTIME_SERVICES))
+>> -		efi_reboot(reboot_mode, NULL);
+>> -
+>>  	/* Now call the architecture specific reboot code. */
+>>  	do_kernel_restart(cmd);
+>>
+>> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+>> index f70573928f1b..5fa95980ba73 100644
+>> --- a/arch/arm64/kernel/setup.c
+>> +++ b/arch/arm64/kernel/setup.c
+>> @@ -12,6 +12,7 @@
+>>  #include <linux/stddef.h>
+>>  #include <linux/ioport.h>
+>>  #include <linux/delay.h>
+>> +#include <linux/reboot.h>
+>>  #include <linux/initrd.h>
+>>  #include <linux/console.h>
+>>  #include <linux/cache.h>
+>> @@ -298,6 +299,24 @@ u64 cpu_logical_map(unsigned int cpu)
+>>  	return __cpu_logical_map[cpu];
+>>  }
+>>
+>> +static int efi_restart(struct notifier_block *nb, unsigned long action,
+>> +		       void *data)
+>> +{
+>> +	/*
+>> +	 * UpdateCapsule() depends on the system being reset via
+>> +	 * ResetSystem().
+>> +	 */
+>> +	if (efi_enabled(EFI_RUNTIME_SERVICES))
+>> +		efi_reboot(reboot_mode, NULL);
+>> +
+>> +	return NOTIFY_DONE;
+>> +}
+>> +
+>> +static struct notifier_block efi_restart_nb = {
+>> +	.notifier_call = efi_restart,
+>> +	.priority = 129,
+>> +};
+>> +
+>>  void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>>  {
+>>  	setup_initial_init_mm(_stext, _etext, _edata, _end);
+>> @@ -346,6 +365,8 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>>
+>>  	paging_init();
+>>
+>> +	register_restart_handler(&efi_restart_nb);
+>
+>If we're going to register this, it'd be nicer to register it
+>conditionally in the EFI code when we probe EFI, rather than having the
+>arch setup code unconditionally register a notifier that conditionally
+>does something.
+>
+
+You might be right, I did a 1:1 translation of the code, so to say. I
+will look at the alternative approach for registering.
+
+Krzysztof

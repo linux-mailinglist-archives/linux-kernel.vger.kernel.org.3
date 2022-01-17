@@ -2,99 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7024904DA
+	by mail.lfdr.de (Postfix) with ESMTP id F09AC4904DC
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiAQJ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:28:37 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4414 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiAQJ2f (ORCPT
+        id S235710AbiAQJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235696AbiAQJ2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:28:35 -0500
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jcmj71Jybz67jS1;
-        Mon, 17 Jan 2022 17:25:31 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 10:28:33 +0100
-Received: from [10.47.83.126] (10.47.83.126) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 17 Jan
- 2022 09:28:32 +0000
-Subject: Re: [PATCH] scsi: hisi_sas: Remove useless DMA-32 fallback
- configuration
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>
-References: <1bf2d3660178b0e6f172e5208bc0bd68d31d9268.1642237482.git.christophe.jaillet@wanadoo.fr>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b7e68ce9-cca0-a5d7-0bd6-82cf597b9619@huawei.com>
-Date:   Mon, 17 Jan 2022 09:28:06 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 17 Jan 2022 04:28:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCEBC06161C;
+        Mon, 17 Jan 2022 01:28:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A061EB80E6C;
+        Mon, 17 Jan 2022 09:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C524C36AE3;
+        Mon, 17 Jan 2022 09:28:40 +0000 (UTC)
+Message-ID: <d4ccf803-3736-d95d-19a9-f3593465b81e@xs4all.nl>
+Date:   Mon, 17 Jan 2022 10:28:38 +0100
 MIME-Version: 1.0
-In-Reply-To: <1bf2d3660178b0e6f172e5208bc0bd68d31d9268.1642237482.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v8 1/4] media: v4l: Add definition for the Aspeed JPEG
+ format
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.126]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+To:     Jammy Huang <jammy_huang@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>
+Cc:     "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
+ <20211224012738.1551-2-jammy_huang@aspeedtech.com>
+ <703ff71e-c76a-9df1-c644-04efed0199ca@xs4all.nl>
+ <609cfe9e-2fd8-b31a-9d71-b83d61693f84@aspeedtech.com>
+ <CACPK8XeJQHLWfVbBjArxV_QMDDnRXfccOeXdsn6aBEG7gd8yvw@mail.gmail.com>
+ <98096e97-68cc-18fd-d2b6-3477f57f05bd@aspeedtech.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <98096e97-68cc-18fd-d2b6-3477f57f05bd@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/01/2022 09:05, Christophe JAILLET wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
-> 
-> Simplify code and remove some dead code accordingly.
-> 
-> [1]: https://lore.kernel.org/linux-kernel/YL3vSPK5DXTNvgdx@infradead.org/#t
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Hi Jammy,
 
-Great, you got both callsites:
+On 1/17/22 08:18, Jammy Huang wrote:
+> On 2022/1/17 上午 10:24, Joel Stanley wrote:
+>> On Mon, 17 Jan 2022 at 02:00, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
+>>> Hi Hans,
+>>>
+>>> On 2022/1/14 下午 04:11, Hans Verkuil wrote:
+>>>> On 24/12/2021 02:27, Jammy Huang wrote:
+>>>>> This introduces support for the Aspeed JPEG format, where the new frame
+>>>>> can refer to previous frame to reduce the amount of compressed data. The
+>>>>> concept is similar to I/P frame of video compression. It will compare the
+>>>>> new frame with previous one to decide which macroblock's data is
+>>>>> changed, and only the changed macroblocks will be compressed.
+>>>>>
+>>>>> This Aspeed JPEG format is used by the video engine on Aspeed platforms,
+>>>>> which is generally adapted for remote KVM.
+>>>>>
+>>>>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+>>>>> ---
+>>>>> v8:
+>>>>>     - Add decoder information for aspeed-jpeg
+>>>>> v7:
+>>>>>     - Add more information for aspeed-jpeg
+>>>>> v6:
+>>>>>     - Update description for new format, aspeed-jpeg, in Documentation.
+>>>>> v5:
+>>>>>     - no update
+>>>>> v4:
+>>>>>     - new
+>>>>> ---
+>>>>>    .../media/uapi/v4l/pixfmt-reserved.rst          | 17 +++++++++++++++++
+>>>>>    drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
+>>>>>    include/uapi/linux/videodev2.h                  |  1 +
+>>>>>    3 files changed, 19 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/media/uapi/v4l/pixfmt-reserved.rst b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
+>>>> This is the wrong file! It should be:
+>>>>
+>>>> Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+>>> Thanks, I just used git format-patch to generate the cover-letter and
+>>> didn't notice this.
+>>>
+>>> It looks like the file, pixfmt-reserved.rst, has different path in
+>>> different Linux kernel,
+>>>
+>>> * 5.4:           Documentation/media/uapi/v4l/pixfmt-reserved.rst
+>>>
+>>> * 5.10/5.15: Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+>>>
+>>> 5.4 is the one I based to submit the patches.
+>>>
+>>> Could you suggest the kernel that I should based to submit these patches??
+>> You should always submit based on the latest release.
+>>
+>> There are sometimes exceptions where you will base your patches on
+>> something even newer, but generally you should grab the latest.
+>>
+>> Be sure to re-test on the latest kernel before submitting.
+> OK, thank you.
 
-Acked-by: John Garry <john.garry@huawei.com>
+I recommend waiting until later this week. I hope to have a PR for other outstanding
+aspeed patches ready in a few days. It is easiest if you base your v9 on top of that
+series, this to avoid merge conflicts.
 
-> ---
->   drivers/scsi/hisi_sas/hisi_sas_main.c  | 3 ---
->   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 --
->   2 files changed, 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index a05ec7aece5a..2f53a2ee024a 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -2666,9 +2666,6 @@ static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
->   		goto err_out;
->   
->   	error = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-> -	if (error)
-> -		error = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> -
->   	if (error) {
->   		dev_err(dev, "No usable DMA addressing method\n");
->   		goto err_out;
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> index a45ef9a5e12e..a01a3a7b706b 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> @@ -4695,8 +4695,6 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   		goto err_out;
->   
->   	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> -	if (rc)
-> -		rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
->   	if (rc) {
->   		dev_err(dev, "No usable DMA addressing method\n");
->   		rc = -ENODEV;
-> 
+Regards,
 
+	Hans
+
+>>
+>> Cheers,
+>>
+>> Joel
+>>
+>>> I will need to change the number of V4L2_CID_USER_ASPEED_BASE per different
+>>>
+>>> linux kernel as well.
+>>>
+>>>> Regards,
+>>>>
+>>>>        Hans
+>>>>
+>>>>> index b2cd155e691b..1d0dc8d86ed7 100644
+>>>>> --- a/Documentation/media/uapi/v4l/pixfmt-reserved.rst
+>>>>> +++ b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
+>>>>> @@ -264,6 +264,23 @@ please make a proposal on the linux-media mailing list.
+>>>>>       of tiles, resulting in 32-aligned resolutions for the luminance plane
+>>>>>       and 16-aligned resolutions for the chrominance plane (with 2x2
+>>>>>       subsampling).
+>>>>> +    * .. _V4L2-PIX-FMT-AJPG:
+>>>>> +
+>>>>> +      - ``V4L2_PIX_FMT_AJPG``
+>>>>> +      - 'AJPG'
+>>>>> +      - ASPEED JPEG format used by the aspeed-video driver on Aspeed platforms,
+>>>>> +        which is generally adapted for remote KVM.
+>>>>> +        On each frame compression, I will compare the new frame with previous
+>>>>> +        one to decide which macroblock's data is changed, and only the changed
+>>>>> +        macroblocks will be compressed.
+>>>>> +
+>>>>> +        The implementation is based on AST2600 A3 datasheet, revision 0.9, which
+>>>>> +        is not publicly available. Or you can reference Video stream data format
+>>>>> +        – ASPEED mode compression of SDK_User_Guide which available on
+>>>>> +        AspeedTech-BMC/openbmc/releases.
+>>>>> +
+>>>>> +        Decoder's implementation can be found here,
+>>>>> +        `https://github.com/AspeedTech-BMC/aspeed_codec/ <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
+>>>>>
+>>>>>    .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
+>>>>>
+>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> index 24db33f803c0..00dde01d2f97 100644
+>>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> @@ -1378,6 +1378,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>>>>>               case V4L2_PIX_FMT_S5C_UYVY_JPG: descr = "S5C73MX interleaved UYVY/JPEG"; break;
+>>>>>               case V4L2_PIX_FMT_MT21C:        descr = "Mediatek Compressed Format"; break;
+>>>>>               case V4L2_PIX_FMT_SUNXI_TILED_NV12: descr = "Sunxi Tiled NV12 Format"; break;
+>>>>> +            case V4L2_PIX_FMT_AJPG:         descr = "Aspeed JPEG"; break;
+>>>>>               default:
+>>>>>                       if (fmt->description[0])
+>>>>>                               return;
+>>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>>>>> index 3210b3c82a4a..994eb6155ea9 100644
+>>>>> --- a/include/uapi/linux/videodev2.h
+>>>>> +++ b/include/uapi/linux/videodev2.h
+>>>>> @@ -726,6 +726,7 @@ struct v4l2_pix_format {
+>>>>>    #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
+>>>>>    #define V4L2_PIX_FMT_SUNXI_TILED_NV12 v4l2_fourcc('S', 'T', '1', '2') /* Sunxi Tiled NV12 Format */
+>>>>>    #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
+>>>>> +#define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
+>>>>>
+>>>>>    /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+>>>>>    #define V4L2_PIX_FMT_IPU3_SBGGR10  v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
+>>> -- 
+>>> Best Regards
+>>> Jammy
+>>>

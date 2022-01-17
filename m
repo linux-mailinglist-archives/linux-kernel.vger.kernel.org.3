@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E30F491159
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C699549116C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243298AbiAQVix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 16:38:53 -0500
-Received: from mga09.intel.com ([134.134.136.24]:45887 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230312AbiAQViv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:38:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642455531; x=1673991531;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lRvcJ3YccmJnwh4LZ5knDv+F74644MGKq1W3e+EB/q0=;
-  b=JXk9xYomXfrUgGzSib98i4ZXYdiuu5nBFbEESPWuDeisIgdrf2TrF+D1
-   lRsXObt2kYFh5qGMHmtQJ9D3Nl0larjjqlwSur0sst6MUDXWd6mTs29j8
-   q7IfubgAMJJI1EB3XB/7vT/drjuBJjukZfIomq4vxCkqgqj176JAv0zFx
-   3J1TQBG0o9XQJgmFgbeTW7YKhLEkpOuORuEYDlWXrBpBoWOVSJCA54z+n
-   80WF93oxFTIUrk7pSDTeQwTIc2z7Vrh3WXihRRMyVuebuRgPCFdlKo7QM
-   OcyrqXpHN6q761HNtcbN/d9nNxOBn6dsH+/t+WtePn54ybJw21OUiyn9i
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244492825"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="244492825"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 13:38:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="693187899"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 13:38:49 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9ZiD-000BtK-89; Mon, 17 Jan 2022 21:38:49 +0000
-Date:   Tue, 18 Jan 2022 05:38:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: samsung-keypad.c:undefined reference to `devm_ioremap'
-Message-ID: <202201180526.k3xQvHVO-lkp@intel.com>
+        id S243368AbiAQVti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 16:49:38 -0500
+Received: from pb-sasl-trial21.pobox.com ([173.228.157.51]:54843 "EHLO
+        pb-sasl-trial21.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233431AbiAQVtg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 16:49:36 -0500
+X-Greylist: delayed 656 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 16:49:35 EST
+Received: from pb-sasl-trial21.pobox.com (localhost.local [127.0.0.1])
+        by pb-sasl-trial21.pobox.com (Postfix) with ESMTP id 574E91F98F;
+        Mon, 17 Jan 2022 16:38:39 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=zHTCsXhUflqG5NDTDETust6K8wY=; b=l3aqFz
+        fcswXCeUZAknRJXQfFykkxtIqxRVp6V0lwKzhODdF5qUUAmqBx3ry8Sbr4HCSXc7
+        02Low6RVnJGWn3rhYnDMkvGdNCY3UyBx3ssiQZonv2Alr+VU1/5c8NDYOq7O41Re
+        U0vEEf+WJlphqJc0Jv3odUeJYB146gB8F/4Hk=
+Received: from pb-smtp20.sea.icgroup.com (pb-smtp20.pobox.com [10.110.30.20])
+        by pb-sasl-trial21.pobox.com (Postfix) with ESMTP id 38CE11F98C;
+        Mon, 17 Jan 2022 16:38:39 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=97k/YWCIM2xZt1fXcNpvHo0/q7gN6rGe/OBE09sgPW0=; b=tGjceoNgnUQowKwZBQcMObZYxb0XkZetLIAKdSEDPkirP5BZKs01nVYlbqUJFKnnjLnjmDdaYC/dR1wmwGbZAWgxzx+b64cU+JqFgxKUYKT7fi2x+qluy+wlPpXzsdOAH10spiimWmr8h8YXgPGuIhVnuRup2CrBCkA7znTINms=
+Received: from yoda.home (unknown [96.21.170.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp20.pobox.com (Postfix) with ESMTPSA id 10961178028;
+        Mon, 17 Jan 2022 16:38:36 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 0B3022DA0040;
+        Mon, 17 Jan 2022 16:38:34 -0500 (EST)
+Date:   Mon, 17 Jan 2022 16:38:33 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Borislav Petkov <bp@alien8.de>
+cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v9 04/15] arch: introduce ASM function sections
+In-Reply-To: <YeXasIO5ArXxtw1J@zn.tnic>
+Message-ID: <8n284257-9665-s3q1-6833-rn966p87qoqs@syhkavp.arg>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-5-alexandr.lobakin@intel.com> <YeXasIO5ArXxtw1J@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: D377A396-77DD-11EC-BE07-C85A9F429DF0-78420484!pb-smtp20.pobox.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Mon, 17 Jan 2022, Borislav Petkov wrote:
 
-FYI, the error/warning still remains.
+> Thanks for explaining this. The gas manpage is very, hm, verbose
+> <sarcarstic eyeroll> ;-\:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0c947b893d69231a9add855939da7c66237ab44f
-commit: bbd7ffdbef6888459f301c5889f3b14ada38b913 clk: Allow the common clk framework to be selectable
-date:   1 year, 8 months ago
-config: s390-randconfig-c023-20220117 (https://download.01.org/0day-ci/archive/20220118/202201180526.k3xQvHVO-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbd7ffdbef6888459f301c5889f3b14ada38b913
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bbd7ffdbef6888459f301c5889f3b14ada38b913
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+GNU tools tend to be far better documented in their info pages.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
-   irq-imx-intmux.c:(.text+0x19c): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x3ae): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
-   meson-rng.c:(.text+0x112): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
-   mtk-rng.c:(.text+0x43e): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/ks-sa-rng.o: in function `ks_sa_rng_probe':
-   ks-sa-rng.c:(.text+0x546): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/npcm-rng.o:npcm-rng.c:(.text+0x2e2): more undefined references to `devm_platform_ioremap_resource' follow
-   s390-linux-ld: drivers/input/keyboard/samsung-keypad.o: in function `samsung_keypad_probe':
->> samsung-keypad.c:(.text+0x92a): undefined reference to `devm_ioremap'
-   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
-   sirfsoc_wdt.c:(.text+0x1ee): undefined reference to `devm_platform_ioremap_resource'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
-   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
-   Selected by
-   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
-   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Nicolas

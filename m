@@ -2,143 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC6A490943
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0134A490944
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiAQNNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:13:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44025 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231894AbiAQNNO (ORCPT
+        id S240152AbiAQNNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240146AbiAQNNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:13:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642425193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KoHD0T4Qgoe1KhATHZfpvSKKRzDTRge8Amqh33PB6yY=;
-        b=ccMMvZgGXq0YvqreQQN26bOnhz3ohL72ahmnXbXnZPc3Nb5ooTYMJ8hi+Q9z4U4bC5K/ts
-        qHrAGsVNCrpARBHcx4XUENoaL+e3Zj9EuzbiHrjq7wg919H4/lkOJX94CusijPPG76Cj13
-        5q6HhNX/UYkAjoZrCwYt5r2ZxLDz1jI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-596-yRlD69j6OZ6hs6GB3-znaw-1; Mon, 17 Jan 2022 08:13:12 -0500
-X-MC-Unique: yRlD69j6OZ6hs6GB3-znaw-1
-Received: by mail-qt1-f197.google.com with SMTP id 4-20020ac85744000000b002b2f329efc2so12541658qtx.12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:13:12 -0800 (PST)
+        Mon, 17 Jan 2022 08:13:44 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E85C06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:13:44 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id y17so19092745qtx.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=profian-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v95MTDE6AwXJuJQAhPQ7NXPCKSsA4ja2dsCjYA+yvqo=;
+        b=FrJ405V3mUw7sUTQyI1GqbU4h2e0ueIGC2ozRZCH0jX8W1XwdTnq2NgiYUCLNHOZuP
+         ammSvth9vj1A+fdJJKM1mTBf2T9EUp/jSOr/5F0Y+n8gj2Rs08IR/dGRoDB3OSV2GOCS
+         oaLR3tiGdPFH3UQIQsIHLVMsddpd+JGurMKDIGvJHaKxLAVn+rnVifiqHt6NWlaY/K3s
+         bE5zkABdZaabcFkrqIxilNe8IBoXwP+tF6b3ugEjdZ/bsa6Wwe9dV1IY9hDUeMhrIRXj
+         jWsVAg5fk3aHO/TWUKBskt5YFy9EzFXUS5NVXKl9tZiE8eim1jrmkfvMNTIf1xelGUQX
+         z2WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KoHD0T4Qgoe1KhATHZfpvSKKRzDTRge8Amqh33PB6yY=;
-        b=0+Wdd4bteFaePIKiRpswfWyvjjZ61OV/xyyRG85AtL8s7tH1+1vIKStOnRuSDokuRX
-         mwoPktdhl/pRv9TzBG+UKleWHd2o+Hu2NCsReTri3/tBaurZuazKv4PQo3CJ5H6L70pn
-         a53xxld++SVbX06I0sRb2S/cxSXwJyMWiUnGq+vo2ZNcxYiNbmeD6QnIX11IPnSE2LYb
-         txlZdIVmliWK8olphrY5FxYSYufa6RcKhyurSa18EeIMfboN9D8AWPGdGpfPZ6TqjtGX
-         rL4ozlGi6QuK9pBCX/em78zyEsNzCy+94rgN0DfDFbR2WRnN/9FgTW2OAUq2/y77l51x
-         DZiA==
-X-Gm-Message-State: AOAM533lackEQJ7DuUe7IQNU1ho3rShPxV8sDTOGXzzTlv9tpfQlsEb5
-        B7HZXcTbmiyU+7SBEJY8W8TChqu+xKxcj4+8jnfN7RwGLg4cmBjqFyE1loJm49SzAu349dDW/Z/
-        vhBJqYiRm1yFnHeFJYJyVTk2S
-X-Received: by 2002:ad4:5ded:: with SMTP id jn13mr18031197qvb.112.1642425192216;
-        Mon, 17 Jan 2022 05:13:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw8zahbWUfzIjviyspBo6mAwtq6lEfIulh9X/Oe4Votnq4+jt74G1gTWnuu1R8OJmZa285zkA==
-X-Received: by 2002:ad4:5ded:: with SMTP id jn13mr18031165qvb.112.1642425191861;
-        Mon, 17 Jan 2022 05:13:11 -0800 (PST)
-Received: from localhost.localdomain ([151.57.254.96])
-        by smtp.gmail.com with ESMTPSA id x14sm8810332qko.110.2022.01.17.05.13.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 05:13:11 -0800 (PST)
-Date:   Mon, 17 Jan 2022 14:13:04 +0100
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Xin Long <lucien.xin@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Clark Williams <williams@redhat.com>
-Subject: Re: [PATCH] mm: slub: fix a deadlock warning in kmem_cache_destroy
-Message-ID: <20220117131304.pdc3mfdowkzovw6q@localhost.localdomain>
-References: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
- <YeO8pcs866Iu2iJX@ip-172-31-30-232.ap-northeast-1.compute.internal>
- <CADvbK_eY=3Gf79MkvK72Nh86ysN4eoFei0k1jg0frg22GgToGA@mail.gmail.com>
- <YeU4B46F+oFUBRLE@linutronix.de>
- <39a3470f-06ab-cf41-32e4-80edb249c7d3@suse.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v95MTDE6AwXJuJQAhPQ7NXPCKSsA4ja2dsCjYA+yvqo=;
+        b=Ds1wIBGG2a3HtIEz8H5e9hJx1Du5amZWLMsFRlZ5XFKnKcDL4q2Mk5V2SRTZUPcTMv
+         SQeAJp+espqTGrvVKS7JskqeEXpuz4A6bn6Et7vWUOIUYPcRJnwChKvt1+jep32MZWb4
+         q/yGAP4Fc9XwVITXHhSKetJ2pusZtJik7hOpFOrFvFnxV7bdnRUuhcsQNAcXOe93TLTD
+         z2dOIeREmH+Gx9hw1RmazF3800sx4X+XrFF50LsCcbXlTwy/eTFurTVUZaITqXxM30Oc
+         bO5LAXimujbGenMJAIJuQdCORNY+N7qTdivjTcVTYiwNSVYyiyW48Ef8Bs442g6utrPh
+         SyGA==
+X-Gm-Message-State: AOAM531cCTjmj9oo6eWaGHM/cSGB3gHwKGQKmk/JcvKo7HHQqIGXA1ZV
+        /vo1u9x9PoUQ7gVPAZ/y+LUrDX8kX2ezE4iGJwtWqwnJhgze8A==
+X-Google-Smtp-Source: ABdhPJy8tsAc3Zrv1hefqgTT6H6NoS9VEjRY7O+xv9ZGLsNDyvmrNNEo96qFakH7bQCayVaOkPvQmB+Pj2Asfpl66JE=
+X-Received: by 2002:a05:622a:3cd:: with SMTP id k13mr3965011qtx.458.1642425223156;
+ Mon, 17 Jan 2022 05:13:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39a3470f-06ab-cf41-32e4-80edb249c7d3@suse.cz>
+References: <Yd9qmMx7NO450mzZ@iki.fi> <CAHAy0tRi2q+wG+yBttq0FYeK-5wUAoK_=ZCtWsfQf0m8oPc1-w@mail.gmail.com>
+ <168fb2c9-de3f-384a-bb17-ab84db2cf533@intel.com> <YeHwzwnfsUcxiNbw@iki.fi>
+ <b0e5c1fc-aa6d-4e26-c18b-d93d93c2131a@intel.com> <YeIEKayEUidj0Dlb@iki.fi>
+ <6e1cb295-b86e-ae09-2cf0-cfefd1a10e65@intel.com> <YeIU6e6wetrifn+b@iki.fi>
+ <e2d675f7-319b-4816-ad5e-4154cbf69f2b@intel.com> <YeIgzLzPu0U8s0sh@iki.fi> <YeK2hFcy72tYL61S@iki.fi>
+In-Reply-To: <YeK2hFcy72tYL61S@iki.fi>
+From:   Nathaniel McCallum <nathaniel@profian.com>
+Date:   Mon, 17 Jan 2022 08:13:32 -0500
+Message-ID: <CAHAy0tT7+AwgQUtzndj1E99hVcHNmyk2xJ6wUSxa4oPYytAMzA@mail.gmail.com>
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Jan 15, 2022 at 6:57 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Sat, Jan 15, 2022 at 03:18:04AM +0200, Jarkko Sakkinen wrote:
+> > On Fri, Jan 14, 2022 at 04:41:59PM -0800, Reinette Chatre wrote:
+> > > Hi Jarkko,
+> > >
+> > > On 1/14/2022 4:27 PM, Jarkko Sakkinen wrote:
+> > > > On Fri, Jan 14, 2022 at 04:01:33PM -0800, Reinette Chatre wrote:
+> > > >> Hi Jarkko,
+> > > >>
+> > > >> On 1/14/2022 3:15 PM, Jarkko Sakkinen wrote:
+> > > >>> On Fri, Jan 14, 2022 at 03:05:21PM -0800, Reinette Chatre wrote:
+> > > >>>> Hi Jarkko,
+> > > >>>
+> > > >>> How enclave can check a page range that EPCM has the expected permissions?
+> > > >>
+> > > >> Only way to change EPCM permissions from outside enclave is to run ENCLS[EMODPR]
+> > > >> that needs to be accepted from within the enclave via ENCLU[EACCEPT]. At that
+> > > >> time the enclave provides the expected permissions and that will fail
+> > > >> if there is a mismatch with the EPCM permissions (SGX_PAGE_ATTRIBUTES_MISMATCH).
+> > > >
+> > > > This is a very valid point but that does make the introspection possible
+> > > > only at the time of EACCEPT.
+> > > >
+> > > > It does not give tools for enclave to make sure that EMODPR-ETRACK dance
+> > > > was ever exercised.
+> > >
+> > > Could you please elaborate? EACCEPT is available to the enclave as a tool
+> > > and it would fail if ETRACK was not completed (error SGX_NOT_TRACKED).
+> > >
+> > > Here is the relevant snippet from the SDM from the section where it
+> > > describes EACCEPT:
+> > >
+> > > IF (Tracking not correct)
+> > >     THEN
+> > >         RFLAGS.ZF := 1;
+> > >         RAX := SGX_NOT_TRACKED;
+> > >         GOTO DONE;
+> > > FI;
+> > >
+> > > Reinette
+> >
+> > Yes, if enclave calls EACCEPT it does the necessary introspection and makes
+> > sure that ETRACK is completed. I have trouble understanding how enclave
+> > makes sure that EACCEPT was called.
+>
+> I'm not concerned of anything going wrong once EMODPR has been started.
+>
+> The problem nails down to that the whole EMODPR process is spawned by
+> the entity that is not trusted so maybe that should further broke down
+> to three roles:
+>
+> 1. Build process B
+> 2. Runner process R.
+> 3. Enclave E.
+>
+> And to the costraint that we trust B *more* than R. Once B has done all the
+> needed EMODPR calls it would send the file descriptor to R. Even if R would
+> have full access to /dev/sgx_enclave, it would not matter, since B has done
+> EMODPR-EACCEPT dance with E.
+>
+> So what you can achieve with EMODPR is not protection against mistrusted
+> *OS*. There's absolutely no chance you could use it for that purpose
+> because mistrusted OS controls the whole process.
+>
+> EMODPR is to help to protect enclave against mistrusted *process*, i.e.
+> in the above scenario R.
 
-On 17/01/22 13:40, Vlastimil Babka wrote:
-> +CC Clark
-> 
-> On 1/17/22 10:33, Sebastian Andrzej Siewior wrote:
-> > On 2022-01-17 16:32:46 [+0800], Xin Long wrote:
-> >> another issue. From the code analysis, this issue does exist on the
-> >> upstream kernel, though I couldn't build an upstream RT kernel for the
-> >> testing.
-> > 
-> > This should also reproduce in v5.16 since the commit in question is
-> > there.
-> 
-> Yeah. I remember we had some issues with the commit during development, but
-> I'd hope those were resolved and the commit that's ultimately merged got the
-> fixes, see this subthread:
-> 
-> https://lore.kernel.org/all/0b36128c-3e12-77df-85fe-a153a714569b@quicinc.com/
-> 
-> >> > >         CPU0                        CPU1
-> >> > >         ----                        ----
-> >> > >   cpus_read_lock()
-> >> > >                                    kn->active++
-> >> > >                                    cpus_read_lock() [a]
-> >> > >   wait until kn->active == 0
-> >> > >
-> >> > > Although cpu_hotplug_lock is a RWSEM, [a] will not block in there. But as
-> >> > > lockdep annotations are added for cpu_hotplug_lock, a deadlock warning
-> >> > > would be detected:
-> > 
-> > The cpu_hotplug_lock is a per-CPU RWSEM. The lock in [a] will block if
-> > there is a writer pending.
-> > 
-> >> > >   ======================================================
-> >> > >   WARNING: possible circular locking dependency detected
-> >> > >   ------------------------------------------------------
-> >> > >   dmsetup/1832 is trying to acquire lock:
-> >> > >   ffff986f5a0f9f20 (kn->count#144){++++}-{0:0}, at: kernfs_remove+0x1d/0x30
-> >> > >
-> >> > >   but task is already holding lock:
-> >> > >   ffffffffa43817c0 (slab_mutex){+.+.}-{3:3}, at: kmem_cache_destroy+0x2a/0x120
-> >> > >
-> > 
-> > I tried to create & destroy a cryptarget which creates/destroy a cache
-> > via bio_put_slab(). Either the callchain is different or something else
-> > is but I didn't see a lockdep warning.
-> 
-> RHEL-8 kernel seems to be 4.18, unless RT uses a newer one. Could be some
-> silently relevant backport is missing? How about e.g. 59450bbc12be ("mm,
-> slab, slub: stop taking cpu hotplug lock") ?
+There are two general cases that I can see. Both are valid.
 
-Hummm, looks like we have backported commit 59450bbc12be in RHEL-8.
+1. The OS moves from a trusted to an untrusted state. This could be
+the multi-process system you've described. But it could also be that
+the kernel becomes compromised after the enclave is fully initialized.
 
-Xin Long, would you be able to check if you still see the lockdep splat
-with latest upstream RT?
+2. The OS is untrustworthy from the start.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.16.y-rt
+The second case is the stronger one and if you can solve it, the first
+one is solved implicitly. And our end goal is that if the OS does
+anything malicious we will crash in a controlled way.
 
-Thanks!
-Juri
-
+A defensive enclave will always want to have the least number of
+privileges for the maximum protection. Therefore, the enclave will
+want the OS to call EMODPR. If that were it, the host could just lie.
+But the enclave also verifies that the EMODPR operation was, in fact,
+executed by doing EACCEPT. When the enclave calls EACCEPT, if the
+kernel hasn't restricted permissions then we get a controlled crash.
+Therefore, we have solved the second case.

@@ -2,255 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8542E49004E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B28C049005B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiAQCpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiAQCpi (ORCPT
+        id S236877AbiAQCwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:52:45 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:31093 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232774AbiAQCwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:45:38 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE46C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 18:45:37 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id f8so9565899pgf.8
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 18:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=qUMGXQA24GuCkD0foGZ5EQ/jWXa2C4jCsPx92Oi0DR4=;
-        b=3JcalMkLwRqtx0dh+FBtyQAGr4zEik0NNokh7CZm9OjxATON/gXp5yImWlNGSIthv+
-         GKYZ+O5JUE82OShMSyjYbUfxwuerQa/dKw8d7y9kVZm3zCqZJOKr0d1o6ayrotoo3lAJ
-         MmQZ1GZ5ae53FWqTbV1p4NViMmmFmTtzBh4sCCWV8S0DvMixlOTHfAfZkbOp699BGmZc
-         afbQ9vjEADSw0zK+vnLf4MyjIuPu5pTDn2igIrZ7D0ZnOdZrUU1kZWmPomddoEpg5LNj
-         9nnyRMfVFRPxSyImBzr3BFn7mjlhalInCzqMRsNZTIpyJ2B3c6mTjAHrA4Tyv0wFWSRS
-         SZ5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qUMGXQA24GuCkD0foGZ5EQ/jWXa2C4jCsPx92Oi0DR4=;
-        b=Qq3mYCsv7XzHEbJeB19AvJOpP6BHVBZCqD+nNWYrSCg49CXJJ3do45CK3J4rfkQZnt
-         p/mb0W81FUngH5DLhXhh2yAuULV0fIRb4K+y7rfwhdOVpkV/Ex1fjCurbk2gWxsIiFxK
-         UVFM0zLFEGLibQdcaaRhmAcgubemQUD2F1sZk6yWUw+804O9n5gZMyYptDqTqaJnCufc
-         OgA+6IVhIj75zvz1I9f7o+WcaI7LvAqfL0wZ0wIcJlVZm+wXeluK+LVPEIzSCG+r1LNT
-         1O+ml/uE5BcsHjaaCWPy6CH7OKKxx0AWkUa6l6+rNSUXm2NO4qKk5h1tUCAJTSE8s8hh
-         fhqQ==
-X-Gm-Message-State: AOAM530I4nqpIMyasqGpxKJ7KeqyWRH6Lz4JkgUI/2zFzbcFfM3mx81V
-        ZjbaCnGP/u+MLcf5DnGbereF7Q==
-X-Google-Smtp-Source: ABdhPJzq0NYrXjwknb/WYsPDwFTg401OZR3e8p/eQrIgNjYBek+0BxMrjWkmpMsqlGtfJhXoVGGOoA==
-X-Received: by 2002:a05:6a00:188a:b0:4c2:faa1:b6ed with SMTP id x10-20020a056a00188a00b004c2faa1b6edmr10839523pfh.54.1642387536771;
-        Sun, 16 Jan 2022 18:45:36 -0800 (PST)
-Received: from [10.16.129.73] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id c21sm2183587pgw.41.2022.01.16.18.45.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 18:45:36 -0800 (PST)
-Message-ID: <dfc44001-cdb7-3a85-2c66-b6180183bd5a@igel.co.jp>
-Date:   Mon, 17 Jan 2022 11:45:27 +0900
+        Sun, 16 Jan 2022 21:52:44 -0500
+Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Jcbvc3twnz1FCgc;
+        Mon, 17 Jan 2022 10:49:00 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 10:52:42 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 10:52:41 +0800
+Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
+ 'ai->fastmap' when fm->used_blocks>=2
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     Richard Weinberger <richard@nod.at>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
+        "kirill shutemov" <kirill.shutemov@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211227032246.2886878-1-chengzhihao1@huawei.com>
+ <11976804.249069.1641902225370.JavaMail.zimbra@nod.at>
+ <0a7a5cce-1ee1-70b6-d368-615dfa0a617a@huawei.com>
+ <1492514284.249466.1641909382867.JavaMail.zimbra@nod.at>
+ <6815e4af-9b5b-313f-5828-644722dd4d1f@huawei.com>
+ <23886736.260777.1642185939371.JavaMail.zimbra@nod.at>
+ <88df000c-97a6-ff3f-a1e2-10fa4da8c604@huawei.com>
+ <face6dce-d860-a7e6-fe9c-39f59cef22c5@huawei.com>
+ <626252388.262848.1642240912242.JavaMail.zimbra@nod.at>
+ <89fd8bab-3c12-f76d-b23f-f41ea8fc2dd7@huawei.com>
+Message-ID: <e5f5093e-bddc-21d6-df96-d62654cf5b4f@huawei.com>
+Date:   Mon, 17 Jan 2022 10:52:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [RFC PATH 1/3] drm: add support modifiers for drivers whose
- planes only support linear layout
-Content-Language: en-US
-To:     dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
-        Simon Ser <contact@emersion.fr>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-References: <20211222052727.19725-1-etom@igel.co.jp>
- <20211222052727.19725-2-etom@igel.co.jp>
- <YeGpw7L3jODHHnPC@phenom.ffwll.local>
-From:   Esaki Tomohito <etom@igel.co.jp>
-In-Reply-To: <YeGpw7L3jODHHnPC@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <89fd8bab-3c12-f76d-b23f-f41ea8fc2dd7@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your reviews.
-
-On 2022/01/15 1:50, Daniel Vetter wrote:
-> On Wed, Dec 22, 2021 at 02:27:25PM +0900, Tomohito Esaki wrote:
->> The LINEAR modifier is advertised as default if a driver doesn't specify
->> modifiers. However, there are legacy drivers such as radeon that do not
->> support modifiers but infer the actual layout of the underlying buffer.
->> Therefore, a new flag not_support_fb_modifires is introduced for these
->> legacy drivers. Allow_fb_modifiers will be replaced with this new flag.
+Hi Richard,
+>> FYI, I think I understand now our disagreement.
+>> You assume that old Fastmap PEBs are *guaranteed* to be part of 
+>> Fastmap's erase list.
+>> That's okay and this is what Linux as of today does.
 >>
->> Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
->> ---
->>   drivers/gpu/drm/drm_plane.c   | 34 ++++++++++++++++++++++++++--------
->>   include/drm/drm_mode_config.h | 10 ++++++++++
->>   include/drm/drm_plane.h       |  3 +++
->>   3 files changed, 39 insertions(+), 8 deletions(-)
+>> My point is that we need to be paranoid and check carefully for old 
+>> Fastmap PEBs
+>> which might be *not* on the erase list.
+>> I saw such issues in the wild. These were causes by old and/or buggy 
+>> Fastmap
+>> implementations.
+>> Keep in mind that Linux is not the only system that implements UBI 
+>> (and fastmap).
+> Uh, that is really a point, I met UBI implemented in Vxworks ever. Now, 
+> you convinced me, we should process fastmap with considering bad 
+> images(caused by other implementations). Let's keep this wonky assertion 
+> until a better fix.
 >>
->> diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
->> index 82afb854141b..75308ee240c0 100644
->> --- a/drivers/gpu/drm/drm_plane.c
->> +++ b/drivers/gpu/drm/drm_plane.c
->> @@ -161,6 +161,16 @@ modifiers_ptr(struct drm_format_modifier_blob *blob)
->>   	return (struct drm_format_modifier *)(((char *)blob) + blob->modifiers_offset);
->>   }
->>   
->> +static bool check_format_modifier(struct drm_plane *plane, uint32_t format,
->> +				  uint64_t modifier)
->> +{
->> +	if (plane->funcs->format_mod_supported)
->> +		return plane->funcs->format_mod_supported(plane, format,
->> +							  modifier);
->> +
->> +	return modifier == DRM_FORMAT_MOD_LINEAR;
->> +}
->> +
->>   static int create_in_format_blob(struct drm_device *dev, struct drm_plane *plane)
->>   {
->>   	const struct drm_mode_config *config = &dev->mode_config;
->> @@ -203,16 +213,15 @@ static int create_in_format_blob(struct drm_device *dev, struct drm_plane *plane
->>   	memcpy(formats_ptr(blob_data), plane->format_types, formats_size);
->>   
->>   	/* If we can't determine support, just bail */
->> -	if (!plane->funcs->format_mod_supported)
->> +	if (config->fb_modifiers_not_supported)
->>   		goto done;
->>   
->>   	mod = modifiers_ptr(blob_data);
->>   	for (i = 0; i < plane->modifier_count; i++) {
->>   		for (j = 0; j < plane->format_count; j++) {
->> -			if (plane->funcs->format_mod_supported(plane,
->> -							       plane->format_types[j],
->> -							       plane->modifiers[i])) {
->> -
->> +			if (check_format_modifier(plane,
->> +						  plane->format_types[j],
->> +						  plane->modifiers[i])) {
->>   				mod->formats |= 1ULL << j;
->>   			}
->>   		}
->> @@ -242,6 +251,10 @@ static int __drm_universal_plane_init(struct drm_device *dev,
->>   				      const char *name, va_list ap)
->>   {
->>   	struct drm_mode_config *config = &dev->mode_config;
->> +	const uint64_t default_modifiers[] = {
->> +		DRM_FORMAT_MOD_LINEAR,
->> +		DRM_FORMAT_MOD_INVALID
->> +	};
->>   	unsigned int format_modifier_count = 0;
->>   	int ret;
->>   
->> @@ -282,6 +295,11 @@ static int __drm_universal_plane_init(struct drm_device *dev,
->>   
->>   		while (*temp_modifiers++ != DRM_FORMAT_MOD_INVALID)
->>   			format_modifier_count++;
->> +	} else {
->> +		if (!dev->mode_config.fb_modifiers_not_supported) {
->> +			format_modifiers = default_modifiers;
->> +			format_modifier_count = 1;
->> +		}
->>   	}
->>   
->>   	/* autoset the cap and check for consistency across all planes */
->> @@ -346,7 +364,7 @@ static int __drm_universal_plane_init(struct drm_device *dev,
->>   		drm_object_attach_property(&plane->base, config->prop_src_h, 0);
->>   	}
->>   
->> -	if (config->allow_fb_modifiers)
->> +	if (format_modifier_count)
->>   		create_in_format_blob(dev, plane);
->>   
->>   	return 0;
->> @@ -373,8 +391,8 @@ static int __drm_universal_plane_init(struct drm_device *dev,
->>    * drm_universal_plane_init() to let the DRM managed resource infrastructure
->>    * take care of cleanup and deallocation.
->>    *
->> - * Drivers supporting modifiers must set @format_modifiers on all their planes,
->> - * even those that only support DRM_FORMAT_MOD_LINEAR.
->> + * For drivers supporting modifiers, all planes will advertise
->> + * DRM_FORMAT_MOD_LINEAR support, if @format_modifiers is not set.
->>    *
->>    * Returns:
->>    * Zero on success, error code on failure.
->> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
->> index 48b7de80daf5..c56f298c55bd 100644
->> --- a/include/drm/drm_mode_config.h
->> +++ b/include/drm/drm_mode_config.h
->> @@ -920,6 +920,16 @@ struct drm_mode_config {
->>   	 */
->>   	bool allow_fb_modifiers;
->>   
->> +	/**
->> +	 * @fb_modifiers_not_supported:
->> +	 *
->> +	 * This flag is for legacy drivers such as radeon that do not support
-> 
-> Maybe don't put specific driver names into kerneldoc (in commit message to
-> motivate your changes it's fine). It's unlikely radeon ever changes on
-> this, but also no one will update this in the docs if we ever do that.
-> 
-> Perhaps also add that new driver should never set this, just to hammer it
-> home that modifiers really should work everywhere.
-
-I agree with you.
-I'll modify this docs.
-
-Thanks,
-Tomohito Esaki
-
-> 
-> Otherwise I think this series is the right thing to do.
-> -Daniel
-> 
->> +	 * modifiers but infer the actual layout of the underlying buffer.
->> +	 * Generally, each drivers must support modifiers, this flag should not
->> +	 * be set.
->> +	 */
->> +	bool fb_modifiers_not_supported;
->> +
->>   	/**
->>   	 * @normalize_zpos:
->>   	 *
->> diff --git a/include/drm/drm_plane.h b/include/drm/drm_plane.h
->> index 0c1102dc4d88..cad641b1f797 100644
->> --- a/include/drm/drm_plane.h
->> +++ b/include/drm/drm_plane.h
->> @@ -803,6 +803,9 @@ void *__drmm_universal_plane_alloc(struct drm_device *dev,
->>    *
->>    * The @drm_plane_funcs.destroy hook must be NULL.
->>    *
->> + * For drivers supporting modifiers, all planes will advertise
->> + * DRM_FORMAT_MOD_LINEAR support, if @format_modifiers is not set.
->> + *
->>    * Returns:
->>    * Pointer to new plane, or ERR_PTR on failure.
->>    */
->> -- 
->> 2.17.1
->>
-> 
+>> So let me give the whole situation another thought on how to improve it.
+>> I totally agree with you that currently there is a problem with 
+>> fm->used_blocks > 1.
+>> I'm just careful (maybe too careful) about changing Fastmap code.
+>>I reconsider the WARNON, it can recognize the bad images and fall back 
+full scanning mode early. If linux kernel encounters the WARNON, it 
+means something wrong with your image(caused by bad UBI implementation). 
+I begin to like this strict check.
+After comparing WARNON with the assertion:
+   WARN_ON(count_fastmap_pebs(ai) != ubi->peb_count - ai->bad_peb_count 
+- fm->used_blocks)
+   ubi_assert(ubi->good_peb_count == found_pebs)
+The 'found_pebs' consists of 'ai->erase', 'ai->free', 'ai->volumes' and 
+'ai->fastmap'. The count_fastmap_pebs() includes 'ai->erase', 'ai->free' 
+and 'ai->volumes'. This means the number of 'ai->fastmap' equals to 
+'fm->used_blocks'. So, the 'ai->fastmap' adding position in my fix is right.
+In a word, can you accept the point that 'WARNON' can help us recognize 
+the bad fastmap images?

@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDE1491137
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A3E49113D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243214AbiAQVBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 16:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235646AbiAQVBg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:01:36 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6775C061574;
-        Mon, 17 Jan 2022 13:01:35 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id m196so21138487ybf.4;
-        Mon, 17 Jan 2022 13:01:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E/L36AdK5Ipen2tmpRXUP0pX59XDvEK9cBawMrh2MjE=;
-        b=DligtBPwqn6VtiU+rpAn5X+wN11F98GkoqMRJbBi53/INouP3OZYi4BtPYLmhfHf7W
-         YAbGiO6l/guh3I1zu20VxIFUqvd2xlQ4X2C7GWESOPxMC1Rtmvysn0lBEoc0krZG2eDh
-         +EHyAxlxaB91ofBqytmoOm6j3O3EhP+ujjSCroUGMLct0ASx49rMLrK95JesRNrkO97j
-         L/5hAuK3K08Y80yWzXfXX9DtZqRenb2y2Gnm40NOQvZUaal9aV8Q+puBweI0GDpnJ31Z
-         mPVhhzwNuk8lvKAdau1XGZj3HSTJpTLmM3eurQKuW6CJNz//eHH4uJEJaB28/wgmpS8m
-         uyxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E/L36AdK5Ipen2tmpRXUP0pX59XDvEK9cBawMrh2MjE=;
-        b=FvdIVExb3eHWlsvtpTVHkYIw+ps3EvojSl+O2i31Hj7uhJnvg4JPF14Ib0C3BxnV01
-         ErcgPYh8kDvAeMEV7Kx4QZEum8MtMTth2tjQqtXPrSE5S+yNCXUksAHcdZ29WvBpbiw5
-         2m9BSSwMDPWoN58g6xY/efcGzMXC2tc2nUVEkCnLa+b3RCho95zgqwi2xPq0BZM0GRuh
-         6JcOs3DIBmCQhVmsroMf9qOgtj+N/DiMqWnVI4gKbgTA7ej3LgtFRfiLyxOJO6LDN1aF
-         /NJES2X2ZaykDxM6vBPhzBDDb6QERjUixRd3KARqSS9W2XG1Umkc+UJVzFhfYlZhwTRM
-         06kg==
-X-Gm-Message-State: AOAM533TElS5eNJTUFJVpADAq0NfL0HPJDHjC0Vcngt/KX4hEJjQTecl
-        dTccfLYfkEt+SjVBe4SJPKGU6Rrxe/xY7m2uN1kSmcRf
-X-Google-Smtp-Source: ABdhPJz2qC1gbLERDHPFPmDnVv4rb4ybLBXYBQWsc0lxZSVX9k2ZYOya1CMbAN8jg7o53QZDYaTP6MHHW0h2Q+EsfXA=
-X-Received: by 2002:a25:b184:: with SMTP id h4mr13155000ybj.738.1642453295121;
- Mon, 17 Jan 2022 13:01:35 -0800 (PST)
+        id S243226AbiAQVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 16:05:40 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:34814 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229641AbiAQVFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 16:05:39 -0500
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1n9ZBz-0001NU-2L; Mon, 17 Jan 2022 22:05:31 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Frank Wunderlich <frank-w@public-files.de>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Johan Jonker <jbx6244@gmail.com>,
+        Frank Wunderlich <linux@fw-web.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/3] dts64: rk3568: drop pclk_xpcs from gmac0
+Date:   Mon, 17 Jan 2022 22:05:29 +0100
+Message-ID: <236548630.RelmrRfzIS@diego>
+In-Reply-To: <CAMdYzYrNQCcOiLf=jUGtCTM44SU8bUpBBOac6_SGJtqX+hvUuA@mail.gmail.com>
+References: <20220116124911.65203-1-linux@fw-web.de> <trinity-5a2f356e-2777-4624-b921-f8f56ce282c7-1642420742957@3c-app-gmx-bap64> <CAMdYzYrNQCcOiLf=jUGtCTM44SU8bUpBBOac6_SGJtqX+hvUuA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
-In-Reply-To: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
-From:   ronnie sahlberg <ronniesahlberg@gmail.com>
-Date:   Tue, 18 Jan 2022 07:01:23 +1000
-Message-ID: <CAN05THS5A5r8PgaHk8BaK+8kTyT8mJ3LdB__tJCbSb8Cs+yaKQ@mail.gmail.com>
-Subject: Re: [PATCH] cifs: Replace one-element array with flexible-array member
-To:     cgel.zte@gmail.com
-Cc:     Steve French <sfrench@samba.org>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is wrong.
-qi_iov is not even the trailing element of the array so we cant change
-it to be a flexible array member.
-This change will likely clobber io_iov so the potential for breaking,
-memory leaks or ooops is quite possible.
-qi_iov is supposed to be exactly one element in size.
+Am Montag, 17. Januar 2022, 19:26:27 CET schrieb Peter Geis:
+> On Mon, Jan 17, 2022 at 6:59 AM Frank Wunderlich
+> <frank-w@public-files.de> wrote:
+> >
+> > Hi
+> >
+> > > Gesendet: Montag, 17. Januar 2022 um 11:47 Uhr
+> > > Von: "Johan Jonker" <jbx6244@gmail.com>
+> > > Hi Frank,
+> > >
+> > > Despite that the DT is hosted in the kernel tree
+> > > DT and mainline kernel driver support are 2 separate things.
+> > > PCLK_XPCS might be in use elsewhere.
+> > >
+> > > Given the link below pclk_xpcs is only needed for rk3568.
+> > > Maybe gmac1 should have a PCLK_XPCS too, because one can select between
+> > > them.
+> > >
+> > > ethernet: stmicro: stmmac: Add SGMII/QSGMII support for RK3568
+> > > https://github.com/rockchip-linux/kernel/commit/1fc7cbfe9e227c700c692f1de3137914b3ea6ca6
+> > >
+> > > The original dtsi did have PCLK_XPCS in both nodes.
+> > > https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2121
+> > > https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L1492
+> > >
+> > > Maybe fix the document or leave it as it is for now as long the driver
+> > > isn't updated and someone has tested it.
+> > > That's up to the DT maintainer.
+> > >
+> > > Johan
+> >
+> > as far as i understand, the PCLK_XPCS is part of the naneng combphy, which is not yet available in mainline.
+> > Naneng driver needs some changes and imho this should be part of it (including change documentation). That also makes it clear why this clock is added.
+> > But leaving an unused property with sideeffects is imho no good choice.
+> >
+> > So this was the easiest way to fix the dtbs_check. Else i got no usable result for it. Maybe adding it to Documentation is also easy, but have not yet looked into it as it currently unused from my POV.
+> >
+> > But i leave it as decision for Maintainer to drop this patch as it is not needed for my Board DTS.
+> 
+> As both the current submission of the combophy driver and the gmac
+> driver do not support xpcs, I elected to remove the clock vice adding
+> documentation for something which is not currently supported.
+> This is especially true as it only leaked through for the gmac0 port,
+> the gmac1 port is modeled to the current support level.
+> 
+> Once xpcs support is introduced, the clock can be added to the
+> documentation and both controllers as part of the same patch series.
+> 
+> Do you concur, Heiko?
 
-Same for close_iov, while it is the last element in the structure, it
-is not a flexible array but an array of exactly one member.
-This change to close_iov would likely lead to reading/writing beyond
-the end of the structure.
+Did you see my own reply from some hours ago?
+From looking at the documentation I got the impression that the
+pclk_xpcs is related to the separate qsgmii_pcs in the memory map.
+
+So yes, I fully agree to dropping this clock from here and then adding
+them to whatever ip block really needs it.
 
 
-NACK
+Heiko
 
-On Sat, Jan 15, 2022 at 12:44 AM <cgel.zte@gmail.com> wrote:
->
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
->
-> There is a regular need in the kernel to provide a way to declare having
-> a dynamically sized set of trailing elements in a structure. Kernel code
-> should always use "flexible array members" for these cases. The older
-> style of one-element or zero-length arrays should no longer be used.
-> Reference:
-> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-> ---
->  fs/cifs/smb2ops.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-> index af5d0830bc8a..5c104b2f308a 100644
-> --- a/fs/cifs/smb2ops.c
-> +++ b/fs/cifs/smb2ops.c
-> @@ -1609,10 +1609,10 @@ struct iqi_vars {
->         struct smb_rqst rqst[3];
->         struct kvec rsp_iov[3];
->         struct kvec open_iov[SMB2_CREATE_IOV_SIZE];
-> -       struct kvec qi_iov[1];
-> +       struct kvec qi_iov[];
->         struct kvec io_iov[SMB2_IOCTL_IOV_SIZE];
->         struct kvec si_iov[SMB2_SET_INFO_IOV_SIZE];
-> -       struct kvec close_iov[1];
-> +       struct kvec close_iov[];
->  };
->
->  static int
-> --
-> 2.25.1
->
+
+> > > ===
+> > >
+> > > XPCS is also part of PD_PIPE.
+> > > See Rockchip RK3568 TRM Part1 V1.0-20210111.pdf page 475.
+> > > Please advise if the power-domain@RK3568_PD_PIPE does need a PCLK_XPCS
+> > > fix or is PCLK_PIPE enough in combination with a PHY driver?
+> > >
+> > > PD_PIPE:
+> > >
+> > > BIU_PIPE
+> > > USB3OTG
+> > > PCIE20
+> > > PCIE30
+> > > SATA
+> > > XPCS
+> > >
+> > >
+> > >       power-domain@RK3568_PD_PIPE {
+> > >               reg = <RK3568_PD_PIPE>;
+> > >               clocks = <&cru PCLK_PIPE>;
+> > >               pm_qos = <&qos_pcie2x1>,
+> > >                        <&qos_pcie3x1>,
+> > >                        <&qos_pcie3x2>,
+> > >                        <&qos_sata0>,
+> > >                        <&qos_sata1>,
+> > >                        <&qos_sata2>,
+> > >                        <&qos_usb3_0>,
+> > >                        <&qos_usb3_1>;
+> > >               #power-domain-cells = <0>;
+> > >       };
+> >
+> > PD_PIPE is imho also part of Naneng. But more for usage as USB3/SATA/... phy. This is not part of Mainline too.
+> >
+> > But thanks for pointing.
+> >
+> > regards Frank
+> 
+
+
+
+

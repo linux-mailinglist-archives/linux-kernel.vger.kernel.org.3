@@ -2,131 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 460A3490C4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA61490C50
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240993AbiAQQN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:13:57 -0500
-Received: from mail-bn8nam12on2085.outbound.protection.outlook.com ([40.107.237.85]:38133
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240982AbiAQQNp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:13:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jxJ0CS7qLZTFRqJ/bnnz60zqx7wW/+duUeRPPTPHp8LkrUXyu4x1d+UJhR4ySZd5DptfxMzaV7edq/K9Kpg76LxZ3E3yCaJ6LOehQFvkqd6/CyWPH0HXEGzBDIst2L0sBHwAJ5TVfShIgFKafWtKd2NBsxTJNY3owsd7zI5M/2+LePt/EZ4nMX3WbF1uCTaPHcMH+J19Skj2x2N5hwrRsoT9Q54o2d3D7y+Wrw3McQWqAnaJpSGlAwQxe5gMJlyRxGDr5Pl53IzXnr9mwN694F3NvolkFe48W7xGLnwjw7lkZkJPpFzPx9vUFjGwysHI/RCdV4vcroPDvQtzGfJ9Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y0hHcSrf91d9XsKJTvLIaraSzs9fR8XtatDBgI37DHM=;
- b=J496ww7O9+bddqxBrvHGW6Z3SMURj53KEQx/KscVJThGXbTzM7qwoKclp+aHZ4rW6Rj2qMdjlwL7ylbw8cI/4EdT9WSZUMbPwCzkGOTFxvrh532co5r4w27dyzQg80GOIz31pg9ci2ZRGGSbvCpvizt5sXmOdu7T+pqmknfuqQMhKSQEzdE35WOLnYQwNSPpcRJxw2ezpVZnSyOzNdMwCTId4W4OOPZCoj3JDXx+I05s6EymvHWYKqmrLCb8n0T9OHnolkCYgQs5wASuaY5zGvNFtiKLRAnZx2hn7RIzqfsdGnss6o5CuPSCmoSeZr5U9qPBOGMlPwE7ZEhKWfg9gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y0hHcSrf91d9XsKJTvLIaraSzs9fR8XtatDBgI37DHM=;
- b=FN4S5dUtRv8NL0A58gZoWH7CgJTP97XS0cxAg9b97144l3ug/RzpjLJmd0WchmwQaJJzEZ+kVXMXLTDoD03m8RuhrdvaSNYq4BZVe7rRfN3TmeGdvTfmsD2cJ2Kg8/0m+NteFnar2fSEbFfAYhX/EcziODe95AXjXEVcAOj63R8=
-Received: from MWHPR19CA0072.namprd19.prod.outlook.com (2603:10b6:300:94::34)
- by CH2PR12MB4085.namprd12.prod.outlook.com (2603:10b6:610:79::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Mon, 17 Jan
- 2022 16:13:43 +0000
-Received: from CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:94:cafe::e7) by MWHPR19CA0072.outlook.office365.com
- (2603:10b6:300:94::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
- Transport; Mon, 17 Jan 2022 16:13:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT050.mail.protection.outlook.com (10.13.174.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4888.9 via Frontend Transport; Mon, 17 Jan 2022 16:13:43 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 17 Jan
- 2022 10:13:40 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
-        <x86@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] x86/MCE/AMD: Allow thresholding interface updates after init
-Date:   Mon, 17 Jan 2022 16:13:28 +0000
-Message-ID: <20220117161328.19148-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S240960AbiAQQPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235158AbiAQQPa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 11:15:30 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEACC06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:15:29 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id c2so15975589wml.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BYgJDH5u7Y8YeoWfDuM56T17Gv5aMOQMmqg9a2t5daA=;
+        b=XAfW47a9vaxUgIYAmMI0z64awv1LqMJOffb8Lkma0SSON3eU5IBq3uyRA22ZewNF+b
+         tKt9WpHikvnHJ4eDzh9nEHGx3UWP3uSqfRei68f43QWt9RA8f99UP0keKwdoyjTOb0r7
+         m6Yei+v31ShI6iwLSGjhpS5Z3yA/VlCEDVc4Krf9H00pEJX2jWWwFUzRu5N7vpttUACs
+         DGEa3hxLjS0MhAyQN6/2seqyrrLzM+LBVn9wDfyptQcklnKGlNTNxvdW6Q+s0tSqM1x5
+         rSTNZ0xP3nXIwqI3DKJZmxBb4LLgV+LmnsRanXPQ0i/jp/jUanFn+OQ6mTqkKFucBKXc
+         D97A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BYgJDH5u7Y8YeoWfDuM56T17Gv5aMOQMmqg9a2t5daA=;
+        b=q/HZEAhbUF/HB4hjNX01lm2lFcuyvwuTYkMqjxhiplppeQYfktHMd4tNWX8g9EINON
+         2gUr2TQ0OpJaVte7/smCwrTjSMvnxvIZlxMWSVrVRPENIq7OrIt1i5oqOWwB0hEon2+K
+         GrR7b5RdTIKzBOeTDjyl61jP1iRQOVHDr8jco3o5C9f/X1VYWTDrVzxG51F03ZWvxY7Q
+         ul33hm6YGA6MeA+kbx48buxYKNuSbH2zJ7Q7bsOnFB00I4eNtBVnOBR/hdOJyourggRz
+         HgZBCafxB79xsFoIJh7JNYu9/whCSRsTGmbrII7898uPLpqb6PgmvrKnjdcXAlG+8+PY
+         mMLA==
+X-Gm-Message-State: AOAM530uOdSPYhg92RTs3l6CkyJqexlPJ8dwtsRuitz1Lsfh2ZveCpFD
+        KOMfXMVDvUyOMEnFOPiW9quAt+a8NthYyHxDDkNBcA==
+X-Google-Smtp-Source: ABdhPJxiSeb6uUNrxNczt/tQerhk4fkXTOtS8o7B2ljt8+VSYZYAK7NpcYEIzgbm/2mSJbETKBZ+JoXmAsrqyCxJ1y8=
+X-Received: by 2002:a7b:cc96:: with SMTP id p22mr18002851wma.137.1642436128338;
+ Mon, 17 Jan 2022 08:15:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 31fd4a94-1ae6-4bde-1968-08d9d9d45510
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4085:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB4085744897EBB6CDCBEDBB42F8579@CH2PR12MB4085.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Uknqe9NdKe+jvx6eLcso2JJYiOxkok8+mbKL5nc4uApCSpS0S8WwLHissvj3XZlWqmJjhlpg7oZ8MzhSN+EhatipSRcR4jICtGutHOAqyuNE4mBsrMWJmiaW/Mhf96K99rW3g1i/OpFg7vDXl6xIZZ1dPMOq/8VQQ/x27Rr2Sasx4gGHjSorosoMH+dmEnmhcsLFcpWZMGpHm1On1EvRT9tbZsTlgeFNaRyScJdh4BC1fR7Fdw8YBUcfDoPGYIJI2hkg6csVQIa1zKgewJ2cQKR/eHOtVeMz+ctcKUtbYBl5RwtW4+5oEA9/+09cZ5+6zmmnpmtbsv82rkR4SpF/k559Ggqqp7hUfWta7K1Po3taLTPGVyOmLzJp3XZmC1AMPDIzF/MWM+lLyBvP3LilTEF0Ht3MNBjWczHjUzS7z2FD5BJ58t61aRrCYAtJpRJ3+nIBuOR05BOTSU8Q4NvYslLdUmSoDBozfoc7+W5ToCAjop/BwC7sdBMr5OjLkiy+Jf5I+QXHwvRlalZf4OeYpmjsv0qXLGz+q9wkDGRKhi6k/m7meZbMFk/SN2y8VdnyZV7E+IBk8yjK5Z9pB9lkbS1l7GXTqAZ3/SiFV6MNQm9drP88sXRuXYULbrKhzI4CXKt0v2btBX75duw07+0wUKqGYADyjiV2V473Zz39rKmHACBNSiLWc6YM8Lz28yCiHjtWb/OZxBDAJERxCUTSWbb8IbDsEwVyX/kPACcXdDv35+7RdOcUis4LpdWS4CziSFln0dF2lzwqlWAOrV2ICe1qTNG8WqB+HhyTzSTNbf6wtqV/eC4MnpbwxKDstaVsKKlmvPLQi6ekkTjpkWDp5UfyKWFw7dIoufl3qjdwf0vLIWa68sJG+ruDTv9Sfghi
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(70206006)(8676002)(5660300002)(1076003)(4326008)(356005)(7696005)(36860700001)(40460700001)(81166007)(44832011)(36756003)(336012)(8936002)(966005)(26005)(2906002)(6666004)(86362001)(83380400001)(15650500001)(16526019)(186003)(6916009)(426003)(508600001)(316002)(70586007)(82310400004)(2616005)(47076005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 16:13:43.1485
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31fd4a94-1ae6-4bde-1968-08d9d9d45510
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4085
+References: <20211225054647.1750577-1-atishp@rivosinc.com> <20211225054647.1750577-6-atishp@rivosinc.com>
+In-Reply-To: <20211225054647.1750577-6-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 17 Jan 2022 21:45:17 +0530
+Message-ID: <CAAhSdy0RU_tZKz=6aDxEt50h2kr96+UTskDE1HURYyFzXmmtXg@mail.gmail.com>
+Subject: Re: [v5 5/9] RISC-V: Add RISC-V SBI PMU extension definitions
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes to the AMD Thresholding sysfs code prevents sysfs writes from
-updating the underlying registers once CPU init is completed, i.e.
-"threshold_banks" is set.
+On Sat, Dec 25, 2021 at 11:17 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> From: Atish Patra <atish.patra@wdc.com>
+>
+> This patch adds all the definitions defined by the SBI PMU extension.
+>
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/sbi.h | 97 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> index 0d42693cb65e..afb29ee1f230 100644
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@ -27,6 +27,7 @@ enum sbi_ext_id {
+>         SBI_EXT_IPI = 0x735049,
+>         SBI_EXT_RFENCE = 0x52464E43,
+>         SBI_EXT_HSM = 0x48534D,
+> +       SBI_EXT_PMU = 0x504D55,
+>  };
+>
+>  enum sbi_ext_base_fid {
+> @@ -70,6 +71,99 @@ enum sbi_hsm_hart_status {
+>         SBI_HSM_HART_STATUS_STOP_PENDING,
+>  };
+>
+> +
 
-Allow the registers to be updated if the thresholding interface is
-already initialized or if in the init path. Use the "set_lvt_off" value
-to indicate if running in the init path, since this value is only set
-during init.
+Unwanted newline here.
 
-Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: <stable@vger.kernel.org>
----
-Link:
-https://lkml.kernel.org/r/20211207193028.9389-1-yazen.ghannam@amd.com
+> +enum sbi_ext_pmu_fid {
+> +       SBI_EXT_PMU_NUM_COUNTERS = 0,
+> +       SBI_EXT_PMU_COUNTER_GET_INFO,
+> +       SBI_EXT_PMU_COUNTER_CFG_MATCH,
+> +       SBI_EXT_PMU_COUNTER_START,
+> +       SBI_EXT_PMU_COUNTER_STOP,
+> +       SBI_EXT_PMU_COUNTER_FW_READ,
+> +};
+> +
+> +#define RISCV_PMU_RAW_EVENT_MASK GENMASK_ULL(55, 0)
+> +#define RISCV_PMU_RAW_EVENT_IDX 0x20000
+> +
+> +/** General pmu event codes specified in SBI PMU extension */
+> +enum sbi_pmu_hw_generic_events_t {
+> +       SBI_PMU_HW_NO_EVENT                     = 0,
+> +       SBI_PMU_HW_CPU_CYCLES                   = 1,
+> +       SBI_PMU_HW_INSTRUCTIONS                 = 2,
+> +       SBI_PMU_HW_CACHE_REFERENCES             = 3,
+> +       SBI_PMU_HW_CACHE_MISSES                 = 4,
+> +       SBI_PMU_HW_BRANCH_INSTRUCTIONS          = 5,
+> +       SBI_PMU_HW_BRANCH_MISSES                = 6,
+> +       SBI_PMU_HW_BUS_CYCLES                   = 7,
+> +       SBI_PMU_HW_STALLED_CYCLES_FRONTEND      = 8,
+> +       SBI_PMU_HW_STALLED_CYCLES_BACKEND       = 9,
+> +       SBI_PMU_HW_REF_CPU_CYCLES               = 10,
+> +
+> +       SBI_PMU_HW_GENERAL_MAX,
+> +};
+> +
+> +/**
+> + * Special "firmware" events provided by the firmware, even if the hardware
+> + * does not support performance events. These events are encoded as a raw
+> + * event type in Linux kernel perf framework.
+> + */
+> +enum sbi_pmu_fw_generic_events_t {
+> +       SBI_PMU_FW_MISALIGNED_LOAD      = 0,
+> +       SBI_PMU_FW_MISALIGNED_STORE     = 1,
+> +       SBI_PMU_FW_ACCESS_LOAD          = 2,
+> +       SBI_PMU_FW_ACCESS_STORE         = 3,
+> +       SBI_PMU_FW_ILLEGAL_INSN         = 4,
+> +       SBI_PMU_FW_SET_TIMER            = 5,
+> +       SBI_PMU_FW_IPI_SENT             = 6,
+> +       SBI_PMU_FW_IPI_RECVD            = 7,
+> +       SBI_PMU_FW_FENCE_I_SENT         = 8,
+> +       SBI_PMU_FW_FENCE_I_RECVD        = 9,
+> +       SBI_PMU_FW_SFENCE_VMA_SENT      = 10,
+> +       SBI_PMU_FW_SFENCE_VMA_RCVD      = 11,
+> +       SBI_PMU_FW_SFENCE_VMA_ASID_SENT = 12,
+> +       SBI_PMU_FW_SFENCE_VMA_ASID_RCVD = 13,
+> +
+> +       SBI_PMU_FW_HFENCE_GVMA_SENT     = 14,
+> +       SBI_PMU_FW_HFENCE_GVMA_RCVD     = 15,
+> +       SBI_PMU_FW_HFENCE_GVMA_VMID_SENT = 16,
+> +       SBI_PMU_FW_HFENCE_GVMA_VMID_RCVD = 17,
+> +
+> +       SBI_PMU_FW_HFENCE_VVMA_SENT     = 18,
+> +       SBI_PMU_FW_HFENCE_VVMA_RCVD     = 19,
+> +       SBI_PMU_FW_HFENCE_VVMA_ASID_SENT = 20,
+> +       SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD = 21,
+> +       SBI_PMU_FW_MAX,
+> +};
+> +
+> +/* SBI PMU event types */
+> +enum sbi_pmu_event_type {
+> +       SBI_PMU_EVENT_TYPE_HW = 0x0,
+> +       SBI_PMU_EVENT_TYPE_CACHE = 0x1,
+> +       SBI_PMU_EVENT_TYPE_RAW = 0x2,
+> +       SBI_PMU_EVENT_TYPE_FW = 0xf,
+> +};
+> +
+> +/* SBI PMU event types */
+> +enum sbi_pmu_ctr_type {
+> +       SBI_PMU_CTR_TYPE_HW = 0x0,
+> +       SBI_PMU_CTR_TYPE_FW,
+> +};
+> +
+> +/* Flags defined for config matching function */
+> +#define SBI_PMU_CFG_FLAG_SKIP_MATCH    (1 << 0)
+> +#define SBI_PMU_CFG_FLAG_CLEAR_VALUE   (1 << 1)
+> +#define SBI_PMU_CFG_FLAG_AUTO_START    (1 << 2)
+> +#define SBI_PMU_CFG_FLAG_SET_VUINH     (1 << 3)
+> +#define SBI_PMU_CFG_FLAG_SET_VSNH      (1 << 4)
+> +#define SBI_PMU_CFG_FLAG_SET_UINH      (1 << 5)
+> +#define SBI_PMU_CFG_FLAG_SET_SINH      (1 << 6)
+> +#define SBI_PMU_CFG_FLAG_SET_MINH      (1 << 7)
+> +
+> +/* Flags defined for counter start function */
+> +#define SBI_PMU_START_FLAG_SET_INIT_VALUE (1 << 0)
+> +
+> +/* Flags defined for counter stop function */
+> +#define SBI_PMU_STOP_FLAG_RESET (1 << 0)
+> +
+>  #define SBI_SPEC_VERSION_DEFAULT       0x1
+>  #define SBI_SPEC_VERSION_MAJOR_SHIFT   24
+>  #define SBI_SPEC_VERSION_MAJOR_MASK    0x7f
+> @@ -82,6 +176,9 @@ enum sbi_hsm_hart_status {
+>  #define SBI_ERR_INVALID_PARAM  -3
+>  #define SBI_ERR_DENIED         -4
+>  #define SBI_ERR_INVALID_ADDRESS        -5
+> +#define SBI_ERR_ALREADY_AVAILABLE -6
+> +#define SBI_ERR_ALREADY_STARTED -7
+> +#define SBI_ERR_ALREADY_STOPPED -8
+>
+>  extern unsigned long sbi_spec_version;
+>  struct sbiret {
+> --
+> 2.33.1
+>
 
-v1->v2:
-* Add Cc: stable
-* Switch logic for check and drop extra comment.
+Apart from a minor comment above, it looks good to me.
 
- arch/x86/kernel/cpu/mce/amd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index a1e2f41796dc..9f4b508886dd 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -423,7 +423,7 @@ static void threshold_restart_bank(void *_tr)
- 	u32 hi, lo;
- 
- 	/* sysfs write might race against an offline operation */
--	if (this_cpu_read(threshold_banks))
-+	if (!this_cpu_read(threshold_banks) && !tr->set_lvt_off)
- 		return;
- 
- 	rdmsr(tr->b->address, lo, hi);
--- 
-2.25.1
-
+Regards,
+Anup

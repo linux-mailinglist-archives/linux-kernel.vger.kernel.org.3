@@ -2,107 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B264F49121F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 00:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AAB491224
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 00:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243709AbiAQXDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 18:03:07 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8040 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229842AbiAQXDG (ORCPT
+        id S243729AbiAQXEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 18:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229842AbiAQXED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 18:03:06 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20HKTEGj010709;
-        Mon, 17 Jan 2022 23:03:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=M7BMP24y1cQ28K7PlH8TJ6wkIn7xRBvGLBDOYJ3A/m0=;
- b=I4GTfaboWlND4IHEFCKiX+teaqPmKiOnvtCU9fEJ3m2Zn3s7B13FJKun56NBvySEsbG4
- saecKj5vpcVRMWzvJoOwn7TtCT+78moQ8NEUiccXKBNHn8v8Qp0OKF317UJQbXJgifO9
- 53jvh6rNXJCNTIJ0Yi+ATi1w0MmsknllwLb2tAof+VNHl2zxtjo/W7WetM+3n3BX50YE
- 9ozlrCO8HZFrl2+I33vzGSu8FajP1nsLwh06uL3K+PFP1dHOG+s+H2quSwW/a4pLSjVw
- duv4+VJov0ctPDjjwXBwEjLsC+6K+ZR7ul5ZAHZR8TlBkn5YevZCmZpGz+K0m+ysxonD pw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnfhe2phr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 23:03:03 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HMvLsw014269;
-        Mon, 17 Jan 2022 23:03:01 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dknhj7hb9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 23:03:01 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HN2wTD45351420
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jan 2022 23:02:58 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D30FFA406B;
-        Mon, 17 Jan 2022 23:02:58 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 08282A4067;
-        Mon, 17 Jan 2022 23:02:58 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.85.218])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Jan 2022 23:02:57 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: add missing "security/integrity" directory
-Date:   Mon, 17 Jan 2022 18:02:29 -0500
-Message-Id: <20220117230229.16475-1-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6xPCtEPtag_9tqrfPy5id-62z4Dor_tX
-X-Proofpoint-ORIG-GUID: 6xPCtEPtag_9tqrfPy5id-62z4Dor_tX
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 17 Jan 2022 18:04:03 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7CAC06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 15:04:03 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id q186so25794523oih.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 15:04:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F0QppAE3dgrO3ATeoBVK+jA9wQIIxsU1AloQj3TMNp8=;
+        b=Uby76qXesTFxE/+DH5qAsUshOdsEdI2bykwDeFrfltv3ZmvtZtPWtnV2c4h+x7wfxW
+         qCJbMNuR2SA9Adi4FcRyxAcYHf+R+truNFoZjNFKdrSkSUvws6lN+vZM7bG2S/IzFZJI
+         9hGT8WvwcSn7uAUO+PLiOaS4/mNcJw0Db4OVtbsjOD48q8f/8HwXQMAYVuhJuQquTRsA
+         oVzvyVlYYCLuO/g37ge/Nry8owS+nFgfOER8fdPGUrGYy8CjY+itDcIXiP8jNaTAeD7o
+         KXgXMFYc0hiiKQ6EMzQkM75w/qkUWqViB6teaJylpAw5TU0tcgDSLpDl1ZCEXSCYN9nW
+         i0ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F0QppAE3dgrO3ATeoBVK+jA9wQIIxsU1AloQj3TMNp8=;
+        b=1LytFxvwsw2CvYCjk05Q7eTG6LIm6amN5EnwS20YvaswQlLoKOR6oD9Dr/VA2yf5uU
+         clah37oWu1OCHvJjf2Mgi4sVyX2a/cGtxTb/J/eD6cK6qqi/ihWcyUJp65ifqCB4MGr7
+         wjXvvDgmD2iZV2Xc4ez/DzIE1ph2gtZZQgnEc6NIcXnQ5798oLQfLUmFaI0B5Rxhunjl
+         8QdxjsUGCW3Y8T1R3ijuoXYlXtah5hGOdgNiQM9aekC+LwGu1c3Qyvsaq3hVgMRbBkCf
+         ZM8I/+GH+S9Wgy96PgzDoaTlhfLWGuLVC3RkVzKClno1Q2XIs2RDpw004gfPA8D4zoDm
+         OIag==
+X-Gm-Message-State: AOAM532gwwG1w6R1Dw11BNLUuoe/sTz5khnVTpTQ/2E3eEKKFX83Peod
+        BV//alJHvMpP1A22I9AoA34WJw==
+X-Google-Smtp-Source: ABdhPJxCaDj7BjPF0fezJDfx1f2OYftgE4/mn+paMKJrEWGTwkSNf0Ue8jHo5S1hMCHKH4eVtEGXpw==
+X-Received: by 2002:a05:6808:169f:: with SMTP id bb31mr25041369oib.87.1642460642878;
+        Mon, 17 Jan 2022 15:04:02 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id l39sm6514722otv.63.2022.01.17.15.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 15:04:02 -0800 (PST)
+Date:   Mon, 17 Jan 2022 17:03:57 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh
+Subject: Re: [PATCH v8 11/13] rpmsg: char: Introduce the "rpmsg-raw" channel
+Message-ID: <YeX13cUAerjCM5Li@builder.lan>
+References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
+ <20211207080843.21222-12-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_07,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=839 spamscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201170144
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207080843.21222-12-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the IMA and EVM records to include the "security/integrity"
-directory.
+On Tue 07 Dec 02:08 CST 2021, Arnaud Pouliquen wrote:
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+> Allows to probe the endpoint device on a remote name service announcement,
+> by registering a rpmsg_driverfor the "rpmsg-raw" channel.
+> 
+> With this patch the /dev/rpmsgX interface can be instantiated by the remote
+> firmware.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+>  drivers/rpmsg/rpmsg_char.c | 64 ++++++++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_ctrl.c |  7 +++--
+>  2 files changed, 69 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index cf97839f5833..92b44630e03a 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -435,6 +435,58 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
+>  }
+>  EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
+>  
+> +static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
+> +{
+> +	struct rpmsg_channel_info chinfo;
+> +	struct rpmsg_eptdev *eptdev;
+> +	struct device *dev = &rpdev->dev;
+> +
+> +	memcpy(chinfo.name, rpdev->id.name, RPMSG_NAME_SIZE);
+> +	chinfo.src = rpdev->src;
+> +	chinfo.dst = rpdev->dst;
+> +
+> +	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, dev);
+> +	if (IS_ERR(eptdev))
+> +		return PTR_ERR(eptdev);
+> +
+> +	/*
+> +	 * Create the default endpoint associated to the rpmsg device and provide rpmsg_eptdev
+> +	 * structure as callback private data.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5250298d2817..a9973d0991e3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7181,6 +7181,7 @@ M:	Mimi Zohar <zohar@linux.ibm.com>
- L:	linux-integrity@vger.kernel.org
- S:	Supported
- F:	security/integrity/evm/
-+F:	security/integrity
- 
- EXTENSIBLE FIRMWARE INTERFACE (EFI)
- M:	Ard Biesheuvel <ardb@kernel.org>
-@@ -9419,6 +9420,7 @@ L:	linux-integrity@vger.kernel.org
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
- F:	security/integrity/ima/
-+F:	security/integrity
- 
- INTEL 810/815 FRAMEBUFFER DRIVER
- M:	Antonino Daplas <adaplas@gmail.com>
--- 
-2.27.0
+If the only this the probe function does is to create a new endpoint
+with the same properties as the rpdev, why can't you just specify a
+callback on the rpmsg_chrdev_driver?
 
+As this isn't the typical way you create a default endpoint I think the
+reasoning behind this warrants a proper explanation in the commit
+message.
+
+> +	 * Do not allow the creation and release of an endpoint on /dev/rpmsgX open and close,
+> +	 * reuse the default endpoint instead
+
+This sentence doesn't tell me anything about this code snippet and
+doesn't indicate that it relates to the snippet added elsewhere in this
+file by the previous patch.
+
+> +	 */
+> +	eptdev->default_ept = rpmsg_create_default_ept(rpdev, rpmsg_ept_cb, eptdev, chinfo);
+> +	if (!eptdev->default_ept) {
+> +		dev_err(&rpdev->dev, "failed to create %s\n", chinfo.name);
+> +		put_device(dev);
+> +		kfree(eptdev);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
+> +}
+> +
+> +static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+> +{
+> +	int ret;
+> +
+> +	ret = device_for_each_child(&rpdev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+> +	if (ret)
+> +		dev_warn(&rpdev->dev, "failed to destroy endpoints: %d\n", ret);
+> +}
+> +
+> +static struct rpmsg_device_id rpmsg_chrdev_id_table[] = {
+> +	{ .name	= "rpmsg-raw" },
+> +	{ },
+> +};
+> +
+> +static struct rpmsg_driver rpmsg_chrdev_driver = {
+> +	.probe = rpmsg_chrdev_probe,
+> +	.remove = rpmsg_chrdev_remove,
+> +	.id_table = rpmsg_chrdev_id_table,
+> +	.drv.name = "rpmsg_chrdev",
+> +};
+> +
+>  static int rpmsg_chrdev_init(void)
+>  {
+>  	int ret;
+> @@ -445,12 +497,24 @@ static int rpmsg_chrdev_init(void)
+>  		return ret;
+>  	}
+>  
+> +	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
+> +	if (ret < 0) {
+> +		pr_err("rpmsg: failed to register rpmsg raw driver\n");
+> +		goto free_region;
+> +	}
+> +
+>  	return 0;
+> +
+> +free_region:
+> +	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> +
+> +	return ret;
+>  }
+>  postcore_initcall(rpmsg_chrdev_init);
+>  
+>  static void rpmsg_chrdev_exit(void)
+>  {
+> +	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
+>  	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>  }
+>  module_exit(rpmsg_chrdev_exit);
+> diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
+> index 59d2bd264fdb..298e75dc7774 100644
+> --- a/drivers/rpmsg/rpmsg_ctrl.c
+> +++ b/drivers/rpmsg/rpmsg_ctrl.c
+> @@ -10,6 +10,9 @@
+>   * Based on rpmsg performance statistics driver by Michal Simek, which in turn
+>   * was based on TI & Google OMX rpmsg driver.
+>   */
+> +
+> +#define pr_fmt(fmt)		KBUILD_MODNAME ": " fmt
+
+These changes seems unrelated to above.
+
+Regards,
+Bjorn
+
+> +
+>  #include <linux/cdev.h>
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+> @@ -193,13 +196,13 @@ static int rpmsg_ctrldev_init(void)
+>  
+>  	ret = alloc_chrdev_region(&rpmsg_major, 0, RPMSG_DEV_MAX, "rpmsg_ctrl");
+>  	if (ret < 0) {
+> -		pr_err("rpmsg: failed to allocate char dev region\n");
+> +		pr_err("failed to allocate char dev region\n");
+>  		return ret;
+>  	}
+>  
+>  	ret = register_rpmsg_driver(&rpmsg_ctrldev_driver);
+>  	if (ret < 0) {
+> -		pr_err("rpmsg ctrl: failed to register rpmsg driver\n");
+> +		pr_err("failed to register rpmsg driver\n");
+>  		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>  	}
+>  
+> -- 
+> 2.17.1
+> 

@@ -2,168 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C83490B11
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FD1490B15
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbiAQPDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiAQPDv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:03:51 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECC1C06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:03:51 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so20088546otu.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=THQ5/GDYwzhowPGkTHlKwpOER01fDlo33fQ7jTXIfGM=;
-        b=HyEfUGHwC/aDJmOWqsnYpDBv2rJLeDcksnXdbJ10SqiszTT2cU3u8SfwrzwBEYzzDe
-         zBJb7AN4dhihR7JDJfW0yGofsulhJHbR8psBK97UVMakM8KRHiCBFh8dsObuEzHJpBvi
-         pgxi/GP0D4r44P9WLgjDOHO7vQ3S6QhH66wkI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=THQ5/GDYwzhowPGkTHlKwpOER01fDlo33fQ7jTXIfGM=;
-        b=N4i8i6Uj6OgWmr5FDdusn5kpBEGEtYO/CMIuCvfT3NQMn5rkLaaUp+bjrzmboxLHxd
-         gDvcN3aIQRF8nyhZa3lr9Nj+cll0KJpaemiaYbvXES04/K0jElDEuZrqzOR8vZN4me32
-         8yAoTQtiXOlPasHcRQ704ANVN52a/UvjD36cjuB1+aiu4fn85v4iap18+d/TxxZVzdRX
-         2MLXTdfpPchhyRwOn6mvNsXs01Tg/KjyebAhDoHr7C74U5hCO7jiAf1OEfyKjQNuTsDV
-         kAjg0IpfypV8HVLaAC0y2mOh8Sb7eCBJV+++IzNg1E70tft9NBvfmsgLsJkCF/t/khmf
-         Quqw==
-X-Gm-Message-State: AOAM5315q8eUbEd174k5zuLjceIJFA4l7osE+8DZRk3C29lXTWI+Q/Ja
-        BufgqteUI2TsJSPejlPp2O0nwO8N7DkOXqqWUgqn+Q==
-X-Google-Smtp-Source: ABdhPJzSDDOCkmzV3Sk6ECBMGYdBHWibu6XEyZwL/kT0+dKt5n4BVpNxu6iCvabnhidMw4EMC2Im+NYWtI63JpZvzBI=
-X-Received: by 2002:a9d:d12:: with SMTP id 18mr14105706oti.75.1642431830676;
- Mon, 17 Jan 2022 07:03:50 -0800 (PST)
+        id S240323AbiAQPEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:04:34 -0500
+Received: from mga09.intel.com ([134.134.136.24]:59607 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233003AbiAQPEc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 10:04:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642431872; x=1673967872;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8hAcDQdsGYS2a64rx034wwDmCqbWr8Zo5bXT7BLZY1w=;
+  b=W7qtXRfvFNxSbJ8xjCqDQrUyFp0rH7XA7/NUyGB0pOLFp3x1lSTQAwrr
+   Ot9IXUyRDBe7wQhaS7bxirW50EoC9OSF/TUzxGxDhLdnNaCqxrsVm++gu
+   g90vqwbpF4g/vjAw8CK6ZqVM631QWAaMpAoItJFqZYoJ1XLA+ESdYz+rI
+   V7pI0vZwhNnlq3+9/KmmEXCHW15ATL2OMsiW+BYUPYvbDnhhS/ZQjyJvH
+   f3sLmDpWXIzgWYNcWsjmnU9yP64gI9wLNnXBA57V3FXHQP2DtNJlRZJTn
+   sA+xQJmFXELfeKxxAGjg/tNYSwlUH920uNPYr5IOETuMjX2sHiZYjoWAx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244438026"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="244438026"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 07:04:32 -0800
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="476679426"
+Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.254.209.10]) ([10.254.209.10])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 07:04:27 -0800
+Message-ID: <67262b95-d577-0620-79bf-20fc37906869@intel.com>
+Date:   Mon, 17 Jan 2022 23:04:18 +0800
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de> <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
-In-Reply-To: <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 17 Jan 2022 16:03:39 +0100
-Message-ID: <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Helge Deller <deller@gmx.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com> <YeCjHbdAikyIFQc9@google.com>
+ <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+ <YeGiVCn0wNH9eqxX@google.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <YeGiVCn0wNH9eqxX@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 3:48 PM Helge Deller <deller@gmx.de> wrote:
+On 1/15/2022 12:18 AM, Sean Christopherson wrote:
+> On Fri, Jan 14, 2022, Zeng Guang wrote:
+>> On 1/14/2022 6:09 AM, Sean Christopherson wrote:
+>>> On Fri, Dec 31, 2021, Zeng Guang wrote:
+>>>> +static int vmx_expand_pid_table(struct kvm_vmx *kvm_vmx, int entry_idx)
+>>>> +{
+>>>> +	u64 *last_pid_table;
+>>>> +	int last_table_size, new_order;
+>>>> +
+>>>> +	if (entry_idx <= kvm_vmx->pid_last_index)
+>>>> +		return 0;
+>>>> +
+>>>> +	last_pid_table = kvm_vmx->pid_table;
+>>>> +	last_table_size = table_index_to_size(kvm_vmx->pid_last_index + 1);
+>>>> +	new_order = get_order(table_index_to_size(entry_idx + 1));
+>>>> +
+>>>> +	if (vmx_alloc_pid_table(kvm_vmx, new_order))
+>>>> +		return -ENOMEM;
+>>>> +
+>>>> +	memcpy(kvm_vmx->pid_table, last_pid_table, last_table_size);
+>>>> +	kvm_make_all_cpus_request(&kvm_vmx->kvm, KVM_REQ_PID_TABLE_UPDATE);
+>>>> +
+>>>> +	/* Now old PID table can be freed safely as no vCPU is using it. */
+>>>> +	free_pages((unsigned long)last_pid_table, get_order(last_table_size));
+>>> This is terrifying.  I think it's safe?  But it's still terrifying.
+>> Free old PID table here is safe as kvm making request KVM_REQ_PI_TABLE_UPDATE
+>> with KVM_REQUEST_WAIT flag force all vcpus trigger vm-exit to update vmcs
+>> field to new allocated PID table. At this time, it makes sure old PID table
+>> not referenced by any vcpu.
+>> Do you mean it still has potential problem?
+> No, I do think it's safe, but it is still terrifying :-)
 >
-> On 1/17/22 15:10, Geert Uytterhoeven wrote:
-> > Hi Thomas,
-> >
-> > On Mon, Jan 17, 2022 at 2:51 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >> Am 17.01.22 um 14:29 schrieb Geert Uytterhoeven:
-> >>> On Mon, Jan 17, 2022 at 1:57 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
-> >>>>> b) to include new drivers (for old hardware) if they arrive (probably happens rarely but there can be).
-> >>>>>     I know of at least one driver which won't be able to support DRM....
-> >>>>
-> >>>> Hmm?  I seriously doubt that.  There is always the option to use a
-> >>>> shadow framebuffer, then convert from standard drm formats to whatever
-> >>>> esoteric pixel format your hardware expects.
-> >>>>
-> >>>> Been there, done that.  Have a look at the cirrus driver.  The physical
-> >>>> hardware was designed in the early 90-ies, almost 30 years ago.  These
-> >>>> days it exists in virtual form only (qemu emulates it).  Thanks to the
-> >>>> drm driver it runs wayland just fine even though it has a bunch of
-> >>>> constrains dictated by the hardware design.
-> >>>
-> >>> The Cirrus DRM driver supports TrueColor (RGB565/888 and ARGB8888)
-> >>> modes only.  The Cirrus fbdev driver also supports mochrome and 256
-> >>> color modes.
-> >>>
-> >>> There exist some DRM drivers that do support DRM_FORMAT_C8, but none of
-> >>> the "tiny" ones do. Same for DRM_FORMAT_RGB{332,233}.  Using a shadow
-> >>> frame buffer to convert from truecolor to 256 colors would be doable,
-> >>> but would give bad results. And what about less colors?
-> >>> Adding support for e.g. DRM_FORMAT_C4 is not straight-forward, as
-> >>> the DRM core assumes in many places that a pixel is at least 1 byte,
-> >>> and would crash otherwise (yes I tried).  Other modes needed are
-> >>> DRM_FORMAT_Y4 and DRM_FORMAT_{BW,WB} (monochrome).
-> >>
-> >> We export XRGB32 from each driver, because userspace expects it. But
-> >> that is not a hard requirement. Userspace can use any format. It's just
-> >> that no one seems to have any use cases so far, so no work has been
-> >> done. Think of XRGB32 as a fallback.
-> >
-> > Using an XRGB32 intermediate would kill the user experience on old
-> > machines, due to both increased memory usage and copy overhead.
-> >
-> >> Personally, I'd much appreciate if userspace would support more of the
-> >> native formats and not rely on XRGB32.
-> >
-> > Supporting monochrome, 16 colors, and 256 colors would be nice.
+>>> Rather than dynamically react as vCPUs are created, what about we make max_vcpus
+>>> common[*], extend KVM_CAP_MAX_VCPUS to allow userspace to override max_vcpus,
+>>> and then have the IPIv support allocate the PID table on first vCPU creation
+>>> instead of in vmx_vm_init()?
+>>>
+>>> That will give userspace an opportunity to lower max_vcpus to reduce memory
+>>> consumption without needing to dynamically muck with the table in KVM.  Then
+>>> this entire patch goes away.
+>> IIUC, it's risky if relying on userspace .
+> That's why we have cgroups, rlimits, etc...
 >
-> From this conversation it seems DRM completely lacks backwards compatibility,
-> including a missing 2D bitblt copy.
-> Isn't that all what's needed and then migrating existing drivers would
-> be easy ?
+>> In this way userspace also have chance to assign large max_vcpus but not use
+>> them at all. This cannot approach the goal to save memory as much as possible
+>> just similar as using KVM_MAX_VCPU_IDS to allocate PID table.
+> Userspace can simply do KVM_CREATE_VCPU until it hits KVM_MAX_VCPU_IDS...
+IIUC, what you proposed is to use max_vcpus in kvm for x86 arch 
+(currently not present yet) and
+provide new api for userspace to notify kvm how many vcpus in current vm 
+session prior to vCPU creation.
+Thus IPIv can setup PID-table with this information in one shot.
+I'm thinking this may have several things uncertain:
+1. cannot identify the exact max APIC ID corresponding to max vcpus
+APIC ID definition is platform dependent. A large APIC ID could be 
+assigned to one vCPU in theory even running with
+small max_vcpus. We cannot figure out max APIC ID supported mapping to 
+max_vcpus.
 
-Not sure who you talked to, but we have drivers with fbdev bitblt
-accel (well, in some cases had, because driver maintainers decided
-it's just not worth it and ripped it out again or never merged it).
-Also the other discussions about some low-bit formats is pretty much
-just a question of extending a few enums and wiring through the fbdev
-emulation layer. So the things brought up in this thread thus far are
-actually the fairly easy items, which should take at most a handful of
-patches to rectify. There's much more nastier issues in fbdev, which
-will take serious amounts of development time to fix.
+2. cannot optimize the memory consumption on PID table to the least at 
+run-time
+  In case "-smp=small_n,maxcpus=large_N", kvm has to allocate memory to 
+accommodate large_N vcpus at the
+beginning no matter whether all maxcpus will run.
 
-Unfortunately in the past 5+ years absolutely no one stepped up with
-actual patches, which is why fbdev was marked as orphaned in
-MAINTAINERS.
--Daniel
+3. Potential backward-compatible problem
+If running with old QEMU version,  kvm cannot get expected information 
+so as to make a fallback to use
+KVM_MAX_VCPU_IDS by default. It's feasible but not benefit on memory 
+optimization for PID table.
 
->
-> Helge
->
->
-> >>> This not only to support "old" hardware, but also modern small OLED
-> >>> and e-ink displays.
-> >>
-> >> There's a DRM driver for Repaper e-Ink displays. So it seems doable at
-> >> least.
-> >
-> > Which uses an DRM_FORMAT_XRGB8888 intermediate, and
-> > drm_fb_xrgb8888_to_gray8() and repaper_gray8_to_mono_reversed()
-> > to convert from truecolor to monochrome.  I guess that would work,
-> > as this is a slow e-ink display.  Have fun as a text console ;-)
-> >
-> > Gr{oetje,eeting}s,
-> >
-> >                         Geert
-> >
-> > --
-> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> >
-> > In personal conversations with technical people, I call myself a hacker. But
-> > when I'm talking to journalists I just say "programmer" or something like that.
-> >                                 -- Linus Torvalds
-> >
->
-
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+What's your opinion ? Thanks.

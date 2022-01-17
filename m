@@ -2,189 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E376A49107F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DBC491089
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 20:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242631AbiAQSzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:55:47 -0500
-Received: from mga05.intel.com ([192.55.52.43]:54723 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233419AbiAQSzq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:55:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642445746; x=1673981746;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LQrQESAuBmiDBGf8ezAg1KIsoxEHQ5UEfJJMEaZbAXY=;
-  b=Se6yB5Mnp7m2UymlEy5jAUTVjDHAja6MbyTV75U+e7C18qRcFoZPq7/E
-   HDgEity7mMKCgHj06Et5ew3nSEfKPifvAUdLMtvxWVYUEqJloi3qQ33JX
-   7rOMCZe1SjAunJIm36joJ/R7my7/a5RCv4JgrVaZRjZqhPyw+g2g0EAmk
-   TqzVOXMOrCEpTK0hmjmNLUzjrzQY3FSenP4YIbeW95beT1QqHjggDf6sh
-   Ah8zhvzMUuWd6iKr3xU7Ts4hu2Odmq8z3yVZjABSypTK+E6Y4BgvX4iLE
-   I5cNsIa1+uLIRkhzFpgfNKLYJowxXm8tWr5ALB2hNPAs1gsgeZElQF+Ys
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="331027471"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="331027471"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:55:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="615134298"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jan 2022 10:55:45 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9XAO-000Bmo-Pp; Mon, 17 Jan 2022 18:55:44 +0000
-Date:   Tue, 18 Jan 2022 02:54:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [rmk-arm:zii 76/167] drivers/net/dsa/qca8k.c:1185:3: error: implicit
- declaration of function 'qca8k_mac_config_setup_internal_delay'
-Message-ID: <202201180222.WdeTEpLq-lkp@intel.com>
+        id S233567AbiAQTCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 14:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232207AbiAQTCT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 14:02:19 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E957EC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 11:02:18 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id o12so44579928lfu.12
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 11:02:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=WvbXEhKMMN0GmOckN6zN2KXde81RRc5HGG+ozhtaEIg=;
+        b=GPPkCee1xrGK7EyCkoGt+hwDgACYkjYj/t2hsJ/Cw+ZnWitIBKt6Wa3eSytB5aZjfW
+         4rj3Pe3dMrTMemUrsnUGKelg1BQXS8S5xqKOcUU6O/J/GuIBK89//g7cjIGhfVHhE1zK
+         4fRTKXGL7MydDNWN3trZa5WCj1sOleftnjCn3aYNO91h2JRD/GOP1hplXmzqDuLqvWGC
+         7KbzM5gQOA69a/88lfOYUKXZRJprVQgLT7a46Ma+aQKtwMy+hZAG76jeyp/xzcmbt/fS
+         UX2Eaaxdgdr9yVFk+jY5sa6fZQ1gLJ7X6Gyfsc7j8JSI3Rk8eeJE3XZdgBKEh5C9ZGhg
+         s3rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WvbXEhKMMN0GmOckN6zN2KXde81RRc5HGG+ozhtaEIg=;
+        b=NN1Ei70eVv0ZelVihKaFSfXOhMkuIHy4NtLYIy4OBfLy74jHEyu/xVsDMW2wh35xN0
+         IHniZ0YvYAvQGI8vRGa558tzWwzSDz5BWMqAQSrd+/lCEOVe5gG+fm/lMfSItl0yCr+M
+         gT99u39kYAyaZSDJ/FHrXPwRmJEb32J6tR7c5RXC0T1HF3HFuFdycOUUTlSikDtNJygV
+         V6MFL2yx9nE8Dz9oh3gZJyvISmcsOu16/XpOah9/S1CrXMpKBYPMfR//4BBTfToxvHrC
+         fhsFMbRpj4MdCSNjSdNSQBLkSdSJev5w858I8XTU7JeM41pSoyK4PjSAH1LRWyeNl3FW
+         iivw==
+X-Gm-Message-State: AOAM5336G9vJ9p/PoQ2yvgAbP9I/unomu+Q/hClWsEeyVbKsBB8Du2QK
+        BFLSzBHABZxxnh/puqHRE9HQiZm4eJo=
+X-Google-Smtp-Source: ABdhPJz1YbYmEgd4oGiaAeaV2suCiVIh4pAX4ZjZXDs/uXT5r1OB4Ds3IzNI5uNpHmSvmtOqu2OkcQ==
+X-Received: by 2002:ac2:58da:: with SMTP id u26mr17661738lfo.91.1642446137110;
+        Mon, 17 Jan 2022 11:02:17 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id t18sm1040360lfr.155.2022.01.17.11.02.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 11:02:16 -0800 (PST)
+Message-ID: <38455f10-6cac-4eda-3e7a-3744fb377870@gmail.com>
+Date:   Mon, 17 Jan 2022 22:02:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [syzbot] kernel BUG in ntfs_read_inode_mount
+Content-Language: en-US
+To:     syzbot <syzbot+3c765c5248797356edaa@syzkaller.appspotmail.com>,
+        anton@tuxera.com, linux-kernel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000739eb405d5c458dc@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000739eb405d5c458dc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
-head:   2c17c82cf0078ead3d8a315b2b103f9e5a5cdb1d
-commit: c1b605b3b2edac51ad6b687c68f087fe166790ce [76/167] net: dsa: qca8k: convert to use phylink_pcs
-config: i386-randconfig-a005-20220117 (https://download.01.org/0day-ci/archive/20220118/202201180222.WdeTEpLq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm zii
-        git checkout c1b605b3b2edac51ad6b687c68f087fe166790ce
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/
+On 1/17/22 13:09, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    d0a231f01e5b Merge tag 'pci-v5.17-changes' of git://git.ke..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11f83837b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=986ed422f1741853
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3c765c5248797356edaa
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sad :(
 
-All errors (new ones prefixed by >>):
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3c765c5248797356edaa@syzkaller.appspotmail.com
+> 
 
->> drivers/net/dsa/qca8k.c:1185:3: error: implicit declaration of function 'qca8k_mac_config_setup_internal_delay' [-Werror,-Wimplicit-function-declaration]
-                   qca8k_mac_config_setup_internal_delay(priv, cpu_port_index, reg);
-                   ^
-   drivers/net/dsa/qca8k.c:1479:1: error: static declaration of 'qca8k_mac_config_setup_internal_delay' follows non-static declaration
-   qca8k_mac_config_setup_internal_delay(struct qca8k_priv *priv, int cpu_port_index,
-   ^
-   drivers/net/dsa/qca8k.c:1185:3: note: previous implicit declaration is here
-                   qca8k_mac_config_setup_internal_delay(priv, cpu_port_index, reg);
-                   ^
-   2 errors generated.
+__ntfs_malloc() calls BUG_ON() in case of requested size is equal to 
+zero. Seems like syzbot has once again crafted malicious fs image that 
+has attr_list_size == 0
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_CS35L41_SPI
-   Depends on SOUND && !UML && SND && SND_SOC && SPI_MASTER
-   Selected by
-   - SND_SOC_AMD_VANGOGH_MACH && SOUND && !UML && SND && SND_SOC && SND_SOC_AMD_ACP5x && I2C
+Just for thoughts
 
 
-vim +/qca8k_mac_config_setup_internal_delay +1185 drivers/net/dsa/qca8k.c
-
-  1120	
-  1121	static int qca8k_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
-  1122				    phy_interface_t interface,
-  1123				    const unsigned long *advertising,
-  1124				    bool permit_pause_to_mac)
-  1125	{
-  1126		struct qca8k_priv *priv = pcs_to_qca8k_pcs(pcs)->priv;
-  1127		int cpu_port_index, ret, port;
-  1128		u32 reg, val;
-  1129	
-  1130		port = pcs_to_qca8k_pcs(pcs)->port;
-  1131		switch (port) {
-  1132		case 0:
-  1133			reg = QCA8K_REG_PORT0_PAD_CTRL;
-  1134			cpu_port_index = QCA8K_CPU_PORT0;
-  1135			break;
-  1136	
-  1137		case 6:
-  1138			reg = QCA8K_REG_PORT6_PAD_CTRL;
-  1139			cpu_port_index = QCA8K_CPU_PORT6;
-  1140			break;
-  1141	
-  1142		default:
-  1143			WARN_ON(1);
-  1144		}
-  1145	
-  1146		/* Enable/disable SerDes auto-negotiation as necessary */
-  1147		ret = qca8k_read(priv, QCA8K_REG_PWS, &val);
-  1148		if (ret)
-  1149			return ret;
-  1150		if (phylink_autoneg_inband(mode))
-  1151			val &= ~QCA8K_PWS_SERDES_AEN_DIS;
-  1152		else
-  1153			val |= QCA8K_PWS_SERDES_AEN_DIS;
-  1154		qca8k_write(priv, QCA8K_REG_PWS, val);
-  1155	
-  1156		/* Configure the SGMII parameters */
-  1157		ret = qca8k_read(priv, QCA8K_REG_SGMII_CTRL, &val);
-  1158		if (ret)
-  1159			return ret;
-  1160	
-  1161		val |= QCA8K_SGMII_EN_SD;
-  1162	
-  1163		if (priv->ports_config.sgmii_enable_pll)
-  1164			val |= QCA8K_SGMII_EN_PLL | QCA8K_SGMII_EN_RX |
-  1165			       QCA8K_SGMII_EN_TX;
-  1166	
-  1167		if (dsa_is_cpu_port(priv->ds, port)) {
-  1168			/* CPU port, we're talking to the CPU MAC, be a PHY */
-  1169			val &= ~QCA8K_SGMII_MODE_CTRL_MASK;
-  1170			val |= QCA8K_SGMII_MODE_CTRL_PHY;
-  1171		} else if (interface == PHY_INTERFACE_MODE_SGMII) {
-  1172			val &= ~QCA8K_SGMII_MODE_CTRL_MASK;
-  1173			val |= QCA8K_SGMII_MODE_CTRL_MAC;
-  1174		} else if (interface == PHY_INTERFACE_MODE_1000BASEX) {
-  1175			val &= ~QCA8K_SGMII_MODE_CTRL_MASK;
-  1176			val |= QCA8K_SGMII_MODE_CTRL_BASEX;
-  1177		}
-  1178	
-  1179		qca8k_write(priv, QCA8K_REG_SGMII_CTRL, val);
-  1180	
-  1181		/* From original code is reported port instability as SGMII also
-  1182		 * require delay set. Apply advised values here or take them from DT.
-  1183		 */
-  1184		if (interface == PHY_INTERFACE_MODE_SGMII)
-> 1185			qca8k_mac_config_setup_internal_delay(priv, cpu_port_index, reg);
-  1186		/* For qca8327/qca8328/qca8334/qca8338 sgmii is unique and
-  1187		 * falling edge is set writing in the PORT0 PAD reg
-  1188		 */
-  1189		if (priv->switch_id == QCA8K_ID_QCA8327 ||
-  1190		    priv->switch_id == QCA8K_ID_QCA8337)
-  1191			reg = QCA8K_REG_PORT0_PAD_CTRL;
-  1192	
-  1193		val = 0;
-  1194	
-  1195		/* SGMII Clock phase configuration */
-  1196		if (priv->ports_config.sgmii_rx_clk_falling_edge)
-  1197			val |= QCA8K_PORT0_PAD_SGMII_RXCLK_FALLING_EDGE;
-  1198	
-  1199		if (priv->ports_config.sgmii_tx_clk_falling_edge)
-  1200			val |= QCA8K_PORT0_PAD_SGMII_TXCLK_FALLING_EDGE;
-  1201	
-  1202		if (val)
-  1203			ret = qca8k_rmw(priv, reg,
-  1204					QCA8K_PORT0_PAD_SGMII_RXCLK_FALLING_EDGE |
-  1205					QCA8K_PORT0_PAD_SGMII_TXCLK_FALLING_EDGE,
-  1206					val);
-  1207	
-  1208	
-  1209		return 0;
-  1210	}
-  1211	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+With regards,
+Pavel Skripkin

@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8D2490C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C74490C3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240880AbiAQQLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240866AbiAQQLv (ORCPT
+        id S240884AbiAQQMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:12:15 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:36579 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240889AbiAQQMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:11:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6F1C061574;
-        Mon, 17 Jan 2022 08:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fB/5UIJYK/N6mY41Lc7aoPYq98s1VP7KunDWS2lUCAs=; b=HmIb80JJAC7ZddUBJ1hJaFr52I
-        EMGYIKArwetQ6GXfbsQq4iRVshjxPMN8mbV7Qg/hc0tBPSAe8O1YCbCyoFUaqfNmT8ZbRZFB0AV5Q
-        8q8TfhXjqILYLu8YC0b0BvatQ1aMJb39zGa1oWZltF0gtVgtnTf3ior8bN+lqFWqw3arwT1Fgx6BN
-        gM1ZeOy0LNFItTVRLAEyVi2Cbu8ETZqkUYcao7lnF4Q5hk98dR4HpC3lE4lGazYUdd0sql0qWP5oi
-        6GBceqNur6eMvTR3V1JQnPqZnjnKUmqY+gjI8B3NiCCl9dZJYO3L5IlHAl085LJOqzgm5N6sMZHUF
-        rw/N/iDA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9Ubk-008Mko-Ug; Mon, 17 Jan 2022 16:11:49 +0000
-Date:   Mon, 17 Jan 2022 16:11:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 02/12] filemap: Use folio_put_refs() in
- filemap_free_folio()
-Message-ID: <YeWVRFgUjlQ4/gOu@casper.infradead.org>
-References: <20220116121822.1727633-1-willy@infradead.org>
- <20220116121822.1727633-3-willy@infradead.org>
- <20220117155641.u5ysambg72nq2p6y@box.shutemov.name>
+        Mon, 17 Jan 2022 11:12:12 -0500
+Received: by mail-io1-f69.google.com with SMTP id 85-20020a6b0258000000b006079e46159fso6423367ioc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:12:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=xuzTZ41K566REjxDbPumQ9eQ7qYKtqQReAxXQBUHG4E=;
+        b=Ly3Im+A82m5//mjq593aaYHS7DncaZ2H8AqhLzpYCrVwEA8ToqRMgQI/edcCZpJ6t7
+         vQqerhW3wsho8RknS4wbXE2uq5VKAe1XYHqkITeBdNjfAthgeLwmIwtsseuPWwtvBi9Z
+         eTBSh7hSbT2L5W6K2y/fujRVg03NGy1Wt4HUecHWQt+rhUpFrreJQXWhAbeQXP3t0SK5
+         e79a3+fCk3GGJQoxRH2WXqpi66fBQFAj16+K1nmT14m4u6XtuOWg9YfLs0/JLGe45O4a
+         Zet50DeuVw6Rd7W+b22YUVFxxLBWWtaOnjXfa0eUJlGUnMJtOa1w2vKEuZOs4kxuM94u
+         uiGg==
+X-Gm-Message-State: AOAM530KaN+85N5azmjGv4cvlqqavSXazLB20YFoXD0/SxQBJaC7J4Bl
+        1sYv9bJ+VCFIAwU55Kfwl290YlX6Elo0mgO+O8okqQ8K2rdl
+X-Google-Smtp-Source: ABdhPJz1jyyIXxHrExZi60mnLbKlhQ4qpcFnzsZJTX4wBUQTPJaJ+7xBoy1CZ1oYysLObagTp2nEyg6NE4o1+kQgvoMIAINQnGVz
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117155641.u5ysambg72nq2p6y@box.shutemov.name>
+X-Received: by 2002:a02:94a3:: with SMTP id x32mr10046790jah.185.1642435931560;
+ Mon, 17 Jan 2022 08:12:11 -0800 (PST)
+Date:   Mon, 17 Jan 2022 08:12:11 -0800
+In-Reply-To: <000000000000c0069f05d38f279d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000044c19b05d5c96a09@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in nf_hook_entries_grow
+From:   syzbot <syzbot+e918523f77e62790d6d9@syzkaller.appspotmail.com>
+To:     antony.antony@secunet.com, coreteam@netfilter.org,
+        davem@davemloft.net, eyal.birger@gmail.com, fw@strlen.de,
+        kadlec@netfilter.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
+        steffen.klassert@secunet.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 06:56:41PM +0300, Kirill A. Shutemov wrote:
-> On Sun, Jan 16, 2022 at 12:18:12PM +0000, Matthew Wilcox (Oracle) wrote:
-> > +	if (folio_test_large(folio) && !folio_test_hugetlb(folio))
-> > +		refs = folio_nr_pages(folio);
-> 
-> Isn't folio_test_large() check redundant? folio_nr_pages() would return 1
-> for non-large folio, wouldn't it?
+syzbot suspects this issue was fixed by commit:
 
-I'm trying to avoid the function call for !hugetlb pages.
+commit 8dce43919566f06e865f7e8949f5c10d8c2493f5
+Author: Antony Antony <antony.antony@secunet.com>
+Date:   Sun Dec 12 10:34:30 2021 +0000
+
+    xfrm: interface with if_id 0 should return error
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10eb9bb0700000
+start commit:   9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=10f3f669b8093e95
+dashboard link: https://syzkaller.appspot.com/bug?extid=e918523f77e62790d6d9
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1781a643b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15130199b00000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: xfrm: interface with if_id 0 should return error
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

@@ -2,111 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D0F49064C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AE4490654
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiAQK4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:56:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57918 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiAQK4N (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:56:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0964460FE8;
-        Mon, 17 Jan 2022 10:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0F6C36AE7;
-        Mon, 17 Jan 2022 10:56:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642416971;
-        bh=WyPJvdRmUEPwRoLB14a6aObUcdcSgZBUxYOv6PmK66E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WOJ7Mq1g21hn5lAnuRXnhsSIsJe7Q5UD3AEdAhkk6F0ZFFampyGRfr0J6nI0YITWS
-         TyTRUN59zdVVukOzE2m1aOnE5Yt36n27x3of1zmX1PBxiAcItWc0EZXuwBcAbY6ErW
-         h5HKkIp4EuBiyokFdArbhOt0JZUiKy5XfInxgAOhAHjvtMX94anV8P99Xr+rQ5BZlz
-         ZNdw9+ZF07ybL9svsVxBICN7pLrgz4ilGetxGvwVMEkF0ZbxYY8Ry4/uQXxXshpZwz
-         osrsjQViITL7XNUg+QyMXorCJtUyPqRd2LjkCyoHKrC71MOrBnc0ig/2CXyS7W0+z1
-         AsGYw3vFwHQ1g==
-Date:   Mon, 17 Jan 2022 11:56:07 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>
-Subject: Re: [PATCH 1/2] iio: imu: st_lsm6dsx: Limit requested watermark
- value to hwfifo size
-Message-ID: <YeVLRzmUw/U9GRC3@lore-desk>
-References: <20220117102512.31725-1-paul@crapouillou.net>
+        id S238797AbiAQK6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:58:54 -0500
+Received: from mout.gmx.net ([212.227.17.20]:60377 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229503AbiAQK6y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 05:58:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642417124;
+        bh=ZlkRI76O1HNMaDibceLBJ4+Yr9W5biTnm7ePlGXax8c=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=BwHcpXm3NG1Lwqd5XnmY5I13XEroXICdnIhOyAtjctLB+ZbD8AMT83sL6BLMwuMUE
+         RNor84k7NkJGdF+BTLmzC4gwe1o5UuLxlRozF59cPDu5uduZa5pmbuDpR9J7Y5H/H1
+         OmZ39nqVBn86+zhnL/pJ7o+4oTUefstaX7Dd+ZLc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MN5eX-1mqNGg3sxx-00J3u5; Mon, 17
+ Jan 2022 11:58:43 +0100
+Message-ID: <60fad896-235c-7602-39d1-14691282ebf6@gmx.de>
+Date:   Mon, 17 Jan 2022 11:57:38 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bP2/75p4uu4UIPkj"
-Content-Disposition: inline
-In-Reply-To: <20220117102512.31725-1-paul@crapouillou.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <87o84a63hy.fsf@intel.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <87o84a63hy.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ebVuJl/dmLqN1DusLAVJLl1TzbN3n+pZ2TDGb0JtsNZMKjzmqgX
+ AcrDzss4HYUU4gGfKlDiuJmsR/a5e3j0YMe9gONh2MWqf/Q+jfxq67YuTBd1YgtvBfMNWnw
+ o75DkRCCC5uDZACJqcEHVBpW+aTxTTKUITA68CQXTvqOdI7AmgoBfwWsqtwFUAPJAdpVcbX
+ 6qxo5uiHQle2Hy46OdqfA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Vl7fjTBigKs=:1/42af+1H3BqrJsWlSFH/o
+ RZfzhKKvGuIrHY0xRLqz3QObRNaNDFiE6fdTQDVod6fFYPpMDtjNNXN6oHSeb0yZU69bK3IvO
+ QK4LY0IWHelVcWmoEdEcqLYAh0taPBWcToUbS+AOr0pwOV1G8/sUApFI5DuqBgB79HFQUg6RI
+ +YN8qTdRlP67RmGDzy0LiSi2YyZ7EjAkzeyEy2g+4J91T35knvcXQ009d+qN7jqo/qpOThWel
+ zz6YX+VcpzOIkzK0u19pBZwiEzrvBOzN9FpcVY7F8aBXc+xH0js1ZRNdeTsxT1EK5lHx0UnuT
+ 5Mt1O1BgK6JtxTQfRQkyiNIMAXnNgudr18iixaTzvLbeerE4hf7yb/PITQv43pKeT+KzKOR60
+ 13dYcHlgT+NlloWCZO41vrmrJX6PJh37g0FkGpRo3J/I26CZt9pyMDrhx+Rj4dlNCS607WZf/
+ PeLxGlJoZDLPqJSdCf3Y6h3+s6lxlNlkOhi7TmR2gjw6p9Fyfe5OCQ0hQPzDoE+9KCLcaBDg4
+ tvE1wXHot1y1ZjIi6a+95m9AxM+njeOBnsolwPNTMbAHxwM3YKsmKNBdsleC9s7nrbY1S/j34
+ YdmZA2aZmGo1O/ZiM1J6CgZyPGdcv8yy6rln0Xe/w2mc+6D0qlFDkSkj0WoFT1zok8RCGd4jZ
+ wwg4VNlxdoQ0CGPjS58YWNSH7TcmShdGRusF4DJg6o3sfHKxzaETaE/zWZEJZbkG3jazelU1V
+ bmYhgcH3d5QWKBZyIDu3izQXeL1R4q2A2WxQXPBSRSnhV3wduB2pib3Xz6F5KC/sU3CsUZw+Z
+ 1v+SptapJKwtINPGptCvnOu/UtYx66WF8VT5w+Wq8ViYWU2xczdidoaF6DqXte5a6Jd7hDxro
+ 1GRRRe3L1c8x0in3J5e1pEyi95mT4M1s549hvcowIuWb7Aygkd45aPIgKix9SvvYcuSW0+LGf
+ eMvU318jN3DhQoKQib5iTD59tIUQd9u4NKuuUE1bzOsYqH3dw4w4J2hwwZsKkCgwWdufEN29L
+ 2wi2GFjFLsWgZbYcMWS91JuXRAVlGtVxArGWPpaJXwMYcUNl/Ka4ICq8D9HecL0PCxBCrh/FE
+ t0fka4TH4+eZ88=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Jani,
 
---bP2/75p4uu4UIPkj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 1/17/22 11:49, Jani Nikula wrote:
+> On Mon, 17 Jan 2022, Daniel Vetter <daniel@ffwll.ch> wrote:
+>> Hi Helge
+>>
+>> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
+>>>
+>>> The fbdev layer is orphaned, but seems to need some care.
+>>> So I'd like to step up as new maintainer.
+>>>
+>>> Signed-off-by: Helge Deller <deller@gmx.de>
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 5d0cd537803a..ce47dbc467cc 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/e=
+mulator/index.html
+>>>  F:     arch/x86/math-emu/
+>>>
+>>>  FRAMEBUFFER LAYER
+>>> -L:     dri-devel@lists.freedesktop.org
+>>> +M:     Helge Deller <deller@gmx.de>
+>>>  L:     linux-fbdev@vger.kernel.org
+>>> -S:     Orphan
+>>
+>> Maybe don't rush maintainer changes in over the w/e without even bother=
+ing
+>> to get any input from the people who've been maintaining it before.
+>>
+>> Because the status isn't entirely correct, fbdev core code and fbcon an=
+d
+>> all that has been maintained, but in bugfixes only mode. And there's ve=
+ry
+>> solid&important reasons to keep merging these patches through a drm tre=
+e,
+>> because that's where all the driver development happens, and hence also
+>> all the testing (e.g. the drm test suite has some fbdev tests - the onl=
+y
+>> automated ones that exist to my knowledge - and we run them in CI). So
+>> moving that into an obscure new tree which isn't even in linux-next yet=
+ is
+>> no good at all.
+>>
+>> Now fbdev driver bugfixes is indeed practically orphaned and I very muc=
+h
+>> welcome anyone stepping up for that, but the simplest approach there wo=
+uld
+>> be to just get drm-misc commit rights and push the oddball bugfix in th=
+ere
+>> directly. But also if you want to do your own pull requests to Linus fo=
+r
+>> that I don't care and there's really no interference I think, so
+>> whatever floats.
+>>
+>> But any code that is relevant for drm drivers really needs to go in thr=
+ough
+>> drm trees, nothing else makes much sense.
+>>
+>> I guess you're first action as newly minted fbdev maintainer is going t=
+o be to
+>> clean up the confusion you just created.
+>
+> As much as I like folks stepping up as maintainers, I've got to say this
+> is not a style I appreciate at all.
+>
+> Thursday: Object a recent fbdev change [1].
+>
+> Friday: Step up as fbdev maintainer, change git tree (this thread) [2].
+>
+> Sunday: Send the maintainer change to Linus [3].
+>
+> Later Sunday: Start reverting the changes objected to on Thursday, with
+> no discussion, no acks, no reviews, in the new git tree [4].
+>
+> Monday: Continue reverting the changes [5].
+>
+> I'm heavily in favor of maintainers who are open, transparent,
+> collaborative, who seek consensus through discussion, and only put their
+> foot down when required.
+>
+> I really don't like the optics here. I'd expect some pretty good
+> explanations.
 
-> Instead of returning an error if the watermark value is too high, which
-> the core will silently ignore anyway, limit the value to the hardware
-> FIFO size; a lower-than-requested value is still better than using the
-> default, which is usually 1.
->=20
+Jani, please don't worry!
+I've started to sort things out, to work through the existing backlog of
+patches (which is a LOT!) and nothing has been pushed yet.
+I've seen the other mails and we will discuss.
 
-Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
+So, please just ignore the current state of the linux-fbdev tree for now.
 
-> Cc: Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c b/drivers/iio/i=
-mu/st_lsm6dsx/st_lsm6dsx_core.c
-> index 727b4b6ac696..5fd46bf1a11b 100644
-> --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
-> +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
-> @@ -54,6 +54,7 @@
->  #include <linux/iio/sysfs.h>
->  #include <linux/interrupt.h>
->  #include <linux/irq.h>
-> +#include <linux/minmax.h>
->  #include <linux/pm.h>
->  #include <linux/property.h>
->  #include <linux/regmap.h>
-> @@ -1607,8 +1608,7 @@ int st_lsm6dsx_set_watermark(struct iio_dev *iio_de=
-v, unsigned int val)
->  	struct st_lsm6dsx_hw *hw =3D sensor->hw;
->  	int err;
-> =20
-> -	if (val < 1 || val > hw->settings->fifo_ops.max_size)
-> -		return -EINVAL;
-> +	val =3D clamp_val(val, 1, hw->settings->fifo_ops.max_size);
-> =20
->  	mutex_lock(&hw->conf_lock);
-> =20
-> --=20
-> 2.34.1
->=20
-
---bP2/75p4uu4UIPkj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYeVLRgAKCRA6cBh0uS2t
-rM07AP4nFkyIdNtLaE6ZhYiaSwvF1FlkQJNl3Hsa7eTwNQwWSwD/e6jifcjD2e53
-sQcPYAXSVQEW/aPuHbAoY8i8f/GO8Q4=
-=Gqbr
------END PGP SIGNATURE-----
-
---bP2/75p4uu4UIPkj--
+Helge

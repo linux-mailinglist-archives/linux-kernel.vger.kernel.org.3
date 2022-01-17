@@ -2,163 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D784C491242
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 00:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABECB491243
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 00:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243787AbiAQXRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 18:17:42 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57868 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234551AbiAQXRk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 18:17:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1621FB810CE;
-        Mon, 17 Jan 2022 23:17:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51069C36AE7;
-        Mon, 17 Jan 2022 23:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642461457;
-        bh=/H4hodNYNQX3IviAGezs1hAY921lAVGOrr7Ddgmplvo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ia/UvUI844gw+WPfwhpJ6CQYqC3Io+w357Z+aGKwEsO1sO8ICYc/ENa5nKvN4o2oN
-         BKj58XNTesbzhY5wein2705/CG/tTJU/xv/5yvvaY34MCqjfQe19ubqEthQho8Pehy
-         id0x+GZtfWNnAE7taY4Ezoq256Sh2ElZaGHI+GLWAJpZdMun5QDEJWL+3KTDSYWBl1
-         SfTMZm9mqqZr53WWoSw9yAujDqEi+P/3WPo+Nl+LTyULpCIPCDvEWKHCMOCzg3JL1Y
-         2Y3gt4LF17SICawmHmm12LXg8EIxriCiWKPK61Z+b2Z1HnfKp/1aG4JT57ygcrEv2q
-         nTDv54d+coBKA==
-Date:   Mon, 17 Jan 2022 17:17:35 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     hongxing.zhu@nxp.com, l.stach@pengutronix.de,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id S243791AbiAQXT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 18:19:57 -0500
+Received: from mga12.intel.com ([192.55.52.136]:54799 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234551AbiAQXT4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 18:19:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642461595; x=1673997595;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z8SFnS14Ws1uI9msm3xogohlM5/v43CKlc3O/8rmaBE=;
+  b=DsQ2oeKFJdlQXi35f3mdAOXnUOL7dYJ6JkSsdcR2IxUQdMKay01ma9a4
+   BjRgmY9rvJ7+k7VtkgLY+xwoguxC4+GlIwGMbmNUACFa/GWbVIVKkyQBb
+   wondd0CFDH/g1nC8EqalNpZOt7XFXTFNhopVPe+CDcM/zkBcOzv8/7THi
+   OJeBgV3I2s9pLOQnlvEllNbzxiE/sFDsdnuyg/uC3GnOfz6SXokUDwtHe
+   KLI33Ys0NYsqAP8aCoNlJKXvwiSe6oute3H98LQlaPIUFK7cX+rnkeWM3
+   ZKbppU+xkoFgw96Q95GJ3azCrokmaWoOrrpb7cs4aFi0CH8fdBEwUaiYy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224683531"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="224683531"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 15:19:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="517553577"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 15:19:54 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9bI1-000BxE-BN; Mon, 17 Jan 2022 23:19:53 +0000
+Date:   Tue, 18 Jan 2022 07:19:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci: imx: disable reglator when imx6_pcie_probe fails
-Message-ID: <20220117231735.GA813924@bhelgaas>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 11/24]
+ fs/ceph/addr.c:1744:1: warning: unused label 'out_put_folio'
+Message-ID: <202201180732.hDR9RuNW-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220117102137.3513439-1-xiaolei.wang@windriver.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 06:21:37PM +0800, Xiaolei Wang wrote:
-> From: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
+head:   e450b62f32df4384c141a6a382811b3fe5723bad
+commit: 11d90ed519237baca31d841a9a64fecdbc932f5a [11/24] ceph: Uninline the data on a file opened for writing
+config: x86_64-randconfig-a006-20220117 (https://download.01.org/0day-ci/archive/20220118/202201180732.hDR9RuNW-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/11d90ed519237baca31d841a9a64fecdbc932f5a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
+        git checkout 11d90ed519237baca31d841a9a64fecdbc932f5a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ceph/
 
-I got two copies of this.  This one changed:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  - Signed-off-by: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
-  + Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+All warnings (new ones prefixed by >>):
 
-This looks like a good change.  You should also change the
-"From: wrsadmin" line above because that is what "git am" uses in the
-commit:
+>> fs/ceph/addr.c:1744:1: warning: unused label 'out_put_folio' [-Wunused-label]
+   out_put_folio:
+   ^~~~~~~~~~~~~~
+   1 warning generated.
 
-  commit 119fdfb8fb1b ("pci: imx: disable reglator when imx6_pcie_probe fails")
-  Author: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
-  Date:   Mon Jan 17 18:17:35 2022 +0800
 
-Also, please run "git log --oneline drivers/pci/controller/dwc/pci-imx6.c"
-and make your subject line match in capitalization and style.
+vim +/out_put_folio +1744 fs/ceph/addr.c
 
-Also, fix the "s/reglator/regulator" typo in subject and below and add
-"()" after the imx6_pcie_probe() function name.
+  1645	
+  1646	int ceph_uninline_data(struct file *file)
+  1647	{
+  1648		struct inode *inode = file_inode(file);
+  1649		struct ceph_inode_info *ci = ceph_inode(inode);
+  1650		struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
+  1651		struct ceph_osd_request *req;
+  1652		struct folio *folio = NULL;
+  1653		struct page *pages[1];
+  1654		u64 len, inline_version;
+  1655		int err = 0;
+  1656	
+  1657		folio = read_mapping_folio(inode->i_mapping, 0, file);
+  1658		if (IS_ERR(folio)) {
+  1659			err = PTR_ERR(folio);
+  1660			goto out;
+  1661		}
+  1662	
+  1663		spin_lock(&ci->i_ceph_lock);
+  1664		inline_version = ci->i_inline_version;
+  1665		spin_unlock(&ci->i_ceph_lock);
+  1666	
+  1667		dout("uninline_data %p %llx.%llx inline_version %llu\n",
+  1668		     inode, ceph_vinop(inode), inline_version);
+  1669	
+  1670		if (inline_version == 1 || /* initial version, no data */
+  1671		    inline_version == CEPH_INLINE_NONE)
+  1672			goto out_unlock;
+  1673	
+  1674		len = i_size_read(inode);
+  1675		if (len > folio_size(folio))
+  1676			len = folio_size(folio);
+  1677	
+  1678		req = ceph_osdc_new_request(&fsc->client->osdc, &ci->i_layout,
+  1679					    ceph_vino(inode), 0, &len, 0, 1,
+  1680					    CEPH_OSD_OP_CREATE, CEPH_OSD_FLAG_WRITE,
+  1681					    NULL, 0, 0, false);
+  1682		if (IS_ERR(req)) {
+  1683			err = PTR_ERR(req);
+  1684			goto out_unlock;
+  1685		}
+  1686	
+  1687		req->r_mtime = inode->i_mtime;
+  1688		err = ceph_osdc_start_request(&fsc->client->osdc, req, false);
+  1689		if (!err)
+  1690			err = ceph_osdc_wait_request(&fsc->client->osdc, req);
+  1691		ceph_osdc_put_request(req);
+  1692		if (err < 0)
+  1693			goto out_unlock;
+  1694	
+  1695		req = ceph_osdc_new_request(&fsc->client->osdc, &ci->i_layout,
+  1696					    ceph_vino(inode), 0, &len, 1, 3,
+  1697					    CEPH_OSD_OP_WRITE, CEPH_OSD_FLAG_WRITE,
+  1698					    NULL, ci->i_truncate_seq,
+  1699					    ci->i_truncate_size, false);
+  1700		if (IS_ERR(req)) {
+  1701			err = PTR_ERR(req);
+  1702			goto out_unlock;
+  1703		}
+  1704	
+  1705		pages[0] = folio_page(folio, 0);
+  1706		osd_req_op_extent_osd_data_pages(req, 1, pages, len, 0, false, false);
+  1707	
+  1708		{
+  1709			__le64 xattr_buf = cpu_to_le64(inline_version);
+  1710			err = osd_req_op_xattr_init(req, 0, CEPH_OSD_OP_CMPXATTR,
+  1711						    "inline_version", &xattr_buf,
+  1712						    sizeof(xattr_buf),
+  1713						    CEPH_OSD_CMPXATTR_OP_GT,
+  1714						    CEPH_OSD_CMPXATTR_MODE_U64);
+  1715			if (err)
+  1716				goto out_put_req;
+  1717		}
+  1718	
+  1719		{
+  1720			char xattr_buf[32];
+  1721			int xattr_len = snprintf(xattr_buf, sizeof(xattr_buf),
+  1722						 "%llu", inline_version);
+  1723			err = osd_req_op_xattr_init(req, 2, CEPH_OSD_OP_SETXATTR,
+  1724						    "inline_version",
+  1725						    xattr_buf, xattr_len, 0, 0);
+  1726			if (err)
+  1727				goto out_put_req;
+  1728		}
+  1729	
+  1730		req->r_mtime = inode->i_mtime;
+  1731		err = ceph_osdc_start_request(&fsc->client->osdc, req, false);
+  1732		if (!err)
+  1733			err = ceph_osdc_wait_request(&fsc->client->osdc, req);
+  1734	
+  1735		ceph_update_write_metrics(&fsc->mdsc->metric, req->r_start_latency,
+  1736					  req->r_end_latency, len, err);
+  1737	
+  1738	out_put_req:
+  1739		ceph_osdc_put_request(req);
+  1740		if (err == -ECANCELED)
+  1741			err = 0;
+  1742	out_unlock:
+  1743		folio_unlock(folio);
+> 1744	out_put_folio:
+  1745		folio_put(folio);
+  1746	out:
+  1747		dout("uninline_data %p %llx.%llx inline_version %llu = %d\n",
+  1748		     inode, ceph_vinop(inode), inline_version, err);
+  1749		return err;
+  1750	}
+  1751	
 
-If you include a calltrace, remove timestamps and other non-relevant
-stuff from it and indent quoted material two spaces.  But in this
-case, I don't think the calltrace is useful.
-
-The reason to do this is not to avoid a warning and the related
-calltrace.  The reason is to fix the problem that *caused* the warning
-in the first place.  So we should describe the underlying problem and
-the fix.
-
-> disable reglator when imx6_pcie_probe fails,
-> otherwise the following calltrace will appear
-> 
-> [ 3.785075] ------------[ cut here ]------------
-> [ 3.788142] Registering SWP/SWPB emulation handler
-> [ 3.789853] WARNING: CPU: 0 PID: 7 at drivers/regulator/core.c:2257 _regulator_put.part.0+0x1bc/0x1e0
-> [ 3.795680] Loading compiled-in X.509 certificates
-> [ 3.803947] Modules linked in:
-> [ 3.811922] CPU: 0 PID: 7 Comm: kworker/u8:0 Not tainted 5.16.0-10645-g3c750c7b6143-dirty #9
-> [ 3.820393] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> [ 3.826945] Workqueue: events_unbound async_run_entry_fn
-> [ 3.832304] unwind_backtrace from show_stack+0x10/0x14
-> [ 3.837569] show_stack from dump_stack_lvl+0x58/0x70
-> [ 3.842663] dump_stack_lvl from __warn+0xd8/0x114
-> [ 3.847493] __warn from warn_slowpath_fmt+0x5c/0xc4
-> [ 3.852490] warn_slowpath_fmt from _regulator_put.part.0+0x1bc/0x1e0
-> [ 3.858968] _regulator_put.part.0 from regulator_put+0x2c/0x3c
-> [ 3.864918] regulator_put from release_nodes+0x50/0x178
-> [ 3.870270] release_nodes from devres_release_all+0x80/0xd0
-> [ 3.875968] devres_release_all from really_probe+0xdc/0x30c
-> [ 3.881661] really_probe from __driver_probe_device+0x80/0xe4
-> [ 3.887522] __driver_probe_device from driver_probe_device+0x30/0xd4
-> [ 3.893991] driver_probe_device from __driver_attach_async_helper+0x20/0x38
-> [ 3.901068] __driver_attach_async_helper from async_run_entry_fn+0x20/0xb4
-> [ 3.908059] async_run_entry_fn from process_one_work+0x298/0x7d0
-> [ 3.914188] process_one_work from worker_thread+0x30/0x510
-> [ 3.919792] worker_thread from kthread+0x128/0x14c
-> [ 3.924705] kthread from ret_from_fork+0x14/0x38
-> [ 3.929443] Exception stack(0xc20cbfb0 to 0xc20cbff8)
-> [ 3.934521] bfa0: 00000000 00000000 00000000 00000000
-> [ 3.942722] bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [ 3.950922] bfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [ 3.957677] irq event stamp: 1207
-> [ 3.961024] hardirqs last enabled at (1215): [<c0198270>] __up_console_sem+0x50/0x60
-> [ 3.968974] hardirqs last disabled at (1224): [<c019825c>] __up_console_sem+0x3c/0x60
-> [ 3.976911] softirqs last enabled at (1206): [<c010150c>] __do_softirq+0x2ec/0x5a4
-> [ 3.984669] softirqs last disabled at (1197): [<c012ef08>] irq_exit+0x18c/0x20c
-> [ 3.992021] ---[ end trace 45a52c023bf8fb33 ]---
-> 
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 6974bd5aa116..f8279a15463b 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -1216,7 +1216,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
->  
->  	ret = dw_pcie_host_init(&pci->pp);
->  	if (ret < 0)
-> -		return ret;
-> +		goto err_vpcie;
->  
->  	if (pci_msi_enabled()) {
->  		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> @@ -1226,6 +1226,11 @@ static int imx6_pcie_probe(struct platform_device *pdev)
->  	}
->  
->  	return 0;
-> +
-> +err_vpcie:
-> +	regulator_disable(imx6_pcie->vpcie);
-
-I don't know the regulator code and I couldn't figure out how
-devm_regulator_get_optional() works because it passes OPTIONAL_GET in
-to _devm_regulator_get(), but nothing ever checks for that, and I
-couldn't be bothered to figure out what magic makes it work.
-
-But regulator_disable() definitely dereferences its argument, and I'm
-pretty sure it's possible to get here with "imx6_pcie->vpcie == NULL".
-
-Also, it looks like the same situation with imx6_pcie->vph, so why
-don't you clean that one up, too?
-
-> +	return ret;
->  }
->  
->  static void imx6_pcie_shutdown(struct platform_device *pdev)
-> -- 
-> 2.25.1
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

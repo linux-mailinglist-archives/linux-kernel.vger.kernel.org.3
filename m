@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B56490896
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DA4490891
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239836AbiAQMV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:21:57 -0500
-Received: from mga14.intel.com ([192.55.52.115]:35878 "EHLO mga14.intel.com"
+        id S239827AbiAQMUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:20:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:35821 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239831AbiAQMV4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:21:56 -0500
+        id S236978AbiAQMUr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 07:20:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642422116; x=1673958116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7hL98B8VHA8BYC2ePlx10Jl7+f4j5WgTIvH4DR1v8/A=;
-  b=Dj2XJEjNH2WR1p0OE/MqIeNDn+vwwD+anX8ggMhtzdxvST7zO37PlwCC
-   qFZEgO2MVZjapuj9apO/0ZNvgicTXMwoT89Exv+8/7yrKLOtZ97nYzKSq
-   0Bn5KBX5tC/h1uHn3jfk/+fudF6UOd7WtRNt5IIRcgyNuUmC3m4lUNBzW
-   jwXLoHRknZPeKdvPhyDDwXvNwioOR9l+ciC8/Zgd3mTPVFh+DgnIbfNEo
-   o2C5zFC3RhggVoTJwtJVKAPaxC9Nopn4o82LGVuGXUBsNcNzCRwXXaJgJ
-   L3PwoMgNvz7tRaPAgbWBN9CpzjZHM+paMPJI2jGyK3sZSakTqcgGHG/tC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244810538"
+  t=1642422047; x=1673958047;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=bDk7Xh2Uwl1ciemzd6BPTU50WsyNshlNM0SSyDlnoag=;
+  b=CRKKsHYyF+v8oymy98oBTrRI6yr92xUw29kMYaXvsZttR1fGZ7wa4yLq
+   zxw6wxn/zVxyul2VgdjsuDwH6xT5pqmIeYZLm58+tGtninn4yhJyx2kZ1
+   hdR63fYSxRTO7qeshT2xp8wvduXryrJFhTMXUxqUZcT/zI7XCEp4bgr0P
+   2OWg6oduV2gVqzo4kyz2xUwSQFcQMhBhYmKD4MONcXAamnYjnC8EN/C0f
+   hd8A11tjphepDXA7zh0+a+Qm/Oa18McbeCmajmKy1yjKM+SkS9qcIIs+J
+   0BhEWXpyMwruL9FhvInJnuVjxZoBQNIJZjtW/7eCyTJkI+pmdDQ+zrLFT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244810402"
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="244810538"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 04:21:55 -0800
+   d="scan'208";a="244810402"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 04:20:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="671544346"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 17 Jan 2022 04:21:53 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Jan 2022 14:21:52 +0200
-Date:   Mon, 17 Jan 2022 14:21:52 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org
-Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
- the kernel stops loading on my devices.
-Message-ID: <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com>
-References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
- <YeUvvIaVJnJrrpYe@kuha.fi.intel.com>
- <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
- <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
- <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+   d="scan'208";a="625175556"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2022 04:20:43 -0800
+To:     Puma Hsu <pumahsu@google.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc:     mathias.nyman@intel.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20211229112551.3483931-1-pumahsu@google.com>
+ <Yd1tUKhyZf26OVNQ@kroah.com>
+ <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
+ <Yd/g/ywBWZG7gF8v@kroah.com>
+ <CAGCq0LZ3i8VaMfRWNKvH_-ms0TgNqKA6f+Zx7M=iz1t_-smW+g@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was
+ set
+Message-ID: <fe411488-c67c-62ab-4709-98621b9f199b@linux.intel.com>
+Date:   Mon, 17 Jan 2022 14:22:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+In-Reply-To: <CAGCq0LZ3i8VaMfRWNKvH_-ms0TgNqKA6f+Zx7M=iz1t_-smW+g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 04:52:02PM +0500, Mikhail Gavrilov wrote:
-> On Mon, 17 Jan 2022 at 16:19, Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> 
-> > I don't know which tree you are working on top of, but the patch
-> > applies just fine on top of Linus' latest master branch:
-> > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >
-> 
-> Same here.
-> 
-> $ git remote -v
-> origin    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> (fetch)
-> origin    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> (push)
-> 
-> $ git show
-> commit 0c947b893d69231a9add855939da7c66237ab44f (HEAD -> master,
-> origin/master, origin/HEAD)
-> Merge: a6097180d884 9bbf8662a27b
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Mon Jan 17 09:53:21 2022 +0200
-> 
->     Merge tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs-2.6
-> 
->     Pull cifs updates from Steve French:
-> 
->      - multichannel patches mostly related to improving reconnect behavior
-> 
->      - minor cleanup patches
-> 
->     * tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs-2.6:
->       cifs: fix FILE_BOTH_DIRECTORY_INFO definition
->       cifs: move superblock magic defitions to magic.h
->       cifs: Fix smb311_update_preauth_hash() kernel-doc comment
->       cifs: avoid race during socket reconnect between send and recv
->       cifs: maintain a state machine for tcp/smb/tcon sessions
->       cifs: fix hang on cifs_get_next_mid()
->       cifs: take cifs_tcp_ses_lock for status checks
->       cifs: reconnect only the connection and not smb session where possible
->       cifs: add WARN_ON for when chan_count goes below minimum
->       cifs: adjust DebugData to use chans_need_reconnect for conn status
->       cifs: use the chans_need_reconnect bitmap for reconnect status
->       cifs: track individual channel status using chans_need_reconnect
->       cifs: remove redundant assignment to pointer p
-> 
-> $ cat 0001-usb-typec-Test-fix.patch | git apply
-> error: patch failed: drivers/usb/typec/port-mapper.c:56
-> error: drivers/usb/typec/port-mapper.c: patch does not apply
 
-Have you modified the file, or something else that you have not
-committed yet?
+>>> This seems like a big hammer for when the host controller throws an
+>>>> error.  Why is this the only place that it should be checked for?  What
+>>>> caused the error that can now allow it to be fixed?
+>>>
+>>> I believe this is not the only place that the host controller may set
+>>> HCE, the host controller may set HCE anytime it sees an error in my
+>>> opinion, not only in suspend or resume.
+>>
+>> Then where else should it be checked?  Where else will your silicon set
+>> this bit as part of the normal operating process?
+> 
+> We observed this flag while resume in our silicon so far. According to the XHCI
+> specification 4.24.1, “Software should implement an algorithm for checking the
+> HCE flag if the xHC is not responding.”, so maybe it would be better
+> to implement
+> a new API to recover host controller whenever the driver side finds no response
+> from host controller in the future.
+> 
 
-        % git status
+As all the code to reset the host during resume already exists, and is well tried
+due to issues in resume being so common, I think it makes sense to add the HCE case 
+here as well. It's a simple fix that makes the life of users better.
 
-Checkout the file, and then try to apply the patch:
+That said we shouldn't hide the reason for reset like this.
+Print a debug message telling about the HCE so that everybody working with xHCI
+can see it and start fixing the rootcause.
 
-        % git checkout drivers/usb/typec/port-mapper.c
-        % git apply -v 0001-usb-typec-Test-fix.patch
+Another HCE check could be added to command timeout code, but just to show a
+warning for now.
+Reset might not always clear HCE, and we don't want to be stuck in a reset loop.
+This check  could be a separate patch
 
-thanks,
-
--- 
-heikki
+-Mathias

@@ -2,117 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C6F4909A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7344909AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiAQNiD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Jan 2022 08:38:03 -0500
-Received: from mail-qk1-f173.google.com ([209.85.222.173]:44683 "EHLO
-        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiAQNiB (ORCPT
+        id S233795AbiAQNoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232656AbiAQNoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:38:01 -0500
-Received: by mail-qk1-f173.google.com with SMTP id t1so2837055qkt.11;
-        Mon, 17 Jan 2022 05:38:00 -0800 (PST)
+        Mon, 17 Jan 2022 08:44:07 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6211FC061574;
+        Mon, 17 Jan 2022 05:44:07 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id o135so8651066qke.8;
+        Mon, 17 Jan 2022 05:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wcgdBMETg09EaIqnlllAs1b5H6LLPh/71QIKDM8zgoQ=;
+        b=aB4uPEUcyHIddyBjA09c1Ve85mosTSF4qF+8O1xymYerqPxVfWr3/YKiK62kzwU8bE
+         Sw5+sbvrsh7deGjMKqTomRo7c3uygv/DgWuHMhIS/jHIvKMNkD3LfKc2ewCOJcxxkeFy
+         joI1PqdJYlkwzdNvo4WQ5mKC8fkYJvkO03rzLT2fKw51Wz0Y5nLXDDDiwm849/K1FQ6R
+         4v0PmCVacEOP3k3t1wJWrAtNrk6Da+0dyUBesvecag4qDirawZNxHFq6/fxlvjxvAQ8C
+         mXMpNFRsmvnSGwdhV9pzynuuz7L8WnSemFB8BjFlXRcLXfGn8BZy/uc/v7LyDfyLnNoZ
+         AaUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Vgyxr7ztzV60Xeh7Q7gRuypGNAwuqlHo855fT6ZQ17E=;
-        b=PiUDFWDBmU1+9vD4LZmuVbR65V+lCU9F7loiGmX1eZujZTseE8D/3n5/gK3z/DarOl
-         FgwlLnRenmiBBehgtd+rIidprM7p26l03tsCuJVY7kl8KZzV0a1AFr3PCeKYdgLuovtN
-         2PdoJ8xqSuQS6GjvwpU+2RKSBgGaWEjWiOCWnzZYMn4Huncw/C10BepaY4pUZy1ldVCa
-         kLm/aFCLHPSYgIHItB/kpxYZSi0Y7BaXC1NX5cXIlQOx51n4h7chhUGHKfvEYlERUgzr
-         sm+HTEDGRnSwkKCgZAgjiS0Bbv6Wciam5yS9ZNeKlgBX+ghOzHxthf3qvzbvcMBqFNMG
-         qZcg==
-X-Gm-Message-State: AOAM533pUQzBzSmKA6RUzx1GGUD6jpJgwso7Shooe9JhEx+JDWnegzkK
-        XP/hCP60M1k6g83EqfYgI23+N+rJJGNE3PtveCI=
-X-Google-Smtp-Source: ABdhPJzgqH7VQOVtjyKwk0O6xlkP5eJCKSaa1kHhuN3q3ZPuNR5LB9Fx/9eQnXEjz8YssSHj1lIGXO8rpmxps9J+78A=
-X-Received: by 2002:a05:620a:4714:: with SMTP id bs20mr2943693qkb.8.1642426680287;
- Mon, 17 Jan 2022 05:38:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wcgdBMETg09EaIqnlllAs1b5H6LLPh/71QIKDM8zgoQ=;
+        b=XL9vv2j3kYSJBJ8hGO+bvF3etbZro8P9ffoy+KVNNMinYv2+0hyM8FxYA4v3vN4u2Z
+         pTKVM7OF+RHMAcCEHhIMBZ0W0ExLzgICRgK2QGxsVdJ7lW02EhxMY/9APrUim0BMSj1z
+         DAZ0yK4PrIWjrmziW5Osps8PhK1M26K5wE09Ba7NVfBT7RT7xShAJw+3zgatTzkFQrDw
+         UV/kNL+PQ6sA54NBrL4ai/DWXNDhLaygjUNZUwMq2QOIDQBBL0UhwoWnFCwwdQxFHqYb
+         PRsHaGRtM2YsLAGE9Nu9FgwV3pjy/OR7UgN7+zHNMpQX0jptv7DfILWHugGPNYH9UKvi
+         m7jQ==
+X-Gm-Message-State: AOAM533VFoNjFktYCZPzE4SxtKlwvs91N80QIEe39UuqDgNmQ2BaWI0h
+        vOfTKFa+MCq9jeTizScMg1s=
+X-Google-Smtp-Source: ABdhPJzvafk1T1OUqBxHnB53261+ZqfPQG+SyFnzkux6s+4h35+3vQj53k6oFQCsvq83Ui9dpOXg2w==
+X-Received: by 2002:a05:620a:458c:: with SMTP id bp12mr3572279qkb.175.1642427046452;
+        Mon, 17 Jan 2022 05:44:06 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s1sm9124073qtw.25.2022.01.17.05.43.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 05:44:05 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: zhang.yunkai@zte.com.cn
+To:     mhiramat@kernel.org
+Cc:     viro@zeniv.linux.org.uk, keescook@chromium.org,
+        samitolvanen@google.com, ojeda@kernel.org, johan@kernel.org,
+        bhelgaas@google.com, elver@google.com, masahiroy@kernel.org,
+        zhang.yunkai@zte.com.cn, axboe@kernel.dk, vgoyal@redhat.com,
+        jack@suse.cz, leon@kernel.org, akpm@linux-foundation.org,
+        rppt@kernel.org, linux@rasmusvillemoes.dk,
+        palmerdabbelt@google.com, f.fainelli@gmail.com,
+        wangkefeng.wang@huawei.com, rostedt@goodmis.org,
+        ahalaney@redhat.com, valentin.schneider@arm.com,
+        peterz@infradead.org, geert@linux-m68k.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/2] init/initramfs.c: make initramfs support pivot_root
+Date:   Mon, 17 Jan 2022 13:43:50 +0000
+Message-Id: <20220117134352.866706-1-zhang.yunkai@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220107181723.54392-1-paul@crapouillou.net> <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
-In-Reply-To: <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 Jan 2022 14:37:45 +0100
-Message-ID: <CAJZ5v0htDq+qFhEoV+PLQ9_pOy_xa7+rMoaGtqK7QpEbpUDA+Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
 
-On Sun, Jan 16, 2022 at 1:05 PM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Hi Rafael,
->
-> Could patches [1/6] and [2/6] make it to 5.17-rc1, or at least -rc2?
+As Luis Chamberlain suggested, I split the patch:
+[init/initramfs.c: make initramfs support pivot_root]
+(https://lore.kernel.org/linux-fsdevel/20210520154244.20209-1-dong.menglong@zte.com.cn/)
+into three.
 
-Yes.  I'm going to send a PR with the whole series later today.
+The goal of the series patches is to make pivot_root() support initramfs.
 
-> I'm afraid that if these two have to wait for the 5.18 cycle, then I'll
-> have more drivers to fix later.
->
-> Should I add a Fixes tag maybe?
+In the first patch, I introduce the function ramdisk_exec_exist(), which
+is used to check the exist of 'ramdisk_execute_command' in LOOKUP_DOWN
+lookup mode.
 
-No need, thanks!
+In the second patch, I create a second mount, which is called
+'user root', and make it become the root. Therefore, the root has a
+parent mount, and it can be umounted or pivot_root.
 
-> Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil
-> <paul@crapouillou.net> a écrit :
-> > Hi,
-> >
-> > A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros that
-> > were introduced recently.
-> >
-> > Changes since V2:
-> > * [1/6]: - Keep UNIVERSAL_DEV_PM_OPS() macro deprecated
-> >          - Rework commit message
-> > * [3/6]: - Reorder the code to have non-private macros together in the
-> >            file
-> >        - Add comment about the necesity to use the new export macro
-> >          when the dev_pm_ops has to be exported
-> > * [5/6]: Add comment about the necesity to use the new export macro
-> >          when the dev_pm_ops has to be exported
-> >
-> > Cheers,
-> > -Paul
-> >
-> > Paul Cercueil (6):
-> >   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
-> >   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
-> >   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
-> >   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
-> >   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
-> >   iio: pressure: bmp280: Use new PM macros
-> >
-> >  drivers/iio/pressure/bmp280-core.c | 11 ++----
-> >  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
-> >  drivers/iio/pressure/bmp280-spi.c  |  2 +-
-> >  drivers/mmc/host/jz4740_mmc.c      |  4 +--
-> >  drivers/mmc/host/mxcmmc.c          |  2 +-
-> >  include/linux/pm.h                 | 55
-> > ++++++++++++++++++++++--------
-> >  include/linux/pm_runtime.h         | 24 +++++++++++++
-> >  7 files changed, 71 insertions(+), 29 deletions(-)
-> >
-> > --
-> > 2.34.1
-> >
->
->
+In the third patch, I fix rootfs_fs_type with ramfs, as it is not used
+directly any more, and it make no sense to switch it between ramfs and
+tmpfs, just fix it with ramfs to simplify the code.
+
+Changes since V6:
+
+Fix some bugs by Zhang Yunkai.
+
+
+Changes since V5:
+
+Remove the third patch and make it combined with the second one.
+
+
+Changes since V4:                                                                                                                                                     
+                                                                                                                                                                      
+Do some more code cleanup for the second patch, include:                                                                                                              
+- move 'ramdisk_exec_exist()' to 'init.h'                                                                                                                             
+- remove unnecessary struct 'fs_rootfs_root'                                                                                                                          
+- introduce 'revert_mount_rootfs()'                                                                                                                                   
+- [...]                                                                                                                                                               
+
+
+Changes since V3:
+
+Do a code cleanup for the second patch, as Christian Brauner suggested:
+- remove the concept 'user root', which seems not suitable.
+- introduce inline function 'check_tmpfs_enabled()' to avoid duplicated
+  code.
+- rename function 'mount_user_root' to 'prepare_mount_rootfs'
+- rename function 'end_mount_user_root' to 'finish_mount_rootfs'
+- join 'init_user_rootfs()' with 'prepare_mount_rootfs()'
+
+Changes since V2:
+
+In the first patch, I use vfs_path_lookup() in init_eaccess() to make the
+path lookup follow the mount on '/'. After this, the problem reported by
+Masami Hiramatsu is solved. Thanks for your report :/
+
+
+Changes since V1:
+
+In the first patch, I add the flag LOOKUP_DOWN to init_eaccess(), to make
+it support the check of filesystem mounted on '/'.
+
+In the second patch, I control 'user root' with kconfig option
+'CONFIG_INITRAMFS_USER_ROOT', and add some comments, as Luis Chamberlain
+suggested.
+
+In the third patch, I make 'rootfs_fs_type' in control of
+'CONFIG_INITRAMFS_USER_ROOT'.
+
+
+Zhang Yunkai (2):
+  init/main.c: introduce function ramdisk_exec_exist()
+  init/do_mounts.c: create second mount for initramfs
+
+ fs/init.c            | 11 +++++++++--
+ include/linux/init.h |  1 +
+ init/do_mounts.c     | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ init/do_mounts.h     | 17 ++++++++++++++++-
+ init/initramfs.c     | 12 +++++++++++-
+ init/main.c          |  7 ++++++-
+ usr/Kconfig          | 10 ++++++++++
+ 7 files changed, 98 insertions(+), 5 deletions(-)
+
+-- 
+2.25.1
+

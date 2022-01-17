@@ -2,79 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57790490064
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC946490068
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236884AbiAQCz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbiAQCz1 (ORCPT
+        id S236895AbiAQCzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:55:44 -0500
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:40301 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232541AbiAQCzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:55:27 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E99C061574;
-        Sun, 16 Jan 2022 18:55:27 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so9766941pjl.0;
-        Sun, 16 Jan 2022 18:55:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TC/ZT9U+TsRTqvL1Tb9mnrdS2C63NBDexd+hsYqZ5YA=;
-        b=ioltH1Ov2iDS+zfilvwI9UGF/CcMMagRNRziEiYf2LDCpGiJQ5VKUVsRKGbDL57Ian
-         qV7rRvMH6jMd6xxyawKRu8OEhYYK+u1ryc19EBCI4k4+3VWPGLxhCQN55lY/QnMJugLo
-         PEY+EJKkFtlWKdemG4U3XYmDnUb8K3GigGkkVrHATN6McN6YEYpHbwsBp8WoUs+yW/MV
-         LNMk9YDZfGJ5YXB0W9hSPadI23jKwX2dTBIa7PITQW3ocP0ZoaADw3aHlajQA/DdE8sr
-         vHMXqTlkZSHrFBN2aHbHP03zDZmRT23xeaCusaHDFUVxSHgo4t18fgvNCjft6DaQLLue
-         7euQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TC/ZT9U+TsRTqvL1Tb9mnrdS2C63NBDexd+hsYqZ5YA=;
-        b=S9zwKH+Yd9sXbHmW0BD1+BCB+aXCbXmghiYerqKZsFSciH0jhKWRu9NFo/tePS6o7m
-         5Og7Jp2lOj3j0nFc5zMrpfFgpdNVABJGzMFE9WfiUKjR8vKF9WX/48VKD3TIuA8Cocvy
-         VdkJrrHFo3Dmxri6aP3n+GS06shYzwe3TdFbKiuHV+Y3ACXo+2FwwlYYlVmq7adIEfun
-         dS6rhuRM7kYarWHb6YgGjiH5MANwgLO3+UibVu/jH39dWrJlJd7e4t4136fZOaG3nWfU
-         wzf7AyFzUiYZ5MDZPeybUyO8QkOeHpW3If7EQbOaVpxAM26KIVjEGPh8wVBAENhRRjVn
-         KBmg==
-X-Gm-Message-State: AOAM531DPPNCrumWg7g1j7dGWXt25x8ehpLRgfYNVlUpyxG/ETWfhbWh
-        NHFfdJsZgCEB/8LRBHEW5/U=
-X-Google-Smtp-Source: ABdhPJxX/DmQygLiFOoAZgI7NcB5iJLAGqce8UZtJc2Um6HmytK1FcZF0sGb0BRyMsGrnTTICGFByg==
-X-Received: by 2002:a17:90b:4012:: with SMTP id ie18mr22834074pjb.43.1642388126918;
-        Sun, 16 Jan 2022 18:55:26 -0800 (PST)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id t3sm12457550pfj.137.2022.01.16.18.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 18:55:26 -0800 (PST)
-Message-ID: <ed1dc51a-8dfb-1179-3200-13669a25c845@gmail.com>
-Date:   Sun, 16 Jan 2022 18:55:25 -0800
+        Sun, 16 Jan 2022 21:55:42 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id C75AE5C0178;
+        Sun, 16 Jan 2022 21:55:41 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 16 Jan 2022 21:55:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=
+        message-id:subject:from:to:cc:date:in-reply-to:references
+        :content-type:mime-version:content-transfer-encoding; s=fm2; bh=
+        E9QgnAUv2s26J9MTI8ndOrZNGiuEedtyCcEYZbzeGJo=; b=NwRb8bdJdaiTQKGy
+        GJ2BrkhunJl1KtrPlditG7Zri29Tr+TNG8U4fXU609URd2NGKJDu35bHrhRBMI0k
+        8mD773leNTSuv1LUW+UcQeitZQmqOj0RFUIMNmJRMsSrw/fFiptHcc/MwVrVIdj1
+        0TQm9kZLgWY/EnBlSGXS3OZ1xfEbNt9SVLToSjgXNaGbGpIii6RTU4T4iztQvj5O
+        UCOiHARXDdcaogcTMNoAcXpw/EWa+IFzZVnykQAw0Tm//JIEbtkxnAJCsQ/DR4mK
+        56/LvDklAqfmZmufNTkn8gnA8GPAUNPpHkz7OUEYtkHj93NAtdRenB0pVDom2sye
+        ZR+wuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=E9QgnAUv2s26J9MTI8ndOrZNGiuEedtyCcEYZbzeG
+        Jo=; b=YviPgv1/ZewuNWQT2Id+prNM1DYyFI3Xx8mv5y8zuyGIFulN+xV5xg/KC
+        tazwKTGtV0Bb5MWYdxOnm/aZt6PGMT5YvNKkzB/9l0GZBVYiclKNqokKlvLCOrgb
+        fsXQ1H2mJqwkAP79HLjgie2btWDQoyVacPJAEL16mw/qDHsKu/LL39iq+GqE/xXN
+        tmXvS4+k6aNt/IoiOlqVwX9Hh3ZyS+ZgMrR54fl7nD+zb14QnmlFXQDmYdrfxfsN
+        Qjsbk9PPOs0WlJ0QxykCQ6IzBxGX3tcF73Svorh7VOL8bzFbN7Bwf7HDJWFGAB59
+        QLB1NsqjMsbeiOP1WUDslwpcKKiMw==
+X-ME-Sender: <xms:rNrkYYE0HYrvUh-zueIxA3z0Hr19UMvzO9sz_fGsKWuOmh81A3CyuQ>
+    <xme:rNrkYRVdfZhKm0D8QXdo92wkJm-1cfpV08RJwFNsayTUgzuK9F00I3FcUBYCNzFHk
+    BpbcxTix6Ze>
+X-ME-Received: <xmr:rNrkYSLYvYtY3T9HjPL504xEiIKuGnSZNvlkg9oVfEB9JH1Sm5xYdMYFobLoQv43bLSYgCThJXTfdJlA8D3twZmVihOr6-2BilkN0ovlez0N5OYBywMYDg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtgdehfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkuffhvfffjghftggfggfgsehtkeertddtreejnecuhfhrohhmpefkrghnucfm
+    vghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnhepgf
+    elleekteehleegheeujeeuudfhueffgfelhefgvedthefhhffhhfdtudfgfeehnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnhesth
+    hhvghmrgifrdhnvght
+X-ME-Proxy: <xmx:rNrkYaH-PhDhLPg8DqKK9gORapF0NpMqKWfvc7of-k6eEkRlUc7wcA>
+    <xmx:rNrkYeXURhqG7mqbrqYbahDIvQU2CO8bOgeXedvI3LmEu7V0RhvPtA>
+    <xmx:rNrkYdP_cC3xu4c2DHBKpNt1Kf_v5c8_8OFQFEMzcc3nOLEQ-zZL9w>
+    <xmx:rdrkYQK8tCH2y3tmTRMY0L5SlRhaRM7YwMuO6UVwiFMR32ZsEZNw4A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 16 Jan 2022 21:55:37 -0500 (EST)
+Message-ID: <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
+Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
+From:   Ian Kent <raven@themaw.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Brian Foster <bfoster@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>
+Date:   Mon, 17 Jan 2022 10:55:32 +0800
+In-Reply-To: <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
+         <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
- noneexisting handle
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220116012627.2031-1-tstruk@gmail.com>
- <20220116012627.2031-2-tstruk@gmail.com> <YeQs7Fy5NaK6m6Ar@iki.fi>
- <YeR6Z9a4Z3Xz79Tp@iki.fi> <070044a5-5468-1095-334f-67cf98eb30b3@gmail.com>
- <YeTKG3qPxm2DJGCN@iki.fi>
-From:   Tadeusz Struk <tstruk@gmail.com>
-In-Reply-To: <YeTKG3qPxm2DJGCN@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/22 17:44, Jarkko Sakkinen wrote:
-> NP, Both are applied now.
+On Sat, 2022-01-15 at 06:38 +0000, Al Viro wrote:
+> On Mon, Jan 10, 2022 at 05:11:31PM +0800, Ian Kent wrote:
+> > When following a trailing symlink in rcu-walk mode it's possible
+> > for
+> > the dentry to become invalid between the last dentry seq lock check
+> > and getting the link (eg. an unlink) leading to a backtrace similar
+> > to this:
+> > 
+> > crash> bt
+> > PID: 10964  TASK: ffff951c8aa92f80  CPU: 3   COMMAND: "TaniumCX"
+> > …
+> >  #7 [ffffae44d0a6fbe0] page_fault at ffffffff8d6010fe
+> >     [exception RIP: unknown or invalid address]
+> >     RIP: 0000000000000000  RSP: ffffae44d0a6fc90  RFLAGS: 00010246
+> >     RAX: ffffffff8da3cc80  RBX: ffffae44d0a6fd30  RCX:
+> > 0000000000000000
+> >     RDX: ffffae44d0a6fd98  RSI: ffff951aa9af3008  RDI:
+> > 0000000000000000
+> >     RBP: 0000000000000000   R8: ffffae44d0a6fb94   R9:
+> > 0000000000000000
+> >     R10: ffff951c95d8c318  R11: 0000000000080000  R12:
+> > ffffae44d0a6fd98
+> >     R13: ffff951aa9af3008  R14: ffff951c8c9eb840  R15:
+> > 0000000000000000
+> >     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+> >  #8 [ffffae44d0a6fc90] trailing_symlink at ffffffff8cf24e61
+> >  #9 [ffffae44d0a6fcc8] path_lookupat at ffffffff8cf261d1
+> > #10 [ffffae44d0a6fd28] filename_lookup at ffffffff8cf2a700
+> > #11 [ffffae44d0a6fe40] vfs_statx at ffffffff8cf1dbc4
+> > #12 [ffffae44d0a6fe98] __do_sys_newstat at ffffffff8cf1e1f9
+> > #13 [ffffae44d0a6ff38] do_syscall_64 at ffffffff8cc0420b
+> > 
+> > Most of the time this is not a problem because the inode is
+> > unchanged
+> > while the rcu read lock is held.
+> > 
+> > But xfs can re-use inodes which can result in the inode -
+> > >get_link()
+> > method becoming invalid (or NULL).
+> 
+> Without an RCU delay?  Then we have much worse problems...
 
-Looking at
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/
-I can see only the 2/2 selftest applied.
+Sorry for the delay.
+
+That was a problem that was discussed at length with the original post
+of this patch that included a patch for this too (misguided though it
+was).
+
+That discussion resulted in Darrick merging the problem xfs inline
+symlink handling with the xfs normal symlink handling.
+
+Another problem with these inline syslinks was they would hand a
+pointer to internal xfs storage to the VFS. Darrick's change
+allocates and copies the link then hands it to the VFS to free
+after use. And since there's an allocation in the symlink handler
+the rcu-walk case returns -ECHILD (on passed NULL dentry) so the
+VFS will call unlazy before that next call which I think is itself
+enough to resolve this problem.
+
+The only thing I think might be questionable is the VFS copy of the
+inode pointer but I think the inode is rcu freed so it will be
+around and the seq count will have changed so I think it should be
+ok.
+
+If I'm missing something please say so, ;)
+
+Darrick's patch is (was last I looked) in his xfs-next tree.
+
+Ian
+
+

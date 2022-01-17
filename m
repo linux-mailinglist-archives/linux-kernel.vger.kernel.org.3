@@ -2,174 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9C6490F42
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6234490F51
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242721AbiAQRSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:18:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:33262 "EHLO foss.arm.com"
+        id S238726AbiAQRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:21:33 -0500
+Received: from mout.gmx.net ([212.227.15.19]:49061 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243001AbiAQRQv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:16:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA7F16D;
-        Mon, 17 Jan 2022 09:16:49 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC2943F766;
-        Mon, 17 Jan 2022 09:16:48 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Yihao Wu <wuyihao@linux.alibaba.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Shanpei Chen <shanpeic@linux.alibaba.com>,
-        =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/fair: Again ignore percpu threads for imbalance pulls
-In-Reply-To: <5f8497cd-aeaf-906d-a2d8-2e0a752fed4b@linux.alibaba.com>
-References: <20211211094808.109295-1-wuyihao@linux.alibaba.com> <87k0g48kyp.mognet@arm.com> <5f8497cd-aeaf-906d-a2d8-2e0a752fed4b@linux.alibaba.com>
-Date:   Mon, 17 Jan 2022 17:16:42 +0000
-Message-ID: <87ee56705h.mognet@arm.com>
+        id S236774AbiAQRUf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:20:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642440022;
+        bh=Oe482/0i/WLrNkCXVOSQLDJo+BYQo13yR5t/lqWrnFY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=hhQgz5JnVrEy6KkiPAOQ4XU4369t4ecgVSovc2DuarSXYrJwOLohxakWYQoa9MyAO
+         7UMGGbTw/k1PnrWUBKenVa2awlD8UpV9kVP5vPREy7UvtQLzP/PvJRPKkT3MEcGcK6
+         L20gTP/wOT5RA2lb0Va1WkPNKQW4lkhBx9qUx4ss=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4QsO-1m9G7c11GA-011TYV; Mon, 17
+ Jan 2022 18:20:22 +0100
+Message-ID: <cbe8641e-9358-2ea6-235f-bd837171eaf0@gmx.de>
+Date:   Mon, 17 Jan 2022 18:19:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+ <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
+ <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
+ <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
+ <CAKMK7uECQU2ALkLHuFfPCjDcH456R6yJ4N_yKbHJ6PiFZ6fiow@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAKMK7uECQU2ALkLHuFfPCjDcH456R6yJ4N_yKbHJ6PiFZ6fiow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CwGx+k2vKlIe81+Xy61ZTTZRrhgIedfMmfUFL2qQ7R0sD1+/wnC
+ ah3MeIxVHGzgSCh8OpE5dUgC6K7/+7ToA7j98VctdiB/D8IB0ayzF/U2Ct4r6MQAarkjhiu
+ SbPsDSrdQUrmpcvGfjpt0n7Cl3zZC1v/JTRGK3Njn9RBrrm95kWqDkQZwMF94y1FE3j3Nr5
+ kgZBeadDnK1dAcjHQRoFQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hCwKHzwCHog=:xmZuXJQ5jSJYoM2b5+kIUO
+ 97PPzM+IuZ6++TkQI3+ctf0LqEkIJG3Lm05TTk/pl7pKhpChd2zKwgsD6OOdBQ9tTpznE+nXw
+ AvKGH0EjE0TUMPPf63ZbOJlzqsu4hZw+zz37UdHQu6XvH1dVH7Avpc5PO8+nmTvsLYmuI0JIo
+ yKxkJAP+ai5xWRM4RxW1tQKXt85YWTwS5F6Z64ryVsMOCACtZ/bfycVOdnxHPraLD3Jf/Z4F+
+ aA6G8DjENyB8JSpbc6Zfcepp1mwHNsY2t/P1KdXmhV9hBoSpYu/f4tWzmaiHxBVp+fjf5B0/h
+ BkfBuBMRHFR8B5QUzNNP9Lxs40tc+Ke6PcJ3K47hNBvHgebaAZsOPEnJA0dqW3yGHL+tYpL+2
+ 9Y3VZaA6PCizAZ+S9SIIZA7pkd08SRSZDq/kfYs/HTWAzLkm/L2my8oJh0f98FH/TZibZJZgR
+ IcVd+lVque44QxqpLJKOSRfdT5eZFPCcN18FKzdOUTs2zA57gmOep+mMia7T4L+kH8dFtSbju
+ 8qfhQFyRHLeym94vCWRV+WT6L5UK3UBwmNDs7gBGub9U6jv1ZuAq5Vq4tXS8AiGWB/8D/M6C1
+ hlZUy1FPwl5km0FtDuh608N+7kfuNAU7commey2WD8M/Ft2bzgwJ8RIEYTv9sOgNuSTwguUvC
+ d12vjZbNx3pCiLWPoYFXlnyOv2j+vhFVsvZcVyJE0mV4wgXHRBrLbeFFYL7LGe1kpYvAD7HTZ
+ AHRm7a5bGY4MiqLeujdZMFZWYbJQ/j+qZtbCI3jbOcTWC2+9/7mext0tlXp7xc7xfrWViqUjc
+ rI5IlttD9+hlFDeVxObViKTzUzoJLuyqnPqwx+AYFb8bYzDY4z2YFlv7iGISwztIw6ZmRPv4u
+ fW9tEujxKFaJjWfrZcqYwe/cmG2Mhn2sBjmxEpMsbwIhgqLNMTRNksQ10xYeYenWl7hLMtKF/
+ iQTfVBuQLqs3Y96Htrxs3NrtsTWqEqtFQUyQ0p8fvYBV6+mXHhzQsWmjMc5wwYgubU9k4GNVv
+ 4dd//vybGO+yMvXoXqosMAbOPGcSI5YgKvggSrta+WK0LRyn5TdKEdk+c0Aqg3ukl18e+npcM
+ Syw2gqkHlkJ0F8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/22 22:50, Yihao Wu wrote:
-> Thanks a lot for the help, Valentin and Peter!
->
-> On 2021/12/17 2:26am, Valentin Schneider wrote:
->> On 11/12/21 17:48, Yihao Wu wrote:
->>> commit 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance
->>> pulls") was meant to fix a performance issue, when load balance tries to
->>> migrate pinned kernel threads at MC domain level. This was destined to
->>> fail.
->> 
->>> After it fails, it further makes wakeup balance at NUMA domain level
->>> messed up. The most severe case that I noticed and frequently occurs:
->>>      |sum_nr_running(node1) - sum_nr_running(node2)| > 100
+On 1/17/22 17:38, Daniel Vetter wrote:
+> On Mon, Jan 17, 2022 at 5:22 PM Helge Deller <deller@gmx.de> wrote:
+>>
+>> On 1/17/22 16:58, Thomas Zimmermann wrote:
+>>> Hi
 >>>
->> 
->> Wakeup balance (aka find_idlest_cpu()) is different from periodic load
->> balance (aka load_balance()) and doesn't use can_migrate_task(), so the
->> incriminated commit shouldn't have impacted it (at least not in obvious
->> ways...). Do you have any more details on that issue
->
-> The original bugfix concerns only about load balance. While I found wake
-> up balance is impacted too, after I observed regression in lmbench3 test
-> suite. This is how it's impacted:
->
-> - Periodic load balance
-> - kthread_is_per_cpu? No
-> - env->flags |= LBF_SOME_PINNED
-> - sd_parent..imbalance being set to 1 because of LBF_SOME_PINNED
->
-> So far exactly the same as what Chandrasekhar describes in 2f5f4cce496e.
-> Then imbalance connects periodic and wakeup balance.
->
-> - Wakeup balance(find_idlest_group)
-> - update_sg_wakeup_stats classifies local_sgs as group_imbalanced
-> - find_idlest_group chooses another NUMA node
->
-> wakeup balance keeps doing this until another NUMA node becomes so busy.
-> And another periodic load balance just shifts it around, makeing the 
-> previously overloaded node completely idle now.
->
-
-Oooh, right, I came to the same conclusion when I got that stress-ng
-regression report back then:
-
-https://lore.kernel.org/all/871rajkfkn.mognet@arm.com/
-
-I pretty much gave up on that as the regression we caused by removing an
-obscure/accidental balance which I couldn't properly codify. I can give it
-another shot, but AFAICT that only affects fork/exec heavy workloads (that
--13% was on something doing almost only forks) which is an odd case to
-support.
-
-> (Thanks to the great schedviz tool, I observed that all workloads as a 
-> whole, is migrated between the two NUMA nodes in a ping-pong pattern, 
-> and with a period around 3ms)
->
-> The reason wake up balance suffers more is, in fork+exit test case, 
-> wakeup balance happens with much higher frequency. It exists in real 
-> world applications too I believe.
->
->> 
->>> However the original bugfix failed, because it covers only case 1) below.
->>>    1) Created by create_kthread
->>>    2) Created by kernel_thread
->>> No kthread is assigned to task_struct in case 2 (Please refer to comments
->>> in free_kthread_struct) so it simply won't work.
+>>> Am 17.01.22 um 16:42 schrieb Helge Deller:
+>>>> [...]
+>>>>>> c) reintroduce the state where fbcon is fast on fbdev. This is impo=
+rtant for non-DRM machines,
+>>>>>>     either when run on native hardware or in an emulator.
+>>>>>> d) not break DRM development
+>>>>>>
+>>>>>> Especially regarding c) I complained in [1] and got no feedback. I =
+really would like to
+>>>>>> understand where the actual problems were and what's necessary to f=
+ix them.
+>>>>>>
+>>>>>> Helge
+>>>>>>
+>>>>>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@=
+gmx.de
 >>>
->>> The easist way to cover both cases is to check nr_cpus_allowed, just as
->>> discussed in the mailing list of the v1 version of the original fix.
->>>
->>> * lmbench3.lat_proc -P 104 fork (2 NUMA, and 26 cores, 2 threads)
->>>
->> 
->> Reasoning about "proper" pcpu kthreads was simpler since they are static,
->> see 3a7956e25e1d ("kthread: Fix PF_KTHREAD vs to_kthread() race")
->> 
-> Get it. Thanks.
+>>> Seems like few people read linux-fbdev these days.
+>>> I suggest to partly revert the patch to the point were performance
+>>> gets better again.
+>> Yes, *please*!
+>> That would solve my biggest concern.
+>>
+>> As far as I can see that's only 2 commits to be reverted:
+>> b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, pa=
+rt 1 (from TODO list)"
+>> 39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
+>>
+>> I think both were not related to any 0-day bug reports (but again, I mi=
+ght be wrong).
 >
->>>                           w/out patch                 w/ patch
->>> fork+exit latency            1660 ms                  1520 ms (   8.4%)
->>>
->>> Fixes: 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance pulls")
->>> Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
->>> ---
->>>   kernel/kthread.c | 6 +-----
->>>   1 file changed, 1 insertion(+), 5 deletions(-)
->>>
->>> diff --git a/kernel/kthread.c b/kernel/kthread.c
->>> index 4a4d7092a2d8..cb05d3ff2de4 100644
->>> --- a/kernel/kthread.c
->>> +++ b/kernel/kthread.c
->>> @@ -543,11 +543,7 @@ void kthread_set_per_cpu(struct task_struct *k, int cpu)
->>>
->>>   bool kthread_is_per_cpu(struct task_struct *p)
->>>   {
->>> -	struct kthread *kthread = __to_kthread(p);
->>> -	if (!kthread)
->>> -		return false;
->>> -
->>> -	return test_bit(KTHREAD_IS_PER_CPU, &kthread->flags);
->>> +	return (p->flags & PF_KTHREAD) && p->nr_cpus_allowed == 1;
->>>   }
->> 
->> As Peter said, this is going to cause issues. If you look at
->> kthread_set_per_cpu(), we also store a CPU value which we expect to be
->> valid when kthread_is_per_cpu(), which that change is breaking.
->> 
->> AIUI what you want to patch is the actual usage in can_migrate_task()
->> 
->
-> Get it. Some may want a consistent view of kthread_is_per_cpu, 
-> kthread->cpu, and KTHREAD_IS_PER_CPU.
->
-> Are you suggesting to patch only can_migrate_task to check 
-> nr_cpus_allowed?
+> syzbot, not 0day, and there's like a sea of them unfortunately.
+> There's all kinds of funny races going on when resizing consoles (due
 
-Yes
+The patches above are not about resizing consoles.
+Even if a resize should happen in between, it's better to introduce some k=
+ind of big lock
+instead of completely disable acceleration for est. 58 other graphic card =
+drivers and slow them
+down that much that it renders them to become unusable.
 
-> Wouldn't it be confusing if it uses an alternative way 
-> to tell if p is a per-cpu kthread?
->
+> to bad locking design) which then blow up, especially in less tested
+> code. For the sw rendering we've merged a bunch of patches, but you
+> pretty much have to assume that it's all fairly broken code until it's
+> rewritten and fully covered with tests. Shadowfb + memcpy is probably
+> much faster for restoring scrolling performance than anything else
+> really.
 
-Well then it wouldn't catch just per-CPU kthreads, but rather any pinned
-task (kernel or otherwise). But then you have to check/test if that's a
-sane thing to :)
+That's maybe true for fast new machines with fast PCI busses.
+But have you measured that on other/older hardware too?
+There is a good reason why 2D acceleration was introduced.
 
-> I haven't a better solution though. :(
->
->
-> Thanks,
-> Yihao Wu
->
->>>
->>>   /**
->>> --
->>> 2.32.0.604.gb1f3e1269
+Helge

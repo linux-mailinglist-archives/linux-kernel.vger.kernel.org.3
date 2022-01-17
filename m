@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870C748FFE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA3348FFE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236464AbiAQBQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 20:16:34 -0500
-Received: from mga05.intel.com ([192.55.52.43]:21400 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233954AbiAQBQd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 20:16:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642382193; x=1673918193;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=hoK3fTeWhCyqNmt3Ie1Ok7THuuhISXUqxwf6Q5YCOKQ=;
-  b=E/i35cycFsYq3tEv8+dsFSkBWCY31gArzJ3V+y5mwvV1vtZ5dVilUwkt
-   2Ix6YiYPxDts3nLhAFuxEWfi6viMb7a0LBydm0G2BVcA7swFyxJ/0N6mR
-   mmBtchOkdkRvPurgPD6Ju1tJGy8+orO3D+AZaeTW1Z7P4MSnyPhKKe9wT
-   QdTb+4Tkqo4QVPHktFc/KjhHYDz9zE2lw1D99LmF7O1QogL9UfEPboRit
-   ZujYEV3VJpakdb4GmOjVTc5o4Xiab0+PP8Y56nYjwP6wvze6bjbi80aRt
-   E6ypClONukvP9IahrWS5PQq1c+FITlusldErYzJD8Thw+l/9f8dXD/EYr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="330879763"
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="330879763"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 17:16:33 -0800
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="531133039"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.175.229]) ([10.249.175.229])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 17:16:30 -0800
-Subject: Re: [kbuild-all] Re: drivers/firmware/efi/sysfb_efi.c:190:35:
- warning: unused variable 'efifb_dmi_system_table'
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Herrmann <dh.herrmann@gmail.com>
-References: <202201041920.mOzzco4D-lkp@intel.com>
- <f9336852-d741-5483-a6f5-3cd05b233022@infradead.org>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <3731657b-a4d6-b7e3-007d-76e70a01628a@intel.com>
-Date:   Mon, 17 Jan 2022 09:16:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <f9336852-d741-5483-a6f5-3cd05b233022@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S236680AbiAQBXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 20:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233969AbiAQBXX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 20:23:23 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23F7C06161C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:23:22 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id g7-20020a25bdc7000000b00611c616bc76so21063357ybk.5
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:23:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=zGaYVdXkM9nXVR2aJfZ0FkDzKWqSmGNmNFUOz1dK4BY=;
+        b=ldQDPwl14BUn1yS+wNp5UbaiDzPTZUwPo5iZXGKfWSVAtJ8uaOev4GiH6cVJnaJYon
+         aC+ZSaTQFULZSvCF5ozqRuSj67k2gY3zZ8vDnYzugffs7LHZVBH9He0UBLIxH5Ul3P2T
+         WSqVzd23hf8+j3E8lG6cjSfoDzGOtFZB4ks0LbKwfICIwkKOCNThD3/7kOniLDDKc2DX
+         Xg9U0cGcNvSFqWIPBzebB6k5ueCINpUgygkNnxQjZ0d2b/bKbWx19Ga8GuW8o/0J68J0
+         PwdAxW9Sxp5i1HUmZaEemKfJJAhLvjOD/EB2HI9xu6L4j8sXiRmaECRQVFKS6vHmq9x+
+         tAgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=zGaYVdXkM9nXVR2aJfZ0FkDzKWqSmGNmNFUOz1dK4BY=;
+        b=BeunAc9PyhD3giWI7f9O3saOMxsaUyL5P6j47dwAKPZZ6E13WRBWGFpq2m0wwVLg23
+         569xbiZWDpibKlQMpwsnSjRi5hzvZ2ZuzzEl0VTKG42OCY9S/hk9lfO3Cr55isWjGjrX
+         h7YQJHjzgIt6Iv3JcEXWKVFl/nnF2zP5kWjqDwuUN9yJAK/SRZXRJYZ0UmU69phx1Xa2
+         9GQABvs9B6QlrtALZy3A174NfRKAzaisKOBJEnKR3rA3Ck2iQE1YmZtyJt07qa1VAhQt
+         KxoRI1XWyfF7tANVbFzW0Lb2noaX48JsBTaTmHFLXVO/cHth/bebpWqnshJ62nFJg9K0
+         +DiA==
+X-Gm-Message-State: AOAM5321hTFHI7A1SUKDr/TfyQppnj3n6MyEloigEHCKKIdgWYh1/MEu
+        pZh9x1zYTBX/ifGOks2tOokNJ7gZEg8=
+X-Google-Smtp-Source: ABdhPJyPoKDIHPPSJ5nfJiL8DU2Iaz9WnnE3eE9ejq5NYFPHpMerXqKF3PDFdMaN8faC2LZUgz609t8D/Nw=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:d5fd:2339:f71:ffa3])
+ (user=surenb job=sendgmr) by 2002:a25:fd6:: with SMTP id 205mr24462734ybp.654.1642382601368;
+ Sun, 16 Jan 2022 17:23:21 -0800 (PST)
+Date:   Sun, 16 Jan 2022 17:23:17 -0800
+Message-Id: <20220117012317.21168-1-surenb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH 1/1] sysctl: Fix 'one_thousand' defined but not used warning
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     sfr@canb.auug.org.au
+Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix the following warning issued when CONFIG_PERF_EVENTS is not
+defined:
 
+kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not used [-Wunused-variable]
 
-On 1/15/2022 8:06 AM, Randy Dunlap wrote:
-> Hi lkp robot,
-> 
-> I have a metaquestion, please:
-> 
-> 
-> On 1/4/22 03:52, kernel test robot wrote:
->> Hi Randy,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
->> commit: 15d27b15de965043d6f8e23bc7f34386fcd1a772 efi: sysfb_efi: fix build when EFI is not set
+Fixes: 39c65a94cd96 ("mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ kernel/sysctl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->>
-> 
-> [snip]
-> 
-> Why is the patch committer (David Herrmann) not cc-ed on your original email?
-> (I am adding him now.)
-> 
-> bu I have seen this multiple times, where the TO: person (below) is not cc-ed
-> on the problem email.  I don't understand.
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index ef77be575d87..81a6f2d47f77 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -122,7 +122,9 @@ static unsigned long one_ul = 1;
+ static unsigned long long_max = LONG_MAX;
+ static int one_hundred = 100;
+ static int two_hundred = 200;
++#ifdef CONFIG_PERF_EVENTS
+ static int one_thousand = 1000;
++#endif
+ static int three_thousand = 3000;
+ #ifdef CONFIG_PRINTK
+ static int ten_thousand = 10000;
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-Hi Randy,
-
-The lkp robot sent the report to the people mentioned in the first bad
-commit (15d27b15de) from bisection, the below commit (2995e50627) is
-from git blame (drivers/firmware/efi/sysfb_efi.c:190), sometimes the
-commits are not the same.
-
-Best Regards,
-Rong Chen
-
-> 
->>
->> :::::: The code at line 190 was first introduced by commit
->> :::::: 2995e506276bfdc7311eb02db8b2aa1a61a4b849 x86: sysfb: move EFI quirks from efifb to sysfb
->>
->> :::::: TO: David Herrmann <dh.herrmann@gmail.com>
->> :::::: CC: H. Peter Anvin <hpa@linux.intel.com>
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
-> thanks.
-> 

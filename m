@@ -2,297 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E614E490FA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7D9490FA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbiAQRbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239334AbiAQRbi (ORCPT
+        id S235466AbiAQRcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:32:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26705 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237988AbiAQRcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:31:38 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE9CC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:31:38 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m3so46328508lfu.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:31:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QKizg9vb1bMC/Rpg8PcXzKz/r6Jw7RAb5GldlqzIDCw=;
-        b=kCOUQDHA2SRlcCSdViUg2MvHcKix52LweJCzvRNwwvpYs+sURZ5u+2Ma7tB/CZ2q2K
-         el4CNFDWY1n5/YyvAwoADNuMWgwBldq+9Wsf77OT8VVDuen3hj2J8rWeZG/NPkLHKSKZ
-         d60WP9ezAp7F6+v7do7bkLQdAFoJCoZxCLoPi845RUDK2ADA2Yyk7rgNLVXLFzFImFnX
-         WWQyWWxqsI5POGk0dBh03MPb8rwxBj3VD8LxyLKwo/9p5nhc1oYrtyMR7wuuQUHxq78C
-         b0uw9GQChDk7/Jxu8h1HsmrSV1kp/N9wy0Pid3WKlh8mkxmjd3Ul2Zl8h3QQBnEi7pNV
-         kvEw==
+        Mon, 17 Jan 2022 12:32:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642440722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=facGYaN7TmsTdJN/2dDbCbC61s3Aifzqr9lBPbfPM3U=;
+        b=cM/n2Oz/JIfWfaxEkdBcg6lkqvZ5b0ld1J9NbcwWoH+B5tGypmUyZbJSLtGBdecE2uZmkZ
+        QSgjnYvHhKGnAjtlfaM8CHpjMtffCgdC3wQ9QfGRXQiwW3il1I1cW3RRlREDPe66uhH16y
+        M0vwfVLZxta/Xiz/+E0B089QFmkZaic=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-MawdLP9nPHWGTOGxhTfmnQ-1; Mon, 17 Jan 2022 12:32:01 -0500
+X-MC-Unique: MawdLP9nPHWGTOGxhTfmnQ-1
+Received: by mail-wm1-f72.google.com with SMTP id n14-20020a7bcbce000000b003488820f0d9so277827wmi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:32:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QKizg9vb1bMC/Rpg8PcXzKz/r6Jw7RAb5GldlqzIDCw=;
-        b=5f3oMD1Fh88fQcUKEhSLL/mk/TkLxrJGPlqD7yP7TV9OmluTQ8LZw9EmOqlb5mxXcF
-         KXIP9767n1/RrCXU+/oK8zPUyllfGsvrJ7UAeyb+X4Fi9FA3Cbnmdb04nSrr0cpBaGU7
-         sYDR5a0IqMDBtPQN2Hvb7u2bLbydkmkxb7inADXi3HG5Jm2fNQ2+bDGiLR+HSQ1/aGxb
-         fvl46J2y7w4UIMR+1IRJrlNjDfKon5v0SKM+dJjH12CYcF7cNFcDtOq3oHM4awzsl7Io
-         39oVw+HIQq/ywQoa4FmpxRJtqyynt7vXz4uqTOGbUAjARMO3JHVUWQZpMW3gHWzU1/CR
-         0hVg==
-X-Gm-Message-State: AOAM530t1qWKvnklF0Jw33EH/rffUaC1EPcOPW45RlQtREl6nFmfOARV
-        E4RrrObK47S7C+1cGwS9H/+Klj4yQRuizObjX5+s6Q==
-X-Google-Smtp-Source: ABdhPJwZu5QRrrzDfxfknZjTrEEdejJ9IolyV0Um5SlAjhl5Kiyz7EXf7o0FJzz0FdXB01kk0ZsI0wHNS1MjSoFtbRc=
-X-Received: by 2002:a19:f811:: with SMTP id a17mr16941381lff.18.1642440696541;
- Mon, 17 Jan 2022 09:31:36 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=facGYaN7TmsTdJN/2dDbCbC61s3Aifzqr9lBPbfPM3U=;
+        b=VxyrPj1BA+O/o7AktX1YRJB47kTLPD78wMeVaBr9aiDDRSNv49/UWHrNccQJWr8z1h
+         nyyw6YDHoiUnvLsGXG0DyF9U6KFcf0npdQPj22UN5pAA6rDkiSMSlPmZtSj/1mvMU5ed
+         erLEE3+Ta0/ArNPO06pnnnOhd2mgB9JtzqEHJfJsN1axK/XZsxWWq5R1QanuEZ4tnBuI
+         LKlXO9VAAqk9bCB3OiBFYwLaeHRjeLxDtPdGLnt2wYtNrPJAzoUahMMk7nLNV1TbztOB
+         PLKuNP8q2ly+peGyrt4Kws7pOKTA/iS9jptPN4eNAyBY8D1j9uO2ay4HtGhwEUSczRK2
+         WidA==
+X-Gm-Message-State: AOAM533wcrBEdDI50KCwMPLIQQ/1RKe+rW7apeFwxkh29dobrUaPG61m
+        HyP1KXRV337MozuAOkKiJjjrCDWpqYmUbTgWHZJFFVt4YO29UthWg1ny423Iv/EmiHEH/s1y/oN
+        TMXrl637/2nvauBWPdyrPt5BS
+X-Received: by 2002:adf:fdce:: with SMTP id i14mr85549wrs.576.1642440720627;
+        Mon, 17 Jan 2022 09:32:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw0Q5fs7xydS2XJIbfrnGOlACwSA2+DribL1EuLT7jO9E41JhIHZo1NMUFoTPYHWcS8gVfxCg==
+X-Received: by 2002:adf:fdce:: with SMTP id i14mr85533wrs.576.1642440720414;
+        Mon, 17 Jan 2022 09:32:00 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id w7sm13761219wrv.96.2022.01.17.09.31.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 09:31:59 -0800 (PST)
+Message-ID: <301d4800-5eab-6e21-e8c1-2f87789fc4b9@redhat.com>
+Date:   Mon, 17 Jan 2022 18:31:58 +0100
 MIME-Version: 1.0
-References: <20220112161230.836326-1-vincent.donnefort@arm.com> <20220112161230.836326-3-vincent.donnefort@arm.com>
-In-Reply-To: <20220112161230.836326-3-vincent.donnefort@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 17 Jan 2022 18:31:25 +0100
-Message-ID: <CAKfTPtC2wCw4U9w=saW0dGYHfOKo42nBKU7oHcEM7KeDj7MzWA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] sched/fair: Decay task PELT values during migration
-To:     Vincent Donnefort <Vincent.Donnefort@arm.com>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Valentin.Schneider@arm.com, Morten.Rasmussen@arm.com,
-        Chris.Redpath@arm.com, qperret@google.com, Lukasz.Luba@arm.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] KVM: x86/cpuid: Clear XFD for component i if the base
+ feature is missing
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Jing Liu <jing2.liu@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220117074531.76925-1-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220117074531.76925-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 at 17:14, Vincent Donnefort
-<vincent.donnefort@arm.com> wrote:
->
-> Before being migrated to a new CPU, a task sees its PELT values
-> synchronized with rq last_update_time. Once done, that same task will also
-> have its sched_avg last_update_time reset. This means the time between
-> the migration and the last clock update (B) will not be accounted for in
-> util_avg and a discontinuity will appear. This issue is amplified by the
-> PELT clock scaling. If the clock hasn't been updated while the CPU is
-> idle, clock_pelt will not be aligned with clock_task and that time (A)
-> will be also lost.
->
->    ---------|----- A -----|-----------|------- B -----|>
->         clock_pelt   clock_task     clock            now
->
-> This is especially problematic for asymmetric CPU capacity systems which
-> need stable util_avg signals for task placement and energy estimation.
->
-> Ideally, this problem would be solved by updating the runqueue clocks
-> before the migration. But that would require taking the runqueue lock
-> which is quite expensive [1]. Instead estimate the missing time and update
-> the task util_avg with that value:
->
->   A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
->
-> Neither clock_task, clock_pelt nor clock can be accessed without the
-> runqueue lock. The new runqueue clock_pelt_lag is therefore created and
-> encode those three values.
->
->   clock_pelt_lag = clock - clock_task + clock_pelt
->
-> And we can then write the missing time as follow:
->
->   A + B = sched_clock_cpu() - clock_pelt_lag
->
-> The B. part of the missing time is however an estimation that doesn't take
-> into account IRQ and Paravirt time.
->
-> Now we have an estimation for A + B, we can create an estimator for the
-> PELT value at the time of the migration. We need for this purpose to
-> inject last_update_time which is a combination of both clock_pelt and
-> lost_idle_time. The latter is a time value which is completely lost form a
-> PELT point of view and must be ignored. And finally, we can write:
->
->   rq_clock_pelt_estimator() = last_update_time + A + B
->                             = last_update_time +
->                                    sched_clock_cpu() - clock_pelt_lag
->
-> [1] https://lore.kernel.org/all/20190709115759.10451-1-chris.redpath@arm.com/
->
-> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 06cf7620839a..11c6aeef4583 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -618,6 +618,12 @@ struct rq *task_rq_lock(struct task_struct *p, struct rq_flags *rf)
->         }
->  }
->
-> +static void update_rq_clock_pelt_lag(struct rq *rq)
-> +{
-> +       u64_u32_store(rq->clock_pelt_lag,
-> +                     rq->clock - rq->clock_task + rq->clock_pelt);
-
-This has several shortfalls:
-- have a look at cfs_rq_clock_pelt() and rq_clock_pelt(). What you
-name clock_pelt in your commit message and is used to update PELT and
-saved in se->avg.last_update_time is : rq->clock_pelt -
-rq->lost_idle_time - cfs_rq->throttled_clock_task_time
-- you are doing this whatever the state of the cpu : idle or not. But
-the clock cycles are not accounted for in the same way in both cases.
-- (B) doesn't seem to be accurate as you skip irq and steal time
-accounting and you don't apply any scale invariance if the cpu is not
-idle
-- IIUC your explanation in the commit message above, the (A) period
-seems to be a problem only when idle but you apply it unconditionally.
-If cpu is idle you can assume that clock_pelt should be equal to
-clock_task but you can't if cpu is not idle otherwise your sync will
-be inaccurate and defeat the primary goal of this patch. If your
-problem with clock_pelt is that the pending idle time is not accounted
-for when entering idle but only at the next update (update blocked
-load or wakeup of a thread). This patch below should fix this and
-remove your A.
-
-
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index e06071bf3472..855877be4dd8 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -114,6 +114,7 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
- {
-        u32 divider = ((LOAD_AVG_MAX - 1024) << SCHED_CAPACITY_SHIFT)
-- LOAD_AVG_MAX;
-        u32 util_sum = rq->cfs.avg.util_sum;
-+       u64 now = rq_clock_task(rq);
-        util_sum += rq->avg_rt.util_sum;
-        util_sum += rq->avg_dl.util_sum;
-
-@@ -127,7 +128,10 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
-         * rq's clock_task.
-         */
-        if (util_sum >= divider)
--               rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
-+               rq->lost_idle_time += now - rq->clock_pelt;
-+
-+       /* The rq is idle, we can sync to clock_task */
-+       rq->clock_pelt  = now;
- }
-
- static inline u64 rq_clock_pelt(struct rq *rq)
-
----
-
-
-> +}
+On 1/17/22 08:45, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> According to Intel extended feature disable (XFD) spec, the sub-function i
+> (i > 1) of CPUID function 0DH enumerates "details for state component i.
+> ECX[2] enumerates support for XFD support for this state component."
+> 
+> If KVM does not report F(XFD) feature (e.g. due to CONFIG_X86_64),
+> then the corresponding XFD support for any state component i
+> should also be removed. Translate this dependency into KVM terms.
+> 
+> Fixes: 690a757d610e ("kvm: x86: Add CPUID support for Intel AMX")
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>   arch/x86/kvm/cpuid.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index c55e57b30e81..e96efef4f048 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -886,6 +886,9 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>   				--array->nent;
+>   				continue;
+>   			}
 > +
->  /*
->   * RQ-clock updating methods:
->   */
-> @@ -674,6 +680,7 @@ static void update_rq_clock_task(struct rq *rq, s64 delta)
->                 update_irq_load_avg(rq, irq_delta + steal);
->  #endif
->         update_rq_clock_pelt(rq, delta);
-> +       update_rq_clock_pelt_lag(rq);
->  }
->
->  void update_rq_clock(struct rq *rq)
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 99ea9540ece4..046d5397eb8a 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6852,6 +6852,14 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->
->  static void detach_entity_cfs_rq(struct sched_entity *se);
->
-> +static u64 rq_clock_pelt_estimator(struct rq *rq, u64 last_update_time)
-> +{
-> +       u64 pelt_lag = sched_clock_cpu(cpu_of(rq)) -
-> +                      u64_u32_load(rq->clock_pelt_lag);
+> +			if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
+> +				entry->ecx &= ~BIT_ULL(2);
+>   			entry->edx = 0;
+>   		}
+>   		break;
 
-Have you evaluated the impact of calling sched_clock_cpu(cpu_of(rq))
-for a remote cpu ? especially with a huge number of migration and
-concurrent access from several cpus
+Generally this is something that is left to userspace.  Apart from the 
+usecase of "call KVM_GET_SUPPORTED_CPUID and pass it to KVM_SET_CPUID2", 
+userspace should know what any changed bits mean.
 
-> +
-> +       return last_update_time + pelt_lag;
-> +}
-> +
->  /*
->   * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
->   * cfs_rq_of(p) references at time of call are still valid and identify the
-> @@ -6859,6 +6867,9 @@ static void detach_entity_cfs_rq(struct sched_entity *se);
->   */
->  static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->  {
-> +       struct sched_entity *se = &p->se;
-> +       struct rq *rq = task_rq(p);
-> +
->         /*
->          * As blocked tasks retain absolute vruntime the migration needs to
->          * deal with this by subtracting the old and adding the new
-> @@ -6866,7 +6877,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->          * the task on the new runqueue.
->          */
->         if (READ_ONCE(p->__state) == TASK_WAKING) {
-> -               struct sched_entity *se = &p->se;
->                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
->
->                 se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-> @@ -6877,26 +6887,32 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->                  * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
->                  * rq->lock and can modify state directly.
->                  */
-> -               lockdep_assert_rq_held(task_rq(p));
-> -               detach_entity_cfs_rq(&p->se);
-> +               lockdep_assert_rq_held(rq);
-> +               detach_entity_cfs_rq(se);
->
->         } else {
-> +               u64 now;
-> +
-> +               remove_entity_load_avg(se);
-> +
->                 /*
-> -                * We are supposed to update the task to "current" time, then
-> -                * its up to date and ready to go to new CPU/cfs_rq. But we
-> -                * have difficulty in getting what current time is, so simply
-> -                * throw away the out-of-date time. This will result in the
-> -                * wakee task is less decayed, but giving the wakee more load
-> -                * sounds not bad.
-> +                * Here, the task's PELT values have been updated according to
-> +                * the current rq's clock. But if that clock hasn't been
-> +                * updated in a while, a substantial idle time will be missed,
-> +                * leading to an inflation after wake-up on the new rq.
-> +                *
-> +                * Estimate the PELT clock lag, and update sched_avg to ensure
-> +                * PELT continuity after migration.
->                  */
-> -               remove_entity_load_avg(&p->se);
-> +               now = rq_clock_pelt_estimator(rq, se->avg.last_update_time);
-> +               __update_load_avg_blocked_se(now, se);
->         }
->
->         /* Tell new CPU we are migrated */
-> -       p->se.avg.last_update_time = 0;
-> +       se->avg.last_update_time = 0;
->
->         /* We have migrated, no longer consider this task hot */
-> -       p->se.exec_start = 0;
-> +       se->exec_start = 0;
->
->         update_scan_period(p, new_cpu);
->  }
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index f1a445efdc63..fdf2a9e54c0e 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1027,8 +1027,13 @@ struct rq {
->         /* Ensure that all clocks are in the same cache line */
->         u64                     clock_task ____cacheline_aligned;
->         u64                     clock_pelt;
-> +       u64                     clock_pelt_lag;
->         unsigned long           lost_idle_time;
->
-> +#ifndef CONFIG_64BIT
-> +       u64                     clock_pelt_lag_copy;
-> +#endif
-> +
->         atomic_t                nr_iowait;
->
->  #ifdef CONFIG_SCHED_DEBUG
-> --
-> 2.25.1
->
+Paolo
+

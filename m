@@ -2,93 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC7D490197
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EA249019A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiAQFiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 00:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S232865AbiAQFkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 00:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiAQFip (ORCPT
+        with ESMTP id S232449AbiAQFkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 00:38:45 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB00BC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:38:44 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a18so60790293edj.7
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:38:44 -0800 (PST)
+        Mon, 17 Jan 2022 00:40:08 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365A9C06161C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:40:08 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id f12-20020a056902038c00b006116df1190aso30876903ybs.20
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:40:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1O8U+wUF4iGrPSEsUvPr9Y9g9nT7ZxuOwHXUzTfTnig=;
-        b=gUKhHF9sP7IwLcbDjWCXAhGnqD9tXJYiiBYhhYRsxV841C7QMjWhy6zf3Wx5BW31pw
-         gvKGdUglcUAsD+GVsno6Rl+On2LQkVodPB+4EGTYl/M/y+Az2c4g+HlS0OjOLwjGYJ0d
-         mena0IQyOaJesacPl8wfwWPX4muMIJkMIRTTU=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kHrC0ZNtdAjmUJmpQtal/sFEceDq2usB7n488HtzJyU=;
+        b=FoZScfXDQtIvSINxhwpNPqr2wc4+9o3tgZ/tO5pDjpWmrSWp42+eeYjppN+aSiNv9U
+         kCNvac2PojYKLVlQ1j1aS/lUX8C5R9b2T0ah9mMXlRWXPGSdSO4TNa8FTmHcf6L4cVVN
+         XZQ5/rzLIfYHk0Y8I8peVe9yjflucydPmjMa5wZefbcbq+IBZAEShCoMTlgXiLhTKBzH
+         UtNREaEyhOIYCzRBZOdrrMM/6qB9uUNxYik69csUd01f6LYUmYTbooF6CUm/gQ/h/fj2
+         9jEs5Oox3RLtIjxK1/Pbn3Ax3MROwHid70HBjtaWPwgHuSZstOGrLjdFdhzXuHezne7b
+         fehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1O8U+wUF4iGrPSEsUvPr9Y9g9nT7ZxuOwHXUzTfTnig=;
-        b=fQdMPnVaaEkVI4PcFxDCkGNgXWVFCO4D15mvzXcpjAj2kxbb37OnWvcnv4S1JG8+Aa
-         bSV+9BE33VXlj1ANo5oO+siga37ke7fuNMy/9GlMr1ZC7R4ycZTCQNhNvZbZnXrw96ko
-         KpCX/Cz8rBtT1x+Avfgoq6jDwTczzixUQhZEKSXe4igHIhgOMGwp30pzXTnGtNi+dT0x
-         9fztqgSH573ps3kJcSfH0L0xLhWpw1uFTfKRadBE+mBWg+sEJuyBMBIKpqXmacIa9LEC
-         VyJlkAK9QnTULOMVktTTRQh5v95iml3hMcfmwGsydvXgLzGS4kaWjIZmsV/hLM8wCeIF
-         xCQw==
-X-Gm-Message-State: AOAM533/LOvcVnL7iw/Vfo05rmL0Pwiinb8FzHyBduWfrU/EeFYQnMox
-        02l4WZ5Kuex+iSJZDD5z1P1UEfVt8Ulmhz+q
-X-Google-Smtp-Source: ABdhPJzc8+7KFZPat30qKEL8G7RGSjn0+NwwWnKR38g6vKV9oxC7wz0DfcnEuWWKRv19lInuJInUvw==
-X-Received: by 2002:a17:906:478a:: with SMTP id cw10mr15159926ejc.39.1642397923141;
-        Sun, 16 Jan 2022 21:38:43 -0800 (PST)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id eg30sm2953715edb.85.2022.01.16.21.38.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 21:38:42 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id c66so17884337wma.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:38:41 -0800 (PST)
-X-Received: by 2002:a05:6000:1787:: with SMTP id e7mr3962110wrg.281.1642397921591;
- Sun, 16 Jan 2022 21:38:41 -0800 (PST)
-MIME-Version: 1.0
-References: <YeITMG7bKozB2xVQ@bombadil.infradead.org>
-In-Reply-To: <YeITMG7bKozB2xVQ@bombadil.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 17 Jan 2022 07:38:25 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wjCajUWAZBNrQv3zrrjZBH7e7x2UrQ2n18+yk3TpGD9ag@mail.gmail.com>
-Message-ID: <CAHk-=wjCajUWAZBNrQv3zrrjZBH7e7x2UrQ2n18+yk3TpGD9ag@mail.gmail.com>
-Subject: Re: Modules updates for v5.17-rc1
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Jessica Yu <jeyu@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Yu Chen <chen.yu@easystack.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kHrC0ZNtdAjmUJmpQtal/sFEceDq2usB7n488HtzJyU=;
+        b=06zEYS73TGTm5KgqiHtwmNLMQhFZYSKmj7b8kLApXBAkrMwm0Z1FmyS/z+Ko2sPf7V
+         +uyhFaX6pMFVQj4ud0qpWWSXkoumkAYOltMhMaXxfACBR4pnJvKw5OhFNaA9fMmEargC
+         2+qOGh1dvZotePe6bp52ENOT9LSG0IcubCHKgTuietjla9oMLKNZsK4XeKCK4QDv9Z/L
+         vdMYcGc81KNmA2qUDJRksx6xAJdTws1SzTgoPZjslRrvUYfFKZY1rdO/vszJ5Ugj0H9f
+         h4zqpXVLXTe4ShLVeDvn/1WdhIbBYZD570NsT68h8zVoD92GMDbROmE8gs1zb282QjxE
+         5/MA==
+X-Gm-Message-State: AOAM530BavWuBrT1IUC4/xXUke2UEVROewwZBTMFVwbwCCFAfACpU9N3
+        uPOETlE2X3nyK5QRC3gzr8xxLnYVaUFz
+X-Google-Smtp-Source: ABdhPJzBnaI/zy/gt36IQozw7qOVqf4D5D6Z89ZgclkVag0otV1hW+5BOVZjfLcikEKcWEg+uSXZlzRQtYzU
+X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:e7:3de8:f33d:ca1c])
+ (user=pumahsu job=sendgmr) by 2002:a25:6d06:: with SMTP id
+ i6mr24525004ybc.216.1642398007387; Sun, 16 Jan 2022 21:40:07 -0800 (PST)
+Date:   Mon, 17 Jan 2022 13:39:18 +0800
+Message-Id: <20220117053918.671399-1-pumahsu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH v4] xhci: re-initialize the HC during resume if HCE was set
+From:   Puma Hsu <pumahsu@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Puma Hsu <pumahsu@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 2:20 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> Although this change was only merged on January 11th, the patches have
-> been being reviewed since early december. There was at least one fix
-> already found for it and merged.
+When HCE(Host Controller Error) is set, it means an internal
+error condition has been detected. Software needs to re-initialize
+the HC, so add this check in xhci resume.
 
-Grr..
+Cc: stable@vger.kernel.org
+Signed-off-by: Puma Hsu <pumahsu@google.com>
+---
+v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+v3: Add stable@vger.kernel.org for stable release.
+v4: Refine the commit message.
 
-And that's exactly why it matters not about "being reviewed", but when
-they were in linux-next etc.
+ drivers/usb/host/xhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've pulled this, but consider this a complaint. Things should not be
-"reviewed" before the merge window. They should be ready and merged
-and have actually seen some testing.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..ab440ce8420f 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		temp = readl(&xhci->op_regs->status);
+ 	}
+ 
+-	/* If restore operation fails, re-initialize the HC during resume */
+-	if ((temp & STS_SRE) || hibernated) {
++	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
++	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+ 
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-Review is good. But nothing beats actually being out there and
-actually seeing real-life testing (of course, linux-next probably
-mostly gets build-testing, but what testing it gets is still better
-than not being there).
-
-               Linus

@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCD248FFB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 01:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D090948FFC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 01:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiAQAMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 19:12:30 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:48880
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231480AbiAQAM3 (ORCPT
+        id S236496AbiAQAoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 19:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233846AbiAQAoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 19:12:29 -0500
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 581E7402A3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642378343;
-        bh=rwscmfN2VvXFl57KIDylnXT4uFX0erZr3MxoMOgqhYc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=SJz9Egycd22hPcDWzZ0UTmn5X3Zsb1AFGwbtEu/lC67VmKAbUuLSeN+ZL4FzAljxt
-         mHXXidOmlu/lO+BYHZfgWWACZyz0lfmefcxrQqxXvaGrbTM2okBJyQuguSjdZC11OI
-         w9dNPB6xzHAIsD8HcpPrpfugD/aQk46q0SoXSykzgerHNePc8RCu941B50Msid9vgt
-         ESY9OKiM52BiLJ8APfrK3KNZxVasmdRFZJuW89yxF+SSkiFV2N7XkRd2zbi1oAAdgh
-         g8IJsZZmvdrucX7aag3LOIEzSFi2tpGCH7lekrG+BXOt4rjvo+e5PmWctk4AwHKul5
-         HUGiSti8ZlY6A==
-Received: by mail-ot1-f69.google.com with SMTP id v21-20020a05683018d500b00590a3479c4eso4988550ote.11
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 16:12:23 -0800 (PST)
+        Sun, 16 Jan 2022 19:44:01 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C24C061574;
+        Sun, 16 Jan 2022 16:44:01 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id u21so58674806edd.5;
+        Sun, 16 Jan 2022 16:44:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fVBwHqjRiTPngWkNGF9zdvdA//oHQIGX1K8FVBmadoE=;
+        b=ahBnotuLo2MHhRJNsnoJSvsPJeP0nuIPb74JifxhzfTNUva1Vmp1Vq4Zc6ZivaEViv
+         9nq4+vSH2/FTECHhEJ5ZraYvkWRYoVPACRbUrsTyq04YFJlVjA84kPBFfByykgRgdoMr
+         jLb8Vn6+kUjpFVcV9kzZs3cU9OGrLl8CE/fDn00mAdVmOzsRFFwAO7D0wh0wIp1ELnfW
+         NmGahlbaSFhpcKXd3wSPcTtXW8eEj6PNOWnELVoei3BM6f1mImANOlqsHabqdzcteXxh
+         NV75MnAUb9Mmjx/jNPhOnmIKw6ZiFM97QBQWZ052DWG/yyCkLf8r7UTvLzr+wm0GQX/l
+         joLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rwscmfN2VvXFl57KIDylnXT4uFX0erZr3MxoMOgqhYc=;
-        b=xGk6wDlfObV5q9gTKULHvgR9aXnpwfMTfRJDMyxSEUlOZ6xnSCHMzJ/JLxZg2ULvGn
-         k/TZYoBlwUXIITsz5CxLGhpaAsm5gsb50vUYg033ocUj/1E8qvCgQ5hZXd0AMRipI9or
-         bi16C7GA9KR4QOC3qVURkcxX+AXrY+bLVO4gfK2anTBnycqugeigGILpjX9FW15zWKzA
-         mFBIIdiWL/OEVmeD2cqCitpWlRIbdf1bigN0y2k7TIU92uB7zY0W9wNjpBk+ret/z8+c
-         QsaEJ3fUXQrhqJm2cT3zSX84e8VDDS8+5B0pw9apjNVZSmuUT+F/cj1fgbCQuyK9WhAs
-         zCxw==
-X-Gm-Message-State: AOAM532L5fXWumTK7BNgDnkuKit8P6qeGgdwK9FgJGknYrs0zibK+0ug
-        e8MGTMngD2boRpgSomXqi6uPVA2lYUaTyiT6lSQsm0Ix5QEbCO9KU/FQjg4z7z5BdmF10KG1W0r
-        6K1mPY0OglPtXTY/vCK+4TUpRhlRjnKm/pLxjvudA1t90FXE5IrEaHAEJWQ==
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr14466569oth.233.1642378339918;
-        Sun, 16 Jan 2022 16:12:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzmTa4OSW+e+tPUzL+uPusjNQWVVyJk3wNYGeLJ1mjMfv2VVEg30AAbV0RtwuN/5IKjzG/RX3WJYkoKoLj6hlg=
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr14466553oth.233.1642378339620;
- Sun, 16 Jan 2022 16:12:19 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fVBwHqjRiTPngWkNGF9zdvdA//oHQIGX1K8FVBmadoE=;
+        b=iS5Irj0tVBABnki8KJlsrxcuTYwJp/aeFHh8Je94zLlKjbOWbOZO9s2i9WzKwKoRqZ
+         kDm7Y/UNoUavej+jOSMnFDZ6pTWqzVFmQQAZyn4V7KqNBUH29jY0+jq39M9TtoD1LF0k
+         12hGM66dGIvdOlLESEr1UXzjF5rfRO/GBb4uPerIYqZeY6JnfDoQLgUCrO29xgY8FZNK
+         obZxI8nuLBYnR0FFQC21j2qhvlZcqbF/1DnqgFHu2tqTH/+2ylcdmrAcdceiBy8A5Jik
+         6Imw1NRe3gSFLxlSJqK/h6D70kNyT1LDTCzpVzKgWpDt9kch4YxwlbSK2ojY8X9MzSG5
+         QYgQ==
+X-Gm-Message-State: AOAM533x7WhE7Im3JnDMKWkznls0iaKk/gQJgQpEyXNmFV2dSetuLddV
+        4NbctFxaDXnV6oPctd3x0Zb3ZaKRFlM=
+X-Google-Smtp-Source: ABdhPJzueh6U+3ebTRaJF4BFO4gi/HSDdXR09qU0X172/JUL/EVbKDFdN4yPWzvoVNgrxesnWeUZ1A==
+X-Received: by 2002:a05:6402:1bd9:: with SMTP id ch25mr14458702edb.84.1642380239563;
+        Sun, 16 Jan 2022 16:43:59 -0800 (PST)
+Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id go41sm3879266ejc.200.2022.01.16.16.43.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 16:43:59 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH 1/2] drivers: phy: qcom: ipq806x-usb: convert to BITFIELD macro
+Date:   Mon, 17 Jan 2022 01:26:40 +0100
+Message-Id: <20220117002641.26773-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220114164904.lgj7yimbei6fmloe@localhost.localdomain>
- <20220114165050.ouw2nknuspclynro@localhost.localdomain> <CAAd53p6KXD2mEHgkU_TpTrsU-vQ9Vxdip+6sPfDaVoSOkmaz-g@mail.gmail.com>
- <20220115163208.xmvum6ehqcadonj7@localhost.localdomain>
-In-Reply-To: <20220115163208.xmvum6ehqcadonj7@localhost.localdomain>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 17 Jan 2022 08:12:08 +0800
-Message-ID: <CAAd53p64w38NCo7c0cnKCyjaswa0_Rns-CjWBwOnph3V5J2taQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] ALSA: hda/realtek: fix speakers and micmute on HP
- 855 G8
-To:     Alexander Sergeyev <sergeev917@gmail.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
-        Elia Devito <eliadevito@gmail.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 12:26 AM Alexander Sergeyev
-<sergeev917@gmail.com> wrote:
->
-> On Sat, Jan 15, 2022 at 11:47:40PM +0800, Kai-Heng Feng wrote:
-> > > Note that the device can boot up with working speakers and micmute LED
-> > > without this patch, but the success rate would be quite low (order of
-> > > 16 working boots across 709 boots) at least for the built-in drivers
-> > > scenario. This also means that there are some timing issues during early
-> > > boot and this patch is a workaround.
-> >
-> > Does this issue happen to warm boot (reboot) or cold boot?
->
-> The issue is definitely not limited to warm boots only. I can confirm cold
-> boots with no sound and also warm boots with functioning sound. With this in
-> mind, the provided numbers (16 good boots across 709 boots) are largely coming
-> from reboots since the testing was scripted and driven by SSH.
+Convert some define to BITFIELD macro to tidy things up.
 
-If this issue also happens to cold boot it seems to be a BIOS issue.
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
->
-> > If the issue only happen to warm boot, please try reverting commit
-> > 9d3fcb28f9b9 "Revert "PM: ACPI: reboot: Use S5 for reboot"".
-> > Many HP systems requires it to have a functional reboot.
->
-> Interesting. I haven't noticed anything breaking with reboots on this
-> particular system (at least so far).
+diff --git a/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c b/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c
+index bfff0c8c9130..6788e0e8272a 100644
+--- a/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c
++++ b/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c
+@@ -10,6 +10,7 @@
+ #include <linux/delay.h>
+ #include <linux/regmap.h>
+ #include <linux/mfd/syscon.h>
++#include <linux/bitfield.h>
+ 
+ /* USB QSCRATCH Hardware registers */
+ #define QSCRATCH_GENERAL_CFG		(0x08)
+@@ -74,20 +75,20 @@
+ 		 PHY_PARAM_CTRL1_LOS_BIAS_MASK)
+ 
+ #define PHY_PARAM_CTRL1_TX_FULL_SWING(x)	\
+-		(((x) << 20) & PHY_PARAM_CTRL1_TX_FULL_SWING_MASK)
++		FIELD_PREP(PHY_PARAM_CTRL1_TX_FULL_SWING_MASK, (x))
+ #define PHY_PARAM_CTRL1_TX_DEEMPH_6DB(x)	\
+-		(((x) << 14) & PHY_PARAM_CTRL1_TX_DEEMPH_6DB_MASK)
++		FIELD_PREP(PHY_PARAM_CTRL1_TX_DEEMPH_6DB_MASK, (x))
+ #define PHY_PARAM_CTRL1_TX_DEEMPH_3_5DB(x)	\
+-		(((x) <<  8) & PHY_PARAM_CTRL1_TX_DEEMPH_3_5DB_MASK)
++		FIELD_PREP(PHY_PARAM_CTRL1_TX_DEEMPH_3_5DB_MASK, x)
+ #define PHY_PARAM_CTRL1_LOS_BIAS(x)	\
+-		(((x) <<  3) & PHY_PARAM_CTRL1_LOS_BIAS_MASK)
++		FIELD_PREP(PHY_PARAM_CTRL1_LOS_BIAS_MASK, (x))
+ 
+ /* RX OVRD IN HI bits */
+ #define RX_OVRD_IN_HI_RX_RESET_OVRD		BIT(13)
+ #define RX_OVRD_IN_HI_RX_RX_RESET		BIT(12)
+ #define RX_OVRD_IN_HI_RX_EQ_OVRD		BIT(11)
+ #define RX_OVRD_IN_HI_RX_EQ_MASK		GENMASK(10, 7)
+-#define RX_OVRD_IN_HI_RX_EQ(x)			((x) << 8)
++#define RX_OVRD_IN_HI_RX_EQ(x)			FIELD_PREP(RX_OVRD_IN_HI_RX_EQ_MASK, (x))
+ #define RX_OVRD_IN_HI_RX_EQ_EN_OVRD		BIT(7)
+ #define RX_OVRD_IN_HI_RX_EQ_EN			BIT(6)
+ #define RX_OVRD_IN_HI_RX_LOS_FILTER_OVRD	BIT(5)
+-- 
+2.33.1
 
-If possible, please still give that commit a try.
-
-Kai-Heng

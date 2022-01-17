@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E70490747
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DC1490749
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbiAQLq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:46:26 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40658
+        id S239205AbiAQLrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:47:18 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40684
         "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239176AbiAQLqW (ORCPT
+        by vger.kernel.org with ESMTP id S236426AbiAQLrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:46:22 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        Mon, 17 Jan 2022 06:47:17 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 20DF73F211
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 11:46:21 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C980B3F1E2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 11:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642419981;
-        bh=2navcQ0WRElNhWSfCvnqCtUkEsAg/QuZ7IOd8SfSz50=;
+        s=20210705; t=1642420036;
+        bh=KWW81zXKWRZLFTdKDAM8Dxes8YJlXIyroEnLeEEVaPY=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=KicMYF6qukoV9p2Jg6A+ViNQZKd5qd/+YGCTlmPaTDaH/0EJn6dwg20l4WZgscmSX
-         yszIl531gwtsYREKa/gGVzLxTT6VX9DzI9vmDe8ZKBJHQRSSj07xczb4WrAI5anWqt
-         AVNN4T5eMV5c0D9IFruqIbu9DskX0EO6jl5jR1UvnUz6VibtrpJEdtLkVrTo+CjmZD
-         fuOjjHnxpiDH4qO6tZwW/eBtk4AiUB5l+VTnqgnAyeOKWAhSg6FtGjaMFDgI2wcQZt
-         nmDMlhgbkYa9R0mnMxDqyzHy4vs1tXsE5eJB0XhZ8pGKOxMcjyNV3E7W2mqYr7Z3OJ
-         vRyEye4k2qwXQ==
-Received: by mail-ed1-f72.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so2857686edb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:46:21 -0800 (PST)
+        b=cEFMwErYPPv11jylDfBR49GDDOOUnQU2YyCLLsXLzxNyvTzX8R7N/UdoaI469bnnS
+         nccNYXypFYXyLNYxx7kIbHfQGMoMnYYZIXNAU2TI+qA2Pl5vy4Tz4GRQi71kc08CL7
+         QgIAVyGLaHkmUyWmS3AI4B2FbcPn7YWVuoUDHQwiAqjY1SkxUkeFkiAbhYpYuQQDfo
+         9g3yN4faEs2bEFGLEzd+KmfnSf1QYaccJtEqQxurOuIYBzwpPr6Y5IVgCDPQG17NrT
+         hC18DW8XefDcazmxuepLoj1EUHoXMo7lCqzF5iM37Ol1iONtV4VNXH/I5vq39REGJ9
+         Y1xK16+nuc6XQ==
+Received: by mail-ed1-f69.google.com with SMTP id bs4-20020a056402304400b004032af6b7ebso717637edb.16
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:47:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2navcQ0WRElNhWSfCvnqCtUkEsAg/QuZ7IOd8SfSz50=;
-        b=G+ZckyclB56YVZ9WyfaK2XZg4oFiUdDHfEPpLej8ftrgFvHSW+LgYriC28BIcwdqqz
-         uVgveeu/cKERNK0MFittIQfZOhuQp2E2BqY+oxyYylqmtfCeGgz/gbnIHv/28JcPc4u9
-         SrLkVxgSc2AKkeBtEsuZB59os19eHNWP3iYf9m3rXiWaZzTjKg1RZ4L5eHAZOXek/CKw
-         +OLUXLBRGqZkhuQQ3pblTBrTFoIvZD2Ac1VwkXZFLkSuHZxj0eO2E+dpO+trhAEFi1B6
-         lG1P4Edsgnvoypz6o3NV9Y1C/dgJmBEsMkuWQO8HPArKgMHgwbuR/JXXTRKO8gkahTjb
-         MHJQ==
-X-Gm-Message-State: AOAM532xFkQo96ru2GKM/E7vLpaGKN13kat0G6UF9nOkh8SYYZ+mIT2o
-        Ylr5GL9uP3XhAeNIv6XwLF88MTcpcEKOQBPp0d1nro/hp4DecDaxOcdDvVmsKQRwMsTKTBmKG6o
-        iUsgWMYrvO6X3KEJWBwgRUAIwWpm9DPHVCNt64yWyqA==
-X-Received: by 2002:a17:906:954f:: with SMTP id g15mr10577307ejy.755.1642419980496;
-        Mon, 17 Jan 2022 03:46:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyGTZAqOavFLCxp4H/YcZ7P4w7DVAjIx/j59efiAeyFrXxLU+CMV9xrYwEVLTkxErw6RieKXw==
-X-Received: by 2002:a17:906:954f:: with SMTP id g15mr10577296ejy.755.1642419980301;
-        Mon, 17 Jan 2022 03:46:20 -0800 (PST)
+        bh=KWW81zXKWRZLFTdKDAM8Dxes8YJlXIyroEnLeEEVaPY=;
+        b=JV3PrHPgeQcq7pJmp+sDEFoVm2T0bYn46KtrU9JkNWOfzPE9SEc0hQO4wLcAmbb4qL
+         cWaWv6XPb0HwNNj1d3QqvM/vxCxJM2MgGPe4fHRNaDgn6wTHw6BGSBkMT4lm7ovsIy/Q
+         V7FGuSEIybterqmaG15vxsBNmRhR8xn2rvy43vqYLefJuJbuNUQe/mTEjgx0ju/ezHjW
+         +Gdszkk2/Cl2SsRQF0LuSnLyh5VDzuK5j8Lu2e8qhdMSoEeJUFGRP2GKSo/IPSfOoc5l
+         uwE+oit3oXR5YCxBzvmbDMEeOmVp5NmWs5Ci4nK3jseDqMrXC4MLHkWcckREMtQpTUCf
+         FSGA==
+X-Gm-Message-State: AOAM5320FaufpA5XVZJknx/kIXsywcVSm0st+ugzi1s6a1exLIsJlxcn
+        YThbh9waDvf2DM7eQymPW761x7YX8v1WyhDFPRFKnTYFv0ck5qt+Q3aHdqTCxF2JvL9PULsyUgj
+        asVlVBJY3kJnsS0IsRjyQrM2Qt9Heg+C9sRpyxz4jQA==
+X-Received: by 2002:aa7:c7c6:: with SMTP id o6mr20427692eds.32.1642420036551;
+        Mon, 17 Jan 2022 03:47:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwYbl0ZqyxizwYR/FD3lH5PkLtBQvCTWyelYpaOm+E51QulRzhjkDzSRFhvzmstty4uu+QIVg==
+X-Received: by 2002:aa7:c7c6:: with SMTP id o6mr20427685eds.32.1642420036423;
+        Mon, 17 Jan 2022 03:47:16 -0800 (PST)
 Received: from [192.168.0.37] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id w11sm4327081eds.88.2022.01.17.03.46.19
+        by smtp.gmail.com with ESMTPSA id f13sm5807955edd.73.2022.01.17.03.47.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 03:46:19 -0800 (PST)
-Message-ID: <5ea17ac8-c351-069a-efe5-832b1778b7dc@canonical.com>
-Date:   Mon, 17 Jan 2022 12:46:19 +0100
+        Mon, 17 Jan 2022 03:47:15 -0800 (PST)
+Message-ID: <1116a187-b43e-c139-ebdf-7d27a83c2389@canonical.com>
+Date:   Mon, 17 Jan 2022 12:47:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH] sound/soc/samsung: remove unneeded ret variable
+Subject: Re: [PATCH v2 04/11] arm64: defconfig: enable pcieaer configuration
 Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     s.nawrocki@samsung.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220117110357.863990-1-chi.minghao@zte.com.cn>
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
+        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "olof@lixom.net" <olof@lixom.net>, "arnd@arndb.de" <arnd@arndb.de>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+References: <20220114141507.395271-1-marcel@ziswiler.com>
+ <20220114141507.395271-5-marcel@ziswiler.com>
+ <a03f3240-0e68-1451-0d97-109c024f784a@canonical.com>
+ <28f9ff53dc1379fa6462bf54c5db556c3474c302.camel@toradex.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220117110357.863990-1-chi.minghao@zte.com.cn>
+In-Reply-To: <28f9ff53dc1379fa6462bf54c5db556c3474c302.camel@toradex.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2022 12:03, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On 17/01/2022 12:45, Marcel Ziswiler wrote:
+> On Sat, 2022-01-15 at 17:45 +0100, Krzysztof Kozlowski wrote:
+>> On 14/01/2022 15:15, Marcel Ziswiler wrote:
+>>> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+>>>
+>>> Enable CONFIG_PCIEAER which is required for CONFIG_ACPI_APEI_PCIEAER.
+>>> Commit 8c8ff55b4da7 ("PCI/AER: Don't select CONFIG_PCIEAER by default")
+>>> changed it to no longer being enabled by default.
+>>>
+>>> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+>>>
+>>> ---
+>>>
+>>> Changes in v2:
+>>> - New patch following full defconfig analysis as requested by Krzysztof.
+>>>
+>>
+>> Good finding! The question is whether we actually need PCIe AER...
 > 
-> Return value from io_remap_pfn_range() directly instead
-> of taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Yes, however, why else would we have explicitly enabled CONFIG_ACPI_APEI_PCIEAER?
 
-Where is the report? What is being reported here? The tag reported-by is
-used to credit bug reporters, mostly public as we work in a public way.
-Since there is no bug and there is no public report of anything, the tag
-is not applicable.
+Right, I missed that it is mentioned in defconfig.
 
-Please do not add unrelated tags to the patches.
-
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> ---
->  sound/soc/samsung/idma.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
 Best regards,

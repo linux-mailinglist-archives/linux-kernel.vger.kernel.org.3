@@ -2,167 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71055490A9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7B8490AA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbiAQOiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:38:17 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:48694 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237148AbiAQOiK (ORCPT
+        id S235449AbiAQOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:38:31 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:61605 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234367AbiAQOi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:38:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 14CE21F385;
-        Mon, 17 Jan 2022 14:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642430289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvUap+DwKBiunMat6fSEU/DhZVQmc4GhjOocn0eF9F0=;
-        b=zAarisL5NN5+v9qyJxFdGX7etOauLFTpfdV5yQVvoXbBIkxO1W/kTNELbDmujo2xOxdHg4
-        u2w1xT4rMAgmXEkqiKEYVsvCDR4qdEcTYe5Iql4SHKhYHFHGY+sme4T+J1G5q8i8+lALej
-        xNCytpw4HjuY2tKCjIhLkcEtDsI/0lc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642430289;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvUap+DwKBiunMat6fSEU/DhZVQmc4GhjOocn0eF9F0=;
-        b=oC1GEgl2WZAvCkL8tz8vZQn/WUd0qxBZeCixIX8Ay9CGDGI+E+0Ge4w9fMnI4O1GMSWgJU
-        aqJbtMr7iy0vW7Bw==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EC5E8A3B88;
-        Mon, 17 Jan 2022 14:38:08 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8E87DA05E4; Mon, 17 Jan 2022 15:38:07 +0100 (CET)
-Date:   Mon, 17 Jan 2022 15:38:07 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>, tytso@mit.edu,
-        Eric Whitney <enwlinux@gmail.com>
-Subject: Re: [PATCH 6/6] jbd2: No need to use t_handle_lock in
- jbd2_journal_wait_updates
-Message-ID: <20220117143807.6fil45qvutvswa7z@quack3.lan>
-References: <cover.1642044249.git.riteshh@linux.ibm.com>
- <e7e0f8c54306591a3a9c8fead1e0e54358052ab6.1642044249.git.riteshh@linux.ibm.com>
- <20220113112749.d5tfszcksvxvshnn@quack3.lan>
- <20220113123842.3rpfcyecylt5n3wo@riteshh-domain>
- <20220117125527.ienv3drg5whiryrr@riteshh-domain>
+        Mon, 17 Jan 2022 09:38:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642430308; x=1673966308;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/wDgTOF9nD7qJTc2/BsA6bElbpP6tW+QytfeDJS27YY=;
+  b=C0EepcS3/ekrhwuHlJhh9te+VirEkSGBOupOI2IiLbfdRda8/Z/PuG78
+   Zjfsw0txq5JOiymPOQLklUMrTqeU47inz3BUneF/9jngJx3tB6V1zkgts
+   MdJ+XRMGSzxx9BUNH90RKqvNCrdhQYDUSLVWmDkXOnZTTCP3ubwMcsFuf
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 17 Jan 2022 06:38:27 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 06:38:26 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 17 Jan 2022 06:38:25 -0800
+Received: from [10.216.12.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 17 Jan
+ 2022 06:38:19 -0800
+Message-ID: <bd284863-3643-4a8e-beb6-f47cc60ea1b5@quicinc.com>
+Date:   Mon, 17 Jan 2022 20:08:15 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117125527.ienv3drg5whiryrr@riteshh-domain>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/4] drm/msm/adreno: Expose speedbin to userspace
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
+ <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
+ <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
+ <CAA8EJpokgiUbqj9BOF52a9QjJK53PinNHfxy_6nbNq53JnO2Og@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAA8EJpokgiUbqj9BOF52a9QjJK53PinNHfxy_6nbNq53JnO2Og@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 17-01-22 18:25:27, Ritesh Harjani wrote:
-> On 22/01/13 06:08PM, Ritesh Harjani wrote:
-> > On 22/01/13 12:27PM, Jan Kara wrote:
-> > > On Thu 13-01-22 08:56:29, Ritesh Harjani wrote:
-> > > > Since jbd2_journal_wait_updates() uses waitq based on t_updates atomic_t
-> > > > variable. So from code review it looks like we don't need to use
-> > > > t_handle_lock spinlock for checking t_updates value.
-> > > > Hence this patch gets rid of the spinlock protection in
-> > > > jbd2_journal_wait_updates()
-> > > >
-> > > > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> > >
-> > > This patch looks good. Feel free to add:
-> > >
-> > > Reviewed-by: Jan Kara <jack@suse.cz>
-> > >
-> > > Actually looking at it, t_handle_lock seems to be very much unused. I agree
-> 
-> Thanks Jan for your help in this.
-> I have dropped this patch from v2 in order to discuss few more things and I felt
-> killing t_handle_lock completely can be sent in a seperate patch series.
+On 1/13/2022 12:43 PM, Dmitry Baryshkov wrote:
+> On Thu, 13 Jan 2022 at 00:19, Rob Clark <robdclark@gmail.com> wrote:
+>> On Tue, Jan 11, 2022 at 1:31 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>>> Expose speedbin through MSM_PARAM_CHIP_ID parameter to help userspace
+>>> identify the sku.
+>>>
+>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>> ---
+>>>
+>>>   drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +++++----
+>>>   1 file changed, 5 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>>> index f33cfa4..e970e6a 100644
+>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>>> @@ -242,10 +242,11 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_t param, uint64_t *value)
+>>>                  *value = !adreno_is_a650_family(adreno_gpu) ? 0x100000 : 0;
+>>>                  return 0;
+>>>          case MSM_PARAM_CHIP_ID:
+>>> -               *value = adreno_gpu->rev.patchid |
+>>> -                               (adreno_gpu->rev.minor << 8) |
+>>> -                               (adreno_gpu->rev.major << 16) |
+>>> -                               (adreno_gpu->rev.core << 24);
+>>> +               *value = (uint64_t) adreno_gpu->rev.patchid |
+>>> +                               (uint64_t) (adreno_gpu->rev.minor << 8) |
+>>> +                               (uint64_t) (adreno_gpu->rev.major << 16) |
+>>> +                               (uint64_t) (adreno_gpu->rev.core << 24) |
+>>> +                               (((uint64_t) adreno_gpu->rev.sku) << 32);
+>> How about this instead, so we are only changing the behavior for
+>> new/unreleased devices:
 
-Yes, probably a good choice.
+I thought this property was only used for new devices whereas the 
+existing devices rely on REVN.
 
-> > I too had this thought in mind. Thanks for taking a deeper look into it :)
-> >
-> > >
-> > > we don't need it when waiting for outstanding handles but the only
-> > > remaining uses are:
-> > >
-> > > 1) jbd2_journal_extend() where it is not needed either - we use
-> > > atomic_add_return() to manipulate t_outstanding_credits and hold
-> > > j_state_lock for reading which provides us enough exclusion.
-> 
-> I looked into jbd2_journal_extend and yes, we don't need t_handle_lock
-> for updating transaction->t_outstanding_credits, since it already happens with
-> atomic API calls.
-> 
-> Now I do see we update handle->h_**_credits in that function.
-> But I think this is per process (based on task_struct, current->journal_info)
-> and doesn't need a lock protection right?
+-Akhil.
 
-Yes, handle is per process so no lock is needed there.
-
-> > > 2) update_t_max_wait() - this is the only valid use of t_handle_lock but we
-> > > can just switch it to cmpxchg loop with a bit of care. Something like:
-> > >
-> > > 	unsigned long old;
-> > >
-> > > 	ts = jbd2_time_diff(ts, transaction->t_start);
-> > > 	old = transaction->t_max_wait;
-> > > 	while (old < ts)
-> > > 		old = cmpxchg(&transaction->t_max_wait, old, ts);
-> 
-> I think there might be a simpler and more straight forward way for updating
-> t_max_wait.
-> 
-> I did look into the t_max_wait logic and where all we are updating it.
-> 
-> t_max_wait is the max wait time in starting (&attaching) a _new_ running
-> transaction by a handle. Is this understaning correct?
-
-Correct. It is the maximum time we had to wait for a new transaction to be
-created.
-
-> From code I don't see t_max_wait getting updated for the time taken in order
-> to start the handle by a existing running transaction.
-> 
-> Here is how -
-> update_t_max_wait() will only update t_max_wait if the
-> transaction->t_start is after ts
-> (ts is nothing but when start_this_handle() was called).
-> 
-> 1. This means that for transaction->t_start to be greater than ts, it has to be
->    the new transaction that gets started right (in start_this_handle() func)?
+>>
+>> *value = adreno_gpu->rev.patchid |
+>> (adreno_gpu->rev.minor << 8) |
+>> (adreno_gpu->rev.major << 16) |
+>> (adreno_gpu->rev.core << 24);
+>> if (!adreno_gpu->info->revn)
+>> *value |= (((uint64_t) adreno_gpu->rev.sku) << 32);
+>>
+>> (sorry about the butchered indentation.. somehow gmail has become
+>> antagonistic about pasting code)
+> I assume that you would like to keep userspace compat for older chips.
+> thus the if.
+> Maybe we should introduce MSM_PARAM_CHIP_ID_SKU instead (and gradually
+> make userspace switch to it)?
 >
-> 2. Second place where transaction->t_start is updated is just after the start of
->    commit phase 7. But this only means that this transaction has become the
->    commit transaction. That means someone has to alloc a new running transaction
->    which again is case-1.
-> 
-> Now I think this spinlock was added since multiple processes can start a handle
-> in parallel and attach a running transaction.
-> 
-> Also this was then moved within CONFIG_JBD2_DEBUG since to avoid spinlock
-> contention on a SMP system in starting multiple handles by different processes.
-> 
-> Now looking at all of above, I think we can move update_t_max_wait()
-> inside jbd2_get_transaction() in start_this_handle(). Because that is where
-> a new transaction will be started and transaction->t_start will be greater then
-> ts. This also is protected within j_state_lock write_lock, so we don't need
-> spinlock.
+>> BR,
+>> -R
+>>
+>>>                  return 0;
+>>>          case MSM_PARAM_MAX_FREQ:
+>>>                  *value = adreno_gpu->base.fast_rate;
+>>> --
+>>> 2.7.4
+>>>
+>
+>
 
-All above is correct upto this point. The catch is there can be (and often
-are) more processes in start_this_handle() waiting in
-wait_transaction_switching() and then racing to create the new transaction.
-The process calling jbd2_get_transaction() is not necessarily the one which
-entered start_this_handle() first and thus t_max_wait would not be really
-the maximum time someone had to wait.
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR

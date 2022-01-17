@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2E4490310
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F230F490315
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237641AbiAQHpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:45:39 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58162
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237632AbiAQHpi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:45:38 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 11048402A3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642405537;
-        bh=BnlFRfnEyWAxe1fw6gmGyUXzbXb/Exxy2EiruYyTAbQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=StB5wBV1XLTBI84hCIoZtLuROo0ozvFtdtwF3vN4ht4NUjcz3nnjfl9k15XGhYHCq
-         lNhO7y40gxfI41FrSGRqeVyXaHwIIVkgJWuQYqdQR0jJbMOEypykpJOhyUeN9YBjBB
-         pJ5CaoOplMEFvSUSEwjaj0b+/bx5dzcMjx1H7RKpen8Vs6loq5B1xnm+FNPnOuAJ5m
-         Bn2q5/qCL2HxWrPYdeTUQ+E4TUauSpKuwlD3/Xth44M2hlR2j5WSLZ3YqTApJFR8Yg
-         mL5M6TyBdax002cSbGiwHZ6JR1fEJ5SArvMa3mWB8S1K1uVPBzEb86niC9WNRVuMPn
-         UiXQBSAWAgCYw==
-Received: by mail-ed1-f72.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so2295741edb.22
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 23:45:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BnlFRfnEyWAxe1fw6gmGyUXzbXb/Exxy2EiruYyTAbQ=;
-        b=QkVZZaqtdMhprUDaH/HFbqAidzK72G8bPjD+aMH3b5S6RFo1l68DYkH8eg5jadf2sp
-         vjSV7i4U9LUnQahm4KMv+Sw6ZgLDMw3upS2D6t6+ypNbZaqeom1FOiQaSCeC4PSrJm7k
-         4aYIqRKgYcAapK04KE95eMh1BstZ4e+uroIAYB+4/qiObSb/wr8KyOcfniJznCe1RATv
-         KCgYU63M/1aPQOzdA1WCy7gIvDH33YxLlck4xS2TdV3N7mxetj3pqAaDQ0K1+FVfuv0i
-         ggihV6tot6q2ehZG7HA3qaC/W61uY56tbSDMWttOsbZ2iTPYrWKa0GM14z5U+sZ4Kvb5
-         h82Q==
-X-Gm-Message-State: AOAM533cHhRLNSpl+LfH7zMR94RsuLTUdo7CefoN1MpfhBflaXaGETLt
-        wbl/tR/xnpdELGqRg8jjjG/izVEj839rfjWvdU1k6gsz0DFzHolVP5WMGOARbV5IDMS2yXpJm9G
-        CrX2ETy8PGT0k6b/PwGiIVna5r3Rjt10YNS/7A+Jvqw==
-X-Received: by 2002:a05:6402:50d3:: with SMTP id h19mr5266030edb.346.1642405536679;
-        Sun, 16 Jan 2022 23:45:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzMuqDcqMplgNTykVRmag/eEAnjZ76C8iPXMJNJiJNejm5c5xQel4/ESmkmvuy3yxY7PGuFQA==
-X-Received: by 2002:a05:6402:50d3:: with SMTP id h19mr5266017edb.346.1642405536552;
-        Sun, 16 Jan 2022 23:45:36 -0800 (PST)
-Received: from [192.168.0.35] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id hp14sm4151387ejc.97.2022.01.16.23.45.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 23:45:36 -0800 (PST)
-Message-ID: <77bd8fa4-2b35-352c-da07-ef91fcbed454@canonical.com>
-Date:   Mon, 17 Jan 2022 08:45:35 +0100
+        id S237654AbiAQHqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:46:07 -0500
+Received: from first.geanix.com ([116.203.34.67]:37718 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235289AbiAQHqF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 02:46:05 -0500
+Received: from skn-laptop.hadsten (unknown [185.233.254.173])
+        by first.geanix.com (Postfix) with ESMTPSA id DFC6EE1C31;
+        Mon, 17 Jan 2022 07:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1642405562; bh=wBNx6sRPedjd7oOlbFst7M+VLUAgT59jpgSY1ikPP7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=X32/OMSHN+GNr6594QlDkAddn6aARUQ1QKGj8fUVBstkMGs+FA4lP9BUWueau77iX
+         ckhZCgHWi+gxefyNHYedwWppXP1H0eZ/jeNtxXnI+9UtQNTw72JfP5n+jMNY1e6ykD
+         buFEJ9Y66eWy1AAxHnpMgxM39c9B+tDdYP8/rMm+fr1Bkaj7wBuappalehl+QO60ws
+         XaBU1p1kJkx5RXls+hvFqkle5XTX08rZ9Z7w+dSkWa+kPWy+S7L5S/3FKSpxaeZHf2
+         OgfeCtU16vTkYijkNia5yKlSdAjjRtMT4Tn9g4POFtJFBaR+1YKBt4Ck2LD2o2vhMP
+         S2++UnNkCNCsg==
+Date:   Mon, 17 Jan 2022 08:46:00 +0100
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: accel: fxls8962af: add padding to regmap for SPI
+Message-ID: <20220117074600.gmfonh35ptx6kqbs@skn-laptop.hadsten>
+References: <20211220125144.3630539-1-sean@geanix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 24/28] dt-bindings: pinctrl: samsung: convert to
- dtschema
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
- <20220111201722.327219-18-krzysztof.kozlowski@canonical.com>
- <CACRpkdYTXSOW+sOX3wVtF4jj6xm0jr-F3HKQPGHOdAVjbasP3A@mail.gmail.com>
- <5047da7c-d3a6-5472-b0ca-7ed3dbe8a5fe@canonical.com>
- <CACRpkdbhmJ91EW395C5F2WYjWJQdJ-SBHaDm7XnQsxMuyoMmLg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CACRpkdbhmJ91EW395C5F2WYjWJQdJ-SBHaDm7XnQsxMuyoMmLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211220125144.3630539-1-sean@geanix.com>
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2022 22:38, Linus Walleij wrote:
-> On Sun, Jan 16, 2022 at 6:10 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
+On Mon, Dec 20, 2021 at 01:51:43PM +0100, Sean Nyekjaer wrote:
+> Add missing don't care padding between address and
+> data for SPI transfers
 > 
->> Anyway DTS and dtschema will have to wait for one release, because they
->> depend on samsung pinctrl driver change (patch #2).
+> Fixes: a3e0b51884ee ("iio: accel: add support for FXLS8962AF/FXLS8964AF accelerometers")
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> ---
+>  drivers/iio/accel/fxls8962af-core.c | 12 ++++++++++--
+>  drivers/iio/accel/fxls8962af-i2c.c  |  2 +-
+>  drivers/iio/accel/fxls8962af-spi.c  |  2 +-
+>  drivers/iio/accel/fxls8962af.h      |  3 ++-
+>  4 files changed, 14 insertions(+), 5 deletions(-)
 > 
-> What about I put that (and maybe this schema) on an immutable
-> branch so you can pull the commit into your for-arm-soc branch and
-> put the DTS changes on top?
+> diff --git a/drivers/iio/accel/fxls8962af-core.c b/drivers/iio/accel/fxls8962af-core.c
+> index 32989d91b982..f7fd9e046588 100644
+> --- a/drivers/iio/accel/fxls8962af-core.c
+> +++ b/drivers/iio/accel/fxls8962af-core.c
+> @@ -173,12 +173,20 @@ struct fxls8962af_data {
+>  	u16 upper_thres;
+>  };
+>  
+> -const struct regmap_config fxls8962af_regmap_conf = {
+> +const struct regmap_config fxls8962af_i2c_regmap_conf = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+>  	.max_register = FXLS8962AF_MAX_REG,
+>  };
+> -EXPORT_SYMBOL_GPL(fxls8962af_regmap_conf);
+> +EXPORT_SYMBOL_GPL(fxls8962af_i2c_regmap_conf);
+> +
+> +const struct regmap_config fxls8962af_spi_regmap_conf = {
+> +	.reg_bits = 8,
+> +	.pad_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = FXLS8962AF_MAX_REG,
+> +};
+> +EXPORT_SYMBOL_GPL(fxls8962af_spi_regmap_conf);
+>  
+>  enum {
+>  	fxls8962af_idx_x,
+> diff --git a/drivers/iio/accel/fxls8962af-i2c.c b/drivers/iio/accel/fxls8962af-i2c.c
+> index cfb004b20455..6bde9891effb 100644
+> --- a/drivers/iio/accel/fxls8962af-i2c.c
+> +++ b/drivers/iio/accel/fxls8962af-i2c.c
+> @@ -18,7 +18,7 @@ static int fxls8962af_probe(struct i2c_client *client)
+>  {
+>  	struct regmap *regmap;
+>  
+> -	regmap = devm_regmap_init_i2c(client, &fxls8962af_regmap_conf);
+> +	regmap = devm_regmap_init_i2c(client, &fxls8962af_i2c_regmap_conf);
+>  	if (IS_ERR(regmap)) {
+>  		dev_err(&client->dev, "Failed to initialize i2c regmap\n");
+>  		return PTR_ERR(regmap);
+> diff --git a/drivers/iio/accel/fxls8962af-spi.c b/drivers/iio/accel/fxls8962af-spi.c
+> index 57108d3d480b..6f4dff3238d3 100644
+> --- a/drivers/iio/accel/fxls8962af-spi.c
+> +++ b/drivers/iio/accel/fxls8962af-spi.c
+> @@ -18,7 +18,7 @@ static int fxls8962af_probe(struct spi_device *spi)
+>  {
+>  	struct regmap *regmap;
+>  
+> -	regmap = devm_regmap_init_spi(spi, &fxls8962af_regmap_conf);
+> +	regmap = devm_regmap_init_spi(spi, &fxls8962af_spi_regmap_conf);
+>  	if (IS_ERR(regmap)) {
+>  		dev_err(&spi->dev, "Failed to initialize spi regmap\n");
+>  		return PTR_ERR(regmap);
+> diff --git a/drivers/iio/accel/fxls8962af.h b/drivers/iio/accel/fxls8962af.h
+> index b67572c3ef06..9cbe98c3ba9a 100644
+> --- a/drivers/iio/accel/fxls8962af.h
+> +++ b/drivers/iio/accel/fxls8962af.h
+> @@ -17,6 +17,7 @@ int fxls8962af_core_probe(struct device *dev, struct regmap *regmap, int irq);
+>  int fxls8962af_core_remove(struct device *dev);
+>  
+>  extern const struct dev_pm_ops fxls8962af_pm_ops;
+> -extern const struct regmap_config fxls8962af_regmap_conf;
+> +extern const struct regmap_config fxls8962af_i2c_regmap_conf;
+> +extern const struct regmap_config fxls8962af_spi_regmap_conf;
+>  
+>  #endif				/* _FXLS8962AF_H_ */
+> -- 
+> 2.34.1
+> 
 
-That would be a solution if not a policy for arm-soc of keeping DTS
-separate. Arnd and Olof since some time are not happy when DTS branch
-receives any driver updates.
+Hi Jonathan,
 
-Arnd, Olof,
-This is a set of dtschema conversion + DTS alignment with new schema:
-1. Driver change necessary to accept new DTS (driver depends on node
-names and this has to change because of dtschema),
-2. DTS commits depending on above, which convert node name to new format,
-3. Finally dtschema requiring new naming of the GPIO nodes.
+Did you have time to look at this?
 
-If I got correctly, the policy of not mixing drivers and DTS requires
-that #2 above (DTS changes) will wait for one more release. During the
-time, if dtschema (#3 above) is applied, there will be new warnings
-about non-compliant DTS.
-
-Do you see any chance of merging driver + DTS + dtschema via same tree
-in same release?
-
-
-Best regards,
-Krzysztof
+/Sean

@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D14848FFEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F2348FFF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbiAQB1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 20:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiAQB1q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 20:27:46 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43540C06161C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:27:46 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id c6so41359562ybk.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:27:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O2digv+QpmJ4GxkGmzogQsMft19ZdoPKFKzQK1SlSeg=;
-        b=MejeoNq0A5npx3dssEP0rb/nU7fxJrxLUw40OQDXbY5tmSWxVaXpKD7qnBTS3nA+n9
-         B1MuGtyOzgeLk6Y5oYErBlf/G/UKRYPCPs3ZljeFwIJI2eXb4utCph1Ljh7Nd6HIWNXH
-         YGg5OqTpeIr58NdzUPy5h3I0DC2gMcXAqsKHmg6AtfxiD+2/5CTGLArlEdTIZPygxVMj
-         r7g4rA84Q4YTeQGtKNjKzC6LTECJUETOyJLmpXDqPCcUD8gNP8SMJZtmG906QIAyhLjX
-         hOzRuk3kSomwPzG4y7QbCnFZ9DedGHtbrcJZ4SmRqY/kvrLJuIwE734V0keBrqYqxJkB
-         Jdlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2digv+QpmJ4GxkGmzogQsMft19ZdoPKFKzQK1SlSeg=;
-        b=DX2wdW7FQ8Io8MXn9pDNvkwOmdFwollnNlfQ7wmjQiN9nYpE6elgFatl/4N6KDTrQk
-         wmFRkTKp6Fu99j27GSmMYCPskxE1meZ+qcf+tzfBZi+p41bkV++y/DB+6Bo9OBNWl3R+
-         Vx6uvBKBt6zAUEyyt6NHyDTCBnlgx84WRqRUoHsaMx0UuXuQRnDST5VnIxiAe3vtpgBh
-         I7ZVwQ6RDVEyH5mfA01PlKb+DoukKfh7U56xhGYub3dXeQ3l9FCBkfYaQiwCqzC1bxcL
-         CP4YRJmsquHfQd9fMeKNkbHj2QRaBv1oxhHXo4/G1EIfetLFspqaLX5GrQQ7tXLyi38d
-         nC/Q==
-X-Gm-Message-State: AOAM533GNxvGaKu/FGRigdx7Y3tO6XZZ9L4VSItNSRJjmwKrRsIaC5IM
-        BYBi9p7V7O4U4JsEOvSf3VkN36wfCX5P6nMpNFLThQ==
-X-Google-Smtp-Source: ABdhPJz8zqhGtaNQSz/m4dCzdhWzfxEwQd+tHTiXpYaIky+sLQ5J1hmqrROYJbKaWoccoZo13YxlfGMZnoOzx4k0HI0=
-X-Received: by 2002:a25:a085:: with SMTP id y5mr7021533ybh.1.1642382865156;
- Sun, 16 Jan 2022 17:27:45 -0800 (PST)
+        id S236712AbiAQB3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 20:29:23 -0500
+Received: from mga07.intel.com ([134.134.136.100]:56421 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233969AbiAQB3W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 20:29:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642382962; x=1673918962;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dX2c9IoRnDpnBIwBy5qcsqKPfKwk8mV/7Bz72MXQzI0=;
+  b=BIReFoHwFwUCasbnj1uq7uBJ9w2vLrtR/TbWCkq2a2nPtbXcppw6h/dB
+   O6Sywr/f8/amR2oTVue8SkzQmXxG+oUAehzMQX7HUovaEY8TSWz39E82y
+   jHSSQoY0R4FGYna1N9+5zuITt81GtxtOpWmdjH/TwJEcKR4OK9/URzopL
+   9EsO0thEnnWkzLZl5D1NVuQWiK7nCPGoXj4N6v0J7vODwDtTvHzkMKmxt
+   MU1NMDaWanKVreeGn5RqXrXpnDgGJ5PSALHPT0zEcXQKxRGx4i+t4XeT5
+   IsxIzQdiUB08XOMt5GBSxAEzDQ1UFseWZ4SZgw+0deiA/Hf5TEaZx8zBk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="307871930"
+X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
+   d="scan'208";a="307871930"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 17:29:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
+   d="scan'208";a="692899832"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 16 Jan 2022 17:29:19 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9Gpj-000B88-5l; Mon, 17 Jan 2022 01:29:19 +0000
+Date:   Mon, 17 Jan 2022 09:28:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sander Vanheule <sander@svanheule.net>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>
+Subject: Re: [PATCH 2/2] clocksource/drivers: Add Realtek Otto timer driver
+Message-ID: <202201170911.q3u7GptA-lkp@intel.com>
+References: <2fb4aa29e8c581f5c7e97ab7678ccb34e99e5c6e.1642369117.git.sander@svanheule.net>
 MIME-Version: 1.0
-References: <20220117114514.5b6daa04@canb.auug.org.au>
-In-Reply-To: <20220117114514.5b6daa04@canb.auug.org.au>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sun, 16 Jan 2022 17:27:34 -0800
-Message-ID: <CAJuCfpErqDrgEkw7OXyGTkfXiAEDHx=9DF9cW0qdc27Nm1_wrw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the origin tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fb4aa29e8c581f5c7e97ab7678ccb34e99e5c6e.1642369117.git.sander@svanheule.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 4:45 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the origin tree, today's linux-next build (powerpc
-> allnoconfig) produced this warning:
->
-> kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not used [-Wunused-variable]
->   125 | static int one_thousand = 1000;
->       |            ^~~~~~~~~~~~
->
-> Introduced by commit
->
->   39c65a94cd96 ("mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%")
->
-> It seems to only be used when CONFIG_PERF_EVENTS is set.
->
-> I didn't see it in linux-next because there is a patch later in the
-> akpm series (not yet in Linus' tree) that removes this variable.
+Hi Sander,
 
-Sorry, I saw the warning before when backporting this patch but I
-didn't realize that the followup patches refactoring this code would
-not be merged.
-Posted a fix at:
-https://lore.kernel.org/all/20220117012317.21168-1-surenb@google.com/
-Thanks!
+I love your patch! Perhaps something to improve:
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+[auto build test WARNING on next-20220116]
+[cannot apply to tip/timers/core linux/master linus/master daniel-lezcano/clockevents/next v5.16 v5.16-rc8 v5.16-rc7 v5.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Sander-Vanheule/Realtek-Otto-timer-counter-support/20220117-054003
+base:    70e6f1b39929bf6755a9c55b79fe720f7c8b9436
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220117/202201170911.q3u7GptA-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1c346209c6655c06ab28df22f821ffa06a792a14
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sander-Vanheule/Realtek-Otto-timer-counter-support/20220117-054003
+        git checkout 1c346209c6655c06ab28df22f821ffa06a792a14
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/clocksource/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/clocksource/timer-realtek-otto.c: In function 'otto_tc_init':
+   drivers/clocksource/timer-realtek-otto.c:182:16: error: implicit declaration of function 'kzalloc'; did you mean 'd_alloc'? [-Werror=implicit-function-declaration]
+     182 |         ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+         |                ^~~~~~~
+         |                d_alloc
+>> drivers/clocksource/timer-realtek-otto.c:182:14: warning: assignment to 'struct otto_tc_ctrl *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     182 |         ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+         |              ^
+   drivers/clocksource/timer-realtek-otto.c:212:9: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
+     212 |         kfree(ctrl);
+         |         ^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +182 drivers/clocksource/timer-realtek-otto.c
+
+   176	
+   177	static int __init otto_tc_init(struct device_node *node)
+   178	{
+   179		struct otto_tc_ctrl *ctrl;
+   180		int err;
+   181	
+ > 182		ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

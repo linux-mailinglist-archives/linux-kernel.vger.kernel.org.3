@@ -2,99 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D264908CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227A24908CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239941AbiAQMix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:38:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39071 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239939AbiAQMiw (ORCPT
+        id S237045AbiAQMk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:40:29 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:36712 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237036AbiAQMk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:38:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642423130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 17 Jan 2022 07:40:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 915E7212BF;
+        Mon, 17 Jan 2022 12:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642423227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rqTVwBDvJkQkrgOjBOFOxTMhFtDY5gU77SJrn6Io5D8=;
-        b=Ib7PQTLISwXFAgfujJH6+yBVSFg2a/mf0SJb2HQcZy6rzCbA9IIuzHKWRKdYpeMs9SuPTM
-        sr/odnAujFhdqqwQjyRXL4ZmIE3AkELAH3dyJg7iqKnlY+5O+wOpRZoCKyI3BFns3lDwJG
-        3XfG1QpZivFapCfEQTJBkaN5KjSwbvo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-QJzUXAueNpm3biCdYaoZbw-1; Mon, 17 Jan 2022 07:38:49 -0500
-X-MC-Unique: QJzUXAueNpm3biCdYaoZbw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=ac5nyObxkkedzmWPxZXWjsCjSPwuhnK/aotnvT2TN1I=;
+        b=hRcfG3BuBoCzCulb1co9DL14pIOMcijpy6BZOBmBLCy9VInL7g8rsps1lT0A2/M/xo6H3Q
+        q4dkAo6xrcm+un9Gw4q0q8YKXG6mtOmayfkhgR4rerpFjYgJGk3gaS3o0MmRsE3C8QFb8r
+        +RaqVVJDummCf4UE0ewOgrb/ysbqfRs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642423227;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ac5nyObxkkedzmWPxZXWjsCjSPwuhnK/aotnvT2TN1I=;
+        b=uJ0MvzKZXpjYLQ8mn8jDnvRpNy6oNSXI1K2JyiK/DwFGH5s8ldnn3XYT/xl1xGPg8f/4Gg
+        WZRkfTkZbVFY77CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5010E1083F6B;
-        Mon, 17 Jan 2022 12:38:48 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E0A3974EB5;
-        Mon, 17 Jan 2022 12:38:43 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Halil Pasic <pasic@linux.ibm.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH] virtio: acknowledge all features before access
-In-Reply-To: <20220117032429-mutt-send-email-mst@kernel.org>
-Organization: Red Hat GmbH
-References: <20220114200744.150325-1-mst@redhat.com>
- <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
- <20220117032429-mutt-send-email-mst@kernel.org>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Mon, 17 Jan 2022 13:38:42 +0100
-Message-ID: <87mtjuv8od.fsf@redhat.com>
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5FE7D13D3C;
+        Mon, 17 Jan 2022 12:40:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xdWGFrtj5WEJJwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 17 Jan 2022 12:40:27 +0000
+Message-ID: <39a3470f-06ab-cf41-32e4-80edb249c7d3@suse.cz>
+Date:   Mon, 17 Jan 2022 13:40:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Clark Williams <williams@redhat.com>
+References: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
+ <YeO8pcs866Iu2iJX@ip-172-31-30-232.ap-northeast-1.compute.internal>
+ <CADvbK_eY=3Gf79MkvK72Nh86ysN4eoFei0k1jg0frg22GgToGA@mail.gmail.com>
+ <YeU4B46F+oFUBRLE@linutronix.de>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] mm: slub: fix a deadlock warning in kmem_cache_destroy
+In-Reply-To: <YeU4B46F+oFUBRLE@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
++CC Clark
 
-> On Mon, Jan 17, 2022 at 02:31:49PM +0800, Jason Wang wrote:
->>=20
->> =E5=9C=A8 2022/1/15 =E4=B8=8A=E5=8D=884:09, Michael S. Tsirkin =E5=86=99=
-=E9=81=93:
->> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *d=
-ev)
->> >   	/* We have a driver! */
->> >   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
->> > +	ret =3D dev->config->finalize_features(dev);
->> > +	if (ret)
->> > +		goto err;
->>=20
->>=20
->> Is this part of code related?
->>=20
->> Thanks
->>=20
->
-> Yes. virtio_finalize_features no longer calls dev->config->finalize_featu=
-res.
->
-> I think the dev->config->finalize_features callback is actually
-> a misnomer now, it just sends the features to device,
-> finalize is FEATURES_OK. Renaming that is a bigger
-> patch though, and I'd like this one to be cherry-pickable
-> to stable.
+On 1/17/22 10:33, Sebastian Andrzej Siewior wrote:
+> On 2022-01-17 16:32:46 [+0800], Xin Long wrote:
+>> another issue. From the code analysis, this issue does exist on the
+>> upstream kernel, though I couldn't build an upstream RT kernel for the
+>> testing.
+> 
+> This should also reproduce in v5.16 since the commit in question is
+> there.
 
-Do we want to add a comment before the calls to ->finalize_features()
-(/* write features to device */) and adapt the comment in virtio_ring.h?
-Should still be stable-friendly, and giving the callback a better name
-can be a follow-up patch.
+Yeah. I remember we had some issues with the commit during development, but
+I'd hope those were resolved and the commit that's ultimately merged got the
+fixes, see this subthread:
 
->
->> > +
->> >   	ret =3D virtio_finalize_features(dev);
->> >   	if (ret)
->> >   		goto err;
+https://lore.kernel.org/all/0b36128c-3e12-77df-85fe-a153a714569b@quicinc.com/
+
+>> > >         CPU0                        CPU1
+>> > >         ----                        ----
+>> > >   cpus_read_lock()
+>> > >                                    kn->active++
+>> > >                                    cpus_read_lock() [a]
+>> > >   wait until kn->active == 0
+>> > >
+>> > > Although cpu_hotplug_lock is a RWSEM, [a] will not block in there. But as
+>> > > lockdep annotations are added for cpu_hotplug_lock, a deadlock warning
+>> > > would be detected:
+> 
+> The cpu_hotplug_lock is a per-CPU RWSEM. The lock in [a] will block if
+> there is a writer pending.
+> 
+>> > >   ======================================================
+>> > >   WARNING: possible circular locking dependency detected
+>> > >   ------------------------------------------------------
+>> > >   dmsetup/1832 is trying to acquire lock:
+>> > >   ffff986f5a0f9f20 (kn->count#144){++++}-{0:0}, at: kernfs_remove+0x1d/0x30
+>> > >
+>> > >   but task is already holding lock:
+>> > >   ffffffffa43817c0 (slab_mutex){+.+.}-{3:3}, at: kmem_cache_destroy+0x2a/0x120
+>> > >
+> 
+> I tried to create & destroy a cryptarget which creates/destroy a cache
+> via bio_put_slab(). Either the callchain is different or something else
+> is but I didn't see a lockdep warning.
+
+RHEL-8 kernel seems to be 4.18, unless RT uses a newer one. Could be some
+silently relevant backport is missing? How about e.g. 59450bbc12be ("mm,
+slab, slub: stop taking cpu hotplug lock") ?
+
+> Sebastian
 

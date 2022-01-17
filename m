@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8335D4910F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4B94910F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243041AbiAQU0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241503AbiAQU0R (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:26:17 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F340C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:26:17 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id v2so7501536ply.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dX5BDdPmD+NPI6WaR8s/OfKSkKWqboFHvMNVeJ4mtho=;
-        b=BJHo0ew6lxRnbn+aN6pFlwQsdGTqnRA9NKFS6jblkxWxLayQuvtV333n7ZthAwgJnT
-         AXrDQvKS4+fj/sL/B1JrAkbxVoYUSWv+dNmoQiZ9CkAKJHZZE6iUXL3wElW5o66iMzyX
-         SDBnTISDGMd/utWP1KY0CK/G50WGQsCA/fUB6O5pCq9wE7v/zIMcsS0ldOfTGmslCNb/
-         gy0EWqOKlY/5t5UaXqYbhiqefybF7MLzq2GBsWuOb9+nYnudDoiw1o9Qo8Zw5q9OrmtP
-         lG2fGZEc6quxHMcBFNv5LsB1MZLspOb7joO3eS/Ta/sl/aQKXuffCQUAxFRFicczlZBU
-         /B7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dX5BDdPmD+NPI6WaR8s/OfKSkKWqboFHvMNVeJ4mtho=;
-        b=ZHM6L6N8khTIUN6WkN+Zmu30Ga7jo0liJrSWicO5T646ZGa7pjLZTt1pHUArPEYwlh
-         R3FDIxzSb/gKMu3xqenVUrkbohGTL8HahTpDMm1o/dM6VwUXMP1iYp16RY45zW3uxbnO
-         v5U44utXKfnnPnY67sar9dWx7QMv1HE48xgoCRdCaIjlYV2xVUSTu1XKRmyr2+cvH3oy
-         LSjFhIUYk2+RWjHjyfP+8X1XkqFW5lEyPM+/8hjAjHRLsxBKbPnQs3LlMTn1X4oVgHmR
-         rC3qlJ0VmF14OEv+/da0rMJ8P0aUw8zFcDfDzh8SXjxPGLvr5EhtHD46w/TPsLQCnY1J
-         2SVQ==
-X-Gm-Message-State: AOAM5332jIfgdgJSiaa6WKsW7+T0B6W3PSluJtWC68rnxME7XWjAAFNg
-        97e6dlF245v4ijYl4UwI200Sj2vvuOVltzK8/EewTA==
-X-Google-Smtp-Source: ABdhPJzs4NFch1IbJoePzGpRGSPF5a/BDJH4NeuYNKzRO9JLl6Xyd9LRCb0ktA169IQmhMKLm8A1K6VtC3RjJ2m+I+8=
-X-Received: by 2002:a17:902:b947:b0:14a:a6aa:4fa6 with SMTP id
- h7-20020a170902b94700b0014aa6aa4fa6mr10975861pls.149.1642451176378; Mon, 17
- Jan 2022 12:26:16 -0800 (PST)
+        id S243097AbiAQU1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:27:49 -0500
+Received: from mga12.intel.com ([192.55.52.136]:55705 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235244AbiAQU1t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 15:27:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642451269; x=1673987269;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6J7EAmc3BVCdekV+9fAAd4SfvYLQlJjb0v5rHGXaptc=;
+  b=kN+7rvC3fpZ8sEv3gydCBFKLKWSGump5nd1C7PrhUP5/ZZMHWs0kekH8
+   j0myBaUgX/ytXYUH9W8Ovvs00JQ/lF/QsHb+1TklEmi4t18jOrv7TJJtg
+   OCo7PfHlt/J4dpq+hlyjL6nXECh+OEjSh10ovP9SkgQ5yaRFrR0RYayls
+   /k0IJNFRNVIbt92jrq4sPw+p+Hryxq1szJvfmcXH+Zquo3ndXsC/A2kww
+   dJBYkxZH9Ei0WYl4hIcS2OI3P8Efg/ZuGeeArq4MOC2ZyOufrqV912zz9
+   KH/JfOWPYjXVzOYwidjI99CirC22SySCae2Ul6yW6apLkjhIVEQeavX0Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224669290"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="224669290"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 12:27:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="625289742"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2022 12:27:47 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9YbS-000Bqo-Nm; Mon, 17 Jan 2022 20:27:46 +0000
+Date:   Tue, 18 Jan 2022 04:26:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [drm-misc:drm-misc-next 3/5] ld.lld: error: undefined symbol:
+ drm_dp_calc_pbn_mode
+Message-ID: <202201180447.2T9OteXU-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
- <20220111201722.327219-18-krzysztof.kozlowski@canonical.com>
- <CACRpkdYTXSOW+sOX3wVtF4jj6xm0jr-F3HKQPGHOdAVjbasP3A@mail.gmail.com>
- <5047da7c-d3a6-5472-b0ca-7ed3dbe8a5fe@canonical.com> <CACRpkdbhmJ91EW395C5F2WYjWJQdJ-SBHaDm7XnQsxMuyoMmLg@mail.gmail.com>
- <77bd8fa4-2b35-352c-da07-ef91fcbed454@canonical.com>
-In-Reply-To: <77bd8fa4-2b35-352c-da07-ef91fcbed454@canonical.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Mon, 17 Jan 2022 12:26:04 -0800
-Message-ID: <CAOesGMg2eH1B94h+etPBDW3B1LMeHBytz0v2e0GfVRDv8gU0YA@mail.gmail.com>
-Subject: Re: [PATCH v2 24/28] dt-bindings: pinctrl: samsung: convert to dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 11:45 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 16/01/2022 22:38, Linus Walleij wrote:
-> > On Sun, Jan 16, 2022 at 6:10 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@canonical.com> wrote:
-> >
-> >> Anyway DTS and dtschema will have to wait for one release, because they
-> >> depend on samsung pinctrl driver change (patch #2).
-> >
-> > What about I put that (and maybe this schema) on an immutable
-> > branch so you can pull the commit into your for-arm-soc branch and
-> > put the DTS changes on top?
->
-> That would be a solution if not a policy for arm-soc of keeping DTS
-> separate. Arnd and Olof since some time are not happy when DTS branch
-> receives any driver updates.
->
-> Arnd, Olof,
-> This is a set of dtschema conversion + DTS alignment with new schema:
-> 1. Driver change necessary to accept new DTS (driver depends on node
-> names and this has to change because of dtschema),
-> 2. DTS commits depending on above, which convert node name to new format,
-> 3. Finally dtschema requiring new naming of the GPIO nodes.
->
-> If I got correctly, the policy of not mixing drivers and DTS requires
-> that #2 above (DTS changes) will wait for one more release. During the
-> time, if dtschema (#3 above) is applied, there will be new warnings
-> about non-compliant DTS.
->
-> Do you see any chance of merging driver + DTS + dtschema via same tree
-> in same release?
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   032a125904995985334766911de9e26ee2bbd646
+commit: adb9d5a2cc77e8aefe98fe4c11656c5b7025c248 [3/5] drm/dp: Move DisplayPort helpers into separate helper module
+config: hexagon-randconfig-r041-20220116 (https://download.01.org/0day-ci/archive/20220118/202201180447.2T9OteXU-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc drm-misc-next
+        git checkout adb9d5a2cc77e8aefe98fe4c11656c5b7025c248
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-Our general guidance to separate DTS and driver changes is to avoid
-large entangled changes between the two, and to discourage a developer
-mentality of "the implementation is the binding".
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think this is a good example of when it makes sense to bring in what
-is a fairly small and clean driver change to deal with this. So the
-right answer here is to stage such a stable branch and merge into both
-arm-soc and the pinctrl subsystem trees as proposed.
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: drm_dp_calc_pbn_mode
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(igt_dp_mst_calc_pbn_mode) in archive drivers/built-in.a
+   >>> referenced 7 more times
+--
+>> ld.lld: error: undefined symbol: drm_dp_encode_sideband_req
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: drm_dp_decode_sideband_req
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: drm_dp_dump_sideband_msg_req_body
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+   >>> referenced by test-drm_dp_mst_helper.c
+   >>> gpu/drm/selftests/test-drm_dp_mst_helper.o:(sideband_msg_req_encode_decode) in archive drivers/built-in.a
+   >>> referenced 1 more times
 
--Olof
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

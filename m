@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43BC4904EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13154904EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbiAQJad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:30:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S235773AbiAQJeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235753AbiAQJac (ORCPT
+        with ESMTP id S231282AbiAQJeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:30:32 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD7C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:30:32 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id l21-20020a17090b079500b001b49df5c4dfso3056924pjz.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CypZ2O0aOlLYoEWjzj8LBaIlTHfP284kF/aI9kD9Oi0=;
-        b=F0lYJHcNkJ4Tt8/+tLCR2AdNzLJeYYHixlTpRYn8nq8A9eQ3MC/AqMUv2sQY54+FCk
-         MbElzvIO5ON3FF2RMklVS3uFQVF/GVEYjbiS8OMTm2km4AMVFNeERUFC8RRh9Z9TgZEu
-         pTWbldJd/DlasbIpzIkbkviL7rPcKjrksiIUtgaoJfwRtHhTeyNJMdIZ3m6kqftr52vH
-         Yd66AK6GGfA7Np9TU/6M6V8mAXVwQV7N2vpm2qMTi2ygJ91yrZw0Kp5KkiZPIPh9ApHv
-         HkMr9OJbH77gY3ihOVAzdmW2dSaDkURsBx1/fcPzjXT00zhg2/K8/dk6/0PWQ1Qxf6Y3
-         J0fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CypZ2O0aOlLYoEWjzj8LBaIlTHfP284kF/aI9kD9Oi0=;
-        b=pNTjxdd1FN/OdMZ/F3AV85hagQWS6U64kxuTUHqG4g0Q+PKJHXPTtpsGZMRn3ipzwp
-         G7NkacfeZz2SvK0PNi9vde9O52BiVK4vpkFidgVvCXZUj7S3K8u9zvouP2ZSQ+F53qW7
-         c9toTAFR46Gekj9CXs7fqEjTHbUqXV6CWMeBBfP3/zKBk1+IffkAWP8sbi+tyvyiRLo8
-         cmJ5Hcq9OCFFfd8tgjoDjCccBxkY636/wtQA4loB7UAemYqm20fo66X44giOE4c6OORM
-         6WvOWNch/zBonJgdvOFqTfzjEIUp4KW5H8mdsAe0VUjFzjdRyrkH3aRmodGORn6LRqz7
-         njmQ==
-X-Gm-Message-State: AOAM532JYBpXGDwdtRpD9eZb40XQVk5PZc2oMc72A+qimeTCPvmNPxSQ
-        wKlCSvj3yojimX6FSVdQCXRFdw28qSoLXdQgM6sexOXLBxZe8w==
-X-Google-Smtp-Source: ABdhPJxK0U9MlTiUUxHtfSgC3lqiJHtxmlZTFYZyL0/lOpEOPkoo9p85ByTfesogvIVuCUA+0pqLXr+igjTH2NjHqdU=
-X-Received: by 2002:a17:90b:3e8e:: with SMTP id rj14mr17855889pjb.179.1642411831985;
- Mon, 17 Jan 2022 01:30:31 -0800 (PST)
+        Mon, 17 Jan 2022 04:34:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429AFC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:34:02 -0800 (PST)
+Date:   Mon, 17 Jan 2022 10:33:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642412040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gUwYyjGRaOG1n9rddzpFHQxZYYxv3VHs0gt0bcZZRuA=;
+        b=WBCWSuzouFzebECmDhPjNM+D2l6VhV19Ryfp5UsxS9uY+IYnSKT1xCzbIlcccbeyUXzptm
+        GspzC/IfdPLjYppxaEsoROdlsitjTlxgAxMaohEGWn1V7+A+nXGO+qeKgE0gYpawEOoQGm
+        1uGGOer9ERclfF/i+6TvvWeGAQt+IAZMaPRgHmrQ2QGb4pLGfK4a2vklBpBi3gtx99FqVf
+        cKXEiSlqCvF9oR4KQx8gVXCZm9NJJ2Wf0csezAo5K9d5ZNqJJ0rCJGR5lUzS+6+60O35Y2
+        GCRaA7Hrx3HbSHGEAkcDoi9iWcXqXbT8tbR+Hnx22GSvk9tjwRnOJQoTb1ccQA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642412040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gUwYyjGRaOG1n9rddzpFHQxZYYxv3VHs0gt0bcZZRuA=;
+        b=7ZpD5/huBQf6jeg4H2LeNre/AS5SE5cxbG3mRUmUd3MNrgOCHLvXnx41x1VfolCJMnI8jd
+        GBDh9Id+n29bqnDQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Antoine Tenart <atenart@kernel.org>
+Subject: Re: [PATCH] mm: slub: fix a deadlock warning in kmem_cache_destroy
+Message-ID: <YeU4B46F+oFUBRLE@linutronix.de>
+References: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
+ <YeO8pcs866Iu2iJX@ip-172-31-30-232.ap-northeast-1.compute.internal>
+ <CADvbK_eY=3Gf79MkvK72Nh86ysN4eoFei0k1jg0frg22GgToGA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220117052146.75811-1-julianbraha@gmail.com>
-In-Reply-To: <20220117052146.75811-1-julianbraha@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 17 Jan 2022 10:30:20 +0100
-Message-ID: <CAG3jFyvs_J218R0q=geUaO7V25bkdu_zjW7GMKBoP+phHnXACQ@mail.gmail.com>
-Subject: Re: [PATCH v3] drm: bridge: fix unmet dependency on DRM_KMS_HELPER
- for DRM_PANEL_BRIDGE
-To:     Julian Braha <julianbraha@gmail.com>
-Cc:     narmstrong@baylibre.com, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, jagan@amarulasolutions.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        fazilyildiran@gmail.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADvbK_eY=3Gf79MkvK72Nh86ysN4eoFei0k1jg0frg22GgToGA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 at 06:22, Julian Braha <julianbraha@gmail.com> wrote:
->
-> When DRM_CHIPONE_ICN6211 is selected, and DRM_KMS_HELPER is not selected,
-> Kbuild gives the following warning:
->
-> WARNING: unmet direct dependencies detected for DRM_PANEL_BRIDGE
->   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && DRM_KMS_HELPER [=n]
->   Selected by [y]:
->   - DRM_CHIPONE_ICN6211 [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_BRIDGE [=y] && OF [=y]
->
-> This is because DRM_CHIPONE_ICN6211 selects DRM_PANEL_BRIDGE
-> without depending on or selecting DRM_KMS_HELPER,
-> despite DRM_PANEL_BRIDGE depending on DRM_KMS_HELPER.
->
-> This unmet dependency bug was detected by Kismet,
-> a static analysis tool for Kconfig.
-> Please advise if this is not the appropriate solution.
->
-> Fixes: ce517f18944e ("drm: bridge: Add Chipone ICN6211 MIPI-DSI to RGB bridge")
-> Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Julian Braha <julianbraha@gmail.com>
-> ---
-> v2:
-> - changed from "select" to "depends on"
->
-> v3:
-> - new line now uses tabs instead of spaces.
->
->  drivers/gpu/drm/bridge/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-> index 61db5a66b493..a1b52eaf26e0 100644
-> --- a/drivers/gpu/drm/bridge/Kconfig
-> +++ b/drivers/gpu/drm/bridge/Kconfig
-> @@ -30,6 +30,7 @@ config DRM_CDNS_DSI
->  config DRM_CHIPONE_ICN6211
->         tristate "Chipone ICN6211 MIPI-DSI/RGB Converter bridge"
->         depends on OF
-> +       depends on DRM_KMS_HELPER
->         select DRM_MIPI_DSI
->         select DRM_PANEL_BRIDGE
->         help
-> --
+On 2022-01-17 16:32:46 [+0800], Xin Long wrote:
+> another issue. From the code analysis, this issue does exist on the
+> upstream kernel, though I couldn't build an upstream RT kernel for the
+> testing.
 
-Applied to drm-misc-next.
+This should also reproduce in v5.16 since the commit in question is
+there.
+
+> > >         CPU0                        CPU1
+> > >         ----                        ----
+> > >   cpus_read_lock()
+> > >                                    kn->active++
+> > >                                    cpus_read_lock() [a]
+> > >   wait until kn->active == 0
+> > >
+> > > Although cpu_hotplug_lock is a RWSEM, [a] will not block in there. But as
+> > > lockdep annotations are added for cpu_hotplug_lock, a deadlock warning
+> > > would be detected:
+
+The cpu_hotplug_lock is a per-CPU RWSEM. The lock in [a] will block if
+there is a writer pending.
+
+> > >   ======================================================
+> > >   WARNING: possible circular locking dependency detected
+> > >   ------------------------------------------------------
+> > >   dmsetup/1832 is trying to acquire lock:
+> > >   ffff986f5a0f9f20 (kn->count#144){++++}-{0:0}, at: kernfs_remove+0x1d/0x30
+> > >
+> > >   but task is already holding lock:
+> > >   ffffffffa43817c0 (slab_mutex){+.+.}-{3:3}, at: kmem_cache_destroy+0x2a/0x120
+> > >
+
+I tried to create & destroy a cryptarget which creates/destroy a cache
+via bio_put_slab(). Either the callchain is different or something else
+is but I didn't see a lockdep warning.
+
+Sebastian

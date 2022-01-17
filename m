@@ -2,88 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B2B4908DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F724908DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239975AbiAQMmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:42:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239966AbiAQMmC (ORCPT
+        id S239980AbiAQMnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:43:08 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:42225 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237120AbiAQMnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:42:02 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1265C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 04:42:01 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id g14so45334458ybs.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 04:42:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=vAmFUqrC0PksSSA2pMtmtsSscMtr7L+ruC6Pf2vhQnE=;
-        b=e2bMOzD6lFvxfjU1JWi/EP+qcCLvVyTMOV06myYdjWq34wqNWJzOikTOYQ47Fiuw/X
-         pSkOTE+pLL7w8DbMB9AEWd4xKCTPZfAP5WR6vW1ebgqvqXcx+bTDNMEHFSllfIeb8VFz
-         9h4iD8hED19+5Kp2Qw8HPKyDauoLc1HyQxURhgIgLLiMueg85slmtbft0dfJVAamzSUo
-         V+aeGqgnX8FU4h6LWcS9AeA5pxShh3CkY80HKJ4X+AgpAmB9tLNzVQZ/9tmLq4tbk/xS
-         MQnLnHfy7eD4X8ws9cLWfX3s4s7H4keEnjxEESQuLldmZtHkmSLWptYn+j2p86vKI8p3
-         jaPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=vAmFUqrC0PksSSA2pMtmtsSscMtr7L+ruC6Pf2vhQnE=;
-        b=I0VX6nKjanpvPL91VlfJr/5qZvmmyvDfAqCMKhw/+FVsiwlKg8ZcZUhrmDtHgIFny0
-         X2tsMBpTq0U3jN7nlS0cN9G/FtS/wZ4jHcVGpqsPrC+BhD7zDlQtfKsQrMPGeTbDsyxD
-         Rifx3L4FmTVTiZudi4OQ36YkMeH2DR8+lJDG3YUunPHnjKjX4l0P2tX0JM2/YkJandMu
-         W06PuT/TQ4nltTG5gwOgYCweL7z1fuOIj9Amd67Ffr4f1eQkZuefCBAAa3vWX6VFWUEn
-         GpFtPrq1WuFgs6/GzewJJOuiCfiAjRe+5JJEP397zS/MQ32PMBS8Yy0gm+b8YUM1mbTx
-         U5yQ==
-X-Gm-Message-State: AOAM531AQ3EQtTEbV0hAopRQnZqAWyf+1eFs68ZpkV5qHRcmINJ86p0X
-        kPwLRgdr6aW9BhXv7PlTu1vFmyqxeJs2+t/a+TKmNDlhV3JJhA==
-X-Google-Smtp-Source: ABdhPJwFcWegAP/aLBiQS2RDOI0Vfg/3kYpQ7IAjve/Fx5jG6zBvjvW74xJsvC4FSVsUwOS9wCM3NvGN1aPUjQAvZa8=
-X-Received: by 2002:a05:6902:1141:: with SMTP id p1mr3065197ybu.393.1642423320797;
- Mon, 17 Jan 2022 04:42:00 -0800 (PST)
+        Mon, 17 Jan 2022 07:43:06 -0500
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220117124304epoutp03d23ccb0f686978319e77aa3f2166d1f8~LD13dI_aI2184421844epoutp03a
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:43:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220117124304epoutp03d23ccb0f686978319e77aa3f2166d1f8~LD13dI_aI2184421844epoutp03a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642423384;
+        bh=y/fg2d2Xcr3JPdo/TQ/fdeipX9YDMvYtY3RetiGHpu0=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=A5PbKHFenvHimMZNjH4hyhkNK1BB/KRF/vpkAEYeC9kjk77s/S8pXT0i7xWZY9m4N
+         OsvpluWoBQDFI2AoOAnvvoBjHuv7zU0nClkloSTNkdlOsfMh7TuxRHiNF+fK/xeeuC
+         OHrcimfjgLFxJeBnDikR80OyM1H+TgXtlpix0WOY=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220117124303epcas5p105edefeb35e132cc6983672399182cf4~LD12fhCE31151111511epcas5p1F;
+        Mon, 17 Jan 2022 12:43:03 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Jcs4x5RXxz4x9Pp; Mon, 17 Jan
+        2022 12:42:57 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        47.7A.06423.15465E16; Mon, 17 Jan 2022 21:42:57 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220117124256epcas5p31c0a87b82fa0b195caa4a1a8f2e905d1~LD1v1-8k90117401174epcas5p3F;
+        Mon, 17 Jan 2022 12:42:56 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220117124256epsmtrp12fbb2a834055f83a023ae7abd22ed805~LD1v0tZbQ2520925209epsmtrp1n;
+        Mon, 17 Jan 2022 12:42:56 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-2e-61e56451f7b9
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        20.B7.29871.05465E16; Mon, 17 Jan 2022 21:42:56 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220117124253epsmtip26e666f9119d6cdd8e7b59036fd7f472f~LD1swO4sw0708607086epsmtip2e;
+        Mon, 17 Jan 2022 12:42:53 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Jonathan Cameron'" <Jonathan.Cameron@Huawei.com>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>
+Cc:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <olof@lixom.net>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <robh+dt@kernel.org>,
+        <s.nawrocki@samsung.com>, <linux-samsung-soc@vger.kernel.org>,
+        <pankaj.dubey@samsung.com>, <linux-fsd@tesla.com>,
+        "'Tamseel Shams'" <m.shams@samsung.com>
+In-Reply-To: <20220117094728.000051b8@Huawei.com>
+Subject: RE: [PATCH 20/23] dt-bindings: iio: adc: exynos-adc: Add ADC-V3
+ variant
+Date:   Mon, 17 Jan 2022 18:12:52 +0530
+Message-ID: <00b301d80b9f$c06304d0$41290e70$@samsung.com>
 MIME-Version: 1.0
-Received: by 2002:a81:3cd:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 04:42:00 -0800 (PST)
-In-Reply-To: <eea2c529-b874-58e6-f0b2-1483cc7e30a6@intel.com>
-References: <20220113213027.457282-1-martin.fernandez@eclypsium.com>
- <20220113213027.457282-4-martin.fernandez@eclypsium.com> <eea2c529-b874-58e6-f0b2-1483cc7e30a6@intel.com>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Mon, 17 Jan 2022 09:42:00 -0300
-Message-ID: <CAKgze5Z7U0R+HJ8_GajUsspYw+52+i2MW75KBGVOmE8zmT_BDQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] x86/e820: Tag e820_entry with crypto capabilities
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgIwyL4qAholePgCN4X3HAEeB8w4qn3OlMA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHJsWRmVeSWpSXmKPExsWy7bCmhm5gytNEg1mTtSzeL+thtJh/5Byr
+        xaqF19gsNr79wWQx5c9yJotNj6+xWnzsucdq8fBVuMXlXXPYLGac38dkcbd1MbvFqeuf2SwW
+        bf3CbtG69wi7xeE37awWj6//YXMQ8Fgzbw2jx6yGXjaPliNvWT02repk87hzbQ+bx+Yl9R5X
+        TjSxevRtWcXo8a9pLrvH501yAVxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbm
+        Sgp5ibmptkouPgG6bpk5QK8oKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSK
+        E3OLS/PS9fJSS6wMDQyMTIEKE7Izvu15xlpwXaRix9l9bA2MlwS7GDk5JARMJCad3crcxcjF
+        ISSwm1Gi6cMaNgjnE6PE6QVNTBDON0aJP1M7mGFavm+ewgiR2MsosfnxN3YI5yWjxKEJM1lA
+        qtgEdCV2LG5jA7FFBEol7rR9ARvFLDCbWWL9zdmMIAlOAUOJ0/uPsoLYwgJBEl9+3AJrYBFQ
+        lXiw8ipYnFfAUuLCs5WMELagxMmZT8AWMAvIS2x/OwfqJAWJn0+XsUIs85M4c38lM0SNuMTL
+        o0fArpMQ+M8hMePCbqAEB5DjInHxbTxEr7DEq+Nb2CFsKYmX/W3sECXZEj27jCHCNRJL5x1j
+        gbDtJQ5cmcMCUsIsoCmxfpc+xCY+id7fT5ggOnklOtqEIKpVJZrfXYXqlJaY2N3NCmF7SMzb
+        fYxtAqPiLCR/zULy1ywk989CWLaAkWUVo2RqQXFuemqxaYFhXmo5PL6T83M3MYITupbnDsa7
+        Dz7oHWJk4mA8xCjBwawkwnuM+0miEG9KYmVValF+fFFpTmrxIUZTYGBPZJYSTc4H5pS8knhD
+        E0sDEzMzMxNLYzNDJXHe0+kbEoUE0hNLUrNTUwtSi2D6mDg4pRqYrH6xG9l+uPTpx8G3K+w3
+        XuNuOLFnq3CR6rnY+Wbqatwl5RMNLRbnXzpqc9h07/QHZ7Uaf20I63ywTCbNQLzg9+GdJwsP
+        3+P7w/t4us3Lg2HJKjOOJ6yMzk/Kajpwzqbj9fe7xdP02Rh76u1urqrzPdK5SXC7p0LfCieO
+        RkednbccF38ws9jbeWtT6lHn078PzdIW6XBZMskyuXUSR6SopUmCRuSrX6e0DTd1lymzBS/6
+        UXb/wIF1v1/Esbf+nPBaUnqvBuc5XusDk05u1zq1cn3mhqUz+l6Hdh45sD19TXHAhNvbn7rX
+        HeN6sMTY8/iulcc1Xzunx9d2iTf5t6zhvcvGoZL//vg6JROvquZts5VYijMSDbWYi4oTASJ3
+        /hVxBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOIsWRmVeSWpSXmKPExsWy7bCSvG5AytNEg97Xqhbvl/UwWsw/co7V
+        YtXCa2wWG9/+YLKY8mc5k8Wmx9dYLT723GO1ePgq3OLyrjlsFjPO72OyuNu6mN3i1PXPbBaL
+        tn5ht2jde4Td4vCbdlaLx9f/sDkIeKyZt4bRY1ZDL5tHy5G3rB6bVnWyedy5tofNY/OSeo8r
+        J5pYPfq2rGL0+Nc0l93j8ya5AK4oLpuU1JzMstQifbsEroxve56xFlwXqdhxdh9bA+MlwS5G
+        Tg4JAROJ75unMHYxcnEICexmlNjQMZkZIiEtcX3jBHYIW1hi5b/n7BBFzxklnrx6xgqSYBPQ
+        ldixuI0NxBYRKJVoObUZbBKzwGpmiebPW5ghOmYxSfSsfM0EUsUpYChxev9RsG5hgQCJjzev
+        gXWzCKhKPFh5FSzOK2ApceHZSkYIW1Di5MwnLF2MHEBT9STaNoKFmQXkJba/nQN1qYLEz6fL
+        WCGO8JM4c38lM0SNuMTLo0fYJzAKz0IyaRbCpFlIJs1C0rGAkWUVo2RqQXFuem6xYYFhXmq5
+        XnFibnFpXrpecn7uJkZwXGtp7mDcvuqD3iFGJg7GQ4wSHMxKIrzHuJ8kCvGmJFZWpRblxxeV
+        5qQWH2KU5mBREue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cDUG/7msoLl4kmT3y6ZemuqX3GI
+        Xr3v1tl30tgtQsJzN2+flaCuNK/1vGDbZlt9i7Id7Gan9infyb0beqH+3Iuzpzfk6ZW+USz/
+        6beD0bdxn6Tl6/0+HuY6Du9KlRi32qVtcg/c4PtZ7JdK3vyHEyyWvpNOFSuzDhflCf7TXuS/
+        9JVwQs3ixdn+8bJP+7mDnJY59015XTJb95aBzc9Umyl/dFsOFNZ1hx1a6nXFkmXW99Nrfs/e
+        tyNJn6n5/CTV4/MUPjFYvHr1ULXb7WHv9t+n/qxjeLzp/cJpXmeNo0t3zK19euBd/CYeTWk+
+        441/W3c1CRhJHdDrEGrp7v3Zxy2X0V4vW5bzRfq/e9osqcdKLMUZiYZazEXFiQAXSuOlWgMA
+        AA==
+X-CMS-MailID: 20220117124256epcas5p31c0a87b82fa0b195caa4a1a8f2e905d1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220113122447epcas5p266d44c8df143229d22dfa700c285a786
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+        <CGME20220113122447epcas5p266d44c8df143229d22dfa700c285a786@epcas5p2.samsung.com>
+        <20220113121143.22280-21-alim.akhtar@samsung.com>
+        <75ae8b8c-e416-5007-b995-f1317ef207d4@canonical.com>
+        <20220117094728.000051b8@Huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22, Dave Hansen <dave.hansen@intel.com> wrote:
-> On 1/13/22 1:30 PM, Martin Fernandez wrote:
->> +/*
->> + * Update crypto capabilities in a range
->> + */
->> +static u64 __init __e820__range_update_crypto(struct e820_table *table,
->> +					      u64 start, u64 size,
->> +					      enum e820_crypto_capabilities crypto_capable)
->
-> This looks like an almost pure copy-and-paste of a 70-line function.
-> That's not the end of the world, but it does seem like a place where
-> refactoring is in order.
->
-> The rest of this series looks pretty straightforward, but this part in
-> particular is the most worrying.
->
 
-Yep, I'm not super happy with this either. I'll check it out to see
-what we can do. Btw e820__range_remove is quite similiar too.
+
+>-----Original Message-----
+>From: Jonathan Cameron [mailto:Jonathan.Cameron@Huawei.com]
+>Sent: Monday, January 17, 2022 3:17 PM
+>To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>Cc: Alim Akhtar <alim.akhtar@samsung.com>; linux-arm-
+>kernel@lists.infradead.org; linux-kernel@vger.kernel.org; soc@kernel.org;
+>linux-clk@vger.kernel.org; devicetree@vger.kernel.org; olof@lixom.net;
+>linus.walleij@linaro.org; catalin.marinas@arm.com; robh+dt@kernel.org;
+>s.nawrocki@samsung.com; linux-samsung-soc@vger.kernel.org;
+>pankaj.dubey@samsung.com; linux-fsd@tesla.com; Tamseel Shams
+><m.shams@samsung.com>
+>Subject: Re: [PATCH 20/23] dt-bindings: iio: adc: exynos-adc: Add ADC-V3
+>variant
+>
+>On Thu, 13 Jan 2022 14:32:12 +0100
+>Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+>
+>> On 13/01/2022 13:11, Alim Akhtar wrote:
+>> > This patch adds a new compatible string for exynos's ADC-V3 variant.
+>> >
+>> > Cc: linux-fsd@tesla.com
+>> > Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+>> > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+>
+>Please cc linux-iio@vger.kernel.org for next version...
+>
+Noted, will separate out these patches from the original series and send.
+Thanks
+
+>> > ---
+>> >  .../devicetree/bindings/iio/adc/samsung,exynos-adc.yaml          | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> >
+>> > diff --git
+>> > a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+>> > b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+>> > index 81c87295912c..9303053759ca 100644
+>> > ---
+>> > a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+>> > +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-
+>adc.y
+>> > +++ aml
+>> > @@ -14,6 +14,7 @@ properties:
+>> >      enum:
+>> >        - samsung,exynos-adc-v1                 # Exynos5250
+>> >        - samsung,exynos-adc-v2
+>> > +      - samsung,exynos-adc-v3
+>>
+>> Please use SoC-specific compatible. IP block versions are tricky because:
+>> 1. Documentation/datasheet mentioning which SoC has which block
+>> version are not public.
+>> 2. Neither are public the datasheets for ADC blocks.
+>> 3. The versioning of IP blocks can be inaccurate.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>> _______________________________________________
+>> linux-arm-kernel mailing list
+>> linux-arm-kernel@lists.infradead.org
+>> https://protect2.fireeye.com/v1/url?k=9dd88c77-fca326ff-9dd90738-74fe4
+>> 860018a-343cb1b0388f1560&q=1&e=61045889-dd66-417f-b142-
+>9e85b39f1676&u=
+>> http%3A%2F%2Flists.infradead.org%2Fmailman%2Flistinfo%2Flinux-arm-
+>kern
+>> el
+
+

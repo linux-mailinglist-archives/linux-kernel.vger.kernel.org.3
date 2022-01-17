@@ -2,108 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEC44901ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C7E4901F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbiAQGYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 01:24:34 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:60889 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbiAQGYc (ORCPT
+        id S234662AbiAQG0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 01:26:02 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:31162 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbiAQG0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:24:32 -0500
-Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 17 Jan
- 2022 14:24:28 +0800
-Message-ID: <fe77fd6b-788f-1694-f260-f95e54cf4ef3@amlogic.com>
-Date:   Mon, 17 Jan 2022 14:24:28 +0800
+        Mon, 17 Jan 2022 01:26:00 -0500
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jchfk6s6vz8wNN;
+        Mon, 17 Jan 2022 14:23:10 +0800 (CST)
+Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 17 Jan 2022 14:25:58 +0800
+Received: from [10.67.111.186] (10.67.111.186) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 17 Jan 2022 14:25:58 +0800
+Message-ID: <b4c8e31f-9f56-0683-fe70-c6619847e3ea@huawei.com>
+Date:   Mon, 17 Jan 2022 14:25:58 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v9 4/4] clk: meson: add sub MMC clock controller driver
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-clk@vger.kernel.org>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20220113115745.45826-1-liang.yang@amlogic.com>
- <20220113115745.45826-5-liang.yang@amlogic.com>
- <20220113213513.9819AC36AEA@smtp.kernel.org>
- <09ff9044-9abc-d1ad-26c1-5e6ece56d30c@amlogic.com>
- <20220114230130.35EAAC36AE7@smtp.kernel.org>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <20220114230130.35EAAC36AE7@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [Question] set_cpus_allowed_ptr() call failed at cpuset_attach()
+To:     Tejun Heo <tj@kernel.org>
+CC:     <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <09ce5796-798e-83d0-f1a6-ba38a787bfc5@huawei.com>
+ <4415cd09-6de3-bb2d-386d-8beb4927fb46@huawei.com>
+ <YeGi2yjRi/uZIF/2@slm.duckdns.org>
+From:   Zhang Qiao <zhangqiao22@huawei.com>
+In-Reply-To: <YeGi2yjRi/uZIF/2@slm.duckdns.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.28.39.106]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
+X-Originating-IP: [10.67.111.186]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500018.china.huawei.com (7.185.36.186)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/1/15 7:01, Stephen Boyd wrote:
-> [ EXTERNAL EMAIL ]
+在 2022/1/15 0:20, Tejun Heo 写道:
+> (cc'ing Waiman and Michal and quoting whole body)
 > 
-> Quoting Liang Yang (2022-01-13 21:14:46)
->> On 2022/1/14 5:35, Stephen Boyd wrote:
->>> Quoting Liang Yang (2022-01-13 03:57:45)
->>>> diff --git a/drivers/clk/meson/mmc-clkc.c b/drivers/clk/meson/mmc-clkc.c
->>>> new file mode 100644
->>>> index 000000000000..f53977f61390
->>>> --- /dev/null
->>>> +++ b/drivers/clk/meson/mmc-clkc.c
->>>> @@ -0,0 +1,300 @@
-> [..]
->>>> +
->>>> +static int mmc_clkc_probe(struct platform_device *pdev)
->>>> +{
->>>> +       struct clk_hw_onecell_data *onecell_data;
->>>> +       struct device *dev = &pdev->dev;
->>>> +       struct mmc_clkc_data *data;
->>>> +       struct regmap *map;
->>>> +       struct clk_regmap *clk, *core;
->>>> +       struct meson_sclk_div_data *div_data;
->>>> +
->>>> +       /*cast to drop the const in match->data*/
->>>
->>> Space after *, also why do we need to cast away const? The user of this
->>> pointer passes it all the way down to mmc_clkc_register_clk() which
->>> could take the data as const void pointer and decide to cast away const
->>> there.
->>
->> if use 'const' here, it  will report a warning:
->> drivers/clk/meson/mmc-clkc.c:224:7: error: assignment discards ‘const’
->> qualifier from pointer targe
->> t type [-Werror=discarded-qualifiers]
->>
->>     data = (const struct mmc_clkc_data *)of_device_get_match_data(dev);
+> Seems sane to me but let's hear what Waiman and Michal think.
 > 
-> Of course. The type declaration up above needs const added to it.The parm of mmc_clkc_register_clk_with_parent(...., void *data) does not 
-have 'const', so make the type declaration cause a further 'const' cast 
-warning. Could i copy these infos just like below:
 
-struct mmc_clkc_data *data_clkc;
-......
-data = of_device_get_match_data(dev);
-data_clkc = devm_kmalloc(dev, sizeof(*data_clkc), GFP_KERNEL);
-memcpy(data_clkc, data, sizeof(*data_clkc));
-......
-clk = mmc_clkc_register_clk_with_parent(...., &data_clkc->rx);
+Thank you for taking a look!
+if ok, i will send a patch.
 
+Thanks,
+Zhang Qiao.
+
+> On Fri, Jan 14, 2022 at 09:15:06AM +0800, Zhang Qiao wrote:
+>>
+>> Hello everyone
+>>
+>> 	I found the following warning log on qemu. I migrated a task from one cpuset cgroup to
+>> another, while I also performed the cpu hotplug operation, and got following calltrace.
+>>
+>> 	This may lead to a inconsistency between the affinity of the task and cpuset.cpus of the
+>> dest cpuset, but this task can be successfully migrated to the dest cpuset cgroup.
+>>
+>> 	Can we use cpus_read_lock()/cpus_read_unlock() to guarantee that set_cpus_allowed_ptr()
+>> doesn't fail, as follows:
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index d0e163a02099..2535d23d2c51 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -2265,6 +2265,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+>>         guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
+>>
+>>         cgroup_taskset_for_each(task, css, tset) {
+>> +               cpus_read_lock();
+>>                 if (cs != &top_cpuset)
+>>                         guarantee_online_cpus(task, cpus_attach);
+>>                 else
+>> @@ -2274,6 +2275,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+>>                  * fail.  TODO: have a better way to handle failure here
+>>                  */
+>>                 WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
+>> +               cpus_read_unlock();
+>>
+>>
+>> 	Is there a better solution?
+>>
+>> 	Thanks
+>>
+>> log:
+>> [   43.853794] ------------[ cut here ]------------
+>> [   43.853798] WARNING: CPU: 7 PID: 463 at ../kernel/cgroup/cpuset.c:2279 cpuset_attach+0xee/0x1f0
+>> [   43.853806] Modules linked in:
+>> [   43.853807] CPU: 7 PID: 463 Comm: bash Not tainted 5.16.0-rc4+ #10
+>> [   43.853810] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+>> [   43.853811] RIP: 0010:cpuset_attach+0xee/0x1f0
+>> [   43.853814] Code: ff ff 48 85 c0 48 89 c3 74 24 48 81 fd 40 42 54 82 75 96 80 bb 38 07 00 00 6f 48 8b 05 93 b3 55 01 48 89 05 bc 05 bb 01 75 97 <0f> 0b eb b3 48 8b 85 e8 00 00 00 48 85
+>> [   43.853816] RSP: 0018:ffffc90000623c30 EFLAGS: 00010246
+>> [   43.853818] RAX: 0000000000000000 RBX: ffff888101f39c80 RCX: 0000000000000001
+>> [   43.853819] RDX: 0000000000007fff RSI: ffffffff82cd5708 RDI: ffff888101f39c80
+>> [   43.853821] RBP: ffff8881001afe00 R08: 0000000000000000 R09: ffffc90000623d00
+>> [   43.853822] R10: ffffc900000a3de8 R11: 0000000000000001 R12: ffffc90000623cf0
+>> [   43.853823] R13: ffffffff82cd56d0 R14: ffffffff82544240 R15: 0000000000000001
+>> [   43.853824] FS:  00007f012414d740(0000) GS:ffff8882b5bc0000(0000) knlGS:0000000000000000
+>> [   43.853828] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [   43.853829] CR2: 000055cfdb27de28 CR3: 00000001020cc000 CR4: 00000000000006e0
+>> [   43.853830] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> [   43.853831] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> [   43.853832] Call Trace:
+>> [   43.853846]  <TASK>
+>> [   43.853848]  cgroup_migrate_execute+0x319/0x410
+>> [   43.853853]  cgroup_attach_task+0x159/0x200
+>> [   43.853857]  ? __cgroup1_procs_write.constprop.21+0x10d/0x170
+>> [   43.853858]  __cgroup1_procs_write.constprop.21+0x10d/0x170
+>> [   43.853860]  cgroup_file_write+0x65/0x160
+>> [   43.853863]  kernfs_fop_write_iter+0x12a/0x1a0
+>> [   43.853870]  new_sync_write+0x11d/0x1b0
+>> [   43.853877]  vfs_write+0x232/0x290
+>> [   43.853880]  ksys_write+0x9c/0xd0
+>> [   43.853882]  ? fpregs_assert_state_consistent+0x19/0x40
+>> [   43.853886]  do_syscall_64+0x3a/0x80
+>> [   43.853896]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> [   43.853902] RIP: 0033:0x7f012381f224
+>> [   43.853904] Code: 89 02 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8d 05 c1 07 2e 00 8b 00 85 c0 75 13 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 54 f3 c3 66 90 45
+>> [   43.853906] RSP: 002b:00007ffd3f411f28 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+>> [   43.853908] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f012381f224
+>> [   43.853909] RDX: 0000000000000004 RSI: 000055cfdb297a70 RDI: 0000000000000001
+>> [   43.853910] RBP: 000055cfdb297a70 R08: 000000000000000a R09: 0000000000000003
+>> [   43.853911] R10: 000000000000000a R11: 0000000000000246 R12: 00007f0123afb760
+>> [   43.853913] R13: 0000000000000004 R14: 00007f0123af72a0 R15: 00007f0123af6760
+>> [   43.853914]  </TASK>
+>> [   43.853915] ---[ end trace 8292bcee7ea90403 ]---
 > 
-> .

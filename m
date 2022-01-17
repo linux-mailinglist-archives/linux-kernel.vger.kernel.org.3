@@ -2,155 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F14649099D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96464909B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiAQNfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:35:25 -0500
-Received: from mga02.intel.com ([134.134.136.20]:38483 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229655AbiAQNfY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:35:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642426524; x=1673962524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3JmoZ0RiGz7FwJ+WYd+MEOkPsuw8YTjwDU2w4Dh7MkI=;
-  b=dXsAeg15WEiujiadsHVqfv7kh7FH0f/GLdkYK6EsZr6xZnnxdbteCumi
-   RhJSHi0dlNCmYbhmAA8vDttR4pqoXU/Q3Qm4t3MH+m+uy4bLgUbZjDxMU
-   Gy1ORlL3YM4FLfBRBPOFrESCxqsPLE+9+fchRFJYueZOVYMElJv4vmuFa
-   PhAnc0D+lkp40OwSNb4fKfQOaACMz2ffCAIawxjFlqG1InNTwvXQ467kx
-   SfmZBG6dLRK+vlkSV2/vxgcgh5lcz/4u99ilaGmt0J6iyqqAKgLfhdx9e
-   7S3P496vlXP4Z1ZDFipkp88yR+VltMPJh4zXJxF31VWGFL+HN5sfArMks
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="231981641"
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="231981641"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:35:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="671559600"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:35:20 -0800
-Date:   Mon, 17 Jan 2022 21:46:10 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] KVM: x86: Remove WARN_ON in
- kvm_arch_check_processor_compat
-Message-ID: <20220117134608.GA30004@gao-cwp>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-6-chao.gao@intel.com>
- <Ydy6aIyI3jFQvF0O@google.com>
- <BN9PR11MB5276DEA925C72AF585E7472C8C519@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Yd3fFxg3IjWPUIqH@google.com>
- <20220112110000.GA10249@gao-cwp>
- <Yd8RUJ6YpQrpe4Zf@google.com>
- <20220117133503.GA27833@gao-cwp>
+        id S234392AbiAQNrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:47:09 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:44622 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232312AbiAQNrI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 08:47:08 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 85B6B21122;
+        Mon, 17 Jan 2022 13:47:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642427227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wOyNSE44kK6xC41+HeY9o5KMHdWeZPag8nufqG7r+kQ=;
+        b=a2pt+/qPhTSug69pW6RB6v4uzknMCkQhWVvqoHvVCncCefvImDNkaElNJ+HjVJshxFxXS6
+        208ptyY9gfUT9VwlFirdumwjt29oeZObXFMr6a/ndgWUhYbsbqa1vm8iZFMJo6SQNH0caX
+        x8Hqmewhq4/7WgAA0lTtRoBGgNeQunI=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 432B5A3B88;
+        Mon, 17 Jan 2022 13:47:07 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 14:47:06 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>
+Subject: Re: [RESEND][PATCH v2] mm: don't call lru draining in the nested
+ lru_cache_disable
+Message-ID: <YeVzWlrojI1+buQx@dhcp22.suse.cz>
+References: <20211230193627.495145-1-minchan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220117133503.GA27833@gao-cwp>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211230193627.495145-1-minchan@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 09:35:04PM +0800, Chao Gao wrote:
->On Wed, Jan 12, 2022 at 05:35:12PM +0000, Sean Christopherson wrote:
->>On Wed, Jan 12, 2022, Chao Gao wrote:
->>> On Tue, Jan 11, 2022 at 07:48:39PM +0000, Sean Christopherson wrote:
->>> >On Tue, Jan 11, 2022, Tian, Kevin wrote:
->>> >> > From: Sean Christopherson <seanjc@google.com>
->>> >> > Sent: Tuesday, January 11, 2022 7:00 AM
->>> >> > 
->>> >> > On Mon, Dec 27, 2021, Chao Gao wrote:
->>> >> > > kvm_arch_check_processor_compat() needn't be called with interrupt
->>> >> > > disabled, as it only reads some CRs/MSRs which won't be clobbered
->>> >> > > by interrupt handlers or softirq.
->>> >> > >
->>> >> > > What really needed is disabling preemption. No additional check is
->>> >> > > added because if CONFIG_DEBUG_PREEMPT is enabled, smp_processor_id()
->>> >> > > (right above the WARN_ON()) can help to detect any violation.
->>> >> > 
->>> >> > Hrm, IIRC, the assertion that IRQs are disabled was more about detecting
->>> >> > improper usage with respect to KVM doing hardware enabling than it was
->>> >> > about ensuring the current task isn't migrated.  E.g. as exhibited by patch
->>> >> > 06, extra protections (disabling of hotplug in that case) are needed if
->>> >> > this helper is called outside of the core KVM hardware enabling flow since
->>> >> > hardware_enable_all() does its thing via SMP function call.
->>> >> 
->>> >> Looks the WARN_ON() was added by you. 😊
->>> >
->>> >Yeah, past me owes current me a beer.
->>> >
->>> >> commit f1cdecf5807b1a91829a2dc4f254bfe6bafd4776
->>> >> Author: Sean Christopherson <sean.j.christopherson@intel.com>
->>> >> Date:   Tue Dec 10 14:44:14 2019 -0800
->>> >> 
->>> >>     KVM: x86: Ensure all logical CPUs have consistent reserved cr4 bits
->>> >> 
->>> >>     Check the current CPU's reserved cr4 bits against the mask calculated
->>> >>     for the boot CPU to ensure consistent behavior across all CPUs.
->>> >> 
->>> >>     Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
->>> >>     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->>> >> 
->>> >> But it's unclear to me how this WARN_ON() is related to what the commit
->>> >> msg tries to explain.
->>> >
->>> >Ya, the changelog and lack of a comment is awful.
->>> >
->>> >> When I read this code it's more like a sanity check on the assumption that it
->>> >> is currently called in SMP function call which runs the said function with
->>> >> interrupt disabled.
->>> >
->>> >Yes, and as above, that assertion was more about the helper not really being safe
->>> >for general usage as opposed to wanting to detect use from preemptible context.
->>> >If we end up keeping the WARN_ON, I'll happily write a comment explaining the
->>> >point of the assertion.
->>> 
->>> OK. I will do following changes to keep the WARN_ON():
->>> 1. drop this patch
->>> 2. disable interrupt before the call site in patch 6.
->>
->>No, we shouldn't sully other code just to keep this WARN.  Again, the point of
->>the WARN is/was to highlight that any use outside of the hardware enabling path
->>is suspect.  That's why I asked if there was a way this code could identify that
->>the CPU in question is being hotplugged, i.e. to convey that the helper is safe
->>to use only during hardware enabling _or_ hotplug.  If that's not feasible,
->>replacing the WARN with a scary comment is better than disabling IRQs.
+On Thu 30-12-21 11:36:27, Minchan Kim wrote:
+> lru_cache_disable involves IPIs to drain pagevec of each core,
+> which sometimes takes quite long time to complete depending
+> on cpu's business, which makes allocation too slow up to
+> sveral hundredth milliseconds. Furthermore, the repeated draining
+> in the alloc_contig_range makes thing worse considering caller
+> of alloc_contig_range usually tries multiple times in the loop.
 >
->OK. How about:
->
->	/*
->	 * Compatibility checks are done when loading KVM or in KVM's CPU
->	 * hotplug callback. It ensures all online CPUs are compatible before
->	 * running any vCPUs. For other cases, compatibility checks are
->	 * unnecessary or even problematic. Try to detect improper usages here.
->	 */
->	WARN_ON(!irqs_disabled() && !cpu_active(smp_processor_id()));
+> This patch makes the lru_cache_disable aware of the fact the
+> pagevec was already disabled. With that, user of alloc_contig_range
+> can disable the lru cache in advance in their context during the
+> repeated trial so they can avoid the multiple costly draining
+> in cma allocation.
 
-Sorry. It should be:
-	WARN_ON(!irqs_disabled() && cpu_active(smp_processor_id()));
+Do you have any numbers on any improvements?
 
->
->a CPU is active when it reaches the CPUHP_AP_ACTIVE state (the last state before
->CPUHP_ONLINE). So, if a cpu isn't active, it probably is being hotplugged. One
->false positive is the CPU is dying, which I guess is fine.
->
->And to help justify this change, I will merge it into patch 6.
+Now to the change. I do not like this much to be honest. LRU cache
+disabling is a complex synchronization scheme implemented in
+__lru_add_drain_all now you are stacking another level on top of that.
+
+More fundamentally though. I am not sure I understand the problem TBH.
+What prevents you from calling lru_cache_disable at the cma level in the
+first place?
+
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
+> ---
+>  * from v1 - https://lore.kernel.org/lkml/20211206221006.946661-1-minchan@kernel.org/
+>    * fix lru_cache_disable race - akpm
+> 
+>  include/linux/swap.h | 14 ++------------
+>  mm/cma.c             |  5 +++++
+>  mm/swap.c            | 30 ++++++++++++++++++++++++++++--
+>  3 files changed, 35 insertions(+), 14 deletions(-)
+> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index ba52f3a3478e..fe18e86a4f13 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -348,19 +348,9 @@ extern void lru_note_cost_page(struct page *);
+>  extern void lru_cache_add(struct page *);
+>  extern void mark_page_accessed(struct page *);
+>  
+> -extern atomic_t lru_disable_count;
+> -
+> -static inline bool lru_cache_disabled(void)
+> -{
+> -	return atomic_read(&lru_disable_count);
+> -}
+> -
+> -static inline void lru_cache_enable(void)
+> -{
+> -	atomic_dec(&lru_disable_count);
+> -}
+> -
+> +extern bool lru_cache_disabled(void);
+>  extern void lru_cache_disable(void);
+> +extern void lru_cache_enable(void);
+>  extern void lru_add_drain(void);
+>  extern void lru_add_drain_cpu(int cpu);
+>  extern void lru_add_drain_cpu_zone(struct zone *zone);
+> diff --git a/mm/cma.c b/mm/cma.c
+> index 995e15480937..60be555c5b95 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/cma.h>
+>  #include <linux/highmem.h>
+>  #include <linux/io.h>
+> +#include <linux/swap.h>
+>  #include <linux/kmemleak.h>
+>  #include <trace/events/cma.h>
+>  
+> @@ -453,6 +454,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>  	if (bitmap_count > bitmap_maxno)
+>  		goto out;
+>  
+> +	lru_cache_disable();
+> +
+>  	for (;;) {
+>  		spin_lock_irq(&cma->lock);
+>  		bitmap_no = bitmap_find_next_zero_area_off(cma->bitmap,
+> @@ -492,6 +495,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>  		start = bitmap_no + mask + 1;
+>  	}
+>  
+> +	lru_cache_enable();
+> +
+>  	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
+>  
+>  	/*
+> diff --git a/mm/swap.c b/mm/swap.c
+> index af3cad4e5378..5f89d7c9a54e 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -847,7 +847,17 @@ void lru_add_drain_all(void)
+>  }
+>  #endif /* CONFIG_SMP */
+>  
+> -atomic_t lru_disable_count = ATOMIC_INIT(0);
+> +static atomic_t lru_disable_count = ATOMIC_INIT(0);
+> +
+> +bool lru_cache_disabled(void)
+> +{
+> +	return atomic_read(&lru_disable_count) != 0;
+> +}
+> +
+> +void lru_cache_enable(void)
+> +{
+> +	atomic_dec(&lru_disable_count);
+> +}
+>  
+>  /*
+>   * lru_cache_disable() needs to be called before we start compiling
+> @@ -859,7 +869,21 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
+>   */
+>  void lru_cache_disable(void)
+>  {
+> -	atomic_inc(&lru_disable_count);
+> +	static DEFINE_MUTEX(lock);
+> +
+> +	/*
+> +	 * The lock gaurantees lru_cache is drained when the function
+> +	 * returned.
+> +	 */
+> +	mutex_lock(&lock);
+> +	/*
+> +	 * If someone is already disabled lru_cache, just return with
+> +	 * increasing the lru_disable_count.
+> +	 */
+> +	if (atomic_inc_not_zero(&lru_disable_count)) {
+> +		mutex_unlock(&lock);
+> +		return;
+> +	}
+>  #ifdef CONFIG_SMP
+>  	/*
+>  	 * lru_add_drain_all in the force mode will schedule draining on
+> @@ -873,6 +897,8 @@ void lru_cache_disable(void)
+>  #else
+>  	lru_add_and_bh_lrus_drain();
+>  #endif
+> +	atomic_inc(&lru_disable_count);
+> +	mutex_unlock(&lock);
+>  }
+>  
+>  /**
+> -- 
+> 2.34.1.448.ga2b2bfdf31-goog
+
+-- 
+Michal Hocko
+SUSE Labs

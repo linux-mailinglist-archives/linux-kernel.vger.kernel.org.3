@@ -2,143 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2619A4905D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61450490631
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiAQKUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:20:37 -0500
-Received: from mga03.intel.com ([134.134.136.65]:9377 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236091AbiAQKUe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:20:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642414834; x=1673950834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jDJBF+me4UIpCdYvrGk9WtsHjzrNIKyPA0OTav0+y4c=;
-  b=Y0WkvS6l4v+tlZw8kidzKcIOSBkrFokKe+GW3K0pHIdSh5K+/vZKUZqF
-   C3G4JH/86EXxzFn/RnXHrDEOaB1Zn1aVLCZ8OEjidOnnsW9LNUX+/lodz
-   VClEF3sjAyGd3vFKwk8dBnPkOB+BudDeNaeJV9I2uyYBdLypEOHejXazG
-   p5JwhH6w0r8J9y4lYltb0paKDKvpeMTNHmih5TR0uKSCwlIENZQlF5DYr
-   94sRW5D1ehQFiEqcfWJTa0eie8BlQcMgAwat1ZVYCKhXiX1MFpU06BDbc
-   yrgsi1DE4HLRl9vDIzevvROW3JahEPQigXXzlYYmZfCK48cduNEp9uhSM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244554880"
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="244554880"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 02:20:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="693025931"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 02:20:31 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9P7m-000BTI-DB; Mon, 17 Jan 2022 10:20:30 +0000
-Date:   Mon, 17 Jan 2022 18:20:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Landley <rob@landley.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH] Wire up CONFIG_DEVTMPFS_MOUNT to initramfs.
-Message-ID: <202201171822.FDXweWsH-lkp@intel.com>
-References: <d53f041a-83f7-57f7-28ae-eb7b23034f83@landley.net>
+        id S235143AbiAQKpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:45:55 -0500
+Received: from unknown-3-146.windriver.com ([147.11.3.146]:10400 "EHLO
+        mail1.wrs.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233757AbiAQKpy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 05:45:54 -0500
+X-Greylist: delayed 1571 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 05:45:54 EST
+Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
+        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 20HALxbZ025167
+        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 17 Jan 2022 02:21:59 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 20HALowg008849
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Jan 2022 02:21:51 -0800 (PST)
+Received: from pek-lpggp7.wrs.com (128.224.153.21) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 17 Jan 2022 02:21:47 -0800
+From:   Xiaolei Wang <xiaolei.wang@windriver.com>
+To:     <hongxing.zhu@nxp.com>, <l.stach@pengutronix.de>,
+        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <festevam@gmail.com>
+CC:     <linux-imx@nxp.com>, <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] pci: imx: disable reglator when imx6_pcie_probe fails
+Date:   Mon, 17 Jan 2022 18:21:37 +0800
+Message-ID: <20220117102137.3513439-1-xiaolei.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d53f041a-83f7-57f7-28ae-eb7b23034f83@landley.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [128.224.153.21]
+X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+From: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
 
-Thank you for the patch! Perhaps something to improve:
+disable reglator when imx6_pcie_probe fails,
+otherwise the following calltrace will appear
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on linus/master v5.16 next-20220117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[ 3.785075] ------------[ cut here ]------------
+[ 3.788142] Registering SWP/SWPB emulation handler
+[ 3.789853] WARNING: CPU: 0 PID: 7 at drivers/regulator/core.c:2257 _regulator_put.part.0+0x1bc/0x1e0
+[ 3.795680] Loading compiled-in X.509 certificates
+[ 3.803947] Modules linked in:
+[ 3.811922] CPU: 0 PID: 7 Comm: kworker/u8:0 Not tainted 5.16.0-10645-g3c750c7b6143-dirty #9
+[ 3.820393] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+[ 3.826945] Workqueue: events_unbound async_run_entry_fn
+[ 3.832304] unwind_backtrace from show_stack+0x10/0x14
+[ 3.837569] show_stack from dump_stack_lvl+0x58/0x70
+[ 3.842663] dump_stack_lvl from __warn+0xd8/0x114
+[ 3.847493] __warn from warn_slowpath_fmt+0x5c/0xc4
+[ 3.852490] warn_slowpath_fmt from _regulator_put.part.0+0x1bc/0x1e0
+[ 3.858968] _regulator_put.part.0 from regulator_put+0x2c/0x3c
+[ 3.864918] regulator_put from release_nodes+0x50/0x178
+[ 3.870270] release_nodes from devres_release_all+0x80/0xd0
+[ 3.875968] devres_release_all from really_probe+0xdc/0x30c
+[ 3.881661] really_probe from __driver_probe_device+0x80/0xe4
+[ 3.887522] __driver_probe_device from driver_probe_device+0x30/0xd4
+[ 3.893991] driver_probe_device from __driver_attach_async_helper+0x20/0x38
+[ 3.901068] __driver_attach_async_helper from async_run_entry_fn+0x20/0xb4
+[ 3.908059] async_run_entry_fn from process_one_work+0x298/0x7d0
+[ 3.914188] process_one_work from worker_thread+0x30/0x510
+[ 3.919792] worker_thread from kthread+0x128/0x14c
+[ 3.924705] kthread from ret_from_fork+0x14/0x38
+[ 3.929443] Exception stack(0xc20cbfb0 to 0xc20cbff8)
+[ 3.934521] bfa0: 00000000 00000000 00000000 00000000
+[ 3.942722] bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[ 3.950922] bfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[ 3.957677] irq event stamp: 1207
+[ 3.961024] hardirqs last enabled at (1215): [<c0198270>] __up_console_sem+0x50/0x60
+[ 3.968974] hardirqs last disabled at (1224): [<c019825c>] __up_console_sem+0x3c/0x60
+[ 3.976911] softirqs last enabled at (1206): [<c010150c>] __do_softirq+0x2ec/0x5a4
+[ 3.984669] softirqs last disabled at (1197): [<c012ef08>] irq_exit+0x18c/0x20c
+[ 3.992021] ---[ end trace 45a52c023bf8fb33 ]---
 
-url:    https://github.com/0day-ci/linux/commits/Rob-Landley/Wire-up-CONFIG_DEVTMPFS_MOUNT-to-initramfs/20220117-023610
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git daadb3bd0e8d3e317e36bc2c1542e86c528665e5
-config: h8300-randconfig-s032-20220116 (https://download.01.org/0day-ci/archive/20220117/202201171822.FDXweWsH-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/c6b7e8ccdf2b0a9620c9dc0b5e5b2a719b223817
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Rob-Landley/Wire-up-CONFIG_DEVTMPFS_MOUNT-to-initramfs/20220117-023610
-        git checkout c6b7e8ccdf2b0a9620c9dc0b5e5b2a719b223817
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> init/main.c:1624:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected char const [noderef] __user *pathname @@     got char * @@
-   init/main.c:1624:27: sparse:     expected char const [noderef] __user *pathname
-   init/main.c:1624:27: sparse:     got char *
-
-vim +1624 init/main.c
-
-  1579	
-  1580	static noinline void __init kernel_init_freeable(void)
-  1581	{
-  1582		/* Now the scheduler is fully set up and can do blocking allocations */
-  1583		gfp_allowed_mask = __GFP_BITS_MASK;
-  1584	
-  1585		/*
-  1586		 * init can allocate pages on any node
-  1587		 */
-  1588		set_mems_allowed(node_states[N_MEMORY]);
-  1589	
-  1590		cad_pid = get_pid(task_pid(current));
-  1591	
-  1592		smp_prepare_cpus(setup_max_cpus);
-  1593	
-  1594		workqueue_init();
-  1595	
-  1596		init_mm_internals();
-  1597	
-  1598		rcu_init_tasks_generic();
-  1599		do_pre_smp_initcalls();
-  1600		lockup_detector_init();
-  1601	
-  1602		smp_init();
-  1603		sched_init_smp();
-  1604	
-  1605		padata_init();
-  1606		page_alloc_init_late();
-  1607		/* Initialize page ext after all struct pages are initialized. */
-  1608		page_ext_init();
-  1609	
-  1610		do_basic_setup();
-  1611	
-  1612		kunit_run_all_tests();
-  1613	
-  1614		wait_for_initramfs();
-  1615	
-  1616		/*
-  1617		 * check if there is an early userspace init.  If yes, let it do all
-  1618		 * the work
-  1619		 */
-  1620		if (init_eaccess(ramdisk_execute_command) != 0) {
-  1621			ramdisk_execute_command = NULL;
-  1622			prepare_namespace();
-  1623		} else if (IS_ENABLED(CONFIG_DEVTMPFS_MOUNT)) {
-> 1624			sys_mkdir("/dev", 0755);
-
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/pci/controller/dwc/pci-imx6.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+index 6974bd5aa116..f8279a15463b 100644
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -1216,7 +1216,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 
+ 	ret = dw_pcie_host_init(&pci->pp);
+ 	if (ret < 0)
+-		return ret;
++		goto err_vpcie;
+ 
+ 	if (pci_msi_enabled()) {
+ 		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+@@ -1226,6 +1226,11 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
++
++err_vpcie:
++	regulator_disable(imx6_pcie->vpcie);
++
++	return ret;
+ }
+ 
+ static void imx6_pcie_shutdown(struct platform_device *pdev)
+-- 
+2.25.1
+

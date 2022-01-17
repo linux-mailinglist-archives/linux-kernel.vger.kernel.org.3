@@ -2,336 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 302E2490097
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133B3490098
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbiAQDeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 22:34:21 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:58915 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237016AbiAQDeQ (ORCPT
+        id S236988AbiAQDeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 22:34:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60323 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236991AbiAQDeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 22:34:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642390456; x=1673926456;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lvrbhMCfAp3bBClq/SQ1WlS+AsU8IXclSbLtgUr3LVU=;
-  b=LtIJ1IHs4IjvxbiFxtuE3D+xwBufeor72KWvpP1nbiV5tsKfBUIz+R7N
-   7WG6XREo0oiChCgtHGwzNUDQg+PCikgRtKidXBFq1hWZzb34IMoSH6cD3
-   05wQOjCf0KGIXF8yeOXyzinMUtF7dogv/E0OVgmp0I65oymdffbmIDFa0
-   w=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 16 Jan 2022 19:34:16 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 19:34:15 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 16 Jan 2022 19:34:15 -0800
-Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 16 Jan 2022 19:34:10 -0800
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-To:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     gregkh <gregkh@linuxfoundation.org>, <quic_psodagud@quicinc.com>,
-        "Trilok Soni" <quic_tsoni@quicinc.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>
-Subject: [PATCHv8 5/5] asm-generic/io: Add logging support for MMIO accessors
-Date:   Mon, 17 Jan 2022 09:02:54 +0530
-Message-ID: <14ebf1ce34f3186a45bc6c93675295acd28b8f05.1642309054.git.quic_saipraka@quicinc.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1642309054.git.quic_saipraka@quicinc.com>
-References: <cover.1642309054.git.quic_saipraka@quicinc.com>
+        Sun, 16 Jan 2022 22:34:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642390441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z7kmAQx1W86wiixFNxYrN6XgsdmCVXWqG3Iw078BpWE=;
+        b=OropG9gJiu+SjKyc8gqc8GUiV4eVWl6zEHDczVqp/F7qbZAP8x4WnNxIZIUbhLe04F0hvP
+        CS0UNtWZGNbkVXF1o4pY648M0fEXLIljlCOTvMqc2KXiSrJ3QuK1kgRQmbb087pidNvJti
+        wkvmyHeKn3REw+mcPqbTIHu1BoiuRA4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-628-dV9BwejdPMe6Qe2iDsvMwg-1; Sun, 16 Jan 2022 22:33:55 -0500
+X-MC-Unique: dV9BwejdPMe6Qe2iDsvMwg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 631B91853033;
+        Mon, 17 Jan 2022 03:33:53 +0000 (UTC)
+Received: from localhost (ovpn-12-67.pek2.redhat.com [10.72.12.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A685E5E272;
+        Mon, 17 Jan 2022 03:33:46 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 11:33:44 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        pmladek@suse.com, kernel@gpiccoli.net, senozhatsky@chromium.org,
+        rostedt@goodmis.org, john.ogness@linutronix.de,
+        feng.tang@intel.com, kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Message-ID: <20220117033344.GA2523@MiWiFi-R3L-srv>
+References: <20220114183046.428796-1-gpiccoli@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114183046.428796-1-gpiccoli@igalia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add logging support for MMIO high level accessors such as read{b,w,l,q}
-and their relaxed versions to aid in debugging unexpected crashes/hangs
-caused by the corresponding MMIO operation. Also add a generic flag
-(__DISABLE_TRACE_MMIO__) which is used to disable MMIO tracing in nVHE KVM
-and if required can be used to disable MMIO tracing for specific drivers.
+On 01/14/22 at 03:30pm, Guilherme G. Piccoli wrote:
+...... 
+>  .../admin-guide/kernel-parameters.txt         |  4 ++++
+>  kernel/panic.c                                | 22 ++++++++++++++-----
+>  2 files changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a069d8fe2fee..0f5cbe141bfd 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3727,6 +3727,10 @@
+>  			bit 4: print ftrace buffer
+>  			bit 5: print all printk messages in buffer
+>  			bit 6: print all CPUs backtrace (if available in the arch)
+> +			*Be aware* that this option may print a _lot_ of lines,
+> +			so there are risks of losing older messages in the log.
+> +			Use this option carefully, maybe worth to setup a
+> +			bigger log buffer with "log_buf_len" along with this.
+>  
+>  	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
+>  			Format: <hex>[,nousertaint]
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 41ecf9ab824a..4ae712665f75 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -148,10 +148,13 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
+>  }
+>  EXPORT_SYMBOL(nmi_panic);
+>  
+> -static void panic_print_sys_info(void)
+> +static void panic_print_sys_info(bool after_kmsg_dumpers)
+>  {
+> -	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
+> -		console_flush_on_panic(CONSOLE_REPLAY_ALL);
+> +	if (after_kmsg_dumpers) {
+> +		if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
+> +			console_flush_on_panic(CONSOLE_REPLAY_ALL);
+> +		return;
+> +	}
+>  
+>  	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
+>  		trigger_all_cpu_backtrace();
+> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
+>  	 * show some extra information on kernel log if it was set...
+>  	 */
+>  	if (kexec_crash_loaded())
+> -		panic_print_sys_info();
+> +		panic_print_sys_info(false);
 
-Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
----
- arch/arm64/kvm/hyp/nvhe/Makefile |  7 ++-
- include/asm-generic/io.h         | 82 ++++++++++++++++++++++++++++++--
- 2 files changed, 84 insertions(+), 5 deletions(-)
+Patch can'e be applied on the latest code of linus's tree, can you tell
+which branch your code are based on?
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index 24b2c2425b38..228d1f8921c3 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -4,7 +4,12 @@
- #
- 
- asflags-y := -D__KVM_NVHE_HYPERVISOR__ -D__DISABLE_EXPORTS
--ccflags-y := -D__KVM_NVHE_HYPERVISOR__ -D__DISABLE_EXPORTS
-+
-+# Tracepoint and MMIO logging symbols should not be visible at nVHE KVM as
-+# there is no way to execute them and any such MMIO access from nVHE KVM
-+# will explode instantly (Words of Marc Zyngier). So introduce a generic flag
-+# __DISABLE_TRACE_MMIO__ to disable MMIO tracing for nVHE KVM.
-+ccflags-y := -D__KVM_NVHE_HYPERVISOR__ -D__DISABLE_EXPORTS -D__DISABLE_TRACE_MMIO__
- 
- hostprogs := gen-hyprel
- HOST_EXTRACFLAGS += -I$(objtree)/include
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 7ce93aaf69f8..c9b428657760 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -10,6 +10,7 @@
- #include <asm/page.h> /* I/O is all done through memory accesses */
- #include <linux/string.h> /* for memset() and memcpy() */
- #include <linux/types.h>
-+#include <linux/instruction_pointer.h>
- 
- #ifdef CONFIG_GENERIC_IOMAP
- #include <asm-generic/iomap.h>
-@@ -61,6 +62,35 @@
- #define __io_par(v)     __io_ar(v)
- #endif
- 
-+#if IS_ENABLED(CONFIG_TRACE_MMIO_ACCESS) && !(defined(__DISABLE_TRACE_MMIO__))
-+#include <linux/tracepoint-defs.h>
-+
-+DECLARE_TRACEPOINT(rwmmio_write);
-+DECLARE_TRACEPOINT(rwmmio_post_write);
-+DECLARE_TRACEPOINT(rwmmio_read);
-+DECLARE_TRACEPOINT(rwmmio_post_read);
-+
-+void log_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-+		    unsigned long caller_addr);
-+void log_post_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-+			 unsigned long caller_addr);
-+void log_read_mmio(u8 width, const volatile void __iomem *addr,
-+		   unsigned long caller_addr);
-+void log_post_read_mmio(u64 val, u8 width, const volatile void __iomem *addr,
-+			unsigned long caller_addr);
-+
-+#else
-+
-+static inline void log_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-+				  unsigned long caller_addr) {}
-+static inline void log_post_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-+				       unsigned long caller_addr) {}
-+static inline void log_read_mmio(u8 width, const volatile void __iomem *addr,
-+				 unsigned long caller_addr) {}
-+static inline void log_post_read_mmio(u64 val, u8 width, const volatile void __iomem *addr,
-+				      unsigned long caller_addr) {}
-+
-+#endif /* CONFIG_TRACE_MMIO_ACCESS */
- 
- /*
-  * __raw_{read,write}{b,w,l,q}() access memory in native endianness.
-@@ -149,9 +179,11 @@ static inline u8 readb(const volatile void __iomem *addr)
- {
- 	u8 val;
- 
-+	log_read_mmio(8, addr, _THIS_IP_);
- 	__io_br();
- 	val = __raw_readb(addr);
- 	__io_ar(val);
-+	log_post_read_mmio(val, 8, addr, _THIS_IP_);
- 	return val;
- }
- #endif
-@@ -162,9 +194,11 @@ static inline u16 readw(const volatile void __iomem *addr)
- {
- 	u16 val;
- 
-+	log_read_mmio(16, addr, _THIS_IP_);
- 	__io_br();
- 	val = __le16_to_cpu((__le16 __force)__raw_readw(addr));
- 	__io_ar(val);
-+	log_post_read_mmio(val, 16, addr, _THIS_IP_);
- 	return val;
- }
- #endif
-@@ -175,9 +209,11 @@ static inline u32 readl(const volatile void __iomem *addr)
- {
- 	u32 val;
- 
-+	log_read_mmio(32, addr, _THIS_IP_);
- 	__io_br();
- 	val = __le32_to_cpu((__le32 __force)__raw_readl(addr));
- 	__io_ar(val);
-+	log_post_read_mmio(val, 32, addr, _THIS_IP_);
- 	return val;
- }
- #endif
-@@ -189,9 +225,11 @@ static inline u64 readq(const volatile void __iomem *addr)
- {
- 	u64 val;
- 
-+	log_read_mmio(64, addr, _THIS_IP_);
- 	__io_br();
- 	val = __le64_to_cpu(__raw_readq(addr));
- 	__io_ar(val);
-+	log_post_read_mmio(val, 64, addr, _THIS_IP_);
- 	return val;
- }
- #endif
-@@ -201,9 +239,11 @@ static inline u64 readq(const volatile void __iomem *addr)
- #define writeb writeb
- static inline void writeb(u8 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 8, addr, _THIS_IP_);
- 	__io_bw();
- 	__raw_writeb(value, addr);
- 	__io_aw();
-+	log_post_write_mmio(value, 8, addr, _THIS_IP_);
- }
- #endif
- 
-@@ -211,9 +251,11 @@ static inline void writeb(u8 value, volatile void __iomem *addr)
- #define writew writew
- static inline void writew(u16 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 16, addr, _THIS_IP_);
- 	__io_bw();
- 	__raw_writew((u16 __force)cpu_to_le16(value), addr);
- 	__io_aw();
-+	log_post_write_mmio(value, 16, addr, _THIS_IP_);
- }
- #endif
- 
-@@ -221,9 +263,11 @@ static inline void writew(u16 value, volatile void __iomem *addr)
- #define writel writel
- static inline void writel(u32 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 32, addr, _THIS_IP_);
- 	__io_bw();
- 	__raw_writel((u32 __force)__cpu_to_le32(value), addr);
- 	__io_aw();
-+	log_post_write_mmio(value, 32, addr, _THIS_IP_);
- }
- #endif
- 
-@@ -232,9 +276,11 @@ static inline void writel(u32 value, volatile void __iomem *addr)
- #define writeq writeq
- static inline void writeq(u64 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 64, addr, _THIS_IP_);
- 	__io_bw();
- 	__raw_writeq(__cpu_to_le64(value), addr);
- 	__io_aw();
-+	log_post_write_mmio(value, 64, addr, _THIS_IP_);
- }
- #endif
- #endif /* CONFIG_64BIT */
-@@ -248,7 +294,12 @@ static inline void writeq(u64 value, volatile void __iomem *addr)
- #define readb_relaxed readb_relaxed
- static inline u8 readb_relaxed(const volatile void __iomem *addr)
- {
--	return __raw_readb(addr);
-+	u8 val;
-+
-+	log_read_mmio(8, addr, _THIS_IP_);
-+	val = __raw_readb(addr);
-+	log_post_read_mmio(val, 8, addr, _THIS_IP_);
-+	return val;
- }
- #endif
- 
-@@ -256,7 +307,12 @@ static inline u8 readb_relaxed(const volatile void __iomem *addr)
- #define readw_relaxed readw_relaxed
- static inline u16 readw_relaxed(const volatile void __iomem *addr)
- {
--	return __le16_to_cpu(__raw_readw(addr));
-+	u16 val;
-+
-+	log_read_mmio(16, addr, _THIS_IP_);
-+	val = __le16_to_cpu(__raw_readw(addr));
-+	log_post_read_mmio(val, 16, addr, _THIS_IP_);
-+	return val;
- }
- #endif
- 
-@@ -264,7 +320,12 @@ static inline u16 readw_relaxed(const volatile void __iomem *addr)
- #define readl_relaxed readl_relaxed
- static inline u32 readl_relaxed(const volatile void __iomem *addr)
- {
--	return __le32_to_cpu(__raw_readl(addr));
-+	u32 val;
-+
-+	log_read_mmio(32, addr, _THIS_IP_);
-+	val = __le32_to_cpu(__raw_readl(addr));
-+	log_post_read_mmio(val, 32, addr, _THIS_IP_);
-+	return val;
- }
- #endif
- 
-@@ -272,7 +333,12 @@ static inline u32 readl_relaxed(const volatile void __iomem *addr)
- #define readq_relaxed readq_relaxed
- static inline u64 readq_relaxed(const volatile void __iomem *addr)
- {
--	return __le64_to_cpu(__raw_readq(addr));
-+	u64 val;
-+
-+	log_read_mmio(64, addr, _THIS_IP_);
-+	val =__le64_to_cpu(__raw_readq(addr));
-+	log_post_read_mmio(val, 64, addr, _THIS_IP_);
-+	return val;
- }
- #endif
- 
-@@ -280,7 +346,9 @@ static inline u64 readq_relaxed(const volatile void __iomem *addr)
- #define writeb_relaxed writeb_relaxed
- static inline void writeb_relaxed(u8 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 8, addr, _THIS_IP_);
- 	__raw_writeb(value, addr);
-+	log_post_write_mmio(value, 8, addr, _THIS_IP_);
- }
- #endif
- 
-@@ -288,7 +356,9 @@ static inline void writeb_relaxed(u8 value, volatile void __iomem *addr)
- #define writew_relaxed writew_relaxed
- static inline void writew_relaxed(u16 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 16, addr, _THIS_IP_);
- 	__raw_writew(cpu_to_le16(value), addr);
-+	log_post_write_mmio(value, 16, addr, _THIS_IP_);
- }
- #endif
- 
-@@ -296,7 +366,9 @@ static inline void writew_relaxed(u16 value, volatile void __iomem *addr)
- #define writel_relaxed writel_relaxed
- static inline void writel_relaxed(u32 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 32, addr, _THIS_IP_);
- 	__raw_writel(__cpu_to_le32(value), addr);
-+	log_post_write_mmio(value, 32, addr, _THIS_IP_);
- }
- #endif
- 
-@@ -304,7 +376,9 @@ static inline void writel_relaxed(u32 value, volatile void __iomem *addr)
- #define writeq_relaxed writeq_relaxed
- static inline void writeq_relaxed(u64 value, volatile void __iomem *addr)
- {
-+	log_write_mmio(value, 64, addr, _THIS_IP_);
- 	__raw_writeq(__cpu_to_le64(value), addr);
-+	log_post_write_mmio(value, 64, addr, _THIS_IP_);
- }
- #endif
- 
--- 
-2.33.1
+>  
+>  	/*
+>  	 * If we have crashed and we have a crash kernel loaded let it handle
+> @@ -283,6 +286,15 @@ void panic(const char *fmt, ...)
+>  	 */
+>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+>  
+> +	/*
+> +	 * If kexec_crash_loaded() is true and we still reach this point,
+> +	 * kernel would double print the information from panic_print; so
+> +	 * let's guard against that possibility (it happens if kdump users
+> +	 * also set crash_kexec_post_notifiers in the command-line).
+> +	 */
+> +	if (!kexec_crash_loaded())
+> +		panic_print_sys_info(false);
+> +
+>  	kmsg_dump(KMSG_DUMP_PANIC);
+>  
+>  	/*
+> @@ -313,7 +325,7 @@ void panic(const char *fmt, ...)
+>  	debug_locks_off();
+>  	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+>  
+> -	panic_print_sys_info();
+> +	panic_print_sys_info(true);
+>  
+>  	if (!panic_blink)
+>  		panic_blink = no_blink;
+> -- 
+> 2.34.1
+> 
 

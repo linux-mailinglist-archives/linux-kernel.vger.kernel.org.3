@@ -2,110 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D297490C6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3613490C70
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241068AbiAQQXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:23:04 -0500
-Received: from mout.gmx.net ([212.227.17.21]:49275 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237650AbiAQQXD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:23:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642436574;
-        bh=C/nNo/U1fHwsB5wUuT5IdsLvdaDiPnpuFRsb17zmLaY=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=BiA1MA4wynF+O+Vxx2Jdd5bajZOBcVShHWfh2xu+a2jBsKEy58fbFRlFLJ6hdutU5
-         ZmkKBaDx8s/Pqq6RljVqD99XqXm/fWKJxPAA9cW2Ft+fBoJF4RE1brZOsI4zPJS29K
-         MSkrZZdMH3UP7pCwIxiZiioDOi4e8Mv5UJwJgs6A=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mzyuc-1mMSIC10K6-00x1kY; Mon, 17
- Jan 2022 17:22:54 +0100
-Message-ID: <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
-Date:   Mon, 17 Jan 2022 17:21:49 +0100
+        id S241082AbiAQQXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:23:32 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10596 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237650AbiAQQXa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 11:23:30 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20HFWXNh012384;
+        Mon, 17 Jan 2022 16:23:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=1QLlsI03ZBSQdQUeNmbd3oQ1oY9zw4gqBO103kVXstM=;
+ b=du7skKjrVdl/aIiiRwA8RpO2uVsl+Xq4Rjn9fGVqlfnUPEjyg476SNhgKSnmK0R8XQcD
+ 9yg88nW98RIJe39Yal+Ow2xuqfxEIvWuSw2zOYYwQjnYIivu6B0RZC9JoWp466qpuHwo
+ BZpQ94xd6PNwyfRS0WW+fiWhwr3cR3KSoM3Ju3KWZg6solazi5uJAhsXH3gfD6rxPPBc
+ 3jJEq7DMoGvtAUKyEvtpzRw39+fTHwWUlHx0Jki/6ooJV2Eh7srGU7WI8BnqKLH+vqkT
+ FFry2yvIB/cYHoPePFxhv5bDUoQM9XMRnXTX3eG/CRwEjqQ5cIn74vfgi27sLzV8vivL hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dn8whmwpt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 16:23:30 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20HFwRc8022887;
+        Mon, 17 Jan 2022 16:23:29 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dn8whmwna-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 16:23:29 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HGD9ED009482;
+        Mon, 17 Jan 2022 16:23:26 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dknhj5wk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 16:23:26 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HGNNZe41288008
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Jan 2022 16:23:23 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 723074C046;
+        Mon, 17 Jan 2022 16:23:23 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 58A654C040;
+        Mon, 17 Jan 2022 16:23:22 +0000 (GMT)
+Received: from [9.171.80.201] (unknown [9.171.80.201])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 17 Jan 2022 16:23:22 +0000 (GMT)
+Message-ID: <adc3ce02-050d-356e-e911-81723f17ee00@linux.ibm.com>
+Date:   Mon, 17 Jan 2022 17:25:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Subject: Re: [PATCH v2 14/30] KVM: s390: pci: add basic kvm_zdev structure
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
- <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/5TP4ksWG3pJ2c8vr5NltA1nVOpxlu0XprZKELpqA0IF76MmDq9
- cMNzSSwkf2zb3y1tjx6mIIpJ5VFxbLYDgQ1sj8wMsnwWy0HfkR5GElwZzBReIZcFPybuQpk
- Xr4WSHwtVFRjxQ9/g1oBKH8hsUqjaPDa6mJbGKwY6+JhCWGI+BonlHSuVKuQgTWm+e36ZuG
- eD4VYA8rmHx2ZVkjWpV+g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cjpfNiUJtH0=:HdpF7/JuxlGGkFZaIer7yR
- DBUufryX0oB7eN8IdA5AVHbnWozyAUyuTbr/2HwgNELbH7icR3iKkxuUgmoXGe60/H9T/em41
- JZs1jcnT3Nk9GHnbDt7bzi5m6zedFUUogw+6+QHQka86ksse+o7uAbbhnQ+j750Z+0tBDOLWP
- RXh/QYNKwfA35i1Sa2kA5qAVGXtcbRhlem23tuuvSRrz0XeArsdkqheuSG5/KelGW8JxRnGyv
- eq1RQu62NtCbUAtLFKt6D1cslGptxs+d4ORwtGQyre0Bv7JRAJoStn/vxZNS3K7Ms5mPXwZLJ
- oHU02cYFCwUpPWx4KZ2qUxmJz3yoo/CLGBZjhkTwG0GjjH4mJeIDY6YRxnE8MAC8vYVng/DqT
- SKzfq7f0mazENoX/QOumTetynExnuYBKC+DdXVbgbFdzLgrSW/8NEhCejYjbvl0/U7Cbxr0WS
- odceWhNx3veLolUxWlE8XlfeavSAqMeKuCz1zffmCd8/8Iczo9UBMz3+49zoZIqKJZ4xTM7Qx
- 0SEi2Hki3dKFh9oWTm5FYKSXjH4zRIi6B0p1WZFNiSNLQ2pwE5a4eDJpseMy7hRY5pv6eAlmc
- WLvoubEWoqDo/qoMZZe+H/As3tbps7w4sJ+DxucnYksTn9Z3zIL6/rmCmj6EMsCZZM7egUEaK
- b5ZcFtW4JhBoShFQdgIhBc0YeUgDyGO9j72xUfjbe2VM/7KCiYwb0/PUIn0AJPUCdCSayNPWg
- /Mg1ZbAwXqGZTiH/Pk9uHys5ZffovwRFX55fCaHKW7VrR8tejYp4GoT5kKOWMMyUYtruejLlj
- qiygTJkFlaGm+fbMm0qnbUk7MGnCy+KPRAKnghWZzdZoW6/Dwdoh3pxe2z1ZqMW262rnFNU1N
- hnI/0EjM/7dGK6iG2k6+ppDKyzWUsJuN3gZTVioiMV8tJRqKhfyP54Bh9v00KvWpC4277+g9H
- V9FruUmJRKDOtDwCmCyBhNXEYxDB2gtFFbuZc2OQXt1AGxsPFFaPdb6QlpcKQE1l6Qi1EwSSI
- Xy24vOHDZgu96aSbtH42LFn0UsSYMGI52cVNPQavVjFc4PraZt6xIItsvUlUZxttOlSmjnx32
- NSABtmS0/DS6hY=
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-15-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-15-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Jsbm6cF3yZ-m3HJM2p6-QNEtdb3Qw45D
+X-Proofpoint-GUID: sU7SPIFaOpZrP9tpFbFMFERvM8NEtdHp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-17_07,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201170102
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 16:58, Thomas Zimmermann wrote:
-> Hi
->
-> Am 17.01.22 um 16:42 schrieb Helge Deller:
->> [...]
->>>> c) reintroduce the state where fbcon is fast on fbdev. This is import=
-ant for non-DRM machines,
->>>> =C2=A0=C2=A0=C2=A0 either when run on native hardware or in an emulat=
-or.
->>>> d) not break DRM development
->>>>
->>>> Especially regarding c) I complained in [1] and got no feedback. I re=
-ally would like to
->>>> understand where the actual problems were and what's necessary to fix=
- them.
->>>>
->>>> Helge
->>>>
->>>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gm=
-x.de
->
-> Seems like few people read linux-fbdev these days.
-> I suggest to partly revert the patch to the point were performance
-> gets better again.
-Yes, *please*!
-That would solve my biggest concern.
 
-As far as I can see that's only 2 commits to be reverted:
-b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, part =
-1 (from TODO list)"
-39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
 
-I think both were not related to any 0-day bug reports (but again, I might=
- be wrong).
+On 1/14/22 21:31, Matthew Rosato wrote:
+> This structure will be used to carry kvm passthrough information related to
+> zPCI devices.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/kvm_pci.h | 29 +++++++++++++++++++++
+>   arch/s390/include/asm/pci.h     |  3 +++
+>   arch/s390/kvm/Makefile          |  2 +-
+>   arch/s390/kvm/pci.c             | 46 +++++++++++++++++++++++++++++++++
+>   4 files changed, 79 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/s390/include/asm/kvm_pci.h
+>   create mode 100644 arch/s390/kvm/pci.c
+> 
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> new file mode 100644
+> index 000000000000..aafee2976929
+> --- /dev/null
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * KVM PCI Passthrough for virtual machines on s390
+> + *
+> + * Copyright IBM Corp. 2021
+> + *
+> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+> + */
+> +
+> +
 
-Helge
+One blank line too much.
+
+Otherwise, look good to me.
+
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+
+> +#ifndef ASM_KVM_PCI_H
+> +#define ASM_KVM_PCI_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/kvm_types.h>
+> +#include <linux/kvm_host.h>
+> +#include <linux/kvm.h>
+> +#include <linux/pci.h>
+> +
+> +struct kvm_zdev {
+> +	struct zpci_dev *zdev;
+> +	struct kvm *kvm;
+> +};
+> +
+> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev);
+> +void kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+> +
+> +#endif /* ASM_KVM_PCI_H */
+> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+> index f3cd2da8128c..9b6c657d8d31 100644
+> --- a/arch/s390/include/asm/pci.h
+> +++ b/arch/s390/include/asm/pci.h
+> @@ -97,6 +97,7 @@ struct zpci_bar_struct {
+>   };
+>   
+>   struct s390_domain;
+> +struct kvm_zdev;
+>   
+>   #define ZPCI_FUNCTIONS_PER_BUS 256
+>   struct zpci_bus {
+> @@ -190,6 +191,8 @@ struct zpci_dev {
+>   	struct dentry	*debugfs_dev;
+>   
+>   	struct s390_domain *s390_domain; /* s390 IOMMU domain data */
+> +
+> +	struct kvm_zdev *kzdev; /* passthrough data */
+>   };
+>   
+>   static inline bool zdev_enabled(struct zpci_dev *zdev)
+> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
+> index b3aaadc60ead..a26f4fe7b680 100644
+> --- a/arch/s390/kvm/Makefile
+> +++ b/arch/s390/kvm/Makefile
+> @@ -11,5 +11,5 @@ ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
+>   
+>   kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o sigp.o
+>   kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
+> -
+> +kvm-$(CONFIG_PCI) += pci.o
+>   obj-$(CONFIG_KVM) += kvm.o
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> new file mode 100644
+> index 000000000000..1c33bc7bf2bd
+> --- /dev/null
+> +++ b/arch/s390/kvm/pci.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * s390 kvm PCI passthrough support
+> + *
+> + * Copyright IBM Corp. 2021
+> + *
+> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+> + */
+> +
+> +#include <linux/kvm_host.h>
+> +#include <linux/pci.h>
+> +#include <asm/kvm_pci.h>
+> +
+> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
+> +{
+> +	struct kvm_zdev *kzdev;
+> +
+> +	kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
+> +	if (!kzdev)
+> +		return -ENOMEM;
+> +
+> +	kzdev->zdev = zdev;
+> +	zdev->kzdev = kzdev;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_open);
+> +
+> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
+> +{
+> +	struct kvm_zdev *kzdev;
+> +
+> +	kzdev = zdev->kzdev;
+> +	WARN_ON(kzdev->zdev != zdev);
+> +	zdev->kzdev = 0;
+> +	kfree(kzdev);
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_release);
+> +
+> +void kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+> +{
+> +	struct kvm_zdev *kzdev = zdev->kzdev;
+> +
+> +	kzdev->kvm = kvm;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

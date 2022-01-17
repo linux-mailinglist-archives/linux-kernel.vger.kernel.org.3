@@ -2,526 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB46E490C9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1AA490CAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241127AbiAQQlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:41:17 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:32676 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241116AbiAQQlP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:41:15 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20HE0KBi022546;
-        Mon, 17 Jan 2022 11:41:06 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dn4wyhqnf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 11:41:06 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 20HGf5is064961
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Jan 2022 11:41:05 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 17 Jan
- 2022 11:41:04 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 17 Jan 2022 11:41:04 -0500
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20HGes82012846;
-        Mon, 17 Jan 2022 11:41:00 -0500
-From:   Cristian Pop <cristian.pop@analog.com>
-To:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <jic23@kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>, Cristian Pop <cristian.pop@analog.com>
-Subject: [PATCH v1 2/2] iio:frequency:admv4420.c: Add support for ADMV4420
-Date:   Mon, 17 Jan 2022 18:52:47 +0200
-Message-ID: <20220117165247.15718-2-cristian.pop@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220117165247.15718-1-cristian.pop@analog.com>
-References: <20220117165247.15718-1-cristian.pop@analog.com>
+        id S237819AbiAQQyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:54:03 -0500
+Received: from mail-gv0che01on2096.outbound.protection.outlook.com ([40.107.23.96]:11233
+        "EHLO CHE01-GV0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235345AbiAQQyC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 11:54:02 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Eu+IJq7HARW8oR4wG+b5XJTMxEfGPvwRSSkT52f4UFFyyq96ZfLd57MicmEki5QS/L7flpAwbyNpag8ALKffdaU7bsrsApgwBcYeYXQAYbTI5X0ECSvEnLbU+OYoS6M798d1ZJcvi6LlR6iFR/feyr2NdkqJpJPiahvPkO6BMTTMAaNx9VdfH0lZqbviTB2DbZK1zZFjFxUmCrJ/RhWDMdwyHsj6qEMDBp/mAM2bsYLMYRJhqojlzkvSf4Ik0U4XUyBHaPeMh1QVxsSKJOPVVvmP+i3J4mxh2B6T47TWuGVv9AglkFQXqLZgRufHS07e5JR95hrOywxHFn/OJnHfQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QEQRVBlAVt4KOJ+nYlbNFy+Zy+n+xfjJQfeRE4iMIFo=;
+ b=AtmjHEzmdqUUX5hdJmzi6A1CxOyxYZf9ZrstFpU17JdtQOQDwhCG9H6XhLfeYHB/NvLdp+j7rKJZWNum9I/eBFhBMuUQM9mMKq+Ls/qSQN7h5O0B6pVuXkQzJEq135z9MTm4gpypWOWF64PjkwwADysMuYkO4YTlwIiAh/WutKCD6bPPcWkgW0olob06ONdNm1EDC2JOwo4Rk4VMAEahInPM97EvwC3x7QTczY5NwebPJZeDiwOyV4gE6BRjMmD+3u1eNUTrm11nvzHag3hYzSW3cg5Vfs6OVsVn28iNt5aFhmid6Fu5BoJVk/Sx0yJZbDwIaE8oN1DndBYuIv8HcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
+ dkim=pass header.d=toradex.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QEQRVBlAVt4KOJ+nYlbNFy+Zy+n+xfjJQfeRE4iMIFo=;
+ b=euAsUIRJGPyds3I5x0j+g9jvbnNOTL2S7M717iLPPV2rlpTLgRc3hEeazZpxPnnBGUoaTX6Oj0H7XTJT4//DCi/PEf4DmIosSVWizaNCuh+1PN1rWjgpsQMZHi4NWt9pBby0xBDbYKycIB7Q3Pauul+PWUVsgQy3ew4GdrobeK8=
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ GVAP278MB0279.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:3c::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.11; Mon, 17 Jan 2022 16:53:59 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::7067:aadd:1aa2:85ee]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::7067:aadd:1aa2:85ee%8]) with mapi id 15.20.4888.013; Mon, 17 Jan 2022
+ 16:53:59 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "robert.foss@linaro.org" <robert.foss@linaro.org>,
+        "narmstrong@baylibre.com" <narmstrong@baylibre.com>
+CC:     "Laurent.pinchart@ideasonboard.com" 
+        <Laurent.pinchart@ideasonboard.com>,
+        "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "kieran.bingham+renesas@ideasonboard.com" 
+        <kieran.bingham+renesas@ideasonboard.com>
+Subject: Re: [PATCH] drm/bridge: dw-hdmi: use safe format when first in bridge
+ chain
+Thread-Topic: [PATCH] drm/bridge: dw-hdmi: use safe format when first in
+ bridge chain
+Thread-Index: AQHYC8LSSOfkBvha+Eugd8X3rLMYDg==
+Date:   Mon, 17 Jan 2022 16:53:59 +0000
+Message-ID: <cdc8dd0f08aea5f8a32a6da7ec087c8d48d627f5.camel@toradex.com>
+References: <20220117141750.1182223-1-narmstrong@baylibre.com>
+In-Reply-To: <20220117141750.1182223-1-narmstrong@baylibre.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toradex.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4537bd29-cb87-4856-69c4-08d9d9d9f52c
+x-ms-traffictypediagnostic: GVAP278MB0279:EE_
+x-microsoft-antispam-prvs: <GVAP278MB027920D4C93D807EB3518641FB579@GVAP278MB0279.CHEP278.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aBqYzlPYnMjb3F7BE7YEIhU9NtexELKX9QPP1vA9li9kkEbPApMPHiZZkrPrywTCTayCyF8UNU+JN+zFH7Csf+BVcCT5BqBWmS74Gu6SojNbroLZUL8k9t0OAuCgogjQ8IAGwkzlHC6ay1XxOsuAKuni0PEdMZYehmIhXJt1BPhp5HL/6D8HW+UtTD7SVMAiJS26Jeqem3zpGUpHrjawXDNwcDCc2BZZDTxM1xd2wZerVGtllwHJ5fq+//4r3giVmSJd+HnIrQ2LWj8qvZTfmJPXv+r4htJpBRdoDIsZTQFGPbu24RKn+ez6VyaAVGLLGZrcLhluWqIzv1ltIvBSflZrxu9EhPm1t10q6M1bHEyPRqdDUJPCEkp8atGGjyySvvmHLFXGvpO1nw91SbuwINQBHCRMUyaxNYECKNcOiyExcrWSx3iJqq+eR6mZ8zWRUTzymMsGz/R5N7+Pg1uurqjSJYfGyhEPZ/j9ERSPnbPEbuccqfV6ousPosCmpDbTIiz38FIAUOPWIqJ0A+uAUs3DoKxBdfXjHPL0RCF7vxSCfpJOU/nlAVjt8lr3S4BRUHhRtwo1JcY3pH34PrtOiov5PZTpwY0MCszQSQnWNTgSWJAvRjAjC0ViiL6yVK/V6ZhU7XW3bdEa/KIN8sXp+aysG7FMhT8auyub2g/BfP+tPUAdq8cUf4s9wf//t9AEQ/38jcr/LYRqQP3Ra5j43g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(136003)(39850400004)(396003)(376002)(346002)(366004)(5660300002)(2906002)(7416002)(8676002)(71200400001)(26005)(38100700002)(122000001)(186003)(508600001)(6506007)(83380400001)(316002)(110136005)(54906003)(44832011)(86362001)(4326008)(76116006)(66946007)(36756003)(38070700005)(8936002)(6512007)(66446008)(2616005)(64756008)(6486002)(66476007)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Yi90Mlh6czB5SThnR2dDR25lQkNIQ0xBY3BTcVNKbG1zbFF5Y3dhSVpKcTdW?=
+ =?utf-8?B?YTlaK3lQNmdHd2Z5TkRESzkxSVl1WWhRZGZ0ZWNNaUlnNE5jMUIzRTN3UkEy?=
+ =?utf-8?B?dzUxUFViUlM0WDl5OTBORkF5ODBXZFlSQW9qemhtRmg0MXZYaDlMcjVPazZm?=
+ =?utf-8?B?b3pFdjlhT2VMd3BiWE9MMVJnYWFvaDlNVFVnRm93VTFsM2E3TkFhS3VIQmk2?=
+ =?utf-8?B?SDhRazdFZEF0N0c4emdSZXB3UkVJNmpzakJEQWg0WGVyRXhYeldsN01EcXJ5?=
+ =?utf-8?B?eVQwSUtiYmZqUHoyVFZPeFlveVJPWnNmdnpVRFJPcXdaL0hLcHlsY1B6R1Zx?=
+ =?utf-8?B?WkpaODhiSzhmRjNJN1BEdytLSVg5dzMxNytpQ3VieHpTTzNXbjJmamJTVjVx?=
+ =?utf-8?B?SEFTV3pRQkp6Z3RaWlVKNngrVStSakMrMmVTVkxQNzgxRGpUOC82Tk5RRTl6?=
+ =?utf-8?B?SnM0aXZYNGZtaTFXSVVGZU03SGFNOU8yS3lkbmpRWXFGOGE0V3lBZWU4Z243?=
+ =?utf-8?B?R3BNcjdOcWFjeERBRjQ0YjJQWEVYeVMyd3VxRHhXSDNpVTNtd0poWmdUWGZv?=
+ =?utf-8?B?RndIM2RXNUdFQzVrRWpxbS9mc2gyaERNWnA3Y3Z1c1FjMFBzdk5UNENZZjZv?=
+ =?utf-8?B?SnNtdGVoYXJoOVhKV21XV1dzdjE0cmc3dStDTmJyM0IrVkJidSsreFRQNTQ2?=
+ =?utf-8?B?U2ZPNzRMVHBHcHZ5VkRhM0JhcU5IaDQvWWlsRE0vUDNsK0NDT3RhSkNXQ2pD?=
+ =?utf-8?B?dk04V1NvNFlXQTRmNFBDdGJTNVBRdWV3QTJjaFRtR3pSMWYyMUdFVzFUQzB5?=
+ =?utf-8?B?dFZHOFgxSzArRjFsUHMrMmNwd3JkaGtleWZUSXdvV0F3TGxOS1BEUWU2UjZV?=
+ =?utf-8?B?UG4rYTdteHlXSnJoNVZmK1ZzbjBHK0tZTkY5cWtUTGZtWmVFOFd0VURPZkZT?=
+ =?utf-8?B?UzVYa0NIcGlEbFlKeVdQNGpaZ3VIdFZ0V0p3SlNQdXFRNDFBSFpnZ0swUFls?=
+ =?utf-8?B?OWVOU2xlNlVuK085QmN3V3VXMFN0MUlackZrVG9Zb2I5NzI0eEZQMkQvWFZ1?=
+ =?utf-8?B?S1BuQmtMQnVKQTJxTU5vaGtYUGxCWDRFZG1FMk1tN1I2ZkhBbDl0OEVnM0xK?=
+ =?utf-8?B?ays1eEpWOExTMVJHeGNYZmpGZkRmNDh0dHczL29oU1g0ODE5dzFhNW9LeG1k?=
+ =?utf-8?B?QTB5ZHk0UkY5M1Y0L2RJK3A5QWhjWEFZbVo2WElGNXJIYjFqbVgwM2V2bHdX?=
+ =?utf-8?B?MEx4V0VVYWJnb0hqeEZnWlkvanhVdmJraEZwMkZnRGxXbTM5WU9xR01xTlBN?=
+ =?utf-8?B?cGpjQ3R6ODVQMkhuem9USEpvODYwcjZma1pVaG0rOERDRkVFcTdoeHFWUytL?=
+ =?utf-8?B?VjFsVnMrTmlJV0Jtcng4RzNmYkd3MGpnTkY3aG1XZnlManVpbW8vTFFibU1V?=
+ =?utf-8?B?aEhSc1RVbEMwZ21YeTlWV1FUckJHWSt2TkFQMWJOZUhiWG05elIzL0lmYnI4?=
+ =?utf-8?B?STFGSlpMTkFYbXRPOFpLVWsxcksvOWkxRjRiT1dlemtybGNldkQyTHI3c1Iz?=
+ =?utf-8?B?dVo4Z3Zud254Z3dPcGtDNnlGaTFEMHAvUmU4YU9DdmJmRlZVQnF5TzhsdFVm?=
+ =?utf-8?B?ZndKRnpjelRwazF6K3FEM094bTFFbzVUSzBQVkdHNTUzRmhKS1g1UzBjdEFU?=
+ =?utf-8?B?bGRCMmpSTTlXTWFsZGUvaDRnREFqOVgrTkp5akQ5aUVmRVpuUGpxN00vcmFZ?=
+ =?utf-8?B?UjFyeXNhZFFubWJvRlR6U2N1UW5hazFtUlJxVGZXdGVuOUZjTXJiRlBsUVdE?=
+ =?utf-8?B?WDNMbXM5WnN3SUdZMmRqUXNpeWh3SEJwWWR0UHJtTTBYcVBwQ1NVbkZhR3pz?=
+ =?utf-8?B?dTVFUEdTVEhnTE52cFhwdExBYm5DT3dIMFRYM3Q3WjMxaC9ITFl0enBjRHNa?=
+ =?utf-8?B?SlhDUjFtU2hQVWVaMDd6d3VDUGdkWkRrblNEY2dMckl6Z0ZtQzdIaFkzT0pp?=
+ =?utf-8?B?TitOVWFDUHhPcUZNRTc3cmpad3dJM29ncnpNeWJjMGtaNy8yT2podDVFems3?=
+ =?utf-8?B?THhFK1hhazJBTk52YmM0ME53akpQYnM5ZE1mZ01uM3B1WXdTRXZQd0IxMEZa?=
+ =?utf-8?B?MXhkZWRNNk04NTdkbnNYWHNPMnBmUE9pUmx1d0xQcXJTc0NRSExLeSs2Tnoy?=
+ =?utf-8?B?dUV1akhBQW5ieTBabEg4MDBKeFA0YXJsK1lhVFVqZVZUeUtwMFU4UHpQUWVB?=
+ =?utf-8?Q?qiSyYOmPuSIBZfDwx1Bcxha5oK5kAdDrs6e/e5lQk4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <005DBA46EB373A4EACF72DF42D556FE7@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: zv44Kwb_gHKcMRZqy6Z6qCXG3vd6escY
-X-Proofpoint-ORIG-GUID: zv44Kwb_gHKcMRZqy6Z6qCXG3vd6escY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_07,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- mlxlogscore=999 priorityscore=1501 suspectscore=0 clxscore=1015
- impostorscore=0 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201170105
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4537bd29-cb87-4856-69c4-08d9d9d9f52c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2022 16:53:59.3782
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: V9OHl7I0OjE16M9BKkfTroUWANq15LWp4wDiIAikYbCEuJgSnnoitvn/d/SZEpAB02quhTUxYSjJY2fS2hOly1sB6iw7l70rAPv42ZjbXIQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0279
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for K Band Downconverter with Integrated
-Fractional-N PLL and VCO.
-More info:
-https://www.analog.com/en/products/admv4420.html
-
-Signed-off-by: Cristian Pop <cristian.pop@analog.com>
----
- drivers/iio/frequency/Kconfig    |  10 +
- drivers/iio/frequency/Makefile   |   1 +
- drivers/iio/frequency/admv4420.c | 412 +++++++++++++++++++++++++++++++
- 3 files changed, 423 insertions(+)
- create mode 100644 drivers/iio/frequency/admv4420.c
-
-diff --git a/drivers/iio/frequency/Kconfig b/drivers/iio/frequency/Kconfig
-index b44036f843af..55aa63548c00 100644
---- a/drivers/iio/frequency/Kconfig
-+++ b/drivers/iio/frequency/Kconfig
-@@ -60,6 +60,16 @@ config ADMV1013
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called admv1013.
- 
-+config ADMV4420
-+	tristate "Analog Devices ADMV4420 K Band Downconverter"
-+	depends on SPI && COMMON_CLK
-+	help
-+	  Say yes here to build support for Analog Devices K Band
-+	  Downconverter with integrated Fractional-N PLL and VCO.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called admv4420.
-+
- config ADRF6780
-         tristate "Analog Devices ADRF6780 Microwave Upconverter"
-         depends on SPI
-diff --git a/drivers/iio/frequency/Makefile b/drivers/iio/frequency/Makefile
-index ae6899856c99..782e5baa1630 100644
---- a/drivers/iio/frequency/Makefile
-+++ b/drivers/iio/frequency/Makefile
-@@ -8,4 +8,5 @@ obj-$(CONFIG_AD9523) += ad9523.o
- obj-$(CONFIG_ADF4350) += adf4350.o
- obj-$(CONFIG_ADF4371) += adf4371.o
- obj-$(CONFIG_ADMV1013) += admv1013.o
-+obj-$(CONFIG_ADMV4420) += admv4420.o
- obj-$(CONFIG_ADRF6780) += adrf6780.o
-diff --git a/drivers/iio/frequency/admv4420.c b/drivers/iio/frequency/admv4420.c
-new file mode 100644
-index 000000000000..f32039ab2cd3
---- /dev/null
-+++ b/drivers/iio/frequency/admv4420.c
-@@ -0,0 +1,412 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+/*
-+ * ADMV4420
-+ *
-+ * Copyright 2021 Analog Devices Inc.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/spi/spi.h>
-+
-+/* ADMV4420 Register Map */
-+#define ADMV4420_SPI_CONFIG_1			0x00
-+#define ADMV4420_SPI_CONFIG_2			0x01
-+#define ADMV4420_CHIPTYPE			0x03
-+#define ADMV4420_PRODUCT_ID_L			0x04
-+#define ADMV4420_PRODUCT_ID_H			0x05
-+#define ADMV4420_SCRATCHPAD			0x0A
-+#define ADMV4420_SPI_REV			0x0B
-+#define ADMV4420_ENABLES			0x103
-+#define ADMV4420_SDO_LEVEL			0x108
-+#define ADMV4420_INT_L				0x200
-+#define ADMV4420_INT_H				0x201
-+#define ADMV4420_FRAC_L				0x202
-+#define ADMV4420_FRAC_M				0x203
-+#define ADMV4420_FRAC_H				0x204
-+#define ADMV4420_MOD_L				0x208
-+#define ADMV4420_MOD_M				0x209
-+#define ADMV4420_MOD_H				0x20A
-+#define ADMV4420_R_DIV_L			0x20C
-+#define ADMV4420_R_DIV_H			0x20D
-+#define ADMV4420_REFERENCE			0x20E
-+#define ADMV4420_VCO_DATA_READBACK1		0x211
-+#define ADMV4420_VCO_DATA_READBACK2		0x212
-+#define ADMV4420_PLL_MUX_SEL			0x213
-+#define ADMV4420_LOCK_DETECT			0x214
-+#define ADMV4420_BAND_SELECT			0x215
-+#define ADMV4420_VCO_ALC_TIMEOUT		0x216
-+#define ADMV4420_VCO_MANUAL			0x217
-+#define ADMV4420_ALC				0x219
-+#define ADMV4420_VCO_TIMEOUT1			0x21C
-+#define ADMV4420_VCO_TIMEOUT2			0x21D
-+#define ADMV4420_VCO_BAND_DIV			0x21E
-+#define ADMV4420_VCO_READBACK_SEL		0x21F
-+#define ADMV4420_AUTOCAL			0x226
-+#define ADMV4420_CP_STATE			0x22C
-+#define ADMV4420_CP_BLEED_EN			0x22D
-+#define ADMV4420_CP_CURRENT			0x22E
-+#define ADMV4420_CP_BLEED			0x22F
-+
-+
-+#define ADMV4420_SPI_CONFIG_1_SOFTRESET_	BIT(7)
-+#define ADMV4420_SPI_CONFIG_1_SDOACTIVE_	BIT(4)
-+#define ADMV4420_SPI_CONFIG_1_SDOACTIVE		BIT(3)
-+#define ADMV4420_SPI_CONFIG_1_SOFTRESET		BIT(1)
-+
-+#define ADMV4420_REFERENCE_IN_MODE(x)		(x << 1)
-+#define ADMV4420_REFERENCE_DOUBLER(x)		(x << 2)
-+#define ADMV4420_REFERENCE_DIVIDE_BY_2_MASK	BIT(0)
-+#define ADMV4420_REFERENCE_MODE_MASK		BIT(1)
-+#define ADMV4420_REFERENCE_DOUBLER_MASK		BIT(2)
-+#define ADMV4420_REF_DIVIDER_MAX_VAL		GENMASK(9, 0)
-+#define ADMV4420_N_COUNTER_INT_MAX		GENMASK(15, 0)
-+#define ADMV4420_N_COUNTER_FRAC_MAX		GENMASK(23, 0)
-+#define ADMV4420_N_COUNTER_MOD_MAX		GENMASK(23, 0)
-+
-+#define ADMV4420_INT_L_MASK			GENMASK(7, 0)
-+#define ADMV4420_INT_H_MASK			GENMASK(15, 8)
-+#define ADMV4420_FRAC_L_MASK			GENMASK(7, 0)
-+#define ADMV4420_FRAC_M_MASK			GENMASK(15, 8)
-+#define ADMV4420_FRAC_H_MASK			GENMASK(23, 16)
-+#define ADMV4420_MOD_L_MASK			GENMASK(7, 0)
-+#define ADMV4420_MOD_M_MASK			GENMASK(15, 8)
-+#define ADMV4420_MOD_H_MASK			GENMASK(23, 16)
-+
-+#define ENABLE_PLL				BIT(6)
-+#define ENABLE_LO				BIT(5)
-+#define ENABLE_VCO				BIT(3)
-+#define ENABLE_IFAMP				BIT(2)
-+#define ENABLE_MIXER				BIT(1)
-+#define ENABLE_LNA				BIT(0)
-+
-+#define ADMV4420_SCRATCH_PAD_VAL_1              0xAD
-+#define ADMV4420_SCRATCH_PAD_VAL_2              0xEA
-+
-+#define ADMV4420_REF_FREQ_HZ                    50000000
-+#define MAX_N_COUNTER                           655360UL
-+#define MAX_R_DIVIDER                           1024
-+#define ADMV4420_DEFAULT_LO_FREQ_HZ		16750000000ULL
-+
-+enum admv4420_mux_sel {
-+	ADMV4420_LOW = 0,
-+	ADMV4420_LOCK_DTCT = 1,
-+	ADMV4420_R_COUNTER_PER_2 = 4,
-+	ADMV4420_N_CONUTER_PER_2 = 5,
-+	ADMV4420_HIGH = 8,
-+};
-+
-+struct admv4420_reference_block {
-+	bool doubler_en;
-+	bool divide_by_2_en;
-+	bool ref_single_ended;
-+	u32 divider;
-+};
-+
-+struct admv4420_n_counter {
-+	u32 int_val;
-+	u32 frac_val;
-+	u32 mod_val;
-+	u32 n_counter;
-+};
-+
-+struct admv4420_state {
-+	struct spi_device		*spi;
-+	struct regmap			*regmap;
-+	u64				pfd_freq_hz;
-+	u64				vco_freq_hz;
-+	u64				lo_freq_hz;
-+	struct admv4420_reference_block ref_block;
-+	struct admv4420_n_counter	n_counter;
-+	enum admv4420_mux_sel		mux_sel;
-+	struct mutex			lock;
-+};
-+
-+static const struct regmap_config admv4420_regmap_config = {
-+	.reg_bits = 16,
-+	.val_bits = 8,
-+	.read_flag_mask = BIT(7),
-+};
-+
-+static int admv4420_reg_access(struct iio_dev *indio_dev,
-+			       u32 reg, u32 writeval,
-+			       u32 *readval)
-+{
-+	struct admv4420_state *st = iio_priv(indio_dev);
-+
-+	if (readval)
-+		return regmap_read(st->regmap, reg, readval);
-+	else
-+		return regmap_write(st->regmap, reg, writeval);
-+}
-+
-+static int admv4420_set_n_counter(struct admv4420_state *st, u32 int_val, u32 frac_val, u32 mod_val)
-+{
-+	int ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_FRAC_H, FIELD_GET(ADMV4420_FRAC_H_MASK, frac_val));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_FRAC_M, FIELD_GET(ADMV4420_FRAC_M_MASK, frac_val));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_FRAC_L, FIELD_GET(ADMV4420_FRAC_L_MASK, frac_val));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_MOD_H, FIELD_GET(ADMV4420_MOD_H_MASK, mod_val));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_MOD_M, FIELD_GET(ADMV4420_MOD_M_MASK, mod_val));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_MOD_L, FIELD_GET(ADMV4420_MOD_L_MASK, mod_val));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_INT_H, FIELD_GET(ADMV4420_INT_H_MASK, int_val));
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(st->regmap, ADMV4420_INT_L, FIELD_GET(ADMV4420_INT_L_MASK, int_val));
-+}
-+
-+static int admv4420_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     int *val, int *val2, long info)
-+{
-+	struct admv4420_state *st = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_FREQUENCY:
-+		*val = div_u64(st->lo_freq_hz, 1000000);
-+		div_u64_rem(st->lo_freq_hz, 1000000, val2);
-+
-+		return IIO_VAL_INT_PLUS_MICRO;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info admv4420_info = {
-+	.read_raw = admv4420_read_raw,
-+	.debugfs_reg_access = &admv4420_reg_access,
-+};
-+
-+static const struct iio_chan_spec admv4420_channels[] = {
-+	{
-+		.type = IIO_ALTVOLTAGE,
-+		.output = 0,
-+		.indexed = 1,
-+		.channel = 0,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_FREQUENCY),
-+	},
-+};
-+
-+static void admv4420_dt_parse(struct admv4420_state *st)
-+{
-+	struct spi_device *spi = st->spi;
-+
-+	device_property_read_u64(&spi->dev, "adi,lo_freq_hz", &st->lo_freq_hz);
-+	st->ref_block.ref_single_ended = of_property_read_bool(spi->dev.of_node,
-+							       "adi,ref_ext_single_ended_en");
-+}
-+
-+static inline uint64_t admv4420_calc_pfd_vco(struct admv4420_state *st)
-+{
-+	return div_u64(st->vco_freq_hz * 10, st->n_counter.n_counter);
-+}
-+
-+static inline uint64_t admv4420_calc_pfd_ref(struct admv4420_state *st)
-+{
-+	uint64_t tmp;
-+
-+	tmp = ADMV4420_REF_FREQ_HZ * (st->ref_block.doubler_en ? 2 : 1);
-+	return div_u64(tmp, st->ref_block.divider * (st->ref_block.divide_by_2_en ? 2 : 1));
-+}
-+
-+static int admv4420_calc_parameters(struct admv4420_state *st)
-+{
-+	u64 pfd_ref, pfd_vco;
-+	bool sol_found = false;
-+
-+	st->ref_block.doubler_en = false;
-+	st->ref_block.divide_by_2_en = false;
-+	st->vco_freq_hz = div_u64(st->lo_freq_hz, 2);
-+
-+	for (st->ref_block.divider = 1; st->ref_block.divider < MAX_R_DIVIDER;
-+	    st->ref_block.divider++) {
-+		pfd_ref = admv4420_calc_pfd_ref(st);
-+		for (st->n_counter.n_counter = 1; st->n_counter.n_counter < MAX_N_COUNTER;
-+		    st->n_counter.n_counter++) {
-+			pfd_vco = admv4420_calc_pfd_vco(st);
-+			if (pfd_ref == pfd_vco) {
-+				sol_found = true;
-+				break;
-+			}
-+		}
-+
-+		if (sol_found)
-+			break;
-+
-+		st->n_counter.n_counter = 1;
-+	}
-+	if (!sol_found)
-+		return -1;
-+
-+	st->n_counter.int_val = div_u64_rem(st->n_counter.n_counter, 10, &st->n_counter.frac_val);
-+	st->n_counter.mod_val = 1;
-+
-+	return 0;
-+}
-+
-+static int admv4420_setup(struct iio_dev *indio_dev)
-+{
-+	struct admv4420_state *st = iio_priv(indio_dev);
-+	u32 val = 0;
-+	int ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_SPI_CONFIG_1,
-+			   ADMV4420_SPI_CONFIG_1_SOFTRESET_ | ADMV4420_SPI_CONFIG_1_SOFTRESET);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_SPI_CONFIG_1,
-+			   ADMV4420_SPI_CONFIG_1_SDOACTIVE_ | ADMV4420_SPI_CONFIG_1_SDOACTIVE);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_SCRATCHPAD, ADMV4420_SCRATCH_PAD_VAL_1);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(st->regmap, ADMV4420_SCRATCHPAD, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val != ADMV4420_SCRATCH_PAD_VAL_1) {
-+		dev_err(indio_dev->dev.parent, "Failed ADMV4420 to read/write scratchpad %x ", val);
-+		return -EIO;
-+	}
-+
-+	ret = regmap_write(st->regmap, ADMV4420_SCRATCHPAD, ADMV4420_SCRATCH_PAD_VAL_2);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(st->regmap, ADMV4420_SCRATCHPAD, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val != ADMV4420_SCRATCH_PAD_VAL_2) {
-+		dev_err(indio_dev->dev.parent, "Failed to read/write scratchpad %x ", val);
-+		return -EIO;
-+	}
-+
-+	st->mux_sel = ADMV4420_LOCK_DTCT;
-+	st->lo_freq_hz = ADMV4420_DEFAULT_LO_FREQ_HZ;
-+
-+	admv4420_dt_parse(st);
-+
-+	ret = admv4420_calc_parameters(st);
-+	if (ret) {
-+		dev_err(indio_dev->dev.parent, "Failed calc parameters for %lld ", st->vco_freq_hz);
-+		return ret;
-+	}
-+
-+	ret = regmap_write(st->regmap, ADMV4420_R_DIV_L,
-+			   FIELD_GET(0xFF, st->ref_block.divider));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_R_DIV_H,
-+			   FIELD_GET(0xFF00, st->ref_block.divider));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_REFERENCE,
-+			   st->ref_block.divide_by_2_en |
-+			   ADMV4420_REFERENCE_IN_MODE(st->ref_block.ref_single_ended) |
-+			   ADMV4420_REFERENCE_DOUBLER(st->ref_block.doubler_en));
-+	if (ret)
-+		return ret;
-+
-+	ret = admv4420_set_n_counter(st, st->n_counter.int_val, st->n_counter.frac_val, st->n_counter.mod_val);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_PLL_MUX_SEL, st->mux_sel);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(st->regmap, ADMV4420_ENABLES, ENABLE_PLL | ENABLE_LO | ENABLE_VCO |
-+			   ENABLE_IFAMP | ENABLE_MIXER | ENABLE_LNA);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int admv4420_probe(struct spi_device *spi)
-+{
-+	struct iio_dev *indio_dev;
-+	struct admv4420_state *st;
-+	struct regmap *regmap;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	regmap = devm_regmap_init_spi(spi, &admv4420_regmap_config);
-+	if (IS_ERR(regmap)) {
-+		dev_err(&spi->dev, "Error  ADMV4420 initializing spi regmap: %ld\n",
-+			PTR_ERR(regmap));
-+		return PTR_ERR(regmap);
-+	}
-+
-+	st = iio_priv(indio_dev);
-+	st->spi = spi;
-+	st->regmap = regmap;
-+	mutex_init(&st->lock);
-+
-+	indio_dev->dev.parent = &spi->dev;
-+	indio_dev->name = "admv4420";
-+	indio_dev->info = &admv4420_info;
-+	indio_dev->channels = admv4420_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(admv4420_channels);
-+
-+	ret = admv4420_setup(indio_dev);
-+	if (ret) {
-+		dev_err(&spi->dev, "Setup ADMV4420 failed (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	return devm_iio_device_register(&spi->dev, indio_dev);
-+}
-+
-+static const struct of_device_id admv4420_of_match[] = {
-+	{ .compatible = "adi,admv4420" },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, admv4420_of_match);
-+
-+static struct spi_driver admv4420_driver = {
-+	.driver = {
-+		.name	= "admv4420",
-+		.of_match_table = admv4420_of_match,
-+	},
-+	.probe		= admv4420_probe,
-+};
-+module_spi_driver(admv4420_driver);
-+
-+MODULE_AUTHOR("Cristian Pop <cristian.pop@analog.com>");
-+MODULE_DESCRIPTION("Analog Devices ADMV44200 K Band Downconverter");
-+MODULE_LICENSE("Dual BSD/GPL");
--- 
-2.17.1
-
+SGkgTmVpbA0KDQpTb3JyeSwganVzdCBzb21lIHRyaXZpYWwgc3BlbGxpbmcgZml4ZXMuDQoNCk9u
+IE1vbiwgMjAyMi0wMS0xNyBhdCAxNToxNyArMDEwMCwgTmVpbCBBcm1zdHJvbmcgd3JvdGU6DQo+
+IFdoZW4gdGhlIGR3LWhkbWkgYnJpZGdlIGlzIGluIGZpcnN0IHBsYWNlIG9mIHRoZSBicmlkZ2Ug
+Y2hhaW4sIHRoaXMNCj4gbWVhbnMgdGhlcmUgaXMgbm93IHdheQ0KDQpubyB3YXkNCg0KPiB0byBz
+ZWxlY3QgYW4gaW5wdXQgZm9ybWF0IG9mIHRoZSBkdy1oZG1pIEhXDQo+IGNvbXBvbmVudC4NCj4g
+DQo+IFNpbmNlIGludHJvZHVjdGlvbiBvZiBkaXNwbGF5LWNvbm5lY3RvciwgbmVnb2NpYXRpb24N
+Cg0KOiVzL25lZ29jaWF0aW9uL25lZ290aWF0aW9uL2cNCg0KPiB3YXMgYnJva2VuIHNpbmNlDQo+
+IHRoZSBkdy1oZG1pIG5lZ29jaWF0aW9uIGNvZGUgb25seSB3b3JrZWQgd2hlbiB0aGUgZHctaGRt
+aSBicmlkZ2Ugd2FzDQo+IGluIGxhc3QgcG9zaXRpb24gb2YgdGhlIGJyaWRnZSBjaGFpbiBvciBi
+ZWhpbmQgYW5vdGhlciBicmlkZ2UgYWxzbw0KPiBzdXBwb3J0aW5nIGlucHV0ICYgb3V0cHV0IGZv
+cm1hdCBuZWdvY2lhdGlvbi4NCj4gDQo+IENvbW1pdCAwNjU2ZDEyODViNzkgKCJkcm0vYnJpZGdl
+OiBkaXNwbGF5LWNvbm5lY3RvcjogaW1wbGVtZW50IGJ1cyBmbXRzIGNhbGxiYWNrcyIpDQo+IHdh
+cyBpbnRyb2R1Y2VkIHRvIG1ha2UgbmVnb2NpYXRpb24gd29yayBhZ2FpbiBieSBtYWtpbmcgZGlz
+cGxheS1jb25uZWN0b3INCj4gYWN0IGFzIGEgcGFzcy10aHJvdWdoIGNvbmNlcm5pbmcgaW5wdXQg
+JiBvdXRwdXQgZm9ybWF0IG5lZ29jaWF0aW9uLg0KPiANCj4gQnV0IGluIHRoZSBjYXNlIHdlcmUN
+Cg0Kd2hlcmUNCg0KPiB0aGUgZHctaGRtaSB3YXMgc2luZ2xlIGluIHRoZSBicmlkZ2UgY2hhaW4s
+IGZvcg0KPiBleGFtcGxlIG9uIFJlbmVzYXMgU29Dcywgd2l0aCB0aGUgZGlzcGx5LWNvbm5lY3Rv
+cg0KDQpkaXNwbGF5LWNvbm5lY3Rvcg0KDQo+IGJyaWRnZSB0aGUgZHctaGRtaQ0KPiBpcyBubyBt
+b3JlIHNpbmdsZSwgYnJlYWtpbmcgb3V0cHV0IGZvcm1hdC4NCj4gDQo+IFJlcG9ydGVkLWJ5OiBC
+aWp1IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+IEJpc2VjdGVkLWJ5OiBLaWVy
+YW4gQmluZ2hhbSA8a2llcmFuLmJpbmdoYW0rcmVuZXNhc0BpZGVhc29uYm9hcmQuY29tPg0KPiBU
+ZXN0ZWQtYnk6IEtpZXJhbiBCaW5naGFtIDxraWVyYW4uYmluZ2hhbStyZW5lc2FzQGlkZWFzb25i
+b2FyZC5jb20+DQo+IEZpeGVzOiAwNjU2ZDEyODViNzkgKCJkcm0vYnJpZGdlOiBkaXNwbGF5LWNv
+bm5lY3RvcjogaW1wbGVtZW50IGJ1cyBmbXRzIGNhbGxiYWNrcyIpLg0KPiBTaWduZWQtb2ZmLWJ5
+OiBOZWlsIEFybXN0cm9uZyA8bmFybXN0cm9uZ0BiYXlsaWJyZS5jb20+DQo+IC0tLQ0KPiDCoGRy
+aXZlcnMvZ3B1L2RybS9icmlkZ2Uvc3lub3BzeXMvZHctaGRtaS5jIHwgOSArKysrKysrLS0NCj4g
+wqAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2Uvc3lub3BzeXMvZHctaGRtaS5jIGIv
+ZHJpdmVycy9ncHUvZHJtL2JyaWRnZS9zeW5vcHN5cy9kdy1oZG1pLmMNCj4gaW5kZXggNTRkOGZk
+YWQzOTVmLi45ZjJlMWNhYzBhZTIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9icmlk
+Z2Uvc3lub3BzeXMvZHctaGRtaS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2Uvc3lu
+b3BzeXMvZHctaGRtaS5jDQo+IEBAIC0yNTUxLDggKzI1NTEsOSBAQCBzdGF0aWMgdTMyICpkd19o
+ZG1pX2JyaWRnZV9hdG9taWNfZ2V0X291dHB1dF9idXNfZm10cyhzdHJ1Y3QgZHJtX2JyaWRnZSAq
+YnJpZGdlLA0KPiDCoMKgwqDCoMKgwqDCoMKgaWYgKCFvdXRwdXRfZm10cykNCj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gTlVMTDsNCj4gwqANCj4gLcKgwqDCoMKgwqDC
+oMKgLyogSWYgZHctaGRtaSBpcyB0aGUgb25seSBicmlkZ2UsIGF2b2lkIG5lZ29jaWF0aW5nIHdp
+dGggb3Vyc2VsdmVzICovDQo+IC3CoMKgwqDCoMKgwqDCoGlmIChsaXN0X2lzX3Npbmd1bGFyKCZi
+cmlkZ2UtPmVuY29kZXItPmJyaWRnZV9jaGFpbikpIHsNCj4gK8KgwqDCoMKgwqDCoMKgLyogSWYg
+ZHctaGRtaSBpcyB0aGUgZmlyc3Qgb3Igb25seSBicmlkZ2UsIGF2b2lkIG5lZ29jaWF0aW5nIHdp
+dGggb3Vyc2VsdmVzICovDQo+ICvCoMKgwqDCoMKgwqDCoGlmIChsaXN0X2lzX3Npbmd1bGFyKCZi
+cmlkZ2UtPmVuY29kZXItPmJyaWRnZV9jaGFpbikgfHwNCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+IGxpc3RfaXNfZmlyc3QoJmJyaWRnZS0+Y2hhaW5fbm9kZSwgJmJyaWRnZS0+ZW5jb2Rlci0+YnJp
+ZGdlX2NoYWluKSkgew0KPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCpudW1fb3V0
+cHV0X2ZtdHMgPSAxOw0KPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG91dHB1dF9m
+bXRzWzBdID0gTUVESUFfQlVTX0ZNVF9GSVhFRDsNCj4gwqANCj4gQEAgLTI2NzMsNiArMjY3NCwx
+MCBAQCBzdGF0aWMgdTMyICpkd19oZG1pX2JyaWRnZV9hdG9taWNfZ2V0X2lucHV0X2J1c19mbXRz
+KHN0cnVjdCBkcm1fYnJpZGdlICpicmlkZ2UsDQo+IMKgwqDCoMKgwqDCoMKgwqBpZiAoIWlucHV0
+X2ZtdHMpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIE5VTEw7DQo+
+IMKgDQo+ICvCoMKgwqDCoMKgwqDCoC8qIElmIGR3LWhkbWkgaXMgdGhlIGZpcnN0IGJyaWRnZSBm
+YWxsLWJhY2sgdG8gc2FmZSBvdXRwdXQgZm9ybWF0ICovDQo+ICvCoMKgwqDCoMKgwqDCoGlmIChs
+aXN0X2lzX2ZpcnN0KCZicmlkZ2UtPmNoYWluX25vZGUsICZicmlkZ2UtPmVuY29kZXItPmJyaWRn
+ZV9jaGFpbikpDQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBvdXRwdXRfZm10ID0g
+TUVESUFfQlVTX0ZNVF9GSVhFRDsNCj4gKw0KPiDCoMKgwqDCoMKgwqDCoMKgc3dpdGNoIChvdXRw
+dXRfZm10KSB7DQo+IMKgwqDCoMKgwqDCoMKgwqAvKiBJZiBNRURJQV9CVVNfRk1UX0ZJWEVEIGlz
+IHRlc3RlZCwgcmV0dXJuIGRlZmF1bHQgYnVzIGZvcm1hdCAqLw0KPiDCoMKgwqDCoMKgwqDCoMKg
+Y2FzZSBNRURJQV9CVVNfRk1UX0ZJWEVEOg0KDQpDaGVlcnMNCg0KTWFyY2VsDQo=

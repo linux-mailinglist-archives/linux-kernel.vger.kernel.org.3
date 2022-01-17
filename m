@@ -2,144 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 262514905A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCE24905A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238497AbiAQKD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:03:27 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:42602 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238473AbiAQKDU (ORCPT
+        id S238503AbiAQKFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238473AbiAQKFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:03:20 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20H7ssvF007714;
-        Mon, 17 Jan 2022 11:03:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=RQJJgQY1Idxf2tTyWLXLLK2DgfgnOIBmtxr9Lc7hWX8=;
- b=Qw0RY8iouxcUrfYnk1T42n6imKaX0Rp9da09yLAvJVJhe2TvKkHwa8hzVebJx8LpXMge
- hkWuNAEYIHldBRA0lWmCx9rOfOHYZzf4Sd2OiWBxcqKdgtlcH/qlSHCK9LaNCqFVQIfp
- OmC6TZ1FJE8Wv5XMIDx/yB1NzSdwaam32iiozE8ZEHpYBx/FkdbL0JihprsR/Npeevtj
- kKTxjkLeIO/Xv58BzF+4isuuejmmkn0jLNVZyPxvsqc41dUIPY2spZU1pPLHy3M+dXQN
- JAEC5Qy6symtj07dAtCk/DlWfrXWqyp9kqKW2MaZ5g5bFbS4tf1dBW42hUvNb4ZA9zuW Xw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dmwkwj9rh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 11:03:01 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3D487100038;
-        Mon, 17 Jan 2022 11:03:01 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 348FD2122EE;
-        Mon, 17 Jan 2022 11:03:01 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE1.st.com (10.75.127.4)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 17 Jan 2022 11:03:00
- +0100
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH] dmaengine: stm32-mdma: check the channel availability (secure or not)
-Date:   Mon, 17 Jan 2022 11:03:00 +0100
-Message-ID: <20220117100300.14150-1-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Jan 2022 05:05:21 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AFCC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:05:21 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id n137so14842867iod.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u6gDfYz5XK3BoOih3zuPlIJCbUaQgDeict/aTqmu/uM=;
+        b=iSOe/tpAkwoCHPr7fqp3jd6szzLu83DiXOeN9DKlmNtzauUj0iVLlJ1T3qwaenz+pI
+         ymL2xsF44k9NC5Yds8oqf5vBHUcLF5hHnw+jHM0CnV6QZih6a6rNVoYdnSLApaVADng9
+         l75A0igiz9pk0tzYQEYjMlaydyWtcb19HYCxU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u6gDfYz5XK3BoOih3zuPlIJCbUaQgDeict/aTqmu/uM=;
+        b=BBGyIOwWrmPtt1DVvetwsCRU/fTb7dgivXvYWP43i2lpLJyMQzVOM8RBQh6PmdMuIZ
+         6KkNsgAC+lPU9njsxjuc6bez1jXQjdFNH+gj/U+g388J4/AWl2jxFkwUG13UaHcGfndn
+         SOHJ/KLGuTFnbYWrwWyS9S50r6gVDXUnbmmCBxZQ9H+P4HbRcnilBjfLchIuJnUL+GCZ
+         KQH4E40QS02q+dseUzcpemc6L8mwSIlFAJ0Qy1SiiMUJWp39cMLOJGclE6r6VesDjuBM
+         rFaKofNLe1EZFb/XtXPz6e3fO2+CrMacyHNB/rzSOMpoflc3KgDUtAhLIeIFrJV7MsKm
+         96AA==
+X-Gm-Message-State: AOAM531IYubGmUBSUQphssXMHeKMBztpJwidoH7vQ7PmdelTLRsJQjny
+        lMao8zFZpHUmf8HXOqu68W8+Wx6963CR/zcoTEm1qQ==
+X-Google-Smtp-Source: ABdhPJySbmSFcO/QHU4TTkKLetNVnNodmMnSpMBqDkpCFOLtn3BKxvUR7j8t3VwVAQpMLQm3SmlY/s9PU6KUjRhj2+0=
+X-Received: by 2002:a05:6602:490:: with SMTP id y16mr9860884iov.162.1642413920295;
+ Mon, 17 Jan 2022 02:05:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE1.st.com
- (10.75.127.4)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-17_03,2022-01-14_01,2021-12-02_01
+References: <20220113082918.2279347-1-hsinyi@chromium.org> <CAG3jFytu8VpopWYHvGiSYRW2bcX-wHSoYgQ42u84WBQKGrnfZQ@mail.gmail.com>
+In-Reply-To: <CAG3jFytu8VpopWYHvGiSYRW2bcX-wHSoYgQ42u84WBQKGrnfZQ@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 17 Jan 2022 18:04:54 +0800
+Message-ID: <CAJMQK-gOMeK+_-6COEsaTdMq3GUejVRuH-HfdvBFS+Q-wKaGkA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] drm/bridge: anx7625: Convert to use devm_kzalloc
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32_MDMA_CCR bit[8] is used to enable Secure Mode (SM). If this bit is
-set, it means that all the channel registers are write-protected. So the
-channel is not available for Linux use.
+hi Robert,
 
-Add stm32_mdma_filter_fn() callback filter and give it to
-__dma_request_chan (instead of dma_get_any_slave_channel()), to exclude the
-channel if it is marked Secure.
+The second patch depends on "drm/bridge: anx7625: send DPCD command to
+downstream" (https://patchwork.kernel.org/project/dri-devel/patch/1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com/).
+But I'm waiting for Xin Ji's response for that patch.
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/dma/stm32-mdma.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+Thanks
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index 6f57ff0e7b37..95e5831e490a 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -73,6 +73,7 @@
- #define STM32_MDMA_CCR_WEX		BIT(14)
- #define STM32_MDMA_CCR_HEX		BIT(13)
- #define STM32_MDMA_CCR_BEX		BIT(12)
-+#define STM32_MDMA_CCR_SM		BIT(8)
- #define STM32_MDMA_CCR_PL_MASK		GENMASK(7, 6)
- #define STM32_MDMA_CCR_PL(n)		FIELD_PREP(STM32_MDMA_CCR_PL_MASK, (n))
- #define STM32_MDMA_CCR_TCIE		BIT(5)
-@@ -248,6 +249,7 @@ struct stm32_mdma_device {
- 	u32 nr_channels;
- 	u32 nr_requests;
- 	u32 nr_ahb_addr_masks;
-+	u32 chan_reserved;
- 	struct stm32_mdma_chan chan[STM32_MDMA_MAX_CHANNELS];
- 	u32 ahb_addr_masks[];
- };
-@@ -1456,10 +1458,23 @@ static void stm32_mdma_free_chan_resources(struct dma_chan *c)
- 	chan->desc_pool = NULL;
- }
- 
-+static bool stm32_mdma_filter_fn(struct dma_chan *c, void *fn_param)
-+{
-+	struct stm32_mdma_chan *chan = to_stm32_mdma_chan(c);
-+	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
-+
-+	/* Check if chan is marked Secure */
-+	if (dmadev->chan_reserved & BIT(chan->id))
-+		return false;
-+
-+	return true;
-+}
-+
- static struct dma_chan *stm32_mdma_of_xlate(struct of_phandle_args *dma_spec,
- 					    struct of_dma *ofdma)
- {
- 	struct stm32_mdma_device *dmadev = ofdma->of_dma_data;
-+	dma_cap_mask_t mask = dmadev->ddev.cap_mask;
- 	struct stm32_mdma_chan *chan;
- 	struct dma_chan *c;
- 	struct stm32_mdma_chan_config config;
-@@ -1485,7 +1500,7 @@ static struct dma_chan *stm32_mdma_of_xlate(struct of_phandle_args *dma_spec,
- 		return NULL;
- 	}
- 
--	c = dma_get_any_slave_channel(&dmadev->ddev);
-+	c = __dma_request_channel(&mask, stm32_mdma_filter_fn, &config, ofdma->of_node);
- 	if (!c) {
- 		dev_err(mdma2dev(dmadev), "No more channels available\n");
- 		return NULL;
-@@ -1615,6 +1630,10 @@ static int stm32_mdma_probe(struct platform_device *pdev)
- 	for (i = 0; i < dmadev->nr_channels; i++) {
- 		chan = &dmadev->chan[i];
- 		chan->id = i;
-+
-+		if (stm32_mdma_read(dmadev, STM32_MDMA_CCR(i)) & STM32_MDMA_CCR_SM)
-+			dmadev->chan_reserved |= BIT(i);
-+
- 		chan->vchan.desc_free = stm32_mdma_desc_free;
- 		vchan_init(&chan->vchan, dd);
- 	}
--- 
-2.25.1
-
+On Mon, Jan 17, 2022 at 5:40 PM Robert Foss <robert.foss@linaro.org> wrote:
+>
+> Hey Hsin-Yi,
+>
+>
+> On Thu, 13 Jan 2022 at 09:29, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> >
+> > Use devm_kzalloc instead of kzalloc and drop kfree(). Let the memory
+> > handled by driver detach.
+> >
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Reviewed-by: Xin Ji <xji@analogixsemi.com>
+> > ---
+> > v2->v3: remove kfree() in anx7625_i2c_remove().
+> > ---
+> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 10 +++-------
+> >  1 file changed, 3 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index 0b858c78abe8b6..d3661c78770a8f 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -2515,7 +2515,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> >                 return -ENODEV;
+> >         }
+> >
+> > -       platform = kzalloc(sizeof(*platform), GFP_KERNEL);
+> > +       platform = devm_kzalloc(dev, sizeof(*platform), GFP_KERNEL);
+> >         if (!platform) {
+> >                 DRM_DEV_ERROR(dev, "fail to allocate driver data\n");
+> >                 return -ENOMEM;
+> > @@ -2527,7 +2527,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> >         if (ret) {
+> >                 if (ret != -EPROBE_DEFER)
+> >                         DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
+> > -               goto free_platform;
+> > +               return ret;
+> >         }
+> >
+> >         platform->client = client;
+> > @@ -2552,7 +2552,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> >         if (!platform->hdcp_workqueue) {
+> >                 dev_err(dev, "fail to create work queue\n");
+> >                 ret = -ENOMEM;
+> > -               goto free_platform;
+> > +               return ret;
+> >         }
+> >
+> >         platform->pdata.intp_irq = client->irq;
+> > @@ -2637,9 +2637,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> >         if (platform->hdcp_workqueue)
+> >                 destroy_workqueue(platform->hdcp_workqueue);
+> >
+> > -free_platform:
+> > -       kfree(platform);
+> > -
+> >         return ret;
+> >  }
+> >
+> > @@ -2666,7 +2663,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
+> >         if (platform->pdata.audio_en)
+> >                 anx7625_unregister_audio(platform);
+> >
+> > -       kfree(platform);
+> >         return 0;
+> >  }
+> >
+>
+> I just had a look at applying this series, but it fails to apply on
+> drm-misc-next today.
+>
+> Could you send a v4 that applies cleanly, and I'll try to be quick
+> about applying it.
+>
+>
+> Rob.

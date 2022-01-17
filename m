@@ -2,160 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A64CD490005
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CFC490008
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbiAQBfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 20:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236778AbiAQBfp (ORCPT
+        id S233996AbiAQBkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 20:40:31 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16713 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232715AbiAQBka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 20:35:45 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C574C061748
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:35:44 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id f8so9207134pgf.8
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OqMpSNI9o/wkUts3PmMeUCyav5wo+up/ZcTRwyLImaU=;
-        b=gPRlR1Hf1DlVbJZaGtmNkw21jKWi4su9kEjnfc5X377q7Nd2Y7HtBZ8vt7o0fPFteE
-         OnSEKYrRPfCyC+GNzQBc5ldetBk0daHxdb3Lxbb2kSvLFTtfMnrai26rR6lfsiJhA5Wh
-         ZG3abik8TZjlyWBQ3+2YgYRT7TtoLmhp+gqoNM/89EpwrKyOXju1Je6li41y6FXwPrJH
-         dMJPV+RtTQIrMVx5XXr6iEbXB/ffBTzSh66nJcqwLpN0A/uXf2sg77dt2oyTc+D1BQQh
-         jMIqejCOwnTteD3HvNIxv5WFJwq0OotlC0m99621XL3g5wInYZe8k9DeWd3ha9CepGAn
-         Sz/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OqMpSNI9o/wkUts3PmMeUCyav5wo+up/ZcTRwyLImaU=;
-        b=l4kTwIujsR93+TaI8lmfvuDu6aqWbvQWLISascZukWKZmwUmdUl4B84VMiuQPfWqcm
-         12sr/hOzQxwt/cX20qtQh2UFFW2hGG5bwUBfzGs7FiIqTytiH+pr45hzaG6bNDjH7l9w
-         OeERULhQRdwX+L6jtXKi8WNb2jSMoNxvEa4luA62/8nTx0NZ+jdygMV9MzeDLFXhmPbo
-         guwGg24eGOaYyB5mzQ/fkVxartAF9wlj+ugAKFpWbddCTwWZswm1FaTwBT/7mQ3ON3av
-         ItLGsdcT1Ebjcasu0QRWK35xDiLa4tZSrhNGx++NG0Ts9R6MhRkJ5u7rh4x9pses7hQW
-         +nxQ==
-X-Gm-Message-State: AOAM533eXJF0oOz4pGlXc5dhvDdVwComnRYDEmsCsWTkpoN/+JlPXdal
-        fhsct5OHRrOMhaOOf/sDyp+cBA==
-X-Google-Smtp-Source: ABdhPJwuYjavF52j9NgVoipdfAqM8ttzlG86FOpEh3FLfEagU2BCeR800imtawrLV3moDeYClwsDHQ==
-X-Received: by 2002:aa7:92d1:0:b0:4bb:9d7:6951 with SMTP id k17-20020aa792d1000000b004bb09d76951mr18916569pfa.40.1642383343595;
-        Sun, 16 Jan 2022 17:35:43 -0800 (PST)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id l1sm10008335pgn.35.2022.01.16.17.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 17:35:43 -0800 (PST)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v4 3/3] dmaengine: sf-pdma: Get number of channel by device tree
-Date:   Mon, 17 Jan 2022 09:35:28 +0800
-Message-Id: <0d0b0a3ad703f5ef50611e2dd80439675bda666a.1642383007.git.zong.li@sifive.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1642383007.git.zong.li@sifive.com>
-References: <cover.1642383007.git.zong.li@sifive.com>
+        Sun, 16 Jan 2022 20:40:30 -0500
+Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JcZJG1SYXzZdwP;
+        Mon, 17 Jan 2022 09:36:46 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 09:40:28 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 09:40:27 +0800
+Subject: Re: [PATCH v6 15/15] ubi: fastmap: Fix high cpu usage of ubi_bgt by
+ making sure wl_pool not empty
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
+        <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
+        <s.hauer@pengutronix.de>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20211227032246.2886878-1-chengzhihao1@huawei.com>
+ <20211227032246.2886878-16-chengzhihao1@huawei.com>
+Message-ID: <e37980e5-962a-1223-cd46-b793a2caac6c@huawei.com>
+Date:   Mon, 17 Jan 2022 09:40:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211227032246.2886878-16-chengzhihao1@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It currently assumes that there are always four channels, it would
-cause the error if there is actually less than four channels. Change
-that by getting number of channel from device tree.
-
-For backwards-compatible, it uses the default value (i.e. 4) when there
-is no 'dma-channels' information in dts.
-
-Signed-off-by: Zong Li <zong.li@sifive.com>
----
- drivers/dma/sf-pdma/sf-pdma.c | 20 +++++++++++++-------
- drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
- 2 files changed, 15 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-index f12606aeff87..1264add9897e 100644
---- a/drivers/dma/sf-pdma/sf-pdma.c
-+++ b/drivers/dma/sf-pdma/sf-pdma.c
-@@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
- static int sf_pdma_probe(struct platform_device *pdev)
- {
- 	struct sf_pdma *pdma;
--	struct sf_pdma_chan *chan;
- 	struct resource *res;
--	int len, chans;
- 	int ret;
- 	const enum dma_slave_buswidth widths =
- 		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-@@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
- 		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
- 		DMA_SLAVE_BUSWIDTH_64_BYTES;
- 
--	chans = PDMA_NR_CH;
--	len = sizeof(*pdma) + sizeof(*chan) * chans;
--	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-+	pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
- 	if (!pdma)
- 		return -ENOMEM;
- 
--	pdma->n_chans = chans;
-+	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-+				   &pdma->n_chans);
-+	if (ret) {
-+		dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-+		pdma->n_chans = PDMA_MAX_NR_CH;
-+	}
-+
-+	if (pdma->n_chans > PDMA_MAX_NR_CH) {
-+		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-+		return -EINVAL;
-+	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-@@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
- 	struct sf_pdma_chan *ch;
- 	int i;
- 
--	for (i = 0; i < PDMA_NR_CH; i++) {
-+	for (i = 0; i < pdma->n_chans; i++) {
- 		ch = &pdma->chans[i];
- 
- 		devm_free_irq(&pdev->dev, ch->txirq, ch);
-diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-index 0c20167b097d..8127d792f639 100644
---- a/drivers/dma/sf-pdma/sf-pdma.h
-+++ b/drivers/dma/sf-pdma/sf-pdma.h
-@@ -22,11 +22,7 @@
- #include "../dmaengine.h"
- #include "../virt-dma.h"
- 
--#define PDMA_NR_CH					4
--
--#if (PDMA_NR_CH != 4)
--#error "Please define PDMA_NR_CH to 4"
--#endif
-+#define PDMA_MAX_NR_CH					4
- 
- #define PDMA_BASE_ADDR					0x3000000
- #define PDMA_CHAN_OFFSET				0x1000
-@@ -118,7 +114,7 @@ struct sf_pdma {
- 	void __iomem            *membase;
- 	void __iomem            *mappedbase;
- 	u32			n_chans;
--	struct sf_pdma_chan	chans[PDMA_NR_CH];
-+	struct sf_pdma_chan	chans[PDMA_MAX_NR_CH];
- };
- 
- #endif /* _SF_PDMA_H */
--- 
-2.31.1
-
+Hi Richard,
+> Fix it by:
+>    1) Adding 2 PEBs reserved for fm_anchor and fm_next_anchor.
+>    2) Abandoning filling wl_pool until free count belows beb_rsvd_pebs.
+> Then, there are at least 2(EBA_RESERVED_PEBS + MIN_FASTMAP_RESERVED_PEBS -
+> MIN_FASTMAP_TAKEN_PEBS[1]) PEBs in pool and 1(WL_RESERVED_PEBS) PEB in
+> wl_pool after calling ubi_refill_pools() with all erase works done.
+> 
+> This modification will cause a compatibility problem with old UBI image.
+> If UBI volumes take the maximun number of PEBs for one certain UBI device,
+> there are no available PEBs to satisfy 2 new reserved PEBs, bad reserved
+> PEBs are taken firstly, if still not enough, ENOSPC will returned from ubi
+> initialization.
+> 
+Can you come up with a better solution that can be compatible with old 
+images? In other words, can we solve this problem not by adding new 
+reserved PEBs?

@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 755C0490040
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070D849004C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbiAQCeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:34:36 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:35447 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230132AbiAQCeb (ORCPT
+        id S236849AbiAQCnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:43:04 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:21845 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232774AbiAQCnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:34:31 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V1ziwmF_1642386869;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V1ziwmF_1642386869)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 17 Jan 2022 10:34:29 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mm/damon: Remove redundant page validation
-Date:   Mon, 17 Jan 2022 10:34:18 +0800
-Message-Id: <6d32f7d201b8970d53f51b6c5717d472aed2987c.1642386715.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Sun, 16 Jan 2022 21:43:03 -0500
+Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 17 Jan
+ 2022 10:43:01 +0800
+Message-ID: <d6933fd7-ec4c-aee1-5cf4-9cbcf881a33d@amlogic.com>
+Date:   Mon, 17 Jan 2022 10:43:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 3/4] clk: meson: add DT documentation for emmc clock
+ controller
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20220113115745.45826-1-liang.yang@amlogic.com>
+ <20220113115745.45826-4-liang.yang@amlogic.com>
+ <20220113212957.768FFC36AE3@smtp.kernel.org>
+ <5d99ac02-a246-5bcc-2ecb-371b0d193537@amlogic.com>
+ <20220114225957.285ADC36AE7@smtp.kernel.org>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <20220114225957.285ADC36AE7@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.39.106]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It will never get a NULL page by pte_page() as discussed in thread [1],
-thus remove the redundant page validation to fix below Smatch static
-checker warning.
 
-    mm/damon/vaddr.c:405 damon_hugetlb_mkold()
-    warn: 'page' can't be NULL.
 
-[1] https://lore.kernel.org/linux-mm/20220106091200.GA14564@kili/
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: SeongJae Park <sj@kernel.org>
----
-Changes from v1:
- - Improve the commit message suggested by SeongJae.
- - Add reviewed-by tag from SeongJae.
----
- mm/damon/vaddr.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index 89b6468d..8a52e00 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -402,9 +402,6 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
- 	pte_t entry = huge_ptep_get(pte);
- 	struct page *page = pte_page(entry);
- 
--	if (!page)
--		return;
--
- 	get_page(page);
- 
- 	if (pte_young(entry)) {
-@@ -564,9 +561,6 @@ static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
- 		goto out;
- 
- 	page = pte_page(entry);
--	if (!page)
--		goto out;
--
- 	get_page(page);
- 
- 	if (pte_young(entry) || !page_is_idle(page) ||
--- 
-1.8.3.1
-
+On 2022/1/15 6:59, Stephen Boyd wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> Quoting Liang Yang (2022-01-13 19:06:07)
+>> Hi Stephen,
+>>
+>> Thanks for your quick response.
+>>
+>> On 2022/1/14 5:29, Stephen Boyd wrote:
+>>> [ EXTERNAL EMAIL ]
+>>>
+>>> Quoting Liang Yang (2022-01-13 03:57:44)
+>>>> Document the MMC sub clock controller driver, the potential consumer
+>>>> of this driver is MMC or NAND. Also add four clock bindings IDs which
+>>>> provided by this driver.
+>>>>
+>>>> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+>>>> ---
+>>>>    .../bindings/clock/amlogic,mmc-clkc.yaml      | 64 +++++++++++++++++++
+>>>>    include/dt-bindings/clock/amlogic,mmc-clkc.h  | 14 ++++
+>>>>    2 files changed, 78 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+>>>>    create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..a274c3d5fc2e
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+>>>> @@ -0,0 +1,64 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Amlogic MMC Sub Clock Controller Driver Device Tree Bindings
+>>>> +
+>>>> +maintainers:
+>>>> +  - jianxin.pan@amlogic.com
+>>>> +  - liang.yang@amlogic.com
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - "amlogic,axg-mmc-clkc", "syscon"
+>>>
+>>> Why is it a syscon?
+>>
+>> The register documented by reg is shared with SD/eMMC controller port C,
+>> and it need to be ops on NFC driver.
+>>
+> 
+> Is this the case where the clk is inside the SD/eMMC controller? Can the
+yes.
+> mmc driver register the clk controller from there and pass it an iomem
+> pointer to poke clks?
+we can't do that since EMMC and NAND is mutually exclusivem. both of 
+them share the same data pins.
+> 
+> .

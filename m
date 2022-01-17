@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4ED24903FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50673490400
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238259AbiAQIhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S238264AbiAQIid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiAQIhw (ORCPT
+        with ESMTP id S233418AbiAQIib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:37:52 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F25C06161C;
-        Mon, 17 Jan 2022 00:37:52 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 133so5925710pgb.0;
-        Mon, 17 Jan 2022 00:37:52 -0800 (PST)
+        Mon, 17 Jan 2022 03:38:31 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E77C061574;
+        Mon, 17 Jan 2022 00:38:31 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id c5so10242922pgk.12;
+        Mon, 17 Jan 2022 00:38:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cb1+ziTr7tG5ItZw1HG25PJXDx+szSS4d+LEoIryOmA=;
-        b=BZjziNhOpoUFCfZhUDpZifQ6ONaSDAMTiD12YPiJOcNURhXeu0kPSuPapf2COidWmG
-         +DxXjY4G4NpsiE2MRdN1G0TkTkh/CFc1vEA9VqKqaeXz1P1honrxMepua4H3rX4H3zLT
-         MYAxRWc9VjPVALz58iacADXS1p0ZBxyWCAP1SDhSk63AcyGsgGaGrHYQjPQ0JvXfZ0ir
-         /9HCpouE5192Rxwa1iNqjCtB7jP8vAKD+9qH90qrKzbk/rszZ5QkaVsrlAAHEs/lbxVA
-         zQxnUXlyvXRn4V/fcKq4Is6LPkAZSf3SnQe0VRmxHrEaR3ZQah0ctxwy/DpMdX1M+9L5
-         1T9Q==
+        bh=/T33RHWOQc5pzbPE0ffvrM3mXshEH5+43Yne4cdEAaE=;
+        b=qK4qFlrU11uCBM7/cT9juSnIpKrxZB16E9Pb85F473qDlnIP/oqadcjQbeugZnuCcq
+         5GiHBmxFu7HhwrkEg6dJOeOuN0elj/wo21Ep2a4k5uDyIYdhoIymvUsIfxYHq28lHBMA
+         5xAcGfALj8p0WY52FiC67n9jNQ3+1LB8cuhz9MOcRqTZ2UaOPIBAHCG1ZUDAuZ4OdEJW
+         TmzJpFqkQ8DgBAwqMaQXdDK5vG2QSK3uNy0Zihf8Y20mVszZBGPMH4oATVzh63ZEA6+W
+         9VHJc6soo90e76Imv/OBX0pP2REIIPOqU8wYBibjU4adaA+nDJeopMw4HbchDHoES61L
+         q11g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cb1+ziTr7tG5ItZw1HG25PJXDx+szSS4d+LEoIryOmA=;
-        b=X/p1Z+gLbsjRrNr0w6nsRNFZWKHzSYb7SE1RNOfEJd5tI0eesRdaccMVxYqC3CTAWz
-         C81b7aySD/VAv9y73LdZiKm5579tFTvXTqG0YYmOxNVovyZ239qOSC0ts2r9b6pMJmGb
-         bUyRTdyXb3JPCFV08eH5rmtojZgvgcptPVRS2VxTQ/OJK+GeLZkWY65gjG2EH8Jv10hF
-         Yp8YCnlucKoF8j/6N6430Ku0rd85iVYew+ThTn8mxPCf/3XUsBrv2pfCiE0QBdhu9RNV
-         ZvJrpUNdt6MKtZBRm4lLEuWXnVd/KGIdpmFj4rtfnpXkjIowKUCKKuNHOFHJPkC8vCdv
-         kb6A==
-X-Gm-Message-State: AOAM5336uTCOi0gWbM2jmz8lmX+p1ow3cl0LdwaWR1EuEe5OF0D/sMV1
-        sZkFj+cD2B6c8HuUI78HVPo=
-X-Google-Smtp-Source: ABdhPJwWUwbiCLpBOkksUyk1EywkFo53vA2/zy5Pvnu7OO7lFMemDwE3effKVIABpchRHkZ7Gcke8w==
-X-Received: by 2002:aa7:9155:0:b0:4bb:e7b7:73c3 with SMTP id 21-20020aa79155000000b004bbe7b773c3mr20176435pfi.62.1642408671587;
-        Mon, 17 Jan 2022 00:37:51 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x12sm12245883pjq.52.2022.01.17.00.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 00:37:51 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     mingo@redhat.com
-Cc:     acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, irogers@google.com, james.clark@arm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] perf cpumap: remove duplicate include in cpumap.h
-Date:   Mon, 17 Jan 2022 08:37:30 +0000
-Message-Id: <20220117083730.863200-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=/T33RHWOQc5pzbPE0ffvrM3mXshEH5+43Yne4cdEAaE=;
+        b=Ipoc9paKpu8WGBVEAh4ahZ/sP3uCkfUll/sOh3bRL85sQXYWsetFWIHVg4HoTBLhpx
+         cUb/nNXgDv6Zw9Bu3y+jEcubQBHDx+t6Ll6/pNyjOiVrwn/2daxbv5LoENH6INYuDo2F
+         HMN7pDYONkDZfER+OlfXRsuPbpPo94ujrXfha27H96lwSTlD/WMT8+jUCaOqcy3bDa87
+         xMowqErAr9PUvFIbmdKtzROMbjZovkp4elJrd2Z/+nxzyfYKGDwx6+liuzi4pKk69dp8
+         +nBzAg+KvuSgql+YpTOzCf0Fn6qlLLcZzKbd1UKRUfui9WfkTjSlLjSGPvdmTQsJ5Uan
+         H01Q==
+X-Gm-Message-State: AOAM532ZQ4qN3kScuqlG3rFpuCKSiuswgF6FdpkaGN6oR3OCXWf49Tof
+        ERln2slxavJUlsVAYFvi+IY=
+X-Google-Smtp-Source: ABdhPJxLpvslHwTJ0OknxPpRG7dW67M4XmqAj4vIfiB7do+vHK9KfGfw6xQpiJxoD2v44WiCSHT4Pg==
+X-Received: by 2002:a63:350c:: with SMTP id c12mr18258702pga.568.1642408711173;
+        Mon, 17 Jan 2022 00:38:31 -0800 (PST)
+Received: from nj08008nbu.spreadtrum.com ([103.6.5.6])
+        by smtp.gmail.com with ESMTPSA id pg9sm7260181pjb.44.2022.01.17.00.38.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Jan 2022 00:38:30 -0800 (PST)
+From:   Kevin Tang <kevin3.tang@gmail.com>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, mark.rutland@arm.com,
+        javierm@redhat.com, tzimmermann@suse.de, lukas.bulwahn@gmail.com
+Cc:     zou_wei@huawei.com, kevin3.tang@gmail.com, pony1.wu@gmail.com,
+        orsonzhai@gmail.com, dan.carpenter@oracle.com,
+        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 0/3] sprd drm cover letter
+Date:   Mon, 17 Jan 2022 16:38:17 +0800
+Message-Id: <20220117083820.6893-1-kevin3.tang@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+v1:
+  remove the selected DRM_KMS_CMA_HELPER in kconfig
+  drm-sprd-fix-potential-NULL-dereference
 
-Remove all but the first include of stdbool.h from cpumap.h.
+v2:
+  fix commit comments long lines issue and drop "On linux-next" comments
+  Split checking platform_get_resource() return value to a separate patch
+  Use dev_warn() instead of removing the warning log
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- tools/perf/util/cpumap.h | 1 -
- 1 file changed, 1 deletion(-)
+Kevin Tang (3):
+  drm/sprd: remove the selected DRM_KMS_CMA_HELPER in kconfig
+  drm/sprd: fix potential NULL dereference
+  drm/sprd: check the platform_get_resource() return value
 
-diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-index 0d3c2006a15d..240db1da370c 100644
---- a/tools/perf/util/cpumap.h
-+++ b/tools/perf/util/cpumap.h
-@@ -4,7 +4,6 @@
- 
- #include <stdbool.h>
- #include <stdio.h>
--#include <stdbool.h>
- #include <internal/cpumap.h>
- #include <perf/cpumap.h>
- 
+ drivers/gpu/drm/sprd/Kconfig    | 1 -
+ drivers/gpu/drm/sprd/sprd_dpu.c | 5 +++++
+ drivers/gpu/drm/sprd/sprd_drm.c | 2 +-
+ drivers/gpu/drm/sprd/sprd_dsi.c | 5 +++++
+ 4 files changed, 11 insertions(+), 2 deletions(-)
+
 -- 
-2.25.1
+2.29.0
 

@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EC7490AEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C5F490AEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240402AbiAQO5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:57:18 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59502 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240255AbiAQO4g (ORCPT
+        id S234737AbiAQO5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbiAQO5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:56:36 -0500
-Received: from x64host.home (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E010E20B9137;
-        Mon, 17 Jan 2022 06:56:34 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E010E20B9137
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1642431395;
-        bh=BKQVFrzc9NWvFdLTdrRxXKa1sIlB+Nm5XhtURANzAOE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=qWkTAEUEiL8JCNmJH4E+PQCIMLN6T1rZxsyo/jtsOmI/DWe2yh8ACu0wnbSHqTHza
-         93pXi/I3ysWVdIWUYbHCyq8tGiQKq1epNuqM5xlFWMICH0UaFZkURHY5DDlkJQWn/e
-         i0/KEsCdIURpWJ0Ddkh78hpBKfQ0Ehp2ZdhcpgcU=
-From:   madvenka@linux.microsoft.com
-To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        madvenka@linux.microsoft.com
-Subject: [PATCH v13 11/11] arm64: Select HAVE_RELIABLE_STACKTRACE
-Date:   Mon, 17 Jan 2022 08:56:08 -0600
-Message-Id: <20220117145608.6781-12-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220117145608.6781-1-madvenka@linux.microsoft.com>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
+        Mon, 17 Jan 2022 09:57:48 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E42C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:57:47 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id m3so44584955lfu.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Vw83fkEEICsk8cXVRF4hd6kspazzqozligmgHkDbaoI=;
+        b=lCdQVFYeg4XSeRcHvXROP7hbZUqqHEFQg/ax9Xzn8aCEOppBR+HNzR1RBAWcdk8zBZ
+         sHgoi2tGuwBSUWDKhjmTnpWtqEdLi/bw0AeOCahUchM9pWrSpiymfXD60YcE7pz16S72
+         vCcpEUBe+AmaX1gCNV5DaMfGBhye3bUKjDCSMZPOSHjm/DqX0v31yXwHkBbetG+NnTpG
+         dR7yNKJech+iDRdjXWpi6Dnomo9+hU/cznUhqu0Boiii4Gcyxw70oS9pCZlQWxdWNDSk
+         pughCAvyhdgpJbc0CnOK7u5TQzWNxmmZ4viRc0ducv3aVmonOoCO0qo6GB205+iHDXk5
+         cMLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Vw83fkEEICsk8cXVRF4hd6kspazzqozligmgHkDbaoI=;
+        b=ecs6stF3p8UFmrpVBay/4DY1un+FCiRvO2zDPwMybk+ujW6qCirAlmm/aWShhv/E8k
+         QJCr3/kTLyztQKum79f9YlVC0hHwfVmciDzTVKbna3UkSoQSnvqotAW7A7YONsCZ6v5F
+         s6LaPhcXTD31oQnpgER5jbgaPy5MRsd4m7EfT03gJlzbFESP2i2Ki47jbYU3jevFazkP
+         0szzb/B3hZzP0Dn4P/d2l4H5RJuXtH+dLHomN5+Lxco2bnE4GCUBqmdW9ccEM+gPP4VD
+         BJkwXUA4R+NUiJ/TtKS/3xBu9Mz7FwdvZ9DUP+p09LTKV6QyExmQ3pcLFIUrp7QpyTM7
+         FD4w==
+X-Gm-Message-State: AOAM531YCxAkHK92vUjvREdyb5rXOShMTQOh8qOgKpTSH78n0tVgjwhY
+        Jm1+oT+nGVhLRZxBfw/xfQRJPW6uRFBl8UExOpI=
+X-Google-Smtp-Source: ABdhPJx+Y6aztqU1g2fIhNs9KsXX2uLgGhfqOZAOov08K3yvRbKoQWlq6rQ9juJn1fiyS+cLGdG/ZGrJkmC7gvfPtlk=
+X-Received: by 2002:a05:6512:ea7:: with SMTP id bi39mr16977182lfb.312.1642431465002;
+ Mon, 17 Jan 2022 06:57:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ac2:4344:0:0:0:0:0 with HTTP; Mon, 17 Jan 2022 06:57:44
+ -0800 (PST)
+Reply-To: advocate.barisozdogans@gmail.com
+From:   INFOR <kpakpovivief@gmail.com>
+Date:   Mon, 17 Jan 2022 14:57:44 +0000
+Message-ID: <CAK_MbQfuRJ0TDajG_exKPFpiTo0wGT_g7rmffvv6U+L9W4eayg@mail.gmail.com>
+Subject: HI
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Hello,
+    Happy New Year. How are you?
+Did you have a chance to check my old email?
+I understand your busy schedule, so don't worry. Please reply as soon
+as possible.
+Thanks and best regards,
+Baris Ozdogan
 
-Select HAVE_RELIABLE_STACKTRACE in arm64/Kconfig to allow
-arch_stack_walk_reliable() to be used.
-
-Note that this is conditional upon STACK_VALIDATION which will be added
-when frame pointer validation is implemented (say via objtool).
-
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index f6e333b59314..bc7b3514b563 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -223,6 +223,7 @@ config ARM64
- 	select THREAD_INFO_IN_TASK
- 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
- 	select TRACE_IRQFLAGS_SUPPORT
-+	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && STACK_VALIDATION
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
- 
--- 
-2.25.1
-
+Hola,
+   Feliz a=C3=B1o nuevo. =C2=BFC=C3=B3mo est=C3=A1s?
+=C2=BFTuviste la oportunidad de revisar mi correo electr=C3=B3nico anterior=
+?
+Entiendo tu apretada agenda, as=C3=AD que no te preocupes. Por favor
+responda tan pronto como sea posible.
+Gracias y saludos cordiales,
+Baris =C3=96zdogan

@@ -2,141 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252C5490AFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCCF490AFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237257AbiAQPB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:01:28 -0500
-Received: from mail-mw2nam08on2089.outbound.protection.outlook.com ([40.107.101.89]:44897
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234686AbiAQPB0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:01:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mKvPyuwRaPuovMSXX0GOSOH3XVh4VWX/F2t8WM/0gPsDHvJPcyUHSiDrmvYfEpi+f1oqpIH/Gl6fn5gXCJqsre6lYWHCWjJ3IiGZXv7lKhYAGV8XKZRjYoHDQfKBa4q4be+yNckK9ztMja0Wa+gQlsKUpsO7pCb+EfcvjqpBEgj7ug9s+n6u96SOKSxB7jNC1AQSjv+MV1aKkj3m7Sj38zJOKdXH6hUeoWwHGXw6CR1cNYC1a9VH72zmsRZowynjUMgDGcrY/zpwgjSR7XAf9Jcz/rimmE6Ec7t+o8mq0UqNt3pYi2eF4vUOb0SR10nwkzOabqThChrlFG44+59upw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Cx7bWS2pRq6Y613DdQYMRNcGLfA9G8tuuMQDpIQ1Fw=;
- b=mFuMLSGcHnabaLdOJKrxg6prhJvRNErwKbcIiJF5fxrOinfzMonDY0iyyE77wvgEglKnR9eJSTgnmbED12HhX7uWaPv9xlhyPgacGbD+y3xX8gQPO1U1P2EnzTrYupuPwxM4/eHA953Hz6iMqWf3KCc0DHUUaWsOkjpWjiJYvY/Kz6hYv64HmHGgzG4xOUaIx/AA1sdA0hWvbvq1spkh2NrPMZogqlQ0UU3rTvQ14SNWkn4ia6jhrNwsiyQSeVQN6HJZpCmNkVQkc9uv4tcDchc9yJYOkudIrAdeMIAZ4hzubIBzoncC2NCqHAV+q2XNgxnX/8qp/QS5lsjx19EmPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Cx7bWS2pRq6Y613DdQYMRNcGLfA9G8tuuMQDpIQ1Fw=;
- b=Y1cwOf1WOo2GRjai7DD469jv2VbM3NEOAq6wn1Vq+36ngDLZWoZDwQIHMgWLbpOWz0WmLA0OnGNGiqdrJkZIrk4Xn5QcGlRxx880oRQiqrQlLH27GM4vzIeTs5f1JGpD4JHeqseZN8WPRKeVzoXgAJ1MNYth45YWcKpA1WbKrK1tMhK8am22OyCTat7Opt6W0+qkLSP2ZHatTUsiM4vNIxoTcGg6OQvcD8eqmcHCZKrBYPXr7sIaEeHWQHDUYqqX1Y4CVeg0g3kg2HxfnG+rs+MWBv7x91aUz8w6ojErghCOCDXp3TMiXWcyfSXMRDuDty+lACck0nI6bItDVQTQmA==
-Received: from BN0PR04CA0128.namprd04.prod.outlook.com (2603:10b6:408:ed::13)
- by DM6PR12MB2617.namprd12.prod.outlook.com (2603:10b6:5:4a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Mon, 17 Jan
- 2022 15:01:25 +0000
-Received: from BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ed:cafe::2) by BN0PR04CA0128.outlook.office365.com
- (2603:10b6:408:ed::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10 via Frontend
- Transport; Mon, 17 Jan 2022 15:01:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT066.mail.protection.outlook.com (10.13.177.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4888.9 via Frontend Transport; Mon, 17 Jan 2022 15:01:24 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 17 Jan
- 2022 15:01:03 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 17 Jan
- 2022 15:01:03 +0000
-Received: from moonraker.nvidia.com (10.127.8.11) by mail.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Mon, 17 Jan 2022 15:01:01 +0000
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V2] usb: common: ulpi: Fix crash in ulpi_match()
-Date:   Mon, 17 Jan 2022 15:00:39 +0000
-Message-ID: <20220117150039.44058-1-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        id S235056AbiAQPAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:00:49 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:47284
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229610AbiAQPAs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 10:00:48 -0500
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CAADA3F203
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 15:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642431646;
+        bh=P1t3TusiuWvEJQvj6KQ3UI4zLwE3rcF19O3O8iabinU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=S+hn/P/+ORd5yFuloev1kgWwDaFAaeiN7nXsJ/Qp+89KwtPN2IBixal8kgeBesRlT
+         JuMKK4SrCzKujGFYUxxNKQOm0z40SXJhTOLhDq6j0VDJeJCpv8mH7761XWr1F55ZmH
+         hJ6gp4DxAbO+DO2M4AqyUubDXzpV8h+tekH2Au09TTKSWGEiW3p+iDEQWOH4Oa52oQ
+         Te3cUZi13alBYA2rH2c53+6rO+sWQgDlZw+xmz1+DhnLX3WgX7EiPopvGNz/ix18YE
+         oGpKWMwnMk5fZO+SJ/inzEoQh6y3cF13LtsklT1mh+862F2jLFwWz2QhcrJ7wYrqwZ
+         qQnXAJqSWbkpA==
+Received: by mail-ed1-f70.google.com with SMTP id r14-20020aa7da0e000000b004021fa39843so3753225eds.15
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:00:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P1t3TusiuWvEJQvj6KQ3UI4zLwE3rcF19O3O8iabinU=;
+        b=OmO8FBXwiE79BBmOhRXcHxn0ysWj0lAoJoA8Nd9WkB0iE3DrZWsTn/eiESwUBDGZNR
+         r2bIR48Bpo+cFZj08dGnxJ6zzAE5cBKzv3V5KFp30FkVyj9f7g3UWHI6N+7Ff21zFNP8
+         ofyckDVk6wMBAbi1PrtPK25uirni3xUGOxl3sFtKpDOz1lkT31rh+39+OO2GOaZkQPs9
+         M/9qB2w7VWLYaddnkZ+M4dJUMAXc8k4MPkbXmYE7hXn3J74Hj9a58gmESIpV+8pDqBTr
+         l8GW+y0IfqQttW5AuCWlt/kav9akXW3aeGfd2/p4PQ1ID8vV8dlYmHQxLvWrrM3SUmYP
+         77jQ==
+X-Gm-Message-State: AOAM533/HpxLfcG1tqg+cWAvJ50kIvwhYqB+PGE4ydZGdstnutFOnn2U
+        CvamCryurfbk8PVvVASMT5zXIInvtEIFJityfk7ldnGew57xmDCRFI/GGh4L3fPOfjaG3I5dyN8
+        7OXdks6RA1D4L+HbU5q2cxbXlviY08oNVzRQrlHHfSA==
+X-Received: by 2002:a17:906:8053:: with SMTP id x19mr11918936ejw.485.1642431646520;
+        Mon, 17 Jan 2022 07:00:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwi5fMBz8oaksx3ekbOg74TUZaXBrRwCj5lzvu6SsBncvDyD0ZOfpPjH3B+rGmVa8PY2miIKA==
+X-Received: by 2002:a17:906:8053:: with SMTP id x19mr11918904ejw.485.1642431646225;
+        Mon, 17 Jan 2022 07:00:46 -0800 (PST)
+Received: from [192.168.0.39] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id bg20sm3958261ejb.59.2022.01.17.07.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 07:00:45 -0800 (PST)
+Message-ID: <9b98fd89-87b5-5026-fb0c-16bb956801ea@canonical.com>
+Date:   Mon, 17 Jan 2022 16:00:44 +0100
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 06dce57d-551e-46f3-c762-08d9d9ca3aff
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2617:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB26179AE6052761EE2622BC49D9579@DM6PR12MB2617.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iSZFvxydmekXqSm6g+27IvbUYFMMJk7+MJavbmO/0ua8MHk9J4vxELdmcgVsW8BlPu85uXYRchkdf3KSy4UCAqTV6xfM05ri0hWrTzaBJ/E1qUVA1CWBGWB8Ogn3B28yFpNLtC7uqv+DRLLq+KlKxPsQRNlaTiItt764PvjILxayRrEPkLhLWbhseoo0PRHuo3X44eKVNksTYbH8eMsrmWcPxQWu7HXpHvF/miq+FouqJrKA/uYqys6IGkyjX+E38cLxsui6C+k5XKjP0b6FSajxNI6Eq2W9FXhc1tNXryUEUbkz0p1tnrBodUWCw3wwpDHSkmOcIeiPo4CsnF8oCLk88d05dcKpbYBs90Bbdv2WCKWAlCIIbC0axBwInbz0dPJNG826x97Tp2UTguMKRoaUBoGSoNN/0+YRsGrCfcnMWAbsh1g+hNOrBfOxnLG7luJIb/vjVZrgq2RmkmxhXuuWT1ZLv8vpiJTFO93RVe1zvoJooqF6ONa/IzD+2BjnS0mIled2POV7sGaN33JbX9l58gZe3palCUtWLSjrpQb3pkHmkR4JOP1vofeDheWVABH9CFqghfAzTKesLJ85ReNfd4Ixp6wN7YPvPF6gsVbY1xZpsKHrSP3WVp2+R6VqmXGTBu8hJfSPewWeAra3NelnSy2rGzUc7CRgUcHV20duljyzErWY+kSHibFEQtf3pGy4WeSEQ0LXNyHz7t6bKCGIWQzet6SoAgiaLB+rJCtLm7Xs34zCkdGi1IoILQq/yYk59WcE68FU3ypjduVH1fisx/GgeU6f1Jx7yvm1YdE=
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(36860700001)(4326008)(54906003)(81166007)(82310400004)(6666004)(26005)(40460700001)(47076005)(508600001)(2906002)(1076003)(107886003)(316002)(5660300002)(110136005)(36756003)(426003)(356005)(186003)(83380400001)(336012)(70586007)(8676002)(70206006)(8936002)(2616005)(86362001)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 15:01:24.4223
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06dce57d-551e-46f3-c762-08d9d9ca3aff
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2617
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 13/23] dt-bindings: arm: add Tesla FSD ARM SoC
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SoC Team <soc@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Pankaj Dubey <pankaj.dubey@samsung.com>, linux-fsd@tesla.com
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+ <CGME20220113122408epcas5p45053d1bf0acf2d8233a98b6c1abab6eb@epcas5p4.samsung.com>
+ <20220113121143.22280-14-alim.akhtar@samsung.com>
+ <53c17ddc-a049-72ed-7237-de23db7889da@canonical.com>
+ <085801d80967$e4b8fe00$ae2afa00$@samsung.com>
+ <5ab62673-8d46-ec1d-1c80-696421ab69ca@canonical.com>
+ <00c901d80ba5$c9ae6ab0$5d0b4010$@samsung.com>
+ <CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
-DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
-multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
-on the Tegra20 Ventana platform in the ulpi_match() function.
+On 17/01/2022 15:14, Arnd Bergmann wrote:
+> On Mon, Jan 17, 2022 at 2:26 PM Alim Akhtar <alim.akhtar@samsung.com> wrote:
+>>
+>>> I cannot judge how different this is from Exynos subarchitecture - looking at
+>>> patches it is not different - so I could understand a FSD sub-arch with only one
+>>> SoC.
+>>>
+>> I understand, it is a bit difficult to visualize it with the current patch set.
+>> As discuss on the other thread, FSD is different, more over the vendor is different, internal design is different.
+> 
+> Is it based on another SoC design then? Most new SoCs are derived from
+> some other
+> one, so it makes sense to put it into the same family. E.g. the Apple
+> M1 takes bits from
+> both Exynos and PA-Semi SoCs but has more newly added components than
+> either one.
 
-The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
-registers a ulpi_driver but this driver does not provide an 'id_table',
-so when ulpi_match() is called on the Tegra20 Ventana platform, it
-crashes when attempting to deference the id_table pointer which is not
-valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
-ULPI driver with the device and so fix this crash by using device-tree
-for matching if the id_table is not valid.
+It seems Apple M1 shares only few bits with SoC. I am aware of only UART
+driver as directly re-usable.
 
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
-Changes since V1:
-- Added fixes tag
+> 
+> I would argue that if this SoC shares the pinctrl, clock, spi, adc,
+> and timer implementation
 
- drivers/usb/common/ulpi.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Plus: UART, watchdog, PWM, I2C, I2S, USB PHY, DWC3 USB (in Exynos
+flavor), UFS (also in Exynos-looking flavor), MFC (video codec), some
+similarities in DW PCIe, TMU (thermal). Looking at DTS there are
+differences but just few comparing to most of shared blocks.
 
-diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-index 4169cf40a03b..8f8405b0d608 100644
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev, struct device_driver *driver)
- 	struct ulpi *ulpi = to_ulpi_dev(dev);
- 	const struct ulpi_device_id *id;
- 
--	/* Some ULPI devices don't have a vendor id so rely on OF match */
--	if (ulpi->id.vendor == 0)
-+	/*
-+	 * Some ULPI devices don't have a vendor id
-+	 * or provide an id_table so rely on OF match.
-+	 */
-+	if (ulpi->id.vendor == 0 || !drv->id_table)
- 		return of_driver_match_device(dev, driver);
- 
- 	for (id = drv->id_table; id->vendor; id++)
--- 
-2.25.1
+Additionally SoC BSP (and maybe SoC itself...) was actually developed or
+co-developed by Samsung, judging by copyrights in the BSP code. Even the
+original DTSI has:
 
+	TURBO TRAV SoC device tree source
+	Copyright (c) 2017 Samsung Electronics Co., Ltd.
+
+
+Tesla could still customize it a lot, but it is a strong hint that most
+of it came from Samsung LSI and shares with existing Samsung designs.
+
+Have in mind that recent Exynos chips are significantly different than
+early ARMv7 or ARMv8 designs and we still consider them part of Exynos
+family.
+
+> with Exynos, we should consider it part of the Exynos family,
+> regardless of what other
+> blocks may exist next to those.
+
+Yes. I don't see the benefit of keeping it outside of Exynos. It will
+sprinkle "depends on ARCH_EXYNOS || ARCH_FSD" all over (or depend on
+Exynos like you suggested).
+
+
+Best regards,
+Krzysztof

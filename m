@@ -2,77 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A773B490577
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424C149057C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238173AbiAQJy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:54:57 -0500
-Received: from m1397.mail.163.com ([220.181.13.97]:1859 "EHLO
-        m1397.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiAQJy4 (ORCPT
+        id S238356AbiAQJ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:56:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29732 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238225AbiAQJ4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:54:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=9dnuf
-        rMMtk3itgkWFpthNjv+i06kMuBtg0W7wPYLTxE=; b=aZEAQoaYt6Naomu1ING73
-        u96ooLZwi/o/Fx/YAWUDip1zLxg+uBUkzJngziUIaWit60L0jAg4AjomBsb/46Sg
-        KCA45ornegWjnovlhwI10ui3yuCiAyIIoxXe0oIEU3txItRo1LVgqDNr6kuU6Gfx
-        1afLPav9IyVXJdOOdGlcuU=
-Received: from slark_xiao$163.com ( [112.97.53.17] ) by ajax-webmail-wmsvr97
- (Coremail) ; Mon, 17 Jan 2022 17:54:37 +0800 (CST)
-X-Originating-IP: [112.97.53.17]
-Date:   Mon, 17 Jan 2022 17:54:37 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Manivannan Sadhasivam" <mani@kernel.org>
-Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH net v2] For default mechanism, product would use
- default MRU 3500 if they didn't define it. But for Foxconn SDX55, there is
- a known issue which MRU 3500 would lead to data connection lost. So we
- align it with Qualcomm default MRU settings.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <20220117084432.GB4209@thinkpad>
-References: <20220117081644.21121-1-slark_xiao@163.com>
- <20220117084432.GB4209@thinkpad>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 17 Jan 2022 04:56:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642413359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/PNBuUABW17OI1MPUIKGcYQCkX+IJQeexMOvk7DAhBE=;
+        b=WWgn0yEm4rKde2YQGKxJ0I1O47hnB6Lxvpn1bBi/medtS/wahhEDrKPJytw1rJ6bg7SPj+
+        yB5oeUTfhBQPGkYwsmm445rTBti4XgNBvgx9J807bU9if2b9GS2FEcJlVNzgFD1U0jswsT
+        lwpQ+LXQP4fQqi3/IeKXuHkeqKkV7c0=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-ne1C7k7PNsymFGbG4UqzyA-1; Mon, 17 Jan 2022 04:55:58 -0500
+X-MC-Unique: ne1C7k7PNsymFGbG4UqzyA-1
+Received: by mail-ed1-f71.google.com with SMTP id r14-20020aa7da0e000000b004021fa39843so3091294eds.15
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:55:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=/PNBuUABW17OI1MPUIKGcYQCkX+IJQeexMOvk7DAhBE=;
+        b=WBf9WdiGOWEA96jXUVBtkDmh3BUYcMUZzt63eYwjeGMCLlGiWpGa1dalYdDK9P3HOC
+         x8sEjxrziylIgvJIwhZR7xUwVvWBbpKA+ukEUArIAXJ4E42o0md32HWKOmZEOBkfmi+/
+         m0B28Xjd2ul/6WMF/ZYen9hLXoivM5bjlClQFY3arZZllso3R5j6+Fo16jP4xIiWw+Wp
+         ElwIGcVGVicWA71Y64RoC5bO20nFji8EPRqu/pXGBSx2IEJyi25yKkURZnOerFLfLyUm
+         fUIVdQxAbB2A8Ij4+Xo7A0a+9l8Ka3l8FFcNm6O1AKsXzoMkM45YCavIc2lvXywY0F9g
+         LgRQ==
+X-Gm-Message-State: AOAM533AHCd3sSbgYlyrHdI19iaXqCq0rkKMEhvgFk9xlOL+zxT4m+yV
+        GXEQppEZ7LbzNPsQqw8vgHSGgoGn3LBjTYrDP3OMUzCbENK0DFE/6PbNdKsDopOs9Wj0GWJB6Eg
+        8hdKuIeWi5ZinohY4IOYEOX8saPBdz0Ezodj8dDGSsplJonSc17nYmfY1JYzItkuGcyJgRt1xEy
+        Kb
+X-Received: by 2002:a17:906:589:: with SMTP id 9mr16756670ejn.721.1642413356993;
+        Mon, 17 Jan 2022 01:55:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxVTgCi97l2whIA2wAQKWU0iPnD65d8m1c2MtxiDiZX3r+1FWhb3KL3xNTaAAjlHDFIRq+gBQ==
+X-Received: by 2002:a17:906:589:: with SMTP id 9mr16756643ejn.721.1642413356544;
+        Mon, 17 Jan 2022 01:55:56 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id v26sm2500979edd.41.2022.01.17.01.55.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 01:55:55 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Igor Mammedov <imammedo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+In-Reply-To: <YeGsKslt7hbhQZPk@google.com>
+References: <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+ <20211227183253.45a03ca2@redhat.com>
+ <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+ <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
+ <YeCowpPBEHC6GJ59@google.com> <20220114095535.0f498707@redhat.com>
+ <87ilummznd.fsf@redhat.com> <20220114122237.54fa8c91@redhat.com>
+ <87ee5amrmh.fsf@redhat.com> <YeGsKslt7hbhQZPk@google.com>
+Date:   Mon, 17 Jan 2022 10:55:54 +0100
+Message-ID: <8735lmn0t1.fsf@redhat.com>
 MIME-Version: 1.0
-Message-ID: <50e92997.386b.17e6775c20b.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: YcGowADnCyvdPOVhWi0NAA--.52199W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDR+LZFaEG24L7QACs+
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKQXQgMjAyMi0wMS0xNyAxNjo0NDozMiwgIk1hbml2YW5uYW4gU2FkaGFzaXZhbSIgPG1h
-bmlAa2VybmVsLm9yZz4gd3JvdGU6Cj5PbiBNb24sIEphbiAxNywgMjAyMiBhdCAwNDoxNjo0NFBN
-ICswODAwLCBTbGFyayBYaWFvIHdyb3RlOgo+PiBGaXhlczogNWMyYzg1MzE1OTQ4ICgiYnVzOiBt
-aGk6IHBjaS1nZW5lcmljOiBjb25maWd1cmFibGUgbmV0d29yayBpbnRlcmZhY2UgTVJVIikKPgo+
-WW91IGhhdmUgbWVzc2VkIHVwIHRoZSBwYXRjaCBzdWJqZWN0LCBwbGVhc2UgZml4IGl0LiBBbHNv
-LCB0aGUgY29ycmVjdCBmaXhlcyB0YWcKPnNob3VsZCBiZSB0aGUgb25lIGFkZGVkIHRoZSBGb3hj
-b25uIG1vZGVtIHN1cHBvcnQsIHByZWNpc2VseSAiYWFjNDI2NTYyZjU2Ii4KPgpZZXMsIHNvcnJ5
-IGZvciB0aGlzIG1pc3Rha2UuIAo+T25lIG1vcmUgdGhpbmcsIHBsZWFzZSBtYWtlIHN1cmUgdGhp
-cyBNUlUgdmFsdWUgd29ya3Mgd2VsbCBmb3Igb3RoZXIgRm94Y29ubgo+bW9kZW1zIHN1cHBvcnRl
-ZCBieSB0aGlzIGNvbmZpZy4KPgpJIGFtIHN1cmUgdGhpcyB3b3VsZCB3b3JrIGZvciBhbGwgIG91
-ciBkZXZpY2UuIEJUVywgSSB3YW50IHRvIGFkZCB0aGlzIG1ydV9kZWZhdWx0IHRvIApjaW50ZXJp
-b24tbXYzMSBQUk9EVUNULiBTaGFsbCBJIHVzZSB2MyBvciBjcmVhdGUgYSBuZXcgdmVyc2lvbiBm
-b3IgdGhhdD8gSXQncyBjb25maXJtZWQgCnRoYXQgdGhpcyBjaGFuZ2UgY291bGQgaGVscCBmaXgg
-aXNzdWUgb24gdGhhdCBwcm9kdWN0Lgo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFy
-a194aWFvQDE2My5jb20+Cj4KPllvdSBzaG91bGQgaGF2ZSBhZGRlZCBteSBSZXZpZXdlZC1ieSB0
-YWcgdG9vLi4uClNoYWxsIEkgYWRkIHJldmlld2QtYnkgdGFnIGlmIEkgYWRkIGNoYW5nZXMgb24g
-TVYzMSBwcm9kdWN0Pwo+Cj5UaGFua3MsCj5NYW5pCj4KPj4gCj4+IC0tLQo+PiB2MjogQWRkIEZp
-eGVzIHRhZwo+PiAtLS0KPj4gIGRyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jIHwgMSArCj4+
-ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL2J1cy9taGkvcGNpX2dlbmVyaWMuYyBiL2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5j
-Cj4+IGluZGV4IDNhMjU4YTY3N2RmOC4uNzRlOGZjMzQyY2ZkIDEwMDY0NAo+PiAtLS0gYS9kcml2
-ZXJzL2J1cy9taGkvcGNpX2dlbmVyaWMuYwo+PiArKysgYi9kcml2ZXJzL2J1cy9taGkvcGNpX2dl
-bmVyaWMuYwo+PiBAQCAtMzY2LDYgKzM2Niw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbWhpX3Bj
-aV9kZXZfaW5mbyBtaGlfZm94Y29ubl9zZHg1NV9pbmZvID0gewo+PiAgCS5jb25maWcgPSAmbW9k
-ZW1fZm94Y29ubl9zZHg1NV9jb25maWcsCj4+ICAJLmJhcl9udW0gPSBNSElfUENJX0RFRkFVTFRf
-QkFSX05VTSwKPj4gIAkuZG1hX2RhdGFfd2lkdGggPSAzMiwKPj4gKwkubXJ1X2RlZmF1bHQgPSAz
-Mjc2OCwKPj4gIAkuc2lkZWJhbmRfd2FrZSA9IGZhbHNlLAo+PiAgfTsKPj4gIAo+PiAtLSAKPj4g
-Mi4yNS4xCj4+IAo=
+Sean Christopherson <seanjc@google.com> writes:
+
+> On Fri, Jan 14, 2022, Vitaly Kuznetsov wrote:
+>> Igor Mammedov <imammedo@redhat.com> writes:
+>> 
+>> > On Fri, 14 Jan 2022 10:31:50 +0100
+>> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>> >
+>> >> Igor Mammedov <imammedo@redhat.com> writes:
+>> >> 
+>> >> 
+>> >> > However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
+>> >> > is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
+>> >> > even if ioctl called with exactly the same CPUID leafs as the 1st call.
+>> >> >  
+>> >> 
+>> >> Assuming APIC id change doesn not need to be supported, I can send v2
+>> >> here with an empty allowlist.
+>> > As you mentioned in another thread black list would be better
+>> > to address Sean's concerns or just revert problematic commit.
+>> >
+>> 
+>> Personally, I'm leaning towards the blocklist approach even if just for
+>> 'documenting' the fact that KVM doesn't correctly handle the
+>> change. Compared to a comment in the code, such approach could help
+>> someone save tons of debugging time (if anyone ever decides do something
+>> weird, like changing MAXPHYADDR on the fly).
+>
+> I assume the blocklist approach is let userspace opt into rejecting KVM_SET_CPUID{,2},
+> but allow all CPUID leafs and sub-leafs to be modified at will by
+> default? 
+
+No, honestly I was thinking about something much simpler: instead of
+forbidding KVM_SET_CPUID{,2} after KVM_RUN completely (what we have now
+in 5.16), we only forbid to change certain data which we know breaks
+some assumptions in MMU, from the comment:
+"
+         * KVM does not correctly handle changing guest CPUID after KVM_RUN, as
+         * MAXPHYADDR, GBPAGES support, AMD reserved bit behavior, etc.. aren't
+         * tracked in kvm_mmu_page_role.  As a result, KVM may miss guest page
+         * faults due to reusing SPs/SPTEs.
+"
+It seems that CPU hotplug path doesn't need to change these so we don't
+need an opt-in/opt-out, we can just forbid changing certain things for
+the time being. Alternatively, we can silently ignore such changes but I
+don't quite like it because it would mask bugs in VMMs.
+
+> I don't dislike the idea, but I wonder if it's unnecessarily fancy.
+>
+> What if we instead provide an ioctl/capability to let userspace toggle disabling
+> of KVM_SET_CPUID{,2}, a la STAC/CLAC to override SMAP?  E.g. QEMU could enable
+> protections after initially creating the vCPU, then temporarily
+> disable protections only for the hotplug path?
+>
+> That'd provide solid protections for minimal effort, and if userspace can restrict
+> the danger zone to one specific path, then userspace can easily do its own auditing
+> for that one path.
+
+Could work but it seems the protection would only "protect" VMM from
+shooting itself in the foot and will likely result in killing the guest
+anyway so I'm wondering if it's worth it.
+
+-- 
+Vitaly
+

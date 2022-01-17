@@ -2,272 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B81491201
+	by mail.lfdr.de (Postfix) with ESMTP id 14BC54911FF
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 23:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiAQWzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 17:55:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49646 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiAQWzq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235936AbiAQWzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 17 Jan 2022 17:55:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A561B81223;
-        Mon, 17 Jan 2022 22:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA596C36AEC;
-        Mon, 17 Jan 2022 22:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642460144;
-        bh=MclqmDZx8r3dVXnL9Y5hPNJ+4+2V1RMl0nPPDLyyXXY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uiKlOLbquJRn8mmS95F5/I/Tbx1JJ/apTSdS6WFX0tyRTSCUpfWaTSSmyamNbRT8Y
-         v3wpyMlNyj90Umzym3hkz/RFYfa+VhPPmry6mv92MTLRqpzowtcqt4piUJZcGS23UM
-         AhmLPLPwVJK7n4TYBg5ptin9hcm3Qt0vfw9dkvzqYp/3z3GSNcQPvzYvKl8Tv4uygA
-         bD2X3TxpvUjT+i7WsCTRoH87tS/S/MKmNoA15Rw11T0oe/aGvt17aa2tHA7hChED8d
-         ABilFBgcWpev0t6VNInXTEGUtYiJi6Bu1Oh0wuVXDdILWyDYZOL0x7raSPqUP/d3P+
-         Wz41uCQShkP9g==
-Date:   Mon, 17 Jan 2022 16:55:42 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     yangyicong@hisilicon.com,
-        Lukasz Maniak <lukasz.maniak@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?Q?=C5=81ukasz?= Gieryk <lukasz.gieryk@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH] PCI: Reset IOV state on FLR to PF
-Message-ID: <20220117225542.GA813284@bhelgaas>
+Received: from mail-eopbgr660042.outbound.protection.outlook.com ([40.107.66.42]:27374
+        "EHLO CAN01-QB1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229842AbiAQWzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 17:55:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hGUC4SjO7roeK+uKhE9SiVH/nImnE/GQPDE2SspIFhwzWwnWNS0voTeuZecCUaXVCr5HYoZ8rrixKeIfKv6XjgLJUUMj1dS8PmYibWeCuOMKN/aVIt4dSQld7vFOmBnuo67OXuvjccYdFXOEK+7PpP0YdapasdmdrZkBbnAaTT0CIOHiUJ06RBtU3Sb4waxdYy2w9i+2hLRJOTpd8NW/3eOjKm8OJTz8Uwb0trVTkL0epknLMxwy7o4v7IDi6Jrfg2/N9f4OHpYRE/mWhT+nWLKj9SkeJlY18M+j+plILHvlcsFpvhXGpejK0dEbrpwVqPTac1m0VrZO8pkq36hDNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dTSbVGN6EhsnZ3DqV9USt4bmIfNDeEQ03Z+DLnZMeek=;
+ b=j5LaJhT0lcopRpCUhDGwbIH7KcnlSLUu4pa5WTv9S2optap8aojEbQ1aYz1k0hUrbU/bVWkTseOG+oa8KBO05rp0RfNabAt8dFGoyh066miwDL6a3PYvJZGR2ZFhOVx+tXAIc1xfnhDejZsPEupMBt4hndI0MJ4okSuTlPX5e9N8w7tmQLsjLxtz9LWPYQCZDKAX8ScS24wXr3RjHpFi7QJk2TTk+H2TGHXNCr7antzwrbyTTjpSldbi3GEmVTpEzc58PMPMacx+YS6mRJpuih1OS2kOnThpSY0VKkJM/8ZKtiVFVO/GxldWgiEgFXVslhI8EyGO60Di0pFInN3mQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dimonoff.com; dmarc=pass action=none header.from=dimonoff.com;
+ dkim=pass header.d=dimonoff.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dimonoff.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dTSbVGN6EhsnZ3DqV9USt4bmIfNDeEQ03Z+DLnZMeek=;
+ b=L+8At+ptIaQm5yJjg6ERPMlMkok1h+ptUE/lhxBPRLOJ1HM6PAyDYWufQgPCwUoPDeB0Ir8eTju8tdNSHHryS4mrQNMnyxscf8Q/p7klgRoFn1zS4c78z0eVeSoYZXPy98E8/l/y/DaO6fF45V+xsq1vWFrgQag0K/rGsX3sD+8=
+Received: from YQXPR01MB5200.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:2e::20)
+ by YTBPR01MB3120.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:16::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Mon, 17 Jan
+ 2022 22:55:42 +0000
+Received: from YQXPR01MB5200.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::c1af:9bb:87bc:c1d5]) by YQXPR01MB5200.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::c1af:9bb:87bc:c1d5%9]) with mapi id 15.20.4888.014; Mon, 17 Jan 2022
+ 22:55:42 +0000
+From:   Hugo Villeneuve <hvilleneuve@dimonoff.com>
+To:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "hugo@hugovil.com" <hugo@hugovil.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] rtc: lp8788: Fix typo in comment
+Thread-Topic: [PATCH 1/3] rtc: lp8788: Fix typo in comment
+Thread-Index: AQHYC/P50Y/38qn4Zk6NN34nMXKKXaxn0swA
+Date:   Mon, 17 Jan 2022 22:55:42 +0000
+Message-ID: <60129428c0011b76bc915f89c027ae3925e40bce.camel@dimonoff.com>
+References: <20220117224503.1250525-1-hugo@hugovil.com>
+In-Reply-To: <20220117224503.1250525-1-hugo@hugovil.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dimonoff.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 97667447-c85a-445d-bc21-08d9da0c7d7a
+x-ms-traffictypediagnostic: YTBPR01MB3120:EE_
+x-microsoft-antispam-prvs: <YTBPR01MB3120116FD4670F1975F8ACF8C4579@YTBPR01MB3120.CANPRD01.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:2803;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uhh7u76va39MVl4FzzZm++gc4DRyvR+zz4augqcmI9UvekNcMW1FqKTcXPGdhGMBQLuKMpunsuBaY0NvBXlc8dkahKEUiruSy1t4LwVenTv0dSQRc+5VDR5LUhPpY3knF8rJfxRT6VZVCiX96+JczScx6tfYRyN6ltxGBWEMOiI3PyHAoJOVpyZvOtFxZ2fnaN/qPwIu6EeR68uo2FNWaDYx7nO4dsjz+Yx+lVH1MhKSYBQ8DcjaWS4+DpVvR7aDc2rbs97q1FldvuVxKIKyN5MwdONrasX3ENhlHHqRkHopxYi0Cul7ZsEp1V6apc3/VSnq/aWS+fgZHO0I0w1x7PeE7iKyHYnpdBj2cO65DuUKadTs88WZt7RrI2F4MGC88ksf6tOmFVCYipR3IBAIHpCbU5ZTP+AiryIJDkIsN6RoWh+C7W2t0Q0WfkuSC+0epE2VsfaVvnRXlTYVLxaxuQGdlf9hlA3SaYoKWQMprtIEWGE8snVA9bluqPZFWVJlIpMUUTYvzWzq5STlwg3Soo79EHAknXd2L/FcOaZ2nhTrCWg7mMRrNgMpO+SklV1PnoOr/hC9lB7ivh8Nn/C/eqHr5/JEovVQKMDMPUd1MFotRuBq4nQBBcKOCPu6qiw3qDCl7ErNG/hxN/1Gk9x8JsKtJBX7Cjxr1Ww2mrJAyTZ7WtwZJMKTWQgOLpQgmu5shvKwW2saNpIpMlLFtc2HpQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQXPR01MB5200.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(346002)(376002)(366004)(396003)(39840400004)(136003)(5660300002)(122000001)(110136005)(2906002)(66946007)(6512007)(86362001)(6506007)(54906003)(4326008)(36756003)(4744005)(316002)(6486002)(76116006)(508600001)(66476007)(186003)(38100700002)(71200400001)(8676002)(66556008)(2616005)(8936002)(64756008)(66446008)(83380400001)(26005)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MHRlS1ZjNkppYUY3eS9oNlNXSWlDdW5YbmgzNk5zZkxQYVV4YVVlTytSSHNU?=
+ =?utf-8?B?UHdNRlgxNXRMNmk0c0N1VTFLdGxHajF5M0hZQUFxeGpLeGM3TTgzSU04K29a?=
+ =?utf-8?B?MGE4VzcyL3ZXb0FTdHdDcGZKMlFkR2lOdWZJT1puOXVjU29WeVBudXBHTTJB?=
+ =?utf-8?B?NzQra0RjbUZLMHRCQ3Z0b0pUWjFzYUk2UGptYzdiNEJGTkZ5OWtEV3YxSVRh?=
+ =?utf-8?B?aVg4ZCszM3R3QTJyVmEwNkZRSlF0MmdyYkw4a1JFUTF6eEh3WHB3L05UNTdn?=
+ =?utf-8?B?WllsbVFXcDJNaDZZQUIzZVVRWDYrcG0zL1Y4Q0VkK1RGTVdmUEY3NTJNR0lV?=
+ =?utf-8?B?WWZnSzlQWHk0elNxaWo0TmhSVXBDQ0pjTmxrSFU0bjdyVTB0UEtUVFVHZ2NB?=
+ =?utf-8?B?TEV6YW1XejhJT2lYSUduT0ZNNWJuZmxKVlMxalBFa1hwamNwelNXSy9DcCtv?=
+ =?utf-8?B?TnJ6WFMwRk9JU3JlMHpjaGl6dlpLZmlEWm5OTTVYSUpTWkxuLzJ5UXREMVU1?=
+ =?utf-8?B?TlBCVDVIajNlZUxhQWlZOUVobTRSU3YzRVpLTmhFRldNOTRpdlVkWmoxZW5J?=
+ =?utf-8?B?ZTRWbERnOVQrd2ZRVE1TVHF0T0RKQjBna1NOMGxYUXc5VDZJdFBRS1FqaU56?=
+ =?utf-8?B?My9ERE8vYkJiYWwzT3lnVUt6blVVb1VqbWg0WWhDclFDZFAvWHhpTFdaWW5J?=
+ =?utf-8?B?NndMM3RiNmtsSnNzMFpETEhLMG5oVytkRzRYc1ZPQkQ5MVRDVVQyeXhJVzdi?=
+ =?utf-8?B?OEJ3dlB5TXlwVG1OaTgxdGJWaldmL0EwV1F6N2RrdkpuZlByMXJjMGxKSGRY?=
+ =?utf-8?B?cmZwVzhSN3hzaExuUnM2ZUVTY1lBczIzKzh0eXgzaTR6Wnhab0dFLzdTMlBs?=
+ =?utf-8?B?WGszYnB1azRQUHVENkRQMXVJYVNnUk1xQkFFYmROb2FETEY5WnFKOTQ3VnJP?=
+ =?utf-8?B?TU14c0kvcHBMMDIvakNFZ2ZOQW0xTmhuSG0rQWtickFNZlRjS3NyTVUrRmhF?=
+ =?utf-8?B?SVZuUTJiWTBLQXh0UFFYMVBpSUh0Wk1hYmJickk5VHhKSWlBc1dyRW5TMjFF?=
+ =?utf-8?B?N293czRRUmQvSFM1TXZiSkJuSVhWOVdSTEtoRHE1WXBBbzBtOFAwdUZaQlJl?=
+ =?utf-8?B?WXd3WTJQVmpmRWJSekpEV2U1a2FqeUJ5Ynl3RmxQWDdlYUtqdzQ2R092ZUVv?=
+ =?utf-8?B?SUhyelk3RHJCQWRyY2d4aXVsZEZEbHd0NW8vTzE4MzgrY1d3RXZlMDFqOEJK?=
+ =?utf-8?B?Z0hnWjl4NS9BQ2pyc2hBaTYvNHVtOGxQemJzdCtYZXNHUkx3YjNJUmNDNHc5?=
+ =?utf-8?B?MSszV2R5bXBKM2tSYWxxVDVPK3hRYkRoZHh4dHRFZGVHalU4YUNVajUzOWpE?=
+ =?utf-8?B?L2hlTmdPczJLcHBPNkdZNmFOK2hKc3V4TFBqd1lDUlMzTEIrenFCTTBWUklW?=
+ =?utf-8?B?eXIvcTRwTFdteWxPZjZYZzBzSXh6dTFDc3FCdTQxNEpLMmJTZkx6RFd4UjhZ?=
+ =?utf-8?B?cXpJUnoyQzd6UHhDVDBCeitDbkx2TFZYdERnQlFZVWIyNlVSbkhnaUVhUjNw?=
+ =?utf-8?B?SzlNQVZwVlBjYm5QalRaa3R4U0IrT1QydnRoQXdBbHRlbE5QVDdCbm1YMjFn?=
+ =?utf-8?B?bVNqbnZoYUJ3WkpFektkT3pMWFFGUytCT1lPL2R5dnlpUVM5YmVYVUVpUHAw?=
+ =?utf-8?B?RkxuU3Ardk5uR3VFRzE0cFI0THhuTmJ2K2VZSFIyaWpkRS81Ym5yRjZheUxj?=
+ =?utf-8?B?cTgyby9maE9TZDF2QzNhYW05MW85bVhRZkxpT2F0WFpiQ1MzWW15Wm9qeXph?=
+ =?utf-8?B?UzNNM2tIdTZIM29xRmdwUktYalJvZlJubnVSaXg5OW1JODlneERZUU90UGFK?=
+ =?utf-8?B?TC9ITnhXSDVPS01nYVJXa3c0ZVluUHlxNk9LYkdBb0lMelBhTjlJcEtQbkJX?=
+ =?utf-8?B?MlhFUVdZdk1WVS9WbzhiUXJLdlBKa3l1aXNBNmJpZ3ZGSHdIRmM5VFkxV2hJ?=
+ =?utf-8?B?aXk4QlFpT1NtQkdUdDQ0aytWbkV2TnREVHpzYjVFYWxybEc1RHVDckNrVzRJ?=
+ =?utf-8?B?TFVzU2ZoL3E4LzVPUjFEbUdvRFc2TFQ0WUxEU3RGUzdYWndhTkJXUzhUaCtX?=
+ =?utf-8?B?UmRENFRueGk5TmNxM2JaaUkvcE1XcVFTS1RXVTI2VkFHcXJpeVJzV1RmTUNP?=
+ =?utf-8?B?NHA1Q2NpN3VkcWtmNngzTlNNWTExczNhM3NYYzF5TEl2VllaaFVPZnpxd210?=
+ =?utf-8?Q?/reDBXNuBbEKyJjNGcVi7buJH06BE1gr6k/qH+HrUo=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8C3044102DB951489F7E0DE95F42812B@CANPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9cb41c4c-5d44-ae60-f457-c317daa84c4f@huawei.com>
+X-OriginatorOrg: dimonoff.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB5200.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97667447-c85a-445d-bc21-08d9da0c7d7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2022 22:55:42.8669
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c4063547-e5e6-4866-a386-58c3965da102
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CJQ5BAiGZ+TBAsXrNr+JkSBtMvt5ysjLuApjF0WZjbD/fJSpa4gF5ODwN+iv+dLcxtV+vUtBT0DzkWR7KI7H/H9rBmNrcS1zoCbun+HQDxE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YTBPR01MB3120
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Alex in case he has comments on how FLR should work on
-non-conforming hns3 devices]
-
-On Sat, Jan 15, 2022 at 05:22:19PM +0800, Yicong Yang wrote:
-> On 2022/1/15 0:37, Bjorn Helgaas wrote:
-> > On Fri, Jan 14, 2022 at 05:42:48PM +0800, Yicong Yang wrote:
-> >> On 2022/1/14 0:45, Lukasz Maniak wrote:
-> >>> On Wed, Jan 12, 2022 at 08:49:03AM -0600, Bjorn Helgaas wrote:
-> >>>> On Wed, Dec 22, 2021 at 08:19:57PM +0100, Lukasz Maniak wrote:
-> >>>>> As per PCI Express specification, FLR to a PF resets the PF state as
-> >>>>> well as the SR-IOV extended capability including VF Enable which means
-> >>>>> that VFs no longer exist.
-> >>>>
-> >>>> Can you add a specific reference to the spec, please?
-> >>>>
-> >>> Following the Single Root I/O Virtualization and Sharing Specification:
-> >>> 2.2.3. FLR That Targets a PF
-> >>> PFs must support FLR.
-> >>> FLR to a PF resets the PF state as well as the SR-IOV extended
-> >>> capability including VF Enable which means that VFs no longer exist.
-> >>>
-> >>> For PCI Express Base Specification Revision 5.0 and later, this is
-> >>> section 9.2.2.3.
-> > 
-> > This is also the section in the new PCIe r6.0.  Let's use that.
-> > 
-> >>>>> Currently, the IOV state is not updated during FLR, resulting in
-> >>>>> non-compliant PCI driver behavior.
-> >>>>
-> >>>> And include a little detail about what problem is observed?  How would
-> >>>> a user know this problem is occurring?
-> >>>>
-> >>> The problem is that the state of the kernel and HW as to the number of
-> >>> VFs gets out of sync after FLR.
-> >>>
-> >>> This results in further listing, after the FLR is performed by the HW,
-> >>> of VFs that actually no longer exist and should no longer be reported on
-> >>> the PCI bus. lspci return FFs for these VFs.
-> >>
-> >> There're some exceptions. Take HiSilicon's hns3 and sec device as an
-> >> example, the VF won't be destroyed after the FLR reset.
-> > 
-> > If FLR on an hns3 PF does *not* clear VF Enable, and the VFs still
-> > exist after FLR, isn't that a violation of sec 9.2.2.3?
-> 
-> yes I think it's a violation to the spec.
-
-Thanks for confirming that.
-
-> > If hns3 and sec don't conform to the spec, we should have some sort of
-> > quirk that serves to document and work around this.
-> 
-> ok I think it'll help. Do you mean something like this based on this patch:
-> 
-> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> index 69ee321027b4..0e4976c669b2 100644
-> --- a/drivers/pci/iov.c
-> +++ b/drivers/pci/iov.c
-> @@ -1025,6 +1025,8 @@ void pci_reset_iov_state(struct pci_dev *dev)
->  		return;
->  	if (!iov->num_VFs)
->  		return;
-> +	if (dev->flr_no_vf_reset)
-> +		return;
-> 
->  	sriov_del_vfs(dev);
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 003950c738d2..c8ffcb0ac612 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -1860,6 +1860,17 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa256, quirk_huawei_pcie_sva);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa258, quirk_huawei_pcie_sva);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa259, quirk_huawei_pcie_sva);
-> 
-> +/*
-> + * Some HiSilicon PCIe devices' VF won't be destroyed after a FLR reset.
-> + * Don't reset these devices' IOV state when doing FLR.
-> + */
-> +static void quirk_huawei_pcie_flr(struct pci_dev *pdev)
-> +{
-> +	pdev->flr_no_vf_reset = 1;
-> +}
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa255, quirk_huawei_pcie_flr);
-> +/* ...some other devices have this quirk */
-
-Yes, I think something along this line will help.
-
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 18a75c8e615c..e62f9fa4d48f 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -454,6 +454,7 @@ struct pci_dev {
->  	unsigned int	is_probed:1;		/* Device probing in progress */
->  	unsigned int	link_active_reporting:1;/* Device capable of reporting link active */
->  	unsigned int	no_vf_scan:1;		/* Don't scan for VFs after IOV enablement */
-> +	unsigned int	flr_no_vf_reset:1;	/* VF won't be destroyed after PF's FLR */
-> 
-> >> Currently the transactions with the VF will be restored after the
-> >> FLR. But this patch will break that, the VF is fully disabled and
-> >> the transaction cannot be restored. User needs to reconfigure it,
-> >> which is unnecessary before this patch.
-> > 
-> > What does it mean for a "transaction to be restored"?  Maybe you mean
-> > this patch removes the *VFs* via sriov_del_vfs(), and whoever
-> > initiated the FLR would need to re-enable VFs via pci_enable_sriov()
-> > or something similar?
-> 
-> Partly. It'll also terminate the VF users.
-> Think that I attach the VF of hns to a VM by vfio and ping the network
-> in the VM, when doing FLR the 'ping' will pause and after FLR it'll
-> resume. Currenlty The driver handle this in the ->reset_{prepare, done}()
-> methods. The user of VM may not realize there is a FLR of the PF as the
-> VF always exists and the 'ping' is never terminated.
-> 
-> If we remove the VF when doing FLR, then 1) we'll block in the VF->remove()
-> until no one is using the device, for example the 'ping' is finished.
-> 2) the VF in the VM no longer exists and we have to re-enable VF and hotplug
-> it into the VM and restart the ping. That's a big difference.
-> 
-> > If FLR disables VFs, it seems like we should expect to have to
-> > re-enable them if we want them.
-> 
-> It involves a remove()/probe() process of the VF driver and the user
-> of the VF will be terminated, just like the situation illustrated
-> above.
-
-I think users of FLR should be able to rely on it working per spec,
-i.e., that VFs will be destroyed.  If hardware like hns3 doesn't do
-that, the quirk should work around that in software by doing it
-explicitly.
-
-I don't think the non-standard behavior should be exposed to the
-users.  The user should not have to know about this hns3 issue.
-
-If FLR on a standard NIC terminates a ping on a VF, FLR on an hns3 NIC
-should also terminate a ping on a VF.
-
-> >> Can we handle this problem in another way? Maybe test the VF's
-> >> vendor device ID after the FLR reset to see whether it has really
-> >> gone or not?
-> >>
-> >>> sriov_numvfs in sysfs returns old invalid value and does not allow
-> >>> setting a new value before explicitly setting 0 in the first place.
-> >>>
-> >>>>> This patch introduces a simple function, called on the FLR path, that
-> >>>>> removes the virtual function devices from the PCI bus and their
-> >>>>> corresponding sysfs links with a final clear of the num_vfs value in IOV
-> >>>>> state.
-> >>>>>
-> >>>>> Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
-> >>>>> ---
-> >>>>>  drivers/pci/iov.c | 21 +++++++++++++++++++++
-> >>>>>  drivers/pci/pci.c |  2 ++
-> >>>>>  drivers/pci/pci.h |  4 ++++
-> >>>>>  3 files changed, 27 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> >>>>> index 0267977c9f17..69ee321027b4 100644
-> >>>>> --- a/drivers/pci/iov.c
-> >>>>> +++ b/drivers/pci/iov.c
-> >>>>> @@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
-> >>>>>  	return max ? max - bus->number : 0;
-> >>>>>  }
-> >>>>>  
-> >>>>> +/**
-> >>>>> + * pci_reset_iov_state - reset the state of the IOV capability
-> >>>>> + * @dev: the PCI device
-> >>>>> + */
-> >>>>> +void pci_reset_iov_state(struct pci_dev *dev)
-> >>>>> +{
-> >>>>> +	struct pci_sriov *iov = dev->sriov;
-> >>>>> +
-> >>>>> +	if (!dev->is_physfn)
-> >>>>> +		return;
-> >>>>> +	if (!iov->num_VFs)
-> >>>>> +		return;
-> >>>>> +
-> >>>>> +	sriov_del_vfs(dev);
-> >>>>> +
-> >>>>> +	if (iov->link != dev->devfn)
-> >>>>> +		sysfs_remove_link(&dev->dev.kobj, "dep_link");
-> >>>>> +
-> >>>>> +	iov->num_VFs = 0;
-> >>>>> +}
-> >>>>> +
-> >>>>>  /**
-> >>>>>   * pci_enable_sriov - enable the SR-IOV capability
-> >>>>>   * @dev: the PCI device
-> >>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> >>>>> index 3d2fb394986a..535f19d37e8d 100644
-> >>>>> --- a/drivers/pci/pci.c
-> >>>>> +++ b/drivers/pci/pci.c
-> >>>>> @@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
-> >>>>>   */
-> >>>>>  int pcie_flr(struct pci_dev *dev)
-> >>>>>  {
-> >>>>> +	pci_reset_iov_state(dev);
-> >>>>> +
-> >>>>>  	if (!pci_wait_for_pending_transaction(dev))
-> >>>>>  		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
-> >>>>>  
-> >>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> >>>>> index 3d60cabde1a1..7bb144fbec76 100644
-> >>>>> --- a/drivers/pci/pci.h
-> >>>>> +++ b/drivers/pci/pci.h
-> >>>>> @@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
-> >>>>>  resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
-> >>>>>  void pci_restore_iov_state(struct pci_dev *dev);
-> >>>>>  int pci_iov_bus_range(struct pci_bus *bus);
-> >>>>> +void pci_reset_iov_state(struct pci_dev *dev);
-> >>>>>  extern const struct attribute_group sriov_pf_dev_attr_group;
-> >>>>>  extern const struct attribute_group sriov_vf_dev_attr_group;
-> >>>>>  #else
-> >>>>> @@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
-> >>>>>  {
-> >>>>>  	return 0;
-> >>>>>  }
-> >>>>> +static inline void pci_reset_iov_state(struct pci_dev *dev)
-> >>>>> +{
-> >>>>> +}
-> >>>>>  
-> >>>>>  #endif /* CONFIG_PCI_IOV */
+T24gTW9uLCAyMDIyLTAxLTE3IGF0IDE3OjQ1IC0wNTAwLCBIdWdvIFZpbGxlbmV1dmUgd3JvdGU6
+DQo+IEZyb206IEh1Z28gVmlsbGVuZXV2ZSA8aHZpbGxlbmV1dmVAZGltb25vZmYuY29tPg0KPiAN
+Cj4gQWRkIG1pc3NpbmcgImlmIi4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEh1Z28gVmlsbGVuZXV2
+ZSA8aHZpbGxlbmV1dmVAZGltb25vZmYuY29tPg0KPiAtLS0NCj4gwqBkcml2ZXJzL3J0Yy9ydGMt
+bHA4Nzg4LmMgfCAyICstDQo+IMKgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRl
+bGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ydGMvcnRjLWxwODc4OC5jIGIv
+ZHJpdmVycy9ydGMvcnRjLWxwODc4OC5jDQo+IGluZGV4IGMwYjhmYmNlMTA4Mi4uM2FhNWQ5ODBl
+NTk2IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3J0Yy9ydGMtbHA4Nzg4LmMNCj4gKysrIGIvZHJp
+dmVycy9ydGMvcnRjLWxwODc4OC5jDQo+IEBAIC0yNjIsNyArMjYyLDcgQEAgc3RhdGljIGludCBs
+cDg3ODhfYWxhcm1faXJxX3JlZ2lzdGVyKHN0cnVjdA0KPiBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYs
+DQo+IMKgDQo+IMKgwqDCoMKgwqDCoMKgwqBydGMtPmlycSA9IDA7DQo+IMKgDQo+IC3CoMKgwqDC
+oMKgwqDCoC8qIGV2ZW4gdGhlIGFsYXJtIElSUSBudW1iZXIgaXMgbm90IHNwZWNpZmllZCwgcnRj
+IHRpbWUNCj4gc2hvdWxkIHdvcmsgKi8NCj4gK8KgwqDCoMKgwqDCoMKgLyogZXZlbiBpZiB0aGUg
+YWxhcm0gSVJRIG51bWJlciBpcyBub3Qgc3BlY2lmaWVkLCBydGMgdGltZQ0KPiBzaG91bGQgd29y
+ayAqLw0KPiDCoMKgwqDCoMKgwqDCoMKgciA9IHBsYXRmb3JtX2dldF9yZXNvdXJjZV9ieW5hbWUo
+cGRldiwgSU9SRVNPVVJDRV9JUlEsDQo+IExQODc4OF9BTE1fSVJRKTsNCj4gwqDCoMKgwqDCoMKg
+wqDCoGlmICghcikNCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsN
+Cg0KVGhpcyBpcyBhIHNpbmdsZSBwYXRjaCwgc3ViamVjdCBsaW5lIHNob3VsZCBiZSBbUEFUQ0hd
+IGFuZCBub3QgW1BBVENIDQoxLzNdLg0KDQo=

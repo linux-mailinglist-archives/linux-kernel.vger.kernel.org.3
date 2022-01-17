@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2A649058F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 172BC490592
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbiAQJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:57:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20625 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238398AbiAQJ5t (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:57:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642413468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=0ko6OUF03NtREbd4Ba6uZksPkCXStJRahIx6FjvF3q4=;
-        b=jWn3QqEg5BuZtO+23jFO8LqD5oIQTKwI34WqczINW9vKJfINLSsF8+hy7NFHk/znu9P+2m
-        7FMWK79rRqo9x9oDbNhAC2nbXd2dvOngS38ezWMgQ+W0t15WHPeZblMU35vK4AIkngO8vK
-        /EObuplR13OTyF7n5IfWuJSq9v1WZPk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-300-In4HevWtNs-JnAKOIck5mg-1; Mon, 17 Jan 2022 04:57:42 -0500
-X-MC-Unique: In4HevWtNs-JnAKOIck5mg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B59F7100C663;
-        Mon, 17 Jan 2022 09:57:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D7227B9E5;
-        Mon, 17 Jan 2022 09:57:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-cc:     dhowells@redhat.com, Anna Schumaker <anna.schumaker@netapp.com>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Omar Sandoval <osandov@osandov.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Out of order read() completion and buffer filling beyond returned amount
+        id S238414AbiAQJ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:59:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:55928 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233637AbiAQJ7U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 04:59:20 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDF306D;
+        Mon, 17 Jan 2022 01:59:19 -0800 (PST)
+Received: from [10.57.36.122] (unknown [10.57.36.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07BDA3F73D;
+        Mon, 17 Jan 2022 01:59:15 -0800 (PST)
+Subject: Re: [PATCH] perf record/arm-spe: Override attr->sample_period for
+ non-libpfm4 events
+To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Cc:     Chase Conklin <chase.conklin@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, "acme@kernel.org" <acme@kernel.org>
+References: <20220114212102.179209-1-german.gomez@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
+Date:   Mon, 17 Jan 2022 09:59:12 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2752207.1642413437.1@warthog.procyon.org.uk>
-Date:   Mon, 17 Jan 2022 09:57:17 +0000
-Message-ID: <2752208.1642413437@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <20220114212102.179209-1-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Al, Linus,
 
-Do you have an opinion on whether it's permissible for a filesystem to write
-into the read() buffer beyond the amount it claims to return, though still
-within the specified size of the buffer?
 
-I'm working on common DIO routines for 9p, afs, ceph and cifs in netfs lib,
-and I can see that at least three of those four filesystems either can or must
-split a read, possibly being required to distribute across multiple servers.
+On 14/01/2022 21:21, German Gomez wrote:
+> A previous commit preventing attr->sample_period values from being
+> overridden in pfm events changed a related behaviour in arm_spe.
+> 
+> Before this patch:
+> perf record -c 10000 -e arm_spe_0// -- sleep 1
+> 
+> Would not yield an SPE event with period=10000, because the arm-spe code
 
-If a filesystem was to emit multiple read RPCs in parallel, there is the
-possibility that they would complete out of order - particularly if they go to
-multiple servers.
+Just to clarify, this seems like it should say "Would yield", not "Would not yield",
+as in it was previously working?
 
-Would it be a violation of the way the read() family of syscalls work to write
-the data into the buffers out of order, and then abandon the extra data
-written at the end if one of the RPCs returned a short read?  We would have
-clobbered some of the buffer that we haven't said we've modified.
-
-For buffered reads, it's not a problem as we can fill the pagecache out of
-order with no issue.
-
-David
-
+> initializes sample_period to a non-0 value, so the "-c 10000" is ignored.
+> 
+> This patch restores the previous behaviour for non-libpfm4 events.
+> 
+> Reported-by: Chase Conklin <chase.conklin@arm.com>
+> Fixes: ae5dcc8abe31 (“perf record: Prevent override of attr->sample_period for libpfm4 events”)
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> ---
+>  tools/perf/util/evsel.c | 25 +++++++++++++++++--------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index a59fb2ecb84e..86ab038f020f 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -1065,6 +1065,17 @@ void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr __maybe_un
+>  {
+>  }
+>  
+> +static void evsel__set_default_freq_period(struct record_opts *opts,
+> +					   struct perf_event_attr *attr)
+> +{
+> +	if (opts->freq) {
+> +		attr->freq = 1;
+> +		attr->sample_freq = opts->freq;
+> +	} else {
+> +		attr->sample_period = opts->default_interval;
+> +	}
+> +}
+> +
+>  /*
+>   * The enable_on_exec/disabled value strategy:
+>   *
+> @@ -1131,14 +1142,12 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
+>  	 * We default some events to have a default interval. But keep
+>  	 * it a weak assumption overridable by the user.
+>  	 */
+> -	if (!attr->sample_period) {
+> -		if (opts->freq) {
+> -			attr->freq		= 1;
+> -			attr->sample_freq	= opts->freq;
+> -		} else {
+> -			attr->sample_period = opts->default_interval;
+> -		}
+> -	}
+> +	if ((evsel->is_libpfm_event && !attr->sample_period) ||
+> +	    (!evsel->is_libpfm_event && (!attr->sample_period ||
+> +					 opts->user_freq != UINT_MAX ||
+> +					 opts->user_interval != ULLONG_MAX)))
+> +		evsel__set_default_freq_period(opts, attr);
+> +
+>  	/*
+>  	 * If attr->freq was set (here or earlier), ask for period
+>  	 * to be sampled.
+> 

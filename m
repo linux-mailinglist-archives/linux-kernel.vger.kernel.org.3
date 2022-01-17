@@ -2,176 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA42C490A22
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50889490A2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiAQOOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:14:50 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:54380 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237674AbiAQOOh (ORCPT
+        id S234389AbiAQOR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232029AbiAQOR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:14:37 -0500
-Received: from machine.localnet (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr [86.207.51.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2DFD920B9132;
-        Mon, 17 Jan 2022 06:14:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2DFD920B9132
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1642428877;
-        bh=Emgmu+8u0DDH5mFqspHHwYip5IpMYUB4sTtK8ZbStjM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LULG2NOFbk/IITyOKLBCkOZodQ293b5Qv7mfEtjKRJnLFstxRM/Gsrojjb0t+rZ9B
-         758KURSJMiJUDKDo8gK0/YuHz6ek/SOotQbX+HDYoy+f/pJTGmy81zZC5z9wOzyB+z
-         +aYvXF85INpBYaYKr/y56/J2V6lxnj4792NlFREQ=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/2] capability: Add cap_strings.
-Date:   Mon, 17 Jan 2022 15:14:34 +0100
-Message-ID: <2966845.Fhcn9zfbF5@machine>
-In-Reply-To: <20220114003910.GA19319@mail.hallyn.com>
-References: <20211227205500.214777-1-flaniel@linux.microsoft.com> <18436829.ogB85pbuhf@machine> <20220114003910.GA19319@mail.hallyn.com>
+        Mon, 17 Jan 2022 09:17:58 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F622C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:17:58 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso24096173wmj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DJwsITSMY4QI1R0GyVDZJD0gSOxLKr++NG45dIxuuJs=;
+        b=RIqG2RM1JSZMzH3Ltu70CUWzXiGPKZkk6KaXW/WMH4QnBcWgVffvRVOIPTxBFWHxNk
+         QEK25D9g9Cofj5DtQrc5AhOtb0wXb7XMWB9w+2/BDyS8T87HBQ1q+KL15jwHX2m0rV/W
+         YBdSd0Nc6gA87MRxxsfyisMmQIghcyXDqbXR2l/yUi7Zyf8NCDjnafAupzL2cIdPlcUl
+         Q7jlKIqf49CRzNjKiMNhpe1uZb62jVfeUOgUzyzFJTmLBVfhqqoh764JVknbA/2R7JJy
+         B0PkWyIYRAKppKAlHG+q44USoznorkTcX6G0FB8M4kaC2Wfta5+c4DwoRzVIMXBNsfLK
+         k5OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DJwsITSMY4QI1R0GyVDZJD0gSOxLKr++NG45dIxuuJs=;
+        b=K+HgbH97SYhA4EzEsvK/cIjE/kbGgZuwXatKwrPrfPJz1WhmxAZXvzM5QBpITawRQI
+         A3RlYPtkDwcl2XOCZjrWb+z0VsvWw3v9MLntyX/lmE2tHySZeFB+VsgK8DXuS8QFeik0
+         oVHNynmEUtkRujhwNeZZ05vfo3pL1u8pXMaMpVj4G0mnLbsf5TiAsVcVNbf61iFD8YZj
+         Txe/EW8RybHAvn3CcU73qjpGJrQ+T1K8TBRdhA5ve3QjMPQp52wCd7Y/6EVbtjdYqWsY
+         4eVx2R4wd+EAU+GXjWIW5SRui7I52M0ziGUnRcr8brZCRowhgoUKCqLujchxV7CV7sYS
+         dqgw==
+X-Gm-Message-State: AOAM5321B/w0qSaSA0dQJQ+67dh7Ucrt5wIkJvxnDIzHjrH96LRFOm+e
+        uxUJV70S2M4kXVt6bmddXHDkdA==
+X-Google-Smtp-Source: ABdhPJx2Lp6ss2rXVGBn2sErjrUmZPIzPgpqhB8Kd0/S/liD97bAVpi21dNqow/jsz25iV/zAWV9AQ==
+X-Received: by 2002:a5d:5849:: with SMTP id i9mr7839177wrf.358.1642429076455;
+        Mon, 17 Jan 2022 06:17:56 -0800 (PST)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:c004:9fe1:fbda:2d0c])
+        by smtp.gmail.com with ESMTPSA id f141sm7975972wmf.30.2022.01.17.06.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 06:17:55 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robert.foss@linaro.org
+Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
+        biju.das.jz@bp.renesas.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Subject: [PATCH] drm/bridge: dw-hdmi: use safe format when first in bridge chain
+Date:   Mon, 17 Jan 2022 15:17:50 +0100
+Message-Id: <20220117141750.1182223-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+When the dw-hdmi bridge is in first place of the bridge chain, this
+means there is now way to select an input format of the dw-hdmi HW
+component.
 
+Since introduction of display-connector, negociation was broken since
+the dw-hdmi negociation code only worked when the dw-hdmi bridge was
+in last position of the bridge chain or behind another bridge also
+supporting input & output format negociation.
 
-Le vendredi 14 janvier 2022, 01:39:10 CET Serge E. Hallyn a =E9crit :
-> On Tue, Dec 28, 2021 at 02:27:56PM +0100, Francis Laniel wrote:
-> > Hi.
-> >=20
-> > Le lundi 27 d=E9cembre 2021, 23:26:29 CET Casey Schaufler a =E9crit :
-> > > On 12/27/2021 12:54 PM, Francis Laniel wrote:
-> > > > This array contains the capability names for the given capabilitiy.
-> > > > For example, index CAP_BPF contains "CAP_BPF".
-> > > >=20
-> > > > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> > > > ---
-> > > >=20
-> > > >   include/uapi/linux/capability.h |  1 +
-> > > >   kernel/capability.c             | 45
-> > > >   +++++++++++++++++++++++++++++++++
-> > > >   2 files changed, 46 insertions(+)
-> > > >=20
-> > > > diff --git a/include/uapi/linux/capability.h
-> > > > b/include/uapi/linux/capability.h index 463d1ba2232a..9646654d5111
-> > > > 100644
-> > > > --- a/include/uapi/linux/capability.h
-> > > > +++ b/include/uapi/linux/capability.h
-> > > > @@ -428,5 +428,6 @@ struct vfs_ns_cap_data {
-> > > >=20
-> > > >   #define CAP_TO_INDEX(x)     ((x) >> 5)        /* 1 << 5 =3D=3D bi=
-ts in
-> > > >   __u32
-> > > >   */
-> > > >   #define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed
-> > > >   __u32
-> > > >   */
-> > > >=20
-> > > > +extern const char *cap_strings[];
-> > > >=20
-> > > >   #endif /* _UAPI_LINUX_CAPABILITY_H */
-> > > >=20
-> > > > diff --git a/kernel/capability.c b/kernel/capability.c
-> > > > index 46a361dde042..5a2e71dcd87b 100644
-> > > > --- a/kernel/capability.c
-> > > > +++ b/kernel/capability.c
-> > > > @@ -15,6 +15,7 @@
-> > > >=20
-> > > >   #include <linux/mm.h>
-> > > >   #include <linux/export.h>
-> > > >   #include <linux/security.h>
-> > > >=20
-> > > > +#include <linux/stringify.h>
-> > > >=20
-> > > >   #include <linux/syscalls.h>
-> > > >   #include <linux/pid_namespace.h>
-> > > >   #include <linux/user_namespace.h>
-> > > >=20
-> > > > @@ -27,6 +28,50 @@
-> > > >=20
-> > > >   const kernel_cap_t __cap_empty_set =3D CAP_EMPTY_SET;
-> > > >   EXPORT_SYMBOL(__cap_empty_set);
-> > > >=20
-> > > > +const char *cap_strings[] =3D {
-> > > > +	[CAP_CHOWN] =3D __stringify_1(CAP_CHOWN),
-> > >=20
-> > > I may just be old and slow, but why is this better than
-> > >=20
-> > > 	[CAP_CHOWN] =3D "CAP_CHOWN",
-> >=20
-> > Good catch, thank you for it, I just replaced the __stringify_1() by
-> > quotes. I thought of using __stringify_() because at first I thought of
-> > adding a new macro which would both define a new capability as well as
-> > adding to this array.
-> I think you are saying you have a new version of the patch where you do
-> what Casey suggests, but I don't see it.  Have you sent an updated patch,
-> or am I misunderstanding?
+Commit 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks")
+was introduced to make negociation work again by making display-connector
+act as a pass-through concerning input & output format negociation.
 
-Sorry, I forgot to send it as we were thinking on the right place to put th=
-e=20
-sysfs with Casey.
-I normally have send it two minutes ago.
+But in the case were the dw-hdmi was single in the bridge chain, for
+example on Renesas SoCs, with the disply-connector bridge the dw-hdmi
+is no more single, breaking output format.
 
-> > But I think it is better to with this simple way rather than doing
-> > complicated stuff.
-> >=20
-> > > > +	[CAP_DAC_OVERRIDE] =3D __stringify_1(CAP_DAC_OVERRIDE),
-> > > > +	[CAP_DAC_READ_SEARCH] =3D __stringify_1(CAP_DAC_READ_SEARCH),
-> > > > +	[CAP_FOWNER] =3D __stringify_1(CAP_FOWNER),
-> > > > +	[CAP_FSETID] =3D __stringify_1(CAP_FSETID),
-> > > > +	[CAP_KILL] =3D __stringify_1(CAP_KILL),
-> > > > +	[CAP_SETGID] =3D __stringify_1(CAP_SETGID),
-> > > > +	[CAP_SETUID] =3D __stringify_1(CAP_SETUID),
-> > > > +	[CAP_SETPCAP] =3D __stringify_1(CAP_SETPCAP),
-> > > > +	[CAP_LINUX_IMMUTABLE] =3D __stringify_1(CAP_LINUX_IMMUTABLE),
-> > > > +	[CAP_NET_BIND_SERVICE] =3D __stringify_1(CAP_NET_BIND_SERVICE),
-> > > > +	[CAP_NET_BROADCAST] =3D __stringify_1(CAP_NET_BROADCAST),
-> > > > +	[CAP_NET_ADMIN] =3D __stringify_1(CAP_NET_ADMIN),
-> > > > +	[CAP_NET_RAW] =3D __stringify_1(CAP_NET_RAW),
-> > > > +	[CAP_IPC_LOCK] =3D __stringify_1(CAP_IPC_LOCK),
-> > > > +	[CAP_IPC_OWNER] =3D __stringify_1(CAP_IPC_OWNER),
-> > > > +	[CAP_SYS_MODULE] =3D __stringify_1(CAP_SYS_MODULE),
-> > > > +	[CAP_SYS_RAWIO] =3D __stringify_1(CAP_SYS_RAWIO),
-> > > > +	[CAP_SYS_CHROOT] =3D __stringify_1(CAP_SYS_CHROOT),
-> > > > +	[CAP_SYS_PTRACE] =3D __stringify_1(CAP_SYS_PTRACE),
-> > > > +	[CAP_SYS_PACCT] =3D __stringify_1(CAP_SYS_PACCT),
-> > > > +	[CAP_SYS_ADMIN] =3D __stringify_1(CAP_SYS_ADMIN),
-> > > > +	[CAP_SYS_BOOT] =3D __stringify_1(CAP_SYS_BOOT),
-> > > > +	[CAP_SYS_NICE] =3D __stringify_1(CAP_SYS_NICE),
-> > > > +	[CAP_SYS_RESOURCE] =3D __stringify_1(CAP_SYS_RESOURCE),
-> > > > +	[CAP_SYS_TIME] =3D __stringify_1(CAP_SYS_TIME),
-> > > > +	[CAP_SYS_TTY_CONFIG] =3D __stringify_1(CAP_SYS_TTY_CONFIG),
-> > > > +	[CAP_MKNOD] =3D __stringify_1(CAP_MKNOD),
-> > > > +	[CAP_LEASE] =3D __stringify_1(CAP_LEASE),
-> > > > +	[CAP_AUDIT_WRITE] =3D __stringify_1(CAP_AUDIT_WRITE),
-> > > > +	[CAP_AUDIT_CONTROL] =3D __stringify_1(CAP_AUDIT_CONTROL),
-> > > > +	[CAP_SETFCAP] =3D __stringify_1(CAP_SETFCAP),
-> > > > +	[CAP_MAC_OVERRIDE] =3D __stringify_1(CAP_MAC_OVERRIDE),
-> > > > +	[CAP_MAC_ADMIN] =3D __stringify_1(CAP_MAC_ADMIN),
-> > > > +	[CAP_SYSLOG] =3D __stringify_1(CAP_SYSLOG),
-> > > > +	[CAP_WAKE_ALARM] =3D __stringify_1(CAP_WAKE_ALARM),
-> > > > +	[CAP_BLOCK_SUSPEND] =3D __stringify_1(CAP_BLOCK_SUSPEND),
-> > > > +	[CAP_AUDIT_READ] =3D __stringify_1(CAP_AUDIT_READ),
-> > > > +	[CAP_PERFMON] =3D __stringify_1(CAP_PERFMON),
-> > > > +	[CAP_BPF] =3D __stringify_1(CAP_BPF),
-> > > > +	[CAP_CHECKPOINT_RESTORE] =3D=20
-__stringify_1(CAP_CHECKPOINT_RESTORE),
-> > > > +};
-> > > > +
-> > > >=20
-> > > >   int file_caps_enabled =3D 1;
-> > > >  =20
-> > > >   static int __init file_caps_disable(char *str)
+Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
+Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fixes: 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks").
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-
-
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index 54d8fdad395f..9f2e1cac0ae2 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+ 	if (!output_fmts)
+ 		return NULL;
+ 
+-	/* If dw-hdmi is the only bridge, avoid negociating with ourselves */
+-	if (list_is_singular(&bridge->encoder->bridge_chain)) {
++	/* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
++	if (list_is_singular(&bridge->encoder->bridge_chain) ||
++	    list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
+ 		*num_output_fmts = 1;
+ 		output_fmts[0] = MEDIA_BUS_FMT_FIXED;
+ 
+@@ -2673,6 +2674,10 @@ static u32 *dw_hdmi_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+ 	if (!input_fmts)
+ 		return NULL;
+ 
++	/* If dw-hdmi is the first bridge fall-back to safe output format */
++	if (list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain))
++		output_fmt = MEDIA_BUS_FMT_FIXED;
++
+ 	switch (output_fmt) {
+ 	/* If MEDIA_BUS_FMT_FIXED is tested, return default bus format */
+ 	case MEDIA_BUS_FMT_FIXED:
+-- 
+2.25.1
 

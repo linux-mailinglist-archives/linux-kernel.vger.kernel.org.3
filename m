@@ -2,111 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E370A490483
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AF5490486
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiAQJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:00:35 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:59142 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229484AbiAQJAe (ORCPT
+        id S233569AbiAQJCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230189AbiAQJCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:00:34 -0500
-X-UUID: ec0394411d204e49978411e812a1d059-20220117
-X-UUID: ec0394411d204e49978411e812a1d059-20220117
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1176267212; Mon, 17 Jan 2022 17:00:32 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 17 Jan 2022 17:00:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 17 Jan 2022 17:00:30 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-CC:     Miles Chen <miles.chen@mediatek.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] clk: mediatek: add unregister logic to mtk_clk_simple_probe error path
-Date:   Mon, 17 Jan 2022 17:00:29 +0800
-Message-ID: <20220117090030.13064-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 17 Jan 2022 04:02:05 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC216C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:02:04 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id d3so54854176lfv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:02:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5eWNHkxEDcvDnOVa58vimxj0RFzSnZVX78Y15KWp4XE=;
+        b=F04iKpf55HWHZUfNd0MND3kcC57yHpdTxP2HADRAYHB8O1xd4GhvxL5ge//KS4A7TS
+         gpejjKDT3cDnZAclFrysE8oNstHYfFzAc9Xxt1Z6B96UtuI7T3RYhU56mMNBQZGcPJ1S
+         9NeSRFgzrZiCJ3BaQjQFBzJfWoY4POEB95y48=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5eWNHkxEDcvDnOVa58vimxj0RFzSnZVX78Y15KWp4XE=;
+        b=r3np+3zH/jaz50F//Syja0/bDjKfEZpY+n6e7Ma0Q8X+ialAGF0Q3rYcMdUS88Vl7v
+         VHq9UbOZO8z7QrcSfiOGwa+mPI1FxiDDkUVA2zM2EgB/Dsylv0SMrouR/CqF/LtfG7vA
+         8ndb4/FUCncmJPtczDB0RYw3KkMtM94mRT6thRh7iOgsuBKRynP1ZTgbZ5H32zFEOEDO
+         /QdMsAYKEfhmD1O9obhvp69lSt9DxraiW9mawheQSL6wTgoa2V1Kx8ZRwudlUCns6IhT
+         Mg5zEdvW4+nWzAoBsGcPftxniXHjVa5NTdEHaEiMmlGEReo4uF9++SQpBjEa7zXv6vfq
+         AWdA==
+X-Gm-Message-State: AOAM533VeYYCv1ndpJ/34FrkvjkfBaC418gCeX1/eghLFgQDzsKZkLxa
+        LCEDEEktLggxve/kw2PhnAE9zF4/sh9U09wE3tC2xg==
+X-Google-Smtp-Source: ABdhPJwK4naYaBZ+8GM/Ab9/Ixhagfb6WfeIhngfxmIkwTvUXsUhPQGr5I/x32U0ZdswDbRkgjWjQoAnUK/H9/TpoSc=
+X-Received: by 2002:a2e:b602:: with SMTP id r2mr3683300ljn.392.1642410123234;
+ Mon, 17 Jan 2022 01:02:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20220114230209.4091727-1-briannorris@chromium.org> <20220114150129.v2.3.I3c79b1466c14b02980071221e5b99283cd26ec77@changeid>
+In-Reply-To: <20220114150129.v2.3.I3c79b1466c14b02980071221e5b99283cd26ec77@changeid>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 17 Jan 2022 17:01:52 +0800
+Message-ID: <CAGXv+5HC00YU6ARtGDahxWLqivvUCowh7wDq5H5OzoGO9htB+g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] ASoC: rk3399_gru_sound: Wire up DP jack detection
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen pointed out that there is no unregister logic in
-mtk_clk_simple_probe() error path [1].
-Fix it by adding unregister logic to mtk_clk_simple_probe().
+Hi,
 
-[1] https://lore.kernel.org/linux-mediatek/20220114221930.660B5C36AE9@smtp.kernel.org/
+On Sat, Jan 15, 2022 at 7:03 AM Brian Norris <briannorris@chromium.org> wrote:
+>
+> Now that the cdn-dp driver supports plug-change callbacks, let's wire it
+> up.
+>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+>
+> (no changes since v1)
+>
+>  sound/soc/rockchip/rk3399_gru_sound.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
+> index e2d52d8d0ff9..eeef3ed70037 100644
+> --- a/sound/soc/rockchip/rk3399_gru_sound.c
+> +++ b/sound/soc/rockchip/rk3399_gru_sound.c
+> @@ -164,6 +164,25 @@ static int rockchip_sound_da7219_hw_params(struct snd_pcm_substream *substream,
+>         return 0;
+>  }
+>
+> +static struct snd_soc_jack cdn_dp_card_jack;
+> +
+> +static int rockchip_sound_cdndp_init(struct snd_soc_pcm_runtime *rtd)
+> +{
+> +       struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
 
-Fixes: c58cd0e40ffa ("clk: mediatek: Add mtk_clk_simple_probe() to simplify clock providers")
-Cc: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
----
- drivers/clk/mediatek/clk-mtk.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+Using snd_soc_card_get_codec_dai() might be a better choice throughout this
+driver. While it will work for the cdn_dp case, because it is the first DAI
+in |rockchip_dais[]|, all the invocations for the other codecs are likely
+returning the wrong DAI.
 
-diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
-index 8d5791b3f460..edf21975cb4d 100644
---- a/drivers/clk/mediatek/clk-mtk.c
-+++ b/drivers/clk/mediatek/clk-mtk.c
-@@ -161,6 +161,22 @@ int mtk_clk_register_gates(struct device_node *node,
- }
- EXPORT_SYMBOL_GPL(mtk_clk_register_gates);
- 
-+static void mtk_clk_unregister_gates(const struct mtk_gate *clks,
-+		int num, struct clk_onecell_data *clk_data)
-+{
-+	int i;
-+	const struct mtk_gate *gate;
-+	struct clk *clk;
-+
-+	for (i = 0; i < num; i++) {
-+		gate = &clks[i];
-+		clk = clk_data->clks[gate->id];
-+
-+		if (!IS_ERR_OR_NULL(clk))
-+			clk_unregister(clk);
-+	}
-+}
-+
- struct clk *mtk_clk_register_composite(const struct mtk_composite *mc,
- 		void __iomem *base, spinlock_t *lock)
- {
-@@ -320,15 +336,17 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
- 
- 	r = mtk_clk_register_gates(node, mcd->clks, mcd->num_clks, clk_data);
- 	if (r)
--		goto free_data;
-+		goto err_free_data;
- 
- 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
- 	if (r)
--		goto free_data;
-+		goto err_unregister_gates;
- 
- 	return r;
- 
--free_data:
-+err_unregister_gates:
-+	mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_data);
-+err_free_data:
- 	mtk_free_clk_data(clk_data);
- 	return r;
- }
--- 
-2.18.0
+For this particular patch it works either way, so
 
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+
+> +       struct snd_soc_card *card = rtd->card;
+> +       int ret;
+> +
+> +       /* Enable jack detection. */
+> +       ret = snd_soc_card_jack_new(card, "DP Jack", SND_JACK_LINEOUT,
+> +                                   &cdn_dp_card_jack, NULL, 0);
+> +       if (ret) {
+> +               dev_err(card->dev, "Can't create DP Jack %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       return snd_soc_component_set_jack(component, &cdn_dp_card_jack, NULL);
+> +}
+> +
+>  static int rockchip_sound_da7219_init(struct snd_soc_pcm_runtime *rtd)
+>  {
+>         struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
+> @@ -315,6 +334,7 @@ static const struct snd_soc_dai_link rockchip_dais[] = {
+>         [DAILINK_CDNDP] = {
+>                 .name = "DP",
+>                 .stream_name = "DP PCM",
+> +               .init = rockchip_sound_cdndp_init,
+>                 .dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
+>                         SND_SOC_DAIFMT_CBS_CFS,
+>                 SND_SOC_DAILINK_REG(cdndp),
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip

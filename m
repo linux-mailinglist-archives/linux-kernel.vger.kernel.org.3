@@ -2,237 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F3B490984
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE87649098B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbiAQN0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:26:19 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:63995 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiAQN0S (ORCPT
+        id S233700AbiAQN2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233841AbiAQN2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:26:18 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220117132616epoutp0264f4d50f5e0757d85afe7966a6e64d3c~LEbk49sTg2252522525epoutp02R
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:26:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220117132616epoutp0264f4d50f5e0757d85afe7966a6e64d3c~LEbk49sTg2252522525epoutp02R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642425976;
-        bh=jJYIuzuaNEFnNoUSu/2MnSA+EPnb7LgcjQMBnYhMUyk=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=rGym4fpa6AvM9HP+Br0iWxrW30mvCdh7M9UPqDMtLl1ySxNHNmL7VzNeYkGgpV+HS
-         RpMgAOVA8barhowucFxaGhKYNLnA3aOTwSCQH3qerqP9gDHP/oM4vuFYWG0fvsxmdI
-         QIUqoSoxyATHJ7+ENFUwhXjDB2tjPzRw9ixv3/8o=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220117132615epcas5p16624146221ce26631968fe9b6310c9ae~LEbkbTCDN0268702687epcas5p18;
-        Mon, 17 Jan 2022 13:26:15 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Jct2p2tm0z4x9Pt; Mon, 17 Jan
-        2022 13:26:10 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5D.57.46822.64E65E16; Mon, 17 Jan 2022 22:25:26 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220117132609epcas5p20eb1ddff0d0bf74393acfc37d16ad027~LEbeXe2c31268812688epcas5p2Z;
-        Mon, 17 Jan 2022 13:26:09 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220117132609epsmtrp115d45856a6933f230ea84e93ed2b2dd1~LEbeWnVEE1765217652epsmtrp18;
-        Mon, 17 Jan 2022 13:26:09 +0000 (GMT)
-X-AuditID: b6c32a4a-dfbff7000000b6e6-e6-61e56e466d5d
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        89.2A.08738.17E65E16; Mon, 17 Jan 2022 22:26:09 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220117132607epsmtip1ed04742abc9fee9b50b79ca74fe17ee6~LEbcQmvjr2208722087epsmtip1E;
-        Mon, 17 Jan 2022 13:26:06 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <soc@kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <olof@lixom.net>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>
-In-Reply-To: <5ab62673-8d46-ec1d-1c80-696421ab69ca@canonical.com>
-Subject: RE: [PATCH 13/23] dt-bindings: arm: add Tesla FSD ARM SoC
-Date:   Mon, 17 Jan 2022 18:56:05 +0530
-Message-ID: <00c901d80ba5$c9ae6ab0$5d0b4010$@samsung.com>
+        Mon, 17 Jan 2022 08:28:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAB5C061574;
+        Mon, 17 Jan 2022 05:28:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CC540CE13A5;
+        Mon, 17 Jan 2022 13:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DC87C36AE7;
+        Mon, 17 Jan 2022 13:28:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642426085;
+        bh=BtG7I84GvB/Sz35ndvv2QPjfdM9pekvFOFAZuOIgw9E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ghT0ducj8wxuhb3IMBgYpurbShrG1FYBjGCA8UPHzsGxWXafgT4FDlFIOipDvU48K
+         ViCgE1mDk87dtIZTI8lsPbl4NfC9yFi6buvAu1qZVwYsEwAazgj6KNWnUE8pV5oxiH
+         tKpLm13mWhiiXtQrA/OurFtfw8so+Zfqw4m7JeWYtyKGo+0JEJHONkdsQeG69aBGgf
+         0vw8bvp42Ke7ZAsJSlLV+5MsljtFD+HrRS7Oi07x5v1iVat0RmX5tM5Bl4124jl04t
+         DV1LA/+Hg9zGc236HzzpULRvh5gkWUxAxWaWe4B/csXJfDUro6KtAeIx/w8bqcM3IX
+         SXyyOkzeRArZg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-arch@vger.kernel.org, Michal Simek <monstr@monstr.eu>
+Cc:     linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, ebiederm@xmission.com,
+        viro@zeniv.linux.org.uk, torvalds@linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH] microblaze: remove CONFIG_SET_FS
+Date:   Mon, 17 Jan 2022 14:27:03 +0100
+Message-Id: <20220117132757.1881981-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
+References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgIR+KN8AmyCbh0CxU8U/wHDvG0jANpCFQOqa8cWwA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPJsWRmVeSWpSXmKPExsWy7bCmuq5b3tNEg403WSzeL+thtJh/5Byr
-        xca3P5gspvxZzmSx6fE1VouPPfdYLR6+Cre4vGsOm8WM8/uYLE5d/8xmsWjrF3aL1r1H2C0O
-        v2lntXh8/Q+bA5/HmnlrGD1mNfSyeWxa1cnmcefaHjaPzUvqPa6caGL16NuyitHjX9Ncdo/P
-        m+QCOKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA
-        bldSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZ
-        AhUmZGdcW9vBXrBaseLmqvVMDYyrZLoYOTkkBEwkXj+dytjFyMUhJLCbUWLP4X1MEM4nRolF
-        C46wQjifGSX2vlrOCtPSvOoyE4gtJLCLUeLgU3OIopeMErs/HAdLsAnoSuxY3MYGkhAR6GSU
-        WP39J9hcZoEVTBLzT91lAaniFHCUuP9iJzuILSzgJPH35jmwFSwCqhItU68AxTk4eAUsJZ7/
-        VwAJ8woISpyc+QSslVlAW2LZwtfMEBcpSPx8ugysVUQgTOLipJnsEDXiEi+PHmEH2Ssh8IJD
-        YveSj0wQDS4S1x61QtnCEq+Ob2GHsKUkXva3ge2VEMiW6NllDBGukVg67xgLhG0vceDKHBaQ
-        EmYBTYn1u/QhVvFJ9P5+wgTRySvR0SYEUa0q0fzuKlSntMTE7m5oGHpIvHrym3UCo+IsJI/N
-        QvLYLCQPzEJYtoCRZRWjZGpBcW56arFpgVFeajk8vpPzczcxglO2ltcOxocPPugdYmTiYDzE
-        KMHBrCTCe4z7SaIQb0piZVVqUX58UWlOavEhRlNgYE9klhJNzgdmjbySeEMTSwMTMzMzE0tj
-        M0Mlcd7T6RsShQTSE0tSs1NTC1KLYPqYODilGpiKV57UE7JN7f357m/VVHsmtoym/yKzv4so
-        vzZ8+X6vVcK1T88WqvFlfXlccdmpkVlHeInfzwteAl8jdLda/3aQPRG2dvKWw7fUNV9HyjOK
-        tj5luiD5YvuCVL3FPL4F02/cWXi4tPn5urru715HUo7fNLV+lewiJjr3XOeFO/qc32zmq6mf
-        1jJT9N7cd6+iXStcfG7Kx7tlfavtr30V+fgy8vmnT6sXxCvVnO5/e20VO/firmW/5d6tjDPc
-        WRk2b4WKd8t/2wDJlqtWG5wazxlezp4kWG0e++30A4uri+O0zsUad37aJWKYuOtedYuvfIt2
-        +54v/Zxc4rp7s9SCshxlamuNc86/k+V/5tcSYKbEUpyRaKjFXFScCABv5Y91YgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFIsWRmVeSWpSXmKPExsWy7bCSnG5h3tNEgw3PeSzeL+thtJh/5Byr
-        xca3P5gspvxZzmSx6fE1VouPPfdYLR6+Cre4vGsOm8WM8/uYLE5d/8xmsWjrF3aL1r1H2C0O
-        v2lntXh8/Q+bA5/HmnlrGD1mNfSyeWxa1cnmcefaHjaPzUvqPa6caGL16NuyitHjX9Ncdo/P
-        m+QCOKO4bFJSczLLUov07RK4Mo6fWMtWcEKh4tGFT+wNjEeluxg5OSQETCSaV11m6mLk4hAS
-        2MEosbinhREiIS1xfeMEdghbWGLlv+fsEEXPGSVmLDnGApJgE9CV2LG4jQ0kISLQzShxpWcm
-        I4jDLLCFSaLzxRlmiJYbTBLnV34Fm8Up4Chx/8VOMFtYwEni781zrCA2i4CqRMvUK0BxDg5e
-        AUuJ5/8VQMK8AoISJ2c+AdvGLKAt0fuwlRHGXrbwNTPEeQoSP58uAxsjIhAmcXHSTHaIGnGJ
-        l0ePsE9gFJ6FZNQsJKNmIRk1C0nLAkaWVYySqQXFuem5xYYFRnmp5XrFibnFpXnpesn5uZsY
-        wdGrpbWDcc+qD3qHGJk4GA8xSnAwK4nwHuN+kijEm5JYWZValB9fVJqTWnyIUZqDRUmc90LX
-        yXghgfTEktTs1NSC1CKYLBMHp1QDU3bqohM3/ZqfMqY83e/IIZ32+rJ4zZfDR93ikpdMljun
-        p1N7Qlr155T7zBn6LI/DHq61ujqhb0+9QdaijSXfGBti7qQ87VlgnynepNOQcCIt6lZZ0pNr
-        LQKu6vmme2qkGC5vOOe5+uC60/ZustlHmiLtL6spN93JNy3+5K50oo/bzXDT3eYfT3QLzod+
-        Z1lxPavcKq/NYr14wDT30AxpjrZ1m5MOMb7SqjQ6wsEouzlnM4fHBat1mY8Mz+tKLDFcoNtT
-        cMEq642Wt8ms3JzMp4suXHK3nJl+6tqsSUaxASpur89kuvAWXYg56L1/i175pUNtZ5X78h39
-        19w9aTLd0GBelQE37wqnWWbVfXOVWIozEg21mIuKEwGJ2u9HTQMAAA==
-X-CMS-MailID: 20220117132609epcas5p20eb1ddff0d0bf74393acfc37d16ad027
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122408epcas5p45053d1bf0acf2d8233a98b6c1abab6eb
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122408epcas5p45053d1bf0acf2d8233a98b6c1abab6eb@epcas5p4.samsung.com>
-        <20220113121143.22280-14-alim.akhtar@samsung.com>
-        <53c17ddc-a049-72ed-7237-de23db7889da@canonical.com>
-        <085801d80967$e4b8fe00$ae2afa00$@samsung.com>
-        <5ab62673-8d46-ec1d-1c80-696421ab69ca@canonical.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+From: Arnd Bergmann <arnd@arndb.de>
 
->-----Original Message-----
->From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
->Sent: Friday, January 14, 2022 11:00 PM
->To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->Cc: soc=40kernel.org; linux-clk=40vger.kernel.org; devicetree=40vger.kerne=
-l.org;
->olof=40lixom.net; linus.walleij=40linaro.org; catalin.marinas=40arm.com;
->robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
->soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.com
->Subject: Re: =5BPATCH 13/23=5D dt-bindings: arm: add Tesla FSD ARM SoC
->
->On 14/01/2022 17:57, Alim Akhtar wrote:
->>
->>
->>> -----Original Message-----
->>> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=
-=5D
->>> Sent: Thursday, January 13, 2022 6:03 PM
->>> To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->>> kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->>> Cc: soc=40kernel.org; linux-clk=40vger.kernel.org;
->>> devicetree=40vger.kernel.org; olof=40lixom.net; linus.walleij=40linaro.=
-org;
->>> catalin.marinas=40arm.com;
->>> robh+dt=40kernel.org; s.nawrocki=40samsung.com; linux-samsung-
->>> soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-fsd=40tesla.co=
-m
->>> Subject: Re: =5BPATCH 13/23=5D dt-bindings: arm: add Tesla FSD ARM SoC
->>>
->>> On 13/01/2022 13:11, Alim Akhtar wrote:
->>>> Add device tree bindings for the Tesla FSD ARM SoC.
->>>>
->>>> Cc: linux-fsd=40tesla.com
->>>> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
->>>> ---
->>>>  .../devicetree/bindings/arm/tesla.yaml        =7C 25 ++++++++++++++++=
-+++
->>>>  1 file changed, 25 insertions(+)
->>>>  create mode 100644
->Documentation/devicetree/bindings/arm/tesla.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/arm/tesla.yaml
->>>> b/Documentation/devicetree/bindings/arm/tesla.yaml
->>>> new file mode 100644
->>>> index 000000000000..9f89cde76c85
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/arm/tesla.yaml
->>>> =40=40 -0,0 +1,25 =40=40
->>>> +=23 SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
->>>> +---
->>>> +=24id:
->>>> +https://protect2.fireeye.com/v1/url?k=3D2f0fac44-70949546-2f0e270b-0c
->>>> +c4
->>>> +7a312ab0-50c826f7b1999a5f&q=3D1&e=3Dbcbf277f-4e93-4705-8f6a-
->>> 2beaa7eb31e2&
->>>>
->+u=3Dhttp%3A%2F%2Fdevicetree.org%2Fschemas%2Farm%2Ftesla.yaml%23
->>>> +=24schema:
->>>> +https://protect2.fireeye.com/v1/url?k=3Dd8493fe2-87d206e0-d848b4ad-
->0c
->>>> +c4
->>>> +7a312ab0-f4e5046adc7da972&q=3D1&e=3Dbcbf277f-4e93-4705-8f6a-
->>> 2beaa7eb31e2&
->>>> +u=3Dhttp%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
->>>> +
->>>> +title: Tesla Full Self Driving(FSD) platforms device tree bindings
->>>> +
->>>> +maintainers:
->>>> +  - Alim Akhtar <alim.akhtar=40samsung.com>
->>>> +  - linux-fsd=40tesla.com
->>>> +
->>>> +properties:
->>>> +  =24nodename:
->>>> +    const: '/'
->>>> +  compatible:
->>>> +    oneOf:
->>>> +
->>>> +      - description: FSD SoC board
->>>> +        items:
->>>> +          - const: tesla,fsd
->>>
->>> Either this is a SoC or a board compatible... Cannot be both.
->>>
->> Actually we call this as fsd board, so let me add accordingly compatible=
- (fsd-
->baord) for board.
->> Thanks
->
->It's confusing and probably not accurate. In your series fsd is three thin=
-gs in
->the same time: an architecture, a SoC and a board (DTS). The last two shou=
-ld
->definitely be different. You probably have some eval board (how it is call=
-ed
->also in Tesla open source git) or some specific product board.
->
-Understood, let me clear this confusion in the patchset-2 where fsd board w=
-ill have its own compatible and=20
-of course SoC will have its own (shared with fsd architecture) compatible.
+I picked microblaze as one of the architectures that still
+use set_fs() and converted it not to.
 
->I cannot judge how different this is from Exynos subarchitecture - looking=
- at
->patches it is not different - so I could understand a FSD sub-arch with on=
-ly one
->SoC.
->
-I understand, it is a bit difficult to visualize it with the current patch =
-set.
-As discuss on the other thread, FSD is different, more over the vendor is d=
-ifferent, internal design is different.
->
->Best regards,
->Krzysztof
+Link: https://lore.kernel.org/lkml/CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+This is an old patch I found after Christoph asked about
+conversions for the remaining architectures. I have no idea
+about the state of this patch, but there is a reasonable
+chance that it works.
+---
+ arch/microblaze/Kconfig                   |  1 -
+ arch/microblaze/include/asm/thread_info.h |  6 ---
+ arch/microblaze/include/asm/uaccess.h     | 56 ++++++++++-------------
+ arch/microblaze/kernel/asm-offsets.c      |  1 -
+ 4 files changed, 25 insertions(+), 39 deletions(-)
+
+diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+index 59798e43cdb0..1fb1cec087b7 100644
+--- a/arch/microblaze/Kconfig
++++ b/arch/microblaze/Kconfig
+@@ -42,7 +42,6 @@ config MICROBLAZE
+ 	select CPU_NO_EFFICIENT_FFS
+ 	select MMU_GATHER_NO_RANGE
+ 	select SPARSE_IRQ
+-	select SET_FS
+ 	select ZONE_DMA
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 
+diff --git a/arch/microblaze/include/asm/thread_info.h b/arch/microblaze/include/asm/thread_info.h
+index 44f5ca331862..a0ddd2a36fb9 100644
+--- a/arch/microblaze/include/asm/thread_info.h
++++ b/arch/microblaze/include/asm/thread_info.h
+@@ -56,17 +56,12 @@ struct cpu_context {
+ 	__u32	fsr;
+ };
+ 
+-typedef struct {
+-	unsigned long seg;
+-} mm_segment_t;
+-
+ struct thread_info {
+ 	struct task_struct	*task; /* main task structure */
+ 	unsigned long		flags; /* low level flags */
+ 	unsigned long		status; /* thread-synchronous flags */
+ 	__u32			cpu; /* current CPU */
+ 	__s32			preempt_count; /* 0 => preemptable,< 0 => BUG*/
+-	mm_segment_t		addr_limit; /* thread address space */
+ 
+ 	struct cpu_context	cpu_context;
+ };
+@@ -80,7 +75,6 @@ struct thread_info {
+ 	.flags		= 0,			\
+ 	.cpu		= 0,			\
+ 	.preempt_count	= INIT_PREEMPT_COUNT,	\
+-	.addr_limit	= KERNEL_DS,		\
+ }
+ 
+ /* how to get the thread information struct from C */
+diff --git a/arch/microblaze/include/asm/uaccess.h b/arch/microblaze/include/asm/uaccess.h
+index d2a8ef9f8978..346fe4618b27 100644
+--- a/arch/microblaze/include/asm/uaccess.h
++++ b/arch/microblaze/include/asm/uaccess.h
+@@ -16,45 +16,20 @@
+ #include <asm/extable.h>
+ #include <linux/string.h>
+ 
+-/*
+- * On Microblaze the fs value is actually the top of the corresponding
+- * address space.
+- *
+- * The fs value determines whether argument validity checking should be
+- * performed or not. If get_fs() == USER_DS, checking is performed, with
+- * get_fs() == KERNEL_DS, checking is bypassed.
+- *
+- * For historical reasons, these macros are grossly misnamed.
+- *
+- * For non-MMU arch like Microblaze, KERNEL_DS and USER_DS is equal.
+- */
+-# define MAKE_MM_SEG(s)       ((mm_segment_t) { (s) })
+-
+-#  define KERNEL_DS	MAKE_MM_SEG(0xFFFFFFFF)
+-#  define USER_DS	MAKE_MM_SEG(TASK_SIZE - 1)
+-
+-# define get_fs()	(current_thread_info()->addr_limit)
+-# define set_fs(val)	(current_thread_info()->addr_limit = (val))
+-# define user_addr_max() get_fs().seg
+-
+-# define uaccess_kernel()	(get_fs().seg == KERNEL_DS.seg)
+-
+ static inline int access_ok(const void __user *addr, unsigned long size)
+ {
+ 	if (!size)
+ 		goto ok;
+ 
+-	if ((get_fs().seg < ((unsigned long)addr)) ||
+-			(get_fs().seg < ((unsigned long)addr + size - 1))) {
+-		pr_devel("ACCESS fail at 0x%08x (size 0x%x), seg 0x%08x\n",
+-			(__force u32)addr, (u32)size,
+-			(u32)get_fs().seg);
++	if ((((unsigned long)addr) > TASK_SIZE) ||
++	    (((unsigned long)addr + size - 1) > TASK_SIZE)) {
++		pr_devel("ACCESS fail at 0x%08x (size 0x%x)",
++			(__force u32)addr, (u32)size);
+ 		return 0;
+ 	}
+ ok:
+-	pr_devel("ACCESS OK at 0x%08x (size 0x%x), seg 0x%08x\n",
+-			(__force u32)addr, (u32)size,
+-			(u32)get_fs().seg);
++	pr_devel("ACCESS OK at 0x%08x (size 0x%x)\n",
++			(__force u32)addr, (u32)size);
+ 	return 1;
+ }
+ 
+@@ -280,6 +255,25 @@ extern long __user_bad(void);
+ 	__gu_err;							\
+ })
+ 
++#define __get_kernel_nofault(dst, src, type, label)	\
++{							\
++	type __user *p = (type __force __user *)(src);	\
++	type data;					\
++	if (__get_user(data, p))			\
++		goto label;				\
++	*(type *)dst = data;				\
++}
++
++#define __put_kernel_nofault(dst, src, type, label)	\
++{							\
++	type __user *p = (type __force __user *)(dst);	\
++	type data = *(type *)src;			\
++	if (__put_user(data, p))			\
++		goto label;				\
++}
++
++#define HAVE_GET_KERNEL_NOFAULT
++
+ static inline unsigned long
+ raw_copy_from_user(void *to, const void __user *from, unsigned long n)
+ {
+diff --git a/arch/microblaze/kernel/asm-offsets.c b/arch/microblaze/kernel/asm-offsets.c
+index b77dd188dec4..47ee409508b1 100644
+--- a/arch/microblaze/kernel/asm-offsets.c
++++ b/arch/microblaze/kernel/asm-offsets.c
+@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
+ 	/* struct thread_info */
+ 	DEFINE(TI_TASK, offsetof(struct thread_info, task));
+ 	DEFINE(TI_FLAGS, offsetof(struct thread_info, flags));
+-	DEFINE(TI_ADDR_LIMIT, offsetof(struct thread_info, addr_limit));
+ 	DEFINE(TI_CPU_CONTEXT, offsetof(struct thread_info, cpu_context));
+ 	DEFINE(TI_PREEMPT_COUNT, offsetof(struct thread_info, preempt_count));
+ 	BLANK();
+-- 
+2.29.2
 

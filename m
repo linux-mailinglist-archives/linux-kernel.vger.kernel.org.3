@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FF4490D56
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617D2490D5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241819AbiAQRC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
+        id S242116AbiAQRCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241821AbiAQRBP (ORCPT
+        with ESMTP id S241856AbiAQRBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:01:15 -0500
+        Mon, 17 Jan 2022 12:01:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A40C06175B;
-        Mon, 17 Jan 2022 09:01:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0EBC061777;
+        Mon, 17 Jan 2022 09:01:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CE07611C2;
-        Mon, 17 Jan 2022 17:01:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1885C36AE3;
-        Mon, 17 Jan 2022 17:01:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B11CC611CB;
+        Mon, 17 Jan 2022 17:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D791C36AEC;
+        Mon, 17 Jan 2022 17:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642438874;
-        bh=6V+sC1g13i8VXCbalZh08XyriymrAMskwoCmd6usGJM=;
+        s=k20201202; t=1642438881;
+        bh=ZyzMXIedkgTIw/WfYn0qeV0S+0BFxcF3RefNHmpwwok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UWP9gm+rJCqZGRDt0Z/coGVZMV4BD519pNyBvaqG5zpIZy4XI5fxLWge/B/h+AGIo
-         Jxi64sv3YHiIXd4Ri7vZyaNX/roxibP/N0tNK8VJjppqJAMVuUcOyrh+SMe+UQpotY
-         kuYs/iAk2xPOs0ibKarVvgTmBMoWjYXzw+bFDAnyh/sL+QDDuLc+gMC3ZpRDXL056y
-         m13ym5lIOm5xtfpjtQFYbW3hS28CzeDLYN59aEMel7SU+hrEc2bRWIzRanZyASNrP/
-         rjCAm1jXJzd6pAUm/OvD6mn0dMP8LdWNWyU62iHd4o3W1+17Y/OkODCqovlOUYJBa0
-         6FLKZk837XNzQ==
+        b=fnGtADk7veEbbYkMmqqFprSl+5/DRIn8RshZ/+jpjczek8Cxq3gOei4Xr5B4rXfhD
+         LwuQEE91QT/pBPwK6fJ36GNfUgw4RdvjvrQikS9jV+jAL2N8+kTxhTS19zY/7uTA3w
+         CWpYFlBg6oaVapRzNvuYSyEFRlY0Q6kmxMmwiS24YF6agC2PK4YuNRZu4igUyVSirg
+         whC0TQzouuQ9XdkJrewesnts9ddXuCtxPNcJ0DNRKW8f1a+wfl539Oq1jOJHE49RZC
+         OdHb4PKVRKDdM5O75sekpxTSspjZFa98cy3SYqFfGJpMDpvcvHYsBCLj94yB4A7qpn
+         ddTHT0ibqz0dA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
-        chunfeng.yun@mediatek.com, kishon@ti.com, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.16 49/52] phy: mediatek: Fix missing check in mtk_mipi_tx_probe
-Date:   Mon, 17 Jan 2022 11:58:50 -0500
-Message-Id: <20220117165853.1470420-49-sashal@kernel.org>
+Cc:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, vsujithkumar.reddy@amd.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.16 50/52] ASoC: amd: acp: acp-mach: Change default RT1019 amp dev id
+Date:   Mon, 17 Jan 2022 11:58:51 -0500
+Message-Id: <20220117165853.1470420-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220117165853.1470420-1-sashal@kernel.org>
 References: <20220117165853.1470420-1-sashal@kernel.org>
@@ -57,35 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
 
-[ Upstream commit 399c91c3f30531593e5ff6ca7b53f47092128669 ]
+[ Upstream commit 7112550890d7e415188a3351ec0a140be60f6deb ]
 
-The of_device_get_match_data() function may return NULL.
-Add check to prevent potential null dereference.
+RT1019 components was initially registered with i2c1 and i2c2 but
+now changed to i2c0 and i2c1 in most of our AMD platforms. Change
+default rt1019 components to 10EC1019:00 and 10EC1019:01 which is
+aligned with most of AMD machines.
 
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20211224082103.7658-1-linmq006@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Any exception to rt1019 device ids in near future board design can
+be handled using dmi based quirk for that machine.
+
+Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Link: https://lore.kernel.org/r/20220106150525.396170-1-AjitKumar.Pandey@amd.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/mediatek/phy-mtk-mipi-dsi.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/amd/acp/acp-mach-common.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-index 28ad9403c4414..67b005d5b9e35 100644
---- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-+++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-@@ -146,6 +146,8 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
+index 7785f12aa0065..7386e5bb61b5e 100644
+--- a/sound/soc/amd/acp/acp-mach-common.c
++++ b/sound/soc/amd/acp/acp-mach-common.c
+@@ -268,8 +268,8 @@ static const struct snd_soc_ops acp_card_rt5682s_ops = {
  
- 	mipi_tx->driver_data = of_device_get_match_data(dev);
-+	if (!mipi_tx->driver_data)
-+		return -ENODEV;
+ /* Declare RT1019 codec components */
+ SND_SOC_DAILINK_DEF(rt1019,
+-	DAILINK_COMP_ARRAY(COMP_CODEC("i2c-10EC1019:01", "rt1019-aif"),
+-			  COMP_CODEC("i2c-10EC1019:02", "rt1019-aif")));
++	DAILINK_COMP_ARRAY(COMP_CODEC("i2c-10EC1019:00", "rt1019-aif"),
++			  COMP_CODEC("i2c-10EC1019:01", "rt1019-aif")));
  
- 	mipi_tx->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(mipi_tx->regs))
+ static const struct snd_soc_dapm_route rt1019_map_lr[] = {
+ 	{ "Left Spk", NULL, "Left SPO" },
+@@ -278,11 +278,11 @@ static const struct snd_soc_dapm_route rt1019_map_lr[] = {
+ 
+ static struct snd_soc_codec_conf rt1019_conf[] = {
+ 	{
+-		 .dlc = COMP_CODEC_CONF("i2c-10EC1019:01"),
++		 .dlc = COMP_CODEC_CONF("i2c-10EC1019:00"),
+ 		 .name_prefix = "Left",
+ 	},
+ 	{
+-		 .dlc = COMP_CODEC_CONF("i2c-10EC1019:02"),
++		 .dlc = COMP_CODEC_CONF("i2c-10EC1019:01"),
+ 		 .name_prefix = "Right",
+ 	},
+ };
 -- 
 2.34.1
 

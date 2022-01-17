@@ -2,149 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E07A490979
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C6F4909A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbiAQNYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:24:15 -0500
-Received: from mga07.intel.com ([134.134.136.100]:21856 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229541AbiAQNYO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:24:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642425854; x=1673961854;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HGSlJkPFahzJlQW9BvUEZBi+xdMhmzehQDA5gynXVrA=;
-  b=bSsOlR+TMguFVzbdC2XgvH0rvpakq1OMozThKmLdHOD798tycEUkcwK/
-   qfi4a7YqfaGuuYWnXeBA11Wg0YqtuFSSSVavk7SXZBn7eV05MREzlrnir
-   NFRfh0AJLRUb+l7LacGWfiv5th12bFTZ/LABDDR+tpn4wAIxYxYx6SJw0
-   Rcgu6hnywHs0j249k6Sbta/AwyqENoBYw63hHetTsEl41b8tWS0ETgkfp
-   oqDinTYUb8WlMmXwoHQ9Ut2zSTTGT8TC0h7Df3sY6rps9LH8mABPssXdW
-   z6Y1wvIDW0ihHiRL7DQ/baZv6koQ+TN9Bc/jfNRcZ4rW0tCDnRgMsjo77
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="307962600"
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="307962600"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:24:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
-   d="scan'208";a="531336726"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 05:24:10 -0800
-Date:   Mon, 17 Jan 2022 21:35:04 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] KVM: x86: Remove WARN_ON in
- kvm_arch_check_processor_compat
-Message-ID: <20220117133503.GA27833@gao-cwp>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-6-chao.gao@intel.com>
- <Ydy6aIyI3jFQvF0O@google.com>
- <BN9PR11MB5276DEA925C72AF585E7472C8C519@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Yd3fFxg3IjWPUIqH@google.com>
- <20220112110000.GA10249@gao-cwp>
- <Yd8RUJ6YpQrpe4Zf@google.com>
+        id S232077AbiAQNiD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Jan 2022 08:38:03 -0500
+Received: from mail-qk1-f173.google.com ([209.85.222.173]:44683 "EHLO
+        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230190AbiAQNiB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 08:38:01 -0500
+Received: by mail-qk1-f173.google.com with SMTP id t1so2837055qkt.11;
+        Mon, 17 Jan 2022 05:38:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Vgyxr7ztzV60Xeh7Q7gRuypGNAwuqlHo855fT6ZQ17E=;
+        b=PiUDFWDBmU1+9vD4LZmuVbR65V+lCU9F7loiGmX1eZujZTseE8D/3n5/gK3z/DarOl
+         FgwlLnRenmiBBehgtd+rIidprM7p26l03tsCuJVY7kl8KZzV0a1AFr3PCeKYdgLuovtN
+         2PdoJ8xqSuQS6GjvwpU+2RKSBgGaWEjWiOCWnzZYMn4Huncw/C10BepaY4pUZy1ldVCa
+         kLm/aFCLHPSYgIHItB/kpxYZSi0Y7BaXC1NX5cXIlQOx51n4h7chhUGHKfvEYlERUgzr
+         sm+HTEDGRnSwkKCgZAgjiS0Bbv6Wciam5yS9ZNeKlgBX+ghOzHxthf3qvzbvcMBqFNMG
+         qZcg==
+X-Gm-Message-State: AOAM533pUQzBzSmKA6RUzx1GGUD6jpJgwso7Shooe9JhEx+JDWnegzkK
+        XP/hCP60M1k6g83EqfYgI23+N+rJJGNE3PtveCI=
+X-Google-Smtp-Source: ABdhPJzgqH7VQOVtjyKwk0O6xlkP5eJCKSaa1kHhuN3q3ZPuNR5LB9Fx/9eQnXEjz8YssSHj1lIGXO8rpmxps9J+78A=
+X-Received: by 2002:a05:620a:4714:: with SMTP id bs20mr2943693qkb.8.1642426680287;
+ Mon, 17 Jan 2022 05:38:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yd8RUJ6YpQrpe4Zf@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220107181723.54392-1-paul@crapouillou.net> <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
+In-Reply-To: <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 17 Jan 2022 14:37:45 +0100
+Message-ID: <CAJZ5v0htDq+qFhEoV+PLQ9_pOy_xa7+rMoaGtqK7QpEbpUDA+Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 05:35:12PM +0000, Sean Christopherson wrote:
->On Wed, Jan 12, 2022, Chao Gao wrote:
->> On Tue, Jan 11, 2022 at 07:48:39PM +0000, Sean Christopherson wrote:
->> >On Tue, Jan 11, 2022, Tian, Kevin wrote:
->> >> > From: Sean Christopherson <seanjc@google.com>
->> >> > Sent: Tuesday, January 11, 2022 7:00 AM
->> >> > 
->> >> > On Mon, Dec 27, 2021, Chao Gao wrote:
->> >> > > kvm_arch_check_processor_compat() needn't be called with interrupt
->> >> > > disabled, as it only reads some CRs/MSRs which won't be clobbered
->> >> > > by interrupt handlers or softirq.
->> >> > >
->> >> > > What really needed is disabling preemption. No additional check is
->> >> > > added because if CONFIG_DEBUG_PREEMPT is enabled, smp_processor_id()
->> >> > > (right above the WARN_ON()) can help to detect any violation.
->> >> > 
->> >> > Hrm, IIRC, the assertion that IRQs are disabled was more about detecting
->> >> > improper usage with respect to KVM doing hardware enabling than it was
->> >> > about ensuring the current task isn't migrated.  E.g. as exhibited by patch
->> >> > 06, extra protections (disabling of hotplug in that case) are needed if
->> >> > this helper is called outside of the core KVM hardware enabling flow since
->> >> > hardware_enable_all() does its thing via SMP function call.
->> >> 
->> >> Looks the WARN_ON() was added by you. 😊
->> >
->> >Yeah, past me owes current me a beer.
->> >
->> >> commit f1cdecf5807b1a91829a2dc4f254bfe6bafd4776
->> >> Author: Sean Christopherson <sean.j.christopherson@intel.com>
->> >> Date:   Tue Dec 10 14:44:14 2019 -0800
->> >> 
->> >>     KVM: x86: Ensure all logical CPUs have consistent reserved cr4 bits
->> >> 
->> >>     Check the current CPU's reserved cr4 bits against the mask calculated
->> >>     for the boot CPU to ensure consistent behavior across all CPUs.
->> >> 
->> >>     Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
->> >>     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->> >> 
->> >> But it's unclear to me how this WARN_ON() is related to what the commit
->> >> msg tries to explain.
->> >
->> >Ya, the changelog and lack of a comment is awful.
->> >
->> >> When I read this code it's more like a sanity check on the assumption that it
->> >> is currently called in SMP function call which runs the said function with
->> >> interrupt disabled.
->> >
->> >Yes, and as above, that assertion was more about the helper not really being safe
->> >for general usage as opposed to wanting to detect use from preemptible context.
->> >If we end up keeping the WARN_ON, I'll happily write a comment explaining the
->> >point of the assertion.
->> 
->> OK. I will do following changes to keep the WARN_ON():
->> 1. drop this patch
->> 2. disable interrupt before the call site in patch 6.
+Hi,
+
+On Sun, Jan 16, 2022 at 1:05 PM Paul Cercueil <paul@crapouillou.net> wrote:
 >
->No, we shouldn't sully other code just to keep this WARN.  Again, the point of
->the WARN is/was to highlight that any use outside of the hardware enabling path
->is suspect.  That's why I asked if there was a way this code could identify that
->the CPU in question is being hotplugged, i.e. to convey that the helper is safe
->to use only during hardware enabling _or_ hotplug.  If that's not feasible,
->replacing the WARN with a scary comment is better than disabling IRQs.
+> Hi Rafael,
+>
+> Could patches [1/6] and [2/6] make it to 5.17-rc1, or at least -rc2?
 
-OK. How about:
+Yes.  I'm going to send a PR with the whole series later today.
 
-	/*
-	 * Compatibility checks are done when loading KVM or in KVM's CPU
-	 * hotplug callback. It ensures all online CPUs are compatible before
-	 * running any vCPUs. For other cases, compatibility checks are
-	 * unnecessary or even problematic. Try to detect improper usages here.
-	 */
-	WARN_ON(!irqs_disabled() && !cpu_active(smp_processor_id()));
+> I'm afraid that if these two have to wait for the 5.18 cycle, then I'll
+> have more drivers to fix later.
+>
+> Should I add a Fixes tag maybe?
 
-a CPU is active when it reaches the CPUHP_AP_ACTIVE state (the last state before
-CPUHP_ONLINE). So, if a cpu isn't active, it probably is being hotplugged. One
-false positive is the CPU is dying, which I guess is fine.
+No need, thanks!
 
-And to help justify this change, I will merge it into patch 6.
+> Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil
+> <paul@crapouillou.net> a écrit :
+> > Hi,
+> >
+> > A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros that
+> > were introduced recently.
+> >
+> > Changes since V2:
+> > * [1/6]: - Keep UNIVERSAL_DEV_PM_OPS() macro deprecated
+> >          - Rework commit message
+> > * [3/6]: - Reorder the code to have non-private macros together in the
+> >            file
+> >        - Add comment about the necesity to use the new export macro
+> >          when the dev_pm_ops has to be exported
+> > * [5/6]: Add comment about the necesity to use the new export macro
+> >          when the dev_pm_ops has to be exported
+> >
+> > Cheers,
+> > -Paul
+> >
+> > Paul Cercueil (6):
+> >   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+> >   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+> >   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+> >   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+> >   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
+> >   iio: pressure: bmp280: Use new PM macros
+> >
+> >  drivers/iio/pressure/bmp280-core.c | 11 ++----
+> >  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
+> >  drivers/iio/pressure/bmp280-spi.c  |  2 +-
+> >  drivers/mmc/host/jz4740_mmc.c      |  4 +--
+> >  drivers/mmc/host/mxcmmc.c          |  2 +-
+> >  include/linux/pm.h                 | 55
+> > ++++++++++++++++++++++--------
+> >  include/linux/pm_runtime.h         | 24 +++++++++++++
+> >  7 files changed, 71 insertions(+), 29 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
+>
+>

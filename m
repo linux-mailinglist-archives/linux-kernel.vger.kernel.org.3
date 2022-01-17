@@ -2,184 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12604910A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 20:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988894910AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 20:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242898AbiAQTaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 14:30:06 -0500
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:57959 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiAQTaF (ORCPT
+        id S242956AbiAQTb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 14:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230136AbiAQTbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 14:30:05 -0500
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id 9XhXn6cD441cb9XhYnqv0u; Mon, 17 Jan 2022 20:30:02 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 17 Jan 2022 20:30:02 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <025203f4-3487-1296-2d26-ddaad0d7a5cc@wanadoo.fr>
-Date:   Mon, 17 Jan 2022 20:29:59 +0100
+        Mon, 17 Jan 2022 14:31:24 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F825C061574;
+        Mon, 17 Jan 2022 11:31:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id br17so61572700lfb.6;
+        Mon, 17 Jan 2022 11:31:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DZ5wjKqdD4TOpUJAi2NdV3t9go691za/EKfx/PAIrRE=;
+        b=gz4T71ovmCihp7dBpcmrTTPBkYOr+u0E/lranh7viHqlkXAxn5JmP3Vz0EkFmH/2o4
+         mGcXhut6ILLGgIik6IUbmwP2LpTY2Dh/2S2Kq933rbrrXTxZsVUr/9QYg/Lo/YexYc4Z
+         /hJNUt4Fmx/75kdh5OSOj9Unr0NE14n+sL89QFQ02PDzOoD2FiB7kj2MSC2f0RPSLJLF
+         u1qfungfAeyu7+hmzzPZ/bu+J3u88gNzwrpdlyO/4OUnXml7WnfhoWqnZCtXLVUZV860
+         0m2+oPhI1++jDlSMigukoiiTeb68ByNNLtcH0naA9bLyuhv1/LgsWHehdm9HYSB83JNR
+         SlPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DZ5wjKqdD4TOpUJAi2NdV3t9go691za/EKfx/PAIrRE=;
+        b=D9bF0w1DMhYNVxtqApB9LAn9fjl5/4SZz4hTAZ2GG6iwJ5kTW0qCna1VHQPfpEt2hO
+         eOLQyyrbF1bw0CGBetRSlRQcsrNR4Rf6zG3ZHutYAqGaTLT3dHpVEswjBln8hNqFPcqn
+         8hNtFaQBkmTemLLkC3TInnsVP+TR2QjILUXAkkS5RJuhC1EaqoyUlzJPJJ5YhW8M+zGR
+         5IR2QPcRR+FmFGz+SA5dMv0/ifgcUb1aogl5UsUWdKUp/IsvLMbVLjZz47hL5CFfG2Fr
+         fkT4o6hxpTb6etElVZKXQPwVUR2OjqDpGOaAGSQIX0nrzCtALtBz7s47r9efU1rUaapo
+         8gEg==
+X-Gm-Message-State: AOAM530swVELMmdK5gn4TJMKvBvoCZB6Gl6LnxjWdrljcpijEWcFSuet
+        YLOtl3pfPRvKC4B9Z9ls6hg=
+X-Google-Smtp-Source: ABdhPJyKektrJbGLvmoZ62wrAIbR18BnJfnmPO7YAgypNVCdZWt+/9v1QVkY8Fr2BqM4fBI3dg4zaA==
+X-Received: by 2002:ac2:5a41:: with SMTP id r1mr17741335lfn.44.1642447882595;
+        Mon, 17 Jan 2022 11:31:22 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id g33sm1299771lfv.91.2022.01.17.11.31.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 11:31:22 -0800 (PST)
+Message-ID: <d2a4ad77-3ade-9319-f99c-82201c4268e5@gmail.com>
+Date:   Mon, 17 Jan 2022 22:31:21 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] lib/string_helpers: Use the given gfp flag when
- allocating memory
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
+ errors
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <30a0c2011f8034378639883339fa7d7c55e034a5.1642337349.git.christophe.jaillet@wanadoo.fr>
- <YeU8PhtvvXIWtTk/@dhcp22.suse.cz> <YeWOd2G69LyR3PVZ@dhcp22.suse.cz>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <YeWOd2G69LyR3PVZ@dhcp22.suse.cz>
+To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
+        freddy@asix.com.tw
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+References: <20220105131952.15693-1-paskripkin@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220105131952.15693-1-paskripkin@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 17/01/2022 à 16:42, Michal Hocko a écrit :
-> On Mon 17-01-22 10:51:59, Michal Hocko wrote:
->> On Sun 16-01-22 13:49:22, Christophe JAILLET wrote:
->>> kstrdup_quotable_cmdline() is given a gfp flag that is passed and used for
->>> memory allocation in kstrdup_quotable() just a few lines below.
->>>
->>> It looks reasonable to use this gfp value for the buffer allocated and
->>> freed in kstrdup_quotable_cmdline() as well.
->>>
->>> Fixes: 0ee931c4e31a ("mm: treewide: remove GFP_TEMPORARY allocation flag")
->>
->> I do not think this commit is changing much here. It just replaces
->> GFP_TEMPORARY with GFP_KERNEL so the code has ignored the gfp mask even
->> before that change.
->>
->> All existing callers of kstrdup_quotable_cmdline use GFP_KERNEL so would
->> it make more sense to simply drop the gfp argument altogether and use
->> GFP_KERNEL internally?
->>
->> Normally it is better to have a full control of the allocation mask but
->> if we have any non-GFP_KERNEL caller then I would rather have the
->> argument added and the function checked whether all internal paths are
->> gfp mask aware.
+On 1/5/22 16:19, Pavel Skripkin wrote:
+> Syzbot once again hit uninit value in asix driver. The problem still the
+> same -- asix_read_cmd() reads less bytes, than was requested by caller.
 > 
-> In other words something like this:
+> Since all read requests are performed via asix_read_cmd() let's catch
+> usb related error there and add __must_check notation to be sure all
+> callers actually check return value.
+> 
+> So, this patch adds sanity check inside asix_read_cmd(), that simply
+> checks if bytes read are not less, than was requested and adds missing
+> error handling of asix_read_cmd() all across the driver code.
+> 
+> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
 
-For me, this is just fine.
-This looks more consistant this way and (slighly) simplify the few callers.
+gentle ping :)
 
-CJ
-
-
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> index 2c46cd968ac4..44fde4b537f1 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> @@ -376,7 +376,7 @@ static void recover_worker(struct kthread_work *work)
->   		task = get_pid_task(submit->pid, PIDTYPE_PID);
->   		if (task) {
->   			comm = kstrdup(task->comm, GFP_KERNEL);
-> -			cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
-> +			cmd = kstrdup_quotable_cmdline(task);
->   			put_task_struct(task);
->   		}
+>   drivers/net/usb/asix.h         |  4 ++--
+>   drivers/net/usb/asix_common.c  | 19 +++++++++++++------
+>   drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
+>   3 files changed, 33 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+> index 2a1e31defe71..4334aafab59a 100644
+> --- a/drivers/net/usb/asix.h
+> +++ b/drivers/net/usb/asix.h
+> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
+>   /* ASIX specific flags */
+>   #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
 >   
-> @@ -467,7 +467,7 @@ static void fault_worker(struct kthread_work *work)
->   		task = get_pid_task(submit->pid, PIDTYPE_PID);
->   		if (task) {
->   			comm = kstrdup(task->comm, GFP_KERNEL);
-> -			cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
-> +			cmd = kstrdup_quotable_cmdline(task);
->   			put_task_struct(task);
->   		}
+> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> -		  u16 size, void *data, int in_pm);
+> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> +			       u16 size, void *data, int in_pm);
 >   
-> diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
-> index 4ba39e1403b2..7a67eee8bd0f 100644
-> --- a/include/linux/string_helpers.h
-> +++ b/include/linux/string_helpers.h
-> @@ -97,8 +97,8 @@ static inline void string_lower(char *dst, const char *src)
+>   int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>   		   u16 size, void *data, int in_pm);
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index 71682970be58..524805285019 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -11,8 +11,8 @@
+>   
+>   #define AX_HOST_EN_RETRIES	30
+>   
+> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> -		  u16 size, void *data, int in_pm)
+> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> +			       u16 size, void *data, int in_pm)
+>   {
+>   	int ret;
+>   	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>   	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>   		 value, index, data, size);
+>   
+> -	if (unlikely(ret < 0))
+> +	if (unlikely(ret < size)) {
+> +		ret = ret < 0 ? ret : -ENODATA;
+> +
+>   		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+>   			    index, ret);
+> +	}
+>   
+>   	return ret;
 >   }
+> @@ -79,7 +82,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
+>   				    0, 0, 1, &smsr, in_pm);
+>   		if (ret == -ENODEV)
+>   			break;
+> -		else if (ret < sizeof(smsr))
+> +		else if (ret < 0)
+>   			continue;
+>   		else if (smsr & AX_HOST_EN)
+>   			break;
+> @@ -579,8 +582,12 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
+>   		return ret;
+>   	}
 >   
->   char *kstrdup_quotable(const char *src, gfp_t gfp);
-> -char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp);
-> -char *kstrdup_quotable_file(struct file *file, gfp_t gfp);
-> +char *kstrdup_quotable_cmdline(struct task_struct *task);
-> +char *kstrdup_quotable_file(struct file *file);
+> -	asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+> -		      (__u16)loc, 2, &res, 1);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+> +			    (__u16)loc, 2, &res, 1);
+> +	if (ret < 0) {
+> +		mutex_unlock(&dev->phy_mutex);
+> +		return ret;
+> +	}
+>   	asix_set_hw_mii(dev, 1);
+>   	mutex_unlock(&dev->phy_mutex);
 >   
->   void kfree_strarray(char **array, size_t n);
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 4514d35ef4c4..6b2fbdf4e0fd 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -755,7 +755,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>   	priv->phy_addr = ret;
+>   	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
 >   
-> diff --git a/lib/string_helpers.c b/lib/string_helpers.c
-> index d5d008f5b1d9..267e142c7e13 100644
-> --- a/lib/string_helpers.c
-> +++ b/lib/string_helpers.c
-> @@ -618,12 +618,13 @@ EXPORT_SYMBOL_GPL(kstrdup_quotable);
->    * command line, with inter-argument NULLs replaced with spaces,
->    * and other special characters escaped.
->    */
-> -char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp)
-> +char *kstrdup_quotable_cmdline(struct task_struct *task)
->   {
-> +	gfp_t gfp = GFP_KERNEL;
->   	char *buffer, *quoted;
->   	int i, res;
+> -	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	chipcode &= AX_CHIPCODE_MASK;
 >   
-> -	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> +	buffer = kmalloc(PAGE_SIZE, gfp);
->   	if (!buffer)
->   		return NULL;
+>   	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
+> @@ -920,11 +925,21 @@ static int ax88178_reset(struct usbnet *dev)
+>   	int gpio0 = 0;
+>   	u32 phyid;
 >   
-> @@ -651,15 +652,16 @@ EXPORT_SYMBOL_GPL(kstrdup_quotable_cmdline);
->    * with special characters escaped, able to be safely logged. If
->    * there is an error, the leading character will be "<".
->    */
-> -char *kstrdup_quotable_file(struct file *file, gfp_t gfp)
-> +char *kstrdup_quotable_file(struct file *file)
->   {
-> +	gfp_t gfp = GFP_KERNEL;
->   	char *temp, *pathname;
+> -	asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read GPIOS: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	netdev_dbg(dev->net, "GPIO Status: 0x%04x\n", status);
 >   
->   	if (!file)
->   		return kstrdup("<unknown>", gfp);
+>   	asix_write_cmd(dev, AX_CMD_WRITE_ENABLE, 0, 0, 0, NULL, 0);
+> -	asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read EEPROM: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	asix_write_cmd(dev, AX_CMD_WRITE_DISABLE, 0, 0, 0, NULL, 0);
 >   
->   	/* We add 11 spaces for ' (deleted)' to be appended */
-> -	temp = kmalloc(PATH_MAX + 11, GFP_KERNEL);
-> +	temp = kmalloc(PATH_MAX + 11, gfp);
->   	if (!temp)
->   		return kstrdup("<no_memory>", gfp);
->   
-> diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
-> index b12f7d986b1e..79322ba89913 100644
-> --- a/security/loadpin/loadpin.c
-> +++ b/security/loadpin/loadpin.c
-> @@ -23,8 +23,8 @@ static void report_load(const char *origin, struct file *file, char *operation)
->   {
->   	char *cmdline, *pathname;
->   
-> -	pathname = kstrdup_quotable_file(file, GFP_KERNEL);
-> -	cmdline = kstrdup_quotable_cmdline(current, GFP_KERNEL);
-> +	pathname = kstrdup_quotable_file(file);
-> +	cmdline = kstrdup_quotable_cmdline(current);
->   
->   	pr_notice("%s %s obj=%s%s%s pid=%d cmdline=%s%s%s\n",
->   		  origin, operation,
-> diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
-> index 06e226166aab..c87a41304b6c 100644
-> --- a/security/yama/yama_lsm.c
-> +++ b/security/yama/yama_lsm.c
-> @@ -54,8 +54,8 @@ static void __report_access(struct callback_head *work)
->   		container_of(work, struct access_report_info, work);
->   	char *target_cmd, *agent_cmd;
->   
-> -	target_cmd = kstrdup_quotable_cmdline(info->target, GFP_KERNEL);
-> -	agent_cmd = kstrdup_quotable_cmdline(info->agent, GFP_KERNEL);
-> +	target_cmd = kstrdup_quotable_cmdline(info->target);
-> +	agent_cmd = kstrdup_quotable_cmdline(info->agent);
->   
->   	pr_notice_ratelimited(
->   		"ptrace %s of \"%s\"[%d] was attempted by \"%s\"[%d]\n",
-> 
+>   	netdev_dbg(dev->net, "EEPROM index 0x17 is 0x%04x\n", eeprom);
 
+
+
+
+With regards,
+Pavel Skripkin

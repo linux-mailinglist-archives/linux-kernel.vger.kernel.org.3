@@ -2,94 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D45C4903FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308E24903F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbiAQIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:36:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38217 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238251AbiAQIgi (ORCPT
+        id S238246AbiAQIgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:36:36 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:36084 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229507AbiAQIgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:36:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642408598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uNhzno0wWEhzgVxHRwjARVs6TzvvxzJQTz1ejQZ7JqQ=;
-        b=A8mRCfAK6l4N/G9AFMgckDSyDB+nL4pCMnR1hi7QwE1uIBue9wb2fBeANa6aexmoSBLeBL
-        5gqcwUP5D49NgebqpJu/hDXw+rjPiKfzlFcMKHk7vcORNw9sBreuTsvE3cfg1jE076AG6S
-        LHMRYMkAPNCoH7Ic2YPoHBew0tYJHdY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-272-KZfgY9rcP96CfMVddnsjug-1; Mon, 17 Jan 2022 03:36:33 -0500
-X-MC-Unique: KZfgY9rcP96CfMVddnsjug-1
-Received: by mail-wm1-f72.google.com with SMTP id p7-20020a05600c1d8700b0034a0c77dad6so10551268wms.7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:36:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uNhzno0wWEhzgVxHRwjARVs6TzvvxzJQTz1ejQZ7JqQ=;
-        b=OOPZtRKABMdbHD5zDmPzFGjBTEu6QCko0M/MlETTwZVg9BLtVJCd5shanrKbiXyHPx
-         8OEBOYnB+kKtnBhXLQ5JR9I5e+HQy4F0mWTUFVASOyBc+XdbNOOtNsHiXVpSaQ7aSKna
-         JZ+X8tnHD7QX2LrctrzQLE8Zn99CxItidE05bYn/3zE29ZaycHVDvxv2QNwwKf7VeB3k
-         qU9m9jtaG2p/nnO2dMoBRmlCnzjiWGmMA5nalnXJPkaKr2iiN8Fckh9jJO/ezsfoOOeu
-         6egjzSQpilK+WikSSq+YBicgudXeoxQJGW0hVARWXGfZtdAh9vodfmkfSZf2+Lq9JDYJ
-         eHwQ==
-X-Gm-Message-State: AOAM531lW6xPrcIEUpu3Q3CXyPeq3oYp8n3++UR5Y/yzgKvlGUuSudYm
-        guc+xmUxDLqSJdBBFpCnejlvkxptJJ+A1smodaFAbxHD1h7D/0tdbBJQVyPCWa9iA8L9i+0mRt1
-        ZQryIEBzJurYozxU7hAl7cDPz
-X-Received: by 2002:adf:e84f:: with SMTP id d15mr18256188wrn.15.1642408592053;
-        Mon, 17 Jan 2022 00:36:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxj2pp45Ih4MGk2jlOZCfHILaORsUuOFs80diJwXqRhG219ra8KDaGLXAInm8r0EuFBpb0QPA==
-X-Received: by 2002:adf:e84f:: with SMTP id d15mr18256174wrn.15.1642408591893;
-        Mon, 17 Jan 2022 00:36:31 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id r19sm12674076wmh.42.2022.01.17.00.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 00:36:31 -0800 (PST)
-Message-ID: <4ca0ec95-6552-ac86-64e4-4b50e65c776e@redhat.com>
-Date:   Mon, 17 Jan 2022 09:36:29 +0100
+        Mon, 17 Jan 2022 03:36:35 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E8461212C5;
+        Mon, 17 Jan 2022 08:36:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642408593; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FtJCCBAxuUDcCgRSleoZ8EPFKlcAqokZy9jGQB7KBnc=;
+        b=m1LNh5jWynGL8i+ScVMHxF8LXqHUeE+gErwV7yJM+mEcuC8mesgILgsnEKyHtmRICAWafV
+        AKa7UbVi8msWvbEJYAmXtr3CzSA1TaBfkBfGpz8cSMC8//Tuqon7VMs2Qz6n+FWUyHTIMy
+        QO69UN6ea7Sy13yzXsUWgi7Q6T9DUN4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642408593;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FtJCCBAxuUDcCgRSleoZ8EPFKlcAqokZy9jGQB7KBnc=;
+        b=ATpt3KtIjb49oghhvDP5Q4vF10huv79m3VbAyUzGpvrqO44PYylbqz5QcLBRV/4Ea16jru
+        ibKc9JIQEHANJIBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D679A134DA;
+        Mon, 17 Jan 2022 08:36:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Qy9UNJEq5WFUHgAAMHmgww
+        (envelope-from <dwagner@suse.de>); Mon, 17 Jan 2022 08:36:33 +0000
+Date:   Mon, 17 Jan 2022 09:36:33 +0100
+From:   Daniel Wagner <dwagner@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+Subject: [ANNOUNCE] 4.4.299-rt230
+Message-ID: <164232885429.16727.14256146043064078052@beryllium.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] KVM: x86/svm: Add module param to control PMU
- virtualization
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211117080304.38989-1-likexu@tencent.com>
- <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
- <CALMp9eQCEFsQTbm7F9CqotirbP18OF_cQUySb7Q=dqiuiK1FMg@mail.gmail.com>
- <ad3cc4b9-11d4-861b-6e31-a75564539216@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <ad3cc4b9-11d4-861b-6e31-a75564539216@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 03:33, Like Xu wrote:
->>>
->>
->> Whoops! The global 'pmu' is hidden by a local 'pmu' in get_gp_pmc_amd().
-> 
-> Indeed, I wonder if Poalo would like to take a look at this fix:
-> https://lore.kernel.org/kvm/20220113035324.59572-1-likexu@tencent.com/
+Hello RT-list!
 
-Yes, my mistake.
+I'm pleased to announce the 4.4.299-rt230 stable release.
 
-Paolo
+This is just an update to the latest stable release. No RT specific
+changes.
 
+You can get this release via the git tree at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+
+  branch: v4.4-rt
+  Head SHA1: 6c3d1a0e6e3f5eec61f856fa284426dc880f7bd5
+
+Signing key fingerprint:
+
+  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
+
+Enjoy!
+Daniel
+
+Changes from v4.4.296-rt229:
+---
+
+Alexey Makhalov (1):
+      scsi: vmw_pvscsi: Set residual data length conditionally
+
+Ard Biesheuvel (1):
+      ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
+
+Benjamin Tissoires (1):
+      HID: holtek: fix mouse probing
+
+Colin Ian King (1):
+      ALSA: drivers: opl3: Fix incorrect use of vp->state
+
+Daniel Borkmann (1):
+      bpf, test: fix ld_abs + vlan push/pop stress test
+
+Daniel Wagner (2):
+      Merge tag 'v4.4.299' into v4.4-rt
+      Linux 4.4.299-rt230
+
+Darrick J. Wong (1):
+      xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate
+
+Dmitry V. Levin (1):
+      uapi: fix linux/nfc.h userspace compilation errors
+
+Eric Dumazet (1):
+      sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
+
+Fernando Fernandez Mancera (1):
+      bonding: fix ad_actor_system option setting to default
+
+Greg Jesionowski (1):
+      net: usb: lan78xx: add Allied Telesis AT29M2-AF
+
+Greg Kroah-Hartman (3):
+      Linux 4.4.297
+      Linux 4.4.298
+      Linux 4.4.299
+
+Guenter Roeck (1):
+      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
+
+Hangyu Hua (1):
+      phonet: refcount leak in pep_sock_accep
+
+Heiko Carstens (1):
+      recordmcount.pl: fix typo in s390 mcount regex
+
+Jedrzej Jagielski (1):
+      i40e: Fix incorrect netdev's real number of RX/TX queues
+
+Jiasheng Jiang (2):
+      qlcnic: potential dereference null pointer of rx_queue->page_ring
+      drivers: net: smc911x: Check for error irq
+
+Jimmy Assarsson (1):
+      can: kvaser_usb: get CAN clock frequency from device
+
+José Expósito (1):
+      IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
+
+Juergen Gross (1):
+      xen/blkfront: fix bug in backported patch
+
+Krzysztof Kozlowski (1):
+      nfc: uapi: use kernel size_t to fix user-space builds
+
+Leo L. Schwab (1):
+      Input: spaceball - fix parsing of movement data packets
+
+Lin Ma (3):
+      ax25: NPD bug when detaching AX25 device
+      hamradio: defer ax25 kfree after unregister_netdev
+      hamradio: improve the incomplete fix to avoid NPD
+
+Lixiaokeng (1):
+      scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+
+Mathias Nyman (1):
+      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
+
+Muchun Song (1):
+      net: fix use-after-free in tw_timer_handler
+
+Nathan Chancellor (1):
+      power: reset: ltc2952: Fix use of floating point literals
+
+Pavel Skripkin (2):
+      Input: appletouch - initialize work before device registration
+      ieee802154: atusb: fix uninit value in atusb_set_extended_addr
+
+Rémi Denis-Courmont (1):
+      phonet/pep: refuse to enable an unbound pipe
+
+Takashi Iwai (1):
+      Bluetooth: btusb: Apply QCA Rome patches for some ATH3012 models
+
+Thomas Toye (1):
+      rndis_host: support Hytera digital radios
+
+Tom Rix (2):
+      selinux: initialize proto variable in selinux_ip_postroute_compat()
+      mac80211: initialize variable have_higher_than_11mbit
+
+Vincent Pelletier (1):
+      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
+
+Wang Qing (1):
+      platform/x86: apple-gmux: use resource_size() with res
+
+William Zhao (1):
+      ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
+
+Xiaoke Wang (1):
+      ALSA: jack: Check the return value of kstrdup()
+
+wolfgang huang (1):
+      mISDN: change function names to avoid conflicts
+
+yangxingwu (1):
+      net: udp: fix alignment problem in udp4_seq_show()
+---
+Documentation/networking/bonding.txt               | 11 +++---
+ Makefile                                           |  2 +-
+ arch/arm/kernel/entry-armv.S                       |  8 ++---
+ drivers/block/xen-blkfront.c                       |  4 ---
+ drivers/bluetooth/btusb.c                          | 32 +++++++++++++----
+ drivers/hid/hid-holtek-mouse.c                     | 15 ++++++++
+ drivers/hwmon/lm90.c                               |  5 ++-
+ drivers/infiniband/hw/qib/qib_user_sdma.c          |  2 +-
+ drivers/input/joystick/spaceball.c                 | 11 ++++--
+ drivers/input/mouse/appletouch.c                   |  4 +--
+ drivers/isdn/mISDN/core.c                          |  6 ++--
+ drivers/isdn/mISDN/core.h                          |  4 +--
+ drivers/isdn/mISDN/layer1.c                        |  4 +--
+ drivers/net/bonding/bond_options.c                 |  2 +-
+ drivers/net/can/usb/kvaser_usb.c                   | 41 +++++++++++++++++++---
+ drivers/net/ethernet/intel/i40e/i40e_main.c        | 32 +++++++++++++----
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h  |  2 +-
+ .../ethernet/qlogic/qlcnic/qlcnic_sriov_common.c   | 12 +++++--
+ .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c   |  4 ++-
+ drivers/net/ethernet/smsc/smc911x.c                |  5 +++
+ drivers/net/hamradio/mkiss.c                       |  5 +--
+ drivers/net/ieee802154/atusb.c                     | 10 +++---
+ drivers/net/usb/lan78xx.c                          |  6 ++++
+ drivers/net/usb/rndis_host.c                       |  5 +++
+ drivers/platform/x86/apple-gmux.c                  |  2 +-
+ drivers/power/reset/ltc2952-poweroff.c             |  4 +--
+ drivers/scsi/libiscsi.c                            |  6 ++--
+ drivers/scsi/vmw_pvscsi.c                          |  7 ++--
+ drivers/usb/gadget/function/f_fs.c                 |  9 +++--
+ drivers/usb/host/xhci-pci.c                        |  5 ++-
+ fs/xfs/xfs_ioctl.c                                 |  3 +-
+ include/uapi/linux/nfc.h                           |  6 ++--
+ lib/test_bpf.c                                     |  2 +-
+ localversion-rt                                    |  2 +-
+ net/ax25/af_ax25.c                                 |  4 ++-
+ net/ipv4/af_inet.c                                 | 10 +++---
+ net/ipv4/udp.c                                     |  2 +-
+ net/ipv6/ip6_vti.c                                 |  2 ++
+ net/mac80211/mlme.c                                |  2 +-
+ net/phonet/pep.c                                   |  3 ++
+ net/sched/sch_qfq.c                                |  6 ++--
+ scripts/recordmcount.pl                            |  2 +-
+ security/selinux/hooks.c                           |  2 +-
+ sound/core/jack.c                                  |  4 +++
+ sound/drivers/opl3/opl3_midi.c                     |  2 +-
+ 45 files changed, 223 insertions(+), 94 deletions(-)

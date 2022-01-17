@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1392490C8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A10490C93
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241093AbiAQQfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S241102AbiAQQii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbiAQQfB (ORCPT
+        with ESMTP id S235274AbiAQQih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:35:01 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3CBC061574;
-        Mon, 17 Jan 2022 08:35:01 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso20504309otr.6;
-        Mon, 17 Jan 2022 08:35:01 -0800 (PST)
+        Mon, 17 Jan 2022 11:38:37 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D5EC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:38:37 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id y14so24244083oia.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=p3gG/uGYcRlUGoPgDwXdMzkPcoyd1UeEICXKBe487oM=;
-        b=QiVDp2IE56rYB7csRiMySFukCBTP+2HJDXPgVrULlTGDurbgfYRVsgJVDGkwrv+dEH
-         box9Jqwyqwv2E5SzxMqdmLPxUpnBaDyTs1F1N5Iv/PwqXw/S38HYSJ+kdEmBp68Haq/E
-         OimQIKUfNV/ZOl+AQhZgkcK4yHI3CbE8+OTmiWnkacb6jml2tL8pY9P7UWIh32gxGoC1
-         d4VfMxAEy1roKPgtQU1VQiPesqaio0SmD5f9XBNbXSX2QgKVyHlXkPWcowddnlZqCPJy
-         ouuveDStvDjunnXBUDqcnrPPeLFJIcBJSFzVMqFbT2lnHvLHM736O/QAKf8r0xYQvR0t
-         dYrQ==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TI+T6c0N7K3peD5+tx0Z05C/5JTL5JQSb7+Gvq9P/90=;
+        b=HQGZtxqrdYuyGFZCoIvTbvoyDbXOEqvEXtal37kXs0fwaT8d5+UBqIyUt03jdv+LWO
+         YTghMijy/JpjTAiDS1lH/dgiOJTG8ZqcJ/YNZ+hCWHG9ArTln0xRRiNFQnToVrr3UKbu
+         cFRDl3Edik/s2Uzs5ZHZggDK4AJW0zTqhLH+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=p3gG/uGYcRlUGoPgDwXdMzkPcoyd1UeEICXKBe487oM=;
-        b=behSu8RlbB3gIu4S9p30mDv/AvhUC9Xr+7BOVwvR45LoyZbpX35LJDfd5rC+NylO1l
-         3CoejWpyFa+EPuhqdc7d5QDCgzhR4XnuWXspuE47NrvimlWwJxvwLbUjfGxA82NSLBmh
-         f0z0VtEoNQunClozqUPZD8LoTc8qmWVA0E+4HBGHrK7/cNi3hL4L2j0efKpn0zZYyv/U
-         xg/9H4+vJrdPm85+Qrgk9eoLNtAqJ+fNknCufmJdXdzTGmG0t14LpYFP3kKM5NT9iiyT
-         9/70UnFl0+X8mYX2sQHpka9ccMZ3lmi2WzDY0pKa2CmExpOJF2Xd582HMa60CfVo+btc
-         5YuA==
-X-Gm-Message-State: AOAM531JPChFthqkhiUYvNM7XO9d1T5n4MnUqV4R5H2Htntscvdm39E4
-        MxkBRKMj5qIumvOXz+xES6o=
-X-Google-Smtp-Source: ABdhPJyK0Irotkr18SoI6ww//ipgY/CYXIrn7ww3l9mNRiGWugmMTHvzxGIOeJHYzS5QUnUYe/zIoQ==
-X-Received: by 2002:a05:6830:4391:: with SMTP id s17mr17003236otv.108.1642437300631;
-        Mon, 17 Jan 2022 08:35:00 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f7sm5969418oti.35.2022.01.17.08.34.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 08:34:59 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Missing ARM TWD Watchdog driver?
-To:     Boris Lysov <arzamas-16@mail.ee>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220117190112.2b2c2f53@pc>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <60dceae6-5c7c-9f2d-9fcb-5e849f1d8ce5@roeck-us.net>
-Date:   Mon, 17 Jan 2022 08:34:57 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TI+T6c0N7K3peD5+tx0Z05C/5JTL5JQSb7+Gvq9P/90=;
+        b=B2L+mtp83swNVQH9MAjA9t2eVKrbbSsLLtY7OBMyxE5MagB8mM3rhOb3w1wELY5ppA
+         gBfByS/kCAjtTaws3N0DAszJgXXQ4xkPoTYPIfacLM1jPpzwm/Vf58DRQtOe7QwbMZ//
+         nRhBy8F5EwjD3jIfGlqg8kjA6RiQ6ZHeCLx1mXtRiYyKMvngenRwBc6bbRueoZhf78w9
+         XV1JYcoKuHXmNgzB4n1touKmIybx95nBtbpzxUEzAbwnZQcckmWea4EnNqx/QZiIZvPB
+         bEsHVltZ+18pLf87Ekmm86dXZwNpQGSncaMT3CCPyzQ6m04GWUq2zfpwurqQ3Dle81f4
+         Bmvw==
+X-Gm-Message-State: AOAM532Dw80h2AGvXrdurcn7rG7WG68LRPOW3UGh9rXJrmCSwd++rBBm
+        Yibqt8HUPNQUar1G1xT59Qshg8vEqc7zvP4ROI8RMA==
+X-Google-Smtp-Source: ABdhPJwtZw3vr6mz2n3FOqglwVtWUYAgk2YKpHpdVERnXV0uo5vcLRo2/BjpnL+iKV8aeXnIyLfjH1gWrAF+/H/EIvA=
+X-Received: by 2002:a05:6808:3a3:: with SMTP id n3mr9217462oie.128.1642437516512;
+ Mon, 17 Jan 2022 08:38:36 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220117190112.2b2c2f53@pc>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+ <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
+ <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
+In-Reply-To: <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Mon, 17 Jan 2022 17:38:25 +0100
+Message-ID: <CAKMK7uECQU2ALkLHuFfPCjDcH456R6yJ4N_yKbHJ6PiFZ6fiow@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Helge Deller <deller@gmx.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 8:01 AM, Boris Lysov wrote:
-> Hello everyone,
-> 
-> I stumbled upon the ARM TWD Watchdog driver which seems to be missing (or I'm
-> just blind).
-> 
-> As per commit a33f5c380c4bd3fa5278d690421b72052456d9fe ("Merge tag
-> 'xfs-5.17-merge-3' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux"), multiple
-> device trees declare usage of arm-twd:
-> 
-> arch/arm/boot/dts/arm-realview-eb-mp.dtsi
-> arch/arm/boot/dts/arm-realview-pb11mp.dts
-> arch/arm/boot/dts/arm-realview-pbx-a9.dts
-> arch/arm/boot/dts/bcm5301x.dtsi
-> arch/arm/boot/dts/bcm63138.dtsi
-> arch/arm/boot/dts/bcm-hr2.dtsi
-> arch/arm/boot/dts/bcm-nsp.dtsi
-> arch/arm/boot/dts/berlin2cd.dtsi
-> arch/arm/boot/dts/highbank.dts
-> arch/arm/boot/dts/mmp3.dtsi
-> arch/arm/boot/dts/owl-s500.dtsi
-> arch/arm/boot/dts/spear13xx.dtsi
-> arch/arm/boot/dts/ste-dbx5x0.dtsi
-> arch/arm/boot/dts/vexpress-v2p-ca5s.dts
-> arch/arm/boot/dts/vexpress-v2p-ca9.dts
-> 
-> and it is documented in
-> Documentation/devicetree/bindings/watchdog/arm,twd-wdt.yaml
-> 
-> However I could not find the driver itself. I tried running case-insensitive
-> grep and ripgrep to no avail. Does this driver actually exist? Is it gone?
-> 
+On Mon, Jan 17, 2022 at 5:22 PM Helge Deller <deller@gmx.de> wrote:
+>
+> On 1/17/22 16:58, Thomas Zimmermann wrote:
+> > Hi
+> >
+> > Am 17.01.22 um 16:42 schrieb Helge Deller:
+> >> [...]
+> >>>> c) reintroduce the state where fbcon is fast on fbdev. This is important for non-DRM machines,
+> >>>>     either when run on native hardware or in an emulator.
+> >>>> d) not break DRM development
+> >>>>
+> >>>> Especially regarding c) I complained in [1] and got no feedback. I really would like to
+> >>>> understand where the actual problems were and what's necessary to fix them.
+> >>>>
+> >>>> Helge
+> >>>>
+> >>>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
+> >
+> > Seems like few people read linux-fbdev these days.
+> > I suggest to partly revert the patch to the point were performance
+> > gets better again.
+> Yes, *please*!
+> That would solve my biggest concern.
+>
+> As far as I can see that's only 2 commits to be reverted:
+> b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, part 1 (from TODO list)"
+> 39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
+>
+> I think both were not related to any 0-day bug reports (but again, I might be wrong).
 
-I may be missing it, but I do not see any evidence that it ever existed.
-
-Guenter
+syzbot, not 0day, and there's like a sea of them unfortunately.
+There's all kinds of funny races going on when resizing consoles (due
+to bad locking design) which then blow up, especially in less tested
+code. For the sw rendering we've merged a bunch of patches, but you
+pretty much have to assume that it's all fairly broken code until it's
+rewritten and fully covered with tests. Shadowfb + memcpy is probably
+much faster for restoring scrolling performance than anything else
+really.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

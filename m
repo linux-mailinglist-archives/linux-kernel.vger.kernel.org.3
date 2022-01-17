@@ -2,157 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7997E490AC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF33490AC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237190AbiAQOvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:51:00 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:52561 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237195AbiAQOu7 (ORCPT
+        id S237225AbiAQOxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237192AbiAQOxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:50:59 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=wuyihao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V27uN1Z_1642431056;
-Received: from B-V5AVMD6P-1927.local(mailfrom:wuyihao@linux.alibaba.com fp:SMTPD_---0V27uN1Z_1642431056)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 17 Jan 2022 22:50:56 +0800
-Subject: Re: [PATCH] sched/fair: Again ignore percpu threads for imbalance
- pulls
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Shanpei Chen <shanpeic@linux.alibaba.com>,
-        =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-References: <20211211094808.109295-1-wuyihao@linux.alibaba.com>
- <87k0g48kyp.mognet@arm.com>
-From:   Yihao Wu <wuyihao@linux.alibaba.com>
-Message-ID: <5f8497cd-aeaf-906d-a2d8-2e0a752fed4b@linux.alibaba.com>
-Date:   Mon, 17 Jan 2022 22:50:55 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <87k0g48kyp.mognet@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Mon, 17 Jan 2022 09:53:07 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042F3C061574;
+        Mon, 17 Jan 2022 06:53:07 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id o15so58480906lfo.11;
+        Mon, 17 Jan 2022 06:53:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=onWdt0fyeqqEsMifvTUGSb7FG4MeJVVCrnl4WB/xhwg=;
+        b=HlBqFcVJUgeG+7AzJjGBH0RvzQNnFMma5/bY22sKBRoLna4EicyPr5dp5uy+m/kif7
+         sw4UvpGlY1XCqoek48qGhJoVrK1PV41rEYtzYJ1FhoQGb0vb1z2eaSTlWDTkBRjsPFgA
+         iJmJcExF29aZEVSsKjpMHdBDdar/ZYhsYQEhQ9dT2CdgZHoDZ5eA4leKvMVLYiwJE1Nr
+         k37RKbl6BCJ41ZStGYk/h33vS9OpAHi9av8S/VOCGIfa1QL5jSuqwN97WCV+GIGF3Cy3
+         Sk4XDGZly2uPs1+RLDGjolamZ91PIuGkTrBy2bzKdoNMIM1hEBbY30rcf5Bd/k8fdYu1
+         wUpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=onWdt0fyeqqEsMifvTUGSb7FG4MeJVVCrnl4WB/xhwg=;
+        b=GiTWchsnh/k2l40D+LFFqZWx6ddIl4CTo8uX+Z4d5Nc+gvWGm6SMnA6LByAZJ94/7A
+         XrFaXg8YuWbDPW+9DE/OBmNVpNkM8tqN+okwXZJzhQlKnCOmDsh+lQvQ2XbIWpC0WcNI
+         YCfTgktusT5BLH8YnQzIS4I2Q9yflL9fncpnecSMcrTjWaeHlsKqHGVShfCEeIkdnmEL
+         EsDkdhk+ruiakF6kCL/Cu80QYnvtvX+j6/14iSJMCNiYrS70GLFNtbash/lKfEWB4gWb
+         ZkADBKlGhUTwVsdDpfDWXNxPImDxTBx7iZmRvqePxeSKMf6ebZjWSWXXkYTDx85tGHRF
+         DgIA==
+X-Gm-Message-State: AOAM5308StXjC7weVIEb9yhYQ6+OpEU0ZxR/g3jKzMhdLnAdnNTbioID
+        gp67YNzB3EwaAn3uesnlUdQ=
+X-Google-Smtp-Source: ABdhPJzCgLZE2f1V4ZTHHLY0+82A8Z0lem/5f4KqeZD0C75yveNJ5NrqaZPCkP/ybtda2xUf2KLx8g==
+X-Received: by 2002:a05:6512:2606:: with SMTP id bt6mr16873651lfb.202.1642431185384;
+        Mon, 17 Jan 2022 06:53:05 -0800 (PST)
+Received: from smtpclient.apple (31-178-191-245.dynamic.chello.pl. [31.178.191.245])
+        by smtp.gmail.com with ESMTPSA id p13sm1418432lfa.42.2022.01.17.06.53.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Jan 2022 06:53:04 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH 5/9] arm64: dts: rockchip: add rk3568 tsadc nodes
+From:   Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+In-Reply-To: <CAMdYzYqsPgAbLBt+xwDL2s7ViLDJw5mnzDnupimRVESt0xFksQ@mail.gmail.com>
+Date:   Mon, 17 Jan 2022 15:53:03 +0100
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A6AF0F12-FB41-4C60-96AA-660C1E8B379C@gmail.com>
+References: <20210728135534.703028-1-pgwipeout@gmail.com>
+ <20210728135534.703028-6-pgwipeout@gmail.com>
+ <C3AE0A81-A829-4241-A65E-EB28825E3C33@gmail.com>
+ <CAMdYzYo2gkNvNYjU9_kc4cTwNBFU+kg3bRwaS3yCCAsMdo-Tow@mail.gmail.com>
+ <E3AA167E-1E40-45CD-8CBB-3EB280856604@gmail.com>
+ <CAMdYzYqsPgAbLBt+xwDL2s7ViLDJw5mnzDnupimRVESt0xFksQ@mail.gmail.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks a lot for the help, Valentin and Peter!
-
-On 2021/12/17 2:26am, Valentin Schneider wrote:
-> On 11/12/21 17:48, Yihao Wu wrote:
->> commit 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance
->> pulls") was meant to fix a performance issue, when load balance tries to
->> migrate pinned kernel threads at MC domain level. This was destined to
->> fail.
-> 
->> After it fails, it further makes wakeup balance at NUMA domain level
->> messed up. The most severe case that I noticed and frequently occurs:
->>      |sum_nr_running(node1) - sum_nr_running(node2)| > 100
->>
-> 
-> Wakeup balance (aka find_idlest_cpu()) is different from periodic load
-> balance (aka load_balance()) and doesn't use can_migrate_task(), so the
-> incriminated commit shouldn't have impacted it (at least not in obvious
-> ways...). Do you have any more details on that issue
-
-The original bugfix concerns only about load balance. While I found wake
-up balance is impacted too, after I observed regression in lmbench3 test
-suite. This is how it's impacted:
-
-- Periodic load balance
-- kthread_is_per_cpu? No
-- env->flags |= LBF_SOME_PINNED
-- sd_parent..imbalance being set to 1 because of LBF_SOME_PINNED
-
-So far exactly the same as what Chandrasekhar describes in 2f5f4cce496e.
-Then imbalance connects periodic and wakeup balance.
-
-- Wakeup balance(find_idlest_group)
-- update_sg_wakeup_stats classifies local_sgs as group_imbalanced
-- find_idlest_group chooses another NUMA node
-
-wakeup balance keeps doing this until another NUMA node becomes so busy.
-And another periodic load balance just shifts it around, makeing the 
-previously overloaded node completely idle now.
-
-(Thanks to the great schedviz tool, I observed that all workloads as a 
-whole, is migrated between the two NUMA nodes in a ping-pong pattern, 
-and with a period around 3ms)
-
-The reason wake up balance suffers more is, in fork+exit test case, 
-wakeup balance happens with much higher frequency. It exists in real 
-world applications too I believe.
-
-> 
->> However the original bugfix failed, because it covers only case 1) below.
->>    1) Created by create_kthread
->>    2) Created by kernel_thread
->> No kthread is assigned to task_struct in case 2 (Please refer to comments
->> in free_kthread_struct) so it simply won't work.
->>
->> The easist way to cover both cases is to check nr_cpus_allowed, just as
->> discussed in the mailing list of the v1 version of the original fix.
->>
->> * lmbench3.lat_proc -P 104 fork (2 NUMA, and 26 cores, 2 threads)
->>
-> 
-> Reasoning about "proper" pcpu kthreads was simpler since they are static,
-> see 3a7956e25e1d ("kthread: Fix PF_KTHREAD vs to_kthread() race")
-> 
-Get it. Thanks.
-
->>                           w/out patch                 w/ patch
->> fork+exit latency            1660 ms                  1520 ms (   8.4%)
->>
->> Fixes: 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance pulls")
->> Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
->> ---
->>   kernel/kthread.c | 6 +-----
->>   1 file changed, 1 insertion(+), 5 deletions(-)
->>
->> diff --git a/kernel/kthread.c b/kernel/kthread.c
->> index 4a4d7092a2d8..cb05d3ff2de4 100644
->> --- a/kernel/kthread.c
->> +++ b/kernel/kthread.c
->> @@ -543,11 +543,7 @@ void kthread_set_per_cpu(struct task_struct *k, int cpu)
->>
->>   bool kthread_is_per_cpu(struct task_struct *p)
->>   {
->> -	struct kthread *kthread = __to_kthread(p);
->> -	if (!kthread)
->> -		return false;
->> -
->> -	return test_bit(KTHREAD_IS_PER_CPU, &kthread->flags);
->> +	return (p->flags & PF_KTHREAD) && p->nr_cpus_allowed == 1;
->>   }
-> 
-> As Peter said, this is going to cause issues. If you look at
-> kthread_set_per_cpu(), we also store a CPU value which we expect to be
-> valid when kthread_is_per_cpu(), which that change is breaking.
-> 
-> AIUI what you want to patch is the actual usage in can_migrate_task()
-> 
-
-Get it. Some may want a consistent view of kthread_is_per_cpu, 
-kthread->cpu, and KTHREAD_IS_PER_CPU.
-
-Are you suggesting to patch only can_migrate_task to check 
-nr_cpus_allowed? Wouldn't it be confusing if it uses an alternative way 
-to tell if p is a per-cpu kthread?
-
-I haven't a better solution though. :(
 
 
-Thanks,
-Yihao Wu
+> Wiadomo=C5=9B=C4=87 napisana przez Peter Geis <pgwipeout@gmail.com> w =
+dniu 17.01.2022, o godz. 15:38:
+>=20
+>=20
+>=20
+> Your issue is in your dts.
+> You have retained the quartz64-a &cpu_thermal active thermal node
+> without tying in an active thermal control device (a fan).
+> By default the rk356x dtsi passive thermal trips are hooked up and
+> will throttle the device in case of overtemp.
+> If your device has no active thermal control, you don't need to add
+> the &cpu_thermal node at all to your dts.
+>=20
+>>=20
+>> btw2: for rk3566 i'm using majority of your patches!
+>> Great work of you!
 
->>
->>   /**
->> --
->> 2.32.0.604.gb1f3e1269
+Peter,
+
+Many thx!
+
+Now it works nicely:
+
+cpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +33.8=C2=B0C  (crit =3D +95.0=C2=B0C)
+
+gpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +34.4=C2=B0C  (crit =3D +95.0=C2=B0C)
+
+again: many thx!
+
+
+
+forgive me unrelated q:
+may hint me for script you are using in your gitlab ci for building =
+quartz64 u-boot in ci pipeline?
+I'm using yours binaries - but want to add building from sources in my =
+project....=20
+
+

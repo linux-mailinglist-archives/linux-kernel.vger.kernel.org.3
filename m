@@ -2,117 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD8E49087F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8A2490888
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239794AbiAQMQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:16:06 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13446 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239765AbiAQMQF (ORCPT
+        id S239805AbiAQMSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:18:10 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:34898 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236982AbiAQMSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:16:05 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20H9vnfq026678;
-        Mon, 17 Jan 2022 12:15:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=3a6XeSsdk/gF/5MxcgUQfE5YMHf39nUtcYBoI8X+tZQ=;
- b=fT7WmRMXvktXHp4JBuINW9JapuDmpsVTaPm4kOQeBDYPopHeVUSKAX5PZwdwz3uEmBUf
- JjECpVgthhB6SOUuKBKevThF+FUunjLgaT16HoFxG3QmhX6AEaNagdagFQR2LL/qI/3E
- bK3/V0Mh38Lhm1GeVaMGm41vuTNFLgIbeX/aWBvY4T7Somm250X4fNGNhqp68GVVDLMW
- bymjDPBnWlVUAYq4HQoGS35x7jGaH013kAwMgIniejLrOCf583bXiKWpG5GuoE4MFeBw
- mbKSkkCZwVU7+T24rA73aBjNMNgdNwFFbfoObSn+N7smYJhI6UVLhzbWUCvSxICUjzMB Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dn69mk460-1
+        Mon, 17 Jan 2022 07:18:09 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20HB8SZj003347;
+        Mon, 17 Jan 2022 13:17:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=eAGtpLGxSBUIlXwyUQAhV0dqyriUuuNNn2oh2mbZPlM=;
+ b=DgNwH5wkS7WR5MsVB12K4Hb0y95syoI73hW3Hz1yatctkv9FKEEVO9/sBLdXUcb8NxpX
+ PxmpDHxk5GTZ4/XkippKkmIYortMSjixxKXym0a+16yktuzeTrKd28NmYAq3PckEd2Z8
+ jRxlaD2f34CBPLxWbxyhBmzYPHErJfvqZwFVTO8P2fkUINMp670qDpRjaaVlXnnlReel
+ yROuzJrW40UviuGdsjgkOYWPM9XCLuRjAtl7Rya3rqdOMahZOrh+F68RKgDTO8KDTNy4
+ S5xoigD63gMP+WHXx4b78cgWphAhSCbWQZIXj1utwlr55BGORQM8U59/2TULiWjsLp3K DQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dmq5g4gkb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 12:15:51 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20HC1G8c012770;
-        Mon, 17 Jan 2022 12:15:50 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dn69mk45b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 12:15:50 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HCD300008145;
-        Mon, 17 Jan 2022 12:15:49 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dknhj3tf7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Jan 2022 12:15:48 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HCFj4Z41615734
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jan 2022 12:15:45 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA4EF4205C;
-        Mon, 17 Jan 2022 12:15:45 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4418342041;
-        Mon, 17 Jan 2022 12:15:45 +0000 (GMT)
-Received: from osiris (unknown [9.145.81.191])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 17 Jan 2022 12:15:45 +0000 (GMT)
-Date:   Mon, 17 Jan 2022 13:15:43 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH 03/10] exit: Move oops specific logic from do_exit into
- make_task_dead
-Message-ID: <YeVd7xj2Lwyp4QB1@osiris>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-3-ebiederm@xmission.com>
- <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
- <87tuefwewa.fsf@email.froward.int.ebiederm.org>
- <YeUjVZX764zLm9/K@infradead.org>
+        Mon, 17 Jan 2022 13:17:58 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9F45110002A;
+        Mon, 17 Jan 2022 13:17:57 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 94AEF214D28;
+        Mon, 17 Jan 2022 13:17:57 +0100 (CET)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE1.st.com (10.75.127.4)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 17 Jan 2022 13:17:57
+ +0100
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>, <stable@vger.kernel.org>
+Subject: [PATCH v3] spi: stm32-qspi: Update spi registering
+Date:   Mon, 17 Jan 2022 13:17:44 +0100
+Message-ID: <20220117121744.29729-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeUjVZX764zLm9/K@infradead.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xINXz-bmWCwqN2vRiMBHUjzzyNw3PA0R
-X-Proofpoint-GUID: k1yIDPKElVbS_MVkl7Z1RwZ35S4nA9_8
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE1.st.com
+ (10.75.127.4)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-17_05,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=573 adultscore=0
- suspectscore=0 priorityscore=1501 bulkscore=0 impostorscore=0 mlxscore=0
- clxscore=1015 lowpriorityscore=0 spamscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201170077
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-On Mon, Jan 17, 2022 at 12:05:41AM -0800, Christoph Hellwig wrote:
-> On Fri, Jan 07, 2022 at 12:59:33PM -0600, Eric W. Biederman wrote:
-> > Assuming it won't be too much longer before the rest of the arches have
-> > set_fs/get_fs removed it looks like it makes sense to leave the
-> > force_uaccess_begin where it is, and just let force_uaccess_begin be
-> > removed when set_fs/get_fs are removed from the tree.
-> > 
-> > Christoph does it look like the set_fs/get_fs removal work is going
-> > to stall indefinitely on some architectures?  If so I think we want to
-> > find a way to get kernel threads to run with set_fs(USER_DS) on the
-> > stalled architectures.  Otherwise I think we have a real hazard of
-> > introducing bugs that will only show up on the stalled architectures.
-> 
-> I really need help from the arch maintainers to finish the set_fs
-> removal.  There have been very few arch maintainers helping with that
-> work (arm, arm64, parisc, m68k) in addition to the ones I did because
-> I have the test setups and knowledge.  I'll send out another ping,
+Some device driver need to communicate to qspi device during the remove
+process, qspi controller must be functional when spi_unregister_master()
+is called.
 
-Just in case you missed it: s390 was converted with commit 87d598634521
-("s390/mm: remove set_fs / rework address space handling").
+To ensure this, replace devm_spi_register_master() by spi_register_master()
+and spi_unregister_master() is called directly in .remove callback before
+stopping the qspi controller.
+
+This issue was put in evidence using kernel v5.11 and later
+with a spi-nor which supports the software reset feature introduced
+by commit d73ee7534cc5 ("mtd: spi-nor: core: perform a Soft Reset on
+shutdown")
+
+Fixes: c530cd1d9d5e ("spi: spi-mem: add stm32 qspi controller")
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: <stable@vger.kernel.org> # 5.8.x
+---
+
+v3: 
+  _ Update error path due to devm_spi_alloc_master() usage
+
+v2: 
+  _ update commit message
+  _ make usage of devm_spi_alloc_master() instead of spi_alloc_master()
+
+ drivers/spi/spi-stm32-qspi.c | 47 +++++++++++++-----------------------
+ 1 file changed, 17 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 514337c86d2c..ffdc55f87e82 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	int ret, irq;
+ 
+-	ctrl = spi_alloc_master(dev, sizeof(*qspi));
++	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
+ 	if (!ctrl)
+ 		return -ENOMEM;
+ 
+@@ -697,58 +697,46 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi");
+ 	qspi->io_base = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(qspi->io_base)) {
+-		ret = PTR_ERR(qspi->io_base);
+-		goto err_master_put;
+-	}
++	if (IS_ERR(qspi->io_base))
++		return PTR_ERR(qspi->io_base);
+ 
+ 	qspi->phys_base = res->start;
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi_mm");
+ 	qspi->mm_base = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(qspi->mm_base)) {
+-		ret = PTR_ERR(qspi->mm_base);
+-		goto err_master_put;
+-	}
++	if (IS_ERR(qspi->mm_base))
++		return PTR_ERR(qspi->mm_base);
+ 
+ 	qspi->mm_size = resource_size(res);
+-	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ) {
+-		ret = -EINVAL;
+-		goto err_master_put;
+-	}
++	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ)
++		return -EINVAL;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		ret = irq;
+-		goto err_master_put;
+-	}
++	if (irq < 0)
++		return irq;
+ 
+ 	ret = devm_request_irq(dev, irq, stm32_qspi_irq, 0,
+ 			       dev_name(dev), qspi);
+ 	if (ret) {
+ 		dev_err(dev, "failed to request irq\n");
+-		goto err_master_put;
++		return ret;
+ 	}
+ 
+ 	init_completion(&qspi->data_completion);
+ 	init_completion(&qspi->match_completion);
+ 
+ 	qspi->clk = devm_clk_get(dev, NULL);
+-	if (IS_ERR(qspi->clk)) {
+-		ret = PTR_ERR(qspi->clk);
+-		goto err_master_put;
+-	}
++	if (IS_ERR(qspi->clk))
++		return PTR_ERR(qspi->clk);
+ 
+ 	qspi->clk_rate = clk_get_rate(qspi->clk);
+-	if (!qspi->clk_rate) {
+-		ret = -EINVAL;
+-		goto err_master_put;
+-	}
++	if (!qspi->clk_rate)
++		return -EINVAL;
+ 
+ 	ret = clk_prepare_enable(qspi->clk);
+ 	if (ret) {
+ 		dev_err(dev, "can not enable the clock\n");
+-		goto err_master_put;
++		return ret;
+ 	}
+ 
+ 	rstc = devm_reset_control_get_exclusive(dev, NULL);
+@@ -784,7 +772,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_get_noresume(dev);
+ 
+-	ret = devm_spi_register_master(dev, ctrl);
++	ret = spi_register_master(ctrl);
+ 	if (ret)
+ 		goto err_pm_runtime_free;
+ 
+@@ -806,8 +794,6 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 	stm32_qspi_dma_free(qspi);
+ err_clk_disable:
+ 	clk_disable_unprepare(qspi->clk);
+-err_master_put:
+-	spi_master_put(qspi->ctrl);
+ 
+ 	return ret;
+ }
+@@ -817,6 +803,7 @@ static int stm32_qspi_remove(struct platform_device *pdev)
+ 	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
+ 
+ 	pm_runtime_get_sync(qspi->dev);
++	spi_unregister_master(qspi->ctrl);
+ 	/* disable qspi */
+ 	writel_relaxed(0, qspi->io_base + QSPI_CR);
+ 	stm32_qspi_dma_free(qspi);
+-- 
+2.17.1
+

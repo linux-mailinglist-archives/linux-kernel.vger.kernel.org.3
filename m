@@ -2,250 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B733490AA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F52B490AB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiAQOi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiAQOiz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:38:55 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A447C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:38:55 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id m1so58431387lfq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:38:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YTbFxKFtP6VC8EJbPZUXEwEsiyRahEoV9KQwNLkzBSU=;
-        b=oWDSankRHuF+Vm4yXUlmPZJNE2iMwjyvNiik4A0xtP7nHVv79sIGiH07zxaDZjKNVu
-         XniTdtFYGHca51Ag8GoD/aTtaxtAQNTE4sb2XOV9FpVB8Xx1LIf279FJW1q66UcAIfvH
-         KjezUTcrg29uYbDhNLS7Vk2PhgNe7L6PMcjNVwDZMMjAvN0A4jWynG9PUgHDcbP8jzbU
-         qia4XqYeCkuAcMKcIwOfPwtpw81Qzj5okn4QHrRwV+CwnMLosm56Ml66eecVxN4G/438
-         X3QljW7DKGU5lBDI53RKu5Xji321IAFGbMNy53bMo1pRhln8b0WXlHGx4NdQfe1DCSJX
-         nqyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YTbFxKFtP6VC8EJbPZUXEwEsiyRahEoV9KQwNLkzBSU=;
-        b=mpihHeH2ogDqUubYAL4P61Y2h2EahkC51yR0xvrhWnUVcxF0CJAHSVTwFoMzVn7EuJ
-         SLfU7DGZ+ULTniw2z3VBw+zxMfmLLB6OPZ6BTfZc/xz+soN0mNti/AATDa8m7NseZWdY
-         nqtBunVe1wINXjNf5vAAwB/B8jFNy+ijRAowV6O4vYxIHy6rbSqbvbLon9ygDZnJ7dhJ
-         4rltPORHruh7HvIBin8izUjBZZQzif+qkH8zGdn2YBjLmOF2+YEIGHtZ30PTCDbcXaOs
-         Iaz+0uOrvTH7neqQ9SWhQTPnazufYuWSN2aJ4SaD34FFn2xRYA6gOtW3xudjMdGhaEbP
-         nNUQ==
-X-Gm-Message-State: AOAM5329Hy3/XuebIIJZjgmdBQfWbupD5tkv+Y/2muS37720XGN5X+DB
-        ChSNvvafiuLV8lKtFc9z6vZxTw==
-X-Google-Smtp-Source: ABdhPJwf6OmyCDJaP5dzRA2pj/War0ryajg+7Eg+Qeb50OSn6HhVPEqOfGSlYfXNH6bFbqhxOFJfeQ==
-X-Received: by 2002:ac2:4c56:: with SMTP id o22mr17345879lfk.558.1642430333351;
-        Mon, 17 Jan 2022 06:38:53 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id m7sm1388315ljb.59.2022.01.17.06.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 06:38:52 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 9F06910387E; Mon, 17 Jan 2022 17:39:20 +0300 (+03)
-Date:   Mon, 17 Jan 2022 17:39:20 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/26] x86/tdx: Support TDX guest port I/O at
- decompression time
-Message-ID: <20220117143920.3umnnlx7dl27cm5z@box.shutemov.name>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-11-kirill.shutemov@linux.intel.com>
- <YeAuehoOEjUH3vZ3@zn.tnic>
- <20220115010155.ss2hnyotw4a3nljf@black.fi.intel.com>
- <YeK7AJXGN5GVGkRV@zn.tnic>
+        id S237173AbiAQOsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:48:47 -0500
+Received: from mout.gmx.net ([212.227.17.20]:59109 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231979AbiAQOsj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 09:48:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642430909;
+        bh=0z5LHwE5NG6AcV/mo1P1LpHBQnyVU+bCpmzShbRlbGU=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=fS+Bu50tH8J6jQmtlnTIrC8aRu9PBg/h/d9G4/qwdTpXpePoYTvZNMlQEFZ4pgPvC
+         VLzqu/UtNNadpMDDudUr5xUKAqtU474B9xhybWkQyuOz/ekiyKEkNqLrVM5mIoWg2w
+         zhiXsT872MQgcVGi58UW4JGKEEHuVPBoU+SF8c20=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N9Mtg-1mDA6q3GWC-015KxP; Mon, 17
+ Jan 2022 15:48:28 +0100
+Message-ID: <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
+Date:   Mon, 17 Jan 2022 15:47:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeK7AJXGN5GVGkRV@zn.tnic>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:0IYh08vDK6QIg5wdcH+NhEdYzxVPfDL3OyfZJU3NzK8g5WMPnjY
+ oX/cVPByBDrvgHTcvm5X2rmX4escCEdre5r98uIWeHzo7VTtIf73qg0b6k1wt5xA80GbFuP
+ nWcJZHaH7HzleB5Ps49xB68EzA8xktko/LZeGGnVHJMlSBzOayoZJiM3hQiOvtUN+pWyboV
+ 33lix+6VBnZlf+fLh2PtQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UH5P+eqU0rM=:VibbxS6CbIXwAAHtUnBBil
+ ak0y+AouoDFlohFc1kDED8OdBWiPWQi4OxNxG91caPk365RWHdqNL+5MavZP8H02vDX8LCzGo
+ MVWcVPLxXUolZJXk3I95wKmb5Z6xdctAAUaYg0cjX2mxmJlZmcgI1GKAJXYYQY0rmSJqOKHa8
+ mNFZv5js/9BvtE0muCBbdHx6sPMQhiQdQrweaNXdTUXShIBkzH3q33+DOFcohFgd6PQaLFUTY
+ pZAqU+hFzJaqkSo4rgIO3Kuxy0A6uSbodB+FNtgKLUV6RlLPhkkng4uPoRuC9CL1J2JmfrM9r
+ YwPNNm+MZRgHcdDxq4jVW5xcIlezjODv0Ie5QWmzZDJy4E3eVK7cLshOn9BOHfKun7zCGT0FT
+ 69wiJkOqn4Wvk8UaKp4uQDN4CWKLLyffyKGGF6V0iZ3WyXcUIvfj1gFEeJqM1E64k0W8xfb9y
+ drqIR0nbcX/bbNHNB7bxerLW58LLawcOCF6CRpTbFO9W+cHXRrDUvQXT5w78xh/vi2rIDlvFE
+ hGfnCF/fsDortY0tls1paWya/2FOdDkb+Ar4O4W1ZUvrT+LbrM4xiQZD1Y0RTLXUnEB+vcILc
+ qIzIQ4rATz3gMR8WdElKkza+8MWBNIazjuRD0DT/TiIVpMkdFzlBB+bJcAPd4FNoPzOvuz2Zw
+ 0KwJAeIM0pavx6HPvnfXrseWIWPnqd9OfnrdOyWuPkgJGu5rAEdn1lVv3Ch8scq8e/v17Lf3C
+ eG69HJrIYMUwE1xLT+mrPj7zmIvrypsRrZf0SzZrIpjwFXiYFEJue5oztcwqPKTgR3JtMAJAY
+ vZnHdC8pEoNoLbkxv9s8sYY2I/BVdFP7t+WzMgHfyBVtDKkr7uxQgBxL00qD6udKARD2dq5pq
+ Rrte4Svx3XdA3ihPS+OpulywPNDhkCNm8+wcXGjHli5Z/CVpxWhUP13V6FyDHjwEo/22blKCw
+ dwHB3B+GvfhYIDwfZMA9kCyiyxtBtsZk57OOmBTBHgdJ+xVtiZzXO7vvBXSQZlYU3uXca7P7M
+ o5hUCMbMbaxrouPQ9eg0/MCpL39cfhQBMtnVd5rGFZ1Nv8Xp13veDPmQJcz0Ia+R9dIYyCCMy
+ KZj6rsnDIiTTlc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 01:16:00PM +0100, Borislav Petkov wrote:
-> On Sat, Jan 15, 2022 at 04:01:55AM +0300, Kirill A. Shutemov wrote:
-> > Do you see it differently? Do you want to switch to #VE here?
-> 
-> I'm just comparing to what SEV does and wondering why you guys do it
-> differently. But if you think hypercalls is easier, fine by me.
-> 
-> The thing I don't like about that patch is you mixing up kernel proper
-> io helpers with the decompressor code instead of modifying the ones in
-> arch/x86/boot/boot.h.
+On 1/17/22 15:10, Geert Uytterhoeven wrote:
+> Hi Thomas,
+>
+> On Mon, Jan 17, 2022 at 2:51 PM Thomas Zimmermann <tzimmermann@suse.de> =
+wrote:
+>> Am 17.01.22 um 14:29 schrieb Geert Uytterhoeven:
+>>> On Mon, Jan 17, 2022 at 1:57 PM Gerd Hoffmann <kraxel@redhat.com> wrot=
+e:
+>>>>> b) to include new drivers (for old hardware) if they arrive (probabl=
+y happens rarely but there can be).
+>>>>>     I know of at least one driver which won't be able to support DRM=
+....
+>>>>
+>>>> Hmm?  I seriously doubt that.  There is always the option to use a
+>>>> shadow framebuffer, then convert from standard drm formats to whateve=
+r
+>>>> esoteric pixel format your hardware expects.
+>>>>
+>>>> Been there, done that.  Have a look at the cirrus driver.  The physic=
+al
+>>>> hardware was designed in the early 90-ies, almost 30 years ago.  Thes=
+e
+>>>> days it exists in virtual form only (qemu emulates it).  Thanks to th=
+e
+>>>> drm driver it runs wayland just fine even though it has a bunch of
+>>>> constrains dictated by the hardware design.
+>>>
+>>> The Cirrus DRM driver supports TrueColor (RGB565/888 and ARGB8888)
+>>> modes only.  The Cirrus fbdev driver also supports mochrome and 256
+>>> color modes.
+>>>
+>>> There exist some DRM drivers that do support DRM_FORMAT_C8, but none o=
+f
+>>> the "tiny" ones do. Same for DRM_FORMAT_RGB{332,233}.  Using a shadow
+>>> frame buffer to convert from truecolor to 256 colors would be doable,
+>>> but would give bad results. And what about less colors?
+>>> Adding support for e.g. DRM_FORMAT_C4 is not straight-forward, as
+>>> the DRM core assumes in many places that a pixel is at least 1 byte,
+>>> and would crash otherwise (yes I tried).  Other modes needed are
+>>> DRM_FORMAT_Y4 and DRM_FORMAT_{BW,WB} (monochrome).
+>>
+>> We export XRGB32 from each driver, because userspace expects it. But
+>> that is not a hard requirement. Userspace can use any format. It's just
+>> that no one seems to have any use cases so far, so no work has been
+>> done. Think of XRGB32 as a fallback.
+>
+> Using an XRGB32 intermediate would kill the user experience on old
+> machines, due to both increased memory usage and copy overhead.
+>
+>> Personally, I'd much appreciate if userspace would support more of the
+>> native formats and not rely on XRGB32.
+>
+> Supporting monochrome, 16 colors, and 256 colors would be nice.
 
-arch/x86/boot and arch/x86/boot/compressed are separate linking domains.
-boot/ uses own implementation while boot/compressed uses implementation
-from <asm/io.h>. Decopliing boot/compressed from <asm/io.h> requires hack.
-See #define _ACPI_IO_H_ below.
+=46rom this conversation it seems DRM completely lacks backwards compatibi=
+lity,
+including a missing 2D bitblt copy.
+Isn't that all what's needed and then migrating existing drivers would
+be easy ?
 
-And even after that we cannot directly use implementation in boot/ since
-we would need to make aware about TDX. That's not needed beyond
-boot/comressed.
+Helge
 
-> We need to hammer out how the code sharing between kernel proper and the
-> decompressor should be done but that ain't it, especially if there are
-> already special io helpers in the decompressor.
 
-What about the patch below?
+>>> This not only to support "old" hardware, but also modern small OLED
+>>> and e-ink displays.
+>>
+>> There's a DRM driver for Repaper e-Ink displays. So it seems doable at
+>> least.
+>
+> Which uses an DRM_FORMAT_XRGB8888 intermediate, and
+> drm_fb_xrgb8888_to_gray8() and repaper_gray8_to_mono_reversed()
+> to convert from truecolor to monochrome.  I guess that would work,
+> as this is a slow e-ink display.  Have fun as a text console ;-)
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m=
+68k.org
+>
+> In personal conversations with technical people, I call myself a hacker.=
+ But
+> when I'm talking to journalists I just say "programmer" or something lik=
+e that.
+>                                 -- Linus Torvalds
+>
 
-I've added another (yes, third) implementation of outb()/inb() for
-boot/compressed (we don't need the rest io helpers there).
-
-Looks cleaner to me.
-
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 22a2a6cc2ab4..1bfe30ebadbe 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -99,6 +99,7 @@ endif
- 
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
- vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdcall.o
- 
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-diff --git a/arch/x86/boot/compressed/early_serial_console.c b/arch/x86/boot/compressed/early_serial_console.c
-index 261e81fb9582..1b842d04e687 100644
---- a/arch/x86/boot/compressed/early_serial_console.c
-+++ b/arch/x86/boot/compressed/early_serial_console.c
-@@ -1,4 +1,5 @@
- #include "misc.h"
-+#include "io.h"
- 
- int early_serial_base;
- 
-diff --git a/arch/x86/boot/compressed/io.h b/arch/x86/boot/compressed/io.h
-new file mode 100644
-index 000000000000..5e9de1e781d7
---- /dev/null
-+++ b/arch/x86/boot/compressed/io.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef BOOT_COMPRESSED_IO_H
-+#define BOOT_COMPRESSED_IO_H
-+
-+#include "tdx.h"
-+
-+static inline void outb(u8 v, u16 port)
-+{
-+	if (early_is_tdx_guest())
-+		tdx_io_out(1, port, v);
-+	else
-+		asm volatile("outb %0,%1" : : "a" (v), "dN" (port));
-+}
-+
-+static inline u8 inb(u16 port)
-+{
-+	u8 v;
-+	if (early_is_tdx_guest())
-+		v = tdx_io_in(1, port);
-+	else
-+		asm volatile("inb %1,%0" : "=a" (v) : "dN" (port));
-+	return v;
-+}
-+
-+#endif
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-index d8373d766672..dd97d9ca73db 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -15,6 +15,8 @@
- #include "misc.h"
- #include "error.h"
- #include "pgtable.h"
-+#include "tdx.h"
-+#include "io.h"
- #include "../string.h"
- #include "../voffset.h"
- #include <asm/bootparam_utils.h>
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 0d8e275a9d96..f3c10ae33c45 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -22,13 +22,13 @@
- #include <linux/linkage.h>
- #include <linux/screen_info.h>
- #include <linux/elf.h>
--#include <linux/io.h>
- #include <asm/page.h>
- #include <asm/boot.h>
- #include <asm/bootparam.h>
- #include <asm/desc_defs.h>
- 
--#include "tdx.h"
-+/* Avoid pulling outb()/inb() from <asm/io.h> */
-+#define _ACPI_IO_H_
- 
- #define BOOT_CTYPE_H
- #include <linux/acpi.h>
-diff --git a/arch/x86/boot/compressed/tdcall.S b/arch/x86/boot/compressed/tdcall.S
-new file mode 100644
-index 000000000000..aafadc136c88
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdcall.S
-@@ -0,0 +1,3 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include "../../kernel/tdcall.S"
-diff --git a/arch/x86/boot/compressed/tdx.h b/arch/x86/boot/compressed/tdx.h
-index 18970c09512e..6d6799c1daec 100644
---- a/arch/x86/boot/compressed/tdx.h
-+++ b/arch/x86/boot/compressed/tdx.h
-@@ -6,11 +6,37 @@
- #include <linux/types.h>
- 
- #ifdef CONFIG_INTEL_TDX_GUEST
-+
-+#include <vdso/limits.h>
-+#include <uapi/asm/vmx.h>
-+#include <asm/tdx.h>
-+
- void early_tdx_detect(void);
- bool early_is_tdx_guest(void);
-+
-+static inline unsigned int tdx_io_in(int size, int port)
-+{
-+	struct tdx_hypercall_output out;
-+
-+	__tdx_hypercall(TDX_HYPERCALL_STANDARD, EXIT_REASON_IO_INSTRUCTION,
-+			size, 0, port, 0, &out);
-+
-+	return out.r10 ? UINT_MAX : out.r11;
-+}
-+
-+static inline void tdx_io_out(int size, int port, u64 value)
-+{
-+	struct tdx_hypercall_output out;
-+
-+	__tdx_hypercall(TDX_HYPERCALL_STANDARD, EXIT_REASON_IO_INSTRUCTION,
-+			size, 1, port, value, &out);
-+}
-+
- #else
- static inline void early_tdx_detect(void) { };
- static inline bool early_is_tdx_guest(void) { return false; }
-+static inline unsigned int tdx_io_in(int size, int port) { return 0; }
-+static inline void tdx_io_out(int size, int port, u64 value) { }
- #endif
- 
- #endif
--- 
- Kirill A. Shutemov

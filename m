@@ -2,110 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9355C490B8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF717490B94
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240547AbiAQPjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:39:41 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4423 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237314AbiAQPjk (ORCPT
+        id S240558AbiAQPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237314AbiAQPkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:39:40 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JcwwL58s3z6F98b;
-        Mon, 17 Jan 2022 23:35:46 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 16:39:38 +0100
-Received: from [10.47.92.236] (10.47.92.236) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Mon, 17 Jan
- 2022 15:39:37 +0000
-Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
-To:     Marco Elver <elver@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>, <svens@linux.ibm.com>, <gor@linux.ibm.com>,
-        <sumanthk@linux.ibm.com>, <hca@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211216151454.752066-1-tmricht@linux.ibm.com>
- <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
-Date:   Mon, 17 Jan 2022 15:39:10 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 17 Jan 2022 10:40:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B4C061574;
+        Mon, 17 Jan 2022 07:40:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34CD1B810F5;
+        Mon, 17 Jan 2022 15:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3063FC36AEF;
+        Mon, 17 Jan 2022 15:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642434007;
+        bh=uX1Nzu6ud1l1C70Ts3ffEy/I1QZlKKPuL/lL0tIjKdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qYBnWKV4AgjvJESWAfOjRKk5KGWyNBt9fAj+rhJzvIx08u8qTzS9ZGvhlQw+tNG52
+         xlX2Ngv7quLX26fT4VYiTAqfPx9n0dM2TJFtIuBIs6lkGiKZryObvKa6jmUA6yw7VF
+         BH7oO4EOxnY6XvuazDHedKVCXfYJDT2aiC9ccO9I=
+Date:   Mon, 17 Jan 2022 16:40:04 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V2] usb: common: ulpi: Fix crash in ulpi_match()
+Message-ID: <YeWN1Hb0tpjDzn+C@kroah.com>
+References: <20220117150039.44058-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.92.236]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117150039.44058-1-jonathanh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2021 15:48, Marco Elver wrote:
-
-+
-
-> On Thu, 16 Dec 2021 at 16:15, Thomas Richter<tmricht@linux.ibm.com>  wrote:
->> In Linux next kernel
->> Commit 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
->> introduced the new test which uses breakpoint events.
->> These events are not supported on s390 and PowerPC and always fail:
->>
->>   # perf test -F 73
->>   73: Sigtrap                                                         : FAILED!
->>   #
->>
->> Fix it the same way as in the breakpoint tests in file
->> tests/bp_account.c where these type of tests are skipped on
->> s390 and PowerPC platforms.
->>
->> With this patch skip this test on both platforms.
->>
->> Output after:
->>   # ./perf test -F 73
->>   73: Sigtrap
->>
->> Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
->>
->> Cc: Marco Elver<elver@google.com>
->> Signed-off-by: Thomas Richter<tmricht@linux.ibm.com>
-> Acked-by: Marco Elver<elver@google.com>
+On Mon, Jan 17, 2022 at 03:00:39PM +0000, Jon Hunter wrote:
+> Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+> DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+> multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+> on the Tegra20 Ventana platform in the ulpi_match() function.
 > 
-> Thanks, and sorry for missing this case!
+> The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+> registers a ulpi_driver but this driver does not provide an 'id_table',
+> so when ulpi_match() is called on the Tegra20 Ventana platform, it
+> crashes when attempting to deference the id_table pointer which is not
+> valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+> ULPI driver with the device and so fix this crash by using device-tree
+> for matching if the id_table is not valid.
 > 
+> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 
-I am finding that this test hangs on my arm64 machine:
+No cc: of stable since this is a bug going back to 4.11?
 
-john@debian:~/kernel-dev2/tools/perf$ sudo ./perf test -vvv 73
-  73: Sigtrap:
---- start ---
-test child forked, pid 45193
+thanks,
 
-And fails on my x86 broadwell machine:
-
-john@localhost:~/kernel-dev2/tools/perf> sudo ./perf test -v 73
-73: Sigtrap                                                         :
---- start ---
-test child forked, pid 22255
-FAILED sys_perf_event_open(): Argument list too long
-test child finished with -1
----- end ----
-Sigtrap: FAILED!
-john@localhost:~/kernel-dev2/tools/perf>
-
-Are there more architectures+platforms for which we need to skip this test?
-
-Thanks,
-John
+greg k-h

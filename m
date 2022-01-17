@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6224908EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA964908F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240002AbiAQMoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiAQMoV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:44:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A3EC061574;
-        Mon, 17 Jan 2022 04:44:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F53FB8104D;
-        Mon, 17 Jan 2022 12:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515EFC36AE3;
-        Mon, 17 Jan 2022 12:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642423458;
-        bh=WfSe0f2tp73p9eX+2t47RIEu4N4Dal4v9YDkwvB2ysE=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=HqFIKHUQaTAkz6zUwf8OoIf6hGHdQYQOOodOUD4xhwppJUytyUguW3yTtj0eI2xej
-         s9EW2y7/kvDANPDE9dD08k7AJOnAeOgJ569Ny5TLksF0g9bx5ATTsTfF4+yCVhr8Iw
-         v1QPjcuFnJ//frQJzqg+t3x8Q6GcWpI9SnLdP6H8yitwOyOciDIdJ4txECts9qgE7O
-         235kdOJkiMY6cvJg8bp4kzuJWxPo2hAsq6cyU7CjbJ+o1OTy0+qHYYZburqUAHm1Bw
-         2x8MiKDDtQQkZ6jVh15LzxTEZgFlXgoUjNVoAGFBXAHyyXpeeppc1cGyhdKjgHxyKC
-         3fCM3CRpyLymA==
-Content-Type: text/plain; charset="utf-8"
+        id S240017AbiAQMpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:45:24 -0500
+Received: from foss.arm.com ([217.140.110.172]:57822 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231622AbiAQMpX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 07:45:23 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2984A6D;
+        Mon, 17 Jan 2022 04:45:23 -0800 (PST)
+Received: from e127744.arm.com (unknown [10.57.36.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D5ABA3F73D;
+        Mon, 17 Jan 2022 04:45:21 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, mark.rutland@arm.com, james.clark@arm.com,
+        leo.yan@linaro.org
+Cc:     German Gomez <german.gomez@arm.com>
+Subject: [RFC PATCH 0/2] perf: arm_spe: Fix consistency of CONTEXT packets in SPE driver
+Date:   Mon, 17 Jan 2022 12:44:30 +0000
+Message-Id: <20220117124432.3119132-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 6/8] wcn36xx: Use platform_get_irq_byname() to get the
- interrupt
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211224192626.15843-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211224192626.15843-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164242345282.27899.3620486539382484087.kvalo@kernel.org>
-Date:   Mon, 17 Jan 2022 12:44:16 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+Applies a couple of small changes to the arm_spe_pmu driver.
 
-> platform_get_resource_byname(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
-> 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_byname().
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+We are seeing context packets in an inconsistent number of SPE records
+even  when the perf-tool runs without the needed capabilities. This is
+fixed in [1/2].
 
-Patch applied to ath-next branch of ath.git, thanks.
+We're also allowing CONTEXT packets to be collected in per-cpu events in
+[2/2].
 
-d17efe4f80fc wcn36xx: Use platform_get_irq_byname() to get the interrupt
+I'm sending as an RFC because it's the first time I change driver code.
+Also I'm not 100% sure of the approach in [2/2] (from a security and/or
+implementation standpoint).
+
+Thanks,
+German
+
+- [PATCH 1/2] Fixes the consistency issue with the context packets.
+- [PATCH 2/2] Enables context packets in per-cpu events.
+
+German Gomez (2):
+  perf: arm_spe: Fix consistency of PMSCR register bit CX
+  perf: arm_spe: Enable CONTEXT packets in SPE traces if the profiler
+    runs in CPU mode.
+
+ drivers/perf/arm_spe_pmu.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211224192626.15843-7-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.25.1
 

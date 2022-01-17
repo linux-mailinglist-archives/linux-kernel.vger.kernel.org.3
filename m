@@ -2,184 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BCB491073
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA53491076
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241539AbiAQSsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:48:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44798 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiAQSsS (ORCPT
+        id S242414AbiAQSwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 13:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230519AbiAQSwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:48:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AD13B81151
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 18:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673BEC36AE3;
-        Mon, 17 Jan 2022 18:48:13 +0000 (UTC)
-Date:   Mon, 17 Jan 2022 18:48:10 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
- contextidr
-Message-ID: <YeW56uyxJ42oEn8L@arm.com>
-References: <20211021134530.206216-1-leo.yan@linaro.org>
- <20211021134530.206216-5-leo.yan@linaro.org>
- <202110210848.35971643C6@keescook>
- <20211101152835.GB375622@leoy-ThinkPad-X240s>
- <YapEUlcyDZ6TuE6n@arm.com>
- <20211205135103.GA42658@leoy-ThinkPad-X240s>
- <Ya9J8HnMWxBy3MJv@arm.com>
- <20211207123118.GA255238@leoy-ThinkPad-X240s>
- <YbDrhQLeBdn0wqKT@arm.com>
- <20211210075918.GD622826@leoy-ThinkPad-X240s>
+        Mon, 17 Jan 2022 13:52:13 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8857AC061574;
+        Mon, 17 Jan 2022 10:52:12 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p18so22534551wmg.4;
+        Mon, 17 Jan 2022 10:52:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Llyi63UWOQi3BXtk58lidq6ltne401ehGOiS/+yI99c=;
+        b=E0SkFJ1eNBMo/BXshOmkTPChBIgiyyVlVk0gPGk8QVDDy8UyhCmsqtCHoZoCQaVEQx
+         Yb58PaMtXHJVBJCjqhGQOYYVRLNm1yJkccLfJeS4ZcrGOGajs/K0w1TYlVLI/AmKZhRB
+         fe6dC6vlN7i6TZBjk4XACc/fnUn5h4x7xC/oHEpyn0/nMwqXNHZzCKXzH+y93UyMAnX5
+         eQviF1wxkhT72AKqxmeYxLzTL/pcImh7vlU/GhZfJSxitgRa/HCQtG2It+18vtBtWppx
+         /H8OM87IZVViaQZgl4IwD4XbF02ov9rDIT9Vpwr+N7lASCCowUWCpV9Cp0ToXyuz+fqH
+         R3mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Llyi63UWOQi3BXtk58lidq6ltne401ehGOiS/+yI99c=;
+        b=J0vibS4sszwLle6Brrh6kTyBL0Tfkg+S+lkRrMT0JswJ2BxVaJFLh+AltjobaeV6c3
+         A6eVbA1xSfZcHT/l4NBAvOsJT1Rp9Kl0nTwntPwgBVtLqP6k5WdzU8kmUBaUZ0hmo+Ie
+         d80mUjgnP6IeVLJeuu2y1YJsT/ZJZBwjo6o4buUlQjMuXLyciRso+VscVnc+xB4hkNHr
+         H4gKqvQau95LS5rhgUd0YaXqfPimDr5eZHBGHpiwyuwUpL1AMH76Bl+0DoFeimXOAIKN
+         qLAw6vzidQknG3i4QYDr+2fR75yqyh99+OVTQMtW9tnJ/F7l5IB8DNX2LTwQaNrP6yxt
+         fFfA==
+X-Gm-Message-State: AOAM532Xr9XtLsR8FHRaEDeueUtf0VuVhQJm0wkP6Wz6VDpzBn0rmQhN
+        nHwvctGJtysmJN114DzwMkbtXfno88JjHLQD0DY=
+X-Google-Smtp-Source: ABdhPJxQ0pUqRD8MmoQwaA9vNqyssG6WNxyHraaqHL2nlDWnmgYgF9OQPX1Wec8GNSQSV0jOQD8w+lH1oChYwZaIrBY=
+X-Received: by 2002:a7b:ce08:: with SMTP id m8mr22116860wmc.127.1642445530931;
+ Mon, 17 Jan 2022 10:52:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210075918.GD622826@leoy-ThinkPad-X240s>
+References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
+ <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
+ <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
+ <CAA8EJpokgiUbqj9BOF52a9QjJK53PinNHfxy_6nbNq53JnO2Og@mail.gmail.com> <bd284863-3643-4a8e-beb6-f47cc60ea1b5@quicinc.com>
+In-Reply-To: <bd284863-3643-4a8e-beb6-f47cc60ea1b5@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 17 Jan 2022 10:52:07 -0800
+Message-ID: <CAF6AEGsBNafYjfC-05XBG2QT+vxU-jB=wTmu9gOVe-wLTXFgzQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] drm/msm/adreno: Expose speedbin to userspace
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+On Mon, Jan 17, 2022 at 6:38 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> On 1/13/2022 12:43 PM, Dmitry Baryshkov wrote:
+> > On Thu, 13 Jan 2022 at 00:19, Rob Clark <robdclark@gmail.com> wrote:
+> >> On Tue, Jan 11, 2022 at 1:31 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+> >>> Expose speedbin through MSM_PARAM_CHIP_ID parameter to help userspace
+> >>> identify the sku.
+> >>>
+> >>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> >>> ---
+> >>>
+> >>>   drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +++++----
+> >>>   1 file changed, 5 insertions(+), 4 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>> index f33cfa4..e970e6a 100644
+> >>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>> @@ -242,10 +242,11 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_t param, uint64_t *value)
+> >>>                  *value = !adreno_is_a650_family(adreno_gpu) ? 0x100000 : 0;
+> >>>                  return 0;
+> >>>          case MSM_PARAM_CHIP_ID:
+> >>> -               *value = adreno_gpu->rev.patchid |
+> >>> -                               (adreno_gpu->rev.minor << 8) |
+> >>> -                               (adreno_gpu->rev.major << 16) |
+> >>> -                               (adreno_gpu->rev.core << 24);
+> >>> +               *value = (uint64_t) adreno_gpu->rev.patchid |
+> >>> +                               (uint64_t) (adreno_gpu->rev.minor << 8) |
+> >>> +                               (uint64_t) (adreno_gpu->rev.major << 16) |
+> >>> +                               (uint64_t) (adreno_gpu->rev.core << 24) |
+> >>> +                               (((uint64_t) adreno_gpu->rev.sku) << 32);
+> >> How about this instead, so we are only changing the behavior for
+> >> new/unreleased devices:
+>
+> I thought this property was only used for new devices whereas the
+> existing devices rely on REVN.
+>
+> -Akhil.
+>
+> >>
+> >> *value = adreno_gpu->rev.patchid |
+> >> (adreno_gpu->rev.minor << 8) |
+> >> (adreno_gpu->rev.major << 16) |
+> >> (adreno_gpu->rev.core << 24);
+> >> if (!adreno_gpu->info->revn)
+> >> *value |= (((uint64_t) adreno_gpu->rev.sku) << 32);
+> >>
+> >> (sorry about the butchered indentation.. somehow gmail has become
+> >> antagonistic about pasting code)
+> > I assume that you would like to keep userspace compat for older chips.
+> > thus the if.
+> > Maybe we should introduce MSM_PARAM_CHIP_ID_SKU instead (and gradually
+> > make userspace switch to it)?
+> >
 
-(sorry for the delay, holidays, merging window)
+Existing userspace tools do query CHIP_ID, but match based on GPU_ID
+(falling back to CHIP_ID only if GPU_ID==0).. still, out of an
+abundance of caution, we should probably not change the behavior for
+existing GPUs.  But so far the only thing with GPU_ID==0 does not
+exist in the wild yet, so I think we can get away without having to
+introduce a new param if we only set the upper bits of CHIP_ID when
+GPU_ID==0.
 
-On Fri, Dec 10, 2021 at 03:59:18PM +0800, Leo Yan wrote:
-> On Wed, Dec 08, 2021 at 05:29:41PM +0000, Catalin Marinas wrote:
-> > On Tue, Dec 07, 2021 at 08:31:18PM +0800, Leo Yan wrote:
-> > > On Tue, Dec 07, 2021 at 11:48:00AM +0000, Catalin Marinas wrote:
-> > > > On Sun, Dec 05, 2021 at 09:51:03PM +0800, Leo Yan wrote:
-> > > > > On Fri, Dec 03, 2021 at 04:22:42PM +0000, Catalin Marinas wrote:
-> > > > > > What's the cost of always enabling CONFIG_PID_IN_CONTEXTIDR? If it's
-> > > > > > negligible, I'd not bother at all with any of the enabling/disabling.
-> > > > > 
-> > > > > Yes, I compared performance for PID tracing with always enabling and
-> > > > > disabling CONFIG_PID_IN_CONTEXTIDR, and also compared with using
-> > > > > static key for enabling/disabling PID tracing.  The result shows the
-> > > > > cost is negligible based on the benchmark 'perf bench sched'.
-> > > > > 
-> > > > > Please see the detailed data in below link (note the testing results
-> > > > > came from my Juno board):
-> > > > > https://lore.kernel.org/lkml/20211021134530.206216-1-leo.yan@linaro.org/
-> > > > 
-> > > > The table wasn't entirely clear to me. So the dis/enb benchmarks are
-> > > > without this patchset applied.
-> > > 
-> > > Yes, dis/enb metrics don't apply this patchset.
-> > > 
-> > > > There seems to be a minor drop but it's
-> > > > probably noise. Anyway, do we need this patchset or we just make
-> > > > CONFIG_PID_IN_CONTEXTIDR default to y?
-> > > 
-> > > Good point.  I remembered before we had discussed for making
-> > > CONFIG_PID_IN_CONTEXTIDR to 'y', but this approach is not always valid,
-> > > especially when the profiling process runs in non-root PID namespace,
-> > > in this case, hardware tracing data (e.g. Arm SPE or CoreSight) cannot
-> > > trust the PID values from tracing since the PID conflicts between
-> > > different PID namespaces.
-> > > 
-> > > So this patchset is to add the fundamental mechanism for dynamically
-> > > enabling and disable PID tracing into CONTEXTIDR.  Based on it, we can
-> > > use helpers to dynamically enable PID tracing _only_ when process runs
-> > > in root PID namespace.
-> > 
-> > I don't think your approach fully works. Let's say you are tracing two
-> > processes, one in the root PID namespace, the other not. Since the
-> > former enables PID in CONTEXTIDR, you automatically get some PID in
-> > CONTEXTIDR for the latter whether you requested it explicitly or not.
-> 
-> The key point is kernel always sets a PID number from the root PID
-> namespace into the system register CONTEXTIDR.
-
-So earlier you mentioned that CONFIG_PID_IN_CONTEXTIDR=y is not always
-right since a profiled task may run in a non-root PID namespace. But
-this series introduces a single knob to turn on PID in CONTEXTIDR for
-all CPUs, irrespective of whether they run a task in the root PID
-namespace or not. The CPU running a task in the root ns may call
-contextidr_enable() but the other CPUs may run tasks in non-root ns.
-
-IIUC, with this patch, to avoid the root ns PID for a non-root ns task,
-the SPE driver only sets the SYS_PMSCR_EL1_CX_SHIFT bit for the root ns
-tasks. So, in this case, for a non-root ns task, does it matter that
-CONTEXTIDR always contain the root ns PID? If it matters, see above why
-a single knob is already doing this.
-
-> Let's see a case:
-> 
->   # unshare --fork --pid perf record -e cs_etm// -m 64K,64K -a -o perf_test.data -- ./multi_threads_test
-> 
-> In this case, with command "unshare --fork --pid", perf tool and the
-> profiled program multi_threads_test run in the created PID namespace.
-> We can see the dumped PID values:
-> 
->    <idle>-0       [000] d..2.   331.751681: __switch_to: contextidr_thread_switch: task perf-exec pid 840 ns_pid 2
->    <idle>-0       [002] d..2.   331.755930: __switch_to: contextidr_thread_switch: task multi_threads_t pid 842 ns_pid 4
->    <idle>-0       [003] d..2.   331.755993: __switch_to: contextidr_thread_switch: task multi_threads_t pid 843 ns_pid 5
->   sugov:0-129     [005] d..2.   332.323469: __switch_to: contextidr_thread_switch: task perf pid 841 ns_pid 3
-> 
-> We can see processes have two different PIDs values, say task
-> 'perf-exec', 840 is its PID number from the root PID namespace, and 2
-> is its PID from the active namespace the task is belonging to.
-> 
-> But the register CONTEXTIDR is _only_ used to trace PIDs from the root
-> PID namespace and ignores PID values from any other PID namespace.
-
-Would it help if we used task_pid_nr_ns() instead for setting
-CONTEXTIDR?
-
-> Come back to your question, if there have two tracing sessions, one
-> session runs in the root PID namespace, and another runs in the
-> non-root PID namespace.  Since we can gather the PIDs in the root namespace,
-> the session in the root PID namespace can work perfectly, and we can
-> ensure the PID infos matching well between kernel's PID tracing and user
-> space tool (note: perf needs gather process info with process' pid/tid for
-> post parsing).
-> 
-> For the later session in non-root PID name space, we doesn't capture
-> any PID tracing data.  This results in the profiled result doesn't
-> contain any PID info, although it's painful that the PID info is
-> incomplete but we don't deliver any wrong info for users studying
-> profiling result and PID is always '-1'.
-
-So what's actually disabling the capture of PID tracing data? Is it the
-PMSCR_EL1.CX bit being 0?
-
-> I think the purpose for this patchset is to allow us to dynamically
-> enable PID tracing when the tracing session runs in root namespace.
-
-But it doesn't do this with a single global knob for all CPUs. You only
-need the SPE patch together with the CONTEXTIDR config set to y.
-
-> Alternatively, if you accept to always set PID to CONTEXTIDR in
-> contextidr_thread_switch(), it would be fine for me and we can only
-> need to control PID packets in SPE and CoreSight drivers.
-
-Well, we have the config option and infrastructure already, it's up to
-Linux distros to turn it on. It doesn't necessarily need to be in
-defconfig.
-
-Now, if we removed the CONTEXTIDR setting altogether, is there a way for
-perf tools to coordinate the traces with the scheduling events? This
-would be a simpler approach from the kernel perspective (i.e. no work).
-Alternatively, could we move the CONTEXTIDR setting to a perf driver.
-I'm not too familiar with perf but I guess we could add some scheduling
-event hooks.
-
--- 
-Catalin
+BR,
+-R

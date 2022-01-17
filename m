@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B1D49023B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 07:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F25490240
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiAQG6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 01:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
+        id S235040AbiAQHAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbiAQG6c (ORCPT
+        with ESMTP id S232184AbiAQHAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:58:32 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC8BC061574;
-        Sun, 16 Jan 2022 22:58:32 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 3EC24425B7;
-        Mon, 17 Jan 2022 06:58:22 +0000 (UTC)
-Subject: Re: [PATCH v2 23/35] brcmfmac: cfg80211: Add support for scan params
- v2
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-24-marcan@marcan.st>
- <f909828f-ad8d-a7d6-0e21-7f34ee713da5@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <776c385c-84f8-4716-8561-52f60463e202@marcan.st>
-Date:   Mon, 17 Jan 2022 15:58:20 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 17 Jan 2022 02:00:08 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5F1C061574;
+        Sun, 16 Jan 2022 23:00:07 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id l21-20020a17090b079500b001b49df5c4dfso2749853pjz.2;
+        Sun, 16 Jan 2022 23:00:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IJGYiOOL+6CUqrzL1DWyP6i538pdaiTRGXfMxIypbx4=;
+        b=SQOmKzE5qLd9atEF7c6ICsVd/f5pZySXamSt5bexMkFZxDX8MPWRQ8iyBNR3y4r8YJ
+         T28OGncW226NldDD+N3pS6Sfp1ROGEcVKoeumFtoVRbxHaaeCpgNpLn7K6z0wsB/h2m8
+         bOSZIW+WnM7/erCzYmkbF2CcBuJKmCJ5a5jiz+TaYqU0GybF3ne52Df8RbF91EnZldIu
+         zg2Tum8yvOL9K5RvbuKAafOyl8rXxoRY+BKiPNzwq8deqivzL11NWe39DnGQKbwp7eDq
+         XcsOQqFXQL6cDjhI8GUlhTXwsolsy1KVWYzUmfYLWaA5sdUpT2nfQM+tJdwlghNsm5SV
+         5RTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IJGYiOOL+6CUqrzL1DWyP6i538pdaiTRGXfMxIypbx4=;
+        b=GThgX0tV/y/PQXXheVsSQh9Hlr0ZRi7wCLFO7W8RNyCgpN0Zw+ZpPIxy1JLKp/oHzU
+         72+sVPHGCTSNI5LUoCHIKNfKbr56eP6ngfnTS7eaKNWaY85h7h96BHlHBahhGV1n2Sp1
+         9Uw/8K3upUpzACzqo7Kx46yd9VDz/ibtLGDFLqkriV1Lycbf+DTIQGgIkkVtJAiKoqGe
+         xxCCDUOZItpicAvlHldQMAry0X4T3PaMRJiJ6JN+/1IosH757sbmHc70QZWeKbYzG5Gi
+         8WZA8eqquYOOdxfahZLQCxRqaK/93QUexMN3l14ugiiZ5eMrF/XBOPmMLsfe2hs1NkM9
+         IFaw==
+X-Gm-Message-State: AOAM530NTBzhmHeTTcxBVImAVQGjeWiOJZnr4KhHR6ygYjaPt8n6Xg8M
+        IUsSh5JaWhcQ4uNl0UxfUss=
+X-Google-Smtp-Source: ABdhPJyr1guEKgMePOqMXuJjqjUjwbfxwr+ht7XFTzzRRD5eavXA8v2bvVaiMaXLsySekzmV+ZQpIA==
+X-Received: by 2002:a17:90a:156:: with SMTP id z22mr32537539pje.191.1642402807498;
+        Sun, 16 Jan 2022 23:00:07 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id t25sm10752959pgv.9.2022.01.16.23.00.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 23:00:07 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jing Liu <jing2.liu@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/cpuid: Stop exposing unknown AMX Tile Palettes and accelerator units
+Date:   Mon, 17 Jan 2022 14:59:57 +0800
+Message-Id: <20220117065957.65335-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-In-Reply-To: <f909828f-ad8d-a7d6-0e21-7f34ee713da5@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 17.50, Arend van Spriel wrote:
-> On 1/4/2022 8:26 AM, Hector Martin wrote:
->> This new API version is required for at least the BCM4387 firmware. Add
->> support for it, with a fallback to the v1 API.
-> 
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
->> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>   .../broadcom/brcm80211/brcmfmac/cfg80211.c    | 113 ++++++++++++++----
->>   .../broadcom/brcm80211/brcmfmac/feature.c     |   1 +
->>   .../broadcom/brcm80211/brcmfmac/feature.h     |   4 +-
->>   .../broadcom/brcm80211/brcmfmac/fwil_types.h  |  49 +++++++-
->>   4 files changed, 145 insertions(+), 22 deletions(-)
->>
->> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
->> index fb727778312c..71e932a8302c 100644
->> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
->> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
->> @@ -769,12 +769,50 @@ void brcmf_set_mpc(struct brcmf_if *ifp, int mpc)
->>   	}
->>   }
->>   
->> +static void brcmf_escan_prep(struct brcmf_cfg80211_info *cfg,
->> +			     struct brcmf_scan_params_v2_le *params_le,
->> +			     struct cfg80211_scan_request *request);
-> 
-> I am not a fan of function prototypes so if it can be avoided by simply 
-> moving the function that would be preferred over this.
+From: Like Xu <likexu@tencent.com>
 
-Moved the function for v3 :)
+Guest enablement of Intel AMX requires a good co-work from both host and
+KVM, which means that KVM should take a more safer approach to avoid
+the accidental inclusion of new unknown AMX features, even though it's
+designed to be an extensible architecture.
 
->> +	if (!brcmf_feat_is_enabled(ifp, BRCMF_FEAT_SCAN_V2)) {
-> 
-> Okay. So it is not really a fallback. Phew!
+Per current spec, Intel CPUID Leaf 1EH sub-leaf 1 and above are reserved,
+other bits in leaves 0x1d and 0x1e marked as "Reserved=0" shall be strictly
+limited by definition for reporeted KVM_GET_SUPPORTED_CPUID.
 
-I meant fallback in case the feature is not present, not fallback from
-trying to use it without checking. Thankfully we can use a feature test
-for this :-)
+Fixes: 690a757d610e ("kvm: x86: Add CPUID support for Intel AMX")
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/cpuid.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index c55e57b30e81..3fde6610d314 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -661,7 +661,6 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+ 	case 0x17:
+ 	case 0x18:
+ 	case 0x1d:
+-	case 0x1e:
+ 	case 0x1f:
+ 	case 0x8000001d:
+ 		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
+@@ -936,21 +935,26 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		break;
+ 	/* Intel AMX TILE */
+ 	case 0x1d:
++		entry->ebx = entry->ecx = entry->edx = 0;
+ 		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
+-			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
++			entry->eax = 0;
+ 			break;
+ 		}
+ 
++		entry->eax = min(entry->eax, 1u);
+ 		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+ 			if (!do_host_cpuid(array, function, i))
+ 				goto out;
+ 		}
+ 		break;
+-	case 0x1e: /* TMUL information */
++	/* TMUL Information */
++	case 0x1e:
++		entry->eax = entry->ecx = entry->edx = 0;
+ 		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
+-			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
++			entry->ebx = 0;
+ 			break;
+ 		}
++		entry->ebx &= 0xffffffu;
+ 		break;
+ 	case KVM_CPUID_SIGNATURE: {
+ 		const u32 *sigptr = (const u32 *)KVM_SIGNATURE;
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.33.1
+

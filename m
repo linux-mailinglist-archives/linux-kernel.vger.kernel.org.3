@@ -2,196 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38845490C4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 460A3490C4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241006AbiAQQNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240936AbiAQQNd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:13:33 -0500
-Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC515C06161C;
-        Mon, 17 Jan 2022 08:13:32 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jcxlt6Jd8zQkjF;
-        Mon, 17 Jan 2022 17:13:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1642436009;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a1vsx+73yO//LTfnZakZY7L86flI50eX3rHI5DH1Kqg=;
-        b=zU0bgrKjJ15VtjFsLqRsEttsN+gpzHYXCoFVgsaCx7h6N76mJkHfVmhXAlxUebVoX5QS0U
-        SpQfF4oDeVR960N0u7lgDlIQOfJuUEEpwuDjYGsNVxPhF6IQsNeRXBoWbGI2etv4Mk2Lki
-        uHaJFK3V8Od5TGao7/9X3/3rOk5mzyg5g4vJI0t07ZXuaORBPUQ6Zu59BRl3d4l4U0jyZ7
-        oE+aMLNC26bhWy230O84Jg0PvUbISRHJiOq0Uny1a3Q+5mq81WR9pXZN3Fc+tYa7gU7xVy
-        YM1EnDfHQA+deH9zW/Z0uw8DOXKN+65EgOehbXU1R96b8BhTVzN5Wsr6QuA3EA==
-From:   Marcello Sylvester Bauer <sylv@sylv.io>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: [PATCH v1 4/4] pmbus: Add support for bcm6123 Bus Converter
-Date:   Mon, 17 Jan 2022 17:12:50 +0100
-Message-Id: <db9cb6a43de9b248b76f815c6c173d1eefd42ad0.1642434222.git.sylv@sylv.io>
-In-Reply-To: <cover.1642434222.git.sylv@sylv.io>
-References: <cover.1642434222.git.sylv@sylv.io>
+        id S240993AbiAQQN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:13:57 -0500
+Received: from mail-bn8nam12on2085.outbound.protection.outlook.com ([40.107.237.85]:38133
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240982AbiAQQNp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 11:13:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jxJ0CS7qLZTFRqJ/bnnz60zqx7wW/+duUeRPPTPHp8LkrUXyu4x1d+UJhR4ySZd5DptfxMzaV7edq/K9Kpg76LxZ3E3yCaJ6LOehQFvkqd6/CyWPH0HXEGzBDIst2L0sBHwAJ5TVfShIgFKafWtKd2NBsxTJNY3owsd7zI5M/2+LePt/EZ4nMX3WbF1uCTaPHcMH+J19Skj2x2N5hwrRsoT9Q54o2d3D7y+Wrw3McQWqAnaJpSGlAwQxe5gMJlyRxGDr5Pl53IzXnr9mwN694F3NvolkFe48W7xGLnwjw7lkZkJPpFzPx9vUFjGwysHI/RCdV4vcroPDvQtzGfJ9Zw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y0hHcSrf91d9XsKJTvLIaraSzs9fR8XtatDBgI37DHM=;
+ b=J496ww7O9+bddqxBrvHGW6Z3SMURj53KEQx/KscVJThGXbTzM7qwoKclp+aHZ4rW6Rj2qMdjlwL7ylbw8cI/4EdT9WSZUMbPwCzkGOTFxvrh532co5r4w27dyzQg80GOIz31pg9ci2ZRGGSbvCpvizt5sXmOdu7T+pqmknfuqQMhKSQEzdE35WOLnYQwNSPpcRJxw2ezpVZnSyOzNdMwCTId4W4OOPZCoj3JDXx+I05s6EymvHWYKqmrLCb8n0T9OHnolkCYgQs5wASuaY5zGvNFtiKLRAnZx2hn7RIzqfsdGnss6o5CuPSCmoSeZr5U9qPBOGMlPwE7ZEhKWfg9gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y0hHcSrf91d9XsKJTvLIaraSzs9fR8XtatDBgI37DHM=;
+ b=FN4S5dUtRv8NL0A58gZoWH7CgJTP97XS0cxAg9b97144l3ug/RzpjLJmd0WchmwQaJJzEZ+kVXMXLTDoD03m8RuhrdvaSNYq4BZVe7rRfN3TmeGdvTfmsD2cJ2Kg8/0m+NteFnar2fSEbFfAYhX/EcziODe95AXjXEVcAOj63R8=
+Received: from MWHPR19CA0072.namprd19.prod.outlook.com (2603:10b6:300:94::34)
+ by CH2PR12MB4085.namprd12.prod.outlook.com (2603:10b6:610:79::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Mon, 17 Jan
+ 2022 16:13:43 +0000
+Received: from CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:94:cafe::e7) by MWHPR19CA0072.outlook.office365.com
+ (2603:10b6:300:94::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
+ Transport; Mon, 17 Jan 2022 16:13:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT050.mail.protection.outlook.com (10.13.174.79) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4888.9 via Frontend Transport; Mon, 17 Jan 2022 16:13:43 +0000
+Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 17 Jan
+ 2022 10:13:40 -0600
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
+        <x86@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] x86/MCE/AMD: Allow thresholding interface updates after init
+Date:   Mon, 17 Jan 2022 16:13:28 +0000
+Message-ID: <20220117161328.19148-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 31fd4a94-1ae6-4bde-1968-08d9d9d45510
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4085:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB4085744897EBB6CDCBEDBB42F8579@CH2PR12MB4085.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Uknqe9NdKe+jvx6eLcso2JJYiOxkok8+mbKL5nc4uApCSpS0S8WwLHissvj3XZlWqmJjhlpg7oZ8MzhSN+EhatipSRcR4jICtGutHOAqyuNE4mBsrMWJmiaW/Mhf96K99rW3g1i/OpFg7vDXl6xIZZ1dPMOq/8VQQ/x27Rr2Sasx4gGHjSorosoMH+dmEnmhcsLFcpWZMGpHm1On1EvRT9tbZsTlgeFNaRyScJdh4BC1fR7Fdw8YBUcfDoPGYIJI2hkg6csVQIa1zKgewJ2cQKR/eHOtVeMz+ctcKUtbYBl5RwtW4+5oEA9/+09cZ5+6zmmnpmtbsv82rkR4SpF/k559Ggqqp7hUfWta7K1Po3taLTPGVyOmLzJp3XZmC1AMPDIzF/MWM+lLyBvP3LilTEF0Ht3MNBjWczHjUzS7z2FD5BJ58t61aRrCYAtJpRJ3+nIBuOR05BOTSU8Q4NvYslLdUmSoDBozfoc7+W5ToCAjop/BwC7sdBMr5OjLkiy+Jf5I+QXHwvRlalZf4OeYpmjsv0qXLGz+q9wkDGRKhi6k/m7meZbMFk/SN2y8VdnyZV7E+IBk8yjK5Z9pB9lkbS1l7GXTqAZ3/SiFV6MNQm9drP88sXRuXYULbrKhzI4CXKt0v2btBX75duw07+0wUKqGYADyjiV2V473Zz39rKmHACBNSiLWc6YM8Lz28yCiHjtWb/OZxBDAJERxCUTSWbb8IbDsEwVyX/kPACcXdDv35+7RdOcUis4LpdWS4CziSFln0dF2lzwqlWAOrV2ICe1qTNG8WqB+HhyTzSTNbf6wtqV/eC4MnpbwxKDstaVsKKlmvPLQi6ekkTjpkWDp5UfyKWFw7dIoufl3qjdwf0vLIWa68sJG+ruDTv9Sfghi
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(70206006)(8676002)(5660300002)(1076003)(4326008)(356005)(7696005)(36860700001)(40460700001)(81166007)(44832011)(36756003)(336012)(8936002)(966005)(26005)(2906002)(6666004)(86362001)(83380400001)(15650500001)(16526019)(186003)(6916009)(426003)(508600001)(316002)(70586007)(82310400004)(2616005)(47076005)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 16:13:43.1485
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31fd4a94-1ae6-4bde-1968-08d9d9d45510
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4085
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Changes to the AMD Thresholding sysfs code prevents sysfs writes from
+updating the underlying registers once CPU init is completed, i.e.
+"threshold_banks" is set.
 
-BCM6123 is an Fixed-Ratio DC-DC Converter.
+Allow the registers to be updated if the thresholding interface is
+already initialized or if in the init path. Use the "set_lvt_off" value
+to indicate if running in the init path, since this value is only set
+during init.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: <stable@vger.kernel.org>
 ---
- drivers/hwmon/pmbus/Kconfig   |  9 ++++
- drivers/hwmon/pmbus/Makefile  |  1 +
- drivers/hwmon/pmbus/bcm6123.c | 90 +++++++++++++++++++++++++++++++++++
- 3 files changed, 100 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/bcm6123.c
+Link:
+https://lkml.kernel.org/r/20211207193028.9389-1-yazen.ghannam@amd.com
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index c96f7b7338bd..62dac90631c5 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -48,6 +48,15 @@ config SENSORS_ADM1275
- 	  This driver can also be built as a module. If so, the module will
- 	  be called adm1275.
+v1->v2:
+* Add Cc: stable
+* Switch logic for check and drop extra comment.
+
+ arch/x86/kernel/cpu/mce/amd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index a1e2f41796dc..9f4b508886dd 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -423,7 +423,7 @@ static void threshold_restart_bank(void *_tr)
+ 	u32 hi, lo;
  
-+config SENSORS_BCM6123
-+	tristate "Vicor BCM6123 Compatible Power Supplies"
-+	help
-+	  If you say yes here you get hardware monitoring support for Vicor
-+	  BCM6123 Power Supplies.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called bcm6123.
-+
- config SENSORS_BEL_PFE
- 	tristate "Bel PFE Compatible Power Supplies"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index e5935f70c9e0..2918c2ea7bc5 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_PMBUS)		+= pmbus_core.o
- obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
- obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
- obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
-+obj-$(CONFIG_SENSORS_BCM6123)	+= bcm6123.o
- obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
- obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
- obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
-diff --git a/drivers/hwmon/pmbus/bcm6123.c b/drivers/hwmon/pmbus/bcm6123.c
-new file mode 100644
-index 000000000000..78fc259bc40f
---- /dev/null
-+++ b/drivers/hwmon/pmbus/bcm6123.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon bcm6123
-+ *
-+ * Copyright (c) 2021 9elements GmbH
-+ *
-+ * VOUT_MODE is not supported by the device. The driver fakes VOUT linear16
-+ * mode with exponent value -8 as direct mode with m=256/b=0/R=0.
-+ *
-+ * The device supports VOUT_PEAK, IOUT_PEAK, and TEMPERATURE_PEAK, however
-+ * this driver does not currently support them.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+static struct pmbus_platform_data bcm6123_plat_data = {
-+	.flags = PMBUS_NO_CAPABILITY,
-+};
-+
-+static struct pmbus_driver_info bcm6123_info = {
-+	.pages = 2,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_IN] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.m[PSC_VOLTAGE_IN] = 1,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 1,
-+	.m[PSC_VOLTAGE_OUT] = 1,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 1,
-+	.m[PSC_CURRENT_IN] = 1,
-+	.b[PSC_CURRENT_IN] = 0,
-+	.R[PSC_CURRENT_IN] = 3,
-+	.m[PSC_CURRENT_OUT] = 1,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 2,
-+	.func[0] = 0, /* Summing page without voltage readings */
-+	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+	    | PMBUS_HAVE_IIN | PMBUS_HAVE_POUT,
-+};
-+
-+static int bcm6123_probe(struct i2c_client *client)
-+{
-+	client->dev.platform_data = &bcm6123_plat_data;
-+
-+	return pmbus_do_probe(client, &bcm6123_info);
-+}
-+
-+static const struct i2c_device_id bcm6123_id[] = {
-+	{"bcm6123", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, bcm6123_id);
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id bcm6123_of_match[] = {
-+	{ .compatible = "vicor,bcm6123" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, bcm6123_of_match);
-+#endif
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver bcm6123_driver = {
-+	.driver = {
-+		   .name = "bcm6123",
-+		   .of_match_table = of_match_ptr(bcm6123_of_match),
-+		   },
-+	.probe_new = bcm6123_probe,
-+	.id_table = bcm6123_id,
-+};
-+
-+module_i2c_driver(bcm6123_driver);
-+
-+MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-+MODULE_DESCRIPTION("PMBus driver for Vicor bcm6123");
-+MODULE_LICENSE("GPL");
+ 	/* sysfs write might race against an offline operation */
+-	if (this_cpu_read(threshold_banks))
++	if (!this_cpu_read(threshold_banks) && !tr->set_lvt_off)
+ 		return;
+ 
+ 	rdmsr(tr->b->address, lo, hi);
 -- 
-2.33.1
+2.25.1
 

@@ -2,120 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB866490A82
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5449490A8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239681AbiAQOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S234595AbiAQOfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239799AbiAQOcH (ORCPT
+        with ESMTP id S234441AbiAQOfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:32:07 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39855C061749
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:32:07 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id f141-20020a1c1f93000000b003497aec3f86so23149303wmf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JkVqqY9kZfQlCXm2Gf4qVdWbnEyCYzJMqa1tKAalEO0=;
-        b=GwOd4qQ17iTBKi/M2U09g7wFRrZ7O1AcmcJsEB4JxJHNHmQDDZeuIJcVxi2iKOt3LI
-         sjaEewjLWKtdO/Fcual2luU6kyA/r/EhCe/KRLfQCueOCNTkSduqbysao57Bo1lhmYd3
-         9nJ2sk3UjPwh1ZMjx58Us5bV0deT7dp2w8u/N/lzJXfHKSKUxLE8fZ2ZTAGJ4djz2uhW
-         p47foC9ykdJDRwLlldDV++bMlA9SPs7gMkmOzuG+Dss144I1w2tuj+ByGPpp5opg4XIw
-         JE/LAuQe99lypus2YI8qHf4+JPmy+9ACu6dXlxpf5GjHixnpKmryC2HsPo828+KHOKsM
-         uHgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=JkVqqY9kZfQlCXm2Gf4qVdWbnEyCYzJMqa1tKAalEO0=;
-        b=6PNu8yN0y0H+cTRU9JwRIMk5kWsrlIJgrtgPhDlqyi1s/KmtgPnd9ROCxO0XKCmHFV
-         6NzMWEx55bGcl6HiZdBjreHPK36pEqVrsvzJtyeNscEVxyClO5FQ6oUibH4DO47Ba9nq
-         +0faZNXUiJrAVUFjnGZyjZ6asWvrp769kmUD8j7ZWjhCOoM0eQONpAcUk1iT64zsp0mX
-         nhpdV5eHD31g45FlwPrxCDwkO8PzsNIS2vbMGBUXWSVOHU9Lv6qgmubSRQJiGu0jn83p
-         i3Fp/IN3r4wjIRH7mSN3NRYVyVvstDvsl0D/irM4o1XqNrWQoDT5k102bUG08neCOWFf
-         WKhA==
-X-Gm-Message-State: AOAM533ye9mfP8Yo4tA2eXmCnwkX7RA6Sd5IG/LdZVTY1usr+uPdpk7Z
-        hNPgsp6ytp9dBpnhLf34FwUKcJZCUM4WUQ==
-X-Google-Smtp-Source: ABdhPJy96ZZV8+Ibug5tTlQussK4v5Du7LmRau62LTD73sovJWJzj+U7KynntUu/47ZyvxG+FR4F6A==
-X-Received: by 2002:a5d:6d89:: with SMTP id l9mr15499890wrs.14.1642429925354;
-        Mon, 17 Jan 2022 06:32:05 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:c004:9fe1:fbda:2d0c? ([2001:861:44c0:66c0:c004:9fe1:fbda:2d0c])
-        by smtp.gmail.com with ESMTPSA id y9sm6702962wrm.94.2022.01.17.06.32.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 06:32:04 -0800 (PST)
-Subject: Re: [PATCH 1/3] arm64: dts: meson: add Broadcom WiFi to P212 dtsi
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220113041746.16040-1-christianshewitt@gmail.com>
- <20220113041746.16040-2-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <927257db-1338-af1c-3198-3153e122967b@baylibre.com>
-Date:   Mon, 17 Jan 2022 15:32:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 17 Jan 2022 09:35:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03800C06173E;
+        Mon, 17 Jan 2022 06:35:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 933536127C;
+        Mon, 17 Jan 2022 14:35:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF947C36AEC;
+        Mon, 17 Jan 2022 14:35:00 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="o5lUIVek"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642430099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aaW0Uk+9BWDfg75RNXbu9puufapoNx/hbgFAFnNlHpA=;
+        b=o5lUIVekFU/CMlMWfbMSHPWg3Y+AO+IBjHDVYdA4/1ehvadLmE47x9mx9KjUg/tkH4n+Bm
+        BXhisVCv73+46A0QTAGsXfhxrC1ZK3iUOitweRNXQFU5+mIYZMAN/69ypY5yjIg2Nqu6Ho
+        mxekyYSnnO6ZTQrb9NaxbRW0auHiYl4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 70f2d64c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 17 Jan 2022 14:34:58 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 15:34:54 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        ebiggers@kernel.org
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Message-ID: <YeV+jkGg6mpQdRID@zx2c4.com>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220113041746.16040-2-christianshewitt@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220111180318.591029-1-roberto.sassu@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 05:17, Christian Hewitt wrote:
-> The P212 has a combined WiFi/BT module. The BT side is already enabled
-> in the dtsi but the WiFi side is not. Let's tweak SDIO speed (in-line
-> with other GXL/GXM devices) and enable the WiFi module.
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->  arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
-> index 05cb2f5e5c36..c635e5858929 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
-> @@ -113,7 +113,7 @@
->  
->  	bus-width = <4>;
->  	cap-sd-highspeed;
-> -	max-frequency = <50000000>;
-> +	max-frequency = <100000000>;
->  
->  	non-removable;
->  	disable-wp;
-> @@ -125,6 +125,11 @@
->  
->  	vmmc-supply = <&vddao_3v3>;
->  	vqmmc-supply = <&vddio_boot>;
-> +
-> +	brcmf: wifi@1 {
-> +		reg = <1>;
-> +		compatible = "brcm,bcm4329-fmac";
-> +	};
->  };
->  
->  /* SD card */
-> 
+Hi,
 
-As I commented in patch 3, the 2 changes should be split.
+While it looks like you put a lot of work into this patchset, I think
+the general idea of adding PGP *to the kernel* is a pretty daunting
+proposition. The general consensus in the crypto engineering world is
+that PGP ought to be on its way out. We definitely don't want to
+perpetuate this project-on-life-support into the permanence of kernel
+code. Some quick Google searches will reveal a litany of blog posts to
+the tune of, "why oh why are people still using this?" Here's one from
+2019: https://latacora.micro.blog/2019/07/16/the-pgp-problem.html . I
+think these are arguments to take seriously. And even if you disagree
+with some parts, you may want to consider whether the remaining parts
+warrant a bit of pause before adding this to the kernel and perpetuating
+PGP's design further.
 
-When you resend, you can put my:
+If you're looking for a simple signature mechanism to replace the use of
+X.509 and all of that infrastructure, may I suggest just coming up with
+something simple using ed25519, similar to signify or minisign? Very
+minimal code in the kernel, in userspace, and very few moving parts to
+break.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-
-in both patches.
-
-Neil
+Jason

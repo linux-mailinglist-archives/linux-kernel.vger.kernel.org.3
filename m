@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AE44904D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF20D4904D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiAQJ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:27:11 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:15882 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232585AbiAQJ1K (ORCPT
+        id S235668AbiAQJ2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235665AbiAQJ2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:27:10 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20H5VoL8004479;
-        Mon, 17 Jan 2022 03:26:59 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=C91gWLLOR9MQkEctlcrUtw91QuwUpHk8YmwclM2NQqs=;
- b=CYL6ZH4gSY85YIqBxnLO/o5lW5orb9FxtXdJIBFLKnM8xXFXcn6YIIsIYBl0y7efNva1
- S1MX7xg3EqDueduWmMkTmvgugBqYWt4ih3HR4Llh6ELUwZ75sPzwjdTZfpkO1Zc/Mpy/
- ICfyvkiQueJVeuc0SJKN5e0HG3dH7HXchNmsxUz3BAj2sFDFsi2NUp89b1264ocNoBwZ
- SU0Fv1Po/p8djN+vyQQzoEl9saBWcXLEY7H7on49AAb7srj36t9WrNEu/xTJr7+Oq4fe
- foSVdJoMCsNHY8Z/YVic8i7Zmv+9vtb4pf6z0a5mLVGr4BT2U4v+SM9oudJqdBAxzXV9 gw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dkvj59ykg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 17 Jan 2022 03:26:58 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 17 Jan
- 2022 09:26:56 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Mon, 17 Jan 2022 09:26:56 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A8488B16;
-        Mon, 17 Jan 2022 09:26:56 +0000 (UTC)
-Date:   Mon, 17 Jan 2022 09:26:56 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>
-Subject: Re: ChipIdea USB regression
-Message-ID: <20220117092656.GM18506@ediswmail.ad.cirrus.com>
-References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
- <20220114111800.GL18506@ediswmail.ad.cirrus.com>
- <CAL_JsqKWMLi69kXp0fcdqLD039eSPwi=NPkPpOWKy=va1+YXow@mail.gmail.com>
+        Mon, 17 Jan 2022 04:28:06 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047FCC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:28:06 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so1809226otu.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 01:28:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qiJzkYiS8JHxjNK1yY8Lz1eEhjg/JRuoOm5z9rJq0+8=;
+        b=GDNvN5rWNly2LPMsurHXtjpNJzi151UlIEbV+dJT1XG3AGQceVAA93aouVa0V+8GjX
+         I3aPw+ScHrpJN6y5b4IH9f+OaXrhQD//q1+iSLBk6mK2dTmfIq8qNYiast+NzWL0LUPj
+         F5szCyPPceZkA5/nIknl+LWwCLznPhnY1Au6No+5JheWlcYdTn+z4LWjsKWY6stmKu8U
+         XZnqzATGvLGSLaOZlujPTsP/yffdFw68D26zO2LTBmYlmFAuujjlPQnywxINHhXIKSeN
+         mvlhetY59vm8pFfmIUihyQ98bFGZkvmq9xFgXEAXStD1wh5HIHkc7InbpllqdecEgIbK
+         X6Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qiJzkYiS8JHxjNK1yY8Lz1eEhjg/JRuoOm5z9rJq0+8=;
+        b=a4PZPftV7fYFpifa+Nvl6zj+FD4TPHwNwAf4YbndQOQl9O90ZLKGEKL4LEBZ71Lid/
+         iN/1jEzbX4F6Xe1qp0d0HmoBOtG6mMya2jJ+Pao6cC3Zpw8PiXwf0V+3QW0I5ctmLAdM
+         mH0X2B4MPvVNkOIW1eLX4jZCYfYJVjVV2wEYdvPDpQZ8RJKWhCvG/GzfvvaMJwzPP+Y5
+         VM8pXgY7Ro1qr71f5dno1gv4wF77mmcmoDBuyYW/yEnciihnFgio/AYHRZb501YkwSBs
+         ZSqvSR+EwoWG30wUHScq1PaseCHbcKBBnaNUV9hDpjjSTRFrGnfIyIGqIAQJWVjJYma8
+         76gg==
+X-Gm-Message-State: AOAM530Ubt7Q/zxlE3pbJ9QsSnT+D7csFSIyhF/RmUfh0kWCaGScfs63
+        +QnLrzIeFx39ZFq63ulpSA0=
+X-Google-Smtp-Source: ABdhPJyEIx8GplQapvkHi6f0AkIX416RfX4Uj4E2J0tyK5q0ClmnV5USegDVHfCpM5u7zI0fVbkLtw==
+X-Received: by 2002:a05:6830:23bc:: with SMTP id m28mr15418623ots.343.1642411685231;
+        Mon, 17 Jan 2022 01:28:05 -0800 (PST)
+Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
+        by smtp.googlemail.com with ESMTPSA id i7sm4943770oot.17.2022.01.17.01.28.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 01:28:05 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org
+Cc:     Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH v1] genirq/msi: fix crash when handling Multi-MSI
+Date:   Mon, 17 Jan 2022 01:27:59 -0800
+Message-Id: <20220117092759.1619771-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKWMLi69kXp0fcdqLD039eSPwi=NPkPpOWKy=va1+YXow@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: L6LiOKD6ZkYf6JG-I0wmKxqqYuwXrdck
-X-Proofpoint-GUID: L6LiOKD6ZkYf6JG-I0wmKxqqYuwXrdck
-X-Proofpoint-Spam-Reason: safe
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 09:55:23AM -0600, Rob Herring wrote:
-> On Fri, Jan 14, 2022 at 5:18 AM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
-> > On Fri, Jan 14, 2022 at 10:56:20AM +0000, Charles Keepax wrote:
-> > So when that patch copies the DT node to the new platform device
-> > in ci_hdrc_add_device it copies the compatible stuff as well as
-> > the IRQ stuff it was targeting, this presumably causes the kernel
-> > to bind a new copy of the driver to that new device, which probes
-> > and calls ci_hdrc_add_device again repeating the process until
-> > it dies.
-> >
-> > Kinda looks to me like the best solution might just be to revert
-> > the patch, I am not sure I see how that copy of the DT is supposed
-> > to work?
-> 
-> It's not copying the DT, but yes AFAICT it does match and bind the
-> child device on the parent driver using the compatible match instead
-> of matching on driver name. I think we can use the of_reuse_node flag
-> to avoid this in the match, but that needs some more investigation.
+pci_msi_domain_check_cap() could return 1 when domain does not support
+multi MSI and user request multi MSI. This positive value will be used by
+__pci_enable_msi_range(). In previous refactor, this positive value is
+handled as error case which will cause kernel crash.
 
-Assuming you mean the of_node_reused flag, looks like it already
-being set, your code does this:
+[    1.197953] BUG: KASAN: use-after-free in __pci_enable_msi_range+0x234/0x320
+[    1.198327] Freed by task 1:
+[    1.198327]  kfree+0x8f/0x2b0
+[    1.198327]  msi_free_msi_descs_range+0xf5/0x130
+[    1.198327]  msi_domain_alloc_irqs_descs_locked+0x8d/0xa0
+[    1.198327]  __pci_enable_msi_range+0x1a4/0x320
+[    1.198327]  pci_alloc_irq_vectors_affinity+0x135/0x1a0
+[    1.198327]  pcie_port_device_register+0x4a1/0x5c0
+[    1.198327]  pcie_portdrv_probe+0x50/0x100
 
-@@ -864,6 +864,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
-	pdev->dev.parent = dev;
-	+ device_set_of_node_from_dev(&pdev->dev, dev);
+Fixes: 0f62d941acf9 ("genirq/msi: Provide msi_domain_alloc/free_irqs_descs_locked()")
 
-And that function does this:
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ kernel/irq/msi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
-{
-	of_node_put(dev->of_node);
-	dev->of_node = of_node_get(dev2->of_node);
-	dev->of_node_reused = true;
-}
-EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index 2bdfce5edafd..57b1447a3bf1 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -935,7 +935,7 @@ int msi_domain_alloc_irqs_descs_locked(struct irq_domain *domain, struct device
+ 		return ret;
+ 
+ 	ret = ops->domain_alloc_irqs(domain, dev, nvec);
+-	if (ret)
++	if (ret < 0)
+ 		msi_domain_free_irqs_descs_locked(domain, dev);
+ 	return ret;
+ }
+-- 
+2.25.1
 
-I guess maybe that flag doesn't do what it is supposed to for
-some reason?
-
-Thanks,
-Charles

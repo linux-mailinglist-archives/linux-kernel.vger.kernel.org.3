@@ -2,149 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A245F490807
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932CC490812
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbiAQL7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:59:30 -0500
-Received: from mout.gmx.net ([212.227.17.20]:59441 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232540AbiAQL71 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:59:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642420743;
-        bh=gujjjYS9qrwNcyKQ6e9KHDoy6rimz86Y6K0Rz+RmDUc=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=a7TR8vfa60Twe9sfDtxzobLLBC1WGSWSQq6+QehAaAKkAb3ur6o+U9nJhvIQaAvYv
-         GFYyyxXC6WXdwLRWdn3R/YAUpBnDfhdDHb1oyvq2/e2bYphp74qqZCM44pTI6LFZ9X
-         C37PQnrI+uCSIhAc1Hlkab9B+d6HEybmsoBW6B6c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.156.53] ([217.61.156.53]) by web-mail.gmx.net
- (3c-app-gmx-bap64.server.lan [172.19.172.134]) (via HTTP); Mon, 17 Jan 2022
- 12:59:03 +0100
+        id S239349AbiAQMA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:00:29 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4417 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236936AbiAQMA2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 07:00:28 -0500
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jcr7g2n5xz6864S;
+        Mon, 17 Jan 2022 20:00:15 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Mon, 17 Jan 2022 13:00:25 +0100
+Received: from [10.47.83.126] (10.47.83.126) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 17 Jan
+ 2022 12:00:25 +0000
+Subject: Re: PCI MSI issue for maxcpus=1
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+ <87a6g8vp8k.wl-maz@kernel.org>
+ <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+ <87v8yjyjc0.wl-maz@kernel.org> <87k0ey9122.wl-maz@kernel.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+Date:   Mon, 17 Jan 2022 11:59:58 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Message-ID: <trinity-5a2f356e-2777-4624-b921-f8f56ce282c7-1642420742957@3c-app-gmx-bap64>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Aw: Re: [PATCH v1 1/3] dts64: rk3568: drop pclk_xpcs from gmac0
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 17 Jan 2022 12:59:03 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <8285bea7-559c-5834-78c7-5a062b7d8269@gmail.com>
-References: <20220116124911.65203-1-linux@fw-web.de>
- <20220116124911.65203-2-linux@fw-web.de>
- <8285bea7-559c-5834-78c7-5a062b7d8269@gmail.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:cHO62E7Ya9rRWKPr0L0VrCY6B+yBe1mHhOfKgW+7v9Hi1JVHqgeaRwf2dbX14RlQr0bQS
- EaLgvi6Or8euWn98c6UjX+7pWk8eqTZy9t6P0XrUdQOhQ42xpzISY9KjjbMblE1OeK3bgJ/VIUlV
- 0vP3/KvslZqn2qRoBHn0FVjlBaMw7Uv7heU+l7PCUPPxXcD739+eTt45Tiq9ATZnJbwRT+ohyZq7
- pJ6/eKvZiJ+LH9sOaXw0UmTO+PYxYdhQVBsabvBXMxGOQ2g0bw7hAkybXpltlfujGGjdfbeNyhZc
- 3Y=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L5kvOgyIvyc=:rgDGofe8CM8AvpBjMrXbOl
- GuHBAUFt2+k+8H9y0OHogGT/4Fudq7RfZcPkA7WrtGEPoW9+EM/X04qQVmFIM0GMOUubqVXdX
- Wk8EPuPONlKFrbFuXT+bKhOHuFX4woH5PGzmGnp0SYLXVyo3qdBv+vOVItB1uj/rN0O5a2xAp
- vOYnEVPFE9wbuULn2UcCoze2e/n32jKEWeFRh127O5y0wDoExGmASf6QM49H4tqDCioLYT3zg
- L2nOebMdO+FGRD6yK9tnO9rh1fKE1hCDxzBv2hZsY97yxQ3MAzpxGS5lgj794zeuxq00wc39Q
- AJ9wNxg5nNELhK6eaH9cmL3t+jBsJB00/2nDBIzZHcfzr1bPD1jBuXDG6E7dOgJWHmPbySxl1
- EbzlxhoybuubsUN2WzXE59AvOUn2zxOkYiKYNTzquRDJapJFKedDmxv+TaZK4Xi0Zbery4659
- jBsJRpFrYJLyomSyD+i1CwFuNpqundlA+99xTC3KFfcJkcooKQRecf/QWzJ7ALh0bdZLVomle
- a4rUe2kzEGLnRoso0K4gqcq47mU9DiIkw8toOXCqpKQYXgYGM0Qv/qHRjWvVvbQveiyMCa7Kp
- sSOja7cW63bQEDqXWiAWeUHE9fMB5Bb3eCXE1M+wIvkIJ9cmLXH3u3HIM/8Cm0XJX42BoeweT
- knWIa91iHp4r/GxQfVOCL472l5fQ+X4kkG0vSEfXnu2fv3bmjaL7sKeMHvuaPCL96aoZQ9Nju
- LIoy25fZ5dhnmbvcmHrZ1/IrDuGQkU7qvBHR5uczZOso/1PDebtR7bAQQ9cQhFzCq17baNd/F
- N5nV3gJ
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87k0ey9122.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.126]
+X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 17/01/2022 09:14, Marc Zyngier wrote:
+>> I guess that for managed interrupts, it shouldn't matter, as these
+>> interrupts should only be used when the relevant CPUs come online.
+>>
+>> Would something like below help? Totally untested, as I don't have a
+>> Multi-MSI capable device that I can plug in a GICv3 system (maybe I
+>> should teach that to a virtio device...).
 
-> Gesendet: Montag, 17. Januar 2022 um 11:47 Uhr
-> Von: "Johan Jonker" <jbx6244@gmail.com>
-> Hi Frank,
->
-> Despite that the DT is hosted in the kernel tree
-> DT and mainline kernel driver support are 2 separate things.
-> PCLK_XPCS might be in use elsewhere.
->
-> Given the link below pclk_xpcs is only needed for rk3568.
-> Maybe gmac1 should have a PCLK_XPCS too, because one can select between
-> them.
->
-> ethernet: stmicro: stmmac: Add SGMII/QSGMII support for RK3568
-> https://github.com/rockchip-linux/kernel/commit/1fc7cbfe9e227c700c692f1d=
-e3137914b3ea6ca6
->
-> The original dtsi did have PCLK_XPCS in both nodes.
-> https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/bo=
-ot/dts/rockchip/rk3568.dtsi#L2121
-> https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/bo=
-ot/dts/rockchip/rk3568.dtsi#L1492
->
-> Maybe fix the document or leave it as it is for now as long the driver
-> isn't updated and someone has tested it.
-> That's up to the DT maintainer.
->
-> Johan
+JFYI, NVMe PCI uses the same API (pci_alloc_irq_vectors_affinity()), but 
+does not suffer from this issue - for maxcpus=1 the driver looks to only 
+want 1x vector
 
-as far as i understand, the PCLK_XPCS is part of the naneng combphy, which=
- is not yet available in mainline.
-Naneng driver needs some changes and imho this should be part of it (inclu=
-ding change documentation). That also makes it clear why this clock is add=
-ed.
-But leaving an unused property with sideeffects is imho no good choice.
+> Actually, if the CPU online status doesn't matter for managed affinity
+> interrupts, then the correct fix is this:
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index d25b7a864bbb..af4e72a6be63 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -1624,7 +1624,7 @@ static int its_select_cpu(struct irq_data *d,
+>   
+>   		cpu = cpumask_pick_least_loaded(d, tmpmask);
+>   	} else {
+> -		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+> +		cpumask_copy(tmpmask, irq_data_get_affinity_mask(d));
+>   
+>   		/* If we cannot cross sockets, limit the search to that node */
+>   		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
 
-So this was the easiest way to fix the dtbs_check. Else i got no usable re=
-sult for it. Maybe adding it to Documentation is also easy, but have not y=
-et looked into it as it currently unused from my POV.
+That produces a warn:
 
-But i leave it as decision for Maintainer to drop this patch as it is not =
-needed for my Board DTS.
+[ 7.833025] ------------[ cut here ]------------
+[ 7.837634] WARNING: CPU: 0 PID: 44 at 
+drivers/irqchip/irq-gic-v3-its.c:298 valid_col+0x14/0x24
+[ 7.846324] Modules linked in:
+[ 7.849368] CPU: 0 PID: 44 Comm: kworker/0:3 Not tainted 5.16.0-dirty #119
+[ 7.856230] Hardware name: Huawei D06 /D06, BIOS Hisilicon D06 UEFI RC0 
+- V1.16.01 03/15/2019
+[ 7.864740] Workqueue: events work_for_cpu_fn
+[ 7.869088] pstate: 804000c9 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[ 7.876037] pc : valid_col+0x14/0x24
+[ 7.879600] lr : its_build_mapti_cmd+0x84/0x90
 
-> =3D=3D=3D
->
-> XPCS is also part of PD_PIPE.
-> See Rockchip RK3568 TRM Part1 V1.0-20210111.pdf page 475.
-> Please advise if the power-domain@RK3568_PD_PIPE does need a PCLK_XPCS
-> fix or is PCLK_PIPE enough in combination with a PHY driver?
->
-> PD_PIPE:
->
-> BIU_PIPE
-> USB3OTG
-> PCIE20
-> PCIE30
-> SATA
-> XPCS
->
->
-> 	power-domain@RK3568_PD_PIPE {
-> 		reg =3D <RK3568_PD_PIPE>;
-> 		clocks =3D <&cru PCLK_PIPE>;
-> 		pm_qos =3D <&qos_pcie2x1>,
-> 			 <&qos_pcie3x1>,
-> 			 <&qos_pcie3x2>,
-> 			 <&qos_sata0>,
-> 			 <&qos_sata1>,
-> 			 <&qos_sata2>,
-> 			 <&qos_usb3_0>,
-> 			 <&qos_usb3_1>;
-> 		#power-domain-cells =3D <0>;
-> 	};
+...
 
-PD_PIPE is imho also part of Naneng. But more for usage as USB3/SATA/... p=
-hy. This is not part of Mainline too.
+[ 7.961007]  valid_col+0x14/0x24
+[ 7.964223]  its_send_single_command+0x4c/0x150
+[ 7.968741]  its_irq_domain_activate+0xc8/0x104
+[ 7.973259]  __irq_domain_activate_irq+0x5c/0xac
+[ 7.977865]  __irq_domain_activate_irq+0x38/0xac
+[ 7.982471]  irq_domain_activate_irq+0x3c/0x64
+[ 7.986902]  __msi_domain_alloc_irqs+0x1a8/0x2f4
+[ 7.991507]  msi_domain_alloc_irqs+0x20/0x2c
+[ 7.995764]  __pci_enable_msi_range+0x2ec/0x590
+[ 8.000284]  pci_alloc_irq_vectors_affinity+0xe0/0x140
+[ 8.005410]  hisi_sas_v3_probe+0x300/0xbe0
+[ 8.009494]  local_pci_probe+0x44/0xb0
+[ 8.013232]  work_for_cpu_fn+0x20/0x34
+[ 8.016969]  process_one_work+0x1d0/0x354
+[ 8.020966]  worker_thread+0x2c0/0x470
+[ 8.024703]  kthread+0x17c/0x190
+[ 8.027920]  ret_from_fork+0x10/0x20
+[ 8.031485] ---[ end trace bb67cfc7eded7361 ]---
 
-But thanks for pointing.
+Apart from this, I assume that if another cpu comes online later in the 
+affinity mask I would figure that we want to target the irq to that cpu 
+(which I think we would not do here).
 
-regards Frank
+Cheers,
+John
+
+

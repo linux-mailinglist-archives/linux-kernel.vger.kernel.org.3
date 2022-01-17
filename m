@@ -2,137 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F7C4903E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1305B4903E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbiAQIcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:32:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37681 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238214AbiAQIcC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:32:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642408321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vaBNs95WDlXx8iGl0AyfpROH/j47Hay2zVSLmFsrGtg=;
-        b=Mq8yNpeEq2DZTB2XDE10++mLPAMFwqc9tz8XhoL9Xse00bZfhLMxOCIeGKniUI8XyLMEvJ
-        zTpr0HNxa0bOL8C5ATCwzUuUn0b4MroZnc4RaAG+jxRBjnwVjepScfVuTfGij2ZhTzHZjM
-        NQ89IhJtqnDW05DdGGg5OirnwssqP60=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-hMf16PxePYCDn8kyu880Dw-1; Mon, 17 Jan 2022 03:31:59 -0500
-X-MC-Unique: hMf16PxePYCDn8kyu880Dw-1
-Received: by mail-ed1-f70.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so2407509edb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:31:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=vaBNs95WDlXx8iGl0AyfpROH/j47Hay2zVSLmFsrGtg=;
-        b=ffjWhgrcaKqhEMxv0ZnXASmmjpIGIMHtoZQzlg3GhD2KUMtma2/lwqrPrv8HVi2fK0
-         I4qJ2tglgcY2MjYDANKgGA0jI7WoVMPkVsO4ZNvoEpfCmRghpHI+Pc9xnC20jZg737qh
-         QdIHpbv54lvRrU8GrlC9OYly/Go2Bh47RwnVfI7TeN7xejjnGHKgIFk5e7g2Ezx7xs0l
-         jVPbb0ixv3Oag+T11K8E+FKb5yLRXSjOQKyiJkKjIvpQKA1LRoEPHkQw48PG/mop+uzn
-         rDI1v/yr9PV3ZTDA4vsUlc/ujBpQgULdT14MUiM6CfBpkvQCQSLSsOyR32Ou4DO5mmUM
-         yHwQ==
-X-Gm-Message-State: AOAM530fY13fI+MlXLYpz3uxb2Q7QfMZglidrnEgpbWu75Su15e4LuDZ
-        ZwTMo8i6SPI12KcegBMQ7LKh2ag9HVin/oYsHkq2idt2a6y0QblyzPOLCuN5v+so1cgX5Som/e4
-        R/K/BuehSMAafn9CUilJf9Nr0
-X-Received: by 2002:aa7:c609:: with SMTP id h9mr20143855edq.248.1642408318293;
-        Mon, 17 Jan 2022 00:31:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzgZa/KW4xGU199wi9i9/KP8wY0G54upJDfddwLxn3V0PbEj2XKQGZhKuv6oRoWoO1Yxc7NKg==
-X-Received: by 2002:aa7:c609:: with SMTP id h9mr20143839edq.248.1642408318111;
-        Mon, 17 Jan 2022 00:31:58 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:dd00:68a1:1bd:6733:bde9? (p200300cbc705dd0068a101bd6733bde9.dip0.t-ipconnect.de. [2003:cb:c705:dd00:68a1:1bd:6733:bde9])
-        by smtp.gmail.com with ESMTPSA id b19sm2463073edr.40.2022.01.17.00.31.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 00:31:57 -0800 (PST)
-Message-ID: <7ec8218e-9d76-a9b7-ccd0-b7c8ce257fe2@redhat.com>
-Date:   Mon, 17 Jan 2022 09:31:56 +0100
+        id S238210AbiAQIcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:32:47 -0500
+Received: from mga11.intel.com ([192.55.52.93]:22559 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238201AbiAQIcn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 03:32:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642408363; x=1673944363;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=9tJd1d4BMhBoupOx95gX9rum423ETMCxhY6LxtaY1Lo=;
+  b=UAMFydnxVGoiRNcRtDiXf9Qj0yh7Yi7EGCJgkatQ1yiXwz+uXGmiebwz
+   drH7b8cpnKuMt8wCGQFs9ztLVBWv+EHxiuH2ylFmHUwV657wtsgMLZ7+I
+   z6do29N1+1Lskkja/rgZbksBTff+pFrlrZg2bN8W2di5EM1b9OYBTdZ1z
+   LnqLzVqIbWApd3Ob3V6Cg1dIhUfcjdHBwne1JWfLRjCLVGXwwGIno7FGv
+   PvtvmKgBv4ldkBN0dUEGy/eEgKftR2MWBhoTq2/3qxN0Hbj8HSZEpo5nL
+   BU3cRNasw7jYNzDRL13k5MtHonGNLemtZggSSuFbcc+PmTSzguIdJ09c1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="242138479"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="242138479"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 00:32:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="531248980"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.175.229]) ([10.249.175.229])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 00:32:40 -0800
+Subject: Re: [kbuild-all] Re: WARNING: modpost:
+ vmlinux.o(.text.unlikely+0x2c44): Section mismatch in reference from the
+ function trace_define_generic_fields() to the variable
+ .init.data:initcall_level_names
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202112210114.CFpCHRci-lkp@intel.com>
+ <20220110185100.6c4c226c@gandalf.local.home>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <cea7d17b-1994-e2cb-7580-4bd2f287ebdd@intel.com>
+Date:   Mon, 17 Jan 2022 16:32:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+In-Reply-To: <20220110185100.6c4c226c@gandalf.local.home>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-References: <20220114214324.239444-1-mst@redhat.com>
- <1f703ebf-0f78-e530-0fe1-163613397cad@redhat.com>
- <20220117025341-mutt-send-email-mst@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] virtio_mem: break device on remove
-In-Reply-To: <20220117025341-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.01.22 08:55, Michael S. Tsirkin wrote:
-> On Mon, Jan 17, 2022 at 02:40:11PM +0800, Jason Wang wrote:
+
+
+On 1/11/2022 7:51 AM, Steven Rostedt wrote:
+> On Tue, 21 Dec 2021 01:12:12 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+>> All warnings (new ones prefixed by >>, old ones prefixed by <<):
 >>
->> 在 2022/1/15 上午5:43, Michael S. Tsirkin 写道:
->>> A common pattern for device reset is currently:
->>> vdev->config->reset(vdev);
->>> .. cleanup ..
->>>
->>> reset prevents new interrupts from arriving and waits for interrupt
->>> handlers to finish.
->>>
->>> However if - as is common - the handler queues a work request which is
->>> flushed during the cleanup stage, we have code adding buffers / trying
->>> to get buffers while device is reset. Not good.
->>>
->>> This was reproduced by running
->>> 	modprobe virtio_console
->>> 	modprobe -r virtio_console
->>> in a loop, and this reasoning seems to apply to virtio mem though
->>> I could not reproduce it there.
->>>
->>> Fix this up by calling virtio_break_device + flush before reset.
->>>
->>> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
->>> ---
->>>   drivers/virtio/virtio_mem.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
->>> index 38becd8d578c..33b8a118a3ae 100644
->>> --- a/drivers/virtio/virtio_mem.c
->>> +++ b/drivers/virtio/virtio_mem.c
->>> @@ -2888,6 +2888,8 @@ static void virtio_mem_remove(struct virtio_device *vdev)
->>>   		virtio_mem_deinit_hotplug(vm);
->>>   	/* reset the device and cleanup the queues */
->>> +	virtio_break_device(vdev);
->>> +	flush_work(&vm->wq);
->>
->>
->> We set vm->removing to true and call cancel_work_sync() in
->> virtio_mem_deinit_hotplug(). Isn't is sufficient?
->>
->> Thanks
+>>>> WARNING: modpost: vmlinux.o(.text.unlikely+0x2c44): Section mismatch in reference from the function trace_define_generic_fields() to the variable .init.data:initcall_level_names
+>> The function trace_define_generic_fields() references
+>> the variable __initdata initcall_level_names.
+>> This is often because trace_define_generic_fields lacks a __initdata
+>> annotation or the annotation of initcall_level_names is wrong.
+> 
+> I keep getting this, and it looks like a bug in the compiler not the kernel
+> code.
+> 
+> We have:
+> 
+> int filter_assign_type(const char *type)
+> {
+> 	if (strstr(type, "__data_loc") && strstr(type, "char"))
+> 		return FILTER_DYN_STRING;
+> 
+> 	if (strstr(type, "__rel_loc") && strstr(type, "char"))
+> 		return FILTER_RDYN_STRING;
+> 
+> 	if (strchr(type, '[') && strstr(type, "char"))
+> 		return FILTER_STATIC_STRING;
+> 
+> 	if (strcmp(type, "char *") == 0 || strcmp(type, "const char *") == 0)
+> 		return FILTER_PTR_STRING;
+> 
+> 	return FILTER_OTHER;
+> }
+> 
+> static int __trace_define_field(struct list_head *head, const char *type,
+> 				const char *name, int offset, int size,
+> 				int is_signed, int filter_type)
+> {
+> 	struct ftrace_event_field *field;
+> 
+> 	field = kmem_cache_alloc(field_cachep, GFP_TRACE);
+> 	if (!field)
+> 		return -ENOMEM;
+> 
+> 	field->name = name;
+> 	field->type = type;
+> 
+> 	if (filter_type == FILTER_OTHER)
+> 		field->filter_type = filter_assign_type(type);
+> 	else
+> 		field->filter_type = filter_type;
+> 
+> 	field->offset = offset;
+> 	field->size = size;
+> 	field->is_signed = is_signed;
+> 
+> 	list_add(&field->link, head);
+> 
+> 	return 0;
+> }
+> 
+> #define is_signed_type(type)	(((type)(-1)) < (type)1)
+> 
+> static LIST_HEAD(ftrace_generic_fields);
+> 
+> #define __generic_field(type, item, filter_type)			\
+> 	ret = __trace_define_field(&ftrace_generic_fields, #type,	\
+> 				   #item, 0, 0, is_signed_type(type),	\
+> 				   filter_type);			\
+> 	if (ret)							\
+> 		return ret;
 > 
 > 
-> Hmm I think you are right. David, I will drop this for now.
-> Up to you to consider whether some central capability will be
-> helpful as a replacement for the virtio-mem specific "removing" flag.
+> static int trace_define_generic_fields(void)
+> {
+> 	int ret;
+> 
+> 	__generic_field(int, CPU, FILTER_CPU);
+> 	__generic_field(int, cpu, FILTER_CPU);
+> 	__generic_field(char *, COMM, FILTER_COMM);
+> 	__generic_field(char *, comm, FILTER_COMM);
+> 
+> 	return ret;
+> }
+> 
+> 
+> Please tell me where initcall_level_names is being referenced?
+> 
+> Either fix the compiler or tell me exactly what the bug is. Otherwise, stop
+> sending me this.
+> 
+> -- Steve
 
-It's all a bit tricky because we also have to handle pending timers and
-pending memory onlining/offlining operations in a controlled way. Maybe
-we could convert to virtio_break_device() and use the
-&dev->vqs_list_lock as a replacement for the removal_lock. However, I'm
-not 100% sure if it's nice to use that lock from
-drivers/virtio/virtio_mem.c directly.
--- 
-Thanks,
+Hi Steve,
 
-David / dhildenb
+I'm not familiar with the code, the warning can be silenced with the 
+below change:
 
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -162,7 +162,7 @@ EXPORT_SYMBOL_GPL(trace_define_field);
+         if (ret)                                                        \
+                 return ret;
+
+-static int trace_define_generic_fields(void)
++static __init int trace_define_generic_fields(void)
+  {
+         int ret;
+
+@@ -174,7 +174,7 @@ static int trace_define_generic_fields(void)
+         return ret;
+  }
+
+-static int trace_define_common_fields(void)
++static __init int trace_define_common_fields(void)
+  {
+         int ret;
+         struct trace_entry ent;
+
+If the warning can't be fixed, we'll add the warning to the ignore list.
+
+Best Regards,
+Rong Chen

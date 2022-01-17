@@ -2,345 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F76449075F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7C5490755
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239253AbiAQLuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S239226AbiAQLuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239238AbiAQLuc (ORCPT
+        with ESMTP id S236426AbiAQLuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:50:32 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EE3C06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:50:31 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9QVx-0000fx-Mn; Mon, 17 Jan 2022 12:49:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9QVo-00AoYK-L6; Mon, 17 Jan 2022 12:49:23 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9QVn-0001x3-Fg; Mon, 17 Jan 2022 12:49:23 +0100
-Date:   Mon, 17 Jan 2022 12:49:23 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <20220117114923.d5vajgitxneec7j7@pengutronix.de>
-References: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
- <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
- <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+        Mon, 17 Jan 2022 06:50:01 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2D9C061574;
+        Mon, 17 Jan 2022 03:50:00 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id g81-20020a1c9d54000000b0034cd1acd9b5so989814wme.1;
+        Mon, 17 Jan 2022 03:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Qh9qlD7Xxyuod6l2VHcORITt556iH0cP6xXy3RESnzc=;
+        b=Mlh7ovtSMXfYuLtZJBDHb8iGlTGgdK+kw1r5kJiXwtkbGmEsnjbmlZKUV5ho5ALXtc
+         ErsaGGPcarRlcH0t4J9vPlE7jazy1cyw4hGIdk5wDin+9M1XbOFs7iX0+erqOXDuyLDU
+         N13wuTcAslvW26atfDB8z2bt5QcgcQx0NvYODdDPvmJu5WOEdUigB3+CL6bozU4yXHIO
+         z5RuHGs7a1T0dgtc9eifrjqDUx3C7Cj1uVvulqDbFgE7j4WbdpSwVcPr5oIJjqyg57+1
+         JsTSCgmyV7thCpmP1yut4igRrUJ/m74v/GBfEAf36/FiwfUXtIG2YDJO9iRXKAcSCsHW
+         HgNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qh9qlD7Xxyuod6l2VHcORITt556iH0cP6xXy3RESnzc=;
+        b=iOX4ti44lj69MuTQbgjNq4mVl5bcDUlENfExRpiiyv9ysDRhUKzL2u+mOR0P4wV0sS
+         2LFb//a3v4FTAVH3tRcj77p4+BXscTDdkUOOVW9327aDbBwo8eU+T+fckc7Y1fOI1lGg
+         GPoPkQ+p7NmC+Hf65Tbeydm7pFpHMI8LP+FQcZvbtg1IYO69FjCbkJEnJlj6EAKmIs+p
+         gHHRaYd7sPucrZ+zmC2dc1AR4xnsEEGzRSf6geyLxcuQf1IgVGHtxMu/uc4ouuEh0/fh
+         JvFZ2SaWI3nz05QoQV8sPSLQUcKvoZB8GGasXD7jCCv38rDlVVro7RtUhE7LjV8avePU
+         HcGg==
+X-Gm-Message-State: AOAM532r0OntNu2o50mAZGTfjEEUcov8QmTzl6bJYbAUr+8fn4nOm0Yg
+        R4d22Da8lybdbUpwwIAHjmY=
+X-Google-Smtp-Source: ABdhPJxnzn9RYFSiRwIN27xe7uwz9Ej9yjcj/6lztBm/AGx+ZaPHnqv2QULOgW5amVoWsoNmN1+5pg==
+X-Received: by 2002:a5d:453a:: with SMTP id j26mr15627235wra.348.1642420199348;
+        Mon, 17 Jan 2022 03:49:59 -0800 (PST)
+Received: from [192.168.0.14] ([37.223.145.74])
+        by smtp.gmail.com with ESMTPSA id n7sm13895148wms.46.2022.01.17.03.49.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 03:49:58 -0800 (PST)
+Message-ID: <c8fc24a2-9ee3-75a2-0928-95a217d9dfdf@gmail.com>
+Date:   Mon, 17 Jan 2022 12:49:56 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p6yh245p57zhiyck"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v10 00/13] Clean up "mediatek,larb"
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Joerg Roedel <jroedel@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        Matthias Kaehlcke <mka@chromium.org>, anan.sun@mediatek.com,
+        yi.kuo@mediatek.com, acourbot@chromium.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        anthony.huang@mediatek.com,
+        Frank Wunderlich <frank-w@public-files.de>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com
+References: <20220117070510.17642-1-yong.wu@mediatek.com>
+ <06e5e76c-557a-20a5-b8dd-37b25b3384a3@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <06e5e76c-557a-20a5-b8dd-37b25b3384a3@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---p6yh245p57zhiyck
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 17, 2022 at 11:35:52AM +0100, Geert Uytterhoeven wrote:
-> Hi Uwe,
->=20
-> On Mon, Jan 17, 2022 at 10:24 AM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Mon, Jan 17, 2022 at 09:41:42AM +0100, Geert Uytterhoeven wrote:
-> > > On Sat, Jan 15, 2022 at 9:22 PM Sergey Shtylyov <s.shtylyov@omp.ru> w=
-rote:
-> > > > On 1/14/22 11:22 PM, Uwe Kleine-K=F6nig wrote:
-> > > > > You have to understand that for clk (and regulator and gpiod) NUL=
-L is a
-> > > > > valid descriptor that can actually be used, it just has no effect=
-=2E So
-> > > > > this is a convenience value for the case "If the clk/regulator/gp=
-iod in
-> > > > > question isn't available, there is nothing to do". This is what m=
-akes
-> > > > > clk_get_optional() and the others really useful and justifies the=
-ir
-> > > > > existence. This doesn't apply to platform_get_irq_optional().
-> > > >
-> > > >    I do understand that. However, IRQs are a different beast with t=
-heir
-> > > > own justifications...
-> > >
-> > > > > clk_get_optional() is sane and sensible for cases where the clk m=
-ight be
-> > > > > absent and it helps you because you don't have to differentiate b=
-etween
-> > > > > "not found" and "there is an actual resource".
-> > > > >
-> > > > > The reason for platform_get_irq_optional()'s existence is just th=
-at
-> > > > > platform_get_irq() emits an error message which is wrong or subop=
-timal
-> > > >
-> > > >    I think you are very wrong here. The real reason is to simplify =
-the
-> > > > callers.
-> > >
-> > > Indeed.
-> >
-> > The commit that introduced platform_get_irq_optional() said:
-> >
-> >         Introduce a new platform_get_irq_optional() that works much like
-> >         platform_get_irq() but does not output an error on failure to
-> >         find the interrupt.
-> >
-> > So the author of 8973ea47901c81a1912bd05f1577bed9b5b52506 failed to
-> > mention the real reason? Or look at
-> > 31a8d8fa84c51d3ab00bf059158d5de6178cf890:
-> >
-> >         [...] use platform_get_irq_optional() to get second/third IRQ
-> >         which are optional to avoid below error message during probe:
-> >         [...]
-> >
-> > Look through the output of
-> >
-> >         git log -Splatform_get_irq_optional
-> >
-> > to find several more of these.
->=20
-> Commit 8973ea47901c81a1 ("driver core: platform: Introduce
-> platform_get_irq_optional()") and the various fixups fixed the ugly
-> printing of error messages that were not applicable.
-> In hindsight, probably commit 7723f4c5ecdb8d83 ("driver core:
-> platform: Add an error message to platform_get_irq*()") should have
-> been reverted instead, until a platform_get_irq_optional() with proper
-> semantics was introduced.
+On 17/01/2022 11:27, AngeloGioacchino Del Regno wrote:
+> Il 17/01/22 08:04, Yong Wu ha scritto:
+>> MediaTek IOMMU block diagram always like below:
+>>
+>>          M4U
+>>           |
+>>      smi-common
+>>           |
+>>    -------------
+>>    |         |  ...
+>>    |         |
+>> larb1     larb2
+>>    |         |
+>> vdec       venc
+>>
+>> All the consumer connect with smi-larb, then connect with smi-common.
+>>
+>> When the consumer works, it should enable the smi-larb's power which also
+>> need enable the smi-common's power firstly.
+>>
+>> Thus, Firstly, use the device link connect the consumer and the
+>> smi-larbs. then add device link between the smi-larb and smi-common.
+>>
+>> After adding the device_link, then "mediatek,larb" property can be removed.
+>> the iommu consumer don't need call the mtk_smi_larb_get/put to enable
+>> the power and clock of smi-larb and smi-common.
+>>
+>> Base on the media branch [1] and a jpeg dtbinding patchset[2] that already got
+>> the necessary R-b.
+>>
+>> [1] git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.18d
+>> [2] 
+>> https://lore.kernel.org/linux-mediatek/20211206130425.184420-1-hsinyi@chromium.org/ 
+>>
+>>
+>> Change notes:
+>> v10: a) Rebase on the media tree. Respin the "media: mtk-vcodec:" patches.
+>>       b) Add Joerg's Ack for iommu patches.
+>>
+>> v9: 
+>> https://lore.kernel.org/linux-mediatek/20211112105509.12010-1-yong.wu@mediatek.com/ 
+>>
+>>      1) Add return -ENODEV when the dev is null.
+>>      2) Add more strict about the case that a iommu consume device use the 
+>> ports in
+>>      different larbs. Don't allow this case.
+>>      3) Remove two codec interface: mtk_vcodec_release_enc/dec_pm since it 
+>> only has one
+>>      line now.
+>>
+>> v8: 
+>> https://lore.kernel.org/linux-mediatek/20210929013719.25120-1-yong.wu@mediatek.com/ 
+>>
+>>      1) Rebase on v5.15-rc1.
+>>      2) Don't rebase the below mdp patchset that may still need more discuss.
+>>      
+>> https://lore.kernel.org/linux-mediatek/20210709022324.1607884-1-eizan@chromium.org/ 
+>>
+>>      3) Add Frank's Tested-by. Remove Dafna's Tested-by as he requested.
+>>
+>> v7: 
+>> https://lore.kernel.org/linux-mediatek/20210730025238.22456-1-yong.wu@mediatek.com/ 
+>>
+>>      1) Fix a arm32 boot fail issue. reported from Frank.
+>>      2) Add a return fail in the mtk drm. suggested by Dafna.
+>>
+>> v6: 
+>> https://lore.kernel.org/linux-mediatek/20210714025626.5528-1-yong.wu@mediatek.com/ 
+>>
+>>      1) rebase on v5.14-rc1.
+>>      2) Fix the issue commented in v5 from Dafna and Hsin-Yi.
+>>      3) Remove the patches about using pm_runtime_resume_and_get since they have
+>>         already been merged by other patches.
+>>
+>> v5: 
+>> https://lore.kernel.org/linux-mediatek/20210410091128.31823-1-yong.wu@mediatek.com/ 
+>>
+>>      1) Base v5.12-rc2.
+>>      2) Remove changing the mtk-iommu to module_platform_driver patch, It have 
+>> already been a
+>>      independent patch.
+>>
+>> v4: 
+>> https://lore.kernel.org/linux-mediatek/1590826218-23653-1-git-send-email-yong.wu@mediatek.com/ 
+>>
+>>      base on v5.7-rc1.
+>>    1) Move drm PM patch before smi patchs.
+>>    2) Change builtin_platform_driver to module_platform_driver since we may need
+>>       build as module.
+>>    3) Rebase many patchset as above.
+>>
+>> v3: 
+>> https://lore.kernel.org/linux-iommu/1567503456-24725-1-git-send-email-yong.wu@mediatek.com/ 
+>>
+>>      1) rebase on v5.3-rc1 and the latest mt8183 patchset.
+>>      2) Use device_is_bound to check whether the driver is ready from Matthias.
+>>      3) Add DL_FLAG_STATELESS flag when calling device_link_add and explain the
+>>     reason in the commit message[3/14].
+>>      4) Add a display patch[12/14] into this series. otherwise it may affect
+>>     display HW fastlogo even though it don't happen in mt8183.
+>> v2: 
+>> https://lore.kernel.org/linux-iommu/1560171313-28299-1-git-send-email-yong.wu@mediatek.com/ 
+>>
+>>     1) rebase on v5.2-rc1.
+>>     2) Move adding device_link between the consumer and smi-larb into
+>> iommu_add_device from Robin.
+>>     3) add DL_FLAG_AUTOREMOVE_CONSUMER even though the smi is built-in from Evan.
+>>     4) Remove the shutdown callback in iommu.
+>>
+>> v1: 
+>> https://lore.kernel.org/linux-iommu/1546318276-18993-1-git-send-email-yong.wu@mediatek.com/ 
+>>
+>>
+>> Yong Wu (12):
+>>    dt-binding: mediatek: Get rid of mediatek,larb for multimedia HW
+>>    iommu/mediatek-v1: Free the existed fwspec if the master dev already
+>>      has
+>>    iommu/mediatek: Return ENODEV if the device is NULL
+>>    iommu/mediatek: Add probe_defer for smi-larb
+>>    iommu/mediatek: Add device_link between the consumer and the larb
+>>      devices
+>>    media: mtk-jpeg: Get rid of mtk_smi_larb_get/put
+>>    media: mtk-mdp: Get rid of mtk_smi_larb_get/put
+>>    drm/mediatek: Get rid of mtk_smi_larb_get/put
+>>    media: mtk-vcodec: Get rid of mtk_smi_larb_get/put
+>>    memory: mtk-smi: Get rid of mtk_smi_larb_get/put
+>>    arm: dts: mediatek: Get rid of mediatek,larb for MM nodes
+>>    arm64: dts: mediatek: Get rid of mediatek,larb for MM nodes
+>>
+>> Yongqiang Niu (1):
+>>    drm/mediatek: Add pm runtime support for ovl and rdma
+>>
+>>   .../display/mediatek/mediatek,disp.txt        |  9 ----
+>>   .../media/mediatek,vcodec-decoder.yaml        |  7 ---
+>>   .../media/mediatek,vcodec-encoder.yaml        |  8 ----
+>>   .../bindings/media/mediatek-jpeg-decoder.yaml |  9 ----
+>>   .../bindings/media/mediatek-jpeg-encoder.yaml |  9 ----
+>>   .../bindings/media/mediatek-mdp.txt           |  8 ----
+>>   arch/arm/boot/dts/mt2701.dtsi                 |  2 -
+>>   arch/arm/boot/dts/mt7623n.dtsi                |  5 ---
+>>   arch/arm64/boot/dts/mediatek/mt8173.dtsi      | 16 -------
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  6 ---
+>>   drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |  8 +++-
+>>   drivers/gpu/drm/mediatek/mtk_disp_rdma.c      |  9 +++-
+>>   drivers/gpu/drm/mediatek/mtk_drm_crtc.c       | 15 ++++---
+>>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 36 +--------------
+>>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  1 -
+>>   drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  5 +--
+>>   drivers/iommu/mtk_iommu.c                     | 34 ++++++++++++++
+>>   drivers/iommu/mtk_iommu_v1.c                  | 42 ++++++++++++++++-
+>>   .../media/platform/mtk-jpeg/mtk_jpeg_core.c   | 45 +------------------
+>>   .../media/platform/mtk-jpeg/mtk_jpeg_core.h   |  2 -
+>>   drivers/media/platform/mtk-mdp/mtk_mdp_comp.c | 40 -----------------
+>>   drivers/media/platform/mtk-mdp/mtk_mdp_comp.h |  2 -
+>>   drivers/media/platform/mtk-mdp/mtk_mdp_core.c |  1 -
+>>   .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  2 -
+>>   .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   |  1 -
+>>   .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 41 +++--------------
+>>   .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  3 --
+>>   .../platform/mtk-vcodec/mtk_vcodec_enc.c      |  1 -
+>>   .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  2 -
+>>   .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   | 45 +++----------------
+>>   drivers/memory/mtk-smi.c                      | 14 ------
+>>   include/soc/mediatek/smi.h                    | 20 ---------
+>>   32 files changed, 115 insertions(+), 333 deletions(-)
+>>
+> 
+> Hello Hans, Matthias,
+> on my side, this series is totally ready for merge, hence, green light from here.
+> 
+> Can you please take it for 5.18?
+> 
 
-ack.
+@Hans: I understand you take the series through your tree. Please let me know 
+when you do so. I'll take care of patch 12 and 13, which should go through my tree.
 
-> But as we were all in a hurry to kill the non-applicable error
-> message, we went for the quick and dirty fix.
->=20
-> > Also I fail to see how a caller of (today's) platform_get_irq_optional()
-> > is simpler than a caller of platform_get_irq() given that there is no
-> > semantic difference between the two. Please show me a single
-> > conversion from platform_get_irq to platform_get_irq_optional that
-> > yielded a simplification.
->=20
-> That's exactly why we want to change the latter to return 0 ;-)
-
-OK. So you agree to my statement "The reason for
-platform_get_irq_optional()'s existence is just that platform_get_irq()
-emits an error message [...]". Actually you don't want to oppose but
-say: It's unfortunate that the silent variant of platform_get_irq() took
-the obvious name of a function that could have an improved return code
-semantic.
-
-So my suggestion to rename todays platform_get_irq_optional() to
-platform_get_irq_silently() and then introducing
-platform_get_irq_optional() with your suggested semantic seems
-intriguing and straigt forward to me.
-
-Another thought: platform_get_irq emits an error message for all
-problems. Wouldn't it be consistent to let platform_get_irq_optional()
-emit an error message for all problems but "not found"?
-Alternatively remove the error printk from platform_get_irq().
-
-> > So you need some more effort to convince me of your POV.
-> >
-> > > Even for clocks, you cannot assume that you can always blindly use
-> > > the returned dummy (actually a NULL pointer) to call into the clk
-> > > API.  While this works fine for simple use cases, where you just
-> > > want to enable/disable an optional clock (clk_prepare_enable() and
-> > > clk_disable_unprepare()), it does not work for more complex use cases.
-> >
-> > Agreed. But for clks and gpiods and regulators the simple case is quite
-> > usual. For irqs it isn't.
->=20
-> It is for devices that can have either separate interrupts, or a single
-> multiplexed interrupt.
->=20
-> The logic in e.g. drivers/tty/serial/sh-sci.c and
-> drivers/spi/spi-rspi.c could be simplified and improved (currently
-> it doesn't handle deferred probe) if platform_get_irq_optional()
-> would return 0 instead of -ENXIO.
-
-Looking at sh-sci.c the irq handling logic could be improved even
-without a changed platform_get_irq_optional():
-
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 968967d722d4..c7dc9fb84844 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -2873,11 +2873,13 @@ static int sci_init_single(struct platform_device *=
-dev,
- 	 * interrupt ID numbers, or muxed together with another interrupt.
- 	 */
- 	if (sci_port->irqs[0] < 0)
--		return -ENXIO;
-+		return sci_port->irqs[0];
-=20
--	if (sci_port->irqs[1] < 0)
-+	if (sci_port->irqs[1] =3D=3D -ENXIO)
- 		for (i =3D 1; i < ARRAY_SIZE(sci_port->irqs); i++)
- 			sci_port->irqs[i] =3D sci_port->irqs[0];
-+	else if (sci_port->irqs[1] < 0)
-+		return sci_port->irqs[1];
-=20
- 	sci_port->params =3D sci_probe_regmap(p);
- 	if (unlikely(sci_port->params =3D=3D NULL))
-
-And then the code flow is actively irritating. sci_init_single() copies
-irqs[0] to all other irqs[i] and then sci_request_irq() loops over the
-already requested irqs and checks for duplicates. A single place that
-identifies the exact set of required irqs would already help a lot.
-
-Also for spi-rspi.c I don't see how platform_get_irq_byname_optional()
-returning 0 instead of -ENXIO would help. Please talk in patches.
-
-Preferably first simplify in-driver logic to make the conversion to the
-new platform_get_irq_optional() actually reviewable.
-
-> > And if you cannot blindly use the dummy, then you're not the targetted
-> > caller of *_get_optional() and should better use *_get() and handle
-> > -ENODEV explicitly.
->=20
-> No, because the janitors tend to consolidate error message handling,
-> by moving the printing up, inside the *_get() methods.  That's exactly
-> what happened here.
-
-This is in my eyes the root cause of the issues at hand. Moving the
-error message handling into a get function is only right for most of the
-callers. So the more conservative approach would be to introduce a noisy
-variant of the get function and convert all users that benefit
-separately while the unreviewed callers and those that don't want an
-error message can happily continue to use the silent variant.
-
-> So there are three reasons: because the absence of an optional IRQ
-> is not an error, and thus that should not cause (a) an error code
-> to be returned, and (b) an error message to be printed, and (c)
-> because it can simplify the logic in device drivers.
-
-I don't agree to (a). If the value signaling not-found is -ENXIO or 0
-(or -ENODEV) doesn't matter much. I wouldn't deviate from the return
-code semantics of platform_get_irq() just for having to check against 0
-instead of -ENXIO. Zero is then just another magic value.
-(c) still has to be proven, see above.
-
-> Commit 8973ea47901c81a1 ("driver core: platform: Introduce
-> platform_get_irq_optional()") fixed (b), but didn't address (a) and
-> (c).
-
-Yes, it fixed (b) and picked a bad name for that.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---p6yh245p57zhiyck
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHlV8AACgkQwfwUeK3K
-7Am0GQf8CoKYtZsyB2Veq4tA4dVxwehDrqSNzD0/oee9gQ2W8Ug3o/BHJYBwahzq
-EvMyo3JUywFfBFS6fqP6q+5CXaw3qhcVdLIQIYR1NbdbDku9fPpYgUlMeO8FLj0S
-AjA1gReJzZffpqQa+j6sWHbwoCmV4ZWTYuhi2tnY6gxes4QcBTcXhrlPtPvEcvRj
-xiaHDNvm4yBJjau7t98dhCCfb9ioYwkuGybaTVJenP6u4ZB5QxTAKBsVZsaYscE9
-K/bTKX+pt+MFJrjy6AN6Qq4JYNuQK8v7MawD5u/q9qZHAELmMQaNyWTpBBDKqjGv
-Z8p6bAtXmJy2dTalO786GdRxwAWrMQ==
-=gT+3
------END PGP SIGNATURE-----
-
---p6yh245p57zhiyck--
+Thanks!
+Matthias

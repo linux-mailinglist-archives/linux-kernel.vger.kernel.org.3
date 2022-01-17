@@ -2,224 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 173994910EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8335D4910F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242414AbiAQUSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:18:20 -0500
-Received: from mout.gmx.net ([212.227.15.15]:56763 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231964AbiAQUST (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:18:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642450689;
-        bh=KCY8X2y2Vnk71ilSMMSCpiULMPeoSQ28Wxj5Cc45cVA=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=KW2UfH9xCVNwyBe/5BSqSaHxgQUrC6LgyRng8YoryXjuxvVmhQNvMoNoTrouoD7L5
-         L0JfJna7ioSsZMqZqwmNeZXzhuo/p27cnz3avEkENtru6kiJxxd2I1Yz78NCXx5sOb
-         TB0XiHfqxiu+cF3neojmVNwKOePuM8STsGpijNYw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRCK6-1mvCT63Z3c-00NEII; Mon, 17
- Jan 2022 21:18:08 +0100
-Message-ID: <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
-Date:   Mon, 17 Jan 2022 21:17:04 +0100
+        id S243041AbiAQU0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241503AbiAQU0R (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 15:26:17 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F340C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:26:17 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id v2so7501536ply.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:26:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dX5BDdPmD+NPI6WaR8s/OfKSkKWqboFHvMNVeJ4mtho=;
+        b=BJHo0ew6lxRnbn+aN6pFlwQsdGTqnRA9NKFS6jblkxWxLayQuvtV333n7ZthAwgJnT
+         AXrDQvKS4+fj/sL/B1JrAkbxVoYUSWv+dNmoQiZ9CkAKJHZZE6iUXL3wElW5o66iMzyX
+         SDBnTISDGMd/utWP1KY0CK/G50WGQsCA/fUB6O5pCq9wE7v/zIMcsS0ldOfTGmslCNb/
+         gy0EWqOKlY/5t5UaXqYbhiqefybF7MLzq2GBsWuOb9+nYnudDoiw1o9Qo8Zw5q9OrmtP
+         lG2fGZEc6quxHMcBFNv5LsB1MZLspOb7joO3eS/Ta/sl/aQKXuffCQUAxFRFicczlZBU
+         /B7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dX5BDdPmD+NPI6WaR8s/OfKSkKWqboFHvMNVeJ4mtho=;
+        b=ZHM6L6N8khTIUN6WkN+Zmu30Ga7jo0liJrSWicO5T646ZGa7pjLZTt1pHUArPEYwlh
+         R3FDIxzSb/gKMu3xqenVUrkbohGTL8HahTpDMm1o/dM6VwUXMP1iYp16RY45zW3uxbnO
+         v5U44utXKfnnPnY67sar9dWx7QMv1HE48xgoCRdCaIjlYV2xVUSTu1XKRmyr2+cvH3oy
+         LSjFhIUYk2+RWjHjyfP+8X1XkqFW5lEyPM+/8hjAjHRLsxBKbPnQs3LlMTn1X4oVgHmR
+         rC3qlJ0VmF14OEv+/da0rMJ8P0aUw8zFcDfDzh8SXjxPGLvr5EhtHD46w/TPsLQCnY1J
+         2SVQ==
+X-Gm-Message-State: AOAM5332jIfgdgJSiaa6WKsW7+T0B6W3PSluJtWC68rnxME7XWjAAFNg
+        97e6dlF245v4ijYl4UwI200Sj2vvuOVltzK8/EewTA==
+X-Google-Smtp-Source: ABdhPJzs4NFch1IbJoePzGpRGSPF5a/BDJH4NeuYNKzRO9JLl6Xyd9LRCb0ktA169IQmhMKLm8A1K6VtC3RjJ2m+I+8=
+X-Received: by 2002:a17:902:b947:b0:14a:a6aa:4fa6 with SMTP id
+ h7-20020a170902b94700b0014aa6aa4fa6mr10975861pls.149.1642451176378; Mon, 17
+ Jan 2022 12:26:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
+ <20220111201722.327219-18-krzysztof.kozlowski@canonical.com>
+ <CACRpkdYTXSOW+sOX3wVtF4jj6xm0jr-F3HKQPGHOdAVjbasP3A@mail.gmail.com>
+ <5047da7c-d3a6-5472-b0ca-7ed3dbe8a5fe@canonical.com> <CACRpkdbhmJ91EW395C5F2WYjWJQdJ-SBHaDm7XnQsxMuyoMmLg@mail.gmail.com>
+ <77bd8fa4-2b35-352c-da07-ef91fcbed454@canonical.com>
+In-Reply-To: <77bd8fa4-2b35-352c-da07-ef91fcbed454@canonical.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Mon, 17 Jan 2022 12:26:04 -0800
+Message-ID: <CAOesGMg2eH1B94h+etPBDW3B1LMeHBytz0v2e0GfVRDv8gU0YA@mail.gmail.com>
+Subject: Re: [PATCH v2 24/28] dt-bindings: pinctrl: samsung: convert to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sven Schnelle <svens@stackframe.org>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
- <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2RXldoJ1Jt10As/nLASf/6Yb4wGfmMbg62AH4oKNO4dup/n8ErT
- Q6ybpEaOL44rz7KK4PYJHSg1qPtP/AA5xwkEIOOfv8Ua3+18/FlY0hRMtlSIDwgUSUdxPC3
- +S0FVQkQNSwLeI6RAT49E8T9Rm4RHBiALlZc/ZVKrkskMKx98Yvd+bnEj8VKLAggojWXdKZ
- Ig2WZCYUMB0fBafcVAASg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lADmUlNvY0w=:JUW1XobJcedqZV8XakPpb8
- OmMfJPjR+nD3POVYV8BQVpuqBkESti3S/bGgmXz9CvRXPJz5f+e5CESenn5EDkgu6yTUi+79Z
- erCgPIsPJcXwmoblI7LKRj/VzsFiM8WZ4aAjrK+cUAJ+TxDDfvZ0iKZlQ0eq6zZwk8NuaGEvS
- JSfEjdGA7uN55efjFtA3wP3Y2ACC9i7idn+6rNg+smUPsOGSyNx9ZA11mDSVG521U9Wt4qJ9q
- 22Yzcvi69PpPEfAZbs6AKw1Xg39NwSiVHlMV7oftt4kb9eu1AVsiovyTHlALG5XdtwPgmtNnu
- 5MOPfJBSOnKDcxk1jDlsfORf/cRVtvAmbvtFRA/IRgzRtHa+vuJ7TkOAjJOMJ+BVn5VMz9z6t
- FWP3VnZAsN6CBH/9rPN5HewCxbprBRiKqCSaUpkMCvoM+DmBxlTVfCcWjx0lqMBMnqovTHjlz
- f+EcaEnUocKuaWYEnKKCIfZGH7Ef3icaZwqX0UKKeU2K5ykjwpMaBI9A2yGrv9dgLYBK6Px4d
- ZfyvvhYExJKTQIGnnGy1VD/xjZepHkb0I03iRGA+lfz0YFEqbU0QuyteyJdfVmb42JfKjLpVH
- 1fEWAlvwyx3jbZtHTBsXGzb+HOaR97CTo2PEKoERPxm2FFQjmPuJll+SL6UQcV+lsaUBr8RFm
- ld59fwSCLorZbDhPYKtHR2DEIlVcfVhxLRDYBYlnxXrfqGQFqAceNqUJrisSARZjiWNjj6KHd
- 7GU9ytV6xS4OEaGq645gradXK8bzIP8k6Psp7/bqnkuhPcFlMPrQI6Rn6uLyfRI8CqIVM0YWX
- 7UlzfIayh//w/kG1w0pBc7jtHlgaPg/MJ0unz1ND6i5zEibRZEX1bffSLIkjREX/5WrMnt4nP
- kHty+JYCjeMMg3MAakQKVMMsYB1ftKKINEm+DoGxHeQgvI0G39ijvsL6+sNyNfqmsfYfNpZ28
- 5531Tga5Olesey0ZRFVbJSYoUmVa8o4fbjW+sEuykHzXqaqVOxi7xzoJj6uiEbcIl8fgbxS7S
- /tTaqpyfCyndE5OPzmFlG/KdPQlq0fI+GQorwSfI443/SEn5KTJNcJ0mSG2k3Qx5VnwxiKTO7
- GEPLn8KOuRV/jY=
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Alim Akhtar <alim.akhtar@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 16:03, Daniel Vetter wrote:
-> On Mon, Jan 17, 2022 at 3:48 PM Helge Deller <deller@gmx.de> wrote:
->>
->> On 1/17/22 15:10, Geert Uytterhoeven wrote:
->>> Hi Thomas,
->>>
->>> On Mon, Jan 17, 2022 at 2:51 PM Thomas Zimmermann <tzimmermann@suse.de=
-> wrote:
->>>> Am 17.01.22 um 14:29 schrieb Geert Uytterhoeven:
->>>>> On Mon, Jan 17, 2022 at 1:57 PM Gerd Hoffmann <kraxel@redhat.com> wr=
-ote:
->>>>>>> b) to include new drivers (for old hardware) if they arrive (proba=
-bly happens rarely but there can be).
->>>>>>>     I know of at least one driver which won't be able to support D=
-RM....
->>>>>>
->>>>>> Hmm?  I seriously doubt that.  There is always the option to use a
->>>>>> shadow framebuffer, then convert from standard drm formats to whate=
-ver
->>>>>> esoteric pixel format your hardware expects.
->>>>>>
->>>>>> Been there, done that.  Have a look at the cirrus driver.  The phys=
-ical
->>>>>> hardware was designed in the early 90-ies, almost 30 years ago.  Th=
-ese
->>>>>> days it exists in virtual form only (qemu emulates it).  Thanks to =
-the
->>>>>> drm driver it runs wayland just fine even though it has a bunch of
->>>>>> constrains dictated by the hardware design.
->>>>>
->>>>> The Cirrus DRM driver supports TrueColor (RGB565/888 and ARGB8888)
->>>>> modes only.  The Cirrus fbdev driver also supports mochrome and 256
->>>>> color modes.
->>>>>
->>>>> There exist some DRM drivers that do support DRM_FORMAT_C8, but none=
- of
->>>>> the "tiny" ones do. Same for DRM_FORMAT_RGB{332,233}.  Using a shado=
-w
->>>>> frame buffer to convert from truecolor to 256 colors would be doable=
-,
->>>>> but would give bad results. And what about less colors?
->>>>> Adding support for e.g. DRM_FORMAT_C4 is not straight-forward, as
->>>>> the DRM core assumes in many places that a pixel is at least 1 byte,
->>>>> and would crash otherwise (yes I tried).  Other modes needed are
->>>>> DRM_FORMAT_Y4 and DRM_FORMAT_{BW,WB} (monochrome).
->>>>
->>>> We export XRGB32 from each driver, because userspace expects it. But
->>>> that is not a hard requirement. Userspace can use any format. It's ju=
-st
->>>> that no one seems to have any use cases so far, so no work has been
->>>> done. Think of XRGB32 as a fallback.
->>>
->>> Using an XRGB32 intermediate would kill the user experience on old
->>> machines, due to both increased memory usage and copy overhead.
->>>
->>>> Personally, I'd much appreciate if userspace would support more of th=
-e
->>>> native formats and not rely on XRGB32.
->>>
->>> Supporting monochrome, 16 colors, and 256 colors would be nice.
->>
->> From this conversation it seems DRM completely lacks backwards compatib=
-ility,
->> including a missing 2D bitblt copy.
->> Isn't that all what's needed and then migrating existing drivers would
->> be easy ?
+On Sun, Jan 16, 2022 at 11:45 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 >
-> Not sure who you talked to, but we have drivers with fbdev bitblt
-> accel (well, in some cases had, because driver maintainers decided
-> it's just not worth it and ripped it out again or never merged it).
-> Also the other discussions about some low-bit formats is pretty much
-> just a question of extending a few enums and wiring through the fbdev
-> emulation layer.
-
-No, you got me wrong.
-
-I'm not talking about making other low-bit formats available to userspace.
-
-I'm talking about running the framebuffer natively on a lower-bit format
-and to speed up text emulation (fbcon) with help of on-chip 2D bitblt.
-So, similiar as it was done in fbdev for non-DRM graphic cards before two
-patches were applied and which disabled this speedup for *all* existing fb=
-dev drivers:
-b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, part =
-1 (from TODO list)"
-39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
-
-Esp. the commit message of patch 39aead8373b3 completely
-ignored the acceleration of the fbdev drivers.
-
-Please correct me if I'm wrong, but text-console emulation/scrolling on DR=
-M is
-currently unaccelerated and bound to Truecolour modes only, which is proba=
-bly
-one of the main reasons why most fbdev drivers can't be ported to DRM...
-
-Helge
-
-
-
-> So the things brought up in this thread thus far are
-> actually the fairly easy items, which should take at most a handful of
-> patches to rectify. There's much more nastier issues in fbdev, which
-> will take serious amounts of development time to fix.
+> On 16/01/2022 22:38, Linus Walleij wrote:
+> > On Sun, Jan 16, 2022 at 6:10 PM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@canonical.com> wrote:
+> >
+> >> Anyway DTS and dtschema will have to wait for one release, because they
+> >> depend on samsung pinctrl driver change (patch #2).
+> >
+> > What about I put that (and maybe this schema) on an immutable
+> > branch so you can pull the commit into your for-arm-soc branch and
+> > put the DTS changes on top?
 >
-> Unfortunately in the past 5+ years absolutely no one stepped up with
-> actual patches, which is why fbdev was marked as orphaned in
-> MAINTAINERS.
-> -Daniel
+> That would be a solution if not a policy for arm-soc of keeping DTS
+> separate. Arnd and Olof since some time are not happy when DTS branch
+> receives any driver updates.
 >
->>
->> Helge
->>
->>
->>>>> This not only to support "old" hardware, but also modern small OLED
->>>>> and e-ink displays.
->>>>
->>>> There's a DRM driver for Repaper e-Ink displays. So it seems doable a=
-t
->>>> least.
->>>
->>> Which uses an DRM_FORMAT_XRGB8888 intermediate, and
->>> drm_fb_xrgb8888_to_gray8() and repaper_gray8_to_mono_reversed()
->>> to convert from truecolor to monochrome.  I guess that would work,
->>> as this is a slow e-ink display.  Have fun as a text console ;-)
->>>
->>> Gr{oetje,eeting}s,
->>>
->>>                         Geert
->>>
->>> --
->>> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux=
--m68k.org
->>>
->>> In personal conversations with technical people, I call myself a hacke=
-r. But
->>> when I'm talking to journalists I just say "programmer" or something l=
-ike that.
->>>                                 -- Linus Torvalds
->>>
->>
+> Arnd, Olof,
+> This is a set of dtschema conversion + DTS alignment with new schema:
+> 1. Driver change necessary to accept new DTS (driver depends on node
+> names and this has to change because of dtschema),
+> 2. DTS commits depending on above, which convert node name to new format,
+> 3. Finally dtschema requiring new naming of the GPIO nodes.
 >
+> If I got correctly, the policy of not mixing drivers and DTS requires
+> that #2 above (DTS changes) will wait for one more release. During the
+> time, if dtschema (#3 above) is applied, there will be new warnings
+> about non-compliant DTS.
 >
+> Do you see any chance of merging driver + DTS + dtschema via same tree
+> in same release?
 
+Our general guidance to separate DTS and driver changes is to avoid
+large entangled changes between the two, and to discourage a developer
+mentality of "the implementation is the binding".
+
+I think this is a good example of when it makes sense to bring in what
+is a fairly small and clean driver change to deal with this. So the
+right answer here is to stage such a stable branch and merge into both
+arm-soc and the pinctrl subsystem trees as proposed.
+
+
+-Olof

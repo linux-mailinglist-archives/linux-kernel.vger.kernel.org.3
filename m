@@ -2,234 +2,553 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C0C48FFDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F8648FFDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 02:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbiAQBNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 20:13:30 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:40698 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233958AbiAQBN3 (ORCPT
+        id S236695AbiAQBO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 20:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233958AbiAQBO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 20:13:29 -0500
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20GBe11i002821;
-        Mon, 17 Jan 2022 01:12:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=VVDSRRMRfjTKLSkWLYSSTv1aQavS6eae1Rw3P0O0300=;
- b=UzeQ7vLwTqat7ZVxWG5+wneUxq+Bip588dah87asFNmFeRfr1m3jDyMGep70kUqmBi7E
- avKw5JiDTiw8THphZvTQ6Iq59st6mMvo52uJL1rMps4yx5iRTjKho0TZQzpix3c3FrCS
- lghJi9zPsqrMtFtkKC+8LkcgF378Gy3WSJL0gmynWE9AU9oHDYyl88aBK1e+NozT0QKc
- 7NWN0ZpkZOpKJEd8Q0/sJMnqMROqwi5hxZhAxIezFeDF5saGnVCbacu1JazfPNppi6W1
- z7sE6qEPQJGspu83SACFpDPvaDpJ6sYRPvHcNEzeLYUMmRzUcPG0Gc7krXYUOlMcFETu eg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dkmv228r4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jan 2022 01:12:42 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20H1B1aW118334;
-        Mon, 17 Jan 2022 01:12:41 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-        by aserp3030.oracle.com with ESMTP id 3dkmaa1jtx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jan 2022 01:12:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SPfP5DXR/F2anK+A7vCncXchkyQAt5wKfr5iccb7RjBRgLKvH3qJKk6iW0qjap7a3bemIQzagsCf5hcASrDeNuStRJcvvDkFFZ9sHkPaO7PE7M4l5Xt5K8HEAus60Xlm6jakCWvAGuSjSR6pSsGeTRbWgwPJzfqQEhypMYlPw+BDlrUl5GJPzrfzRdSRTg4iYgjgoGHW+KCNGI4itMOI3gz7hArc38qKJhvK4rFfrHsbt+g8fJxWuZ5ANwn5gVHOXHBwlQ+ndZR17rX2eOsXzbIAcomUdgI6FBThSza5eO1zs5lzYkx8ive+QaBxB1RzTG/ZEQW6t508P2ApBj9SJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VVDSRRMRfjTKLSkWLYSSTv1aQavS6eae1Rw3P0O0300=;
- b=QwagfoodRd8vf7MNR2g5Xna+yNDMoW5T8nRYkmCHb9D08gYwAz7KXbqECryRrnCU9ec5/mAqP2u2ySw3F1MZ/UcEQaooZEGPTjz0n76p5VL0PBijhwkcOYTwMQZhfsF63ingrvj1GPm5IDE9ulfAYt+L/FyVz/SlBJ4Qt7wqy7GCdb68gHoHC2gVDB2EfVPAh7szKLZHQ0eYwrka6NDGt15/JmlTj7gtBGnwQkVfn1JFWfvfwUXxujXqsDQcOb+cDOWAKDg7aL3D8EtyLRc4Z0RvY204nBFFiuzPS5xuZxPYA7A0+Rp6lXrYe+DOmOkRwiDr8qD/1JDyU9XdR9rbVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sun, 16 Jan 2022 20:14:57 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C54EC06161C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:14:57 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id u3so7999499qku.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 17:14:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VVDSRRMRfjTKLSkWLYSSTv1aQavS6eae1Rw3P0O0300=;
- b=jm27w2kY9AcJUmLR1I0BXHVIRATY2if2FqkQNSLYwK99p0nu+d19U5K39q71U1p5de/koTnxqAVd7TUMD5C3c9ZpSUbtN5EvWg4nKpk1YKOKEE6B8dKR+85fxL8tiDj9n9HuhUdvMK7k2lgXmXrNmjBRse+vWKrmk+WzU7WpqUY=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by MWHPR10MB1406.namprd10.prod.outlook.com (2603:10b6:300:1d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Mon, 17 Jan
- 2022 01:12:39 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::3857:3a25:3444:fdd3]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::3857:3a25:3444:fdd3%5]) with mapi id 15.20.4888.013; Mon, 17 Jan 2022
- 01:12:39 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-Subject: Re: [PATCH v4 16/66] mm: Remove rb tree.
-Thread-Topic: [PATCH v4 16/66] mm: Remove rb tree.
-Thread-Index: AQHX5r/pFs5QB33Z/Eer0iQ/ZM5uPqxfiyQAgAcl9oA=
-Date:   Mon, 17 Jan 2022 01:12:39 +0000
-Message-ID: <20220117011231.rkcdvkfqozdaexcg@revolver>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-17-Liam.Howlett@oracle.com>
- <77fc73e7-f6c4-27ea-66ef-63f61e0929eb@suse.cz>
-In-Reply-To: <77fc73e7-f6c4-27ea-66ef-63f61e0929eb@suse.cz>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f975e45c-929e-479d-53b3-08d9d9567489
-x-ms-traffictypediagnostic: MWHPR10MB1406:EE_
-x-microsoft-antispam-prvs: <MWHPR10MB14066AD4C172CB2CE34841D6FD579@MWHPR10MB1406.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cWcFIDXbXk1urZlNQZmPaUcFaK1qkhAwdAnKLf6iR7X3j2Q3pzG6FjnWABFUx6TL+EjU+9/eJD8+M2JDSobG+6Yi4eDEPRHgfMEFkkn4cI51aJtUYUs+b+T3iZx2BOpDYgnfD/PcFGoLZxaOiPWtgKcd/EFFerDnbt67FXSFEZvimVifY+VUqWbyX49ZV8x8I4XLNcowgeFenDF6pLelHry+UWAwwW6S+OZaQM+X2/GPDKuUmvKsad0i18KTqmNqThd8s6GgEHiIa90iL1OIHnUVP/SEFvN7UCrA/dgjpkwvQrlQ/Qw+GhTfYDcioV9yj+fMGXE9xYHv2Haokp/F6mFLnDfC9JeAr4OYe+lUL905+zKfgroML7Dt5P7ZxE2+COAZ0uwIJyGtfhMPgrdbO/9V40m6zZiVnhBQzDfEpsWhnpJe/x77Y12DHelr8B6Z06KlHXsOHbfPub45m0yn7EalmJg+5CIuag18wgI/UBlfyCfuJyVqA77OE6gBWan1SoKg4hXEnedSn3j8yfS6CpKbloFBokWRmMiiiDP01E8ERZOyQesODDC7H3DiWxNxyI/WFiO7F1OeBypB8FF/9Wfss5nL9R+FDM4na651gyfeqtIhJN8YHbSgvL9kK1ugYDdhLMzplJld8sjy5IJBDkwngLf44xXWhmShhrwaSPC+d8Tij0qQ7+onDuWNZbn2h6ED4ryXdrVq4nJyblHrSQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(9686003)(316002)(66556008)(54906003)(5660300002)(122000001)(508600001)(66446008)(4326008)(6512007)(44832011)(6486002)(186003)(66476007)(71200400001)(66946007)(1076003)(38070700005)(8936002)(2906002)(86362001)(53546011)(91956017)(6506007)(6916009)(76116006)(3716004)(83380400001)(26005)(33716001)(38100700002)(64756008)(7416002)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oBj8tr2zOFFb4wd9f/4fiY+kleWlX2nf7Vt9XmHRUh9zLyiJlGaag/+k3jrz?=
- =?us-ascii?Q?JOi9qTnv/U2RFdFICyKrzt+L7RAqPQiR1oW4nmAm+9FHk1trnXPNsfm8rCeW?=
- =?us-ascii?Q?3hoVUqFXGRvKv4vAFEi5Hh1PIwsM0v7Hv1sjrjJlwjCg5DffY2DNRCbd6hoD?=
- =?us-ascii?Q?oat7/Z+EMOCsfV042V4dsUBYHdxcXIR+Pf5uODWEdiYp0xh1pOSHwsHhKyG3?=
- =?us-ascii?Q?sPmRpaSC2KvFJEuYPIl5tLFPrj9VeYN8Qp+0/GuDiUC94yX/I13l8DTF3AEL?=
- =?us-ascii?Q?FrOZWPpnbMXuPI3EYoAfkgEOOg+JOZV3qo1n5KYHhj/ABjNvknIWhxH7bf6/?=
- =?us-ascii?Q?+quiO5zdJXHeORP2YBlbyWcitt2p/gpb263Ug00eYmnesVdiOwfFg7v6u3yz?=
- =?us-ascii?Q?e5l7UGbqdH5RlLchazMoOyt8SeSoRe5Zmj7G2zEKrpmOZPO1wAhKlvmvV1YE?=
- =?us-ascii?Q?ATTlYu+k2rEllcSStKMEzhH9b6FpvSLnr0yNyzC1jCj6i5Wevs3sllAkz6dY?=
- =?us-ascii?Q?9bj0sVPHR/wdygOzGQEee70zIA4u16SahuunGvFPejrE1Il+IHyH+/NCNaeO?=
- =?us-ascii?Q?aSkRK/Nvfwj+9tuDd/f9U6GgcVVtTCC88ael2ZxppSnx9SKU4QdZBRPVv7Jd?=
- =?us-ascii?Q?s7Ry1RZCTypuYVjjOUXyK3Ddm7qY2FPl+kpTnsGuVX08a8UlwjTaIAEtNgPQ?=
- =?us-ascii?Q?l5djgBarP9ZlLwahSl4uFAE/nNKqkbSM/qu6K50m9SaTT7BZUwsfePh+PwC8?=
- =?us-ascii?Q?kJ52Ce38BGlm+ey57wnhYL0X3H+e9kiOA1fO756Ht1IjKClEooNPbuFmFoja?=
- =?us-ascii?Q?HcqJkKBuxksaQsV0b4BJmJX35OSAsFFHayMSWzAeVeExXNyNQIdkJHJfaUWM?=
- =?us-ascii?Q?oRkEfKjL2A84iM3nCWbY8GGIMMvwLmFpbwuWou8WKnuyLRIWHjpsY40hSsG2?=
- =?us-ascii?Q?auibW14Ww79hnqtHGapEAort4j2QJYBerlNnx+FwjtLC9MrT2IXKvD2yV+F1?=
- =?us-ascii?Q?aRGeQbdQctpu7X7SH02KhL75vDu9DGsuLBbque2aSjy8au6bXq0/fyaiC1d5?=
- =?us-ascii?Q?JOwNQfWH7Z/3ix6C6UKSgX6/yJYPzYItVuVRVy/et2qG697Bl40foPzEnlbI?=
- =?us-ascii?Q?yUPezipUlgpJBKgvafBS01FFvn9UeKirmE2ZTqSNpSu2uAA4uNAbmxqUkHZh?=
- =?us-ascii?Q?UXzDVqptP1VTRsbIRsYucCuu3xcKjPFjcXY/IXbAnEds6ko9ozcmYf0lq58R?=
- =?us-ascii?Q?fF9UAMhCx1I0Xw2DnpUTP8SHElJfdpl8Q22iLsHlfQ9GrMhQQF7WmuX6T7rt?=
- =?us-ascii?Q?sS9zD+DAMnjD7Wo0oImEXRcc2+SGKd385DC1i11vTO8Mp4v3gPZY4mxKGbw9?=
- =?us-ascii?Q?7KzbM/o3S2NjkQo+RHVOJbRGprnZ8qLJ91bks4r8sGveIQKdB8tLuCxogrGI?=
- =?us-ascii?Q?6Wm6drkA9LTQUc1zUEd/vp00aG4c4L5D7pWq1aI0uILsYlyFcTBcu7MKLw7/?=
- =?us-ascii?Q?0pGG51udYtqPmIh9y7K+FPtP7tkI8nzKki8ezl5bK6B0mayLeUmnBV4QbC2S?=
- =?us-ascii?Q?G+5ir2slrzQurjZs0BgBiLy+cHQiKTEjbntiVPM06mDHVJSCAN8BRwXOKO3F?=
- =?us-ascii?Q?Kud6WevhJm4KK0ih4C27mTQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E1EBE7240A5D364C9CD2C1D6632604EB@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=andrew.cmu.edu; s=google-2021;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=K6Eoc7SHg6GXRpqRVCIjFM1kncjBJ/efZihL9Xup8bE=;
+        b=eR7nN0GZ3uc8a0lXI4mXCrabLyRkqejRFRpa8K0pFMZsBnNTrLbUCeOJJvTjdin8df
+         IO5lH5QVuloUJumZgnRXI8R9sRnMrWxoMjMO0JrF68UwaCjLcCuC5PXA77AEPcqRNfnp
+         NfU16ghBuggEyv7sHsGKbdnASihuAybaG20e4oE+57cRQXSMS4oqBa+UjWwqP1VBXFMI
+         OZ251EwtUT9BjH38eGJ/7/HoD/UazoyyMclWvhe2Tgkr4lQaVPyt1gjZExSxP0DDUM80
+         OMVuzlhKARKFWYpi46hhf0+zKvxPnK2oF5LLGdq9hc/VztfnQMpRj+kzpVKzX1p7kNFa
+         JVqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K6Eoc7SHg6GXRpqRVCIjFM1kncjBJ/efZihL9Xup8bE=;
+        b=4cQxve8csErN1Bmaq3JreWlu7TX9dEehhm2giZpv/w4bk17/7GJLXIgwtlvtb54mP5
+         sCjG1lOC7aD+PQ/tY+/XLXP55cdyCw0/HzPt2YP4VrIpWar5Op8jwtbfKy3cwL59QtIk
+         TqkNvYoiV48s8QnDIYMcsjBMQ5joiie1p4ObxTU2gzP5SxPChXCVVN7NqYFmkV4MTY1C
+         qPR1agTNgi9vR34vK+EBk2Jw9bQG4oNkYTI1raJY/DJfvvc/howEGcunmRU+4pOjhX9e
+         u9Y7lnTK1ZeWKkfWcoErBo7EKmqtCLqG6XuKvrx/Q8HOCiH9Qr3aB1sOOfZ0oGhsMt3v
+         EPyQ==
+X-Gm-Message-State: AOAM531RX8N/T2FeFluzvGxM2DSCUeOLpyAG2M/8m36mf+m7/aLquoK3
+        xuwYPBUEkL9ktRgBCk5ZBfpXyQ==
+X-Google-Smtp-Source: ABdhPJxE6fP16gG5EwuvrEri77geVtSPdEcMP7JZB89Ki1FgarDLWjUEgX6krosQAyHad2CQ5PsFYg==
+X-Received: by 2002:a05:620a:205a:: with SMTP id d26mr13293737qka.54.1642382095876;
+        Sun, 16 Jan 2022 17:14:55 -0800 (PST)
+Received: from ?IPV6:2601:547:900:1070:90da:bfc1:ba35:80f5? ([2601:547:900:1070:90da:bfc1:ba35:80f5])
+        by smtp.gmail.com with ESMTPSA id t204sm7639348qka.127.2022.01.16.17.14.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 17:14:55 -0800 (PST)
+Message-ID: <3d8d8dd7-deb4-f5c4-c7c5-e1d5972c71f4@andrew.cmu.edu>
+Date:   Sun, 16 Jan 2022 20:14:53 -0500
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f975e45c-929e-479d-53b3-08d9d9567489
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2022 01:12:39.4426
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u1DX2TdBA5Vafn/5k/kS/waIVoqOtLDLdY6tWMcPLsDX1UDOt5QYQLyxl7mRr7hYIikvVCrYCwOMsuzja9zyLw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1406
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10229 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 suspectscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201170006
-X-Proofpoint-GUID: VD5Rq172KdK1EVoRFY8Q6A3v4i-kpFC5
-X-Proofpoint-ORIG-GUID: VD5Rq172KdK1EVoRFY8Q6A3v4i-kpFC5
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
+Content-Language: en-US
+To:     Sohil Mehta <sohil.mehta@intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        seth@cmu.edu, x86@kernel.org
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <9b5a8cf9-5ce6-c6ba-951f-757135d74492@andrew.cmu.edu>
+ <7c1038de-0bae-3b87-d4e4-8a30a910ebdd@intel.com>
+From:   Chrisma Pakha <cpakha@andrew.cmu.edu>
+In-Reply-To: <7c1038de-0bae-3b87-d4e4-8a30a910ebdd@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Vlastimil Babka <vbabka@suse.cz> [220112 07:03]:
-> On 12/1/21 15:29, Liam Howlett wrote:
-> > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> >=20
-> > Remove the RB tree and start using the maple tree for vm_area_struct
-> > tracking.
-> >=20
-> > Drop validate_mm() calls in expand_upwards() and expand_downwards() as
-> > the lock is not held.
-> >=20
-> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
->=20
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
->=20
-> > ---
-> >  arch/x86/kernel/tboot.c    |   1 -
-> >  drivers/firmware/efi/efi.c |   1 -
-> >  include/linux/mm.h         |   2 -
-> >  include/linux/mm_types.h   |  14 --
-> >  kernel/fork.c              |   8 -
-> >  mm/init-mm.c               |   2 -
-> >  mm/mmap.c                  | 496 ++++++++-----------------------------
-> >  mm/nommu.c                 |  88 ++-----
-> >  mm/util.c                  |   8 +
-> >  9 files changed, 136 insertions(+), 484 deletions(-)
->=20
-> Nice stats.
+Hi Sohil,
 
-Thanks.
+Thank you for your reply and the clarification.
 
->=20
-> Wanted to suggest splitting out the swith to range_has_overlap() but I th=
-ink
-> I see how it's not feasible.
->=20
-> > diff --git a/mm/util.c b/mm/util.c
-> > index e58151a61255..ab02382c2d57 100644
-> > --- a/mm/util.c
-> > +++ b/mm/util.c
-> > @@ -287,6 +287,8 @@ void __vma_link_list(struct mm_struct *mm, struct v=
-m_area_struct *vma,
-> >  	vma->vm_next =3D next;
-> >  	if (next)
-> >  		next->vm_prev =3D vma;
-> > +	else
-> > +		mm->highest_vm_end =3D vm_end_gap(vma);
-> >  }
-> > =20
-> >  void __vma_unlink_list(struct mm_struct *mm, struct vm_area_struct *vm=
-a)
-> > @@ -301,6 +303,12 @@ void __vma_unlink_list(struct mm_struct *mm, struc=
-t vm_area_struct *vma)
-> >  		mm->mmap =3D next;
-> >  	if (next)
-> >  		next->vm_prev =3D prev;
-> > +	else {
->=20
-> Nit: style suggests that once else is { } block then if block should be t=
-oo,
-> even though it remains a single line.
+>>
+>> We have been exploring how user-level interrupts (UIs) can be used to
+>> improve performance and programmability in several different areas:
+>> e.g., parallel programming, memory management, I/O, and floating-point
+>> libraries.
+>
+> Can you please share more details on this? It would really help 
+> improve the API design.
+>
+Of course! Below we describe a few use cases for both user-level 
+interrupts (UIs) and user-level exceptions (UEs). We realize that the 
+current proposal is targeted towards UIs, but we also describe some UEs 
+use cases because we believe handling exceptions without going through 
+the kernel may provide even more of a benefit than UIs. We hope these 
+use cases can influence the direction of the API so that it can be made 
+forward compatible for future hardware revisions.
 
-Ack, I will fix this.  Although this function is completely dropped
-later in the series.
+To be clear, we distinguish between interrupts (generated from an 
+external source, such as another core or Device) that are most likely 
+imprecise and asynchronous and exceptions (generated by the currently 
+executing program) that need to be precise and synchronous.
 
->=20
-> > +		if (prev)
-> > +			mm->highest_vm_end =3D vm_end_gap(prev);
-> > +		else
-> > +			mm->highest_vm_end =3D 0;
-> > +	}
-> >  }
-> > =20
-> >  /* Check if the vma is being used as a stack by this task */
->=20
-> =
+# UST2UST
+
+A UI is a mechanism to allow two or more threads to communicate with one 
+another asynchronously without requiring the intervention of the kernel 
+or a change in privilege. We believe that having UIs can help integrate 
+the shared memory model and message passing model for multicore 
+processors. This integration makes it easier to build parallel programs, 
+allowing developers to take advantage of both models. The shared memory 
+model provides an easy way to share data between threads, while the 
+message passing model can be used for synchronization between threads.
+
+In the following section, we will describe two use cases for UIs.
+- We show how UIs can be used to improve parallel program performance by 
+reducing the overhead of exposing parallelism.
+- We show how UIs can be used to build efficient active messages.
+
+Both of the use cases we present below require the receiver of a UI to 
+know which thread issued it. At the end of the email we describe how we 
+would implement this using the current API and suggest an alternative, 
+and possibly more streamlined approach.
+
+## Lazy Work Stealing
+
+One of the hurdles in writing parallel programs is ensuring that the 
+cost of parallelizing the code does not become a bottleneck in program 
+performance. Some of these overheads come from unnecessarily exposing 
+too much parallelism, even if all cores are busy. One mechanism to 
+reduce this overhead is to lazily expose parallelism only when it is 
+needed. This can be done through stack unwinding (similar to how 
+Exception Handling works). Whenever a thread (thief) asks for work from 
+another thread (victim), the victim will perform stack unwinding, 
+creating the work for the thief. This approach to lazy thread creation 
+requires some mechanism for the thief to ask for work.
+
+We have implemented a prototype compiler and runtime for this mechanism. 
+Our runtime requires a mechanism for the thief to signal the victim when 
+it needs work. We implement this signaling through polls because the 
+current IPI mechanism is too expensive to use. However, requiring the 
+victim to poll can introduce excessive polling overhead and/or introduce 
+significant latency between the request and the response. The compiler 
+tries to keep the overhead of polling low (<5%) while still ensuring 
+that the latency between a work-stealing request and its response is as 
+low as possible. Currently, we essentially only poll for work requests 
+in the function prologue, keeping the overhead to about 2% of execution 
+time on average. This works well for almost all applications. However, 
+in some applications, this can add 100 of microseconds of latency to the 
+response of a work-stealing request.
+
+One reason we use polling today, instead of the victim just taking work, 
+is that there are points in the program where work-stealing is not 
+allowed. So, in addition to having an inexpensive mechanism to request 
+work, we need an inexpensive method to disallow the requests. IOW, the 
+compiler only inserts polls at points where it is safe to do so. With 
+the UI mechanism in the proposed API, we could signal a work-stealing 
+request with a UST2UST UI and disallow such requests by disabling 
+interrupts. One nice advantage of the current proposal is that disabling 
+interrupts is a *local* operation, making it very inexpensive and not 
+causing any interference with the rest of the threads. In other words, 
+an important benefit of the proposed UI mechanism is that we can ensure 
+atomicity (with respect to work stealing) without having to do any 
+global communication.
+
+## Implementing Active Message
+
+Active messages can efficiently support the message passing parallel 
+programming model. With the proposed API, the UI could signal that an AM 
+is being delivered while shared memory data structures could be used for 
+the payload. As described in the above use case, this would allow 
+receiving threads to provide atomicity by disabling interrupts without 
+any global communication.
+
+Clearly, having a shared address space makes data access and management 
+easier for parallel programming. On the other hand, controlling access 
+to that data can often be cleaner to implement in message passing 
+models. Dogan et al. have shown promising improvements by using explicit 
+messaging hardware to accelerate Machine Learning and Graphs workloads 
+(see [DHAKWETAL17,DAKK19]). Explicit messaging is used as a 
+synchronization mechanism and has better scalability than shared 
+memory-based synchronization. The current proposal would support this 
+model integration with significantly lower overheads and lower latencies 
+compared to what are available on today's machines.
+
+------------------------------------------------------------------------
+# D2UST
+
+Applications that frequently interact with external devices can benefit 
+from UIs. To achieve high performance, conventional IO approaches 
+through the kernel are not appealing as it incurs high overhead. It 
+requires context switching and data transfer from kernel-space to 
+user-space, possibly polluting the cache and TLB. One improvement to 
+bypass the kernel is by pinning pages to specific physical addresses, 
+where these pages act as a buffer between user-space and device. 
+However, since the device cannot directly interrupt the UST, the UST 
+needs to poll to check if the data from the device is available. 
+However, having the UST poll can easily erase any potential performance 
+improvements offered by bypassing the kernel in the first place. 
+Allowing a device to interrupt a UST under the proposed API will 
+eliminate the need to poll and support atomicity as required which could 
+significantly improve application performance.
+
+This would be particularly useful when an application uses a GPU as an 
+accelerator for parallel computation and CPU for serial computation (see 
+[WBSACETAL08]). An example would be K-means. Finding which clusters each 
+point belongs to is computed in the GPU (in parallel), while computing 
+the mean is computed in the CPU (in serial). As this process is 
+iterative, there are multiple computation transitions between the CPU 
+and GPU. Without UIs, the only real option is to poll for GPU task 
+completion, complicating control flow if there is also other work for 
+the CPU thread to do. With UIs, keeping the GPU busy can be handled by 
+the UI handler. The result would be cleaner code and better load 
+balancing. To make this work, the D2UST interrupt will have to ensure 
+that the process that started the task on the GPU is the same one that 
+is currently running. When a different process is running, the interrupt 
+will have to be saved by the kernel so it can be delivered to the UST 
+when is is next scheduled.
+
+------------------------------------------------------------------------
+
+# CPU2UST
+
+Providing a low cost user-level exception mechanism could fundamentally 
+change the approach to implementing many algorithms. Examples range 
+across many common tasks, e.g., checking for valid pointers, 
+preprocessing floating-point data, garbage collection, etc. Today, due 
+to the high cost of exception handling, programmers go to great lengths 
+to ensure that exceptions do not happen. Unfortunately, this leads to 
+more code and often less performance. Below we describe different 
+scenarios where UEs could potentially reduce programming effort and/or 
+improve performance.
+
+## API for CPU2UST
+
+For the examples, below we propose a small modification to the proposed 
+API to support exceptions. We propose that a handler be registered for a 
+particular fault to distinguish the exception type. Potentially, the 
+`flags` argument could hold the `signum`, or a bit in the `flags` 
+argument could indicate that a third parameter was being included with 
+the `signum`. We suggest including `signum` in the current API for 
+future use.
+
+```
+int uintr_register_handler(u64 handler_address, unsigned int flags, int 
+signum);
+```
+
+Since each handler is registered for a particular exception, the handler 
+itself would only have one argument, a pointer to the `__uintr_frame`. 
+In some cases, the handler might need the `error_code` information 
+(e.g., for a page-fault), which could be obtained using a new function, 
+`unsigned long long __get_ue_errorcode(void)`.
+
+```
+__attribute__ ((interrupt))
+void
+handlerFunction (struct __uintr_frame *ui_frame)
+{
+   // Get error code if needed
+   // unsigned long long error_code = __get_ue_errorcode();
+   ...
+}
+```
+
+We envision four ways for the user handler to manipulate the thread's 
+state. Here we assume that a UE is handled by the thread that causes the 
+exception.
+
+1. Continuing the faulting thread of control.
+2. Suspending a faulting thread or continuing another thread in the same 
+process.
+3. Deferring processing of the fault back to the kernel.
+4. Or, finally, terminating the thread of control.
+
+In case 1, where the faulting thread is continued, the handler can 
+simply use the uiret (It could potentially modify the return address on 
+the stack to change where execution continues). For case 2, we do not 
+have a proposed API yet, but potentially some set of functions that 
+extend pthreads might be appropriate. For case 3, the handler would use 
+a trap to signal that the kernel should continue processing the 
+exception. The compiler would have to restore registers appropriately 
+before the trap is executed.
+
+## Binary rewriting
+
+Binary rewriting is a valuable technique for debugging, optimizing, 
+repairing, emulating, and hardening (tightening security) a program 
+[WMUW19]. One implementation of binary rewriting is to replace the 
+probed instructions (instrumentation points) with a redirect instruction 
+(either jump or trap) to the patch instructions. Most developers use 
+jump instructions instead of traps due to their lower cost. However, 
+because instructions have variable encoding lengths, inserting jump 
+instructions requires care, e.g., "instruction punning" [CSDN17] with a 
+combination of padding and eviction [DGR20]. On the other hand, the trap 
+instruction is only a single byte, allowing it to replace any patched 
+instruction. If the trap can be made inexpensive, this would potentially 
+allow a simpler approach to binary rewriting without control flow recovery.
+
+## Binary Emulation for forward/backward compatibility
+
+Some processor families have an all encompassing ISA of which only a 
+subset is implemented in hardware for some instances of the family. 
+Applications built for the processor family either have to be recompiled 
+for each instance or software emulation must handle the unimplemented 
+instructions. If there is a UE for the illegal instruction fault, this 
+can potentially be made inexpensive enough to avoid recompilation. 
+Furthermore, it could be a way to handle legacy code and allow future 
+generations to avoid the older crufty instructions that are no longer 
+commonly used.
+
+## Floating-Point Performance
+
+Today, floating-point algorithms often preprocess the data in order to 
+avoid underflow (or overflow) exceptions. If UEs were low enough cost, 
+it is possible that these time consuming data preparation steps could be 
+removed and only run if an exception was generated. A simple example is 
+the calculation of the Root Mean Square (RMS) of a vector [HFT94,H96]. 
+The common approach to calculating a vector's RMS is to scan the input 
+vector and then potentially scale it to avoid underflow/overflow. For 
+many applications, the common case is that the data does not require 
+rescaling. In those cases, one could calculate the RMS on the unscaled 
+data and only scale it if a UE was generated.
+
+## Memory: garbage collection and watch points
+
+User-level Page Fault exceptions (ULPF) is one essential component for 
+improving the performance of a wide variety of applications. For 
+example, in [AL20], we describe a solution that shows how ULPFs when 
+combined with a mechanism that allows the user a limited ability to 
+change a page's permissions without kernel intervention, can be used to 
+implement an unlimited number of efficient software watchpoints. Our 
+experiments were performed using GEM5, where we made changes to the MMU 
+and TLB. However, Intel's Memory Protection Keys for User (MPK) [MPK17] 
+combined with UE could also potentially do the trick.
+
+Another example of an application that could benefit from ULPF is 
+Concurrent Garbage Collection. Concurrent Garbage collection allows both 
+the program (aka mutator) threads and the collector to run in parallel. 
+To implement concurrent GC, a read barrier or write barrier is often 
+needed (these are GC terms and should not be confused with hardware 
+memory barriers). These barriers ensure that the GC invariants are 
+maintained before a read or write operations. The write barrier prevents 
+the GC from reclaiming a live object that was recently accessed by the 
+mutator (in the case of a concurrent mark-sweep) [BDS91]. The read 
+barrier prevents the mutator from reading stale objects (in the case of 
+concurrent mark-compact) [AL91]. Both read and write barriers can be 
+implemented using ULPF. The programmer can use the permission bit in the 
+user-level page tables to cheaply turn on/off memory protection (e.g., 
+inside the handler).
+
+Belay et al. [BBMTMETAL12] has shown how to implement Boehm GC[BDS91] (a 
+mostly parallel mark-sweep GC used in the Mono project [Mono18] and 
+Objective-C [Objc15]) on their platform, Dune. Dune is a platform that 
+allows user-space direct access to exceptions and privileged hardware 
+features. The results show both speedup and slowdown, where the slowdown 
+is attributed to their platform's inherent overhead. On the other hand, 
+Click et al. [CTW05] and Tene et al. [TIW11] have built a custom system 
+to build a Pauseless GC. This custom system allows fast page fault 
+handling. The mechanism described in [AL20] could be extended to 
+implement a similar approach.
+
+# References
+
+- [AL91] Appel, Andrew W. and Li, Kai, Virtual Memory Primitives for 
+User Programs (1991)
+- [AL20] Li, Qingyang, User Level Page Faults (2020), 
+http://reports-archive.adm.cs.cmu.edu/anon/2020/CMU-CS-20-124.pdf
+- [BBMTMETAL12] Belay, Adam and Bittau, Andrea and Mashtizadeh, Ali and 
+Terei, David and Mazi\`{e}res, David and Kozyrakis, Christos, Dune: Safe 
+User-Level Access to Privileged CPU Features (2012)
+- [BDS91] Boehm, Hans-J. and Demers, Alan J. and Shenker, Scott, Mostly 
+Parallel Garbage Collection (1991)
+- [CSDN17] Chamith, Buddhika and Svensson, Bo Joel and Dalessandro, Luke 
+and Newton, Ryan R., Instruction Punning: Lightweight Instrumentation 
+for X86-64 (2017)
+- [CTW05] Click, Cliff and Tene, Gil and Wolf, Michael, The Pauseless GC 
+Algorithm (2005)
+- [DAKK19] Dogan, Halit and Ahmad, Masab and Kahne, Brian and Khan, 
+Omer, Accelerating Synchronization Using Moving Compute to Data Model at 
+1,000-core Multicore Scale (2019)
+- [DHAKWETAL17] Dogan, Halit and Hijaz, Farrukh and Ahmad, Masab and 
+Kahne, Brian and Wilson, Peter and Khan, Omer, Accelerating Graph and 
+Machine Learning Workloads Using a Shared Memory Multicore Architecture 
+with Auxiliary Support for in-Hardware Explicit Messaging (2017)
+- [DGR20] Duck, Gregory J. and Gao, Xiang and Roychoudhury, Abhik, 
+Binary Rewriting without Control Flow Recovery (2020)
+- [ECGS92] von Eicken, Thorsten and Culler, David E. and Goldstein, Seth 
+Copen and Schauser, Klaus Erik, Active Messages: A Mechanism for 
+Integrated Communication and Computation (1992)
+- [H96] Hauser, John R., Handling Floating-Point Exceptions in Numeric 
+Programs (1996)
+- [HFT94] Hull, T. E. and Fairgrieve, Thomas F. and Tang, Ping-Tak 
+Peter, Implementing Complex Elementary Functions Using Exception 
+Handling (1994)
+- [Mono18] https://www.mono-project.com/docs/advanced/runtime/ (2018)
+- [MPK17] 
+https://www.kernel.org/doc/Documentation/x86/protection-keys.txt (2017)
+- [Objc15] 
+https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/Garbage-Collection.html (2015)
+- [TIW11] Tene, Gil and Iyengar, Balaji and Wolf, Michael, C4: The 
+Continuously Concurrent Compacting Collector (2011)
+- [WBSACETAL08] Wong, Henry and Bracy, Anne and Schuchman, Ethan and 
+Aamodt, Tor M. and Collins, Jamison D. and Wang, Perry H. and Chinya, 
+Gautham and Groen, Ankur Khandelwal and Jiang, Hong and Wang, Hong , 
+Pangaea: A tightly-coupled IA32 heterogeneous chip multiprocessor (2008)
+- [WMUW19] Wenzl, Matthias and Merzdovnik, Georg and Ullrich, Johanna 
+and Weippl, Edgar, From Hack to Elaborate Technique—A Survey on Binary 
+Rewriting (2019)
+
+>> # Preparing for future use cases
+>> If someone could point out an example for Kernel to
+>> user-space thread (K2UST) UI, we would appreciate it.
+>>
+>
+> The idea here is improve the kernel-to-user event notification 
+> latency. Theoretically, this can be useful when the kernel sees event 
+> completion on one cpu but it want to signal (notify) a thread actively 
+> running on some other CPU. The receiver thread can save some cycles by 
+> avoiding ring transitions to receive the event.
+>
+> IO_URING is one of the examples for kernel-to-user event 
+> notifications. We are evaluating whether providing a UINTR based 
+> completion mechanism can have benefit over eventfd based completions. 
+> The benefits in practice are yet to be measured and proven.
+>
+Thank you for the clarification.
+
+- QUESTION: If the processor has D2UST capability, would this allow the 
+device to directly send the interrupt to the target process (the process 
+that initiates the I/O through io_uring) instead of the kernel?
+
+>> In our work, we have also been exploring precise UIs from the
+>> currently running thread.  We call these CPU to UST (CPU2UST) UIs.
+>> For example, a SIGSEGV generated by writing to a read-only page, a
+>> SIGFPE generated by dividing a number by zero.
+>>
+>
+> It is definitely possible in future to delivery CPU events as User 
+> Interrupts. The hardware architecture for this is still being worked 
+> on internally.
+>
+> Though our focus isn't on exceptions being delivered as User 
+> Interrupts. Do you have details on what type of benefit is expected?
+>
+Described in the use-cases we mentioned above.
+
+>> - QUESTION: Is there is a rough draft/plan that we can refer to that 
+>> describes the
+>> current thinking on these three cases.
+>>
+>> - QUESTION: Are there use cases for K2UST, or is K2UST the same as 
+>> CPU2UST?
+>>
+>
+> No, K2UST isn't the same as CPU2UST. We would expect limited benefits 
+> from K2UST but on the other hand CPU2UST can provide significant 
+> speedup since it avoids the kernel completely.
+>
+> Unfortunately, due to the large scope of the feature, the hardware 
+> architecture development is happening in stages. I don't have detailed 
+> plans for each of the sources of User Interrupts.
+>
+> Here is our rough plan:
+>
+> 1. Provide a common infrastructure to receive User Interrupts. This is 
+> independent of the source of the interrupt. The intention here is to 
+> keep the software APIs generic and extendable so that future sources 
+> can be added without causing much disturbance to the older APIs.
+>
+> 2. Introduce various sources of User Interrupts in stages:
+>
+> UST2UST - This RFC. Available in the upcoming Sapphire Rapids processor.
+>
+> K2UST - Also available in upcoming Sapphire Rapids. Working towards 
+> proving the value before sending something out.
+>
+> D2UST - Future processor. Hardware architecture being worked on 
+> internally. Not much to share right now.
+>
+> CPU2UST - Future processor. Hardware architecture being worked on 
+> internally. Not much to share right now.
+
+Thank you for the update, really appreciate it.
+
+
+>
+> The saving and restoring of the registers is done by gcc when the 
+> muintr flag along with the 'interrupt' attribute is used. Applications 
+> can choose to save floating point registers as part of the interrupt 
+> handler as well.
+>
+> To make it easier for applications we are working on implementing a 
+> thin library that can help with some of this common functionality like 
+> saving floating point registers or redirecting to 64 sub-handlers.
+
+- QUESTION: Would this thin library also provide a mechanism to share 
+data between sender and receiver through shared memory (similar to 
+implementing Active message)?
+- QUESTION: Is there a plan in the future to allow data to be 
+transmitted along with the interrupt?
+
+>> # Multi-threaded parallel programming example
+>>
+>> One of the uses for UIs that we have been exploring is combining the
+>> message-passing and shared memory models for parallel programming.  In
+>> our approach, message-passing is used for synchronization and shared
+>> memory for data sharing.  The message passing part of the programming
+>> pattern is based loosely on Active Messages (See ISCA92), where a
+>> particular thread can turn off/on interrupts to ignore incoming
+>> messages so they can execute critical sections without having to
+>> notify any other threads in the system.
+>>
+>
+> This look like a good fit for the User IPI (UST2UST) implementation in 
+> this RFC. Have you had a chance to evaluate the current API design for 
+> this usage?
+
+Our approach requires point-to-point communication to implement the 
+UST2UST use cases described above. From my understanding, the current 
+API requires (n-1)*n descriptors to enable point-to-point communication 
+(assuming a private UITT). Here, each receiver assigns a vector to the 
+UI file descriptor (uifd) and shares it with the appropriate sender. 
+This way, the receivers know the sender based on the vector.
+
+Have other approaches to handling the case where the receiver needs to 
+know the sender's identity been explored? In particular, approaches that 
+do not require n^2 descriptors be created? In the context of the RFC, 
+one possibility we have thought about would be where the sender assigns 
+a vector to uifd (maybe based on its cpuid) and shares this information 
+to all receivers. This would possibly only require n descriptors.
+
+> Also, is any of the above work publicly available?
+
+Not yet. We are still working on it and hope to update you on it.
+
+Best regards,
+Chrisma and Seth
+

@@ -2,112 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ADF4910F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38964910F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 21:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbiAQU1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 15:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiAQU1O (ORCPT
+        id S243119AbiAQU16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 15:27:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56420 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235244AbiAQU15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:27:14 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A80C061574;
-        Mon, 17 Jan 2022 12:27:14 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bu18so39044489lfb.5;
-        Mon, 17 Jan 2022 12:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UvHJLX7IdGzz1pAEtv5SH8by2bDEnibSRbenuruMozU=;
-        b=nD6UwUsWlWWn3+8gIxQfzwEte1mhQ83mOiZ+3vV1xc5HfFrToq2AaEPGH+oXHW836J
-         /N3bzIZ3AFgdrNva4+qXJLPUEkFmr9or/lsmG4lfox1sI7QHUVEN1h510+NXEDLdsMLf
-         J5mk/XXTQHcXCTS/uBriOCXz+qCc1J6PlGnS+1chS8pkOPRC3vDAXF2hva6AFxfpXeZ1
-         cH5Ie0JtAbATuayIBP4uv4+CJPFinP2DLHQgcHmlLfk1MOD+lxp7pRhoSua0Fkx7wS28
-         nbbXTTmnTOEnE+G1l2Del9r6UOH6/0G5IJTbGXBuAamiBDfoz6BvbK6gH+iV8FcogjgX
-         DtpQ==
+        Mon, 17 Jan 2022 15:27:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642451276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7+lYxU3tVqA2sSSaMSI/HeSKHJBhjb7QNjws1JqnTIg=;
+        b=D0xUKo7JW/IUVOKgDRCcP8+8cKPjhXj7hYZtl2Uat8z2XdqAsbta/AqFMkDyz1Ki9Vw8Ps
+        SrGSxVem7ou8YtIVpql6rfWlfzE1blaqBZUgJ9LeiRFmVahtAD/Jrr3htWZk+hNStOIhLI
+        TCn3jyKKXJEFi3Sov7tKfU1uRLSbb9A=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-601-hNBY44byN7m84_IX3zZvTw-1; Mon, 17 Jan 2022 15:27:55 -0500
+X-MC-Unique: hNBY44byN7m84_IX3zZvTw-1
+Received: by mail-qv1-f69.google.com with SMTP id f7-20020a056214076700b0041c20941155so4354608qvz.15
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 12:27:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UvHJLX7IdGzz1pAEtv5SH8by2bDEnibSRbenuruMozU=;
-        b=KwS1hurd1zcYVZs5mOR2/I4wBlBFtButTlolo8soR8uzugOI19KCDwLWG2bmPb1XMY
-         aR5Ei5j1vs2dndrYdMXBM+piBbmlOpG6KZbGdLco1D6jN/e8KMIJduLoCTiF+1Smlegu
-         9xQoUDhm1Y3CZmKg6oXvbcXRslG/AgM7qzVQKNffdk2MRC+sF/2WNaHdIoI4uvm6/bqE
-         /w1zOAWN1OgvZ29x7auTtedSaLu1n4QRGh251QvQ9ExAGSDyNUOvKvgEVchJg/BPlYMc
-         wsuAEH947Df9Nmh6gjGqInjQerPABjAxzwdbqfrjeiDj4SI1zhz6JvvxO+iY/eFGw5d5
-         1/yw==
-X-Gm-Message-State: AOAM533YdzBMoqM79e4Y3t+X1wy8rGLjTM78cr7OkFCg3nl0en6MIOrX
-        blpXAnZJUGknzjydYY4HgYMBY7G5xu66EwPvuzc=
-X-Google-Smtp-Source: ABdhPJzSjj3jXK0JEgHFned13cyE7P7wdzpQ11/VjVcSoX3gLfiDYpRXata+lJUvxbMQTujI2IxyTJXRGpAP6SzaV9E=
-X-Received: by 2002:a05:6512:3090:: with SMTP id z16mr11502446lfd.601.1642451232764;
- Mon, 17 Jan 2022 12:27:12 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7+lYxU3tVqA2sSSaMSI/HeSKHJBhjb7QNjws1JqnTIg=;
+        b=RTY5Afu9pl1S04htd4yIDDci5i58z97/V+lvpzbXViAe0tDqXAvKtCkpFCNdvJgh5b
+         BIYxjefbN2R2peSDAV+yDkxaiURe70H+jjWe/TyXO15q7F5bAPYkBCpgX7AqQiZbFvpc
+         UK4HWDNlfDRV3oAwyl3ttmpo0PCaSJX5PFQKSxRDJt/cOds+ohlUqruwdZtGWTPZu3Ns
+         2kMhhMW4R5wpQeeRL7wZDxEDApfBT5sPFS8jEqM5Y3SHLT8Z+WuISnfhwgUX0tfslopX
+         3GkueqV+Q1WyfcJ5URVgDju++TrAeAJP6Fru+Z/i3EnIKN58tu3UgYrgwTqQQsN5xJ1k
+         DVtA==
+X-Gm-Message-State: AOAM533m/eqr9zV89F30CoASqjL+lOgoWiE47NRk3pddmKO4J2BE1Ud5
+        MG7+POVfvi6HhfuSL6ZdR0aGzemSlqESnz/EEie9cJE4z2rdz/68Eg9GZVihPYRzJF8LvgPHevN
+        Ja0tmOnj8+KSkwxC6imQBqTj8
+X-Received: by 2002:a05:6214:f26:: with SMTP id iw6mr19691040qvb.67.1642451274761;
+        Mon, 17 Jan 2022 12:27:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3XNICSdZNx6ynNTtHC90JL4P9Ip7fLcLdm1kojcwkjIVtaCVBn7LBIowiz1ljZavnrxt2tw==
+X-Received: by 2002:a05:6214:f26:: with SMTP id iw6mr19691027qvb.67.1642451274500;
+        Mon, 17 Jan 2022 12:27:54 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::c])
+        by smtp.gmail.com with ESMTPSA id r2sm2236608qkp.62.2022.01.17.12.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 12:27:53 -0800 (PST)
+Date:   Mon, 17 Jan 2022 12:27:51 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chi-Thanh Hoang <chithanh.hoang@gmail.com>
+Subject: Re: Issue using faddr2line on kernel modules
+Message-ID: <20220117202751.bmwvfsnqxokob6d2@treble>
+References: <CAPDLWs_iSrbXwfKa6CQ0f6H6GE4U88uRhaFgabRjMmSuSEpsiA@mail.gmail.com>
+ <20220117194836.vj2rxr3wocrtdx7k@treble>
 MIME-Version: 1.0
-References: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
-In-Reply-To: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 17 Jan 2022 14:26:58 -0600
-Message-ID: <CAH2r5msz3iUwJVirtSmpZNbxpbtD3A8t7YfeGHDLtko6u4w+-g@mail.gmail.com>
-Subject: Re: [PATCH] cifs: Replace one-element array with flexible-array member
-To:     cgel.zte@gmail.com
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220117194836.vj2rxr3wocrtdx7k@treble>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Doesn't this change the address of the assignment in this line in the
-function (smb2_ioctl_query_info)?
+On Mon, Jan 17, 2022 at 11:48:39AM -0800, Josh Poimboeuf wrote:
+> On Mon, Jan 17, 2022 at 10:27:14AM +0530, Kaiwan N Billimoria wrote:
+> > Hi there,
+> > 
+> > Am researching using the cool faddr2line script to help debug Oops'es
+> > from kernel modules..
+> > I find it works just fine when used against the unstripped vmlinux
+> > with debug symbols.
+> > 
+> > My use case is for a kernel module which Oopses, though. Here's my scenario:
+> > I built a module on a custom debug kernel (5.10.60) with most debug
+> > options enabled...
+> > KASLR is enabled by default as well.
+> > 
+> > A test kernel module Oopses on my x86_64 guest running this kernel with:
+> > RIP: 0010:do_the_work+0x15b/0x174 [oops_tryv2]
+> > 
+> > So, i try this:
+> > 
+> > $ <...>/linux-5.10.60/scripts/faddr2line ./oops_tryv2.ko do_the_work+0x15b/0x174
+> > bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
+> > $
+> > 
+> > (It works fine with addr2line though!).
+> > Now I think I've traced the faddr2line script's failure to locate
+> > anything down to this:
+> > ...
+> > done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 ==
+> > fn { found=1; line    =$0; start=$1; next } found == 1 { found=0;
+> > print line, "0x"$1 } END {if (found == 1) print     line, end; }')
+> > 
+> > The nm output is:
+> > $ nm -n ./oops_tryv2.ko |grep -i do_the_work
+> > 0000000000000000 t do_the_work
+> > $
+> > 
+> > nm shows the text addr as 0x0; this is obviously incorrect (same 0x0
+> > with objdump -d on the module).
+> > Am I missing something? Any suggestions as to what I can try, to get
+> > faddr2line working?
+> 
+> Hi Kaiwan,
+> 
+> Thanks for reporting this issue.  The module text address of 0x0 is not
+> necessarily incorrect, as the address is relative the the module, where
+> all text usually starts at zero.
+> 
+> I was able to recreate this problem using a module which only has a
+> single function in .text.  Does this fix it?
 
-        /* Close */
-        rqst[2].rq_iov = &vars->close_iov[0];
+Actually, that patch has other problems.  Try this one?
 
-On Fri, Jan 14, 2022 at 8:44 AM <cgel.zte@gmail.com> wrote:
->
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
->
-> There is a regular need in the kernel to provide a way to declare having
-> a dynamically sized set of trailing elements in a structure. Kernel code
-> should always use "flexible array members" for these cases. The older
-> style of one-element or zero-length arrays should no longer be used.
-> Reference:
-> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-> ---
->  fs/cifs/smb2ops.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-> index af5d0830bc8a..5c104b2f308a 100644
-> --- a/fs/cifs/smb2ops.c
-> +++ b/fs/cifs/smb2ops.c
-> @@ -1609,10 +1609,10 @@ struct iqi_vars {
->         struct smb_rqst rqst[3];
->         struct kvec rsp_iov[3];
->         struct kvec open_iov[SMB2_CREATE_IOV_SIZE];
-> -       struct kvec qi_iov[1];
-> +       struct kvec qi_iov[];
->         struct kvec io_iov[SMB2_IOCTL_IOV_SIZE];
->         struct kvec si_iov[SMB2_SET_INFO_IOV_SIZE];
-> -       struct kvec close_iov[1];
-> +       struct kvec close_iov[];
->  };
->
->  static int
-> --
-> 2.25.1
->
+----
 
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH] scripts/faddr2line: Only look for text symbols when
+ calculating function size
 
+With the following commit:
+
+  efdb4167e676 ("scripts/faddr2line: Fix "size mismatch" error")
+
+... it was discovered that faddr2line can't just read a function's ELF
+size, because that wouldn't match the kallsyms function size which is
+printed in the stack trace.  The kallsyms size includes any padding
+after the function, whereas the ELF size does not.
+
+So faddr2line has to manually calculate the size of a function similar
+to how kallsyms does.  It does so by starting with a sorted list of
+symbols and subtracting the function address from the subsequent
+symbol's address.
+
+That calculation is broken in the case where the function is the last
+(or only) symbol in the .text section.  The next symbol in the sorted
+list might actually be a data symbol, which can break the function size
+detection:
+
+  $ scripts/faddr2line sound/soundcore.ko sound_devnode+0x5/0x35
+  bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
+
+Similar breakage can occur when reading from a .o file.
+
+Fix it by only looking for text symbols.
+
+Fixes: efdb4167e676 ("scripts/faddr2line: Fix "size mismatch" error")
+Reported-by: Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ scripts/faddr2line | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 6c6439f69a72..2a130134f1e6 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -189,7 +189,7 @@ __faddr2line() {
+ 
+ 		DONE=1
+ 
+-	done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
++	done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$2 !~ /[Tt]/ {next} $3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
+ }
+ 
+ [[ $# -lt 2 ]] && usage
 -- 
-Thanks,
+2.31.1
 
-Steve

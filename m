@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AA3490A16
+	by mail.lfdr.de (Postfix) with ESMTP id BFD2C490A18
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbiAQON2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:13:28 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:54204 "EHLO
+        id S237137AbiAQONa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:13:30 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54212 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235862AbiAQONU (ORCPT
+        with ESMTP id S236238AbiAQONX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:13:20 -0500
+        Mon, 17 Jan 2022 09:13:23 -0500
 Received: from machine.home (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr [86.207.51.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A02A020B9134;
-        Mon, 17 Jan 2022 06:13:18 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A02A020B9134
+        by linux.microsoft.com (Postfix) with ESMTPSA id A6C9920B9132;
+        Mon, 17 Jan 2022 06:13:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A6C9920B9132
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1642428799;
-        bh=kRp9obQlr94SEe0AopnqHM1DyfG1O8JSr4kv+y1GnCk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o0pgi3TdERfvFhFTs2ffaSDuyI0RVhK881vfCqgae/k8fl1k+zqKfbHqlUEOyojFc
-         HCUJd6PqxX3UoFfyyOqdA/VYISdvvyEZurrpvsa46s6jqbbD82B89QzLF042ceie+J
-         d51+OG99mQsJnMLfg7B5e4kOiFRWOaJ/IxA/uFO0=
+        s=default; t=1642428802;
+        bh=g7N7sfYLlsw3Se/LgOETJWnN/nS4JN3uvztiyC1WyDI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QIA4T0tCCem2JnWVe3goJY2Mv06pvKGSoPmBqpxqnHj5b1n6C8Q5qbt+OGB0Rjvuc
+         8sQF6pTy9UTSdsaUOl1+Lw12kgdR4c7xaqz4NYQX/nt9tXauTYztkxnrWjlI53kRGv
+         a+Jsr9YW6xx9IpMvWXYoJNDWU8xKRuvLIHnxTQV4=
 From:   Francis Laniel <flaniel@linux.microsoft.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-security-module@vger.kernel.org,
         Serge Hallyn <serge@hallyn.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
         Francis Laniel <flaniel@linux.microsoft.com>
-Subject: [RFC PATCH v2 0/2] Add capabilities file to sysfs
-Date:   Mon, 17 Jan 2022 15:12:52 +0100
-Message-Id: <20220117141254.46278-1-flaniel@linux.microsoft.com>
+Subject: [RFC PATCH v2 1/2] capability: Add cap_strings.
+Date:   Mon, 17 Jan 2022 15:12:53 +0100
+Message-Id: <20220117141254.46278-2-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220117141254.46278-1-flaniel@linux.microsoft.com>
+References: <20220117141254.46278-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+This array contains the capability names for the given capabilitiy.
+For example, index CAP_BPF contains "CAP_BPF".
 
-
-First, I hope you are fine and the same for your relatives.
-
-Capabilities are used to check if a thread has the right to perform a given
-action [1].
-For example, a thread with CAP_BPF set can use the bpf() syscall.
-
-Capabilities are used in the container world.
-In terms of code, several projects related to container maintain code where the
-capabilities are written alike include/uapi/linux/capability.h [2][3][4][5].
-For these projects, their codebase should be updated when a new capability is
-added to the kernel.
-Some other projects rely on <sys/capability.h> [6].
-In this case, this header file should reflect the capabilities offered by the
-kernel.
-
-So, in this series, I added a new file to sysfs: /sys/kernel/capabilities.
-The goal of this file is to be used by "container world" software to know kernel
-capabilities at run time instead of compile time.
-
-The underlying kernel attribute is read-only and its content is the capability
-number associated with the capability name:
-root@vm-amd64:~# cat /sys/kernel/capabilities
-0       CAP_CHOWN
-1       CAP_DAC_OVERRIDE
-...
-39      CAP_BPF
-
-The kernel already exposes the last capability number under:
-/proc/sys/kernel/cap_last_cap
-So, I think there should not be any issue exposing all the capabilities it
-offers.
-If there is any, please share it as I do not want to introduce issue with this
-series.
-
-Also, if you see any way to improve this series please share it as it would
-increase this contribution quality.
-
-Change since v1:
-* Use quotes for cap_strings values instead of __stringify().
-
-Francis Laniel (2):
-  capability: Add cap_strings.
-  kernel/ksysfs.c: Add capabilities attribute.
-
+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+---
  include/uapi/linux/capability.h |  1 +
  kernel/capability.c             | 44 +++++++++++++++++++++++++++++++++
- kernel/ksysfs.c                 | 18 ++++++++++++++
- 3 files changed, 63 insertions(+)
+ 2 files changed, 45 insertions(+)
 
-
-Best regards and thank you in advance for your reviews.
----
-[1] man capabilities
-[2] https://github.com/containerd/containerd/blob/1a078e6893d07fec10a4940a5664fab21d6f7d1e/pkg/cap/cap_linux.go#L135
-[3] https://github.com/moby/moby/commit/485cf38d48e7111b3d1f584d5e9eab46a902aabc#diff-2e04625b209932e74c617de96682ed72fbd1bb0d0cb9fb7c709cf47a86b6f9c1
-moby relies on containerd code.
-[4] https://github.com/syndtr/gocapability/blob/42c35b4376354fd554efc7ad35e0b7f94e3a0ffb/capability/enum.go#L47
-[5] https://github.com/opencontainers/runc/blob/00f56786bb220b55b41748231880ba0e6380519a/libcontainer/capabilities/capabilities.go#L12
-runc relies on syndtr package.
-[6] https://github.com/containers/crun/blob/fafb556f09e6ffd4690c452ff51856b880c089f1/src/libcrun/linux.c#L35
+diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+index 463d1ba2232a..9646654d5111 100644
+--- a/include/uapi/linux/capability.h
++++ b/include/uapi/linux/capability.h
+@@ -428,5 +428,6 @@ struct vfs_ns_cap_data {
+ #define CAP_TO_INDEX(x)     ((x) >> 5)        /* 1 << 5 == bits in __u32 */
+ #define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32 */
+ 
++extern const char *cap_strings[];
+ 
+ #endif /* _UAPI_LINUX_CAPABILITY_H */
+diff --git a/kernel/capability.c b/kernel/capability.c
+index 46a361dde042..cd386419f2b7 100644
+--- a/kernel/capability.c
++++ b/kernel/capability.c
+@@ -27,6 +27,50 @@
+ const kernel_cap_t __cap_empty_set = CAP_EMPTY_SET;
+ EXPORT_SYMBOL(__cap_empty_set);
+ 
++const char *cap_strings[] = {
++	[CAP_CHOWN] = "CAP_CHOWN",
++	[CAP_DAC_OVERRIDE] = "CAP_DAC_OVERRIDE",
++	[CAP_DAC_READ_SEARCH] = "CAP_DAC_READ_SEARCH",
++	[CAP_FOWNER] = "CAP_FOWNER",
++	[CAP_FSETID] = "CAP_FSETID",
++	[CAP_KILL] = "CAP_KILL",
++	[CAP_SETGID] = "CAP_SETGID",
++	[CAP_SETUID] = "CAP_SETUID",
++	[CAP_SETPCAP] = "CAP_SETPCAP",
++	[CAP_LINUX_IMMUTABLE] = "CAP_LINUX_IMMUTABLE",
++	[CAP_NET_BIND_SERVICE] = "CAP_NET_BIND_SERVICE",
++	[CAP_NET_BROADCAST] = "CAP_NET_BROADCAST",
++	[CAP_NET_ADMIN] = "CAP_NET_ADMIN",
++	[CAP_NET_RAW] = "CAP_NET_RAW",
++	[CAP_IPC_LOCK] = "CAP_IPC_LOCK",
++	[CAP_IPC_OWNER] = "CAP_IPC_OWNER",
++	[CAP_SYS_MODULE] = "CAP_SYS_MODULE",
++	[CAP_SYS_RAWIO] = "CAP_SYS_RAWIO",
++	[CAP_SYS_CHROOT] = "CAP_SYS_CHROOT",
++	[CAP_SYS_PTRACE] = "CAP_SYS_PTRACE",
++	[CAP_SYS_PACCT] = "CAP_SYS_PACCT",
++	[CAP_SYS_ADMIN] = "CAP_SYS_ADMIN",
++	[CAP_SYS_BOOT] = "CAP_SYS_BOOT",
++	[CAP_SYS_NICE] = "CAP_SYS_NICE",
++	[CAP_SYS_RESOURCE] = "CAP_SYS_RESOURCE",
++	[CAP_SYS_TIME] = "CAP_SYS_TIME",
++	[CAP_SYS_TTY_CONFIG] = "CAP_SYS_TTY_CONFIG",
++	[CAP_MKNOD] = "CAP_MKNOD",
++	[CAP_LEASE] = "CAP_LEASE",
++	[CAP_AUDIT_WRITE] = "CAP_AUDIT_WRITE",
++	[CAP_AUDIT_CONTROL] = "CAP_AUDIT_CONTROL",
++	[CAP_SETFCAP] = "CAP_SETFCAP",
++	[CAP_MAC_OVERRIDE] = "CAP_MAC_OVERRIDE",
++	[CAP_MAC_ADMIN] = "CAP_MAC_ADMIN",
++	[CAP_SYSLOG] = "CAP_SYSLOG",
++	[CAP_WAKE_ALARM] = "CAP_WAKE_ALARM",
++	[CAP_BLOCK_SUSPEND] = "CAP_BLOCK_SUSPEND",
++	[CAP_AUDIT_READ] = "CAP_AUDIT_READ",
++	[CAP_PERFMON] = "CAP_PERFMON",
++	[CAP_BPF] = "CAP_BPF",
++	[CAP_CHECKPOINT_RESTORE] = "CAP_CHECKPOINT_RESTORE",
++};
++
+ int file_caps_enabled = 1;
+ 
+ static int __init file_caps_disable(char *str)
 -- 
 2.30.2
 

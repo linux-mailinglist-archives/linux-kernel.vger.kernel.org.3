@@ -2,160 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F82E49009B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C350249009C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 04:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbiAQDg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 22:36:59 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:10320 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiAQDg5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 22:36:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642390617; x=1673926617;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bj9WMkmjtrT6QiuclCEkl72aeTgEetnOQdSVXuGcalk=;
-  b=b9CM7HT76Xs3GO44Us/cZLqnd/8dGkZocQGHDp0WqRJ85c7xWP8WFSzk
-   azDtirI9NjqO1D5oANi06p45l8VP8qSFhtNvZBsS/u4cSL971YUDJ7NSw
-   1mquoRVrCg0zTGKgwZSyAxSMMj5erYK0MsA61l3U11bUxoMSFA4mHNO1/
-   c=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 16 Jan 2022 19:36:57 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 19:36:57 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 16 Jan 2022 19:36:56 -0800
-Received: from [10.50.45.28] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 16 Jan
- 2022 19:36:52 -0800
-Message-ID: <c441e4f1-02e6-058e-3d53-549afc9d960b@quicinc.com>
-Date:   Mon, 17 Jan 2022 09:06:48 +0530
+        id S234214AbiAQDlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 22:41:25 -0500
+Received: from mga12.intel.com ([192.55.52.136]:24959 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231537AbiAQDlZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 22:41:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642390885; x=1673926885;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BTnjIY3zcb179ObENt7eweJVpmgKCsSQpmjGZJTzHXU=;
+  b=KIK/4gZ9gvKQTzpXpP1DzWsTaohrs7eH8kdRkZD+Y7SYXY6EcP2vIMkk
+   KMPUDCfIhUt4ND/MVTxgdSkUu/JEzqchO4My0evdoEAGrTrtpd5Pdf8Hx
+   K0v/h+KTq70NnTg1/IYjP26ZMFhhS9mWgnb9zrkNqpoaAsht6Vg10um8W
+   xS6VC1alFYvpSxxsSEClEUQlvxbbWudJCTs9REUXFNoBGApS2BQKXYrG/
+   J/og0x8Rz/PcW6pdy4e8VvbP6lzrZrrpCBzvF1eNM+KhXqDabaWe1kln0
+   TlpxocikZpmEEQ1IQqgRoZDMqWj/UfFqMAXYvVumM+GJOCVVZyHAnaRHC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="224525365"
+X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
+   d="scan'208";a="224525365"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 19:41:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
+   d="scan'208";a="614926282"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jan 2022 19:41:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9ItW-000BE5-V8; Mon, 17 Jan 2022 03:41:22 +0000
+Date:   Mon, 17 Jan 2022 11:40:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 168/2384]
+ include/linux/sched/affinity.h:32:9: error: incomplete definition of type
+ 'struct task_struct'
+Message-ID: <202201171113.5k8tKBGY-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCHv7 5/5] asm-generic/io: Add logging support for MMIO
- accessors
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Will Deacon <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     <kbuild-all@lists.01.org>, gregkh <gregkh@linuxfoundation.org>,
-        <quic_psodagud@quicinc.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>
-References: <8085e36ca19787ae111e4cfbb5c555e65bd34be6.1642233364.git.quic_saipraka@quicinc.com>
- <202201160019.hrsMYj6V-lkp@intel.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <202201160019.hrsMYj6V-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/15/2022 10:03 PM, kernel test robot wrote:
-> Hi Sai,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on next-20220115]
-> [cannot apply to arm64/for-next/core arnd-asm-generic/master arm-perf/for-next/perf linus/master v5.16 v5.16-rc8 v5.16-rc7 v5.16]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Sai-Prakash-Ranjan/lib-rwmmio-arm64-Add-support-to-trace-register-reads-writes/20220115-211708
-> base:    bd8d9cef2a7932e688ca267ea1adf5ea6557c777
-> config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220116/202201160019.hrsMYj6V-lkp@intel.com/config)
-> compiler: nios2-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/0day-ci/linux/commit/0757812bba83a756f73ce1a84c86ded3e276cd0f
->          git remote add linux-review https://github.com/0day-ci/linux
->          git fetch --no-tags linux-review Sai-Prakash-Ranjan/lib-rwmmio-arm64-Add-support-to-trace-register-reads-writes/20220115-211708
->          git checkout 0757812bba83a756f73ce1a84c86ded3e276cd0f
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->     In file included from arch/nios2/include/asm/io.h:41,
->                      from include/linux/io.h:13,
->                      from arch/nios2/include/asm/pgtable.h:18,
->                      from include/linux/pgtable.h:6,
->                      from arch/nios2/kernel/nios2_ksyms.c:11:
->     include/asm-generic/io.h: In function 'readb':
->>> include/asm-generic/io.h:181:32: error: '_THIS_IP_' undeclared (first use in this function)
->       181 |         log_read_mmio(8, addr, _THIS_IP_);
->           |                                ^~~~~~~~~
->     include/asm-generic/io.h:181:32: note: each undeclared identifier is reported only once for each function it appears in
->     include/asm-generic/io.h: In function 'readw':
->     include/asm-generic/io.h:196:33: error: '_THIS_IP_' undeclared (first use in this function)
->       196 |         log_read_mmio(16, addr, _THIS_IP_);
->           |                                 ^~~~~~~~~
->     include/asm-generic/io.h: In function 'readl':
->     include/asm-generic/io.h:211:33: error: '_THIS_IP_' undeclared (first use in this function)
->       211 |         log_read_mmio(32, addr, _THIS_IP_);
->           |                                 ^~~~~~~~~
->     include/asm-generic/io.h: In function 'writeb':
->     include/asm-generic/io.h:241:40: error: '_THIS_IP_' undeclared (first use in this function)
->       241 |         log_write_mmio(value, 8, addr, _THIS_IP_);
->           |                                        ^~~~~~~~~
->     include/asm-generic/io.h: In function 'writew':
->     include/asm-generic/io.h:253:41: error: '_THIS_IP_' undeclared (first use in this function)
->       253 |         log_write_mmio(value, 16, addr, _THIS_IP_);
->           |                                         ^~~~~~~~~
->     include/asm-generic/io.h: In function 'writel':
->     include/asm-generic/io.h:265:41: error: '_THIS_IP_' undeclared (first use in this function)
->       265 |         log_write_mmio(value, 32, addr, _THIS_IP_);
->           |                                         ^~~~~~~~~
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 92675dd8b872d91539f60f7dc7ddf7e2a1c70361 [168/2384] headers/deps: Move CPU affinity APIs from <linux/sched.h> to <linux/sched/affinity.h>
+config: i386-randconfig-a014-20220109 (https://download.01.org/0day-ci/archive/20220117/202201171113.5k8tKBGY-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=92675dd8b872d91539f60f7dc7ddf7e2a1c70361
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 92675dd8b872d91539f60f7dc7ddf7e2a1c70361
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Hmm I need to include <linux/instruction_pointer.h> for this, although 
-arm64 build doesn't
-throw this warning. Now posted v8 with this fix - 
-https://lore.kernel.org/lkml/cover.1642309054.git.quic_saipraka@quicinc.com/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> vim +/_THIS_IP_ +181 include/asm-generic/io.h
->
->     169	
->     170	/*
->     171	 * {read,write}{b,w,l,q}() access little endian memory and return result in
->     172	 * native endianness.
->     173	 */
->     174	
->     175	#ifndef readb
->     176	#define readb readb
->     177	static inline u8 readb(const volatile void __iomem *addr)
->     178	{
->     179		u8 val;
->     180	
->   > 181		log_read_mmio(8, addr, _THIS_IP_);
->     182		__io_br();
->     183		val = __raw_readb(addr);
->     184		__io_ar(val);
->     185		log_post_read_mmio(val, 8, addr, _THIS_IP_);
->     186		return val;
->     187	}
->     188	#endif
->     189	
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Note: the mingo-tip/sched/headers HEAD 4c707c1c0de83967079b4e385012fa5b00e2cd11 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   In file included from lib/syscall.c:2:
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   include/linux/sched/affinity.h:38:11: error: incomplete definition of type 'struct task_struct'
+           WARN_ON(p->user_cpus_ptr);
+                   ~^
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   4 errors generated.
+--
+>> kernel/sched/core.c:3571:9: error: implicit declaration of function 'set_cpus_allowed_ptr' [-Werror,-Wimplicit-function-declaration]
+           return set_cpus_allowed_ptr(p, new_mask);
+                  ^
+   kernel/sched/core.c:3571:9: note: did you mean '__set_cpus_allowed_ptr'?
+   kernel/sched/core.c:3567:19: note: '__set_cpus_allowed_ptr' declared here
+   static inline int __set_cpus_allowed_ptr(struct task_struct *p,
+                     ^
+>> kernel/sched/core.c:8017:11: error: implicit declaration of function 'dl_task_check_affinity' [-Werror,-Wimplicit-function-declaration]
+           retval = dl_task_check_affinity(p, new_mask);
+                    ^
+   kernel/sched/core.c:9369:13: warning: no previous prototype for function 'per_task_init' [-Wmissing-prototypes]
+   void __init per_task_init(void)
+               ^
+   kernel/sched/core.c:9369:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init per_task_init(void)
+   ^
+   static 
+   1 warning and 2 errors generated.
+--
+   In file included from arch/x86/kernel/cpu/resctrl/pseudo_lock.c:14:
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+>> include/linux/sched/affinity.h:32:9: error: incomplete definition of type 'struct task_struct'
+           if (src->user_cpus_ptr)
+               ~~~^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   include/linux/sched/affinity.h:38:11: error: incomplete definition of type 'struct task_struct'
+           WARN_ON(p->user_cpus_ptr);
+                   ~^
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   include/linux/sched/affinity.h:8:8: note: forward declaration of 'struct task_struct'
+   struct task_struct;
+          ^
+   In file included from arch/x86/kernel/cpu/resctrl/pseudo_lock.c:20:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 4 errors generated.
+
+
+vim +32 include/linux/sched/affinity.h
+
+     9	
+    10	extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+    11	extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed);
+    12	#ifdef CONFIG_SMP
+    13	extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
+    14	extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
+    15	extern int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node);
+    16	extern void release_user_cpus_ptr(struct task_struct *p);
+    17	extern int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask);
+    18	extern void force_compatible_cpus_allowed_ptr(struct task_struct *p);
+    19	extern void relax_compatible_cpus_allowed_ptr(struct task_struct *p);
+    20	#else
+    21	static inline void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+    22	{
+    23	}
+    24	static inline int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask)
+    25	{
+    26		if (!cpumask_test_cpu(0, new_mask))
+    27			return -EINVAL;
+    28		return 0;
+    29	}
+    30	static inline int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src, int node)
+    31	{
+  > 32		if (src->user_cpus_ptr)
+    33			return -EINVAL;
+    34		return 0;
+    35	}
+    36	static inline void release_user_cpus_ptr(struct task_struct *p)
+    37	{
+    38		WARN_ON(p->user_cpus_ptr);
+    39	}
+    40	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

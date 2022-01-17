@@ -2,172 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D2F49039A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103004903F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238028AbiAQITS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiAQITR (ORCPT
+        id S238237AbiAQIgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:36:05 -0500
+Received: from m1397.mail.163.com ([220.181.13.97]:45498 "EHLO
+        m1397.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233273AbiAQIgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:19:17 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1092C061574;
-        Mon, 17 Jan 2022 00:19:16 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x11so28842440lfa.2;
-        Mon, 17 Jan 2022 00:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CgFiE1xRseB0L65/zcK0C8WvrsrBuQCopXkVzsqfP4E=;
-        b=MIrL15KFbodb8dwAPOc2ReAWJ15S3kOthT8ICt7Rsbi6quFPKpogoZkcq+1E+2i3ZN
-         9SleM9zPMvTSG9kvV9w7CkMbyOCp5YNtsH9u+Ka2YKHQdL1HzziaC2evA3ETuexaTOJQ
-         OqYxtOxHD3TXo1FYuun10VrYN2t5R7IjPtb7a6JZF6otQEGBZ21Fd7/AqzUICjyWKUXq
-         w0YuA6WJ1DFyJnSSHzgq51qlO6tpDxtS5GhCmMBdpjtLbIhN4UjVlBLvb5SIa411+bFb
-         yWR1aCooUq+EBqchLWdDnmLNmXtZT4ZRwvlk9RWqgyOjlsOlMYjk/GMJHJV3VhtkEf4n
-         FV6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CgFiE1xRseB0L65/zcK0C8WvrsrBuQCopXkVzsqfP4E=;
-        b=k2KlEFgjGGDI7g11MMfN5ZM29w5TKNZSRh8QlJIQ/rcq+38wOh2107OHPC3xCEKK9Q
-         P5Bx4t5+BLK+USrxE/vBrG+wCuwyt65ZebHdeVMwp+9ScFgBojuQxL7KPkpmCf3mKwB5
-         r7xiReMd/0s/SoooWnOhpNSjqlc5+pEVsY+U2/UHYg6lTUToi5HLIG2GauvsE2Ju2qJL
-         +mzoqLc88AIjwydYKK/vA5kCDOm0S8mqLe1LcU3WGFkFzAMWE2k9a1X6vgper7jUlG5e
-         QfpArloqfvg2F6nYfvEJtm250PtSQhoZUBb88ThHiMdU4nu1p0J2n1+7bqX7vYpW31LY
-         ma7w==
-X-Gm-Message-State: AOAM532rnot/mEq6MwsjaQkubSnimkCTIJpSXADABrEbu3SLgJ9yOEaD
-        XieWHSKzo4wCTv9wbA2H1F6/LN10eUX3yA==
-X-Google-Smtp-Source: ABdhPJwSTMtUkjOhIAUaA8niPZVsU4ZOP/r2y93VDyf6TzIZ5d4GZUGEWNMpOZygTAOvnzLH4O2h3A==
-X-Received: by 2002:a2e:8041:: with SMTP id p1mr15023917ljg.331.1642407555032;
-        Mon, 17 Jan 2022 00:19:15 -0800 (PST)
-Received: from localhost ([46.188.51.186])
-        by smtp.gmail.com with ESMTPSA id g15sm1321967lfv.113.2022.01.17.00.19.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 00:19:14 -0800 (PST)
-Date:   Mon, 17 Jan 2022 11:19:05 +0300
-From:   Alexander Fomichev <fomichev.ru@gmail.com>
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux@yadro.com, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
- changes
-Message-ID: <20220117081905.a4pwglxqj7dqpyql@yadro.com>
-References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
- <20220112170512.GO3301@suse.de>
+        Mon, 17 Jan 2022 03:36:04 -0500
+X-Greylist: delayed 925 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 03:35:56 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=U6AJg
+        RT9yEKALKqy71zPTJhLAEDKSAmRLqeRA/LEZqI=; b=og+G4EDMAh4i2EurjCB65
+        teC8pAYUU5c4O0ADKf3qc8RxMr7UEwDepXJOswqKL5CyZcY+U93HKNLyFaB6+kLP
+        us5VJOosw9eK37s4Ry1Nd8ZwGezVY7NMjnOXCAt/l5W6V5vBg75r7+48C6BSMI5P
+        WDLiTOA9hIKs3f+JLqwlKY=
+Received: from slark_xiao$163.com ( [112.97.53.17] ) by ajax-webmail-wmsvr97
+ (Coremail) ; Mon, 17 Jan 2022 16:20:12 +0800 (CST)
+X-Originating-IP: [112.97.53.17]
+Date:   Mon, 17 Jan 2022 16:20:12 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Manivannan Sadhasivam" <mani@kernel.org>
+Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH net] bus: mhi: Add mru_default for Foxconn SDX55
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <20220117075323.GA4209@thinkpad>
+References: <20220115103912.3775-1-slark_xiao@163.com>
+ <20220117075323.GA4209@thinkpad>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112170512.GO3301@suse.de>
+Message-ID: <76f0a70a.2e7f.17e671f4eb0.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: YcGowABHbCu8JuVhoh8NAA--.52392W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJRaLZGAJmDy6WgABsw
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 05:05:12PM +0000, Mel Gorman wrote:
-> On Wed, Jan 12, 2022 at 06:26:09PM +0300, Alexander Fomichev wrote:
-> > CC: Mel Gorman <mgorman@suse.de>
-> > CC: linux@yadro.com
-> > 
-> > Hi all,
-> > 
-> > There's a huge regression found, which affects Intel Xeon's DMA Engine
-> > performance between v4.14 LTS and modern kernels. In certain
-> > circumstances the speed in dmatest is more than 6 times lower.
-> > 
-> > 	- Hardware -
-> > I did testing on 2 systems:
-> > 1) Intel(R) Xeon(R) Gold 6132 CPU @ 2.60GHz (Supermicro X11DAi-N)
-> > 2) Intel(R) Xeon(R) Bronze 3204 CPU @ 1.90GHz (YADRO Vegman S220)
-> > 
-> > 	- Measurement -
-> > The dmatest result speed decreases with almost any test settings.
-> > Although the most significant impact is revealed with 64K transfers. The
-> > following parameters were used:
-> > 
-> > modprobe dmatest iterations=1000 timeout=2000 test_buf_size=0x100000 transfer_size=0x10000 norandom=1
-> > echo "dma0chan0" > /sys/module/dmatest/parameters/channel
-> > echo 1 > /sys/module/dmatest/parameters/run
-> > 
-> > Every test csse was performed at least 3 times. All detailed results are
-> > below.
-> > 
-> > 	- Analysis -
-> > Bisecting revealed 2 different bad commits for those 2 systems, but both
-> > change the same function/condition in the same file.
-> > For the system (1) the bad commit is:
-> > [7332dec055f2457c386032f7e9b2991eb05c2a0a] sched/fair: Only immediately migrate tasks due to interrupts if prev and target CPUs share cache
-> > For the system (2) the bad commit is:
-> > [806486c377e33ab662de6d47902e9e2a32b79368] sched/fair: Do not migrate if the prev_cpu is idle
-> > 
-> > 	- Additional check -
-> > Attempting to revert the changes above, a dirty patch for the (current)
-> > kernel v5.16.0-rc5 was tested too:
-> > 
-> 
-> The consequences of the patch is allowing interrupts to migrate tasks away
-> from potentially cache hot data -- L1 misses if the two CPUs share LLC
-> or incurring remote memory access if migrating cross-node. The secondary
-> concern is that excessive migration from interrupts that round-robin CPUs
-> will mean that the CPU does not increase frequency. Minimally, the RFC
-> patch introduces regressions of their own. The comments cover the two
-> scenarios of interest
-> 
-> +        * If this_cpu is idle, it implies the wakeup is from interrupt
-> +        * context. Only allow the move if cache is shared. Otherwise an
-> +        * interrupt intensive workload could force all tasks onto one
-> +        * node depending on the IO topology or IRQ affinity settings.
-> 
-> (This one causes remote memory accesses and potentially overutilisation
-> of a subset of nodes)
-> 
-> +        * If the prev_cpu is idle and cache affine then avoid a migration.
-> +        * There is no guarantee that the cache hot data from an interrupt
-> +        * is more important than cache hot data on the prev_cpu and from
-> +        * a cpufreq perspective, it's better to have higher utilisation
-> +        * on one CPU.
-> 
-> (This one incurs L1/L2 misses due to a migration even though LLC may be
-> shared)
-> 
-> The tests don't say but what CPUs to the dmatest interrupts get
-> delivered to? dmatest appears to be an exception that the *only* hot
-> data of concern is also related to the interrupt as the DMA operation is
-> validated.
-> 
-> However, given that the point of a DMA engine is to transfer data without
-> the host CPU being involved and the interrupt is delivered on completion,
-> how realistic is it that the DMA data is immediately accessed on completion
-> by normal workloads that happen to use the DMA engine? What impact does
-> it have to tbe test is noverify or polling is used?
-
-Thanks for the comment. Some additional notes regarding the issue.
-
-1) You're right. When options "noverify=1" and "polling=1" are used.
-then no performance reducing occurs.
-
-2) DMA Engine on certain devices, e.g. Switchtec DMA and AMD PTDMA, is
-used particularly for off-CPU data transfer via device's NTB to a remote
-host. In NTRDMA project, which I'm involved to, DMA Engine sends data to
-remote ring buffer and on data arrival CPU processes local ring buffers.
-
-3) I checked dmatest with noverify=0 on PTDMA dirver: AMD EPYC 7313 16-Core
-Processor/ASRock ROMED8-2T. The regression occurs on this hardware too.
-
-4) Do you mean that with noverify=N and dirty patch, data verification
-is performed on cached data and thus measured performance is fake?
-
-5) What DMA Engine enabled drivers (and dmatest) should use as design
-pattern to conform migration/cache behavior? Does scheduler optimisation
-conflict to DMA Engine performance in general?
-
-6) I didn't suggest RFC patch to real world usage. It was just a test
-case to find out a low speed cause.
-
-Comments/answers/suggestions are welcome.
-
--- 
-Regards,
-  Alexander
+CgpBdCAyMDIyLTAxLTE3IDE1OjUzOjIzLCAiTWFuaXZhbm5hbiBTYWRoYXNpdmFtIiA8bWFuaUBr
+ZXJuZWwub3JnPiB3cm90ZToKPk9uIFNhdCwgSmFuIDE1LCAyMDIyIGF0IDA2OjM5OjEyUE0gKzA4
+MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEZvciBkZWZhdWx0IG1lY2hhbmlzbSwgcHJvZHVjdCB3
+b3VsZCB1c2UgZGVmYXVsdCBNUlUgMzUwMCBpZgo+PiB0aGV5IGRpZG4ndCBkZWZpbmUgaXQuIEJ1
+dCBmb3IgRm94Y29ubiBTRFg1NSwgdGhlcmUgaXMgYSBrbm93bgo+PiBpc3N1ZSB3aGljaCBNUlUg
+MzUwMCB3b3VsZCBsZWFkIHRvIGRhdGEgY29ubmVjdGlvbiBsb3N0Lgo+PiBTbyB3ZSBhbGlnbiBp
+dCB3aXRoIFF1YWxjb21tIGRlZmF1bHQgTVJVIHNldHRpbmdzLgo+PiAKPj4gU2lnbmVkLW9mZi1i
+eTogU2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29tPgo+Cj5SZXZpZXdlZC1ieTogTWFuaXZh
+bm5hbiBTYWRoYXNpdmFtIDxtYW5pQGtlcm5lbC5vcmc+Cj4KPllvdSBuZWVkIHRvIGFkZCBGaXhl
+cyB0YWcgc28gdGhhdCBJIGNhbiBxdWV1ZSB0aGlzIHBhdGNoIGZvciB2NS4xNyBSQ3MuCj4KPlRo
+YW5rcywKPk1hbmkKPgpIaSBNYW5pLAogIE5ldyBwYXRjaCBpcyBjb21taXR0ZWQuIFBsZWFzZSBo
+ZWxwIGRvIGEgY2hlY2sgYWdhaW4uCgpUaGFua3MhCj4+IC0tLQo+PiAgZHJpdmVycy9idXMvbWhp
+L3BjaV9nZW5lcmljLmMgfCAxICsKPj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+
+PiAKPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jIGIvZHJpdmVy
+cy9idXMvbWhpL3BjaV9nZW5lcmljLmMKPj4gaW5kZXggM2EyNThhNjc3ZGY4Li43NGU4ZmMzNDJj
+ZmQgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jCj4+ICsrKyBi
+L2RyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jCj4+IEBAIC0zNjYsNiArMzY2LDcgQEAgc3Rh
+dGljIGNvbnN0IHN0cnVjdCBtaGlfcGNpX2Rldl9pbmZvIG1oaV9mb3hjb25uX3NkeDU1X2luZm8g
+PSB7Cj4+ICAJLmNvbmZpZyA9ICZtb2RlbV9mb3hjb25uX3NkeDU1X2NvbmZpZywKPj4gIAkuYmFy
+X251bSA9IE1ISV9QQ0lfREVGQVVMVF9CQVJfTlVNLAo+PiAgCS5kbWFfZGF0YV93aWR0aCA9IDMy
+LAo+PiArCS5tcnVfZGVmYXVsdCA9IDMyNzY4LAo+PiAgCS5zaWRlYmFuZF93YWtlID0gZmFsc2Us
+Cj4+ICB9Owo+PiAgCj4+IC0tIAo+PiAyLjI1LjEKPj4gCg==

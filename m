@@ -2,163 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AE4490654
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9AE490659
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238797AbiAQK6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:58:54 -0500
-Received: from mout.gmx.net ([212.227.17.20]:60377 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229503AbiAQK6y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:58:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642417124;
-        bh=ZlkRI76O1HNMaDibceLBJ4+Yr9W5biTnm7ePlGXax8c=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=BwHcpXm3NG1Lwqd5XnmY5I13XEroXICdnIhOyAtjctLB+ZbD8AMT83sL6BLMwuMUE
-         RNor84k7NkJGdF+BTLmzC4gwe1o5UuLxlRozF59cPDu5uduZa5pmbuDpR9J7Y5H/H1
-         OmZ39nqVBn86+zhnL/pJ7o+4oTUefstaX7Dd+ZLc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MN5eX-1mqNGg3sxx-00J3u5; Mon, 17
- Jan 2022 11:58:43 +0100
-Message-ID: <60fad896-235c-7602-39d1-14691282ebf6@gmx.de>
-Date:   Mon, 17 Jan 2022 11:57:38 +0100
+        id S238807AbiAQLBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:01:24 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:52318 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238801AbiAQLBX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 06:01:23 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20HB1F8i105933;
+        Mon, 17 Jan 2022 05:01:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642417275;
+        bh=APcufelCvvtQ92C4lwDeP/wnCcE/tCVes1IRHyTJzUY=;
+        h=From:To:CC:Subject:Date;
+        b=I1walgYssduKSqfJZfAo656o1GDfaStLuK+EZyGTKO4SJjAiw4+BaNuuozjwlvYf5
+         X0CDHQrR0w7GDAP0jVa/600BNn2stCIQpA1SL3d0OufEwQKkQNoozsOZZoqf/7ua0P
+         e8K1NSJYF0zc9N++PgNtqrR3e7UZZW0D+N39Uvf4=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20HB1FKd111167
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Jan 2022 05:01:15 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 17
+ Jan 2022 05:01:14 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 17 Jan 2022 05:01:14 -0600
+Received: from a0393678-lt.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20HB1Ase115422;
+        Mon, 17 Jan 2022 05:01:11 -0600
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     Swapnil Jakhade <sjakhade@cadence.com>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] phy: ti: Fix "BUG: KASAN: global-out-of-bounds in _get_maxdiv" issue
+Date:   Mon, 17 Jan 2022 16:31:08 +0530
+Message-ID: <20220117110108.4117-1-kishon@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <87o84a63hy.fsf@intel.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <87o84a63hy.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ebVuJl/dmLqN1DusLAVJLl1TzbN3n+pZ2TDGb0JtsNZMKjzmqgX
- AcrDzss4HYUU4gGfKlDiuJmsR/a5e3j0YMe9gONh2MWqf/Q+jfxq67YuTBd1YgtvBfMNWnw
- o75DkRCCC5uDZACJqcEHVBpW+aTxTTKUITA68CQXTvqOdI7AmgoBfwWsqtwFUAPJAdpVcbX
- 6qxo5uiHQle2Hy46OdqfA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Vl7fjTBigKs=:1/42af+1H3BqrJsWlSFH/o
- RZfzhKKvGuIrHY0xRLqz3QObRNaNDFiE6fdTQDVod6fFYPpMDtjNNXN6oHSeb0yZU69bK3IvO
- QK4LY0IWHelVcWmoEdEcqLYAh0taPBWcToUbS+AOr0pwOV1G8/sUApFI5DuqBgB79HFQUg6RI
- +YN8qTdRlP67RmGDzy0LiSi2YyZ7EjAkzeyEy2g+4J91T35knvcXQ009d+qN7jqo/qpOThWel
- zz6YX+VcpzOIkzK0u19pBZwiEzrvBOzN9FpcVY7F8aBXc+xH0js1ZRNdeTsxT1EK5lHx0UnuT
- 5Mt1O1BgK6JtxTQfRQkyiNIMAXnNgudr18iixaTzvLbeerE4hf7yb/PITQv43pKeT+KzKOR60
- 13dYcHlgT+NlloWCZO41vrmrJX6PJh37g0FkGpRo3J/I26CZt9pyMDrhx+Rj4dlNCS607WZf/
- PeLxGlJoZDLPqJSdCf3Y6h3+s6lxlNlkOhi7TmR2gjw6p9Fyfe5OCQ0hQPzDoE+9KCLcaBDg4
- tvE1wXHot1y1ZjIi6a+95m9AxM+njeOBnsolwPNTMbAHxwM3YKsmKNBdsleC9s7nrbY1S/j34
- YdmZA2aZmGo1O/ZiM1J6CgZyPGdcv8yy6rln0Xe/w2mc+6D0qlFDkSkj0WoFT1zok8RCGd4jZ
- wwg4VNlxdoQ0CGPjS58YWNSH7TcmShdGRusF4DJg6o3sfHKxzaETaE/zWZEJZbkG3jazelU1V
- bmYhgcH3d5QWKBZyIDu3izQXeL1R4q2A2WxQXPBSRSnhV3wduB2pib3Xz6F5KC/sU3CsUZw+Z
- 1v+SptapJKwtINPGptCvnOu/UtYx66WF8VT5w+Wq8ViYWU2xczdidoaF6DqXte5a6Jd7hDxro
- 1GRRRe3L1c8x0in3J5e1pEyi95mT4M1s549hvcowIuWb7Aygkd45aPIgKix9SvvYcuSW0+LGf
- eMvU318jN3DhQoKQib5iTD59tIUQd9u4NKuuUE1bzOsYqH3dw4w4J2hwwZsKkCgwWdufEN29L
- 2wi2GFjFLsWgZbYcMWS91JuXRAVlGtVxArGWPpaJXwMYcUNl/Ka4ICq8D9HecL0PCxBCrh/FE
- t0fka4TH4+eZ88=
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jani,
+_get_table_maxdiv() tries to access "clk_div_table" array out of bound
+defined in phy-j721e-wiz.c. Add a sentinel entry to prevent
+the following global-out-of-bounds error reported by enabling KASAN.
 
-On 1/17/22 11:49, Jani Nikula wrote:
-> On Mon, 17 Jan 2022, Daniel Vetter <daniel@ffwll.ch> wrote:
->> Hi Helge
->>
->> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
->>>
->>> The fbdev layer is orphaned, but seems to need some care.
->>> So I'd like to step up as new maintainer.
->>>
->>> Signed-off-by: Helge Deller <deller@gmx.de>
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 5d0cd537803a..ce47dbc467cc 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/e=
-mulator/index.html
->>>  F:     arch/x86/math-emu/
->>>
->>>  FRAMEBUFFER LAYER
->>> -L:     dri-devel@lists.freedesktop.org
->>> +M:     Helge Deller <deller@gmx.de>
->>>  L:     linux-fbdev@vger.kernel.org
->>> -S:     Orphan
->>
->> Maybe don't rush maintainer changes in over the w/e without even bother=
-ing
->> to get any input from the people who've been maintaining it before.
->>
->> Because the status isn't entirely correct, fbdev core code and fbcon an=
-d
->> all that has been maintained, but in bugfixes only mode. And there's ve=
-ry
->> solid&important reasons to keep merging these patches through a drm tre=
-e,
->> because that's where all the driver development happens, and hence also
->> all the testing (e.g. the drm test suite has some fbdev tests - the onl=
-y
->> automated ones that exist to my knowledge - and we run them in CI). So
->> moving that into an obscure new tree which isn't even in linux-next yet=
- is
->> no good at all.
->>
->> Now fbdev driver bugfixes is indeed practically orphaned and I very muc=
-h
->> welcome anyone stepping up for that, but the simplest approach there wo=
-uld
->> be to just get drm-misc commit rights and push the oddball bugfix in th=
-ere
->> directly. But also if you want to do your own pull requests to Linus fo=
-r
->> that I don't care and there's really no interference I think, so
->> whatever floats.
->>
->> But any code that is relevant for drm drivers really needs to go in thr=
-ough
->> drm trees, nothing else makes much sense.
->>
->> I guess you're first action as newly minted fbdev maintainer is going t=
-o be to
->> clean up the confusion you just created.
->
-> As much as I like folks stepping up as maintainers, I've got to say this
-> is not a style I appreciate at all.
->
-> Thursday: Object a recent fbdev change [1].
->
-> Friday: Step up as fbdev maintainer, change git tree (this thread) [2].
->
-> Sunday: Send the maintainer change to Linus [3].
->
-> Later Sunday: Start reverting the changes objected to on Thursday, with
-> no discussion, no acks, no reviews, in the new git tree [4].
->
-> Monday: Continue reverting the changes [5].
->
-> I'm heavily in favor of maintainers who are open, transparent,
-> collaborative, who seek consensus through discussion, and only put their
-> foot down when required.
->
-> I really don't like the optics here. I'd expect some pretty good
-> explanations.
+[    9.552392] BUG: KASAN: global-out-of-bounds in _get_maxdiv+0xc0/0x148
+[    9.558948] Read of size 4 at addr ffff8000095b25a4 by task kworker/u4:1/38
+[    9.565926]
+[    9.567441] CPU: 1 PID: 38 Comm: kworker/u4:1 Not tainted 5.16.0-116492-gdaadb3bd0e8d-dirty #360
+[    9.576242] Hardware name: Texas Instruments J721e EVM (DT)
+[    9.581832] Workqueue: events_unbound deferred_probe_work_func
+[    9.587708] Call trace:
+[    9.590174]  dump_backtrace+0x20c/0x218
+[    9.594038]  show_stack+0x18/0x68
+[    9.597375]  dump_stack_lvl+0x9c/0xd8
+[    9.601062]  print_address_description.constprop.0+0x78/0x334
+[    9.606830]  kasan_report+0x1f0/0x260
+[    9.610517]  __asan_load4+0x9c/0xd8
+[    9.614030]  _get_maxdiv+0xc0/0x148
+[    9.617540]  divider_determine_rate+0x88/0x488
+[    9.622005]  divider_round_rate_parent+0xc8/0x124
+[    9.626729]  wiz_clk_div_round_rate+0x54/0x68
+[    9.631113]  clk_core_determine_round_nolock+0x124/0x158
+[    9.636448]  clk_core_round_rate_nolock+0x68/0x138
+[    9.641260]  clk_core_set_rate_nolock+0x268/0x3a8
+[    9.645987]  clk_set_rate+0x50/0xa8
+[    9.649499]  cdns_sierra_phy_init+0x88/0x248
+[    9.653794]  phy_init+0x98/0x108
+[    9.657046]  cdns_pcie_enable_phy+0xa0/0x170
+[    9.661340]  cdns_pcie_init_phy+0x250/0x2b0
+[    9.665546]  j721e_pcie_probe+0x4b8/0x798
+[    9.669579]  platform_probe+0x8c/0x108
+[    9.673350]  really_probe+0x114/0x630
+[    9.677037]  __driver_probe_device+0x18c/0x220
+[    9.681505]  driver_probe_device+0xac/0x150
+[    9.685712]  __device_attach_driver+0xec/0x170
+[    9.690178]  bus_for_each_drv+0xf0/0x158
+[    9.694124]  __device_attach+0x184/0x210
+[    9.698070]  device_initial_probe+0x14/0x20
+[    9.702277]  bus_probe_device+0xec/0x100
+[    9.706223]  deferred_probe_work_func+0x124/0x180
+[    9.710951]  process_one_work+0x4b0/0xbc0
+[    9.714983]  worker_thread+0x74/0x5d0
+[    9.718668]  kthread+0x214/0x230
+[    9.721919]  ret_from_fork+0x10/0x20
+[    9.725520]
+[    9.727032] The buggy address belongs to the variable:
+[    9.732183]  clk_div_table+0x24/0x440
 
-Jani, please don't worry!
-I've started to sort things out, to work through the existing backlog of
-patches (which is a LOT!) and nothing has been pushed yet.
-I've seen the other mails and we will discuss.
+Fixes: 091876cc35 ("phy: ti: j721e-wiz: Add support for WIZ module present in TI J721E SoC")
+Cc: stable@vger.kernel.org # v5.10+
+Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+---
+ drivers/phy/ti/phy-j721e-wiz.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-So, please just ignore the current state of the linux-fbdev tree for now.
+diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
+index b3384c31637a..da546c35d1d5 100644
+--- a/drivers/phy/ti/phy-j721e-wiz.c
++++ b/drivers/phy/ti/phy-j721e-wiz.c
+@@ -233,6 +233,7 @@ static const struct clk_div_table clk_div_table[] = {
+ 	{ .val = 1, .div = 2, },
+ 	{ .val = 2, .div = 4, },
+ 	{ .val = 3, .div = 8, },
++	{ /* sentinel */ },
+ };
+ 
+ static const struct wiz_clk_div_sel clk_div_sel[] = {
+-- 
+2.17.1
 
-Helge

@@ -2,271 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E434902BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CBE49028C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 08:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237460AbiAQHIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 02:08:13 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:49088 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237446AbiAQHHr (ORCPT
+        id S237295AbiAQHGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 02:06:41 -0500
+Received: from out162-62-57-64.mail.qq.com ([162.62.57.64]:49763 "EHLO
+        out162-62-57-64.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237310AbiAQHGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 02:07:47 -0500
-X-UUID: 4c271091d3d84efb887a0c5a04f860d0-20220117
-X-UUID: 4c271091d3d84efb887a0c5a04f860d0-20220117
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 438142784; Mon, 17 Jan 2022 15:07:42 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 17 Jan 2022 15:07:41 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 17 Jan 2022 15:07:39 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Joerg Roedel <jroedel@suse.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Airlie <airlied@linux.ie>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>
-CC:     Evan Green <evgreen@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Will Deacon <will.deacon@arm.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>, <yong.wu@mediatek.com>,
-        <youlin.pei@mediatek.com>, Matthias Kaehlcke <mka@chromium.org>,
-        <anan.sun@mediatek.com>, <yi.kuo@mediatek.com>,
-        <acourbot@chromium.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        "Dafna Hirschfeld" <dafna.hirschfeld@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        <anthony.huang@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v10 13/13] arm64: dts: mediatek: Get rid of mediatek,larb for MM nodes
-Date:   Mon, 17 Jan 2022 15:05:10 +0800
-Message-ID: <20220117070510.17642-14-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220117070510.17642-1-yong.wu@mediatek.com>
-References: <20220117070510.17642-1-yong.wu@mediatek.com>
+        Mon, 17 Jan 2022 02:06:39 -0500
+X-Greylist: delayed 81946 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 02:06:38 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1642403195;
+        bh=FNEpumVdR0V042HQu4zqL7oQurwNLap94AMGiqd5IpE=;
+        h=From:To:Cc:Subject:Date;
+        b=vBUxB9WO8/vHnqZrp5HTqGgZA8nw+ZQJvKFjMd1Z/j6vy9pyr/pTgkJ0O0BxnzUUP
+         OeMC6lY25gyYVOTx8ffjJq6/pWT1Y4BLegAiWbiCqtYIpWCAglX+K3aagDzsZ6JLgk
+         DLvttTM/SsGaGj6PA92Q0PmnXnA2gJzX/LXDSqNQ=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
+        id 1A08A296; Mon, 17 Jan 2022 15:06:32 +0800
+X-QQ-mid: xmsmtpt1642403192tfdsxvpxm
+Message-ID: <tencent_A3850F2901FD5B80E831ABE7C27144509C0A@qq.com>
+X-QQ-XMAILINFO: OAHLEV5KK0oz88TejDCCjtxc1/NDx0qMqz5+bhh+SN7UqDz7QcIBHoAgThmCVG
+         xfRCclSwS5/RIGjiZpijD2udeR23s/j/B1ajJ9uYkT0WO7cFnZA5bMGBgk4cooCz3i04aDYZAtQ8
+         NALm1pxIcm+UM4sZ/p0TMNn28kf+eWgEPlM8pas+pWjHobgVxq4qUriJlHRLzyOTgmhu8Ly0er7M
+         sFyLKow1gqLkEQtewUKLCHoULLdGClp6l2j12aPkikBMUFMHQUdvdwcRYBEL571UgWKUJRIRLYN6
+         +uUWjxGDXDrTqEoQw9FmU/S+SKt//EHj1cEGO25u14mTULG+HfGIdz9xTQ0hh1DnSoM6SFUf4o2m
+         +6hxpaBK5eW90hUHTEnpjocBNK03RTVXtTyo2K/MIJvIyGVcCkQmJKsOOPH6BB6xb861oZgIbhUk
+         mQN0omePJ9xN9yEKiz+8/CAWfaL3hj2CN2lOxDGNCEmOWJp/RQ4M4JD9htWfK9O4yZeQyrYab/Ws
+         sg9pAjVd6IGDXFXqAfXPf5sFEn0eb24+r6rVzDHiYbgFnMzf8ivrhBP6Ky7tueTKG3MOxjqyDxG6
+         1SP6nD6Bpb42JYFJye/afrzePd5xyrBgN6lG4piUnBSv2FoT2OIvSH7kx+kUniOe/39KundlTYhG
+         hSLaJJUwZpYvhMhE63iS70DCHZAfar/HpiZPwBzpAfoWFMMywViLdWDIS3hqvai+nK6kQhuzirl0
+         kKGvtMfmjZ/ynMau7nM6iDSy/04HzzH8F4bVvN3P2WCjtG+7VJDDdfIuOGkD6OV46O4Aot+r78rC
+         9tGMwAD5MU5Gyl9j1Mva4MfJHg5LR5L7Cw0XaZ6OPNoprTsOqPmz9Qjy8oBPkzpZAmWmccgumgmA
+         5S1OovJdyVGZHdwxcByH0qOTeeIt82CwKEhTO1F/LCppUdtF8Uc9c=
+From:   xkernel.wang@foxmail.com
+To:     andy@kernel.org
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v2] gpio: merrifield: check the return value of devm_kstrdup()
+Date:   Mon, 17 Jan 2022 15:06:06 +0800
+X-OQ-MSGID: <20220117070606.3475-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After adding device_link between the IOMMU consumer and smi,
-the mediatek,larb is unnecessary now.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-CC: Matthias Brugger <matthias.bgg@gmail.com>
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: Evan Green <evgreen@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+devm_kstrdup() returns pointer to allocated string on success, NULL on
+failure. So it is better to check the return value of it.
+
+Before, if devm_kstrdup() fails, pinctrl_dev_name will be NULL, then the
+retval below will be a negative error-code(inside gpiochip_add_pin_range(),
+pinctrl_find_and_add_gpio_range()->get_pinctrl_dev_from_devname() will
+finally check pinctrl_dev_name and return error), so the failure of
+devm_kstrdup() can be only implicitly caught after a long call chain.
+While this patch is to explicitly catch the failure in time.
+> retval = gpiochip_add_pin_range(&priv->chip, pinctrl_dev_name,
+>				  range->gpio_base,
+>				  range->pin_base,
+>				  range->npins);
+> if (retval) {
+> 	dev_err(priv->dev, "failed to add GPIO pin range\n");
+> 	return retval;
+> }
+
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8173.dtsi | 16 ----------------
- arch/arm64/boot/dts/mediatek/mt8183.dtsi |  6 ------
- 2 files changed, 22 deletions(-)
+Changelogs:
+v1 -> v2: update the commit message.
+ drivers/gpio/gpio-merrifield.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-index dee66e5f054c..417e82891a70 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-@@ -1010,7 +1010,6 @@
- 				 <&mmsys CLK_MM_MUTEX_32K>;
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,vpu = <&vpu>;
- 		};
+diff --git a/drivers/gpio/gpio-merrifield.c b/drivers/gpio/gpio-merrifield.c
+index 42c4d9d..f3d1bae 100644
+--- a/drivers/gpio/gpio-merrifield.c
++++ b/drivers/gpio/gpio-merrifield.c
+@@ -409,6 +409,9 @@ static int mrfld_gpio_add_pin_ranges(struct gpio_chip *chip)
+ 	int retval;
  
-@@ -1021,7 +1020,6 @@
- 				 <&mmsys CLK_MM_MUTEX_32K>;
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			iommus = <&iommu M4U_PORT_MDP_RDMA1>;
--			mediatek,larb = <&larb4>;
- 		};
- 
- 		mdp_rsz0: rsz@14003000 {
-@@ -1051,7 +1049,6 @@
- 			clocks = <&mmsys CLK_MM_MDP_WDMA>;
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			iommus = <&iommu M4U_PORT_MDP_WDMA>;
--			mediatek,larb = <&larb0>;
- 		};
- 
- 		mdp_wrot0: wrot@14007000 {
-@@ -1060,7 +1057,6 @@
- 			clocks = <&mmsys CLK_MM_MDP_WROT0>;
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			iommus = <&iommu M4U_PORT_MDP_WROT0>;
--			mediatek,larb = <&larb0>;
- 		};
- 
- 		mdp_wrot1: wrot@14008000 {
-@@ -1069,7 +1065,6 @@
- 			clocks = <&mmsys CLK_MM_MDP_WROT1>;
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			iommus = <&iommu M4U_PORT_MDP_WROT1>;
--			mediatek,larb = <&larb4>;
- 		};
- 
- 		ovl0: ovl@1400c000 {
-@@ -1079,7 +1074,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_OVL0>;
- 			iommus = <&iommu M4U_PORT_DISP_OVL0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xc000 0x1000>;
- 		};
- 
-@@ -1090,7 +1084,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_OVL1>;
- 			iommus = <&iommu M4U_PORT_DISP_OVL1>;
--			mediatek,larb = <&larb4>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xd000 0x1000>;
- 		};
- 
-@@ -1101,7 +1094,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
- 			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xe000 0x1000>;
- 		};
- 
-@@ -1112,7 +1104,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
- 			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
--			mediatek,larb = <&larb4>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xf000 0x1000>;
- 		};
- 
-@@ -1123,7 +1114,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_RDMA2>;
- 			iommus = <&iommu M4U_PORT_DISP_RDMA2>;
--			mediatek,larb = <&larb4>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0 0x1000>;
- 		};
- 
-@@ -1134,7 +1124,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_WDMA0>;
- 			iommus = <&iommu M4U_PORT_DISP_WDMA0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x1000 0x1000>;
- 		};
- 
-@@ -1145,7 +1134,6 @@
- 			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
- 			clocks = <&mmsys CLK_MM_DISP_WDMA1>;
- 			iommus = <&iommu M4U_PORT_DISP_WDMA1>;
--			mediatek,larb = <&larb4>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x2000 0x1000>;
- 		};
- 
-@@ -1397,7 +1385,6 @@
- 			      <0 0x16027800 0 0x800>,	/* VDEC_HWB */
- 			      <0 0x16028400 0 0x400>;	/* VDEC_HWG */
- 			interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_LOW>;
--			mediatek,larb = <&larb1>;
- 			iommus = <&iommu M4U_PORT_HW_VDEC_MC_EXT>,
- 				 <&iommu M4U_PORT_HW_VDEC_PP_EXT>,
- 				 <&iommu M4U_PORT_HW_VDEC_AVC_MV_EXT>,
-@@ -1465,7 +1452,6 @@
- 			compatible = "mediatek,mt8173-vcodec-enc";
- 			reg = <0 0x18002000 0 0x1000>;	/* VENC_SYS */
- 			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_LOW>;
--			mediatek,larb = <&larb3>;
- 			iommus = <&iommu M4U_PORT_VENC_RCPU>,
- 				 <&iommu M4U_PORT_VENC_REC>,
- 				 <&iommu M4U_PORT_VENC_BSDMA>,
-@@ -1493,7 +1479,6 @@
- 			clock-names = "jpgdec-smi",
- 				      "jpgdec";
- 			power-domains = <&spm MT8173_POWER_DOMAIN_VENC>;
--			mediatek,larb = <&larb3>;
- 			iommus = <&iommu M4U_PORT_JPGDEC_WDMA>,
- 				 <&iommu M4U_PORT_JPGDEC_BSDMA>;
- 		};
-@@ -1527,7 +1512,6 @@
- 				 <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
- 				 <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
- 				 <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
--			mediatek,larb = <&larb5>;
- 			mediatek,vpu = <&vpu>;
- 			clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
- 			clock-names = "venc_lt_sel";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index ac6b0c12d3b3..452102c4904a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1332,7 +1332,6 @@
- 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
- 			clocks = <&mmsys CLK_MM_DISP_OVL0>;
- 			iommus = <&iommu M4U_PORT_DISP_OVL0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x8000 0x1000>;
- 		};
- 
-@@ -1343,7 +1342,6 @@
- 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
- 			clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
- 			iommus = <&iommu M4U_PORT_DISP_2L_OVL0_LARB0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x9000 0x1000>;
- 		};
- 
-@@ -1354,7 +1352,6 @@
- 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
- 			clocks = <&mmsys CLK_MM_DISP_OVL1_2L>;
- 			iommus = <&iommu M4U_PORT_DISP_2L_OVL1_LARB0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xa000 0x1000>;
- 		};
- 
-@@ -1365,7 +1362,6 @@
- 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
- 			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
- 			iommus = <&iommu M4U_PORT_DISP_RDMA0>;
--			mediatek,larb = <&larb0>;
- 			mediatek,rdma-fifo-size = <5120>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xb000 0x1000>;
- 		};
-@@ -1377,7 +1373,6 @@
- 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
- 			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
- 			iommus = <&iommu M4U_PORT_DISP_RDMA1>;
--			mediatek,larb = <&larb0>;
- 			mediatek,rdma-fifo-size = <2048>;
- 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xc000 0x1000>;
- 		};
-@@ -1534,7 +1529,6 @@
- 			compatible = "mediatek,mt8183-jpgenc", "mediatek,mtk-jpgenc";
- 			reg = <0 0x17030000 0 0x1000>;
- 			interrupts = <GIC_SPI 249 IRQ_TYPE_LEVEL_LOW>;
--			mediatek,larb = <&larb4>;
- 			iommus = <&iommu M4U_PORT_JPGENC_RDMA>,
- 				 <&iommu M4U_PORT_JPGENC_BSDMA>;
- 			power-domains = <&spm MT8183_POWER_DOMAIN_VENC>;
+ 	pinctrl_dev_name = mrfld_gpio_get_pinctrl_dev_name(priv);
++	if (!pinctrl_dev_name)
++		return -ENOMEM;
++
+ 	for (i = 0; i < ARRAY_SIZE(mrfld_gpio_ranges); i++) {
+ 		range = &mrfld_gpio_ranges[i];
+ 		retval = gpiochip_add_pin_range(&priv->chip, pinctrl_dev_name,
 -- 
-2.18.0
-

@@ -2,88 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFD649072C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACD949072F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239123AbiAQLdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:33:37 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:54680 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiAQLdf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:33:35 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5A3991F39A;
-        Mon, 17 Jan 2022 11:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642419214; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6AT+BcSng3mCjm3YV8NAWDfJaHk3WflmRlnyGIs2osU=;
-        b=W9fQoUk6ynN8A9SUKYIzk+1u9jMKeIkiIk30Qy2MmF2K2mc8MRRpBph23eyBNuPULQJYo1
-        GZAu82TYgSznNB+DKbd/DbZzZoI+YxFT4s2D4C1WyAK94WGmS9yg31YFEdl2VPXqAeuD0e
-        lorOsIyOTPijwQW/AGlgGOJXgAekaRE=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B21BBA3B84;
-        Mon, 17 Jan 2022 11:33:33 +0000 (UTC)
-Date:   Mon, 17 Jan 2022 12:33:33 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Joel Savitz <jsavitz@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
-        Nico Pache <npache@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
- victim shared mutex
-Message-ID: <YeVUDVV4Z5ur9Flh@dhcp22.suse.cz>
-References: <20211207214902.772614-1-jsavitz@redhat.com>
- <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
- <YbB0d6T8RbHW48sZ@dhcp22.suse.cz>
- <YbDX16LAkvzgYHpH@dhcp22.suse.cz>
- <CAL1p7m4ka1v-Zoi-RpDy5ME-bMikGPX5V_4Hod-Y0KHOq_G8zA@mail.gmail.com>
- <YbG1mu0CLONo+Z7l@dhcp22.suse.cz>
- <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
+        id S239133AbiAQLeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:34:44 -0500
+Received: from mout.gmx.net ([212.227.17.20]:34889 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239124AbiAQLen (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 06:34:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642419279;
+        bh=ixYk5MD8R5rNfTjSru7HMfOf9ODsYIJqWhVfbGz0ugE=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ggDZBvzrdOsJm5kYnP0EB9aiEGGjVtL63MqyEw9eFprRI5FIfCEAIVEtcLTzd+6QH
+         LA2StO1NVyt25vQndr0Xbka7BG2kEjPM0gPu4DxwGTHtBen7tSoKHtfiIQp0jk4gJy
+         mLzsyzBtpcZR0sj/wdcWi6Ka8Dl4CUqaXOWIgF5o=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M26vB-1nBMDm2N7B-002bDo; Mon, 17
+ Jan 2022 12:34:39 +0100
+Message-ID: <9814d071-2a01-f452-8bf9-4d216a11186d@gmx.de>
+Date:   Mon, 17 Jan 2022 12:33:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:II3Xzz0r0WZUTIWd7usXxmmg5CbCeZdmAmFEb0usWE1FFQrDFCi
+ 8cniIJJPypYyHz4L0tyMRAAUbdiNQzbQFnQVH5FumOvO4pu9Y8Fg/0IT+tEJqHqSYSJP5Ht
+ bU1Y3/MvbxfI/pFHZhS2TmlqOtKtw+1GyK5Pib4ZQU4y/sBwOLJKsuhrgL/CJEMycpfoH6Y
+ Qfgoy5K8KMsoBvWq0KM0w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vzZXgwMU3l0=:mWqwBzWJBBo/WO6qFlZLXM
+ SzWTxmBmRJUZ+a4o4fQ/qaIlTKFg0Ut7RA7umThm1Ac+IF42yRn1TyktCIMRjx4eGA2grT/EA
+ vw/oHzIFCy7R3EJJiE5TGWbqQU+lJAuGBsYGzhSOy0rgFvBUVAD7FkqFQ5gdulKME10o6ucE+
+ I/j3U4IjK1NGuaZs5RJY57aO6U5YNnJgqgUqP0QyMUiy+GiHF/w7uW3Mp/yHz7sDcXG8bFwCV
+ jdsJL7nB0HxqNtDCi4y11ftbQMLEFYqzd8yPb/YWTzYPtuD+54aS2SLYjyGORzTEisajemSlV
+ qWx4e4trGLTACup6r2OMAhSxNXDVSG9XZbedppQxuikF8SHxBfWH/CSDp/i8AfH6iIf4fvSGE
+ y+6lPeTvOwPlh5v0BVWlYYJ0FEIRtiJ9WEgXUKj/BNFUHIQUeyxu0XfgS/GO8QFgK3Hrx2JPa
+ H3QjWMNl/BZoiyV6pPl2Xguva6BilOSrTds66DnfWW57zOxvbsJsNu0lckbM/WiJ5SeS8SJE/
+ xK+Dd3wqcIkuPoZYUlvbrUTxCmMLN9yPv+X0uZhrXmTO+ydTTtPx/3blKR64o6vJYZlZUE4i8
+ kRNUkDf9v7cjzRsJe663KJ1onvblWoEo+DaF5eleBJzVD+G2GZU4HJbGVTSEA9VPeymSUSi1Y
+ /Z+YEWRueHeBPP3LO++03627RkyMc/Sy8IZbrPK7R+ia1Tl8hBcEWx6iXvWomstPBffwNCf/1
+ Wlfz6DTbXqqop329G08flltuPOWpKYtBIRGwOMMSbjDcGaaN9Od+czzHZ4RhWZmf4hIzf059L
+ NGFRv+3X+nRgTQEzppYv6T7wmTXX1RAdwqCiwlnFt1V+7AUgquwlFo8nHAS7BS/+DPaxhLqUb
+ TaiC/0HKVjf6bUlvqCiO6W4Q4X8RXgbdCtBxX+kWvk3Eydd/qXGuGQMpHmbHI4g9CA48MivhY
+ P4srW2NhSCPYoBavDeQ+wIeXnRBlv6kL0GKE4Dy8dVL3z4FHhBI7yWsh+2JWreqG07k3oirJK
+ ERcDtNy0XCT2ZutQ/v3UiVDN2ikDGi5hsSloR/eBA82oxdmoK+/dPLhcgeDXZKR6yT1NzvPQI
+ xxj3cUhtazrwzc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have only noticed your email now after replying to v3 so our emails
-have crossed.
+Hi Thomas,
 
-On Fri 14-01-22 09:39:55, Joel Savitz wrote:
-> > What has happened to the oom victim and why it has never exited?
-> 
-> What appears to happen is that the oom victim is sent SIGKILL by the
-> process that triggers the oom while also being marked as an oom
-> victim.
-> 
-> As you mention in your patchset introducing the oom reaper in commit
-> aac4536355496 ("mm, oom: introduce oom reaper"), the purpose the the
-> oom reaper is to try and free more memory more quickly than it
-> otherwise would have been by assuming anonymous or swapped out pages
-> won't be needed in the exit path as the owner is already dying.
-> However, this assumption is violated by the futex_cleanup() path,
-> which needs access to userspace in fetch_robust_entry() when it is
-> called in exit_robust_list(). Trace_printk()s in this failure path
-> reveal an apparent race between the oom reaper thread reaping the
-> victim's mm and the futex_cleanup() path. There may be other ways that
-> this race manifests but we have been most consistently able to trace
-> that one.
+On 1/17/22 12:16, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 14.01.22 um 19:11 schrieb Helge Deller:
+>> The fbdev layer is orphaned, but seems to need some care.
+>> So I'd like to step up as new maintainer.
+>>
+>> Signed-off-by: Helge Deller <deller@gmx.de>
+>
+> First of all, thank you for stepping up to maintain the fbdev
+> codebase. It really needs someone actively looking after it.
 
-Please let's continue the discussion in the v3 email thread:
-http://lkml.kernel.org/r/20220114180135.83308-1-npache@redhat.com
--- 
-Michal Hocko
-SUSE Labs
+Thanks.
+
+> And now comes the BUT.
+>
+> I want to second everything said by Danial and Javier. In addition to
+> purely organizational topics (trees, PRs, etc), there are a number of
+> inherit problems with fbdev.
+
+I will answer that in the other mail to Daniel shortly...
+
+> * It's 90s technology. Neither does it fit today's userspace, not
+> hardware. If you have more than just the most trivial of graphical
+> output fbdev isn't for you.
+
+Right.
+I'm working and maintaining such hardware.
+There is not just x86, there is not just Intel/AMD/nvidia graphics
+and for those fbdev is still (and will be) important.
+
+> * There's no new development in fbdev and there are no new drivers.
+> Everyone works on DRM, which is better in most regards.
+
+In most regards yes.
+So, don't get me wrong.
+I fully agree DRM that is the way forward.
+But on the way forward we shouldn't try to actively break code for others.
+
+> The consequence is that userspace is slowly loosing the ability to
+> use fbdev.
+Maybe.
+
+> * A few use-cases for efifb remain, but distributions are actively
+> moving away from fbdev. I know that at least openSUSE, Fedora and
+> Alpine do this.
+
+Debian is still running on lots of hardware, either which isn't x86 or
+which is old hardware.
+The distributions you mentioned still need fbdev for machines were DRM isn=
+'t
+available (yet).
+
+> I'd like to hear what your plans are for fbdev?
+
+That's easy:
+* To maintain it.
+* To keep it working for where DRM can't be used.
+* My goal is NOT to work against DRM. That's the future of course.
+
+Helge
+
+>
+> Best regards
+> Thomas
+>
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5d0cd537803a..ce47dbc467cc 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7583,11 +7583,12 @@ W:=C2=A0=C2=A0=C2=A0 http://floatingpoint.sourc=
+eforge.net/emulator/index.html
+>> =C2=A0 F:=C2=A0=C2=A0=C2=A0 arch/x86/math-emu/
+>>
+>> =C2=A0 FRAMEBUFFER LAYER
+>> -L:=C2=A0=C2=A0=C2=A0 dri-devel@lists.freedesktop.org
+>> +M:=C2=A0=C2=A0=C2=A0 Helge Deller <deller@gmx.de>
+>> =C2=A0 L:=C2=A0=C2=A0=C2=A0 linux-fbdev@vger.kernel.org
+>> -S:=C2=A0=C2=A0=C2=A0 Orphan
+>> +L:=C2=A0=C2=A0=C2=A0 dri-devel@lists.freedesktop.org
+>> +S:=C2=A0=C2=A0=C2=A0 Maintained
+>> =C2=A0 Q:=C2=A0=C2=A0=C2=A0 http://patchwork.kernel.org/project/linux-f=
+bdev/list/
+>> -T:=C2=A0=C2=A0=C2=A0 git git://anongit.freedesktop.org/drm/drm-misc
+>> +T:=C2=A0=C2=A0=C2=A0 git git://git.kernel.org/pub/scm/linux/kernel/git=
+/deller/linux-fbdev.git
+>> =C2=A0 F:=C2=A0=C2=A0=C2=A0 Documentation/fb/
+>> =C2=A0 F:=C2=A0=C2=A0=C2=A0 drivers/video/
+>> =C2=A0 F:=C2=A0=C2=A0=C2=A0 include/linux/fb.h
+>
+

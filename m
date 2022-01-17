@@ -2,132 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666554905BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028DD490634
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 11:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiAQKK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 05:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236035AbiAQKKZ (ORCPT
+        id S236208AbiAQKp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 05:45:57 -0500
+Received: from unknown-3-146.windriver.com ([147.11.3.146]:10400 "EHLO
+        mail1.wrs.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233756AbiAQKpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:10:25 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F55CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:10:25 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id z22so43762899ybi.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 02:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BouR0VV77MpcGctqKa2gvLTpAJl8MJ7JwC3WZtNKLdo=;
-        b=Qsz6fjuGzAT6R+ByoaWuEbq65eacB9osCar1lL9Ko5fHYTh9dHUphcM7x5Vosx80iy
-         Y3YO7woSJsXRSXp6580L66czwqc4mbuWSsUDHtHTCXyQlmIuspmowV3xhT9uIix8/8ye
-         Sk8rklknMaUzMH8Fisu5M7b9hsOSC7Pik36DwmQdfX3n6w2JSXkS4LsbgKXRr6k+/dYF
-         sYkPV4saskU1hIgGylni3cB5w2B6988bHNZfZFVE2HYOwRb8se4nHBVBChqKr+zlhsRF
-         9hdRoSN2Ysjc1DTxHjILr9p1uM5GljNSP3Nr2dLw06++K0+X4VJ30rakzVp0j0fejZXc
-         rxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BouR0VV77MpcGctqKa2gvLTpAJl8MJ7JwC3WZtNKLdo=;
-        b=2TUU+wiKtobAn4Ly4E/kAIXqSXUZ4Uh7bJQWvoXKhXbb3qa9sC3ln7qXz3xisK1/Ok
-         XkqTKS4ObI7w9xWsHyVpgEmWsoRhyQ50XwpjGyQ4egdaMomxfstRHbRJiv6SZ1mHVfAN
-         U1ISDArpgji95xdKECXCxNrrnHaGGgNYn8A4TuuPR9lOwIkVitYgbDZk01WIYPlpim15
-         vQD7+zu0esRZAm105lUHVf4K5MbFTRu2gpzeZG0nIvB812HbXg9UpYpOACly+D3PbZAJ
-         u9wt1y4OgplXig56D0bn8xHrG1M7jk+gKqHxXJXaJ3gRMjQs0HE8dHXbxhvM5dJANoQm
-         rRfA==
-X-Gm-Message-State: AOAM530kF35yIzGekSp/6FWqK13nawr0xnIXsx4SPxVyUTBGBn/mkAsF
-        h+Z/9AK9u6geenEGipnUxnwEE7XaPdtKDZIewfbbA3UgLen6nw==
-X-Google-Smtp-Source: ABdhPJzkna+eg9A2SqH8HMEvDQLSOkoMBF7pmLip9we40/Nwc/zYFyDWjWKFfMtbs5NZoFBLO+j5f9pHzKasehBEUms=
-X-Received: by 2002:a25:fe05:: with SMTP id k5mr535743ybe.429.1642414224193;
- Mon, 17 Jan 2022 02:10:24 -0800 (PST)
+        Mon, 17 Jan 2022 05:45:55 -0500
+X-Greylist: delayed 1571 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 05:45:54 EST
+Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
+        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 20HAI1Rp024995
+        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 17 Jan 2022 02:18:01 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 20HAHtAH008450
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Jan 2022 02:18:00 -0800 (PST)
+Received: from pek-lpggp7.wrs.com (128.224.153.21) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 17 Jan 2022 02:17:51 -0800
+From:   Xiaolei Wang <xiaolei.wang@windriver.com>
+To:     <hongxing.zhu@nxp.com>, <l.stach@pengutronix.de>,
+        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <festevam@gmail.com>
+CC:     <linux-imx@nxp.com>, <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] pci: imx: disable reglator when imx6_pcie_probe fails
+Date:   Mon, 17 Jan 2022 18:17:35 +0800
+Message-ID: <20220117101735.3512039-1-xiaolei.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220117092759.1619771-1-ztong0001@gmail.com> <87ilui8yxt.wl-maz@kernel.org>
-In-Reply-To: <87ilui8yxt.wl-maz@kernel.org>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Mon, 17 Jan 2022 02:10:13 -0800
-Message-ID: <CAA5qM4CfExWdg=Gp8OshKgYsi0A82nzTA1Uqu6nc_MQmdBfWzg@mail.gmail.com>
-Subject: Re: [PATCH v1] genirq/msi: fix crash when handling Multi-MSI
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [128.224.153.21]
+X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
 
-ops->msi_check could point to pci_msi_domain_check_cap that is the
-function in question
+disable reglator when imx6_pcie_probe fails,
+otherwise the following calltrace will appear
 
-hence we can have following call stack
+[ 3.785075] ------------[ cut here ]------------
+[ 3.788142] Registering SWP/SWPB emulation handler
+[ 3.789853] WARNING: CPU: 0 PID: 7 at drivers/regulator/core.c:2257 _regulator_put.part.0+0x1bc/0x1e0
+[ 3.795680] Loading compiled-in X.509 certificates
+[ 3.803947] Modules linked in:
+[ 3.811922] CPU: 0 PID: 7 Comm: kworker/u8:0 Not tainted 5.16.0-10645-g3c750c7b6143-dirty #9
+[ 3.820393] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+[ 3.826945] Workqueue: events_unbound async_run_entry_fn
+[ 3.832304] unwind_backtrace from show_stack+0x10/0x14
+[ 3.837569] show_stack from dump_stack_lvl+0x58/0x70
+[ 3.842663] dump_stack_lvl from __warn+0xd8/0x114
+[ 3.847493] __warn from warn_slowpath_fmt+0x5c/0xc4
+[ 3.852490] warn_slowpath_fmt from _regulator_put.part.0+0x1bc/0x1e0
+[ 3.858968] _regulator_put.part.0 from regulator_put+0x2c/0x3c
+[ 3.864918] regulator_put from release_nodes+0x50/0x178
+[ 3.870270] release_nodes from devres_release_all+0x80/0xd0
+[ 3.875968] devres_release_all from really_probe+0xdc/0x30c
+[ 3.881661] really_probe from __driver_probe_device+0x80/0xe4
+[ 3.887522] __driver_probe_device from driver_probe_device+0x30/0xd4
+[ 3.893991] driver_probe_device from __driver_attach_async_helper+0x20/0x38
+[ 3.901068] __driver_attach_async_helper from async_run_entry_fn+0x20/0xb4
+[ 3.908059] async_run_entry_fn from process_one_work+0x298/0x7d0
+[ 3.914188] process_one_work from worker_thread+0x30/0x510
+[ 3.919792] worker_thread from kthread+0x128/0x14c
+[ 3.924705] kthread from ret_from_fork+0x14/0x38
+[ 3.929443] Exception stack(0xc20cbfb0 to 0xc20cbff8)
+[ 3.934521] bfa0: 00000000 00000000 00000000 00000000
+[ 3.942722] bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[ 3.950922] bfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[ 3.957677] irq event stamp: 1207
+[ 3.961024] hardirqs last enabled at (1215): [<c0198270>] __up_console_sem+0x50/0x60
+[ 3.968974] hardirqs last disabled at (1224): [<c019825c>] __up_console_sem+0x3c/0x60
+[ 3.976911] softirqs last enabled at (1206): [<c010150c>] __do_softirq+0x2ec/0x5a4
+[ 3.984669] softirqs last disabled at (1197): [<c012ef08>] irq_exit+0x18c/0x20c
+[ 3.992021] ---[ end trace 45a52c023bf8fb33 ]---
 
-pci_msi_domain_check_cap (used by ops->msi_check(domain, info, dev))
-msi_domain_prepare_irqs
-__msi_domain_alloc_irqs
-msi_domain_alloc_irqs_descs_locked
+Signed-off-by: wrsadmin <wrsadmin@pek-xwang8-d1.corp.ad.wrs.com>
+---
+ drivers/pci/controller/dwc/pci-imx6.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-What I am suggesting is commit 0f62d941acf9 changed how this return
-value is being handled and created a UAF
+diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+index 6974bd5aa116..f8279a15463b 100644
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -1216,7 +1216,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 
+ 	ret = dw_pcie_host_init(&pci->pp);
+ 	if (ret < 0)
+-		return ret;
++		goto err_vpcie;
+ 
+ 	if (pci_msi_enabled()) {
+ 		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+@@ -1226,6 +1226,11 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
++
++err_vpcie:
++	regulator_disable(imx6_pcie->vpcie);
++
++	return ret;
+ }
+ 
+ static void imx6_pcie_shutdown(struct platform_device *pdev)
+-- 
+2.25.1
 
-- Tong
-
-
-On Mon, Jan 17, 2022 at 2:00 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Mon, 17 Jan 2022 09:27:59 +0000,
-> Tong Zhang <ztong0001@gmail.com> wrote:
-> >
-> > pci_msi_domain_check_cap() could return 1 when domain does not support
-> > multi MSI and user request multi MSI. This positive value will be used by
-> > __pci_enable_msi_range(). In previous refactor, this positive value is
-> > handled as error case which will cause kernel crash.
-> >
-> > [    1.197953] BUG: KASAN: use-after-free in __pci_enable_msi_range+0x234/0x320
-> > [    1.198327] Freed by task 1:
-> > [    1.198327]  kfree+0x8f/0x2b0
-> > [    1.198327]  msi_free_msi_descs_range+0xf5/0x130
-> > [    1.198327]  msi_domain_alloc_irqs_descs_locked+0x8d/0xa0
-> > [    1.198327]  __pci_enable_msi_range+0x1a4/0x320
-> > [    1.198327]  pci_alloc_irq_vectors_affinity+0x135/0x1a0
-> > [    1.198327]  pcie_port_device_register+0x4a1/0x5c0
-> > [    1.198327]  pcie_portdrv_probe+0x50/0x100
->
-> I'm sorry, but you'll have to be a bit clearer in your commit message,
-> because I cannot relate what you describe with the patch.
->
-> The real issue seems to be that a domain_alloc_irqs callback can
-> return a positive, non-zero value, and I don't think this is expected.
->
-> How about this instead? If I am barking up the wrong tree, please
-> provide a more accurate description of the problem you are seeing.
->
-> Thanks,
->
->         M.
->
-> diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-> index 2bdfce5edafd..da8bb6135627 100644
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -878,8 +878,10 @@ int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
->                 virq = __irq_domain_alloc_irqs(domain, -1, desc->nvec_used,
->                                                dev_to_node(dev), &arg, false,
->                                                desc->affinity);
-> -               if (virq < 0)
-> -                       return msi_handle_pci_fail(domain, desc, allocated);
-> +               if (virq < 0) {
-> +                       ret = msi_handle_pci_fail(domain, desc, allocated);
-> +                       return ret < 0 ? ret : 0;
-> +               }
->
->                 for (i = 0; i < desc->nvec_used; i++) {
->                         irq_set_msi_desc_off(virq, i, desc);
->
-> --
-> Without deviation from the norm, progress is not possible.

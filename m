@@ -2,123 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DA4490B4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45AE490B53
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240423AbiAQPVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:21:46 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4422 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiAQPVo (ORCPT
+        id S240433AbiAQPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240406AbiAQPXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:21:44 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JcwWf25yVz6F8yG;
-        Mon, 17 Jan 2022 23:17:50 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 16:21:41 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Mon, 17 Jan 2022 16:21:41 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>
-Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xnP9oAgAASNCA=
-Date:   Mon, 17 Jan 2022 15:21:41 +0000
-Message-ID: <887a1e46cd6f4c02a6530a15f00e8eb8@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
-In-Reply-To: <YeV+jkGg6mpQdRID@zx2c4.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 17 Jan 2022 10:23:50 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D53C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:23:50 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id c6so13136742plh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:23:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VnjA2KHofUEKHkQNqNXo62wzKavO8JJRdKbV0UahKN4=;
+        b=OE78WGgL1nowrWRV3NUTn32yF5ldeaiahSnJ5YblR9gfaPeDcPDNvdiP2XPFzLOzo5
+         M5c+jvWqEK+OJ8ni0tweiYW+iuKT9iijVE5W3QtywcMa1tZrQREEqbkxDG6lce2EOXX+
+         pkptFj1pMJ1kQlk5xe40o0At/1b0mDUTg57vczFNLO6k9Fw6nvagALJ0TCCCc+luHMxY
+         444lbBpGdfmbGCIAYGGQMYxSR7+0YliaFZ2+f4w1LavyL3XPuyJPXw4xhM0egQvVflMl
+         U7mDV7DMLUuOgc5DU2+Ty+TCqROQkGHcHYqB1PkJvS6giNlUjYUIOeht73sSB3lSns9h
+         aj/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VnjA2KHofUEKHkQNqNXo62wzKavO8JJRdKbV0UahKN4=;
+        b=lvFEoRClGO9im3YYVs55+FZJzWMUabYJw/ma6vIpK7Kkav6hfnoR314DTubRRHNayM
+         6Jd2SW/Cjf2esgqQ0vx1rloHIGhKZTF7tswG8H87mCeZWOTBLp9QvLB7b28A2h/T+b/e
+         6ZhXduzwlGlp7qrjFgrOSsVKcDusdr+B7UfYOW66h2/dUb/o2L0PifM0u3iQqQTyfBoo
+         wlPl/Iv+2txM2ilq4pavT0xGXm+RfQtDPC+LrzQfFqbcjJgxYh8QtIz7RDaP9srpo/dv
+         dpm8OmFu7W9tas35KCze5LL1cX4Iy1x7I0Y7gHjPz5Dcwp5wU+4btM8GQVF0PmWohoi/
+         bNJw==
+X-Gm-Message-State: AOAM531RZ3ikJ8zlWz1XIj1+r1bDFI+0787CYk726eGBJnFDikpVcJKA
+        nWvtT0KLdrYHYNA7zzilAbfkTegrBLFu7mnZbS910A==
+X-Google-Smtp-Source: ABdhPJwyV1xILkVOjDtTwNStAJk4uTHz5Fm7df/Lvq9bkEM2w1UKdOaqrnXM1IFq3J2cy6VzPcXnBeodoC6Bk7Xa5+8=
+X-Received: by 2002:a17:90b:4a92:: with SMTP id lp18mr7416140pjb.152.1642433030103;
+ Mon, 17 Jan 2022 07:23:50 -0800 (PST)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <20220113125201.22544-1-lzmlzmhh@gmail.com>
+In-Reply-To: <20220113125201.22544-1-lzmlzmhh@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 17 Jan 2022 16:23:39 +0100
+Message-ID: <CAG3jFyuZK8BLLicm8BLCGgdZaZ4O6x1W0VY4mn4JvJLDGDxpgw@mail.gmail.com>
+Subject: Re: [PATCH v2] Remove extra device acquisition method of i2c client
+ in lt9611 driver
+To:     Zhiming Liu <lzmlzmhh@gmail.com>
+Cc:     narmstrong@baylibre.com, laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKYXNvbiBBLiBEb25lbmZlbGQgW21haWx0bzpKYXNvbkB6eDJjNC5jb21dDQo+IFNl
-bnQ6IE1vbmRheSwgSmFudWFyeSAxNywgMjAyMiAzOjM1IFBNDQo+IEhpLA0KPiANCj4gV2hpbGUg
-aXQgbG9va3MgbGlrZSB5b3UgcHV0IGEgbG90IG9mIHdvcmsgaW50byB0aGlzIHBhdGNoc2V0LCBJ
-IHRoaW5rDQo+IHRoZSBnZW5lcmFsIGlkZWEgb2YgYWRkaW5nIFBHUCAqdG8gdGhlIGtlcm5lbCog
-aXMgYSBwcmV0dHkgZGF1bnRpbmcNCj4gcHJvcG9zaXRpb24uIFRoZSBnZW5lcmFsIGNvbnNlbnN1
-cyBpbiB0aGUgY3J5cHRvIGVuZ2luZWVyaW5nIHdvcmxkIGlzDQo+IHRoYXQgUEdQIG91Z2h0IHRv
-IGJlIG9uIGl0cyB3YXkgb3V0LiBXZSBkZWZpbml0ZWx5IGRvbid0IHdhbnQgdG8NCj4gcGVycGV0
-dWF0ZSB0aGlzIHByb2plY3Qtb24tbGlmZS1zdXBwb3J0IGludG8gdGhlIHBlcm1hbmVuY2Ugb2Yg
-a2VybmVsDQo+IGNvZGUuIFNvbWUgcXVpY2sgR29vZ2xlIHNlYXJjaGVzIHdpbGwgcmV2ZWFsIGEg
-bGl0YW55IG9mIGJsb2cgcG9zdHMgdG8NCj4gdGhlIHR1bmUgb2YsICJ3aHkgb2ggd2h5IGFyZSBw
-ZW9wbGUgc3RpbGwgdXNpbmcgdGhpcz8iIEhlcmUncyBvbmUgZnJvbQ0KPiAyMDE5OiBodHRwczov
-L2xhdGFjb3JhLm1pY3JvLmJsb2cvMjAxOS8wNy8xNi90aGUtcGdwLXByb2JsZW0uaHRtbCAuIEkN
-Cj4gdGhpbmsgdGhlc2UgYXJlIGFyZ3VtZW50cyB0byB0YWtlIHNlcmlvdXNseS4gQW5kIGV2ZW4g
-aWYgeW91IGRpc2FncmVlDQo+IHdpdGggc29tZSBwYXJ0cywgeW91IG1heSB3YW50IHRvIGNvbnNp
-ZGVyIHdoZXRoZXIgdGhlIHJlbWFpbmluZyBwYXJ0cw0KPiB3YXJyYW50IGEgYml0IG9mIHBhdXNl
-IGJlZm9yZSBhZGRpbmcgdGhpcyB0byB0aGUga2VybmVsIGFuZCBwZXJwZXR1YXRpbmcNCj4gUEdQ
-J3MgZGVzaWduIGZ1cnRoZXIuDQoNCkhpIEphc29uDQoNCnRoYW5rcyBhIGxvdCBmb3IgdGhlIGFk
-ZGl0aW9uYWwgaW5mb3JtYXRpb24uIFRoZXkgY291bGQNCm1ha2UgcGVvcGxlIG1vcmUgYXdhcmUg
-b2YgdGhlIHJpc2tzIHNvIHRoYXQgdGhleSB0cmFuc2l0aW9uDQp0byBtb3JlIHNlY3VyZSBzY2hl
-bWVzLg0KDQpUaGUgcHJvYmxlbSBpcyB0aGF0IEkgZG9uJ3Qgc2VlIHRoYXQgdHJhbnNpdGlvbiBj
-b21pbmcgc29vbi4NClRyYW5zaXRpb24gZnJvbSBQR1AgdG8gYW5vdGhlciBzY2hlbWUgd291bGQg
-cmVxdWlyZSBMaW51eA0KZGlzdHJpYnV0aW9uIHZlbmRvcnMgdG8gZG8gYW4gaHVnZSBhbW91bnQg
-b2Ygd29yay4gSXQgY291bGQNCnByb2JhYmx5IHRha2UgeWVhcnMgYmVmb3JlIHRoYXQgdHJhbnNp
-dGlvbiBvY2N1cnMuDQoNCk1vcmUgc3BlY2lmaWNhbGx5LCB0aGUgZmlyc3QgdGFzayB3b3VsZCBi
-ZSB0byBtb2RpZnkgaG93DQpSUE1zIGFyZSBzaWduZWQgKGFuZCB0aHVzIGhvdyB0aGV5IGFyZSB2
-ZXJpZmllZCkuIFRoZSBzZWNvbmQNCnRhc2sgd291bGQgYmUgdG8gaGF2ZSBhIGRpZmZlcmVudCB3
-YXkgdG8gY2VydGlmeSB0aGUgcHVibGljIGtleS4NCkxhc3RseSwgTGludXggZGlzdHJpYnV0aW9u
-IHZlbmRvcnMgd291bGQgaGF2ZSB0byBjaGFuZ2UgdGhlaXINCmJ1aWxkaW5nIGluZnJhc3RydWN0
-dXJlIHRvIHVzZSB0aGUgbmV3IGNlcnRpZmllZCBrZXksIGEgbmV3DQp2ZXJzaW9uIG9mIHRoZSBy
-cG0gcGFja2FnZSBtYW5hZ2VyIHdoaWNoIHRha2VzIGFzIGlucHV0DQp0aGUgbmV3IGtleSwgcHJv
-ZHVjZXMgYSBkaWZmZXJlbnQgdHlwZSBvZiBzaWduYXR1cmUgYW5kIGVtYmVkcw0KaXQgaW4gdGhl
-IFJQTSBoZWFkZXIuDQoNCkluIHRoaXMgZGlzY3Vzc2lvbjoNCg0KaHR0cHM6Ly9saXN0cy5mZWRv
-cmFwcm9qZWN0Lm9yZy9hcmNoaXZlcy9saXN0L2RldmVsQGxpc3RzLmZlZG9yYXByb2plY3Qub3Jn
-L3RocmVhZC9KRTJIR0xKTUxFS1VKVzNZQlA2TVFKV1A0M0NTVEM1Ny8NCg0KcGVvcGxlIHdlcmUg
-Y29uY2VybmVkIGFib3V0IHRoZSBsaWZlY3ljbGUgb2YgdGhlIHNlY29uZGFyeQ0Ka2V5IHVzZWQg
-Zm9yIGZzdmVyaXR5IHNpZ25hdHVyZXMuIExpa2VseSwgY29tcGxldGVseSByZXBsYWNpbmcNCnRo
-ZSBrZXkgaW5mcmFzdHJ1Y3R1cmUgd291bGQgcmFpc2UgZXZlbiBiaWdnZXIgY29uY2VybnMuDQoN
-ClRoZSBhaW0gb2YgdGhpcyBwYXRjaCBzZXQgaXMgdG8gbWFrZSBzb21lIHNlY3VyaXR5IGZlYXR1
-cmVzDQphdmFpbGFibGUgaW4gYSBzaG9ydCB0aW1lLCBieSBzaWduaWZpY2FudGx5IHJlZHVjaW5n
-IHRoZSBidXJkZW4NCm9mIExpbnV4IGRpc3RyaWJ1dGlvbiB2ZW5kb3JzIGZvciBtYW5hZ2luZyB0
-aG9zZSBzZWN1cml0eQ0KZmVhdHVyZXMuIEkgbWVudGlvbmVkIGZzdmVyaXR5LCBidXQgbXkgcHJp
-bWFyeSB1c2UgY2FzZSB3b3VsZA0KYmUgZm9yIERJR0xJTSAoZXh0cmFjdCByZWZlcmVuY2UgdmFs
-dWVzIGZvciBmaWxlIGRpZ2VzdHMgZnJvbQ0KUlBNIGhlYWRlcnMgYW5kIHVzZSB0aGVtIGZvciBJ
-TUEgbWVhc3VyZW1lbnQgb3IgYXBwcmFpc2FsKS4NCg0KVGhlIG1haW4gYWR2YW50YWdlIG9mIHRo
-aXMgcGF0Y2ggc2V0LCBhdCBsZWFzdCBmb3IgRElHTElNLCBpcw0KdGhhdCBpdCBjb21wbGV0ZWx5
-IHJlbW92ZXMgdGhlIG5lZWQgb2YgY2hhbmdpbmcgdGhlIGJ1aWxkaW5nDQppbmZyYXN0cnVjdHVy
-ZS4gVG8gc2hvdyB0aGUgRElHTElNIGJlbmVmaXRzLCBJIHJldHJvZml0dGVkIHR3bw0KYWxyZWFk
-eSByZWxlYXNlZCBMaW51eCBkaXN0cmlidXRpb25zIChGZWRvcmEgMzQgYW5kIG9wZW5TVVNFDQpM
-ZWFwIDE1LjMpIHdpdGggRElHTElNIGFuZCB0aGUgbmVjZXNzYXJ5IGNoYW5nZXMgaW4gSU1BLCBz
-bw0KdGhhdCB0aGV5IHByZXZlbnQgdGhlIGV4ZWN1dGlvbiBvZiBiaW5hcmllcyBhbmQgc2hhcmVk
-IGxpYnJhcmllcw0Kd2hpY2ggd2VyZSBub3QgcmVsZWFzZWQgYnkgdGhlIGRpc3RyaWJ1dGlvbiAo
-dGhlIG1lY2hhbmlzbSBpcw0KY29tcGxldGVseSBjb25maWd1cmFibGUgYnkgdGhlIHVzZXIgdG8g
-dHJ1c3QgaGlzIGJpbmFyaWVzLA0KaWYgaGUgd2lzaGVzIHRvKS4gSWYgeW91IGFyZSBpbnRlcmVz
-dGVkLCBoZXJlIGlzIHRoZSBsaW5rIG9mIHRoZQ0KZGVtbyBJIGRldmVsb3BlZDoNCg0KaHR0cHM6
-Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtaW50ZWdyaXR5LzQ4Y2Q3MzdjNTA0ZDQ1MjA4Mzc3ZGFh
-MjdkNjI1NTMxQGh1YXdlaS5jb20vDQoNCklmIGluIHRoZSBmdXR1cmUgdGhlIHRyYW5zaXRpb24g
-ZnJvbSBQR1AgdG8gYW5vdGhlciBzY2hlbWUNCm9jY3Vycywgc3VwcG9ydCBmb3IgUEdQIGtleXMg
-YW5kIHNpZ25hdHVyZXMgY2FuIGJlIHN0aWxsDQpkZXByZWNhdGVkLg0KDQpSb2JlcnRvDQoNCkhV
-QVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBE
-aXJlY3RvcjogTGkgUGVuZywgWmhvbmcgUm9uZ2h1YQ0KDQo+IElmIHlvdSdyZSBsb29raW5nIGZv
-ciBhIHNpbXBsZSBzaWduYXR1cmUgbWVjaGFuaXNtIHRvIHJlcGxhY2UgdGhlIHVzZSBvZg0KPiBY
-LjUwOSBhbmQgYWxsIG9mIHRoYXQgaW5mcmFzdHJ1Y3R1cmUsIG1heSBJIHN1Z2dlc3QganVzdCBj
-b21pbmcgdXAgd2l0aA0KPiBzb21ldGhpbmcgc2ltcGxlIHVzaW5nIGVkMjU1MTksIHNpbWlsYXIg
-dG8gc2lnbmlmeSBvciBtaW5pc2lnbj8gVmVyeQ0KPiBtaW5pbWFsIGNvZGUgaW4gdGhlIGtlcm5l
-bCwgaW4gdXNlcnNwYWNlLCBhbmQgdmVyeSBmZXcgbW92aW5nIHBhcnRzIHRvDQo+IGJyZWFrLg0K
-PiANCj4gSmFzb24NCg==
+Hey Zhiming,
+
+Again, I think the code is good, but let's fix some small stuff with
+the patch submission and then I'll happily apply this.
+
+On Thu, 13 Jan 2022 at 13:52, Zhiming Liu <lzmlzmhh@gmail.com> wrote:
+>
+> Signed-off-by: Zhiming Liu <lzmlzmhh@gmail.com>
+
+The tags like Signed-off-by come after the body of the commit message.
+
+>
+> bridge : drm : Remove extra device acquisition method of i2c client in lt9611 driver.
+
+This line has to come first, since it is the title of the commit message.
+
+>
+> We have get the device of i2c client in probe function.So we should
+> remove extra device acquisition method of i2c client.
+
+^^^ this is the body of the commit message.
+
+Put the tags like Signed-off-by here.
+
+> ---
+>  drivers/gpu/drm/bridge/lontium-lt9611.c    | 4 ++--
+>  drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
+> index dafb1b47c15f..feb128a4557d 100644
+> --- a/drivers/gpu/drm/bridge/lontium-lt9611.c
+> +++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
+> @@ -1090,7 +1090,7 @@ static int lt9611_probe(struct i2c_client *client,
+>         if (!lt9611)
+>                 return -ENOMEM;
+>
+> -       lt9611->dev = &client->dev;
+> +       lt9611->dev = dev;
+>         lt9611->client = client;
+>         lt9611->sleep = false;
+>
+> @@ -1100,7 +1100,7 @@ static int lt9611_probe(struct i2c_client *client,
+>                 return PTR_ERR(lt9611->regmap);
+>         }
+>
+> -       ret = lt9611_parse_dt(&client->dev, lt9611);
+> +       ret = lt9611_parse_dt(dev, lt9611);
+>         if (ret) {
+>                 dev_err(dev, "failed to parse device tree\n");
+>                 return ret;
+> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+> index 33f9716da0ee..3d62e6bf6892 100644
+> --- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+> +++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+> @@ -860,7 +860,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
+>         if (!lt9611uxc)
+>                 return -ENOMEM;
+>
+> -       lt9611uxc->dev = &client->dev;
+> +       lt9611uxc->dev = dev;
+>         lt9611uxc->client = client;
+>         mutex_init(&lt9611uxc->ocm_lock);
+>
+> @@ -870,7 +870,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
+>                 return PTR_ERR(lt9611uxc->regmap);
+>         }
+>
+> -       ret = lt9611uxc_parse_dt(&client->dev, lt9611uxc);
+> +       ret = lt9611uxc_parse_dt(dev, lt9611uxc);
+>         if (ret) {
+>                 dev_err(dev, "failed to parse device tree\n");
+>                 return ret;
+> --
+> 2.25.1
+>

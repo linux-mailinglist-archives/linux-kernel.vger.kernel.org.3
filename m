@@ -2,141 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A3E49113D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98314491143
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243226AbiAQVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 16:05:40 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:34814 "EHLO gloria.sntech.de"
+        id S243247AbiAQVIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 16:08:05 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:39160 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229641AbiAQVFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:05:39 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1n9ZBz-0001NU-2L; Mon, 17 Jan 2022 22:05:31 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Frank Wunderlich <frank-w@public-files.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Johan Jonker <jbx6244@gmail.com>,
-        Frank Wunderlich <linux@fw-web.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/3] dts64: rk3568: drop pclk_xpcs from gmac0
-Date:   Mon, 17 Jan 2022 22:05:29 +0100
-Message-ID: <236548630.RelmrRfzIS@diego>
-In-Reply-To: <CAMdYzYrNQCcOiLf=jUGtCTM44SU8bUpBBOac6_SGJtqX+hvUuA@mail.gmail.com>
-References: <20220116124911.65203-1-linux@fw-web.de> <trinity-5a2f356e-2777-4624-b921-f8f56ce282c7-1642420742957@3c-app-gmx-bap64> <CAMdYzYrNQCcOiLf=jUGtCTM44SU8bUpBBOac6_SGJtqX+hvUuA@mail.gmail.com>
+        id S229641AbiAQVID (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 16:08:03 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8A55D1EC02DD;
+        Mon, 17 Jan 2022 22:07:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642453677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=x9mhOj3OPp7/NgS1SucK0b8bM2kZIWpEaBWAuEEfK7Q=;
+        b=OX/VTbG+FiU93UTSILFiausMlqvvqzxTUgh0Kj76IqmgR/Wy6aYQcr0wD46a1hc5INwd5V
+        4eg/6JP4DWLADsHqp4CoaG38ua8jQ/Jeq2Bju6aML1420SCC2A5w8uPfG2aUq9zTV2eSj3
+        QqqJKJ3A5ygnp2E3zCvzN+GKaLD23N8=
+Date:   Mon, 17 Jan 2022 22:08:00 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 04/15] arch: introduce ASM function sections
+Message-ID: <YeXasIO5ArXxtw1J@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-5-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211223002209.1092165-5-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 17. Januar 2022, 19:26:27 CET schrieb Peter Geis:
-> On Mon, Jan 17, 2022 at 6:59 AM Frank Wunderlich
-> <frank-w@public-files.de> wrote:
-> >
-> > Hi
-> >
-> > > Gesendet: Montag, 17. Januar 2022 um 11:47 Uhr
-> > > Von: "Johan Jonker" <jbx6244@gmail.com>
-> > > Hi Frank,
-> > >
-> > > Despite that the DT is hosted in the kernel tree
-> > > DT and mainline kernel driver support are 2 separate things.
-> > > PCLK_XPCS might be in use elsewhere.
-> > >
-> > > Given the link below pclk_xpcs is only needed for rk3568.
-> > > Maybe gmac1 should have a PCLK_XPCS too, because one can select between
-> > > them.
-> > >
-> > > ethernet: stmicro: stmmac: Add SGMII/QSGMII support for RK3568
-> > > https://github.com/rockchip-linux/kernel/commit/1fc7cbfe9e227c700c692f1de3137914b3ea6ca6
-> > >
-> > > The original dtsi did have PCLK_XPCS in both nodes.
-> > > https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2121
-> > > https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L1492
-> > >
-> > > Maybe fix the document or leave it as it is for now as long the driver
-> > > isn't updated and someone has tested it.
-> > > That's up to the DT maintainer.
-> > >
-> > > Johan
-> >
-> > as far as i understand, the PCLK_XPCS is part of the naneng combphy, which is not yet available in mainline.
-> > Naneng driver needs some changes and imho this should be part of it (including change documentation). That also makes it clear why this clock is added.
-> > But leaving an unused property with sideeffects is imho no good choice.
-> >
-> > So this was the easiest way to fix the dtbs_check. Else i got no usable result for it. Maybe adding it to Documentation is also easy, but have not yet looked into it as it currently unused from my POV.
-> >
-> > But i leave it as decision for Maintainer to drop this patch as it is not needed for my Board DTS.
-> 
-> As both the current submission of the combophy driver and the gmac
-> driver do not support xpcs, I elected to remove the clock vice adding
-> documentation for something which is not currently supported.
-> This is especially true as it only leaked through for the gmac0 port,
-> the gmac1 port is modeled to the current support level.
-> 
-> Once xpcs support is introduced, the clock can be added to the
-> documentation and both controllers as part of the same patch series.
-> 
-> Do you concur, Heiko?
+On Thu, Dec 23, 2021 at 01:21:58AM +0100, Alexander Lobakin wrote:
+> Sometimes it is useful to create a separate section for every
+> function (symbol in general) to be able then to selectively merge
+> them back into on or several others. This is how DCE and a part of
+		 ^^
 
-Did you see my own reply from some hours ago?
-From looking at the documentation I got the impression that the
-pclk_xpcs is related to the separate qsgmii_pcs in the memory map.
+"one"
 
-So yes, I fully agree to dropping this clock from here and then adding
-them to whatever ip block really needs it.
+DCE == Dead Code Elimination?
+
+In any case, write it out first please and then use the abbreviation.
+
+> LTO work.
+
+I would've said that too but that one at least has a Kconfig entry which
+explains what it is so no need.
+
+/me looks further
+
+Aha there is LD_DEAD_CODE_DATA_ELIMINATION. So connect the two pls.
+
+> Currently, only C functions are in scope
+
+You mean, currently this is done only for C functions? The "in scope"
+formulation sounds weird.
+
+> and the compilers are able to do this automatically when
+> `-ffunction-section` is specified.
+
+-ffunction-sections, plural.
+
+> Add a basic infra for supporting ASM function sections. If any of
+
+yah s/ASM/asm/g. It's not like it is an acronym or so.
+
+and also, you should explain that "asm function sections" means "put a
+function symbol defined in asm, into a separate section".
+
+> the required build options (DCE, LTO, FG-KASLR later) is on and
+> the target architecture claims it supports them, all ASM functions
+> and "code" will be placed into separate named sections by default.
+> This is achieved using --sectname-subst GAS flag which will then
+> substitute "%S" in a .pushsection or .section directive with the
+
+Thanks for explaining this. The gas manpage is very, hm, verbose
+<sarcarstic eyeroll> ;-\:
+
+"       --sectname-subst
+           Honor substitution sequences in section names.
+"
 
 
-Heiko
+...
+
+> diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+> index dbf8506decca..0c0ddf4429dc 100644
+> --- a/include/linux/linkage.h
+> +++ b/include/linux/linkage.h
+> @@ -73,6 +73,37 @@
+>  #define __ALIGN_STR	".align 4,0x90"
+>  #endif
+>  
+> +/*
+> + * Allow ASM symbols to have their own unique sections if they are being
+> + * generated by the compiler for C functions (DCE, LTO).
+> + */
+> +#if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
+> +    ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
+> +     (defined(CONFIG_LTO_CLANG)))
+> +
+> +#define SYM_PUSH_SECTION(name)				\
+> +	.pushsection %S.name, "ax"
+> +
+> +#define SYM_POP_SECTION()				\
+> +	.popsection
+> +
+> +#define __ASM_PUSH_SECTION(name)			\
+> +	".pushsection %S." name ", \"ax\""
+> +
+> +#else /* Just .text */
+
+Just .text?
+
+> +
+> +#define SYM_PUSH_SECTION(name)
+> +#define SYM_POP_SECTION()
+> +#define __ASM_PUSH_SECTION(name)
+> +
+> +#endif /* Just .text */
+> +
+> +#define ASM_PUSH_SECTION(name)				\
+> +	__ASM_PUSH_SECTION(__stringify(name))
+> +
+> +#define ASM_POP_SECTION()				\
+> +	__stringify(SYM_POP_SECTION())
+> +
+>  #ifdef __ASSEMBLY__
+>  
+>  /* SYM_T_FUNC -- type used by assembler to mark functions */
+> @@ -209,6 +240,15 @@
+>  	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+>  #endif
+>  
+> +/*
+> + * SYM_FUNC_START_WEAK -- use where there are two global names for one
+
+SYM_FUNC_START_WEAK_ALIAS
+
+> + * function, and one of them is weak
+> + */
+> +#ifndef SYM_FUNC_START_WEAK_ALIAS
+> +#define SYM_FUNC_START_WEAK_ALIAS(name)			\
+> +	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
+> +#endif
+> +
+>  /*
+>   * SYM_FUNC_START_ALIAS -- use where there are two global names for one
+>   * function
+> @@ -225,12 +265,24 @@
+>   * later.
+>   */
+>  #define SYM_FUNC_START(name)				\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+> +	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+> +#endif
+> +
+> +/*
+> + * SYM_FUNC_START_SECT -- use for global functions, will be conditionally
+> + * placed into a section specified in the second argument
+> + */
+> +#ifndef SYM_FUNC_START_SECT
+> +#define SYM_FUNC_START_SECT(name, to)			\
+
+			      (name, sect)
+
+"to" reads kinda unclear what it is supposed to mean.
 
 
-> > > ===
-> > >
-> > > XPCS is also part of PD_PIPE.
-> > > See Rockchip RK3568 TRM Part1 V1.0-20210111.pdf page 475.
-> > > Please advise if the power-domain@RK3568_PD_PIPE does need a PCLK_XPCS
-> > > fix or is PCLK_PIPE enough in combination with a PHY driver?
-> > >
-> > > PD_PIPE:
-> > >
-> > > BIU_PIPE
-> > > USB3OTG
-> > > PCIE20
-> > > PCIE30
-> > > SATA
-> > > XPCS
-> > >
-> > >
-> > >       power-domain@RK3568_PD_PIPE {
-> > >               reg = <RK3568_PD_PIPE>;
-> > >               clocks = <&cru PCLK_PIPE>;
-> > >               pm_qos = <&qos_pcie2x1>,
-> > >                        <&qos_pcie3x1>,
-> > >                        <&qos_pcie3x2>,
-> > >                        <&qos_sata0>,
-> > >                        <&qos_sata1>,
-> > >                        <&qos_sata2>,
-> > >                        <&qos_usb3_0>,
-> > >                        <&qos_usb3_1>;
-> > >               #power-domain-cells = <0>;
-> > >       };
-> >
-> > PD_PIPE is imho also part of Naneng. But more for usage as USB3/SATA/... phy. This is not part of Mainline too.
-> >
-> > But thanks for pointing.
-> >
-> > regards Frank
-> 
+> +	SYM_PUSH_SECTION(to) ASM_NL			\
+>  	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+>  #endif
+>  
+>  /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
+>  #ifndef SYM_FUNC_START_NOALIGN
+>  #define SYM_FUNC_START_NOALIGN(name)			\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+>  	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
+>  #endif
+>  
+> @@ -238,24 +290,38 @@
+>  #ifndef SYM_FUNC_START_LOCAL
+>  /* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
+>  #define SYM_FUNC_START_LOCAL(name)			\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+>  	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+>  #endif
+>  
+>  /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
+>  #ifndef SYM_FUNC_START_LOCAL_NOALIGN
+>  #define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
+> +	SYM_PUSH_SECTION(name) ASM_NL			\
+> +	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+> +#endif
+> +
+> +/*
+> + * SYM_FUNC_START_LOCAL_NOALIGN_SECT -- use for local functions, w/o alignment,
+> + * will be conditionally placed into a section specified in the second argument
+> + */
+> +#ifndef SYM_FUNC_START_LOCAL_NOALIGN_SECT
+> +#define SYM_FUNC_START_LOCAL_NOALIGN_SECT(name, to)	\
 
+Ditto. And so on below.
 
+...
 
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 37926d19a74a..3babc0aeac61 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1386,6 +1386,17 @@ config CC_OPTIMIZE_FOR_SIZE
+>  
+>  endchoice
+>  
+> +config HAVE_ASM_FUNCTION_SECTIONS
+> +	depends on ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
+> +	depends on $(cc-option,-Wa$(comma)--sectname-subst)
+> +	def_bool y
+> +	help
+> +	  This enables ASM function sections if both architecture
+> +	  and toolchain supports that. It allows creating a separate
 
+"... support it."
+
+> +	  .text section for each ASM function in order to improve
+
+s/.text // - the section name is specified by the macro arg.
+
+> +	  DCE and LTO (works the same way as -ffunction-sections for
+> +	  C code).
+> +
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

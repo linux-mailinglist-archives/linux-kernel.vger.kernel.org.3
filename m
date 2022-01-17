@@ -2,200 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F2E48FFAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 00:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B20748FFB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 01:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbiAPX5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 18:57:23 -0500
-Received: from mga07.intel.com ([134.134.136.100]:6306 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236448AbiAPX5U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 18:57:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642377439; x=1673913439;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m+eksH4Z3VDFmbqZqXMcQR7273i5vhsghkYH3f7+ImE=;
-  b=duU3Zz4LBvBb9lHpj3KKVynffB3Ui48bJXE51bkDrZikaTPQDOSqRRAU
-   XWMPvHxkuWDIfI3b/AdaXI4o2WsmB1miuLw/5I5jhoqiMU4xPSGFGgRgG
-   YiMHaNDoQ1q3brnt3sluddz9P0BmRgHYOAATUHVNw1HEdIF4hHaFf/lXO
-   1ln9oAV7d5nvwzzaebmuz2ubvHwU4PToH6VNmKeszkCZDf6iUblAdYvXc
-   7X5wKK8Yqdcokop85qOlWC/lO9BVP8jaqwZGlfywn4h5LMZDOh6yIn0/3
-   BTDn+EEzo3yn4HUAlRslwwpToCkGlnIoqnlgTjD44k2ZlzLDKb+LXOcGP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="307864505"
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="307864505"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 15:57:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="474266090"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jan 2022 15:57:17 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9FOe-000B4A-Uq; Sun, 16 Jan 2022 23:57:16 +0000
-Date:   Mon, 17 Jan 2022 07:56:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: drivers/media/i2c/ov5648.c:2035:39: warning: taking address of
- packed member 'handler' of class or structure 'ov5648_ctrls' may result in
- an unaligned pointer value
-Message-ID: <202201170727.bHmScZS3-lkp@intel.com>
+        id S236464AbiAQAF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 19:05:26 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:50914 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236462AbiAQAFZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 19:05:25 -0500
+Received: by mail-io1-f70.google.com with SMTP id m185-20020a6bbcc2000000b00605898d6b61so8802606iof.17
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 16:05:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=n0Q0139SFG+a05PCBICqsbFwpyWDdadFRS7jqfWkpqs=;
+        b=KsxI1t6+9/ioXWf664SbqSZmY05Jte6OYRTK4N8w/scWI/0SBj37fuPUnmxMqIgTj6
+         A3GlBYGPPV3gxaI6etul07gxEqdPNU8EN1jERFFq3RclwmiH2unKnopM205U+ljgXgIE
+         koT6DwyGsAsjVbmZhcUjyqjdXufvlhkIRc2i0inSTbd9XkJftqStyd+fiLq7kHPYsObk
+         N6mSuDQcg9R4Z74C8pVTXAZ4pR+Qsk5pKzOdF/Cfxwh6BnreormrJdIiKCGqEofWscOz
+         nRmMQiO5yyxQMyRAPxogQrfB7Q00U9ZcX7YQyJY+3idhA7HIJHAAEXQvQ+BFSDf2e0AN
+         kchA==
+X-Gm-Message-State: AOAM531cIIZGY9fCILQXgOeam6Kx5P3O27aPYG5bPWNWOFK7H7YdzPRQ
+        ILFDDo9MQMO2LT6Rrb/T/k9b3mqC9f3eaAdVCg9YMYZcl/w1
+X-Google-Smtp-Source: ABdhPJxRLwLRgnFdUfT5aRwInjv9Q6N05LgHNwf1utr7rzaw6YiUKz8+e1THu35ngdTY2XLsKkVxVrcUy7xIUJ5NgBcyCI8nNUGD
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6e02:1c2f:: with SMTP id m15mr9296065ilh.206.1642377924688;
+ Sun, 16 Jan 2022 16:05:24 -0800 (PST)
+Date:   Sun, 16 Jan 2022 16:05:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9c00e05d5bbe887@google.com>
+Subject: [syzbot] WARNING in __cleanup_sighand
+From:   syzbot <syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        axboe@kernel.dk, bpf@vger.kernel.org, christian@brauner.io,
+        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        legion@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Hello,
 
-FYI, the error/warning still remains.
+syzbot found the following issue on:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   79e06c4c4950be2abd8ca5d2428a8c915aa62c24
-commit: e43ccb0a045f34838b786e8021dc4838b4af5c38 media: i2c: Add support for the OV5648 image sensor
-date:   1 year ago
-config: mips-randconfig-r002-20220116 (https://download.01.org/0day-ci/archive/20220117/202201170727.bHmScZS3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e43ccb0a045f34838b786e8021dc4838b4af5c38
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e43ccb0a045f34838b786e8021dc4838b4af5c38
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/iio/adc/ drivers/media/i2c/ drivers/media/v4l2-core/ drivers/usb/gadget/
+HEAD commit:    79e06c4c4950 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1285ed28700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=afd3ce8cd5cf174b
+dashboard link: https://syzkaller.appspot.com/bug?extid=985a662ba46639a7897f
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Unfortunately, I don't have any reproducer for this issue yet.
 
-All warnings (new ones prefixed by >>):
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com
 
->> drivers/media/i2c/ov5648.c:2035:39: warning: taking address of packed member 'handler' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           struct v4l2_ctrl_handler *handler = &ctrls->handler;
-                                                ^~~~~~~~~~~~~~
->> drivers/media/i2c/ov5648.c:2054:29: warning: taking address of packed member 'exposure_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
-                                      ^~~~~~~~~~~~~~~~~~~~
->> drivers/media/i2c/ov5648.c:2064:29: warning: taking address of packed member 'gain_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
-                                      ^~~~~~~~~~~~~~~~
->> drivers/media/i2c/ov5648.c:2080:29: warning: taking address of packed member 'white_balance_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3640 at kernel/sched/wait.c:245 __wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:246
+Modules linked in:
+CPU: 0 PID: 3640 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:245
+Code: 0d 00 00 c6 44 08 0f 00 65 48 8b 04 25 28 00 00 00 48 3b 84 24 a0 00 00 00 75 13 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 <0f> 0b eb a7 e8 60 3e b0 08 55 41 57 41 56 41 55 41 54 53 48 83 ec
+RSP: 0018:ffffc900028cf760 EFLAGS: 00010097
+RAX: ffff88801ec1b130 RBX: 0000000000000046 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000001
+RBP: ffffc900028cf848 R08: dffffc0000000000 R09: ffffed100850025a
+R10: ffffed100850025a R11: 0000000000000000 R12: 0000000000000000
+R13: ffffc900028cf7a0 R14: 1ffff92000519ef4 R15: ffff888042801308
+FS:  0000555556549400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fed83b131b8 CR3: 000000004a82a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 000000000000802e DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __cleanup_sighand+0x48/0xa0 kernel/fork.c:1590
+ __exit_signal kernel/exit.c:159 [inline]
+ release_task+0x115f/0x15d0 kernel/exit.c:200
+ wait_task_zombie kernel/exit.c:1114 [inline]
+ wait_consider_task+0x1995/0x2fb0 kernel/exit.c:1341
+ do_wait_thread kernel/exit.c:1404 [inline]
+ do_wait+0x291/0x9d0 kernel/exit.c:1521
+ kernel_wait4+0x2a3/0x3c0 kernel/exit.c:1684
+ __do_sys_wait4 kernel/exit.c:1712 [inline]
+ __se_sys_wait4 kernel/exit.c:1708 [inline]
+ __x64_sys_wait4+0x130/0x1e0 kernel/exit.c:1708
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f2aff29e487
+Code: 89 7c 24 10 48 89 4c 24 18 e8 35 50 02 00 4c 8b 54 24 18 8b 54 24 14 41 89 c0 48 8b 74 24 08 8b 7c 24 10 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 89 44 24 10 e8 65 50 02 00 8b 44
+RSP: 002b:00007ffeabee34f0 EFLAGS: 00000293 ORIG_RAX: 000000000000003d
+RAX: ffffffffffffffda RBX: 0000000000000932 RCX: 00007f2aff29e487
+RDX: 0000000040000001 RSI: 00007ffeabee357c RDI: 00000000ffffffff
+RBP: 00007ffeabee357c R08: 0000000000000000 R09: 0000000000000010
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000032
+R13: 00000000000af2e3 R14: 0000000000000009 R15: 00007ffeabee35e0
+ </TASK>
 
-
-vim +2035 drivers/media/i2c/ov5648.c
-
-  2031	
-  2032	static int ov5648_ctrls_init(struct ov5648_sensor *sensor)
-  2033	{
-  2034		struct ov5648_ctrls *ctrls = &sensor->ctrls;
-> 2035		struct v4l2_ctrl_handler *handler = &ctrls->handler;
-  2036		const struct v4l2_ctrl_ops *ops = &ov5648_ctrl_ops;
-  2037		int ret;
-  2038	
-  2039		v4l2_ctrl_handler_init(handler, 32);
-  2040	
-  2041		/* Use our mutex for ctrl locking. */
-  2042		handler->lock = &sensor->mutex;
-  2043	
-  2044		/* Exposure */
-  2045	
-  2046		ctrls->exposure_auto = v4l2_ctrl_new_std_menu(handler, ops,
-  2047							      V4L2_CID_EXPOSURE_AUTO,
-  2048							      V4L2_EXPOSURE_MANUAL, 0,
-  2049							      V4L2_EXPOSURE_AUTO);
-  2050	
-  2051		ctrls->exposure = v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE,
-  2052						    16, 1048575, 16, 512);
-  2053	
-> 2054		v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
-  2055	
-  2056		/* Gain */
-  2057	
-  2058		ctrls->gain_auto =
-  2059			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTOGAIN, 0, 1, 1, 1);
-  2060	
-  2061		ctrls->gain = v4l2_ctrl_new_std(handler, ops, V4L2_CID_GAIN, 16, 1023,
-  2062						16, 16);
-  2063	
-> 2064		v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
-  2065	
-  2066		/* White Balance */
-  2067	
-  2068		ctrls->white_balance_auto =
-  2069			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTO_WHITE_BALANCE, 0,
-  2070					  1, 1, 1);
-  2071	
-  2072		ctrls->red_balance = v4l2_ctrl_new_std(handler, ops,
-  2073						       V4L2_CID_RED_BALANCE, 0, 4095,
-  2074						       1, 1024);
-  2075	
-  2076		ctrls->blue_balance = v4l2_ctrl_new_std(handler, ops,
-  2077							V4L2_CID_BLUE_BALANCE, 0, 4095,
-  2078							1, 1024);
-  2079	
-> 2080		v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
-  2081	
-  2082		/* Flip */
-  2083	
-  2084		v4l2_ctrl_new_std(handler, ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-  2085		v4l2_ctrl_new_std(handler, ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-  2086	
-  2087		/* Test Pattern */
-  2088	
-  2089		v4l2_ctrl_new_std_menu_items(handler, ops, V4L2_CID_TEST_PATTERN,
-  2090					     ARRAY_SIZE(ov5648_test_pattern_menu) - 1,
-  2091					     0, 0, ov5648_test_pattern_menu);
-  2092	
-  2093		/* MIPI CSI-2 */
-  2094	
-  2095		ctrls->link_freq =
-  2096			v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ,
-  2097					       ARRAY_SIZE(ov5648_link_freq_menu) - 1,
-  2098					       0, ov5648_link_freq_menu);
-  2099	
-  2100		ctrls->pixel_rate =
-  2101			v4l2_ctrl_new_std(handler, NULL, V4L2_CID_PIXEL_RATE, 1,
-  2102					  INT_MAX, 1, 1);
-  2103	
-  2104		if (handler->error) {
-  2105			ret = handler->error;
-  2106			goto error_ctrls;
-  2107		}
-  2108	
-  2109		ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
-  2110		ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
-  2111	
-  2112		ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-  2113		ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-  2114	
-  2115		sensor->subdev.ctrl_handler = handler;
-  2116	
-  2117		return 0;
-  2118	
-  2119	error_ctrls:
-  2120		v4l2_ctrl_handler_free(handler);
-  2121	
-  2122		return ret;
-  2123	}
-  2124	
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

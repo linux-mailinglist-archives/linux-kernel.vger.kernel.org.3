@@ -2,33 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DB149053A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C0049054B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbiAQJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:40:52 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41822 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237793AbiAQJkU (ORCPT
+        id S237556AbiAQJlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:41:08 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:37114 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238000AbiAQJk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:40:20 -0500
-X-UUID: 03c4ba52ae99470aa15259d93ed7af1d-20220117
-X-UUID: 03c4ba52ae99470aa15259d93ed7af1d-20220117
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        Mon, 17 Jan 2022 04:40:26 -0500
+X-UUID: a36f23d86de84f74a164ea9231786a03-20220117
+X-UUID: a36f23d86de84f74a164ea9231786a03-20220117
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1880628091; Mon, 17 Jan 2022 17:40:18 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 17 Jan 2022 17:40:16 +0800
+        with ESMTP id 168240966; Mon, 17 Jan 2022 17:40:20 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 17 Jan 2022 17:40:18 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 Jan
+ 2022 17:40:18 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 17 Jan 2022 17:40:15 +0800
+ Transport; Mon, 17 Jan 2022 17:40:16 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -53,9 +56,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5, 08/15] media: mtk-vcodec: Add format to support MT21C
-Date:   Mon, 17 Jan 2022 17:39:54 +0800
-Message-ID: <20220117094001.20049-9-yunfei.dong@mediatek.com>
+Subject: [PATCH v5, 09/15] media: mtk-vcodec: disable vp8 4K capability
+Date:   Mon, 17 Jan 2022 17:39:55 +0800
+Message-ID: <20220117094001.20049-10-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220117094001.20049-1-yunfei.dong@mediatek.com>
 References: <20220117094001.20049-1-yunfei.dong@mediatek.com>
@@ -67,58 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Needs to use mediatek compressed mode for mt8192 decoder.
+For vp8 not support 4K, need to disable it.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c   | 7 ++++++-
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h         | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-index 21c97781d50a..0019f8ff614b 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-@@ -81,7 +81,7 @@ static const struct mtk_stateless_control mtk_stateless_controls[] = {
- 
- #define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
- 
--static struct mtk_video_fmt mtk_video_formats[2];
-+static struct mtk_video_fmt mtk_video_formats[3];
- static struct mtk_codec_framesizes mtk_vdec_framesizes[1];
- 
- static struct mtk_video_fmt default_out_format;
-@@ -359,6 +359,7 @@ static void mtk_vcodec_add_formats(unsigned int fourcc,
- 		num_framesizes++;
- 		break;
- 	case V4L2_PIX_FMT_MM21:
-+	case V4L2_PIX_FMT_MT21C:
- 		mtk_video_formats[count_formats].fourcc = fourcc;
- 		mtk_video_formats[count_formats].type = MTK_FMT_FRAME;
- 		mtk_video_formats[count_formats].num_planes = 2;
-@@ -384,6 +385,10 @@ static void mtk_vcodec_get_supported_formats(struct mtk_vcodec_ctx *ctx)
- 		mtk_vcodec_add_formats(V4L2_PIX_FMT_MM21, ctx);
- 		cap_format_count++;
- 	}
-+	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_MT21C) {
-+		mtk_vcodec_add_formats(V4L2_PIX_FMT_MT21C, ctx);
-+		cap_format_count++;
-+	}
- 	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_H264_SLICE) {
- 		mtk_vcodec_add_formats(V4L2_PIX_FMT_H264_SLICE, ctx);
- 		out_format_count++;
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 13c12de85edf..aa608ab0a247 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -353,6 +353,7 @@ enum mtk_vdec_hw_arch {
-  */
- enum mtk_vdec_format_types {
- 	MTK_VDEC_FORMAT_MM21 = 0x20,
-+	MTK_VDEC_FORMAT_MT21C = 0x40,
- 	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
- };
- 
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index bae43938ee37..ba188d16f0fb 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -532,7 +532,8 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
+ 		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
+ 		fsize->stepwise = dec_pdata->vdec_framesizes[i].stepwise;
+ 		if (!(ctx->dev->dec_capability &
+-				VCODEC_CAPABILITY_4K_DISABLED)) {
++				VCODEC_CAPABILITY_4K_DISABLED) &&
++				fsize->pixel_format != V4L2_PIX_FMT_VP8_FRAME) {
+ 			mtk_v4l2_debug(3, "4K is enabled");
+ 			fsize->stepwise.max_width =
+ 					VCODEC_DEC_4K_CODED_WIDTH;
 -- 
 2.25.1
 

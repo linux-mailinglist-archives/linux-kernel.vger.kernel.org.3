@@ -2,206 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96202490031
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4775949003F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236841AbiAQCZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:25:29 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31092 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiAQCZ1 (ORCPT
+        id S236774AbiAQCeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230132AbiAQCeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:25:27 -0500
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JcbJ64ftSz1FCgs;
-        Mon, 17 Jan 2022 10:21:42 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 10:25:24 +0800
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 10:25:24 +0800
-Message-ID: <c618f413-8b58-d1d8-3129-bb5624fc140a@huawei.com>
-Date:   Mon, 17 Jan 2022 10:25:24 +0800
+        Sun, 16 Jan 2022 21:34:03 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E72CC061574;
+        Sun, 16 Jan 2022 18:34:02 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id g5so19776720plo.12;
+        Sun, 16 Jan 2022 18:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=KlnOK8g4Edefb043EQsqUHF8oDJQb8Ntv8+8ul6Frj0=;
+        b=mL70LWhl8jgugjxenuHeAivedcJQTctzhsDpDxvmAkCN3+6fOLAnSohmTtI90mwqJH
+         OH6QUbuhtGTdMjjRFI4KXtGtuCR5UbuHoDrTq24dkfnvxm6pYmpNBiboC9CDnRTDqi6Q
+         3l2DKFbijqHk74FFKOwRf54Tfg09o3ywBIDoz0uAC+VDarH0D1xtAr1ADFBdDqMVm20g
+         EZzfnYqbtwY1XJjGGuAXKbgxTUOJOUTu7obxtYaygBpIxKuQsilvtjPVBSUYP/y0c5Yk
+         XTfmpNb4RkhpwWGJCWmcsdq6zZlmW2XA6owQhjYYng5+24neZUHrJACicRJCzrUCII0Z
+         PfOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=KlnOK8g4Edefb043EQsqUHF8oDJQb8Ntv8+8ul6Frj0=;
+        b=E0AnBhA++CnCQqKWrLwe7POKPOhVqJecqjVCZsR3luXBCS+wTLtNenH8mezYQFF4MC
+         w8oU9hXw/aFNfY6hRlnG1owysVg5+1S02+B7pcBaKxqwXHzGcUfXENk0GC7Kb6iGJodq
+         sygwnsrqcR4sV5NIgL/kHk94unDHv1Re4L65xM/03vndqv9Bj65bdtBjJURqIvvSHe84
+         vpqK8c6/LIb2zEmmxC6YOJUlEuyzgxWgopi+KFAuvkwGnRNzT4BxFBvMwUuqmWZapjVV
+         oakGWw9L+gixiPi/U39xDk8LvzMrmDAHixXDnYyHt0Iqs+RE0iW+03OlHlba73AENEvf
+         4I7Q==
+X-Gm-Message-State: AOAM5332nUrpl+oE1B5eTdBlBUycf3a+zwnX0o/D4TZGPF6dCu9+gBaC
+        dzmDbgN19EFWMqB+Aqzz7X8=
+X-Google-Smtp-Source: ABdhPJwNo6QA1j4XGX5jVDfERE2T5a4/SN079/Wst4ZyZh7WxZ0Bbak4Xv/AediHMbt9iotjhs22uQ==
+X-Received: by 2002:a17:90b:4d11:: with SMTP id mw17mr15707218pjb.32.1642386842049;
+        Sun, 16 Jan 2022 18:34:02 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id c17sm10829173pjs.25.2022.01.16.18.33.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 18:34:01 -0800 (PST)
+Message-ID: <ad3cc4b9-11d4-861b-6e31-a75564539216@gmail.com>
+Date:   Mon, 17 Jan 2022 10:33:51 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [Question] set_cpus_allowed_ptr() call failed at cpuset_attach()
-To:     Waiman Long <longman@redhat.com>
-CC:     <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>
-References: <09ce5796-798e-83d0-f1a6-ba38a787bfc5@huawei.com>
- <4415cd09-6de3-bb2d-386d-8beb4927fb46@huawei.com>
- <YeGi2yjRi/uZIF/2@slm.duckdns.org>
- <8bda2a8d-7faf-621d-c3c0-6351a49219ea@redhat.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <8bda2a8d-7faf-621d-c3c0-6351a49219ea@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH] KVM: x86/svm: Add module param to control PMU
+ virtualization
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211117080304.38989-1-likexu@tencent.com>
+ <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
+ <CALMp9eQCEFsQTbm7F9CqotirbP18OF_cQUySb7Q=dqiuiK1FMg@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <CALMp9eQCEFsQTbm7F9CqotirbP18OF_cQUySb7Q=dqiuiK1FMg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hello
-
-在 2022/1/15 4:33, Waiman Long 写道:
-> On 1/14/22 11:20, Tejun Heo wrote:
->> (cc'ing Waiman and Michal and quoting whole body)
+On 15/1/2022 9:26 am, Jim Mattson wrote:
+> On Thu, Nov 18, 2021 at 5:25 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >>
->> Seems sane to me but let's hear what Waiman and Michal think.
+>> On 11/17/21 09:03, Like Xu wrote:
+>>> From: Like Xu <likexu@tencent.com>
+>>>
+>>> For Intel, the guest PMU can be disabled via clearing the PMU CPUID.
+>>> For AMD, all hw implementations support the base set of four
+>>> performance counters, with current mainstream hardware indicating
+>>> the presence of two additional counters via X86_FEATURE_PERFCTR_CORE.
+>>>
+>>> In the virtualized world, the AMD guest driver may detect
+>>> the presence of at least one counter MSR. Most hypervisor
+>>> vendors would introduce a module param (like lbrv for svm)
+>>> to disable PMU for all guests.
+>>>
+>>> Another control proposal per-VM is to pass PMU disable information
+>>> via MSR_IA32_PERF_CAPABILITIES or one bit in CPUID Fn4000_00[FF:00].
+>>> Both of methods require some guest-side changes, so a module
+>>> parameter may not be sufficiently granular, but practical enough.
+>>>
+>>> Signed-off-by: Like Xu <likexu@tencent.com>
+>>> ---
+>>>    arch/x86/kvm/cpuid.c   |  2 +-
+>>>    arch/x86/kvm/svm/pmu.c |  4 ++++
+>>>    arch/x86/kvm/svm/svm.c | 11 +++++++++++
+>>>    arch/x86/kvm/svm/svm.h |  1 +
+>>>    4 files changed, 17 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>>> index 2d70edb0f323..647af2a184ad 100644
+>>> --- a/arch/x86/kvm/cpuid.c
+>>> +++ b/arch/x86/kvm/cpuid.c
+>>> @@ -487,7 +487,7 @@ void kvm_set_cpu_caps(void)
+>>>                F(CR8_LEGACY) | F(ABM) | F(SSE4A) | F(MISALIGNSSE) |
+>>>                F(3DNOWPREFETCH) | F(OSVW) | 0 /* IBS */ | F(XOP) |
+>>>                0 /* SKINIT, WDT, LWP */ | F(FMA4) | F(TBM) |
+>>> -             F(TOPOEXT) | F(PERFCTR_CORE)
+>>> +             F(TOPOEXT) | 0 /* PERFCTR_CORE */
+>>>        );
+>>>
+>>>        kvm_cpu_cap_mask(CPUID_8000_0001_EDX,
+>>> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+>>> index fdf587f19c5f..a0bcf0144664 100644
+>>> --- a/arch/x86/kvm/svm/pmu.c
+>>> +++ b/arch/x86/kvm/svm/pmu.c
+>>> @@ -16,6 +16,7 @@
+>>>    #include "cpuid.h"
+>>>    #include "lapic.h"
+>>>    #include "pmu.h"
+>>> +#include "svm.h"
+>>>
+>>>    enum pmu_type {
+>>>        PMU_TYPE_COUNTER = 0,
+>>> @@ -100,6 +101,9 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
+>>>    {
+>>>        struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+>>>
+>>> +     if (!pmuv)
+>>> +             return NULL;
+>>> +
+>>>        switch (msr) {
+>>>        case MSR_F15H_PERF_CTL0:
+>>>        case MSR_F15H_PERF_CTL1:
+>>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+>>> index 21bb81710e0f..062e48c191ee 100644
+>>> --- a/arch/x86/kvm/svm/svm.c
+>>> +++ b/arch/x86/kvm/svm/svm.c
+>>> @@ -190,6 +190,10 @@ module_param(vgif, int, 0444);
+>>>    static int lbrv = true;
+>>>    module_param(lbrv, int, 0444);
+>>>
+>>> +/* enable/disable PMU virtualization */
+>>> +bool pmuv = true;
+>>> +module_param(pmuv, bool, 0444);
+>>> +
+>>>    static int tsc_scaling = true;
+>>>    module_param(tsc_scaling, int, 0444);
+>>>
+>>> @@ -952,6 +956,10 @@ static __init void svm_set_cpu_caps(void)
+>>>            boot_cpu_has(X86_FEATURE_AMD_SSBD))
+>>>                kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
+>>>
+>>> +     /* AMD PMU PERFCTR_CORE CPUID */
+>>> +     if (pmuv && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
+>>> +             kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
+>>> +
+>>>        /* CPUID 0x8000001F (SME/SEV features) */
+>>>        sev_set_cpu_caps();
+>>>    }
+>>> @@ -1085,6 +1093,9 @@ static __init int svm_hardware_setup(void)
+>>>                        pr_info("LBR virtualization supported\n");
+>>>        }
+>>>
+>>> +     if (!pmuv)
+>>> +             pr_info("PMU virtualization is disabled\n");
+>>> +
+>>>        svm_set_cpu_caps();
+>>>
+>>>        /*
+>>> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+>>> index 0d7bbe548ac3..08e1c19ffbdf 100644
+>>> --- a/arch/x86/kvm/svm/svm.h
+>>> +++ b/arch/x86/kvm/svm/svm.h
+>>> @@ -32,6 +32,7 @@
+>>>    extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>>>    extern bool npt_enabled;
+>>>    extern bool intercept_smi;
+>>> +extern bool pmuv;
+>>>
+>>>    /*
+>>>     * Clean bits in VMCB.
+>>>
 >>
->> On Fri, Jan 14, 2022 at 09:15:06AM +0800, Zhang Qiao wrote:
->>> Hello everyone
->>>
->>>     I found the following warning log on qemu. I migrated a task from one cpuset cgroup to
->>> another, while I also performed the cpu hotplug operation, and got following calltrace.
->>>
->>>     This may lead to a inconsistency between the affinity of the task and cpuset.cpus of the
->>> dest cpuset, but this task can be successfully migrated to the dest cpuset cgroup.
->>>
->>>     Can we use cpus_read_lock()/cpus_read_unlock() to guarantee that set_cpus_allowed_ptr()
->>> doesn't fail, as follows:
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index d0e163a02099..2535d23d2c51 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -2265,6 +2265,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->>>          guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
->>>
->>>          cgroup_taskset_for_each(task, css, tset) {
->>> +               cpus_read_lock();
->>>                  if (cs != &top_cpuset)
->>>                          guarantee_online_cpus(task, cpus_attach);
->>>                  else
->>> @@ -2274,6 +2275,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->>>                   * fail.  TODO: have a better way to handle failure here
->>>                   */
->>>                  WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
->>> +               cpus_read_unlock();
->>>
->>>
->>>     Is there a better solution?
->>>
->>>     Thanks
+>> Queued, thanks - just changed the parameter name to "pmu".
 > 
-> The change looks OK to me. However, we may need to run the full set of regression test to make sure that lockdep won't complain about potential deadlock.
-> 
-I run the test with lockdep enabled, and got lockdep warning like that below.
-so we should take the cpu_hotplug_lock first, then take the cpuset_rwsem lock.
+> Whoops! The global 'pmu' is hidden by a local 'pmu' in get_gp_pmc_amd().
 
-thanks,
-Zhang Qiao
-
-[   38.420372] ======================================================
-[   38.421339] WARNING: possible circular locking dependency detected
-[   38.422312] 5.16.0-rc4+ #13 Not tainted
-[   38.422920] ------------------------------------------------------
-[   38.423883] bash/594 is trying to acquire lock:
-[   38.424595] ffffffff8286afc0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_attach+0xc2/0x1e0
-[   38.425880]
-[   38.425880] but task is already holding lock:
-[   38.426787] ffffffff8296a5a0 (&cpuset_rwsem){++++}-{0:0}, at: cpuset_attach+0x3e/0x1e0
-[   38.428015]
-[   38.428015] which lock already depends on the new lock.
-[   38.428015]
-[   38.429279]
-[   38.429279] the existing dependency chain (in reverse order) is:
-[   38.430445]
-[   38.430445] -> #1 (&cpuset_rwsem){++++}-{0:0}:
-[   38.431371]        percpu_down_write+0x42/0x130
-[   38.432085]        cpuset_css_online+0x2b/0x2e0
-[   38.432808]        online_css+0x24/0x80
-[   38.433411]        cgroup_apply_control_enable+0x2fa/0x330
-[   38.434273]        cgroup_mkdir+0x396/0x4c0
-[   38.434930]        kernfs_iop_mkdir+0x56/0x80
-[   38.435614]        vfs_mkdir+0xde/0x190
-[   38.436220]        do_mkdirat+0x7d/0xf0
-[   38.436824]        __x64_sys_mkdir+0x21/0x30
-[   38.437495]        do_syscall_64+0x3a/0x80
-[   38.438145]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   38.439015]
-[   38.439015] -> #0 (cpu_hotplug_lock){++++}-{0:0}:
-[   38.439980]        __lock_acquire+0x17f6/0x2260
-[   38.440691]        lock_acquire+0x277/0x320
-[   38.441347]        cpus_read_lock+0x37/0xc0
-[   38.442011]        cpuset_attach+0xc2/0x1e0
-[   38.442671]        cgroup_migrate_execute+0x3a6/0x490
-[   38.443461]        cgroup_attach_task+0x22c/0x3d0
-[   38.444197]        __cgroup1_procs_write.constprop.21+0x10d/0x170
-[   38.445145]        cgroup_file_write+0x6f/0x230
-[   38.445860]        kernfs_fop_write_iter+0x130/0x1b0
-[   38.446636]        new_sync_write+0x120/0x1b0
-[   38.447319]        vfs_write+0x359/0x3b0
-[   38.447937]        ksys_write+0xa2/0xe0
-[   38.448540]        do_syscall_64+0x3a/0x80
-[   38.449183]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   38.450057]
-[   38.450057] other info that might help us debug this:
-[   38.450057]
-[   38.451297]  Possible unsafe locking scenario:
-[   38.451297]
-[   38.452218]        CPU0                    CPU1
-[   38.452935]        ----                    ----
-[   38.453650]   lock(&cpuset_rwsem);
-[   38.454188]                                lock(cpu_hotplug_lock);
-[   38.455148]                                lock(&cpuset_rwsem);
-[   38.456069]   lock(cpu_hotplug_lock);
-[   38.456645]
-[   38.456645]  *** DEADLOCK ***
-[   38.456645]
-[   38.457572] 5 locks held by bash/594:
-[   38.458156]  #0: ffff888100d67470 (sb_writers#8){.+.+}-{0:0}, at: ksys_write+0xa2/0xe0
-[   38.459392]  #1: ffff888100d06290 (&of->mutex){+.+.}-{4:4}, at: kernfs_fop_write_iter+0xfe/0x1b0
-[   38.460761]  #2: ffffffff82967330 (cgroup_mutex){+.+.}-{4:4}, at: cgroup_kn_lock_live+0xcf/0x1d0
-[   38.462137]  #3: ffffffff82967100 (cgroup_threadgroup_rwsem){++++}-{0:0}, at: cgroup_procs_write_start+0x78/0x240
-[   38.463749]  #4: ffffffff8296a5a0 (&cpuset_rwsem){++++}-{0:0}, at: cpuset_attach+0x3e/0x1e0
-[   38.465052]
-[   38.465052] stack backtrace:
-[   38.465747] CPU: 0 PID: 594 Comm: bash Not tainted 5.16.0-rc4+ #13
-[   38.466712] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-[   38.468507] Call Trace:
-[   38.468900]  <TASK>
-[   38.469241]  dump_stack_lvl+0x56/0x7b
-[   38.469827]  check_noncircular+0x126/0x140
-[   38.470476]  ? __lock_acquire+0x17f6/0x2260
-[   38.471136]  __lock_acquire+0x17f6/0x2260
-[   38.471772]  lock_acquire+0x277/0x320
-[   38.472352]  ? cpuset_attach+0xc2/0x1e0
-[   38.472961]  cpus_read_lock+0x37/0xc0
-[   38.473550]  ? cpuset_attach+0xc2/0x1e0
-[   38.474159]  cpuset_attach+0xc2/0x1e0
-[   38.474742]  cgroup_migrate_execute+0x3a6/0x490
-[   38.475457]  cgroup_attach_task+0x22c/0x3d0
-[   38.476121]  ? __cgroup1_procs_write.constprop.21+0x10d/0x170
-[   38.477021]  __cgroup1_procs_write.constprop.21+0x10d/0x170
-[   38.477904]  cgroup_file_write+0x6f/0x230
-[   38.478540]  kernfs_fop_write_iter+0x130/0x1b0
-[   38.479241]  new_sync_write+0x120/0x1b0
-[   38.479849]  vfs_write+0x359/0x3b0
-[   38.480391]  ksys_write+0xa2/0xe0
-[   38.480920]  do_syscall_64+0x3a/0x80
-[   38.481488]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   38.482289] RIP: 0033:0x7f229f42b224
-[   38.482857] Code: 89 02 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8d 05 c1 07 2e 00 8b 00 85 c0 75 13 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 54 f3 c3 66 90 45
-[   38.485758] RSP: 002b:00007fffaa3eadd8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-[   38.486937] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f229f42b224
-[   38.488051] RDX: 0000000000000004 RSI: 0000562679dc5410 RDI: 0000000000000001
-[   38.489164] RBP: 0000562679dc5410 R08: 000000000000000a R09: 0000000000000003
-[   38.490282] R10: 000000000000000a R11: 0000000000000246 R12: 00007f229f707760
-[   38.491395] R13: 0000000000000004 R14: 00007f229f7032a0 R15: 00007f229f702760
-[   38.492516]  </TASK>
-
-
-> Cheers,
-> Longman
-> 
-> .
+Indeed, I wonder if Poalo would like to take a look at this fix:
+https://lore.kernel.org/kvm/20220113035324.59572-1-likexu@tencent.com/

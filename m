@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C74490C3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472B2490C45
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240884AbiAQQMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 11:12:15 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:36579 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240889AbiAQQMM (ORCPT
+        id S240955AbiAQQNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240855AbiAQQN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:12:12 -0500
-Received: by mail-io1-f69.google.com with SMTP id 85-20020a6b0258000000b006079e46159fso6423367ioc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:12:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=xuzTZ41K566REjxDbPumQ9eQ7qYKtqQReAxXQBUHG4E=;
-        b=Ly3Im+A82m5//mjq593aaYHS7DncaZ2H8AqhLzpYCrVwEA8ToqRMgQI/edcCZpJ6t7
-         vQqerhW3wsho8RknS4wbXE2uq5VKAe1XYHqkITeBdNjfAthgeLwmIwtsseuPWwtvBi9Z
-         eTBSh7hSbT2L5W6K2y/fujRVg03NGy1Wt4HUecHWQt+rhUpFrreJQXWhAbeQXP3t0SK5
-         e79a3+fCk3GGJQoxRH2WXqpi66fBQFAj16+K1nmT14m4u6XtuOWg9YfLs0/JLGe45O4a
-         Zet50DeuVw6Rd7W+b22YUVFxxLBWWtaOnjXfa0eUJlGUnMJtOa1w2vKEuZOs4kxuM94u
-         uiGg==
-X-Gm-Message-State: AOAM530KaN+85N5azmjGv4cvlqqavSXazLB20YFoXD0/SxQBJaC7J4Bl
-        1sYv9bJ+VCFIAwU55Kfwl290YlX6Elo0mgO+O8okqQ8K2rdl
-X-Google-Smtp-Source: ABdhPJz1jyyIXxHrExZi60mnLbKlhQ4qpcFnzsZJTX4wBUQTPJaJ+7xBoy1CZ1oYysLObagTp2nEyg6NE4o1+kQgvoMIAINQnGVz
+        Mon, 17 Jan 2022 11:13:29 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DA3C061574;
+        Mon, 17 Jan 2022 08:13:29 -0800 (PST)
+Received: from smtp202.mailbox.org (unknown [91.198.250.118])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jcxlq0fntzQkgh;
+        Mon, 17 Jan 2022 17:13:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1642436005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=o74IafmFWO8eacIxV9jc9ZxTyomdrZz0JkyFBZA0YbY=;
+        b=eq08YXyhHyj+COl6RVLumv/aKYbgO63methE8Vgg/ZWESZuEpOxBKawT9NpSWP+4L3WAWM
+        jisLlSdDmRJ1/4CuMRvRVkpF8UGzbMVe9opRnQw711+95ymnULUC+LgIO+jgcBpG5zwV1V
+        OUaxSh+jUuTBIW3D6Un5gVgethWVP1k9Wuu4zLpMhJ8BHv1P4O63Gh/q/QQu/W0ZZzJr1t
+        vTcIlM8YGRxrrXwGSVE3MqIJ9+0ex+ZocJSgZZqkS+ufZ2LTwxOFxy22YP1l+NtnvzkyIW
+        WGNmDoDdlqtk3X4Mb17BwkTToOsjyq/XPBPTkXV2i6xIm6bkhRaHdPj1w2vuKQ==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/4] Support bcm6123 Bus Converter
+Date:   Mon, 17 Jan 2022 17:12:46 +0100
+Message-Id: <cover.1642434222.git.sylv@sylv.io>
 MIME-Version: 1.0
-X-Received: by 2002:a02:94a3:: with SMTP id x32mr10046790jah.185.1642435931560;
- Mon, 17 Jan 2022 08:12:11 -0800 (PST)
-Date:   Mon, 17 Jan 2022 08:12:11 -0800
-In-Reply-To: <000000000000c0069f05d38f279d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000044c19b05d5c96a09@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in nf_hook_entries_grow
-From:   syzbot <syzbot+e918523f77e62790d6d9@syzkaller.appspotmail.com>
-To:     antony.antony@secunet.com, coreteam@netfilter.org,
-        davem@davemloft.net, eyal.birger@gmail.com, fw@strlen.de,
-        kadlec@netfilter.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        steffen.klassert@secunet.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hi,
 
-commit 8dce43919566f06e865f7e8949f5c10d8c2493f5
-Author: Antony Antony <antony.antony@secunet.com>
-Date:   Sun Dec 12 10:34:30 2021 +0000
+This patchset adds support for BCM6123 Bus Converter from Vicor
+Corporation.
 
-    xfrm: interface with if_id 0 should return error
+Marcello Sylvester Bauer (3):
+  dt-bindings: vendor-prefixes: add Vicor Corporation
+  dt-bindings: hwmon/pmbus: Add vicor,bcm6123 Bus Converter
+  pmbus: remove trailing whitespaces
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10eb9bb0700000
-start commit:   9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=10f3f669b8093e95
-dashboard link: https://syzkaller.appspot.com/bug?extid=e918523f77e62790d6d9
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1781a643b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15130199b00000
+Patrick Rudolph (1):
+  pmbus: Add support for bcm6123 Bus Converter
 
-If the result looks correct, please mark the issue as fixed by replying with:
+ .../bindings/hwmon/pmbus/vicor,bcm6123.yaml   | 41 +++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ drivers/hwmon/pmbus/Kconfig                   | 13 ++-
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/bcm6123.c                 | 90 +++++++++++++++++++
+ 5 files changed, 145 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
+ create mode 100644 drivers/hwmon/pmbus/bcm6123.c
 
-#syz fix: xfrm: interface with if_id 0 should return error
+-- 
+2.33.1
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection

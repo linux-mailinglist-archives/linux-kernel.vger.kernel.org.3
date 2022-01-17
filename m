@@ -2,305 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACC449074F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F76449075F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 12:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239211AbiAQLtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 06:49:17 -0500
-Received: from mail-dm6nam10on2053.outbound.protection.outlook.com ([40.107.93.53]:58848
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236426AbiAQLtQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 06:49:16 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eqQxQ9dy5WVozOF1HrTxwpk9EVd2+K17wqQ/Q1qCa/XEYwtYuDsNSh+ORSuFDpwFmw83Wiexogj6fl2PVN0cFfBGPAWeABeU571weIBGc+Evo594JdnM/7lGo8za5aO1Ujel/RJ2EX//AZyG2am6oxwnBkwBtTmZ7G/veZE5o2aTxv/T2QvoiIRj/OlsAU3wkb4YKiyh485qYuNNe3qZzWlze3/oiXgMIykFMhdgGieFvuvrp5TBckpIO4+T9iqfMzjTNul0C2B5DrK7dYcXbhYW7XUDRmgbas7GIFyETrznu5QxxC431dafRe2ltF7Zki+uKXVfiy/hB4mBdtarPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4JZrpD3IDhBvFoe4ZirLE51IXiPt1uWMM+9C84wMQQA=;
- b=bGMsHiQPE3ZQdIQz/o/68HNfOf+QvQVYJ0PrE/YQZnkxC5foQYmVlDMFtfq9vqm6ikP/3aeU3U1NJiP6H3B4Z65h24mlEVEWZbkiKdp1HEzeNhldnFh8XRuPY0QZDFlY47TAkH6NdqE67Q3sUqXepNx6QEFez5H6xE6nCnJ66xznTsrFNK8zIIVCisIPUilJFOiPdbHfSIGjx29l++Q2T9mYN0jYBU+SWYG8UM0hIDt/raihgi/aU17yv2vMYvRKTpeVKj96+HgCszjVZMhLmvqSxiz+MsxBAAAkpkBOWC/qRD0SkMdD9C6jtOIEXGb70DEDbZfcciCuuza15G0ZQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4JZrpD3IDhBvFoe4ZirLE51IXiPt1uWMM+9C84wMQQA=;
- b=cqXkpVp3VZCW23B0WOvMwY0fZXaS4ENw+GiDgY+Q44wfOef9S/tbDOlqU/dLLGQyldyWJcfzztL4ZA6k5C+FjE3Ed16Zu9VGkCWU6yxIdvy9eqiY2cjbIa2wnGlnzKfFxqnUYsF4I91n2KzBEdJFvCP5+wMO5CVAoRAlbcApyGs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3627.namprd12.prod.outlook.com (2603:10b6:5:3e::18) by
- DM5PR12MB1211.namprd12.prod.outlook.com (2603:10b6:3:79::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4888.11; Mon, 17 Jan 2022 11:49:14 +0000
-Received: from DM6PR12MB3627.namprd12.prod.outlook.com
- ([fe80::2437:1c64:765e:2fb6]) by DM6PR12MB3627.namprd12.prod.outlook.com
- ([fe80::2437:1c64:765e:2fb6%5]) with mapi id 15.20.4888.014; Mon, 17 Jan 2022
- 11:49:14 +0000
-Message-ID: <4b4b1119-7a4e-4cb7-e6a7-8af8a99284fe@amd.com>
-Date:   Mon, 17 Jan 2022 17:18:56 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 1/6] ASoC: amd: acp: Add generic support for PDM
- controller on ACP
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     Sunil-kumar.Dommati@amd.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        id S239253AbiAQLuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 06:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239238AbiAQLuc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 06:50:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EE3C06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 03:50:31 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9QVx-0000fx-Mn; Mon, 17 Jan 2022 12:49:33 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9QVo-00AoYK-L6; Mon, 17 Jan 2022 12:49:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9QVn-0001x3-Fg; Mon, 17 Jan 2022 12:49:23 +0100
+Date:   Mon, 17 Jan 2022 12:49:23 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>, Vijendar.Mukunda@amd.com,
-        Alexander.Deucher@amd.com
-References: <20220113163348.434108-1-AjitKumar.Pandey@amd.com>
- <20220113163348.434108-2-AjitKumar.Pandey@amd.com>
- <7d79a8a7-b9b5-8a0c-a140-810bc647927c@linux.intel.com>
-From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-In-Reply-To: <7d79a8a7-b9b5-8a0c-a140-810bc647927c@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0160.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:26::15) To DM6PR12MB3627.namprd12.prod.outlook.com
- (2603:10b6:5:3e::18)
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220117114923.d5vajgitxneec7j7@pengutronix.de>
+References: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+ <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+ <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
+ <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+ <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
+ <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+ <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+ <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c0b9a095-1566-4c9d-6252-08d9d9af6193
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1211:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1211C418094E6F7DC6A9215382579@DM5PR12MB1211.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: spvTR/FH7KF5W+vxKkQ6KdsV1Rd8ESmu5pY1deqHoGRZpZ1dDDJ4HhPSL5f0JII/Jwh5uFpo3zCc94r69QBa2k2pCRPaXWoywVRtxwG9iTbrFQJQvUUKgR7N92+KNm9d89QN6L7jeHIL0x4Akp+zZ7LhOvdc6zEGAHZXn09l+mna2fElWT9ucZsSQH2eCRaSkFhRw3GrVUc3HU20VCDPcr1okZZYXgGd81nriyoTbDR9yOB8pq7dR4UpBTyX592f2qX+pn6bMprp6AO1MYaFh2bSLKIBZF6/HD9PbZiuBOa3oUI0L+EsHo3qF6cGuQIFjkoCVTGNhIGRvbUFfTkgXZ539MAHgD6bCFaFPz96Rk3hcTcUcr+iTAM1UVoMOC69oy8ONAXvJyyiXcXF8AfGuLzW7BLAWPKRgTl5KWz+Sq8qUSihK9BqOnLrLgnCGQaRFSu5ix74d/ZPNZZYEt09gtii9l1qX+YK3ikOkUF6Bt6/S1lOqM/izYYWi/LsGFIG4PL3xDBkaxmistD0MKc9LjWJauDlc8mqdbJ63OouYWgRXLhRA59XI1QBY/X5ya2+I2HuGBDHMGNPUUH8YNkIMqB1nZJbu2x3W2IhxsF8uCnB7FacBQTB6Yxdya7B+6wwhApgCLxiPg4/FlRzt6n4QTPWfM1+//djHE5TvLnb5dyyiGc/GQSFjs+x4BPYG6ua47QiTT9uQRBaS6z0mfcXOFIbyn291gKMvmxDEsdOYSWOlyJm0PwSvM9wN4dusSmZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3627.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(2616005)(6512007)(53546011)(86362001)(6506007)(5660300002)(186003)(26005)(4326008)(31696002)(36756003)(6486002)(38100700002)(2906002)(83380400001)(66946007)(54906003)(316002)(8676002)(6666004)(8936002)(31686004)(66476007)(66556008)(41533002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YzlwSUpieEVCVk5oOWN0b2VRQmxBazJuMkY3OGFBSkM5YnpGUGdMQW93YTM5?=
- =?utf-8?B?cmIzWFY5THlFQXYrWjRhd1o0OW9tWmNyRys0T2J5NU9vY1ZRY0tjU2JpNVRz?=
- =?utf-8?B?cUl2Y2lmYjV2dCtIZzFkWmNNUm1TcmszT0xoZk9EU0dJVFRNRGZrQmhSQXQ1?=
- =?utf-8?B?S1BQQndmZDJvOFJxakE5dndaTStEamNlL2ZPTDhvS0tLcVBoZ255MlB6SFJZ?=
- =?utf-8?B?aXVJL2hnUlJOME85U2FpcURtem5pbzZ0YVVqdW9neERwOWF1VTlaaXBFdW1O?=
- =?utf-8?B?QlZWZFJxcDFobFkyTHEvaG9BNVNLajg3VnBhNFF0TnhJUjhNc2dSSzhMYVEy?=
- =?utf-8?B?b1ZlTXRMWWdUdDN5RU5MaFlyanQvSEdlTW0vZWp5dmhJZVZsbU5aMzJSdGpV?=
- =?utf-8?B?OEFMVms4SjQ5U3Z2enNveFJzV1NvVVZyNy9XbU11WnVXUnBTeFpZQ2tCM3F4?=
- =?utf-8?B?T01RRW1pSXVUSmwxZEFEUjF1ZGZ3NDNTWWFDQVhhWkpKaGNCazJtclV1eTZG?=
- =?utf-8?B?b2V4RWxxWXpNWXJZQlFvU1p1MmRaTkplV1BFSUtxUlRBRXIvSkdBUkNFL29Y?=
- =?utf-8?B?UC9MRURsNGsrNjhnaStXVGdXS1kvdWRnZ21UWER0eVhPRmh1MzVDNFV1bDVE?=
- =?utf-8?B?L0hpaVNTV2RHU3AyUXppbEVFYTNLK0hGK29ObkZ1ellxVDkyc1A2SERvTFoy?=
- =?utf-8?B?bVdBTWk4V2ZvNXhmVU5ySHVaRll2MnBvdTI4clA1V3h5L3Y0V2VJK2J4TzNs?=
- =?utf-8?B?cG9qVm1nU2ljWUs3OTFkdnBBZmFjcU5HaWl6WWlaajlKZzA2K05YcDNucnk4?=
- =?utf-8?B?bDJidG80RFAwOXBkQ2NPcVJQVzBWOS9FL2dod0M0cGd1eUhpZHJ5NU5udWk1?=
- =?utf-8?B?N1ZjT1FDY2JhQkFZdTVpcEVKMTc3Z3d3NldYMG9hNE53U1JJcE8zTUNCYU1w?=
- =?utf-8?B?OE5SaW15RmxlaDdObUp6b2R5Z0ZuM29QTDRzOW5VTFl3Vm44RHdzaXdYUk9h?=
- =?utf-8?B?VUtPNmxvSk9iQjRjaTExM3FidTVjcFlnaWNjWnZ5VmQ4S0NDaTlHTkhqZFBI?=
- =?utf-8?B?eFdqN0NpZE9HMHVmOEpPemhITUhwRy8reU01TmdqdjU3UytGR3lJb1RWZTFr?=
- =?utf-8?B?Zzh1NlVKa0F4VHFZZTZGUVcxaFk1ei9EZHRDMUFDbkdnd25pbDVvenlFUzJB?=
- =?utf-8?B?R3Y1YzBTMGZsQ2s0Uk50akh4N2xxZnZYSFhZVm1ORWZ0WDM5TGtPTkl0dCtW?=
- =?utf-8?B?ektka0FGOG5kYTVhZzZPZGQ4S1dwZGpKS2FPZHdEU2MrSU9wNEVZamFTdTRI?=
- =?utf-8?B?Y095RVFzZ2crbjJnUmcvbmZkRGVCWjF4anhKUTZOK28zZlpwdVpjSDVWc0Zl?=
- =?utf-8?B?cFpMYU11TVdLYjljWG41Wi9PUmhRNE5sUVFLanYzcUlna3A0Z0NQTUhjYkxD?=
- =?utf-8?B?YXlSNGZnMDAwZ1VGek83TEJjZ05CYVR1cW92REp2ckwzZmp2Tm1QRlRSb2hv?=
- =?utf-8?B?OFN5QmdPWmo1N3kzcXUvTTFJY1p2U2ZtTEk4Vms5aEp2dytWUGFLQjlTUzk5?=
- =?utf-8?B?WVR2a05QTTRleEdGMHdobzk2dWRDeS9rVWtXYUw3dUJUREs3bDlkSG93cEFT?=
- =?utf-8?B?ektXM1RGS0RyV2grbVZVdVFQUktFQ1Zmb085NjFQdEZ4c3VzZXliaE03akpo?=
- =?utf-8?B?d2dTWGtySGJHWXkyTXI2WG4wNlk4ZHBURzdydEV1bnFFTzNiUmhjWFczUEkv?=
- =?utf-8?B?MXFjd2pic3oyVjNDUmpkMGdxTlpzZWRaZVlWdjJjSDJLcCtyQkZhUHoyY1lX?=
- =?utf-8?B?ZmJESHd5enBhMHZlYVhPcTg4TjFjclIyZFZiZ1ZFRmFSSjBjYXRFWHNvMU9a?=
- =?utf-8?B?d09YbHdOMGZJMjZjOVFsWFgreTk3Q0ErempLY1JRcHlEcTh1UkVGdGxaQWpU?=
- =?utf-8?B?dkgvS0xLblNyOHEzRHJLLzJOcDh0K1hGSFdrbk9nVmRTUGtNeUFsZGQ5RFIz?=
- =?utf-8?B?bzdVeTZoVDcyb2xsQ3k0UktycFljdmVqMmg4S1lWVlpWNjRxaWhhUE4zY0l6?=
- =?utf-8?B?Z21CLytqNjdDOTBCOFBjODUybm1OcnowRVZyV3NFWGFRQ0RmdzJmZTlPV2FP?=
- =?utf-8?B?ZzYxek84aGNlZzd3REtkM3IxTERmcyt0Tm5xWmIrcTZjdEJNemk5WlMvUFdq?=
- =?utf-8?Q?f7EXVJd7V7g4qNyXvo03MCo=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0b9a095-1566-4c9d-6252-08d9d9af6193
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3627.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 11:49:14.0282
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vt71bykNyrsND0mfRCjaC09YHXuRW22aEFoq3hB+CsVwYtuQSnOqySMBu3XDH+C/9i1Us0NeT/PY2+ejguqEWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1211
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p6yh245p57zhiyck"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--p6yh245p57zhiyck
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 1/14/2022 12:04 AM, Pierre-Louis Bossart wrote:
-> [CAUTION: External Email]
-> 
-> couple of nit-picks:
-> 
-> 
->> diff --git a/sound/soc/amd/acp/acp-pdm.c b/sound/soc/amd/acp/acp-pdm.c
->> new file mode 100644
->> index 000000000000..cb9bbd795eee
->> --- /dev/null
->> +++ b/sound/soc/amd/acp/acp-pdm.c
->> @@ -0,0 +1,181 @@
->> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
->> +//
->> +// This file is provided under a dual BSD/GPLv2 license. When using or
->> +// redistributing this file, you may do so under either license.
->> +//
->> +// Copyright(c) 2021 Advanced Micro Devices, Inc.
-> 
-> 2022?
-> 
->> +//
->> +// Authors: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
->> +//       Vijendar Mukunda <Vijendar.Mukunda@amd.com>
->> +//
->> +
->> +/*
->> + * Generic Hardware interface for ACP Audio PDM controller
->> + */
->> +
->> +#include <linux/platform_device.h>
->> +#include <linux/module.h>
->> +#include <linux/err.h>
->> +#include <linux/io.h>
->> +#include <sound/pcm_params.h>
->> +#include <sound/soc.h>
->> +#include <sound/soc-dai.h>
->> +#include <linux/dma-mapping.h>
-> 
-> alphabetical order?
-> 
->> +
->> +#include "amd.h"
->> +
->> +#define DRV_NAME "acp-pdm"
->> +
->> +#define PDM_DMA_STAT         0x10
->> +#define PDM_DMA_INTR_MASK    0x10000
->> +#define PDM_DEC_64           0x2
->> +#define PDM_CLK_FREQ_MASK    0x07
->> +#define PDM_MISC_CTRL_MASK   0x10
->> +#define PDM_ENABLE           0x01
->> +#define PDM_DISABLE          0x00
->> +#define DMA_EN_MASK          0x02
->> +#define DELAY_US             5
->> +#define PDM_TIMEOUT          1000
->> +
->> +static int acp_dmic_dai_trigger(struct snd_pcm_substream *substream,
->> +                            int cmd, struct snd_soc_dai *dai)
->> +{
->> +     struct acp_stream *stream = substream->runtime->private_data;
->> +     struct device *dev = dai->component->dev;
->> +     struct acp_dev_data *adata = dev_get_drvdata(dev);
->> +     u32 physical_addr, size_dmic, period_bytes;
->> +     unsigned int dma_enable;
->> +     int ret = 0;
->> +
->> +     period_bytes = frames_to_bytes(substream->runtime,
->> +                     substream->runtime->period_size);
->> +     size_dmic = frames_to_bytes(substream->runtime,
->> +                     substream->runtime->buffer_size);
->> +
->> +     physical_addr = stream->reg_offset + MEM_WINDOW_START;
->> +
->> +     /* Init DMIC Ring buffer */
->> +     writel(physical_addr, adata->acp_base + ACP_WOV_RX_RINGBUFADDR);
->> +     writel(size_dmic, adata->acp_base + ACP_WOV_RX_RINGBUFSIZE);
->> +     writel(period_bytes, adata->acp_base + ACP_WOV_RX_INTR_WATERMARK_SIZE);
->> +     writel(0x01, adata->acp_base + ACPAXI2AXI_ATU_CTRL);
-> 
-> could this be done in a .prepare step?
-> 
->> +
->> +     switch (cmd) {
->> +     case SNDRV_PCM_TRIGGER_START:
->> +     case SNDRV_PCM_TRIGGER_RESUME:
->> +     case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
->> +             dma_enable = readl(adata->acp_base + ACP_WOV_PDM_DMA_ENABLE);
->> +             if (!(dma_enable & DMA_EN_MASK)) {
->> +                     writel(PDM_ENABLE, adata->acp_base + ACP_WOV_PDM_ENABLE);
->> +                     writel(PDM_ENABLE, adata->acp_base + ACP_WOV_PDM_DMA_ENABLE);
->> +             }
->> +
->> +             ret = readl_poll_timeout_atomic(adata->acp_base + ACP_WOV_PDM_DMA_ENABLE,
->> +                                             dma_enable, (dma_enable & DMA_EN_MASK),
->> +                                             DELAY_US, PDM_TIMEOUT);
->> +             break;
->> +     case SNDRV_PCM_TRIGGER_STOP:
->> +     case SNDRV_PCM_TRIGGER_SUSPEND:
->> +     case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
->> +             dma_enable = readl(adata->acp_base + ACP_WOV_PDM_DMA_ENABLE);
->> +             if ((dma_enable & DMA_EN_MASK)) {
->> +                     writel(PDM_DISABLE, adata->acp_base + ACP_WOV_PDM_ENABLE);
->> +                     writel(PDM_DISABLE, adata->acp_base + ACP_WOV_PDM_DMA_ENABLE);
->> +
->> +             }
->> +
->> +             ret = readl_poll_timeout_atomic(adata->acp_base + ACP_WOV_PDM_DMA_ENABLE,
->> +                                             dma_enable, !(dma_enable & DMA_EN_MASK),
->> +                                             DELAY_US, PDM_TIMEOUT);
-> 
-> is the _atomic needed?
-> 
->> +             break;
->> +     default:
->> +             ret = -EINVAL;
->> +             break;
->> +     }
->> +
->> +     return ret;
->> +}
->> +
->> +static int acp_dmic_hwparams(struct snd_pcm_substream *substream,
->> +     struct snd_pcm_hw_params *hwparams, struct snd_soc_dai *dai)
->> +{
->> +     struct device *dev = dai->component->dev;
->> +     struct acp_dev_data *adata = dev_get_drvdata(dev);
->> +     unsigned int dmic_ctrl, channels, ch_mask;
->> +
->> +     /* Enable default DMIC clk */
->> +     writel(PDM_CLK_FREQ_MASK, adata->acp_base + ACP_WOV_CLK_CTRL);
->> +     dmic_ctrl = readl(adata->acp_base + ACP_WOV_MISC_CTRL);
->> +     dmic_ctrl |= PDM_MISC_CTRL_MASK;
->> +     writel(dmic_ctrl, adata->acp_base + ACP_WOV_MISC_CTRL);
-> 
-> .hw_params can be called multiple times, should this clock handling be
-> done in a .prepare step?
-> 
-> Or alternatively in .startup - this doesn't seem to depend on hardware
-> parameters?
-> 
->> +
->> +     channels = params_channels(hwparams);
->> +     switch (channels) {
->> +     case 2:
->> +             ch_mask = 0;
->> +             break;
->> +     case 4:
->> +             ch_mask = 1;
->> +             break;
->> +     case 6:
->> +             ch_mask = 2;
->> +             break;
->> +     default:
->> +             dev_err(dev, "Invalid channels %d\n", channels);
->> +             return -EINVAL;
->> +     }
->> +
->> +     if (params_format(hwparams) != SNDRV_PCM_FORMAT_S32_LE) {
->> +             dev_err(dai->dev, "Invalid format:%d\n", params_format(hwparams));
->> +             return -EINVAL;
->> +     }
->> +
->> +     writel(ch_mask, adata->acp_base + ACP_WOV_PDM_NO_OF_CHANNELS);
->> +     writel(PDM_DEC_64, adata->acp_base + ACP_WOV_PDM_DECIMATION_FACTOR);
->> +
->> +     return 0;
->> +}
-> 
->> +MODULE_LICENSE("GPL v2");
-> 
-> "GPL" is enough
-> 
-> 
-Thanks, will try to adopt commnets in v3 patch chain
+On Mon, Jan 17, 2022 at 11:35:52AM +0100, Geert Uytterhoeven wrote:
+> Hi Uwe,
+>=20
+> On Mon, Jan 17, 2022 at 10:24 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Mon, Jan 17, 2022 at 09:41:42AM +0100, Geert Uytterhoeven wrote:
+> > > On Sat, Jan 15, 2022 at 9:22 PM Sergey Shtylyov <s.shtylyov@omp.ru> w=
+rote:
+> > > > On 1/14/22 11:22 PM, Uwe Kleine-K=F6nig wrote:
+> > > > > You have to understand that for clk (and regulator and gpiod) NUL=
+L is a
+> > > > > valid descriptor that can actually be used, it just has no effect=
+=2E So
+> > > > > this is a convenience value for the case "If the clk/regulator/gp=
+iod in
+> > > > > question isn't available, there is nothing to do". This is what m=
+akes
+> > > > > clk_get_optional() and the others really useful and justifies the=
+ir
+> > > > > existence. This doesn't apply to platform_get_irq_optional().
+> > > >
+> > > >    I do understand that. However, IRQs are a different beast with t=
+heir
+> > > > own justifications...
+> > >
+> > > > > clk_get_optional() is sane and sensible for cases where the clk m=
+ight be
+> > > > > absent and it helps you because you don't have to differentiate b=
+etween
+> > > > > "not found" and "there is an actual resource".
+> > > > >
+> > > > > The reason for platform_get_irq_optional()'s existence is just th=
+at
+> > > > > platform_get_irq() emits an error message which is wrong or subop=
+timal
+> > > >
+> > > >    I think you are very wrong here. The real reason is to simplify =
+the
+> > > > callers.
+> > >
+> > > Indeed.
+> >
+> > The commit that introduced platform_get_irq_optional() said:
+> >
+> >         Introduce a new platform_get_irq_optional() that works much like
+> >         platform_get_irq() but does not output an error on failure to
+> >         find the interrupt.
+> >
+> > So the author of 8973ea47901c81a1912bd05f1577bed9b5b52506 failed to
+> > mention the real reason? Or look at
+> > 31a8d8fa84c51d3ab00bf059158d5de6178cf890:
+> >
+> >         [...] use platform_get_irq_optional() to get second/third IRQ
+> >         which are optional to avoid below error message during probe:
+> >         [...]
+> >
+> > Look through the output of
+> >
+> >         git log -Splatform_get_irq_optional
+> >
+> > to find several more of these.
+>=20
+> Commit 8973ea47901c81a1 ("driver core: platform: Introduce
+> platform_get_irq_optional()") and the various fixups fixed the ugly
+> printing of error messages that were not applicable.
+> In hindsight, probably commit 7723f4c5ecdb8d83 ("driver core:
+> platform: Add an error message to platform_get_irq*()") should have
+> been reverted instead, until a platform_get_irq_optional() with proper
+> semantics was introduced.
+
+ack.
+
+> But as we were all in a hurry to kill the non-applicable error
+> message, we went for the quick and dirty fix.
+>=20
+> > Also I fail to see how a caller of (today's) platform_get_irq_optional()
+> > is simpler than a caller of platform_get_irq() given that there is no
+> > semantic difference between the two. Please show me a single
+> > conversion from platform_get_irq to platform_get_irq_optional that
+> > yielded a simplification.
+>=20
+> That's exactly why we want to change the latter to return 0 ;-)
+
+OK. So you agree to my statement "The reason for
+platform_get_irq_optional()'s existence is just that platform_get_irq()
+emits an error message [...]". Actually you don't want to oppose but
+say: It's unfortunate that the silent variant of platform_get_irq() took
+the obvious name of a function that could have an improved return code
+semantic.
+
+So my suggestion to rename todays platform_get_irq_optional() to
+platform_get_irq_silently() and then introducing
+platform_get_irq_optional() with your suggested semantic seems
+intriguing and straigt forward to me.
+
+Another thought: platform_get_irq emits an error message for all
+problems. Wouldn't it be consistent to let platform_get_irq_optional()
+emit an error message for all problems but "not found"?
+Alternatively remove the error printk from platform_get_irq().
+
+> > So you need some more effort to convince me of your POV.
+> >
+> > > Even for clocks, you cannot assume that you can always blindly use
+> > > the returned dummy (actually a NULL pointer) to call into the clk
+> > > API.  While this works fine for simple use cases, where you just
+> > > want to enable/disable an optional clock (clk_prepare_enable() and
+> > > clk_disable_unprepare()), it does not work for more complex use cases.
+> >
+> > Agreed. But for clks and gpiods and regulators the simple case is quite
+> > usual. For irqs it isn't.
+>=20
+> It is for devices that can have either separate interrupts, or a single
+> multiplexed interrupt.
+>=20
+> The logic in e.g. drivers/tty/serial/sh-sci.c and
+> drivers/spi/spi-rspi.c could be simplified and improved (currently
+> it doesn't handle deferred probe) if platform_get_irq_optional()
+> would return 0 instead of -ENXIO.
+
+Looking at sh-sci.c the irq handling logic could be improved even
+without a changed platform_get_irq_optional():
+
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 968967d722d4..c7dc9fb84844 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -2873,11 +2873,13 @@ static int sci_init_single(struct platform_device *=
+dev,
+ 	 * interrupt ID numbers, or muxed together with another interrupt.
+ 	 */
+ 	if (sci_port->irqs[0] < 0)
+-		return -ENXIO;
++		return sci_port->irqs[0];
+=20
+-	if (sci_port->irqs[1] < 0)
++	if (sci_port->irqs[1] =3D=3D -ENXIO)
+ 		for (i =3D 1; i < ARRAY_SIZE(sci_port->irqs); i++)
+ 			sci_port->irqs[i] =3D sci_port->irqs[0];
++	else if (sci_port->irqs[1] < 0)
++		return sci_port->irqs[1];
+=20
+ 	sci_port->params =3D sci_probe_regmap(p);
+ 	if (unlikely(sci_port->params =3D=3D NULL))
+
+And then the code flow is actively irritating. sci_init_single() copies
+irqs[0] to all other irqs[i] and then sci_request_irq() loops over the
+already requested irqs and checks for duplicates. A single place that
+identifies the exact set of required irqs would already help a lot.
+
+Also for spi-rspi.c I don't see how platform_get_irq_byname_optional()
+returning 0 instead of -ENXIO would help. Please talk in patches.
+
+Preferably first simplify in-driver logic to make the conversion to the
+new platform_get_irq_optional() actually reviewable.
+
+> > And if you cannot blindly use the dummy, then you're not the targetted
+> > caller of *_get_optional() and should better use *_get() and handle
+> > -ENODEV explicitly.
+>=20
+> No, because the janitors tend to consolidate error message handling,
+> by moving the printing up, inside the *_get() methods.  That's exactly
+> what happened here.
+
+This is in my eyes the root cause of the issues at hand. Moving the
+error message handling into a get function is only right for most of the
+callers. So the more conservative approach would be to introduce a noisy
+variant of the get function and convert all users that benefit
+separately while the unreviewed callers and those that don't want an
+error message can happily continue to use the silent variant.
+
+> So there are three reasons: because the absence of an optional IRQ
+> is not an error, and thus that should not cause (a) an error code
+> to be returned, and (b) an error message to be printed, and (c)
+> because it can simplify the logic in device drivers.
+
+I don't agree to (a). If the value signaling not-found is -ENXIO or 0
+(or -ENODEV) doesn't matter much. I wouldn't deviate from the return
+code semantics of platform_get_irq() just for having to check against 0
+instead of -ENXIO. Zero is then just another magic value.
+(c) still has to be proven, see above.
+
+> Commit 8973ea47901c81a1 ("driver core: platform: Introduce
+> platform_get_irq_optional()") fixed (b), but didn't address (a) and
+> (c).
+
+Yes, it fixed (b) and picked a bad name for that.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--p6yh245p57zhiyck
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHlV8AACgkQwfwUeK3K
+7Am0GQf8CoKYtZsyB2Veq4tA4dVxwehDrqSNzD0/oee9gQ2W8Ug3o/BHJYBwahzq
+EvMyo3JUywFfBFS6fqP6q+5CXaw3qhcVdLIQIYR1NbdbDku9fPpYgUlMeO8FLj0S
+AjA1gReJzZffpqQa+j6sWHbwoCmV4ZWTYuhi2tnY6gxes4QcBTcXhrlPtPvEcvRj
+xiaHDNvm4yBJjau7t98dhCCfb9ioYwkuGybaTVJenP6u4ZB5QxTAKBsVZsaYscE9
+K/bTKX+pt+MFJrjy6AN6Qq4JYNuQK8v7MawD5u/q9qZHAELmMQaNyWTpBBDKqjGv
+Z8p6bAtXmJy2dTalO786GdRxwAWrMQ==
+=gT+3
+-----END PGP SIGNATURE-----
+
+--p6yh245p57zhiyck--

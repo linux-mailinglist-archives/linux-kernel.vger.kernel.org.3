@@ -2,115 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 839DE490BA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0668490BA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240593AbiAQPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbiAQPmk (ORCPT
+        id S240601AbiAQPmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:42:50 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60142 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240598AbiAQPmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:42:40 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCF5C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:42:40 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id p37so10521493pfh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 07:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mBse3TDhMT3P1QzjpmTykdxb+O3mXQF8X49QrJGnK9w=;
-        b=LZTP5w65jwgoJGxqEXUMQBhGqnjlbTs84KuPFBpRzYEx0DwsSeJeLBikEqHqkrSW9g
-         VSpBlg/Cogu47PGexznErP70Sr0aY7rxPv5bhtOLPGVsqRDI4CQFxo1/MTfyCWUNYQew
-         UWHrktQHee2IMNUM2nvKprXbyMXe4Dc7lflFtBpUDqWW4OCum5RU2Vk0pHf0sT1wfHM3
-         Usl/QhE1XVbcgXSbXL4IM9B7aEqPuZb8f+SzqBwnNiSi30/ryHWQKDvGlHZkLWhH/5XB
-         aWjmgRDVAn8TCiUosMZQNjwfgAG8+SC0xnypzhxkf6TIGcn3v5jCcBjJ4vCGsBaOrrjt
-         gKhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mBse3TDhMT3P1QzjpmTykdxb+O3mXQF8X49QrJGnK9w=;
-        b=OxRCxDju38NdcgV/zIBhFtVic6JVdFB04tYV9KrifXUwD2RVc1d38ELYlPTCuCaC4i
-         VfrcDyfzUMu1z2ncr9uIOaZvfmBS+gm9OGUWx0WWLhwEaouSsIzbbDPGku7WEWvQKyuY
-         f5DqyRIJ2+orX9fIr5tw/IVaw/3nJLYBqANnP7Kc1L4PO6bu7P220xEpyTalauk1tLB5
-         ++vCziq7KmJCPOS2nz1eUglIkh9l4Y8ctzem7T5ROc3H9tfNIs8F5iRx9Y6Es4jorj19
-         F3keGZrsE8TN5WO/SUl++4j8nV9CuuKu5BFHhgwWnoLFPIQwsQcfj6N7dUNad++J3F8d
-         4PVA==
-X-Gm-Message-State: AOAM530Np1vorCIDtKmuFoyeX2C12N+Hxneoqv60zvh6CpkdqyusT6ln
-        ujRX11c2IdhLDXDrUmcEGOaIW8g6XRFf0CVvsvm1eA==
-X-Google-Smtp-Source: ABdhPJyK+mJqd8HpVnnFKs335VNzfb1ZQwWiuJ4tIjAYkUGYjihDvc47IddIXGdc5+gkomCMF5P6xqqjbwDuvvVxMCk=
-X-Received: by 2002:a63:2b03:: with SMTP id r3mr19439606pgr.201.1642434159652;
- Mon, 17 Jan 2022 07:42:39 -0800 (PST)
+        Mon, 17 Jan 2022 10:42:49 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 531DF212B8;
+        Mon, 17 Jan 2022 15:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642434168; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1+4ye3+lekgmAvrnZnOBgLXp/ufTElkC6yvkqhvuWSY=;
+        b=aJQMHGtG53Ckxi9jkIW9G6C9V8pT6E+uYfu2E5ps85eFBVdpvrWMPll1WgGGeDP/QeuxFh
+        whNNJwRMwMDbJTTY9gQ2zgNQ3mDhmu1NKyQx0Be7mdVssdHcjq3BaeW1YAWfDqtVnOKGbw
+        0WO95B75SyBhXjQFkR/S9f3YFBXXytA=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C44CDA3B83;
+        Mon, 17 Jan 2022 15:42:47 +0000 (UTC)
+Date:   Mon, 17 Jan 2022 16:42:47 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] lib/string_helpers: Use the given gfp flag when
+ allocating memory
+Message-ID: <YeWOd2G69LyR3PVZ@dhcp22.suse.cz>
+References: <30a0c2011f8034378639883339fa7d7c55e034a5.1642337349.git.christophe.jaillet@wanadoo.fr>
+ <YeU8PhtvvXIWtTk/@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20220117100949.9542-1-qwt9588@gamil.com>
-In-Reply-To: <20220117100949.9542-1-qwt9588@gamil.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 17 Jan 2022 16:42:28 +0100
-Message-ID: <CAG3jFytFGPZ+eksbaj2muT8R=1QmCCPRerv6yYZC6s9X+TOsbw@mail.gmail.com>
-Subject: Re: [PATCH v5] drm/bridge: anx7625: Return -EPROBE_DEFER if the dsi
- host was not found
-To:     owen <qwt9588@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Xin Ji <xji@analogixsemi.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeU8PhtvvXIWtTk/@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Owen
+On Mon 17-01-22 10:51:59, Michal Hocko wrote:
+> On Sun 16-01-22 13:49:22, Christophe JAILLET wrote:
+> > kstrdup_quotable_cmdline() is given a gfp flag that is passed and used for
+> > memory allocation in kstrdup_quotable() just a few lines below.
+> > 
+> > It looks reasonable to use this gfp value for the buffer allocated and
+> > freed in kstrdup_quotable_cmdline() as well.
+> > 
+> > Fixes: 0ee931c4e31a ("mm: treewide: remove GFP_TEMPORARY allocation flag")
+> 
+> I do not think this commit is changing much here. It just replaces
+> GFP_TEMPORARY with GFP_KERNEL so the code has ignored the gfp mask even
+> before that change.
+> 
+> All existing callers of kstrdup_quotable_cmdline use GFP_KERNEL so would
+> it make more sense to simply drop the gfp argument altogether and use
+> GFP_KERNEL internally?
+> 
+> Normally it is better to have a full control of the allocation mask but
+> if we have any non-GFP_KERNEL caller then I would rather have the
+> argument added and the function checked whether all internal paths are
+> gfp mask aware.
 
-On Mon, 17 Jan 2022 at 11:10, owen <qwt9588@gmail.com> wrote:
->
-> From: owen <qwt9588@gmail.com>
->
-> It will connect to the mipi dsi host and find the corresponding
-> mipi dsi host node, but the node registered by the mipi dsi host
-> has not been loaded yet. of_find_mipi_dsi_host_by_node() returns -EINVAL
-> which causes the calling driver to fail.
->
-> If the anx7625 driver is loaded afterwards the driver requesting
-> the mipi dsi host will not notice this.
->
-> Better approach is to return -EPROBE_DEFER in such case.
-> Then when the anx7625 driver appears the driver requesting
-> the mipi dsi host will be probed again.
->
-> Signed-off-by: owen <qwt9588@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index 2346dbcc505f..297bbeb5aae0 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -1660,7 +1660,7 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
->         host = of_find_mipi_dsi_host_by_node(ctx->pdata.mipi_host_node);
->         if (!host) {
->                 DRM_DEV_ERROR(dev, "fail to find dsi host.\n");
-> -               return -EINVAL;
-> +               return -EPROBE_DEFER;
->         }
->
->         dsi = devm_mipi_dsi_device_register_full(dev, host, &info);
-> --
-> 2.31.0
->
-
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-
-Applied to drm-misc-next.
+In other words something like this:
+diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+index 2c46cd968ac4..44fde4b537f1 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.c
++++ b/drivers/gpu/drm/msm/msm_gpu.c
+@@ -376,7 +376,7 @@ static void recover_worker(struct kthread_work *work)
+ 		task = get_pid_task(submit->pid, PIDTYPE_PID);
+ 		if (task) {
+ 			comm = kstrdup(task->comm, GFP_KERNEL);
+-			cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
++			cmd = kstrdup_quotable_cmdline(task);
+ 			put_task_struct(task);
+ 		}
+ 
+@@ -467,7 +467,7 @@ static void fault_worker(struct kthread_work *work)
+ 		task = get_pid_task(submit->pid, PIDTYPE_PID);
+ 		if (task) {
+ 			comm = kstrdup(task->comm, GFP_KERNEL);
+-			cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
++			cmd = kstrdup_quotable_cmdline(task);
+ 			put_task_struct(task);
+ 		}
+ 
+diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
+index 4ba39e1403b2..7a67eee8bd0f 100644
+--- a/include/linux/string_helpers.h
++++ b/include/linux/string_helpers.h
+@@ -97,8 +97,8 @@ static inline void string_lower(char *dst, const char *src)
+ }
+ 
+ char *kstrdup_quotable(const char *src, gfp_t gfp);
+-char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp);
+-char *kstrdup_quotable_file(struct file *file, gfp_t gfp);
++char *kstrdup_quotable_cmdline(struct task_struct *task);
++char *kstrdup_quotable_file(struct file *file);
+ 
+ void kfree_strarray(char **array, size_t n);
+ 
+diff --git a/lib/string_helpers.c b/lib/string_helpers.c
+index d5d008f5b1d9..267e142c7e13 100644
+--- a/lib/string_helpers.c
++++ b/lib/string_helpers.c
+@@ -618,12 +618,13 @@ EXPORT_SYMBOL_GPL(kstrdup_quotable);
+  * command line, with inter-argument NULLs replaced with spaces,
+  * and other special characters escaped.
+  */
+-char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp)
++char *kstrdup_quotable_cmdline(struct task_struct *task)
+ {
++	gfp_t gfp = GFP_KERNEL;
+ 	char *buffer, *quoted;
+ 	int i, res;
+ 
+-	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
++	buffer = kmalloc(PAGE_SIZE, gfp);
+ 	if (!buffer)
+ 		return NULL;
+ 
+@@ -651,15 +652,16 @@ EXPORT_SYMBOL_GPL(kstrdup_quotable_cmdline);
+  * with special characters escaped, able to be safely logged. If
+  * there is an error, the leading character will be "<".
+  */
+-char *kstrdup_quotable_file(struct file *file, gfp_t gfp)
++char *kstrdup_quotable_file(struct file *file)
+ {
++	gfp_t gfp = GFP_KERNEL;
+ 	char *temp, *pathname;
+ 
+ 	if (!file)
+ 		return kstrdup("<unknown>", gfp);
+ 
+ 	/* We add 11 spaces for ' (deleted)' to be appended */
+-	temp = kmalloc(PATH_MAX + 11, GFP_KERNEL);
++	temp = kmalloc(PATH_MAX + 11, gfp);
+ 	if (!temp)
+ 		return kstrdup("<no_memory>", gfp);
+ 
+diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+index b12f7d986b1e..79322ba89913 100644
+--- a/security/loadpin/loadpin.c
++++ b/security/loadpin/loadpin.c
+@@ -23,8 +23,8 @@ static void report_load(const char *origin, struct file *file, char *operation)
+ {
+ 	char *cmdline, *pathname;
+ 
+-	pathname = kstrdup_quotable_file(file, GFP_KERNEL);
+-	cmdline = kstrdup_quotable_cmdline(current, GFP_KERNEL);
++	pathname = kstrdup_quotable_file(file);
++	cmdline = kstrdup_quotable_cmdline(current);
+ 
+ 	pr_notice("%s %s obj=%s%s%s pid=%d cmdline=%s%s%s\n",
+ 		  origin, operation,
+diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+index 06e226166aab..c87a41304b6c 100644
+--- a/security/yama/yama_lsm.c
++++ b/security/yama/yama_lsm.c
+@@ -54,8 +54,8 @@ static void __report_access(struct callback_head *work)
+ 		container_of(work, struct access_report_info, work);
+ 	char *target_cmd, *agent_cmd;
+ 
+-	target_cmd = kstrdup_quotable_cmdline(info->target, GFP_KERNEL);
+-	agent_cmd = kstrdup_quotable_cmdline(info->agent, GFP_KERNEL);
++	target_cmd = kstrdup_quotable_cmdline(info->target);
++	agent_cmd = kstrdup_quotable_cmdline(info->agent);
+ 
+ 	pr_notice_ratelimited(
+ 		"ptrace %s of \"%s\"[%d] was attempted by \"%s\"[%d]\n",
+-- 
+Michal Hocko
+SUSE Labs

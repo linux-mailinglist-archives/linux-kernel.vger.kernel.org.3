@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F587490F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F7A491009
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244221AbiAQROr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:14:47 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52680
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242898AbiAQRLV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:11:21 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E5407407F2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 17:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642439478;
-        bh=rYVFCe9pl7AFup8bHTYfW3/P3SXGC/+nyEtQsAxutfY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Oac+hn9eUEvafikHjXR4nfWdTPZdIab1KyPdEB2QFpwtztZoIG/giJc6lXC2AJjsU
-         Ktqz/LAqJyLgDCdL83SEend9MBm16b49OoN01EYRTRW2VlCQ6eXdVpMDrvMx2A4ikL
-         0TI1nyzxC12/bgqXDuT7Lhg/bqAfl1I/S7VERyFM9iwpmbsX/U2MLqshK0QcNF6ybl
-         Kf2qTrI/fkPWsXlpRzuK6lg9j7Sk+LD7rVhe8M41xkApcac74af0K0EbCpCcacs+B7
-         ocqVWCl0+8E+dho1gKsALjBVEIQOitXwueJSK8kjtQN8JopStSX8ir8eE0O0vEWwTx
-         FIB9qiVgyqgZA==
-Received: by mail-ed1-f72.google.com with SMTP id bm21-20020a0564020b1500b00402c34373f9so2539480edb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:11:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rYVFCe9pl7AFup8bHTYfW3/P3SXGC/+nyEtQsAxutfY=;
-        b=V4KpsCouci8wMyBupRlltrui1GdsAVEq3ZZTlZC0ZrUN7M2XS30BrcGqKOeoCEexcn
-         eHzm7TAzqQxmrj8t7s5PrsrDoSbYvf1iBeA0s2bEb0CdUbv736rFQlX2RmjwS5561hPj
-         Eu/rCMdAW+OUhIhAZRd30cTD0ZTODrkRyzE+tkkm3JqaPmlw0rlnmAi2E2KIesXLb1r7
-         O3JHI8ztknHaHvjhPLRshkk1axdKVWRhNHj2pImy28dQWKck/CSvGhdGzu/ZxJITXsvH
-         HThMqDvtmOMBJASuvtUynu1S52SFkhBgP09QVRhW5BcQLOrlHrw3PA355sjGCRRepJtO
-         oBrQ==
-X-Gm-Message-State: AOAM532AjwlsIaMsGs0HT7gcDZwC2oWijVyy54F7xSp73lHMMYTxG3pf
-        vF2TqkhY+Ab1cEpvC7EOrDP0JwSu59Lf9MjuGCA90C4YMajCpR40BDH7qohkPnR/uOeEJU39bYp
-        dXNLC464m4IF1y+jSLT+8t3XQBDcT+WPBa/uaN+oNtA==
-X-Received: by 2002:a17:907:16a9:: with SMTP id hc41mr17077011ejc.706.1642439478473;
-        Mon, 17 Jan 2022 09:11:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwdCubmpUIIeWiYR7npGWGTb6d6igWjY9M7lKb/sdt4nQUU2xIQTqvtVmX1TQrgDksa1opr+A==
-X-Received: by 2002:a17:907:16a9:: with SMTP id hc41mr17076989ejc.706.1642439478199;
-        Mon, 17 Jan 2022 09:11:18 -0800 (PST)
-Received: from [192.168.0.40] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id i16sm6191119edu.29.2022.01.17.09.11.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 09:11:17 -0800 (PST)
-Message-ID: <b75a0bc9-0423-83cc-11e1-d5e08952cc93@canonical.com>
-Date:   Mon, 17 Jan 2022 18:11:16 +0100
+        id S242234AbiAQSG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 13:06:56 -0500
+Received: from mga05.intel.com ([192.55.52.43]:51931 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232426AbiAQSGz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 13:06:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642442815; x=1673978815;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=XXFdFLVJY5KBBZp6WHS4dhJVYZEvhL9b7ul4U2y0o8U=;
+  b=YlworV7VmHXEo1lGFTPV2bdPnrhuBn7O28ES7MEG1IwsPPOdts3IiBJ0
+   ZT7T5n5HVxksiTb6/EYpCQf3oXglsUveOQ8DzC5pIjpnwDvsagMYF5eE2
+   veZZ3own5i2KOGUIthpTk/k+3samnYouSLD+ocKUIGX4hccT2gjQeuD9h
+   vYbGIzHHCcvRjWf5JGWQo1awRczU4zMNlsXGXcKMuuzVunHwjK9oaz878
+   RfN0fsIH2pTPU4KAwh0IwAJFvPx4wFTJV6J1yKa6QWjuSw5XlaaKmyYEL
+   b+YT8q9dDIbfq268pVL0zBX1h4PccW2ty/9vX6Yutn6i8+S3hOhMk222J
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="331022070"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="331022070"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:06:55 -0800
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="625260176"
+Received: from pthompso-mobl1.amr.corp.intel.com (HELO [10.213.168.97]) ([10.213.168.97])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 10:06:54 -0800
+Subject: Re: [PATCH] ASoC: soc-pcm: use GFP_ATOMIC in
+ dpcm_create_debugfs_state()
+To:     Takashi Iwai <tiwai@suse.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     alsa-devel@alsa-project.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <ed322b8821fa787907c1a4cce879564d1281b69d.1642331884.git.christophe.jaillet@wanadoo.fr>
+ <s5hwniy21cl.wl-tiwai@suse.de>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <bbe18490-fba4-9307-fe5f-b02c00433d07@linux.intel.com>
+Date:   Mon, 17 Jan 2022 11:11:42 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH AUTOSEL 5.16 02/52] clk: samsung: exynos850: Register
- clocks early
+In-Reply-To: <s5hwniy21cl.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        tomasz.figa@gmail.com, cw00.choi@samsung.com,
-        mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220117165853.1470420-1-sashal@kernel.org>
- <20220117165853.1470420-2-sashal@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220117165853.1470420-2-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2022 17:58, Sasha Levin wrote:
-> From: Sam Protsenko <semen.protsenko@linaro.org>
-> 
-> [ Upstream commit bcda841f9bf2cddcf2f000cba96f2e27f6f2bdbf ]
-> 
-> Some clocks must be registered before init calls. For example MCT clock
-> (from CMU_PERI) is needed for MCT timer driver, which is registered
-> with TIMER_OF_DECLARE(). By the time we get to core_initcall() used for
-> clk-exynos850 platform driver init, it's already too late. Inability to
-> get "mct" clock in MCT driver leads to kernel panic, as functions
-> registered with *_OF_DECLARE() can't do deferred calls. MCT timer driver
-> can't be fixed either, as it's acting as a clock source and it's
-> essential to register it in start_kernel() -> time_init().
-> 
-> Let's register CMU_PERI clocks early, using CLK_OF_DECLARE(). CMU_TOP
-> generates clocks needed for CMU_PERI, but it's already registered early.
-> 
-> While at it, let's cleanup the code a bit, by extracting everything
-> related to CMU initialization and registration to the separate function.
-> 
-> Similar issue was discussed at [1] and addressed in commit 1f7db7bbf031
-> ("clk: renesas: cpg-mssr: Add early clock support"), as well as in
-> drivers/clk/mediatek/clk-mt2712.c.
-> 
-> [1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20180829132954.64862-2-chris.brandt@renesas.com/
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Link: https://lore.kernel.org/r/20211122144206.23134-1-semen.protsenko@linaro.org
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/clk/samsung/clk-exynos850.c | 70 ++++++++++++++++++++---------
->  1 file changed, 49 insertions(+), 21 deletions(-)
-> 
-
-I propose to skip this one.
-
-Backporting it to v5.16 does not hurt but also does not bring any
-benefits for the upstream kernel users. There is no support for
-mentioned Exynos850 in v5.16.
-
-It could have only meaning for some downstream, out-of-tree kernels
-which apply Exynos850 support on top of v5.16, but then they can just
-take this patch as well.
 
 
-Best regards,
-Krzysztof
+On 1/17/22 2:49 AM, Takashi Iwai wrote:
+> On Sun, 16 Jan 2022 12:18:17 +0100,
+> Christophe JAILLET wrote:
+>>
+>> The commit below states that dpcm_be_connect() may be called from atomic
+>> context. It changes a GFP_KERNEL into a GFP_ATOMIC to deal with it.
+>>
+>> Another memory allocation is done in dpcm_create_debugfs_state() which is
+>> called by dpcm_be_connect(). Also use GFP_ATOMIC there to be consistent
+>> and be compliant with atomic context.
+>>
+>> Fixes: d8a9c6e1f676 ("ASoC: soc-pcm: use GFP_ATOMIC for dpcm structure")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Not clear to me how dpcm_be_connect() can be called from an atomic context,
+>> though. But better safe than sorry.
+> 
+> I don't think this no longer valid for the very latest code.
+> The commit b7898396f4bb dropped the spurious dpcm_lock spinlock, so
+> the code path you touched must be always sleepable.
+> 
+> Similarly, the commit d8a9c6e1f676 can be reverted now.
+
+Can we really revert d8a9c6e1f676?
+
+We did propagate the non-atomic FE property to the BE, but if both FE
+and BE are both atomic that constraint would be required, no?
+
+
+> 
+> thanks,
+> 
+> Takashi
+> 
+>> ---
+>>  sound/soc/soc-pcm.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+>> index 7abfc48b26ca..1a536a2b9dc3 100644
+>> --- a/sound/soc/soc-pcm.c
+>> +++ b/sound/soc/soc-pcm.c
+>> @@ -212,7 +212,7 @@ static void dpcm_create_debugfs_state(struct snd_soc_dpcm *dpcm, int stream)
+>>  {
+>>  	char *name;
+>>  
+>> -	name = kasprintf(GFP_KERNEL, "%s:%s", dpcm->be->dai_link->name,
+>> +	name = kasprintf(GFP_ATOMIC, "%s:%s", dpcm->be->dai_link->name,
+>>  			 stream ? "capture" : "playback");
+>>  	if (name) {
+>>  		dpcm->debugfs_state = debugfs_create_dir(
+>> -- 
+>> 2.32.0
+>>

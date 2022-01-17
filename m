@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6B5490DA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DD8490DCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242411AbiAQREQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:04:16 -0500
-Received: from foss.arm.com ([217.140.110.172]:60952 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241831AbiAQRCb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:02:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01A756D;
-        Mon, 17 Jan 2022 09:02:30 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.38.30])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B57253F766;
-        Mon, 17 Jan 2022 09:02:28 -0800 (PST)
-Date:   Mon, 17 Jan 2022 17:02:25 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Boris Lysov <arzamas-16@mail.ee>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: Missing ARM TWD Watchdog driver?
-Message-ID: <20220117170225.GB94025@C02TD0UTHF1T.local>
-References: <20220117190112.2b2c2f53@pc>
- <60dceae6-5c7c-9f2d-9fcb-5e849f1d8ce5@roeck-us.net>
+        id S242317AbiAQRFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:05:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51246 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242279AbiAQRDc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:03:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4957DB81162;
+        Mon, 17 Jan 2022 17:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1592DC36AEF;
+        Mon, 17 Jan 2022 17:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642439009;
+        bh=S5nPjdjCzKt885qz1sQlYghV0MtZBTbsg2HgpYi5+bs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fHRxkSzU3k/lBqgGb0gQvFohe60WegQYvjqURXxjusqqcTkx5D7jeRA0HvVjNSAfa
+         7HjdvgRryOxoAaIGus3jhf6pyhsQJavJx7V4Ofstn9/HS7LEsFyIuXy0DpCD9MsFqE
+         G5FJVY1yzth+WyLTSAi1odJDs4nB4wU3SDh95LcyLCORPDqUQnoAQVAWEbUOwjwEvd
+         1fXmZXx2A/LC2v/LHtCTI0fztNSolMAWU1KRIMx+yr/M1g+5xjbxQnTRoXTpgkdmwh
+         Z9BrcQouBXs+G86NlhgCmb6xZ2mmjJtHPTWvTZeayq2XvzNF4D2SU5NJSWXKS7F4Gh
+         1OoaGAFmkG8AA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>,
+        perex@perex.cz, tiwai@suse.com, timo.gurr@gmail.com,
+        andfagiani@gmail.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.10 01/34] ALSA: usb-audio: Fix dB level of Bose Revolve+ SoundLink
+Date:   Mon, 17 Jan 2022 12:02:51 -0500
+Message-Id: <20220117170326.1471712-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60dceae6-5c7c-9f2d-9fcb-5e849f1d8ce5@roeck-us.net>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 08:34:57AM -0800, Guenter Roeck wrote:
-> On 1/17/22 8:01 AM, Boris Lysov wrote:
-> > Hello everyone,
-> > 
-> > I stumbled upon the ARM TWD Watchdog driver which seems to be missing (or I'm
-> > just blind).
-> > 
-> > As per commit a33f5c380c4bd3fa5278d690421b72052456d9fe ("Merge tag
-> > 'xfs-5.17-merge-3' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux"), multiple
-> > device trees declare usage of arm-twd:
-> > 
-> > arch/arm/boot/dts/arm-realview-eb-mp.dtsi
-> > arch/arm/boot/dts/arm-realview-pb11mp.dts
-> > arch/arm/boot/dts/arm-realview-pbx-a9.dts
-> > arch/arm/boot/dts/bcm5301x.dtsi
-> > arch/arm/boot/dts/bcm63138.dtsi
-> > arch/arm/boot/dts/bcm-hr2.dtsi
-> > arch/arm/boot/dts/bcm-nsp.dtsi
-> > arch/arm/boot/dts/berlin2cd.dtsi
-> > arch/arm/boot/dts/highbank.dts
-> > arch/arm/boot/dts/mmp3.dtsi
-> > arch/arm/boot/dts/owl-s500.dtsi
-> > arch/arm/boot/dts/spear13xx.dtsi
-> > arch/arm/boot/dts/ste-dbx5x0.dtsi
-> > arch/arm/boot/dts/vexpress-v2p-ca5s.dts
-> > arch/arm/boot/dts/vexpress-v2p-ca9.dts
-> > 
-> > and it is documented in
-> > Documentation/devicetree/bindings/watchdog/arm,twd-wdt.yaml
-> > 
-> > However I could not find the driver itself. I tried running case-insensitive
-> > grep and ripgrep to no avail. Does this driver actually exist? Is it gone?
-> > 
-> 
-> I may be missing it, but I do not see any evidence that it ever existed.
+From: Takashi Iwai <tiwai@suse.de>
 
-Likewise, AFAICT we added the binding but never the driver.
+[ Upstream commit 02eb1d098e26f34c8f047b0b1cee6f4433a34bd1 ]
 
-Looking at the git history, that schema was introduced in commit:
+Bose Revolve+ SoundLink (0a57:40fa) advertises invalid dB level for
+the speaker volume.  This patch provides the correction in the mixer
+map quirk table entry.
 
-  50e02e9a030a9ae3 ("dt-bindings: timer: arm,twd: Convert to json-schema")
+Note that this requires the prerequisite change to add min_mute flag
+to the dB map table.
 
-... and replaced Documentation/devicetree/bindings/timer/arm,twd.txt
+BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1192375
+Link: https://lore.kernel.org/r/20211116065415.11159-4-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/usb/mixer_maps.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Per:
+diff --git a/sound/usb/mixer_maps.c b/sound/usb/mixer_maps.c
+index 8f6823df944ff..01a30968e7e1f 100644
+--- a/sound/usb/mixer_maps.c
++++ b/sound/usb/mixer_maps.c
+@@ -337,6 +337,13 @@ static const struct usbmix_name_map bose_companion5_map[] = {
+ 	{ 0 }	/* terminator */
+ };
+ 
++/* Bose Revolve+ SoundLink, correction of dB maps */
++static const struct usbmix_dB_map bose_soundlink_dB = {-8283, -0, true};
++static const struct usbmix_name_map bose_soundlink_map[] = {
++	{ 2, NULL, .dB = &bose_soundlink_dB },
++	{ 0 }	/* terminator */
++};
++
+ /* Sennheiser Communications Headset [PC 8], the dB value is reported as -6 negative maximum  */
+ static const struct usbmix_dB_map sennheiser_pc8_dB = {-9500, 0};
+ static const struct usbmix_name_map sennheiser_pc8_map[] = {
+@@ -551,6 +558,11 @@ static const struct usbmix_ctl_map usbmix_ctl_maps[] = {
+ 		.id = USB_ID(0x05a7, 0x1020),
+ 		.map = bose_companion5_map,
+ 	},
++	{
++		/* Bose Revolve+ SoundLink */
++		.id = USB_ID(0x05a7, 0x40fa),
++		.map = bose_soundlink_map,
++	},
+ 	{
+ 		/* Corsair Virtuoso SE (wired mode) */
+ 		.id = USB_ID(0x1b1c, 0x0a3d),
+-- 
+2.34.1
 
-  $ git log --follow Documentation/devicetree/bindings/timer/arm,twd.txt
-
-That was introduced alongside a driver in commit:
-
-  d8e0364364d333fe ("ARM: smp_twd: add device tree support")
-
-... which only introduced a driver for the timer, and not the watchdog,
-as the commit message notes.
-
-Thanks.
-Mark.

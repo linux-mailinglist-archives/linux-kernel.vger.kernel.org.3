@@ -2,153 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB1B490A9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71055490A9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbiAQOiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbiAQOh7 (ORCPT
+        id S234934AbiAQOiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:38:17 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48694 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237148AbiAQOiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:37:59 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57550C06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:37:59 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id g81-20020a1c9d54000000b0034cd1acd9b5so2112000wme.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 06:37:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4vQvlRkBG8jyAFRkdJw5QqA+mnvGAb10rlLjyuN04xs=;
-        b=QjEdn1V494YIOgy22qdp6vDH5BZPbC+l+4DyMdnaxhOsSomlH3tJ3xiazui+zjN3Zi
-         yfy8cV03n9ak5nStGvMoXx4ezcKXinKQUvu2ibsFQbmAEZvtUEJSL26lWX+1bBACIFzj
-         Kw7kaqcJ32ykROt5YjJ+EQQ0u1jT8rnn2Shgbnw7/N30GpIWtYDOgbjV86asy9fBM0Al
-         m4ujK2sK+a1huYIOlrurQJyS+zEF1el0VI4xrkqmCFNkCQ5IKROkvdfOiksT2rarMBKp
-         QyA9qCMCZDLcaTaMIPu4hK1BpRWOonYu5NYf1eB58VXO0lQ6Yz7YCCCcijaMH3bSvF8x
-         7iRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=4vQvlRkBG8jyAFRkdJw5QqA+mnvGAb10rlLjyuN04xs=;
-        b=CPke9th5oiojdfhpGLxICx7yFTC+GkZhiuav//lFSVKybf7XrHRD2DGD9TkRnXGwcq
-         NWp+44gvERai4wULSNfvSy+4r9MIiRBkNRWvR/TvFeeCLQ9+uInd7pBzy1Nb9YeN6O3a
-         sveDo38U9RvgcYZJFAf3ejGYpptZ4dNZwsrpf5SMyfRiEAmQ9FsRn8WBgrSg+DIHf1cS
-         l4cZDmz8nn+MNhHYxutxRtykd1q23Z33q+jeIJQ1SkpHmYfKsIXgjGSItOQPn0xLrWcc
-         FqXJkdlr5kaCCAcUDKaJnVMEnYZtGkMycH7v0JyTcss0pj/4nLJyj5NZd+ERYdpnSjG3
-         S2Lg==
-X-Gm-Message-State: AOAM533fgqkdIlmyCAQZ1hu1QcP/qk5BCiMMkAjZWb26qybtQ70hqulQ
-        vOCTcGdYgu1SY6yREYEoGxzzGKZ3kH33jA==
-X-Google-Smtp-Source: ABdhPJwqlv7WG3XoYbvtpmNzZ7lMwU5e5dYWkiNHREnVczkvwGQlzQCCr5goFgi16xexqDTyavAgjg==
-X-Received: by 2002:adf:f2c5:: with SMTP id d5mr19119203wrp.90.1642430277417;
-        Mon, 17 Jan 2022 06:37:57 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:c004:9fe1:fbda:2d0c? ([2001:861:44c0:66c0:c004:9fe1:fbda:2d0c])
-        by smtp.gmail.com with ESMTPSA id j9sm14444458wms.0.2022.01.17.06.37.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 06:37:56 -0800 (PST)
-Subject: Re: [PATCH] arm64: dts: meson: add audio playback to P212
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220113044546.16856-1-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <aa02e3f7-3f77-4b9c-74a0-987045de0352@baylibre.com>
-Date:   Mon, 17 Jan 2022 15:37:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 17 Jan 2022 09:38:10 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 14CE21F385;
+        Mon, 17 Jan 2022 14:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642430289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvUap+DwKBiunMat6fSEU/DhZVQmc4GhjOocn0eF9F0=;
+        b=zAarisL5NN5+v9qyJxFdGX7etOauLFTpfdV5yQVvoXbBIkxO1W/kTNELbDmujo2xOxdHg4
+        u2w1xT4rMAgmXEkqiKEYVsvCDR4qdEcTYe5Iql4SHKhYHFHGY+sme4T+J1G5q8i8+lALej
+        xNCytpw4HjuY2tKCjIhLkcEtDsI/0lc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642430289;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvUap+DwKBiunMat6fSEU/DhZVQmc4GhjOocn0eF9F0=;
+        b=oC1GEgl2WZAvCkL8tz8vZQn/WUd0qxBZeCixIX8Ay9CGDGI+E+0Ge4w9fMnI4O1GMSWgJU
+        aqJbtMr7iy0vW7Bw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id EC5E8A3B88;
+        Mon, 17 Jan 2022 14:38:08 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8E87DA05E4; Mon, 17 Jan 2022 15:38:07 +0100 (CET)
+Date:   Mon, 17 Jan 2022 15:38:07 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>, tytso@mit.edu,
+        Eric Whitney <enwlinux@gmail.com>
+Subject: Re: [PATCH 6/6] jbd2: No need to use t_handle_lock in
+ jbd2_journal_wait_updates
+Message-ID: <20220117143807.6fil45qvutvswa7z@quack3.lan>
+References: <cover.1642044249.git.riteshh@linux.ibm.com>
+ <e7e0f8c54306591a3a9c8fead1e0e54358052ab6.1642044249.git.riteshh@linux.ibm.com>
+ <20220113112749.d5tfszcksvxvshnn@quack3.lan>
+ <20220113123842.3rpfcyecylt5n3wo@riteshh-domain>
+ <20220117125527.ienv3drg5whiryrr@riteshh-domain>
 MIME-Version: 1.0
-In-Reply-To: <20220113044546.16856-1-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117125527.ienv3drg5whiryrr@riteshh-domain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 13/01/2022 05:45, Christian Hewitt wrote:
-> Add initial audio support limited to HDMI i2s.
+On Mon 17-01-22 18:25:27, Ritesh Harjani wrote:
+> On 22/01/13 06:08PM, Ritesh Harjani wrote:
+> > On 22/01/13 12:27PM, Jan Kara wrote:
+> > > On Thu 13-01-22 08:56:29, Ritesh Harjani wrote:
+> > > > Since jbd2_journal_wait_updates() uses waitq based on t_updates atomic_t
+> > > > variable. So from code review it looks like we don't need to use
+> > > > t_handle_lock spinlock for checking t_updates value.
+> > > > Hence this patch gets rid of the spinlock protection in
+> > > > jbd2_journal_wait_updates()
+> > > >
+> > > > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> > >
+> > > This patch looks good. Feel free to add:
+> > >
+> > > Reviewed-by: Jan Kara <jack@suse.cz>
+> > >
+> > > Actually looking at it, t_handle_lock seems to be very much unused. I agree
 > 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
-> The P212 dts is widely used with Android box devices that follow the
-> reference design. The real P212 development board probably has many
-> more audio capabilities, but as a minimum we can enable HDMI output
-> and help box users too.
-> 
->  .../boot/dts/amlogic/meson-gxl-s905x-p212.dts | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts
-> index 2602940c2077..a39830379c74 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dts
-> @@ -7,6 +7,7 @@
->  /dts-v1/;
->  
->  #include "meson-gxl-s905x-p212.dtsi"
-> +#include <dt-bindings/sound/meson-aiu.h>
->  
->  / {
->  	compatible = "amlogic,p212", "amlogic,s905x", "amlogic,meson-gxl";
-> @@ -32,6 +33,45 @@
->  			};
->  		};
->  	};
-> +
-> +	sound {
-> +		compatible = "amlogic,gx-sound-card";
-> +		model = "S905X-P212";
-> +		assigned-clocks = <&clkc CLKID_MPLL0>,
-> +				  <&clkc CLKID_MPLL1>,
-> +				  <&clkc CLKID_MPLL2>;
-> +		assigned-clock-parents = <0>, <0>, <0>;
-> +		assigned-clock-rates = <294912000>,
-> +				       <270950400>,
-> +				       <393216000>;
-> +		status = "okay";
-> +
-> +		dai-link-0 {
-> +			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
-> +		};
-> +
-> +		dai-link-1 {
-> +			sound-dai = <&aiu AIU_CPU CPU_I2S_ENCODER>;
-> +			dai-format = "i2s";
-> +			mclk-fs = <256>;
-> +
-> +			codec-0 {
-> +				sound-dai = <&aiu AIU_HDMI CTRL_I2S>;
-> +			};
-> +		};
-> +
-> +		dai-link-2 {
-> +			sound-dai = <&aiu AIU_HDMI CTRL_OUT>;
-> +
-> +			codec-0 {
-> +				sound-dai = <&hdmi_tx>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&aiu {
-> +	status = "okay";
->  };
->  
->  &cec_AO {
-> 
+> Thanks Jan for your help in this.
+> I have dropped this patch from v2 in order to discuss few more things and I felt
+> killing t_handle_lock completely can be sent in a seperate patch series.
 
-The P212 ref board has an analog audio output with a DIO2133CT14 amplifier unmuted by default with the active high GPIOH_5 to mute.
+Yes, probably a good choice.
 
-It's very probable all the STB boxes uses the same scheme, so it'll be safe to add the analog audio output here exactly like libretech-cc.
+> > I too had this thought in mind. Thanks for taking a deeper look into it :)
+> >
+> > >
+> > > we don't need it when waiting for outstanding handles but the only
+> > > remaining uses are:
+> > >
+> > > 1) jbd2_journal_extend() where it is not needed either - we use
+> > > atomic_add_return() to manipulate t_outstanding_credits and hold
+> > > j_state_lock for reading which provides us enough exclusion.
+> 
+> I looked into jbd2_journal_extend and yes, we don't need t_handle_lock
+> for updating transaction->t_outstanding_credits, since it already happens with
+> atomic API calls.
+> 
+> Now I do see we update handle->h_**_credits in that function.
+> But I think this is per process (based on task_struct, current->journal_info)
+> and doesn't need a lock protection right?
 
-Neil
+Yes, handle is per process so no lock is needed there.
+
+> > > 2) update_t_max_wait() - this is the only valid use of t_handle_lock but we
+> > > can just switch it to cmpxchg loop with a bit of care. Something like:
+> > >
+> > > 	unsigned long old;
+> > >
+> > > 	ts = jbd2_time_diff(ts, transaction->t_start);
+> > > 	old = transaction->t_max_wait;
+> > > 	while (old < ts)
+> > > 		old = cmpxchg(&transaction->t_max_wait, old, ts);
+> 
+> I think there might be a simpler and more straight forward way for updating
+> t_max_wait.
+> 
+> I did look into the t_max_wait logic and where all we are updating it.
+> 
+> t_max_wait is the max wait time in starting (&attaching) a _new_ running
+> transaction by a handle. Is this understaning correct?
+
+Correct. It is the maximum time we had to wait for a new transaction to be
+created.
+
+> From code I don't see t_max_wait getting updated for the time taken in order
+> to start the handle by a existing running transaction.
+> 
+> Here is how -
+> update_t_max_wait() will only update t_max_wait if the
+> transaction->t_start is after ts
+> (ts is nothing but when start_this_handle() was called).
+> 
+> 1. This means that for transaction->t_start to be greater than ts, it has to be
+>    the new transaction that gets started right (in start_this_handle() func)?
+>
+> 2. Second place where transaction->t_start is updated is just after the start of
+>    commit phase 7. But this only means that this transaction has become the
+>    commit transaction. That means someone has to alloc a new running transaction
+>    which again is case-1.
+> 
+> Now I think this spinlock was added since multiple processes can start a handle
+> in parallel and attach a running transaction.
+> 
+> Also this was then moved within CONFIG_JBD2_DEBUG since to avoid spinlock
+> contention on a SMP system in starting multiple handles by different processes.
+> 
+> Now looking at all of above, I think we can move update_t_max_wait()
+> inside jbd2_get_transaction() in start_this_handle(). Because that is where
+> a new transaction will be started and transaction->t_start will be greater then
+> ts. This also is protected within j_state_lock write_lock, so we don't need
+> spinlock.
+
+All above is correct upto this point. The catch is there can be (and often
+are) more processes in start_this_handle() waiting in
+wait_transaction_switching() and then racing to create the new transaction.
+The process calling jbd2_get_transaction() is not necessarily the one which
+entered start_this_handle() first and thus t_max_wait would not be really
+the maximum time someone had to wait.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

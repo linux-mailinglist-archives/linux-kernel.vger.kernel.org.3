@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F1B492A60
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19239492A80
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346713AbiARQJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:09:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39588 "EHLO
+        id S1346868AbiARQKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:10:40 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39986 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346383AbiARQI3 (ORCPT
+        with ESMTP id S1346571AbiARQI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:08:29 -0500
+        Tue, 18 Jan 2022 11:08:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20CAF612BE;
-        Tue, 18 Jan 2022 16:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE637C00446;
-        Tue, 18 Jan 2022 16:08:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DDA3612E6;
+        Tue, 18 Jan 2022 16:08:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F73C00446;
+        Tue, 18 Jan 2022 16:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522108;
-        bh=7XGP7dG6+EC/xkmA/isIOueTBCAE1QOZz3FGPl9MwmM=;
+        s=korg; t=1642522137;
+        bh=euUqpoJamjbQtoMt2wX7hkoWVdt15chwwxCFqoDKJu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LmY5XbGPAVDVjXjQ0CuqNK5tI8hAXTbFfeY5vlb8CTLgwmFgc/vlOKK5ApOixQoud
-         F4rchZHIRI+jxGVC4nvExLkI9xXbKDq1pV61rLTXLexbXow6aL1fvPymiq5Y4EKZpz
-         n8HMu3wqgWxwprZ1IdzgzRoQTVKEwEaJqfPMwjTg=
+        b=a49Tm78YYe/MTS4ZliiZzAqt3P+UWGqSN0abUedYuEfpZynsNNL4g2RRIvPM/BECc
+         4Rn8E07JYEWXt7jNauZcqLoV6fIP3yD8gKwb8Nh4SO8/pFffiSNS2/PU4mdiNS4y4b
+         euNH2kF+j3T6V3c8Rph+hw8A3Iew/Jzw1mzmWEXw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kris Karas <bugs-a21@moonlit-rail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 5.10 10/23] video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.15 04/28] remoteproc: qcom: pil_info: Dont memcpy_toio more than is provided
 Date:   Tue, 18 Jan 2022 17:05:50 +0100
-Message-Id: <20220118160451.593058388@linuxfoundation.org>
+Message-Id: <20220118160452.025245220@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
-References: <20220118160451.233828401@linuxfoundation.org>
+In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
+References: <20220118160451.879092022@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,82 +45,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+From: Stephen Boyd <swboyd@chromium.org>
 
-commit 0499f419b76f94ede08304aad5851144813ac55c upstream.
+commit fdc12231d885119cc2e2b4f3e0fbba3155f37a56 upstream.
 
-The vga16fb framebuffer driver only supports Enhanced Graphics Adapter
-(EGA) and Video Graphics Array (VGA) 16 color graphic cards.
+If the string passed into qcom_pil_info_store() isn't as long as
+PIL_RELOC_NAME_LEN we'll try to copy the string assuming the length is
+PIL_RELOC_NAME_LEN to the io space and go beyond the bounds of the
+string. Let's only copy as many byes as the string is long, ignoring the
+NUL terminator.
 
-But it doesn't check if the adapter is one of those or if a VGA16 mode
-is used. This means that the driver will be probed even if a VESA BIOS
-Extensions (VBE) or Graphics Output Protocol (GOP) interface is used.
+This fixes the following KASAN error:
 
-This issue has been present for a long time but it was only exposed by
-commit d391c5827107 ("drivers/firmware: move x86 Generic System
-Framebuffers support") since the platform device registration to match
-the {vesa,efi}fb drivers is done later as a consequence of that change.
+ BUG: KASAN: global-out-of-bounds in __memcpy_toio+0x124/0x140
+ Read of size 1 at addr ffffffd35086e386 by task rmtfs/2392
 
-All non-x86 architectures though treat orig_video_isVGA as a boolean so
-only do the supported video mode check for x86 and not for other arches.
+ CPU: 2 PID: 2392 Comm: rmtfs Tainted: G        W         5.16.0-rc1-lockdep+ #10
+ Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
+ Call trace:
+  dump_backtrace+0x0/0x410
+  show_stack+0x24/0x30
+  dump_stack_lvl+0x7c/0xa0
+  print_address_description+0x78/0x2bc
+  kasan_report+0x160/0x1a0
+  __asan_report_load1_noabort+0x44/0x50
+  __memcpy_toio+0x124/0x140
+  qcom_pil_info_store+0x298/0x358 [qcom_pil_info]
+  q6v5_start+0xdf0/0x12e0 [qcom_q6v5_mss]
+  rproc_start+0x178/0x3a0
+  rproc_boot+0x5f0/0xb90
+  state_store+0x78/0x1bc
+  dev_attr_store+0x70/0x90
+  sysfs_kf_write+0xf4/0x118
+  kernfs_fop_write_iter+0x208/0x300
+  vfs_write+0x55c/0x804
+  ksys_pwrite64+0xc8/0x134
+  __arm64_compat_sys_aarch32_pwrite64+0xc4/0xdc
+  invoke_syscall+0x78/0x20c
+  el0_svc_common+0x11c/0x1f0
+  do_el0_svc_compat+0x50/0x60
+  el0_svc_compat+0x5c/0xec
+  el0t_32_sync_handler+0xc0/0xf0
+  el0t_32_sync+0x1a4/0x1a8
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215001
-Fixes: d391c5827107 ("drivers/firmware: move x86 Generic System Framebuffers support")
-Reported-by: Kris Karas <bugs-a21@moonlit-rail.com>
-Cc: <stable@vger.kernel.org> # 5.15.x
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Tested-by: Kris Karas <bugs-a21@moonlit-rail.com>
-Acked-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220110095625.278836-3-javierm@redhat.com
+ The buggy address belongs to the variable:
+  .str.59+0x6/0xffffffffffffec80 [qcom_q6v5_mss]
+
+ Memory state around the buggy address:
+  ffffffd35086e280: 00 00 00 00 02 f9 f9 f9 f9 f9 f9 f9 00 00 00 00
+  ffffffd35086e300: 00 02 f9 f9 f9 f9 f9 f9 00 00 00 06 f9 f9 f9 f9
+ >ffffffd35086e380: 06 f9 f9 f9 05 f9 f9 f9 00 00 00 00 00 06 f9 f9
+                    ^
+  ffffffd35086e400: f9 f9 f9 f9 01 f9 f9 f9 04 f9 f9 f9 00 00 01 f9
+  ffffffd35086e480: f9 f9 f9 f9 00 00 00 00 00 00 00 01 f9 f9 f9 f9
+
+Fixes: 549b67da660d ("remoteproc: qcom: Introduce helper to store pil info in IMEM")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211117065454.4142936-1-swboyd@chromium.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/vga16fb.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/remoteproc/qcom_pil_info.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/vga16fb.c b/drivers/video/fbdev/vga16fb.c
-index e2757ff1c23d..96e312a3eac7 100644
---- a/drivers/video/fbdev/vga16fb.c
-+++ b/drivers/video/fbdev/vga16fb.c
-@@ -184,6 +184,25 @@ static inline void setindex(int index)
- 	vga_io_w(VGA_GFX_I, index);
- }
+--- a/drivers/remoteproc/qcom_pil_info.c
++++ b/drivers/remoteproc/qcom_pil_info.c
+@@ -104,7 +104,7 @@ int qcom_pil_info_store(const char *imag
+ 	return -ENOMEM;
  
-+/* Check if the video mode is supported by the driver */
-+static inline int check_mode_supported(void)
-+{
-+	/* non-x86 architectures treat orig_video_isVGA as a boolean flag */
-+#if defined(CONFIG_X86)
-+	/* only EGA and VGA in 16 color graphic mode are supported */
-+	if (screen_info.orig_video_isVGA != VIDEO_TYPE_EGAC &&
-+	    screen_info.orig_video_isVGA != VIDEO_TYPE_VGAC)
-+		return -ENODEV;
-+
-+	if (screen_info.orig_video_mode != 0x0D &&	/* 320x200/4 (EGA) */
-+	    screen_info.orig_video_mode != 0x0E &&	/* 640x200/4 (EGA) */
-+	    screen_info.orig_video_mode != 0x10 &&	/* 640x350/4 (EGA) */
-+	    screen_info.orig_video_mode != 0x12)	/* 640x480/4 (VGA) */
-+		return -ENODEV;
-+#endif
-+	return 0;
-+}
-+
- static void vga16fb_pan_var(struct fb_info *info, 
- 			    struct fb_var_screeninfo *var)
- {
-@@ -1422,6 +1441,11 @@ static int __init vga16fb_init(void)
- 
- 	vga16fb_setup(option);
- #endif
-+
-+	ret = check_mode_supported();
-+	if (ret)
-+		return ret;
-+
- 	ret = platform_driver_register(&vga16fb_driver);
- 
- 	if (!ret) {
--- 
-2.34.1
-
+ found_unused:
+-	memcpy_toio(entry, image, PIL_RELOC_NAME_LEN);
++	memcpy_toio(entry, image, strnlen(image, PIL_RELOC_NAME_LEN));
+ found_existing:
+ 	/* Use two writel() as base is only aligned to 4 bytes on odd entries */
+ 	writel(base, entry + PIL_RELOC_NAME_LEN);
 
 

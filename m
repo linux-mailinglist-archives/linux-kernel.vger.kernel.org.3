@@ -2,140 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 635CB491EC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 06:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59F7491ECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 06:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiARFFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 00:05:36 -0500
-Received: from mail-mw2nam12on2079.outbound.protection.outlook.com ([40.107.244.79]:26720
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229475AbiARFFc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 00:05:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZJCTAxRC5yHN+CgiWkCDXEYdJB1zjCV/pirQ9XXCy40nvpc3oHX7S5Oum6PzQC36lOmS8umie+1pXOVlHafAfh/D3y5iYui2CepHhwh1cGqoL0WOJ2wrpQ4AwLe6l9jSkSM5ZRvk8s3bEFFc55Bz9yStF472aL/juuor5ANq9DOhZhsQJdOuUo5xrDbZDO4qdHQoTnTdufQDUm4l55Q+IsnkvqIM/U5ysoPvuND7isodLVVG9Qjd5M2hlxPgtvyIyx002RtEgr2ILFBSmZXmVOfeJ7IHm9dVsVjatUwcrfrJIoNlKi2EamG0IeKrL+r6b6Vem+2rKVT5Khin6xIgZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1qLSLJRJBgq4INi0AzQ9eBxM8AO+2usbpFfvC5+WHR4=;
- b=aNC4C4jSbuSyyBbRkdh43tQfK4SloCGYF9AurJL4/dz4omx9dqSnNxqRr53FI5Rx1LFpjk5w0b8zhqli+v0BWJpPKMOEbMIKTKrJPzQO6mstdjZFwwVwvjWw8gkdDLW2t5E1e93d083AxcRwhP980NExCSRshzPuczdUNH+p+likSrgEw8AGJHRSRE/bHHgsvcR+hV5daboouc8G3sJVoKj54av21qEHWBbB22kzZ7eObB9I+kYiWFyAoCCs7mLz7+uqS1ePxjs9Uqr3H+33HzYkwxt61Rhs1NbSq81R/EkfwvOBGo9Ltzeen0/Dt8mqh7U0vf0uA5VvT75Jxy+3DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1qLSLJRJBgq4INi0AzQ9eBxM8AO+2usbpFfvC5+WHR4=;
- b=VJKlz1WgHS/1YQobrRrdZJF+mzpO+cvUOVzQACosmEbZclPMtr/jZmnhAdekgkG4DPA7Z4Fc21uLMIwuhq8Dx14SbZI0LmzRndlfAZerMLcvDisFkB3jb5hNeQ8R3prCGEaxU+5GrIhByeXcAZ/cebT+DT+iPPqBj1edxgubJXM=
-Received: from CO2PR07CA0076.namprd07.prod.outlook.com (2603:10b6:100::44) by
- BYAPR12MB3512.namprd12.prod.outlook.com (2603:10b6:a03:134::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
- 2022 05:05:28 +0000
-Received: from CO1NAM11FT030.eop-nam11.prod.protection.outlook.com
- (2603:10b6:100:0:cafe::c3) by CO2PR07CA0076.outlook.office365.com
- (2603:10b6:100::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10 via Frontend
- Transport; Tue, 18 Jan 2022 05:05:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT030.mail.protection.outlook.com (10.13.174.125) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 05:05:28 +0000
-Received: from BLR-5CG1133937.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 17 Jan
- 2022 23:05:23 -0600
-From:   Bharata B Rao <bharata@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <srikar@linux.vnet.ibm.com>, <riel@surriel.com>,
-        Bharata B Rao <bharata@amd.com>
-Subject: [PATCH] sched/debug: Remove mpol_get/put and task_lock/unlock from sched_show_numa
-Date:   Tue, 18 Jan 2022 10:35:15 +0530
-Message-ID: <20220118050515.2973-1-bharata@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S231981AbiARFXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 00:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229540AbiARFXb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 00:23:31 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A001C06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 21:23:31 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id d18-20020a05600c251200b0034974323cfaso3011157wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 21:23:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HArCxtgmaAUtHv2EkJWX43r7m5jT88idzjgN10lSzvg=;
+        b=FcJ24fjHTLf6zTemywoAEeEZLg6z+KppHcW/fWc6qgOGHMMNMEqHHUC5SyxgB604+e
+         zbXFg3KFkIgMU1O8oiPpWkEy9/IIToAVrwuvYmilDXt5GKlTLpdbrJBs+rbuolJyZo3z
+         At3TgzqbV790Mi2jwBrMmsFLUDjUvPRMGeUfKSVvIY3JGbI6WGINj8ut9Ii4b7eUaOA2
+         Al9JuXkOX0B9kZIg01sX/lHbp33fBj3HrRcgIeg7S5Ve3likMCmkbw80MAzXoLJhy6m7
+         YwDAofQn+PgCA+9s/w9gGcvimGfBp2TMLpBqN1pD5ENVuUEMnbC5xHomoNqMSy4jhars
+         IrTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HArCxtgmaAUtHv2EkJWX43r7m5jT88idzjgN10lSzvg=;
+        b=H6JacpRNSdBhHD7Le/kSnZsciiM9geca0JfhK/LAdGQYIvItcewBMKme0feOH7B3uW
+         ME2oQ3dVab8voK94azlgr95d2fwDJtMrYkBh6kq/av5K+NN+QbZUB5Q7DQovHFHN6SPT
+         OCztv8EGl+oKdklV7HPDB2gtIGkwTxMoOArBzu9bJBOsPaQVxi4pmU4/h0pEhjjXcd85
+         ssoqLd7/J1mL+y+k15p460ItshP2f7usBtD0CFlH2O0M4fhEtY+134lZuiLRLdP9Q5v1
+         AMlgE2pihQzK/2a0pQr0TynoXndzzvMxxN4c4ML7PNXygqf4XDjhxbFjGgTJnXme7yiD
+         u3Fg==
+X-Gm-Message-State: AOAM533Ipwf4TTaO4ubWKuZHxpUF3KeoYoN4u0MQeP67W8s/ZwSCrBHb
+        zFWi1QpeYo2d9smJWkfxS4TEdSMKLcHwHp3Or830Sw==
+X-Google-Smtp-Source: ABdhPJwVRwrzMl6GQKLqAhaaYxifwRl1R0tSpKmmp7g+cj5TnMk/du5kPQdyodgo5wPc4OgUfyMIIN9wiCdS3n/J/bM=
+X-Received: by 2002:a05:6000:1286:: with SMTP id f6mr22252928wrx.346.1642483409473;
+ Mon, 17 Jan 2022 21:23:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cf6dce43-e396-43b8-e8c9-08d9da40250c
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3512:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB351225B0E704A35B1FC75E7CB0589@BYAPR12MB3512.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6y6azGAhw7FhqYueKmyieq83yK3VgdKm7q/m5f9LzgBycU8s6oWSwXOl63nVnDgf4mJfoaRq+GMMkQNNkHNrZQeIragm5HPH42e6FmJZT7+PnBSxtZypSjjwS17mITBqycw0Fr+eIlKIE4QGm331SGsUCr2+ZwwVrecRz15fTgQdE78ADeALS5bwn3t+6au2JwuOKokxIFPv5Xmg9PQkWosCwA92sqBhf9BHfxoiIDJXQogjIhNZiJ+UKTXPrcUSAsfXNZrzxEjin/qQfR54dyiZ6BKoJX1SVztikjsibpTCUl2GwI0xYsXTyrbiKuCikM6zrnrKvPI2o1ONjyXb9vnMGKclqLJpD7t8r/yzhMm4QZE69+63A5GoEKeY9JyLbAPQWojIeGtKKNNY3zR0meWid+CTh2QLSOzP1vVZjVky9Lyv1dhqhd9tsuTiPaXV4QPCE5RIvIDreYv0UnGpLfy2r+SOtsg8mwPZfImdkD68NXiVovNb9tuYBf07jjLs1gLeEjGGloNhIls9j56RGhqNG/0r6j5RaXct/y4HbuxP/QfH/Xq1nmhdN+qSotARVPVNETFSTC+Nt46FxFzKPbXOjuQ1ssb6FZZlaedEmuS5BMiz0cBB3S9dHG1aIPtqqNMusyZKy7jyZ77TNtqtkZxaRpOqFh3UZ4ChYjsxbn1YwAYR8MjfIa3z4CwivduGvXHTZXyjPEidbymAoNoVA+e04DmFPsAn2330eQSPvqGb+au0mO0wsyfI7QtfrbzwWMe5fxaVdHRQsBtcHpLhfiCci7bi2Kel8I2j0xS9EZs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(5660300002)(82310400004)(70586007)(86362001)(81166007)(336012)(40460700001)(2616005)(26005)(316002)(4326008)(36756003)(70206006)(1076003)(356005)(54906003)(508600001)(83380400001)(8676002)(7696005)(8936002)(2906002)(6916009)(426003)(7416002)(6666004)(36860700001)(186003)(47076005)(16526019)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 05:05:28.2282
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf6dce43-e396-43b8-e8c9-08d9da40250c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT030.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3512
+References: <20211225054647.1750577-1-atishp@rivosinc.com> <20211225054647.1750577-5-atishp@rivosinc.com>
+In-Reply-To: <20211225054647.1750577-5-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 18 Jan 2022 10:53:17 +0530
+Message-ID: <CAAhSdy3RGxM5w8eQ-s0n0-__-S-GgRi98+cO89kRfAFN99a9eA@mail.gmail.com>
+Subject: Re: [v5 4/9] RISC-V: Add a simple platform driver for RISC-V legacy perf
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The older format of /proc/pid/sched printed home node info which
-required the mempolicy and task lock around mpol_get(). However
-the format has changed since then and there is no need for
-sched_show_numa() any more to have mempolicy argument,
-asssociated mpol_get/put and task_lock/unlock. Remove them.
+On Sat, Dec 25, 2021 at 11:17 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> From: Atish Patra <atish.patra@wdc.com>
+>
+> The old RISC-V perf implementation allowed counting of only
+> cycle/instruction counters using perf. Restore that feature by implementing
+> a simple platform driver under a separate config to provide backward
+> compatibility. Any existing software stack will continue to work as it is.
+> However, it provides an easy way out in future where we can remove the
+> legacy driver.
+>
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  drivers/perf/Kconfig            |  10 +++
+>  drivers/perf/Makefile           |   3 +
+>  drivers/perf/riscv_pmu_legacy.c | 143 ++++++++++++++++++++++++++++++++
+>  include/linux/perf/riscv_pmu.h  |   6 ++
+>  4 files changed, 162 insertions(+)
+>  create mode 100644 drivers/perf/riscv_pmu_legacy.c
+>
+> diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
+> index 03ca0315df73..6bd12663c8d3 100644
+> --- a/drivers/perf/Kconfig
+> +++ b/drivers/perf/Kconfig
+> @@ -66,6 +66,16 @@ config RISCV_PMU
+>           PMU functionalities in a core library so that different PMU drivers
+>           can reuse it.
+>
+> +config RISCV_PMU_LEGACY
+> +       depends on RISCV_PMU
+> +       bool "RISC-V legacy PMU implementation"
+> +       default y
+> +       help
+> +         Say y if you want to use the legacy CPU performance monitor
+> +         implementation on RISC-V based systems. This only allows counting
+> +         of cycle/instruction counter and doesn't support counter overflow,
+> +         or programmable counters. It will be removed in future.
+> +
+>  config ARM_PMU_ACPI
+>         depends on ARM_PMU && ACPI
+>         def_bool y
+> diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
+> index 76e5c50e24bb..e8aa666a9d28 100644
+> --- a/drivers/perf/Makefile
+> +++ b/drivers/perf/Makefile
+> @@ -11,6 +11,9 @@ obj-$(CONFIG_HISI_PMU) += hisilicon/
+>  obj-$(CONFIG_QCOM_L2_PMU)      += qcom_l2_pmu.o
+>  obj-$(CONFIG_QCOM_L3_PMU) += qcom_l3_pmu.o
+>  obj-$(CONFIG_RISCV_PMU) += riscv_pmu.o
+> +ifeq ($(CONFIG_RISCV_PMU), y)
+> +obj-$(CONFIG_RISCV_PMU_LEGACY) += riscv_pmu_legacy.o
+> +endif
 
-Fixes: 397f2378f1361 ("sched/numa: Fix numa balancing stats in /proc/pid/sched")
-Signed-off-by: Bharata B Rao <bharata@amd.com>
----
- kernel/sched/debug.c | 10 ----------
- 1 file changed, 10 deletions(-)
+RISCV_PMU_LEGACY already depends on RISCV_PMU.
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 7dcbaa31c5d9..50e05c8d0d61 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -931,25 +931,15 @@ void print_numa_stats(struct seq_file *m, int node, unsigned long tsf,
- static void sched_show_numa(struct task_struct *p, struct seq_file *m)
- {
- #ifdef CONFIG_NUMA_BALANCING
--	struct mempolicy *pol;
--
- 	if (p->mm)
- 		P(mm->numa_scan_seq);
- 
--	task_lock(p);
--	pol = p->mempolicy;
--	if (pol && !(pol->flags & MPOL_F_MORON))
--		pol = NULL;
--	mpol_get(pol);
--	task_unlock(p);
--
- 	P(numa_pages_migrated);
- 	P(numa_preferred_nid);
- 	P(total_numa_faults);
- 	SEQ_printf(m, "current_node=%d, numa_group_id=%d\n",
- 			task_node(p), task_numa_group_id(p));
- 	show_numa_stats(p, m);
--	mpol_put(pol);
- #endif
- }
- 
--- 
-2.25.1
+Do you still need this "ifeq ()" check ?
 
+>  obj-$(CONFIG_THUNDERX2_PMU) += thunderx2_pmu.o
+>  obj-$(CONFIG_XGENE_PMU) += xgene_pmu.o
+>  obj-$(CONFIG_ARM_SPE_PMU) += arm_spe_pmu.o
+> diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
+> new file mode 100644
+> index 000000000000..8bb973f2d9f7
+> --- /dev/null
+> +++ b/drivers/perf/riscv_pmu_legacy.c
+> @@ -0,0 +1,143 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * RISC-V performance counter support.
+> + *
+> + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
+> + *
+> + * This implementation is based on old RISC-V perf and ARM perf event code
+> + * which are in turn based on sparc64 and x86 code.
+> + */
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/perf/riscv_pmu.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define RISCV_PMU_LEGACY_CYCLE         0
+> +#define RISCV_PMU_LEGACY_INSTRET       1
+> +#define RISCV_PMU_LEGACY_NUM_CTR       2
+> +
+> +bool pmu_init_done;
+
+This should be a static variable.
+
+> +
+> +static int pmu_legacy_ctr_get_idx(struct perf_event *event)
+> +{
+> +       struct perf_event_attr *attr = &event->attr;
+> +
+> +       if (event->attr.type != PERF_TYPE_HARDWARE)
+> +               return -EOPNOTSUPP;
+> +       if (attr->config == PERF_COUNT_HW_CPU_CYCLES)
+> +               return RISCV_PMU_LEGACY_CYCLE;
+> +       else if (attr->config == PERF_COUNT_HW_INSTRUCTIONS)
+> +               return RISCV_PMU_LEGACY_INSTRET;
+> +       else
+> +               return -EOPNOTSUPP;
+> +}
+> +
+> +/* For legacy config & counter index are same */
+> +static int pmu_legacy_event_map(struct perf_event *event, u64 *config)
+> +{
+> +       return pmu_legacy_ctr_get_idx(event);
+> +}
+> +
+> +static u64 pmu_legacy_read_ctr(struct perf_event *event)
+> +{
+> +       struct hw_perf_event *hwc = &event->hw;
+> +       int idx = hwc->idx;
+> +       u64 val;
+> +
+> +       if (idx == RISCV_PMU_LEGACY_CYCLE) {
+> +               val = riscv_pmu_ctr_read_csr(CSR_CYCLE);
+> +               if (IS_ENABLED(CONFIG_32BIT))
+> +                       val = (u64)riscv_pmu_ctr_read_csr(CSR_CYCLEH) << 32 | val;
+> +       } else if (idx == RISCV_PMU_LEGACY_INSTRET) {
+> +               val = riscv_pmu_ctr_read_csr(CSR_INSTRET);
+> +               if (IS_ENABLED(CONFIG_32BIT))
+> +                       val = ((u64)riscv_pmu_ctr_read_csr(CSR_INSTRETH)) << 32 | val;
+> +       } else
+> +               return 0;
+> +
+> +       return val;
+> +}
+> +
+> +static void pmu_legacy_ctr_start(struct perf_event *event, u64 ival)
+> +{
+> +       struct hw_perf_event *hwc = &event->hw;
+> +       u64 initial_val = pmu_legacy_read_ctr(event);
+> +
+> +       /**
+> +        * The legacy method doesn't really have a start/stop method.
+> +        * It also can not update the counter with a initial value.
+> +        * But we still need to set the prev_count so that read() can compute
+> +        * the delta. Just use the current counter value to set the prev_count.
+> +        */
+> +       local64_set(&hwc->prev_count, initial_val);
+> +}
+> +
+> +/**
+> + * This is just a simple implementation to allow legacy implementations
+> + * compatible with new RISC-V PMU driver framework.
+> + * This driver only allows reading two counters i.e CYCLE & INSTRET.
+> + * However, it can not start or stop the counter. Thus, it is not very useful
+> + * will be removed in future.
+> + */
+> +static void pmu_legacy_init(struct riscv_pmu *pmu)
+> +{
+> +       pr_info("Legacy PMU implementation is available\n");
+> +
+> +       pmu->num_counters = RISCV_PMU_LEGACY_NUM_CTR;
+> +       pmu->ctr_start = pmu_legacy_ctr_start;
+> +       pmu->ctr_stop = NULL;
+> +       pmu->event_map = pmu_legacy_event_map;
+> +       pmu->ctr_get_idx = pmu_legacy_ctr_get_idx;
+> +       pmu->ctr_get_width = NULL;
+> +       pmu->ctr_clear_idx = NULL;
+> +       pmu->ctr_read = pmu_legacy_read_ctr;
+> +
+> +       perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+> +}
+> +
+> +static int pmu_legacy_device_probe(struct platform_device *pdev)
+> +{
+> +       struct riscv_pmu *pmu = NULL;
+> +
+> +       pmu = riscv_pmu_alloc();
+> +       if (!pmu)
+> +               return -ENOMEM;
+> +       pmu_legacy_init(pmu);
+> +
+> +       return 0;
+> +}
+> +
+> +static struct platform_driver pmu_legacy_driver = {
+> +       .probe          = pmu_legacy_device_probe,
+> +       .driver         = {
+> +               .name   = RISCV_PMU_LEGACY_PDEV_NAME,
+> +       },
+> +};
+> +
+> +static int __init riscv_pmu_legacy_devinit(void)
+> +{
+> +       int ret;
+> +       struct platform_device *pdev;
+> +
+> +       if (likely(pmu_init_done))
+> +               return 0;
+> +
+> +       ret = platform_driver_register(&pmu_legacy_driver);
+> +       if (ret)
+> +               return ret;
+> +
+> +       pdev = platform_device_register_simple(RISCV_PMU_LEGACY_PDEV_NAME, -1, NULL, 0);
+> +       if (IS_ERR(pdev)) {
+> +               platform_driver_unregister(&pmu_legacy_driver);
+> +               return PTR_ERR(pdev);
+> +       }
+> +
+> +       return ret;
+> +}
+> +late_initcall(riscv_pmu_legacy_devinit);
+> +
+> +void riscv_pmu_legacy_init(bool done)
+
+I would suggest renaming riscv_pmu_legacy_init()
+to riscv_pmu_legacy_skip_init().
+
+Also, no need for "done" parameter.
+
+> +{
+> +       if (done)
+> +               pmu_init_done = true;
+
+I would also suggest renaming "pmu_init_done" to
+"legacy_pmu_init_done" or something similar.
+
+> +}
+> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+> index 0d8979765d79..52672de540c2 100644
+> --- a/include/linux/perf/riscv_pmu.h
+> +++ b/include/linux/perf/riscv_pmu.h
+> @@ -22,6 +22,7 @@
+>  #define RISCV_MAX_COUNTERS     64
+>  #define RISCV_OP_UNSUPP                (-EOPNOTSUPP)
+>  #define RISCV_PMU_PDEV_NAME    "riscv-pmu"
+> +#define RISCV_PMU_LEGACY_PDEV_NAME     "riscv-pmu-legacy"
+>
+>  #define RISCV_PMU_STOP_FLAG_RESET 1
+>
+> @@ -58,6 +59,11 @@ unsigned long riscv_pmu_ctr_read_csr(unsigned long csr);
+>  int riscv_pmu_event_set_period(struct perf_event *event);
+>  uint64_t riscv_pmu_ctr_get_width_mask(struct perf_event *event);
+>  u64 riscv_pmu_event_update(struct perf_event *event);
+> +#ifdef CONFIG_RISCV_PMU_LEGACY
+> +void riscv_pmu_legacy_init(bool init_done);
+> +#else
+> +static inline void riscv_pmu_legacy_init(bool init_done) {};
+> +#endif
+>  struct riscv_pmu *riscv_pmu_alloc(void);
+>
+>  #endif /* CONFIG_RISCV_PMU */
+> --
+> 2.33.1
+>
+
+Apart from minor comments above, it looks good to me.
+
+Reviewed-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup

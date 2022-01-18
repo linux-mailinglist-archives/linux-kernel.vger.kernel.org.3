@@ -2,134 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BE849134A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3CB49134D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244127AbiARBDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 20:03:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35556 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244148AbiARBCv (ORCPT
+        id S233763AbiARBFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 20:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229836AbiARBFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:02:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77C7CB8122A;
-        Tue, 18 Jan 2022 01:02:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D553C36AEC;
-        Tue, 18 Jan 2022 01:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642467767;
-        bh=UjL36AtpqN/N1m6zQK0IYdRjEoTpeNF2t5q+/41fARU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Z/gYtLHOmxBAddG2NFDIURm+9msmcsBXHQdC3cUmPyosgiX/f30nhpaPtryT566EL
-         xR7wakG7J4aSW0+YibzShiHQO+s/nGWPrefIQeoadh8s9aP8MUxjnbXKmiBtMb/fxx
-         aIAQEW+iU12VA9Pvf94xbYwBtY9hQzjmOR2fclisvAxypeFuLgyQYopnHJ+myuwxBb
-         x8WyFH8bV0CrxBM0N1VB+hCT26maTkDUsArzr7u1e18PF4d/9a1MWbG5mf+5r3WbOR
-         jBpIa4uUZ89lnrl80iAoFRHRDVaaBUJekbmFkAco/vTtLc6JzRQbJ2HA71cKO5QYco
-         yq3rWbOxPNVog==
-Date:   Tue, 18 Jan 2022 10:02:44 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 01/12] user_events: Add minimal support for
- trace_event into ftrace
-Message-Id: <20220118100244.2a45702eea08c55616bb464d@kernel.org>
-In-Reply-To: <20220117180914.GA1789@kbox>
-References: <20220111172602.2513-1-beaub@linux.microsoft.com>
-        <20220111172602.2513-2-beaub@linux.microsoft.com>
-        <20220118004517.b9dda3d98d6c5d6233ac8886@kernel.org>
-        <20220117180914.GA1789@kbox>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 17 Jan 2022 20:05:19 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B45EC061574;
+        Mon, 17 Jan 2022 17:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=+D+1Fa35JempJQJICO+SIPds0O/uLmaQUC0VXum/YyM=; b=NZxlFVrpBRLAUL8dK/V1ZuRh14
+        wtwbRLnL9kX4xDJMiXH4H/hFpXUxIPzuIieedpPy/gCG+uAYH/ivsycWcwEVu96WGNZCXoqZRpAlQ
+        adL4GXmJ7+gdpxWQolmfG/EquZPy8RaWgSfx3wP9eYTaW0iNDfzLMh5M+TZ929R4sFS754759VnFk
+        FuJqjfKG+QBCE4GnBq07FnZZDWFFhSRGReKsYSR6AlYKKvyOaS0x0cRnM5SQPvKqV1zT5KjybsC7N
+        rSRWI2ht86hpDaLvM5Xu84NzM0ULUu3AlH4EW3Clblklk3h9osbW60NEHgNui4SmIAN59Lv9xGkCI
+        lzT6YeNA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9cw2-00GkoG-Gf; Tue, 18 Jan 2022 01:05:18 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH -next] Documentation: fix firewire.rst ABI file path error
+Date:   Mon, 17 Jan 2022 17:05:17 -0800
+Message-Id: <20220118010517.20826-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 10:09:14 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+Adjust the path of the ABI files for firewire.rst to prevent a
+documentation build error. Prevents this problem:
 
-> On Tue, Jan 18, 2022 at 12:45:17AM +0900, Masami Hiramatsu wrote:
-> > Hi Beau,
-> > 
-> > On Tue, 11 Jan 2022 09:25:51 -0800
-> > Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > 
-> > > +static int user_event_show(struct seq_file *m, struct dyn_event *ev)
-> > > +{
-> > > +	struct user_event *user = container_of(ev, struct user_event, devent);
-> > > +	struct ftrace_event_field *field, *next;
-> > > +	struct list_head *head;
-> > > +	int depth = 0;
-> > > +
-> > > +	seq_printf(m, "%s%s", USER_EVENTS_PREFIX, EVENT_NAME(user));
-> > > +
-> > > +	head = trace_get_fields(&user->call);
-> > > +
-> > > +	list_for_each_entry_safe_reverse(field, next, head, link) {
-> > > +		if (depth == 0)
-> > > +			seq_puts(m, " ");
-> > > +		else
-> > > +			seq_puts(m, "; ");
-> > > +		seq_printf(m, "%s %s", field->type, field->name);
-> > > +		depth++;
-> > > +	}
-> > > +
-> > > +	seq_puts(m, "\n");
-> > > +
-> > > +	return 0;
-> > > +}
-> > 
-> > Let me confirm just one point. Your syntax supports
-> > 
-> > [__data_loc|__rel_loc] [unsigned] TYPE[\[LEN\]] NAME
-> > 
-> > or
-> > 
-> > struct TYPE NAME SIZE
-> > 
-> > for the fields, right? In that case, above seq_printf() seems not enough.
-> 
-> Yep, I see.
-> 
-> The non-struct cases work as expected from my testing:
-> echo 'u:test unsigned char msg[20]' > dynamic_events
-> cat dynamic_events
-> u:test unsigned char msg[20]
-> 
-> In the struct case you are right, it's missing the size. Good catch!
-> I'll fix this up!
-> 
-> Was there another case you had in mind that I might have missed beyond
-> the struct case?
+Sphinx parallel build error:
+docutils.utils.SystemMessage: /work/lnx/next/linux-next-20220117/Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
+InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
 
-No, that's the only one which I found :)
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+I don't see what is causing this problem...
 
-> 
-> I also would like, since I'm re-spinning, to fix a warning the intel bot
-> found related to the same code pulled from single_open, etc.
-> 
-> See https://lore.kernel.org/llvm/YeGk0nIH9x91k01I@archlinux-ax161/
+ Documentation/driver-api/firewire.rst |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-OK, I'll then wait for your next version.
-
-Thank you!
-
-> 
-> > 
-> > Thank you,
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> Thanks,
-> -Beau
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+--- linux-next-20220117.orig/Documentation/driver-api/firewire.rst
++++ linux-next-20220117/Documentation/driver-api/firewire.rst
+@@ -19,7 +19,7 @@ of kernel interfaces is available via ex
+ Firewire char device data structures
+ ====================================
+ 
+-.. include:: /ABI/stable/firewire-cdev
++.. include:: ../ABI/stable/firewire-cdev
+     :literal:
+ 
+ .. kernel-doc:: include/uapi/linux/firewire-cdev.h
+@@ -28,7 +28,7 @@ Firewire char device data structures
+ Firewire device probing and sysfs interfaces
+ ============================================
+ 
+-.. include:: /ABI/stable/sysfs-bus-firewire
++.. include:: ../ABI/stable/sysfs-bus-firewire
+     :literal:
+ 
+ .. kernel-doc:: drivers/firewire/core-device.c

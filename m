@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D82E492E8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79B9492E8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348650AbiARTjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S1348823AbiARTkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245123AbiARTje (ORCPT
+        with ESMTP id S1348737AbiARTj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:39:34 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99C0C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:39:33 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id d24so218735qkk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:39:33 -0800 (PST)
+        Tue, 18 Jan 2022 14:39:59 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8739C061574;
+        Tue, 18 Jan 2022 11:39:59 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id b3so16298521plc.7;
+        Tue, 18 Jan 2022 11:39:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tLdog0n5L37y3MRWMAFNB4F/ux6HarIU0b+GSL5AL8I=;
-        b=JxuUbd1edEtbcMjCPSHSeTD/CMYEQdKqj/JLXxnkn+Bkc6GbozsOmUxwYRcTFsY47V
-         WslujJVSY9vZtdXObppzaJQ0XtxjM0/O6BcKQE/zLqUnX0H8LSFwCeWeCMv6fVoWagiZ
-         UtOtlLdGXjCLwzJlFu1FXI8C5OfuzJPVSSbieu+2VLq4ZVapGXxYrJTLJFqeMIFy9d2Z
-         k0/ON6VVV5+yE9VVVEWmaWQlbwRu5BN60dy3Gg3kukxXeKDIhZdFxFaEc4FoJa1LtbHS
-         Uv158qvrSco6aI/Rx+lCeqczh5qvcETHy05zvS+uAImu/AEx1laINzofgC3XGJBKWFzn
-         RXog==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CMrbu7d1tdpLr0gUt3hdr3z+X3lDj8gI8RJ8X44ubSA=;
+        b=mh+vyWmGhmDIdWL9PdpJfBayq8BGIVTWH2tZP0BMMlu4sPJTbpx/LqAh72x9Ib85n4
+         EjqSi/Orj76/vhgNnWTodb+ry3mL35e2B2Sn8B+RISI89QwbiU0IWpkWXU4yClAwWHg4
+         C3z3tFMMvEb9WJKgAgtGDPPBHjU5jvwTXU1JBN7Cf9+E6feqxYtIyOBdJVKUg+dMIVOk
+         rRD2OO9LT/eMaQ+VpV/ECkYw0zvnuN+A9BKx9oJOQKtUAVfN6g+TqsZBPmleALfjxe/3
+         WPIyCDulMtmau97NgHtFbNRg3VtXXjinUtPCJ5VyBxK6xudz08cF2p9h63wkHXPEbnr6
+         qrxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tLdog0n5L37y3MRWMAFNB4F/ux6HarIU0b+GSL5AL8I=;
-        b=6v7CeIsUm+vCYfTAf+mG/p2bdJYT7UiSDmWzQcufb+IJN3x4IH2iSxVAVITy+YtL5f
-         P56e/BGpQjPsH+brAwxK+wjjWSTJ+7186VktrvVlCAFTtQvongduJ7O+Uh2E2Q9c22IA
-         qii+LO04DQht9kv4SQiChia5ri9A/g9VBaXS11tY3pVS9Se91UnjSUF29XKGhIQ5/rVX
-         CGF0dtvK665WkdeHSku0o0NkfETu5mtEtjwJuADdaXlm0u4y5AJKagCHmJHUv9wthDP6
-         xCwtIIQ0ZsqXMNF7uR7F1clUSsT96AWN/sbQezDf/WZ7raDCh9tYiYm4Vr84kXyzNSGJ
-         Mm+g==
-X-Gm-Message-State: AOAM530vu5yscyaFU6h5P6f9Pm3rzBG6pneVNty/9URxWQHqZvu6XKf1
-        WsjTcdfxNehjel4WabVunbtX3w==
-X-Google-Smtp-Source: ABdhPJyv+GW0Uxig4OgnmrE0B7ffqMZTGZmT4aK6Hb5mU/4+tpZB5vTRrUzdANLkG2L924vH1W5P2A==
-X-Received: by 2002:a37:de09:: with SMTP id h9mr18417793qkj.764.1642534772953;
-        Tue, 18 Jan 2022 11:39:32 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id a19sm431977qtx.7.2022.01.18.11.39.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 11:39:32 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n9uKJ-0012sn-OS; Tue, 18 Jan 2022 15:39:31 -0400
-Date:   Tue, 18 Jan 2022 15:39:31 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Message-ID: <20220118193931.GH8034@ziepe.ca>
-References: <20220118183650.3386989-1-keescook@chromium.org>
- <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CMrbu7d1tdpLr0gUt3hdr3z+X3lDj8gI8RJ8X44ubSA=;
+        b=Kdk9ZGeZG0Soit0mwbD/0OKJunnsjuEiAkEYSul+OasmrZ8S3WP17/1mqe+kBtWxvb
+         JIPZTGpuheTO30L402PTFyvukxGzmcaO/xkgQ1zdkYPLrgj9OaT7I6aeXGx+TOadURMd
+         KNwjvZ61VTVnua/0GbZ2lfhMfMhjePoMbKmx/CKKT2kCxlQnftduXaU3pBLwNg+yzWua
+         dYq59HesrK0qnJH7SSpuAkJGpGl1wajfUy3aaEmqvi7yhf+jQu/ZeLRrmCIGdWmZ79Lm
+         TlyMeaPVW4Aa62vNkvDqUonDF7oyf81qmV+hKzB61ubvh/JTf+jB6v8oL93RqmoCQ27S
+         L7fQ==
+X-Gm-Message-State: AOAM532wsqNc4LSbPZOtBU3ImnzPNQrCfKdNuPlI6qyT+hbalOCGqVok
+        CFle45vENcXpKXEg/b0ftEqKxfd0uWc=
+X-Google-Smtp-Source: ABdhPJwPDwcoNcYMCjeKXdXJCJCiK9U9O9o0FQGKnUj9qVCwuUAR3ihLB8joDorhAL3nKNeNLiKh2Q==
+X-Received: by 2002:a17:90b:3912:: with SMTP id ob18mr113737pjb.112.1642534798913;
+        Tue, 18 Jan 2022 11:39:58 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u6sm16703387pfl.166.2022.01.18.11.39.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 11:39:58 -0800 (PST)
+Subject: Re: [PATCH 5.15 00/28] 5.15.16-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20220118160451.879092022@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <bfdcaaf4-de4f-db66-815b-401569a8452d@gmail.com>
+Date:   Tue, 18 Jan 2022 11:39:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
+In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:32:43PM +0100, Jann Horn wrote:
-> On Tue, Jan 18, 2022 at 7:37 PM Kees Cook <keescook@chromium.org> wrote:
-> > When building with -Warray-bounds, this warning was emitted:
-> >
-> > In function 'memset',
-> >     inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-> > ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-> > [-Warray-bounds]
-> >    43 | #define __underlying_memset     __builtin_memset
-> >       |                                 ^
+On 1/18/22 8:05 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.16 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Can you explain what that compiler warning actually means, and which
-> compiler it is from? Is this from a 32-bit or a 64-bit architecture?
+> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+> Anything received after that time might be too late.
 > 
-> It sounds like the compiler (GCC?) is hallucinating a codepath on
-> which "len" is guaranteed to be >=2147483648, right? Why is it doing
-> that? Is this some kinda side effect from the fortify code?
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.16-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-I agree, this looks bogus, or at least the commit message neeeds alot
-more explaining.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
-
-        if (count > sizeof(proxy_dev->buffer))
-            [...]
-        proxy_dev->req_len = count;
-
-Not clear how req_len can be larger than sizeof(buffer)?
-
-Jason
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

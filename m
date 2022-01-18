@@ -2,109 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE59492D7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290B5492D7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348154AbiARSgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348136AbiARSgx (ORCPT
+        id S1347973AbiARShX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:37:23 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47030 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S244841AbiARShW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:36:53 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CFCC061401
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id i8so14877537pgt.13
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iW16hd+cXQQsHyRP7rt+lJ5AICZ50nA5CTVDepKk1SY=;
-        b=hkjqRWJ4GTUWf/fA1HqqRNXjXZBRWN0KbJB3mPlHa5YoKLe77jPKhe+wjGQu0WRXnp
-         OKWGhgSC2QBrVgvIzuYh8G5csrAG3/M6LoMiY9y0yb9p4hkFmfAoDJFErBjEiWG1Qta5
-         9IqRb58Pch9kVolf/Or7Uy7XlFzTIVmZXG018=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iW16hd+cXQQsHyRP7rt+lJ5AICZ50nA5CTVDepKk1SY=;
-        b=H9OuAT00VNPT84cP30i5leOGpZJkPtl/Vm1wmkTq8qRSgkL/UeVimMoL74XsV99xcw
-         3XKO1XLbZKZX0et1ffhSD3/pOMFq/Yf3X/eQs75q4VihTlpl8d1+D1qNLWa3QXKuHNl6
-         RninIk5+PYFQbwiui/lStcJkLESld8eRaWkow57eJDRqzmso+PMIaJto8G2HFUz8qnHE
-         zBkyim1BmfwgMhJSjJidna/FquOoj0avYurA/ROaoaWtWFosx1HQBz0eOjS6WaS4f9LJ
-         CGnncZfgd4psr8s+tfaXzp1qrUs2HccN01oblk0glSSLESpEUMNGqky1KCelWFpqTpuO
-         n+kw==
-X-Gm-Message-State: AOAM532wscELfMommNbvBu6Q+1iFdb+BCiQdw1hdPD4bYVszb7o+AlNI
-        gbsvLx8ns4Q/gkRiwNodgsJUjg==
-X-Google-Smtp-Source: ABdhPJzHBVHEaBUgvGyzi2wXWjc7xsYpLja7zuIEJVM5c8RiYPsKsQrWpZl0npooGeV7ZnjrOCpPVQ==
-X-Received: by 2002:a63:7544:: with SMTP id f4mr24302719pgn.556.1642531012435;
-        Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w18sm5509171pga.18.2022.01.18.10.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Huewe <peterhuewe@gmx.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Date:   Tue, 18 Jan 2022 10:36:50 -0800
-Message-Id: <20220118183650.3386989-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 18 Jan 2022 13:37:22 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IGvHRn030232;
+        Tue, 18 Jan 2022 18:37:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=0IMeSBcFtQ6ENgaIyTd1O8tNJg337yrCQNAUAa9CNuM=;
+ b=sBHjaKypymUFSYy66ch9aK9FRIYKyVGlpno3gOrNdB00yc82hxS0tjQ3WxpPrPdQ4O5t
+ WULWOp0gUjT2s2RpDrrci8gr5Aa3S3CVsCjLgTt0BdSTEE8tPJNwfaxLj5dQptM9ZNzP
+ HUCWsh4z2ISfopp0daX6tTOEMcl27Gz6Di3dFpRVnQ4YyHP4+zmtgn1gNtUs/ZsAzDpx
+ tbF7A5Re9YxHHm1D61mL95Rb/2jekst+z/D2Wg2SoFp5eX1NzndclR5VSWungazvFXDc
+ MIBOZOsGjNvlyK9EfnM8eDXWz+POGcUUu0Y7VXESdT57sXO/AFnGbEOlDh77WpN1FaC+ Tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dp1h8aqr4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:37:21 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IIPOwL008721;
+        Tue, 18 Jan 2022 18:37:20 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dp1h8aqqn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:37:20 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IIHn1o030733;
+        Tue, 18 Jan 2022 18:37:20 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 3dknwaqnqf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:37:19 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IIbI2w17957168
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 18:37:18 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CEC256E05B;
+        Tue, 18 Jan 2022 18:37:18 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C8E1F6E072;
+        Tue, 18 Jan 2022 18:37:16 +0000 (GMT)
+Received: from [9.163.19.30] (unknown [9.163.19.30])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 18:37:16 +0000 (GMT)
+Message-ID: <104bb7a4-68e7-adb1-91f4-d6fce09b99e7@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 13:37:16 -0500
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1713; h=from:subject; bh=aQ56F/K9EivD7wwGaVgmtBlfGCGvsRBhNwMsTf+3QQw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh5wjCHVDaUYrsL2fGabA2P1j4qpg2fjljD/IAr3nW n6XxQjuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYecIwgAKCRCJcvTf3G3AJrcHEA CE9wB7dgJGERHXIitTtvTPL1be+tJVDIAl87bB3MwfS4vzZgOWJqNTJ/gt3zjvNgavNIcMn3EOd+ZS y9iiiTsLfmIAb0Yl7TQJgeqRMpKVf8OMPrw12CDawZ0/Ed/fWaFwfXxX8FSxDT5xOV3SsmQpZwRMUg S4JealaQ3hCb053471GPtUlthOGmjB+RKIDV++2l6mLXj0pPMQ31OaXlCuqQ27pUiOWibuVos5awWA ulS24UU3Y7cfuGXOwsOxk1Zwz9JF7Sll/40RKpQPhezoNSa7kDdIiUOwJGBWtvcCXBY09+CkU1AykC PuyAlIwJVkP7xm2to/ky6AuSHnu0a4yK6y1z0I72G3VDWmSWo2O2ocs5nfGkDWGGwSmU6SChFcGOC5 pTb3qlaHupazqOOyJSV0hBBMby4GXrSQbXA+giMXA4LfDQF2TwRo5Se5+X5FOk0mgMMPshtQ5chJnZ 6ORLeitCZgEP7QMFLJzVl675Htd6W7dOkSsyhlS0xZ/cGLnafcF2vtyXqgYtDfvnRYgbQDvyj93rb4 LulMmcwhdjpBt+w4rxDmrn321EciKzWZPJSdQrMWapDhDO7D+Xah5e87OvA93AdO1uXziDO8l9edfv HtrRkEQAIgGP/gYGiDdrF8oIGSACvoLIsNcLL7s+T0dsj/jzdeTZCYq2cFSw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 24/30] vfio-pci/zdev: wire up group notifier
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-25-mjrosato@linux.ibm.com>
+ <0af94334-27ac-7e05-86ea-465857e9dadd@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <0af94334-27ac-7e05-86ea-465857e9dadd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: XNtEfXUqbmnCOA7Lp2BBSa6vf4wGX7Cs
+X-Proofpoint-GUID: 075JrzAsHVnxKO0CpKjmRzrbnF9Ri7Y5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 suspectscore=0 bulkscore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 adultscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180112
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with -Warray-bounds, this warning was emitted:
+On 1/18/22 12:34 PM, Pierre Morel wrote:
+> 
+> 
+> On 1/14/22 21:31, Matthew Rosato wrote:
+>> KVM zPCI passthrough device logic will need a reference to the associated
+>> kvm guest that has access to the device.  Let's register a group notifier
+>> for VFIO_GROUP_NOTIFY_SET_KVM to catch this information in order to 
+>> create
+>> an association between a kvm guest and the host zdev.
+>>
+>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> ---
+>>   arch/s390/include/asm/kvm_pci.h  |  2 ++
+>>   drivers/vfio/pci/vfio_pci_core.c |  2 ++
+>>   drivers/vfio/pci/vfio_pci_zdev.c | 46 ++++++++++++++++++++++++++++++++
+>>   include/linux/vfio_pci_core.h    | 10 +++++++
+>>   4 files changed, 60 insertions(+)
+>>
+>> diff --git a/arch/s390/include/asm/kvm_pci.h 
+>> b/arch/s390/include/asm/kvm_pci.h
+>> index fa90729a35cf..97a90b37c87d 100644
+>> --- a/arch/s390/include/asm/kvm_pci.h
+>> +++ b/arch/s390/include/asm/kvm_pci.h
+>> @@ -17,6 +17,7 @@
+>>   #include <linux/kvm.h>
+>>   #include <linux/pci.h>
+>>   #include <linux/mutex.h>
+>> +#include <linux/notifier.h>
+>>   #include <asm/pci_insn.h>
+>>   #include <asm/pci_dma.h>
+>> @@ -33,6 +34,7 @@ struct kvm_zdev {
+>>       u64 rpcit_count;
+>>       struct kvm_zdev_ioat ioat;
+>>       struct zpci_fib fib;
+>> +    struct notifier_block nb;
+>>   };
+>>   int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+>> diff --git a/drivers/vfio/pci/vfio_pci_core.c 
+>> b/drivers/vfio/pci/vfio_pci_core.c
+>> index f948e6cd2993..fc57d4d0abbe 100644
+>> --- a/drivers/vfio/pci/vfio_pci_core.c
+>> +++ b/drivers/vfio/pci/vfio_pci_core.c
+>> @@ -452,6 +452,7 @@ void vfio_pci_core_close_device(struct vfio_device 
+>> *core_vdev)
+>>       vfio_pci_vf_token_user_add(vdev, -1);
+>>       vfio_spapr_pci_eeh_release(vdev->pdev);
+>> +    vfio_pci_zdev_release(vdev);
+>>       vfio_pci_core_disable(vdev);
+>>       mutex_lock(&vdev->igate);
+>> @@ -470,6 +471,7 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_close_device);
+>>   void vfio_pci_core_finish_enable(struct vfio_pci_core_device *vdev)
+>>   {
+>>       vfio_pci_probe_mmaps(vdev);
+>> +    vfio_pci_zdev_open(vdev);
+>>       vfio_spapr_pci_eeh_open(vdev->pdev);
+>>       vfio_pci_vf_token_user_add(vdev, 1);
+>>   }
+>> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c 
+>> b/drivers/vfio/pci/vfio_pci_zdev.c
+>> index ea4c0d2b0663..5c2bddc57b39 100644
+>> --- a/drivers/vfio/pci/vfio_pci_zdev.c
+>> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
+>> @@ -13,6 +13,7 @@
+>>   #include <linux/vfio_zdev.h>
+>>   #include <asm/pci_clp.h>
+>>   #include <asm/pci_io.h>
+>> +#include <asm/kvm_pci.h>
+>>   #include <linux/vfio_pci_core.h>
+>> @@ -136,3 +137,48 @@ int vfio_pci_info_zdev_add_caps(struct 
+>> vfio_pci_core_device *vdev,
+>>       return ret;
+>>   }
+>> +
+>> +static int vfio_pci_zdev_group_notifier(struct notifier_block *nb,
+>> +                    unsigned long action, void *data)
+>> +{
+>> +    struct kvm_zdev *kzdev = container_of(nb, struct kvm_zdev, nb);
+>> +
+>> +    if (action == VFIO_GROUP_NOTIFY_SET_KVM) {
+>> +        if (!data || !kzdev->zdev)
+>> +            return NOTIFY_DONE;
+>> +        kvm_s390_pci_attach_kvm(kzdev->zdev, data);
+> 
+> Why not just set kzdev->kvm = data ?
+> 
+> alternatively, define kvm_s390_pci_attach_kvm() as an inline instead of 
+> a global function.
+> 
+> otherwise LGTM
 
-In function 'memset',
-    inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-[-Warray-bounds]
-   43 | #define __underlying_memset     __builtin_memset
-      |                                 ^
-
-There was no checking of the req_len value. To keep this code robust,
-and to silence the compiler warning, check the size before attempting
-a memset().
-
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Link: https://lore.kernel.org/lkml/4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1: https://lore.kernel.org/lkml/20220113002727.3709495-1-keescook@chromium.org
-v2: make commit log more accurate, add Reviewed-by
----
- drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 91c772e38bb5..5c865987ba5c 100644
---- a/drivers/char/tpm/tpm_vtpm_proxy.c
-+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-@@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
- 
- 	len = proxy_dev->req_len;
- 
--	if (count < len) {
-+	if (count < len || len > sizeof(proxy_dev->buffer)) {
- 		mutex_unlock(&proxy_dev->buf_lock);
- 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
- 			 count, len);
--- 
-2.30.2
+At some point in the past this function did more than just set a 
+pointer...  You are correct there's no need for this abstraction now, 
+let's just set kzdev->kvm = data directly here and drop the 
+kvm_s390_pci_attach_kvm function.
 

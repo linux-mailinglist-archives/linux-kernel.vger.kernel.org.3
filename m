@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E1B492B83
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B43492B99
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346268AbiARQte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:49:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50674 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbiARQtc (ORCPT
+        id S1346512AbiARQxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231277AbiARQxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:49:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAA05B8159B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B50C340E0;
-        Tue, 18 Jan 2022 16:49:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MePl9iYX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642524568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=D57DudwSqXwMHBPnWuXkPiCXPHFdtonW45twGTCs/kI=;
-        b=MePl9iYXyzyMzt2R7q6uKoLQZGfBggT0/0wxeIC5QIkoQIsL2KJ+o6do5/nuHGFDjNkFUu
-        yglMO2kW/HugiDIywXOp1HwdctV2L7auOXV6KI/VGZyUI3klul5xSH9Nh03P8MTCVTfKrr
-        IojST5fBiaw1zXfUAzTiNTipkRE7mpk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 954df8b7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 18 Jan 2022 16:49:28 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [GIT PULL] random number generator fixes for 5.17-rc1
-Date:   Tue, 18 Jan 2022 17:49:06 +0100
-Message-Id: <20220118164906.402468-1-Jason@zx2c4.com>
+        Tue, 18 Jan 2022 11:53:32 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A8C061574;
+        Tue, 18 Jan 2022 08:53:31 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id w26so29096440wmi.0;
+        Tue, 18 Jan 2022 08:53:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fD75JvyIsiVpBEx5QtG5GC9Un7z17Fl7pTIMPWRtl8I=;
+        b=maWYMrui4TgwRqDdWVibXHB5T1WIxc2iuT4yxI71rVkDkyQCUMn78HZ5u5c9lBSump
+         0p5sZJo6P5zFrWZMkO+GgU5Mni1gwAoLBbejaEAq0n4lAqpMHUBL6dm+hm88GFfPAW/9
+         11MbesyOM/eBMsi2euH+wY5nCPnxsjFQnv/fF7Ts/Rdo+o9K4XZYLSJ7Qi062+hJaJu6
+         QD41eEI3wS1SqEXTdRh38uE+2k7z3xTL8/6CZO9tEIyFvUAIEt+tcb9yU7werzSOgp+J
+         rERw2TsoDVP45ZcnznL3rd/zMVD7Gr+ZJjUxgAuxG98Wt6a41kxD+g/JA92BzfGiaWeh
+         +MYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fD75JvyIsiVpBEx5QtG5GC9Un7z17Fl7pTIMPWRtl8I=;
+        b=B29lcc3WwO89OHx7Dx1+TWcUByuZregk/5UDOAcVGxnv9+C8+EGdJMfKZdLgHCFuZp
+         X04DVJCpWS46XuJKelhvoJxXe912u4/tVCJ1jf9zLH/2WuAcFkEAJwYaLV6CPUYKueb9
+         A00l1OQg4FxeqQfiGfabRr0mIGaPf0rlgcFPZXw0CIMCrtRguYSwDsBWg3qO6h3o8zJB
+         kuCoNW1UwxSAOozQ7DCVpuzOHP5s2vGPze+tt0KQIyAbuMn0giJAu3Jcez1/scUudhl9
+         kW5kt6w+uKJYFvOzPSBNCd0Gm05rVQ/mINroASzCy+CvFXAOHQlxqvtIrVmWeEH6IFl+
+         57/g==
+X-Gm-Message-State: AOAM531sQ4Nlh6VLYzR97UETuFG/OYPV5AzS1Qr+IjZWjFd0mm3iF8Kt
+        scivhr19BuK33ouqKfB00pw5jcGgfCvt9A==
+X-Google-Smtp-Source: ABdhPJz6ngw+lrAu63PBTllko9nB58N2mt4o+jQmmv5wJrRe7ZIn9cVcNBWeMk6qbSX6KBNSvMOd8w==
+X-Received: by 2002:a5d:6da1:: with SMTP id u1mr18367215wrs.592.1642524810267;
+        Tue, 18 Jan 2022 08:53:30 -0800 (PST)
+Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
+        by smtp.googlemail.com with ESMTPSA id o12sm10634141wrc.51.2022.01.18.08.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 08:53:29 -0800 (PST)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [ASUS EC Sensors v7 0/3]
+Date:   Tue, 18 Jan 2022 17:53:06 +0100
+Message-Id: <20220118165316.412735-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This patchset replaces the HWMON asus_wmi_ec_sensors driver with
+an implementation that does not use WMI but queries the embedded
+controller directly.
 
-Please pull the following fixes, intended for 5.17-rc1:
+That provides two enhancements: sensor reading became quicker (on some
+systems or kernel configuration it took almost a full second to read
+all the sensors, that transfers less than 15 bytes of data), the driver
+became more fexible. The driver now relies on ACPI mutex to lock access
+to the EC, in the same way as the WMI DSDT code does.
 
-1) Some Kconfig changes resulted in BIG_KEYS being unselectable, which Justin
-   sent a patch to fix.
+Changes in v7:
+ - Add suport for the ROG STRIX X570-F GAMING board.
+ - Add the __init attribute to two more functions.
 
-2) Geert pointed out that moving to BLAKE2s bloated vmlinux on little
-   machines, like m68k, so we now compensate for this.
+Changes in v6:
+ - Fixed hwmon device name replacing dashes with underscores.
+ - Removed module verion.
+ - Fixed condition for asus_wmi_ec_Sensors in KBuild.
 
-3) Numerous style and house cleaning fixes, meant to have a cleaner base for
-   future changes.
+Changes in v5:
+ - Place the sensors bitset directly into the driver_data field of the
+   dmi_system_id struct.
+ - Replace doc comments with regular ones.
 
-Thanks,
-Jason
+Changes in v4:
+ - Deprecate the wmi driver rather than removing it.
 
-The following changes since commit fe81ba137ebcc7f236780996a0b375732c07e85c:
+Changes in v3:
+ - Remove BIOS version checks and BIOS version dependent mutex path.
 
-  Merge tag 'ata-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata (2022-01-18 10:14:49 +0200)
+Changes in v2:
+ - Replace sensor flags enum with bitset
+ - Replace module init/probe functions with module_platform_driver_probe
+   and ask the platform drivers framework to load the driver when ACPI
+   EC is found (ACPI ID "PNP0C09").
+ - Extend board data with BIOS version attribute for the mutex path to be
+   BIOS version dependent.
+ - Add module parameter to override the mutex path.
 
-are available in the Git repository at:
+Eugene Shalygin (3):
+  hwmon: (asus-ec-sensors) add driver for ASUS EC
+  hwmon: (asus-ec-sensors) update documentation
+  hwmon: deprecate asis_wmi_ec_sensors driver
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git random-5.17-rc1-for-linus
+ Documentation/hwmon/asus_ec_sensors.rst     |  52 ++
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  38 --
+ MAINTAINERS                                 |   6 +
+ drivers/hwmon/Kconfig                       |  16 +-
+ drivers/hwmon/Makefile                      |   1 +
+ drivers/hwmon/asus-ec-sensors.c             | 694 ++++++++++++++++++++
+ 6 files changed, 768 insertions(+), 39 deletions(-)
+ create mode 100644 Documentation/hwmon/asus_ec_sensors.rst
+ delete mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ create mode 100644 drivers/hwmon/asus-ec-sensors.c
 
-for you to fetch changes up to a254a0e4093fce8c832414a83940736067eed515:
+-- 
+2.34.1
 
-  random: simplify arithmetic function flow in account() (2022-01-18 13:03:56 +0100)
-
-----------------------------------------------------------------
-Jason A. Donenfeld (14):
-      lib/crypto: blake2s: move hmac construction into wireguard
-      lib/crypto: sha1: re-roll loops to reduce code size
-      random: cleanup poolinfo abstraction
-      random: cleanup integer types
-      random: remove incomplete last_data logic
-      random: remove unused extract_entropy() reserved argument
-      random: rather than entropy_store abstraction, use global
-      random: remove unused OUTPUT_POOL constants
-      random: de-duplicate INPUT_POOL constants
-      random: prepend remaining pool constants with POOL_
-      random: cleanup fractional entropy shift constants
-      random: access input_pool_data directly rather than through pointer
-      random: selectively clang-format where it makes sense
-      random: simplify arithmetic function flow in account()
-
-Justin M. Forbes (1):
-      lib/crypto: add prompts back to crypto libraries
-
-Schspa Shi (1):
-      random: fix typo in comments
-
- crypto/Kconfig                |   2 -
- drivers/char/random.c         | 627 ++++++++++++++++++------------------------
- drivers/net/wireguard/noise.c |  45 ++-
- include/crypto/blake2s.h      |   3 -
- include/trace/events/random.h |  56 ++--
- lib/Kconfig                   |   2 +
- lib/crypto/Kconfig            |  17 +-
- lib/crypto/blake2s-selftest.c |  31 ---
- lib/crypto/blake2s.c          |  37 ---
- lib/sha1.c                    |  95 +------
- 10 files changed, 352 insertions(+), 563 deletions(-)

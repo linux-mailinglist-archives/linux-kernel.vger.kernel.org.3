@@ -2,318 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66480493157
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AA949315B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350266AbiARXUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 18:20:12 -0500
-Received: from mail-co1nam11on2139.outbound.protection.outlook.com ([40.107.220.139]:4481
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237650AbiARXUL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:20:11 -0500
+        id S1350282AbiARXWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 18:22:19 -0500
+Received: from mx0c-0054df01.pphosted.com ([67.231.159.91]:39821 "EHLO
+        mx0c-0054df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350052AbiARXWN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 18:22:13 -0500
+Received: from pps.filterd (m0208999.ppops.net [127.0.0.1])
+        by mx0c-0054df01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20ILtlZg003890;
+        Tue, 18 Jan 2022 18:21:57 -0500
+Received: from can01-to1-obe.outbound.protection.outlook.com (mail-to1can01lp2059.outbound.protection.outlook.com [104.47.61.59])
+        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3dnapfs4be-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:21:56 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XBxpx+52F+EiEoLchOrC415L7ogHWtjVcPcmE4TmkeolstlTmnZGlVtjIs3OdKhe+zocdoZf2OmgL4gyEStgMBPSTbS/uGPyR+EY1T8BShDype7c3VZadJzOJbB8Q4UP1CFycYK80WCjlsr+Nkw+Ed2pP0HOZw48g/ikJ20bfABuOzi97E6HBgHUfH9C5oTTt5/OcjWaKTawr718Vl7CAbi4QyBRxgU5CGJURz7JvLHgI/Iu+Qi41k+7aPGFo14q1T0nPblOUI6DOYvI03NqWivCkbPAJdCIQS3tAbphLdKEca2dHEACu0bsqoQnbTSTlpJ4wX/dcCvhChtegxqFNA==
+ b=jR/fRjRC8zjOhEBujs2Dn4Qc5H2wfUDwJkkJ0KGIIkGRQRNt1/cK4gtVa+cw29YAF7DXUugD2e1HjLH/nxjmujZhsc0V7wgFmR+h/B+2pk9vPGKHFqPk01EUUj6axqUGfGllGac34v6fZarKkN2PLjFiBWwxIIGW7wbEAj5bj+I2Xt8wkT4ale/4lQJezcDNAHv/NAlBu7fXAKNeif0bHWkFMRgALdjqr0jZWGXgHkw4KPtSKTXAXual2nsHSKV1G6B+UzwQJTD0j5MGiygQXFnkgHBamy9tWeBwAyHov3gp3nqmCpXyfJdRolKp6ceiW1ZViHfhrGRo/38WPwo0Bg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NmCqsWFriJgsGQ970wXRMZerDolQ3FjAaUedr0HMPbk=;
- b=NBPidsZIrJjz2JhsFLUSYIEX6bS0xYzRRCB9OGcU7JTXmF/eEJxs5ozRtp91G0sSmQveoQvNcHtwVpQkxjMQ0u5wcOACR3UJtO7WNl35+S0AjW4PArvkYTZCYgByXY31WhecHBTwGgV1rrBU0kRph/tD926HUKWv3BQQ0CoIKCKdh17AIvu8Ic2yxtRGl1oH0m7SRtRuHLcEbvoOPv8szZzClZVaxcy4GWUQnwGR//rqAOvkWt1RHo+Hdyus3gUbz+/Vo0lpnNcgcpAu1/e8ZZCKkLeVRn4Fb7YXFthdrOHlfzXX+r2Wt6IXAW1mEYC75fH8S2JS1NGGVmjFu4t2bA==
+ bh=YLrcf+CxzNqXgEYDYPTwx+SHKEtwZq30NkUktC91zH8=;
+ b=TFxcfqMtYQpOH0y2/fD6Ff9ll2OoVLhZ6ffa5W6bOCpyCn+v08ErHMBf33r4zb8VHkPcSePGMvVVHCNOc+uBvYGaSet4YSxyNHrPpCcrxhBcUs6t8C4R2grZ61QkP27G5oRl09LzdyrLqgufMwJSCMEywwldoWAVQYbRH7ZBeXwG+WxqBRk37G8PG+RpdOfwFTGfMhv48jLHUUyDo20NXLaT9IIGEhWnbYQK9OVE296MRXovqWdxueIf00sTXykh9g3lpA97BQDEDg0SW57gFtU9vFS02cyuuFWgrC2G9WzJTk1lNrDk2mCqhGmthzIwrZVn102WYEQq4BveSnVELg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
+ dkim=pass header.d=calian.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NmCqsWFriJgsGQ970wXRMZerDolQ3FjAaUedr0HMPbk=;
- b=eUFTKva2y764IBU2EJFeZuGoXpHnuEJE2yZ4Ac3QS3WTWVQpaIEQIULvlNK12cSozzHz/roDMFPD2AQpXIwXH1SRp1KEsYJtslb5KMigWNUtDFSH1KbkA/V70dhlEh4yIs9MdIVBagIP88YMFqPe4UYzJry0/v7GXXDRtV0JpzM=
-Received: from CH2PR21MB1509.namprd21.prod.outlook.com (2603:10b6:610:84::18)
- by MN2PR21MB1168.namprd21.prod.outlook.com (2603:10b6:208:ff::11) with
+ bh=YLrcf+CxzNqXgEYDYPTwx+SHKEtwZq30NkUktC91zH8=;
+ b=nEBvAXjyO89XuIke5aMAkyAYhrzcHcibdizoOEcHLjpPVkKPEIwk7Eg7qn88x6FvVRnT48W1P1ctcZUitLVgyrbi24mVPlLJayIZp7gE8AG8duDR4VyIO55PNv0uj70uqncl0jpysWTBhPJeZnlQ1ZWZO9oxRXY01PTQauvrwLc=
+Received: from YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:6a::19)
+ by YQBPR0101MB9856.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:7c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.3; Tue, 18 Jan
- 2022 23:20:07 +0000
-Received: from CH2PR21MB1509.namprd21.prod.outlook.com
- ([fe80::e060:a16a:e925:8101]) by CH2PR21MB1509.namprd21.prod.outlook.com
- ([fe80::e060:a16a:e925:8101%5]) with mapi id 15.20.4909.001; Tue, 18 Jan 2022
- 23:20:07 +0000
-From:   Long Li <longli@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>
-Subject: RE: [PATCH] PCI: hv: Fix NUMA node assignment when kernel boots with
- parameters affecting NUMA topology
-Thread-Topic: [PATCH] PCI: hv: Fix NUMA node assignment when kernel boots with
- parameters affecting NUMA topology
-Thread-Index: AQHYA1QWLddhPIPNnk6mtn+/LlpFvqxXsWWAgABQoACABHENgIADtXxggAYN6oCAAzyJgIAABFMAgAAFyAA=
-Date:   Tue, 18 Jan 2022 23:20:07 +0000
-Message-ID: <CH2PR21MB1509F89BD3DB59E6396CFA24CE589@CH2PR21MB1509.namprd21.prod.outlook.com>
-References: <1641511228-12415-1-git-send-email-longli@linuxonhyperv.com>
- <MWHPR21MB15937B050A3E849A76384EA8D74D9@MWHPR21MB1593.namprd21.prod.outlook.com>
- <BY5PR21MB15067D1C5AA731A340A7AF34CE4D9@BY5PR21MB1506.namprd21.prod.outlook.com>
- <MWHPR21MB15938D29A4C1AF535E8510ADD7509@MWHPR21MB1593.namprd21.prod.outlook.com>
- <BY5PR21MB1506B0D34E7C42B9B0337136CE539@BY5PR21MB1506.namprd21.prod.outlook.com>
- <MWHPR21MB1593B3FF426AFF5B3F7C35E9D7569@MWHPR21MB1593.namprd21.prod.outlook.com>
- <BY5PR21MB1506829683984FD91061D907CE589@BY5PR21MB1506.namprd21.prod.outlook.com>
- <MWHPR21MB1593386F34FD34260FAE89EFD7589@MWHPR21MB1593.namprd21.prod.outlook.com>
-In-Reply-To: <MWHPR21MB1593386F34FD34260FAE89EFD7589@MWHPR21MB1593.namprd21.prod.outlook.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.12; Tue, 18 Jan
+ 2022 23:21:55 +0000
+Received: from YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6929:c39f:d893:b6c8]) by YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6929:c39f:d893:b6c8%2]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 23:21:55 +0000
+From:   Robert Hancock <robert.hancock@calian.com>
+To:     "sean.anderson@seco.com" <sean.anderson@seco.com>,
+        "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
+        "baruch@tkos.co.il" <baruch@tkos.co.il>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "bjagadee@codeaurora.org" <bjagadee@codeaurora.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "agross@kernel.org" <agross@kernel.org>
+Subject: Re: [PATCH 0/6] usb: dwc3: Calculate REFCLKPER et. al. from reference
+ clock
+Thread-Topic: [PATCH 0/6] usb: dwc3: Calculate REFCLKPER et. al. from
+ reference clock
+Thread-Index: AQHYCZ/4XkJytJwIJEir+k8QaI40kqxnCOeAgAIr+YCAAAIGAIAAAgEAgAAQWgCAAAMdAIAAJL0A
+Date:   Tue, 18 Jan 2022 23:21:55 +0000
+Message-ID: <8e8094f148920388b81a2a58bd7cd85cd4316d92.camel@calian.com>
+References: <20220114233904.907918-1-sean.anderson@seco.com>
+         <87iluifxy1.fsf@tarshish>
+         <7831a4f7-7c3f-4a2a-be73-38f2c40a123c@synopsys.com>
+         <f28052d9-5dea-a05b-8745-09e4d237b539@seco.com>
+         <f53ba815-f2ee-a558-73f3-06c5a43f5c5e@synopsys.com>
+         <0aaeb0e3-1e10-df41-0b61-c10249ea5faa@seco.com>
+         <9b4f6122-a044-fac6-c5ba-e786cb1fc584@synopsys.com>
+In-Reply-To: <9b4f6122-a044-fac6-c5ba-e786cb1fc584@synopsys.com>
+Accept-Language: en-CA, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8bda7ebd-c08f-425e-b37c-6b8fc48aeffa;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-01-07T15:18:50Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6875b5f5-7f1e-4345-3f31-08d9dad910fd
-x-ms-traffictypediagnostic: MN2PR21MB1168:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <MN2PR21MB11689A1C0FB0E1DE9B4611B0CE589@MN2PR21MB1168.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-office365-filtering-correlation-id: 46101120-ec49-4e38-9942-08d9dad950f9
+x-ms-traffictypediagnostic: YQBPR0101MB9856:EE_
+x-microsoft-antispam-prvs: <YQBPR0101MB9856C35E34804DBC5E7E80B6EC589@YQBPR0101MB9856.CANPRD01.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2EJvPVgeoAA4KpGm2/IKmJnKDclC8lzBjtnbN0PkkohR4978XQ3SBsomAnIdtURh3JOYi5THd84MEvUjsw1jlxz/4ECFzoX4Zsm6AOey6IbYf/9ZKaFQm65JFTaCNLvuoPVapae5ODz0l3jFQNlz99nQg0spnK0WQxjP+L4MOI1ycghOAzkyyRvf+HtXn3VISHlDBYQc7dS3HHOpo9lSHw4VLiMl1OWsxv6N+9l6rtn7Fu25852gYaCtnjJNfeMonu3L1YnO3izpkfndpPpKWFxqh3o/VUgRn3Abfh87aM/1E3HDgaU66i+ecp/hvQcfrVih7Di2zYj0Y0z4pn0wW9yL0nvb8HCPNToNzRC6SrW6dcnCc5wfweXRyrwjqeYeyRpjN77+NVV91NTLSZLHMLfXD/gi0jK6froQt0k0d8PoU2Wta7AloHmTLdYr8kstj8yZdHsgJWnS/lqRdU0QL2O4H6r9mKJ/9lFVVZljWlNvl3sucCyRSjiSceOvw1oR6bga6Ou2q3NaQIG/APQC3ShOOcRJ9Vt6fblmu4HgSWlIxocVFdtVML6qaJjUTLP2hFO+igxFs0PTHrqAk4ZHNfoTl9fBIeJVDAowdBcnYo/hD9UPDIZfztojDyBB0iZDGi0MdhtGzZA13OMZIUQW9ReEkkdYNKxrVgUq+KIdvsYi8hOj/vrE0c5kl6Ta8nzpUmZViVMHVaky94MdLB0PenXIvuV2N7tOTMve66K70FU0v5Tj23ZNsoYGCmLRzoFq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR21MB1509.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(122000001)(9686003)(5660300002)(7696005)(82960400001)(76116006)(6506007)(110136005)(52536014)(38070700005)(33656002)(55016003)(82950400001)(6636002)(316002)(66556008)(66946007)(71200400001)(64756008)(66476007)(8990500004)(83380400001)(86362001)(66446008)(186003)(26005)(508600001)(2906002)(10290500003)(8936002)(8676002)(20210929001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: eBGA6cWHTV1iDQ+UWoReBbQssYKP32AbBPpMK9ZUWclT6WUy1UpJIR0x6Z92+qKi9m7RO7qXX6LMvfOevC3EPZSLLp6hLG2QTA0pIdMLGsvS7QCVf6mEiyrbA8MZ3tGEBQQVABRTvsEUZCztu9ZJTC7ChoNkDRSeMN3kfR1VStmJZZ/E2zAzLs4F81IIO34cg5B6LAsVBDqTEQp4TH+VXRoJ8gtCCZuTwSYHlyHFQWgclnwdbbKDrt6aoG/+w0FuDwzVJ136cZFn763OzbeCuwZIloB8oxKKOH/DVQ7P8RUeBxDsXuusAJ9N7y9zPjUGxu89A7UKyYk7F63NsOilpFeGhQmV2UOaGlfcbR2hPBAj0pVG6iNhgzQtGrHi2J5Nd29PRuHfFdIs5tQcWJVy4o+lOn+XrWextLvnjgAm7O8hm/h9yUmJnUh7BLEvHctHq539LJ/TaukTcGHE+A6gApe6cc3cl9PRbVotwN2cWtOzmFfT3UDwIFGhb4p1119PT37zGdHPHoxkdzKikFTZ0b9lmrto6RjxRqEkVN82zAfszZVSOom5y14qM+uYc22ptrW7hsJ2ciDPU+bnUgjn4evAQwyQW4bR91yDuB6OCh2PLt8V33JB86jIr4YzkmHbAiPgekq/5AE3UAcBt8rEDLV19f0gqSAc5DWEGvh2jePhjX83m6HeQwvdlhMjOUUArJ02+xaQGnjbyO0KRDj7VqTMw0hwn1qp1RWPEwejA+/zuB6I8vr6BGkTPFXG9zO1xphjdUspW1bFmCbceC2TizitF6xIZ1aBe4OJwpWoelOK/0vG+tcI5UI4fvQfvSuf8fmtlpQFVB7TENjir6Ik0A5Lvp1faxffEYW3LBTbxb0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(15974865002)(6486002)(2906002)(44832011)(36756003)(26005)(2616005)(86362001)(110136005)(5660300002)(122000001)(38070700005)(316002)(8676002)(966005)(38100700002)(8936002)(71200400001)(66556008)(6512007)(6506007)(76116006)(508600001)(66446008)(64756008)(186003)(4326008)(91956017)(83380400001)(53546011)(54906003)(66946007)(7416002)(66476007)(99106002)(18886075002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9pM/YNG+GYLqQp+HBvz/mKCXLYAE1rn4WTj5ewu40vNNjwRHABrqr0XYwut5?=
- =?us-ascii?Q?pSY9SSMAc/Navf9JjqnNAc1Ln5rbAzQP/KHOIcLRPSuqSaoYERuuTabVeOd3?=
- =?us-ascii?Q?Mf63xZ7MlhAn8OhQ19dA+SDa3jDkcEAyp6guW/DQNGLvZQKu26ErD1A4oyNP?=
- =?us-ascii?Q?7MoKSxv0XJCZAp4qOFwwiEOxAmh2n1oqtJQRCI/OqhcdlOXDfc8HKIhA53FG?=
- =?us-ascii?Q?925eGCjRcCyv98G02fwxBJ9TiBdiXsb54WwYpH00O31gCrPlVwbTZEjLlJCZ?=
- =?us-ascii?Q?l9FRIrr5wXFTsEqV6SEg3OTTKNI+Lzojxo3n2iU0kLd6/oyvsOAQ3hQPDjQw?=
- =?us-ascii?Q?jSz4Db+LoWuQmwHWW3T2j7PMDIRuPYXaClJxMnB2RXHik6A9R40HuEUd3EBU?=
- =?us-ascii?Q?l6axE/2PakHV9ShCcQRgGblCuRz01t1Ip8xjC95FyjQXPWHJw0g4SeZB1PiM?=
- =?us-ascii?Q?kpqz85ihwOlSbSYssoTk2RYi7X0rmxAn6A7Enqse4x5Jh2M6l8qHQCwa7xIB?=
- =?us-ascii?Q?MKfPuMzht3+yS0E+AN63VZ6+SUXWlont54gUoW/uVuebjORKmuV1Gq8Mqnop?=
- =?us-ascii?Q?SxKolw+AGrm2TlidSVga9cuH4uRzbC+fCkJd6FuQCIekLq7BkdlvOZ18oLTM?=
- =?us-ascii?Q?B6fN3Qg9Kun60yKHsM7niwsLwAG/0p5iqpEKUQ86N0UGPGruHVfPBINdJfGt?=
- =?us-ascii?Q?1Fl4F7Kjfp/r+GvKxNl3c2FQCwZzjaKAAD2NS3eTCPqGgvBBF6fPVitpJ8X5?=
- =?us-ascii?Q?eaXya0G9rDS6f8scjkRJcryRL3Pnku+67nF0dq/cDZ0OeyWKU08FcHizI5F5?=
- =?us-ascii?Q?Yo9OjdVDgKkt2FWrLIWWFgYQBDXWeeAtmXFdwBZGwI4mRSZRdu9YvVPFFAgO?=
- =?us-ascii?Q?vb0HdHJI0Lt3jR3fCmCDyKUm9bAGteR7YukjbuGwvfRxWsfYzxd0sq39ZT92?=
- =?us-ascii?Q?DZtUbqslx+5ZUhn7W02/gCHduVjkzIpKKeSeSnHzX9sJuB8+AiW2rYgUsNeV?=
- =?us-ascii?Q?KJxDh4XOitGT4FDuXHlMEOiFPBaz4FeCQLGCDmTeCRIuooyiE5Jqp7DHMa55?=
- =?us-ascii?Q?7vhFUiDqM/lO8pVbTC4II6XMjxgW4fPnNuVvpVkuJ+99A9GB1/r0xb2gIncA?=
- =?us-ascii?Q?oWlHYbXO7uhgO1oYH7XLJ6c/7xYuSAsR2u6d9Htse72fyokTvDkXwBxWfJEn?=
- =?us-ascii?Q?GCMdhhMmNeS8bYoflUUpBuZUrX/Fr6cwPA0+1Vr2DeW8A5h7alWLLPo9gYIV?=
- =?us-ascii?Q?6ye1Z8ALP07nZOgcUT9B+XQGAAbVowEQda21rOxPyrLISdJfkKCLbtL4S2GY?=
- =?us-ascii?Q?V7J8g/nZCtTxhuFxN12/ZXRZs8EbnXWSCBQUgmHmktJDxm46KpJdKv9pk/07?=
- =?us-ascii?Q?p+9Hmrz7nMDP9svxmPTclA9qJwYqVp59+xQY0af0yv54A2d0fZb1Nd6hmI0Z?=
- =?us-ascii?Q?7eoeJH20LjE/EZY6BN64dBL/aloslIyQizXeAqt07wipatLhXprdgqkqmzfb?=
- =?us-ascii?Q?GsDj3uzIjYsYuxans+d4OYtrM/f1nx6R8dGfEfEYTSs+44oAs9A5HEGJPLdz?=
- =?us-ascii?Q?dbHPK9laOV0AOwJKXk3khRotHizy4525aiMdRoa55S02FBj/o4dh+n40M5ib?=
- =?us-ascii?Q?RA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cGRZdWl6V2oweHBLeU1DSmZHdVFtNE80V0hJSXhkTjd5R1NFZEJXMVl6d2NQ?=
+ =?utf-8?B?K1d4UStxZitmbWx1bHp6RnhhK1l1K3pLSW5NSUxpaktUU0w2dVJ4WlZUdlU5?=
+ =?utf-8?B?a2orL1FXbk9SU3cxUTl1eTNnZW16bUE0dmF6ekYyZzFYYjExWDArUVlpUDlQ?=
+ =?utf-8?B?aU41VlRhL3E5cTJRZHlGOTdkMUR5Y2lVQUpzSjJBV20wRHVPZXE2bEtmUWVo?=
+ =?utf-8?B?dUhLc3l2K01TbG5YV1dwRS9kdXpzc0VqWUNnbnAxU2toRGh6TW5jMVc2ZkRV?=
+ =?utf-8?B?RFBRNXRoQ0g0YlU4TGp4ckhaK1JPVnhlSnJINm5nUi8zeGVtclVhV25yRzR5?=
+ =?utf-8?B?M3ZNYVEvaUxJdHdhSG1uQW1iRCtIZVZNZkpVRE9GNUkvanV6ZzFjajZWOXg3?=
+ =?utf-8?B?ZGNsVnd5MGdDU2F6V0lqdG1HNG5RK3dNamR0azFDZnkxSXNoRVNsQmVPandU?=
+ =?utf-8?B?bkUvS01VaHNWUFF6YW15cGgwRWpxTEJTRVpEd25uVS8wek54R2hnb3o4ZE1U?=
+ =?utf-8?B?R0VzRU9MdDhVcDZia3ZVSFBFcFVBS0JOdHFtbjM5ZDNIUjYrQTJveExzeUZW?=
+ =?utf-8?B?cFRxWXZlei91TzJ0Q0g3K1o5aW5ycVZWT25GTnNWZ1p5ZVh1TDBoZkd3NXNX?=
+ =?utf-8?B?QkRYbjBoUnEreGl5TEtPRzRsc2UzUzg5dnlxY1g4NGlaQlQ3SDAyVXo2UG1Z?=
+ =?utf-8?B?SjdwMnQzZ3lXTGNoSTUzVk1EcDUvZm9zcmcwcGY3OEJwYWJkbWFOdTNoZ0ZG?=
+ =?utf-8?B?bU9zT0s3MExRK3gzSDhXUk9TNWY4M2FkVHhKWFNzb1ZUTDNGNXU1d3BsdzJB?=
+ =?utf-8?B?aEs5WGFTR3dNVndWWGo5VFlRZjQvZ1p0dmFaaUp0MUlzRzFqNFE4cWQ5SWVY?=
+ =?utf-8?B?YVVsOXR5QkJOQWJOWEhYMkxMN3ZPZUFWUFlUMWE0ZjRoQnEzbzUzQ24wbEhi?=
+ =?utf-8?B?d0FrbEM2M3ZOMGJRS2V1YWRubk9qeWYvWVZNakZqTDN4bnpES0dBbG1RTzlq?=
+ =?utf-8?B?REpuemJhYmpORy9ueW04d0lOUEFlSVplRWdVcENBKzg0Q1Uwbk1ud0JqeVFi?=
+ =?utf-8?B?Y1ZLQUpFbkFocEdDVGVWZnRxVTJXVWpuYmhIcXJXL1BDdmk0Q3hrSzhvU2lm?=
+ =?utf-8?B?SXZtcTVNUk9OYzlpUGxnUzEvcFYwTXc0VlRQdzBJdkJhMVZ6OElHa1M1T3px?=
+ =?utf-8?B?ZkhwUGE3ZWdOZDJMZUkxcWpsc21VRHFhckN2ek5BQjN1cmswbVRmQzA1S0pF?=
+ =?utf-8?B?ekdBS3ZsV2d2bHNmbkJwdU9GWUoxdjlocldpVjRqbGZtK3ZMRWxrdkNENzBy?=
+ =?utf-8?B?VUxjZ2xXSytuNGxMRUF2b2JFZnNiRG41SjhhR0VndDA4cDJSQzdhT01sbkth?=
+ =?utf-8?B?Tk5yRG9jUkFveE9hcUtxUnpPMXo5cnZEQmIzaGtuV3R1Wi8xdTFVck5yRE9n?=
+ =?utf-8?B?cjBKOFdnclE2SlcwQm1ZWVo0dnY2eHdWdEhJUit6aVVPUXZrS1RGcnZ0dGVz?=
+ =?utf-8?B?V2NOWjR0blFCRWtnTVRaMnN4elRUS2xpaTByQkUwd1RYQlNDaHpJcWswUE1q?=
+ =?utf-8?B?NTdVU0NpZTJCVTNxanRRSXZIeWxkU1BYWlFTN3dYSll0Y3M0S0NMV3g1VnBp?=
+ =?utf-8?B?cTBMZ1lpRFNpeGZad3FWZjdxR0d3WkxscTJTa0xVektQV005aDg1YW9rSlQy?=
+ =?utf-8?B?VDFJWDlIRS8rSUlKRXd3WXE3UmVuUFYwQmgrY1RPK29ZSzJMRTJRWTJzWGRm?=
+ =?utf-8?B?aWJ4dWMvMUpiVWc4RCtiaUFZN1JtZ2ZuYWZBTkhxcWFLQ211REFneDNnWXdO?=
+ =?utf-8?B?RWFpRkkzc0VBVm82amdpYkhweDhsSWtRWkNFNHhUNlpobjVqa0IyL0N0WE5O?=
+ =?utf-8?B?Z0FMT1g1cWpPNWttRVdhaUpMU1JXY0J0b09mRHRKU0xTd2NIcTA0TEdjcTEw?=
+ =?utf-8?B?OVdtMEl0Ly9LTUpRb2dDNFVEbE1qNmp2eVdMclNUMkZWbDNwZ1VmTmhPb3dL?=
+ =?utf-8?B?S0VGd2hmcTJiV1pXRUNpOU5LQ09IcWZpTUJwUUVNd0hzS0FPUzR3WWhObzU4?=
+ =?utf-8?B?TnFaaG1USmY4WkMwTUhzc1doZWRRRFN4U3lsT2JkV1JLYWtqYUFheVRpVTZJ?=
+ =?utf-8?B?ZVRPblgzaldwNmRDejNiN0FMbVJBM2VLckVvYjlBSDM3VHFjNFVLb1R4Qm5G?=
+ =?utf-8?B?dzRxRWx0YWozSFl0Qk9SalhabTdrZkd1dENDOGJSU0xzV2VKWFFzbi9ONmF3?=
+ =?utf-8?Q?OQkTkAbNaOm7l+hI0pNB5ndEWl9JmC9fOMvD+duCkk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D4D1CCDB02340D4A981BA3DE77FE6B49@CANPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+X-OriginatorOrg: calian.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR21MB1509.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6875b5f5-7f1e-4345-3f31-08d9dad910fd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2022 23:20:07.6176
+X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB6274.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46101120-ec49-4e38-9942-08d9dad950f9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2022 23:21:55.0616
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ewZk00CxCzZHk9LI61AhTeX8Yhjdz6H6qh9hx2cmuk2iPtvwcv6m0oeQ1CLL0ixBNyBf6Q4WW8EKCKXGz3vtxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1168
+X-MS-Exchange-CrossTenant-userprincipalname: Obolm7HyPOXUG2nSvF/3L8gCZ/GqMsgACDSgs3jFNfa/73cCKA+yfH3JZZO2NGG/wVr6lLW6QqRGxAuNxAnPX8MA2LMxPEQW9gDpwHdTIXc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB9856
+X-Proofpoint-GUID: S4NnnvdJZVMprEidch-y5y0bUdPyP1He
+X-Proofpoint-ORIG-GUID: S4NnnvdJZVMprEidch-y5y0bUdPyP1He
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_06,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ spamscore=0 mlxscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180130
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: RE: [PATCH] PCI: hv: Fix NUMA node assignment when kernel boots
-> with parameters affecting NUMA topology
->=20
-> From: Long Li <longli@microsoft.com> Sent: Tuesday, January 18, 2022 2:44=
- PM
-> > >
-> > > From: Long Li <longli@microsoft.com> Sent: Wednesday, January 12,
-> > > 2022 4:59 PM
-> > > >
-> > > > > Subject: RE: [PATCH] PCI: hv: Fix NUMA node assignment when
-> > > > > kernel boots with parameters affecting NUMA topology
-> > > > >
-> > > > > From: Long Li <longli@microsoft.com> Sent: Friday, January 7,
-> > > > > 2022
-> > > > > 12:32 PM
-> > > > > > >
-> > > > > > > From: longli@linuxonhyperv.com <longli@linuxonhyperv.com> Sen=
-t:
-> > > > > > > Thursday, January 6, 2022 3:20 PM
-> > > > > > > >
-> > > > > > > > When the kernel boots with parameters restricting the
-> > > > > > > > number of cpus or NUMA nodes, e.g. maxcpus=3DX or numa=3Dof=
-f,
-> > > > > > > > the vPCI driver should only set to the NUMA node to a
-> > > > > > > > value that is valid in the
-> > > current running kernel.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Long Li <longli@microsoft.com>
-> > > > > > > > ---
-> > > > > > > >  drivers/pci/controller/pci-hyperv.c | 17
-> > > > > > > > +++++++++++++++--
-> > > > > > > >  1 file changed, 15 insertions(+), 2 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/pci/controller/pci-hyperv.c
-> > > > > > > > b/drivers/pci/controller/pci- hyperv.c index
-> > > > > > > > fc1a29acadbb..8686343eff4c 100644
-> > > > > > > > --- a/drivers/pci/controller/pci-hyperv.c
-> > > > > > > > +++ b/drivers/pci/controller/pci-hyperv.c
-> > > > > > > > @@ -1835,8 +1835,21 @@ static void
-> > > > > > > > hv_pci_assign_numa_node(struct hv_pcibus_device *hbus)
-> > > > > > > >  		if (!hv_dev)
-> > > > > > > >  			continue;
-> > > > > > > >
-> > > > > > > > -		if (hv_dev->desc.flags &
-> > > HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
-> > > > > > > > -			set_dev_node(&dev->dev, hv_dev-
-> > > >desc.virtual_numa_node);
-> > > > > > > > +		if (hv_dev->desc.flags &
-> > > HV_PCI_DEVICE_FLAG_NUMA_AFFINITY) {
-> > > > > > > > +			int cpu;
-> > > > > > > > +			bool found_node =3D false;
-> > > > > > > > +
-> > > > > > > > +			for_each_possible_cpu(cpu)
-> > > > > > > > +				if (cpu_to_node(cpu) =3D=3D
-> > > > > > > > +				    hv_dev->desc.virtual_numa_node) {
-> > > > > > > > +					found_node =3D true;
-> > > > > > > > +					break;
-> > > > > > > > +				}
-> > > > > > > > +
-> > > > > > > > +			if (found_node)
-> > > > > > > > +				set_dev_node(&dev->dev,
-> > > > > > > > +					     hv_dev-
-> > > >desc.virtual_numa_node);
-> > > > > > > > +		}
-> > > > > > >
-> > > > > > > I'm wondering about this approach vs. just comparing against
-> > > nr_node_ids.
-> > > > > >
-> > > > > > I was trying to fix this by comparing with nr_node_ids. This
-> > > > > > worked for numa=3Doff, but it didn't work with maxcpus=3DX.
-> > > > > >
-> > > > > > maxcpus=3DX is commonly used in kdump kernels. In this config,
-> > > > > > the memory system is initialized in a way that only the NUMA
-> > > > > > nodes within maxcpus are setup and can be used by the drivers.
-> > > > >
-> > > > > In looking at a 5.16 kernel running in a Hyper-V VM on two NUMA
-> > > > > nodes, the number of NUMA nodes configured in the kernel is not
-> > > > > affected by maxcpus=3D on the kernel boot line.  This VM has 48
-> > > > > vCPUs and 2 NUMA nodes, and is Generation 2.  Even with
-> > > > > maxcpus=3D4 or maxcpus=3D1, these lines are output during
-> > > > > boot:
-> > > > >
-> > > > > [    0.238953] NODE_DATA(0) allocated [mem 0x7edffd5000-0x7edffff=
-fff]
-> > > > > [    0.241397] NODE_DATA(1) allocated [mem 0xfcdffd4000-0xfcdfffe=
-fff]
-> > > > >
-> > > > > and
-> > > > >
-> > > > > [    0.280039] Initmem setup node 0 [mem 0x0000000000001000-
-> > > 0x0000007edfffffff]
-> > > > > [    0.282869] Initmem setup node 1 [mem 0x0000007ee0000000-
-> > > 0x000000fcdfffffff]
-> > > > >
-> > > > > It's perfectly legit to have a NUMA node with memory but no CPUs.
-> > > > > The memory assigned to the NUMA node is determined by the ACPI SR=
-AT.
-> > > > > So I'm wondering what is causing the kdump issue you see.  Or
-> > > > > maybe the behavior of older kernels is different.
-> > > >
-> > > > Sorry, it turns out I had a typo. It's nr_cpus=3D1 (not maxcpus).
-> > > > But I'm not sure if that matters as the descriptions on these two
-> > > > in the kernel doc
-> > > are the same.
-> > > >
-> > > > On my system (4 NUMA nodes) with kdump boot line:  (maybe if you
-> > > > try a VM with 4 NUMA nodes, you can see the problem)
-> > > > [    0.000000] Command line: BOOT_IMAGE=3D/boot/vmlinuz-5.11.0-1025=
--
-> azure
-> > > > root=3DPARTUUID=3D7145c36d-e182-43b6-a37e-0b6d18fef8fe ro console=
-=3Dtty1
-> > > > console=3DttyS0
-> > > > earlyprintk=3DttyS0 reset_devices
-> > > > systemd.unit=3Dkdump-tools-dump.service
-> > > > nr_cpus=3D1 irqpoll nousb ata_piix.prefer_ms_hyperv=3D0
-> > > > elfcorehdr=3D4038049140K
-> > > >
-> > > > I see the following:
-> > > > [    0.408246] NODE_DATA(0) allocated [mem 0x2cfd6000-0x2cffffff]
-> > > > [    0.410454] NODE_DATA(3) allocated [mem 0x3c2bef32000-
-> 0x3c2bef5bfff]
-> > > > [    0.413031] Zone ranges:
-> > > > [    0.414117]   DMA      [mem 0x0000000000001000-0x0000000000fffff=
-f]
-> > > > [    0.416522]   DMA32    [mem 0x0000000001000000-0x00000000fffffff=
-f]
-> > > > [    0.418932]   Normal   [mem 0x0000000100000000-0x000003c2bef5cff=
-f]
-> > > > [    0.421357]   Device   empty
-> > > > [    0.422454] Movable zone start for each node
-> > > > [    0.424109] Early memory node ranges
-> > > > [    0.425541]   node   0: [mem 0x0000000000001000-0x000000000009ff=
-ff]
-> > > > [    0.428050]   node   0: [mem 0x000000001d000000-0x000000002cffff=
-ff]
-> > > > [    0.430547]   node   3: [mem 0x000003c27f000000-0x000003c2bef5cf=
-ff]
-> > > > [    0.432963] Initmem setup node 0 [mem 0x0000000000001000-
-> > > 0x000000002cffffff]
-> > > > [    0.435695] Initmem setup node 3 [mem 0x000003c27f000000-
-> > > 0x000003c2bef5cfff]
-> > > > [    0.438446] On node 0, zone DMA: 1 pages in unavailable ranges
-> > > > [    0.439377] On node 0, zone DMA32: 53088 pages in unavailable ra=
-nges
-> > > > [    0.452784] On node 3, zone Normal: 40960 pages in unavailable r=
-anges
-> > > > [    0.455221] On node 3, zone Normal: 4259 pages in unavailable ra=
-nges
-> > > >
-> > > > It's unclear to me why node 1 and 2 are missing. But I don't think
-> > > > it's a Hyper-V problem since it's only affected by setting nr_cpus
-> > > > over kernel boot line. Later, a device driver
-> > > > (mlx5 in this example) tries to allocate memory on node 1 and fails=
-:
-> > > >
-> > >
-> > > To summarize some offline conversation, we've figured out that the
-> "missing"
-> > > NUMA nodes are not due to setting maxcpus=3D1 or nr_cpus=3D1.  Settin=
-g
-> > > the cpu count doesn't affect any of this.
-> > >
-> > > Instead, Linux is modifying the memory map prior to starting the
-> > > kdump kernel so that most of the memory is not touched and is
-> > > preserved to be dumped, which is the whole point of kdump.   This
-> > > modified memory map has no memory in NUMA nodes 1 and 2, so it is
-> > > correct to just see nodes 0 and 3 as online.
-> > >
-> > > I think code fix here is pretty simple:
-> > >
-> > > 	int node;
-> > >
-> > > 	node =3D hv_dev->desc.virtual_numa_node;
-> > > 	if ((hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
-> > > 			&& (node < nr_node_ids))
-> > > 		set_dev_node(&dev->dev, numa_map_to_online_node(node));
-> > >
-> > > Michael
-> >
-> > Okay, this looks good.
-> >
-> > I'm sending a V2 (with a minor change) after testing is done.
-> >
-> > Long
->=20
-> Please leave a comment in the code as to why a NUMA node might be
-> offline.   In the future, somebody new might not know what can happen.
-> I certainly didn't. :-(
-
-Will do that.
-
-Long
+T24gVHVlLCAyMDIyLTAxLTE4IGF0IDIxOjEwICswMDAwLCBUaGluaCBOZ3V5ZW4gd3JvdGU6DQo+
+IEhpIFNlYW4sDQo+IA0KPiBTZWFuIEFuZGVyc29uIHdyb3RlOg0KPiA+IEhpIFRoaW5oLA0KPiA+
+IA0KPiA+IE9uIDEvMTgvMjIgMzowMCBQTSwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPiA+ID4gU2Vh
+biBBbmRlcnNvbiB3cm90ZToNCj4gPiA+ID4gSGkgVGhpbmgsDQo+ID4gPiA+IA0KPiA+ID4gPiBP
+biAxLzE4LzIyIDI6NDYgUE0sIFRoaW5oIE5ndXllbiB3cm90ZToNCj4gPiA+ID4gPiBIaSBTZWFu
+LA0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IEJhcnVjaCBTaWFjaCB3cm90ZToNCj4gPiA+ID4gPiA+
+IEhpIFNlYW4sIFRoaW5oLA0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiBPbiBGcmksIEphbiAx
+NCAyMDIyLCBTZWFuIEFuZGVyc29uIHdyb3RlOg0KPiA+ID4gPiA+ID4gPiBUaGlzIGlzIGEgcmV3
+b3JrIG9mIHBhdGNoZXMgMy01IG9mIFsxXS4gSXQgYXR0ZW1wdHMgdG8gY29ycmVjdGx5DQo+ID4g
+PiA+ID4gPiA+IHByb2dyYW0NCj4gPiA+ID4gPiA+ID4gUkVGQ0xLUEVSIGFuZCBSRUZDTEtfRkxB
+REogYmFzZWQgb24gdGhlIHJlZmVyZW5jZSBjbG9jaw0KPiA+ID4gPiA+ID4gPiBmcmVxdWVuY3ku
+DQo+ID4gPiA+ID4gPiA+IFNpbmNlDQo+ID4gPiA+ID4gPiA+IHdlIG5vIGxvbmdlciBuZWVkIGEg
+c3BlY2lhbCBwcm9wZXJ0eSBkdXBsaWNhdGluZyB0aGlzDQo+ID4gPiA+ID4gPiA+IGNvbmZpZ3Vy
+YXRpb24sDQo+ID4gPiA+ID4gPiA+IHNucHMscmVmLWNsb2NrLXBlcmlvZC1ucyBpcyBkZXByZWNh
+dGVkLg0KPiA+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+ID4gUGxlYXNlIHRlc3QgdGhpcyEgUGF0
+Y2hlcyAzLzQgaW4gdGhpcyBzZXJpZXMgaGF2ZSB0aGUgZWZmZWN0IG9mDQo+ID4gPiA+ID4gPiA+
+IHByb2dyYW1taW5nIFJFRkNMS1BFUiBhbmQgUkVGQ0xLX0ZMQURKIG9uIGJvYXJkcyB3aGljaCBh
+bHJlYWR5DQo+ID4gPiA+ID4gPiA+IGNvbmZpZ3VyZQ0KPiA+ID4gPiA+ID4gPiB0aGUgInJlZiIg
+Y2xvY2suIEkgaGF2ZSBidWlsZCB0ZXN0ZWQsIGJ1dCBub3QgbXVjaCBlbHNlLg0KPiA+ID4gPiA+
+ID4gPiANCj4gPiA+ID4gPiA+ID4gWzFdDQo+ID4gPiA+ID4gPiA+IGh0dHBzOi8vdXJsZGVmZW5z
+ZS5jb20vdjMvX19odHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC11c2IvMjAyMjAxMTQwNDQy
+MzAuMjY3NzI4My0xLXJvYmVydC5oYW5jb2NrQGNhbGlhbi5jb20vX187ISFBNEYyUjlHX3BnIU0z
+ekt4RFpDOWFfZXRxelhvN0dTRU1USFJXZmMxd1JfODR3d000LWZTaGlBMzVDc0djeGNURWZmSFBi
+cHJiZEM0ZDJSJA0KPiA+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiAN
+Cj4gPiA+ID4gPiA+IFRoaW5oLCB5b3Ugc3VnZ2VzdGVkIHRoZSBkZWRpY2F0ZWQgRFQgcHJvcGVy
+dHkgZm9yIHRoZSByZWZlcmVuY2UNCj4gPiA+ID4gPiA+IGNsb2NrOg0KPiA+ID4gPiA+ID4gDQo+
+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+IGh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRw
+czovL2xvcmUua2VybmVsLm9yZy9hbGwvZDVhY2IxOTItODBiOS0zNmY3LTQzZjUtODFmMjFjNGU2
+YmEwQHN5bm9wc3lzLmNvbS9fXzshIUE0RjJSOUdfcGchTTN6S3hEWkM5YV9ldHF6WG83R1NFTVRI
+UldmYzF3Ul84NHd3TTQtZlNoaUEzNUNzR2N4Y1RFZmZIUGJwcmJwT0ZtdlgkDQo+ID4gPiA+ID4g
+PiANCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiBDYW4geW91IGNvbW1l
+bnQgb24gdGhpcyBzZXJpZXM/DQo+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBV
+bmxlc3MgdGhlcmUncyBhIGdvb2Qgd2F5IHRvIHBhc3MgdGhpcyBpbmZvcm1hdGlvbiBmb3IgUENJ
+IGRldmljZXMsDQo+ID4gPiA+ID4gbXkNCj4gPiA+ID4gPiBvcGluaW9uIGhhc24ndCBjaGFuZ2Vk
+LiAoQnR3LCBJIGRvbid0IHRoaW5rIGNyZWF0aW5nIGEgZHVtbXkgY2xvY2sNCj4gPiA+ID4gPiBw
+cm92aWRlciBhbmQgaXRzIGR1bW15IG9wcyBpcyBhIGdvb2Qgc29sdXRpb24gYXMgc2VlbXMgdG8g
+Y29tcGxpY2F0ZQ0KPiA+ID4gPiA+IGFuZA0KPiA+ID4gPiA+IGJsb2F0IHRoZSBQQ0kgZ2x1ZSBk
+cml2ZXJzKS4NCj4gPiA+ID4gDQo+ID4gPiA+IENhbiB5b3UgZXhwbGFpbiB5b3VyIHNpdHVhdGlv
+biBhIGJpdCBtb3JlPyBJJ20gbm90IHN1cmUgaG93IHlvdSBjYW4NCj4gPiA+ID4gYWNjZXNzIGEg
+ZGV2aWNlIHRyZWUgcHJvcGVydHkgYnV0IG5vdCBhZGQgYSBmaXhlZC1yYXRlIGNsb2NrLg0KPiA+
+ID4gPiANCj4gPiA+ID4gLS1TZWFuDQo+ID4gPiANCj4gPiA+IEN1cnJlbnRseSBmb3IgZHdjMyBw
+Y2kgZGV2aWNlcywgd2UgaGF2ZSBnbHVlIGRyaXZlcnMgdGhhdCBjcmVhdGUgYQ0KPiA+ID4gcGxh
+dGZvcm1fZGV2aWNlIHdpdGggc3BlY2lmaWMgcHJvcGVydGllcyB0byBwYXNzIHRvIHRoZSBkd2Mz
+IGNvcmUNCj4gPiA+IGRyaXZlci4gV2l0aG91dCBhIHJlZiBjbG9jayBwcm9wZXJ0eSwgd2Ugd291
+bGQgbmVlZCBhbm90aGVyIHdheSB0byBwYXNzDQo+ID4gPiB0aGlzIGluZm9ybWF0aW9uIHRvIHRo
+ZSBjb3JlIGRyaXZlciBvciBhbm90aGVyIHdheSBmb3IgdGhlIGR3YzMgY29yZQ0KPiA+ID4gZHJp
+dmVyIHRvIGNoZWNrIGZvciBzcGVjaWZpYyBwY2kgZGV2aWNlJ3MgcHJvcGVydGllcyBhbmQgcXVp
+cmtzLg0KPiA+IA0KPiA+IFRoZSBwcmltYXJ5IHByb2JsZW0gd2l0aCB0aGUgZXhpc3RpbmcgYmlu
+ZGluZyBpcyB0aGF0IGl0IGRvZXMgbm90DQo+ID4gY29udGFpbiBlbm91Z2ggaW5mb3JtYXRpb24g
+dG8gY2FsY3VsYXRlIHRoZSBmcmFjdGlvbmFsIHBlcmlvZC4gV2l0aCB0aGUNCj4gPiBmcmVxdWVu
+Y3ksIHdlIGNhbiBjYWxjdWxhdGUgdGhlIGNvcnJlY3QgdmFsdWVzIGZvciB0aGUgcmVnaXN0ZXJz
+IHdpdGhvdXQNCj4gPiBuZWVkaW5nIGFuIGFkZGl0aW9uYWwgYmluZGluZy4gU28gd2UgbmVlZCB0
+byB0cmFuc2l0aW9uIHRvIHNvbWUga2luZCBvZg0KPiA+IGZyZXF1ZW5jeS1iYXNlZCBzeXN0ZW0u
+IFNvIHBlcmhhcHMgd2Ugc2hvdWxkIGFkZCBhICJyZWYtY2xvY2stZnJlcXVlbmN5Ig0KPiA+IHBy
+b3BlcnR5IGFuZCB1c2UgdGhhdCBhcyBhIGRlZmF1bHQgZm9yIHdoZW4gdGhlIGNsb2NrIGlzIG1p
+c3NpbmcuDQo+ID4gDQo+IA0KPiBOb3Qgc3VyZSBhYm91dCBvdGhlcnMsIGJ1dCB0aGF0J3MgZmlu
+ZSB3aXRoIG1lLiBUaGUgb3RoZXIgc29sdXRpb24gaXMgdG8NCj4gcmV3b3JrIHRoZSBkd2MzIGRy
+aXZlcnMgYXMgUm9iZXJ0IG5vdGVkLCBidXQgdGhhdCByZXF1aXJlcyBzb21lIHdvcmsuDQo+IA0K
+DQpTZWVtcyByZWFzb25hYmxlIGVub3VnaCBmb3IgYSBzaG9ydC10ZXJtIGZpeCBhbnl3YXkuDQoN
+Cj4gVGhhbmtzLA0KPiBUaGluaA0KPiANCi0tIA0KUm9iZXJ0IEhhbmNvY2sNClNlbmlvciBIYXJk
+d2FyZSBEZXNpZ25lciwgQ2FsaWFuIEFkdmFuY2VkIFRlY2hub2xvZ2llcw0Kd3d3LmNhbGlhbi5j
+b20NCg==

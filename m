@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A136F4929CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1754A4929CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345945AbiARPnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:43:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:59762 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236135AbiARPnh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:43:37 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D2DA1FB;
-        Tue, 18 Jan 2022 07:43:37 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.37.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BA3A3F766;
-        Tue, 18 Jan 2022 07:43:30 -0800 (PST)
-Date:   Tue, 18 Jan 2022 15:43:28 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
-        gor@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        maz@kernel.org, mingo@redhat.com, mpe@ellerman.id.au,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com,
-        suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
-Message-ID: <20220118154328.GD17938@C02TD0UTHF1T.local>
-References: <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
- <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
- <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
- <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
- <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
- <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
- <20220118120154.GA17938@C02TD0UTHF1T.local>
- <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
- <20220118131223.GC17938@C02TD0UTHF1T.local>
- <77e8d214-372b-3f0e-7b4e-5c2d23a4199c@linux.ibm.com>
+        id S1345979AbiARPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:43:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40000 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345950AbiARPnz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:43:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642520630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0YPpE+94B6yWE7TJv4rcwracfeu9W68cFUmQp0rBtk=;
+        b=g7uiJfW7u1/M60YSZoTIYJWbR4jjWmq7YCbuKiwvvF0w1LvF/ngcpB56eGw5D7LKWuH11f
+        R37CAntgny7GhXYYVZUcY/2SoWm13m5Y90AN1K1v+zqmFP3qsN3EBm+LtQRT4QjCYUSfuE
+        045qwLd4UR+sHeMnSppnGeNJr1hwAV0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219-12RjRnhkPeaDBYcCLStdmg-1; Tue, 18 Jan 2022 10:43:47 -0500
+X-MC-Unique: 12RjRnhkPeaDBYcCLStdmg-1
+Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso17331386edt.20
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:43:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d0YPpE+94B6yWE7TJv4rcwracfeu9W68cFUmQp0rBtk=;
+        b=a7dIGQMLtQz8GY7TtVTduOT7LjxG5jLZ7xErHwp1VT3gTdU+z/7g/dxDKfGmghvr51
+         bBbELx07h7DWcGUj9l+crbzUGBuovREgtKnLrCjL0PIpN76AgyY8VMlHgpSW62Mc2WwF
+         fq5m0cDuB3UxKh7NKnDYQxsDTO210VwtWe+NOyWIBBvHR1/VRG58X7VFgM81UZKXhBNN
+         PIZuFq/rBAkckUHGmmV+3/wURm+gFXPnacU1U6ZEax4xba0B6JB4SNVS7y3hYGL7lQdc
+         yutlr9j9QY5qo4LbEoA9ICw0zYNzam0/thwctmgJE3wkGO/eFWHm/nKL3d8HFRT360rE
+         1uxQ==
+X-Gm-Message-State: AOAM533r8lJFrqp43HotbfZWjv85d8f2GyBj/zRrY1n6ufaNB4g/OD0i
+        0mjql+HSvQLHN/W06RAvzsPiMUhc0I1HGb60q07YaHe5W5JoIzaFHqQZuti/0c5Mag9j8oigqaY
+        g4KDffzUtBLAB9zQDuFXTJa+0
+X-Received: by 2002:a05:6402:291b:: with SMTP id ee27mr18848547edb.363.1642520623263;
+        Tue, 18 Jan 2022 07:43:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwSf30u1Y8twrreQGvhRj70h4otcNrhlmXnPl8LDEz9y+o8KJ76N1+dABMmBkucVx6D4qd3/Q==
+X-Received: by 2002:a05:6402:291b:: with SMTP id ee27mr18848524edb.363.1642520623022;
+        Tue, 18 Jan 2022 07:43:43 -0800 (PST)
+Received: from redhat.com ([2.55.154.241])
+        by smtp.gmail.com with ESMTPSA id hs32sm5459700ejc.180.2022.01.18.07.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 07:43:42 -0800 (PST)
+Date:   Tue, 18 Jan 2022 10:43:38 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] virtio: acknowledge all features before access
+Message-ID: <20220118104318-mutt-send-email-mst@kernel.org>
+References: <20220114200744.150325-1-mst@redhat.com>
+ <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
+ <20220117032429-mutt-send-email-mst@kernel.org>
+ <87mtjuv8od.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <77e8d214-372b-3f0e-7b4e-5c2d23a4199c@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87mtjuv8od.fsf@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 03:15:51PM +0100, Christian Borntraeger wrote:
-> Am 18.01.22 um 14:12 schrieb Mark Rutland:
-> > On Tue, Jan 18, 2022 at 01:42:26PM +0100, Christian Borntraeger wrote:
-> > > 
-> > > 
-> > > Am 18.01.22 um 13:02 schrieb Mark Rutland:
-> > > > On Mon, Jan 17, 2022 at 06:45:36PM +0100, Paolo Bonzini wrote:
-> > > > > On 1/14/22 16:19, Mark Rutland wrote:
-> > > > > > I also think there is another issue here. When an IRQ is taken from SIE, will
-> > > > > > user_mode(regs) always be false, or could it be true if the guest userspace is
-> > > > > > running? If it can be true I think tha context tracking checks can complain,
-> > > > > > and it*might*  be possible to trigger a panic().
-> > > > > 
-> > > > > I think that it would be false, because the guest PSW is in the SIE block
-> > > > > and switched on SIE entry and exit, but I might be incorrect.
-> > > > 
-> > > > Ah; that's the crux of my confusion: I had thought the guest PSW would
-> > > > be placed in the regular lowcore *_old_psw slots. From looking at the
-> > > > entry asm it looks like the host PSW (around the invocation of SIE) is
-> > > > stored there, since that's what the OUTSIDE + SIEEXIT handling is
-> > > > checking for.
-> > > > 
-> > > > Assuming that's correct, I agree this problem doesn't exist, and there's
-> > > > only the common RCU/tracing/lockdep management to fix.
-> > > 
-> > > Will you provide an s390 patch in your next iteration or shall we then do
-> > > one as soon as there is a v2? We also need to look into vsie.c where we
-> > > also call sie64a
-> > 
-> > I'm having a go at that now; my plan is to try to have an s390 patch as
-> > part of v2 in the next day or so.
-> > 
-> > Now that I have a rough idea of how SIE and exception handling works on
-> > s390, I think the structural changes to kvm-s390.c:__vcpu_run() and
-> > vsie.c:do_vsie_run() are fairly simple.
-> > 
-> > The only open bit is exactly how/where to identify when the interrupt
-> > entry code needs to wake RCU. I can add a per-cpu variable or thread
-> > flag to indicate that we're inside that EQS, or or I could move the irq
-> > enable/disable into the sie64a asm and identify that as with the OUTSIDE
-> > macro in the entry asm.
-> What exactly would the low-level interrupt handler need to do?
+On Mon, Jan 17, 2022 at 01:38:42PM +0100, Cornelia Huck wrote:
+> On Mon, Jan 17 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> 
+> > On Mon, Jan 17, 2022 at 02:31:49PM +0800, Jason Wang wrote:
+> >> 
+> >> 在 2022/1/15 上午4:09, Michael S. Tsirkin 写道:
+> >> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
+> >> >   	/* We have a driver! */
+> >> >   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
+> >> > +	ret = dev->config->finalize_features(dev);
+> >> > +	if (ret)
+> >> > +		goto err;
+> >> 
+> >> 
+> >> Is this part of code related?
+> >> 
+> >> Thanks
+> >> 
+> >
+> > Yes. virtio_finalize_features no longer calls dev->config->finalize_features.
+> >
+> > I think the dev->config->finalize_features callback is actually
+> > a misnomer now, it just sends the features to device,
+> > finalize is FEATURES_OK. Renaming that is a bigger
+> > patch though, and I'd like this one to be cherry-pickable
+> > to stable.
+> 
+> Do we want to add a comment before the calls to ->finalize_features()
+> (/* write features to device */) and adapt the comment in virtio_ring.h?
+> Should still be stable-friendly, and giving the callback a better name
+> can be a follow-up patch.
 
-Having looked around a bit, I think the best bet is to have
-irqentry_enter() check PF_VCPU in addition to PF_IDLE (which it checks
-via is_idle_task()), at which point nothing needs to change in the s390
-entry code.
+Sorry which comment in virtio_ring.h?
+Could not find anything.
 
-I'm currently implementing that, let me have a go, and then we can see
-if that looks ok or whether we should do something else.
+> >
+> >> > +
+> >> >   	ret = virtio_finalize_features(dev);
+> >> >   	if (ret)
+> >> >   		goto err;
 
-> CC Sven, Heiko for the entry.S changes.
-
-I'll make sure you're all Cc'd when I send out vs with s390 patches.
-
-Thanks,
-Mark.

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F174919D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E434919E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347382AbiARC4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:56:36 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53034 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346315AbiARCoc (ORCPT
+        id S245481AbiARC4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:56:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37094 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348059AbiARCoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:44:32 -0500
+        Mon, 17 Jan 2022 21:44:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC7E6B81253;
-        Tue, 18 Jan 2022 02:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD2DC36AE3;
-        Tue, 18 Jan 2022 02:44:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77F4D6130E;
+        Tue, 18 Jan 2022 02:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE1B7C36AEB;
+        Tue, 18 Jan 2022 02:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473869;
-        bh=XKhNpFcyGUjE+sjTlejmD2OUYPSklbFBgEeUXUUIQe4=;
+        s=k20201202; t=1642473884;
+        bh=1VvY1q6ys+z/nxaqazZx6mlkGoBLdE1pBlUsSpD+yXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cXxSIX+MGdbHkbraKhSm3DkGZhd/f+1KoS/7J8r0XZPNwW5QVcymAcMAOrv43hlL5
-         /7/BrP1tiALYmF8ar7Cy3rdCEy3d37rT/J14VeRGwmSZD3jDv1hpPMj6JSAnWsGMPP
-         ae9ct+fmxZNAks13bac0cQUAOFI2SbIiPjKwWv/EGu67gJoP1Hn7ljMv1Rp3bDSn8m
-         XnQHOAenqhqDhMJQnmHg6kanxuwtwJGQWuPytN9JFQXiAFrJnp04vcyzNEsUVCJzr5
-         0Uy9e3eMKvuSiKmf5FM3PqyYi+hDiahtKWj2ejG6MDuWEdzm8LkqO1qrCyWAa1FDsc
-         /jJsLyFdjMIWw==
+        b=BfJeXRh3MbkPVxXhX7pv74ylIB1a1j/YkuSeyvfRIdNv7kmfg3kDNCFc525SJp+Rj
+         SI10lI1eKnCKaI5Mesd8f5/xOLdH9upNJWnUEBFdejccmL4Wah5LcWMaEY8Jqoe0il
+         P/718e7APCmd/reXrmQR798ZaS01oEfOzFJ06RRKCwm971xK/WZhlkSDmwuk7Jwvrz
+         9O4IJ9qXlG6sJu5NjsqBDe/2TwU18cjH1GylCuIYGlTjsIRT9EAV3zk1wbixgOUT83
+         XMZuz3d5308Xt+qx0hwbXMKDEKOKK8YtB6b7EyXTEqh0gRLhvo2nM80o6SAYG1o+Np
+         jnVVC5zi8nwUw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, yuzenghui@huawei.com,
-        emil.l.velikov@gmail.com, mbenes@suse.cz, jeyu@kernel.org,
-        akpm@linux-foundation.org
-Subject: [PATCH AUTOSEL 5.10 115/116] x86/kbuild: Enable CONFIG_KALLSYMS_ALL=y in the defconfigs
-Date:   Mon, 17 Jan 2022 21:40:06 -0500
-Message-Id: <20220118024007.1950576-115-sashal@kernel.org>
+Cc:     Ben Skeggs <bskeggs@redhat.com>,
+        Diego Viola <diego.viola@gmail.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, lyude@redhat.com,
+        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.4 06/73] drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR
+Date:   Mon, 17 Jan 2022 21:43:25 -0500
+Message-Id: <20220118024432.1952028-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
-References: <20220118024007.1950576-1-sashal@kernel.org>
+In-Reply-To: <20220118024432.1952028-1-sashal@kernel.org>
+References: <20220118024432.1952028-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -50,43 +51,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ingo Molnar <mingo@kernel.org>
+From: Ben Skeggs <bskeggs@redhat.com>
 
-[ Upstream commit b6aa86cff44cf099299d3a5e66348cb709cd7964 ]
+[ Upstream commit 1d2271d2fb85e54bfc9630a6c30ac0feb9ffb983 ]
 
-Most distro kernels have this option enabled, to improve debug output.
+There have been reports of the WFI timing out on some boards, and a
+patch was proposed to just remove it.  This stuff is rather fragile,
+and I believe the WFI might be needed with our FW prior to GM200.
 
-Lockdep also selects it.
+However, we probably should not be touching PMU during init on GPUs
+where we depend on NVIDIA FW, outside of limited circumstances, so
+this should be a somewhat safer change that achieves the desired
+result.
 
-Enable this in the defconfig kernel as well, to make it more
-representative of what people are using on x86.
-
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/YdTn7gssoMVDMgMw@gmail.com
+Reported-by: Diego Viola <diego.viola@gmail.com>
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/configs/i386_defconfig   | 1 +
- arch/x86/configs/x86_64_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+ .../gpu/drm/nouveau/nvkm/subdev/pmu/base.c    | 37 +++++++++++--------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
-index 78210793d357c..38d7acb9610cc 100644
---- a/arch/x86/configs/i386_defconfig
-+++ b/arch/x86/configs/i386_defconfig
-@@ -264,3 +264,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
- CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
-+CONFIG_KALLSYMS_ALL=y
-diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
-index 9936528e19393..c6e587a9a6f85 100644
---- a/arch/x86/configs/x86_64_defconfig
-+++ b/arch/x86/configs/x86_64_defconfig
-@@ -260,3 +260,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
- CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
-+CONFIG_KALLSYMS_ALL=y
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+index ea2e11771bca5..105b4be467a3e 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+@@ -88,20 +88,13 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev, bool suspend)
+ 	return 0;
+ }
+ 
+-static int
++static void
+ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ {
+ 	struct nvkm_device *device = pmu->subdev.device;
+ 
+ 	if (!pmu->func->enabled(pmu))
+-		return 0;
+-
+-	/* Inhibit interrupts, and wait for idle. */
+-	nvkm_wr32(device, 0x10a014, 0x0000ffff);
+-	nvkm_msec(device, 2000,
+-		if (!nvkm_rd32(device, 0x10a04c))
+-			break;
+-	);
++		return;
+ 
+ 	/* Reset. */
+ 	if (pmu->func->reset)
+@@ -112,25 +105,37 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
+ 			break;
+ 	);
+-
+-	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_preinit(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	return nvkm_pmu_reset(pmu);
++	nvkm_pmu_reset(pmu);
++	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_init(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	int ret = nvkm_pmu_reset(pmu);
+-	if (ret == 0 && pmu->func->init)
+-		ret = pmu->func->init(pmu);
+-	return ret;
++	struct nvkm_device *device = pmu->subdev.device;
++
++	if (!pmu->func->init)
++		return 0;
++
++	if (pmu->func->enabled(pmu)) {
++		/* Inhibit interrupts, and wait for idle. */
++		nvkm_wr32(device, 0x10a014, 0x0000ffff);
++		nvkm_msec(device, 2000,
++			if (!nvkm_rd32(device, 0x10a04c))
++				break;
++		);
++
++		nvkm_pmu_reset(pmu);
++	}
++
++	return pmu->func->init(pmu);
+ }
+ 
+ static int
 -- 
 2.34.1
 

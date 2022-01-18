@@ -2,244 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1304928B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A77949290B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344037AbiAROr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:47:29 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:8466 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343801AbiAROr2 (ORCPT
+        id S235711AbiARPAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:00:17 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:45113 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238138AbiARPAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:47:28 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IEkPrn017986;
-        Tue, 18 Jan 2022 14:47:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2021-07-09; bh=ZOx/UyJmqFtjfYwCIhqYIqXT070tUzKm19R2TP2GxXY=;
- b=EAsY5ZVFiuCAJ3/IHmv4GaupXFdAdkNXHCY8490hA434+ZId9J0hL/OwJxKac7jfFR7i
- IHzmgIrkTUWTpLrYb8Ni/Y9IS68dTtO6TdoRr+KhtM/E5QnzSvvXBiKEaEhpo2Yj4L+K
- nNzrKvzHY8P0EtBXL+sKLmbul33g7MbOLYYVsjdhqmGasfB3sslqbcr4oMqLgo1ecwMh
- FSGC96TfaENeQH73OWzkV9Glpu6cRF4oEUL/cS1YkzrcbaGjFgKB516IgO/yTf9uakYD
- fR/1MMXChzXibug/6JmI8gsy7eL52AtarR0YwcbQwwIYIBn63aCtYgkFYoOYQtl2BYuy oQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc51a07n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 14:47:24 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20IEkMvn015371;
-        Tue, 18 Jan 2022 14:47:23 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-        by aserp3020.oracle.com with ESMTP id 3dkp34a0u8-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 14:47:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FFW/30A3X8ysVdIo8r1DXmpLIHGkfbwqcOpOBQgjJim8fPvFIPV80TYm+CmCEkapxIYE2QCv1WnX0Z3L1fBU4whn81NyH2/COw2JtJwKifhzHMjuZ1gZ3lI94wPMmOZA2O5mKURy2iXxeW+yT+WNxCo+LeoTlF7pOqMq7YqBhd+SI/v0LRM3Py/DFp9ywl7XO+5qZa0E0BstZ5Ih0BT6j4LTGEmFArnG1LfwKeuO9KWFsYn2FkCFVm8ssO3FHwCaqO67g4WGRuLqJ3a86OWSttfyF5sJywORfNh4ke0z00Ss8fxTyoDIalkRqMSvR1nY6NKc1JkuRga/ePuz/qc6PA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZOx/UyJmqFtjfYwCIhqYIqXT070tUzKm19R2TP2GxXY=;
- b=flYi2iTth+XXvhpdQL7B/QuDZRC+cGpzN0jkpL3Oe5UDifqpsYkQITy3+IszVMBKyQnj+3z49YP1WoZeahGYNwcBJ2XetdAPIjAbtd4DDjCeOQIo3KtApZzAw2ScA8atnKsAY9lqVCUCKF42wtgAo4Zd6tb7iNpXgZKAcK7ereexgjgVe0MxJdJ2FxuRwOTybC4JMZY2TgYYJzP8DZyv77oIuL67O9z93geKW4TUNa3z34pN/cMqWbbNZDJdxNfYjVXlQB9ryDJ8/KBoQSJDwttaxxiSPSLdUuIFHQPYiYU04UhHPWtK1aqXARqNYyYmA/0QEf+1N707BE+ZsywlSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZOx/UyJmqFtjfYwCIhqYIqXT070tUzKm19R2TP2GxXY=;
- b=hvcBPUqJEc3Av+UKxerG3UnhWczNpgpkoxz5e8cqjiXbNAShoPlqyJ5MkeIKlH5Wv2+kh0Htsk+WUkCZD3YuhJDdXvWvIlEoWQEHdCWHb41EdInY9ZnNJURCo0pSee04DIHX7rXwFVlSMj2rRDVXu1J5CHto7PmPgoj9mOuK4Tc=
-Received: from PH0PR10MB5515.namprd10.prod.outlook.com (2603:10b6:510:109::7)
- by CH0PR10MB5260.namprd10.prod.outlook.com (2603:10b6:610:c4::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Tue, 18 Jan
- 2022 14:47:21 +0000
-Received: from PH0PR10MB5515.namprd10.prod.outlook.com
- ([fe80::edcf:c580:da6f:4a5]) by PH0PR10MB5515.namprd10.prod.outlook.com
- ([fe80::edcf:c580:da6f:4a5%6]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
- 14:47:21 +0000
-From:   Praveen Kumar Kannoju <praveen.kannoju@oracle.com>
-To:     santosh.shilimkar@oracle.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org
-Cc:     rama.nichanamatlu@oracle.com,
-        rajesh.sivaramasubramaniom@oracle.com,
-        Praveen Kumar Kannoju <praveen.kannoju@oracle.com>
-Subject: [PATCH RFC] rds: ib: Reduce the contention caused by the asynchronous workers to flush the mr pool
-Date:   Tue, 18 Jan 2022 14:47:18 +0000
-Message-Id: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: SN7PR04CA0162.namprd04.prod.outlook.com
- (2603:10b6:806:125::17) To PH0PR10MB5515.namprd10.prod.outlook.com
- (2603:10b6:510:109::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 96fc8bdf-02d2-49cf-8355-08d9da916e83
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5260:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR10MB5260D57CE26CD53E3A8A46258C589@CH0PR10MB5260.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:327;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SurURjX/VX/c2s1YbS+yCJj2LCSV/keUZI/06K3vMhk0O4N62Qfu47BUM6iEmOht4OjEEZkz+UPVJcJD88nb04CVZ3CeuupHnoFnyyniMMNL3yM5FfTa6ua8B+DfAP/tu2BjDhkW19N9JVsQm9kz+fAk/Y8B8NVuYdfspTdN1rCesoBR3VBP2Iq1aiTIMUxiYgtLXvxi/J5eQIjXX64XZvmN3NCxG2qVcsIzupsCra8kJhfzdBJIn5KeqOPkafAfzB8n4JpD/K5O8LtgDRuJTTIaTiBPZBqAZYawCJmnoEl6AIWPbjDaziXzDDGB0HAYpZyvhchvW9DED3JI66AE7bDovMKU8q0Rw1Y1EH1XMwnb1s+aC2YAbrhj3wpxSQHvcnyDCxQaUoVeVsmKui1sO5PfGcH3aWvJsPWFpB8RZ2NavjT9DM3UEDJYYjOMM2E8M/28zC8Br2owOcjpwHidlTdA5VD4QtuPhqHH2QlaCeykxQdJFJLe5+I/+AfYySitKTZ9fouEcYjfGqrCg3kRdTxasTRQfDawj9X8e5FNnLu3XUix35F3+4tJc4l8RidcXmbElBKix6nBysxye6WRu4WOvsR1F3gPfz1zkEbuNaLp0KiSGmGQvP0T5QlethyEtF8/6huPYB9S19wzrA0ZVLst+d7TAp6oIQaDJaYFUGQwrbJQ6yl8SkuqrYaJVSI9Ko0ayEAYmMjdwjYC9s1VQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5515.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6666004)(86362001)(316002)(83380400001)(38350700002)(38100700002)(5660300002)(8676002)(52116002)(508600001)(66946007)(66476007)(66556008)(26005)(2906002)(6506007)(186003)(6512007)(2616005)(8936002)(6486002)(107886003)(4326008)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MA/yowDZutI4yJbuLUQd2DWk4BAGf9adweVZmzfEJuiTIr1UWwvsWVVIJMEK?=
- =?us-ascii?Q?usglflCjbuovkaTyRE1JQACft+1BEZK1VQTfbjoF251YrRstsbvp8YTLYBAu?=
- =?us-ascii?Q?1jezl/Gj/GxfVVDaSyx0sWwvy9Tq5fEuHOpGW6r/c64iSXuY/wCdVWVwLnQy?=
- =?us-ascii?Q?B9FbmGY3ToiLQWWDZLFSWPyJJx53weBaklNR6LcDCr3m7AziYrzrZ1sfkOkz?=
- =?us-ascii?Q?1v8VgbagacJmr1WlFmL6yjRoXlQJWI/qf2pbUwlVBWm0Zms2ZwEjdUbEH67F?=
- =?us-ascii?Q?acfQdUS/RdCMhBJO8W13FKrzcIBMAG3vNz+Vtd0M0NadOx6AEkG8OExIBSzS?=
- =?us-ascii?Q?3NHlhAm+h4fqifSU70i5jEnPq5Y0o3VmlnVt4UG8qBNHgAWSBO/LgNOMu5+e?=
- =?us-ascii?Q?zi3JzVDvyLZns2I6PviZWiOd8gyJu7w4p47Pweo8ATm1A/XJREIjdA7fL409?=
- =?us-ascii?Q?nJquDm29sMV+vAwjBGp11E4nauiscsGC0M5W4UtYa1Ef+LOw+n81tyDCgHAn?=
- =?us-ascii?Q?pouPdI5GJ1D9s5Zsy7oBmjmhElEvrzXwyq8tT5rtJww9gEBl5EjUD70tvmSR?=
- =?us-ascii?Q?pXlI4E7Z3MWyr/L7AHYgs7GRSx4wIqnnKOodGNMiUn7hHb1Tz/n6XWJLXGOG?=
- =?us-ascii?Q?1QaAmW0fswb1fBt1iR2zqgAl7oeG/vA2H6gXiiYswvzsrM3TVLZVU3CvPHCH?=
- =?us-ascii?Q?VJnr6KZ2sSc+Jv7Uwc3SU0tBXD5FxV7wcX9PVuuJ7mdYhCdg9Kx5/PCu2uGn?=
- =?us-ascii?Q?EBLVL0QS3FH4QwWoAm7lWXgAxmyK9al7w6ioGVr+s+giNfWBeA8vigSG0mid?=
- =?us-ascii?Q?R52orHR4JThuHcsYt2jegoVxAXj0s5P3ILOc88Ek73tjmZG2HO+N01DCmwj9?=
- =?us-ascii?Q?gwt5C6O93lt3nXgg5noSQ+3li2HxW8kG+P1FqfANCVLU507773kyKnO5b0aR?=
- =?us-ascii?Q?erPrwyOibRk9IXUBdcM0p3rpTtFyns9kJUQgtIbD38u/sAMbQvFITy6n2ia8?=
- =?us-ascii?Q?FSHIf76yc0xzuid9YqaEYe8k4NGda9pVaP0SSPvcEQaBjeau8ogwhOg3Mxx3?=
- =?us-ascii?Q?XtFPHp6AD+j5/wxXy27uxhHeVwmsktE7BUJhgIB+GjTfWajmIwhi0gzziv2O?=
- =?us-ascii?Q?o8fTh8siJ0qJ49tn7kDJfO0rdpaBotfxbR1wvxW8NMS0Nc0qFhrTrGJKzf4C?=
- =?us-ascii?Q?fHBcyEDt3WQwsNnU1oC+7k+cak8/UEUop/DJ9oYeQNyOvQuw/FyA/S9U8Vde?=
- =?us-ascii?Q?IMSr0QheyTmj5dEP63NZba1ryI2S0Py7o3iCdtzmF2MLORPxoySXpIbpt2yj?=
- =?us-ascii?Q?smnkpVNLnqeEdtwHN2AeVrTsVJ8LS5JZenPlVK/v2YzzH/gjwy+aViRMGylv?=
- =?us-ascii?Q?YxJaPyUlQa2eTOVd+8Xe46M8PYrqbvRF9aAz6bAr18ycCtFiSMDoJ0ySyHzu?=
- =?us-ascii?Q?sx0oDFiD+qOmkwp2pypJ4ylhI3ny5Qqieo732J+Y3xl2t163+P8BJPmkPYLa?=
- =?us-ascii?Q?EDlEhRjoOBlaervy5MtjhBJOJD94494qBTRsGGXQVXfLDG8dtr67ehM/LFsr?=
- =?us-ascii?Q?+5ZToOKMVxkILfJYPMwKwHAgspQp+LGS9/sIUCnoj1Ly/8odFjf8qy0P3QTv?=
- =?us-ascii?Q?rnx+vM5KK22om4BGk/U4rd8Ehkk1d/NEb9wWnjNHqmSoz4i6ZZs7BJNalH41?=
- =?us-ascii?Q?oSckFw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96fc8bdf-02d2-49cf-8355-08d9da916e83
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5515.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 14:47:21.0736
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cP8zYic5QpOxzZuKj0ptkIduEqrPTOUJiLXx19MQjV1Cv0SAwTccEPYSl2P5UwquVt/3DVY7Dh5Al6s7dvJ4tuMwpXOHfYxgEwR0w9O0Jgg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5260
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10230 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180090
-X-Proofpoint-GUID: LtysyrPv85yy8Mcufn2YeInKFhSGJ6c2
-X-Proofpoint-ORIG-GUID: LtysyrPv85yy8Mcufn2YeInKFhSGJ6c2
+        Tue, 18 Jan 2022 10:00:16 -0500
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220118150014epoutp02b4e6d772bf4152880050b002f68742e4~LZW6i2VL12017420174epoutp02V
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:00:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220118150014epoutp02b4e6d772bf4152880050b002f68742e4~LZW6i2VL12017420174epoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642518014;
+        bh=Qx3gCAkpMFE3yWJlRYOzvvsdJehEpXNkVuWR2y56IY8=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=nuEhssP1F8D6VlDUQc3UJrADitJSNGaQbdIuN8lQHzKlvI+0cdFHuWQu6eFAOHaHW
+         tIN5/eweufFreyZWK4GabyfJLDCIiCNCfV+d5H9V/D7U4hPbj4Z84VaVeFrmrqNOSl
+         3Gc2RL0xFm22GXvEtluMsX6JHrCewr6IGptPu1DE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220118150014epcas5p4e52e88693eca86d5e4e1f3574e4e7078~LZW6ECQyl2208322083epcas5p4-;
+        Tue, 18 Jan 2022 15:00:14 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4JdX4m6PVrz4x9Pw; Tue, 18 Jan
+        2022 15:00:08 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BE.F8.06423.8F5D6E16; Wed, 19 Jan 2022 00:00:08 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220118150008epcas5p40d1c79616bb17797e79e1769f5e2c19c~LZW0RYB1C2208722087epcas5p4u;
+        Tue, 18 Jan 2022 15:00:08 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220118150008epsmtrp2e04d3b60281e89c675ec1e9a513d85aa~LZW0QRA4k1935719357epsmtrp2y;
+        Tue, 18 Jan 2022 15:00:08 +0000 (GMT)
+X-AuditID: b6c32a49-b01ff70000001917-e1-61e6d5f80bcc
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        89.91.29871.8F5D6E16; Wed, 19 Jan 2022 00:00:08 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220118150005epsmtip16dc6a4bf20208b65004d59959cf5b2fa~LZWyIH7f51211512115epsmtip1i;
+        Tue, 18 Jan 2022 15:00:05 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
+        pankaj.dubey@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v2 00/16] Add support for Tesla Full Self-Driving (FSD) SoC
+Date:   Tue, 18 Jan 2022 20:18:35 +0530
+Message-Id: <20220118144851.69537-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHKsWRmVeSWpSXmKPExsWy7bCmuu6Pq88SDXa+1bN4MG8bm8XfScfY
+        Ld4v62G0mH/kHKvFxrc/mCym/FnOZLHp8TVWi48991gtLu+aw2Yx4/w+JotT1z+zWSza+oXd
+        onXvEXaLw2/aWS0eX//D5sDvsWbeGkaP378mMXrMauhl89i0qpPN4861PWwem5fUe1w50cTq
+        0bdlFaPH501yAZxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkou
+        PgG6bpk5QB8oKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OLS/PS9fJS
+        S6wMDQyMTIEKE7Izlq14xVQwTariw/ajTA2M7SJdjJwcEgImEmevTmbpYuTiEBLYzSjRvuw9
+        E4TziVHixIqFUM43RolL35azwrScbHnPCpHYyyjxfeIKKKeFSeLG/amMIFVsAtoSd6dvYQKx
+        RQTcJG40doCNYha4wSRxaNdWIIeDQ1jAW2LedFOQGhYBVYmVpz6wgdi8AjYSt2ZPYILYJi+x
+        esMBZgi7k0Piz2ZNCNtF4vHzM1AXCUu8Or6FHcKWkvj8bi8byHgJgWyJnl3GEOEaiaXzjrFA
+        2PYSB67MYQEpYRbQlFi/Sx8kzCzAJ9H7+wkTRCevREebEES1qkTzu6tQndISE7u7WSFKPCSu
+        XIsEMYUEYiX6vzFNYJSZhTByASPjKkbJ1ILi3PTUYtMCw7zUcnjEJOfnbmIEJ0Qtzx2Mdx98
+        0DvEyMTBeIhRgoNZSYRXqv5ZohBvSmJlVWpRfnxRaU5q8SFGU2AQTWSWEk3OB6bkvJJ4QxNL
+        AxMzMzMTS2MzQyVx3tPpGxKFBNITS1KzU1MLUotg+pg4OKUamLh2LIv+udDwTKtW2IsL5oVN
+        jXrrDiZL19r+q6ht+HQ37HzWefnz09S8v5i+eCu0I2PZOsMv29Ktd1/e/tbzl9WjSe99V736
+        FuV+s6mx+9fxWM9Ky8XmKQ8cnCd/Yq1JkFp5QL1dnGG61dIlC46sffx158SJSXkq7dXy4la3
+        581O8GJUWqLKbH3m68zyU8WqO6ILZqfubfWPKMqpUruZKTfpX4FMwbuP7rOWzLiYopq0aYr+
+        4uiV80xWOe35/OHOHKupM8IO6Fx6JCEwXcP1vYLtzdT8k79c/W2eWVzvUNC5a8dWwL/84b7W
+        C63H/f/leOrsXjP3CsMnK6bp2umHnwTF/ZD/G+yvrK22Zvndz2+UWIozEg21mIuKEwFvc72W
+        EQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFLMWRmVeSWpSXmKPExsWy7bCSnO6Pq88SDS5t5rZ4MG8bm8XfScfY
+        Ld4v62G0mH/kHKvFxrc/mCym/FnOZLHp8TVWi48991gtLu+aw2Yx4/w+JotT1z+zWSza+oXd
+        onXvEXaLw2/aWS0eX//D5sDvsWbeGkaP378mMXrMauhl89i0qpPN4861PWwem5fUe1w50cTq
+        0bdlFaPH501yAZxRXDYpqTmZZalF+nYJXBnLVrxiKpgmVfFh+1GmBsZ2kS5GTg4JAROJky3v
+        WbsYuTiEBHYzSly78ZUNIiEtcX3jBHYIW1hi5b/n7BBFTUwS3zpugRWxCWhL3J2+hQnEFhHw
+        kGj7d48ZpIhZ4BmTxKt9c4HGcnAIC3hLzJtuClLDIqAqsfLUB7BeXgEbiVuzJzBBLJCXWL3h
+        APMERp4FjAyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCg1dLcwfj9lUf9A4xMnEw
+        HmKU4GBWEuGVqn+WKMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgs
+        EwenVAMT23J9lUzvw4VT05Z4G/6fHvSimX/CsYXMCwq02OfxCzG8XFXG2NuVbZN9IH1XxUvj
+        ubbndmhPnlBw9ZNVjkzm6kSlvMLkNI3JP/qTv7lu3ayd9i/3T9UadtNUuWf800KvKDUtnBt4
+        LpVLe8vxI3tcVnC9fRXXWrF/povsFq6Jpls9zv9ctWrXag6uif2uSxslQj1XqlRO2W89TbLP
+        5YL1/5Pf9b4ZMJg2/vN5J3fr6CZnRs/GbTx2eeqZ9SkZTZE2Lu+5dq2YleR7lkFmo/FBL7/3
+        9t82zFgtviv6iBbbv3CbCa/97hoaTxBonf3w78bLWx8pz2rpyZDdZ/+XPWLnDP877G9fdcmc
+        bL4t2N6pxFKckWioxVxUnAgAWxIaSs0CAAA=
+X-CMS-MailID: 20220118150008epcas5p40d1c79616bb17797e79e1769f5e2c19c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220118150008epcas5p40d1c79616bb17797e79e1769f5e2c19c
+References: <CGME20220118150008epcas5p40d1c79616bb17797e79e1769f5e2c19c@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch aims to reduce the number of asynchronous workers being spawned
-to execute the function "rds_ib_flush_mr_pool" during the high I/O
-situations. Synchronous call path's to this function "rds_ib_flush_mr_pool"
-will be executed without being disturbed. By reducing the number of
-processes contending to flush the mr pool, the total number of D state
-processes waiting to acquire the mutex lock will be greatly reduced, which
-otherwise were causing DB instance crash as the corresponding processes
-were not progressing while waiting to acquire the mutex lock.
+Adds basic support for the Tesla Full Self-Driving (FSD)
+SoC. This SoC contains three clusters of four Cortex-A72 CPUs,
+as well as several IPs.
 
-Signed-off-by: Praveen Kumar Kannoju <praveen.kannoju@oracle.com>
----
- net/rds/ib.h       |  1 +
- net/rds/ib_mr.h    |  2 ++
- net/rds/ib_rdma.c  | 18 ++++++++++++++++--
- net/rds/ib_stats.c |  1 +
- 4 files changed, 20 insertions(+), 2 deletions(-)
+Patches 1 to 9 provide support for the clock controller
+(which is designed similarly to Exynos SoCs).
 
-diff --git a/net/rds/ib.h b/net/rds/ib.h
-index 2ba7110..d881e3f 100644
---- a/net/rds/ib.h
-+++ b/net/rds/ib.h
-@@ -308,6 +308,7 @@ struct rds_ib_statistics {
- 	uint64_t	s_ib_rdma_mr_1m_pool_flush;
- 	uint64_t	s_ib_rdma_mr_1m_pool_wait;
- 	uint64_t	s_ib_rdma_mr_1m_pool_depleted;
-+	uint64_t	s_ib_rdma_flush_mr_pool_avoided;
- 	uint64_t	s_ib_rdma_mr_8k_reused;
- 	uint64_t	s_ib_rdma_mr_1m_reused;
- 	uint64_t	s_ib_atomic_cswp;
-diff --git a/net/rds/ib_mr.h b/net/rds/ib_mr.h
-index ea5e9ae..9cbec6e 100644
---- a/net/rds/ib_mr.h
-+++ b/net/rds/ib_mr.h
-@@ -105,6 +105,8 @@ struct rds_ib_mr_pool {
- 	unsigned long		max_items_soft;
- 	unsigned long		max_free_pinned;
- 	unsigned int		max_pages;
-+
-+	bool                    flush_ongoing;	/* To avoid redundant flushes */
- };
- 
- extern struct workqueue_struct *rds_ib_mr_wq;
-diff --git a/net/rds/ib_rdma.c b/net/rds/ib_rdma.c
-index 8f070ee..6b640b5 100644
---- a/net/rds/ib_rdma.c
-+++ b/net/rds/ib_rdma.c
-@@ -393,6 +393,8 @@ int rds_ib_flush_mr_pool(struct rds_ib_mr_pool *pool,
- 	 */
- 	dirty_to_clean = llist_append_to_list(&pool->drop_list, &unmap_list);
- 	dirty_to_clean += llist_append_to_list(&pool->free_list, &unmap_list);
-+	WRITE_ONCE(pool->flush_ongoing, true);
-+	smp_wmb();
- 	if (free_all) {
- 		unsigned long flags;
- 
-@@ -430,6 +432,8 @@ int rds_ib_flush_mr_pool(struct rds_ib_mr_pool *pool,
- 	atomic_sub(nfreed, &pool->item_count);
- 
- out:
-+	WRITE_ONCE(pool->flush_ongoing, false);
-+	smp_wmb();
- 	mutex_unlock(&pool->flush_lock);
- 	if (waitqueue_active(&pool->flush_wait))
- 		wake_up(&pool->flush_wait);
-@@ -507,8 +511,17 @@ void rds_ib_free_mr(void *trans_private, int invalidate)
- 
- 	/* If we've pinned too many pages, request a flush */
- 	if (atomic_read(&pool->free_pinned) >= pool->max_free_pinned ||
--	    atomic_read(&pool->dirty_count) >= pool->max_items / 5)
--		queue_delayed_work(rds_ib_mr_wq, &pool->flush_worker, 10);
-+	    atomic_read(&pool->dirty_count) >= pool->max_items / 5) {
-+		smp_rmb();
-+		if (!READ_ONCE(pool->flush_ongoing)) {
-+			queue_delayed_work(rds_ib_mr_wq, &pool->flush_worker, 10);
-+		} else {
-+			/* This counter indicates the number of redundant
-+			 * flush calls avoided, and provides an indication
-+			 * of the load pattern imposed on kernel.
-+			 */
-+			rds_ib_stats_inc(s_ib_rdma_flush_mr_pool_avoided);
-+		}
- 
- 	if (invalidate) {
- 		if (likely(!in_interrupt())) {
-@@ -670,6 +683,7 @@ struct rds_ib_mr_pool *rds_ib_create_mr_pool(struct rds_ib_device *rds_ibdev,
- 
- 	pool->max_free_pinned = pool->max_items * pool->max_pages / 4;
- 	pool->max_items_soft = rds_ibdev->max_mrs * 3 / 4;
-+	pool->flush_ongoing = false;
- 
- 	return pool;
- }
-diff --git a/net/rds/ib_stats.c b/net/rds/ib_stats.c
-index ac46d89..29ae5cb 100644
---- a/net/rds/ib_stats.c
-+++ b/net/rds/ib_stats.c
-@@ -75,6 +75,7 @@
- 	"ib_rdma_mr_1m_pool_flush",
- 	"ib_rdma_mr_1m_pool_wait",
- 	"ib_rdma_mr_1m_pool_depleted",
-+	"ib_rdma_flush_mr_pool_avoided",
- 	"ib_rdma_mr_8k_reused",
- 	"ib_rdma_mr_1m_reused",
- 	"ib_atomic_cswp",
+The remaining changes provide pinmux support, initial device tree support.
+
+- Changes since v1
+* fixed make dt_binding_check error as pointed by Rob
+* Addressed Krzysztof's and Rob's review comments
+* Added Reviewed-by and Acked-by tags
+* Reordered the patches
+* Dropped SPI, MCT and ADC from this series (to be posted in small sets)
+
+NOTE: These patches are based on next-20220118
+
+Alim Akhtar (16):
+  dt-bindings: add vendor prefix for Tesla
+  dt-bindings: clock: Add bindings definitions for FSD CMU blocks
+  dt-bindings: clock: Document FSD CMU bindings
+  clk: samsung: fsd: Add initial clock support
+  clk: samsung: fsd: Add cmu_peric block clock information
+  clk: samsung: fsd: Add cmu_fsys0 clock information
+  clk: samsung: fsd: Add cmu_fsys1 clock information
+  clk: samsung: fsd: Add cmu_imem block clock information
+  clk: samsung: fsd: Add cmu_mfc block clock information
+  clk: samsung: fsd: Add cam_csi block clock information
+  dt-bindings: pinctrl: samsung: Add compatible for Tesla FSD SoC
+  pinctrl: samsung: add FSD SoC specific data
+  dt-bindings: arm: add Tesla FSD ARM SoC
+  arm64: dts: fsd: Add initial device tree support
+  arm64: dts: fsd: Add initial pinctrl support
+  arm64: defconfig: Enable Tesla FSD SoC
+
+ .../devicetree/bindings/arm/tesla.yaml        |   27 +
+ .../bindings/clock/tesla,fsd-clock.yaml       |  198 ++
+ .../bindings/pinctrl/samsung-pinctrl.txt      |    1 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |    8 +
+ arch/arm64/Kconfig.platforms                  |    7 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/tesla/Makefile            |    3 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   39 +
+ arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi    |  335 +++
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  673 ++++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/samsung/Kconfig                   |    7 +
+ drivers/clk/samsung/Makefile                  |    1 +
+ drivers/clk/samsung/clk-fsd.c                 | 1801 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |    1 +
+ drivers/clk/samsung/clk-pll.h                 |    1 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |   71 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |    2 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |    1 +
+ include/dt-bindings/clock/fsd-clk.h           |  149 ++
+ 21 files changed, 3329 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/tesla.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/tesla/Makefile
+ create mode 100644 arch/arm64/boot/dts/tesla/fsd-evb.dts
+ create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/tesla/fsd.dtsi
+ create mode 100644 drivers/clk/samsung/clk-fsd.c
+ create mode 100644 include/dt-bindings/clock/fsd-clk.h
+
+
+base-commit: 6f59bc242877fcb9c9a5136ea62d383fce5615df
 -- 
-1.8.3.1
+2.25.1
 

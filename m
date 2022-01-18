@@ -2,99 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A39EF492BA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B2B492B96
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346782AbiARQxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346658AbiARQxk (ORCPT
+        id S1346383AbiARQxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:53:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52092 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231277AbiARQxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:53:40 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11D7C06161C;
-        Tue, 18 Jan 2022 08:53:39 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c2so23544756wml.1;
-        Tue, 18 Jan 2022 08:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lRAWtfjjgO5udN5+BKSAfe9dAH85zJZw/J7zjuoQ9nM=;
-        b=Dqb8O6GEYwt8HCmaHuN1I+GcjxznFBzwxuZuQSEgO3bTJaokbixGAe8kgncdkE/VNz
-         bryh8WKSu10Jtncf2jG+g3DTXhINZ0XjLePrs70VSDJ86Nbo/OxIjWo6bnDqSow/fwxY
-         Hmu9bk5Cl8No5EvWiWvenUCcadbzXsGvzdUsWmO5Bh/juNwxmjVPTgB42Rf4uGysVR/+
-         jiYxH79KncyeO7ewBOtdgkgTYGjW9M0uWNMyQSaolx3YpxzCvLw6xoqSqLw0ffhvPSan
-         oGxwmiHDbhrJZUSn5b0dtXBwZj8xxJHbDJICT8v7DHbz17FqQVk3PAGsxQE/JyzfW2cu
-         RXDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lRAWtfjjgO5udN5+BKSAfe9dAH85zJZw/J7zjuoQ9nM=;
-        b=A7F0fHRlCcosnuLSBU2VsEtjRssrvZ2ZdCxcKEi24etD3iCPWT6pP3u2jfJafVcMn0
-         M+bjolBq8yZmYU2WRGtzpHHtLBURjVjIzvu5WnZY0C8INTrpj5GRXSWHm5osy2IQxTXB
-         0gG+rP0iPGan4/kw/D51I9S7Dc+tgVyibVoXAXMBAPPXXzHkOtNanELLX35r2Wz0AA47
-         r3TebEORpbW7mpx/zzpLT1so3Y6Vre0AakItBDkrD1fzo9Jm8iZy0++xcM4HPgWiTrfv
-         NR1ei0Vpe3V70nxvPHOyWkBahLejILVM16VO3dn9mXZAKOTikDr4gzTOH6PuNWJ+HKrA
-         YiNQ==
-X-Gm-Message-State: AOAM530HOUk8R0PHUEDdZ4RSSx8y3JZPxr3zKA8rrTRw3ahPeq1CnGEY
-        LB+B7ry4soRULQL3F5nSB50=
-X-Google-Smtp-Source: ABdhPJwjm8rQCg0TKQgSjD4CWMm1aJAlhnlKVN716sTW6eCvfVZJFwlYsQUwAPUrNNgYjymzLCCbjA==
-X-Received: by 2002:a5d:59ac:: with SMTP id p12mr13734859wrr.9.1642524818602;
-        Tue, 18 Jan 2022 08:53:38 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id o12sm10634141wrc.51.2022.01.18.08.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 08:53:38 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [ASUS EC Sensors v7 3/3] hwmon: deprecate asis_wmi_ec_sensors driver
-Date:   Tue, 18 Jan 2022 17:53:09 +0100
-Message-Id: <20220118165316.412735-4-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118165316.412735-1-eugene.shalygin@gmail.com>
-References: <20220118165316.412735-1-eugene.shalygin@gmail.com>
+        Tue, 18 Jan 2022 11:53:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A47A1B816E3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:53:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC88C340E0;
+        Tue, 18 Jan 2022 16:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642524808;
+        bh=hj6cgF8nqJUDMXfSevCsDKP3HTwnEamooJYkoM7Kvns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cI/3+ELb1BO7XjuTEVngbV/xxNGYbpZJOS87HYLo3jL/W9zr4VIkXF/j+dr1KzeB5
+         Y6UJE6RbT6KBGFSFyXF/JJY84pQf8y6RngMXN8PO6Kta7EOw2X0u+K6tkYlObhXBFs
+         25A/VWJUZMDedKwIZ8u3svG5O3LJfq/iZzvu0O6LYipOlmnQFchv4wVNM3B/41XCA7
+         +oj7aRU332K+PadAKKj6JaKugkbGvhJRGj59KBKNN1URwG5XXGWUz2iP/7lighYZOv
+         FzLzYvS+fpKVMoTsQ5EoIp75D5NEm8XvSCkQwXTwvNwOQPndKrCzBKm1zlIlkMmmS7
+         IEsRPgff81FBA==
+Date:   Tue, 18 Jan 2022 08:53:25 -0800
+From:   Keith Busch <kbusch@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: nvme: IO_PAGE_FAULT logged with Intel SSDPEKKF512G8
+Message-ID: <20220118165325.GA3301052@dhcp-10-100-145-180.wdc.com>
+References: <366b1545-fdea-3423-10a7-308ca2bef746@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <366b1545-fdea-3423-10a7-308ca2bef746@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Deprecate the asus_wmi_ec_sensors driver in favor of the asus_ec_sensors
+On Tue, Jan 18, 2022 at 03:32:45PM +0100, Paul Menzel wrote:
+> On a Dell OptiPlex 5055 with an Intel SSDPEKKF512G8, Linux 5.10.82 reported
+> an IO_PAGE_FAULT error. This is the first and only time this has happened.
+> 
+>     $ dmesg --level=err
+>     [    4.194306] nvme 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000c address=0xffffc080 flags=0x0050]
+>     [    4.206970] nvme 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000c address=0xffffc000 flags=0x0050]
+>     [    7.327820] kfd kfd: VERDE  not supported in kfd
+>     $ lspci -nn -s 01:00.0
+>     01:00.0 Non-Volatile memory controller [0108]: Intel Corporation SSD Pro 7600p/760p/E 6100p Series [8086:f1a6] (rev 03)
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/Kconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 2c16b19d2c03..38094c702e4d 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
- 
- config SENSORS_ASUS_WMI_EC
- 	tristate "ASUS WMI B550/X570"
--	depends on ACPI_WMI
-+	depends on ACPI_WMI && SENSORS_ASUS_EC=n
- 	help
- 	  If you say yes here you get support for the ACPI embedded controller
- 	  hardware monitoring interface found in B550/X570 ASUS motherboards.
- 	  This driver will provide readings of fans, voltages and temperatures
- 	  through the system firmware.
- 
-+	  This driver is deprecated in favor of the ASUS EC Sensors driver
-+	  which provides fully compatible output.
-+
- 	  This driver can also be built as a module. If so, the module
- 	  will be called asus_wmi_sensors_ec.
- 
--- 
-2.34.1
-
+I think it's a bug with the iommu implementation. If it causes problems,
+you can typically work around it with kernel parameter "iommu=soft".

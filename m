@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD16492D19
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C39E492D1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347901AbiARSRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:17:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S1347872AbiARSSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347872AbiARSRg (ORCPT
+        with ESMTP id S231373AbiARSSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:17:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8158C061574;
-        Tue, 18 Jan 2022 10:17:35 -0800 (PST)
+        Tue, 18 Jan 2022 13:18:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02875C061574;
+        Tue, 18 Jan 2022 10:18:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66DC561504;
-        Tue, 18 Jan 2022 18:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7629C340E0;
-        Tue, 18 Jan 2022 18:17:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642529854;
-        bh=iJ0MdH5QslLk5DaTZSJY1trQkw+gM14Ryth70aQ9KG0=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B477DB8173F;
+        Tue, 18 Jan 2022 18:18:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9666C340E0;
+        Tue, 18 Jan 2022 18:18:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642529926;
+        bh=iYc3f1Yn77HYG2PAOhBLn8hldp4BZ7PpTNw/u3x8n+w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a5MW+3QtPPeXs6UHQMvUPf655LsQM8V7tw0//kUyOZ9vL9gMBxEsQjcVxMVLKytmD
-         auZ/JKlo/Mh8vF/3RW6/ZJA4dmQ4XxAjMiPzMPNPtknNrBzVSAUzG7q0MkBW/mZasm
-         1YF4oe/XHCa8tmSBEq/oh62JomUvkG27MSYuIcDdE3gafJSiEA4lPR39RKkiFLaGNE
-         Bd+i9KJINRUznZsQsLBK1QJcPEley8Dh/GwLtDeyacjZO9CbT3quYmZE7/RrtViYDT
-         W9uS9/ajgsTdJKr5T75L8GroPRiB7QFWLNsndrc4/LfotS4JDbHDroofw8JnUNvXNu
-         OBtljZopaaIrA==
-Date:   Tue, 18 Jan 2022 10:17:34 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the xfs tree with Linus' tree
-Message-ID: <20220118181734.GC13540@magnolia>
-References: <20220118093041.7d964a13@canb.auug.org.au>
+        b=rKOzPdmPq0KhH+KMmoOGHcC/UveU7liTb2/oqUyL7cznc6lYb6LWEWVq89Qlaf4va
+         G8vBpuKm/mTS7O2mzqBoX7Fwd/3csXHA1u0tYRt8xIhEKWTJXsVXNyaeMU9BEoQufD
+         tm96qGh0c1/MeM+2oor8bkzTrjteqrlx/UNUTIoc=
+Date:   Tue, 18 Jan 2022 19:18:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 00/23] 5.10.93-rc1 review
+Message-ID: <YecEgzBLtKvzcHQS@kroah.com>
+References: <20220118160451.233828401@linuxfoundation.org>
+ <20220118173524.GA17462@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118093041.7d964a13@canb.auug.org.au>
+In-Reply-To: <20220118173524.GA17462@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:30:41AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Jan 18, 2022 at 06:35:24PM +0100, Pavel Machek wrote:
+> Hi!
 > 
-> Today's linux-next merge of the xfs tree got a conflict in:
+> > This is the start of the stable review cycle for the 5.10.93 release.
+> > There are 23 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > 
->   fs/xfs/xfs_ioctl.c
-> 
-> between commit:
-> 
->   983d8e60f508 ("xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate")
-> 
-> from Linus' tree and commit:
-> 
->   4d1b97f9ce7c ("xfs: kill the XFS_IOC_{ALLOC,FREE}SP* ioctls")
-> 
-> from the xfs tree.
-> 
-> I fixed it up (the latter removed the code modified by the former, so I
-> did that) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be mentioned
-> to your upstream maintainer when your tree is submitted for merging.
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
+> CIP testing did not find any new kernel problems here (but we still
+> hit the gmp.h compilation issue):
 
-Ok, thanks!  The resolution you picked (delete xfs_ioc_space regardless
-of its contents) is exactly what I was expecting.
+If it bothers you, patches are always welcome.
 
---D
+thanks,
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-
-
+greg k-h

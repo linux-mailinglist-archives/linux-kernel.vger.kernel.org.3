@@ -2,255 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5499C492147
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12034492153
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344458AbiARIgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:36:49 -0500
-Received: from mga02.intel.com ([134.134.136.20]:35566 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343864AbiARIgs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:36:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642495008; x=1674031008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bEHey9QupRjV9zwrkI/FK565olCk7HBpauULY2Z1kUs=;
-  b=mAXLwBisrvclJQFYDU+QiI8cNgQg+oYc6k/A6KsiWokbcQnOny+H8AwE
-   17nudHQ4WAoKgFky/6GkHtipAbbzgehY4DeT8V0m0QMLMizq3kLEtzwrM
-   L+lj7WiOxyhZ2v8VylH5AfL1vg16VfPQP7nJUAYNjOpfyn71lHffg+I/8
-   fV5nDdYIXYXFOGHxwioglE8IOvI6bNs0Ya5OrmMS1AQVcPhqqJ76YGJTJ
-   4BD11mqkbUgp1WWXCS39pva8APMtHjzYP4mdlG2j0A1jXFLQFeibbfqoU
-   ngx/x8wG3qdeaW7m/Ui9IPMdz2SuA7mWrLivKZf07V9wFgQt5VvUE1Bqr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="232126212"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="232126212"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 00:36:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="517682356"
-Received: from ramaling-i9x.iind.intel.com (HELO intel.com) ([10.203.144.108])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 00:36:45 -0800
-Date:   Tue, 18 Jan 2022 14:06:40 +0530
-From:   Ramalingam C <ramalingam.c@intel.com>
-To:     Robert Beckett <bob.beckett@collabora.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        id S1344481AbiARIhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343864AbiARIhI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 03:37:08 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79B1C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:37:08 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id l6-20020a17090a4d4600b001b44bb75a8bso2135134pjh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:37:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tclGn/FiRJQbwpHi1/YABi2ORnKVDKyi6q1jYS35leY=;
+        b=GcqAKeMVa6/4IkNacCw9otDzRpDX28nVEv5OF1TpqZZmJ1ZQb6TtCcfLTuGFsSu1hO
+         phW4KAfvQTwiSSYwxeFoyrjrRaa7gUIKxv1vw8SVXmyLt/vJ/ZMUX9x+FXizkJ4rEJ0f
+         pjNyCl4EhDmUQkBWi6rcWCTktIfwVgruK8aQWY8NTRVkJiPYNd9AHtPD4wAH2IR8+07t
+         p+hLd47qhOrNOTkQHGmwuV/WoQVtSjhKtDExWoSOMCeiMtfScXXmj8HtHmloHDtqEV0w
+         hLWBD6nlL5jPFFS7HE8id7wChtC7OVwufUwqS1i4cYOU9VXcC7k45L4aXnauGeepsS/Y
+         dedg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tclGn/FiRJQbwpHi1/YABi2ORnKVDKyi6q1jYS35leY=;
+        b=OZes7L9MtLhX9H8Uf3DIvN2b8cM+e2M3+T23If4DdVHLYV3pg5XvHN3COIzJjbfc9O
+         b1rbBhxQj2uYj39Rzr0/Kd7sjB0SztVfUqMuF24hPWtV14vLbh0TQIzX9+l9YqokSYr+
+         Kbs1/Mf62YB7I/cMgIv43OSxfYM8AE33YfD9ao/8Hn4UqFd0N0dPJi8AKZtzYunXwBb/
+         uIl3v+PsF2gh4AOEiq8oUFrHjrH/PpSuMvuZrBX1S8P4GpBZg/nmny2IAenQUnfhEpoo
+         mEIybfMvgTMer6Ha/cFrc6dO20kjVY+zo+YmrzXiyax2SPbYC+YhIKiCsRcUzf28x8CC
+         0mlA==
+X-Gm-Message-State: AOAM532od/tekeVQtpuDlP/ZU0riYam0nn3x68EQhJICdwngMadsf5LY
+        EhHpJmzLYyb/amEOPU1dMmMnOA==
+X-Google-Smtp-Source: ABdhPJwfNHQ492Uz1jSVXHWDHlMxibTErMr09yFvEjODMjXrCCY9QQ/D08NSZpGdiZoI/53grjN20A==
+X-Received: by 2002:a17:902:d483:b0:14a:58c5:3bf3 with SMTP id c3-20020a170902d48300b0014a58c53bf3mr26390855plg.106.1642495028323;
+        Tue, 18 Jan 2022 00:37:08 -0800 (PST)
+Received: from aqua.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id c6sm1775615pjo.39.2022.01.18.00.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 00:37:07 -0800 (PST)
+From:   Tomohito Esaki <etom@igel.co.jp>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 3/4] drm/i915: add gtt misalignment test
-Message-ID: <20220118083638.GA2476@intel.com>
-References: <20220111180238.1370631-1-bob.beckett@collabora.com>
- <20220111180238.1370631-4-bob.beckett@collabora.com>
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        Simon Ser <contact@emersion.fr>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Evan Quan <evan.quan@amd.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomohito Esaki <etom@igel.co.jp>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>
+Subject: [RFC PATCH v4 0/3] Add support modifiers for drivers whose planes only support linear layout
+Date:   Tue, 18 Jan 2022 17:36:49 +0900
+Message-Id: <20220118083652.16335-1-etom@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220111180238.1370631-4-bob.beckett@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-11 at 18:02:37 +0000, Robert Beckett wrote:
-> add test to check handling of misaligned offsets and sizes
+Some drivers whose planes only support linear layout fb do not support format
+modifiers.
+These drivers should support modifiers, however the DRM core should handle this
+rather than open-coding in every driver.
 
-Bob, This needs the rebase. I have rebased the other three patches of
-the series..
+In this patch series, these drivers expose format modifiers based on the
+following suggestion[1].
 
-Meanwhile i will review the changes.
+On Thu, Nov 18, 2021 at 01:02:11PM +0000, Daniel Stone wrote:
+> I think the best way forward here is:
+>   - add a new mode_config.cannot_support_modifiers flag, and enable
+> this in radeon (plus any other drivers in the same boat)
+>   - change drm_universal_plane_init() to advertise the LINEAR modifier
+> when NULL is passed as the modifier list (including installing a
+> default .format_mod_supported hook)
+>   - remove the mode_config.allow_fb_modifiers hook and always
+> advertise modifier support, unless
+> mode_config.cannot_support_modifiers is set
 
-Ram.
-> 
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> ---
->  drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 130 ++++++++++++++++++
->  1 file changed, 130 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> index fea031b4ec4f..28de0b333835 100644
-> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> @@ -22,10 +22,12 @@
->   *
->   */
->  
-> +#include "gt/intel_gtt.h"
->  #include <linux/list_sort.h>
->  #include <linux/prime_numbers.h>
->  
->  #include "gem/i915_gem_context.h"
-> +#include "gem/i915_gem_region.h"
->  #include "gem/selftests/mock_context.h"
->  #include "gt/intel_context.h"
->  #include "gt/intel_gpu_commands.h"
-> @@ -1066,6 +1068,120 @@ static int shrink_boom(struct i915_address_space *vm,
->  	return err;
->  }
->  
-> +static int misaligned_case(struct i915_address_space *vm, struct intel_memory_region *mr,
-> +			   u64 addr, u64 size, unsigned long flags)
-> +{
-> +	struct drm_i915_gem_object *obj;
-> +	struct i915_vma *vma;
-> +	int err = 0;
-> +	u64 expected_vma_size, expected_node_size;
-> +
-> +	obj = i915_gem_object_create_region(mr, size, 0, 0);
-> +	if (IS_ERR(obj))
-> +		return PTR_ERR(obj);
-> +
-> +	vma = i915_vma_instance(obj, vm, NULL);
-> +	if (IS_ERR(vma)) {
-> +		err = PTR_ERR(vma);
-> +		goto err_put;
-> +	}
-> +
-> +	err = i915_vma_pin(vma, 0, 0, addr | flags);
-> +	if (err)
-> +		goto err_put;
-> +	i915_vma_unpin(vma);
-> +
-> +	if (!drm_mm_node_allocated(&vma->node)) {
-> +		err = -EINVAL;
-> +		goto err_put;
-> +	}
-> +
-> +	if (i915_vma_misplaced(vma, 0, 0, addr | flags)) {
-> +		err = -EINVAL;
-> +		goto err_put;
-> +	}
-> +
-> +	expected_vma_size = round_up(size, 1 << (ffs(vma->page_sizes.gtt) - 1));
-> +	expected_node_size = expected_vma_size;
-> +
-> +	if (IS_DG2(vm->i915) && i915_gem_object_is_lmem(obj)) {
-> +		/* dg2 should expand lmem node to 2MB */
-> +		expected_vma_size = round_up(size, I915_GTT_PAGE_SIZE_64K);
-> +		expected_node_size = round_up(size, I915_GTT_PAGE_SIZE_2M);
-> +	}
-> +
-> +	if (vma->size != expected_vma_size || vma->node.size != expected_node_size) {
-> +		err = i915_vma_unbind(vma);
-> +		err = -EBADSLT;
-> +		goto err_put;
-> +	}
-> +
-> +	err = i915_vma_unbind(vma);
-> +	if (err)
-> +		goto err_put;
-> +
-> +	GEM_BUG_ON(drm_mm_node_allocated(&vma->node));
-> +
-> +err_put:
-> +	i915_gem_object_put(obj);
-> +	cleanup_freed_objects(vm->i915);
-> +	return err;
-> +}
-> +
-> +static int misaligned_pin(struct i915_address_space *vm,
-> +			  u64 hole_start, u64 hole_end,
-> +			  unsigned long end_time)
-> +{
-> +	struct intel_memory_region *mr;
-> +	enum intel_region_id id;
-> +	unsigned long flags = PIN_OFFSET_FIXED | PIN_USER;
-> +	int err = 0;
-> +	u64 hole_size = hole_end - hole_start;
-> +
-> +	if (i915_is_ggtt(vm))
-> +		flags |= PIN_GLOBAL;
-> +
-> +	for_each_memory_region(mr, vm->i915, id) {
-> +		u64 min_alignment = i915_vm_min_alignment(vm, id);
-> +		u64 size = min_alignment;
-> +		u64 addr = round_up(hole_start + (hole_size / 2), min_alignment);
-> +
-> +		/* we can't test < 4k alignment due to flags being encoded in lower bits */
-> +		if (min_alignment != I915_GTT_PAGE_SIZE_4K) {
-> +			err = misaligned_case(vm, mr, addr + (min_alignment / 2), size, flags);
-> +			/* misaligned should error with -EINVAL*/
-> +			if (!err)
-> +				err = -EBADSLT;
-> +			if (err != -EINVAL)
-> +				return err;
-> +		}
-> +
-> +		/* test for vma->size expansion to min page size */
-> +		err = misaligned_case(vm, mr, addr, PAGE_SIZE, flags);
-> +		if (min_alignment > hole_size) {
-> +			if (!err)
-> +				err = -EBADSLT;
-> +			else if (err == -ENOSPC)
-> +				err = 0;
-> +		}
-> +		if (err)
-> +			return err;
-> +
-> +		/* test for intermediate size not expanding vma->size for large alignments */
-> +		err = misaligned_case(vm, mr, addr, size / 2, flags);
-> +		if (min_alignment > hole_size) {
-> +			if (!err)
-> +				err = -EBADSLT;
-> +			else if (err == -ENOSPC)
-> +				err = 0;
-> +		}
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int exercise_ppgtt(struct drm_i915_private *dev_priv,
->  			  int (*func)(struct i915_address_space *vm,
->  				      u64 hole_start, u64 hole_end,
-> @@ -1135,6 +1251,12 @@ static int igt_ppgtt_shrink_boom(void *arg)
->  	return exercise_ppgtt(arg, shrink_boom);
->  }
->  
-> +static int igt_ppgtt_misaligned_pin(void *arg)
-> +{
-> +	return exercise_ppgtt(arg, misaligned_pin);
-> +}
-> +
-> +
->  static int sort_holes(void *priv, const struct list_head *A,
->  		      const struct list_head *B)
->  {
-> @@ -1207,6 +1329,12 @@ static int igt_ggtt_lowlevel(void *arg)
->  	return exercise_ggtt(arg, lowlevel_hole);
->  }
->  
-> +static int igt_ggtt_misaligned_pin(void *arg)
-> +{
-> +	return exercise_ggtt(arg, misaligned_pin);
-> +}
-> +
-> +
->  static int igt_ggtt_page(void *arg)
->  {
->  	const unsigned int count = PAGE_SIZE/sizeof(u32);
-> @@ -2137,12 +2265,14 @@ int i915_gem_gtt_live_selftests(struct drm_i915_private *i915)
->  		SUBTEST(igt_ppgtt_fill),
->  		SUBTEST(igt_ppgtt_shrink),
->  		SUBTEST(igt_ppgtt_shrink_boom),
-> +		SUBTEST(igt_ppgtt_misaligned_pin),
->  		SUBTEST(igt_ggtt_lowlevel),
->  		SUBTEST(igt_ggtt_drunk),
->  		SUBTEST(igt_ggtt_walk),
->  		SUBTEST(igt_ggtt_pot),
->  		SUBTEST(igt_ggtt_fill),
->  		SUBTEST(igt_ggtt_page),
-> +		SUBTEST(igt_ggtt_misaligned_pin),
->  		SUBTEST(igt_cs_tlb),
->  	};
->  
-> -- 
-> 2.25.1
-> 
+
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20190509054518.10781-1-etom@igel.co.jp/#24602575
+
+v4:
+* modify documentation for fb_modifiers_not_supported flag in kerneldoc
+
+v3: https://www.spinics.net/lists/dri-devel/msg329102.html
+* change the order as follows:
+   1. add fb_modifiers_not_supported flag
+   2. add default modifiers
+   3. remove allow_fb_modifiers flag
+* add a conditional disable in amdgpu_dm_plane_init()
+
+v2: https://www.spinics.net/lists/dri-devel/msg328939.html
+* rebase to the latest master branch (5.16.0+)
+      + "drm/plane: Make format_mod_supported truly optional" patch [2]
+  [2] https://patchwork.freedesktop.org/patch/467940/?series=98255&rev=3
+
+v1: https://www.spinics.net/lists/dri-devel/msg327352.html
+* The initial patch set
+
+Tomohito Esaki (3):
+  drm: introduce fb_modifiers_not_supported flag in mode_config
+  drm: add support modifiers for drivers whose planes only support
+    linear layout
+  drm: remove allow_fb_modifiers
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c   |  6 ++---
+ drivers/gpu/drm/amd/amdgpu/dce_v10_0.c        |  2 ++
+ drivers/gpu/drm/amd/amdgpu/dce_v11_0.c        |  2 ++
+ drivers/gpu/drm/amd/amdgpu/dce_v6_0.c         |  1 +
+ drivers/gpu/drm/amd/amdgpu/dce_v8_0.c         |  2 ++
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  3 +++
+ drivers/gpu/drm/drm_framebuffer.c             |  6 ++---
+ drivers/gpu/drm/drm_ioctl.c                   |  2 +-
+ drivers/gpu/drm/drm_plane.c                   | 22 +++++++++----------
+ drivers/gpu/drm/nouveau/nouveau_display.c     |  6 +++--
+ drivers/gpu/drm/radeon/radeon_display.c       |  2 ++
+ .../gpu/drm/selftests/test-drm_framebuffer.c  |  1 -
+ include/drm/drm_mode_config.h                 | 18 +++++----------
+ include/drm/drm_plane.h                       |  3 +++
+ 14 files changed, 43 insertions(+), 33 deletions(-)
+
+-- 
+2.25.1
+

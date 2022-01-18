@@ -2,226 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65411492C13
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B49492C14
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235820AbiARRPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:15:25 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:37765 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiARRPY (ORCPT
+        id S243633AbiARRPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:15:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51342 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346933AbiARRPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:15:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642526043;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=cyrnWGrJvs1dfpSyQh55Z5OJ2Bhw4Ju474fu1zFZejw=;
-    b=Q5E65ZMtmZAgQzC8pyRy9ZHHRKQWAfPr7bnZ+6jdlifTttPjZzfMX48YdBvvo2rEkm
-    f53tawNNym34PyIu9Hz/DpG/yhCvMqzVNuV8c80MGrZQS425VUtQ2C63GHej3Lcn3luf
-    TvS35jJPTQQ+xvDJ+nCo8RbIAz+mwfx5CKSaxmerXJQ6k6GlpHumCvnmA/gEdj5AlNag
-    Brje1imq8At/Uv1T1XhRoygUXNc4V30URBXcxTF5GGLDn6RZ5IN96M2eS38Cbe33Cdnc
-    exoeuGEebqseG01QR1gbWirZgh9L5CJbCJxeqoZDJP7hwufii0LbVnq/A8lEi/2roZhe
-    egKw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iMITlA=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.37.6 DYNA|AUTH)
-    with ESMTPSA id D61423y0IHE1hsP
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 18 Jan 2022 18:14:01 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
- output
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <AI0X5R.YWIZO63QXTF4@crapouillou.net>
-Date:   Tue, 18 Jan 2022 18:14:00 +0100
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4E2787F5-8080-4F6C-8843-4C5D49462AD0@goldelico.com>
-References: <cover.1633436959.git.hns@goldelico.com>
- <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
- <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
- <7CEBB741-2218-40A7-9800-B3A154895274@goldelico.com>
- <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
- <229EBE4C-6555-41DE-962F-D82798AEC650@goldelico.com>
- <HQY82R.69JHJIC64HDO1@crapouillou.net>
- <5BC61397-AF28-45CD-83F6-FA2C760F3995@goldelico.com>
- <C846BAFB-473D-41D8-93B9-B9ECDD1846C1@goldelico.com>
- <AI0X5R.YWIZO63QXTF4@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Tue, 18 Jan 2022 12:15:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642526134;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iGgVMFp2VtgX9CS88lYiEKy1GarUr4t4M/Z368/eDbo=;
+        b=IjlIKzapC70wtf4rIMXE1znyhmn09+qRx/+QtYuPTmgEMTOrDDbJzS+bMpe72v0gImsUkE
+        0covqwgUU3K25FOuxqpokyubC+2ztxbRd6Cv9o4k/tyrQnyvQCqMCwPBcxm9x7syhJTdMF
+        9uh5hXrZyIuHYtkkyS6P6y6lqseI480=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-443-gUyxbgn2NWajxGtlwLdqUQ-1; Tue, 18 Jan 2022 12:15:33 -0500
+X-MC-Unique: gUyxbgn2NWajxGtlwLdqUQ-1
+Received: by mail-ed1-f70.google.com with SMTP id c11-20020a056402120b00b0040321cea9d4so4524485edw.23
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:15:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iGgVMFp2VtgX9CS88lYiEKy1GarUr4t4M/Z368/eDbo=;
+        b=yRGGypslE1RO6TiejlrC/J3ustYchpCB2/nwkeIbPVQLZTCsOUJGqG7NzuaUWWxigX
+         1oJ4JlSoZdOgH8WbOvq9xLzPExT9bcBlRplia8Ube4MnA+Rfx2yCswKu8l821lpvS4Xm
+         v6Fw5vsuy3r52Bo9QrouLAUuOMFVB9KFtFzIDxz82PifvpuQaXAIZ31UFWRobZJXcfz2
+         AzyNHbrYQfKJO1fHekx57CT5IHjES/0CDTjVQ6RR2Sa0TX6zEs+0vzwATzikhKMK0GMD
+         p7XINcD/vAz5NxA2AxM2+S6dzhbUH0QyDhFUj+B7gIO3sXXmrXsDPbPXCM540iuM23UI
+         4IEA==
+X-Gm-Message-State: AOAM532Ulk8v9kpl6n6AcHm3FjpBKpDORyWpzThJC9GELj74LITZD3lT
+        lzgd5uFM6bJ4+u5r7lrksfQTQoFxK0Bfzm9Od4Slx93fpYq1LogTSo+XfSXo4zT44VmknpPCO6+
+        ykiS3xIbXfQYAPlz55BTVkD4/
+X-Received: by 2002:aa7:d305:: with SMTP id p5mr26831862edq.201.1642526131038;
+        Tue, 18 Jan 2022 09:15:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJycTPPIdf1+7tCR0aAgWJHCAhex7oAJuH3u6iRzlYO/0+UQMelr2ZdalDlZRoTOYRL+M7yrUg==
+X-Received: by 2002:aa7:d305:: with SMTP id p5mr26831837edq.201.1642526130798;
+        Tue, 18 Jan 2022 09:15:30 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id sd4sm2337798ejb.33.2022.01.18.09.15.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 09:15:30 -0800 (PST)
+Message-ID: <47362220-30d5-c513-a2aa-61187ee91c41@redhat.com>
+Date:   Tue, 18 Jan 2022 18:15:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] x86/cpufeatures: Move the definition of X86_FEATURE_AMX_*
+ to the word 18
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Jing Liu <jing2.liu@intel.com>, linux-kernel@vger.kernel.org,
+        "Bae, Chang Seok" <chang.seok.bae@intel.com>
+References: <20220117062344.58862-1-likexu@tencent.com>
+ <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On 1/18/22 18:11, Dave Hansen wrote:
+> What tree is this against?  I see BF16 and INT8 in some old versions of
+> Chang's patches, but not current kernels.  All I see right now in
+> tip/master is:
+> 
+>> #define X86_FEATURE_AMX_TILE            (18*32+24) /* AMX tile ...
+> 
+> It's still in the wrong spot, but the other two features aren't there.
 
-> Am 18.01.2022 um 17:58 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
-> Le mar., janv. 18 2022 at 15:50:01 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Hi Paul,
->> any insights on the JZ_REG_LCD_OSDC issue below?
->=20
-> Sorry, I missed your previous email. I blame the holidays ;)
+It was added for the KVM side of AMX (commit 690a757d610e, "kvm: x86: 
+Add CPUID support for Intel AMX") and is in Linus's tree.
 
-No problem... We all had deserved them.
+Paolo
 
->=20
->> There is a second, unrelated issue with the introduction of
->> "drm/bridge: display-connector: implement bus fmts callbacks"
->> which breaks bus format negotiations.
->> These are the two last unsolved issues to submit a fully working =
-driver.
->>> Am 22.12.2021 um 15:03 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->>>> Am 08.11.2021 um 10:37 schrieb Paul Cercueil =
-<paul@crapouillou.net>:
->>>> Hi Nikolaus,
->>>> Le dim., nov. 7 2021 at 21:25:38 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->>>>> Hi Paul,
->>>>>>>>> @@ -1274,7 +1319,7 @@ static int ingenic_drm_bind(struct =
-device *dev, bool has_components)
->>>>>>>>> 	/* Enable OSD if available */
->>>>>>>>> 	if (soc_info->has_osd)
->>>>>>>>> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
-JZ_LCD_OSDC_OSDEN);
->>>>>>>>> +		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, =
-JZ_LCD_OSDC_OSDEN);
->>>>>>>> This change is unrelated to this patch, and I'm not even sure =
-it's a valid change. The driver shouldn't rely on previous register =
-values.
->>>>>>> I think I already commented that I think the driver should also =
-not reset
->>>>>>> previous register values to zero.
->>>>>> You did comment this, yes, but I don't agree. The driver *should* =
-reset the registers to zero. It should *not* have to rely on whatever =
-was configured before.
->>>>>> Even if I did agree, this is a functional change unrelated to =
-JZ4780 support, so it would have to be splitted to its own patch.
->>>>> Well it is in preparation of setting more bits that are only =
-available for the jz4780.
->>>>> But it will be splitted into its own patch for other reasons - if =
-we ever make osd working...
->>>>>>> If I counted correctly this register has 18 bits which seem to =
-include
->>>>>>> some interrupt masks (which could be initialized somewhere else) =
-and we
->>>>>>> write a constant 0x1.
->>>>>>> Of course most other bits are clearly OSD related (alpha =
-blending),
->>>>>>> i.e. they can have any value (incl. 0) if OSD is disabled. But =
-here we
->>>>>>> enable it. I think there may be missing some setting for the =
-other bits.
->>>>>>> So are you sure, that we can unconditionally reset *all* bits
->>>>>>> except JZ_LCD_OSDC_OSDEN for the jz4780?
->>>>>>> Well I have no experience with OSD being enabled at all. I.e. I =
-have no
->>>>>>> test scenario.
->>> It turns out that the line
->>> 		ret =3D clk_prepare_enable(priv->lcd_clk);
->>> initializes JZ_REG_LCD_OSDC to 0x00010005 (i.e. printk tells 0x0 =
-before).
->> more detailled test shows that it is the underlying
->> 	clk_enable(priv->lcd_clk)
->> (i.e. not the prepare).
->>> and writing
->>> 		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
-JZ_LCD_OSDC_OSDEN);
->>> overwrites it with 0x00000001.
->>> This makes the HDMI monitor go/stay black until I write manually 0x5 =
-to
->>> JZ_REG_LCD_OSDC.
->>> This means that JZ_LCD_OSDC_ALPHAEN must be enabled on jz4780 as =
-well.
->>> Hence overwriting just with JZ_LCD_OSDC_OSDEN breaks it.
->>> Now the questions:
->>> a) 0x5 is understandable that it sets JZ_LCD_OSDC_ALPHAEN - but why =
-is it needed?
->>>   Is this a not well documented difference between jz4740/60/70/80?
->>> b) how can clk_prepare_enable() write 0x00010005 to JZ_REG_LCD_OSDC? =
-Bug or feature?
->>>   Something in cgu driver going wrong?
->> I now suspect that it is an undocumented SoC feature.
->=20
-> Not at all. If the clock is disabled, the LCD controller is disabled, =
-so all the registers read zero, this makes sense. You can only read the =
-registers when the clock is enabled. On some SoCs, reading disabled =
-registers can even cause a complete lockup.
 
-This is the right answer to the wrong question :)
-The question is why the register becomes 0x10005 as soon as the clock is =
-enabled. Without writing to it.  And contrary to the documented reset =
-state.
-Or are you aware that u-boot initialized the lcdc and clocks get =
-disabled when/during starting the kernel (I am using the good old =
-v2013.10)?
-That could be an explanation that we read 0 before the clock is enabled =
-and 0x10005 after.
+>> We have defined the word 18 for Intel-defined CPU features from CPUID level> 0x00000007:0 (EDX). Let's move the definitions of X86_FEATURE_AMX_* to
+> the> right entry to prevent misinterpretation. No functional change
+> intended.
+> Please, no "we's" in changelogs.  Don't say, "let's move".  Just say:
+> "Move..."
+> 
+> The subject could probably also be trimmed a bit.  Perhaps:
+> 
+> 	x86/cpu: Move AMX CPU feature defines to correct word location
+> 
+> 
 
-> Why is this JZ_LCD_OSDC_ALPHAEN bit needed now? I remember it working =
-fine last time I tried, and now I indeed get a black screen unless this =
-bit is set. The PM doesn't make it obvious that the bit is required,
-
-exactly.
-
-> but that wouldn't be surprising.
->=20
-> Anyway, feel free to send a patch to fix it (with a Fixes: tag). =
-Ideally something like this:
->=20
-> u32 osdc =3D 0;
-> ...
-> if (soc_info->has_osd)
->   osdc |=3D JZ_LCD_OSDC_OSDEN;
-> if (soc_info->has_alpha)
->   osdc |=3D JZ_LCD_OSDC_ALPHAEN;
-> regmap_write(priv->map, JZ_REG_LCD_OSDC, osdc);
-
-Looks good to me. I'll give it a try.
-
->=20
-> This also ensures that the OSDC register is properly initialized in =
-the !has_osd case. The driver shouldn't rely on pre-boot values in the =
-registers.
-
-Ok. Not all SoC have osd.
-
-BR and thanks,
-Nikolaus=

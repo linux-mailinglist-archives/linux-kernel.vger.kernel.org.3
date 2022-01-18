@@ -2,200 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 471C2492833
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F3249285B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245027AbiAROSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:18:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27634 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244861AbiAROSU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:18:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642515498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bLFvUw5OiL0PwWN1RfLYJMbRWgda2rw0vcjqVwdGBw4=;
-        b=UvIph5ZR0vfCK9hpXLUp4lm6moYci4XD6oaYT+uNtY3Zaygph6+utUlRQQUubm7D7tJitF
-        rUu+ZcL/3eXigVQTdeCbok//3C+KjHf2MJw5YpHfY0Nmo/VAaLi3wq5yUpG/WlCukq97C9
-        utVq3Y14Hdx4BzGw/OKOrCBwNH5Ffko=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477--rDvR8haOZW_qEsTZ3am1g-1; Tue, 18 Jan 2022 09:18:15 -0500
-X-MC-Unique: -rDvR8haOZW_qEsTZ3am1g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A10C86A061;
-        Tue, 18 Jan 2022 14:18:14 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 27C467E126;
-        Tue, 18 Jan 2022 14:18:11 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] KVM: selftests: Test KVM_SET_CPUID2 after KVM_RUN
-Date:   Tue, 18 Jan 2022 15:18:01 +0100
-Message-Id: <20220118141801.2219924-5-vkuznets@redhat.com>
-In-Reply-To: <20220118141801.2219924-1-vkuznets@redhat.com>
-References: <20220118141801.2219924-1-vkuznets@redhat.com>
+        id S245448AbiARO2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:28:07 -0500
+Received: from uho.ysoft.cz ([81.19.3.130]:58091 "EHLO uho.ysoft.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233969AbiARO2G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 09:28:06 -0500
+X-Greylist: delayed 538 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 09:28:06 EST
+Received: from vokac-Latitude-7410.ysoft.local (unknown [10.0.30.196])
+        by uho.ysoft.cz (Postfix) with ESMTP id 77EFFAB680;
+        Tue, 18 Jan 2022 15:19:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1642515545;
+        bh=63fEdM9tEtwcmcsewPLa0Aa7XJVKM4JY5ED6EPbMk3E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UzwwaPRGi/HhVI8nKyJxu5nQo5wUbsajHMo7bpI9c/aHpJ9RisJzDEOWo+JbACgcZ
+         1tPJccfYtUeFFrI3H2VlIYSJMIaBeUCaBGTXpujczhlYjuObkpW+vpfeHuA1ZEWHFk
+         minsPuufAQCQbotyEFOzaIopbWDl4vs0Ks68kzhU=
+From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+To:     Gaurav Jain <gaurav.jain@nxp.com>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.stach@pengutronix.de, robert.hancock@calian.com,
+        Petr Benes <petr.benes@ysoft.com>, petrben@gmail.com,
+        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Subject: [RFC PATCH v2] crypto: caam - restore retry count after HW RNG failure
+Date:   Tue, 18 Jan 2022 15:18:11 +0100
+Message-Id: <20220118141811.110618-1-michal.vokac@ysoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM forbids KVM_SET_CPUID2 after KVM_RUN was performed on a vCPU unless
-the supplied CPUID data is equal to what was previously set. Test this.
+From: Petr Benes <petr.benes@ysoft.com>
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Each time TRNG generates entropy, statistical tests are run.
+If they fail, RETRY_COUNT value is decremented. Once it
+reaches 0, HW RNG returns an error, and needs to be reset.
+RETRY_COUNT could be programmed in RTSCMISC register and is
+set to 1 by default. Hence, we are left without hwrng after
+the first error, which could happen even under normal
+conditions.
+
+Cc: petrben@gmail.com
+Signed-off-by: Petr Benes <petr.benes@ysoft.com>
+Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  |  7 ++++
- .../selftests/kvm/lib/x86_64/processor.c      | 33 ++++++++++++++++---
- .../testing/selftests/kvm/x86_64/cpuid_test.c | 30 +++++++++++++++++
- 3 files changed, 66 insertions(+), 4 deletions(-)
+v2:
+- Export caam_reinstantiate_rng to fix build error.
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e94ba0fc67d8..bb013d101c14 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -375,6 +375,8 @@ uint64_t kvm_get_feature_msr(uint64_t msr_index);
- struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
+ drivers/crypto/caam/caamrng.c | 42 ++++++++++++++++++++++++++++++++---
+ drivers/crypto/caam/ctrl.c    | 14 ++++++++++++
+ drivers/crypto/caam/ctrl.h    |  2 ++
+ 3 files changed, 55 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/crypto/caam/caamrng.c b/drivers/crypto/caam/caamrng.c
+index 77d048dfe5d0..2be5584ae591 100644
+--- a/drivers/crypto/caam/caamrng.c
++++ b/drivers/crypto/caam/caamrng.c
+@@ -21,6 +21,7 @@
+ #include "desc_constr.h"
+ #include "jr.h"
+ #include "error.h"
++#include "ctrl.h"
  
- struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vm *vm, uint32_t vcpuid);
-+int __vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
-+		     struct kvm_cpuid2 *cpuid);
- void vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
- 		    struct kvm_cpuid2 *cpuid);
+ #define CAAM_RNG_MAX_FIFO_STORE_SIZE	16
  
-@@ -418,6 +420,11 @@ uint64_t vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vaddr);
- void vm_set_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vaddr,
- 			     uint64_t pte);
+@@ -113,6 +114,35 @@ static int caam_rng_read_one(struct device *jrdev,
+ 	return err ?: (ret ?: len);
+ }
+ 
++static void caam_rng_retry_reset(struct caam_rng_ctx *context)
++{
++	struct device *ctrldev = context->ctrldev;
++	struct caam_drv_private *ctrlpriv = dev_get_drvdata(ctrldev);
++	struct caam_ctrl __iomem *ctrl;
++	struct rng4tst __iomem *r4tst;
++	u32 __iomem *rtstatus;
++	u32 retry_count;
++
++	ctrl = (struct caam_ctrl __iomem *)ctrlpriv->ctrl;
++	r4tst = &ctrl->r4tst[0];
++
++	/*
++	 * There is unfortunately no member for RTSTATUS register in
++	 * struct rng4tst and the structure doesn't look stable
++	 */
++	rtstatus = (u32 *)((char *)&ctrl->r4tst[0] + 0x3C);
++	retry_count = (rd_reg32(rtstatus) >> 16) & 0xf;
++	dev_dbg(ctrldev, "CAAM RNG retry count %d\n", retry_count);
++	if (retry_count == 0) {
++		dev_err(ctrldev, "CAAM RNG resetting retry count to 1\n");
++		clrsetbits_32(&r4tst->rtmctl, 0, RTMCTL_PRGM | RTMCTL_ACC);
++		wr_reg32(&r4tst->rtscmisc, (rd_reg32(&r4tst->rtscmisc) & 0x7f) | (1 << 16));
++		clrsetbits_32(&r4tst->rtmctl, RTMCTL_PRGM | RTMCTL_ACC,
++				RTMCTL_SAMP_MODE_RAW_ES_SC);
++		caam_reinstantiate_rng(ctrldev);
++	}
++}
++
+ static void caam_rng_fill_async(struct caam_rng_ctx *ctx)
+ {
+ 	struct scatterlist sg[1];
+@@ -129,8 +159,10 @@ static void caam_rng_fill_async(struct caam_rng_ctx *ctx)
+ 				sg[0].length,
+ 				ctx->desc_async,
+ 				&done);
+-	if (len < 0)
++	if (len < 0) {
++		caam_rng_retry_reset(ctx);
+ 		return;
++	}
+ 
+ 	kfifo_dma_in_finish(&ctx->fifo, len);
+ }
+@@ -145,13 +177,17 @@ static void caam_rng_worker(struct work_struct *work)
+ static int caam_read(struct hwrng *rng, void *dst, size_t max, bool wait)
+ {
+ 	struct caam_rng_ctx *ctx = to_caam_rng_ctx(rng);
+-	int out;
++	int out, ret;
+ 
+ 	if (wait) {
+ 		struct completion done;
+ 
+-		return caam_rng_read_one(ctx->jrdev, dst, max,
++		ret = caam_rng_read_one(ctx->jrdev, dst, max,
+ 					 ctx->desc_sync, &done);
++		if (ret < 0)
++			caam_rng_retry_reset(ctx);
++
++		return ret;
+ 	}
+ 
+ 	out = kfifo_out(&ctx->fifo, dst, max);
+diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c
+index ca0361b2dbb0..6feb828b6a56 100644
+--- a/drivers/crypto/caam/ctrl.c
++++ b/drivers/crypto/caam/ctrl.c
+@@ -339,6 +339,20 @@ static int instantiate_rng(struct device *ctrldev, int state_handle_mask,
+ 	return devm_add_action_or_reset(ctrldev, devm_deinstantiate_rng, ctrldev);
+ }
  
 +/*
-+ * get_cpuid() - find matching CPUID entry and return pointer to it.
++ * caam_reinstantiate_rng - reinstantiates RNG. Intended for a case when RNG falls into
++ *			    HW error condition. That happens if TRNG fails statistical
++ *			    check and RTY_CNT value set in RTSCMISC decrements to zero.
++ *			    It is exported to caamrng.c
++ * @ctrldev - pointer to device
 + */
-+struct kvm_cpuid_entry2 *get_cpuid(struct kvm_cpuid2 *cpuid, uint32_t function,
-+				   uint32_t index);
- /*
-  * set_cpuid() - overwrites a matching cpuid entry with the provided value.
-  *		 matches based on ent->function && ent->index. returns true
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index babb0f28575c..d61e2326dc85 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -886,6 +886,17 @@ kvm_get_supported_cpuid_index(uint32_t function, uint32_t index)
- 	return entry;
- }
- 
 +
-+int __vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
-+		     struct kvm_cpuid2 *cpuid)
++int caam_reinstantiate_rng(struct device *ctrldev)
 +{
-+	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-+
-+	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
-+
-+	return ioctl(vcpu->fd, KVM_SET_CPUID2, cpuid);
++	return instantiate_rng(ctrldev, 0, 0);
 +}
++EXPORT_SYMBOL(caam_reinstantiate_rng);
 +
  /*
-  * VM VCPU CPUID Set
-  *
-@@ -903,12 +914,9 @@ kvm_get_supported_cpuid_index(uint32_t function, uint32_t index)
- void vcpu_set_cpuid(struct kvm_vm *vm,
- 		uint32_t vcpuid, struct kvm_cpuid2 *cpuid)
- {
--	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
- 	int rc;
+  * kick_trng - sets the various parameters for enabling the initialization
+  *	       of the RNG4 block in CAAM
+diff --git a/drivers/crypto/caam/ctrl.h b/drivers/crypto/caam/ctrl.h
+index f3ecd67922a7..26ff5a49a865 100644
+--- a/drivers/crypto/caam/ctrl.h
++++ b/drivers/crypto/caam/ctrl.h
+@@ -8,6 +8,8 @@
+ #ifndef CTRL_H
+ #define CTRL_H
  
--	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
--
--	rc = ioctl(vcpu->fd, KVM_SET_CPUID2, cpuid);
-+	rc = __vcpu_set_cpuid(vm, vcpuid, cpuid);
- 	TEST_ASSERT(rc == 0, "KVM_SET_CPUID2 failed, rc: %i errno: %i",
- 		    rc, errno);
++int caam_reinstantiate_rng(struct device *ctrldev);
++
+ /* Prototypes for backend-level services exposed to APIs */
+ extern bool caam_dpaa2;
  
-@@ -1384,6 +1392,23 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid)
- 	}
- }
- 
-+struct kvm_cpuid_entry2 *get_cpuid(struct kvm_cpuid2 *cpuid, uint32_t function,
-+				   uint32_t index)
-+{
-+	int i;
-+
-+	for (i = 0; i < cpuid->nent; i++) {
-+		struct kvm_cpuid_entry2 *cur = &cpuid->entries[i];
-+
-+		if (cur->function == function && cur->index == index)
-+			return cur;
-+	}
-+
-+	TEST_FAIL("CPUID function 0x%x index 0x%x not found ", function, index);
-+
-+	return NULL;
-+}
-+
- bool set_cpuid(struct kvm_cpuid2 *cpuid,
- 	       struct kvm_cpuid_entry2 *ent)
- {
-diff --git a/tools/testing/selftests/kvm/x86_64/cpuid_test.c b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-index a711f83749ea..16d2465c5634 100644
---- a/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-@@ -154,6 +154,34 @@ struct kvm_cpuid2 *vcpu_alloc_cpuid(struct kvm_vm *vm, vm_vaddr_t *p_gva, struct
- 	return guest_cpuids;
- }
- 
-+static void set_cpuid_after_run(struct kvm_vm *vm, struct kvm_cpuid2 *cpuid)
-+{
-+	struct kvm_cpuid_entry2 *ent;
-+	int rc;
-+	u32 eax, ebx, x;
-+
-+	/* Setting unmodified CPUID is allowed */
-+	rc = __vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+	TEST_ASSERT(!rc, "Setting unmodified CPUID after KVM_RUN failed: %d", rc);
-+
-+	/* Changing CPU features is forbidden */
-+	ent = get_cpuid(cpuid, 0x7, 0);
-+	ebx = ent->ebx;
-+	ent->ebx--;
-+	rc = __vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+	TEST_ASSERT(rc, "Changing CPU features should fail");
-+	ent->ebx = ebx;
-+
-+	/* Changing MAXPHYADDR is forbidden */
-+	ent = get_cpuid(cpuid, 0x80000008, 0);
-+	eax = ent->eax;
-+	x = eax & 0xff;
-+	ent->eax = (eax & ~0xffu) | (x - 1);
-+	rc = __vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+	TEST_ASSERT(rc, "Changing MAXPHYADDR should fail");
-+	ent->eax = eax;
-+}
-+
- int main(void)
- {
- 	struct kvm_cpuid2 *supp_cpuid, *cpuid2;
-@@ -175,5 +203,7 @@ int main(void)
- 	for (stage = 0; stage < 3; stage++)
- 		run_vcpu(vm, VCPU_ID, stage);
- 
-+	set_cpuid_after_run(vm, cpuid2);
-+
- 	kvm_vm_free(vm);
- }
 -- 
-2.34.1
+2.25.1
 

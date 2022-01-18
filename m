@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A5E492E66
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 276B3492E69
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348751AbiARTV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:21:28 -0500
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:55460 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348742AbiARTV1 (ORCPT
+        id S1348756AbiARTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:22:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58634 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343530AbiARTVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:21:27 -0500
-Date:   Tue, 18 Jan 2022 19:21:18 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1642533682;
-        bh=5dUeSSJ4ctACQ6+7qomltkfRNS6763hIzUOtbzKxQxU=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=YE6dsf6HKaQEdSsnSQmY4kzgQ76wnUGq7yZSIjt7sW8zXBMROW4xTsQ83YVPfYPyJ
-         N6fdSFwUxKDVemibTh/CvVb3/LpI9co6rEB+gp4ZqHQca3yOpMEQRy17EI4clGpMK5
-         rSUNEDoBwxQxo7LPWgpE6Tr3aXTZgoZS4j5zsj01hezPHcGS9W2MKpz1OhHcRlIvjw
-         FShfTL/Ozi1pBTYUFzbhQBithEUR9wGgFvzgEqWsgCrTYpHHtuWUmis2kTvZQNLk3/
-         GPxwnWc+f1hWbe5IMU3Pfx3AAc8W0P2heOf5xL/jyTXadJQ3o2aDLY4HMGvoxTomY9
-         xf2Mpqwlia5Mg==
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
-Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kettenis@openbsd.org,
-        =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
-Reply-To: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
-Subject: [PATCH v2 3/3] MAINTAINERS: Add clk-apple-nco under ARM/APPLE MACHINE
-Message-ID: <20220118191839.64086-4-povik+lin@protonmail.com>
-In-Reply-To: <20220118191839.64086-1-povik+lin@protonmail.com>
-References: <20220118191839.64086-1-povik+lin@protonmail.com>
+        Tue, 18 Jan 2022 14:21:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FAEB60AFF;
+        Tue, 18 Jan 2022 19:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC096C340E0;
+        Tue, 18 Jan 2022 19:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642533710;
+        bh=qWkShJH2TbRNtnHC5fQMNTh4h6rrTjQ6/Ri5U/KLWRk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iOYDcKp0OHD7uuMi/pb2JXOwuGOdqqoF2Ie7hT9HgpPEaVxrGCK1I9k8zAkuC0kh7
+         P4gOh4aIvdsenYK2efrmmSOQzUuol2Ik4edOIPPJyuUG+WEtVfCOCVlUfuwogLvaOh
+         9KD125NusJnAbPfug20zDgaffLztteOAyErpQuYaOr9pDL9NnVNUx98qymcna4iPbJ
+         p0YLQLeJ4Wgg3FyT5Mga1MWHb9IlqUnQmsWCZyaxLb09M7oOobECMAh69MUI9gOLRW
+         qlGp+KY+IU5bzYdtwLpw3LsfMm9nptapEZD8IF6ro5dDF84mVRT/cOoQ5AkB7i4lMk
+         eH9Z25IXARXMA==
+Date:   Tue, 18 Jan 2022 11:21:48 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, edumazet@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xu xin <xu.xin16@zte.com.cn>
+Subject: Re: [PATCH] ipv4: Namespaceify min_adv_mss sysctl knob
+Message-ID: <20220118112148.3e1acad4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220118124055.927605-1-xu.xin16@zte.com.cn>
+References: <20220118124055.927605-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clk-apple-nco driver and corresponding binding schema to MAINTAINERS.
+On Tue, 18 Jan 2022 12:40:55 +0000 cgel.zte@gmail.com wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> Different netns have different requirement on the setting of min_adv_mss
+> sysctl that the advertised MSS will be never lower than. The sysctl
+> min_adv_mss can indirectly affects the segmentation efficiency of TCP.
+> 
+> So enable min_adv_mss to be visible and configurable inside the netns.
+> 
+> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 
-Signed-off-by: Martin Povi=C5=A1er <povik+lin@protonmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+CGEL ZTE, whatever it is, is most definitely not a person so it can't
+sign off patches. Please stop adding the CGEL task, you can tell us
+what it stands for it you want us to suggest an alternative way of
+marking.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4e828542b089..9b6585717627 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1765,6 +1765,7 @@ C:        irc://irc.oftc.net/asahi-dev
- T:     git https://github.com/AsahiLinux/linux.git
- F:     Documentation/devicetree/bindings/arm/apple.yaml
- F:     Documentation/devicetree/bindings/arm/apple/*
-+F:     Documentation/devicetree/bindings/clock/apple,nco.yaml
- F:     Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- F:     Documentation/devicetree/bindings/interrupt-controller/apple,aic.ya=
-ml
- F:     Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
-@@ -1773,6 +1774,7 @@ F:        Documentation/devicetree/bindings/pinctrl/a=
-pple,pinctrl.yaml
- F:     Documentation/devicetree/bindings/power/apple*
- F:     Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:     arch/arm64/boot/dts/apple/
-+F:     drivers/clk/clk-apple-nco.c
- F:     drivers/i2c/busses/i2c-pasemi-core.c
- F:     drivers/i2c/busses/i2c-pasemi-platform.c
- F:     drivers/irqchip/irq-apple-aic.c
---
-2.33.0
+As for the patch:
 
+# Form letter - net-next is closed
 
+We have already sent the networking pull request for 5.17
+and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
+
+Please repost when net-next reopens after 5.17-rc1 is cut.
+
+Look out for the announcement on the mailing list or check:
+http://vger.kernel.org/~davem/net-next.html
+
+RFC patches sent for review only are obviously welcome at any time.

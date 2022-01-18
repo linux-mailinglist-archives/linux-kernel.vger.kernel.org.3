@@ -2,193 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA5549210D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FD0492113
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiARISx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:18:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1038 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231218AbiARISw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:18:52 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20I6Qrqh016440;
-        Tue, 18 Jan 2022 08:18:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ViqkJtmDnxe4El0ZsPaatK607nUr+I3f9GvrrJSBpYQ=;
- b=B4K62Ngai+9DugK4xmzB9uyvhCTTyPP0vCttOUnnHnrT+7aVKhuUXqSlC+dhy7dssS0b
- aXJHijttMciJZ6/pYyr0GTLLRe0xrTFSbGtWr1s9x92Wu2pwenw3rrx+rnKkt1wmaSrG
- Kx7g9hIWk4N6/QrSN/faMtXTLLKas7EmuhT5ikMoXc4l1+XBTDJcBKtV9t5QjuBWS9E/
- 95Z+34Ue8hd3+RNzPZeyLUh2YxGqcAhmEDRNjIxnMWYRB/dSK1KdLGRwL1Z8u+eAV+fq
- +dNQzXHOvEPi4UiR54ILVlvunohPdis5xxB7J5tLYfBGK5iDpLOHFJlThUlIAPC70q7e nw== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnr9sjhk1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 08:18:47 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20I8HE1g032636;
-        Tue, 18 Jan 2022 08:18:44 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3dnm6r1ugd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 08:18:44 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20I8Ifur40567110
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 08:18:41 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 79E614C04E;
-        Tue, 18 Jan 2022 08:18:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A95184C044;
-        Tue, 18 Jan 2022 08:18:40 +0000 (GMT)
-Received: from [9.171.19.84] (unknown [9.171.19.84])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 08:18:40 +0000 (GMT)
-Message-ID: <aef11e2f-2b92-e713-a407-3bebf9b3340d@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 09:18:40 +0100
+        id S1344064AbiARIWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:22:02 -0500
+Received: from mout.gmx.net ([212.227.15.19]:39811 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343729AbiARIV7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 03:21:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642494109;
+        bh=iEnrxoLs+M+Xhm5bqXFfPM9bJaACNANweZulGOVxe2s=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=it/n+Bu20A+rDNDARaFFa+TClsrGy3v7xNggTzObRv2hWXBJDaiS5QWdmqVX5CnEA
+         riJkhb7xVYVNa+VoRz2xhGni4zmOrFtS5R5N5C3yjt5YOONt86IfERImdTEruH1aR0
+         R8PbyBV1//daa3DnuVQYelqwCjUS6UdF1TbDj69k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.155.155]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtfJd-1mJpgI0h8p-00v9Bg; Tue, 18
+ Jan 2022 09:21:49 +0100
+Message-ID: <ebe9c076-e2a9-0cb7-eb6a-ae71c075975e@gmx.de>
+Date:   Tue, 18 Jan 2022 09:20:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH AUTOSEL 5.15 081/188] s390/nmi: add missing __pa/__va
- address conversion of extended save area
+ Thunderbird/91.3.0
 Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>, gor@linux.ibm.com,
-        egorenar@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, ebiederm@xmission.com,
-        valentin.schneider@arm.com, rppt@kernel.org, iii@linux.ibm.com,
-        linux-s390@vger.kernel.org
-References: <20220118023152.1948105-1-sashal@kernel.org>
- <20220118023152.1948105-81-sashal@kernel.org>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220118023152.1948105-81-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IR9tHnmbM_-1mAM8vTZ4Mx35-q-bZlbx
-X-Proofpoint-ORIG-GUID: IR9tHnmbM_-1mAM8vTZ4Mx35-q-bZlbx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_01,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 mlxscore=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 clxscore=1031
- bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180048
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+ <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
+ <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
+ <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
+ <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
+From:   Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+In-Reply-To: <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:prWw9Xzsb49CRbqWjcdFLIUei76xAcWz2JUkyRqfu6+rvcGmd7o
+ MpFTdhlErIj5qC+iOCYB7gLwlqvPwELibl4pUuPJK9rLPx2JJpeg+uJpUmbQUwDNbXZ5dNc
+ svt0Q1GTrGyNf7GrJCs5/9KQYDG41yqUF0RUd4crRs8DSoJ2gMW5AsMSFGR0Rrs27+kfAWN
+ rB88KhNOGtfKEk7RAh8QA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CprwXkI8ZOI=:TgwiIbvFKPZjAL3KebNfYh
+ 3KExnKEjR0oUcn7JWXiFZ+6gda2EkX20oih1TkXpdKQWCgyK/gFNWNVJrVUi97x7wlHCPKECn
+ vz2nO6Ee8htWmtmAbyJOJnZ9o9gy3YkekEbOuiFayEAjerZy+QT2pWhqiHo0Im8n73H9Q+rTN
+ xT6ZvDFJQi2cCpeUEkiro4ekhWlEtMGueN7ILWjFD0Ydgu0WfjIcI13nXzGUNqAN1wObOPXEe
+ kcfLBMrpiCBBB1i1ISNdgYyLNP74MwhikRDkfLev16OM6FcCp0qX4StpSKEEzTeQ98qDN0skn
+ u2gdNo2MyxWayMFrVzvvPysykU90bRPZjWcmqRCJCbiIaZKh98kU84CfdG2iP6LIpPnWzxHR5
+ KDunMMUm32ZAw+szYFtDnwAatJFRYA8CRuGJ76fsFvK+aYMrYrD0Q15MxyqJ5kb+2JkaMu070
+ LtdfjVZwr/CGCGYFea2xDHHiQPL4LTt5Nr6cAMz0XCV69rxRkhplrggGGpjWo1TA/xUhSix+W
+ aj632CRP/F4NL1v19yYP3gO2FZ7+4OWL6Ds6pEqhyKXVMfBSc+QP4x43Xv3vFCSbKwTdkzCHA
+ nRQ4pJ/Hp9c2BgXPtK7hJAdzznCweiktAeUjZvmbt6kIbKsTg7FypagkCwI6Ny6CsxeVIlyXw
+ 1OUCzQIns+TKzvJqMqQ+P/NaHgn3uz8wwAz83kr9xFoPL8eLB+xIbBDOUKkaIKwAyxPfzkFtV
+ XFIHGtOOQpk4R6V3nZK3nrP9COyyN2tWnfCDGvSF32Fu2biWIz1+cnOzyVtXE5/yeCpIP8i5v
+ 4yuyeAxu7Thkkztc6tPHpIKkSzqULxzUxtqViFsN7+x9OLez7PgRLZeYR0+MAWGWz/iVv+Niw
+ DXN+DoAGOay3BQolOA6THzysTCrFNZbkoNQO6oZd8cIvw0v7S9eGT13DXfXRvJQUzRn4LRW6Y
+ DOVVjjSXrrqfbQAjdlF7KZr1wyiwB/SdxcsbCk41Qc9T6FHYZLq/ZqRM+LiKcsUVYbMKe3ZD2
+ 12to/9cUh3FqkyrpuLn3IIXdMDR+ox9JxP/A8zWPxmCbjYdi7ZfX0D2zhb0EwPKpUXPnbMz1X
+ ABrSsl1epg843o=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.01.22 um 03:30 schrieb Sasha Levin:
-> From: Heiko Carstens <hca@linux.ibm.com>
-> 
-> [ Upstream commit 402ff5a3387dc8ec6987a80d3ce26b0c25773622 ]
-> 
-> Add missing __pa/__va address conversion of machine check extended
-> save area designation, which is an absolute address.
-> 
+On 1/18/22 07:29, Gerd Hoffmann wrote:
+>> Please correct me if I'm wrong, but text-console emulation/scrolling on=
+ DRM is
+>> currently unaccelerated and bound to Truecolour modes only,
+>
+> Yes.  Adding support for formats beside argb8888 to the drm fbcon
+> emulation shouldn't be that much of a problem though.
 
-vv
-> Note: this currently doesn't fix a real bug, since virtual addresses
-> are indentical to physical ones.
-^^
+Really? Assuming a graphic card which runs with only 256 colors framebuffe=
+r
+is easily supported by DRM, and you can use fbcon without using lots of me=
+mcpy()?
 
-Sasha,
-please note the disclaimer above. There will be plenty of such fixes
-in s390 code and there is no point in backporting single fixes to stable.
-It will provide no benefit on its own but adds a risk of regression.
+> Acceleration is harder.  The scroll acceleration had issues nobody
+> addressed for years, and on modern hardware it is simply not used, which
+> is probably the reason nobody stepped up fixing things and it ended up
+> being dropped.
 
+The DRM layer doesn't use scroll acceleration.
+More than 30 other existing fbdev drivers use it.
 
+> Bringing it back is much more work than just reverting the commits remov=
+ing it.
 
-> 
-> Reported-by: Vineeth Vijayan <vneethv@linux.ibm.com>
-> Tested-by: Vineeth Vijayan <vneethv@linux.ibm.com>
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/s390/kernel/machine_kexec.c |  2 +-
->   arch/s390/kernel/nmi.c           | 10 +++++-----
->   arch/s390/kernel/smp.c           |  2 +-
->   3 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/s390/kernel/machine_kexec.c b/arch/s390/kernel/machine_kexec.c
-> index 0505e55a62979..a16467b3825ec 100644
-> --- a/arch/s390/kernel/machine_kexec.c
-> +++ b/arch/s390/kernel/machine_kexec.c
-> @@ -86,7 +86,7 @@ static noinline void __machine_kdump(void *image)
->   			continue;
->   	}
->   	/* Store status of the boot CPU */
-> -	mcesa = (struct mcesa *)(S390_lowcore.mcesad & MCESA_ORIGIN_MASK);
-> +	mcesa = __va(S390_lowcore.mcesad & MCESA_ORIGIN_MASK);
->   	if (MACHINE_HAS_VX)
->   		save_vx_regs((__vector128 *) mcesa->vector_save_area);
->   	if (MACHINE_HAS_GS) {
-> diff --git a/arch/s390/kernel/nmi.c b/arch/s390/kernel/nmi.c
-> index 20f8e1868853f..3f18c1412eba3 100644
-> --- a/arch/s390/kernel/nmi.c
-> +++ b/arch/s390/kernel/nmi.c
-> @@ -68,7 +68,7 @@ void __init nmi_alloc_boot_cpu(struct lowcore *lc)
->   {
->   	if (!nmi_needs_mcesa())
->   		return;
-> -	lc->mcesad = (unsigned long) &boot_mcesa;
-> +	lc->mcesad = __pa(&boot_mcesa);
->   	if (MACHINE_HAS_GS)
->   		lc->mcesad |= ilog2(MCESA_MAX_SIZE);
->   }
-> @@ -94,7 +94,7 @@ static int __init nmi_init(void)
->   	__ctl_store(cr0, 0, 0);
->   	__ctl_clear_bit(0, 28); /* disable lowcore protection */
->   	/* Replace boot_mcesa on the boot CPU */
-> -	S390_lowcore.mcesad = origin | mcesa_origin_lc;
-> +	S390_lowcore.mcesad = __pa(origin) | mcesa_origin_lc;
->   	__ctl_load(cr0, 0, 0);
->   	return 0;
->   }
-> @@ -111,7 +111,7 @@ int nmi_alloc_per_cpu(struct lowcore *lc)
->   		return -ENOMEM;
->   	/* The pointer is stored with mcesa_bits ORed in */
->   	kmemleak_not_leak((void *) origin);
-> -	lc->mcesad = origin | mcesa_origin_lc;
-> +	lc->mcesad = __pa(origin) | mcesa_origin_lc;
->   	return 0;
->   }
->   
-> @@ -119,7 +119,7 @@ void nmi_free_per_cpu(struct lowcore *lc)
->   {
->   	if (!nmi_needs_mcesa())
->   		return;
-> -	kmem_cache_free(mcesa_cache, (void *)(lc->mcesad & MCESA_ORIGIN_MASK));
-> +	kmem_cache_free(mcesa_cache, __va(lc->mcesad & MCESA_ORIGIN_MASK));
->   }
->   
->   static notrace void s390_handle_damage(void)
-> @@ -246,7 +246,7 @@ static int notrace s390_validate_registers(union mci mci, int umode)
->   			: "Q" (S390_lowcore.fpt_creg_save_area));
->   	}
->   
-> -	mcesa = (struct mcesa *)(S390_lowcore.mcesad & MCESA_ORIGIN_MASK);
-> +	mcesa = __va(S390_lowcore.mcesad & MCESA_ORIGIN_MASK);
->   	if (!MACHINE_HAS_VX) {
->   		/* Validate floating point registers */
->   		asm volatile(
-> diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
-> index 1a04e5bdf6555..5c3d3d8f6b5d8 100644
-> --- a/arch/s390/kernel/smp.c
-> +++ b/arch/s390/kernel/smp.c
-> @@ -622,7 +622,7 @@ int smp_store_status(int cpu)
->   		return -EIO;
->   	if (!MACHINE_HAS_VX && !MACHINE_HAS_GS)
->   		return 0;
-> -	pa = __pa(lc->mcesad & MCESA_ORIGIN_MASK);
-> +	pa = lc->mcesad & MCESA_ORIGIN_MASK;
->   	if (MACHINE_HAS_GS)
->   		pa |= lc->mcesad & MCESA_LC_MASK;
->   	if (__pcpu_sigp_relax(pcpu->address, SIGP_STORE_ADDITIONAL_STATUS,
+Reverting those commits have no effect on DRM's usage of fbcon.
+But reverting those commits bring back scroll acceleration for all others.
+I'm trying to find out which patches did apparently fixed such issues
+for the REDRAW case. If you have a pointer it would be helpful.
+
+> Also note that using a shadow framebuffer allows to decouple fbcon
+> updates and scanout framebuffer updates.  Can be used to speed up
+> things without depending on the 2d blitter.
+
+Not on older hardware.
+
+Helge

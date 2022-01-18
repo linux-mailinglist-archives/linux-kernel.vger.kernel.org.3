@@ -2,323 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF86492742
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F52492749
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241937AbiARN2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 08:28:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57685 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240235AbiARN2s (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:28:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642512527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oEy4mSekqx1bwIqqVrDwu9nYXd87zuE1sTzu9aaRkiE=;
-        b=V4yFLoMmkDeOZw2qxpyGH3Td8MIAC9V2DSRWAsvHJ/2gB9X4JkHi8mczqUW89OYpYgUvjB
-        EJAWj6LLOB7pl+tG8uczjRzUm78CGHi5fiRoVJNCOOOiwvuL+0uAFru7wnXXKlLia7Epsl
-        Qp4qp9sv0dKahVOJ1+p0HmFXlDObelE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-rJ9_pt_aNRKtRNC7k1loLA-1; Tue, 18 Jan 2022 08:28:44 -0500
-X-MC-Unique: rJ9_pt_aNRKtRNC7k1loLA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21FB8100CCC3;
-        Tue, 18 Jan 2022 13:28:43 +0000 (UTC)
-Received: from T590 (ovpn-8-27.pek2.redhat.com [10.72.8.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1E7FA6A023;
-        Tue, 18 Jan 2022 13:28:36 +0000 (UTC)
-Date:   Tue, 18 Jan 2022 21:28:31 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     mkoutny@suse.com, paulmck@kernel.org, tj@kernel.org,
-        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <YebAf+wkTiCsMiE9@T590>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com>
- <Yd5FkuhYX9YcgQkZ@T590>
- <2221953d-be40-3433-d46c-f40acd044482@huawei.com>
- <CAFj5m9KmHB6FtUZ3E42BMZo+=aNNfn2bLu=kNhBOsRdxbfT6nw@mail.gmail.com>
- <c5d1d7b5-b815-0dda-b7d3-8151189a8203@huawei.com>
- <YeU1AmG4/2wXMgxh@T590>
- <e436c92b-efe2-1b18-38c7-f2850b55edef@huawei.com>
+        id S242288AbiARNdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 08:33:37 -0500
+Received: from mga17.intel.com ([192.55.52.151]:20237 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229659AbiARNdg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 08:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642512816; x=1674048816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r12jMZqW3/WnUriCyz5HZN5FFe5jtdoU3x0kjbYDskE=;
+  b=G68f3MLGTdNdm88aRRyVd9ID8cSTf4QpmOdxXX5YcoVYnurntZtoRuGr
+   BH8lUfNLDFNyxW79uNVKllXIArYnB6H12EyWitOnE5lRFGPugzw8FfnCr
+   ezAvh5OKk57BemsXP54eDs2XxsGUFYA1WGypq9JHK5b4rCJ6HDwI/d3eS
+   3U5bJ8GGKaMgEL05xzdZ6/xEowV8f8djWE0G6gZrGhobN52uwHG9ptMvI
+   bpABLbyvwiqNiMYv5FI55Ajas1rrY3dZXpiUSEYBuwGEObSLoYvjPCvHy
+   dsa0ydE02df2ejSY7BTjSClRDb8I6WwdJoOU4EjLgPVBqCQiLR0YKx9fY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="225492554"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208,223";a="225492554"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 05:33:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208,223";a="671839651"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Jan 2022 05:33:32 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 18 Jan 2022 15:33:31 +0200
+Date:   Tue, 18 Jan 2022 15:33:31 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org
+Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
+ the kernel stops loading on my devices.
+Message-ID: <YebBq/WDeYCIvwYw@kuha.fi.intel.com>
+References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
+ <YeUvvIaVJnJrrpYe@kuha.fi.intel.com>
+ <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
+ <YeVQsRp7aDMcQKs7@kuha.fi.intel.com>
+ <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+ <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com>
+ <CABXGCsOwsP7NJ67oyK3HPs2EarSJKLB9EVW7oEh+8bAFihSa8g@mail.gmail.com>
+ <Yea8p1b/sZYKNGaB@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/mixed; boundary="MxjOsjrC21eCMA0L"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e436c92b-efe2-1b18-38c7-f2850b55edef@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <Yea8p1b/sZYKNGaB@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 04:48:26PM +0800, yukuai (C) wrote:
-> 在 2022/01/17 17:21, Ming Lei 写道:
-> > On Fri, Jan 14, 2022 at 04:21:04PM +0800, yukuai (C) wrote:
-> > > 在 2022/01/14 11:05, Ming Lei 写道:
-> > > > On Thu, Jan 13, 2022 at 04:46:18PM +0800, yukuai (C) wrote:
-> > > > > 在 2022/01/12 11:05, Ming Lei 写道:
-> > > > > > Hello Yu Kuai,
-> > > > > > 
-> > > > > > On Mon, Jan 10, 2022 at 09:47:58PM +0800, Yu Kuai wrote:
-> > > > > > > Throttled bios can't be issued after del_gendisk() is done, thus
-> > > > > > > it's better to cancel them immediately rather than waiting for
-> > > > > > > throttle is done.
-> > > > > > > 
-> > > > > > > For example, if user thread is throttled with low bps while it's
-> > > > > > > issuing large io, and the device is deleted. The user thread will
-> > > > > > > wait for a long time for io to return.
-> > > > > > > 
-> > > > > > > Noted this patch is mainly from revertion of commit 32e3374304c7
-> > > > > > > ("blk-throttle: remove tg_drain_bios") and commit b77412372b68
-> > > > > > > ("blk-throttle: remove blk_throtl_drain").
-> > > > > > > 
-> > > > > > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> > > > > > > ---
-> > > > > > >     block/blk-throttle.c | 77 ++++++++++++++++++++++++++++++++++++++++++++
-> > > > > > >     block/blk-throttle.h |  2 ++
-> > > > > > >     block/genhd.c        |  2 ++
-> > > > > > >     3 files changed, 81 insertions(+)
-> > > > > > 
-> > > > > > Just wondering why not take the built-in way in throtl_upgrade_state() for
-> > > > > > canceling throttled bios? Something like the following, then we can avoid
-> > > > > > to re-invent the wheel.
-> > > > > > 
-> > > > > >     block/blk-throttle.c | 38 +++++++++++++++++++++++++++++++-------
-> > > > > >     block/blk-throttle.h |  2 ++
-> > > > > >     block/genhd.c        |  3 +++
-> > > > > >     3 files changed, 36 insertions(+), 7 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> > > > > > index cf7e20804f1b..17e56b2e44c4 100644
-> > > > > > --- a/block/blk-throttle.c
-> > > > > > +++ b/block/blk-throttle.c
-> > > > > > @@ -1816,16 +1816,11 @@ static void throtl_upgrade_check(struct throtl_grp *tg)
-> > > > > >               throtl_upgrade_state(tg->td);
-> > > > > >     }
-> > > > > > -static void throtl_upgrade_state(struct throtl_data *td)
-> > > > > > +static void __throtl_cancel_bios(struct throtl_data *td)
-> > > > > >     {
-> > > > > >       struct cgroup_subsys_state *pos_css;
-> > > > > >       struct blkcg_gq *blkg;
-> > > > > > -   throtl_log(&td->service_queue, "upgrade to max");
-> > > > > > -   td->limit_index = LIMIT_MAX;
-> > > > > > -   td->low_upgrade_time = jiffies;
-> > > > > > -   td->scale = 0;
-> > > > > > -   rcu_read_lock();
-> > > > > >       blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg) {
-> > > > > >               struct throtl_grp *tg = blkg_to_tg(blkg);
-> > > > > >               struct throtl_service_queue *sq = &tg->service_queue;
-> > > > > > @@ -1834,12 +1829,41 @@ static void throtl_upgrade_state(struct throtl_data *td)
-> > > > > >               throtl_select_dispatch(sq);
-> > > > > >               throtl_schedule_next_dispatch(sq, true);
-> > > > > Hi, Ming Lei
-> > > > > 
-> > > > > I'm confused that how can bios be canceled here?
-> > > > > tg->iops and tg->bps stay untouched, how can throttled bios
-> > > > > dispatch?
-> > > > 
-> > > > I thought that throttled bios will be canceled by 'tg->disptime = jiffies - 1;'
-> > > > and the following dispatch schedule.
-> > > > 
-> > > > But looks it isn't enough, since tg_update_disptime() updates
-> > > > ->disptime. However,
-> > > > this problem can be solved easily by not updating ->disptime in case that we are
-> > > > canceling.
-> > > > 
-> > > > > >       }
-> > > > > > -   rcu_read_unlock();
-> > > > > >       throtl_select_dispatch(&td->service_queue);
-> > > > > >       throtl_schedule_next_dispatch(&td->service_queue, true);
-> > > > > >       queue_work(kthrotld_workqueue, &td->dispatch_work);
-> > > > > >     }
-> > > > > > +void blk_throtl_cancel_bios(struct request_queue *q)
-> > > > > > +{
-> > > > > > +   struct cgroup_subsys_state *pos_css;
-> > > > > > +   struct blkcg_gq *blkg;
-> > > > > > +
-> > > > > > +   rcu_read_lock();
-> > > > > > +   spin_lock_irq(&q->queue_lock);
-> > > > > > +   __throtl_cancel_bios(q->td);
-> > > > > > +   spin_unlock_irq(&q->queue_lock);
-> > > > > > +   rcu_read_unlock();
-> > > > > > +
-> > > > > > +   blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg)
-> > > > > > +           del_timer_sync(&blkg_to_tg(blkg)->service_queue.pending_timer);
-> > > > > > +   del_timer_sync(&q->td->service_queue.pending_timer);
-> > > > > 
-> > > > > By the way, I think delete timer will end up io hung here if there are
-> > > > > some bios still be throttled.
-> > > > 
-> > > > Firstly ->queue_lock is held by blk_throtl_cancel_bios(), so no new bios
-> > > > will be throttled.
-> > > > 
-> > > > Also if we don't update ->disptime, any new bios throttled after releasing
-> > > > ->queue_lock will be dispatched soon.
-> > > 
-> > > Hi, Ming Lei
-> > > 
-> > > Just to be curiosity, I'm still trying to understand the logic here:
-> > > 
-> > > For example, if bps is set to 1k, and a io with size 16k is just
-> > > dispatched, then io throtle should wait for 16s untill new io can be
+
+--MxjOsjrC21eCMA0L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jan 18, 2022 at 03:12:10PM +0200, Heikki Krogerus wrote:
+> Hi Mikhail,
+> 
+> On Tue, Jan 18, 2022 at 04:26:27PM +0500, Mikhail Gavrilov wrote:
+> > On Mon, 17 Jan 2022 at 17:21, Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Have you modified the file, or something else that you have not
+> > > committed yet?
+> > >
+> > >         % git status
+> > >
+> > > Checkout the file, and then try to apply the patch:
+> > >
+> > >         % git checkout drivers/usb/typec/port-mapper.c
+> > >         % git apply -v 0001-usb-typec-Test-fix.patch
+> > >
 > > 
-> > There isn't such wait code in blk-throttle, and the magic is just in
-> > how to compute tg->disptime.
+> > I understood why the patch was not applied. The "Window line endings"
+> > in the attached file were.
 > > 
-> > > dispatched. (details in tg_with_in_bps_limit）.
-> > > 
-> > > How does such mechanism bypassed here?
+> > $ dos2unix 0001-usb-typec-Test-fix.patch
+> > dos2unix: converting file 0001-usb-typec-Test-fix.patch to Unix format...
+> > $ git apply -v 0001-usb-typec-Test-fix.patch
+> > Checking patch drivers/usb/typec/port-mapper.c...
+> > Applied patch drivers/usb/typec/port-mapper.c cleanly.
+> 
+> Oh, I'm sorry. Something corrupted the patch, which is a bit alarming,
+> but good that you managed to test it in any case.
+> 
+> > Unfortunately the attached patch didn't fix the issue.
 > > 
-> > The point is that tg->disptime is always set as one past time, so all
-> > throttled IOs will be dispatched immediately if ->disptime is older than
-> > jiffies, and I have verified that the following patch can work as expected.
-> > 
-> Hi, Ming Lei
+> >  BUG: kernel NULL pointer dereference, address: 0000000000000008
+> >  #PF: supervisor read access in kernel mode
+> >  #PF: error_code(0x0000) - not-present page
+> >  PGD 0 P4D 0
+> >  Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >  CPU: 10 PID: 459 Comm: kworker/10:2 Not tainted
+> > 5.16.0-patched-455e73a07f6e+ #26
+> >  Hardware name: ASUSTeK COMPUTER INC. ROG Strix G513QY_G513QY/G513QY,
+> > BIOS G513QY.316 11/29/2021
+> >  Workqueue: events_long ucsi_init_work [typec_ucsi]
+> >  RIP: 0010:component_master_add_with_match+0x14/0x110
+> >  Code: 72 d7 48 89 ef 5b 5d e9 1a 5c 9f ff 66 2e 0f 1f 84 00 00 00 00
+> > 00 0f 1f 44 00 00 41 55 49 89 fd 41 54 49 89 f4 55 53 48 89 d3 <48> 8b
+> > 72 08 48 3b 32 74 10 48 89 d7 e8 4b fd ff ff 85 c0 0f 85 bb
+> >  RSP: 0018:ffffba4581837d90 EFLAGS: 00010282
+> >  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> >  RDX: 0000000000000000 RSI: ffffffffc04f58d0 RDI: ffff9c5afe43a808
+> >  RBP: ffff9c5a81076358 R08: 0000000000000001 R09: 0000000000000001
+> >  R10: 0000000000000001 R11: 0000000000000000 R12: ffffffffc04f58d0
+> >  R13: ffff9c5afe43a808 R14: ffff9c5afe43a808 R15: ffff9c5a832c4010
+> >  FS:  0000000000000000(0000) GS:ffff9c5d88a00000(0000) knlGS:0000000000000000
+> >  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >  CR2: 0000000000000008 CR3: 00000002e5028000 CR4: 0000000000750ee0
+> >  PKRU: 55555554
+> >  Call Trace:
+> >   <TASK>
+> >   typec_link_ports+0x5d/0x70 [typec]
+> >   typec_register_port+0x1e6/0x2e0 [typec]
+> >   ucsi_init_work+0x463/0x840 [typec_ucsi]
+> >   process_one_work+0x2bb/0x600
+> >   worker_thread+0x55/0x3b0
+> >   ? process_one_work+0x600/0x600
+> >   kthread+0x17c/0x1a0
+> >   ? set_kthread_struct+0x40/0x40
+> >   ret_from_fork+0x22/0x30
+> >   </TASK>
 > 
-> I'm not sure about the logic here yet, however, I tried the following
-
-I believe I have explained the theory already, here we just miss to
-patch tg_may_dispatch(), then CPU is spinning in
-throtl_pending_timer_fn() until tg_may_dispatch() becomes true.
-
-> patch, and the patch doesn't work as expected in my case:
+> This is not the same issue, this is another bug :-(. The original
+> issue does seem to be fixed.
 > 
-> 1. limit bps to 1k
-> 2. issue io with bs=16k
-> 
-> In this workload, each io will wait for 16s to complete.
-> 
-> 3. when an io is just completed, delete the device
-> 
-> After this is done, what I expected is that the user thread will exit
-> immediately(with io error), however, with this patch applied, the user
-> thread will wait for about 16s to exit, which is the same without this
-> patch.
+> I can reproduce this one by simply not creating the component list in
+> the code. That function - component_master_add_with_match() - can't
+> handle situation where the list is empty. I'll prepare the fix.
 
-Please try the revised patch, which can return immediately after
-deleting the disk.
+I'm again attaching the proposed fix, just to see if it also gets
+corrupted. Can you test does it fix this issue?
+You need to apply it on top of the previous one.
+
+thanks,
+
+-- 
+heikki
+
+--MxjOsjrC21eCMA0L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-usb-typec-Don-t-try-to-register-component-master-wit.patch"
+
+From acae81528b4c2bd0b461a4c3bd66b9df10947ac9 Mon Sep 17 00:00:00 2001
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Date: Tue, 18 Jan 2022 16:15:37 +0300
+Subject: [PATCH] usb: typec: Don't try to register component master without
+ components
+
+This fixes NULL pointer dereference that happens if
+component master is registered with empty component match
+list.
+
+Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Fixes: 730b49aac426 ("usb: typec: port-mapper: Convert to the component framework")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/port-mapper.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
+index b6e0c6acc628c..a7d507802509f 100644
+--- a/drivers/usb/typec/port-mapper.c
++++ b/drivers/usb/typec/port-mapper.c
+@@ -60,6 +60,8 @@ int typec_link_ports(struct typec_port *con)
+ 		return 0;
+ 
+ 	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
++	if (!arg.match)
++		return 0;
+ 
+ 	/*
+ 	 * REVISIT: Now each connector can have only a single component master.
+-- 
+2.34.1
 
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 7c462c006b26..912ba25839f2 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -45,6 +45,7 @@ static struct workqueue_struct *kthrotld_workqueue;
- enum tg_state_flags {
- 	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
- 	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
-+	THROTL_TG_CANCELING	= 1 << 2,	/* starts to cancel all bios */
- };
- 
- #define rb_entry_tg(node)	rb_entry((node), struct throtl_grp, rb_node)
-@@ -870,8 +871,9 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
- 	BUG_ON(tg->service_queue.nr_queued[rw] &&
- 	       bio != throtl_peek_queued(&tg->service_queue.queued[rw]));
- 
--	/* If tg->bps = -1, then BW is unlimited */
--	if (bps_limit == U64_MAX && iops_limit == UINT_MAX) {
-+	/* If tg->bps = -1 or we are canceling bios, then BW is unlimited */
-+	if ((bps_limit == U64_MAX && iops_limit == UINT_MAX) ||
-+			(tg->flags & THROTL_TG_CANCELING)) {
- 		if (wait)
- 			*wait = 0;
- 		return true;
-@@ -974,6 +976,9 @@ static void tg_update_disptime(struct throtl_grp *tg)
- 	unsigned long read_wait = -1, write_wait = -1, min_wait = -1, disptime;
- 	struct bio *bio;
- 
-+	if (tg->flags & THROTL_TG_CANCELING)
-+		goto update;
-+
- 	bio = throtl_peek_queued(&sq->queued[READ]);
- 	if (bio)
- 		tg_may_dispatch(tg, bio, &read_wait);
-@@ -983,6 +988,7 @@ static void tg_update_disptime(struct throtl_grp *tg)
- 		tg_may_dispatch(tg, bio, &write_wait);
- 
- 	min_wait = min(read_wait, write_wait);
-+update:
- 	disptime = jiffies + min_wait;
- 
- 	/* Update dispatch time */
-@@ -1836,6 +1842,25 @@ static void throtl_upgrade_state(struct throtl_data *td)
- 	queue_work(kthrotld_workqueue, &td->dispatch_work);
- }
- 
-+void blk_throtl_cancel_bios(struct request_queue *q)
-+{
-+	struct cgroup_subsys_state *pos_css;
-+	struct blkcg_gq *blkg;
-+
-+	rcu_read_lock();
-+	spin_lock_irq(&q->queue_lock);
-+	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
-+		struct throtl_grp *tg = blkg_to_tg(blkg);
-+		struct throtl_service_queue *sq = &tg->service_queue;
-+
-+		tg->disptime = jiffies - 1;
-+		blkg_to_tg(blkg)->flags |= THROTL_TG_CANCELING;
-+		throtl_schedule_pending_timer(sq, jiffies + 1);
-+	}
-+	spin_unlock_irq(&q->queue_lock);
-+	rcu_read_unlock();
-+}
-+
- static void throtl_downgrade_state(struct throtl_data *td)
- {
- 	td->scale /= 2;
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index 175f03abd9e4..b412a4d7cc1e 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -160,12 +160,14 @@ static inline void blk_throtl_exit(struct request_queue *q) { }
- static inline void blk_throtl_register_queue(struct request_queue *q) { }
- static inline void blk_throtl_charge_bio_split(struct bio *bio) { }
- static inline bool blk_throtl_bio(struct bio *bio) { return false; }
-+static inline void blk_throtl_cancel_bios(struct request_queue *q) {}
- #else /* CONFIG_BLK_DEV_THROTTLING */
- int blk_throtl_init(struct request_queue *q);
- void blk_throtl_exit(struct request_queue *q);
- void blk_throtl_register_queue(struct request_queue *q);
- void blk_throtl_charge_bio_split(struct bio *bio);
- bool __blk_throtl_bio(struct bio *bio);
-+void blk_throtl_cancel_bios(struct request_queue *q);
- static inline bool blk_throtl_bio(struct bio *bio)
- {
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
-diff --git a/block/genhd.c b/block/genhd.c
-index f7577dde18fc..a32d48b87223 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -29,6 +29,7 @@
- 
- #include "blk.h"
- #include "blk-mq-sched.h"
-+#include "blk-throttle.h"
- 
- static struct kobject *block_depr;
- 
-@@ -576,6 +577,8 @@ void del_gendisk(struct gendisk *disk)
- 	blk_integrity_del(disk);
- 	disk_del_events(disk);
- 
-+	blk_throtl_cancel_bios(disk->queue);
-+
- 	mutex_lock(&disk->open_mutex);
- 	remove_inode_hash(disk->part0->bd_inode);
- 	blk_drop_partitions(disk);
-
-Thanks, 
-Ming
-
+--MxjOsjrC21eCMA0L--

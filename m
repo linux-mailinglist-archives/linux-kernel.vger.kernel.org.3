@@ -2,78 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D695A492C05
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B823492C0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347055AbiARRLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:11:55 -0500
-Received: from mga11.intel.com ([192.55.52.93]:13488 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346947AbiARRLw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:11:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642525911; x=1674061911;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=2AX5z3CbkJRVb4Ql9dSq/ITQ6aTiN9iCy/YMAWKIyy0=;
-  b=aoxbU5kiAqJuqohk/w0l2GyhUXNTb0L12M1XLnvgf3hwZyztDWJnI3rc
-   64VKqiyYBPiu3xWRXzqlE7ycOFg2vJaEL+Asx+HesIBSeKF+qvgB0HcfX
-   PCa8EdXZAbyPkrlQZ1K8wPTSVShxUnQn+vxNyUX/0bFCEFzhs1ouE5LAg
-   0Yt8PD9/r4+iuIbBaYJjL6o3UhYuT1h5OVYE/1y9c9qF2oxzCckAEHke5
-   sFvpeUpUS+ZYHVGgrj76tiaEbNVaEROU/xcQifzoxP6XxEzPZ6BDCoGKO
-   A5tSKvTPbUjBS0G7kxUP643u6z5/wtsAVseC0atxoYTUkYR4x/i0VqzLl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="242428620"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="242428620"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 09:11:50 -0800
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="764653361"
-Received: from ssrikan2-mobl2.amr.corp.intel.com (HELO [10.209.52.128]) ([10.209.52.128])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 09:11:50 -0800
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Liu <jing2.liu@intel.com>, linux-kernel@vger.kernel.org,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>
-References: <20220117062344.58862-1-likexu@tencent.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/cpufeatures: Move the definition of X86_FEATURE_AMX_*
- to the word 18
-Message-ID: <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
-Date:   Tue, 18 Jan 2022 09:11:47 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1347068AbiARRMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:12:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42469 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346919AbiARRMY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:12:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642525943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CTFcvZshGd418XxQ4f5JMIidhKASZvElX59Zaynhob4=;
+        b=IzRuYszDk6bzRAFOmBMimVyHJg32yzafGC2S4QD1H1+OrAMR80i+pTw7ZUVfZ0TwNmciMd
+        h7KWqptZWJI2yg7bGxN7lijws9KL7MtlrIeeGmR66syznWJaxMymUUInFMZAX4oubeMCFO
+        CGCCgE/z259F+UQFG2dvGzxy2v/cOWM=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-UkGwWek1PeyuKpnP7-gZbQ-1; Tue, 18 Jan 2022 12:12:19 -0500
+X-MC-Unique: UkGwWek1PeyuKpnP7-gZbQ-1
+Received: by mail-ed1-f69.google.com with SMTP id bs4-20020a056402304400b004032af6b7ebso4367045edb.16
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:12:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CTFcvZshGd418XxQ4f5JMIidhKASZvElX59Zaynhob4=;
+        b=NSBScL9owDL3R+gYbtY6VTXEvjQk7KTcxgFXWw5SgaJ3CpFgdHCrAVFZzTgL+csO8j
+         PHQDdJ5w182guGcG7spgFXpQayxlhVV1oRexAB8tcKTDQ/S7tEuzxWSCNWOWOmeIhsT1
+         oKzxmIX3WwrhIBLPWwCxGvjs8jfaCv6enfbRWjjSOynW07muA1+8Cu5GlFTFf2dqY72x
+         fnz2rBHXMVWXd6e9vU2gV4ClJWeReNaFoCviGc4Vr2SjdJAKIowo2YFDMDrZjcI9lzRs
+         MaGQytoBcM3uVyqD97OhysFEG6fakvNEQ89hLb2bWsp0aX5CPOG7ylQJVNV0H/QL6Je9
+         VjQg==
+X-Gm-Message-State: AOAM532wvexYmg7RJPt3IEB8ifyZodCWyc+YuxSV8x9Ccoy4qPyJKiS/
+        qcZo5uF6FSS2cMkq+SDIGADNQZtmax5+kNk6OXt3neu4Y6Vq3NfmNlALHE9LRublr8S6can6GBz
+        0LgTUP2pXhn6UYJQuhe+MYyeA
+X-Received: by 2002:a17:906:9746:: with SMTP id o6mr20727222ejy.112.1642525937917;
+        Tue, 18 Jan 2022 09:12:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwljlno0wVWgKk1pGv+IEFTQBr9kKOJljcK59bCW2njywhQcJtIwVh22D7avYUEqToB1+2oCw==
+X-Received: by 2002:a17:906:9746:: with SMTP id o6mr20727210ejy.112.1642525937722;
+        Tue, 18 Jan 2022 09:12:17 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id 16sm5601542ejx.149.2022.01.18.09.12.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 09:12:17 -0800 (PST)
+Message-ID: <4a87b289-05a7-8247-9529-a8148924a7c5@redhat.com>
+Date:   Tue, 18 Jan 2022 18:12:14 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220117062344.58862-1-likexu@tencent.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 0/4] KVM: x86: Partially allow KVM_SET_CPUID{,2} after
+ KVM_RUN for CPU hotplug
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Igor Mammedov <imammedo@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+References: <20220117150542.2176196-1-vkuznets@redhat.com>
+ <20220118153531.11e73048@redhat.com>
+ <498eb39c-c50a-afef-4d46-5c6753489d7e@redhat.com>
+ <YebwkcAgszlyTzJ+@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YebwkcAgszlyTzJ+@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-What tree is this against?  I see BF16 and INT8 in some old versions of
-Chang's patches, but not current kernels.  All I see right now in
-tip/master is:
+On 1/18/22 17:53, Sean Christopherson wrote:
+>>
+>> and I think we should redo all or most of kvm_update_cpuid_runtime
+>> the same way.
+> Please no.  xstate_required_size() requires multiple host CPUID calls, and glibc
+> does CPUID.0xD.0x0 and CPUID.0xD.0x1 as part of its initialization, i.e. launching
+> a new userspace process in the guest will see additional performance overhread due
+> to KVM dynamically computing the XSAVE size instead of caching it based on vCPU
+> state.  Nested virtualization would be especially painful as every one of those
+> "host" CPUID invocations will trigger and exit from L1=>L0.
+> 
 
-> #define X86_FEATURE_AMX_TILE            (18*32+24) /* AMX tile ...
+Agreed, but all of the required data is by Linux cached in 
+xstate_offsets, xstate_sizes and xstate_comp_offsets; moving 
+xstate_required_size to xstate.c and skipping the host CPUID would 
+probably be a good idea nevertheless.
 
-It's still in the wrong spot, but the other two features aren't there.
-
-> We have defined the word 18 for Intel-defined CPU features from CPUID level> 0x00000007:0 (EDX). Let's move the definitions of X86_FEATURE_AMX_* to
-the> right entry to prevent misinterpretation. No functional change
-intended.
-Please, no "we's" in changelogs.  Don't say, "let's move".  Just say:
-"Move..."
-
-The subject could probably also be trimmed a bit.  Perhaps:
-
-	x86/cpu: Move AMX CPU feature defines to correct word location
-
+Paolo
 

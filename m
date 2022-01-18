@@ -2,172 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45423492948
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EA449294F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345321AbiARPCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:02:14 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:35652 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345850AbiARPB0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:01:26 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1n9pyn-00084x-Lw; Tue, 18 Jan 2022 16:01:01 +0100
-Message-ID: <010ef70c-31a2-2831-a2a7-950db14baf23@maciej.szmigiero.name>
-Date:   Tue, 18 Jan 2022 16:00:55 +0100
+        id S1346093AbiARPCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:02:18 -0500
+Received: from ip-94-112-206-30.net.upcbroadband.cz ([94.112.206.30]:49272
+        "EHLO ixit.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345950AbiARPBy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:01:54 -0500
+Received: from [10.0.0.139] (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 1EB272005E;
+        Tue, 18 Jan 2022 16:01:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1642518107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mNusQwiI8GcX+4JOHZXHVMrQQalF8f+joTR1dl9wdAI=;
+        b=J5axomeaNDvt65zgkc21EkHB3WGiFZrzLz0Ax1DMwiR2UmkZ0hkLk2emRiHZMqXzuH/Zj0
+        mcg546+l6U+HcJ7ZtCKSrOQOhxcqG7C9begla7mvThTZFw8hYmsIp5EX/ZAksV8pZX4F7w
+        AmwjEXaX7QothkMfEq0RP04RPSf3OuM=
+Date:   Tue, 18 Jan 2022 16:01:42 +0100
+From:   David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH v4] dt-bindings: misc: fastrpc convert bindings to yaml
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <U2VW5R.K2NKZT1MORH03@ixit.cz>
+In-Reply-To: <7A333484-F1D4-4D0E-97D5-6A40DEC44BFE@ixit.cz>
+References: <20211208101508.24582-1-david@ixit.cz>
+        <YbPIM9OXyuU5hfHY@robh.at.kernel.org>
+        <7A333484-F1D4-4D0E-97D5-6A40DEC44BFE@ixit.cz>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Nikunj A Dadhania <nikunj@amd.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-7-nikunj@amd.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
- sev_launch_update_data()
-In-Reply-To: <20220118110621.62462-7-nikunj@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikunj,
+Should I pick different approach or keeping additionalProperties: true 
+is suitable solution in this situation?
 
-On 18.01.2022 12:06, Nikunj A Dadhania wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
+Thanks
+David Heidelberg
+
+On Sun, Dec 12 2021 at 13:03:40 +0000, David Heidelberg <david@ixit.cz> 
+wrote:
+> Well, since this is a subnode, some nodes are not converted yet and 
+> at least know it'll bash about iommus, qcom,glink-channels and 
+> qcom,smd-channels. I can change it to false, bit it'll print these 
+> additional warnings, until other binding don't get converted.
 > 
-> Pin the memory for the data being passed to launch_update_data()
-> because it gets encrypted before the guest is first run and must
-> not be moved which would corrupt it.
+> David
 > 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
->    * Updated sev_pin_memory_in_mmu() error handling.
->    * As pinning/unpining pages is handled within MMU, removed
->      {get,put}_user(). ]
-> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> ---
->   arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 119 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 14aeccfc500b..1ae714e83a3c 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -22,6 +22,7 @@
->   #include <asm/trapnr.h>
->   #include <asm/fpu/xcr.h>
->   
-> +#include "mmu.h"
->   #include "x86.h"
->   #include "svm.h"
->   #include "svm_ops.h"
-> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
->   	return pages;
->   }
->   
-> +#define SEV_PFERR_RO (PFERR_USER_MASK)
-> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
-> +
-> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
-> +					      unsigned long hva)
-> +{
-> +	struct kvm_memslots *slots = kvm_memslots(kvm);
-> +	struct kvm_memory_slot *memslot;
-> +	int bkt;
-> +
-> +	kvm_for_each_memslot(memslot, bkt, slots) {
-> +		if (hva >= memslot->userspace_addr &&
-> +		    hva < memslot->userspace_addr +
-> +		    (memslot->npages << PAGE_SHIFT))
-> +			return memslot;
-> +	}
-> +
-> +	return NULL;
-> +}
+>>  +    required:
+>>  +      - compatible
+>>  +      - reg
+>>  +
+>>  +    additionalProperties: true
+> 
+> Why? What other properties are present.
+> 
+>>  +
+>>  +required:
+>>  +  - compatible
+>>  +  - label
+>>  +  - '#address-cells'
+>>  +  - '#size-cells'
+>>  +
+>>  +additionalProperties: true
+> 
+> Why? What other properties are present. This is generally never 
+> correct.
+> 
+> Rob
+> 
 
-We have kvm_for_each_memslot_in_hva_range() now, please don't do a linear
-search through memslots.
-You might need to move the aforementioned macro from kvm_main.c to some
-header file, though.
 
-> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
-> +{
-> +	struct kvm_memory_slot *memslot;
-> +	gpa_t gpa_offset;
-> +
-> +	memslot = hva_to_memslot(kvm, hva);
-> +	if (!memslot)
-> +		return UNMAPPED_GVA;
-> +
-> +	*ro = !!(memslot->flags & KVM_MEM_READONLY);
-> +	gpa_offset = hva - memslot->userspace_addr;
-> +	return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
-> +}
-> +
-> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
-> +					   unsigned long size,
-> +					   unsigned long *npages)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct kvm_vcpu *vcpu;
-> +	struct page **pages;
-> +	unsigned long i;
-> +	u32 error_code;
-> +	kvm_pfn_t pfn;
-> +	int idx, ret = 0;
-> +	gpa_t gpa;
-> +	bool ro;
-> +
-> +	pages = sev_alloc_pages(sev, addr, size, npages);
-> +	if (IS_ERR(pages))
-> +		return pages;
-> +
-> +	vcpu = kvm_get_vcpu(kvm, 0);
-> +	if (mutex_lock_killable(&vcpu->mutex)) {
-> +		kvfree(pages);
-> +		return ERR_PTR(-EINTR);
-> +	}
-> +
-> +	vcpu_load(vcpu);
-> +	idx = srcu_read_lock(&kvm->srcu);
-> +
-> +	kvm_mmu_load(vcpu);
-> +
-> +	for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
-> +		if (signal_pending(current)) {
-> +			ret = -ERESTARTSYS;
-> +			break;
-> +		}
-> +
-> +		if (need_resched())
-> +			cond_resched();
-> +
-> +		gpa = hva_to_gpa(kvm, addr, &ro);
-> +		if (gpa == UNMAPPED_GVA) {
-> +			ret = -EFAULT;
-> +			break;
-> +		}
-
-This function is going to have worst case O(n²) complexity if called with
-the whole VM memory (or O(n * log(n)) when hva_to_memslot() is modified
-to use kvm_for_each_memslot_in_hva_range()).
-
-That's really bad for something that can be done in O(n) time - look how
-kvm_for_each_memslot_in_gfn_range() does it over gfns.
-
-Thanks,
-Maciej

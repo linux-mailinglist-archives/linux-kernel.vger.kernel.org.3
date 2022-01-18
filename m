@@ -2,180 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C46492855
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAFD49285D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245344AbiAROZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:25:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52422 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233969AbiAROZb (ORCPT
+        id S245504AbiARO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233969AbiARO2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:25:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642515930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N0j/fQ4PflVYGPy/bLo8LyJo0AEkhVcyeqzgco+GTv8=;
-        b=VF8b9qOtBTViUT6+Slp36CzezAcdTXWL4olQown8KqKoP8K6N8gehy6fRjSepVu8G/p9JY
-        WsKdYZUwgHcGXSGHu3hbfxteNvpimitwxLCtdGyGXYg4inQ8JfdeDozdqAtEWUfnUeoADL
-        ltRSI3JuA1tBw8a50y2kPixXvjY2Lo8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-570-JSLZuKm6OPmWEa-XEdhMsA-1; Tue, 18 Jan 2022 09:25:29 -0500
-X-MC-Unique: JSLZuKm6OPmWEa-XEdhMsA-1
-Received: by mail-ed1-f71.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so6031381edb.22
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:25:29 -0800 (PST)
+        Tue, 18 Jan 2022 09:28:11 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DBEC06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:28:11 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id bb37so1044907oib.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0fkJsmeB7165f0SJ65+JtHacZHTvcYLO9yyJUgbHYpo=;
+        b=BdcgUkDj8SdYSXsSJgPL3zm43cFGei5vVUZOKBAg0Rqt+mgB1Aw4bn9q0sffU8VF8v
+         QzD6PwcTCmg3kp+nK8HVxFAO17Tdb4MP+EhOTCiApXy0ONIbFmITQGp7qsjPjswljTDu
+         iIpUHaLSBf5aeqD7fR6y2nXFMv2JwZakNy15X8WbgUMor3fPfQcpiwSupIlZMDavdsBy
+         vS5nKVco4rmJH7f+8XbFQwCuUWD0YWGgJ2mpPbSwheCSnHb8phHbgvrlHaHk1je/Izd5
+         dqpTmDmg/mfCSDYRQR9jVdgfHl/F1i8TegoJC0OINDPfzvHcyN1ksqfafBX4mWzrnSPI
+         +lyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N0j/fQ4PflVYGPy/bLo8LyJo0AEkhVcyeqzgco+GTv8=;
-        b=2/p0K361DMZ7Ut9BAx0Ewl38aNjmGXapHBf9fjbOvUAXh3Ev2ZQPwhd1ct63wEEc4v
-         LauAuyeQRw1YACSkg7a6batBqOWNP/L3OdjQ+pEF4abmV40vFSRrPHtyAKeTwk0c/opY
-         MBEwDzjt0Oi9Q2DB/Hr8250FKUoXcXb4WbQyt5Z27o4BBUNpXu6tuYu45KvL4NEW/CWd
-         qyzvuJf4Ul9Dk1Z8Qh0hieccMpBwHhnzd2FlnD9yWsKhchj2xFZw50qsjlrO5DSGiiD5
-         JW29ep7EI7e4voJ0+8n2bxcUjPOWwRxsfE4+M45V3AZTCeczysMGAqPyVW05tYl3AfNB
-         SPOA==
-X-Gm-Message-State: AOAM533INEhh8AyNx0nYsHF8XWjx7VnHJojvfGfOt3MzQ8st76g73kAS
-        G5QClCTes5fyV5JmG1StoMNTGGb232Kvi/fW9G9Yq+kQt4CgdYID1EXytQWAidsWu+62MHSyj3c
-        CXcqz1+dVU26p3GKyUnCFRCvQ
-X-Received: by 2002:a17:907:6d22:: with SMTP id sa34mr19840876ejc.635.1642515928025;
-        Tue, 18 Jan 2022 06:25:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxt7mNYuWcPmCyBDWs9bQTDMSJk3irHRnoPYop007C8xxpW8ahyJvriCHSEP50GE/m7CBOxBQ==
-X-Received: by 2002:a17:907:6d22:: with SMTP id sa34mr19840848ejc.635.1642515927724;
-        Tue, 18 Jan 2022 06:25:27 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id cw6sm7205493edb.11.2022.01.18.06.25.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0fkJsmeB7165f0SJ65+JtHacZHTvcYLO9yyJUgbHYpo=;
+        b=HUlK5crmK0A6B52zjidGIMdiyoeNuH/vxvij07/3+l/wHIOcpVl7CVIRWeld8OKGGO
+         mMwfJBAMcFxhR1r4Tv1tZv6Xz0+YxbnazzzdBO7xcixyRUqh0Dzqr9lU1LH+AJkFKN/9
+         3rt2PEcU2jv6yzgDh1J52E3tTjB+H5E2eEhHlIr+vcb3wTgK6uYhbtsjT9LVaWLwG+Sc
+         dzQ53xeTFSyhiMQYS1qydy5UFXawYSNtyL4eJ9bAMl/k6j1IQrU648p+1pW5+ds7l3U7
+         528jmRy/PrpAcC5SsVqvVvO4QVJOIv+8pyUNRt8A9Nvoq16mYW8JFimyxgBIX2Nlky6M
+         G07A==
+X-Gm-Message-State: AOAM53216ar5iKwm8qiHBSlrHKgUFWjzlShO6RZ1sXBOR+LNxn9N10du
+        epQq9+v7n6eNuL3nyzdVb+LWUw==
+X-Google-Smtp-Source: ABdhPJwG70L6WOC4NLSIi6zQrjbwiaKOI6CLkQeMbsIFP1dM7e3U9RPC+GHM028Q2rQDPmlE9afwjg==
+X-Received: by 2002:a54:4e8c:: with SMTP id c12mr26670097oiy.65.1642516091047;
+        Tue, 18 Jan 2022 06:28:11 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id d12sm6335477otl.80.2022.01.18.06.28.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 06:25:27 -0800 (PST)
-Date:   Tue, 18 Jan 2022 15:25:25 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
- probe
-Message-ID: <YebN1TIRxMX0sgs4@krava>
-References: <164199616622.1247129.783024987490980883.stgit@devnote2>
- <Yd77SYWgtrkhFIYz@krava>
- <YeAatqQTKsrxmUkS@krava>
- <20220115135219.64ef1cc6482d5de8a3bce9b0@kernel.org>
+        Tue, 18 Jan 2022 06:28:10 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>
+Subject: [GIT PULL] hwspinlock updates for v5.17
+Date:   Tue, 18 Jan 2022 08:28:09 -0600
+Message-Id: <20220118142809.1751011-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220115135219.64ef1cc6482d5de8a3bce9b0@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 01:52:19PM +0900, Masami Hiramatsu wrote:
-> On Thu, 13 Jan 2022 13:27:34 +0100
-> Jiri Olsa <jolsa@redhat.com> wrote:
-> 
-> > On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
-> > > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
-> > > > Hi Jiri and Alexei,
-> > > > 
-> > > > Here is the 2nd version of fprobe. This version uses the
-> > > > ftrace_set_filter_ips() for reducing the registering overhead.
-> > > > Note that this also drops per-probe point private data, which
-> > > > is not used anyway.
-> > > > 
-> > > > This introduces the fprobe, the function entry/exit probe with
-> > > > multiple probe point support. This also introduces the rethook
-> > > > for hooking function return as same as kretprobe does. This
-> > > 
-> > > nice, I was going through the multi-user-graph support 
-> > > and was wondering that this might be a better way
-> > > 
-> > > > abstraction will help us to generalize the fgraph tracer,
-> > > > because we can just switch it from rethook in fprobe, depending
-> > > > on the kernel configuration.
-> > > > 
-> > > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
-> > > > patches will not be affected by this change.
-> > > 
-> > > I'll try the bpf selftests on top of this
-> > 
-> > I'm getting crash and stall when running bpf selftests,
-> > the fprobe sample module works fine, I'll check on that
-> 
-> OK, I got a kernel stall. I missed to enable CONFIG_FPROBE.
-> I think vmtest.sh should support menuconfig option.
-> 
-> #6 bind_perm:OK
-> #7 bloom_filter_map:OK
-> [  107.282403] clocksource: timekeeping watchdog on CPU0: Marking clocksource 'tsc' as unstable because the skew is too large:
-> [  107.283240] clocksource:                       'hpet' wd_nsec: 496216090 wd_now: 7ddc7120 wd_last: 7ae746b7 mask: ffffffff
-> [  107.284045] clocksource:                       'tsc' cs_nsec: 495996979 cs_now: 31fdb69b39 cs_last: 31c2d29219 mask: ffffffffffffffff
-> [  107.284926] clocksource:                       'tsc' is current clocksource.
-> [  107.285487] tsc: Marking TSC unstable due to clocksource watchdog
-> [  107.285973] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
-> [  107.286616] sched_clock: Marking unstable (107240582544, 45390230)<-(107291410145, -5437339)
-> [  107.290408] clocksource: Not enough CPUs to check clocksource 'tsc'.
-> [  107.290879] clocksource: Switched to clocksource hpet
-> [  604.210415] INFO: rcu_tasks detected stalls on tasks:
-> [  604.210830] (____ptrval____): .. nvcsw: 86/86 holdout: 1 idle_cpu: -1/0
-> [  604.211314] task:test_progs      state:R  running task     stack:    0 pid:   87 ppid:    85 flags:0x00004000
-> [  604.212058] Call Trace:
-> [  604.212246]  <TASK>
-> [  604.212452]  __schedule+0x362/0xbb0
-> [  604.212723]  ? preempt_schedule_notrace_thunk+0x16/0x18
-> [  604.213107]  preempt_schedule_notrace+0x48/0x80
-> [  604.217403]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [  604.217790]  ? ftrace_regs_call+0xd/0x52
-> [  604.218087]  ? bpf_test_finish.isra.0+0x190/0x190
-> [  604.218461]  ? bpf_fentry_test1+0x5/0x10
-> [  604.218750]  ? trace_clock_x86_tsc+0x10/0x10
-> [  604.219064]  ? __sys_bpf+0x8b1/0x2970
-> [  604.219337]  ? lock_is_held_type+0xd7/0x130
-> [  604.219680]  ? __x64_sys_bpf+0x1c/0x20
-> [  604.219957]  ? do_syscall_64+0x35/0x80
-> [  604.220237]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [  604.220653]  </TASK>
-> 
-> Jiri, is that what you had seen? 
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-hi,
-sorry for late response
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-I did not get any backtrace for the stall, debugging showed 
-that the first probed function was called over and over for
-some reason
+are available in the Git repository at:
 
-as for the crash I used the small fix below
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v5.17
 
-do you have any newer version I could play with?
+for you to fetch changes up to 60630924bb5af8751adcecc896e7763c3783ca89:
 
-jirka
+  hwspinlock: stm32: enable clock at probe (2021-11-17 16:12:44 -0600)
 
+----------------------------------------------------------------
+hwspinlock updates for v5.17
 
----
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 3333893e5217..883151275892 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -157,7 +157,8 @@ int unregister_fprobe(struct fprobe *fp)
- 	ret = unregister_ftrace_function(&fp->ftrace);
- 
- 	if (!ret) {
--		rethook_free(fp->rethook);
-+		if (fp->rethook)
-+			rethook_free(fp->rethook);
- 		if (fp->syms) {
- 			kfree(fp->addrs);
- 			fp->addrs = NULL;
+This contains a change to the stm32 hwspinlock driver to ensure that
+the hardware is operational even without CONFIG_PM.
 
+----------------------------------------------------------------
+Fabien Dessenne (1):
+      hwspinlock: stm32: enable clock at probe
+
+ drivers/hwspinlock/stm32_hwspinlock.c | 58 ++++++++++++++++++++++-------------
+ 1 file changed, 37 insertions(+), 21 deletions(-)

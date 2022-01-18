@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCEB492D78
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE59492D7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348139AbiARSgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:36:51 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36708
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244848AbiARSgu (ORCPT
+        id S1348154AbiARSgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348136AbiARSgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:36:50 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0874440028
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642531009;
-        bh=Xr6SgdUN1TZh8LNJdRyo3Mtp+OngI4NaFYJZFvhIHmw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=NGvScW1Rpl9xwrx2slmunED1b6Bp5QEbaTjOnMuNH/eo+EGWhMqZnn+IV+jB5cxq0
-         v1HDdN806g8QMm7+J1kbkWH8SFoKzeoPLoB+wBGQqnFFNAV0dQrl7GqSY9lbmxZMld
-         UjTx/b45MI/hskSfOPYMUEX+IkDKLnP/PEIq65fQpG6HS/oUhJgwyae5/Ag/zn4WFn
-         tmEjzVsIRgZInVGywbygUJI5Zaw9vWZRB9FinCQsvl5vVN3vOLEhm8xNf4Jmp3J+8M
-         mPCUTjeIvoY6EZhvAwldHzsHPkvOmpVuHQAshWP8sNZg9RWfc6X0WXphsEbZuojUA3
-         uYY0Dq66bKrUw==
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso17795068edt.20
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:36:49 -0800 (PST)
+        Tue, 18 Jan 2022 13:36:53 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CFCC061401
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:36:52 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id i8so14877537pgt.13
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iW16hd+cXQQsHyRP7rt+lJ5AICZ50nA5CTVDepKk1SY=;
+        b=hkjqRWJ4GTUWf/fA1HqqRNXjXZBRWN0KbJB3mPlHa5YoKLe77jPKhe+wjGQu0WRXnp
+         OKWGhgSC2QBrVgvIzuYh8G5csrAG3/M6LoMiY9y0yb9p4hkFmfAoDJFErBjEiWG1Qta5
+         9IqRb58Pch9kVolf/Or7Uy7XlFzTIVmZXG018=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Xr6SgdUN1TZh8LNJdRyo3Mtp+OngI4NaFYJZFvhIHmw=;
-        b=PkkMl7dOfiCsqDn/Ahr3M+8tAyWvX4jkI9/CK5tgPqfYyT76l1KQTDZayoLq4dt3x5
-         5nBDm4fyjt14axrqRsStkWXaTMERFffYmcD9CrUErzJ7f4Fkon6uJZhXZtLSAe11UvlW
-         uHRWdWVaXZSwiTguGHDdJmt7M9vCod0VtRrdN53SIQNmvudPfu6XcCEl6/Qpr6wLy12b
-         FuWMnNUtkkegf2RJmQ5CU92fB/evxrokHiy+7YNRR8oxufMYb4kh3bJHHSY2uMwusXLo
-         c31DsxRQAuu8wG8OBCU5+MD9zsLBSu9cr01SylQIEyxESIZhIB3UtkGZou8APJfHWDZm
-         bcjw==
-X-Gm-Message-State: AOAM531AUVcPU4/ZZhVDgZTVyjZuBVGCU7715rOFt7Atc8xJ/YNWAbed
-        ajafbwBWeDaXipvdGjGKJoXR8OQ5g1Ds3rMC6vT509wv+F+EL4jLujLBl46UTrEf07vAqUHzK2L
-        /MOjQ8RJDQi74APdCBkzmB4CHateQlL+ZYtI6QfJPpQ==
-X-Received: by 2002:a17:907:9810:: with SMTP id ji16mr21430548ejc.202.1642531007367;
-        Tue, 18 Jan 2022 10:36:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzhfrqj3ReK7A0ko54v0kjJtEtaJOwjxvJZxY2r3mMd3765xiW/XF5zsxzkUqpiG2o3Eafuww==
-X-Received: by 2002:a17:907:9810:: with SMTP id ji16mr21430530ejc.202.1642531007224;
-        Tue, 18 Jan 2022 10:36:47 -0800 (PST)
-Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id kw22sm5615885ejc.132.2022.01.18.10.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 10:36:46 -0800 (PST)
-Message-ID: <ad954b04-9df9-6675-18b8-8cda01467ce8@canonical.com>
-Date:   Tue, 18 Jan 2022 19:36:45 +0100
+        bh=iW16hd+cXQQsHyRP7rt+lJ5AICZ50nA5CTVDepKk1SY=;
+        b=H9OuAT00VNPT84cP30i5leOGpZJkPtl/Vm1wmkTq8qRSgkL/UeVimMoL74XsV99xcw
+         3XKO1XLbZKZX0et1ffhSD3/pOMFq/Yf3X/eQs75q4VihTlpl8d1+D1qNLWa3QXKuHNl6
+         RninIk5+PYFQbwiui/lStcJkLESld8eRaWkow57eJDRqzmso+PMIaJto8G2HFUz8qnHE
+         zBkyim1BmfwgMhJSjJidna/FquOoj0avYurA/ROaoaWtWFosx1HQBz0eOjS6WaS4f9LJ
+         CGnncZfgd4psr8s+tfaXzp1qrUs2HccN01oblk0glSSLESpEUMNGqky1KCelWFpqTpuO
+         n+kw==
+X-Gm-Message-State: AOAM532wscELfMommNbvBu6Q+1iFdb+BCiQdw1hdPD4bYVszb7o+AlNI
+        gbsvLx8ns4Q/gkRiwNodgsJUjg==
+X-Google-Smtp-Source: ABdhPJzHBVHEaBUgvGyzi2wXWjc7xsYpLja7zuIEJVM5c8RiYPsKsQrWpZl0npooGeV7ZnjrOCpPVQ==
+X-Received: by 2002:a63:7544:: with SMTP id f4mr24302719pgn.556.1642531012435;
+        Tue, 18 Jan 2022 10:36:52 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w18sm5509171pga.18.2022.01.18.10.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 10:36:52 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Huewe <peterhuewe@gmx.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
+Date:   Tue, 18 Jan 2022 10:36:50 -0800
+Message-Id: <20220118183650.3386989-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 10/16] clk: samsung: fsd: Add cam_csi block clock
- information
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, Sathyakam M <sathya@samsung.com>
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150052epcas5p12efa399d1a59fc2fb0595eef128ffdf9@epcas5p1.samsung.com>
- <20220118144851.69537-11-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220118144851.69537-11-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1713; h=from:subject; bh=aQ56F/K9EivD7wwGaVgmtBlfGCGvsRBhNwMsTf+3QQw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh5wjCHVDaUYrsL2fGabA2P1j4qpg2fjljD/IAr3nW n6XxQjuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYecIwgAKCRCJcvTf3G3AJrcHEA CE9wB7dgJGERHXIitTtvTPL1be+tJVDIAl87bB3MwfS4vzZgOWJqNTJ/gt3zjvNgavNIcMn3EOd+ZS y9iiiTsLfmIAb0Yl7TQJgeqRMpKVf8OMPrw12CDawZ0/Ed/fWaFwfXxX8FSxDT5xOV3SsmQpZwRMUg S4JealaQ3hCb053471GPtUlthOGmjB+RKIDV++2l6mLXj0pPMQ31OaXlCuqQ27pUiOWibuVos5awWA ulS24UU3Y7cfuGXOwsOxk1Zwz9JF7Sll/40RKpQPhezoNSa7kDdIiUOwJGBWtvcCXBY09+CkU1AykC PuyAlIwJVkP7xm2to/ky6AuSHnu0a4yK6y1z0I72G3VDWmSWo2O2ocs5nfGkDWGGwSmU6SChFcGOC5 pTb3qlaHupazqOOyJSV0hBBMby4GXrSQbXA+giMXA4LfDQF2TwRo5Se5+X5FOk0mgMMPshtQ5chJnZ 6ORLeitCZgEP7QMFLJzVl675Htd6W7dOkSsyhlS0xZ/cGLnafcF2vtyXqgYtDfvnRYgbQDvyj93rb4 LulMmcwhdjpBt+w4rxDmrn321EciKzWZPJSdQrMWapDhDO7D+Xah5e87OvA93AdO1uXziDO8l9edfv HtrRkEQAIgGP/gYGiDdrF8oIGSACvoLIsNcLL7s+T0dsj/jzdeTZCYq2cFSw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2022 15:48, Alim Akhtar wrote:
-> Adds clocks for BLK_CAM_CSI block, this is needed for CSI to work.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Sathyakam M <sathya@samsung.com>
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  drivers/clk/samsung/clk-fsd.c | 207 ++++++++++++++++++++++++++++++++++
->  1 file changed, 207 insertions(+)
-> 
-> diff --git a/drivers/clk/samsung/clk-fsd.c b/drivers/clk/samsung/clk-fsd.c
-> index 72a2b38524a1..afac8760ebe1 100644
-> --- a/drivers/clk/samsung/clk-fsd.c
-> +++ b/drivers/clk/samsung/clk-fsd.c
-> @@ -1543,6 +1543,210 @@ static const struct samsung_cmu_info mfc_cmu_info __initconst = {
->  	.nr_clk_regs		= ARRAY_SIZE(mfc_clk_regs),
->  };
->  
+When building with -Warray-bounds, this warning was emitted:
 
+In function 'memset',
+    inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
+./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
+[-Warray-bounds]
+   43 | #define __underlying_memset     __builtin_memset
+      |                                 ^
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+There was no checking of the req_len value. To keep this code robust,
+and to silence the compiler warning, check the size before attempting
+a memset().
 
-Best regards,
-Krzysztof
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Link: https://lore.kernel.org/lkml/4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v1: https://lore.kernel.org/lkml/20220113002727.3709495-1-keescook@chromium.org
+v2: make commit log more accurate, add Reviewed-by
+---
+ drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 91c772e38bb5..5c865987ba5c 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+ 
+ 	len = proxy_dev->req_len;
+ 
+-	if (count < len) {
++	if (count < len || len > sizeof(proxy_dev->buffer)) {
+ 		mutex_unlock(&proxy_dev->buf_lock);
+ 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
+ 			 count, len);
+-- 
+2.30.2
+

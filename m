@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC01492BE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB5F492C48
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347009AbiARRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiARRG7 (ORCPT
+        id S1347201AbiARRZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:25:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25318 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243633AbiARRZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:06:59 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D261C061574;
-        Tue, 18 Jan 2022 09:06:59 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id j2so884343edj.8;
-        Tue, 18 Jan 2022 09:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T+4KTXN2MyPk5h2NaJWjBVuUnjRXsreM7Vqs8LDWdrI=;
-        b=pAn+jxyEYSHJdfcoa2E2EcGtseKd1LUSIEE+bIVTWa55oeQ7D1Hw/OGSuWFoAjdI1e
-         KQAVVue4LWWIKuYADHF111mi25qZTlscNogoazDmexf/4sFpQtCqY5mtARGMRqSv4iIr
-         OxPmaUQST1fcuxNbAqcgJ2v1rFGV+exgWuy0QrLnsbnwZzwmXWrrFsrvk+Rb+QAuKJx/
-         Z3qT/SI0RTIOJ1bTUfBAYGKQe8gpPwS+1uvfnvW3jOlMllk197RS57tw0osZl/qFkCB3
-         zz82C0Wt7+MfqD4c3Szcjng9Qvto6yGoXkjsx+r5I0Y+rCTKFZi6EAemqMf808HQsP11
-         QPTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T+4KTXN2MyPk5h2NaJWjBVuUnjRXsreM7Vqs8LDWdrI=;
-        b=0hWslPAu4QBm5zo0rrwwuxhFprGcX6WzGc9ZYjaykn3uCzFyfMFbkpavGG/omFseRV
-         O4a1Y9YKKNAjDjzxs056qTxI06pd3N95rvrgvHC5iGCRhGtiHdVgfo5/AfL7iTZqqeOU
-         sQWCTG1ipD50BfjV0UQ15PxFfOqLZQoWryiya3RIc7Rp6pW+oZO24vMbHJKZjLp+8Y5X
-         4HqsejWxVXIxJxV3CMdzUS/UdJz9MpMFZJbKGjeQ3QENzzbtH/+3B6GfB+uiejYaj7Re
-         Z6KQbbD/Bl80C7oYGcrVldIDrzo1uny8Q5AzPpyaWsO3X31qEkimU2+IsPM7gyE0vMOl
-         leFA==
-X-Gm-Message-State: AOAM531EqjMsUXapnCbKAqfCRtoK3zZv+mtiF9NNXsDlK8L7gyYACNDx
-        wLOkwl5xzBhTBAnfB3lWWS1Nu86T5D1TyOiD7QLLsI2Qbv7E4w==
-X-Google-Smtp-Source: ABdhPJz9ajbfoxq27WakO0O+HLS9Uvs5z/U9yrSCS73qihJQQf0dxS+tGGfLSrBrJF9UbJ4U5KfTGp3lY0K4QicV2VY=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr3262885ejo.636.1642525617578;
- Tue, 18 Jan 2022 09:06:57 -0800 (PST)
+        Tue, 18 Jan 2022 12:25:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642526751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rR/bu37Is80SlqeUGWI0t9CgSie0s+VhhWDwdSOZaOM=;
+        b=hsOP71oA+PDSdboeI2khzOr6xS3w+lvCfU9Q8QMlF3KWXG3ZzwcvhFk4uOo1XRsoQZl+VT
+        xRgixhZuW+SFYfOZqjFj+3tYDXFJW6xBExV98NblObTlN9U48eHviqcl9YvP75DW7J9GKy
+        Ri9lzgEWmFxKF6MnOyqQo8ngP+sc/z0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-p40EvUEhNN6kNZ7FxO2S4Q-1; Tue, 18 Jan 2022 12:25:46 -0500
+X-MC-Unique: p40EvUEhNN6kNZ7FxO2S4Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51FCB11185D0;
+        Tue, 18 Jan 2022 17:10:07 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.139])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B74817A3F9;
+        Tue, 18 Jan 2022 17:10:06 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] virtio: acknowledge all features before access
+In-Reply-To: <20220118104318-mutt-send-email-mst@kernel.org>
+Organization: Red Hat GmbH
+References: <20220114200744.150325-1-mst@redhat.com>
+ <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
+ <20220117032429-mutt-send-email-mst@kernel.org>
+ <87mtjuv8od.fsf@redhat.com>
+ <20220118104318-mutt-send-email-mst@kernel.org>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Tue, 18 Jan 2022 18:10:05 +0100
+Message-ID: <871r15dl76.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220111115919.14645-1-cristian.pop@analog.com>
- <20220111115919.14645-2-cristian.pop@analog.com> <20220116115228.1f7b4728@jic23-huawei>
-In-Reply-To: <20220116115228.1f7b4728@jic23-huawei>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 18 Jan 2022 19:06:20 +0200
-Message-ID: <CAHp75VeakSDtDfGO1tcZKgoJ0KTAHgYMKG1v=cYDSHoc-zLUbw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] one-bit-adc-dac: Add initial version of one bit ADC-DAC
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Cristian Pop <cristian.pop@analog.com>, linux-iio@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 8:41 AM Jonathan Cameron <jic23@kernel.org> wrote:
-> On Tue, 11 Jan 2022 13:59:19 +0200
-> Cristian Pop <cristian.pop@analog.com> wrote:
+On Tue, Jan 18 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
 
-> > +     st->labels = devm_kzalloc(device, sizeof(*st->labels) * child_num, GFP_KERNEL);
-> > +     if (!st->labels)
-> > +             return -ENOMEM;
-> > +
-> > +     i = child_num;
-> > +     fwnode_for_each_child_node(fwnode, child) {
-> > +             if (fwnode_property_read_u32(child, "reg", &crt_ch))
-> > +                     continue;
-> > +
-> > +             if (crt_ch >= num_channels)
-> > +                     continue;
-> > +
-> > +             if (fwnode_property_read_string(child, "label", &label))
-> > +                     continue;
-> > +
-> > +             chan = &channels[crt_ch];
-> ? Not used.
+> On Mon, Jan 17, 2022 at 01:38:42PM +0100, Cornelia Huck wrote:
+>> On Mon, Jan 17 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+>>=20
+>> > On Mon, Jan 17, 2022 at 02:31:49PM +0800, Jason Wang wrote:
+>> >>=20
+>> >> =E5=9C=A8 2022/1/15 =E4=B8=8A=E5=8D=884:09, Michael S. Tsirkin =E5=86=
+=99=E9=81=93:
+>> >> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device=
+ *dev)
+>> >> >   	/* We have a driver! */
+>> >> >   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
+>> >> > +	ret =3D dev->config->finalize_features(dev);
+>> >> > +	if (ret)
+>> >> > +		goto err;
+>> >>=20
+>> >>=20
+>> >> Is this part of code related?
+>> >>=20
+>> >> Thanks
+>> >>=20
+>> >
+>> > Yes. virtio_finalize_features no longer calls dev->config->finalize_fe=
+atures.
+>> >
+>> > I think the dev->config->finalize_features callback is actually
+>> > a misnomer now, it just sends the features to device,
+>> > finalize is FEATURES_OK. Renaming that is a bigger
+>> > patch though, and I'd like this one to be cherry-pickable
+>> > to stable.
+>>=20
+>> Do we want to add a comment before the calls to ->finalize_features()
+>> (/* write features to device */) and adapt the comment in virtio_ring.h?
+>> Should still be stable-friendly, and giving the callback a better name
+>> can be a follow-up patch.
 >
-> > +             st->labels[--i] = label;
+> Sorry which comment in virtio_ring.h?
+> Could not find anything.
 
-> I've no idea how this works...  Should be looking for the chan->channel
-> value as that's what your read uses to index.
+Typo; I ment virtio_config.h...
 
-It's an implicit memcpy().
+>
+>> >
+>> >> > +
+>> >> >   	ret =3D virtio_finalize_features(dev);
+>> >> >   	if (ret)
+>> >> >   		goto err;
 
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko

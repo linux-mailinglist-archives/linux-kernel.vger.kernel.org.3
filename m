@@ -2,192 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FBB492312
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F1A492317
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiARJrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:47:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:51954 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230116AbiARJrB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:47:01 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 606991FB;
-        Tue, 18 Jan 2022 01:47:01 -0800 (PST)
-Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5DC63F774;
-        Tue, 18 Jan 2022 01:46:59 -0800 (PST)
-Date:   Tue, 18 Jan 2022 09:46:57 +0000
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, valentin.schneider@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, lukasz.luba@arm.com
-Subject: Re: [PATCH v2 6/7] sched/fair: Remove task_util from effective
- utilization in feec()
-Message-ID: <YeaMO6v2HZy3OVUv@FVFF7649Q05P>
-References: <20220112161230.836326-1-vincent.donnefort@arm.com>
- <20220112161230.836326-7-vincent.donnefort@arm.com>
- <265e98a5-d641-9ba9-3fac-4844ceaf643d@arm.com>
+        id S233723AbiARJsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:48:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53992 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232585AbiARJse (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 04:48:34 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20I6QqHq016393;
+        Tue, 18 Jan 2022 09:48:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=EdPwNuQrqAvTuWVT0ODa8mxO+y2WE/frrmMVg5Z8hIA=;
+ b=Z2PMnoz0cg90e4GtGlC9Ptm2XKQkQfh7+MH00WhAJ96Y863vK1FJnyNMa8HBb2UFUlA7
+ rInuz2IovZoF0VNJ+zX+pC7JDCCffyhVYZFFh6A5wkKuPsdy2DDERuZG4adhACrYLFsf
+ vw6vUquFWGvhwElSBAHIqfcRPExWL9vVyfVvG8ljJFCyR+nxAo6WTQpnOgoLp+v0aEbn
+ aULm34S1v1SwWkO+DICDxsEzR4HhXxmarYfuddWWmkVxZ1+iuWB91UIcGOkuKhVzJFWd
+ XX8JXPWW2LbVZUvPMOHxpT99MXTkZMJqmTPKPC31xmU11rGKi5OXMd4DoaU4znNrPFlS OQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnr9sm7xt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 09:48:33 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20I9bM83014697;
+        Tue, 18 Jan 2022 09:48:33 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnr9sm7wt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 09:48:32 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20I9m4qS005709;
+        Tue, 18 Jan 2022 09:48:30 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3dknw99ej8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 09:48:30 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20I9mPfY28180822
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 09:48:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCFFDAE045;
+        Tue, 18 Jan 2022 09:48:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE9FDAE04D;
+        Tue, 18 Jan 2022 09:48:24 +0000 (GMT)
+Received: from [9.171.70.230] (unknown [9.171.70.230])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 09:48:24 +0000 (GMT)
+Message-ID: <8a1ca4cf-a51a-9d45-0ed4-b48f6d8fb4a2@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 10:50:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <265e98a5-d641-9ba9-3fac-4844ceaf643d@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 06/30] s390/airq: allow for airq structure that uses an
+ input vector
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-7-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-7-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qB1WlVRsqgjGOTP_b6IfGDHdJ_gKI3S7
+X-Proofpoint-ORIG-GUID: rCzn2GvFPO6DyN4L_G_K8di86xPVJirz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_02,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 clxscore=1015
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180057
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 02:17:55PM +0100, Dietmar Eggemann wrote:
-> On 12/01/2022 17:12, Vincent Donnefort wrote:
-> 
-> [...]
-> 
-> > +static inline unsigned long
-> > +get_pd_busy_time(struct task_struct *p, struct cpumask *cpus,
-> > +		 unsigned long pd_cap)
-> > +{
-> > +	unsigned long busy_time = 0;
-> > +	int cpu;
-> >  
-> > -	/*
-> > -	 * The capacity state of CPUs of the current rd can be driven by CPUs
-> > -	 * of another rd if they belong to the same pd. So, account for the
-> > -	 * utilization of these CPUs too by masking pd with cpu_online_mask
-> > -	 * instead of the rd span.
-> > -	 *
-> > -	 * If an entire pd is outside of the current rd, it will not appear in
-> > -	 * its pd list and will not be accounted by compute_energy().
-> > -	 */
-> >  	for_each_cpu(cpu, cpus) {
-> > -		unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
-> > -		unsigned long cpu_util, util_running = util_freq;
-> > -		struct task_struct *tsk = NULL;
-> > +		unsigned long util = cpu_util_next(cpu, p, -1);
-> >  
-> > -		/*
-> > -		 * When @p is placed on @cpu:
-> > -		 *
-> > -		 * util_running = max(cpu_util, cpu_util_est) +
-> > -		 *		  max(task_util, _task_util_est)
-> > -		 *
-> > -		 * while cpu_util_next is: max(cpu_util + task_util,
-> > -		 *			       cpu_util_est + _task_util_est)
-> > -		 */
-> > -		if (cpu == dst_cpu) {
-> > -			tsk = p;
-> > -			util_running =
-> > -				cpu_util_next(cpu, p, -1) + task_util_est(p);
-> > -		}
-> > +		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
-> > +	}
-> >  
-> > -		/*
-> > -		 * Busy time computation: utilization clamping is not
-> > -		 * required since the ratio (sum_util / cpu_capacity)
-> > -		 * is already enough to scale the EM reported power
-> > -		 * consumption at the (eventually clamped) cpu_capacity.
-> > -		 */
-> > -		cpu_util = effective_cpu_util(cpu, util_running, ENERGY_UTIL,
-> > -					      NULL);
-> > +	return min(pd_cap, busy_time);
-> 
-> You're capping the busy_time (sum of effective_cpu_util() of CPUs in
-> cpus) by pd capacity (cpumask_weight(cpus) * cpu_thermal_cap).
-> 
-> Before, each effective_cpu_util() was capped by cpu_thermal_cap
-> individually: sum_util += min(effective_cpu_util(), cpu_thermal_cap)
-> 
-> Why did you change that? Because of the way you calculate busy time with
-> the task: busy_time = min(pd_cap, busy_time + tsk_busy_time) ?
 
-It avoids having to cap each CPU separately and also aligns with task_busy_time.
-I guess we could argue this isn't the most accurate solution but without taking
-this shortcut, we'd have to walk through all the CPUs again for the busy time
-computation when testing the task placement. :/
 
-But now reading it again makes me feel I might have not taken the right decision
-and we'd prefer not fall into the case where the utilization of a single CPU is
-too high but the global PD's is not. 
+On 1/14/22 21:31, Matthew Rosato wrote:
+> When doing device passthrough where interrupts are being forwarded
+> from host to guest, we wish to use a pinned section of guest memory
+> as the vector (the same memory used by the guest as the vector).
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-> 
-> [...]
-> 
-> > @@ -6662,9 +6690,11 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >  {
-> >  	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
-> >  	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
-> > +	unsigned long busy_time, tsk_busy_time, max_util, pd_cap;
-> >  	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
-> >  	int cpu, best_energy_cpu = prev_cpu, target = -1;
-> > -	unsigned long cpu_cap, util, base_energy = 0;
-> > +	unsigned long cpu_cap, cpu_thermal_cap, util;
-> > +	unsigned long base_energy = 0;
-> >  	struct sched_domain *sd;
-> >  	struct perf_domain *pd;
-> >  
-> > @@ -6689,6 +6719,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >  	if (!task_util_est(p))
-> >  		goto unlock;
-> >  
-> > +	tsk_busy_time = get_task_busy_time(p, prev_cpu);
-> > +
-> >  	for (; pd; pd = pd->next) {
-> >  		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
-> >  		bool compute_prev_delta = false;
-> > @@ -6697,7 +6729,17 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >  
-> >  		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
-> >  
-> > -		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-> > +		/* Account thermal pressure for the energy estimation */
-> > +		cpu = cpumask_first(cpus);
-> > +		cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
-> > +		cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
-> > +
-> > +		for_each_cpu(cpu, cpus) {
-> > +			pd_cap += cpu_thermal_cap;
-> > +
-> > +			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
-> > +				continue;
-> > +
-> >  			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
-> >  				continue;
-> >  
-> > @@ -6734,12 +6776,21 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >  			continue;
-> >  
-> >  		/* Compute the 'base' energy of the pd, without @p */
-> > -		base_energy_pd = compute_energy(p, -1, cpus, pd);
-> > +		busy_time = get_pd_busy_time(p, cpus, pd_cap);
-> > +		max_util = get_pd_max_util(p, -1, cpus, cpu_thermal_cap);
-> 
-> There is this issue now that we would iterate twice now over `cpus`
-> here. To avoid this, I can only see the solution to introduce a
-> 
->     struct eas_env {
->            unsigned long max_util;      (1)
->            unsigned long busy_time;     (2)
->            unsigned long busy_tsk_time; (3)
->            ...
->     }
-> 
-> replace get_pd_busy_time() and get_pd_max_util() with
-> 
->     get_energy_params(struct eas_env *env, ...)
 
-That'd be cleaner yeah, I'll give a try for a next version.
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
 
-Thanks.
 
+> ---
+>   arch/s390/include/asm/airq.h     |  4 +++-
+>   arch/s390/pci/pci_irq.c          |  8 ++++----
+>   drivers/s390/cio/airq.c          | 10 +++++++---
+>   drivers/s390/virtio/virtio_ccw.c |  2 +-
+>   4 files changed, 15 insertions(+), 9 deletions(-)
 > 
-> and make sure that (1)-(3) are calculated and returned here whereas only
-> (1) is later for `if (compute_prev_delta)` and `if (max_spare_cap_cpu >=
-> 0)`. E.g. by passing this switch with the env.
-> This would allow the keep pd_cap within get_energy_params(). W/o struct
-> eas_env, IMHO this function ends up with too many parameters.
+> diff --git a/arch/s390/include/asm/airq.h b/arch/s390/include/asm/airq.h
+> index 7918a7d09028..e82e5626e139 100644
+> --- a/arch/s390/include/asm/airq.h
+> +++ b/arch/s390/include/asm/airq.h
+> @@ -47,8 +47,10 @@ struct airq_iv {
+>   #define AIRQ_IV_PTR		4	/* Allocate the ptr array */
+>   #define AIRQ_IV_DATA		8	/* Allocate the data array */
+>   #define AIRQ_IV_CACHELINE	16	/* Cacheline alignment for the vector */
+> +#define AIRQ_IV_GUESTVEC	32	/* Vector is a pinned guest page */
+>   
+> -struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags);
+> +struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags,
+> +			       unsigned long *vec);
+>   void airq_iv_release(struct airq_iv *iv);
+>   unsigned long airq_iv_alloc(struct airq_iv *iv, unsigned long num);
+>   void airq_iv_free(struct airq_iv *iv, unsigned long bit, unsigned long num);
+> diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
+> index cc4c8d7c8f5c..0d0a02a9fbbf 100644
+> --- a/arch/s390/pci/pci_irq.c
+> +++ b/arch/s390/pci/pci_irq.c
+> @@ -296,7 +296,7 @@ int arch_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
+>   		zdev->aisb = bit;
+>   
+>   		/* Create adapter interrupt vector */
+> -		zdev->aibv = airq_iv_create(msi_vecs, AIRQ_IV_DATA | AIRQ_IV_BITLOCK);
+> +		zdev->aibv = airq_iv_create(msi_vecs, AIRQ_IV_DATA | AIRQ_IV_BITLOCK, NULL);
+>   		if (!zdev->aibv)
+>   			return -ENOMEM;
+>   
+> @@ -419,7 +419,7 @@ static int __init zpci_directed_irq_init(void)
+>   	union zpci_sic_iib iib = {{0}};
+>   	unsigned int cpu;
+>   
+> -	zpci_sbv = airq_iv_create(num_possible_cpus(), 0);
+> +	zpci_sbv = airq_iv_create(num_possible_cpus(), 0, NULL);
+>   	if (!zpci_sbv)
+>   		return -ENOMEM;
+>   
+> @@ -441,7 +441,7 @@ static int __init zpci_directed_irq_init(void)
+>   		zpci_ibv[cpu] = airq_iv_create(cache_line_size() * BITS_PER_BYTE,
+>   					       AIRQ_IV_DATA |
+>   					       AIRQ_IV_CACHELINE |
+> -					       (!cpu ? AIRQ_IV_ALLOC : 0));
+> +					       (!cpu ? AIRQ_IV_ALLOC : 0), NULL);
+>   		if (!zpci_ibv[cpu])
+>   			return -ENOMEM;
+>   	}
+> @@ -458,7 +458,7 @@ static int __init zpci_floating_irq_init(void)
+>   	if (!zpci_ibv)
+>   		return -ENOMEM;
+>   
+> -	zpci_sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC);
+> +	zpci_sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, NULL);
+>   	if (!zpci_sbv)
+>   		goto out_free;
+>   
+> diff --git a/drivers/s390/cio/airq.c b/drivers/s390/cio/airq.c
+> index 2f2226786319..375a58b1c838 100644
+> --- a/drivers/s390/cio/airq.c
+> +++ b/drivers/s390/cio/airq.c
+> @@ -122,10 +122,12 @@ static inline unsigned long iv_size(unsigned long bits)
+>    * airq_iv_create - create an interrupt vector
+>    * @bits: number of bits in the interrupt vector
+>    * @flags: allocation flags
+> + * @vec: pointer to pinned guest memory if AIRQ_IV_GUESTVEC
+>    *
+>    * Returns a pointer to an interrupt vector structure
+>    */
+> -struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags)
+> +struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags,
+> +			       unsigned long *vec)
+>   {
+>   	struct airq_iv *iv;
+>   	unsigned long size;
+> @@ -146,6 +148,8 @@ struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags)
+>   					     &iv->vector_dma);
+>   		if (!iv->vector)
+>   			goto out_free;
+> +	} else if (flags & AIRQ_IV_GUESTVEC) {
+> +		iv->vector = vec;
+>   	} else {
+>   		iv->vector = cio_dma_zalloc(size);
+>   		if (!iv->vector)
+> @@ -185,7 +189,7 @@ struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags)
+>   	kfree(iv->avail);
+>   	if (iv->flags & AIRQ_IV_CACHELINE && iv->vector)
+>   		dma_pool_free(airq_iv_cache, iv->vector, iv->vector_dma);
+> -	else
+> +	else if (!(iv->flags & AIRQ_IV_GUESTVEC))
+>   		cio_dma_free(iv->vector, size);
+>   	kfree(iv);
+>   out:
+> @@ -204,7 +208,7 @@ void airq_iv_release(struct airq_iv *iv)
+>   	kfree(iv->bitlock);
+>   	if (iv->flags & AIRQ_IV_CACHELINE)
+>   		dma_pool_free(airq_iv_cache, iv->vector, iv->vector_dma);
+> -	else
+> +	else if (!(iv->flags & AIRQ_IV_GUESTVEC))
+>   		cio_dma_free(iv->vector, iv_size(iv->bits));
+>   	kfree(iv->avail);
+>   	kfree(iv);
+> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> index 52c376d15978..410498d693f8 100644
+> --- a/drivers/s390/virtio/virtio_ccw.c
+> +++ b/drivers/s390/virtio/virtio_ccw.c
+> @@ -241,7 +241,7 @@ static struct airq_info *new_airq_info(int index)
+>   		return NULL;
+>   	rwlock_init(&info->lock);
+>   	info->aiv = airq_iv_create(VIRTIO_IV_BITS, AIRQ_IV_ALLOC | AIRQ_IV_PTR
+> -				   | AIRQ_IV_CACHELINE);
+> +				   | AIRQ_IV_CACHELINE, NULL);
+>   	if (!info->aiv) {
+>   		kfree(info);
+>   		return NULL;
 > 
-> That said, I haven't seen asymmetric CPU capacity processors with more
-> than 6 CPUs in one PD (i.e. Frequency Domain)
-> 
-> [...]
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

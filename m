@@ -2,105 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9324922D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A1C4922E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344679AbiARJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:36:19 -0500
-Received: from mga09.intel.com ([134.134.136.24]:22223 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240673AbiARJgS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:36:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642498578; x=1674034578;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KOITIXo9rTTKwEPZruFQPM233i/+GJkiKbootFZI4Yk=;
-  b=dCnX/rjWjXqd+Oq7IjcTE/TuNFmeA7fkbzVF4Lm0pfCzp7mvh1te/2Yz
-   4WrmvKcqrBvWvlKzYbNfGtJ1WbDLTKgJxX7xtw0YB1ZC6b9/gqKP8zbLc
-   wg6Xi4hFiO1b5EyfckInLFTnnmWxPePm94FxRO/DX8HxLoibQ4uSSW7us
-   Llmew3Yt7FGhRYqAuX8gg8xYvo3/fcG/xv7uJ83FWhiHGXlwLLizitjIc
-   IL248D2JrCi8Uu0nQH+CmrVINVz359+h4KYMVqb3kYZa9JcZKXCDSCZpc
-   WSglrx1tdcrktHjrFP27PcDzV8FDZBcPtM7kaeDZWG9KmFNo6/qXh062q
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244572557"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="244572557"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 01:36:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="671790221"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Jan 2022 01:36:15 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Robert=20=C5=9Awi=C4=99cki?= <robert@swiecki.net>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Subject: [PATCH] usb: typec: Only attempt to link USB ports if there is fwnode
-Date:   Tue, 18 Jan 2022 12:36:27 +0300
-Message-Id: <20220118093627.74098-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1344505AbiARJhn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 04:37:43 -0500
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:44993 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230172AbiARJhl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 04:37:41 -0500
+Received: by mail-ua1-f44.google.com with SMTP id f24so1463520uab.11;
+        Tue, 18 Jan 2022 01:37:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=94RJUajJnozufTpAr/gV3w0KHJpzlohNQuBpMs4wyR0=;
+        b=MaJCYAKIZUUHoKESEVDo6QEMbUS0vkztkUHhvTyDRPuvl53gzl04ILCRAu0GnOtVRK
+         Fvsqi1dRCWirqq9t3YmOGL8oXLmj/c+ZZFTIODGLKPlzxX8Ns6wHkpRTbSPaEfsZ36u4
+         ORN6JM3Oeh3Dc1cjY/4ZEg13C7N7mPArKcEq7Xunw/e8ZvQsNOVSECVOCe87pXr4nh9N
+         126uQq6/jbqxCCxq2ZjYt3NQ0u+z0wbgBsZz9KBMihq0jkIt+i5HgIS0vNkewXXXDrgQ
+         OYktUJ7DOibltni3K4josLd5pAQEJihshjDkFlMyhvPPj/QLZQ+doQm3IWaMf8wZ+eqx
+         yM4w==
+X-Gm-Message-State: AOAM533+LPFA5XuBfxDmKTi3x58EAS+txDXKAUOxEGQc+6FNPhMYt6Ro
+        qt8Ud413mJQN8fsYU8zZH1yhJ+BVx0cQyYCj
+X-Google-Smtp-Source: ABdhPJyw+oic6AsAShUu1MGqZLa67XXZj9G+hQqL+tvjzZ6gUStjqN2CB20oVkNecThrkl9ruBrXVg==
+X-Received: by 2002:a9f:2424:: with SMTP id 33mr9064060uaq.67.1642498659372;
+        Tue, 18 Jan 2022 01:37:39 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id s47sm3681740uad.17.2022.01.18.01.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 01:37:37 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id c36so35282332uae.13;
+        Tue, 18 Jan 2022 01:37:37 -0800 (PST)
+X-Received: by 2002:a67:bc17:: with SMTP id t23mr5014894vsn.57.1642498657061;
+ Tue, 18 Jan 2022 01:37:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru> <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+ <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru> <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+ <20220117092444.opoedfcf5k5u6otq@pengutronix.de> <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+ <20220117114923.d5vajgitxneec7j7@pengutronix.de> <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+ <20220117170609.yxaamvqdkivs56ju@pengutronix.de> <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
+ <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
+In-Reply-To: <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Jan 2022 10:37:25 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+Message-ID: <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev <netdev@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code that creates the links to the USB ports attached to
-a connector inside the system assumed that the ACPI nodes
-(fwnodes) always exist for the connectors, but it can not do
-that.
+Hi Uwe,
 
-There is no guarantee that every USB Type-C connector has
-ACPI device node representing it in the ACPI tables, and
-even if there are the nodes in the ACPI tables, the _STA
-method in those nodes may still return 0 (which means the
-device does not exist from ACPI PoW).
+On Tue, Jan 18, 2022 at 10:09 AM Uwe Kleine-König
+<u.kleine-koenig@pengutronix.de> wrote:
+> On Tue, Jan 18, 2022 at 09:25:01AM +0100, Geert Uytterhoeven wrote:
+> > On Mon, Jan 17, 2022 at 6:06 PM Uwe Kleine-König
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> > > On Mon, Jan 17, 2022 at 02:08:19PM +0100, Geert Uytterhoeven wrote:
+> > > > On Mon, Jan 17, 2022 at 12:49 PM Uwe Kleine-König
+> > > > <u.kleine-koenig@pengutronix.de> wrote:
+> > > > > > So there are three reasons: because the absence of an optional IRQ
+> > > > > > is not an error, and thus that should not cause (a) an error code
+> > > > > > to be returned, and (b) an error message to be printed, and (c)
+> > > > > > because it can simplify the logic in device drivers.
+> > > > >
+> > > > > I don't agree to (a). If the value signaling not-found is -ENXIO or 0
+> > > > > (or -ENODEV) doesn't matter much. I wouldn't deviate from the return
+> > > > > code semantics of platform_get_irq() just for having to check against 0
+> > > > > instead of -ENXIO. Zero is then just another magic value.
+> > > >
+> > > > Zero is a natural magic value (also for pointers).
+> > > > Errors are always negative.
+> > > > Positive values are cookies (or pointers) associated with success.
+> > >
+> > > Yeah, the issue where we don't agree is if "not-found" is special enough
+> > > to deserve the natural magic value. For me -ENXIO is magic enough to
+> > > handle the absence of an irq line. I consider it even the better magic
+> > > value.
+> >
+> > It differs from other subsystems (clk, gpio, reset), which do return
+> > zero on not found.
+>
+> IMHO it doesn't matter at all that the return value is zero, relevant is
+> the semantic of the returned value. For clk, gpio, reset and regulator
+> NULL is a usable dummy, for irqs it's not. So what you do with the value
+> returned by platform_get_irq_whatever() is: you compare it with the
+> (magic?) not-found value, and if it matches, you enter a suitable
+> if-block.
+>
+> For the (clk|gpiod|regulator)_get_optional() you don't have to check
+> against the magic not-found value (so no implementation detail magic
+> leaks into the caller code) and just pass it to the next API function.
+> (And my expectation would be that if you chose to represent not-found by
+> (void *)66 instead of NULL, you won't have to adapt any user, just the
+> framework internal checks. This is a good thing!)
 
-This fixes NULL pointer dereference that happens if the
-nodes are missing.
+Ah, there is the wrong assumption: drivers sometimes do need to know
+if the resource was found, and thus do need to know about (void *)66,
+-ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
+I can imagine these exist for gpiod and regulator, too, as soon as
+you go beyond the trivial "enable" and "disable" use-cases.
 
-Reported-and-tested-by: Robert Święcki <robert@swiecki.net>
-Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Fixes: 730b49aac426 ("usb: typec: port-mapper: Convert to the component framework")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-Hi guys,
+And 0/NULL vs. > 0 is the natural check here: missing, but not
+an error.  Even for IRQ this was envisioned before, when it was
+decided that vIRQ zero does not exist.
+(Inconsistent) Error codes are not, as missing optional resources
+are not error conditions.
 
-Mikhail, I got confirmation from Robert that the patch fixes the
-issue.
+Gr{oetje,eeting}s,
 
-thanks,
----
- drivers/usb/typec/port-mapper.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+                        Geert
 
-diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-index 07d307418b470..b6e0c6acc628c 100644
---- a/drivers/usb/typec/port-mapper.c
-+++ b/drivers/usb/typec/port-mapper.c
-@@ -56,6 +56,9 @@ int typec_link_ports(struct typec_port *con)
- {
- 	struct each_port_arg arg = { .port = con, .match = NULL };
- 
-+	if (!has_acpi_companion(&con->dev))
-+		return 0;
-+
- 	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
- 
- 	/*
-@@ -74,5 +77,6 @@ int typec_link_ports(struct typec_port *con)
- 
- void typec_unlink_ports(struct typec_port *con)
- {
--	component_master_del(&con->dev, &typec_aggregate_ops);
-+	if (has_acpi_companion(&con->dev))
-+		component_master_del(&con->dev, &typec_aggregate_ops);
- }
--- 
-2.34.1
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,142 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8107493023
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BFF493030
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349599AbiARVsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 16:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S234970AbiARVvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 16:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiARVsn (ORCPT
+        with ESMTP id S1349619AbiARVvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 16:48:43 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9234C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:48:43 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id bb37so1061316oib.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:48:43 -0800 (PST)
+        Tue, 18 Jan 2022 16:51:10 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C93C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:51:10 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id o15so822947lfo.11
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:51:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=XbypTSvua+Bn+tStGdHHerix/3+IgEDg0+FneAuZ170=;
-        b=QpAAwHF2qWinW2uvaofhoAUY39nlZwvyaMiOxxeRdyuHYzNLDAAZIRF5kasuOU3+eC
-         IVeupmELfxU1+XxjoKk/GtmN5MfLrFr5jLMaIofFTdVigAu5RgI74s+6US1TagKA9EYG
-         5LWW55GQurbt9XXRFW9hic2ErARQMedsS3goQ=
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:organization:content-transfer-encoding;
+        bh=zCzfaUBZlnSSUo3UCXDV+58rEZH0xND460lZC6VQ+x8=;
+        b=fr442tV30SPPVvNjAJ+6tm6MiDMwOazAaLg67MwH9+7ljvQ3L5qKhW+jYlzbdKVWLX
+         K3ZVTBXEKFrpdt5aOGc2ZyT03uEDbvbW/IN5VayV3XFufPzAHQTwOVN0JbzPksQKF/eq
+         OTmRbWoRp2Qa95RZx0agz2gP2BAk10WI++OelkFnyaUz4+BvWakgmEMKwwRD8brp6IZN
+         DhmnryEr5NSQcPieiCW/WGE+f7tWE5bbOFlf9KJBnGJNBzENL+lSKgYECSTrYsEnw33r
+         Y9lQKFnW19NFURl1IXH2ZLPNGmcWtDjhaRTuIbMEZn/QK5UIcA2mnjvdTsYbYpd3At6b
+         /OkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=XbypTSvua+Bn+tStGdHHerix/3+IgEDg0+FneAuZ170=;
-        b=6eOZg5Omkvl/tw58HjnImTlWvtSxtPemxBVIrzz5LdUhJRGSc33sLKwvz3Mh0FZq7u
-         vM5e6ECrWm9dqWu4ViwSIbXT/TO99/jmh2DMkqfIsDfAqsv3gAhTFPLi44dyKUAN6cgV
-         2JhXcL40wIbsCSrTjNJfnwYjgbSMmgQpwrJ/zmyUC5fw+2hJSYuKHJiVYyyg1wfilh0K
-         xuICrfbEzwxWpHnCehHo9+fNuk2FrtCxmYXK5TIY7n0w2LBvezL7PoMbxDu6WRdExDQs
-         2/O9CU5ImGvMkXAFxScPKqVvvWC0b5gHFFx6kSNSIAJO26b/dCpoivtwX7hcRrdahdck
-         7Ygw==
-X-Gm-Message-State: AOAM531UNiVk+qX5ufSFhOr1h7diH57BwIiAWjLKmZdSkvbB7aPo4f9y
-        SJGqtFnmP8NroLlpJiUg5sle8Azn9mFIrppYQtsOXg==
-X-Google-Smtp-Source: ABdhPJy9GaLVs4C+CRAAbCb6jqWMfK6XSY2DOuVH79+SDS+8SWhgAnJT9e4zefrFMl48i8wIYbvNmfwKg8rjy27WavQ=
-X-Received: by 2002:aca:f241:: with SMTP id q62mr475173oih.64.1642542523126;
- Tue, 18 Jan 2022 13:48:43 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 18 Jan 2022 15:48:42 -0600
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:organization:content-transfer-encoding;
+        bh=zCzfaUBZlnSSUo3UCXDV+58rEZH0xND460lZC6VQ+x8=;
+        b=G0GTrbRkLFp7PfXkEPsSJRaVKmcGAdZ5xZAYNEECTD+CBKMHcwIIT6xbS1SzYGXhaT
+         Lcj4gZ0RMaVFZjlQDgTDDt2u4iGWl9T+y1XJBkuC2Is1gtGoKm+SMjpLXf3qH6JA/3Z3
+         ii+KIPOCabRd1snktOJZ4EQM/rZoCdnmK615jiojKlzrh35qGBZhrRZ34yqVpd5fr/ba
+         HVnMOMZn5S2bZBCRiNJN6FVcV1KwAoviNg/m3hX0O+or5eCVih0ywFpUp8f1IPPhRBuC
+         KKaPi/9wCOSfl2NcR969LiwzsghZRPJggTmrr46S8SvspK7dEgVo+YYWZnrgeq/4hHRB
+         0zow==
+X-Gm-Message-State: AOAM530XfFGNhAOwzgFGy5qQxQtbpjjwDH5V/Ad1Kt9VoaYDtZwjHfGC
+        4zIOJIFm5/cHX3U4cBdbx/lrTw==
+X-Google-Smtp-Source: ABdhPJx8F/qHg4qYSzsPl0mr7Mwad+xTfKkS+TZF/uCxuSb6aG+L14Ml/MPRTFKeEasSt39iP32ybQ==
+X-Received: by 2002:a05:6512:10d2:: with SMTP id k18mr22808024lfg.640.1642542668486;
+        Tue, 18 Jan 2022 13:51:08 -0800 (PST)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id w5sm1704808ljm.55.2022.01.18.13.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 13:51:08 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Shruti Kanetkar <Shruti@freescale.com>,
+        Emil Medve <Emilian.Medve@Freescale.com>,
+        Scott Wood <scottwood@freescale.com>,
+        Igal Liberman <Igal.Liberman@freescale.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net 1/4] net/fsl: xgmac_mdio: Add workaround for erratum A-009885
+Date:   Tue, 18 Jan 2022 22:50:50 +0100
+Message-Id: <20220118215054.2629314-2-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220118215054.2629314-1-tobias@waldekranz.com>
+References: <20220118215054.2629314-1-tobias@waldekranz.com>
 MIME-Version: 1.0
-In-Reply-To: <1642531648-8448-2-git-send-email-quic_khsieh@quicinc.com>
-References: <1642531648-8448-1-git-send-email-quic_khsieh@quicinc.com> <1642531648-8448-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 18 Jan 2022 15:48:42 -0600
-Message-ID: <CAE-0n513EnHjFLNaRPecXZJMp0Cg7UHZyqq9q3NZS50CvJtn6w@mail.gmail.com>
-Subject: Re: [PATCH v18 1/4] drm/msm/dp: do not initialize phy until plugin
- interrupt received
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Organization: Westermo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-18 10:47:25)
-> Current DP drivers have regulators, clocks, irq and phy are grouped
-> together within a function and executed not in a symmetric manner.
-> This increase difficulty of code maintenance and limited code scalability.
-> This patch divides the driver life cycle of operation into four states,
-> resume (including booting up), dongle plugin, dongle unplugged and suspend.
-> Regulators, core clocks and irq are grouped together and enabled at resume
-> (or booting up) so that the DP controller is armed and ready to receive HPD
-> plugin interrupts. HPD plugin interrupt is generated when a dongle plugs
-> into DUT (device under test). Once HPD plugin interrupt is received, DP
-> controller will initialize phy so that dpcd read/write will function and
-> following link training can be proceeded successfully. DP phy will be
-> disabled after main link is teared down at end of unplugged HPD interrupt
-> handle triggered by dongle unplugged out of DUT. Finally regulators, code
-> clocks and irq are disabled at corresponding suspension.
->
-> Changes in V2:
-> -- removed unnecessary dp_ctrl NULL check
-> -- removed unnecessary phy init_count and power_count DRM_DEBUG_DP logs
-> -- remove flip parameter out of dp_ctrl_irq_enable()
-> -- add fixes tag
->
-> Changes in V3:
-> -- call dp_display_host_phy_init() instead of dp_ctrl_phy_init() at
->         dp_display_host_init() for eDP
->
-> Changes in V4:
-> -- rewording commit text to match this commit changes
->
-> Changes in V5:
-> -- rebase on top of msm-next branch
->
-> Changes in V6:
-> -- delete flip variable
->
-> Changes in V7:
-> -- dp_ctrl_irq_enable/disabe() merged into dp_ctrl_reset_irq_ctrl()
->
-> Changes in V8:
-> -- add more detail comment regrading dp phy at dp_display_host_init()
->
-> Changes in V9:
-> -- remove set phy_initialized to false when -ECONNRESET detected
->
-> Changes in v10:
-> --  group into one series
->
-> Changes in v11:
-> -- drop drm/msm/dp: dp_link_parse_sink_count() return immediately
->         if aux read
->
-> Changes in v12:
-> -- move dp_display_host_phy_exit() after dp_display_host_deinit()
->
-> Changes in v13:
-> -- do not execute phy_init until plugged_in interrupt for edp, same as DP.
->
-> Changes in v14:
-> -- remove redundant dp->core_initialized = false form dp_pm_suspend.
->
-> Changes in v15:
-> -- remove core_initialized flag check at both host_init and host_deinit
->
-> Changes in v16:
-> -- remove dp_display_host_phy_exit core_initialized=false at dp_pm_suspend
->
-> Changes in v17:
-> -- remove core_initialized checking before execute attention_cb()
->
-> Changes in v18:
-> -- remove core_initialized checking at dp_pm_suspend
->
-> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
+Once an MDIO read transaction is initiated, we must read back the data
+register within 16 MDC cycles after the transaction completes. Outside
+of this window, reads may return corrupt data.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Therefore, disable local interrupts in the critical section, to
+maximize the probability that we can satisfy this requirement.
+
+Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+ drivers/net/ethernet/freescale/xgmac_mdio.c | 25 ++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/freescale/xgmac_mdio.c b/drivers/net/ethernet/freescale/xgmac_mdio.c
+index 5b8b9bcf41a2..bf566ac3195b 100644
+--- a/drivers/net/ethernet/freescale/xgmac_mdio.c
++++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
+@@ -51,6 +51,7 @@ struct tgec_mdio_controller {
+ struct mdio_fsl_priv {
+ 	struct	tgec_mdio_controller __iomem *mdio_base;
+ 	bool	is_little_endian;
++	bool	has_a009885;
+ 	bool	has_a011043;
+ };
+ 
+@@ -186,10 +187,10 @@ static int xgmac_mdio_read(struct mii_bus *bus, int phy_id, int regnum)
+ {
+ 	struct mdio_fsl_priv *priv = (struct mdio_fsl_priv *)bus->priv;
+ 	struct tgec_mdio_controller __iomem *regs = priv->mdio_base;
++	unsigned long flags;
+ 	uint16_t dev_addr;
+ 	uint32_t mdio_stat;
+ 	uint32_t mdio_ctl;
+-	uint16_t value;
+ 	int ret;
+ 	bool endian = priv->is_little_endian;
+ 
+@@ -221,12 +222,18 @@ static int xgmac_mdio_read(struct mii_bus *bus, int phy_id, int regnum)
+ 			return ret;
+ 	}
+ 
++	if (priv->has_a009885)
++		/* Once the operation completes, i.e. MDIO_STAT_BSY clears, we
++		 * must read back the data register within 16 MDC cycles.
++		 */
++		local_irq_save(flags);
++
+ 	/* Initiate the read */
+ 	xgmac_write32(mdio_ctl | MDIO_CTL_READ, &regs->mdio_ctl, endian);
+ 
+ 	ret = xgmac_wait_until_done(&bus->dev, regs, endian);
+ 	if (ret)
+-		return ret;
++		goto irq_restore;
+ 
+ 	/* Return all Fs if nothing was there */
+ 	if ((xgmac_read32(&regs->mdio_stat, endian) & MDIO_STAT_RD_ER) &&
+@@ -234,13 +241,17 @@ static int xgmac_mdio_read(struct mii_bus *bus, int phy_id, int regnum)
+ 		dev_dbg(&bus->dev,
+ 			"Error while reading PHY%d reg at %d.%hhu\n",
+ 			phy_id, dev_addr, regnum);
+-		return 0xffff;
++		ret = 0xffff;
++	} else {
++		ret = xgmac_read32(&regs->mdio_data, endian) & 0xffff;
++		dev_dbg(&bus->dev, "read %04x\n", ret);
+ 	}
+ 
+-	value = xgmac_read32(&regs->mdio_data, endian) & 0xffff;
+-	dev_dbg(&bus->dev, "read %04x\n", value);
++irq_restore:
++	if (priv->has_a009885)
++		local_irq_restore(flags);
+ 
+-	return value;
++	return ret;
+ }
+ 
+ static int xgmac_mdio_probe(struct platform_device *pdev)
+@@ -287,6 +298,8 @@ static int xgmac_mdio_probe(struct platform_device *pdev)
+ 	priv->is_little_endian = device_property_read_bool(&pdev->dev,
+ 							   "little-endian");
+ 
++	priv->has_a009885 = device_property_read_bool(&pdev->dev,
++						      "fsl,erratum-a009885");
+ 	priv->has_a011043 = device_property_read_bool(&pdev->dev,
+ 						      "fsl,erratum-a011043");
+ 
+-- 
+2.25.1
+

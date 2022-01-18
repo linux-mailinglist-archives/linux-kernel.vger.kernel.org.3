@@ -2,258 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 977104928A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D72A49288B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343826AbiAROp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:45:29 -0500
-Received: from ip-94-112-206-30.net.upcbroadband.cz ([94.112.206.30]:49250
-        "EHLO ixit.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241144AbiAROp1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:45:27 -0500
-X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 09:45:26 EST
-Received: from [10.0.0.139] (_gateway [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 1E5612005E;
-        Tue, 18 Jan 2022 15:37:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1642516629;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+4whwaOsPH0/UfN7RFCyHS+ItnYg48fRwxO6IFphqFI=;
-        b=rEg8WspxgirCsDw+FoG1rfzWPwoZ4txGptVdrYwbaqylFbzKmsiswNt4ZXjE4fqobb4+g7
-        f4TYXtFE85Sk6wsxRXe/sjgCs4fDoANy9bT+RqQD4JBq7BK+gym9pMEUVgJJd8l4aMHTG9
-        /KgbPUOLjQc/LDgFVndTxZKpP95pMxc=
-Date:   Tue, 18 Jan 2022 15:37:04 +0100
-From:   David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH] powerpc/fsl: fix the schema check errors for
- fsl,tmu-calibration
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     ~okias/devicetree@lists.sr.ht, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Message-Id: <SXTW5R.DQG57Y1RMSI9@ixit.cz>
-In-Reply-To: <20211029121733.46849-1-david@ixit.cz>
-References: <20211029121733.46849-1-david@ixit.cz>
-X-Mailer: geary/40.0
+        id S245686AbiAROiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:38:11 -0500
+Received: from mail-bn8nam11on2066.outbound.protection.outlook.com ([40.107.236.66]:31232
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S245635AbiAROhy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 09:37:54 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BA0iG+ULplQSrOTW0hxc2Cg7WSMiP2iXCl+besc147VzWjFxDTkjvzlQiHkNnhNhiMCWAutydsx3h+uxVGVzPDMxjQ6rp0SvYjqxLvPFR9p2UTzn4OPN3M0DnxzAUfB2Im+AEs/W0/LdkHHW2t7qiJA81MMmngCnMkk7ZaK7qCJWzuTi8kJ0YOe45NM/K5suhQPkwto/+Y3jly9VbW3oAZADgpYob2YkYd9y3jJysedDTjFs4C0xZ/aDJImuwXUwlBdFIHD0imQN6VU5d5sXX31VNkz5N/o+lBCPP8zX6ylu0AcCwWsFTmFw4BD2Uyg9Httv7jLjMT0R0iyx0WTUiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qhnhaCxcmrW5xjD2TObMDQfVHXvaF+V3u+RbvouJJeY=;
+ b=KlaqgZUn2cXjUGUuoMxZbMT5flNZbkexe7Tr4B1fwUldPlT/uqdyIR4JgdzL7OYIZg6VokvWTV/KiIS855o2bt5g/8pG5ihXWagTsXz6X40mm8UGN+GEUs+KcS/wkF7alJHviOCWiwgNJC3MoDlty2HrYQZx0A0c7kj6fAIfVsK2tPA0LMw8Y24U3/bBGQiEMi7q0ylQbhvwq/JEcd9pXlD+uT5QsZubnL7WQ+/h4HB53zEAJneigKD9qHUJ9Ncjh7iYKuZyStqkS72aB497J9+c3gcwdik7sl3uhZyxVLMd9NLiZ8AVVMy6oKrSvzphsfBRiOq3F9hkCtgBUgwVLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qhnhaCxcmrW5xjD2TObMDQfVHXvaF+V3u+RbvouJJeY=;
+ b=sww1FLJgS1QFNDxTnoXkPZGFV6M5RY17FiOBmhkVQRb4oFQWWJtYpbZU+nSP0tPUvez18kAu9WvtrneSIOTA+HVusaz+olySpVfT3Dlgtb7f9xv92wehXVCvpKZgMC11sjuuX4lrk2La5CILUTr5gfV8CEzIF2gf4LqfT0AY2V0=
+Received: from DS7PR06CA0036.namprd06.prod.outlook.com (2603:10b6:8:54::14) by
+ CO6PR12MB5459.namprd12.prod.outlook.com (2603:10b6:303:13b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Tue, 18 Jan
+ 2022 14:37:51 +0000
+Received: from DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::cb) by DS7PR06CA0036.outlook.office365.com
+ (2603:10b6:8:54::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10 via Frontend
+ Transport; Tue, 18 Jan 2022 14:37:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT024.mail.protection.outlook.com (10.13.172.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 14:37:49 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
+ 2022 08:37:48 -0600
+Date:   Tue, 18 Jan 2022 08:37:30 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <20220118143730.wenhm2bbityq7wwy@amd.com>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-30-brijesh.singh@amd.com>
+ <YeAmFePcPjvMoWCP@zn.tnic>
+ <20220113163913.phpu4klrmrnedgic@amd.com>
+ <YeGhKll2fTcTr2wS@zn.tnic>
+ <20220118043521.exgma53qrzrbalpd@amd.com>
+ <YebIiN6Ftq2aPtyF@zn.tnic>
+ <20220118142345.65wuub2p3alavhpb@amd.com>
+ <20220118143238.lu22npcktxuvadwk@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220118143238.lu22npcktxuvadwk@amd.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e4dbac7d-ecca-43bb-0665-08d9da9019da
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5459:EE_
+X-Microsoft-Antispam-PRVS: <CO6PR12MB5459085B7FB182F32496101295589@CO6PR12MB5459.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kvcHbVw4BAH93+yfnO/WM7aa7tb5I0t9No8QRwWk3jC0Ye9dmDxcgKpIBuKgn14cU7cBncTuEZDKjfhM5FLp6O6zEHXvKhxQC9S7+7hF2y3qP3twytoS5IUsMl29yFliYHQeTdTBjrmsaeZIfnvojPNQaUob4q6OF/NDtPqDqWIqlMMaGvDySSIU8xo795VWTt3HW8lacQE5LuPTBDFbQjstRTKlwbXItwzBBa3coZ8I8by+8lGkF4bxlnnwsN4O4umH9dFVvb/0OWIwTrs+eCa9qjWieMh7IIG4o1zSYRou7d8zZ0tvPMc1Uj7osi6W9Sh2IutNfpG3ohCaFz4izpqeQbcKSgX2vZJFrxTDtlIGstnhO3slv9h0oMDUyDCNOXLXpnvBHprsP/P6iCzsSFLSCGz+g5x7M/bNaXFAPgAWE7uesbsuRC5AziSO97m+HLIYb2IqGHoQ/vs+TBIdzpzRryg1VYVi7uRopXaxn2WiVG4EerPiPU8haW+xFZ+OS2YGXztXhIxIIwzH6mucS4hbGitmIOU7iFzvXdMGNglTkySnOUTFeD7KqJrkpK4u4j8aL49OO6SeVr+l+XIggPUFoYJxptBRfptpWzSZEd+KhokBK0SCpqyyJELsNCppeOSHBkcfRuXZzKhpA6ki/DYekQL+kVMBuv1xRt4NxxYppLPOKd9Lye+OrLnoCyJGHK/PDOYj+y+N/s8EdG2omTafBzFAPHIxaOpqEzddWw/fLAP5lCutA9ZGUYMPbqVb/LThkJghYrbYr2KNxEkSJ6nzGv3O93y1SgKupdN2qBQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(40470700002)(36840700001)(1076003)(44832011)(2616005)(186003)(36860700001)(426003)(316002)(70206006)(70586007)(8676002)(54906003)(16526019)(336012)(47076005)(8936002)(40460700001)(508600001)(82310400004)(86362001)(6666004)(81166007)(4326008)(5660300002)(356005)(83380400001)(7406005)(36756003)(26005)(7416002)(2906002)(6916009)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 14:37:49.2719
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4dbac7d-ecca-43bb-0665-08d9da9019da
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5459
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, can I ask for review please? Thanks.
-David Heidelberg
+On Tue, Jan 18, 2022 at 08:32:38AM -0600, Michael Roth wrote:
+> On Tue, Jan 18, 2022 at 08:23:45AM -0600, Michael Roth wrote:
+> > On Tue, Jan 18, 2022 at 03:02:48PM +0100, Borislav Petkov wrote:
+> > > On Mon, Jan 17, 2022 at 10:35:21PM -0600, Michael Roth wrote:
+> > > > Unfortunately, in sev_enable(), between the point where snp_init() is
+> > > > called, and sev_status is actually set, there are a number of cpuid
+> > > > intructions which will make use of do_vc_no_ghcb() prior to sev_status
+> > > > being set (and it needs to happen in that order to set sev_status
+> > > > appropriately). After that point, snp_cpuid_active() would no longer be
+> > > > necessary, but during that span some indicator is needed in case this
+> > > > is just an SEV-ES guest trigger cpuid #VCs.
+> > > 
+> > > You mean testing what snp_cpuid_info_create() set up is not enough?
+> > > 
+> > > diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> > > index 7bc7e297f88c..17cfe804bad3 100644
+> > > --- a/arch/x86/kernel/sev-shared.c
+> > > +++ b/arch/x86/kernel/sev-shared.c
+> > > @@ -523,7 +523,9 @@ static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+> > >  static int snp_cpuid(u32 func, u32 subfunc, u32 *eax, u32 *ebx, u32 *ecx,
+> > >  		     u32 *edx)
+> > >  {
+> > > -	if (!snp_cpuid_active())
+> > > +	const struct snp_cpuid_info *c = snp_cpuid_info_get_ptr();
+> > > +
+> > > +	if (!c->count)
+> > >  		return -EOPNOTSUPP;
+> > >  
+> > >  	if (!snp_cpuid_find_validated_func(func, subfunc, eax, ebx, ecx, edx)) {
+> > 
+> > snp_cpuid_info_get_ptr() will always return non-NULL, since it's a
+> > pointer to the local copy of the cpuid page. But I can probably re-work
+> 
+> Doh, misread your patch. Yes I think checking the count would also work,
+> since a valid table should be non-zero.
 
-On Fri, Oct 29 2021 at 14:17:33 +0200, David Heidelberg <david@ixit.cz> 
-wrote:
-> fsl,tmu-calibration is in u32-matrix format. Use matching property 
-> syntax.
-> No functional changes. Fixes warnings as:
-> $ make dtbs_check
-> ...
-> arch/arm64/boot/dts/freescale/imx8mq-librem5-r3.dt.yaml: 
-> tmu@30260000: fsl,tmu-calibration:0: Additional items are not allowed 
-> (1, 41, 2, 47, 3, 53, 4, 61, 5, 67, 6, 75, 7, 81, 8, 87, 9, 95, 10, 
-> 103, 11, 111
-> , 65536, 27, 65537, 35, 65538, 43, 65539, 51, 65540, 59, 65541, 67, 
-> 65542, 75, 65543, 85, 65544, 93, 65545, 103, 65546, 112, 131072, 23, 
-> 131073, 35, 131074, 45, 131075, 55, 131076, 65, 131077, 75, 131078, 
-> 87, 13
-> 1079, 99, 131080, 111, 196608, 21, 196609, 33, 196610, 45, 196611, 
-> 57, 196612, 69, 196613, 83, 196614, 95, 196615, 113 were unexpected)
->         From schema: 
-> Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-> ...
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  arch/powerpc/boot/dts/fsl/t1023si-post.dtsi | 79 
-> +++++++++++----------
->  arch/powerpc/boot/dts/fsl/t1040si-post.dtsi | 71 +++++++++---------
->  2 files changed, 76 insertions(+), 74 deletions(-)
-> 
-> diff --git a/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi 
-> b/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi
-> index d552044c5afc..aa5152ca8120 100644
-> --- a/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi
-> +++ b/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi
-> @@ -367,45 +367,46 @@ tmu: tmu@f0000 {
->  		reg = <0xf0000 0x1000>;
->  		interrupts = <18 2 0 0>;
->  		fsl,tmu-range = <0xb0000 0xa0026 0x80048 0x30061>;
-> -		fsl,tmu-calibration = <0x00000000 0x0000000f
-> -				       0x00000001 0x00000017
-> -				       0x00000002 0x0000001e
-> -				       0x00000003 0x00000026
-> -				       0x00000004 0x0000002e
-> -				       0x00000005 0x00000035
-> -				       0x00000006 0x0000003d
-> -				       0x00000007 0x00000044
-> -				       0x00000008 0x0000004c
-> -				       0x00000009 0x00000053
-> -				       0x0000000a 0x0000005b
-> -				       0x0000000b 0x00000064
-> -
-> -				       0x00010000 0x00000011
-> -				       0x00010001 0x0000001c
-> -				       0x00010002 0x00000024
-> -				       0x00010003 0x0000002b
-> -				       0x00010004 0x00000034
-> -				       0x00010005 0x00000039
-> -				       0x00010006 0x00000042
-> -				       0x00010007 0x0000004c
-> -				       0x00010008 0x00000051
-> -				       0x00010009 0x0000005a
-> -				       0x0001000a 0x00000063
-> -
-> -				       0x00020000 0x00000013
-> -				       0x00020001 0x00000019
-> -				       0x00020002 0x00000024
-> -				       0x00020003 0x0000002c
-> -				       0x00020004 0x00000035
-> -				       0x00020005 0x0000003d
-> -				       0x00020006 0x00000046
-> -				       0x00020007 0x00000050
-> -				       0x00020008 0x00000059
-> -
-> -				       0x00030000 0x00000002
-> -				       0x00030001 0x0000000d
-> -				       0x00030002 0x00000019
-> -				       0x00030003 0x00000024>;
-> +		fsl,tmu-calibration =
-> +				<0x00000000 0x0000000f>,
-> +				<0x00000001 0x00000017>,
-> +				<0x00000002 0x0000001e>,
-> +				<0x00000003 0x00000026>,
-> +				<0x00000004 0x0000002e>,
-> +				<0x00000005 0x00000035>,
-> +				<0x00000006 0x0000003d>,
-> +				<0x00000007 0x00000044>,
-> +				<0x00000008 0x0000004c>,
-> +				<0x00000009 0x00000053>,
-> +				<0x0000000a 0x0000005b>,
-> +				<0x0000000b 0x00000064>,
-> +
-> +				<0x00010000 0x00000011>,
-> +				<0x00010001 0x0000001c>,
-> +				<0x00010002 0x00000024>,
-> +				<0x00010003 0x0000002b>,
-> +				<0x00010004 0x00000034>,
-> +				<0x00010005 0x00000039>,
-> +				<0x00010006 0x00000042>,
-> +				<0x00010007 0x0000004c>,
-> +				<0x00010008 0x00000051>,
-> +				<0x00010009 0x0000005a>,
-> +				<0x0001000a 0x00000063>,
-> +
-> +				<0x00020000 0x00000013>,
-> +				<0x00020001 0x00000019>,
-> +				<0x00020002 0x00000024>,
-> +				<0x00020003 0x0000002c>,
-> +				<0x00020004 0x00000035>,
-> +				<0x00020005 0x0000003d>,
-> +				<0x00020006 0x00000046>,
-> +				<0x00020007 0x00000050>,
-> +				<0x00020008 0x00000059>,
-> +
-> +				<0x00030000 0x00000002>,
-> +				<0x00030001 0x0000000d>,
-> +				<0x00030002 0x00000019>,
-> +				<0x00030003 0x00000024>;
->  		#thermal-sensor-cells = <1>;
->  	};
-> 
-> diff --git a/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi 
-> b/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi
-> index f58eb820eb5e..27e6985d8bde 100644
-> --- a/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi
-> +++ b/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi
-> @@ -447,41 +447,42 @@ tmu: tmu@f0000 {
->  		reg = <0xf0000 0x1000>;
->  		interrupts = <18 2 0 0>;
->  		fsl,tmu-range = <0xa0000 0x90026 0x8004a 0x1006a>;
-> -		fsl,tmu-calibration = <0x00000000 0x00000025
-> -				       0x00000001 0x00000028
-> -				       0x00000002 0x0000002d
-> -				       0x00000003 0x00000031
-> -				       0x00000004 0x00000036
-> -				       0x00000005 0x0000003a
-> -				       0x00000006 0x00000040
-> -				       0x00000007 0x00000044
-> -				       0x00000008 0x0000004a
-> -				       0x00000009 0x0000004f
-> -				       0x0000000a 0x00000054
-> -
-> -				       0x00010000 0x0000000d
-> -				       0x00010001 0x00000013
-> -				       0x00010002 0x00000019
-> -				       0x00010003 0x0000001f
-> -				       0x00010004 0x00000025
-> -				       0x00010005 0x0000002d
-> -				       0x00010006 0x00000033
-> -				       0x00010007 0x00000043
-> -				       0x00010008 0x0000004b
-> -				       0x00010009 0x00000053
-> -
-> -				       0x00020000 0x00000010
-> -				       0x00020001 0x00000017
-> -				       0x00020002 0x0000001f
-> -				       0x00020003 0x00000029
-> -				       0x00020004 0x00000031
-> -				       0x00020005 0x0000003c
-> -				       0x00020006 0x00000042
-> -				       0x00020007 0x0000004d
-> -				       0x00020008 0x00000056
-> -
-> -				       0x00030000 0x00000012
-> -				       0x00030001 0x0000001d>;
-> +		fsl,tmu-calibration =
-> +				<0x00000000 0x00000025>,
-> +				<0x00000001 0x00000028>,
-> +				<0x00000002 0x0000002d>,
-> +				<0x00000003 0x00000031>,
-> +				<0x00000004 0x00000036>,
-> +				<0x00000005 0x0000003a>,
-> +				<0x00000006 0x00000040>,
-> +				<0x00000007 0x00000044>,
-> +				<0x00000008 0x0000004a>,
-> +				<0x00000009 0x0000004f>,
-> +				<0x0000000a 0x00000054>,
-> +
-> +				<0x00010000 0x0000000d>,
-> +				<0x00010001 0x00000013>,
-> +				<0x00010002 0x00000019>,
-> +				<0x00010003 0x0000001f>,
-> +				<0x00010004 0x00000025>,
-> +				<0x00010005 0x0000002d>,
-> +				<0x00010006 0x00000033>,
-> +				<0x00010007 0x00000043>,
-> +				<0x00010008 0x0000004b>,
-> +				<0x00010009 0x00000053>,
-> +
-> +				<0x00020000 0x00000010>,
-> +				<0x00020001 0x00000017>,
-> +				<0x00020002 0x0000001f>,
-> +				<0x00020003 0x00000029>,
-> +				<0x00020004 0x00000031>,
-> +				<0x00020005 0x0000003c>,
-> +				<0x00020006 0x00000042>,
-> +				<0x00020007 0x0000004d>,
-> +				<0x00020008 0x00000056>,
-> +
-> +				<0x00030000 0x00000012>,
-> +				<0x00030001 0x0000001d>;
->  		#thermal-sensor-cells = <1>;
->  	};
-> 
-> --
-> 2.33.0
-> 
+Actually, no, because doing that would provide hypervisor a means to
+effectively disable CPUID page for an SNP guest by provided a table with
+count == 0, which needs to be guarded against.
 
-
+But can still implement something similar by having snp_cpuid_info_get_ptr()
+return NULL if local copy of cpuid page hasn't been initialized.

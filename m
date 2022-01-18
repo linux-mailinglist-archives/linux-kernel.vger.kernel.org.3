@@ -2,110 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 323BB492F11
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C30492F14
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349092AbiARUN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
+        id S1349108AbiARUOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348488AbiARUNv (ORCPT
+        with ESMTP id S1349098AbiARUON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:13:51 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB35C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:13:51 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id t9so598283oie.12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XpoF/evSGX0quKC3ojWlZTaHsolih4rnXmKXZB109js=;
-        b=n8WE+2ligzVvQw/ftNjaP0Jz2I1BoZsxvck3BbPbUE2kP5cwZAgXweL6E9LBtnJvJM
-         1Z+RJvetEolqEgtBCwkmyNZ48Dog0SO60DM9dFkETYnmCh/xaeKp+fzwHVNyAqRLLemj
-         tADuUkyCCcJF9iQFwMdF/H+JhaKN2HGHFsC0Lrrb/z9jS1Yf4Q0S1Z1+eIG0uoK+uvQP
-         cCcvC6YIqQ0LRWQpCXPLkr3tCrYJUHYK4AiYcEkUXQUMOomxqNl5rupsd0ne7DWp4Hym
-         lPUhAymAfQZHw0K887F/ecfeKL/1bSKmAffodTve5rE3R4E9fyHgU28XaLZco31L8wv8
-         8YZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XpoF/evSGX0quKC3ojWlZTaHsolih4rnXmKXZB109js=;
-        b=j44KjL4L3yLy7GSfA/RX3nZOP12CuF+E+1CLa7tMoHBAcU2PdbP5dhJTBmbO91tRrn
-         leSh87gLPi5IRn1hzgmdPqqV2H9ac6DFaaannWsE3a9ott/JzlTz7EUqWNBNXpCmRUs+
-         Qo8uqDy2sQLKA1uCrMKyG1jQQq7s1ve8ioj3ATpgS/1WGL2nrdZtiN/k9XQU9YGdPfhF
-         nak0oM5kQvHikElVuVA0BfHNBTsXQCv8Ox7oNmCqvkRAxA8zOz8I1swZecKUYOqBC+oU
-         j/d7x0NljChbQBvlKjZHweq7EWrHEPOn6HdkjUQ3fNewDt+o7mju0PTbKdbyGLzTD+p2
-         Fyuw==
-X-Gm-Message-State: AOAM5311WWgdnumxgopHuOwlHkTCmuTsHOzeQ2A5v0+x0AftYf6VzUfg
-        LMmruPTwV/fGSLMyHxjmnurvdDUT6jnCyyNvVcg=
-X-Google-Smtp-Source: ABdhPJxvYFNlS33t9IOQ2TLxkoGORZjhSHiI7VuLU21HAwY3nvkX4Ewt2BR5wBKsVHdRKvXiVgMiEuFSpuxy058YkGI=
-X-Received: by 2002:a05:6808:68f:: with SMTP id k15mr176939oig.5.1642536830297;
- Tue, 18 Jan 2022 12:13:50 -0800 (PST)
+        Tue, 18 Jan 2022 15:14:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B824C061574;
+        Tue, 18 Jan 2022 12:14:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51A8FB81803;
+        Tue, 18 Jan 2022 20:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD28DC340E0;
+        Tue, 18 Jan 2022 20:14:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642536851;
+        bh=DlHdeXzjECbxaJwQVBy3YSulzif+klrPVSABU+KcSEU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kk53RwCgXEYjKllMos8zA6LCm8NNdZuwovPImNq+h1nxopYTqt+oxEvsF9zkryLJ+
+         nLMFz0DFaxV/m6KEZ0OFToVdaK9tHb95cJRddak4Q+1Ggu6qsocZyny2yyp3OT8IZc
+         gtAfYUV8GnqeFp1h5YH9h/Cb0nJWhUTJMz/ZGM8pVWlzrx58egKXnqAa524r0z29lV
+         FncmUT3e4dcBZNXGPJMiGKqmmyL+QzscHZNu/E+Z4yPWcOzNIWMiAK9+nSb+rckMHG
+         vpKzqmqXWYllkDGM9CWHXDwb6jx1dBZpzJi/Fc0ZDEXgypOJJ1z4/MYq6wyq0c2CSO
+         73ww7YEBQZuTg==
+Date:   Tue, 18 Jan 2022 12:14:09 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     David Miller <davem@davemloft.net>, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] nfc: llcp: fix and improvements
+Message-ID: <20220118121409.6f89b651@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <9fcef93a-7afa-06ad-66e4-2cb22c6ea0ae@canonical.com>
+References: <20220115122650.128182-1-krzysztof.kozlowski@canonical.com>
+        <20220116.123211.1251576778673440603.davem@davemloft.net>
+        <9fcef93a-7afa-06ad-66e4-2cb22c6ea0ae@canonical.com>
 MIME-Version: 1.0
-References: <1642507272-17545-1-git-send-email-lyz_cs@pku.edu.cn> <0ba294a9-1428-98cf-93b6-f9a195924a8f@amd.com>
-In-Reply-To: <0ba294a9-1428-98cf-93b6-f9a195924a8f@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 18 Jan 2022 15:13:39 -0500
-Message-ID: <CADnq5_M7SqB_OjKaYaqKvdC=8xAo=Zn4NFzAuPxZrKPEOJtU8w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Add missing pm_runtime_put_autosuspend
-To:     "Lazar, Lijo" <lijo.lazar@amd.com>
-Cc:     Yongzhi Liu <lyz_cs@pku.edu.cn>, Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nirmoy Das <nirmoy.das@amd.com>,
-        Jingwen Chen <Jingwen.Chen2@amd.com>,
-        "Quan, Evan" <evan.quan@amd.com>, Jack Zhang <Jack.Zhang1@amd.com>,
-        Kevin Wang <kevin1.wang@amd.com>,
-        Tom St Denis <tom.stdenis@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Strangely I can't seem to find this patch in my inbox or in
-the dri-devel or amd-gfx archives.
+On Sun, 16 Jan 2022 17:58:28 +0100 Krzysztof Kozlowski wrote:
+> On 16/01/2022 13:32, David Miller wrote:
+> > 
+> > Please don't mix cleanups and bug fixes.  
+> 
+> The fix is the first patch, so it is easy to apply. Do you wish me to
+> resend it?
 
-Alex
+Yes, please. 99% sure Dave is expecting you to do so.
 
-On Tue, Jan 18, 2022 at 9:03 AM Lazar, Lijo <lijo.lazar@amd.com> wrote:
->
->
->
-> On 1/18/2022 5:31 PM, Yongzhi Liu wrote:
-> > pm_runtime_get_sync() increments the runtime PM usage counter even
-> > when it returns an error code, thus a matching decrement is needed
-> > on the error handling path to keep the counter balanced.
-> >
-> > Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
->
-> Thanks!
->
-> Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
->
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > index 9aea1cc..4b950de 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > @@ -1120,8 +1120,10 @@ static ssize_t amdgpu_debugfs_gfxoff_read(struct file *f, char __user *buf,
-> >               return -EINVAL;
-> >
-> >       r = pm_runtime_get_sync(adev_to_drm(adev)->dev);
-> > -     if (r < 0)
-> > +     if (r < 0) {
-> > +             pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
-> >               return r;
-> > +     }
-> >
-> >       while (size) {
-> >               uint32_t value;
-> >
+FWIW the scripts I use for tag normalization and adding Links won't
+work when picking one patch out of entire series so repost is best.
+Thanks!

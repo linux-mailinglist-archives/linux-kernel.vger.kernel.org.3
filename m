@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DAD4925BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E374925BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiARMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S233608AbiARMdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiARMce (ORCPT
+        with ESMTP id S229604AbiARMdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:32:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FABC061574;
-        Tue, 18 Jan 2022 04:32:34 -0800 (PST)
+        Tue, 18 Jan 2022 07:33:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21349C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 04:33:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D929061380;
-        Tue, 18 Jan 2022 12:32:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254E8C00446;
-        Tue, 18 Jan 2022 12:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642509153;
-        bh=F9Vu7ZI1/HnPH5QGZNUeqh85iKDiHrkRW8l6raKQS+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WmrASj3abHpIKN7ju1MqlFtWwY+yzZqkpVOdWr9pT+nikc5uQwHJvmtPWBEot56md
-         8uvZW3fsAR01ws0X7LKtkgykQPuSBRUmSBVW4m6f7KaT0lwPDeBthRSs8PzjAhT7GA
-         R+0zSy1emkBLdDXSNtPlX4fzkCZ1zu1fVl2CGXHX86Il4GXhXQ0r6B1BFTwrtUyedw
-         JPLgOvn+LpML56YCXJMB+yUpqjTqQilfATvLW6sTKW5h5kjDZRw7ymla0/98zQKfIt
-         2qMA6YcSN2HomakS+9yo1mldhDfarQsr817bsuoRUg99WsnmP7vcvQl29uy82WyFss
-         9Ig7+VjIMb9vA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 86E8440714; Tue, 18 Jan 2022 09:32:30 -0300 (-03)
-Date:   Tue, 18 Jan 2022 09:32:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     Ian Rogers <irogers@google.com>, James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Chase Conklin <chase.conklin@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] perf record/arm-spe: Override attr->sample_period for
- non-libpfm4 events
-Message-ID: <YeazXmnjkET7h5LW@kernel.org>
-References: <20220114212102.179209-1-german.gomez@arm.com>
- <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
- <35a4f70f-d7ef-6e3c-dc79-aa09d87f0271@arm.com>
- <CAP-5=fUHT29Z8Y5pMdTWK4mLKAXrNTtC5RBpet6UsAy4TLDfDw@mail.gmail.com>
- <10cc73f1-53fd-9c5a-7fe2-8cd3786fbe37@arm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D462AB8169D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF26C00446;
+        Tue, 18 Jan 2022 12:32:58 +0000 (UTC)
+Date:   Tue, 18 Jan 2022 12:32:55 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, maz@kernel.org, will@kernel.org,
+        james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        suzuki.poulose@arm.com, jean-philippe@linaro.org,
+        Alexandru.Elisei@arm.com, qperret@google.com,
+        jonathan.cameron@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
+Message-ID: <Yeazd1lLuYm4k3lH@arm.com>
+References: <20211122121844.867-1-shameerali.kolothum.thodi@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <10cc73f1-53fd-9c5a-7fe2-8cd3786fbe37@arm.com>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211122121844.867-1-shameerali.kolothum.thodi@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 17, 2022 at 09:32:55PM +0000, German Gomez escreveu:
-> Hi Ian,
-> 
-> On 17/01/2022 16:28, Ian Rogers wrote:
-> > [...]
-> > Thanks for fixing this, I can add an acked-by for the v2 patch. Could
-> > we add a test for this to avoid future regressions? There are similar
-> > tests for frequency like:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/attr/test-record-freq
-> > based on the attr.py test:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/attr.py
-> > The test specifies a base type of event attribute and then what is
-> > modified by the test. It takes a little to get your head around but
-> > having a test for this would be a welcome addition.
-> 
-> I agree I should have included a test for this fix. I'll look into this for the v2.
+Hi Shameer,
 
-A test is always good to have, we need more, yeah.
+On Mon, Nov 22, 2021 at 12:18:40PM +0000, Shameer Kolothum wrote:
+>  -TLA+ model. Modified the asidalloc model to incorporate the new
+>   VMID algo. The main differences are,
+>   -flush_tlb_all() instead of local_tlb_flush_all() on rollover.
+>   -Introduced INVALID_VMID and vCPU Sched Out logic.
+>   -No CnP (Removed UniqueASIDAllCPUs & UniqueASIDActiveTask invariants).
+>   -Removed  UniqueVMIDPerCPU invariant for now as it looks like
+>    because of the speculative fetching with flush_tlb_all() there
+>    is a small window where this gets triggered. If I change the
+>    logic back to local_flush_tlb_all(), UniqueVMIDPerCPU seems to
+>    be fine. With my limited knowledge on TLA+ model, it is not
+>    clear to me whether this is a problem with the above logic
+>    or the VMID model implementation. Really appreciate any help
+>    with the model.
+>    The initial VMID TLA+ model is here,
+>    https://github.com/shamiali2008/kernel-tla/tree/private-vmidalloc-v1
 
-But since this is a fix and what is needed for v2 is just to improve the
-wording, please don't let the test to prevent you from sending the
-updated fix.
+I only had a brief look at the TLA+ model and I don't understand why you
+have a separate 'shed_out' process. It would run in parallel with the
+'sched' but AFAICT you can't really schedule a guest out while you are
+in the middle of scheduling it in. I'd rather use the same 'sched'
+process and either schedule in an inactive task or schedule out an
+active one for a given CPU.
 
-Then you can go on and work on the test.
+Also active_vmids[] for example is defined on the CPUS domain but you
+call vcpu_sched_out() from a process that's not in the CPUS domain but
+the SCHED_OUT one.
 
-I say this because the merge window may close before the test gets ready
-and its better for us to have fixes merged as soon as possible so that
-we have more time to figure out if it has unintended consequences as it
-gets in place for longer.
- 
-> Other events such as "-p 10000 -e cycles//" worked fine. Only the ones with aux area tracing (arm_spe, cs_etm, intel_pt) were ignoring the global config flags.
-> 
-> Thank you for the pointers, and the review,
-> German
-> 
-> >
-> > Thanks!
-> > Ian
-> >
-> >> Thanks for the review,
-> >> German
+Regarding UniqueVMIDPerCPU, I think we need to figure out why it
+happens. The fact that flush_tlb_all() was made to simulate the
+speculative TLB loads is not relevant. In a different spec I have,
+arm64kpti.tla, I just used another process that invokes an update_tlbs()
+macro so that it can happen at any time. I didn't bother to update the
+ASID spec in a similar way but it may be useful. The corresponding
+UniqueASIDPerCPU meant that for any two TLB entries on a single CPU, if
+they correspond to different tasks (pgd), they should have different
+ASIDs. That's a strong requirement, otherwise we end up with the wrong
+translation.
+
+Why did you remove the CnP? Do we have this disabled for KVM guests?
 
 -- 
-
-- Arnaldo
+Catalin

@@ -2,148 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE5A492C5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC6F492C68
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347287AbiARRaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:30:07 -0500
-Received: from mga17.intel.com ([192.55.52.151]:57461 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347244AbiARRaF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:30:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642527005; x=1674063005;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dSukR0JtsenQCgdhT6LdUB7pq9FiY6TgrOKCVDDPSoc=;
-  b=RPmhmcrxcec9mBb//8NARoQ24Yc4YAn0IjQSp65Hm8njx4+z8yMiFeus
-   8RArtYkSG8EiMOUMhOMRq4Ad0DM71HJ5zVwDKNbeJkIMUOhCizNwbN+OR
-   XOWYMtUuE3bAoReLjKh28JelKquvuxO8kEHcczkCylJzUCadQtvfvoVJp
-   w5CNgdCeKdNF76yZSQ1o7stCLWeKFgCuIk/UDZafca4Osx+77pdcb48/1
-   LF93kP49Q65lzxBXG//mpMoc2tJ5emmNzUCDD6/Yciqsx2ZD9kwxBYWCY
-   Ln076eoimplSj+ad37UUb0B3ARoPXMW8ssqNT9AB5a40X8CS4ZTtWjTQJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="225546174"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="225546174"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 09:30:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="477064167"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jan 2022 09:30:03 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9sJ0-000Cn7-Hg; Tue, 18 Jan 2022 17:30:02 +0000
-Date:   Wed, 19 Jan 2022 01:29:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wei Fu <wefu@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Liu Shaohua <liush@allwinnertech.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [csky-linux:riscv_compat_v2_sv48_v3_mmind_pbmt 42/44]
- arch/riscv/kernel/setup.c:328:8: warning: format '%lx' expects argument of
- type 'long unsigned int', but argument 3 has type 'u64' {aka 'long long
- unsigned int'}
-Message-ID: <202201190119.sK9iIWyR-lkp@intel.com>
+        id S1347305AbiARRa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229568AbiARRa5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:30:57 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90FBC061574;
+        Tue, 18 Jan 2022 09:30:56 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id br17so73689132lfb.6;
+        Tue, 18 Jan 2022 09:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kd+ihHSa65bZsYesw4D/FyTF+Vo+oGBmiX15FDAQBXk=;
+        b=e13PFa9kUnXLdHA7Q1zZ95wii6tWgGfOPp0QNoBAFP/eLrG1Ubit7uyDezbQqsrGnv
+         8roNME9Q6nZjaWFe/sfws3oDxQGesuTonq0wNGYGZ380zn5cZyfyWB6h4phl5TvbbECQ
+         BWC8Z4lLxrH9Ow9SutdvCZYOWDac7fOJdUC6WM9JATZRpgbrTVLUEW1woV/L4N4BX4MM
+         RqUSfdenWGAOf9wHTXdbmN0KhcesEenPbMRLQBF2CbC/K9sF4slFVaOiLHFhSP/NCVTk
+         4tnVLabvDMxIkSUAI8gdZsGIyquPUiDcWSK/0XEyKSM53rV1VCbKcwn+eWjZirqb0i+H
+         zchQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kd+ihHSa65bZsYesw4D/FyTF+Vo+oGBmiX15FDAQBXk=;
+        b=FiaOqv8alezADDYkJB5RQEo16rRPpLkSLvKzNzutpwsMLAmjQj3cKq00eaQ3HGCArR
+         KKYpn6OMO3bDmF1catH1IWAcBxUqxhn2P1NwanW6x8QrczIFsvBDOks66q0YW04H8gpe
+         IDU9quAKkxfIhT1zDyDqjw+bp9eOH84UFLzue7WJ9YrLeUMuyMDR8KG71oVbOheb4UPT
+         nCf4CE4L3UodxLKjHOFEi2Hfx4mXQtzdpA+IUHATeGGnjeuvW8tNJlW+UcM3qOkMSQTk
+         T/5BPX28UGHtQBUKLf8G3CFzKrx+FW4FT6vpB6wpt8Ldiv6L951oYmj+YGeX5ltng1sz
+         /liA==
+X-Gm-Message-State: AOAM531G00kt7prpSzdb4+7mKjTFUd8Dn5yRY/7qgMNl+kKvaCIz2Dld
+        GLeabaRv8sou7F7Jo9yt9C0tUw9e+vQ=
+X-Google-Smtp-Source: ABdhPJxvN0s/tHa9KOkWnm2uUIZUZLh8EQBSFrgC9FL8hALhMK6XhLbQQsY/Z1iA+1VidzrnHhLOFw==
+X-Received: by 2002:ac2:5217:: with SMTP id a23mr22664021lfl.684.1642527055166;
+        Tue, 18 Jan 2022 09:30:55 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id t6sm1751911lfl.286.2022.01.18.09.30.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 09:30:54 -0800 (PST)
+Message-ID: <99353796-eea7-b765-f355-46e50f1b8773@gmail.com>
+Date:   Tue, 18 Jan 2022 20:30:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
+ special case
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211213225350.27481-1-ebiederm@xmission.com>
+ <9363765f-9883-75ee-70f1-a1a8e9841812@gmail.com>
+ <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
+ <5bbb54c4-7504-cd28-5dde-4e5965496625@gmail.com>
+ <87bl0m14ew.fsf@email.froward.int.ebiederm.org>
+ <6692758a-0af2-67e0-26fd-365625b3ad0c@gmail.com>
+ <87iluqtcj3.fsf@email.froward.int.ebiederm.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <87iluqtcj3.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_mmind_pbmt
-head:   b28a50c03a72c48d3895320bdd0757e0a8acb881
-commit: 330ce3d4a3edd32464ac6deb817c211526c40781 [42/44] riscv: add RISC-V Svpbmt extension supports
-config: riscv-nommu_k210_defconfig (https://download.01.org/0day-ci/archive/20220119/202201190119.sK9iIWyR-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/c-sky/csky-linux/commit/330ce3d4a3edd32464ac6deb817c211526c40781
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_mmind_pbmt
-        git checkout 330ce3d4a3edd32464ac6deb817c211526c40781
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+11.01.2022 20:20, Eric W. Biederman пишет:
+> Dmitry Osipenko <digetx@gmail.com> writes:
+> 
+>> 08.01.2022 21:13, Eric W. Biederman пишет:
+>>> Dmitry Osipenko <digetx@gmail.com> writes:
+>>>
+>>>> 05.01.2022 22:58, Eric W. Biederman пишет:
+>>>>>
+>>>>> I have not yet been able to figure out how to run gst-pluggin-scanner in
+>>>>> a way that triggers this yet.  In truth I can't figure out how to
+>>>>> run gst-pluggin-scanner in a useful way.
+>>>>>
+>>>>> I am going to set up some unit tests and see if I can reproduce your
+>>>>> hang another way, but if you could give me some more information on what
+>>>>> you are doing to trigger this I would appreciate it.
+>>>>
+>>>> Thanks, Eric. The distro is Arch Linux, but it's a development
+>>>> environment where I'm running latest GStreamer from git master. I'll try
+>>>> to figure out the reproduction steps and get back to you.
+>>>
+>>> Thank you.
+>>>
+>>> Until I can figure out why this is causing problems I have dropped the
+>>> following two patches from my queue:
+>>>  signal: Make SIGKILL during coredumps an explicit special case
+>>>  signal: Drop signals received after a fatal signal has been processed
+>>>
+>>> I have replaced them with the following two patches that just do what
+>>> is needed for the rest of the code in the series:
+>>>  signal: Have prepare_signal detect coredumps using
+>>>  signal: Make coredump handling explicit in complete_signal
+>>>
+>>> Perversely my failure to change the SIGKILL handling when coredumps are
+>>> happening proves to me that I need to change the SIGKILL handling when
+>>> coredumps are happening to make the code more maintainable.
+>>
+>> Eric, thank you again. I started to look at the reproduction steps and
+>> haven't completed it yet. Turned out the problem affects only older
+>> NVIDIA Tegra2 Cortex-A9 CPU that lacks support of ARM NEON instructions
+>> set, hence the problem isn't visible on x86 and other CPUs out of the
+>> box. I'll need to check whether the problem could be simulated on all
+>> arches or maybe it's specific to VFP exception handling of ARM32.
+> 
+> It sounds like the gstreamer plugins only fail on certain hardware on
+> arm32, and things don't hang in coredumps unless the plugins fail.
+> That does make things tricky to minimize.
+> 
+> I have just verified that the known problematic code is not
+> in linux-next for Jan 11 2022.
+> 
+> If folks as they have time can double check linux-next and verify all is
+> well I would appreciate it.  I don't expect that there are problems but
+> sometimes one problem hides another.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hello Eric,
 
-All warnings (new ones prefixed by >>):
+I reproduced the trouble on x86_64.
 
-   arch/riscv/kernel/setup.c: In function 'free_initmem':
-   arch/riscv/kernel/setup.c:326:9: error: implicit declaration of function 'ALT_THEAD_PMA' [-Werror=implicit-function-declaration]
-     326 |         ALT_THEAD_PMA(prot_val);
-         |         ^~~~~~~~~~~~~
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:9,
-                    from arch/riscv/kernel/setup.c:12:
->> arch/riscv/kernel/setup.c:328:8: warning: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Wformat=]
-     328 | printk("%s: _PAGE_IO: 0x%lx\n", __func__, _PAGE_IO);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:422:25: note: in definition of macro 'printk_index_wrap'
-     422 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   arch/riscv/kernel/setup.c:328:1: note: in expansion of macro 'printk'
-     328 | printk("%s: _PAGE_IO: 0x%lx\n", __func__, _PAGE_IO);
-         | ^~~~~~
-   arch/riscv/kernel/setup.c:328:27: note: format string is defined here
-     328 | printk("%s: _PAGE_IO: 0x%lx\n", __func__, _PAGE_IO);
-         |                         ~~^
-         |                           |
-         |                           long unsigned int
-         |                         %llx
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:9,
-                    from arch/riscv/kernel/setup.c:12:
-   arch/riscv/kernel/setup.c:329:8: warning: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Wformat=]
-     329 | printk("%s: _PAGE_NOCACHE: 0x%lx\n", __func__, _PAGE_NOCACHE);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:422:25: note: in definition of macro 'printk_index_wrap'
-     422 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   arch/riscv/kernel/setup.c:329:1: note: in expansion of macro 'printk'
-     329 | printk("%s: _PAGE_NOCACHE: 0x%lx\n", __func__, _PAGE_NOCACHE);
-         | ^~~~~~
-   arch/riscv/kernel/setup.c:329:32: note: format string is defined here
-     329 | printk("%s: _PAGE_NOCACHE: 0x%lx\n", __func__, _PAGE_NOCACHE);
-         |                              ~~^
-         |                                |
-         |                                long unsigned int
-         |                              %llx
-   cc1: some warnings being treated as errors
+Here are the reproduction steps, using ArchLinux and linux-next-20211224:
 
+```
+sudo pacman -S base-devel git mesa glu meson wget
+git clone https://github.com/grate-driver/gstreamer.git
+cd gstreamer
+git checkout sigill
+meson --prefix=/usr -Dgst-plugins-base:playback=enabled -Dgst-devtools:validate=disabled build
+cd build
+sudo ninja install
+wget https://www.peach.themazzone.com/big_buck_bunny_720p_h264.mov
+rm -r ~/.cache/gstreamer-1.0
+gst-play-1.0 ./big_buck_bunny_720p_h264.mov
+```
 
-vim +328 arch/riscv/kernel/setup.c
+The SIGILL, thrown by [1], causes the hang. There is no hang using v5.16.1 kernel. 
 
-19a00869028f4a Atish Patra    2020-11-04  320  
-19a00869028f4a Atish Patra    2020-11-04  321  void free_initmem(void)
-19a00869028f4a Atish Patra    2020-11-04  322  {
-a8a0c8f014166b Heiko Stuebner 2021-12-17  323  	unsigned long prot_val = pgprot_val(PAGE_KERNEL);
-a8a0c8f014166b Heiko Stuebner 2021-12-17  324  
-a8a0c8f014166b Heiko Stuebner 2021-12-17  325  printk("%s: _PAGE_KERNEL-orig: 0x%lx\n", __func__, prot_val);
-a8a0c8f014166b Heiko Stuebner 2021-12-17  326  	ALT_THEAD_PMA(prot_val);
-a8a0c8f014166b Heiko Stuebner 2021-12-17  327  printk("%s: _PAGE_KERNEL: 0x%lx\n", __func__, prot_val);
-a8a0c8f014166b Heiko Stuebner 2021-12-17 @328  printk("%s: _PAGE_IO: 0x%lx\n", __func__, _PAGE_IO);
+[1] https://github.com/grate-driver/gstreamer/commit/006f9a2ee6dcf7b31c9b5413815d6054d82a3b2f
 
-:::::: The code at line 328 was first introduced by commit
-:::::: a8a0c8f014166b1e95e223240632fd0baac50ea7 hack in a debug output in freeinitmem
-
-:::::: TO: Heiko Stuebner <heiko@sntech.de>
-:::::: CC: Guo Ren <guoren@linux.alibaba.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,96 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B79B9492E8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37392492E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348823AbiARTkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348737AbiARTj7 (ORCPT
+        id S1348864AbiARTnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:43:16 -0500
+Received: from conssluserg-05.nifty.com ([210.131.2.90]:33954 "EHLO
+        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348857AbiARTnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:39:59 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8739C061574;
-        Tue, 18 Jan 2022 11:39:59 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id b3so16298521plc.7;
-        Tue, 18 Jan 2022 11:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CMrbu7d1tdpLr0gUt3hdr3z+X3lDj8gI8RJ8X44ubSA=;
-        b=mh+vyWmGhmDIdWL9PdpJfBayq8BGIVTWH2tZP0BMMlu4sPJTbpx/LqAh72x9Ib85n4
-         EjqSi/Orj76/vhgNnWTodb+ry3mL35e2B2Sn8B+RISI89QwbiU0IWpkWXU4yClAwWHg4
-         C3z3tFMMvEb9WJKgAgtGDPPBHjU5jvwTXU1JBN7Cf9+E6feqxYtIyOBdJVKUg+dMIVOk
-         rRD2OO9LT/eMaQ+VpV/ECkYw0zvnuN+A9BKx9oJOQKtUAVfN6g+TqsZBPmleALfjxe/3
-         WPIyCDulMtmau97NgHtFbNRg3VtXXjinUtPCJ5VyBxK6xudz08cF2p9h63wkHXPEbnr6
-         qrxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CMrbu7d1tdpLr0gUt3hdr3z+X3lDj8gI8RJ8X44ubSA=;
-        b=Kdk9ZGeZG0Soit0mwbD/0OKJunnsjuEiAkEYSul+OasmrZ8S3WP17/1mqe+kBtWxvb
-         JIPZTGpuheTO30L402PTFyvukxGzmcaO/xkgQ1zdkYPLrgj9OaT7I6aeXGx+TOadURMd
-         KNwjvZ61VTVnua/0GbZ2lfhMfMhjePoMbKmx/CKKT2kCxlQnftduXaU3pBLwNg+yzWua
-         dYq59HesrK0qnJH7SSpuAkJGpGl1wajfUy3aaEmqvi7yhf+jQu/ZeLRrmCIGdWmZ79Lm
-         TlyMeaPVW4Aa62vNkvDqUonDF7oyf81qmV+hKzB61ubvh/JTf+jB6v8oL93RqmoCQ27S
-         L7fQ==
-X-Gm-Message-State: AOAM532wsqNc4LSbPZOtBU3ImnzPNQrCfKdNuPlI6qyT+hbalOCGqVok
-        CFle45vENcXpKXEg/b0ftEqKxfd0uWc=
-X-Google-Smtp-Source: ABdhPJwPDwcoNcYMCjeKXdXJCJCiK9U9O9o0FQGKnUj9qVCwuUAR3ihLB8joDorhAL3nKNeNLiKh2Q==
-X-Received: by 2002:a17:90b:3912:: with SMTP id ob18mr113737pjb.112.1642534798913;
-        Tue, 18 Jan 2022 11:39:58 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u6sm16703387pfl.166.2022.01.18.11.39.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 11:39:58 -0800 (PST)
-Subject: Re: [PATCH 5.15 00/28] 5.15.16-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220118160451.879092022@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <bfdcaaf4-de4f-db66-815b-401569a8452d@gmail.com>
-Date:   Tue, 18 Jan 2022 11:39:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 18 Jan 2022 14:43:14 -0500
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 20IJgrbE026463;
+        Wed, 19 Jan 2022 04:42:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 20IJgrbE026463
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1642534974;
+        bh=LNvWzZoXdQgjKsY/TuZQXMxlMKkxTYTgfKxIGj0AYOY=;
+        h=From:Date:Subject:To:Cc:From;
+        b=ccBA/DIbNW6kEdm2Sd7RlPMEggElLy/LSK70wciIB/RBYGHgf+2NjemghjpumBmEY
+         nEFJRos+XFdE2RI7ZOIEzGXadf+yTaWA9+1UG4BDG4xUunX+bPHTIkkHP1rw1d25kb
+         TbKVJNgZVp4yQ9L5cCZgzvW58COIwOESdVWdh2GLMRICxyjGDlduEltTJpWM4BdOb2
+         Jq53zMyAUVx5IAyrwGTTHNaqc+PKzwQfYI6jV5oCwGfXMX4jZoxXXRJTIZpJ2/vyBU
+         NLaFsmpW+nUtDv3T04TAylrdGgaRCu7mqG7FZQ2x9o8MA6C4Uc7Eys0SfGjDoJZk9c
+         /9qvCHzSLgZhQ==
+X-Nifty-SrcIP: [209.85.215.174]
+Received: by mail-pg1-f174.google.com with SMTP id 8so137318pgc.10;
+        Tue, 18 Jan 2022 11:42:54 -0800 (PST)
+X-Gm-Message-State: AOAM533d6+c+TLA6v1Wbx8PI1joDWMhTX+prBJqGyHCvQrMhrIQcVkxQ
+        0JHE6RtX01aD13YojdcYYHWY8GU6b6OYAVxc6RI=
+X-Google-Smtp-Source: ABdhPJx+BM5pnypS6Zvw++CZxvDPLbOIwS69tzu4dV+GB5aMmXGWxPkdGd842xNcKryUL7mriUdoRZcaEdLnp3nD+48=
+X-Received: by 2002:a65:66c5:: with SMTP id c5mr15815564pgw.126.1642534973320;
+ Tue, 18 Jan 2022 11:42:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 19 Jan 2022 04:42:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
+Message-ID: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
+Subject: [GIT PULL] Kbuild updates for v5.17-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 8:05 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.16 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.16-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Linus,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Please pull Kbuild updates.
+Thanks.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+
+You will see a trivial conflict in scripts/link-vmlinux.sh
+(commit 72b3942a173c in the mainline
+vs 7d153696e5db from this PR)
+The fix is available in linux-next.
+
+
+
+
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5=
+:
+
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-v5.17
+
+for you to fetch changes up to c4d7f40b250c1a4d74ed259e84807f58032507b6:
+
+  kbuild: add cmd_file_size (2022-01-14 02:57:43 +0900)
+
+----------------------------------------------------------------
+Kbuild updates for v5.17
+
+ - Add new kconfig target 'make mod2noconfig', which will be useful to
+   speed up the build and test iteration.
+
+ - Raise the minimum supported version of LLVM to 11.0.0
+
+ - Refactor certs/Makefile
+
+ - Change the format of include/config/auto.conf to stop double-quoting
+   string type CONFIG options.
+
+ - Fix ARCH=3Dsh builds in dash
+
+ - Separate compression macros for general purposes (cmd_bzip2 etc.) and
+   the ones for decompressors (cmd_bzip2_with_size etc.)
+
+ - Misc Makefile cleanups
+
+----------------------------------------------------------------
+Josh Triplett (1):
+      kconfig: Add `make mod2noconfig` to disable module options
+
+Masahiro Yamada (25):
+      certs: move the 'depends on' to the choice of module signing keys
+      nds32: remove unused BUILTIN_DTB from arch/nds32/Makefile
+      certs: remove meaningless $(error ...) in certs/Makefile
+      certs: check-in the default x509 config file
+      certs: remove noisy messages while generating the signing key
+      certs: use 'cmd' to hide openssl output in silent builds more simply
+      certs: use if_changed to re-generate the key when the key type is cha=
+nged
+      kbuild: move headers_check.pl to usr/include/
+      kbuild: remove headers_check stub
+      certs: use $< and $@ to simplify the key generation rule
+      certs: unify duplicated cmd_extract_certs and improve the log
+      certs: remove unneeded -I$(srctree) option for system_certificates.o
+      certs: refactor file cleaning
+      certs: remove misleading comments about GCC PR
+      kbuild: stop using config_filename in scripts/Makefile.modsign
+      certs: simplify $(srctree)/ handling and remove config_filename macro
+      kbuild: do not include include/config/auto.conf from shell scripts
+      kbuild: do not quote string values in include/config/auto.conf
+      certs: move scripts/extract-cert to certs/
+      microblaze: use built-in function to get CPU_{MAJOR,MINOR,REV}
+      sh: rename suffix-y to suffix_y
+      kbuild: drop $(size_append) from cmd_zstd
+      kbuild: rename cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22}
+      arch: decompressor: remove useless vmlinux.bin.all-y
+      kbuild: add cmd_file_size
+
+Miguel Ojeda (1):
+      doc: kbuild: fix default in `imply` table
+
+Nathan Chancellor (6):
+      Documentation: Raise the minimum supported version of LLVM to 11.0.0
+      mm, slab: Remove compiler check in __kmalloc_index
+      arch/Kconfig: Remove CLANG_VERSION check in HAS_LTO_CLANG
+      Revert "ARM: 9070/1: Make UNWINDER_ARM depend on ld.bfd or ld.lld 11.=
+0.0+"
+      gcov: Remove compiler version check
+      init/Kconfig: Drop linker version check for LD_ORPHAN_WARN
+
+=C5=81ukasz Stelmach (1):
+      streamline_config.pl: show the full Kconfig name
+
+ Documentation/kbuild/kconfig-language.rst     |   2 +-
+ Documentation/process/changes.rst             |   2 +-
+ MAINTAINERS                                   |   1 -
+ Makefile                                      |  15 +--
+ arch/Kconfig                                  |   3 +-
+ arch/arc/Makefile                             |   4 +-
+ arch/arc/boot/dts/Makefile                    |   4 +-
+ arch/arm/Kconfig.debug                        |   2 -
+ arch/arm/boot/compressed/Makefile             |   8 +-
+ arch/h8300/boot/compressed/Makefile           |   4 +-
+ arch/h8300/boot/dts/Makefile                  |   6 +-
+ arch/microblaze/Makefile                      |   8 +-
+ arch/mips/boot/compressed/Makefile            |  12 +--
+ arch/nds32/Makefile                           |   6 --
+ arch/nds32/boot/dts/Makefile                  |   7 +-
+ arch/nios2/boot/dts/Makefile                  |   2 +-
+ arch/openrisc/boot/dts/Makefile               |   7 +-
+ arch/parisc/boot/compressed/Makefile          |  24 +++--
+ arch/powerpc/boot/Makefile                    |   2 +-
+ arch/riscv/boot/dts/canaan/Makefile           |   4 +-
+ arch/s390/boot/compressed/Makefile            |  28 +++---
+ arch/sh/boot/Makefile                         |  16 ++--
+ arch/sh/boot/compressed/Makefile              |  22 ++---
+ arch/sh/boot/dts/Makefile                     |   4 +-
+ arch/x86/boot/compressed/Makefile             |  12 +--
+ arch/xtensa/Makefile                          |   2 +-
+ arch/xtensa/boot/dts/Makefile                 |   5 +-
+ certs/.gitignore                              |   1 +
+ certs/Kconfig                                 |   4 +-
+ certs/Makefile                                | 125 +++++++---------------=
+---
+ certs/default_x509.genkey                     |  17 ++++
+ {scripts =3D> certs}/extract-cert.c             |   2 +-
+ drivers/acpi/Makefile                         |   2 +-
+ drivers/base/firmware_loader/builtin/Makefile |   4 +-
+ include/linux/slab.h                          |   3 +-
+ include/uapi/linux/soundcard.h                |   2 +-
+ init/Kconfig                                  |   1 -
+ init/Makefile                                 |   2 +-
+ kernel/gcov/Kconfig                           |   1 -
+ net/wireless/Makefile                         |   4 +-
+ scripts/.gitignore                            |   1 -
+ scripts/Kbuild.include                        |  47 ----------
+ scripts/Makefile                              |  11 +--
+ scripts/Makefile.lib                          |  35 +++++--
+ scripts/Makefile.modinst                      |   4 +-
+ scripts/gen_autoksyms.sh                      |  11 +--
+ scripts/kconfig/Makefile                      |   3 +-
+ scripts/kconfig/conf.c                        |  17 ++--
+ scripts/kconfig/confdata.c                    |  24 ++---
+ scripts/kconfig/streamline_config.pl          |   2 +-
+ scripts/link-vmlinux.sh                       |  47 +++++-----
+ scripts/min-tool-version.sh                   |   2 +-
+ scripts/remove-stale-files                    |   2 +
+ scripts/setlocalversion                       |   9 +-
+ usr/Makefile                                  |   7 +-
+ usr/include/Makefile                          |   6 +-
+ {scripts =3D> usr/include}/headers_check.pl     |   0
+ 57 files changed, 242 insertions(+), 366 deletions(-)
+ create mode 100644 certs/default_x509.genkey
+ rename {scripts =3D> certs}/extract-cert.c (98%)
+ rename {scripts =3D> usr/include}/headers_check.pl (100%)
+
+
+--=20
+Best Regards
+Masahiro Yamada

@@ -2,181 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A4E492F92
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC22492F94
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344192AbiARUmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:42:45 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51282 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238061AbiARUmo (ORCPT
+        id S1349332AbiARUng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:43:36 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:43792 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234481AbiARUnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:42:44 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IKXnZb010509;
-        Tue, 18 Jan 2022 20:42:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=lvufmgSXOhEp4NlWXuaPh3W+jRMNCuZZX8/ntPvQvVI=;
- b=pu436hMjywVVSLJwjtkLxPZOWnlS1Uu7IiwBqN7Bfs/lte//72xml62x/yvIDat6PmmE
- up0fpZniwGmgUGDm+R33HzgRUFQtkzcTTe4xv/ceiyffmBDw+B0gn+AY5NPA8qubfirb
- JSankqI7Br9HLcgsrSXgAtZGTyUtZXtR9XySk9c6Esv/SDV2nQb759aeJ++NJo4A25JZ
- txwMOg98zch+FOv0A5b3MkHjTDUCF6+BcCNZDbbQoukixyMK2nNfGOHZrI2O514rG3vc
- m8zRj8l2XRmj9rSvtTROwTPiIMz/FIhcyroDXdGva1DKJKRSwFVVdT58M0Irhx59CX3h dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yaw30b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 20:42:30 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IKSxjg024911;
-        Tue, 18 Jan 2022 20:42:30 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yaw2yt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 20:42:30 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IKIspn015708;
-        Tue, 18 Jan 2022 20:42:28 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3dknw96f6d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 20:42:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IKgMmB45351302
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 20:42:22 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB25E42041;
-        Tue, 18 Jan 2022 20:42:22 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA2B942042;
-        Tue, 18 Jan 2022 20:42:19 +0000 (GMT)
-Received: from sig-9-65-88-194.ibm.com (unknown [9.65.88.194])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 20:42:19 +0000 (GMT)
-Message-ID: <fbdade37017dd836881c5ecd98fae7313de5b5bb.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 07/19] ima: Move dentry into ima_namespace and others
- onto stack
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Tue, 18 Jan 2022 15:42:14 -0500
-In-Reply-To: <d53a66a2-17e2-54b3-f115-efd7c58080a7@linux.ibm.com>
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
-         <20220104170416.1923685-8-stefanb@linux.vnet.ibm.com>
-         <a7c5ac94b4c4d87b407353f74ff87bc0b13542a4.camel@linux.ibm.com>
-         <d53a66a2-17e2-54b3-f115-efd7c58080a7@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LvMK1ZdIpXV8z_-FIzzNIlCq2_7mh-63
-X-Proofpoint-GUID: pwL3tbWKXN8GnY3Csceck8Rfk-pxqGjB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 suspectscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180120
+        Tue, 18 Jan 2022 15:43:31 -0500
+Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A1CC020B9278;
+        Tue, 18 Jan 2022 12:43:30 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A1CC020B9278
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1642538610;
+        bh=6Eorb0NJsYuIac5U3+BcA5E3+pNTgrJBqx1uUFzIkRU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ON+8bsTLuGzAUzLHSI0KEfHF03iM+owfHcl7PwhUeuzv7HrX/fHe+t/JGvPd7TMaA
+         7V0SZwwREpTsXpP8LHiQ4uws3dulnzTl22kyOXDTKSxEvcx94GYA9RSYCZ3SISLusp
+         ssEz+G2SM5VSA/UreFRoWXi0efNgVnSIV5sJEF2k=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beaub@linux.microsoft.com
+Subject: [PATCH v10 00/12] user_events: Enable user processes to create and write to trace events
+Date:   Tue, 18 Jan 2022 12:43:14 -0800
+Message-Id: <20220118204326.2169-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 15:12 -0500, Stefan Berger wrote:
-> On 1/13/22 15:28, Mimi Zohar wrote:
-> > Hi Stefan,
-> >
-> > Nobody refers to the IMA securityfs files as dentries.  The Subject
-> > line is suppose to provide a hint about the patch.  How about changing
-> > the "Subject" line to "ima: Move IMA securityfs files into
-> > ima_namespaces or onto stack".
-> >
-> > On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
-> >> From: Stefan Berger <stefanb@linux.ibm.com>
-> >>
-> >> Move the policy file dentry into the ima_namespace for reuse by
-> >> virtualized SecurityFS and for being able to remove it from
-> >> the filesystem. Move the other dentries onto the stack.
-> > Missing is an explanation why the other IMA securityfs files can be on
-> > the stack.  Maybe start out by saying that the ns_ima_init securityfs
-> > files are never deleted.  Then transition into the IMA namespaced
-> > securityfs files and how they will be deleted.
-> 
-> How about this:
-> 
-> ima: Move IMA securityfs files into ima_namespace or onto stack
-> 
-> Move the IMA policy file's dentry into the ima_namespace for reuse by
-> virtualized securityfs and for being able to remove the file from the
-> filesystem using securityfs_remove().
+User mode processes that wish to use trace events to get data into
+ftrace, perf, eBPF, etc are limited to uprobes today. The user events
+features enables an ABI for user mode processes to create and write to
+trace events that are isolated from kernel level trace events. This
+enables a faster path for tracing from user mode data as well as opens
+managed code to participate in trace events, where stub locations are
+dynamic.
 
-How about "Move the IMA securityfs policy file ..."
+User processes often want to trace only when it's useful. To enable this
+a set of pages are mapped into the user process space that indicate the
+current state of the user events that have been registered. User
+processes can check if their event is hooked to a trace/probe, and if it
+is, emit the event data out via the write() syscall.
 
-> Move the other files' dentries onto the stack since they are not needed
+Two new files are introduced into tracefs to accomplish this:
+user_events_status - This file is mmap'd into participating user mode
+processes to indicate event status.
 
-How about "Move the other IMA securityfs files ..."
+user_events_data - This file is opened and register/delete ioctl's are
+issued to create/open/delete trace events that can be used for tracing.
 
-> outside the function where they are created in. Also, their cleanup is
-> automatically handled by the filesystem upon umount of a virtualized
-> secruityfs instance, so they don't need to be explicitly freed anymore.
-> 
-> When moving the dentry 'ima_policy' into ima_namespace rename it to
-> 'policy_dentry' to clarify its datatype and avoid a name clash with
-> 'int ima_policy' from ima_policy.c.
+The typical scenario is on process start to mmap user_events_status. Processes
+then register the events they plan to use via the REG ioctl. The ioctl reads
+and updates the passed in user_reg struct. The status_index of the struct is
+used to know the byte in the status page to check for that event. The
+write_index of the struct is used to describe that event when writing out to
+the fd that was used for the ioctl call. The data must always include this
+index first when writing out data for an event. Data can be written either by
+write() or by writev().
 
-To prevent namespace pollution, static variables need to be prefixed
-(e.g. "ima_").  This is not a concern with variables inside the
-ima_namespace structure.  Why not just rename the variable "policy".
+For example, in memory:
+int index;
+char data[];
 
-Refer to the section on "Naming" in Documentation/process/coding-
-style.rst.
+Psuedo code example of typical usage:
+struct user_reg reg;
 
-thanks,
+int page_fd = open("user_events_status", O_RDWR);
+char *page_data = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, page_fd, 0);
+close(page_fd);
 
-Mimi
+int data_fd = open("user_events_data", O_RDWR);
 
-> 
-> 
-> 
-> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >> ---
-> >>   security/integrity/ima/ima.h    |  2 ++
-> >>   security/integrity/ima/ima_fs.c | 32 ++++++++++++++++++--------------
-> >>   2 files changed, 20 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> >> index 82b3f6a98320..224b09617c52 100644
-> >> --- a/security/integrity/ima/ima.h
-> >> +++ b/security/integrity/ima/ima.h
-> >> @@ -140,6 +140,8 @@ struct ima_namespace {
-> >>   	struct mutex ima_write_mutex;
-> >>   	unsigned long ima_fs_flags;
-> >>   	int valid_policy;
-> >> +
-> >> +	struct dentry *policy_dentry;
-> > None of the other securityfs files are renamed.  Why is "ima_policy"
-> > being renamed to "policy_dentry"?  If there is a need, it should be
-> > documented in the patch description.
-> >
-> > thanks,
-> >
-> > Mimi
-> >
-> >>   } __randomize_layout;
-> >>   extern struct ima_namespace init_ima_ns;
-> >>
+reg.size = sizeof(reg);
+reg.name_args = (__u64)"test";
 
+ioctl(data_fd, DIAG_IOCSREG, &reg);
+int status_id = reg.status_index;
+int write_id = reg.write_index;
+
+struct iovec io[2];
+io[0].iov_base = &write_id;
+io[0].iov_len = sizeof(write_id);
+io[1].iov_base = payload;
+io[1].iov_len = sizeof(payload);
+
+if (page_data[status_id])
+	writev(data_fd, io, 2);
+
+User events are also exposed via the dynamic_events tracefs file for
+both create and delete. Current status is exposed via the user_events_status
+tracefs file.
+
+Simple example to register a user event via dynamic_events:
+	echo u:test >> dynamic_events
+	cat dynamic_events
+	u:test
+
+If an event is hooked to a probe, the probe hooked shows up:
+	echo 1 > events/user_events/test/enable
+	cat user_events_status
+	1:test # Used by ftrace
+
+	Active: 1
+	Busy: 1
+	Max: 4096
+
+If an event is not hooked to a probe, no probe status shows up:
+	echo 0 > events/user_events/test/enable
+	cat user_events_status
+	1:test
+
+	Active: 1
+	Busy: 0
+	Max: 4096
+
+Users can describe the trace event format via the following format:
+	name[:FLAG1[,FLAG2...] [field1[;field2...]]
+
+Each field has the following format:
+	type name
+
+Example for char array with a size of 20 named msg:
+	echo 'u:detailed char[20] msg' >> dynamic_events
+	cat dynamic_events
+	u:detailed char[20] msg
+
+Data offsets are based on the data written out via write() and will be
+updated to reflect the correct offset in the trace_event fields. For dynamic
+data it is recommended to use the new __rel_loc data type. This type will be
+the same as __data_loc, but the offset is relative to this entry. This allows
+user_events to not worry about what common fields are being inserted before
+the data.
+
+The above format is valid for both the ioctl and the dynamic_events file.
+
+V2:
+Fixed kmalloc vs kzalloc for register_page.
+Renamed user_event_mmap to user_event_status.
+Renamed user_event prefix from ue to u.
+Added seq_* operations to user_event_status to enable cat output.
+Aligned field parsing to synth_events format (+ size specifier for
+custom/user types).
+Added uapi header user_events.h to align kernel and user ABI definitions.
+
+V3:
+Updated ABI to handle single FD into many events via an int header.
+Added iovec/writev support to enable int header without payload changes.
+Updated bpf context to describe if data is coming from user, kernel or
+raw iovec.
+Added flag support for registering event, allows forcing BPF to always
+recieve the direct iovecs for sensitive code paths that do not want
+copies.
+
+V4:
+Moved to struct user_reg for registering events via ioctl.
+Added unit tests for ftrace, dyn_events and perf integration.
+Added print_fmt generation and proper dyn_events matching statements.
+Reduced time in preemption disabled paths.
+Added documentation file.
+Pre-fault in data when preemption is enabled and use no-fault copy in probes.
+Fixed MIPs missing PAGE_READONLY define.
+
+V5:
+Rebase to linux-trace for-next branch.
+Added sample code into samples/user_events.
+Switched to str_has_prefix in various locations.
+Allow hex in array sizes and ensure reasonable sizes are used.
+Moved lifetime of name buffer when parsing to the caller for failure paths.
+Fixed documentation nits and index.
+Ensure event isn't busy before freeing through dyn_events.
+Properly handle failure case for ftrace and perf in fault cases for buffers.
+Ensure write data is over min size and null terminated for dynamic arrays.
+
+V6:
+Fixed endian issue with dyn loc decoding (use u32).
+Fixed size_t conversion warning on hexagon arch (min vs min_t).
+Handle cases for __get_str vs __get_rel_str in print_fmt generation.
+Add additional comments around various event member lifetimes.
+Reduced max field array size to 1K.
+
+V7:
+Acquire reg_mutex during release, ensure refs cannot change under any situation.
+Remove default n from Kconfig.
+Move from static 0644 mode to TRACE_MODE_WRITE.
+
+V8:
+Squashed UABI header into ftrace minimal patch thread.
+Moved pagefault_disable/enable into copy_nofault.
+Moved to strscpy vs custom copy when getting array size from type.
+Made patch bisect friendly by ensuring tests are split from kernel code.
+
+V9:
+Rebase to linux-trace ftrace/core branch.
+Added comments for user_reg and other structs in user_events.h.
+Moved from delayed seq_file to pre-created seq_file for status file.
+Added deleting events to documentation and expanded registering section.
+Reordered patches to make reviewing easier.
+Fixed nitpicks.
+
+V10:
+Fix struct size case not writing size out to dynamic_events.
+Fix warning for NULL pointer arithmetic in user_seq_start.
+
+Beau Belgrave (12):
+  user_events: Add minimal support for trace_event into ftrace
+  user_events: Add print_fmt generation support for basic types
+  user_events: Handle matching arguments from dyn_events
+  user_events: Add basic perf and eBPF support
+  user_events: Optimize writing events by only copying data once
+  user_events: Validate user payloads for size and null termination
+  user_events: Add self-test for ftrace integration
+  user_events: Add self-test for dynamic_events integration
+  user_events: Add self-test for perf_event integration
+  user_events: Add self-test for validator boundaries
+  user_events: Add sample code for typical usage
+  user_events: Add documentation file
+
+ Documentation/trace/index.rst                 |    1 +
+ Documentation/trace/user_events.rst           |  216 +++
+ include/uapi/linux/user_events.h              |  116 ++
+ kernel/trace/Kconfig                          |   14 +
+ kernel/trace/Makefile                         |    1 +
+ kernel/trace/trace_events_user.c              | 1617 +++++++++++++++++
+ samples/user_events/Makefile                  |    5 +
+ samples/user_events/example.c                 |   91 +
+ tools/testing/selftests/user_events/Makefile  |    9 +
+ .../testing/selftests/user_events/dyn_test.c  |  130 ++
+ .../selftests/user_events/ftrace_test.c       |  452 +++++
+ .../testing/selftests/user_events/perf_test.c |  168 ++
+ tools/testing/selftests/user_events/settings  |    1 +
+ 13 files changed, 2821 insertions(+)
+ create mode 100644 Documentation/trace/user_events.rst
+ create mode 100644 include/uapi/linux/user_events.h
+ create mode 100644 kernel/trace/trace_events_user.c
+ create mode 100644 samples/user_events/Makefile
+ create mode 100644 samples/user_events/example.c
+ create mode 100644 tools/testing/selftests/user_events/Makefile
+ create mode 100644 tools/testing/selftests/user_events/dyn_test.c
+ create mode 100644 tools/testing/selftests/user_events/ftrace_test.c
+ create mode 100644 tools/testing/selftests/user_events/perf_test.c
+ create mode 100644 tools/testing/selftests/user_events/settings
+
+
+base-commit: 85c62c8c3749eec02ba81217bdcac26867dc262e
+-- 
+2.17.1
 

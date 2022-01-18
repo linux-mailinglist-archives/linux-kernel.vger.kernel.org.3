@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC404492AA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3E6492A8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346560AbiARQMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:12:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41606 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347385AbiARQKf (ORCPT
+        id S1347195AbiARQLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347107AbiARQJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:10:35 -0500
+        Tue, 18 Jan 2022 11:09:37 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA32C0613E3;
+        Tue, 18 Jan 2022 08:09:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 444206127D;
-        Tue, 18 Jan 2022 16:10:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02389C00446;
-        Tue, 18 Jan 2022 16:10:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AB457CE1A32;
+        Tue, 18 Jan 2022 16:09:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FACEC340E0;
+        Tue, 18 Jan 2022 16:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522233;
-        bh=ERFngSnK8NWlq1S9iWKrXO753FmDpH8p3lhZOH5OLis=;
+        s=korg; t=1642522170;
+        bh=jvgy58p5NNQDL1d44rsCcECEHTpB8jcJZ4tD6xqJeU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mgB9/Ro3FfS/pTTfgFrcCLqRS6kzwa144AEVUn+VWDamAeA5+mQosM6lvSsx0Q2p/
-         Jj5yKvukgRlvUp1bccncXr9bHe8VaaaEyWRQHwhuqu7ZfWiiRFbDQxXivAG2qPKNnr
-         VV+hBowNabSmXRJdKu5RzQ5WJFtDIaB4mSiM5mzE=
+        b=S+PKZ0JhqHt65S0gVKxGeSZiZ1LmhdGeAeEDWd9tmpHZn66EjXz+UT8tX5S9b8ZKx
+         OTijbw/Y85Qj1x9XSE9/vjf6gDxIW88cGuNcO03/fqGYxpdH2wFXE6GKvzDkq52Vk+
+         CoOkc2JUkB1o6PC/3pV+78+J7LazQfNvhGVlmXtk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [PATCH 5.16 12/28] NFSD: Fix zero-length NFSv3 WRITEs
-Date:   Tue, 18 Jan 2022 17:06:07 +0100
-Message-Id: <20220118160452.813222449@linuxfoundation.org>
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 22/28] ALSA: hda/realtek: Use ALC285_FIXUP_HP_GPIO_LED on another HP laptop
+Date:   Tue, 18 Jan 2022 17:06:08 +0100
+Message-Id: <20220118160452.614874048@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
-References: <20220118160452.384322748@linuxfoundation.org>
+In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
+References: <20220118160451.879092022@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,85 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-commit 6a2f774424bfdcc2df3e17de0cefe74a4269cad5 upstream.
+commit 08977fe8cfb7d9fe9337470eec4843081cf3a76d upstream.
 
-The Linux NFS server currently responds to a zero-length NFSv3 WRITE
-request with NFS3ERR_IO. It responds to a zero-length NFSv4 WRITE
-with NFS4_OK and count of zero.
+The audio mute and mic mute LEDs don't work, so use the quirk to make
+them work.
 
-RFC 1813 says of the WRITE procedure's @count argument:
-
-count
-         The number of bytes of data to be written. If count is
-         0, the WRITE will succeed and return a count of 0,
-         barring errors due to permissions checking.
-
-RFC 8881 has similar language for NFSv4, though NFSv4 removed the
-explicit @count argument because that value is already contained in
-the opaque payload array.
-
-The synthetic client pynfs's WRT4 and WRT15 tests do emit zero-
-length WRITEs to exercise this spec requirement. Commit fdec6114ee1f
-("nfsd4: zero-length WRITE should succeed") addressed the same
-problem there with the same fix.
-
-But interestingly the Linux NFS client does not appear to emit zero-
-length WRITEs, instead squelching them. I'm not aware of a test that
-can generate such WRITEs for NFSv3, so I wrote a naive C program to
-generate a zero-length WRITE and test this fix.
-
-Fixes: 8154ef2776aa ("NFSD: Clean up legacy NFS WRITE argument XDR decoders")
-Reported-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211224035015.310068-1-kai.heng.feng@canonical.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs3proc.c |    6 +-----
- fs/nfsd/nfsproc.c  |    5 -----
- 2 files changed, 1 insertion(+), 10 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/nfsd/nfs3proc.c
-+++ b/fs/nfsd/nfs3proc.c
-@@ -202,15 +202,11 @@ nfsd3_proc_write(struct svc_rqst *rqstp)
- 	fh_copy(&resp->fh, &argp->fh);
- 	resp->committed = argp->stable;
- 	nvecs = svc_fill_write_vector(rqstp, &argp->payload);
--	if (!nvecs) {
--		resp->status = nfserr_io;
--		goto out;
--	}
-+
- 	resp->status = nfsd_write(rqstp, &resp->fh, argp->offset,
- 				  rqstp->rq_vec, nvecs, &cnt,
- 				  resp->committed, resp->verf);
- 	resp->count = cnt;
--out:
- 	return rpc_success;
- }
- 
---- a/fs/nfsd/nfsproc.c
-+++ b/fs/nfsd/nfsproc.c
-@@ -235,10 +235,6 @@ nfsd_proc_write(struct svc_rqst *rqstp)
- 		argp->len, argp->offset);
- 
- 	nvecs = svc_fill_write_vector(rqstp, &argp->payload);
--	if (!nvecs) {
--		resp->status = nfserr_io;
--		goto out;
--	}
- 
- 	resp->status = nfsd_write(rqstp, fh_copy(&resp->fh, &argp->fh),
- 				  argp->offset, rqstp->rq_vec, nvecs,
-@@ -247,7 +243,6 @@ nfsd_proc_write(struct svc_rqst *rqstp)
- 		resp->status = fh_getattr(&resp->fh, &resp->stat);
- 	else if (resp->status == nfserr_jukebox)
- 		return rpc_drop_reply;
--out:
- 	return rpc_success;
- }
- 
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8730,6 +8730,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x103c, 0x8896, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_MUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8898, "HP EliteBook 845 G8 Notebook PC", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x103c, 0x88d0, "HP Pavilion 15-eh1xxx (mainboard 88D0)", ALC287_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x89c3, "HP", ALC285_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
 
 

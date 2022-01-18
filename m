@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1087492AA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A5B492AA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347310AbiARQMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:12:13 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41728 "EHLO
+        id S235878AbiARQMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:12:16 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41748 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347367AbiARQKa (ORCPT
+        with ESMTP id S1346485AbiARQKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:10:30 -0500
+        Tue, 18 Jan 2022 11:10:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2517CE1A32;
-        Tue, 18 Jan 2022 16:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67707C00446;
-        Tue, 18 Jan 2022 16:10:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30A50CE1A49;
+        Tue, 18 Jan 2022 16:10:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4615C00446;
+        Tue, 18 Jan 2022 16:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522227;
-        bh=DYgiJsRqlFesnYRzc0uqjAE5zEsG2YAuaw5jKkrO4YM=;
+        s=korg; t=1642522230;
+        bh=VvEXG/uskcBxjxchzFJiJEq3FHobJwTi3M5ECqK+QJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NYGGYpvzDYBGuzvv8YUh5wYJIm6RoZjcV9jlrisTPpcroXhIe444nAlqPEPeHTaw7
-         TN5IbkbJOqjHSxrBeLTf5dJLqH9ktCWJeqk77IlXg8c0dVCwgbxMbMJ5j1EIUfo9X4
-         9WXf3O44T3GRpwAjwAY/199l8mTvfI0MetXH5HE4=
+        b=ACSaANOhf5Mt1i6FYktY/YoW/nNaz8flRr2MGrjVm4kAsb3SA61Ttp1Rt5P26vkAy
+         IRlhX+ji0y9I2nvgq4P5O6Ep68rSNsQ0vJXaBZC8VHHyvtih9u0WUP3yF9i4o89vCA
+         UpoIIekuzJ58Pc6060byFTCeWdIi94QLc8d6O8iE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: [PATCH 5.16 10/28] KVM: s390: Clarify SIGP orders versus STOP/RESTART
-Date:   Tue, 18 Jan 2022 17:06:05 +0100
-Message-Id: <20220118160452.750105506@linuxfoundation.org>
+        stable@vger.kernel.org, Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.16 11/28] remoteproc: qcom: pas: Add missing power-domain "mxc" for CDSP
+Date:   Tue, 18 Jan 2022 17:06:06 +0100
+Message-Id: <20220118160452.781948870@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
 References: <20220118160452.384322748@linuxfoundation.org>
@@ -46,121 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Farman <farman@linux.ibm.com>
+From: Sibi Sankar <sibis@codeaurora.org>
 
-commit 812de04661c4daa7ac385c0dfd62594540538034 upstream.
+commit dd585d9bfbf06fd08a6326c82978be1f06e7d1bd upstream.
 
-With KVM_CAP_S390_USER_SIGP, there are only five Signal Processor
-orders (CONDITIONAL EMERGENCY SIGNAL, EMERGENCY SIGNAL, EXTERNAL CALL,
-SENSE, and SENSE RUNNING STATUS) which are intended for frequent use
-and thus are processed in-kernel. The remainder are sent to userspace
-with the KVM_CAP_S390_USER_SIGP capability. Of those, three orders
-(RESTART, STOP, and STOP AND STORE STATUS) have the potential to
-inject work back into the kernel, and thus are asynchronous.
+Add missing power-domain "mxc" required by CDSP PAS remoteproc on SM8350
+SoC.
 
-Let's look for those pending IRQs when processing one of the in-kernel
-SIGP orders, and return BUSY (CC2) if one is in process. This is in
-agreement with the Principles of Operation, which states that only one
-order can be "active" on a CPU at a time.
-
+Fixes: e8b4e9a21af7 ("remoteproc: qcom: pas: Add SM8350 PAS remoteprocs")
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 Cc: stable@vger.kernel.org
-Suggested-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Eric Farman <farman@linux.ibm.com>
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Link: https://lore.kernel.org/r/20211213210550.856213-2-farman@linux.ibm.com
-[borntraeger@linux.ibm.com: add stable tag]
-Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/1624559605-29847-1-git-send-email-sibis@codeaurora.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kvm/interrupt.c |    7 +++++++
- arch/s390/kvm/kvm-s390.c  |    9 +++++++--
- arch/s390/kvm/kvm-s390.h  |    1 +
- arch/s390/kvm/sigp.c      |   28 ++++++++++++++++++++++++++++
- 4 files changed, 43 insertions(+), 2 deletions(-)
+ drivers/remoteproc/qcom_q6v5_pas.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/s390/kvm/interrupt.c
-+++ b/arch/s390/kvm/interrupt.c
-@@ -2115,6 +2115,13 @@ int kvm_s390_is_stop_irq_pending(struct
- 	return test_bit(IRQ_PEND_SIGP_STOP, &li->pending_irqs);
- }
- 
-+int kvm_s390_is_restart_irq_pending(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_s390_local_interrupt *li = &vcpu->arch.local_int;
-+
-+	return test_bit(IRQ_PEND_RESTART, &li->pending_irqs);
-+}
-+
- void kvm_s390_clear_stop_irq(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_s390_local_interrupt *li = &vcpu->arch.local_int;
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -4645,10 +4645,15 @@ int kvm_s390_vcpu_stop(struct kvm_vcpu *
- 		}
- 	}
- 
--	/* SIGP STOP and SIGP STOP AND STORE STATUS has been fully processed */
-+	/*
-+	 * Set the VCPU to STOPPED and THEN clear the interrupt flag,
-+	 * now that the SIGP STOP and SIGP STOP AND STORE STATUS orders
-+	 * have been fully processed. This will ensure that the VCPU
-+	 * is kept BUSY if another VCPU is inquiring with SIGP SENSE.
-+	 */
-+	kvm_s390_set_cpuflags(vcpu, CPUSTAT_STOPPED);
- 	kvm_s390_clear_stop_irq(vcpu);
- 
--	kvm_s390_set_cpuflags(vcpu, CPUSTAT_STOPPED);
- 	__disable_ibs_on_vcpu(vcpu);
- 
- 	for (i = 0; i < online_vcpus; i++) {
---- a/arch/s390/kvm/kvm-s390.h
-+++ b/arch/s390/kvm/kvm-s390.h
-@@ -427,6 +427,7 @@ void kvm_s390_destroy_adapters(struct kv
- int kvm_s390_ext_call_pending(struct kvm_vcpu *vcpu);
- extern struct kvm_device_ops kvm_flic_ops;
- int kvm_s390_is_stop_irq_pending(struct kvm_vcpu *vcpu);
-+int kvm_s390_is_restart_irq_pending(struct kvm_vcpu *vcpu);
- void kvm_s390_clear_stop_irq(struct kvm_vcpu *vcpu);
- int kvm_s390_set_irq_state(struct kvm_vcpu *vcpu,
- 			   void __user *buf, int len);
---- a/arch/s390/kvm/sigp.c
-+++ b/arch/s390/kvm/sigp.c
-@@ -276,6 +276,34 @@ static int handle_sigp_dst(struct kvm_vc
- 	if (!dst_vcpu)
- 		return SIGP_CC_NOT_OPERATIONAL;
- 
-+	/*
-+	 * SIGP RESTART, SIGP STOP, and SIGP STOP AND STORE STATUS orders
-+	 * are processed asynchronously. Until the affected VCPU finishes
-+	 * its work and calls back into KVM to clear the (RESTART or STOP)
-+	 * interrupt, we need to return any new non-reset orders "busy".
-+	 *
-+	 * This is important because a single VCPU could issue:
-+	 *  1) SIGP STOP $DESTINATION
-+	 *  2) SIGP SENSE $DESTINATION
-+	 *
-+	 * If the SIGP SENSE would not be rejected as "busy", it could
-+	 * return an incorrect answer as to whether the VCPU is STOPPED
-+	 * or OPERATING.
-+	 */
-+	if (order_code != SIGP_INITIAL_CPU_RESET &&
-+	    order_code != SIGP_CPU_RESET) {
-+		/*
-+		 * Lockless check. Both SIGP STOP and SIGP (RE)START
-+		 * properly synchronize everything while processing
-+		 * their orders, while the guest cannot observe a
-+		 * difference when issuing other orders from two
-+		 * different VCPUs.
-+		 */
-+		if (kvm_s390_is_stop_irq_pending(dst_vcpu) ||
-+		    kvm_s390_is_restart_irq_pending(dst_vcpu))
-+			return SIGP_CC_BUSY;
-+	}
-+
- 	switch (order_code) {
- 	case SIGP_SENSE:
- 		vcpu->stat.instruction_sigp_sense++;
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -652,6 +652,7 @@ static const struct adsp_data sm8350_cds
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
++		"mxc",
+ 		NULL
+ 	},
+ 	.load_state = "cdsp",
 
 

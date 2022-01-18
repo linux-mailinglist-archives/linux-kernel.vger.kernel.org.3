@@ -2,139 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FD6492D36
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A12492D3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347962AbiARSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:24:17 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42914
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244482AbiARSYQ (ORCPT
+        id S1347973AbiARSZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:25:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43940 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244482AbiARSZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:24:16 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A13DA3F313
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642530255;
-        bh=mLcBql6ry0uXjx6vo+gnKoiWq+07y5Vfuzwy6oiJwJQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=T1+tO+WzYP/hN3IfHh0xrxU+2xOYeJ8ECvPIHhA3y6uijtmsk7tY2O6AEvKD90q35
-         7tEYTbmP3NvsQDp+T1LsL9xZWySVty9n95pUYagwn9hcBTsx+5ncw4p0QQ6bt24vd1
-         W5/NTcyByVE+dHR5b3zTaREinoUZN9KwaAYkBeEJQOnfiFh+ZTzRFMuypcDv1ZrEia
-         xFF8ipGqPQAGeLiOvfMGYmhWHr/9bFu7wPwLHWqSAsSjXZWUjD5uOEcjfcyKJ02+wD
-         bA+OyfPRnn6KPrU34hCJghOgFl312wneUS8R0osd803fBB7zGO+1VxrN8kUxdrXk7n
-         5TwHoVqBjvWcg==
-Received: by mail-ed1-f72.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so17835609edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:24:15 -0800 (PST)
+        Tue, 18 Jan 2022 13:25:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642530320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3MhpNbODvMKo6hEJEGqgokJYKmNiOJQtUtppd6rmbf4=;
+        b=NKMtPZPeCFIc9hWg7/dBGuX8a/qmX40LuKvA6Hpy30D/rkAPD9U4Gkt0Ys3TAQ77IMADlK
+        SpLCTK1l9pwufZ3+OOupAP3E2kdo1wp2tui8spqxEfE6yT8YCVQdiP2FG4zeeGxG7u3Kq+
+        buT7klbqCoYTXbgYlSMkVC1Ivzd1ZEA=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-39-74DyJbwYMy---1oFas5MIw-1; Tue, 18 Jan 2022 13:25:19 -0500
+X-MC-Unique: 74DyJbwYMy---1oFas5MIw-1
+Received: by mail-qk1-f197.google.com with SMTP id 81-20020a370454000000b00478f3a61beeso15831900qke.18
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:25:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mLcBql6ry0uXjx6vo+gnKoiWq+07y5Vfuzwy6oiJwJQ=;
-        b=cAmCax4f+8qFYIAQJ1G0QX8MePmYmM418uZKVhFf+ugcf1kvw8/k18Jk9VJdi5M3zM
-         pHayXZyEDkIKzP8tSww3hPQ2wSpjDyfrlN8L3ClIbwBM4kgMnJ3qFrR1bEe2YMLLgiBo
-         9u3Ih12n0FQDosuJGIcoKOZ3AveKpXuZpp4khaUuhEgqwd0YRsT6cMcz+d6XL5uKA17h
-         5nmhPr/hwQusfsKBDHJN1lpjp8yqCvDyF7VEslyY/4fjSTjKVE2UhvSEw6J2xPi0/ybn
-         GYs9YM1Lpb/HU5nY5l6IIss4o6sffOeAsxtmK3Ne3lNHzg04kwklB4p0Ok4T7/ysaX5N
-         7UDw==
-X-Gm-Message-State: AOAM532HeU+OjWOSNX3k3pZWdDtsGEcbOGhiXEPEjxVWHInLJboHeX2Y
-        bU/oFs+LUxGdIJX5sI6y8qyhNWj6JJ8vPNnBmErmTw1hPXnkKzAlyhF9CzpqgJTshFuIazlzJwi
-        2tlbxIueAzUy3ztgR2ci3n0N+n49kCADnuW1SZp+0Gw==
-X-Received: by 2002:a50:fe90:: with SMTP id d16mr26971835edt.361.1642530252980;
-        Tue, 18 Jan 2022 10:24:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJztrE0/iDUvJZuDQ5B9d9jHRgMofzZ3cOcTTHrRpyH4UXtBTQXBgCc7/qL6dnTKZQKwt/9lDg==
-X-Received: by 2002:a50:fe90:: with SMTP id d16mr26971820edt.361.1642530252835;
-        Tue, 18 Jan 2022 10:24:12 -0800 (PST)
-Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id b2sm191457edv.37.2022.01.18.10.24.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 10:24:11 -0800 (PST)
-Message-ID: <735d1001-abcb-67d1-75a6-17db11cdec40@canonical.com>
-Date:   Tue, 18 Jan 2022 19:24:11 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3MhpNbODvMKo6hEJEGqgokJYKmNiOJQtUtppd6rmbf4=;
+        b=uoZSITjEBNv3rCyM3oDZo5+EkCqGBYjEVCF8cjJi0izg+KV+Xtqtec8OAEPMdNgLzG
+         3275iuqGsE/Gd//OhwBN+fTNpmQTpgH39auuUz8bRXyD9hqrx5edbCKI5tobUDs3Tn8d
+         dBEeSGsBUXnbvZ/zSDObqT4lELSx/OMwuJ2dW7/GYta2Pjun+Z5RpFY1S9zSsiKo6Y1A
+         uNop8S4ocu0HQLA708HDIcUvUAVZI47nSejL1BqpV9XtviyIA7MKZ0jI+0460X6amCTQ
+         6vEKjPzubWjpT/ORul5J8dBVg/B5ejZ5+8yu73XNOfiqJSU+09TzhRzuGH3zXOyv2mBZ
+         8XDg==
+X-Gm-Message-State: AOAM530PEBBjg+6jLf3gsGMrj+qK7pKxt2Ntg4O/JaoeSe52KECgTXcH
+        oPbEopc5Sobe4jlSyEXqgE3YNxxk+IoteeKQbEB9v2hGiZaylGD22dsilWfG1eqEyNAi2YXiP4O
+        4PKuL8GJ92kWbCjXy3oqDqzcp
+X-Received: by 2002:a05:620a:4594:: with SMTP id bp20mr8982482qkb.556.1642530318560;
+        Tue, 18 Jan 2022 10:25:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz91UOaUCACPM5lW3+SnvOJUJ/BJjaJLu9ntSYbEtlWK59wTvQ1gzG7iB444j0LBlkTzVEp/Q==
+X-Received: by 2002:a05:620a:4594:: with SMTP id bp20mr8982468qkb.556.1642530318231;
+        Tue, 18 Jan 2022 10:25:18 -0800 (PST)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id f14sm195078qtf.81.2022.01.18.10.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 10:25:17 -0800 (PST)
+Date:   Tue, 18 Jan 2022 13:25:15 -0500
+From:   Brian Foster <bfoster@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
+Message-ID: <YecGC06UrGrfonS0@bfoster>
+References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
+ <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+ <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
+ <YeV+zseKGNqnSuKR@bfoster>
+ <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
+ <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
+ <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
+ <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
+ <YebFCeLcbziyMjbA@bfoster>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 03/16] dt-bindings: clock: Document FSD CMU bindings
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150022epcas5p21912423606220552a78c7e22e4133a05@epcas5p2.samsung.com>
- <20220118144851.69537-4-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220118144851.69537-4-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YebFCeLcbziyMjbA@bfoster>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2022 15:48, Alim Akhtar wrote:
-> Add dt-schema documentation for Tesla FSD SoC clock controller.
+On Tue, Jan 18, 2022 at 08:47:53AM -0500, Brian Foster wrote:
+> On Tue, Jan 18, 2022 at 01:32:23AM +0000, Al Viro wrote:
+> > On Mon, Jan 17, 2022 at 07:48:49PM +0000, Al Viro wrote:
+> > > > But that critically depends upon the contents not getting mangled.  If it
+> > > > *can* be screwed by such unlink, we risk successful lookup leading to the
+> > > > wrong place, with nothing to tell us that it's happening.  We could handle
+> > > > that by adding a check to fs/namei.c:put_link(), and propagating the error
+> > > > to callers.  It's not impossible, but it won't be pretty.
+> > > > 
+> > > > And that assumes we avoid oopsen on string changing under us in the first
+> > > > place.  Which might or might not be true - I hadn't finished the audit yet.
+> > > > Note that it's *NOT* just fs/namei.c + fs/dcache.c + some fs methods -
+> > > > we need to make sure that e.g. everything called by ->d_hash() instances
+> > > > is OK with strings changing right under them.  Including utf8_to_utf32(),
+> > > > crc32_le(), utf8_casefold_hash(), etc.
+> > > 
+> > > And AFAICS, ext4, xfs and possibly ubifs (I'm unfamiliar with that one and
+> > > the call chains there are deep enough for me to miss something) have the
+> > > "bugger the contents of string returned by RCU ->get_link() if unlink()
+> > > happens" problem.
+> > > 
+> > > I would very much prefer to have them deal with that crap, especially
+> > > since I don't see why does ext4_evict_inode() need to do that memset() -
+> > > can't we simply check ->i_op in ext4_can_truncate() and be done with
+> > > that?
+> > 
+> > This reuse-without-delay has another fun side, AFAICS.  Suppose the new use
+> > for inode comes with the same ->i_op (i.e. it's a symlink again) and it
+> > happens right after ->get_link() has returned the pointer to body.
+> > 
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  .../bindings/clock/tesla,fsd-clock.yaml       | 198 ++++++++++++++++++
->  1 file changed, 198 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+> Yep, I had reproduced this explicitly when playing around with some
+> instrumented delays and whatnot in the code. This and the similar
+> variant of just returning internal/non-string data fork metadata via
+> ->get_link() is why I asked to restore old behavior of returning -ECHILD
+> for inline symlinks.
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
-> new file mode 100644
-> index 000000000000..dc808e2f8327
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
-> @@ -0,0 +1,198 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/tesla,fsd-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tesla FSD (Full Self-Driving) SoC clock controller
-> +
-> +maintainers:
-> +  - Alim Akhtar <alim.akhtar@samsung.com>
-> +  - linux-fsd@tesla.com
-> +
-> +description: |
-> +  FSD clock controller consist of several clock management unit
-> +  (CMU), which generates clocks for various inteernal SoC blocks.
-> +  The root clock comes from external OSC clock (24 MHz).
-> +
-> +  All available clocks are defined as preprocessor macros in
-> +  'dt-bindings/clock/fsd-clk.h' header.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - tesla,fsd-clock-cmu
-> +      - tesla,fsd-clock-imem
-> +      - tesla,fsd-clock-peric
-> +      - tesla,fsd-clock-fsys0
-> +      - tesla,fsd-clock-fsys1
-> +      - tesla,fsd-clock-mfc
-> +      - tesla,fsd-clock-cam_csi
-> +
+> > We are already past whatever checks we might add in pick_link().  And the
+> > pointer is still valid.  So we end up quietly traversing the body of
+> > completely unrelated symlink that never had been anywhere near any directory
+> > we might be looking at.  With no indication of anything going wrong - just
+> > a successful resolution with bogus result.
+> > 
+> > Could XFS folks explain what exactly goes wrong if we make actual marking
+> > inode as ready for reuse RCU-delayed, by shifting just that into
+> > ->free_inode()?  Why would we need any extra synchronize_rcu() anywhere?
+> > 
+> 
+> Dave already chimed in on why we probably don't want ->free_inode()
+> across the board. I don't think there's a functional problem with a more
+> selective injection of an rcu delay on the INACTIVE -> RECLAIMABLE
+> transition, based on the reasoning specified earlier (i.e., the iget
+> side already blocks on INACTIVE, so it's just a matter of a longer
+> delay).
+> 
+> Most of that long thread I previously linked to was us discussing pretty
+> much how to do something like that with minimal performance impact. The
+> experiment I ran to measure performance was use of queue_rcu_work() for
+> inactive inode processing. That resulted in a performance hit to single
+> threaded sequential file removal, but could be mitigated by increasing
+> the queue size (which may or may not have other side effects). Dave
+> suggested a more async approach to track the current grace period in the
+> inode and refer to it at lookup/alloc time, but that is notably more
+> involved and isn't clear if/how much it mitigates rcu delays.
+> 
+> IIUC, your thought here is to introduce an rcu delay on the destroy
+> side, but after the inactive processing rather than before it (as my
+> previous experiment did). IOW, basically invoke
+> xfs_inodegc_set_reclaimable() as an rcu callback via
+> xfs_inodegc_worker(), yes? If so, that seems like a potentially
+> reasonable option to me since it pulls the delay out of the inactivation
+> processing pipeline. I suspect the tradeoff with that is it might be
+> slightly less efficient than doing it earlier because we've lost any
+> grace period transitions that have occurred since before the inode was
+> queued and processed, but OTOH this might isolate the impact of that
+> delay to the inode reuse path. Maybe there's room for a simple
+> optimization there in cases where a gp may have expired already since
+> the inode was first queued. Hmm.. maybe I'll give that a try to see
+> if/how much impact there may be on an inode alloc/free workload..
+> 
 
-I am not particularly happy about FSD naming (so SoC name, sub-arch
-name), but Olof was fine with it, so I won't oppose. Bindings look ok.
+Here are results from a few quick tests running a tight inode alloc/free
+loop against an XFS filesystem with some concurrent kernel source tree
+recursive ls activity running on a separate (XFS) filesystem in the
+background. The loop runs for 60s and reports how many create/unlink
+cycles it was able to perform in that time:
 
+Baseline (xfs for-next, v5.16.0-rc5):	~34k cycles
+inactive -> reclaimable grace period:	~29k cycles
+unconditional iget rcu sync:		~4400 cycles
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Note that I did get a lockdep splat from _set_reclaimable() in rcu
+context that I've ignored for now because the test completed. That
+aside, that looks like about a ~15% or so hit from baseline. The last
+test inserts an unconditional synchronize_rcu() in the iget recycle path
+to provide a reference for the likely worst case implementation.
 
+If I go back to the inactive -> reclaimable grace period variant and
+also insert a start_poll_synchronize_rcu() and
+poll_state_synchronize_rcu() pair across the inactive processing
+sequence, I start seeing numbers closer to ~36k cycles. IOW, the
+xfs_inodegc_inactivate() helper looks something like this:
 
-Best regards,
-Krzysztof
+        if (poll_state_synchronize_rcu(ip->i_destroy_gp))
+                xfs_inodegc_set_reclaimable(ip);
+        else
+                call_rcu(&VFS_I(ip)->i_rcu, xfs_inodegc_set_reclaimable_callback);
+
+... to skip the rcu grace period if one had already passed while the
+inode sat on the inactivation queue and was processed.
+
+However my box went haywire shortly after with rcu stall reports or
+something if I let that continue to run longer, so I'll probably have to
+look into that lockdep splat (complaining about &pag->pag_ici_lock in
+rcu context, perhaps needs to become irq safe?) or see if something else
+is busted..
+
+Brian
+
+> Brian
+

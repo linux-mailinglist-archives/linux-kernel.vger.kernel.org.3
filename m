@@ -2,78 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A64B492135
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606D149213F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344554AbiARI3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S245308AbiARIdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344274AbiARI3O (ORCPT
+        with ESMTP id S232184AbiARIdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:29:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08302C061574;
-        Tue, 18 Jan 2022 00:29:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4F28B812A9;
-        Tue, 18 Jan 2022 08:29:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63F39C340E6;
-        Tue, 18 Jan 2022 08:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642494551;
-        bh=ngfco9m5RC6ysn8lXvCShk4RMg7ryZFXstNW7rRs70s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=nhcZgJJAwlftay688HihdC7itWdxDr1blrDcqAzbPX8/Tf1XL53dPiTw7SG4tEGiq
-         xtQ64e+0ILBF2cQkrSFPxdskWGLfLtxblp4HlLrPb8rnYkvyA88XyKevOyx8zVl2CX
-         05YezsFNGU6h31ts6oB7zVpNZuAOZf1YA7JA7FAiG/wjznYGkCjh+9Um/wOVhbV+cm
-         7G/ulkcgLqx33iBFCWBuxPLwk8HAkgy3GY/frWa62qHTYNy7+vd54qXonLtynKhgwQ
-         bkEMvKrquMmQs97IJO1EI4YVhSvyt5rOmUzUPhoRNmNonbnGw64NwvHz/pGLu8Crnb
-         JEsI7gXa4NW+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4F20FF60797;
-        Tue, 18 Jan 2022 08:29:11 +0000 (UTC)
-Subject: Re: [GIT PULL v2] virtio,vdpa,qemu_fw_cfg: features, cleanups, fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220114185734-mutt-send-email-mst@kernel.org>
-References: <20220114185734-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: Linux virtualization <virtualization.lists.linux-foundation.org>
-X-PR-Tracked-Message-Id: <20220114185734-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: b03fc43e73877e180c1803a33aea3e7396642367
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3bf6a9e36e441714928d73a5adbc59562eb7ef19
-Message-Id: <164249455131.3500.5357538951870066126.pr-tracker-bot@kernel.org>
-Date:   Tue, 18 Jan 2022 08:29:11 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        yun.wang@linux.alibaba.com, kvm@vger.kernel.org, trix@redhat.com,
-        flyingpeng@tencent.com, virtualization@lists.linux-foundation.org,
-        elic@nvidia.com, guanjun@linux.alibaba.com, lkp@intel.com,
-        xianting.tian@linux.alibaba.com, mst@redhat.com,
-        eperezma@redhat.com, luolikang@nsfocus.com, wu000273@umn.edu,
-        lvivier@redhat.com, keescook@chromium.org, somlo@cmu.edu,
-        jiasheng@iscas.ac.cn, johan@kernel.org,
-        christophe.jaillet@wanadoo.fr, flyingpenghao@gmail.com,
-        dapeng1.mi@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, labbott@kernel.org,
-        gregkh@linuxfoundation.org, lingshan.zhu@intel.com
+        Tue, 18 Jan 2022 03:33:35 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D69C061574;
+        Tue, 18 Jan 2022 00:33:34 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id e3so64838697lfc.9;
+        Tue, 18 Jan 2022 00:33:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=KLD+MloItQCMXbz2y5vOdZNej7yessFgYaQM/n3CvoM=;
+        b=ne353ukwDghnGnW3HPOF/4PSgN+McoDbmkJm9FMzmrZDcFAD7EK2OapuoSm1g5mwfm
+         I7RGL8DSO0iiq8skp4G3D8VJa+P5pdxQiHs25XFQ0gU70ulS8KccYJeOZG17GqXdSvnW
+         tOC+ubr92jCsHTSnYA5KMEXVmlUlHHzkcV4qfD9TuJUiusF+FyMTgZFUZ8/RXbOVfeok
+         XMDRgP3h+K/GxxW0pN+8nzDDQIQI3knLJVI31mXFW56MLkoQNlW7j9TUhEURlp7DwDzD
+         uRYGhhczkt3Fyrb5VDWqbH+ng5lcEYDCgGzbR/tZQZJPYECC4L4pNmauVOrVioyu6h3N
+         THkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=KLD+MloItQCMXbz2y5vOdZNej7yessFgYaQM/n3CvoM=;
+        b=wOTCCf1CCMcPR9dWsv5bBG4zEKEC0pIuivuzF8ul6DK9p5Ox1jtH/M34zRhfBhk4w3
+         24q6zOPGguiRzYm2gHUVeyT9ntnjN/LcCVrDqzwxwRx0g0cGHHl516dgqAXLUB1xRMAE
+         aAV/QRJeo3ziudHRlR7+9SVtHw0oagKpZmEnnNKxL+tdAYNFwMolhtXtT2mQnxgX95fW
+         vv+fZi3DoZHYnY2f3VATm8XmdzpObm9gJ0C0RhqSD6smSGQOAZIf0ZOBIp/mhlZ+GYyn
+         2OH2H2B2Fhz0i7LV1LHDyf03kCrsZl2WKg18VKKAHDO9jx1idQSDDbdtjGHezIxqxQDN
+         wYXA==
+X-Gm-Message-State: AOAM530N0VqjWbZZJTdhJq5S3RCXy5kRtErfMJymrYaATEOH0ZPR2VRH
+        m41Hy57riOGn0dONagd1ydo=
+X-Google-Smtp-Source: ABdhPJzuSq/MUQlGIOzjU9G0ydbmSVmtEw8DKQdKcurbT9pZPqO7lteH/by5/VpQMde9PF0CTDn6ew==
+X-Received: by 2002:a05:6512:3249:: with SMTP id c9mr20011630lfr.355.1642494813232;
+        Tue, 18 Jan 2022 00:33:33 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id e23sm1617601lfj.64.2022.01.18.00.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 00:33:32 -0800 (PST)
+Date:   Tue, 18 Jan 2022 10:33:23 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Sven Schnelle <svens@stackframe.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Message-ID: <20220118103323.4bae3a7d@eldfell>
+In-Reply-To: <87bl0amc6s.fsf@x1.stackframe.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+        <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+        <87bl0amc6s.fsf@x1.stackframe.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/pF3FTcxUDW+xdzSl3bV6P7H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 14 Jan 2022 18:57:34 -0500:
+--Sig_/pF3FTcxUDW+xdzSl3bV6P7H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+On Mon, 17 Jan 2022 19:47:39 +0100
+Sven Schnelle <svens@stackframe.org> wrote:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3bf6a9e36e441714928d73a5adbc59562eb7ef19
+> I also tested the speed on my Thinkpad X1 with Intel graphics, and there
+> a dmesg with 919 lines one the text console took about 2s to display. In
+> x11, i measure 22ms. This might be unfair because encoding might be
+> different, but i cannot confirm the 'memcpy' is faster than hardware
+> blitting' point. I think if that would be the case, no-one would care
+> about 2D acceleration.
 
-Thank you!
+I think that is an extremely unfair comparison, because a graphical
+terminal app is not going to render every line of text streamed to it.
+It probably renders only the final view alone if you simply run
+'dmesg', skipping the first 800-900 lines completely.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Maybe fbcon should do the same when presented with a flood of text,
+but I don't know how or why it works like it works. I assume in your
+two second test you actually see some scrolling (animation) rather than
+the final view? Or does it take 2 seconds just to update one screenful?
+
+I doubt your fbcon and terminal window had height of 919 lines?
+
+
+Thanks,
+pq
+
+--Sig_/pF3FTcxUDW+xdzSl3bV6P7H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmHme1MACgkQI1/ltBGq
+qqdM2w//ZKh892gl5oVmYmmIi7+I4zQlFkWyR0zVRmm2TIInv/MNdEJglce4PXNX
+bfkq5wWZxDrtN/dm/uO165wehDzq4vn5WqhJPUckfmYvQyhCu959hDfPuqD6MZhA
+3FMmW44k5NkkSVA0Y9wlhD2s5Xt3SGPkabMuxLsLCFLHsHodW6wRdf3Ot/3TdN+0
+x7VK4M5KkBw74t2nGZpCd/Q+B1BlI9nrp7hpSwvqN1DYYH9+LCIrXrueKlA4Bkcz
+a/NxfH7M0eXUJiuMv25gyfdGGQrPwdd1poGMdF7UiAOgxXXUb/zWM6b5tZS4POLM
+9le017M5ZXMDVqp83XU1hukMAvt9O9QRwp+9C6CV/GD2II2rrKe74Fpvx4/CAycr
+vAaKrRSvH1qKZ+kLnITGHnSyqFIT3QkousXWd/3Ty656p5Q62IYOnM1TEy9Sb3xE
+5AIgB2wGUdjCl/lMn8DhTGFaTe/8rvTee9N1bqMVASfEyk63mVZHHb/1pcwSvspo
+NGh+6H9yHUF3X1yH+jYQVFELe+1w7KXdF24mUOvhJwcoNqcN+nrpm3UYPs3Q4DpN
+3lj+dzyUDg1esOBx3Q5DcwNcOXzJPE3h8EUN7+LKkIsr8Z7rFyQNM+y/7TfkK29O
+KVrUmyBJKoytMrLdbv411j1K/4vVi00byMtSxUiKcLY0hv9EblE=
+=Y0Ho
+-----END PGP SIGNATURE-----
+
+--Sig_/pF3FTcxUDW+xdzSl3bV6P7H--

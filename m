@@ -2,227 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC3A492180
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C42492173
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344809AbiARInS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:43:18 -0500
-Received: from mout.gmx.net ([212.227.15.18]:37319 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344801AbiARInH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:43:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642495375;
-        bh=SedghP5JapOAs2pJB1DLV4296xvTjJCK4XoFLMWApjo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=jw3xsIhxBFYh6g8WtOp9mTKLY6qTDNjIhgPTxeRU/5tzat6rUfDf3NnY3vWjPxJe7
-         k9VGvHOxwPb/iMw3NHvY6N4djbQISurV9Cyo6PsQuR2VCrPsKq731qk+ABq7sabEHK
-         U+MBPZF2uRqxrhI0lis7IgezBDgnzvVgKzSpIguI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.155.155]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbAh0-1mcsAJ2F1U-00bYa6; Tue, 18
- Jan 2022 09:42:55 +0100
-Message-ID: <4009cf14-2bb0-a63a-1936-4ac4d757777a@gmx.de>
-Date:   Tue, 18 Jan 2022 09:41:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Vw5Y8Ukxx+E+/vPqCkQYPUnaTtWM1BJ50QjjdAWjvvb1RETIG8u
- hDvvDSSFPXXEMNCEnGEEDVsc5xc8DGNqBYfqRvjsRArdmqnkTRK588TuS93fIMCoYwmyP3c
- fAWFTt0qfAvOPHy3BvuQUx9SoXcS0JQPg15uIM3EcQcOjFAAo3jP9V5v0m8CSveu25G2v1h
- oSNDgsqSz6Iv1o0gy1grA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W8m+MGP2rXo=:dHowt1gesn8TSdGNPXRQlC
- n0zDMpR079YGvttuGR+F6X5XPwVUVXxgLCny7pZNIfEia/gWG0wGq6nTOosmsSL6A6Uzm5WKv
- xN59Bqr4n9TIsH7rbebwUinIVjouNznl8YUXJGEvZbG45aYKUqqaYJ/nBvGmVDuYF3rs+Skrf
- 5Durjf3wbd9pyLHKHXieE17P2pPPAhdINPeSi+bRdfqZw/xTpepv3veT7dKnWQduG62oXyfYu
- R3KkTNIO+Qi7z/x6Gt444UdWJNZD8FpWM8eIK1RkMQ/c4amtgiWCx3zXX47vAS/BfoCUhkPY9
- WreOy5rAREm8crzuwlOXTsvpbmyupBAWR33Xr4v53Ht9GRGB8elWEms5mbqaiOZmH9HH+XJoN
- 5fDidzCxzmohrKgltrJocx98BMr7/htFVVJDLutp44wWANjG/YNk83BL4M5Ln788jdL+KbsKE
- 5SOcHWXOUwNE0uFFQJfuaYGXYnQKaOM4h7AEjvw9/kxaNWEIjWsrwKTNpwlJqh2XHOChKLMtY
- eqJYmAACgQNfQCBtz9ql0lYVDNBWfuywsGMzYQaeC5HVOeaoNAqUxtXxnS8jJ+RL0w+4K2DqR
- qekQ6DmUFIliXG/zOAd4w+CwfNK83kRnybiY2QiY+c+yjl67S/p8HJ3hB4ngMweTouY2KIU/Q
- r6t7yuIyeQG5lfTYQAThzI7Pc/D2aX3ktPTxWJHSaMUUuvlqLF3n1BekuZ/wjLiIBt4YzImVu
- PeK+jl3uUj5GF/9jwzkkSuJR67wIiovqavhapnxs98wkYyilD4x+1hduZdVAGkxydKVLcpwAf
- dVQLFKCrSJ0jifnhPy0poCZjwYiVJ9rAp+2NRSQoI2AtuJSYyuDuWoHB6Canx8e6D/vwdIE5B
- xdOS+ECZjbjZzRU777uRVQWPwrm3XHiGPQyE9XdAFtnPuuTf/v9X/BprLBktdA8DcPQEUaMz3
- CnzRDU6WPIejj4AQX6SYK7n5GIUXbLmJ01M4qs14ZtHwbAmx3D0Il9sAnat+EqhZ8gJShiq5f
- Rhh42yl+mtfv5ZLoktcRGvoqEkrEw7n0HGTOBhVxt5WyIxOiGxcdoZeAh0DOHEaONvtTWMImm
- RMHKavNxd9NVTY=
+        id S1344737AbiARImc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344701AbiARImb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 03:42:31 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C284C061574;
+        Tue, 18 Jan 2022 00:42:31 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id p125so2102336pga.2;
+        Tue, 18 Jan 2022 00:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=8YhW7kPz/0dwcgLNR6pHvdAKCVjhZDw2v5KzLLB3Sdw=;
+        b=KvVAmjNqIAM5rKgWxpNSO9sTeuTBkTii6FeT8E5Wj2ZUsNw7YvpM0V0oYuAhImPMlx
+         G9pCjbFfJmbGqwpavhKsyUCUybbfa5bGvcdxaH3jO1qPbT1UX2m4UhXF60jxrzUirEYB
+         ko75WxrIflNlP/blEogSwrKXzH85VGaugUPUJdu6JE4TOy28kErTqGA1SVSWBUfoa/3Y
+         QJDf3n+q/rLmigIVMzUYHIwbhRwMvcGpOH5Ma0sSBbvJYQ8WU0QSOhaqNheAR8qUaj3U
+         lO8xjxCfP0OdBkB9w+xmmHgQBdHZHda4nC66phqxpL1vR1N6oe8TKpSRxqRsVE5mqgJh
+         GwzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8YhW7kPz/0dwcgLNR6pHvdAKCVjhZDw2v5KzLLB3Sdw=;
+        b=GC8IZu0fgROHnOLx6LXnt33kr8JSVqRM/lwiEBzYxTVF4q0+oCT027gtxU9NTcu7lv
+         Y/NsbnTlxTQ8IInmnV5YGZm/NLNGpl8Eg/gNMWoglHqHllxFPklEENhnjLVlTwnjWh18
+         iufc++gMz0T9/vcnDYy5zPdfk4ofVxyFA8R+xxQGBsLUgwRZWm/Qr4jFsb7TQCwEWN0u
+         F2ObuD+T2N391yKtesDOsMNYj4IqWXIjPp574ScFNOMiMvxu5Jej3GQtqjtIaLrGrHxZ
+         OH1dLQTDltyshWZFMkJyQ8UWIdXjZELhyV5L5X0maIdZEugrQ1wUXZsYSBUduxFLAWOD
+         dt9A==
+X-Gm-Message-State: AOAM5330GvG20kVTfNJeMQuMdVVLCrw5McvOEjqFPeKp6dCNLoRIAXoH
+        abfsBDRQe8AV66dkVtgqCqc=
+X-Google-Smtp-Source: ABdhPJyEcHzyJwHvMz43RR4Vu4ljXITw8kYN/lExgQk+Xi1sPq1tghV2sVx/fdKxR0cGVQl75EwgKw==
+X-Received: by 2002:a63:4554:: with SMTP id u20mr22242363pgk.463.1642495350654;
+        Tue, 18 Jan 2022 00:42:30 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id t199sm14227787pgb.64.2022.01.18.00.42.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 18 Jan 2022 00:42:30 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     p.zabel@pengutronix.de, broonie@kernel.org,
+        andyshevchenko@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v6 0/2] Add spi control driver for Sunplus SP7021 SoC
+Date:   Tue, 18 Jan 2022 16:42:37 +0800
+Message-Id: <cover.1642494310.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel,
+This is a patch series for SPI driver for Sunplus SP7021 SoC.
 
-On 1/17/22 16:00, Daniel Vetter wrote:
-> On Mon, Jan 17, 2022 at 1:16 PM Helge Deller <deller@gmx.de> wrote:
->> On 1/17/22 11:02, Daniel Vetter wrote:
->>> On Fri, Jan 14, 2022 at 7:18 PM Helge Deller <deller@gmx.de> wrote:
->>>>
->>>> The fbdev layer is orphaned, but seems to need some care.
->>>> So I'd like to step up as new maintainer.
->>>>
->>>> Signed-off-by: Helge Deller <deller@gmx.de>
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 5d0cd537803a..ce47dbc467cc 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -7583,11 +7583,12 @@ W:      http://floatingpoint.sourceforge.net/=
-emulator/index.html
->>>>  F:     arch/x86/math-emu/
->>>>
->>>>  FRAMEBUFFER LAYER
->>>> -L:     dri-devel@lists.freedesktop.org
->>>> +M:     Helge Deller <deller@gmx.de>
->>>>  L:     linux-fbdev@vger.kernel.org
->>>> -S:     Orphan
->>>
->>> Maybe don't rush maintainer changes in over the w/e without even bothe=
-ring
->>> to get any input from the people who've been maintaining it before.
->>>
->>> Because the status isn't entirely correct, fbdev core code and fbcon a=
-nd
->>> all that has been maintained, but in bugfixes only mode. And there's v=
-ery
->>> solid&important reasons to keep merging these patches through a drm tr=
-ee,
->>> because that's where all the driver development happens, and hence als=
-o
->>> all the testing (e.g. the drm test suite has some fbdev tests - the on=
-ly
->>> automated ones that exist to my knowledge - and we run them in CI). So
->>> moving that into an obscure new tree which isn't even in linux-next ye=
-t is
->>> no good at all.
->>>
->>> Now fbdev driver bugfixes is indeed practically orphaned and I very mu=
-ch
->>> welcome anyone stepping up for that, but the simplest approach there w=
-ould
->>> be to just get drm-misc commit rights and push the oddball bugfix in t=
-here
->>> directly. But also if you want to do your own pull requests to Linus f=
-or
->>> that I don't care and there's really no interference I think, so
->>> whatever floats.
->>>
->>> But any code that is relevant for drm drivers really needs to go in th=
-rough
->>> drm trees, nothing else makes much sense.
->>>
->>> I guess you're first action as newly minted fbdev maintainer is going =
-to be to
->>> clean up the confusion you just created.
->>
->> Most of my machines depend on a working fbdev layer since drm isn't (an=
-d probably
->> -due to technical requirements of DRM- won't be) available for those.
->> So, since the fbdev drivers were marked orphaned, I decided to step up =
-as maintainer.
->>
->> I see your point that at least the fbdev core code and fbcon are shared=
- between DRM and fbdev.
->> For me it's really not important to drive any patches through a seperat=
-e tree, so
->> I'd be happy to join the drm-misc tree if you feel it's necessary. (By =
-the way,
->> adding my tree to for-next was on my todo list...)
->>
->> What's important for me though is, to keep fbdev actively maintained, w=
-hich means:
->> a) to get fixes which were posted to fbdev mailing list applied if they=
- are useful & correct,
->
-> Yeah it'd be great if we have that, for a while Bart took care of
-> these, but had to step down again. drm-misc is maintained with the dim
-> scrip suite, which comes with docs and bash completion and everything.
-> Good starting pointer is here:
->
-> https://drm.pages.freedesktop.org/maintainer-tools/getting-started.html
->
-> Process for getting commit rights is documented here:
->
-> https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#dr=
-m-misc
->
-> But there's a pile more. I think once we've set that up and got it
-> going we can look at the bigger items. Some of them are fairly
-> low-hanging fruit, but the past 5+ years absolutely no one bothered to
-> step up and sort them out. Other problem areas in fbdev are extremely
-> hard to fix properly, without only doing minimal security-fixes only
-> support, so fair warning there. I think a good starting point would be
-> to read the patches and discussions for some of the things you've
-> reverted in your tree.
->
-> Anyway I hope this gets you started, and hopefully after a minor
-> detour: Welcome to dri-devel, we're happy to take any help we can get,
-> there's lots to do!
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-Thanks for this info, Daniel!
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-After reading those docs I've decided not to join dri-devel and keep
-my existing linux-fbdev tree at:
+Li-hao Kuo (2):
+  spi: Add spi driver for Sunplus SP7021
+  dt-bindings:spi: Add Sunplus SP7021 schema
 
-https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+ .../bindings/spi/spi-sunplus-sp7021.yaml           |  81 +++
+ MAINTAINERS                                        |   7 +
+ drivers/spi/Kconfig                                |  11 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-sunplus-sp7021.c                   | 602 +++++++++++++++++++++
+ 5 files changed, 702 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+ create mode 100644 drivers/spi/spi-sunplus-sp7021.c
 
-The linux-fbdev is a low-volume mailing list with mostly small bug fixes
-or enhancements for the fbdev drivers. Those patches usually don't affect =
-DRM.
-
-I'm expecting that non-trivial changes which may affect fbdev will be sent=
- to the
-linux-fbdev mailing list, same way as I will of course send any patches wh=
-ich
-might affect DRM to dri-devel.
-
-My git tree is wired up to the for-next pull chain, so in any way we would=
- notice
-merge conflicts (which I believe will not happen).
-
-Cheers,
-
-Helge
-
->> b) to include new drivers (for old hardware) if they arrive (probably h=
-appens rarely but there can be).
->>    I know of at least one driver which won't be able to support DRM....
->>    Of course, if the hardware is capable to support DRM, it should be w=
-ritten for DRM and not applied for fbdev.
->> c) reintroduce the state where fbcon is fast on fbdev. This is importan=
-t for non-DRM machines,
->>    either when run on native hardware or in an emulator.
->> d) not break DRM development
->>
->> Especially regarding c) I complained in [1] and got no feedback. I real=
-ly would like to
->> understand where the actual problems were and what's necessary to fix t=
-hem.
->>
->> Helge
->>
->> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.=
-de
->
->
->
+-- 
+2.7.4
 

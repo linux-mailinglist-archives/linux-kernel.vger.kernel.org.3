@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A664925E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E294925DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237683AbiARMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:44:18 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10334 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237441AbiARMoR (ORCPT
+        id S237191AbiARMny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234111AbiARMnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:44:17 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20ICYsYb035744;
-        Tue, 18 Jan 2022 12:42:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=m12V+yXH4hlsiZwa8i+pDOp/j8Cs7qgKrlgEwxXj7L4=;
- b=RnlpiRvsUmkTWbjkruFslYg1tMFQEJuByDNn/0YTdV7DSI138NX40q5meitQdeZeW1Yu
- k5EjYZWjx9qzdO56Aja0MBuq7X6zydGGr2b/7ryqUtGTk+0pWv0/UvAgzDo9tFZTnhCq
- 1k2P5DRAR2BQ79VW7//cIBf0CxghnC0wU7poxz2X0XDJ+Vk3dmGawcG8O7VEddXlyFql
- fQXA8mYfg7MLeFtLfrvIuBe06ReGD+eoc2oj85gI0N8OiMxaxJZBX8t0doppb8oWBua3
- dpD1zfzbh0R9xrycvwLTF86PosVpuQlw0XDwCxxcVroA7CfX9Kdvjs34WHLCN5M0NDdM Yw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnv93anyn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 12:42:35 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20ICgYjv023877;
-        Tue, 18 Jan 2022 12:42:35 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnv93anxp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 12:42:34 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ICbc3T000483;
-        Tue, 18 Jan 2022 12:42:32 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dknw9m9cc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 12:42:32 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ICgT1r44761424
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 12:42:29 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3B548AE134;
-        Tue, 18 Jan 2022 12:42:29 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85CDBAE143;
-        Tue, 18 Jan 2022 12:42:26 +0000 (GMT)
-Received: from [9.171.19.84] (unknown [9.171.19.84])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 12:42:26 +0000 (GMT)
-Message-ID: <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 13:42:26 +0100
+        Tue, 18 Jan 2022 07:43:52 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7833C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 04:43:51 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id m4so78735641edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 04:43:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rTGN2etA9k5qiSP7ZrVqfOL8gvgrJ9M1T4KKkJp0QWM=;
+        b=GgxT31tFLd4a+OUKWDBAd70k8Yeeis6kDp5b2gHUS0rGPxK22UFqKkvQHm0U5/YGny
+         WAI5UQZMbjfqyfhFAt3GUf5SW/PEDJsiYw9N45rxF6tP6Nh4J+6RNR/2alpDopSkfSN5
+         RcCdPiKochKA+ids16pdZwSQcj+xwNyCSwtpYaGzUTt7zdlLTEcvMm+itvOKBadIBs1C
+         SN3Gf7iQ9Hcld3vlEWzY64gJGltq3voMpToPLBCArLOUrq4cgEzzjVDZvnFrgRvmwASO
+         fY40TU7it9R2XzyyGOKm4uZft57FbbxvdnfMULLZTfa4jjfoJoBfeGtJAbQtw1czcSDM
+         PsdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rTGN2etA9k5qiSP7ZrVqfOL8gvgrJ9M1T4KKkJp0QWM=;
+        b=d6guCgo330gJXK0sI2+ukSz/MVuvrgIxHBzGF6Fnu4GKExlAipPMff3Oo10voPOThC
+         4dB8fGhRUgOrGgORC3u4p/+TccN4A/+G0qkMvfqipjF2gwWoRRo0prBDusMKYFAOuMe4
+         M7hznjlQsfJAXQlzxRNt234pa42HXz8yQzIOgW2gDybYJqBmETD/+DthYYsLyvjYa5eX
+         FtBCnONQ2VKGz6glkX1CC6kvqOGCRVqas/Iq/cVKBMQQVO51F8e3HAaLH368ZOx6JT0d
+         gZglQbQGqJl7M14nbL4b3TDwkU4C/xrDU2gKAlUXpkNhWMEKYedXdOoDjaxqrk4tfP+o
+         512Q==
+X-Gm-Message-State: AOAM530Qow9JTRuKoyxsFddHwtlJbCGfbqym8WwUn099g/ybi+oAUGig
+        RUvjh2VuOd8ImpqQ0VXf+xsLsg==
+X-Google-Smtp-Source: ABdhPJz18wxKnoCux8+DSsMS7vloPGlf4s5356a/BEFnwnKL4xDDaTm/Qma52lDPuXb9GXYfzIVi+w==
+X-Received: by 2002:a17:906:9b87:: with SMTP id dd7mr19839112ejc.178.1642509830140;
+        Tue, 18 Jan 2022 04:43:50 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.239])
+        by smtp.gmail.com with ESMTPSA id r27sm2379066ejc.42.2022.01.18.04.43.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 04:43:49 -0800 (PST)
+Date:   Tue, 18 Jan 2022 20:43:43 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Marco Elver <elver@google.com>
+Cc:     John Garry <john.garry@huawei.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
+        sumanthk@linux.ibm.com, hca@linux.ibm.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
+Message-ID: <20220118124343.GC98966@leoy-ThinkPad-X240s>
+References: <20211216151454.752066-1-tmricht@linux.ibm.com>
+ <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
+ <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+ <20220118091827.GA98966@leoy-ThinkPad-X240s>
+ <CANpmjNMPoU+1b1fKFuYDYwisW2YfjQHxGt5hgLp1tioG7C2jmg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
-        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
-        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
-        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
-        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
- <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
- <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
- <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
- <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
- <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
- <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
- <20220118120154.GA17938@C02TD0UTHF1T.local>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220118120154.GA17938@C02TD0UTHF1T.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kBuNuBs-U6Vi15T0uagzyQoDh0iT-1MZ
-X-Proofpoint-GUID: ryNn6W6_ACAD_AcE88cXBjk0KElOYo9l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 adultscore=0 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180077
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMPoU+1b1fKFuYDYwisW2YfjQHxGt5hgLp1tioG7C2jmg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 18, 2022 at 12:40:04PM +0100, Marco Elver wrote:
 
+[...]
 
-Am 18.01.22 um 13:02 schrieb Mark Rutland:
-> On Mon, Jan 17, 2022 at 06:45:36PM +0100, Paolo Bonzini wrote:
->> On 1/14/22 16:19, Mark Rutland wrote:
->>> I also think there is another issue here. When an IRQ is taken from SIE, will
->>> user_mode(regs) always be false, or could it be true if the guest userspace is
->>> running? If it can be true I think tha context tracking checks can complain,
->>> and it*might*  be possible to trigger a panic().
->>
->> I think that it would be false, because the guest PSW is in the SIE block
->> and switched on SIE entry and exit, but I might be incorrect.
+> > Both Arm and Arm64 platforms cannot support signal handler with
+> > breakpoint, please see the details in [1].  So I think we need
+> > something like below:
+> >
+> > static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+> > {
+> >         ...
+> >
+> >         if (!BP_SIGNAL_IS_SUPPORTED) {
+> >                 pr_debug("Test not supported on this architecture");
+> >                 return TEST_SKIP;
+> >         }
+> >
+> >         ...
+> > }
+> >
+> > Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
+> > here.
+> >
+> > [1] https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
 > 
-> Ah; that's the crux of my confusion: I had thought the guest PSW would
-> be placed in the regular lowcore *_old_psw slots. From looking at the
-> entry asm it looks like the host PSW (around the invocation of SIE) is
-> stored there, since that's what the OUTSIDE + SIEEXIT handling is
-> checking for.
-> 
-> Assuming that's correct, I agree this problem doesn't exist, and there's
-> only the common RCU/tracing/lockdep management to fix.
+> Does this limitation also exist for address watchpoints? The sigtrap
+> test does not make use of instruction breakpoints, but instead just
+> sets up a watchpoint on access to a data address.
 
-Will you provide an s390 patch in your next iteration or shall we then do
-one as soon as there is a v2? We also need to look into vsie.c where we
-also call sie64a
+Yes, after reading the code, the flow for either instrution breakpoint
+or watchpoint both use the single step [1], thus the signal handler will
+take the single step execution and lead to the infinite loop.
+
+I am not the best person to answer this question; @Will, could you
+confirm for this?  Thanks!
+
+Leo
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/hw_breakpoint.c

@@ -2,107 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7298E492C7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D9D492C81
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347425AbiARRfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:35:20 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:36771 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346912AbiARRfP (ORCPT
+        id S1347549AbiARRfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:35:32 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:47514 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347463AbiARRf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:35:15 -0500
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id AC90B223F6;
-        Tue, 18 Jan 2022 18:35:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1642527313;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E7u3bW2JrZRjIUX82K4eJKjrr9Yp7IpGI/5ky9C3x8w=;
-        b=WfdoMHiDUh24X4gp1I+oyZtPBmatt+zXZn052cVGoQVJjCcoDGUgEjD9jEHfvZDXKUcS3r
-        uJwfyY1THl2BEmA8XRQ0IoLb8GwqtE3iXaMkDiS9GkqtRPq69EiYAQMXn9V7zoLAtEnOCt
-        VySx36gwez+twDu5cazmD0d8AAy9+Bs=
-From:   Michael Walle <michael@walle.cc>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 3/3] of: base: add of_parse_phandle_with_optional_args()
-Date:   Tue, 18 Jan 2022 18:35:04 +0100
-Message-Id: <20220118173504.2867523-4-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220118173504.2867523-1-michael@walle.cc>
-References: <20220118173504.2867523-1-michael@walle.cc>
+        Tue, 18 Jan 2022 12:35:26 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 1321E1C0B80; Tue, 18 Jan 2022 18:35:25 +0100 (CET)
+Date:   Tue, 18 Jan 2022 18:35:24 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 00/23] 5.10.93-rc1 review
+Message-ID: <20220118173524.GA17462@duo.ucw.cz>
+References: <20220118160451.233828401@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new variant of the of_parse_phandle_with_args() which treats the
-cells name as optional. If it's missing, it is assumed that the phandle
-has no arguments.
 
-Up until now, a nvmem node didn't have any arguments, so all the device
-trees haven't any '#*-cells' property. But there is a need for an
-additional argument for the phandle, for which we need a '#*-cells'
-property. Therefore, we need to support nvmem nodes with and without
-this property.
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-changes since v2:
- - make index signed
- - add missing function parameter doc
+Hi!
 
-changes since v1:
- - new patch
+> This is the start of the stable review cycle for the 5.10.93 release.
+> There are 23 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
- include/linux/of.h | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+CIP testing did not find any new kernel problems here (but we still
+hit the gmp.h compilation issue):
 
-diff --git a/include/linux/of.h b/include/linux/of.h
-index c64af2efbc3a..a0880c43d435 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -1028,6 +1028,31 @@ static inline int of_parse_phandle_with_fixed_args(const struct device_node *np,
- 					    index, out_args);
- }
- 
-+/**
-+ * of_parse_phandle_with_optional_args() - Find a node pointed by phandle in a list
-+ * @np:		pointer to a device tree node containing a list
-+ * @list_name:	property name that contains a list
-+ * @cells_name:	property name that specifies phandles' arguments count
-+ * @index:	index of a phandle to parse out
-+ * @out_args:	optional pointer to output arguments structure (will be filled)
-+ *
-+ * Same as of_parse_phandle_with_args() except that if the cells_name property
-+ * is not found, cell_count of 0 is assumed.
-+ *
-+ * This is used to useful, if you have a phandle which didn't have arguments
-+ * before and thus doesn't have a '#*-cells' property but is now migrated to
-+ * having arguments while retaining backwards compatibility.
-+ */
-+static inline int of_parse_phandle_with_optional_args(const struct device_node *np,
-+						      const char *list_name,
-+						      const char *cells_name,
-+						      int index,
-+						      struct of_phandle_args *out_args)
-+{
-+	return __of_parse_phandle_with_args(np, list_name, cells_name,
-+					    0, index, out_args);
-+}
-+
- /**
-  * of_property_count_u8_elems - Count the number of u8 elements in a property
-  *
--- 
-2.30.2
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
 
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYeb6XAAKCRAw5/Bqldv6
+8iQcAJ0eDo/vTp0YjCy7aKxBMUQ+viyWSwCgrtg4ZwZYHwu/FtREZ8R/0cy1w50=
+=Sgcs
+-----END PGP SIGNATURE-----
+
+--yrj/dFKFPuw6o+aM--

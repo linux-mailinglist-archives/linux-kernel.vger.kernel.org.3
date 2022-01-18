@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F046493176
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E55493178
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350301AbiARXrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 18:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S1346581AbiARXwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 18:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbiARXq6 (ORCPT
+        with ESMTP id S233354AbiARXww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:46:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9145CC061574;
-        Tue, 18 Jan 2022 15:46:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C882761457;
-        Tue, 18 Jan 2022 23:46:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31AF9C340E0;
-        Tue, 18 Jan 2022 23:46:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642549617;
-        bh=oVzp83gVtqUhhjJPDkZJhGEWXJn1dYVjgJBlh0SPBjQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=F4y+VVYF4Lr4f2Nl9f2iwHT14o8tjT5tHGZOCuVtcMSFKx0TxQXu8l4MubFQlkEcJ
-         VunVxNeVSdvno7nbdIOmfljfBIO0vxtPn0Mxy/Vzj+MawB6OPxGNvRbS4hMjVVkQsu
-         tr+J0vf0+1W2SUN9s+oQcHM0uAw2diPTYKb99mW73y2LEhhnIYnMeq6gQG1eFJGPRS
-         uJ6u4P6PBwSOZPJh6oaVc5zFhwIFUanpncLUjztqdbPEBTCoyD2F9XS5Zo9CYnp3ow
-         0UZ2D8J2oHVUr97dOpWh4sGHz6H6T91VGhTsxoLQrK9+oaObPi/FqrCW7k0zv7jttc
-         J/D+ED5jQ3qxA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E808A5C0A21; Tue, 18 Jan 2022 15:46:56 -0800 (PST)
-Date:   Tue, 18 Jan 2022 15:46:56 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other
- failures
-Message-ID: <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
- <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
- <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
- <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 18 Jan 2022 18:52:52 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3C2C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:52:52 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id l16so799446pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4/RjK8BN3JSAYkOl/QC9o65LtcnAhU3UXdD1BgVr6Dc=;
+        b=I3JK5GxKJNosEutNRJEjnFEOYFwZ1QUsNrU8p+R6GhPQVxZou96OUTOJJJNUYvUXlI
+         djYqsWuuEpIwlotwaIt6WThuRViY62QjMtOAC3oESQLeE07JPBa7iENB1R8NVtCdVozp
+         KPhBoyoOoL+vLpnNDQRI2pTsZRefcPiWZD+vMtgXegOqwK8dmBlhC1pKrzn2n33WalQ6
+         u8I5lEIHn3e2WkVkySHo1yLDA/aqfeiJdTWy/oT2R7IK5/7BoD4gUBn88IlHzHMIwl5L
+         tFptvPjevkIe/BK90fAKEO/eaOhkO2+zfCLCyHh4/USxnftehM/1SGXMrANgce6HlDQx
+         gWXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4/RjK8BN3JSAYkOl/QC9o65LtcnAhU3UXdD1BgVr6Dc=;
+        b=XU4itxMmpEYHHlBB6hTt1PN30WsDz1FkIwIAjrY/uUesJRCIuhtrH9Kv5yBPIB7CEL
+         qiKGSHENo+NJ+mf22ifKgh2Cm+C88PwrTmd2QB1LhSqjzZWUL0pXuibdLBO83uGabTne
+         URdLfCHBmUnuk1dlJ7niUVnqD3sdMjGSLA66vha9Azr5EsY5iov3/WDfLyHkaHCqIo5n
+         OIX/ahy386/UpKDb7ogLLnynOKevk5PHnZpVp8zUZqMIOmPtocIvkqdQNFBtkmDOPgUe
+         bkrCBkIl9YFv+TTG8BpscSB2OboyYOWqmPugHsNV+150xOsrfj9+sw94ddWFzYQjSF/6
+         2HrQ==
+X-Gm-Message-State: AOAM533AhZmdL29BWAQ7+4x1DyOx7E5X++gnv24pFW2cXKWW09k0L1Qd
+        hdRuiDHzMZYswFjThb3CzUs=
+X-Google-Smtp-Source: ABdhPJxiD2bVrhbvfdZNgIib+nJd6p1sFBUR9Rc3MGJm0eXE85gtCHvnl1zU6KKl3ctqvAbPK7LMAA==
+X-Received: by 2002:a17:903:32c4:b0:14a:67ae:3e03 with SMTP id i4-20020a17090332c400b0014a67ae3e03mr29666243plr.111.1642549971771;
+        Tue, 18 Jan 2022 15:52:51 -0800 (PST)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id h4sm18962329pfi.79.2022.01.18.15.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 15:52:51 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH] vmap(): don't allow invalid pages
+Date:   Tue, 18 Jan 2022 15:52:44 -0800
+Message-Id: <20220118235244.540103-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:29:04AM -0800, Paul E. McKenney wrote:
-> On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
-> > Dear Zhouyi,
-> > 
-> > 
-> > Thank you for your quick response.
-> > 
-> > 
-> > Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
-> > 
-> > > I have studied the rcu torture test recently. I am also interested in
-> > > this topic.
-> > > But I can't open
-> > > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
-> > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
-> > 
-> > Sorry, about that. I should have checked those. I had put them into a
-> > directory:
-> > 
-> > [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
-> > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
-> > 
-> > I am going to try to test your suggestions at the end of the day.
-> 
-> On x86 rcutorture builds successfully.  However, allmodconfig
-> on semi-recent -next got me "Can't open perl script
-> "./usr/include/headers_check.pl": No such file or directory".
-> Which might well be a local problem or might well be fixed by now.
+vmap() takes struct page *pages as one of arguments, and user may provide
+an invalid pointer which would lead to DABT at address translation later.
 
-Not fixed as of next-20220118.  Chasing it down...  ;-)
+Currently, kernel checks the pages against NULL. In my case, however, the
+address was not NULL, and was big enough so that the hardware generated
+Address Size Abort on arm64.
 
-> Either way, it looks like I need to upgrade the torture.sh script's
-> checks for failed builds.  Thank you for reporting this!
+Interestingly, this abort happens even if copy_from_kernel_nofault() is
+used, which is quite inconvenient for debugging purposes. 
 
-Does this make torture.sh more reliably report build failures?
+This patch adds a pfn_valid() check into vmap() path, so that invalid
+mapping will not be created.
 
-						Thanx, Paul
+RFC: https://lkml.org/lkml/2022/1/18/815
+v1: use pfn_valid() instead of adding an arch-specific
+    arch_vmap_page_valid(). Thanks to Matthew Wilcox for the hint.
 
-------------------------------------------------------------------------
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ mm/vmalloc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-commit 0d302830515307ceb58e89d5fb91e81b6d22e0bf
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Tue Jan 18 15:40:49 2022 -0800
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index d2a00ad4e1dd..a4134ee56b10 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -477,6 +477,8 @@ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+ 			return -EBUSY;
+ 		if (WARN_ON(!page))
+ 			return -ENOMEM;
++		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
++			return -EINVAL;
+ 		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
+ 		(*nr)++;
+ 	} while (pte++, addr += PAGE_SIZE, addr != end);
+-- 
+2.30.2
 
-    torture: Make kvm-find-errors.sh notice missing vmlinux file
-    
-    Currently, an obtuse compiler diagnostic can fool kvm-find-errors.sh
-    into believing that the build was successful.  This commit therefore
-    adds a check for a missing vmlinux file.
-    
-    Link: https://lore.kernel.org/lkml/36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de/
-    Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-index 2e9e9e2eedb69..7d3e11a6b8290 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-@@ -30,10 +30,15 @@ editor=${EDITOR-vi}
- files=
- for i in ${rundir}/*/Make.out
- do
-+	scenariodir="`dirname $i`"
- 	if egrep -q "error:|warning:|^ld: .*undefined reference to" < $i
- 	then
- 		egrep "error:|warning:|^ld: .*undefined reference to" < $i > $i.diags
- 		files="$files $i.diags $i"
-+	elif ! test -f ${scenariodir}/vmlinux
-+	then
-+		echo No ${scenariodir}/vmlinux file > $i.diags
-+		files="$files $i.diags $i"
- 	fi
- done
- if test -n "$files"

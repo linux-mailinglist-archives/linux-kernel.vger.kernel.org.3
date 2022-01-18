@@ -2,168 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 047354929B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AE34929C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345834AbiARPfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:35:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54331 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238270AbiARPfJ (ORCPT
+        id S1345867AbiARPhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:37:46 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:41909 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238270AbiARPhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:35:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642520109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=03W0CajDsWL8nkNyBb+ZXdbNP0dR+eVZouhyVqFR/1Q=;
-        b=ML9IYD2Hk0dhejM1/T5Rf2uKX9POsmYZZEF0+WloeMmNs1bhJrmsxY9/dwE/ybjYptDQSX
-        VxziXil5JuoH44OfTp2KH0cGifuIndydnyLclqe2Kfd7Mb1hZ1JcRNoU4ElIBxka/0TLJp
-        e9ys4ZT5JKpQSgbJK2UUB7Nru2vMU9U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-121-wv9rVZS0PC-dp6oha4b2sg-1; Tue, 18 Jan 2022 10:35:06 -0500
-X-MC-Unique: wv9rVZS0PC-dp6oha4b2sg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED18A1825174;
-        Tue, 18 Jan 2022 15:33:10 +0000 (UTC)
-Received: from llong.com (unknown [10.22.35.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E3946753EF;
-        Tue, 18 Jan 2022 15:33:09 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH] locking/semaphore: Use wake_q to wake up processes outside lock critical section
-Date:   Tue, 18 Jan 2022 10:32:54 -0500
-Message-Id: <20220118153254.358748-1-longman@redhat.com>
+        Tue, 18 Jan 2022 10:37:45 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0V2CoSVm_1642520260;
+Received: from 192.168.2.97(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0V2CoSVm_1642520260)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 18 Jan 2022 23:37:41 +0800
+Message-ID: <51520425-dcdf-cae6-65a8-496d89905361@linux.alibaba.com>
+Date:   Tue, 18 Jan 2022 23:37:39 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH 3/3] x86/sev: The code for returning to user space is also
+ in syscall gap
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, Joerg Roedel <jroedel@suse.de>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Oleg Nesterov <oleg@redhat.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <20211213042215.3096-1-jiangshanlai@gmail.com>
+ <20211213042215.3096-4-jiangshanlai@gmail.com> <YbkR36Vpb1h5SlMZ@zn.tnic>
+ <YbxhBQg99YCTrYN3@suse.de> <Ybxmsn1wp8NZjXaD@zn.tnic>
+ <Ybxt0g+U11hZhbSh@suse.de> <YeaXP51ClhnV8Xfd@zn.tnic>
+From:   Lai Jiangshan <laijs@linux.alibaba.com>
+In-Reply-To: <YeaXP51ClhnV8Xfd@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following lockdep splat was observed:
 
-[ 9776.459819] ======================================================
-[ 9776.459820] WARNING: possible circular locking dependency detected
-[ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
-[ 9776.459823] ------------------------------------------------------
-[ 9776.459824] stress-ng/117708 is trying to acquire lock:
-[ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at: down_trylock+0x13/0x70
 
-[ 9776.459831] but task is already holding lock:
-[ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x27/0x130
+On 2022/1/18 18:32, Borislav Petkov wrote:
+> On Fri, Dec 17, 2021 at 12:00:34PM +0100, Joerg Roedel wrote:
+>> On Fri, Dec 17, 2021 at 11:30:10AM +0100, Borislav Petkov wrote:
+>>> I audited the handful instructions in there and didn't find anything
+>>> that would cause a #VC...
+>>
+>> If the hypervisor decides to mess with the code-page for this path
+>> while a CPU is executing it. This will cause a #VC on that CPU and that
+>> could hit in the syscall return path.
+> 
+> So I added a CPUID on that return path:
+> 
+> @@ -213,8 +213,11 @@ syscall_return_via_sysret:
+>   
+>          popq    %rdi
+>          popq    %rsp
+> +       cpuid
+> 
+> 
+> It results in the splat below. I.e., we're on the VC2 stack. We've
+> landed there because:
+> 
+>   * If entered from kernel-mode the return stack is validated first, and if it is
+>   * not safe to use (e.g. because it points to the entry stack) the #VC handler
+>   * will switch to a fall-back stack (VC2) and call a special handler function.
+> 
 
-[ 9776.459837] which lock already depends on the new lock.
-      :
-[ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
-[ 9776.459860]        __lock_acquire+0xb72/0x1870
-[ 9776.459861]        lock_acquire+0x1ca/0x570
-[ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
-[ 9776.459863]        try_to_wake_up+0x9d/0x1210
-[ 9776.459864]        up+0x7a/0xb0
-[ 9776.459864]        __up_console_sem+0x33/0x70
-[ 9776.459865]        console_unlock+0x3a1/0x5f0
-[ 9776.459866]        vprintk_emit+0x23b/0x2b0
-[ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
-[ 9776.459868]        devkmsg_write.cold+0x4e/0x78
-[ 9776.459869]        do_iter_readv_writev+0x343/0x690
-[ 9776.459870]        do_iter_write+0x123/0x340
-[ 9776.459871]        vfs_writev+0x19d/0x520
-[ 9776.459871]        do_writev+0x110/0x290
-[ 9776.459872]        do_syscall_64+0x3b/0x90
-[ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-      :
-[ 9776.459905] Chain exists of:
-[ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
+Hello
 
-[ 9776.459911]  Possible unsafe locking scenario:
+Thanks for testing.
 
-[ 9776.459913]        CPU0                    CPU1
-[ 9776.459914]        ----                    ----
-[ 9776.459914]   lock(&rq->__lock);
-[ 9776.459917]                                lock(&p->pi_lock);
-[ 9776.459919]                                lock(&rq->__lock);
-[ 9776.459921]   lock((console_sem).lock);
+The log shows that the %rsp is 0x7ffc79fd7e78 before the #VC, which means the
+userspace might not be malicious since it might not tamper the %rsp.
 
-[ 9776.459923]  *** DEADLOCK ***
+If the userspace is not malicious, there is nothing wrong with it when #VC is
+on this gap.
 
-The problematic locking sequence ((console_sem).lock --> &p->pi_lock)
-was caused by the fact the semaphore up() function is calling
-wake_up_process() while holding the semaphore raw spinlock.
+If the userspace is malicious and misleads vc_switch_off_ist(), it would harm
+the system.
 
-By moving the wake_up_processs() call out of the raw spinlock critical
-section using wake_q, it will break the problematic locking sequence as
-well as reducing raw spinlock hold time which will be good for
-PREEMPT_RT.
+For example, (I haven't test it, I am just imaging it,) if user %rsp were set
+to be the kernel #NMI stack, #VC would keep running on #NMI stack, its stack
+would be corrupted when a #NMI is delivered since #NMI is not masked.  It would
+be more dangerous if the hypervisor connives with the userspace.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/semaphore.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+I think ip_within_syscall_gap() was designed for avoid using userspace %rsp
+albeit it misses the path returning to user space.
 
-diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
-index 9ee381e4d2a4..a26c915430ba 100644
---- a/kernel/locking/semaphore.c
-+++ b/kernel/locking/semaphore.c
-@@ -29,6 +29,7 @@
- #include <linux/export.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched/wake_q.h>
- #include <linux/semaphore.h>
- #include <linux/spinlock.h>
- #include <linux/ftrace.h>
-@@ -37,7 +38,7 @@ static noinline void __down(struct semaphore *sem);
- static noinline int __down_interruptible(struct semaphore *sem);
- static noinline int __down_killable(struct semaphore *sem);
- static noinline int __down_timeout(struct semaphore *sem, long timeout);
--static noinline void __up(struct semaphore *sem);
-+static noinline void __up(struct semaphore *sem, struct wake_q_head *wake_q);
- 
- /**
-  * down - acquire the semaphore
-@@ -182,13 +183,16 @@ EXPORT_SYMBOL(down_timeout);
- void up(struct semaphore *sem)
- {
- 	unsigned long flags;
-+	DEFINE_WAKE_Q(wake_q);
- 
- 	raw_spin_lock_irqsave(&sem->lock, flags);
- 	if (likely(list_empty(&sem->wait_list)))
- 		sem->count++;
- 	else
--		__up(sem);
-+		__up(sem, &wake_q);
- 	raw_spin_unlock_irqrestore(&sem->lock, flags);
-+	if (!wake_q_empty(&wake_q))
-+		wake_up_q(&wake_q);
- }
- EXPORT_SYMBOL(up);
- 
-@@ -256,11 +260,12 @@ static noinline int __sched __down_timeout(struct semaphore *sem, long timeout)
- 	return __down_common(sem, TASK_UNINTERRUPTIBLE, timeout);
- }
- 
--static noinline void __sched __up(struct semaphore *sem)
-+static noinline void __sched __up(struct semaphore *sem,
-+				  struct wake_q_head *wake_q)
- {
- 	struct semaphore_waiter *waiter = list_first_entry(&sem->wait_list,
- 						struct semaphore_waiter, list);
- 	list_del(&waiter->list);
- 	waiter->up = true;
--	wake_up_process(waiter->task);
-+	wake_q_add(wake_q, waiter->task);
- }
--- 
-2.27.0
+Thanks
+Lai.
 
+> and what puts us there is, I think:
+> 
+> vc_switch_off_ist:
+>          if (!get_stack_info_noinstr(stack, current, &info) || info.type == STACK_TYPE_ENTRY ||
+>              info.type > STACK_TYPE_EXCEPTION_LAST)
+>                  sp = __this_cpu_ist_top_va(VC2);
+> 
+> but I need to stare at this more later to figure it all out properly.
+> 
+> [    1.372783] Kernel panic - not syncing: Can't handle #VC exception from unsupported context: sp: 0xfffffe0000019f58, prev_sp: 0x7ffc79fd7e78, VC2 stack [0xfffffe0000018000:0xfffffe000001a000]
+> [    1.374828] CPU: 0 PID: 1 Comm: init Not tainted 5.16.0+ #6
+> [    1.375586] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+> [    1.376553] Call Trace:
+> [    1.377030]  <#VC2>
+> [    1.377462]  dump_stack_lvl+0x48/0x5e
+> [    1.378038]  panic+0xfa/0x2c6
+> [    1.378570]  kernel_exc_vmm_communication+0x10e/0x160
+> [    1.379275]  asm_exc_vmm_communication+0x30/0x60
+> [    1.379934] RIP: 0010:syscall_return_via_sysret+0x28/0x2a
+> [    1.380669] Code: 00 00 41 5f 41 5e 41 5d 41 5c 5d 5b 5e 41 5a 41 59 41 58 58 5e 5a 5e 48 89 e7 65 48 8b 24 25 04 60 00 00 ff 77 28 ff 37 5f 5c <0f> a2 0f 01 f8 48 0f 07 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00
+> [    1.384240] RSP: 0018:00007ffc79fd7e78 EFLAGS: 00010046
+> [    1.384977] RAX: 00005555e4b80000 RBX: 0000000000000001 RCX: 00007fc2d978ac17
+> [    1.385894] RDX: 0000000000000054 RSI: 00007fc2d9792e09 RDI: 0000000000000000
+> [    1.386816] RBP: 00007fc2d97724e0 R08: 00007ffc79fd9fe7 R09: 00007fc2d979ae88
+> [    1.387734] R10: 000000000000001c R11: 0000000000000246 R12: 00005555e448e040
+> [    1.388647] R13: 000000000000000b R14: 0000000000000000 R15: 00007ffc79fd8119
+> [    1.389559]  </#VC2>
+> [    1.391521] Kernel Offset: 0x7e00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [    1.393015] ---[ end Kernel panic - not syncing: Can't handle #VC exception from unsupported context: sp: 0xfffffe0000019f58, prev_sp: 0x7ffc79fd7e78, VC2 stack [0xfffffe0000018000:0xfffffe000001a000] ]---
+> 
+> 

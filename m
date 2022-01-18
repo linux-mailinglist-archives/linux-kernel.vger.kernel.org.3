@@ -2,130 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6080492C5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E0B492C60
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244059AbiARR32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:29:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:33994 "EHLO foss.arm.com"
+        id S1347249AbiARRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:30:10 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:43150 "EHLO vps-vb.mhejs.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347244AbiARR31 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:29:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A693BD6E;
-        Tue, 18 Jan 2022 09:29:26 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B9D03F774;
-        Tue, 18 Jan 2022 09:29:24 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Kenta.Tada\@sony.com" <Kenta.Tada@sony.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ed Tsai <ed.tsai@mediatek.com>, linux-api@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] sched/tracing: Add TASK_RTLOCK_WAIT to TASK_REPORT
-In-Reply-To: <878rve89cc.fsf@email.froward.int.ebiederm.org>
-References: <20220117164633.322550-1-valentin.schneider@arm.com> <20220117164633.322550-3-valentin.schneider@arm.com> <878rve89cc.fsf@email.froward.int.ebiederm.org>
-Date:   Tue, 18 Jan 2022 17:29:21 +0000
-Message-ID: <878rvd6jgu.mognet@arm.com>
+        id S1347244AbiARRaI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:30:08 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1n9sIu-0000RU-G7; Tue, 18 Jan 2022 18:29:56 +0100
+Message-ID: <28a005b7-9ae3-fe0d-b003-9aedba27dc85@maciej.szmigiero.name>
+Date:   Tue, 18 Jan 2022 18:29:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-7-nikunj@amd.com>
+ <010ef70c-31a2-2831-a2a7-950db14baf23@maciej.szmigiero.name>
+Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
+ sev_launch_update_data()
+In-Reply-To: <010ef70c-31a2-2831-a2a7-950db14baf23@maciej.szmigiero.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/22 13:12, Eric W. Biederman wrote:
-> Valentin Schneider <valentin.schneider@arm.com> writes:
->> --- a/fs/proc/array.c
->> +++ b/fs/proc/array.c
->> @@ -128,9 +128,10 @@ static const char * const task_state_array[] = {
->>  	"X (dead)",		/* 0x10 */
->>  	"Z (zombie)",		/* 0x20 */
->>  	"P (parked)",		/* 0x40 */
->> +	"L (rt-locked)",        /* 0x80 */
->>  
->>  	/* states beyond TASK_REPORT: */
->> -	"I (idle)",		/* 0x80 */
->> +	"I (idle)",		/* 0x100 */
->>  };
->
-> I think this is at least possibly an ABI break.  I have a vague memory
-> that userspace is not ready being reported new task states.  Which is
-> why we encode some of our states the way we do.
->
-> Maybe it was just someone being very conservative.
->
-> Still if you are going to add new states to userspace and risk breaking
-> them can you do some basic analysis and report what ps and similar
-> programs do.
->
-> Simply changing userspace without even mentioning that you are changing
-> the userspace output of proc looks dangerous indeed.
->
+On 18.01.2022 16:00, Maciej S. Szmigiero wrote:
+> Hi Nikunj,
+> 
+> On 18.01.2022 12:06, Nikunj A Dadhania wrote:
+>> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>>
+>> Pin the memory for the data being passed to launch_update_data()
+>> because it gets encrypted before the guest is first run and must
+>> not be moved which would corrupt it.
+>>
+>> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+>> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
+>>    * Updated sev_pin_memory_in_mmu() error handling.
+>>    * As pinning/unpining pages is handled within MMU, removed
+>>      {get,put}_user(). ]
+>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>> ---
+>>   arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 119 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>> index 14aeccfc500b..1ae714e83a3c 100644
+>> --- a/arch/x86/kvm/svm/sev.c
+>> +++ b/arch/x86/kvm/svm/sev.c
+>> @@ -22,6 +22,7 @@
+>>   #include <asm/trapnr.h>
+>>   #include <asm/fpu/xcr.h>
+>> +#include "mmu.h"
+>>   #include "x86.h"
+>>   #include "svm.h"
+>>   #include "svm_ops.h"
+>> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
+>>       return pages;
+>>   }
+>> +#define SEV_PFERR_RO (PFERR_USER_MASK)
+>> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
+>> +
+>> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
+>> +                          unsigned long hva)
+>> +{
+>> +    struct kvm_memslots *slots = kvm_memslots(kvm);
+>> +    struct kvm_memory_slot *memslot;
+>> +    int bkt;
+>> +
+>> +    kvm_for_each_memslot(memslot, bkt, slots) {
+>> +        if (hva >= memslot->userspace_addr &&
+>> +            hva < memslot->userspace_addr +
+>> +            (memslot->npages << PAGE_SHIFT))
+>> +            return memslot;
+>> +    }
+>> +
+>> +    return NULL;
+>> +}
+> 
+> We have kvm_for_each_memslot_in_hva_range() now, please don't do a linear
+> search through memslots.
+> You might need to move the aforementioned macro from kvm_main.c to some
+> header file, though.
 
-Yeah, you're right.
+Besides performance considerations I can't see the code here taking into
+account the fact that a hva can map to multiple memslots (they an overlap
+in the host address space).
 
-> Looking in the history commit 74e37200de8e ("proc: cleanup/simplify
-> get_task_state/task_state_array") seems to best document the concern
-> that userspace does not know how to handle new states.
->
-
-Thanks for the sha1 and for digging around. Now, I read
-74e37200de8e ("proc: cleanup/simplify get_task_state/task_state_array")
-as "get_task_state() isn't clear vs what value is actually exposed to
-userspace" rather than "get_task_state() could expose things userspace
-doesn't know what to do with".
-
-> The fact we have had a parked state for quite a few years despite that
-> concern seems to argue it is possible to extend the states.  Or perhaps
-> it just argues that parked states are rare enough it does not matter.
->
-> It is definitely the case that the ps manpage documents the possible
-> states and as such they could be a part of anyone's shell scripts.
->
-
-06eb61844d84 ("sched/debug: Add explicit TASK_IDLE printing") for instance
-seems to suggest extending the states OK, but you're right that this then
-requires updating ps' manpage.
-
-Alternatively, TASK_RTLOCK_WAIT could be masqueraded as
-TASK_(UN)INTERRUPTIBLE when reported to userspace - it is actually somewhat
-similar, unlike TASK_IDLE vs TASK_UNINTERRUPTIBLE for instance. The
-handling in get_task_state() will be fugly, but it might be preferable over
-exposing a detail userspace might not need to be made aware of?
-
-> From the ps man page:
->>        Here are the different values that the s, stat and state output
->>        specifiers (header "STAT" or "S") will display to describe the
->>        state of a process:
->> 
->>                D    uninterruptible sleep (usually IO)
->>                I    Idle kernel thread
->>                R    running or runnable (on run queue)
->>                S    interruptible sleep (waiting for an event to complete)
->>                T    stopped by job control signal
->>                t    stopped by debugger during the tracing
->>                W    paging (not valid since the 2.6.xx kernel)
->>                X    dead (should never be seen)
->>                Z    defunct ("zombie") process, terminated but not reaped by its parent
->> 
->
-> So it looks like a change that adds to the number of states in the
-> kernel should update the ps man page as well.
->
-> Eric
+Thanks,
+Maciej

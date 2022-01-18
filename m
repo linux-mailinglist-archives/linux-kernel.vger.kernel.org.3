@@ -2,159 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC6F492C68
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF19C492C64
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347305AbiARRa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiARRa5 (ORCPT
+        id S1347269AbiARRab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:30:31 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60648 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229701AbiARRa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:30:57 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90FBC061574;
-        Tue, 18 Jan 2022 09:30:56 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id br17so73689132lfb.6;
-        Tue, 18 Jan 2022 09:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kd+ihHSa65bZsYesw4D/FyTF+Vo+oGBmiX15FDAQBXk=;
-        b=e13PFa9kUnXLdHA7Q1zZ95wii6tWgGfOPp0QNoBAFP/eLrG1Ubit7uyDezbQqsrGnv
-         8roNME9Q6nZjaWFe/sfws3oDxQGesuTonq0wNGYGZ380zn5cZyfyWB6h4phl5TvbbECQ
-         BWC8Z4lLxrH9Ow9SutdvCZYOWDac7fOJdUC6WM9JATZRpgbrTVLUEW1woV/L4N4BX4MM
-         RqUSfdenWGAOf9wHTXdbmN0KhcesEenPbMRLQBF2CbC/K9sF4slFVaOiLHFhSP/NCVTk
-         4tnVLabvDMxIkSUAI8gdZsGIyquPUiDcWSK/0XEyKSM53rV1VCbKcwn+eWjZirqb0i+H
-         zchQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kd+ihHSa65bZsYesw4D/FyTF+Vo+oGBmiX15FDAQBXk=;
-        b=FiaOqv8alezADDYkJB5RQEo16rRPpLkSLvKzNzutpwsMLAmjQj3cKq00eaQ3HGCArR
-         KKYpn6OMO3bDmF1catH1IWAcBxUqxhn2P1NwanW6x8QrczIFsvBDOks66q0YW04H8gpe
-         IDU9quAKkxfIhT1zDyDqjw+bp9eOH84UFLzue7WJ9YrLeUMuyMDR8KG71oVbOheb4UPT
-         nCf4CE4L3UodxLKjHOFEi2Hfx4mXQtzdpA+IUHATeGGnjeuvW8tNJlW+UcM3qOkMSQTk
-         T/5BPX28UGHtQBUKLf8G3CFzKrx+FW4FT6vpB6wpt8Ldiv6L951oYmj+YGeX5ltng1sz
-         /liA==
-X-Gm-Message-State: AOAM531G00kt7prpSzdb4+7mKjTFUd8Dn5yRY/7qgMNl+kKvaCIz2Dld
-        GLeabaRv8sou7F7Jo9yt9C0tUw9e+vQ=
-X-Google-Smtp-Source: ABdhPJxvN0s/tHa9KOkWnm2uUIZUZLh8EQBSFrgC9FL8hALhMK6XhLbQQsY/Z1iA+1VidzrnHhLOFw==
-X-Received: by 2002:ac2:5217:: with SMTP id a23mr22664021lfl.684.1642527055166;
-        Tue, 18 Jan 2022 09:30:55 -0800 (PST)
-Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
-        by smtp.googlemail.com with ESMTPSA id t6sm1751911lfl.286.2022.01.18.09.30.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 09:30:54 -0800 (PST)
-Message-ID: <99353796-eea7-b765-f355-46e50f1b8773@gmail.com>
-Date:   Tue, 18 Jan 2022 20:30:53 +0300
+        Tue, 18 Jan 2022 12:30:29 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IHTlor003961;
+        Tue, 18 Jan 2022 17:30:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=al7xY5FqdR2bfpfG1KWR55uPxfNyjoj1fhFF3Z/BNs4=;
+ b=JKiFhfR2gfZ61WzJ6aBa1N/dEDfVpiiii+Ld+d87hFg9PDcXCdD4RMd73DzvDzCsQa/a
+ mjvLViHpsSL+PDi8CGadnxYrRvMPdFD61JBeYU6wlyp/3wN7gXLyaxY91cg0l65U0pVL
+ 5NmLX2puOv5niQYUy+vjz5HAH+fI0d0kCZLSRfA73HTvm68ER4hDS+gcofxYndcBOXus
+ LMTNxfjXzEmVkkaeTZhBApmuWPusWEFNlDyA81gNwcOIUakOR9Z2KvgJ1/J9kxEMguAU
+ YBfQfIoYalVlJY01mV8wylNxbpc9c26CggXZqpLY2Doz54MUy2a8BHl/PoYWv3lG4FmI TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnutk34sn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:30:28 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IGilMP009759;
+        Tue, 18 Jan 2022 17:30:28 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnutk34rh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:30:28 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IHNE9V015011;
+        Tue, 18 Jan 2022 17:30:26 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3dnm6r6drm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:30:25 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IHUK7121627278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 17:30:20 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1246AE058;
+        Tue, 18 Jan 2022 17:30:19 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0F81AE051;
+        Tue, 18 Jan 2022 17:30:18 +0000 (GMT)
+Received: from [9.171.70.230] (unknown [9.171.70.230])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 17:30:18 +0000 (GMT)
+Message-ID: <4d181623-24b5-980d-d78f-36472a622538@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 18:32:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 14/30] KVM: s390: pci: add basic kvm_zdev structure
 Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211213225350.27481-1-ebiederm@xmission.com>
- <9363765f-9883-75ee-70f1-a1a8e9841812@gmail.com>
- <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
- <5bbb54c4-7504-cd28-5dde-4e5965496625@gmail.com>
- <87bl0m14ew.fsf@email.froward.int.ebiederm.org>
- <6692758a-0af2-67e0-26fd-365625b3ad0c@gmail.com>
- <87iluqtcj3.fsf@email.froward.int.ebiederm.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <87iluqtcj3.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Pierre Morel <pmorel@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-15-mjrosato@linux.ibm.com>
+ <adc3ce02-050d-356e-e911-81723f17ee00@linux.ibm.com>
+In-Reply-To: <adc3ce02-050d-356e-e911-81723f17ee00@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mhOEpSlWhj4Dv51Z8Wn0dn9aYNv3BAhT
+X-Proofpoint-ORIG-GUID: uR4AxiaHDVPjI69kLf3rpWgJB9ZbXfoO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_04,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 mlxlogscore=999 spamscore=0 phishscore=0 adultscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180103
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-11.01.2022 20:20, Eric W. Biederman пишет:
-> Dmitry Osipenko <digetx@gmail.com> writes:
+
+
+On 1/17/22 17:25, Pierre Morel wrote:
 > 
->> 08.01.2022 21:13, Eric W. Biederman пишет:
->>> Dmitry Osipenko <digetx@gmail.com> writes:
->>>
->>>> 05.01.2022 22:58, Eric W. Biederman пишет:
->>>>>
->>>>> I have not yet been able to figure out how to run gst-pluggin-scanner in
->>>>> a way that triggers this yet.  In truth I can't figure out how to
->>>>> run gst-pluggin-scanner in a useful way.
->>>>>
->>>>> I am going to set up some unit tests and see if I can reproduce your
->>>>> hang another way, but if you could give me some more information on what
->>>>> you are doing to trigger this I would appreciate it.
->>>>
->>>> Thanks, Eric. The distro is Arch Linux, but it's a development
->>>> environment where I'm running latest GStreamer from git master. I'll try
->>>> to figure out the reproduction steps and get back to you.
->>>
->>> Thank you.
->>>
->>> Until I can figure out why this is causing problems I have dropped the
->>> following two patches from my queue:
->>>  signal: Make SIGKILL during coredumps an explicit special case
->>>  signal: Drop signals received after a fatal signal has been processed
->>>
->>> I have replaced them with the following two patches that just do what
->>> is needed for the rest of the code in the series:
->>>  signal: Have prepare_signal detect coredumps using
->>>  signal: Make coredump handling explicit in complete_signal
->>>
->>> Perversely my failure to change the SIGKILL handling when coredumps are
->>> happening proves to me that I need to change the SIGKILL handling when
->>> coredumps are happening to make the code more maintainable.
+> 
+> On 1/14/22 21:31, Matthew Rosato wrote:
+>> This structure will be used to carry kvm passthrough information 
+>> related to
+>> zPCI devices.
 >>
->> Eric, thank you again. I started to look at the reproduction steps and
->> haven't completed it yet. Turned out the problem affects only older
->> NVIDIA Tegra2 Cortex-A9 CPU that lacks support of ARM NEON instructions
->> set, hence the problem isn't visible on x86 and other CPUs out of the
->> box. I'll need to check whether the problem could be simulated on all
->> arches or maybe it's specific to VFP exception handling of ARM32.
+>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> ---
+>>   arch/s390/include/asm/kvm_pci.h | 29 +++++++++++++++++++++
+>>   arch/s390/include/asm/pci.h     |  3 +++
+>>   arch/s390/kvm/Makefile          |  2 +-
+>>   arch/s390/kvm/pci.c             | 46 +++++++++++++++++++++++++++++++++
+>>   4 files changed, 79 insertions(+), 1 deletion(-)
+>>   create mode 100644 arch/s390/include/asm/kvm_pci.h
+>>   create mode 100644 arch/s390/kvm/pci.c
+>>
+>> diff --git a/arch/s390/include/asm/kvm_pci.h 
+>> b/arch/s390/include/asm/kvm_pci.h
+>> new file mode 100644
+>> index 000000000000..aafee2976929
+>> --- /dev/null
+>> +++ b/arch/s390/include/asm/kvm_pci.h
+>> @@ -0,0 +1,29 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * KVM PCI Passthrough for virtual machines on s390
+>> + *
+>> + * Copyright IBM Corp. 2021
+>> + *
+>> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+>> + */
+>> +
+>> +
 > 
-> It sounds like the gstreamer plugins only fail on certain hardware on
-> arm32, and things don't hang in coredumps unless the plugins fail.
-> That does make things tricky to minimize.
+> One blank line too much.
 > 
-> I have just verified that the known problematic code is not
-> in linux-next for Jan 11 2022.
+> Otherwise, look good to me.
 > 
-> If folks as they have time can double check linux-next and verify all is
-> well I would appreciate it.  I don't expect that there are problems but
-> sometimes one problem hides another.
+> Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+> 
+>> +#ifndef ASM_KVM_PCI_H
+>> +#define ASM_KVM_PCI_H
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/kvm_types.h>
+>> +#include <linux/kvm_host.h>
+>> +#include <linux/kvm.h>
+>> +#include <linux/pci.h>
+>> +
+>> +struct kvm_zdev {
+>> +    struct zpci_dev *zdev;
+>> +    struct kvm *kvm;
+>> +};
+>> +
+>> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+>> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev);
+>> +void kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+>> +
+>> +#endif /* ASM_KVM_PCI_H */
+>> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+>> index f3cd2da8128c..9b6c657d8d31 100644
+>> --- a/arch/s390/include/asm/pci.h
+>> +++ b/arch/s390/include/asm/pci.h
+>> @@ -97,6 +97,7 @@ struct zpci_bar_struct {
+>>   };
+>>   struct s390_domain;
+>> +struct kvm_zdev;
+>>   #define ZPCI_FUNCTIONS_PER_BUS 256
+>>   struct zpci_bus {
+>> @@ -190,6 +191,8 @@ struct zpci_dev {
+>>       struct dentry    *debugfs_dev;
+>>       struct s390_domain *s390_domain; /* s390 IOMMU domain data */
+>> +
+>> +    struct kvm_zdev *kzdev; /* passthrough data */
+>>   };
+>>   static inline bool zdev_enabled(struct zpci_dev *zdev)
+>> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
+>> index b3aaadc60ead..a26f4fe7b680 100644
+>> --- a/arch/s390/kvm/Makefile
+>> +++ b/arch/s390/kvm/Makefile
+>> @@ -11,5 +11,5 @@ ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
+>>   kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o 
+>> sigp.o
+>>   kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
+>> -
+>> +kvm-$(CONFIG_PCI) += pci.o
+>>   obj-$(CONFIG_KVM) += kvm.o
+>> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+>> new file mode 100644
+>> index 000000000000..1c33bc7bf2bd
+>> --- /dev/null
+>> +++ b/arch/s390/kvm/pci.c
+>> @@ -0,0 +1,46 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * s390 kvm PCI passthrough support
+>> + *
+>> + * Copyright IBM Corp. 2021
+>> + *
+>> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+>> + */
+>> +
+>> +#include <linux/kvm_host.h>
+>> +#include <linux/pci.h>
+>> +#include <asm/kvm_pci.h>
+>> +
+>> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
+>> +{
+>> +    struct kvm_zdev *kzdev;
+>> +
+>> +    kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
+>> +    if (!kzdev)
+>> +        return -ENOMEM;
+>> +
+>> +    kzdev->zdev = zdev;
+>> +    zdev->kzdev = kzdev;
+>> +
+>> +    return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_open);
+>> +
+>> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
+>> +{
+>> +    struct kvm_zdev *kzdev;
+>> +
+>> +    kzdev = zdev->kzdev;
+>> +    WARN_ON(kzdev->zdev != zdev);
+>> +    zdev->kzdev = 0;
+>> +    kfree(kzdev);
+>> +}
+>> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_release);
+>> +
+>> +void kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+>> +{
+>> +    struct kvm_zdev *kzdev = zdev->kzdev;
+>> +
+>> +    kzdev->kvm = kvm;
+>> +}
+>> +EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
+>>
+> 
 
-Hello Eric,
+Working now on patch 24, I am not sure that this function is necessary.
+the only purpose seems to set kzdev->kvm = kvm while we already know 
+kzdev in the caller.
 
-I reproduced the trouble on x86_64.
 
-Here are the reproduction steps, using ArchLinux and linux-next-20211224:
 
-```
-sudo pacman -S base-devel git mesa glu meson wget
-git clone https://github.com/grate-driver/gstreamer.git
-cd gstreamer
-git checkout sigill
-meson --prefix=/usr -Dgst-plugins-base:playback=enabled -Dgst-devtools:validate=disabled build
-cd build
-sudo ninja install
-wget https://www.peach.themazzone.com/big_buck_bunny_720p_h264.mov
-rm -r ~/.cache/gstreamer-1.0
-gst-play-1.0 ./big_buck_bunny_720p_h264.mov
-```
-
-The SIGILL, thrown by [1], causes the hang. There is no hang using v5.16.1 kernel. 
-
-[1] https://github.com/grate-driver/gstreamer/commit/006f9a2ee6dcf7b31c9b5413815d6054d82a3b2f
-
+-- 
+Pierre Morel
+IBM Lab Boeblingen

@@ -2,163 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB42B4922AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E41F4922AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345670AbiARJZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345659AbiARJZX (ORCPT
+        id S1345693AbiARJZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:25:32 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60712 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1345680AbiARJZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:25:23 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7863C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:25:22 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id x15so16976759ilc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4nJyI6eUhIELdgXFkdrBzVMhM0Y1Gcauhxwwo0CSvpo=;
-        b=a7wHf17/waSeg4gU4SCxg3XtQIQmgnZ9oLXhXsh7E6nGZEX8a9pxmky5RpdL4SEpJF
-         XyqfRtUuMs6UOq3c64hLYLesUR/BCqpoFrOmKQXH6o6/d7pnOBTpvnlbhDASEpBfBiFf
-         aSCrNFayKE6moPZZtaoUAgMu4QRgE4GJbE01I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4nJyI6eUhIELdgXFkdrBzVMhM0Y1Gcauhxwwo0CSvpo=;
-        b=QdxOhNLqxvcwTrrHuJJShSg23g90X8VeMTFy06Q8onn5oRMxP21AqlSYdKH6zfvv20
-         7lHB7vPiInx5c9PDuSOVWggKP5/doN59pxDre+LYIl95WLKLo7TZAtI8PxVIQnKnu2nf
-         FlGNnYM/Uz3AOYcgBUlYb8gwq5dFUP9NvFEXLPdike71ZggeB1Oe9TZgEH9XoP/PxRgP
-         Be94WiUd0mXRlNW33YcZDcpwbmXNhppFwxGSMlpPe5A4M4iUHK0BviA2y/ArO0CqTaZL
-         vj135k1gpZ7XzyqWdjuJPlLVgU5I8KtuHshiXR9RBgQi+QW699oVWpoOkbmI8YUl2tgM
-         A2ww==
-X-Gm-Message-State: AOAM5319ZVLP1SrF+u/Gz6z0g3W5EPPb8m8hWvA4mR0Gz57jdCdb2xXc
-        XUQzibgyuQWSiMRwHnD64l5SBSDB0419hACZT9MjNw==
-X-Google-Smtp-Source: ABdhPJx0AV/W+kXKIgPEQuoEPUU/Q24Z4RuR77346sKClFXpzzJr2J5A2NlQs0ErkKMIWfqVq14VvtZb7Ezvq8RHBFU=
-X-Received: by 2002:a05:6e02:1946:: with SMTP id x6mr12916718ilu.10.1642497922291;
- Tue, 18 Jan 2022 01:25:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20220113082918.2279347-1-hsinyi@chromium.org> <CAG3jFytu8VpopWYHvGiSYRW2bcX-wHSoYgQ42u84WBQKGrnfZQ@mail.gmail.com>
- <CAJMQK-gOMeK+_-6COEsaTdMq3GUejVRuH-HfdvBFS+Q-wKaGkA@mail.gmail.com>
-In-Reply-To: <CAJMQK-gOMeK+_-6COEsaTdMq3GUejVRuH-HfdvBFS+Q-wKaGkA@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Tue, 18 Jan 2022 17:24:56 +0800
-Message-ID: <CAJMQK-hZ=jfBe7FjkrRJvWPBG2r3s9Ahq=cpnBCUVGczYt7diA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] drm/bridge: anx7625: Convert to use devm_kzalloc
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
+        Tue, 18 Jan 2022 04:25:31 -0500
+X-UUID: 2c63b72d53c54b989adeb6f86494d9af-20220118
+X-UUID: 2c63b72d53c54b989adeb6f86494d9af-20220118
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1651465341; Tue, 18 Jan 2022 17:25:26 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 18 Jan 2022 17:25:25 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 18 Jan
+ 2022 17:25:25 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 18 Jan 2022 17:25:25 +0800
+Message-ID: <544f5085fc8597ce9ce3eb7dc1b5d08fb1ac8755.camel@mediatek.com>
+Subject: Re: [PATCH v2 1/2] soc: mediatek: pwrap: add pwrap driver for
+ MT8186 SoC
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 18 Jan 2022 17:25:25 +0800
+In-Reply-To: <9949a1f7-1ed5-a137-c7b9-2ef8d8e1caf8@gmail.com>
+References: <20220107104633.7500-1-johnson.wang@mediatek.com>
+         <20220107104633.7500-2-johnson.wang@mediatek.com>
+         <9949a1f7-1ed5-a137-c7b9-2ef8d8e1caf8@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 6:04 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> hi Robert,
->
-> The second patch depends on "drm/bridge: anx7625: send DPCD command to
-> downstream" (https://patchwork.kernel.org/project/dri-devel/patch/1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com/).
-> But I'm waiting for Xin Ji's response for that patch.
->
+Hi Matthias,
 
-Hi Robert,
+On Fri, 2022-01-14 at 16:46 +0100, Matthias Brugger wrote:
+> 
+> On 07/01/2022 11:46, Johnson Wang wrote:
+> > MT8186 are highly integrated SoC and use PMIC_MT6366 for
+> > power management. This patch adds pwrap master driver to
+> > access PMIC_MT6366.
+> > 
+> 
+> It seems this new arbiter is significantly different from the version
+> 1. Please 
+> explain that in the commit message.
+> 
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-pmic-wrap.c | 72
+> > ++++++++++++++++++++++++++++
+> >   1 file changed, 72 insertions(+)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> > b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> > index 952bc554f443..78866ebf7f04 100644
+> > --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> > +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> > @@ -30,6 +30,7 @@
+> >   #define PWRAP_GET_WACS_REQ(x)		(((x) >> 19) &
+> > 0x00000001)
+> >   #define PWRAP_STATE_SYNC_IDLE0		BIT(20)
+> >   #define PWRAP_STATE_INIT_DONE0		BIT(21)
+> > +#define PWRAP_STATE_INIT_DONE0_V2	BIT(22)
+> 
+> That's a strange name, does it come from the datasheet description?
 
-I've rebased to the latest drm-misc-next and sent v4:
-https://lore.kernel.org/lkml/20220118092002.4267-1-hsinyi@chromium.org/T/#t
-I also discussed with Xin Ji about the dependent patch and included it
-in the series.
+Thanks for your review.
+
+No, there is only PWRAP_STATE_INIT_DONE0 in MT8186 datasheet.
+However, it's the 22nd bit in MT8186 and the 21st bit in other SoCs.
+So we changed its name to avoid redefinition of PWRAP_STATE_INIT_DONE0.
+
+Could you give us some suggestion on proper definition naming?
+Do you think PWRAP_STATE_INIT_DONE0_MT8186 will be a better choice?
+
+> 
+> >   #define PWRAP_STATE_INIT_DONE1		BIT(15)
+> >   
+> >   /* macro for WACS FSM */
+> > @@ -77,6 +78,8 @@
+> >   #define PWRAP_CAP_INT1_EN	BIT(3)
+> >   #define PWRAP_CAP_WDT_SRC1	BIT(4)
+> >   #define PWRAP_CAP_ARB		BIT(5)
+> > +#define PWRAP_CAP_MONITOR_V2	BIT(6)
+> 
+> Not used capability, please delete.
+> 
+> 
+> Regards,
+> Matthias
+
+PWRAP_CAP_MONITOR_V2 is not used right now.
+We can remove it in next version.
+But this capability will be added when we need it.
 
 Thanks.
 
-> Thanks
->
-> On Mon, Jan 17, 2022 at 5:40 PM Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > Hey Hsin-Yi,
-> >
-> >
-> > On Thu, 13 Jan 2022 at 09:29, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> > >
-> > > Use devm_kzalloc instead of kzalloc and drop kfree(). Let the memory
-> > > handled by driver detach.
-> > >
-> > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > > Reviewed-by: Xin Ji <xji@analogixsemi.com>
-> > > ---
-> > > v2->v3: remove kfree() in anx7625_i2c_remove().
-> > > ---
-> > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 10 +++-------
-> > >  1 file changed, 3 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > index 0b858c78abe8b6..d3661c78770a8f 100644
-> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > @@ -2515,7 +2515,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> > >                 return -ENODEV;
-> > >         }
-> > >
-> > > -       platform = kzalloc(sizeof(*platform), GFP_KERNEL);
-> > > +       platform = devm_kzalloc(dev, sizeof(*platform), GFP_KERNEL);
-> > >         if (!platform) {
-> > >                 DRM_DEV_ERROR(dev, "fail to allocate driver data\n");
-> > >                 return -ENOMEM;
-> > > @@ -2527,7 +2527,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> > >         if (ret) {
-> > >                 if (ret != -EPROBE_DEFER)
-> > >                         DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
-> > > -               goto free_platform;
-> > > +               return ret;
-> > >         }
-> > >
-> > >         platform->client = client;
-> > > @@ -2552,7 +2552,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> > >         if (!platform->hdcp_workqueue) {
-> > >                 dev_err(dev, "fail to create work queue\n");
-> > >                 ret = -ENOMEM;
-> > > -               goto free_platform;
-> > > +               return ret;
-> > >         }
-> > >
-> > >         platform->pdata.intp_irq = client->irq;
-> > > @@ -2637,9 +2637,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> > >         if (platform->hdcp_workqueue)
-> > >                 destroy_workqueue(platform->hdcp_workqueue);
-> > >
-> > > -free_platform:
-> > > -       kfree(platform);
-> > > -
-> > >         return ret;
-> > >  }
-> > >
-> > > @@ -2666,7 +2663,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
-> > >         if (platform->pdata.audio_en)
-> > >                 anx7625_unregister_audio(platform);
-> > >
-> > > -       kfree(platform);
-> > >         return 0;
-> > >  }
-> > >
-> >
-> > I just had a look at applying this series, but it fails to apply on
-> > drm-misc-next today.
-> >
-> > Could you send a v4 that applies cleanly, and I'll try to be quick
-> > about applying it.
-> >
-> >
-> > Rob.

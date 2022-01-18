@@ -2,172 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CC449230B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8824B492306
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbiARJpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:45:30 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:38630 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233603AbiARJpS (ORCPT
+        id S233436AbiARJpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:45:15 -0500
+Received: from mail-ua1-f53.google.com ([209.85.222.53]:33503 "EHLO
+        mail-ua1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229620AbiARJpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:45:18 -0500
-X-UUID: e1587ceefc7f4901ab973fa118381a65-20220118
-X-UUID: e1587ceefc7f4901ab973fa118381a65-20220118
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 50564287; Tue, 18 Jan 2022 17:45:13 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 18 Jan 2022 17:45:11 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 18 Jan 2022 17:45:11 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <rmk+kernel@armlinux.org.uk>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <kasan-dev@googlegroups.com>, <yj.chiang@mediatek.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>
-Subject: [PATCH 2/2] arm: kconfig: fix MODULE_PLTS for KASAN with KASAN_VMALLOC
-Date:   Tue, 18 Jan 2022 17:44:50 +0800
-Message-ID: <20220118094450.7730-3-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220118094450.7730-1-lecopzer.chen@mediatek.com>
-References: <20220118094450.7730-1-lecopzer.chen@mediatek.com>
+        Tue, 18 Jan 2022 04:45:14 -0500
+Received: by mail-ua1-f53.google.com with SMTP id u6so35522187uaq.0;
+        Tue, 18 Jan 2022 01:45:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uRFhx0l+e0ed4wS3RUIFPjxFMaQUtU4eks+w7Sri8W8=;
+        b=MNKFQ4bVp34xzc4RxSRvXhDFAlw8i4o3hgln/fQvY3AB2CMVo6zcIN6dpl48sA4K5R
+         5MVoqunP9Ijc2WnmcZkG6BZKjCXnbNLIYd+fORqcACJMud67nYuo1GHqIyCJzkL1jcNP
+         OxDYvGCHond0QpsvEegy17bWr8a0vRZpn9qdb+PUqcM8whBoAJLBsjc+QSgNkHoG9WNE
+         vUfOqD4tZeJb4O0/e+b+XOl4QxtjejXtgh+wX2KqG8S1Taq0Zk3mtOtjyyI5pR5pMinr
+         y9AaNzNKEO8uur1z+oyrAXwo/D2QpuUFtkkQkdg22BEJfg7Dzd/IYZqhz6PXCfdmu+Y3
+         +3bg==
+X-Gm-Message-State: AOAM530BS2A9b1hpi08xFIPJq9Azf+pueov+O2AhHEQcA0dxZBrvoHX1
+        2BBTunj6EPaq6EdQ0Snw3dQ1waOTUaftuA==
+X-Google-Smtp-Source: ABdhPJwobgNh5jzju94tSNCALbSRCU6L5eXvdYjI1szdwgU6Qy+hazztlvY3KM2ik9+Rx6CRPy2tyg==
+X-Received: by 2002:ab0:4e17:: with SMTP id g23mr9431553uah.24.1642499112913;
+        Tue, 18 Jan 2022 01:45:12 -0800 (PST)
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
+        by smtp.gmail.com with ESMTPSA id q28sm4064433vsl.2.2022.01.18.01.45.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 01:45:12 -0800 (PST)
+Received: by mail-vk1-f174.google.com with SMTP id bj47so12022117vkb.13;
+        Tue, 18 Jan 2022 01:45:11 -0800 (PST)
+X-Received: by 2002:a1f:384b:: with SMTP id f72mr9456081vka.0.1642499111709;
+ Tue, 18 Jan 2022 01:45:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+ <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
+ <87ee5659dt.fsf@intel.com> <4f1d6018-d74e-8e62-ea4d-0ca79c6bbbc5@gmx.de>
+ <87a6ft5thv.fsf@intel.com> <5ba33e10-7d75-9f9a-dfd6-c04608d230a4@gmx.de> <4f65fdd9-4b73-ca83-cf6e-c60c7ccd6558@redhat.com>
+In-Reply-To: <4f65fdd9-4b73-ca83-cf6e-c60c7ccd6558@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Jan 2022 10:45:00 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUWRkMhU1=2V85iqdP8Hec6CoMAy3CwE9SjPhPBjGjuag@mail.gmail.com>
+Message-ID: <CAMuHMdUWRkMhU1=2V85iqdP8Hec6CoMAy3CwE9SjPhPBjGjuag@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Helge Deller <deller@gmx.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we run out of module space address with ko insertion,
-and with MODULE_PLTS, module would turn to try to find memory
-from VMALLOC address space.
+Hi Javier,
 
-Unfortunately, with KASAN enabled, VMALLOC doesn't work without
-KASAN_VMALLOC, thus select KASAN_VMALLOC by default.
+On Tue, Jan 18, 2022 at 10:33 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> On 1/18/22 09:54, Helge Deller wrote:
+> > On 1/18/22 09:38, Jani Nikula wrote:
+> >> On Mon, 17 Jan 2022, Helge Deller <deller@gmx.de> wrote:
+> >>> On 1/17/22 22:40, Jani Nikula wrote:
+> >>>> On Mon, 17 Jan 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >>>>> Seems like few people read linux-fbdev these days.
+> >>>>
+> >>>> How much traffic is there to linux-fbdev that is *not* Cc'd to dri-devel
+> >>>> also?
+> >>>
+> >>> Doesn't seem like much traffic - which IMHO is OK for such a tree with
+> >>> mostly just maintenance patches.
+> >>>
+> >>>> Do we still need a separate linux-fbdev mailing list at all?
+> >>>
+> >>> Yes. I want to have it seperate of dri-devel.
+> >>> Actually I'd prefer to drop dri-devel from the list where patches
+> >>> for fbdev are sent...
+> >>
+> >> Disagreed. If anything, this thread shows we can't have fbdev and drm in
+> >> silos of their own.
+> >
+> > Patches to fbdev usually don't affect DRM.
+>
+> Patches for fbdev drivers don't usually affect DRM but that's not the
+> case for patches to fbdev core and fbcon as you and others mentioned.
+>
+> > Patches which affect DRM needs to through to dri-devel.
+>
+> And how would people know which ones need to go through dri-devel ? Are
+> you planning to add another entry to MAINTAINERS for fbdev core/fbcon ?
 
-8<--- cut here ---
- Unable to handle kernel paging request at virtual address bd300860
- [bd300860] *pgd=41cf1811, *pte=41cf26df, *ppte=41cf265f
- Internal error: Oops: 80f [#1] PREEMPT SMP ARM
- Modules linked in: hello(O+)
- CPU: 0 PID: 89 Comm: insmod Tainted: G           O      5.16.0-rc6+ #19
- Hardware name: Generic DT based system
- PC is at mmioset+0x30/0xa8
- LR is at 0x0
- pc : [<c077ed30>]    lr : [<00000000>]    psr: 20000013
- sp : c451fc18  ip : bd300860  fp : c451fc2c
- r10: f18042cc  r9 : f18042d0  r8 : 00000000
- r7 : 00000001  r6 : 00000003  r5 : 01312d00  r4 : f1804300
- r3 : 00000000  r2 : 00262560  r1 : 00000000  r0 : bd300860
- Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
- Control: 10c5387d  Table: 43e9406a  DAC: 00000051
- Register r0 information: non-paged memory
- Register r1 information: NULL pointer
- Register r2 information: non-paged memory
- Register r3 information: NULL pointer
- Register r4 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r5 information: non-paged memory
- Register r6 information: non-paged memory
- Register r7 information: non-paged memory
- Register r8 information: NULL pointer
- Register r9 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r10 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r11 information: non-slab/vmalloc memory
- Register r12 information: non-paged memory
- Process insmod (pid: 89, stack limit = 0xc451c000)
- Stack: (0xc451fc18 to 0xc4520000)
- fc00:                                                       f18041f0 c04803a4
- fc20: c451fc44 c451fc30 c048053c c0480358 f1804030 01312cff c451fc64 c451fc48
- fc40: c047f330 c0480500 f18040c0 c1b52ccc 00000001 c5be7700 c451fc74 c451fc68
- fc60: f1802098 c047f300 c451fcb4 c451fc78 c026106c f180208c c4880004 00000000
- fc80: c451fcb4 bf001000 c044ff48 c451fec0 f18040c0 00000000 c1b54cc4 00000000
- fca0: c451fdf0 f1804268 c451fe64 c451fcb8 c0264e88 c0260d48 ffff8000 00007fff
- fcc0: f18040c0 c025cd00 c451fd14 00000003 0157f008 f1804258 f180425c f1804174
- fce0: f1804154 f180424c f18041f0 f180414c f1804178 f18041c0 bf0025d4 188a3fa8
- fd00: 0000009e f1804170 f2b18000 c451ff10 c0d92e40 f180416c c451feec 00000001
- fd20: 00000000 c451fec8 c451fe20 c451fed0 f18040cc 00000000 f17ea000 c451fdc0
- fd40: 41b58ab3 c1387729 c0261c28 c047fb5c c451fe2c c451fd60 c0525308 c048033c
- fd60: 188a3fb4 c3ccb090 c451fe00 c3ccb080 00000000 00000000 00016920 00000000
- fd80: c02d0388 c047f55c c02d0388 00000000 c451fddc c451fda0 c02d0388 00000000
- fda0: 41b58ab3 c13a72d0 c0524ff0 c1705f48 c451fdfc c451fdc0 c02d0388 c047f55c
- fdc0: 00016920 00000000 00000003 c1bb2384 c451fdfc c3ccb080 c1bb2384 00000000
- fde0: 00000000 00000000 00000000 00000000 c451fe1c c451fe00 c04e9d70 c1705f48
- fe00: c1b54cc4 c1bbc71c c3ccb080 00000000 c3ccb080 00000000 00000003 c451fec0
- fe20: c451fe64 c451fe30 c0525918 c0524ffc c451feb0 c1705f48 00000000 c1b54cc4
- fe40: b78a3fd0 c451ff60 00000000 0157f008 00000003 c451fec0 c451ffa4 c451fe68
- fe60: c0265480 c0261c34 c451feb0 7fffffff 00000000 00000002 00000000 c4880000
- fe80: 41b58ab3 c138777b c02652cc c04803ec 000a0000 c451ff00 ffffff9c b6ac9f60
- fea0: c451fed4 c1705f48 c04a4a90 b78a3fdc f17ea000 ffffff9c b6ac9f60 c0100244
- fec0: f17ea21a f17ea300 f17ea000 00016920 f1800240 f18000ac f17fb7dc 01316000
- fee0: 013161b0 00002590 01316250 00000000 00000000 00000000 00002580 00000029
- ff00: 0000002a 00000013 00000000 0000000c 00000000 00000000 0157f004 c451ffb0
- ff20: c1719be0 aed6f410 c451ff74 c451ff38 c0c4103c c0c407d0 c451ff84 c451ff48
- ff40: 00000805 c02c8658 c1604230 c1719c30 00000805 0157f004 00000005 c451ffb0
- ff60: c1719be0 aed6f410 c451ffac c451ff78 c0122130 c1705f48 c451ffac 0157f008
- ff80: 00000006 0000005f 0000017b c0100244 c4880000 0000017b 00000000 c451ffa8
- ffa0: c0100060 c02652d8 0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
- ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
- ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60 a0000010 00000003 00000000 00000000
- Backtrace:
- [<c048034c>] (kasan_poison) from [<c048053c>] (kasan_unpoison+0x48/0x5c)
- [<c04804f4>] (kasan_unpoison) from [<c047f330>] (__asan_register_globals+0x3c/0x64)
-  r5:01312cff r4:f1804030
- [<c047f2f4>] (__asan_register_globals) from [<f1802098>] (_sub_I_65535_1+0x18/0xf80 [hello])
-  r7:c5be7700 r6:00000001 r5:c1b52ccc r4:f18040c0
- [<f1802080>] (_sub_I_65535_1 [hello]) from [<c026106c>] (do_init_module+0x330/0x72c)
- [<c0260d3c>] (do_init_module) from [<c0264e88>] (load_module+0x3260/0x32a8)
-  r10:f1804268 r9:c451fdf0 r8:00000000 r7:c1b54cc4 r6:00000000 r5:f18040c0
-  r4:c451fec0
- [<c0261c28>] (load_module) from [<c0265480>] (sys_finit_module+0x1b4/0x1e8)
-  r10:c451fec0 r9:00000003 r8:0157f008 r7:00000000 r6:c451ff60 r5:b78a3fd0
-  r4:c1b54cc4
- [<c02652cc>] (sys_finit_module) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
- Exception stack(0xc451ffa8 to 0xc451fff0)
- ffa0:                   0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
- ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
- ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60
-  r10:0000017b r9:c4880000 r8:c0100244 r7:0000017b r6:0000005f r5:00000006
-  r4:0157f008
- Code: e92d4100 e1a08001 e1a0e003 e2522040 (a8ac410a)
- ---[ end trace df6e12843197b6f5 ]---
+Those are nicely contained in drivers/video/fbdev/core/, so an entry
+in MAINTAINERS listing both linux-fbdev and dri-devel would do.
 
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
----
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+> > In addition this would take the burden of the dri-developers to receive
+> > unrelated fbdev driver updates and patches.
+>
+> In my opinion having fbdev patches in the dri-devel mailing list isn't
+> a big burden, but rather getting people to review and push say patches.
+>
+> Since you are volunteering for the latter, that should improve things.
+>
+> I still fail to see the benefit of doing that split, same for having a
+> separate fbdev tree. Using drm-misc only have advantages, among other
+> things providing redundancy in cases that a maintainer isn't available
+> for a period of time.
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index f97f2c416be0..d219179d3254 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1514,6 +1514,7 @@ config ARCH_WANT_GENERAL_HUGETLB
- config ARM_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
-+	select KASAN_VMALLOC if KASAN
- 	default y
- 	help
- 	  Allocate PLTs when loading modules so that jumps and calls whose
--- 
-2.25.1
+The above is the point of view from a DRM developer?
+For an fbdev developer, the burden to receive unrelated DRM driver
+updates and patches would be significant.
 
+The first page of https://lore.kernel.org/dri-devel/ goes back to yesterday.
+The first page of https://lore.kernel.org/linux-fbdev/ goes back to Nov 30th.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

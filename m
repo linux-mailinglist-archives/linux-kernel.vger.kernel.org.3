@@ -2,141 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D00492FF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A6E492FFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349528AbiARVUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 16:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234887AbiARVUm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 16:20:42 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5752EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:20:42 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i17so494220pfk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1XFeP6RNPzLCJfqoUd76H+t40KtDQUNh5VVtLJcfmgc=;
-        b=juf7aPxwbqkK8/wuz96AC4A0W28SqhpeNYDqxYbiBbaCuRGzw/TBmB1qm6vp5AD29q
-         lxE9BbV0e1nZzGeJ5Vkz6TuDMKG+2yOvphO7bGYFn3KIe1LD/IqOGMQgQhcdt3RYpdMe
-         mCZD2WHIGDjr2qfKff1r0Mb5+Dj9+kvt3m9fc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1XFeP6RNPzLCJfqoUd76H+t40KtDQUNh5VVtLJcfmgc=;
-        b=dMq33es5BebKhdGJ5ayslgmtKKFuqbVsrYfsQ/FSAu/rvnxUxTQex2g804tiG1Lb6/
-         yG+ZVxNCW+OfPGg0FJfXqJ1PsDZnHUXK8Q2KOMhNTI5LVaFbmPJD+UjTnSqDK5ePSyOT
-         uVHwkz4583Q382zTPAt9chsEMIjwqC6IsYC+Yr0khmQDzgF/4J0TvE1OzP6Hc/sbhQb9
-         9pzuQbTUUKgy9dsoy4DFlkHZCBZHG/iYH6tC3Lcxt30AxNwlHGLd7I9Gqk3pH3YzyX41
-         AUb60c2MLC9LIygZBRHGujY8sKbCtu8Zj20/APiJkTPoZ4z/sp5wxrBzZHgZIN09Ir6Z
-         ZiUg==
-X-Gm-Message-State: AOAM532oBA3jZfUzaLuK5+6yqbWcKjraH9UG78JrtvWbst5DJ0B2xAEy
-        LbpFwVIFTIaRfdDYbL/xWPk/ie5G6kqCaA==
-X-Google-Smtp-Source: ABdhPJxj+QSfdAHHN0VP1WhOiT2/VnJC+AhAou/jI85HXTaB9Qu4NMHkHAdZM4jHGj/R76eqkD4hrQ==
-X-Received: by 2002:a05:6a00:16c7:b0:4a4:edfe:4625 with SMTP id l7-20020a056a0016c700b004a4edfe4625mr27409471pfc.58.1642540841797;
-        Tue, 18 Jan 2022 13:20:41 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m14sm12363450pfh.129.2022.01.18.13.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 13:20:41 -0800 (PST)
-Date:   Tue, 18 Jan 2022 13:20:40 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Jann Horn <jannh@google.com>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Message-ID: <202201181255.DB5D38F6AA@keescook>
-References: <20220118183650.3386989-1-keescook@chromium.org>
- <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
- <20220118193931.GH8034@ziepe.ca>
+        id S245623AbiARV2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 16:28:32 -0500
+Received: from mail-db8eur05on2050.outbound.protection.outlook.com ([40.107.20.50]:60801
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231853AbiARV2a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 16:28:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f53bmPVyiJ/dcUBX3JNmhCEV16S4OoFA5+dgNyS0AabedhZe4DVsMZxYF4k5ex0YvgzAu93gIdKKtVxq9y/S5pgowLTdEcQ9DL9IQeZptP+I91H+GSrhozs8OHo+VBIcE3YsFYZg/nXkiguLurv+YUcUY0qkogVrvBppd0OxWD5G+n8/YI78kXiW5CFrWshbcOir7YONtxiqxBvU17lrMyz0dMv+weeIPS7RQZPhlyfNk8XCHICN9kFOZsGc0Ur+AxWUO8qBBh6aXh72LwEbSuvw5b54QQYHLYgReRVg6hNsa3rKR9HV0KDZRzryk4l+tLr7xZANBOhxdCYjavm67w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4cDV/bE1FRbuUuIpmfOXhLyQ0Kvp7jSwUlO4d9L9Hhw=;
+ b=brdNTmmXkh8eyq4m8UMX3X1JyO3WLeF997ytcaEyi7aN8EHM3UAONq0phSMgzp9j3bu+Ek2zYczLKRqpErzQJY54ZgYaScV2fhq2XxGKRm7PorVgVvdu+VbKjCgd+7nm1ntKA3WEdoC+np9w2ireN9B8/0qmN3lMUMdymeYJXYolcEFb2N+9SFrAACKPiNz4sQ+wSW22SHfZXeZaBNhRtdqgGC52APdXwtPzoiuPRfewILcatw1/bB+R2AuXmNitoaHB9+9ZJsKd/QiYNTeZM6LCJLnv2Jk3lLaCo7JG0Uc/D+EDrMakoEiH7uCKUGSJa3YLLs0oS1yzt8+zbh2Lgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4cDV/bE1FRbuUuIpmfOXhLyQ0Kvp7jSwUlO4d9L9Hhw=;
+ b=gQjlj+aOHtPUVd5QfFIFLyfomcdK0zJ7Ohci3oYN7AsfI2nI38SDIIcV0m4bhQcBaafViOrNgA23P54nkejc9RCx3pgyLewEAaowm0LpdCBmKulY/kowkI9uHD+cNlqJgOZJUhjPVuFagZHeTgx/MTAFTZepGiFrnx9WmI1WWeI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5151.eurprd04.prod.outlook.com (2603:10a6:803:61::28)
+ by PAXPR04MB8207.eurprd04.prod.outlook.com (2603:10a6:102:1cd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 21:28:27 +0000
+Received: from VI1PR04MB5151.eurprd04.prod.outlook.com
+ ([fe80::3de6:806c:e71:2a2f]) by VI1PR04MB5151.eurprd04.prod.outlook.com
+ ([fe80::3de6:806c:e71:2a2f%5]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 21:28:27 +0000
+From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
+To:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
+        broonie@kernel.org
+Cc:     daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
+        ranjani.sridharan@linux.intel.com,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, cezary.rojewski@intel.com,
+        paul.olaru@nxp.com
+Subject: [PATCH v2 0/2] SOF: Add compress support implementation
+Date:   Tue, 18 Jan 2022 23:27:30 +0200
+Message-Id: <20220118212732.281657-1-daniel.baluta@oss.nxp.com>
+X-Mailer: git-send-email 2.27.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM3PR03CA0063.eurprd03.prod.outlook.com
+ (2603:10a6:207:5::21) To VI1PR04MB5151.eurprd04.prod.outlook.com
+ (2603:10a6:803:61::28)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118193931.GH8034@ziepe.ca>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fb0d8b2b-6635-4acb-1307-08d9dac97738
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8207:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <PAXPR04MB82077830F0656768A6DE86D9B8589@PAXPR04MB8207.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SJFlP5LgiJ0SYKq3zRw4eYkfDy61tilIrThewHMDTM9uduZuQuv9g+NlEMxOUPjZ0i54q11+R7oMvTEDyYe8mubZMkiKD4jSgt1+nZ8OBEVa6JIjk3rQCtQ+Xh+U/9nMrKB1sYz5fNsmVmn7sHTnXBUH9G307sRoqd6APQ6V2Ds+A212CrWXRc9dgo5swWI/kGyE+ENDIstrTPXmz1PTZa7eVht/F1ROeFfv32SrmHK9UPcA7QoGjAkM5HAftYeDV5SRF5EvbxJdcG4E1SfRBSWfwlZQ5Dre+r5IEuUE/FKT0D1n6QYtA5nafN4Yf13gmlLCf0HybZ6d2gfc5cPXRmAevlH4OD/6ip61nEyV6f0pO6fWf7zQTtgOoIS2s//BW2j8t/u+WXZ03KNLibuc2bqKhTkoVjnb9k6H8gT00oK/A1q0l4q5aSvMr99sguCazrDTr1+no1b/f6k2jEOm5xljB0QSWSgK5knyY4IR2erx+zCFAbMY5yL42cUhjYRl9s/7iGmvFDaJkTYG0VEgFC+zt6vhKMUB665MArdy2QKUszwB3Fp4aoGjdLoKy4w694SlvJjlM9h/UZipcZLUg3pzap0gU2yrjIizlbxAuz1Rr1I2i6nXbssjwSrKGRJy53lbwHc2mtUP+9KCg0SAzZu0QpswXwFWgT/YQK9tbNZTPC/Vl9nfJUK33nn8gpA3H8dwGaYj5M7spqCj5e8zcNJxZDMvwWN8q6Y7EWhVzwk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(52116002)(38100700002)(5660300002)(86362001)(8936002)(508600001)(6506007)(66946007)(1076003)(2616005)(6512007)(66476007)(316002)(6486002)(186003)(44832011)(66556008)(2906002)(4326008)(83380400001)(8676002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkdMNUgrWmI4eEN1TU9SWjVVRzNWb3ZmckZJVHFXOVNGNWhEZ3pDMTZSTnVm?=
+ =?utf-8?B?WStidWVZVjBwdktSbHMrL0JHNVZVV3pkZEp3TVc5cHJCTzA2NVBPRnJVbXZn?=
+ =?utf-8?B?dWNzMTdkVGxrRE1rL3Z1cTJLNzlOL3Bmb2d1Y0lEVk9CSC9QajczR2RFMWs5?=
+ =?utf-8?B?NGxoVG1wWi9za1dBazJEUFJXQWdLUWhiOXJHVUNDZ2lDSVY1dm1OdnpCMkh1?=
+ =?utf-8?B?MVBaR2FJVlgvQ0JSNDFHWGxWVGhHK2ZuSjZER29BRGxpajhLR0ZKNThVaHRj?=
+ =?utf-8?B?TTZtWk1YNmhXSUFTalFEaS9rNjVZZ2ljWDgrQWx3Zlp6MCtIRTNmblBtNHhV?=
+ =?utf-8?B?amFReWpPcUVjbm4xK2RDY0lQdmhyamRzNUlhY2g5OGxDZUZoSHRUbXc4QkUx?=
+ =?utf-8?B?ektuME95MXFQS1kwUy9NODN6OEl1OHk0V2VDWi8zUDkxWWJ4Nm9xMEhyNmxz?=
+ =?utf-8?B?VXRPdTdVZWxGelZxTGk3NXR0Y2IxMGVITHVPMG5nWXlQa1pCTWx6NFA1SkV4?=
+ =?utf-8?B?TWhjQXkyM0l3UXVYdkpPWER1bHRWWHB1YVJCN2g4UE0vcWlvT2g4VXdyTy9l?=
+ =?utf-8?B?eGpwdyt4SjBSdzdxeUVRR0ErczZ3Wlh5Q2VzbnJaRGpOWk55RmFrcWVWMEZj?=
+ =?utf-8?B?Y04ySHNXZUZOZ2s0NXFNL1dVSTNMRXVBYk1laVY4aHFlVE8velN6NkFpN2NM?=
+ =?utf-8?B?b1Z5Y3JTN213ZUpxUm1vd0I1NGs4V0loNk0zVHljSEJWRHhYTW9MWDlIN3dM?=
+ =?utf-8?B?UEpIL1l5cWxRWk1tTUN6TUpENmR2NlkyS1hlL21UNnRGYXhva2d3L2tzSkEv?=
+ =?utf-8?B?dm1Eb2xjT0xUb2FEVGt3VTRIaEhhM2ZLTHJJeHFuSWtuMVR6cVBFdnFkSnFE?=
+ =?utf-8?B?Q1hwaGxidTN0R0tTRzJ5dUsyWk5KR08yVUdBeDI5TmVOUFl0Y2tjQ0pGbjZU?=
+ =?utf-8?B?SmIzdXZuQTM0V2ljU24yY284QXJmVUNnNEVmOUM1TUhjTUlGeHczSUsvS3Bh?=
+ =?utf-8?B?ZFdvWU53NFV3ZUcva0FwdnJiM3ZtU0RqWWI0S0VhNmlzT3NQeHI5eDNZR0Ev?=
+ =?utf-8?B?S00zT3JCVkpqTkFscjVCVkFPL1NzTVVxMEZpOEU1dE1ISzlkbUFVUFFhcEU0?=
+ =?utf-8?B?VGUxeHQzWE1qUEVRYTF4bEw1TjRJRGpra0g2aHY1dGNNejBERWhWcjNHaDBu?=
+ =?utf-8?B?bjVzcVp6Z3RIWjg1bmozeUE4bFMwcVZUS0NtdDdNNUQ1alJvbm9Wd3E2V0J4?=
+ =?utf-8?B?aytvZGVOd0wvTjZkMWRNQVlkQlNMU1BPcGsyYnEzb05BUnI4SFdzSXhXaURB?=
+ =?utf-8?B?c0k5dU1vREdZUDVRd1hhVHhINmNQamlPcC9GeUc1V1l4Y2dYdU12R2w2TEZa?=
+ =?utf-8?B?Zms2QXNNdkxmYlY5WGN1VHgvNVhlcnRrZzd6WFNZMXFlbS80endGUkhOKy9I?=
+ =?utf-8?B?ems4dzdGQmlUYmdkMXdISUsvUkVWaThKbVRxWU41NGtGMVF1bytnM1ZqUnc4?=
+ =?utf-8?B?emE2U1l2UFVCekZPU2ZYSm9YZHdxcVZSTThuNG16WDlUd0s4Tm8yVlNVUkpu?=
+ =?utf-8?B?OWRtbVloUVNRVURva243YjZLZE9LVmozcHRHRys0QldMUk5EMXN2UlFGM25U?=
+ =?utf-8?B?aXlyNGxjcnRhVW5XVFpJVUxxd0E0dFRsaGNFZlBmcEJvU21uVlVrM3VEQlJw?=
+ =?utf-8?B?cVFVWW9RaVhHUmg1M0J6MGx0K3IrWmZvd1ArdkVTNms3YjR4YjdSRW1nS2lx?=
+ =?utf-8?B?MS9pYVEvaSt0UmNjU0xEbTVFQXdkZ2ZETjdrcnlGK0l6bWgrdWhWWmpHVWhu?=
+ =?utf-8?B?bmlvdzdnelVacEtiZ1ZqS2lXNDhPNUN3OXRGOGdmbUV4ZGJSbXJmT2c5aDlH?=
+ =?utf-8?B?enVHTWVVZVNnbTAvSncvTHFjNWRrQUhVeEdrRHAxNTF0SnQ4TUtRT1ZlRlEr?=
+ =?utf-8?B?ZzVkc3JoWlFHdVZKeUdnNm15RlNobmhONkQwbktmemNzZm5kbFRUR0pWb2Fl?=
+ =?utf-8?B?Um5XdDhUeURsRFpiRlJHNWptUm43dW1iM1dxWWVESDlKKzdDWkdDc2xVTGdM?=
+ =?utf-8?B?T0RiczVSY24vZEo3NHJ4YzNOY2Z6Ukdrb2F1Q040ZGJJZ2luVTN5a3B2NjBt?=
+ =?utf-8?B?V0psRVJnYkh4SlVhVng0VnR4aXVWTjR3S1pFNDdzbGU5M2lIR2w1SzMvN0lk?=
+ =?utf-8?B?WFBmLzNHVkhrZ1JYdkUxVkxMbzFIU0wxRm1Sb2N2MkViNWxkbVB3OGVtcEdX?=
+ =?utf-8?Q?DbTjUYm9HrAhuYeu+gEQRDcEOJQshbQRm9AmdiTyCA=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb0d8b2b-6635-4acb-1307-08d9dac97738
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5151.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 21:28:27.5209
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oTZTAd2SyGUij5/Tc/FbQVsh3sInwD9mMBcdcUOB4jjYfV9LZxEwxiiO7ZNJx61h0L9hmPkFKuxyM/ToEmk3hQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8207
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 03:39:31PM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 18, 2022 at 08:32:43PM +0100, Jann Horn wrote:
-> > On Tue, Jan 18, 2022 at 7:37 PM Kees Cook <keescook@chromium.org> wrote:
-> > > When building with -Warray-bounds, this warning was emitted:
-> > >
-> > > In function 'memset',
-> > >     inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-> > > ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-> > > [-Warray-bounds]
-> > >    43 | #define __underlying_memset     __builtin_memset
-> > >       |                                 ^
-> > 
-> > Can you explain what that compiler warning actually means, and which
-> > compiler it is from? Is this from a 32-bit or a 64-bit architecture?
+From: Daniel Baluta <daniel.baluta@nxp.com>
 
-This is from ARCH=i386
+This patch series adds compress operations support. This is tested with
+SOF (codec_adapter component enabled) and i.MX8/8X/8M boards.
 
-> > 
-> > It sounds like the compiler (GCC?) is hallucinating a codepath on
+Changes since v1:
+(https://lore.kernel.org/lkml/20220113161341.371345-1-daniel.baluta@oss.nxp.com/T/)
 
-Yes, GCC 11.2.
+- Addressed review from Cezary and Pierre
+- fixed layout of declaration blocks to be more consistent
+- avoid using rtd and runtime simultaneously inside a function (always
+  used rtd and crtd)
+- check return code for create_page_table
+- completely remove sof_compr_stream and use snd_compr_tstmap instead to
+  keep compress stream related info.·
+- add get_caps and get_codec_caps implementations (in patch 2) 
 
-> > which "len" is guaranteed to be >=2147483648, right? Why is it doing
-> > that? Is this some kinda side effect from the fortify code?
+Daniel Baluta (1):
+  ASoC: SOF: compr: Add compress ops implementation
 
-Right; I don't know what triggered it. I assume the "count" comparison.
-The warning is generated with or without CONFIG_FORTIFY_SOURCE. It is
-from adding -Warray-bounds. This is one of the last places in the kernel
-where a warning is being thrown for this option, and it has found a lot
-of real bugs, so Gustavo and I have been working to get the build
-warning-clean so we can enable it globally.
+Paul Olaru (1):
+  ASoC: SOF: compress: Implement get_caps and get_codec_caps
 
-> I agree, this looks bogus, or at least the commit message neeeds alot
-> more explaining.
-> 
-> static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
-> 
->         if (count > sizeof(proxy_dev->buffer))
->             [...]
->         proxy_dev->req_len = count;
-> 
-> Not clear how req_len can be larger than sizeof(buffer)?
-
-Given the current code, I agree: it's not possible.
-
-As for the cause of the warning, my assumption is that since the compiler
-only has visibility into vtpm_proxy_fops_read(), and sees size_t len set
-from ((struct proxy_dev *)filp->private_data)->req_len, and it performs
-range checking perhaps triggered by the "count" comparison:
-
-
-static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
-                                    size_t count, loff_t *off)
-{
-        struct proxy_dev *proxy_dev = filp->private_data;
-        size_t len;
-	...
-        len = proxy_dev->req_len;
-
-        if (count < len) {
-		...
-                return -EIO;
-        }
-
-        rc = copy_to_user(buf, proxy_dev->buffer, len);
-        memset(proxy_dev->buffer, 0, len);
-
-
-I haven't been able to reproduce the specific cause of why GCC decided to
-do the bounds checking, but it's not an unreasonable thing to check for,
-just for robustness.
+ sound/soc/sof/compress.c | 347 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 345 insertions(+), 2 deletions(-)
 
 -- 
-Kees Cook
+2.27.0
+

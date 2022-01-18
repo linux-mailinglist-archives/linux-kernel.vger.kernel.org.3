@@ -2,74 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB1B4913F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4D74913FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244282AbiARCPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S244341AbiARCTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236398AbiARCP2 (ORCPT
+        with ESMTP id S231611AbiARCTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:15:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA082C061574;
-        Mon, 17 Jan 2022 18:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=nrC9v5TH5mhwcYLw5MQgkFk0+L190zpoOd9ftRKCwRI=; b=fiA9taDxGDlpNEyMgBxG+r8mcG
-        sQqY4MeaBicL8wGkJpLgSa9oIDEteMyNcCIGKzJU2+HQKxuRtgsj+Vg2DxQEoRt+dEe2fnz+zw3Zk
-        yIv2SIstLoUOep60Xv3fSXA91Dqm7V9EioiPdMFiCD9em4Qqk+a4vcLIQ+CqDsalnt6dFeTGB5kb0
-        6V4NAHDGah8IZuFUtAwUVWoDmwf9eCVfaxz3ci5Bev7AYOaYeuu3razOLnK93WsTNpCcpN3enmn2+
-        K8rgbg5v98w8WNzL1xxPL6vEE/69XSkVv/dQmMwrtvFvJCDldO9Mjrm455jY3TQ/1UwwYc5eX6E3J
-        9DL1fSMA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9e1r-00Gs6a-OI; Tue, 18 Jan 2022 02:15:23 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH -next] power: supply: fix table problem in sysfs-class-power
-Date:   Mon, 17 Jan 2022 18:15:22 -0800
-Message-Id: <20220118021522.1672-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Mon, 17 Jan 2022 21:19:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF981C061574;
+        Mon, 17 Jan 2022 18:19:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 360E6612BE;
+        Tue, 18 Jan 2022 02:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55668C36AEB;
+        Tue, 18 Jan 2022 02:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642472383;
+        bh=ePBaW9YD9SIwvLA46ELgC5rC7fjkynIpw6UKXVSMxew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PYHkxLtkipoa2E6HucbExx9mFwwJ951fWgG9pgCl9/kpovqMGWqAVlHVSoiX5VtPA
+         E5T/8wYB6K0BSkB3Pb4iSS61UcxjnRppneHNS7ztptpZPT8/Tkd5C0GVNHv72nHulN
+         Ot61ANhQomBsuFxv24JbiHpKrl3PupMPrjlsxcyjbFCuqpTaLxPJZWvPm4WUXt30qR
+         07sYJW7oTFlJ5jV1UEFLyTHT/4HWfz0L0plpmZnt2V4X3G/6pT1MZ7HnQZbyTBWG/P
+         oG5tO/ZiYv0cZ1qUm4WnUMvUohAPNu4sBaB/hOMIPbCNhaBAFjrxbfjwB/zRTGxJHX
+         +dehexyopM7Lw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nguyen Dinh Phi <phind.uet@gmail.com>,
+        syzbot+4c4ffd1e1094dae61035@syzkaller.appspotmail.com,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>, johan.hedberg@gmail.com,
+        luiz.dentz@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 001/217] Bluetooth: hci_sock: purge socket queues in the destruct() callback
+Date:   Mon, 17 Jan 2022 21:16:04 -0500
+Message-Id: <20220118021940.1942199-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a bottom table border to complete the table format and prevent
-a documentation build warning.
+From: Nguyen Dinh Phi <phind.uet@gmail.com>
 
-Documentation/ABI/testing/sysfs-class-power:459: WARNING: Malformed table.
-No bottom table border found.
+[ Upstream commit 709fca500067524381e28a5f481882930eebac88 ]
 
-Fixes: 1b0b6cc8030d0 ("power: supply: add charge_behaviour attributes")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Weißschuh <linux@weissschuh.net>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+The receive path may take the socket right before hci_sock_release(),
+but it may enqueue the packets to the socket queues after the call to
+skb_queue_purge(), therefore the socket can be destroyed without clear
+its queues completely.
+
+Moving these skb_queue_purge() to the hci_sock_destruct() will fix this
+issue, because nothing is referencing the socket at this point.
+
+Signed-off-by: Nguyen Dinh Phi <phind.uet@gmail.com>
+Reported-by: syzbot+4c4ffd1e1094dae61035@syzkaller.appspotmail.com
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-class-power |    1 +
- 1 file changed, 1 insertion(+)
+ net/bluetooth/hci_sock.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- linux-next-20220117.orig/Documentation/ABI/testing/sysfs-class-power
-+++ linux-next-20220117/Documentation/ABI/testing/sysfs-class-power
-@@ -468,6 +468,7 @@ Description:
- 			auto:            Charge normally, respect thresholds
- 			inhibit-charge:  Do not charge while AC is attached
- 			force-discharge: Force discharge while AC is attached
-+			================ ====================================
+diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
+index d0dad1fafe079..446573a125711 100644
+--- a/net/bluetooth/hci_sock.c
++++ b/net/bluetooth/hci_sock.c
+@@ -889,10 +889,6 @@ static int hci_sock_release(struct socket *sock)
+ 	}
  
- What:		/sys/class/power_supply/<supply_name>/technology
- Date:		May 2007
+ 	sock_orphan(sk);
+-
+-	skb_queue_purge(&sk->sk_receive_queue);
+-	skb_queue_purge(&sk->sk_write_queue);
+-
+ 	release_sock(sk);
+ 	sock_put(sk);
+ 	return 0;
+@@ -2058,6 +2054,12 @@ static int hci_sock_getsockopt(struct socket *sock, int level, int optname,
+ 	return err;
+ }
+ 
++static void hci_sock_destruct(struct sock *sk)
++{
++	skb_queue_purge(&sk->sk_receive_queue);
++	skb_queue_purge(&sk->sk_write_queue);
++}
++
+ static const struct proto_ops hci_sock_ops = {
+ 	.family		= PF_BLUETOOTH,
+ 	.owner		= THIS_MODULE,
+@@ -2111,6 +2113,7 @@ static int hci_sock_create(struct net *net, struct socket *sock, int protocol,
+ 
+ 	sock->state = SS_UNCONNECTED;
+ 	sk->sk_state = BT_OPEN;
++	sk->sk_destruct = hci_sock_destruct;
+ 
+ 	bt_sock_link(&hci_sk_list, sk);
+ 	return 0;
+-- 
+2.34.1
+

@@ -2,54 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4B849267C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60091492676
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiARNKQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 08:10:16 -0500
-Received: from mail3.divigroup.com ([94.143.156.66]:59650 "EHLO
-        mail3.divigroup.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241564AbiARNKJ (ORCPT
+        id S234927AbiARNJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 08:09:11 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:60134 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232013AbiARNJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:10:09 -0500
-X-Greylist: delayed 9038 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 08:10:09 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail3.divigroup.com (Postfix) with ESMTP id 19AC215A5A77;
-        Tue, 18 Jan 2022 11:07:14 +0100 (CET)
-Received: from mail3.divigroup.com ([127.0.0.1])
-        by localhost (z8.divitel.lan [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kdsYAwzkHw15; Tue, 18 Jan 2022 11:07:13 +0100 (CET)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail3.divigroup.com (Postfix) with ESMTP id 75FB819B8633;
-        Tue, 18 Jan 2022 11:01:08 +0100 (CET)
-X-Virus-Scanned: amavisd-new at z8.divitel.lan
-Received: from mail3.divigroup.com ([127.0.0.1])
-        by localhost (z8.divitel.lan [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id llIBmYVNMREO; Tue, 18 Jan 2022 11:01:08 +0100 (CET)
-Received: from [103.1.179.201] (unknown [103.1.179.201])
-        by mail3.divigroup.com (Postfix) with ESMTPSA id E41B715A5A70;
-        Tue, 18 Jan 2022 10:57:24 +0100 (CET)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Regards
-To:     Recipients <butula@parliament.go.ke>
-From:   "Mr. Kai Wen" <butula@parliament.go.ke>
-Date:   Tue, 18 Jan 2022 15:27:19 +0530
-Reply-To: mrkkaiwwen@aol.com
-Message-Id: <20220118095724.E41B715A5A70@mail3.divigroup.com>
+        Tue, 18 Jan 2022 08:09:10 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 89ED81F3A1;
+        Tue, 18 Jan 2022 13:09:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642511349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IP8dPYQfV66+U/60Z6uwGGTorfNTOANCinaLXZXX9Kk=;
+        b=QCcfXNviLSwdRjbmLGGnxrjYIigMTu5dgZf5y7EpXz9DgCmgijDf/b4Ezp8SPPllxCp/E6
+        SEUYQPBadmzYZX+WSea9DEFq8911WQBFI17c2M+Jv/XXjbaWpRYv+58QF7m7wdqybk3o2C
+        PbhiHQFIevGzhQd4uDahjJyHhpfw5yc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642511349;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IP8dPYQfV66+U/60Z6uwGGTorfNTOANCinaLXZXX9Kk=;
+        b=1+XNefK6zD0VVUXKqxRdiXzPNtG937taHwTSUVAJg4x4yklMdmbjsBxIDAzKrkX+dN1jrW
+        ALLfp9rAkE5Pi4CA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 7047FA3B83;
+        Tue, 18 Jan 2022 13:09:09 +0000 (UTC)
+Date:   Tue, 18 Jan 2022 14:09:09 +0100
+Message-ID: <s5h4k61yyve.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH v2 1/6] ALSA: hda: cs35l41: Avoid overwriting register patch
+In-Reply-To: <20220117160830.709403-1-tanureal@opensource.cirrus.com>
+References: <20220117160830.709403-1-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings My Friend,
+On Mon, 17 Jan 2022 17:08:25 +0100,
+Lucas Tanure wrote:
+> 
+> From: Charles Keepax <ckeepax@opensource.cirrus.com>
+> 
+> regmap_register_patch can't be used to apply the probe sequence as a
+> patch is already registers with the regmap by
+> cs35l41_register_errata_patch and only a single patch can be attached to
+> a single regmap. The driver doesn't currently rely on a cache sync to
+> re-apply this probe sequence so simply switch it to a multi write.
+> 
+> Fixes: 7b2f3eb492da ("ALSA: hda: cs35l41: Add support for CS35L41 in HDA systems")
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> ---
+> 
+> V2: Add Fixes tag
 
-I am Mr. Kai Wen, I work with a bank here in China as head of the audit department. During our last year fiscal bank general account auditing, I discovered an overdue funds sum of USD19,500,000.00 Million belonging to my bank late customer who died over 10 years ago leaving no body to inherit his funds.
- 
-I am contacting you so that we may have an agreement/proper arrangement. note 50% of the sum will be for you while the other 50% will be my share as well.
+Applied all 6 patches now.
 
-I will be waiting for your quick response in order to update you with full detail and be informed that this deal will be executed legally.
+At the next time when submitting a patch set, though, please prepare a
+cover letter.
 
-Yours Sincerely,
-Mr. Kai Wen.
+
+thanks,
+
+Takashi

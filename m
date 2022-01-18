@@ -2,229 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F88492CFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28704492CFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347781AbiARSJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:09:52 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34720 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237348AbiARSJu (ORCPT
+        id S1347803AbiARSK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:10:29 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:43220 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237348AbiARSKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:09:50 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IHvptx033287;
-        Tue, 18 Jan 2022 18:09:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qdURXCSIdearxSVyI4wimCDGoPd5eO/yurISbHJRttI=;
- b=CYzehy3JGeDrPE+u+TV9kNYdjpe0fjbED43k5N3Zfzo4nxnSuA0XwSB4hozFDYfb7v1y
- YDfFNJzfbctBYVfg4fY6aFXb2/BwFOgBiP5QbuWCQyZLTAkjuokEd2YSIytiqOdNQ/XM
- zgEfqX2LILDtwJm3hExpEb1liXolaBUNcM0T5MZwUm8+Q/BwNr9SfG7bug2scu72c4JR
- XoVUg92LEs7ahLlssnPSnhYmVPcKh1zi+TAXIp5JFLRAygnJRfvli5xaOt+OnK3wOHHz
- sdhk9Gd99FiVFkPaXA6SftHFRcNDD6fenxDiSI7GZLQjeBkhqiPTIrjyLQCpRGSYjQsP yA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp2dmrb4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 18:09:17 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20II1COV007361;
-        Tue, 18 Jan 2022 18:09:17 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp2dmrb41-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 18:09:17 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20II33ZL001055;
-        Tue, 18 Jan 2022 18:09:15 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma03wdc.us.ibm.com with ESMTP id 3dknw9y6bp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 18:09:15 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20II9CQt32112950
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 18:09:13 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D20D0AE073;
-        Tue, 18 Jan 2022 18:09:12 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85547AE063;
-        Tue, 18 Jan 2022 18:09:12 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 18:09:12 +0000 (GMT)
-Message-ID: <8f7e0bcc-cd7c-723d-c544-300b5e8f3873@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 13:09:12 -0500
+        Tue, 18 Jan 2022 13:10:23 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:48006)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n9sw0-0028Bm-Ki; Tue, 18 Jan 2022 11:10:20 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:60400 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n9svz-0026qb-Ei; Tue, 18 Jan 2022 11:10:20 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ed Tsai <ed.tsai@mediatek.com>, linux-api@vger.kernel.org
+References: <20220117164633.322550-1-valentin.schneider@arm.com>
+        <20220117164633.322550-3-valentin.schneider@arm.com>
+        <878rve89cc.fsf@email.froward.int.ebiederm.org>
+        <878rvd6jgu.mognet@arm.com>
+Date:   Tue, 18 Jan 2022 12:10:12 -0600
+In-Reply-To: <878rvd6jgu.mognet@arm.com> (Valentin Schneider's message of
+        "Tue, 18 Jan 2022 17:29:21 +0000")
+Message-ID: <87h7a06hkr.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 19/19] ima: Enable IMA namespaces
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
- <20220114144515.vbler7ae3jqebhec@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220114144515.vbler7ae3jqebhec@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MN2PzQuo8sUKosjOArxxODBIZ1Cm5EMz
-X-Proofpoint-GUID: oI15isXt1JsljjwNRWJJ0gOvjc0RJOeN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180109
+Content-Type: text/plain
+X-XM-SPF: eid=1n9svz-0026qb-Ei;;;mid=<87h7a06hkr.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+GdPcXRX9fPx6fHK6oCi3BAAvq5AF1mLk=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMSubLong,
+        XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Valentin Schneider <valentin.schneider@arm.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 548 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 3.1 (0.6%), b_tie_ro: 2.1 (0.4%), parse: 1.36
+        (0.2%), extract_message_metadata: 14 (2.5%), get_uri_detail_list: 2.7
+        (0.5%), tests_pri_-1000: 6 (1.1%), tests_pri_-950: 1.04 (0.2%),
+        tests_pri_-900: 0.84 (0.2%), tests_pri_-90: 96 (17.6%), check_bayes:
+        94 (17.1%), b_tokenize: 8 (1.5%), b_tok_get_all: 34 (6.2%),
+        b_comp_prob: 2.1 (0.4%), b_tok_touch_all: 47 (8.5%), b_finish: 0.64
+        (0.1%), tests_pri_0: 412 (75.3%), check_dkim_signature: 0.47 (0.1%),
+        check_dkim_adsp: 3.6 (0.7%), poll_dns_idle: 0.02 (0.0%), tests_pri_10:
+        1.85 (0.3%), tests_pri_500: 7 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 2/2] sched/tracing: Add TASK_RTLOCK_WAIT to TASK_REPORT
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Valentin Schneider <valentin.schneider@arm.com> writes:
 
-On 1/14/22 09:45, Christian Brauner wrote:
-> On Tue, Jan 04, 2022 at 12:04:16PM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
+> On 17/01/22 13:12, Eric W. Biederman wrote:
+>> Valentin Schneider <valentin.schneider@arm.com> writes:
+>>> --- a/fs/proc/array.c
+>>> +++ b/fs/proc/array.c
+>>> @@ -128,9 +128,10 @@ static const char * const task_state_array[] = {
+>>>  	"X (dead)",		/* 0x10 */
+>>>  	"Z (zombie)",		/* 0x20 */
+>>>  	"P (parked)",		/* 0x40 */
+>>> +	"L (rt-locked)",        /* 0x80 */
+>>>  
+>>>  	/* states beyond TASK_REPORT: */
+>>> -	"I (idle)",		/* 0x80 */
+>>> +	"I (idle)",		/* 0x100 */
+>>>  };
 >>
->> Introduce the IMA_NS in Kconfig for IMA namespace enablement.
+>> I think this is at least possibly an ABI break.  I have a vague memory
+>> that userspace is not ready being reported new task states.  Which is
+>> why we encode some of our states the way we do.
 >>
->> Enable the lazy initialization of an IMA namespace when a user mounts
->> SecurityFS. Now a user_namespace will get a pointer to an ima_namespace
->> and therefore add an implementation of get_current_ns() that returns this
->> pointer.
+>> Maybe it was just someone being very conservative.
 >>
->> get_current_ns() may now return a NULL pointer for as long as the IMA
->> namespace hasn't been created, yet. Therefore, return early from those
->> functions that may now get a NULL pointer from this call. The NULL
->> pointer can typically be treated similar to not having an IMA policy set
->> and simply return early from a function.
+>> Still if you are going to add new states to userspace and risk breaking
+>> them can you do some basic analysis and report what ps and similar
+>> programs do.
 >>
->> Implement ima_ns_from_file() for SecurityFS-related files where we can
->> now get the IMA namespace via the user namespace pointer associated
->> with the superblock of the SecurityFS filesystem instance. Since
->> the functions using ima_ns_from_file() will only be called after an
->> ima_namesapce has been allocated they will never get a NULL pointer
->> for the ima_namespace.
+>> Simply changing userspace without even mentioning that you are changing
+>> the userspace output of proc looks dangerous indeed.
 >>
->> Switch access to userns->ima_ns to use acquire/release semantics to ensure
->> that a newly created ima_namespace structure is fully visible upon access.
+>
+> Yeah, you're right.
+>
+>> Looking in the history commit 74e37200de8e ("proc: cleanup/simplify
+>> get_task_state/task_state_array") seems to best document the concern
+>> that userspace does not know how to handle new states.
 >>
->> Replace usage of current_user_ns() with ima_ns_from_user_ns() that
->> implements a method to derive the user_namespace from the given
->> ima_namespace. It leads to the same result.
+>
+> Thanks for the sha1 and for digging around. Now, I read
+> 74e37200de8e ("proc: cleanup/simplify get_task_state/task_state_array")
+> as "get_task_state() isn't clear vs what value is actually exposed to
+> userspace" rather than "get_task_state() could expose things userspace
+> doesn't know what to do with".
+
+There is also commit abd50b39e783 ("wait: introduce EXIT_TRACE to avoid
+the racy EXIT_DEAD->EXIT_ZOMBIE transition").
+
+Which I think is more of what I was remembering.
+
+>> The fact we have had a parked state for quite a few years despite that
+>> concern seems to argue it is possible to extend the states.  Or perhaps
+>> it just argues that parked states are rare enough it does not matter.
 >>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
-[...]
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index b7dbc687b6ff..5a9b511ebbae 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -1333,6 +1333,7 @@ static unsigned int ima_parse_appraise_algos(char *arg)
->>   static int ima_parse_rule(struct ima_namespace *ns,
->>   			  char *rule, struct ima_rule_entry *entry)
->>   {
->> +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
-> So I think ima_policy_write() and therefore ima_parse_rule() can
-> legitimately be reached at least from an ancestor userns but also from a
-> completely unrelated userns via securityfs. Sorry, I didn't see this
-> earlier. Think of the following two scenarios:
+>> It is definitely the case that the ps manpage documents the possible
+>> states and as such they could be a part of anyone's shell scripts.
+>>
 >
-> * userns1: unshare -U --map-root --mount
-> -----------------------------------------
->     mount -t securityfs securityfs /userns1_securityfs
->     fd_in_userns1 = open("/userns1_securityfs/ima_file, O_RDWR);
+> 06eb61844d84 ("sched/debug: Add explicit TASK_IDLE printing") for instance
+> seems to suggest extending the states OK, but you're right that this then
+> requires updating ps' manpage.
 >
->     /* I _think_ that sending of fds here should work but I haven't
->      * bothered to recheck the scm code as I need to do some driving in a
->      * little bit so I'm running out of time...
->      */
->     send_fd_scm_rights(fd_in_userns1, task_in_userns2);
->
-> * userns2: unshare -U --map-root --mount
-> -----------------------------------------
->     fd_from_userns1 = receive_fd_scm_rights();
->     write_policy(fd_from_userns1, "my fancy policy");
+> Alternatively, TASK_RTLOCK_WAIT could be masqueraded as
+> TASK_(UN)INTERRUPTIBLE when reported to userspace - it is actually somewhat
+> similar, unlike TASK_IDLE vs TASK_UNINTERRUPTIBLE for instance. The
+> handling in get_task_state() will be fugly, but it might be preferable over
+> exposing a detail userspace might not need to be made aware of?
 
-Passing an fd around like this presumably indicates that you intend to 
-let the recipient read/write to it.
+Right.
 
+Frequently I have seen people do a cost/benefit analysis.
 
-> It also means that if you inherit an fd from a more privileged imans
-> instance you can write to it:
+If the benefit is enough, and tracking down the userspace programs that
+need to be verified to work with the change is inexpensive enough the
+change is made.  Always keeping in mind that if something was missed and
+the change causes a regression the change will need to be reverted.
 
-Now in this example we have to assume that root is making a mistake 
-passing the file descriptor around?
+If there is little benefit or the cost to track down userspace is great
+enough the work is put in to hide the change from userspace.  Just
+because it is too much trouble to expose it to userspace.
 
-# ls -l /sys/kernel/security/ima/
-total 0
--r--r-----. 1 root root 0 Jan 18 12:48 ascii_runtime_measurements
--r--r-----. 1 root root 0 Jan 18 12:48 binary_runtime_measurements
--rw-------. 1 root root 0 Jan 18 12:48 policy
--r--r-----. 1 root root 0 Jan 18 12:48 runtime_measurements_count
--r--r-----. 1 root root 0 Jan 18 12:48 violations
+I honestly don't have any kind of sense about how hard it is to verify
+that a userspace regression won't result from a change like this.  I
+just know that the question needs to be asked.
 
->
-> * initial_userns:
-
-
-So that's the host, right? And this is a 2nd independent example from 
-the first.
-
- > ------------------
-
->     mount -t securityfs securityfs /initial_securityfs
->
->     fd_in_initial_securityfs = open("/initial_securityfs/ima_file, O_RDWR);
->
->     pid = fork():
->     if (pid == 0) {
-> 	unshare(CLONE_NEWUSER);
-> 	/* write idmapping for yourself */
->
-> 	write_policy(fd_in_initial_securityfs, "my fancy policy");
->     }
->
-> would allow an unprivileged caller to alter the host's ima policy (as
-> you can see the example requires cooperation).
-
-Sorry, not currently following. Root is the only one being able to open 
-that IMA files on the host, right? Is this a mistake here where root 
-passed the fd onto the child and that child is not trusted to mess with 
-the fd including passing it on further?
-
-
->
-> In both cases the write can legitimately reach ima_policy_write() and
-> trigger ima_parse_rule() from another user namespace.
->
-> There are multiple ways to go here, I think.
->
-> It's important to figure out whether - coming back to an earlier review
-> of mine - you're ok with everyone with access to an opened policy fd
-> being able to write an ima policy for the namespace in questions as long
-> as _the opener of the policy file_ was privileged enough.
->
-> If that's the case then you can just remove the WARN_ON()/add a
-> non-WARN_ON() helper in there.
->
->  From my ima-naive perspective this seems fine and preferable as this
-> means clean permission checking once at open time.
->
-> A good question to answer in order to solve this is whether or not a
-> given operation is allowed is dependent on what is written, i.e. on the
-> content of the rule, I guess. I don't think there is.
+Eric

@@ -2,88 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 357AD4929B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047354929B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345815AbiARPcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:32:51 -0500
-Received: from marcansoft.com ([212.63.210.85]:58404 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238270AbiARPcs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:32:48 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1345834AbiARPfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:35:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54331 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238270AbiARPfJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:35:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642520109;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=03W0CajDsWL8nkNyBb+ZXdbNP0dR+eVZouhyVqFR/1Q=;
+        b=ML9IYD2Hk0dhejM1/T5Rf2uKX9POsmYZZEF0+WloeMmNs1bhJrmsxY9/dwE/ybjYptDQSX
+        VxziXil5JuoH44OfTp2KH0cGifuIndydnyLclqe2Kfd7Mb1hZ1JcRNoU4ElIBxka/0TLJp
+        e9ys4ZT5JKpQSgbJK2UUB7Nru2vMU9U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121-wv9rVZS0PC-dp6oha4b2sg-1; Tue, 18 Jan 2022 10:35:06 -0500
+X-MC-Unique: wv9rVZS0PC-dp6oha4b2sg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 02C4A3FA5E;
-        Tue, 18 Jan 2022 15:32:38 +0000 (UTC)
-Subject: Re: [PATCH v3 0/9] misc brcmfmac fixes (M1/T2 series spin-off)
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220117142919.207370-1-marcan@marcan.st>
- <CAHp75VfRiFokdTQ9cnEEH596mM7cb4FXQk4eXVt37cG4FcFMyA@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <e956e500-a59a-a03b-6be1-c7eca85c8741@marcan.st>
-Date:   Wed, 19 Jan 2022 00:32:36 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED18A1825174;
+        Tue, 18 Jan 2022 15:33:10 +0000 (UTC)
+Received: from llong.com (unknown [10.22.35.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E3946753EF;
+        Tue, 18 Jan 2022 15:33:09 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH] locking/semaphore: Use wake_q to wake up processes outside lock critical section
+Date:   Tue, 18 Jan 2022 10:32:54 -0500
+Message-Id: <20220118153254.358748-1-longman@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VfRiFokdTQ9cnEEH596mM7cb4FXQk4eXVt37cG4FcFMyA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2022 19.43, Andy Shevchenko wrote:
-> On Mon, Jan 17, 2022 at 4:30 PM Hector Martin <marcan@marcan.st> wrote:
->>
->> Hi everyone,
->>
->> This series contains just the fixes / misc improvements from the
->> previously submitted series:
->>
->> brcmfmac: Support Apple T2 and M1 platforms
->>
->> Patches 8-9 aren't strictly bugfixes but rather just general
->> improvements; they can be safely skipped, although patch 8 will be a
->> dependency of the subsequent series to avoid a compile warning.
-> 
-> Have I given you a tag? If so, I do not see it applied in the patches...
+The following lockdep splat was observed:
 
-I didn't see any review tags from you in the previous thread. Did I miss
-any?
+[ 9776.459819] ======================================================
+[ 9776.459820] WARNING: possible circular locking dependency detected
+[ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
+[ 9776.459823] ------------------------------------------------------
+[ 9776.459824] stress-ng/117708 is trying to acquire lock:
+[ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at: down_trylock+0x13/0x70
 
+[ 9776.459831] but task is already holding lock:
+[ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x27/0x130
+
+[ 9776.459837] which lock already depends on the new lock.
+      :
+[ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
+[ 9776.459860]        __lock_acquire+0xb72/0x1870
+[ 9776.459861]        lock_acquire+0x1ca/0x570
+[ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
+[ 9776.459863]        try_to_wake_up+0x9d/0x1210
+[ 9776.459864]        up+0x7a/0xb0
+[ 9776.459864]        __up_console_sem+0x33/0x70
+[ 9776.459865]        console_unlock+0x3a1/0x5f0
+[ 9776.459866]        vprintk_emit+0x23b/0x2b0
+[ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
+[ 9776.459868]        devkmsg_write.cold+0x4e/0x78
+[ 9776.459869]        do_iter_readv_writev+0x343/0x690
+[ 9776.459870]        do_iter_write+0x123/0x340
+[ 9776.459871]        vfs_writev+0x19d/0x520
+[ 9776.459871]        do_writev+0x110/0x290
+[ 9776.459872]        do_syscall_64+0x3b/0x90
+[ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+      :
+[ 9776.459905] Chain exists of:
+[ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
+
+[ 9776.459911]  Possible unsafe locking scenario:
+
+[ 9776.459913]        CPU0                    CPU1
+[ 9776.459914]        ----                    ----
+[ 9776.459914]   lock(&rq->__lock);
+[ 9776.459917]                                lock(&p->pi_lock);
+[ 9776.459919]                                lock(&rq->__lock);
+[ 9776.459921]   lock((console_sem).lock);
+
+[ 9776.459923]  *** DEADLOCK ***
+
+The problematic locking sequence ((console_sem).lock --> &p->pi_lock)
+was caused by the fact the semaphore up() function is calling
+wake_up_process() while holding the semaphore raw spinlock.
+
+By moving the wake_up_processs() call out of the raw spinlock critical
+section using wake_q, it will break the problematic locking sequence as
+well as reducing raw spinlock hold time which will be good for
+PREEMPT_RT.
+
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/locking/semaphore.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+index 9ee381e4d2a4..a26c915430ba 100644
+--- a/kernel/locking/semaphore.c
++++ b/kernel/locking/semaphore.c
+@@ -29,6 +29,7 @@
+ #include <linux/export.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
++#include <linux/sched/wake_q.h>
+ #include <linux/semaphore.h>
+ #include <linux/spinlock.h>
+ #include <linux/ftrace.h>
+@@ -37,7 +38,7 @@ static noinline void __down(struct semaphore *sem);
+ static noinline int __down_interruptible(struct semaphore *sem);
+ static noinline int __down_killable(struct semaphore *sem);
+ static noinline int __down_timeout(struct semaphore *sem, long timeout);
+-static noinline void __up(struct semaphore *sem);
++static noinline void __up(struct semaphore *sem, struct wake_q_head *wake_q);
+ 
+ /**
+  * down - acquire the semaphore
+@@ -182,13 +183,16 @@ EXPORT_SYMBOL(down_timeout);
+ void up(struct semaphore *sem)
+ {
+ 	unsigned long flags;
++	DEFINE_WAKE_Q(wake_q);
+ 
+ 	raw_spin_lock_irqsave(&sem->lock, flags);
+ 	if (likely(list_empty(&sem->wait_list)))
+ 		sem->count++;
+ 	else
+-		__up(sem);
++		__up(sem, &wake_q);
+ 	raw_spin_unlock_irqrestore(&sem->lock, flags);
++	if (!wake_q_empty(&wake_q))
++		wake_up_q(&wake_q);
+ }
+ EXPORT_SYMBOL(up);
+ 
+@@ -256,11 +260,12 @@ static noinline int __sched __down_timeout(struct semaphore *sem, long timeout)
+ 	return __down_common(sem, TASK_UNINTERRUPTIBLE, timeout);
+ }
+ 
+-static noinline void __sched __up(struct semaphore *sem)
++static noinline void __sched __up(struct semaphore *sem,
++				  struct wake_q_head *wake_q)
+ {
+ 	struct semaphore_waiter *waiter = list_first_entry(&sem->wait_list,
+ 						struct semaphore_waiter, list);
+ 	list_del(&waiter->list);
+ 	waiter->up = true;
+-	wake_up_process(waiter->task);
++	wake_q_add(wake_q, waiter->task);
+ }
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.27.0
+

@@ -2,120 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2919C492885
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 977104928A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245580AbiAROhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:37:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56982 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245283AbiAROhH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:37:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642516626;
+        id S1343826AbiAROp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:45:29 -0500
+Received: from ip-94-112-206-30.net.upcbroadband.cz ([94.112.206.30]:49250
+        "EHLO ixit.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241144AbiAROp1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 09:45:27 -0500
+X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 09:45:26 EST
+Received: from [10.0.0.139] (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 1E5612005E;
+        Tue, 18 Jan 2022 15:37:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1642516629;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=I1Roh1bswl/1psuf+8JsW8+b4eb0eTKZBCJnJTJbWm4=;
-        b=gDt/k+wyRsLRO5okh/DOvrUraQnDWGVm97HP74TtRJij5ETIc5lwEnoLaDXn7+NAmOGUn+
-        7Lmwbnmx+AbHW9n1XFRhbfI9SD4ak6YFBqCXqVv8k5BHvCLHPdx8m7PnaJcBAZm9tgNJfL
-        IPMYm2MVvL39th2MxJRVc/mcB+qK8vY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-132-DhnUDoJ5NZKlXtQt1Z8H2Q-1; Tue, 18 Jan 2022 09:37:04 -0500
-X-MC-Unique: DhnUDoJ5NZKlXtQt1Z8H2Q-1
-Received: by mail-ed1-f72.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so1262099edb.14
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:37:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=I1Roh1bswl/1psuf+8JsW8+b4eb0eTKZBCJnJTJbWm4=;
-        b=LaXDqEcU5PphX9mzfcpzs3ws8hKYhnkWV1hh2Wta0ZhLKMy2zbAOaV3spAvk+LIcK0
-         3P2h3mHwuM/+dhnFEvjZIFFHF4/Q0DpuCb9WU4h40AdYXRgFulMxMcmOwAoyZwAsPCeA
-         JYBN0VUXVTUFZCdbceAuGdi9fZ65kv/1lQi0asfzwszb2Kce+wRFAe0c/xhfTVeL2c7W
-         neZdeWbLat1DmoBx4RDsnPVJn9sIrz4iRzQMUU+uBy4cIcWxqPT/RPgnM+Vwwru+3uiz
-         aFXPGzU+SPOrdroDgBsfgc5L6sUEI5WqlT5BWK59iYC1V2SVcD3/1jx/yOn3BE7ubszp
-         ab8g==
-X-Gm-Message-State: AOAM532jqyT+4dIX/7o7Uvq4EuA2s7LIx9PDQhIrfc+ZLd0sAUIwqJt2
-        2nl/4dPjYcb5igvjepP2Z0m0pbu+EvKhcL4GmQzBUO1rHuZ1Zf+qxWqAHKF5gJytVu8OMTUnIJo
-        pgXarAZnfz/gJl67pB5Usa/fS/GiCSgK8cF7/j2vHP8JXkBpzyR/BG0Occ0LkoPwjDGVdVF3SPb
-        Ey
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr20555842ejc.696.1642516622950;
-        Tue, 18 Jan 2022 06:37:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyJziAnMIo7Ue83WoM483kFpdpRDcWL4HxXt+a5HKtfJ+yVSF2XwVc5D5V3zdoybTJ7oVrJEw==
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr20555817ejc.696.1642516622684;
-        Tue, 18 Jan 2022 06:37:02 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id sh38sm5304355ejc.70.2022.01.18.06.37.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 06:37:02 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] KVM: x86: Partially allow KVM_SET_CPUID{,2}
- after KVM_RUN
-In-Reply-To: <87pmopl9m2.fsf@redhat.com>
-References: <20220117150542.2176196-1-vkuznets@redhat.com>
- <20220117150542.2176196-3-vkuznets@redhat.com>
- <c427371c-474e-1233-4e57-66210bfc5687@redhat.com>
- <87pmopl9m2.fsf@redhat.com>
-Date:   Tue, 18 Jan 2022 15:37:01 +0100
-Message-ID: <87h7a1kt4i.fsf@redhat.com>
+        bh=+4whwaOsPH0/UfN7RFCyHS+ItnYg48fRwxO6IFphqFI=;
+        b=rEg8WspxgirCsDw+FoG1rfzWPwoZ4txGptVdrYwbaqylFbzKmsiswNt4ZXjE4fqobb4+g7
+        f4TYXtFE85Sk6wsxRXe/sjgCs4fDoANy9bT+RqQD4JBq7BK+gym9pMEUVgJJd8l4aMHTG9
+        /KgbPUOLjQc/LDgFVndTxZKpP95pMxc=
+Date:   Tue, 18 Jan 2022 15:37:04 +0100
+From:   David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH] powerpc/fsl: fix the schema check errors for
+ fsl,tmu-calibration
+To:     Rob Herring <robh+dt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     ~okias/devicetree@lists.sr.ht, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Message-Id: <SXTW5R.DQG57Y1RMSI9@ixit.cz>
+In-Reply-To: <20211029121733.46849-1-david@ixit.cz>
+References: <20211029121733.46849-1-david@ixit.cz>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+Hello, can I ask for review please? Thanks.
+David Heidelberg
 
-> Paolo Bonzini <pbonzini@redhat.com> writes:
->
->> On 1/17/22 16:05, Vitaly Kuznetsov wrote:
->>>   
->>> +/* Check whether the supplied CPUID data is equal to what is already set for the vCPU. */
->>> +static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
->>> +				 int nent)
->>> +{
->>> +	struct kvm_cpuid_entry2 *best;
->>> +	int i;
->>> +
->>> +	for (i = 0; i < nent; i++) {
->>> +		best = kvm_find_cpuid_entry(vcpu, e2[i].function, e2[i].index);
->>> +		if (!best)
->>> +			return -EINVAL;
->>> +
->>> +		if (e2[i].eax != best->eax || e2[i].ebx != best->ebx ||
->>> +		    e2[i].ecx != best->ecx || e2[i].edx != best->edx)
->>> +			return -EINVAL;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>
->> What about this alternative implementation:
->>
-...
->>
->> avoiding the repeated calls to kvm_find_cpuid_entry?
->>
->
-> My version is a bit more permissive as it allows supplying CPUID entries
-> in any order, not necessarily matching the original. I *guess* this
-> doesn't matter much for the QEMU problem we're trying to workaround,
-> I'll have to check.
+On Fri, Oct 29 2021 at 14:17:33 +0200, David Heidelberg <david@ixit.cz> 
+wrote:
+> fsl,tmu-calibration is in u32-matrix format. Use matching property 
+> syntax.
+> No functional changes. Fixes warnings as:
+> $ make dtbs_check
+> ...
+> arch/arm64/boot/dts/freescale/imx8mq-librem5-r3.dt.yaml: 
+> tmu@30260000: fsl,tmu-calibration:0: Additional items are not allowed 
+> (1, 41, 2, 47, 3, 53, 4, 61, 5, 67, 6, 75, 7, 81, 8, 87, 9, 95, 10, 
+> 103, 11, 111
+> , 65536, 27, 65537, 35, 65538, 43, 65539, 51, 65540, 59, 65541, 67, 
+> 65542, 75, 65543, 85, 65544, 93, 65545, 103, 65546, 112, 131072, 23, 
+> 131073, 35, 131074, 45, 131075, 55, 131076, 65, 131077, 75, 131078, 
+> 87, 13
+> 1079, 99, 131080, 111, 196608, 21, 196609, 33, 196610, 45, 196611, 
+> 57, 196612, 69, 196613, 83, 196614, 95, 196615, 113 were unexpected)
+>         From schema: 
+> Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+> ...
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  arch/powerpc/boot/dts/fsl/t1023si-post.dtsi | 79 
+> +++++++++++----------
+>  arch/powerpc/boot/dts/fsl/t1040si-post.dtsi | 71 +++++++++---------
+>  2 files changed, 76 insertions(+), 74 deletions(-)
+> 
+> diff --git a/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi 
+> b/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi
+> index d552044c5afc..aa5152ca8120 100644
+> --- a/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi
+> +++ b/arch/powerpc/boot/dts/fsl/t1023si-post.dtsi
+> @@ -367,45 +367,46 @@ tmu: tmu@f0000 {
+>  		reg = <0xf0000 0x1000>;
+>  		interrupts = <18 2 0 0>;
+>  		fsl,tmu-range = <0xb0000 0xa0026 0x80048 0x30061>;
+> -		fsl,tmu-calibration = <0x00000000 0x0000000f
+> -				       0x00000001 0x00000017
+> -				       0x00000002 0x0000001e
+> -				       0x00000003 0x00000026
+> -				       0x00000004 0x0000002e
+> -				       0x00000005 0x00000035
+> -				       0x00000006 0x0000003d
+> -				       0x00000007 0x00000044
+> -				       0x00000008 0x0000004c
+> -				       0x00000009 0x00000053
+> -				       0x0000000a 0x0000005b
+> -				       0x0000000b 0x00000064
+> -
+> -				       0x00010000 0x00000011
+> -				       0x00010001 0x0000001c
+> -				       0x00010002 0x00000024
+> -				       0x00010003 0x0000002b
+> -				       0x00010004 0x00000034
+> -				       0x00010005 0x00000039
+> -				       0x00010006 0x00000042
+> -				       0x00010007 0x0000004c
+> -				       0x00010008 0x00000051
+> -				       0x00010009 0x0000005a
+> -				       0x0001000a 0x00000063
+> -
+> -				       0x00020000 0x00000013
+> -				       0x00020001 0x00000019
+> -				       0x00020002 0x00000024
+> -				       0x00020003 0x0000002c
+> -				       0x00020004 0x00000035
+> -				       0x00020005 0x0000003d
+> -				       0x00020006 0x00000046
+> -				       0x00020007 0x00000050
+> -				       0x00020008 0x00000059
+> -
+> -				       0x00030000 0x00000002
+> -				       0x00030001 0x0000000d
+> -				       0x00030002 0x00000019
+> -				       0x00030003 0x00000024>;
+> +		fsl,tmu-calibration =
+> +				<0x00000000 0x0000000f>,
+> +				<0x00000001 0x00000017>,
+> +				<0x00000002 0x0000001e>,
+> +				<0x00000003 0x00000026>,
+> +				<0x00000004 0x0000002e>,
+> +				<0x00000005 0x00000035>,
+> +				<0x00000006 0x0000003d>,
+> +				<0x00000007 0x00000044>,
+> +				<0x00000008 0x0000004c>,
+> +				<0x00000009 0x00000053>,
+> +				<0x0000000a 0x0000005b>,
+> +				<0x0000000b 0x00000064>,
+> +
+> +				<0x00010000 0x00000011>,
+> +				<0x00010001 0x0000001c>,
+> +				<0x00010002 0x00000024>,
+> +				<0x00010003 0x0000002b>,
+> +				<0x00010004 0x00000034>,
+> +				<0x00010005 0x00000039>,
+> +				<0x00010006 0x00000042>,
+> +				<0x00010007 0x0000004c>,
+> +				<0x00010008 0x00000051>,
+> +				<0x00010009 0x0000005a>,
+> +				<0x0001000a 0x00000063>,
+> +
+> +				<0x00020000 0x00000013>,
+> +				<0x00020001 0x00000019>,
+> +				<0x00020002 0x00000024>,
+> +				<0x00020003 0x0000002c>,
+> +				<0x00020004 0x00000035>,
+> +				<0x00020005 0x0000003d>,
+> +				<0x00020006 0x00000046>,
+> +				<0x00020007 0x00000050>,
+> +				<0x00020008 0x00000059>,
+> +
+> +				<0x00030000 0x00000002>,
+> +				<0x00030001 0x0000000d>,
+> +				<0x00030002 0x00000019>,
+> +				<0x00030003 0x00000024>;
+>  		#thermal-sensor-cells = <1>;
+>  	};
+> 
+> diff --git a/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi 
+> b/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi
+> index f58eb820eb5e..27e6985d8bde 100644
+> --- a/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi
+> +++ b/arch/powerpc/boot/dts/fsl/t1040si-post.dtsi
+> @@ -447,41 +447,42 @@ tmu: tmu@f0000 {
+>  		reg = <0xf0000 0x1000>;
+>  		interrupts = <18 2 0 0>;
+>  		fsl,tmu-range = <0xa0000 0x90026 0x8004a 0x1006a>;
+> -		fsl,tmu-calibration = <0x00000000 0x00000025
+> -				       0x00000001 0x00000028
+> -				       0x00000002 0x0000002d
+> -				       0x00000003 0x00000031
+> -				       0x00000004 0x00000036
+> -				       0x00000005 0x0000003a
+> -				       0x00000006 0x00000040
+> -				       0x00000007 0x00000044
+> -				       0x00000008 0x0000004a
+> -				       0x00000009 0x0000004f
+> -				       0x0000000a 0x00000054
+> -
+> -				       0x00010000 0x0000000d
+> -				       0x00010001 0x00000013
+> -				       0x00010002 0x00000019
+> -				       0x00010003 0x0000001f
+> -				       0x00010004 0x00000025
+> -				       0x00010005 0x0000002d
+> -				       0x00010006 0x00000033
+> -				       0x00010007 0x00000043
+> -				       0x00010008 0x0000004b
+> -				       0x00010009 0x00000053
+> -
+> -				       0x00020000 0x00000010
+> -				       0x00020001 0x00000017
+> -				       0x00020002 0x0000001f
+> -				       0x00020003 0x00000029
+> -				       0x00020004 0x00000031
+> -				       0x00020005 0x0000003c
+> -				       0x00020006 0x00000042
+> -				       0x00020007 0x0000004d
+> -				       0x00020008 0x00000056
+> -
+> -				       0x00030000 0x00000012
+> -				       0x00030001 0x0000001d>;
+> +		fsl,tmu-calibration =
+> +				<0x00000000 0x00000025>,
+> +				<0x00000001 0x00000028>,
+> +				<0x00000002 0x0000002d>,
+> +				<0x00000003 0x00000031>,
+> +				<0x00000004 0x00000036>,
+> +				<0x00000005 0x0000003a>,
+> +				<0x00000006 0x00000040>,
+> +				<0x00000007 0x00000044>,
+> +				<0x00000008 0x0000004a>,
+> +				<0x00000009 0x0000004f>,
+> +				<0x0000000a 0x00000054>,
+> +
+> +				<0x00010000 0x0000000d>,
+> +				<0x00010001 0x00000013>,
+> +				<0x00010002 0x00000019>,
+> +				<0x00010003 0x0000001f>,
+> +				<0x00010004 0x00000025>,
+> +				<0x00010005 0x0000002d>,
+> +				<0x00010006 0x00000033>,
+> +				<0x00010007 0x00000043>,
+> +				<0x00010008 0x0000004b>,
+> +				<0x00010009 0x00000053>,
+> +
+> +				<0x00020000 0x00000010>,
+> +				<0x00020001 0x00000017>,
+> +				<0x00020002 0x0000001f>,
+> +				<0x00020003 0x00000029>,
+> +				<0x00020004 0x00000031>,
+> +				<0x00020005 0x0000003c>,
+> +				<0x00020006 0x00000042>,
+> +				<0x00020007 0x0000004d>,
+> +				<0x00020008 0x00000056>,
+> +
+> +				<0x00030000 0x00000012>,
+> +				<0x00030001 0x0000001d>;
+>  		#thermal-sensor-cells = <1>;
+>  	};
+> 
+> --
+> 2.33.0
+> 
 
-I tried this with QEMU and nothing blew up, during CPU hotplug entries
-come in the same order as the original. v3 which I've just sent
-implements this suggestion.
-
--- 
-Vitaly
 

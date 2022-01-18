@@ -2,90 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0D0492144
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5499C492147
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344304AbiARIe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344645AbiARIen (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:34:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D3BC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:34:43 -0800 (PST)
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1n9jwe-000196-OC; Tue, 18 Jan 2022 09:34:24 +0100
-Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1n9jwc-000D8k-6O; Tue, 18 Jan 2022 09:34:22 +0100
-Date:   Tue, 18 Jan 2022 09:34:22 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>, Han Xu <han.xu@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [RFC PATCH v3 0/4] Fix and improve gpmi nand on mx28
-Message-ID: <YeZ7jjzaLIioOGZo@pengutronix.de>
-References: <20220117161755.1863579-1-dario.binacchi@amarulasolutions.com>
+        id S1344458AbiARIgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:36:49 -0500
+Received: from mga02.intel.com ([134.134.136.20]:35566 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343864AbiARIgs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 03:36:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642495008; x=1674031008;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bEHey9QupRjV9zwrkI/FK565olCk7HBpauULY2Z1kUs=;
+  b=mAXLwBisrvclJQFYDU+QiI8cNgQg+oYc6k/A6KsiWokbcQnOny+H8AwE
+   17nudHQ4WAoKgFky/6GkHtipAbbzgehY4DeT8V0m0QMLMizq3kLEtzwrM
+   L+lj7WiOxyhZ2v8VylH5AfL1vg16VfPQP7nJUAYNjOpfyn71lHffg+I/8
+   fV5nDdYIXYXFOGHxwioglE8IOvI6bNs0Ya5OrmMS1AQVcPhqqJ76YGJTJ
+   4BD11mqkbUgp1WWXCS39pva8APMtHjzYP4mdlG2j0A1jXFLQFeibbfqoU
+   ngx/x8wG3qdeaW7m/Ui9IPMdz2SuA7mWrLivKZf07V9wFgQt5VvUE1Bqr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="232126212"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="232126212"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 00:36:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="517682356"
+Received: from ramaling-i9x.iind.intel.com (HELO intel.com) ([10.203.144.108])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 00:36:45 -0800
+Date:   Tue, 18 Jan 2022 14:06:40 +0530
+From:   Ramalingam C <ramalingam.c@intel.com>
+To:     Robert Beckett <bob.beckett@collabora.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 3/4] drm/i915: add gtt misalignment test
+Message-ID: <20220118083638.GA2476@intel.com>
+References: <20220111180238.1370631-1-bob.beckett@collabora.com>
+ <20220111180238.1370631-4-bob.beckett@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220117161755.1863579-1-dario.binacchi@amarulasolutions.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:32:55 up 110 days, 21:29, 72 users,  load average: 7.00, 14.79,
- 14.26
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20220111180238.1370631-4-bob.beckett@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 05:17:51PM +0100, Dario Binacchi wrote:
-> Starting from [1], the series fixes the timings setting of the gpmi
-> controller for the mx28 architecture, also adding support for fast
-> edo mode timings. The whole series has been heavily tested with the
-> mtd kernel test modules, and with repeated write cycles on nand.
+On 2022-01-11 at 18:02:37 +0000, Robert Beckett wrote:
+> add test to check handling of misaligned offsets and sizes
+
+Bob, This needs the rebase. I have rebased the other three patches of
+the series..
+
+Meanwhile i will review the changes.
+
+Ram.
 > 
-> [1] https://lore.kernel.org/r/20210702065350.209646-5-ebiggers@kernel.org
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> ---
+>  drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 130 ++++++++++++++++++
+>  1 file changed, 130 insertions(+)
 > 
-> Changes in v3:
-> - Remove the "mtd: rawnand: gpmi: use a table to get EDO mode setup" patch.
-> - Simplify the validation logic (suggested by Sascha Hauer <sha@pengutronix.de>).
-
-Thanks Dario. I gave it a test on a custom i.MX28 board and it works as
-expected.
-
-For the series:
-
-Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
-Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> index fea031b4ec4f..28de0b333835 100644
+> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> @@ -22,10 +22,12 @@
+>   *
+>   */
+>  
+> +#include "gt/intel_gtt.h"
+>  #include <linux/list_sort.h>
+>  #include <linux/prime_numbers.h>
+>  
+>  #include "gem/i915_gem_context.h"
+> +#include "gem/i915_gem_region.h"
+>  #include "gem/selftests/mock_context.h"
+>  #include "gt/intel_context.h"
+>  #include "gt/intel_gpu_commands.h"
+> @@ -1066,6 +1068,120 @@ static int shrink_boom(struct i915_address_space *vm,
+>  	return err;
+>  }
+>  
+> +static int misaligned_case(struct i915_address_space *vm, struct intel_memory_region *mr,
+> +			   u64 addr, u64 size, unsigned long flags)
+> +{
+> +	struct drm_i915_gem_object *obj;
+> +	struct i915_vma *vma;
+> +	int err = 0;
+> +	u64 expected_vma_size, expected_node_size;
+> +
+> +	obj = i915_gem_object_create_region(mr, size, 0, 0);
+> +	if (IS_ERR(obj))
+> +		return PTR_ERR(obj);
+> +
+> +	vma = i915_vma_instance(obj, vm, NULL);
+> +	if (IS_ERR(vma)) {
+> +		err = PTR_ERR(vma);
+> +		goto err_put;
+> +	}
+> +
+> +	err = i915_vma_pin(vma, 0, 0, addr | flags);
+> +	if (err)
+> +		goto err_put;
+> +	i915_vma_unpin(vma);
+> +
+> +	if (!drm_mm_node_allocated(&vma->node)) {
+> +		err = -EINVAL;
+> +		goto err_put;
+> +	}
+> +
+> +	if (i915_vma_misplaced(vma, 0, 0, addr | flags)) {
+> +		err = -EINVAL;
+> +		goto err_put;
+> +	}
+> +
+> +	expected_vma_size = round_up(size, 1 << (ffs(vma->page_sizes.gtt) - 1));
+> +	expected_node_size = expected_vma_size;
+> +
+> +	if (IS_DG2(vm->i915) && i915_gem_object_is_lmem(obj)) {
+> +		/* dg2 should expand lmem node to 2MB */
+> +		expected_vma_size = round_up(size, I915_GTT_PAGE_SIZE_64K);
+> +		expected_node_size = round_up(size, I915_GTT_PAGE_SIZE_2M);
+> +	}
+> +
+> +	if (vma->size != expected_vma_size || vma->node.size != expected_node_size) {
+> +		err = i915_vma_unbind(vma);
+> +		err = -EBADSLT;
+> +		goto err_put;
+> +	}
+> +
+> +	err = i915_vma_unbind(vma);
+> +	if (err)
+> +		goto err_put;
+> +
+> +	GEM_BUG_ON(drm_mm_node_allocated(&vma->node));
+> +
+> +err_put:
+> +	i915_gem_object_put(obj);
+> +	cleanup_freed_objects(vm->i915);
+> +	return err;
+> +}
+> +
+> +static int misaligned_pin(struct i915_address_space *vm,
+> +			  u64 hole_start, u64 hole_end,
+> +			  unsigned long end_time)
+> +{
+> +	struct intel_memory_region *mr;
+> +	enum intel_region_id id;
+> +	unsigned long flags = PIN_OFFSET_FIXED | PIN_USER;
+> +	int err = 0;
+> +	u64 hole_size = hole_end - hole_start;
+> +
+> +	if (i915_is_ggtt(vm))
+> +		flags |= PIN_GLOBAL;
+> +
+> +	for_each_memory_region(mr, vm->i915, id) {
+> +		u64 min_alignment = i915_vm_min_alignment(vm, id);
+> +		u64 size = min_alignment;
+> +		u64 addr = round_up(hole_start + (hole_size / 2), min_alignment);
+> +
+> +		/* we can't test < 4k alignment due to flags being encoded in lower bits */
+> +		if (min_alignment != I915_GTT_PAGE_SIZE_4K) {
+> +			err = misaligned_case(vm, mr, addr + (min_alignment / 2), size, flags);
+> +			/* misaligned should error with -EINVAL*/
+> +			if (!err)
+> +				err = -EBADSLT;
+> +			if (err != -EINVAL)
+> +				return err;
+> +		}
+> +
+> +		/* test for vma->size expansion to min page size */
+> +		err = misaligned_case(vm, mr, addr, PAGE_SIZE, flags);
+> +		if (min_alignment > hole_size) {
+> +			if (!err)
+> +				err = -EBADSLT;
+> +			else if (err == -ENOSPC)
+> +				err = 0;
+> +		}
+> +		if (err)
+> +			return err;
+> +
+> +		/* test for intermediate size not expanding vma->size for large alignments */
+> +		err = misaligned_case(vm, mr, addr, size / 2, flags);
+> +		if (min_alignment > hole_size) {
+> +			if (!err)
+> +				err = -EBADSLT;
+> +			else if (err == -ENOSPC)
+> +				err = 0;
+> +		}
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int exercise_ppgtt(struct drm_i915_private *dev_priv,
+>  			  int (*func)(struct i915_address_space *vm,
+>  				      u64 hole_start, u64 hole_end,
+> @@ -1135,6 +1251,12 @@ static int igt_ppgtt_shrink_boom(void *arg)
+>  	return exercise_ppgtt(arg, shrink_boom);
+>  }
+>  
+> +static int igt_ppgtt_misaligned_pin(void *arg)
+> +{
+> +	return exercise_ppgtt(arg, misaligned_pin);
+> +}
+> +
+> +
+>  static int sort_holes(void *priv, const struct list_head *A,
+>  		      const struct list_head *B)
+>  {
+> @@ -1207,6 +1329,12 @@ static int igt_ggtt_lowlevel(void *arg)
+>  	return exercise_ggtt(arg, lowlevel_hole);
+>  }
+>  
+> +static int igt_ggtt_misaligned_pin(void *arg)
+> +{
+> +	return exercise_ggtt(arg, misaligned_pin);
+> +}
+> +
+> +
+>  static int igt_ggtt_page(void *arg)
+>  {
+>  	const unsigned int count = PAGE_SIZE/sizeof(u32);
+> @@ -2137,12 +2265,14 @@ int i915_gem_gtt_live_selftests(struct drm_i915_private *i915)
+>  		SUBTEST(igt_ppgtt_fill),
+>  		SUBTEST(igt_ppgtt_shrink),
+>  		SUBTEST(igt_ppgtt_shrink_boom),
+> +		SUBTEST(igt_ppgtt_misaligned_pin),
+>  		SUBTEST(igt_ggtt_lowlevel),
+>  		SUBTEST(igt_ggtt_drunk),
+>  		SUBTEST(igt_ggtt_walk),
+>  		SUBTEST(igt_ggtt_pot),
+>  		SUBTEST(igt_ggtt_fill),
+>  		SUBTEST(igt_ggtt_page),
+> +		SUBTEST(igt_ggtt_misaligned_pin),
+>  		SUBTEST(igt_cs_tlb),
+>  	};
+>  
+> -- 
+> 2.25.1
+> 

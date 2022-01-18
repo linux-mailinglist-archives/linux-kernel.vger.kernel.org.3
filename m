@@ -2,191 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88A04929AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357AD4929B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345827AbiARP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345760AbiARP3F (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:29:05 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D565C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:29:05 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id o14-20020a17090ac08e00b001b4b55792aeso2828311pjs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e8bsxgP9fDmzRuw6qWFf72IvrW3wUmdFHqldah+o4J0=;
-        b=DgzPo6PbYSkA1j3hhsET3Oq6gJO7Ge85+KB+0YOJp42yB32DkAmN6+yPoNo7jt4AlF
-         7yBHl2KWHSndYKakV+L2pdZ0kWButRoYTpQo9PVUHzeInoz+Ul5QXG2TRmwaRqnXSK/X
-         Nia5uKjZth/Gu3L/H+WqqOOTpbFm1NomF1olhKUc4Y0L63FdZGEjN8oZNRsExZAsE7eH
-         xYI2niCY4KfaWhKzpjDFflUiXCVtSHlCXT9Cd+FAD65Rq46sLVku7z+3Z+cZWNCSWP8j
-         NAO91SamqooTdor4AnB/wYQnrRIW5xmEfx7JHscddEtq6dBEnRheDpUTZKWhm408+OSW
-         HTuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e8bsxgP9fDmzRuw6qWFf72IvrW3wUmdFHqldah+o4J0=;
-        b=p1RaelcE8RAhmB71lZEOfApePJzoMcdFeVukaq3bVmYP1QDxbVZkOqyV7f4/xgxIZ5
-         L8oDk/qMcLzei3iHpV4UUCVhIMi1YZ3U/E+b2llrcKvIS9DPobzAB7EqnCceCI6t+TC7
-         WF3P8HTrixvhqG22bO3VG/GbPYH0vwbod8PBtvypmb7upP//PbgOa7cERSiwXYpEN0E5
-         NsGILgFQyca03mfjCyDOfyyCDyaP33AtsASVw5ViHV/t8prbnCqaiS2wllXELihfno8i
-         0jAWwO3R6VXOGs8ELZPBJC243aU0dM0nzeOlzrb4S0YKcuPlsjT82rjSNjT4BEhWm6+n
-         OQNw==
-X-Gm-Message-State: AOAM530lsCxJPd0gBCHsvNPJtCS1x+hjF+fck13E9cORRiDfhPwA4196
-        h4vq0luzcbWWQW1PPWIxWMdC/C1ZhQ9GZF7+5+AFew==
-X-Google-Smtp-Source: ABdhPJxNTswGKXkKxb/QjEvrhY8z2s3/j4H7t9WW/RzQe54opjBvzY70VWm5TRxHTG1OLSt74CJ9s4MQ2Cy1AdyAgCQ=
-X-Received: by 2002:a17:902:ce8f:b0:14a:b9c2:4e5b with SMTP id
- f15-20020a170902ce8f00b0014ab9c24e5bmr10718304plg.132.1642519744882; Tue, 18
- Jan 2022 07:29:04 -0800 (PST)
+        id S1345815AbiARPcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:32:51 -0500
+Received: from marcansoft.com ([212.63.210.85]:58404 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238270AbiARPcs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:32:48 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 02C4A3FA5E;
+        Tue, 18 Jan 2022 15:32:38 +0000 (UTC)
+Subject: Re: [PATCH v3 0/9] misc brcmfmac fixes (M1/T2 series spin-off)
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220117142919.207370-1-marcan@marcan.st>
+ <CAHp75VfRiFokdTQ9cnEEH596mM7cb4FXQk4eXVt37cG4FcFMyA@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <e956e500-a59a-a03b-6be1-c7eca85c8741@marcan.st>
+Date:   Wed, 19 Jan 2022 00:32:36 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
- <20211228080717.10666-2-lizhijian@cn.fujitsu.com> <20220106002130.GP6467@ziepe.ca>
- <bf038e6c-66db-50ca-0126-3ad4ac1371e7@fujitsu.com> <CAPcyv4h2Cuzm_fn9fi9RqQ_iEwOwuc9qdk5x_7W=VXvsOAVPFA@mail.gmail.com>
- <050c3183-2fc6-03a1-eecd-258744750972@fujitsu.com>
-In-Reply-To: <050c3183-2fc6-03a1-eecd-258744750972@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 18 Jan 2022 07:28:54 -0800
-Message-ID: <CAPcyv4h2wiJ+2h8Q9PKOysJ-3bG7N7yDeBucW+jWttUjPXRJ7Q@mail.gmail.com>
-Subject: Re: [RFC PATCH rdma-next 01/10] RDMA: mr: Introduce is_pmem
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
-        "aharonl@nvidia.com" <aharonl@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
-        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAHp75VfRiFokdTQ9cnEEH596mM7cb4FXQk4eXVt37cG4FcFMyA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 12:55 AM lizhijian@fujitsu.com
-<lizhijian@fujitsu.com> wrote:
->
->
->
-> On 17/01/2022 02:11, Dan Williams wrote:
-> > On Wed, Jan 5, 2022 at 10:13 PM lizhijian@fujitsu.com
-> > <lizhijian@fujitsu.com> wrote:
-> >>
-> >> Add Dan to the party :)
-> >>
-> >> May i know whether there is any existing APIs to check whether
-> >> a va/page backs to a nvdimm/pmem ?
-> >>
-> >>
-> >>
-> >> On 06/01/2022 08:21, Jason Gunthorpe wrote:
-> >>> On Tue, Dec 28, 2021 at 04:07:08PM +0800, Li Zhijian wrote:
-> >>>> We can use it to indicate whether the registering mr is associated with
-> >>>> a pmem/nvdimm or not.
-> >>>>
-> >>>> Currently, we only assign it in rxe driver, for other device/drivers,
-> >>>> they should implement it if needed.
-> >>>>
-> >>>> RDMA FLUSH will support the persistence feature for a pmem/nvdimm.
-> >>>>
-> >>>> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
-> >>>>    drivers/infiniband/sw/rxe/rxe_mr.c | 47 ++++++++++++++++++++++++++++++
-> >>>>    include/rdma/ib_verbs.h            |  1 +
-> >>>>    2 files changed, 48 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
-> >>>> index 7c4cd19a9db2..bcd5e7afa475 100644
-> >>>> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
-> >>>> @@ -162,6 +162,50 @@ void rxe_mr_init_dma(struct rxe_pd *pd, int access, struct rxe_mr *mr)
-> >>>>       mr->type = IB_MR_TYPE_DMA;
-> >>>>    }
-> >>>>
-> >>>> +// XXX: the logic is similar with mm/memory-failure.c
-> >>>> +static bool page_in_dev_pagemap(struct page *page)
-> >>>> +{
-> >>>> +    unsigned long pfn;
-> >>>> +    struct page *p;
-> >>>> +    struct dev_pagemap *pgmap = NULL;
-> >>>> +
-> >>>> +    pfn = page_to_pfn(page);
-> >>>> +    if (!pfn) {
-> >>>> +            pr_err("no such pfn for page %p\n", page);
-> >>>> +            return false;
-> >>>> +    }
-> >>>> +
-> >>>> +    p = pfn_to_online_page(pfn);
-> >>>> +    if (!p) {
-> >>>> +            if (pfn_valid(pfn)) {
-> >>>> +                    pgmap = get_dev_pagemap(pfn, NULL);
-> >>>> +                    if (pgmap)
-> >>>> +                            put_dev_pagemap(pgmap);
-> >>>> +            }
-> >>>> +    }
-> >>>> +
-> >>>> +    return !!pgmap;
-> >>> You need to get Dan to check this out, but I'm pretty sure this should
-> >>> be more like this:
-> >>>
-> >>> if (is_zone_device_page(page) && page->pgmap->type == MEMORY_DEVICE_FS_DAX)
-> >> Great, i have added him.
-> >>
-> >>
-> >>
-> >>>
-> >>>> +static bool iova_in_pmem(struct rxe_mr *mr, u64 iova, int length)
-> >>>> +{
-> >>>> +    struct page *page = NULL;
-> >>>> +    char *vaddr = iova_to_vaddr(mr, iova, length);
-> >>>> +
-> >>>> +    if (!vaddr) {
-> >>>> +            pr_err("not a valid iova %llu\n", iova);
-> >>>> +            return false;
-> >>>> +    }
-> >>>> +
-> >>>> +    page = virt_to_page(vaddr);
-> >>> And obviously this isn't uniform for the entire umem, so I don't even
-> >>> know what this is supposed to mean.
-> >> My intention is to check if a memory region belongs to a nvdimm/pmem.
-> >> The approach is like that:
-> >> iova(user space)-+                     +-> page -> page_in_dev_pagemap()
-> >>                    |                     |
-> >>                    +-> va(kernel space) -+
-> >> Since current MR's va is associated with map_set where it record the relations
-> >> between iova and va and page. Do do you mean we should travel map_set to
-> >> get its page ? or by any other ways.
-> > Apologies for the delay in responding.
-> >
-> > The Subject line of this patch is confusing, if you want to know if a
-> > pfn is in persistent memory the only mechanism for that is:
-> >
-> > region_intersects(addr, length, IORESOURCE_MEM, IORES_DESC_PERSISTENT_MEMORY)
-> >
-> > ...there is otherwise nothing pmem specific about the dev_pagemap
-> > infrastructure. Yes, pmem is the primary user, but it is also used for
-> > mapping "soft-reserved" memory (See: the EFI_MEMORY_SP) attribute, and
-> > other users.
-> >
-> > Can you clarify the intent? I am missing some context.
->
-> thanks for your help @Dan
->
-> I'm going to implement a new ibvers called RDMA FLUSH, it will support global visibility
-> and persistence placement type.
->
-> In my first design, only pmem can support persistence placement type, so i need to introduce
-> new attribute is_pmem to RDMA memory region where it associates to a user space address iova
-> so that i can reject a persistence placement type to DRAM(non-pmem).
+On 18/01/2022 19.43, Andy Shevchenko wrote:
+> On Mon, Jan 17, 2022 at 4:30 PM Hector Martin <marcan@marcan.st> wrote:
+>>
+>> Hi everyone,
+>>
+>> This series contains just the fixes / misc improvements from the
+>> previously submitted series:
+>>
+>> brcmfmac: Support Apple T2 and M1 platforms
+>>
+>> Patches 8-9 aren't strictly bugfixes but rather just general
+>> improvements; they can be safely skipped, although patch 8 will be a
+>> dependency of the subsequent series to avoid a compile warning.
+> 
+> Have I given you a tag? If so, I do not see it applied in the patches...
 
-Ok, I think for that case you are better served using the
-IORES_DESC_PERSISTENT_MEMORY designation as the gate for attempting
-the flush. The dev_pagemap is otherwise only indicating the presence
-of device-backed memory pages, not persistence.
+I didn't see any review tags from you in the previous thread. Did I miss
+any?
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

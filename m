@@ -2,96 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB28493038
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E0849304D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349789AbiARVvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 16:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
+        id S1349722AbiARWG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 17:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349696AbiARVvN (ORCPT
+        with ESMTP id S233791AbiARWGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 16:51:13 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA107C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:51:12 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id m1so959041lfq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=JeYoWwfchvNJOmrZgHyYDokoWzu/xjtZKfF1uxEPiY0=;
-        b=4PrA+f6BhxoJRVWv4pzCCp7JcgyL+SZ4Hx2xPu+iqc8A34u9z7lX/pHyhw4ZVJ3DFt
-         LbGrgWmC0g5mCDQAsOWOHwNYYYp4ADtFkqWRqC8zNoEACrugXDGqcCFbslSeGmaphapc
-         VRoLdYETqUAuQ6ftH02tRJRcbUE7gh+LqMqgt8vHBSTJFJV1cWDRXYf5wWXhg4X66fMf
-         yj7kyBw7Oei15CA4t4gjSgqEgim/yFU+OvSCLec/OdteG/CEtvdVKo6BJ6ihGUbBElNR
-         XrQKNfC8Yn2lDXitCsoixlImwxs1QuCIdhPEceXSmTQz4ql/JsKktrwvbGP/aPIptWbj
-         PaTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=JeYoWwfchvNJOmrZgHyYDokoWzu/xjtZKfF1uxEPiY0=;
-        b=qGdR6lxPUWRoLv0VbVHHTXzEMrgiWB8KKHgfzVuNjZgvwuT3UPltK4kiWa5+tzJGSO
-         ymhLyNdAkGUxZ5QMlH5CXCP9Sv68BfwKGkwR8/m8yMFJLXtKA08cDWH7q2hqOLw5le66
-         fzDEJVnoYtf42vZk9z4YDBKut9mHkgQfSum91aR57ge9EnPCVKth8mpp1e7VlGI7eZgW
-         ygfHAqzF4S7hvMYgnG1yraSU9Eo1QDpgpiDck0QRZ1V1IClgm1d46qiPhI2TfvqIIg+o
-         D1L+ox79ZwlFdw8ZrUKpBuy8YAtBg/CtKLCxbH9kqJ7YbjksuTkbyTnwQWM8LLxvI0OG
-         kL8Q==
-X-Gm-Message-State: AOAM530SeY5WdbxK+zybpKsqMqsWX8AzeWpi/GOeS7nPe9Vh0f6PTomi
-        gGEeoljHq2CvkWPnGGuxiwCwXA==
-X-Google-Smtp-Source: ABdhPJwG2GbqbOuxYvUygDn3T+Khl6cMcmtGwzlWfulo6HUOsG2urxLos90dWacYQlHql3n4YGYpag==
-X-Received: by 2002:ac2:531a:: with SMTP id c26mr22724055lfh.356.1642542671173;
-        Tue, 18 Jan 2022 13:51:11 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id w5sm1704808ljm.55.2022.01.18.13.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 13:51:10 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Timur Tabi <timur@freescale.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net 4/4] net/fsl: xgmac_mdio: Fix incorrect iounmap when removing module
-Date:   Tue, 18 Jan 2022 22:50:53 +0100
-Message-Id: <20220118215054.2629314-5-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220118215054.2629314-1-tobias@waldekranz.com>
-References: <20220118215054.2629314-1-tobias@waldekranz.com>
+        Tue, 18 Jan 2022 17:06:54 -0500
+X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Jan 2022 14:06:53 PST
+Received: from forward105p.mail.yandex.net (forward105p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CD2C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:06:53 -0800 (PST)
+Received: from myt5-bc23fd5efdaf.qloud-c.yandex.net (myt5-bc23fd5efdaf.qloud-c.yandex.net [IPv6:2a02:6b8:c12:3ca5:0:640:bc23:fd5e])
+        by forward105p.mail.yandex.net (Yandex) with ESMTP id 43EF12FD90E3;
+        Wed, 19 Jan 2022 01:00:18 +0300 (MSK)
+Received: from myt5-aad1beefab42.qloud-c.yandex.net (myt5-aad1beefab42.qloud-c.yandex.net [2a02:6b8:c12:128:0:640:aad1:beef])
+        by myt5-bc23fd5efdaf.qloud-c.yandex.net (mxback/Yandex) with ESMTP id bKW5jXpdf8-0HfuKpqi;
+        Wed, 19 Jan 2022 01:00:18 +0300
+Authentication-Results: myt5-bc23fd5efdaf.qloud-c.yandex.net; dkim=pass
+Received: by myt5-aad1beefab42.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id feV44VOHqO-0FQCUuPl;
+        Wed, 19 Jan 2022 01:00:16 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Yaroslav Bolyukin <iam@lach.pw>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Yaroslav Bolyukin <iam@lach.pw>
+Subject: [PATCH] drm/edid: Support type 7 timings
+Date:   Wed, 19 Jan 2022 00:59:56 +0300
+Message-Id: <20220118215956.17229-1-iam@lach.pw>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Organization: Westermo
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by sparse: In the remove path, the driver would attempt to
-unmap its own priv pointer - instead of the io memory that it mapped
-in probe.
+Per VESA DisplayID Standard v2.0: Type VII Timing – Detailed Timing Data
 
-Fixes: 9f35a7342cff ("net/fsl: introduce Freescale 10G MDIO driver")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Definitions were already provided as type I, but not used
+
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
 ---
- drivers/net/ethernet/freescale/xgmac_mdio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/drm_edid.c  | 26 +++++++++++++++++---------
+ include/drm/drm_displayid.h |  6 +++---
+ 2 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/xgmac_mdio.c b/drivers/net/ethernet/freescale/xgmac_mdio.c
-index bf566ac3195b..266e562bd67a 100644
---- a/drivers/net/ethernet/freescale/xgmac_mdio.c
-+++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
-@@ -331,9 +331,10 @@ static int xgmac_mdio_probe(struct platform_device *pdev)
- static int xgmac_mdio_remove(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index 12893e7be..5fcefd9b5 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -5404,13 +5404,17 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ 	return quirks;
+ }
+ 
+-static struct drm_display_mode *drm_mode_displayid_detailed(struct drm_device *dev,
+-							    struct displayid_detailed_timings_1 *timings)
++static struct drm_display_mode *drm_mode_displayid_detailed_1_7(struct drm_device *dev,
++								struct displayid_detailed_timings_1_7 *timings,
++								bool type_7)
  {
- 	struct mii_bus *bus = platform_get_drvdata(pdev);
-+	struct mdio_fsl_priv *priv = bus->priv;
+ 	struct drm_display_mode *mode;
+ 	unsigned pixel_clock = (timings->pixel_clock[0] |
+ 				(timings->pixel_clock[1] << 8) |
+ 				(timings->pixel_clock[2] << 16)) + 1;
++	// type 7 allows higher precision pixel clock
++	if (!type_7)
++		pixel_clock *= 10;
+ 	unsigned hactive = (timings->hactive[0] | timings->hactive[1] << 8) + 1;
+ 	unsigned hblank = (timings->hblank[0] | timings->hblank[1] << 8) + 1;
+ 	unsigned hsync = (timings->hsync[0] | (timings->hsync[1] & 0x7f) << 8) + 1;
+@@ -5426,7 +5430,7 @@ static struct drm_display_mode *drm_mode_displayid_detailed(struct drm_device *d
+ 	if (!mode)
+ 		return NULL;
  
- 	mdiobus_unregister(bus);
--	iounmap(bus->priv);
-+	iounmap(priv->mdio_base);
- 	mdiobus_free(bus);
+-	mode->clock = pixel_clock * 10;
++	mode->clock = pixel_clock;
+ 	mode->hdisplay = hactive;
+ 	mode->hsync_start = mode->hdisplay + hsync;
+ 	mode->hsync_end = mode->hsync_start + hsync_width;
+@@ -5449,10 +5453,12 @@ static struct drm_display_mode *drm_mode_displayid_detailed(struct drm_device *d
+ 	return mode;
+ }
  
- 	return 0;
+-static int add_displayid_detailed_1_modes(struct drm_connector *connector,
+-					  const struct displayid_block *block)
++static int add_displayid_detailed_1_7_modes(struct drm_connector *connector,
++					    const struct displayid_block *block,
++					    bool type_7)
+ {
+-	struct displayid_detailed_timing_block *det = (struct displayid_detailed_timing_block *)block;
++	struct displayid_detailed_timing_1_7_block *det =
++		(struct displayid_detailed_timing_1_7_block *)block;
+ 	int i;
+ 	int num_timings;
+ 	struct drm_display_mode *newmode;
+@@ -5463,9 +5469,9 @@ static int add_displayid_detailed_1_modes(struct drm_connector *connector,
+ 
+ 	num_timings = block->num_bytes / 20;
+ 	for (i = 0; i < num_timings; i++) {
+-		struct displayid_detailed_timings_1 *timings = &det->timings[i];
++		struct displayid_detailed_timings_1_7 *timings = &det->timings[i];
+ 
+-		newmode = drm_mode_displayid_detailed(connector->dev, timings);
++		newmode = drm_mode_displayid_detailed_1_7(connector->dev, timings, type_7);
+ 		if (!newmode)
+ 			continue;
+ 
+@@ -5485,7 +5491,9 @@ static int add_displayid_detailed_modes(struct drm_connector *connector,
+ 	displayid_iter_edid_begin(edid, &iter);
+ 	displayid_iter_for_each(block, &iter) {
+ 		if (block->tag == DATA_BLOCK_TYPE_1_DETAILED_TIMING)
+-			num_modes += add_displayid_detailed_1_modes(connector, block);
++			num_modes += add_displayid_detailed_1_7_modes(connector, block, false);
++		else if (block->tag == DATA_BLOCK_2_TYPE_7_DETAILED_TIMING)
++			num_modes += add_displayid_detailed_1_7_modes(connector, block, true);
+ 	}
+ 	displayid_iter_end(&iter);
+ 
+diff --git a/include/drm/drm_displayid.h b/include/drm/drm_displayid.h
+index 7ffbd9f7b..268ff5e1f 100644
+--- a/include/drm/drm_displayid.h
++++ b/include/drm/drm_displayid.h
+@@ -111,7 +111,7 @@ struct displayid_tiled_block {
+ 	u8 topology_id[8];
+ } __packed;
+ 
+-struct displayid_detailed_timings_1 {
++struct displayid_detailed_timings_1_7 {
+ 	u8 pixel_clock[3];
+ 	u8 flags;
+ 	u8 hactive[2];
+@@ -124,9 +124,9 @@ struct displayid_detailed_timings_1 {
+ 	u8 vsw[2];
+ } __packed;
+ 
+-struct displayid_detailed_timing_block {
++struct displayid_detailed_timing_1_7_block {
+ 	struct displayid_block base;
+-	struct displayid_detailed_timings_1 timings[];
++	struct displayid_detailed_timings_1_7 timings[];
+ };
+ 
+ #define DISPLAYID_VESA_MSO_OVERLAP	GENMASK(3, 0)
+
+base-commit: 99613159ad749543621da8238acf1a122880144e
 -- 
-2.25.1
+2.34.1
 

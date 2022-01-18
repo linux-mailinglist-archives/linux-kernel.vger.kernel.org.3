@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC54D49298B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2249549298C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345380AbiARPTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:19:14 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:40340 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233767AbiARPTH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:19:07 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1n9qG7-0006C3-8I; Tue, 18 Jan 2022 16:18:55 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>, Alex Bee <knaerzche@gmail.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alex Bee <knaerzche@gmail.com>
-Subject: Re: [PATCH 0/4] add GPU for RK356x SoCs
-Date:   Tue, 18 Jan 2022 16:18:54 +0100
-Message-ID: <6645896.O1m7UbTlE4@diego>
-In-Reply-To: <20211126151729.1026566-1-knaerzche@gmail.com>
-References: <20211126151729.1026566-1-knaerzche@gmail.com>
+        id S1345373AbiARPTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235984AbiARPTI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:19:08 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9C2C061574;
+        Tue, 18 Jan 2022 07:19:08 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id e13so1439724pjl.2;
+        Tue, 18 Jan 2022 07:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=a1w+cgfBvHMi9BSk7YOfIx7gMi8ZSEfjap/hRbKJAZY=;
+        b=a6+N+z3LLL2eIpR6WMmFOPvoCgz/iOjSgoB63GSSoa+UG8BYbejMfFFMAHu4axXd5L
+         OCU1a03+GeDekipQgtBjfs3n2ynCKf2M2a0niiJY/f2RyY+wdyxZSVMY8jDRfGF4sVF0
+         gl7aD7LD4HOwpe8tvJGY/uMRQvI0t3YhsUG5DVVEKORRIWk2R9CRzK/joW0XaDuomVyO
+         snu29ssZBszP9oRfDKR3eQA6aYq9zv9CC8kz7+x96/sjL0xAU3yu3d4QV7N3wAGI41LD
+         GMTO6x3MQKXmOdceCAXsAjQ4wvn5pOy7ElkfeViPl8MR/JotY+WUzrsnW1BQoMjwCxLf
+         ALIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=a1w+cgfBvHMi9BSk7YOfIx7gMi8ZSEfjap/hRbKJAZY=;
+        b=CUUMVeWurRUVkJaGHNbC+5LcdF+nXpxr1kgiQcIgmFAjr3EopHFeJpBzORf5b1sjcI
+         6hJB6FShKrtj1/cRPYOWDcoPJnYpkZhf/5/p7a/t9Zg10OPa0vVa3KUuLmXhpmGLCr+S
+         5sir2GzAEpjyExBrtKovlI5aQPjeGF5AsP83HuBhJ6zuejGFV0lfrLA7YXsp3U6d0XLE
+         DwdlOju2b/SXyN4uPfNDRxuE433wK0ByNUQcE3OGsQrETlOZVGF9CY3Vsk/OAiQ4PsKc
+         ZRg2t8ewhdkQ8ZWEG635f7oDONlT0l28Kaa8tCnmAQM/WbzE56mEfm27cklavRYdgZRO
+         Io+Q==
+X-Gm-Message-State: AOAM531jHfWUaHF0q+GkfGZDuiZ6dfuU68env1PcGitiVbPHnAbGoW/N
+        wPsGL+rOsRG5MJeXrgN/oM0=
+X-Google-Smtp-Source: ABdhPJxJ96loOG/L3H86yKOUymJkuNBWxl27xmbjSYhAUHWsRK6N70bxzJ3yOVW1skk9NZK36Ujyvw==
+X-Received: by 2002:a17:90b:3892:: with SMTP id mu18mr13349099pjb.51.1642519147804;
+        Tue, 18 Jan 2022 07:19:07 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id t3sm18724613pfj.137.2022.01.18.07.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 07:19:07 -0800 (PST)
+Date:   Tue, 18 Jan 2022 07:19:04 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     cgel.zte@gmail.com
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] drivers/net/phy/dp83640: remove unneeded val variable
+Message-ID: <20220118151904.GA31192@hoboy.vegasvil.org>
+References: <20220118075438.925768-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118075438.925768-1-chi.minghao@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On Tue, Jan 18, 2022 at 07:54:38AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Return value from phy_read() directly instead
+> of taking this in another redundant variable.
 
-Am Freitag, 26. November 2021, 16:17:25 CET schrieb Alex Bee:
-> This is a respin of Ezequiel's series which adds GPU for RK3568 [0]:
-> 
-> > I've decided to split the GPU off previous series:
+NAK this is purely cosmetic and not clearly better WRT CodingStyle.
+ 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-do you plan on a respin for Rob's comments?
+Please make your robot less zealous or filter its results before
+posting.
 
-Thanks
-Heiko
+This is the second time I told you.  It isn't wise to ignore feedback,
+and it is also rude.
 
-> >
-> > https://lore.kernel.org/linux-rockchip/2147216.TLkxdtWsSY@diego/
-> >
-> > This series now contains only the GPU support, as the VPU
-> > needs a tiny rework.
-> >
-> > This is compiled tested only, in this case. Similar patches
-> > have been tested on a v5.10-based kernel, so I'd say it's good
-> > to go.
-> >
-> > The mesa side is merged https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/10771
-> > and can be tested without a display, using something like weston --backend=headless-backend.so,
-> > which provides an environment for GL to work.
-> 
-> I hope to have resolved all DT-binding issues and added cooling map and trip points
-> which can make the GPU a cooling device.
-> 
-> Tested with mesa 21.3.0 on quartz64-a board.
-> 
-> [0] https://patchwork.kernel.org/project/linux-rockchip/list/?series=526661
-> 
-> Alex Bee (2):
->   dt-bindings: gpu: mali-bifrost: Allow up to two clocks
->   arm64: dts: rockchip: Add cooling map / trip points for RK356x' GPU
-> 
-> Ezequiel Garcia (2):
->   arm64: dts: rockchip: Add GPU node for rk3568
->   arm64: dts: rockchip: Enable the GPU on Quartz64 Model A
-> 
->  .../bindings/gpu/arm,mali-bifrost.yaml        | 20 ++++-
->  .../boot/dts/rockchip/rk3566-quartz64-a.dts   |  5 ++
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 77 +++++++++++++++++++
->  3 files changed, 101 insertions(+), 1 deletion(-)
-> 
-> 
-
-
-
-
+Thanks,
+Richard

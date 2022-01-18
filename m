@@ -2,162 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D27D49276B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AC949276F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242424AbiARNsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 08:48:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33087 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232839AbiARNr7 (ORCPT
+        id S242959AbiARNsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 08:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242543AbiARNs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:47:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642513678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pjtxi7RqCOzG980gOImaPYpuRa/0jydsSGVWCWHzEsQ=;
-        b=eAiYhzxovnlTT3vzIpt0Tbn/3Ya8/OGNCjS3jxwMj1qOo4N4iOyg/HmuM2MBIM+dChUqE3
-        hfj3VpdY/uHY2VgtlwoLMwJH09U4G2rYrZY5oW+wV5u03oWcbKX8uR3OwRab4nGKCNSLPW
-        ngEm49vZVsbh1+DbmOUck5+iJTRBzwo=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-JsuwgnkBM_CcNltiS1HzUg-1; Tue, 18 Jan 2022 08:47:57 -0500
-X-MC-Unique: JsuwgnkBM_CcNltiS1HzUg-1
-Received: by mail-qv1-f70.google.com with SMTP id kk29-20020a056214509d00b0041c9228d334so5919921qvb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 05:47:57 -0800 (PST)
+        Tue, 18 Jan 2022 08:48:28 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B4BC06161C;
+        Tue, 18 Jan 2022 05:48:27 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id br17so70910855lfb.6;
+        Tue, 18 Jan 2022 05:48:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=17MkQ+D7lcIHENLUZkNE+Wb1M6GLIW0KLmLfLfpyKuY=;
+        b=mvTY0w/pN5vJRbVPnoOMSXYgEs0lE5GlWlKV8Luv12ObuBtRxvt7RXJeD2Z0aNH3ce
+         PPMNmQnjVcQOy6g/N73ELDWzPO5QURYj60f7BWVvl2JFCrM8hDCL+Ou6UqO4dWJASTUE
+         p85+YBd1DD4XiFG9c5igQlX+SSZ84TaUlM8j3MmOtnbCR9w97IzXpN0PdmXOAVK/gJoL
+         zMTZ4Ev4EBM5S9UF3Hcub3rkfkbGCeruG6b3ZVGf1C0ZgonWKEWOweucqUJ3XJ7ILIMM
+         iuW8AwkGSe5KaKLAHljj1SOLuHXp8YxWfy0G2Edb0RGSiya/37yP/b5x0O9rPqBNAzXr
+         kcsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Pjtxi7RqCOzG980gOImaPYpuRa/0jydsSGVWCWHzEsQ=;
-        b=JzNFRL6NG17IzVprNHjMVDwldKGFrqNShDA6dWhgpZL2pdrNeHdS/t9aW5l2icb7of
-         tuXdrKikkl+YleFzvBavajkMc6XgJhLvjO3XK+f/a8oLApPsKP5CEuIlczyYHh2t2NUU
-         C9+BEGEEEUeLZJo+V+7Up3BHkJ+I9NMHhIkSzX1Txygz4qwxQGFuwfVSGulzjI+GA7PB
-         RrhbE3DUME/1aVLUYo3r2EpoOUjc01jQ7aG+QpqpY1JlpRhZb/8rW7598TpmoBjHbjWp
-         wjaKlrOhDGOYl3nAjjCc14fdJZykJ83ga7XBO4fFFb4w+zO8YASwRdnWuhy6MkUpsMDo
-         b1pA==
-X-Gm-Message-State: AOAM533YS9fT05KRMO/lIDnwn/arKP2p+JqaGTra3fKnSNatgs7rBJFy
-        18htoQVM8pWjw+MLlrM0zz0ZdCJBmB2ke+QxEnbKoseD4fnHH9yEMODslFJ8kjcfBJsDihj9EOp
-        9+tfHP/M5R6oavz2C1GOjBMLj
-X-Received: by 2002:a05:620a:4707:: with SMTP id bs7mr10579012qkb.69.1642513676534;
-        Tue, 18 Jan 2022 05:47:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzv6HnzjHuT5N1t1EC9wxx1PTYBX6bmSt1ApjuQU+Hkt1OpfbXesU08UCU1CJZIzmlhr0LmNA==
-X-Received: by 2002:a05:620a:4707:: with SMTP id bs7mr10578995qkb.69.1642513676274;
-        Tue, 18 Jan 2022 05:47:56 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id m8sm3842981qkp.93.2022.01.18.05.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 05:47:55 -0800 (PST)
-Date:   Tue, 18 Jan 2022 08:47:53 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YebFCeLcbziyMjbA@bfoster>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
- <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
- <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=17MkQ+D7lcIHENLUZkNE+Wb1M6GLIW0KLmLfLfpyKuY=;
+        b=C69E5gk22bWcOcu7SHgSG1kbiNeKsaLUDpvqULxcpjrKX2SO7yPZS3inaMw1PHHxNo
+         i29llskcmsY69uM4SPrX5Eokn6nG2bd2El9ftc6pb06UUssgx3Y9MbKWG9Dz3deyTzpd
+         0tuvUeoO7eF4PkyT3uqRbF+pyU6kG8izgOFWSOmrErCLzYqjuVrc0nUaNPQSyIB6bgeb
+         VQP8qhOswOfnRyLtSUnYh7kmDMwqdoHIWDjjLsPOVJvVotCKkzyZnLdcK+bBGPdeRbH+
+         5HWq16GlyC91ptFGuZLW97bk6umuwwMCDTNIhaEMRYV2MavGBZJaLVAkFRQ194EXfMt4
+         ihYw==
+X-Gm-Message-State: AOAM532SCUlKmsfxYNHpIxl7lhuGrI3xA9jxTQamRNqZ1glnx6OO5KeG
+        OIgxo3R3+OOSQmmRY8tOPzE=
+X-Google-Smtp-Source: ABdhPJy5tJQ9AnqnDnEzUgBVyJTQX64dfrMfnDFOnHwhm/zxWsZZI0QlLSJNsTEqxIim+EyvlBxJ6g==
+X-Received: by 2002:a05:651c:171c:: with SMTP id be28mr20262368ljb.183.1642513705172;
+        Tue, 18 Jan 2022 05:48:25 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id t13sm1625887lji.57.2022.01.18.05.48.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 05:48:24 -0800 (PST)
+Message-ID: <683a71b1-049a-bddf-280d-5d5141b59686@gmail.com>
+Date:   Tue, 18 Jan 2022 16:48:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v16 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1641830718-23650-1-git-send-email-akhilrajeev@nvidia.com>
+ <1641830718-23650-3-git-send-email-akhilrajeev@nvidia.com>
+ <16c73e83-b990-7d8e-ddfd-7cbbe7e407ea@gmail.com>
+ <DM5PR12MB1850A5F5ABA9CD5D04C37086C0579@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <1db14c3d-6a96-96dd-be76-b81b3a48a2b1@gmail.com>
+ <DM5PR12MB1850FF1DC4DC1714E31AADB5C0589@DM5PR12MB1850.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <DM5PR12MB1850FF1DC4DC1714E31AADB5C0589@DM5PR12MB1850.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 01:32:23AM +0000, Al Viro wrote:
-> On Mon, Jan 17, 2022 at 07:48:49PM +0000, Al Viro wrote:
-> > > But that critically depends upon the contents not getting mangled.  If it
-> > > *can* be screwed by such unlink, we risk successful lookup leading to the
-> > > wrong place, with nothing to tell us that it's happening.  We could handle
-> > > that by adding a check to fs/namei.c:put_link(), and propagating the error
-> > > to callers.  It's not impossible, but it won't be pretty.
-> > > 
-> > > And that assumes we avoid oopsen on string changing under us in the first
-> > > place.  Which might or might not be true - I hadn't finished the audit yet.
-> > > Note that it's *NOT* just fs/namei.c + fs/dcache.c + some fs methods -
-> > > we need to make sure that e.g. everything called by ->d_hash() instances
-> > > is OK with strings changing right under them.  Including utf8_to_utf32(),
-> > > crc32_le(), utf8_casefold_hash(), etc.
-> > 
-> > And AFAICS, ext4, xfs and possibly ubifs (I'm unfamiliar with that one and
-> > the call chains there are deep enough for me to miss something) have the
-> > "bugger the contents of string returned by RCU ->get_link() if unlink()
-> > happens" problem.
-> > 
-> > I would very much prefer to have them deal with that crap, especially
-> > since I don't see why does ext4_evict_inode() need to do that memset() -
-> > can't we simply check ->i_op in ext4_can_truncate() and be done with
-> > that?
+18.01.2022 08:36, Akhil R пишет:
+>> 17.01.2022 10:02, Akhil R пишет:
+>>>> 10.01.2022 19:05, Akhil R пишет:
+>>>>> +static int tegra_dma_terminate_all(struct dma_chan *dc)
+>>>>> +{
+>>>>> +     struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+>>>>> +     unsigned long flags;
+>>>>> +     LIST_HEAD(head);
+>>>>> +     int err;
+>>>>> +
+>>>>> +     if (tdc->dma_desc) {
+>>>>
+>>>> Needs locking protection against racing with the interrupt handler.
+>>> tegra_dma_stop_client() waits for the in-flight transfer
+>>> to complete and prevents any additional transfer to start.
+>>> Wouldn't it manage the race? Do you see any potential issue there?
+>>
+>> You should consider interrupt handler like a process running in a
+>> parallel thread. The interrupt handler sets tdc->dma_desc to NULL, hence
+>> you'll get NULL dereference in tegra_dma_stop_client().
 > 
-> This reuse-without-delay has another fun side, AFAICS.  Suppose the new use
-> for inode comes with the same ->i_op (i.e. it's a symlink again) and it
-> happens right after ->get_link() has returned the pointer to body.
+> Is it better if I remove the below part from tegra_dma_stop_client() so
+> that dma_desc is not accessed at all?
 > 
-
-Yep, I had reproduced this explicitly when playing around with some
-instrumented delays and whatnot in the code. This and the similar
-variant of just returning internal/non-string data fork metadata via
-->get_link() is why I asked to restore old behavior of returning -ECHILD
-for inline symlinks.
-
-> We are already past whatever checks we might add in pick_link().  And the
-> pointer is still valid.  So we end up quietly traversing the body of
-> completely unrelated symlink that never had been anywhere near any directory
-> we might be looking at.  With no indication of anything going wrong - just
-> a successful resolution with bogus result.
+> +	wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
+> +	tdc->dma_desc->bytes_transferred +=
+> +			tdc->dma_desc->bytes_requested - (wcount * 4);
 > 
-> Could XFS folks explain what exactly goes wrong if we make actual marking
-> inode as ready for reuse RCU-delayed, by shifting just that into
-> ->free_inode()?  Why would we need any extra synchronize_rcu() anywhere?
-> 
+> Because I don't see a point in updating the value there. dma_desc is set
+> to NULL in the next step in terminate_all() anyway.
 
-Dave already chimed in on why we probably don't want ->free_inode()
-across the board. I don't think there's a functional problem with a more
-selective injection of an rcu delay on the INACTIVE -> RECLAIMABLE
-transition, based on the reasoning specified earlier (i.e., the iget
-side already blocks on INACTIVE, so it's just a matter of a longer
-delay).
-
-Most of that long thread I previously linked to was us discussing pretty
-much how to do something like that with minimal performance impact. The
-experiment I ran to measure performance was use of queue_rcu_work() for
-inactive inode processing. That resulted in a performance hit to single
-threaded sequential file removal, but could be mitigated by increasing
-the queue size (which may or may not have other side effects). Dave
-suggested a more async approach to track the current grace period in the
-inode and refer to it at lookup/alloc time, but that is notably more
-involved and isn't clear if/how much it mitigates rcu delays.
-
-IIUC, your thought here is to introduce an rcu delay on the destroy
-side, but after the inactive processing rather than before it (as my
-previous experiment did). IOW, basically invoke
-xfs_inodegc_set_reclaimable() as an rcu callback via
-xfs_inodegc_worker(), yes? If so, that seems like a potentially
-reasonable option to me since it pulls the delay out of the inactivation
-processing pipeline. I suspect the tradeoff with that is it might be
-slightly less efficient than doing it earlier because we've lost any
-grace period transitions that have occurred since before the inode was
-queued and processed, but OTOH this might isolate the impact of that
-delay to the inode reuse path. Maybe there's room for a simple
-optimization there in cases where a gp may have expired already since
-the inode was first queued. Hmm.. maybe I'll give that a try to see
-if/how much impact there may be on an inode alloc/free workload..
-
-Brian
-
+That isn't going help you much because you also can't release DMA
+descriptor while interrupt handler still may be running and using that
+descriptor.

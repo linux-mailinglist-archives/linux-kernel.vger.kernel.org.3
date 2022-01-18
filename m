@@ -2,151 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EBB492B4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47147492B4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243835AbiARQeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:34:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21944 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241327AbiARQeR (ORCPT
+        id S244495AbiARQdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244047AbiARQdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:34:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642523656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NDRBcK1YMu+yeTrzNGtn5hFI5coY1/6IuTgKRbLDusA=;
-        b=XqdO2MUrFT1vx7BrZi8XrvNOiOLtjjOflKyqEAEfqTi/v291pbV0MAOw5sCuGN29KFU4AZ
-        F0Dxdxjev8uP5wMbPHaZ2oMRxkF9mqkPerxQlI8IwxbMsaUtQ8/n6k7RFz2w0uMnDMcruI
-        dowbnuHIxVQZVWTtM1ZLKIiXf7oKDRU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-502-K2KYBKmrPvmKPmNdnjHzkw-1; Tue, 18 Jan 2022 11:34:15 -0500
-X-MC-Unique: K2KYBKmrPvmKPmNdnjHzkw-1
-Received: by mail-wm1-f72.google.com with SMTP id n19-20020a05600c501300b0034d7b01ae4dso253458wmr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 08:34:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=NDRBcK1YMu+yeTrzNGtn5hFI5coY1/6IuTgKRbLDusA=;
-        b=xL3S8cD6bEzBEeWxZDyrNjluEM061g5Fo25XcfS/j5Co1RrFG6Xqt+iPiVtSrJ83b7
-         jT7Sos2DCS9Cr09yVjXgSSrFt9cw0o/F+cJwumrxM4ZlZ8HisqQIJZRlRwV9pwdNZD6A
-         0Ue/aC/UGYSPFaY6ZuOgXNChWxk1PH27oAzX3BwM5tUSzMgR82lMApI08Y/ArfbQEcyb
-         UOa/cexhJGHPzDTwyTY5/ypDHnhrmiQivDFCrPH9VVDyAzKh/XYFL1bSfMhBGDPvl+hy
-         IKLhYBpaRTcqHVAT8kOJFb0HGj0OsHWVIqodNb8gV280cG1cjqa1KFzvh1JNqzmXVfiI
-         AZlw==
-X-Gm-Message-State: AOAM5337/hR3Op1VbPNxkNcJxzXfut69wfI0KJk+Uv5tZUJznbeNz8HS
-        UN5A6QkxqZa6q463siAC7WdrxhZPX1qkaP9r2PrEHDDU4izwiWq/FjO8FMeYDf0PNdk4BnMEHHV
-        ffErzub0DJkts3E8fKrZOyAHm2QOKXBMgB7PdnsWMaPC9qZZ/zS/g8F6TdoJWslg8QyC3AhmQzX
-        Bh
-X-Received: by 2002:adf:fc90:: with SMTP id g16mr25634961wrr.699.1642523651258;
-        Tue, 18 Jan 2022 08:34:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxakAAHpFv9j8JH43Ek867/dZJS9LmnS10c9F0qAH99L9AYcFIRgVmADvv/nkkqfUuJfrraNg==
-X-Received: by 2002:adf:fc90:: with SMTP id g16mr25634925wrr.699.1642523650947;
-        Tue, 18 Jan 2022 08:34:10 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id o5sm2743792wmc.39.2022.01.18.08.34.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 08:34:10 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] KVM: x86: Partially allow KVM_SET_CPUID{,2}
- after KVM_RUN for CPU hotplug
-In-Reply-To: <20220118153531.11e73048@redhat.com>
-References: <20220117150542.2176196-1-vkuznets@redhat.com>
- <20220118153531.11e73048@redhat.com>
-Date:   Tue, 18 Jan 2022 17:34:09 +0100
-Message-ID: <87ee55knpa.fsf@redhat.com>
+        Tue, 18 Jan 2022 11:33:16 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDEBC06173F;
+        Tue, 18 Jan 2022 08:33:14 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id D1D162000A;
+        Tue, 18 Jan 2022 16:33:10 +0000 (UTC)
+Date:   Tue, 18 Jan 2022 17:34:13 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] media: dt-bindings: media: renesas,csi2: Update
+ data-lanes property
+Message-ID: <20220118163413.ge2b4g75yhfqvq3x@uno.localdomain>
+References: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain>
+ <CA+V-a8t=f14QH=M8p8mufeJsqddwOn6XPqFma5TEbfQ7XdLBZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8t=f14QH=M8p8mufeJsqddwOn6XPqFma5TEbfQ7XdLBZA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Igor Mammedov <imammedo@redhat.com> writes:
+Hi Prabhakar
 
-> On Mon, 17 Jan 2022 16:05:38 +0100
-> Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+On Tue, Jan 18, 2022 at 09:11:42AM +0000, Lad, Prabhakar wrote:
+> Hi Jacopo,
 >
->> Changes since v1:
->> - Drop the allowlist of items which were allowed to change and just allow
->> the exact same CPUID data [Sean, Paolo]. Adjust selftest accordingly.
->> - Drop PATCH1 as the exact same change got merged upstream.
->> 
->> Recently, KVM made it illegal to change CPUID after KVM_RUN but
->> unfortunately this change is not fully compatible with existing VMMs.
->> In particular, QEMU reuses vCPU fds for CPU hotplug after unplug and it
->> calls KVM_SET_CPUID2. Relax the requirement by implementing an allowing
->> KVM_SET_CPUID{,2} with the exact same data.
+> Thank you for the review.
 >
+> On Mon, Jan 17, 2022 at 8:11 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
+> >
+> > Hello Prabhakar,
+> >
+> > On Thu, Jan 13, 2022 at 10:32:14AM +0000, Lad Prabhakar wrote:
+> > > CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
+> > > handled by rcar-csi2.c driver. This patch updates the data-lanes property
+> > > to describe the same.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > >  .../devicetree/bindings/media/renesas,csi2.yaml          | 9 ++++++++-
+> > >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > index e6a036721082..064a0a4c5737 100644
+> > > --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > @@ -67,7 +67,14 @@ properties:
+> > >                  maxItems: 1
+> > >
+> > >                data-lanes:
+> > > -                maxItems: 1
+> > > +                items:
+> > > +                  minItems: 1
+> > > +                  maxItems: 4
+> > > +                  items:
+> > > +                    - const: 1
+> > > +                    - const: 2
+> > > +                    - const: 3
+> > > +                    - const: 4
+> >
+> > Seeing "maxItems: 1" there confuses me too, as the property is an
+> > array of data-lanes, but I'm afraid your change does not what you
+> > intend as it would allow you to specify the number of data lanes as an
+> > integer rather than as an array.
+> >
+> Agreed, what do you think of the below instead?
 >
-> Can you check following scenario:
->  * on host that has IA32_TSX_CTRL and TSX enabled (RTM/HLE cpuid bits present)
->  * boot 2 vcpus VM with TSX enabled on VMM side but with tsx=off on kernel CLI
+>             properties:
+>               data-lanes:
+>                 minItems: 1
+>                 maxItems: 4
+>                 items:
+>                   maximum: 4
 >
->      that should cause kernel to set MSR_IA32_TSX_CTRL to 3H from initial 0H
->      and clear RTM+HLE bits in CPUID, check that RTM/HLE cpuid it
->      cleared
 
-Forgive me my ignorance around (not only) TSX :-) I took a "Intel(R)
-Xeon(R) CPU E3-1270 v5 @ 3.60GHz" host which seems to have rtm/hle and
-booted a guest with 'cpu=host' and with (and without) 'tsx=off' on the
-kernel command line. I decided to check what's is MSR_IA32_TSX_CTRL but
-I see the following:
+Sorry, I should have read your reply first :)
+even better with your suggested uniqueItems
 
-# rdmsr 0x122
-rdmsr: CPU 0 cannot read MSR 0x00000122
+> The above should handle all the possible mix and match of the lanes.
+>
+> > I think it would probably be correct to set
+> >
+> >                 data-lanes: true
+> >
+> > (maybe maxItems: 1 is correct already)
+> >
+> > And restrict the number of valid combinations in the board DTS file
+> > with a construct like:
+> >
+> >     data-lanes:
+> >       oneOf:
+> >         - items:
+> >             - const: 1
+> >             - const: 2
+> >             - const: 3
+> >             - const: 4
+> >         - items:
+> >             - const: 1
+> >             - const: 2
+> >
+> I haven't come across dts files having such constraints is it allowed,
+> could you point me to a example.
 
-I tried adding 'tsx_ctrl' to my QEMU command line but it complains with
-qemu-system-x86_64: warning: host doesn't support requested feature: MSR(10AH).tsx-ctrl [bit 7]
+I see some
 
-so I think my host is not good enough :-(
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-        properties:
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml:          data-lanes:
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-            oneOf:
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-              - items:
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-                  - const: 1
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-                  - const: 2
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-                  - const: 3
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-                  - const: 4
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-              - items:
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-                  - const: 1
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-                  - const: 2
+Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml-
 
-Also, I've looked at tsx_clear_cpuid() but it actually writes to
-MSR_TSX_FORCE_ABORT MSR (0x10F), not MSR_IA32_TSX_CTRL so I'm confused.
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-        properties:
+Documentation/devicetree/bindings/media/i2c/imx258.yaml:          data-lanes:
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-            oneOf:
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-              - items:
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-                  - const: 1
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-                  - const: 2
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-                  - const: 3
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-                  - const: 4
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-              - items:
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-                  - const: 1
+Documentation/devicetree/bindings/media/i2c/imx258.yaml-                  - const: 2
+
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-        properties:
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml:          data-lanes:
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-            anyOf:
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-              - items:
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-                  - const: 1
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-                  - const: 2
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-              - items:
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-                  - const: 1
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-                  - const: 2
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-                  - const: 3
+Documentation/devicetree/bindings/media/i2c/sony,imx214.yaml-                  - const: 4
+
+But yes, most bindings simply report
+
+              data-lanes:
+                minItems: 1
+                maxItems: 4
+
+Which allows all combinations, including repetitions, so they're
+probably wrong.
+
+Thanks
+  j
 
 >
->  * hotunplug a VCPU and then replug it again
->     if IA32_TSX_CTRL is reset to initial state, that should re-enable
->     RTM/HLE cpuid bits and KVM_SET_CPUID2 might fail due to difference
-
-Could you please teach me this kung-fu, I mean hot to unplug a
-cold-plugged CPU with QMP? Previoulsy, I only did un-plugging for what
-I've hotplugged, something like:
-
-(QEMU) device_add driver=host-x86_64-cpu socket-id=0 core-id=2 thread-id=0 id=cpu2
-{"return": {}}
-(QEMU) device_del id=cpu2
-{"return": {}}
-
-What's the ids of the cold-plugged CPUs?
-
->
-> and as Sean pointed out there might be other non constant leafs,
-> where exact match check could leave userspace broken.
-
-Indeed, while testing your suggestion I've stumbled upon
-CPUID.(EAX=0x12, ECX=1) (SGX) where we mangle ECX from
-kvm_vcpu_after_set_cpuid():
-
-        best = kvm_find_cpuid_entry(vcpu, 0x12, 0x1);
-	if (best) {
-                best->ecx &= vcpu->arch.guest_supported_xcr0 & 0xffffffff;
-		best->edx &= vcpu->arch.guest_supported_xcr0 >> 32;
-                best->ecx |= XFEATURE_MASK_FPSSE;
-        }
-
-In theory, we should just move this to __kvm_update_cpuid_runtime()...
-I'll take a look tomorrow.
-
--- 
-Vitaly
-
+> Cheers,
+> Prabhakar

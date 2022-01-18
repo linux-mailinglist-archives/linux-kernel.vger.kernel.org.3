@@ -2,145 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F16492D4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE14492D50
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348032AbiARS1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S1348041AbiARSaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348025AbiARS1N (ORCPT
+        with ESMTP id S244209AbiARSaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:27:13 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7923C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:27:12 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id p18so6912wmg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:27:12 -0800 (PST)
+        Tue, 18 Jan 2022 13:30:08 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DE8C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:30:08 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id s15so133883pfw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:30:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WgQNd9jvDGSha0ZOEMYIqms6ohSARrZSwqDxbZSH43Y=;
-        b=kBaY/RYbdbEQuVsoV59cdNSiYYEv/9+RmudEw6xW7hlLv4mFdmtVkuKSNLjmFUvOzc
-         LhMS9vPI5BvRCSoKCUaHMQied6UDI80sIe2M+NMvfM5rVsCBmt4+sF7c0HqZq/t32L8b
-         SVd4BOlZthBeWJS7STMIFEPM7BttCoyc71zKfXqB84igRKImCXDZsaiQ4uBvK7t/KXiH
-         qzv2PcAYYTILng7EK+AMn/GGN6XX0TiiIP0fods4ChIYz3Toa29XEv/07uJy+4Ht8hQH
-         MD+IQEhFDi/MVApmFBMCev09BdH3OiDDxE7JchRS8Vd9cXZdz0wM9v7qd4snLFKtmtO/
-         orDg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SWbb1UZG/b7k7Lx9na6HLCxa4UWNr2RlfPnFhxjraRg=;
+        b=f4H5WNnaCHNp+d7K0qMWtzUU7JrzZgs2CLPbFeWIrzTmQ6AMxAts/LARYEPMhhz9Zc
+         traIcym/lekeL97Ouynm24SqNqQCno5Ywn91tcLRTQmH8+1t+uCSNFmdk0XG7ggGQf0b
+         E3BqfQ76zWGS0fP6df+/+yOJ9YceO2F55ZO9NSuIymy19+50eBaEjhFkSNAhrIP5ViBG
+         +LNc3Ahf3r8lf05WZVzaP/BwscV13WDc13OmQ/Z2865qx+CZnpyJKGVOzmMiSiDuJ5sn
+         k0CSsQZqjJd75q9+/AMS0k5w8p+r4KN95wvOGN3cGIv15/i0MhwvnMckr5NDjSiAxwmO
+         YYmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WgQNd9jvDGSha0ZOEMYIqms6ohSARrZSwqDxbZSH43Y=;
-        b=qOVliS3xh6xu9BP5js/biyDKRAEZJzBcRYd1R55JNUuCWqNW5Vb3q/FBomP7Va2vin
-         EmdzCfsi+nEP2HqNG01TdB4b2Ff3nCSNUipA+Esc9Obew4wmdf7HBIMX6S7n7zEBdd1h
-         THteE62KwUxkGCbbKHICz69ShleZV1xv8nwA8ovOppLZmR4D9d5ktkYjR5GqOWrGTyLR
-         fQVOcl6nbnFR0FYxce3h12Bgqyn7qKg3SGIEoGbrG+dEWwXvDZUDjy3pThgi2G02Ks2R
-         DRKrBALxUTfGL+bjWHxSzkQl4nXuGZa7lJK+RFF/zkN6jtmz3p3bpvQ39yTYRa/FnS1Z
-         eLyA==
-X-Gm-Message-State: AOAM5313qGNC/VZqSCnIWzAQL+cvTTo8/MUggVGbKXMgagnK1tG9n/JZ
-        Ebpv0xMpPWJj+1+VJ32mDCEC88kfjZ7hzUcawbyH9xnk
-X-Google-Smtp-Source: ABdhPJz+Qq6Hg8o9CGDBWKWvXnZqajzRt83pZwriF9mRbH7PQHVCmjFwWz39UQqiwfmkprJbnih58o5swmprfBfSNyU=
-X-Received: by 2002:adf:d4c8:: with SMTP id w8mr25603273wrk.137.1642530430846;
- Tue, 18 Jan 2022 10:27:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SWbb1UZG/b7k7Lx9na6HLCxa4UWNr2RlfPnFhxjraRg=;
+        b=Lf5b+GY6Ynp3QomQzCpb4xJGC6dCB2VHG30xKtuPezgpWjoRj9q0zkq3vfnUXkFnKC
+         5y/ntPlkRQaa+WJ2Rcy27saMXrnwenoGLWaEw3B2Vh3v3Wz403ob0hufESVyqTAnJ3ZW
+         tiJsMdsxZ58/mDX7iSLICcQzCCogWNsAexJjKqz/QezBubpfc0zh/oGX4sakW2Tckk99
+         6/Dqj8Uf8kk/wlyBmRiO6/vvaselI0i/7jRFMCvRtzkX6zBm4ZWYAJPIQeRM2Ri0zeTh
+         2MOsri/yjT5kmZW89Tr7twZmC1W2KlVOj7QzMfOxceE83oJWkbTP+I3hPQriTdt9F3GM
+         n9cw==
+X-Gm-Message-State: AOAM5302dJH0fTxVWTOcGDLULTH8mRwd1hL+Fx3kh+R86wKiWSPoASEg
+        DurgXxPDSOOnJNTkkcsrfLEsgA==
+X-Google-Smtp-Source: ABdhPJzB5DUKJcstTUBwBMK55nhluUUChAkq6wKa4PRFr915fyjn1nQYdkdR4oLzUnWTydBXCZaixA==
+X-Received: by 2002:a63:84c8:: with SMTP id k191mr16893333pgd.562.1642530607662;
+        Tue, 18 Jan 2022 10:30:07 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t5sm12971739pfl.6.2022.01.18.10.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 10:30:07 -0800 (PST)
+Date:   Tue, 18 Jan 2022 18:30:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Update the states size cpuid even if
+ XCR0/IA32_XSS is reset
+Message-ID: <YecHK2DmooVlMr2U@google.com>
+References: <20220117082631.86143-1-likexu@tencent.com>
 MIME-Version: 1.0
-References: <20220113161341.371345-1-daniel.baluta@oss.nxp.com> <9b3d28f3-aa2b-ade9-4160-752b349bdeab@linux.intel.com>
-In-Reply-To: <9b3d28f3-aa2b-ade9-4160-752b349bdeab@linux.intel.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Tue, 18 Jan 2022 20:26:58 +0200
-Message-ID: <CAEnQRZBsJbcdx_H9ChcPTGEbe+Ok8mVGG+1wVYe2pDF+9RqbQA@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: SOF: compr: Add compress ops implementation
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117082631.86143-1-likexu@tencent.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Pierre for comments.
+On Mon, Jan 17, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
+> both RESET and INIT. In both cases, the size in bytes of the XSAVE
+> area containing all states enabled by XCR0 or (XCRO | IA32_XSS)
+> needs to be updated.
+> 
+> Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/x86.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 76b4803dd3bd..5748a57e1cb7 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11134,6 +11134,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  	struct kvm_cpuid_entry2 *cpuid_0x1;
+>  	unsigned long old_cr0 = kvm_read_cr0(vcpu);
+>  	unsigned long new_cr0;
+> +	bool need_update_cpuid = false;
+>  
+>  	/*
+>  	 * Several of the "set" flows, e.g. ->set_cr0(), read other registers
+> @@ -11199,6 +11200,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  
+>  		vcpu->arch.msr_misc_features_enables = 0;
+>  
+> +		if (vcpu->arch.xcr0 != XFEATURE_MASK_FP)
+> +			need_update_cpuid = true;
+>  		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
+>  	}
+>  
+> @@ -11216,6 +11219,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
+>  	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
+>  
+> +	if (vcpu->arch.ia32_xss)
+> +		need_update_cpuid = true;
 
-On Sat, Jan 15, 2022 at 1:01 AM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
->
->
-> Thanks for starting this work Daniel.
->
-> > +int sof_compr_get_params(struct snd_soc_component *component,
-> > +                      struct snd_compr_stream *cstream, struct snd_codec *params)
-> > +{
-> > +     return 0;
-> > +}
->
-> You should probably add a statement along the lines of:
->
-> /* TODO: we don't query the supported codecs for now, if the application
-> asks for an unsupported codec the set_params() will fail
-> */
->
-> .get_codec_caps is also missing, it should be documented as something we
-> want to add.
+This means that kvm_set_msr_common()'s handling of MSR_IA32_XSS also needs to
+update kvm_update_cpuid_runtime().  And then for bnoth XCR0 and XSS, I would very
+strongly prefer that use the helpers to write the values and let the helpers call
+kvm_update_cpuid_runtime().  Yes, that will mean kvm_update_cpuid_runtime() may be
+called multiple times during INIT, but that's already true (CR4), and this isn't
+exactly a fast path.
 
-Will do.
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 55518b7d3b96..22d4b1d15e94 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11256,7 +11256,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
 
->
-> > +static int sof_compr_pointer(struct snd_soc_component *component,
-> > +                          struct snd_compr_stream *cstream,
-> > +                          struct snd_compr_tstamp *tstamp)
-> > +{
-> > +     struct snd_compr_runtime *runtime = cstream->runtime;
-> > +     struct sof_compr_stream *sstream = runtime->private_data;
-> > +
-> > +     tstamp->sampling_rate = sstream->sample_rate;
-> > +     tstamp->copied_total = sstream->copied_total;
->
-> Humm, this doesn't return any information on how many PCM samples were
-> generated (pcm_frames) or rendered (pcm_io_frames).
+                vcpu->arch.msr_misc_features_enables = 0;
 
-This is on my TODO list. I think there is some more work needed to be
-done in FW.
+-               vcpu->arch.xcr0 = XFEATURE_MASK_FP;
++               __kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
+        }
 
->
-> I don't think the existing SOF firmware has this level of detail for
-> now, you should at least document it as to be added in the future.
->
-> In addition, the .pointer callback can be used at different times, and
-> for added precision the information should be queried from the firmware
-> via IPC or by looking up counters in the SRAM windows.
->
-> I don't think it's good enough to update the information on a fragment
-> elapsed event. It will work for sure in terms of reporting compressed
-> data transfers, but it's not good enough for an application to report
-> time elapsed.
+        /* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
+@@ -11273,7 +11273,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+        cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
+        kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
 
-Very good observations here.
+-       vcpu->arch.ia32_xss = 0;
++       __kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
 
->
-> > +struct sof_compr_stream {
-> > +     unsigned int copied_total;
-> > +     unsigned int sample_rate;
-> > +     size_t posn_offset;
-> > +};
->
-> do you need an SOF-specific definition? This looks awfully similar to
-> snd_compr_tstamp:
->
-> struct snd_compr_tstamp {
->         __u32 byte_offset;
->         __u32 copied_total;
->         __u32 pcm_frames;
->         __u32 pcm_io_frames;
->         __u32 sampling_rate;
-> }
+        static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
 
-There is no need for a SOF specific definition. I think we can use
-that for now. We can change it later if we
-need new fields.
+

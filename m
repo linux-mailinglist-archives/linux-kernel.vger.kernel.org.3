@@ -2,195 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0F5492127
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCA449212B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344198AbiARIZT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 03:25:19 -0500
-Received: from mail-ua1-f45.google.com ([209.85.222.45]:42760 "EHLO
-        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiARIZQ (ORCPT
+        id S243213AbiARI1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235743AbiARI1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:25:16 -0500
-Received: by mail-ua1-f45.google.com with SMTP id p1so35034049uap.9;
-        Tue, 18 Jan 2022 00:25:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wwyuk2lsKqIfL1r34uR4hiV5J4os/EyMOhjZZucVxAA=;
-        b=I2i1nK3KE49ayM/k/7+QwdNB1Zw/V8rfgqp4QCmvWpqWYqVHuXXZLHkoGFbUNZwQoa
-         5n58deiE9GIRaPOlMyVpmgpPhdeM6+XjSafr9D/U+9wMw7QnCwIKSHifBPKaKoKI7ghV
-         GPjZiS0nW+lz1lWDERj4p5QQ60xQw9CHXpsjRJ1hmG+OzAfo7VdqIEEb5MXSZJ4tk/sN
-         wK6lF0d8e/ePocJHJLPejU1HF8xld5m/zmPX0RLIdCeaaIPTzpkjHd0Jw8D0cXvhbrYZ
-         FHbmY3rE4GmX6ZIIgeSp6MmNKyIiUbHsjMTOOage5nc+kV1Al0PTA5oAEiRtF6XNNBFK
-         UC4A==
-X-Gm-Message-State: AOAM531TjjIono2QQrSzMZER0NUpWw9YWmdyoa4VDcXGutV5AUI3N5Qk
-        NMu4UvqkxsalSADZQSGZWKANBWSt+9lqXV/t
-X-Google-Smtp-Source: ABdhPJxEapMDT1TLJpP3jj0kK0vs2RhIajlcXxONwhZS+EvdSgowj8ApkJ3nRAIXNWOHwgyRPrDJbQ==
-X-Received: by 2002:ab0:e13:: with SMTP id g19mr9097770uak.135.1642494314740;
-        Tue, 18 Jan 2022 00:25:14 -0800 (PST)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id j76sm4044397vke.27.2022.01.18.00.25.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 00:25:13 -0800 (PST)
-Received: by mail-ua1-f44.google.com with SMTP id 2so10353317uax.10;
-        Tue, 18 Jan 2022 00:25:13 -0800 (PST)
-X-Received: by 2002:ab0:4d42:: with SMTP id k2mr7281422uag.78.1642494312957;
- Tue, 18 Jan 2022 00:25:12 -0800 (PST)
+        Tue, 18 Jan 2022 03:27:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BFC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:27:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52E73B80932
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 08:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5F0C00446;
+        Tue, 18 Jan 2022 08:26:59 +0000 (UTC)
+Subject: Re: [PATCH v2 RESEND] m68k/kernel: array out of bound access in
+ process_uboot_commandline
+To:     Hangyu Hua <hbh25y@gmail.com>
+References: <9775e266-5fee-b0e9-7fa3-b602ec4b7796 () gmail ! com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Message-ID: <a7483172-09dc-21ad-d674-25b7015156fd@linux-m68k.org>
+Date:   Tue, 18 Jan 2022 18:26:56 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru> <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru> <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru> <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de> <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de> <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
- <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
-In-Reply-To: <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jan 2022 09:25:01 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
-Message-ID: <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <9775e266-5fee-b0e9-7fa3-b602ec4b7796 () gmail ! com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
+Hi Hangyu,
 
-On Mon, Jan 17, 2022 at 6:06 PM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> On Mon, Jan 17, 2022 at 02:08:19PM +0100, Geert Uytterhoeven wrote:
-> > On Mon, Jan 17, 2022 at 12:49 PM Uwe Kleine-König
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > > > The logic in e.g. drivers/tty/serial/sh-sci.c and
-> > > > drivers/spi/spi-rspi.c could be simplified and improved (currently
-> > > > it doesn't handle deferred probe) if platform_get_irq_optional()
-> > > > would return 0 instead of -ENXIO.
+On 18/1/22 12:18 pm, Hangyu Hua wrote:
+> Hi Greg,
+> 
+> On 2022/1/17 下午12:03, Greg Ungerer wrote:
+>> Hi Hangyu,
+>>
+>> On 13/1/22 11:58 am, Hangyu Hua wrote:
+>>> When the size of commandp >= size, array out of bound write occurs
+>>> because
+>>> len == 0.
+>>>
+>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>>> ---
+>>>    arch/m68k/kernel/uboot.c | 3 ++-
+>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/m68k/kernel/uboot.c b/arch/m68k/kernel/uboot.c
+>>> index 928dbd33fc4a..63eaf3c3ddcd 100644
+>>> --- a/arch/m68k/kernel/uboot.c
+>>> +++ b/arch/m68k/kernel/uboot.c
+>>> @@ -101,5 +101,6 @@ __init void process_uboot_commandline(char
+>>> *commandp, int size)
+>>>        }
+>>>        parse_uboot_commandline(commandp, len);
+>>> -    commandp[len - 1] = 0;
+>>> +    if (len > 0)
+>>> +        commandp[len - 1] = 0;
+>>>    }
+>>>
+>>
+>> I am not convinced this is wrong for the reason you think it is.
+>> Looking at the code in its entirety:
+>>
+>> __init void process_uboot_commandline(char *commandp, int size)
+>> {
+>>           int len, n;
+>>
+>>           n = strnlen(commandp, size);
+>>           commandp += n;
+>>           len = size - n;
+>>           if (len) {
+>>                   /* Add the whitespace separator */
+>>                   *commandp++ = ' ';
+>>                   len--;
+>>           }
+>>
+>>           parse_uboot_commandline(commandp, len);
+>>           commandp[len - 1] = 0;
+>> }
+>>
+>>
+>> "commandp" is moved based on the return of the strnlen(). So in the
+>> case of commandp actually being full of valid characters (so n == size,
+>> and thus len == 0) the commandp technically points outside of its
+>> real size at that point. But "command[[len - 1]" would actually be
+>> pointing to the last char in the original commandp array (so the original
+>> commandp[size - 1]). Well at least if you are happy with the use of
+>> negative array indexes.
+>>
+> 
+> You mean this is a friendly out of bound beacause "command[[len - 1]"
+> pointing to the last char in the original commandp array. I used to
+> think command[[len - 1] = 0 may be a zero-terminated for command. You
+> can see my discussion with Andreas Schwab and my patch v1 in
+> 
+> https://lore.kernel.org/all/CAOo-nLJG71QqqD0-cJDyH0rY2VTx1eO9nHVQ5MCe8J0iiME_vw@mail.gmail.com/
+> 
+> But this still be a out of bound write because "commandp" is a macro
+> definition with a fixed size.
 
-> > > Also for spi-rspi.c I don't see how platform_get_irq_byname_optional()
-> > > returning 0 instead of -ENXIO would help. Please talk in patches.
-
-[...]
-
-> This is not a simplification, just looking at the line count and the
-> added gotos. That's because it also improves error handling and so the
-> effect isn't easily spotted.
-
-Yes, it's larger because it adds currently missing error handling.
-
-> What about the following idea (in pythonic pseudo code for simplicity):
-
-No idea what you gain by throwing in a language that is irrelevant
-to kernel programming (why no Rust? ;-)
-
-> > > > So there are three reasons: because the absence of an optional IRQ
-> > > > is not an error, and thus that should not cause (a) an error code
-> > > > to be returned, and (b) an error message to be printed, and (c)
-> > > > because it can simplify the logic in device drivers.
-> > >
-> > > I don't agree to (a). If the value signaling not-found is -ENXIO or 0
-> > > (or -ENODEV) doesn't matter much. I wouldn't deviate from the return
-> > > code semantics of platform_get_irq() just for having to check against 0
-> > > instead of -ENXIO. Zero is then just another magic value.
-> >
-> > Zero is a natural magic value (also for pointers).
-> > Errors are always negative.
-> > Positive values are cookies (or pointers) associated with success.
->
-> Yeah, the issue where we don't agree is if "not-found" is special enough
-> to deserve the natural magic value. For me -ENXIO is magic enough to
-> handle the absence of an irq line. I consider it even the better magic
-> value.
-
-It differs from other subsystems (clk, gpio, reset), which do return
-zero on not found.
-What's the point in having *_optional() APIs if they just return the
-same values as the non-optional ones?
+No, "commandp" is not a macro, it is a parameter to this function, is a char pointer.
+It points into a char array of size "size" (which will be non-zero).
+It is modified during execution of this function.
+I don't see an out-of-bound write here.
 
 
-Gr{oetje,eeting}s,
+>> Clearly this could be structured better. There is no point in calling
+>> parse_uboot_commandline() if len == 0, or even if len == 1, since you
+>> cannot add anymore to the command line, it is full.
+>>
+> I think it is no point too. But the caller (setup_arch()) don't check
+> the size of "commandp" before call parse_uboot_commandline(). Instead we
+> do this in parse_uboot_commandline(). So it may be better to move these
+> checks to the caller ?
 
-                        Geert
+No, I don't think so. The caller doesn't care if it is already full.
+And the common case is that process_uboot_commandline() is empty
+when CONFIG_UBOOT is not enabled.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Regards
+Greg
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+

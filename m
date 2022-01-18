@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B823492C0B
+	by mail.lfdr.de (Postfix) with ESMTP id 972BB492C0C
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347068AbiARRMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:12:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42469 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346919AbiARRMY (ORCPT
+        id S1347083AbiARRMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:12:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42200 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346580AbiARRMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:12:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642525943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CTFcvZshGd418XxQ4f5JMIidhKASZvElX59Zaynhob4=;
-        b=IzRuYszDk6bzRAFOmBMimVyHJg32yzafGC2S4QD1H1+OrAMR80i+pTw7ZUVfZ0TwNmciMd
-        h7KWqptZWJI2yg7bGxN7lijws9KL7MtlrIeeGmR66syznWJaxMymUUInFMZAX4oubeMCFO
-        CGCCgE/z259F+UQFG2dvGzxy2v/cOWM=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-UkGwWek1PeyuKpnP7-gZbQ-1; Tue, 18 Jan 2022 12:12:19 -0500
-X-MC-Unique: UkGwWek1PeyuKpnP7-gZbQ-1
-Received: by mail-ed1-f69.google.com with SMTP id bs4-20020a056402304400b004032af6b7ebso4367045edb.16
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:12:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CTFcvZshGd418XxQ4f5JMIidhKASZvElX59Zaynhob4=;
-        b=NSBScL9owDL3R+gYbtY6VTXEvjQk7KTcxgFXWw5SgaJ3CpFgdHCrAVFZzTgL+csO8j
-         PHQDdJ5w182guGcG7spgFXpQayxlhVV1oRexAB8tcKTDQ/S7tEuzxWSCNWOWOmeIhsT1
-         oKzxmIX3WwrhIBLPWwCxGvjs8jfaCv6enfbRWjjSOynW07muA1+8Cu5GlFTFf2dqY72x
-         fnz2rBHXMVWXd6e9vU2gV4ClJWeReNaFoCviGc4Vr2SjdJAKIowo2YFDMDrZjcI9lzRs
-         MaGQytoBcM3uVyqD97OhysFEG6fakvNEQ89hLb2bWsp0aX5CPOG7ylQJVNV0H/QL6Je9
-         VjQg==
-X-Gm-Message-State: AOAM532wvexYmg7RJPt3IEB8ifyZodCWyc+YuxSV8x9Ccoy4qPyJKiS/
-        qcZo5uF6FSS2cMkq+SDIGADNQZtmax5+kNk6OXt3neu4Y6Vq3NfmNlALHE9LRublr8S6can6GBz
-        0LgTUP2pXhn6UYJQuhe+MYyeA
-X-Received: by 2002:a17:906:9746:: with SMTP id o6mr20727222ejy.112.1642525937917;
-        Tue, 18 Jan 2022 09:12:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwljlno0wVWgKk1pGv+IEFTQBr9kKOJljcK59bCW2njywhQcJtIwVh22D7avYUEqToB1+2oCw==
-X-Received: by 2002:a17:906:9746:: with SMTP id o6mr20727210ejy.112.1642525937722;
-        Tue, 18 Jan 2022 09:12:17 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id 16sm5601542ejx.149.2022.01.18.09.12.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 09:12:17 -0800 (PST)
-Message-ID: <4a87b289-05a7-8247-9529-a8148924a7c5@redhat.com>
-Date:   Tue, 18 Jan 2022 18:12:14 +0100
+        Tue, 18 Jan 2022 12:12:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C45C461475
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:12:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4D1C340E0;
+        Tue, 18 Jan 2022 17:12:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642525972;
+        bh=GPZlp//3p8yqxQjMYidmu0QfzB/F+RGgxGDKh9DIb44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AY9H43MBFuXUxaAa/RE1Zzt7/tHKdGqzzXoeU5a3mwbU45WQBQLHyGf+jwFawddKu
+         F4ittSZ/HyryXFwS7n2OWCzKVTBxfrCb+cnbA5GMt2rTyHlB6FITKAYZdz69nV56/J
+         I9EZbR11zHtHkyLW/J3rp60Sid5e+hDFrFzkBAeNnNHd2J+MgNdrVezYQD0+Q9q/6u
+         /cy3uGX7ej1YLRGq4K1+ad0Il2+zf/D+0ubtyLD/VLk3l2+VJDnFlbd68nd8uJXqg8
+         GlgQwEQScYHONGd8bApCiiecE5Uf257IAK1X9Q6krYJ4PUSKNrrHg0Ojx1IzEPhLh6
+         F0o8qYktwaRdw==
+Date:   Tue, 18 Jan 2022 17:12:48 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] regmap-irq: Use regmap_irq_update_bits instead of
+ regmap_write
+Message-ID: <Yeb1EOtZKnO4sr+E@sirena.org.uk>
+References: <20220117091621.30330-1-quic_pkumpatl@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 0/4] KVM: x86: Partially allow KVM_SET_CPUID{,2} after
- KVM_RUN for CPU hotplug
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Igor Mammedov <imammedo@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-References: <20220117150542.2176196-1-vkuznets@redhat.com>
- <20220118153531.11e73048@redhat.com>
- <498eb39c-c50a-afef-4d46-5c6753489d7e@redhat.com>
- <YebwkcAgszlyTzJ+@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YebwkcAgszlyTzJ+@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lBpfOBQ0w1Ud6m8V"
+Content-Disposition: inline
+In-Reply-To: <20220117091621.30330-1-quic_pkumpatl@quicinc.com>
+X-Cookie: Do YOU have redeeming social value?
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 17:53, Sean Christopherson wrote:
->>
->> and I think we should redo all or most of kvm_update_cpuid_runtime
->> the same way.
-> Please no.  xstate_required_size() requires multiple host CPUID calls, and glibc
-> does CPUID.0xD.0x0 and CPUID.0xD.0x1 as part of its initialization, i.e. launching
-> a new userspace process in the guest will see additional performance overhread due
-> to KVM dynamically computing the XSAVE size instead of caching it based on vCPU
-> state.  Nested virtualization would be especially painful as every one of those
-> "host" CPUID invocations will trigger and exit from L1=>L0.
-> 
 
-Agreed, but all of the required data is by Linux cached in 
-xstate_offsets, xstate_sizes and xstate_comp_offsets; moving 
-xstate_required_size to xstate.c and skipping the host CPUID would 
-probably be a good idea nevertheless.
+--lBpfOBQ0w1Ud6m8V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Paolo
+On Mon, Jan 17, 2022 at 02:46:21PM +0530, Prasad Kumpatla wrote:
+> With the existing interrupt ack and clear ack logic, only the first
+> interrupt gets processed properly and further interrupts will not as
+> the ack register is not reset as expected. Use regmap_irq_update_bits
 
+In what way is only the first interrupt processed properly?  How is the
+ack register not reset as expected?  Please write a clearer changelog -
+I can't tell what problem you're trying to fix here or how the change is
+intended to fix it.
+
+--lBpfOBQ0w1Ud6m8V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm9Q8ACgkQJNaLcl1U
+h9As6wf+OBgFwjYf4CDokNLeGf/AxVEgB6lDNIld2KCOF0bQG45NWmDU7NvHTDWR
+eiBGE4Ch5LX7XRAFZFEFjLy27hRNPrdu5uV7Wtn9l10iiGrDGENJuowXlWv0vS6J
+cf7SvzGQA2JAKm3nuhFyUw0L/LmR46bTTFCUC3winEqcIFTBq/2vCqyOHLkTeA2o
+0SGIwdDotHlKs/WfbV6KLPi1ccSMlsklbb1zVcG8zJC9IaqFZcZpooDJ8kkgA2Zd
+ucXS4L/NgSr8Y1fEGyl+/1UcNcM9L/wmJHJkLqeZ2YuIiMepanWWPHWxVUP0NyI8
+aRpvojWBT+j8Rw5HLgCGhkLBaVYGJQ==
+=2zcQ
+-----END PGP SIGNATURE-----
+
+--lBpfOBQ0w1Ud6m8V--

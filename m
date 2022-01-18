@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14365492C58
+	by mail.lfdr.de (Postfix) with ESMTP id DE67B492C5A
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347256AbiARR2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:28:54 -0500
-Received: from mga17.intel.com ([192.55.52.151]:57294 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235427AbiARR2t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:28:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642526929; x=1674062929;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=k4eJH2zoU91Kl9uf4FCGcvt/8O88IEchGIaQVuOy/n8=;
-  b=nerDM3vl20D3blaYkn3ET5kzoRYfP5UXAgBiiGpn3RYgh3DH5dbE96wd
-   CwhyS5KI99BB4b73tzfBIZUL9Wb/E+cgV4IpsvjH2vbiv9nfYGa4ZemWz
-   /7g7yWHu8HG+vY1oyMFtIGji6Tmsjb8vHzKB0tLir2CMTINvWMiPWBsMt
-   7XMWC73wUfvapC47uwwMgb1RjvC4DBy+xVAZ5+F9KSQr8GNGILPrwtI6R
-   3YygNGtdDYfTJ0MAMeQEkKQPp5Tbzdu06HG+ceif3rlCOB6LYJm13EMQb
-   ZaWNbmqajXCil9yMBMypndKMFd+HFuB8MBZBhCU+fPZt/Itb0t+YvRTAd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="225545861"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="225545861"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 09:28:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="764657295"
-Received: from ssrikan2-mobl2.amr.corp.intel.com (HELO [10.209.52.128]) ([10.209.52.128])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 09:28:47 -0800
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, x86@kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
- <20211227145903.187152-4-wangkefeng.wang@huawei.com>
- <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
- <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
- <31a75f95-6e6e-b640-2d95-08a95ea8cf51@intel.com>
- <1642472965.lgfksp6krp.astroid@bobo.none>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Message-ID: <4488d39f-0698-7bfd-b81c-1e609821818f@intel.com>
-Date:   Tue, 18 Jan 2022 09:28:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1347243AbiARR3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244020AbiARR3H (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:29:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4F4C061574;
+        Tue, 18 Jan 2022 09:29:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AA12B81739;
+        Tue, 18 Jan 2022 17:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E1EC340E0;
+        Tue, 18 Jan 2022 17:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642526944;
+        bh=yV8nau+e7py7AXVT55qxiKrSjmSn1nY3nikPwY+HlQ4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=UzbaNiSopDJUP34kvekVtz1qmtM+izR/pYz+jphOouPpAGXPQ53wvAS/ZHXnmAzfw
+         tS0pqNtv/JZA3pbblATVXiPscRgiitSDviY2T1AaFYFmHhx7gs6O1DjleutrDuIVT2
+         javR9mdo+Z6gGr6yzmFr2cvou4Ze7voMb1iHNeCRHuPUiDj2PT7B8Ts2JK/+V9Is/l
+         8smvmfw3bs21XFyomwwQbawyrqv1+P1zRhiix6l8t9vt4Q/Qrr1JZy9aDgLSslqlNB
+         ZFZ6qoOij7h8ekG6oFnhpaqakyCkqOJ+W+tOxE3X6jjd0JsALxMM2c9YZAEmhvzHLF
+         KNikNMhhiy5rg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 835295C0A21; Tue, 18 Jan 2022 09:29:04 -0800 (PST)
+Date:   Tue, 18 Jan 2022 09:29:04 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other
+ failures
+Message-ID: <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+ <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
+ <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
 MIME-Version: 1.0
-In-Reply-To: <1642472965.lgfksp6krp.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 6:46 PM, Nicholas Piggin wrote:
->> This all sounds very fragile to me.  Every time a new architecture would
->> get added for huge vmalloc() support, the developer needs to know to go
->> find that architecture's module_alloc() and add this flag.
-> This is documented in the Kconfig.
+On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
+> Dear Zhouyi,
 > 
->  #
->  #  Archs that select this would be capable of PMD-sized vmaps (i.e.,
->  #  arch_vmap_pmd_supported() returns true), and they must make no assumptions
->  #  that vmalloc memory is mapped with PAGE_SIZE ptes. The VM_NO_HUGE_VMAP flag
->  #  can be used to prohibit arch-specific allocations from using hugepages to
->  #  help with this (e.g., modules may require it).
->  #
->  config HAVE_ARCH_HUGE_VMALLOC
->          depends on HAVE_ARCH_HUGE_VMAP
->          bool
 > 
-> Is it really fair to say it's *very* fragile? Surely it's reasonable to 
-> read the (not very long) documentation ad understand the consequences for
-> the arch code before enabling it.
+> Thank you for your quick response.
+> 
+> 
+> Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
+> 
+> > I have studied the rcu torture test recently. I am also interested in
+> > this topic.
+> > But I can't open
+> > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
+> > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
+> 
+> Sorry, about that. I should have checked those. I had put them into a
+> directory:
+> 
+> [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
+> [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
+> 
+> I am going to try to test your suggestions at the end of the day.
 
-Very fragile or not, I think folks are likely to get it wrong.  It would
-be nice to have it default *everyone* to safe and slow and make *sure*
-they go look at the architecture modules code itself before enabling
-this for modules.
+On x86 rcutorture builds successfully.  However, allmodconfig
+on semi-recent -next got me "Can't open perl script
+"./usr/include/headers_check.pl": No such file or directory".
+Which might well be a local problem or might well be fixed by now.
 
-Just from that Kconfig text, I don't think I'd know off the top of my
-head what do do for x86, or what code I needed to go touch.
+Either way, it looks like I need to upgrade the torture.sh script's
+checks for failed builds.  Thank you for reporting this!
+
+							Thanx, Paul

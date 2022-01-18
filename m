@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356454923FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EE6492427
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237989AbiARKon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:44:43 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:39418 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237931AbiARKom (ORCPT
+        id S238134AbiARKza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230113AbiARKz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:44:42 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20I97GDu009658;
-        Tue, 18 Jan 2022 11:44:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=8tSOi6hFO4mBG1V3W8bMA0J9PppE7RMIf5SisFC//CI=;
- b=2rCtH5QP/v8r3GgsSoY6Pq3pXO6qXE4aw1ZZ0RrQW4IAynpj+Bo85F9ip/XsEgq/flNg
- 7hQpCHpIon9MYzLQPpP+P6T+E38l6qM5l/FUo3QkYtb+icyvkRCNbxt5B0E6Fm/SEH9Q
- 2rjVHQtzvmutThtVNwrmSlrR04YnfdBlodDAruT3tulCjOhgWAHUiaHcnDLlmw212XU2
- YvrOSGIVKRAMMk/rHzakdmqojXD+vkH5g7rIXRaFzkuk1V5RgWk0wanLgftTH0JOzbFO
- uqDFNidLjygE9+RCaKVZPIM4rNSNdYFZFP2hCr7G9ZIlMMquIw2J9ZFBieJ2orP+W+E4 tA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dnkesjnu8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 11:44:33 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7D5BA10002A;
-        Tue, 18 Jan 2022 11:44:32 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6A797211F15;
-        Tue, 18 Jan 2022 11:44:32 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG2NODE1.st.com
- (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 18 Jan
- 2022 11:44:31 +0100
-Subject: Re: [PATCH v8 03/13] rpmsg: Move the rpmsg control device from
- rpmsg_char to rpmsg_ctrl
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>, <julien.massot@iot.bzh>
-References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
- <20211207080843.21222-4-arnaud.pouliquen@foss.st.com>
- <YeXz2SFqYr+eUvnw@builder.lan>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <cffe6884-2059-d1e7-7dfd-37c852924959@foss.st.com>
-Date:   Tue, 18 Jan 2022 11:44:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 18 Jan 2022 05:55:29 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37305C061574;
+        Tue, 18 Jan 2022 02:55:29 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id p5so54350008ybd.13;
+        Tue, 18 Jan 2022 02:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qX9bpX2U2LycHUgsFRXfic647Pds1didQ033KinuA4k=;
+        b=o0BztHVZ1LQmVJP92fkpl16r9fBU9Pm1o0VonUhcxZhiOO4ihX0Pb29+y1k1PNj34z
+         +UpG5OCvAcyxsJB8uHLXvj4BUywITXo07plyGSKDS/P/OfsOVqhH98R6zHlWEq3QXMQu
+         08Ta72t3KaHMx2M4HzFhQw3UC5lLXkG1NlQPL8+3G0+1zVSd+meTommKZpuJXFvvzD4I
+         dIMder4solR5FSuntM0EXN5+sPxBJXh0+ZdyO656iPDuOKqq4Mh5wWmYi/tMdL9e1mSK
+         GpOyuSxKR25wp9J+OsPtNipL+7L0FHc1zpSUiVAIp+kvMCmaLEFoDE2DvueYmFq59Dlc
+         HRfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qX9bpX2U2LycHUgsFRXfic647Pds1didQ033KinuA4k=;
+        b=UpQTeEGvZqVyJFE81Be4TJOGYpvnXcT8s8in/Z0TOWbDcopFlT0s8gL8u9XD424mSm
+         O76AEcEu0X9FC2QgfPnMfah+Vz78m5Kwmm7UHJi+Z9HzPOh16LY4bz2kE524W0OEdvfx
+         BSsFvj4EiYTDTGli/tATVeZ6fmWtMe6F/F8+Fo4IAUDROt9H/6pC0xGeLO3n0Qrmnav8
+         8CfYZYYEoBTcZ434pkZADZhqP1TB8xepzYt6oILQJJcnou4MKUSPdEsl073y7EOEoiVm
+         ehdfZr8evGFeH5FXGcohqPIwVx2/kxBXKOZDyjuLRvbhG0D/iYZdZFOvbFBNn1Y/heX6
+         0qiA==
+X-Gm-Message-State: AOAM530dPJxhAKt4wOlSKlHDhukHzKCBGHA/T7HUzkePVus8pZ1qFi/Y
+        3l6FCZODqwzQOwU3lL6ZVwd/waM6LXXdH0yDHXs=
+X-Google-Smtp-Source: ABdhPJz5ZjtgS46r8HctMvvAHzp05vBC1E/wskDFyy3SGIR5TezLZWsW4hrfgYRNWuc7PJnV/9pEtp+oDwGZCOpDT9w=
+X-Received: by 2002:a25:d293:: with SMTP id j141mr14450203ybg.690.1642503328474;
+ Tue, 18 Jan 2022 02:55:28 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YeXz2SFqYr+eUvnw@builder.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE1.st.com
- (10.75.127.4)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
+References: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain> <CA+V-a8t=f14QH=M8p8mufeJsqddwOn6XPqFma5TEbfQ7XdLBZA@mail.gmail.com>
+In-Reply-To: <CA+V-a8t=f14QH=M8p8mufeJsqddwOn6XPqFma5TEbfQ7XdLBZA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 18 Jan 2022 10:55:02 +0000
+Message-ID: <CA+V-a8sNoX6=MUj6VVR7ewR2O8gbQb9z41MAYzehd0P05VYL2w@mail.gmail.com>
+Subject: Re: [PATCH] media: dt-bindings: media: renesas,csi2: Update
+ data-lanes property
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bjorn,
+On Tue, Jan 18, 2022 at 9:11 AM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> Hi Jacopo,
+>
+> Thank you for the review.
+>
+> On Mon, Jan 17, 2022 at 8:11 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
+> >
+> > Hello Prabhakar,
+> >
+> > On Thu, Jan 13, 2022 at 10:32:14AM +0000, Lad Prabhakar wrote:
+> > > CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
+> > > handled by rcar-csi2.c driver. This patch updates the data-lanes property
+> > > to describe the same.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > >  .../devicetree/bindings/media/renesas,csi2.yaml          | 9 ++++++++-
+> > >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > index e6a036721082..064a0a4c5737 100644
+> > > --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > @@ -67,7 +67,14 @@ properties:
+> > >                  maxItems: 1
+> > >
+> > >                data-lanes:
+> > > -                maxItems: 1
+> > > +                items:
+> > > +                  minItems: 1
+> > > +                  maxItems: 4
+> > > +                  items:
+> > > +                    - const: 1
+> > > +                    - const: 2
+> > > +                    - const: 3
+> > > +                    - const: 4
+> >
+> > Seeing "maxItems: 1" there confuses me too, as the property is an
+> > array of data-lanes, but I'm afraid your change does not what you
+> > intend as it would allow you to specify the number of data lanes as an
+> > integer rather than as an array.
+> >
+> Agreed, what do you think of the below instead?
+>
+>             properties:
+>               data-lanes:
+>                 minItems: 1
+>                 maxItems: 4
+uniqueItems: true
 
-On 1/17/22 11:55 PM, Bjorn Andersson wrote:
-> On Tue 07 Dec 02:08 CST 2021, Arnaud Pouliquen wrote:
->> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> [..]
->> -static void rpmsg_ctrldev_release_device(struct device *dev)
->> -{
->> -	struct rpmsg_ctrldev *ctrldev = dev_to_ctrldev(dev);
->> -
->> -	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
->> -	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
->> -	cdev_del(&ctrldev->cdev);
->> -	kfree(ctrldev);
->> -}
->> -
->> -static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
->> -{
->> -	struct rpmsg_ctrldev *ctrldev;
->> -	struct device *dev;
->> -	int ret;
->> -
->> -	ctrldev = kzalloc(sizeof(*ctrldev), GFP_KERNEL);
->> -	if (!ctrldev)
->> -		return -ENOMEM;
->> -
->> -	ctrldev->rpdev = rpdev;
->> -
->> -	dev = &ctrldev->dev;
->> -	device_initialize(dev);
->> -	dev->parent = &rpdev->dev;
->> -	dev->class = rpmsg_class;
->> -
->> -	cdev_init(&ctrldev->cdev, &rpmsg_ctrldev_fops);
->> -	ctrldev->cdev.owner = THIS_MODULE;
->> -
->> -	ret = ida_simple_get(&rpmsg_minor_ida, 0, RPMSG_DEV_MAX, GFP_KERNEL);
->> -	if (ret < 0)
->> -		goto free_ctrldev;
->> -	dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
->> -
->> -	ret = ida_simple_get(&rpmsg_ctrl_ida, 0, 0, GFP_KERNEL);
->> -	if (ret < 0)
->> -		goto free_minor_ida;
->> -	dev->id = ret;
->> -	dev_set_name(&ctrldev->dev, "rpmsg_ctrl%d", ret);
->> -
->> -	ret = cdev_add(&ctrldev->cdev, dev->devt, 1);
-> 
-> This turns out to be incomplete and the cdev_del above is in the wrong
-> place. This, and the same for eptdev, is being corrected in:
-> 
-> https://lore.kernel.org/linux-remoteproc/164245960510.1698571.4998090450663669237.b4-ty@linaro.org/T/#t
+can go in as well, to avoid duplicate lane numbers.
 
-I will rebase on next branch including this patchset
-
-Thanks,
-Arnaud
-
-> 
-> Regards,
-> Bjorn
-> 
+>                 items:
+>                   maximum: 4
+>
+Cheers,
+Prabhakar

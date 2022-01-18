@@ -2,69 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29420492BE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA30492BD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347014AbiARRHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:07:32 -0500
-Received: from forward107o.mail.yandex.net ([37.140.190.210]:39014 "EHLO
-        forward107o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230126AbiARRHb (ORCPT
+        id S243610AbiARRDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:03:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46595 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236454AbiARRDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:07:31 -0500
-X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 12:07:30 EST
-Received: from myt6-8f57f8b29865.qloud-c.yandex.net (myt6-8f57f8b29865.qloud-c.yandex.net [IPv6:2a02:6b8:c12:2c81:0:640:8f57:f8b2])
-        by forward107o.mail.yandex.net (Yandex) with ESMTP id 4E7156AF9BBF;
-        Tue, 18 Jan 2022 20:00:48 +0300 (MSK)
-Received: from myt6-9bdf92ffd111.qloud-c.yandex.net (myt6-9bdf92ffd111.qloud-c.yandex.net [2a02:6b8:c12:468a:0:640:9bdf:92ff])
-        by myt6-8f57f8b29865.qloud-c.yandex.net (mxback/Yandex) with ESMTP id TIqon8tWko-0leG8KHX;
-        Tue, 18 Jan 2022 20:00:48 +0300
-Authentication-Results: myt6-8f57f8b29865.qloud-c.yandex.net; dkim=pass
-Received: by myt6-9bdf92ffd111.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 5awJUD2gQt-0kPeBMo5;
-        Tue, 18 Jan 2022 20:00:46 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-From:   Yaroslav Bolyukin <iam@lach.pw>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Yaroslav Bolyukin <iam@lach.pw>
-Subject: [PATCH] drm/edid: Add Vive Pro 2 to non-desktop list
-Date:   Tue, 18 Jan 2022 20:00:37 +0300
-Message-Id: <20220118170037.14584-1-iam@lach.pw>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Jan 2022 12:03:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642525427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=xeHoR1Km3Ot/QwwgnNEtsDvDGwANoK5Acc9epKDxSQU=;
+        b=Xpijj9Fn5Fr4+2bNwTB8g315xzQZG21M3KKrF3BAl0DVvR5vliAT9eMangZMF1CxW/mEhn
+        dC2meVhuDo7OXwcB0W7QUg6genoVCYpo21lQ7k+D6YpH+4WErtqhRG167gRCyKGSdyOvsg
+        C2nkwsNjXUmA28cspAryht5K3lG8JwA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-9vX1mWFnPD6rZNjjZsnxUQ-1; Tue, 18 Jan 2022 12:03:44 -0500
+X-MC-Unique: 9vX1mWFnPD6rZNjjZsnxUQ-1
+Received: by mail-ed1-f69.google.com with SMTP id t5-20020aa7db05000000b00402670daeb9so6660531eds.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:03:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=xeHoR1Km3Ot/QwwgnNEtsDvDGwANoK5Acc9epKDxSQU=;
+        b=U0vRTDh5KXAtFEOv2VmVGmwdlP2zA+Dk1iHoHxSObt9gqgY9s0zGEdhab1eJx47Y9U
+         3dIwCQ6+6sz+yyHYgk6uQmQhjVW/nJ49IciBl5HVqlDKKTKXOozjETosGfhVIgOexwtg
+         zEHmkMx+SAvJsNxQotL7EauKkCwQtXU30r4oJqs8xXBQ45RONlozZBcur293LklfdOJi
+         yb1EWTjQ6378fFduRZI+AT/FROs/zLm95wxHqnHZPtJs7gta03LU3WjE0r7C/+I32/0y
+         OGMN4wN4rnnsWn6H/Na781cieTW4KlcCl/NKKZFZ4IBvdP6xZJM9JjZ8GnY3jb/Kwh+A
+         CJVQ==
+X-Gm-Message-State: AOAM531fSgfTjLt/Nvg21OBzKFEeISzX6pOpGzbbi25ZzD/pBhPYWWkd
+        IP3HLiG+AfQHrvtwOZfnxen4EssXOGejPbBYbURaBsKxkFg/R6Or5lzgtfNy6ybalR59K7b2qQm
+        VkPO2Sj1za20JCcVScZ13qrH6adJA1k/826IbFDDtvBp3dubwir030QO60e5VUwBmwVNE2A==
+X-Received: by 2002:a05:6402:399:: with SMTP id o25mr25929996edv.70.1642525421662;
+        Tue, 18 Jan 2022 09:03:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysFKMueDijbw2+fxPnfDwyfRixXRfg11cODmIZFCXfCeIojgPJErkMskMdbICWuCYRvZZVkg==
+X-Received: by 2002:a05:6402:399:: with SMTP id o25mr25929978edv.70.1642525421403;
+        Tue, 18 Jan 2022 09:03:41 -0800 (PST)
+Received: from redhat.com ([2.55.154.241])
+        by smtp.gmail.com with ESMTPSA id i22sm5559325ejw.75.2022.01.18.09.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 09:03:38 -0800 (PST)
+Date:   Tue, 18 Jan 2022 12:03:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v2 1/2] virtio: unexport virtio_finalize_features
+Message-ID: <20220118170225.30620-1-mst@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+virtio_finalize_features is only used internally within virtio.
+No reason to export it.
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/gpu/drm/drm_edid.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/virtio/virtio.c | 3 +--
+ include/linux/virtio.h  | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index 12893e7be..fdb8f0a6f 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -200,9 +200,10 @@ static const struct edid_quirk {
- 	EDID_QUIRK('V', 'L', 'V', 0x91be, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('V', 'L', 'V', 0x91bf, EDID_QUIRK_NON_DESKTOP),
+diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+index 00ac9db792a4..d891b0a354b0 100644
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -166,7 +166,7 @@ void virtio_add_status(struct virtio_device *dev, unsigned int status)
+ }
+ EXPORT_SYMBOL_GPL(virtio_add_status);
  
--	/* HTC Vive and Vive Pro VR Headsets */
-+	/* HTC Vive, Vive Pro and Vive Pro 2 VR Headsets */
- 	EDID_QUIRK('H', 'V', 'R', 0xaa01, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('H', 'V', 'R', 0xaa02, EDID_QUIRK_NON_DESKTOP),
-+	EDID_QUIRK('H', 'V', 'R', 0xaa04, EDID_QUIRK_NON_DESKTOP),
+-int virtio_finalize_features(struct virtio_device *dev)
++static int virtio_finalize_features(struct virtio_device *dev)
+ {
+ 	int ret = dev->config->finalize_features(dev);
+ 	unsigned status;
+@@ -202,7 +202,6 @@ int virtio_finalize_features(struct virtio_device *dev)
+ 	}
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(virtio_finalize_features);
  
- 	/* Oculus Rift DK1, DK2, CV1 and Rift S VR Headsets */
- 	EDID_QUIRK('O', 'V', 'R', 0x0001, EDID_QUIRK_NON_DESKTOP),
-
-base-commit: 99613159ad749543621da8238acf1a122880144e
+ void virtio_reset_device(struct virtio_device *dev)
+ {
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 72292a62cd90..5464f398912a 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -133,7 +133,6 @@ bool is_virtio_device(struct device *dev);
+ void virtio_break_device(struct virtio_device *dev);
+ 
+ void virtio_config_changed(struct virtio_device *dev);
+-int virtio_finalize_features(struct virtio_device *dev);
+ #ifdef CONFIG_PM_SLEEP
+ int virtio_device_freeze(struct virtio_device *dev);
+ int virtio_device_restore(struct virtio_device *dev);
 -- 
-2.34.1
+MST
 

@@ -2,225 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD3649253A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DF849253B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237533AbiARLvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:51:40 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13636 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230274AbiARLvj (ORCPT
+        id S241125AbiARLwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:52:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60376 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241103AbiARLvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:51:39 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IBSUXq030316;
-        Tue, 18 Jan 2022 11:51:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=I9K5XHxLDOsibcZ5rl4plOW1p+JxRz8GMdd1sVVC/r8=;
- b=SPt7cTrBliVh55gduecSqJnx5AjZn8FTfO/5/zE7bPSt94DNx0gLROpbCOipZXw5V+dA
- 6XrVNqeUuedlAb7RTTZ6rO3WGhBKxJ7wKjtdcEfasa9dqhKHGP0E1fWRBRTBvmm9gvjN
- rFipqbBge7KQoyShs7414yxhFbv0pcVRHnvN/uORY4f6ovimtSRd0RkhG2uUfzhWTIJ/
- +67GozLERgS0YXcrllu/RNtaUXLZO9wzZRIgpKzI5dVkVxlDiloRg0iwo8zHnPuJE5G4
- RB0pewCmW8CXThGqtO2PGYIFGlh5z5tL1uioQN8+IHhYAJl0vGuoJv1dJ0KDOfrBBhhG Qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnt4dkqjx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 11:51:38 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IBoSNs007311;
-        Tue, 18 Jan 2022 11:51:37 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnt4dkqjd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 11:51:37 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IBmqMZ015970;
-        Tue, 18 Jan 2022 11:51:36 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3dknw92f0k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 11:51:35 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IBgA2I33882408
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 11:42:10 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34A7CAE045;
-        Tue, 18 Jan 2022 11:51:27 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BE2D8AE04D;
-        Tue, 18 Jan 2022 11:51:26 +0000 (GMT)
-Received: from [9.171.19.84] (unknown [9.171.19.84])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 11:51:26 +0000 (GMT)
-Message-ID: <2bd8dd31-0c08-a03b-33b3-67d7adc78726@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 12:51:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 05/10] KVM: s390: Add optional storage key checking
- to MEMOP IOCTL
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        Tue, 18 Jan 2022 06:51:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2120B612D2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:51:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 566E8C00446;
+        Tue, 18 Jan 2022 11:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642506707;
+        bh=ruqQ6u6+OHL8NnX5Pv6LIHWbAvMY/0Tismmqvqx2R1E=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=pSUDCxNTutCw8Cjy/JJ31D0YEBp8+1xGCDC1poKzZnvm6co8FjjO8MGZUHZnh/otg
+         vCAa2/DVZ3Wej3RiZcLqqJFkmIPLu3jtIeA7p/3BPhQ1iHaKfLZp4z6BFzfCKJy9/w
+         cv1BjjepYBWEmMWQHVNX6/7ZQ1ZfhnbhXAqfPPVRpENm0rfLQtOHHNvi4bcPLsfv9Z
+         /FZtmmJf/QbUs1n7Jadv1dTchilhgROZgdF+U0ykcINSgH1Lb6JVnGPPyY/j59Q8PA
+         OVLNWYx2joPmo/vcHYcGU1glOBRScyJLP0filqj6ODcCqhKCVCwj+AhP2ZpZDOPIYF
+         i5Aa9nQRFXP9w==
+Subject: Re: ERROR: modpost: "gpmc_omap_get_nand_ops"
+ [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-6-scgl@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220118095210.1651483-6-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <202201171805.5HeoR4rS-lkp@intel.com>
+ <232ecd71-c4f8-6272-9a1e-91372763c3f5@kernel.org>
+ <57ad6f87-2198-92c6-8c26-f5b5a8d8a354@canonical.com>
+From:   Roger Quadros <rogerq@kernel.org>
+Message-ID: <7c523b72-2285-80b9-e0fc-0fbb2aa9d439@kernel.org>
+Date:   Tue, 18 Jan 2022 13:51:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <57ad6f87-2198-92c6-8c26-f5b5a8d8a354@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2m9v-qkGO2dcM6m5Gq5rJf8PC8IKuIKa
-X-Proofpoint-GUID: nT_KZZE9z1DpFYdkyx0gDhu0rarlProb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 adultscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180070
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-
-Am 18.01.22 um 10:52 schrieb Janis Schoetterl-Glausch:
-> User space needs a mechanism to perform key checked accesses when
-> emulating instructions.
+On 17/01/2022 15:08, Krzysztof Kozlowski wrote:
+> On 17/01/2022 13:35, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 17/01/2022 12:51, kernel test robot wrote:
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>> head:   0c947b893d69231a9add855939da7c66237ab44f
+>>> commit: dbcb124acebd8148e9e858a231f1798956dd3ca6 mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
+>>> date:   4 weeks ago
+>>> config: arm64-randconfig-r001-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171805.5HeoR4rS-lkp@intel.com/config)
+>>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+>>> reproduce (this is a W=1 build):
+>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>         chmod +x ~/bin/make.cross
+>>>         # install arm64 cross compiling tool for clang build
+>>>         # apt-get install binutils-aarch64-linux-gnu
+>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dbcb124acebd8148e9e858a231f1798956dd3ca6
+>>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>         git fetch --no-tags linus master
+>>>         git checkout dbcb124acebd8148e9e858a231f1798956dd3ca6
+>>>         # save the config file to linux build tree
+>>>         mkdir build_dir
+>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>>>
+>>>>> ERROR: modpost: "gpmc_omap_get_nand_ops" [drivers/mtd/nand/raw/omap2_nand.ko] undefined!
+>>
+>> The issue is that CONFIG_MEMORY is not set so OMAP_GPMC driver is not built causing the above undefined symbol error.
+>>
+>>>
+>>> Kconfig warnings: (for reference only)
+>>>    WARNING: unmet direct dependencies detected for OMAP_GPMC
+>>>    Depends on MEMORY && OF_ADDRESS
+>>>    Selected by
+>>>    - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST && HAS_IOMEM && ARCH_K3
+>>>
+>>
+>> A possible fix would be to select MEMORY along with OMAP_GPMC at the below location
+>>
+>> config MTD_NAND_OMAP2
+>>         tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+>>         depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
+>>         depends on HAS_IOMEM
+>> 	select MEMORY
+>> ^^
+>>         select OMAP_GPMC if ARCH_K3 
+>>         help
+>>           Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
+>>           and Keystone platforms.
+>>
+>>
+>> Is this OK?
 > 
-> The key can be passed as an additional argument via the flags field.
-> As reserved flags need to be 0, and key 0 matches all storage keys,
-> by default no key checking is performed, as before.
-> Having an additional argument is flexible, as user space can
-> pass the guest PSW's key, in order to make an access the same way the
-> CPU would, or pass another key if necessary.
+> Instead rather "select MEMORY if ARCH_K3"?
+
+I think we should drop "if ARCH_K3" for both for simplicity as the driver is using gpmc_omap_get_nand_ops() from that driver.
+
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Acked-by: Janosch Frank <frankja@linux.ibm.com>
-> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> ---
->   arch/s390/kvm/kvm-s390.c | 21 ++++++++++++++-------
->   include/uapi/linux/kvm.h |  1 +
->   2 files changed, 15 insertions(+), 7 deletions(-)
+> However I had impression that selecting a user-visible options is
+> discouraged, especially from within the drivers. What I would expect is
+> to select it from the machine/architecture code like you did before [1]
+> but was rejected by Nishanth.
 > 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 38b304e81c57..c4acdb025ff1 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -32,6 +32,7 @@
->   #include <linux/sched/signal.h>
->   #include <linux/string.h>
->   #include <linux/pgtable.h>
-> +#include <linux/bitfield.h>
->   
->   #include <asm/asm-offsets.h>
->   #include <asm/lowcore.h>
-> @@ -4727,9 +4728,11 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
->   	void *tmpbuf = NULL;
-> +	char access_key = 0;
->   	int r = 0;
->   	const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
-> -				    | KVM_S390_MEMOP_F_CHECK_ONLY;
-> +				    | KVM_S390_MEMOP_F_CHECK_ONLY
-> +				    | KVM_S390_MEMOP_F_SKEYS_ACC;
+> https://lore.kernel.org/linux-devicetree/20211217161417.q2qwwlki7oieqzjd@headlock/
 
-I think it would be better to just have a flag here (single bit) to check the key and
-then embed the key value in the payload.
+OMAP_GPMC option is not user visible. Else I would have just made MTD_NAND_OMAP2 depend on it.
 
-         union {
-                 __u8 ar;        /* the access register number */
-                 __u32 sida_offset; /* offset into the sida */
-                 __u8 reserved[32]; /* should be set to 0 */
-         };
+> 
+> In such case, your choice (with if ARCH...?) seems sensible.
+> MTD_NAND_FSL_IFC already does it.
+> 
 
-There are cases when we need both, AR and key so maybe an unname struct is the easiest.
-
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 1daa45268de2..e8fa1f82d472 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -562,7 +562,10 @@ struct kvm_s390_mem_op {
-         __u32 op;               /* type of operation */
-         __u64 buf;              /* buffer in userspace */
-         union {
--               __u8 ar;        /* the access register number */
-+               struct {
-+                       __u8 ar;        /* the access register number */
-+                       __u8 key;       /* effective storage key */
-+               };
-                 __u32 sida_offset; /* offset into the sida */
-                 __u8 reserved[32]; /* should be set to 0 */
-         };
-
-(or acc instead of key)
-
-
->   
->   	if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
->   		return -EINVAL;
-> @@ -4746,14 +4749,17 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->   			return -ENOMEM;
->   	}
->   
-> +	access_key = FIELD_GET(KVM_S390_MEMOP_F_SKEYS_ACC, mop->flags);
-> +
->   	switch (mop->op) {
->   	case KVM_S390_MEMOP_LOGICAL_READ:
->   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> -			r = check_gva_range(vcpu, mop->gaddr, mop->ar,
-> -					    mop->size, GACC_FETCH, 0);
-> +			r = check_gva_range(vcpu, mop->gaddr, mop->ar, mop->size,
-> +					    GACC_FETCH, access_key);
->   			break;
->   		}
-> -		r = read_guest(vcpu, mop->gaddr, mop->ar, tmpbuf, mop->size);
-> +		r = read_guest_with_key(vcpu, mop->gaddr, mop->ar, tmpbuf,
-> +					mop->size, access_key);
->   		if (r == 0) {
->   			if (copy_to_user(uaddr, tmpbuf, mop->size))
->   				r = -EFAULT;
-> @@ -4761,15 +4767,16 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->   		break;
->   	case KVM_S390_MEMOP_LOGICAL_WRITE:
->   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> -			r = check_gva_range(vcpu, mop->gaddr, mop->ar,
-> -					    mop->size, GACC_STORE, 0);
-> +			r = check_gva_range(vcpu, mop->gaddr, mop->ar, mop->size,
-> +					    GACC_STORE, access_key);
->   			break;
->   		}
->   		if (copy_from_user(tmpbuf, uaddr, mop->size)) {
->   			r = -EFAULT;
->   			break;
->   		}
-> -		r = write_guest(vcpu, mop->gaddr, mop->ar, tmpbuf, mop->size);
-> +		r = write_guest_with_key(vcpu, mop->gaddr, mop->ar, tmpbuf,
-> +					 mop->size, access_key);
->   		break;
->   	}
->   
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 1daa45268de2..e3f450b2f346 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -575,6 +575,7 @@ struct kvm_s390_mem_op {
->   /* flags for kvm_s390_mem_op->flags */
->   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
->   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
-> +#define KVM_S390_MEMOP_F_SKEYS_ACC		0x0f00ULL
->   
->   /* for KVM_INTERRUPT */
->   struct kvm_interrupt {
+cheers,
+-roger

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D6C492A14
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E96492A3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346211AbiARQGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S1346476AbiARQIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbiARQGm (ORCPT
+        with ESMTP id S243030AbiARQHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:06:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F283C061574;
-        Tue, 18 Jan 2022 08:06:42 -0800 (PST)
+        Tue, 18 Jan 2022 11:07:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40500C06161C;
+        Tue, 18 Jan 2022 08:07:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 463EB61295;
-        Tue, 18 Jan 2022 16:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B77C00446;
-        Tue, 18 Jan 2022 16:06:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B4B11CE1A3D;
+        Tue, 18 Jan 2022 16:07:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C13C340E0;
+        Tue, 18 Jan 2022 16:07:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522001;
-        bh=tjVPwCVSeIZmW7pkMs9ssKS1sLlUHCZNu+FGDeWmM5A=;
+        s=korg; t=1642522051;
+        bh=rjWTO/p7fIy6qGufrFBgvX7eBrnt5/kirKWfyg1bm4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XbmLsLZXRi3sV8whEVNpGUrwlpdYfufkfYgCAo+SODektqhmduLLaHH2NomUZ5/+Q
-         yqu7k8Zsk5PnjcKtgT92Q9lmdttSirlDBpYSFwOP30cLEwamdaJR4bX3NWQsEZsc/f
-         NDTwJPK2hzNXe7JGXvfYngDefqYZ/9yroDRfwO5U=
+        b=WIfrflV1ZucrOkVecQpc72iMuIgxoUvkMHl9zuDSLCFD48MvQWQmsiCkxOurW0rTA
+         HXudLNH+g4dvxCDi5Q7B2wrp5U1O4JyeLSxm2B17DcIePcjTbdPq5lgGMhwHUpO4CK
+         IAGrW4F+JQ6U+DUbE+utewe3eJbI61K0SSkpZ6KU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Paul Barker <paul.barker@sancloud.com>
-Subject: [PATCH 5.4 01/15] kbuild: Add $(KBUILD_HOSTLDFLAGS) to has_libelf test
-Date:   Tue, 18 Jan 2022 17:05:40 +0100
-Message-Id: <20220118160450.114140529@linuxfoundation.org>
+Subject: [PATCH 5.10 01/23] kbuild: Add $(KBUILD_HOSTLDFLAGS) to has_libelf test
+Date:   Tue, 18 Jan 2022 17:05:41 +0100
+Message-Id: <20220118160451.280084496@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160450.062004175@linuxfoundation.org>
-References: <20220118160450.062004175@linuxfoundation.org>
+In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
+References: <20220118160451.233828401@linuxfoundation.org>
 User-Agent: quilt/0.66
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -83,7 +83,7 @@ choice is respected.
 Link: https://github.com/ClangBuiltLinux/linux/issues/479
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Paul Barker <paul.barker@sancloud.com>
+Cc: Paul Barker <paul.barker@sancloud.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
  Makefile |    2 +-
@@ -91,14 +91,14 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/Makefile
 +++ b/Makefile
-@@ -1022,7 +1022,7 @@ HOST_LIBELF_LIBS = $(shell pkg-config li
+@@ -1073,7 +1073,7 @@ export mod_sign_cmd
+ HOST_LIBELF_LIBS = $(shell pkg-config libelf --libs 2>/dev/null || echo -lelf)
+ 
+ has_libelf = $(call try-run,\
+-               echo "int main() {}" | $(HOSTCC) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
++               echo "int main() {}" | $(HOSTCC) $(KBUILD_HOSTLDFLAGS) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
  
  ifdef CONFIG_STACK_VALIDATION
-   has_libelf := $(call try-run,\
--		echo "int main() {}" | $(HOSTCC) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
-+		echo "int main() {}" | $(HOSTCC) $(KBUILD_HOSTLDFLAGS) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
    ifeq ($(has_libelf),1)
-     objtool_target := tools/objtool FORCE
-   else
 
 

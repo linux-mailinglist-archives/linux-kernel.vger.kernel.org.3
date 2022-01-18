@@ -2,86 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABE9492B09
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFDE492B17
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347018AbiARQTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:19:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46812 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346618AbiARQSv (ORCPT
+        id S236432AbiARQV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235038AbiARQVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:18:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12ECC61444;
-        Tue, 18 Jan 2022 16:18:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6DCC00446;
-        Tue, 18 Jan 2022 16:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642522730;
-        bh=lWwgMLWeN92CpQV3rny+wqDTYoq0ROE6wIY4Y1P6dnA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jGyX78QRww/d16vaK9s1zbN4lO8EJ0FspYJdZgkvqR+MmqdU0SXHWhsxgJJUXzaN1
-         lzFX8CPXjPCWy4dTQzGzSZmlLCFX+mgQ3HFFYtt5y/9Za1Gs8Nvp1rP5dEZ82iKaYK
-         PBV5trb3A7sxfw4tquN/NsR54aWamu9CWFAxIlGV9n7ue0UFL6iBspe+pTmPFXuJzL
-         ooJXNddznNMqWwdqK1BhGbCOtFdLH5WLoAfm+925oAuVu6bPHMTj37TaaUdFmSU8zu
-         1Tz51eidlhe6gQZrDqZ4ERaHlMl4WwvKAs+I/FxcE7ZTFGUHOLr7aIap9o9aGt5ZhC
-         0ubF+mQwQRyLw==
-Date:   Tue, 18 Jan 2022 16:18:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        vsujithkumar.reddy@amd.com, alsa-devel@alsa-project.org
-Subject: Re: [PATCH AUTOSEL 5.16 50/52] ASoC: amd: acp: acp-mach: Change
- default RT1019 amp dev id
-Message-ID: <YeboZaJQLVejZCRg@sirena.org.uk>
-References: <20220117165853.1470420-1-sashal@kernel.org>
- <20220117165853.1470420-50-sashal@kernel.org>
+        Tue, 18 Jan 2022 11:21:25 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64179C061574;
+        Tue, 18 Jan 2022 08:21:24 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8D7021BF206;
+        Tue, 18 Jan 2022 16:21:19 +0000 (UTC)
+Date:   Tue, 18 Jan 2022 17:22:21 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: dt-bindings: media: renesas,csi2: Update
+ data-lanes property
+Message-ID: <20220118162221.yfwen6ppx7gcjzvw@uno.localdomain>
+References: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain>
+ <YeU1kDee7L26QJ86@oden.dyn.berto.se>
+ <20220117100040.wa3ple6meahebtni@uno.localdomain>
+ <YeaXZO+3C/fUM7ex@oden.dyn.berto.se>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q6NjtMl96wQVpgwI"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220117165853.1470420-50-sashal@kernel.org>
-X-Cookie: Do YOU have redeeming social value?
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YeaXZO+3C/fUM7ex@oden.dyn.berto.se>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Niklas,
 
---q6NjtMl96wQVpgwI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jan 18, 2022 at 11:33:08AM +0100, Niklas Söderlund wrote:
+> Hi Jacopo,
+>
+> Thanks for your feedback.
+>
+> On 2022-01-17 11:00:40 +0100, Jacopo Mondi wrote:
+> > Hi Niklas,
+> >
+> > On Mon, Jan 17, 2022 at 10:23:28AM +0100, Niklas Söderlund wrote:
+> > > Hello Jacopo,
+> > >
+> > > On 2022-01-17 09:11:10 +0100, Jacopo Mondi wrote:
+> > > > Hello Prabhakar,
+> > > >
+> > > > On Thu, Jan 13, 2022 at 10:32:14AM +0000, Lad Prabhakar wrote:
+> > > > > CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
+> > > > > handled by rcar-csi2.c driver. This patch updates the data-lanes property
+> > > > > to describe the same.
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > ---
+> > > > >  .../devicetree/bindings/media/renesas,csi2.yaml          | 9 ++++++++-
+> > > > >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > > > index e6a036721082..064a0a4c5737 100644
+> > > > > --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > > > > @@ -67,7 +67,14 @@ properties:
+> > > > >                  maxItems: 1
+> > > > >
+> > > > >                data-lanes:
+> > > > > -                maxItems: 1
+> > > > > +                items:
+> > > > > +                  minItems: 1
+> > > > > +                  maxItems: 4
+> > > > > +                  items:
+> > > > > +                    - const: 1
+> > > > > +                    - const: 2
+> > > > > +                    - const: 3
+> > > > > +                    - const: 4
+> > > >
+> > > > Seeing "maxItems: 1" there confuses me too, as the property is an
+> > > > array of data-lanes, but I'm afraid your change does not what you
+> > > > intend as it would allow you to specify the number of data lanes as an
+> > > > integer rather than as an array.
+> > > >
+> > > > I think it would probably be correct to set
+> > > >
+> > > >                 data-lanes: true
+> > > >
+> > > > (maybe maxItems: 1 is correct already)
+> > > >
+> > > > And restrict the number of valid combinations in the board DTS file
+> > > > with a construct like:
+> > > >
+> > > >     data-lanes:
+> > > >       oneOf:
+> > > >         - items:
+> > > >             - const: 1
+> > > >             - const: 2
+> > > >             - const: 3
+> > > >             - const: 4
+> > > >         - items:
+> > > >             - const: 1
+> > > >             - const: 2
+> > >
+> > > I don't think this is correct, what if data lanes 2 and 3 are used?
+> > >
+> >
+> > These were examples that allow you to accept <1 2> and <1 2 3 4> as
+> > valid properties. If other combinations are accepted they can be
+> > specified there, in your example, <2 3> with
+> >
+> >              - items:
+> >                - const: 2
+> >                - const: 3
+> >
+> > As lane re-reordering is quite unusual as a feature (afaik) there are
+> > usually just an handful of supported combinations for 1, 2 and 4 data
+> > lanes setups.
+>
+> R-Car CSI-2 hardware and driver supports full lane swapping, see the
+> LSWAP register and usage of struct rcar_csi2.lane_swap.
 
-On Mon, Jan 17, 2022 at 11:58:51AM -0500, Sasha Levin wrote:
-> From: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
->=20
-> [ Upstream commit 7112550890d7e415188a3351ec0a140be60f6deb ]
->=20
-> RT1019 components was initially registered with i2c1 and i2c2 but
-> now changed to i2c0 and i2c1 in most of our AMD platforms. Change
-> default rt1019 components to 10EC1019:00 and 10EC1019:01 which is
-> aligned with most of AMD machines.
+Uh, I missed that. So indeed restricting the possible combinations in
+the .dts file is a no-go :0
 
-This seems like a disruptive change to be backporting into stable...
+>
+> I think it's a good idea to extend the binding description to limit the
+> data-lanes property to an array of max 4 items where each value use is
+> ether a 1, 2, 3 or 4. But it must allow for any combination of the
+> values.
+>
 
---q6NjtMl96wQVpgwI
-Content-Type: application/pgp-signature; name="signature.asc"
+Agreed then.
 
------BEGIN PGP SIGNATURE-----
+Looking at the definition in video-interfaces.txt
+  data-lanes:
+    $ref: /schemas/types.yaml#/definitions/uint32-array
+    minItems: 1
+    maxItems: 8
+    items:
+      # Assume up to 9 physical lane indices
+      maximum: 8
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm6GQACgkQJNaLcl1U
-h9Cc+Af+LysinIPtu2z7k6BtNNgMxopSjDRXmvpFaxTaDINJWKg0Qps9VjZIQoM4
-46/b1AnkPLHJW48mtsS0chlzyIB7yvnmY+boA8WHntSxYInSmOXP4tLIw8X/Zq3e
-E9UBjPxMYJbPxNNDR97PqEJP7K71maEWwg+hgwkS5O6HsztCWMfO7mW7zOAKidsN
-8Kgi6OgkjiPdKs5eFr3bzR6KcK9x5gc759E8Ox4bHLUhDTRy1umZNo8CLxssOCTG
-6AjrJCR0pdy3QsONDVh6qnbj5FXeQoj3Tio5INS+4VQVfsffCsa9sI6olp3qcGXF
-aIBtW46qLwVqqyjDwhe1QwTVLULb3A==
-=YylC
------END PGP SIGNATURE-----
+Should the R-Car CSI-2 bindings report (validated with
+dt_binding_check)
 
---q6NjtMl96wQVpgwI--
+      data-lanes:
+        maxItems: 4
+        items:
+          maximum: 4
+
+Thanks
+   j
+
+> >
+> > If full lane re-ordering is supported then it's enough to set
+> > data-lanes: true and accepts all combinations.
+> >
+> > Also, the reason why imho the property should go in the board DTS and
+> > not in the SoC .dtsi is that not all the available data lanes of the
+> > IP-core might be routed out on a specific board.
+> >
+> > That's at least my understanding which I would be glad to be disproved
+> > as specifying the valid combinations in each board dts is rather
+> > un-convenient.
+> >
+> > Thanks
+> >    j
+> >
+> > > >
+> > > > Thanks
+> > > >    j
+> > > >
+> > > > >
+> > > > >              required:
+> > > > >                - clock-lanes
+> > > > > --
+> > > > > 2.17.1
+> > > > >
+> > >
+> > > --
+> > > Kind Regards,
+> > > Niklas Söderlund
+>
+> --
+> Kind Regards,
+> Niklas Söderlund

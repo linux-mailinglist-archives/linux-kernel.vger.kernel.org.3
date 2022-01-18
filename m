@@ -2,90 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2700349136D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C1C491370
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238907AbiARBcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 20:32:53 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:33338 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238792AbiARBcw (ORCPT
+        id S238930AbiARBc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 20:32:58 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:38790 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238891AbiARBcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:32:52 -0500
-Received: by mail-ot1-f51.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so5010733otu.0;
-        Mon, 17 Jan 2022 17:32:52 -0800 (PST)
+        Mon, 17 Jan 2022 20:32:53 -0500
+Received: by mail-ot1-f46.google.com with SMTP id g1-20020a9d6481000000b00592d01f2b6eso18162960otl.5;
+        Mon, 17 Jan 2022 17:32:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=UTya3NP8ShVi3TupYuluGp8FAaiOXk0bgJr9capIY1Y=;
-        b=aN17tOQXkxYyAq+7JgHXMpIMT4PdRRZlzJQ0Pb4YZgdpIeOK6o3zN8U3o57OvF/SUh
-         TnmrUbWjqz8KRdtm7H811nMDQSw4ro4OJUqvLWTMWPx3ZxoXHdxanBlMmvuZScUwYx50
-         UKezkw8r9N8QYlihCbmm0z7RuRz72peU9M7rPobIqTlXW3ZYCneHluZUfDaPjZ439QEJ
-         Aoog1nVzhtenFOLC5MW3sab8RHEmBV0d9YQFGhq+IHGtMF2lcbaAvhYVQacJF0xz8mmi
-         kD8mPlQrt99B3J0T8NwqrcIalxMKwtqJcvdaU1EhkOh10DhHO373rOS0ZAMdsi5mZFGv
-         8Scw==
-X-Gm-Message-State: AOAM530J//N+N1zl1s4lpqGt+WIXATc24OJOgdYT6M0OK/uB1odl/nkQ
-        ya88D4hB9HZLCrr1GOvLhHru8BEWuA==
-X-Google-Smtp-Source: ABdhPJxY2OtlCebxGCFuxE33YrmMjePyRG0OvLHCPVYYAFzbcANNCuNMrHqFQjab+l6ECjiYQmfEfw==
-X-Received: by 2002:a05:6830:150b:: with SMTP id k11mr15905244otp.231.1642469571569;
-        Mon, 17 Jan 2022 17:32:51 -0800 (PST)
+        bh=oEIoapL8xzQ/CNjfq2UGe67vWBp5fLU9YTddyRNF7D4=;
+        b=GNfQplyF1rLc8HJLS/qQAdEJqtOomWbdk5Cbhq1JqmFXgO6bnVlUFvwuPH3TI2ilcF
+         YtZZ4p/0DERPNY/15DTrKnvihPuO+eLf6tpeR8fMYk/hvk3DIJ87awwKALLKC+flnnEc
+         UnDL5T+4a2KGc6sm0jfh3caanWCw4OtO4Fp4KCKke6ykk5xe5TTNkgYkD2W2Pleo2kgE
+         92Lsx1oyastJEIjsgbNtfgEKhOjvpq32D2hl36H1zByI9oqIKfcQ4c4shvbS83HeXHgy
+         AIXGH+oWnwZ7SNbbaRYCkBk8t92sgt3opOA4wQtUQtufG8o8XeMe9ubmJui/5ukf7nAB
+         lF9w==
+X-Gm-Message-State: AOAM531X/7gPi+TO+YVR7OFVwAtGM22BmiYbh25Nn5qnCSIelB11N4T6
+        qUpIHWlrQIgoGt5eWP0hrA==
+X-Google-Smtp-Source: ABdhPJxOcSm7CNH2As9w3aynJ/Eeqk3Ioa3pKfpotJB614dy5Nud1iEbQPEcyuCYuwFps9Ymm1QLMQ==
+X-Received: by 2002:a9d:4106:: with SMTP id o6mr11937606ote.139.1642469573136;
+        Mon, 17 Jan 2022 17:32:53 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o11sm7905064oiv.10.2022.01.17.17.32.50
+        by smtp.gmail.com with ESMTPSA id c26sm6300180otr.65.2022.01.17.17.32.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 17:32:50 -0800 (PST)
-Received: (nullmailer pid 545751 invoked by uid 1000);
+        Mon, 17 Jan 2022 17:32:52 -0800 (PST)
+Received: (nullmailer pid 545747 invoked by uid 1000);
         Tue, 18 Jan 2022 01:32:47 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220118004434.17095-2-ansuelsmth@gmail.com>
-References: <20220118004434.17095-1-ansuelsmth@gmail.com> <20220118004434.17095-2-ansuelsmth@gmail.com>
-Subject: Re: [PATCH 01/14] dt-bindings: clock: Document qcom,gcc-ipq8064 binding
+To:     Cristian Pop <cristian.pop@analog.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        jic23@kernel.org, linux-iio@vger.kernel.org, robh+dt@kernel.org
+In-Reply-To: <20220117165247.15718-1-cristian.pop@analog.com>
+References: <20220117165247.15718-1-cristian.pop@analog.com>
+Subject: Re: [PATCH v1 1/2] dt:bindings:iio:frequency: Add ADMV4420 doc
 Date:   Mon, 17 Jan 2022 19:32:47 -0600
-Message-Id: <1642469567.797039.545749.nullmailer@robh.at.kernel.org>
+Message-Id: <1642469567.789557.545746.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 01:44:21 +0100, Ansuel Smith wrote:
-> Document qcom,gcc-ipq8064 binding needed to declare pxo and cxo source
-> clocks. The gcc node is also used by the tsens driver, already Documented,
-> to get the calib nvmem cells and the base reg from gcc.
+On Mon, 17 Jan 2022 18:52:46 +0200, Cristian Pop wrote:
+> Add device tree bindings for the ADMV4420 K band downconverter.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
 > ---
->  .../bindings/clock/qcom,gcc-ipq8064.yaml      | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
+>  .../bindings/iio/frequency/adi,admv4420.yaml  | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml:10:1: [warning] wrong indentation: expected 2 but found 0 (indentation)
+./Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml:36:1: [warning] wrong indentation: expected 2 but found 0 (indentation)
+./Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml:42:1: [warning] wrong indentation: expected 2 but found 0 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.example.dt.yaml: clock-controller@900000: compatible: ['qcom,gcc-ipq8064', 'syscon'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.example.dt.yaml: clock-controller@900000: compatible: Additional items are not allowed ('syscon' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.example.dt.yaml: clock-controller@900000: 'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.example.dt.yaml: clock-controller@900000: compatible: ['qcom,gcc-ipq8064', 'syscon'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.example.dt.yaml: clock-controller@900000: compatible: Additional items are not allowed ('syscon' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1581028
+See https://patchwork.ozlabs.org/patch/1580930
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

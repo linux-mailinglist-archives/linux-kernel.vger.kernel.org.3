@@ -2,124 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2200492A6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7308B492ADE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347238AbiARQKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:10:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40222 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346983AbiARQJM (ORCPT
+        id S243676AbiARQOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347267AbiARQMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:09:12 -0500
+        Tue, 18 Jan 2022 11:12:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3298BC0613E3;
+        Tue, 18 Jan 2022 08:11:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95BBA612E7;
-        Tue, 18 Jan 2022 16:09:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B42AC00446;
-        Tue, 18 Jan 2022 16:09:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B35AECE1A4C;
+        Tue, 18 Jan 2022 16:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DCCC340E2;
+        Tue, 18 Jan 2022 16:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522151;
-        bh=eP1FHXkJaS1vfmICRdpSwWEOAQrgMPNvDtNQR6vgBrs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FQfmTck7EpzXW5cm/w41nXtpAGDjlf5yqmCIkt5wMeQUpGHL9OXytamwvC5kxEVn6
-         TGo+VS/ZhDCZ3iGrJzrxRu+2spk1RXN81QwffvH0+Dnpka0/S1QMSfApyMt+YQuQHe
-         Kz3BMtjai2yYfFPWx8Y41Mz+VUQKi0Rl82oSlDkI=
+        s=korg; t=1642522275;
+        bh=sfEYohfTlHFWr3tXCBhB1w1ZUbrkKkZLnofhLtXytbY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=2uD2QTWztiOAJIeduPt526GmiEio7oMw/yuLjT1pZQffm4VV6JPZV5bt9NA7d9o0x
+         rTaqjd+kludbfXmhMzK8MlCD+MXuyvhIEJq97IIa9OU/UqsPL/YNnIfjLvgAmoPbnq
+         KM5ACyS4Rtiad6FCHHg7Pjvg0kj3etU12pWb+9T4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Artem Kashkanov <artem.kashkanov@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 08/28] KVM: x86: Register Processor Trace interrupt hook iff PT enabled in guest
-Date:   Tue, 18 Jan 2022 17:05:54 +0100
-Message-Id: <20220118160452.156025146@linuxfoundation.org>
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: [PATCH 5.16 00/28] 5.16.2-rc1 review
+Date:   Tue, 18 Jan 2022 17:05:55 +0100
+Message-Id: <20220118160452.384322748@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
-References: <20220118160451.879092022@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.16.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.16.2-rc1
+X-KernelTest-Deadline: 2022-01-20T16:04+00:00
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+This is the start of the stable review cycle for the 5.16.2 release.
+There are 28 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit f4b027c5c8199abd4fb6f00d67d380548dbfdfa8 upstream.
+Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+Anything received after that time might be too late.
 
-Override the Processor Trace (PT) interrupt handler for guest mode if and
-only if PT is configured for host+guest mode, i.e. is being used
-independently by both host and guest.  If PT is configured for system
-mode, the host fully controls PT and must handle all events.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+and the diffstat can be found below.
 
-Fixes: 8479e04e7d6b ("KVM: x86: Inject PMI for KVM guest")
-Reported-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Reported-by: Artem Kashkanov <artem.kashkanov@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211111020738.2512932-4-seanjc@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/x86/include/asm/kvm_host.h |    1 +
- arch/x86/kvm/vmx/vmx.c          |    1 +
- arch/x86/kvm/x86.c              |    5 ++++-
- 3 files changed, 6 insertions(+), 1 deletion(-)
+thanks,
 
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1509,6 +1509,7 @@ struct kvm_x86_init_ops {
- 	int (*disabled_by_bios)(void);
- 	int (*check_processor_compatibility)(void);
- 	int (*hardware_setup)(void);
-+	bool (*intel_pt_intr_in_guest)(void);
- 
- 	struct kvm_x86_ops *runtime_ops;
- };
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7899,6 +7899,7 @@ static struct kvm_x86_init_ops vmx_init_
- 	.disabled_by_bios = vmx_disabled_by_bios,
- 	.check_processor_compatibility = vmx_check_processor_compat,
- 	.hardware_setup = hardware_setup,
-+	.intel_pt_intr_in_guest = vmx_pt_mode_is_host_guest,
- 
- 	.runtime_ops = &vmx_x86_ops,
- };
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8430,7 +8430,7 @@ static struct perf_guest_info_callbacks
- 	.is_in_guest		= kvm_is_in_guest,
- 	.is_user_mode		= kvm_is_user_mode,
- 	.get_guest_ip		= kvm_get_guest_ip,
--	.handle_intel_pt_intr	= kvm_handle_intel_pt_intr,
-+	.handle_intel_pt_intr	= NULL,
- };
- 
- #ifdef CONFIG_X86_64
-@@ -11183,6 +11183,8 @@ int kvm_arch_hardware_setup(void *opaque
- 	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
- 	kvm_ops_static_call_update();
- 
-+	if (ops->intel_pt_intr_in_guest && ops->intel_pt_intr_in_guest())
-+		kvm_guest_cbs.handle_intel_pt_intr = kvm_handle_intel_pt_intr;
- 	perf_register_guest_info_callbacks(&kvm_guest_cbs);
- 
- 	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
-@@ -11213,6 +11215,7 @@ int kvm_arch_hardware_setup(void *opaque
- void kvm_arch_hardware_unsetup(void)
- {
- 	perf_unregister_guest_info_callbacks(&kvm_guest_cbs);
-+	kvm_guest_cbs.handle_intel_pt_intr = NULL;
- 
- 	static_call(kvm_x86_hardware_unsetup)();
- }
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.16.2-rc1
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/realtek: Re-order quirk entries for Lenovo
+
+Baole Fang <fbl718@163.com>
+    ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
+
+Sameer Pujar <spujar@nvidia.com>
+    ALSA: hda/tegra: Fix Tegra194 HDA reset failure
+
+Bart Kroon <bart@tarmack.eu>
+    ALSA: hda: ALC287: Add Lenovo IdeaPad Slim 9i 14ITL5 speaker quirk
+
+Christian Lachner <gladiac@gmail.com>
+    ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master after reboot from Windows
+
+Kai-Heng Feng <kai.heng.feng@canonical.com>
+    ALSA: hda/realtek: Use ALC285_FIXUP_HP_GPIO_LED on another HP laptop
+
+Arie Geiger <arsgeiger@gmail.com>
+    ALSA: hda/realtek: Add speaker fixup for some Yoga 15ITL5 devices
+
+Dario Petrillo <dario.pk1@gmail.com>
+    perf annotate: Avoid TUI crash when navigating in the annotation of recursive functions
+
+Johan Hovold <johan@kernel.org>
+    firmware: qemu_fw_cfg: fix kobject leak in probe error path
+
+Johan Hovold <johan@kernel.org>
+    firmware: qemu_fw_cfg: fix NULL-pointer deref on duplicate entries
+
+Johan Hovold <johan@kernel.org>
+    firmware: qemu_fw_cfg: fix sysfs information leak
+
+Larry Finger <Larry.Finger@lwfinger.net>
+    rtlwifi: rtl8192cu: Fix WARNING when calling local_irq_restore() with interrupts enabled
+
+Johan Hovold <johan@kernel.org>
+    media: uvcvideo: fix division by zero at stream start
+
+Javier Martinez Canillas <javierm@redhat.com>
+    video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+
+Dominique Martinet <asmadeus@codewreck.org>
+    9p: fix enodata when reading growing file
+
+Christian Brauner <christian.brauner@ubuntu.com>
+    9p: only copy valid iattrs in 9P2000.L setattr implementation
+
+Chuck Lever <chuck.lever@oracle.com>
+    NFSD: Fix zero-length NFSv3 WRITEs
+
+Sibi Sankar <sibis@codeaurora.org>
+    remoteproc: qcom: pas: Add missing power-domain "mxc" for CDSP
+
+Eric Farman <farman@linux.ibm.com>
+    KVM: s390: Clarify SIGP orders versus STOP/RESTART
+
+Li RongQing <lirongqing@baidu.com>
+    KVM: x86: don't print when fail to read/write pv eoi memory
+
+Sean Christopherson <seanjc@google.com>
+    KVM: x86: Register Processor Trace interrupt hook iff PT enabled in guest
+
+Sean Christopherson <seanjc@google.com>
+    KVM: x86: Register perf callbacks after calling vendor's hardware_setup()
+
+Sean Christopherson <seanjc@google.com>
+    perf: Protect perf_guest_cbs with RCU
+
+Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+    vfs: fs_context: fix up param length parsing in legacy_parse_param
+
+Stephen Boyd <swboyd@chromium.org>
+    remoteproc: qcom: pil_info: Don't memcpy_toio more than is provided
+
+Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+    orangefs: Fix the size of a memory allocation in orangefs_bufmap_alloc()
+
+Mario Limonciello <mario.limonciello@amd.com>
+    drm/amd/display: explicitly set is_dsc_supported to false before use
+
+NeilBrown <neilb@suse.de>
+    devtmpfs regression fix: reconfigure on each mount
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +-
+ arch/arm/kernel/perf_callchain.c                   | 17 ++++---
+ arch/arm64/kernel/perf_callchain.c                 | 18 +++++---
+ arch/csky/kernel/perf_callchain.c                  |  6 ++-
+ arch/nds32/kernel/perf_event_cpu.c                 | 17 ++++---
+ arch/riscv/kernel/perf_callchain.c                 |  7 ++-
+ arch/s390/kvm/interrupt.c                          |  7 +++
+ arch/s390/kvm/kvm-s390.c                           |  9 +++-
+ arch/s390/kvm/kvm-s390.h                           |  1 +
+ arch/s390/kvm/sigp.c                               | 28 ++++++++++++
+ arch/x86/events/core.c                             | 17 ++++---
+ arch/x86/events/intel/core.c                       |  9 ++--
+ arch/x86/include/asm/kvm_host.h                    |  1 +
+ arch/x86/kvm/lapic.c                               | 18 +++-----
+ arch/x86/kvm/vmx/vmx.c                             |  1 +
+ arch/x86/kvm/x86.c                                 | 12 +++--
+ drivers/base/devtmpfs.c                            |  7 +++
+ drivers/firmware/qemu_fw_cfg.c                     | 20 ++++-----
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  1 +
+ drivers/media/usb/uvc/uvc_video.c                  |  4 ++
+ .../net/wireless/realtek/rtlwifi/rtl8192cu/hw.c    |  1 +
+ drivers/remoteproc/qcom_pil_info.c                 |  2 +-
+ drivers/remoteproc/qcom_q6v5_pas.c                 |  1 +
+ drivers/video/fbdev/vga16fb.c                      | 24 ++++++++++
+ fs/9p/vfs_addr.c                                   |  5 +++
+ fs/9p/vfs_inode_dotl.c                             | 29 ++++++++----
+ fs/fs_context.c                                    |  2 +-
+ fs/nfsd/nfs3proc.c                                 |  6 +--
+ fs/nfsd/nfsproc.c                                  |  5 ---
+ fs/orangefs/orangefs-bufmap.c                      |  7 ++-
+ fs/super.c                                         |  4 +-
+ include/linux/fs_context.h                         |  2 +
+ include/linux/perf_event.h                         | 13 +++++-
+ kernel/events/core.c                               | 13 ++++--
+ sound/pci/hda/hda_tegra.c                          | 43 ++++++++++++++----
+ sound/pci/hda/patch_realtek.c                      | 52 ++++++++++++++++++++--
+ tools/perf/ui/browsers/annotate.c                  | 23 ++++++----
+ 37 files changed, 321 insertions(+), 115 deletions(-)
 
 

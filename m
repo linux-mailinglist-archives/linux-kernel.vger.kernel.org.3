@@ -2,68 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE608491F7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368FD491F8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242835AbiARGtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 01:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S240077AbiARGvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 01:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiARGtC (ORCPT
+        with ESMTP id S229486AbiARGvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 01:49:02 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96877C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:49:01 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b14so48248189lff.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:49:01 -0800 (PST)
+        Tue, 18 Jan 2022 01:51:20 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77892C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:51:20 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id n16-20020a17090a091000b001b46196d572so1905120pjn.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:51:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=cTX8+aELljL75aGmFQLFVAGHxGfTYO/25DOtLiHIZIQ=;
-        b=Tocf1BOlQF40dFt4fkKOzwhePLa1cWAS8xfWiU2H9Ufuul1SeZ/jar0hfTVOChtKlj
-         93UhqCzhE+xlYCznU3HYSP3nHV/QyQWNontC8ty+xv7Eq45ajDETErU8sHv9+iLSDuYE
-         8Gakdz0Wu4sEcngxJrYA2mMiYWNcGGttyoYdEfHJu/bjebBfINbDetyMWxTiulZPKxye
-         1rjH757WEH3+SoWV/tV9xcr2IJPiEiPOetXYEg5kg2mjVkVeZldLdRKL+Y4yVTwH7Za2
-         RXgcjS/u7iOBo/LherZUcYxNENZbusNEKr7dKJH167XdHyVVRjlyBew29R000O+cCLOA
-         /T6A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=werjgtfLJkCP6XvKlLZntqYlamvXmge4L1VauqJtNeY=;
+        b=HagPAQv1Ulr0Q1aSVtQ+foapRIoRkSmyUk8RzGOS12R7ORrBCZqyr2Eju+pun2M/Hy
+         pROOjIXbfjcJSJgJfoCevcoM237fiSrl0rDX+wNPtoECDCA/19JL7xF5di4a2pPy4Hp+
+         DcheRu/b7G7ED2VnFJBP6yENS35azMfzs30oFltv7G6Kfs/9pycaQGwoQ6bSRfybsKPB
+         0PDRoF8mFXZzlgo9B6MsEqYOw+IWmFr7mnL3dOw40b9HYbobDhfVxjo9z+vUaAn4hjJQ
+         lcxcdgvcF042RhSjhFtW/Z0Y0h4qOZyZ+KuPMQ5ne1+Ivra0D+e/x7MG1EhdwrMcFCkl
+         7dgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=cTX8+aELljL75aGmFQLFVAGHxGfTYO/25DOtLiHIZIQ=;
-        b=SQvNWndU2oMv3A0AATe6X9UH8ONrUM1nwxo/2XITgpPqYdrc3XbuXlgVCIk3mtmWVD
-         w9BhbUSOS9uDoTMlnWvaDdD3O0V/V58Q39ymcGOmYd2AZI9o3VoZvArS3rMBRkL4AnQm
-         TMT1B3YTKb/tYDji3zXkDEkNPA2HVLf8dyK2r03Pz9fhWzMcZCvGAp8VxeB8l+NulEBn
-         sxv2uSv9dWCkH+gsgvkzVBfq8HSeVemvSCOAoUrHykp4c6CbpeF60Qzjv3vh/9+//gzL
-         5f87lrbxUUNlvl+Fxj/oTozD3dQHVdgdfnrYhEx+C8fv5XxK7Iw22HUaVjL7sUdb2ABz
-         a3Dw==
-X-Gm-Message-State: AOAM532n+dfds4ji5RSkylAsqz1jHcWW84cSC2Ll/ixsmVuycR7woqQq
-        58NeaQQttzIKTgvGhd0h3Dmj7WlNfg0k2ELbews=
-X-Google-Smtp-Source: ABdhPJzP9KyQp4SWyhUyr77x3Gks7BDEfk4JwV4fJsMsuseZllRWV39zOv3SPwLFX6RYJ4AdkBInrMqsPcdHtIA0F6U=
-X-Received: by 2002:a19:f811:: with SMTP id a17mr19506156lff.18.1642488539936;
- Mon, 17 Jan 2022 22:48:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=werjgtfLJkCP6XvKlLZntqYlamvXmge4L1VauqJtNeY=;
+        b=8FYnPP7h3QNhJ+Hy46VUu4JSRY0yczvOhuNG5lBzbtjFzChX9YztWkHn6zxFe/DG0V
+         0+Rueg1lSuIIZ6YUfDzUhsuUGXEJMebGYm4bhyHl7ddZucpmonhCAzqqAcrVHuiEezXD
+         3SmQShz0ZkgOfJ/XTnD7Vdl2FMWtSFhDXRkxP36r7J+7ET+q0Om97wIMwdTYepQTIuer
+         nLuP7hMlc7IdC5a9rPX55YBpkV3ecuMEdSIscZj4dNZ0Pl/UaBa6DlO46JqTtKo1U44p
+         +gWol/zKW++OH7OytfmOfb7iIo4pibR7dBCmxc6d0Nm5W0qr+ubJNovwgIkdrBpqFVaw
+         JyPw==
+X-Gm-Message-State: AOAM533mGPtNnNmEubgnh66/5WIDcIoLRClOS07gryJKIo2RItWqebh+
+        PRY7bzlVimicLD5lDxjOFkGl9KRDFsYaM2P3+biqtw==
+X-Google-Smtp-Source: ABdhPJzIXVX7xNxzFzJpP0oBNgMI7a26OOC9KLGvwG4LcrItLCbHlO5/9AdqOQ2EnURmF7liRfqyT87olQGAXtDgErI=
+X-Received: by 2002:a17:90b:1095:: with SMTP id gj21mr33900113pjb.121.1642488679407;
+ Mon, 17 Jan 2022 22:51:19 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6504:264:0:0:0:0 with HTTP; Mon, 17 Jan 2022 22:48:59
- -0800 (PST)
-Reply-To: charlesjacksonjrc@gmail.com
-From:   Charles Jackson <johnnydepp3331@gmail.com>
-Date:   Mon, 17 Jan 2022 22:48:59 -0800
-Message-ID: <CAK7eE_nDP=HKLGoaZyBgiJnQEhHedbyx8Sh-VnbXWqjERC9vEw@mail.gmail.com>
-Subject: =?UTF-8?Q?Herzliche_Gl=C3=BCckw=C3=BCnsche=21=21=21_Antworten_Sie_zur=C3=BCck=2C_u?=
-        =?UTF-8?Q?m_Ihre_gespendeten_Gelder_einzufordern=2E?=
-To:     undisclosed-recipients:;
+References: <20211229112551.3483931-1-pumahsu@google.com> <Yd1tUKhyZf26OVNQ@kroah.com>
+ <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
+ <Yd/g/ywBWZG7gF8v@kroah.com> <CAGCq0LZ3i8VaMfRWNKvH_-ms0TgNqKA6f+Zx7M=iz1t_-smW+g@mail.gmail.com>
+ <fe411488-c67c-62ab-4709-98621b9f199b@linux.intel.com>
+In-Reply-To: <fe411488-c67c-62ab-4709-98621b9f199b@linux.intel.com>
+From:   Puma Hsu <pumahsu@google.com>
+Date:   Tue, 18 Jan 2022 14:50:43 +0800
+Message-ID: <CAGCq0LYwrkCe4X77x__CC6qUPaSvRXoO3grKODfP+eSGZfNm7w@mail.gmail.com>
+Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was set
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, mathias.nyman@intel.com,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-IHR E-MAIL-KONTO WURDE F=C3=9CR EINE SPENDE VON $3.500.000,00 USD F=C3=9CR
-WOHLT=C3=84TIGKEIT AUSGEW=C3=84HLT. ANTWORTEN SIE UNTEN AUF DIE E-MAIL F=C3=
-=9CR
-WEITERE INFORMATIONEN
+On Mon, Jan 17, 2022 at 8:20 PM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+>
+> >>> This seems like a big hammer for when the host controller throws an
+> >>>> error.  Why is this the only place that it should be checked for?  W=
+hat
+> >>>> caused the error that can now allow it to be fixed?
+> >>>
+> >>> I believe this is not the only place that the host controller may set
+> >>> HCE, the host controller may set HCE anytime it sees an error in my
+> >>> opinion, not only in suspend or resume.
+> >>
+> >> Then where else should it be checked?  Where else will your silicon se=
+t
+> >> this bit as part of the normal operating process?
+> >
+> > We observed this flag while resume in our silicon so far. According to =
+the XHCI
+> > specification 4.24.1, =E2=80=9CSoftware should implement an algorithm f=
+or checking the
+> > HCE flag if the xHC is not responding.=E2=80=9D, so maybe it would be b=
+etter
+> > to implement
+> > a new API to recover host controller whenever the driver side finds no =
+response
+> > from host controller in the future.
+> >
+>
+> As all the code to reset the host during resume already exists, and is we=
+ll tried
+> due to issues in resume being so common, I think it makes sense to add th=
+e HCE case
+> here as well. It's a simple fix that makes the life of users better.
+>
+> That said we shouldn't hide the reason for reset like this.
+> Print a debug message telling about the HCE so that everybody working wit=
+h xHCI
+> can see it and start fixing the rootcause.
 
-E-Mail: charlesjacksonjrc@gmail.com
+I will print a debug message in next patch version.
+
+> Another HCE check could be added to command timeout code, but just to sho=
+w a
+> warning for now.
+> Reset might not always clear HCE, and we don't want to be stuck in a rese=
+t loop.
+> This check  could be a separate patch
+
+Maybe I can try to make this in the future. Thank you for advising.
+
+> -Mathias

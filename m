@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FE049215E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3524492166
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344630AbiARIiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:38:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:3670 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344523AbiARIiV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:38:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642495101; x=1674031101;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=FhVSDuFXzCYwf0ycFrcVmxrINtgqM1+o6yYDqyQgb7c=;
-  b=HvBhHwrT1rVtQi2HT3Hsw6c8jACuRRMCABy9Mnb39M55/06t+8ye4zD3
-   Y8MPZ38m1UiyHfbiCHOViC13E+pkXugY4YqFaP7Bd2TYM9AWs1KS8xvnK
-   PV92HttH/6B+bw+mTF2wa1ZDMAT1PcqPGFGEDcioyi4fspDso00XCac3M
-   tZdDGlItAqd2YWBLxgseOC8dFRHf3Fht/umwisItvb0Jxgkr2apr2U+Uk
-   zbJHtNxtYixn3+D2eb5Vooi848yNhycQW7D6wKzK008ZVvVYrUAZOpiXL
-   BYYZcSm15i4xuCHjqS3iaq5MkUJm/NCFq8W4ch7VRuiq9oF2JcL3cPFTX
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="269146339"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="269146339"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 00:38:20 -0800
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="625435611"
-Received: from alexruss-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.3.57])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 00:38:15 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Helge Deller <deller@gmx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-fbdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-In-Reply-To: <4f1d6018-d74e-8e62-ea4d-0ca79c6bbbc5@gmx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
- <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de> <87ee5659dt.fsf@intel.com>
- <4f1d6018-d74e-8e62-ea4d-0ca79c6bbbc5@gmx.de>
-Date:   Tue, 18 Jan 2022 10:38:04 +0200
-Message-ID: <87a6ft5thv.fsf@intel.com>
+        id S235459AbiARIk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:40:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43233 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235028AbiARIk6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 03:40:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642495257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P6JED6ZXK16zXcKezrzoJEKz/qwjTeZGQeCzB0BgpnU=;
+        b=RiEWDAV3OcuiE45sjY523IQKEiL50lKdzcdimznNdEiAZwwtX40m3DNOrvuIZuD73NltPx
+        cjqsdZyJsz3BSwFpxZvx37j7+BNn9FKPJI84KvexMbIh3Q8Vdfndrn8DZgF6qsrZL1tjbU
+        tJd5mKkoIF5i/4ctf9mIR7dmsevljkQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-533-ZWeVy4WUPDuVBQhECn_eRw-1; Tue, 18 Jan 2022 03:40:56 -0500
+X-MC-Unique: ZWeVy4WUPDuVBQhECn_eRw-1
+Received: by mail-ed1-f70.google.com with SMTP id l10-20020a056402124a00b0040186fbe40dso7764396edw.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:40:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=P6JED6ZXK16zXcKezrzoJEKz/qwjTeZGQeCzB0BgpnU=;
+        b=D1VAzzeLbA9NIJ+c93bcFSL2EVvt3DUdF/mTd72lgrRa7Qasc+9fJIDCAMKhlG6b23
+         GIO4no74sldWFUr6TBNmdIDTzNbaQFXH233d7sQZsFY9mJc9je7qIEiZzOdqtT6wUn1Q
+         xvcyofVON8L4vH0+SGM1WVGIvhKt5fNGaYPKDe89ZQ9z5r7qotFhrfLSoPUMQ8aRR61Y
+         G/F8BmWkOx0gqW2uLVVwc5mygIjDfSROZHlX1nW0t8sGTZ2FllwKjQXWY/XGoqqgR8Xf
+         WL2hBOgdVvy/qViEzLg0XMQJXoOplZWxxpJ1eTHZOajc5yqCUS5aFh/qdlAVt8YctF4G
+         jeaA==
+X-Gm-Message-State: AOAM5312uBI1IqnfeZ4Ly8SPO4FqSseS3o7w339TJC1aiX+dvu/RNT5G
+        usnFa7N1eQcJIIPo0PckDtaSzxrppD7eFOo00saq3VepyD9b0Fhscc3AYjIvSknbpndn5f+XjRM
+        Nj16nc6VKNrxcgtSRRj8dj/OYWPkHn2XL1ylB9sPBWaZKPaWKau0UUoe3dJi8sc94K7QLhiBZVx
+        9o
+X-Received: by 2002:a17:906:6a1d:: with SMTP id qw29mr6640045ejc.750.1642495255541;
+        Tue, 18 Jan 2022 00:40:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxy/67Tkiwq/Hb0lr+RVqCK8TWjyci7RUPTkTmpxhBNTEK2o14/AlNKQFp4PQJusHdo+BDSrA==
+X-Received: by 2002:a17:906:6a1d:: with SMTP id qw29mr6640026ejc.750.1642495255261;
+        Tue, 18 Jan 2022 00:40:55 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id o22sm2994507eju.193.2022.01.18.00.40.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 00:40:54 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] KVM: x86: Partially allow KVM_SET_CPUID{,2}
+ after KVM_RUN
+In-Reply-To: <c427371c-474e-1233-4e57-66210bfc5687@redhat.com>
+References: <20220117150542.2176196-1-vkuznets@redhat.com>
+ <20220117150542.2176196-3-vkuznets@redhat.com>
+ <c427371c-474e-1233-4e57-66210bfc5687@redhat.com>
+Date:   Tue, 18 Jan 2022 09:40:53 +0100
+Message-ID: <87pmopl9m2.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022, Helge Deller <deller@gmx.de> wrote:
-> On 1/17/22 22:40, Jani Nikula wrote:
->> On Mon, 17 Jan 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
->>> Seems like few people read linux-fbdev these days.
->>
->> How much traffic is there to linux-fbdev that is *not* Cc'd to dri-devel
->> also?
+Paolo Bonzini <pbonzini@redhat.com> writes:
+
+> On 1/17/22 16:05, Vitaly Kuznetsov wrote:
+>>   
+>> +/* Check whether the supplied CPUID data is equal to what is already set for the vCPU. */
+>> +static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+>> +				 int nent)
+>> +{
+>> +	struct kvm_cpuid_entry2 *best;
+>> +	int i;
+>> +
+>> +	for (i = 0; i < nent; i++) {
+>> +		best = kvm_find_cpuid_entry(vcpu, e2[i].function, e2[i].index);
+>> +		if (!best)
+>> +			return -EINVAL;
+>> +
+>> +		if (e2[i].eax != best->eax || e2[i].ebx != best->ebx ||
+>> +		    e2[i].ecx != best->ecx || e2[i].edx != best->edx)
+>> +			return -EINVAL;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
 >
-> Doesn't seem like much traffic - which IMHO is OK for such a tree with
-> mostly just maintenance patches.
+> What about this alternative implementation:
 >
->> Do we still need a separate linux-fbdev mailing list at all?
+> /* Check whether the supplied CPUID data is equal to what is already set for the vCPU. */
+> static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+>                                   int nent)
+> {
+>          struct kvm_cpuid_entry2 *orig;
+>          int i;
 >
-> Yes. I want to have it seperate of dri-devel.
-> Actually I'd prefer to drop dri-devel from the list where patches
-> for fbdev are sent...
+>          if (nent != vcpu->arch.cpuid_nent)
+>                  return -EINVAL;
+>
+>          for (i = 0; i < nent; i++) {
+>                  orig = &vcpu->arch.cpuid_entries[i];
+>                  if (e2[i].function != orig->function ||
+>                      e2[i].index != orig->index ||
+>                      e2[i].eax != orig->eax || e2[i].ebx != orig->ebx ||
+>                      e2[i].ecx != orig->ecx || e2[i].edx != orig->edx)
+>                          return -EINVAL;
+>          }
+>
+>          return 0;
+> }
+>
+> avoiding the repeated calls to kvm_find_cpuid_entry?
+>
 
-Disagreed. If anything, this thread shows we can't have fbdev and drm in
-silos of their own.
-
-Also, if the patches continue to get merged through drm-misc, they need
-to be sent to dri-devel.
-
-
-BR,
-Jani.
-
+My version is a bit more permissive as it allows supplying CPUID entries
+in any order, not necessarily matching the original. I *guess* this
+doesn't matter much for the QEMU problem we're trying to workaround,
+I'll have to check.
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Vitaly
+

@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1754A4929CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B90F64929DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345979AbiARPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:43:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40000 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345950AbiARPnz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:43:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642520630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d0YPpE+94B6yWE7TJv4rcwracfeu9W68cFUmQp0rBtk=;
-        b=g7uiJfW7u1/M60YSZoTIYJWbR4jjWmq7YCbuKiwvvF0w1LvF/ngcpB56eGw5D7LKWuH11f
-        R37CAntgny7GhXYYVZUcY/2SoWm13m5Y90AN1K1v+zqmFP3qsN3EBm+LtQRT4QjCYUSfuE
-        045qwLd4UR+sHeMnSppnGeNJr1hwAV0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-219-12RjRnhkPeaDBYcCLStdmg-1; Tue, 18 Jan 2022 10:43:47 -0500
-X-MC-Unique: 12RjRnhkPeaDBYcCLStdmg-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso17331386edt.20
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:43:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=d0YPpE+94B6yWE7TJv4rcwracfeu9W68cFUmQp0rBtk=;
-        b=a7dIGQMLtQz8GY7TtVTduOT7LjxG5jLZ7xErHwp1VT3gTdU+z/7g/dxDKfGmghvr51
-         bBbELx07h7DWcGUj9l+crbzUGBuovREgtKnLrCjL0PIpN76AgyY8VMlHgpSW62Mc2WwF
-         fq5m0cDuB3UxKh7NKnDYQxsDTO210VwtWe+NOyWIBBvHR1/VRG58X7VFgM81UZKXhBNN
-         PIZuFq/rBAkckUHGmmV+3/wURm+gFXPnacU1U6ZEax4xba0B6JB4SNVS7y3hYGL7lQdc
-         yutlr9j9QY5qo4LbEoA9ICw0zYNzam0/thwctmgJE3wkGO/eFWHm/nKL3d8HFRT360rE
-         1uxQ==
-X-Gm-Message-State: AOAM533r8lJFrqp43HotbfZWjv85d8f2GyBj/zRrY1n6ufaNB4g/OD0i
-        0mjql+HSvQLHN/W06RAvzsPiMUhc0I1HGb60q07YaHe5W5JoIzaFHqQZuti/0c5Mag9j8oigqaY
-        g4KDffzUtBLAB9zQDuFXTJa+0
-X-Received: by 2002:a05:6402:291b:: with SMTP id ee27mr18848547edb.363.1642520623263;
-        Tue, 18 Jan 2022 07:43:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwSf30u1Y8twrreQGvhRj70h4otcNrhlmXnPl8LDEz9y+o8KJ76N1+dABMmBkucVx6D4qd3/Q==
-X-Received: by 2002:a05:6402:291b:: with SMTP id ee27mr18848524edb.363.1642520623022;
-        Tue, 18 Jan 2022 07:43:43 -0800 (PST)
-Received: from redhat.com ([2.55.154.241])
-        by smtp.gmail.com with ESMTPSA id hs32sm5459700ejc.180.2022.01.18.07.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 07:43:42 -0800 (PST)
-Date:   Tue, 18 Jan 2022 10:43:38 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH] virtio: acknowledge all features before access
-Message-ID: <20220118104318-mutt-send-email-mst@kernel.org>
-References: <20220114200744.150325-1-mst@redhat.com>
- <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
- <20220117032429-mutt-send-email-mst@kernel.org>
- <87mtjuv8od.fsf@redhat.com>
+        id S1346012AbiARPtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:49:00 -0500
+Received: from mga05.intel.com ([192.55.52.43]:39701 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345834AbiARPs7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:48:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642520939; x=1674056939;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n2HdvlkezkO7MNNO0epANEP8x/sWSiaZABc03KE2VuQ=;
+  b=mC3AfNMRImOOLVpVRKqF5GTZuFauoPWY2pbXLTi5m8azD63K9WpUIfgB
+   7GvhB7HtFX2y3OXUS6j1FBle50FStlLgUk1OtakO8SOg83i3seTtIAcz8
+   TrO/9EUzjGo+iL6sK/sUDXmGN4cAnkEKA3OxVLgf6AmhqaB4NE9P6IcC3
+   D7ikgy0Qta/lCMTXbSCd1G++ALeMSvH0K63xs1igL1iwYG5CRUeXkQZ6h
+   e1Woux8OxSFBKGVTSXHAto+fKlcqjZLpz2ogBAAvcEnDQRWMTuYGc6CHw
+   dr84VJi064OsLDCB6K3/Uc+7WRDWv+dcfL+r3A1mpoCKanwGd6jyvZNX7
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="331194297"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="331194297"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 07:48:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="625547181"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2022 07:48:57 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9qjA-000Cig-O3; Tue, 18 Jan 2022 15:48:56 +0000
+Date:   Tue, 18 Jan 2022 23:48:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: drivers/media/i2c/ov8865.c:2799 ov8865_get_selection() warn:
+ inconsistent indenting
+Message-ID: <202201182306.qGenOYaU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87mtjuv8od.fsf@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 01:38:42PM +0100, Cornelia Huck wrote:
-> On Mon, Jan 17 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> 
-> > On Mon, Jan 17, 2022 at 02:31:49PM +0800, Jason Wang wrote:
-> >> 
-> >> 在 2022/1/15 上午4:09, Michael S. Tsirkin 写道:
-> >> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
-> >> >   	/* We have a driver! */
-> >> >   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
-> >> > +	ret = dev->config->finalize_features(dev);
-> >> > +	if (ret)
-> >> > +		goto err;
-> >> 
-> >> 
-> >> Is this part of code related?
-> >> 
-> >> Thanks
-> >> 
-> >
-> > Yes. virtio_finalize_features no longer calls dev->config->finalize_features.
-> >
-> > I think the dev->config->finalize_features callback is actually
-> > a misnomer now, it just sends the features to device,
-> > finalize is FEATURES_OK. Renaming that is a bigger
-> > patch though, and I'd like this one to be cherry-pickable
-> > to stable.
-> 
-> Do we want to add a comment before the calls to ->finalize_features()
-> (/* write features to device */) and adapt the comment in virtio_ring.h?
-> Should still be stable-friendly, and giving the callback a better name
-> can be a follow-up patch.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fe81ba137ebcc7f236780996a0b375732c07e85c
+commit: acd25e220921de232b027c677668c93aa6ba5d15 media: i2c: Add .get_selection() support to ov8865
+date:   7 weeks ago
+config: x86_64-randconfig-m001-20220117 (https://download.01.org/0day-ci/archive/20220118/202201182306.qGenOYaU-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
-Sorry which comment in virtio_ring.h?
-Could not find anything.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >
-> >> > +
-> >> >   	ret = virtio_finalize_features(dev);
-> >> >   	if (ret)
-> >> >   		goto err;
+smatch warnings:
+drivers/media/i2c/ov8865.c:2799 ov8865_get_selection() warn: inconsistent indenting
 
+vim +2799 drivers/media/i2c/ov8865.c
+
+  2787	
+  2788	static int ov8865_get_selection(struct v4l2_subdev *subdev,
+  2789					struct v4l2_subdev_state *state,
+  2790					struct v4l2_subdev_selection *sel)
+  2791	{
+  2792		struct ov8865_sensor *sensor = ov8865_subdev_sensor(subdev);
+  2793	
+  2794		switch (sel->target) {
+  2795		case V4L2_SEL_TGT_CROP:
+  2796			mutex_lock(&sensor->mutex);
+  2797				__ov8865_get_pad_crop(sensor, state, sel->pad,
+  2798						      sel->which, &sel->r);
+> 2799			mutex_unlock(&sensor->mutex);
+  2800			break;
+  2801		case V4L2_SEL_TGT_NATIVE_SIZE:
+  2802			sel->r.top = 0;
+  2803			sel->r.left = 0;
+  2804			sel->r.width = OV8865_NATIVE_WIDTH;
+  2805			sel->r.height = OV8865_NATIVE_HEIGHT;
+  2806			break;
+  2807		case V4L2_SEL_TGT_CROP_BOUNDS:
+  2808		case V4L2_SEL_TGT_CROP_DEFAULT:
+  2809			sel->r.top = OV8865_ACTIVE_START_TOP;
+  2810			sel->r.left = OV8865_ACTIVE_START_LEFT;
+  2811			sel->r.width = OV8865_ACTIVE_WIDTH;
+  2812			sel->r.height = OV8865_ACTIVE_HEIGHT;
+  2813			break;
+  2814		default:
+  2815			return -EINVAL;
+  2816		}
+  2817	
+  2818		return 0;
+  2819	}
+  2820	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

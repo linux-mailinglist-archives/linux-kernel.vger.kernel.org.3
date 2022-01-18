@@ -2,279 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8519492049
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 08:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A53549205B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 08:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245397AbiARH1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 02:27:39 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:56144 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245157AbiARH0x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 02:26:53 -0500
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220118072648epoutp03884f0f0ab06c47d986ef23821355f563~LTLAYokpv2005820058epoutp03F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:26:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220118072648epoutp03884f0f0ab06c47d986ef23821355f563~LTLAYokpv2005820058epoutp03F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642490808;
-        bh=Zg0RU9t5W1nXKXsU2UNw4q6sL2viMGbVEqOgjrgpgsY=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=CNcB8ZoMoTnViy3OSGV6mMlqNTWjxffp9cQHpMPYzPKgebMx4MGbrnVEpZe68WaBN
-         M3u4hpsVOS5/8BBcKABoec0RwBXdjvJEwRdFims87SDPeCA7wcg3MGhdBZtYxjX7bA
-         3ThQrAm736d36D4TWi8dyJmSmqVMWX7dF4YIIiX0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220118072647epcas5p1419e8d3f15254d71568b1e88edca0923~LTK-3cT3s0182301823epcas5p17;
-        Tue, 18 Jan 2022 07:26:47 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JdL1T2mZ1z4x9Q5; Tue, 18 Jan
-        2022 07:26:37 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        15.F2.06423.AAB66E16; Tue, 18 Jan 2022 16:26:34 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220118072633epcas5p484d86503f12b803cfb83cd20954b3626~LTKyyh9UU2404324043epcas5p4Y;
-        Tue, 18 Jan 2022 07:26:33 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220118072633epsmtrp19d54e1f50077be4c8e6b0ee62780545a~LTKyxqVGq1052610526epsmtrp17;
-        Tue, 18 Jan 2022 07:26:33 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-0f-61e66baa8d47
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        52.BD.08738.9AB66E16; Tue, 18 Jan 2022 16:26:33 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220118072631epsmtip213571a9cbf9be5f39b0a6df5f2326652~LTKwsg1SV0825508255epsmtip2f;
-        Tue, 18 Jan 2022 07:26:31 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Henrik Grimler'" <henrik@grimler.se>
-Cc:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        <semen.protsenko@linaro.org>, <virag.david003@gmail.com>,
-        <martin.juecker@gmail.com>, <cw00.choi@samsung.com>,
-        <m.szyprowski@samsung.com>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>
-In-Reply-To: <YeWgNJaDHxKROpQs@grimlerstat>
-Subject: RE: [PATCH v3 3/3] ARM: dts: Add support for Samsung Chagall WiFi
-Date:   Tue, 18 Jan 2022 12:56:30 +0530
-Message-ID: <01c501d80c3c$b820fb90$2862f2b0$@samsung.com>
-MIME-Version: 1.0
+        id S234336AbiARHd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 02:33:27 -0500
+Received: from mga03.intel.com ([134.134.136.65]:4272 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229474AbiARHd1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 02:33:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642491206; x=1674027206;
+  h=message-id:date:subject:references:to:cc:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=WkhlGSbtbbLJTP3jGD2ejRPI7+/hW1kplm+8vSHLV1g=;
+  b=O2SkCQz1h/TLVut5fJGJ8xbwUMl3VPjt5/pc3Dk89r0djcd2ktvlmQKs
+   bLnhTmLXownjtkXAIIssZfTPemvPXovgV63q91R2eWdPjHGmmu2eKt9A4
+   DCRmlgBMlrXUkZE1oOYbhWtgPwfcErqjNIaej4hM37vVRPN60BIQLxB6t
+   fS6dFnSbtyuZ2Y00aaJEsh58u5KZLDeQdALmwZJMD3EDbqggFBUgXioLv
+   9rhaJDS7GKw73C58ueBrR8A92uxvAauAyqEQp2GKCOcIKY4s88vuGF3Lh
+   iA+dfZ+pydHC1UY7ITV5i3Ts9UF1C87eghLs7cNa4yi/+ktDrLuLLBVLu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244716046"
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="244716046"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 23:33:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
+   d="scan'208";a="531663639"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga008.jf.intel.com with ESMTP; 17 Jan 2022 23:33:26 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 17 Jan 2022 23:33:25 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 17 Jan 2022 23:33:25 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.175)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 17 Jan 2022 23:33:25 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iTQIFu/b0cWGEzjjBxIjEQllRcSEfHQlsNCSQSk0Q3q+il9fgCM4Pz5Ghi/99+jwYeG0cm5a51W2nyc1vf2yfEonNqDsrTxVqHU976f0RwHS1OWfAU+83MiKHsmDnBgYCV0B8FBlYGYK9ZhFLZiYD58I+TuQBoCkR+b7LsbjpULWAuv/vCEx9ZY68P4OqY1P7pgi+diC89FQl71rpqlJSqvNwpFu1L3Em8T3Oa+t3YP4F0nYR6Q3fr+WzZg0L5HhUX2BLLYveu/1yuxJePbUdVfhwoENxVX1q/FMLDFtstWIJi1p3UAwm0+ZuQwhI1wOI75cTU9WSrfL1gFZDV/JNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5qUpusLyfn6Dj9QJ70vR8Ap8oo+2Vas3hZAKkMmf46I=;
+ b=L0UhgYYlpHnY0ih67J7d5F5qzzodIzAyjULTx141qS6ZTzHqk7dx3D3FSNWyOdYyfhTLog1z1PxKazCSsSpwF/ZvD3yuHNtnYrxb/DWWaUOQcgufwjnCYXYaQHb/SU7yWLA0QnoX2/EpExgYds9QVoY3fM1eNVqIcxxYUsT0mBi29ghx4bFMmqMYNeX/ZjXqJQz/0xEeyl09qrA8YPbA5gwa53qarUNnf7y9m9qZdyenQ4g2eE1fft5n/ZkzX1j55foptvOS/ce+JH/2LDWEWCli+wkApYmSJPTbCWFTLeVAoNaXaWyLx3hBctsjyPbIzjtCwY4Uf/KADmlWjtjzng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
+ by BYAPR11MB2888.namprd11.prod.outlook.com (2603:10b6:a03:8c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 07:33:19 +0000
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::741a:c47f:a4:bff5]) by SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::741a:c47f:a4:bff5%6]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 07:33:19 +0000
+Message-ID: <2fdfe9da-ce67-2495-f6c3-2610033437ad@intel.com>
+Date:   Tue, 18 Jan 2022 15:33:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: drivers/gpu/drm/ast/ast_mode.c:1232:3: warning: Use of memory after
+ it is freed [clang-analyzer-unix.Malloc]
+References: <202201141416.VfNXpsi5-lkp@intel.com>
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+From:   kernel test robot <yujie.liu@intel.com>
+In-Reply-To: <202201141416.VfNXpsi5-lkp@intel.com>
+X-Forwarded-Message-Id: <202201141416.VfNXpsi5-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKTrlzLhJbN5e22s0Ks3rGJhMIi0gCNReXFAo1zs98Cp4BzmQGZbeD4AaJ5xbYBhx1hmaqc71SA
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDJsWRmVeSWpSXmKPExsWy7bCmlu6q7GeJBhtP8Fhc//Kc1WL+kXOs
-        Fm+X7GK02Pj2B5PFpsfXWC0u75rDZjHj/D4mi7VH7rJbnPk3lcWide8RdovnfUCx4+8fM1ps
-        /v6X0YHXY1ZDL5vHzll32T2OXrnH6rFpVSebx51re9g8Ni+p9/h/Zy27R9+WVYwenzfJBXBG
-        ZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAN2tpFCW
-        mFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjO
-        +Pqlh7Xgp0nF2vY+1gbGqZpdjJwcEgImEk877zJ3MXJxCAnsZpS4uewLO4TziVHi+NbJrBDO
-        Z0aJV/fOs8C03P5ylQUisYtR4sv2/1DOS0aJJd1NjCBVbAK6EjsWt7GB2CICWhJTN3wAW8Is
-        sIBZ4k3HfLAEp4C2xJVVp5lBbGEBL4mfd3+zgtgsAqoSK05uAFvHK2Ap0d1wjhnCFpQ4OfMJ
-        WJxZQF5i+9s5zBAnKUj8fLqMFWJZlETrx5WsEDXiEi+PHgF7SELgAYfE28b9TBANLhL9l46y
-        QtjCEq+Ob2GHsKUkXva3AdkcQHa2RM8uY4hwjcTSeceg3reXOHBlDgtICbOApsT6XfoQq/gk
-        en8/YYLo5JXoaBOCqFaVaH53FapTWmJidzfUUg+Jly07WSYwKs5C8tgsJI/NQvLALIRlCxhZ
-        VjFKphYU56anFpsWGOallsMjPDk/dxMjOFlree5gvPvgg94hRiYOxkOMEhzMSiK8x7ifJArx
-        piRWVqUW5ccXleakFh9iNAWG9kRmKdHkfGC+yCuJNzSxNDAxMzMzsTQ2M1QS5z2dviFRSCA9
-        sSQ1OzW1ILUIpo+Jg1OqgcmL/05zL59rs1DZ+dbemmXiO4+HRvZfWmWjOoH5kVwYo+5dycMn
-        Hb83bFZay7DeJ71U6HTfXLujic9/zr/GxDbj2dxLnUrno56svTThNKts1oTXLX7pm3Oub2U8
-        9OrLVxujI+dXlij/8D8rJMrqIZ4x0d0yu/9wfxZHxmLtI43flU69+XHM7ebqmPnWanl9bxkz
-        rr9+LMRrFXL42KTdbw1+Zs54HGuaOnWlzYyrF4OXFDWznS9jzrt1qcl5H19E0Z2ru/JnLlld
-        aWgyvVClM7U08fy20ryftbIpBjyJ12UnqLz4cEosvlekWfhLuFRJ8N6bJWpzHd48X3Sk0IY5
-        7HOYYPchb76DizKiFf1usCqxFGckGmoxFxUnAgCw6mfJXwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCIsWRmVeSWpSXmKPExsWy7bCSvO7K7GeJBgsPqllc//Kc1WL+kXOs
-        Fm+X7GK02Pj2B5PFpsfXWC0u75rDZjHj/D4mi7VH7rJbnPk3lcWide8RdovnfUCx4+8fM1ps
-        /v6X0YHXY1ZDL5vHzll32T2OXrnH6rFpVSebx51re9g8Ni+p9/h/Zy27R9+WVYwenzfJBXBG
-        cdmkpOZklqUW6dslcGV8/dLDWvDTpGJtex9rA+NUzS5GTg4JAROJ21+usnQxcnEICexglGjc
-        co0NIiEtcX3jBHYIW1hi5b/n7BBFzxklLrTvZwZJsAnoSuxY3AbWICKgJTF1wwdmkCJmgVXM
-        EmtvTYLquMQkcWbhO1aQKk4BbYkrq06DdQsLeEn8vPsbLM4ioCqx4uQGFhCbV8BSorvhHDOE
-        LShxcuYToDgH0FQ9ibaNjCBhZgF5ie1v5zBDXKcg8fPpMlaII6IkWj+uZIWoEZd4efQI+wRG
-        4VlIJs1CmDQLyaRZSDoWMLKsYpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQIjlgtrR2M
-        e1Z90DvEyMTBeIhRgoNZSYT3GPeTRCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeW
-        pGanphakFsFkmTg4pRqYrO+tP1qb6rnVKIvPJlrx9XdJhRvTp5gyzxe/Okdw62atL3tyX91k
-        OVG3/pvGum1hRlcbxP/+bGNW//ruV96796uPFzwzVt4yWbXz2et9xWYndlcs33pj5Q3zgBDu
-        9VfCvNfq1uvoZAj5LLr1rWlS1I/8YN0n4bNeGvlnFuwyu7bmj8OygjUR56ulk/Q6zA56skhv
-        qFpzQEws9Z6m2MJTf/fNdOTp/dNwtu/Ur7PsfHVN1SGHHKakx+eq58bO+vmjWf+kx2q17NMv
-        3F/v137ufDnJ9NDLsqfPI24kzHktEbLBYN+KFz/9lonPyhSw2hldvu2gy8437S12T8+EiTG3
-        vm1/96ZiaR1r3dO19iZNS5RYijMSDbWYi4oTASmEpy9HAwAA
-X-CMS-MailID: 20220118072633epcas5p484d86503f12b803cfb83cd20954b3626
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220116205940epcas5p3dbab01fb6bb7a4af76169231e6d94469
-References: <20220116165035.437274-1-henrik@grimler.se>
-        <20220116165035.437274-4-henrik@grimler.se>
-        <ca8c4613-a058-6cde-f9e6-8530f142a821@canonical.com>
-        <CGME20220116205940epcas5p3dbab01fb6bb7a4af76169231e6d94469@epcas5p3.samsung.com>
-        <YeSHNCywXhp8gHC7@L14.lan> <001301d80b66$190901a0$4b1b04e0$@samsung.com>
-        <YeWgNJaDHxKROpQs@grimlerstat>
+X-ClientProxiedBy: HKAPR04CA0010.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::20) To SJ0PR11MB5598.namprd11.prod.outlook.com
+ (2603:10b6:a03:304::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02339db6-f9c3-4da5-b926-08d9da54cc79
+X-MS-TrafficTypeDiagnostic: BYAPR11MB2888:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR11MB2888AE72C7F9D4D7A6688B59FB589@BYAPR11MB2888.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:497;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eXUwQmuF6fS/uQiJ6l4ymP0OBtyFZ4Zpdj47cS7dWbxP8ZBrlT5PiwFD277Kms4ml/s+6dPGBC4fXdefAFN1IMFT/KmzfPhWROp1A61Ogt8VJoKX11/B8rKWUDiobTysyeQdkE8g0DBHW10+QyZyy3n7UBZ8CAqIQRJUrVTYN/qd2bAeUKgihpT8ATOfbPHxlRMjom0z0+EInH1ULAAamIvvr8Zuu5rQ0ZXOSj8nMYQ8xpK/OL2MFnSZvXHAucwzavkeWh/iyiR9DRJNNZGwtmRLKfigAHpnoBSG94HlG5o2upRmNwt1lYRzH0phBImjdKOzA2cBGuPCr4bwTFsoDLwqR//3mJfuYRpt2AnQqnGi5+d1FqMBf0Q0NWdGOh9L0EnJv8iXYK7S9AKunocLGAehhzFUxa3CWHA+miPx3ZHSvHKq0w2FcysCg0TXeyVirzVuxXIdB+iPtsh+HGWr8eiSONpRmBXXvumg8LNDoY2Nmr2h22J5aqwcjmkikTfZEBx/Zd9iOru+BEskS12Ef6ez3GZBLcmS4m/v06eFuEVmVPP6Fz41iq5uSSJzcoLapK9eHVexA6O10l7IMJMPESF8wpz64TQDzNDVywaHwh3FWzbhy8AH96JMKx+b83/cNVrxR1p8Yfh3f+EookFvFAY98FVR1y/ST1yU18jZBOh512kXPiL0HlfVLFM37ReEUakfoOQFlHMC0JgxsaaKjkO8FMYegAjSm612QuW+0EcuDejXLwBjiPQdm+LNzr7ABjqVRaDD7mwBfKgEnnwRLk1Yzhpn0CnGf9DYb4SJ2cw/6QbFDglC+i4YRMB/P02KXXaWvaQ5s3x83ieskPv4Mg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66476007)(6512007)(5660300002)(66946007)(8936002)(54906003)(31696002)(6916009)(31686004)(38100700002)(83380400001)(86362001)(36756003)(6666004)(4326008)(508600001)(8676002)(2906002)(6506007)(966005)(82960400001)(186003)(66556008)(6486002)(2616005)(26005)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MVY0NUdkMTJwK2ZUTVlMY3hGcXl6L0wyVlZkUTd3Y3YvN1ptRlVPbDhRbEsz?=
+ =?utf-8?B?bnFuUXlQc05sUzVQU090MHNvTkpkTXBmZi9UQnI0ck9hdHdhdFNRSlVjNmUz?=
+ =?utf-8?B?N3lTRXJ4UlVnTEhWK2RoVlJKNHJ2KzNZeE5oM2xZRmdJQ01wTzhwTm43L2VL?=
+ =?utf-8?B?WkREU0oxNTEzUTltSE15K2pHbVZmbUhaa1JMNjJjN0R0WmY3bTQxVmt6dTd6?=
+ =?utf-8?B?SEZYR0p4ZGNmNDRVMnNNM0lheFh3MHNXTHpDelJNbFB0WnkzY3l6QkFxaEps?=
+ =?utf-8?B?UTlTbXRRVkk4K2NpdFduREtMQ0JXU0pXY2hueDd1VkVtc3dtbTZVZDhQcUh3?=
+ =?utf-8?B?WkF3U2RGTGJvUVNRbk5ncXlLblFpdk9qZURaa0FxZHpvT3NlL3hhYnhWaUpN?=
+ =?utf-8?B?cHVMK25qN0w4bSt4T2tCSFg0UUxIblpKcTZkRnFaNXJ4c2dCeXZLbHYvc0ZV?=
+ =?utf-8?B?T3duMDVuT1g3NzFnK2xibG9wTE5GWW1oVWV1RlM4ZXF6NEVKM0tROGo1czl0?=
+ =?utf-8?B?ZWlaZkNaWWozaWVka2U4N3MvUmVpUTk0Z01UOGZ3ZEg0NzlvVHUrNjQ1Qkxn?=
+ =?utf-8?B?bGNOQWh5ZkI5Qmh4Z0lxSjhZbk9NMDRhYmNwdFRBZW5QU3plbHhjMWRYREZ1?=
+ =?utf-8?B?bUUrNkRSeFJ4RjNHTUczUDlxTmlzNlF0YWxhaXFHMVFPT3NCYjM4NmQ3K3lo?=
+ =?utf-8?B?WG1WVG8xZ0hwaUNpNk5HeExES1NCSGRpTS9kb25vbGcxVzJpRUxXRktIOVhJ?=
+ =?utf-8?B?czVRdWxoWmIwQ3d3UHNXOFN2NzRnWmhkb28wdFBINkFFSG5sRTc0MGVCNUly?=
+ =?utf-8?B?WWYyT3FQMjRYbEl3em83ZTNZa3luV2RlTkt4L3Z4Y1dCd1RRcFVFczNLb2Vx?=
+ =?utf-8?B?MkpIRGJjVUFsWE1veFVYY3Y3U0lrVlJUZDU0WElrV3hyU1Nxd1J4Y0JwZUpY?=
+ =?utf-8?B?OHFYS3VOSTdNZzN2Mnd1eEh3RG5wYThNQzlZSVNSc2lyZlhScTRUdXVHMG0r?=
+ =?utf-8?B?SXUwNzlySUdhMEtROUdST0dEOWFHd1k4dE92Sk91K3pLaFhPSHU0all5cWov?=
+ =?utf-8?B?elpsdW5SbmQwK2I3elM2OXNlMEk2QlVnKzhPTzBTbWYvb0Z4NHRCdTZrM3h0?=
+ =?utf-8?B?aG9jTytOaFhocndCbWpmWHVnUm96WG5oNXJBd0tTcDg0YjlpMk5ZZ0VRU1lQ?=
+ =?utf-8?B?NFRPUXRDM2Y0UXlNSi9KYjIzZlNTS1dsNlByTm8wMXgyUEkxTEJLQXBlTmZw?=
+ =?utf-8?B?UlpLWEN3TjlPUGR0dlpxNENDZ29oRTJJOEVsWWUwVk9NU21KdzBOWWpydldW?=
+ =?utf-8?B?OEl6WGlyRnliYkk4UWh6RjI0QzlyNHNvVnJpRTJnSHRvNE9NT3pBeHV3QVNu?=
+ =?utf-8?B?eTJXSjVWMFpvbGFsVms0d3lDU255M0pHeGZVSHVCVmlpYndWYXZKQkI2ZlhQ?=
+ =?utf-8?B?MTh0ZENmVGVBSHFEYUJDN3ZSQUNockRaRHhieWZWMVJWZEQraWpDU3JyWUVV?=
+ =?utf-8?B?OXo4WFJ4TmpQb2FLMXRvRFRjVjEwMXREUERMQy9nWHk5bXlwTjhPaTJJeFFw?=
+ =?utf-8?B?MTNjNThsRjUwL0ZmZUIwaGFzYTR1UXFNdU50ZzRvdVFtOGIyS3dnMVNzenIy?=
+ =?utf-8?B?SmZVdDJXVXVhYXVEZUI4djEyeXByVit2UlZHUmNJQlZsVGJ2bHRSZXIzQ3dT?=
+ =?utf-8?B?ZXVsTmtuSnVmSmwxcHVmTURKR0lBOFZjVGFlQWVqTVQyT254V1JReFpaaEtF?=
+ =?utf-8?B?dldSYjM4dzhRYjZzMnlZeFVDNlljRHE2UEx6S2FWU0huZ3R0Y21sa084cUxs?=
+ =?utf-8?B?WFgrYWU5U1FSV1N5L2I3cEVEbG5abXNJQ2VpYkxzZ0dyTWRGcUVvdVl1enR3?=
+ =?utf-8?B?UGlUbDJObFA4SThPc0FYOHVSSVlySGw2cS9Oc3pnSEZCd2FNYUFJcmJIcEJX?=
+ =?utf-8?B?bEl0dWREeTNBdXNKMUdJTXNvZHl3dXF6bEh4VE5OTFpPa09aYzhvSU91Vk1W?=
+ =?utf-8?B?b1R0U0JVM21EWVBudkhMa0hZRit1dHdrR3hORkUvL2xMWEJRTURObzQyQnZB?=
+ =?utf-8?B?Ri81cStNeUVvbCtkdUNsWXR2dml0NWhObGJ0dVhPRWJzNGs0WmV5NG91cGZm?=
+ =?utf-8?B?T3hkVml6dUQvdjFsYXdZMm1LL3R0UXpMdXdaNGVzT0JBNFNnR3dBbld4TGwy?=
+ =?utf-8?Q?oMBOXb5A6S50w1rqG5oCnow=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02339db6-f9c3-4da5-b926-08d9da54cc79
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 07:33:19.6491
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9xEdOLIx3BsY27dr1wa9PuLSFaAhC4+voxQU7PYJxvQBXQx6kyHvUG8YU209tLxnMa/Ttc7auJh4S8B7hYvqBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2888
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Henrik
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fb3b0673b7d5b477ed104949450cd511337ba3c6
+commit: 55dc449a7c60d3df5a8f0b71bbae9d5173c864f5 drm/ast: Handle failed I2C initialization gracefully
+date:   4 weeks ago
+config: riscv-randconfig-c006-20220113 (https://download.01.org/0day-ci/archive/20220114/202201141416.VfNXpsi5-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+reproduce (this is a W=1 build):
+         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # install riscv cross compiling tool for clang build
+         # apt-get install binutils-riscv64-linux-gnu
+         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=55dc449a7c60d3df5a8f0b71bbae9d5173c864f5
+         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+         git fetch --no-tags linus master
+         git checkout 55dc449a7c60d3df5a8f0b71bbae9d5173c864f5
+         # save the config file to linux build tree
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer
 
->-----Original Message-----
->From: Henrik Grimler [mailto:henrik@grimler.se]
->Sent: Monday, January 17, 2022 10:28 PM
->To: Alim Akhtar <alim.akhtar@samsung.com>
->Cc: 'Krzysztof Kozlowski' <krzysztof.kozlowski@canonical.com>;
->semen.protsenko@linaro.org; virag.david003@gmail.com;
->martin.juecker@gmail.com; cw00.choi@samsung.com;
->m.szyprowski@samsung.com; robh+dt@kernel.org;
->devicetree@vger.kernel.org; linux-samsung-soc@vger.kernel.org; linux-arm-
->kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->~postmarketos/upstreaming@lists.sr.ht
->Subject: Re: [PATCH v3 3/3] ARM: dts: Add support for Samsung Chagall WiFi
->
->Hi Alim,
->
->> >> > +/* External sdcard */
->> >> > +&mmc_2 {
->> >> > +	status = "okay";
->> >> > +	bus-width = <4>;
->> >> > +	cap-sd-highspeed;
->> >> > +	card-detect-delay = <200>;
->> >> > +	pinctrl-0 = <&sd2_clk &sd2_cmd &mmc2_cd &sd2_bus1
->&sd2_bus4>;
->> >> > +	pinctrl-names = "default";
->> >> > +	samsung,dw-mshc-ciu-div = <3>;
->> >> > +	samsung,dw-mshc-ddr-timing = <0 2>;
->> >> > +	samsung,dw-mshc-sdr-timing = <0 4>;
->> >> > +	sd-uhs-sdr50;
->> >> > +	vmmc-supply = <&ldo19_reg>;
->> >> > +	vqmmc-supply = <&ldo13_reg>;
->> >> > +};
->> >> > +
->> >> > +&pinctrl_0 {
->> >> > +	mmc2_cd: sd2-cd-pins {
->> >> > +		samsung,pins = "gpx2-4";
->> >>
->> >> Interesting... I looked at vendor sources to board-chagall and
->> >> standard pin gpc2-2 is mentioned as PULL down and not-connected
->> >comment.
->> >>
->> >> gpx2-4 seems not mentioned at all, unless other board files are
->> >> actually used.
->> >
->> >Gpio seems to be spread out. GPIO_T_FLASH_DETECT is defined as gpx2-4
->> >in board-universal5420-mmc.c, and then used for card detection.
->> >(Looking at it now again I see that write protection through sd2_wp
->> >should also be supported for mmc_2, can add that in next patch set.)
->> >
->> Card detect pin is generally a special function (dedicated pin) pin,
->> directly connected from SoC to card external slot.
->> And for exynos5420 it is gpc2-2 as pointed by Krzysztof.
->
->gpio/pinctrl is still not my area of expertise so your feedback is greatly
->appreciated!
->
->gpc2-2 does not seem to be the card-detect pin for these tablets.  If I add
->sd2_cd to pinctrl-0 above I am unable to use the sdcard at all, instead
-dmesg is
->filled with repeating messages like:
->
->[  18.669050] mmc_host mmc1: Bus speed (slot 0) = 50000000Hz (slot req
->300000Hz, actual 297619HZ div = 84) [  18.703711] mmc_host mmc1: Bus speed
->(slot 0) = 50000000Hz (slot req 200000Hz, actual 200000HZ div = 125) [
->18.737167] mmc_host mmc1: Bus speed (slot 0) = 50000000Hz (slot req
->100000Hz, actual 100000HZ div = 250) [  19.058352] mmc_host mmc1: Bus
->speed (slot 0) = 50000000Hz (slot req 400000Hz, actual 396825HZ div = 63) [
->19.093037] mmc_host mmc1: Bus speed (slot 0) = 50000000Hz (slot req
->300000Hz, actual 297619HZ div = 84) [  19.127701] mmc_host mmc1: Bus speed
->(slot 0) = 50000000Hz (slot req 200000Hz, actual 200000HZ div = 125) [
->19.162380] mmc_host mmc1: Bus speed (slot 0) = 50000000Hz (slot req
->100000Hz, actual 100000HZ div = 250)
->
->gpx2-4 on the other hand switches state when an sdcard is inserted or
->removed.  After exporting relevant pins I have, with the card
->inserted:
->
-># grep -A 2 gpx2 /sys/kernel/debug/gpio
->gpiochip3: GPIOs 24-31, parent: platform/13400000.pinctrl, gpx2:
-> gpio-26  (                    |Power               ) in  hi IRQ ACTIVE LOW
-> gpio-28  (                    |sysfs               ) in  lo
->
->and when removed gpx2-4 changes to high:
->
->gpiochip3: GPIOs 24-31, parent: platform/13400000.pinctrl, gpx2:
-> gpio-26  (                    |Power               ) in  hi IRQ ACTIVE LOW
-> gpio-28  (                    |sysfs               ) in  hi
->
->All the gpc2 pins are low no matter if sdcard is inserted or removed:
->
->gpiochip7: GPIOs 56-62, parent: platform/13410000.pinctrl, gpc2:
-> gpio-56  (                    |sysfs               ) in  lo
-> gpio-57  (                    |sysfs               ) in  lo
-> gpio-58  (                    |sysfs               ) in  lo
-> gpio-59  (                    |sysfs               ) in  lo
-> gpio-60  (                    |sysfs               ) in  lo
-> gpio-61  (                    |sysfs               ) in  lo
-> gpio-62  (                    |sysfs               ) in  lo
->
->That being said, I am not sure if it is working properly:
->
->> Also PIN_FUNC_2 for gpx2-4 indicate that it is wakeup_int2 function.
->> Do you get a card detect interrupt when removing and inserting the
->> card to the card slot?
-> 
-This is the confirmation that this board does not uses gpc2-2 but gpx2-4. 
-Thanks for detailed log.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->(What is the best way to check this?) I don't get any irq related messages
-in
 
-Probably if you are interested, you can enable few debug in dw-mmc driver to
-check a message like "card is present" etc.
+clang-analyzer warnings: (new ones prefixed by >>)
 
->dmesg, and I don't see any changes in /proc/interrupts if tracked with
->something like `watch -n1 "cat /proc/interrupts"` when card is removed or
->inserted, so seems likely that pin config is wrong.
->All I can find in vendor kernel for this device is that pull config is set
-to
->S3C_GPIO_PULL_NONE [1].  For some of the sibling tablets the pin is
->configured as {S3C_GPIO_INPUT, GPIO_LV_N, S3C_GPIO_PULL_NONE} [2]
->though, which I think should correspond to having:
->
->mmc2_cd: mmc2-cd-pins {
->  samsung,pins = "gpx2-4";
->  samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
->  samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
->  samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV3>; };
->
->Changing to that does not seem to change anything though, I don't get any
->interrupt, or any messages in dmesg, when inserting or removing the sdcard.
->
->> Also to avoid confusion, probably you can change the node name as
->"mmc2_cd:
->> mmc2-cd-pins"
->> (as sd2-cd-pins is gpc2-2 for this SoC)
->
->Thanks, will fix in a v4 (after discussions here are settled).
->
-I am convinced that gpc2-2 is not used for card detect for this board.
-So no other query on this patch.
-Thanks
+ >> drivers/gpu/drm/ast/ast_mode.c:1232:3: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
+                    drm_connector_update_edid_property(&ast_connector->base, edid);
+                    ^                                                        ~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1217:6: note: Assuming field 'tx_chip_type' is equal to AST_TX_DP501
+            if (ast->tx_chip_type == AST_TX_DP501) {
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1217:2: note: Taking true branch
+            if (ast->tx_chip_type == AST_TX_DP501) {
+            ^
+    drivers/gpu/drm/ast/ast_mode.c:1220:7: note: Assuming 'edid' is non-null
+                    if (!edid)
+                        ^~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1220:3: note: Taking false branch
+                    if (!edid)
+                    ^
+    drivers/gpu/drm/ast/ast_mode.c:1224:7: note: Assuming 'flags' is false
+                    if (flags)
+                        ^~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1224:3: note: Taking false branch
+                    if (flags)
+                    ^
+    drivers/gpu/drm/ast/ast_mode.c:1227:4: note: Memory is released
+                            kfree(edid);
+                            ^~~~~~~~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1229:7: note: 'flags' is false
+            if (!flags && ast_connector->i2c)
+                 ^~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1229:6: note: Left side of '&&' is true
+            if (!flags && ast_connector->i2c)
+                ^
+    drivers/gpu/drm/ast/ast_mode.c:1229:16: note: Assuming field 'i2c' is null
+            if (!flags && ast_connector->i2c)
+                          ^~~~~~~~~~~~~~~~~~
+    drivers/gpu/drm/ast/ast_mode.c:1229:2: note: Taking false branch
+            if (!flags && ast_connector->i2c)
+            ^
+    drivers/gpu/drm/ast/ast_mode.c:1231:6: note: 'edid' is non-null
+            if (edid) {
+                ^~~~
+    drivers/gpu/drm/ast/ast_mode.c:1231:2: note: Taking true branch
+            if (edid) {
+            ^
+    drivers/gpu/drm/ast/ast_mode.c:1232:3: note: Use of memory after it is freed
+                    drm_connector_update_edid_property(&ast_connector->base, edid);
+                    ^                                                        ~~~~
 
->[1] https://protect2.fireeye.com/v1/url?k=bba823ae-dad5cbe9-bba9a8e1-
->74fe485fff30-b4ccbbe9776f501d&q=1&e=9951c78c-16c8-449e-913b-
->d4d1f1f9bb6b&u=https%3A%2F%2Fgithub.com%2Fexynos5420%2Fandroid_k
->ernel_samsung_exynos5420%2Fblob%2Flineage-
->17.1%2Farch%2Farm%2Fmach-exynos%2Fboard-universal5420-
->mmc.c%23L388
->[2] https://protect2.fireeye.com/v1/url?k=97465c6e-f63bb429-9747d721-
->74fe485fff30-4111389a6d2b68b4&q=1&e=9951c78c-16c8-449e-913b-
->d4d1f1f9bb6b&u=https%3A%2F%2Fgithub.com%2Fexynos5420%2Fandroid_k
->ernel_samsung_exynos5420%2Fblob%2Flineage-
->17.1%2Farch%2Farm%2Fmach-exynos%2Fboard-n1-gpio.c%23L119
->
->Best regards,
->Henrik Grimler
+vim +1232 drivers/gpu/drm/ast/ast_mode.c
 
+312fec1405dd54 Dave Airlie       2012-02-29  1204
+4961eb60f14553 Thomas Zimmermann 2019-11-07  1205  /*
+4961eb60f14553 Thomas Zimmermann 2019-11-07  1206   * Connector
+4961eb60f14553 Thomas Zimmermann 2019-11-07  1207   */
+4961eb60f14553 Thomas Zimmermann 2019-11-07  1208
+312fec1405dd54 Dave Airlie       2012-02-29  1209  static int ast_get_modes(struct drm_connector *connector)
+312fec1405dd54 Dave Airlie       2012-02-29  1210  {
+312fec1405dd54 Dave Airlie       2012-02-29  1211  	struct ast_connector *ast_connector = to_ast_connector(connector);
+fa7dbd7688849d Thomas Zimmermann 2020-06-17  1212  	struct ast_private *ast = to_ast_private(connector->dev);
+55dc449a7c60d3 Thomas Zimmermann 2021-12-06  1213  	struct edid *edid = NULL;
+83c6620bae3f14 Dave Airlie       2014-03-28  1214  	bool flags = false;
+55dc449a7c60d3 Thomas Zimmermann 2021-12-06  1215  	int ret;
+6c9bd4432b2527 Gregory Williams  2021-07-30  1216
+83c6620bae3f14 Dave Airlie       2014-03-28  1217  	if (ast->tx_chip_type == AST_TX_DP501) {
+83c6620bae3f14 Dave Airlie       2014-03-28  1218  		ast->dp501_maxclk = 0xff;
+83c6620bae3f14 Dave Airlie       2014-03-28  1219  		edid = kmalloc(128, GFP_KERNEL);
+83c6620bae3f14 Dave Airlie       2014-03-28  1220  		if (!edid)
+83c6620bae3f14 Dave Airlie       2014-03-28  1221  			return -ENOMEM;
+312fec1405dd54 Dave Airlie       2012-02-29  1222
+83c6620bae3f14 Dave Airlie       2014-03-28  1223  		flags = ast_dp501_read_edid(connector->dev, (u8 *)edid);
+83c6620bae3f14 Dave Airlie       2014-03-28  1224  		if (flags)
+83c6620bae3f14 Dave Airlie       2014-03-28  1225  			ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
+83c6620bae3f14 Dave Airlie       2014-03-28  1226  		else
+83c6620bae3f14 Dave Airlie       2014-03-28  1227  			kfree(edid);
+83c6620bae3f14 Dave Airlie       2014-03-28  1228  	}
+55dc449a7c60d3 Thomas Zimmermann 2021-12-06  1229  	if (!flags && ast_connector->i2c)
+312fec1405dd54 Dave Airlie       2012-02-29  1230  		edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
+312fec1405dd54 Dave Airlie       2012-02-29  1231  	if (edid) {
+c555f02371c338 Daniel Vetter     2018-07-09 @1232  		drm_connector_update_edid_property(&ast_connector->base, edid);
+312fec1405dd54 Dave Airlie       2012-02-29  1233  		ret = drm_add_edid_modes(connector, edid);
+993dcb05e47e35 Jani Nikula       2012-08-15  1234  		kfree(edid);
+312fec1405dd54 Dave Airlie       2012-02-29  1235  		return ret;
+6c9bd4432b2527 Gregory Williams  2021-07-30  1236  	}
+c555f02371c338 Daniel Vetter     2018-07-09  1237  	drm_connector_update_edid_property(&ast_connector->base, NULL);
+312fec1405dd54 Dave Airlie       2012-02-29  1238  	return 0;
+312fec1405dd54 Dave Airlie       2012-02-29  1239  }
+312fec1405dd54 Dave Airlie       2012-02-29  1240
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

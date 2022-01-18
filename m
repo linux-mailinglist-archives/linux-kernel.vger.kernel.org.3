@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC92493125
+	by mail.lfdr.de (Postfix) with ESMTP id 89364493126
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350168AbiARXDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 18:03:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47748 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238025AbiARXDi (ORCPT
+        id S1350181AbiARXEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 18:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350172AbiARXET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:03:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0AD612D3;
-        Tue, 18 Jan 2022 23:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C0FC340E0;
-        Tue, 18 Jan 2022 23:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642547017;
-        bh=JwxY2h9tn3QE+WRRLQPNM+uQ68EejJ4xhgjUAq77hWY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ukveCzfprxQ8zpV7fQKoIcvoTWtVmd0L9ll7H6IeS2o3YDXLINBG4IVQACbTsgckj
-         VOaDmm8ZlFqcwB9G1T4+orQSuAAlXBiwf4eTGA4XDmy3EpSr6ztf0omxs0Nehl9C8n
-         UgfM55ECiqtgi0kv/orpwrsXyzbVw5ZMzxSh3PW4be1CQ+IGRKFuOw+VJVrDkXlWbk
-         zzRYGUDlOcR4yPvkn6vRg2de85Takv9uNol9sxPQSj77osrWelTazrv7CIN0H9VlmT
-         A7SxM8N/lkcAavSDt0fhpYBwoqXbqUjFGADZ34jxSAetjaWsrNzXe7ltqj+k5fcLrJ
-         B7xomrIy3KdQg==
-Date:   Tue, 18 Jan 2022 15:03:35 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Antony Vennard <antony@vennard.ch>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com
-Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Message-ID: <YedHR93wPLS/JEsE@sol.localdomain>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
- <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
+        Tue, 18 Jan 2022 18:04:19 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A238C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:04:19 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id f8so565089pgf.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:04:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=vmI5obZJChROSVQzReKLArfFA6O6EbFVOPbqT4ROOPo=;
+        b=QfQD1u5VB3E351cX8YrjWGZk8vfWE2crrmBoY6ipDg4SX2/GS7Uck5C8/8Ixyl/ee6
+         5RwrN57TS0g+L9P/syCEvZqk3jluxNUUZuyAfiG3xxUYULGwOJOOuqCc82sm7+BwX3M8
+         uy83V4j/0LH7R2BhpkH71Jf/XHK5C5M7SnUlJFhokGszQ5UE6bb2OJLwiDN6rjwC7orl
+         YvDv0rY6byus6J8y3Eyq5xO2hbztgN95nVDx57MDOsvjMyPjZGX2NeHSlxDCyrrP2gqR
+         0sEm+3hypvO86f1fGdg4wQJxJ/utQ8csuzhfsQrj3pgNEuPaiGB8UyU8fC3AiRsRZvtH
+         9Vvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=vmI5obZJChROSVQzReKLArfFA6O6EbFVOPbqT4ROOPo=;
+        b=nnDBug6r4MpLaIqTqifLQztLAa/YdojwV1MNFb9G2xShOhyIpgZgjEsjscntRS7EjU
+         TtKPkFYkTvn1L/mMnaFMJyL1F8pHpKiDFhbFWE3BSkMCXVaWJ5+GgCPqlPw9O31KSGcK
+         8DbDqnHqm8221x8iWCIfWW/ILfuh0Rsq+irgoVJ9NnVr6Z+l/RUVgbYep87udtikJGjB
+         xWyRTWn1gT+aPTVTu3K+VFJ1D0GL1f8pc2yrDFLUTWimrTS482e90gZ+mtHwq8YIIn0j
+         0nwMB5wrouRZnnR/pLRvR2IRDF/wF5MhidTbsYyzkO/q4CoV68cIe+gABKa4RSz4C3QL
+         O6WQ==
+X-Gm-Message-State: AOAM531UnMGDDnvWVDPnH05JGE/bwSu7bb04e1hoQSkfss2bfOjKgst7
+        prjqa6WBd2ZrDEYxb5iIJd3Gr4nFoj7IVc2/pBw=
+X-Google-Smtp-Source: ABdhPJw+EJr9CIkmWZMT2kuFRRthOjv28RD0JsJY7pNppfXdsHHhYSV2ChZdm54sofXo+ulJRhvEMg==
+X-Received: by 2002:a62:1c12:0:b0:4bc:6d81:b402 with SMTP id c18-20020a621c12000000b004bc6d81b402mr27869091pfc.40.1642547058817;
+        Tue, 18 Jan 2022 15:04:18 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id x15sm20422153pfh.157.2022.01.18.15.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 15:04:18 -0800 (PST)
+Date:   Wed, 19 Jan 2022 12:04:13 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/3] staging: pi433: fix validation for min bit rate
+ supported by the device
+Message-ID: <20220118230413.GA4859@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
+In-Reply-To: <20220118230312.GA4826@mail.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:50:21PM +0100, Antony Vennard wrote:
-> 
-> Hi All,
-> 
-> On 17/01/2022 16:02, James Bottomley wrote:
-> > On Mon, 2022-01-17 at 15:34 +0100, Jason A. Donenfeld wrote:
-> > > Hi,
-> > > 
-> > > While it looks like you put a lot of work into this patchset, I think
-> > > the general idea of adding PGP *to the kernel* is a pretty daunting
-> > > proposition. The general consensus in the crypto engineering world is
-> > > that PGP ought to be on its way out. We definitely don't want to
-> > > perpetuate this project-on-life-support into the permanence of kernel
-> > > code. Some quick Google searches will reveal a litany of blog posts
-> > > to the tune of, "why oh why are people still using this?" Here's one
-> > > from 2019:
-> > > https://latacora.micro.blog/2019/07/16/the-pgp-problem.html . I
-> > > think these are arguments to take seriously. And even if you disagree
-> > > with some parts, you may want to consider whether the remaining parts
-> > > warrant a bit of pause before adding this to the kernel and
-> > > perpetuating PGP's design further.
-> 
-> So while I understand why this is being proposed and clearly effort has gone
-> into it, I also think it is not the right approach. It seems this proposal
-> is to include a full PGP packet parser and verification logic in the kernel
-> as an equivalent to allow PGP signatures to be submitted via
-> FS_IOC_ENABLE_VERITY:
-> 
-> "FS_IOC_ENABLE_VERITY accepts a pointer to a PKCS#7 formatted detached
-> signature in DER format of the file’s fs-verity digest."
-> 
+rf69 datasheets establishes that the minimum supported bit rate is
+1.2 kbps regardless of modulation.
 
-It's worth noting that if fs-verity built-in signatures are used, a trusted
-userspace program is still required to determine and enforce the policy of which
-files are required to be signed.  The kernel only handles the actual signature
-verification.  This was basically a proof-of-concept which reused the kernel's
-module signature verification code (which happens to use PKCS#7).
+this patch replaces the errouneous validation with the correct value
 
-I'd encourage new users to either go all-in on a userspace solution, using a
-trusted userspace program to verify signatures of fs-verity file digests;
-*or* go all-in on an in-kernel solution, using the IMA support for fs-verity
-which Mimi Zohar is working on.  A userspace solution could use a simple
-signature format, using a modern algorithm such as Ed25519.  IMA uses a simple
-signature format too, though it uses a complex format (X.509) for public keys.
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ drivers/staging/pi433/rf69.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-- Eric
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index ee8c81d164e1..f4ac17adcd83 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -226,14 +226,12 @@ int rf69_set_modulation_shaping(struct spi_device *spi,
+ int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
+ {
+ 	int retval;
+-	u32 bit_rate_min;
+ 	u32 bit_rate_reg;
+ 	u8 msb;
+ 	u8 lsb;
+ 
+ 	// check input value
+-	bit_rate_min = F_OSC / 8388608; // 8388608 = 2^23;
+-	if (bit_rate < bit_rate_min) {
++	if (bit_rate < 1200) {
+ 		dev_dbg(&spi->dev, "setBitRate: illegal input param");
+ 		return -EINVAL;
+ 	}
+-- 
+2.25.4
+

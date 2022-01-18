@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF68492497
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51CE49249B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240142AbiARLSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239462AbiARLSN (ORCPT
+        id S240448AbiARLSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:18:47 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:35094 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239520AbiARLSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Jan 2022 06:18:13 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D2C061747;
-        Tue, 18 Jan 2022 03:18:13 -0800 (PST)
-Date:   Tue, 18 Jan 2022 11:18:10 -0000
+Date:   Tue, 18 Jan 2022 11:18:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1642504691;
+        s=2020; t=1642504692;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CtJycL6AF4wmGQP7ON0oiIDHEFFjKYvFbIrs+ZNTZlE=;
-        b=w3DKpVar4lXJZMOWQMQ6VHF23Gw709zqZlDzcDi5bIZhI4bys5/sYVl7Yg6gQki/fWy+m1
-        w9uXpHuSzJqpDyjNbCraGoBoxWkHBr9VLg8hF91WNl2APO6j29uF2E0c1HJ1J4K4d/Nyjo
-        Ok2Mp6fzRqt/IGoPnjYrfiop4bSf2XAfnJkE4vhXN/Alxv9vdV4tiCTebtjY93205kkbH2
-        WpOQX42OzcktxbjwmD6D8I9QEvGkON/M1dxAkA8+XYOmraZpaG0wW9gRLIsfEpTGxmj5AC
-        c1pBhs32MUSla8wKI7warbI2zj8byltKVqHRvqp8+WPNT7sOyuEHprbrifLMKQ==
+        bh=FKexeQ9ADkjB8kDZNztseV3vq2w0Z47HQHdnBdHz9ak=;
+        b=b1oxLH4giJhyyoTvBogUiifJAO88jW7N/WTtZviYlH7uU42KSftaIEyvwQMdVejHlZJKe1
+        Mi8Bi9byOQUWGg9MHTaG2LliQpC7ONLtFcwZKOZaGJBpyPa+UbaeQYF/QY8O6pdhqH20xb
+        TB2NEdGRYbvlKYcTnX3QFQSUNrknZpqA1oCvrRQCAYLddRUnD+9VdG5aKcPln1F0XnAQXc
+        ctgEU29f9pCHZIeHPNGwQCU/dfvL97ywsFwVeWpX6QobikNe7JXYW0VsfOgqgqKGtHVnNq
+        TNRAQ+77JAW5mooXIhoeVMrX5G5r1ka9s0PrlBWdq83bUuBUUP39jUfiwu3nQw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1642504691;
+        s=2020e; t=1642504692;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CtJycL6AF4wmGQP7ON0oiIDHEFFjKYvFbIrs+ZNTZlE=;
-        b=SEsh5tc9xj0/fEGjMEJAx6lFguxmOJGTwC6EWVgX8AVFJ3kMpek6I8ZtLWJ9rXYtZLTMau
-        /pl18+q8qoJIhHCw==
-From:   "tip-bot2 for Randy Dunlap" <tip-bot2@linutronix.de>
+        bh=FKexeQ9ADkjB8kDZNztseV3vq2w0Z47HQHdnBdHz9ak=;
+        b=/Ho2gYHaUKhNTULiD0prpnK5idTtPLZ2zg2xw/3fj/84p5XZK9g6spJECgXVfVqUxu5cnI
+        D0zyc957YiV2cEDw==
+From:   "tip-bot2 for Cruz Zhao" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched/fair: Fix all kernel-doc warnings
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
+Subject: [tip: sched/urgent] sched/core: Accounting forceidle time for all
+ tasks except idle task
+Cc:     Cruz Zhao <CruzZhao@linux.alibaba.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
+        Josh Don <joshdon@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211218055900.2704-1-rdunlap@infradead.org>
-References: <20211218055900.2704-1-rdunlap@infradead.org>
+In-Reply-To: <1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com>
+References: <1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com>
 MIME-Version: 1.0
-Message-ID: <164250469028.16921.15898915270330568659.tip-bot2@tip-bot2>
+Message-ID: <164250469114.16921.12912359382201917091.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -63,72 +60,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/urgent branch of tip:
 
-Commit-ID:     a315da5e686b02b20c1713dda818e8fb691526bb
-Gitweb:        https://git.kernel.org/tip/a315da5e686b02b20c1713dda818e8fb691526bb
-Author:        Randy Dunlap <rdunlap@infradead.org>
-AuthorDate:    Fri, 17 Dec 2021 21:59:00 -08:00
+Commit-ID:     b171501f258063f5c56dd2c5fdf310802d8d7dc1
+Gitweb:        https://git.kernel.org/tip/b171501f258063f5c56dd2c5fdf310802d8d7dc1
+Author:        Cruz Zhao <CruzZhao@linux.alibaba.com>
+AuthorDate:    Tue, 11 Jan 2022 17:55:59 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 18 Jan 2022 12:09:59 +01:00
 
-sched/fair: Fix all kernel-doc warnings
+sched/core: Accounting forceidle time for all tasks except idle task
 
-Quieten all kernel-doc warnings in kernel/sched/fair.c:
+There are two types of forced idle time: forced idle time from cookie'd
+task and forced idle time form uncookie'd task. The forced idle time from
+uncookie'd task is actually caused by the cookie'd task in runqueue
+indirectly, and it's more accurate to measure the capacity loss with the
+sum of both.
 
-kernel/sched/fair.c:3663: warning: No description found for return value of 'update_cfs_rq_load_avg'
-kernel/sched/fair.c:8601: warning: No description found for return value of 'asym_smt_can_pull_tasks'
-kernel/sched/fair.c:8673: warning: Function parameter or member 'sds' not described in 'update_sg_lb_stats'
-kernel/sched/fair.c:9483: warning: contents before sections
+Assuming cpu x and cpu y are a pair of SMT siblings, consider the
+following scenarios:
+  1.There's a cookie'd task running on cpu x, and there're 4 uncookie'd
+    tasks running on cpu y. For cpu x, there will be 80% forced idle time
+    (from uncookie'd task); for cpu y, there will be 20% forced idle time
+    (from cookie'd task).
+  2.There's a uncookie'd task running on cpu x, and there're 4 cookie'd
+    tasks running on cpu y. For cpu x, there will be 80% forced idle time
+    (from cookie'd task); for cpu y, there will be 20% forced idle time
+    (from uncookie'd task).
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+The scenario1 can recurrent by stress-ng(scenario2 can recurrent similary):
+    (cookie'd)taskset -c x stress-ng -c 1 -l 100
+    (uncookie'd)taskset -c y stress-ng -c 4 -l 100
+
+In the above two scenarios, the total capacity loss is 1 cpu, but in
+scenario1, the cookie'd forced idle time tells us 20% cpu capacity loss, in
+scenario2, the cookie'd forced idle time tells us 80% cpu capacity loss,
+which are not accurate. It'll be more accurate to measure with cookie'd
+forced idle time and uncookie'd forced idle time.
+
+Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20211218055900.2704-1-rdunlap@infradead.org
+Reviewed-by: Josh Don <joshdon@google.com>
+Link: https://lore.kernel.org/r/1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com
 ---
- kernel/sched/fair.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ kernel/sched/core.c       | 3 +--
+ kernel/sched/core_sched.c | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f4f02c2..5146163 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3668,7 +3668,7 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
-  *
-  * cfs_rq->avg is used for task_h_load() and update_cfs_share() for example.
-  *
-- * Returns true if the load decayed or we removed load.
-+ * Return: true if the load decayed or we removed load.
-  *
-  * Since both these conditions indicate a changed cfs_rq->avg.load we should
-  * call update_tg_load_avg() when this function returns true.
-@@ -8573,6 +8573,8 @@ group_type group_classify(unsigned int imbalance_pct,
-  *
-  * If @sg does not have SMT siblings, only pull tasks if all of the SMT siblings
-  * of @dst_cpu are idle and @sg has lower priority.
-+ *
-+ * Return: true if @dst_cpu can pull tasks, false otherwise.
-  */
- static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
- 				    struct sg_lb_stats *sgs,
-@@ -8648,6 +8650,7 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
- /**
-  * update_sg_lb_stats - Update sched_group's statistics for load balancing.
-  * @env: The load balancing environment.
-+ * @sds: Load-balancing data with statistics of the local group.
-  * @group: sched_group whose statistics are to be updated.
-  * @sgs: variable to hold the statistics for this group.
-  * @sg_status: Holds flag indicating the status of the sched_group
-@@ -9455,12 +9458,11 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- /**
-  * find_busiest_group - Returns the busiest group within the sched_domain
-  * if there is an imbalance.
-+ * @env: The load balancing environment.
-  *
-  * Also calculates the amount of runnable load which should be moved
-  * to restore balance.
-  *
-- * @env: The load balancing environment.
-- *
-  * Return:	- The busiest group if imbalance exists.
-  */
- static struct sched_group *find_busiest_group(struct lb_env *env)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 83872f9..0d2ab2a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5822,8 +5822,7 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+ 	}
+ 
+ 	if (schedstat_enabled() && rq->core->core_forceidle_count) {
+-		if (cookie)
+-			rq->core->core_forceidle_start = rq_clock(rq->core);
++		rq->core->core_forceidle_start = rq_clock(rq->core);
+ 		rq->core->core_forceidle_occupation = occ;
+ 	}
+ 
+diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+index 1fb4567..c8746a9 100644
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -277,7 +277,7 @@ void __sched_core_account_forceidle(struct rq *rq)
+ 		rq_i = cpu_rq(i);
+ 		p = rq_i->core_pick ?: rq_i->curr;
+ 
+-		if (!p->core_cookie)
++		if (p == rq_i->idle)
+ 			continue;
+ 
+ 		__schedstat_add(p->stats.core_forceidle_sum, delta);

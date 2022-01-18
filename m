@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBCF492E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA87492E6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348737AbiARTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:23:09 -0500
-Received: from mga03.intel.com ([134.134.136.65]:19705 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347785AbiARTXI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:23:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642533788; x=1674069788;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fam4jN08KIoBl1JR2iTduOH2dhjyiiVlYfvy4wb1B8c=;
-  b=RjCDwASBWnUGIZoJe9BTyjcHuyDO9t8SIdF9R9wuBy5J6h1lCKheMfrY
-   RV6mh9Jjro+TUSrC8LoHRhe+bipWHQ7zpE/A8HvYV2n1Ad22Zmbh9BCBj
-   AS1ps0haCQebZ6OaLokHJ6wDbk33Kk2YN55rOlFEXkN3unvJj9hnCPW6d
-   8B23YMA8NF+T0/J+tgVtPunDaM55SNJvNe5CNI4OiRYknQY5/HPG+AHCR
-   JRIv2qBFKZ+cGhyCG3F0tDItZ8ZNjhz8jkAA2tTP31H36ZdRIlP3JD9zL
-   lfe/oesGwRJ1Zzf13ZxUBo1AQJ6bB7/fiGjrsylsT0Twqv4G2yUfrjQ6P
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244852787"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="244852787"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 11:23:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="625612298"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2022 11:23:06 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9u4P-000Ct0-Es; Tue, 18 Jan 2022 19:23:05 +0000
-Date:   Wed, 19 Jan 2022 03:22:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 19/23] ld:
- fs/cifs/file.o:undefined reference to `netfs_invalidatepage'
-Message-ID: <202201190316.hRrB5y0R-lkp@intel.com>
+        id S1343580AbiARTXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:23:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51935 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245416AbiARTXC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 14:23:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642533781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=szFzYuqp/rVABkm8mkSgMpFZFDViwmtCeMvEqr1ilK0=;
+        b=f0ZovC1KXkl9fMiWKKpGH/cHQXNjUQVwwQwvAPep4cx2c0gv0HyDdsZZDF+HDCs9jbDfDD
+        HJG9xtr018CZF7yeAQ47YmKZFi5/2yjpi+G+f20kpOE4KENu6B/Ria2EYDRsdeLlw7CUzU
+        SwkxUBHryn+ogRluG2HY/Ju2bMN2bZQ=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-527-A5bnrqFTNri99O6MOtetlg-1; Tue, 18 Jan 2022 14:23:00 -0500
+X-MC-Unique: A5bnrqFTNri99O6MOtetlg-1
+Received: by mail-ot1-f69.google.com with SMTP id c3-20020a9d6c83000000b00591cba30d03so8510634otr.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:23:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=szFzYuqp/rVABkm8mkSgMpFZFDViwmtCeMvEqr1ilK0=;
+        b=1m/jMulj8iTN1sjX2bN/F9y/01IH2e7uWR5kVAhAhE/Gotcv/ti3FkevZH62fSK4o5
+         H/iQ4G87CQNqArHF/uQn0OxD8+KLhtdWviikoodzOI74WXPxNpHKlsf4dtLMKfTwD7fi
+         fMPIXhUV4+KVnUy87f7FHdhyhSKRwXqRxPthamKrTYJlHugxAWZ7tOGzKnmNrPqgyzBy
+         P7Qf+oEWXcrGQVC0nxJFY/Dkro7oI5O/4htDv7pG2EQiKUFeuEdq1jOhg7YqOU0N9Utc
+         MFQxmKJsVfaT3OACkI92FxmN9hCYemo+haiKPxRNFw0vCflRBd99KyJOqAJUEHs669u9
+         MFcA==
+X-Gm-Message-State: AOAM530C3DUdy8Ids8bEURToTcT0RPbipORA/jo2YwRhmsq7E4CJkpN3
+        WS6Cx4XVXcTW/kNQTvhfCQVMRuA4lilGzF6uPDlykq4gYdY/ad0xJgswAxyh42JghLg/tQDaMrU
+        Td6wlx6jMmZWcfoL5Ycd6lO3a
+X-Received: by 2002:a05:6830:148f:: with SMTP id s15mr12549740otq.242.1642533779971;
+        Tue, 18 Jan 2022 11:22:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwzr0wpP0kkTCgrhkGxkaIaWoXrzgt8LpYDiF/kTrxf2zstxk5uqrspsrdw765/b9E+vg16lA==
+X-Received: by 2002:a05:6830:148f:: with SMTP id s15mr12549720otq.242.1642533779776;
+        Tue, 18 Jan 2022 11:22:59 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::c])
+        by smtp.gmail.com with ESMTPSA id i25sm7472390otl.8.2022.01.18.11.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 11:22:59 -0800 (PST)
+Date:   Tue, 18 Jan 2022 11:22:56 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        x86@kernel.org, llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
+ __COUNTER__
+Message-ID: <20220118192256.jzk5dnceeusq7x7u@treble>
+References: <20220114010526.1776605-1-ndesaulniers@google.com>
+ <YeQei0xNzMq7bFdg@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YeQei0xNzMq7bFdg@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   e229088c2bc0ba29fdff1bc737506aed6ec50581
-commit: eab3170e20c001ee23073a8705db22713b529c21 [19/23] netfs: Provide invalidatepage and releasepage calls
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20220119/202201190316.hRrB5y0R-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/eab3170e20c001ee23073a8705db22713b529c21
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout eab3170e20c001ee23073a8705db22713b529c21
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Sun, Jan 16, 2022 at 02:32:59PM +0100, Borislav Petkov wrote:
+> so I like the local label and how it is more readable this way.
+> 
+> So, provided the memory clobber works (I wonder here if Josh has some
+> concrete failing cases which could be tested with your version) and
+> after the nitpicks have been addressed
+> 
+> Acked-by: Borislav Petkov <bp@suse.de>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think Nick was already able to recreate the original issue.  I'll run
+it through some more testing.
 
-All errors (new ones prefixed by >>):
+I wanted to make this change years ago, but couldn't because of legacy
+toolchains.  Here's hoping this is the final solution for those @#$%^
+macros.
 
->> ld: fs/cifs/file.o:(.rodata+0x288): undefined reference to `netfs_invalidatepage'
->> ld: fs/cifs/file.o:(.rodata+0x290): undefined reference to `netfs_releasepage'
-   ld: fs/cifs/file.o:(.rodata+0x348): undefined reference to `netfs_invalidatepage'
-   ld: fs/cifs/file.o:(.rodata+0x350): undefined reference to `netfs_releasepage'
+Boris, thanks for looping Nick in, I should have done so to begin with.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Josh
+

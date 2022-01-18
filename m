@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89364493126
+	by mail.lfdr.de (Postfix) with ESMTP id D3C91493127
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350181AbiARXEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 18:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S1345266AbiARXFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 18:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350172AbiARXET (ORCPT
+        with ESMTP id S230234AbiARXFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:04:19 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A238C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:04:19 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id f8so565089pgf.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:04:19 -0800 (PST)
+        Tue, 18 Jan 2022 18:05:08 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98551C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:05:08 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso4273002pjo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:05:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :in-reply-to;
-        bh=vmI5obZJChROSVQzReKLArfFA6O6EbFVOPbqT4ROOPo=;
-        b=QfQD1u5VB3E351cX8YrjWGZk8vfWE2crrmBoY6ipDg4SX2/GS7Uck5C8/8Ixyl/ee6
-         5RwrN57TS0g+L9P/syCEvZqk3jluxNUUZuyAfiG3xxUYULGwOJOOuqCc82sm7+BwX3M8
-         uy83V4j/0LH7R2BhpkH71Jf/XHK5C5M7SnUlJFhokGszQ5UE6bb2OJLwiDN6rjwC7orl
-         YvDv0rY6byus6J8y3Eyq5xO2hbztgN95nVDx57MDOsvjMyPjZGX2NeHSlxDCyrrP2gqR
-         0sEm+3hypvO86f1fGdg4wQJxJ/utQ8csuzhfsQrj3pgNEuPaiGB8UyU8fC3AiRsRZvtH
-         9Vvw==
+        bh=9nmGSMsNg7TpxFokhDu2M3YQG+slmr+fovI7GFM6KVY=;
+        b=iZj1UrYomjsoNst1oHFF0dz6gUYl2R3R86cMGTV1/2YCsaWmkXfGqgZFOFtjr1YZk8
+         IzRDYzRzSVUkgOz7YAHzK57bJqsCP3rizbqzhXwBC5CJrQOJuPqMYGjjKGkJ3o4BYvIk
+         4oo+6gjjUfoVy1Ckai3kqWm4C2xZBOXdqMhW6lz4ehja9HT70/8fmZRBj89UsUOZEq12
+         +NXRBGHXQleJFh95XzcRYmw3jQicebSQH1LUzKvWx/GahWQsjyGHyoAAcKY6WEa1yw68
+         txyB6DhXh+N0rrtppw5HU+HnL5EwgTJayLY5YbHWF6JfI4xzl40f7Gmsce60kT/7EYoK
+         QhtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:in-reply-to;
-        bh=vmI5obZJChROSVQzReKLArfFA6O6EbFVOPbqT4ROOPo=;
-        b=nnDBug6r4MpLaIqTqifLQztLAa/YdojwV1MNFb9G2xShOhyIpgZgjEsjscntRS7EjU
-         TtKPkFYkTvn1L/mMnaFMJyL1F8pHpKiDFhbFWE3BSkMCXVaWJ5+GgCPqlPw9O31KSGcK
-         8DbDqnHqm8221x8iWCIfWW/ILfuh0Rsq+irgoVJ9NnVr6Z+l/RUVgbYep87udtikJGjB
-         xWyRTWn1gT+aPTVTu3K+VFJ1D0GL1f8pc2yrDFLUTWimrTS482e90gZ+mtHwq8YIIn0j
-         0nwMB5wrouRZnnR/pLRvR2IRDF/wF5MhidTbsYyzkO/q4CoV68cIe+gABKa4RSz4C3QL
-         O6WQ==
-X-Gm-Message-State: AOAM531UnMGDDnvWVDPnH05JGE/bwSu7bb04e1hoQSkfss2bfOjKgst7
-        prjqa6WBd2ZrDEYxb5iIJd3Gr4nFoj7IVc2/pBw=
-X-Google-Smtp-Source: ABdhPJw+EJr9CIkmWZMT2kuFRRthOjv28RD0JsJY7pNppfXdsHHhYSV2ChZdm54sofXo+ulJRhvEMg==
-X-Received: by 2002:a62:1c12:0:b0:4bc:6d81:b402 with SMTP id c18-20020a621c12000000b004bc6d81b402mr27869091pfc.40.1642547058817;
-        Tue, 18 Jan 2022 15:04:18 -0800 (PST)
+        bh=9nmGSMsNg7TpxFokhDu2M3YQG+slmr+fovI7GFM6KVY=;
+        b=4vUcyqIv+WVodwCuIOAU4CoZwCvtuVKBD77a/nVfhcoS351zkUAQcjnzdYP6CAN9Ig
+         swHhj8daX3sd7g5lckixO8UWjCDlGC/miEO0N1jy23FE7ZGIc6e2/a39X/zhKKVNOMOt
+         N3TvmFLjLjgaX/7F1FdQSzACBRwxUp25Ho8YxSVZG0vEdVdw3SzIfIBRuIOUx7+5dGOS
+         dcDOX82fijhwObd3ZKDuYeyR9bhqN2xf0pq6z8xK0Y5Gf5w60/2MQ6HV6e4PNUH1MIT1
+         or2vQ3pXyafYNjIERtFGfw9ZNwViSqXvIHYMuEzTMHNzZppfS0O5sgMgmSY4HyBEAE5g
+         p/EQ==
+X-Gm-Message-State: AOAM530ied1elTl/N8Iq0a+Br5JecCzJyAyFYp/WiRfR3aF70Sk/H+Sf
+        40TOl+VE9nLxKnsQ1iQGCUA=
+X-Google-Smtp-Source: ABdhPJwBym8eeRcj0DVKaPItufN4k+RbokuV48j+BiichBZQGbGQaX0QAwwJXHJQ0uGtuJEszQPvlg==
+X-Received: by 2002:a17:903:1c4:b0:14a:555c:adc0 with SMTP id e4-20020a17090301c400b0014a555cadc0mr29501068plh.101.1642547108175;
+        Tue, 18 Jan 2022 15:05:08 -0800 (PST)
 Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id x15sm20422153pfh.157.2022.01.18.15.04.16
+        by smtp.gmail.com with ESMTPSA id on1sm3253534pjb.52.2022.01.18.15.05.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 15:04:18 -0800 (PST)
-Date:   Wed, 19 Jan 2022 12:04:13 +1300
+        Tue, 18 Jan 2022 15:05:07 -0800 (PST)
+Date:   Wed, 19 Jan 2022 12:05:02 +1300
 From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
         realwakka@gmail.com
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] staging: pi433: fix validation for min bit rate
- supported by the device
-Message-ID: <20220118230413.GA4859@mail.google.com>
+Subject: [PATCH v3 2/3] staging: pi433: change order in which driver config
+ the rf69 chip
+Message-ID: <20220118230502.GA4897@mail.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,36 +64,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rf69 datasheets establishes that the minimum supported bit rate is
-1.2 kbps regardless of modulation.
+There is an explicit dependency between modulation and bit rate
+configurations. To ensure proper validation of input value for the
+set_bit_rate routine, we must ensure that modulation has been set
+before.
 
-this patch replaces the errouneous validation with the correct value
+This patch ensures that set_modulation is always called before
+set_bit_rate for both RX and TX routines
 
 Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 ---
- drivers/staging/pi433/rf69.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/staging/pi433/pi433_if.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index ee8c81d164e1..f4ac17adcd83 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -226,14 +226,12 @@ int rf69_set_modulation_shaping(struct spi_device *spi,
- int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
- {
- 	int retval;
--	u32 bit_rate_min;
- 	u32 bit_rate_reg;
- 	u8 msb;
- 	u8 lsb;
- 
- 	// check input value
--	bit_rate_min = F_OSC / 8388608; // 8388608 = 2^23;
--	if (bit_rate < bit_rate_min) {
-+	if (bit_rate < 1200) {
- 		dev_dbg(&spi->dev, "setBitRate: illegal input param");
- 		return -EINVAL;
- 	}
+diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+index f9f86e2c44a9..17ff51f6a9da 100644
+--- a/drivers/staging/pi433/pi433_if.c
++++ b/drivers/staging/pi433/pi433_if.c
+@@ -167,10 +167,10 @@ rf69_set_rx_cfg(struct pi433_device *dev, struct pi433_rx_cfg *rx_cfg)
+ 	ret = rf69_set_frequency(dev->spi, rx_cfg->frequency);
+ 	if (ret < 0)
+ 		return ret;
+-	ret = rf69_set_bit_rate(dev->spi, rx_cfg->bit_rate);
++	ret = rf69_set_modulation(dev->spi, rx_cfg->modulation);
+ 	if (ret < 0)
+ 		return ret;
+-	ret = rf69_set_modulation(dev->spi, rx_cfg->modulation);
++	ret = rf69_set_bit_rate(dev->spi, rx_cfg->bit_rate);
+ 	if (ret < 0)
+ 		return ret;
+ 	ret = rf69_set_antenna_impedance(dev->spi, rx_cfg->antenna_impedance);
+@@ -290,10 +290,10 @@ rf69_set_tx_cfg(struct pi433_device *dev, struct pi433_tx_cfg *tx_cfg)
+ 	ret = rf69_set_frequency(dev->spi, tx_cfg->frequency);
+ 	if (ret < 0)
+ 		return ret;
+-	ret = rf69_set_bit_rate(dev->spi, tx_cfg->bit_rate);
++	ret = rf69_set_modulation(dev->spi, tx_cfg->modulation);
+ 	if (ret < 0)
+ 		return ret;
+-	ret = rf69_set_modulation(dev->spi, tx_cfg->modulation);
++	ret = rf69_set_bit_rate(dev->spi, tx_cfg->bit_rate);
+ 	if (ret < 0)
+ 		return ret;
+ 	ret = rf69_set_deviation(dev->spi, tx_cfg->dev_frequency);
 -- 
 2.25.4
 

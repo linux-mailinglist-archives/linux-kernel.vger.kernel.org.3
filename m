@@ -2,203 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952804920DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3DF4920CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343864AbiARIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:04:19 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:39545 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiARIES (ORCPT
+        id S1343799AbiARIBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244429AbiARIBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:04:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642492697;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=1qsuYiZ+TnspVh46LBDqSDLAe/AFtcWSs/1s3CE8Rds=;
-    b=cGCPl4dH02cODoYYyb9G2WpxoTYhBpFiTzJv3tnR+NSuHlYpYqcr/F2TETEYwOCp2p
-    CJW3wXN9TcUEOADMF5qcMIoNQFOJ7PDVc8QDkRQvamlWjeYEgXEvsNPgQWHQsGtOMJwe
-    fpUxXjn2+0A6fFhOePergW2U8QNeBMGfRmuc40DSCB3xL/Zow+RJIzJOhjrSIvGznQLq
-    vQ6pVOzWlCUmqwnxiBSF0fWyIcDFERIcYSnaPNp3uFnS+rqRGr39qh5B+gM/VJmmifdN
-    /ii9AxSx+xx/3ijNbFvE80j90DVAmj80SgrhNDK5R557bSVcGV2PSEXMBVN/WC8/PZRG
-    s3Pw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.37.6 AUTH)
-    with ESMTPSA id Rb080by0I7wHUGe
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 18 Jan 2022 08:58:17 +0100 (CET)
-Message-ID: <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
-Date:   Tue, 18 Jan 2022 08:58:12 +0100
+        Tue, 18 Jan 2022 03:01:04 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFD2C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:01:03 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id q186so27282816oih.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:01:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Al3F+2ViLnm9/9qxjHoxeFPrd9kF19aHZnlQsAdIPRg=;
+        b=FCysJPty2mrcMf6v3VRjTFbhweCJRR3WyXaxWMp3y2v3HgQYlh1B9roeLBgjjTLRrF
+         q0EveM9wLKiqTMkN1DW5Bwx6oBRbVXaR3Yor5+pZHw/GeYeVfg7jaml0nA3ZTYTbDPf8
+         /M5uRa5UkC50Ris5+mVE2ymR7zWkKQSwm1M6tEpnSjw+FA+oE8BdNjJc5IU+QJ45WFS1
+         1eYPiEg8mweB/z9UP6dqcOFv/DMTLw15D/CbD2dDV5ue9EUg5bCwcw/h3jULi4lZQdms
+         qsgFgsm0r2f8iqGy0dIX/Ep+vHUUwgup0pUjPtXrxHk/w8ZNsQE+Ez0HsgQDhj6KnjWf
+         h9hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Al3F+2ViLnm9/9qxjHoxeFPrd9kF19aHZnlQsAdIPRg=;
+        b=aHN27QEB4+4UX3kMuAlRjzz7IkFeo7nPNJeaomv3xz85kZn5wsRO6+ZOhNGKXU5Z/Q
+         eNoVYXXrqAnIYSc6vNKO0zti+Q+RGeAGyEurCQtL9doOg1zuVSpIw+sJGNEaTl1+GOem
+         4xNtL4fIDrlDFOMqZV6FkENHVgs+j5yoTMwpwABJMP6gZWBaFvYBt7fXiWqt34MNAI/Q
+         odq8krMMMQk7ddRY1jvFD4/0LPcqvuGZikF0g4jxnYABA1r7PY3lmLW+xpxWSoehAfZ3
+         BzhMsL2TaBsHdfBRkbFzWXMuED5nTc09RKak4CK1LUTajza0FXq15WYTpLWKUkAiJ4SX
+         Koiw==
+X-Gm-Message-State: AOAM531XhHEa6YDTnIlz9PmpkV1zQ7tPYLuvGoh4pgRvuVsUJbefl9HA
+        /IByxpEPmkZdDgug9F8MKWR1ycv/uPA3w+tF+qY=
+X-Google-Smtp-Source: ABdhPJzvGwPY3OUJ5cr+YDP3ryIKCL5St1eOUXqyHiBMdGlYGVftPHZ71UYHtXtQprVP0IFc5O3S9yOgkr3fuXzNLkU=
+X-Received: by 2002:aca:2802:: with SMTP id 2mr7601418oix.23.1642492863253;
+ Tue, 18 Jan 2022 00:01:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-Content-Language: en-US
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>, mkl@pengutronix.de
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com>
+ <YeO8pcs866Iu2iJX@ip-172-31-30-232.ap-northeast-1.compute.internal>
+ <CADvbK_eY=3Gf79MkvK72Nh86ysN4eoFei0k1jg0frg22GgToGA@mail.gmail.com>
+ <YeU4B46F+oFUBRLE@linutronix.de> <39a3470f-06ab-cf41-32e4-80edb249c7d3@suse.cz>
+ <20220117131304.pdc3mfdowkzovw6q@localhost.localdomain>
+In-Reply-To: <20220117131304.pdc3mfdowkzovw6q@localhost.localdomain>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 18 Jan 2022 16:00:51 +0800
+Message-ID: <CADvbK_eKRNpE7PkdFLQgmfEme5LgEVDK7WakUc-Rj4XTRSpdiQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: slub: fix a deadlock warning in kmem_cache_destroy
+To:     Juri Lelli <juri.lelli@redhat.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Clark Williams <williams@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jan 17, 2022 at 9:13 PM Juri Lelli <juri.lelli@redhat.com> wrote:
+>
+> Hi,
+>
+> On 17/01/22 13:40, Vlastimil Babka wrote:
+> > +CC Clark
+> >
+> > On 1/17/22 10:33, Sebastian Andrzej Siewior wrote:
+> > > On 2022-01-17 16:32:46 [+0800], Xin Long wrote:
+> > >> another issue. From the code analysis, this issue does exist on the
+> > >> upstream kernel, though I couldn't build an upstream RT kernel for the
+> > >> testing.
+> > >
+> > > This should also reproduce in v5.16 since the commit in question is
+> > > there.
+> >
+> > Yeah. I remember we had some issues with the commit during development, but
+> > I'd hope those were resolved and the commit that's ultimately merged got the
+> > fixes, see this subthread:
+> >
+> > https://lore.kernel.org/all/0b36128c-3e12-77df-85fe-a153a714569b@quicinc.com/
+> >
+> > >> > >         CPU0                        CPU1
+> > >> > >         ----                        ----
+> > >> > >   cpus_read_lock()
+> > >> > >                                    kn->active++
+> > >> > >                                    cpus_read_lock() [a]
+> > >> > >   wait until kn->active == 0
+> > >> > >
+> > >> > > Although cpu_hotplug_lock is a RWSEM, [a] will not block in there. But as
+> > >> > > lockdep annotations are added for cpu_hotplug_lock, a deadlock warning
+> > >> > > would be detected:
+> > >
+> > > The cpu_hotplug_lock is a per-CPU RWSEM. The lock in [a] will block if
+> > > there is a writer pending.
+> > >
+> > >> > >   ======================================================
+> > >> > >   WARNING: possible circular locking dependency detected
+> > >> > >   ------------------------------------------------------
+> > >> > >   dmsetup/1832 is trying to acquire lock:
+> > >> > >   ffff986f5a0f9f20 (kn->count#144){++++}-{0:0}, at: kernfs_remove+0x1d/0x30
+> > >> > >
+> > >> > >   but task is already holding lock:
+> > >> > >   ffffffffa43817c0 (slab_mutex){+.+.}-{3:3}, at: kmem_cache_destroy+0x2a/0x120
+> > >> > >
+> > >
+> > > I tried to create & destroy a cryptarget which creates/destroy a cache
+> > > via bio_put_slab(). Either the callchain is different or something else
+> > > is but I didn't see a lockdep warning.
+> >
+> > RHEL-8 kernel seems to be 4.18, unless RT uses a newer one. Could be some
+> > silently relevant backport is missing? How about e.g. 59450bbc12be ("mm,
+> > slab, slub: stop taking cpu hotplug lock") ?
+>
+> Hummm, looks like we have backported commit 59450bbc12be in RHEL-8.
+>
+> Xin Long, would you be able to check if you still see the lockdep splat
+> with latest upstream RT?
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.16.y-rt
+Hi, Juri,
 
-the referenced syzbot issue has already been fixed in upstream here:
+Thanks for sharing the RT kernel repo.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=5f33a09e769a9da0482f20a6770a342842443776
+I just tried with this kernel, and I couldn't reproduce it on my env.
+But I don't see how the upstream RT kernel can avoid the call trace.
 
-("can: isotp: convert struct tpcon::{idx,len} to unsigned int")
+As this warning was triggered when the system was shutting down, it might
+not be reproduced on it due to some timing change.
 
-Additionally this fix changes some behaviour that is required by the ISO 
-16765-2 specification (see below).
-
-On 17.01.22 13:01, Ziyang Xuan wrote:
-> When receive a FF, the current code logic does not consider the real
-> so->rx.state but set so->rx.state to ISOTP_IDLE directly. That will
-> make so->rx accessed by multiple receiving processes concurrently.
-
-This is intentionally. "multiple receiving processes" are not allowed 
-resp. specified by ISO 15765-2.
-
-> The following syz problem is one of the scenarios. so->rx.len is
-> changed by isotp_rcv_ff() during isotp_rcv_cf(), so->rx.len equals
-> 0 before alloc_skb() and equals 4096 after alloc_skb(). That will
-> trigger skb_over_panic() in skb_put().
-> 
-> =======================================================
-> CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
-> RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
-> Call Trace:
->   <TASK>
->   skb_over_panic net/core/skbuff.c:118 [inline]
->   skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
->   isotp_rcv_cf net/can/isotp.c:570 [inline]
->   isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
->   deliver net/can/af_can.c:574 [inline]
->   can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
->   can_receive+0x31d/0x580 net/can/af_can.c:665
->   can_rcv+0x120/0x1c0 net/can/af_can.c:696
->   __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
->   __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
-> 
-> Check so->rx.state equals ISOTP_IDLE firstly in isotp_rcv_ff().
-> Make sure so->rx idle when receive another new packet. And set
-> so->rx.state to ISOTP_IDLE after whole packet being received.
-> 
-> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-> Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
->   net/can/isotp.c | 28 +++++++++++++++++-----------
->   1 file changed, 17 insertions(+), 11 deletions(-)
-> 
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index df6968b28bf4..a4b174f860f3 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -443,8 +443,10 @@ static int isotp_rcv_ff(struct sock *sk, struct canfd_frame *cf, int ae)
->   	int off;
->   	int ff_pci_sz;
->   
-> +	if (so->rx.state != ISOTP_IDLE)
-> +		return 0;
-> +
->   	hrtimer_cancel(&so->rxtimer);
-> -	so->rx.state = ISOTP_IDLE;
-
-No matter in which receiving state we receive a first frame (FF) we are 
-required to start a fresh reception process and/or terminate the current 
-attempt.
-
-Best regards,
-Oliver
-
->   
->   	/* get the used sender LL_DL from the (first) CAN frame data length */
->   	so->rx.ll_dl = padlen(cf->len);
-> @@ -518,8 +520,6 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->   		so->lastrxcf_tstamp = skb->tstamp;
->   	}
->   
-> -	hrtimer_cancel(&so->rxtimer);
-> -
->   	/* CFs are never longer than the FF */
->   	if (cf->len > so->rx.ll_dl)
->   		return 1;
-> @@ -531,15 +531,15 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->   			return 1;
->   	}
->   
-> +	hrtimer_cancel(&so->rxtimer);
-> +
->   	if ((cf->data[ae] & 0x0F) != so->rx.sn) {
->   		/* wrong sn detected - report 'illegal byte sequence' */
->   		sk->sk_err = EILSEQ;
->   		if (!sock_flag(sk, SOCK_DEAD))
->   			sk_error_report(sk);
->   
-> -		/* reset rx state */
-> -		so->rx.state = ISOTP_IDLE;
-> -		return 1;
-> +		goto err_out;
->   	}
->   	so->rx.sn++;
->   	so->rx.sn %= 16;
-> @@ -551,21 +551,18 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->   	}
->   
->   	if (so->rx.idx >= so->rx.len) {
-> -		/* we are done */
-> -		so->rx.state = ISOTP_IDLE;
-> -
->   		if ((so->opt.flags & ISOTP_CHECK_PADDING) &&
->   		    check_pad(so, cf, i + 1, so->opt.rxpad_content)) {
->   			/* malformed PDU - report 'not a data message' */
->   			sk->sk_err = EBADMSG;
->   			if (!sock_flag(sk, SOCK_DEAD))
->   				sk_error_report(sk);
-> -			return 1;
-> +			goto err_out;
->   		}
->   
->   		nskb = alloc_skb(so->rx.len, gfp_any());
->   		if (!nskb)
-> -			return 1;
-> +			goto err_out;
->   
->   		memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
->   		       so->rx.len);
-> @@ -573,6 +570,10 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->   		nskb->tstamp = skb->tstamp;
->   		nskb->dev = skb->dev;
->   		isotp_rcv_skb(nskb, sk);
-> +
-> +		/* we are done */
-> +		so->rx.state = ISOTP_IDLE;
-> +
->   		return 0;
->   	}
->   
-> @@ -591,6 +592,11 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->   	/* we reached the specified blocksize so->rxfc.bs */
->   	isotp_send_fc(sk, ae, ISOTP_FC_CTS);
->   	return 0;
-> +
-> +err_out:
-> +	/* reset rx state */
-> +	so->rx.state = ISOTP_IDLE;
-> +	return 1;
->   }
->   
->   static void isotp_rcv(struct sk_buff *skb, void *data)
+>
+> Thanks!
+> Juri
+>

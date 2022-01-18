@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D13A4492C82
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FDB492C8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346912AbiARRfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:35:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S1347375AbiARRi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347532AbiARRfk (ORCPT
+        with ESMTP id S236042AbiARRi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:35:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3462DC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:35:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6609B8170A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:35:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15DC9C340E0;
-        Tue, 18 Jan 2022 17:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642527337;
-        bh=qMzBU33o1h25dpmtWo89Wxg5l+7hKomR8KeOL5BKubw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ptaUXx4yuwtxtmAf2YCCFHlmgKVe5rLE3JdBPRpYiFe1tK995MGhuRvcSJs3b3tAT
-         IFLklJ15uxxD2KYX03VAkD1RfTIwYuRfV8sTJkQ9e6f9x96Kxcx0uBSeMuKYp4ulxL
-         NGN74ojNX7IYCk3A5ibHMbDm3TVSadNhRUEF9EOjgejsOrysdVcEibKxCpeA/A2+S8
-         hL1ee4vPUzWlCX465p2Ik5yLwjgzq8NKPGHGy34sgusZheKQodnHenInFeso4XEy8q
-         BkXWmC2ASJlfIJ/KIpSD+I7iaM7CrTgYhgYia8z7bt2loFm6xgcTDAirx/r3MQ7oR6
-         /zwU/xoJNTilw==
-Date:   Tue, 18 Jan 2022 17:35:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Julian Braha <julianbraha@gmail.com>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, Vijendar.Mukunda@amd.com,
-        AjitKumar.Pandey@amd.com, kai.vehmanen@linux.intel.com,
-        tanureal@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, fazilyildiran@gmail.com
-Subject: Re: [PATCH] ASoC: amd: fix unmet dependency on GPIOLIB for
- SND_SOC_DMIC
-Message-ID: <Yeb6YzIugFSmidQY@sirena.org.uk>
-References: <20220117041528.59958-1-julianbraha@gmail.com>
- <Yeb0n9AVXeVzBHrT@sirena.org.uk>
- <26ec72a7-effa-7553-fc0f-4e016b651c09@linux.intel.com>
+        Tue, 18 Jan 2022 12:38:27 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E582C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:38:27 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id t32so14728618pgm.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=QJWd1khAstY0x93rwrGIBjaegCyTJ/dAFVARXocXpuM=;
+        b=gC+QQkDkloGrkehE2AMrT0DqlcBVU9Xuf5Clh9Ncc4QNmFi94txNhGoQgEPmZqoO/U
+         /cP2aFWN4GSSuqRvBsncAnzkC+XipwdPUDVgyptM0Lb6NaQA8bP1Jj5fz9JP1OzvERe2
+         Mj9yGxAqkHGz1wUafQ0ySCnc1zgBOBZDm5lt1tLTcdSswcCuTkDKeqWnxst/UuhazoUK
+         m6c+Pkj6XS8Iuxn9AScFMnHC4XXse25nb+qu+qewCxZwBOHQFKAaU1MsWW7oU4yPE4no
+         edUYMpKqO0a8kSP+PIM0l4BSQs0zipiguELuqzPiO4GI64PAEOlOYmCavasO+e7vc/z+
+         RoCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=QJWd1khAstY0x93rwrGIBjaegCyTJ/dAFVARXocXpuM=;
+        b=R14OqpwnWLqYqDHC1fS+csvuSloIyOIKUuhpUGSQHUn50XAoKXEIvQXc7dxa8a2GBM
+         oF+4ukALC3JjDGIKaetCn1iJnnFL4dwScepb8esOejKDckZosl9/Qcqy6Bw9uxK78GZ+
+         DPIZsX/PXWX2lpx4ZvfcHT2VYoGBflURNVP99G8QjejUFPHCDVXLutn/W4DcLGpVl82Q
+         Q/NxpiSYOJwtJL4TAykHbANGi8Lb5qwCvJAGfl+aXPFYoMMwiY9S7fCFdiB/tClpdIOT
+         jEoeLSNsau2IoYjQ3SsvX6WIVbKfAyoqxSkxJXr1AV4s2TAO300VXlxg4ukeF2BJrXRF
+         wM4w==
+X-Gm-Message-State: AOAM531gODRHOOHV6vfe7ftaKEj0jfbnX6e2idxjVrpNEQBXwHV+VWLj
+        LdMq7lD2DYFC60XuTBjUTMlDku6Gkssj1g==
+X-Google-Smtp-Source: ABdhPJy1yhVOt0VFuq/zcJmfQrui2AtwBnQsidJlo3pCchU2ZsEk0dHXMtBmmLUbecfrle3G6icG7g==
+X-Received: by 2002:a63:6b46:: with SMTP id g67mr23965410pgc.482.1642527506841;
+        Tue, 18 Jan 2022 09:38:26 -0800 (PST)
+Received: from [192.168.1.32] ([122.183.149.79])
+        by smtp.gmail.com with ESMTPSA id j3sm2704439pjs.1.2022.01.18.09.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 09:38:26 -0800 (PST)
+Message-ID: <96ad6c6f0346c466a7e65ef93bc0a072cf6de10b.camel@rajagiritech.edu.in>
+Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Date:   Tue, 18 Jan 2022 23:08:21 +0530
+In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
+References: <20220118160452.384322748@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bBU/pd3VrGlA9S/Q"
-Content-Disposition: inline
-In-Reply-To: <26ec72a7-effa-7553-fc0f-4e016b651c09@linux.intel.com>
-X-Cookie: Do YOU have redeeming social value?
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-01-18 at 17:05 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.2 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+>         
+> https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
+> stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+ hello ,
 
---bBU/pd3VrGlA9S/Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Compiled  and booted  5.16.2-rc1+ on VivoBook 15_ASUS Laptop X507UAR
+.No Regression  from dmesg, except an old warning
+ 
+Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
 
-On Tue, Jan 18, 2022 at 11:21:50AM -0600, Pierre-Louis Bossart wrote:
-> On 1/18/22 11:10 AM, Mark Brown wrote:
-
-> > Why is this a good fix and not removing the dependency on gpiolib from
-> > DMIC?  While a DMIC *can* use a GPIO it's not something that's an
-> > intrinsic requirement and it's entirely optional in the code.
-
-> We also have similar 'depends on GPIOLIB' for Intel boards that are not
-> really useful. see e.g. 4262ddc2ad63 ('ASoC: Intel: boards: add explicit
-> dependency on GPIOLIB when DMIC is used'). IIRC we had this discussion
-> before about doing a larger cleanup.
-
-At first glance it's just that the gpiolib dependency on the DMIC driver
-is spurious and should be deleted, the code looks fine and I'd not
-expect any need for an actual dependency (but I'm out of office this
-week so probably not going to actually poke at things properly right
-now).
-
---bBU/pd3VrGlA9S/Q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm+mMACgkQJNaLcl1U
-h9CyEgf7B4or95KreNOOC9KGSpHw3O2RfRdk8iBHMJYbjN4fPEMZ7C1kyER7j3F4
-DvTXfw5BTamOl04W1YNmP6xms/S2OZ6Jxc+p/wTyQEKS64GRl9t8SWX090V3kUUo
-ggwCXzb1TYG4Pb4DqpeQrCI34UbhSDa1twH73P9YBg9VtEIw0Hw9drxa8dZE22As
-HFiidQGiTd89jhY/omGjudeFdCTutSaE+ROL4FZHK3Y4X+3eubptlbL6M2f9jbhw
-3TCz/o0ZP4rUvu09r7CDutmHNyavRNLhfv3fz9UouO8aVMgyPJGOerehK8bhjOTc
-3Rey2MR3FItXaOIt0R1UrbVxkMq+ww==
-=3kwX
------END PGP SIGNATURE-----
-
---bBU/pd3VrGlA9S/Q--
+-- 
+software engineer
+rajagiri school of engineering and technology - autonomous

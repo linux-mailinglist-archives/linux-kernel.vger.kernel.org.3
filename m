@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E41F4922AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A264922B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345693AbiARJZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:25:32 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:60712 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1345680AbiARJZb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:25:31 -0500
-X-UUID: 2c63b72d53c54b989adeb6f86494d9af-20220118
-X-UUID: 2c63b72d53c54b989adeb6f86494d9af-20220118
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1651465341; Tue, 18 Jan 2022 17:25:26 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 18 Jan 2022 17:25:25 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 18 Jan
- 2022 17:25:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 18 Jan 2022 17:25:25 +0800
-Message-ID: <544f5085fc8597ce9ce3eb7dc1b5d08fb1ac8755.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/2] soc: mediatek: pwrap: add pwrap driver for
- MT8186 SoC
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 18 Jan 2022 17:25:25 +0800
-In-Reply-To: <9949a1f7-1ed5-a137-c7b9-2ef8d8e1caf8@gmail.com>
-References: <20220107104633.7500-1-johnson.wang@mediatek.com>
-         <20220107104633.7500-2-johnson.wang@mediatek.com>
-         <9949a1f7-1ed5-a137-c7b9-2ef8d8e1caf8@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S244802AbiARJ0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:26:17 -0500
+Received: from mga17.intel.com ([192.55.52.151]:64332 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234638AbiARJ0Q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 04:26:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642497976; x=1674033976;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ripv7PKf8AE+DZencjgRj4jyC+vbpn4HOU9gpa3R3nI=;
+  b=N6L8sQ5GOJhf+6lBVyMCtBMVZCYom3YibpEoo3im5j6pnMtxqQs068Sx
+   FZ0tT/tsKfaKTtvnUKoacwGCSN04ay3JU4DO8AfMD/nw6sn04dxDIsePU
+   BlXatHnvVZpDRhuHZB23lK/rdGJju4ienoaJHgUPB5CR4r3tct15zDKDR
+   Q7geReaWrx56jKw+GZxWs0KYPm++A0fKyf0G1B4bV0xA1mR0E55was4zZ
+   ClljJnCIg1Pi7eRjg19fYJjwZYPzCAEVrT3WBZ7jQvRxfnuHtgXZ+jFAC
+   MA7TGe7+uKjaIdWIyJaas8Dmc4zkEo5q4Dkbqp1XvV5iCnlfTgBlyXEco
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="225452482"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="225452482"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 01:26:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="578339881"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2022 01:26:09 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9kkj-000CPD-AO; Tue, 18 Jan 2022 09:26:09 +0000
+Date:   Tue, 18 Jan 2022 17:25:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org
+Subject: [PATCH] nvme-fabrics: fix returnvar.cocci warnings
+Message-ID: <20220118092531.GA25410@95126676e75f>
+References: <202201181710.TjfwKXN9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201181710.TjfwKXN9-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+From: kernel test robot <lkp@intel.com>
 
-On Fri, 2022-01-14 at 16:46 +0100, Matthias Brugger wrote:
-> 
-> On 07/01/2022 11:46, Johnson Wang wrote:
-> > MT8186 are highly integrated SoC and use PMIC_MT6366 for
-> > power management. This patch adds pwrap master driver to
-> > access PMIC_MT6366.
-> > 
-> 
-> It seems this new arbiter is significantly different from the version
-> 1. Please 
-> explain that in the commit message.
-> 
-> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > ---
-> >   drivers/soc/mediatek/mtk-pmic-wrap.c | 72
-> > ++++++++++++++++++++++++++++
-> >   1 file changed, 72 insertions(+)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> > b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> > index 952bc554f443..78866ebf7f04 100644
-> > --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> > +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> > @@ -30,6 +30,7 @@
-> >   #define PWRAP_GET_WACS_REQ(x)		(((x) >> 19) &
-> > 0x00000001)
-> >   #define PWRAP_STATE_SYNC_IDLE0		BIT(20)
-> >   #define PWRAP_STATE_INIT_DONE0		BIT(21)
-> > +#define PWRAP_STATE_INIT_DONE0_V2	BIT(22)
-> 
-> That's a strange name, does it come from the datasheet description?
+drivers/nvme/host/fabrics.c:1095:5-8: Unneeded variable: "ret". Return "0" on line 1109
 
-Thanks for your review.
 
-No, there is only PWRAP_STATE_INIT_DONE0 in MT8186 datasheet.
-However, it's the 22nd bit in MT8186 and the 21st bit in other SoCs.
-So we changed its name to avoid redefinition of PWRAP_STATE_INIT_DONE0.
+ Remove unneeded variable used to store return value.
 
-Could you give us some suggestion on proper definition naming?
-Do you think PWRAP_STATE_INIT_DONE0_MT8186 will be a better choice?
+Generated by: scripts/coccinelle/misc/returnvar.cocci
 
-> 
-> >   #define PWRAP_STATE_INIT_DONE1		BIT(15)
-> >   
-> >   /* macro for WACS FSM */
-> > @@ -77,6 +78,8 @@
-> >   #define PWRAP_CAP_INT1_EN	BIT(3)
-> >   #define PWRAP_CAP_WDT_SRC1	BIT(4)
-> >   #define PWRAP_CAP_ARB		BIT(5)
-> > +#define PWRAP_CAP_MONITOR_V2	BIT(6)
-> 
-> Not used capability, please delete.
-> 
-> 
-> Regards,
-> Matthias
+Fixes: f18ee3d98815 ("nvme-fabrics: print out valid arguments when reading from /dev/nvme-fabrics")
+CC: Hannes Reinecke <hare@suse.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
-PWRAP_CAP_MONITOR_V2 is not used right now.
-We can remove it in next version.
-But this capability will be added when we need it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e3a8b6a1e70c37702054ae3c7c07ed828435d8ee
+commit: f18ee3d988157ebcadc9b7e5fd34811938f50223 nvme-fabrics: print out valid arguments when reading from /dev/nvme-fabrics
+:::::: branch date: 5 hours ago
+:::::: commit date: 4 weeks ago
 
-Thanks.
+ fabrics.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+--- a/drivers/nvme/host/fabrics.c
++++ b/drivers/nvme/host/fabrics.c
+@@ -1092,7 +1092,6 @@ static void __nvmf_concat_opt_tokens(str
+ static int nvmf_dev_show(struct seq_file *seq_file, void *private)
+ {
+ 	struct nvme_ctrl *ctrl;
+-	int ret = 0;
+ 
+ 	mutex_lock(&nvmf_dev_mutex);
+ 	ctrl = seq_file->private;
+@@ -1106,7 +1105,7 @@ static int nvmf_dev_show(struct seq_file
+ 
+ out_unlock:
+ 	mutex_unlock(&nvmf_dev_mutex);
+-	return ret;
++	return 0;
+ }
+ 
+ static int nvmf_dev_open(struct inode *inode, struct file *file)

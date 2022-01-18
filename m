@@ -2,125 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C171D4924A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DD94924A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240138AbiARLTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S240226AbiARLTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240366AbiARLSn (ORCPT
+        with ESMTP id S240716AbiARLS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:18:43 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C52C061760
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:18:43 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id bb37so242294oib.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:18:43 -0800 (PST)
+        Tue, 18 Jan 2022 06:18:58 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB8CC06176C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:18:58 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id 15so44653806edx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wa1dZG4GoQTrXlzOi6DDYuer/mOyHhSLIkqIRyNfCb0=;
-        b=fuf/49aasH2ICZ5tiYtVjQdBuAqwceTPNFDeB2rPyXb5ynaEJYfpZPt98OPIWjHB9A
-         SixKkvj07y2F7xGCnTcxaJk5Rpwb349v98j/8S5jwou/75iGPEOmUFL/p/+/9hfvK/mf
-         tMBRo5/5GEbk14QLHVOhXOJ/O5l/4D6Q8nsQI=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dXkKY9TV5jKPRQS8npjT2kmqtGeprtOApiCdkfgYiBA=;
+        b=RaqI3KHqXcZqT1HWbCc0QERICwhfSItlAf6p615a9aV9FK4gtZloTjvE/aMk0xre//
+         QG5neM7zOxKc0gFZcPnY6KDQ8EnpFbkN+BymjejeISvbcCjp+OMzu+vWfNkL9lEx8z09
+         oMZNi53pbX0GAE2fgZ7eyihjD/lWTJBEvLyyuSs3ysA/HXTU3r16HTa13jXPTcxM+kq+
+         5NjdSp5PP8U7O7pepfz+7rS0WGGyRbZpsYF4B1KDlzQ8Do/UgWjbcIKn2lXu+tCDNBoC
+         U/tIm2ZqfKw5WmJ1K7IwJTCMydISJXfcRSBlv/r2mxpLy2Tv2yjiOxmqX4/TMP8LfzVJ
+         t/dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wa1dZG4GoQTrXlzOi6DDYuer/mOyHhSLIkqIRyNfCb0=;
-        b=qGLiHNEzsFb74DPhs60gslpx8n+jgGUPY0rOM1W7ekZDkp+/KjAR10tnf+syGwLLRD
-         sW1kyMnqj9G54a6EAPUHP+yFn8ystozAafA9BAOvXiEy8OrNzlsF7kwMljwR36TOCT4g
-         +x39tOKSHLJX5kJ/dMXbAiSwaFXHQckWhRIRQk6jOMj2JJw/b3TnI17UNzuc8VbsXvoA
-         5dV1LL24AobRgvRn9GB3pWVXHDK1ztT3rwpMZlZIn34SOBU5hvwcVbn4O4riOi8zuECe
-         RCIWdau2kxiwKGNzmsBxq0eBTnfIxzQyKL5rBfZ8VTrklDQxWaJpQ7xyqOjL36RPmJKZ
-         88dg==
-X-Gm-Message-State: AOAM532lQAsXNavo1iO2j1c+2UM4POHEqAsFXehx7V/3cAXfMHABjWzV
-        YQB7+ii0gDE7dAPTmh7GogwuHBAjpOCBCQXpRQK0Xxa42c8=
-X-Google-Smtp-Source: ABdhPJwaiWOvuwzgv58eTEUe46jNmMAihEdSp5q+fSNBT1IED8/qYXBr7kRmRyn8hc73vcobXONscKk/imKt+JwYtY4=
-X-Received: by 2002:a05:6808:3a3:: with SMTP id n3mr12412474oie.128.1642504723007;
- Tue, 18 Jan 2022 03:18:43 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dXkKY9TV5jKPRQS8npjT2kmqtGeprtOApiCdkfgYiBA=;
+        b=iZ7le50e7MOJlRAVj5Cp0wL1R7IIlC8kIvfC+raPDh1qCcsamVWJoZ+juBS/2gipAy
+         DMTFy3BvRbsRrPc1ShEf6A89l6+zPBnpB/i6r8S1GWgYOo+Q+Vh4FngypIdX+FKT047c
+         2mPCzBNappEqVT9XwXPwzKCMfDVAr/BF5YyZUZ9O8CqRMG6ZrXYY+oSZBCtGvs5YsfFl
+         ucqD2tKpEbb/WDB6bg9RUscrT33CYWxH2uWUgReGIXxZ9iTv9nkPCNsXb1n6/AC/oyjI
+         X4ZLwmfXc5B2q/GGDmrKYYUgyXe1AN/TklUmYgCWsFJHVW0cdYY2jWhQyiOrMxRA4AYI
+         RSyg==
+X-Gm-Message-State: AOAM530ZKUaGnoPPVz7COPYg7fxyKVTm/END2e2cHZ9GbDXfYJXd0lzx
+        kmDsOAgFS+IuUVGGS93VrglIqg==
+X-Google-Smtp-Source: ABdhPJxyP3fn57xchwb8RYb//nVXkLqwMxgKnviK20rQSEkF8U4GquITBii9dwbD2lb1qcYRUKGWzw==
+X-Received: by 2002:a17:907:160c:: with SMTP id hb12mr9439119ejc.652.1642504736785;
+        Tue, 18 Jan 2022 03:18:56 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.239])
+        by smtp.gmail.com with ESMTPSA id h2sm5267548ejo.169.2022.01.18.03.18.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 03:18:56 -0800 (PST)
+Date:   Tue, 18 Jan 2022 19:18:49 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Marco Elver <elver@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
+        sumanthk@linux.ibm.com, hca@linux.ibm.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
+Message-ID: <20220118111849.GB98966@leoy-ThinkPad-X240s>
+References: <20211216151454.752066-1-tmricht@linux.ibm.com>
+ <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
+ <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+ <20220118091827.GA98966@leoy-ThinkPad-X240s>
+ <46d27f58-7732-3359-e0aa-090468a1cb22@huawei.com>
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
- <87ee5659dt.fsf@intel.com> <4f1d6018-d74e-8e62-ea4d-0ca79c6bbbc5@gmx.de>
- <87a6ft5thv.fsf@intel.com> <5ba33e10-7d75-9f9a-dfd6-c04608d230a4@gmx.de>
-In-Reply-To: <5ba33e10-7d75-9f9a-dfd6-c04608d230a4@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 18 Jan 2022 12:18:31 +0100
-Message-ID: <CAKMK7uG48Due9Tv_78BJT52hvC5JcbT6-7S6_Qt7FiZ-GrTRzw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Helge Deller <deller@gmx.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-fbdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46d27f58-7732-3359-e0aa-090468a1cb22@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 9:56 AM Helge Deller <deller@gmx.de> wrote:
->
-> On 1/18/22 09:38, Jani Nikula wrote:
-> > On Mon, 17 Jan 2022, Helge Deller <deller@gmx.de> wrote:
-> >> On 1/17/22 22:40, Jani Nikula wrote:
-> >>> On Mon, 17 Jan 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>>> Seems like few people read linux-fbdev these days.
-> >>>
-> >>> How much traffic is there to linux-fbdev that is *not* Cc'd to dri-devel
-> >>> also?
-> >>
-> >> Doesn't seem like much traffic - which IMHO is OK for such a tree with
-> >> mostly just maintenance patches.
-> >>
-> >>> Do we still need a separate linux-fbdev mailing list at all?
-> >>
-> >> Yes. I want to have it seperate of dri-devel.
-> >> Actually I'd prefer to drop dri-devel from the list where patches
-> >> for fbdev are sent...
-> >
-> > Disagreed. If anything, this thread shows we can't have fbdev and drm in
-> > silos of their own.
->
-> Patches to fbdev usually don't affect DRM.
-> Patches which affect DRM needs to through to dri-devel.
-> In addition this would take the burden of the dri-developers to receive
-> unrelated fbdev driver updates and patches.
+Hi John,
 
-I added dri-devel for fbdev because stuff landed that shouldn't have.
-Let's not remove that, because the amount of patches for fbdev which
-arent relevant for drm drivers is pretty much nothing.
+On Tue, Jan 18, 2022 at 10:20:37AM +0000, John Garry wrote:
 
-I really don't like the idea that fbdev goes off again becoming a
-silo, just because it's too hard to wire through low-bit greyscale
-support. Which no I can't type for you, because I don't have such hw
-here.
+[...]
 
-Everything where people cared enough for adding fbdev compat support
-for to actually write a patch is supported.
+> > static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+> > {
+> >          ...
+> > 
+> >          if (!BP_SIGNAL_IS_SUPPORTED) {
+> >                  pr_debug("Test not supported on this architecture");
+> >                  return TEST_SKIP;
+> >          }
+> > 
+> >          ...
+> > }
+> > 
+> > Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
+> > here.
+> 
+> 
+> Do you know any other architectures which would have this issue? Or a
+> generic way to check for support?
+> 
+> It's better to not have to add to this list arch-by-arch..
 
-If you do want a silo  for fbdev then I think the only reasonable
-option is that we create a copy of the fbdev/fbcon code for drm
-(somewhat renamed), so that you can do the reverts without impacting
-drm drivers. But there will still be some overlap and minimal
-coordination, plus I'm not seeing anyone from the drm side
-volunteering for the sizeable amount of work.
--Daniel
+Yeah, it's ugly to add archs one by one.  But I don't find an ABI can
+be used to make decision if an arch supports signal handler for
+breakpoint.  Usually, it's architecture specific operations for signal
+handling, see the code [1]; simply to say, architecture needs to disable
+single step when call signal handler and restore single step after
+return from signal handler.
 
-> > Also, if the patches continue to get merged through drm-misc, they need
-> > to be sent to dri-devel.
->
-> Helge
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/signal.c#n830
 
+> > > And fails on my x86 broadwell machine:
+> > > 
+> > > john@localhost:~/kernel-dev2/tools/perf> sudo ./perf test -v 73
+> > > 73: Sigtrap                                                         :
+> > > --- start ---
+> > > test child forked, pid 22255
+> > > FAILED sys_perf_event_open(): Argument list too long
+> > > test child finished with -1
+> > > ---- end ----
+> > > Sigtrap: FAILED!
+> > > john@localhost:~/kernel-dev2/tools/perf>
+> > It is a bit suprise for the failure on x86, as I remembered x86 platform
+> > can support signal handler with hw breakpoint.  And from the error
+> > "Argument list too long", it should be a different issue from other
+> > archs.
+> 
+> Yeah, I don't know what's going on here.
 
+Seems to there have incompatible issue.
+Maybe you could cleanup with "make clean" and then rebuild perf.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+Leo

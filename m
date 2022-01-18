@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6BD49196D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB26491995
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245745AbiARCyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:54:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34546 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245507AbiARCnO (ORCPT
+        id S1351647AbiARCyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:54:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52042 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344102AbiARCn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:43:14 -0500
+        Mon, 17 Jan 2022 21:43:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DB5161269;
-        Tue, 18 Jan 2022 02:43:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B11C36B04;
-        Tue, 18 Jan 2022 02:43:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B2B1B812A1;
+        Tue, 18 Jan 2022 02:43:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C59C4C36AF9;
+        Tue, 18 Jan 2022 02:43:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473791;
-        bh=lMEBuMlvnB1Pwb+Tnv2fUmVQFddWQ68uoefQrCW//Rg=;
+        s=k20201202; t=1642473802;
+        bh=9ps7Jv4uIYBcpa73FrRpKTB27g2ZiCKS7+v1WkaUAAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rKujjtFabwLhlY+x96Ww23TWMGxQPpEBZwySAdALSrZbneAax2YnI6fFOwIVnkPKl
-         WwpN0iQ9BBaofs4OBVfPKXUfEdarbDNFnAakbevmGR+fBv2YAUxPzqP1DbtEBsmueO
-         LQuuJCtOqRTXfYcHclPPtJyB3h53Id1oEibQOGHDsiFpwFlqDq6voyiYOilFfOHJ/P
-         TDpjxQVWWmYliO/SlbzU1adlyGQNgO+LknCGvUS8vyjh7l9aixhOwROK73UdFdROOJ
-         KyW3rtdAAjfvNjjD0AzERrbRYRcGUk6X+MUXzyaxINGRVS4CpTcPxtktKvwTdBj6CZ
-         ZNd+ks1OJMCag==
+        b=ldjcQq0MfjlahXzLO6cjzDIHWUx6lQTwn/ibXgmOuVS2EOu4IoYxGmHGa1fPUy2CW
+         8FR1YFkfB3WqANZclidB1ru0WM+ekBNuc/MjujoHUaE44G6qJjfYIlJsW5MWCNld5A
+         TXaRzZKAV4gSsI72N3EgTNQwcMWEqU4kzxwHrQ/Ob3Qehkm4llEwuA/PDSfAJ6jLPv
+         TpRiu44SdI+6w30df+STl4Mf/sooMGXBP7zjZBzQZSd3pmw7/rdkQ7s28HRbt8fA5p
+         oqiMCrFE9FA/oV9znTYOtOKF8v6o0UsG5FVJJKvVR4wBn8gOd4yuoN7+GICtjsuIya
+         TwC8uYKsNQ7nA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 074/116] PM: runtime: Add safety net to supplier device release
-Date:   Mon, 17 Jan 2022 21:39:25 -0500
-Message-Id: <20220118024007.1950576-74-sashal@kernel.org>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 080/116] iwlwifi: fix leaks/bad data after failed firmware load
+Date:   Mon, 17 Jan 2022 21:39:31 -0500
+Message-Id: <20220118024007.1950576-80-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
 References: <20220118024007.1950576-1-sashal@kernel.org>
@@ -50,135 +50,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit d1579e61192e0e686faa4208500ef4c3b529b16c ]
+[ Upstream commit ab07506b0454bea606095951e19e72c282bfbb42 ]
 
-Because refcount_dec_not_one() returns true if the target refcount
-becomes saturated, it is generally unsafe to use its return value as
-a loop termination condition, but that is what happens when a device
-link's supplier device is released during runtime PM suspend
-operations and on device link removal.
+If firmware load fails after having loaded some parts of the
+firmware, e.g. the IML image, then this would leak. For the
+host command list we'd end up running into a WARN on the next
+attempt to load another firmware image.
 
-To address this, introduce pm_runtime_release_supplier() to be used
-in the above cases which will check the supplier device's runtime
-PM usage counter in addition to the refcount_dec_not_one() return
-value, so the loop can be terminated in case the rpm_active refcount
-value becomes invalid, and update the code in question to use it as
-appropriate.
+Fix this by calling iwl_dealloc_ucode() on failures, and make
+that also clear the data so we start fresh on the next round.
 
-This change is not expected to have any visible functional impact.
-
-Reported-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210110539.1f742f0eb58a.I1315f22f6aa632d94ae2069f85e1bca5e734dce0@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/core.c          |  3 +--
- drivers/base/power/runtime.c | 41 ++++++++++++++++++++++++++----------
- include/linux/pm_runtime.h   |  3 +++
- 3 files changed, 34 insertions(+), 13 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 389d13616d1df..c0566aff53551 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -348,8 +348,7 @@ static void device_link_release_fn(struct work_struct *work)
- 	/* Ensure that all references to the link object have been dropped. */
- 	device_link_synchronize_removal();
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+index be214f39f52be..4bdfd6afa7324 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -185,6 +185,9 @@ static void iwl_dealloc_ucode(struct iwl_drv *drv)
  
--	while (refcount_dec_not_one(&link->rpm_active))
--		pm_runtime_put(link->supplier);
-+	pm_runtime_release_supplier(link, true);
- 
- 	put_device(link->consumer);
- 	put_device(link->supplier);
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index bc649da4899a0..1573319404888 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -305,19 +305,40 @@ static int rpm_get_suppliers(struct device *dev)
- 	return 0;
+ 	for (i = 0; i < IWL_UCODE_TYPE_MAX; i++)
+ 		iwl_free_fw_img(drv, drv->fw.img + i);
++
++	/* clear the data for the aborted load case */
++	memset(&drv->fw, 0, sizeof(drv->fw));
  }
  
-+/**
-+ * pm_runtime_release_supplier - Drop references to device link's supplier.
-+ * @link: Target device link.
-+ * @check_idle: Whether or not to check if the supplier device is idle.
-+ *
-+ * Drop all runtime PM references associated with @link to its supplier device
-+ * and if @check_idle is set, check if that device is idle (and so it can be
-+ * suspended).
-+ */
-+void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
-+{
-+	struct device *supplier = link->supplier;
+ static int iwl_alloc_fw_desc(struct iwl_drv *drv, struct fw_desc *desc,
+@@ -1365,6 +1368,7 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	int i;
+ 	bool load_module = false;
+ 	bool usniffer_images = false;
++	bool failure = true;
+ 
+ 	fw->ucode_capa.max_probe_length = IWL_DEFAULT_MAX_PROBE_LENGTH;
+ 	fw->ucode_capa.standard_phy_calibration_size =
+@@ -1634,6 +1638,7 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 				op->name, err);
+ #endif
+ 	}
++	failure = false;
+ 	goto free;
+ 
+  try_again:
+@@ -1649,6 +1654,9 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	complete(&drv->request_firmware_complete);
+ 	device_release_driver(drv->trans->dev);
+  free:
++	if (failure)
++		iwl_dealloc_ucode(drv);
 +
-+	/*
-+	 * The additional power.usage_count check is a safety net in case
-+	 * the rpm_active refcount becomes saturated, in which case
-+	 * refcount_dec_not_one() would return true forever, but it is not
-+	 * strictly necessary.
-+	 */
-+	while (refcount_dec_not_one(&link->rpm_active) &&
-+	       atomic_read(&supplier->power.usage_count) > 0)
-+		pm_runtime_put_noidle(supplier);
-+
-+	if (check_idle)
-+		pm_request_idle(supplier);
-+}
-+
- static void __rpm_put_suppliers(struct device *dev, bool try_to_suspend)
- {
- 	struct device_link *link;
- 
- 	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
--				device_links_read_lock_held()) {
--
--		while (refcount_dec_not_one(&link->rpm_active))
--			pm_runtime_put_noidle(link->supplier);
--
--		if (try_to_suspend)
--			pm_request_idle(link->supplier);
--	}
-+				device_links_read_lock_held())
-+		pm_runtime_release_supplier(link, try_to_suspend);
- }
- 
- static void rpm_put_suppliers(struct device *dev)
-@@ -1755,9 +1776,7 @@ void pm_runtime_drop_link(struct device_link *link)
- 		return;
- 
- 	pm_runtime_drop_link_count(link->consumer);
--
--	while (refcount_dec_not_one(&link->rpm_active))
--		pm_runtime_put(link->supplier);
-+	pm_runtime_release_supplier(link, true);
- }
- 
- static bool pm_runtime_need_not_resume(struct device *dev)
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 161acd4ede448..30091ab5de287 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -58,6 +58,7 @@ extern void pm_runtime_get_suppliers(struct device *dev);
- extern void pm_runtime_put_suppliers(struct device *dev);
- extern void pm_runtime_new_link(struct device *dev);
- extern void pm_runtime_drop_link(struct device_link *link);
-+extern void pm_runtime_release_supplier(struct device_link *link, bool check_idle);
- 
- /**
-  * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
-@@ -279,6 +280,8 @@ static inline void pm_runtime_get_suppliers(struct device *dev) {}
- static inline void pm_runtime_put_suppliers(struct device *dev) {}
- static inline void pm_runtime_new_link(struct device *dev) {}
- static inline void pm_runtime_drop_link(struct device_link *link) {}
-+static inline void pm_runtime_release_supplier(struct device_link *link,
-+					       bool check_idle) {}
- 
- #endif /* !CONFIG_PM */
- 
+ 	if (pieces) {
+ 		for (i = 0; i < ARRAY_SIZE(pieces->img); i++)
+ 			kfree(pieces->img[i].sec);
 -- 
 2.34.1
 

@@ -2,195 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F73E492DED
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946A4492DF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348462AbiARSy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S1348474AbiARSzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348444AbiARSyx (ORCPT
+        with ESMTP id S1348449AbiARSzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:54:53 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2EAC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:54:52 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id g81so58899557ybg.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:54:52 -0800 (PST)
+        Tue, 18 Jan 2022 13:55:36 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0AC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:55:36 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id y14so288438oia.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:55:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QuweckTQS4ipVDvmzbXJd32fRhDvTN+WDj7gwwJ5UoU=;
-        b=jQFQQg8xNBNZ796rZm7JSGtcgk/RVRlUMQOrW3OprZAwIy/2ezKxTUPzerHa5MEWoA
-         +kfQjBOqWihjoI8v514cV21UvUHS5JntgpKuZ/16liMkZGbbSOZYF4w1r6JCuqamghHv
-         vowP4DYmSxtE//fgZqRAITszSqg91cqu9Gg64FsXe9W1savFkk2plmXtLm5fBBA0jF0b
-         oImfjSzLxxePgVhSUZSsFU9ZJ84ZiyGtkbd0T7VyhnxMEoyDyxlSw/pOQe3BAymEfuQ2
-         L/UK5sx9cvQq7XnTqbleIw48nFYsStzQLbt2Y29R65fkhq5UTeKah55mvbCMv7n+zmyV
-         rtAA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8ZFGTElrC3sfK3btUfb11FHGF7x4FjrcJFy3qIIQKiM=;
+        b=hCarYOz34jr83WftfM0iS+dwH1sSDGCkfsBkAB57NfnKesxK4aaH5gD3/gh3issx9+
+         Daa5eBqKtQcCCoptygVZMnTNfFjMD8xIZoP7jzlGWUGzWWIUiTFJ3vGwzYp8QHUkHvDX
+         qpJY+Q0N4siTxyRUiqYaSBFwPjztC9Dwyzg20xTJeFpuiUGSgcpmoF9mm+KrEFyb2VW5
+         GQXv425AFDyHeYwfKpRwAaPL9cGijJqd3aCus/IssOUsVcRu3y4VSnTgwf3/Qoy3a4e5
+         rNzA1caD7HISrSKPftdbKKczvNQz2zBzNro1xInu9PrWcsjXFXZdGcNMIqx2ZFbW7Sac
+         ENvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QuweckTQS4ipVDvmzbXJd32fRhDvTN+WDj7gwwJ5UoU=;
-        b=gjPLNCAzdKW2qGd+FZvB9Lqwwbd0Y+4HEspZ3YyksRMl7wqgr07FJaRGeNT9GuqbIY
-         J/SP9MDqfCWNRCbBCVP7YXg6dHpzL3KrKqFyBtZrmAZe8hmhaPRfTSsE+8/pU1QW0hK/
-         HmaQT1clBVBBxST2lbhZCO0LVDLzeE58c93p6DcU0q7+l8Eys+O4rW1uvlgbrdMcz0pt
-         36ir7X0QPzEiOXTXueQbmbjOc7CLDMENByYr6y9Ci4bqalFGbEI65VF0gYKHF5zTzSzC
-         f/9tsvT5jkuRasW3v8Il3l4Eeli8ldGWAeOlcU+QFxLPTm3yHQnt6jU1ygbmE3mZMA08
-         CVog==
-X-Gm-Message-State: AOAM532ou9JXwXH5jiWhPz+Xxqy7dnFYH0EXJR6POCF9HRiwwHBM+uqH
-        T+C8wQIUFq3Z5MORbeX+9T/Jt8Uy/wqlHFwXWUkC7Q==
-X-Google-Smtp-Source: ABdhPJwmF0diEuNSgYDq6VwVG2sEv2wSXB4R4GhA8CrKDHbQBq+Cp6d2D+RYzxyanPD1WMMgcwbQ0BJ4awu2dbq2mt8=
-X-Received: by 2002:a25:388a:: with SMTP id f132mr35653202yba.102.1642532092017;
- Tue, 18 Jan 2022 10:54:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20220115010622.3185921-1-hridya@google.com> <20220115010622.3185921-5-hridya@google.com>
- <f8c8b196-7d12-6242-97ac-38149f3a3ba3@amd.com>
-In-Reply-To: <f8c8b196-7d12-6242-97ac-38149f3a3ba3@amd.com>
-From:   Hridya Valsaraju <hridya@google.com>
-Date:   Tue, 18 Jan 2022 10:54:16 -0800
-Message-ID: <CA+wgaPMjCfjQS4LA8hmVwAaGfXZhoJvvTUnOGt3duOhFb3orTw@mail.gmail.com>
-Subject: Re: [RFC 4/6] dma-buf: Add DMA-BUF exporter op to charge a DMA-BUF to
- a cgroup.
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8ZFGTElrC3sfK3btUfb11FHGF7x4FjrcJFy3qIIQKiM=;
+        b=iuwfnvvEIyyEiIFCOojNvT98ze46jc7W8vYI4JU2Uqt+tYcr+Vwi4otuTEt4bmCA5u
+         teHNCap9gNoDKJw5LgngBNtnpdZ6bd4ChTUTBEWqsJeiBba1Ay+KPbriXATMOnUK6QsT
+         fQ7e6p3zkLq12cjGR0M5VfVWSjMzFULdU9N6xPh59N55g0NWlXlhuZwWN14YHVDCRVTI
+         +OHlfqSrVnGKrx0EpeCOKGmGIW7NNX43aWoVqmSqNKJ4t4uqNg/0UwocZ4m2D7AiCTPm
+         /V320k++phelFL0V5eZfb2utHOgcvPViXV6LD1AHsYylw3qZZ0WzrzzfWujdyNRH50Mo
+         1PKg==
+X-Gm-Message-State: AOAM532FQFw0o22i8lJlinUl35yrRqVy4qpbVrZGhGrWDbbnastvZ9m4
+        YPCOopHnzQRMbER9TOGJrrh8qg==
+X-Google-Smtp-Source: ABdhPJwMGts/PsWLqBrYm3HeRRLwq7WaG7CdrrxQZDPqt3E46l7dlRGt5JffecmAxnLrUslTHJ33uw==
+X-Received: by 2002:a05:6808:1508:: with SMTP id u8mr9261476oiw.35.1642532135383;
+        Tue, 18 Jan 2022 10:55:35 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id n19sm7258855otq.11.2022.01.18.10.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 10:55:34 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <christian@brauner.io>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Airlie <airlied@redhat.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Li Li <dualli@google.com>, Marco Ballesio <balejs@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Hang Lu <hangl@codeaurora.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Chris Down <chris@chrisdown.name>,
-        Vipin Sharma <vipinsh@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        cgroups@vger.kernel.org, Kenny.Ho@amd.com, daniels@collabora.com,
-        kaleshsingh@google.com, tjmercier@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 1/2] cpufreq: qcom-hw: Use initialized cpumask for thermal pressure update
+Date:   Tue, 18 Jan 2022 10:56:11 -0800
+Message-Id: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 11:46 PM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 15.01.22 um 02:06 schrieb Hridya Valsaraju:
-> > The optional exporter op provides a way for processes to transfer
-> > charge of a buffer to a different process. This is essential for the
-> > cases where a central allocator process does allocations for various
-> > subsystems, hands over the fd to the client who
-> > requested the memory and drops all references to the allocated memory.
-> >
-> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > ---
-> >   include/linux/dma-buf.h | 18 ++++++++++++++++++
-> >   1 file changed, 18 insertions(+)
-> >
-> > diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> > index 7ab50076e7a6..d5e52f81cc6f 100644
-> > --- a/include/linux/dma-buf.h
-> > +++ b/include/linux/dma-buf.h
-> > @@ -13,6 +13,7 @@
-> >   #ifndef __DMA_BUF_H__
-> >   #define __DMA_BUF_H__
-> >
-> > +#include <linux/cgroup_gpu.h>
-> >   #include <linux/dma-buf-map.h>
-> >   #include <linux/file.h>
-> >   #include <linux/err.h>
-> > @@ -285,6 +286,23 @@ struct dma_buf_ops {
-> >
-> >       int (*vmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
-> >       void (*vunmap)(struct dma_buf *dmabuf, struct dma_buf_map *map);
-> > +
-> > +     /**
-> > +      * @charge_to_cgroup:
-> > +      *
-> > +      * This is called by an exporter to charge a buffer to the specif=
-ied
-> > +      * cgroup.
->
-> Well that sentence makes absolutely no sense at all.
->
-> The dma_buf_ops are supposed to be called by the DMA-buf subsystem on
-> behalves of the importer and never by the exporter itself.
->
-> I hope that this is just a documentation mixup.
+In the event that the SoC is under thermal pressure while booting it's
+possible for the dcvs notification to happen inbetween the cpufreq
+framework calling init and it actually updating the policy's
+related_cpus cpumask.
 
-Thank you for taking a look Christian!
+Prior to the introduction of the thermal pressure update helper an empty
+cpumask would simply result in the thermal pressure of no cpus being
+updated, but the new code will attempt to dereference an invalid per_cpu
+variable.
 
-Yes, that was poor wording, sorry about that. It should instead say
-that the op would be called by the process the buffer is currently
-charged to in order to transfer the buffer's charge to a different
-cgroup. This is helpful in the case where a process acts as an
-allocator for multiple client processes and we would like the
-allocated buffers to be charged to the clients who requested their
-allocation(instead of the allocating process as is the default
-behavior). In Android, the graphics allocator HAL process[1] does
-most of the graphics allocations on behalf of various clients. After
-allocation, the HAL process passes the fd to the client over binder
-IPC and the binder driver invokes the charge_to_cgroup() DMA-BUF op to
-uncharge the buffer from the HAL process and charge it to the client
-process instead.
+Avoid this problem by using the policy's cpus cpumask instead of the
+related_cpus mask, as this is initialized before the interrupt is
+registered.
 
-[1]: https://source.android.com/devices/graphics/arch-bq-gralloc
+Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Hridya
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 05f3d7876e44..866fba3ac6fc 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -297,7 +297,7 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 	throttled_freq = freq_hz / HZ_PER_KHZ;
+ 
+ 	/* Update thermal pressure (the boost frequencies are accepted) */
+-	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
++	arch_update_thermal_pressure(policy->cpus, throttled_freq);
+ 
+ 	/*
+ 	 * In the unlikely case policy is unregistered do not enable
+-- 
+2.33.1
 
-
->
-> Regards,
-> Christian.
->
-> >   The caller must hold a reference to @gpucg obtained via
-> > +      * gpucg_get(). The DMA-BUF will be uncharged from the cgroup it =
-is
-> > +      * currently charged to before being charged to @gpucg. The calle=
-r must
-> > +      * belong to the cgroup the buffer is currently charged to.
-> > +      *
-> > +      * This callback is optional.
-> > +      *
-> > +      * Returns:
-> > +      *
-> > +      * 0 on success or negative error code on failure.
-> > +      */
-> > +     int (*charge_to_cgroup)(struct dma_buf *dmabuf, struct gpucg *gpu=
-cg);
-> >   };
-> >
-> >   /**
->

@@ -2,77 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 180F2492436
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AE949243D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238380AbiARLDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:03:14 -0500
-Received: from azure-sdnproxy.icoremail.net ([52.175.55.52]:52535 "HELO
-        azure-sdnproxy-2.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S231758AbiARLDM (ORCPT
+        id S238498AbiARLEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:04:21 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52652 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238467AbiARLES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:03:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID; bh=bFkUcZmM+EbGih7bRXgct6iBhh0wCfmhyFvc
-        7WGjPRg=; b=NGUBxz4j2ZYGl31QLojAY5YDuRzhoyEMMqAOVAQmATm8YD+dLhgO
-        lsjHoz5HQnTKHlC7YhTI8pc6bQcvczdV0H6zB3Cy26OIES9c7tnVA0ZL9Xsx6HhB
-        1M8Rcb31oujhQwYy6p5KwTvi1lD0edY9Bdn7omCLe0UxYBhiqdmbS4k=
-Received: by ajax-webmail-front01 (Coremail) ; Tue, 18 Jan 2022 18:57:03
- +0800 (GMT+08:00)
-X-Originating-IP: [10.129.37.75]
-Date:   Tue, 18 Jan 2022 18:57:03 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
-To:     "rafael j. wysocki" <rafael@kernel.org>
-Cc:     "greg kroah-hartman" <gregkh@linuxfoundation.org>,
-        "linux kernel mailing list" <linux-kernel@vger.kernel.org>
-Subject: Re: Re: [PATCH] driver core: Add missing pm_runtime_put_noidle
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
-In-Reply-To: <CAJZ5v0heMSa82qSVrrjrv2ioz5y-18rCKThjbPBACJ6xuXQQQg@mail.gmail.com>
-References: <1642417623-5393-1-git-send-email-lyz_cs@pku.edu.cn>
- <CAJZ5v0heMSa82qSVrrjrv2ioz5y-18rCKThjbPBACJ6xuXQQQg@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 18 Jan 2022 06:04:18 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20I93Idc009646;
+        Tue, 18 Jan 2022 12:04:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=RnzBcJkwn9+YhSqc0hY7vDRWf1fQflevXV2FqDpbpEM=;
+ b=uNACs/CFWZr8UrsclxSvYEfM+tWpOkhLB4h5osJ/cboEtbhDb12mTcdcVNSN/X3v++jR
+ tntX7O2AuJXk7oz3A5X9CtDt6/oHoGv8VB2Xh/u9IiZYiay2KP1F/cYo/8jKG3Pj8Jhq
+ CUJHiKUa139ABHiQa7F+S3X6gRcLYPCVi6+u7CBByzkzZXm2uRhHcVn+TW4dlDhlZhOd
+ rwvUTOyBu60cExxM/LAiSyfQvS8pnWvTmagTlPCvWFZjxlk5w6n2isqVdxo/thL0gt4s
+ c1Fg2ECRIbzuLKqhFtVQGsVPFrmQEebdUnoTLPxEMoWDUFB2rE8g3Y1UskQOr5Nc9XeL iQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dnkesjs07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 12:04:14 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5BC8810002A;
+        Tue, 18 Jan 2022 12:04:14 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5278321279B;
+        Tue, 18 Jan 2022 12:04:14 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.51) by SFHDAG2NODE1.st.com
+ (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 18 Jan
+ 2022 12:04:13 +0100
+Subject: Re: [PATCH v8 11/13] rpmsg: char: Introduce the "rpmsg-raw" channel
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>, <julien.massot@iot.bzh>
+References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
+ <20211207080843.21222-12-arnaud.pouliquen@foss.st.com>
+ <YeX13cUAerjCM5Li@builder.lan>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <6db32381-6615-3916-088a-d1cd27e3443a@foss.st.com>
+Date:   Tue, 18 Jan 2022 12:04:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Message-ID: <3861fca1.2105f.17e6cd545c0.Coremail.lyz_cs@pku.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: 5oFpogBHTzv_nOZhoKJzAA--.10967W
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEKBlPy7uA+KwAAs0
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+In-Reply-To: <YeX13cUAerjCM5Li@builder.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE1.st.com
+ (10.75.127.4)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiUmFmYWVsIEouIFd5c29ja2ki
-IDxyYWZhZWxAa2VybmVsLm9yZz4KPiDlj5HpgIHml7bpl7Q6IDIwMjItMDEtMTcgMjI6MDE6NTQg
-KOaYn+acn+S4gCkKPiDmlLbku7bkuro6ICJZb25nemhpIExpdSIgPGx5el9jc0Bwa3UuZWR1LmNu
-Pgo+IOaKhOmAgTogIkdyZWcgS3JvYWgtSGFydG1hbiIgPGdyZWdraEBsaW51eGZvdW5kYXRpb24u
-b3JnPiwgIlJhZmFlbCBKLiBXeXNvY2tpIiA8cmFmYWVsQGtlcm5lbC5vcmc+LCAiTGludXggS2Vy
-bmVsIE1haWxpbmcgTGlzdCIgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+Cj4g5Li76aKY
-OiBSZTogW1BBVENIXSBkcml2ZXIgY29yZTogQWRkIG1pc3NpbmcgcG1fcnVudGltZV9wdXRfbm9p
-ZGxlCj4gCj4gT24gTW9uLCBKYW4gMTcsIDIwMjIgYXQgMTI6MDggUE0gWW9uZ3poaSBMaXUgPGx5
-el9jc0Bwa3UuZWR1LmNuPiB3cm90ZToKPiA+Cj4gPiBwbV9ydW50aW1lX2dldF9ub3Jlc3VtZSgp
-IGluIGRldmljZV9zaHV0ZG93biBpbmNyZW1lbnRzIHRoZQo+ID4gcnVudGltZSBQTSB1c2FnZSBj
-b3VudGVyLAo+IAo+IFRoaXMgaXMgb24gcHVycG9zZSwgdG8gcHJldmVudCBkZXZpY2VzIGZyb20g
-YmVpbmcgcnVudGltZS1zdXNwZW5kZWQKPiBhZnRlciB0aGVpciBzaHV0ZG93biBjYWxsYmFja3Mg
-aGF2ZSBydW4uCj4gCj4gPiB0aHVzIGEgbWF0Y2hpbmcgZGVjcmVtZW50IGlzIG5lZWRlZAo+IAo+
-IE5vLCBpdCBpcyBub3QsIEFGQUlDUy4KPiAKPiA+IHRvIGtlZXAgdGhlIGNvdW50ZXIgYmFsYW5j
-ZWQuCj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogWW9uZ3poaSBMaXUgPGx5el9jc0Bwa3UuZWR1LmNu
-Pgo+ID4gLS0tCj4gPiAgZHJpdmVycy9iYXNlL2NvcmUuYyB8IDIgKysKPiA+ICAxIGZpbGUgY2hh
-bmdlZCwgMiBpbnNlcnRpb25zKCspCj4gPgo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmFzZS9j
-b3JlLmMgYi9kcml2ZXJzL2Jhc2UvY29yZS5jCj4gPiBpbmRleCBmZDAzNGQ3Li4yOTk1MGJkIDEw
-MDY0NAo+ID4gLS0tIGEvZHJpdmVycy9iYXNlL2NvcmUuYwo+ID4gKysrIGIvZHJpdmVycy9iYXNl
-L2NvcmUuYwo+ID4gQEAgLTQ1MjMsNiArNDUyMyw4IEBAIHZvaWQgZGV2aWNlX3NodXRkb3duKHZv
-aWQpCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBkZXYtPmRyaXZlci0+c2h1dGRvd24oZGV2
-KTsKPiA+ICAgICAgICAgICAgICAgICB9Cj4gPgo+ID4gKyAgICAgICAgICAgICAgIHBtX3J1bnRp
-bWVfcHV0X25vaWRsZShkZXYpOwo+ID4gKwo+ID4gICAgICAgICAgICAgICAgIGRldmljZV91bmxv
-Y2soZGV2KTsKPiA+ICAgICAgICAgICAgICAgICBpZiAocGFyZW50KQo+ID4gICAgICAgICAgICAg
-ICAgICAgICAgICAgZGV2aWNlX3VubG9jayhwYXJlbnQpOwo+ID4gLS0KPiA+IDIuNy40Cj4gPgpZ
-ZXMsIHRoYW5rcyBmb3IgeW91ciByZXBseS4K
+
+
+On 1/18/22 12:03 AM, Bjorn Andersson wrote:
+> On Tue 07 Dec 02:08 CST 2021, Arnaud Pouliquen wrote:
+> 
+>> Allows to probe the endpoint device on a remote name service announcement,
+>> by registering a rpmsg_driverfor the "rpmsg-raw" channel.
+>>
+>> With this patch the /dev/rpmsgX interface can be instantiated by the remote
+>> firmware.
+>>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>> ---
+>>   drivers/rpmsg/rpmsg_char.c | 64 ++++++++++++++++++++++++++++++++++++++
+>>   drivers/rpmsg/rpmsg_ctrl.c |  7 +++--
+>>   2 files changed, 69 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+>> index cf97839f5833..92b44630e03a 100644
+>> --- a/drivers/rpmsg/rpmsg_char.c
+>> +++ b/drivers/rpmsg/rpmsg_char.c
+>> @@ -435,6 +435,58 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
+>>   }
+>>   EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
+>>   
+>> +static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
+>> +{
+>> +	struct rpmsg_channel_info chinfo;
+>> +	struct rpmsg_eptdev *eptdev;
+>> +	struct device *dev = &rpdev->dev;
+>> +
+>> +	memcpy(chinfo.name, rpdev->id.name, RPMSG_NAME_SIZE);
+>> +	chinfo.src = rpdev->src;
+>> +	chinfo.dst = rpdev->dst;
+>> +
+>> +	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, dev);
+>> +	if (IS_ERR(eptdev))
+>> +		return PTR_ERR(eptdev);
+>> +
+>> +	/*
+>> +	 * Create the default endpoint associated to the rpmsg device and provide rpmsg_eptdev
+>> +	 * structure as callback private data.
+> 
+> If the only this the probe function does is to create a new endpoint
+> with the same properties as the rpdev, why can't you just specify a
+> callback on the rpmsg_chrdev_driver?
+> 
+> As this isn't the typical way you create a default endpoint I think the
+> reasoning behind this warrants a proper explanation in the commit
+> message.
+> 
+
+As mentioned in [PATCH v8 09/13] rpmsg: Introduce rpmsg_create_default_ept function
+"This helper function allows rpmsg drivers to create a default endpoint
+on runtime with an associated private context."
+
+Here the private context is the eptdev structure. I need to create the structure 
+first, before
+the endpoint.
+I will add more details in the commit message as you suggest.
+
+An alternative could be to directly set default_ept->priv but as the 
+rpmsg_create_default_ept
+"priv" parameter is forwarded to the rpmsg backend (using create_ept ops).
+This could introduces unexpected side effect.
+
+>> +	 * Do not allow the creation and release of an endpoint on /dev/rpmsgX open and close,
+>> +	 * reuse the default endpoint instead
+> 
+> This sentence doesn't tell me anything about this code snippet and
+> doesn't indicate that it relates to the snippet added elsewhere in this
+> file by the previous patch.
+> 
+>> +	 */
+>> +	eptdev->default_ept = rpmsg_create_default_ept(rpdev, rpmsg_ept_cb, eptdev, chinfo);
+>> +	if (!eptdev->default_ept) {
+>> +		dev_err(&rpdev->dev, "failed to create %s\n", chinfo.name);
+>> +		put_device(dev);
+>> +		kfree(eptdev);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
+>> +}
+>> +
+>> +static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = device_for_each_child(&rpdev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+>> +	if (ret)
+>> +		dev_warn(&rpdev->dev, "failed to destroy endpoints: %d\n", ret);
+>> +}
+>> +
+>> +static struct rpmsg_device_id rpmsg_chrdev_id_table[] = {
+>> +	{ .name	= "rpmsg-raw" },
+>> +	{ },
+>> +};
+>> +
+>> +static struct rpmsg_driver rpmsg_chrdev_driver = {
+>> +	.probe = rpmsg_chrdev_probe,
+>> +	.remove = rpmsg_chrdev_remove,
+>> +	.id_table = rpmsg_chrdev_id_table,
+>> +	.drv.name = "rpmsg_chrdev",
+>> +};
+>> +
+>>   static int rpmsg_chrdev_init(void)
+>>   {
+>>   	int ret;
+>> @@ -445,12 +497,24 @@ static int rpmsg_chrdev_init(void)
+>>   		return ret;
+>>   	}
+>>   
+>> +	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
+>> +	if (ret < 0) {
+>> +		pr_err("rpmsg: failed to register rpmsg raw driver\n");
+>> +		goto free_region;
+>> +	}
+>> +
+>>   	return 0;
+>> +
+>> +free_region:
+>> +	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>> +
+>> +	return ret;
+>>   }
+>>   postcore_initcall(rpmsg_chrdev_init);
+>>   
+>>   static void rpmsg_chrdev_exit(void)
+>>   {
+>> +	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
+>>   	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>>   }
+>>   module_exit(rpmsg_chrdev_exit);
+>> diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
+>> index 59d2bd264fdb..298e75dc7774 100644
+>> --- a/drivers/rpmsg/rpmsg_ctrl.c
+>> +++ b/drivers/rpmsg/rpmsg_ctrl.c
+>> @@ -10,6 +10,9 @@
+>>    * Based on rpmsg performance statistics driver by Michal Simek, which in turn
+>>    * was based on TI & Google OMX rpmsg driver.
+>>    */
+>> +
+>> +#define pr_fmt(fmt)		KBUILD_MODNAME ": " fmt
+> 
+> These changes seems unrelated to above.
+
+I apparently broke something in my patchset here during a rebase. The previous
+irrelevant comment you pointed out to me is also a consequence. My apologies for 
+this dirty patch...
+
+Thanks,
+Arnaud
+
+> 
+> Regards,
+> Bjorn
+> 
+>> +
+>>   #include <linux/cdev.h>
+>>   #include <linux/device.h>
+>>   #include <linux/fs.h>
+>> @@ -193,13 +196,13 @@ static int rpmsg_ctrldev_init(void)
+>>   
+>>   	ret = alloc_chrdev_region(&rpmsg_major, 0, RPMSG_DEV_MAX, "rpmsg_ctrl");
+>>   	if (ret < 0) {
+>> -		pr_err("rpmsg: failed to allocate char dev region\n");
+>> +		pr_err("failed to allocate char dev region\n");
+>>   		return ret;
+>>   	}
+>>   
+>>   	ret = register_rpmsg_driver(&rpmsg_ctrldev_driver);
+>>   	if (ret < 0) {
+>> -		pr_err("rpmsg ctrl: failed to register rpmsg driver\n");
+>> +		pr_err("failed to register rpmsg driver\n");
+>>   		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>>   	}
+>>   
+>> -- 
+>> 2.17.1
+>>

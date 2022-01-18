@@ -2,205 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F693492602
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937F149260C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239392AbiARMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:49:07 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4604 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234541AbiARMtF (ORCPT
+        id S240065AbiARMtf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 07:49:35 -0500
+Received: from mail-ua1-f49.google.com ([209.85.222.49]:35487 "EHLO
+        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235104AbiARMtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:49:05 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IC7hqD016559;
-        Tue, 18 Jan 2022 12:49:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=7zk+7nKCLi9ENWrIDerU8vUeqRDxwurdAz2k0Ew1qF4=;
- b=remzBvhSJOgBcBGIWMGUbbKxxnGtIZygt4s7WCdF/qSbB3yKWfghGslJ8vKEgCUzAzHf
- UCAnxFAn+6QWKgP8kkfJNKbDmNi3lnaV3UZ1TvojBiy+Cl18pFV/GvmnZ5xROtDdHstZ
- 6Ok3j9cNOtsA+OSZmshvTsRhnCx0KznWK3IZAgjOdIZS7yMhyWGArd/4+VcjLwaBs2/Q
- Sze3v/bcazZiUIG+/+/yn3AURCxJPhpCzV51DW9P+cbSyLxU0qj/pDXJlJczeE/rX3Tm
- PseZ29iQfl/BilnUcPDIz3vpIpY+ScLm/vBwAt82cUl5TqWoa4lXMw7FkfkTn7BoVQ1p Yw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dntgf57pg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 12:49:03 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IClku1025136;
-        Tue, 18 Jan 2022 12:49:02 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dntgf57ng-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 12:49:02 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ICle8p025377;
-        Tue, 18 Jan 2022 12:49:00 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dknw9mauf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 12:49:00 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ICmwiB41615830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 12:48:58 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1AFC742078;
-        Tue, 18 Jan 2022 12:48:58 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7DE142047;
-        Tue, 18 Jan 2022 12:48:57 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.88.172])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue, 18 Jan 2022 12:48:57 +0000 (GMT)
-Date:   Tue, 18 Jan 2022 13:48:55 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH] virtio: acknowledge all features before access
-Message-ID: <20220118134855.3e8cbce5.pasic@linux.ibm.com>
-In-Reply-To: <20220114200744.150325-1-mst@redhat.com>
-References: <20220114200744.150325-1-mst@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Tue, 18 Jan 2022 07:49:31 -0500
+Received: by mail-ua1-f49.google.com with SMTP id m90so36320088uam.2;
+        Tue, 18 Jan 2022 04:49:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iDNGF1VjVomGlE1aVlmhPbvwByegTECQGcsrxubfQG0=;
+        b=W/7+KwcQIFe8k9do6GnoupOVJaOKBdiP+MrAUzGwizq4jkG1DvOd/PQS8vg7vJJvPe
+         8C5XbpuNcDb8ZlT+gBIZGaYfLBDaASe9KEv2NsKpjpF2tRaZ+Zuud8NIJms2l4qkzLAx
+         XMv9JWaVH9cGPKjKWYMq/5DePXPe+QcRDbfM7E/Ty5DHg2hX3jTvc+WkxeBZAwkUGvve
+         QRei+gV7soYC+7p6+3G6d1wC+bgK5TkBu1QySj3AJkSRF2gvILWYsUQfNeBdCNFetwxb
+         1YNiYjF+yFkbraOPVF38W15G82u/rOkTNnSpQ0FS+TlAQ0nrg9CvT8YPJTzh++cG9Tv2
+         lZ5A==
+X-Gm-Message-State: AOAM531I+1ECNNQTj+97N5eGsVOavtQ4zTarjbORuoCQFkwudfNUGeEL
+        ykKgZwG8KROlSfpcRJvFjxNtHdQQD6iLJ4YM
+X-Google-Smtp-Source: ABdhPJwKQbCOkjDtdikM1lfRv1KCWaWVwhaMtYkyK+iOxRUckVe3GwFbVQNSVQ9kAuVjm+afJgCLKg==
+X-Received: by 2002:a05:6102:ecf:: with SMTP id m15mr8610496vst.68.1642510169047;
+        Tue, 18 Jan 2022 04:49:29 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id p14sm3586095uad.20.2022.01.18.04.49.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 04:49:27 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id c36so36154877uae.13;
+        Tue, 18 Jan 2022 04:49:27 -0800 (PST)
+X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr9266907vsu.5.1642510166831;
+ Tue, 18 Jan 2022 04:49:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LgdXokpGAwTbj_bO38sN3_CjlvHbFl0p
-X-Proofpoint-ORIG-GUID: a3jZiu96mqtM74oEA5U3sDEb_0Bwm1nf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 adultscore=0
- impostorscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180077
+References: <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru> <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+ <20220117092444.opoedfcf5k5u6otq@pengutronix.de> <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+ <20220117114923.d5vajgitxneec7j7@pengutronix.de> <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+ <20220117170609.yxaamvqdkivs56ju@pengutronix.de> <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
+ <20220118090913.pjumkq4zf4iqtlha@pengutronix.de> <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+ <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
+In-Reply-To: <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Jan 2022 13:49:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
+Message-ID: <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 15:09:14 -0500
-"Michael S. Tsirkin" <mst@redhat.com> wrote:
+Hi Uwe,
 
-> The feature negotiation was designed in a way that
-> makes it possible for devices to know which config
-> fields will be accessed by drivers.
-> 
-> This is broken since commit 404123c2db79 ("virtio: allow drivers to
-> validate features") with fallout in at least block and net.
-> We have a partial work-around in commit 2f9a174f918e ("virtio: write
-> back F_VERSION_1 before validate") which at least lets devices
-> find out which format should config space have, but this
-> is a partial fix: guests should not access config space
-> without acknowledging features since otherwise we'll never
-> be able to change the config space format.
-> 
-> As a side effect, this also reduces the amount of hypervisor accesses -
-> we now only acknowledge features once unless we are clearing any
-> features when validating.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 404123c2db79 ("virtio: allow drivers to validate features")
-> Fixes: 2f9a174f918e ("virtio: write back F_VERSION_1 before validate")
-> Cc: "Halil Pasic" <pasic@linux.ibm.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
-> 
-> Halil, I thought hard about our situation with transitional and
-> today I finally thought of something I am happy with.
-> Pls let me know what you think. Testing on big endian would
-> also be much appreciated!
- 
-Hi Michael!
+On Tue, Jan 18, 2022 at 1:08 PM Uwe Kleine-König
+<u.kleine-koenig@pengutronix.de> wrote:
+> On Tue, Jan 18, 2022 at 10:37:25AM +0100, Geert Uytterhoeven wrote:
+> > On Tue, Jan 18, 2022 at 10:09 AM Uwe Kleine-König
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> > > For the (clk|gpiod|regulator)_get_optional() you don't have to check
+> > > against the magic not-found value (so no implementation detail magic
+> > > leaks into the caller code) and just pass it to the next API function.
+> > > (And my expectation would be that if you chose to represent not-found by
+> > > (void *)66 instead of NULL, you won't have to adapt any user, just the
+> > > framework internal checks. This is a good thing!)
+> >
+> > Ah, there is the wrong assumption: drivers sometimes do need to know
+> > if the resource was found, and thus do need to know about (void *)66,
+> > -ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
+> > I can imagine these exist for gpiod and regulator, too, as soon as
+> > you go beyond the trivial "enable" and "disable" use-cases.
+>
+> My premise is that every user who has to check for "not found"
+> explicitly should not use (clk|gpiod)_get_optional() but
+> (clk|gpiod)_get() and do proper (and explicit) error handling for
+> -ENODEV. (clk|gpiod)_get_optional() is only for these trivial use-cases.
+>
+> > And 0/NULL vs. > 0 is the natural check here: missing, but not
+> > an error.
+>
+> For me it it 100% irrelevant if "not found" is an error for the query
+> function or not. I just have to be able to check for "not found" and
+> react accordingly.
+>
+> And adding a function
+>
+>         def platform_get_irq_opional():
+>                 ret = platform_get_irq()
+>                 if ret == -ENXIO:
+>                         return 0
+>                 return ret
+>
+> it's not a useful addition to the API if I cannot use 0 as a dummy
+> because it doesn't simplify the caller enough to justify the additional
+> function.
+>
+> The only thing I need to be able is to distinguish the cases "there is
+> an irq", "there is no irq" and anything else is "there is a problem I
+> cannot handle and so forward it to my caller". The semantic of
+> platform_get_irq() is able to satisfy this requirement[1], so why introduce
+> platform_get_irq_opional() for the small advantage that I can check for
+> not-found using
+>
+>         if (!irq)
+>
+> instead of
+>
+>         if (irq != -ENXIO)
+>
+> ? The semantic of platform_get_irq() is easier ("Either a usable
+> non-negative irq number or a negative error number") compared to
+> platform_get_irq_optional() ("Either a usable positive irq number or a
+> negative error number or 0 meaning not found"). Usage of
+> platform_get_irq() isn't harder or more expensive (neither for a human
+> reader nor for a maching running the resulting compiled code).
+> For a human reader
+>
+>         if (irq != -ENXIO)
+>
+> is even easier to understand because for
+>
+>         if (!irq)
+>
+> they have to check where the value comes from, see it's
+> platform_get_irq_optional() and understand that 0 means not-found.
 
-I was just about to have a look into this. But it does not apply
-cleanly to Linus master (fetched a couple of minutes ago). I also tride
-with d9679d0013a66849~1 but no luck. What is a suitable base for this
-patch?
+"vIRQ zero does not exist."
 
-Regards,
-Halil
+> This function just adds overhead because as a irq framework user I have
+> to understand another function. For me the added benefit is too small to
+> justify the additional function. And you break out-of-tree drivers.
+> These are all no major counter arguments, but as the advantage isn't
+> major either, they still matter.
+>
+> Best regards
+> Uwe
+>
+> [1] the only annoying thing is the error message.
 
+So there's still a need for two functions.
 
->  drivers/virtio/virtio.c | 31 +++++++++++++++++--------------
->  1 file changed, 17 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> index d891b0a354b0..2ed6e2451fd8 100644
-> --- a/drivers/virtio/virtio.c
-> +++ b/drivers/virtio/virtio.c
-> @@ -168,12 +168,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
->  
->  static int virtio_finalize_features(struct virtio_device *dev)
->  {
-> -	int ret = dev->config->finalize_features(dev);
->  	unsigned status;
-> +	int ret;
->  
->  	might_sleep();
-> -	if (ret)
-> -		return ret;
->  
->  	ret = arch_has_restricted_virtio_memory_access();
->  	if (ret) {
-> @@ -244,17 +242,6 @@ static int virtio_dev_probe(struct device *_d)
->  		driver_features_legacy = driver_features;
->  	}
->  
-> -	/*
-> -	 * Some devices detect legacy solely via F_VERSION_1. Write
-> -	 * F_VERSION_1 to force LE config space accesses before FEATURES_OK for
-> -	 * these when needed.
-> -	 */
-> -	if (drv->validate && !virtio_legacy_is_little_endian()
-> -			  && device_features & BIT_ULL(VIRTIO_F_VERSION_1)) {
-> -		dev->features = BIT_ULL(VIRTIO_F_VERSION_1);
-> -		dev->config->finalize_features(dev);
-> -	}
-> -
->  	if (device_features & (1ULL << VIRTIO_F_VERSION_1))
->  		dev->features = driver_features & device_features;
->  	else
-> @@ -265,10 +252,22 @@ static int virtio_dev_probe(struct device *_d)
->  		if (device_features & (1ULL << i))
->  			__virtio_set_bit(dev, i);
->  
-> +	err = dev->config->finalize_features(dev);
-> +	if (err)
-> +		goto err;
-> +
->  	if (drv->validate) {
-> +		u64 features = dev->features;
-> +
->  		err = drv->validate(dev);
->  		if (err)
->  			goto err;
-> +
-> +		if (features != dev->features) {
-> +			err = dev->config->finalize_features(dev);
-> +			if (err)
-> +				goto err;
-> +		}
->  	}
->  
->  	err = virtio_finalize_features(dev);
-> @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
->  	/* We have a driver! */
->  	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
->  
-> +	ret = dev->config->finalize_features(dev);
-> +	if (ret)
-> +		goto err;
-> +
->  	ret = virtio_finalize_features(dev);
->  	if (ret)
->  		goto err;
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

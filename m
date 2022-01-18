@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 548D24922B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47694922B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344072AbiARJ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:27:17 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:46151 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234638AbiARJ1Q (ORCPT
+        id S1344451AbiARJ2C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 04:28:02 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:20916 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234638AbiARJ2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:27:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642498036; x=1674034036;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=pBpAdki5wF5bxKDytfc9sD9oUt2UYpuMdypcx78WBtM=;
-  b=Ier3qBJOMHQ4oQxfLsfiJ1nEGTQztqkg+2xZPFoxR5mzS7E3+9/CHni8
-   cHSVfn5PLYz+UlHsqBzcm0jIM7VHhhT4J9DCmsR3mHA6BHHUER/uu1yVa
-   HIQxsvhltMt+bxNrt6wvqaVA0XVZqqdSXYC3yWy/OVmAQkaAvQpnBapSO
-   8=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Jan 2022 01:27:16 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 01:27:16 -0800
-Received: from [10.216.2.106] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 18 Jan
- 2022 01:27:13 -0800
-Subject: Re: Query on moving Recovery remoteproc work to a separate wq instead
- of system freezable wq
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <ea64436c-3d9b-9ac1-d4e8-38f15142a764@quicinc.com>
- <YeXrtuQglDwhNvLm@builder.lan>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-Message-ID: <03bde95c-dfd3-cdf6-2b0f-afa6a0ec036d@quicinc.com>
-Date:   Tue, 18 Jan 2022 14:57:08 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 18 Jan 2022 04:28:01 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-65-UKP7NHATNSOzPFPjhdG_nQ-1; Tue, 18 Jan 2022 09:27:58 +0000
+X-MC-Unique: UKP7NHATNSOzPFPjhdG_nQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 18 Jan 2022 09:27:57 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 18 Jan 2022 09:27:57 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+CC:     Andrew Lunn <andrew@lunn.ch>, LKML <linux-kernel@vger.kernel.org>
+Subject: RE: list iterator spacing: clang-format vs checkpatch
+Thread-Topic: list iterator spacing: clang-format vs checkpatch
+Thread-Index: AQHYC8zMXnUUMjrv/kWzvC/rbrfnP6xogwQA
+Date:   Tue, 18 Jan 2022 09:27:57 +0000
+Message-ID: <87f5fe31ee8748658ca5849cdcad832e@AcuMS.aculab.com>
+References: <CAHmME9ofzanQTBD_WYBRW49d+gM77rCdh8Utdk4+PM9n_bmKwA@mail.gmail.com>
+         <CANiq72=hXXvzfYz-1EdgDNBVfYMiRp2RbjjNF=wwiiPVU+jmuQ@mail.gmail.com>
+         <3cbaf145ee577f017cf7aea953c9dd1eb88ed4b4.camel@perches.com>
+         <CANiq72=bfYHM6XjQZ9dG_auahA_w59naEXM+VZHGm0m=_7nOqA@mail.gmail.com>
+         <CAHmME9pWGsc5wLzNK5pe4gVLPNb4uUWYF8AARK8_K=WYLwdGfQ@mail.gmail.com>
+         <CAHmME9p6q5MxLy-_1KaDWz8ksQYAUev1UvaQ-fHhetmy0sNHOg@mail.gmail.com>
+ <e67388e4bdd25ca5ccb4cf20df0527d82ba31277.camel@perches.com>
+In-Reply-To: <e67388e4bdd25ca5ccb4cf20df0527d82ba31277.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <YeXrtuQglDwhNvLm@builder.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Joe Perches
+> Sent: 17 January 2022 18:05
+> 
+> On Mon, 2022-01-17 at 13:47 +0100, Jason A. Donenfeld wrote:
+> > Hey again,
+> 
+> Rehi.
+> 
+> > Four years later I went through basically the same motions: "oh hey I
+> > should clean this up", "I'll start with clang format", "oh cool it
+> > adds spaces before the iterator paren so it looks like a normal for
+> > loop to me", "that seems so reasonable; I love clang format", "oh no
+> > checkpatch.pl complains; I hope it's wrong", "I wonder if anybody has
+> > thought about this before", "oh, look, I asked about this already in
+> > 2018."
 
-On 1/18/2022 3:50 AM, Bjorn Andersson wrote:
-> On Mon 17 Jan 09:09 CST 2022, Mukesh Ojha wrote:
->
->> Hi,
->>
->> There could be a situation there is too much load(of tasks which is affined
-> As in "it's theoretically possible" or "we run into this issue all the
-> time"?
+Personally I think it should look like a #define expansion, not
+part of the language.
 
-During recovery we notify all the remoteproc kernel clients about the 
-crash and if one of the notification gets stuck
+I did notice it in the recent patch - and though it looked wrong.
 
-for more than 20-30s we ideally inject panic . During analysis, We saw 
-that just because of the load(stress testing) on the
+	David
 
-core we are not able to proceed. would be good to avail this work to run 
-on different CPU.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
->
->> to particular core) on a core on which  rproc
->> recovery thread will not get a chance to run with no reason but the load. If
->> we make this queue unbound, then this work
->> can run on any core.
->>
->> Kindly Let me if i can post a proper patch for this like below.
->>
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -59,6 +59,7 @@ static int rproc_release_carveout(struct rproc *rproc,
->>
->>   /* Unique indices for remoteproc devices */
->>   static DEFINE_IDA(rproc_dev_index);
->> +static struct workqueue_struct *rproc_recovery_wq;
->>
->>   static const char * const rproc_crash_names[] = {
->>          [RPROC_MMUFAULT]        = "mmufault",
->> @@ -2487,7 +2488,7 @@ void rproc_report_crash(struct rproc *rproc, enum
->> rproc_crash_type type)
->>                  rproc->name, rproc_crash_to_string(type));
->>
->>          /* Have a worker handle the error; ensure system is not suspended */
->> -       queue_work(system_freezable_wq, &rproc->crash_handler);
->> +       queue_work(rproc_recovery_wq, &rproc->crash_handler);
->>   }
->>   EXPORT_SYMBOL(rproc_report_crash);
->>
->> @@ -2532,6 +2533,12 @@ static void __exit rproc_exit_panic(void)
->>
->>   static int __init remoteproc_init(void)
->>   {
->> +       rproc_recovery_wq = alloc_workqueue("rproc_recovery_wq", WQ_UNBOUND
->> |
->> +                               WQ_HIGHPRI | WQ_FREEZABLE |
->> WQ_CPU_INTENSIVE, 0);
-> Afaict this is not only a separate work queue, but a high priority, "cpu
-> intensive" work queue. Does that really represent the urgency of getting
-> the recovery under way?
-
-Adding a WQ_CPU_INTENSIVE(no use) here is a blunder from my end, will 
-remove this.
-
-Thanks,
--Mukesh
-
-> Regards,
-> Bjorn
->
->> +       if (!rproc_recovery_wq) {
->> +               pr_err("creation of rproc_recovery_wq failed\n");
->> +       }
->> +
->>
->> Thanks,
->> Mukesh

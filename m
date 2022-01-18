@@ -2,96 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1998492EC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7532492ED3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348987AbiARTy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245187AbiARTyO (ORCPT
+        id S1348932AbiART7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:59:44 -0500
+Received: from angie.orcam.me.uk ([78.133.224.34]:38966 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348062AbiART7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:54:14 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1C5C06173E;
-        Tue, 18 Jan 2022 11:54:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id c3so25439442pls.5;
-        Tue, 18 Jan 2022 11:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eNrUscqw42vLCLOdKXjI6TJU5eZpO8qMPR9+8nKvO3Q=;
-        b=kO/gnSMVnrPVYeFCn5YxhGGu9m4tsz2aQGARdUmcxVy/BZweaFos0DQUxJLsuaHfW5
-         syVVuyzN8Au7CK/+nrMCDV3e2SMt26rDMJdibWWI/FdI5wvVwTGhRYGO9mj9uzWC2DRt
-         3umPsyOBnglQ4XC/+IMdeL49245F1MnHwHKzWPTUSkaUCZf2nnwcgpL2oxuzf4VJhaZx
-         3LKfS4E9r0i8SlyywxQLILxBgS3gM0u+v+wRu/xeSek3bN3raOuXVPdzaxDGWuNePbGc
-         LXfaZafRKiyiGg37l/bNM+Ug9FK/EpikrEnl1jwwRy/tOtD/GrYNqn/pquHm4Olzri6w
-         L82Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eNrUscqw42vLCLOdKXjI6TJU5eZpO8qMPR9+8nKvO3Q=;
-        b=4rkmOFf5mIDbSdhHeb8Xk3Ow1cz7fWwM/yekVwh92B/PViMAiW1PRv1RHDgcTH/8dL
-         kX9IS/N3dCU1o8Brm5xtPxkdlRiKjObBcMOHvCdzcC0Ec3WOs7ns4hK36bpDxvhf8Wpk
-         wWD0VPvbRssR9QjrXx+99NQ088dut9LNOvSfG38z/CIlu8cV1L3pqozNdpKR5mkRg9jf
-         qwJ/TcMNRx7zYyWvGfHLg+OUyelRKEwyXRa0EqCpIY+wWohitHDkpEvNRkHMN1Lb9B65
-         IfjjlLZPvLFHSIb9vmBfRREeO9whQNet7lavTjWhoOS/YWjyWbF44FQa51dq+07UEZgB
-         ecLQ==
-X-Gm-Message-State: AOAM531Q1VZsgH1b2hNwCv/ay1Mib1DcbYpvuDDscvdo++ZCTPaZ4Q+q
-        vmHCxF+453NOjg21g2P9fm0rAlN2IeM=
-X-Google-Smtp-Source: ABdhPJzNy8j7oUotixQfP2cRtqQ46pbEnG7KjFTrVX4VgsXlz7zwiyDUd2ndaGNRAbzuiI7yKnQeGg==
-X-Received: by 2002:a17:902:aa84:b0:149:711b:258f with SMTP id d4-20020a170902aa8400b00149711b258fmr28872735plr.170.1642535653754;
-        Tue, 18 Jan 2022 11:54:13 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g2sm19258083pfc.54.2022.01.18.11.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 11:54:13 -0800 (PST)
-Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220118160452.384322748@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <72179daf-7242-bff3-9a1c-ae3e11a95dcb@gmail.com>
-Date:   Tue, 18 Jan 2022 11:54:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 18 Jan 2022 14:59:41 -0500
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id BA29492009C; Tue, 18 Jan 2022 20:59:39 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id AEA7992009B;
+        Tue, 18 Jan 2022 19:59:39 +0000 (GMT)
+Date:   Tue, 18 Jan 2022 19:59:39 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
+ nodes
+In-Reply-To: <CAMuHMdU94tk5pcTK4Fa-g9vm56oooCeWXkkL8nOgofk5aKbwig@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2201090221150.56863@angie.orcam.me.uk>
+References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com> <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com> <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com> <20211129122052.GA7921@alpha.franken.de>
+ <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com> <20211129130535.GA8644@alpha.franken.de> <CAMuHMdU94tk5pcTK4Fa-g9vm56oooCeWXkkL8nOgofk5aKbwig@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 8:05 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.2 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Geert,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+> Took me a bit to test proper operation, as contemporary cross-toolchains
+> create userland binaries that can no longer run on MIPS-II/III CPUs,
+> and native development is slow and memory-constrained (dpkg OOM)...
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+ You mean cross-toolchains included with (some) distributions, right?
+
+ I do hope so or otherwise I'd be very concerned.  Myself I've been using 
+a self-built MIPS cross-compiler, running on POWER9, which builds MIPS I 
+binaries just fine, e.g.:
+
+$ file install/usr/sysroot/{lib/ld-2.32.9000.so,usr/bin/gdbserver}
+install/usr/sysroot/lib/ld-2.32.9000.so: ELF 32-bit LSB pie executable, MIPS, MIPS-I version 1 (SYSV), dynamically linked, with debug_info, not stripped
+install/usr/sysroot/usr/bin/gdbserver: ELF 32-bit LSB executable, MIPS, MIPS-I version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 3.2.0, not stripped
+$ install/usr/bin/mipsel-linux-gnu-gcc -dumpversion
+11.0.0
+$ 
+
+(time to upgrade perhaps).
+
+  Maciej

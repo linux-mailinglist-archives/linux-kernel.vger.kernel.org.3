@@ -2,175 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F11492BC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750FE492BD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346964AbiARRBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:01:10 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:58769 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1346368AbiARRBJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:01:09 -0500
-Received: from [192.168.0.2] (ip5f5aecd1.dynamic.kabel-deutschland.de [95.90.236.209])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1154261EA1BE6;
-        Tue, 18 Jan 2022 18:01:07 +0100 (CET)
-Message-ID: <fd1c1767-0029-58d2-3878-5bc1a85b8e2c@molgen.mpg.de>
-Date:   Tue, 18 Jan 2022 18:01:06 +0100
+        id S1346973AbiARRCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236675AbiARRCM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:02:12 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20F7C061574;
+        Tue, 18 Jan 2022 09:02:11 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id c71so82458649edf.6;
+        Tue, 18 Jan 2022 09:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t4VS+844/s3c/SVFK110m3TmMIP45+ZI1bs8dsZpnqA=;
+        b=DiE/Sx5EKcVRYBuu3GI1maZ8+9DrRUOTbO4kj8L8v3drZQ5vDYcebnD2l8rkk+kUPu
+         85jbhNWfQ7NY3u3o0oXE2mMpb5OH0aKMKhNFVegsAkqJGXcgzuG725NiSrOdsjN8IpWz
+         5HLr/HZ21d7LhvPEql6WqrVepEk1Kcx8n7HrEUNacLIdCDx0262YYUDrC7cjf2BJpuiq
+         3h1KmitzhGbJGeBI7vhSmf/ywbiS5Ia+FJkuIQDqL9VwqLWxeV+6iYSD+9e/AudXvm5M
+         wlzKx1m0Y1bh4S3kmcnMkiEmZ3q8HE13PeSvWAtkW1Pj5JjjY0GmenYv++/jwk3c0l7I
+         qvOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t4VS+844/s3c/SVFK110m3TmMIP45+ZI1bs8dsZpnqA=;
+        b=VGx0bZi4XUOmeKtCuBaku7kcr1UllEj3yGhOXzKyi+qyw6zUIcwy7WZMmuv+RNGUrg
+         2PVradYGz/RVGkjj+k648qBYMVc8FRu4CyvBQI3aH7MIoUa3D+sTrZROCaeb/bmHGSGO
+         xvPABRqpJX7VU/ZWZfn2dZkbz6TLeBmlEq3mPRhbrO9GTcUV4K4M125r0Sjf1EpC5xcB
+         NqgnQrgDud11rSRgk2EXgWAJ7x/97+MZ4RTAfSPCHUD5RIKLMlrWPLm0JGBsDAf6bC7k
+         LzDTl+uVfriHRHgw5epTSbXv0l0Rkvulg82HwUqTsrEm6JOsUlsPiIVa1L3YPXipQ8GZ
+         gzCg==
+X-Gm-Message-State: AOAM531QoUh30nQYnq0EYA4dxC8kJEluafrr/vHnb8OsxMo5NMvvufXv
+        2XE505RtQnzdsAuoXUORl/l88fK+f+5wds5oyfw=
+X-Google-Smtp-Source: ABdhPJwjL5/U9atRUwKah1nVHi2Tz36ttxQPPKgTZStjY2ox97/ZV7PBDQj4lMISk2cYHqzmlBfYCAWRqklRfGUGPpI=
+X-Received: by 2002:a17:907:6e0b:: with SMTP id sd11mr21916858ejc.132.1642525330273;
+ Tue, 18 Jan 2022 09:02:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: nvme: IO_PAGE_FAULT logged with Intel SSDPEKKF512G8
-Content-Language: en-US
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?SsO2cmcgUsO2ZGVs?= <joro@8bytes.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-References: <366b1545-fdea-3423-10a7-308ca2bef746@molgen.mpg.de>
- <20220118165325.GA3301052@dhcp-10-100-145-180.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220118165325.GA3301052@dhcp-10-100-145-180.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220117142919.207370-1-marcan@marcan.st> <CAHp75VfRiFokdTQ9cnEEH596mM7cb4FXQk4eXVt37cG4FcFMyA@mail.gmail.com>
+ <e956e500-a59a-a03b-6be1-c7eca85c8741@marcan.st>
+In-Reply-To: <e956e500-a59a-a03b-6be1-c7eca85c8741@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Jan 2022 19:01:32 +0200
+Message-ID: <CAHp75Vcp_cFEDZC4LoqVkNBypX1R74MVOhKKw8-2iRCF-MuYTg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] misc brcmfmac fixes (M1/T2 series spin-off)
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Keith,
+On Tue, Jan 18, 2022 at 5:32 PM Hector Martin <marcan@marcan.st> wrote:
+> On 18/01/2022 19.43, Andy Shevchenko wrote:
+> > On Mon, Jan 17, 2022 at 4:30 PM Hector Martin <marcan@marcan.st> wrote:
+> >>
+> >> Hi everyone,
+> >>
+> >> This series contains just the fixes / misc improvements from the
+> >> previously submitted series:
+> >>
+> >> brcmfmac: Support Apple T2 and M1 platforms
+> >>
+> >> Patches 8-9 aren't strictly bugfixes but rather just general
+> >> improvements; they can be safely skipped, although patch 8 will be a
+> >> dependency of the subsequent series to avoid a compile warning.
+> >
+> > Have I given you a tag? If so, I do not see it applied in the patches...
+>
+> I didn't see any review tags from you in the previous thread. Did I miss
+> any?
 
+I checked myself and indeed it seems my memory is about something
+else, I'll check v3, last time I remember I found no (big) issues with
+the fixes patches, I believe they are in shape.
 
-Thank you for your quick response.
-
-
-Am 18.01.22 um 17:53 schrieb Keith Busch:
-> On Tue, Jan 18, 2022 at 03:32:45PM +0100, Paul Menzel wrote:
->> On a Dell OptiPlex 5055 with an Intel SSDPEKKF512G8, Linux 5.10.82 reported
->> an IO_PAGE_FAULT error. This is the first and only time this has happened.
->>
->>      $ dmesg --level=err
->>      [    4.194306] nvme 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000c address=0xffffc080 flags=0x0050]
->>      [    4.206970] nvme 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000c address=0xffffc000 flags=0x0050]
->>      [    7.327820] kfd kfd: VERDE  not supported in kfd
->>      $ lspci -nn -s 01:00.0
->>      01:00.0 Non-Volatile memory controller [0108]: Intel Corporation SSD Pro 7600p/760p/E 6100p Series [8086:f1a6] (rev 03)
-> 
-> I think it's a bug with the iommu implementation.
-
-That would surprise me, but I am adding Jörg and Suravee to the 
-recipient list. Last time, I saw an IO_PAGE_FAULT, it was a bug in the 
-amdgpu driver.
-
-> If it causes problems, you can typically work around it with kernel
-> parameter "iommu=soft".
-
-I have not noticed any problems yet.
-
-
-Kind regards,
-
-Paul
-
-
-PS: No idea, if useful, but I include the content of `/proc/iomem`:
-
-$ sudo more /proc/iomem
-00000000-00000fff : Reserved
-00001000-00087fff : System RAM
-00088000-00088fff : Reserved
-00089000-0009efff : System RAM
-0009f000-000bffff : Reserved
-   000a0000-000bffff : PCI Bus 0000:00
-000c0000-000c3fff : PCI Bus 0000:00
-000c4000-000c7fff : PCI Bus 0000:00
-000c8000-000cbfff : PCI Bus 0000:00
-000cc000-000cffff : PCI Bus 0000:00
-000d0000-000d3fff : PCI Bus 0000:00
-000d4000-000d7fff : PCI Bus 0000:00
-000d8000-000dbfff : PCI Bus 0000:00
-000dc000-000dffff : PCI Bus 0000:00
-000e0000-000e3fff : PCI Bus 0000:00
-000e4000-000e7fff : PCI Bus 0000:00
-000e8000-000ebfff : PCI Bus 0000:00
-000ec000-000effff : PCI Bus 0000:00
-000f0000-000fffff : System ROM
-00100000-09cfffff : System RAM
-   05000000-05e03316 : Kernel code
-   06000000-063a8fff : Kernel rodata
-   06400000-06762eff : Kernel data
-   06d31000-06ffffff : Kernel bss
-09d00000-09e6ffff : Reserved
-09e70000-7afb5fff : System RAM
-7afb6000-7afb6fff : Reserved
-7afb7000-7afbbfff : System RAM
-7afbc000-7afbcfff : Reserved
-7afbd000-dadbefff : System RAM
-dadbf000-dafbefff : Unknown E820 type
-dafbf000-dcfbefff : Reserved
-dcfbf000-defbefff : ACPI Non-volatile Storage
-defbf000-deffefff : ACPI Tables
-defff000-deffffff : System RAM
-df000000-dfffffff : Reserved
-e0000000-f7ffffff : PCI Bus 0000:00
-   e0000000-efffffff : PCI Bus 0000:06
-     e0000000-efffffff : 0000:06:00.0
-   f0000000-f00fffff : PCI Bus 0000:02
-     f0000000-f00fffff : PCI Bus 0000:03
-       f0000000-f00fffff : PCI Bus 0000:04
-         f0000000-f000ffff : 0000:04:00.0
-           f0000000-f000ffff : tg3
-         f0010000-f001ffff : 0000:04:00.0
-           f0010000-f001ffff : tg3
-         f0020000-f002ffff : 0000:04:00.0
-           f0020000-f002ffff : tg3
-   f0100000-f01fffff : PCI Bus 0000:08
-     f0100000-f0107fff : 0000:08:00.3
-       f0100000-f0107fff : ICH HD audio
-     f0108000-f0108fff : 0000:08:00.2
-       f0108000-f0108fff : ahci
-   f0200000-f04fffff : PCI Bus 0000:07
-     f0200000-f02fffff : 0000:07:00.3
-       f0200000-f02fffff : xhci-hcd
-     f0300000-f03fffff : 0000:07:00.2
-     f0400000-f0401fff : 0000:07:00.2
-   f0500000-f05fffff : PCI Bus 0000:06
-     f0500000-f053ffff : 0000:06:00.0
-     f0540000-f0543fff : 0000:06:00.1
-       f0540000-f0543fff : ICH HD audio
-     f0560000-f057ffff : 0000:06:00.0
-   f0600000-f06fffff : PCI Bus 0000:02
-     f0600000-f061ffff : 0000:02:00.1
-       f0600000-f061ffff : ahci
-     f0620000-f0627fff : 0000:02:00.0
-       f0620000-f0627fff : xhci-hcd
-     f0680000-f06fffff : 0000:02:00.1
-   f0700000-f07fffff : PCI Bus 0000:01
-     f0700000-f0703fff : 0000:01:00.0
-       f0700000-f0703fff : nvme
-f8000000-fbffffff : PCI MMCONFIG 0000 [bus 00-3f]
-   f8000000-fbffffff : Reserved
-fc000000-feafffff : PCI Bus 0000:00
-   fc000000-fc07ffff : amd_iommu
-   fdf00000-fdffffff : pnp 00:00
-fec00000-fec00fff : Reserved
-   fec00000-fec003ff : IOAPIC 0
-fec01000-fec013ff : IOAPIC 1
-fec10000-fec10fff : Reserved
-fec30000-fec30fff : AMDIF030:00
-fed00000-fed003ff : HPET 0
-   fed00000-fed003ff : PNP0103:00
-fed40000-fed44fff : MSFT0101:00
-fed80000-fed80fff : Reserved
-fed81500-fed818ff : AMDI0030:00
-fee00000-fee00fff : Local APIC
-   fee00000-fee00fff : pnp 00:00
-ff000000-ffffffff : Reserved
-   ff000000-ffffffff : pnp 00:03
-100000000-81effffff : System RAM
-81f000000-81fffffff : RAM buffer
+-- 
+With Best Regards,
+Andy Shevchenko

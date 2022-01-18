@@ -2,105 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC9D4920A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 08:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AB44920A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 08:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343699AbiARH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 02:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiARH4Y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 02:56:24 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5D4C061574;
-        Mon, 17 Jan 2022 23:56:24 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id j85so21953146qke.2;
-        Mon, 17 Jan 2022 23:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YDrGiU196Cd9X8NedR8qiHnQqpD4VsHuZ/+ks4ADMfE=;
-        b=IZSIgNQ3HYbniwJOBLBGsLjGM/wwnlUFolM73KuBptdCrL9GQsG5l7c/b6u6ov4y/h
-         zuw4lPhduwq3ra657cYq3JQ/B9bZNAHEJjmJoHmcr7leG/R/Uz0Xb8EZa4gFx2987FLX
-         uEbiz7uvKA4p0cBp5hav32zkgsfJjlJXVWlHWh2eVycWYoFehmdfPMMom+uAiLz5AEpH
-         PsKnAHO9++DQQnwwHAtz27FVywk+jE9jNLmRb4c6jJksGvm6Y6pOGbPYEPRQHo1x8vCE
-         Zk3xORsa4fSWXbuvCKC/4YH95HUB92jxSkna2OBezRoxJXN4xNqKbzWK/eCWpf0FgFuf
-         ep4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YDrGiU196Cd9X8NedR8qiHnQqpD4VsHuZ/+ks4ADMfE=;
-        b=udfU3KfgyU+R+EYOqCkR84XdWt9TTmaFKigUInceGSLavCodiedtftvtqrYwzhOBQa
-         rGbnANihUdeT/PzqDzeaBYFoK6Awvzv/FyQgE0hgXp4lPnidP3QX3zL/ElOD4KFITGv6
-         ETHQ//uHrVapYTtJ4j86hI14aMNYFx8uQAoqxDcqZrXp5JttSsLGt71qC7fydhxLM/AW
-         nRYD1hXapUCAYBPfqZK6uFrLsU/+xwc7Y+JzuqOlByfETFBNXUyNoDbj+m8FQMjKywBu
-         z0qjhpFo/acqDEA1CG6UwvldsJUXDgNUrGbyZefvrU2biEGSby0TwTtb7GzOc1llTGb5
-         NKKg==
-X-Gm-Message-State: AOAM533q78fXyxsNNdCyIVO1YBhjYya6y56UlEEYkoj0PWu5whlVzeuV
-        P5VEcH3CgdwlOrZ4WE64Qwc=
-X-Google-Smtp-Source: ABdhPJy98/C2E2hSiMU++8nC4c0o0fitdU4AHLvYdR5zYFJbYUASSJfXeRvjEKrDErOahfdA3VEtFA==
-X-Received: by 2002:a37:a948:: with SMTP id s69mr11193415qke.570.1642492583697;
-        Mon, 17 Jan 2022 23:56:23 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a16sm10274335qta.13.2022.01.17.23.56.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 23:56:23 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     ecree.xilinx@gmail.com
-Cc:     habetsm.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] sfc/ef10: remove unneeded rc variable
-Date:   Tue, 18 Jan 2022 07:56:16 +0000
-Message-Id: <20220118075616.925855-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1343729AbiARH43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 02:56:29 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:58267 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230082AbiARH41 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 02:56:27 -0500
+Received: from [192.168.0.4] (ip5f5aeaaa.dynamic.kabel-deutschland.de [95.90.234.170])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D1DE561EA1BE6;
+        Tue, 18 Jan 2022 08:56:24 +0100 (CET)
+Message-ID: <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
+Date:   Tue, 18 Jan 2022 08:56:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other
+ failures
+Content-Language: en-US
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+ <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Dear Zhouyi,
 
-Return value from efx_mcdi_rpc() directly instead
-of taking this in another redundant variable.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- drivers/net/ethernet/sfc/ef10.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Thank you for your quick response.
 
-diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
-index cf366ed2557c..991758292b7c 100644
---- a/drivers/net/ethernet/sfc/ef10.c
-+++ b/drivers/net/ethernet/sfc/ef10.c
-@@ -3627,7 +3627,6 @@ static int efx_ef10_rx_disable_timestamping(struct efx_channel *channel,
- 					    bool temp)
- {
- 	MCDI_DECLARE_BUF(inbuf, MC_CMD_PTP_IN_TIME_EVENT_UNSUBSCRIBE_LEN);
--	int rc;
- 
- 	if (channel->sync_events_state == SYNC_EVENTS_DISABLED ||
- 	    (temp && channel->sync_events_state == SYNC_EVENTS_QUIESCENT))
-@@ -3646,10 +3645,8 @@ static int efx_ef10_rx_disable_timestamping(struct efx_channel *channel,
- 	MCDI_SET_DWORD(inbuf, PTP_IN_TIME_EVENT_UNSUBSCRIBE_QUEUE,
- 		       channel->channel);
- 
--	rc = efx_mcdi_rpc(channel->efx, MC_CMD_PTP,
-+	return efx_mcdi_rpc(channel->efx, MC_CMD_PTP,
- 			  inbuf, sizeof(inbuf), NULL, 0, NULL);
--
--	return rc;
- }
- 
- static int efx_ef10_ptp_set_ts_sync_events(struct efx_nic *efx, bool en,
--- 
-2.25.1
 
+Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
+
+> I have studied the rcu torture test recently. I am also interested in
+> this topic.
+> But I can't open
+> [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
+> [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
+
+Sorry, about that. I should have checked those. I had put them into a 
+directory:
+
+[1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
+[2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
+
+I am going to try to test your suggestions at the end of the day.
+
+
+Kind regards,
+
+Paul

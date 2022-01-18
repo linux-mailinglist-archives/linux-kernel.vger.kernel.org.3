@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C8F492495
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF68492497
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239943AbiARLS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:18:26 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:35068 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239854AbiARLSL (ORCPT
+        id S240142AbiARLSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239462AbiARLSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:18:11 -0500
-Date:   Tue, 18 Jan 2022 11:18:09 -0000
+        Tue, 18 Jan 2022 06:18:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D2C061747;
+        Tue, 18 Jan 2022 03:18:13 -0800 (PST)
+Date:   Tue, 18 Jan 2022 11:18:10 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1642504690;
+        s=2020; t=1642504691;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Bk/9twIBlVgr/UmrtZdDPQtXp5zaM6nzEXilX/lUysA=;
-        b=JNPmiNtq5IEzGnwkBusuzeZuFCf7obaBiqwGaDOAzIm59BMSsz4xCTdJ1ATV0QCV2JS/gR
-        4KeFEeqMShjr3+QpawHUXSt4258iCw/8qIdZXoneU7wBBzg5lwvIUVDZXUW99qr5eXh4XE
-        G3Ln1+tH+mQW3e/cJ6GYPvP2GtmnF8EYsXt7hWpkRwzFJfVAPSjyoL5XAz+PhuoHGWk5oP
-        ccRi4/txs6zsXnmMLUZf2jn3/GSjIUUObEkp9t9CklgM5uX7wTp6hniIt3tUpwqY0ezbn5
-        08/knmLR8ISP6wfzDNg0XJKa9rb288HB+KYkWom2cUsGYaTmyyRylRFaaNKjbA==
+        bh=CtJycL6AF4wmGQP7ON0oiIDHEFFjKYvFbIrs+ZNTZlE=;
+        b=w3DKpVar4lXJZMOWQMQ6VHF23Gw709zqZlDzcDi5bIZhI4bys5/sYVl7Yg6gQki/fWy+m1
+        w9uXpHuSzJqpDyjNbCraGoBoxWkHBr9VLg8hF91WNl2APO6j29uF2E0c1HJ1J4K4d/Nyjo
+        Ok2Mp6fzRqt/IGoPnjYrfiop4bSf2XAfnJkE4vhXN/Alxv9vdV4tiCTebtjY93205kkbH2
+        WpOQX42OzcktxbjwmD6D8I9QEvGkON/M1dxAkA8+XYOmraZpaG0wW9gRLIsfEpTGxmj5AC
+        c1pBhs32MUSla8wKI7warbI2zj8byltKVqHRvqp8+WPNT7sOyuEHprbrifLMKQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1642504690;
+        s=2020e; t=1642504691;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Bk/9twIBlVgr/UmrtZdDPQtXp5zaM6nzEXilX/lUysA=;
-        b=31hGylwayp3rduEJfmdQZg1Hs5o9gkqq/H7zb4ZaCaciloulld2l1eiSRW+FbgNCiHFkJ9
-        P3+HGST00lE/NIDw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=CtJycL6AF4wmGQP7ON0oiIDHEFFjKYvFbIrs+ZNTZlE=;
+        b=SEsh5tc9xj0/fEGjMEJAx6lFguxmOJGTwC6EWVgX8AVFJ3kMpek6I8ZtLWJ9rXYtZLTMau
+        /pl18+q8qoJIhHCw==
+From:   "tip-bot2 for Randy Dunlap" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched: Avoid double preemption in __cond_resched_*lock*()
-Cc:     xuhaifeng <xuhaifeng@oppo.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/urgent] sched/fair: Fix all kernel-doc warnings
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <YcGnvDEYBwOiV0cR@hirez.programming.kicks-ass.net>
-References: <YcGnvDEYBwOiV0cR@hirez.programming.kicks-ass.net>
+In-Reply-To: <20211218055900.2704-1-rdunlap@infradead.org>
+References: <20211218055900.2704-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164250468946.16921.3796443718413078010.tip-bot2@tip-bot2>
+Message-ID: <164250469028.16921.15898915270330568659.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,63 +63,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/urgent branch of tip:
 
-Commit-ID:     7e406d1ff39b8ee574036418a5043c86723170cf
-Gitweb:        https://git.kernel.org/tip/7e406d1ff39b8ee574036418a5043c86723170cf
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Sat, 25 Dec 2021 01:04:57 +01:00
+Commit-ID:     a315da5e686b02b20c1713dda818e8fb691526bb
+Gitweb:        https://git.kernel.org/tip/a315da5e686b02b20c1713dda818e8fb691526bb
+Author:        Randy Dunlap <rdunlap@infradead.org>
+AuthorDate:    Fri, 17 Dec 2021 21:59:00 -08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 18 Jan 2022 12:09:59 +01:00
 
-sched: Avoid double preemption in __cond_resched_*lock*()
+sched/fair: Fix all kernel-doc warnings
 
-For PREEMPT/DYNAMIC_PREEMPT the *_unlock() will already trigger a
-preemption, no point in then calling preempt_schedule_common()
-*again*.
+Quieten all kernel-doc warnings in kernel/sched/fair.c:
 
-Use _cond_resched() instead, since this is a NOP for the preemptible
-configs while it provide a preemption point for the others.
+kernel/sched/fair.c:3663: warning: No description found for return value of 'update_cfs_rq_load_avg'
+kernel/sched/fair.c:8601: warning: No description found for return value of 'asym_smt_can_pull_tasks'
+kernel/sched/fair.c:8673: warning: Function parameter or member 'sds' not described in 'update_sg_lb_stats'
+kernel/sched/fair.c:9483: warning: contents before sections
 
-Reported-by: xuhaifeng <xuhaifeng@oppo.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/YcGnvDEYBwOiV0cR@hirez.programming.kicks-ass.net
+Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/r/20211218055900.2704-1-rdunlap@infradead.org
 ---
- kernel/sched/core.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ kernel/sched/fair.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0d2ab2a..56b428c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8218,9 +8218,7 @@ int __cond_resched_lock(spinlock_t *lock)
- 
- 	if (spin_needbreak(lock) || resched) {
- 		spin_unlock(lock);
--		if (resched)
--			preempt_schedule_common();
--		else
-+		if (!_cond_resched())
- 			cpu_relax();
- 		ret = 1;
- 		spin_lock(lock);
-@@ -8238,9 +8236,7 @@ int __cond_resched_rwlock_read(rwlock_t *lock)
- 
- 	if (rwlock_needbreak(lock) || resched) {
- 		read_unlock(lock);
--		if (resched)
--			preempt_schedule_common();
--		else
-+		if (!_cond_resched())
- 			cpu_relax();
- 		ret = 1;
- 		read_lock(lock);
-@@ -8258,9 +8254,7 @@ int __cond_resched_rwlock_write(rwlock_t *lock)
- 
- 	if (rwlock_needbreak(lock) || resched) {
- 		write_unlock(lock);
--		if (resched)
--			preempt_schedule_common();
--		else
-+		if (!_cond_resched())
- 			cpu_relax();
- 		ret = 1;
- 		write_lock(lock);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index f4f02c2..5146163 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3668,7 +3668,7 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
+  *
+  * cfs_rq->avg is used for task_h_load() and update_cfs_share() for example.
+  *
+- * Returns true if the load decayed or we removed load.
++ * Return: true if the load decayed or we removed load.
+  *
+  * Since both these conditions indicate a changed cfs_rq->avg.load we should
+  * call update_tg_load_avg() when this function returns true.
+@@ -8573,6 +8573,8 @@ group_type group_classify(unsigned int imbalance_pct,
+  *
+  * If @sg does not have SMT siblings, only pull tasks if all of the SMT siblings
+  * of @dst_cpu are idle and @sg has lower priority.
++ *
++ * Return: true if @dst_cpu can pull tasks, false otherwise.
+  */
+ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+ 				    struct sg_lb_stats *sgs,
+@@ -8648,6 +8650,7 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
+ /**
+  * update_sg_lb_stats - Update sched_group's statistics for load balancing.
+  * @env: The load balancing environment.
++ * @sds: Load-balancing data with statistics of the local group.
+  * @group: sched_group whose statistics are to be updated.
+  * @sgs: variable to hold the statistics for this group.
+  * @sg_status: Holds flag indicating the status of the sched_group
+@@ -9455,12 +9458,11 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ /**
+  * find_busiest_group - Returns the busiest group within the sched_domain
+  * if there is an imbalance.
++ * @env: The load balancing environment.
+  *
+  * Also calculates the amount of runnable load which should be moved
+  * to restore balance.
+  *
+- * @env: The load balancing environment.
+- *
+  * Return:	- The busiest group if imbalance exists.
+  */
+ static struct sched_group *find_busiest_group(struct lb_env *env)

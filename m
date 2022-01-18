@@ -2,104 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C58C492842
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BE5492847
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245173AbiAROW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:22:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43527 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245071AbiAROW0 (ORCPT
+        id S245206AbiAROXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:23:44 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38986 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235500AbiAROXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:22:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642515746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 18 Jan 2022 09:23:43 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2C5491F3C0;
+        Tue, 18 Jan 2022 14:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642515822; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=y4YzeEHCT5Qsp1fTF2Ff1Fo1X3wdgn1gp47dQ5F5Huc=;
-        b=Gcj7TMGEHboZaCr6rlwiPf7SSMLa3Pw/RL/BnC5t06ONDehofRcZ+waOV/7V6FQh+9EA7e
-        P1O3T/XRj23f+m7ZmnYpWrJvHhNUODi1ivHFO0pNkIr/DBQnFE5Tf1MSkAL9u2q5950zva
-        l2bUiynzSFsOvizov5mzylY/DtNyYNM=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-KlFFfJILOuGbA2J0z9tbog-1; Tue, 18 Jan 2022 09:22:25 -0500
-X-MC-Unique: KlFFfJILOuGbA2J0z9tbog-1
-Received: by mail-ed1-f72.google.com with SMTP id t5-20020aa7db05000000b00402670daeb9so6195537eds.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:22:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=y4YzeEHCT5Qsp1fTF2Ff1Fo1X3wdgn1gp47dQ5F5Huc=;
-        b=X3GT5o/C25hBNGj/QFdIVjVDQsJsLYyElyo/ovPtpgREn/GLkAT97PdlOoRSOVxz35
-         0XQrxkd7LWTAi3wJRD+uRELxEgCgauKuveBnAYfUOO/4MkwRwYoXU84AFBj+NeXpT1/K
-         6F1Cy38jiA7Bw7PtUb5Tk0cU3oxntyqm+Sj8PCjUUBQdF9rOESX5Rum1GwhHhmINIXAe
-         DQ/sQR1NOKhqkhjyvGcwTci84tfnk1K7ASsNdRdkB4b4L6BNwz4cCgXnBPbgyLwdt3cM
-         +mH4wWguJnnyv4YMdHk9S+ZeAdfHaZNKkeLkNecldTrrqFUCcM6aKO92yPuLF3iPXHWc
-         mRuA==
-X-Gm-Message-State: AOAM531dlCrlIcKZRh3L88j3GNky7sZSckJje9xRKKA5tDpn1sr4mfO9
-        gKdY5U/SVVz5MXlPoD+DY+bj+yV/FYEv/qSBED5oqAcLemDueqzJ29vfDtrCgjggnOdhzHjQASI
-        veBS4MHsIAlrrZjH5cKHQHPEh
-X-Received: by 2002:a17:907:a088:: with SMTP id hu8mr8326068ejc.371.1642515743988;
-        Tue, 18 Jan 2022 06:22:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwzJQAqutfAisYqiCh+L8bg9o17eCN/WQ/E0+eI30kykTX1fCzEW1NnfAmieqKaAxTUw7qCtA==
-X-Received: by 2002:a17:907:a088:: with SMTP id hu8mr8326054ejc.371.1642515743776;
-        Tue, 18 Jan 2022 06:22:23 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id l25sm4381770edc.20.2022.01.18.06.22.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 06:22:23 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] KVM: nVMX: Fix Windows 11 + WSL2 + Enlightened VMCS
-In-Reply-To: <20220112170134.1904308-1-vkuznets@redhat.com>
-References: <20220112170134.1904308-1-vkuznets@redhat.com>
-Date:   Tue, 18 Jan 2022 15:22:22 +0100
-Message-ID: <87k0exktsx.fsf@redhat.com>
+        bh=tM6zt9zecMhOJSD1c47Vgit3U6uq8FT429lnN1jQWA4=;
+        b=QS2H8AMo2BkBlkVx2UUOhJJbuFd52rl1CA5wCH4cv0cOsQHV+3Zx5YyRdTms6K1Ry/bD4n
+        oD2PO4c8+Wn+EmknI8OsDNw1ECY0XjsFc3qipgcT+u37KCoik0sqaqEd6T/dKPg27L2vTt
+        whj4mpe+J2V5FtRxKUM/8mV+JqTSOaY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642515822;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tM6zt9zecMhOJSD1c47Vgit3U6uq8FT429lnN1jQWA4=;
+        b=aADDFnnCPd+3fQWLWHazAyKQCWMg2JWz7PTyDTJEsorhPQeKbS7NfgPm19wddtRVnN2JAV
+        1UrqpLSeO51J1sDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB45D13AB6;
+        Tue, 18 Jan 2022 14:23:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WKZxOG3N5mHsPAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 18 Jan 2022 14:23:41 +0000
+Message-ID: <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de>
+Date:   Tue, 18 Jan 2022 15:23:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+ <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
+ <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
+ <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
+ <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
+ <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------14SQUsxm06705p8tH2chcwLf"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------14SQUsxm06705p8tH2chcwLf
+Content-Type: multipart/mixed; boundary="------------2szkWFXyk0r6UwvNxqEM6tru";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Gerd Hoffmann <kraxel@redhat.com>
+Cc: Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
+ Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+ Sven Schnelle <svens@stackframe.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+ <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
+ <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
+ <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
+ <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
+ <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
+In-Reply-To: <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
 
-> Changes since v2 [Sean]:
-> - Tweak a comment in PATCH5.
-> - Add Reviewed-by: tags to PATCHes 3 and 5.
->
-> Original description:
->
-> Windows 11 with enabled Hyper-V role doesn't boot on KVM when Enlightened
-> VMCS interface is provided to it. The observed behavior doesn't conform to
-> Hyper-V TLFS. In particular, I'm observing 'VMREAD' instructions trying to
-> access field 0x4404 ("VM-exit interruption information"). TLFS, however, is
-> very clear this should not be happening:
->
-> "Any VMREAD or VMWRITE instructions while an enlightened VMCS is active is
-> unsupported and can result in unexpected behavior."
->
-> Microsoft confirms this is a bug in Hyper-V which is supposed to get fixed
-> eventually. For the time being, implement a workaround in KVM allowing 
-> VMREAD instructions to read from the currently loaded Enlightened VMCS.
->
-> Patches 1-2 are unrelated fixes to VMX feature MSR filtering when eVMCS is
-> enabled. Patches 3 and 4 are preparatory changes, patch 5 implements the
-> workaround.
->
+--------------2szkWFXyk0r6UwvNxqEM6tru
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Paolo,
+SGkNCg0KQW0gMTguMDEuMjIgdW0gMDk6MTAgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQo+IEhpIEdlcmQsDQo+IA0KPiBPbiBUdWUsIEphbiAxOCwgMjAyMiBhdCA3OjMwIEFNIEdl
+cmQgSG9mZm1hbm4gPGtyYXhlbEByZWRoYXQuY29tPiB3cm90ZToNCj4+IEFsc28gbm90ZSB0
+aGF0IHVzaW5nIGEgc2hhZG93IGZyYW1lYnVmZmVyIGFsbG93cyB0byBkZWNvdXBsZSBmYmNv
+bg0KPj4gdXBkYXRlcyBhbmQgc2Nhbm91dCBmcmFtZWJ1ZmZlciB1cGRhdGVzLiAgQ2FuIGJl
+IHVzZWQgdG8gc3BlZWQgdXANCj4+IHRoaW5ncyB3aXRob3V0IGRlcGVuZGluZyBvbiB0aGUg
+MmQgYmxpdHRlci4NCj4gDQo+IEFzc3VtaW5nIGFjY2Vzc2VzIHRvIHRoZSBzaGFkb3cgZnJh
+bWUgYnVmZmVyIGFyZSBmYXN0ZXIgdGhhbiBhY2Nlc3Nlcw0KPiB0byB0aGUgc2Nhbm91dCBm
+cmFtZSBidWZmZXIuIFdoaWxlIHRoaXMgaXMgdHJ1ZSBvbiBtb2Rlcm4gaGFyZHdhcmUsDQo+
+IHRoaXMgaXMgbm90IHRoZSBjYXNlIG9uIGFsbCBoYXJkd2FyZS4gIEVzcGVjaWFsbHkgaWYg
+dGhlIHNoYWRvdyBmcmFtZQ0KPiBidWZmZXIgaGFzIGEgaGlnaGVyIGRlcHRoIChYUkdCODg4
+OCkgdGhhbiB0aGUgc2Nhbm91dCBmcmFtZSBidWZmZXINCj4gKGUuZy4gQ24pLi4uDQo+IA0K
+PiBUaGUgZnVubnkgdGhpbmcgaXMgdGhhdCB0aGUgc3lzdGVtcyB3ZSBhcmUgaW50ZXJlc3Rl
+ZCBpbiwgb25jZSB1c2VkDQo+IHRvIGJlIGtub3duIGZvciB0aGVpciBncmFwaGljcyBjYXBh
+YmlsaXRpZXMgYW5kL29yIHBlcmZvcm1hbmNlLi4uDQoNCldoYXQgSSBzdGlsbCBkb24ndCB1
+bmRlcnN0YW5kOiB3aHkgYXJlIHlvdSBzbyBrZWVuIG9uIG1haW50YWluaW5nIGFuIA0KaW50
+ZXJmYWNlIHRoYXQgb25seSBzZXJ2ZXMgdGhlIGNvbnNvbGU/IE5vdGhpbmcgZWxzZSB1c2Vz
+IGZiZGV2IHRoZXNlIA0KZGF5cy4gV2h5IG5vdCBpbXByb3ZlIERSTS91c2Vyc3BhY2UgdG8g
+dGhlIHBvaW50IHdoZXJlIGl0IGZpdHMgeW91ciANCnJlcXVpcmVtZW50cz8gTG9uZy10ZXJt
+LCB0aGUgbGF0dGVyIHdvdWxkIG1ha2UgYSBsb3QgbW9yZSBzZW5zZS4NCg0KQmVzdCByZWdh
+cmRzDQpUaG9tYXMNCg0KPiANCj4gR3J7b2V0amUsZWV0aW5nfXMsDQo+IA0KPiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgR2VlcnQNCj4gDQo+IC0tDQo+IEdlZXJ0IFV5dHRlcmhvZXZl
+biAtLSBUaGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0gZ2VlcnRAbGludXgt
+bTY4ay5vcmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZlcnNhdGlvbnMgd2l0aCB0ZWNobmlj
+YWwgcGVvcGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLiBCdXQNCj4gd2hlbiBJJ20gdGFs
+a2luZyB0byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFtbWVyIiBvciBzb21ldGhp
+bmcgbGlrZSB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAtLSBM
+aW51cyBUb3J2YWxkcw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
+ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
+eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
+TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-would it be possible to pick this up for 5.17? Technically, this is a
-"fix", even if the bug itself is not in KVM)
+--------------2szkWFXyk0r6UwvNxqEM6tru--
 
--- 
-Vitaly
+--------------14SQUsxm06705p8tH2chcwLf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHmzW0FAwAAAAAACgkQlh/E3EQov+DD
+YQ//U8Hso+ElXk2uF3RYfYt3ZsZ/mVcFtvtHxmnVI7Kuh7Hd2TyU8gOBSjx14fXMakmIzOFlU7ap
+2lE66012f//80xRKb2EDjHZmI8LfBa628t/Ez3i+4diQFa4QvigZWO7Bn3zuccx10RE8QS3n7op2
+a0cX2z5u9KTacmOkCV1ShrqgODlB27RqmKG1ZsGzcmiBRINuQ9AFprg7f1R+iHOCrOrJz3seXxpQ
+F1k+1pH4JdLsfL4x7BkOS7qtctpL27iYTRhpCZcI62pZ/2MFjlCzP2nnkcyUGj6IcqOjD9tKf7zO
+94kOwjA+k0JKB7XGZ1oiVCcAbWkEQFgjJm500P+4iIhLjJzCGem+bbFa531zvrDxrPr+gWS75No8
+cu0dNhDO7TrT4Vy/dri6XYImoPAKQ7Xq/vSM3mhhkiW5j9gKkCK/hMhJEtu/gKQeehwttFLqCiXs
+WRDU8Oxhairf3yMhCAt/7DkojAHY/xSJt/2Gd/X4+tD9dfEtDdYw9vg5yLSRCYJZm9rLGBziTskV
+Di5rR0y2i/Mk98LtE79mstnHxCdcvp0XL+uueTXsw9U85/kQFbyvXlguq14gD92/JxYpcOwHBSAL
+WqJblRv8XAKqxwSl2MD/43TZLlgrqxVEw/R8pZVSL0rgP239mHPFMRiv7J9PcpulIRx5P1NgLIJr
+SQo=
+=59FY
+-----END PGP SIGNATURE-----
+
+--------------14SQUsxm06705p8tH2chcwLf--

@@ -2,194 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 672D3492F1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AE1492F23
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349110AbiARURB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S1349127AbiARUSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbiARURA (ORCPT
+        with ESMTP id S1349112AbiARUSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:17:00 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446C1C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:17:00 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so25846484otc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:17:00 -0800 (PST)
+        Tue, 18 Jan 2022 15:18:00 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9899C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:18:00 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso377715pjm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=He49yW7OyJJZQm4z6JSnGw3avbkaRtaS3bqUTuhHunc=;
-        b=XuITQ2FaV6SooarHn5WnGL2EmHNlAsAIIy1rnRhSYfbOSxlAijkcvN6cF0KrUY49or
-         e9TQUbVoJy9NcWRJm5WOUcAT680yX93YjYtL67LPnzEdWTtrDIu6iWy3BfpAtoCFUT9d
-         3fcjinfectzksRwnOc98D4rw759DrpdnaKBDtGf+J/1mcBMXMw33CfbeubtGU5UZtSoL
-         pYcTPZU1GWEk+ri0P5ClUk5KurrM17v33bjuO/+kRJ2ch8Z3QKDX+VQZaeh8qic9ZKhN
-         vKORlYVLApuut6NPojyQmeqGNwKncRPIeWVH7f+jIMSDegowVwXTCTxUwzyZGe55KR2L
-         B0Vw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fTJy6r2petxIyCqlCeqcI3j0J1mr0+L2iTxm9kuz7Xs=;
+        b=inhbbrVy+Fl/lXwKK3g5gU174TWO3UbXPm6+kPhfHgNNQVApLzBtbDcGk4Xgom17AB
+         i3YZWJdLTgR31k1+RKgfidYdZUqNPiFDDZAGoFHkdyc4Ob67KE7sURHRukbTSubzASSf
+         maDQWVxRz4iuaY3PO0xLJR+1EQcEZT+I8Q6AQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=He49yW7OyJJZQm4z6JSnGw3avbkaRtaS3bqUTuhHunc=;
-        b=W6H/RDP5WsoMNjjR2PJ8c09dNz9N4bGbqNp7rmXNvBtbV1ynzxk0Cziz5qCEgiC179
-         tZDakGXJEgJP+VxuHLzqnofQMSAT2pcvTtAJxIGStRrHP78jiyEMpcV7Bo7KL5je/Dlw
-         2+TdRXlKgEcvhK4S2Rp4MyXBnrPpD0YyJuyyvYLU2EDenelgS8a4qViieyBzNVFPlEGO
-         Tph7wy89/tUq7rM3meX+00KvabS8LvMD2X2v96POskdy2iz9IuMOyjcEJxMWxd8Z0kzw
-         A/r03zg9p+0Nz0jH0/NbOvq5Yg8B0d0fgKI612StreBj0agEB5jQoaWyC4JjumuF9ve0
-         zkng==
-X-Gm-Message-State: AOAM532dxlI0abaCxc1b8te0YzPeiMiKc/xk4yVuP9TlrjKlxjqdPqWd
-        z+eOCnZFq4L0Ixn/Ha0DmBbSVhM4J6fhhRyJuMU=
-X-Google-Smtp-Source: ABdhPJyEoz0zXwrzFuBM2JIVgjhTpd4kPETh6fm7uOfPE7ttfRQg6574AJwyvrb+0D3mIMPKuaRWt0oKed0v3J96Dss=
-X-Received: by 2002:a9d:12f7:: with SMTP id g110mr22360780otg.299.1642537019635;
- Tue, 18 Jan 2022 12:16:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20220117074731.29882-1-maqianga@uniontech.com> <581d4658-0f12-f355-0c4c-4b0da9b23d61@amd.com>
-In-Reply-To: <581d4658-0f12-f355-0c4c-4b0da9b23d61@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 18 Jan 2022 15:16:48 -0500
-Message-ID: <CADnq5_OoB90EGoujeLaK+iSQig=K0uzysM-OSLFhJAy0e4T9_w@mail.gmail.com>
-Subject: Re: [PATCH] drm/radeon: fix UVD suspend error
-To:     Leo Liu <leo.liu@amd.com>
-Cc:     Qiang Ma <maqianga@uniontech.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fTJy6r2petxIyCqlCeqcI3j0J1mr0+L2iTxm9kuz7Xs=;
+        b=C405xfIacK2Fesp1/SE4deeKRuMFHpPcpPekzAtduOKoPtyR1CylyB8DYoTKTVIX6e
+         QY7X6n7X3EYwC3058dA3iZ8LrxQFwyX6p9ySOIrKm2XpJFKhZS0koof6zIahllQ9B1uT
+         ytqP2djFXv44GiLXO2Kbx//A15RpA0at0T6fveTitM+2RIl5I5OoUsSd6lhZg+hqC+Te
+         z4TZsSJrOVwMqtQ1g5q6qnfJt1cMqEUAft0u8yxSrvaBfdZ2rDDjdCMz0KK8hgEvuCWr
+         Z4A9CIfqFarh1Ae4f8zz4CSE+2JZFVhJIooLtONS/9Y54XDOFechYiWRqT6t9WIFROtf
+         Mfig==
+X-Gm-Message-State: AOAM532/jQY/subbsZWqfJH81zERFcak/E//AN+M8wNkzuPjQ0EdMl3F
+        x5SXv+dECLh1g0LxZ5cKPrLu1w==
+X-Google-Smtp-Source: ABdhPJxiIurI5FHOTYvsCLYSQboCxGuQP/VrNeICLl1afrsd2ymXtXw5svEXZBZPdy/+GQJ6NoXhPA==
+X-Received: by 2002:a17:90b:4b8a:: with SMTP id lr10mr278353pjb.58.1642537079558;
+        Tue, 18 Jan 2022 12:17:59 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:e4bb:67e6:f0b5:1b92])
+        by smtp.gmail.com with ESMTPSA id ha11sm1170099pjb.3.2022.01.18.12.17.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 12:17:58 -0800 (PST)
+Date:   Tue, 18 Jan 2022 12:17:55 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] ASoC: rk3399_gru_sound: Wire up DP jack detection
+Message-ID: <YecgcwXrQNzCesMN@google.com>
+References: <20220114230209.4091727-1-briannorris@chromium.org>
+ <20220114150129.v2.3.I3c79b1466c14b02980071221e5b99283cd26ec77@changeid>
+ <CAGXv+5HC00YU6ARtGDahxWLqivvUCowh7wDq5H5OzoGO9htB+g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGXv+5HC00YU6ARtGDahxWLqivvUCowh7wDq5H5OzoGO9htB+g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Chen-Yu,
 
-On Mon, Jan 17, 2022 at 3:05 PM Leo Liu <leo.liu@amd.com> wrote:
->
->
-> On 2022-01-17 2:47 a.m., Qiang Ma wrote:
-> > I met a bug recently and the kernel log:
+On Mon, Jan 17, 2022 at 05:01:52PM +0800, Chen-Yu Tsai wrote:
+> On Sat, Jan 15, 2022 at 7:03 AM Brian Norris <briannorris@chromium.org> wrote:
 > >
-> > [  330.171875] radeon 0000:03:00.0: couldn't schedule ib
-> > [  330.175781] [drm:radeon_uvd_suspend [radeon]] *ERROR* Error destroying UVD (-22)!
+> > Now that the cdn-dp driver supports plug-change callbacks, let's wire it
+> > up.
 > >
-> > In radeon drivers, using UVD suspend is as follows:
-> >
-> > if (rdev->has_uvd) {
-> >          uvd_v1_0_fini(rdev);
-> >          radeon_uvd_suspend(rdev);
-> > }
-> >
-> > In radeon_ib_schedule function, we check the 'ring->ready' state,
-> > but in uvd_v1_0_fini funciton, we've cleared the ready state.
-> > So, just modify the suspend code flow to fix error.
->
-> It seems reasonable to me. The suspend sends the destroy message if
-> there is still incomplete job, so it should be before the fini which
-> stops the hardware.
->
-> The series are:
->
-> Reviewed-by: Leo Liu <leo.liu@amd.com>
->
->
-> >
-> > Signed-off-by: Qiang Ma <maqianga@uniontech.com>
+> > Signed-off-by: Brian Norris <briannorris@chromium.org>
 > > ---
-> >   drivers/gpu/drm/radeon/cik.c       | 2 +-
-> >   drivers/gpu/drm/radeon/evergreen.c | 2 +-
-> >   drivers/gpu/drm/radeon/ni.c        | 2 +-
-> >   drivers/gpu/drm/radeon/r600.c      | 2 +-
-> >   drivers/gpu/drm/radeon/rv770.c     | 2 +-
-> >   drivers/gpu/drm/radeon/si.c        | 2 +-
-> >   6 files changed, 6 insertions(+), 6 deletions(-)
 > >
-> > diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
-> > index 81b4de7be9f2..5819737c21c6 100644
-> > --- a/drivers/gpu/drm/radeon/cik.c
-> > +++ b/drivers/gpu/drm/radeon/cik.c
-> > @@ -8517,8 +8517,8 @@ int cik_suspend(struct radeon_device *rdev)
-> >       cik_cp_enable(rdev, false);
-> >       cik_sdma_enable(rdev, false);
-> >       if (rdev->has_uvd) {
-> > -             uvd_v1_0_fini(rdev);
-> >               radeon_uvd_suspend(rdev);
-> > +             uvd_v1_0_fini(rdev);
-> >       }
-> >       if (rdev->has_vce)
-> >               radeon_vce_suspend(rdev);
-> > diff --git a/drivers/gpu/drm/radeon/evergreen.c b/drivers/gpu/drm/radeon/evergreen.c
-> > index eeb590d2dec2..455f8036aa54 100644
-> > --- a/drivers/gpu/drm/radeon/evergreen.c
-> > +++ b/drivers/gpu/drm/radeon/evergreen.c
-> > @@ -5156,8 +5156,8 @@ int evergreen_suspend(struct radeon_device *rdev)
-> >       radeon_pm_suspend(rdev);
-> >       radeon_audio_fini(rdev);
-> >       if (rdev->has_uvd) {
-> > -             uvd_v1_0_fini(rdev);
-> >               radeon_uvd_suspend(rdev);
-> > +             uvd_v1_0_fini(rdev);
-> >       }
-> >       r700_cp_stop(rdev);
-> >       r600_dma_stop(rdev);
-> > diff --git a/drivers/gpu/drm/radeon/ni.c b/drivers/gpu/drm/radeon/ni.c
-> > index 4a364ca7a1be..927e5f42e97d 100644
-> > --- a/drivers/gpu/drm/radeon/ni.c
-> > +++ b/drivers/gpu/drm/radeon/ni.c
-> > @@ -2323,8 +2323,8 @@ int cayman_suspend(struct radeon_device *rdev)
-> >       cayman_cp_enable(rdev, false);
-> >       cayman_dma_stop(rdev);
-> >       if (rdev->has_uvd) {
-> > -             uvd_v1_0_fini(rdev);
-> >               radeon_uvd_suspend(rdev);
-> > +             uvd_v1_0_fini(rdev);
-> >       }
-> >       evergreen_irq_suspend(rdev);
-> >       radeon_wb_disable(rdev);
-> > diff --git a/drivers/gpu/drm/radeon/r600.c b/drivers/gpu/drm/radeon/r600.c
-> > index ca3fcae2adb5..dd78fc499402 100644
-> > --- a/drivers/gpu/drm/radeon/r600.c
-> > +++ b/drivers/gpu/drm/radeon/r600.c
-> > @@ -3232,8 +3232,8 @@ int r600_suspend(struct radeon_device *rdev)
-> >       radeon_audio_fini(rdev);
-> >       r600_cp_stop(rdev);
-> >       if (rdev->has_uvd) {
-> > -             uvd_v1_0_fini(rdev);
-> >               radeon_uvd_suspend(rdev);
-> > +             uvd_v1_0_fini(rdev);
-> >       }
-> >       r600_irq_suspend(rdev);
-> >       radeon_wb_disable(rdev);
-> > diff --git a/drivers/gpu/drm/radeon/rv770.c b/drivers/gpu/drm/radeon/rv770.c
-> > index e592e57be1bb..38796af4fadd 100644
-> > --- a/drivers/gpu/drm/radeon/rv770.c
-> > +++ b/drivers/gpu/drm/radeon/rv770.c
-> > @@ -1894,8 +1894,8 @@ int rv770_suspend(struct radeon_device *rdev)
-> >       radeon_pm_suspend(rdev);
-> >       radeon_audio_fini(rdev);
-> >       if (rdev->has_uvd) {
-> > -             uvd_v1_0_fini(rdev);
-> >               radeon_uvd_suspend(rdev);
-> > +             uvd_v1_0_fini(rdev);
-> >       }
-> >       r700_cp_stop(rdev);
-> >       r600_dma_stop(rdev);
-> > diff --git a/drivers/gpu/drm/radeon/si.c b/drivers/gpu/drm/radeon/si.c
-> > index 013e44ed0f39..8d5e4b25609d 100644
-> > --- a/drivers/gpu/drm/radeon/si.c
-> > +++ b/drivers/gpu/drm/radeon/si.c
-> > @@ -6800,8 +6800,8 @@ int si_suspend(struct radeon_device *rdev)
-> >       si_cp_enable(rdev, false);
-> >       cayman_dma_stop(rdev);
-> >       if (rdev->has_uvd) {
-> > -             uvd_v1_0_fini(rdev);
-> >               radeon_uvd_suspend(rdev);
-> > +             uvd_v1_0_fini(rdev);
-> >       }
-> >       if (rdev->has_vce)
-> >               radeon_vce_suspend(rdev);
+> > (no changes since v1)
+> >
+> >  sound/soc/rockchip/rk3399_gru_sound.c | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> >
+> > diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
+> > index e2d52d8d0ff9..eeef3ed70037 100644
+> > --- a/sound/soc/rockchip/rk3399_gru_sound.c
+> > +++ b/sound/soc/rockchip/rk3399_gru_sound.c
+> > @@ -164,6 +164,25 @@ static int rockchip_sound_da7219_hw_params(struct snd_pcm_substream *substream,
+> >         return 0;
+> >  }
+> >
+> > +static struct snd_soc_jack cdn_dp_card_jack;
+> > +
+> > +static int rockchip_sound_cdndp_init(struct snd_soc_pcm_runtime *rtd)
+> > +{
+> > +       struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
+> 
+> Using snd_soc_card_get_codec_dai() might be a better choice throughout this
+> driver. While it will work for the cdn_dp case, because it is the first DAI
+> in |rockchip_dais[]|, all the invocations for the other codecs are likely
+> returning the wrong DAI.
+
+I'll admit, I'm not very familiar with the ASoC object model, so you may
+well be correct that there's something fishy in here. But I did trace
+through the objects involved here, and we *are* getting the correct DAI
+for both this case and the DA7219 case (preexisting code).
+
+It looks like we actually have a new runtime for each of our static
+dai_links:
+
+devm_snd_soc_register_card()
+  ...
+  for_each_card_prelinks()
+    snd_soc_add_pcm_runtime()
+
+So I think this is valid to keep as-is.
+
+> For this particular patch it works either way, so
+> 
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+Thanks for looking!
+
+Brian

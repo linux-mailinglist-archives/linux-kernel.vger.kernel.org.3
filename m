@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB48491C8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA310491B5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356262AbiARDP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352407AbiARC74 (ORCPT
+        id S1354185AbiARDF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:05:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39242 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348902AbiARCqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:59:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0C6C02B5F0;
-        Mon, 17 Jan 2022 18:46:42 -0800 (PST)
+        Mon, 17 Jan 2022 21:46:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44828B81233;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D38506130F;
         Tue, 18 Jan 2022 02:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41694C36AEB;
-        Tue, 18 Jan 2022 02:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FED5C36AE3;
+        Tue, 18 Jan 2022 02:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642474000;
-        bh=pAudh+TsOSpSnD0nYfPANG+aRUPcTOqHL2dBB7d7S30=;
+        s=k20201202; t=1642474001;
+        bh=AA9YYFjl/q1mqv9RbvGD8amx10J1e3sqEDSaIOLxGfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SoC64WXmzKIMbaZRQ6H/nEvfJPb55sU3EElL62Ho19p/QFNijvGy6Re4B5JkRGhzu
-         P9WHYvnJtWRiYEaO8/OHmQZnh9hfUn8TiGiZbHgEkRl+VhF+gATArJB87fS2/1KNpZ
-         UgQ72nFi4ROMk8D5KUIJTW+NCbbOdUw5Wt3p097cxS8MyLuf8UBtgBbubRqM3kYMgw
-         Nd6/t4rdW00YsBuVcxpTN3cpbGyhWAAUO5CumQ2nN60EM7DhpFR+B8jfUqOBh9hwT3
-         PpDwHOinMZr3TCL7Occc4jm8c3yJuTw0FnIMj3zk6xUtLjM1CGITQt0QVQdqcCAUmn
-         aCoR9QoQN/b1g==
+        b=obVOE5n8yTrsF5d79qnFYenRH9A0z2plQAo6FTnROhZdIej1n6jsfveOho/up4jyF
+         h+7KXrhkOXpOKP56/FpI8v41VfsDPjQtSa9h+vXGhF8Jx9KJE0aDD5lviIUdXXGt/z
+         raw3TVRcdEnjZKia5ANr9IImIo14bP1CoOTMBNfooFGulZyZ6X9kWGJ8P3cNwBWeBJ
+         nF2g4OXYlSK/UJDQH1ShSai8jzc8GSpZ32dMUxluEmUWPN77hMfFMvcM+Ic8oQZU3l
+         OS0wq+edPpKmlYeJILbYys04f0Ci+TBRs5EJZCuH4v5GlnvWWeS2wLdSYgVHTr2HR+
+         e6t9lNWfpOkWA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 60/73] ACPI: battery: Add the ThinkPad "Not Charging" quirk
-Date:   Mon, 17 Jan 2022 21:44:19 -0500
-Message-Id: <20220118024432.1952028-60-sashal@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sasha Levin <sashal@kernel.org>, clm@fb.com,
+        linux-btrfs@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 61/73] btrfs: remove BUG_ON() in find_parent_nodes()
+Date:   Mon, 17 Jan 2022 21:44:20 -0500
+Message-Id: <20220118024432.1952028-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118024432.1952028-1-sashal@kernel.org>
 References: <20220118024432.1952028-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,80 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Weißschuh <linux@weissschuh.net>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit e96c1197aca628f7d2480a1cc3214912b40b3414 ]
+[ Upstream commit fcba0120edf88328524a4878d1d6f4ad39f2ec81 ]
 
-The EC/ACPI firmware on Lenovo ThinkPads used to report a status
-of "Unknown" when the battery is between the charge start and
-charge stop thresholds. On Windows, it reports "Not Charging"
-so the quirk has been added to also report correctly.
+We search for an extent entry with .offset = -1, which shouldn't be a
+thing, but corruption happens.  Add an ASSERT() for the developers,
+return -EUCLEAN for mortals.
 
-Now the "status" attribute returns "Not Charging" when the
-battery on ThinkPads is not physicaly charging.
-
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/battery.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ fs/btrfs/backref.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index 6e96ed68b3379..4e0aea5f008e3 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -65,6 +65,7 @@ static int battery_bix_broken_package;
- static int battery_notification_delay_ms;
- static int battery_ac_is_broken;
- static int battery_check_pmic = 1;
-+static int battery_quirk_notcharging;
- static unsigned int cache_time = 1000;
- module_param(cache_time, uint, 0644);
- MODULE_PARM_DESC(cache_time, "cache time in milliseconds");
-@@ -233,6 +234,8 @@ static int acpi_battery_get_property(struct power_supply *psy,
- 			val->intval = POWER_SUPPLY_STATUS_CHARGING;
- 		else if (acpi_battery_is_charged(battery))
- 			val->intval = POWER_SUPPLY_STATUS_FULL;
-+		else if (battery_quirk_notcharging)
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
- 		else
- 			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
- 		break;
-@@ -1337,6 +1340,12 @@ battery_do_not_check_pmic_quirk(const struct dmi_system_id *d)
- 	return 0;
- }
+diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
+index 7f644a58db511..9044e7282d0b2 100644
+--- a/fs/btrfs/backref.c
++++ b/fs/btrfs/backref.c
+@@ -1208,7 +1208,12 @@ static int find_parent_nodes(struct btrfs_trans_handle *trans,
+ 	ret = btrfs_search_slot(trans, fs_info->extent_root, &key, path, 0, 0);
+ 	if (ret < 0)
+ 		goto out;
+-	BUG_ON(ret == 0);
++	if (ret == 0) {
++		/* This shouldn't happen, indicates a bug or fs corruption. */
++		ASSERT(ret != 0);
++		ret = -EUCLEAN;
++		goto out;
++	}
  
-+static int __init battery_quirk_not_charging(const struct dmi_system_id *d)
-+{
-+	battery_quirk_notcharging = 1;
-+	return 0;
-+}
-+
- static const struct dmi_system_id bat_dmi_table[] __initconst = {
- 	{
- 		/* NEC LZ750/LS */
-@@ -1381,6 +1390,19 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
- 		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo MIIX 320-10ICR"),
- 		},
- 	},
-+	{
-+		/*
-+		 * On Lenovo ThinkPads the BIOS specification defines
-+		 * a state when the bits for charging and discharging
-+		 * are both set to 0. That state is "Not Charging".
-+		 */
-+		.callback = battery_quirk_not_charging,
-+		.ident = "Lenovo ThinkPad",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
-+		},
-+	},
- 	{},
- };
- 
+ #ifdef CONFIG_BTRFS_FS_RUN_SANITY_TESTS
+ 	if (trans && likely(trans->type != __TRANS_DUMMY) &&
 -- 
 2.34.1
 

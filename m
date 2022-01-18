@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138E4492A1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3A2492A64
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346282AbiARQHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S1346759AbiARQJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346285AbiARQG6 (ORCPT
+        with ESMTP id S1346739AbiARQIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:06:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1ABC06161C;
-        Tue, 18 Jan 2022 08:06:58 -0800 (PST)
+        Tue, 18 Jan 2022 11:08:42 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFE4C061760;
+        Tue, 18 Jan 2022 08:08:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E395361295;
-        Tue, 18 Jan 2022 16:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE451C00446;
-        Tue, 18 Jan 2022 16:06:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B70FCE1A45;
+        Tue, 18 Jan 2022 16:08:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C471CC36AF3;
+        Tue, 18 Jan 2022 16:08:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522017;
-        bh=LR2kLMcR+apjYWyEcYPnLl/7WPX0fK4eUt1AbzTwVcs=;
+        s=korg; t=1642522118;
+        bh=9OtNLgBZCevG6a5ICRwisDy1q+BlBNTtwsIeLoU+79w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NnYkmJAs1wNqEQwXZ+KP1eZjqa+UOgM1/OvUpsWsLmxsfPIx1/2XV5sxeam5TwQDO
-         3KY3clBTZlvIFhwXY7wx2RHFZXNuJDy33S7V/GGHRdQ9yCmgZeG5PJCqjH5pS2Mhx0
-         d7AOmNE0I4pLZCt6QHDiZkzmuSnqBkHNrO2DwMrs=
+        b=0tJiT5fIDJhVF9B4aGOghOjzOOzgs7uVH9NVxRFEvfqX6Lh5lfSSneME4sZFycwgR
+         bZlJcdPjxf95nxsK737PN/q+sBpdYvBQ/dcH6AUKEYSEM/tTuSyesGJqme3ozZo+pE
+         4tiFHir94IQwlWaGuwDNyjma//M9QeMwAH9mO/o8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 5.4 14/15] mtd: fixup CFI on ixp4xx
+        stable@vger.kernel.org, Gabriel Somlo <somlo@cmu.edu>,
+        Johan Hovold <johan@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.10 13/23] firmware: qemu_fw_cfg: fix sysfs information leak
 Date:   Tue, 18 Jan 2022 17:05:53 +0100
-Message-Id: <20220118160450.523058120@linuxfoundation.org>
+Message-Id: <20220118160451.683176709@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160450.062004175@linuxfoundation.org>
-References: <20220118160450.062004175@linuxfoundation.org>
+In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
+References: <20220118160451.233828401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,57 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Johan Hovold <johan@kernel.org>
 
-commit 603362b4a58393061dcfed1c7f0d0fd4aba61126 upstream.
+commit 1b656e9aad7f4886ed466094d1dc5ee4dd900d20 upstream.
 
-drivers/mtd/maps/ixp4xx.c requires MTD_CFI_BE_BYTE_SWAP to be set
-in order to compile.
+Make sure to always NUL-terminate file names retrieved from the firmware
+to avoid accessing data beyond the entry slab buffer and exposing it
+through sysfs in case the firmware data is corrupt.
 
-drivers/mtd/maps/ixp4xx.c:57:4: error: #error CONFIG_MTD_CFI_BE_BYTE_SWAP required
-
-This patch avoids the #error output by enforcing the policy in
-Kconfig. Not sure if this is the right approach, but it helps doing
-randconfig builds.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20210927141045.1597593-1-arnd@kernel.org
-Cc: Anders Roxell <anders.roxell@linaro.org>
+Fixes: 75f3e8e47f38 ("firmware: introduce sysfs driver for QEMU's fw_cfg device")
+Cc: stable@vger.kernel.org      # 4.6
+Cc: Gabriel Somlo <somlo@cmu.edu>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20211201132528.30025-4-johan@kernel.org
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/chips/Kconfig |    2 ++
- drivers/mtd/maps/Kconfig  |    2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/firmware/qemu_fw_cfg.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/mtd/chips/Kconfig
-+++ b/drivers/mtd/chips/Kconfig
-@@ -55,12 +55,14 @@ choice
- 	  LITTLE_ENDIAN_BYTE, if the bytes are reversed.
+--- a/drivers/firmware/qemu_fw_cfg.c
++++ b/drivers/firmware/qemu_fw_cfg.c
+@@ -601,7 +601,7 @@ static int fw_cfg_register_file(const st
+ 	/* set file entry information */
+ 	entry->size = be32_to_cpu(f->size);
+ 	entry->select = be16_to_cpu(f->select);
+-	memcpy(entry->name, f->name, FW_CFG_MAX_FILE_PATH);
++	strscpy(entry->name, f->name, FW_CFG_MAX_FILE_PATH);
  
- config MTD_CFI_NOSWAP
-+	depends on !ARCH_IXP4XX || CPU_BIG_ENDIAN
- 	bool "NO"
- 
- config MTD_CFI_BE_BYTE_SWAP
- 	bool "BIG_ENDIAN_BYTE"
- 
- config MTD_CFI_LE_BYTE_SWAP
-+	depends on !ARCH_IXP4XX
- 	bool "LITTLE_ENDIAN_BYTE"
- 
- endchoice
---- a/drivers/mtd/maps/Kconfig
-+++ b/drivers/mtd/maps/Kconfig
-@@ -303,7 +303,7 @@ config MTD_DC21285
- 
- config MTD_IXP4XX
- 	tristate "CFI Flash device mapped on Intel IXP4xx based systems"
--	depends on MTD_CFI && MTD_COMPLEX_MAPPINGS && ARCH_IXP4XX
-+	depends on MTD_CFI && MTD_COMPLEX_MAPPINGS && ARCH_IXP4XX && MTD_CFI_ADV_OPTIONS
- 	help
- 	  This enables MTD access to flash devices on platforms based
- 	  on Intel's IXP4xx family of network processors such as the
+ 	/* register entry under "/sys/firmware/qemu_fw_cfg/by_key/" */
+ 	err = kobject_init_and_add(&entry->kobj, &fw_cfg_sysfs_entry_ktype,
 
 

@@ -2,155 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44576492270
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3584A492292
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345533AbiARJSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S1345742AbiARJUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345515AbiARJSf (ORCPT
+        with ESMTP id S1345637AbiARJTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:18:35 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D24C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:18:35 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a18so76626581edj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:18:35 -0800 (PST)
+        Tue, 18 Jan 2022 04:19:35 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FE4C06161C;
+        Tue, 18 Jan 2022 01:19:35 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id c71so76602059edf.6;
+        Tue, 18 Jan 2022 01:19:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=epXjxVZYGdrS5V2vncnZJ3QtAgAqtwFKvMdQBktjbpw=;
-        b=IFjPIDyeHD1pa5vazociaIVltQeXFZP1IdZTMMldhbplf7rS2ghHX6lhePpdxZDlN4
-         pyD/vK623ixNxbD156KLjuu+xovW29aHl7KMyPjoM8UHmrx0T7gaExFrg5dtNLneIk05
-         8lHTr3rAmRDP7a2x25z+hqUWZb4eJTe1/KLbmMqJCuvy5aEcVQaoFB9Y/IbA/Cl7yQu5
-         BkkBu3jJR9BBK5r3tgF2Me27nwdmkXjKyBULFKE08+siXHIPY9zyLt/FdMe23siMG10V
-         7HfCoKachHeLruBO0zJHVKKgNXN+sGZ/jOnJqWyjKFs2zwicoBfakSbE6GN7QxVFweur
-         WZag==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SB0wh1JvYuxb1nJDI7PyGganrQILU5xtGUXZvsW6ko0=;
+        b=Eb3i4SvXu8XdwLGqOWL+zhPFAIwvhYqMVIWvCZjfeZ5ZrgYQD20Lhib1bopL3XrTDl
+         YRO+tDpWXFKJmz+2BkS0nLE4ds0vw8VwIQblDXUFEDBghIwU93IgPJ5g8rXupxy2Wh2u
+         NQfas8Nf0ifp3WNIDFayWkEArYkMRkZ3Rg+hab33gvawGk3aYLJDkfjrZtwqVsSohRkQ
+         MbVlMgd+APnIHBIVW4drs9yPcKC9Fq5Z2axKha6s2Q/zUly2ttNFau2Ze08+VZyS4OHp
+         2PiRK8RbKEPnCZUwEYIkOE5cun6lc2SmJTZ+9eRdXHaC2yFnmBl3Q1ZSnBsaujANHhuL
+         jiig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=epXjxVZYGdrS5V2vncnZJ3QtAgAqtwFKvMdQBktjbpw=;
-        b=WikBn4vJ/w/S/GBwX+AFURLU9W2BDoHJA4o7YypVSiti6r9B7tJngDhXsnls5PKTfE
-         ospIuaJ1zfAPoOnF9E1yzB3gazP6fpDd2XJh1gdLCdPknCewrcjYks/2+v83ro2LaQQs
-         Gr+mB70SHYBhBKtkBrdnjQqGhQzlKVxKtsucYtJ52hzNhIRC9eG2H5acaa3cF9lRkI+K
-         tTgTjTlcGXoLZh7qOTTrctjXlDEfzvIXqTLo1378YfoFFOPvwAMScc2M0vt87MsCX2WI
-         1SSILV2RO4h814GWbImR8oWjlU6Y7AfNhW5MRs2Yg0bKv6DroS0os1pjz6SFmOwSQLYv
-         uEdw==
-X-Gm-Message-State: AOAM533cjFvEj/RZjr0Xw6fuiyfz8d7jyDqO7BpPiC/wEj2uqQzAiGvQ
-        B8gu8eD5SvnPEWOgyPz6teTC2w==
-X-Google-Smtp-Source: ABdhPJzdwWCxEjIeT5KJlR/Ba2GZ8dPe4vxd5ULvLy5WwNe9MrQCFdDTOTcEXmSEqqi1EyMCLYF1kA==
-X-Received: by 2002:a05:6402:158:: with SMTP id s24mr25490055edu.144.1642497513890;
-        Tue, 18 Jan 2022 01:18:33 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([104.245.96.239])
-        by smtp.gmail.com with ESMTPSA id w22sm3411723eji.87.2022.01.18.01.18.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 01:18:33 -0800 (PST)
-Date:   Tue, 18 Jan 2022 17:18:27 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Marco Elver <elver@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
-        sumanthk@linux.ibm.com, hca@linux.ibm.com,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
-Message-ID: <20220118091827.GA98966@leoy-ThinkPad-X240s>
-References: <20211216151454.752066-1-tmricht@linux.ibm.com>
- <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
- <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SB0wh1JvYuxb1nJDI7PyGganrQILU5xtGUXZvsW6ko0=;
+        b=HNWbRh+T8p/gqUp1gRazEL5bPor4/EtUnQF2QkOFXCybXROWUuGPiI7TZ3mEyQSy5P
+         Morq0aFT4Zp257YsGzikV1Sd1sgGJPD5KfWKhYzik+bYIw5WjnQzU3mAp7VU0G3Vr2ti
+         XBfC0ykw0IQAEp2L7iVw4sTZSXh5N1+C9Wn9dBp4QubctWZgRRjRR0ZA4owZGF+eP+a9
+         +8LDvrMtrfQLy2+5ZG/0S5U/MtG2v+Nn+6GGXveKwk0TEWQIVIVOGI9sIwFBJeMFa5HD
+         sCR1dzadMRLYI33RiBrWnkoxANRl8Atc+7zJ2jaJ2iD0kZd3RY7PZWqArtzODvCLjwJl
+         MrvA==
+X-Gm-Message-State: AOAM531X3B3has92CqqO4i16yYat2cppxGpmI5aNV89g4U8s1Hq5wZJk
+        ghWqvPxeCB7ot4yWN1y+/je0gCQlBu1Sa0hC0Go=
+X-Google-Smtp-Source: ABdhPJxSbMd+HQ6M+bgVFr1+OvobdOGajiL40zRQ24757+JEdYZ/E9oYJtr25sD0StBm4K7Oyl/FGS1x2frkSyRibbQ=
+X-Received: by 2002:a17:907:6ea3:: with SMTP id sh35mr5517133ejc.497.1642497573955;
+ Tue, 18 Jan 2022 01:19:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+References: <20220117082539.18713-1-axe.yang@mediatek.com> <20220117082539.18713-4-axe.yang@mediatek.com>
+In-Reply-To: <20220117082539.18713-4-axe.yang@mediatek.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Jan 2022 11:18:57 +0200
+Message-ID: <CAHp75VdkKYujGZOdGkLK-tzC9q+RjkX59fFZe5cHajGOnDdL2w@mail.gmail.com>
+Subject: Re: [RESEND v3 3/3] mmc: mediatek: add support for SDIO eint IRQ
+To:     Axe Yang <axe.yang@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Yong Mao <yong.mao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 03:39:10PM +0000, John Garry wrote:
-> On 16/12/2021 15:48, Marco Elver wrote:
-> 
+On Mon, Jan 17, 2022 at 7:33 PM Axe Yang <axe.yang@mediatek.com> wrote:
+>
+> Add support for eint IRQ when MSDC is used as an SDIO host. This
+> feature requires SDIO device support async IRQ function. With this
+> feature, SDIO host can be awakened by SDIO card in suspend state,
+> without additional pin.
+>
+> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+> resume, switch GPIO function back to DAT1 mode then turn on clock.
+>
+> Some device tree property should be added or modified in MSDC node
+> to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
+> are mandatory. And cap-sdio-async-irq flag is necessary since this
+> feature depends on asynchronous interrupt:
+>         &mmcX {
+>                 ...
+>                 pinctrl-names = "default", "state_uhs", "state_eint",
+>                                 "state_dat1";
+>                 ...
+>                 pinctrl-2 = <&mmc2_pins_eint>;
+>                 pinctrl-3 = <&mmc2_pins_dat1>;
+>                 ...
+>                 cap-sdio-async-irq;
+>                 ...
+>         };
+
+...
+
+> +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
+> +{
+> +       struct msdc_host *host = dev_id;
+> +       struct mmc_host *mmc = mmc_from_priv(host);
+
+> +       unsigned long flags;
+
+Same Q as per v2. Why do you need this?
+
+Yes, you did the first step to the answer, but I want you to go deeper
+and tell me why you need the spin_lock_irqsave() variant.
+
+> +       spin_lock_irqsave(&host->lock, flags);
+> +       if (likely(host->sdio_irq_cnt > 0)) {
+> +               disable_irq_nosync(host->eint_irq);
+> +               disable_irq_wake(host->eint_irq);
+> +               host->sdio_irq_cnt--;
+> +       }
+> +       spin_unlock_irqrestore(&host->lock, flags);
 > +
-> 
-> > On Thu, 16 Dec 2021 at 16:15, Thomas Richter<tmricht@linux.ibm.com>  wrote:
-> > > In Linux next kernel
-> > > Commit 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
-> > > introduced the new test which uses breakpoint events.
-> > > These events are not supported on s390 and PowerPC and always fail:
-> > > 
-> > >   # perf test -F 73
-> > >   73: Sigtrap                                                         : FAILED!
-> > >   #
-> > > 
-> > > Fix it the same way as in the breakpoint tests in file
-> > > tests/bp_account.c where these type of tests are skipped on
-> > > s390 and PowerPC platforms.
-> > > 
-> > > With this patch skip this test on both platforms.
-> > > 
-> > > Output after:
-> > >   # ./perf test -F 73
-> > >   73: Sigtrap
-> > > 
-> > > Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
-> > > 
-> > > Cc: Marco Elver<elver@google.com>
-> > > Signed-off-by: Thomas Richter<tmricht@linux.ibm.com>
-> > Acked-by: Marco Elver<elver@google.com>
-> > 
-> > Thanks, and sorry for missing this case!
-> > 
-> 
-> I am finding that this test hangs on my arm64 machine:
-> 
-> john@debian:~/kernel-dev2/tools/perf$ sudo ./perf test -vvv 73
->  73: Sigtrap:
-> --- start ---
-> test child forked, pid 45193
+> +       sdio_signal_irq(mmc);
+> +
+> +       return IRQ_HANDLED;
+> +}
 
-Both Arm and Arm64 platforms cannot support signal handler with
-breakpoint, please see the details in [1].  So I think we need
-something like below:
-
-static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
-{
-        ...
-
-        if (!BP_SIGNAL_IS_SUPPORTED) {
-                pr_debug("Test not supported on this architecture");
-                return TEST_SKIP;
-        }
-
-        ...
-}
-
-Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
-here.
-
-[1] https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
-
-> And fails on my x86 broadwell machine:
-> 
-> john@localhost:~/kernel-dev2/tools/perf> sudo ./perf test -v 73
-> 73: Sigtrap                                                         :
-> --- start ---
-> test child forked, pid 22255
-> FAILED sys_perf_event_open(): Argument list too long
-> test child finished with -1
-> ---- end ----
-> Sigtrap: FAILED!
-> john@localhost:~/kernel-dev2/tools/perf>
-
-It is a bit suprise for the failure on x86, as I remembered x86 platform
-can support signal handler with hw breakpoint.  And from the error
-"Argument list too long", it should be a different issue from other
-archs.
-
-Thanks,
-Leo
+-- 
+With Best Regards,
+Andy Shevchenko

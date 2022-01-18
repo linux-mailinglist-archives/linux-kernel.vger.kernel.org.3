@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63991492C1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D20492C33
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347139AbiARRRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347121AbiARRRN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:17:13 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6855EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:17:12 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id c2so23707761wml.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:17:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xjMQTF4eVKdyYAu8QrW4WjNPRTGXRpV0NBTS0oqE87o=;
-        b=IZegMCoeQ3hsBGjk2vtSpm5HrT9deisVQ46CZM3W0KeCwtTnRXltsYEkFkK7yN3kmr
-         FrxakSA4UABJoLpQ2vt1aupCGgjVZR/yetgF6KbYS+Wb1MvUDzzsBcLjGToUAv8yfWEN
-         CtzNojQhJGGDxowfq4eZc6l3xtJmf2RhRdZky817UJYEa0IVe1hVWqPQ9jAmSvChBYiK
-         CmJJe8g75QHXaKLXux+guYXIgee20K9ncaKL5KcgmzKX38rvjaK5D51MMxkhre0mhd9s
-         halEpN+LKuSFqaBxYoxeF0T5KxSnAJXxWpNJO2ZMOb9zLt75zrGVSwmJWj3VVF7IVUMo
-         uy/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xjMQTF4eVKdyYAu8QrW4WjNPRTGXRpV0NBTS0oqE87o=;
-        b=uKm8YyzjN5Ixv4vGnvJoRAr0olu9pqe4nTDv/YI1LlmCN+1oso5In18G3hXoh1v5xK
-         L4HFC8z4oWep6Pw2MUNSoCu17ky/jnEf4jUR8vqIzVHEV/d8mHFy4nkc0VjBwLXWsEOq
-         00tyaZ/4zTlyPxB0dMPoyeMHfrPHlMROtKpf1paUIH1xPUM6c0pupQrplV8Wfu797Rkb
-         0ZJWamI0nyfDwmWptZQLG1+/O+PzwOjj7E08vshNTavWiCtMZfZ2suw437kg3NoO5k57
-         lcRxhg4+eH93gNnPvsoaw+enVwmgj+QgyCgfb5+kbtg4znc4ramLqFb6YISR9SvpHSGy
-         BW2w==
-X-Gm-Message-State: AOAM5335eIvw1P9rpTP5kdV6lxtk3CBKvaC9+sXSnXO59CNV0m+utIyi
-        xjruaWCnj758MBIqizIJ574qd3++lyGN8PS8NhXQ/w==
-X-Google-Smtp-Source: ABdhPJyM8Er7F8IWCUjoxB2zTsyLWrUtQFdcfszUUYmE5GJpHJTzU5uLC3uRD7QV0QTnKuyA/uRJk761VISSAS7dA7Q=
-X-Received: by 2002:a5d:6da4:: with SMTP id u4mr20828497wrs.82.1642526230826;
- Tue, 18 Jan 2022 09:17:10 -0800 (PST)
+        id S1347159AbiARRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:21:33 -0500
+Received: from mga07.intel.com ([134.134.136.100]:39099 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347151AbiARRVc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:21:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642526492; x=1674062492;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QHTl9o5Gs3pPX65V4raS2341N/gKD8noQB/ZI9pdSX8=;
+  b=kMMZt0S0o9xLiP5lx6YIVO/tKxdiIEwjBVpEPxQKKLjYHlCQwitZT6J+
+   ysFF6+iPlq3lVsXXhQXxIsSsA9u+qAHiT5IrCbXPxuYi4q3WQvaGGl7yP
+   7WDNWvHE0FtiFdeLkr3Ox5cnsrnshJ82V1l7kaOqbZeO5EXPr3HtKp32i
+   HXq9BVb9mRL/kKk5pQvBwyFKGgT7AjDxXfIysDaunRhBLT1+DQGoO4Wlb
+   eOz8c22x31dfeUciVCATEsqMyMqOP2+AoQXh86bl8hfAOhnTgRP3F2NS0
+   ftWJmi2omn9061HTO5370/TgJtg/pbJxl+iVu80lAh3WHvAdk+A+IqnO7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="308205930"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="308205930"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 09:20:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="477060502"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jan 2022 09:20:03 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9s9K-000Cmq-D0; Tue, 18 Jan 2022 17:20:02 +0000
+Date:   Wed, 19 Jan 2022 01:19:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 10/31] drivers/tty/serial/sunzilog.c:103:13:
+ warning: 'sunzilog_putchar' used but never defined
+Message-ID: <202201190151.92tNhDTm-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220113233940.3608440-1-posk@google.com> <20220113233940.3608440-5-posk@google.com>
- <YeU0nr6DfBCaH6UF@hirez.programming.kicks-ass.net>
-In-Reply-To: <YeU0nr6DfBCaH6UF@hirez.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@google.com>
-Date:   Tue, 18 Jan 2022 09:16:59 -0800
-Message-ID: <CAPNVh5e+ijBCdvzZujWNUw7QnFt5Mdonw35ByuvcvzJu7gGjHQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 4/5] sched: UMCG: add a blocked worker list
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, avagin@google.com, jannh@google.com,
-        tdelisle@uwaterloo.ca, posk@posk.io
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 1:19 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Jan 13, 2022 at 03:39:39PM -0800, Peter Oskolkov wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   0ecc0cdeaabd6b08ef3ec6dfaf724139031c00b8
+commit: 2258e16ea4fe67f9700294b439b7aa1669aef643 [10/31] serial: make uart_console_write->putchar's character a char
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220119/202201190151.92tNhDTm-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=2258e16ea4fe67f9700294b439b7aa1669aef643
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 2258e16ea4fe67f9700294b439b7aa1669aef643
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/tty/serial/
 
-[...]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >
-> > So this change basically decouples block/wake detection from
-> > M:N threading in the sense that the number of servers is now
-> > does not have to be M or N, but is more driven by the scalability
-> > needs of the userspace application.
->
-> So I don't object to having this blocking list, we had that early on in
-> the discussions.
->
-> *However*, combined with WF_CURRENT_CPU this 1:N userspace model doesn't
-> really make sense, also combined with Proxy-Exec (if we ever get that
-> sorted) it will fundamentally not work.
->
-> More consideration is needed I think...
+All warnings (new ones prefixed by >>):
 
-I was not very clear here. The intent of this change is not to make
-1:N a good general approach, but to make "several running workers per
-single server" a viable option.
+   drivers/tty/serial/sunzilog.c:1128:28: error: conflicting types for 'sunzilog_putchar'; have 'void(struct uart_port *, char)'
+    1128 | static void __maybe_unused sunzilog_putchar(struct uart_port *port, char ch)
+         |                            ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/sunzilog.c:103:13: note: previous declaration of 'sunzilog_putchar' with type 'void(struct uart_port *, int)'
+     103 | static void sunzilog_putchar(struct uart_port *port, int ch);
+         |             ^~~~~~~~~~~~~~~~
+>> drivers/tty/serial/sunzilog.c:103:13: warning: 'sunzilog_putchar' used but never defined
 
-My guess, based on some numbers/benchmarks from another project, is
-that having a single server/runqueue per four or eight running
-workers, properly aligned with (= affined to) an AMD chiplet, will be
-the most performant solution, comparing to both a runqueue per single
-running worker and to a global runqueue. On Intel this will probably
-look like a single runqueue per core (2 running workers/HT threads).
 
-So in this model a "server" represents a runqueue.
+vim +/sunzilog_putchar +103 drivers/tty/serial/sunzilog.c
 
-I'll reply to other active umcg discussions shortly.
+^1da177e4c3f41 drivers/serial/sunzilog.c Linus Torvalds 2005-04-16  102  
+6d45a1aed34b0c drivers/serial/sunzilog.c Jason Wessel   2010-05-20 @103  static void sunzilog_putchar(struct uart_port *port, int ch);
+6d45a1aed34b0c drivers/serial/sunzilog.c Jason Wessel   2010-05-20  104  
+
+:::::: The code at line 103 was first introduced by commit
+:::::: 6d45a1aed34b0cd7b298967eb9cb72b77afcb33b sparc,sunzilog: Add console polling support for sunzilog serial driver
+
+:::::: TO: Jason Wessel <jason.wessel@windriver.com>
+:::::: CC: Jason Wessel <jason.wessel@windriver.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

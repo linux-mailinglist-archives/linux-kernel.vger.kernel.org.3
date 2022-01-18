@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0420C492A7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674FA492A51
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347388AbiARQKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:10:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S1346931AbiARQJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243318AbiARQJV (ORCPT
+        with ESMTP id S1346544AbiARQIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:09:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9997BC06173F;
-        Tue, 18 Jan 2022 08:09:20 -0800 (PST)
+        Tue, 18 Jan 2022 11:08:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E0BC061746;
+        Tue, 18 Jan 2022 08:07:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EB2E4CE1A3E;
-        Tue, 18 Jan 2022 16:09:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF611C00446;
-        Tue, 18 Jan 2022 16:09:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43186612C2;
+        Tue, 18 Jan 2022 16:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF4BC00446;
+        Tue, 18 Jan 2022 16:07:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522157;
-        bh=WHbb0OXW8TtFj+QNFHxl7WaQnbFj5FU03ZDyBJMfPKI=;
+        s=korg; t=1642522073;
+        bh=vdM6Cy9srToZDLQmdI33WSW2Po2CA/CbILXi6A19DZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nPiGQAGydvKJ8VQGn0x5SZO9WA4vHMB9qBaCpCXjS+V0b0w1xzo8Xus39Fpko0g+f
-         iGtWZAVkoQh5bZTQ7UapOlK/uN/11PoJi8fcNAQvoeu3lFs5iAUniTf7Fih8w6RqME
-         ngHivy4KvW/5kUaAA/sB73ee+ZJmQdGfkjtIDdWI=
+        b=nryPrbr6H5gCLEAUa9B4itOKgzNeN3bvMcL55ulukliepjZT3T4avb/77Boc86wqA
+         6ttOSZ3s6jLYedO/x5F2BA8/SDno7gK5gi7Eg3aVnrWWb+xkJaXgelIV5kLqnbrGVv
+         9nCTrkCmS9Vi314MBZQe9zcCX3HoGbHQ01/m8oS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: [PATCH 5.15 10/28] KVM: s390: Clarify SIGP orders versus STOP/RESTART
+        stable@vger.kernel.org, Wei Wang <wei.w.wang@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 16/23] KVM: x86: remove PMU FIXED_CTR3 from msrs_to_save_all
 Date:   Tue, 18 Jan 2022 17:05:56 +0100
-Message-Id: <20220118160452.224062485@linuxfoundation.org>
+Message-Id: <20220118160451.790880694@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
-References: <20220118160451.879092022@linuxfoundation.org>
+In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
+References: <20220118160451.233828401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,121 +48,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Farman <farman@linux.ibm.com>
+From: Wei Wang <wei.w.wang@intel.com>
 
-commit 812de04661c4daa7ac385c0dfd62594540538034 upstream.
+commit 9fb12fe5b93b94b9e607509ba461e17f4cc6a264 upstream.
 
-With KVM_CAP_S390_USER_SIGP, there are only five Signal Processor
-orders (CONDITIONAL EMERGENCY SIGNAL, EMERGENCY SIGNAL, EXTERNAL CALL,
-SENSE, and SENSE RUNNING STATUS) which are intended for frequent use
-and thus are processed in-kernel. The remainder are sent to userspace
-with the KVM_CAP_S390_USER_SIGP capability. Of those, three orders
-(RESTART, STOP, and STOP AND STORE STATUS) have the potential to
-inject work back into the kernel, and thus are asynchronous.
+The fixed counter 3 is used for the Topdown metrics, which hasn't been
+enabled for KVM guests. Userspace accessing to it will fail as it's not
+included in get_fixed_pmc(). This breaks KVM selftests on ICX+ machines,
+which have this counter.
 
-Let's look for those pending IRQs when processing one of the in-kernel
-SIGP orders, and return BUSY (CC2) if one is in process. This is in
-agreement with the Principles of Operation, which states that only one
-order can be "active" on a CPU at a time.
+To reproduce it on ICX+ machines, ./state_test reports:
+==== Test Assertion Failure ====
+lib/x86_64/processor.c:1078: r == nmsrs
+pid=4564 tid=4564 - Argument list too long
+1  0x000000000040b1b9: vcpu_save_state at processor.c:1077
+2  0x0000000000402478: main at state_test.c:209 (discriminator 6)
+3  0x00007fbe21ed5f92: ?? ??:0
+4  0x000000000040264d: _start at ??:?
+ Unexpected result from KVM_GET_MSRS, r: 17 (failed MSR was 0x30c)
 
-Cc: stable@vger.kernel.org
-Suggested-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Eric Farman <farman@linux.ibm.com>
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Link: https://lore.kernel.org/r/20211213210550.856213-2-farman@linux.ibm.com
-[borntraeger@linux.ibm.com: add stable tag]
-Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+With this patch, it works well.
+
+Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+Message-Id: <20211217124934.32893-1-wei.w.wang@intel.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: e2ada66ec418 ("kvm: x86: Add Intel PMU MSRs to msrs_to_save[]")
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kvm/interrupt.c |    7 +++++++
- arch/s390/kvm/kvm-s390.c  |    9 +++++++--
- arch/s390/kvm/kvm-s390.h  |    1 +
- arch/s390/kvm/sigp.c      |   28 ++++++++++++++++++++++++++++
- 4 files changed, 43 insertions(+), 2 deletions(-)
+ arch/x86/kvm/x86.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/s390/kvm/interrupt.c
-+++ b/arch/s390/kvm/interrupt.c
-@@ -2115,6 +2115,13 @@ int kvm_s390_is_stop_irq_pending(struct
- 	return test_bit(IRQ_PEND_SIGP_STOP, &li->pending_irqs);
- }
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1229,7 +1229,7 @@ static const u32 msrs_to_save_all[] = {
+ 	MSR_IA32_UMWAIT_CONTROL,
  
-+int kvm_s390_is_restart_irq_pending(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_s390_local_interrupt *li = &vcpu->arch.local_int;
-+
-+	return test_bit(IRQ_PEND_RESTART, &li->pending_irqs);
-+}
-+
- void kvm_s390_clear_stop_irq(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_s390_local_interrupt *li = &vcpu->arch.local_int;
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -4642,10 +4642,15 @@ int kvm_s390_vcpu_stop(struct kvm_vcpu *
- 		}
- 	}
- 
--	/* SIGP STOP and SIGP STOP AND STORE STATUS has been fully processed */
-+	/*
-+	 * Set the VCPU to STOPPED and THEN clear the interrupt flag,
-+	 * now that the SIGP STOP and SIGP STOP AND STORE STATUS orders
-+	 * have been fully processed. This will ensure that the VCPU
-+	 * is kept BUSY if another VCPU is inquiring with SIGP SENSE.
-+	 */
-+	kvm_s390_set_cpuflags(vcpu, CPUSTAT_STOPPED);
- 	kvm_s390_clear_stop_irq(vcpu);
- 
--	kvm_s390_set_cpuflags(vcpu, CPUSTAT_STOPPED);
- 	__disable_ibs_on_vcpu(vcpu);
- 
- 	for (i = 0; i < online_vcpus; i++) {
---- a/arch/s390/kvm/kvm-s390.h
-+++ b/arch/s390/kvm/kvm-s390.h
-@@ -418,6 +418,7 @@ void kvm_s390_destroy_adapters(struct kv
- int kvm_s390_ext_call_pending(struct kvm_vcpu *vcpu);
- extern struct kvm_device_ops kvm_flic_ops;
- int kvm_s390_is_stop_irq_pending(struct kvm_vcpu *vcpu);
-+int kvm_s390_is_restart_irq_pending(struct kvm_vcpu *vcpu);
- void kvm_s390_clear_stop_irq(struct kvm_vcpu *vcpu);
- int kvm_s390_set_irq_state(struct kvm_vcpu *vcpu,
- 			   void __user *buf, int len);
---- a/arch/s390/kvm/sigp.c
-+++ b/arch/s390/kvm/sigp.c
-@@ -288,6 +288,34 @@ static int handle_sigp_dst(struct kvm_vc
- 	if (!dst_vcpu)
- 		return SIGP_CC_NOT_OPERATIONAL;
- 
-+	/*
-+	 * SIGP RESTART, SIGP STOP, and SIGP STOP AND STORE STATUS orders
-+	 * are processed asynchronously. Until the affected VCPU finishes
-+	 * its work and calls back into KVM to clear the (RESTART or STOP)
-+	 * interrupt, we need to return any new non-reset orders "busy".
-+	 *
-+	 * This is important because a single VCPU could issue:
-+	 *  1) SIGP STOP $DESTINATION
-+	 *  2) SIGP SENSE $DESTINATION
-+	 *
-+	 * If the SIGP SENSE would not be rejected as "busy", it could
-+	 * return an incorrect answer as to whether the VCPU is STOPPED
-+	 * or OPERATING.
-+	 */
-+	if (order_code != SIGP_INITIAL_CPU_RESET &&
-+	    order_code != SIGP_CPU_RESET) {
-+		/*
-+		 * Lockless check. Both SIGP STOP and SIGP (RE)START
-+		 * properly synchronize everything while processing
-+		 * their orders, while the guest cannot observe a
-+		 * difference when issuing other orders from two
-+		 * different VCPUs.
-+		 */
-+		if (kvm_s390_is_stop_irq_pending(dst_vcpu) ||
-+		    kvm_s390_is_restart_irq_pending(dst_vcpu))
-+			return SIGP_CC_BUSY;
-+	}
-+
- 	switch (order_code) {
- 	case SIGP_SENSE:
- 		vcpu->stat.instruction_sigp_sense++;
+ 	MSR_ARCH_PERFMON_FIXED_CTR0, MSR_ARCH_PERFMON_FIXED_CTR1,
+-	MSR_ARCH_PERFMON_FIXED_CTR0 + 2, MSR_ARCH_PERFMON_FIXED_CTR0 + 3,
++	MSR_ARCH_PERFMON_FIXED_CTR0 + 2,
+ 	MSR_CORE_PERF_FIXED_CTR_CTRL, MSR_CORE_PERF_GLOBAL_STATUS,
+ 	MSR_CORE_PERF_GLOBAL_CTRL, MSR_CORE_PERF_GLOBAL_OVF_CTRL,
+ 	MSR_ARCH_PERFMON_PERFCTR0, MSR_ARCH_PERFMON_PERFCTR1,
 
 

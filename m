@@ -2,81 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAC3491E60
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 05:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2981B491E64
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 05:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237852AbiAREF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 23:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S245675AbiAREIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 23:08:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiAREF5 (ORCPT
+        with ESMTP id S245564AbiAREIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 23:05:57 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73623C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 20:05:57 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id l16so12730781pjl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 20:05:57 -0800 (PST)
+        Mon, 17 Jan 2022 23:08:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB34EC061574;
+        Mon, 17 Jan 2022 20:08:46 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id i7-20020a17090a4b8700b001b4d486d9c2so501785pjh.4;
+        Mon, 17 Jan 2022 20:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=zv9WXqV8vqC3j/zyXrptfmKmy6B6enP0K/hpwWNEgTo=;
-        b=l/YtsjnyohEUzENprx/EzUAvSluSpj8rpGpQF+tH7wTn62oMMcRAFbgmVBz44KKaGa
-         aMrdD5AP/ZImiXNKrdWtuWu1JV7BZZSkiYazoE5Vv791c+f2doH9J63JdJDZ2nl/vBnh
-         LwyZoy9V9KuoJOHKEYzefxfRj2Cl4XOadb9PE5az/1wND8lF7ileLeVV2j3IlFw9Rv6A
-         cbAAyf7pprYM7I2Yz+cv3QAv7lutW3pTwAYjlUByz/uM/2l3nJXsRM5Fj2rzQj3RfqUP
-         tH6u/Sk7sAc8bb84XcMREx7ZrN+xADNtEREb94ooUCYQwUshzQYhaVb1HfXYKvdD7C6h
-         IIBQ==
+        d=gmail.com; s=20210112;
+        h=to:cc:references:subject:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HAPEx1acaCP1M7+HDpwiBixmcTR8CIddXESJ3SH7olY=;
+        b=iVW5/aO6a6deZsdE28WonY0b7GU9kU+ekkT8URjNU23dVYj6pvZeqAnqkObwTfAtTC
+         PuEpbtTlVYpWn9U/XaYB2nNVHuN96oLnHmHX2AYd6DrLSbnl7hD+vV2wmfevcSan/ff8
+         bMgx96PwzhTqG2t8EOfnQdcv88nVGf2sEOoQHOmboCvgDKVME31nsVQDA7/w7U3wcg+a
+         pux1jWordsWrpd/ZR2r/UZjeww0Xq7yJ4M9gBIx9AG2EpmBKCFpCYt8aBIzBV/t2exFO
+         oBF8kNofaCpBeXlPw0Oujn7wsBXWXAHGDThcIxhy7HnZM6YwuEoAQiGj3eZAqsm5kjDJ
+         r8nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=zv9WXqV8vqC3j/zyXrptfmKmy6B6enP0K/hpwWNEgTo=;
-        b=7cePPR6pt7V0q9JbZ8krBB27df+q75ciVBKK75Hd587qm9DyvKsjspHSjM227x6Aoj
-         ipLXVS4+I8sEDMiL0KU/4oL7hiRQ+fyCwtUeNNo0qSOvCq+pmyR7xG163TVgqCJTIQwk
-         iXiMXAE/Q890nuI1ZXmIq8+65eNTnKE2AawcIRjzlFHDUGeTmMAuV4rY8OP2pr4NrdIY
-         2di9Oeq5C7LRMxF4yORdsgsPEp0oYly8yo8mvBBbBLvbV1zPbX8J1xNKZb1E/m6TbOoa
-         dkfTbDVsIYhSPQnHKkh7kK16uZLS1CHSiLzvEk27tGrdMftT1IMCnm1R21SMlwLWysiB
-         svqg==
-X-Gm-Message-State: AOAM532PVrPFWQv1xN7DFRXGUeRCDKvka/qO2CpKXg4+9rSHXZQusoYC
-        iQqpaXgjhXQtG7UWPcP5rqhz1cnsDetXW2KSE0Vo1cezbfmzhAYs
-X-Google-Smtp-Source: ABdhPJxDftv3+8dC7LYjfqZdiJMnSzy0aGhsctQ+9iX74f0SG+U/x1b6UvsMkoaLvrcSHhcTkTeAAQHl7Zmd4rlABm0=
-X-Received: by 2002:a17:902:9f97:b0:14a:b594:7913 with SMTP id
- g23-20020a1709029f9700b0014ab5947913mr9355867plq.111.1642478756862; Mon, 17
- Jan 2022 20:05:56 -0800 (PST)
+        h=x-gm-message-state:to:cc:references:subject:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HAPEx1acaCP1M7+HDpwiBixmcTR8CIddXESJ3SH7olY=;
+        b=bLUZNULHB+cw5kbDGvHnojoVKreG/cjoNEXyPYgxBKh5+x8xP5NObU+mX+naRiOnUH
+         Bds8zz1DQecVI/0d6r+bzxnR7h1uU9j/BlxLKqmpTTzq8OY2/p3lfE4acDsj1PHETCyZ
+         ZEtOQ3nNlSiQ3UJ3ECgUe6jDnzCXFv3TG36XwXBvMuKSORNloMy5dqvsbFLQ58x8rLmA
+         symg+GmpBj9h7/MAztOyhXG1DInf7WmnviLsVRtJI6no/xpuUTRANPDfGHjV9RykDAiu
+         ZSXnl3Rhbp7aNDpzK8o5iKWB2klcU8vg68BFZd2Wa6P/WfMUEvEoKwHoqd6daO9+h6Vk
+         cSKw==
+X-Gm-Message-State: AOAM5308J7kccDdUNSZSjXRe1FD3cJFJ2T1deEBBAhdJGSSrGJ9QxWxU
+        Ye5BoV12XCeM+LI0t7QT5Ts=
+X-Google-Smtp-Source: ABdhPJzNOBajz+OZsOHSDvNQdlR5gI+2zDZu7270b8u83fJJDmsjkyWRaDQ3yMoAaJY1bG+tdurCmw==
+X-Received: by 2002:a17:902:ce90:b0:14a:7166:a186 with SMTP id f16-20020a170902ce9000b0014a7166a186mr25721216plg.107.1642478926428;
+        Mon, 17 Jan 2022 20:08:46 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id t128sm9096619pfd.219.2022.01.17.20.08.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 20:08:45 -0800 (PST)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20220118010517.20826-1-rdunlap@infradead.org>
+Subject: Re: [PATCH -next] Documentation: fix firewire.rst ABI file path error
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <dc527b05-2b65-cf88-c174-6fec6d458de4@gmail.com>
+Date:   Tue, 18 Jan 2022 13:08:41 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Tue, 18 Jan 2022 12:05:45 +0800
-Message-ID: <CAPqJEFoUyHiyNj8Hx-wRaw86NLb5hGo-WT4ysqV4RGerYyDyJA@mail.gmail.com>
-Subject: About perf tool set exclude_guest = 1 on guest environment
-To:     linux-kernel@vger.kernel.org, namhyung@kernel.org,
-        jolsa@redhat.com, alexander.shishkin@linux.intel.com,
-        mark.rutland@arm.com, acme@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, yao.jin@linux.intel.com
-Cc:     Greentime Hu <greentime.hu@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Vincent Chen <vincent.chen@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220118010517.20826-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, 17 Jan 2022 17:05:17 -0800,
+Randy Dunlap wrote:
+> Adjust the path of the ABI files for firewire.rst to prevent a
+> documentation build error. Prevents this problem:
+> 
+> Sphinx parallel build error:
+> docutils.utils.SystemMessage: /work/lnx/next/linux-next-20220117/Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
+> InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+> I don't see what is causing this problem...
 
-Currently, I run the perf command 'perf record -e branches:u ls'  and
-'perf record -e branches ls'. It will set exclude_guest = 1 as below:
+Randy, did you run "make SPHINXDIRS=driver-api htmldocs"?
 
-# perf record -e branches:u ls
-# perf evlist -v
-branches:u: .., exclude_kernel: 1, exclude_hv: 1,, exclude_guest: 1, ..
+I remember seeing similar errors with v5.14 or v5.15.
+So I don't think this is a new issue.
 
-# perf record -e branches ls
-# perf evlist -v
-branches: ..., exclude_guest: 1, ...
+Without "SPHINXDIRS=driver-api", I don't get this error on -next.
 
-As I understand it, set exclude_guest =1 will not include guest counting.
-May I ask if I run the above commands as a guest user, should the
-architecture implementation ignore this exclude_guest flags and still
-make perf can count guest events in Linux kernel?
+I didn't report it at the time as I was not sure it was expected
+or not.
 
-Best regards,
-Eric Lin
+        Thanks, Akira
+
+> 
+>  Documentation/driver-api/firewire.rst |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- linux-next-20220117.orig/Documentation/driver-api/firewire.rst
+> +++ linux-next-20220117/Documentation/driver-api/firewire.rst
+> @@ -19,7 +19,7 @@ of kernel interfaces is available via ex
+>  Firewire char device data structures
+>  ====================================
+>  
+> -.. include:: /ABI/stable/firewire-cdev
+> +.. include:: ../ABI/stable/firewire-cdev
+>      :literal:
+>  
+>  .. kernel-doc:: include/uapi/linux/firewire-cdev.h
+> @@ -28,7 +28,7 @@ Firewire char device data structures
+>  Firewire device probing and sysfs interfaces
+>  ============================================
+>  
+> -.. include:: /ABI/stable/sysfs-bus-firewire
+> +.. include:: ../ABI/stable/sysfs-bus-firewire
+>      :literal:
+>  
+>  .. kernel-doc:: drivers/firewire/core-device.c
+

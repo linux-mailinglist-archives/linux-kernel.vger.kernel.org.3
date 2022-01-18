@@ -2,222 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 518BE492852
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C46492855
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245315AbiAROYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:24:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42936 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242241AbiAROYx (ORCPT
+        id S245344AbiAROZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:25:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52422 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233969AbiAROZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:24:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29400614D0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38A9C00446;
-        Tue, 18 Jan 2022 14:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642515892;
-        bh=qfhBRI96dPWOb1VgMeO1zge4Anqb8GOqRNqOVR/c9vg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Bebpkah9Niyt6HMIT6RmDpRW9gyMlob2AEs9mGu0soYOi5uC6kMDNK8EVaGa29oKA
-         8Bj9Nt0K66ZoA7kiBOGYxVZTRvEf3Q4c7DKVOpi0732gJRlHRwYpp+YkeWGY+F5One
-         wqHk/UJDPGrplLZKRpHRqRWTA+5d0EVAOa0bvuSs654RDajvcoNS0f7N4lku9iUhB3
-         tX3O1F4G5X8SC1iD9pEPa9QHpH5GS9Nyadt43lS/TMzYuOqiHKmpNU/IKEkfXJx8uU
-         SS5nxfCWsZ70LyOn4+eFUivz/LOC1fs0Acp0r80THDtXW/kJwW6Hobm5NVrrlFAFDb
-         dp0yAolgp2D9g==
-Date:   Tue, 18 Jan 2022 23:24:48 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
-        zanussi@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] trace: Introduce objtrace trigger to trace the
- kernel object
-Message-Id: <20220118232448.891fbf550b50193e0155b59c@kernel.org>
-In-Reply-To: <20220113013835.503285-1-xiehuan09@gmail.com>
-References: <20220113013835.503285-1-xiehuan09@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Tue, 18 Jan 2022 09:25:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642515930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N0j/fQ4PflVYGPy/bLo8LyJo0AEkhVcyeqzgco+GTv8=;
+        b=VF8b9qOtBTViUT6+Slp36CzezAcdTXWL4olQown8KqKoP8K6N8gehy6fRjSepVu8G/p9JY
+        WsKdYZUwgHcGXSGHu3hbfxteNvpimitwxLCtdGyGXYg4inQ8JfdeDozdqAtEWUfnUeoADL
+        ltRSI3JuA1tBw8a50y2kPixXvjY2Lo8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-570-JSLZuKm6OPmWEa-XEdhMsA-1; Tue, 18 Jan 2022 09:25:29 -0500
+X-MC-Unique: JSLZuKm6OPmWEa-XEdhMsA-1
+Received: by mail-ed1-f71.google.com with SMTP id cf15-20020a0564020b8f00b0040284b671c6so6031381edb.22
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:25:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N0j/fQ4PflVYGPy/bLo8LyJo0AEkhVcyeqzgco+GTv8=;
+        b=2/p0K361DMZ7Ut9BAx0Ewl38aNjmGXapHBf9fjbOvUAXh3Ev2ZQPwhd1ct63wEEc4v
+         LauAuyeQRw1YACSkg7a6batBqOWNP/L3OdjQ+pEF4abmV40vFSRrPHtyAKeTwk0c/opY
+         MBEwDzjt0Oi9Q2DB/Hr8250FKUoXcXb4WbQyt5Z27o4BBUNpXu6tuYu45KvL4NEW/CWd
+         qyzvuJf4Ul9Dk1Z8Qh0hieccMpBwHhnzd2FlnD9yWsKhchj2xFZw50qsjlrO5DSGiiD5
+         JW29ep7EI7e4voJ0+8n2bxcUjPOWwRxsfE4+M45V3AZTCeczysMGAqPyVW05tYl3AfNB
+         SPOA==
+X-Gm-Message-State: AOAM533INEhh8AyNx0nYsHF8XWjx7VnHJojvfGfOt3MzQ8st76g73kAS
+        G5QClCTes5fyV5JmG1StoMNTGGb232Kvi/fW9G9Yq+kQt4CgdYID1EXytQWAidsWu+62MHSyj3c
+        CXcqz1+dVU26p3GKyUnCFRCvQ
+X-Received: by 2002:a17:907:6d22:: with SMTP id sa34mr19840876ejc.635.1642515928025;
+        Tue, 18 Jan 2022 06:25:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxt7mNYuWcPmCyBDWs9bQTDMSJk3irHRnoPYop007C8xxpW8ahyJvriCHSEP50GE/m7CBOxBQ==
+X-Received: by 2002:a17:907:6d22:: with SMTP id sa34mr19840848ejc.635.1642515927724;
+        Tue, 18 Jan 2022 06:25:27 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id cw6sm7205493edb.11.2022.01.18.06.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 06:25:27 -0800 (PST)
+Date:   Tue, 18 Jan 2022 15:25:25 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-ID: <YebN1TIRxMX0sgs4@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+ <Yd77SYWgtrkhFIYz@krava>
+ <YeAatqQTKsrxmUkS@krava>
+ <20220115135219.64ef1cc6482d5de8a3bce9b0@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220115135219.64ef1cc6482d5de8a3bce9b0@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 09:38:31 +0800
-Jeff Xie <xiehuan09@gmail.com> wrote:
+On Sat, Jan 15, 2022 at 01:52:19PM +0900, Masami Hiramatsu wrote:
+> On Thu, 13 Jan 2022 13:27:34 +0100
+> Jiri Olsa <jolsa@redhat.com> wrote:
+> 
+> > On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
+> > > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
+> > > > Hi Jiri and Alexei,
+> > > > 
+> > > > Here is the 2nd version of fprobe. This version uses the
+> > > > ftrace_set_filter_ips() for reducing the registering overhead.
+> > > > Note that this also drops per-probe point private data, which
+> > > > is not used anyway.
+> > > > 
+> > > > This introduces the fprobe, the function entry/exit probe with
+> > > > multiple probe point support. This also introduces the rethook
+> > > > for hooking function return as same as kretprobe does. This
+> > > 
+> > > nice, I was going through the multi-user-graph support 
+> > > and was wondering that this might be a better way
+> > > 
+> > > > abstraction will help us to generalize the fgraph tracer,
+> > > > because we can just switch it from rethook in fprobe, depending
+> > > > on the kernel configuration.
+> > > > 
+> > > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> > > > patches will not be affected by this change.
+> > > 
+> > > I'll try the bpf selftests on top of this
+> > 
+> > I'm getting crash and stall when running bpf selftests,
+> > the fprobe sample module works fine, I'll check on that
+> 
+> OK, I got a kernel stall. I missed to enable CONFIG_FPROBE.
+> I think vmtest.sh should support menuconfig option.
+> 
+> #6 bind_perm:OK
+> #7 bloom_filter_map:OK
+> [  107.282403] clocksource: timekeeping watchdog on CPU0: Marking clocksource 'tsc' as unstable because the skew is too large:
+> [  107.283240] clocksource:                       'hpet' wd_nsec: 496216090 wd_now: 7ddc7120 wd_last: 7ae746b7 mask: ffffffff
+> [  107.284045] clocksource:                       'tsc' cs_nsec: 495996979 cs_now: 31fdb69b39 cs_last: 31c2d29219 mask: ffffffffffffffff
+> [  107.284926] clocksource:                       'tsc' is current clocksource.
+> [  107.285487] tsc: Marking TSC unstable due to clocksource watchdog
+> [  107.285973] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
+> [  107.286616] sched_clock: Marking unstable (107240582544, 45390230)<-(107291410145, -5437339)
+> [  107.290408] clocksource: Not enough CPUs to check clocksource 'tsc'.
+> [  107.290879] clocksource: Switched to clocksource hpet
+> [  604.210415] INFO: rcu_tasks detected stalls on tasks:
+> [  604.210830] (____ptrval____): .. nvcsw: 86/86 holdout: 1 idle_cpu: -1/0
+> [  604.211314] task:test_progs      state:R  running task     stack:    0 pid:   87 ppid:    85 flags:0x00004000
+> [  604.212058] Call Trace:
+> [  604.212246]  <TASK>
+> [  604.212452]  __schedule+0x362/0xbb0
+> [  604.212723]  ? preempt_schedule_notrace_thunk+0x16/0x18
+> [  604.213107]  preempt_schedule_notrace+0x48/0x80
+> [  604.217403]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
+> [  604.217790]  ? ftrace_regs_call+0xd/0x52
+> [  604.218087]  ? bpf_test_finish.isra.0+0x190/0x190
+> [  604.218461]  ? bpf_fentry_test1+0x5/0x10
+> [  604.218750]  ? trace_clock_x86_tsc+0x10/0x10
+> [  604.219064]  ? __sys_bpf+0x8b1/0x2970
+> [  604.219337]  ? lock_is_held_type+0xd7/0x130
+> [  604.219680]  ? __x64_sys_bpf+0x1c/0x20
+> [  604.219957]  ? do_syscall_64+0x35/0x80
+> [  604.220237]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  604.220653]  </TASK>
+> 
+> Jiri, is that what you had seen? 
 
-> Introduce a method based on function tracer to trace any object and get
-> the value of the object dynamically. the object can be obtained from the
-> dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
-> 
-> Usage:
-> When using the kprobe event, only need to set the objtrace(a new trigger),
-> we can get the value of the object. The object is from the setting of the 
-> kprobe event.
-> 
-> For example:
-> For the function bio_add_page():
-> 
-> int bio_add_page(struct bio *bio, struct page *page,
-> 	unsigned int len, unsigned int offset)
-> 
-> Firstly, we can set the base of the object, thus the first string "arg1"
-> stands for the value of the first parameter of this function bio_add_gage(),
-> 
-> # echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
-> 
-> Secondly, we can get the value dynamically base the above object. 
-> 
-> find the offset of the bi_size in struct bio:
-> $ gdb vmlinux
-> (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-> $1 = (unsigned int *) 0x28
-> 
-> # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-> 	p_bio_add_page_0/trigger
-> 
-> The best way to use this is that we can set the entrance event and exit
-> event, for example, the following example is to set the read_papes as
-> the entrance event, and set the __blk_account_io_start as the exit event.
-> 
-> # cd /sys/kernel/debug/tracing/
-> # echo 0 > ./tracing_on
-> # echo 'p read_pages' >> ./kprobe_events
-> # echo 'p __blk_account_io_start' >> ./kprobe_events
-> # echo 'traceon if comm == "cat"' > ./events/kprobes/p_read_pages_0/trigger
-> # echo 'traceoff if comm == "cat"' > ./events/kprobes/p___blk_account_io_start_0/trigger
-> # echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
-> # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-> 
-> # du -sh /test.txt
-> 12.0K   /test.txt
-> 
-> # cat  /test.txt > /dev/null
-> # cat ./trace
-> 
-> # tracer: nop
-> #
-> # entries-in-buffer/entries-written: 50/50   #P:1
-> #
-> #                                _-----=> irqs-off
-> #                               / _----=> need-resched
-> #                              | / _---=> hardirq/softirq
-> #                              || / _--=> preempt-depth
-> #                              ||| / _-=> migrate-disable
-> #                              |||| /     delay
-> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> #              | |         |   |||||     |         |
->              cat-95      [000] .....     1.412065: _raw_spin_unlock_irqrestore <-event_triggers_call object:0xffff888108af6328 value:0x0
->              cat-95      [000] .....     1.412066: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x0
->              cat-95      [000] .....     1.412066: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x0
->              cat-95      [000] .....     1.412066: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x1000
->              cat-95      [000] .....     1.412066: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x1000
->              cat-95      [000] .....     1.412066: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x1000
->              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x1000
->              cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x1000
->              cat-95      [000] .....     1.412067: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x1000
->              cat-95      [000] .....     1.412067: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x2000
->              cat-95      [000] .....     1.412067: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x2000
->              cat-95      [000] .....     1.412067: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x2000
->              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x2000
->              cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x2000
->              cat-95      [000] .....     1.412068: submit_bio <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: submit_bio_noacct <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: __submit_bio <-submit_bio_noacct object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: blk_try_enter_queue <-__submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: submit_bio_checks <-__submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: __cond_resched <-submit_bio_checks object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: rcu_all_qs <-__cond_resched object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412068: should_fail_bio <-submit_bio_checks object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: create_task_io_context <-submit_bio_checks object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: kmem_cache_alloc_node <-create_task_io_context object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: should_failslab <-kmem_cache_alloc_node object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: _raw_spin_lock <-create_task_io_context object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: blk_mq_submit_bio <-__submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: __blk_queue_split <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: bvec_split_segs <-__blk_queue_split object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412069: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: __blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: dd_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: _raw_spin_lock <-dd_bio_merge object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: blk_mq_sched_try_merge <-dd_bio_merge object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: elv_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: elv_rqhash_find <-elv_merge object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: dd_request_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: elv_rb_find <-dd_request_merge object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412070: __blk_mq_alloc_request <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: dd_limit_depth <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: blk_mq_get_tag <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: __blk_mq_get_tag <-blk_mq_get_tag object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: blk_mq_rq_ctx_init.isra.0 <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: ktime_get <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: dd_prepare_request <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: __blk_account_io_start <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x3000
->              cat-95      [000] .....     1.412071: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x3000
-> 
-> Almost all changelogs were suggested by Masami(mhiramat@kernel.org)
-> and steve(rostedt@goodmis.org), thank you all so much.
-> 
-> v7:
-> - use fixed-size array for object pool instead of list structure
-> - use ftrace_test_recursion_trylock for function trace hook function
-> - fix trace_object_ref reference count in the init_trace_object
-> - invoke exit_trace_object no matter whether data->ops->free is null 
->   in the unregister_object_trigger
-> - release private_data of event_trigger_data in the trace_object_trigger_free
-> - remove [RFC] tag
-> 
-> Note: when change to use the ftrace_test_recursion_trylock, all the functions
-> will call the copy_from_kernel_nofault, I don't know where this is the problem now, 
-> maybe should fall back to the usage in v6. 
-> 
-> for example:
-> 
-> cat-118     [000] ...1.     1.458998: __bio_add_page <-bio_add_page object:0xffff88811a12e9e8 value:0x0
-> cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault <-trace_object_events_call object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault_allowed <-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...1.     1.458998: __rcu_read_lock <-xa_load object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault <-trace_object_events_call object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault_allowed <-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...1.     1.458998: __rcu_read_unlock <-xa_load object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...3.     1.458998: copy_from_kernel_nofault <-trace_object_events_call object:0xffff88811a12e9e8 value:0x1000
-> cat-118     [000] ...3.     1.458998: copy_from_kernel_nofault_allowed <-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
-> ....
+hi,
+sorry for late response
 
-Hmm, this is strange, but I got it is the expected behavior, since the
-ftrace_test_recursion_trylock() accepts one stage recursion for the
-first event in the interrupt as transition event.
-Steve, any good way to limit probing this transition events?
+I did not get any backtrace for the stall, debugging showed 
+that the first probed function was called over and over for
+some reason
+
+as for the crash I used the small fix below
+
+do you have any newer version I could play with?
+
+jirka
 
 
-BTW, I tried your series on the 
-git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git ftrace/core
-and got below build errors.
+---
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 3333893e5217..883151275892 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -157,7 +157,8 @@ int unregister_fprobe(struct fprobe *fp)
+ 	ret = unregister_ftrace_function(&fp->ftrace);
+ 
+ 	if (!ret) {
+-		rethook_free(fp->rethook);
++		if (fp->rethook)
++			rethook_free(fp->rethook);
+ 		if (fp->syms) {
+ 			kfree(fp->addrs);
+ 			fp->addrs = NULL;
 
-linux/kernel/trace/trace_object.c:266:3: error: ‘struct event_trigger_ops’ has no member named ‘func’
-  266 |  .func   = trace_object_trigger,
-      |   ^~~~
-linux/kernel/trace/trace_object.c:273:3: error: ‘struct event_trigger_ops’ has no member named ‘func’
-  273 |  .func   = trace_object_count_trigger,
-      |   ^~~~
-linux/kernel/trace/trace_object.c:535:3: error: ‘struct event_command’ has no member named ‘func’
-  535 |  .func   = event_object_trigger_callback,
-      |   ^~~~
-  CC      net/ipv6/sysctl_net_ipv6.o
-
-This is because commit 7d28e1e7d4fa ("tracing: Change event_trigger_ops func() to trigger()")
-and commit 4dfe5dff80a4 ("tracing: Change event_command func() to parse()") changed the field
-names. Please update it.
-
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

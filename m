@@ -2,78 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C75F491F9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DB5491FA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244098AbiARG5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 01:57:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40632 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243988AbiARG47 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 01:56:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642489017;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I5up6dZy0ZUANufFKUFgvfkxOTraxEVper7GxcI8Tho=;
-        b=Bxj1wZSKhFzCRLL0uxIpRGLKoJ9q5JE9lAXDE+tw39x2wYHAqlRNaXiNayUNepevcV6Wmu
-        pUtk/u0AUYqXYtPpsOqZV1X2oYJyscRNIs9C4zluXQqc4QbKRTN9KwljKBfzBk4fz/faBK
-        oEAbXbbgDU5C+Urg5wWyZOaZNuOmqDE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-OcFCS_5ROZqcaHB5-A-z2g-1; Tue, 18 Jan 2022 01:56:54 -0500
-X-MC-Unique: OcFCS_5ROZqcaHB5-A-z2g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 00B6B192AB76;
-        Tue, 18 Jan 2022 06:56:53 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A4C5D10550B1;
-        Tue, 18 Jan 2022 06:56:52 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id F19FC18000A6; Tue, 18 Jan 2022 07:56:50 +0100 (CET)
-Date:   Tue, 18 Jan 2022 07:56:50 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     sumit.semwal@linaro.org, christian.koenig@amd.com,
-        daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Subject: Re: [PATCH] udmabuf: validate ubuf->pagecount
-Message-ID: <20220118065650.fi74ebzqmmz4e5io@sirius.home.kraxel.org>
-References: <20211230142649.23022-1-paskripkin@gmail.com>
+        id S244234AbiARG7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 01:59:06 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:59644 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230196AbiARG7E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 01:59:04 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1n9iRd-0007cI-7l; Tue, 18 Jan 2022 17:58:18 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 18 Jan 2022 17:58:17 +1100
+Date:   Tue, 18 Jan 2022 17:58:17 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ebiggers@kernel.org, surenb@google.com, hannes@cmpxchg.org,
+        tj@kernel.org, lizefan.x@bytedance.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        stable@vger.kernel.org, kernel-team@android.com,
+        syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+Message-ID: <YeZlCfZZkU5jyFS+@gondor.apana.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230142649.23022-1-paskripkin@gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <CAHk-=wgwb6pJjvHYmOMT-yp5RYvw0pbv810Wcxdm5S7dWc-s0g@mail.gmail.com>
+X-Newsgroups: apana.lists.os.linux.doc,apana.lists.os.linux.kernel
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 05:26:49PM +0300, Pavel Skripkin wrote:
-> Syzbot has reported GPF in sg_alloc_append_table_from_pages(). The
-> problem was in ubuf->pages == ZERO_PTR.
-> 
-> ubuf->pagecount is calculated from arguments passed from user-space. If
-> user creates udmabuf with list.size == 0 then ubuf->pagecount will be
-> also equal to zero; it causes kmalloc_array() to return ZERO_PTR.
-> 
-> Fix it by validating ubuf->pagecount before passing it to
-> kmalloc_array().
-> 
-> Fixes: fbb0de795078 ("Add udmabuf misc device")
-> Reported-and-tested-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> ---
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+>
+> Of course, in practice, for pointers, the whole "dereference off a
+> pointer" on the read side *does* imply a barrier in all relevant
+> situations. So yes, a smp_store_release() -> READ_ONCE() does work in
+> practice, although it's technically wrong (in particular, it's wrong
+> on alpha, because of the completely broken memory ordering that alpha
+> has that doesn't even honor data dependencies as read-side orderings)
 
-Pushed to drm-misc-next.
+READ_ONCE has contained the alpha barrier since 2017:
 
-thanks,
-  Gerd
+commit 76ebbe78f7390aee075a7f3768af197ded1bdfbb
+Author: Will Deacon <will@kernel.org>
+Date:   Tue Oct 24 11:22:47 2017 +0100
 
+    locking/barriers: Add implicit smp_read_barrier_depends() to READ_ONCE()
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

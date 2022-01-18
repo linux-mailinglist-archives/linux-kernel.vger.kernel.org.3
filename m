@@ -2,96 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7F2492F07
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF76492F09
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348893AbiARULi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S1349009AbiARUMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348378AbiARULh (ORCPT
+        with ESMTP id S1343489AbiARUMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:11:37 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FA6C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:11:37 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so386395pja.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:11:37 -0800 (PST)
+        Tue, 18 Jan 2022 15:12:46 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31878C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:12:46 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id o80so376426yba.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:12:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LKCUU04jhzRg3avCcdzhiNctDYJoROpzq94cvgLpl4Y=;
-        b=pGpCN4E5n27lswRENLjJkUXRl5U6y0heJ9FaNyrklevgrorctLsBDEaf41sp98rDsX
-         Q6oLSxjgAl4Nfc0XCuQ4meedx21JZ5QmF0ymMg0es72T0H55/e4tGFX5EjmwcqzL1tq2
-         7yj+bKHUieRb7zkK6QQlLfNoYbNQcF/0NgAhyRKe+nacOVLIw/j7tVFfipwX9lH013za
-         4YHqa8fzd+25lb1EsO4+0M5E7q5w6cP3XNRATjW06iQhvWydOMx7izyUClcvG/Wl5xAf
-         ky7kQZWxI7v7UdD9ixTz3qaspG2qZcDZg04kkZQUypzEZ4yaJ2HVrgkUXVjgoZZB8jcj
-         0s7g==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OSqqLhyTtzJxhz0q3DXFIpxiiCpjsPm+6enDaOk0ioI=;
+        b=nZta7SvitwxRUx3wprgyqeBWZ0dDlrCpUUNu6Hic5upqDFiLjb9UqZBc+u2Dm6OgCy
+         xqddIBKlcrqDpBPrBTwBj0dnfPdNZIwZ7qCTO+scmQn874g6od62Vs0y9wPf7lZ43EUi
+         VyuHxuG0cP5Y807TjuGVSg9Mp+0nMGmaqTSjc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LKCUU04jhzRg3avCcdzhiNctDYJoROpzq94cvgLpl4Y=;
-        b=prw4sRkgupAZH0tFcWPWrYolAE//yEQTRol4vP2Ak0c/0As3TIlRTMbxgRR0I/Fivw
-         grF1Ne+WDKbq8J/Z0UZDR+DmOO+WX02usZVEvLP0FR+hSmz/KQaNaNxTMvyBDajfk1f8
-         YYh3fnHhCzHI5XstWvfHEwzxyCKAJec0Qe4JWTw0RzuSdzz0PXiutbqT9m96iDy6URy5
-         ogS9fUjeL2eE0CTxWdXZhRm3/YNCmKU1JNmHTNjLESDbKVTxW2Yc8PD7y0a01YtnXxjk
-         cBELAgbOfgzVCgguTJ6m9DlFpf6b2vws4EaMeJt45AKIWe4WmrdQ2FY5NEI3cMikA/DF
-         pzuw==
-X-Gm-Message-State: AOAM530pPzT8zWL1T4SAXvF3Xu9kpVqBE5H7rVfsJ5XF1vqdhRZOI+6l
-        lHnvtUu1TAOGVWFKUdwftRs=
-X-Google-Smtp-Source: ABdhPJyWrCpdsV62AjMddA9IrdfcyisSWk/Ym7sUkyvUUx99KrI2K1iYswLUL8mmbDobdkyyyQilxw==
-X-Received: by 2002:a17:90b:1d0d:: with SMTP id on13mr234643pjb.200.1642536696717;
-        Tue, 18 Jan 2022 12:11:36 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id q19sm19803167pfk.131.2022.01.18.12.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 12:11:36 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 18 Jan 2022 10:11:34 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, jiangshanlai@gmail.com
-Subject: Re: synchronize_rcu_expedited gets stuck in hotplug path
-Message-ID: <Yece9mH3nzwGxar6@slm.duckdns.org>
-References: <7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com>
- <20220118200646.GJ947480@paulmck-ThinkPad-P17-Gen-1>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OSqqLhyTtzJxhz0q3DXFIpxiiCpjsPm+6enDaOk0ioI=;
+        b=r+Ss/Ssy9/wAeyOV3lTDGgBFndAPvGpD/7fZVKr9KbqjC9rN8E9q6qywokme2T6zs1
+         IgIc7R21tSSguwvcAwl7WxYAZpf5Da4HmpL2b+xYFhHjcRvk6mwHfV4PC/pcn/aWA5Ww
+         Hu4IqTbO/S0U00p0BG3kYdeVjO14OQzCyLRwaAV8eKfE1qShigosipj4/zXZYMmEfb8X
+         WAIZO2T30VDDaQ/Gp44LulCEuDNHgh/wkUAWmuj16172mxmv9LOssgvU2Ax8tJgC0poh
+         VSN6Gxkc07l/Auh4fVXQgpnlf0oINF72tEqaFHUaaqWejGNW6/SFTXuekUTSRxw1LRBt
+         VCFg==
+X-Gm-Message-State: AOAM533R5KhndOGpDpM2r+7Z4TruurPxRZvWwVlBWymuxya4pGjPX7AX
+        XIAFdj3xX0F/sD1A/KyguFLFaCLtGN6UXyrT2KJv3g==
+X-Google-Smtp-Source: ABdhPJzBg853u2lGTlkCiNJtKQ4Gwcsbs1nSDNSQkRI1AEcQU6HgTkoPlk+g792B0DrAfLhwol9dhQYJJUfRuRWeKBc=
+X-Received: by 2002:a25:b7cd:: with SMTP id u13mr35687434ybj.93.1642536765437;
+ Tue, 18 Jan 2022 12:12:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118200646.GJ947480@paulmck-ThinkPad-P17-Gen-1>
+References: <20220118163754.nfy53mfjpazgw2a2@eve> <YecV+rh/4rzygUbx@google.com>
+ <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
+In-Reply-To: <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 18 Jan 2022 12:12:34 -0800
+Message-ID: <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
+Subject: Re: Null pointer dereference in cros-ec-typec
+To:     Benson Leung <bleung@google.com>, mr.chromebox@gmail.com
+Cc:     Alyssa Ross <hi@alyssa.is>, Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+(+Mr.Chromebox team; using the address listed in
+https://mrchromebox.tech/#support )
 
-On Tue, Jan 18, 2022 at 12:06:46PM -0800, Paul E. McKenney wrote:
-> Interesting.  Adding Tejun and Lai on CC for their perspective.
-> 
-> As you say, the incoming CPU invoked synchronize_rcu_expedited() which
-> in turn invoked queue_work().  By default, workqueues will of course
-> queue that work on the current CPU.  But in this case, the CPU's bit
-> is not yet set in the cpu_active_mask.  Thus, a workqueue scheduled on
-> the incoming CPU won't be invoked until CPUHP_AP_ACTIVE, which won't
-> be reached until after the grace period ends, which cannot happen until
-> the workqueue handler is invoked.
-> 
-> I could imagine doing something as shown in the (untested) patch below,
-> but first does this help?
-> 
-> If it does help, would this sort of check be appropriate here or
-> should it instead go into workqueues?
+Hi Team Mr.Chromebox,
 
-Maybe it can be solved by rearranging the hotplug sequence but it's fragile
-to schedule per-cpu work items from hotplug paths. Maybe the whole issue can
-be side-stepped by making synchronize_rcu_expedited() use unbound workqueue
-instead? Does it require to be per-cpu?
+Could you kindly provide some more detail regarding how the GOOG0014
+Type C ACPI device is set up in the Mr Chromebox BIOS for Chromebooks
+(the driver expects it to be embedded in the GOOG0004 EC device)?
+We want to enable Alyssa and other developers using the Mr.Chromebox
+BIOS to have a functional cros-ec-typec driver, so would like to help
+ensure that the device is set up correctly in ACPI.
 
-Thanks.
+Thanks!
 
--- 
-tejun
+-Prashant
+
+On Tue, Jan 18, 2022 at 11:49 AM Prashant Malani <pmalani@chromium.org> wro=
+te:
+>
+> Hi Benson and Alyssa,
+>
+> On Tue, Jan 18, 2022 at 11:33 AM Benson Leung <bleung@google.com> wrote:
+> >
+> > Hi Alyssa,
+> >
+> > Thanks for reaching out.
+> >
+> > On Tue, Jan 18, 2022 at 04:37:54PM +0000, Alyssa Ross wrote:
+> > > My distribution recently enabled the Chrome OS EC Type C control driv=
+er
+> > > in its kernel builds.  On my Google Pixelbook i7 (eve), the driver re=
+ports
+> > > a null pointer dereference at boot.  From what I can tell, this happe=
+ns
+> > > because typec->ec is set to NULL in cros_typec_probe.  Other drivers,
+> > > like cros-usbpd-notify, appear to be set up to handle this case.  As =
+a
+> > > result of this bug, I'm no longer able to reboot my computer, because
+> > > udevd hangs while trying to do something with the device whose driver
+> > > isn't working.
+> > >
+> >
+> > I've copied Prashant, who's the author of the typec driver as well as
+> > cros-usbpd-notify.
+> >
+> > Prashant, any thoughts on a more graceful failure out of the typec driv=
+er's
+> > probe in case there's no ec object?
+>
+> We can add a NULL check and just abort the driver probe if the pointer is
+> not valid (the driver is useless without that pointer anyway).
+>
+> A note: The NULL check makes sense on older drivers like cros-usbpd-notif=
+y since
+> they can exist in ACPI configurations where they are *not* embedded
+> inside the GOOG0004
+> EC device (on older Chromebooks). That is not the case for the EC Type C =
+device.
+>
+> This raises another issue: the custom BIOS from Mr. Chromebox is
+> likely not setting
+> up the EC Type C ACPI (GOOG0014) device correctly; it *must* be
+> embedded inside the overall
+> EC device (GOOG0004). If this is not being done, then the GOOG0014
+> device should not
+> be added to the ACPI tables at all.
+>
+> I would like to understand whether the above was intentional from the
+> Mr. Chromebox BIOS developers;
+> otherwise we are letting an incorrect ACPI configuration just fail
+> with a probe error.
+>
+> Thanks,
+>
+> -Prashant
+>
+> >
+> > > Here's the full Oops.  I was able to reproduce the issue with every
+> > > kernel I tried, from 5.10 to mainline.
+> > >
+> > > cros-usbpd-notify-acpi GOOG0003:00: Couldn't get Chrome EC device poi=
+nter.
+> > > input: Intel Virtual Buttons as /devices/pci0000:00/0000:00:1f.0/PNP0=
+C09:00/INT33D6:00/input/input14
+> > > BUG: kernel NULL pointer dereference, address: 00000000000000d8
+> > > #PF: supervisor read access in kernel mode
+> > > #PF: error_code(0x0000) - not-present page
+> > > PGD 0 P4D 0
+> > > Oops: 0000 [#1] SMP PTI
+> > > CPU: 1 PID: 561 Comm: systemd-udevd Not tainted 5.15.12 #4
+> > > Hardware name: Google Eve/Eve, BIOS MrChromebox-4.14 08/06/2021
+> >
+> >
+> > Ah, here's the problem. It looks like this is a custom bios from Mr Chr=
+omebox,
+> > so this is not a bios combination we validate at Google.
+> >
+> > Thank you for the report. We'll look into fixing this and marking the f=
+ix
+> > for stable kernels so that it goes back to 5.10.
+> >
+> > Thanks,
+> >
+> > Benson
+> >
+> > > RIP: 0010:__mutex_lock+0x59/0x8c0
+> > > Code: 53 48 89 cb 48 83 ec 70 89 75 9c be 3d 02 00 00 4c 89 45 90 e8 =
+18 47 33 ff e8 e3 e2 ff ff 44 8b 35 a4 85 e8 02 45 85 f6 75 0a <4d> 3b 6d 6=
+8 0f 85 bf 07 00 00 65 ff 05 b6 5b 23 75 ff 75 90 4d 8d
+> > > RSP: 0018:ffffb44580a4bb50 EFLAGS: 00010246
+> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000001
+> > > RDX: 0000000000000000 RSI: ffffffff8bf91320 RDI: ffff922cbba50e20
+> > > RBP: ffffb44580a4bbf0 R08: 0000000000000000 R09: ffff922c5bac8140
+> > > R10: ffffb44580a4bc10 R11: 0000000000000000 R12: 0000000000000000
+> > > R13: 0000000000000070 R14: 0000000000000000 R15: 0000000000000001
+> > > FS:  00007f55338d6b40(0000) GS:ffff922fae200000(0000) knlGS:000000000=
+0000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00000000000000d8 CR3: 000000011bbb2006 CR4: 00000000003706e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  <TASK>
+> > >  ? fs_reclaim_acquire+0x4d/0xd0
+> > >  ? lock_is_held_type+0xaa/0x120
+> > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
+> > >  ? lock_is_held_type+0xaa/0x120
+> > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
+> > >  cros_ec_cmd_xfer_status+0x1f/0x110
+> > >  cros_typec_ec_command+0x91/0x1c0 [cros_ec_typec]
+> > >  cros_typec_probe+0x7f/0x5a8 [cros_ec_typec]
+> > >  platform_probe+0x3f/0x90
+> > >  really_probe+0x1f5/0x3f0
+> > >  __driver_probe_device+0xfe/0x180
+> > >  driver_probe_device+0x1e/0x90
+> > >  __driver_attach+0xc4/0x1d0
+> > >  ? __device_attach_driver+0xe0/0xe0
+> > >  ? __device_attach_driver+0xe0/0xe0
+> > >  bus_for_each_dev+0x67/0x90
+> > >  bus_add_driver+0x12e/0x1f0
+> > >  driver_register+0x8f/0xe0
+> > >  ? 0xffffffffc04ec000
+> > >  do_one_initcall+0x67/0x320
+> > >  ? rcu_read_lock_sched_held+0x3f/0x80
+> > >  ? trace_kmalloc+0x38/0xe0
+> > >  ? kmem_cache_alloc_trace+0x17c/0x2b0
+> > >  do_init_module+0x5c/0x270
+> > >  __do_sys_finit_module+0x95/0xe0
+> > >  do_syscall_64+0x3b/0x90
+> > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > RIP: 0033:0x7f55344b1f3d
+> > > Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 =
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f=
+0 ff ff 73 01 c3 48 8b 0d bb ee 0e 00 f7 d8 64 89 01 48
+> > > RSP: 002b:00007fff187f1388 EFLAGS: 00000246 ORIG_RAX: 000000000000013=
+9
+> > > RAX: ffffffffffffffda RBX: 000055a53acbe6e0 RCX: 00007f55344b1f3d
+> > > RDX: 0000000000000000 RSI: 00007f553461732c RDI: 000000000000000e
+> > > RBP: 0000000000020000 R08: 0000000000000000 R09: 0000000000000002
+> > > R10: 000000000000000e R11: 0000000000000246 R12: 00007f553461732c
+> > > R13: 000055a53ad94010 R14: 0000000000000007 R15: 000055a53ad95690
+> > >  </TASK>
+> > > Modules linked in: fjes(+) cros_ec_typec(+) typec intel_vbtn(+) cros_=
+usbpd_notify sparse_keymap soc_button_array int3403_thermal int340x_thermal=
+_zone int3400_thermal acpi_thermal_rel cros_kbd_led_backlight zram ip_table=
+s i915 hid_multitouch i2c_algo_bit ttm crct10dif_pclmul crc32_pclmul crc32c=
+_intel drm_kms_helper nvme ghash_clmulni_intel sdhci_pci cqhci cec nvme_cor=
+e sdhci serio_raw drm mmc_core i2c_hid_acpi i2c_hid video pinctrl_sunrisepo=
+int fuse
+> > > CR2: 00000000000000d8
+> > > ---[ end trace 4a12c4896d70352b ]---
+> >
+> >
+> >
+> > --
+> > Benson Leung
+> > Staff Software Engineer
+> > Chrome OS Kernel
+> > Google Inc.
+> > bleung@google.com
+> > Chromium OS Project
+> > bleung@chromium.org

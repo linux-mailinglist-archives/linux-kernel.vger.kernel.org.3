@@ -2,271 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580E8492E31
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D0A492ED0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbiARTJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348647AbiARTJl (ORCPT
+        id S1343775AbiART7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:59:36 -0500
+Received: from gateway34.websitewelcome.com ([192.185.148.109]:14202 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348986AbiART7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:09:41 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648B2C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:09:40 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id g2-20020a0562141cc200b004123b0abe18so269069qvd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:09:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=lD6lqWX8EnRHxX0zLj6k1wGPtoB3tiWy/CWZlAPTJDU=;
-        b=an/AD+StigzlDSBcUsrKyiMtniDABtx3FjPV3LX+S/5cfZuxEjADmiINc5hsUJqS1j
-         vFTjb4Ul52P09yJ6XxYKzttKNQ/Ib5uuHg4qFDgBDYNo86P9mOJoDPOczuLV4qWlS/cN
-         8AwBpDQpXYBuR9DHbP0IUyr71FTya6jMiTjSlMTpVq0YP8uyPpVphvD53fCM4EJNPWvr
-         applchaagucZGm05aYWFSks7whPkdUYXEkxL9gvpAPI1Iz4Jc52x6C3LMNniWqH/nOih
-         PE9dXI5P/Lgx5sqNYkPQbUOobP11U+lBaR4ev71T4cEN0g2Cj5VyyBe21F2b/nbEO4CM
-         Ombw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=lD6lqWX8EnRHxX0zLj6k1wGPtoB3tiWy/CWZlAPTJDU=;
-        b=lxSav32munmvOtG8AOtWVk/0NTpOX9+HN7YMBi7480om38GvBuBhUZJFqXXBrgv06b
-         uDCOqzDN9sb3+q7unQDTRGks/AXw/ZH5BVrfi2dE1JNoQpi7j7VFf3fWZhMm/NlBUDJ6
-         AwpGIFmNKROc8gdkJZhW6q8cMH16m37NBOJNETZDITw+p2jBPd3BQoyqgA2zfigaixmv
-         W5gtucEhAnjKfmuGlwCN8xzG9SP3UC5z8Oh5UCY65tBxbnWHGEXXR+tnrvyFJ/hWlDJw
-         vw08CK9vmRDh6I7QE5zK7bqCXbNLI6eoC3f1SDK3rz8/89wQ1HCkmiRslBSzxF9+8MYn
-         vwSw==
-X-Gm-Message-State: AOAM5323F9NQfqpIGSG3SdTelQdHqzrnHjXqnpEnSiRylG3O+mefR4jT
-        bscnVS/hBMnsPkyl5kGxAC63AiuizjS+bQ==
-X-Google-Smtp-Source: ABdhPJyIvRFzYjNHUfdXdKwTrT/HLKTC2twyg8uViC+rjfEei3/hOjHQj+ZJiX9u9n5Ps/sLbCQj8EpQA+WuJQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7fc9:5977:ab73:1d36])
- (user=dlatypov job=sendgmr) by 2002:ac8:5e4e:: with SMTP id
- i14mr21505830qtx.221.1642532979560; Tue, 18 Jan 2022 11:09:39 -0800 (PST)
-Date:   Tue, 18 Jan 2022 11:09:22 -0800
-In-Reply-To: <20220118190922.1557074-1-dlatypov@google.com>
-Message-Id: <20220118190922.1557074-5-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH 5/5] kunit: tool: simplify code since build_dir can't be None
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 18 Jan 2022 14:59:35 -0500
+X-Greylist: delayed 1498 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 14:59:35 EST
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 026D51A6F4D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:11:41 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 9tnVndUiQRnrr9tnVn1CpC; Tue, 18 Jan 2022 13:05:37 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=62lwA313ylYvMl776J0nmotREsLRnHNHGefb4h0dvoo=; b=PyiVKsPlAhwkbLzznyg+KBOywd
+        sR3mIPwqE3E0G8CInbrV9M3G8iCwH7MqbVJGhkNV18tD8re3JjQ35Yw5iT63N8odXWGXNt4w2E7Qp
+        R12bj3nDKnKpeUy6nnpQEv72BYa4D2F0GXLwSs/jytZy6I1cdm55pDlIN6bh7y0t2P9ZTFSYAXAjY
+        QgLeAfhlb5TVG6fv+A+JHfKuJslOWE0B0sqm/ZVJi5LQzt6krt9sHb1aHrwMJ22IyotWi6ryzadzD
+        WoRUs4BQGpRp038/cCAQKZC6sLgtAMbEFHpR3CgG71r4m3yhYcip64XkEkz60EMir+GyJFXu2QEQ4
+        f/FC+yGw==;
+Received: from [187.184.156.46] (port=26621 helo=[192.168.0.21])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1n9tnV-001SJO-46; Tue, 18 Jan 2022 13:05:37 -0600
+Subject: Re: [PATCH] drm/dp: Remove common Post Cursor2 register handling
+To:     Kees Cook <keescook@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220105173507.2420910-1-keescook@chromium.org>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <cae904f1-21f4-426f-8831-e122d965b131@embeddedor.com>
+Date:   Tue, 18 Jan 2022 13:11:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220105173507.2420910-1-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.184.156.46
+X-Source-L: No
+X-Exim-ID: 1n9tnV-001SJO-46
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.0.21]) [187.184.156.46]:26621
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 13
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---build_dir is set to a default of '.kunit' since commit ddbd60c779b4
-("kunit: use --build_dir=.kunit as default"), but even before then it
-was explicitly set to ''.
 
-So outside of one unit test, there was no way for the build_dir to be
-ever be None, and we can simplify code by fixing the unit test and
-enforcing that via updated type annotations.
 
-E.g. this lets us drop `get_file_path()` since it's now exactly
-equivalent to os.path.join().
+On 1/5/22 11:35, Kees Cook wrote:
+> The link_status array was not large enough to read the Adjust Request
+> Post Cursor2 register, so remove the common helper function to avoid
+> an OOB read, found with a -Warray-bounds build:
+> 
+> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+>    59 |         return link_status[r - DP_LANE0_1_STATUS];
+>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Replace the only user of the helper with an open-coded fetch and decode,
+> similar to drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c.
+> 
+> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
 
-Note: there's some `if build_dir` checks that also fail if build_dir is
-explicitly set to '' that just guard against passing "O=" to make.
-But running `make O=` works just fine, so drop these checks.
+This should be tagged for -stable:
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_json.py      |  8 ++--
- tools/testing/kunit/kunit_kernel.py    | 51 ++++++++++----------------
- tools/testing/kunit/kunit_tool_test.py |  2 +-
- 3 files changed, 24 insertions(+), 37 deletions(-)
+Cc: stable@vger.kernel.org
 
-diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
-index 61091878f51e..24d103049bca 100644
---- a/tools/testing/kunit/kunit_json.py
-+++ b/tools/testing/kunit/kunit_json.py
-@@ -12,12 +12,11 @@ import os
- import kunit_parser
- 
- from kunit_parser import Test, TestStatus
--from typing import Any, Dict, Optional
-+from typing import Any, Dict
- 
- JsonObj = Dict[str, Any]
- 
--def _get_group_json(test: Test, def_config: str,
--		build_dir: Optional[str]) -> JsonObj:
-+def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
- 	sub_groups = []  # List[JsonObj]
- 	test_cases = []  # List[JsonObj]
- 
-@@ -50,8 +49,7 @@ def _get_group_json(test: Test, def_config: str,
- 	}
- 	return test_group
- 
--def get_json_result(test: Test, def_config: str,
--		build_dir: Optional[str]) -> str:
-+def get_json_result(test: Test, def_config: str, build_dir: str) -> str:
- 	test_group = _get_group_json(test, def_config, build_dir)
- 	test_group["name"] = "KUnit Test Group"
- 	return json.dumps(test_group, indent=4)
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 44bbe54f25f1..fe159e7ff697 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -28,11 +28,6 @@ OUTFILE_PATH = 'test.log'
- ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
- QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
- 
--def get_file_path(build_dir, default):
--	if build_dir:
--		default = os.path.join(build_dir, default)
--	return default
--
- class ConfigError(Exception):
- 	"""Represents an error trying to configure the Linux kernel."""
- 
-@@ -59,17 +54,15 @@ class LinuxSourceTreeOperations(object):
- 	def make_arch_qemuconfig(self, kconfig: kunit_config.Kconfig) -> None:
- 		pass
- 
--	def make_allyesconfig(self, build_dir, make_options) -> None:
-+	def make_allyesconfig(self, build_dir: str, make_options) -> None:
- 		raise ConfigError('Only the "um" arch is supported for alltests')
- 
--	def make_olddefconfig(self, build_dir, make_options) -> None:
--		command = ['make', 'ARCH=' + self._linux_arch, 'olddefconfig']
-+	def make_olddefconfig(self, build_dir: str, make_options) -> None:
-+		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, 'olddefconfig']
- 		if self._cross_compile:
- 			command += ['CROSS_COMPILE=' + self._cross_compile]
- 		if make_options:
- 			command.extend(make_options)
--		if build_dir:
--			command += ['O=' + build_dir]
- 		print('Populating config with:\n$', ' '.join(command))
- 		try:
- 			subprocess.check_output(command, stderr=subprocess.STDOUT)
-@@ -78,14 +71,12 @@ class LinuxSourceTreeOperations(object):
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output.decode())
- 
--	def make(self, jobs, build_dir, make_options) -> None:
--		command = ['make', 'ARCH=' + self._linux_arch, '--jobs=' + str(jobs)]
-+	def make(self, jobs, build_dir: str, make_options) -> None:
-+		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
- 		if make_options:
- 			command.extend(make_options)
- 		if self._cross_compile:
- 			command += ['CROSS_COMPILE=' + self._cross_compile]
--		if build_dir:
--			command += ['O=' + build_dir]
- 		print('Building with:\n$', ' '.join(command))
- 		try:
- 			proc = subprocess.Popen(command,
-@@ -143,14 +134,12 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
- 	def __init__(self, cross_compile=None):
- 		super().__init__(linux_arch='um', cross_compile=cross_compile)
- 
--	def make_allyesconfig(self, build_dir, make_options) -> None:
-+	def make_allyesconfig(self, build_dir: str, make_options) -> None:
- 		kunit_parser.print_with_timestamp(
- 			'Enabling all CONFIGs for UML...')
--		command = ['make', 'ARCH=um', 'allyesconfig']
-+		command = ['make', 'ARCH=um', 'O=' + build_dir, 'allyesconfig']
- 		if make_options:
- 			command.extend(make_options)
--		if build_dir:
--			command += ['O=' + build_dir]
- 		process = subprocess.Popen(
- 			command,
- 			stdout=subprocess.DEVNULL,
-@@ -167,24 +156,24 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
- 
- 	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
- 		"""Runs the Linux UML binary. Must be named 'linux'."""
--		linux_bin = get_file_path(build_dir, 'linux')
-+		linux_bin = os.path.join(build_dir, 'linux')
- 		return subprocess.Popen([linux_bin] + params,
- 					   stdin=subprocess.PIPE,
- 					   stdout=subprocess.PIPE,
- 					   stderr=subprocess.STDOUT,
- 					   text=True, errors='backslashreplace')
- 
--def get_kconfig_path(build_dir) -> str:
--	return get_file_path(build_dir, KCONFIG_PATH)
-+def get_kconfig_path(build_dir: str) -> str:
-+	return os.path.join(build_dir, KCONFIG_PATH)
- 
--def get_kunitconfig_path(build_dir) -> str:
--	return get_file_path(build_dir, KUNITCONFIG_PATH)
-+def get_kunitconfig_path(build_dir: str) -> str:
-+	return os.path.join(build_dir, KUNITCONFIG_PATH)
- 
--def get_old_kunitconfig_path(build_dir) -> str:
--	return get_file_path(build_dir, OLD_KUNITCONFIG_PATH)
-+def get_old_kunitconfig_path(build_dir: str) -> str:
-+	return os.path.join(build_dir, OLD_KUNITCONFIG_PATH)
- 
--def get_outfile_path(build_dir) -> str:
--	return get_file_path(build_dir, OUTFILE_PATH)
-+def get_outfile_path(build_dir: str) -> str:
-+	return os.path.join(build_dir, OUTFILE_PATH)
- 
- def get_source_tree_ops(arch: str, cross_compile: Optional[str]) -> LinuxSourceTreeOperations:
- 	config_path = os.path.join(QEMU_CONFIGS_DIR, arch + '.py')
-@@ -268,7 +257,7 @@ class LinuxSourceTree(object):
- 			return False
- 		return True
- 
--	def validate_config(self, build_dir) -> bool:
-+	def validate_config(self, build_dir: str) -> bool:
- 		kconfig_path = get_kconfig_path(build_dir)
- 		validated_kconfig = kunit_config.parse_file(kconfig_path)
- 		if self._kconfig.is_subset_of(validated_kconfig):
-@@ -283,7 +272,7 @@ class LinuxSourceTree(object):
- 		logging.error(message)
- 		return False
- 
--	def build_config(self, build_dir, make_options) -> bool:
-+	def build_config(self, build_dir: str, make_options) -> bool:
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if build_dir and not os.path.exists(build_dir):
- 			os.mkdir(build_dir)
-@@ -311,7 +300,7 @@ class LinuxSourceTree(object):
- 		old_kconfig = kunit_config.parse_file(old_path)
- 		return old_kconfig.entries() != self._kconfig.entries()
- 
--	def build_reconfig(self, build_dir, make_options) -> bool:
-+	def build_reconfig(self, build_dir: str, make_options) -> bool:
- 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if not os.path.exists(kconfig_path):
-@@ -326,7 +315,7 @@ class LinuxSourceTree(object):
- 		os.remove(kconfig_path)
- 		return self.build_config(build_dir, make_options)
- 
--	def build_kernel(self, alltests, jobs, build_dir, make_options) -> bool:
-+	def build_kernel(self, alltests, jobs, build_dir: str, make_options) -> bool:
- 		try:
- 			if alltests:
- 				self._ops.make_allyesconfig(build_dir, make_options)
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index f7cbc248a405..a3c036a620b2 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -469,7 +469,7 @@ class KUnitJsonTest(unittest.TestCase):
- 			json_obj = kunit_json.get_json_result(
- 				test=test_result,
- 				def_config='kunit_defconfig',
--				build_dir=None)
-+				build_dir='.kunit')
- 		return json.loads(json_obj)
- 
- 	def test_failed_test_json(self):
--- 
-2.34.1.703.g22d0c6ccf7-goog
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
+--
+Gustavo
+
+> ---
+> This is the alternative to:
+> https://lore.kernel.org/lkml/20211203084354.3105253-1-keescook@chromium.org/
+> ---
+>  drivers/gpu/drm/drm_dp_helper.c | 10 ----------
+>  drivers/gpu/drm/tegra/dp.c      | 11 ++++++++++-
+>  include/drm/drm_dp_helper.h     |  2 --
+>  3 files changed, 10 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
+> index 23f9073bc473..c9528aa62c9c 100644
+> --- a/drivers/gpu/drm/drm_dp_helper.c
+> +++ b/drivers/gpu/drm/drm_dp_helper.c
+> @@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
+>  }
+>  EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
+>  
+> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+> -					 unsigned int lane)
+> -{
+> -	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
+> -	u8 value = dp_link_status(link_status, offset);
+> -
+> -	return (value >> (lane << 1)) & 0x3;
+> -}
+> -EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
+> -
+>  static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
+>  {
+>  	if (rd_interval > 4)
+> diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
+> index 70dfb7d1dec5..f5535eb04c6b 100644
+> --- a/drivers/gpu/drm/tegra/dp.c
+> +++ b/drivers/gpu/drm/tegra/dp.c
+> @@ -549,6 +549,15 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
+>  {
+>  	struct drm_dp_link_train_set *adjust = &link->train.adjust;
+>  	unsigned int i;
+> +	u8 post_cursor;
+> +	int err;
+> +
+> +	err = drm_dp_dpcd_read(link->aux, DP_ADJUST_REQUEST_POST_CURSOR2,
+> +			       &post_cursor, sizeof(post_cursor));
+> +	if (err < 0) {
+> +		DRM_ERROR("failed to read post_cursor2: %d\n", err);
+> +		post_cursor = 0;
+> +	}
+>  
+>  	for (i = 0; i < link->lanes; i++) {
+>  		adjust->voltage_swing[i] =
+> @@ -560,7 +569,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
+>  				DP_TRAIN_PRE_EMPHASIS_SHIFT;
+>  
+>  		adjust->post_cursor[i] =
+> -			drm_dp_get_adjust_request_post_cursor(status, i);
+> +			(post_cursor >> (i << 1)) & 0x3;
+>  	}
+>  }
+>  
+> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+> index 472dac376284..fdf3cf6ccc02 100644
+> --- a/include/drm/drm_dp_helper.h
+> +++ b/include/drm/drm_dp_helper.h
+> @@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
+>  					  int lane);
+>  u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
+>  				   int lane);
+> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+> -					 unsigned int lane);
+>  
+>  #define DP_BRANCH_OUI_HEADER_SIZE	0xc
+>  #define DP_RECEIVER_CAP_SIZE		0xf
+> 

@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51CE49249B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB0F49249E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbiARLSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:18:47 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:35094 "EHLO
+        id S240602AbiARLSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:18:54 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:35114 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239520AbiARLSN (ORCPT
+        with ESMTP id S239924AbiARLSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:18:13 -0500
+        Tue, 18 Jan 2022 06:18:16 -0500
 Date:   Tue, 18 Jan 2022 11:18:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1642504692;
+        s=2020; t=1642504693;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FKexeQ9ADkjB8kDZNztseV3vq2w0Z47HQHdnBdHz9ak=;
-        b=b1oxLH4giJhyyoTvBogUiifJAO88jW7N/WTtZviYlH7uU42KSftaIEyvwQMdVejHlZJKe1
-        Mi8Bi9byOQUWGg9MHTaG2LliQpC7ONLtFcwZKOZaGJBpyPa+UbaeQYF/QY8O6pdhqH20xb
-        TB2NEdGRYbvlKYcTnX3QFQSUNrknZpqA1oCvrRQCAYLddRUnD+9VdG5aKcPln1F0XnAQXc
-        ctgEU29f9pCHZIeHPNGwQCU/dfvL97ywsFwVeWpX6QobikNe7JXYW0VsfOgqgqKGtHVnNq
-        TNRAQ+77JAW5mooXIhoeVMrX5G5r1ka9s0PrlBWdq83bUuBUUP39jUfiwu3nQw==
+        bh=oWKZwKyG+bLylrY0AetNmo/3o9rtAiab3PfnDq35yCA=;
+        b=hcdScKru5mldHbtCpgQbb0cmBfXpaP3tv2yHnRJiuK4xypcYYO0W+nPOsCl45qKNZcxjsu
+        aBi+xqfWtpllPOLDxl1iwy9Vdme2wW368VL3bCnfGbV7Wu2rLYIfXMmxF40Bx52R9h+6hI
+        769JySUExo4TwvWyIK44uM0qHhj5Ecn0BPTLle8wC4Sv415hqWeA49FoWy2e+NKM/fhStC
+        e4QTGYAXDdNlF6PEMnJ769o7ERvGgUiX8ILsOikGlCDrTiikupUkgO01c7DGsHhoLOYcB5
+        TdjpqWG3wxr+PaqGb4cNmXfhNTW5ueASnoSXrmpueSQ5ybHyzoeGUbITA9omTg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1642504692;
+        s=2020e; t=1642504693;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FKexeQ9ADkjB8kDZNztseV3vq2w0Z47HQHdnBdHz9ak=;
-        b=/Ho2gYHaUKhNTULiD0prpnK5idTtPLZ2zg2xw/3fj/84p5XZK9g6spJECgXVfVqUxu5cnI
-        D0zyc957YiV2cEDw==
-From:   "tip-bot2 for Cruz Zhao" <tip-bot2@linutronix.de>
+        bh=oWKZwKyG+bLylrY0AetNmo/3o9rtAiab3PfnDq35yCA=;
+        b=GdGCQGAVIqBcHZJFvZ9N7fQgw+yVzt2AAHgYv3UIc8iZ/wVvvxOChEMGN/QQZFBOJPj3ip
+        B8UJ2HcrMj9bBhCQ==
+From:   "tip-bot2 for Vincent Guittot" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched/core: Accounting forceidle time for all
- tasks except idle task
-Cc:     Cruz Zhao <CruzZhao@linux.alibaba.com>,
+Subject: [tip: sched/urgent] sched/pelt: Relax the sync of load_sum with load_avg
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Don <joshdon@google.com>, x86@kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com>
-References: <1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com>
+In-Reply-To: <20220111134659.24961-5-vincent.guittot@linaro.org>
+References: <20220111134659.24961-5-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Message-ID: <164250469114.16921.12912359382201917091.tip-bot2@tip-bot2>
+Message-ID: <164250469199.16921.17195356283606086939.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,75 +60,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/urgent branch of tip:
 
-Commit-ID:     b171501f258063f5c56dd2c5fdf310802d8d7dc1
-Gitweb:        https://git.kernel.org/tip/b171501f258063f5c56dd2c5fdf310802d8d7dc1
-Author:        Cruz Zhao <CruzZhao@linux.alibaba.com>
-AuthorDate:    Tue, 11 Jan 2022 17:55:59 +08:00
+Commit-ID:     2d02fa8cc21a93da35cfba462bf8ab87bf2db651
+Gitweb:        https://git.kernel.org/tip/2d02fa8cc21a93da35cfba462bf8ab87bf2db651
+Author:        Vincent Guittot <vincent.guittot@linaro.org>
+AuthorDate:    Tue, 11 Jan 2022 14:46:59 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 18 Jan 2022 12:09:59 +01:00
+CommitterDate: Tue, 18 Jan 2022 12:09:58 +01:00
 
-sched/core: Accounting forceidle time for all tasks except idle task
+sched/pelt: Relax the sync of load_sum with load_avg
 
-There are two types of forced idle time: forced idle time from cookie'd
-task and forced idle time form uncookie'd task. The forced idle time from
-uncookie'd task is actually caused by the cookie'd task in runqueue
-indirectly, and it's more accurate to measure the capacity loss with the
-sum of both.
+Similarly to util_avg and util_sum, don't sync load_sum with the low
+bound of load_avg but only ensure that load_sum stays in the correct range.
 
-Assuming cpu x and cpu y are a pair of SMT siblings, consider the
-following scenarios:
-  1.There's a cookie'd task running on cpu x, and there're 4 uncookie'd
-    tasks running on cpu y. For cpu x, there will be 80% forced idle time
-    (from uncookie'd task); for cpu y, there will be 20% forced idle time
-    (from cookie'd task).
-  2.There's a uncookie'd task running on cpu x, and there're 4 cookie'd
-    tasks running on cpu y. For cpu x, there will be 80% forced idle time
-    (from cookie'd task); for cpu y, there will be 20% forced idle time
-    (from uncookie'd task).
-
-The scenario1 can recurrent by stress-ng(scenario2 can recurrent similary):
-    (cookie'd)taskset -c x stress-ng -c 1 -l 100
-    (uncookie'd)taskset -c y stress-ng -c 4 -l 100
-
-In the above two scenarios, the total capacity loss is 1 cpu, but in
-scenario1, the cookie'd forced idle time tells us 20% cpu capacity loss, in
-scenario2, the cookie'd forced idle time tells us 80% cpu capacity loss,
-which are not accurate. It'll be more accurate to measure with cookie'd
-forced idle time and uncookie'd forced idle time.
-
-Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Josh Don <joshdon@google.com>
-Link: https://lore.kernel.org/r/1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+Link: https://lkml.kernel.org/r/20220111134659.24961-5-vincent.guittot@linaro.org
 ---
- kernel/sched/core.c       | 3 +--
- kernel/sched/core_sched.c | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ kernel/sched/fair.c | 36 ++++++++++++++++++++++--------------
+ 1 file changed, 22 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 83872f9..0d2ab2a 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5822,8 +5822,7 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
- 	}
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 0e87e19..f4f02c2 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3028,9 +3028,11 @@ enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ static inline void
+ dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+-	u32 divider = get_pelt_divider(&se->avg);
+ 	sub_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
+-	cfs_rq->avg.load_sum = cfs_rq->avg.load_avg * divider;
++	sub_positive(&cfs_rq->avg.load_sum, se_weight(se) * se->avg.load_sum);
++	/* See update_cfs_rq_load_avg() */
++	cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
++					  cfs_rq->avg.load_avg * PELT_MIN_DIVIDER);
+ }
+ #else
+ static inline void
+@@ -3513,9 +3515,10 @@ update_tg_cfs_runnable(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cf
+ static inline void
+ update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)
+ {
+-	long delta, running_sum, runnable_sum = gcfs_rq->prop_runnable_sum;
++	long delta_avg, running_sum, runnable_sum = gcfs_rq->prop_runnable_sum;
+ 	unsigned long load_avg;
+ 	u64 load_sum = 0;
++	s64 delta_sum;
+ 	u32 divider;
  
- 	if (schedstat_enabled() && rq->core->core_forceidle_count) {
--		if (cookie)
--			rq->core->core_forceidle_start = rq_clock(rq->core);
-+		rq->core->core_forceidle_start = rq_clock(rq->core);
- 		rq->core->core_forceidle_occupation = occ;
- 	}
+ 	if (!runnable_sum)
+@@ -3542,7 +3545,7 @@ update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq
+ 		 * assuming all tasks are equally runnable.
+ 		 */
+ 		if (scale_load_down(gcfs_rq->load.weight)) {
+-			load_sum = div_s64(gcfs_rq->avg.load_sum,
++			load_sum = div_u64(gcfs_rq->avg.load_sum,
+ 				scale_load_down(gcfs_rq->load.weight));
+ 		}
  
-diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-index 1fb4567..c8746a9 100644
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -277,7 +277,7 @@ void __sched_core_account_forceidle(struct rq *rq)
- 		rq_i = cpu_rq(i);
- 		p = rq_i->core_pick ?: rq_i->curr;
+@@ -3559,19 +3562,22 @@ update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq
+ 	running_sum = se->avg.util_sum >> SCHED_CAPACITY_SHIFT;
+ 	runnable_sum = max(runnable_sum, running_sum);
  
--		if (!p->core_cookie)
-+		if (p == rq_i->idle)
- 			continue;
+-	load_sum = (s64)se_weight(se) * runnable_sum;
+-	load_avg = div_s64(load_sum, divider);
+-
+-	se->avg.load_sum = runnable_sum;
++	load_sum = se_weight(se) * runnable_sum;
++	load_avg = div_u64(load_sum, divider);
  
- 		__schedstat_add(p->stats.core_forceidle_sum, delta);
+-	delta = load_avg - se->avg.load_avg;
+-	if (!delta)
++	delta_avg = load_avg - se->avg.load_avg;
++	if (!delta_avg)
+ 		return;
+ 
+-	se->avg.load_avg = load_avg;
++	delta_sum = load_sum - (s64)se_weight(se) * se->avg.load_sum;
+ 
+-	add_positive(&cfs_rq->avg.load_avg, delta);
+-	cfs_rq->avg.load_sum = cfs_rq->avg.load_avg * divider;
++	se->avg.load_sum = runnable_sum;
++	se->avg.load_avg = load_avg;
++	add_positive(&cfs_rq->avg.load_avg, delta_avg);
++	add_positive(&cfs_rq->avg.load_sum, delta_sum);
++	/* See update_cfs_rq_load_avg() */
++	cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
++					  cfs_rq->avg.load_avg * PELT_MIN_DIVIDER);
+ }
+ 
+ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum)
+@@ -3687,7 +3693,9 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+ 
+ 		r = removed_load;
+ 		sub_positive(&sa->load_avg, r);
+-		sa->load_sum = sa->load_avg * divider;
++		sub_positive(&sa->load_sum, r * divider);
++		/* See sa->util_sum below */
++		sa->load_sum = max_t(u32, sa->load_sum, sa->load_avg * PELT_MIN_DIVIDER);
+ 
+ 		r = removed_util;
+ 		sub_positive(&sa->util_avg, r);

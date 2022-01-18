@@ -2,96 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4EC492A0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEBA492A30
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346194AbiARQE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241152AbiARQE5 (ORCPT
+        id S1346535AbiARQIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:08:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38872 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346337AbiARQH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:04:57 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0414C061574;
-        Tue, 18 Jan 2022 08:04:57 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9qyY-002r1e-4y; Tue, 18 Jan 2022 16:04:50 +0000
-Date:   Tue, 18 Jan 2022 16:04:50 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Brian Foster <bfoster@redhat.com>, Ian Kent <raven@themaw.net>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YeblIix0fyXyBipW@zeniv-ca.linux.org.uk>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
- <20220118082911.rsmv5m2pjeyt6wpg@wittgenstein>
+        Tue, 18 Jan 2022 11:07:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A33AD6128A;
+        Tue, 18 Jan 2022 16:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892C5C00446;
+        Tue, 18 Jan 2022 16:07:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642522048;
+        bh=OD6DauHEUSB9JbHdvWu0Abd2g9hX5HFknzwPTHm1+6A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oDsApZ5Pk6SHjZ9kJWldajYa9VZZXrW1bAM2g4jLAHwPNvb58IMvT7YyJcgepgr7F
+         +F7q9+sgrJWDYG2oQ9rv2eDyCxE6NGX0V2px77s+tmEwoIvlAT423X5swFCnQ/eyOh
+         0rfHk0isySD1ps/q2AucVkiWH3ku3H5p3Dtmyii0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: [PATCH 5.4 00/15] 5.4.173-rc1 review
+Date:   Tue, 18 Jan 2022 17:05:39 +0100
+Message-Id: <20220118160450.062004175@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118082911.rsmv5m2pjeyt6wpg@wittgenstein>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.173-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.173-rc1
+X-KernelTest-Deadline: 2022-01-20T16:04+00:00
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:29:11AM +0100, Christian Brauner wrote:
-> On Mon, Jan 17, 2022 at 06:10:36PM +0000, Al Viro wrote:
-> > On Mon, Jan 17, 2022 at 04:28:52PM +0000, Al Viro wrote:
-> > 
-> > > IOW, ->free_inode() is RCU-delayed part of ->destroy_inode().  If both
-> > > are present, ->destroy_inode() will be called synchronously, followed
-> > > by ->free_inode() from RCU callback, so you can have both - moving just
-> > > the "finally mark for reuse" part into ->free_inode() would be OK.
-> > > Any blocking stuff (if any) can be left in ->destroy_inode()...
-> > 
-> > BTW, we *do* have a problem with ext4 fast symlinks.  Pathwalk assumes that
-> > strings it parses are not changing under it.  There are rather delicate
-> > dances in dcache lookups re possibility of ->d_name contents changing under
-> > it, but the search key is assumed to be stable.
-> > 
-> > What's more, there's a correctness issue even if we do not oops.  Currently
-> > we do not recheck ->d_seq of symlink dentry when we dismiss the symlink from
-> > the stack.  After all, we'd just finished traversing what used to be the
-> > contents of a symlink that used to be in the right place.  It might have been
-> > unlinked while we'd been traversing it, but that's not a correctness issue.
-> > 
-> > But that critically depends upon the contents not getting mangled.  If it
-> > *can* be screwed by such unlink, we risk successful lookup leading to the
-> 
-> Out of curiosity: whether or not it can get mangled depends on the
-> filesystem and how it implements fast symlinks or do fast symlinks
-> currently guarantee that contents are mangled?
+This is the start of the stable review cycle for the 5.4.173 release.
+There are 15 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Not sure if I understand your question correctly...
+Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+Anything received after that time might be too late.
 
-	Filesystems should guarantee that the contents of string returned
-by ->get_link() (or pointed to by ->i_link) remains unchanged for as long
-as we are looking at it (until fs/namei.c:put_link() that drops it or
-fs/namei.c:drop_links() in the end of pathwalk).  Fast symlinks or not -
-doesn't matter.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.173-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-	The only cases where that does not hold (there are two of them in
-the entire kernel) happen to be fast symlinks.	Both cases are bugs.
-ext4 case is actually easy to fix - the only reason it ends up mangling
-the string is the way ext4_truncate() implements its check for victim
-being a fast symlink (and thus needing no work).  It gets disrupted
-by zeroing ->i_size, which we need to do in this case (inode removal).
-That's not hard to get right.
+thanks,
 
-	A plenty of other fast symlink variants (starting with ext2 ones,
-BTW) do not step into anything of that sort.  IIRC, we used to have at
-least some cases (orangefs, perhaps?) where revalidate on a symlink
-might (with confused or malicious server) end up modifying the contents,
-possibly right under somebody else walking that symlink.  Also a bug...
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.173-rc1
+
+Nick Desaulniers <ndesaulniers@google.com>
+    ARM: 9025/1: Kconfig: CPU_BIG_ENDIAN depends on !LD_IS_LLD
+
+Arnd Bergmann <arnd@arndb.de>
+    mtd: fixup CFI on ixp4xx
+
+Christian Lachner <gladiac@gmail.com>
+    ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master after reboot from Windows
+
+Wei Wang <wei.w.wang@intel.com>
+    KVM: x86: remove PMU FIXED_CTR3 from msrs_to_save_all
+
+Johan Hovold <johan@kernel.org>
+    firmware: qemu_fw_cfg: fix kobject leak in probe error path
+
+Johan Hovold <johan@kernel.org>
+    firmware: qemu_fw_cfg: fix NULL-pointer deref on duplicate entries
+
+Johan Hovold <johan@kernel.org>
+    firmware: qemu_fw_cfg: fix sysfs information leak
+
+Larry Finger <Larry.Finger@lwfinger.net>
+    rtlwifi: rtl8192cu: Fix WARNING when calling local_irq_restore() with interrupts enabled
+
+Johan Hovold <johan@kernel.org>
+    media: uvcvideo: fix division by zero at stream start
+
+Eric Farman <farman@linux.ibm.com>
+    KVM: s390: Clarify SIGP orders versus STOP/RESTART
+
+Sean Christopherson <seanjc@google.com>
+    perf: Protect perf_guest_cbs with RCU
+
+Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+    vfs: fs_context: fix up param length parsing in legacy_parse_param
+
+Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+    orangefs: Fix the size of a memory allocation in orangefs_bufmap_alloc()
+
+NeilBrown <neilb@suse.de>
+    devtmpfs regression fix: reconfigure on each mount
+
+Nathan Chancellor <nathan@kernel.org>
+    kbuild: Add $(KBUILD_HOSTLDFLAGS) to 'has_libelf' test
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  6 ++---
+ arch/arm/kernel/perf_callchain.c                   | 17 +++++++-----
+ arch/arm/mm/Kconfig                                |  1 +
+ arch/arm64/kernel/perf_callchain.c                 | 18 ++++++++-----
+ arch/csky/kernel/perf_callchain.c                  |  6 +++--
+ arch/nds32/kernel/perf_event_cpu.c                 | 17 +++++++-----
+ arch/riscv/kernel/perf_callchain.c                 |  7 +++--
+ arch/s390/kvm/interrupt.c                          |  7 +++++
+ arch/s390/kvm/kvm-s390.c                           |  9 +++++--
+ arch/s390/kvm/kvm-s390.h                           |  1 +
+ arch/s390/kvm/sigp.c                               | 28 ++++++++++++++++++++
+ arch/x86/events/core.c                             | 17 +++++++-----
+ arch/x86/events/intel/core.c                       |  9 ++++---
+ arch/x86/kvm/x86.c                                 |  2 +-
+ drivers/base/devtmpfs.c                            |  8 ++++++
+ drivers/firmware/qemu_fw_cfg.c                     | 20 ++++++---------
+ drivers/media/usb/uvc/uvc_video.c                  |  4 +++
+ drivers/mtd/chips/Kconfig                          |  2 ++
+ drivers/mtd/maps/Kconfig                           |  2 +-
+ .../net/wireless/realtek/rtlwifi/rtl8192cu/hw.c    |  1 +
+ fs/fs_context.c                                    |  2 +-
+ fs/orangefs/orangefs-bufmap.c                      |  7 +++--
+ fs/super.c                                         |  4 +--
+ include/linux/fs_context.h                         |  2 ++
+ include/linux/perf_event.h                         | 13 +++++++++-
+ kernel/events/core.c                               | 13 +++++++---
+ sound/pci/hda/patch_realtek.c                      | 30 +++++++++++++++++++++-
+ 27 files changed, 191 insertions(+), 62 deletions(-)
+
+

@@ -2,318 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D22949292C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB964928BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345934AbiARPBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:01:43 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:29100 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344431AbiARPAt (ORCPT
+        id S1344177AbiAROvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:51:42 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:45047 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343801AbiAROvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:00:49 -0500
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220118150047epoutp01d03f5829c052cace1d15037d7264747f~LZXYw_qXY3081430814epoutp01b
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:00:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220118150047epoutp01d03f5829c052cace1d15037d7264747f~LZXYw_qXY3081430814epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642518047;
-        bh=x/t8BcMBlV2lMivWk+wOuuf0jQzazG+TWfxzePwc9sE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EctNgzl3JQX3pmOeJrGZ3SiYM0DWrotgVrL6PG5ZXOvxbm/1/EukVeZeU9zZSQAk1
-         VKKhTWP9UOg9nMG9Mq7/+ln0Sw+xyklAwoxS3yDI+4nYu8AD02mEQzmVa8kgscz42h
-         JZidk9gvFQAdd2ARQJFCt8SqUIm2tR7LUTG6hBDo=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220118150046epcas5p210a4a935ea2c0795427f8650be965c11~LZXYHTS_43044830448epcas5p2Q;
-        Tue, 18 Jan 2022 15:00:46 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4JdX5P4wqLz4x9Px; Tue, 18 Jan
-        2022 15:00:41 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6A.98.05590.916D6E16; Wed, 19 Jan 2022 00:00:41 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220118150041epcas5p2634381919d0e9f60867d6087162fa134~LZXS7T6Cx3044830448epcas5p2J;
-        Tue, 18 Jan 2022 15:00:41 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220118150041epsmtrp1d7b659e43d1757a32a5d10cf510037fc~LZXS6d_5n2079320793epsmtrp1t;
-        Tue, 18 Jan 2022 15:00:41 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-23-61e6d6190588
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E1.F0.08738.916D6E16; Wed, 19 Jan 2022 00:00:41 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220118150038epsmtip1b1b2027ad8228a6ba564d39cc2ae9e10~LZXQgyCe-0468004680epsmtip1Y;
-        Tue, 18 Jan 2022 15:00:38 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
-        pankaj.dubey@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-fsd@tesla.com, Ajay Kumar <ajaykumar.rs@samsung.com>
-Subject: [PATCH v2 07/16] clk: samsung: fsd: Add cmu_fsys1 clock information
-Date:   Tue, 18 Jan 2022 20:18:42 +0530
-Message-Id: <20220118144851.69537-8-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220118144851.69537-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmpq7ktWeJBld26VkceH+QxeLBvG1s
-        Fn8nHWO3eL+sh9Fi/pFzrBYb3/5gspjyZzmTxabH11gtPvbcY7V4+Crc4vKuOWwWM87vY7I4
-        df0zm8WirV/YLVr3HmG3OPymndXi8fU/bA6CHmvmrWH0+P1rEqPHrIZeNo9NqzrZPO5c28Pm
-        sXlJvceVE02sHn1bVjF6/Guay+7xeZNcAFdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmB
-        oa6hpYW5kkJeYm6qrZKLT4CuW2YO0D9KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKU
-        nAKTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMNzc3sxZsDa7Yu/kkewPjZK8uRk4OCQETiba7
-        31m6GLk4hAR2M0qsb3vACOF8YpRY++86K4TzmVHi27kmZpiWh3/OQ1XtYpT42fWbHcJpYZJY
-        t2EOG0gVm4C2xN3pW5hAbBEBN4kbjR1MIEXMAtOYJd68OcQIkhAW8JGY+n4R2FgWAVWJ842z
-        WEFsXgEbicYTc1kh1slLrN5wAKyGU8BWYmrDVDaI+A4OiWnLAiBsF4mbh75AxYUlXh3fwg5h
-        S0m87G8DsjmA7GyJnl3GEOEaiaXzjrFA2PYSB67MYQEpYRbQlFi/Sx8kzCzAJ9H7+wkTRCev
-        REebEES1qkTzu6tQndISE7u7oY70kPjUfYMZEgwTGCXOzVnOPoFRdhbC1AWMjKsYJVMLinPT
-        U4tNC4zzUsvhEZWcn7uJEZxMtbx3MD568EHvECMTB+MhRgkOZiURXqn6Z4lCvCmJlVWpRfnx
-        RaU5qcWHGE2BITaRWUo0OR+YzvNK4g1NLA1MzMzMTCyNzQyVxHlPpW9IFBJITyxJzU5NLUgt
-        gulj4uCUamBi8X6ianx0VXjjqlT5N4cDeiuZKjNmH1kd6lRS+VbXe23nre2if9aWfPx+LHPD
-        3rCpl2L+/vgY8YJ1VUXtI5f7f36Kvp4fV+q+T8ShbMbZ7R0dvCvcrotezHvaP5X/1In3YgKX
-        77RLb1JOD/NK7FJJT/+aJd5zbIPDmoO7Av4FZq5xY58VGevxqf3lZRuBwPglbnUT52XK1CTN
-        sLPk4SqpjzotkNcbVl3Hrf/er+f78ZBFjw4Vpqpp+chuSV4fq5ETauzDfLXI5T1f85qrtvb/
-        uMumPRP8LXWQZ+LSS6935dRknztUvHpPeUKM/IF5Qis8Di/+rPfl/a2vVb41r8tXrZ4+6aCg
-        wgNzJdd6TTclluKMREMt5qLiRABob+pwLwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrILMWRmVeSWpSXmKPExsWy7bCSnK7ktWeJBgveMVsceH+QxeLBvG1s
-        Fn8nHWO3eL+sh9Fi/pFzrBYb3/5gspjyZzmTxabH11gtPvbcY7V4+Crc4vKuOWwWM87vY7I4
-        df0zm8WirV/YLVr3HmG3OPymndXi8fU/bA6CHmvmrWH0+P1rEqPHrIZeNo9NqzrZPO5c28Pm
-        sXlJvceVE02sHn1bVjF6/Guay+7xeZNcAFcUl01Kak5mWWqRvl0CV8abm5tZC7YGV+zdfJK9
-        gXGyVxcjJ4eEgInEwz/nGbsYuTiEBHYwSpzY/IgdIiEtcX3jBChbWGLlv+fsEEVNTBLdb36w
-        gCTYBLQl7k7fwgRiiwh4SLT9u8cMUsQssIxZ4tSiz2wgCWEBH4mp7xcxg9gsAqoS5xtnsYLY
-        vAI2Eo0n5rJCbJCXWL3hAFgNp4CtxNSGqWC9QkA1F1dOY57AyLeAkWEVo2RqQXFuem6xYYFR
-        Xmq5XnFibnFpXrpecn7uJkZwLGhp7WDcs+qD3iFGJg7GQ4wSHMxKIrxS9c8ShXhTEiurUovy
-        44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamDyzuE+M2HNm+jaLwH3zWR1
-        9KtOS17tXKrx0C6IN/P/dmVF3uu84ptdy2vjXLyy/7D5fkzsSVRSElA6d9f3i3T0sc/akRW9
-        01NVZiq1h+52FL3yZ6P1dp3H01q2eImF8O4Ry358OEim6wlnTs2DnbJ979IOrT2WHB0kk+R4
-        syZ2y2y+f5w3jR+off+fxhy2tvCnZlTGx5vNvpFTw25M6gk62vRu69plb89FpF3ryesWPaNa
-        nLNAJnL5tTVH3hr+9go6KmRQ/mbZ/5VtMQxbttb3zeyTWyXls3H6k31985576jMd3nFm45U9
-        huvNskrqjYTnRHp9UJPZ0/Th4ruDlU/LBE5uW5k1M5Wp1+LSFlslluKMREMt5qLiRAAsF3p8
-        9AIAAA==
-X-CMS-MailID: 20220118150041epcas5p2634381919d0e9f60867d6087162fa134
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220118150041epcas5p2634381919d0e9f60867d6087162fa134
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
-        <CGME20220118150041epcas5p2634381919d0e9f60867d6087162fa134@epcas5p2.samsung.com>
+        Tue, 18 Jan 2022 09:51:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642517405;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=ZRxpxg3yvouQAHplNdqcixEdp4kkISs4RaC904ODu7k=;
+    b=hNwHinG2rTQaKv3C6d0gISmOqkfnhWNRV6Ah3N6zsvxCgyoT0wOYRd+TerJWXIYAdA
+    qaSBRfk3Bb8ulktRCmZG4s0yx/tPyE5JmcjEcyg8HOnjpb6yVvEFQgNALs3L/66KNsDW
+    mn7JDHSo0qIoOaJWjlBPH35dAXNdUzVprw+IZumktCYCd2azohcR9OxRGxF3Pf+F+p6l
+    FNBzp6iKWUPDbVPq6Wu+Jw6D0h9gY9Q8WQAbhWuQw/r2aZM6+/b6I6e2hlJP8K+mcLvy
+    AVK83W5E6P65/kkR+5KitWgU76F6/5s5nZ6z9nR96fluRXsuepjID9MrziOcubl9Ms10
+    C97g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iMITlA=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.37.6 DYNA|AUTH)
+    with ESMTPSA id D61423y0IEo3h0y
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 18 Jan 2022 15:50:03 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <5BC61397-AF28-45CD-83F6-FA2C760F3995@goldelico.com>
+Date:   Tue, 18 Jan 2022 15:50:01 +0100
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C846BAFB-473D-41D8-93B9-B9ECDD1846C1@goldelico.com>
+References: <cover.1633436959.git.hns@goldelico.com>
+ <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
+ <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
+ <7CEBB741-2218-40A7-9800-B3A154895274@goldelico.com>
+ <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
+ <229EBE4C-6555-41DE-962F-D82798AEC650@goldelico.com>
+ <HQY82R.69JHJIC64HDO1@crapouillou.net>
+ <5BC61397-AF28-45CD-83F6-FA2C760F3995@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds cmu_fsys1 block clock information which are needed
-for PCIe IPs in block FSYS1.
+Hi Paul,
+any insights on the JZ_REG_LCD_OSDC issue below?
 
-Cc: linux-fsd@tesla.com
-Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- drivers/clk/samsung/clk-fsd.c | 175 ++++++++++++++++++++++++++++++++++
- 1 file changed, 175 insertions(+)
+There is a second, unrelated issue with the introduction of
 
-diff --git a/drivers/clk/samsung/clk-fsd.c b/drivers/clk/samsung/clk-fsd.c
-index 9ae0a86ae762..97973a629453 100644
---- a/drivers/clk/samsung/clk-fsd.c
-+++ b/drivers/clk/samsung/clk-fsd.c
-@@ -970,6 +970,178 @@ static const struct samsung_cmu_info fsys0_cmu_info __initconst = {
- 	.clk_name		= "dout_cmu_fsys0_shared1div4",
- };
- 
-+/* Register Offset definitions for CMU_FSYS1 (0x16810000) */
-+#define PLL_CON0_ACLK_FSYS1_BUSP_MUX			0x100
-+#define PLL_CON0_PCLKL_FSYS1_BUSP_MUX			0x180
-+#define DIV_CLK_FSYS1_PHY0_OSCCLK			0x1800
-+#define DIV_CLK_FSYS1_PHY1_OSCCLK			0x1804
-+#define GAT_FSYS1_CMU_FSYS1_IPCLKPORT_PCLK	0x2000
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_AUXCLK		0x2004
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_SOC_REF_CLK	0x2008
-+#define GAT_FSYS1_PCIE_LINK1_IPCLKPORT_AUXCLK		0x200c
-+#define GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_REF_XTAL	0x202c
-+#define GAT_FSYS1_PHY0_OSCCLLK				0x2034
-+#define GAT_FSYS1_PHY1_OSCCLK				0x2038
-+#define GAT_FSYS1_AXI2APB_FSYS1_IPCLKPORT_ACLK		0x203c
-+#define GAT_FSYS1_BUS_D0_FSYS1_IPCLKPORT_MAINCLK	0x2040
-+#define GAT_FSYS1_BUS_S0_FSYS1_IPCLKPORT_M250CLK	0x2048
-+#define GAT_FSYS1_BUS_S0_FSYS1_IPCLKPORT_MAINCLK	0x204c
-+#define GAT_FSYS1_CPE425_0_FSYS1_IPCLKPORT_ACLK		0x2054
-+#define GAT_FSYS1_NS_BRDG_FSYS1_IPCLKPORT_CLK__PSOC_FSYS1__CLK_FSYS1_D0	0x205c
-+#define GAT_FSYS1_NS_BRDG_FSYS1_IPCLKPORT_CLK__PSOC_FSYS1__CLK_FSYS1_S0	0x2064
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_DBI_ACLK		0x206c
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_APB_CLK	0x2070
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_DRIVER_APB_CLK	0x2074
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_MSTR_ACLK	0x2078
-+#define GAT_FSYS1_PCIE_LINK0_IPCLKPORT_SLV_ACLK		0x207c
-+#define GAT_FSYS1_PCIE_LINK1_IPCLKPORT_DBI_ACLK		0x2080
-+#define GAT_FSYS1_PCIE_LINK1_IPCLKPORT_I_DRIVER_APB_CLK	0x2084
-+#define GAT_FSYS1_PCIE_LINK1_IPCLKPORT_MSTR_ACLK	0x2088
-+#define GAT_FSYS1_PCIE_LINK1_IPCLKPORT_SLV_ACLK		0x208c
-+#define GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_APB_CLK		0x20a4
-+#define GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_REF_SOC_PLL	0x20a8
-+#define GAT_FSYS1_SYSREG_FSYS1_IPCLKPORT_PCLK		0x20b4
-+#define GAT_FSYS1_TBU0_FSYS1_IPCLKPORT_ACLK		0x20b8
-+
-+static const unsigned long fsys1_clk_regs[] __initconst = {
-+	PLL_CON0_ACLK_FSYS1_BUSP_MUX,
-+	PLL_CON0_PCLKL_FSYS1_BUSP_MUX,
-+	DIV_CLK_FSYS1_PHY0_OSCCLK,
-+	DIV_CLK_FSYS1_PHY1_OSCCLK,
-+	GAT_FSYS1_CMU_FSYS1_IPCLKPORT_PCLK,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_AUXCLK,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_SOC_REF_CLK,
-+	GAT_FSYS1_PCIE_LINK1_IPCLKPORT_AUXCLK,
-+	GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_REF_XTAL,
-+	GAT_FSYS1_PHY0_OSCCLLK,
-+	GAT_FSYS1_PHY1_OSCCLK,
-+	GAT_FSYS1_AXI2APB_FSYS1_IPCLKPORT_ACLK,
-+	GAT_FSYS1_BUS_D0_FSYS1_IPCLKPORT_MAINCLK,
-+	GAT_FSYS1_BUS_S0_FSYS1_IPCLKPORT_M250CLK,
-+	GAT_FSYS1_BUS_S0_FSYS1_IPCLKPORT_MAINCLK,
-+	GAT_FSYS1_CPE425_0_FSYS1_IPCLKPORT_ACLK,
-+	GAT_FSYS1_NS_BRDG_FSYS1_IPCLKPORT_CLK__PSOC_FSYS1__CLK_FSYS1_D0,
-+	GAT_FSYS1_NS_BRDG_FSYS1_IPCLKPORT_CLK__PSOC_FSYS1__CLK_FSYS1_S0,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_DBI_ACLK,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_APB_CLK,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_DRIVER_APB_CLK,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_MSTR_ACLK,
-+	GAT_FSYS1_PCIE_LINK0_IPCLKPORT_SLV_ACLK,
-+	GAT_FSYS1_PCIE_LINK1_IPCLKPORT_DBI_ACLK,
-+	GAT_FSYS1_PCIE_LINK1_IPCLKPORT_I_DRIVER_APB_CLK,
-+	GAT_FSYS1_PCIE_LINK1_IPCLKPORT_MSTR_ACLK,
-+	GAT_FSYS1_PCIE_LINK1_IPCLKPORT_SLV_ACLK,
-+	GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_APB_CLK,
-+	GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_REF_SOC_PLL,
-+	GAT_FSYS1_SYSREG_FSYS1_IPCLKPORT_PCLK,
-+	GAT_FSYS1_TBU0_FSYS1_IPCLKPORT_ACLK,
-+};
-+
-+static const struct samsung_fixed_rate_clock fsys1_fixed_clks[] __initconst = {
-+	FRATE(0, "clk_fsys1_phy0_ref", NULL, 0, 100000000),
-+	FRATE(0, "clk_fsys1_phy1_ref", NULL, 0, 100000000),
-+};
-+
-+/* List of parent clocks for Muxes in CMU_FSYS1 */
-+PNAME(mout_fsys1_pclkl_fsys1_busp_mux_p) = { "fin_pll", "dout_cmu_fsys1_shared0div8" };
-+PNAME(mout_fsys1_aclk_fsys1_busp_mux_p) = { "fin_pll", "dout_cmu_fsys1_shared0div4" };
-+
-+static const struct samsung_mux_clock fsys1_mux_clks[] __initconst = {
-+	MUX(0, "mout_fsys1_pclkl_fsys1_busp_mux", mout_fsys1_pclkl_fsys1_busp_mux_p,
-+	    PLL_CON0_PCLKL_FSYS1_BUSP_MUX, 4, 1),
-+	MUX(0, "mout_fsys1_aclk_fsys1_busp_mux", mout_fsys1_aclk_fsys1_busp_mux_p,
-+	    PLL_CON0_ACLK_FSYS1_BUSP_MUX, 4, 1),
-+};
-+
-+static const struct samsung_div_clock fsys1_div_clks[] __initconst = {
-+	DIV(0, "dout_fsys1_clk_fsys1_phy0_oscclk", "fsys1_phy0_osccllk",
-+	    DIV_CLK_FSYS1_PHY0_OSCCLK, 0, 4),
-+	DIV(0, "dout_fsys1_clk_fsys1_phy1_oscclk", "fsys1_phy1_oscclk",
-+	    DIV_CLK_FSYS1_PHY1_OSCCLK, 0, 4),
-+};
-+
-+static const struct samsung_gate_clock fsys1_gate_clks[] __initconst = {
-+	GATE(0, "fsys1_cmu_fsys1_ipclkport_pclk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_CMU_FSYS1_IPCLKPORT_PCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_phy0_ipclkport_i_ref_xtal", "clk_fsys1_phy0_ref",
-+	     GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_REF_XTAL, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_phy0_osccllk", "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_PHY0_OSCCLLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_phy1_oscclk", "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_PHY1_OSCCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_axi2apb_fsys1_ipclkport_aclk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_AXI2APB_FSYS1_IPCLKPORT_ACLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_bus_d0_fsys1_ipclkport_mainclk", "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_BUS_D0_FSYS1_IPCLKPORT_MAINCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_bus_s0_fsys1_ipclkport_m250clk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_BUS_S0_FSYS1_IPCLKPORT_M250CLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_bus_s0_fsys1_ipclkport_mainclk", "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_BUS_S0_FSYS1_IPCLKPORT_MAINCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_cpe425_0_fsys1_ipclkport_aclk", "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_CPE425_0_FSYS1_IPCLKPORT_ACLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_ns_brdg_fsys1_ipclkport_clk__psoc_fsys1__clk_fsys1_d0",
-+	     "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_NS_BRDG_FSYS1_IPCLKPORT_CLK__PSOC_FSYS1__CLK_FSYS1_D0, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_ns_brdg_fsys1_ipclkport_clk__psoc_fsys1__clk_fsys1_s0",
-+	     "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_NS_BRDG_FSYS1_IPCLKPORT_CLK__PSOC_FSYS1__CLK_FSYS1_S0, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK0_IPCLKPORT_DBI_ACLK, "fsys1_pcie_link0_ipclkport_dbi_aclk",
-+	     "mout_fsys1_aclk_fsys1_busp_mux", GAT_FSYS1_PCIE_LINK0_IPCLKPORT_DBI_ACLK, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_link0_ipclkport_i_apb_clk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_APB_CLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_link0_ipclkport_i_soc_ref_clk", "fin_pll",
-+	     GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_SOC_REF_CLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_link0_ipclkport_i_driver_apb_clk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_PCIE_LINK0_IPCLKPORT_I_DRIVER_APB_CLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK0_IPCLKPORT_MSTR_ACLK, "fsys1_pcie_link0_ipclkport_mstr_aclk",
-+	     "mout_fsys1_aclk_fsys1_busp_mux", GAT_FSYS1_PCIE_LINK0_IPCLKPORT_MSTR_ACLK, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK0_IPCLKPORT_SLV_ACLK, "fsys1_pcie_link0_ipclkport_slv_aclk",
-+	     "mout_fsys1_aclk_fsys1_busp_mux", GAT_FSYS1_PCIE_LINK0_IPCLKPORT_SLV_ACLK, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK1_IPCLKPORT_DBI_ACLK, "fsys1_pcie_link1_ipclkport_dbi_aclk",
-+	     "mout_fsys1_aclk_fsys1_busp_mux", GAT_FSYS1_PCIE_LINK1_IPCLKPORT_DBI_ACLK, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_link1_ipclkport_i_driver_apb_clk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_PCIE_LINK1_IPCLKPORT_I_DRIVER_APB_CLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK1_IPCLKPORT_MSTR_ACLK, "fsys1_pcie_link1_ipclkport_mstr_aclk",
-+	     "mout_fsys1_aclk_fsys1_busp_mux", GAT_FSYS1_PCIE_LINK1_IPCLKPORT_MSTR_ACLK, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK1_IPCLKPORT_SLV_ACLK, "fsys1_pcie_link1_ipclkport_slv_aclk",
-+	     "mout_fsys1_aclk_fsys1_busp_mux", GAT_FSYS1_PCIE_LINK1_IPCLKPORT_SLV_ACLK, 21,
-+	     CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_phy0_ipclkport_i_apb_clk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_APB_CLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK0_IPCLKPORT_AUX_ACLK, "fsys1_pcie_link0_ipclkport_auxclk", "fin_pll",
-+	     GAT_FSYS1_PCIE_LINK0_IPCLKPORT_AUXCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(PCIE_LINK1_IPCLKPORT_AUX_ACLK, "fsys1_pcie_link1_ipclkport_auxclk", "fin_pll",
-+	     GAT_FSYS1_PCIE_LINK1_IPCLKPORT_AUXCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_pcie_phy0_ipclkport_i_ref_soc_pll", "dout_fsys1_clk_fsys1_phy0_oscclk",
-+	     GAT_FSYS1_PCIE_PHY0_IPCLKPORT_I_REF_SOC_PLL, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_sysreg_fsys1_ipclkport_pclk", "mout_fsys1_pclkl_fsys1_busp_mux",
-+	     GAT_FSYS1_SYSREG_FSYS1_IPCLKPORT_PCLK, 21, CLK_IGNORE_UNUSED, 0),
-+	GATE(0, "fsys1_tbu0_fsys1_ipclkport_aclk", "mout_fsys1_aclk_fsys1_busp_mux",
-+	     GAT_FSYS1_TBU0_FSYS1_IPCLKPORT_ACLK, 21, CLK_IGNORE_UNUSED, 0),
-+};
-+
-+static const struct samsung_cmu_info fsys1_cmu_info __initconst = {
-+	.mux_clks		= fsys1_mux_clks,
-+	.nr_mux_clks		= ARRAY_SIZE(fsys1_mux_clks),
-+	.div_clks		= fsys1_div_clks,
-+	.nr_div_clks		= ARRAY_SIZE(fsys1_div_clks),
-+	.gate_clks		= fsys1_gate_clks,
-+	.nr_gate_clks		= ARRAY_SIZE(fsys1_gate_clks),
-+	.fixed_clks		= fsys1_fixed_clks,
-+	.nr_fixed_clks		= ARRAY_SIZE(fsys1_fixed_clks),
-+	.nr_clk_ids		= FSYS1_NR_CLK,
-+	.clk_regs		= fsys1_clk_regs,
-+	.nr_clk_regs		= ARRAY_SIZE(fsys1_clk_regs),
-+	.clk_name		= "dout_cmu_fsys1_shared0div4",
-+};
-+
- /**
-  * fsd_cmu_probe - Probe function for FSD platform clocks
-  * @pdev: Pointer to platform device
-@@ -995,6 +1167,9 @@ static const struct of_device_id fsd_cmu_of_match[] = {
- 	}, {
- 		.compatible = "tesla,fsd-clock-fsys0",
- 		.data = &fsys0_cmu_info,
-+	}, {
-+		.compatible = "tesla,fsd-clock-fsys1",
-+		.data = &fsys1_cmu_info,
- 	}, {
- 	},
- };
--- 
-2.25.1
+"drm/bridge: display-connector: implement bus fmts callbacks"
+
+which breaks bus format negotiations.
+
+These are the two last unsolved issues to submit a fully working driver.
+
+> Am 22.12.2021 um 15:03 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+>> Am 08.11.2021 um 10:37 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>=20
+>> Hi Nikolaus,
+>>=20
+>> Le dim., nov. 7 2021 at 21:25:38 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>>> Hi Paul,
+>>>>>>>=20
+>>>>>>> @@ -1274,7 +1319,7 @@ static int ingenic_drm_bind(struct device =
+*dev, bool has_components)
+>>>>>>> 	/* Enable OSD if available */
+>>>>>>> 	if (soc_info->has_osd)
+>>>>>>> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
+JZ_LCD_OSDC_OSDEN);
+>>>>>>> +		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, =
+JZ_LCD_OSDC_OSDEN);
+>>>>>> This change is unrelated to this patch, and I'm not even sure =
+it's a valid change. The driver shouldn't rely on previous register =
+values.
+>>>>> I think I already commented that I think the driver should also =
+not reset
+>>>>> previous register values to zero.
+>>>> You did comment this, yes, but I don't agree. The driver *should* =
+reset the registers to zero. It should *not* have to rely on whatever =
+was configured before.
+>>>> Even if I did agree, this is a functional change unrelated to =
+JZ4780 support, so it would have to be splitted to its own patch.
+>>> Well it is in preparation of setting more bits that are only =
+available for the jz4780.
+>>> But it will be splitted into its own patch for other reasons - if we =
+ever make osd working...
+>>>>> If I counted correctly this register has 18 bits which seem to =
+include
+>>>>> some interrupt masks (which could be initialized somewhere else) =
+and we
+>>>>> write a constant 0x1.
+>>>>> Of course most other bits are clearly OSD related (alpha =
+blending),
+>>>>> i.e. they can have any value (incl. 0) if OSD is disabled. But =
+here we
+>>>>> enable it. I think there may be missing some setting for the other =
+bits.
+>>>>> So are you sure, that we can unconditionally reset *all* bits
+>>>>> except JZ_LCD_OSDC_OSDEN for the jz4780?
+>>>>> Well I have no experience with OSD being enabled at all. I.e. I =
+have no
+>>>>> test scenario.
+>=20
+> It turns out that the line
+>=20
+> 		ret =3D clk_prepare_enable(priv->lcd_clk);
+>=20
+> initializes JZ_REG_LCD_OSDC to 0x00010005 (i.e. printk tells 0x0 =
+before).
+
+more detailled test shows that it is the underlying=20
+
+	clk_enable(priv->lcd_clk)
+
+(i.e. not the prepare).
+>=20
+> and writing=20
+>=20
+> 		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
+JZ_LCD_OSDC_OSDEN);
+>=20
+> overwrites it with 0x00000001.
+>=20
+> This makes the HDMI monitor go/stay black until I write manually 0x5 =
+to
+> JZ_REG_LCD_OSDC.
+>=20
+> This means that JZ_LCD_OSDC_ALPHAEN must be enabled on jz4780 as well.
+> Hence overwriting just with JZ_LCD_OSDC_OSDEN breaks it.
+>=20
+> Now the questions:
+> a) 0x5 is understandable that it sets JZ_LCD_OSDC_ALPHAEN - but why is =
+it needed?
+>   Is this a not well documented difference between jz4740/60/70/80?
+> b) how can clk_prepare_enable() write 0x00010005 to JZ_REG_LCD_OSDC? =
+Bug or feature?
+>   Something in cgu driver going wrong?
+
+I now suspect that it is an undocumented SoC feature.
+
+> c) what do your SoC or panels do if you write 0x5 to JZ_REG_LCD_OSDC?
+> d) 0x00010005 also has bit 16 set which is undocumented... But this is =
+a don't care
+>   according to jz4780 PM.
+
+BR and thanks,
+Nikolaus
 

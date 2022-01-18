@@ -2,312 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 983DB492B44
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002DA492B3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244091AbiARQdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:33:16 -0500
-Received: from mga12.intel.com ([192.55.52.136]:25537 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243751AbiARQc7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:32:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642523578; x=1674059578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ou1tYTGYDE/VqSh4Fh3pqeVC6v99AHNfT2N9XJ85LAg=;
-  b=V1N/3dANn5z//6Yizd0pKlqlg4rNMiLz53MmTcwpkgcicQHFSV5Xt991
-   2N5awCMYALbnS96bI2AlpZ/zg6t7ocNwnc3eqd2aBftT1iuOwASFWdDqv
-   TS1Lo7L6ntIlK2LobsQxLvH0utPz0Te0FVzlut685rVRGdWCuVEcz9iys
-   uJIwX65UcjX+xtR8tl0SUDPN1EKeyq/4bhiaJY6tQ4i2cqwrySSCiMKyw
-   8rr9xmscqEy/Tsq4eGkyxVE851jTDxrrEHkJ7Adb21KSf+qthFvneamHW
-   8ZFVWN8XUMMX0x9Ov7UpbVel82pkzSdxNwIgVv8hz6KgEzzihy/4QtyIa
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224833481"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="224833481"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 08:32:26 -0800
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="517826389"
-Received: from lmaniak-dev.igk.intel.com ([10.55.249.72])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 08:32:23 -0800
-Date:   Tue, 18 Jan 2022 17:30:54 +0100
-From:   Lukasz Maniak <lukasz.maniak@linux.intel.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, yangyicong@hisilicon.com,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?Q?=C5=81ukasz?= Gieryk <lukasz.gieryk@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH] PCI: Reset IOV state on FLR to PF
-Message-ID: <20220118163054.GA8392@lmaniak-dev.igk.intel.com>
-References: <20220117225542.GA813284@bhelgaas>
- <e4483576-cafb-6ba2-a98f-8b7bdcead80d@huawei.com>
+        id S243047AbiARQb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:31:56 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30050 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233718AbiARQby (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 11:31:54 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IExPY9026569;
+        Tue, 18 Jan 2022 16:31:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=gwtBNDrjoRUjgdImL2lUJU8rSD1D9vwLIi3HT5QdUQw=;
+ b=hNApWxNnWcHtPBWqgnPX9WkAEBaK1ydzmh8rlRn0KHpWGkkgorDX1r78srNXUyO7vF9j
+ hVOYGB8aTqGmFd3ndympaUP8xMAXPF85cdYFVRmaeq7Q/K4gDbsPnFSNfXB3YvfnnYEk
+ 4sruIkRFy+qrGg6xl7/SFk6a9D6u7DA4/Km2FqZL1BPAgn7ibbpfnygKMA7UCQ6GxYH5
+ knb07xYxvQdD1mWC79zgf9KBX7JHB9lV+2cpva0CR0XNvL/sLCkC//GqoDfdvTe6p02v
+ R12KDBPNv/XbCWid1qAJ9SYcNT6UfqHNCKgPquh5ygepDOLXKt+Tx2eW3h5+zINavqCk ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnydgaq5s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 16:31:34 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IGQwM3005255;
+        Tue, 18 Jan 2022 16:31:34 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnydgaq5g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 16:31:34 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IGDYb9005520;
+        Tue, 18 Jan 2022 16:31:33 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma01dal.us.ibm.com with ESMTP id 3dknwbjgy9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 16:31:33 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IGVTw633882384
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 16:31:29 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C559AAC073;
+        Tue, 18 Jan 2022 16:31:29 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5F510AC068;
+        Tue, 18 Jan 2022 16:31:29 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 16:31:29 +0000 (GMT)
+Message-ID: <971dc802-42b2-9f04-f143-89f9ae26f0fe@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 11:31:29 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4483576-cafb-6ba2-a98f-8b7bdcead80d@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 18/19] ima: Show owning user namespace's uid and gid
+ when displaying policy
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-19-stefanb@linux.vnet.ibm.com>
+ <20220114134527.bk5ijfrqwt334ypr@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220114134527.bk5ijfrqwt334ypr@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: y_QP-K8FJAh6YkJT1ap-2b-M7beQ2bbN
+X-Proofpoint-GUID: T_nExa_IjIW3VGgu4p_5nbPEnLYQRT_0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_04,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 clxscore=1011 spamscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180101
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:07:23PM +0800, Yicong Yang wrote:
-> On 2022/1/18 6:55, Bjorn Helgaas wrote:
-> > [+cc Alex in case he has comments on how FLR should work on
-> > non-conforming hns3 devices]
-> > 
-> > On Sat, Jan 15, 2022 at 05:22:19PM +0800, Yicong Yang wrote:
-> >> On 2022/1/15 0:37, Bjorn Helgaas wrote:
-> >>> On Fri, Jan 14, 2022 at 05:42:48PM +0800, Yicong Yang wrote:
-> >>>> On 2022/1/14 0:45, Lukasz Maniak wrote:
-> >>>>> On Wed, Jan 12, 2022 at 08:49:03AM -0600, Bjorn Helgaas wrote:
-> >>>>>> On Wed, Dec 22, 2021 at 08:19:57PM +0100, Lukasz Maniak wrote:
-> >>>>>>> As per PCI Express specification, FLR to a PF resets the PF state as
-> >>>>>>> well as the SR-IOV extended capability including VF Enable which means
-> >>>>>>> that VFs no longer exist.
-> >>>>>>
-> >>>>>> Can you add a specific reference to the spec, please?
-> >>>>>>
-> >>>>> Following the Single Root I/O Virtualization and Sharing Specification:
-> >>>>> 2.2.3. FLR That Targets a PF
-> >>>>> PFs must support FLR.
-> >>>>> FLR to a PF resets the PF state as well as the SR-IOV extended
-> >>>>> capability including VF Enable which means that VFs no longer exist.
-> >>>>>
-> >>>>> For PCI Express Base Specification Revision 5.0 and later, this is
-> >>>>> section 9.2.2.3.
-> >>>
-> >>> This is also the section in the new PCIe r6.0.  Let's use that.
-> >>>
-> >>>>>>> Currently, the IOV state is not updated during FLR, resulting in
-> >>>>>>> non-compliant PCI driver behavior.
-> >>>>>>
-> >>>>>> And include a little detail about what problem is observed?  How would
-> >>>>>> a user know this problem is occurring?
-> >>>>>>
-> >>>>> The problem is that the state of the kernel and HW as to the number of
-> >>>>> VFs gets out of sync after FLR.
-> >>>>>
-> >>>>> This results in further listing, after the FLR is performed by the HW,
-> >>>>> of VFs that actually no longer exist and should no longer be reported on
-> >>>>> the PCI bus. lspci return FFs for these VFs.
-> >>>>
-> >>>> There're some exceptions. Take HiSilicon's hns3 and sec device as an
-> >>>> example, the VF won't be destroyed after the FLR reset.
-> >>>
-> >>> If FLR on an hns3 PF does *not* clear VF Enable, and the VFs still
-> >>> exist after FLR, isn't that a violation of sec 9.2.2.3?
-> >>
-> >> yes I think it's a violation to the spec.
-> > 
-> > Thanks for confirming that.
-> > 
-> >>> If hns3 and sec don't conform to the spec, we should have some sort of
-> >>> quirk that serves to document and work around this.
-> >>
-> >> ok I think it'll help. Do you mean something like this based on this patch:
-> >>
-> >> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> >> index 69ee321027b4..0e4976c669b2 100644
-> >> --- a/drivers/pci/iov.c
-> >> +++ b/drivers/pci/iov.c
-> >> @@ -1025,6 +1025,8 @@ void pci_reset_iov_state(struct pci_dev *dev)
-> >>  		return;
-> >>  	if (!iov->num_VFs)
-> >>  		return;
-> >> +	if (dev->flr_no_vf_reset)
-> >> +		return;
-> >>
-> >>  	sriov_del_vfs(dev);
-> >>
-> >> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> >> index 003950c738d2..c8ffcb0ac612 100644
-> >> --- a/drivers/pci/quirks.c
-> >> +++ b/drivers/pci/quirks.c
-> >> @@ -1860,6 +1860,17 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa256, quirk_huawei_pcie_sva);
-> >>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa258, quirk_huawei_pcie_sva);
-> >>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa259, quirk_huawei_pcie_sva);
-> >>
-> >> +/*
-> >> + * Some HiSilicon PCIe devices' VF won't be destroyed after a FLR reset.
-> >> + * Don't reset these devices' IOV state when doing FLR.
-> >> + */
-> >> +static void quirk_huawei_pcie_flr(struct pci_dev *pdev)
-> >> +{
-> >> +	pdev->flr_no_vf_reset = 1;
-> >> +}
-> >> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa255, quirk_huawei_pcie_flr);
-> >> +/* ...some other devices have this quirk */
-> > 
-> > Yes, I think something along this line will help.
-> > 
-> >> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> >> index 18a75c8e615c..e62f9fa4d48f 100644
-> >> --- a/include/linux/pci.h
-> >> +++ b/include/linux/pci.h
-> >> @@ -454,6 +454,7 @@ struct pci_dev {
-> >>  	unsigned int	is_probed:1;		/* Device probing in progress */
-> >>  	unsigned int	link_active_reporting:1;/* Device capable of reporting link active */
-> >>  	unsigned int	no_vf_scan:1;		/* Don't scan for VFs after IOV enablement */
-> >> +	unsigned int	flr_no_vf_reset:1;	/* VF won't be destroyed after PF's FLR */
-> >>
-> >>>> Currently the transactions with the VF will be restored after the
-> >>>> FLR. But this patch will break that, the VF is fully disabled and
-> >>>> the transaction cannot be restored. User needs to reconfigure it,
-> >>>> which is unnecessary before this patch.
-> >>>
-> >>> What does it mean for a "transaction to be restored"?  Maybe you mean
-> >>> this patch removes the *VFs* via sriov_del_vfs(), and whoever
-> >>> initiated the FLR would need to re-enable VFs via pci_enable_sriov()
-> >>> or something similar?
-> >>
-> >> Partly. It'll also terminate the VF users.
-> >> Think that I attach the VF of hns to a VM by vfio and ping the network
-> >> in the VM, when doing FLR the 'ping' will pause and after FLR it'll
-> >> resume. Currenlty The driver handle this in the ->reset_{prepare, done}()
-> >> methods. The user of VM may not realize there is a FLR of the PF as the
-> >> VF always exists and the 'ping' is never terminated.
-> >>
-> >> If we remove the VF when doing FLR, then 1) we'll block in the VF->remove()
-> >> until no one is using the device, for example the 'ping' is finished.
-> >> 2) the VF in the VM no longer exists and we have to re-enable VF and hotplug
-> >> it into the VM and restart the ping. That's a big difference.
-> >>
-> >>> If FLR disables VFs, it seems like we should expect to have to
-> >>> re-enable them if we want them.
-> >>
-> >> It involves a remove()/probe() process of the VF driver and the user
-> >> of the VF will be terminated, just like the situation illustrated
-> >> above.
-> > 
-> > I think users of FLR should be able to rely on it working per spec,
-> > i.e., that VFs will be destroyed.  If hardware like hns3 doesn't do
-> > that, the quirk should work around that in software by doing it
-> > explicitly.
-> > 
-> > I don't think the non-standard behavior should be exposed to the
-> > users.  The user should not have to know about this hns3 issue.
-> > 
-> > If FLR on a standard NIC terminates a ping on a VF, FLR on an hns3 NIC
-> > should also terminate a ping on a VF.
-> > 
-> 
-> ok thanks for the discussion, agree on that. According to the spec, after
-> the FLR to the PF the VF does not exist anymore, so the ping will be terminated.
-> Our hns3 and sec team are still evaluating it before coming to a solution of
-> whether using a quirk or comform to the spec.
-> 
-> For this patch it looks reasonable to me, but some questions about the code below.
-> 
-> >>>> Can we handle this problem in another way? Maybe test the VF's
-> >>>> vendor device ID after the FLR reset to see whether it has really
-> >>>> gone or not?
-> >>>>
-> >>>>> sriov_numvfs in sysfs returns old invalid value and does not allow
-> >>>>> setting a new value before explicitly setting 0 in the first place.
-> >>>>>
-> >>>>>>> This patch introduces a simple function, called on the FLR path, that
-> >>>>>>> removes the virtual function devices from the PCI bus and their
-> >>>>>>> corresponding sysfs links with a final clear of the num_vfs value in IOV
-> >>>>>>> state.
-> >>>>>>>
-> >>>>>>> Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
-> >>>>>>> ---
-> >>>>>>>  drivers/pci/iov.c | 21 +++++++++++++++++++++
-> >>>>>>>  drivers/pci/pci.c |  2 ++
-> >>>>>>>  drivers/pci/pci.h |  4 ++++
-> >>>>>>>  3 files changed, 27 insertions(+)
-> >>>>>>>
-> >>>>>>> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> >>>>>>> index 0267977c9f17..69ee321027b4 100644
-> >>>>>>> --- a/drivers/pci/iov.c
-> >>>>>>> +++ b/drivers/pci/iov.c
-> >>>>>>> @@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
-> >>>>>>>  	return max ? max - bus->number : 0;
-> >>>>>>>  }
-> >>>>>>>  
-> >>>>>>> +/**
-> >>>>>>> + * pci_reset_iov_state - reset the state of the IOV capability
-> >>>>>>> + * @dev: the PCI device
-> >>>>>>> + */
-> >>>>>>> +void pci_reset_iov_state(struct pci_dev *dev)
-> >>>>>>> +{
-> >>>>>>> +	struct pci_sriov *iov = dev->sriov;
-> >>>>>>> +
-> >>>>>>> +	if (!dev->is_physfn)
-> >>>>>>> +		return;
-> >>>>>>> +	if (!iov->num_VFs)
-> >>>>>>> +		return;
-> >>>>>>> +
-> >>>>>>> +	sriov_del_vfs(dev);
-> >>>>>>> +
-> >>>>>>> +	if (iov->link != dev->devfn)
-> >>>>>>> +		sysfs_remove_link(&dev->dev.kobj, "dep_link");
-> >>>>>>> +
-> >>>>>>> +	iov->num_VFs = 0;
-> >>>>>>> +}
-> >>>>>>> +
-> 
-> Any reason for not using pci_disable_sriov()?
 
-The issue with pci_disable_sriov() is that it calls sriov_disable(),
-which directly uses pci_cfg_access_lock(), leading to deadlock on the
-FLR path.
+On 1/14/22 08:45, Christian Brauner wrote:
+> On Tue, Jan 04, 2022 at 12:04:15PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Show the uid and gid values of the owning user namespace when displaying
+>> the IMA policy rather than the kernel uid and gid values. Now the same uid
+>> and gid values are shown in the policy as those that were used when the
+>> policy was set.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   security/integrity/ima/ima_policy.c | 19 +++++++++++++------
+>>   1 file changed, 13 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index 15c68dc5da9e..b7dbc687b6ff 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -1997,6 +1997,7 @@ static void ima_policy_show_appraise_algos(struct seq_file *m,
+>>   
+>>   int ima_policy_show(struct seq_file *m, void *v)
+>>   {
+>> +	struct user_namespace *user_ns = ima_user_ns_from_file(m->file);
+> Hm, so when looking at the policy entries via seq_file's .show method
+> and displaying the {g,u}id values of the rules we don't want the values
+> resolved according to the user namespace the securityfs instances was
+> mounted in. That would be misleading for callers that are in an
+> ancestor userns (which we allow in .permission).
+>
+> So we want to make sure that we see the values as the opener of the file
+> would see them. This is similar to e.g. looking at a task's ids through
+> /proc/<pid>/status. So this should be seq_user_ns(m) instead of
+> ima_user_ns_from_file().
+>>   	struct ima_rule_entry *entry = v;
+>>   	int i;
+>>   	char tbuf[64] = {0,};
+>> @@ -2074,7 +2075,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_UID) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kuid(user_ns, entry->uid));
+> This should be from_k{g,u}id_munged().
 
-> 
-> With the spec the related registers in the SRIOV cap will be reset so
-> it's ok in general. But for some devices not following the spec like hns3,
-> some fields like VF enable won't be reset and keep enabled after the FLR.
-> In this case after the FLR the VF devices in the system has gone but
-> the state of the PF SRIOV cap leaves uncleared. pci_disable_sriov()
-> will reset the whole SRIOV cap. It'll also call pcibios_sriov_disable()
-> to correct handle the VF disabling on some platforms, IIUC.
-> 
-> Or is it better to use pdev->driver->sriov_configure(pdev,0)?
-> PF drivers must implement ->sriov_configure() for enabling/disabling
-> the VF but we totally skip the PF driver here.
-> 
-> Thanks,
-> Yicong
-> 
-> >>>>>>>  /**
-> >>>>>>>   * pci_enable_sriov - enable the SR-IOV capability
-> >>>>>>>   * @dev: the PCI device
-> >>>>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> >>>>>>> index 3d2fb394986a..535f19d37e8d 100644
-> >>>>>>> --- a/drivers/pci/pci.c
-> >>>>>>> +++ b/drivers/pci/pci.c
-> >>>>>>> @@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
-> >>>>>>>   */
-> >>>>>>>  int pcie_flr(struct pci_dev *dev)
-> >>>>>>>  {
-> >>>>>>> +	pci_reset_iov_state(dev);
-> >>>>>>> +
-> >>>>>>>  	if (!pci_wait_for_pending_transaction(dev))
-> >>>>>>>  		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
-> >>>>>>>  
-> >>>>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> >>>>>>> index 3d60cabde1a1..7bb144fbec76 100644
-> >>>>>>> --- a/drivers/pci/pci.h
-> >>>>>>> +++ b/drivers/pci/pci.h
-> >>>>>>> @@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
-> >>>>>>>  resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
-> >>>>>>>  void pci_restore_iov_state(struct pci_dev *dev);
-> >>>>>>>  int pci_iov_bus_range(struct pci_bus *bus);
-> >>>>>>> +void pci_reset_iov_state(struct pci_dev *dev);
-> >>>>>>>  extern const struct attribute_group sriov_pf_dev_attr_group;
-> >>>>>>>  extern const struct attribute_group sriov_vf_dev_attr_group;
-> >>>>>>>  #else
-> >>>>>>> @@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
-> >>>>>>>  {
-> >>>>>>>  	return 0;
-> >>>>>>>  }
-> >>>>>>> +static inline void pci_reset_iov_state(struct pci_dev *dev)
-> >>>>>>> +{
-> >>>>>>> +}
-> >>>>>>>  
-> >>>>>>>  #endif /* CONFIG_PCI_IOV */
-> > .
-> > 
+Thanks, fixed.
+
+When I run a runc container as uid=1000 I see uid = 0 when inside the 
+container and when entering its mount namespace from root account via 
+nsenter it shows 'uid = 1000' while before it was showing 'uid = 0'.
+

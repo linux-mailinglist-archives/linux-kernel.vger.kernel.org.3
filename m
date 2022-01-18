@@ -2,114 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EB9491348
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C841D4912FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 01:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244198AbiARBCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 20:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
+        id S238550AbiARAs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 19:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244112AbiARBCI (ORCPT
+        with ESMTP id S229632AbiARAsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:02:08 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54D1C06161C;
-        Mon, 17 Jan 2022 17:02:07 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id c71so72639749edf.6;
-        Mon, 17 Jan 2022 17:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=70y9nP+1TJuyoQVHWKHYrgk62/1kbAozVgHhQoGQnWU=;
-        b=Ua355Juvb+5cWQs7Gu/XWJattoD8KtPGSZKPITsu8/pwo6tOdqGkRg78iwsyMaR/3Q
-         5Nl6JWabCVo4Ysyl4qcpLQddwq2FtSSNTl0IEWSKUUvxyCCU1LzPPFdMwEScczc0cTSx
-         eLyThB2vMDUN+WPoE8SgUPs+Ni55KM+GYapZ7K3IptXwFqs6XYx0qxZCO1au/4ckOW0n
-         ziUnL2ARYZyRDq/g1voz3IMBh3mHi7G1+xeK3Is0K96VpYeDq9Z6EC2lAXiWc/gIyD3c
-         pWnd09mAyvDhmza6odhGBmhl9SJUovZXXAajqM0GQQSPNvFUgTjATRQvrVqIRjSBr5GT
-         8XnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=70y9nP+1TJuyoQVHWKHYrgk62/1kbAozVgHhQoGQnWU=;
-        b=fpXvvVYjvLmG3CoWFQ5Mb7DRBEmKPvMJl+TMpqlmsDRrzN8yX848qH+W8qlpp4Q3r8
-         MYB2TdPcwKOrxvGCapFEmQOjQSsnk5MAkY1f3tWzE+g9PFy9Y1t2+MVvuCsn8oW43bMh
-         bo5LafQlurhHiovmgDq7TIm21LZwMoK04EJZ2pSrBhSD5NUNud3u/QF00FgdS+kdxKM5
-         buwUCi8igHhq7Ota8nb6TnEQq7yqKVKSqhvglNH5wQt9IWC8awXgbiWMXsniwtbX/Gyb
-         Rew1ozZnwiC3Tvwoi0Sd5sfEs5ZVL9A4eOd74LcACLFqYc/VizkwJAd6ajYYpn886fab
-         mqYA==
-X-Gm-Message-State: AOAM531zAJGH8FJi/qr4UxEPV5zuKt23ckJIsmGeD/whOXLnwquZMjWr
-        1CC3eIHt5YVGv8WVDa88L8814WOCkyQ=
-X-Google-Smtp-Source: ABdhPJw587JtgnQlOOPt5ApE1N1/wBG4hMb2MOqEUk6zLxEKAgsPBKF5evubIxpeZlL3w/Qnn8/1CA==
-X-Received: by 2002:a05:6402:518d:: with SMTP id q13mr23364662edd.377.1642467726331;
-        Mon, 17 Jan 2022 17:02:06 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id 24sm4892127ejg.47.2022.01.17.17.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 17:02:06 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 14/14] ARM: dts: qcom: Add syscon and cxo/pxo clock to gcc node for ipq8064
-Date:   Tue, 18 Jan 2022 01:44:34 +0100
-Message-Id: <20220118004434.17095-15-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220118004434.17095-1-ansuelsmth@gmail.com>
-References: <20220118004434.17095-1-ansuelsmth@gmail.com>
+        Mon, 17 Jan 2022 19:48:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844ECC061574;
+        Mon, 17 Jan 2022 16:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=GKFv+rNBUgP+uemMExRCemo1T5lz+hJjEuBQFmv6aMw=; b=J3VhQ4xSElaK2untFTsfWu91iZ
+        XmsOnj/KodXByQhJCxeiTaykyxPNK+VntLgOxk4iLDzo3fYLZkyukn4EoaxoQnvzwSy1E83CDZP3V
+        MyI8j/n2Bf6mg5qe+ox6qJ4fpX18jU/3n0k8PVV3wDsNpH+XBYZyvuROisjh1sCeKjRbJdcziVkSi
+        lUMND2LrxOcflhcWlEVE3YP5h6PRllRUKEfhkxXAKFVvb+la5AEkp+Tk/PREjhn3uSP4kRDfB19Ky
+        YzreROqtWUjxALjR7ks9pNKilyz07oPLd/+Z8xQmqQT6uJbU9c+AnCuIPXawBXFxKZR4oPcnkt0B2
+        iP1GzmNA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9cfe-00GhFw-Iz; Tue, 18 Jan 2022 00:48:22 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH -next] thermal: fix Documentation bullet list warning
+Date:   Mon, 17 Jan 2022 16:48:21 -0800
+Message-Id: <20220118004821.27408-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add syscon compatible required for tsens driver to correctly probe driver
-and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-now requires them for the ipq8064 gcc driver that has now been modernized.
+Fix bullet list indentation formatting to prevent a docs build warning.
+Use same indentation style as other files in this directory.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Documentation/ABI/testing/sysfs-class-thermal:201: WARNING: Bullet list ends without a blank line; unexpected unindent.
+
+Fixes: 80da1b508f29 ("thermal: Move ABI documentation to Documentation/ABI")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: linux-pm@vger.kernel.org
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Documentation/ABI/testing/sysfs-class-thermal |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 11481313bdb6..5524a68cf3d1 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -298,13 +298,13 @@ smem: smem@41000000 {
- 	};
+--- linux-next-20220117.orig/Documentation/ABI/testing/sysfs-class-thermal
++++ linux-next-20220117/Documentation/ABI/testing/sysfs-class-thermal
+@@ -203,7 +203,7 @@ Description:
  
- 	clocks {
--		cxo_board {
-+		cxo_board: cxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
- 		};
+ 		- for generic ACPI: should be "Fan", "Processor" or "LCD"
+ 		- for memory controller device on intel_menlow platform:
+-		should be "Memory controller".
++		  should be "Memory controller".
  
--		pxo_board {
-+		pxo_board: pxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
-@@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
- 		};
+ 		RO, Required
  
- 		gcc: clock-controller@900000 {
--			compatible = "qcom,gcc-ipq8064";
-+			compatible = "qcom,gcc-ipq8064", "syscon";
-+			clocks = <&pxo_board>, <&cxo_board>;
-+			clock-names = "pxo", "cxo";
- 			reg = <0x00900000 0x4000>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
--- 
-2.33.1
-

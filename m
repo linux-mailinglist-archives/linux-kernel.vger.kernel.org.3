@@ -2,83 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3CB49134D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C73491378
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbiARBFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 20:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S243970AbiARBiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 20:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiARBFT (ORCPT
+        with ESMTP id S231266AbiARBiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:05:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B45EC061574;
-        Mon, 17 Jan 2022 17:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=+D+1Fa35JempJQJICO+SIPds0O/uLmaQUC0VXum/YyM=; b=NZxlFVrpBRLAUL8dK/V1ZuRh14
-        wtwbRLnL9kX4xDJMiXH4H/hFpXUxIPzuIieedpPy/gCG+uAYH/ivsycWcwEVu96WGNZCXoqZRpAlQ
-        adL4GXmJ7+gdpxWQolmfG/EquZPy8RaWgSfx3wP9eYTaW0iNDfzLMh5M+TZ929R4sFS754759VnFk
-        FuJqjfKG+QBCE4GnBq07FnZZDWFFhSRGReKsYSR6AlYKKvyOaS0x0cRnM5SQPvKqV1zT5KjybsC7N
-        rSRWI2ht86hpDaLvM5Xu84NzM0ULUu3AlH4EW3Clblklk3h9osbW60NEHgNui4SmIAN59Lv9xGkCI
-        lzT6YeNA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9cw2-00GkoG-Gf; Tue, 18 Jan 2022 01:05:18 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH -next] Documentation: fix firewire.rst ABI file path error
-Date:   Mon, 17 Jan 2022 17:05:17 -0800
-Message-Id: <20220118010517.20826-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Mon, 17 Jan 2022 20:38:11 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B0CC061574;
+        Mon, 17 Jan 2022 17:38:11 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id t24so72828619edi.8;
+        Mon, 17 Jan 2022 17:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HTyWntryCBF4iZJRg4LVIdA30wsrAuLbxuCKj8lB+YA=;
+        b=ZNnuZdnp4aH0xUTo2hVJ3oXzTIxQohV/RtSLFHEYvmOTZJuBrEY2GpF2XLKqjvZp8o
+         wkWZDTPw0EPr4qq7Afc6HtUrQiUr4bzMhQvM9iNC1M++YUffmfYt3cHWzE658ruhkbNc
+         tVMltG4qTYFyUPf/K1WazsXYxz6UMPOP8m7K0XB5AeZtkRK5pBLV3E1Zc9LMxMZqhTAC
+         j67WQ6vhD6LCtZt4Or5gwruI7piplslFNFFZFu0HsBJ9Xp41ADCIm8U8JtZfiMTbruxy
+         GiwK6nXM7+uG9rjd53UySclF5f4yqJE9wHJl3r4dOMAt4diMtQ6udG2v1CySODWYhXlQ
+         SlMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HTyWntryCBF4iZJRg4LVIdA30wsrAuLbxuCKj8lB+YA=;
+        b=V/3HuCNoQicwi+GQquDAdn2c+OQ3EouDK3malLFCWCfclnczgDPOi+DE59ooZnXTLs
+         /E9tOxTzKnqHFNWXSMC44XXNxc57gwpZop2Wc1ArxdppKPyLRtpJBKPRf17PfntDjjtA
+         R1wGRgjV3s5SUG4Liw2sGTek5KZ7dCrup4zFS05dnk6F2EB4zN2B60q2FPUzCuhCi2Mz
+         tpkTf15r4KxiHDFsb9qntDJO2Gcak1Im3CH1jh5AAyHO/yBFB4nKOpx5JgTt1hWKNAWC
+         pVgIMd8YMQUzDgHkTrRwpacOZCqov09raoTV6i1JPXAkf77Cjzr4xJBwowSH/QflJF+a
+         CAQg==
+X-Gm-Message-State: AOAM532wtqwaRrS3Xk4BlZlNNzYX/yj5b4gPj11B0yXsaMw9gP/fJ9Vc
+        LOl2c2ETJe4IH6llVR+yvLA=
+X-Google-Smtp-Source: ABdhPJzPwaA9CAKXi1XWNkYgNeLcX4kyhh2e9tQqMhJgVNOMwWHa09CnWK7qYu/M/LgBhEseEhljaQ==
+X-Received: by 2002:a17:907:72d2:: with SMTP id du18mr18435031ejc.208.1642469889882;
+        Mon, 17 Jan 2022 17:38:09 -0800 (PST)
+Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id kj18sm3990675ejc.139.2022.01.17.17.38.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 17:38:09 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH 00/17] Multiple addition to ipq8064 dtsi
+Date:   Tue, 18 Jan 2022 02:20:30 +0100
+Message-Id: <20220118012051.21691-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust the path of the ABI files for firewire.rst to prevent a
-documentation build error. Prevents this problem:
+This try to complete the ipq8064 dtsi and introduce 2 new dtsi
+ipq8064-v2 and ipq8065. While some node are still missing (cpufreq node,
+l2 scale node, fab scale node) this would add most of the missing node
+to make ipq8064 actually usable.
 
-Sphinx parallel build error:
-docutils.utils.SystemMessage: /work/lnx/next/linux-next-20220117/Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
-InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
+Some of the changes are the fix for the pci IO that cause any secondary
+wifi card with ath10k to fail init.
+Adds regulators definition for RPM.
+Adds many missing gsbi nodes used by all the devices.
+Enable the usb phy by default as they are actually enabled internally by
+xlate only if the dwc3 driver is used.
+Add opp table and declare idle state for ipq8064.
+Fix some dtc warning.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
-I don't see what is causing this problem...
+This also add the ipq8064-v2.0 dtsi and the ipq8065 dtsi used by more
+recent devices based on this SoC.
 
- Documentation/driver-api/firewire.rst |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ansuel Smith (17):
+  ARM: dts: qcom: add multiple missing pin definition for ipq8064
+  ARM: dts: qcom: add gsbi6 missing definition for ipq8064
+  ARM: dts: qcom: add missing rpm regulators and cells for ipq8064
+  ARM: dts: qcom: add missing snps,dwmac compatible for gmac ipq8064
+  ARM: dts: qcom: enable usb phy by default for ipq8064
+  ARM: dts: qcom: reduce pci IO size to 64K for ipq8064
+  ARM: dts: qcom: fix dtc warning for missing #address-cells for ipq8064
+  ARM: dts: qcom: add smem node for ipq8064
+  ARM: dts: qcom: add saw for l2 cache and kraitcc for ipq8064
+  ARM: dts: qcom: add sic non secure node for ipq8064
+  ARM: dts: qcom: fix and add some missing gsbi node for ipq8064
+  ARM: dts: qcom: add opp table for cpu and l2 for ipq8064
+  ARM: dts: qcom: add speedbin efuse nvmem binding
+  ARM: dts: qcom: add multiple missing binding for cpu and l2 for
+    ipq8064
+  ARM: dts: qcom: remove redundant binding from ipq8064 rb3011 dts
+  ARM: dts: qcom: add ipq8064-v2.0 dtsi
+  ARM: dts: qcom: add ipq8065 dtsi
 
---- linux-next-20220117.orig/Documentation/driver-api/firewire.rst
-+++ linux-next-20220117/Documentation/driver-api/firewire.rst
-@@ -19,7 +19,7 @@ of kernel interfaces is available via ex
- Firewire char device data structures
- ====================================
- 
--.. include:: /ABI/stable/firewire-cdev
-+.. include:: ../ABI/stable/firewire-cdev
-     :literal:
- 
- .. kernel-doc:: include/uapi/linux/firewire-cdev.h
-@@ -28,7 +28,7 @@ Firewire char device data structures
- Firewire device probing and sysfs interfaces
- ============================================
- 
--.. include:: /ABI/stable/sysfs-bus-firewire
-+.. include:: ../ABI/stable/sysfs-bus-firewire
-     :literal:
- 
- .. kernel-doc:: drivers/firewire/core-device.c
+ arch/arm/boot/dts/qcom-ipq8064-rb3011.dts |  17 --
+ arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi  |  70 +++++
+ arch/arm/boot/dts/qcom-ipq8064.dtsi       | 344 +++++++++++++++++++++-
+ arch/arm/boot/dts/qcom-ipq8065.dtsi       | 168 +++++++++++
+ 4 files changed, 568 insertions(+), 31 deletions(-)
+ create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
+ create mode 100644 arch/arm/boot/dts/qcom-ipq8065.dtsi
+
+-- 
+2.33.1
+

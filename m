@@ -2,374 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4684930E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B744930D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240938AbiARWfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 17:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S1350007AbiARWfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 17:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350042AbiARWfY (ORCPT
+        with ESMTP id S237457AbiARWfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 17:35:24 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D39C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:35:23 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e130-20020a255088000000b006126feb051eso941625ybb.18
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:35:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=tSyDUU2qe6GiQYXnVQVFIIOoNjQpGjnA4HyYPexSfSc=;
-        b=h3U/e4WQj8w+C8SvDpVUPh+f64S7zVFg1c9nYRh4hM5j7lKoFCzCNjZsYVbP9Hm9km
-         KyZxl+qU1ZhxTh+g5sr3BMjBtMSRffsM2q3R3+9uXR42ZdBX0XJj1RzpmVJHNz0M9c/X
-         Hw9Z7djRbrfJQhoPZDO+2jpLS/PQUFpHK9w+Wt/jUOmJETzSFitHFp7knnV4JTh/PEdX
-         v97UNP3pVAseCgRBeoMPTqLj28sWtGi0YN97JqAyzuqZB+1yT1C4BGS+3Vle6uae3LPL
-         Ouor81bQdh93t4A0/emeKYzEXXf/b58hDzEXAuCJrvIsdpM3AvzlcvCabm0dVlPJe1YB
-         bJdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tSyDUU2qe6GiQYXnVQVFIIOoNjQpGjnA4HyYPexSfSc=;
-        b=ajOCsc2kiF4zW57QopHXjVObVZjQew5/SXrQCJWSWjcqIbws/KFVUTtTStCpAP4J5B
-         Q415DivK5OHp1DaEQ4H2i2ugvnXrfHnE0hZpeBXe8rC7fhEiuUzD50UkwZa+qHc8TpEV
-         m+1AHMCpFpVLqGwMZzIeEtgx8ae6VRqAhdyEAvVfweBd8VVndEBNMke2pyumjgyBINqw
-         SMfcOCPSOblkni4PpHm4V6hiGyelrbSXt4OeD0RQzbeu9YZ/VU7OahbaK7xj4lrxYNfg
-         m6Ne5c+wPmJlGPhGd/hh11WvKtie1Pcc8Tjj7hUgZELjF6o0/X3TJG41JW/lTsEIch6m
-         JiRA==
-X-Gm-Message-State: AOAM530Zy07AnmK0fa56OecW6X+AR5NP+PlghVNkjRb6wriZO+l2b+/V
-        XWFnu6bvSGIq98GZov53jZ9dFz7P79dijg==
-X-Google-Smtp-Source: ABdhPJyfcDqWEaPAcKcwRJDC085jVE6aroMlVHnPqPKzO+JnPYGtB6KFOhn3f7/CRkgzJ3Kjm8q0dIkgw6IJSQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7fc9:5977:ab73:1d36])
- (user=dlatypov job=sendgmr) by 2002:a25:7509:: with SMTP id
- q9mr36176959ybc.315.1642545323119; Tue, 18 Jan 2022 14:35:23 -0800 (PST)
-Date:   Tue, 18 Jan 2022 14:35:05 -0800
-In-Reply-To: <20220118223506.1701553-1-dlatypov@google.com>
-Message-Id: <20220118223506.1701553-5-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220118223506.1701553-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH 4/5] kunit: decrease macro layering for integer asserts
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 18 Jan 2022 17:35:07 -0500
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC7AC061574;
+        Tue, 18 Jan 2022 14:35:06 -0800 (PST)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id BDC453DDA; Tue, 18 Jan 2022 17:35:05 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org BDC453DDA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1642545305;
+        bh=t2AsXyVLAWmqYQGBLsOjhjyKdu16wtjBmE5q6ZDtIgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dl7RqCM/OQvD2DSoj+7Ntl1r4n7BRlbqZIXAkO7Fg/cg5U/MzRV9bQXFI7SFKSleW
+         rWh0BVNfsEpLSmQN4XpDXIKdi0FT4IJiPZoM7kwHomtE9q01dhmycP/LudlMVz23S9
+         bR+XxAlemLZU9B9qo3Bu7w2jdZQyQCJPue8Feyp4=
+Date:   Tue, 18 Jan 2022 17:35:05 -0500
+From:   "J. Bruce Fields" <bfields@fieldses.org>
+To:     Vasily Averin <vvs@virtuozzo.com>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>, kernel@openvz.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: Re: [PATCH v3 2/3] nfs4: handle async processing of F_SETLK with
+ FL_SLEEP
+Message-ID: <20220118223505.GE16108@fieldses.org>
+References: <1f354cec-d2d6-ddf5-56e0-325c10fe26ee@virtuozzo.com>
+ <00d1e0fa-55dd-82a5-2607-70d4552cc7f4@virtuozzo.com>
+ <20220103195333.GG21514@fieldses.org>
+ <7666958f-6215-a8eb-3412-b613158406db@virtuozzo.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7666958f-6215-a8eb-3412-b613158406db@virtuozzo.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a KUNIT_BINARY_INT_ASSERTION for the likes of KUNIT_EXPECT_LT.
-This is analagous to KUNIT_BINARY_STR_ASSERTION.
+On Sun, Jan 16, 2022 at 03:44:21PM +0300, Vasily Averin wrote:
+> On 03.01.2022 22:53, J. Bruce Fields wrote:
+> > On Wed, Dec 29, 2021 at 11:24:43AM +0300, Vasily Averin wrote:
+> >> nfsd and lockd use F_SETLK cmd with the FL_SLEEP flag set to request
+> >> asynchronous processing of blocking locks.
+> >>
+> >> Currently nfs4 use locks_lock_inode_wait() function which is blocked
+> >> for such requests. To handle them correctly FL_SLEEP flag should be
+> >> temporarily reset before executing the locks_lock_inode_wait() function.
+> >>
+> >> Additionally block flag is forced to set, to translate blocking lock to
+> >> remote nfs server, expecting it supports async processing of the blocking
+> >> locks too.
+> > 
+> > But this on its own isn't enough for the client to support asynchronous
+> > blocking locks, right?  Don't we also need the logic that calls knfsd's
+> > lm_notify when it gets a CB_NOTIFY_LOCK from the server?
+> 
+> No, I think this should be enough.
+> We are here a nfs client,
+> we can get F_SETLK with FL_SLEEP from nfsd only (i.e. in re-export case)
+> we need to avoid blocking if lock is already taken, 
+> so we need to call locks_lock_inode_wait without FL_SLEEP,
+> then we submit _sleeping_ request to NFS server (i.e. set )data->arg.block = 1)
+> and waiting for reply from server.
+> 
+> Here we rely that server will NOT block on such request too, so our reply wel not be blocked too.
 
-Note: this patch leaves the EQ/NE macros untouched since those share
-some intermediate macros for the pointer-based macros.
+Just on that one point: if there's a lock conflict, an NFSv4 server will
+return NFS4ERR_DENIED immediately and leave it to the client to poll.
+Or if you're using NFS version >= 4.1, the server has the option of
+calling back to the client with a CB_NOTIFY_LOCK to let the client know
+when the lock might be available.  (See
+https://datatracker.ietf.org/doc/html/rfc8881#section-20.11 for
+details.)  But if a server that blocked and didn't reply to the original
+LOCK request until the lock became available, that would be a bug.
 
-The current macro chain looks like:
-KUNIT_EXPECT_LT_MSG => KUNIT_BASE_LT_MSG_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
-KUNIT_EXPECT_GT_MSG => KUNIT_BASE_GT_MSG_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
-<ditto for LE, GE, and ASSERT variants>
+(Apologies for responding just to that one point, I'm also trying to get
+caught back up again here....).
 
-After this change:
-KUNIT_EXPECT_LT_MSG => KUNIT_BINARY_INT_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
-KUNIT_EXPECT_GT_MSG => KUNIT_BINARY_INT_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
+--b.
 
-I.e. we've traded all the unique intermediary macros for a single shared
-KUNIT_BINARY_INT_ASSERTION. The only difference is that users of
-KUNIT_BINARY_INT_ASSERTION also need to pass the operation (==, <, etc.).
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- include/kunit/test.h | 199 +++++++++++--------------------------------
- 1 file changed, 51 insertions(+), 148 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index d5dc1ef68bfe..48cf520b69ce 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -920,77 +920,28 @@ do {									       \
- 				    fmt,				       \
- 				    ##__VA_ARGS__)
- 
--#define KUNIT_BASE_LT_MSG_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
--				    ...)				       \
--	KUNIT_BASE_BINARY_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left, <, right,			       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
--#define KUNIT_BASE_LE_MSG_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
--				    ...)				       \
--	KUNIT_BASE_BINARY_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left, <=, right,			       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
--#define KUNIT_BASE_GT_MSG_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
-+#define KUNIT_BINARY_EQ_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
-+	KUNIT_BASE_EQ_MSG_ASSERTION(test,				       \
-+				    kunit_binary_assert,		       \
-+				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
- 				    assert_type,			       \
- 				    left,				       \
- 				    right,				       \
- 				    fmt,				       \
--				    ...)				       \
--	KUNIT_BASE_BINARY_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left, >, right,			       \
--				    fmt,				       \
- 				    ##__VA_ARGS__)
- 
--#define KUNIT_BASE_GE_MSG_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
-+#define KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   assert_type,				       \
-+				   left,				       \
-+				   op,					       \
-+				   right,				       \
-+				   fmt,					       \
- 				    ...)				       \
- 	KUNIT_BASE_BINARY_ASSERTION(test,				       \
--				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
--				    assert_type,			       \
--				    left, >=, right,			       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
--#define KUNIT_BINARY_EQ_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
--	KUNIT_BASE_EQ_MSG_ASSERTION(test,				       \
- 				    kunit_binary_assert,		       \
- 				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
- 				    assert_type,			       \
--				    left,				       \
--				    right,				       \
-+				    left, op, right,			       \
- 				    fmt,				       \
- 				    ##__VA_ARGS__)
- 
-@@ -1034,46 +985,6 @@ do {									       \
- 				    fmt,				       \
- 				    ##__VA_ARGS__)
- 
--#define KUNIT_BINARY_LT_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
--	KUNIT_BASE_LT_MSG_ASSERTION(test,				       \
--				    kunit_binary_assert,		       \
--				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
--#define KUNIT_BINARY_LE_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
--	KUNIT_BASE_LE_MSG_ASSERTION(test,				       \
--				    kunit_binary_assert,		       \
--				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
--#define KUNIT_BINARY_GT_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
--	KUNIT_BASE_GT_MSG_ASSERTION(test,				       \
--				    kunit_binary_assert,		       \
--				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
--#define KUNIT_BINARY_GE_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
--	KUNIT_BASE_GE_MSG_ASSERTION(test,				       \
--				    kunit_binary_assert,		       \
--				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
--				    assert_type,			       \
--				    left,				       \
--				    right,				       \
--				    fmt,				       \
--				    ##__VA_ARGS__)
--
- #define KUNIT_BINARY_STR_ASSERTION(test,				       \
- 				   assert_type,				       \
- 				   left,				       \
-@@ -1259,12 +1170,11 @@ do {									       \
- 	KUNIT_EXPECT_LT_MSG(test, left, right, NULL)
- 
- #define KUNIT_EXPECT_LT_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_LT_MSG_ASSERTION(test,				       \
--				      KUNIT_EXPECTATION,		       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_EXPECTATION,			       \
-+				   left, <, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_EXPECT_LE() - Expects that @left is less than or equal to @right.
-@@ -1281,12 +1191,11 @@ do {									       \
- 	KUNIT_EXPECT_LE_MSG(test, left, right, NULL)
- 
- #define KUNIT_EXPECT_LE_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_LE_MSG_ASSERTION(test,				       \
--				      KUNIT_EXPECTATION,		       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_ASSERTION,			       \
-+				   left, <=, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_EXPECT_GT() - An expectation that @left is greater than @right.
-@@ -1303,12 +1212,11 @@ do {									       \
- 	KUNIT_EXPECT_GT_MSG(test, left, right, NULL)
- 
- #define KUNIT_EXPECT_GT_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_GT_MSG_ASSERTION(test,				       \
--				      KUNIT_EXPECTATION,		       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_EXPECTATION,			       \
-+				   left, >, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_EXPECT_GE() - Expects that @left is greater than or equal to @right.
-@@ -1325,12 +1233,11 @@ do {									       \
- 	KUNIT_EXPECT_GE_MSG(test, left, right, NULL)
- 
- #define KUNIT_EXPECT_GE_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_GE_MSG_ASSERTION(test,				       \
--				      KUNIT_EXPECTATION,		       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_EXPECTATION,			       \
-+				   left, >=, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_EXPECT_STREQ() - Expects that strings @left and @right are equal.
-@@ -1536,12 +1443,11 @@ do {									       \
- 	KUNIT_ASSERT_LT_MSG(test, left, right, NULL)
- 
- #define KUNIT_ASSERT_LT_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_LT_MSG_ASSERTION(test,				       \
--				      KUNIT_ASSERTION,			       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_EXPECTATION,			       \
-+				   left, <, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- /**
-  * KUNIT_ASSERT_LE() - An assertion that @left is less than or equal to @right.
-  * @test: The test context object.
-@@ -1557,12 +1463,11 @@ do {									       \
- 	KUNIT_ASSERT_LE_MSG(test, left, right, NULL)
- 
- #define KUNIT_ASSERT_LE_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_LE_MSG_ASSERTION(test,				       \
--				      KUNIT_ASSERTION,			       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_ASSERTION,			       \
-+				   left, <=, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_ASSERT_GT() - An assertion that @left is greater than @right.
-@@ -1579,12 +1484,11 @@ do {									       \
- 	KUNIT_ASSERT_GT_MSG(test, left, right, NULL)
- 
- #define KUNIT_ASSERT_GT_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_GT_MSG_ASSERTION(test,				       \
--				      KUNIT_ASSERTION,			       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_EXPECTATION,			       \
-+				   left, >, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_ASSERT_GE() - Assertion that @left is greater than or equal to @right.
-@@ -1601,12 +1505,11 @@ do {									       \
- 	KUNIT_ASSERT_GE_MSG(test, left, right, NULL)
- 
- #define KUNIT_ASSERT_GE_MSG(test, left, right, fmt, ...)		       \
--	KUNIT_BINARY_GE_MSG_ASSERTION(test,				       \
--				      KUNIT_ASSERTION,			       \
--				      left,				       \
--				      right,				       \
--				      fmt,				       \
--				      ##__VA_ARGS__)
-+	KUNIT_BINARY_INT_ASSERTION(test,				       \
-+				   KUNIT_ASSERTION,			       \
-+				   left, >=, right,			       \
-+				   fmt,					       \
-+				    ##__VA_ARGS__)
- 
- /**
-  * KUNIT_ASSERT_STREQ() - An assertion that strings @left and @right are equal.
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+> Under "block" I mean that handler can sleep or process request for a very long time 
+> but it will NOT BE BLOCKED if lock is taken already, it WILL NOT WAIT when lock will be released,
+> it just return some error in this case.
+> 
+> I think it is correct.
+> Do you think I am wrong or maybe I missed something? 
+> 
+> Thank you,
+> 	Vasily Averin
+> 
+> However I noticed now that past is incorrect, 
+> temporally dropped FL_SLEEP should be restored back in _nfs4_proc_setlk before _nfs4_do_setlk() call.
+> I'll fix it in next version of this patch-set.
+> 
+> >> https://bugzilla.kernel.org/show_bug.cgi?id=215383
+> >> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
+> >> ---
+> >>  fs/nfs/nfs4proc.c | 5 ++++-
+> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+> >> index ee3bc79f6ca3..9b1380c4223c 100644
+> >> --- a/fs/nfs/nfs4proc.c
+> >> +++ b/fs/nfs/nfs4proc.c
+> >> @@ -7094,7 +7094,7 @@ static int _nfs4_do_setlk(struct nfs4_state *state, int cmd, struct file_lock *f
+> >>  			recovery_type == NFS_LOCK_NEW ? GFP_KERNEL : GFP_NOFS);
+> >>  	if (data == NULL)
+> >>  		return -ENOMEM;
+> >> -	if (IS_SETLKW(cmd))
+> >> +	if (IS_SETLKW(cmd) || (fl->fl_flags & FL_SLEEP))
+> >>  		data->arg.block = 1;
+> >>  	nfs4_init_sequence(&data->arg.seq_args, &data->res.seq_res, 1,
+> >>  				recovery_type > NFS_LOCK_NEW);
+> >> @@ -7200,6 +7200,9 @@ static int _nfs4_proc_setlk(struct nfs4_state *state, int cmd, struct file_lock
+> >>  	int status;
+> >>  
+> >>  	request->fl_flags |= FL_ACCESS;
+> >> +	if (((fl_flags & FL_SLEEP_POSIX) == FL_SLEEP_POSIX) && IS_SETLK(cmd))
+> >> +		request->fl_flags &= ~FL_SLEEP;
+> >> +
+> >>  	status = locks_lock_inode_wait(state->inode, request);
+> >>  	if (status < 0)
+> >>  		goto out;
+> >> -- 
+> >> 2.25.1

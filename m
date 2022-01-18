@@ -2,647 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38084492890
+	by mail.lfdr.de (Postfix) with ESMTP id CB6E7492892
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343724AbiAROiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:38:46 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55808 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343650AbiAROiR (ORCPT
+        id S1343545AbiAROjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:39:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42411 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241901AbiAROif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:38:17 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IEMY2m018197;
-        Tue, 18 Jan 2022 14:38:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=s8qrhLz4Z9fUJoJSh2fgIgTOaPbLYP3IKdvIfK2HcmI=;
- b=Oq6wnSEy+hHbIWvbX1ALLpuNcsFZlhNTcKO6l0Sq63snF0SMH+hxJPug3bRu/nmGD63A
- XJRXO0a4w1K/BfjWuhVZn2B6ix6RYvFgNvf+AcLiA917ToiIzw8Y3RqKNtDRt+7pP6eH
- rYdBRWMusid2dfoMlMQo678FWAeHquxdVUX3YeNkNfkeWRVFLibCC372o/u2EBGEPyIa
- 4vouMiahlALAx101YlY4X7tFymeGGB1bco/K+G7QqH0ASUYsRLHDWowInMIiJH09yG45
- j7VphnmavxX/fLC2kw8G4+Ky/mHUi9bFv+61IStHBOXSgUig6ufGsglXWaSkilkvMAuA ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dntgf8yhs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 14:38:16 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IEMffF018782;
-        Tue, 18 Jan 2022 14:38:15 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dntgf8ygu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 14:38:15 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IEXVV5009014;
-        Tue, 18 Jan 2022 14:38:13 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3dknhj464k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 14:38:13 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IEc9Wm37683690
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 14:38:09 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC17AAE05A;
-        Tue, 18 Jan 2022 14:38:09 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B6E7AE045;
-        Tue, 18 Jan 2022 14:38:09 +0000 (GMT)
-Received: from [9.145.64.253] (unknown [9.145.64.253])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 14:38:09 +0000 (GMT)
-Message-ID: <e5b06907-471d-fe4f-8461-a7dea37abca2@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 15:38:08 +0100
+        Tue, 18 Jan 2022 09:38:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642516714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L/3xiTwKonxDCzPOwDPfLLah1H5jM3BzmJPk13Up2Bg=;
+        b=FH+7rTyg7syZPn2d8qpwLaWAW52Aa6j6Akijc+Q+IeuqlWe9vU5XtuZFFWLhimZpApW+Bq
+        m6dGUv0hPTaSZ4AbcxqcJ6m0SWdZE8xYsf0PGzeegOXzrTfKF9zDYr2hoJd53PKZE1LaoC
+        AskI51e08XWT9wsL3QDqqjV7aBCQ5nQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-457-BIXCOp1mMGeKZvzRGc55Rg-1; Tue, 18 Jan 2022 09:38:33 -0500
+X-MC-Unique: BIXCOp1mMGeKZvzRGc55Rg-1
+Received: by mail-ed1-f69.google.com with SMTP id ee53-20020a056402293500b004022f34edcbso6497224edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:38:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L/3xiTwKonxDCzPOwDPfLLah1H5jM3BzmJPk13Up2Bg=;
+        b=2f+37hpmClLPvwuaBVEzz96S6rbqCm03pzh4DnrFECosbW/XkBPavoCVJe/euOiToo
+         HwFOe1Ro83LoOW66RCuxDovjOBxgB3aUgbnqQpWiK4Jql5TkAHkJg+uqbqjELkutLuUy
+         kT9GPFfFvEARLtmiDslqnkspV+G426Mjd18vvgnytZCB8vKyILywFf0o2a/0Nl68kBLk
+         HsETF5RKUGBAeVG3tMcZxDVWCL4hNnGAsDDTeZUooRL3qdMZpw95fJSTS2GNj3dalFes
+         vrm1PrHpGm5XLidvi08CGSAJPZ8gwlgAg3IXp/pkT2+xZZbaDi5I1yYmfjV0kNsbJHrr
+         VNMw==
+X-Gm-Message-State: AOAM5330m/tDSePsUXIdkXM8+BxybiY8PtuJpJ2R2LpBn0v8aj5K8xLg
+        jmSo1z8m979/1HN8jj+YQemtyAeR5a+EMQreICwkZjseLvwjohvkvl6w4KMRj9uEzkWYkoQjhzk
+        ZN6lJDYkZXPaRkMc6nSQdtib9
+X-Received: by 2002:a05:6402:22d2:: with SMTP id dm18mr25313842edb.410.1642516712348;
+        Tue, 18 Jan 2022 06:38:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJypqPN9DQm94a1olWK3nqTc3tmoyxpKtTknk1gpNMzhugw4gQ/v2cnrt8sk2LTdvU5KY9yY4Q==
+X-Received: by 2002:a05:6402:22d2:: with SMTP id dm18mr25313829edb.410.1642516712165;
+        Tue, 18 Jan 2022 06:38:32 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id q14sm7065206edv.79.2022.01.18.06.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 06:38:31 -0800 (PST)
+Date:   Tue, 18 Jan 2022 15:38:28 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-ID: <YebQ5E0dEvbFqxL3@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+ <CAEf4BzY9qmzemZ=3JSto+eWq9k-kX7hZKgugJRO9zZ61-pasqg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-3-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [RFC PATCH v1 02/10] KVM: s390: Honor storage keys when accessing
- guest memory
-In-Reply-To: <20220118095210.1651483-3-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mP_tbT-f9TD2_arqlzZVz-yk0oQgD7SC
-X-Proofpoint-ORIG-GUID: dXMbjRmL2uUenOEsbG0iXtJfGH7VBq-P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_04,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 adultscore=0
- impostorscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180089
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzY9qmzemZ=3JSto+eWq9k-kX7hZKgugJRO9zZ61-pasqg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 10:52, Janis Schoetterl-Glausch wrote:
-> Storage key checking had not been implemented for instructions emulated
-> by KVM. Implement it by enhancing the functions used for guest access,
-> in particular those making use of access_guest which has been renamed
-> to access_guest_with_key.
-> Accesses via access_guest_real should not be key checked.
+On Fri, Jan 14, 2022 at 05:08:32PM -0800, Andrii Nakryiko wrote:
+> On Wed, Jan 12, 2022 at 6:02 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Hi Jiri and Alexei,
+> >
+> > Here is the 2nd version of fprobe. This version uses the
+> > ftrace_set_filter_ips() for reducing the registering overhead.
+> > Note that this also drops per-probe point private data, which
+> > is not used anyway.
 > 
-> For actual accesses, key checking is done by __copy_from/to_user_with_key
-> (which internally uses MVCOS/MVCP/MVCS).
-> In cases where accessibility is checked without an actual access,
-> this is performed by getting the storage key and checking
-> if the access key matches.
-> In both cases, if applicable, storage and fetch protection override
-> are honored.
+> This per-probe private data is necessary for the feature called BPF
+> cookie, in which each attachment has a unique user-provided u64 value
+> associated to it, accessible at runtime through
+> bpf_get_attach_cookie() helper. One way or another we'll need to
+> support this to make these multi-attach BPF programs really useful for
+> generic tracing applications.
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-
-Once you've fixed my nits:
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-> ---
->   arch/s390/include/asm/ctl_reg.h |   2 +
->   arch/s390/include/asm/page.h    |   2 +
->   arch/s390/kvm/gaccess.c         | 174 +++++++++++++++++++++++++++++---
->   arch/s390/kvm/gaccess.h         |  78 ++++++++++++--
->   arch/s390/kvm/intercept.c       |  12 +--
->   arch/s390/kvm/kvm-s390.c        |   4 +-
->   6 files changed, 241 insertions(+), 31 deletions(-)
+> Jiri,
 > 
-> diff --git a/arch/s390/include/asm/ctl_reg.h b/arch/s390/include/asm/ctl_reg.h
-> index 04dc65f8901d..c800199a376b 100644
-> --- a/arch/s390/include/asm/ctl_reg.h
-> +++ b/arch/s390/include/asm/ctl_reg.h
-> @@ -12,6 +12,8 @@
->   
->   #define CR0_CLOCK_COMPARATOR_SIGN	BIT(63 - 10)
->   #define CR0_LOW_ADDRESS_PROTECTION	BIT(63 - 35)
-> +#define CR0_FETCH_PROTECTION_OVERRIDE	BIT(63 - 38)
-> +#define CR0_STORAGE_PROTECTION_OVERRIDE	BIT(63 - 39)
->   #define CR0_EMERGENCY_SIGNAL_SUBMASK	BIT(63 - 49)
->   #define CR0_EXTERNAL_CALL_SUBMASK	BIT(63 - 50)
->   #define CR0_CLOCK_COMPARATOR_SUBMASK	BIT(63 - 52)
-> diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
-> index d98d17a36c7b..cfc4d6fb2385 100644
-> --- a/arch/s390/include/asm/page.h
-> +++ b/arch/s390/include/asm/page.h
-> @@ -20,6 +20,8 @@
->   #define PAGE_SIZE	_PAGE_SIZE
->   #define PAGE_MASK	_PAGE_MASK
->   #define PAGE_DEFAULT_ACC	0
-> +/* storage-protection override */
-> +#define PAGE_SPO_ACC		9
->   #define PAGE_DEFAULT_KEY	(PAGE_DEFAULT_ACC << 4)
->   
->   #define HPAGE_SHIFT	20
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index 4460808c3b9a..92ab96d55504 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -10,6 +10,7 @@
->   #include <linux/mm_types.h>
->   #include <linux/err.h>
->   #include <linux/pgtable.h>
-> +#include <linux/bitfield.h>
->   
->   #include <asm/gmap.h>
->   #include "kvm-s390.h"
-> @@ -794,6 +795,79 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
->   	return 1;
->   }
->   
-> +static bool fetch_prot_override_applicable(struct kvm_vcpu *vcpu, enum gacc_mode mode,
-> +					   union asce asce)
-> +{
-> +	psw_t *psw = &vcpu->arch.sie_block->gpsw;
-> +	unsigned long override;
-> +
-> +	if (mode == GACC_FETCH || mode == GACC_IFETCH) {
-> +		/* check if fetch protection override enabled */
-> +		override = vcpu->arch.sie_block->gcr[0];
-> +		override &= CR0_FETCH_PROTECTION_OVERRIDE;
-> +		/* not applicable if subject to DAT && private space */
-> +		override = override && !(psw_bits(*psw).dat && asce.p);
-> +		return override;
-> +	}
-> +	return false;
-> +}
-> +
-> +static bool fetch_prot_override_applies(unsigned long ga, unsigned int len)
-> +{
-> +	return ga < 2048 && ga + len <= 2048;
-> +}
-> +
-> +static bool storage_prot_override_applicable(struct kvm_vcpu *vcpu)
-> +{
-> +	/* check if storage protection override enabled */
-> +	return vcpu->arch.sie_block->gcr[0] & CR0_STORAGE_PROTECTION_OVERRIDE;
-> +}
-> +
-> +static bool storage_prot_override_applies(char access_control)
-> +{
-> +	/* matches special storage protection override key (9) -> allow */
-> +	return access_control == PAGE_SPO_ACC;
-> +}
-> +
-> +static int vcpu_check_access_key(struct kvm_vcpu *vcpu, char access_key,
-> +				 enum gacc_mode mode, union asce asce, gpa_t gpa,
-> +				 unsigned long ga, unsigned int len)
-> +{
-> +	unsigned char storage_key, access_control;
-> +	unsigned long hva;
-> +	int r;
-> +
-> +	/* access key 0 matches any storage key -> allow */
-> +	if (access_key == 0)
-> +		return 0;
-> +	/*
-> +	 * caller needs to ensure that gfn is accessible, so we can
-> +	 * assume that this cannot fail
-> +	 */
-> +	hva = gfn_to_hva(vcpu->kvm, gpa_to_gfn(gpa));
-> +	mmap_read_lock(current->mm);
-> +	r = get_guest_storage_key(current->mm, hva, &storage_key);
-> +	mmap_read_unlock(current->mm);
-> +	if (r)
-> +		return r;
-> +	access_control = FIELD_GET(_PAGE_ACC_BITS, storage_key);
-> +	/* access key matches storage key -> allow */
-> +	if (access_control == access_key)
-> +		return 0;
-> +	if (mode == GACC_FETCH || mode == GACC_IFETCH) {
-> +		/* mismatching keys, no fetch protection -> allowed */
+> We've discussed with Alexei this week how cookies can be supported for
+> multi-attach fentry (where it seems even more challenging than in
+> kprobe case), and agreed on rather simple solution, which roughly goes
+> like this. When multi-attaching either fentry/fexit program, save
+> sorted array of IP addresses and then sorted in the same order as IPs
+> list of u64 cookies. At runtime, bpf_get_attach_cookie() helper should
+> somehow get access to these two arrays and functions IP (that we
+> already have with bpf_get_func_ip()), perform binary search and locate
+> necessary cookie. This offloads the overhead of finding this cookie to
+> actual call site of bpf_get_attach_cookie() (and it's a log(N), so not
+> bad at all, especially if BPF program can be optimized to call this
+> helper just once).
+> 
+> I think something like that should be doable for Masami's fprobe-based
+> multi-attach kprobes, right? That would allow to have super-fast
+> attachment, but still support BPF cookie per each individual IP/kernel
+> function attachment. I haven't looked at code thoroughly, though,
+> please let me know if I'm missing something fundamental.
 
-we want to fetch and fetch protection is off -> allow access
+ok, that seems doable, we should be able to get the link struct
+in bpf_get_attach_cookie_trace and reach both ips and cookies
 
-> +		if (!(storage_key & _PAGE_FP_BIT))
-> +			return 0;
-> +		if (fetch_prot_override_applicable(vcpu, mode, asce))
-> +			if (fetch_prot_override_applies(ga, len))
+jirka
 
-Personally I'd prefer a "&&" at the end of the first if and then a \n
-
-> +				return 0;
-> +	}
-> +	if (storage_prot_override_applicable(vcpu))
-> +		if (storage_prot_override_applies(access_control))
-> +			return 0;
-> +	return PGM_PROTECTION;
-> +}
-
-Everything above looks like I'd expect it to
-
-> +
->   /**
->    * guest_range_to_gpas() - Calculate guest physical addresses of page fragments
->    * covering a logical range
-> @@ -804,6 +878,7 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
->    * @len: length of range in bytes
->    * @asce: address-space-control element to use for translation
->    * @mode: access mode
-> + * @access_key: access key to mach the range's storage keys against
->    *
->    * Translate a logical range to a series of guest absolute addresses,
->    * such that the concatenation of page fragments starting at each gpa make up
-> @@ -830,7 +905,8 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
->    */
->   static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->   			       unsigned long *gpas, unsigned long len,
-> -			       const union asce asce, enum gacc_mode mode)
-> +			       const union asce asce, enum gacc_mode mode,
-> +			       char access_key)
->   {
->   	psw_t *psw = &vcpu->arch.sie_block->gpsw;
->   	unsigned int offset = offset_in_page(ga);
-> @@ -857,6 +933,10 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->   		}
->   		if (rc)
->   			return trans_exc(vcpu, rc, ga, ar, mode, prot);
-> +		rc = vcpu_check_access_key(vcpu, access_key, mode, asce, gpa, ga,
-> +					   fragment_len);
-> +		if (rc)
-> +			return trans_exc(vcpu, rc, ga, ar, mode, PROT_TYPE_KEYC);
->   		if (gpas)
->   			*gpas++ = gpa;
->   		offset = 0;
-> @@ -880,16 +960,50 @@ static int access_guest_page(struct kvm *kvm, enum gacc_mode mode, gpa_t gpa,
->   	return rc;
->   }
->   
-> -int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
-> -		 unsigned long len, enum gacc_mode mode)
-> +static int
-> +access_guest_page_with_key(struct kvm *kvm, enum gacc_mode mode, gpa_t gpa,
-> +			   void *data, unsigned int len, char key)
-> +{
-> +	struct kvm_memory_slot *slot;
-> +	bool writable;
-> +	gfn_t gfn;
-> +	hva_t hva;
-> +	int rc;
-> +
-> +	gfn = gpa >> PAGE_SHIFT;
-> +	slot = gfn_to_memslot(kvm, gfn);
-> +	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
-> +
-> +	if (kvm_is_error_hva(hva))
-> +		return PGM_ADDRESSING;
-> +	if (!writable && mode == GACC_STORE)
-> +		return -EOPNOTSUPP;
-
-/* We don't support ro memslots so this should suffice */
-
-> +	hva += offset_in_page(gpa);
-> +	if (mode == GACC_STORE)
-> +		rc = __copy_to_user_with_key((void __user *)hva, data, len, key);
-> +	else
-> +		rc = __copy_from_user_with_key(data, (void __user *)hva, len, key);
-> +	if (rc)
-> +		return PGM_PROTECTION;
-> +	if (mode == GACC_STORE)
-> +		mark_page_dirty_in_slot(kvm, slot, gfn);
-> +	return 0;
-> +}
-> +
-> +int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
-> +			  void *data, unsigned long len, enum gacc_mode mode,
-> +			  char access_key)
->   {
->   	psw_t *psw = &vcpu->arch.sie_block->gpsw;
->   	unsigned long nr_pages, idx;
->   	unsigned long gpa_array[2];
->   	unsigned int fragment_len;
->   	unsigned long *gpas;
-> +	enum prot_type prot;
->   	int need_ipte_lock;
->   	union asce asce;
-> +	bool try_storage_prot_override;
-> +	bool try_fetch_prot_override;
->   	int rc;
->   
->   	if (!len)
-> @@ -904,16 +1018,37 @@ int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
->   		gpas = vmalloc(array_size(nr_pages, sizeof(unsigned long)));
->   	if (!gpas)
->   		return -ENOMEM;
-> +	try_fetch_prot_override = fetch_prot_override_applicable(vcpu, mode, asce);
-> +	try_storage_prot_override = storage_prot_override_applicable(vcpu);
->   	need_ipte_lock = psw_bits(*psw).dat && !asce.r;
->   	if (need_ipte_lock)
->   		ipte_lock(vcpu);
-> -	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode);
-> -	for (idx = 0; idx < nr_pages && !rc; idx++) {
-
-
-/*
-We'll do an actual access via the mv instruction which will return 
-access errors to us so we don't need to check here.
-*/
-> +	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode, 0);
-> +	if (rc)
-> +		goto out_unlock;
-> +	for (idx = 0; idx < nr_pages; idx++) {
->   		fragment_len = min(PAGE_SIZE - offset_in_page(gpas[idx]), len);
-> -		rc = access_guest_page(vcpu->kvm, mode, gpas[idx], data, fragment_len);
-> +		if (try_fetch_prot_override && fetch_prot_override_applies(ga, fragment_len)) {
-> +			rc = access_guest_page(vcpu->kvm, mode, gpas[idx],
-> +					       data, fragment_len);
-> +		} else {
-> +			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
-> +							data, fragment_len, access_key);
-> +		}
-> +		if (rc == PGM_PROTECTION && try_storage_prot_override)
-> +			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
-> +							data, fragment_len, PAGE_SPO_ACC);
-> +		if (rc == PGM_PROTECTION)
-> +			prot = PROT_TYPE_KEYC;
-> +		if (rc)
-> +			break;
->   		len -= fragment_len;
->   		data += fragment_len;
-> +		ga = kvm_s390_logical_to_effective(vcpu, ga + fragment_len);
->   	}
-> +	if (rc > 0)
-> +		rc = trans_exc(vcpu, rc, ga, 0, mode, prot);
-> +out_unlock:
->   	if (need_ipte_lock)
->   		ipte_unlock(vcpu);
->   	if (nr_pages > ARRAY_SIZE(gpa_array))
-> @@ -940,12 +1075,13 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->   }
->   
->   /**
-> - * guest_translate_address - translate guest logical into guest absolute address
-> + * guest_translate_address_with_key - translate guest logical into guest absolute address
->    * @vcpu: virtual cpu
->    * @gva: Guest virtual address
->    * @ar: Access register
->    * @gpa: Guest physical address
->    * @mode: Translation access mode
-> + * @access_key: access key to mach the storage key with
->    *
->    * Parameter semantics are the same as the ones from guest_translate.
->    * The memory contents at the guest address are not changed.
-> @@ -953,8 +1089,9 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->    * Note: The IPTE lock is not taken during this function, so the caller
->    * has to take care of this.
->    */
-> -int guest_translate_address(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
-> -			    unsigned long *gpa, enum gacc_mode mode)
-> +int guest_translate_address_with_key(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
-> +				     unsigned long *gpa, enum gacc_mode mode,
-> +				     char access_key)
->   {
->   	union asce asce;
->   	int rc;
-> @@ -963,7 +1100,17 @@ int guest_translate_address(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
->   	rc = get_vcpu_asce(vcpu, &asce, gva, ar, mode);
->   	if (rc)
->   		return rc;
-> -	return guest_range_to_gpas(vcpu, gva, ar, gpa, 1, asce, mode);
-> +	return guest_range_to_gpas(vcpu, gva, ar, gpa, 1, asce, mode,
-> +				 access_key);
-> +}
-> +
-> +int guest_translate_address(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
-> +			    unsigned long *gpa, enum gacc_mode mode)
-> +{
-> +	char access_key = psw_bits(vcpu->arch.sie_block->gpsw).key;
-> +
-> +	return guest_translate_address_with_key(vcpu, gva, ar, gpa, mode,
-> +						access_key);
->   }
->   
->   /**
-> @@ -973,9 +1120,11 @@ int guest_translate_address(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
->    * @ar: Access register
->    * @length: Length of test range
->    * @mode: Translation access mode
-> + * @access_key: access key to mach the storage keys with
->    */
->   int check_gva_range(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
-> -		    unsigned long length, enum gacc_mode mode)
-> +		    unsigned long length, enum gacc_mode mode,
-> +		    char access_key)
->   {
->   	union asce asce;
->   	int rc = 0;
-> @@ -984,7 +1133,8 @@ int check_gva_range(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
->   	if (rc)
->   		return rc;
->   	ipte_lock(vcpu);
-> -	rc = guest_range_to_gpas(vcpu, gva, ar, NULL, length, asce, mode);
-> +	rc = guest_range_to_gpas(vcpu, gva, ar, NULL, length, asce, mode,
-> +				 access_key);
->   	ipte_unlock(vcpu);
->   
->   	return rc;
-> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
-> index 7c72a5e3449f..3df432702cd6 100644
-> --- a/arch/s390/kvm/gaccess.h
-> +++ b/arch/s390/kvm/gaccess.h
-> @@ -186,24 +186,32 @@ enum gacc_mode {
->   	GACC_IFETCH,
->   };
->   
-> +int guest_translate_address_with_key(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
-> +				     unsigned long *gpa, enum gacc_mode mode,
-> +				     char access_key);
-> +
->   int guest_translate_address(struct kvm_vcpu *vcpu, unsigned long gva,
->   			    u8 ar, unsigned long *gpa, enum gacc_mode mode);
-> +
->   int check_gva_range(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
-> -		    unsigned long length, enum gacc_mode mode);
-> +		    unsigned long length, enum gacc_mode mode,
-> +		    char access_key);
->   
-> -int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
-> -		 unsigned long len, enum gacc_mode mode);
-> +int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
-> +			  void *data, unsigned long len, enum gacc_mode mode,
-> +			  char access_key);
-
-Normally we group them without \n.
-Yes this was already inconsistent before you added your changes :)
-
->   
->   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->   		      void *data, unsigned long len, enum gacc_mode mode);
->   
->   /**
-> - * write_guest - copy data from kernel space to guest space
-> + * write_guest_with_key - copy data from kernel space to guest space
->    * @vcpu: virtual cpu
->    * @ga: guest address
->    * @ar: access register
->    * @data: source address in kernel space
->    * @len: number of bytes to copy
-> + * @access_key: access key the storage key needs to match
->    *
->    * Copy @len bytes from @data (kernel space) to @ga (guest address).
->    * In order to copy data to guest space the PSW of the vcpu is inspected:
-> @@ -214,8 +222,8 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->    * The addressing mode of the PSW is also inspected, so that address wrap
->    * around is taken into account for 24-, 31- and 64-bit addressing mode,
->    * if the to be copied data crosses page boundaries in guest address space.
-> - * In addition also low address and DAT protection are inspected before
-> - * copying any data (key protection is currently not implemented).
-> + * In addition low address, DAT and key protection checks are performed before
-> + * copying any data.
->    *
->    * This function modifies the 'struct kvm_s390_pgm_info pgm' member of @vcpu.
->    * In case of an access exception (e.g. protection exception) pgm will contain
-> @@ -243,10 +251,53 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->    *	 if data has been changed in guest space in case of an exception.
->    */
->   static inline __must_check
-> +int write_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
-> +			 void *data, unsigned long len, char access_key)
-> +{
-> +	return access_guest_with_key(vcpu, ga, ar, data, len, GACC_STORE,
-> +				     access_key);
-> +}
-> +
-> +/**
-> + * write_guest - copy data from kernel space to guest space
-> + * @vcpu: virtual cpu
-> + * @ga: guest address
-> + * @ar: access register
-> + * @data: source address in kernel space
-> + * @len: number of bytes to copy
-> + *
-> + * The behaviour of write_guest is identical to write_guest_with_key, except
-> + * that the PSW access key is used instead of an explicit argument.
-> + */
-> +static inline __must_check
->   int write_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
->   		unsigned long len)
->   {
-> -	return access_guest(vcpu, ga, ar, data, len, GACC_STORE);
-> +	char access_key = psw_bits(vcpu->arch.sie_block->gpsw).key;
-> +
-> +	return write_guest_with_key(vcpu, ga, ar, data, len, access_key);
-> +}
-> +
-> +/**
-> + * read_guest_with_key - copy data from guest space to kernel space
-> + * @vcpu: virtual cpu
-> + * @ga: guest address
-> + * @ar: access register
-> + * @data: destination address in kernel space
-> + * @len: number of bytes to copy
-> + * @access_key: access key the storage key needs to match
-> + *
-> + * Copy @len bytes from @ga (guest address) to @data (kernel space).
-> + *
-> + * The behaviour of read_guest_with_key is identical to write_guest_with_key,
-> + * except that data will be copied from guest space to kernel space.
-> + */
-> +static inline __must_check
-> +int read_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
-> +			void *data, unsigned long len, char access_key)
-> +{
-> +	return access_guest_with_key(vcpu, ga, ar, data, len, GACC_FETCH,
-> +				     access_key);
->   }
->   
->   /**
-> @@ -259,14 +310,16 @@ int write_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
->    *
->    * Copy @len bytes from @ga (guest address) to @data (kernel space).
->    *
-> - * The behaviour of read_guest is identical to write_guest, except that
-> - * data will be copied from guest space to kernel space.
-> + * The behaviour of read_guest is identical to read_guest_with_key, except
-> + * that the PSW access key is used instead of an explicit argument.
->    */
->   static inline __must_check
->   int read_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
->   	       unsigned long len)
->   {
-> -	return access_guest(vcpu, ga, ar, data, len, GACC_FETCH);
-> +	char access_key = psw_bits(vcpu->arch.sie_block->gpsw).key;
-> +
-> +	return read_guest_with_key(vcpu, ga, ar, data, len, access_key);
->   }
->   
->   /**
-> @@ -287,7 +340,10 @@ static inline __must_check
->   int read_guest_instr(struct kvm_vcpu *vcpu, unsigned long ga, void *data,
->   		     unsigned long len)
->   {
-> -	return access_guest(vcpu, ga, 0, data, len, GACC_IFETCH);
-> +	char access_key = psw_bits(vcpu->arch.sie_block->gpsw).key;
-> +
-> +	return access_guest_with_key(vcpu, ga, 0, data, len, GACC_IFETCH,
-> +				     access_key);
->   }
->   
->   /**
-> diff --git a/arch/s390/kvm/intercept.c b/arch/s390/kvm/intercept.c
-> index d07ff646d844..8bd42a20d924 100644
-> --- a/arch/s390/kvm/intercept.c
-> +++ b/arch/s390/kvm/intercept.c
-> @@ -331,18 +331,18 @@ static int handle_mvpg_pei(struct kvm_vcpu *vcpu)
->   
->   	kvm_s390_get_regs_rre(vcpu, &reg1, &reg2);
->   
-> -	/* Make sure that the source is paged-in */
-> -	rc = guest_translate_address(vcpu, vcpu->run->s.regs.gprs[reg2],
-> -				     reg2, &srcaddr, GACC_FETCH);
-> +	/* Ensure that the source is paged-in, no actual access -> no key checking */
-> +	rc = guest_translate_address_with_key(vcpu, vcpu->run->s.regs.gprs[reg2],
-> +					      reg2, &srcaddr, GACC_FETCH, 0);
->   	if (rc)
->   		return kvm_s390_inject_prog_cond(vcpu, rc);
->   	rc = kvm_arch_fault_in_page(vcpu, srcaddr, 0);
->   	if (rc != 0)
->   		return rc;
->   
-> -	/* Make sure that the destination is paged-in */
-> -	rc = guest_translate_address(vcpu, vcpu->run->s.regs.gprs[reg1],
-> -				     reg1, &dstaddr, GACC_STORE);
-> +	/* Ensure that the source is paged-in, no actual access -> no key checking */
-> +	rc = guest_translate_address_with_key(vcpu, vcpu->run->s.regs.gprs[reg1],
-> +					      reg1, &dstaddr, GACC_STORE, 0);
->   	if (rc)
->   		return kvm_s390_inject_prog_cond(vcpu, rc);
->   	rc = kvm_arch_fault_in_page(vcpu, dstaddr, 1);
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 14a18ba5ff2c..38b304e81c57 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -4750,7 +4750,7 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->   	case KVM_S390_MEMOP_LOGICAL_READ:
->   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
->   			r = check_gva_range(vcpu, mop->gaddr, mop->ar,
-> -					    mop->size, GACC_FETCH);
-> +					    mop->size, GACC_FETCH, 0);
->   			break;
->   		}
->   		r = read_guest(vcpu, mop->gaddr, mop->ar, tmpbuf, mop->size);
-> @@ -4762,7 +4762,7 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
->   	case KVM_S390_MEMOP_LOGICAL_WRITE:
->   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
->   			r = check_gva_range(vcpu, mop->gaddr, mop->ar,
-> -					    mop->size, GACC_STORE);
-> +					    mop->size, GACC_STORE, 0);
->   			break;
->   		}
->   		if (copy_from_user(tmpbuf, uaddr, mop->size)) {
+> 
+> >
+> > This introduces the fprobe, the function entry/exit probe with
+> > multiple probe point support. This also introduces the rethook
+> > for hooking function return as same as kretprobe does. This
+> > abstraction will help us to generalize the fgraph tracer,
+> > because we can just switch it from rethook in fprobe, depending
+> > on the kernel configuration.
+> >
+> > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> > patches will not be affected by this change.
+> >
+> > [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+> >
+> > I also added an out-of-tree (just for testing) patch at the
+> > end of this series ([8/8]) for adding a wildcard support to
+> > the sample program. With that patch, it shows how long the
+> > registration will take;
+> >
+> > # time insmod fprobe_example.ko symbol='btrfs_*'
+> > [   36.130947] fprobe_init: 1028 symbols found
+> > [   36.177901] fprobe_init: Planted fprobe at btrfs_*
+> > real    0m 0.08s
+> > user    0m 0.00s
+> > sys     0m 0.07s
+> >
+> > Thank you,
+> >
+> > ---
+> >
+> > Jiri Olsa (2):
+> >       ftrace: Add ftrace_set_filter_ips function
+> >       bpf: Add kprobe link for attaching raw kprobes
+> >
+> > Masami Hiramatsu (6):
+> >       fprobe: Add ftrace based probe APIs
+> >       rethook: Add a generic return hook
+> >       rethook: x86: Add rethook x86 implementation
+> >       fprobe: Add exit_handler support
+> >       fprobe: Add sample program for fprobe
+> >       [DO NOT MERGE] Out-of-tree: Support wildcard symbol option to sample
+> >
+> >
+> >  arch/x86/Kconfig                |    1
+> >  arch/x86/kernel/Makefile        |    1
+> >  arch/x86/kernel/rethook.c       |  115 ++++++++++++++++++++
+> >  include/linux/bpf_types.h       |    1
+> >  include/linux/fprobe.h          |   57 ++++++++++
+> >  include/linux/ftrace.h          |    3 +
+> >  include/linux/rethook.h         |   74 +++++++++++++
+> >  include/linux/sched.h           |    3 +
+> >  include/uapi/linux/bpf.h        |   12 ++
+> >  kernel/bpf/syscall.c            |  195 +++++++++++++++++++++++++++++++++-
+> >  kernel/exit.c                   |    2
+> >  kernel/fork.c                   |    3 +
+> >  kernel/kallsyms.c               |    1
+> >  kernel/trace/Kconfig            |   22 ++++
+> >  kernel/trace/Makefile           |    2
+> >  kernel/trace/fprobe.c           |  168 +++++++++++++++++++++++++++++
+> >  kernel/trace/ftrace.c           |   54 ++++++++-
+> >  kernel/trace/rethook.c          |  226 +++++++++++++++++++++++++++++++++++++++
+> >  samples/Kconfig                 |    7 +
+> >  samples/Makefile                |    1
+> >  samples/fprobe/Makefile         |    3 +
+> >  samples/fprobe/fprobe_example.c |  154 +++++++++++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h  |   12 ++
+> >  23 files changed, 1103 insertions(+), 14 deletions(-)
+> >  create mode 100644 arch/x86/kernel/rethook.c
+> >  create mode 100644 include/linux/fprobe.h
+> >  create mode 100644 include/linux/rethook.h
+> >  create mode 100644 kernel/trace/fprobe.c
+> >  create mode 100644 kernel/trace/rethook.c
+> >  create mode 100644 samples/fprobe/Makefile
+> >  create mode 100644 samples/fprobe/fprobe_example.c
+> >
+> > --
+> > Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
 > 
 

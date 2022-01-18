@@ -2,289 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D16714930FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E40493100
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350011AbiARWoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 17:44:21 -0500
-Received: from mail-eus2azon11020020.outbound.protection.outlook.com ([52.101.56.20]:19135
-        "EHLO na01-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237704AbiARWoR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 17:44:17 -0500
+        id S1350030AbiARWrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 17:47:41 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:5410 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344558AbiARWrj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 17:47:39 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IKEEMs021250;
+        Tue, 18 Jan 2022 22:47:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=f+xmmp0yILBW9zO/a9O30NDq7DxiKeeJjO9dCKGUGfQ=;
+ b=Abpi6tLSKQsWf/wdzEfBp1M9faGgaEsSjdpdl5cthnc+fnNP68PLd8EKepHqXLzN+C4a
+ J2d0K61DCEDr8Lf4I6IfqYCP+luw6sN9Xlb69jPbA+RO0d3QK7+yJ8s883VYC0AZUpjS
+ vd2dBnmuH6ek0kEmcVGvD2XTXYONF6xOEE5+3ZUlWFc/QEB/kbMSLTtrVHdOdjeuMZhr
+ vuTH3dD+Cn3kw8hVQcJBx/9PhsjQ+RwLo7LpJxEOJFW/R8O1E08lHtl8wMwcjxA2q7GX
+ +tBnQNYoCi0AOXoyf+ZlMsqiNnKnTCkRICBomXrdq0AjD5XNcf8fNH1MpTObvJsCbv2M 8Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4q3fjs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 22:47:22 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20IMQZuW016645;
+        Tue, 18 Jan 2022 22:47:21 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2048.outbound.protection.outlook.com [104.47.74.48])
+        by userp3030.oracle.com with ESMTP id 3dkkcy5t3a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 22:47:21 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BJQcfgRYaBQe5/GXpftrVNF26BggkD0yYwJtg92jgdnRl3G49jmV+KTUpmYCIbT1BbyMwIHyzZgRWZ2MOchfp1v72jyUMCM4Q9IHfCdwUGs7nY8if4GuDoLThFKdp0iTxqYcn2mpXZ9SIgGWWckgolgiZgWWBfKCqf45vM5Eg1jzfRny/dKZOKt5hJUqDiF01SfWZg7mL6lE7PumCjWGn/GLAtihJr2T+ONZA45yjZLW+6auyyjU9kOcLdPPpAW8xRF/m7W8Q/zUjMW3ChDx2U7rvh8TvVThtBQ+FCcI97OWbD6cOuP/9vMZ8W57hJnZQztLNN3JthNuOCUQWncpdA==
+ b=Dyn67xJbLdbYV1+appdJC9pZ/TcAUTO9z7xLx2A45vTuKsdI2NN05FNsdgfSD5ikfbDdUzaMpbrDJEnznVkBoKkt9ZTLD2ubqTBiOTcAfQG/T1QYYUF+8tRaTOzZa3BupsEp22DliUGTE/aP9+HXbtUDpCTY+rzaDqww7B/j8ZRFgzmRqbekU83ru1/yvwHzBT2zTH4y5qtevUEr7eyaAfA6rUD8eTTV+pBmhKDIXFijocrSxxqtjt8VkRav4EhssgeUFg+oydnUZ9ISsbJgCyZScQBXmgKd69USxjFz1FJHoxcma74/QQLNt8yPvWBm/bsZkQTh4kcr7WC2cphYuw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vsxQDf1zpqTWD5gxK7Qr1FMS+YUWax60/X/d/hisl9A=;
- b=AZV25Y3CL3Ml4zPjY987iLN7GMc+Bpg0D2Hm0JGG1jMo0gXF6GVejXntpPH9h3fBdho2qSPaEcBvkIn6aXhliSdCBIDO+xZGLj91mGVE59uh29U/leEH5Vg1uxlSUDcpK9bPNLjuZfg5m12j+xOYKJUwSlrMgBk0r10fuDySkOAHNwek89GZL1IR7cC++6iKiSwB36tpGHBOkfoCKwBVHGG6Gusz2OObDe5MXYMzR9jVDs6FJM6rQNJodx2/uylWxdjlmslPr5Ib6Vs+zz1YfJ7thCG13fvubImyQxN29jxRvon6zR3q0RNtDHHo7rLnnRFaL/LoLGkLj7vg7NZSDw==
+ bh=f+xmmp0yILBW9zO/a9O30NDq7DxiKeeJjO9dCKGUGfQ=;
+ b=Myb9wJL5JwWco0tgPwRLMrcwLNQFUkplvWEFYmG2GWyCsrwQQVDFMnyX42fDN2vBhVx+XdXaIrfTx2Qz8Z+EkIF0nMLpEvgSnwdSgJrwxRB2c0i46aIWOR5vYk02sb4ux7Iv68GjN/1udu2lNWFvcoB8kPIfyPrrtdbqsYQCXeBq2x7ye3A01QGkhNr9Q3zPh5fL+7+aE41z9PGxyNsqL91flqwcMkSplrteXT3vGFhbe8RqsHjJ6ahW3UVHOyk1aYOeCqrfl2u+JAhseGb8d/5MiJG9aNYVXC1/KSjLt0/9VQQVgHNG5QDPCZh3Hjz1rrAbfYLohBItXhMORATgNw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vsxQDf1zpqTWD5gxK7Qr1FMS+YUWax60/X/d/hisl9A=;
- b=gv0TMKm1FJEgn9gRaibxanndY+sTfmi9jLoHlXk5BUNQQpyHyoX8IRti+Zm+cRcBXMOuRePPEowtWAM0Vmj+QxxqHm++gSiDcmhycRwYNyi+nV9wzWyLCAGkOVvcOjEjBFoyDo1ccqF2CwYvc7zoc6guqEnITTPUH7WHfJurWgM=
-Received: from BY5PR21MB1506.namprd21.prod.outlook.com (2603:10b6:a03:23d::12)
- by MW2PR2101MB0923.namprd21.prod.outlook.com (2603:10b6:302:10::31) with
+ bh=f+xmmp0yILBW9zO/a9O30NDq7DxiKeeJjO9dCKGUGfQ=;
+ b=WXpMgJSGyw1VtyCIfCrpWwfsYG5LMNQ30VFrZBgsYrNLYi7fQjd3dDte4fMWA/Pu249CI+eAjixkkoKJbWHUrvxcLMgzzZg0+NnX1kZAPrCcqNWvPyQmqjheVS58VjZApNd4AgiZK0QwC/roHtYHsxj9T4sMXbT7J+Bj1u+StRM=
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
+ by BLAPR10MB5219.namprd10.prod.outlook.com (2603:10b6:208:321::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.3; Tue, 18 Jan
- 2022 22:44:12 +0000
-Received: from BY5PR21MB1506.namprd21.prod.outlook.com
- ([fe80::d18c:f0b3:8491:22e1]) by BY5PR21MB1506.namprd21.prod.outlook.com
- ([fe80::d18c:f0b3:8491:22e1%3]) with mapi id 15.20.4930.003; Tue, 18 Jan 2022
- 22:44:12 +0000
-From:   Long Li <longli@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>
-Subject: RE: [PATCH] PCI: hv: Fix NUMA node assignment when kernel boots with
- parameters affecting NUMA topology
-Thread-Topic: [PATCH] PCI: hv: Fix NUMA node assignment when kernel boots with
- parameters affecting NUMA topology
-Thread-Index: AQHYA1QWLddhPIPNnk6mtn+/LlpFvqxXsWWAgABQoACABHENgIADtXxggAYN6oCAAzyJgA==
-Date:   Tue, 18 Jan 2022 22:44:12 +0000
-Message-ID: <BY5PR21MB1506829683984FD91061D907CE589@BY5PR21MB1506.namprd21.prod.outlook.com>
-References: <1641511228-12415-1-git-send-email-longli@linuxonhyperv.com>
- <MWHPR21MB15937B050A3E849A76384EA8D74D9@MWHPR21MB1593.namprd21.prod.outlook.com>
- <BY5PR21MB15067D1C5AA731A340A7AF34CE4D9@BY5PR21MB1506.namprd21.prod.outlook.com>
- <MWHPR21MB15938D29A4C1AF535E8510ADD7509@MWHPR21MB1593.namprd21.prod.outlook.com>
- <BY5PR21MB1506B0D34E7C42B9B0337136CE539@BY5PR21MB1506.namprd21.prod.outlook.com>
- <MWHPR21MB1593B3FF426AFF5B3F7C35E9D7569@MWHPR21MB1593.namprd21.prod.outlook.com>
-In-Reply-To: <MWHPR21MB1593B3FF426AFF5B3F7C35E9D7569@MWHPR21MB1593.namprd21.prod.outlook.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Tue, 18 Jan
+ 2022 22:47:18 +0000
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::104f:849b:6a11:c5c2]) by BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::104f:849b:6a11:c5c2%6]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 22:47:18 +0000
+Message-ID: <6920ea3c-5833-952c-5530-b02560e307aa@oracle.com>
+Date:   Tue, 18 Jan 2022 15:47:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8bda7ebd-c08f-425e-b37c-6b8fc48aeffa;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-01-07T15:18:50Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d50f50f5-87e4-4a38-9143-08d9dad40c9d
-x-ms-traffictypediagnostic: MW2PR2101MB0923:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <MW2PR2101MB0923EA3DBBBC649E1B6419AACE589@MW2PR2101MB0923.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hPCu2Nf7DJXkwezLdCtm5IsqKycj658lLp8J+s/CNasnYa7fo1p0Mzh6qRgX5ww/x3n/73nZ5Vz+/9SzQGGDi59pYuZOeu7Tb7j7jez+qMONl6WF6ORUdAHzUM22ilNY1Tdc8ydXiCreXV8J2I2Hbu/7q5Udl4WKuVb/rhTdpTDkyzM1KTGnYNcRNEfqmf2aiQVNlSjl+4iPm3Wqeia3OmrEJlc6UIxZgF9yEaZAST/nd6MU2JfbWWGFrzB/8+q45KqVU3u9S8PUP4u0f35xosLZs8MZcIVOLzK9wJ6mRtzO/awp9Eune+EHOC3aQwdXZWQt3e3Jqd9IfqbJYTcGnz1+P9/91zyWuPNifHwfaP4OdYtCLcjmlSn31eHodH5y6bjJOnRBF6WbMQ3gEUzZj1v5GjG1pcPlSqD0e5zWU5+jfwXg2Rkxg1d8tRKagJ0kWXJCcB/rtnrwQViVWfjp1ksYI47NYytOrgxBttkQav8jiPxy1HId6rMFsjPQVDz2DwIwbAhgjt2NfiewBJ/5vdgFn36NumK7JAlGzxDDmBBYvsKWeTtoFzWqPG5QGFWcbPWzwvdAqFYJhtmbuXTOIPnnjiw/KOiZvHePLaQ1FbHKo4AG8dRCGpR1fG9gLdtKdWKUd4tR6FCkgC1ORfqkiE0h+r06n3I2FRmN1rNvsr4Agy11uMIHC5jSgBxGdkvB7Fsn9AIw4YALLZLkzGDJY3YMbChkgpiuUzsoLByvtnMCRAtYB8FRkh/fdDPiGZ7H
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1506.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(508600001)(71200400001)(6506007)(10290500003)(38070700005)(38100700002)(122000001)(82960400001)(82950400001)(7696005)(86362001)(186003)(26005)(83380400001)(66556008)(64756008)(66476007)(52536014)(66446008)(76116006)(33656002)(8990500004)(316002)(66946007)(6636002)(110136005)(8676002)(8936002)(5660300002)(55016003)(2906002)(20210929001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Q2o2eJgpxXkVt2w/Kl1w4XqQO0u6OC2Uem1QAjp9bJILT0xgrlcaW3CxZTKj?=
- =?us-ascii?Q?oiBkiFtM45FahDjhM/FFg1yjP3lrxTJHxQC8VG4vUiE0+5Grtp9OC4WBa2TB?=
- =?us-ascii?Q?QDcucakWiqWYYBD0iP7jO+nIlhgJDeb+uTfulqwLd/SIaIZR/LWbF8ji2UbQ?=
- =?us-ascii?Q?J5GIs7Qr+BJyRU8CVyBzd8G7onmFBuG3q4yWkmYYcHKccItACdKGd9FDO9tR?=
- =?us-ascii?Q?yhAmwGkbcuvGPOb9gnvhFGh88Ie63s+31TjtashB8sL3ZlB9zrCjZ+hsF1wE?=
- =?us-ascii?Q?qVQPhKWu/W+m4VLX/AJHGxN+4WLZ0NOnwTLPFIwJJXzdeBMCQSfTLd3iX3A0?=
- =?us-ascii?Q?Dd4Jrbf3GvnIwRS3qstZ2ls3LW6Iyntv/4NyMqSCXpzuNId4hUE5N8Zt0LJE?=
- =?us-ascii?Q?0nkvxeG3sywI09ScJQbOGOFkmspNEhyoQFv2v6ORbdL/EmhQlguZIbBAL0VA?=
- =?us-ascii?Q?k3WwukLSYSXpYHSMENXRHKsJA1QI1yiuYGu6sCYMSA0urDX5huPdhhxYJyfC?=
- =?us-ascii?Q?svHT+34BGuWm3i2ExPwxyXxyyIUFKlEPXA9QT8atbG5xWbOsW79ano6xf5v3?=
- =?us-ascii?Q?JGO/1HByqpdjQBrqHSUWUj3wmDpt+PXgm4OrotzVl1VXixbeexWLp7GgQ9LV?=
- =?us-ascii?Q?SpcyVns4Wc9cugstcUJd0pTwapuFcTXimQhyYW7xIfUqR4e7lvGJIRzH1IOa?=
- =?us-ascii?Q?hxx3uHFNUyVDoyswJITGsRoPA3n9+/mpjKYU3NX5/QZx4zcA+w0LCMl8t4vy?=
- =?us-ascii?Q?L2v92X5vDnuOtgzrTStVmueezJooupLgAn8atfrC42/dPv57jJm3AairWeqh?=
- =?us-ascii?Q?V/QzFAZPQg8MFCQ5oeRxPFZqQZGGgdJV99btmBSNvrGwGIZ0VSHr8GcumD+J?=
- =?us-ascii?Q?S89L2e/nmnmcowAlp+aKmfKyM1aziBYpIJT0zrWumGtwS+LI9rJaxVsTT/oM?=
- =?us-ascii?Q?50oauP01uuiY1vAAomtHZFT9eCwsYD7jtPeo2w7KjNwx2tu2s5jqa4YkpT1T?=
- =?us-ascii?Q?4tsgkrUFwQ0O6r9//GexhYb2CSyMKOAKlLngz31fucnuKHIWRqEKtysXoSLy?=
- =?us-ascii?Q?h4jG2fykxsZhVDqUsO8f2O6k4dA5924XQKNZfmdSOFzKY+YfD7D7k7BU3NSs?=
- =?us-ascii?Q?ZUaYOsB+/W++C5EMqNPSUYwR0q8x6byL2H3qioV7zh50XA90Vb73MeUC+YQX?=
- =?us-ascii?Q?UpQeJTGFiGYpFA0l40T269CsXMRaTfTv8pMShk45r/u5xIbGw4h7OEDMBELX?=
- =?us-ascii?Q?YQpW4eWZvKU0CekvDpU1ozC5tLYTMInu+MlZ2OIDlKFIyJhtBcZ1bm46Ov7T?=
- =?us-ascii?Q?8AxuUcGf/lPVe7K2v611WFHgkZo/Z0iFPtAEr8or6wTNl18Yu9EsJ1i2db1J?=
- =?us-ascii?Q?Z4RVE2XMwPOWmDYQX4GtZ/WzQokhiW1bR8Y5MKQ5nT0XxcF5bC315RjocZq8?=
- =?us-ascii?Q?tNJk5D3kfz2/ydKT7Muf4NsRJspiJh58lRkJZxSL7zQb5uaUD9ka6dscZZ7f?=
- =?us-ascii?Q?l5RVGiQRBjqKFOECOT2PKvu6K62UrkZxBHv6PD8kFeOH38N6SPCORQrAkEDY?=
- =?us-ascii?Q?E87Vqq2gP0rGPrbVMNg9CfC2rTkGqmD1Xqb1cpmH+KHrE6Y4jJNgQUNZEkzZ?=
- =?us-ascii?Q?RQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Matthew Wilcox <willy@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     akpm@linux-foundation.org, longpeng2@huawei.com, arnd@arndb.de,
+        dave.hansen@linux.intel.com, david@redhat.com, rppt@kernel.org,
+        surenb@google.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <eb696699-0138-33c5-ad47-bfca7f6e9079@intel.com>
+ <Yec1OZ0reX2EMXL7@casper.infradead.org>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+In-Reply-To: <Yec1OZ0reX2EMXL7@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR11CA0041.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::18) To BN8PR10MB3220.namprd10.prod.outlook.com
+ (2603:10b6:408:c8::18)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4e40a4ba-9cde-4eb5-6f38-08d9dad47b50
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5219:EE_
+X-Microsoft-Antispam-PRVS: <BLAPR10MB521961D517E97ED335643A4C86589@BLAPR10MB5219.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zPxhjqyz5hvr0UGJ8plHlEBg0KnLmwDfUKP144//5xeJJG2z4gz2rUD05Wxzvn1pbutKKPdyVM23TKF3QGqb0PsiJROBNl9LrnSYPQ3Xiwy3RuoIr38/JRbBBCXF7R2UTv73XsjtavBHS2cpgM0WRy88yK2zVPDPK8uopvMFBCi0js/JqHKhDLBcjcFUlpVhYdlcFST97RvM99txioJt1E+Jzbz0udaHzSXFQ6cK0ssxxUq2OYiW1vWfxG1WA6wQnGI48mh2gq4CCnEIc4987/d3CIlJdoPkHAXKUp+dq8ZmRzUb4IA9rUNCYT92PI/rdqKSBY8D4oEgkzT8MvmbR6zRNIWLsJoWvKFgfKFNGL6WDU4uHuGM/rbpREIna2faRCZ6TzeHs0hVo+TpXUQNnpTX1wtpnoQ8HAB0rlxi1zQdwREt57VPNQQnUaBoUlOUVuPTd9BQtR2fJOZpGhRb9lHCrvu2SEheUnrVtbVSPRDan6uRSzaprviztCAC22gWph3ikA3lw7x8bkuJg/+Sp0MVpeWvyas3BQd1+blv5yWTvU/+9pwTQ56GOh+xGbV8y2ECEb3MiUafy3tYkns14lSkIv5CCY2AKSoxXFGD8s7XzT9JK3b2ge6/gGQY7YUPK15VeXYtEBJqEdw7lmWb0ksS7zVFelKmFYBzPJKmCZKxY+okfmCDhBRwBkFKgS8CqchHSvM12NWT6hunLG7SDadHCGIoRElOJlGUVEEn8onOQZTwIf/RzFIFIHOSpF4S
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6666004)(44832011)(31696002)(8936002)(2906002)(6486002)(2616005)(316002)(8676002)(508600001)(5660300002)(38100700002)(36756003)(6512007)(66946007)(83380400001)(7416002)(66556008)(86362001)(31686004)(110136005)(186003)(66476007)(53546011)(6506007)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?LzNxdmh3OUJLbHpOQlRDWkJHNWRNM0ZMcjhXd2VhU2V0MjAwRDdtVmRCWFpW?=
+ =?utf-8?B?bC9aRE9mMDB1Vm9oVDBBNXpKcXlKTFQzbEdPYWd6MW1pVFhDd2Q2cUc1YW41?=
+ =?utf-8?B?akNKZk9nS0IydVl4bmpQcmt2bEtMS3pxMW4vMW50QXVEWmEwU1AzMlUwQ0xv?=
+ =?utf-8?B?NWdYMW1BWGliVUFKeFUrbVl0aHR6ajgwZ1NnM2NsNWJrSk1SZDlDMnR3UlEx?=
+ =?utf-8?B?ZitrbjdRYTM4U3lNVkl1RUs5eWFHTDkzWHA2RVFBRGJQdnp0UjREMHJTUHg4?=
+ =?utf-8?B?ZVRYc2F1bDV5NGVZUjFmUlh5TGE0R0xGc1FhdUNGOUJCQUtjVHA2eUFMcXc2?=
+ =?utf-8?B?cTJqcXUrcUlWOWNxUnhIaittK2lKVUtrUVdNclVLanpCTkkya040QU9mYnJv?=
+ =?utf-8?B?SkkvcC83ODdQOGFIc1dGeGtaQ3l5RHhsKys1bFRaNkQvRGkxb2wrc0ZXQVhl?=
+ =?utf-8?B?UUhnRTNJV042bjE2NXVZWHZURWRvWVpLYW1SNVcvUW9Bek01NWdnd3U5MHdi?=
+ =?utf-8?B?cncwSkUzcWNFV0pYcHZyNUdvT0tlRTZHaTV1UVg1UHBGeVg3TnQ4Q0IzQVF3?=
+ =?utf-8?B?R001SVFYQzQrRDJ0OWRTaVhKYmFLNmMxa0VQS2piaWNhaHRPa3NsT0dxVW85?=
+ =?utf-8?B?Q3hSQ3EvazdMdjQ1enpvenQ3Z04rbzlGUytNQTkrOE5MSmZBRWRKQnR4d0JS?=
+ =?utf-8?B?ZnFWZU5EdVBoUFZpNngrdGM4a2NWRDI0SWI1LzlaMk1nS3JsclVvUXVoL3Fp?=
+ =?utf-8?B?dUpHV2ZpN0ZTWGJUbXg0dVhsYUtBakVYb0xxRjNHRHFPbmF2ZzA1L1BDaStM?=
+ =?utf-8?B?b0J3N01IL21aSjRLbnUrdlFOL3ZDanpReTZOekJLRkV4NUtwU3RnQ2JwZ25D?=
+ =?utf-8?B?MXo3eEhxQWVqY2dqbGJEYUNlTmxjb3o0Z1JyVkVubEI3Vzg3ZXcwbks0SEJK?=
+ =?utf-8?B?bW96Zm1naFFNY2dxV0pLTStIejIxMTlJSjZYNmRINEg3UmtXOWV4Uzd4ci94?=
+ =?utf-8?B?K1A5V2djci9kemNBYXptV1YwU2ZvT3FVblZYVk9wejJmOGxybXB6SE1ZNldm?=
+ =?utf-8?B?WkVGc0xmWG9SZ0VEcU1RSlBsZ0txTzBjWWZ6ZDcvYVZYdzNYZUQrYUtmbXhD?=
+ =?utf-8?B?TEZMUnVrVXNMZERTZ1Q4YVFJVUN1YnE2ZUFLendvTG9OZWNNNjdIK1IyL0dq?=
+ =?utf-8?B?TnFEUDlMcW9pK29vbFZRMEV5M3RTL1htSUNEYmU0SkRjN2JPaFNqMkZnMlBE?=
+ =?utf-8?B?UllwQllQWFVjM0hpNWZvUC9vUkc0T0d3MG0wSTc1UW8vTVZQamlPdjhnN3RB?=
+ =?utf-8?B?S1JoRmZWNXRZVnNqNktERit3NDNGQ3djM2N2c3hXY0xXUmw1R2ZyZTlTNFg2?=
+ =?utf-8?B?TUxCWWo5ZExIa3J6MFVqZDYvZExENUxWU010NnJTTUZuMENwemJtbGd3Z1Ns?=
+ =?utf-8?B?bU0wQitRektWZk8rWDNsSHRTV3FWTXVISk81M0REYmFOVzU3MldSMHRxVjZK?=
+ =?utf-8?B?LzdKZTg0N2xRdFpXQmlMZG42OVhwRDlDNXhjM3p3cjZSYlZhaVVEcHIvSHBO?=
+ =?utf-8?B?VUR4bGJYbWc0QVpyQy8ycGNwN2dqdXZhcTdZZmxiYWp2aUhadlpmRW9kemp0?=
+ =?utf-8?B?ZmxiM2VQU1NhSkpxZTgxT3lQTnA0OEFaeU9weXlBY2JqUGF4WVpEYlo0V21h?=
+ =?utf-8?B?WGI0QTRaNlFuR1JVaW9VMWtuNFNRYUNuODBseW1yVjlhalh0bXV4OWdaUjY1?=
+ =?utf-8?B?OWpPTHR5dGxhb3dWMWZQNmdtZFc3eGFSQzBzc2FHYlRCbldzS0RuQWV4TUl6?=
+ =?utf-8?B?STlTR0ZXT29VVFUwbDhTQlE2ZXVFMWQzYnZJVVFHdjFLYmV0ZkdsRXpGVlAx?=
+ =?utf-8?B?MDhvQ2lRRHhycW9GOUNqQmR3alk0VnYvaHBOU2NSMVhEZC9UZHNXdC94YXRE?=
+ =?utf-8?B?bkxSMnVoMDk1bFRxTVZpQzBieHJpcWJJb25wYWJmeno5Mysybkx4dzN4Q2Fr?=
+ =?utf-8?B?bjhCS3RWK0g3cWhoZ3lSOEhnR3EzUHFFSm92eXJ3NTUycHZTT3UvZ1RERGQw?=
+ =?utf-8?B?dUEyTUw5SGt6S0Y3cGc2N0JacVlXbGNKVEl0ZWhhMmtCaXFhUnZwbVBhMnpP?=
+ =?utf-8?B?dXpUMGFYVTV4SFlmTGExcDFaQmowZUZscktzYXZzY1ZySjBxMG1Iekk4ZTI3?=
+ =?utf-8?B?REZhbElGNVcvamdZM3pxc29DRGFzM09BUkxZZ0RpQUpNbTBLci91RFdhODNQ?=
+ =?utf-8?B?VjlCdW5mSEd1OUVGWW9hRDNDYndRPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e40a4ba-9cde-4eb5-6f38-08d9dad47b50
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1506.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d50f50f5-87e4-4a38-9143-08d9dad40c9d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2022 22:44:12.8660
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 22:47:18.8457
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FS+NFyPiin17xZev1SyIlRsbIvwmtQXPY0Q1FeXmrf3P3iVygtvh1ZA8tydiVj6yrm6esmqrvfyNIhMjmdCCaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB0923
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cJKY3gE8/14KgSd2DMZJ19eZ0+4HZ9JkHRGZlzxKCgI2Qkbagmo09KNXGOcRveAcxDjFqRq9H25TkoapUNApZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5219
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10231 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 phishscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180127
+X-Proofpoint-GUID: x7hAvTtT60Cfa5HbrdAubTNTFVPXQEjO
+X-Proofpoint-ORIG-GUID: x7hAvTtT60Cfa5HbrdAubTNTFVPXQEjO
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: RE: [PATCH] PCI: hv: Fix NUMA node assignment when kernel boots
-> with parameters affecting NUMA topology
->=20
-> From: Long Li <longli@microsoft.com> Sent: Wednesday, January 12, 2022 4:=
-59
-> PM
-> >
-> > > Subject: RE: [PATCH] PCI: hv: Fix NUMA node assignment when kernel
-> > > boots with parameters affecting NUMA topology
-> > >
-> > > From: Long Li <longli@microsoft.com> Sent: Friday, January 7, 2022
-> > > 12:32 PM
-> > > > >
-> > > > > From: longli@linuxonhyperv.com <longli@linuxonhyperv.com> Sent:
-> > > > > Thursday, January 6, 2022 3:20 PM
-> > > > > >
-> > > > > > When the kernel boots with parameters restricting the number
-> > > > > > of cpus or NUMA nodes, e.g. maxcpus=3DX or numa=3Doff, the vPCI
-> > > > > > driver should only set to the NUMA node to a value that is vali=
-d in the
-> current running kernel.
-> > > > > >
-> > > > > > Signed-off-by: Long Li <longli@microsoft.com>
-> > > > > > ---
-> > > > > >  drivers/pci/controller/pci-hyperv.c | 17 +++++++++++++++--
-> > > > > >  1 file changed, 15 insertions(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/pci/controller/pci-hyperv.c
-> > > > > > b/drivers/pci/controller/pci- hyperv.c index
-> > > > > > fc1a29acadbb..8686343eff4c 100644
-> > > > > > --- a/drivers/pci/controller/pci-hyperv.c
-> > > > > > +++ b/drivers/pci/controller/pci-hyperv.c
-> > > > > > @@ -1835,8 +1835,21 @@ static void
-> > > > > > hv_pci_assign_numa_node(struct hv_pcibus_device *hbus)
-> > > > > >  		if (!hv_dev)
-> > > > > >  			continue;
-> > > > > >
-> > > > > > -		if (hv_dev->desc.flags &
-> HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
-> > > > > > -			set_dev_node(&dev->dev, hv_dev-
-> >desc.virtual_numa_node);
-> > > > > > +		if (hv_dev->desc.flags &
-> HV_PCI_DEVICE_FLAG_NUMA_AFFINITY) {
-> > > > > > +			int cpu;
-> > > > > > +			bool found_node =3D false;
-> > > > > > +
-> > > > > > +			for_each_possible_cpu(cpu)
-> > > > > > +				if (cpu_to_node(cpu) =3D=3D
-> > > > > > +				    hv_dev->desc.virtual_numa_node) {
-> > > > > > +					found_node =3D true;
-> > > > > > +					break;
-> > > > > > +				}
-> > > > > > +
-> > > > > > +			if (found_node)
-> > > > > > +				set_dev_node(&dev->dev,
-> > > > > > +					     hv_dev-
-> >desc.virtual_numa_node);
-> > > > > > +		}
-> > > > >
-> > > > > I'm wondering about this approach vs. just comparing against
-> nr_node_ids.
-> > > >
-> > > > I was trying to fix this by comparing with nr_node_ids. This
-> > > > worked for numa=3Doff, but it didn't work with maxcpus=3DX.
-> > > >
-> > > > maxcpus=3DX is commonly used in kdump kernels. In this config,  the
-> > > > memory system is initialized in a way that only the NUMA nodes
-> > > > within maxcpus are setup and can be used by the drivers.
-> > >
-> > > In looking at a 5.16 kernel running in a Hyper-V VM on two NUMA
-> > > nodes, the number of NUMA nodes configured in the kernel is not
-> > > affected by maxcpus=3D on the kernel boot line.  This VM has 48 vCPUs
-> > > and 2 NUMA nodes, and is Generation 2.  Even with maxcpus=3D4 or
-> > > maxcpus=3D1, these lines are output during
-> > > boot:
-> > >
-> > > [    0.238953] NODE_DATA(0) allocated [mem 0x7edffd5000-0x7edfffffff]
-> > > [    0.241397] NODE_DATA(1) allocated [mem 0xfcdffd4000-0xfcdfffefff]
-> > >
-> > > and
-> > >
-> > > [    0.280039] Initmem setup node 0 [mem 0x0000000000001000-
-> 0x0000007edfffffff]
-> > > [    0.282869] Initmem setup node 1 [mem 0x0000007ee0000000-
-> 0x000000fcdfffffff]
-> > >
-> > > It's perfectly legit to have a NUMA node with memory but no CPUs.
-> > > The memory assigned to the NUMA node is determined by the ACPI SRAT.
-> > > So I'm wondering what is causing the kdump issue you see.  Or maybe
-> > > the behavior of older kernels is different.
-> >
-> > Sorry, it turns out I had a typo. It's nr_cpus=3D1 (not maxcpus). But
-> > I'm not sure if that matters as the descriptions on these two in the ke=
-rnel doc
-> are the same.
-> >
-> > On my system (4 NUMA nodes) with kdump boot line:  (maybe if you try a
-> > VM with 4 NUMA nodes, you can see the problem)
-> > [    0.000000] Command line: BOOT_IMAGE=3D/boot/vmlinuz-5.11.0-1025-azu=
-re
-> > root=3DPARTUUID=3D7145c36d-e182-43b6-a37e-0b6d18fef8fe ro console=3Dtty=
-1
-> > console=3DttyS0
-> > earlyprintk=3DttyS0 reset_devices systemd.unit=3Dkdump-tools-dump.servi=
-ce
-> > nr_cpus=3D1 irqpoll nousb ata_piix.prefer_ms_hyperv=3D0
-> > elfcorehdr=3D4038049140K
-> >
-> > I see the following:
-> > [    0.408246] NODE_DATA(0) allocated [mem 0x2cfd6000-0x2cffffff]
-> > [    0.410454] NODE_DATA(3) allocated [mem 0x3c2bef32000-0x3c2bef5bfff]
-> > [    0.413031] Zone ranges:
-> > [    0.414117]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
-> > [    0.416522]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
-> > [    0.418932]   Normal   [mem 0x0000000100000000-0x000003c2bef5cfff]
-> > [    0.421357]   Device   empty
-> > [    0.422454] Movable zone start for each node
-> > [    0.424109] Early memory node ranges
-> > [    0.425541]   node   0: [mem 0x0000000000001000-0x000000000009ffff]
-> > [    0.428050]   node   0: [mem 0x000000001d000000-0x000000002cffffff]
-> > [    0.430547]   node   3: [mem 0x000003c27f000000-0x000003c2bef5cfff]
-> > [    0.432963] Initmem setup node 0 [mem 0x0000000000001000-
-> 0x000000002cffffff]
-> > [    0.435695] Initmem setup node 3 [mem 0x000003c27f000000-
-> 0x000003c2bef5cfff]
-> > [    0.438446] On node 0, zone DMA: 1 pages in unavailable ranges
-> > [    0.439377] On node 0, zone DMA32: 53088 pages in unavailable ranges
-> > [    0.452784] On node 3, zone Normal: 40960 pages in unavailable range=
-s
-> > [    0.455221] On node 3, zone Normal: 4259 pages in unavailable ranges
-> >
-> > It's unclear to me why node 1 and 2 are missing. But I don't think
-> > it's a Hyper-V problem since it's only affected by setting nr_cpus
-> > over kernel boot line. Later, a device driver
-> > (mlx5 in this example) tries to allocate memory on node 1 and fails:
-> >
->=20
-> To summarize some offline conversation, we've figured out that the "missi=
-ng"
-> NUMA nodes are not due to setting maxcpus=3D1 or nr_cpus=3D1.  Setting th=
-e cpu
-> count doesn't affect any of this.
->=20
-> Instead, Linux is modifying the memory map prior to starting the kdump ke=
-rnel
-> so that most of the memory is not touched and is
-> preserved to be dumped, which is the whole point of kdump.   This
-> modified memory map has no memory in NUMA nodes 1 and 2, so it is correct
-> to just see nodes 0 and 3 as online.
->=20
-> I think code fix here is pretty simple:
->=20
-> 	int node;
->=20
-> 	node =3D hv_dev->desc.virtual_numa_node;
-> 	if ((hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
-> 			&& (node < nr_node_ids))
-> 		set_dev_node(&dev->dev, numa_map_to_online_node(node));
->=20
-> Michael
+On 1/18/22 14:46, Matthew Wilcox wrote:
+> On Tue, Jan 18, 2022 at 01:41:40PM -0800, Dave Hansen wrote:
+>> On 1/18/22 1:19 PM, Khalid Aziz wrote:
+>>> - Starting address must be aligned to pgdir size (512GB on x86_64)
+>>
+>> How does this work on systems with 5-level paging where a top-level page
+>> table entry covers 256TB?  Is the alignment requirement 512GB or 256TB?
+>>   How does userspace figure out which alignment requirement it is subject to?
+> 
+> The original idea was any power of two, naturally aligned, >= PAGE_SIZE,
+> but I suspect Khalid has simplified it for this first implementation.
+> 
 
-Okay, this looks good.
+Hi Dave,
 
-I'm sending a V2 (with a minor change) after testing is done.
+Yes, this is mostly to keep code somewhat simpler. Large regions make it easier to manage the separate set of shared 
+VMAs. Part of the exploration here is to see what size regions work for other people. This initial prototype is x86 only 
+and for now I am using PGDIR_SIZE. I see your point about how would userspace figure out alignment since this should 
+across all architectures and PGDIR_SIZE/PMD_SIZE/PUD_SIZE are not the same across architectures. We can choose a fixed 
+size and alignment. I would like to keep the region size at 2^20 pages or larger to minimize having to manage large 
+number of small shared regions if those regions are not contiguous. Do you have any suggestion?
 
-Long
+Thanks for your feedback.
+
+--
+Khalid

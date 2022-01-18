@@ -2,211 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B64D74923D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E85A4923DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237555AbiARKed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:34:33 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24488 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235295AbiARKea (ORCPT
+        id S237302AbiARKkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:40:00 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:40920 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230274AbiARKj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:34:30 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20I9lErX009136;
-        Tue, 18 Jan 2022 10:34:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=tSVwhv6KvUgFZFcqMpFQL3G61shedVfXckl5g8U2Gaw=;
- b=IY4iG4OBkUPj4Kd70rejwH55WxzmqgLH9yVCml/orDfpzbL59TaZCI6f+L50kijHhgfF
- wP8lwjyb+kUoVRnpZLURGvwSWsg+6P1kR41J/Q90Eg5lz2n4hGlyLLYWpOJANoDj44Us
- 9UftFknGFCU6dQ+pMCHfQhGNJ5h2N+w1PNgJHqBp2WRqUkO9NbDTD/7mRX57gjKyM++L
- KKTB6/arIeMyjPJYlx1m9LhUKc42kQF1wMLIV7s6GW5wApSiFPwN//SgVZeKX93+XP0m
- BjBmSlzmT1uOo/UQaV+0RK6AAZ3wik9F80z7dEkMFmo6F0FqbFm6tS+TrXytPSPm+hqE hQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dngcqdm7v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 10:34:29 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IALe0d031956;
-        Tue, 18 Jan 2022 10:34:29 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dngcqdm78-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 10:34:29 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IAHdWe027532;
-        Tue, 18 Jan 2022 10:34:27 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dknhjb23q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 10:34:27 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IAYOID48169310
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 10:34:24 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 696CEAE061;
-        Tue, 18 Jan 2022 10:34:24 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6495EAE07D;
-        Tue, 18 Jan 2022 10:34:23 +0000 (GMT)
-Received: from [9.171.70.230] (unknown [9.171.70.230])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 10:34:23 +0000 (GMT)
-Message-ID: <a0fbd50c-bfa4-5f62-6dea-18b85562fff6@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 11:36:06 +0100
+        Tue, 18 Jan 2022 05:39:58 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A2ADF1F3A1;
+        Tue, 18 Jan 2022 10:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642502397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sHPUwbtFeoE0ORf/ZOnFmdOiPu1cHwxOX55EXE7/xBs=;
+        b=Al4aMfDnRCunydLsj2lCJfrlUrJvAtQiR8queTeqgAqjWyhlCFX5BrLjPeOJALEyZXnl4A
+        w20jgEJP+2tSPYyj1be2AahY4YrbwppwADLL0acCHKBvhSLdGZdWnhYlDfCLA9kv/MKRH/
+        LevSF8DxkG5P+9Pec6Rbd0YHCV5xh1w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642502397;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sHPUwbtFeoE0ORf/ZOnFmdOiPu1cHwxOX55EXE7/xBs=;
+        b=pa8NSMY3/oCpDERwBrDj716mVVNZYLoDBdfaMNindBEGnunAwcEsjqBGk7EuIJ8Yg5/73f
+        Oj6iXNVsK3eIl6AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 564F213DC7;
+        Tue, 18 Jan 2022 10:39:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hivrE/2Y5mHiMQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 18 Jan 2022 10:39:57 +0000
+Message-ID: <e7476b15-d35e-8af0-24f2-9a7bbe082035@suse.cz>
+Date:   Tue, 18 Jan 2022 11:39:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 12/30] s390/pci: get SHM information from list pci
+ Thunderbird/91.5.0
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-27-Liam.Howlett@oracle.com>
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-13-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220114203145.242984-13-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v4 26/66] mm/mmap: Reorganize munmap to use maple states
+In-Reply-To: <20211201142918.921493-27-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iSZpcFo1SgaMBMGB2mkIrH4JRsBkWD2Y
-X-Proofpoint-ORIG-GUID: o8EdmgbNPgyFWcePUSoV9Ib0nyJlA8om
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_02,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 impostorscore=0 clxscore=1015 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180064
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/14/22 21:31, Matthew Rosato wrote:
-> KVM will need information on the special handle mask used to indicate
-> emulated devices.  In order to obtain this, a new type of list pci call
-> must be made to gather the information.  Extend clp_list_pci_req to
-> also fetch the model-dependent-data field that holds this mask.
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/asm/pci.h     |  1 +
->   arch/s390/include/asm/pci_clp.h |  2 +-
->   arch/s390/pci/pci_clp.c         | 28 +++++++++++++++++++++++++---
->   3 files changed, 27 insertions(+), 4 deletions(-)
+> Remove __do_munmap() in favour of do_munmap(), do_mas_munmap(), and
+> do_mas_align_munmap().
 > 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 00a2c24d6d2b..f3cd2da8128c 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -227,6 +227,7 @@ int clp_enable_fh(struct zpci_dev *zdev, u32 *fh, u8 nr_dma_as);
->   int clp_disable_fh(struct zpci_dev *zdev, u32 *fh);
->   int clp_get_state(u32 fid, enum zpci_state *state);
->   int clp_refresh_fh(u32 fid, u32 *fh);
-> +int zpci_get_mdd(u32 *mdd);
->   
->   /* UID */
->   void update_uid_checking(bool new);
-> diff --git a/arch/s390/include/asm/pci_clp.h b/arch/s390/include/asm/pci_clp.h
-> index 124fadfb74b9..d6bc324763f3 100644
-> --- a/arch/s390/include/asm/pci_clp.h
-> +++ b/arch/s390/include/asm/pci_clp.h
-> @@ -76,7 +76,7 @@ struct clp_req_list_pci {
->   struct clp_rsp_list_pci {
->   	struct clp_rsp_hdr hdr;
->   	u64 resume_token;
-> -	u32 reserved2;
-> +	u32 mdd;
->   	u16 max_fn;
->   	u8			: 7;
->   	u8 uid_checking		: 1;
-> diff --git a/arch/s390/pci/pci_clp.c b/arch/s390/pci/pci_clp.c
-> index bc7446566cbc..308ffb93413f 100644
-> --- a/arch/s390/pci/pci_clp.c
-> +++ b/arch/s390/pci/pci_clp.c
-> @@ -328,7 +328,7 @@ int clp_disable_fh(struct zpci_dev *zdev, u32 *fh)
->   }
->   
->   static int clp_list_pci_req(struct clp_req_rsp_list_pci *rrb,
-> -			    u64 *resume_token, int *nentries)
-> +			    u64 *resume_token, int *nentries, u32 *mdd)
->   {
->   	int rc;
->   
-> @@ -354,6 +354,8 @@ static int clp_list_pci_req(struct clp_req_rsp_list_pci *rrb,
->   	*nentries = (rrb->response.hdr.len - LIST_PCI_HDR_LEN) /
->   		rrb->response.entry_size;
->   	*resume_token = rrb->response.resume_token;
-> +	if (mdd)
-> +		*mdd = rrb->response.mdd;
->   
->   	return rc;
->   }
-> @@ -365,7 +367,7 @@ static int clp_list_pci(struct clp_req_rsp_list_pci *rrb, void *data,
->   	int nentries, i, rc;
->   
->   	do {
-> -		rc = clp_list_pci_req(rrb, &resume_token, &nentries);
-> +		rc = clp_list_pci_req(rrb, &resume_token, &nentries, NULL);
->   		if (rc)
->   			return rc;
->   		for (i = 0; i < nentries; i++)
-> @@ -383,7 +385,7 @@ static int clp_find_pci(struct clp_req_rsp_list_pci *rrb, u32 fid,
->   	int nentries, i, rc;
->   
->   	do {
-> -		rc = clp_list_pci_req(rrb, &resume_token, &nentries);
-> +		rc = clp_list_pci_req(rrb, &resume_token, &nentries, NULL);
->   		if (rc)
->   			return rc;
->   		fh_list = rrb->response.fh_list;
-> @@ -468,6 +470,26 @@ int clp_get_state(u32 fid, enum zpci_state *state)
->   	return rc;
->   }
->   
-> +int zpci_get_mdd(u32 *mdd)
+> do_munmap() is a wrapper to create a maple state for any callers that
+> have not been converted to the maple tree.
+> 
+> do_mas_munmap() takes a maple state to mumap a range.  This is just a
+> small function which checks for error conditions and aligns the end of
+> the range.
+> 
+> do_mas_align_munmap() uses the aligned range to mumap a range.
+> do_mas_align_munmap() starts with the first VMA in the range, then finds
+> the last VMA in the range.  Both start and end are split if necessary.
+> Then the VMAs are unlocked and removed from the linked list at the same
+> time.  Followed by a single tree operation of overwriting the area in
+> with a NULL.  Finally, the detached list is unmapped and freed.
+> 
+> By reorganizing the munmap calls as outlined, it is now possible to
+> avoid extra work of aligning pre-aligned callers which are known to be
+> safe, avoid extra VMA lookups or tree walks for modifications.
+> 
+> detach_vmas_to_be_unmapped() is no longer used, so drop this code.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+
+<snip>
+
+> -/* Munmap is split into 2 main parts -- this part which finds
+> - * what needs doing, and the areas themselves, which do the
+> - * work.  This now handles partial unmappings.
+> - * Jeremy Fitzhardinge <jeremy@goop.org>
+> +/*
+> + * do_mas_align_munmap() - munmap the aligned region from @start to @end.
+> + * @mas: The maple_state, ideally set up to alter the correct tree location.
+> + * @vma: The starting vm_area_struct
+> + * @mm: The mm_struct
+> + * @start: The aligned start address to munmap.
+> + * @end: The aligned end address to munmap.
+> + * @uf: The userfaultfd list_head
+> + * @downgrade: Set to true to attempt a downwrite of the mmap_sem
+
+s/downwrite/write downgrade/?
+
+> + *
+> + * @mas must be locked before calling this function.  If @downgrade is true,
+> + * check return code for potential release of the lock.
+
+How is 'mas' locked? The downgrade still calls  mmap_write_downgrade(mm). It
+should say "mm's mmap_lock should be write locked" no?
+
+>   */
+> -int __do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
+> -		struct list_head *uf, bool downgrade)
+> +static int
+> +do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+> +		    struct mm_struct *mm, unsigned long start,
+> +		    unsigned long end, struct list_head *uf, bool downgrade)
+>  {
+> -	unsigned long end;
+> -	struct vm_area_struct *vma, *prev, *last;
+> -
+> -	if ((offset_in_page(start)) || start > TASK_SIZE || len > TASK_SIZE-start)
+> -		return -EINVAL;
+> -
+> -	len = PAGE_ALIGN(len);
+> -	end = start + len;
+> -	if (len == 0)
+> -		return -EINVAL;
+> -
+> -	 /* arch_unmap() might do unmaps itself.  */
+> -	arch_unmap(mm, start, end);
+> -
+> -	/* Find the first overlapping VMA where start < vma->vm_end */
+> -	vma = find_vma_intersection(mm, start, end);
+> -	if (!vma)
+> -		return 0;
+> -	prev = vma->vm_prev;
+> +	struct vm_area_struct *prev, *last;
+>  	/* we have start < vma->vm_end  */
+>  
+>  	/*
+> @@ -2458,16 +2418,26 @@ int __do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
+>  		if (error)
+>  			return error;
+>  		prev = vma;
+> +		vma = __vma_next(mm, prev);
+> +		mas->index = start;
+> +		mas_reset(mas);
+> +	} else {
+> +		prev = vma->vm_prev;
+>  	}
+>  
+> +	if (vma->vm_end >= end)
+> +		last = vma;
+> +	else
+> +		last = find_vma_intersection(mm, end - 1, end);
+> +
+>  	/* Does it split the last one? */
+> -	last = find_vma(mm, end);
+> -	if (last && end > last->vm_start) {
+> +	if (last && end < last->vm_end) {
+>  		int error = __split_vma(mm, last, end, 1);
+>  		if (error)
+>  			return error;
+> +		vma = __vma_next(mm, prev);
+
+Should be needed only if last == vma?
+
+> +		mas_reset(mas);
+>  	}
+> -	vma = __vma_next(mm, prev);
+>  
+>  	if (unlikely(uf)) {
+>  		/*
+> @@ -2480,22 +2450,47 @@ int __do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
+>  		 * failure that it's not worth optimizing it for.
+>  		 */
+>  		int error = userfaultfd_unmap_prep(vma, start, end, uf);
+> +
+>  		if (error)
+>  			return error;
+>  	}
+>  
+>  	/*
+> -	 * unlock any mlock()ed ranges before detaching vmas
+> +	 * unlock any mlock()ed ranges before detaching vmas, count the number
+> +	 * of VMAs to be dropped, and return the tail entry of the affected
+> +	 * area.
+>  	 */
+> -	if (mm->locked_vm)
+> -		unlock_range(vma, end);
+> +	mm->map_count -= unlock_range(vma, &last, end);
+> +	/* Drop removed area from the tree */
+> +	mas_store_gfp(mas, NULL, GFP_KERNEL);
+>  
+> -	/* Detach vmas from the MM linked list and remove from the mm tree*/
+> -	if (!detach_vmas_to_be_unmapped(mm, vma, prev, end))
+> -		downgrade = false;
+> +	/* Detach vmas from the MM linked list */
+> +	vma->vm_prev = NULL;
+> +	if (prev)
+> +		prev->vm_next = last->vm_next;
+> +	else
+> +		mm->mmap = last->vm_next;
+>  
+> -	if (downgrade)
+> -		mmap_write_downgrade(mm);
+> +	if (last->vm_next) {
+> +		last->vm_next->vm_prev = prev;
+> +		last->vm_next = NULL;
+> +	} else
+> +		mm->highest_vm_end = prev ? vm_end_gap(prev) : 0;
+> +
+> +	/*
+> +	 * Do not downgrade mmap_lock if we are next to VM_GROWSDOWN or
+> +	 * VM_GROWSUP VMA. Such VMAs can change their size under
+> +	 * down_read(mmap_lock) and collide with the VMA we are about to unmap.
+> +	 */
+> +	if (downgrade) {
+> +		if (last && (last->vm_flags & VM_GROWSDOWN))
+> +			downgrade = false;
+> +		else if (prev && (prev->vm_flags & VM_GROWSUP))
+> +			downgrade = false;
+> +		else {
+> +			mmap_write_downgrade(mm);
+> +		}
+
+remove { } brackets?
+
+> +	}
+>  
+>  	unmap_region(mm, vma, prev, start, end);
+>  
+> @@ -2505,10 +2500,61 @@ int __do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
+>  	return downgrade ? 1 : 0;
+>  }
+>  
+> +/*
+> + * do_mas_munmap() - munmap a given range.
+> + * @mas: The maple state
+> + * @mm: The mm_struct
+> + * @start: The start address to munmap
+> + * @len: The length of the range to munmap
+> + * @uf: The userfaultfd list_head
+> + * @downgrade: set to true if the user wants to attempt to write_downgrade the
+> + * mmap_sem
+> + *
+> + * This function takes a @mas that is in the correct state to remove the
+> + * mapping(s).  The @len will be aligned and any arch_unmap work will be
+> + * preformed.
+> + * @mas must be locked. @mas may be unlocked if @degraded is true.
+> + *
+> + * Returns: -EINVAL on failure, 1 on success and unlock, 0 otherwise.
+> + */
+> +int do_mas_munmap(struct ma_state *mas, struct mm_struct *mm,
+> +		  unsigned long start, size_t len, struct list_head *uf,
+> +		  bool downgrade)
 > +{
-> +	struct clp_req_rsp_list_pci *rrb;
-> +	u64 resume_token = 0;
-> +	int nentries, rc;
+> +	unsigned long end;
+> +	struct vm_area_struct *vma;
 > +
-> +	if (!mdd)
+> +	if ((offset_in_page(start)) || start > TASK_SIZE || len > TASK_SIZE-start)
 > +		return -EINVAL;
-
-I think this tests is not useful.
-The caller must take care not to call with a NULL pointer,
-what the only caller today make sure.
-
-
 > +
-> +	rrb = clp_alloc_block(GFP_KERNEL);
-> +	if (!rrb)
-> +		return -ENOMEM;
+> +	end = start + PAGE_ALIGN(len);
+> +	if (end == start)
+> +		return -EINVAL;
 > +
-> +	rc = clp_list_pci_req(rrb, &resume_token, &nentries, mdd);
+> +	 /* arch_unmap() might do unmaps itself.  */
+> +	arch_unmap(mm, start, end);
 > +
-> +	clp_free_block(rrb);
-> +	return rc;
+> +	/* Find the first overlapping VMA */
+> +	vma = mas_find(mas, end - 1);
+> +	if (!vma)
+> +		return 0;
+> +
+> +	mas->last = end - 1;
+
+Why not set this before mas_find() above? Hm but that takes its own second
+parameter instead of looking at mas->last. To be honest, I'm a bit confused
+wrt the role of mas->last in the API. Perhaps another suggestion for the
+"how to improve docs" discussion earlier. Or maybe I just missed/forgot it.
+
+> +	return do_mas_align_munmap(mas, vma, mm, start, end, uf, downgrade);
 > +}
-> +EXPORT_SYMBOL_GPL(zpci_get_mdd);
 > +
->   static int clp_base_slpc(struct clp_req *req, struct clp_req_rsp_slpc *lpcb)
->   {
->   	unsigned long limit = PAGE_SIZE - sizeof(lpcb->request);
-> 
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+<snip>
+
+> diff --git a/mm/mremap.c b/mm/mremap.c
+> index 002eec83e91e..b09e107cd18b 100644
+> --- a/mm/mremap.c
+> +++ b/mm/mremap.c
+> @@ -978,20 +978,23 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+>  	/*
+>  	 * Always allow a shrinking remap: that just unmaps
+>  	 * the unnecessary pages..
+> -	 * __do_munmap does all the needed commit accounting, and
+> +	 * do_mas_munmap does all the needed commit accounting, and
+>  	 * downgrades mmap_lock to read if so directed.
+>  	 */
+>  	if (old_len >= new_len) {
+>  		int retval;
+> +		MA_STATE(mas, &mm->mm_mt, addr + new_len, addr + new_len);
+>  
+> -		retval = __do_munmap(mm, addr+new_len, old_len - new_len,
+> -				  &uf_unmap, true);
+> -		if (retval < 0 && old_len != new_len) {
+> -			ret = retval;
+> -			goto out;
+> +		retval = do_mas_munmap(&mas, mm, addr + new_len,
+> +				       old_len - new_len, &uf_unmap, true);
+>  		/* Returning 1 indicates mmap_lock is downgraded to read. */
+> -		} else if (retval == 1)
+> +		if (retval == 1) {
+>  			downgraded = true;
+> +		} else if (retval < 0 && old_len != new_len) {
+> +			ret = retval;
+> +			goto out;
+> +		}
+> +
+>  		ret = addr;
+>  		goto out;
+>  	}
+> @@ -1006,7 +1009,7 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+>  	}
+>  
+>  	/* old_len exactly to the end of the area..
+> -	 */
+> +	*/
+
+Spurious edit?
+
+>  	if (old_len == vma->vm_end - addr) {
+>  		/* can we just expand the current mapping? */
+>  		if (vma_expandable(vma, new_len - old_len)) {
+> @@ -1048,9 +1051,9 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+>  			map_flags |= MAP_SHARED;
+>  
+>  		new_addr = get_unmapped_area(vma->vm_file, 0, new_len,
+> -					vma->vm_pgoff +
+> -					((addr - vma->vm_start) >> PAGE_SHIFT),
+> -					map_flags);
+> +					     vma->vm_pgoff +
+> +					     ((addr - vma->vm_start) >> PAGE_SHIFT),
+> +					     map_flags);
+
+And this?
+
+>  		if (IS_ERR_VALUE(new_addr)) {
+>  			ret = new_addr;
+>  			goto out;
+
+

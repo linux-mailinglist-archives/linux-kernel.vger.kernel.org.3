@@ -2,87 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA9B492ACE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD54492ACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346912AbiARQNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:13:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42342 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347462AbiARQLZ (ORCPT
+        id S1346948AbiARQNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:13:15 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9040 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241957AbiARQLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:11:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2113F612D7;
-        Tue, 18 Jan 2022 16:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C61C00446;
-        Tue, 18 Jan 2022 16:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522284;
-        bh=hFpFUyPjgA0qhWidN4tjSgQC/TIVNzqBmyw5e0LbkIw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GYCGvDImss/ATTqa6cTVDJAkQKvUQtHNo1Wv/9b/Kh6ais/vi8bfRPcfYfoKC4q/1
-         1bIzeEco51SZ7XfkchWFzSQvF+68iFyekIhomV4LkeG8IH4b+ymDiJTOecK6ktJbM4
-         bwYBOWDkx/zjSpF0wmENXYsT3hMUWUX1Zwe6TdTo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 28/28] ALSA: hda/realtek: Re-order quirk entries for Lenovo
-Date:   Tue, 18 Jan 2022 17:06:23 +0100
-Message-Id: <20220118160453.330249860@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
-References: <20220118160452.384322748@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 18 Jan 2022 11:11:21 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IF5oFj023401;
+        Tue, 18 Jan 2022 16:09:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=1o6hTST4A3SUGBmaAxu8ieEaB6ozOWFLtPDxrNatUGA=;
+ b=DzNMcImxANxYolnLHBlr+vFqZ5fZdEnH7yQ6rvoPXMq93VzwSqY1EkNyQorEeRwT8COw
+ Q5cppXkRob5+ZZkxuWmPST9YU0fKy0cZXQU1DxLFo+bnD4Dxk6wjlVmO87ERi5CZEO/H
+ lIHQSDeTSNJtTFrNqGKDUESRYDFb13yPYqp8k98o94PywPKZvj9uiaT1uQL5iCQRrANy
+ pJX/9wTh1OvfGFgXkozN+7RQvrEkViRxlcU5AOws18ZyAo6X9mDr+BBSX4vfJcJP5Idp
+ o0iAkwIcOTMTOiy5zZV/Nkgp8gcv/FqBOha6f+bjWIr64qDG+f6p86oRh8lMIwVqzbjI IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnyvv1emg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 16:09:33 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IFbLSU024274;
+        Tue, 18 Jan 2022 16:09:32 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnyvv1ekt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 16:09:32 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IG88Ip027792;
+        Tue, 18 Jan 2022 16:09:30 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3dknw9cuua-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 16:09:30 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IG9Qu737945614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 16:09:26 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B41F54C046;
+        Tue, 18 Jan 2022 16:09:26 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1A714C044;
+        Tue, 18 Jan 2022 16:09:25 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 18 Jan 2022 16:09:25 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup.patel@wdc.com,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
+        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
+        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
+        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
+References: <20220111153539.2532246-1-mark.rutland@arm.com>
+        <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
+        <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
+        <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
+        <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
+        <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
+        <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
+        <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
+        <20220118120154.GA17938@C02TD0UTHF1T.local>
+        <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
+        <20220118131223.GC17938@C02TD0UTHF1T.local>
+Date:   Tue, 18 Jan 2022 17:09:25 +0100
+In-Reply-To: <20220118131223.GC17938@C02TD0UTHF1T.local> (Mark Rutland's
+        message of "Tue, 18 Jan 2022 13:12:23 +0000")
+Message-ID: <yt9dfsplc9fu.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hidflXyfSxGUg2IONdWdehVdnkIymNiH
+X-Proofpoint-ORIG-GUID: dZDmymDNcmhBaN1x10GnjBJvOBJgLfZK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_04,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 impostorscore=0 spamscore=0 mlxscore=0
+ malwarescore=0 lowpriorityscore=0 clxscore=1011 adultscore=0
+ suspectscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201180099
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+Hi Mark,
 
-commit 2aac550da3257ab46e8c7944365eb4a79ccbb3a1 upstream.
+Mark Rutland <mark.rutland@arm.com> writes:
 
-The recent few quirk entries for Lenovo haven't been put in the right
-order.  Let's arrange the table again.
+> On Tue, Jan 18, 2022 at 01:42:26PM +0100, Christian Borntraeger wrote:
+>> 
+>> 
+>> Am 18.01.22 um 13:02 schrieb Mark Rutland:
+>> > On Mon, Jan 17, 2022 at 06:45:36PM +0100, Paolo Bonzini wrote:
+>> > > On 1/14/22 16:19, Mark Rutland wrote:
+>> > > > I also think there is another issue here. When an IRQ is taken from SIE, will
+>> > > > user_mode(regs) always be false, or could it be true if the guest userspace is
+>> > > > running? If it can be true I think tha context tracking checks can complain,
+>> > > > and it*might*  be possible to trigger a panic().
+>> > > 
+>> > > I think that it would be false, because the guest PSW is in the SIE block
+>> > > and switched on SIE entry and exit, but I might be incorrect.
+>> > 
+>> > Ah; that's the crux of my confusion: I had thought the guest PSW would
+>> > be placed in the regular lowcore *_old_psw slots. From looking at the
+>> > entry asm it looks like the host PSW (around the invocation of SIE) is
+>> > stored there, since that's what the OUTSIDE + SIEEXIT handling is
+>> > checking for.
+>> > 
+>> > Assuming that's correct, I agree this problem doesn't exist, and there's
+>> > only the common RCU/tracing/lockdep management to fix.
+>> 
+>> Will you provide an s390 patch in your next iteration or shall we then do
+>> one as soon as there is a v2? We also need to look into vsie.c where we
+>> also call sie64a
+>
+> I'm having a go at that now; my plan is to try to have an s390 patch as
+> part of v2 in the next day or so.
+>
+> Now that I have a rough idea of how SIE and exception handling works on
+> s390, I think the structural changes to kvm-s390.c:__vcpu_run() and
+> vsie.c:do_vsie_run() are fairly simple.
+>
+> The only open bit is exactly how/where to identify when the interrupt
+> entry code needs to wake RCU. I can add a per-cpu variable or thread
+> flag to indicate that we're inside that EQS, or or I could move the irq
+> enable/disable into the sie64a asm and identify that as with the OUTSIDE
+> macro in the entry asm.
 
-Fixes: ad7cc2d41b7a ("ALSA: hda/realtek: Quirks to enable speaker output...")
-Fixes: 6dc86976220c ("ALSA: hda/realtek: Add speaker fixup for some Yoga 15ITL5 devices")
-Fixes: 8f4c90427a8f ("ALSA: hda/realtek: Add quirk for Legion Y9000X 2020")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- sound/pci/hda/patch_realtek.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I wonder whether the code in irqentry_enter() should call a function
+is_eqs() instead of is_idle_task(). The default implementation would
+be just a
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8964,16 +8964,16 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x3176, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x3178, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
-+	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
--	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
-+	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
-+	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
- 	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
--	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
-+	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3853, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
--	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
--	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3902, "Lenovo E50-80", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
- 	SND_PCI_QUIRK(0x17aa, 0x3977, "IdeaPad S210", ALC283_FIXUP_INT_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x3978, "Lenovo B50-70", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
+#ifndef is_eqs
+#define is_eqs is_idle_task
+#endif
 
+and if an architecture has special requirements, it could just define
+is_eqs() and do the required checks there. This way the architecture
+could define whether it's a percpu bit, a cpu flag or something else.
 
+/Sven

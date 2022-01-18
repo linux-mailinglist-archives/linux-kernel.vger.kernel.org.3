@@ -2,113 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B91492263
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6867492268
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345477AbiARJQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:16:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34080 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345472AbiARJQc (ORCPT
+        id S1345492AbiARJQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345493AbiARJQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:16:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642497391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pHlcaTRiriHEO8haif3+Ixs0hQTPZKTCLrheKgj/Tw=;
-        b=KUkihOlTFcoF4zz8WOHtBv1RcsVmo690jodjuCGyqgMt/TU9siyfEbWItOLEdFfSazNwpY
-        5hHz6osu12MMe5RFzZhlzYcDmJOU8rCfGvgPDUPi9orkOmprx/qR0kug0hqqyE7m+nKQMa
-        wDmVmYzlQnEKJ1XDqaiA3wEFyWtwv58=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-402-jWJRqNihNV-Jt4u4Ix0mnQ-1; Tue, 18 Jan 2022 04:16:27 -0500
-X-MC-Unique: jWJRqNihNV-Jt4u4Ix0mnQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3BD3E10151E0;
-        Tue, 18 Jan 2022 09:16:26 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B71D84BC48;
-        Tue, 18 Jan 2022 09:16:17 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id D309318000A6; Tue, 18 Jan 2022 10:16:15 +0100 (CET)
-Date:   Tue, 18 Jan 2022 10:16:15 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Message-ID: <20220118091615.3ih5n7vhd6tgmnku@sirius.home.kraxel.org>
-References: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
- <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
- <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <ebe9c076-e2a9-0cb7-eb6a-ae71c075975e@gmx.de>
+        Tue, 18 Jan 2022 04:16:37 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E719C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:16:37 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id v6so24693694iom.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=5JMhK9pOqseAjHRtHcU/HG4i5NuvupLcjaClPwT4ItM=;
+        b=jPdEscyjUq0GQ4qmNy8I798hmzuHIgNttG+SkkbkRII44t+nXTdrOnT7xBCGxx4xUv
+         DJmHienmcmhSXTAPgb8ez/Yx1tKvwP+1mMgLf2/smVB2uk9Yn8Fu8+OeN6qGRzRFnNAO
+         3iaKSJsod/2qISeaEapCvBr5f4kXRksj79+RSgu0ayotqm8076B6msENLX2C48k8Ul/c
+         vod5+eQy4qYmwFU/V+P94PwT0AoY54n5zuj45GXDjIDqGfKUwVcrMLdRy3v6kr0rpzMm
+         8+csubrlAoWjwWrLZJjMZZ+G+KhctEV33HqkA6X3djG+521UHzVGH41FkTdEYM18naX+
+         ZyCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=5JMhK9pOqseAjHRtHcU/HG4i5NuvupLcjaClPwT4ItM=;
+        b=Jks+IypNwytipLyjmJOtHO5n7ct4HISCry0ZiZlS+IBN56zHW/AYGdCNNI2z2lah+6
+         9wpF7VE3PDI/HtRCAQcQ9bWIoNQC8VwgKrsva4Om2YR6Wo8G5iFqASnkeS0SRFb7di71
+         GEG6EyawCw0gx7MCGu7rSZFb7hIZEOe/XmziVtfTbyVOpDDwjHxh0yJmO2Sqb5HmcKJ0
+         hGiOPCFmsf6QXYdF+IfNvnqf8BQ7QEIfomVyXZL8T32rmah+EWBqg7xrARFYfVI28ExS
+         qWxS5ixZRgn7NXXUJGry/CtbMGf/MFou56Qf6o+KnP9HNHNsDVgbb5yTV6D6UD9NYhde
+         s9pA==
+X-Gm-Message-State: AOAM533v5lAL3dR3zmyyLCIJI78xyTLWe0HXxgtZzBqNqV9FkcRZO7ij
+        /mnV2iwGLMqmItAXF7C+WmUmemepvLkMdphpGQI=
+X-Google-Smtp-Source: ABdhPJygeBXTi5I1nS+MFOVP8Dh//ODdkIjGyuvMjjUOoNo3pWsawhk/Qr8LTmwYYQWzQfCUIsAVFSH4NqAwttelx9s=
+X-Received: by 2002:a6b:591a:: with SMTP id n26mr11667601iob.101.1642497396467;
+ Tue, 18 Jan 2022 01:16:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebe9c076-e2a9-0cb7-eb6a-ae71c075975e@gmx.de>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Received: by 2002:a05:6602:1401:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:16:35
+ -0800 (PST)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <dicksonsilva20017@gmail.com>
+Date:   Tue, 18 Jan 2022 01:16:35 -0800
+Message-ID: <CAPKPuhPJdYBth2qJh0NK1qT_E2eZo3YUjn+O5pbKMnLZR5GLgQ@mail.gmail.com>
+Subject: Liebster Freund,?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:20:43AM +0100, Helge Deller wrote:
-> On 1/18/22 07:29, Gerd Hoffmann wrote:
-> >> Please correct me if I'm wrong, but text-console emulation/scrolling on DRM is
-> >> currently unaccelerated and bound to Truecolour modes only,
-> >
-> > Yes.  Adding support for formats beside argb8888 to the drm fbcon
-> > emulation shouldn't be that much of a problem though.
-> 
-> Really? Assuming a graphic card which runs with only 256 colors framebuffer
-> is easily supported by DRM, and you can use fbcon without using lots of memcpy()?
+--=20
+Liebster Freund,
 
-Driver: programming a fixed color cube palette, then use RGB332.
+Im Namen Gottes, des gn=C3=A4digsten, barmherzigsten.
 
-fbcon/fbdev emulation: RGB332 support must be added I think.  But both
-argb888 and rgb565 are supported today, so it should not be hard to find
-the places where you have to add some code to handle RGB332 too.
+Friede sei mit dir und Barmherzigkeit sei mit dir und Segen sei mit dir.
+Ich habe die Summe von 27,5 Millionen USD f=C3=BCr Investitionen, ich
+interessiere mich f=C3=BCr Sie f=C3=BCr die Unterst=C3=BCtzung von
+Investitionsprojekten in Ihrem Land. Mein Name ist Aisha Gaddafi und
+lebe derzeit im Oman, ich bin eine Witwe und alleinerziehende Mutter
+mit drei Kindern, die einzige leibliche Tochter des verstorbenen
+libyschen Pr=C3=A4sidenten (dem verstorbenen Oberst Muammar Gaddafi) und
+stehe derzeit unter politischem Asylschutz der omanischen Regierung.
 
-> > Acceleration is harder.  The scroll acceleration had issues nobody
-> > addressed for years, and on modern hardware it is simply not used, which
-> > is probably the reason nobody stepped up fixing things and it ended up
-> > being dropped.
-> 
-> The DRM layer doesn't use scroll acceleration.
-> More than 30 other existing fbdev drivers use it.
+Bitte antworten Sie dringend f=C3=BCr weitere Details.
 
-Yes.  The world shifted from 2d acceleration to 3d acceleration.  Modern
-hardware simply has no classic blitter any more.  Which is a problem
-when it comes to keeping scroll acceleration alive, it is already a very
-niche use case and it will only become worse ...
-
-> > Bringing it back is much more work than just reverting the commits removing it.
-> 
-> Reverting those commits have no effect on DRM's usage of fbcon.
-> But reverting those commits bring back scroll acceleration for all others.
-> I'm trying to find out which patches did apparently fixed such issues
-> for the REDRAW case. If you have a pointer it would be helpful.
-
-IIRC the code had a bunch of races and syzkaller flagged problems.
-I didn't follow very closely though.
-
-take care,
-  Gerd
-
+meine E-Mail-Adresse unten: ayishagddafio@mail.ru
+Vielen Dank
+Mit freundlichen Gr=C3=BC=C3=9Fen Aisha

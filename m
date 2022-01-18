@@ -2,179 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF8349297F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B84849298D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345097AbiARPPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiARPPe (ORCPT
+        id S1345533AbiARPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:20:12 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:19456 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345401AbiARPUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:15:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1093C061574;
-        Tue, 18 Jan 2022 07:15:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EF0A61266;
-        Tue, 18 Jan 2022 15:15:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30430C00446;
-        Tue, 18 Jan 2022 15:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642518932;
-        bh=tjT3ZQ4DAQSHMG1zW4fLXQMJkGqd6yqqhqFbfFtt8g8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uOQ1TLV0gpksFu4cRdzD5k1dGB7PoDvwWEOEdiQoyVJwnMp+p7KgkWZ3whjMpftKV
-         U1UXGeoZE07IkY89/QHWO4IPtR8GwxPg7dQ3H0/PcujzCYIhq9wGBM1BlefF7kDRan
-         u4C++7A98b0mrAeAsXHU8a0r0umMK1FntmseBN0pZeGSLp+YB/+f1/PpQF0NIY2fI/
-         6WAcXlUEyZp/RGG9LEA5jSbLfNzo9DbxpPXYB4r5sc78peXtXxmAL8tXN8Y3Te5CN5
-         tNQRUQ1/ibNedNhHjOI12zbvzcDQ3cVB5x/Cdm6qN6jdzgJhVDjzJkO2laAbqiHfL5
-         U2OvbnD7oPZXg==
-Date:   Wed, 19 Jan 2022 00:15:26 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
- probe
-Message-Id: <20220119001526.9d6c931141e6ccb00017f3c0@kernel.org>
-In-Reply-To: <YebN1TIRxMX0sgs4@krava>
-References: <164199616622.1247129.783024987490980883.stgit@devnote2>
-        <Yd77SYWgtrkhFIYz@krava>
-        <YeAatqQTKsrxmUkS@krava>
-        <20220115135219.64ef1cc6482d5de8a3bce9b0@kernel.org>
-        <YebN1TIRxMX0sgs4@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 18 Jan 2022 10:20:06 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IF4UvV004811;
+        Tue, 18 Jan 2022 15:19:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=sh6Jm90NbcOJBmBqUkv/KhnTfcqbgHaRj7y7A887qqI=;
+ b=fnW2gbizocKBmXG4DOE/fNjKQB3Lbflggfy04wbzb4rUUfttF7UAOu/Dp8UTaKENny96
+ saxgAQ4gN4rdOzYWBgrCOr2YaMHmzlrW3gQXpKsN/8VTlGxj8DdQqmN2j0MTGbMf3B7T
+ 6LKqe9G0zrbCGr+Zotci1lJbkxNTbckcts0zhAV/peP67YeUTLh3mtx6MruUnDP09a16
+ v72Nd5Kop2n4P9pNml8jPoPTiTra0woX7QkAv8Zqx+1/wiG9z8oSEpGRnQ1E7NkxuXX9
+ z6+O+1TOpWwo0nuKexZSiNxDuBGEHi+5RAVxAHuxMmwnsMZR6fExYpjBNjxlT6Iz85oO 8Q== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnbrnt6pr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 15:19:49 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20IFGMMq136354;
+        Tue, 18 Jan 2022 15:19:48 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
+        by aserp3020.oracle.com with ESMTP id 3dkp34bacj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 15:19:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LxlZ8oCHK98Gv1OOyz4SH7sJvEggp6hTyC4JIp0MZkAJLWze6/i4b/iAWyGmwTLbw55GagY7VHHCo82GaLI6MkeocPGWxlGC7QflbcC/LRNC0TUeJKJ3D8JbyMwCYAWaofNvsaroIINskkQr3DS8GAIE/mTnLtD/6CzlaV3p+sAG7e09HkWCpqPMcXKivSVaaxmTiI7OpImDvIRjIZFrwYzTJIvwdf/cZrL8naqHU+INEPZr+XmG1QzybKJWudUQyBRg0CI37fW1JWmMscWy2ouN7Xyali8Nm74GCkQQKPb5hODkPxLvYqfTFZyBdp8tEnW3nndpoqywWhNFiwnagA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sh6Jm90NbcOJBmBqUkv/KhnTfcqbgHaRj7y7A887qqI=;
+ b=nNNGgzQcde2rzJtAz5fleGHB+LQss6Mxcx/+WDvXS78wt8HEBSOeXhZKTsWwbveNaDk0W88H31ffJaW9hWXrcmYFDV9Ihd4yokrxFS5H8rUwmCWlCBOtysQvgc6JqOrSvC+TidxBObeseNkhGQsYwrOyKTDr/3+uv92W2fkTk7T3Q0XzJD1dFhQNHbElHmqDRzmjr4MzULV6MuuGft/ODjShQ7f4SYznPmRHYuh6qyi+iG9kwKGI7qPZqnG8gS745N8WhB4mydof5OptF2CRvlR8ieKv+ZSYmph7JRpRERTCAJO9uWd5zJFpcvz+axAwPy1TXdlZm1f87GxowuMuCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sh6Jm90NbcOJBmBqUkv/KhnTfcqbgHaRj7y7A887qqI=;
+ b=Sijlcg0TH+ZwrqrBkmWMxdsWUkX+7Zr2GtxlDs8wOYUDTUSHVVREmkJfKJMiOIeGs83vJ1OEEBK5TSxPB/cGJMbtk/i5pmHxBn1YTIk6elj4hZy7fsNIdVrus8GBac5fTo0E+SqScrCYFcDVUghkJWYWtqHYVmhRxduxGtIHjbc=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR1001MB2189.namprd10.prod.outlook.com
+ (2603:10b6:301:36::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.13; Tue, 18 Jan
+ 2022 15:19:45 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c13b:5812:a403:6d96]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c13b:5812:a403:6d96%5]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 15:19:45 +0000
+Date:   Tue, 18 Jan 2022 18:18:35 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Maxime Ripard <maxime@cerno.tech>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/gpu/drm/armada/armada_plane.c:124
+ armada_drm_plane_atomic_check() warn: variable dereferenced before check
+ 'state' (see line 111)
+Message-ID: <202201170744.uress2oV-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0014.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::19)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d724a35f-e4e8-451e-9511-08d9da95f579
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2189:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB218964E0BBA866476F4308EE8E589@MWHPR1001MB2189.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:255;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6pDi7vu3JW9n4mmyJ/UqQeAcYKMBNrw3T6xcR+92WODz9Tn3WnyoC83tVNuWAmXrpZ9QDz50lIftBZ1m6WY9eEo82AlbowcUjnoay1MgQfMuq1ZPM54vXBpu9LQuoMR7x5zS0/DUnrdviRQ6HEc1RCeHLo8fBCKNlzpBYbVWRjq349ilfxtAkqnOcuJVx0wkKvjTccqfB2gfYq9JyTyUpC8OxpRL2l9Qwo3HM5tTFDXgKPGuUWXI9TkG3E6L6Cuv0h1+svS/RUvuhC1pS0xXmCO5HsG6IPBLRpYwPyJqZTn1VlNyKR9BqKQVFlLUJstO367bpkn68pFJ0ElzBveM3DUa3vccE8fplm4WxIz3+KpUkUqLh+yX83rWczPpOD4wJBux9RCmmykG2tQ0+GMV75xlLyBckdEYEtFEMjjyF60Z2gqLTOEj8h9XOnkWPIFEYzYp9OrtDlFcSZ6FmvMlXowMqLNXIEgwR4+Jm+ibfDT6F2kw6/MSphoFWGFs2zGmpUFnmmTOuG5QLjnW3yGJofB0lGx6ok0AfIiTQwVmXkfSTFZI0Lle1Rf5yWaXn9S0ZDM+BvxX/L6/LZL1hRlKSTWqOlSG3dM+/cW6rkxm/qa4FZxGNZiZRl3bZNrClFDolsbiX1/5J5owlJ1WjR94F/VVoqga8GlwrbK0BznpP1J/T7/l09fnvgE/3VSIxh2dVzGJbtrnFPVbzJZjzNK5QqWM8tZzLuznlJDlUX8KTHZrgnxgDHnJ2t2HgH8CrQm5k/rC9hEBLBtj+9pRuuu2tsgV1nWgKnOppVfVryrcoHsKTUwGwKXgw7igTS12b6r6t2TNL8/e4H22zMkJvt6Uhg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(9686003)(6512007)(316002)(8676002)(5660300002)(6916009)(6666004)(8936002)(966005)(186003)(38100700002)(38350700002)(4326008)(86362001)(508600001)(83380400001)(36756003)(6486002)(6506007)(52116002)(26005)(1076003)(66476007)(66946007)(66556008)(2906002)(44832011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iJq7tfidSkXXWGyt9K0QVZm4i+ns4Sc0OW+BbANFIbyEbrsb8+ZqTTY8pQp8?=
+ =?us-ascii?Q?cx6G8lXyvkjMr4IYwnuF5bkdxCkChB7F1Q5V9F3Bq7QNLwvE5Nng+eyXdDxg?=
+ =?us-ascii?Q?YQxJ3tmaSHglfnXtK+hMZIbLslqJPaiJ9H5ZWJkQuEgqN/IHI+cjz4gBbNId?=
+ =?us-ascii?Q?967yQM7ys1zwqrK7LHbnzVxZY0exensg/cHDH4PFhhWvhxxUzx27aA1/1nEa?=
+ =?us-ascii?Q?zoEvX+jaQKLehl2oN/DmC71b4Nb3ia2+6WPtwFSjImD80Wk/ZrAPCWDU4jvY?=
+ =?us-ascii?Q?slxCiGjggAcx3yU4zhMOtLV6KlbocOYMrzB553E8Ws04pezw8ZixnsAkhaMP?=
+ =?us-ascii?Q?S57sycJCYhhKIvOgBA39tFY2T6GGReekhvv06DQkFG09f+pArT8odWAGcImo?=
+ =?us-ascii?Q?TDx8wWCvBNnpp//KKm1cg2/qHqlartMS+Cy40Z8s4SjnI3slVNocr96EcXMu?=
+ =?us-ascii?Q?FsZoQc2JI4hvcoKY/Hc+EaHbRfZxsyp5NpWXroTMccPDu70jV/kTJadcbWdt?=
+ =?us-ascii?Q?H9Quy6Jp95Cbje2SYv2O4WPZsHZynwRQMTBfmYuoWhw89ApwKd3O3TdlpUYf?=
+ =?us-ascii?Q?Aoa1XRlrGCSx2kTW/yWCJV7S0hZubMLL5gSftInVsmLUaGH2M5znGSJKwCVG?=
+ =?us-ascii?Q?JJbLV48Kz+1mwO0MG3G7oGgCpM0hpxSMXWTZQ9/dXh2PH4HzG9qSrRTLnzCc?=
+ =?us-ascii?Q?gcWag81LXTJ1ysIfkvWYkQsI20npamGpWjNX5mPiII+S7IyfO7IrT4TXxf0/?=
+ =?us-ascii?Q?l9VGAtpqvp/RjnNrmJfwEmBBdELfb+no+nIgweR99xTMrruTpEV1PtLwcr34?=
+ =?us-ascii?Q?z9Yf96PfMyZ3djaFu+6NzZU8S72AehRaQTf8xDauQteow6WALFyzcr7KohwP?=
+ =?us-ascii?Q?wFdq+S0ZJ/befkcFv//lrqKqY+Yoe2tZURL/Gtm15Hp5KBZhTZxy602pZVsD?=
+ =?us-ascii?Q?BkyP8hytB6oL8eiHrVu0t23S5uyvPuLyopW6tbbFt8aaDiFMVYfb5/vYLg6l?=
+ =?us-ascii?Q?x/aIvEqOMceSN+wYpeaJuOOQGuiVovC1hXgmW+qGJ606jgl8M/B8KofbAG79?=
+ =?us-ascii?Q?graPNiDDNGgIGX4GVrIOjG3FZSn6NMhbtXRg/cIy8W756G3kLREUGVKQvN5o?=
+ =?us-ascii?Q?hZSqHoyKPDPAu+VYOVGKXfCW/KFkwZbY5toKJh/db7dBAPJuWiiYSKFTGbrm?=
+ =?us-ascii?Q?AM0qhtLoIY4OFbwA/JSi2mSC3ouusaHBCnB7pnbq7SbejR8ELQoAuWBIX4Zz?=
+ =?us-ascii?Q?NH5IPEhO2BCEEc+ZIOcRk382hUts/um/FJ+UEQGOYLegJ9ldvoKGbecqXUVm?=
+ =?us-ascii?Q?jeABwPnXxQwtK2YPtT8Usp4IcMG0FwLNhj3QpyFJ3oSYFb6K9WnRprJUxSWS?=
+ =?us-ascii?Q?W5oH1fpj+q3qY6wgQUi2f70EsRaF6PV2jcIq26KMtztYY/F643d2+hSsjJ8L?=
+ =?us-ascii?Q?Nk2uhQeeHcmFxqMJE7FUUAdnJK03KyLmSNv1dlBpj6vqWJ6SU5vhpO8+lj1h?=
+ =?us-ascii?Q?xA7PkaOCuexMKUnoIMQCk/B8fSBZI1BqaXP6ll7ZRqfB1zNnnDxRLQ34k+tY?=
+ =?us-ascii?Q?IRX0LIsgUDf0l/8iKgMC3V70zwb7hjlygavVesSDKdcGDiALox7xIKTdvvFi?=
+ =?us-ascii?Q?nrd+onplzNg5sRgTHY2Fxr/pCnJRR0gsOABQl83EXVXwcQ8QTnwliuowbQlo?=
+ =?us-ascii?Q?91jgdN97IKEqOxwf19b1jnEiXO8=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d724a35f-e4e8-451e-9511-08d9da95f579
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 15:19:45.5347
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: akBp+7tsffgvgcWdZlOYkYJwnS4do/n14LwJBNgi/0MAxH0irF6pLnOWHPHqMm0sRa/zh+obAhHy/HdDN8EGY0QlyTrFAssfwA9p6i3AmsU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2189
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10230 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180094
+X-Proofpoint-GUID: FxODOfF59W9lo6CfMaeNpBFsO6tNa_l-
+X-Proofpoint-ORIG-GUID: FxODOfF59W9lo6CfMaeNpBFsO6tNa_l-
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 15:25:25 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   79e06c4c4950be2abd8ca5d2428a8c915aa62c24
+commit: dec92020671c48da231189eb06a5f755f492f87f drm: Use the state pointer directly in planes atomic_check
+config: arm-randconfig-m031-20220116 (https://download.01.org/0day-ci/archive/20220117/202201170744.uress2oV-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 
-> On Sat, Jan 15, 2022 at 01:52:19PM +0900, Masami Hiramatsu wrote:
-> > On Thu, 13 Jan 2022 13:27:34 +0100
-> > Jiri Olsa <jolsa@redhat.com> wrote:
-> > 
-> > > On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
-> > > > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
-> > > > > Hi Jiri and Alexei,
-> > > > > 
-> > > > > Here is the 2nd version of fprobe. This version uses the
-> > > > > ftrace_set_filter_ips() for reducing the registering overhead.
-> > > > > Note that this also drops per-probe point private data, which
-> > > > > is not used anyway.
-> > > > > 
-> > > > > This introduces the fprobe, the function entry/exit probe with
-> > > > > multiple probe point support. This also introduces the rethook
-> > > > > for hooking function return as same as kretprobe does. This
-> > > > 
-> > > > nice, I was going through the multi-user-graph support 
-> > > > and was wondering that this might be a better way
-> > > > 
-> > > > > abstraction will help us to generalize the fgraph tracer,
-> > > > > because we can just switch it from rethook in fprobe, depending
-> > > > > on the kernel configuration.
-> > > > > 
-> > > > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
-> > > > > patches will not be affected by this change.
-> > > > 
-> > > > I'll try the bpf selftests on top of this
-> > > 
-> > > I'm getting crash and stall when running bpf selftests,
-> > > the fprobe sample module works fine, I'll check on that
-> > 
-> > OK, I got a kernel stall. I missed to enable CONFIG_FPROBE.
-> > I think vmtest.sh should support menuconfig option.
-> > 
-> > #6 bind_perm:OK
-> > #7 bloom_filter_map:OK
-> > [  107.282403] clocksource: timekeeping watchdog on CPU0: Marking clocksource 'tsc' as unstable because the skew is too large:
-> > [  107.283240] clocksource:                       'hpet' wd_nsec: 496216090 wd_now: 7ddc7120 wd_last: 7ae746b7 mask: ffffffff
-> > [  107.284045] clocksource:                       'tsc' cs_nsec: 495996979 cs_now: 31fdb69b39 cs_last: 31c2d29219 mask: ffffffffffffffff
-> > [  107.284926] clocksource:                       'tsc' is current clocksource.
-> > [  107.285487] tsc: Marking TSC unstable due to clocksource watchdog
-> > [  107.285973] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
-> > [  107.286616] sched_clock: Marking unstable (107240582544, 45390230)<-(107291410145, -5437339)
-> > [  107.290408] clocksource: Not enough CPUs to check clocksource 'tsc'.
-> > [  107.290879] clocksource: Switched to clocksource hpet
-> > [  604.210415] INFO: rcu_tasks detected stalls on tasks:
-> > [  604.210830] (____ptrval____): .. nvcsw: 86/86 holdout: 1 idle_cpu: -1/0
-> > [  604.211314] task:test_progs      state:R  running task     stack:    0 pid:   87 ppid:    85 flags:0x00004000
-> > [  604.212058] Call Trace:
-> > [  604.212246]  <TASK>
-> > [  604.212452]  __schedule+0x362/0xbb0
-> > [  604.212723]  ? preempt_schedule_notrace_thunk+0x16/0x18
-> > [  604.213107]  preempt_schedule_notrace+0x48/0x80
-> > [  604.217403]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> > [  604.217790]  ? ftrace_regs_call+0xd/0x52
-> > [  604.218087]  ? bpf_test_finish.isra.0+0x190/0x190
-> > [  604.218461]  ? bpf_fentry_test1+0x5/0x10
-> > [  604.218750]  ? trace_clock_x86_tsc+0x10/0x10
-> > [  604.219064]  ? __sys_bpf+0x8b1/0x2970
-> > [  604.219337]  ? lock_is_held_type+0xd7/0x130
-> > [  604.219680]  ? __x64_sys_bpf+0x1c/0x20
-> > [  604.219957]  ? do_syscall_64+0x35/0x80
-> > [  604.220237]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > [  604.220653]  </TASK>
-> > 
-> > Jiri, is that what you had seen? 
-> 
-> hi,
-> sorry for late response
-> 
-> I did not get any backtrace for the stall, debugging showed 
-> that the first probed function was called over and over for
-> some reason
-> 
-> as for the crash I used the small fix below
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Oops, good catch!
+smatch warnings:
+drivers/gpu/drm/armada/armada_plane.c:124 armada_drm_plane_atomic_check() warn: variable dereferenced before check 'state' (see line 111)
 
-> 
-> do you have any newer version I could play with?
+vim +/state +124 drivers/gpu/drm/armada/armada_plane.c
 
-Let me update the fprobe and rethook. I'm now trying to integrate
-the rethook with kretprobes and find some issues.
+d40af7b1ae23da Russell King  2018-07-30  108  int armada_drm_plane_atomic_check(struct drm_plane *plane,
+7c11b99a8e58c0 Maxime Ripard 2021-02-19  109  	struct drm_atomic_state *state)
+d40af7b1ae23da Russell King  2018-07-30  110  {
+7c11b99a8e58c0 Maxime Ripard 2021-02-19 @111  	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state,
+                                                                                                                         ^^^^^^
+Dereference
 
-Thank you!
+7c11b99a8e58c0 Maxime Ripard 2021-02-19  112  										 plane);
+ba5c1649465d40 Maxime Ripard 2021-02-19  113  	struct armada_plane_state *st = to_armada_plane_state(new_plane_state);
+ba5c1649465d40 Maxime Ripard 2021-02-19  114  	struct drm_crtc *crtc = new_plane_state->crtc;
+d40af7b1ae23da Russell King  2018-07-30  115  	struct drm_crtc_state *crtc_state;
+1d1547ec12bc7d Russell King  2019-01-25  116  	bool interlace;
+1d1547ec12bc7d Russell King  2019-01-25  117  	int ret;
+1d1547ec12bc7d Russell King  2019-01-25  118  
+ba5c1649465d40 Maxime Ripard 2021-02-19  119  	if (!new_plane_state->fb || WARN_ON(!new_plane_state->crtc)) {
+ba5c1649465d40 Maxime Ripard 2021-02-19  120  		new_plane_state->visible = false;
+1d1547ec12bc7d Russell King  2019-01-25  121  		return 0;
+1d1547ec12bc7d Russell King  2019-01-25  122  	}
+d40af7b1ae23da Russell King  2018-07-30  123  
+dec92020671c48 Maxime Ripard 2021-02-19 @124  	if (state)
+                                                    ^^^^^
+Checked too late
 
-> 
-> jirka
-> 
-> 
-> ---
-> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> index 3333893e5217..883151275892 100644
-> --- a/kernel/trace/fprobe.c
-> +++ b/kernel/trace/fprobe.c
-> @@ -157,7 +157,8 @@ int unregister_fprobe(struct fprobe *fp)
->  	ret = unregister_ftrace_function(&fp->ftrace);
->  
->  	if (!ret) {
-> -		rethook_free(fp->rethook);
-> +		if (fp->rethook)
-> +			rethook_free(fp->rethook);
->  		if (fp->syms) {
->  			kfree(fp->addrs);
->  			fp->addrs = NULL;
-> 
+dec92020671c48 Maxime Ripard 2021-02-19  125  		crtc_state = drm_atomic_get_existing_crtc_state(state,
+ba5c1649465d40 Maxime Ripard 2021-02-19  126  								crtc);
+d40af7b1ae23da Russell King  2018-07-30  127  	else
+d40af7b1ae23da Russell King  2018-07-30  128  		crtc_state = crtc->state;
+1d1547ec12bc7d Russell King  2019-01-25  129  
+ba5c1649465d40 Maxime Ripard 2021-02-19  130  	ret = drm_atomic_helper_check_plane_state(new_plane_state, crtc_state,
+ba5c1649465d40 Maxime Ripard 2021-02-19  131  						  0,
+1d1547ec12bc7d Russell King  2019-01-25  132  						  INT_MAX, true, false);
+1d1547ec12bc7d Russell King  2019-01-25  133  	if (ret)
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

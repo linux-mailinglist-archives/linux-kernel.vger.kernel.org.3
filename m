@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF756491A6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791D9491A71
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352345AbiARC7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S1352364AbiARC7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349241AbiARCrs (ORCPT
+        with ESMTP id S1345250AbiARCrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:47:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE749C094250;
-        Mon, 17 Jan 2022 18:39:19 -0800 (PST)
+        Mon, 17 Jan 2022 21:47:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79205C094252;
+        Mon, 17 Jan 2022 18:39:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88269B81240;
-        Tue, 18 Jan 2022 02:39:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6D1C36AF4;
-        Tue, 18 Jan 2022 02:39:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A646115F;
+        Tue, 18 Jan 2022 02:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0832C36AEF;
+        Tue, 18 Jan 2022 02:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473558;
-        bh=0W+efpgq1FlUhJyr6MfVSm/5wkWq3CVYrdrfGADKS5w=;
+        s=k20201202; t=1642473559;
+        bh=+j/hF9KUbkWpVpF0TWD+CJhI+JZR0eec5rq0R+03JEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ozaHFbGCC2Qt+7sBda5CzgsTUeTEJOWAM8y4ZFheZlmxgtdFM4Yea1q1ze6fMmSRI
-         xFHnF/+mk9FZsIOtLsU1+nQYdEqCd7PNH/8x9Y2vCSQnGtuV+AGMpyZUKhtfl2E/P5
-         UmYO1mbBgvTAfkJpLfrv8n7r6ppuhWzv9dIflptfKXkStaVRjotRRPZqRVmxbzXh9n
-         Gfi3tyN9O7Kipv9IUfHXciqm6L7bbPxH1ZGPVnzNJJ6D95QYXntifsTSCQSVF4+EOz
-         Jfa154lIWWemnvulRIn3G1RskXRcpki1PZkPthvo3gu1iFZxxwGdwL7KxKTALtOs5f
-         Idi3b8W755JzQ==
+        b=lzMBmL3CFL/3d8vAn/2AfphcVAk4CIWXgU3CzhDHfF6Dycsx4MXqJ77sMoDuigTKM
+         qzwrt7OQ4p4LFgrdUmYCnnIqde0a7402H9PBL4n6wrgo+CPts+YV0SWO+XoBMPmG66
+         WOLxyj6ST+a8KCzRCRn/5UR4ik4ONi1BYuwdPwSN8AsvjW4kaaZl3G70o5Wn7QPj7s
+         VuwOb/P/5PvbPaxre+NMWsuUQwXBysmw2C5wlVh6cXWaHCd3rHpzW1iCiRjGh5p5JE
+         58mR1MsMHdHvRetvKlYnuhhcUFkHXGF+D9Wkqt7nVM9EteBunDUw4aKnrel5TOSIzk
+         D6qbIKRqH5FqQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Joe Thornber <ejt@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
         Sasha Levin <sashal@kernel.org>, agk@redhat.com,
         dm-devel@redhat.com
-Subject: [PATCH AUTOSEL 5.15 168/188] dm btree: add a defensive bounds check to insert_at()
-Date:   Mon, 17 Jan 2022 21:31:32 -0500
-Message-Id: <20220118023152.1948105-168-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 169/188] dm space map common: add bounds check to sm_ll_lookup_bitmap()
+Date:   Mon, 17 Jan 2022 21:31:33 -0500
+Message-Id: <20220118023152.1948105-169-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
 References: <20220118023152.1948105-1-sashal@kernel.org>
@@ -53,41 +53,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Joe Thornber <ejt@redhat.com>
 
-[ Upstream commit 85bca3c05b6cca31625437eedf2060e846c4bbad ]
+[ Upstream commit cba23ac158db7f3cd48a923d6861bee2eb7a2978 ]
 
-Corrupt metadata could trigger an out of bounds write.
+Corrupted metadata could warrant returning error from sm_ll_lookup_bitmap().
 
 Signed-off-by: Joe Thornber <ejt@redhat.com>
 Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/persistent-data/dm-btree.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/md/persistent-data/dm-space-map-common.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/md/persistent-data/dm-btree.c b/drivers/md/persistent-data/dm-btree.c
-index 0703ca7a7d9a4..5ce64e93aae74 100644
---- a/drivers/md/persistent-data/dm-btree.c
-+++ b/drivers/md/persistent-data/dm-btree.c
-@@ -81,14 +81,16 @@ void inc_children(struct dm_transaction_manager *tm, struct btree_node *n,
- }
+diff --git a/drivers/md/persistent-data/dm-space-map-common.c b/drivers/md/persistent-data/dm-space-map-common.c
+index 4a6a2a9b4eb49..bfbfa750e0160 100644
+--- a/drivers/md/persistent-data/dm-space-map-common.c
++++ b/drivers/md/persistent-data/dm-space-map-common.c
+@@ -283,6 +283,11 @@ int sm_ll_lookup_bitmap(struct ll_disk *ll, dm_block_t b, uint32_t *result)
+ 	struct disk_index_entry ie_disk;
+ 	struct dm_block *blk;
  
- static int insert_at(size_t value_size, struct btree_node *node, unsigned index,
--		      uint64_t key, void *value)
--		      __dm_written_to_disk(value)
-+		     uint64_t key, void *value)
-+	__dm_written_to_disk(value)
- {
- 	uint32_t nr_entries = le32_to_cpu(node->header.nr_entries);
-+	uint32_t max_entries = le32_to_cpu(node->header.max_entries);
- 	__le64 key_le = cpu_to_le64(key);
- 
- 	if (index > nr_entries ||
--	    index >= le32_to_cpu(node->header.max_entries)) {
-+	    index >= max_entries ||
-+	    nr_entries >= max_entries) {
- 		DMERR("too many entries in btree node for insert");
- 		__dm_unbless_for_disk(value);
- 		return -ENOMEM;
++	if (b >= ll->nr_blocks) {
++		DMERR_LIMIT("metadata block out of bounds");
++		return -EINVAL;
++	}
++
+ 	b = do_div(index, ll->entries_per_block);
+ 	r = ll->load_ie(ll, index, &ie_disk);
+ 	if (r < 0)
 -- 
 2.34.1
 

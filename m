@@ -2,73 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4355B4923B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219BE4923B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbiARKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:20:25 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:38872 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiARKUZ (ORCPT
+        id S237266AbiARKVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:21:13 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4425 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbiARKVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:20:25 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 08AB71F3A1;
-        Tue, 18 Jan 2022 10:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642501224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vyG09JjfHE/eqrhcJjMQf+/NgPWriznXEChHMp6Jkyg=;
-        b=FzNmAfC0+l3AtP2VDl+AiZ3PH/Qc+RTOrcBPVZ1lFwujyYNdLOcEVPSTPpZAjMuuK84RQU
-        qbYXKofgRH6AczvrOIVxbILHyDQ0KkowLwF5AEFjkn5yT+JcDT8Ou16aOb3+45VK2iH+Z+
-        qG/ywoN0DuUN/pr4KnUy45vdHVo6HBU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642501224;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vyG09JjfHE/eqrhcJjMQf+/NgPWriznXEChHMp6Jkyg=;
-        b=QJdEss9/BNRTF5aIoqbXvudRe0jeV/+ulMorQ1TAdiC3dNZ4AcLuKdhQnlQPp0iDFuNgpY
-        0T7oFe36rNDwVvCg==
-Received: from suse.de (unknown [10.163.32.246])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C8741A3B81;
-        Tue, 18 Jan 2022 10:20:21 +0000 (UTC)
-Date:   Tue, 18 Jan 2022 10:20:19 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        srikar@linux.vnet.ibm.com, riel@surriel.com
-Subject: Re: [PATCH] sched/debug: Remove mpol_get/put and task_lock/unlock
- from sched_show_numa
-Message-ID: <20220118102019.GS3301@suse.de>
-References: <20220118050515.2973-1-bharata@amd.com>
+        Tue, 18 Jan 2022 05:21:11 -0500
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JdPqG3ZTPz67PwS;
+        Tue, 18 Jan 2022 18:18:02 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 18 Jan 2022 11:21:07 +0100
+Received: from [10.47.94.101] (10.47.94.101) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 18 Jan
+ 2022 10:21:06 +0000
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
+To:     Leo Yan <leo.yan@linaro.org>
+CC:     Marco Elver <elver@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>, <svens@linux.ibm.com>, <gor@linux.ibm.com>,
+        <sumanthk@linux.ibm.com>, <hca@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211216151454.752066-1-tmricht@linux.ibm.com>
+ <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
+ <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+ <20220118091827.GA98966@leoy-ThinkPad-X240s>
+Message-ID: <46d27f58-7732-3359-e0aa-090468a1cb22@huawei.com>
+Date:   Tue, 18 Jan 2022 10:20:37 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20220118050515.2973-1-bharata@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220118091827.GA98966@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.94.101]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:35:15AM +0530, Bharata B Rao wrote:
-> The older format of /proc/pid/sched printed home node info which
-> required the mempolicy and task lock around mpol_get(). However
-> the format has changed since then and there is no need for
-> sched_show_numa() any more to have mempolicy argument,
-> asssociated mpol_get/put and task_lock/unlock. Remove them.
+Hi Leo,
+
+>> test child forked, pid 45193
+> Both Arm and Arm64 platforms cannot support signal handler with
+> breakpoint, please see the details in [1].  
+
+Thanks for the info.
+
+>So I think we need
+> something like below:
 > 
-> Fixes: 397f2378f1361 ("sched/numa: Fix numa balancing stats in /proc/pid/sched")
-> Signed-off-by: Bharata B Rao <bharata@amd.com>
 
-Acked-by: Mel Gorman <mgorman@suse.de>
+ok
 
--- 
-Mel Gorman
-SUSE Labs
+> static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+> {
+>          ...
+> 
+>          if (!BP_SIGNAL_IS_SUPPORTED) {
+>                  pr_debug("Test not supported on this architecture");
+>                  return TEST_SKIP;
+>          }
+> 
+>          ...
+> }
+> 
+> Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
+> here.
+
+
+Do you know any other architectures which would have this issue? Or a 
+generic way to check for support?
+
+It's better to not have to add to this list arch-by-arch..
+
+> 
+> [1]https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
+> 
+>> And fails on my x86 broadwell machine:
+>>
+>> john@localhost:~/kernel-dev2/tools/perf> sudo ./perf test -v 73
+>> 73: Sigtrap                                                         :
+>> --- start ---
+>> test child forked, pid 22255
+>> FAILED sys_perf_event_open(): Argument list too long
+>> test child finished with -1
+>> ---- end ----
+>> Sigtrap: FAILED!
+>> john@localhost:~/kernel-dev2/tools/perf>
+> It is a bit suprise for the failure on x86, as I remembered x86 platform
+> can support signal handler with hw breakpoint.  And from the error
+> "Argument list too long", it should be a different issue from other
+> archs.
+
+Yeah, I don't know what's going on here.
+
+Thanks,
+John

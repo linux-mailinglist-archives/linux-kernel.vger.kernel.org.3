@@ -2,145 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A8F493110
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC20493112
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350114AbiARWya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 17:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbiARWyZ (ORCPT
+        id S1350131AbiARWyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 17:54:43 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:1792 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349892AbiARWyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 17:54:25 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65431C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:54:25 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id z22so1467869ybi.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:54:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2A0o9RStrnIxmL11KBIrT0fGYmNaZT0XLIaxHQF5rjs=;
-        b=dag6jxRDJUEiQYlvYUtjYS/OfkScCbS15kuV1kOlQvrem03MJYgdAwaEHsk7xkMGTO
-         kFHIj3pxg2l26Gamk9bynAV2Zfontn1hV5i3Z18gq3jN3xjnwhxB20CVOjA4+vlA0R02
-         ceyCS6rF1ci0H0IzntFxCa97kN3hwPwH9Z5sBLk8kMfM4ZECEp0lNsPAGgF1rYgVCvUR
-         PGkIyNBVj8eZ5YoiH4PXKb+AZcWt0b511F2zYUm4g2+HsrQfl/5+64z1s3gsYWingZHi
-         WN++EpOE6AguKoOdixg8BZ9R5wasNuqelZQvKvhUyQa3VDRdqhnIkSRieTj99s3sWzle
-         ku3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2A0o9RStrnIxmL11KBIrT0fGYmNaZT0XLIaxHQF5rjs=;
-        b=AnLsTnGpm7cQk7mNX4jjQjiQhadshOyjGlJcRDVxtUgq6CldASa2yHwezWvBYjYbbM
-         R7rBSVG9bXHFTuTiZ4ecDqZhH9tE2E4L3UOX3YQxyl9Rnily+RS5Wc1k1x0fylnVCOuE
-         FXSBBhmHzSv2w4w83MGFX9a740s1gC+3WLVgSw4xVGtUNBBE+cMXzGtePEprImxdaDbf
-         WlDVrwzrHbQho35L34ia7rUhPsWF4a4tE7xndh5Pk1s2XHBwZmHko4KIL8DbyS0JJISM
-         Xk2JL005OIbNI7ggYfSfrNh4o1/NS1qk4YMPU+YZSUp0KtlvymDlZkavPYY2HXXIg69q
-         0FXg==
-X-Gm-Message-State: AOAM530HcafGvVk9aAuyiHRVr6ksS5FNvqmrmFaNKxePRhQOQWV3j8mj
-        +0yqklmCk19S9YykfTtMHaYI38zXUmPvkgozliE5/NtC81iLYQ==
-X-Google-Smtp-Source: ABdhPJwKhpxDqzsHYaDrecYU3+cgHLkJME7T1oocecMclqJnaqy7jDJK7leekDDAezlwQk6RPUBfNaub4qT6EIgRDRI=
-X-Received: by 2002:a25:d055:: with SMTP id h82mr6237602ybg.543.1642546464435;
- Tue, 18 Jan 2022 14:54:24 -0800 (PST)
+        Tue, 18 Jan 2022 17:54:41 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20IM4M6R020143;
+        Tue, 18 Jan 2022 14:54:31 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=aUckHWNxfL7Dl3Z0cSNTLL7yvXpBPefIw6M+NlaMCrM=;
+ b=VGgAIVD3LUV6aE2f9hh7gJmSVVka5//zFbXX4njPcWVhBDKYp0j1qtITu4c2S60erj80
+ F0/4eonJ7qklTHTQu02W9S12t9H8NsowDRZMdOA2O3jKs0/GBv9UoE5G/dgP26pqW91e
+ gUTDg65YWLzuy51B2YIb3ESMm7Me3VvkscQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dp16qadt7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 18 Jan 2022 14:54:31 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 18 Jan 2022 14:54:29 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MuLv0uCjw3+6yv52gCsELEEe9ya0BiRvAXzp5TOBRSsZCAUgwnDc+0N7rcsHrfVI9U6NXpPAy2yfjkSAaQolLB2rVg1PnWREYW6tTNKq+nOGvA88NGzi0FD/cF7OkBa939NzANp6qw33Ul30oNIwbPAUa145y1HEwKvrhZIe177OgcI0WyOuDb2Ja+sjupmMJhp+JQ1zOrgUZZfb4d7SapC5P45muCjJ/bMEBXKKnr8s9m1bZrUFbZJ5WV+riKWf9L1iS2mJwSJgB27k7HHNqvz5lUjFBZkirS1HgYYNK++OX3VYaYBMp4Ri5LtODOnQI9hJoUiH1xFWgxU1D0PU2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aUckHWNxfL7Dl3Z0cSNTLL7yvXpBPefIw6M+NlaMCrM=;
+ b=jmhspBJT+XqY4SQOKg2jaH9lhpriZAcspUfYKRnwQ0zwVRcwJKUuDqm0STi71TH4satuhfJEmqndv3aCZv+qkNE6Z0ixl86w2SbRWLg6N6MEZDvDj1fkLf8f1LK3RYCYO5X8Dbe9FSXGavgvmxkz2tSBsLL4WQ0Ek5Aq48cMv86mNr52IOb7o1p5qQjYwrnC2lQz8GHc5Rp7WYauMpWwdYdA9QnjPDSyOYcYvuHCt0ch6TxIaF2cqTgUfSL8zhZqX494t6X+CrU3o/i5gnla+DVpEYPxPTaNE2UawW3MiQjxIKUt8sReQ4rMwzOXIgxV0FgXoFcARkB+P5y1mn1iwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by MWHPR15MB1549.namprd15.prod.outlook.com (2603:10b6:300:be::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 22:54:28 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::c4e9:672d:1e51:7913]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::c4e9:672d:1e51:7913%3]) with mapi id 15.20.4909.007; Tue, 18 Jan 2022
+ 22:54:28 +0000
+Date:   Tue, 18 Jan 2022 14:54:24 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Huichun Feng <foxhoundsk.tw@gmail.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mgorman@techsingularity.net>, <mingo@redhat.com>,
+        <peterz@infradead.org>
+Subject: Re: [PATCH rfc 0/6] Scheduler BPF
+Message-ID: <YedFIIK+a7AbsfPt@carbon.dhcp.thefacebook.com>
+References: <20210916162451.709260-1-guro@fb.com>
+ <20220115082924.4123401-1-foxhoundsk.tw@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220115082924.4123401-1-foxhoundsk.tw@gmail.com>
+X-ClientProxiedBy: MWHPR17CA0055.namprd17.prod.outlook.com
+ (2603:10b6:300:93::17) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
- <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
- <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
- <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
- <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
- <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
- <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
- <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com>
- <YeBfj89mIf8SezfD@google.com> <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
-In-Reply-To: <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 18 Jan 2022 14:54:13 -0800
-Message-ID: <CAJHc60zcwNskA7JCg9nQc4YhmLdziHVauf1gQQ48GHYtby_aYg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Reiji Watanabe <reijiw@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, Peter Shier <pshier@google.com>,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 73f8c725-a978-42ca-3d49-08d9dad57b97
+X-MS-TrafficTypeDiagnostic: MWHPR15MB1549:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR15MB15495445C58959BB412C2399BE589@MWHPR15MB1549.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5e8v/TvkTKNNBNs8y+PCOF4zFhG8u47Mq7QGWbCgQOaCDLB2RIXtlJl/z79IhjZxiHqRvWScrWpYSkRsWWe+GEtDNtVjgflHagq/edcTxoHwE5MajQwtaYELtBJUmlDdw75jVB9uNZFog1NDD9qzq+s9mXsgtgv1/wtuOZ9x+E5dMY0aFyqInL9jk7gWniHjR+5UdV310+cU+yLoJhH8BNPXWcNP/2Y/rkxgqa1DjK7O/5eNo8HNMUPj0XLQkMFMqNriRRHqjCWBI3PALLa5j4dd39j4LOR7b4T6a+VAI9PYYyQNi4FDsxR4TWTIPevPm985FginfTEqHT56wa4e6IdQBET6MW11wwd9AJ5h07yDHsflEg1PLDpnxgR7jZbyYHCyTbRxd1aiKyKq0gsBqp+kWIM7H5OvHXeSiI+q0MNLCigIuBovSKJ3R6vsF1Bhbhi5/nVFE1rRO0gTmgrfrEP9ayGXIOC33blAEwqZHtZZWLPx4UH6Y2yvqN1s7UI9enhgYTyUhDM/V2L2iTyrY5+fIk4svY55Tnch0LmT2WopKYUHwxXgB5Ms98f8QOEpMxpxuvPYyPqix+PfoeMMONYVxYjzuXUcOMi63n+PChbnPzqxx8OA80gKjSvB3acHyYGo9591Ym++5O98H0HQUkh6dcuSQ7iXynXjQcLdEYhagKX2zQSKwvIJvNcFXMI4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(6512007)(9686003)(508600001)(38100700002)(4326008)(52116002)(6666004)(316002)(66476007)(66556008)(5660300002)(8676002)(6916009)(66946007)(6486002)(6506007)(2906002)(8936002)(86362001)(4744005)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?egrY/1G3/UYKEQiE2WlztrAjtubjFnKiKneOpMMSc4dkYLzAscwkpWb/AYZm?=
+ =?us-ascii?Q?VlSDvF35adLGOkyp0TogFKmk8zXwxwNbxWU9UA2/yPQH7mES5Mkxkdoow6e5?=
+ =?us-ascii?Q?mSLy563v87Ah2e2JgqUM/AONHBY/l7ntfp6zSvVF8pbEDU1b0FvPF2mV6mXO?=
+ =?us-ascii?Q?PLpxDyAleNUE/bRY3VMcEoJJunihbtNUuKJU16O5qE/qOHU0g30c2y6/tbHb?=
+ =?us-ascii?Q?WsM+SgVkuWaxfuLGAdzN1s/4TZcsJBwA4tOLxPFTmdLzC5J60M4ReuwkTdku?=
+ =?us-ascii?Q?LSsI78MQ68VzbWWgnPX63Bt/HDtP4VeUmwsLcDtzC3PHb13vbIUgLkP0awCK?=
+ =?us-ascii?Q?cnhLudv/i4X2z++fgAN1abFmWE7v092GQQee2TG2W3KJl0StiRg8WraWN6/h?=
+ =?us-ascii?Q?Gh9bG601ilasJF1lOI06m+MOzu9/ZP+0/ckEQSUbcg40lGnslOnDXvdD9Af9?=
+ =?us-ascii?Q?Oy5oRS2cjZQUyMxMlm/5UaL9p6ZYh4qz880aJx66iaIbBhzy66vDNOoUR7hF?=
+ =?us-ascii?Q?HoHa0Ulf9wZheij4F/g61kqCyaOx2yc4M9gQnlcUhRHx0o1gQ06fpzD5PoKA?=
+ =?us-ascii?Q?FZ61d4lErCiqWS7hbPnqgnu94sGwFYz376DJ4neto4PZTQcFhmPGGXhLvfU2?=
+ =?us-ascii?Q?fUlawbvoWPPprKVCShaUWKNKjkl5VSkPpOlYRVAZV+RUgabXdN3zSe8fTtW6?=
+ =?us-ascii?Q?X2jKmQnUSdULZPM2WaErMdbp93M5MudpBwEDfCWHKUp8uJEZ43loyo+O7QD5?=
+ =?us-ascii?Q?1sVg8F9eSA7Wx70MwWnuIcSSL5ZaOtLe7bbR/QiWbrWGWgdditRfVaEp3bxY?=
+ =?us-ascii?Q?o8/kN5IhlMYapTrY2qF48xyK4gX9HSqGQ9xdEWfw3pXDQayP8YduQd+F+H+y?=
+ =?us-ascii?Q?8b12nr8+mOXYRKoD6WTFMRe/HLhsrVQJbYsqSptPFqz8L5vmFcxRUwzBZd74?=
+ =?us-ascii?Q?5kC0qqn+PbF951aBAf/v5nRw4dvDQvwcpAW92CYip+tFCvK7UNosUcTrw9fW?=
+ =?us-ascii?Q?9bPu84vUuAeDvsKNAeoQzipTxNErMEKAYEc8YZAx43lnDXsYHUzrgzjSJlHa?=
+ =?us-ascii?Q?38VhWiVq7/RpeDF5SLHh0OqX7o11jdrvUvy3/ZCJ7pkBR++lGIidbA02FaOS?=
+ =?us-ascii?Q?srSLVXjMuHOQMxSuZWv2OV1mkgnLleOQl4eTHaiIRonzvS79PdXEtJBiiING?=
+ =?us-ascii?Q?w3e2/rUa5Waeryi0kERx0e1JZDEYniy0XFURxwLoZ0H/uxeBE3n4cpF5Qfvt?=
+ =?us-ascii?Q?t+NbrggcNP/cHGZPrkzUtGJOIzgqCbWoCwP/WM1GYlI2IWRAyirNEtwN8bZ7?=
+ =?us-ascii?Q?VfFdroj9g+htjdan3/AacwvIgpaha25kS4r5unm9DuLInmDqkl6lKVcEHxdu?=
+ =?us-ascii?Q?LQXoG8FLemsREvCuNCiO2QAPZ9qXl4J3/VG7nF9HHJAtFI7xTgD7K0sTZwcw?=
+ =?us-ascii?Q?xjZaA1LCYd2BzzrhDqngu0I3LLTMNQsdlwS9olPelez6J5hin5PRZ8KEvev5?=
+ =?us-ascii?Q?Pn5vs/MrSrugDuqLas4XIOS7LPVkPSPyyLwRqf3FtHIx79ermxQ5DKEJAuD2?=
+ =?us-ascii?Q?DsdhPV/+RpYKugG+nbK/WRK2JvgOEI8qQ9J8VzYf?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73f8c725-a978-42ca-3d49-08d9dad57b97
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 22:54:28.8846
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 736p/Nrv6BQJxBM9hAWgPKq9z+JtCzarXr9UFwo6Va9hlBG8itinfmAn3m0Eu8Yb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1549
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: 8tJ7Tr7gg_V6uVuJ9DG9rYc2y8A5uF2P
+X-Proofpoint-GUID: 8tJ7Tr7gg_V6uVuJ9DG9rYc2y8A5uF2P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_06,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
+ phishscore=0 adultscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180128
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 1:51 PM Reiji Watanabe <reijiw@google.com> wrote:
->
-> On Thu, Jan 13, 2022 at 9:21 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Wed, Jan 12, 2022, Raghavendra Rao Ananta wrote:
-> > > On Tue, Jan 11, 2022 at 11:16 AM Jim Mattson <jmattson@google.com> wrote:
-> > > > Perhaps it would help if you explained *why* you are doing this. It
-> > > > sounds like you are either trying to protect against a malicious
-> > > > userspace, or you are trying to keep userspace from doing something
-> > > > stupid. In general, kvm only enforces constraints that are necessary
-> > > > to protect the host. If that's what you're doing, I don't understand
-> > > > why live migration doesn't provide an end-run around your protections.
-> > > It's mainly to safeguard the guests. With respect to migration, KVM
-> > > and the userspace are collectively playing a role here. It's up to the
-> > > userspace to ensure that the registers are configured the same across
-> > > migrations and KVM ensures that the userspace doesn't modify the
-> > > registers after KVM_RUN so that they don't see features turned OFF/ON
-> > > during execution. I'm not sure if it falls into the definition of
-> > > protecting the host. Do you see a value in adding this extra
-> > > protection from KVM?
-> >
-> > Short answer: probably not?
-> >
-> > There is precedent for disallowing userspace from doing stupid things, but that's
-> > either for KVM's protection (as Jim pointed out), or because KVM can't honor the
-> > change, e.g. x86 is currently in the process of disallowing most CPUID changes
-> > after KVM_RUN because KVM itself consumes the CPUID information and KVM doesn't
-> > support updating some of it's own internal state (because removing features like
-> > GB hugepage support is nonsensical and would require a large pile of complicated,
-> > messy code).
-> >
-> > Restricing CPUID changes does offer some "protection" to the guest, but that's
-> > not the goal.  E.g. KVM won't detect CPUID misconfiguration in the migration
-> > case, and trying to do so is a fool's errand.
-> >
-> > If restricting updates in the arm64 is necessary to ensure KVM provides sane
-> > behavior, then it could be justified.  But if it's purely a sanity check on
-> > behalf of the guest, then it's not justified.
->
-> The pseudo firmware hvc registers, which this series are adding, are
-> used by KVM to identify available hvc features for the guest, and not
-> directly exposed to the guest as registers.
-> The ways the KVM code in the series consumes the registers' values are
-> very limited, and no KVM data/state is created based on their values.
-> But, as the code that consumes the registers grows in the future,
-> I wouldn't be surprised if KVM consumes them differently than it does
-> now (e.g. create another data structure based on the register values).
-> I'm not sure though :)
->
-> The restriction, with which KVM doesn't need to worry about the changes
-> in the registers after KVM_RUN, could potentially protect or be useful
-> to protect KVM and simplify future changes/maintenance of the KVM codes
-> that consumes the values.
-> I thought this was one of the reasons for having the restriction.
->
-Well, that wasn't the original intention of the patch, but just to
-protect the guests from the userspace's dynamic updates. Having said
-that, and based on what Sean mentioned in his last reply, it could be
-inconsistent from what KVM has been doing so far and would be
-difficult to cover all the scenarios that userspace can mess things up
-for guests.
-I'll plan to drop this patch in the next version, and bring it back
-back to arm64 if we really need it.
+On Sat, Jan 15, 2022 at 04:29:24PM +0800, Huichun Feng wrote:
+> Hi Roman and the list,
 
-Thanks Sean, Jim, and Reiji for the comments and discussion.
+Hello Huichun!
 
-Regards,
-Raghavendra
-> Thanks,
-> Reiji
+> 
+> I have a naive question regarding BPF hook for sched.
+> 
+> Given that BPF can also be attached to tracepoint, why do we add a BPF prog
+> type specific to sched?
+
+Tracing programs can have return values as well, see kretprobes.
+
+> 
+> The reason I can come up with is that sched BPF can have retval to drive the
+> scheduling decision in static branch, whereas tracepoint is not able to do this.
+> Is it mainly because of this or anything else?
+
+Well, you are right that right now there is no strict necessity to
+introduce a new prog type (aside from static branch mechanism you
+mentioned), however I believe it's useful in a long run. Sched
+programs might be able to use a different set of helpers, maybe there
+will be some additional restrictions, etc. It's an RFC version of the
+patchset and any ideas, suggestions and critic are highly welcome!
+
+Thanks!

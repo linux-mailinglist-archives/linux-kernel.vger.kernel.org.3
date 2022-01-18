@@ -2,104 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 547174921BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429B14921C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345116AbiARI6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
+        id S231670AbiARJAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345101AbiARI6V (ORCPT
+        with ESMTP id S240386AbiARJAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:58:21 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D7DC061574;
-        Tue, 18 Jan 2022 00:58:21 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4JdN3G6Hy2zQjhc;
-        Tue, 18 Jan 2022 09:58:18 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1642496296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NAxLU0mYbTsljTv5PTOd37yr52jarIfsaW4h+9H3yw0=;
-        b=airmWeIz27QYgz7d3e/3yuC4vceSng6waZCW0gvaE4E7UYuc1aILplg0H/6OPwoKca2OOW
-        p/7g3rC61zZyA1RBswOsiJ8l5paqxrht/2/wAAoURZzmvEqCX88rTeakdn52counfXs2jT
-        hLMSuMrfGKbh1N1QsHKVbiOLbfPH+7pBBUz8oEy2W7slhIJVzluhXwckG4F2KCW4qGnTqP
-        8GiGjsw99EkV686MEWouB11b1Pgf+c8NzWH72DspddW0o+nCT6VKxRvIcWL1lrQQ4n3BgW
-        arDsjb31MI+9alqTWT7WYRzcXVeV7xAo9yEI8Ju/HuE9/f3iLZWJL9vLRxFvVA==
-Message-ID: <a922343d-8805-3446-c000-cf7969699823@mailbox.org>
-Date:   Tue, 18 Jan 2022 09:58:13 +0100
+        Tue, 18 Jan 2022 04:00:30 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FDAC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:00:29 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id b16so697305uaq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=CTv9ritqp+Mg+iGH9UmCSGTsQXYif6U8aLF8P+o+ceI=;
+        b=cLm6yZ5TR92fniWGHv43RaB8Rnyc4KX/UnKc8YJzmMCxfEn4xauybVpeBy1l+ypTNS
+         5eG/F49o2Q7gyIcysSwmbrwEXfYAkkmsJRlGpLP2YyShlmURHm4NsDvk6ZTtKI7sCXxt
+         +NO3assV3mgZn16ADQFlQrSYQYrAQJlT/TtIvkdB+5pFi58APy9hfgJBBG2YEx+rJ84z
+         K9Ni7Uhx9AXRGtpjOnXE3ZMHQSuTkkrKSyNeq2eOORhhelKpUJDrsI4aqJvngDyKDqTI
+         4nxj+NmOXwmpxtstniMxXwlEkTDDkBxeZhejgLJ2edxCRo68G8XhDFWDg0I9qWf7PUHr
+         /5Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=CTv9ritqp+Mg+iGH9UmCSGTsQXYif6U8aLF8P+o+ceI=;
+        b=kzYftd0JOmlpjyVfuTIOJ3LltqiseXempI2fuUBsVe7DWqWVcc0tRdOsuxGVI1m14w
+         aqlzG/RrM6y2ZRRirjI3TM02jE44mXZ7/Tym56bCickR93KbvnAD50KUQe2SLveEpAVn
+         uFOKtWrjzIG6fTQHQc4XEa1v6uIjMmPXOmar1cP53NHbveSM62jBbcZm2MuDLlZNOF+q
+         rWX51tOWXM6WA5++9v9CfuIa77vp+O2iA3MUGMCEn8OCZCynWukWStAZJlb6g63TN4wA
+         V5nSpBYZ83tI83GkZmZN+QtOg/MAquCkWGDhO5d/9dhmBupA6qiOCbCrhTjrUbRqrXP4
+         YCBA==
+X-Gm-Message-State: AOAM530fqxlmBc2bCCRw8RnDWkx34Co8AblLARqzm9I6jzikgcjYsM50
+        P6crsrqAhyiEVyhj1CPP++ewXELJmsRs66EG0B4=
+X-Google-Smtp-Source: ABdhPJzx3bEpIl1/FN4Y6/vfaR+LEAr+DpYyk6jPQdDuUDNYeENi48gocEkJ3n62EAoTAmJrv55V1UEi+5zSI7tmYWQ=
+X-Received: by 2002:a05:6102:3c4:: with SMTP id n4mr8405573vsq.75.1642496428614;
+ Tue, 18 Jan 2022 01:00:28 -0800 (PST)
 MIME-Version: 1.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-CA
-To:     Sven Schnelle <svens@stackframe.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
- <87bl0amc6s.fsf@x1.stackframe.org>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <87bl0amc6s.fsf@x1.stackframe.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a67:4386:0:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:00:28
+ -0800 (PST)
+Reply-To: jane.lily84@aol.com
+From:   Jane Lily <jane.lilly84@gmail.com>
+Date:   Tue, 18 Jan 2022 01:00:28 -0800
+Message-ID: <CAFG_S26aayiXho8TNXY6A7eSvY3JyXkmqNzbStw1Tk_H+SxK3g@mail.gmail.com>
+Subject: Hello Dear, My Name is Mrs. Jane Valerian, I read about you in a
+ reliable website and I would love to employ you in assisting some orphans to
+ protect themselves against spreading of covid-19 Virus in your Country. I
+ have a desire to send some money for you to carry on with the Charity work
+ over there in your country. Please reply this massage via my private email
+ address: ( jane.lily84@aol.com) so that I will tell you about myself and give
+ you further details. I will be waiting for your immediate response.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-17 19:47, Sven Schnelle wrote:
-> 
->>  * There's no new development in fbdev and there are no new
->>    drivers. Everyone works on DRM, which is better in most
->>    regards. The consequence is that userspace is slowly loosing the
->>   ability to use fbdev.
-> 
-> That might be caused by the fact that no new drivers are accepted for
-> fbdev. I wrote a driver for the HP Visualize FX5/10 cards end of last
-> year which was rejected for inclusion into fbdev[1].
-> 
-> Based on your recommendation i re-wrote the whole thing in DRM. This
-> works but has several drawbacks:
-> 
-> - no modesetting. With fbdev, i can nicely switch resolutions with
->   fbset. That doesn't work, and i've been told that this is not supported[2]
-> 
-> - It is *much* slower than fbset with hardware blitting. I would have to
->   dig out the numbers, but it's in the ratio of 1:15. The nice thing
->   with fbdev blitting is that i get an array of pixels and the
->   foreground/background colors all of these these pixels should have.
->   With the help of the hardware blitting, i can write 32 pixels at once
->   with every 32-bit transfer.
-> 
->   With DRM, the closest i could find was DRM_FORMAT_C8, which means one
->   byte per pixel. So i can put 4 pixels into one 32-bit transfer.
-> 
->   fbdev also clears the lines with hardware blitting, which is much
->   faster than clearing it with memcpy.
-> 
->   Based on your recommendation i also verified that pci coalescing is
->   enabled.
-> 
->   These numbers are with DRM's unnatural scrolling behaviour - it seems
->   to scroll several (text)lines at once if it takes to much time. I
->   guess if DRM would scroll line by line it would be even slower.
-> 
->   If DRM would add those things - hardware clearing of memory regions,
->   hw blitting for text with a FG/BG color and modesetting i wouldn't
->   care about fbdev at all. But right now, it's working way faster for me.
-
-A DRM driver can implement the same fbdev acceleration hooks as an fbdev driver.
-
-(Most DRM drivers never bothered because the HW is more complex than traditional 2D accelerators, and can't safely be used under all circumstances where fbdev acceleration hooks could get called from. That's not an issue for a traditional 2D accelerator driver though)
-
-
 -- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
+Hello Dear,
+My Name is Mrs. Jane Valerian, I read about you in a reliable website
+and I would love to employ you in assisting some orphans to protect
+themselves against spreading of covid-19 Virus in your Country. I have
+a desire to send some money for you to carry on with the Charity work
+over there in your country. Please reply this massage via my private
+email address: ( jane.lily84@aol.com) so that I will tell you about
+myself and give you further details. I will be waiting for your
+immediate response.
+
+Your Sincerely
+Mrs. Jane

@@ -2,117 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F13492523
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD0B492526
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240975AbiARLoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S241028AbiARLqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234192AbiARLov (ORCPT
+        with ESMTP id S240973AbiARLqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:44:51 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D025C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:44:51 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso11095668otl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f+NXps7/AMZd6p8CbfFu1xLGWKKhiZWwP/hikl7qUV8=;
-        b=ZXMuh4JpPKQQn028vR5TW28RkJRq/wWREsIVr/rEShZKjMg/B7Z9jPda0Y+LON7jx4
-         Lp1zlJGCIVdT6vqE1wktMASEE0B18XeZWHJkPEPITavWPstuRkYq9nVNCVJNlJ6rFpzd
-         hlaFfUyjK1pYhhAjPmo7KoompJW6Jk7rmN/ck=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f+NXps7/AMZd6p8CbfFu1xLGWKKhiZWwP/hikl7qUV8=;
-        b=ga8KK6xp2sK/kuxTTZPmzjdsbNldL5Vq2WHWSjD03osJPrvEKvBTYeovyDdJUeBBV8
-         Gl4DiY1NRnp2HsFeqBK1zBxVx7hz2Y3k03PrIZKpSqDQeuAuIDcWVhxePTxHCjpviW15
-         MjjovjQG1FxTNi+/b2jcbuWY0XftoHn0PNFOg0zZlt2VqtaWOvD+VxnOOyngxM912aC5
-         VMdFn0WKJM8tC0rUhCJ0yAjgy3+txLMQMIZS4w8jbV7dXPL8PcMlLNmo1Ei+cGcOCf9T
-         VVeDuKDhTd1L7J99yRALtzUlJ+60aBEmxhpG1NLIGA2B1rgc4gyk7b/ag1RYoiAO0ggZ
-         /fHw==
-X-Gm-Message-State: AOAM530C1tL8k3x/saLe10veK6qNbSyNL94TV2zIF7SsrhU+zK7/GW6j
-        SdziqbSO763zCqiXjLgMa8jFT/ulQm9cyRzVxPXB6Q==
-X-Google-Smtp-Source: ABdhPJxbvQaGp+T6oYApy+hIHTb7hh7iMVhDsGckpsWeq9BaU3rN88FunYUfphQtcZoEenjamZA+BYQvRTrRz3ys6zk=
-X-Received: by 2002:a9d:d12:: with SMTP id 18mr17457509oti.75.1642506290874;
- Tue, 18 Jan 2022 03:44:50 -0800 (PST)
+        Tue, 18 Jan 2022 06:46:05 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6D3C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vqnZ5mGKPfst5rNIar7RHcY3kxPBaXqs26CfjQk8N90=; b=mOuBVcdZi8JRU0cyh/XNAe0MFu
+        QjiB+M0BIRXFYwLrfpl+I2XjqATqMOD6SZjqCXHRaK4rfIOJnRdF2mXkJk5GbD1KFPUDtlD7PzwT2
+        kDaXFnj3ROgQ3HDQME4O7o4H5Y5O35JJDxMJJcU+oYCMPCiEjWnYEqR4qB1Rqf4Dgztm4pj6o8Tfc
+        TlN5pX8pG4YkGh3wFOl6iQojVmOhiPnUhpv2r43AEboRd94VuCnV/kL0ApcSO2JMX8cmii4pkdv8L
+        MsupIpsmLKOxdo4cPVhebvtQtKxFgpB5grJWPfwquHwT464m/RSoFfTI8zlub4tz399WrcAXCtWrL
+        T7pwKELw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9mw6-009B9Z-18; Tue, 18 Jan 2022 11:46:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A86D300222;
+        Tue, 18 Jan 2022 12:46:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C879B203C2D6E; Tue, 18 Jan 2022 12:46:01 +0100 (CET)
+Date:   Tue, 18 Jan 2022 12:46:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add Suren as psi co-maintainer
+Message-ID: <YeaoeQlAoj06qlNa@hirez.programming.kicks-ass.net>
+References: <20220117120317.1581315-1-hannes@cmpxchg.org>
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de> <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de> <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de> <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 18 Jan 2022 12:44:39 +0100
-Message-ID: <CAKMK7uEOd+N0Xfk_MRK4m6p-PFCRituimqeOzFMY925vyWcGkA@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117120317.1581315-1-hannes@cmpxchg.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 9:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Gerd,
->
-> On Tue, Jan 18, 2022 at 7:30 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
-> > Also note that using a shadow framebuffer allows to decouple fbcon
-> > updates and scanout framebuffer updates.  Can be used to speed up
-> > things without depending on the 2d blitter.
->
-> Assuming accesses to the shadow frame buffer are faster than accesses
-> to the scanout frame buffer. While this is true on modern hardware,
-> this is not the case on all hardware.  Especially if the shadow frame
-> buffer has a higher depth (XRGB8888) than the scanout frame buffer
-> (e.g. Cn)...
->
-> The funny thing is that the systems we are interested in, once used
-> to be known for their graphics capabilities and/or performance...
+On Mon, Jan 17, 2022 at 07:03:17AM -0500, Johannes Weiner wrote:
+> Suren wrote the poll() interface, which is a significant part of the
+> psi code and represents a large user of psi itself (Android). It's a
+> good idea to have him look at psi patches as well, and it's good to
+> have two people following things in case one of us is traveling.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-That's just a pure strawman. No one is forcing you to run your shadow
-buffer with xrgb8888. You can already do C8, any any other C1 is a few
-lines of code. Which I can't type for you, because I don't have such
-high performance hardware, but if someone would have spent hacking
-instead of typing mails any time this came up the past few years, we'd
-have it long ago. It's really not hard.
-
-Same goes for modesetting support in the fbdev emulation layer (that's
-a bit more work, but really not much) and really anything. And we do
-actually merge additions in the emulation support pretty quickly. If
-they show up.
--Daniel
-
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
-
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks!

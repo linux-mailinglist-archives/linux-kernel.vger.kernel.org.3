@@ -2,195 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D0A492ED0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD90492E39
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343775AbiART7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:59:36 -0500
-Received: from gateway34.websitewelcome.com ([192.185.148.109]:14202 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348986AbiART7f (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:59:35 -0500
-X-Greylist: delayed 1498 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 14:59:35 EST
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 026D51A6F4D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 13:11:41 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 9tnVndUiQRnrr9tnVn1CpC; Tue, 18 Jan 2022 13:05:37 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=62lwA313ylYvMl776J0nmotREsLRnHNHGefb4h0dvoo=; b=PyiVKsPlAhwkbLzznyg+KBOywd
-        sR3mIPwqE3E0G8CInbrV9M3G8iCwH7MqbVJGhkNV18tD8re3JjQ35Yw5iT63N8odXWGXNt4w2E7Qp
-        R12bj3nDKnKpeUy6nnpQEv72BYa4D2F0GXLwSs/jytZy6I1cdm55pDlIN6bh7y0t2P9ZTFSYAXAjY
-        QgLeAfhlb5TVG6fv+A+JHfKuJslOWE0B0sqm/ZVJi5LQzt6krt9sHb1aHrwMJ22IyotWi6ryzadzD
-        WoRUs4BQGpRp038/cCAQKZC6sLgtAMbEFHpR3CgG71r4m3yhYcip64XkEkz60EMir+GyJFXu2QEQ4
-        f/FC+yGw==;
-Received: from [187.184.156.46] (port=26621 helo=[192.168.0.21])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1n9tnV-001SJO-46; Tue, 18 Jan 2022 13:05:37 -0600
-Subject: Re: [PATCH] drm/dp: Remove common Post Cursor2 register handling
-To:     Kees Cook <keescook@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20220105173507.2420910-1-keescook@chromium.org>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Message-ID: <cae904f1-21f4-426f-8831-e122d965b131@embeddedor.com>
-Date:   Tue, 18 Jan 2022 13:11:48 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S245281AbiARTNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:13:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:52208 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245130AbiARTNI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 14:13:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642533188; x=1674069188;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BXNS1bTUDqh0oQ1WR0mnyRRTaK2frHrBYh6HpN8lKwo=;
+  b=JEx8qh+uAvZc7wrjnVd146WaaiSqt8yDWsAP2AU8LMcCOcjEeaoNbA2e
+   UGCs8zYBa3LUfg8hhvL9WmJw/kjHaSFu0InC9xVMgdtD0VJ+1Efmd7CP3
+   VGtQQGgeEThEQ4mO7makFIA63RJ7brkJr1j4LZHXmqq1rP6qbfNrlmK8e
+   9mJ00MbX5M5smvIHTtwuNGJLC/g1MzJX1rhTz9AZezs5F8VTfLRFYh/UF
+   zZ66VhYBuGxhSY2ZezLQ8TwMXsc1XDDfMPiIwVV9qjrAnViWx9Fl4AQ7P
+   UzUPouM3mAf/7jJAIjN6S427c0yu5NWkdZk0symlGfIIdPAJD56yxm8tG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="308233473"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="308233473"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 11:13:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="474866555"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2022 11:13:05 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9tuj-000CsQ-7A; Tue, 18 Jan 2022 19:13:05 +0000
+Date:   Wed, 19 Jan 2022 03:12:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive-5.16.y 61/80] drivers/net/phy/motorcomm.c:163:5:
+ warning: no previous prototype for 'genphy_config_init'
+Message-ID: <202201190351.34Nj9vc7-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220105173507.2420910-1-keescook@chromium.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.184.156.46
-X-Source-L: No
-X-Exim-ID: 1n9tnV-001SJO-46
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.21]) [187.184.156.46]:26621
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 13
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/esmil/linux visionfive-5.16.y
+head:   eeeb46a916e77aecbe1699537a5592746f3130f6
+commit: d4993dd33c50b5ea0db8f5a8cdcd0dee5458b299 [61/80] net: phy: motorcomm: Support the YT8521 gigabit PHY
+config: ia64-randconfig-r021-20220116 (https://download.01.org/0day-ci/archive/20220119/202201190351.34Nj9vc7-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/d4993dd33c50b5ea0db8f5a8cdcd0dee5458b299
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive-5.16.y
+        git checkout d4993dd33c50b5ea0db8f5a8cdcd0dee5458b299
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/phy/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from arch/ia64/include/asm/uaccess.h:40,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/compat.h:17,
+                    from include/linux/ethtool.h:17,
+                    from include/linux/phy.h:16,
+                    from drivers/net/phy/motorcomm.c:10:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   drivers/net/phy/motorcomm.c: At top level:
+>> drivers/net/phy/motorcomm.c:163:5: warning: no previous prototype for 'genphy_config_init' [-Wmissing-prototypes]
+     163 | int genphy_config_init(struct phy_device *phydev)
+         |     ^~~~~~~~~~~~~~~~~~
+>> drivers/net/phy/motorcomm.c:195:5: warning: no previous prototype for 'yt8521_soft_reset' [-Wmissing-prototypes]
+     195 | int yt8521_soft_reset(struct phy_device *phydev)
+         |     ^~~~~~~~~~~~~~~~~
+>> drivers/net/phy/motorcomm.c:484:5: warning: no previous prototype for 'yt8521_suspend' [-Wmissing-prototypes]
+     484 | int yt8521_suspend(struct phy_device *phydev)
+         |     ^~~~~~~~~~~~~~
+>> drivers/net/phy/motorcomm.c:503:5: warning: no previous prototype for 'yt8521_resume' [-Wmissing-prototypes]
+     503 | int yt8521_resume(struct phy_device *phydev)
+         |     ^~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:14:33: warning: initialized field overwritten [-Woverride-init]
+      14 | #define MOTORCOMM_PHY_ID_MASK   0x00000fff
+         |                                 ^~~~~~~~~~
+   drivers/net/phy/motorcomm.c:556:35: note: in expansion of macro 'MOTORCOMM_PHY_ID_MASK'
+     556 |                 .phy_id_mask    = MOTORCOMM_PHY_ID_MASK,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:14:33: note: (near initialization for 'motorcomm_phy_drvs[1].phy_id_mask')
+      14 | #define MOTORCOMM_PHY_ID_MASK   0x00000fff
+         |                                 ^~~~~~~~~~
+   drivers/net/phy/motorcomm.c:556:35: note: in expansion of macro 'MOTORCOMM_PHY_ID_MASK'
+     556 |                 .phy_id_mask    = MOTORCOMM_PHY_ID_MASK,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
 
 
-On 1/5/22 11:35, Kees Cook wrote:
-> The link_status array was not large enough to read the Adjust Request
-> Post Cursor2 register, so remove the common helper function to avoid
-> an OOB read, found with a -Warray-bounds build:
-> 
-> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
-> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
->    59 |         return link_status[r - DP_LANE0_1_STATUS];
->       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
->   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Replace the only user of the helper with an open-coded fetch and decode,
-> similar to drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c.
-> 
-> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+vim +/genphy_config_init +163 drivers/net/phy/motorcomm.c
 
-This should be tagged for -stable:
+  > 10	#include <linux/phy.h>
+    11	
+    12	#define PHY_ID_YT8511		0x0000010a
+    13	#define PHY_ID_YT8521 		0x0000011a
+    14	#define MOTORCOMM_PHY_ID_MASK 	0x00000fff
+    15	
+    16	#define YT8511_PAGE_SELECT	0x1e
+    17	#define YT8511_PAGE		0x1f
+    18	#define YT8511_EXT_CLK_GATE	0x0c
+    19	#define YT8511_EXT_DELAY_DRIVE	0x0d
+    20	#define YT8511_EXT_SLEEP_CTRL	0x27
+    21	
+    22	/* 2b00 25m from pll
+    23	 * 2b01 25m from xtl *default*
+    24	 * 2b10 62.m from pll
+    25	 * 2b11 125m from pll
+    26	 */
+    27	#define YT8511_CLK_125M		(BIT(2) | BIT(1))
+    28	#define YT8511_PLLON_SLP	BIT(14)
+    29	
+    30	/* RX Delay enabled = 1.8ns 1000T, 8ns 10/100T */
+    31	#define YT8511_DELAY_RX		BIT(0)
+    32	
+    33	/* TX Gig-E Delay is bits 7:4, default 0x5
+    34	 * TX Fast-E Delay is bits 15:12, default 0xf
+    35	 * Delay = 150ps * N - 250ps
+    36	 * On = 2000ps, off = 50ps
+    37	 */
+    38	#define YT8511_DELAY_GE_TX_EN	(0xf << 4)
+    39	#define YT8511_DELAY_GE_TX_DIS	(0x2 << 4)
+    40	#define YT8511_DELAY_FE_TX_EN	(0xf << 12)
+    41	#define YT8511_DELAY_FE_TX_DIS	(0x2 << 12)
+    42	
+    43	#define YT8521_SLEEP_SW_EN 	BIT(15)
+    44	#define YT8521_LINK_STATUS 	BIT(10)
+    45	#define YT8521_DUPLEX 		0x2000
+    46	#define YT8521_SPEED_MODE 	0xc000
+    47	#define YTPHY_REG_SPACE_UTP 	0
+    48	#define YTPHY_REG_SPACE_FIBER 	2
+    49	#define REG_PHY_SPEC_STATUS 	0x11
+    50	/* based on yt8521 wol config register */
+    51	#define YTPHY_UTP_INTR_REG 	0x12
+    52	
+    53	#define SYS_WAKEUP_BASED_ON_ETH_PKT 	0
+    54	
+    55	/* to enable system WOL of phy, please define this macro to 1
+    56	 * otherwise, define it to 0.
+    57	 */
+    58	#define YTPHY_ENABLE_WOL 	0
+    59	
+    60	#if (YTPHY_ENABLE_WOL)
+    61		#undef SYS_WAKEUP_BASED_ON_ETH_PKT
+    62		#define SYS_WAKEUP_BASED_ON_ETH_PKT     1
+    63	#endif
+    64	
+    65	#if (YTPHY_ENABLE_WOL)
+    66	enum ytphy_wol_type_e {
+    67		YTPHY_WOL_TYPE_LEVEL,
+    68		YTPHY_WOL_TYPE_PULSE,
+    69		YTPHY_WOL_TYPE_MAX
+    70	};
+    71	typedef enum ytphy_wol_type_e ytphy_wol_type_t;
+    72	
+    73	enum ytphy_wol_width_e {
+    74		YTPHY_WOL_WIDTH_84MS,
+    75		YTPHY_WOL_WIDTH_168MS,
+    76		YTPHY_WOL_WIDTH_336MS,
+    77		YTPHY_WOL_WIDTH_672MS,
+    78		YTPHY_WOL_WIDTH_MAX
+    79	};
+    80	typedef enum ytphy_wol_width_e ytphy_wol_width_t;
+    81	
+    82	struct ytphy_wol_cfg_s {
+    83		int enable;
+    84		int type;
+    85		int width;
+    86	};
+    87	typedef struct ytphy_wol_cfg_s ytphy_wol_cfg_t;
+    88	#endif /*(YTPHY_ENABLE_WOL)*/
+    89	
+    90	static int yt8511_read_page(struct phy_device *phydev)
+    91	{
+    92		return __phy_read(phydev, YT8511_PAGE_SELECT);
+    93	};
+    94	
+    95	static int yt8511_write_page(struct phy_device *phydev, int page)
+    96	{
+    97		return __phy_write(phydev, YT8511_PAGE_SELECT, page);
+    98	};
+    99	
+   100	static int yt8511_config_init(struct phy_device *phydev)
+   101	{
+   102		int oldpage, ret = 0;
+   103		unsigned int ge, fe;
+   104	
+   105		oldpage = phy_select_page(phydev, YT8511_EXT_CLK_GATE);
+   106		if (oldpage < 0)
+   107			goto err_restore_page;
+   108	
+   109		/* set rgmii delay mode */
+   110		switch (phydev->interface) {
+   111		case PHY_INTERFACE_MODE_RGMII:
+   112			ge = YT8511_DELAY_GE_TX_DIS;
+   113			fe = YT8511_DELAY_FE_TX_DIS;
+   114			break;
+   115		case PHY_INTERFACE_MODE_RGMII_RXID:
+   116			ge = YT8511_DELAY_RX | YT8511_DELAY_GE_TX_DIS;
+   117			fe = YT8511_DELAY_FE_TX_DIS;
+   118			break;
+   119		case PHY_INTERFACE_MODE_RGMII_TXID:
+   120			ge = YT8511_DELAY_GE_TX_EN;
+   121			fe = YT8511_DELAY_FE_TX_EN;
+   122			break;
+   123		case PHY_INTERFACE_MODE_RGMII_ID:
+   124			ge = YT8511_DELAY_RX | YT8511_DELAY_GE_TX_EN;
+   125			fe = YT8511_DELAY_FE_TX_EN;
+   126			break;
+   127		default: /* do not support other modes */
+   128			ret = -EOPNOTSUPP;
+   129			goto err_restore_page;
+   130		}
+   131	
+   132		ret = __phy_modify(phydev, YT8511_PAGE, (YT8511_DELAY_RX | YT8511_DELAY_GE_TX_EN), ge);
+   133		if (ret < 0)
+   134			goto err_restore_page;
+   135	
+   136		/* set clock mode to 125mhz */
+   137		ret = __phy_modify(phydev, YT8511_PAGE, 0, YT8511_CLK_125M);
+   138		if (ret < 0)
+   139			goto err_restore_page;
+   140	
+   141		/* fast ethernet delay is in a separate page */
+   142		ret = __phy_write(phydev, YT8511_PAGE_SELECT, YT8511_EXT_DELAY_DRIVE);
+   143		if (ret < 0)
+   144			goto err_restore_page;
+   145	
+   146		ret = __phy_modify(phydev, YT8511_PAGE, YT8511_DELAY_FE_TX_EN, fe);
+   147		if (ret < 0)
+   148			goto err_restore_page;
+   149	
+   150		/* leave pll enabled in sleep */
+   151		ret = __phy_write(phydev, YT8511_PAGE_SELECT, YT8511_EXT_SLEEP_CTRL);
+   152		if (ret < 0)
+   153			goto err_restore_page;
+   154	
+   155		ret = __phy_modify(phydev, YT8511_PAGE, 0, YT8511_PLLON_SLP);
+   156		if (ret < 0)
+   157			goto err_restore_page;
+   158	
+   159	err_restore_page:
+   160		return phy_restore_page(phydev, oldpage, ret);
+   161	}
+   162	
+ > 163	int genphy_config_init(struct phy_device *phydev)
+   164	{
+   165		return genphy_read_abilities(phydev);
+   166	}
+   167	
+   168	static int ytphy_read_ext(struct phy_device *phydev, u32 regnum)
+   169	{
+   170		int ret;
+   171		int val;
+   172	
+   173		ret = phy_write(phydev, YT8511_PAGE_SELECT, regnum);
+   174		if (ret < 0)
+   175			return ret;
+   176	
+   177		val = phy_read(phydev, YT8511_PAGE);
+   178	
+   179		return val;
+   180	}
+   181	
+   182	static int ytphy_write_ext(struct phy_device *phydev, u32 regnum, u16 val)
+   183	{
+   184		int ret;
+   185	
+   186		ret = phy_write(phydev, YT8511_PAGE_SELECT, regnum);
+   187		if (ret < 0)
+   188			return ret;
+   189	
+   190		ret = phy_write(phydev, YT8511_PAGE, val);
+   191	
+   192		return ret;
+   193	}
+   194	
+ > 195	int yt8521_soft_reset(struct phy_device *phydev)
+   196	{
+   197		int ret, val;
+   198	
+   199		val = ytphy_read_ext(phydev, 0xa001);
+   200		ytphy_write_ext(phydev, 0xa001, (val & ~0x8000));
+   201	
+   202		ret = genphy_soft_reset(phydev);
+   203		if (ret < 0)
+   204			return ret;
+   205	
+   206		return 0;
+   207	}
+   208	
 
-Cc: stable@vger.kernel.org
-
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks
---
-Gustavo
-
-> ---
-> This is the alternative to:
-> https://lore.kernel.org/lkml/20211203084354.3105253-1-keescook@chromium.org/
-> ---
->  drivers/gpu/drm/drm_dp_helper.c | 10 ----------
->  drivers/gpu/drm/tegra/dp.c      | 11 ++++++++++-
->  include/drm/drm_dp_helper.h     |  2 --
->  3 files changed, 10 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
-> index 23f9073bc473..c9528aa62c9c 100644
-> --- a/drivers/gpu/drm/drm_dp_helper.c
-> +++ b/drivers/gpu/drm/drm_dp_helper.c
-> @@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->  }
->  EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
->  
-> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-> -					 unsigned int lane)
-> -{
-> -	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
-> -	u8 value = dp_link_status(link_status, offset);
-> -
-> -	return (value >> (lane << 1)) & 0x3;
-> -}
-> -EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
-> -
->  static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
->  {
->  	if (rd_interval > 4)
-> diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
-> index 70dfb7d1dec5..f5535eb04c6b 100644
-> --- a/drivers/gpu/drm/tegra/dp.c
-> +++ b/drivers/gpu/drm/tegra/dp.c
-> @@ -549,6 +549,15 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->  {
->  	struct drm_dp_link_train_set *adjust = &link->train.adjust;
->  	unsigned int i;
-> +	u8 post_cursor;
-> +	int err;
-> +
-> +	err = drm_dp_dpcd_read(link->aux, DP_ADJUST_REQUEST_POST_CURSOR2,
-> +			       &post_cursor, sizeof(post_cursor));
-> +	if (err < 0) {
-> +		DRM_ERROR("failed to read post_cursor2: %d\n", err);
-> +		post_cursor = 0;
-> +	}
->  
->  	for (i = 0; i < link->lanes; i++) {
->  		adjust->voltage_swing[i] =
-> @@ -560,7 +569,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->  				DP_TRAIN_PRE_EMPHASIS_SHIFT;
->  
->  		adjust->post_cursor[i] =
-> -			drm_dp_get_adjust_request_post_cursor(status, i);
-> +			(post_cursor >> (i << 1)) & 0x3;
->  	}
->  }
->  
-> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-> index 472dac376284..fdf3cf6ccc02 100644
-> --- a/include/drm/drm_dp_helper.h
-> +++ b/include/drm/drm_dp_helper.h
-> @@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
->  					  int lane);
->  u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->  				   int lane);
-> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-> -					 unsigned int lane);
->  
->  #define DP_BRANCH_OUI_HEADER_SIZE	0xc
->  #define DP_RECEIVER_CAP_SIZE		0xf
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

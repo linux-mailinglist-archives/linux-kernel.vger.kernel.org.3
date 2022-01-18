@@ -2,128 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91491492EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D84492EEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349040AbiARUBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:01:36 -0500
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:58783 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245377AbiARUBf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:01:35 -0500
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id 9ufbnIM9SeKJJ9ufbnhXGV; Tue, 18 Jan 2022 21:01:33 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 18 Jan 2022 21:01:33 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <464d0428-42ba-cd68-f21c-630850e6f3c7@wanadoo.fr>
-Date:   Tue, 18 Jan 2022 21:01:30 +0100
+        id S1349064AbiARUCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:02:44 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:38482 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245033AbiARUCn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 15:02:43 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 98B8C1EC018C;
+        Tue, 18 Jan 2022 21:02:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642536158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FJzhlG/XZLRshl/TNOzuwLXpy1AY2QvmCVdCYi4DnC0=;
+        b=qV1sdj/NP50o/FgsFvzc+8ZCb1wKPOo6T+dScbwWa301T501gbNLG+JWjQc2ryzUopvFwj
+        xhMtkFflv6+Wqyn8Ni+ve5AMcGoF6CM3m5UrJhgKpT4hh9zWqGWfbyb3+FPXRs/jIGnXfY
+        kdyWEVRX4rgzmoo1awHEA3YgajePM84=
+Date:   Tue, 18 Jan 2022 21:02:41 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Smita Koralahalli Channabasappa 
+        <smita.koralahallichannabasappa@amd.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, patches@lists.linux.dev
+Subject: Re: [PATCH 1/5] x86/ras: Merge Intel and AMD ppin_init() functions
+Message-ID: <YecY/Ri6hvJGqNTT@zn.tnic>
+References: <20220107225442.1690165-1-tony.luck@intel.com>
+ <20220107225442.1690165-2-tony.luck@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] ice: Don't use GFP_KERNEL in atomic context
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Dave Ertman <david.m.ertman@intel.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
-References: <40c94af2f9140794351593047abc95ca65e4e576.1642358759.git.christophe.jaillet@wanadoo.fr>
- <YeSRUVmrdmlUXHDn@lunn.ch>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <YeSRUVmrdmlUXHDn@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220107225442.1690165-2-tony.luck@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 16/01/2022 à 22:42, Andrew Lunn a écrit :
-> On Sun, Jan 16, 2022 at 07:46:20PM +0100, Christophe JAILLET wrote:
->> ice_misc_intr() is an irq handler. It should not sleep.
->>
->> Use GFP_ATOMIC instead of GFP_KERNEL when allocating some memory.
->>
->> Fixes: 348048e724a0 ("ice: Implement iidc operations")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> I've never played a lot with irq handler. My understanding is that they
->> should never sleep.
-> 
-> Hi Christophe
-> 
-> Threaded interrupt handlers are allowed to sleep. However, this
-> handler is not being used in such a way. So your are probably correct
-> about GFP_KERNEL vs GFP_ATOMIC.
-> 
->> ---
->>   drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
->> index 30814435f779..65de01f3a504 100644
->> --- a/drivers/net/ethernet/intel/ice/ice_main.c
->> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
->> @@ -3018,7 +3018,7 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
->>   		struct iidc_event *event;
->>   
->>   		ena_mask &= ~ICE_AUX_CRIT_ERR;
->> -		event = kzalloc(sizeof(*event), GFP_KERNEL);
->> +		event = kzalloc(sizeof(*event), GFP_ATOMIC);
->>   		if (event) {
->>   			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
->>   			/* report the entire OICR value to AUX driver */
-> 
-> What happens next is interesting...
-> 
-> 
->                          event->reg = oicr;
->                          ice_send_event_to_aux(pf, event);
-> 
-> where:
-> 
-> void ice_send_event_to_aux(struct ice_pf *pf, struct iidc_event *event)
-> {
->          struct iidc_auxiliary_drv *iadrv;
-> 
->          if (!pf->adev)
->                  return;
-> 
->          device_lock(&pf->adev->dev);
->          iadrv = ice_get_auxiliary_drv(pf);
->          if (iadrv && iadrv->event_handler)
->                  iadrv->event_handler(pf, event);
->          device_unlock(&pf->adev->dev);
-> }
-> 
-> device_lock() takes a mutex, not something you should be doing in
-> atomic context.
-> 
-> So it looks to me, this handler really should be running in thread
-> context...
-> 
-> 	Andrew
-> 
+On Fri, Jan 07, 2022 at 02:54:38PM -0800, Tony Luck wrote:
 
-Ok, thanks for the explanation.
+Make that subject prefix "x86/cpu" please. Same for patches 2 and 3.
 
-ice_misc_intr() is registered with devm_request_irq(), so it is a 
-handler that can't sleep.
+Patch 4 is probably topology/sysfs - at least this is what past patches
+say. If you're not sure about the prefix, use git log on the files
+you're touching.
 
-I guess that more consideration should be taken into account than only:
-   s/devm_request_irq(handler)/devm_request_threaded_irq(NULL, handler)/
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 0083464de5e3..a1e29c0844d1 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -88,6 +88,80 @@ EXPORT_SYMBOL_GPL(get_llc_id);
+>  /* L2 cache ID of each logical CPU */
+>  DEFINE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id) = BAD_APICID;
+>  
+> +static struct ppin_info {
+> +	int	feature;
+> +	int	msr_ppin_ctl;
+> +	int	msr_ppin;
 
-So I'll leave this one to people with the expected know-how.
+That thing is unused in this patch and only accessed in patch 3. Please
+add it there.
 
-If my s/GFP_KERNEL/GFP_ATOMIC/ makes enough sense as-is, that's fine for 
-me, but it looks that another solution is needed to fix the 2nd issue.
+> +} ppin_info[] = {
+> +	[X86_VENDOR_INTEL] = {
+> +		.feature = X86_FEATURE_INTEL_PPIN,
+> +		.msr_ppin_ctl = MSR_PPIN_CTL,
+> +		.msr_ppin = MSR_PPIN
+> +	},
+> +	[X86_VENDOR_AMD] = {
 
+X86_VENDOR_AMD is index 2 not 1 so ppin_info[1] is empty.
 
-CJ
+I wouldn't mind swapping the numbers here in a pre-patch:
+
+#define X86_VENDOR_CYRIX        1
+#define X86_VENDOR_AMD          2
+
+nothing would depend on those naked numbers, right? :)
+
+> +		.feature = X86_FEATURE_AMD_PPIN,
+> +		.msr_ppin_ctl = MSR_AMD_PPIN_CTL,
+> +		.msr_ppin = MSR_AMD_PPIN
+> +	},
+> +};
+> +
+> +static const struct x86_cpu_id ppin_cpuids[] = {
+> +	X86_MATCH_VENDOR_FEATURE(AMD, X86_FEATURE_AMD_PPIN, &ppin_info[X86_VENDOR_AMD]),
+
+X86_MATCH_FEATURE() I guess.
+
+> +	/* Legacy models without CPUID enumeration */
+> +	X86_MATCH_INTEL_FAM6_MODEL(IVYBRIDGE_X, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(HASWELL_X, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_D, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_X, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL, &ppin_info[X86_VENDOR_INTEL]),
+> +	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM, &ppin_info[X86_VENDOR_INTEL]),
+> +
+> +	{}
+> +};
+> +
+> +static void ppin_init(struct cpuinfo_x86 *c)
+> +{
+> +	const struct x86_cpu_id *id;
+> +	unsigned long long val;
+> +	struct ppin_info *info;
+> +
+> +	id = x86_match_cpu(ppin_cpuids);
+> +	if (!id)
+> +		return;
+> +
+> +	/*
+> +	 * Testing the prescence of the MSR is not enough. Need to check
+
+Unknown word [prescence] in comment.
+Suggestions: ['presence', 'prescience', 'putrescence', 'prepubescence', 'excrescence', 'concrescence']
+
+> +	 * that the PPIN_CTL allows reading of the PPIN.
+> +	 */
+> +	info = (struct ppin_info *)id->driver_data;
+> +
+> +	if (rdmsrl_safe(info->msr_ppin_ctl, &val))
+> +		goto clear_ppin;
+> +
+> +	if ((val & 3UL) == 1UL) {
+> +		/* PPIN locked in disabled mode */
+> +		goto clear_ppin;
+> +	}
+> +
+> +	/* If PPIN is disabled, try to enable */
+> +	if (!(val & 2UL)) {
+> +		wrmsrl_safe(info->msr_ppin_ctl,  val | 2UL);
+> +		rdmsrl_safe(info->msr_ppin_ctl, &val);
+> +	}
+> +
+> +	/* Is the enable bit set? */
+> +	if (val & 2UL) {
+> +		set_cpu_cap(c, info->feature);
+> +		return;
+> +	}
+> +
+> +clear_ppin:
+> +	clear_cpu_cap(c, info->feature);
+> +}
+> +
+>  /* correctly size the local cpu masks */
+>  void __init setup_cpu_local_masks(void)
+>  {
+> @@ -1655,6 +1729,8 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+>  			c->x86_capability[i] |= boot_cpu_data.x86_capability[i];
+>  	}
+>  
+> +	ppin_init(c);
+
+I can't say that I'm crazy about all those miscellaneous
+feature-initializing functions sprinkled allround here but I don't have
+a better idea ... yet.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,144 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 497D249217A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD387492184
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344741AbiARImu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:42:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35715 "EHLO
+        id S1344826AbiARIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:44:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50525 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344780AbiARIms (ORCPT
+        by vger.kernel.org with ESMTP id S235174AbiARIoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:42:48 -0500
+        Tue, 18 Jan 2022 03:44:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642495367;
+        s=mimecast20190719; t=1642495455;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TarkNDGLeLClM9Er8y1qKxBwUxhfzivs6AuUpW/f/WM=;
-        b=J9Y+41iJq49KLOOWhrkhRCMVuLEnYAvWgL8I+Qp+0RagEqemg/QeA9DNzHaMXTCZzlFhhU
-        MnNQyGqxFyCdiIdvYiber+1/HB+gio+FnNYtAFj5lZgB1YVjsqm8jQrNmnxKx+2qK9Z4cR
-        G2CJIqvJCz3g6J8zy4QsmRv4FK4N6kM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ZTb5A3HHYcL7QYMP1DncJCS6Mg4uIaaBO9xs0b1g8Ck=;
+        b=RMUAYXDluKwRBsszpeQQw3LmAqxC76zzjAU1Z6eel2OVMHdDCvjIAijaGgiKbx5mA7g1Yb
+        QfoiAklEOrOq346DEy4KyoJ6u9E8LIx4jJJ74mgm2FgnOUZDUdr6gn814vyw8TAPBTBcHw
+        Zx29QwxLmHEu24iFfBnl+zDI2Z640Cg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-107-H4b2OaVbNS-hgSFsk6OjrQ-1; Tue, 18 Jan 2022 03:42:46 -0500
-X-MC-Unique: H4b2OaVbNS-hgSFsk6OjrQ-1
-Received: by mail-wm1-f70.google.com with SMTP id z2-20020a05600c220200b0034d2eb95f27so878846wml.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:42:45 -0800 (PST)
+ us-mta-94-WAekAxwIOJKxV9pzX72oQA-1; Tue, 18 Jan 2022 03:44:14 -0500
+X-MC-Unique: WAekAxwIOJKxV9pzX72oQA-1
+Received: by mail-wm1-f71.google.com with SMTP id a3-20020a05600c348300b0034a0dfc86aaso1281559wmq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 00:44:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TarkNDGLeLClM9Er8y1qKxBwUxhfzivs6AuUpW/f/WM=;
-        b=0zWArnVfEQceFe1ImwjWgas18xlgJQTb/K13p9VV7hduSVDMrihYyuBRaVms1JiLhs
-         b1ngORFpHC14wkSLO5UArdnPRNhyKkPF/fKJY1X4zN9EBAsLp008403PRSLFLkS6mNib
-         5vNnPGvvbPtRDBJsxcZlA8bZhw20kdc79xLYAMbM3Ok2vcZKrJH49bM6PaU6qjSbRHJx
-         zjJVUIfkTR7TSuq8Pd1OvlAf6oDOlQjkVCVZwq2VOi1p0+RVETeREwJcqzBmDXevqDA6
-         ZknTThVm6NMEApOzpp1TKBzPXmc/dI1eWFU1df1C5CfAlBnlbc0opHsY/mEJKEFi32mS
-         N8LQ==
-X-Gm-Message-State: AOAM531adebEc2WgMnTgAB80hr33AmTaJbfpAaIvNW41etB0ZCLvsCdV
-        hK4FHVZbZ02uL3tpoXv3fOyrI9iaV5k92v2ILmri/e2492RKAavYP7Aw+ynFkf2vZbD0BATOaXf
-        TXEIreiiraBcgUGPo5h9FrKgY
-X-Received: by 2002:a05:6000:1543:: with SMTP id 3mr18770609wry.98.1642495364881;
-        Tue, 18 Jan 2022 00:42:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwAyGvXU5HDKLWFwFpIrTCSK9QY6AaJIsN90njgmJzG/VSlbLny/iJ4sPFZNRRBlJuknO62zg==
-X-Received: by 2002:a05:6000:1543:: with SMTP id 3mr18770585wry.98.1642495364639;
-        Tue, 18 Jan 2022 00:42:44 -0800 (PST)
+        bh=ZTb5A3HHYcL7QYMP1DncJCS6Mg4uIaaBO9xs0b1g8Ck=;
+        b=5RLy0dZ1M3CWioWdnjDtAgCa9HISSnoL6s5j1MTY/2EOqkWdzG8XVz7KRrCpzQlhpB
+         I8Lh8ygend6ttN+xVSuroHR8nvYX0Pa4bHWs+bnis1v6IDKonV/qzpA4Ot2/gdS4VDWK
+         c0mB1aQD+ywQ44X7Qj+kxJUQTe3aFjEE6x0sLEfVcfq5BcVxdKnzlgKKdTVUQY5gFBJ8
+         YGcJ+rmsSJq9+fAMPR3509TJvlD4Lce32/iC2FXzd+sWr+jJty3bza6QXKRxL/uo3/Fg
+         7aM8GStgxsuQYKvCEPAx4UxXYYxz3Jvz5XiODRRupwG9j5a6b7obZYG8N/cUMgz2IxdK
+         2Jnw==
+X-Gm-Message-State: AOAM531L2ZyewrrNwkvNuuGV/DD9P+T75HV1AKn/LTvBOva0W9rSkyAx
+        /2CflonuYM0TEHTkLnmMO45OXJuJtpp51F9qQJAdevgUOP0gATKQqSEMy5Lb8vvE7rLjb6Mikxr
+        BEUxn3YRXLMaSa0OBPjWpWK5u
+X-Received: by 2002:adf:f287:: with SMTP id k7mr23717210wro.417.1642495453015;
+        Tue, 18 Jan 2022 00:44:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwsEzNoEoc0eFP+TA8V5x9IFLr/G4qA07meB3SE7UDlgrs0z3BBio1q/NSa5JHE1ZldCfj0zQ==
+X-Received: by 2002:adf:f287:: with SMTP id k7mr23717186wro.417.1642495452833;
+        Tue, 18 Jan 2022 00:44:12 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id i8sm7620259wry.33.2022.01.18.00.42.42
+        by smtp.googlemail.com with ESMTPSA id n15sm14269604wrf.79.2022.01.18.00.44.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 00:42:44 -0800 (PST)
-Message-ID: <98424056-829b-ed80-73f3-ead0bef1e7ab@redhat.com>
-Date:   Tue, 18 Jan 2022 09:42:41 +0100
+        Tue, 18 Jan 2022 00:44:12 -0800 (PST)
+Message-ID: <14380a1b-669f-8f0f-139b-7c89fabd4276@redhat.com>
+Date:   Tue, 18 Jan 2022 09:44:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH] KVM: x86/cpuid: Clear XFD for component i if the base
- feature is missing
+Subject: Re: [PATCH] KVM: avoid warning on s390 in mark_page_dirty
 Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Jing Liu <jing2.liu@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220117074531.76925-1-likexu@tencent.com>
- <301d4800-5eab-6e21-e8c1-2f87789fc4b9@redhat.com>
- <5ca97b8f-facd-b1dc-f671-51569ad17284@gmail.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        dwmw2@infradead.org
+Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, seanjc@google.com,
+        Cornelia Huck <cohuck@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Thomas Huth <thuth@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+References: <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
+ <20220113122924.740496-1-borntraeger@linux.ibm.com>
+ <eda019b1-8e1d-5d2b-4be4-2725e5814b23@linux.ibm.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <5ca97b8f-facd-b1dc-f671-51569ad17284@gmail.com>
+In-Reply-To: <eda019b1-8e1d-5d2b-4be4-2725e5814b23@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 07:43, Like Xu wrote:
-> On 18/1/2022 1:31 am, Paolo Bonzini wrote:
->> On 1/17/22 08:45, Like Xu wrote:
->>> From: Like Xu <likexu@tencent.com>
->>>
->>> According to Intel extended feature disable (XFD) spec, the 
->>> sub-function i
->>> (i > 1) of CPUID function 0DH enumerates "details for state component i.
->>> ECX[2] enumerates support for XFD support for this state component."
->>>
->>> If KVM does not report F(XFD) feature (e.g. due to CONFIG_X86_64),
->>> then the corresponding XFD support for any state component i
->>> should also be removed. Translate this dependency into KVM terms.
->>>
->>> Fixes: 690a757d610e ("kvm: x86: Add CPUID support for Intel AMX")
->>> Signed-off-by: Like Xu <likexu@tencent.com>
->>> ---
->>>   arch/x86/kvm/cpuid.c | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->>> index c55e57b30e81..e96efef4f048 100644
->>> --- a/arch/x86/kvm/cpuid.c
->>> +++ b/arch/x86/kvm/cpuid.c
->>> @@ -886,6 +886,9 @@ static inline int __do_cpuid_func(struct 
->>> kvm_cpuid_array *array, u32 function)
->>>                   --array->nent;
->>>                   continue;
->>>               }
->>> +
->>> +            if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
->>> +                entry->ecx &= ~BIT_ULL(2);
->>>               entry->edx = 0;
->>>           }
->>>           break;
+On 1/18/22 09:37, Christian Borntraeger wrote:
+> Am 13.01.22 um 13:29 schrieb Christian Borntraeger:
+>> Avoid warnings on s390 like
+>> [ 1801.980931] CPU: 12 PID: 117600 Comm: kworker/12:0 Tainted: 
+>> G            E     
+>> 5.17.0-20220113.rc0.git0.32ce2abb03cf.300.fc35.s390x+next #1
+>> [ 1801.980938] Workqueue: events irqfd_inject [kvm]
+>> [...]
+>> [ 1801.981057] Call Trace:
+>> [ 1801.981060]  [<000003ff805f0f5c>] mark_page_dirty_in_slot+0xa4/0xb0 
+>> [kvm]
+>> [ 1801.981083]  [<000003ff8060e9fe>] adapter_indicators_set+0xde/0x268 
+>> [kvm]
+>> [ 1801.981104]  [<000003ff80613c24>] set_adapter_int+0x64/0xd8 [kvm]
+>> [ 1801.981124]  [<000003ff805fb9aa>] kvm_set_irq+0xc2/0x130 [kvm]
+>> [ 1801.981144]  [<000003ff805f8d86>] irqfd_inject+0x76/0xa0 [kvm]
+>> [ 1801.981164]  [<0000000175e56906>] process_one_work+0x1fe/0x470
+>> [ 1801.981173]  [<0000000175e570a4>] worker_thread+0x64/0x498
+>> [ 1801.981176]  [<0000000175e5ef2c>] kthread+0x10c/0x110
+>> [ 1801.981180]  [<0000000175de73c8>] __ret_from_fork+0x40/0x58
+>> [ 1801.981185]  [<000000017698440a>] ret_from_fork+0xa/0x40
 >>
->> Generally this is something that is left to userspace.  Apart from the 
->> usecase of "call KVM_GET_SUPPORTED_CPUID and pass it to 
->> KVM_SET_CPUID2", userspace should know what any changed bits mean.
+>> when writing to a guest from an irqfd worker as long as we do not have
+>> the dirty ring.
 >>
->> Paolo
+>> Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+>> ---
+>>   virt/kvm/kvm_main.c | 2 ++
+>>   1 file changed, 2 insertions(+)
 >>
+>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>> index 504158f0e131..1a682d3e106d 100644
+>> --- a/virt/kvm/kvm_main.c
+>> +++ b/virt/kvm/kvm_main.c
+>> @@ -3163,8 +3163,10 @@ void mark_page_dirty_in_slot(struct kvm *kvm,
+>>   {
+>>       struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
+>> +#ifdef CONFIG_HAVE_KVM_DIRTY_RING
+>>       if (WARN_ON_ONCE(!vcpu) || WARN_ON_ONCE(vcpu->kvm != kvm))
+>>           return;
+>> +#endif
+>>       if (memslot && kvm_slot_dirty_track_enabled(memslot)) {
+>>           unsigned long rel_gfn = gfn - memslot->base_gfn;
 > 
-> I totally agree that setting the appropriate CPUID bits for a feature is 
-> a user space thing.
+> Paolo, are you going to pick this for next for the time being?
 > 
-> But this patch is more focused on fixing a different type of problem, 
-> which is
-> that the capabilities exposed by KVM should not *contradict each other* :
-> 
->      a user space may be confused with the current code base :
->      - why KVM does not have F(XFD) feature (MSR_IA32_XFD and XFD_ERR 
-> non-exit),
->      - but KVM reports XFD support for state component i individually;
 
-Got it.  Yeah, the patch makes sense for the sake of CONFIG_X86_64.
+Yep, done now.
 
 Paolo
-
-> This is like KVM reporting PEBS when no PMU capacity is reported (due to 
-> module param).
-
 

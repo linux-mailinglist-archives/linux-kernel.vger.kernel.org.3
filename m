@@ -2,107 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B49492C14
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9D5492C17
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243633AbiARRPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:15:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51342 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346933AbiARRPe (ORCPT
+        id S1347108AbiARRPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346777AbiARRPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:15:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642526134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iGgVMFp2VtgX9CS88lYiEKy1GarUr4t4M/Z368/eDbo=;
-        b=IjlIKzapC70wtf4rIMXE1znyhmn09+qRx/+QtYuPTmgEMTOrDDbJzS+bMpe72v0gImsUkE
-        0covqwgUU3K25FOuxqpokyubC+2ztxbRd6Cv9o4k/tyrQnyvQCqMCwPBcxm9x7syhJTdMF
-        9uh5hXrZyIuHYtkkyS6P6y6lqseI480=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-443-gUyxbgn2NWajxGtlwLdqUQ-1; Tue, 18 Jan 2022 12:15:33 -0500
-X-MC-Unique: gUyxbgn2NWajxGtlwLdqUQ-1
-Received: by mail-ed1-f70.google.com with SMTP id c11-20020a056402120b00b0040321cea9d4so4524485edw.23
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:15:32 -0800 (PST)
+        Tue, 18 Jan 2022 12:15:47 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E0CC06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:15:47 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id c6so16549563plh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:15:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Ic/vwIPq8hMZb1u5xWyvewRj9YxhdeiZL9lx4T7YK0I=;
+        b=l00VsDI/HU/AvE+gDxvRmhKnT9k3vloXiVGVhVgWYDrUBPjsgJov6ULMUdAgYvNYnY
+         T5VD4BwTXPGsCXNwiWyARX3w704vNCnU7jj3llyEvCepUQAS0Q4OVHNQ/WhEBNoEXzuM
+         afU+ZmoGMHxyMaBKE5308SgszG8QNjgpze5HtALyOngnpI5NE63OFuLwPaPZzL/+fxkk
+         DRL343HcZx9PzVjJtixTL6K7J5iZekCkWfuAUzB5VZlbwCJfvjCCc1OxYU/dFd3miDsd
+         WwlHebBd6B1/9iSC0pQdfjP7DzbFyG7oIZTsR6i91VnT3FVYji7dGdPcLkM4voDT0+GS
+         Hk6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iGgVMFp2VtgX9CS88lYiEKy1GarUr4t4M/Z368/eDbo=;
-        b=yRGGypslE1RO6TiejlrC/J3ustYchpCB2/nwkeIbPVQLZTCsOUJGqG7NzuaUWWxigX
-         1oJ4JlSoZdOgH8WbOvq9xLzPExT9bcBlRplia8Ube4MnA+Rfx2yCswKu8l821lpvS4Xm
-         v6Fw5vsuy3r52Bo9QrouLAUuOMFVB9KFtFzIDxz82PifvpuQaXAIZ31UFWRobZJXcfz2
-         AzyNHbrYQfKJO1fHekx57CT5IHjES/0CDTjVQ6RR2Sa0TX6zEs+0vzwATzikhKMK0GMD
-         p7XINcD/vAz5NxA2AxM2+S6dzhbUH0QyDhFUj+B7gIO3sXXmrXsDPbPXCM540iuM23UI
-         4IEA==
-X-Gm-Message-State: AOAM532Ulk8v9kpl6n6AcHm3FjpBKpDORyWpzThJC9GELj74LITZD3lT
-        lzgd5uFM6bJ4+u5r7lrksfQTQoFxK0Bfzm9Od4Slx93fpYq1LogTSo+XfSXo4zT44VmknpPCO6+
-        ykiS3xIbXfQYAPlz55BTVkD4/
-X-Received: by 2002:aa7:d305:: with SMTP id p5mr26831862edq.201.1642526131038;
-        Tue, 18 Jan 2022 09:15:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJycTPPIdf1+7tCR0aAgWJHCAhex7oAJuH3u6iRzlYO/0+UQMelr2ZdalDlZRoTOYRL+M7yrUg==
-X-Received: by 2002:aa7:d305:: with SMTP id p5mr26831837edq.201.1642526130798;
-        Tue, 18 Jan 2022 09:15:30 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id sd4sm2337798ejb.33.2022.01.18.09.15.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 09:15:30 -0800 (PST)
-Message-ID: <47362220-30d5-c513-a2aa-61187ee91c41@redhat.com>
-Date:   Tue, 18 Jan 2022 18:15:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] x86/cpufeatures: Move the definition of X86_FEATURE_AMX_*
- to the word 18
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Like Xu <like.xu.linux@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Ic/vwIPq8hMZb1u5xWyvewRj9YxhdeiZL9lx4T7YK0I=;
+        b=kk1CHvtt5vsVnkpZQUBnmPieUQ2oyresU/WRO3yBf9ZiZZd8reRB+y605C9+DhNbqf
+         E7j8rMtQParpWqAbaJFwsuigOjP9+CliuR8YGcBOPdRIsEu6Y+cjJQZrNLEfLg6KEz+a
+         WsvOU7mQonAEX4awe6u/dJhUkyoPrYTfgbUDWW5NOHBtMu9oREGg1kx/U3AFBlrB1PLk
+         HOHUEFoLKroXz9sdC+DXSvZlEDq8FxxYo9wY6+Mcnn1gEfMS54xJojm0ESDI7wQV3YHI
+         me3QwAyK3ZeOpRUo9P8Q+xIpznZgovbndnPG4a3kdBSSJaA/SXiz2Vdt62C8knjcwX11
+         +6rw==
+X-Gm-Message-State: AOAM533HRiDZhn+5KJvBEDqWDzbmdhrHsEWuQCpYE75rzK1ilkcswSlB
+        63opjfKQsU7b9qO8l+snbl87Gw==
+X-Google-Smtp-Source: ABdhPJyqfLBekUrDXtKwHPv8Mg0fIWxbHcJowdIs3+89lCrR9cDZNt4beNIOj5uVRfh9W4sPgnPXHQ==
+X-Received: by 2002:a17:902:8ec5:b0:149:d41a:baa8 with SMTP id x5-20020a1709028ec500b00149d41abaa8mr27731830plo.115.1642526146780;
+        Tue, 18 Jan 2022 09:15:46 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i3sm10949269pfu.36.2022.01.18.09.15.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 09:15:46 -0800 (PST)
+Date:   Tue, 18 Jan 2022 17:15:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jing Liu <jing2.liu@intel.com>, linux-kernel@vger.kernel.org,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>
-References: <20220117062344.58862-1-likexu@tencent.com>
- <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <8b274c5f-6b68-aed9-117d-f89249e57e18@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Message-ID: <Yeb1vkEclYzD27R/@google.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com>
+ <YeCjHbdAikyIFQc9@google.com>
+ <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+ <YeGiVCn0wNH9eqxX@google.com>
+ <67262b95-d577-0620-79bf-20fc37906869@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <67262b95-d577-0620-79bf-20fc37906869@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 18:11, Dave Hansen wrote:
-> What tree is this against?  I see BF16 and INT8 in some old versions of
-> Chang's patches, but not current kernels.  All I see right now in
-> tip/master is:
-> 
->> #define X86_FEATURE_AMX_TILE            (18*32+24) /* AMX tile ...
-> 
-> It's still in the wrong spot, but the other two features aren't there.
+On Mon, Jan 17, 2022, Zeng Guang wrote:
+> On 1/15/2022 12:18 AM, Sean Christopherson wrote:
+> > Userspace can simply do KVM_CREATE_VCPU until it hits KVM_MAX_VCPU_IDS...
+> IIUC, what you proposed is to use max_vcpus in kvm for x86 arch (currently
+> not present yet) and
+> provide new api for userspace to notify kvm how many vcpus in current vm
+> session prior to vCPU creation.
+> Thus IPIv can setup PID-table with this information in one shot.
+> I'm thinking this may have several things uncertain:
+> 1. cannot identify the exact max APIC ID corresponding to max vcpus
+> APIC ID definition is platform dependent. A large APIC ID could be assigned
+> to one vCPU in theory even running with
+> small max_vcpus. We cannot figure out max APIC ID supported mapping to
+> max_vcpus.
 
-It was added for the KVM side of AMX (commit 690a757d610e, "kvm: x86: 
-Add CPUID support for Intel AMX") and is in Linus's tree.
+Gah, I conflated KVM_CAP_MAX_VCPUS and KVM_MAX_VCPU_IDS.  But the underlying idea
+still works: extend KVM_MAX_VCPU_IDS to allow userspace to lower the max allowed
+vCPU ID to reduce the memory footprint of densely "packed" and/or small VMs.
 
-Paolo
+> 2. cannot optimize the memory consumption on PID table to the least at
+> run-time
+>  In case "-smp=small_n,maxcpus=large_N", kvm has to allocate memory to
+> accommodate large_N vcpus at the
+> beginning no matter whether all maxcpus will run.
 
+That's a feature.  E.g. if userspace defines a max vCPU ID that is larger than
+what is required at boot, e.g. to hotplug vCPUs, then consuming a few extra pages
+of memory to ensure that IPIv will be supported for hotplugged vCPUs is very
+desirable behavior.  Observing poor performance on hotplugged vCPUs because the
+host was under memory pressure is far worse.
 
->> We have defined the word 18 for Intel-defined CPU features from CPUID level> 0x00000007:0 (EDX). Let's move the definitions of X86_FEATURE_AMX_* to
-> the> right entry to prevent misinterpretation. No functional change
-> intended.
-> Please, no "we's" in changelogs.  Don't say, "let's move".  Just say:
-> "Move..."
-> 
-> The subject could probably also be trimmed a bit.  Perhaps:
-> 
-> 	x86/cpu: Move AMX CPU feature defines to correct word location
-> 
-> 
+And the goal isn't to achieve the smallest memory footprint possible, it's to
+avoid allocating 32kb of memory when userspace wants to run a VM with only a
+handful of vCPUs, i.e. when 4kb will suffice.  Consuming 32kb of memory for a VM
+with hundreds of vCPUs is a non-issue, e.g. it's highly unlikely to be running
+multiple such VMs on a single host, and such hosts will likely have hundreds of
+gb of RAM.  Conversely, hosts running run small VMs will likely run tens or hundreds
+of small VMs, e.g. for container scenarios, in which case reducing the per-VM memory
+footprint is much more valuable and also easier to achieve.
 
+> 3. Potential backward-compatible problem
+> If running with old QEMU version,  kvm cannot get expected information so as
+> to make a fallback to use
+> KVM_MAX_VCPU_IDS by default. It's feasible but not benefit on memory
+> optimization for PID table.
+
+That's totally fine.  This is purely a memory optimization, IPIv will still work
+as intended if usersepace doesn't lower the max vCPU ID, it'll just consume a bit
+more memory.

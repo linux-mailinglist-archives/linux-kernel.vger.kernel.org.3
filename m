@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B732492F55
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A9E492F66
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349227AbiARU02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S1349242AbiARUbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349214AbiARU01 (ORCPT
+        with ESMTP id S1349064AbiARUbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:26:27 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D074EC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:26:26 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id m1so149669lfq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:26:26 -0800 (PST)
+        Tue, 18 Jan 2022 15:31:38 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4ADC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:31:38 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id v10-20020a4a860a000000b002ddc59f8900so78457ooh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:31:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=03H0oTsaoOJAVZroctwt5LNhXL/5/pvtJL1WK73zL4I=;
-        b=EZI+N5TPNsYGSEEP5udv90ztg+d10rOBWo0oS6CZy6ayJg9vspmRINQQ23ZsK2x3WE
-         fsVZ6UjHH11JuwZd2hHEdulDYeF0i/12p1N1+s6RAZ55S+4R0Oqe9IIPXwKFWG86TAPP
-         MOOwht0RoXbyTwIzY0O/saU54N3BAvWM7e6tCAlScWSMZiXr5F2tI/kV4pApStDBfMUw
-         d1JBMfvUzGjVD7DKs8P2oN54ssu0br9vA/ADCNDadV2WNfKCU+7kgpKh7+bHe9u6k/3j
-         Q+Nobgcj8jm7ElmI6/ATWDOa8y4K9ktRrsOA9QZea9/WUpoQDnV4SPpO9Tz147NM/xry
-         XTTQ==
+         :cc;
+        bh=lS3GFrM29kfkWwvPWQIw4Pk6eycOPGCpsobayljmZkw=;
+        b=V9sBl3RXniA+oUbr5FnqqjPErpemmaL+yQmC7+wieMHA1rxEIMHEQP4+Yptu/ZLS1i
+         PEb6tz7rCo33HvMdh7OcQja7l54gxG1OQkx/I16eDZl2rqjp/r94C6LWg44v2DfNBmtA
+         0EaLrgcMP1wz+isVMSFmc+gYMUFLz4Pj9ARee4dTHPwiZhYkLt4phILDKcaG73lFo/sV
+         ENoGra2xi3AHouWAArmOgW0QlglmwS1brr0rku2pyW+BtwB6bf2NvKuSwW6sy1MJs+Yy
+         Dyy4HsBshi0av2Ut3fHrmL5RkRBuZ6T6l2slmxtTrIrHNPK5llCW0hUK4jh6ZHcrqwbg
+         KtSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=03H0oTsaoOJAVZroctwt5LNhXL/5/pvtJL1WK73zL4I=;
-        b=Tz0vrKEWXY+16vaOCQmClXwa22tof6vHAgsJRQcALjxKCPdG0ym8xw+kG1nbRGprbB
-         +QnnwuKfpAyLrsZas3g5x/eGdc0FwleanE3w4K6JOLGUPShwwZdbhPPgBmCAyabnkmOb
-         LoPRXRH21FC3peR7aktDk06kqkKcPpa5HgZmihQacaApNVCh0DOhKhLFmA/LdWctsGaG
-         6BylcEtgVMsf5VDxcZp7FDmmgIyLiExhBMwBmX4Z+azF/MXWSomUhH0LfR7Y/iSoOEuE
-         4jLh0pLPCs+CNGDG/s71r7RbxkjvLD+eYpsWY49eNNWLKQGNy0SzsQZAVyWnI5EOjtCZ
-         Cd5g==
-X-Gm-Message-State: AOAM532Zd201oHMiobesG8iIXH4YTwNB+SUPpUabQpH4FMZebkQQYEn3
-        ELFxZFFkOIFXvE8FtvZkEknoTjo6VY4ecJM9edMo/Q==
-X-Google-Smtp-Source: ABdhPJzc9ck1UwdUMMdQz8cxvECHxynhABvRW5uhhAK6Ub95oUeBsQpia1cShTVEXNHhvJ6zAxcf7fkBXyfzVdNpwGA=
-X-Received: by 2002:a2e:bd11:: with SMTP id n17mr21127646ljq.508.1642537584879;
- Tue, 18 Jan 2022 12:26:24 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=lS3GFrM29kfkWwvPWQIw4Pk6eycOPGCpsobayljmZkw=;
+        b=1GqpwL6CQwEn3SEF5Hj1CZGuqN6zKWPoPDyQNPbK3birowc6BJWwpkc3CLhhz8zxMJ
+         7NofUackMwm6F/liF0Yf6Yhu3NNkfotg6xLn0unUNZRAlBWEPTzxaPocX0BMQtNvYTGF
+         1NwUZ7FfJq97G0sdXMFBvTS39oKrUyGNmYLnljjqy5lWrcwUpL94JoELBIHbLNpxUQsn
+         n87UIHe+I7Z2fi8p3bronQ6l/LuBYvmCqrw3jqJH5SNBiRxiVtY/RONhaMTWESzvKq1d
+         Rupm629K1Yhd2O3y0/1UW7+3h2OmHpdraRWL8bOaLsD6aod4Vwxn879kFrSisdBRDy4S
+         GT7Q==
+X-Gm-Message-State: AOAM531779Z4q+UpW0BcrGPw7FB2lIwjm/tzp0vWRlrQyVqChzSfE2xc
+        0rNNK/rHJpHmAcDzpFMhH0S3a00yTRQkM/Zmk1Q=
+X-Google-Smtp-Source: ABdhPJwC6J2yTtkomxVb1nBmVSS2A70Zz3uGg1xsukouvEGbNDpuyzjryP5ofkkY9baDzG+BHEx+p8BzBJelYa2CRdA=
+X-Received: by 2002:a4a:3412:: with SMTP id b18mr19430884ooa.23.1642537897267;
+ Tue, 18 Jan 2022 12:31:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222225350.1912249-1-vipinsh@google.com> <20220105180420.GC6464@blackbody.suse.cz>
-In-Reply-To: <20220105180420.GC6464@blackbody.suse.cz>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 18 Jan 2022 12:25:48 -0800
-Message-ID: <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     pbonzini@redhat.com, seanjc@google.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
-        jiangshanlai@gmail.com, kvm@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220118075702.925929-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220118075702.925929-1-chi.minghao@zte.com.cn>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 18 Jan 2022 15:31:26 -0500
+Message-ID: <CADnq5_OeWEJq7Re-usY=m8vThD2jLyXObL6Cn_k3mZweFW_+Pg@mail.gmail.com>
+Subject: Re: [PATCH] amdgpu/amdgpu_psp: remove unneeded ret variable
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        "Lazar, Lijo" <lijo.lazar@amd.com>, Dave Airlie <airlied@linux.ie>,
+        Lang Yu <lang.yu@amd.com>, Oak Zeng <Oak.Zeng@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "Kim, Jonathan" <jonathan.kim@amd.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        "Li, Candice" <candice.li@amd.com>,
+        John Clements <john.clements@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+Applied.  Thanks!
 
-Thanks for looking into this patch. I will be using Sean's suggestion
-and use real_parent of the task. This will avoid my ugly code in the
-cgroup APIs.
+Alex
 
-On Wed, Jan 5, 2022 at 10:04 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
+On Tue, Jan 18, 2022 at 2:57 AM <cgel.zte@gmail.com> wrote:
 >
-> Hi Vipin.
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 >
-> On Wed, Dec 22, 2021 at 10:53:50PM +0000, Vipin Sharma <vipinsh@google.co=
-m> wrote:
-> > VM worker kthreads can linger in the VM process's cgroup for sometime
-> > after KVM terminates the VM process.
+> Return value from amdgpu_bo_create_kernel() directly instead
+> of taking this in another redundant variable.
 >
-> Why is it a problem? And how long are we talking about?
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 >
-
-Automated tools/scripts which delete VM cgroups after the main KVM
-process ends were seeing deletion errors because kernel worker threads
-were still running inside those cgroups. This is not a very frequent
-issue but we noticed it happens every now and then.
-
-
-> > A VM process can terminate between the time window of exit_mm() to
-> > cgroup_exit(), leaving only worker kthreads in the cgroup.
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+> index dee17a0e1187..ac2b87f81ef9 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+> @@ -914,19 +914,15 @@ static void psp_prep_ta_load_cmd_buf(struct psp_gfx_cmd_resp *cmd,
+>  static int psp_ta_init_shared_buf(struct psp_context *psp,
+>                                   struct ta_mem_context *mem_ctx)
+>  {
+> -       int ret;
+> -
+>         /*
+>         * Allocate 16k memory aligned to 4k from Frame Buffer (local
+>         * physical) for ta to host memory
+>         */
+> -       ret = amdgpu_bo_create_kernel(psp->adev, mem_ctx->shared_mem_size,
+> +       return amdgpu_bo_create_kernel(psp->adev, mem_ctx->shared_mem_size,
+>                                       PAGE_SIZE, AMDGPU_GEM_DOMAIN_VRAM,
+>                                       &mem_ctx->shared_bo,
+>                                       &mem_ctx->shared_mc_addr,
+>                                       &mem_ctx->shared_buf);
+> -
+> -       return ret;
+>  }
 >
-> Even kthreads should eventually have PF_EXITING set, they shouldd be
-> treated as "user-space" zombies by cgroups, i.e. mostly invisible (e.g.
-> it doesn't prevent rmdir'ing the cgroup).
+>  static void psp_ta_free_shared_buf(struct ta_mem_context *mem_ctx)
+> --
+> 2.25.1
 >
-
-Since that eventual time period is not known, we can either pause the
-script for sometime before starting the cleanup or add some x number
-of retries. Both of which are not preferable due to indeterministic
-nature.
-
-> (And after the last task_struct reference is gone, the cgroup structs
-> can be released too. Maybe the cause is holding the reference to the KVM
-> worker thread somewhere for too long.)
->
-> > Moving worker kthreads back to the original cgroup (kthreadd_task's
-> > cgroup) makes sure that cgroup is empty as soon as the main VM process
-> > is terminated.
->
-> BTW this used to be done for "user-space" tasks too (migrate to root
-> cgroup) but it was replaced with the less transactional "ignore zombies"
-> approach. So this change seems inconsistent.
->
-Interesting, however, until PF_EXITING is set those threads will also
-exhibit the same behavior if it comes to deletion. Thanks for the
-background, good to know.
-
-Thanks

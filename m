@@ -2,79 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE83492C19
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63991492C1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347122AbiARRP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S1347139AbiARRRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347121AbiARRPz (ORCPT
+        with ESMTP id S1347121AbiARRRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:15:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F35C061574;
-        Tue, 18 Jan 2022 09:15:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9C57B8170A;
-        Tue, 18 Jan 2022 17:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59AABC340E0;
-        Tue, 18 Jan 2022 17:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642526152;
-        bh=JN6V4ugw7NK4GTjm0AAcpeChxTI+dmoqh1YbGTFrRZA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iCL6YV2aonl9dnD61DfDf/6Bn736K8gKspoHwblgh/cJi3eca8uVN0ig4IUod5XAY
-         s7wejLwp8ChN7rpUQuHvsKtHGJzQZ+luWWEMdeAsAKHSg8yj2sWv06VNWENP8YjwsZ
-         xpAO8vym+6oe5E8rDxkfMm+Q/KmwGPU9pIMTXbu37tcyvKXUie3BYKjacxpyohWglH
-         5atjL2t2yt1hyNqxIT80dtxBcdXskq84o7doWvXS2IAf8rf0EMxFln3O68YyIEj6c1
-         8pIBr5ku5VW70Mr1SKXqvFIx4j/vLcMPtLqDcCq4J8EKFFgvMFwyNDji3aWsYhJNSk
-         RhlXQOVmoO7/A==
-Date:   Tue, 18 Jan 2022 09:15:51 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     cgel.zte@gmail.com, Minghao Chi <chi.minghao@zte.com.cn>
-Cc:     Richard Cochran <richardcochran@gmail.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] drivers/net/phy/dp83640: remove unneeded val variable
-Message-ID: <20220118091551.7aa44124@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220118151904.GA31192@hoboy.vegasvil.org>
-References: <20220118075438.925768-1-chi.minghao@zte.com.cn>
-        <20220118151904.GA31192@hoboy.vegasvil.org>
+        Tue, 18 Jan 2022 12:17:13 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6855EC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:17:12 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c2so23707761wml.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xjMQTF4eVKdyYAu8QrW4WjNPRTGXRpV0NBTS0oqE87o=;
+        b=IZegMCoeQ3hsBGjk2vtSpm5HrT9deisVQ46CZM3W0KeCwtTnRXltsYEkFkK7yN3kmr
+         FrxakSA4UABJoLpQ2vt1aupCGgjVZR/yetgF6KbYS+Wb1MvUDzzsBcLjGToUAv8yfWEN
+         CtzNojQhJGGDxowfq4eZc6l3xtJmf2RhRdZky817UJYEa0IVe1hVWqPQ9jAmSvChBYiK
+         CmJJe8g75QHXaKLXux+guYXIgee20K9ncaKL5KcgmzKX38rvjaK5D51MMxkhre0mhd9s
+         halEpN+LKuSFqaBxYoxeF0T5KxSnAJXxWpNJO2ZMOb9zLt75zrGVSwmJWj3VVF7IVUMo
+         uy/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xjMQTF4eVKdyYAu8QrW4WjNPRTGXRpV0NBTS0oqE87o=;
+        b=uKm8YyzjN5Ixv4vGnvJoRAr0olu9pqe4nTDv/YI1LlmCN+1oso5In18G3hXoh1v5xK
+         L4HFC8z4oWep6Pw2MUNSoCu17ky/jnEf4jUR8vqIzVHEV/d8mHFy4nkc0VjBwLXWsEOq
+         00tyaZ/4zTlyPxB0dMPoyeMHfrPHlMROtKpf1paUIH1xPUM6c0pupQrplV8Wfu797Rkb
+         0ZJWamI0nyfDwmWptZQLG1+/O+PzwOjj7E08vshNTavWiCtMZfZ2suw437kg3NoO5k57
+         lcRxhg4+eH93gNnPvsoaw+enVwmgj+QgyCgfb5+kbtg4znc4ramLqFb6YISR9SvpHSGy
+         BW2w==
+X-Gm-Message-State: AOAM5335eIvw1P9rpTP5kdV6lxtk3CBKvaC9+sXSnXO59CNV0m+utIyi
+        xjruaWCnj758MBIqizIJ574qd3++lyGN8PS8NhXQ/w==
+X-Google-Smtp-Source: ABdhPJyM8Er7F8IWCUjoxB2zTsyLWrUtQFdcfszUUYmE5GJpHJTzU5uLC3uRD7QV0QTnKuyA/uRJk761VISSAS7dA7Q=
+X-Received: by 2002:a5d:6da4:: with SMTP id u4mr20828497wrs.82.1642526230826;
+ Tue, 18 Jan 2022 09:17:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220113233940.3608440-1-posk@google.com> <20220113233940.3608440-5-posk@google.com>
+ <YeU0nr6DfBCaH6UF@hirez.programming.kicks-ass.net>
+In-Reply-To: <YeU0nr6DfBCaH6UF@hirez.programming.kicks-ass.net>
+From:   Peter Oskolkov <posk@google.com>
+Date:   Tue, 18 Jan 2022 09:16:59 -0800
+Message-ID: <CAPNVh5e+ijBCdvzZujWNUw7QnFt5Mdonw35ByuvcvzJu7gGjHQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 4/5] sched: UMCG: add a blocked worker list
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, avagin@google.com, jannh@google.com,
+        tdelisle@uwaterloo.ca, posk@posk.io
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 07:19:04 -0800 Richard Cochran wrote:
-> On Tue, Jan 18, 2022 at 07:54:38AM +0000, cgel.zte@gmail.com wrote:
-> > From: Minghao Chi <chi.minghao@zte.com.cn>
-> > 
-> > Return value from phy_read() directly instead
-> > of taking this in another redundant variable.  
-> 
-> NAK this is purely cosmetic and not clearly better WRT CodingStyle.
->  
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>  
-> 
-> Please make your robot less zealous or filter its results before
-> posting.
+On Mon, Jan 17, 2022 at 1:19 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Jan 13, 2022 at 03:39:39PM -0800, Peter Oskolkov wrote:
 
-Plus what does it mean that the bot has signed this off?
+[...]
 
-> > Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> >
+> > So this change basically decouples block/wake detection from
+> > M:N threading in the sense that the number of servers is now
+> > does not have to be M or N, but is more driven by the scalability
+> > needs of the userspace application.
+>
+> So I don't object to having this blocking list, we had that early on in
+> the discussions.
+>
+> *However*, combined with WF_CURRENT_CPU this 1:N userspace model doesn't
+> really make sense, also combined with Proxy-Exec (if we ever get that
+> sorted) it will fundamentally not work.
+>
+> More consideration is needed I think...
 
-> This is the second time I told you.  It isn't wise to ignore feedback,
-> and it is also rude.
+I was not very clear here. The intent of this change is not to make
+1:N a good general approach, but to make "several running workers per
+single server" a viable option.
 
-Same, you don't reply to emails and keep making the same mistakes.
+My guess, based on some numbers/benchmarks from another project, is
+that having a single server/runqueue per four or eight running
+workers, properly aligned with (= affined to) an AMD chiplet, will be
+the most performant solution, comparing to both a runqueue per single
+running worker and to a global runqueue. On Intel this will probably
+look like a single runqueue per core (2 running workers/HT threads).
 
-I asked you to realign the continuation lines in:
-https://lore.kernel.org/all/20220112083942.391fd0d7@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net/
-And without replying you just posted:
-https://lore.kernel.org/all/20220118075159.925542-1-chi.minghao@zte.com.cn/
+So in this model a "server" represents a runqueue.
+
+I'll reply to other active umcg discussions shortly.

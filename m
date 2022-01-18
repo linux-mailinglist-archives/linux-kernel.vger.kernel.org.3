@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE67B492C5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6080492C5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347243AbiARR3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244020AbiARR3H (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:29:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4F4C061574;
-        Tue, 18 Jan 2022 09:29:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AA12B81739;
-        Tue, 18 Jan 2022 17:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E1EC340E0;
-        Tue, 18 Jan 2022 17:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642526944;
-        bh=yV8nau+e7py7AXVT55qxiKrSjmSn1nY3nikPwY+HlQ4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=UzbaNiSopDJUP34kvekVtz1qmtM+izR/pYz+jphOouPpAGXPQ53wvAS/ZHXnmAzfw
-         tS0pqNtv/JZA3pbblATVXiPscRgiitSDviY2T1AaFYFmHhx7gs6O1DjleutrDuIVT2
-         javR9mdo+Z6gGr6yzmFr2cvou4Ze7voMb1iHNeCRHuPUiDj2PT7B8Ts2JK/+V9Is/l
-         8smvmfw3bs21XFyomwwQbawyrqv1+P1zRhiix6l8t9vt4Q/Qrr1JZy9aDgLSslqlNB
-         ZFZ6qoOij7h8ekG6oFnhpaqakyCkqOJ+W+tOxE3X6jjd0JsALxMM2c9YZAEmhvzHLF
-         KNikNMhhiy5rg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 835295C0A21; Tue, 18 Jan 2022 09:29:04 -0800 (PST)
-Date:   Tue, 18 Jan 2022 09:29:04 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other
- failures
-Message-ID: <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
- <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
- <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
+        id S244059AbiARR32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:29:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:33994 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347244AbiARR31 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:29:27 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A693BD6E;
+        Tue, 18 Jan 2022 09:29:26 -0800 (PST)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B9D03F774;
+        Tue, 18 Jan 2022 09:29:24 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Kenta.Tada\@sony.com" <Kenta.Tada@sony.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ed Tsai <ed.tsai@mediatek.com>, linux-api@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] sched/tracing: Add TASK_RTLOCK_WAIT to TASK_REPORT
+In-Reply-To: <878rve89cc.fsf@email.froward.int.ebiederm.org>
+References: <20220117164633.322550-1-valentin.schneider@arm.com> <20220117164633.322550-3-valentin.schneider@arm.com> <878rve89cc.fsf@email.froward.int.ebiederm.org>
+Date:   Tue, 18 Jan 2022 17:29:21 +0000
+Message-ID: <878rvd6jgu.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
-> Dear Zhouyi,
-> 
-> 
-> Thank you for your quick response.
-> 
-> 
-> Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
-> 
-> > I have studied the rcu torture test recently. I am also interested in
-> > this topic.
-> > But I can't open
-> > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
-> > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
-> 
-> Sorry, about that. I should have checked those. I had put them into a
-> directory:
-> 
-> [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
-> [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
-> 
-> I am going to try to test your suggestions at the end of the day.
+On 17/01/22 13:12, Eric W. Biederman wrote:
+> Valentin Schneider <valentin.schneider@arm.com> writes:
+>> --- a/fs/proc/array.c
+>> +++ b/fs/proc/array.c
+>> @@ -128,9 +128,10 @@ static const char * const task_state_array[] = {
+>>  	"X (dead)",		/* 0x10 */
+>>  	"Z (zombie)",		/* 0x20 */
+>>  	"P (parked)",		/* 0x40 */
+>> +	"L (rt-locked)",        /* 0x80 */
+>>  
+>>  	/* states beyond TASK_REPORT: */
+>> -	"I (idle)",		/* 0x80 */
+>> +	"I (idle)",		/* 0x100 */
+>>  };
+>
+> I think this is at least possibly an ABI break.  I have a vague memory
+> that userspace is not ready being reported new task states.  Which is
+> why we encode some of our states the way we do.
+>
+> Maybe it was just someone being very conservative.
+>
+> Still if you are going to add new states to userspace and risk breaking
+> them can you do some basic analysis and report what ps and similar
+> programs do.
+>
+> Simply changing userspace without even mentioning that you are changing
+> the userspace output of proc looks dangerous indeed.
+>
 
-On x86 rcutorture builds successfully.  However, allmodconfig
-on semi-recent -next got me "Can't open perl script
-"./usr/include/headers_check.pl": No such file or directory".
-Which might well be a local problem or might well be fixed by now.
+Yeah, you're right.
 
-Either way, it looks like I need to upgrade the torture.sh script's
-checks for failed builds.  Thank you for reporting this!
+> Looking in the history commit 74e37200de8e ("proc: cleanup/simplify
+> get_task_state/task_state_array") seems to best document the concern
+> that userspace does not know how to handle new states.
+>
 
-							Thanx, Paul
+Thanks for the sha1 and for digging around. Now, I read
+74e37200de8e ("proc: cleanup/simplify get_task_state/task_state_array")
+as "get_task_state() isn't clear vs what value is actually exposed to
+userspace" rather than "get_task_state() could expose things userspace
+doesn't know what to do with".
+
+> The fact we have had a parked state for quite a few years despite that
+> concern seems to argue it is possible to extend the states.  Or perhaps
+> it just argues that parked states are rare enough it does not matter.
+>
+> It is definitely the case that the ps manpage documents the possible
+> states and as such they could be a part of anyone's shell scripts.
+>
+
+06eb61844d84 ("sched/debug: Add explicit TASK_IDLE printing") for instance
+seems to suggest extending the states OK, but you're right that this then
+requires updating ps' manpage.
+
+Alternatively, TASK_RTLOCK_WAIT could be masqueraded as
+TASK_(UN)INTERRUPTIBLE when reported to userspace - it is actually somewhat
+similar, unlike TASK_IDLE vs TASK_UNINTERRUPTIBLE for instance. The
+handling in get_task_state() will be fugly, but it might be preferable over
+exposing a detail userspace might not need to be made aware of?
+
+> From the ps man page:
+>>        Here are the different values that the s, stat and state output
+>>        specifiers (header "STAT" or "S") will display to describe the
+>>        state of a process:
+>> 
+>>                D    uninterruptible sleep (usually IO)
+>>                I    Idle kernel thread
+>>                R    running or runnable (on run queue)
+>>                S    interruptible sleep (waiting for an event to complete)
+>>                T    stopped by job control signal
+>>                t    stopped by debugger during the tracing
+>>                W    paging (not valid since the 2.6.xx kernel)
+>>                X    dead (should never be seen)
+>>                Z    defunct ("zombie") process, terminated but not reaped by its parent
+>> 
+>
+> So it looks like a change that adds to the number of states in the
+> kernel should update the ps man page as well.
+>
+> Eric

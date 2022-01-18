@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E479491F3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD471491F42
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240081AbiARGFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 01:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S240405AbiARGFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 01:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240032AbiARGFO (ORCPT
+        with ESMTP id S240271AbiARGF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 01:05:14 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56604C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:05:14 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id c75-20020a63354e000000b003408e4153d1so8960526pga.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:05:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=wq0C/fowqjD1zfGdKb5yayiyRBlCcZFXN6rlR5ZBXBo=;
-        b=thlIhNMk/BLsR8M38JfIQ6msIRbLsO0zMDgD5kxuqFu09hW3PSd0IMCRuDSSf/2ODZ
-         bkcHBKMmP96L+TN2L/pjTlPC7PF9gYwG3Tri4qBVNoOsAZzEpXF67ls3X++YRGRiDVCu
-         IZ7D21dPcm8KK8yrSeu7or3irDaJXhhEOW2g2hgEI6m8Ul+LQ/1mSfBzUV94TunoO+DM
-         TQP79+0qatMCqPv181uWoAk5ddwatWC65n0/P9N0/95T0DM0+AXBDosgs24DwnbE6uIO
-         /8VWOZ6q7abHpgBqXLHUGV4+56pns4oddRbHSqm2Pm428Zzmd1G+spZzKhBdkbjiRPzh
-         bfUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=wq0C/fowqjD1zfGdKb5yayiyRBlCcZFXN6rlR5ZBXBo=;
-        b=x8jQbankx3D+H9Iab4DD7mJN7+TeOA0va9j+k3tvaRDn31Icxft1UV+vhWWsIXiI2B
-         xrvBlaAv8zL8I4hAjOPCftXXl+BY9v3m98PGIN4P4B66IA3y01KTeXlGetUJNoGULipW
-         5nt7e8kVT5LGn7zrGvX3lwqMpdZ6TbMl5eLik2VWPptchEvzeycGgnQuTcfFXq1i23DC
-         dzQwXFP90po9dolAC9ItBENWg0pg5ScWvvOA8FhnlYCy+pP03ZyZHYxnEuJhleOzI8y/
-         v3X2d9vTIlc2Erp967YinWIMfvlqGxAoKfpaOBfaOjS2aIWw9y7FsX44M1P59e8Uhs9r
-         BEDw==
-X-Gm-Message-State: AOAM533IHp3vpl47tBxIgzeczM+kqv/awHJ9Z/YedtjhY/xOc0BwbnE6
-        L84s1IDIWz8h89jrJ6+fzwN0XkG6kHk2VdI=
-X-Google-Smtp-Source: ABdhPJwdNQnwc6z4Qp+CC6b1DBeT4d9Z1I4voKcaBhsx+tDNOlbARRMn5R0iRShUC3fJqWam443RMFQD/6AjfC4=
-X-Received: from jsperbeck8.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:301f])
- (user=jsperbeck job=sendgmr) by 2002:a63:3d4a:: with SMTP id
- k71mr21578897pga.410.1642485913316; Mon, 17 Jan 2022 22:05:13 -0800 (PST)
-Date:   Tue, 18 Jan 2022 06:04:31 +0000
-Message-Id: <20220118060431.1368538-1-jsperbeck@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] kernel: count warnings and make count accessible to userspace
-From:   John Sperbeck <jsperbeck@google.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        linux-kernel@vger.kernel.org, John Sperbeck <jsperbeck@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 18 Jan 2022 01:05:29 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B5EC061574;
+        Mon, 17 Jan 2022 22:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=eoZNNask/Lw/yitqaxtVE+tSGqFAUnX7/q3GVb7Dbkk=; b=FUe8jaHypBa+8PUDFZCpXfh7tj
+        kEnBSOi/+YWvCKqQrAi5w5kswL5NgvgTqVZgLqkIpGRFeiOF6kamDb3IGlP35pHUjiCsinGbs2ObE
+        ivZsdF73clZ0B3L5H1hyUuiLcUcF2ucGbtkdZkTt7wrSHTutSncSAg+1U/L1DdVv6zSnZQ6n5Cdwh
+        LaxvYevwFdHKmosE/1WACsOXMuU+vxjNTKAqFPurFCxcsCu5yQFMfrWnZVOvqxMBP+xGelNH/HMOj
+        knl6Gyy0zLcCaaS96a0SNHaS78n/ykjt2WS5Mof2bXouCzoW7/3gMqhBq2v1B/xclzjcd9eJYxXGq
+        xKYWXCxQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9hcS-008yII-TF; Tue, 18 Jan 2022 06:05:25 +0000
+Message-ID: <7f4e454c-5f79-7fd7-2866-8db682cc656b@infradead.org>
+Date:   Mon, 17 Jan 2022 22:05:21 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next] Documentation: fix firewire.rst ABI file path error
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220118010517.20826-1-rdunlap@infradead.org>
+ <dc527b05-2b65-cf88-c174-6fec6d458de4@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <dc527b05-2b65-cf88-c174-6fec6d458de4@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When testing, it's common to consider a warning to be a test failure,
-but it's currently awkward to determine which of multiple sequential
-tests is responsible for triggering a warning.  Scraping dmesg or
-/var/log/messages is somewhat expensive and error-prone.  Setting
-panic_on_warn is reliable, but spoils test runs for minor issues.
-Looking at the taint bit is also reliable, but only works for a single
-warning.
 
-We can track the warning count and expose it as a sysfs file.  Test
-infrastructures can snapshot the value before and after a test.  If
-the value changes, they can do more expensive things like extracting
-logs.
 
-Signed-off-by: John Sperbeck <jsperbeck@google.com>
----
- kernel/panic.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On 1/17/22 20:08, Akira Yokosawa wrote:
+> On Mon, 17 Jan 2022 17:05:17 -0800,
+> Randy Dunlap wrote:
+>> Adjust the path of the ABI files for firewire.rst to prevent a
+>> documentation build error. Prevents this problem:
+>>
+>> Sphinx parallel build error:
+>> docutils.utils.SystemMessage: /work/lnx/next/linux-next-20220117/Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
+>> InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: linux-doc@vger.kernel.org
+>> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+>> ---
+>> I don't see what is causing this problem...
+> 
+> Randy, did you run "make SPHINXDIRS=driver-api htmldocs"?
 
-diff --git a/kernel/panic.c b/kernel/panic.c
-index cefd7d82366f..5262c2a0ebf4 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -571,6 +571,8 @@ struct warn_args {
- 	va_list args;
- };
- 
-+static atomic_t  __maybe_unused warn_counter;
-+
- void __warn(const char *file, int line, void *caller, unsigned taint,
- 	    struct pt_regs *regs, struct warn_args *args)
- {
-@@ -612,6 +614,8 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
- 
- 	/* Just a warning, don't kill lockdep. */
- 	add_taint(taint, LOCKDEP_STILL_OK);
-+
-+	atomic_inc(&warn_counter);
- }
- 
- #ifndef __WARN_FLAGS
-@@ -667,6 +671,7 @@ static __init int register_warn_debugfs(void)
- 	/* Don't care about failure */
- 	debugfs_create_file_unsafe("clear_warn_once", 0200, NULL, NULL,
- 				   &clear_warn_once_fops);
-+	debugfs_create_atomic_t("warn_count", 0444, NULL, &warn_counter);
- 	return 0;
- }
- 
+Yes.
+Does that cause a problem when just "make htmldocs" does not?
+
+thanks.
+
+> I remember seeing similar errors with v5.14 or v5.15.
+> So I don't think this is a new issue.
+> 
+> Without "SPHINXDIRS=driver-api", I don't get this error on -next.
+> 
+> I didn't report it at the time as I was not sure it was expected
+> or not.
+> 
+>         Thanks, Akira
+> 
+>>
+>>  Documentation/driver-api/firewire.rst |    4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> --- linux-next-20220117.orig/Documentation/driver-api/firewire.rst
+>> +++ linux-next-20220117/Documentation/driver-api/firewire.rst
+>> @@ -19,7 +19,7 @@ of kernel interfaces is available via ex
+>>  Firewire char device data structures
+>>  ====================================
+>>  
+>> -.. include:: /ABI/stable/firewire-cdev
+>> +.. include:: ../ABI/stable/firewire-cdev
+>>      :literal:
+>>  
+>>  .. kernel-doc:: include/uapi/linux/firewire-cdev.h
+>> @@ -28,7 +28,7 @@ Firewire char device data structures
+>>  Firewire device probing and sysfs interfaces
+>>  ============================================
+>>  
+>> -.. include:: /ABI/stable/sysfs-bus-firewire
+>> +.. include:: ../ABI/stable/sysfs-bus-firewire
+>>      :literal:
+>>  
+>>  .. kernel-doc:: drivers/firewire/core-device.c
+> 
+
 -- 
-2.34.1.703.g22d0c6ccf7-goog
-
+~Randy

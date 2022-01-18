@@ -2,59 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A86491E5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC021491D57
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344470AbiARD4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356782AbiARDyv (ORCPT
+        id S243203AbiARDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:35:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50662 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354554AbiARDGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 22:54:51 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD38C06C112;
-        Mon, 17 Jan 2022 19:03:59 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9emm-002hys-Bh; Tue, 18 Jan 2022 03:03:52 +0000
-Date:   Tue, 18 Jan 2022 03:03:52 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Ian Kent <raven@themaw.net>
-Cc:     Brian Foster <bfoster@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YeYuGO07rVakDpS+@zeniv-ca.linux.org.uk>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
- <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
- <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
- <0f6c2348dae2c47ea46a986884a75fc7d44bb6fb.camel@themaw.net>
+        Mon, 17 Jan 2022 22:06:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642475213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m/T+xqeUAypi/EBSYpJv9W0hZEqvgrZKwX4x1rH2s4Q=;
+        b=XUPA0c9D1oZmlMbfU411dL7GElI8BEZ+GCMtCL3hilyuo1ESjaLyLB0D5n3LhuzJzhmkqK
+        hB7VXBRF7aYs3k8FGuP+Jh7NkT9OK8IrP4o9W2RG0yPxZXnKaF1rtKAz+xa2DKKAzIrH5Q
+        Ms/ddpcOn2JRPtQGhz5pFYIrjvtT1jE=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-156-HVhlt4s7NnSHygj2GsuG8w-1; Mon, 17 Jan 2022 22:06:52 -0500
+X-MC-Unique: HVhlt4s7NnSHygj2GsuG8w-1
+Received: by mail-pg1-f197.google.com with SMTP id u6-20020a63ef06000000b00341c8aa06d8so8695578pgh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 19:06:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m/T+xqeUAypi/EBSYpJv9W0hZEqvgrZKwX4x1rH2s4Q=;
+        b=iR9U1Ln2Nuxvt/nuNTOFaf62aJ877naGsp5Dkf0nFFfNQhqd8W1/UN7DFqUBi2ROcx
+         bEK1Ta8ABO6aeXI2XVBV+fzSPGFC7DxfC4fz48kCMLiE2dWCJWXDueJ0RIyzrVNqLz1y
+         VBmaTjEHFyPKzIR35wGmxiau/gh+MtQR4EfPg710fK/seaY+uA3NUw4SvZyGKvvYg41l
+         3Glc2I6fsaFKRrlYS3ihipvU+noATT9hzQpetPs3S7b0PLsFxCU8k6o/kuZaZGcyMIhi
+         qZuXb9/5V3ITL0cHAqxjqvJ9pemZCO9xoPio+P+VioeUt1FSpIbzFY5gCwuIvPFdaNXR
+         jNDg==
+X-Gm-Message-State: AOAM533yI238QZtPGJuAD2GK0Bn+1LJWtJahlK39V56yJShs2XNv0kk5
+        S2ZtGRTo3vJ49xMzA0r8i3NjFYjPFo0FEZnRsABCkOFUmqMk3ePX514TRcTrcyUsWxDkkeMx+4d
+        Abm1F4/qlcwBdjL7KmRFRLMBR
+X-Received: by 2002:a17:902:d505:b0:14a:77ac:1e8b with SMTP id b5-20020a170902d50500b0014a77ac1e8bmr25111376plg.1.1642475211594;
+        Mon, 17 Jan 2022 19:06:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzoQYXGFOiuE7DE7WvP6A/zKMhsh+2K8vED7mN/UdEi/ZVq6aYj54hRESwmfzpInEWZa5o65A==
+X-Received: by 2002:a17:902:d505:b0:14a:77ac:1e8b with SMTP id b5-20020a170902d50500b0014a77ac1e8bmr25111367plg.1.1642475211348;
+        Mon, 17 Jan 2022 19:06:51 -0800 (PST)
+Received: from [10.72.13.83] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id c19sm15280757pfo.91.2022.01.17.19.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 19:06:50 -0800 (PST)
+Message-ID: <ce3890b8-8f48-847d-b029-e29cc9261f18@redhat.com>
+Date:   Tue, 18 Jan 2022 11:06:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f6c2348dae2c47ea46a986884a75fc7d44bb6fb.camel@themaw.net>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [RFC 1/3] vdpa: support exposing the config size to userspace
+Content-Language: en-US
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>, mst@redhat.com,
+        sgarzare@redhat.com, stefanha@redhat.com
+Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com
+References: <20220117092921.1573-1-longpeng2@huawei.com>
+ <20220117092921.1573-2-longpeng2@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220117092921.1573-2-longpeng2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:31:53AM +0800, Ian Kent wrote:
 
-> Wouldn't that case be caught by the unlazy call since ->get_link()
-> needs to return -ECHILD for the rcu case now (in xfs anyway)?
+在 2022/1/17 下午5:29, Longpeng(Mike) 写道:
+> From: Longpeng <longpeng2@huawei.com>
+>
+> - GET_CONFIG_SIZE: the size of the virtio config space
 
-*shrug*
 
-that'd solve the problem, all right, but it's a serious overkill in
-several respects.
+I think we need to be verbose here. And it would be better to quote what 
+spec said:
+
+"
+
+The device MUST allow reading of any device-specific configuration field 
+before FEATURES_OK is set by the driver. This includes fields which are 
+conditional on feature bits, as long as those feature bits are offered 
+by the device.
+
+"
+
+I guess the size should contain the conditional on features bits.
+
+(Or maybe we need to tweak the comment for get_config_size as well).
+
+Other looks good.
+
+Thanks
+
+
+>
+> Signed-off-by: Longpeng <longpeng2@huawei.com>
+> ---
+>   drivers/vhost/vdpa.c       | 17 +++++++++++++++++
+>   include/uapi/linux/vhost.h |  4 ++++
+>   2 files changed, 21 insertions(+)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 29cced1cd277..1eea14a4ea56 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -355,6 +355,20 @@ static long vhost_vdpa_get_iova_range(struct vhost_vdpa *v, u32 __user *argp)
+>   	return 0;
+>   }
+>   
+> +static long vhost_vdpa_get_config_size(struct vhost_vdpa *v, u32 __user *argp)
+> +{
+> +	struct vdpa_device *vdpa = v->vdpa;
+> +	const struct vdpa_config_ops *ops = vdpa->config;
+> +	u32 size;
+> +
+> +	size = ops->get_config_size(vdpa);
+> +
+> +	if (copy_to_user(argp, &size, sizeof(size)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+>   static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
+>   				   void __user *argp)
+>   {
+> @@ -492,6 +506,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+>   	case VHOST_VDPA_GET_IOVA_RANGE:
+>   		r = vhost_vdpa_get_iova_range(v, argp);
+>   		break;
+> +	case VHOST_VDPA_GET_CONFIG_SIZE:
+> +		r = vhost_vdpa_get_config_size(v, argp);
+> +		break;
+>   	default:
+>   		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
+>   		if (r == -ENOIOCTLCMD)
+> diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+> index c998860d7bbc..bc74e95a273a 100644
+> --- a/include/uapi/linux/vhost.h
+> +++ b/include/uapi/linux/vhost.h
+> @@ -150,4 +150,8 @@
+>   /* Get the valid iova range */
+>   #define VHOST_VDPA_GET_IOVA_RANGE	_IOR(VHOST_VIRTIO, 0x78, \
+>   					     struct vhost_vdpa_iova_range)
+> +
+> +/* Get the config size */
+> +#define VHOST_VDPA_GET_CONFIG_SIZE	_IOR(VHOST_VIRTIO, 0x79, __u32)
+> +
+>   #endif
+

@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAD7492A81
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCB1492A84
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346922AbiARQKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:10:45 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41302 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243397AbiARQJ1 (ORCPT
+        id S234067AbiARQK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346531AbiARQJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:09:27 -0500
+        Tue, 18 Jan 2022 11:09:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD8DC061777;
+        Tue, 18 Jan 2022 08:09:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6AF0FCE1A33;
-        Tue, 18 Jan 2022 16:09:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108A7C00446;
-        Tue, 18 Jan 2022 16:09:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE0F61295;
+        Tue, 18 Jan 2022 16:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541F1C00446;
+        Tue, 18 Jan 2022 16:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522163;
-        bh=aGmo8phtXGKjYkogyfosEDhdfyzWaPgWcxlOHzEJ7as=;
+        s=korg; t=1642522167;
+        bh=Cz7xkI4u/hGuL3TO19+0oF1/lmDp0JRfYAOS1RYc1oE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dx50tyC/huWJbs31Pzba5Naw2xri+HUWR49bf4I4UzkRHHoppcQ7PO6czv1uNGK4Q
-         UF2Ekicf59slHsf/lYhYrreNvS2VeQ7Ij4vvWjmNeoO7m9gn7uhT/Gf4zk9Eneq0GO
-         tDJgIeV74hhIapJaXNT3l3ej8L7gBWW815NLuT78=
+        b=2N59pBDxMKawN21H1b9ERNWwWYZE4wYjlgpK5KodYhgWJkrOJDVr45kniESZurr18
+         hb/CnN4QFs0iVY0obhG2pW1a914jz2Ok/hPWCay5vP/Y6aglDjo/8im2UQYkLPNNHm
+         CTKPwZZ7eV0VsaBEnKr0hN6tk4nJCyO9eXc2hb+M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Wang <wei.w.wang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 20/28] KVM: x86: remove PMU FIXED_CTR3 from msrs_to_save_all
-Date:   Tue, 18 Jan 2022 17:06:06 +0100
-Message-Id: <20220118160452.549838012@linuxfoundation.org>
+        stable@vger.kernel.org, Arie Geiger <arsgeiger@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 21/28] ALSA: hda/realtek: Add speaker fixup for some Yoga 15ITL5 devices
+Date:   Tue, 18 Jan 2022 17:06:07 +0100
+Message-Id: <20220118160452.581433619@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
 References: <20220118160451.879092022@linuxfoundation.org>
@@ -45,46 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Wang <wei.w.wang@intel.com>
+From: Arie Geiger <arsgeiger@gmail.com>
 
-commit 9fb12fe5b93b94b9e607509ba461e17f4cc6a264 upstream.
+commit 6dc86976220cc904e87ee58e4be19dd90d6a36d5 upstream.
 
-The fixed counter 3 is used for the Topdown metrics, which hasn't been
-enabled for KVM guests. Userspace accessing to it will fail as it's not
-included in get_fixed_pmc(). This breaks KVM selftests on ICX+ machines,
-which have this counter.
+This patch adds another possible subsystem ID for the ALC287 used by
+the Lenovo Yoga 15ITL5.
+It uses the same initalization as the others.
+This patch has been tested and works for my device.
 
-To reproduce it on ICX+ machines, ./state_test reports:
-==== Test Assertion Failure ====
-lib/x86_64/processor.c:1078: r == nmsrs
-pid=4564 tid=4564 - Argument list too long
-1  0x000000000040b1b9: vcpu_save_state at processor.c:1077
-2  0x0000000000402478: main at state_test.c:209 (discriminator 6)
-3  0x00007fbe21ed5f92: ?? ??:0
-4  0x000000000040264d: _start at ??:?
- Unexpected result from KVM_GET_MSRS, r: 17 (failed MSR was 0x30c)
-
-With this patch, it works well.
-
-Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-Message-Id: <20211217124934.32893-1-wei.w.wang@intel.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Fixes: e2ada66ec418 ("kvm: x86: Add Intel PMU MSRs to msrs_to_save[]")
+Signed-off-by: Arie Geiger <arsgeiger@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211223232857.30741-1-arsgeiger@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1323,7 +1323,7 @@ static const u32 msrs_to_save_all[] = {
- 	MSR_IA32_UMWAIT_CONTROL,
- 
- 	MSR_ARCH_PERFMON_FIXED_CTR0, MSR_ARCH_PERFMON_FIXED_CTR1,
--	MSR_ARCH_PERFMON_FIXED_CTR0 + 2, MSR_ARCH_PERFMON_FIXED_CTR0 + 3,
-+	MSR_ARCH_PERFMON_FIXED_CTR0 + 2,
- 	MSR_CORE_PERF_FIXED_CTR_CTRL, MSR_CORE_PERF_GLOBAL_STATUS,
- 	MSR_CORE_PERF_GLOBAL_CTRL, MSR_CORE_PERF_GLOBAL_OVF_CTRL,
- 	MSR_ARCH_PERFMON_PERFCTR0, MSR_ARCH_PERFMON_PERFCTR1,
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8927,6 +8927,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3853, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
++	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3902, "Lenovo E50-80", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
+ 	SND_PCI_QUIRK(0x17aa, 0x3977, "IdeaPad S210", ALC283_FIXUP_INT_MIC),
 
 

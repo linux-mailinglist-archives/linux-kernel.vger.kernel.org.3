@@ -2,204 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6E7492892
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EDF492895
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343545AbiAROjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:39:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42411 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241901AbiAROif (ORCPT
+        id S245580AbiAROjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:39:21 -0500
+Received: from mail-40136.proton.ch ([185.70.40.136]:11625 "EHLO
+        mail-40136.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235415AbiAROjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:38:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642516714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/3xiTwKonxDCzPOwDPfLLah1H5jM3BzmJPk13Up2Bg=;
-        b=FH+7rTyg7syZPn2d8qpwLaWAW52Aa6j6Akijc+Q+IeuqlWe9vU5XtuZFFWLhimZpApW+Bq
-        m6dGUv0hPTaSZ4AbcxqcJ6m0SWdZE8xYsf0PGzeegOXzrTfKF9zDYr2hoJd53PKZE1LaoC
-        AskI51e08XWT9wsL3QDqqjV7aBCQ5nQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-BIXCOp1mMGeKZvzRGc55Rg-1; Tue, 18 Jan 2022 09:38:33 -0500
-X-MC-Unique: BIXCOp1mMGeKZvzRGc55Rg-1
-Received: by mail-ed1-f69.google.com with SMTP id ee53-20020a056402293500b004022f34edcbso6497224edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:38:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L/3xiTwKonxDCzPOwDPfLLah1H5jM3BzmJPk13Up2Bg=;
-        b=2f+37hpmClLPvwuaBVEzz96S6rbqCm03pzh4DnrFECosbW/XkBPavoCVJe/euOiToo
-         HwFOe1Ro83LoOW66RCuxDovjOBxgB3aUgbnqQpWiK4Jql5TkAHkJg+uqbqjELkutLuUy
-         kT9GPFfFvEARLtmiDslqnkspV+G426Mjd18vvgnytZCB8vKyILywFf0o2a/0Nl68kBLk
-         HsETF5RKUGBAeVG3tMcZxDVWCL4hNnGAsDDTeZUooRL3qdMZpw95fJSTS2GNj3dalFes
-         vrm1PrHpGm5XLidvi08CGSAJPZ8gwlgAg3IXp/pkT2+xZZbaDi5I1yYmfjV0kNsbJHrr
-         VNMw==
-X-Gm-Message-State: AOAM5330m/tDSePsUXIdkXM8+BxybiY8PtuJpJ2R2LpBn0v8aj5K8xLg
-        jmSo1z8m979/1HN8jj+YQemtyAeR5a+EMQreICwkZjseLvwjohvkvl6w4KMRj9uEzkWYkoQjhzk
-        ZN6lJDYkZXPaRkMc6nSQdtib9
-X-Received: by 2002:a05:6402:22d2:: with SMTP id dm18mr25313842edb.410.1642516712348;
-        Tue, 18 Jan 2022 06:38:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypqPN9DQm94a1olWK3nqTc3tmoyxpKtTknk1gpNMzhugw4gQ/v2cnrt8sk2LTdvU5KY9yY4Q==
-X-Received: by 2002:a05:6402:22d2:: with SMTP id dm18mr25313829edb.410.1642516712165;
-        Tue, 18 Jan 2022 06:38:32 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id q14sm7065206edv.79.2022.01.18.06.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 06:38:31 -0800 (PST)
-Date:   Tue, 18 Jan 2022 15:38:28 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
- probe
-Message-ID: <YebQ5E0dEvbFqxL3@krava>
-References: <164199616622.1247129.783024987490980883.stgit@devnote2>
- <CAEf4BzY9qmzemZ=3JSto+eWq9k-kX7hZKgugJRO9zZ61-pasqg@mail.gmail.com>
+        Tue, 18 Jan 2022 09:39:20 -0500
+X-Greylist: delayed 8879 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 09:39:19 EST
+Date:   Tue, 18 Jan 2022 14:39:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail2; t=1642516758;
+        bh=pTGiM9Eqjwi0l/eloFZx82RA/+Eanez+YibOS4Y8RVY=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=qcKe/r6MWaQtqzD8hRMIUaR4NRtuHsQ2KoIqWAN2uDXjtROUcntz425JzbReKzcmV
+         jcF4hrzH/xOqw6/0KSdh79fqWlolg+vUvLR0iW3QNc5L6OzeWlplPLyuinyFVtwXHN
+         qN6wypuk36g/5RAqXqIQDC+CDOkpLDS6uMSDl5qJD+UqSx8VLiy5Ehc8/Vq8r//LNq
+         M1H9Fy7UoavHbclldC6ubpFO7LH0PfRvGxAFCyAvLiQeAO+7uM7VS1vSCevuHFxiTF
+         HcUHjWsZ6tATuEVvW46ZgiZbrJhrtvo7r+eCMCqrzStt21c874lg+V2Df34dE/CdHw
+         MYJpS8FljcDCA==
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sven Schnelle <svens@stackframe.org>
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Message-ID: <vUIPai73T-nuC9ppTs9iaxFwCLWyB3ip7A3zfbhJTyYBqlqJLbOU217hKMAjZNrSnSdeKJa_3cnsr3S7vsK1QuxH22ESAGN-iZXF0DigALU=@emersion.fr>
+In-Reply-To: <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de>
+References: <YeG8ydoJNWWkGrTb@ls3530> <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de> <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com> <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de> <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com> <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de> <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org> <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com> <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzY9qmzemZ=3JSto+eWq9k-kX7hZKgugJRO9zZ61-pasqg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 05:08:32PM -0800, Andrii Nakryiko wrote:
-> On Wed, Jan 12, 2022 at 6:02 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Jiri and Alexei,
-> >
-> > Here is the 2nd version of fprobe. This version uses the
-> > ftrace_set_filter_ips() for reducing the registering overhead.
-> > Note that this also drops per-probe point private data, which
-> > is not used anyway.
-> 
-> This per-probe private data is necessary for the feature called BPF
-> cookie, in which each attachment has a unique user-provided u64 value
-> associated to it, accessible at runtime through
-> bpf_get_attach_cookie() helper. One way or another we'll need to
-> support this to make these multi-attach BPF programs really useful for
-> generic tracing applications.
-> 
-> Jiri,
-> 
-> We've discussed with Alexei this week how cookies can be supported for
-> multi-attach fentry (where it seems even more challenging than in
-> kprobe case), and agreed on rather simple solution, which roughly goes
-> like this. When multi-attaching either fentry/fexit program, save
-> sorted array of IP addresses and then sorted in the same order as IPs
-> list of u64 cookies. At runtime, bpf_get_attach_cookie() helper should
-> somehow get access to these two arrays and functions IP (that we
-> already have with bpf_get_func_ip()), perform binary search and locate
-> necessary cookie. This offloads the overhead of finding this cookie to
-> actual call site of bpf_get_attach_cookie() (and it's a log(N), so not
-> bad at all, especially if BPF program can be optimized to call this
-> helper just once).
-> 
-> I think something like that should be doable for Masami's fprobe-based
-> multi-attach kprobes, right? That would allow to have super-fast
-> attachment, but still support BPF cookie per each individual IP/kernel
-> function attachment. I haven't looked at code thoroughly, though,
-> please let me know if I'm missing something fundamental.
+On Tuesday, January 18th, 2022 at 15:23, Thomas Zimmermann <tzimmermann@sus=
+e.de> wrote:
 
-ok, that seems doable, we should be able to get the link struct
-in bpf_get_attach_cookie_trace and reach both ips and cookies
+> Am 18.01.22 um 09:10 schrieb Geert Uytterhoeven:
+> > Hi Gerd,
+> >
+> > On Tue, Jan 18, 2022 at 7:30 AM Gerd Hoffmann <kraxel@redhat.com> wrote=
+:
+> >> Also note that using a shadow framebuffer allows to decouple fbcon
+> >> updates and scanout framebuffer updates.  Can be used to speed up
+> >> things without depending on the 2d blitter.
+> >
+> > Assuming accesses to the shadow frame buffer are faster than accesses
+> > to the scanout frame buffer. While this is true on modern hardware,
+> > this is not the case on all hardware.  Especially if the shadow frame
+> > buffer has a higher depth (XRGB8888) than the scanout frame buffer
+> > (e.g. Cn)...
+> >
+> > The funny thing is that the systems we are interested in, once used
+> > to be known for their graphics capabilities and/or performance...
+>
+> What I still don't understand: why are you so keen on maintaining an
+> interface that only serves the console? Nothing else uses fbdev these
+> days. Why not improve DRM/userspace to the point where it fits your
+> requirements? Long-term, the latter would make a lot more sense.
 
-jirka
++1
 
-> 
-> >
-> > This introduces the fprobe, the function entry/exit probe with
-> > multiple probe point support. This also introduces the rethook
-> > for hooking function return as same as kretprobe does. This
-> > abstraction will help us to generalize the fgraph tracer,
-> > because we can just switch it from rethook in fprobe, depending
-> > on the kernel configuration.
-> >
-> > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
-> > patches will not be affected by this change.
-> >
-> > [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
-> >
-> > I also added an out-of-tree (just for testing) patch at the
-> > end of this series ([8/8]) for adding a wildcard support to
-> > the sample program. With that patch, it shows how long the
-> > registration will take;
-> >
-> > # time insmod fprobe_example.ko symbol='btrfs_*'
-> > [   36.130947] fprobe_init: 1028 symbols found
-> > [   36.177901] fprobe_init: Planted fprobe at btrfs_*
-> > real    0m 0.08s
-> > user    0m 0.00s
-> > sys     0m 0.07s
-> >
-> > Thank you,
-> >
-> > ---
-> >
-> > Jiri Olsa (2):
-> >       ftrace: Add ftrace_set_filter_ips function
-> >       bpf: Add kprobe link for attaching raw kprobes
-> >
-> > Masami Hiramatsu (6):
-> >       fprobe: Add ftrace based probe APIs
-> >       rethook: Add a generic return hook
-> >       rethook: x86: Add rethook x86 implementation
-> >       fprobe: Add exit_handler support
-> >       fprobe: Add sample program for fprobe
-> >       [DO NOT MERGE] Out-of-tree: Support wildcard symbol option to sample
-> >
-> >
-> >  arch/x86/Kconfig                |    1
-> >  arch/x86/kernel/Makefile        |    1
-> >  arch/x86/kernel/rethook.c       |  115 ++++++++++++++++++++
-> >  include/linux/bpf_types.h       |    1
-> >  include/linux/fprobe.h          |   57 ++++++++++
-> >  include/linux/ftrace.h          |    3 +
-> >  include/linux/rethook.h         |   74 +++++++++++++
-> >  include/linux/sched.h           |    3 +
-> >  include/uapi/linux/bpf.h        |   12 ++
-> >  kernel/bpf/syscall.c            |  195 +++++++++++++++++++++++++++++++++-
-> >  kernel/exit.c                   |    2
-> >  kernel/fork.c                   |    3 +
-> >  kernel/kallsyms.c               |    1
-> >  kernel/trace/Kconfig            |   22 ++++
-> >  kernel/trace/Makefile           |    2
-> >  kernel/trace/fprobe.c           |  168 +++++++++++++++++++++++++++++
-> >  kernel/trace/ftrace.c           |   54 ++++++++-
-> >  kernel/trace/rethook.c          |  226 +++++++++++++++++++++++++++++++++++++++
-> >  samples/Kconfig                 |    7 +
-> >  samples/Makefile                |    1
-> >  samples/fprobe/Makefile         |    3 +
-> >  samples/fprobe/fprobe_example.c |  154 +++++++++++++++++++++++++++
-> >  tools/include/uapi/linux/bpf.h  |   12 ++
-> >  23 files changed, 1103 insertions(+), 14 deletions(-)
-> >  create mode 100644 arch/x86/kernel/rethook.c
-> >  create mode 100644 include/linux/fprobe.h
-> >  create mode 100644 include/linux/rethook.h
-> >  create mode 100644 kernel/trace/fprobe.c
-> >  create mode 100644 kernel/trace/rethook.c
-> >  create mode 100644 samples/fprobe/Makefile
-> >  create mode 100644 samples/fprobe/fprobe_example.c
-> >
-> > --
-> > Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
-> 
-
+If you need any help with adapting user-space, feel free to ping me. I'd be
+interested in discussing, providing feedback and potentially user-space
+patches.

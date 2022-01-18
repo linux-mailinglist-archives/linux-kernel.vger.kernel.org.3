@@ -2,215 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6647F49238B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A10A492393
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbiARKJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236740AbiARKJj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:09:39 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E56C061574;
-        Tue, 18 Jan 2022 02:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6liHV220LfGQeWf071bjFsGALMPq/vYxp0KoDb2bAPg=; b=X95i51/UoNNANKjeTBR7ERQns7
-        QlLg7W0vZ5FAr1yS2MRBl4RfUQOb7emPoMo5T/dGgwkGOuIrf3uuUUq8F/hyw07kKgbPt4FKyzo/b
-        i8Pn/HtfLVxIPK5695SPrCqlpHuFXg3eip260qaowYybDL8NEVSX0m2tLacEji9tW3nVhsXsnDeuh
-        3VY6Uy5rvgWyFNznB7FXJBENJW0CSkghxYyCFF9rc+H2WtjVNGeZUVAcOhcL+6HL5qUF4J+6IW0f1
-        F0flVobdSwfXAITesV0Zv6ZRLBHQoqu6TpxQWUdILbCHsKNkIZAOSK3ZOhvV4eEFRTUNC3aFsUvxQ
-        Ao38qRCA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9lQQ-001pCt-FO; Tue, 18 Jan 2022 10:09:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9DC0C300252;
-        Tue, 18 Jan 2022 11:09:11 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 531D1212E9D8D; Tue, 18 Jan 2022 11:09:11 +0100 (CET)
-Date:   Tue, 18 Jan 2022 11:09:11 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca
-Subject: Re: [RFC][PATCH 3/3] sched: User Mode Concurency Groups
-Message-ID: <YeaRx9oDp08ABvyU@hirez.programming.kicks-ass.net>
-References: <20211214204445.665580974@infradead.org>
- <20211214205358.701701555@infradead.org>
- <20211221171900.GA580323@dev-hv>
- <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
+        id S236996AbiARKOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:14:20 -0500
+Received: from mout.gmx.net ([212.227.17.20]:47529 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229514AbiARKOT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 05:14:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642500847;
+        bh=q9WeE4nIkI5prnRwCwlCoEZMzm5Vu8F3aRRX9wup85I=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=kgH/k0fgUR+sfgPujSr97qtwglOnKEUKTUSoRg76ufdwAZF/APGcdx9vIa2eSXML4
+         HC+V8cZAKQ+jfprpH3YntF3qDk15JNauwh0grwiN9os6JZCDgedwpgFuz4wDxLOaOh
+         RsuBSODvV4fZe2Mms034aWfgGNJ9o2CSX/2Msk9k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.155.155]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3lcJ-1n9UNw2bdD-000xTZ; Tue, 18
+ Jan 2022 11:14:07 +0100
+Message-ID: <ffef1042-e1af-d5b5-b140-ae24fcc1855b@gmx.de>
+Date:   Tue, 18 Jan 2022 11:13:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+ <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
+ <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
+ <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
+ <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
+ <ebe9c076-e2a9-0cb7-eb6a-ae71c075975e@gmx.de>
+ <20220118091615.3ih5n7vhd6tgmnku@sirius.home.kraxel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220118091615.3ih5n7vhd6tgmnku@sirius.home.kraxel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:GSa5Cuwffr03edaVa0sJSU9YmqnXcHnWJIo9Ct+Ij/irNGRZHOQ
+ x9iouiO+a8hYt5WQoc46evDp9gebCfSWQwXISLFU0xTkDDqpwnZ1njRykOejpKWcnRmjV8m
+ 77sippyRY+i6o2mdu4Sv51buqcd0gDGbvi3lYHEBaCn3x4J8/1CQX7SKM6eS1LMOl1FB9+x
+ ziz/DNQ+7TRiJldahe2QA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZcWvDr5nQG0=:hXj3r+EYoT1FLW3XVX1xee
+ wmrFQX+Eubm79xJAn5dZelAxnVm3TQ46yC5misZfEnDb16jpVhrQWMJYBOBvxWE8Bykq3Uezt
+ ZHuL2K9VitLiQpu5Ydz4vZAJ1BfaiZBYC8wcnCCQ2wMk12IWXl2uuJgdoWjQpHrLvXQMuZ8Dq
+ ltofp0ZYpkpeck6XDoKj4I61/gq97IXthQ9G+aQHPXov1FaI3vIcPPGeXth6iu9dKUQRUjfkv
+ v9XHCfHVFWVn/5tczHCHTurJeL3lofzsbJjGmkdTkwDN5Uqt77wpU9s3JB6m6yznfpSMVOCOu
+ IKhKYVVpIN4y4uTfdmEKoTGudc7o/lgrGbKu0Cxx+KGMmzaK8iD99U5tPXdY65KvBb6M3YWa3
+ mgWJoSKfN13LT1ygBKG+U6f5P70Uy9OJNut66tS/hDoyTMx93aYzr1JZkWlrOpEsaVVD340tr
+ Dm7nqEAXUJP4TFqZ2BSsA7W8Nk3bUQjJY6Wy0LuCsktYYKpkgnub5o2QIdpCWQM64zbIY8w5q
+ ROQxbWwgdA8mkGn5U3WN+QeDpSay+HN1UBMGpSXlWLbE2DSf5To7aNY0gh9JH/uXUEgvTEvy9
+ 3OEnzmxoRJXQZn9g2ioUMKVXxcIEwG0gq7z+aLR6d++6o/fmJbS6P13UdC4tiBuGTPrS72hzT
+ SQd0rh1lFNxxvxYxJkA2peVXCLb5wGAF/uUHB5I95oBt0Rknq0VaU0lEms3oEuXFOpUATbPIA
+ ulRthweN18ZJVXkn8JLdWLO/qV/ttxRS+fkt95VGiUfUSEheLMLGspNrE2cTZfQfB88dYWQFn
+ MI3fxHpb3ODd8/bd6YF58z+40UTuU4DfsgT8UdaUHwG2Fn0Sp4J5Ue4jd5pN/egKGR6iagvaY
+ h+m2JV0rnXXrSPIw3U+TDBZivJ2v6f9rhlIs4KFdTXI0H0KU2XP9CZe0YaJT7Fts/be0rFXWO
+ mlL3qJewwlBydy9C8/R6zFRg3OYt/hK4GvHUaP4UMO9B76YPNb028Gc6iJrAu3GvUhDhrgqxd
+ OT54HTfwxKmPY3L4X8UL48dMDiACrMhMEL3/EGBEAYHBasN3+KqEzZ/G3UlbnZCrXD4s7f6jp
+ F3Y9GeGLF1qBHw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 03:09:55PM +0100, Peter Zijlstra wrote:
-> On Tue, Dec 21, 2021 at 05:19:00PM +0000, Peter Oskolkov wrote:
+On 1/18/22 10:16, Gerd Hoffmann wrote:
+> On Tue, Jan 18, 2022 at 09:20:43AM +0100, Helge Deller wrote:
+>> On 1/18/22 07:29, Gerd Hoffmann wrote:
+>>>> Please correct me if I'm wrong, but text-console emulation/scrolling =
+on DRM is
+>>>> currently unaccelerated and bound to Truecolour modes only,
+>>>
+>>> Yes.  Adding support for formats beside argb8888 to the drm fbcon
+>>> emulation shouldn't be that much of a problem though.
+>>
+>> Really? Assuming a graphic card which runs with only 256 colors framebu=
+ffer
+>> is easily supported by DRM, and you can use fbcon without using lots of=
+ memcpy()?
+>
+> Driver: programming a fixed color cube palette, then use RGB332.
+>
+> fbcon/fbdev emulation: RGB332 support must be added I think.  But both
+> argb888 and rgb565 are supported today, so it should not be hard to find
+> the places where you have to add some code to handle RGB332 too.
 
-> > What does worry me is that in this wakeup the server calls sys_umcg_wait()
-> > with another worker in next_tid, so now the server will have two
-> > workers running: the current kernel API seems to allow this to happen.
-> > In my patchset the invariant that no more than one worker running
-> > per server was enforced by the kernel.
-> 
-> So one of the things I've started, but didn't finished, is to forward
-> port the Proxy-Execution patches to a current kernel and play with the
-> PE+UMCG interaction.
-> 
-> Thinking about that interaction I've ran into that exact problem.
-> 
-> The 'nice' solution is to actually block the worker, but that's also the
-> slow solution :/
-> 
-> The other solution seems to be to keep kernel state; track the current
-> worker associated with the server. I haven't (so far) done that due to
-> my futex trauma.
-> 
-> So yes, the current API can be used to do the wrong thing, but the
-> kernel doesn't care and you get to keep the pieces in userspace. And I
-> much prefer user pieces over kernel pieces.
+I'd expect that that framework is provided by DRM developers if there is t=
+he wish
+to get rid of old fbdev and transition existing drivers over to use DRM.
 
-So I think I came up with a 3rd option; since the TID range is 30 bits
-(per FUTEX_TID_MASK) we have those same two top bits to play with.
+>>> Acceleration is harder.  The scroll acceleration had issues nobody
+>>> addressed for years, and on modern hardware it is simply not used, whi=
+ch
+>>> is probably the reason nobody stepped up fixing things and it ended up
+>>> being dropped.
+>>
+>> The DRM layer doesn't use scroll acceleration.
+>> More than 30 other existing fbdev drivers use it.
+>
+> Yes.  The world shifted from 2d acceleration to 3d acceleration.  Modern
+> hardware simply has no classic blitter any more.  Which is a problem
+> when it comes to keeping scroll acceleration alive, it is already a very
+> niche use case and it will only become worse ...
 
-So we write into server::next_tid the tid of the worker we want to wake;
-and we currently have it cleared such that we can distinguish between
-the case where sys_umcg_wait() returned an error before or after waking
-it.
+For me it's Ok that the DRM drivers don't use 2d acceleration (as it is to=
+day
+with the arguments mentioned multiple times).
+But the patches broke existing fbdev acceleration which is available by
+the fbdev drivers. That's a big regression from point of fbdev.
 
-However; we can use one of the 2 remaining bits to indicate the worker
-is woken, let's say bit 31. This then has server::next_tid always
-containing the current tid, even when the server has a 'spurious' wakeup
-for other things.
+>>> Bringing it back is much more work than just reverting the commits rem=
+oving it.
+>>
+>> Reverting those commits have no effect on DRM's usage of fbcon.
+>> But reverting those commits bring back scroll acceleration for all othe=
+rs.
+>> I'm trying to find out which patches did apparently fixed such issues
+>> for the REDRAW case. If you have a pointer it would be helpful.
+>
+> IIRC the code had a bunch of races and syzkaller flagged problems.
+> I didn't follow very closely though.
 
-Then all we need to do is modify the state check when the bit is set to
-ensure we don't wake the worker again if we race sys_umcg_wait() with a
-worker blocking.
+That's sad.
+Nevertheless I wonder if the changes which were apparently done for
+the SCROLL_REDRAW case (on the higher level?) didn't also fixed the issues
+for SCROLL_MOVE.
 
-A bit like this, I suppose... (incompete patch in that it relies on a
-whole pile of local changes that might or might not live).
-
---- a/include/uapi/linux/umcg.h
-+++ b/include/uapi/linux/umcg.h
-@@ -94,6 +94,8 @@ struct umcg_task {
- 	 */
- 	__u32	state;				/* r/w */
- 
-+#define UMCG_TID_RUNNING	0x80000000U
-+#define UMCG_TID_MASK		0x3fffffffU
- 	/**
- 	 * @next_tid: the TID of the UMCG task that should be context-switched
- 	 *            into in sys_umcg_wait(). Can be zero, in which case
---- a/kernel/sched/umcg.c
-+++ b/kernel/sched/umcg.c
-@@ -20,7 +20,7 @@ static struct task_struct *umcg_get_task
- 
- 	if (tid) {
- 		rcu_read_lock();
--		tsk = find_task_by_vpid(tid);
-+		tsk = find_task_by_vpid(tid & UMCG_TID_MASK);
- 		if (tsk && current->mm == tsk->mm && tsk->umcg_task)
- 			get_task_struct(tsk);
- 		else
-@@ -289,27 +291,6 @@ static int umcg_wake_task(struct task_st
- 	return 0;
- }
- 
--static int umcg_wake_next(struct task_struct *tsk)
--{
--	int ret = umcg_wake_task(tsk->umcg_next, tsk->umcg_next_task);
--	if (ret)
--		return ret;
--
--	/*
--	 * If userspace sets umcg_task::next_tid, it needs to remove
--	 * that task from the ready-queue to avoid another server
--	 * selecting it. However, that also means it needs to put it
--	 * back in case it went unused.
--	 *
--	 * By clearing the field on use, userspace can detect this case
--	 * and DTRT.
--	 */
--	if (put_user(0u, &tsk->umcg_task->next_tid))
--		return -EFAULT;
--
--	return 0;
--}
--
- static int umcg_wake_server(struct task_struct *tsk)
- {
- 	int ret = umcg_wake_task(tsk->umcg_server, tsk->umcg_server_task);
-@@ -637,6 +599,48 @@ SYSCALL_DEFINE2(umcg_kick, u32, flags, p
- 	return 0;
- }
- 
-+static int umcg_wake_next(struct task_struct *tsk, struct umcg_task __user *self)
-+{
-+	struct umcg_task __user *next_task;
-+	struct task_struct *next;
-+	u32 next_tid, state;
-+	int ret;
-+
-+	if (get_user(next_tid, &self->next_tid))
-+		return -EFAULT;
-+
-+	next = umcg_get_task(next_tid);
-+	if (!next)
-+		return -ESRCH;
-+
-+	next_task = READ_ONCE(next->umcg_task);
-+
-+	if (next_tid & UMCG_TID_RUNNING) {
-+		ret = -EFAULT;
-+		if (get_user(state, &next_task->state))
-+			goto put_next;
-+
-+		ret = 0;
-+		if ((state & UMCG_TASK_MASK) != UMCG_TASK_RUNNING)
-+			ret = -EAGAIN;
-+
-+	} else {
-+		ret = umcg_wake_task(next, next_task);
-+		if (ret)
-+			goto put_next;
-+
-+		ret = -EFAULT;
-+		if (put_user(next_tid | UMCG_TID_RUNNING, &self->next_tid))
-+			goto put_next;
-+
-+		ret = 0;
-+	}
-+
-+put_next:
-+	put_task_struct(next);
-+	return ret;
-+}
-+
- /**
-  * sys_umcg_wait: transfer running context
-  *
-
-
-And once we have this, we can add sanity checks that server::next_tid is
-what it should be for ever worker moving away from RUNNING state (which
-depends on the assumption that all threads are in the same PID
-namespace).
-
-
-Does this make sense?
+Helge

@@ -2,230 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80340492DD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21D4492DDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348385AbiARSt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:49:59 -0500
-Received: from mail-bn7nam10on2059.outbound.protection.outlook.com ([40.107.92.59]:64609
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348350AbiARSt6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:49:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DIrDkI+P3i+HWecFwByFCWm1zNyT3vPWtaDz+op4Di6Qz8j664Cr47hlOj0Ej/yvaOpXsqLvyVI4moXab5Jl23wMAhm+qRo5p59HtZqAk68ATH+htjBt4WR+eSlCTprxEnBd78yE9ch6mOh9OCQ3XPzzTP2lBWFXtIsdECAZ0YKuzohfoarl0YIIvoGkrd0cFagVIqh32LGmIyI5tmgTn0kpgSfwqXP/YfkdONaUcZvnkdNNwkAgsAzwPKpJZ/Twuii1av9By0VDj/t9Bq5V2ibniN/0ZbEvYdsIAiAZ/dxB2YgneiIJi4Ph6+POj38sgHkyLA04MRxnV7Yx3DHsRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rm6RfnVFU9PedM6Tlj4u6ujyouEdaJOUch+l1HxO2kA=;
- b=URomINE3vnE8fdydF7bs4dkoObZxgX1m8fTxi0mLsO+GRbvL6UPxId+PuLIdPRfHYyQWlHKS5qYiY+nDrMk4oWZDaTyggozijTyCz/dWP3YpCj4WwqtMpSSEJLCN4sKAZEpVRxFZ7060DDl+uvSO6ypXStRuIpoRChzlqXBEqEZ/MiuO/QOdT5CtxFwUlAjCYmpLwoid+o6EIwXAauIJROmK7uaMMl2Z48qp2kD/9prOr7Jv2MNXkeGUh5tHpKxsIpEhcibkiBDjk9IuAohXLnX12nsRHQvDhZA6YZ3LAvGMIf0MH9cHU7Iq2dFrTOAlywymuo4Gho8bFWhxV524yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rm6RfnVFU9PedM6Tlj4u6ujyouEdaJOUch+l1HxO2kA=;
- b=i4z3vh/8LescZ0EY+UtY2bwQmeXWCtA+Sc6YuQCzyRWfzbnR6zJZl6SfNN3/JRCoIX6PgBxVbIYcV1A8Gp3yIaRBQJ+MIrAaJ9/K7GEt+NCIxMTxx4lAfesZpD3i/jO/l8w0Yr5hyMfOdCKug3H3AZRGZG2bBZfK188gp9cu6ek=
-Received: from MW2PR2101CA0021.namprd21.prod.outlook.com (2603:10b6:302:1::34)
- by MWHPR12MB1742.namprd12.prod.outlook.com (2603:10b6:300:112::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Tue, 18 Jan
- 2022 18:49:55 +0000
-Received: from CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:302:1:cafe::63) by MW2PR2101CA0021.outlook.office365.com
- (2603:10b6:302:1::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.3 via Frontend
- Transport; Tue, 18 Jan 2022 18:49:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT057.mail.protection.outlook.com (10.13.174.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4888.9 via Frontend Transport; Tue, 18 Jan 2022 18:49:53 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
- 2022 12:49:52 -0600
-Date:   Tue, 18 Jan 2022 12:49:30 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
- CPUID table in #VC handlers
-Message-ID: <20220118184930.nnwbgrfr723qabnq@amd.com>
-References: <20220113163913.phpu4klrmrnedgic@amd.com>
- <YeGhKll2fTcTr2wS@zn.tnic>
- <20220118043521.exgma53qrzrbalpd@amd.com>
- <YebIiN6Ftq2aPtyF@zn.tnic>
- <20220118142345.65wuub2p3alavhpb@amd.com>
- <20220118143238.lu22npcktxuvadwk@amd.com>
- <20220118143730.wenhm2bbityq7wwy@amd.com>
- <YebsKcpnYzvjaEjs@zn.tnic>
- <20220118172043.djhy3dwg4fhhfqfs@amd.com>
- <Yeb7vOaqDtH6Fpsb@zn.tnic>
+        id S1348391AbiARSuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:50:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347968AbiARSuW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 13:50:22 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE16C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:50:22 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m8-20020a17090a4d8800b001b4f361964fso159980pjh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:50:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hyUFOt/DRN/Ski8ME3oR/RR/GlHotAPBehInw4A8rwg=;
+        b=y0uHrHAf2EdqIaf/AqU82TqNKrpbwUkXwrbqc6KO03IC76LIlrawu1QkyCK7VawJIr
+         ayt647OaYmn2qHUROh/897uhEy0KbOrkrbqej+Q5WoqiRb0TiG6py3+iYqHDWf1V8X7V
+         PCPCCfXKm3viwQEnTbnqe9Hmvx1VxNUkOa0NwoTmfUAtHQ7xNDJVaeY7TbE2SJ6J5kuu
+         75U8FZSMBUPGqizJxOentmcFNl7FOnpt5ykfIxpmzOPW+81qsNoHASPIiv9Ag0m91pYO
+         A7PMhk6fvhY2M+gk3AqzeeVbmDAR4ZQbksIaWPq0JOO6KlRRJ7BkspSL/eeHwxGWWUuR
+         0W9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hyUFOt/DRN/Ski8ME3oR/RR/GlHotAPBehInw4A8rwg=;
+        b=TWSyL/G4wobs+FuQzP1grpTP55rkjMQtW9rUPU/wl/TeC1pablpbgdMRffxad/lpNp
+         q9bqswkjmDVN3C0vTbKD67VXctBQ1RouKyCUhQnhY/CufWOMhRq0K4tieMOZiQ0Di8Yc
+         OuhPDzFMakoL6ccjK2vgcComvHriCqrbP3jig/F8Gr/ir4v+wE0FN62uJBaqizuvKLSy
+         X39Dfyb4zOhmicNmekh1pY8auaQZFmCaGi8Wah8Q8UFQ6H8UDjyASERZaMmcCYLMD7SK
+         BfhFrdw1Yx/H1JkP3WXpFkB2Aueg7J0JT8oHhB0dN2QUpXZH9Ip9uLKm6xWF8GTxjcUU
+         GPEg==
+X-Gm-Message-State: AOAM531mC970V6FmIw1MTrWjWXsPfYRG7Rj3xIIWoe2GoNXaZsK+/dHC
+        WgvrLNyWS0ZZhbThbZjroQKsoQ==
+X-Google-Smtp-Source: ABdhPJyENdKr8qIAthVQEawv5CUFjquAyiYxPmTNdkS3Ztf2vdRDQRZu+ZJIjFg7sqSDSNJxNt8pNQ==
+X-Received: by 2002:a17:902:b598:b0:14a:ca21:9737 with SMTP id a24-20020a170902b59800b0014aca219737mr7192664pls.73.1642531822281;
+        Tue, 18 Jan 2022 10:50:22 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id q64sm3472329pjk.8.2022.01.18.10.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 10:50:21 -0800 (PST)
+Date:   Tue, 18 Jan 2022 11:50:19 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 5/9] remoteproc: imx_rproc: make clk optional
+Message-ID: <20220118185019.GG1119324@p14s>
+References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
+ <20220111033333.403448-8-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yeb7vOaqDtH6Fpsb@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bfcca906-b973-460c-a832-08d9dab350e3
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1742:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB17429DCE980B42B9AC37820B95589@MWHPR12MB1742.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Y2Yf3IIZZH98M8cp3jwK2l74r9mdmfX0pAA7LJkqVQ0ibpAY4/97BTa132WGJHNophoTT2awFZdVMwcdx/TPROoENd/jfxnRqV0AzGz7rEwLlohIidT+YNicmgY52AFDBhzz2EOzn6L50gFDDZQ3L3uJoUJkEX8yr409Tb2/CyJ5xRDGoOo5e2TVlWXv4ecdJ4QmO+cT9IPe3j90GjKFiElLDcQqiJNhY9y/4UUzv7Vehuh79O/XW/wwjtyzcm/TDE4J4RujL+yYrhFOcodDPyR/wOhvQl1zWIuNDa7eXrRYcea+n1hbh04/esaLvVZF1cEtjGyUFSBswqT4L+tcKoa7ijkYVl4uuxsjbZkzB+71jIs3ltm0vST3i6LiBh9okGbiSFA8kpTFBECn6S63FnDwr3pb2otjkyvWim/Me+keBT5SLv8zdEUVCd2nW4jQdPKpnsLI9Gw8ayAqNQbi8WbtsLTfr/SzWTHawTey8XEN9XjcV4FcVbmngBh3DR8xw4PZOlfDE/5ygZj3+1thQLJPFGCkWhRSDqax9xdEPt5rX7ms7heOjwGOekd7n5SLQcQdL4kl4HQBxleyZbcmHXX72Ap3d4IEsbAyfEt3/RiHRpobzvlEV7G4VJFsk+4opToexYMwjma5zEVA27ohqRSNh0rQohk4W1zpetVhZkLmDARAM6kZj/rbGiyFe7Fxrd4OaJAPtCOTc1obUczRgR7bIgwAkExUpMsdjpU+32Zk0B2azg0iEa6Dcy2mUXQQTlBUuhz2M9xldsoLLQac13SuQejN9w1O6sNgXYx1BMVwh7TLsapnin9hEj3/QPgsRricEFKBl15USBzf6zZXFmYHOkoKz3QkywqsK1mcoRAOUvUbDw183xKPp8FhX6R7
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(40470700002)(36840700001)(16526019)(336012)(426003)(45080400002)(5660300002)(2616005)(81166007)(54906003)(186003)(508600001)(83380400001)(40460700001)(36860700001)(86362001)(36756003)(47076005)(44832011)(26005)(7406005)(2906002)(1076003)(4326008)(8676002)(6666004)(70206006)(82310400004)(6916009)(356005)(966005)(70586007)(316002)(7416002)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 18:49:53.9015
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfcca906-b973-460c-a832-08d9dab350e3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1742
+In-Reply-To: <20220111033333.403448-8-peng.fan@oss.nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 06:41:16PM +0100, Borislav Petkov wrote:
-> On Tue, Jan 18, 2022 at 11:20:43AM -0600, Michael Roth wrote:
-> > The HV fills out the initial contents of the CPUID page, which includes
-> > the count. SNP/PSP firmware will validate the contents the HV tries to put
-> > in the initial page, but does not currently enforce that the 'count' field
-> > is non-zero.
+On Tue, Jan 11, 2022 at 11:33:29AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> So if the HV sets count to 0, then the PSP can validate all it wants but
-> you basically don't have a CPUID page. And that's a pretty easy way to
-> defeat it, if you ask me.
+> To i.MX8QXP/QM/ULP and i.MX7ULP, Mcore maybe out of control of Linux.
+> And in such case, no need clk, so make clk optional with has_clk.
 > 
-> So, if it is too late to change this, I guess the only way out of here
-> is to terminate the guest on count == 0.
-
-Right, which is already enforced as part of snp_cpuid_info_create(). So
-snp_cpuid_info->count will always be non-zero for SNP guests...
-
-Er... so I suppose we *could* use snp_cpuid_info->count==0 as an indicator
-that the cpuid page isn't enabled afterall...since if this was an SNP guest
-then count==0 would've caused it to terminate...
-
-Sorry I missed that, early versions of the code used count==0 as
-indicator to bypass CPUID page before we realized that wasn't safe, and
-I'd avoided relying on count==0 for anything since then. But in the
-current code it should work, since count==0 causes SNP guests to
-terminate, so a running guest with count==0 is clearly non-SNP.
-
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/remoteproc/imx_rproc.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> And regardless, what if the HV fakes the count - how do you figure out
-> what the proper count is? You go and read the whole CPUID page and try
-> to make sense of what's there, even beyond the "last" function leaf.
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 7b2578177ea8..0e99a3ca6fbc 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -89,6 +89,7 @@ struct imx_rproc {
+>  	struct work_struct		rproc_work;
+>  	struct workqueue_struct		*workqueue;
+>  	void __iomem			*rsc_table;
+> +	bool				has_clk;
 
-The current code trusts the count value, as long as it is within the
-bounds of the CPUID page. If the hypervisor provides a count that is
-higher or lower than the number of entries added to the table, the PSP
-will fail the guest launch.
+I am usually weary of bloating structures with flags.  I suggest achieving the
+same functionality with a macro that compares priv->dcfg with the right
+imx_rproc_dcfg structure. 
 
-count==0 is sort of a special case because of the reasons above, and
-since it is never a valid CPUID configuration, so makes sense to
-guard against.
-
-
-> 
-> > So we can't rely on the 'count' field as an indicator of whether or
-> > not the CPUID page is active, we need to rely on the presence of the
-> > ccblob as the true indicator, then treat a non-zero 'count' field as
-> > an invalid state.
-> 
-> treat a non-zero count field as invalid?
-> 
-> You mean, "a zero count" maybe...
-
-Yes, sorry for the confusion.
-
-> 
-> But see above, how do you check whether the HV hasn't "hidden" some
-> entries by modifying the count field?
-> 
-> Either I'm missing something or this sounds really weird...
-
-Yes, that's my fault. count must match the actual number of entries in
-the table in all cases. If count==0 then there must also be no entries
-in the table. count==0 is only special in that code might erroneously
-decide to treat it as an indicator that cpuid table isn't enabled at
-all, but since that case causes termination it should actually be ok.
-
-Though I wonder if we should do something like this to still keep
-callers from relying on checking count==0 directly:
-
-  static const struct snp_cpuid_info *
-  snp_cpuid_info_get_ptr(void)
-  {
-          const struct snp_cpuid_info *cpuid_info;
-          void *ptr;
-  
-          /*
-           * This may be called early while still running on the initial identity
-           * mapping. Use RIP-relative addressing to obtain the correct address
-           * in both for identity mapping and after switch-over to kernel virtual
-           * addresses.
-           */
-          asm ("lea cpuid_info_copy(%%rip), %0"
-               : "=r" (ptr)
-               : "p" (&cpuid_info_copy));
-  
-          cpuid_info = ptr;
-          if (cpuid_info->count == 0)
-                  return NULL
-  
-          return cpuid_info;
-  }
-
-Because then it's impossible for a caller to accidentally misconstrue
-what count==0 means (0 entries? or cpuid table not present?), since the
-table then simply becomes inaccessible for anything other than an SNP
-guest, and callers just need a NULL check (and will get a free hint
-(crash) if they don't).
-
-> 
+>  };
+>  
+>  static const struct imx_rproc_att imx_rproc_att_imx8mn[] = {
+> @@ -724,6 +725,9 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv)
+>  	if (dcfg->method == IMX_RPROC_NONE)
+>  		return 0;
+>  
+> +	if (!priv->has_clk)
+> +		return 0;
+> +
+>  	priv->clk = devm_clk_get(dev, NULL);
+>  	if (IS_ERR(priv->clk)) {
+>  		dev_err(dev, "Failed to get clock\n");
+> @@ -768,6 +772,7 @@ static int imx_rproc_probe(struct platform_device *pdev)
+>  	priv->rproc = rproc;
+>  	priv->dcfg = dcfg;
+>  	priv->dev = dev;
+> +	priv->has_clk = true;
+>  
+>  	dev_set_drvdata(dev, rproc);
+>  	priv->workqueue = create_workqueue(dev_name(dev));
 > -- 
-> Regards/Gruss,
->     Boris.
+> 2.25.1
 > 
-> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=04%7C01%7Cmichael.roth%40amd.com%7C56a8943d73484fda82ce08d9daa9bc0c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637781244848502186%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=2QO85fJBiZt2opWRWX%2FGb5LPt4How5cuAt4UJzAiQsg%3D&amp;reserved=0

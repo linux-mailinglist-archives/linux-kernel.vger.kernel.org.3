@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A04C94925AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DAD4925BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240048AbiARMX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:23:57 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:54434 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbiARMXw (ORCPT
+        id S232927AbiARMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229604AbiARMce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:23:52 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 18 Jan 2022 07:32:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FABC061574;
+        Tue, 18 Jan 2022 04:32:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5D40C1F3B5;
-        Tue, 18 Jan 2022 12:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642508630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c2B9KKsJn7oOo7jGQCOwOyWoEN/ZY+AiAjhSRRVU+n0=;
-        b=CUCJLb/E3Xw86ur1WZwNAMdN0t7VedxvIIWp9YVdwpW4paxW3c2gqitWhfd60lMPPQichd
-        tUCRvBgYo3VkJnHBKGy3CWJnvC1ONzLRYx8KPbJNVljKet7HNkjvz0i4eQEd2EcSIwd1lx
-        NK1dtY8CcADUeTxnkzlw0Euq+/nOpeg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642508630;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c2B9KKsJn7oOo7jGQCOwOyWoEN/ZY+AiAjhSRRVU+n0=;
-        b=ByVWsNnRpY/QKTq7naBB/xuz2wpZCB7j3uXN1RqlrTISJvJAqcFmWUu3hCcMFLAW1OA3aW
-        kzYkNdRUnuEk0mCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 12E9913B26;
-        Tue, 18 Jan 2022 12:23:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7F6kA1ax5mGbbwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 18 Jan 2022 12:23:50 +0000
-Message-ID: <c4c90bfb-5e94-84fb-aec8-cc0edb9b7efb@suse.cz>
-Date:   Tue, 18 Jan 2022 13:23:49 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D929061380;
+        Tue, 18 Jan 2022 12:32:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254E8C00446;
+        Tue, 18 Jan 2022 12:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642509153;
+        bh=F9Vu7ZI1/HnPH5QGZNUeqh85iKDiHrkRW8l6raKQS+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WmrASj3abHpIKN7ju1MqlFtWwY+yzZqkpVOdWr9pT+nikc5uQwHJvmtPWBEot56md
+         8uvZW3fsAR01ws0X7LKtkgykQPuSBRUmSBVW4m6f7KaT0lwPDeBthRSs8PzjAhT7GA
+         R+0zSy1emkBLdDXSNtPlX4fzkCZ1zu1fVl2CGXHX86Il4GXhXQ0r6B1BFTwrtUyedw
+         JPLgOvn+LpML56YCXJMB+yUpqjTqQilfATvLW6sTKW5h5kjDZRw7ymla0/98zQKfIt
+         2qMA6YcSN2HomakS+9yo1mldhDfarQsr817bsuoRUg99WsnmP7vcvQl29uy82WyFss
+         9Ig7+VjIMb9vA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 86E8440714; Tue, 18 Jan 2022 09:32:30 -0300 (-03)
+Date:   Tue, 18 Jan 2022 09:32:30 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     Ian Rogers <irogers@google.com>, James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Chase Conklin <chase.conklin@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] perf record/arm-spe: Override attr->sample_period for
+ non-libpfm4 events
+Message-ID: <YeazXmnjkET7h5LW@kernel.org>
+References: <20220114212102.179209-1-german.gomez@arm.com>
+ <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
+ <35a4f70f-d7ef-6e3c-dc79-aa09d87f0271@arm.com>
+ <CAP-5=fUHT29Z8Y5pMdTWK4mLKAXrNTtC5RBpet6UsAy4TLDfDw@mail.gmail.com>
+ <10cc73f1-53fd-9c5a-7fe2-8cd3786fbe37@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-34-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 33/66] xtensa: Remove vma linked list walks
-In-Reply-To: <20211201142918.921493-34-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10cc73f1-53fd-9c5a-7fe2-8cd3786fbe37@arm.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+Em Mon, Jan 17, 2022 at 09:32:55PM +0000, German Gomez escreveu:
+> Hi Ian,
 > 
-> Use the VMA iterator instead.
+> On 17/01/2022 16:28, Ian Rogers wrote:
+> > [...]
+> > Thanks for fixing this, I can add an acked-by for the v2 patch. Could
+> > we add a test for this to avoid future regressions? There are similar
+> > tests for frequency like:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/attr/test-record-freq
+> > based on the attr.py test:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/attr.py
+> > The test specifies a base type of event attribute and then what is
+> > modified by the test. It takes a little to get your head around but
+> > having a test for this would be a welcome addition.
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> ---
->  arch/xtensa/kernel/syscall.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> I agree I should have included a test for this fix. I'll look into this for the v2.
+
+A test is always good to have, we need more, yeah.
+
+But since this is a fix and what is needed for v2 is just to improve the
+wording, please don't let the test to prevent you from sending the
+updated fix.
+
+Then you can go on and work on the test.
+
+I say this because the merge window may close before the test gets ready
+and its better for us to have fixes merged as soon as possible so that
+we have more time to figure out if it has unintended consequences as it
+gets in place for longer.
+ 
+> Other events such as "-p 10000 -e cycles//" worked fine. Only the ones with aux area tracing (arm_spe, cs_etm, intel_pt) were ignoring the global config flags.
 > 
-> diff --git a/arch/xtensa/kernel/syscall.c b/arch/xtensa/kernel/syscall.c
-> index 201356faa7e6..20ec9534e01f 100644
-> --- a/arch/xtensa/kernel/syscall.c
-> +++ b/arch/xtensa/kernel/syscall.c
-> @@ -58,6 +58,7 @@ unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
->  		unsigned long len, unsigned long pgoff, unsigned long flags)
->  {
->  	struct vm_area_struct *vmm;
-> +	VMA_ITERATOR(vmi, mm, addr)
+> Thank you for the pointers, and the review,
+> German
+> 
+> >
+> > Thanks!
+> > Ian
+> >
+> >> Thanks for the review,
+> >> German
 
-Need to use current->mm or it won't compile, AFAICS.
+-- 
 
-;
->  
->  	if (flags & MAP_FIXED) {
->  		/* We do not accept a shared mapping if it would violate
-> @@ -79,7 +80,7 @@ unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
->  	else
->  		addr = PAGE_ALIGN(addr);
->  
-> -	for (vmm = find_vma(current->mm, addr); ; vmm = vmm->vm_next) {
-> +	for_each_vma(vmi, vmm) {
->  		/* At this point:  (!vmm || addr < vmm->vm_end). */
-
-Well if at this point !vmm then we are no longer here due to for_each_vma().
-
->  		if (TASK_SIZE - len < addr)
->  			return -ENOMEM;
-
-Thus we can miss this? But maybe it could be moved above the for loop and
-checked just once, as addr only grows inside the for loop?
-
-However, the loop body continues:
-
->                 if (!vmm || addr + len <= vm_start_gap(vmm))
->                         return addr;
-
-So after your patch we fail to return the unmapped area after the last vma.
+- Arnaldo

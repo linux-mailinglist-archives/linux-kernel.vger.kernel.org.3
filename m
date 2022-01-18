@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C41CA4923F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278494923F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237803AbiARKnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S237912AbiARKo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiARKnj (ORCPT
+        with ESMTP id S230274AbiARKoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:43:39 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABF6C061574;
-        Tue, 18 Jan 2022 02:43:38 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id m3so54792451lfu.0;
-        Tue, 18 Jan 2022 02:43:38 -0800 (PST)
+        Tue, 18 Jan 2022 05:44:24 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D089C061574;
+        Tue, 18 Jan 2022 02:44:23 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id z22so77500782edd.12;
+        Tue, 18 Jan 2022 02:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Oq4iCc0Wwww95pZLDL+Et/XTeCWCBjBihbZj50b8h3M=;
-        b=b6JxSCncymDWIYKs/NDxFeWUhfO9T3aGxAmnNRbuKRFctelJmHrCxc4GgDoe3VLLb3
-         H+jk0CebLDbcWRvUDksG2L8oAF0Kd50Cd4Ccjby/eqY+ih62XseR6fDqnYjZOL1KcK5z
-         RZkJMoz5oyrO9S3yTNCbP+eVb++NDCh6RMaF/Gxo1gEn6vnh4IZOYV6iEqjvBd07fEC5
-         u0pEF3fZWNJlluEyfQCdEp0W9j+28v7/OrxvLtFvE0/O6v/0fWneShjpSDGDZzO+S5Tv
-         zEQoalJQmoyjPFcUIm99RMIPu4Ew29iK4JMB7TWEfmmJGy8H7VaroWLXy42yT2BiXqit
-         HTqg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CtzkMdSfCrnyPh2rB+DJtTILLwpvztUqax7V+OFUjMA=;
+        b=K01WJVgQUzeZ6CKQbjF+nfrEi+ppClBCVh8nFFlmgCEDOj9R5QixMRO4/W1GhXT1Y+
+         T025UDlZ+nepMZvwthUhn2ZOKcaER3u3V/Qt5Mt/kuzdWNTPq/67+oWp6lpj57JGe2fc
+         qYZC9ay1ucoiPEfM8OpG5V2ecPys5Dj8meQuQFFw/65m5zPAWMEpHBrO5TqHKv3cgcox
+         4Orr0DPD3n6CpBuJTafuhrECW893B/vYh7CS4GPafgB+Qz/gsInYxVw3ymlVPKt9E5t+
+         ukpl48IJ0snAQdsJZ+Lfvu8W6sT8rO40tJQeAr2rrZGG/8xPnyrEP8m7jKweaI+n3Q5G
+         hFlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Oq4iCc0Wwww95pZLDL+Et/XTeCWCBjBihbZj50b8h3M=;
-        b=tRU+t8bKiSMcUWf2kBWh8+yNyMxFE/fU3P2edbUXXOabBAqX8bm6Ey5GgCtF5vVegk
-         urUAaVolSSsekUL3urULBvUe9j1KRuRcESvRY7VdL7g6KI2sijbHiBmhJSzdpoWaVpj+
-         pBRU3GzSLHjLxlYzcvoT/eYkG0xCkqRjr3tWLC6rPm9lXYNiaJUOVeVOWQVvm8nvtc88
-         Yer0Vx7adMKf1OZzLlLLup20RSoYxhXa4bb5Zn+ICk5FP8eGj49V2k0LaBv6cVlPUSmr
-         oWJ9b3+kfuadBmJyqI4lFQ0NP7JJTfy4kFSpe+OZXFENC1HWXiTHcHTeVWMW7dcmysEf
-         IzyA==
-X-Gm-Message-State: AOAM533GhQyTQVv67SFufiFB+fFjgbC663PDKSyqGsGUE1tBKCUei6dT
-        Aw6KYx7g0KSqvC5xSdYo5u4=
-X-Google-Smtp-Source: ABdhPJxLLjKJ5WZW73z7MJeySmPKJaTlIopLrMZq3VtSCkLPKbKCOllEW97jssTlrt8X8H4+5SYagg==
-X-Received: by 2002:a05:651c:19ab:: with SMTP id bx43mr9860035ljb.112.1642502617075;
-        Tue, 18 Jan 2022 02:43:37 -0800 (PST)
-Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
-        by smtp.googlemail.com with ESMTPSA id q9sm1374535lfd.266.2022.01.18.02.43.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 02:43:36 -0800 (PST)
-Message-ID: <f73de032-6461-c665-940d-9cb0c5f63869@gmail.com>
-Date:   Tue, 18 Jan 2022 13:43:35 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CtzkMdSfCrnyPh2rB+DJtTILLwpvztUqax7V+OFUjMA=;
+        b=FXP67FqX5/m6G4gJ5bwvVsF11TUU6EBru1yNQ7aDWRj/mEpFnEJ8BAtrLu5HTZnJOP
+         ZMfT9dolyGWyyozEcme32aa1E5m4wU1uCR3f/jVHpSgMoklyh6UTeHZmAhJbAMNco2OR
+         2tfUYy+SVKoWk/kRmVjXMSYlNGRc6gti5TDfkEPBaAbwZJa8VgVN3zXMr57OcTdwJ1M7
+         wDWFpjOkzLQ5NvIfp+2NdxOF+wKei2tGIkVKSlCf6AI6E8W/DGGB9UpOG4QsrmOu00j1
+         gaZQi1wgCYpdP7WucVGiG1LgDjIWyjtk4hz3AcLJG5L7ZRuRRrggrQ1//QCYn+ab432y
+         4NxQ==
+X-Gm-Message-State: AOAM531ATB8wZJ0h/rEsf1nMnFBI15siJ9da7UpSbSs+4mjRZXXgRX+N
+        EWQ+70crr0NrvyAmVvAteS4AAvNkcH5XXgQQppA=
+X-Google-Smtp-Source: ABdhPJxgeM7o9nefOzSERVjljBgpf3R+t3ROjDf67G1rnP6X6BwJ1AEpf47/feUY2V3H93HBfSBtqRxRgX9m5Dq+68w=
+X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr10055100edc.29.1642502662119;
+ Tue, 18 Jan 2022 02:44:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 2/2] media: staging: tegra-vde: Support V4L stateless
- video decoder API
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220112153952.1291-1-digetx@gmail.com>
- <20220112153952.1291-3-digetx@gmail.com>
- <e5bcc0a6d283ce3ed0cfe7d318232fb878c1b47d.camel@ndufresne.ca>
- <0ae51264-8578-0b4f-4348-7f7a239c98dc@gmail.com>
- <26cd15bc1c5dfe3acf8bb280cf7542657cb8b291.camel@ndufresne.ca>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <26cd15bc1c5dfe3acf8bb280cf7542657cb8b291.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220117142919.207370-1-marcan@marcan.st>
+In-Reply-To: <20220117142919.207370-1-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Jan 2022 12:43:45 +0200
+Message-ID: <CAHp75VfRiFokdTQ9cnEEH596mM7cb4FXQk4eXVt37cG4FcFMyA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] misc brcmfmac fixes (M1/T2 series spin-off)
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-18.01.2022 05:43, Nicolas Dufresne пишет:
-> Le mercredi 12 janvier 2022 à 22:04 +0300, Dmitry Osipenko a écrit :
->>> If so, I may suggest to drop this fallback, and propose an amendment to the
->>> spec, we can require flagging KEYFRAME/PFRAME/BFRAME on the OUTPUT buffer,
->>> this
->>> won't break any drivers/userland on other HW, and will benefit possibly
->>> other HW
->>> in the future. I can volunteer to patch GStreamer and LibreELEC ffmpeg if we
->>> agree to this. Not sure how it works for Chromium, or if it actually make
->>> sense
->>> to support here.
->>>
->>> (expecting feedback from Hans and Ezequiel here)
->>
->> Amending the spec will be great, although it's not clear how to flag
->> frame that consists of slices having different types.
-> 
-> As per spec, all slices of a frame must be of the same type. In short, there is
-> no problem, adding new flags to the decode_params.flags is fine, and is backward
-> compatible. I had a second thought that I'd probably prefer this over using the
-> v4l2_buffer flags, but either way seems backward compatible.
-> 
-> In H264, but also other CODEC, slices are have two types of parameters, some of
-> the parameters are invariant between slices, but still duplicated so you can
-> decode some of the frame, even if the very first slice is lost. We tried our
-> best to place all the slice invariant parameters in decode_params to keep the
-> slice_params as small as we could.
+On Mon, Jan 17, 2022 at 4:30 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> Hi everyone,
+>
+> This series contains just the fixes / misc improvements from the
+> previously submitted series:
+>
+> brcmfmac: Support Apple T2 and M1 platforms
+>
+> Patches 8-9 aren't strictly bugfixes but rather just general
+> improvements; they can be safely skipped, although patch 8 will be a
+> dependency of the subsequent series to avoid a compile warning.
 
-Could you please give a direct reference to the spec? (chapter / page or
-provide quote)
+Have I given you a tag? If so, I do not see it applied in the patches...
 
-I'm vaguely recalling that x264 encoder was able to generate such frames.
+> Hector Martin (9):
+>   brcmfmac: pcie: Release firmwares in the brcmf_pcie_setup error path
+>   brcmfmac: firmware: Allocate space for default boardrev in nvram
+>   brcmfmac: firmware: Do not crash on a NULL board_type
+>   brcmfmac: pcie: Declare missing firmware files in pcie.c
+>   brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with memcpy_toio
+>   brcmfmac: pcie: Fix crashes due to early IRQs
+>   brcmfmac: of: Use devm_kstrdup for board_type & check for errors
+>   brcmfmac: fwil: Constify iovar name arguments
+>   brcmfmac: pcie: Read the console on init and shutdown
+>
+>  .../broadcom/brcm80211/brcmfmac/firmware.c    |  5 ++
+>  .../broadcom/brcm80211/brcmfmac/fwil.c        | 34 ++++----
+>  .../broadcom/brcm80211/brcmfmac/fwil.h        | 28 +++----
+>  .../wireless/broadcom/brcm80211/brcmfmac/of.c |  8 +-
+>  .../broadcom/brcm80211/brcmfmac/pcie.c        | 77 ++++++++-----------
+>  .../broadcom/brcm80211/brcmfmac/sdio.c        |  1 -
+>  6 files changed, 72 insertions(+), 81 deletions(-)
+>
+> --
+> 2.33.0
+>
+
+
+--
+With Best Regards,
+Andy Shevchenko

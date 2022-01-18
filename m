@@ -2,277 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27A3492350
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213F3492421
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbiARJyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:54:50 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:35145 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiARJyo (ORCPT
+        id S234494AbiARKvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:51:22 -0500
+Received: from outbound3.eu.mailhop.org ([52.29.21.168]:11614 "EHLO
+        outbound3.eu.mailhop.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231760AbiARKvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:54:44 -0500
-Received: by gandalf.ozlabs.org (Postfix, from userid 1007)
-        id 4JdPJL4zlrz4y4f; Tue, 18 Jan 2022 20:54:42 +1100 (AEDT)
+        Tue, 18 Jan 2022 05:51:21 -0500
+X-Greylist: delayed 2703 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 05:51:21 EST
+ARC-Seal: i=1; a=rsa-sha256; t=1642500316; cv=none;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        b=ZSC/JHdGSdlVsTfvheO4aaKm3UqmMr5Sbf13dV35vdP0mGemrJjVv9zRplK9BIk1BV23LN1t9aw7S
+         jonpEtO5Io+UUMRXUck6co67m8O/1tn5g/pLG07evXlS6B4vXM6Ksbj/v+L22CPMW/5N3WmGUfEEaQ
+         pnsBuPakTKH20KlKG75Lo4lsVNgge+jUnEhQwC3EaYz3q0Rh/AITEvFMWtHIqWRfULbuHBfJzlFdkE
+         Pvz1zmKcramuaT/lfTX+GglyjiZTURGySs3mTyLDLTJzQcbGv45X9Piy8IskWr1sxQF+sDMFLhj4io
+         /VFwmKorfBHWQhth8N93BIBCIIPu0qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        h=content-transfer-encoding:content-type:mime-version:message-id:in-reply-to:
+         date:references:subject:cc:to:from:dkim-signature:dkim-signature:from;
+        bh=+nnzxvvQj7+bvjQcSTQPnIo0ojYxhfwmrLpYQ8reS7o=;
+        b=QEjX+HUTpBwhrngljwl9WJG7EVkw80G6K/hfqUXEbm7LC4qR7PwMmbLUfYewushFcT2hF8MCLu9mD
+         hKOye5Bh/tNCzbQe13G755vq2I8+He2yPSv9SqS0C+6Sus/Loz9F07CeTsGMEi38Sasyof+B50IrQr
+         hpQW8Mv+/dY/+6jqmUSJAeVUPDWk68IpayDJbrQdmHPR4BZlHzG+7H1d+4cvOEQqflCZiQ7gU9cV2r
+         13GjMVV+N7jGd1WOnjiMKhNz1fgYyrWqndd9Flck788+NgJfNggq52PaILkxswwC67kds3a41iuD8Q
+         gmuFWYer4mOYfiPxUzWVli5VLGEXSJA==
+ARC-Authentication-Results: i=1; outbound3.eu.mailhop.org;
+        spf=pass smtp.mailfrom=stackframe.org smtp.remote-ip=91.207.61.48;
+        dmarc=none header.from=stackframe.org;
+        arc=none header.oldest-pass=0;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gibson.dropbear.id.au; s=201602; t=1642499682;
-        bh=L1hoXLKSt9NYoRIokSIHmsMSKaw3iQXotaq7cViNDlk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JudBKURJAoPy9mwLb6bHrziztFyT4oOfyVSNj7Ud3Cxe5+xNAiG7rL/jxdq/3+a6I
-         mTZi2IXAHhmxpVKFHX17e4yvjY6wDhTqp9Zdf0bBoOAgULmYcmjzuEpR2CVFNDnXxt
-         va7pW+emhaK2+0B29tzJs/yoRgMlTW5sVVo4hhJA=
-Date:   Tue, 18 Jan 2022 20:54:35 +1100
-From:   David Gibson <david@gibson.dropbear.id.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Anmar Oueja <anmar.oueja@linaro.org>,
-        Bill Mills <bill.mills@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>
-Subject: Re: [PATCH 1/1] of: unittest: rename overlay source files from .dts
- to .dtso
-Message-ID: <YeaOW8oTBykIGXgD@yekko.fritz.box>
-References: <YK70Xsl1oXeEQpWZ@yekko>
- <CAMuHMdWdb2s08a=axC+m88gARSA3enOBnczsN59XL2F9yHXXYA@mail.gmail.com>
- <YLBnX4PeK51YwUJB@yekko>
- <CAMuHMdXPn9FHr41xmihuuzNNNKvY-50yAwY4HyuyVo6qBn=Z1w@mail.gmail.com>
- <CAMuHMdWeL3DOXY3xcPOBW2WDDGW3PxgSM8didt7J1KxSm1ivJg@mail.gmail.com>
- <CAMuHMdWXXoS9mmX9VWRQyXfmsy8YROgpLZ-xB7zthEdPdM2u4A@mail.gmail.com>
- <CAMuHMdVWkSnki8VQDaYRzJ8yu8xtEKpXyfQppTtw3wXDQPmYzw@mail.gmail.com>
- <d4b7ce06-23e7-1c60-cc0c-b6aea07e0a1a@gmail.com>
- <CAL_JsqKTckMABk6cM8d=boZcHyLdcqYmbzfKDjAHdCXoCPSDtg@mail.gmail.com>
- <CAMuHMdU4oUKaGxmaPiC=cX0XpHG3KXhr+4MywEfeQ8sq-EG18A@mail.gmail.com>
+        d=stackframe.org; s=duo-1634547266507-560c42ae;
+        h=content-transfer-encoding:content-type:mime-version:message-id:in-reply-to:
+         date:references:subject:cc:to:from:from;
+        bh=+nnzxvvQj7+bvjQcSTQPnIo0ojYxhfwmrLpYQ8reS7o=;
+        b=bxHvMxbl5ntdEp+6XLmItF/hxD10ToBwYre08e+FlQmA74fF/ccBqQiMIcYe+d+Lyj4ybM4t0sQBt
+         I/pNyEqVO9xn5rYE+naazMJ3LcX0m3EO7UTH6I5PIjuZ+opPjdXRxSaZfHAUvEJTer4SzxBwbs/VDZ
+         gX0C1QKizq7goO3k=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=dkim-high;
+        h=content-transfer-encoding:content-type:mime-version:message-id:in-reply-to:
+         date:references:subject:cc:to:from:from;
+        bh=+nnzxvvQj7+bvjQcSTQPnIo0ojYxhfwmrLpYQ8reS7o=;
+        b=pWEf8RqoSlJW6MG02oIJd0fcFPHtwGSAqcs+K0FqJVn1OTouF/8AYmJXZDeODEpQ0OxQPtX3HOhhc
+         kfOrFkl/C+a2cw+jsgHoUOO9xxHAxJgpCn5wRTT7mv0U2mf7ybuOslv82HITN++NnrrKyNIQxYLImh
+         x5EGL9mhemxmCX/sdBEBfQEkJdvvPkCSpHkZU2GHyQA2J3LgGmJFXrSt1hE19P+EAS3xcxvWyit6bA
+         gxKPPfII/I6DwX2T6wx6I3u1ikBPqW6qno+I4tOBTCfE2HcCrERowc4UwXzn23Gl1Tomjmtf1l0S/z
+         QA2/AwM9485CylFlf/1pf/bPk5TPWyA==
+X-Originating-IP: 91.207.61.48
+X-MHO-RoutePath: dG9ta2lzdG5lcm51
+X-MHO-User: 1f77ca2d-7846-11ec-92ec-95b64d6800c5
+X-Report-Abuse-To: https://support.duocircle.com/support/solutions/articles/5000540958-duocircle-standard-smtp-abuse-information
+X-Mail-Handler: DuoCircle Outbound SMTP
+Received: from mail.duncanthrax.net (propper.duncanthrax.net [91.207.61.48])
+        by outbound3.eu.mailhop.org (Halon) with ESMTPSA
+        id 1f77ca2d-7846-11ec-92ec-95b64d6800c5;
+        Tue, 18 Jan 2022 10:05:12 +0000 (UTC)
+Received: from hsi-kbw-109-193-149-228.hsi7.kabel-badenwuerttemberg.de ([109.193.149.228] helo=x1.stackframe.org.stackframe.org)
+        by mail.duncanthrax.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <svens@stackframe.org>)
+        id 1n9lMU-004ylN-Hg; Tue, 18 Jan 2022 12:05:10 +0200
+From:   Sven Schnelle <svens@stackframe.org>
+To:     Michel =?utf-8?Q?D=C3=A4nzer?= <michel.daenzer@mailbox.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+References: <YeG8ydoJNWWkGrTb@ls3530>
+        <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+        <87bl0amc6s.fsf@x1.stackframe.org>
+        <a922343d-8805-3446-c000-cf7969699823@mailbox.org>
+Date:   Tue, 18 Jan 2022 11:05:08 +0100
+In-Reply-To: <a922343d-8805-3446-c000-cf7969699823@mailbox.org> ("Michel
+        =?utf-8?Q?D=C3=A4nzer=22's?= message of "Tue, 18 Jan 2022 09:58:13 +0100")
+Message-ID: <87h7a1l5pn.fsf@x1.stackframe.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Hi1arQejJwPEf6tt"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU4oUKaGxmaPiC=cX0XpHG3KXhr+4MywEfeQ8sq-EG18A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michel,
 
---Hi1arQejJwPEf6tt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Michel D=C3=A4nzer <michel.daenzer@mailbox.org> writes:
 
-On Fri, Jan 14, 2022 at 10:25:03AM +0100, Geert Uytterhoeven wrote:
-> Hi Rob,
->=20
-> On Fri, Jan 14, 2022 at 3:10 AM Rob Herring <robh@kernel.org> wrote:
-> > On Thu, Jan 6, 2022 at 11:23 AM Frank Rowand <frowand.list@gmail.com> w=
-rote:
-> > > Patient Geert has pinged again.
-> >
-> > If it's not a patch to be reviewed, then I'm not going to see it most
-> > likely. I don't read the DT list regularly...
->=20
-> Fair enough...
->=20
-> > > If I remember correctly you guys were not thrilled with this idea, but
-> > > also did not seem strongly against it.  Are you willing to go along
-> > > with .dtso for overlay source files?  If so, I will revive this patch
-> > > series.
-> > >
-> > > David, if you are against supporting .dtso in the dtc compiler then
-> > > the kernel can still support it through make rules.
+> On 2022-01-17 19:47, Sven Schnelle wrote:
+>>=20
+>>>  * There's no new development in fbdev and there are no new
+>>>    drivers. Everyone works on DRM, which is better in most
+>>>    regards. The consequence is that userspace is slowly loosing the
+>>>   ability to use fbdev.
+>>=20
+>> That might be caused by the fact that no new drivers are accepted for
+>> fbdev. I wrote a driver for the HP Visualize FX5/10 cards end of last
+>> year which was rejected for inclusion into fbdev[1].
+>>=20
+>> Based on your recommendation i re-wrote the whole thing in DRM. This
+>> works but has several drawbacks:
+>>=20
+>> - no modesetting. With fbdev, i can nicely switch resolutions with
+>>   fbset. That doesn't work, and i've been told that this is not supporte=
+d[2]
+>>=20
+>> - It is *much* slower than fbset with hardware blitting. I would have to
+>>   dig out the numbers, but it's in the ratio of 1:15. The nice thing
+>>   with fbdev blitting is that i get an array of pixels and the
+>>   foreground/background colors all of these these pixels should have.
+>>   With the help of the hardware blitting, i can write 32 pixels at once
+>>   with every 32-bit transfer.
+>>=20
+>>   With DRM, the closest i could find was DRM_FORMAT_C8, which means one
+>>   byte per pixel. So i can put 4 pixels into one 32-bit transfer.
+>>=20
+>>   fbdev also clears the lines with hardware blitting, which is much
+>>   faster than clearing it with memcpy.
+>>=20
+>>   Based on your recommendation i also verified that pci coalescing is
+>>   enabled.
+>>=20
+>>   These numbers are with DRM's unnatural scrolling behaviour - it seems
+>>   to scroll several (text)lines at once if it takes to much time. I
+>>   guess if DRM would scroll line by line it would be even slower.
+>>=20
+>>   If DRM would add those things - hardware clearing of memory regions,
+>>   hw blitting for text with a FG/BG color and modesetting i wouldn't
+>>   care about fbdev at all. But right now, it's working way faster for me.
+>
+> A DRM driver can implement the same fbdev acceleration hooks as an fbdev =
+driver.
 
-TBH, I barely remember the earlier discussion.  I am more or less
-indifferent on .dtso.
+But i guess i can still only use the DRM_FORMAT_* encodings with that?
+What i need is a pixel bitmap with separate FG/BG colors. Is that
+possible?
 
-> > I'm not really interested in diverging from dtc. I'd suggest moving
-> > the discussion to dtc list and/or devicetree-spec if you want to get
-> > more attention on this.
->=20
-> What needs to be supported in the dtc compiler?
-> The fallback passed to guess_input_format() is "dts".
-> So this has been working out-of-the-box since forever?
-
-Right.  I usually like to supply -I and -O to dtc explicitly, in which
-case the extensions basically irrelevant.
-
-I suppose we could also issue warnings if the /plugin/ tag doesn't
-match the file extension.
-
-> > Also, keep in mind that extensions also affect MIME types which
-> > someone was also asking about recently.
->=20
-> You mean "MIME type of Devicetree Blobs and Sources"[1]?
-> According to [2](2022-01-13), none of that has happened.
->=20
-> [1] https://www.spinics.net/lists/devicetree-spec/msg00938.html
-> [2] https://www.iana.org/assignments/media-types/media-types.xhtml
->=20
-> > > On 1/6/22 3:00 AM, Geert Uytterhoeven wrote:
-> > > > On Tue, Aug 24, 2021 at 11:20 AM Geert Uytterhoeven
-> > > > <geert@linux-m68k.org> wrote:
-> > > >> On Tue, Jun 22, 2021 at 11:44 AM Geert Uytterhoeven
-> > > >> <geert@linux-m68k.org> wrote:
-> > > >>> On Sat, May 29, 2021 at 12:16 PM Geert Uytterhoeven
-> > > >>> <geert@linux-m68k.org> wrote:
-> > > >>>> On Sat, May 29, 2021 at 7:16 AM David Gibson
-> > > >>>> <david@gibson.dropbear.id.au> wrote:
-> > > >>>>> On Thu, May 27, 2021 at 09:21:05AM +0200, Geert Uytterhoeven wr=
-ote:
-> > > >>>>> 65;6401;1c> On Thu, May 27, 2021 at 3:48 AM David Gibson
-> > > >>>>>> <david@gibson.dropbear.id.au> wrote:
-> > > >>>>>>> On Wed, May 26, 2021 at 04:21:48PM -0500, Frank Rowand wrote:
-> > > >>>>>>>> On 5/26/21 1:11 AM, Viresh Kumar wrote:
-> > > >>>>>>>>> On 22-04-21, 13:54, Frank Rowand wrote:
-> > > >>>>>>>>>> On 4/22/21 3:44 AM, Geert Uytterhoeven wrote:
-> > > >>>>>>>>>>> On Mon, Mar 29, 2021 at 9:23 PM Frank Rowand <frowand.lis=
-t@gmail.com> wrote:
-> > > >>>>>>>>>>>> On 3/27/21 12:40 PM, Rob Herring wrote:
-> > > >>>>>>>>>>>>> On Wed, Mar 24, 2021 at 05:37:13PM -0500, frowand.list@=
-gmail.com wrote:
-> > > >>>>>>>>>>>>>> From: Frank Rowand <frank.rowand@sony.com>
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> Add Makefile rule to build .dtbo.o assembly file from =
-overlay .dtso
-> > > >>>>>>>>>>>>>> source file.
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> Rename unittest .dts overlay source files to use .dtso=
- suffix.
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>> I'm pretty lukewarm on .dtso...
-> > > >>>>>>>>>>>>
-> > > >>>>>>>>>>>> I was originally also, but I'm warming up to it.
-> > > >>>>>>>>>>>
-> > > >>>>>>>>>>> What's the status of this?
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> I was planning to resend on top of the upcoming -rc1.
-> > > >>>>>>>>>
-> > > >>>>>>>>> Ping.
-> > > >>>>>>>>>
-> > > >>>>>>>>
-> > > >>>>>>>> Thanks for the prod...
-> > > >>>>>>>>
-> > > >>>>>>>> The .dtso convention was added to the dtc compiler, then a p=
-atch was
-> > > >>>>>>>> accepted to revert one mention of .dtso ,though there still =
-remains
-> > > >>>>>>>> two location where .dtbo is still recognized (guess_type_by_=
-name() in
-> > > >>>>>>>> dtc and the help text of the fdtoverlay program).
-> > > >>>>>>>>
-> > > >>>>>>>> It seems that the general .dtso and .dtbo were not popular, =
-so I'm
-> > > >>>>>>>> going to drop this patch instead of continuing to try to get=
- it
-> > > >>>>>>>> accepted.
-> > > >>>>>>>
-> > > >>>>>>> AFAICT .dtbo is moderately well established, and I think it's=
- a good
-> > > >>>>>>> convention, since it matters whether a blob is an overlay or =
-base
-> > > >>>>>>> tree, and it's not trivial to tell which is which.
-> > > >>>>>>
-> > > >>>>>> Indeed.
-> > > >>>>>>
-> > > >>>>>>> .dtso is much more recent,
-> > > >>>>>>
-> > > >>>>>> Is it?
-> > > >>>>>
-> > > >>>>> Well, I wouldn't bet money on it, I just seem to remember encou=
-ntering
-> > > >>>>> .dtbo for some time before .dtso was mentioned.
-> > > >>>>>
-> > > >>>>>> The oldest reference I could find is from May 2015:
-> > > >>>>>> "[PATCH/RFC] kbuild: Create a rule for building device tree ov=
-erlay objects"
-> > > >>>>>> https://lore.kernel.org/linux-devicetree/1431431816-24612-1-gi=
-t-send-email-geert+renesas@glider.be/
-> > > >>>>>
-> > > >>>>> Hm, I think .dtbo is even older than that, but again, I wouldn'=
-t swear
-> > > >>>>> to it.
-> > > >>>>
-> > > >>>> Sure. My work is based on Pantelis' work for BeagleBoard capes.
-> > > >>>> His code (from 2013?) used .dtbo and .dts:
-> > > >>>>
-> > > >>>>     overlay/v3.10/merge:firmware/Makefile:$(obj)/%.dtbo: $(obj)/=
-%.dts
-> > > >>>> | $(objtree)/$(obj)/$$(dir %)
-> > > >>>>
-> > > >>>> So I might be the one who introduced .dtso...
-> > > >>>>
-> > > >>>>>> I have always used dtbo/dtso in my published overlays branches,
-> > > >>>>>> referred from https://elinux.org/R-Car/DT-Overlays, and used by
-> > > >>>>>> various people.
-> > > >>>>>>
-> > > >>>>>>> and I think there's much less value to it.
-> > > >>>>>>
-> > > >>>>>> IMHO the same reasoning as for dtb vs. dtbo applies to dts vs.=
- dtso.
-> > > >>>>>> It matters if the resulting blob will be an overlay or base tr=
-ee,
-> > > >>>>>> as the blob will have to be called .dtb or .dtbo.
-> > > >>>>>> As dtc outputs to stdout by default, the caller has to provide=
- the
-> > > >>>>>> output filename, and thus needs to know.
-> > > >>>>>> Even if dtc would name the output file based on the presence of
-> > > >>>>>> "/plugin/" in the input file, the build system still needs to =
-know
-> > > >>>>>> for dependency tracking.
-> > > >>>>>
-> > > >>>>> Hm, fair point.  I was thinking of the the /plugin/ tag as the
-> > > >>>>> distinction, whereas dtb is binary and the distinction isn't ev=
-en
-> > > >>>>> marked in the header.  But you're right that even readable text=
- labels
-> > > >>>>> inside the file don't really help make(1).  So, I retract that
-> > > >>>>> assertion.
-> > > >>>>
-> > > >>>> Thanks!
-> > > >>>>
-> > > >>>>>> We also do have .dts vs. .dtsi.
-> > > >>>
-> > > >>> In the mean time, we're at rc7 again?
-> > > >>
-> > > >> That was v5.13-rc7. Now we're at v5.14-rc7...
-> > > >>
-> > > >> Will we live with the inability to e.g. let make distinguish betwe=
-en
-> > > >> DT includes and overlays forever?
-> > > >
-> > > > I guess this is not gonna happen, so I'll convert all my overlays
-> > > > from .dtso to .dts....
->=20
-
---=20
-David Gibson			| I'll have my music baroque, and my code
-david AT gibson.dropbear.id.au	| minimalist, thank you.  NOT _the_ _other_
-				| _way_ _around_!
-http://www.ozlabs.org/~dgibson
-
---Hi1arQejJwPEf6tt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoULxWu4/Ws0dB+XtgypY4gEwYSIFAmHmjlEACgkQgypY4gEw
-YSKeaxAAo+C+x62VKrdYdNn4rOXy2DrFCNWOnGu3l0R8SgchN1v7IhAlJIjYeeLU
-w7ZDkqxxeWo1hN4i+VDRa1svCxbem6wvXqW62ongXKUJi82hVkZjdeCfgtyLFTH8
-KISlv8wy8+d9jDP8XC7UGIP7uG3vLnOjlrHLPBlHYuzCTUWYin68ike8cBoXsg4D
-DePxVfH8oEJvkT57r7Vq7RVx98PekJsLWppENBTMy7ioKPbTbsrP/5M7hprFAE22
-3xvr7F1Gj5/kqoysUk9xup4L0WGR0lnraUJUfWeO7Y4a7zjhqtyoa6Z6HGwfxTTG
-f6B/V2Gd0MnBEXrDPT2l+yKI9bHYt9dII1dsrcZjw/9P2EycYAehAbZDben9aOay
-oo6jwCL6nJj0vALiB1N+Wwu6CohLSkqhgxvbLEuSuyA7HWzv2NWDQTD365r6BPUY
-Ye8BmTuRgGuMmEpPLGj9+iqBpH7wkzGSuu4muYeGVyB7EF3JryhI9rYVNQW9QOgQ
-k03k25mSAl1l/jop203NJkGLaNnAQIZeYCXuoKHEwtU9JeSdR0V8aNhFiyoZ11m0
-hK9dn/lHL3iU87l5qB30SdNi1TTeVPkC5dH3QRxw+AxWgOYnF/+GvttbeLB5dWS6
-bcTpQenWpYj04VRTsKr0Zla7biEkQ1CX7VMkAmSCTN9j6j8jXrI=
-=1e33
------END PGP SIGNATURE-----
-
---Hi1arQejJwPEf6tt--
+/Sven

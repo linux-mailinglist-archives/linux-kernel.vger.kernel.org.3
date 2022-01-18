@@ -2,155 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F60F492C6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553EF492C73
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347345AbiARRdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:33:05 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1088 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229568AbiARRdD (ORCPT
+        id S1347380AbiARRd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234343AbiARRdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:33:03 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IH23pW020690;
-        Tue, 18 Jan 2022 17:33:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=RnxkHMfBnvNfQr8Ica+D+dP7pha12KacO4sVFRCcNZM=;
- b=iDrcxMRP+ThSo/n/ymiqvHpoGgzWexZonQIfLSqFE33M2/bRVJvJVlaHRkLyYvFSayuo
- 8SQ6yLY9HNkbwEXT8sVXBtp3gU8DK855bs5i4CvzhOr8skJpS4+bSSCSzaKtrQjqEQhL
- CWiMQV00LRSHQdaQtNbCmX/XN5CvD1OOs6zo59vSWYG4EDs7a//1GfDeART0AZSgSMSh
- IrvYmaZgPbkHPK1PAWRbzC6PR3jLOICdsPJvkcC1C/IDK27shIm1HzdC6FW903PgpHEY
- ExSOxL5/dqkXyJNOP32PEjacyuGK8Q9ZWBsSuTCkbN6yEX83XxDEF1W9Y3sCQy1EA8K5 Fw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1kegqaq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 17:33:02 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IHR6GD005192;
-        Tue, 18 Jan 2022 17:33:02 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1kegqa1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 17:33:02 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IHNFnH002626;
-        Tue, 18 Jan 2022 17:33:00 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02wdc.us.ibm.com with ESMTP id 3dknwapke6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 17:33:00 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IHWxV826870178
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 17:32:59 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90EE36E062;
-        Tue, 18 Jan 2022 17:32:59 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AA17C6E052;
-        Tue, 18 Jan 2022 17:32:57 +0000 (GMT)
-Received: from [9.163.19.30] (unknown [9.163.19.30])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 17:32:57 +0000 (GMT)
-Message-ID: <e1cd6368-bb1a-1a4d-df83-8190524b9a4d@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 12:32:56 -0500
+        Tue, 18 Jan 2022 12:33:52 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0CBC061574;
+        Tue, 18 Jan 2022 09:33:51 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n9sMe-0000Fx-8a; Tue, 18 Jan 2022 18:33:48 +0100
+Message-ID: <2f55b629-2e5b-bd45-e0ea-4e476f603dc8@leemhuis.info>
+Date:   Tue, 18 Jan 2022 18:33:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH v2 23/30] vfio/pci: re-introduce CONFIG_VFIO_PCI_ZDEV
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-24-mjrosato@linux.ibm.com>
- <1ea61cf3-65b2-87ec-55b4-7dfa5f623d15@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <1ea61cf3-65b2-87ec-55b4-7dfa5f623d15@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9i6Hj0KTeqVpjtVkzm16alwqWHqoE861
-X-Proofpoint-ORIG-GUID: MD-8iwRKWhthPWYzryOewjexSrZyrnpS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 adultscore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180105
+Subject: Re: ChipIdea USB regression
+Content-Language: en-BS
+To:     Rob Herring <robh@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
+ <5bd2dba7-c56f-4d8c-2f28-f2428afdcead@leemhuis.info>
+ <CAL_JsqKH90fgSPjKqALweEmZDfxy88jAiRZ4uRKE3+-OZv1ZXQ@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAL_JsqKH90fgSPjKqALweEmZDfxy88jAiRZ4uRKE3+-OZv1ZXQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1642527231;16d97773;
+X-HE-SMSGID: 1n9sMe-0000Fx-8a
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 12:20 PM, Pierre Morel wrote:
-> 
-> 
-> On 1/14/22 21:31, Matthew Rosato wrote:
->> This was previously removed as unnecessary; while that was true, 
->> subsequent
->> changes will make KVM an additional required component for vfio-pci-zdev.
->> Let's re-introduce CONFIG_VFIO_PCI_ZDEV as now there is actually a reason
->> to say 'n' for it (when not planning to CONFIG_KVM).
+On 18.01.22 17:53, Rob Herring wrote:
+> On Sun, Jan 16, 2022 at 4:21 AM Thorsten Leemhuis
+> <regressions@leemhuis.info> wrote:
 >>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   drivers/vfio/pci/Kconfig      | 11 +++++++++++
->>   drivers/vfio/pci/Makefile     |  2 +-
->>   include/linux/vfio_pci_core.h |  2 +-
->>   3 files changed, 13 insertions(+), 2 deletions(-)
+>> [TLDR: I'm adding this regression to regzbot, the Linux kernel
+>> regression tracking bot; most text you find below is compiled from a few
+>> templates paragraphs some of you might have seen already.]
 >>
->> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
->> index 860424ccda1b..fedd1d4cb592 100644
->> --- a/drivers/vfio/pci/Kconfig
->> +++ b/drivers/vfio/pci/Kconfig
->> @@ -42,5 +42,16 @@ config VFIO_PCI_IGD
->>         and LPC bridge config space.
->>         To enable Intel IGD assignment through vfio-pci, say Y.
->> +
->> +config VFIO_PCI_ZDEV
->> +    bool "VFIO PCI extensions for s390x KVM passthrough"
->> +    depends on S390 && KVM
->> +    default y
->> +    help
->> +      Support s390x-specific extensions to enable support for 
->> enhancements
->> +      to KVM passthrough capabilities, such as interpretive execution of
->> +      zPCI instructions.
->> +
->> +      To enable s390x KVM vfio-pci extensions, say Y.
+>> Hi, this is your Linux kernel regression tracker speaking.
+>>
+>> Adding the regression mailing list to the list of recipients, as it
+>> should be in the loop for all regressions, as explained here:
+>> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+>>
+>> On 14.01.22 11:56, Charles Keepax wrote:
+>>> Hi guys,
+>>>
+>>> My Zynq based board stopped booting today, a bisect points to this
+>>> patch:
+>>>
+>>> commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
+>>
+>> Thanks for the report.
+>>
+>> To be sure this issue doesn't fall through the cracks unnoticed, I'm
+>> adding it to regzbot, my Linux kernel regression tracking bot:
+>>
+>> #regzbot ^introduced 0f153a1b8193
+>> #regzbot title usb: chipidea: Zynq based board stopped booting today
+>> #regzbot ignore-activity
+>>
+>> Reminder: when fixing the issue, please add a 'Link:' tag with the URL
+>> to the report (the parent of this mail) using the kernel.org redirector,
 > 
-> In several patches we check on CONFIG_PCI (14,15,16,17 and 22) but we 
-> may have PCI without VFIO_PCI, wouldn't it be a problem?
+> 'kernel.org redirector' is lore.kernel.org? It would be clearer to
+> just say that.
+
+Yes/No it's lore.kernel.org/r/ (and not lore.kernel.org/list-foo/).
+You're right I'll rephrase next time.
+
+>> as explained in 'Documentation/process/submitting-patches.rst'. Regzbot
+>> then will automatically mark the regression as resolved once the fix
+>> lands in the appropriate tree. For more details about regzbot see footer.
 > 
-> Here we define a new CONFIG entry and I have two questions:
-> 
-> 1- there is no dependency on VFIO_PCI while the functionality is 
-> obviously based on VFIO_PCI
+> Would it be possible for you to provide the exact link tag in your
+> reports? That would be easier and less error prone than describing
+> what to do in prose.
 
-It's not obvious from this diff, but this 'config VFIO_PCI_ZDEV' 
-statement is within an 'if VFIO_PCI' statement, just like VFIO_PCI_IGD 
-above -- so the dependency is there.
+Hmm. The webui already provides this (and other things you likely want
+to add) when you show the details for a tracked regression or visit its
+individual page:
 
-> 
-> 2- Wouldn't it be possible to use this item and the single condition for 
-> the different checks we need through the new VFIO interpretation 
-> functionality.
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+https://linux-regtracking.leemhuis.info/regzbot/regression/20220114105620.GK18506@ediswmail.ad.cirrus.com/
 
-Possibly, but 1) we'd have to make linking arch/s390/kvm/pci.o dependent 
-on CONFIG_VFIO_PCI instead of CONFIG_PCI in patch 14 and 2) if the 
-relationship between CONFIG_VFIO_PCI and CONFIG_PCI were to ever change 
-(though I don't see why it would..), we would be broken because the 
-symbols we are referencing really require CONFIG_PCI (as they are 
-located in s390 PCI).
+I see that it would be convenient for developers and less error prone if
+I could mention the proper Link: tag in mails like the one you quoted,
+that's why I considered that already. But it would make the regression
+tracker's job (aka my "job", which I'm kinda doing in my spare time) yet
+again somewhat harder, as I see no easy solution to automate that when
+writing these mails (which I do with thunderbird, currently). That's why
+I decided to not do that for now, as that job is already hard enough and
+I don't want to get burned out by this a second time; and those link
+tags are something that were expected from developers even before I came
+with regzbot.
 
+But well, maybe over time I can up with some idea to make this easy for
+me, then I'll gladly provide that service. One easy way to make this
+happen would be: regzbot could send a confirmation mail when it adds a
+regression to the list of tracked issues and mention the Link: tag
+there. But that would be yet another mail in all out inboxes. But maybe
+such a mail would be good for other reasons, too.
+
+Ciao, Thorsten

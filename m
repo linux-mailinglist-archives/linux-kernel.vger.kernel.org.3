@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19960491B56
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF0C491B52
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354040AbiARDFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S1353912AbiARDEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:04:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345969AbiARCq6 (ORCPT
+        with ESMTP id S1348958AbiARCrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:46:58 -0500
+        Mon, 17 Jan 2022 21:47:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8819CC06127D;
-        Mon, 17 Jan 2022 18:38:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0358FC03327A;
+        Mon, 17 Jan 2022 18:38:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69E596093C;
-        Tue, 18 Jan 2022 02:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E35C36AEF;
-        Tue, 18 Jan 2022 02:38:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95B746093C;
+        Tue, 18 Jan 2022 02:38:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25AC9C36AEF;
+        Tue, 18 Jan 2022 02:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473523;
-        bh=gDmFszm+/TUhgaalM12dREB18MEqRLtv9uD+Yy9sdoY=;
+        s=k20201202; t=1642473531;
+        bh=GyS828HD/W5brWBjztyF7pzethTmRJ7htmn28hD2mHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/DUMsdM66JPfi1PfoxsXBRz2DhVjJXgIgSS3cojT0QFOntQcuWNsnsCA4VA4WezZ
-         8nP3NG4U42GoCqVU7aQekF7vGYPTOjb3tjQsdVNrwZY8P4P8lD0MCO+TglbslPiiTG
-         isWf4187Fu1Bm1jlbXgjK8r4OUlUfI4N3ghTjii2hcyXOw14ZYSplUqU6o9MBolHr8
-         +RL4Hxx3Spf++XtWa9gqCjLTytbKYgt7ukA4GckiRsK5bG3PoRqkC9UrsMU6wpgOC/
-         F7ZSekuoiEyFtz+TMdXjrxR8Tl4wczxJxBPa/N15vzLAqAsDuwCaD3Kk4EdPhODV3q
-         yHxvhbm6D2Emg==
+        b=AExYOn0hN0JgHXM3GCvDZ/SakpC2qw5m2gQKfJabOVDKmVLE9bzzhG706tGiKsyVg
+         uTsD5pNnpsoJUxPURzZL+8eNhEdygzFwEaml1b8bsxbRbFQ2q/6vvrD41rzkQo3gmA
+         5JRXQ7lq0q3q8mGDhxkIGusfSAxttG4ZvwY4gczlmWfZnzfvX6AlKHfC30zjtEsOyP
+         kEGrPpgVtQee0/liX3BMwPbHau++vYlFvUWJqDpR/cgPzOz/83ycBUZDAf1W5OzUmF
+         W8bN7MX9/pyvSk8pG3AgNOgaz8raYbPghOtpjoJR9zR7yMh8bSK2mOjYRmbhLX3e4N
+         i19ZE3H1dMEoQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, linux-bluetooth@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 148/188] Bluetooth: vhci: Set HCI_QUIRK_VALID_LE_STATES
-Date:   Mon, 17 Jan 2022 21:31:12 -0500
-Message-Id: <20220118023152.1948105-148-sashal@kernel.org>
+Cc:     Mark Langsdorf <mlangsdo@redhat.com>,
+        Bob Moore <robert.moore@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-acpi@vger.kernel.org,
+        devel@acpica.org
+Subject: [PATCH AUTOSEL 5.15 152/188] ACPICA: actypes.h: Expand the ACPI_ACCESS_ definitions
+Date:   Mon, 17 Jan 2022 21:31:16 -0500
+Message-Id: <20220118023152.1948105-152-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
 References: <20220118023152.1948105-1-sashal@kernel.org>
@@ -52,33 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Mark Langsdorf <mlangsdo@redhat.com>
 
-[ Upstream commit cfb4c313be670fd4bd09650216620fa4514cdb93 ]
+[ Upstream commit f81bdeaf816142e0729eea0cc84c395ec9673151 ]
 
-This set HCI_QUIRK_VALID_LE_STATES quirk which is required for the likes
-of experimental LE simultaneous roles.
+ACPICA commit bc02c76d518135531483dfc276ed28b7ee632ce1
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+The current ACPI_ACCESS_*_WIDTH defines do not provide a way to
+test that size is small enough to not cause an overflow when
+applied to a 32-bit integer.
+
+Rather than adding more magic numbers, add ACPI_ACCESS_*_SHIFT,
+ACPI_ACCESS_*_MAX, and ACPI_ACCESS_*_DEFAULT #defines and
+redefine ACPI_ACCESS_*_WIDTH in terms of the new #defines.
+
+This was inititally reported on Linux where a size of 102 in
+ACPI_ACCESS_BIT_WIDTH caused an overflow error in the SPCR
+initialization code.
+
+Link: https://github.com/acpica/acpica/commit/bc02c76d
+Signed-off-by: Mark Langsdorf <mlangsdo@redhat.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_vhci.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/acpi/actypes.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_vhci.c b/drivers/bluetooth/hci_vhci.c
-index 8ab26dec5f6e8..8469f9876dd26 100644
---- a/drivers/bluetooth/hci_vhci.c
-+++ b/drivers/bluetooth/hci_vhci.c
-@@ -121,6 +121,8 @@ static int __vhci_create_device(struct vhci_data *data, __u8 opcode)
- 	if (opcode & 0x80)
- 		set_bit(HCI_QUIRK_RAW_DEVICE, &hdev->quirks);
+diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
+index 92c71dfce0d5d..cefbb7ad253e0 100644
+--- a/include/acpi/actypes.h
++++ b/include/acpi/actypes.h
+@@ -536,8 +536,14 @@ typedef u64 acpi_integer;
+  * Can be used with access_width of struct acpi_generic_address and access_size of
+  * struct acpi_resource_generic_register.
+  */
+-#define ACPI_ACCESS_BIT_WIDTH(size)     (1 << ((size) + 2))
+-#define ACPI_ACCESS_BYTE_WIDTH(size)    (1 << ((size) - 1))
++#define ACPI_ACCESS_BIT_SHIFT		2
++#define ACPI_ACCESS_BYTE_SHIFT		-1
++#define ACPI_ACCESS_BIT_MAX		(31 - ACPI_ACCESS_BIT_SHIFT)
++#define ACPI_ACCESS_BYTE_MAX		(31 - ACPI_ACCESS_BYTE_SHIFT)
++#define ACPI_ACCESS_BIT_DEFAULT		(8 - ACPI_ACCESS_BIT_SHIFT)
++#define ACPI_ACCESS_BYTE_DEFAULT	(8 - ACPI_ACCESS_BYTE_SHIFT)
++#define ACPI_ACCESS_BIT_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BIT_SHIFT))
++#define ACPI_ACCESS_BYTE_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BYTE_SHIFT))
  
-+	set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
-+
- 	if (hci_register_dev(hdev) < 0) {
- 		BT_ERR("Can't register HCI device");
- 		hci_free_dev(hdev);
+ /*******************************************************************************
+  *
 -- 
 2.34.1
 

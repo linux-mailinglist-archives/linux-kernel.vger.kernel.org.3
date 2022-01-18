@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BDD491E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 05:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC6B491E7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 05:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiAREOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 23:14:14 -0500
-Received: from mga07.intel.com ([134.134.136.100]:42504 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230169AbiAREOG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 23:14:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642479244; x=1674015244;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N8StwKOUFN38Fg7Jp+n+nHXaNLN+HGpyfbNXMwx0E+w=;
-  b=ZJTnepacG974z6+f9SZFlBkc0HhsNfypG/EVkRANFUZWt5bApRnIakwo
-   QL1V0dHxE+qrH0faMIMP/g6NVsPr50Bdj/A4luBszax6KAQHFWNt4Htak
-   3e+Ox6Wpzn/MQB30l6aE5YWSY6xyUP8H0zmXWQmTACJf0JftRnqJMRUuH
-   VQkcnhVpl3BQhl47PncMFQV7nv9HbWNNcZdLWY9N3H8voVmE525tgLMY7
-   3WsMvVumtVR+RIGYEdNSA3HvtMlNMqgv96q7nu3XLG9YyLOOW2PtN+Vhk
-   Ysv7JZxeNptsikCKjx/xIm8CnGHffuQJn2PUQKbM06sIJzd0HE3HZz7iu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="308074162"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="308074162"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 20:14:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="476839197"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2022 20:14:00 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9fse-000C95-9m; Tue, 18 Jan 2022 04:14:00 +0000
-Date:   Tue, 18 Jan 2022 12:13:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <mbrugger@suse.com>
-Subject: arch/arm64/kernel/hibernate.c:202:44: sparse: sparse: cast from
- restricted gfp_t
-Message-ID: <202201181248.rDauB3ns-lkp@intel.com>
+        id S232261AbiAREYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 23:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232224AbiAREYM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 23:24:12 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9D4C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 20:24:11 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id a18so74171925edj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 20:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/zF5YGbP0nEkT+Uha6r3jtWZKXjZYuO+eTPXU/yYfOc=;
+        b=XlkT9EJX4wkAEbbjts/SRs/Oca3s7hNnc/YxVUdn5XXezzzfWLPOgcdIg2Eih08gC6
+         iyP5Xy26dc+EWHtnjXbLEbLbvuWerIEEl8qJ3kEwiW5OjDVPByTmajKydrPBjcTLLzF6
+         EJIKzzZfM0pAGb4rz0nfHJ7VtKgcCae7zrXTw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/zF5YGbP0nEkT+Uha6r3jtWZKXjZYuO+eTPXU/yYfOc=;
+        b=xlEAv3L3yd76EhBSZJPkStCIkuoxMER+zUOyLlI9O4IlWk4Kwj+BTycQgzw3sin/Ui
+         JsJo7AOzz0l7ATCAY/5lVuKMEncxIKdZd9U7OBOFPiH3DxCoZSiFRVEnMMD5C4SchAjF
+         ggKAweQ2Hffhjlb2KxL+Pxfi+BPACbpNq1XwvzlQIyfu2dwpCDLa1yfD2l9KMIyP/dox
+         2KtgctdCVJzLf4atwrGZeHvjrYAKOvdMgqml/+M4bS7w078ZdC6bScUkgehtdUh7ojU3
+         A5oDt0oUTfydwUvPwW71NZ0WpRFX2vXsDtaDZW9tdBd7wOOHeXZx2RNY7qsna1s5Bqu2
+         vfOw==
+X-Gm-Message-State: AOAM531xSPqFsptHskEVtKXA/PqzVmYWrmV3XHnfW173GRAw91UB2LOp
+        qVY/Z0c9GbA3Wdzz4L4Mv2rNti8M+nOgKk1x
+X-Google-Smtp-Source: ABdhPJwjyFgg3FYeIse/xGoi1s7sxodD1o0FUhJ3l2vNGQ2SdD7WdHfBiHyawiv9O0qaxHmYQFHuaQ==
+X-Received: by 2002:aa7:c917:: with SMTP id b23mr8290869edt.309.1642479850232;
+        Mon, 17 Jan 2022 20:24:10 -0800 (PST)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id gt38sm4981197ejc.114.2022.01.17.20.24.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 20:24:08 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id v123so24871013wme.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 20:24:07 -0800 (PST)
+X-Received: by 2002:a05:6000:1787:: with SMTP id e7mr8150004wrg.281.1642479847518;
+ Mon, 17 Jan 2022 20:24:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211213225350.27481-1-ebiederm@xmission.com> <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+ <87sfu3b7wm.fsf@email.froward.int.ebiederm.org> <YdniQob7w5hTwB1v@osiris>
+ <87ilurwjju.fsf@email.froward.int.ebiederm.org> <87o84juwhg.fsf@email.froward.int.ebiederm.org>
+ <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
+ <87lezmrxlq.fsf@email.froward.int.ebiederm.org> <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
+ <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
+ <87h7a5kgan.fsf@email.froward.int.ebiederm.org> <991211d94c6dc0ad3501cd9f830cdee916b982b3.camel@trillion01.com>
+ <87ee56e43r.fsf@email.froward.int.ebiederm.org> <87v8yi8ajr.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <87v8yi8ajr.fsf_-_@email.froward.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 18 Jan 2022 06:23:51 +0200
+X-Gmail-Original-Message-ID: <CAHk-=wjCs7XPtNHwzVHK=0D=tZgtdyMGLtoomZB5JeUm7D3JEg@mail.gmail.com>
+Message-ID: <CAHk-=wjCs7XPtNHwzVHK=0D=tZgtdyMGLtoomZB5JeUm7D3JEg@mail.gmail.com>
+Subject: Re: io_uring truncating coredumps
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Olivier Langlois <olivier@trillion01.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0c947b893d69231a9add855939da7c66237ab44f
-commit: 50f53fb721817a6efa541cca24f1b7caa84801c1 arm64: trans_pgd: make trans_pgd_map_page generic
-date:   12 months ago
-config: arm64-randconfig-s031-20220117 (https://download.01.org/0day-ci/archive/20220118/202201181248.rDauB3ns-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=50f53fb721817a6efa541cca24f1b7caa84801c1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 50f53fb721817a6efa541cca24f1b7caa84801c1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On Mon, Jan 17, 2022 at 8:47 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> Thinking about it from the perspective of not delivering the wake-ups
+> fixing io_uring and coredumps in a non-hacky way looks comparatively
+> simple.  The function task_work_add just needs to not wake anything up
+> after a process has started dying.
+>
+> Something like the patch below.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hmm. Yes, I think this is the right direction.
 
+That said, I think it should not add the work at all, and return
+-ESRCH, the exact same way that it does for that work_exited
+condition.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/arm64/kernel/hibernate.c:181:39: sparse: sparse: cast to restricted gfp_t
->> arch/arm64/kernel/hibernate.c:202:44: sparse: sparse: cast from restricted gfp_t
+Because it's basically the same thing: the task is dead and shouldn't
+do more work. In fact, task_work_run() is the thing that sets it to
+&work_exited as it sees PF_EXITING, so it feels to me that THAT is
+actually the issue here - we react to PF_EXITING too late. We react to
+it *after* we've already added the work, and then we do that "no more
+work" logic only after we've accepted those late work entries?
 
-vim +202 arch/arm64/kernel/hibernate.c
+So my gut feel is that task_work_add() should just also test PF_EXITING.
 
-   183	
-   184	/*
-   185	 * Copies length bytes, starting at src_start into an new page,
-   186	 * perform cache maintenance, then maps it at the specified address low
-   187	 * address as executable.
-   188	 *
-   189	 * This is used by hibernate to copy the code it needs to execute when
-   190	 * overwriting the kernel text. This function generates a new set of page
-   191	 * tables, which it loads into ttbr0.
-   192	 *
-   193	 * Length is provided as we probably only want 4K of data, even on a 64K
-   194	 * page system.
-   195	 */
-   196	static int create_safe_exec_page(void *src_start, size_t length,
-   197					 unsigned long dst_addr,
-   198					 phys_addr_t *phys_dst_addr)
-   199	{
-   200		struct trans_pgd_info trans_info = {
-   201			.trans_alloc_page	= hibernate_page_alloc,
- > 202			.trans_alloc_arg	= (void *)GFP_ATOMIC,
-   203		};
-   204	
-   205		void *page = (void *)get_safe_page(GFP_ATOMIC);
-   206		pgd_t *trans_pgd;
-   207		int rc;
-   208	
-   209		if (!page)
-   210			return -ENOMEM;
-   211	
-   212		memcpy(page, src_start, length);
-   213		__flush_icache_range((unsigned long)page, (unsigned long)page + length);
-   214	
-   215		trans_pgd = (void *)get_safe_page(GFP_ATOMIC);
-   216		if (!trans_pgd)
-   217			return -ENOMEM;
-   218	
-   219		rc = trans_pgd_map_page(&trans_info, trans_pgd, page, dst_addr,
-   220					PAGE_KERNEL_EXEC);
-   221		if (rc)
-   222			return rc;
-   223	
-   224		/*
-   225		 * Load our new page tables. A strict BBM approach requires that we
-   226		 * ensure that TLBs are free of any entries that may overlap with the
-   227		 * global mappings we are about to install.
-   228		 *
-   229		 * For a real hibernate/resume cycle TTBR0 currently points to a zero
-   230		 * page, but TLBs may contain stale ASID-tagged entries (e.g. for EFI
-   231		 * runtime services), while for a userspace-driven test_resume cycle it
-   232		 * points to userspace page tables (and we must point it at a zero page
-   233		 * ourselves). Elsewhere we only (un)install the idmap with preemption
-   234		 * disabled, so T0SZ should be as required regardless.
-   235		 */
-   236		cpu_set_reserved_ttbr0();
-   237		local_flush_tlb_all();
-   238		write_sysreg(phys_to_ttbr(virt_to_phys(trans_pgd)), ttbr0_el1);
-   239		isb();
-   240	
-   241		*phys_dst_addr = virt_to_phys(page);
-   242	
-   243		return 0;
-   244	}
-   245	
+And in fact, my gut feel is that PF_EXITING is too late anyway (it
+happens after core-dumping, no?)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+But I guess that thing may be on purpose, and maybe the act of dumping
+core itself wants to do more work, and so that isn't an option?
+
+So I don't think your patch is "right" as-is, and it all worries me,
+but yes, I think this area is very much the questionable one.
+
+I think that work stopping and the io_uring shutdown should probably
+move earlier in the exit queue, but as mentioned above, maybe the work
+addition boundary in particular really wants to be late because the
+exit process itself still uses task works? ;(
+
+              Linus

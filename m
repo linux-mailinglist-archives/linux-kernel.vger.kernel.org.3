@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B698149312B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A0549312E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350190AbiARXFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 18:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346425AbiARXFw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:05:52 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16610C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:05:52 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id a62-20020a25ca41000000b00612ba8ecfcdso1087619ybg.17
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:05:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=l6hbRAzMlKkhDXyQqtvv9DAL8rlD+/FgUl4MA5CnPm8=;
-        b=nKkhAP96OCYA4M4x80g28cPG8G8ErsxJaS13Ynx/835zUQOktZxpfEllu14SNaW6ZN
-         qXjKLzaRdYhy9PJXVwbP+2Jf1b9hP+lSMPoBwidlUYmXQWDyTWVpJInj3fq7WDafuxTa
-         iIoMeNcwjnN6Ys6MwD+AtzizkCx/n3FuS7igc6T6IDDeJFG6FQ777u1Qd2e2Lzw62juQ
-         5JRnEs8RrSNVwLs7Y+HjIBoRj9LPNtc4cLGAxoZ+I0F6hnJ9Xco3AK9rmu4dY5TIwj4G
-         GtXcDJ7/CuGC+07RaUPJ0D9cxTZnpUu/BKnZULfy5igYqfOQlEk7iMU8tfsSEEyXIhRU
-         O4dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=l6hbRAzMlKkhDXyQqtvv9DAL8rlD+/FgUl4MA5CnPm8=;
-        b=3KkX9CqdaCQMRVMCo7+xaYDIScf9aCGsZXlbmTcNwht9nFFGAPKpJgnJ+sNAh76N2u
-         ufq33/e5B3RXf/Di35WqzsQUMWWllTimaLWeQEi+GZrlGF1fxOzPlXU7zbaZNyP6mrkd
-         gz37mmfqguw72kK7sCuS3X3769RyiOdoiMnQpe2mq1OuEfan+nz84dT8xeUK/2ucgSz5
-         Cc2J+Yk4jPwJvs7gwmCs9KkqRCnTqK2CzlhySe0KaPZfGm/aG7bS7SCui5DheQSfwUaJ
-         nirztvQyzzC93ya3CZFa0jR1etJ14B9P7g0jGr/hLAS/P+1mOSeAK+HDO4JEvY1BhqRe
-         zpcA==
-X-Gm-Message-State: AOAM5327W39C7Vw4iTVWzHxICUQAA8Wxnl49TOI62u6IwRZ+JkStBmTG
-        nKXqIC90fKXX+ECj7XARMnD2fEU=
-X-Google-Smtp-Source: ABdhPJyPdrj4Y716RGRIKh5U4LkCBP0FlJ7hNEnEfsKuQQvudDZBs5KtsbgYz/GzyiJmv9fnRvg5DBM=
-X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:1443:965d:6393:cd60])
- (user=pcc job=sendgmr) by 2002:a25:a047:: with SMTP id x65mr37555287ybh.370.1642547151356;
- Tue, 18 Jan 2022 15:05:51 -0800 (PST)
-Date:   Tue, 18 Jan 2022 15:05:39 -0800
-Message-Id: <20220118230539.323058-1-pcc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] mm/mmzone.c: fix page_cpupid_xchg_last() to READ_ONCE() the
- page flags
-From:   Peter Collingbourne <pcc@google.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1350210AbiARXGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 18:06:14 -0500
+Received: from mga11.intel.com ([192.55.52.93]:49456 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350213AbiARXGN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 18:06:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642547173; x=1674083173;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iijlZoQHVdR8sorfGuiRd8FaFRL2pIM3YpLo49cDPpc=;
+  b=DEayYNI/NS2GGyche1MbvE8JeKTfM+pzr8tWkbnR3BnbuxX80rrsxNhR
+   FXu7E4Y0dtAtZFJuWv77jYaQ6W8g58cmKC9Pi9Y7dbW8QgH+KF3WWbOOU
+   YC9mDrVthuTxHhwE1WiRHdThEIFfzAZwQXBApCJXgg7iyc8tJxpFKYkHY
+   1MJZ5kdYNkIII5BMbaRYJ3WZ/TlCBi04zn2ywEBTVD6kT8fczvLxtsu81
+   pfUcq8OF+edTzIy2o9F5m23XK2k3K4tyFSx22JMQfbCQzduM03BZJSUuk
+   N1KhTTsWf3AtJcE9+BX5Sun1RJLBQ3qFWo7f85JnfDjDQSiY5XyHj3G0Z
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="242497168"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="242497168"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 15:06:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="693563062"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Jan 2022 15:06:11 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9xYI-000D1c-Fh; Tue, 18 Jan 2022 23:06:10 +0000
+Date:   Wed, 19 Jan 2022 07:05:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [jpoimboe:objtool-test 1/1] drivers/net/wireless/mac80211_hwsim.o:
+ warning: objtool: mac80211_hwsim_tx()+0xbe2: unreachable instruction
+Message-ID: <202201190702.XNSXrMTK-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After submitting a patch with a compare-exchange loop similar to this
-one to set the KASAN tag in the page flags, Andrey Konovalov pointed
-out that we should be using READ_ONCE() to read the page flags. Fix
-it here.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-test
+head:   14d7c68274f2a17d5734c87971f08cd08cf862c6
+commit: 14d7c68274f2a17d5734c87971f08cd08cf862c6 [1/1] objtool: prefer memory clobber & %= to volatile & __COUNTER__
+config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220119/202201190702.XNSXrMTK-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=14d7c68274f2a17d5734c87971f08cd08cf862c6
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe objtool-test
+        git checkout 14d7c68274f2a17d5734c87971f08cd08cf862c6
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
 
-Fixes: 75980e97dacc ("mm: fold page->_last_nid into page->flags where possible")
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Link: https://linux-review.googlesource.com/id/I2e1f5b5b080ac9c4e0eb7f98768dba6fd7821693
-Cc: stable@vger.kernel.org
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/mac80211_hwsim.o: warning: objtool: mac80211_hwsim_tx()+0xbe2: unreachable instruction
+
 ---
- mm/mmzone.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/mmzone.c b/mm/mmzone.c
-index eb89d6e018e2..f84b84b0d3fc 100644
---- a/mm/mmzone.c
-+++ b/mm/mmzone.c
-@@ -90,7 +90,7 @@ int page_cpupid_xchg_last(struct page *page, int cpupid)
- 	int last_cpupid;
- 
- 	do {
--		old_flags = flags = page->flags;
-+		old_flags = flags = READ_ONCE(page->flags);
- 		last_cpupid = page_cpupid_last(page);
- 
- 		flags &= ~(LAST_CPUPID_MASK << LAST_CPUPID_PGSHIFT);
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

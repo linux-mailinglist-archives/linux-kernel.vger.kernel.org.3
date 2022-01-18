@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369A1492DD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDE7492DCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348332AbiARStH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245016AbiARStG (ORCPT
+        id S245288AbiARSsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:48:51 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:37308
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244756AbiARSsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:49:06 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECADC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:49:05 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id e3so71768348lfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:49:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W7gSIAjEMMHVPzUY9IiyGaokpzvzLkdxvFC2XtksEpw=;
-        b=jv5BMnRBMuhUA/XUaApRCcjspumfl+fNK6m4jaI3SAy+kGzSt4Mx1GJULcYoOFrFh8
-         AEvrIeNsMWBb7bHjLblMkgrER6sznueruOay8Xn0g56/ahOESSMJFj2Nb6xi9PPHKk3p
-         dXPxn/IQNoj7ygHl+pxX2dDVBqwPhsvf9IocFrb6M6FipWRzOVULy32vUT+cPtYJgOqa
-         1Fh15DblTMV56QmkelIsdvvb1rbG07mVoSqLmyQ6iy82tgXUCXXqNjFZndqvaQTFqLrq
-         Ny6DQZbyCUGzpgJR7iMBeWR5uTtedzEDSifwFGn3lS+X6rsLkedZM3ydxSfz0xBbU7z8
-         /7mQ==
+        Tue, 18 Jan 2022 13:48:50 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A1C1D407F2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642531729;
+        bh=osZDE2qGikhWPKRozLWA0fiHv6mtb/zkWnvdgeIXyQ0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=tn708PlEAXS3uC9b/0dBREp55C1djsNVY6cjpTGDfyRhqZ1qBj7erMBxq7AeCmQ6i
+         xRdG2f/lw7eZydQ0p4PL9B38awbt1cUUppkysn/IAsMQvScmMKyks9/8AKHpSCARoX
+         Lnw43+1ZPsoJgErVVt4N6ivDlCBHRRfcC/fW5Rj1XcVYcngiX8VRsYPMAswBqUPGBm
+         MQdT4HbJa+CZnOlkpSux6TGaQ3QwxOvUHryJe3Bzsvif1jhjRgNhoWjJEQ+4FtGt03
+         nN0aEsMH5JdhjDUmRSJzLBwaV6b45QAcXY3G8cgPtbSIKf9R58+1Buf68xkRhm0Qmw
+         DmKxbhKq1g4Ig==
+Received: by mail-ed1-f71.google.com with SMTP id a18-20020aa7d752000000b00403d18712beso814036eds.17
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:48:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W7gSIAjEMMHVPzUY9IiyGaokpzvzLkdxvFC2XtksEpw=;
-        b=TEIFvOv8E8Zko7XthinhtwpQ3ux2cXE6bIL+vbrKm8ARcX100MqoFEuh2ZkfALTRFQ
-         bdQxyEw4RGJXLJwL4YNNWQjB9rGnLoSrosNvfd8IE9SiL+yU7tsnnhhFNBynVOX1vfhE
-         WPkmk+ieIpfaadkQQy1//gTCcLzbir13c0MpETeLJreji5JsjGXfcmjCqzp5owDsJVN7
-         Ph1f36VAY+x/zjl+GAr17KDT3P3pU/lZQ0FmZtw4gVNz8ykEY5KrSth2bkNTn1FNGyJW
-         du8qUoeLScWBN+j+OnrzaNYA46PAXUhu2W8x4HkhfzBpor3e0qwiyFUm9YoeN5jqpPeU
-         o8Rw==
-X-Gm-Message-State: AOAM532fnkt7wSCl06dFWEaaPG/5RCD8EQ1jjvHxgdSrvj46z8f0bRNb
-        6K4p6/YvOaHA4FVaGUXEaefxAD9tweaOHme9YfXqMA==
-X-Google-Smtp-Source: ABdhPJywArf49Dw2UNrWxqMejJ7TLW9Hh1LFYNUhrgeX9EXHvoP0U5m2M1Yqidzc0d71+5BkmvBWTHMOVV1QUXgXhi8=
-X-Received: by 2002:a05:6512:20ca:: with SMTP id u10mr22309044lfr.71.1642531744269;
- Tue, 18 Jan 2022 10:49:04 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=osZDE2qGikhWPKRozLWA0fiHv6mtb/zkWnvdgeIXyQ0=;
+        b=hW5nWYkrIOeTCFEuTfN+IpmMt0Y3fqZFXrrpKODwm3L4FlXfkKgwNg87YNY6ksa1mK
+         kfBCh6CpKBKYhFZKgnUi0WeiVoHdb03LD0NM6+lUlgGsoi8yif4hwKVoyqeZvPj6uLlo
+         e4dGESfxVMiDqTFBqMtUg1wkgs+wnLQCAw1WxABBjbFLQg5DJEUhtrgnOwjftEOzWqz8
+         +6+NWrtfrWAuTJeg51yd3bYRoAsQthplbzaCo21G+/cCm5tXEmIPS4TBQHXhrPCNhLx7
+         EyTVZ2PEHknrPUDyt7kWNg64LDcDmGoQBFnLz4ZzoCdtTq0CpVFJIs6Ha3B2fYZwcwOl
+         X2dA==
+X-Gm-Message-State: AOAM531cGapXli2stgBHcwQVOWckNj8w2Y+QeA45+xu6Y4qO8TyEASRO
+        XdHLHs+3aJ7kg3CYohCunln5jZbKST6eM3+QLjocb4S+LshHUo9jLduOrMuifggXnqV5rSMBbj0
+        R0QOmDXwyKPWJ28PxZ249lzXEJVKulxvjjTY58lbnVA==
+X-Received: by 2002:a17:907:a41e:: with SMTP id sg30mr20960070ejc.249.1642531729185;
+        Tue, 18 Jan 2022 10:48:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxpN3EF5AfOUem/IDvegEXyXvqnsF247GmVHd467UwQ9IoE4dMFmiP2V+P6uDursbIxrwr+/w==
+X-Received: by 2002:a17:907:a41e:: with SMTP id sg30mr20960052ejc.249.1642531729018;
+        Tue, 18 Jan 2022 10:48:49 -0800 (PST)
+Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id ga7sm5590389ejc.50.2022.01.18.10.48.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 10:48:48 -0800 (PST)
+Message-ID: <a1ca1ad2-5e24-0cd4-cbf2-bdf867cccbd7@canonical.com>
+Date:   Tue, 18 Jan 2022 19:48:47 +0100
 MIME-Version: 1.0
-References: <20220115121447.641524-1-andrej.skvortzov@gmail.com>
-In-Reply-To: <20220115121447.641524-1-andrej.skvortzov@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 18 Jan 2022 19:48:28 +0100
-Message-ID: <CAPDyKFr_9kfAns2p6fsUck93s3peyrHvCtv5M9E3fnxLmHbRqQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: Wait for command setting 'Power Off
- Notification' bit to complete
-To:     Andrey Skvortsov <andrej.skvortzov@gmail.com>
-Cc:     Arnaud Ferraris <arnaud.ferraris@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Huijin Park <huijin.park@samsung.com>,
-        =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>,
-        Yue Hu <huyue2@yulong.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 12/16] pinctrl: samsung: add FSD SoC specific data
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, Ajay Kumar <ajaykumar.rs@samsung.com>
+References: <20220118144851.69537-1-alim.akhtar@samsung.com>
+ <CGME20220118150100epcas5p3b7cf28e13fd177336dc9b06875d94f43@epcas5p3.samsung.com>
+ <20220118144851.69537-13-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220118144851.69537-13-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Jan 2022 at 13:15, Andrey Skvortsov
-<andrej.skvortzov@gmail.com> wrote:
->
-> SD card is allowed to signal busy on DAT0 up to 1s after the
-> CMD49. According to SD spec (version 6.0 section 5.8.1.3) first host
-> waits until busy of CMD49 is released and only then polls Power
-> Management Status register up to 1s until the card indicates ready to
-> power off.
->
-> Without waiting for busy before polling status register sometimes card
-> becomes unresponsive and system fails to suspend:
->
->   [  205.907459] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
->   [  206.421274] sunxi-mmc 1c0f000.mmc: data error, sending stop command
->   [  206.421321] sunxi-mmc 1c0f000.mmc: send stop command failed
->   [  206.421347] mmc0: error -110 reading status reg of PM func
->   [  206.421366] PM: dpm_run_callback(): mmc_bus_suspend+0x0/0x74 returns -110
->   [  206.421402] mmcblk mmc0:aaaa: PM: failed to suspend async: error -110
->   [  206.437064] PM: Some devices failed to suspend, or early wake event detected
+On 18/01/2022 15:48, Alim Akhtar wrote:
+> Adds Tesla FSD SoC specific data to enable pinctrl.
+> FSD SoC has similar pinctrl controller as found in the most
+> samsung/exynos SoCs.
 
-Thanks for your patch!
+s/samsung/Samsung/
+s/exynos/Exynos/
 
-I recall I was hesitating on adding another busy completion check for
-this, but thought polling the status register for the power management
-function should be sufficient.
-
->
-> Tested with Sandisk Extreme PRO A2 64GB on Allwinner A64 system.
-
-I will give this patch a try too, to make sure it still works on my
-side. Assuming that works fine, I will queue this up for fixes and by
-adding a fixes/stable tag.
-
->
-> Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
-
-Kind regards
-Uffe
-
+> 
+> Cc: linux-fsd@tesla.com
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  drivers/mmc/core/sd.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
-> index e223275bbad1..842b886bdd4e 100644
-> --- a/drivers/mmc/core/sd.c
-> +++ b/drivers/mmc/core/sd.c
-> @@ -66,7 +66,7 @@ static const unsigned int sd_au_size[] = {
->                 __res & __mask;                                         \
->         })
->
-> -#define SD_POWEROFF_NOTIFY_TIMEOUT_MS 2000
-> +#define SD_POWEROFF_NOTIFY_TIMEOUT_MS 1000
->  #define SD_WRITE_EXTR_SINGLE_TIMEOUT_MS 1000
->
->  struct sd_busy_data {
-> @@ -1663,6 +1663,13 @@ static int sd_poweroff_notify(struct mmc_card *card)
->                 goto out;
->         }
->
-> +       /* Find out when the command is completed. */
-> +       err = mmc_poll_for_busy(card, SD_POWEROFF_NOTIFY_TIMEOUT_MS, false,
-> +                               MMC_BUSY_EXTR_SINGLE);
-> +
-> +       if (err)
-> +               goto out;
-> +
->         cb_data.card = card;
->         cb_data.reg_buf = reg_buf;
->         err = __mmc_poll_for_busy(card->host, SD_POWEROFF_NOTIFY_TIMEOUT_MS,
-> --
-> 2.34.1
->
+>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 71 +++++++++++++++++++
+>  drivers/pinctrl/samsung/pinctrl-samsung.c     |  2 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.h     |  1 +
+>  3 files changed, 74 insertions(+)
+> 
+
+Looks good to me. I'll take it via Samsung pinctrl tree after the merge
+window.
+
+Best regards,
+Krzysztof

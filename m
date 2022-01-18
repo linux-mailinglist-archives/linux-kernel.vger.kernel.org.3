@@ -2,120 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AC949276F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45905492773
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242959AbiARNsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 08:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242543AbiARNs2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:48:28 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B4BC06161C;
-        Tue, 18 Jan 2022 05:48:27 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id br17so70910855lfb.6;
-        Tue, 18 Jan 2022 05:48:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=17MkQ+D7lcIHENLUZkNE+Wb1M6GLIW0KLmLfLfpyKuY=;
-        b=mvTY0w/pN5vJRbVPnoOMSXYgEs0lE5GlWlKV8Luv12ObuBtRxvt7RXJeD2Z0aNH3ce
-         PPMNmQnjVcQOy6g/N73ELDWzPO5QURYj60f7BWVvl2JFCrM8hDCL+Ou6UqO4dWJASTUE
-         p85+YBd1DD4XiFG9c5igQlX+SSZ84TaUlM8j3MmOtnbCR9w97IzXpN0PdmXOAVK/gJoL
-         zMTZ4Ev4EBM5S9UF3Hcub3rkfkbGCeruG6b3ZVGf1C0ZgonWKEWOweucqUJ3XJ7ILIMM
-         iuW8AwkGSe5KaKLAHljj1SOLuHXp8YxWfy0G2Edb0RGSiya/37yP/b5x0O9rPqBNAzXr
-         kcsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=17MkQ+D7lcIHENLUZkNE+Wb1M6GLIW0KLmLfLfpyKuY=;
-        b=C69E5gk22bWcOcu7SHgSG1kbiNeKsaLUDpvqULxcpjrKX2SO7yPZS3inaMw1PHHxNo
-         i29llskcmsY69uM4SPrX5Eokn6nG2bd2El9ftc6pb06UUssgx3Y9MbKWG9Dz3deyTzpd
-         0tuvUeoO7eF4PkyT3uqRbF+pyU6kG8izgOFWSOmrErCLzYqjuVrc0nUaNPQSyIB6bgeb
-         VQP8qhOswOfnRyLtSUnYh7kmDMwqdoHIWDjjLsPOVJvVotCKkzyZnLdcK+bBGPdeRbH+
-         5HWq16GlyC91ptFGuZLW97bk6umuwwMCDTNIhaEMRYV2MavGBZJaLVAkFRQ194EXfMt4
-         ihYw==
-X-Gm-Message-State: AOAM532SCUlKmsfxYNHpIxl7lhuGrI3xA9jxTQamRNqZ1glnx6OO5KeG
-        OIgxo3R3+OOSQmmRY8tOPzE=
-X-Google-Smtp-Source: ABdhPJy5tJQ9AnqnDnEzUgBVyJTQX64dfrMfnDFOnHwhm/zxWsZZI0QlLSJNsTEqxIim+EyvlBxJ6g==
-X-Received: by 2002:a05:651c:171c:: with SMTP id be28mr20262368ljb.183.1642513705172;
-        Tue, 18 Jan 2022 05:48:25 -0800 (PST)
-Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
-        by smtp.googlemail.com with ESMTPSA id t13sm1625887lji.57.2022.01.18.05.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 05:48:24 -0800 (PST)
-Message-ID: <683a71b1-049a-bddf-280d-5d5141b59686@gmail.com>
-Date:   Tue, 18 Jan 2022 16:48:23 +0300
+        id S242967AbiARNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 08:49:43 -0500
+Received: from foss.arm.com ([217.140.110.172]:57264 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239731AbiARNtm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 08:49:42 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EAE11FB;
+        Tue, 18 Jan 2022 05:49:42 -0800 (PST)
+Received: from [10.57.67.190] (unknown [10.57.67.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E25EB3F766;
+        Tue, 18 Jan 2022 05:49:40 -0800 (PST)
+Message-ID: <9913d026-fddd-c188-0873-0f7a66fb2c3c@arm.com>
+Date:   Tue, 18 Jan 2022 13:49:36 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v16 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1641830718-23650-1-git-send-email-akhilrajeev@nvidia.com>
- <1641830718-23650-3-git-send-email-akhilrajeev@nvidia.com>
- <16c73e83-b990-7d8e-ddfd-7cbbe7e407ea@gmail.com>
- <DM5PR12MB1850A5F5ABA9CD5D04C37086C0579@DM5PR12MB1850.namprd12.prod.outlook.com>
- <1db14c3d-6a96-96dd-be76-b81b3a48a2b1@gmail.com>
- <DM5PR12MB1850FF1DC4DC1714E31AADB5C0589@DM5PR12MB1850.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <DM5PR12MB1850FF1DC4DC1714E31AADB5C0589@DM5PR12MB1850.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] iommu: Fix potential use-after-free during probe
+Content-Language: en-GB
+To:     Vijayanand Jitta <quic_vjitta@quicinc.com>, joro@8bytes.org,
+        will@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     vjitta@codeaurora.org, kernel-team@android.com
+References: <1641993184-1232-1-git-send-email-quic_vjitta@quicinc.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1641993184-1232-1-git-send-email-quic_vjitta@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-18.01.2022 08:36, Akhil R пишет:
->> 17.01.2022 10:02, Akhil R пишет:
->>>> 10.01.2022 19:05, Akhil R пишет:
->>>>> +static int tegra_dma_terminate_all(struct dma_chan *dc)
->>>>> +{
->>>>> +     struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
->>>>> +     unsigned long flags;
->>>>> +     LIST_HEAD(head);
->>>>> +     int err;
->>>>> +
->>>>> +     if (tdc->dma_desc) {
->>>>
->>>> Needs locking protection against racing with the interrupt handler.
->>> tegra_dma_stop_client() waits for the in-flight transfer
->>> to complete and prevents any additional transfer to start.
->>> Wouldn't it manage the race? Do you see any potential issue there?
->>
->> You should consider interrupt handler like a process running in a
->> parallel thread. The interrupt handler sets tdc->dma_desc to NULL, hence
->> you'll get NULL dereference in tegra_dma_stop_client().
+On 2022-01-12 13:13, Vijayanand Jitta wrote:
+> Kasan has reported the following use after free on dev->iommu.
+> when a device probe fails and it is in process of freeing dev->iommu
+> in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+> and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+> causing use after free.
 > 
-> Is it better if I remove the below part from tegra_dma_stop_client() so
-> that dma_desc is not accessed at all?
+> BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+> Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
 > 
-> +	wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
-> +	tdc->dma_desc->bytes_transferred +=
-> +			tdc->dma_desc->bytes_requested - (wcount * 4);
+> Workqueue: events_unbound deferred_probe_work_func
+> Call trace:
+>   dump_backtrace+0x0/0x33c
+>   show_stack+0x18/0x24
+>   dump_stack_lvl+0x16c/0x1e0
+>   print_address_description+0x84/0x39c
+>   __kasan_report+0x184/0x308
+>   kasan_report+0x50/0x78
+>   __asan_load8+0xc0/0xc4
+>   of_iommu_configure+0xb4/0x4a4
+>   of_dma_configure_id+0x2fc/0x4d4
+>   platform_dma_configure+0x40/0x5c
+>   really_probe+0x1b4/0xb74
+>   driver_probe_device+0x11c/0x228
+>   __device_attach_driver+0x14c/0x304
+>   bus_for_each_drv+0x124/0x1b0
+>   __device_attach+0x25c/0x334
+>   device_initial_probe+0x24/0x34
+>   bus_probe_device+0x78/0x134
+>   deferred_probe_work_func+0x130/0x1a8
+>   process_one_work+0x4c8/0x970
+>   worker_thread+0x5c8/0xaec
+>   kthread+0x1f8/0x220
+>   ret_from_fork+0x10/0x18
 > 
-> Because I don't see a point in updating the value there. dma_desc is set
-> to NULL in the next step in terminate_all() anyway.
+> Allocated by task 1:
+>   ____kasan_kmalloc+0xd4/0x114
+>   __kasan_kmalloc+0x10/0x1c
+>   kmem_cache_alloc_trace+0xe4/0x3d4
+>   __iommu_probe_device+0x90/0x394
+>   probe_iommu_group+0x70/0x9c
+>   bus_for_each_dev+0x11c/0x19c
+>   bus_iommu_probe+0xb8/0x7d4
+>   bus_set_iommu+0xcc/0x13c
+>   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+>   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+>   platform_drv_probe+0xe4/0x13c
+>   really_probe+0x2c8/0xb74
+>   driver_probe_device+0x11c/0x228
+>   device_driver_attach+0xf0/0x16c
+>   __driver_attach+0x80/0x320
+>   bus_for_each_dev+0x11c/0x19c
+>   driver_attach+0x38/0x48
+>   bus_add_driver+0x1dc/0x3a4
+>   driver_register+0x18c/0x244
+>   __platform_driver_register+0x88/0x9c
+>   init_module+0x64/0xff4 [arm_smmu]
+>   do_one_initcall+0x17c/0x2f0
+>   do_init_module+0xe8/0x378
+>   load_module+0x3f80/0x4a40
+>   __se_sys_finit_module+0x1a0/0x1e4
+>   __arm64_sys_finit_module+0x44/0x58
+>   el0_svc_common+0x100/0x264
+>   do_el0_svc+0x38/0xa4
+>   el0_svc+0x20/0x30
+>   el0_sync_handler+0x68/0xac
+>   el0_sync+0x160/0x180
+> 
+> Freed by task 1:
+>   kasan_set_track+0x4c/0x84
+>   kasan_set_free_info+0x28/0x4c
+>   ____kasan_slab_free+0x120/0x15c
+>   __kasan_slab_free+0x18/0x28
+>   slab_free_freelist_hook+0x204/0x2fc
+>   kfree+0xfc/0x3a4
+>   __iommu_probe_device+0x284/0x394
+>   probe_iommu_group+0x70/0x9c
+>   bus_for_each_dev+0x11c/0x19c
+>   bus_iommu_probe+0xb8/0x7d4
+>   bus_set_iommu+0xcc/0x13c
+>   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+>   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+>   platform_drv_probe+0xe4/0x13c
+>   really_probe+0x2c8/0xb74
+>   driver_probe_device+0x11c/0x228
+>   device_driver_attach+0xf0/0x16c
+>   __driver_attach+0x80/0x320
+>   bus_for_each_dev+0x11c/0x19c
+>   driver_attach+0x38/0x48
+>   bus_add_driver+0x1dc/0x3a4
+>   driver_register+0x18c/0x244
+>   __platform_driver_register+0x88/0x9c
+>   init_module+0x64/0xff4 [arm_smmu]
+>   do_one_initcall+0x17c/0x2f0
+>   do_init_module+0xe8/0x378
+>   load_module+0x3f80/0x4a40
+>   __se_sys_finit_module+0x1a0/0x1e4
+>   __arm64_sys_finit_module+0x44/0x58
+>   el0_svc_common+0x100/0x264
+>   do_el0_svc+0x38/0xa4
+>   el0_svc+0x20/0x30
+>   el0_sync_handler+0x68/0xac
+>   el0_sync+0x160/0x180
+> 
+> Fix this by taking device_lock during probe_iommu_group.
+> 
+> Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
+> ---
+>   drivers/iommu/iommu.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index dd7863e..261792d 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -1617,7 +1617,7 @@ static int probe_iommu_group(struct device *dev, void *data)
+>   {
+>   	struct list_head *group_list = data;
+>   	struct iommu_group *group;
+> -	int ret;
+> +	int ret = 0;
+>   
+>   	/* Device is probed already if in a group */
+>   	group = iommu_group_get(dev);
+> @@ -1626,9 +1626,13 @@ static int probe_iommu_group(struct device *dev, void *data)
+>   		return 0;
+>   	}
+>   
+> -	ret = __iommu_probe_device(dev, group_list);
+> -	if (ret == -ENODEV)
+> -		ret = 0;
+> +	ret = device_trylock(dev);
+> +	if (ret) {
 
-That isn't going help you much because you also can't release DMA
-descriptor while interrupt handler still may be running and using that
-descriptor.
+This doesn't seem right - we can't have a non-deterministic situation 
+where __iommu_probe_device() may or may not be called depending on what 
+anyone else might be doing with the device at the same time.
+
+I don't fully understand how __iommu_probe_device() and 
+of_iommu_configure() can be running for the same device at the same 
+time, but if that's not a race which can be fixed in its own right, then 
+I think adding a refcount to dev_iommu would be a more sensible way to 
+mitigate it.
+
+Robin.
+
+> +		ret = __iommu_probe_device(dev, group_list);
+> +		if (ret == -ENODEV)
+> +			ret = 0;
+> +		device_unlock(dev);
+> +	}
+>   
+>   	return ret;
+>   }

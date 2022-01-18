@@ -2,168 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8374921A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD8A4921AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344983AbiARIvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:51:39 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57264 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiARIvi (ORCPT
+        id S1345004AbiARIxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:53:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44280 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229762AbiARIxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:51:38 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 05EF81F3B5;
-        Tue, 18 Jan 2022 08:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642495897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ktSc+uVAaUOUFDmID1uUn+N2h+FMdLGzH0w7pkGhy34=;
-        b=re+LB1EFXSfuPGtUCKPTDJ9txguBHwN+K0G2zo8K2iyxTUMfADBTmdY7588SE7k4XVgNGP
-        LGeU2/gg0h/xWwjX0Mzb2cyF69i2g/0vHUbEDAQAruIfsxZCTSv2VCFvn12P5R8TKPro6r
-        8rHGyRd3PfSzhd8CYmRolKLKMTZY2Qo=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8A8FEA3B88;
-        Tue, 18 Jan 2022 08:51:36 +0000 (UTC)
-Date:   Tue, 18 Jan 2022 09:51:36 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        jsavitz@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@collabora.com
-Subject: Re: [PATCH v3] mm/oom: do not oom reap task with an unresolved
- robust futex
-Message-ID: <YeZ/mL808DpA8mdG@dhcp22.suse.cz>
-References: <20220114180135.83308-1-npache@redhat.com>
- <YeUuWcNArnDhOjFY@dhcp22.suse.cz>
- <ad639326-bea8-9bfb-23e3-4e2b216d9645@redhat.com>
- <43a6c470-9fc2-6195-9a25-5321d17540e5@redhat.com>
+        Tue, 18 Jan 2022 03:53:32 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20I7VAsf006436;
+        Tue, 18 Jan 2022 08:53:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=f8n/nm79ebuzyK9dbiGbeICF1KGhYlIIhAz7ACIrlNM=;
+ b=hrwglocs4xaOeoIzabT8EsQkulLgGCtlQxEkEGyNkOWeJlV//czH27QSVrpXTE0NJ3Hk
+ YUogtNXpKOZKAI7LghxR8dRr35tFkJ1h0A4iuiYGKlDGHzfOlF1gh6kTZfjsvBzjRoyT
+ wIS4O5VnT+V4X7QtP3sBfArTfJtLGcBdEvX2l1YERqMhxnuuoF60Uc9nOYpPJ9szMFvO
+ JtOBi4+KX9EdIp9X0fOAP+0tETJ5/coM6u0p1AgPpT7L+ZvF1uvu3MWF/BKdkpbxgV3V
+ g1+KvIaD3gZe4Yaih+/xAEMusyNixpVLsNKmrGrokFVM9oT6mbQwmjdIGYEAxWfHv+cZ AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnfgy4wep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 08:53:30 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20I8kPKQ010600;
+        Tue, 18 Jan 2022 08:53:30 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnfgy4we6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 08:53:30 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20I8fDf9020407;
+        Tue, 18 Jan 2022 08:53:27 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3dknwa93n5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 08:53:27 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20I8rOdE19136964
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 08:53:24 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 727F34C040;
+        Tue, 18 Jan 2022 08:53:24 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF0DF4C058;
+        Tue, 18 Jan 2022 08:53:23 +0000 (GMT)
+Received: from [9.171.19.84] (unknown [9.171.19.84])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 08:53:23 +0000 (GMT)
+Message-ID: <d39d9a13-e797-b7d3-6240-db3957b6ff53@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 09:53:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] KVM: avoid warning on s390 in mark_page_dirty
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, dwmw2@infradead.org
+Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, seanjc@google.com,
+        Cornelia Huck <cohuck@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Thomas Huth <thuth@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+References: <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
+ <20220113122924.740496-1-borntraeger@linux.ibm.com>
+ <eda019b1-8e1d-5d2b-4be4-2725e5814b23@linux.ibm.com>
+ <14380a1b-669f-8f0f-139b-7c89fabd4276@redhat.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <14380a1b-669f-8f0f-139b-7c89fabd4276@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <43a6c470-9fc2-6195-9a25-5321d17540e5@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sn5TIcq1oEcEU3i10RvD_Li7TgQykj0l
+X-Proofpoint-ORIG-GUID: ZvseGFlLZjZRliYEn4S9CrhkUBpqPkRv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_01,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ bulkscore=0 phishscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180053
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 17-01-22 17:56:28, Nico Pache wrote:
-> On 1/17/22 11:05, Waiman Long wrote:
-> > On 1/17/22 03:52, Michal Hocko wrote:
-[...]
-> >>> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> >>> index 1ddabefcfb5a..3cdaac9c7de5 100644
-> >>> --- a/mm/oom_kill.c
-> >>> +++ b/mm/oom_kill.c
-> >>> @@ -667,6 +667,21 @@ static void wake_oom_reaper(struct task_struct *tsk)
-> >>>       if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
-> >>>           return;
-> >>>   +#ifdef CONFIG_FUTEX
-> >>> +    /*
-> >>> +     * If the ooming task's SIGKILL has not finished handling the
-> >>> +     * robust futex it is not correct to reap the mm concurrently.
-> >>> +     * Do not wake the oom reaper when the task still contains a
-> >>> +     * robust list.
-> >>> +     */
-> >>> +    if (tsk->robust_list)
-> >>> +        return;
-> >>> +#ifdef CONFIG_COMPAT
-> >>> +    if (tsk->compat_robust_list)
-> >>> +        return;
-> >>> +#endif
-> >>> +#endif
-> >> If this turns out to be really needed, which I do not really see at the
-> >> moment, then this is not the right way to handle this situation. The oom
-> >> victim could get stuck and the oom killer wouldn't be able to move
-> >> forward. If anything the victim would need to get MMF_OOM_SKIP set.
+Am 18.01.22 um 09:44 schrieb Paolo Bonzini:
+> On 1/18/22 09:37, Christian Borntraeger wrote:
+>> Am 13.01.22 um 13:29 schrieb Christian Borntraeger:
+>>> Avoid warnings on s390 like
+>>> [ 1801.980931] CPU: 12 PID: 117600 Comm: kworker/12:0 Tainted: GÂ Â Â Â Â Â Â Â Â Â Â  E 5.17.0-20220113.rc0.git0.32ce2abb03cf.300.fc35.s390x+next #1
+>>> [ 1801.980938] Workqueue: events irqfd_inject [kvm]
+>>> [...]
+>>> [ 1801.981057] Call Trace:
+>>> [ 1801.981060]Â  [<000003ff805f0f5c>] mark_page_dirty_in_slot+0xa4/0xb0 [kvm]
+>>> [ 1801.981083]Â  [<000003ff8060e9fe>] adapter_indicators_set+0xde/0x268 [kvm]
+>>> [ 1801.981104]Â  [<000003ff80613c24>] set_adapter_int+0x64/0xd8 [kvm]
+>>> [ 1801.981124]Â  [<000003ff805fb9aa>] kvm_set_irq+0xc2/0x130 [kvm]
+>>> [ 1801.981144]Â  [<000003ff805f8d86>] irqfd_inject+0x76/0xa0 [kvm]
+>>> [ 1801.981164]Â  [<0000000175e56906>] process_one_work+0x1fe/0x470
+>>> [ 1801.981173]Â  [<0000000175e570a4>] worker_thread+0x64/0x498
+>>> [ 1801.981176]Â  [<0000000175e5ef2c>] kthread+0x10c/0x110
+>>> [ 1801.981180]Â  [<0000000175de73c8>] __ret_from_fork+0x40/0x58
+>>> [ 1801.981185]Â  [<000000017698440a>] ret_from_fork+0xa/0x40
+>>>
+>>> when writing to a guest from an irqfd worker as long as we do not have
+>>> the dirty ring.
+>>>
+>>> Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+>>> ---
+>>> Â  virt/kvm/kvm_main.c | 2 ++
+>>> Â  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>>> index 504158f0e131..1a682d3e106d 100644
+>>> --- a/virt/kvm/kvm_main.c
+>>> +++ b/virt/kvm/kvm_main.c
+>>> @@ -3163,8 +3163,10 @@ void mark_page_dirty_in_slot(struct kvm *kvm,
+>>> Â  {
+>>> Â Â Â Â Â  struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
+>>> +#ifdef CONFIG_HAVE_KVM_DIRTY_RING
+>>> Â Â Â Â Â  if (WARN_ON_ONCE(!vcpu) || WARN_ON_ONCE(vcpu->kvm != kvm))
+>>> Â Â Â Â Â Â Â Â Â  return;
+>>> +#endif
+>>> Â Â Â Â Â  if (memslot && kvm_slot_dirty_track_enabled(memslot)) {
+>>> Â Â Â Â Â Â Â Â Â  unsigned long rel_gfn = gfn - memslot->base_gfn;
+>>
+>> Paolo, are you going to pick this for next for the time being?
+>>
 > 
-> I will try this, but I don't immediately see any difference between this return
-> case and setting the bit, passing the oom_reaper_list, then skipping it based on
-> the flag. Do you mind explaining how this could lead to the oom killer getting
-> stuck?
+> Yep, done now.
+> 
+> Paolo
 
-The primary purpose of the oom_reaper is to guarantee a forward
-progress. If a task gets stuck in the kernel - e.g. on locks then it
-won't bail out and won't handle signals (i.e. SIGKILL from the
-userspace). The oom killer prevents new oom victims selection in a
-presence of an existing oom victim (see oom_evaluate_task). That means
-that we not only send a SIGKILL to the victim, we also wake up the oom
-reaper which then asynchronously tears down the private memory of the
-task (thus release at least some of its memory) and once it is done it
-will set MMF_OOM_SKIP flag which will tell the oom killer
-(oom_evaluate_task) that this victim is no longer interesting and a new
-victim can be selected.
-
-Makes sense?
-
-Part of the async tear down is also MMF_UNSTABLE handling (see
-__oom_reap_task_mm) which tells #PF handling code
-(check_stable_address_space) that the underlying memory could have been
-tempered with and thus it should return SIGBUS. The underlying
-assumption is that the process (and all tasks which share its mm) has
-been killed and it will never return to the userspace so the de-facto
-memory corruption doesn't matter.
-
-One thing that is still unclear to me is why this leads to any locked up
-tasks. Looking at exit_robust_list I can see that it is accessing the
-userspace memory but this should return EFAULT in this situation. My
-assumption (which might be really wrong) is that futex shared among
-processes which are not sharing mm nor signal handling will be sitting
-in a shared memory. 
-
-Now to the actual fix. I do not think we want to hide the task from the
-oom reaper as you are suggesting. Futexes are very likely to be used for
-many processes and that would make the whole async scheme useless. We
-need something like the below.
-
-futex_exit_release is not directly usable as it implicitly depends
-on memory allocation (#PF) and that is not acceptable. So instead we
-need something futex_exit_try_release or similar which would fail the
-operation in case get_user (pagefault_disable) needs to really handle
-the #PF or if the futex_exit_mutex is locked. In other words this would
-have to be a completely non-blocking operation. The oom reaper would
-then bail out.
-
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index ef5860fc7d22..57660d3d1b79 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -613,6 +613,9 @@ static void oom_reap_task(struct task_struct *tsk)
- 	int attempts = 0;
- 	struct mm_struct *mm = tsk->signal->oom_mm;
- 
-+	if (futex_exit_try_release(tsk))
-+		goto fail;
-+
- 	/* Retry the mmap_read_trylock(mm) a few times */
- 	while (attempts++ < MAX_OOM_REAP_RETRIES && !oom_reap_task_mm(tsk, mm))
- 		schedule_timeout_idle(HZ/10);
-@@ -621,6 +624,7 @@ static void oom_reap_task(struct task_struct *tsk)
- 	    test_bit(MMF_OOM_SKIP, &mm->flags))
- 		goto done;
- 
-+fail:
- 	pr_info("oom_reaper: unable to reap pid:%d (%s)\n",
- 		task_pid_nr(tsk), tsk->comm);
- 	sched_show_task(tsk);
-@@ -1184,6 +1188,11 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
- 	if (!reap)
- 		goto drop_mm;
- 
-+	if (futex_exit_try_release(tsk)) {
-+		ret = -EAGAIN;
-+		goto drop_mm;
-+	}
-+	
- 	if (mmap_read_lock_killable(mm)) {
- 		ret = -EINTR;
- 		goto drop_mm;
--- 
-Michal Hocko
-SUSE Labs
+Thanks. I just realized that Davids patch meanwhile landed in Linus tree. So better
+take this via master and not next.
+Maybe also add
+Fixes: 2efd61a608b0 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
+in case the patch is picked for stable

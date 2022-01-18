@@ -2,117 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7BD4927F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ED34927F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244762AbiAROCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:02:53 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:43026 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243400AbiAROCw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:02:52 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AA99D1EC0441;
-        Tue, 18 Jan 2022 15:02:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642514566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4JA023Sy7F48GbJHjrrwIoXYzwKYqGQtCBAMqfyQANo=;
-        b=QVgvfx98+X2IoAfXGC2QEREdXtSvoWS83vhZnsrxrNqdtbkWGX89kMM+eosJlcDhEsUXdI
-        ovazPq/TSnRzTvdcDj+JT/tDuSwcPDIefvr7iyfUHTVM1Q3uisxxkT09LrHgwbVK5RuAnd
-        BCpcpQC1lExp3P6caPQtNf+qU5CDYMU=
-Date:   Tue, 18 Jan 2022 15:02:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
- CPUID table in #VC handlers
-Message-ID: <YebIiN6Ftq2aPtyF@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-30-brijesh.singh@amd.com>
- <YeAmFePcPjvMoWCP@zn.tnic>
- <20220113163913.phpu4klrmrnedgic@amd.com>
- <YeGhKll2fTcTr2wS@zn.tnic>
- <20220118043521.exgma53qrzrbalpd@amd.com>
+        id S242703AbiARODm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:03:42 -0500
+Received: from mail-co1nam11on2078.outbound.protection.outlook.com ([40.107.220.78]:11904
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241950AbiARODj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 09:03:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HQVP9iULjWTngBpPvBo7EWiKjD6PjgVNMhymCKoQVi2DXgFv7UEKrWS/p6thPRQ2hkrFTn5HytrZJTlddc9rNKOjQt3KzuC+1hqjufMI3BemxfeU75ueZhrRqJP8qqLw7A33CI5pWTrHx/I0DnYF7/SyhKqvr8EGrvrY7RTdgtxC43xSM9Bo1OLyS9QburYoUVh5u4xwlHe7sCfuKHXoggasP6c6r8mVlTdFi8vXB1N02kWwxjZ+RcCVue7rKCCEPzIRukx3Fao01lmVzdoPXFae2jaW1SdCG8+QUdkAyZg5fSrFRNWziufOZGtVwIZs/C4yvxUGQaRwEywmJhLpww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xz9AgvcaM5SBrDQLko0ruqK1XtruMt6pzV3iysBNO8A=;
+ b=H2JWVRKEHPztIC2pxwe8FI+gmw9VrZzzyhhb6MpdZD/eM0/kOQ6KIRYHMrQhaSlJM15u6oTsgQD9eX3bltpsDp+/P9WHZMAFZXrp96QiUztxPi6QtLnGHR0YUmydbYxgRSQfRudF1DYIuagntIVzicdYcvMaWgLlw6FnXrT6Yc+oPuraiZqEOpQmjlrna0BnwNSgPXyOCDnrxZmcf5XE/mkHr0nRG32e4/ROW0wZy0hTY7e79U3vH8KH9YzNU8qxoeG7DhIY1OEzK5qAg/q1F4J790NHzWB3owAcLmuHrITVpKQZRSOm7Bp6IvPvxZ5083j83teh3Ul5oI3JTcYGqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xz9AgvcaM5SBrDQLko0ruqK1XtruMt6pzV3iysBNO8A=;
+ b=RM/jFnrb9nhT9L3R2xpk2pcuN2BQzEPk/OzHLmO7XTEwK8cajrCRAGIW6PFo4tnwQz3hT2h7RW8krJdmO0eBK/0sL8mh+hQgs2wfhvUl83FnTO3loSQYgvP5Rl0GmQQr7qIODVR3yZF/g9DDEWwa1Pikfce3FKGZrB2PRIb9Poc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB4614.namprd12.prod.outlook.com (2603:10b6:a03:a6::22)
+ by CY4PR1201MB2516.namprd12.prod.outlook.com (2603:10b6:903:db::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 14:03:35 +0000
+Received: from BYAPR12MB4614.namprd12.prod.outlook.com
+ ([fe80::9c25:ce1d:a478:adda]) by BYAPR12MB4614.namprd12.prod.outlook.com
+ ([fe80::9c25:ce1d:a478:adda%6]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 14:03:35 +0000
+Message-ID: <0ba294a9-1428-98cf-93b6-f9a195924a8f@amd.com>
+Date:   Tue, 18 Jan 2022 19:33:14 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/amdgpu: Add missing pm_runtime_put_autosuspend
+Content-Language: en-US
+To:     Yongzhi Liu <lyz_cs@pku.edu.cn>, airlied@linux.ie, daniel@ffwll.ch,
+        nirmoy.das@amd.com, Jingwen.Chen2@amd.com, evan.quan@amd.com,
+        Jack.Zhang1@amd.com, kevin1.wang@amd.com, tom.stdenis@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <1642507272-17545-1-git-send-email-lyz_cs@pku.edu.cn>
+From:   "Lazar, Lijo" <lijo.lazar@amd.com>
+In-Reply-To: <1642507272-17545-1-git-send-email-lyz_cs@pku.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0003.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::14) To BYAPR12MB4614.namprd12.prod.outlook.com
+ (2603:10b6:a03:a6::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220118043521.exgma53qrzrbalpd@amd.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5b3a08c6-822e-4dd2-2266-08d9da8b5123
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB2516:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB2516B3CB6006A1DF6839559A97589@CY4PR1201MB2516.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fCcYxocFUS8ZCIB2Fh0o/+zaFaxxnFnH2YHVbOU2b0u1+WQOyhY9OcUGF8znW1iPKsBe34C/Lmg4YYq7UELhPSFdlH7qatecH+uT+Y36I/Jy6k2fro8oLYUBojGcNDcqllEPrGUj7ydlanLM4aPTMP6fr1w1r4Ukt4CD9vfWW/kcIAo8bs2vK7Q6CPZvKnKK6/d6Aw9Xq8mHKNr/PtF7oVqahkEnU6iWNDaodGhhjdvTG3KJ2fKzGoIjXHgLj4NfE/eahSTCqh7ZhrEmVMpArev4gPRB96Ty0ybm7CQfCbOCz14JVB+A8c7+heoXKxr3L6X7XdqAc2mJ4rb7Hy83qu+daKcEDjJ3AjTyAd3pGekJAsQ+qapJt9axGUT4QhpBzzpwcQs799V6tTKWNY3aeTYsmpj2qUEFkdsL5W8CYccQRxxCesqOyxTrpzom8e7zI2F+aeWooMb+eNYhapJKeZaHuK7unQ2KAX1NTa2i3ZeriAvR2K54pY1gzk/XqcU/pG/CQZsZA1juOFKxcJDeXkact2noYkf6aRo+Q/I6j/OOefxXaimXehPQevtkUzmjJpHcp7s25F73iXO8urtXMFXA4mCGL8KH0GQ8pbwCHJDEuNH/e2tJZ8NK6rZzsj1V0EALPzjDGIohAOCAUR5mIdT8aZ/QHgld64EBiL16o8Ul3wFkYxZA1y5PthufkUz/uTv3JOX4CJq3zWSCFPNPlp3jH4UYcNFJ7jIzmtH3DeRECgH6FzmivXncNGqYu3IZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4614.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(2906002)(31696002)(4326008)(2616005)(6512007)(6486002)(6666004)(186003)(8676002)(508600001)(8936002)(6636002)(5660300002)(38100700002)(31686004)(6506007)(86362001)(83380400001)(53546011)(66556008)(66946007)(66476007)(36756003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ajdOcEdmeFUxaTBwemlyaFpuUTQwZnZjTjE2bk82REtPOEk1cFNMWHd2SXZM?=
+ =?utf-8?B?MUgyb0pieFpudldtQ2x3RFYrUUc0LzdNdUZ3elZ6Znk0S1FsRFFDUjhQZjJx?=
+ =?utf-8?B?Y0tQUWVHQktySkp6azA1eHpTVXlwaUJ3QXgyUkRoWVUxQVNLSnh1VmYvVEtq?=
+ =?utf-8?B?a3ZGVGNlV0JhU0V3aWJTSkVGeGN6UmJDMVBYUTFoSmtxSzRkUGlNUWFPZXoz?=
+ =?utf-8?B?Z2hJTjdta1Zsd2ZCUlh0K25FeHppSE5Rc0RldEE3TThWMFFDelFqQnVnRm1Q?=
+ =?utf-8?B?eVFrWDhxSlJxVk1pMFhOU0JMSWM3eWtUd3Uwa3JBem1sOGpXWmhNMHljMkdm?=
+ =?utf-8?B?MXNhVjROS1BVaWIreEFBbVpPU3NXZW5XNHQrZTdZZlBvVjlDZVJyZnBpazZo?=
+ =?utf-8?B?RWZXalhUUmRQRjZaeG5jQWN0Ri8xeVVEaEl4ajkySFJocHMwdE5lWElZRDBx?=
+ =?utf-8?B?a3JSOUxzcUU3Q3lBMzR0R3J2T29FN1EyUkJ5OENYaW8yOHdUL0xieWJITU01?=
+ =?utf-8?B?NWlrdXpqSWlpaHFMRTh0VHRQcCtSTzJUZ29NTW5mWGRBdXFIdHVpVW5BVnla?=
+ =?utf-8?B?RGc1eTg2dFdNbncxSnV4SjhKOThObldMaW5KYm5wNThnSWwrWEpsRTE3OTNz?=
+ =?utf-8?B?L3RRL2NRZi9QZGVySFErOGxwTnhZdVk5bTVocHJqREJnL21NR201V3IyWHlD?=
+ =?utf-8?B?aDNCbDhOREl6bEJLYStpbUxMZWpGa1NDQjh1UmZIbzFPTzhZUktGblU1Wkh0?=
+ =?utf-8?B?MVducXJoa3FJZzh6TGo4VWJPSy92eXl2WHpPdzBaMU8vNytHT1B4OWNPL1hB?=
+ =?utf-8?B?NUlMQXVtNWFrSXRNU2Z5cW8rMHlIS2l4eGNZMG1MWXIvd0dJMnUxK0VhV2VP?=
+ =?utf-8?B?RWhMK2Z4M0FaYUVzZHdMUXBmQ01TTUd5TFUzY2p1M09MQ1cvODA0SHMwSE1v?=
+ =?utf-8?B?a3pHeUhxRFEzOXc4VTI2Q2RmeXI0dTREdTFaOU9IODZWbzI1ZHhSRTc1K2tF?=
+ =?utf-8?B?REhSZFJicXI3OXFtenk1RFREM1RSQ1A5KytlUmRZY2FzQ0g3M3EzL3hORkZJ?=
+ =?utf-8?B?ekRMbHNwakM5THRsYTRIYTdpaTh1ZXNuYlV0UHVtUjFhUm9KT0RxdEl6Tm8x?=
+ =?utf-8?B?djF3UGxPMElacWNyWG83V1JUeFlPM1VYdVFjNXdPbDh0MVFxdVRZMXVGSmtl?=
+ =?utf-8?B?WTUyNVRtbi9ZRzFMeE9aY3BWZTZnbzZqbCtlbUt6QWdIaUdvS2JtaTBJVDdP?=
+ =?utf-8?B?dXBpUTc3clNycU5BbVo0c1VDWVJVb2Y4N0ZIcUxXdHpmSk4ybTB2eGJ1a0pH?=
+ =?utf-8?B?TTgycTlrK2lnNW5vejRhY29BZXVoNXVtUElNUkFLVi9zYUdRS3luZlVHZ0hN?=
+ =?utf-8?B?VDVQWElyTEpUVUI3TWRyT21QeUFpa2tXNmw0K2czUUpWeGQrZGtLQmRqSkZQ?=
+ =?utf-8?B?TlZERHNHWnRIMjRpOGtoV3hCMkhRVnpldmZNY0YzckZjaHJJdFRMK3hQL3VR?=
+ =?utf-8?B?SktQNTg0ZTE1QkE3ZjdpdHR1UFJWMkUvdlpwcU9mQWxNU2JOb215cnl4MnpU?=
+ =?utf-8?B?RkR2NkM2Qi9XN0h2QkNYNlI5cDlqOFgyOGdSOGJYT3Y0WkNGT1V1aUhEWkNT?=
+ =?utf-8?B?YTlUL0NuUDc3THJjVXhJWVdYaUltMnBNOU80Q3ZJbk5sSFVDckdPbXdkNm9l?=
+ =?utf-8?B?RTVvRVdubk1DRTU1cHZpWHhoUUMvc0E0TlFUb0FMbkVUYm42VjZqWnh2Ly9y?=
+ =?utf-8?B?bHNESTEwZnlvVmRtNngwYmM0RDN6OUxad3h0dDB0Q1ZXNkUyaTlXL1RFSFZT?=
+ =?utf-8?B?eFFuT1dFODdIWGRidVdOQzNrR2JCRWZlL016T2JXZno0MTl0WmZyeGYzYmEy?=
+ =?utf-8?B?dHZjRmx5Vjl5aDVHSHlmaW9pNEU5b2ZmdWl4UVQyQVV1aUk2djJGT0hsMVlI?=
+ =?utf-8?B?SlNML01IZ0tLUUxvRUVIN3ZWUGJwdnFyZ2NKbjZDaDdsd3N6SlRnSDcvcDRj?=
+ =?utf-8?B?YjYvWnBVT3ZLdmxaM0N5aXVyQmp1dTFHMnMxYWtER3QwekROc0dWWGJFM1Jr?=
+ =?utf-8?B?d2VkWTZHQnlUdFZYSmRkV1R6MkYzaUNodUFaajJZQVpHMURBWGs3ME9tTVZJ?=
+ =?utf-8?Q?te+8=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3a08c6-822e-4dd2-2266-08d9da8b5123
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4614.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 14:03:35.0264
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ycEYnIBuNNnjpgWAajmkbs6mn50VPVYB81+SFTZToKG+gWwc8UQJXyt7KVJwFgoB
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2516
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 10:35:21PM -0600, Michael Roth wrote:
-> Unfortunately, in sev_enable(), between the point where snp_init() is
-> called, and sev_status is actually set, there are a number of cpuid
-> intructions which will make use of do_vc_no_ghcb() prior to sev_status
-> being set (and it needs to happen in that order to set sev_status
-> appropriately). After that point, snp_cpuid_active() would no longer be
-> necessary, but during that span some indicator is needed in case this
-> is just an SEV-ES guest trigger cpuid #VCs.
 
-You mean testing what snp_cpuid_info_create() set up is not enough?
 
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index 7bc7e297f88c..17cfe804bad3 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -523,7 +523,9 @@ static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
- static int snp_cpuid(u32 func, u32 subfunc, u32 *eax, u32 *ebx, u32 *ecx,
- 		     u32 *edx)
- {
--	if (!snp_cpuid_active())
-+	const struct snp_cpuid_info *c = snp_cpuid_info_get_ptr();
-+
-+	if (!c->count)
- 		return -EOPNOTSUPP;
- 
- 	if (!snp_cpuid_find_validated_func(func, subfunc, eax, ebx, ecx, edx)) {
+On 1/18/2022 5:31 PM, Yongzhi Liu wrote:
+> pm_runtime_get_sync() increments the runtime PM usage counter even
+> when it returns an error code, thus a matching decrement is needed
+> on the error handling path to keep the counter balanced.
+> 
+> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
 
----
+Thanks!
 
-Btw, all those
+Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
 
-        /* SEV-SNP CPUID table should be set up now. */
-        if (!snp_cpuid_active())
-                sev_es_terminate(1, GHCB_TERM_CPUID);
-
-after snp_cpuid_info_create() has returned are useless either. If that
-function returns, you know you're good to go wrt SNP.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> index 9aea1cc..4b950de 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> @@ -1120,8 +1120,10 @@ static ssize_t amdgpu_debugfs_gfxoff_read(struct file *f, char __user *buf,
+>   		return -EINVAL;
+>   
+>   	r = pm_runtime_get_sync(adev_to_drm(adev)->dev);
+> -	if (r < 0)
+> +	if (r < 0) {
+> +		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+>   		return r;
+> +	}
+>   
+>   	while (size) {
+>   		uint32_t value;
+> 

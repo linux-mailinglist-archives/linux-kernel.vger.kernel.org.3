@@ -2,378 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBFA493103
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3361493107
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350052AbiARWtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 17:49:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39742 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349833AbiARWti (ORCPT
+        id S1350094AbiARWwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 17:52:39 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:37270 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240919AbiARWwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 17:49:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83C2261460;
-        Tue, 18 Jan 2022 22:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE38C340E0;
-        Tue, 18 Jan 2022 22:49:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642546176;
-        bh=Ul8VHUyyB8eFMXh3v1AtQuhwOKVgkbwkrQyU3MHhhXY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=oTtWjDKVZwGMXfX8IhDrwWDLF5Wfh5K2dZy2FZumDko6bfhRuJmItEENfZn8bVd+L
-         BPzS04BLiEaH/WEVszS/R2zOgMNvtpsOucvy4H5nGqBlgqKFFh+jjwdgaoXm1sm78t
-         3JtVOxmk2ZmDXbl0BUOIBAqSsm+H22bQRiG8akztjZWOo5pskxG51cpmv3cYmH1STH
-         PDW4wibqtZTDNK7dSZKYv6U8kUwvrxW8VML5vfSFBYpEWOYwo/ofZwpC7mFQV5M2If
-         ON0nTAeHm1AzbKpkcPd78UWPLC15H5QfhtxyThgY3XU19chFVtG3shdYwjoQjKnIbD
-         n7PYWbpnV3HxQ==
-Date:   Tue, 18 Jan 2022 16:49:35 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     rafael@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, lenb@kernel.org, rjw@rjwysocki.net,
-        bhelgaas@google.com, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5] ACPI: Move sdei_init and ghes_init ahead to handle
- platform errors earlier
-Message-ID: <20220118224935.GA903617@bhelgaas>
+        Tue, 18 Jan 2022 17:52:37 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IKEkuO007941;
+        Tue, 18 Jan 2022 22:52:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=K7tPZwjTf7dA1Hp8GJYrrVI5AfcCPpl1oqy1ETjUzFM=;
+ b=jZgvgVM9ALLfX+nrd2ClAVgGigzMPXP5XsUWSx3E3/bqCEf+TJcYXZCIjGSiUXRpGSvd
+ zSYR2YaE8PW7zDASui6HBb59VSyGqI3qSMeNvx0j7Mla5slGnBVy0q8n9/zYKVn/Gmsy
+ 7zpaa2zhJUnA1b1jnmxkNt3mVlUd4nCPa5XjeZKQkDTVdtKjfa4v5Ko/Tzrsjb0RZ3Fa
+ /U8da+EiIgQ3SgQRPXif5Oli5lc7SIIKoSy5uMOttoGIytXi9qnVE48FlEGxxFH8L+vn
+ XDhbt5HxENiW9M+U3KLQ8/p7ajC18BSyArCmGifcP91qD6te9JEN1eRv/Tl8u44e6ik0 8g== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4vkexg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 22:52:20 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20IMoPr1131171;
+        Tue, 18 Jan 2022 22:52:19 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
+        by aserp3020.oracle.com with ESMTP id 3dkp34yd44-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 22:52:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GX0U1HB/SSR3jK4afaaoynIaNpke6MEA5fA/KcgO50EV/cL/QyzLUIq7ChiQ7YeehbVyzLOFwA8b10NIgiaRxNXS4zp4sIOeKxRYchc6UZSvU9oW7ocoONHEnrFwI9MECTXb2593lmSc3giXwfv4l0+5nmsBEvKhhg78wgVRbxbIQwehDXLT7MsSClm/d6F7+MjwTBtMhJq4ida49G8GK61ydvM4PW4PyeMMdj0WO+ceO6kLfh1a8N9kzFm9SXtXTZFosU8lqwU/0Hw6ajGMJutjjx5RlSA148Ldk9JreE1MtTHzGEuyIUzxgA3pJy+BLXL8MwfPWo5dRZb1IMvjow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K7tPZwjTf7dA1Hp8GJYrrVI5AfcCPpl1oqy1ETjUzFM=;
+ b=csaX0PrPZUF0TAGULG3FVIpZi8i/SPsXTdXYVo5jRr6XQuiVHFpNQCQpv12ZTKWxL3AZInBtAMP56Had6QDW2dwSnAbtxSh3aFkPCxD6A6EwYG6Bo4AR6/oCkl7kQF4LyxGr7aPmTq8EG1UP2liop0lKbNKCNvmNF2xdFEEWhbqBqMp0JZCtwz9/bE5nilhaDhx9gNZYnvvOXdOY6kUR2ZRKKhYo1YHwkgq44U9YylPzyAegkST2uTd73bACmU9cNL+YVcwVPowwT3o4XWL8rTV3KPrePn0Vs/wKOld03sU4la2kzAlzFnc4QSOC77v5BH+R2OHVb4u+OOe6Z5IgqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K7tPZwjTf7dA1Hp8GJYrrVI5AfcCPpl1oqy1ETjUzFM=;
+ b=frLNBbytyHbJ+CWkDiBDS6qkK04t5Xl+7a8wbqRKBZiGxkh6X2JAHmwBx0FzoSIYE4q3jzP+m1I9+Jssk6yKRlk1GuQVr7UYMQx+Ul8VGQahobxLvljlI6iMPBaV6SmobI5jd8lVH8Lze2EGd5TTxDFzMcFWY19DMO8nye2yJuM=
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
+ by MWHPR1001MB2398.namprd10.prod.outlook.com (2603:10b6:301:2f::37) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.13; Tue, 18 Jan
+ 2022 22:52:16 +0000
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::104f:849b:6a11:c5c2]) by BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::104f:849b:6a11:c5c2%6]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 22:52:16 +0000
+Message-ID: <20b93ac5-dd98-172e-505f-094aa6b0df92@oracle.com>
+Date:   Tue, 18 Jan 2022 15:52:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>, akpm@linux-foundation.org,
+        willy@infradead.org, longpeng2@huawei.com, arnd@arndb.de,
+        dave.hansen@linux.intel.com, david@redhat.com, rppt@kernel.org,
+        surenb@google.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <e0196efb-9c55-c0f8-c663-b4af44b8ffa4@intel.com>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+In-Reply-To: <e0196efb-9c55-c0f8-c663-b4af44b8ffa4@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN2PR01CA0063.prod.exchangelabs.com (2603:10b6:800::31) To
+ BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220116084310.57465-1-xueshuai@linux.alibaba.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 77b0336b-8bb9-45e2-e0e5-08d9dad52ce0
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2398:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB2398504E91AE36A04207730B86589@MWHPR1001MB2398.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W8SWQDH4pZ25rbiMDKJQCi0YXlsnwSX3ffdOm+iDjlKhX6C748Ms0VNpJD8zNh4ZuAnBj4OhUu1Va2okn8cjPTVb4CQrAZ3WePs2XAJ54aSXaYSWhSZT3rIBnXn2myGulEvBFBPfDntivgWtkHHt9yyfTGE7H8egcrRLxs8+o5qCTmQo1eus/6jIKa7O6NQnKPjBFxtNCDrYiptpM4ah7OZfXF1vPOFZcDbBjPdFonzHoF5mRy2tXpEvWI/NE6t5JJ0rGu+181st1eheWxiFuyggpWrvms31x2D0gRGra68HFoeme1gL79Bh/QsqTGh5Qcharo256W073v+W3HXUYFlzCNLprjMLC0TPHAZOJt/ucp+xrrJnaTiPpsLctex/riS93scWlhjnbnsEnURvSceoc+Mj5gCkavlEq0uOGlX4qhcIR//sv6U6KZHBplKZFvu8VJDl/mPtEsSo2Hs85vLBEtdz9ondbHFVoUy60vQMTHXmT9bhYK9dO/5hPfsTkCiecgzZ+7XiIVmjUc4AJ9awNRMkO9jhn7L6N1UYa+8Hk0cqJk3Ubp6Mrs9oh5W1a55e6J+P144xGA0zEw2mjlUOTDDU0YnmwvxAhwZonZ2AUD4rTN8ugCaxy4Dhm5GHa13bEdBvqurxRFVlsz4jdLSQn/gsX5UI14LP3jIO3ixeqlsTIfAeWCI4oxfwT1DLHamjZfXD6o9ZF38Tm+VrGV8tL/TuJ66u40doKMNwRwMdYFfU7az/7gRcw09NFS79
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2906002)(8676002)(38100700002)(8936002)(186003)(53546011)(6506007)(36756003)(508600001)(86362001)(6666004)(2616005)(66556008)(7416002)(66946007)(66476007)(6486002)(5660300002)(316002)(44832011)(921005)(6512007)(31686004)(83380400001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U3JZUGV4YjhraDRiYUlqdWQzODNwSmV0cVV0d0NBQW02MGZhWjRTTHg5Wmpq?=
+ =?utf-8?B?TVZjRWUwSDFITzRsMVc4RGNsQzViTENUU2h3LzczTVRqQ3NKamFRNVdZbUhh?=
+ =?utf-8?B?cVgxYnZMSE4zRUpMVjhUUjgrTVZrbElsT3BaK1FaMnptOHJ4bkN3eWU0SklG?=
+ =?utf-8?B?bWxNWnZWY0VTTW1EOWphRXpPdnMxSC9KZlM4VHo5MENRQWhaZDd0M3E0bkVl?=
+ =?utf-8?B?UDQrS3hNbGcrbU9xbklNOVRJTVRHZ200NXdQUlluVnVra01LSmtTYVNBc1o0?=
+ =?utf-8?B?WTNjWlBvbVRkV01nMTJiU3laVlhYU2M1LzRSajY2Vm56TE9SM0FXZEk3R04x?=
+ =?utf-8?B?NHlrOEwraDhhajFnWEx1bHBVdVk0aEFUWitCQVdOd2piLytDRjNhSkpTVG9k?=
+ =?utf-8?B?VHdlZEZzTTJUM1dxa1FWNHF1cjhDZGdOOVhCbUZ1UDRjd2gwbkQ5ejdBbm0z?=
+ =?utf-8?B?YW1EbTQvMk9hMU42emc2ZDRpM240SmszNU8vZU1uWGpsRFpXSmVwSmxtbXMz?=
+ =?utf-8?B?UTJyQnVXSWtXR3BmeEpIVGY2bytFVFlZTFlSYmlpWlVSRDhwQ0xXaHRTMWpH?=
+ =?utf-8?B?WXZRYUl1SVpVbzVJV1BTSjdpOFhsU0hMRm8wNUJtdVFYdWd0Y21iY0VTRyt0?=
+ =?utf-8?B?ZmhpSTJtQWIvUGw5b0JKN0FxeDl1VExRbDhMWmNoVmZ5OEkzRXhIVjVxaWo0?=
+ =?utf-8?B?UG4yOXhwY2VYMm9UVEs0WU1jY0JDNTBuejZvWFVPc2lKNFg0Y3lOSGIrYXRW?=
+ =?utf-8?B?c2pNeXpoSVJUOG92RUEvVFE2ejlWTmh5d2Vhc3ZsOHVLQXZVQk44TzFHNTdM?=
+ =?utf-8?B?eTBKT21oc2FsSzEvV1FFQTBNdmYra095OWt4UWt2SUkwZ25JbVhXS3lUZmxn?=
+ =?utf-8?B?R0tSVlFXSis4Vm1ibVJ1dHIzZGd4dXc3d1Z3NUNBUkFzSzMzcTNwb095aHdq?=
+ =?utf-8?B?Q1EzTDNncVpHMTFmc1BPZjVxdnpKMWdTWnp1a01oem5JWUNEZHdaRDF4L21n?=
+ =?utf-8?B?dFIxcnVaTGRDVUprd3VqQVVLY0ZwTndFL0xrT3hwbEJIamZmdU1zY2tEemVI?=
+ =?utf-8?B?Z0g5bW8xM2lLSlV4SWttNnU2SC9oT2w1M2lnVzFxUklJZjk0S0R3UVBsZzND?=
+ =?utf-8?B?Q20vNS9Sb3hMRkdneUpWVGtFWURvdytkZUpYWmdoUUY2TC9sYW90SzVpWERq?=
+ =?utf-8?B?OXZxd0VHS2N1S3lYdU8yNEY1cFZZdER1MS9nb2MzUHpJdlR3ekNQbU8zNndS?=
+ =?utf-8?B?WFpXTEdzLzk0aHZaekxobi9ycE9OZitwWnJVdEdQSUZ1TXNnNFB0Ny9rdzQ4?=
+ =?utf-8?B?NVRVQ2lWNkR6WStCZmtwb0lITzFJeW5yaExRZFB1aktxUzdvbmp6YmVodUxJ?=
+ =?utf-8?B?V09NK0pCOFcwVzJtcS9HVVZnWXNOTU8rSTIrRUhZeWZWVlRnZVh5QjBZNGh5?=
+ =?utf-8?B?aTBDZW1lSkovQnZoSnU1Tnk1WkJ5QXYwYlZDTkhic1RQaWY1R1BRZWN5b3dp?=
+ =?utf-8?B?OW1GTjIwQVJRNmVyLzlhWUFwcHpmQldTNzkzSEx4NUxGaysyaGZ6aVRZWEVQ?=
+ =?utf-8?B?RWpLN0NwUlhDUG9hZ1BMM2ZjQlQvcFR3N2lINFhOYzJFRjcxcTAvL2Q3ak05?=
+ =?utf-8?B?Y1M0YTFnekM0KzVGZ1pUbE50YWFDM0NURzYxcnhzamJyYmM5cmNBT1RwV3V4?=
+ =?utf-8?B?dlpHS2NkMmZTNnlQK2FkWDZWdUtvT3NaWHlNQ1Q5WFpUVS91U2dmWlZ2MXc3?=
+ =?utf-8?B?ZDMyK1ZTQndWQW9McERlaDBuTy83dlF6dEl5cXZMN3ZFRmhFZ1NCemp3RHFn?=
+ =?utf-8?B?TkFnc0E4QXBDZVJCZTZtQ3MvaFJqSHloRVNLWGlJU2JFMGpTRmJKZkl6c05l?=
+ =?utf-8?B?NFBiZ2JMMkFISC90RCtIK3dJa3I0R0RvT0N6YmNqamZEV1hnREc2cmRuSzQy?=
+ =?utf-8?B?eUZNVjFNdHVxQ2FXeEk3Y0hnZkN4bUh1TGRHc0draWVPTU0wbGdCSzBwbUtH?=
+ =?utf-8?B?VTN6WWQzK2JERGFVcU5FbUwxdDl5S0pvUkpnblVnVzAxSTJ5c2MvRWMwWHRj?=
+ =?utf-8?B?NWR4RXcvZWdNOWhuZ3Q2TnMxTFRkdzFTdHdrY1FjR1pVd0JIYUk1azlTbGdC?=
+ =?utf-8?B?YVl5VGF3d0JTWERaN09QSnpVRVNCeDRGakJmbUxQTkdoMWNUN0hpZzhvNHdn?=
+ =?utf-8?B?TVZ2WUhPZ0RJOG56Q1k2TDB3eUJMdldKeHRoN2xhQTBmV1JyTHNQUmdFTWEy?=
+ =?utf-8?B?cWMwSXVnTnNYY052V1FaaGhoZ2pRPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77b0336b-8bb9-45e2-e0e5-08d9dad52ce0
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 22:52:16.6710
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ifVH2PbYnEvjLwC+vzvzoiTUAKlpNc0DA1Ttx1GrNBt++qMvKK23QgadLZ20BKMxnByCIcy+CaDgRvGnmscd4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2398
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10231 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180128
+X-Proofpoint-GUID: XcLtW0aQpFp6ZsUhzdyqh_VnXi7iDFky
+X-Proofpoint-ORIG-GUID: XcLtW0aQpFp6ZsUhzdyqh_VnXi7iDFky
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 04:43:10PM +0800, Shuai Xue wrote:
-> On an ACPI system, ACPI is initialised very early from a
-> subsys_initcall(), while SDEI is not ready until a
-> subsys_initcall_sync(). This patch is to reduce the time before GHES
-> initialization.
+On 1/18/22 15:06, Dave Hansen wrote:
+> On 1/18/22 1:19 PM, Khalid Aziz wrote:
+>> This is a proposal to implement a mechanism in kernel to allow
+>> userspace processes to opt into sharing PTEs. The proposal is to add
+>> a new system call - mshare(), which can be used by a process to
+>> create a region (we will call it mshare'd region) which can be used
+>> by other processes to map same pages using shared PTEs. Other
+>> process(es), assuming they have the right permissions, can then make
+>> the mashare() system call to map the shared pages into their address
+>> space using the shared PTEs.
 > 
-> The SDEI driver provides functions (e.g. apei_sdei_register_ghes(),
-> apei_sdei_unregister_ghes()) to register or unregister event callback
-> for dispatcher in firmware. When the GHES driver probing, it registers
-> the corresponding callback according to the notification type specified
-> by GHES. If the GHES notification type is SDEI, the GHES driver will
-> call apei_sdei_register_ghes() to register event call.
+> One thing that went over my head here was that this allowing sharing of
+> relatively arbitrary *EXISTING* regions.  The mshared'd region might be
+> anonymous or an plain mmap()'d file.  It can even be a filesystem or
+> device DAX mmap().
 > 
-> When the firmware emits an event, it migrates the handling of the event
-> into the kernel at the registered entry-point __sdei_asm_handler. And
-> finally, the kernel will call the registered event callback and return
-> status_code to indicate the status of event handling. SDEI_EV_FAILED
-> indicates that the kernel failed to handle the event.
+> In other words, donors can (ideally) share anything.  Consumers have
+> must use msharefs to access the donated areas.
 > 
-> Consequently, when an error occurs during kernel booting, the kernel is
-> unable to handle and report errors until the GHES driver is initialized
-> by device_initcall(), in which the event callback is registered.  For
-> example, when the kernel booting, the console logs many times from
-> firmware before GHES drivers init in our platform:
+> Right?
 > 
-> 	Trip in MM PCIe RAS handle(Intr:910)
->   	Clean PE[1.1.1] ERR_STS:0x4000100 -> 0 INT_STS:F0000000
-> 	Find RP(98:1.0)
-> 	--Walk dev(98:1.0) CE:0 UCE:4000
-> 	...
-> 	ERROR:   sdei_dispatch_event(32a) ret:-1
-> 	--handler(910) end
-
-If I understand correctly, the firmware noticed an error, tried to
-report it to the kernel, and is complaining because the kernel isn't
-ready to handle it yet.  And the reason for this patch is to reduce
-these complaints from the firmware.
-
-That doesn't seem like a very good reason for this patch.  There is
-*always* a window before the kernel is ready to handle events from the
-firmware.
-
-Why is the firmware noticing these errors in the first place?  If
-you're seeing these complaints regularly, my guess is that either you
-have some terrible hardware or (more likely) the firmware isn't
-clearing some expected error condition correctly.  For example, maybe
-the Unsupported Request errors that happen while enumerating PCIe
-devices are being reported.
-
-If you register the callback function, the kernel will now start
-seeing these error reports.  What happens then?  Does the kernel log
-the errors somewhere?  Is that better than the current situation where
-the firmware logs them?
-
-However, I DO think that:
-
-  - Removing acpi_hest_init() from acpi_pci_root_init(), and
-
-  - Converting ghes_init() and sdei_init() from initcalls to explicit
-    calls
-
-are very good reasons to do something like this patch because HEST is
-not PCI-specific, and IMO, explicit calls are better than initcalls
-because initcall ordering is implicit and not well-defined within a
-level.
-
-> This is because the callback function has not been registered yet.  Due
-> to the poor design of firmware, previously reported errors will be
-> overwritten by new ones. Therefore, all errors that occurred before GHES
-> initialization are missed and there is no chance to report and find them
-> again.
+> ( btw... thanks to willy for the correction on IRC.)
 > 
-> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
-> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
-> the estatus memory pool. On the other hand, ghes_init() relies on
-> sdei_init() to detect the SDEI version and the framework for registering
-> and unregistering events. The dependencies are as follows
-> 
-> 	ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
-> 	ghes_init() => sdei_init()
-> 
-> Based on above, move sdei_init and ghes_init as far ahead as possible,
-> right after acpi_iort_init() in acpi_init(). After this patch, there are
-> still errors missing, but we have to tolerate it until the software
-> reporting capability is built. And this patch merely reduce the time
-> before GHES initialization. The boot dmesg before this patch:
-> 
-> 	[    3.688586] HEST: Table parsing has been initialized.
-> 	...
-> 	[   33.204340] calling  sdei_init+0x0/0x120 @ 1
-> 	[   33.208645] sdei: SDEIv1.0 (0x0) detected in firmware.
-> 	...
-> 	[   36.005390] calling  ghes_init+0x0/0x11c @ 1
-> 	[   36.190021] GHES: APEI firmware first mode is enabled by APEI bit and WHEA _OSC.
-> 
-> After this patch, the boot dmesg like bellow:
-> 
-> 	[    3.688664] HEST: Table parsing has been initialized.
-> 	[    3.688691] sdei: SDEIv1.0 (0x0) detected in firmware.
-> 	[    3.694557] GHES: APEI firmware first mode is enabled by APEI bit and WHEA _OSC.
-> 
-> As we can see, the initialization of GHES is advanced by 33 seconds.
-> (It should be noted that the effect of optimization varies with the
-> platform.)
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
->  drivers/acpi/apei/ghes.c    | 18 ++++++++----------
->  drivers/acpi/bus.c          |  4 ++++
->  drivers/acpi/pci_root.c     |  4 ++--
->  drivers/firmware/arm_sdei.c | 13 ++-----------
->  include/acpi/apei.h         |  2 ++
->  include/linux/arm_sdei.h    |  2 ++
->  6 files changed, 20 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 0c5c9acc6254..64f24a9f213f 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -1457,27 +1457,26 @@ static struct platform_driver ghes_platform_driver = {
->  	.remove		= ghes_remove,
->  };
->  
-> -static int __init ghes_init(void)
-> +void __init ghes_init(void)
->  {
->  	int rc;
->  
->  	if (acpi_disabled)
-> -		return -ENODEV;
-> +		return;
->  
->  	switch (hest_disable) {
->  	case HEST_NOT_FOUND:
-> -		return -ENODEV;
-> +		pr_info(GHES_PFX "HEST is not found!\n");
 
-I don't know whether this "HEST is not found" message is worthwhile or
-not.  I don't think lack of an HEST is an error, and users may be
-alarmed.  But this is an ACPI thing, so up to you and Rafael.
+Hi Dave,
 
-> +		return;
->  	case HEST_DISABLED:
->  		pr_info(GHES_PFX "HEST is not enabled!\n");
-> -		return -EINVAL;
-> +		return;
->  	default:
->  		break;
->  	}
->  
-> -	if (ghes_disable) {
-> +	if (ghes_disable)
->  		pr_info(GHES_PFX "GHES is not enabled!\n");
-> -		return -EINVAL;
-> -	}
->  
->  	ghes_nmi_init_cxt();
+Consumers use msharefs only to get information on address and size of shared region. Access to the donated are does not 
+go through msharefs. So the consumer opens the file in msharefs to read starting address and size:
 
-Previously, if "ghes_disable", we returned immediately.  After this
-patch, if "ghes_disable", we print "GHES is not enabled!\n", but then
-we go on to call ghes_nmi_init_cxt() and register the
-&ghes_platform_driver.  That looks wrong.  Maybe you meant to keep a
-"return" here?
+         fd = open("testregion", O_RDONLY);
 
-> @@ -1495,8 +1494,7 @@ static int __init ghes_init(void)
->  	else
->  		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
->  
-> -	return 0;
-> +	return;
->  err:
-> -	return rc;
-> +	ghes_disable = 1;
+         if ((count = read(fd, &mshare_info, sizeof(mshare_info)) > 0))
+                 printf("INFO: %ld bytes shared at addr %lx \n",
+                                 mshare_info[1], mshare_info[0]);
+         else
+                 perror("read failed");
 
-Why do you set ghes_disable here?  As far as I can tell, we will never
-look at it again.  The places we do look at it are:
+         close(fd);
 
-  - ghes_init(): earlier in this function, so we've already done that,
+It then uses that information to map in the donated region:
 
-  - acpi_hest_init(): we've already called that, too, and
+         addr = (char *)mshare_info[0];
+         err = syscall(MSHARE_SYSCALL, "testregion", (void *)mshare_info[0],
+                         mshare_info[1], O_RDWR, 600);
 
-  - acpi_bus_osc_negotiate_platform_control(): called from
-    acpi_bus_init(), which we've already called.
+Makes sense?
 
->  }
-> -device_initcall(ghes_init);
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index 07f604832fd6..1dcd71df2cd5 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -30,6 +30,7 @@
->  #include <linux/acpi_viot.h>
->  #include <linux/pci.h>
->  #include <acpi/apei.h>
-> +#include <linux/arm_sdei.h>
->  #include <linux/suspend.h>
->  #include <linux/prmt.h>
->  
-> @@ -1331,6 +1332,9 @@ static int __init acpi_init(void)
->  
->  	pci_mmcfg_late_init();
->  	acpi_iort_init();
-> +	acpi_hest_init();
-> +	sdei_init();
-> +	ghes_init();
-
-sdei_init() and ghes_init() stick out here because they're the only
-functions without an "acpi_" prefix.  Maybe a separate patch to rename
-them?
-
->  	acpi_scan_init();
->  	acpi_ec_init();
->  	acpi_debugfs_init();
-> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> index b76db99cced3..14e20af44627 100644
-> --- a/drivers/acpi/pci_root.c
-> +++ b/drivers/acpi/pci_root.c
-> @@ -23,7 +23,7 @@
->  #include <linux/dmi.h>
->  #include <linux/platform_data/x86/apple.h>
->  #include <acpi/apei.h>	/* for acpi_hest_init() */
-
-This #include looks like it may no longer be necessary.
-
-> -
-> +#include <linux/arm_sdei.h> /* for sdei_init() */
-
-I don't think this #include is necessary.
-
->  #include "internal.h"
->  
->  #define ACPI_PCI_ROOT_CLASS		"pci_bridge"
-> @@ -943,7 +943,7 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
->  
->  void __init acpi_pci_root_init(void)
->  {
-> -	acpi_hest_init();
-> +
-
-Drop the blank line here.
-
->  	if (acpi_pci_disabled)
->  		return;
->  
-> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
-> index a7e762c352f9..1e1a51510e83 100644
-> --- a/drivers/firmware/arm_sdei.c
-> +++ b/drivers/firmware/arm_sdei.c
-> @@ -1059,14 +1059,14 @@ static bool __init sdei_present_acpi(void)
->  	return true;
->  }
->  
-> -static int __init sdei_init(void)
-> +void __init sdei_init(void)
->  {
->  	struct platform_device *pdev;
->  	int ret;
->  
->  	ret = platform_driver_register(&sdei_driver);
->  	if (ret || !sdei_present_acpi())
-> -		return ret;
-> +		return;
->  
->  	pdev = platform_device_register_simple(sdei_driver.driver.name,
->  					       0, NULL, 0);
-> @@ -1076,17 +1076,8 @@ static int __init sdei_init(void)
->  		pr_info("Failed to register ACPI:SDEI platform device %d\n",
->  			ret);
->  	}
-> -
-> -	return ret;
->  }
->  
-> -/*
-> - * On an ACPI system SDEI needs to be ready before HEST:GHES tries to register
-> - * its events. ACPI is initialised from a subsys_initcall(), GHES is initialised
-> - * by device_initcall(). We want to be called in the middle.
-> - */
-> -subsys_initcall_sync(sdei_init);
-> -
->  int sdei_event_handler(struct pt_regs *regs,
->  		       struct sdei_registered_event *arg)
->  {
-> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-> index ece0a8af2bae..7dbd6363fda7 100644
-> --- a/include/acpi/apei.h
-> +++ b/include/acpi/apei.h
-> @@ -27,8 +27,10 @@ extern int hest_disable;
->  extern int erst_disable;
->  #ifdef CONFIG_ACPI_APEI_GHES
->  extern bool ghes_disable;
-> +void __init ghes_init(void);
->  #else
->  #define ghes_disable 1
-> +static inline void ghes_init(void) { return; }
-
-"return" is unnecessary here.
-
->  #endif
->  
->  #ifdef CONFIG_ACPI_APEI
-> diff --git a/include/linux/arm_sdei.h b/include/linux/arm_sdei.h
-> index 0a241c5c911d..9c987188b692 100644
-> --- a/include/linux/arm_sdei.h
-> +++ b/include/linux/arm_sdei.h
-> @@ -46,9 +46,11 @@ int sdei_unregister_ghes(struct ghes *ghes);
->  /* For use by arch code when CPU hotplug notifiers are not appropriate. */
->  int sdei_mask_local_cpu(void);
->  int sdei_unmask_local_cpu(void);
-> +void __init sdei_init(void);
->  #else
->  static inline int sdei_mask_local_cpu(void) { return 0; }
->  static inline int sdei_unmask_local_cpu(void) { return 0; }
-> +static inline void sdei_init(void) { return ; }
-
-"return" is unnecessary here.
-
->  #endif /* CONFIG_ARM_SDE_INTERFACE */
->  
->  
-> -- 
-> 2.20.1.12.g72788fdb
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Thanks,
+Khalid

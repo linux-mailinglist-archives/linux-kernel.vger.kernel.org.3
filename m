@@ -2,154 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD03492820
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AD5492827
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiAROOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:14:54 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37564 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbiAROOp (ORCPT
+        id S235547AbiARORu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:17:50 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51212 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233736AbiARORs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:14:45 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CFF7A1F3B5;
-        Tue, 18 Jan 2022 14:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642515283; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ATBnUEU9lIqKXhdj6B47cBmL/9xBONGUqasfytnV4S4=;
-        b=tyGBJA22rT9NejaOUvehSKgB7/oB+z+ZXM95GXJbQTShSKPTfn0hj1WWqlcBaCP6NKE9Hd
-        sG98aTzHGb38JD6i4GKpo31w1NHWyu0Up6v8IFGtkdvXrEAVRH6wts6kMTKDo9pE3DqkuV
-        QUlcwV98K49EYCAHkUKu8tugmiNrtdE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642515283;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ATBnUEU9lIqKXhdj6B47cBmL/9xBONGUqasfytnV4S4=;
-        b=VZVmU56vAMytlSoK1rG9eqeqjSrwFpsyvAheDVN2btyzYbCPv0cXzh3vAU6wSvBYaP4HGa
-        xgcQ1HQ9+uln0jCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B7A113AAD;
-        Tue, 18 Jan 2022 14:14:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YkTzJFPL5mGMNgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 18 Jan 2022 14:14:43 +0000
-Message-ID: <c4b9ba30-3da1-56cf-7237-8587d80daaf4@suse.de>
-Date:   Tue, 18 Jan 2022 15:14:43 +0100
+        Tue, 18 Jan 2022 09:17:48 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IEBa3M024929;
+        Tue, 18 Jan 2022 14:16:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cfKbut9R12wdzkP3BqGvG0qGTq5ITpv79/1msMfHDE4=;
+ b=He7HAmHhFHIXlwTEf33QhcMKeie91pF6r++wtBhvN1bl/xTHblclIsyBhDlDvqN/i8q9
+ cpSHTr48qvdNH+i8JAt3L/kUtkYAP5cs+DIDrGBVBMFzvo5hWMJD2CiM7bikj2frvcGc
+ GOlcKYF2muKetBXqCpi76IKKFiLt5Lr+g9pCzaakA0ON0DcVpQLs25i2EEmPICKzA3ca
+ 42kBsNGJB5yYjrDj+YetITgn+1gIzZNQ8pYXBtvBDiHXNEjx7oTrCLVlc57+w6ApaRmU
+ rwEWLVw/dx54YdUIyKx9HJaDj8K/hGeHJb3t/AiHEWfd2b/C7VKsGpZo0hocp4qqXrvI zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnwjwuq8v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 14:16:28 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IECndL032346;
+        Tue, 18 Jan 2022 14:16:27 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnwjwuq74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 14:16:27 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IEFXod007255;
+        Tue, 18 Jan 2022 14:16:23 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3dknw9bwjd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 14:16:23 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IE6a4231785230
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 14:06:36 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B3D5AE058;
+        Tue, 18 Jan 2022 14:15:53 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACF84AE051;
+        Tue, 18 Jan 2022 14:15:51 +0000 (GMT)
+Received: from [9.171.19.84] (unknown [9.171.19.84])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 14:15:51 +0000 (GMT)
+Message-ID: <77e8d214-372b-3f0e-7b4e-5c2d23a4199c@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 15:15:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
 Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
- <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
- <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------xTg5242G1YwO0JkRNignGb3v"
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
+        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
+        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
+        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+References: <20220111153539.2532246-1-mark.rutland@arm.com>
+ <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
+ <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
+ <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
+ <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
+ <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
+ <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
+ <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
+ <20220118120154.GA17938@C02TD0UTHF1T.local>
+ <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
+ <20220118131223.GC17938@C02TD0UTHF1T.local>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220118131223.GC17938@C02TD0UTHF1T.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: apQBE_BGUNoyRSDIRrY4wFjy4JO4HZuL
+X-Proofpoint-ORIG-GUID: gPYCTVnG2DV1pSbyRVhK4x0S-IUnsiKk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_04,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ spamscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201180087
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------xTg5242G1YwO0JkRNignGb3v
-Content-Type: multipart/mixed; boundary="------------8At9tZ4ufV00PpBi4v1EPAv7";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- "airlied@gmail.com" <airlied@gmail.com>, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Javier Martinez Canillas <javierm@redhat.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Message-ID: <c4b9ba30-3da1-56cf-7237-8587d80daaf4@suse.de>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
- <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de>
- <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
- <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
-In-Reply-To: <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de>
 
---------------8At9tZ4ufV00PpBi4v1EPAv7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-SGkNCg0KQW0gMTcuMDEuMjIgdW0gMTc6MjEgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
-IDEvMTcvMjIgMTY6NTgsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gSGkNCj4+DQo+
-PiBBbSAxNy4wMS4yMiB1bSAxNjo0MiBzY2hyaWViIEhlbGdlIERlbGxlcjoNCj4+PiBbLi4u
-XQ0KPj4+Pj4gYykgcmVpbnRyb2R1Y2UgdGhlIHN0YXRlIHdoZXJlIGZiY29uIGlzIGZhc3Qg
-b24gZmJkZXYuIFRoaXMgaXMgaW1wb3J0YW50IGZvciBub24tRFJNIG1hY2hpbmVzLA0KPj4+
-Pj4gIMKgwqDCoCBlaXRoZXIgd2hlbiBydW4gb24gbmF0aXZlIGhhcmR3YXJlIG9yIGluIGFu
-IGVtdWxhdG9yLg0KPj4+Pj4gZCkgbm90IGJyZWFrIERSTSBkZXZlbG9wbWVudA0KPj4+Pj4N
-Cj4+Pj4+IEVzcGVjaWFsbHkgcmVnYXJkaW5nIGMpIEkgY29tcGxhaW5lZCBpbiBbMV0gYW5k
-IGdvdCBubyBmZWVkYmFjay4gSSByZWFsbHkgd291bGQgbGlrZSB0bw0KPj4+Pj4gdW5kZXJz
-dGFuZCB3aGVyZSB0aGUgYWN0dWFsIHByb2JsZW1zIHdlcmUgYW5kIHdoYXQncyBuZWNlc3Nh
-cnkgdG8gZml4IHRoZW0uDQo+Pj4+Pg0KPj4+Pj4gSGVsZ2UNCj4+Pj4+DQo+Pj4+PiBbMV0g
-aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci9mZWVhODMwMy0yYjgzLWZjMzYtOTcyYy00ZmM4
-YWQ3MjNiZGVAZ214LmRlDQo+Pg0KPj4gU2VlbXMgbGlrZSBmZXcgcGVvcGxlIHJlYWQgbGlu
-dXgtZmJkZXYgdGhlc2UgZGF5cy4NCj4+IEkgc3VnZ2VzdCB0byBwYXJ0bHkgcmV2ZXJ0IHRo
-ZSBwYXRjaCB0byB0aGUgcG9pbnQgd2VyZSBwZXJmb3JtYW5jZQ0KPj4gZ2V0cyBiZXR0ZXIg
-YWdhaW4uDQoNCklmIHlvdSB3YW50IHRoYXQsIHlvdSBzaG91bGQgc2VuZCBhIHBhdGNoLg0K
-DQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IFllcywgKnBsZWFzZSohDQo+IFRoYXQgd291
-bGQgc29sdmUgbXkgYmlnZ2VzdCBjb25jZXJuLg0KPiANCj4gQXMgZmFyIGFzIEkgY2FuIHNl
-ZSB0aGF0J3Mgb25seSAyIGNvbW1pdHMgdG8gYmUgcmV2ZXJ0ZWQ6DQo+IGIzZWM4Y2RmNDU3
-ZSAtICJmYmRldjogR2FyYmFnZSBjb2xsZWN0IGZiZGV2IHNjcm9sbGluZyBhY2NlbGVyYXRp
-b24sIHBhcnQgMSAoZnJvbSBUT0RPIGxpc3QpIg0KPiAzOWFlYWQ4MzczYjMgLSAiZmJjb246
-IERpc2FibGUgYWNjZWxlcmF0ZWQgc2Nyb2xsaW5nImZvci1uZXh0LW5leHQNCj4gDQo+IEkg
-dGhpbmsgYm90aCB3ZXJlIG5vdCByZWxhdGVkIHRvIGFueSAwLWRheSBidWcgcmVwb3J0cyAo
-YnV0IGFnYWluLCBJIG1pZ2h0IGJlIHdyb25nKS4NCj4gDQo+IEhlbGdlDQoNCi0tIA0KVGhv
-bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
-cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
-ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
-aHJlcjogSXZvIFRvdGV2DQo=
+Am 18.01.22 um 14:12 schrieb Mark Rutland:
+> On Tue, Jan 18, 2022 at 01:42:26PM +0100, Christian Borntraeger wrote:
+>>
+>>
+>> Am 18.01.22 um 13:02 schrieb Mark Rutland:
+>>> On Mon, Jan 17, 2022 at 06:45:36PM +0100, Paolo Bonzini wrote:
+>>>> On 1/14/22 16:19, Mark Rutland wrote:
+>>>>> I also think there is another issue here. When an IRQ is taken from SIE, will
+>>>>> user_mode(regs) always be false, or could it be true if the guest userspace is
+>>>>> running? If it can be true I think tha context tracking checks can complain,
+>>>>> and it*might*  be possible to trigger a panic().
+>>>>
+>>>> I think that it would be false, because the guest PSW is in the SIE block
+>>>> and switched on SIE entry and exit, but I might be incorrect.
+>>>
+>>> Ah; that's the crux of my confusion: I had thought the guest PSW would
+>>> be placed in the regular lowcore *_old_psw slots. From looking at the
+>>> entry asm it looks like the host PSW (around the invocation of SIE) is
+>>> stored there, since that's what the OUTSIDE + SIEEXIT handling is
+>>> checking for.
+>>>
+>>> Assuming that's correct, I agree this problem doesn't exist, and there's
+>>> only the common RCU/tracing/lockdep management to fix.
+>>
+>> Will you provide an s390 patch in your next iteration or shall we then do
+>> one as soon as there is a v2? We also need to look into vsie.c where we
+>> also call sie64a
+> 
+> I'm having a go at that now; my plan is to try to have an s390 patch as
+> part of v2 in the next day or so.
+> 
+> Now that I have a rough idea of how SIE and exception handling works on
+> s390, I think the structural changes to kvm-s390.c:__vcpu_run() and
+> vsie.c:do_vsie_run() are fairly simple.
+> 
+> The only open bit is exactly how/where to identify when the interrupt
+> entry code needs to wake RCU. I can add a per-cpu variable or thread
+> flag to indicate that we're inside that EQS, or or I could move the irq
+> enable/disable into the sie64a asm and identify that as with the OUTSIDE
+> macro in the entry asm.
+What exactly would the low-level interrupt handler need to do?
 
---------------8At9tZ4ufV00PpBi4v1EPAv7--
+CC Sven, Heiko for the entry.S changes.
 
---------------xTg5242G1YwO0JkRNignGb3v
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHmy1MFAwAAAAAACgkQlh/E3EQov+BH
-pA//XDmi3wDb7AFQSHvihxfXd5tVw12MkQMl/xN3Xr5g0oNsvr/A5NNvzC4gGiqodv4hNkbs9gj6
-8ZeA8jRlicynQ0C7XyOteT27F/dgKQ8wmBu0tdOKg0tX3YAEb9VyYlQSr40pDGRyvkTZmYL4WYiL
-dKLuhmq1bJwIJBdBICXuFeBJoCE/BhJQFnr/+S6vC3vFs/verysUh2+9cYWd8DCKcnc8fl74KJJr
-L/PBiXyukfJgHvnbNZSaAP4x4w7EcXKd4v6ah7V1ajUqErckkG6gQmvjTP/BTz2N48Ag34/N6qE6
-EoEv2MJj8A5hjRtzmuARh/54jMzBYLL8IU627nZBs9Tx3v6+DORzT9nNo06lWcyWWyVWkFtt9F9b
-SoQYDbkJs7blndnmCdyN92JabQ2I+TLkKoA7IbyWC4ubEW3znhrQyTN5WLtHuJbNTOOsoiZwC4He
-c/AqliSeolRseYhQpdaUiSO6r7ocEt4roC9FuHWenbbX/3s+zq+0nd9cdp2rAJVXgSSkS552I+ll
-Pflbo6fYH+bSfdzJdevsqKfezONpsMpmCsHPI0L3LfaSwtqmRjzWPg0MvEhG6PKzUVr++ZNilKIJ
-8XXA+/4Y5yP5JuvgxMk8TBf6QnoraRj8lgbXqtF4gFJtUFuhX/Oc2gGhy20+t7lh9FeuYAmkh7mb
-+JU=
-=F3zH
------END PGP SIGNATURE-----
-
---------------xTg5242G1YwO0JkRNignGb3v--

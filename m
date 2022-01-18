@@ -2,68 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A05074924A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0ED4924AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239372AbiARLUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S238097AbiARLXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240153AbiARLTs (ORCPT
+        with ESMTP id S231157AbiARLXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:19:48 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E18C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:19:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IFZUkU5fxILimkrsOSgEsRNPJsOZCUf1BuMxwFRoTH0=; b=QeyVfgIopjN5XrtQB0oeboW0dQ
-        uAPVgRvwTLVImLLBIVSJo7RulFuEq0rxJj2wYJAIx4KYsLJop2BEMN9iepogU1czEHFDB9R5N0LMM
-        UA61gmmW0YfhNqvfi8ZtlIhhJstQiDEDYEQGSOrkYRebM4Y65sCnjfM7V+DEbruxhjTs9Vvd8LC1Q
-        oGR2jkXpxjQLjNJh7CrE2vpVpr7u6bYzRtQToVpGcfLsWvm1LIuJceZ3NGqIfowHMXa82L+dLtB+D
-        Gy7gRa0Re1KpjxsBFebbjSXdpXm+2p4+qP1g0roSg5hnqmSTUbUCpunrLmQCD1sbe155zl4eeZ2QO
-        d+x6kRrA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9mWK-001pn0-Rt; Tue, 18 Jan 2022 11:19:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0D2F3300237;
-        Tue, 18 Jan 2022 12:19:21 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EA0BC2B56E8B4; Tue, 18 Jan 2022 12:19:20 +0100 (CET)
-Date:   Tue, 18 Jan 2022 12:19:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, srikar@linux.vnet.ibm.com,
-        riel@surriel.com
-Subject: Re: [PATCH] sched/debug: Remove mpol_get/put and task_lock/unlock
- from sched_show_numa
-Message-ID: <YeaiOKUS32zcwXBC@hirez.programming.kicks-ass.net>
-References: <20220118050515.2973-1-bharata@amd.com>
+        Tue, 18 Jan 2022 06:23:02 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93739C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:23:02 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id bx18so9481837oib.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:23:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0vxu12L1jZfPH/n8U6n3NYOUika1PiHRFgnFfE0mqac=;
+        b=FQcI04UjT4EjGUadFs3tu4NgXPGRJOKF4fVamISkg3N+HpvnrRY052ydvNoRCdWVsm
+         DQxKsojVYpQZ/lVhyUlZE4dzcOtYQ5HqNZMtdFoOtzS/mNtFbLcdBrCAKyHdQGtrcNb+
+         Dv/SZjYB0cET4g9ABzGbEN0f28Ox80038d3ls=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0vxu12L1jZfPH/n8U6n3NYOUika1PiHRFgnFfE0mqac=;
+        b=g5fwfu+AvRE6fNKIK0pVZPiGdrtYV632uk/sDnTCxWU0rEaDuMtN3r7vrH5O93JLeL
+         P+kO5blPglnGSI4X//j/M3Ys8CIlQfrSzOW7NSNlj6nX+Wt8Q/DmrjuQyLyOOFFQE7Ep
+         5OMl9acy+oOQhw0tSzAumckDEXVfUkwJv+e7fzVlpdpD3FYTPGWn2/WhTybpyRJRaEqK
+         xEpKCBhgFzijrBfDSKevK3yn/4EM2GnGxW3+gPmjvLq+NF7jPqIFUs0/h1WeE5BAO4QR
+         Y/pBn9WH5rS3a6U1l8/2EXz+8HEkN73Wa2gTKyhNnuKJ3J8FkpPrb4bbWvwgdzDLE22D
+         IWgA==
+X-Gm-Message-State: AOAM530KugOlJMCq9o/Z6GeNWjwntqvDbIcZNwg1qMGFfw+HtR/eWv64
+        o4cBHsM30P8XBHzi4pA5mLyHg2Rw8ZWyMqZ3D5T/+g==
+X-Google-Smtp-Source: ABdhPJx04xf4KFu7cR9PzSZ5lOKeBxnc/JEG/KJ4kgQu+iPUN6I304Hyiv0+IwlQnk/spVK2x5FoB5/tKvzavEUuFvo=
+X-Received: by 2002:aca:b103:: with SMTP id a3mr26125595oif.14.1642504981992;
+ Tue, 18 Jan 2022 03:23:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118050515.2973-1-bharata@amd.com>
+References: <YeG8ydoJNWWkGrTb@ls3530> <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+ <87bl0amc6s.fsf@x1.stackframe.org> <20220118103323.4bae3a7d@eldfell> <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org>
+In-Reply-To: <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 18 Jan 2022 12:22:50 +0100
+Message-ID: <CAKMK7uGQ=pGHv+LcRxZqb_jV0fqzUZtd+tZCr7aatoMDF4hyvw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Pekka Paalanen <ppaalanen@gmail.com>, linux-fbdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sven Schnelle <svens@stackframe.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:35:15AM +0530, Bharata B Rao wrote:
-> The older format of /proc/pid/sched printed home node info which
-> required the mempolicy and task lock around mpol_get(). However
-> the format has changed since then and there is no need for
-> sched_show_numa() any more to have mempolicy argument,
-> asssociated mpol_get/put and task_lock/unlock. Remove them.
-> 
-> Fixes: 397f2378f1361 ("sched/numa: Fix numa balancing stats in /proc/pid/sched")
-> Signed-off-by: Bharata B Rao <bharata@amd.com>
+On Tue, Jan 18, 2022 at 10:54 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
+>
+> On Tue, Jan 18, 2022 at 10:33:23AM +0200, Pekka Paalanen wrote:
+> > On Mon, 17 Jan 2022 19:47:39 +0100
+> > Sven Schnelle <svens@stackframe.org> wrote:
+> >
+> > > I also tested the speed on my Thinkpad X1 with Intel graphics, and there
+> > > a dmesg with 919 lines one the text console took about 2s to display. In
+> > > x11, i measure 22ms. This might be unfair because encoding might be
+> > > different, but i cannot confirm the 'memcpy' is faster than hardware
+> > > blitting' point. I think if that would be the case, no-one would care
+> > > about 2D acceleration.
+> >
+> > I think that is an extremely unfair comparison, because a graphical
+> > terminal app is not going to render every line of text streamed to it.
+> > It probably renders only the final view alone if you simply run
+> > 'dmesg', skipping the first 800-900 lines completely.
+>
+> Probably more like "render on every vblank", but yes, unlike fbcon it
+> surely wouldn't render every single character sent to the terminal.
+>
+> Also acceleration on modern hardware is more like "compose window
+> content using the 3d engine" than "use 2d blitter to scroll the window".
+>
+> > Maybe fbcon should do the same when presented with a flood of text,
+> > but I don't know how or why it works like it works.
+>
+> fbcon could do the same, i.e. render to fbdev in a 60Hz timer instead of
+> doing it synchronously.
 
-Thanks!
+Yeah, and if you use the shadow fb support in drm fbdev helpers,
+that's what you get. Maybe we should just make that the default, since
+that would also greatly simply stuff like modesetting support for
+fbdev.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

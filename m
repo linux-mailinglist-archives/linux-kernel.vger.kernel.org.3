@@ -2,168 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E21E24923FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 356454923FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237931AbiARKpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:45:43 -0500
-Received: from mout.gmx.net ([212.227.17.20]:36519 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235240AbiARKpm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:45:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642502731;
-        bh=JW+QcUwSTe/qvoccvRFDM6uCr/IeefTcWJCBZIb73JE=;
-        h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=FUoqr2g6SrdxgbR7s3ZBQzgB6sf5/IzzwT+GDFZBQPHyfBcjzHzRbEwEzMKAhnT4M
-         pXZAH9qJYjA53LMfM5wG4P2aICpoxOeK9PAiKq7Am7HlpfCUKhWMNcgQ6uGvM1fgaN
-         MbtZ/oV0MDQ8ah9iW0mAWS9rph88+IHgV6ltWy88=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.155.155]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7zBb-1mEFXF39ON-0154Gr; Tue, 18
- Jan 2022 11:45:30 +0100
-Message-ID: <c2526855-233e-c785-ddca-e89c79ca9676@gmx.de>
-Date:   Tue, 18 Jan 2022 11:44:25 +0100
+        id S237989AbiARKon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:44:43 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:39418 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237931AbiARKom (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 05:44:42 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20I97GDu009658;
+        Tue, 18 Jan 2022 11:44:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=8tSOi6hFO4mBG1V3W8bMA0J9PppE7RMIf5SisFC//CI=;
+ b=2rCtH5QP/v8r3GgsSoY6Pq3pXO6qXE4aw1ZZ0RrQW4IAynpj+Bo85F9ip/XsEgq/flNg
+ 7hQpCHpIon9MYzLQPpP+P6T+E38l6qM5l/FUo3QkYtb+icyvkRCNbxt5B0E6Fm/SEH9Q
+ 2rjVHQtzvmutThtVNwrmSlrR04YnfdBlodDAruT3tulCjOhgWAHUiaHcnDLlmw212XU2
+ YvrOSGIVKRAMMk/rHzakdmqojXD+vkH5g7rIXRaFzkuk1V5RgWk0wanLgftTH0JOzbFO
+ uqDFNidLjygE9+RCaKVZPIM4rNSNdYFZFP2hCr7G9ZIlMMquIw2J9ZFBieJ2orP+W+E4 tA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dnkesjnu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 11:44:33 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7D5BA10002A;
+        Tue, 18 Jan 2022 11:44:32 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6A797211F15;
+        Tue, 18 Jan 2022 11:44:32 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG2NODE1.st.com
+ (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 18 Jan
+ 2022 11:44:31 +0100
+Subject: Re: [PATCH v8 03/13] rpmsg: Move the rpmsg control device from
+ rpmsg_char to rpmsg_ctrl
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>, <julien.massot@iot.bzh>
+References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
+ <20211207080843.21222-4-arnaud.pouliquen@foss.st.com>
+ <YeXz2SFqYr+eUvnw@builder.lan>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <cffe6884-2059-d1e7-7dfd-37c852924959@foss.st.com>
+Date:   Tue, 18 Jan 2022 11:44:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+In-Reply-To: <YeXz2SFqYr+eUvnw@builder.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
- <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
- <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <ebe9c076-e2a9-0cb7-eb6a-ae71c075975e@gmx.de>
- <20220118091615.3ih5n7vhd6tgmnku@sirius.home.kraxel.org>
- <ffef1042-e1af-d5b5-b140-ae24fcc1855b@gmx.de>
-In-Reply-To: <ffef1042-e1af-d5b5-b140-ae24fcc1855b@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lmGpmKheriWIpGTC9y29Op8mC39RE4Ab6zzfHl/6o98L6WwynYR
- 6NhK0wilkiCZsfmY5AWLyEJK9Lghxg5Zja6JIpAExEb+wWiIC+fvJnLTfDG2u/+cDFHUPl+
- oDLW0D58BnAwNvS85SrQc1Eh3cdbwyFcpoKE9X8yvJ6GcxwbWjuUHOw3ZhauRyPDJZsptAd
- OHXGO4NEsQm1qxmdUNNag==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TGVFCWwRQW4=:p6xqOSVgld85oN8cqabdFQ
- zaPoklAxiGlRmy414zJsMaZwHZVX3od/N4qo1Ykk6WpM2AckbND/X0q/oq0tuqYyTn8dfbfMY
- 1+QJEy+3LjPV9ywyXE5IW0dZDGEaFv3S3rHkV77h9n6BoSfz24DQ7mi7nZUUbqAAgPGRQrYxY
- qS0PSCUapyBn9LG8CzVgXhLFrbOMJ0Iy9qx4zFYSi5zL0GbpdG5JH9AgIcsif0DSD/vvycr7T
- hLoI9/vU5X2f6+O2h4pCTza96hrh8wuvLlukaABJR9Fg1P48Bj+hC22AMrygKGhWt8x64A4o6
- sgzrmBbx125qMqjfHO0EKknQN5WZ1gOK4BChkqOr9yPVrblA8XeFBpWVPfSkJE/G+gzKvWKiq
- XBY7/inRtZh3JE06MtxgRqjwolepbxkeFrqDyrGFhOKuj59J/UC61pFpeqY36C3xver9/RgL4
- uQcJPRrvm32WBlNakUPhkE1NyzblQH4+1+lkJJ4LwYlf0Ftopt1LQrQb/pe2GbC+tTs6x4aKT
- 2lFP5l3Cr/abjHdiJbhr1bQ/+k1bqO/Na1OuIVQOjAWf9HOE7WyxyvczTxUczSQKBQG/5ieuL
- tDTl3NLlK5dFsiz+/h2x//8qQ7f9VnvqM7aLHnF1eZrAB5iYnold00pRzkEouSre0/Rhd7xV/
- z6ssIUGOnbF7+OKRXy+d1kAbgWd7oS/KuRV20VkFD7uaOq0R4Up7n8kPUrF9wwgQcgW6e98xq
- OeKRPLyDNgAMKyY4peT7PX2WKDaol8cOULTtknDHZu7EMNlFaSlCC6tul1ZyQcQmM4ek2rXTJ
- N3FgtLMg1p7yN2258fGAHnG+riSUAv0P0pRsfF/nE/bTkyOobXKszbUQ9ms19769ObLFVNDOk
- QZM2dGZ56IpDizCbRI1HKa2dN/oolD98rd9FgEzNJ8lIAaQ1CaphDayrPMw5YPcXPorJQ2l8Y
- RMcR1QB/vLKql6cfhNK9OERGZhrjxngmWlLViVQboY8W0sTwmnIreQdnManOLntKNSnGj41rR
- Z1FLsarFU3XIEU7UHjHxmtPg4wITvUfdrsDwb5YzC7Rvn573J8kFhF0jJnvZEDtoGzy2Ugmfl
- 2FMGI/43j5SOy8=
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE1.st.com
+ (10.75.127.4)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 11:13, Helge Deller wrote:
-> On 1/18/22 10:16, Gerd Hoffmann wrote:
->> On Tue, Jan 18, 2022 at 09:20:43AM +0100, Helge Deller wrote:
->>> On 1/18/22 07:29, Gerd Hoffmann wrote:
->>>>> Please correct me if I'm wrong, but text-console emulation/scrolling=
- on DRM is
->>>>> currently unaccelerated and bound to Truecolour modes only,
->>>>
->>>> Yes.  Adding support for formats beside argb8888 to the drm fbcon
->>>> emulation shouldn't be that much of a problem though.
->>>
->>> Really? Assuming a graphic card which runs with only 256 colors frameb=
-uffer
->>> is easily supported by DRM, and you can use fbcon without using lots o=
-f memcpy()?
->>
->> Driver: programming a fixed color cube palette, then use RGB332.
->>
->> fbcon/fbdev emulation: RGB332 support must be added I think.  But both
->> argb888 and rgb565 are supported today, so it should not be hard to fin=
-d
->> the places where you have to add some code to handle RGB332 too.
->
-> I'd expect that that framework is provided by DRM developers if there is=
- the wish
-> to get rid of old fbdev and transition existing drivers over to use DRM.
->
->>>> Acceleration is harder.  The scroll acceleration had issues nobody
->>>> addressed for years, and on modern hardware it is simply not used, wh=
-ich
->>>> is probably the reason nobody stepped up fixing things and it ended u=
-p
->>>> being dropped.
->>>
->>> The DRM layer doesn't use scroll acceleration.
->>> More than 30 other existing fbdev drivers use it.
->>
->> Yes.  The world shifted from 2d acceleration to 3d acceleration.  Moder=
-n
->> hardware simply has no classic blitter any more.  Which is a problem
->> when it comes to keeping scroll acceleration alive, it is already a ver=
-y
->> niche use case and it will only become worse ...
->
-> For me it's Ok that the DRM drivers don't use 2d acceleration (as it is =
-today
-> with the arguments mentioned multiple times).
-> But the patches broke existing fbdev acceleration which is available by
-> the fbdev drivers. That's a big regression from point of fbdev.
->
->>>> Bringing it back is much more work than just reverting the commits re=
-moving it.
->>>
->>> Reverting those commits have no effect on DRM's usage of fbcon.
->>> But reverting those commits bring back scroll acceleration for all oth=
-ers.
->>> I'm trying to find out which patches did apparently fixed such issues
->>> for the REDRAW case. If you have a pointer it would be helpful.
->>
->> IIRC the code had a bunch of races and syzkaller flagged problems.
->> I didn't follow very closely though.
->
-> That's sad.
-> Nevertheless I wonder if the changes which were apparently done for
-> the SCROLL_REDRAW case (on the higher level?) didn't also fixed the issu=
-es
-> for SCROLL_MOVE.
+Hello Bjorn,
 
-I've just looked through all patches in drivers/video which were tagged
-with syzbot or syzkaller back to year 2005. The vast majority fixed the
-reported issues on a higher level, e.g. when screen is to be resized,
-or when font size is to be changed. The few ones which touched driver
-code fixed a real driver bug, e.g. by adding a check.
+On 1/17/22 11:55 PM, Bjorn Andersson wrote:
+> On Tue 07 Dec 02:08 CST 2021, Arnaud Pouliquen wrote:
+>> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> [..]
+>> -static void rpmsg_ctrldev_release_device(struct device *dev)
+>> -{
+>> -	struct rpmsg_ctrldev *ctrldev = dev_to_ctrldev(dev);
+>> -
+>> -	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
+>> -	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
+>> -	cdev_del(&ctrldev->cdev);
+>> -	kfree(ctrldev);
+>> -}
+>> -
+>> -static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
+>> -{
+>> -	struct rpmsg_ctrldev *ctrldev;
+>> -	struct device *dev;
+>> -	int ret;
+>> -
+>> -	ctrldev = kzalloc(sizeof(*ctrldev), GFP_KERNEL);
+>> -	if (!ctrldev)
+>> -		return -ENOMEM;
+>> -
+>> -	ctrldev->rpdev = rpdev;
+>> -
+>> -	dev = &ctrldev->dev;
+>> -	device_initialize(dev);
+>> -	dev->parent = &rpdev->dev;
+>> -	dev->class = rpmsg_class;
+>> -
+>> -	cdev_init(&ctrldev->cdev, &rpmsg_ctrldev_fops);
+>> -	ctrldev->cdev.owner = THIS_MODULE;
+>> -
+>> -	ret = ida_simple_get(&rpmsg_minor_ida, 0, RPMSG_DEV_MAX, GFP_KERNEL);
+>> -	if (ret < 0)
+>> -		goto free_ctrldev;
+>> -	dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
+>> -
+>> -	ret = ida_simple_get(&rpmsg_ctrl_ida, 0, 0, GFP_KERNEL);
+>> -	if (ret < 0)
+>> -		goto free_minor_ida;
+>> -	dev->id = ret;
+>> -	dev_set_name(&ctrldev->dev, "rpmsg_ctrl%d", ret);
+>> -
+>> -	ret = cdev_add(&ctrldev->cdev, dev->devt, 1);
+> 
+> This turns out to be incomplete and the cdev_del above is in the wrong
+> place. This, and the same for eptdev, is being corrected in:
+> 
+> https://lore.kernel.org/linux-remoteproc/164245960510.1698571.4998090450663669237.b4-ty@linaro.org/T/#t
 
-NONE of those patches touched either the SCROLL_MOVE or the SCROLL_REDRAW =
-case.
-That means, I see no reason why SCROLL_MOVE had to be ripped-out and just
-SCROLL_REDRAW had to be used instead, other than simply "it's not being
-used by DRM, so let's pull it out".
-The patches which removed SCROLL_MOVE support simply ignored the fact
-that SCROLL_MOVE is still heavily used by fbdev (non-DRM).
+I will rebase on next branch including this patchset
 
-I don't see a reason why the two patches which removed SCROLL_MOVE
-shouldn't be reverted. Or what am I missing?
+Thanks,
+Arnaud
 
-Helge
+> 
+> Regards,
+> Bjorn
+> 

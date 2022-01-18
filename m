@@ -2,100 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E73CC492C9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117DF492CA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiARRmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:42:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56810 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbiARRmD (ORCPT
+        id S1347532AbiARRnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:43:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27170 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231299AbiARRn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:42:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EA806123D;
-        Tue, 18 Jan 2022 17:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0139C340E0;
-        Tue, 18 Jan 2022 17:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642527722;
-        bh=CYMf003Iq/DrB18YGBUbDhdfRptl/QHoELPBspzPY7g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SDAHsNvHKIL5MrFk6hUQlGQ+57uSdI0u/bXYS+ec4ftE3YAfTtm03vh7VpulHKiIV
-         fYjI6A/pOsXocYll8WrB99SUAK8pWHwBQvdKeIy1XzFW9WAPugU/SLfRPCQU/mRDc9
-         NoiZhDKxOnigysHXdYM898eLeW7FpEMfO9Kdp3lmZ6FPvkrdJCwp+VmOrFPE1AwyyA
-         OzlC6Dfx1OUP68E6+eu9UErYNcPAE0e10av/qn001rmZCC9z2X1NmrX5Gc+Yr8pDQP
-         HDxe06P2nKBMQkQimDuHNA2XXLYb5DEnEOiILjQcoPXK8dU66XEABJ5HXmtjHEd4Sk
-         jiDDTULeNMHbw==
-Date:   Tue, 18 Jan 2022 17:41:57 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     p.zabel@pengutronix.de, andyshevchenko@gmail.com,
-        robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wells.lu@sunplus.com, lh.kuo@sunplus.com
-Subject: Re: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Message-ID: <Yeb75aOOckAfNTTG@sirena.org.uk>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
- <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
+        Tue, 18 Jan 2022 12:43:29 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IHRA6P010476;
+        Tue, 18 Jan 2022 17:43:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=EyVUYdpuI6QI9oyP5AhRC+WmLc0caH/xe7ho5eIeAI4=;
+ b=HBj26SzwnKzCQt+dJPVuemaVuQuI7tsvOemaa+ul9ZLEMg4Fdj0IqW0jzS0xWP9T0DAK
+ Xd3YC2dNLo2wwzCzs1LJtFdzVzSBI+ymdng4kYdzPO6wWa2staxeYoVreGokkUjOshU/
+ bfsDlCDH4pAs/fYhKXmJ1WjsJ38wLZbLrXnSSDWzHJ0qTL7DZByUxycO4L5YJSlugddp
+ cVThdsM9BlBvcrsElMY5b7/6w/oSYehuwilSatyEZrqNYwp3i0dbjuMTE/kL/ZltoUIH
+ Zcti/pbTaM9p+zRGZx4555l9+Al2mcfWKcuEqWJXFcamdcfQFRTXvl2S2EjpawQio3M7 Wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yarcrh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:43:28 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IHRYos011720;
+        Tue, 18 Jan 2022 17:43:28 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yarcr1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:43:28 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IHXjxU003059;
+        Tue, 18 Jan 2022 17:43:26 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dknhjeuy5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:43:26 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IHhNIg24904114
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 17:43:23 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE019AE057;
+        Tue, 18 Jan 2022 17:43:22 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7935AE053;
+        Tue, 18 Jan 2022 17:43:21 +0000 (GMT)
+Received: from [9.171.70.230] (unknown [9.171.70.230])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 17:43:21 +0000 (GMT)
+Message-ID: <4cde7eee-72ef-6bec-bb19-606ca57302dd@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 18:45:04 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cWj0J1tk77zuAC0Y"
-Content-Disposition: inline
-In-Reply-To: <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
-X-Cookie: Do YOU have redeeming social value?
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 23/30] vfio/pci: re-introduce CONFIG_VFIO_PCI_ZDEV
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-24-mjrosato@linux.ibm.com>
+ <1ea61cf3-65b2-87ec-55b4-7dfa5f623d15@linux.ibm.com>
+ <e1cd6368-bb1a-1a4d-df83-8190524b9a4d@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <e1cd6368-bb1a-1a4d-df83-8190524b9a4d@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zNt8jZDwymp1I01CqxrO2RSAbQ2ZUTfs
+X-Proofpoint-GUID: 6Z4K1HEghG6ikZCacyVQm61irZiioPM7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180105
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---cWj0J1tk77zuAC0Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jan 18, 2022 at 04:42:38PM +0800, Li-hao Kuo wrote:
+On 1/18/22 18:32, Matthew Rosato wrote:
+> On 1/18/22 12:20 PM, Pierre Morel wrote:
+>>
+>>
+>> On 1/14/22 21:31, Matthew Rosato wrote:
+>>> This was previously removed as unnecessary; while that was true, 
+>>> subsequent
+>>> changes will make KVM an additional required component for 
+>>> vfio-pci-zdev.
+>>> Let's re-introduce CONFIG_VFIO_PCI_ZDEV as now there is actually a 
+>>> reason
+>>> to say 'n' for it (when not planning to CONFIG_KVM).
+>>>
+>>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>>> ---
+>>>   drivers/vfio/pci/Kconfig      | 11 +++++++++++
+>>>   drivers/vfio/pci/Makefile     |  2 +-
+>>>   include/linux/vfio_pci_core.h |  2 +-
+>>>   3 files changed, 13 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+>>> index 860424ccda1b..fedd1d4cb592 100644
+>>> --- a/drivers/vfio/pci/Kconfig
+>>> +++ b/drivers/vfio/pci/Kconfig
+>>> @@ -42,5 +42,16 @@ config VFIO_PCI_IGD
+>>>         and LPC bridge config space.
+>>>         To enable Intel IGD assignment through vfio-pci, say Y.
+>>> +
+>>> +config VFIO_PCI_ZDEV
+>>> +    bool "VFIO PCI extensions for s390x KVM passthrough"
+>>> +    depends on S390 && KVM
+>>> +    default y
+>>> +    help
+>>> +      Support s390x-specific extensions to enable support for 
+>>> enhancements
+>>> +      to KVM passthrough capabilities, such as interpretive 
+>>> execution of
+>>> +      zPCI instructions.
+>>> +
+>>> +      To enable s390x KVM vfio-pci extensions, say Y.
+>>
+>> In several patches we check on CONFIG_PCI (14,15,16,17 and 22) but we 
+>> may have PCI without VFIO_PCI, wouldn't it be a problem?
+>>
+>> Here we define a new CONFIG entry and I have two questions:
+>>
+>> 1- there is no dependency on VFIO_PCI while the functionality is 
+>> obviously based on VFIO_PCI
+> 
+> It's not obvious from this diff, but this 'config VFIO_PCI_ZDEV' 
+> statement is within an 'if VFIO_PCI' statement, just like VFIO_PCI_IGD 
+> above -- so the dependency is there.
 
-Looks mostly good - a couple of small nits below but nothing major.
+sorry, I remember now you already answered this to Christian last time.
 
-> +static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
-> +				       struct spi_transfer *xfer)
-> +{
+> 
+>>
+>> 2- Wouldn't it be possible to use this item and the single condition 
+>> for the different checks we need through the new VFIO interpretation 
+>> functionality.
+> 
+> Possibly, but 1) we'd have to make linking arch/s390/kvm/pci.o dependent 
+> on CONFIG_VFIO_PCI instead of CONFIG_PCI in patch 14 and 2) if the 
+> relationship between CONFIG_VFIO_PCI and CONFIG_PCI were to ever change 
+> (though I don't see why it would..), we would be broken because the 
+> symbols we are referencing really require CONFIG_PCI (as they are 
+> located in s390 PCI).
+> 
 
-> +	for (i = 0; i <= xfer_cnt; i++) {
-> +		mutex_lock(&pspim->buf_lock);
+Yes but VFIO_PCI_ZDEV depends on KVM, PCI and on VFIO_PCI
+Wouldn't a single config item for this new code be easier to manage and 
+understand?
 
-This lock is redundant: it is only ever held in this function which is
-guaranteed by the core to never be called twice concurrently.
-
-> +	ret = devm_request_irq(dev, pspim->m_irq, sp7021_spi_master_irq,
-> +			       IRQF_TRIGGER_RISING, pdev->name, pspim);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_request_irq(dev, pspim->s_irq, sp7021_spi_slave_irq,
-> +			       IRQF_TRIGGER_RISING, pdev->name, pspim);
-> +	if (ret)
-> +		return ret;
-
-Are you sure the driver is ready to handle interrupts without any of the
-other resources?  Normally interrupts are one of the last things to be
-requested.
-
---cWj0J1tk77zuAC0Y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm++QACgkQJNaLcl1U
-h9AloQf/R9CmVeZkSoLiD5F1sjADwvC/s2mKlTHBm2WFheDAynPMLNrjKPMziv4c
-9cbnuUMl8AIIX/G9B/XrE3htb9F4vOojNd9+uLyWbFuQlNwSFlNh0cqAnbg86r0U
-hR74iH/g8JUN50VZrGGbYrvHv1T1tgI8LCXgMt9MaS1QBNiItnPhgTBy+VslAZS4
-lt3iBzyD6mN0yrVlfWVlBHyYjjYq2EU5Zj0DOSCQ9ywT35KNCH26nUtjqPt8qdpa
-hoDZ/vVbNxSMLKf2wZuADpm1JL9tSzlPmyER83CjNabeLrtZcuW2WDR5chtDZ06T
-3ao2LoKq9N19CXXMB/lMypwT6cwkHw==
-=2Z0W
------END PGP SIGNATURE-----
-
---cWj0J1tk77zuAC0Y--
+-- 
+Pierre Morel
+IBM Lab Boeblingen

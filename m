@@ -2,209 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C51C492E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A096492E81
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348624AbiARTdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S1348785AbiARTdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245420AbiARTdW (ORCPT
+        with ESMTP id S1348737AbiARTd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:33:22 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F27C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:22 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id i17so245780pfk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:22 -0800 (PST)
+        Tue, 18 Jan 2022 14:33:29 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A0BC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:29 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h12so259218pjq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4yDUOHTMYqAid31wh6oGLNZZBHOoCkyIGd04ut2RF8U=;
-        b=qraaWL9bEjCCxGK0d7Js68WPj59M9JK9Rpz2EnuGppWWGkDaMnDiRMAA7lfNgwgMYY
-         KIGrqDoVRogqOxE7lSCsyoHI6yrVrFgJjRr4HEzRYmwI0APhtMnpu3gFdxwW7sUCRn5v
-         etpIGOJgRdMgpbuc9t8qrMX6ZrZQjBT/V9efGNeeDQmhCHVfePGu1WE9pBIsYumXgE2i
-         kvQVryCOvfOG/ihJ/OPTCsA30FnZtcm378EYDWDpD29rAc9jNTwCOZX0E/c9avpZ5yNU
-         fRAsob9f91xaCmCwzmmLLlx53Qk0+MfMiUleP3oOftMWZs3pYnCCpX5T6FkZC6ocZVVN
-         uSOg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CBbnsXy9AytdwcK7KD7eqWz23KQCXfm607WErt+s/w8=;
+        b=YT1dcDemSzFd9O1uW30vhm+OyQ/p1cRIyirJn4JK0W/kFlEBcQuk/TzpJHVZkq5fNS
+         wq+mnMG61BUXUdKnaX4w7tU777mvBvywNvoncTRML58t2j0O5Qh7tT0r0JzNT9UKnfXu
+         QVrJlOcEnjD91zZkyzCzxW9fwzWT+hOCsP8mI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4yDUOHTMYqAid31wh6oGLNZZBHOoCkyIGd04ut2RF8U=;
-        b=I/v3Xgp6YPf3+PcwuK+rDxI7TnFRSgKLv9r34p+v9KByzlKuJjdSawQYqFRpdRbJ/8
-         JhxgvPPOwyqOoyHDConkjH8B2Xs/7xx1XrUt7+IHxuEx2NU945jmzxi/nr+OaH2Axe7U
-         qwtk2YSicLA+LYM0QsJL7KsQBrmeWjV2rk36Fa9dYkLpvseYoAONB57h89ESKgwttJME
-         qifPdBEZZfwRMyz/M7zJAHptJ/eHArFca87kcUT0E1LYABNzqWAkmGUq7Iwuu31VQo7a
-         p699WHQOqr0LQYAo//CHa7aOko1BWZLwNh67G3EloMaZvXqXDKVpOZf1QKG+C4q2uyPQ
-         3zWA==
-X-Gm-Message-State: AOAM530H3NQFPKhZW18uMSg9uej1d4VEAzkXlLJTRy9UDMZGSaGYytce
-        JC9fMHMJ0wuWHn0QILlxMznCzA==
-X-Google-Smtp-Source: ABdhPJzlvVe6UoHnOWKdHLS6wHxw8ZXTLnUe4GVe2xlFkb9YceWBOn/CuRm6SUQLwvHNFx/BBXMlpw==
-X-Received: by 2002:a05:6a00:1144:b0:4c4:8072:e588 with SMTP id b4-20020a056a00114400b004c48072e588mr9535721pfm.11.1642534401803;
-        Tue, 18 Jan 2022 11:33:21 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:d4a9:6caf:1ad8:3664])
-        by smtp.gmail.com with ESMTPSA id e5sm3256145pjr.53.2022.01.18.11.33.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CBbnsXy9AytdwcK7KD7eqWz23KQCXfm607WErt+s/w8=;
+        b=jdt0HbKJ9pQ/4BNdGwaPLHjTqLYR2Z4f4s2P/VR2tIRSl6aTgeVDi1+QeVfINpTrYg
+         WdtUCKIRxRgF+8c6BigcShWakMREXE7U8bahJ0P0E+fUIu90wU31W8Y4/Bf9b+mu00IV
+         wniZF9px5R3BlvJfHJzFRNBCVUEBMSArExsmNcu0Ad7cD5xYgnLUoR5yM8QpE8IkIEeH
+         huGG6P/p8mlhU1j9QdaKhuJFtZli42shbASqxnNSHOE29qS68KFhzt3e5g8f7i4g291w
+         Ao7F/YIFSyBAIa0EhpK7jRByaJtM2pGhWBFzS+0GJb0ix5rOUtCMETQv73sOeEGQ+l76
+         N2rA==
+X-Gm-Message-State: AOAM532piA9sYlWdfQQ+rZ4DTS2sPLYmkrOv/7V2uK28KaCPxCQKbPZ2
+        AWvEO7bxX/0v8hSV6KbXW/+YNg==
+X-Google-Smtp-Source: ABdhPJx2fb9mz0mAbFZn+FD2eJSxHLxAP1SjXHF+pfPxlkQLg9QD3ptDa3kDXQFXt2uiv3/Yd9ff0w==
+X-Received: by 2002:a17:90b:4acb:: with SMTP id mh11mr43583pjb.213.1642534409329;
+        Tue, 18 Jan 2022 11:33:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i9sm18509238pfe.94.2022.01.18.11.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 11:33:20 -0800 (PST)
-Date:   Tue, 18 Jan 2022 11:33:14 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Alyssa Ross <hi@alyssa.is>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Null pointer dereference in cros-ec-typec
-Message-ID: <YecV+rh/4rzygUbx@google.com>
-References: <20220118163754.nfy53mfjpazgw2a2@eve>
+        Tue, 18 Jan 2022 11:33:29 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>,
+        Ivan Safonov <insafonov@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Marco Cesati <marcocesati@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 0/3] staging: rtl*: Check for NULL header value
+Date:   Tue, 18 Jan 2022 11:33:24 -0800
+Message-Id: <20220118193327.2822099-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="chZTVmIPFdDm6RY+"
-Content-Disposition: inline
-In-Reply-To: <20220118163754.nfy53mfjpazgw2a2@eve>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2362; h=from:subject; bh=RkrvzQKXiJGeGVtE4aiiwkUUE4cyJyTqNK6BWHEn6Qk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh5xYFa0gTnX5Uvtzf7/HRJz2R5v+FHxlvgM4/V6ep /QBzNa+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYecWBQAKCRCJcvTf3G3AJk8KD/ 90HzfwC3mZAlSivVeYDqmcqeDbV8BZ/Si9MVcjeWf6G2ulETwY8bNHV7YwDDq/qXNVtCKkAO/xW08Q TP0Cn7BVOsGdL38qzv58z8HfFbwcKIRsfGFzGZFVdpoOdlkxxiLYrgWxklDCIYIG/U3QH8pfdcmzg6 4Lke60cD+jS1CR3cNr9RHHvHw3eij7T3ZU3WpyAL+BcVHkymv0RyZGHM+0fvtR3VYG+dnGwSH5KlsZ fBsIzAsdWqhUXPq7L4Ub7VZ1Q+Z2bZvZdJsS4hXDPJ6PDAILMx1sNU11VSG4EiAQ7128wj41LA4kPB SnV1mzO6vTRrd2jnUQ1rnarsXZ1po4z1ssimb02Cx1gXeVZjY1g/wb14DWp3mWtGI1wfjVMtf0oC21 qOPcR3h9uYRaU9aNslTeMs8cPoFMqmz1SROCrln3Dnufd8RL+y6ybQg4ZuOpf6EQOWmD2fbfixZ6jU hCFi0VRzXTbGOZv11ebLOz2HUhC/lFtKrNwXi47mbvhJwfSMB+vBs/RdevDY9WVLKYp/4l2fei9Wvl WeHRTFTEH6JZGViwTOM+o0X3NtF+/f7AeihfC7E/WQzg+sFBYxY6rNVFuXfXrEYWXosZMEh2uDaONR w65RKc6jytOxlURjKu/cp9phQhJ1eVb39C0F8z925SJb2t+FocoRvMPnozhQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---chZTVmIPFdDm6RY+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When building with -Warray-bounds, the following warning is emitted:
 
-Hi Alyssa,
+In file included from ./include/linux/string.h:253,
+                 from ./arch/x86/include/asm/page_32.h:22,
+                 from ./arch/x86/include/asm/page.h:14,
+                 from ./arch/x86/include/asm/thread_info.h:12,
+                 from ./include/linux/thread_info.h:60,
+                 from ./arch/x86/include/asm/preempt.h:7,
+                 from ./include/linux/preempt.h:78,
+                 from ./include/linux/rcupdate.h:27,
+                 from ./include/linux/rculist.h:11,
+                 from ./include/linux/sched/signal.h:5,
+                 from ./drivers/staging/rtl8723bs/include/drv_types.h:17,
+                 from drivers/staging/rtl8723bs/core/rtw_recv.c:7:
+In function 'memcpy',
+    inlined from 'wlanhdr_to_ethhdr' at drivers/staging/rtl8723bs/core/rtw_recv.c:1554:2:
+./include/linux/fortify-string.h:41:33: warning: '__builtin_memcpy' offset [0, 5] is out of the bounds [0, 0] [-Warray-bounds]
+   41 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
 
-Thanks for reaching out.
+This is due to various paths to the memcpy() where the compile could
+see the destination buffer having a NULL value. This series fixes this
+by both eliminating cases where NULL returns were impossible and adding
+missing NULL checks where values were possible.
 
-On Tue, Jan 18, 2022 at 04:37:54PM +0000, Alyssa Ross wrote:
-> My distribution recently enabled the Chrome OS EC Type C control driver
-> in its kernel builds.  On my Google Pixelbook i7 (eve), the driver reports
-> a null pointer dereference at boot.  From what I can tell, this happens
-> because typec->ec is set to NULL in cros_typec_probe.  Other drivers,
-> like cros-usbpd-notify, appear to be set up to handle this case.  As a
-> result of this bug, I'm no longer able to reboot my computer, because
-> udevd hangs while trying to do something with the device whose driver
-> isn't working.
->=20
+Thanks!
 
-I've copied Prashant, who's the author of the typec driver as well as
-cros-usbpd-notify.
+-Kees
 
-Prashant, any thoughts on a more graceful failure out of the typec driver's
-probe in case there's no ec object?=20
-
-> Here's the full Oops.  I was able to reproduce the issue with every
-> kernel I tried, from 5.10 to mainline.
->=20
-> cros-usbpd-notify-acpi GOOG0003:00: Couldn't get Chrome EC device pointer.
-> input: Intel Virtual Buttons as /devices/pci0000:00/0000:00:1f.0/PNP0C09:=
-00/INT33D6:00/input/input14
-> BUG: kernel NULL pointer dereference, address: 00000000000000d8
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 0 P4D 0
-> Oops: 0000 [#1] SMP PTI
-> CPU: 1 PID: 561 Comm: systemd-udevd Not tainted 5.15.12 #4
-> Hardware name: Google Eve/Eve, BIOS MrChromebox-4.14 08/06/2021
+v1: https://lore.kernel.org/lkml/20220113002001.3498383-1-keescook@chromium.org/
+v2: https://lore.kernel.org/lkml/20220115042427.824542-1-keescook@chromium.org
+v3:
+ - fix paste-o causing build failures (0day)
 
 
-Ah, here's the problem. It looks like this is a custom bios from Mr Chromeb=
-ox,
-so this is not a bios combination we validate at Google.
+Kees Cook (3):
+  staging: r8188eu: Drop get_recvframe_data()
+  staging: rtl8723bs: Drop get_recvframe_data()
+  staging: rtl8712: Drop get_recvframe_data()
 
-Thank you for the report. We'll look into fixing this and marking the fix
-for stable kernels so that it goes back to 5.10.
+ drivers/staging/r8188eu/core/rtw_recv.c        |  6 +++++-
+ drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c  |  4 +---
+ drivers/staging/r8188eu/include/rtw_recv.h     |  9 ---------
+ drivers/staging/rtl8712/rtl871x_recv.c         |  4 ++--
+ drivers/staging/rtl8712/rtl871x_recv.h         |  8 --------
+ drivers/staging/rtl8723bs/core/rtw_recv.c      | 11 ++++++++---
+ drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c |  3 +--
+ drivers/staging/rtl8723bs/include/rtw_recv.h   | 11 -----------
+ 8 files changed, 17 insertions(+), 39 deletions(-)
 
-Thanks,
+-- 
+2.30.2
 
-Benson
-
-> RIP: 0010:__mutex_lock+0x59/0x8c0
-> Code: 53 48 89 cb 48 83 ec 70 89 75 9c be 3d 02 00 00 4c 89 45 90 e8 18 4=
-7 33 ff e8 e3 e2 ff ff 44 8b 35 a4 85 e8 02 45 85 f6 75 0a <4d> 3b 6d 68 0f=
- 85 bf 07 00 00 65 ff 05 b6 5b 23 75 ff 75 90 4d 8d
-> RSP: 0018:ffffb44580a4bb50 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000001
-> RDX: 0000000000000000 RSI: ffffffff8bf91320 RDI: ffff922cbba50e20
-> RBP: ffffb44580a4bbf0 R08: 0000000000000000 R09: ffff922c5bac8140
-> R10: ffffb44580a4bc10 R11: 0000000000000000 R12: 0000000000000000
-> R13: 0000000000000070 R14: 0000000000000000 R15: 0000000000000001
-> FS:  00007f55338d6b40(0000) GS:ffff922fae200000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00000000000000d8 CR3: 000000011bbb2006 CR4: 00000000003706e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  ? fs_reclaim_acquire+0x4d/0xd0
->  ? lock_is_held_type+0xaa/0x120
->  ? cros_ec_cmd_xfer_status+0x1f/0x110
->  ? lock_is_held_type+0xaa/0x120
->  ? cros_ec_cmd_xfer_status+0x1f/0x110
->  cros_ec_cmd_xfer_status+0x1f/0x110
->  cros_typec_ec_command+0x91/0x1c0 [cros_ec_typec]
->  cros_typec_probe+0x7f/0x5a8 [cros_ec_typec]
->  platform_probe+0x3f/0x90
->  really_probe+0x1f5/0x3f0
->  __driver_probe_device+0xfe/0x180
->  driver_probe_device+0x1e/0x90
->  __driver_attach+0xc4/0x1d0
->  ? __device_attach_driver+0xe0/0xe0
->  ? __device_attach_driver+0xe0/0xe0
->  bus_for_each_dev+0x67/0x90
->  bus_add_driver+0x12e/0x1f0
->  driver_register+0x8f/0xe0
->  ? 0xffffffffc04ec000
->  do_one_initcall+0x67/0x320
->  ? rcu_read_lock_sched_held+0x3f/0x80
->  ? trace_kmalloc+0x38/0xe0
->  ? kmem_cache_alloc_trace+0x17c/0x2b0
->  do_init_module+0x5c/0x270
->  __do_sys_finit_module+0x95/0xe0
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f55344b1f3d
-> Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f=
-7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
- ff 73 01 c3 48 8b 0d bb ee 0e 00 f7 d8 64 89 01 48
-> RSP: 002b:00007fff187f1388 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-> RAX: ffffffffffffffda RBX: 000055a53acbe6e0 RCX: 00007f55344b1f3d
-> RDX: 0000000000000000 RSI: 00007f553461732c RDI: 000000000000000e
-> RBP: 0000000000020000 R08: 0000000000000000 R09: 0000000000000002
-> R10: 000000000000000e R11: 0000000000000246 R12: 00007f553461732c
-> R13: 000055a53ad94010 R14: 0000000000000007 R15: 000055a53ad95690
->  </TASK>
-> Modules linked in: fjes(+) cros_ec_typec(+) typec intel_vbtn(+) cros_usbp=
-d_notify sparse_keymap soc_button_array int3403_thermal int340x_thermal_zon=
-e int3400_thermal acpi_thermal_rel cros_kbd_led_backlight zram ip_tables i9=
-15 hid_multitouch i2c_algo_bit ttm crct10dif_pclmul crc32_pclmul crc32c_int=
-el drm_kms_helper nvme ghash_clmulni_intel sdhci_pci cqhci cec nvme_core sd=
-hci serio_raw drm mmc_core i2c_hid_acpi i2c_hid video pinctrl_sunrisepoint =
-fuse
-> CR2: 00000000000000d8
-> ---[ end trace 4a12c4896d70352b ]---
-
-
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---chZTVmIPFdDm6RY+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYecV+gAKCRBzbaomhzOw
-wt5XAP405MJKweQbbpp6U7hht4KUfj9J6CbrrMuKxZZ3XkOrKgEAwREHgXbBw0Wa
-Ixfff3UW0GhQJ3nuH4Q0tncR4FeSBQ8=
-=vk5t
------END PGP SIGNATURE-----
-
---chZTVmIPFdDm6RY+--

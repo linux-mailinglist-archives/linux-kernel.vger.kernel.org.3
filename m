@@ -2,86 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8F64928CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC40D4928DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344512AbiAROyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344627AbiAROxt (ORCPT
+        id S1344886AbiAROya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:54:30 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:61268 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344189AbiAROxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:53:49 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3375C061746
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:52:53 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id 30so80687293edv.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=bQERr3f96sJZo3fyx626TSqkOY/yxktD2TT4mdcbVt0=;
-        b=KCJy185T3knEUP0VU5+2Kb/w2dJCfUi+R6QqFj+D9M67B41I9YRspxvjurd51sI6Zl
-         k3O25OzU2iU2CnyEV9fCL5a5zDqzd/+BWQ3ly8IA/yvKjERUWr8Er55BFVpta/sUOiKK
-         1nZYN2ZhdzcNB5idjud8rbQgozBmb76SUMTUHOA+JrI34xyswedIOT48UbbgYecQEUhb
-         AqfbTt4rOeaVRgLm/DftzRtDHFJRD+LW/T0e1YTefu03dVAj7EVS9g7M4OSNeSQqVcR4
-         ql/Nay9DcVbY0CA2jlhzNNwxWZfsz/73aKSJwaqjh7WBy3nv5WlMtkVKMBmpsqFEV1RA
-         ycKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=bQERr3f96sJZo3fyx626TSqkOY/yxktD2TT4mdcbVt0=;
-        b=vfs/V1RWgr5NsqupER5FkTSgNVzLNJDjwf6ZIzaKgWNbHV7XbsVY7O+hVIiWqMosZs
-         QOZzQyr7HTVU+06BsxoKLUILBAmkE2Ju4x6nPEShUzcbWDhxYJLl1Ggie8JcGnLvGywp
-         Szd6xOTgGF7hTCWZKWuz41PD9ywnlbpIWxDRNaSAapOvl2bHDQOhXC5wQpGZnfH++QbT
-         mLorpJTLZDGOzKauGijv5qERhY/nJwJ2IkdMcOsxJ3iZmu9o7OcpubJAC06MjSrQ0OOh
-         0DLlqYfqLvfrC4MzlzatE28zQPEG9zhqAyG80VXBTqY6jd05ib81mO/W+J1WqaiYy1HF
-         tkyQ==
-X-Gm-Message-State: AOAM532HilGZ/X2+Jmwm/vOSsNbT8mvUcLw+Ix/bBOyRkky0/MRI7hSF
-        abZg10aa0rq55kVahwxO09prnjfXQXK7ZHmcS5L/+w==
-X-Google-Smtp-Source: ABdhPJxfgwnkMBqH0O3rYm2cgpBCiEyYsIzDkff7975I6IoDtQRPDlXXhxmN/92M2MY+QHAL6+sdUoU9Mp1Exv+3Zcc=
-X-Received: by 2002:aa7:c917:: with SMTP id b23mr10498043edt.309.1642517572296;
- Tue, 18 Jan 2022 06:52:52 -0800 (PST)
+        Tue, 18 Jan 2022 09:53:52 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20IA16xt003923;
+        Tue, 18 Jan 2022 08:53:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=oT71zYZrNYYAVg8RxuJrWoYyZlkJNB+Jr07bzKT9yzM=;
+ b=gkkinJg8iKrLsu5gefMkccLiXiaaF52vG01jOgeGPicGGgVTtknU5rW7kmtu8Wx6yU6A
+ iJV07uKpNyBrorvOiUEl8cMdbaONSKY58MdRNLrpQ7PHbe7zDi4qf95nRs47/nrSmBJB
+ dYJ7gLdClb4wIB3NWNI+4zKpLgnDCzT3Ou8rCEoKs5UvhCtvVF9Zg5I6t+pFG1UqlI7k
+ QuV9d5xg/7LbmbJMYLQs0kk9UUA9r2Uo+ldP4TBUbAcbYbzc7PkRvDoVKE+DOd0Sg/F9
+ mUZazc9L4r06Wzbptmt2HW5dgOQGVyYn8YH85nQ31P6VyhadYXAD2/+nTBhIOPudtsik tw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dn8k2s8sw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 18 Jan 2022 08:53:29 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
+ 2022 14:53:27 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 18 Jan 2022 14:53:27 +0000
+Received: from LONN2DGDQ73.ad.cirrus.com (unknown [198.90.238.138])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C0C01B13;
+        Tue, 18 Jan 2022 14:53:19 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v3 00/10] Support Spi in i2c-multi-instantiate driver
+Date:   Tue, 18 Jan 2022 14:52:41 +0000
+Message-ID: <20220118145251.1548-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 18 Jan 2022 15:52:41 +0100
-Message-ID: <CADYN=9LE7-9BHPEJBtL2sXChv2OfRcJTQnG+_Ug3HWAouBwHUQ@mail.gmail.com>
-Subject: backport patches to linux-5.4.y+
-To:     linux-stable <stable@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: zA00nyU-pN3X5N5JynvrPg8PJJY7TPPk
+X-Proofpoint-ORIG-GUID: zA00nyU-pN3X5N5JynvrPg8PJJY7TPPk
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add support for SPI bus in the i2c-multi-instantiate driver as
+upcoming laptops will need to multi instantiate SPI devices from
+a single device node, which has multiple SpiSerialBus entries at
+the ACPI table.
 
-Can these two patches be backported please?
+With the new SPI support, i2c-multi-instantiate becomes
+bus-multi-instantiate and is moved to the ACPI folder.
 
-603362b4a583 ("mtd: fixup CFI on ixp4xx") to v5.4+
-28187dc8ebd9 ("ARM: 9025/1: Kconfig: CPU_BIG_ENDIAN depends on
-!LD_IS_LLD") to v5.4+
+The intention is to support the SPI bus by re-using the current
+I2C multi instantiate, instead of creating a new SPI multi
+instantiate, to make it possible for peripherals that can be
+controlled by I2C or SPI to have the same HID at the ACPI table.
 
-Patch 603362b4a583 ("mtd: fixup CFI on ixp4xx") solves:
+The new driver (Bus multi instantiate, bmi) checks for the
+hard-coded bus type and returns -ENODEV in case of zero devices
+found for that bus. In the case of automatic bus detection, 
+the driver will give preference to I2C.
 
-drivers/mtd/maps/ixp4xx.c:57:4: error: CONFIG_MTD_CFI_BE_BYTE_SWAP required
-#  error CONFIG_MTD_CFI_BE_BYTE_SWAP required
-   ^
-1 error generated.
+The expectation is for a device node in the ACPI table to have
+multiple I2cSerialBus only or multiple SpiSerialBus only, not
+a mix of both; and for the case where there are both entries in
+one device node, only the I2C ones would be probed.
 
-Patch 28187dc8ebd9 ("ARM: 9025/1: Kconfig: CPU_BIG_ENDIAN depends on
-!LD_IS_LLD") solves:
+This new bus multi instantiate will be used in CS35L41 HDA new
+driver.
 
-ld.lld: error: arch/arm/common/dmabounce.o:(.rodata.str1.1): offset is
-outside the section
-make[2]: *** [scripts/Makefile.build:262: arch/arm/common/dmabounce.o] Error 1
-make[2]: *** Deleting file 'arch/arm/common/dmabounce.o'
-make[2]: Target '__build' not remade because of errors.
+Changes since V2:
+ - Fix review comments in bus-multi-instantiate
+ - Modified spi code to export new helper to allocate spi device
+   based on ACPI
+ - Add api in spi code to count number of spi devices in ACPI
+ - Add patch to add support for HP Laptops
+ - Add patch to add support for various CS35L41 devices in
+   scan.c and bus-multi-instantiate from previous chain:
+   https://lore.kernel.org/all/20220117160830.709403-1-tanureal@opensource.cirrus.com/
 
+Lucas Tanure (5):
+  platform/x86: i2c-multi-instantiate: Move it to drivers/acpi folder
+  ACPI: i2c-multi-instantiate: Rename it for a generic bus driver name
+  ACPI: bus-multi-instantiate: Reorganize I2C functions
+  ALSA: hda/realtek: Add support for HP Laptops
+  ACPI / scan: Create platform device for CS35L41
 
-Cheers,
-Anders
+Stefan Binding (5):
+  spi: Make spi_alloc_device and spi_add_device public again
+  spi: Create helper API to lookup ACPI info for spi device
+  spi: Support selection of the index of the ACPI Spi Resource before
+    alloc
+  spi: Add API to count spi acpi resources
+  ACPI: bus-multi-instantiate: Add SPI support
+
+ MAINTAINERS                                  |   4 +-
+ drivers/acpi/Kconfig                         |  11 +
+ drivers/acpi/Makefile                        |   1 +
+ drivers/acpi/bus-multi-instantiate.c         | 369 +++++++++++++++++++
+ drivers/acpi/scan.c                          |  16 +-
+ drivers/platform/x86/Kconfig                 |  11 -
+ drivers/platform/x86/Makefile                |   1 -
+ drivers/platform/x86/i2c-multi-instantiate.c | 174 ---------
+ drivers/spi/spi.c                            | 142 ++++++-
+ include/linux/spi/spi.h                      |  32 ++
+ sound/pci/hda/patch_realtek.c                |  43 ++-
+ 11 files changed, 592 insertions(+), 212 deletions(-)
+ create mode 100644 drivers/acpi/bus-multi-instantiate.c
+ delete mode 100644 drivers/platform/x86/i2c-multi-instantiate.c
+
+-- 
+2.25.1
+

@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAFD49285D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153C8492863
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 15:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245504AbiARO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 09:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
+        id S236256AbiARO3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 09:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiARO2L (ORCPT
+        with ESMTP id S232943AbiARO3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 09:28:11 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DBEC06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:28:11 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id bb37so1044907oib.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0fkJsmeB7165f0SJ65+JtHacZHTvcYLO9yyJUgbHYpo=;
-        b=BdcgUkDj8SdYSXsSJgPL3zm43cFGei5vVUZOKBAg0Rqt+mgB1Aw4bn9q0sffU8VF8v
-         QzD6PwcTCmg3kp+nK8HVxFAO17Tdb4MP+EhOTCiApXy0ONIbFmITQGp7qsjPjswljTDu
-         iIpUHaLSBf5aeqD7fR6y2nXFMv2JwZakNy15X8WbgUMor3fPfQcpiwSupIlZMDavdsBy
-         vS5nKVco4rmJH7f+8XbFQwCuUWD0YWGgJ2mpPbSwheCSnHb8phHbgvrlHaHk1je/Izd5
-         dqpTmDmg/mfCSDYRQR9jVdgfHl/F1i8TegoJC0OINDPfzvHcyN1ksqfafBX4mWzrnSPI
-         +lyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0fkJsmeB7165f0SJ65+JtHacZHTvcYLO9yyJUgbHYpo=;
-        b=HUlK5crmK0A6B52zjidGIMdiyoeNuH/vxvij07/3+l/wHIOcpVl7CVIRWeld8OKGGO
-         mMwfJBAMcFxhR1r4Tv1tZv6Xz0+YxbnazzzdBO7xcixyRUqh0Dzqr9lU1LH+AJkFKN/9
-         3rt2PEcU2jv6yzgDh1J52E3tTjB+H5E2eEhHlIr+vcb3wTgK6uYhbtsjT9LVaWLwG+Sc
-         dzQ53xeTFSyhiMQYS1qydy5UFXawYSNtyL4eJ9bAMl/k6j1IQrU648p+1pW5+ds7l3U7
-         528jmRy/PrpAcC5SsVqvVvO4QVJOIv+8pyUNRt8A9Nvoq16mYW8JFimyxgBIX2Nlky6M
-         G07A==
-X-Gm-Message-State: AOAM53216ar5iKwm8qiHBSlrHKgUFWjzlShO6RZ1sXBOR+LNxn9N10du
-        epQq9+v7n6eNuL3nyzdVb+LWUw==
-X-Google-Smtp-Source: ABdhPJwG70L6WOC4NLSIi6zQrjbwiaKOI6CLkQeMbsIFP1dM7e3U9RPC+GHM028Q2rQDPmlE9afwjg==
-X-Received: by 2002:a54:4e8c:: with SMTP id c12mr26670097oiy.65.1642516091047;
-        Tue, 18 Jan 2022 06:28:11 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id d12sm6335477otl.80.2022.01.18.06.28.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 06:28:10 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>
-Subject: [GIT PULL] hwspinlock updates for v5.17
-Date:   Tue, 18 Jan 2022 08:28:09 -0600
-Message-Id: <20220118142809.1751011-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 18 Jan 2022 09:29:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1357FC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 06:29:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6h1Zdr2EydcVe9RHTPIOffSWxJ2GattgKQcuFo1Sgpc=; b=XWJBblrlv8Jt4qr8OGjvdKAMAA
+        QtTgYzW+R6Ivc64T0KV8TL1o2Fn+EalccwpsRJZW8YypLQ9laTwaCAb6Dg8XSpr4dlTOCb9bzKGfJ
+        o5saOMBiNQAFQXrg3Xv/eXepOy74ZYZY16YjbhaK6f6z+Cy0hQgaeaoHwcbQMCvuaVqyTZrxs8tcf
+        O3R5dQ3AkEJJ7yYXVE7fnJlvgYWAJdusI9l7+yZYp6giJtOPA367IxOxLHNprrIYbMZXKq5lidqJ3
+        cJBiEa8HWnitjLWIbs2MgfEz3eIfF4sqcCOkgDP5EuTXg80xQEX1avksD9OfFlPt81imSi0cybGsR
+        wL1RNeMw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9pTx-009HrY-Kd; Tue, 18 Jan 2022 14:29:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 17A63300252;
+        Tue, 18 Jan 2022 15:29:08 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F32442015FD51; Tue, 18 Jan 2022 15:29:07 +0100 (CET)
+Date:   Tue, 18 Jan 2022 15:29:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Walt Drummond <walt@drummond.us>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, ar@cs.msu.ru,
+        linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        mm <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH 3/3] status: Display an informational message when the
+ VSTATUS character is pressed or TIOCSTAT ioctl is called.
+Message-ID: <YebOs1OWRAru2v5B@hirez.programming.kicks-ass.net>
+References: <20220118044323.765038-1-walt@drummond.us>
+ <20220118044323.765038-3-walt@drummond.us>
+ <72a719a0-cd7c-9516-93c2-bd258930b71e@kernel.org>
+ <YeamX3ELWyc/BtGp@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeamX3ELWyc/BtGp@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+On Tue, Jan 18, 2022 at 12:37:03PM +0100, Peter Zijlstra wrote:
+> > > +static inline struct task_struct *compare(struct task_struct *new,
+> > > +					  struct task_struct *old)
+> > > +{
+> > > +	unsigned int ostate, nstate;
+> > > +
+> > > +	if (old == NULL)
+> > > +		return new;
+> > > +
+> > > +	ostate = task_state_index(old);
+> > > +	nstate = task_state_index(new);
+> > > +
+> > > +	if (ostate == nstate) {
+> 
+> That's not an ordered set, please don't do that.
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+*sigh*.. sorry about that, I can't read, for some reason I thought you
+did: ostate < nstate...
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v5.17
-
-for you to fetch changes up to 60630924bb5af8751adcecc896e7763c3783ca89:
-
-  hwspinlock: stm32: enable clock at probe (2021-11-17 16:12:44 -0600)
-
-----------------------------------------------------------------
-hwspinlock updates for v5.17
-
-This contains a change to the stm32 hwspinlock driver to ensure that
-the hardware is operational even without CONFIG_PM.
-
-----------------------------------------------------------------
-Fabien Dessenne (1):
-      hwspinlock: stm32: enable clock at probe
-
- drivers/hwspinlock/stm32_hwspinlock.c | 58 ++++++++++++++++++++++-------------
- 1 file changed, 37 insertions(+), 21 deletions(-)
+> > > +		if (old->start_time > new->start_time)
+> > > +			return old;
+> > > +		return new;
+> > > +	}
+> > > +
+> > > +	if (ostate < nstate)
+> > > +		return old;
+> > > +
+> > > +	return new;
+> > > +}

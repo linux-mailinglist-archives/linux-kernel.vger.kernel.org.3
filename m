@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 791D9491A71
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DE249183D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352364AbiARC7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345250AbiARCrx (ORCPT
+        id S1348219AbiARCpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:45:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48696 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346607AbiARCjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:47:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79205C094252;
-        Mon, 17 Jan 2022 18:39:20 -0800 (PST)
+        Mon, 17 Jan 2022 21:39:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A646115F;
-        Tue, 18 Jan 2022 02:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0832C36AEF;
-        Tue, 18 Jan 2022 02:39:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE5F8B8125D;
+        Tue, 18 Jan 2022 02:39:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4F5C36AF3;
+        Tue, 18 Jan 2022 02:39:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473559;
-        bh=+j/hF9KUbkWpVpF0TWD+CJhI+JZR0eec5rq0R+03JEU=;
+        s=k20201202; t=1642473573;
+        bh=VnaSr4MhSWW2i7WWLbWLmwOjCnxmEcd4nHfq1PKfJy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lzMBmL3CFL/3d8vAn/2AfphcVAk4CIWXgU3CzhDHfF6Dycsx4MXqJ77sMoDuigTKM
-         qzwrt7OQ4p4LFgrdUmYCnnIqde0a7402H9PBL4n6wrgo+CPts+YV0SWO+XoBMPmG66
-         WOLxyj6ST+a8KCzRCRn/5UR4ik4ONi1BYuwdPwSN8AsvjW4kaaZl3G70o5Wn7QPj7s
-         VuwOb/P/5PvbPaxre+NMWsuUQwXBysmw2C5wlVh6cXWaHCd3rHpzW1iCiRjGh5p5JE
-         58mR1MsMHdHvRetvKlYnuhhcUFkHXGF+D9Wkqt7nVM9EteBunDUw4aKnrel5TOSIzk
-         D6qbIKRqH5FqQ==
+        b=BXWhaZ8ESIiyQKDSNyyNmJkICuhEMfnhOs+R7f9rI8J82a0i4T6Q53LxugbLqBYTH
+         /SjuvCrsxYi3E7plsrMSJU3lhhHqdiRHyBQpWJpX+33/6SQzj4YiRXVUxvZJU3/uhk
+         6gE9+5X4tW8fZrL95EzAmS3302C1ze6SoqYb4U3MjOmUEpmpMS0ZFo9+ekgvq204ga
+         sSpynoayG4YA0A+BP9oOzRoWnT8S1xMlv9zMVuWHtuS7eW++vgHnPCOHicH7l2pbZP
+         Ipbrdsw48qChV7KfEUZF3oD3y8zO5VME86S1NHHj4nSOCkNdsqVpuaNjq6hOhpzcdV
+         mD7exzX6HOCgA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Joe Thornber <ejt@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, agk@redhat.com,
-        dm-devel@redhat.com
-Subject: [PATCH AUTOSEL 5.15 169/188] dm space map common: add bounds check to sm_ll_lookup_bitmap()
-Date:   Mon, 17 Jan 2022 21:31:33 -0500
-Message-Id: <20220118023152.1948105-169-sashal@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, andrew@lunn.ch,
+        vivien.didelot@gmail.com, olteanv@gmail.com, kuba@kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 174/188] net: dsa: hold rtnl_mutex when calling dsa_master_{setup,teardown}
+Date:   Mon, 17 Jan 2022 21:31:38 -0500
+Message-Id: <20220118023152.1948105-174-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
 References: <20220118023152.1948105-1-sashal@kernel.org>
@@ -51,35 +51,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Thornber <ejt@redhat.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit cba23ac158db7f3cd48a923d6861bee2eb7a2978 ]
+[ Upstream commit c146f9bc195a9dc3ad7fd000a14540e7c9df952d ]
 
-Corrupted metadata could warrant returning error from sm_ll_lookup_bitmap().
+DSA needs to simulate master tracking events when a binding is first
+with a DSA master established and torn down, in order to give drivers
+the simplifying guarantee that ->master_state_change calls are made
+only when the master's readiness state to pass traffic changes.
+master_state_change() provide a operational bool that DSA driver can use
+to understand if DSA master is operational or not.
+To avoid races, we need to block the reception of
+NETDEV_UP/NETDEV_CHANGE/NETDEV_GOING_DOWN events in the netdev notifier
+chain while we are changing the master's dev->dsa_ptr (this changes what
+netdev_uses_dsa(dev) reports).
 
-Signed-off-by: Joe Thornber <ejt@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+The dsa_master_setup() and dsa_master_teardown() functions optionally
+require the rtnl_mutex to be held, if the tagger needs the master to be
+promiscuous, these functions call dev_set_promiscuity(). Move the
+rtnl_lock() from that function and make it top-level.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/persistent-data/dm-space-map-common.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/dsa/dsa2.c   | 8 ++++++++
+ net/dsa/master.c | 4 ++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/persistent-data/dm-space-map-common.c b/drivers/md/persistent-data/dm-space-map-common.c
-index 4a6a2a9b4eb49..bfbfa750e0160 100644
---- a/drivers/md/persistent-data/dm-space-map-common.c
-+++ b/drivers/md/persistent-data/dm-space-map-common.c
-@@ -283,6 +283,11 @@ int sm_ll_lookup_bitmap(struct ll_disk *ll, dm_block_t b, uint32_t *result)
- 	struct disk_index_entry ie_disk;
- 	struct dm_block *blk;
+diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
+index e9911b18bdbfa..db9cdfb190fc0 100644
+--- a/net/dsa/dsa2.c
++++ b/net/dsa/dsa2.c
+@@ -1011,6 +1011,8 @@ static int dsa_tree_setup_master(struct dsa_switch_tree *dst)
+ 	struct dsa_port *dp;
+ 	int err;
  
-+	if (b >= ll->nr_blocks) {
-+		DMERR_LIMIT("metadata block out of bounds");
-+		return -EINVAL;
-+	}
++	rtnl_lock();
 +
- 	b = do_div(index, ll->entries_per_block);
- 	r = ll->load_ie(ll, index, &ie_disk);
- 	if (r < 0)
+ 	list_for_each_entry(dp, &dst->ports, list) {
+ 		if (dsa_port_is_cpu(dp)) {
+ 			err = dsa_master_setup(dp->master, dp);
+@@ -1019,6 +1021,8 @@ static int dsa_tree_setup_master(struct dsa_switch_tree *dst)
+ 		}
+ 	}
+ 
++	rtnl_unlock();
++
+ 	return 0;
+ }
+ 
+@@ -1026,9 +1030,13 @@ static void dsa_tree_teardown_master(struct dsa_switch_tree *dst)
+ {
+ 	struct dsa_port *dp;
+ 
++	rtnl_lock();
++
+ 	list_for_each_entry(dp, &dst->ports, list)
+ 		if (dsa_port_is_cpu(dp))
+ 			dsa_master_teardown(dp->master);
++
++	rtnl_unlock();
+ }
+ 
+ static int dsa_tree_setup_lags(struct dsa_switch_tree *dst)
+diff --git a/net/dsa/master.c b/net/dsa/master.c
+index e8e19857621bd..16b7dfd22bf5d 100644
+--- a/net/dsa/master.c
++++ b/net/dsa/master.c
+@@ -267,9 +267,9 @@ static void dsa_master_set_promiscuity(struct net_device *dev, int inc)
+ 	if (!ops->promisc_on_master)
+ 		return;
+ 
+-	rtnl_lock();
++	ASSERT_RTNL();
++
+ 	dev_set_promiscuity(dev, inc);
+-	rtnl_unlock();
+ }
+ 
+ static ssize_t tagging_show(struct device *d, struct device_attribute *attr,
 -- 
 2.34.1
 

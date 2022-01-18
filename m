@@ -2,183 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFB9492CF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F88492CFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347746AbiARSFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:05:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61800 "EHLO
+        id S1347781AbiARSJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:09:52 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34720 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237348AbiARSFl (ORCPT
+        by vger.kernel.org with ESMTP id S237348AbiARSJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:05:41 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IGvbt8015118;
-        Tue, 18 Jan 2022 18:05:40 GMT
+        Tue, 18 Jan 2022 13:09:50 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IHvptx033287;
+        Tue, 18 Jan 2022 18:09:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=fSu/Xg8aajTRlELlulYjnIVdNTp9KCsX1D7Q3mCfhvI=;
- b=kqj789nuPIB5EFkJvYifwCBg/rZ03aMKtpwznroks084hXzkyIEqWcT36i/qH5/KUHFo
- Oxd4kchQxvipjAPHp7WfiZFuYZ51Y6QQaJZ1rrtiF+aH2mhHQS9+DVV5iWqiI/CazA5G
- QHyypcqp7I5ELvF7n8HmkKTgKi1GuJ37O+jQyJpZ3sZz+gcEfEYSfzSsyX7K6ayGo2Kb
- d5MET6fRFaTfuvb5LNTEQJb3oJ80HCkGchOHb4sDzM+AGkmKBifKAT/WyelK2dRD1J4/
- 2QZbdTVuWDxpPC4Js2PvsgXomMBG1dcfeXovc7zQXXE+88YReYL0HNCO32/ulkwm9zvR PQ== 
+ bh=qdURXCSIdearxSVyI4wimCDGoPd5eO/yurISbHJRttI=;
+ b=CYzehy3JGeDrPE+u+TV9kNYdjpe0fjbED43k5N3Zfzo4nxnSuA0XwSB4hozFDYfb7v1y
+ YDfFNJzfbctBYVfg4fY6aFXb2/BwFOgBiP5QbuWCQyZLTAkjuokEd2YSIytiqOdNQ/XM
+ zgEfqX2LILDtwJm3hExpEb1liXolaBUNcM0T5MZwUm8+Q/BwNr9SfG7bug2scu72c4JR
+ XoVUg92LEs7ahLlssnPSnhYmVPcKh1zi+TAXIp5JFLRAygnJRfvli5xaOt+OnK3wOHHz
+ sdhk9Gd99FiVFkPaXA6SftHFRcNDD6fenxDiSI7GZLQjeBkhqiPTIrjyLQCpRGSYjQsP yA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1hfsjgs-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp2dmrb4x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 18:05:40 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20II5eAd004347;
-        Tue, 18 Jan 2022 18:05:40 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1hfsjg0-1
+        Tue, 18 Jan 2022 18:09:17 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20II1COV007361;
+        Tue, 18 Jan 2022 18:09:17 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp2dmrb41-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 18:05:40 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20II1vkl014261;
-        Tue, 18 Jan 2022 18:05:38 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma05wdc.us.ibm.com with ESMTP id 3dknwaq3eh-1
+        Tue, 18 Jan 2022 18:09:17 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20II33ZL001055;
+        Tue, 18 Jan 2022 18:09:15 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03wdc.us.ibm.com with ESMTP id 3dknw9y6bp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 18:05:38 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20II5aFr34078978
+        Tue, 18 Jan 2022 18:09:15 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20II9CQt32112950
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 18:05:36 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C11C6E052;
-        Tue, 18 Jan 2022 18:05:36 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66F7A6E05F;
-        Tue, 18 Jan 2022 18:05:34 +0000 (GMT)
-Received: from [9.163.19.30] (unknown [9.163.19.30])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 18:05:34 +0000 (GMT)
-Message-ID: <2b624b9b-3cc3-23cd-d53f-385332ae6a0e@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 13:05:33 -0500
+        Tue, 18 Jan 2022 18:09:13 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D20D0AE073;
+        Tue, 18 Jan 2022 18:09:12 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85547AE063;
+        Tue, 18 Jan 2022 18:09:12 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 18:09:12 +0000 (GMT)
+Message-ID: <8f7e0bcc-cd7c-723d-c544-300b5e8f3873@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 13:09:12 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 23/30] vfio/pci: re-introduce CONFIG_VFIO_PCI_ZDEV
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 19/19] ima: Enable IMA namespaces
 Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-24-mjrosato@linux.ibm.com>
- <1ea61cf3-65b2-87ec-55b4-7dfa5f623d15@linux.ibm.com>
- <e1cd6368-bb1a-1a4d-df83-8190524b9a4d@linux.ibm.com>
- <4cde7eee-72ef-6bec-bb19-606ca57302dd@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <4cde7eee-72ef-6bec-bb19-606ca57302dd@linux.ibm.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
+ <20220114144515.vbler7ae3jqebhec@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220114144515.vbler7ae3jqebhec@wittgenstein>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -xnS3U12NbZCRBlClX7mf8S5XnZOptRb
-X-Proofpoint-ORIG-GUID: NWtrTaeC_H6_LdyNZxD6Dbc2UrhQRqdQ
+X-Proofpoint-ORIG-GUID: MN2PzQuo8sUKosjOArxxODBIZ1Cm5EMz
+X-Proofpoint-GUID: oI15isXt1JsljjwNRWJJ0gOvjc0RJOeN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- malwarescore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
- spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2201180109
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 12:45 PM, Pierre Morel wrote:
-> 
-> 
-> On 1/18/22 18:32, Matthew Rosato wrote:
->> On 1/18/22 12:20 PM, Pierre Morel wrote:
->>>
->>>
->>> On 1/14/22 21:31, Matthew Rosato wrote:
->>>> This was previously removed as unnecessary; while that was true, 
->>>> subsequent
->>>> changes will make KVM an additional required component for 
->>>> vfio-pci-zdev.
->>>> Let's re-introduce CONFIG_VFIO_PCI_ZDEV as now there is actually a 
->>>> reason
->>>> to say 'n' for it (when not planning to CONFIG_KVM).
->>>>
->>>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->>>> ---
->>>>   drivers/vfio/pci/Kconfig      | 11 +++++++++++
->>>>   drivers/vfio/pci/Makefile     |  2 +-
->>>>   include/linux/vfio_pci_core.h |  2 +-
->>>>   3 files changed, 13 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
->>>> index 860424ccda1b..fedd1d4cb592 100644
->>>> --- a/drivers/vfio/pci/Kconfig
->>>> +++ b/drivers/vfio/pci/Kconfig
->>>> @@ -42,5 +42,16 @@ config VFIO_PCI_IGD
->>>>         and LPC bridge config space.
->>>>         To enable Intel IGD assignment through vfio-pci, say Y.
->>>> +
->>>> +config VFIO_PCI_ZDEV
->>>> +    bool "VFIO PCI extensions for s390x KVM passthrough"
->>>> +    depends on S390 && KVM
->>>> +    default y
->>>> +    help
->>>> +      Support s390x-specific extensions to enable support for 
->>>> enhancements
->>>> +      to KVM passthrough capabilities, such as interpretive 
->>>> execution of
->>>> +      zPCI instructions.
->>>> +
->>>> +      To enable s390x KVM vfio-pci extensions, say Y.
->>>
->>> In several patches we check on CONFIG_PCI (14,15,16,17 and 22) but we 
->>> may have PCI without VFIO_PCI, wouldn't it be a problem?
->>>
->>> Here we define a new CONFIG entry and I have two questions:
->>>
->>> 1- there is no dependency on VFIO_PCI while the functionality is 
->>> obviously based on VFIO_PCI
->>
->> It's not obvious from this diff, but this 'config VFIO_PCI_ZDEV' 
->> statement is within an 'if VFIO_PCI' statement, just like VFIO_PCI_IGD 
->> above -- so the dependency is there.
-> 
-> sorry, I remember now you already answered this to Christian last time.
-> 
->>
->>>
->>> 2- Wouldn't it be possible to use this item and the single condition 
->>> for the different checks we need through the new VFIO interpretation 
->>> functionality.
->>
->> Possibly, but 1) we'd have to make linking arch/s390/kvm/pci.o 
->> dependent on CONFIG_VFIO_PCI instead of CONFIG_PCI in patch 14 and 2) 
->> if the relationship between CONFIG_VFIO_PCI and CONFIG_PCI were to 
->> ever change (though I don't see why it would..), we would be broken 
->> because the symbols we are referencing really require CONFIG_PCI (as 
->> they are located in s390 PCI).
->>
-> 
-> Yes but VFIO_PCI_ZDEV depends on KVM, PCI and on VFIO_PCI
-> Wouldn't a single config item for this new code be easier to manage and 
-> understand?
-> 
 
-I guess my primary resistance is to abstracting/hiding the dependency. 
-Yes, userspace will never setup for zPCI interpretation without 
-CONFIG_VFIO_PCI{_ZDEV}, but that's not where the compilation dependency 
-is -- it's on CONFIG_PCI specifically.
+On 1/14/22 09:45, Christian Brauner wrote:
+> On Tue, Jan 04, 2022 at 12:04:16PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Introduce the IMA_NS in Kconfig for IMA namespace enablement.
+>>
+>> Enable the lazy initialization of an IMA namespace when a user mounts
+>> SecurityFS. Now a user_namespace will get a pointer to an ima_namespace
+>> and therefore add an implementation of get_current_ns() that returns this
+>> pointer.
+>>
+>> get_current_ns() may now return a NULL pointer for as long as the IMA
+>> namespace hasn't been created, yet. Therefore, return early from those
+>> functions that may now get a NULL pointer from this call. The NULL
+>> pointer can typically be treated similar to not having an IMA policy set
+>> and simply return early from a function.
+>>
+>> Implement ima_ns_from_file() for SecurityFS-related files where we can
+>> now get the IMA namespace via the user namespace pointer associated
+>> with the superblock of the SecurityFS filesystem instance. Since
+>> the functions using ima_ns_from_file() will only be called after an
+>> ima_namesapce has been allocated they will never get a NULL pointer
+>> for the ima_namespace.
+>>
+>> Switch access to userns->ima_ns to use acquire/release semantics to ensure
+>> that a newly created ima_namespace structure is fully visible upon access.
+>>
+>> Replace usage of current_user_ns() with ima_ns_from_user_ns() that
+>> implements a method to derive the user_namespace from the given
+>> ima_namespace. It leads to the same result.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+[...]
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index b7dbc687b6ff..5a9b511ebbae 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -1333,6 +1333,7 @@ static unsigned int ima_parse_appraise_algos(char *arg)
+>>   static int ima_parse_rule(struct ima_namespace *ns,
+>>   			  char *rule, struct ima_rule_entry *entry)
+>>   {
+>> +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
+> So I think ima_policy_write() and therefore ima_parse_rule() can
+> legitimately be reached at least from an ancestor userns but also from a
+> completely unrelated userns via securityfs. Sorry, I didn't see this
+> earlier. Think of the following two scenarios:
+>
+> * userns1: unshare -U --map-root --mount
+> -----------------------------------------
+>     mount -t securityfs securityfs /userns1_securityfs
+>     fd_in_userns1 = open("/userns1_securityfs/ima_file, O_RDWR);
+>
+>     /* I _think_ that sending of fds here should work but I haven't
+>      * bothered to recheck the scm code as I need to do some driving in a
+>      * little bit so I'm running out of time...
+>      */
+>     send_fd_scm_rights(fd_in_userns1, task_in_userns2);
+>
+> * userns2: unshare -U --map-root --mount
+> -----------------------------------------
+>     fd_from_userns1 = receive_fd_scm_rights();
+>     write_policy(fd_from_userns1, "my fancy policy");
 
-But I guess on the other hand you could argue why even bother building 
-pci.o into kvm without CONFIG_VFIO_PCI_ZDEV as it will never be used.
+Passing an fd around like this presumably indicates that you intend to 
+let the recipient read/write to it.
 
-OK, I will have a look at making this change.  It will require a little 
-reorganization, at least moving this patch up before patch 14.
+
+> It also means that if you inherit an fd from a more privileged imans
+> instance you can write to it:
+
+Now in this example we have to assume that root is making a mistake 
+passing the file descriptor around?
+
+# ls -l /sys/kernel/security/ima/
+total 0
+-r--r-----. 1 root root 0 Jan 18 12:48 ascii_runtime_measurements
+-r--r-----. 1 root root 0 Jan 18 12:48 binary_runtime_measurements
+-rw-------. 1 root root 0 Jan 18 12:48 policy
+-r--r-----. 1 root root 0 Jan 18 12:48 runtime_measurements_count
+-r--r-----. 1 root root 0 Jan 18 12:48 violations
+
+>
+> * initial_userns:
+
+
+So that's the host, right? And this is a 2nd independent example from 
+the first.
+
+ > ------------------
+
+>     mount -t securityfs securityfs /initial_securityfs
+>
+>     fd_in_initial_securityfs = open("/initial_securityfs/ima_file, O_RDWR);
+>
+>     pid = fork():
+>     if (pid == 0) {
+> 	unshare(CLONE_NEWUSER);
+> 	/* write idmapping for yourself */
+>
+> 	write_policy(fd_in_initial_securityfs, "my fancy policy");
+>     }
+>
+> would allow an unprivileged caller to alter the host's ima policy (as
+> you can see the example requires cooperation).
+
+Sorry, not currently following. Root is the only one being able to open 
+that IMA files on the host, right? Is this a mistake here where root 
+passed the fd onto the child and that child is not trusted to mess with 
+the fd including passing it on further?
+
+
+>
+> In both cases the write can legitimately reach ima_policy_write() and
+> trigger ima_parse_rule() from another user namespace.
+>
+> There are multiple ways to go here, I think.
+>
+> It's important to figure out whether - coming back to an earlier review
+> of mine - you're ok with everyone with access to an opened policy fd
+> being able to write an ima policy for the namespace in questions as long
+> as _the opener of the policy file_ was privileged enough.
+>
+> If that's the case then you can just remove the WARN_ON()/add a
+> non-WARN_ON() helper in there.
+>
+>  From my ima-naive perspective this seems fine and preferable as this
+> means clean permission checking once at open time.
+>
+> A good question to answer in order to solve this is whether or not a
+> given operation is allowed is dependent on what is written, i.e. on the
+> content of the rule, I guess. I don't think there is.

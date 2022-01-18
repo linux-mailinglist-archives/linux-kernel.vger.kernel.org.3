@@ -2,295 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C16B49219B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8374921A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344977AbiARIsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:48:31 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31166 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiARIsa (ORCPT
+        id S1344983AbiARIvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:51:39 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57264 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbiARIvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:48:30 -0500
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JdMmg2b24z8wCk;
-        Tue, 18 Jan 2022 16:45:39 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 18 Jan 2022 16:48:27 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 18 Jan 2022 16:48:27 +0800
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <mkoutny@suse.com>, <paulmck@kernel.org>, <tj@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com> <Yd5FkuhYX9YcgQkZ@T590>
- <2221953d-be40-3433-d46c-f40acd044482@huawei.com>
- <CAFj5m9KmHB6FtUZ3E42BMZo+=aNNfn2bLu=kNhBOsRdxbfT6nw@mail.gmail.com>
- <c5d1d7b5-b815-0dda-b7d3-8151189a8203@huawei.com> <YeU1AmG4/2wXMgxh@T590>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <e436c92b-efe2-1b18-38c7-f2850b55edef@huawei.com>
-Date:   Tue, 18 Jan 2022 16:48:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 18 Jan 2022 03:51:38 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 05EF81F3B5;
+        Tue, 18 Jan 2022 08:51:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642495897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ktSc+uVAaUOUFDmID1uUn+N2h+FMdLGzH0w7pkGhy34=;
+        b=re+LB1EFXSfuPGtUCKPTDJ9txguBHwN+K0G2zo8K2iyxTUMfADBTmdY7588SE7k4XVgNGP
+        LGeU2/gg0h/xWwjX0Mzb2cyF69i2g/0vHUbEDAQAruIfsxZCTSv2VCFvn12P5R8TKPro6r
+        8rHGyRd3PfSzhd8CYmRolKLKMTZY2Qo=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8A8FEA3B88;
+        Tue, 18 Jan 2022 08:51:36 +0000 (UTC)
+Date:   Tue, 18 Jan 2022 09:51:36 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Nico Pache <npache@redhat.com>
+Cc:     Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        jsavitz@redhat.com, peterz@infradead.org, tglx@linutronix.de,
+        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
+        andrealmeid@collabora.com
+Subject: Re: [PATCH v3] mm/oom: do not oom reap task with an unresolved
+ robust futex
+Message-ID: <YeZ/mL808DpA8mdG@dhcp22.suse.cz>
+References: <20220114180135.83308-1-npache@redhat.com>
+ <YeUuWcNArnDhOjFY@dhcp22.suse.cz>
+ <ad639326-bea8-9bfb-23e3-4e2b216d9645@redhat.com>
+ <43a6c470-9fc2-6195-9a25-5321d17540e5@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YeU1AmG4/2wXMgxh@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+In-Reply-To: <43a6c470-9fc2-6195-9a25-5321d17540e5@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-åœ¨ 2022/01/17 17:21, Ming Lei å†™é“:
-> On Fri, Jan 14, 2022 at 04:21:04PM +0800, yukuai (C) wrote:
->> åœ¨ 2022/01/14 11:05, Ming Lei å†™é“:
->>> On Thu, Jan 13, 2022 at 04:46:18PM +0800, yukuai (C) wrote:
->>>> åœ¨ 2022/01/12 11:05, Ming Lei å†™é“:
->>>>> Hello Yu Kuai,
->>>>>
->>>>> On Mon, Jan 10, 2022 at 09:47:58PM +0800, Yu Kuai wrote:
->>>>>> Throttled bios can't be issued after del_gendisk() is done, thus
->>>>>> it's better to cancel them immediately rather than waiting for
->>>>>> throttle is done.
->>>>>>
->>>>>> For example, if user thread is throttled with low bps while it's
->>>>>> issuing large io, and the device is deleted. The user thread will
->>>>>> wait for a long time for io to return.
->>>>>>
->>>>>> Noted this patch is mainly from revertion of commit 32e3374304c7
->>>>>> ("blk-throttle: remove tg_drain_bios") and commit b77412372b68
->>>>>> ("blk-throttle: remove blk_throtl_drain").
->>>>>>
->>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>>>> ---
->>>>>>     block/blk-throttle.c | 77 ++++++++++++++++++++++++++++++++++++++++++++
->>>>>>     block/blk-throttle.h |  2 ++
->>>>>>     block/genhd.c        |  2 ++
->>>>>>     3 files changed, 81 insertions(+)
->>>>>
->>>>> Just wondering why not take the built-in way in throtl_upgrade_state() for
->>>>> canceling throttled bios? Something like the following, then we can avoid
->>>>> to re-invent the wheel.
->>>>>
->>>>>     block/blk-throttle.c | 38 +++++++++++++++++++++++++++++++-------
->>>>>     block/blk-throttle.h |  2 ++
->>>>>     block/genhd.c        |  3 +++
->>>>>     3 files changed, 36 insertions(+), 7 deletions(-)
->>>>>
->>>>> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
->>>>> index cf7e20804f1b..17e56b2e44c4 100644
->>>>> --- a/block/blk-throttle.c
->>>>> +++ b/block/blk-throttle.c
->>>>> @@ -1816,16 +1816,11 @@ static void throtl_upgrade_check(struct throtl_grp *tg)
->>>>>               throtl_upgrade_state(tg->td);
->>>>>     }
->>>>> -static void throtl_upgrade_state(struct throtl_data *td)
->>>>> +static void __throtl_cancel_bios(struct throtl_data *td)
->>>>>     {
->>>>>       struct cgroup_subsys_state *pos_css;
->>>>>       struct blkcg_gq *blkg;
->>>>> -   throtl_log(&td->service_queue, "upgrade to max");
->>>>> -   td->limit_index = LIMIT_MAX;
->>>>> -   td->low_upgrade_time = jiffies;
->>>>> -   td->scale = 0;
->>>>> -   rcu_read_lock();
->>>>>       blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg) {
->>>>>               struct throtl_grp *tg = blkg_to_tg(blkg);
->>>>>               struct throtl_service_queue *sq = &tg->service_queue;
->>>>> @@ -1834,12 +1829,41 @@ static void throtl_upgrade_state(struct throtl_data *td)
->>>>>               throtl_select_dispatch(sq);
->>>>>               throtl_schedule_next_dispatch(sq, true);
->>>> Hi, Ming Lei
->>>>
->>>> I'm confused that how can bios be canceled here?
->>>> tg->iops and tg->bps stay untouched, how can throttled bios
->>>> dispatch?
->>>
->>> I thought that throttled bios will be canceled by 'tg->disptime = jiffies - 1;'
->>> and the following dispatch schedule.
->>>
->>> But looks it isn't enough, since tg_update_disptime() updates
->>> ->disptime. However,
->>> this problem can be solved easily by not updating ->disptime in case that we are
->>> canceling.
->>>
->>>>>       }
->>>>> -   rcu_read_unlock();
->>>>>       throtl_select_dispatch(&td->service_queue);
->>>>>       throtl_schedule_next_dispatch(&td->service_queue, true);
->>>>>       queue_work(kthrotld_workqueue, &td->dispatch_work);
->>>>>     }
->>>>> +void blk_throtl_cancel_bios(struct request_queue *q)
->>>>> +{
->>>>> +   struct cgroup_subsys_state *pos_css;
->>>>> +   struct blkcg_gq *blkg;
->>>>> +
->>>>> +   rcu_read_lock();
->>>>> +   spin_lock_irq(&q->queue_lock);
->>>>> +   __throtl_cancel_bios(q->td);
->>>>> +   spin_unlock_irq(&q->queue_lock);
->>>>> +   rcu_read_unlock();
->>>>> +
->>>>> +   blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg)
->>>>> +           del_timer_sync(&blkg_to_tg(blkg)->service_queue.pending_timer);
->>>>> +   del_timer_sync(&q->td->service_queue.pending_timer);
->>>>
->>>> By the way, I think delete timer will end up io hung here if there are
->>>> some bios still be throttled.
->>>
->>> Firstly ->queue_lock is held by blk_throtl_cancel_bios(), so no new bios
->>> will be throttled.
->>>
->>> Also if we don't update ->disptime, any new bios throttled after releasing
->>> ->queue_lock will be dispatched soon.
->>
->> Hi, Ming Lei
->>
->> Just to be curiosity, I'm still trying to understand the logic here:
->>
->> For example, if bps is set to 1k, and a io with size 16k is just
->> dispatched, then io throtle should wait for 16s untill new io can be
+On Mon 17-01-22 17:56:28, Nico Pache wrote:
+> On 1/17/22 11:05, Waiman Long wrote:
+> > On 1/17/22 03:52, Michal Hocko wrote:
+[...]
+> >>> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> >>> index 1ddabefcfb5a..3cdaac9c7de5 100644
+> >>> --- a/mm/oom_kill.c
+> >>> +++ b/mm/oom_kill.c
+> >>> @@ -667,6 +667,21 @@ static void wake_oom_reaper(struct task_struct *tsk)
+> >>>       if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
+> >>>           return;
+> >>>   +#ifdef CONFIG_FUTEX
+> >>> +    /*
+> >>> +     * If the ooming task's SIGKILL has not finished handling the
+> >>> +     * robust futex it is not correct to reap the mm concurrently.
+> >>> +     * Do not wake the oom reaper when the task still contains a
+> >>> +     * robust list.
+> >>> +     */
+> >>> +    if (tsk->robust_list)
+> >>> +        return;
+> >>> +#ifdef CONFIG_COMPAT
+> >>> +    if (tsk->compat_robust_list)
+> >>> +        return;
+> >>> +#endif
+> >>> +#endif
+> >> If this turns out to be really needed, which I do not really see at the
+> >> moment, then this is not the right way to handle this situation. The oom
+> >> victim could get stuck and the oom killer wouldn't be able to move
+> >> forward. If anything the victim would need to get MMF_OOM_SKIP set.
 > 
-> There isn't such wait code in blk-throttle, and the magic is just in
-> how to compute tg->disptime.
-> 
->> dispatched. (details in tg_with_in_bps_limitï¼‰.
->>
->> How does such mechanism bypassed here?
-> 
-> The point is that tg->disptime is always set as one past time, so all
-> throttled IOs will be dispatched immediately if ->disptime is older than
-> jiffies, and I have verified that the following patch can work as expected.
-> 
-Hi, Ming Lei
+> I will try this, but I don't immediately see any difference between this return
+> case and setting the bit, passing the oom_reaper_list, then skipping it based on
+> the flag. Do you mind explaining how this could lead to the oom killer getting
+> stuck?
 
-I'm not sure about the logic here yet, however, I tried the following
-patch, and the patch doesn't work as expected in my case:
+The primary purpose of the oom_reaper is to guarantee a forward
+progress. If a task gets stuck in the kernel - e.g. on locks then it
+won't bail out and won't handle signals (i.e. SIGKILL from the
+userspace). The oom killer prevents new oom victims selection in a
+presence of an existing oom victim (see oom_evaluate_task). That means
+that we not only send a SIGKILL to the victim, we also wake up the oom
+reaper which then asynchronously tears down the private memory of the
+task (thus release at least some of its memory) and once it is done it
+will set MMF_OOM_SKIP flag which will tell the oom killer
+(oom_evaluate_task) that this victim is no longer interesting and a new
+victim can be selected.
 
-1. limit bps to 1k
-2. issue io with bs=16k
+Makes sense?
 
-In this workload, each io will wait for 16s to complete.
+Part of the async tear down is also MMF_UNSTABLE handling (see
+__oom_reap_task_mm) which tells #PF handling code
+(check_stable_address_space) that the underlying memory could have been
+tempered with and thus it should return SIGBUS. The underlying
+assumption is that the process (and all tasks which share its mm) has
+been killed and it will never return to the userspace so the de-facto
+memory corruption doesn't matter.
 
-3. when an io is just completed, delete the device
+One thing that is still unclear to me is why this leads to any locked up
+tasks. Looking at exit_robust_list I can see that it is accessing the
+userspace memory but this should return EFAULT in this situation. My
+assumption (which might be really wrong) is that futex shared among
+processes which are not sharing mm nor signal handling will be sitting
+in a shared memory. 
 
-After this is done, what I expected is that the user thread will exit
-immediately(with io error), however, with this patch applied, the user
-thread will wait for about 16s to exit, which is the same without this
-patch.
+Now to the actual fix. I do not think we want to hide the task from the
+oom reaper as you are suggesting. Futexes are very likely to be used for
+many processes and that would make the whole async scheme useless. We
+need something like the below.
 
-Thanks,
-Kuai
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 7c462c006b26..d9845afccd97 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -45,6 +45,7 @@ static struct workqueue_struct *kthrotld_workqueue;
->   enum tg_state_flags {
->   	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
->   	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
-> +	THROTL_TG_CANCELING	= 1 << 2,	/* starts to cancel all bios */
->   };
->   
->   #define rb_entry_tg(node)	rb_entry((node), struct throtl_grp, rb_node)
-> @@ -974,6 +975,9 @@ static void tg_update_disptime(struct throtl_grp *tg)
->   	unsigned long read_wait = -1, write_wait = -1, min_wait = -1, disptime;
->   	struct bio *bio;
->   
-> +	if (tg->flags & THROTL_TG_CANCELING)
-> +		goto update;
-> +
->   	bio = throtl_peek_queued(&sq->queued[READ]);
->   	if (bio)
->   		tg_may_dispatch(tg, bio, &read_wait);
-> @@ -983,6 +987,7 @@ static void tg_update_disptime(struct throtl_grp *tg)
->   		tg_may_dispatch(tg, bio, &write_wait);
->   
->   	min_wait = min(read_wait, write_wait);
-> +update:
->   	disptime = jiffies + min_wait;
->   
->   	/* Update dispatch time */
-> @@ -1836,6 +1841,25 @@ static void throtl_upgrade_state(struct throtl_data *td)
->   	queue_work(kthrotld_workqueue, &td->dispatch_work);
->   }
->   
-> +void blk_throtl_cancel_bios(struct request_queue *q)
-> +{
-> +	struct cgroup_subsys_state *pos_css;
-> +	struct blkcg_gq *blkg;
-> +
-> +	rcu_read_lock();
-> +	spin_lock_irq(&q->queue_lock);
-> +	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
-> +		struct throtl_grp *tg = blkg_to_tg(blkg);
-> +		struct throtl_service_queue *sq = &tg->service_queue;
-> +
-> +		tg->disptime = jiffies - 1;
-> +		blkg_to_tg(blkg)->flags |= THROTL_TG_CANCELING;
-> +		throtl_schedule_pending_timer(sq, jiffies + 1);
-> +	}
-> +	spin_unlock_irq(&q->queue_lock);
-> +	rcu_read_unlock();
-> +}
-> +
->   static void throtl_downgrade_state(struct throtl_data *td)
->   {
->   	td->scale /= 2;
-> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-> index 175f03abd9e4..b412a4d7cc1e 100644
-> --- a/block/blk-throttle.h
-> +++ b/block/blk-throttle.h
-> @@ -160,12 +160,14 @@ static inline void blk_throtl_exit(struct request_queue *q) { }
->   static inline void blk_throtl_register_queue(struct request_queue *q) { }
->   static inline void blk_throtl_charge_bio_split(struct bio *bio) { }
->   static inline bool blk_throtl_bio(struct bio *bio) { return false; }
-> +static inline void blk_throtl_cancel_bios(struct request_queue *q) {}
->   #else /* CONFIG_BLK_DEV_THROTTLING */
->   int blk_throtl_init(struct request_queue *q);
->   void blk_throtl_exit(struct request_queue *q);
->   void blk_throtl_register_queue(struct request_queue *q);
->   void blk_throtl_charge_bio_split(struct bio *bio);
->   bool __blk_throtl_bio(struct bio *bio);
-> +void blk_throtl_cancel_bios(struct request_queue *q);
->   static inline bool blk_throtl_bio(struct bio *bio)
->   {
->   	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
-> diff --git a/block/genhd.c b/block/genhd.c
-> index f7577dde18fc..a32d48b87223 100644
-> --- a/block/genhd.c
-> +++ b/block/genhd.c
-> @@ -29,6 +29,7 @@
->   
->   #include "blk.h"
->   #include "blk-mq-sched.h"
-> +#include "blk-throttle.h"
->   
->   static struct kobject *block_depr;
->   
-> @@ -576,6 +577,8 @@ void del_gendisk(struct gendisk *disk)
->   	blk_integrity_del(disk);
->   	disk_del_events(disk);
->   
-> +	blk_throtl_cancel_bios(disk->queue);
-> +
->   	mutex_lock(&disk->open_mutex);
->   	remove_inode_hash(disk->part0->bd_inode);
->   	blk_drop_partitions(disk);
-> 
-> Thanks,
-> Ming
-> 
-> .
-> 
+futex_exit_release is not directly usable as it implicitly depends
+on memory allocation (#PF) and that is not acceptable. So instead we
+need something futex_exit_try_release or similar which would fail the
+operation in case get_user (pagefault_disable) needs to really handle
+the #PF or if the futex_exit_mutex is locked. In other words this would
+have to be a completely non-blocking operation. The oom reaper would
+then bail out.
+
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index ef5860fc7d22..57660d3d1b79 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -613,6 +613,9 @@ static void oom_reap_task(struct task_struct *tsk)
+ 	int attempts = 0;
+ 	struct mm_struct *mm = tsk->signal->oom_mm;
+ 
++	if (futex_exit_try_release(tsk))
++		goto fail;
++
+ 	/* Retry the mmap_read_trylock(mm) a few times */
+ 	while (attempts++ < MAX_OOM_REAP_RETRIES && !oom_reap_task_mm(tsk, mm))
+ 		schedule_timeout_idle(HZ/10);
+@@ -621,6 +624,7 @@ static void oom_reap_task(struct task_struct *tsk)
+ 	    test_bit(MMF_OOM_SKIP, &mm->flags))
+ 		goto done;
+ 
++fail:
+ 	pr_info("oom_reaper: unable to reap pid:%d (%s)\n",
+ 		task_pid_nr(tsk), tsk->comm);
+ 	sched_show_task(tsk);
+@@ -1184,6 +1188,11 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
+ 	if (!reap)
+ 		goto drop_mm;
+ 
++	if (futex_exit_try_release(tsk)) {
++		ret = -EAGAIN;
++		goto drop_mm;
++	}
++	
+ 	if (mmap_read_lock_killable(mm)) {
+ 		ret = -EINTR;
+ 		goto drop_mm;
+-- 
+Michal Hocko
+SUSE Labs

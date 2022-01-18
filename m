@@ -2,73 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D9D492C81
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13A4492C82
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347549AbiARRfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:35:32 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:47514 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347463AbiARRf0 (ORCPT
+        id S1346912AbiARRfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347532AbiARRfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:35:26 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 1321E1C0B80; Tue, 18 Jan 2022 18:35:25 +0100 (CET)
-Date:   Tue, 18 Jan 2022 18:35:24 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 00/23] 5.10.93-rc1 review
-Message-ID: <20220118173524.GA17462@duo.ucw.cz>
-References: <20220118160451.233828401@linuxfoundation.org>
+        Tue, 18 Jan 2022 12:35:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3462DC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:35:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6609B8170A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15DC9C340E0;
+        Tue, 18 Jan 2022 17:35:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642527337;
+        bh=qMzBU33o1h25dpmtWo89Wxg5l+7hKomR8KeOL5BKubw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ptaUXx4yuwtxtmAf2YCCFHlmgKVe5rLE3JdBPRpYiFe1tK995MGhuRvcSJs3b3tAT
+         IFLklJ15uxxD2KYX03VAkD1RfTIwYuRfV8sTJkQ9e6f9x96Kxcx0uBSeMuKYp4ulxL
+         NGN74ojNX7IYCk3A5ibHMbDm3TVSadNhRUEF9EOjgejsOrysdVcEibKxCpeA/A2+S8
+         hL1ee4vPUzWlCX465p2Ik5yLwjgzq8NKPGHGy34sgusZheKQodnHenInFeso4XEy8q
+         BkXWmC2ASJlfIJ/KIpSD+I7iaM7CrTgYhgYia8z7bt2loFm6xgcTDAirx/r3MQ7oR6
+         /zwU/xoJNTilw==
+Date:   Tue, 18 Jan 2022 17:35:31 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Julian Braha <julianbraha@gmail.com>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, Vijendar.Mukunda@amd.com,
+        AjitKumar.Pandey@amd.com, kai.vehmanen@linux.intel.com,
+        tanureal@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, fazilyildiran@gmail.com
+Subject: Re: [PATCH] ASoC: amd: fix unmet dependency on GPIOLIB for
+ SND_SOC_DMIC
+Message-ID: <Yeb6YzIugFSmidQY@sirena.org.uk>
+References: <20220117041528.59958-1-julianbraha@gmail.com>
+ <Yeb0n9AVXeVzBHrT@sirena.org.uk>
+ <26ec72a7-effa-7553-fc0f-4e016b651c09@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bBU/pd3VrGlA9S/Q"
 Content-Disposition: inline
-In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <26ec72a7-effa-7553-fc0f-4e016b651c09@linux.intel.com>
+X-Cookie: Do YOU have redeeming social value?
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---yrj/dFKFPuw6o+aM
+--bBU/pd3VrGlA9S/Q
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi!
+On Tue, Jan 18, 2022 at 11:21:50AM -0600, Pierre-Louis Bossart wrote:
+> On 1/18/22 11:10 AM, Mark Brown wrote:
 
-> This is the start of the stable review cycle for the 5.10.93 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> > Why is this a good fix and not removing the dependency on gpiolib from
+> > DMIC?  While a DMIC *can* use a GPIO it's not something that's an
+> > intrinsic requirement and it's entirely optional in the code.
 
-CIP testing did not find any new kernel problems here (but we still
-hit the gmp.h compilation issue):
+> We also have similar 'depends on GPIOLIB' for Intel boards that are not
+> really useful. see e.g. 4262ddc2ad63 ('ASoC: Intel: boards: add explicit
+> dependency on GPIOLIB when DMIC is used'). IIRC we had this discussion
+> before about doing a larger cleanup.
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
+At first glance it's just that the gpiolib dependency on the DMIC driver
+is spurious and should be deleted, the code looks fine and I'd not
+expect any need for an actual dependency (but I'm out of office this
+week so probably not going to actually poke at things properly right
+now).
 
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---yrj/dFKFPuw6o+aM
+--bBU/pd3VrGlA9S/Q
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYeb6XAAKCRAw5/Bqldv6
-8iQcAJ0eDo/vTp0YjCy7aKxBMUQ+viyWSwCgrtg4ZwZYHwu/FtREZ8R/0cy1w50=
-=Sgcs
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm+mMACgkQJNaLcl1U
+h9CyEgf7B4or95KreNOOC9KGSpHw3O2RfRdk8iBHMJYbjN4fPEMZ7C1kyER7j3F4
+DvTXfw5BTamOl04W1YNmP6xms/S2OZ6Jxc+p/wTyQEKS64GRl9t8SWX090V3kUUo
+ggwCXzb1TYG4Pb4DqpeQrCI34UbhSDa1twH73P9YBg9VtEIw0Hw9drxa8dZE22As
+HFiidQGiTd89jhY/omGjudeFdCTutSaE+ROL4FZHK3Y4X+3eubptlbL6M2f9jbhw
+3TCz/o0ZP4rUvu09r7CDutmHNyavRNLhfv3fz9UouO8aVMgyPJGOerehK8bhjOTc
+3Rey2MR3FItXaOIt0R1UrbVxkMq+ww==
+=3kwX
 -----END PGP SIGNATURE-----
 
---yrj/dFKFPuw6o+aM--
+--bBU/pd3VrGlA9S/Q--

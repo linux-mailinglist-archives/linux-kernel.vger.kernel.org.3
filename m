@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E00492B77
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE5A492B78
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbiARQnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:43:55 -0500
-Received: from bmailout1.hostsharing.net ([83.223.95.100]:55419 "EHLO
-        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiARQny (ORCPT
+        id S1346231AbiARQpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346274AbiARQpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:43:54 -0500
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id C2CCB300097BA;
-        Tue, 18 Jan 2022 17:43:51 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id B4A3819385; Tue, 18 Jan 2022 17:43:51 +0100 (CET)
-Date:   Tue, 18 Jan 2022 17:43:51 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux@armlinux.org.uk, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.4 27/29] serial: pl010: Drop CR register reset
- on set_termios
-Message-ID: <20220118164351.GA25478@wunner.de>
-References: <20220118030822.1955469-1-sashal@kernel.org>
- <20220118030822.1955469-27-sashal@kernel.org>
+        Tue, 18 Jan 2022 11:45:07 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3423C061747
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 08:45:06 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id cx27so8747944edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 08:45:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=KpPLmlJqSe5enL4H8Q9iaiPPjau/vD3KzQyahonR9f0=;
+        b=a2mJyduGfQCaivkxvFMzUibSXLnSsrqZ7DJ9zFn8ZrVf0/V/1nZ8jxgMbl3mC79yku
+         Hywe37CJSSRcVplKEGOj1Yd/QhbBtFJgQDuWNy1orpnu3oJmejpcpfAsmymaO+clXZd1
+         Apobwj9snZr0MLMyTYb8tvcxZKqqrexFLXR4IG0M9Uiph+740tTipOttDBkdxebqHEv1
+         I8xGer2kJaQwRNqYg1QB1khoObFElfPGU+gLuDLREzxqHnOLmG65QpBqkdV6gPallDj/
+         UXcEayTj0McCEb/X+VKYBVI6kadyXV7R5E3Ffl1mIe2pGPp7F7Oa/Bgi33KxV2FEonch
+         Fn4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=KpPLmlJqSe5enL4H8Q9iaiPPjau/vD3KzQyahonR9f0=;
+        b=SB24CailmdC0vI7sVF14MHKvece92rPXvJkU2GolHTwkRceTnxBypnAf0OCUhuX25H
+         WAN8F/iwGXqP7HXjbWwJXAEjRl2shY5S+T2PXHRweGA8c+ctVTlrj+GwP7UXZ0AmNsBE
+         tu5AOqs4sL4lKOKWB06cOjted4tDkXlQKaOVnBq2Wh06H/gbRzv4bcBWjWZAX7+uFelB
+         3MWRgtbHpqJblh+PzoRMZOw/6qOR3TAtFqQsJmsHwkILqmWlHNqlAyF8qR7CL/CXnaep
+         QRvFkJ4IemgKi+zUDRzU1mco1Xg6t0b1+mcBRlHS+Q0V5s0AW5BEYGDtn1B/pc4wcS3W
+         UG6A==
+X-Gm-Message-State: AOAM533RsXIfJ2o85ssKXyJYrjBmeRTRwHRwbn7lkhz+hZFV9ypVYvLy
+        fa2xxqwAXZ/HANrPpdFx1Lx3DRlISxsBViiF3o97705G5dcVeQ==
+X-Google-Smtp-Source: ABdhPJwSdTvWL7q8CMaQDTJoT1mC2snXl2HvymDeTGb2UExahdEa9juYDBjc6CbsoA22kCkhH3pBZMukvvJEYh9C+1E=
+X-Received: by 2002:a17:906:471a:: with SMTP id y26mr21286744ejq.753.1642524294792;
+ Tue, 18 Jan 2022 08:44:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118030822.1955469-27-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a17:907:3e02:0:0:0:0 with HTTP; Tue, 18 Jan 2022 08:44:54
+ -0800 (PST)
+From:   robert anderson <robertandersongood5@gmail.com>
+Date:   Tue, 18 Jan 2022 08:44:54 -0800
+Message-ID: <CAD7QbCA5_RpNobzF4-wHELPg8M_MfXacfvhwWSR9B+9PiLpB4g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 10:08:20PM -0500, Sasha Levin wrote:
-> From: Lukas Wunner <lukas@wunner.de>
-> 
-> [ Upstream commit 08a0c6dff91c965e39905cf200d22db989203ccb ]
-> 
-> pl010_set_termios() briefly resets the CR register to zero.
-> 
-> Where does this register write come from?
-> 
-> The PL010 driver's IRQ handler ambauart_int() originally modified the CR
-> register without holding the port spinlock.  ambauart_set_termios() also
-> modified that register.  To prevent concurrent read-modify-writes by the
-> IRQ handler and to prevent transmission while changing baudrate,
-> ambauart_set_termios() had to disable interrupts.  That is achieved by
-> writing zero to the CR register.
-> 
-> However in 2004 the PL010 driver was amended to acquire the port
-> spinlock in the IRQ handler, obviating the need to disable interrupts in
-> ->set_termios():
-> https://git.kernel.org/history/history/c/157c0342e591
-> 
-> That rendered the CR register write obsolete.  Drop it.
+Pros=C3=ADm pozor,
 
-I'd recommend against backporting this particular patch for pl010
-as it's merely a cleanup that eases future work on the driver,
-but doesn't actually fix anything.
+Ja som Bar. uchenna ilobi , Ako sa m=C3=A1=C5=A1, d=C3=BAfam, =C5=BEe si v =
+poriadku a
+zdrav=C3=A1? Chceli by sme v=C3=A1s informova=C5=A5, =C5=BEe som =C3=BAspe=
+=C5=A1ne uzavrel
+transakciu s pomocou nov=C3=A9ho partnera z Venezuely a teraz bol fond
+preveden=C3=BD do Venezuely na bankov=C3=BD =C3=BA=C4=8Det nov=C3=A9ho part=
+nera.
 
-You've also auto-selected a patch for the pl011 driver with the
-same subject.  That other patch *does* actually fix an rs485
-Transmit Enable glitch, so backporting it makes sense.
+Medzit=C3=BDm som sa rozhodol kompenzova=C5=A5 v=C3=A1s sumou 350 000,00 US=
+D
+(tristop=C3=A4=C5=A5desiattis=C3=ADc americk=C3=BDch dol=C3=A1rov) kv=C3=B4=
+li v=C3=A1=C5=A1mu =C3=BAsiliu v
+minulosti, hoci ste ma v tomto smere sklamali. Ale napriek tomu som
+ve=C4=BEmi r=C3=A1d za =C3=BAspe=C5=A1n=C3=A9 ukon=C4=8Denie transakcie bez=
+ ak=C3=BDchko=C4=BEvek probl=C3=A9mov a
+preto som sa rozhodol kompenzova=C5=A5 v=C3=A1s sumou 350 000,00 USD, aby s=
+te sa
+so mnou o t=C3=BAto rados=C5=A5 podelili.
 
-Thanks,
+Odpor=C3=BA=C4=8Dam v=C3=A1m, aby ste kontaktovali moju sekret=C3=A1rku pre=
+ bankomatov=C3=BA
+kartu v hodnote 350 000,00 USD, ktor=C3=BA som si pre v=C3=A1s nechal.
+Kontaktujte ho teraz bez zbyto=C4=8Dn=C3=A9ho odkladu.
 
-Lukas
+N=C3=A1zov: =C5=A1alam=C3=BAnske brandy
 
-> Cc: Russell King <rmk+kernel@armlinux.org.uk>
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Link: https://lore.kernel.org/r/fcaff16e5b1abb4cc3da5a2879ac13f278b99ed0.1641128728.git.lukas@wunner.de
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/tty/serial/amba-pl010.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/amba-pl010.c b/drivers/tty/serial/amba-pl010.c
-> index 5d41d5b92619a..7f4ba92739663 100644
-> --- a/drivers/tty/serial/amba-pl010.c
-> +++ b/drivers/tty/serial/amba-pl010.c
-> @@ -465,14 +465,11 @@ pl010_set_termios(struct uart_port *port, struct ktermios *termios,
->  	if ((termios->c_cflag & CREAD) == 0)
->  		uap->port.ignore_status_mask |= UART_DUMMY_RSR_RX;
->  
-> -	/* first, disable everything */
->  	old_cr = readb(uap->port.membase + UART010_CR) & ~UART010_CR_MSIE;
->  
->  	if (UART_ENABLE_MS(port, termios->c_cflag))
->  		old_cr |= UART010_CR_MSIE;
->  
-> -	writel(0, uap->port.membase + UART010_CR);
-> -
->  	/* Set baud rate */
->  	quot -= 1;
->  	writel((quot & 0xf00) >> 8, uap->port.membase + UART010_LCRM);
-> -- 
-> 2.34.1
+E-mail: solomonbrandyfiveone@gmail.com
+
+Pros=C3=ADm, znova mu potvr=C4=8Fte nasleduj=C3=BAce inform=C3=A1cie:
+
+Tvoje cel=C3=A9 meno_________________________
+Va=C5=A1a adresa__________________________
+Tvoja krajina___________________________
+Tvoj vek______________________________
+Va=C5=A1e povolanie_________________________
+=C4=8C=C3=ADslo v=C3=A1=C5=A1ho mobiln=C3=A9ho telef=C3=B3nu_______________=
+________
+
+V=C5=A1imnite si, =C5=BEe ak ste mu neposlali vy=C5=A1=C5=A1ie uveden=C3=A9=
+ inform=C3=A1cie =C3=BApln=C3=A9,
+bankomat v=C3=A1m neposkytne, preto=C5=BEe si mus=C3=AD by=C5=A5 ist=C3=BD,=
+ =C5=BEe ste to vy.
+Po=C5=BEiadajte ho, aby v=C3=A1m poslal celkov=C3=BA sumu (350 000,00 USD)
+bankomatovej karty, ktor=C3=BA som si pre v=C3=A1s nechal.
+
+S Pozdravom,
+
+P=C3=A1n uchenna ilobi

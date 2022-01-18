@@ -2,86 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2249549298C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFCD49298F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345373AbiARPTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235984AbiARPTI (ORCPT
+        id S1345642AbiARPUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:20:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38929 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345610AbiARPUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:19:08 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9C2C061574;
-        Tue, 18 Jan 2022 07:19:08 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id e13so1439724pjl.2;
-        Tue, 18 Jan 2022 07:19:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=a1w+cgfBvHMi9BSk7YOfIx7gMi8ZSEfjap/hRbKJAZY=;
-        b=a6+N+z3LLL2eIpR6WMmFOPvoCgz/iOjSgoB63GSSoa+UG8BYbejMfFFMAHu4axXd5L
-         OCU1a03+GeDekipQgtBjfs3n2ynCKf2M2a0niiJY/f2RyY+wdyxZSVMY8jDRfGF4sVF0
-         gl7aD7LD4HOwpe8tvJGY/uMRQvI0t3YhsUG5DVVEKORRIWk2R9CRzK/joW0XaDuomVyO
-         snu29ssZBszP9oRfDKR3eQA6aYq9zv9CC8kz7+x96/sjL0xAU3yu3d4QV7N3wAGI41LD
-         GMTO6x3MQKXmOdceCAXsAjQ4wvn5pOy7ElkfeViPl8MR/JotY+WUzrsnW1BQoMjwCxLf
-         ALIw==
+        Tue, 18 Jan 2022 10:20:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642519216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gY6Hax963rHOpjf62HVLLjpmM0CdjtqRy7qF6ZHQCGc=;
+        b=es+9qyKg/bJf90xd1WtbGhovtnvu4laIKvGXyiDSEJW930AQJROUph5RaZt5zc7SsXPaiI
+        3glTEHohThLOfnStF2reZX/rmb+kxUWhhCUrGveaJzkWDNXSc+huyfNrUQ6bY2I8EKAsHf
+        W1si2iN2NIZ/hTHygWPVmNY+J1fu4j4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-aaAyhClzNXuwpotIDfnJ_g-1; Tue, 18 Jan 2022 10:20:14 -0500
+X-MC-Unique: aaAyhClzNXuwpotIDfnJ_g-1
+Received: by mail-ed1-f72.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so1664435edt.15
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:20:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=a1w+cgfBvHMi9BSk7YOfIx7gMi8ZSEfjap/hRbKJAZY=;
-        b=CUUMVeWurRUVkJaGHNbC+5LcdF+nXpxr1kgiQcIgmFAjr3EopHFeJpBzORf5b1sjcI
-         6hJB6FShKrtj1/cRPYOWDcoPJnYpkZhf/5/p7a/t9Zg10OPa0vVa3KUuLmXhpmGLCr+S
-         5sir2GzAEpjyExBrtKovlI5aQPjeGF5AsP83HuBhJ6zuejGFV0lfrLA7YXsp3U6d0XLE
-         DwdlOju2b/SXyN4uPfNDRxuE433wK0ByNUQcE3OGsQrETlOZVGF9CY3Vsk/OAiQ4PsKc
-         ZRg2t8ewhdkQ8ZWEG635f7oDONlT0l28Kaa8tCnmAQM/WbzE56mEfm27cklavRYdgZRO
-         Io+Q==
-X-Gm-Message-State: AOAM531jHfWUaHF0q+GkfGZDuiZ6dfuU68env1PcGitiVbPHnAbGoW/N
-        wPsGL+rOsRG5MJeXrgN/oM0=
-X-Google-Smtp-Source: ABdhPJxJ96loOG/L3H86yKOUymJkuNBWxl27xmbjSYhAUHWsRK6N70bxzJ3yOVW1skk9NZK36Ujyvw==
-X-Received: by 2002:a17:90b:3892:: with SMTP id mu18mr13349099pjb.51.1642519147804;
-        Tue, 18 Jan 2022 07:19:07 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id t3sm18724613pfj.137.2022.01.18.07.19.06
+         :mime-version:content-disposition:in-reply-to;
+        bh=gY6Hax963rHOpjf62HVLLjpmM0CdjtqRy7qF6ZHQCGc=;
+        b=6j5qYWdT/+ha4B69zOgYONJ6hhsBmmw8kMl/OnDiSPBuRJH2tRCgVbHMxC9IQcsV6v
+         LRQKeh+XXS4yEZwQfV5WgVMmus5fNCpDtsaZSarpPBL7iMYmIC1keBN2rWPWX1ArZ3fJ
+         k2dXDPtsEpmDoz7m1BYiKCWn+Bu9ZNCTdqmnJngSGXkKgC9pNW45OdiSkdI3Yl6EbtEm
+         Zf5p9Cm2oNXziSUxNacJr9Gzei03OuWjeGJtCELC8U9/H7zXM5BF/hR105xF5WaxwyiD
+         gr7GjFpBk4ZdmSkfJssXVob5/Q9a1d5j/Z8TX61HTp4m7WTDs00r/l2iZHxcRdkvw8Az
+         N3sA==
+X-Gm-Message-State: AOAM5317EBcXm4yTJZMHls6Fq4KMHsMPDfInDpvg2vIP6Z8ML5U7qKH3
+        RVvsP7z4S8hyCNFMcX0ZizoAwC8LoDLyDETt28TssSHwvBr/3AWD7U3B7ibyCNiP4jVih5rUFU4
+        jZew0juqFrrdaSD+Xec9Vd4m1
+X-Received: by 2002:a05:6402:350f:: with SMTP id b15mr25709379edd.77.1642519206798;
+        Tue, 18 Jan 2022 07:20:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwrPUpMZrXZZ6hhQLm6jDDIK+KWCDI7IJhGLGk4DhdtM+pN0tvJUeMqVeEWPPbTOnCCPxX2CA==
+X-Received: by 2002:a05:6402:350f:: with SMTP id b15mr25709360edd.77.1642519206567;
+        Tue, 18 Jan 2022 07:20:06 -0800 (PST)
+Received: from redhat.com ([2.55.154.241])
+        by smtp.gmail.com with ESMTPSA id 26sm5457537ejk.166.2022.01.18.07.20.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 07:19:07 -0800 (PST)
-Date:   Tue, 18 Jan 2022 07:19:04 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     cgel.zte@gmail.com
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] drivers/net/phy/dp83640: remove unneeded val variable
-Message-ID: <20220118151904.GA31192@hoboy.vegasvil.org>
-References: <20220118075438.925768-1-chi.minghao@zte.com.cn>
+        Tue, 18 Jan 2022 07:20:05 -0800 (PST)
+Date:   Tue, 18 Jan 2022 10:20:02 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Halil Pasic <pasic@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] virtio: acknowledge all features before access
+Message-ID: <20220118101233-mutt-send-email-mst@kernel.org>
+References: <20220114200744.150325-1-mst@redhat.com>
+ <20220118154350.1ff3fa3f.pasic@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118075438.925768-1-chi.minghao@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220118154350.1ff3fa3f.pasic@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:54:38AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, Jan 18, 2022 at 03:43:50PM +0100, Halil Pasic wrote:
+> On Fri, 14 Jan 2022 15:09:14 -0500
+> "Michael S. Tsirkin" <mst@redhat.com> wrote:
 > 
-> Return value from phy_read() directly instead
-> of taking this in another redundant variable.
+> > The feature negotiation was designed in a way that
+> > makes it possible for devices to know which config
+> > fields will be accessed by drivers.
+> > 
+> > This is broken since commit 404123c2db79 ("virtio: allow drivers to
+> > validate features") with fallout in at least block and net.
+> > We have a partial work-around in commit 2f9a174f918e ("virtio: write
+> > back F_VERSION_1 before validate") which at least lets devices
+> > find out which format should config space have, but this
+> > is a partial fix: guests should not access config space
+> > without acknowledging features since otherwise we'll never
+> > be able to change the config space format.
+> 
+> I agree with that. The crux is what does "acknowledge features" exactly
+> mean. Is it "write features" or "complete the feature negotiation,
+> including setting FEATURES_OK".
 
-NAK this is purely cosmetic and not clearly better WRT CodingStyle.
- 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+Right. I think originally it was "write features". We then added
+the FEATURES_OK in order to give devices a chance to reject
+a set of features, and while doing this we failed to
+notice that at this point "acknowledge" became confusing.
 
-Please make your robot less zealous or filter its results before
-posting.
+There's a spec proposal to make things more explicit, and
+I think I will tweak it to actually use the term
+"acknowledge".
 
-This is the second time I told you.  It isn't wise to ignore feedback,
-and it is also rude.
+On top of that, it makes sense to go back, scan all of the spec
+and see whether any places that we changed from set not negotiated
+for clarify actually should read "set in the written".
 
-Thanks,
-Richard
+> My understanding is, that we should not rely on that the device is
+> going to act according to the negotiated feature set unless FEATURES_OK
+> was set successfully.
+
+
+not for writes, but for reads there's little choice.
+
+> That would mean, that this change ain't guaranteed to help with the
+> stated problem. We simply don't know if the fact that features
+> were written is going to have a side-effect or not. Also see below.
+
+right. at the moment it's just the MTU field. In the future it
+can be more, but by that future time we can fix the spec ;)
+
+> > 
+> > As a side effect, this also reduces the amount of hypervisor accesses -
+> > we now only acknowledge features once unless we are clearing any
+> > features when validating.
+> 
+> My understanding is that this patch basically does for all the features,
+> what commit 2f9a174f918e ("virtio: write back F_VERSION_1 before
+> validate") did only for F_VERSION_1 and under certain conditions to
+> be minimally invasive.
+> 
+> I don't like when s390 is the oddball, so I'm very happy to see us
+> moving away from that.
+> 
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 404123c2db79 ("virtio: allow drivers to validate features")
+> > Fixes: 2f9a174f918e ("virtio: write back F_VERSION_1 before validate")
+> > Cc: "Halil Pasic" <pasic@linux.ibm.com>
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> > 
+> > Halil, I thought hard about our situation with transitional and
+> > today I finally thought of something I am happy with.
+> > Pls let me know what you think. Testing on big endian would
+> > also be much appreciated!
+> 
+> Thanks! I will first provide some comments, and I intend to come back
+> with the test results later.
+> 
+> > 
+> >  drivers/virtio/virtio.c | 31 +++++++++++++++++--------------
+> >  1 file changed, 17 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> > index d891b0a354b0..2ed6e2451fd8 100644
+> > --- a/drivers/virtio/virtio.c
+> > +++ b/drivers/virtio/virtio.c
+> > @@ -168,12 +168,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
+> >  
+> >  static int virtio_finalize_features(struct virtio_device *dev)
+> >  {
+> > -	int ret = dev->config->finalize_features(dev);
+> >  	unsigned status;
+> > +	int ret;
+> >  
+> >  	might_sleep();
+> > -	if (ret)
+> > -		return ret;
+> >  
+> >  	ret = arch_has_restricted_virtio_memory_access();
+> >  	if (ret) {
+> > @@ -244,17 +242,6 @@ static int virtio_dev_probe(struct device *_d)
+> >  		driver_features_legacy = driver_features;
+> >  	}
+> >  
+> > -	/*
+> > -	 * Some devices detect legacy solely via F_VERSION_1. Write
+> > -	 * F_VERSION_1 to force LE config space accesses before FEATURES_OK for
+> > -	 * these when needed.
+> > -	 */
+> > -	if (drv->validate && !virtio_legacy_is_little_endian()
+> > -			  && device_features & BIT_ULL(VIRTIO_F_VERSION_1)) {
+> > -		dev->features = BIT_ULL(VIRTIO_F_VERSION_1);
+> > -		dev->config->finalize_features(dev);
+> > -	}
+> > -
+> >  	if (device_features & (1ULL << VIRTIO_F_VERSION_1))
+> >  		dev->features = driver_features & device_features;
+> >  	else
+> > @@ -265,10 +252,22 @@ static int virtio_dev_probe(struct device *_d)
+> >  		if (device_features & (1ULL << i))
+> >  			__virtio_set_bit(dev, i);
+> >  
+> > +	err = dev->config->finalize_features(dev);
+> 
+> A side note: config->finalize_features() ain't the best name for what the
+> thing does. After config->finalize_features() the features are not final.
+> Unlike after virtio_finalize_features(). IMHO filter_and_write_features()
+> would be a more accurate, although longer name.
+
+I agree.
+But I think I will start with figuring out the best name in the spec.
+Maybe write back or acknowledge. Let's see what gets accepted by
+the tc. Then I'll change code to match.
+
+> After this point, the features aren't final yet, and one can not say
+> that a some feature X has been negotiated. But with regards to features,
+> the spec does not really consider this limbo state.
+> 
+> Should this change? Do we want to say: the device SHOULD pick up, and
+> act upon the new features *before* FEATURES_OK is set?
+
+Yes but only for handling config reads. See my spec proposal.
+
+> ...
+> 
+> > +	if (err)
+> > +		goto err;
+> > +
+> >  	if (drv->validate) {
+> > +		u64 features = dev->features;
+> > +
+> >  		err = drv->validate(dev);
+> 
+> ... Consider the "we would like to introduce a new config space format"
+> example. Here, I guess we would like to use the new format. But let's say
+> _F_CFG_FMT_V2 aint negotiated yet. So to be sure about the format, we
+> would need to specify, that the behavior of the device needs to change
+> after the feature has been written, but before FEATURES_OK is set, at
+> least for _F_CFG_FMT_V2.
+
+for config space reads. yes.
+
+> Please also consider the QEMU implementation of the vhost-user stuff. We
+> push the features to the back-end only when FEATURES_OK status is
+> written.
+
+that has to change, anyway - it's needed to fix endian-ness.
+
+> 
+> >  		if (err)
+> >  			goto err;
+> > +
+> > +		if (features != dev->features) {
+> > +			err = dev->config->finalize_features(dev);
+> 
+> It is fine to call it again, because the features aren't finalized yet.
+> And re-doing any transport-level filtering and validation is fine as
+> well.
+
+Will add a comment.
+
+> > +			if (err)
+> > +				goto err;
+> > +		}
+> >  	}
+> >  
+> >  	err = virtio_finalize_features(dev);
+> 
+> Here the features are finally negotiated and final.
+> 
+> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
+> >  	/* We have a driver! */
+> >  	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
+> >  
+> > +	ret = dev->config->finalize_features(dev);
+> > +	if (ret)
+> > +		goto err;
+> > +
+> >  	ret = virtio_finalize_features(dev);
+> 
+> Looks a little weird, because virtio_finalize_features() used to include
+> filter + write + set FEATURES_OK. But it ain't too bad.
+> 
+> Better names would benefit readability though, if we can come up with
+> some.
+> 
+> Regards,
+> Halil
+
+right. I think that can be a patch on top though.
+
+> >  	if (ret)
+> >  		goto err;
+

@@ -2,141 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF5649255E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B425492565
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241255AbiARMGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:06:46 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:59048 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiARMGp (ORCPT
+        id S241301AbiARMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:08:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30131 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239283AbiARMIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:06:45 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 565762170E;
-        Tue, 18 Jan 2022 12:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642507604; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 18 Jan 2022 07:08:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642507691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=t2xKgPhezzRuZwYQ+n4efRtt2KvBOTUDARMY7HE84mQ=;
-        b=xSZPxN9I4xP8ssF45/LUEbesbGAIzMEz2GAVafLG2gtsMVBLgyclySdRY5DiOxyhTxNsKV
-        ipaJ4kBxSY4yaogGK/kfE6QmY55RBTbgninHzGQEC2ehXszDpXrC/MjVnhyhcLga1x34Di
-        moVhDDHz+ARXF8H6KcNJhXBpYscTU0w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642507604;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t2xKgPhezzRuZwYQ+n4efRtt2KvBOTUDARMY7HE84mQ=;
-        b=yibk3U/hzzDq41kFWWL0X3EGWaztjgPSaO5rT2TEKTecyuE/13IJDyE8BGQuDCZecnzTrb
-        Vib+PDgA4MrESkBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=mTJ9EtX5N2EhF9Fqj6aj3AMNHvKTNUztMryd3miPWg0=;
+        b=ACFuaVr7qQIuo3UBSE+hwgkdsDDcS73XmSo9qGkmOlor1suU5kNyARgFW1eExDt75WfBVN
+        fhV+SYTAkWTEDYNRAnGU3X+24QNi1rtUlr7xbS/aIj6SbmZHBHom/vIcb2I3AIMjsObaqQ
+        zd/QQX8fkeiAXsb3TP544blvD2k5EZ0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-xzNf8PU0MQ2T7-v6zwQeDg-1; Tue, 18 Jan 2022 07:08:08 -0500
+X-MC-Unique: xzNf8PU0MQ2T7-v6zwQeDg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0CF2013B26;
-        Tue, 18 Jan 2022 12:06:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qOJXAlSt5mErZgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 18 Jan 2022 12:06:44 +0000
-Message-ID: <89288cbb-2a54-a35b-785e-2b9f71da604b@suse.cz>
-Date:   Tue, 18 Jan 2022 13:06:43 +0100
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 69E781030C22;
+        Tue, 18 Jan 2022 12:08:06 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 21B2F105916D;
+        Tue, 18 Jan 2022 12:08:05 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 2815418000A6; Tue, 18 Jan 2022 13:07:59 +0100 (CET)
+Date:   Tue, 18 Jan 2022 13:07:59 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Pekka Paalanen <ppaalanen@gmail.com>, linux-fbdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sven Schnelle <svens@stackframe.org>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Message-ID: <20220118120759.qobqonhonej3vnqw@sirius.home.kraxel.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+ <87bl0amc6s.fsf@x1.stackframe.org>
+ <20220118103323.4bae3a7d@eldfell>
+ <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org>
+ <CAKMK7uGQ=pGHv+LcRxZqb_jV0fqzUZtd+tZCr7aatoMDF4hyvw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 29/66] parisc: Remove mmap linked list from cache
- handling
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-30-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-30-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uGQ=pGHv+LcRxZqb_jV0fqzUZtd+tZCr7aatoMDF4hyvw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Use the VMA iterator instead.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+  Hi,
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  arch/parisc/kernel/cache.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> > fbcon could do the same, i.e. render to fbdev in a 60Hz timer instead of
+> > doing it synchronously.
 > 
-> diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-> index 94150b91c96f..c3a8d29b6f9f 100644
-> --- a/arch/parisc/kernel/cache.c
-> +++ b/arch/parisc/kernel/cache.c
-> @@ -519,9 +519,11 @@ static inline unsigned long mm_total_size(struct mm_struct *mm)
->  {
->  	struct vm_area_struct *vma;
->  	unsigned long usize = 0;
-> +	VMA_ITERATOR(vmi, mm, 0);
->  
-> -	for (vma = mm->mmap; vma; vma = vma->vm_next)
-> +	for_each_vma(vmi, vma)
->  		usize += vma->vm_end - vma->vm_start;
-> +
->  	return usize;
->  }
->  
-> @@ -570,6 +572,7 @@ static void flush_user_cache_tlb(struct vm_area_struct *vma,
->  void flush_cache_mm(struct mm_struct *mm)
->  {
->  	struct vm_area_struct *vma;
-> +	VMA_ITERATOR(vmi, mm, 0);
->  
->  	/* Flushing the whole cache on each cpu takes forever on
->  	   rp3440, etc.  So, avoid it if the mm isn't too big.  */
-> @@ -583,13 +586,13 @@ void flush_cache_mm(struct mm_struct *mm)
->  
->  	preempt_disable();
->  	if (mm->context == mfsp(3)) {
-> -		for (vma = mm->mmap; vma; vma = vma->vm_next)
-> +		for_each_vma(vmi, vma)
->  			flush_user_cache_tlb(vma, vma->vm_start, vma->vm_end);
->  		preempt_enable();
->  		return;
->  	}
->  
-> -	for (vma = mm->mmap; vma; vma = vma->vm_next)
-> +	for_each_vma(vmi, vma)
->  		flush_cache_pages(vma, mm, vma->vm_start, vma->vm_end);
->  	preempt_enable();
->  }
+> Yeah, and if you use the shadow fb support in drm fbdev helpers,
+> that's what you get. Maybe we should just make that the default, since
+> that would also greatly simply stuff like modesetting support for
+> fbdev.
+
+Yep, that helps of course.  I was thinking more about the chars + attrs
++ font -> framebuffer step in the fbcon rendering pipeline though where
+one could do something simliar to save even more cpu cycles.
+
+take care,
+  Gerd
 

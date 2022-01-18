@@ -2,139 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 472F449250F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4052C492513
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbiARLkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
+        id S240677AbiARLlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbiARLkQ (ORCPT
+        with ESMTP id S237441AbiARLlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:40:16 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9F4C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:40:16 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id z25-20020a0568301db900b005946f536d85so14742136oti.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:40:16 -0800 (PST)
+        Tue, 18 Jan 2022 06:41:31 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35603C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:41:31 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id g205so27972724oif.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:41:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=ffwll.ch; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DYGWZCJtnfIL0hu+yeMxYhxnO6RLRB9uj48XOeWHa+E=;
-        b=Q5fKoiAyjwUL1QxZfAc9NP29WkhOZF1YyACXXj9RueWaHi1dGO1SDcRVPhWHOX+uB4
-         Zzl98rgrLBmOmiDUIegtvVXAzoj0kSvJRAxElWdxHFsjPKHkRvqGiIr36L0h5TLs8iGG
-         G79LUMDyEQRi16YMC2sKEFHp7PtaYkJP1UgQHZWdEjmx8SmT9X0Qem4bqV8TarcKleu+
-         3O4IO9IZ5Mz8BFqCfanItjYI8K8LGOVgs08yAqtCaDjRA1sgv0N5Cwd328OOH4YS+vOa
-         9SjM4TPlpY+yljiyqoDppUXKc8ef0TJvhdySV0z2XXRRhhNNpJblm1GJ7xInxOCDvqE5
-         OHNA==
+        bh=x78/TbYfX5QsnYZyr52VgAAejiGos9kR5zRjc4vUcCI=;
+        b=BHIqFD6eJovLYxKCszVQrtc4G+FVdv6Af3+lRJEtvGKcldsEv7St9cpQiHsu8HtM0U
+         NVcEdyoH7nAWqEdWzcNUGjIgads4GWtLnBxoviCJOps7kYsK27aZW2mZEhBLUqWgzRPE
+         VN+r7kLysZOMORWrbBThHM57uYpD/YgJdfDHk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DYGWZCJtnfIL0hu+yeMxYhxnO6RLRB9uj48XOeWHa+E=;
-        b=FyWrEcdBtuACxVcElIdNXFte9ZcOgQtJy/hifSipI5DkyJrCSLNRj0H94qyB30u9PQ
-         OIuPJz/2Z6B80ZgVKFBLf3a4uJHm+g5+oTJsTcnyd0giR1EUBKU7LT451sG7W6meuuSA
-         Cnbh5kNfH/41Bu4zGmTWfBlZgdRh/GodyCsfrX4CXvZdp9e2QNtcP8eG18StUQvfuRm7
-         YcVEfiuQvMfolOh5x6jG3GQkBjbETlho1S8ar6eQ5lux2DolbmbaV1B/ydGemJS42drR
-         3za4Ho9ZABWod/GkZszg4KTBo23hndHsjxi7+crdeaOd6X1E4ggHX7yAYzUWcHbE0+za
-         9k8w==
-X-Gm-Message-State: AOAM5328xhmc/1YGafmTg6428S6htflioJ/22ednd3av0qq6T5cvgmmB
-        t8of8VNnUo+PU2+1P3C4DrJB+X1i4rq7ygjCBAK9Zw==
-X-Google-Smtp-Source: ABdhPJw0SRdiEUCu/e6KV+EnYwSn5ooQpcjSojjZx+2jX9yTxj9BW1Q4L3w0ENbYRu/QYUSM6YmcN9ng4iuOb8zbBl4=
-X-Received: by 2002:a9d:58c7:: with SMTP id s7mr5124688oth.246.1642506015453;
- Tue, 18 Jan 2022 03:40:15 -0800 (PST)
+        bh=x78/TbYfX5QsnYZyr52VgAAejiGos9kR5zRjc4vUcCI=;
+        b=jnt8Y0Ri7MWSUX09kXXWPjG5NxDcmKciu5PeGDLxfS6Dd2CjBxMViV0IilFqiic+UX
+         4F38fM1dH0LA96GB7JjIHJV5H/6/QWB+ncB1D0QiG8Op14ZTAp0svtvOKFJVmdURNiQX
+         xy3bGwMpfkfQS7D3fer/WsUw/4KL3USC1QkyuYZzebqacMfKAZtJ1TVMa+ar2NBkWQLB
+         YKAil8LUeKBiL2WHd5Wv2DuhxiV7HMEznRW/cts5aQjaaiPtuBVlP02fikwVEbgpwjcZ
+         zLGPFXHkM7wEKkXGF3C5JPtBCk2Rfs8doc+HP/hmEZk56trGDvBf5fJuzpgt7vm6pGmL
+         Cxqw==
+X-Gm-Message-State: AOAM530oF9Az9O7lYCwhGjcDvLCzcs2uqMIB+TBXeSW6zVHp5HFhJ62L
+        fCqvLvaIHD6ICzSkxumPY3jLeOSH8yxZu0EhAYCCGg==
+X-Google-Smtp-Source: ABdhPJy5bFsGvTTo9Rj+B1mnhsO4OFpJd/bnRdu8kgbMxvhGzvZK0wJseXPAtmukitDgS+zCuzX4XwI2yFZBlgTFLbQ=
+X-Received: by 2002:a05:6808:3a3:: with SMTP id n3mr12476341oie.128.1642506089204;
+ Tue, 18 Jan 2022 03:41:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216151454.752066-1-tmricht@linux.ibm.com>
- <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
- <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com> <20220118091827.GA98966@leoy-ThinkPad-X240s>
-In-Reply-To: <20220118091827.GA98966@leoy-ThinkPad-X240s>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 18 Jan 2022 12:40:04 +0100
-Message-ID: <CANpmjNMPoU+1b1fKFuYDYwisW2YfjQHxGt5hgLp1tioG7C2jmg@mail.gmail.com>
-Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     John Garry <john.garry@huawei.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
-        sumanthk@linux.ibm.com, hca@linux.ibm.com,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
+References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+ <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
+ <87ee5659dt.fsf@intel.com> <4f1d6018-d74e-8e62-ea4d-0ca79c6bbbc5@gmx.de>
+ <87a6ft5thv.fsf@intel.com> <CAMuHMdVE6OY29qB+F-QPgQt2q5xAYfyuPhKqSDrh_HhD9PPw9g@mail.gmail.com>
+In-Reply-To: <CAMuHMdVE6OY29qB+F-QPgQt2q5xAYfyuPhKqSDrh_HhD9PPw9g@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 18 Jan 2022 12:41:17 +0100
+Message-ID: <CAKMK7uHtdjyeasnJw2ZVwJJjuCn1KGT05kJu-x5jdmEmnBB-dA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 at 10:18, Leo Yan <leo.yan@linaro.org> wrote:
+On Tue, Jan 18, 2022 at 9:41 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> On Mon, Jan 17, 2022 at 03:39:10PM +0000, John Garry wrote:
-> > On 16/12/2021 15:48, Marco Elver wrote:
-> >
-> > +
-> >
-> > > On Thu, 16 Dec 2021 at 16:15, Thomas Richter<tmricht@linux.ibm.com>  wrote:
-> > > > In Linux next kernel
-> > > > Commit 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
-> > > > introduced the new test which uses breakpoint events.
-> > > > These events are not supported on s390 and PowerPC and always fail:
-> > > >
-> > > >   # perf test -F 73
-> > > >   73: Sigtrap                                                         : FAILED!
-> > > >   #
-> > > >
-> > > > Fix it the same way as in the breakpoint tests in file
-> > > > tests/bp_account.c where these type of tests are skipped on
-> > > > s390 and PowerPC platforms.
-> > > >
-> > > > With this patch skip this test on both platforms.
-> > > >
-> > > > Output after:
-> > > >   # ./perf test -F 73
-> > > >   73: Sigtrap
-> > > >
-> > > > Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
-> > > >
-> > > > Cc: Marco Elver<elver@google.com>
-> > > > Signed-off-by: Thomas Richter<tmricht@linux.ibm.com>
-> > > Acked-by: Marco Elver<elver@google.com>
+> Hi Jani,
+>
+> On Tue, Jan 18, 2022 at 9:38 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> > On Mon, 17 Jan 2022, Helge Deller <deller@gmx.de> wrote:
+> > > On 1/17/22 22:40, Jani Nikula wrote:
+> > >> On Mon, 17 Jan 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> > >>> Seems like few people read linux-fbdev these days.
+> > >>
+> > >> How much traffic is there to linux-fbdev that is *not* Cc'd to dri-devel
+> > >> also?
 > > >
-> > > Thanks, and sorry for missing this case!
+> > > Doesn't seem like much traffic - which IMHO is OK for such a tree with
+> > > mostly just maintenance patches.
 > > >
+> > >> Do we still need a separate linux-fbdev mailing list at all?
+> > >
+> > > Yes. I want to have it seperate of dri-devel.
+> > > Actually I'd prefer to drop dri-devel from the list where patches
+> > > for fbdev are sent...
 > >
-> > I am finding that this test hangs on my arm64 machine:
-> >
-> > john@debian:~/kernel-dev2/tools/perf$ sudo ./perf test -vvv 73
-> >  73: Sigtrap:
-> > --- start ---
-> > test child forked, pid 45193
+> > Disagreed. If anything, this thread shows we can't have fbdev and drm in
+> > silos of their own.
 >
-> Both Arm and Arm64 platforms cannot support signal handler with
-> breakpoint, please see the details in [1].  So I think we need
-> something like below:
->
-> static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
-> {
->         ...
->
->         if (!BP_SIGNAL_IS_SUPPORTED) {
->                 pr_debug("Test not supported on this architecture");
->                 return TEST_SKIP;
->         }
->
->         ...
-> }
->
-> Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
-> here.
->
-> [1] https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
+> Unless DRM drops fbdev support. Isn't that the long-term plan anyway?
 
-Does this limitation also exist for address watchpoints? The sigtrap
-test does not make use of instruction breakpoints, but instead just
-sets up a watchpoint on access to a data address.
+No. There's way too much old stuff still using the fbdev interface to
+do that. We've even done things like standardize the vblank wait
+ioctl, because people need that.
 
-Thanks,
--- Marco
+There's some effort to make fbdev drivers like efifb obsolete, and
+there's been discussions to have a drm-native fbcon. But none of these
+are going to make fbdev on top of drm obsolete and something we can
+remove. Pretty sure at least not this decade.
+-Daniel
+
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,171 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C42E4916A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B07A649185E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346277AbiARCfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:35:36 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:42298 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1344205AbiARC3V (ORCPT
+        id S1348300AbiARCpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344895AbiARChn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:29:21 -0500
-X-UUID: 55fead7361b54f23ab6d7eada7852afd-20220118
-X-UUID: 55fead7361b54f23ab6d7eada7852afd-20220118
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1671992361; Tue, 18 Jan 2022 10:29:17 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 18 Jan 2022 10:29:15 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 18 Jan 2022 10:29:15 +0800
-Message-ID: <1bd816c2f26cd8e42debf066a57e24eb5e2f580d.camel@mediatek.com>
-Subject: Re: [v9,2/3] drm/mediatek: implement the DSI hs packets aligned
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <p.zabel@pengutronix.de>
-CC:     <xji@analogixsemi.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>
-Date:   Tue, 18 Jan 2022 10:29:15 +0800
-In-Reply-To: <86b76e9f-96b0-7d54-bd38-449745e30aa2@intel.com>
-References: <20220114092110.12137-1-rex-bc.chen@mediatek.com>
-         <20220114092110.12137-3-rex-bc.chen@mediatek.com>
-         <4076cb55-4546-6bbd-1a1f-19395dcd9ccd@collabora.com>
-         <f858dd4aaa35fa3eb969baf887f038c3593232e5.camel@mediatek.com>
-         <86b76e9f-96b0-7d54-bd38-449745e30aa2@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 17 Jan 2022 21:37:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B716C0619C7;
+        Mon, 17 Jan 2022 18:34:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABE5CB81252;
+        Tue, 18 Jan 2022 02:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99E4C36AEB;
+        Tue, 18 Jan 2022 02:33:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642473222;
+        bh=wNtTxl+7OJwp4XfQcWDBPvTn86mQUGQpqISqFTZAWxc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iEbX7KKhMMG1CuRqnA9hRH7JSilqDFj7K14JkgOTaenJ4xYwT2036XKBDJY1U/pRx
+         QHzYL/tB869dzJq3CTy9wHeHpNPWKFVmonueC1x82eevlftppI4n6JvErgs8FACK+2
+         Q0IiqZ0PcmYR5sqhNTctmCfHVdgoEhLhOmPhEdSw1haYvsrraWJ+lh6DekWRClFJ6I
+         ghXEGddCwQ06bkoS+7tusElEUzVUvKneCP+jpSt5f82YxyKf8VqoRDBToAposolbmL
+         cIb3cqbvh7/NG0Z0RLCZEBsqwt1uWdfCIojYhSO5+UobMi/HedpT/2LfYysu3WFjO1
+         UjI3PUQf4VjOw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, liweihang@huawei.com,
+        liuyixing1@huawei.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 031/188] amd: hplance: use eth_hw_addr_set()
+Date:   Mon, 17 Jan 2022 21:29:15 -0500
+Message-Id: <20220118023152.1948105-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
+References: <20220118023152.1948105-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andrzej,
+From: Jakub Kicinski <kuba@kernel.org>
 
-Thanks for your review.
-I will give the explanation for this in next version.
+[ Upstream commit 21942eef062781429b356974589d7965952940fb ]
 
-BRs,
-Rex-BC hen
+Byte by byte assignments.
 
-On Fri, 2022-01-14 at 12:11 +0100, Andrzej Hajda wrote:
-> On 14.01.2022 11:20, Rex-BC Chen wrote:
-> > Hello AngeloGioacchino,
-> > 
-> > Thanks for your review.
-> > I will modify this in next version.
-> > 
-> > BRs,
-> > Rex-BC Chen
-> > 
-> > On Fri, 2022-01-14 at 10:36 +0100, AngeloGioacchino Del Regno
-> > wrote:
-> > > Il 14/01/22 10:21, Rex-BC Chen ha scritto:
-> > > > Some DSI RX devices require the packets on all lanes aligned at
-> > > > the
-> > > > end.
-> > > > Otherwise, there will be some issues of shift or scroll for
-> > > > screen.
-> > > > 
-> > > > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> > > > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > > 
-> > > Hello,
-> > > thanks for the patch! However, there's something to improve...
-> > > 
-> > > > ---
-> > > >    drivers/gpu/drm/mediatek/mtk_dsi.c | 12 ++++++++++++
-> > > >    1 file changed, 12 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > > > b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > > > index 5d90d2eb0019..ccdda15f5a66 100644
-> > > > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > > > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > > > @@ -195,6 +195,8 @@ struct mtk_dsi {
-> > > >    	struct clk *hs_clk;
-> > > >    
-> > > >    	u32 data_rate;
-> > > > +	/* force dsi line end without dsi_null data */
-> > > > +	bool hs_packet_end_aligned;
-> > > 
-> > > There's no need to introduce a new variable here...
-> > > >    
-> > > >    	unsigned long mode_flags;
-> > > >    	enum mipi_dsi_pixel_format format;
-> > > > @@ -500,6 +502,13 @@ static void
-> > > > mtk_dsi_config_vdo_timing(struct
-> > > > mtk_dsi *dsi)
-> > > >    		DRM_WARN("HFP + HBP less than d-phy, FPS will
-> > > > under
-> > > > 60Hz\n");
-> > > >    	}
-> > > >    
-> > > > +	if (dsi->hs_packet_end_aligned) {
-> > > 
-> > > You can simply check mode_flags here:
-> > > 	if (dsi->mode_flags & MIPI_DSI_HS_PKT_END_ALIGNED) {
-> > > 
-> > > > +		horizontal_sync_active_byte =
-> > > > roundup(horizontal_sync_active_byte, dsi->lanes) - 2;
-> > > > +		horizontal_frontporch_byte =
-> > > > roundup(horizontal_frontporch_byte, dsi->lanes) - 2;
-> > > > +		horizontal_backporch_byte =
-> > > > roundup(horizontal_backporch_byte, dsi->lanes) - 2;
-> > > > +		horizontal_backporch_byte -= (vm->hactive *
-> > > > dsi_tmp_buf_bpp + 2) % dsi->lanes;
-> > > > +	}
-> > > > +
-> 
-> 
-> And if you could add comment explaining the magic here it would be
-> nice.
-> 
-> 
-> Regards
-> 
-> Andrzej
-> 
-> 
-> > > >    	writel(horizontal_sync_active_byte, dsi->regs +
-> > > > DSI_HSA_WC);
-> > > >    	writel(horizontal_backporch_byte, dsi->regs +
-> > > > DSI_HBP_WC);
-> > > >    	writel(horizontal_frontporch_byte, dsi->regs +
-> > > > DSI_HFP_WC);
-> > > > @@ -794,6 +803,9 @@ static int mtk_dsi_host_attach(struct
-> > > > mipi_dsi_host *host,
-> > > >    	dsi->lanes = device->lanes;
-> > > >    	dsi->format = device->format;
-> > > >    	dsi->mode_flags = device->mode_flags;
-> > > > +	dsi->hs_packet_end_aligned = (dsi->mode_flags &
-> > > > +				      MIPI_DSI_HS_PKT_END_ALIGN
-> > > > ED)
-> > > > +				     ? true : false;
-> > > 
-> > > ...so there's no need for this one, either.
-> > > 
-> > > >    
-> > > >    	return 0;
-> > > >    }
-> > > > 
-> > > 
-> > > Regards,
-> > > - Angelo
-> > > 
+Fixes build on m68k.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/ethernet/amd/hplance.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/amd/hplance.c b/drivers/net/ethernet/amd/hplance.c
+index 6784f8748638b..055fda11c5724 100644
+--- a/drivers/net/ethernet/amd/hplance.c
++++ b/drivers/net/ethernet/amd/hplance.c
+@@ -129,6 +129,7 @@ static void hplance_init(struct net_device *dev, struct dio_dev *d)
+ {
+ 	unsigned long va = (d->resource.start + DIO_VIRADDRBASE);
+ 	struct hplance_private *lp;
++	u8 addr[ETH_ALEN];
+ 	int i;
+ 
+ 	/* reset the board */
+@@ -144,9 +145,10 @@ static void hplance_init(struct net_device *dev, struct dio_dev *d)
+ 		/* The NVRAM holds our ethernet address, one nibble per byte,
+ 		 * at bytes NVRAMOFF+1,3,5,7,9...
+ 		 */
+-		dev->dev_addr[i] = ((in_8(va + HPLANCE_NVRAMOFF + i*4 + 1) & 0xF) << 4)
++		addr[i] = ((in_8(va + HPLANCE_NVRAMOFF + i*4 + 1) & 0xF) << 4)
+ 			| (in_8(va + HPLANCE_NVRAMOFF + i*4 + 3) & 0xF);
+ 	}
++	eth_hw_addr_set(dev, addr);
+ 
+ 	lp = netdev_priv(dev);
+ 	lp->lance.name = d->name;
+-- 
+2.34.1
 

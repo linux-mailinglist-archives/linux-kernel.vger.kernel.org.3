@@ -2,247 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC194929F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EA74929F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346073AbiARP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:58:07 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:23183 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiARP6G (ORCPT
+        id S1346114AbiARP7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346095AbiARP7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:58:06 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1642521485; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=kZDrU8Dg8Jr5jR4QX28dOeZKIG/4+04z5OJQI5wFtME=; b=FHyR6EPQkI8ZMAstIG0CEJ/Z7O+CioPAUnJelfDYPY7XtwuhO5p8RwVMeOH+JIPPg4pzE+WY
- 6uLeiSyqefkihgVJ5tCI5mLKoHL9bV2Z68gavU/jxeCeQt0AwPXTZiDSc+NL9e8+FFDymiE0
- 8nie7gALlrkZUrqvuhrJb6y0rZ4=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 61e6e38d6189a19cb208f0b4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 18 Jan 2022 15:58:05
- GMT
-Sender: quic_vjitta=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 51F12C4360C; Tue, 18 Jan 2022 15:58:04 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.100] (unknown [103.164.200.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: vjitta)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4D678C4338F;
-        Tue, 18 Jan 2022 15:57:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 4D678C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-Subject: Re: [PATCH v3] iommu: Fix potential use-after-free during probe
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Vijayanand Jitta <quic_vjitta@quicinc.com>, joro@8bytes.org,
-        will@kernel.org, iommu@lists.linux-foundation.org,
+        Tue, 18 Jan 2022 10:59:00 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C72CC06161C;
+        Tue, 18 Jan 2022 07:59:00 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so18087113oto.4;
+        Tue, 18 Jan 2022 07:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6zBK9Ap0MPjjgj20gZD2ZZPJ47JigEwNp1b7g+RZyNk=;
+        b=ewamlKh/o6u6/IdyzYPLbpttc9ObpKVou5F73R+/LRh8Bd9dRriL+7mtG22yIlrKzy
+         6wRS2zq6NKJelgOkZLvg5LzWnxOamM6c69ep+vW/KeHS2Vbq1gAE7t0wNFYFi1loU0z8
+         23T42Y4HWJpk5p+CO9/AD6sJMh5Ucxq5NyeL6GLaW9MbMjweMtAw6x8FEBiNLvTCkIEK
+         J6J3HXOVcUclVrZHxx+J0LUbo9eneats9edQJ4i49XbR+uc58j17gEBchNJqo9/26Tsq
+         4dbbEHu/7yLJw6HFLWWLEMaRYH40lD4HpWwj24RBk7iD8c4N0laHIR+HT1xpHf/nP4ve
+         eUIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=6zBK9Ap0MPjjgj20gZD2ZZPJ47JigEwNp1b7g+RZyNk=;
+        b=TCEz1pBxAjfMEPh4lzX3VXlcbS7NU8CgPkcuvZZk9G8PvSKOSC/cRv7+EN7qz9NCD9
+         rK0BJpTtaBNiKEy0zoEC6LXZmKu1P7nw7RaS24noWQrYCCXZzCxD7gBVnLFCh5kgWJd7
+         Baar+iUixwKcM7l+gk/aNrEa+1H2Kso0lh0GBlUZd2VxyHhMBaGEylXMSarz45xHzlMY
+         DQ6j8906m6cQGrLhgwSoa2qNYF8t40LU0lWdA6uTmHqRfHbsexOb4bHugD3ylwRuoxUc
+         M64hFB1xNBWOw6zXCw2SmpSvdI29d26hETA3hAUxrJjeQtacBB3LkdJz+Z0JTFTFsWPx
+         q//w==
+X-Gm-Message-State: AOAM533H4gNpTzOHwtQXVJrN1ss5thxhyj+cI9keLLem21Hhk5d/K69U
+        6nYjxN5+O6TfT7oFc950QJ8+xqW7vMM=
+X-Google-Smtp-Source: ABdhPJwYvko+oWvGn29Y6w7HoXmhnCowumyb0cXX9LyGbqM9Y/Trvqz2CrsLfveJQLFpRhBp6GC55w==
+X-Received: by 2002:a9d:4718:: with SMTP id a24mr19922023otf.381.1642521539721;
+        Tue, 18 Jan 2022 07:58:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n19sm7003095otq.11.2022.01.18.07.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 07:58:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 18 Jan 2022 07:58:57 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com
-References: <1641993184-1232-1-git-send-email-quic_vjitta@quicinc.com>
- <9913d026-fddd-c188-0873-0f7a66fb2c3c@arm.com>
-From:   Vijayanand Jitta <quic_vjitta@quicinc.com>
-Message-ID: <5f923b2d-645c-a7df-e16b-e8526015db32@quicinc.com>
-Date:   Tue, 18 Jan 2022 21:27:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: Re: [PATCH v1 3/4] pmbus: remove trailing whitespaces
+Message-ID: <20220118155857.GA4114390@roeck-us.net>
+References: <cover.1642434222.git.sylv@sylv.io>
+ <c984b88b136a1cde16ce52c5f818886653b0f84a.1642434222.git.sylv@sylv.io>
 MIME-Version: 1.0
-In-Reply-To: <9913d026-fddd-c188-0873-0f7a66fb2c3c@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c984b88b136a1cde16ce52c5f818886653b0f84a.1642434222.git.sylv@sylv.io>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/18/2022 7:19 PM, Robin Murphy wrote:
-> On 2022-01-12 13:13, Vijayanand Jitta wrote:
->> Kasan has reported the following use after free on dev->iommu.
->> when a device probe fails and it is in process of freeing dev->iommu
->> in dev_iommu_free function, a deferred_probe_work_func runs in parallel
->> and tries to access dev->iommu->fwspec in of_iommu_configure path thus
->> causing use after free.
->>
->> BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
->> Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
->>
->> Workqueue: events_unbound deferred_probe_work_func
->> Call trace:
->>   dump_backtrace+0x0/0x33c
->>   show_stack+0x18/0x24
->>   dump_stack_lvl+0x16c/0x1e0
->>   print_address_description+0x84/0x39c
->>   __kasan_report+0x184/0x308
->>   kasan_report+0x50/0x78
->>   __asan_load8+0xc0/0xc4
->>   of_iommu_configure+0xb4/0x4a4
->>   of_dma_configure_id+0x2fc/0x4d4
->>   platform_dma_configure+0x40/0x5c
->>   really_probe+0x1b4/0xb74
->>   driver_probe_device+0x11c/0x228
->>   __device_attach_driver+0x14c/0x304
->>   bus_for_each_drv+0x124/0x1b0
->>   __device_attach+0x25c/0x334
->>   device_initial_probe+0x24/0x34
->>   bus_probe_device+0x78/0x134
->>   deferred_probe_work_func+0x130/0x1a8
->>   process_one_work+0x4c8/0x970
->>   worker_thread+0x5c8/0xaec
->>   kthread+0x1f8/0x220
->>   ret_from_fork+0x10/0x18
->>
->> Allocated by task 1:
->>   ____kasan_kmalloc+0xd4/0x114
->>   __kasan_kmalloc+0x10/0x1c
->>   kmem_cache_alloc_trace+0xe4/0x3d4
->>   __iommu_probe_device+0x90/0x394
->>   probe_iommu_group+0x70/0x9c
->>   bus_for_each_dev+0x11c/0x19c
->>   bus_iommu_probe+0xb8/0x7d4
->>   bus_set_iommu+0xcc/0x13c
->>   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
->>   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
->>   platform_drv_probe+0xe4/0x13c
->>   really_probe+0x2c8/0xb74
->>   driver_probe_device+0x11c/0x228
->>   device_driver_attach+0xf0/0x16c
->>   __driver_attach+0x80/0x320
->>   bus_for_each_dev+0x11c/0x19c
->>   driver_attach+0x38/0x48
->>   bus_add_driver+0x1dc/0x3a4
->>   driver_register+0x18c/0x244
->>   __platform_driver_register+0x88/0x9c
->>   init_module+0x64/0xff4 [arm_smmu]
->>   do_one_initcall+0x17c/0x2f0
->>   do_init_module+0xe8/0x378
->>   load_module+0x3f80/0x4a40
->>   __se_sys_finit_module+0x1a0/0x1e4
->>   __arm64_sys_finit_module+0x44/0x58
->>   el0_svc_common+0x100/0x264
->>   do_el0_svc+0x38/0xa4
->>   el0_svc+0x20/0x30
->>   el0_sync_handler+0x68/0xac
->>   el0_sync+0x160/0x180
->>
->> Freed by task 1:
->>   kasan_set_track+0x4c/0x84
->>   kasan_set_free_info+0x28/0x4c
->>   ____kasan_slab_free+0x120/0x15c
->>   __kasan_slab_free+0x18/0x28
->>   slab_free_freelist_hook+0x204/0x2fc
->>   kfree+0xfc/0x3a4
->>   __iommu_probe_device+0x284/0x394
->>   probe_iommu_group+0x70/0x9c
->>   bus_for_each_dev+0x11c/0x19c
->>   bus_iommu_probe+0xb8/0x7d4
->>   bus_set_iommu+0xcc/0x13c
->>   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
->>   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
->>   platform_drv_probe+0xe4/0x13c
->>   really_probe+0x2c8/0xb74
->>   driver_probe_device+0x11c/0x228
->>   device_driver_attach+0xf0/0x16c
->>   __driver_attach+0x80/0x320
->>   bus_for_each_dev+0x11c/0x19c
->>   driver_attach+0x38/0x48
->>   bus_add_driver+0x1dc/0x3a4
->>   driver_register+0x18c/0x244
->>   __platform_driver_register+0x88/0x9c
->>   init_module+0x64/0xff4 [arm_smmu]
->>   do_one_initcall+0x17c/0x2f0
->>   do_init_module+0xe8/0x378
->>   load_module+0x3f80/0x4a40
->>   __se_sys_finit_module+0x1a0/0x1e4
->>   __arm64_sys_finit_module+0x44/0x58
->>   el0_svc_common+0x100/0x264
->>   do_el0_svc+0x38/0xa4
->>   el0_svc+0x20/0x30
->>   el0_sync_handler+0x68/0xac
->>   el0_sync+0x160/0x180
->>
->> Fix this by taking device_lock during probe_iommu_group.
->>
->> Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
->> ---
->>   drivers/iommu/iommu.c | 12 ++++++++----
->>   1 file changed, 8 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index dd7863e..261792d 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -1617,7 +1617,7 @@ static int probe_iommu_group(struct device *dev,
->> void *data)
->>   {
->>       struct list_head *group_list = data;
->>       struct iommu_group *group;
->> -    int ret;
->> +    int ret = 0;
->>         /* Device is probed already if in a group */
->>       group = iommu_group_get(dev);
->> @@ -1626,9 +1626,13 @@ static int probe_iommu_group(struct device
->> *dev, void *data)
->>           return 0;
->>       }
->>   -    ret = __iommu_probe_device(dev, group_list);
->> -    if (ret == -ENODEV)
->> -        ret = 0;
->> +    ret = device_trylock(dev);
->> +    if (ret) {
+On Mon, Jan 17, 2022 at 05:12:49PM +0100, Marcello Sylvester Bauer wrote:
+> Fix checkpatch issues by removing trailing whitespaces in Kconfig.
 > 
-> This doesn't seem right - we can't have a non-deterministic situation
-> where __iommu_probe_device() may or may not be called depending on what
-> anyone else might be doing with the device at the same time.
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+
+Applied, after updating Kconfig file. No need to resend.
+
+> ---
+>  drivers/hwmon/pmbus/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> I don't fully understand how __iommu_probe_device() and
-> of_iommu_configure() can be running for the same device at the same
-> time, but if that's not a race which can be fixed in its own right, then
-
-Thanks for the review comments.
-
-During arm_smmu probe, bus_for_each_dev is called which calls
-__iommu_probe_device for each all the devs on that bus.
-
-   __iommu_probe_device+0x90/0x394
-   probe_iommu_group+0x70/0x9c
-   bus_for_each_dev+0x11c/0x19c
-   bus_iommu_probe+0xb8/0x7d4
-   bus_set_iommu+0xcc/0x13c
-   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
-   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
-
-and the deferred probe function is calling of_iommu_configure on the
-same dev which is currently in __iommu_probe_device path in this case
-thus causing the race.
-
-> I think adding a refcount to dev_iommu would be a more sensible way to
-> mitigate it.
-
-Right, Adding refcount for dev_iommu should help , I'll post a new patch
-with it.
-
-Thanks,
-Vijay
-> 
-> Robin.
-> 
->> +        ret = __iommu_probe_device(dev, group_list);
->> +        if (ret == -ENODEV)
->> +            ret = 0;
->> +        device_unlock(dev);
->> +    }
->>         return ret;
->>   }
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 41f6cbf96d3b..c96f7b7338bd 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -189,8 +189,8 @@ config SENSORS_LTC2978_REGULATOR
+>  	depends on SENSORS_LTC2978 && REGULATOR
+>  	help
+>  	  If you say yes here you get regulator support for Linear Technology
+> -	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880, 
+> -	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686, 
+> +	  LTC3880, LTC3883, LTC3884, LTC3886, LTC3887, LTC3889, LTC7880,
+> +	  LTM4644, LTM4675, LTM4676, LTM4677, LTM4678, LTM4680, LTM4686,
+>  	  and LTM4700.
+>  
+>  config SENSORS_LTC3815

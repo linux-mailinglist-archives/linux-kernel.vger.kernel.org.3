@@ -2,377 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F2949234A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D202492345
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbiARJym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:54:42 -0500
-Received: from mx1.cqplus1.com ([113.204.237.245]:46614 "EHLO mx1.cqplus1.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229825AbiARJyj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:54:39 -0500
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24948:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Tue, 18 Jan 2022 17:53:41 +0800 (CST)
-From:   Xiantao Hu <xt.hu@cqplus1.com>
-To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
-        Xiantao Hu <xt.hu@cqplus1.com>
-Subject: [PATCH v5 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Date:   Tue, 18 Jan 2022 17:53:42 +0800
-Message-Id: <20220118095342.186612-3-xt.hu@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220118095342.186612-1-xt.hu@cqplus1.com>
-References: <20220118095342.186612-1-xt.hu@cqplus1.com>
+        id S234408AbiARJyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:54:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27577 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234223AbiARJyB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 04:54:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642499641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XDuwTuoJ9YB+ODFSUsA012oaBLCLX1OTiYl269u+isg=;
+        b=arOdvwWHy4kJOh1rizv+F/bHVdVX8Gfsjm1QBX+kvfKJjkdDv82Jy12di+ZIjth6zomnS6
+        BQzodwJqNlaznfHqLW4m4H/xYcDX2VP80C44aCWNKNuzi53urHIWxIm/WRHhbaraWkEQij
+        QYTgbNWeminCgv9u7lO7oKqCCdAYYSg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-654-pOEjfmZ9PQSzXe8hW18vow-1; Tue, 18 Jan 2022 04:53:56 -0500
+X-MC-Unique: pOEjfmZ9PQSzXe8hW18vow-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B944B3E743;
+        Tue, 18 Jan 2022 09:53:54 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6E38F6F129;
+        Tue, 18 Jan 2022 09:53:54 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id B94AD18000A6; Tue, 18 Jan 2022 10:53:52 +0100 (CET)
+Date:   Tue, 18 Jan 2022 10:53:52 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     Sven Schnelle <svens@stackframe.org>,
+        dri-devel@lists.freedesktop.org, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Message-ID: <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+ <87bl0amc6s.fsf@x1.stackframe.org>
+ <20220118103323.4bae3a7d@eldfell>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118103323.4bae3a7d@eldfell>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sunplus SP7021 requires watchdog timer support.
-Add watchdog driver to enable this.
+On Tue, Jan 18, 2022 at 10:33:23AM +0200, Pekka Paalanen wrote:
+> On Mon, 17 Jan 2022 19:47:39 +0100
+> Sven Schnelle <svens@stackframe.org> wrote:
+> 
+> > I also tested the speed on my Thinkpad X1 with Intel graphics, and there
+> > a dmesg with 919 lines one the text console took about 2s to display. In
+> > x11, i measure 22ms. This might be unfair because encoding might be
+> > different, but i cannot confirm the 'memcpy' is faster than hardware
+> > blitting' point. I think if that would be the case, no-one would care
+> > about 2D acceleration.
+> 
+> I think that is an extremely unfair comparison, because a graphical
+> terminal app is not going to render every line of text streamed to it.
+> It probably renders only the final view alone if you simply run
+> 'dmesg', skipping the first 800-900 lines completely.
 
-Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
----
-Changes in v5:
- - Addressed all comments from Mr. Guenter Roeck.
-   Drop the sp_wdt_set_timeout().
-   Fix devm_add_action_or_reset() called.
- - Use dev_err_probe() making code cleaner.
- - Change GPL version.
+Probably more like "render on every vblank", but yes, unlike fbcon it
+surely wouldn't render every single character sent to the terminal.
 
- MAINTAINERS                    |   1 +
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/sunplus_wdt.c | 268 +++++++++++++++++++++++++++++++++
- 4 files changed, 281 insertions(+)
- create mode 100644 drivers/watchdog/sunplus_wdt.c
+Also acceleration on modern hardware is more like "compose window
+content using the 3d engine" than "use 2d blitter to scroll the window".
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe6cc971c..a1b3d76e2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
- L:	linux-watchdog@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-+F:	drivers/watchdog/sunplus_wdt.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 9d222ba17..d3dbe8695 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called msc313e_wdt.
- 
-+config SUNPLUS_WATCHDOG
-+	tristate "Sunplus watchdog support"
-+	depends on ARCH_SUNPLUS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  Say Y here to include support for the watchdog timer
-+	  in Sunplus SoCs.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called sunplus_wdt.
-+
- # X86 (i386 + ia64 + x86_64) Architecture
- 
- config ACQUIRE_WDT
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 2ee970641..0fa548ee6 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
- obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
- obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
-+obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
-new file mode 100644
-index 000000000..4c6e0a62b
---- /dev/null
-+++ b/drivers/watchdog/sunplus_wdt.c
-@@ -0,0 +1,268 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * sunplus Watchdog Driver
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co., Ltd.
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/watchdog.h>
-+
-+#define WDT_CTRL                0x00
-+#define WDT_CNT                 0x04
-+
-+#define WDT_STOP				0x3877
-+#define WDT_RESUME				0x4A4B
-+#define WDT_CLRIRQ				0x7482
-+#define WDT_UNLOCK				0xAB00
-+#define WDT_LOCK				0xAB01
-+#define WDT_CONMAX				0xDEAF
-+
-+#define SP_WDT_MAX_TIMEOUT		11U
-+#define SP_WDT_DEFAULT_TIMEOUT	10
-+
-+#define STC_CLK				90000
-+
-+#define DEVICE_NAME		"sunplus-wdt"
-+
-+static unsigned int timeout;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct sp_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+};
-+
-+static int sp_wdt_restart(struct watchdog_device *wdev,
-+			  unsigned long action, void *data)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+	writel(WDT_UNLOCK, base + WDT_CTRL);
-+	writel(0x0001, base + WDT_CNT);
-+	writel(WDT_LOCK, base + WDT_CTRL);
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+/* TIMEOUT_MAX = ffff0/90kHz =11.65,so longer than 11 seconds will time out */
-+static int sp_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 count;
-+	u32 actual;
-+
-+	actual = min(wdev->timeout, SP_WDT_MAX_TIMEOUT);
-+
-+	if (actual > SP_WDT_MAX_TIMEOUT) {
-+		writel(WDT_CONMAX, base + WDT_CTRL);
-+	} else {
-+		writel(WDT_UNLOCK, base + WDT_CTRL);
-+		/* tiemrw_cnt[3:0]can't be write,only [19:4] can be write. */
-+		count = (actual * STC_CLK) >> 4;
-+		writel(count, base + WDT_CNT);
-+		writel(WDT_LOCK, base + WDT_CTRL);
-+	}
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 val;
-+
-+	val = readl(base + WDT_CNT);
-+	val &= 0xffff;
-+	val = val << 4;
-+
-+	return val;
-+}
-+
-+static const struct watchdog_info sp_wdt_info = {
-+	.identity	= DEVICE_NAME,
-+	.options	= WDIOF_SETTIMEOUT |
-+			  WDIOF_MAGICCLOSE |
-+			  WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops sp_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= sp_wdt_start,
-+	.stop		= sp_wdt_stop,
-+	.ping		= sp_wdt_ping,
-+	.get_timeleft	= sp_wdt_get_timeleft,
-+	.restart	= sp_wdt_restart,
-+};
-+
-+static void sp_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static void sp_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int sp_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sp_wdt_priv *priv;
-+	int err;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(dev, PTR_ERR(priv->clk),
-+				     "Failed to get clock\n");
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Failed to enable clock\n");
-+
-+	err = devm_add_action_or_reset(dev, sp_clk_disable_unprepare,
-+				       priv->clk);
-+	if (err)
-+		return err;
-+
-+	/* The timer and watchdog shared the STC reset */
-+	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return PTR_ERR(priv->rstc);
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	err = devm_add_action_or_reset(dev, sp_reset_control_assert,
-+				       priv->rstc);
-+	if (err)
-+		return err;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->wdev.info = &sp_wdt_info;
-+	priv->wdev.ops = &sp_wdt_ops;
-+	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
-+	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.parent = dev;
-+
-+	watchdog_init_timeout(&priv->wdev, timeout, dev);
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_set_restart_priority(&priv->wdev, 128);
-+
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+
-+	watchdog_stop_on_reboot(&priv->wdev);
-+	err = devm_watchdog_register_device(dev, &priv->wdev);
-+	if (err)
-+		return err;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	dev_info(dev, "Watchdog enabled (timeout=%d sec%s.)\n",
-+		 priv->wdev.timeout, nowayout ? ", nowayout" : "");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id sp_wdt_of_match[] = {
-+	{.compatible = "sunplus,sp7021-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
-+
-+static int __maybe_unused sp_wdt_suspend(struct device *dev)
-+{
-+	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
-+
-+	if (watchdog_active(&priv->wdev))
-+		sp_wdt_stop(&priv->wdev);
-+
-+	reset_control_assert(priv->rstc);
-+	clk_disable_unprepare(priv->clk);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused sp_wdt_resume(struct device *dev)
-+{
-+	int err;
-+
-+	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err) {
-+		dev_err(dev, "Clock can't be enabled correctly\n");
-+		return err;
-+	}
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	if (watchdog_active(&priv->wdev))
-+		sp_wdt_start(&priv->wdev);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(sp_wdt_pm_ops, sp_wdt_suspend, sp_wdt_resume);
-+
-+static struct platform_driver sp_wdt_driver = {
-+	.probe = sp_wdt_probe,
-+	.driver = {
-+		   .name = DEVICE_NAME,
-+		   .of_match_table = sp_wdt_of_match,
-+		   .pm = &sp_wdt_pm_ops,
-+	},
-+};
-+
-+module_platform_driver(sp_wdt_driver);
-+
-+MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
-+MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.1
+> Maybe fbcon should do the same when presented with a flood of text,
+> but I don't know how or why it works like it works.
+
+fbcon could do the same, i.e. render to fbdev in a 60Hz timer instead of
+doing it synchronously.
+
+take care,
+  Gerd
 

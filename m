@@ -2,62 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD0B492526
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E31D492527
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241028AbiARLqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S241049AbiARLq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:46:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240973AbiARLqF (ORCPT
+        with ESMTP id S241032AbiARLq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:46:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6D3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:46:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vqnZ5mGKPfst5rNIar7RHcY3kxPBaXqs26CfjQk8N90=; b=mOuBVcdZi8JRU0cyh/XNAe0MFu
-        QjiB+M0BIRXFYwLrfpl+I2XjqATqMOD6SZjqCXHRaK4rfIOJnRdF2mXkJk5GbD1KFPUDtlD7PzwT2
-        kDaXFnj3ROgQ3HDQME4O7o4H5Y5O35JJDxMJJcU+oYCMPCiEjWnYEqR4qB1Rqf4Dgztm4pj6o8Tfc
-        TlN5pX8pG4YkGh3wFOl6iQojVmOhiPnUhpv2r43AEboRd94VuCnV/kL0ApcSO2JMX8cmii4pkdv8L
-        MsupIpsmLKOxdo4cPVhebvtQtKxFgpB5grJWPfwquHwT464m/RSoFfTI8zlub4tz399WrcAXCtWrL
-        T7pwKELw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9mw6-009B9Z-18; Tue, 18 Jan 2022 11:46:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A86D300222;
-        Tue, 18 Jan 2022 12:46:01 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C879B203C2D6E; Tue, 18 Jan 2022 12:46:01 +0100 (CET)
-Date:   Tue, 18 Jan 2022 12:46:01 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: add Suren as psi co-maintainer
-Message-ID: <YeaoeQlAoj06qlNa@hirez.programming.kicks-ass.net>
-References: <20220117120317.1581315-1-hannes@cmpxchg.org>
+        Tue, 18 Jan 2022 06:46:27 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7D7C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:46:27 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id m1so69522768lfq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=I1sSEl7MKenQr/9UZ1q6fl+zmivFRoZ6Iw3ttDOsvog=;
+        b=RxgkEz8MlrV00X2wxNF4odeZzz2dXz7VvpJpfJhkz8ho7MIATHfJKPyThW5DecWzG2
+         MgbVgd6f264K37Y9do0+Pim05fWgdUjbDgvH8wOaaG1rQDCxoYwGMQZmFQtMTp9VoD1i
+         NTEyP0MSa/D94ShNIcs6Fo45qL/y1oOYBCDGqIk2SQCxRMDfVHADUISkyS0+jifVQYKm
+         zDutWHQOPfkb9sENAFoC+81xN+uf1us/eU8uN79/iGr8qMF7EejYA+YgDLHmSLAwFgV2
+         eey+OnfVHvb8JrlWgkgzVenEGeNx/9hAQhdoW+F/OYPeL/XkFQnaM3tFGznibeDpvuSs
+         PDyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=I1sSEl7MKenQr/9UZ1q6fl+zmivFRoZ6Iw3ttDOsvog=;
+        b=wVcRjdfDhjKg3DxyuxSdqlLf2HG8A/Oh8z0YF3A7RNyus5xtESVb181IfTJZdTTRCN
+         ewY/tsU4nuT++oGvwvzqUofzM/362+C49MVeEP3mBGpmbtWhrBF3M0gjGh0NogUcVS/t
+         VlgqktR7CJC6rm58YZY8ZPEnEIdOy3XyuIixv0FuUGIUlMd3YDvfw7Sc3qviuwueiEk0
+         WyOzKAFcgjm556tLw1VWuST/16p3KmR29Q7Qf9orXY5ZGBupAd5W51NalbjrdHdJS/bP
+         yjLf5rFMU2BX0HxHIof85vMSAk9ciqu7WNUuvnglmDJS4ue/UjP/Fp1u+LtwKynxs025
+         fXBw==
+X-Gm-Message-State: AOAM532nJIemmuNg0DM3+UGJS3vizqGlXDeW9YdT+3OmaBsGBQwtwbTp
+        JNGQVG36TWR2TzjEMvlIbLDUmAdBfd2dY/9yWPY=
+X-Google-Smtp-Source: ABdhPJxwe930zKkjgaFGUF2GYogswEe+5/yV/5G16Y5I76fSvNDeFQ/OM0BKpGToKaRlMBZ4sUtMPhV1B9LGAdPoIfo=
+X-Received: by 2002:a19:690e:: with SMTP id e14mr8323418lfc.642.1642506385602;
+ Tue, 18 Jan 2022 03:46:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117120317.1581315-1-hannes@cmpxchg.org>
+Received: by 2002:a05:6512:3e19:0:0:0:0 with HTTP; Tue, 18 Jan 2022 03:46:25
+ -0800 (PST)
+Reply-To: kjude081@gmail.com
+From:   Jude Kane <dawonbaadama@gmail.com>
+Date:   Tue, 18 Jan 2022 11:46:25 +0000
+Message-ID: <CAK8ii0fFjSbJFUnRPBZv=YcCW9fVu-8BtBS7ZcUmiYvsyJqiDw@mail.gmail.com>
+Subject: Dear .
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 07:03:17AM -0500, Johannes Weiner wrote:
-> Suren wrote the poll() interface, which is a significant part of the
-> psi code and represents a large user of psi itself (Android). It's a
-> good idea to have him look at psi patches as well, and it's good to
-> have two people following things in case one of us is traveling.
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Dear .
 
-Thanks!
+Please I am a solicitor at law and personal attorney to your late relative, a
+national of your country. Who died here in the year 2018, with his
+wife and their
+only daughter. I have contacted you as the beneficiary/next of kin to his
+estate fund valued at Twenty Million Five Hundred Thousand United States
+Dollars ($20,500.000) However he deposited the fund before his death. Your
+immediate/urgent attention is highly needed and don't fail to call me now.
+
+Call me for more information and directive. You are also advised to provide the
+listed information below.
+
+First and last name:
+Address:
+City:
+Country:
+Phone number:
+Occupation:
+Age:
+Email:
+
+Contact me on this email: kjude081@gmail.com
+
+I look forward to hearing from you asap.
+
+With Kind Regards,
+
+Jude Kane ESQ
+74 Rue du Segbe
+Lome, Togo
+Telephone:. +22897508769

@@ -2,60 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A574A492376
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B295492379
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 11:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbiARKFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 05:05:31 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:43289 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232812AbiARKFa (ORCPT
+        id S236418AbiARKGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 05:06:00 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:42922 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233461AbiARKF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 05:05:30 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V2C14H1_1642500318;
-Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0V2C14H1_1642500318)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 18 Jan 2022 18:05:26 +0800
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-To:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Waiman Long <longman@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpuset: Fix the bug that subpart_cpus updated wrongly in update_cpumask()
-Date:   Tue, 18 Jan 2022 18:05:18 +0800
-Message-Id: <20220118100518.2381118-1-dtcccc@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 18 Jan 2022 05:05:58 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2435421135;
+        Tue, 18 Jan 2022 10:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642500357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bfaPyBaXcXcaMldZv9qZyKNLa9LaQmex0/8zwqmvtO0=;
+        b=Dw3bRF4+RdIgIw/cD5GboHQ9h98YZtHNow8GllWU+NGOSWEpZFtUonpSKQxBuLcBvzLwmd
+        htNpIwJJhEKCiuKfPjg3zEapE2hU9oOOoQz+r2RloM9H46H/eryAOk03urNDYAFUcXGOPB
+        SLiWezpzmQyK9R7JDN/yzCGgXjn30dc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642500357;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bfaPyBaXcXcaMldZv9qZyKNLa9LaQmex0/8zwqmvtO0=;
+        b=/0wtVn54vCalWxE99ldq+qTX0TgIfDWhrmQB7DEuYt1fR3S0Vr7IAKyqOR5MYfQgoMJL0/
+        Jlcp9idrJuMsUpCA==
+Received: from suse.de (unknown [10.163.32.246])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6D459A3B83;
+        Tue, 18 Jan 2022 10:05:56 +0000 (UTC)
+Date:   Tue, 18 Jan 2022 10:05:54 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Alexander Fomichev <fomichev.ru@gmail.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux@yadro.com, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
+ changes
+Message-ID: <20220118100553.GR3301@suse.de>
+References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+ <20220112170512.GO3301@suse.de>
+ <20220117081905.a4pwglxqj7dqpyql@yadro.com>
+ <20220117102701.GQ3301@suse.de>
+ <20220118020448.2399-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220118020448.2399-1-hdanton@sina.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-subparts_cpus should be limited as a subset of cpus_allowed, but it is
-updated wrongly by using cpumask_andnot(). Use cpumask_and() instead to
-fix it.
+On Tue, Jan 18, 2022 at 10:04:48AM +0800, Hillf Danton wrote:
+> > > > 5) What DMA Engine enabled drivers (and dmatest) should use as design
+> > > > pattern to conform migration/cache behavior? Does scheduler optimisation
+> > > > conflict to DMA Engine performance in general?
+> > > > 
+> > > 
+> > > I'm not familiar with DMA engine drivers but if they use wake_up
+> > > interfaces then passing WF_SYNC or calling the wake_up_*_sync helpers
+> > > may force the migration.
+> > > 
+> > 
+> > Thanks for the advice. I'll try to check if this is a solution.
+> 
+> Check if cold cache provides some room for selecting CPU.
+> 
+> Only for thoughts now.
+> 
 
-Fixes: ee8dde0cd2ce ("cpuset: Add new v2 cpuset.sched.partition flag")
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
----
- kernel/cgroup/cpuset.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+That will still favour migrating tasks between CPUs that share LLC cache
+at the expense of losing some higher level caches and cpufreq state
+(depending on the CPUfreq governor).
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index bb3531e7fda7..804ff5738c5f 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1635,8 +1635,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	 * Make sure that subparts_cpus is a subset of cpus_allowed.
- 	 */
- 	if (cs->nr_subparts_cpus) {
--		cpumask_andnot(cs->subparts_cpus, cs->subparts_cpus,
--			       cs->cpus_allowed);
-+		cpumask_and(cs->subparts_cpus, cs->subparts_cpus, cs->cpus_allowed);
- 		cs->nr_subparts_cpus = cpumask_weight(cs->subparts_cpus);
- 	}
- 	spin_unlock_irq(&callback_lock);
 -- 
-2.33.0
-
+Mel Gorman
+SUSE Labs

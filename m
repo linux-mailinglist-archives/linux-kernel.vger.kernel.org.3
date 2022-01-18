@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C844926A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0864926E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242819AbiARNMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 08:12:48 -0500
-Received: from foss.arm.com ([217.140.110.172]:56324 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242186AbiARNMc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:12:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 924751FB;
-        Tue, 18 Jan 2022 05:12:31 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.37.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 258C03F73D;
-        Tue, 18 Jan 2022 05:12:26 -0800 (PST)
-Date:   Tue, 18 Jan 2022 13:12:23 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
-        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
-        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
-        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
-        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
-Message-ID: <20220118131223.GC17938@C02TD0UTHF1T.local>
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
- <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
- <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
- <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
- <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
- <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
- <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
- <20220118120154.GA17938@C02TD0UTHF1T.local>
- <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
+        id S242279AbiARNO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 08:14:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43993 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242181AbiARNOX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 08:14:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642511662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UfPcLWqi6SZLWlgUKc6INmjHHY/xRBa8vL1E7Hp3TMk=;
+        b=NqRW7ef9O0rUP6VyQ/6Yjagv0YybtEmcLYf8FJ6NlDSvtv6cWG5bhSdyawsBFWOIyEfZ/v
+        GC/DH/QrLlmOdVTRRc8YnpB9coe7pN76uVMtlKPGmk5IEdU2xn2TRbMuoi1NijesMaf8u3
+        uHNVUwE1HrdG1ajADVDfa1SOadCbZRY=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-55-HrvKear9P5qRb7Z9xrWqvw-1; Tue, 18 Jan 2022 08:14:21 -0500
+X-MC-Unique: HrvKear9P5qRb7Z9xrWqvw-1
+Received: by mail-ed1-f69.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so16980758edb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 05:14:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UfPcLWqi6SZLWlgUKc6INmjHHY/xRBa8vL1E7Hp3TMk=;
+        b=1iwREgAEhKSCBRJIMFh4sE9MC/zHh2wMs7X/HZehCLRUbERP3Ef8x/3aiMVKjpM+4P
+         cYtHPYXcCP8QLx8uKQFf3UEUq1BsBKse82IkDon6AnjdKhydXKoR5kaGCfnXwrMJ+1QA
+         0T1vb1ivVC9ze73TSdluCVYpEqsvvP2TV+GhU7VThqYRUXSw+pJxi7YDxCfMkulpy0wj
+         NN02escPx4Zdx+HABlXjVPQz+LPpOxim81dStQjWJD9PYMidiDrcCIxPGeZc412iKD0T
+         VmWvEesFTW/sfn+vNjB7wGilQ0cNXbCkZ4Dx3PLD58I/H6C4TkKswmVD5mLMUCH0iklg
+         wV9w==
+X-Gm-Message-State: AOAM533wheV8xJxAfghc9JGhy1TR9hMqNy4LcwVuzVttulBXkwIMz4Dl
+        3WOlr+0MmOn6jfLsaRKMgnk9jtcDI3Vv4Fp03LbG6VVcKOHFycvKrTD1hmeGzLh+l5lTduPA34a
+        z9eKc/32CfKs3MsDDMnwq0f35
+X-Received: by 2002:aa7:c6c1:: with SMTP id b1mr25552635eds.172.1642511660069;
+        Tue, 18 Jan 2022 05:14:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwVXPBkyZaCbHIx/HBCeq3N73EccAH4eC6n2rvzGk7A3reUfBMaU6vShbC6aQz7gJjmFLNErw==
+X-Received: by 2002:aa7:c6c1:: with SMTP id b1mr25552617eds.172.1642511659862;
+        Tue, 18 Jan 2022 05:14:19 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? ([2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id 24sm5351050ejg.47.2022.01.18.05.14.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 05:14:19 -0800 (PST)
+Message-ID: <d8542235-01ff-e04f-84c6-53259ab845b9@redhat.com>
+Date:   Tue, 18 Jan 2022 14:14:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH -next] power: supply: fix table problem in
+ sysfs-class-power
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220118021522.1672-1-rdunlap@infradead.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220118021522.1672-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 01:42:26PM +0100, Christian Borntraeger wrote:
+Hi,
+
+On 1/18/22 03:15, Randy Dunlap wrote:
+> Add a bottom table border to complete the table format and prevent
+> a documentation build warning.
 > 
+> Documentation/ABI/testing/sysfs-class-power:459: WARNING: Malformed table.
+> No bottom table border found.
 > 
-> Am 18.01.22 um 13:02 schrieb Mark Rutland:
-> > On Mon, Jan 17, 2022 at 06:45:36PM +0100, Paolo Bonzini wrote:
-> > > On 1/14/22 16:19, Mark Rutland wrote:
-> > > > I also think there is another issue here. When an IRQ is taken from SIE, will
-> > > > user_mode(regs) always be false, or could it be true if the guest userspace is
-> > > > running? If it can be true I think tha context tracking checks can complain,
-> > > > and it*might*  be possible to trigger a panic().
-> > > 
-> > > I think that it would be false, because the guest PSW is in the SIE block
-> > > and switched on SIE entry and exit, but I might be incorrect.
-> > 
-> > Ah; that's the crux of my confusion: I had thought the guest PSW would
-> > be placed in the regular lowcore *_old_psw slots. From looking at the
-> > entry asm it looks like the host PSW (around the invocation of SIE) is
-> > stored there, since that's what the OUTSIDE + SIEEXIT handling is
-> > checking for.
-> > 
-> > Assuming that's correct, I agree this problem doesn't exist, and there's
-> > only the common RCU/tracing/lockdep management to fix.
+> Fixes: 1b0b6cc8030d0 ("power: supply: add charge_behaviour attributes")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Thomas Weißschuh <linux@weissschuh.net>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+
+Randy, thank you for the patch.
+
+Sebastian, assuming you will merge 5.17-rc1 into your tree, this could
+be merged through your tree (since this is a psy patch).
+
+Since I've merged the original patch introducing this; and since I've
+a bunch of other fixed lined up for 5.17 already, I would also
+be happy to merge this through the pdx86 tree. Sebastian, please let
+me know how you want to proceed with this ?
+
+Regards,
+
+Hans
+
+
+
+> ---
+>  Documentation/ABI/testing/sysfs-class-power |    1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Will you provide an s390 patch in your next iteration or shall we then do
-> one as soon as there is a v2? We also need to look into vsie.c where we
-> also call sie64a
+> --- linux-next-20220117.orig/Documentation/ABI/testing/sysfs-class-power
+> +++ linux-next-20220117/Documentation/ABI/testing/sysfs-class-power
+> @@ -468,6 +468,7 @@ Description:
+>  			auto:            Charge normally, respect thresholds
+>  			inhibit-charge:  Do not charge while AC is attached
+>  			force-discharge: Force discharge while AC is attached
+> +			================ ====================================
+>  
+>  What:		/sys/class/power_supply/<supply_name>/technology
+>  Date:		May 2007
+> 
 
-I'm having a go at that now; my plan is to try to have an s390 patch as
-part of v2 in the next day or so.
-
-Now that I have a rough idea of how SIE and exception handling works on
-s390, I think the structural changes to kvm-s390.c:__vcpu_run() and
-vsie.c:do_vsie_run() are fairly simple.
-
-The only open bit is exactly how/where to identify when the interrupt
-entry code needs to wake RCU. I can add a per-cpu variable or thread
-flag to indicate that we're inside that EQS, or or I could move the irq
-enable/disable into the sie64a asm and identify that as with the OUTSIDE
-macro in the entry asm.
-
-Thanks,
-Mark.

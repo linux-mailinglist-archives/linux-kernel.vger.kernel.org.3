@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 674FA492A51
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862B4492AC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346931AbiARQJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S1347590AbiARQNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346544AbiARQIW (ORCPT
+        with ESMTP id S1347161AbiARQLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:08:22 -0500
+        Tue, 18 Jan 2022 11:11:13 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E0BC061746;
-        Tue, 18 Jan 2022 08:07:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97989C0613AD;
+        Tue, 18 Jan 2022 08:10:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43186612C2;
-        Tue, 18 Jan 2022 16:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF4BC00446;
-        Tue, 18 Jan 2022 16:07:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 377B361325;
+        Tue, 18 Jan 2022 16:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1EBC340E5;
+        Tue, 18 Jan 2022 16:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522073;
-        bh=vdM6Cy9srToZDLQmdI33WSW2Po2CA/CbILXi6A19DZw=;
+        s=korg; t=1642522249;
+        bh=/uxOlI9z31Oyjq452BPB98/Nzd5AXqAI2zFy6juBHF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nryPrbr6H5gCLEAUa9B4itOKgzNeN3bvMcL55ulukliepjZT3T4avb/77Boc86wqA
-         6ttOSZ3s6jLYedO/x5F2BA8/SDno7gK5gi7Eg3aVnrWWb+xkJaXgelIV5kLqnbrGVv
-         9nCTrkCmS9Vi314MBZQe9zcCX3HoGbHQ01/m8oS0=
+        b=DBdFmfF7eO+iwHNtJIW+xneSfeiKJ7kXqTb5RZUgH1O6JFeru2BpKPqEHTHQiqOLv
+         7zcMIx5n5w6LMPHtJqmbpJhiz+PCkHPuKBmluEPfCzhoJXW59RuBnbyTFTkAe0i3H9
+         9ItgWi6N7GMsUbtKJZwixa+Jti09RhjMO6DOSMVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Wang <wei.w.wang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.10 16/23] KVM: x86: remove PMU FIXED_CTR3 from msrs_to_save_all
-Date:   Tue, 18 Jan 2022 17:05:56 +0100
-Message-Id: <20220118160451.790880694@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 02/28] drm/amd/display: explicitly set is_dsc_supported to false before use
+Date:   Tue, 18 Jan 2022 17:05:57 +0100
+Message-Id: <20220118160452.464486698@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
-References: <20220118160451.233828401@linuxfoundation.org>
+In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
+References: <20220118160452.384322748@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,46 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Wang <wei.w.wang@intel.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-commit 9fb12fe5b93b94b9e607509ba461e17f4cc6a264 upstream.
+commit 63ad5371cd1e379519395c49a4b6a652c36c98e5 upstream.
 
-The fixed counter 3 is used for the Topdown metrics, which hasn't been
-enabled for KVM guests. Userspace accessing to it will fail as it's not
-included in get_fixed_pmc(). This breaks KVM selftests on ICX+ machines,
-which have this counter.
+When UBSAN is enabled a case is shown on unplugging the display that
+this variable hasn't been initialized by `update_dsc_caps`, presumably
+when the display was unplugged it wasn't copied from the DPCD.
 
-To reproduce it on ICX+ machines, ./state_test reports:
-==== Test Assertion Failure ====
-lib/x86_64/processor.c:1078: r == nmsrs
-pid=4564 tid=4564 - Argument list too long
-1  0x000000000040b1b9: vcpu_save_state at processor.c:1077
-2  0x0000000000402478: main at state_test.c:209 (discriminator 6)
-3  0x00007fbe21ed5f92: ?? ??:0
-4  0x000000000040264d: _start at ??:?
- Unexpected result from KVM_GET_MSRS, r: 17 (failed MSR was 0x30c)
-
-With this patch, it works well.
-
-Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-Message-Id: <20211217124934.32893-1-wei.w.wang@intel.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Fixes: e2ada66ec418 ("kvm: x86: Add Intel PMU MSRs to msrs_to_save[]")
+Link: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1956497
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1229,7 +1229,7 @@ static const u32 msrs_to_save_all[] = {
- 	MSR_IA32_UMWAIT_CONTROL,
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -6065,6 +6065,7 @@ static void update_dsc_caps(struct amdgp
+ 							struct dsc_dec_dpcd_caps *dsc_caps)
+ {
+ 	stream->timing.flags.DSC = 0;
++	dsc_caps->is_dsc_supported = false;
  
- 	MSR_ARCH_PERFMON_FIXED_CTR0, MSR_ARCH_PERFMON_FIXED_CTR1,
--	MSR_ARCH_PERFMON_FIXED_CTR0 + 2, MSR_ARCH_PERFMON_FIXED_CTR0 + 3,
-+	MSR_ARCH_PERFMON_FIXED_CTR0 + 2,
- 	MSR_CORE_PERF_FIXED_CTR_CTRL, MSR_CORE_PERF_GLOBAL_STATUS,
- 	MSR_CORE_PERF_GLOBAL_CTRL, MSR_CORE_PERF_GLOBAL_OVF_CTRL,
- 	MSR_ARCH_PERFMON_PERFCTR0, MSR_ARCH_PERFMON_PERFCTR1,
+ 	if (aconnector->dc_link && sink->sink_signal == SIGNAL_TYPE_DISPLAY_PORT) {
+ 		dc_dsc_parse_dsc_dpcd(aconnector->dc_link->ctx->dc,
 
 

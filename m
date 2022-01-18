@@ -2,268 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86832491D4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF105491CCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352949AbiARDef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355829AbiARDMR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 22:12:17 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034FAC094255
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 18:55:19 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d3so64915158lfv.13
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 18:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1xGzmg81DuUlAGTYFkIbn0LL6gpYYtNJdIrpuHBXKz4=;
-        b=TCyfhuASYEMuFNk1ASL5LKWD7ok8PXJJ74hOetk36L1lGBv56RpTKWdq3Oan2zuuey
-         1P7dZUsUGAZhvrWqYJhqjI4el8YWhCPLLmMgVMjM1ouVYaRdEFUb3DJFx9ur9I9WmKuV
-         +wjXSSWn9Bme4/0/ekyb/STAD+5FhFBBU51Iw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1xGzmg81DuUlAGTYFkIbn0LL6gpYYtNJdIrpuHBXKz4=;
-        b=R8eKY//O5SCBdHBSQhqiFBDmgXSN0r9pL2FTTuAjtt4FMBJhQjWGIUzBR3TJybd4Wa
-         WUWiFQVAeOjqTI6Y0rp4tPJlYY8Hwhka+WKB4hDyvOTMCdmN2fsOn/FbPKDaA63pa/vL
-         5bb27R0NOT6JAgU1uu+Iw30GvS3us8Tjsmdabh/fTYkIaFlqtN5vLm6R1yl8WAWoDp0q
-         LY+//7bnZ2KriyDf1FxH5jAlaHE8bm4ts+1qzOqiw8fg0g8ltbSVsjjb/L5US7q0Z5Gm
-         GSYz4mO2lnVk8Az4LxUDfInxm4FEvJugWK7M32hiP4NZlpVur2NIwxV012nRXFnDjd6c
-         N70A==
-X-Gm-Message-State: AOAM532a9RdS4m3SqV2nGzSeNI638wJPfIYCaOML233smsJI2Z/wDgHs
-        /mLd4eyz+s2ykKY131nKDfc5OZUyupKjVK8AjQjgng==
-X-Google-Smtp-Source: ABdhPJy6Dg4mAwpGc0BC6YsAH1eqGHyBYkQUxCzn5U7IvAtaIKsJB56Z752NgaGIWVH8lotJElSk0Kxi1jaV0jfRbzY=
-X-Received: by 2002:a05:6512:3682:: with SMTP id d2mr19005682lfs.678.1642474516308;
- Mon, 17 Jan 2022 18:55:16 -0800 (PST)
+        id S1345222AbiARDSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:18:09 -0500
+Received: from mail-eopbgr00077.outbound.protection.outlook.com ([40.107.0.77]:43077
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1353316AbiARDBe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 22:01:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QLrJXZA1s1NyGZqz69cIy3DQIlYGEmwHNm2XrVjxRj8GTFiS4/PbX0IJNOy0ZYfkqlfjPHr8fGSr64EB1roFjB5xiDxYiCZjtnIOZLFhcMBjmfFR5XcOXpSnNtgNCax8rKPZXCfB8Z7kBqbhOE3WgDHSAQ0PxsoRGC/NLJavXcqJLUGymZ90CA3zEj8hTPSNhz52Ejar/pokDVwu31rSLD0O18tgLPAXDl5ZRJlMk4Ph3dA+yz1v06uViLtaz91BWWSTCl04506of6QmsDxmaXb+CmCHKwAtF/G5NOACdOvq/rky59xdrbrR+RDaCy4XGYE6yyIqoZoSB9ryPmZL4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VCDwhEtmmEYLIzpIeV9i0fc7ATrkV+SpOyNtCaGDeSM=;
+ b=G2TC5ijf6arJ5omNCvJYKFRPh41mY0Jn5wJTbUOpLKgTsdvcLnvlZWSqloPD1kA88Sq2l+fKPe5l5EN0DEmNm5BOa9qcuBlZqm6PsAFO073S3kH1/fY1yrJfjN8FqsZoWcutMg6zKW0RTFbVWr025+wiCRGc/k7/anDd3ES/yz0m3Xv09V9DHlhu/Nf9D+JTMRne/Um+1hPfEwuTuh/DjYPRh5PeP+B1bOEDw7Wiq7Bws3Kn+WFAh0IUN3SzGKCr+kHOplaz/gZl8nHqlrclRtsHVe2gjwzq9GE1kxsAl3mBAhIoOVGJDXPIiDykyslXq2rJ6POkH8O/zUeWvskJMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VCDwhEtmmEYLIzpIeV9i0fc7ATrkV+SpOyNtCaGDeSM=;
+ b=QiG/ldUrvJIqiyyNNSTDkCKfZ3LLxTHvHaoffDq4xYp8wFf2c8lWCk/QfjsTH9kCYD7mfxA2Vj9TsaxyUniqKWXbIuEqR+HGJZzhp4fJg1SelGvRqvnYQsBSUd2+9FLzInj8ARjxMGasBvqfvlr0asYYOs04K6DBvdiSi+asmI0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM5PR04MB2978.eurprd04.prod.outlook.com (2603:10a6:206:5::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 18 Jan
+ 2022 03:01:27 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::a5b3:9e5:366:a3fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::a5b3:9e5:366:a3fc%3]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 03:01:27 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     linux-imx@nxp.com, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Subject: [PATCH] phy: dphy: Correct clk_pre parameter
+Date:   Tue, 18 Jan 2022 10:59:18 +0800
+Message-Id: <20220118025918.1444288-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG3P274CA0011.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::23)
+ To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-References: <20220111112244.1483783-1-wenst@chromium.org> <20220111112244.1483783-8-wenst@chromium.org>
- <b1d5ca006860c85edd971ea9e20880ec8ba7f842.camel@mediatek.com>
-In-Reply-To: <b1d5ca006860c85edd971ea9e20880ec8ba7f842.camel@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 18 Jan 2022 10:55:05 +0800
-Message-ID: <CAGXv+5Egf-XM_Y8+ujYrx9k0UgAkpPj9DVpZEVz2hWdGzws2ZA@mail.gmail.com>
-Subject: Re: [PATCH 7/7] pinctrl: mediatek: paris: Support generic PIN_CONFIG_DRIVE_STRENGTH_UA
-To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>
-Cc:     Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guodong Liu <guodong.liu@mediatek.com>, hui.liu@mediatek.com,
-        light.hsieh@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a3e97a0f-e19d-499c-fe3d-08d9da2ed1cf
+X-MS-TrafficTypeDiagnostic: AM5PR04MB2978:EE_
+X-Microsoft-Antispam-PRVS: <AM5PR04MB2978C5D6FFB7DC145CE1EA6998589@AM5PR04MB2978.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M2iwM/wfyhdFleFMe08me5erqKcvye4dFDeE0bWdgpEhfcVOlTYGk5mkxsSqQ5IeDrAbZ3sAmkFdMNPfjfpXkDvchTCO0Vb1IqAZ5QI7woNR+WC19ZU7U+ilA2qTV4fTOO2hWbshCawNTfUTsCkkPDjZ9DtLAHNFJNnT1bKMoCefdRT1ukuPpGsjyNBuvAxFYCm2915ttb9GD/7QJwdi467fzyMWYKpudLtrKTkhJneoFRJvStGHpdTTGuk5rKvztHkReslClgUNyeKNn7DZ0DZhCCGcfnV/LHHf+hTWI7eHXHqN2N/HaWKJ3N2UA/bcclsvKeqxcDlvKqdIuAJcrGujdKQdaIFyav+LxOEpM5F6pQAjgoxjxtN2REJNvFQDHrfYmdPH4FX/xaGILg7JLHWZJd7lTzzTVgYZzonf78YYkbE8IXcp96mySwqxSvYpWPqHT4jRCMVQgPluw/jhu7e7O8S13tolOyg6j0h02X48/m3DFGKWNIyWcaNBgmgPgy6ixoKjSzHTEi8wR4LsWW1d2MbiaockaSOOLFqH8p5loesxaws5C4uM7KThV/364vAQz+k/d/u26348+JbWz0jhdVyE/NSsQfzcOxyEigDM+2aQkOPg1FEZ9qwVTQCa2hbDfaHv/M4kNHGeNR39SCXlv0tYUQ+vBE9tq9MLrVadPL41txIs/TQCZ2OONQzjq3+TEiwmvMBKxs5LVhS3eQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(4326008)(6506007)(6486002)(186003)(316002)(2906002)(7416002)(508600001)(26005)(2616005)(66476007)(66556008)(54906003)(8936002)(38350700002)(52116002)(86362001)(66574015)(83380400001)(36756003)(38100700002)(6666004)(1076003)(6512007)(66946007)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjV1TFpaejhjL1JSNm1Ienl2TDVtM0xWNWNrQ0dXZHBMTTkycURFVktHcWVs?=
+ =?utf-8?B?TFRCUkNRbHRjT2dVQjg3QmV4UUNybVVTMDJ5aXZQRE1LbnNGWmlGMmZXdFdR?=
+ =?utf-8?B?V3liVXMwQk4xemt4anlVUEZTZ3dQNWhoNytCdFB5U29WclEyTmRuanZpRktQ?=
+ =?utf-8?B?YnVyMmdtRTArRVU0QXRWL1ovajZRU0Y3VnA1SnVveVVQUm9zSGIzUVJKZDhO?=
+ =?utf-8?B?TjZZVzhzV2EzR2liZEMwUS9MSmErOUsrY3luT0dEbDYxWFcwaUw1YlMrcmJX?=
+ =?utf-8?B?R29WNmFNWjJtUkJ1TDcraTZpOXdtOWxpejJTT2xHcEE1YThWRGtndWxUczJC?=
+ =?utf-8?B?SW14L2J2cUxja1BKWkYvS2FUM2hxSkNTbnRab1BCcCtKZ2FpQWlWQlZVTDY1?=
+ =?utf-8?B?SlZFV2EwRUF0V21ZQlV5emZrblNkTklMSWZEb3lhWWxNVXJtMG1YM0NoN2w4?=
+ =?utf-8?B?YjdSdXNJb3dWeTNweHBjZU45Rm5zTDZDYTRsdjJCcU1JaDFzSzRRcnRPa0Uy?=
+ =?utf-8?B?djliM3ZDV2gwS0Zuc3d5YjFRRENoZUFFOG5nZVd1RTdhTXdCMTViQnJNTWo5?=
+ =?utf-8?B?bFlsbGVIamQzREhwVjh4NWNZM3MyZk84TVNvc09TWUdEMXJLU250bmRNVWsr?=
+ =?utf-8?B?V1VzNWs1ZEZPWlppWGwvTjNVazhRRzBka0JQRjdUVXd2WjNUK3E5L3VFUXds?=
+ =?utf-8?B?bHd3S2tYMGFCY0ZXUWV5aUNZMmNNbDBsWEduZzZKZUdzZTR0N010SzQvUG5D?=
+ =?utf-8?B?S2I1S2pnTTA5UTZyK3VFMFBNM3RDaUxhQkVocUduRk16K0NCakxobG12TVdw?=
+ =?utf-8?B?ZFNmSzhmZEluMVRzVTFpZHJsQWlwZ2k0TlRzQlZheUxmZi9HdTk3Sy9SUGlX?=
+ =?utf-8?B?ZjYrcTVqNDlEVlJFcUI2QUlrT211SStoMzRjbEZGVENCcVpYUUppL1J3L09J?=
+ =?utf-8?B?YTlnTi9EaHRwNTJCM2g4UlorN0RHNUtTbXZReUhRNGVrZVhyVGIxeGRnWjY3?=
+ =?utf-8?B?SkkrZmUyelJlVnIvYlMzclM3R0tjTW94OWwwdE1RcFQ2cUdBTVlkcUlENzMy?=
+ =?utf-8?B?ZkpJOXkxdzNmcFNEczBQNzcyWldmUXhQU2Z0MTRlSWxvNWZnZzRpMUhKYk1Q?=
+ =?utf-8?B?eVgvOGxnWHh4VHJ5MU9mUlI4N2dnTm83RGxVMVRxa05XQ3dZUVMwaFV0SmZF?=
+ =?utf-8?B?bTRHWjhEd2IyNjZsVENlbjJXaFZySDNHZjdSb1haaElkUkFmQTFoOXh1WFhT?=
+ =?utf-8?B?bmlpQVdKR2ZiWmVRRllxUUR6Uml3N1l4dzUrdEJsdVZ2ZWs0MHlUbzYvRDA2?=
+ =?utf-8?B?R1NMaXhLM0tjQ2pXajJ4cE5BbUpmWjlhb3JQYTFyMFVVZzU0Y1ZseUNZcGlo?=
+ =?utf-8?B?ZmV6T3Q1NzM4UEpnOGhzMGVTcjEzc3pLMFNMQkttejZxWDc4L0EzQUN6ajlr?=
+ =?utf-8?B?aUd0YStrd2xoaG1hR29JenFnNkpJQWhwQWZ2eVVub3lGQmpKTTZpRDlrN1Bs?=
+ =?utf-8?B?K05pb1ZoSlV2ZXlDR09wRTh2VjJlMHZ6alpQVDFxNkpNa0ZzcUVwZHpyVi9w?=
+ =?utf-8?B?YXUrUG1RR1l5Qkx1YjRpeXIrbEg1UGRKbFVlQTlkckxBUXpwUDBBd2xLME5N?=
+ =?utf-8?B?alNpWkw0MWJ5ZlpLNUJHVlY4QXB1Q2pQZmZNd0NlTjZvN1UxTlZXYnUxSVVT?=
+ =?utf-8?B?MXFQZXY3NFNJY29KbVJvME9zcytjSEk5cGtodFhUZGhJVVJiY1d0YThOTTJl?=
+ =?utf-8?B?V2tUOUFkYlU0WTlQNmdudE82WnZyU1JCcEh3ZVJBcmR4ZEJwOFZwYXJpSnJm?=
+ =?utf-8?B?aWxSZ2hYZkVhMEVIekVVRHNCOXFyOWt3cTNYdStpa1BTSVJYVjA1RlRmVjdT?=
+ =?utf-8?B?Q28wLzR6Z3dHc1BtVE1vblQzaVVTMm82LzZ5M2RVZWNsS0taZGl6Y0JhVTNV?=
+ =?utf-8?B?ZHJjdjVOdmZGcW5NcXNydDg0bjZXaWNTOStFK0FLRC9PL0NMdGkwYkM5ZkU3?=
+ =?utf-8?B?SGQrTUoyZjVuMVJPZlU5eTBOVWZzeHlkUVA4aW1Ra1ZGTENpWGltYlZHRlVk?=
+ =?utf-8?B?YXZoOXR1NE5WSUFuQVJPUy9zai91M3BSNkVlNUwxalQrT2IrTS96RnhFS2Z4?=
+ =?utf-8?B?SUhmazFyZHBMUytmMGdxWVNmUW9IYXFJbUord2FiRDVvb0dWaFdCMHNtUW0w?=
+ =?utf-8?Q?dextzwZdxtomss9DrfemaCU=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3e97a0f-e19d-499c-fe3d-08d9da2ed1cf
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 03:01:27.4930
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OYZ3/FSB27af1F5Ati2MzTZXhlOjcQZaHaDwzdHLLi7yy3uHOqiG6IVeckuXfi9syCmMnEKscLCxuerZBISjZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB2978
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
+parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
+kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
+mentions that it should be in UI.  However, the dphy core driver wrongly
+sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
+And, the kernel doc of the 'clk_pre' member wrongly says the minimum value
+is '8 UI', instead of 8.
 
-On Tue, Jan 18, 2022 at 10:36 AM zhiyong.tao <zhiyong.tao@mediatek.com> wrote:
->
-> On Tue, 2022-01-11 at 19:22 +0800, Chen-Yu Tsai wrote:
-> > Some of the MediaTek chips that utilize the Paris pinctrl driver
-> > library
-> > support a lower drive strength (<= 1mA) than the standard drive
-> > strength
-> > settings (2~16 mA) on certain pins. This was previously supported by
-> > the
-> > custom MTK_PIN_CONFIG_DRV_ADV parameter along with the
-> > "mediatek,drive-strength-adv" device tree property.
-> >
-> > The drive strength values for this hardware are 125, 250, 500, and
-> > 1000 mA,
-> > and can be readily described by the existing "drive-strength-
-> > microamp",
-> > which then gets parsed by the generic pinconf library into the
-> > parameter
-> > PIN_CONFIG_DRIVE_STRENGTH_UA.
-> >
-> > Add support for PIN_CONFIG_DRIVE_STRENGTH_UA while keeping the old
-> > custom parameter around for backward compatibility.
-> >
-> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > ---
-> >
-> > The indentation in the switch/case blocks is getting somewhat out of
-> > control. I also have some cleanup changes to reverse the logic of the
-> > if/break statements. Not sure if it should be done before or after
-> > this
-> > patch though.
-> >
-> > ---
-> >  drivers/pinctrl/mediatek/pinctrl-paris.c | 84
-> > ++++++++++++++++++++++++
-> >  1 file changed, 84 insertions(+)
-> >
-> > diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> > b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> > index 678c8aa33012..5a94903ae372 100644
-> > --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> > +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> > @@ -48,6 +48,53 @@ static const char * const mtk_gpio_functions[] = {
-> >       "func12", "func13", "func14", "func15",
-> >  };
-> >
-> > +/*
-> > + * This section supports converting to/from custom
-> > MTK_PIN_CONFIG_DRV_ADV
-> > + * and standard PIN_CONFIG_DRIVE_STRENGTH_UA pin configs.
-> > + *
-> > + * The custom value encodes three hardware bits as follows:
-> > + *
-> > + *   |           Bits           |
-> > + *   | 2 (E1) | 1 (E0) | 0 (EN) | drive strength (uA)
-> > + *   ------------------------------------------------
-> > + *   |    x   |    x   |    0   | disabled, use standard drive
-> > strength
-> > + *   -------------------------------------
-> > + *   |    0   |    0   |    1   |  125 uA
-> > + *   |    0   |    1   |    1   |  250 uA
-> > + *   |    1   |    0   |    1   |  500 uA
-> > + *   |    1   |    1   |    1   | 1000 uA
-> > + */
-> > +static const int mtk_drv_adv_uA[] = { 125, 250, 500, 1000 };
-> > +
-> > +static int mtk_drv_adv_to_uA(int val)
-> > +{
-> > +     /* This should never happen. */
-> > +     if (WARN_ON_ONCE(val < 0 || val > 7))
-> > +             return -EINVAL;
-> > +
-> > +     /* Bit 0 simply enables this hardware part */
-> > +     if (!(val & BIT(0)))
-> > +             return -EINVAL;
-> > +
-> > +     return mtk_drv_adv_uA[(val >> 1)];
-> > +}
-> > +
-> > +static int mtk_drv_uA_to_adv(int val)
-> > +{
-> > +     switch (val) {
-> > +     case 125:
-> > +             return 0x1;
-> > +     case 250:
-> > +             return 0x3;
-> > +     case 500:
-> > +             return 0x5;
-> > +     case 1000:
-> > +             return 0x7;
-> > +     }
-> > +
-> > +     return -EINVAL;
-> > +}
-> > +
-> >  static int mtk_pinmux_gpio_request_enable(struct pinctrl_dev
-> > *pctldev,
-> >                                         struct pinctrl_gpio_range
-> > *range,
-> >                                         unsigned int pin)
-> > @@ -151,11 +198,38 @@ static int mtk_pinconf_get(struct pinctrl_dev
-> > *pctldev,
-> >
-> >               break;
-> >       case PIN_CONFIG_DRIVE_STRENGTH:
-> > +             if (hw->soc->adv_drive_get) {
-> > +                     err = hw->soc->adv_drive_get(hw, desc, &ret);
-> > +                     if (!err) {
-> > +                             err = mtk_drv_adv_to_uA(ret);
-> > +                             if (err > 0) {
-> > +                                     /* PIN_CONFIG_DRIVE_STRENGTH_UA
-> > used */
-> > +                                     err = -EINVAL;
-> > +                                     break;
-> > +                             }
-> > +                     }
-> > +             }
-> > +
-> Hi Chen-Yu,
->
-> PIN_CONFIG_DRIVE_STRENGTH is seems used for 2/4/6/8ma, it is not used
-> for 125/250/500/1000ma. why you change here?
+So, let's fix both the dphy core driver and the kernel doc of the 'clk_pre'
+member to correctly reflect the T-CLK-PRE parameter's unit and the minimum
+value according to the D-PHY specification.
 
-If 125/250/500/1000uA is used, that mode takes precedence over 2/4/6/8 mA.
-To give a correct readback, if 125/250/500/1000 uA is active, we should
-return -EINVAL here to tell the pin config core that PIN_CONFIG_DRIVE_STRENGTH
-is not active.
+I'm assuming that all impacted custom drivers shall program values in
+TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
+specification mentions that the frequency of TxByteClkHS is exactly 1/8
+the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
+custom driver code is changed to program those values as
+DIV_ROUND_UP(cfg->clk_pre, MIPI_DPHY_UI_PER_TXBYTECLKHS_PERIOD), then.
 
-Otherwise when one reads
+Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
+Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
+as I don't have the hardwares.
 
-    /sys/kernel/debug/pinctrl/10005000.pinctrl-pinctrl_paris/pinconf-pins
+Fixes: 2ed869990e14 ("phy: Add MIPI D-PHY configuration options")
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Jonas Karlman <jonas@kwiboo.se>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Guido Günther <agx@sigxcpu.org>
+Tested-by: Liu Ying <victor.liu@nxp.com> # RM67191 DSI panel on i.MX8mq EVK
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+ drivers/gpu/drm/bridge/nwl-dsi.c                 | 7 ++-----
+ drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    | 3 ++-
+ drivers/phy/phy-core-mipi-dphy.c                 | 4 ++--
+ drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c | 3 ++-
+ include/linux/phy/phy-mipi-dphy.h                | 4 +++-
+ 5 files changed, 11 insertions(+), 10 deletions(-)
 
-it would return
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index a7389a0facfb..f1fdcdf763ee 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -196,12 +196,9 @@ static u32 ps2bc(struct nwl_dsi *dsi, unsigned long long ps)
+ /*
+  * ui2bc - UI time periods to byte clock cycles
+  */
+-static u32 ui2bc(struct nwl_dsi *dsi, unsigned long long ui)
++static u32 ui2bc(struct nwl_dsi *dsi, unsigned int ui)
+ {
+-	u32 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+-
+-	return DIV64_U64_ROUND_UP(ui * dsi->lanes,
+-				  dsi->mode.clock * 1000 * bpp);
++	return DIV_ROUND_UP(ui, MIPI_DPHY_UI_PER_TXBYTECLKHS_PERIOD);
+ }
+ 
+ /*
+diff --git a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
+index cd2332bf0e31..8a818cdb7606 100644
+--- a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
++++ b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
+@@ -250,7 +250,8 @@ static int phy_meson_axg_mipi_dphy_power_on(struct phy *phy)
+ 		     (DIV_ROUND_UP(priv->config.clk_zero, temp) << 16) |
+ 		     (DIV_ROUND_UP(priv->config.clk_prepare, temp) << 24));
+ 	regmap_write(priv->regmap, MIPI_DSI_CLK_TIM1,
+-		     DIV_ROUND_UP(priv->config.clk_pre, temp));
++		     DIV_ROUND_UP(priv->config.clk_pre,
++				  MIPI_DPHY_UI_PER_TXBYTECLKHS_PERIOD));
+ 
+ 	regmap_write(priv->regmap, MIPI_DSI_HS_TIM,
+ 		     DIV_ROUND_UP(priv->config.hs_exit, temp) |
+diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
+index 288c9c67aa74..ccb4045685cd 100644
+--- a/drivers/phy/phy-core-mipi-dphy.c
++++ b/drivers/phy/phy-core-mipi-dphy.c
+@@ -36,7 +36,7 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
+ 
+ 	cfg->clk_miss = 0;
+ 	cfg->clk_post = 60000 + 52 * ui;
+-	cfg->clk_pre = 8000;
++	cfg->clk_pre = 8;
+ 	cfg->clk_prepare = 38000;
+ 	cfg->clk_settle = 95000;
+ 	cfg->clk_term_en = 0;
+@@ -97,7 +97,7 @@ int phy_mipi_dphy_config_validate(struct phy_configure_opts_mipi_dphy *cfg)
+ 	if (cfg->clk_post < (60000 + 52 * ui))
+ 		return -EINVAL;
+ 
+-	if (cfg->clk_pre < 8000)
++	if (cfg->clk_pre < 8)
+ 		return -EINVAL;
+ 
+ 	if (cfg->clk_prepare < 38000 || cfg->clk_prepare > 95000)
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+index 347dc79a18c1..67b0a17be7e3 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+@@ -364,7 +364,8 @@ static void inno_dsidphy_mipi_mode_enable(struct inno_dsidphy *inno)
+ 	 * The value of counter for HS Tclk-pre
+ 	 * Tclk-pre = Tpin_txbyteclkhs * value
+ 	 */
+-	clk_pre = DIV_ROUND_UP(cfg->clk_pre, t_txbyteclkhs);
++	clk_pre = DIV_ROUND_UP(cfg->clk_pre,
++			       MIPI_DPHY_UI_PER_TXBYTECLKHS_PERIOD);
+ 
+ 	/*
+ 	 * The value of counter for HS Tlpx Time
+diff --git a/include/linux/phy/phy-mipi-dphy.h b/include/linux/phy/phy-mipi-dphy.h
+index a877ffee845d..ab1f736fbcd3 100644
+--- a/include/linux/phy/phy-mipi-dphy.h
++++ b/include/linux/phy/phy-mipi-dphy.h
+@@ -6,6 +6,8 @@
+ #ifndef __PHY_MIPI_DPHY_H_
+ #define __PHY_MIPI_DPHY_H_
+ 
++#define MIPI_DPHY_UI_PER_TXBYTECLKHS_PERIOD	8
++
+ /**
+  * struct phy_configure_opts_mipi_dphy - MIPI D-PHY configuration set
+  *
+@@ -42,7 +44,7 @@ struct phy_configure_opts_mipi_dphy {
+ 	 * the transmitter prior to any associated Data Lane beginning
+ 	 * the transition from LP to HS mode.
+ 	 *
+-	 * Minimum value: 8 UI
++	 * Minimum value: 8
+ 	 */
+ 	unsigned int		clk_pre;
+ 
+-- 
+2.25.1
 
-    ... output drive strength (X mA), output drive strength (Y uA), ...
-
-where the first "mA" setting isn't actually active in hardware.
-
-> >               if (hw->soc->drive_get)
-> >                       err = hw->soc->drive_get(hw, desc, &ret);
-> >               else
-> >                       err = -ENOTSUPP;
-> >               break;
-> > +     case PIN_CONFIG_DRIVE_STRENGTH_UA:
-> > +             if (hw->soc->adv_drive_get) {
-> > +                     err = hw->soc->adv_drive_get(hw, desc, &ret);
-> > +                     if (err)
-> > +                             break;
-> > +                     err = mtk_drv_adv_to_uA(ret);
-> > +                     if (err < 0)
-> > +                             break;
-> > +
-> > +                     ret = err;
-> > +                     err = 0;
-> > +             } else {
-> > +                     err = -ENOTSUPP;
-> > +             }
-> > +             break;
->
-> Hi Chen-Yu,
-> For PIN_CONFIG_DRIVE_STRENGTH_UA case, How can we use in dts node ?
-> Thanks.
-
-My original thought was to have either
-
-    drive-strength = <2/4/6/8>;
-
-or
-
-    drive-strength-microamp = <125/250/500/1000>;
-
-but not both. However I haven't figured out how to write the binding schema
-to have the two properties be mutually exclusive. I'm not sure this would
-be accepted either.
-
-At the driver level, it should also have a check for the existence of
-"drive-strength-microamp" to enable or disable the special mode.
-
-Regards
-ChenYu
-
-> >       case MTK_PIN_CONFIG_TDSEL:
-> >       case MTK_PIN_CONFIG_RDSEL:
-> >               reg = (param == MTK_PIN_CONFIG_TDSEL) ?
-> > @@ -271,6 +345,16 @@ static int mtk_pinconf_set(struct pinctrl_dev
-> > *pctldev, unsigned int pin,
-> >               else
-> >                       err = -ENOTSUPP;
-> >               break;
-> > +     case PIN_CONFIG_DRIVE_STRENGTH_UA:
-> > +             if (hw->soc->adv_drive_set) {
-> > +                     err = mtk_drv_uA_to_adv(arg);
-> > +                     if (err < 0)
-> > +                             break;
-> > +                     err = hw->soc->adv_drive_set(hw, desc, err);
-> > +             } else {
-> > +                     err = -ENOTSUPP;
-> > +             }
-> > +             break;
-> >       case MTK_PIN_CONFIG_TDSEL:
-> >       case MTK_PIN_CONFIG_RDSEL:
-> >               reg = (param == MTK_PIN_CONFIG_TDSEL) ?
->

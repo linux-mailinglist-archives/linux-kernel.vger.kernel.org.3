@@ -2,116 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34120492C9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73CC492C9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347530AbiARRle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347108AbiARRlT (ORCPT
+        id S229934AbiARRmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:42:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56810 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244165AbiARRmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:41:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBCCC061574;
-        Tue, 18 Jan 2022 09:41:18 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Tue, 18 Jan 2022 12:42:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 463CF1EC018C;
-        Tue, 18 Jan 2022 18:41:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642527673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=CsZVby0OJMbu1MByStGLgighQnR1NhGu4hi+vJOU81M=;
-        b=C3sJeNxIdauAfWOLlqRZorFZVR7UQ/AVKdZPwz7vfz67sIk4HNKkeQFLPa/WrKN/1Xq+Dr
-        W9ZTwB4dfE9qGzH4mfg3r2AYWqKW2xjD0W/tDOSAgw0MZM1vdg7wKPSH5uyRQLZKGEWiCf
-        qNVzhry0cqwqcB8Vhz47o8b2H7qJb+0=
-Date:   Tue, 18 Jan 2022 18:41:16 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
- CPUID table in #VC handlers
-Message-ID: <Yeb7vOaqDtH6Fpsb@zn.tnic>
-References: <YeAmFePcPjvMoWCP@zn.tnic>
- <20220113163913.phpu4klrmrnedgic@amd.com>
- <YeGhKll2fTcTr2wS@zn.tnic>
- <20220118043521.exgma53qrzrbalpd@amd.com>
- <YebIiN6Ftq2aPtyF@zn.tnic>
- <20220118142345.65wuub2p3alavhpb@amd.com>
- <20220118143238.lu22npcktxuvadwk@amd.com>
- <20220118143730.wenhm2bbityq7wwy@amd.com>
- <YebsKcpnYzvjaEjs@zn.tnic>
- <20220118172043.djhy3dwg4fhhfqfs@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EA806123D;
+        Tue, 18 Jan 2022 17:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0139C340E0;
+        Tue, 18 Jan 2022 17:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642527722;
+        bh=CYMf003Iq/DrB18YGBUbDhdfRptl/QHoELPBspzPY7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SDAHsNvHKIL5MrFk6hUQlGQ+57uSdI0u/bXYS+ec4ftE3YAfTtm03vh7VpulHKiIV
+         fYjI6A/pOsXocYll8WrB99SUAK8pWHwBQvdKeIy1XzFW9WAPugU/SLfRPCQU/mRDc9
+         NoiZhDKxOnigysHXdYM898eLeW7FpEMfO9Kdp3lmZ6FPvkrdJCwp+VmOrFPE1AwyyA
+         OzlC6Dfx1OUP68E6+eu9UErYNcPAE0e10av/qn001rmZCC9z2X1NmrX5Gc+Yr8pDQP
+         HDxe06P2nKBMQkQimDuHNA2XXLYb5DEnEOiILjQcoPXK8dU66XEABJ5HXmtjHEd4Sk
+         jiDDTULeNMHbw==
+Date:   Tue, 18 Jan 2022 17:41:57 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     p.zabel@pengutronix.de, andyshevchenko@gmail.com,
+        robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wells.lu@sunplus.com, lh.kuo@sunplus.com
+Subject: Re: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Message-ID: <Yeb75aOOckAfNTTG@sirena.org.uk>
+References: <cover.1642494310.git.lhjeff911@gmail.com>
+ <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cWj0J1tk77zuAC0Y"
 Content-Disposition: inline
-In-Reply-To: <20220118172043.djhy3dwg4fhhfqfs@amd.com>
+In-Reply-To: <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
+X-Cookie: Do YOU have redeeming social value?
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 11:20:43AM -0600, Michael Roth wrote:
-> The HV fills out the initial contents of the CPUID page, which includes
-> the count. SNP/PSP firmware will validate the contents the HV tries to put
-> in the initial page, but does not currently enforce that the 'count' field
-> is non-zero.
 
-So if the HV sets count to 0, then the PSP can validate all it wants but
-you basically don't have a CPUID page. And that's a pretty easy way to
-defeat it, if you ask me.
+--cWj0J1tk77zuAC0Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-So, if it is too late to change this, I guess the only way out of here
-is to terminate the guest on count == 0.
+On Tue, Jan 18, 2022 at 04:42:38PM +0800, Li-hao Kuo wrote:
 
-And regardless, what if the HV fakes the count - how do you figure out
-what the proper count is? You go and read the whole CPUID page and try
-to make sense of what's there, even beyond the "last" function leaf.
+Looks mostly good - a couple of small nits below but nothing major.
 
-> So we can't rely on the 'count' field as an indicator of whether or
-> not the CPUID page is active, we need to rely on the presence of the
-> ccblob as the true indicator, then treat a non-zero 'count' field as
-> an invalid state.
+> +static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
+> +				       struct spi_transfer *xfer)
+> +{
 
-treat a non-zero count field as invalid?
+> +	for (i = 0; i <= xfer_cnt; i++) {
+> +		mutex_lock(&pspim->buf_lock);
 
-You mean, "a zero count" maybe...
+This lock is redundant: it is only ever held in this function which is
+guaranteed by the core to never be called twice concurrently.
 
-But see above, how do you check whether the HV hasn't "hidden" some
-entries by modifying the count field?
+> +	ret = devm_request_irq(dev, pspim->m_irq, sp7021_spi_master_irq,
+> +			       IRQF_TRIGGER_RISING, pdev->name, pspim);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_request_irq(dev, pspim->s_irq, sp7021_spi_slave_irq,
+> +			       IRQF_TRIGGER_RISING, pdev->name, pspim);
+> +	if (ret)
+> +		return ret;
 
-Either I'm missing something or this sounds really weird...
+Are you sure the driver is ready to handle interrupts without any of the
+other resources?  Normally interrupts are one of the last things to be
+requested.
 
--- 
-Regards/Gruss,
-    Boris.
+--cWj0J1tk77zuAC0Y
+Content-Type: application/pgp-signature; name="signature.asc"
 
-https://people.kernel.org/tglx/notes-about-netiquette
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm++QACgkQJNaLcl1U
+h9AloQf/R9CmVeZkSoLiD5F1sjADwvC/s2mKlTHBm2WFheDAynPMLNrjKPMziv4c
+9cbnuUMl8AIIX/G9B/XrE3htb9F4vOojNd9+uLyWbFuQlNwSFlNh0cqAnbg86r0U
+hR74iH/g8JUN50VZrGGbYrvHv1T1tgI8LCXgMt9MaS1QBNiItnPhgTBy+VslAZS4
+lt3iBzyD6mN0yrVlfWVlBHyYjjYq2EU5Zj0DOSCQ9ywT35KNCH26nUtjqPt8qdpa
+hoDZ/vVbNxSMLKf2wZuADpm1JL9tSzlPmyER83CjNabeLrtZcuW2WDR5chtDZ06T
+3ao2LoKq9N19CXXMB/lMypwT6cwkHw==
+=2Z0W
+-----END PGP SIGNATURE-----
+
+--cWj0J1tk77zuAC0Y--

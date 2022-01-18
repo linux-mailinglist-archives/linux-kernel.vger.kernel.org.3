@@ -2,148 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1C54929EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC194929F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346055AbiARPxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:53:07 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62862 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1346021AbiARPxE (ORCPT
+        id S1346073AbiARP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:58:07 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:23183 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230519AbiARP6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:53:04 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IF5mcd023311;
-        Tue, 18 Jan 2022 15:53:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=pUIbwo6CaEeG4mexn1GuonJucf6MenQngOUNfl9jZWE=;
- b=kFsbppA4FaC5DL5CSyIcpp+u4eU6+CBOMlwzpTomgel21Cgqe1Gw3AwAJyG09+ajriWA
- Wt1IKXBKGqi3092NCYcaNg1uFFgasrJr1zxi194+CZGQ0lBVQiXVQluk7qhi+iWj4Qr3
- 1SUHyHlLocoEV63QX4xfNDIA2RoJZ9Z3WldxoR2Zt4zFIe0EHRR4b2cma/aHoiouG3Qp
- pTj5jfmO7xe+kz6WGjOWbbbJMcW/WdwPdFkxKPQxx/fn3d+4HHZrdNUlDFcydC6gI/Xl
- 1Dvv2/AKyW8f6IL+USG77izhMPnnrBNHICaTxaOgkrYqbLAX2LAgfbN8ooKEcZQe3q6C 4g== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnyvv10y1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 15:53:03 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IFpfDJ029454;
-        Tue, 18 Jan 2022 15:53:02 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dknhje3yg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 15:53:02 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IFqwJ345875620
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 15:52:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD82811C05C;
-        Tue, 18 Jan 2022 15:52:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F89511C054;
-        Tue, 18 Jan 2022 15:52:58 +0000 (GMT)
-Received: from [9.171.91.170] (unknown [9.171.91.170])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 15:52:58 +0000 (GMT)
-Message-ID: <bf1c79cc-2108-ceb0-4f0a-d83386046f00@linux.ibm.com>
-Date:   Tue, 18 Jan 2022 16:52:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 01/10] s390/uaccess: Add storage key checked access
- to user memory
-Content-Language: en-US
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-2-scgl@linux.ibm.com>
- <yt9dmtjtcaws.fsf@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <yt9dmtjtcaws.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uFX8pFlPtRW8KtDH_PZMPJ4J8sQWbDNg
-X-Proofpoint-ORIG-GUID: uFX8pFlPtRW8KtDH_PZMPJ4J8sQWbDNg
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 18 Jan 2022 10:58:06 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1642521485; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=kZDrU8Dg8Jr5jR4QX28dOeZKIG/4+04z5OJQI5wFtME=; b=FHyR6EPQkI8ZMAstIG0CEJ/Z7O+CioPAUnJelfDYPY7XtwuhO5p8RwVMeOH+JIPPg4pzE+WY
+ 6uLeiSyqefkihgVJ5tCI5mLKoHL9bV2Z68gavU/jxeCeQt0AwPXTZiDSc+NL9e8+FFDymiE0
+ 8nie7gALlrkZUrqvuhrJb6y0rZ4=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 61e6e38d6189a19cb208f0b4 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 18 Jan 2022 15:58:05
+ GMT
+Sender: quic_vjitta=quicinc.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 51F12C4360C; Tue, 18 Jan 2022 15:58:04 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.0.100] (unknown [103.164.200.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vjitta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4D678C4338F;
+        Tue, 18 Jan 2022 15:57:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 4D678C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
+Subject: Re: [PATCH v3] iommu: Fix potential use-after-free during probe
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Vijayanand Jitta <quic_vjitta@quicinc.com>, joro@8bytes.org,
+        will@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com
+References: <1641993184-1232-1-git-send-email-quic_vjitta@quicinc.com>
+ <9913d026-fddd-c188-0873-0f7a66fb2c3c@arm.com>
+From:   Vijayanand Jitta <quic_vjitta@quicinc.com>
+Message-ID: <5f923b2d-645c-a7df-e16b-e8526015db32@quicinc.com>
+Date:   Tue, 18 Jan 2022 21:27:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_04,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 impostorscore=0 spamscore=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
- suspectscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201180095
+In-Reply-To: <9913d026-fddd-c188-0873-0f7a66fb2c3c@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 16:37, Sven Schnelle wrote:
-> Hi Janis,
-> 
-> Janis Schoetterl-Glausch <scgl@linux.ibm.com> writes:
-> 
->> KVM needs a mechanism to do accesses to guest memory that honor
->> storage key protection.
->> Since the copy_to/from_user implementation makes use of move
->> instructions that support having an additional access key supplied,
->> we can implement __copy_from/to_user_with_key by enhancing the
->> existing implementation.
+
+
+On 1/18/2022 7:19 PM, Robin Murphy wrote:
+> On 2022-01-12 13:13, Vijayanand Jitta wrote:
+>> Kasan has reported the following use after free on dev->iommu.
+>> when a device probe fails and it is in process of freeing dev->iommu
+>> in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+>> and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+>> causing use after free.
 >>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>> BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+>> Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
+>>
+>> Workqueue: events_unbound deferred_probe_work_func
+>> Call trace:
+>>   dump_backtrace+0x0/0x33c
+>>   show_stack+0x18/0x24
+>>   dump_stack_lvl+0x16c/0x1e0
+>>   print_address_description+0x84/0x39c
+>>   __kasan_report+0x184/0x308
+>>   kasan_report+0x50/0x78
+>>   __asan_load8+0xc0/0xc4
+>>   of_iommu_configure+0xb4/0x4a4
+>>   of_dma_configure_id+0x2fc/0x4d4
+>>   platform_dma_configure+0x40/0x5c
+>>   really_probe+0x1b4/0xb74
+>>   driver_probe_device+0x11c/0x228
+>>   __device_attach_driver+0x14c/0x304
+>>   bus_for_each_drv+0x124/0x1b0
+>>   __device_attach+0x25c/0x334
+>>   device_initial_probe+0x24/0x34
+>>   bus_probe_device+0x78/0x134
+>>   deferred_probe_work_func+0x130/0x1a8
+>>   process_one_work+0x4c8/0x970
+>>   worker_thread+0x5c8/0xaec
+>>   kthread+0x1f8/0x220
+>>   ret_from_fork+0x10/0x18
+>>
+>> Allocated by task 1:
+>>   ____kasan_kmalloc+0xd4/0x114
+>>   __kasan_kmalloc+0x10/0x1c
+>>   kmem_cache_alloc_trace+0xe4/0x3d4
+>>   __iommu_probe_device+0x90/0x394
+>>   probe_iommu_group+0x70/0x9c
+>>   bus_for_each_dev+0x11c/0x19c
+>>   bus_iommu_probe+0xb8/0x7d4
+>>   bus_set_iommu+0xcc/0x13c
+>>   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+>>   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+>>   platform_drv_probe+0xe4/0x13c
+>>   really_probe+0x2c8/0xb74
+>>   driver_probe_device+0x11c/0x228
+>>   device_driver_attach+0xf0/0x16c
+>>   __driver_attach+0x80/0x320
+>>   bus_for_each_dev+0x11c/0x19c
+>>   driver_attach+0x38/0x48
+>>   bus_add_driver+0x1dc/0x3a4
+>>   driver_register+0x18c/0x244
+>>   __platform_driver_register+0x88/0x9c
+>>   init_module+0x64/0xff4 [arm_smmu]
+>>   do_one_initcall+0x17c/0x2f0
+>>   do_init_module+0xe8/0x378
+>>   load_module+0x3f80/0x4a40
+>>   __se_sys_finit_module+0x1a0/0x1e4
+>>   __arm64_sys_finit_module+0x44/0x58
+>>   el0_svc_common+0x100/0x264
+>>   do_el0_svc+0x38/0xa4
+>>   el0_svc+0x20/0x30
+>>   el0_sync_handler+0x68/0xac
+>>   el0_sync+0x160/0x180
+>>
+>> Freed by task 1:
+>>   kasan_set_track+0x4c/0x84
+>>   kasan_set_free_info+0x28/0x4c
+>>   ____kasan_slab_free+0x120/0x15c
+>>   __kasan_slab_free+0x18/0x28
+>>   slab_free_freelist_hook+0x204/0x2fc
+>>   kfree+0xfc/0x3a4
+>>   __iommu_probe_device+0x284/0x394
+>>   probe_iommu_group+0x70/0x9c
+>>   bus_for_each_dev+0x11c/0x19c
+>>   bus_iommu_probe+0xb8/0x7d4
+>>   bus_set_iommu+0xcc/0x13c
+>>   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+>>   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+>>   platform_drv_probe+0xe4/0x13c
+>>   really_probe+0x2c8/0xb74
+>>   driver_probe_device+0x11c/0x228
+>>   device_driver_attach+0xf0/0x16c
+>>   __driver_attach+0x80/0x320
+>>   bus_for_each_dev+0x11c/0x19c
+>>   driver_attach+0x38/0x48
+>>   bus_add_driver+0x1dc/0x3a4
+>>   driver_register+0x18c/0x244
+>>   __platform_driver_register+0x88/0x9c
+>>   init_module+0x64/0xff4 [arm_smmu]
+>>   do_one_initcall+0x17c/0x2f0
+>>   do_init_module+0xe8/0x378
+>>   load_module+0x3f80/0x4a40
+>>   __se_sys_finit_module+0x1a0/0x1e4
+>>   __arm64_sys_finit_module+0x44/0x58
+>>   el0_svc_common+0x100/0x264
+>>   do_el0_svc+0x38/0xa4
+>>   el0_svc+0x20/0x30
+>>   el0_sync_handler+0x68/0xac
+>>   el0_sync+0x160/0x180
+>>
+>> Fix this by taking device_lock during probe_iommu_group.
+>>
+>> Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
+>> ---
+>>   drivers/iommu/iommu.c | 12 ++++++++----
+>>   1 file changed, 8 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index dd7863e..261792d 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -1617,7 +1617,7 @@ static int probe_iommu_group(struct device *dev,
+>> void *data)
+>>   {
+>>       struct list_head *group_list = data;
+>>       struct iommu_group *group;
+>> -    int ret;
+>> +    int ret = 0;
+>>         /* Device is probed already if in a group */
+>>       group = iommu_group_get(dev);
+>> @@ -1626,9 +1626,13 @@ static int probe_iommu_group(struct device
+>> *dev, void *data)
+>>           return 0;
+>>       }
+>>   -    ret = __iommu_probe_device(dev, group_list);
+>> -    if (ret == -ENODEV)
+>> -        ret = 0;
+>> +    ret = device_trylock(dev);
+>> +    if (ret) {
 > 
-> This doesn't apply to my master branch.
-
-Maybe it's due to the prerequisite patch missing?
-https://lore.kernel.org/linux-s390/YeGBmPBJ8NMi0Rkp@osiris/T/#t
-
+> This doesn't seem right - we can't have a non-deterministic situation
+> where __iommu_probe_device() may or may not be called depending on what
+> anyone else might be doing with the device at the same time.
 > 
->> diff --git a/arch/s390/lib/uaccess.c b/arch/s390/lib/uaccess.c
->> index d3a700385875..ce7a150dd93a 100644
->> --- a/arch/s390/lib/uaccess.c
->> +++ b/arch/s390/lib/uaccess.c
->> @@ -59,11 +59,13 @@ static inline int copy_with_mvcos(void)
->>  #endif
->>  
->>  static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr,
->> -						 unsigned long size)
->> +						 unsigned long size, char key)
->>  {
->>  	unsigned long tmp1, tmp2;
->>  	union oac spec = {
->> +		.oac2.key = key,
->>  		.oac2.as = PSW_BITS_AS_SECONDARY,
->> +		.oac2.k = 1,
->>  		.oac2.a = 1,
->>  	};
->>  
->> @@ -94,19 +96,19 @@ static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr
->>  }
->>  
->>  static inline unsigned long copy_from_user_mvcp(void *x, const void __user *ptr,
->> -						unsigned long size)
->> +						unsigned long size, char key)
+> I don't fully understand how __iommu_probe_device() and
+> of_iommu_configure() can be running for the same device at the same
+> time, but if that's not a race which can be fixed in its own right, then
+
+Thanks for the review comments.
+
+During arm_smmu probe, bus_for_each_dev is called which calls
+__iommu_probe_device for each all the devs on that bus.
+
+   __iommu_probe_device+0x90/0x394
+   probe_iommu_group+0x70/0x9c
+   bus_for_each_dev+0x11c/0x19c
+   bus_iommu_probe+0xb8/0x7d4
+   bus_set_iommu+0xcc/0x13c
+   arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+   arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+
+and the deferred probe function is calling of_iommu_configure on the
+same dev which is currently in __iommu_probe_device path in this case
+thus causing the race.
+
+> I think adding a refcount to dev_iommu would be a more sensible way to
+> mitigate it.
+
+Right, Adding refcount for dev_iommu should help , I'll post a new patch
+with it.
+
+Thanks,
+Vijay
 > 
-> Any special reason for using 'char' as type for key here? Given the left shift
-> below i would prefer 'unsigned char' to avoid having to think about
-> whether this can overflow. The end result wouldn't look different,
-> so more or less a cosmetic issue.
-
-Will do.
-
-[...]
+> Robin.
 > 
-> With that minor nitpick:
-> 
-> Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
-
-Thanks!
-
+>> +        ret = __iommu_probe_device(dev, group_list);
+>> +        if (ret == -ENODEV)
+>> +            ret = 0;
+>> +        device_unlock(dev);
+>> +    }
+>>         return ret;
+>>   }

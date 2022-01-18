@@ -2,222 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBCC491F79
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE608491F7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 07:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242724AbiARGrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 01:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S242835AbiARGtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 01:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiARGrK (ORCPT
+        with ESMTP id S231146AbiARGtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 01:47:10 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A57C06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:47:10 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id p27so55005157lfa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:47:10 -0800 (PST)
+        Tue, 18 Jan 2022 01:49:02 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96877C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:49:01 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b14so48248189lff.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 22:49:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ndRmdqMdJ9799j8PWgE96Wh//o3D2hfldSG13u5SeAM=;
-        b=YB+Kge9lFu1w7LVUa5FlGUi7PZaLnS8FNV8sMwK0FPqqG0Lk2PUL7PRgao61YZQSU8
-         3/JPbrKoffRa3xJh3qPEuFRzwkbTeYnhZK0i3jHv7Q7X2waL25oHJU1p6im42FbswCSs
-         Ug69yVzHk9/Wmztwy3F8QTh8w2X6tZjB36qmOuzjwqEg4ZdDg1m2wZWDLniLM00kGvDN
-         7tTN5RWg6e9J+S9w5Cc2SEcm7/jA6zzRdoUnhJNiSN7hO/EyjynW9TVag9qAp2VVtfE4
-         wj4QBzzIlAqEZb63Nh++4Y9PPsElMmAn3PShGpukX0PibdcmJlXUdOqIb9oLyi9WcFXd
-         5T0Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=cTX8+aELljL75aGmFQLFVAGHxGfTYO/25DOtLiHIZIQ=;
+        b=Tocf1BOlQF40dFt4fkKOzwhePLa1cWAS8xfWiU2H9Ufuul1SeZ/jar0hfTVOChtKlj
+         93UhqCzhE+xlYCznU3HYSP3nHV/QyQWNontC8ty+xv7Eq45ajDETErU8sHv9+iLSDuYE
+         8Gakdz0Wu4sEcngxJrYA2mMiYWNcGGttyoYdEfHJu/bjebBfINbDetyMWxTiulZPKxye
+         1rjH757WEH3+SoWV/tV9xcr2IJPiEiPOetXYEg5kg2mjVkVeZldLdRKL+Y4yVTwH7Za2
+         RXgcjS/u7iOBo/LherZUcYxNENZbusNEKr7dKJH167XdHyVVRjlyBew29R000O+cCLOA
+         /T6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ndRmdqMdJ9799j8PWgE96Wh//o3D2hfldSG13u5SeAM=;
-        b=hepMAVRixRPzg9yEsGLJQBRByETQKU6y01OtcYD2Usv7tU0aNHr3+xWVx2X70twBaR
-         5Qpw2IfAreVo165CpDlZZnwJlpZE4BBD94SjKWAp49YiH7Zx2878cv0sEDDPeUaKcvfE
-         shh0EOVE8Kln0GgvduGWG4zejh96hHQkpcqYM3ptXa1gGup310HQRY/UgdXsDy0yTmVK
-         sWZ9NpI4K6kKfqX9195uC3IPtSe2wNtbhwxTSC+2vWwkRfvoDYq1E7kYbA9Jx3iYzDHV
-         ZcgdN/WRckinIWsOdautV6jdwyLPCXuMqmzmrItKG5Mga6zcYDujigR/1q9ACrL2EXfF
-         K32w==
-X-Gm-Message-State: AOAM5334jV7UJ+nEJrV6kENZWcyUhFtKCknCBZnZFvj+8j3VpxbRDb4A
-        CAdEme3FUTM/MNbyggDlU9jwELYRHCCBAs8DJOIs/g==
-X-Google-Smtp-Source: ABdhPJzjbz4/fCjr33TO7htvx9gliX688kTeU0cO2lulCwM/tQ2dIG+ra+iboLhNbvF1fx0/jEaSHO1aZFb/EfqXukY=
-X-Received: by 2002:a2e:bf01:: with SMTP id c1mr18353250ljr.511.1642488428506;
- Mon, 17 Jan 2022 22:47:08 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=cTX8+aELljL75aGmFQLFVAGHxGfTYO/25DOtLiHIZIQ=;
+        b=SQvNWndU2oMv3A0AATe6X9UH8ONrUM1nwxo/2XITgpPqYdrc3XbuXlgVCIk3mtmWVD
+         w9BhbUSOS9uDoTMlnWvaDdD3O0V/V58Q39ymcGOmYd2AZI9o3VoZvArS3rMBRkL4AnQm
+         TMT1B3YTKb/tYDji3zXkDEkNPA2HVLf8dyK2r03Pz9fhWzMcZCvGAp8VxeB8l+NulEBn
+         sxv2uSv9dWCkH+gsgvkzVBfq8HSeVemvSCOAoUrHykp4c6CbpeF60Qzjv3vh/9+//gzL
+         5f87lrbxUUNlvl+Fxj/oTozD3dQHVdgdfnrYhEx+C8fv5XxK7Iw22HUaVjL7sUdb2ABz
+         a3Dw==
+X-Gm-Message-State: AOAM532n+dfds4ji5RSkylAsqz1jHcWW84cSC2Ll/ixsmVuycR7woqQq
+        58NeaQQttzIKTgvGhd0h3Dmj7WlNfg0k2ELbews=
+X-Google-Smtp-Source: ABdhPJzP9KyQp4SWyhUyr77x3Gks7BDEfk4JwV4fJsMsuseZllRWV39zOv3SPwLFX6RYJ4AdkBInrMqsPcdHtIA0F6U=
+X-Received: by 2002:a19:f811:: with SMTP id a17mr19506156lff.18.1642488539936;
+ Mon, 17 Jan 2022 22:48:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20211229215330.4134835-1-yaelt@google.com> <CAFA6WYPuPHgcnzt6j+Q-EA2Dos6vBDukrjpheo5srLVXFrifEg@mail.gmail.com>
- <5a38824152eeee0fc9ba0a4fd2308bb6e0970059.camel@linux.ibm.com>
- <CAFA6WYOJt3=YMTt_QQSq6Z-MK42hwWspgSpasw2fuPtVFcP3uA@mail.gmail.com>
- <CAKoutNvW1c7MkTaFwyrD7MjUVXvTtcBOGFULMittJ5vzjMN0mg@mail.gmail.com>
- <CAFA6WYPQRagZF8-grn_LC8_SAaxBzh=cSgHhFAQQOYK+L2KuBQ@mail.gmail.com>
- <CAKoutNtuY0+L29d6xzn6BgEKBytFsBHZ_kgkCOJZuicb_uNPHg@mail.gmail.com>
- <CAFA6WYPxogLMk1EDqvM_mwgCmU1s_yDwYFPjq6wurnQGhG=-_w@mail.gmail.com> <CAKoutNtj8nxvGyZu=m1_7+rGck9dm76E=O93333Yfb5En+8HNQ@mail.gmail.com>
-In-Reply-To: <CAKoutNtj8nxvGyZu=m1_7+rGck9dm76E=O93333Yfb5En+8HNQ@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 18 Jan 2022 12:16:56 +0530
-Message-ID: <CAFA6WYNr5L+=Hz8JGztLH5AZs3+5BwtN4rTF=CmyRdi0CjkRqA@mail.gmail.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-To:     Yael Tiomkin <yaelt@google.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, Jarkko Sakkinen <jarkko@kernel.org>,
-        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Received: by 2002:a05:6504:264:0:0:0:0 with HTTP; Mon, 17 Jan 2022 22:48:59
+ -0800 (PST)
+Reply-To: charlesjacksonjrc@gmail.com
+From:   Charles Jackson <johnnydepp3331@gmail.com>
+Date:   Mon, 17 Jan 2022 22:48:59 -0800
+Message-ID: <CAK7eE_nDP=HKLGoaZyBgiJnQEhHedbyx8Sh-VnbXWqjERC9vEw@mail.gmail.com>
+Subject: =?UTF-8?Q?Herzliche_Gl=C3=BCckw=C3=BCnsche=21=21=21_Antworten_Sie_zur=C3=BCck=2C_u?=
+        =?UTF-8?Q?m_Ihre_gespendeten_Gelder_einzufordern=2E?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 at 00:45, Yael Tiomkin <yaelt@google.com> wrote:
->
-> On Fri, Jan 7, 2022 at 8:32 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > On Fri, 7 Jan 2022 at 18:23, Yael Tiomkin <yaelt@google.com> wrote:
-> > >
-> > > Hi Sumit,
-> > >
-> > > On Fri, Jan 7, 2022 at 12:15 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > >
-> > > > Hi Yael,
-> > > >
-> > > > On Thu, 6 Jan 2022 at 01:48, Yael Tiomkin <yaelt@google.com> wrote:
-> > > > >
-> > > > > Hi Sumit,
-> > > > >
-> > > > > On Mon, Jan 3, 2022 at 1:51 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > > > >
-> > > > > > Hi Mimi,
-> > > > > >
-> > > > > > Apologies for the delayed reply as I was on leave for a long new year weekend.
-> > > > > >
-> > > > > > On Thu, 30 Dec 2021 at 18:59, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > > > >
-> > > > > > > Hi Sumit,
-> > > > > > >
-> > > > > > > On Thu, 2021-12-30 at 15:37 +0530, Sumit Garg wrote:
-> > > > > > > > + Jan, Ahmad
-> > > > > > > >
-> > > > > > > > On Thu, 30 Dec 2021 at 03:24, Yael Tiomkin <yaelt@google.com> wrote:
-> > > > > > > > >
-> > > > > > > > > The encrypted.c class supports instantiation of encrypted keys with
-> > > > > > > > > either an already-encrypted key material, or by generating new key
-> > > > > > > > > material based on random numbers. This patch defines a new datablob
-> > > > > > > > > format: [<format>] <master-key name> <decrypted data length>
-> > > > > > > > > <decrypted data> that allows to instantiate encrypted keys using
-> > > > > > > > > user-provided decrypted data, and therefore allows to perform key
-> > > > > > > > > encryption from userspace. The decrypted key material will be
-> > > > > > > > > inaccessible from userspace.
-> > > > > > > >
-> > > > > > > > This type of user-space key import feature has already been discussed
-> > > > > > > > at large in the context of trusted keys here [1]. So what makes it
-> > > > > > > > special in case of encrypted keys such that it isn't a "UNSAFE_IMPORT"
-> > > > > > > > or "DEBUGGING_IMPORT" or "DEVELOPMENT_IMPORT", ...?
-> > > > > > > >
-> > > > > > > > [1] https://lore.kernel.org/linux-integrity/74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de/
-> > > > > > > >
-> > > > > > > > -Sumit
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > > > > > Signed-off-by: Yael Tiomkin <yaelt@google.com>
-> > > > > > >
-> > > > > > > There is a difference between trusted and encrypted keys.
-> > > > > >
-> > > > > > Yeah I understand the implementation differences.
-> > > > > >
-> > > > > > >  So in
-> > > > > > > addition to pointing to the rather long discussion thread, please
-> > > > > > > summarize the conclusion and, assuming you agree, include why in once
-> > > > > > > case it was acceptable and in the other it wasn't to provide userspace
-> > > > > > > key data.
-> > > > > >
-> > > > > > My major concern with importing user-space key data in *plain* format
-> > > > > > is that if import is *not* done in a safe (manufacturing or
-> > > > > > production) environment then the plain key data is susceptible to
-> > > > > > user-space compromises when the device is in the field.
-> > > > >
-> > > > > I agree this can happen. Key distribution in any scenario needs to be
-> > > > > secure and this could also potentially be an issue if the key is first
-> > > > > encrypted and then imported.
-> > > >
-> > > > Currently its not the case with encrypted keys. These are random keys
-> > > > generated within the kernel and encrypted with master key within the
-> > > > kernel and then exposed to user-space as encrypted blob only.
-> > >
-> > >
-> > > There are two different ways to create encrypted keys. One is to have
-> > > them generated within the kernel using random numbers, and the other
-> > > is by importing them in their encrypted form from user-space.
-> > > I was referring to the latter in my previous statement.
-> > >
-> >
-> > So, from a key distribution security point of view, encrypted key
-> > user-space import is **not equal to** plain key user-space import.
-> > That's why we need to have a separate compile time option as every
-> > device may come with its own threat model and may choose to enable or
-> > disable this user-space plain key import feature.
-> >
-> > -Sumit
-> >
-> > > >
-> > > > > We can make sure the documentation
-> > > > > highlights the safety requirement.
-> > > > >
-> > > >
-> > > > IMO, you should enable this feature as a compile time option. The help
-> > > > text for that config option should highlight the use-case along with a
-> > > > safety warning.
-> > > >
-> > > > -Sumit
-> > > >
-> > > > > >
-> > > > > > And it sounds like we are diverting from basic definition [1] of encrypted keys:
-> > > > > >
-> > > > > > "Trusted and Encrypted Keys are two new key types added to the
-> > > > > > existing kernel key ring service. Both of these new types are variable
-> > > > > > length symmetric keys, and in both cases all keys are created in the
-> > > > > > kernel, and **user space sees, stores, and loads** only encrypted
-> > > > > > blobs."
-> > > > > >
-> > > > > > Also, as Jarrko mentioned earlier the use-case is still not clear to
-> > > > > > me as well. Isn't user logon keys an alternative option for
-> > > > > > non-readable user-space keys?
-> > > > >
-> > > > > The goal in this change is to allow key encryption from userspace,
-> > > > > using user-provided decrypted data. This cannot be achieved in logon
-> > > > > keys, which as you mentioned, are simply non-readable user type keys.
-> > > > >
-> > > > >
-> > > > > >
-> > > > > > [1] https://www.kernel.org/doc/html/v4.13/security/keys/trusted-encrypted.html
-> > > > > >
-> > > > > > -Sumit
-> > > > > >
-> > > > > > >
-> > > > > > > thanks,
-> > > > > > >
-> > > > > > > Mimi
-> > > > > > >
-> > > > >
-> > > > > Yael
->
-> Hi Sumit,
-> The encrypted-keys module is already controlled by the
-> CONFIG_ENCRYPTED_KEYS option, which I think might give sufficient
-> granularity to control the behavior. Do you still think a feature
-> dedicated option is needed?
->
+--=20
+IHR E-MAIL-KONTO WURDE F=C3=9CR EINE SPENDE VON $3.500.000,00 USD F=C3=9CR
+WOHLT=C3=84TIGKEIT AUSGEW=C3=84HLT. ANTWORTEN SIE UNTEN AUF DIE E-MAIL F=C3=
+=9CR
+WEITERE INFORMATIONEN
 
-Since this feature will change security properties for encrypted keys
-which can be considered as a regression for existing users during
-uprev. So it needs to be an optional key import feature with a clear
-user visible warning. Thinking more about this, you can even have a
-module param to turn it on with a runtime warning as well.
-
--Sumit
-
-> Yael
+E-Mail: charlesjacksonjrc@gmail.com

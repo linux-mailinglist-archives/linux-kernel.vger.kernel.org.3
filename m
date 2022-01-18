@@ -2,157 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23424492FCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E5D492FD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349428AbiARU6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:58:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49536 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349276AbiARU6J (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:58:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642539489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b9WqescKjIAzil7l6cr9HCVfXjlyRssVLY+HORpld6I=;
-        b=PwBnb0Egc7pTUBTaL2QM9J7a1MnoZd9pL1LL8FwGUs0+Pcq/Rq70Nklro/A9Xgb/mkxsHz
-        XEEwgvzjC0k01D+INW1le0D4oreCsh/LsQCoN/jh6HVYZag3+BOGHAcgPA7AmfaR1GQFNW
-        Kh2ewv3iMss/QxPy1IJ8Qg15fIJuVD8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-9gCoO90WMWmLdkxF8K4O0A-1; Tue, 18 Jan 2022 15:58:07 -0500
-X-MC-Unique: 9gCoO90WMWmLdkxF8K4O0A-1
-Received: by mail-qv1-f71.google.com with SMTP id a10-20020a056214062a00b0041f0242eb11so522543qvx.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:58:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b9WqescKjIAzil7l6cr9HCVfXjlyRssVLY+HORpld6I=;
-        b=HoSY2Ge0j978YDI+JWAhUZ70fsUJ+CafkE+Yc14hpF3BzqUw0Z+TTSOGcKW1oXxH2U
-         PL5MtF560ffshU9cyYT1DtiMevLZt6UCLbtDGLIpcUCoc5jnsoSbpooQYnYpLLNqzILz
-         KrEE0ozc5Iit6R02OKvIAtbSE3QqUtDPRxryFWxTqGVDnPOTOpRdgE2dvA4WeBOttkXS
-         cEhJJsJU4/b6QS5s8wvRyvtLwQDZAbn1g1/j42HJVPDqodkgwyZ2lRqC/3Bdoj7GWXaa
-         nT+bbabtqRtvE8Ks1mt/jUiaCb7P/8LUpMyBzbn+y7Z/3V3QAnukhmDTF51ffLt3RMMr
-         Rj4A==
-X-Gm-Message-State: AOAM533bS3YO9hHApeVF8scfXcnGVTKVU4+M5VBNt2Jtrc3EnN2RSwI7
-        is3KgT0rIjA5XIiodt6q0KAvxo2Nj+WAAekdfoVrhwOu9IaX/J+V8abmLOQjTAYTvWO2PuXv96Z
-        Jg09mbirLnjUmCnxGIHfI2Rna
-X-Received: by 2002:a05:620a:2448:: with SMTP id h8mr4958217qkn.231.1642539487281;
-        Tue, 18 Jan 2022 12:58:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxq3Ndqgu/1eSPl8H1/GfW4nW+qGmp6SP+v18upZ87Y6BP23e5HdqaD5fVe/w9z/YJHEmEHtw==
-X-Received: by 2002:a05:620a:2448:: with SMTP id h8mr4958206qkn.231.1642539487045;
-        Tue, 18 Jan 2022 12:58:07 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id az15sm5128276qkb.124.2022.01.18.12.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 12:58:06 -0800 (PST)
-Date:   Tue, 18 Jan 2022 15:58:04 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <Yecp3DspJOkhaDGV@bfoster>
-References: <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
- <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
- <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
- <YebFCeLcbziyMjbA@bfoster>
- <YecGC06UrGrfonS0@bfoster>
- <YecTA9nclOowdDEu@zeniv-ca.linux.org.uk>
+        id S1349448AbiARU70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:59:26 -0500
+Received: from mail-eopbgr150083.outbound.protection.outlook.com ([40.107.15.83]:13869
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S245609AbiARU7Y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 15:59:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XOZXLbDMVyrsxPk+ldew4MRwHIPcjQGat9PsjkIjRPNpbcySolNfHld5Qvv3sy27rJxQUu6ZNbS43qiG+WFBIfNPR/T7sqe/rt6TZzJn++rSztq+QtI3uO5HtMV9jjWT7vhOS4l9N1/ANlzPvB+CZsy1N4negcKFoEI6fm1Y7MB5Mbw7kPTfyrGTSIS8Oi2lQWkEKgUY2r+IgoCiLJR1yo0b5vG0qis00DfU9qhkTWfDrJDwPuAJtNTId4q/rS42HtVRyvajwq1jGWODdPLDyQ8Cgd1tBHGSWsEZiwRQraA7IrTcA+AWo20RrXhDiYPhq5ASz7qh9uwX2S/ph21qWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=79TGy9gydQNsHShFPNzG1ZRI4flEDZA2/JTil5PfN4M=;
+ b=GQDzG8x1/E78gkMO2V095IfkG4RDtwwOESiUlh2QhRiZsaHsw/lq20JqDIz2q+P/asuPF3HuD8+G5V+kd8yGm06H5GJNhfdn9P/nsR5ocGhFtCJRZZwkZCyYU/VSIlMQHJ7r83JwkJwuCVwxFHAgxipfRxddx1SuxaCse+6NZHCSDSG0A7xdSAcdXAkfr4TZT0ESk02mlWm/82XrGRrOKpKwP5kQjXtabdmgI3/r/yFjTWTIfjvgjlC87JZcP7ry2ewKm5GaPOd12QW/+t1ByMOeeL7a2lct05J5oj24FZR53BjEciEQRUYL5IHKJvIQvDpWhv3jib26uyzCGmthMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=79TGy9gydQNsHShFPNzG1ZRI4flEDZA2/JTil5PfN4M=;
+ b=coTlpMeausd21Y2NXHnu+1M1bSJEsJkUXb9S4bpDsNMg1crH6iAB3XWFZ04Cdmrv0xEmbpN2JxsxWZuAuBdPS9flJDhyoFglqwO9RtvVr8d/K0kFKu415P2wEQrPQ0Bhqmt3SNtLSuOOsPH2kr1xqTR9uiqq/MLaP6XwUevq1cGW9XnmSh0yU/FqVtqqjPwvi/uLdrDv3E6s/wKA9FdZubEdqMp1xpTd4T7X5xSk7R2q+TXJ9gd56uWIvf6UtHYDnYp2K7oyXwOwjfxFSVTR/NxIp8GyToAAtyoiSv1gbFI1WojCkG1qnv5fFHSZcuAs6qYHnzBEdTp62wFdEAv8Tw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+ by AM9PR03MB6818.eurprd03.prod.outlook.com (2603:10a6:20b:2db::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 20:59:21 +0000
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::d47e:81b0:256:3005]) by DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::d47e:81b0:256:3005%4]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 20:59:21 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [PATCH 0/6] usb: dwc3: Calculate REFCLKPER et. al. from reference
+ clock
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Baruch Siach <baruch@tkos.co.il>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <20220114233904.907918-1-sean.anderson@seco.com>
+ <87iluifxy1.fsf@tarshish> <7831a4f7-7c3f-4a2a-be73-38f2c40a123c@synopsys.com>
+ <f28052d9-5dea-a05b-8745-09e4d237b539@seco.com>
+ <f53ba815-f2ee-a558-73f3-06c5a43f5c5e@synopsys.com>
+Message-ID: <0aaeb0e3-1e10-df41-0b61-c10249ea5faa@seco.com>
+Date:   Tue, 18 Jan 2022 15:59:16 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <f53ba815-f2ee-a558-73f3-06c5a43f5c5e@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR01CA0034.prod.exchangelabs.com (2603:10b6:208:10c::47)
+ To DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YecTA9nclOowdDEu@zeniv-ca.linux.org.uk>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 40e72eb7-6555-4937-1511-08d9dac566b0
+X-MS-TrafficTypeDiagnostic: AM9PR03MB6818:EE_
+X-Microsoft-Antispam-PRVS: <AM9PR03MB681874BFF6B0360C3BDD729796589@AM9PR03MB6818.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LAu4h4rYs0JoWVKTYy9sFoO7zCYe9F+cwEyygNLsjha9zvqGiChxFwO8v6qkpiahctBjlHlR593vZow2PiFVBN0a7xjSLNHHLb8OnVmWTogWN8MIk0HCbQzHYLoFiJqpk4bBRTYbju1pVjvbfPWKLJjLkNzo7ECNib+65yOMaP1mZtMgnT0AZQkZZPQd58Ew/f3JECWT0In+JPmYzW6TO8DhwYxPE46NmxOnnIm5ye8wBAQMCAELknhDJg8usLtIhXJBfkdeGKaV9NKLj3a/mlrYu74GW0EZRdfSkJCEfDFnJXCiPorEWVmfukz5BbUAKy9gVnTVJQCfKl75bovjpIY1AusunnB6m49UJoKQYBYldjSOG/gA7U9RlLlBjv8fxYtogwtae5UxodUghFGWr3313uGPiULn2sqpwOfOi2LOdNjLF5FjAbctVFHnSYSq2Oj34JXrDu8Kx6dis0vzTJKkWitBYDJXszfQBOgHz+qA/CG52Bj2mR4OfR22DQ6ZPhPTAjEX4Y1duJq5wKldH3K/y8kQQxRYiWCuCq4f94MTAL2Veyv3Gwlur1+QyfroRFoD5wWBsG00f/0wgkMLwPBkZKzrEZKzCnC9UjNcYnAghKBUtqdW4HunWjRtEbtXz7SX1jXLv8C1yryZ0KcudQ7ZxkWYL9jSwNEY3N+YRDNfblvE9EEBjyOOxAI2xFkO1rloDLuouPGeydNE+nL386vr/SC+aa0Y6LkVI58l0NBRwgCgmvZ/hCYGUzdEZOFWIwRivPej3JmgLAZnifrGw0nfsbr1fwcMeFQ1K5JQLXJXANVADDE5LwAWGZM9KVOIzOJIbBECScDH5+jCXmnf4LT6M+6mH6aWRfLsVcZ1Rtc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(86362001)(83380400001)(66556008)(2906002)(966005)(4326008)(7416002)(38100700002)(38350700002)(44832011)(5660300002)(54906003)(6486002)(31686004)(110136005)(508600001)(316002)(8676002)(6666004)(66946007)(26005)(186003)(66476007)(53546011)(6506007)(6512007)(52116002)(36756003)(8936002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VDl3REJWSU9LNlpjSHBOMFBxYzBmOFMzaGtEUHRwZmVrMUlldkRBamJqalJj?=
+ =?utf-8?B?d3lwTHYrd2FFL1pVWVZTWjZHTlBpYlZLbXIwU1ovT0twN1dsalhFaU9rU251?=
+ =?utf-8?B?bVQ2NURBeWNnUVRhUlA4aENvckg4andyYVViTjlLK1hWcXZUMnVqeUUvVjJF?=
+ =?utf-8?B?cXhZYWVUUFRIRllVVGhQb0tvVDZXQ0dtcnQwcUtXQi9yK29BbmI5alpLWW1S?=
+ =?utf-8?B?dUVHQU10NGQ3ZVpIOS9BUGc3V2h0cEdERkZRbExSRnBEYjdoa0lQQndZQWNZ?=
+ =?utf-8?B?a0tKQUw5cjg3OFVwdm9vekpOYjh6SmhZaGVsbjVKZ0xQcjlUUCtOVTNOa1l6?=
+ =?utf-8?B?cEZja2hDUHk1dEtLaTJ1Y05PODY5QVh6bTUvYUpvd0RTaWpFcnNLM212R2do?=
+ =?utf-8?B?NUNiR3ErRCtqdmQ2K0VFSXRPc3dwT1htc3B6Q1FaR1cyZ2RSZUk3STNlS04z?=
+ =?utf-8?B?RUN0L3owQUMxUW01YXhIdUN6cXNxQ0phVHk4bHd2NTMyNFZvejBzNndqZWlR?=
+ =?utf-8?B?ZmhQSnVtUU1oQXh3SThYNjZpR1dDUkErczhWdFRERXN5ZGw3Z0JudXcwaUVI?=
+ =?utf-8?B?aTJvcGtscFhsVlRKdVpCUEhwZEIwZjdlQS92T2RSQURTbjVXazlwKzg2Zmx2?=
+ =?utf-8?B?cFlHb3VCZTB4QVJNY3Q3NFBZTTlPY3V6UDJBOW1weTdNZmEvNTZnQmZNZlRL?=
+ =?utf-8?B?SWEybTNNZEROdXZMSVYrTUNNUFNzMllpRDA2UlBkYXFYRFR1MEVjaVdIUXZU?=
+ =?utf-8?B?blQ1Wng0L0p0eWs5YWlseVJVSnh1RHgzWnY3eVR0VHRFZmZ2RjlKcVdXMzJT?=
+ =?utf-8?B?d01XeCtnL0EvK3RxWVNCMGdaTTFUNVNQb0phS0dlSTZmODNkdHI5YmJ1OU1Z?=
+ =?utf-8?B?UUozL2d5d1dTYUN1bzI0YWorL2p1dFdDTG95S3lCQ1BPZlY3UHh4SkZzYm81?=
+ =?utf-8?B?d1pRWnlkSkNUaGd1YVJEMU5QUGJOcFR0OVZHcDl1TmdlVE5xeVEvaTRBUVFQ?=
+ =?utf-8?B?UU1sVFppWkIxZmQvM3YwNnFwVk5RL1BGbEJ3dmdFM1QrMC9kYlkxeGttNFlt?=
+ =?utf-8?B?cEYvUE5TU2k4aHY5U1hCME16MVJ0Qys0RXg0MWErcldRSVVIVnZiTllLZFU1?=
+ =?utf-8?B?QmxEWEJ0ekMzS0crZzc2SmJIcGJMMGNpQU9teGVwVXJyUzRybVpzZnlxUXlG?=
+ =?utf-8?B?VzhQcWNjUFpXVHVKRUoyUE14SXkxT1lRbkNLMFFhd3U2WDlTaWk2RE1MVXpw?=
+ =?utf-8?B?Rkc5aXN0cFBWZkFiblo3MVBLZnR2M0FEOUp5aHVuQ3dWWWVVQkF2V2NvSTNr?=
+ =?utf-8?B?b3MxYndDc2krMDdsa3k1SmpZVVZtbmFJS2sxRmJJLzZwdmhkN24wbG04MDAz?=
+ =?utf-8?B?aTFkdW1HajlNUlRFWnV0Y2dJZ3F1Tzdxd0ZFVFd3aGpQbTRYNVZ5a1FYSzVi?=
+ =?utf-8?B?cUVUcmdCb2p1R3k2NGJYUWRlRFprektzVnJucWJCYVZZWUF1VkNZYzBCL213?=
+ =?utf-8?B?TkFEQkFMM3FUK3NWTFBpOWgxN0JLL0hLQ3VwNEh1NElFNzlxSDZScEtXOE5p?=
+ =?utf-8?B?eVZ0Z1NRQjdadHlUQWwzeXNIK0Z4MGgvU1lDR0owbzJ3NVJZdCtzdnAyK1RV?=
+ =?utf-8?B?OGFqYnE5eDFSK3RvVHo0UXVxWmNMV1ZiZGthNjNLZUp2S25CWkdsVTVvYzNj?=
+ =?utf-8?B?RVVRMW9ZcjYyR2lPZTNrZk9aYWo1SysxaFlhOEZkU2N1dWtrTmJ6WVBJK0ZU?=
+ =?utf-8?B?c2xJNHZXUjdkaTFlcDFlZWwzdUNOYmc2anRYc3FzNTZFRjZRZzVVeU1YUmdh?=
+ =?utf-8?B?ZWNqUi9aNDBMSmMxRkdqKzJSTkZRaWRuZEo5OGRielNIam0zNDh5UWlPWnZo?=
+ =?utf-8?B?cE1udU5oSlZlclZ1aGR4QUtkR0tXcDRxOFlDSkxBU2drNXI2L0FSRFl4UVZJ?=
+ =?utf-8?B?RnhDVThUS1hwV2VwSlVSTzRpZkVqSE1MZHBidC8xeS9Rcjg4czVnK2hYbXFR?=
+ =?utf-8?B?TlYzRDlxcjV0WFlETnN1T3BsNzM0Q01UcVBseXVLQ1M0a3VJMzZla3BsRmQr?=
+ =?utf-8?B?elhJTFF6anFzVDQ3c2p5ak5ibkdzUkxCcHZzWkZjdEJZbUVFNU9lcyt5MWVB?=
+ =?utf-8?B?UE5TT3o1VCtRTVNDc1ZSUHdOd3Z1eks1Q1ljSEg2Yk1FK1JGczVnaTFkWGho?=
+ =?utf-8?Q?lgbw1Mcfyq6UBfi5Xz/55aU=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40e72eb7-6555-4937-1511-08d9dac566b0
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 20:59:21.7582
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XE4B8l8l2C4NOkMnppJ8gOlbjBrwkEjWfYSbVzjvSBQqyVSNPKmIqTqMgdsepimJUBQ+jrG5Z5grdJ1oyGdBGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB6818
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:20:35PM +0000, Al Viro wrote:
-> On Tue, Jan 18, 2022 at 01:25:15PM -0500, Brian Foster wrote:
-> 
-> > If I go back to the inactive -> reclaimable grace period variant and
-> > also insert a start_poll_synchronize_rcu() and
-> > poll_state_synchronize_rcu() pair across the inactive processing
-> > sequence, I start seeing numbers closer to ~36k cycles. IOW, the
-> > xfs_inodegc_inactivate() helper looks something like this:
-> > 
-> >         if (poll_state_synchronize_rcu(ip->i_destroy_gp))
-> >                 xfs_inodegc_set_reclaimable(ip);
-> >         else
-> >                 call_rcu(&VFS_I(ip)->i_rcu, xfs_inodegc_set_reclaimable_callback);
-> > 
-> > ... to skip the rcu grace period if one had already passed while the
-> > inode sat on the inactivation queue and was processed.
-> > 
-> > However my box went haywire shortly after with rcu stall reports or
-> > something if I let that continue to run longer, so I'll probably have to
-> > look into that lockdep splat (complaining about &pag->pag_ici_lock in
-> > rcu context, perhaps needs to become irq safe?) or see if something else
-> > is busted..
-> 
-> Umm...  Could you (or Dave) describe where does the mainline do the
-> RCU delay mentioned several times in these threads, in case of
-> 	* unlink()
-> 	* overwriting rename()
-> 	* open() + unlink() + close() (that one, obviously, for regular files)
-> 
+Hi Thinh,
 
-If you're referring to the existing rcu delay in XFS, I suspect that
-refers to xfs_reclaim_inode(). The last bits of that function remove the
-inode from the perag tree and then calls __xfs_inode_free(), which frees
-the inode via rcu callback.
+On 1/18/22 3:00 PM, Thinh Nguyen wrote:
+> Sean Anderson wrote:
+>> Hi Thinh,
+>>
+>> On 1/18/22 2:46 PM, Thinh Nguyen wrote:
+>>> Hi Sean,
+>>>
+>>> Baruch Siach wrote:
+>>>> Hi Sean, Thinh,
+>>>>
+>>>> On Fri, Jan 14 2022, Sean Anderson wrote:
+>>>>> This is a rework of patches 3-5 of [1]. It attempts to correctly
+>>>>> program
+>>>>> REFCLKPER and REFCLK_FLADJ based on the reference clock frequency.
+>>>>> Since
+>>>>> we no longer need a special property duplicating this configuration,
+>>>>> snps,ref-clock-period-ns is deprecated.
+>>>>>
+>>>>> Please test this! Patches 3/4 in this series have the effect of
+>>>>> programming REFCLKPER and REFCLK_FLADJ on boards which already
+>>>>> configure
+>>>>> the "ref" clock. I have build tested, but not much else.
+>>>>>
+>>>>> [1]
+>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20220114044230.2677283-1-robert.hancock@calian.com/__;!!A4F2R9G_pg!M3zKxDZC9a_etqzXo7GSEMTHRWfc1wR_84wwM4-fShiA35CsGcxcTEffHPbprbdC4d2R$
+>>>>>
+>>>>
+>>>> Thinh, you suggested the dedicated DT property for the reference clock:
+>>>>
+>>>>
+>>>> https://urldefense.com/v3/__https://lore.kernel.org/all/d5acb192-80b9-36f7-43f5-81f21c4e6ba0@synopsys.com/__;!!A4F2R9G_pg!M3zKxDZC9a_etqzXo7GSEMTHRWfc1wR_84wwM4-fShiA35CsGcxcTEffHPbprbpOFmvX$
+>>>>
+>>>>
+>>>> Can you comment on this series?
+>>>>
+>>>
+>>> Unless there's a good way to pass this information for PCI devices, my
+>>> opinion hasn't changed. (Btw, I don't think creating a dummy clock
+>>> provider and its dummy ops is a good solution as seems to complicate and
+>>> bloat the PCI glue drivers).
+>>
+>> Can you explain your situation a bit more? I'm not sure how you can
+>> access a device tree property but not add a fixed-rate clock.
+>>
+>> --Sean
+>
+> Currently for dwc3 pci devices, we have glue drivers that create a
+> platform_device with specific properties to pass to the dwc3 core
+> driver. Without a ref clock property, we would need another way to pass
+> this information to the core driver or another way for the dwc3 core
+> driver to check for specific pci device's properties and quirks.
 
-BTW, I think the experiment above is either going to require an audit to
-make the various _set_reclaimable() locks irq safe or something a bit
-more ugly like putting the inode back on a workqueue after the rcu delay
-to make the state transition. Given the incremental improvement from
-using start_poll_synchronize_rcu(), I replaced the above destroy side
-code with a cond_synchronize_rcu(ip->i_destroy_gp) call on the
-iget/recycle side and see similar results (~36k cycles per 60s, but so
-far without any explosions).
+The primary problem with the existing binding is that it does not
+contain enough information to calculate the fractional period. With the
+frequency, we can calculate the correct values for the registers without
+needing an additional binding. So we need to transition to some kind of
+frequency-based system. So perhaps we should add a "ref-clock-frequency"
+property and use that as a default for when the clock is missing.
 
-Brian
-
-> The thing is, if we already do have an RCU delay in there, there might be
-> a better solution - making sure it happens downstream of d_drop() (in case
-> when dentry has other references) or dentry going negative (in case we are
-> holding the sole reference to it).
-> 
-> If we can do that, RCU'd dcache lookups won't run into inode reuse at all.
-> Sure, right now d_delete() comes last *and* we want the target inode to stay
-> around past the call of ->unlink().  But if you look at do_unlinkat() you'll
-> see an interesting-looking wart with ihold/iput around vfs_unlink().  Not
-> sure if you remember the story on that one; basically, it's "we'd rather
-> have possible IO on inode freeing to happen outside of the lock on parent".
-> 
-> nfsd and mqueue do the same thing; ksmbd does not.  OTOH, ksmbd appears to
-> force the "make victim go unhashed, sole reference or not".  ecryptfs
-> definitely does that forcing (deliberately so).
-> 
-> That area could use some rethinking, and if we can deal with the inode reuse
-> delay while we are at it...
-> 
-> Overwriting rename() is also interesting in that respect, of course.
-> 
-> I can go and try to RTFS my way through xfs iget-related code, but I'd
-> obviously prefer to do so with at least some overview of that thing
-> from the folks familiar with it.  Seeing that it's a lockless search
-> structure, missing something subtle there is all too easy, especially
-> with the lookup-by-fhandle stuff in the mix...
-> 
-
+--Sean

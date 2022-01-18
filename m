@@ -2,142 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE14492D50
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46458492D56
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348041AbiARSaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244209AbiARSaI (ORCPT
+        id S1348061AbiARSbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:31:15 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36318
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244209AbiARSbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:30:08 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DE8C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:30:08 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id s15so133883pfw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:30:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SWbb1UZG/b7k7Lx9na6HLCxa4UWNr2RlfPnFhxjraRg=;
-        b=f4H5WNnaCHNp+d7K0qMWtzUU7JrzZgs2CLPbFeWIrzTmQ6AMxAts/LARYEPMhhz9Zc
-         traIcym/lekeL97Ouynm24SqNqQCno5Ywn91tcLRTQmH8+1t+uCSNFmdk0XG7ggGQf0b
-         E3BqfQ76zWGS0fP6df+/+yOJ9YceO2F55ZO9NSuIymy19+50eBaEjhFkSNAhrIP5ViBG
-         +LNc3Ahf3r8lf05WZVzaP/BwscV13WDc13OmQ/Z2865qx+CZnpyJKGVOzmMiSiDuJ5sn
-         k0CSsQZqjJd75q9+/AMS0k5w8p+r4KN95wvOGN3cGIv15/i0MhwvnMckr5NDjSiAxwmO
-         YYmA==
+        Tue, 18 Jan 2022 13:31:08 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DE33F407F7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642530667;
+        bh=YFaw660kiMtbZw2aFgls+WQSIT2y3r6EjVtjCEIvW6Q=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=oZ4e3IZ1FuDZEcmRuM46tyr2vrvKPNkqMUll/mWd+pMKeDA44/ugSg5PH+60e/Bsq
+         5KhGGRGvaoNqNJNjfP2xk4jZdbh/d2qRR+vCiFJk2qAUzQuyBwgjUwjsB7+j0jig3Y
+         ub+wdwq9TGKLSuJwyLmfzKObGNltMQZ+GrE+K64Rh6QjZ2nAUkWzR++kxdxESNGTew
+         d3eSoT8usJ6bEEs3qRSWxXogn2c7FbrT0GQzWmn8V+Mmjw6ZC9tM4HI/zgq4FWg4Ns
+         67TjuOo+qnTT5G3OgZXT6ct00PACvErGkfamg7bfx6UQpHOAEEAxGxdg7TMSaWVXkj
+         6Ps3UYXa9sB5w==
+Received: by mail-ed1-f69.google.com with SMTP id t5-20020aa7db05000000b00402670daeb9so6882536eds.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:31:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SWbb1UZG/b7k7Lx9na6HLCxa4UWNr2RlfPnFhxjraRg=;
-        b=Lf5b+GY6Ynp3QomQzCpb4xJGC6dCB2VHG30xKtuPezgpWjoRj9q0zkq3vfnUXkFnKC
-         5y/ntPlkRQaa+WJ2Rcy27saMXrnwenoGLWaEw3B2Vh3v3Wz403ob0hufESVyqTAnJ3ZW
-         tiJsMdsxZ58/mDX7iSLICcQzCCogWNsAexJjKqz/QezBubpfc0zh/oGX4sakW2Tckk99
-         6/Dqj8Uf8kk/wlyBmRiO6/vvaselI0i/7jRFMCvRtzkX6zBm4ZWYAJPIQeRM2Ri0zeTh
-         2MOsri/yjT5kmZW89Tr7twZmC1W2KlVOj7QzMfOxceE83oJWkbTP+I3hPQriTdt9F3GM
-         n9cw==
-X-Gm-Message-State: AOAM5302dJH0fTxVWTOcGDLULTH8mRwd1hL+Fx3kh+R86wKiWSPoASEg
-        DurgXxPDSOOnJNTkkcsrfLEsgA==
-X-Google-Smtp-Source: ABdhPJzB5DUKJcstTUBwBMK55nhluUUChAkq6wKa4PRFr915fyjn1nQYdkdR4oLzUnWTydBXCZaixA==
-X-Received: by 2002:a63:84c8:: with SMTP id k191mr16893333pgd.562.1642530607662;
-        Tue, 18 Jan 2022 10:30:07 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t5sm12971739pfl.6.2022.01.18.10.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 10:30:07 -0800 (PST)
-Date:   Tue, 18 Jan 2022 18:30:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Update the states size cpuid even if
- XCR0/IA32_XSS is reset
-Message-ID: <YecHK2DmooVlMr2U@google.com>
-References: <20220117082631.86143-1-likexu@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YFaw660kiMtbZw2aFgls+WQSIT2y3r6EjVtjCEIvW6Q=;
+        b=AgX/8D+bl8ghBbX1rIqEQ9iZyMJ3sBUgJ/BclIoXxLejQusiqx1VPVaBVn5ZmPpyA7
+         5FNlqCupptCEblLr+muqe//fIp0okO5MDRzYprT7sypqtnEQlFUPh/ofKEpf/E6qxtAi
+         j5p0w40uTeDq3XYGWPYzUePSOfQzO1GtEUokeNkcF7q6E0DoKf3DQvzj02/hSgeGFqbg
+         InZUt7cQWtQ9ZlwBASZ0ptxmBdMcpnmGRbi8eGYCOA009HMAXcszYtx7AKgX4lwKJoFE
+         7RDKG4K+Q+Y1J8tgs+GsEV1YEsUmAXYFy8TEbYvnEkWljzdY07AZczzp1KST0aafHxb9
+         nl0w==
+X-Gm-Message-State: AOAM533iWUTaJkZPPjyynKvwvBNe5onyEPHRuT1hXF9rEy/xzCi5+SAh
+        SqWPo+dwj9V3cnJg5X7Be/4GR1kAlfPrTXPrx5ZGmsOWHENMsRtEb4NLXeqepTnYx8mUY5PBMlJ
+        0hHIwbpVFKzZ6ehmUfSxnxpF5VNFr52PkIF8Xkn1rDQ==
+X-Received: by 2002:a17:906:4fcc:: with SMTP id i12mr21825592ejw.529.1642530667585;
+        Tue, 18 Jan 2022 10:31:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzBs0IMBJhfVZZtUf76zLh8JdoHRYNhTeK8f/e7FszXsAagZM7tbUlsGRQqUmDXyORjeRz+lQ==
+X-Received: by 2002:a17:906:4fcc:: with SMTP id i12mr21825569ejw.529.1642530667370;
+        Tue, 18 Jan 2022 10:31:07 -0800 (PST)
+Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id p23sm3741934ejr.191.2022.01.18.10.31.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 10:31:06 -0800 (PST)
+Message-ID: <b35fa0ff-18a0-2a9d-5a1b-378ef2fef66f@canonical.com>
+Date:   Tue, 18 Jan 2022 19:31:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117082631.86143-1-likexu@tencent.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 04/16] clk: samsung: fsd: Add initial clock support
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, Jayati Sahu <jayati.sahu@samsung.com>,
+        Ajay Kumar <ajaykumar.rs@samsung.com>
+References: <20220118144851.69537-1-alim.akhtar@samsung.com>
+ <CGME20220118150028epcas5p282c05b78f28a9b11d46da94e78330f0c@epcas5p2.samsung.com>
+ <20220118144851.69537-5-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220118144851.69537-5-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On 18/01/2022 15:48, Alim Akhtar wrote:
+> Add initial clock support for FSD (Full Self-Driving) SoC
+> which is required to bring-up platforms based on this SoC.
 > 
-> XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
-> both RESET and INIT. In both cases, the size in bytes of the XSAVE
-> area containing all states enabled by XCR0 or (XCRO | IA32_XSS)
-> needs to be updated.
-> 
-> Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
-> Signed-off-by: Like Xu <likexu@tencent.com>
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Jayati Sahu <jayati.sahu@samsung.com>
+> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
+> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  arch/x86/kvm/x86.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/clk/samsung/Kconfig   |   7 +
+>  drivers/clk/samsung/Makefile  |   1 +
+>  drivers/clk/samsung/clk-fsd.c | 308 ++++++++++++++++++++++++++++++++++
+>  drivers/clk/samsung/clk-pll.c |   1 +
+>  drivers/clk/samsung/clk-pll.h |   1 +
+>  5 files changed, 318 insertions(+)
+>  create mode 100644 drivers/clk/samsung/clk-fsd.c
 > 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 76b4803dd3bd..5748a57e1cb7 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11134,6 +11134,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  	struct kvm_cpuid_entry2 *cpuid_0x1;
->  	unsigned long old_cr0 = kvm_read_cr0(vcpu);
->  	unsigned long new_cr0;
-> +	bool need_update_cpuid = false;
->  
->  	/*
->  	 * Several of the "set" flows, e.g. ->set_cr0(), read other registers
-> @@ -11199,6 +11200,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  
->  		vcpu->arch.msr_misc_features_enables = 0;
->  
-> +		if (vcpu->arch.xcr0 != XFEATURE_MASK_FP)
-> +			need_update_cpuid = true;
->  		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
->  	}
->  
-> @@ -11216,6 +11219,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
->  	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
->  
-> +	if (vcpu->arch.ia32_xss)
-> +		need_update_cpuid = true;
+> diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+> index 0e18d6ff2916..11587eb87fc4 100644
+> --- a/drivers/clk/samsung/Kconfig
+> +++ b/drivers/clk/samsung/Kconfig
+> @@ -124,3 +124,10 @@ config S3C2443_COMMON_CLK
+>  	help
+>  	  Support for the clock controller present on the Samsung
+>  	  S3C2416/S3C2443 SoCs. Choose Y here only if you build for this SoC.
+> +
+> +config TESLA_FSD_COMMON_CLK
+> +	bool "Tesla FSD clock controller support" if COMPILE_TEST
+> +	depends on COMMON_CLK_SAMSUNG
+> +	help
+> +	  Support for the clock controller present on the Tesla FSD SoC.
+> +	  Choose Y here only if you build for this SoC.
 
-This means that kvm_set_msr_common()'s handling of MSR_IA32_XSS also needs to
-update kvm_update_cpuid_runtime().  And then for bnoth XCR0 and XSS, I would very
-strongly prefer that use the helpers to write the values and let the helpers call
-kvm_update_cpuid_runtime().  Yes, that will mean kvm_update_cpuid_runtime() may be
-called multiple times during INIT, but that's already true (CR4), and this isn't
-exactly a fast path.
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 55518b7d3b96..22d4b1d15e94 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11256,7 +11256,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-
-                vcpu->arch.msr_misc_features_enables = 0;
-
--               vcpu->arch.xcr0 = XFEATURE_MASK_FP;
-+               __kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
-        }
-
-        /* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
-@@ -11273,7 +11273,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-        cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
-        kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
-
--       vcpu->arch.ia32_xss = 0;
-+       __kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
-
-        static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
+The clock drivers Kconfig is organized in a way, that platform should
+select only COMMON_CLK_SAMSUNG (first comment in a file), so let's keep
+it consistent also for FSD. "select TESLA_FSD_COMMON_CLK if ARM64 &&
+ARCH_TESLA_FSD" and skip the select in Kconfig.platform in following patch.
 
 
+Best regards,
+Krzysztof

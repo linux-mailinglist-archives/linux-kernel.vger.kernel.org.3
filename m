@@ -2,157 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD94649227E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44576492270
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345584AbiARJTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S1345533AbiARJSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:18:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345553AbiARJTF (ORCPT
+        with ESMTP id S1345515AbiARJSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:19:05 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1A9C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:19:05 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9kdD-0006Nd-T3; Tue, 18 Jan 2022 10:18:23 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9kdA-00Ayd5-Tc; Tue, 18 Jan 2022 10:18:20 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9kd9-0003a7-SE; Tue, 18 Jan 2022 10:18:19 +0100
-Date:   Tue, 18 Jan 2022 10:18:19 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Lee Jones <lee.jones@linaro.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-Message-ID: <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
- <YeQpWu2sUVOSaT9I@kroah.com>
+        Tue, 18 Jan 2022 04:18:35 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D24C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:18:35 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id a18so76626581edj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:18:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=epXjxVZYGdrS5V2vncnZJ3QtAgAqtwFKvMdQBktjbpw=;
+        b=IFjPIDyeHD1pa5vazociaIVltQeXFZP1IdZTMMldhbplf7rS2ghHX6lhePpdxZDlN4
+         pyD/vK623ixNxbD156KLjuu+xovW29aHl7KMyPjoM8UHmrx0T7gaExFrg5dtNLneIk05
+         8lHTr3rAmRDP7a2x25z+hqUWZb4eJTe1/KLbmMqJCuvy5aEcVQaoFB9Y/IbA/Cl7yQu5
+         BkkBu3jJR9BBK5r3tgF2Me27nwdmkXjKyBULFKE08+siXHIPY9zyLt/FdMe23siMG10V
+         7HfCoKachHeLruBO0zJHVKKgNXN+sGZ/jOnJqWyjKFs2zwicoBfakSbE6GN7QxVFweur
+         WZag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=epXjxVZYGdrS5V2vncnZJ3QtAgAqtwFKvMdQBktjbpw=;
+        b=WikBn4vJ/w/S/GBwX+AFURLU9W2BDoHJA4o7YypVSiti6r9B7tJngDhXsnls5PKTfE
+         ospIuaJ1zfAPoOnF9E1yzB3gazP6fpDd2XJh1gdLCdPknCewrcjYks/2+v83ro2LaQQs
+         Gr+mB70SHYBhBKtkBrdnjQqGhQzlKVxKtsucYtJ52hzNhIRC9eG2H5acaa3cF9lRkI+K
+         tTgTjTlcGXoLZh7qOTTrctjXlDEfzvIXqTLo1378YfoFFOPvwAMScc2M0vt87MsCX2WI
+         1SSILV2RO4h814GWbImR8oWjlU6Y7AfNhW5MRs2Yg0bKv6DroS0os1pjz6SFmOwSQLYv
+         uEdw==
+X-Gm-Message-State: AOAM533cjFvEj/RZjr0Xw6fuiyfz8d7jyDqO7BpPiC/wEj2uqQzAiGvQ
+        B8gu8eD5SvnPEWOgyPz6teTC2w==
+X-Google-Smtp-Source: ABdhPJzdwWCxEjIeT5KJlR/Ba2GZ8dPe4vxd5ULvLy5WwNe9MrQCFdDTOTcEXmSEqqi1EyMCLYF1kA==
+X-Received: by 2002:a05:6402:158:: with SMTP id s24mr25490055edu.144.1642497513890;
+        Tue, 18 Jan 2022 01:18:33 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.239])
+        by smtp.gmail.com with ESMTPSA id w22sm3411723eji.87.2022.01.18.01.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 01:18:33 -0800 (PST)
+Date:   Tue, 18 Jan 2022 17:18:27 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Marco Elver <elver@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
+        sumanthk@linux.ibm.com, hca@linux.ibm.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] perf test: Test 73 Sig_trap fails on s390
+Message-ID: <20220118091827.GA98966@leoy-ThinkPad-X240s>
+References: <20211216151454.752066-1-tmricht@linux.ibm.com>
+ <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
+ <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4nmi7jsy4ulpuolr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YeQpWu2sUVOSaT9I@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 17, 2022 at 03:39:10PM +0000, John Garry wrote:
+> On 16/12/2021 15:48, Marco Elver wrote:
+> 
+> +
+> 
+> > On Thu, 16 Dec 2021 at 16:15, Thomas Richter<tmricht@linux.ibm.com>  wrote:
+> > > In Linux next kernel
+> > > Commit 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
+> > > introduced the new test which uses breakpoint events.
+> > > These events are not supported on s390 and PowerPC and always fail:
+> > > 
+> > >   # perf test -F 73
+> > >   73: Sigtrap                                                         : FAILED!
+> > >   #
+> > > 
+> > > Fix it the same way as in the breakpoint tests in file
+> > > tests/bp_account.c where these type of tests are skipped on
+> > > s390 and PowerPC platforms.
+> > > 
+> > > With this patch skip this test on both platforms.
+> > > 
+> > > Output after:
+> > >   # ./perf test -F 73
+> > >   73: Sigtrap
+> > > 
+> > > Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
+> > > 
+> > > Cc: Marco Elver<elver@google.com>
+> > > Signed-off-by: Thomas Richter<tmricht@linux.ibm.com>
+> > Acked-by: Marco Elver<elver@google.com>
+> > 
+> > Thanks, and sorry for missing this case!
+> > 
+> 
+> I am finding that this test hangs on my arm64 machine:
+> 
+> john@debian:~/kernel-dev2/tools/perf$ sudo ./perf test -vvv 73
+>  73: Sigtrap:
+> --- start ---
+> test child forked, pid 45193
 
---4nmi7jsy4ulpuolr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Both Arm and Arm64 platforms cannot support signal handler with
+breakpoint, please see the details in [1].  So I think we need
+something like below:
 
-On Sun, Jan 16, 2022 at 03:19:06PM +0100, Greg Kroah-Hartman wrote:
-> On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-K=F6nig wrote:
-> > A possible compromise: We can have both. We rename
-> > platform_get_irq_optional() to platform_get_irq_silent() (or
-> > platform_get_irq_silently() if this is preferred) and once all users are
-> > are changed (which can be done mechanically), we reintroduce a
-> > platform_get_irq_optional() with Sergey's suggested semantic (i.e.
-> > return 0 on not-found, no error message printking).
->=20
-> Please do not do that as anyone trying to forward-port an old driver
-> will miss the abi change of functionality and get confused.  Make
-> build-breaking changes, if the way a function currently works is
-> changed in order to give people a chance.
+static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+{
+        ...
 
-Fine for me. I assume this is a Nack for Sergey's patch?
+        if (!BP_SIGNAL_IS_SUPPORTED) {
+                pr_debug("Test not supported on this architecture");
+                return TEST_SKIP;
+        }
 
-Best regards
-Uwe
+        ...
+}
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
+here.
 
---4nmi7jsy4ulpuolr
-Content-Type: application/pgp-signature; name="signature.asc"
+[1] https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
 
------BEGIN PGP SIGNATURE-----
+> And fails on my x86 broadwell machine:
+> 
+> john@localhost:~/kernel-dev2/tools/perf> sudo ./perf test -v 73
+> 73: Sigtrap                                                         :
+> --- start ---
+> test child forked, pid 22255
+> FAILED sys_perf_event_open(): Argument list too long
+> test child finished with -1
+> ---- end ----
+> Sigtrap: FAILED!
+> john@localhost:~/kernel-dev2/tools/perf>
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHmhdgACgkQwfwUeK3K
-7AlOfwf/RajwcOGZOaXu4/Hu0uIDDH01Izth3e7+cbt0DvzofBxZhrwLi6+7R8Ii
-FDvio63jvvz41IZoKpB3Sp3cJe6N5nHxfoeVbVFx1oDC5ZSb3xpzIKBpz6usYWSK
-mpEzG1FLl/zHhNcFBvzOrkoJNhHOKKqTkCMQ9+SMFB2QpzY2GlhGyeloYsR5wRlS
-36dfdheA3MnzMe+YgqcykvdU78oW4Ajcnq+31xfkY4u4FtLXz44Pz4j32buAaqtw
-/Ryrr0NnSSAdwMkNMebBf3XX8emOhXd3w/ActLJA50YN3K1ePF1ViBaNwB6wIGGA
-DmnwP6lCav2JoRm3yOWVlcLDeltVJA==
-=IrhS
------END PGP SIGNATURE-----
+It is a bit suprise for the failure on x86, as I remembered x86 platform
+can support signal handler with hw breakpoint.  And from the error
+"Argument list too long", it should be a different issue from other
+archs.
 
---4nmi7jsy4ulpuolr--
+Thanks,
+Leo

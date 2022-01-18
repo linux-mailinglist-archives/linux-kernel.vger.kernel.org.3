@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6234922F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD524922F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbiARJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:39:29 -0500
-Received: from mail-wm1-f48.google.com ([209.85.128.48]:45787 "EHLO
-        mail-wm1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbiARJj2 (ORCPT
+        id S236244AbiARJjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235969AbiARJjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:39:28 -0500
-Received: by mail-wm1-f48.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso3185290wms.4;
-        Tue, 18 Jan 2022 01:39:27 -0800 (PST)
+        Tue, 18 Jan 2022 04:39:46 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16007C061574;
+        Tue, 18 Jan 2022 01:39:46 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id m3so54181152lfu.0;
+        Tue, 18 Jan 2022 01:39:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=a0YVlEWbjgSbayNkq6pHh+iGzDRMa2x1N0HZiV2J5M8=;
+        b=H+GBCxLRExjSJlYdrsQ+ZmaBiqmUtbP3o4f++IGayxtMEoBGd8XS+BxXsd9baWgDEc
+         D7XoACSmazPv4dmQiZI8VJSYaAnpHjDKHC4V72hTHbtIHcLuR9uXaHjFMvV+6u7TkF3I
+         PYxeUj6oC5ff6TYvmgQnIaGPlCGfWxPV23AWxG4FH1xxbzC9XP5lLCsZJe1+WkIGtB2u
+         CtVwJzokEzgqIugBCicPdIyabeve/FI+fm4eAv3JlxYcTvE3iRqfERLshLzWqIpwybX5
+         YHY5M51WuLDVSiDqTtG/Ef+bEYkbA+m1RuXxkVpkSsJIvaicN6WPUoy0KsS3LuBBC/AL
+         jZjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=mpMvg9Xq83m6YgFkwSrnYeaarj8V2qnTV6HoEOfUKrc=;
-        b=5wqQdrQRBv+EYmA8HZx6nK9cNxbQPvliCiuNLpmpj/9Uh+5fAK/I5Ge4aeEKilHUcf
-         8nlQrPDTb51FYG69j76ni8ZLw8Y9JSm7JYKCrdKTXG7FWM5Aklu/ifp5h+bQrxlHwMpk
-         kVvYp7QRwwaxZmE0f/9NZXBa5wgaX6HvXGvsTqQOV+i231e1XNLNCSgycXWLVppF5u6c
-         s7ZVVNWDXMJ94oSH/29QAQkLT2u9QKr7sjR227mXAGR9zBBMT3TgmBq9G/PDNF6p+E/G
-         k1rXteUDNsR5xLLq6fzR6Py/0bJBBMH292USRXGRceO7frkCx2CYrcab4Q7E8azN/uO7
-         64xw==
-X-Gm-Message-State: AOAM5332BO3zli12+9/lURTqz4JKtgBygfEw28Z41lNXx5XAb0RQnvGV
-        /Ui9YkoFgSzvWT4T/Zs7aaI=
-X-Google-Smtp-Source: ABdhPJw1cCHpAySIqyCarXq5MJKNu6tszRGXIckjEH6mzi+KENvCwwLTlOyRKIEaPx5b3RDe6kUqzQ==
-X-Received: by 2002:a05:600c:4153:: with SMTP id h19mr16847619wmm.50.1642498767408;
-        Tue, 18 Jan 2022 01:39:27 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id s12sm89617wru.25.2022.01.18.01.39.26
+        bh=a0YVlEWbjgSbayNkq6pHh+iGzDRMa2x1N0HZiV2J5M8=;
+        b=FuW3uwv5+WOcC/hATsPHM560rb2h8UgE2S+eq7CXzEawosM4Ut1Qdtm+iSrHvOpEi/
+         EusMx/RXcm2IfiL4uin/xGsn+RTsi4GQ3F5kG75wkj2KpwTwsnOsYfJU8zavrHWCzU9I
+         4aQpF9ao0gpGc6wSC/xeUq+SO2pDC5BqsZ7wvI67STtUGq4YMsx08Fjxact/lv0Dxznq
+         yYARWvbEY5rQ0Zn2doXEeJ4dya2e8IY5RfLXf6+HKzvNh7Jc761l8jxguDMbw0Ww+3gx
+         a+24UNKelj8wltfnyhnjR0o9dzpOb4GTH5JwGjY9zaHr5xuYzVrZ6/8wL7eZB9loDGWN
+         b3qw==
+X-Gm-Message-State: AOAM533iexUuvlaKIyONCGNpOX1+c+JGBl/Nh0JxhHSk1cqAmyJ7C5uG
+        Ht5G8fa69nrbi2IDakoLbhg=
+X-Google-Smtp-Source: ABdhPJwrsOw6fWZQAvQPhT0+8RdJOK/tXZZPgey8qzx/rfO+H5bfWmNIDPDsdz61+hdPuHU4nH9kHg==
+X-Received: by 2002:a2e:98c8:: with SMTP id s8mr20029474ljj.407.1642498784488;
+        Tue, 18 Jan 2022 01:39:44 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id d18sm659567ljl.22.2022.01.18.01.39.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 01:39:26 -0800 (PST)
-Message-ID: <7a8016ba-730b-f599-2032-31cf03990a55@kernel.org>
-Date:   Tue, 18 Jan 2022 10:39:25 +0100
+        Tue, 18 Jan 2022 01:39:44 -0800 (PST)
+Message-ID: <3bfdaf7b-c34d-1396-c6c7-2e22996b7643@gmail.com>
+Date:   Tue, 18 Jan 2022 12:39:43 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH V6 3/5] tty: serial: meson: Describes the calculation of
- the UART baud rate clock using a clock frame
+Subject: Re: [PATCH AUTOSEL 5.15 123/188] drm/tegra: dc: rgb: Allow changing
+ PLLD rate on Tegra30+
 Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220118030911.12815-1-yu.tu@amlogic.com>
- <20220118030911.12815-4-yu.tu@amlogic.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220118030911.12815-4-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Thierry Reding <treding@nvidia.com>, thierry.reding@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, jonathanh@nvidia.com,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org
+References: <20220118023152.1948105-1-sashal@kernel.org>
+ <20220118023152.1948105-123-sashal@kernel.org>
+ <1fa23a4d-f647-c3ae-df8c-4cbd91f5a4c6@gmail.com>
+In-Reply-To: <1fa23a4d-f647-c3ae-df8c-4cbd91f5a4c6@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18. 01. 22, 4:09, Yu Tu wrote:
-> Using the common Clock code to describe the UART baud rate clock
-> makes it easier for the UART driver to be compatible with the
-> baud rate requirements of the UART IP on different meson chips.
-...
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-...
-> @@ -629,57 +640,105 @@ static struct uart_driver meson_uart_driver = {
->   	.cons		= MESON_SERIAL_CONSOLE,
->   };
->   
-> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
-> -						 const char *id)
-> -{
-> -	struct clk *clk = NULL;
-> -	int ret;
-> -
-> -	clk = devm_clk_get(dev, id);
-> -	if (IS_ERR(clk))
-> -		return clk;
-> -
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "couldn't enable clk\n");
-> -		return ERR_PTR(ret);
-> -	}
-> -
-> -	devm_add_action_or_reset(dev,
-> -			(void(*)(void *))clk_disable_unprepare,
-> -			clk);
-> -
-> -	return clk;
-> -}
-> +static struct clk_div_table xtal_div_table[] = {
+18.01.2022 12:37, Dmitry Osipenko пишет:
+> 18.01.2022 05:30, Sasha Levin пишет:
+>> From: Dmitry Osipenko <digetx@gmail.com>
+>>
+>> [ Upstream commit 0c921b6d4ba06bc899fd84d3ce1c1afd3d00bc1c ]
+>>
+>> Asus Transformer TF700T is a Tegra30 tablet device which uses RGB->DSI
+>> bridge that requires a precise clock rate in order to operate properly.
+>> Tegra30 has a dedicated PLL for each display controller, hence the PLL
+>> rate can be changed freely. Allow PLL rate changes on Tegra30+ for RGB
+>> output. Configure the clock rate before display controller is enabled
+>> since DC itself may be running off this PLL and it's not okay to change
+>> the rate of the active PLL that doesn't support dynamic frequency
+>> switching since hardware will hang.
+>>
+>> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> #TF700T
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> Signed-off-by: Thierry Reding <treding@nvidia.com>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  drivers/gpu/drm/tegra/dc.c  | 27 ++++++++++++--------
+>>  drivers/gpu/drm/tegra/dc.h  |  1 +
+>>  drivers/gpu/drm/tegra/rgb.c | 49 +++++++++++++++++++++++++++++++++++--
+>>  3 files changed, 65 insertions(+), 12 deletions(-)
+> 
+> Hi,
+> 
+> This patch shouldn't be ported to any stable kernel because h/w that
+> needs this patch was just merged to the 5.17.
 
-This can be const, right?
-
-> +	{0, 3},
-> +	{1, 1},
-> +	{2, 2},
-> +	{3, 2},
-
-Not sure if you didn't remove too much whitespace. I think it should be 
-like: "{ 0, 3 },". But I actually don't care, it's a minor thing.
-
-I cannot comment on the rest (clk and OF part) as my knowledge is pretty 
-limited there. Leaving up to others.
-
-thanks,
--- 
-js
-suse labs
+* support of h/w that needs..

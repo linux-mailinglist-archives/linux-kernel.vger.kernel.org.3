@@ -2,214 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EEB492CB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1CD492CB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347611AbiARRws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:52:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23448 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347579AbiARRwr (ORCPT
+        id S1347624AbiARRxZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 12:53:25 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:35934 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244034AbiARRxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:52:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642528366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xHlvo7QWK5LPEIMsgEhcwsrS7X3dVRtPwrg1PSoq2kI=;
-        b=H/ncG+j3+X5fwOYAPYKHsRaqxSQezkd1OM/4BYaUdaBMKecg4h2n4SK33reXzkoJ1h4hVP
-        Gux8AlDzdzSJVZbEMDjMUTiR96U2fmNr7qW+EMZJwEjx/X9LFtQd1Zboj++nCbpq0NSjJw
-        N1fAAOR/RHk6/lgkoWSvosF9TFDMUIY=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-v9XVSt2MPi-YQfXUAhUwTg-1; Tue, 18 Jan 2022 12:52:44 -0500
-X-MC-Unique: v9XVSt2MPi-YQfXUAhUwTg-1
-Received: by mail-oi1-f199.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso13969590oif.23
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:52:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xHlvo7QWK5LPEIMsgEhcwsrS7X3dVRtPwrg1PSoq2kI=;
-        b=r+RbInHhW/McxTQYIeHmJqgv3PvHzxuxXRcTXLeMTEfEXBCJxHzUE1/kRL0zMb+i2D
-         hFCvpmNj/dSHU+tzH8gETytbcgR5gA9QDQZ60d+wa7vZxpvTpjmAKCNBQojCmTbUDits
-         ZQrjW5M4+lGDnm+IOJjAIAu+fB5SXLklh929d++GQmN9Uf96NsZnco18rN9ZKPaSnrYB
-         mSTLQbG7QrJ4ANpZWMN+n5vHQFIAYA/7VwO4vcuIbwFN8Nkykt2+dIeIbvAVlKjIpnmh
-         uSbTi9Fcm6uzvL+SOLCT+4Ks4uMPasCEDHyyJ3TrOSsJJguCwbx4ox+eEXtA6tAoaPiy
-         42/Q==
-X-Gm-Message-State: AOAM532V9L9sWBazE7Tjo3K2nFTjb7sPvg8HegaJH+FzI9piqVtXKMr0
-        90ZsMpF/EZx8NKg/eSoP0htF7oipvNWM2PAWTtIVUr9dGzCk7e3C95fFTy6t9JZPaoBocM7H/r3
-        UEgr0vIJ0xsPlZJnNCJ8cLGXp
-X-Received: by 2002:a05:6808:358:: with SMTP id j24mr14202760oie.134.1642528362475;
-        Tue, 18 Jan 2022 09:52:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzvVcNmkskHyhTreEEzS9pNPBANVdlgKxVDSDUChABCQT/JWSRNCjaMFTZjLIpxYA1SbT7TbQ==
-X-Received: by 2002:a05:6808:358:: with SMTP id j24mr14202741oie.134.1642528362174;
-        Tue, 18 Jan 2022 09:52:42 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::c])
-        by smtp.gmail.com with ESMTPSA id c15sm6758402ooq.30.2022.01.18.09.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 09:52:41 -0800 (PST)
-Date:   Tue, 18 Jan 2022 09:52:39 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chi-Thanh Hoang <chithanh.hoang@gmail.com>
-Subject: Re: Issue using faddr2line on kernel modules
-Message-ID: <20220118175239.lqxi2ycgeusk5pxl@treble>
-References: <CAPDLWs_iSrbXwfKa6CQ0f6H6GE4U88uRhaFgabRjMmSuSEpsiA@mail.gmail.com>
- <20220117194836.vj2rxr3wocrtdx7k@treble>
- <20220117202751.bmwvfsnqxokob6d2@treble>
- <CAPDLWs-yX4FNrmnF3rHrEoHNktcw2Yi8X6qidss-qKpdw=r4RQ@mail.gmail.com>
+        Tue, 18 Jan 2022 12:53:24 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:47986)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n9sfa-0023gS-Lb; Tue, 18 Jan 2022 10:53:22 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:59944 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n9sfZ-007NEG-Jr; Tue, 18 Jan 2022 10:53:22 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211213225350.27481-1-ebiederm@xmission.com>
+        <9363765f-9883-75ee-70f1-a1a8e9841812@gmail.com>
+        <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
+        <5bbb54c4-7504-cd28-5dde-4e5965496625@gmail.com>
+        <87bl0m14ew.fsf@email.froward.int.ebiederm.org>
+        <6692758a-0af2-67e0-26fd-365625b3ad0c@gmail.com>
+        <87iluqtcj3.fsf@email.froward.int.ebiederm.org>
+        <99353796-eea7-b765-f355-46e50f1b8773@gmail.com>
+Date:   Tue, 18 Jan 2022 11:52:56 -0600
+In-Reply-To: <99353796-eea7-b765-f355-46e50f1b8773@gmail.com> (Dmitry
+        Osipenko's message of "Tue, 18 Jan 2022 20:30:53 +0300")
+Message-ID: <87o8496idj.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPDLWs-yX4FNrmnF3rHrEoHNktcw2Yi8X6qidss-qKpdw=r4RQ@mail.gmail.com>
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1n9sfZ-007NEG-Jr;;;mid=<87o8496idj.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19IW9E8YSc8oWkIg8XRmmxKSG6JFJ1R4z0=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,XMSubLong,
+        XM_B_Unicode autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        *  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Dmitry Osipenko <digetx@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 474 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 3.9 (0.8%), b_tie_ro: 2.6 (0.6%), parse: 0.78
+        (0.2%), extract_message_metadata: 12 (2.6%), get_uri_detail_list: 2.5
+        (0.5%), tests_pri_-1000: 9 (1.9%), tests_pri_-950: 1.00 (0.2%),
+        tests_pri_-900: 0.80 (0.2%), tests_pri_-90: 73 (15.4%), check_bayes:
+        72 (15.1%), b_tokenize: 8 (1.6%), b_tok_get_all: 11 (2.3%),
+        b_comp_prob: 2.2 (0.5%), b_tok_touch_all: 48 (10.2%), b_finish: 0.66
+        (0.1%), tests_pri_0: 360 (76.1%), check_dkim_signature: 0.45 (0.1%),
+        check_dkim_adsp: 1.70 (0.4%), poll_dns_idle: 0.19 (0.0%),
+        tests_pri_10: 2.8 (0.6%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00
+        (0.0%)
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
+ special case
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:10:28AM +0530, Kaiwan N Billimoria wrote:
-> Hi Josh,
-> 
-> Actually your first patch - the one you mentioned had other issues -
-> worked perfectly when applied:
-> 
-> scripts/faddr2line ./oops_tryv2.ko do_the_work+0x16f/0x194
-> do_the_work+0x16f/0x0000000000000194:
-> do_the_work at <...>/oops_tryv2/oops_tryv2.c:62
-> 
-> The second one still failed in the same manner:
-> 
-> scripts/faddr2line ./oops_tryv2.ko do_the_work+0x16f/0x194
-> bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
-> 
-> So, is it possible to fixup issues with the first version?
-> What are these issues?
+Dmitry Osipenko <digetx@gmail.com> writes:
 
-The first patch basically reverts the fix in commit efdb4167e676
-("scripts/faddr2line: Fix "size mismatch" error").  That would be nice
-as it's simpler and more robust, but unfortunately it would cause a lot
-of "size mismatch" errors with vmlinux symbols.
+> 11.01.2022 20:20, Eric W. Biederman пишет:
+>> Dmitry Osipenko <digetx@gmail.com> writes:
+>> 
+>>> 08.01.2022 21:13, Eric W. Biederman пишет:
+>>>> Dmitry Osipenko <digetx@gmail.com> writes:
+>>>>
+>>>>> 05.01.2022 22:58, Eric W. Biederman пишет:
+>>>>>>
+>>>>>> I have not yet been able to figure out how to run gst-pluggin-scanner in
+>>>>>> a way that triggers this yet.  In truth I can't figure out how to
+>>>>>> run gst-pluggin-scanner in a useful way.
+>>>>>>
+>>>>>> I am going to set up some unit tests and see if I can reproduce your
+>>>>>> hang another way, but if you could give me some more information on what
+>>>>>> you are doing to trigger this I would appreciate it.
+>>>>>
+>>>>> Thanks, Eric. The distro is Arch Linux, but it's a development
+>>>>> environment where I'm running latest GStreamer from git master. I'll try
+>>>>> to figure out the reproduction steps and get back to you.
+>>>>
+>>>> Thank you.
+>>>>
+>>>> Until I can figure out why this is causing problems I have dropped the
+>>>> following two patches from my queue:
+>>>>  signal: Make SIGKILL during coredumps an explicit special case
+>>>>  signal: Drop signals received after a fatal signal has been processed
+>>>>
+>>>> I have replaced them with the following two patches that just do what
+>>>> is needed for the rest of the code in the series:
+>>>>  signal: Have prepare_signal detect coredumps using
+>>>>  signal: Make coredump handling explicit in complete_signal
+>>>>
+>>>> Perversely my failure to change the SIGKILL handling when coredumps are
+>>>> happening proves to me that I need to change the SIGKILL handling when
+>>>> coredumps are happening to make the code more maintainable.
+>>>
+>>> Eric, thank you again. I started to look at the reproduction steps and
+>>> haven't completed it yet. Turned out the problem affects only older
+>>> NVIDIA Tegra2 Cortex-A9 CPU that lacks support of ARM NEON instructions
+>>> set, hence the problem isn't visible on x86 and other CPUs out of the
+>>> box. I'll need to check whether the problem could be simulated on all
+>>> arches or maybe it's specific to VFP exception handling of ARM32.
+>> 
+>> It sounds like the gstreamer plugins only fail on certain hardware on
+>> arm32, and things don't hang in coredumps unless the plugins fail.
+>> That does make things tricky to minimize.
+>> 
+>> I have just verified that the known problematic code is not
+>> in linux-next for Jan 11 2022.
+>> 
+>> If folks as they have time can double check linux-next and verify all is
+>> well I would appreciate it.  I don't expect that there are problems but
+>> sometimes one problem hides another.
+>
+> Hello Eric,
+>
+> I reproduced the trouble on x86_64.
+>
+> Here are the reproduction steps, using ArchLinux and linux-next-20211224:
+>
+> ```
+> sudo pacman -S base-devel git mesa glu meson wget
+> git clone https://github.com/grate-driver/gstreamer.git
+> cd gstreamer
+> git checkout sigill
+> meson --prefix=/usr -Dgst-plugins-base:playback=enabled -Dgst-devtools:validate=disabled build
+> cd build
+> sudo ninja install
+> wget https://www.peach.themazzone.com/big_buck_bunny_720p_h264.mov
+> rm -r ~/.cache/gstreamer-1.0
+> gst-play-1.0 ./big_buck_bunny_720p_h264.mov
+> ```
+>
+> The SIGILL, thrown by [1], causes the hang. There is no hang using v5.16.1 kernel. 
+>
+> [1] https://github.com/grate-driver/gstreamer/commit/006f9a2ee6dcf7b31c9b5413815d6054d82a3b2f
 
-Can you give the output of 'nm -n ./oops_tryv2.ko'?  There must be some
-text symbol immediately after the do_the_work() symbol which is either
-out of order, or part of another section.
+Thank you.
 
-Is do_the_work() in the .text section?
+I will verify this works before I add my updated version to
+my signal-for-v5.18 branch.
 
-> On Tue, Jan 18, 2022 at 1:57 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> >
-> > On Mon, Jan 17, 2022 at 11:48:39AM -0800, Josh Poimboeuf wrote:
-> > > On Mon, Jan 17, 2022 at 10:27:14AM +0530, Kaiwan N Billimoria wrote:
-> > > > Hi there,
-> > > >
-> > > > Am researching using the cool faddr2line script to help debug Oops'es
-> > > > from kernel modules..
-> > > > I find it works just fine when used against the unstripped vmlinux
-> > > > with debug symbols.
-> > > >
-> > > > My use case is for a kernel module which Oopses, though. Here's my scenario:
-> > > > I built a module on a custom debug kernel (5.10.60) with most debug
-> > > > options enabled...
-> > > > KASLR is enabled by default as well.
-> > > >
-> > > > A test kernel module Oopses on my x86_64 guest running this kernel with:
-> > > > RIP: 0010:do_the_work+0x15b/0x174 [oops_tryv2]
-> > > >
-> > > > So, i try this:
-> > > >
-> > > > $ <...>/linux-5.10.60/scripts/faddr2line ./oops_tryv2.ko do_the_work+0x15b/0x174
-> > > > bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
-> > > > $
-> > > >
-> > > > (It works fine with addr2line though!).
-> > > > Now I think I've traced the faddr2line script's failure to locate
-> > > > anything down to this:
-> > > > ...
-> > > > done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 ==
-> > > > fn { found=1; line    =$0; start=$1; next } found == 1 { found=0;
-> > > > print line, "0x"$1 } END {if (found == 1) print     line, end; }')
-> > > >
-> > > > The nm output is:
-> > > > $ nm -n ./oops_tryv2.ko |grep -i do_the_work
-> > > > 0000000000000000 t do_the_work
-> > > > $
-> > > >
-> > > > nm shows the text addr as 0x0; this is obviously incorrect (same 0x0
-> > > > with objdump -d on the module).
-> > > > Am I missing something? Any suggestions as to what I can try, to get
-> > > > faddr2line working?
-> > >
-> > > Hi Kaiwan,
-> > >
-> > > Thanks for reporting this issue.  The module text address of 0x0 is not
-> > > necessarily incorrect, as the address is relative the the module, where
-> > > all text usually starts at zero.
-> > >
-> > > I was able to recreate this problem using a module which only has a
-> > > single function in .text.  Does this fix it?
-> >
-> > Actually, that patch has other problems.  Try this one?
-> >
-> > ----
-> >
-> > From: Josh Poimboeuf <jpoimboe@redhat.com>
-> > Subject: [PATCH] scripts/faddr2line: Only look for text symbols when
-> >  calculating function size
-> >
-> > With the following commit:
-> >
-> >   efdb4167e676 ("scripts/faddr2line: Fix "size mismatch" error")
-> >
-> > ... it was discovered that faddr2line can't just read a function's ELF
-> > size, because that wouldn't match the kallsyms function size which is
-> > printed in the stack trace.  The kallsyms size includes any padding
-> > after the function, whereas the ELF size does not.
-> >
-> > So faddr2line has to manually calculate the size of a function similar
-> > to how kallsyms does.  It does so by starting with a sorted list of
-> > symbols and subtracting the function address from the subsequent
-> > symbol's address.
-> >
-> > That calculation is broken in the case where the function is the last
-> > (or only) symbol in the .text section.  The next symbol in the sorted
-> > list might actually be a data symbol, which can break the function size
-> > detection:
-> >
-> >   $ scripts/faddr2line sound/soundcore.ko sound_devnode+0x5/0x35
-> >   bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
-> >
-> > Similar breakage can occur when reading from a .o file.
-> >
-> > Fix it by only looking for text symbols.
-> >
-> > Fixes: efdb4167e676 ("scripts/faddr2line: Fix "size mismatch" error")
-> > Reported-by: Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> > ---
-> >  scripts/faddr2line | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/faddr2line b/scripts/faddr2line
-> > index 6c6439f69a72..2a130134f1e6 100755
-> > --- a/scripts/faddr2line
-> > +++ b/scripts/faddr2line
-> > @@ -189,7 +189,7 @@ __faddr2line() {
-> >
-> >                 DONE=1
-> >
-> > -       done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
-> > +       done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$2 !~ /[Tt]/ {next} $3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
-> >  }
-> >
-> >  [[ $# -lt 2 ]] && usage
-> > --
-> > 2.31.1
-> >
-> 
+Have you by any chance tried a newer version of linux-next without
+commit fbc11520b58a ("signal: Make SIGKILL during coredumps an explicit
+special case") in it?
 
--- 
-Josh
+If not I will double check that my pulling the commit out does not break
+in the case you have documented.
 
+Eric

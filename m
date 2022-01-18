@@ -2,66 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85110492EB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F26492EAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348819AbiARTtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:49:01 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:16225 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240120AbiARTtA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:49:00 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JdfV21JQnz6x;
-        Tue, 18 Jan 2022 20:48:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1642535338; bh=SkUs0ebXeW/JGNVaeD68Y9y1sx/zclhAcLjcCN7r/P8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AWtyEFdwD9d3e6jsBqVQCNUYGtfsWDhonDF9ML9P3VRSZh+XCcOqv7WkeRjWD5/Dr
-         agxVqtXXzGP+KD3uKvLY6pvsPrBZ4fdjgW3u9oF1YrZXBG82t5xQTJZ1sALPaNqDmT
-         gFAxLiH+gJZD1JSnvo4haK241ECXNIBuHGOgzSEXpSWRHcytHUrc5OONi4v1jMMi2K
-         FMr+snypjTgVFjh0UNSj9n7b4b61YPFe2cBc2F+5kicwsQvQ/HHBTfT6t88rdrokWp
-         i3xkU+lM7hrsVKhcidguck6wRBxaNJtE7g+0/gYv++V/bQxSUeGROwdD6upkCXOD7D
-         DaCTmQQLhMbPA==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.4 at mail
-Date:   Tue, 18 Jan 2022 20:48:56 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: tegra: allow DVC support to be compiled out
-Message-ID: <YecZqFqpEGy9eZAq@qmqm.qmqm.pl>
-References: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
- <87d646818e2605dad62f82d73f8db3f61e70e1f0.1642348712.git.mirq-linux@rere.qmqm.pl>
- <1db263bb-c424-16b2-d435-2c5429eb7bb9@gmail.com>
+        id S1348900AbiARTry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240120AbiARTrx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 14:47:53 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434E5C061574;
+        Tue, 18 Jan 2022 11:47:53 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id a21so310311qkn.0;
+        Tue, 18 Jan 2022 11:47:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=usUQb6w2J4wKH97NV+PGl45llGxPhXDgSjoJ74JvJ7k=;
+        b=ZoTHACHjbwqTQt5gA/6zuq40mQExhammSJUIXqx//zC/JFgIk8chYhTQOESqKRNFV2
+         cL9jAlTROF+kqbwlrjX7GchtBAHb1tFLX/pptIi1vWegGSaf5JsunWjPQsIZh5YXgzpq
+         +1vNbBCTkdMw7AeufiTpLJZm8Tmeit/jJnl1m7PkqLodIUvyYxaOZa4Itdk5Zx7DjCWt
+         wU6LYYEMRZSamd7Veg8kHAq+++5pXnzFJzaeW+AzuTLik5wPuOsCt0d23MQWs+lx64zO
+         X5yMeFaXcgLUiI0dBBG2GxwYvMvi/YHZUU0eNtbk6HlBSvZB2806NTtGV36EVbkrynv8
+         S10A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=usUQb6w2J4wKH97NV+PGl45llGxPhXDgSjoJ74JvJ7k=;
+        b=7q0m4ABbRMlOVAKhsfGuvqYxxu/PREg6g52+3xdhHyvWani42zmymeFCbVpsmUFhYx
+         /iRMKmBN1xK1RhJoUG4lkSoVHwzoYzEF6UCCXk7ukSXqvkpTdR/ZQH1tO4HaYDW7lvqR
+         GcAuD9foOiyvRLMw+rYhy1hDmnI2ax0ljwo7WKGFElttcFBFFIsQyfEZMimEGQlYZkFw
+         13viiapQrK5jTy75LlGabDU3BlWkOYpf8Vcyw4SLt2tR+7h98nkk8F5FKNLDtzufKVre
+         5D7XpkmSa8aoWeuiRxAlQtzzx521j6KYwtd4tYwoT5CBjrhS9HrW0leXB/JQ5wZjlrqR
+         bgSQ==
+X-Gm-Message-State: AOAM532SnBAHvpwhWzQzFaN3EOiF5zGXhLmIxVaMIME4oLKrABSEPaS4
+        3j0ImgI8RA7UbDb7sFjNmwA=
+X-Google-Smtp-Source: ABdhPJynpk4Q1bAmy/p/QWrvMHnsNw6jEv1JsjAaFKorbzPqnUk/uUC4CoAYXfSW+5q5JL0i6Uwuaw==
+X-Received: by 2002:a37:8d84:: with SMTP id p126mr18801768qkd.684.1642535272443;
+        Tue, 18 Jan 2022 11:47:52 -0800 (PST)
+Received: from JSServ.amd.com ([165.204.78.2])
+        by smtp.googlemail.com with ESMTPSA id d11sm11458287qkn.96.2022.01.18.11.47.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 11:47:51 -0800 (PST)
+From:   julian schroeder <julianmarcusschroeder@gmail.com>
+To:     robh@kernel.org
+Cc:     bhanumaiya@google.com,
+        julian schroeder <julianmarcusschroeder@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fix serdev bind/unbind
+Date:   Tue, 18 Jan 2022 13:48:57 -0600
+Message-Id: <20220118194857.26546-1-julianmarcusschroeder@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1db263bb-c424-16b2-d435-2c5429eb7bb9@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 12:46:39PM +0300, Dmitry Osipenko wrote:
-> 16.01.2022 19:02, Michał Mirosław пишет:
-> > {
-> >  	{ .compatible = "nvidia,tegra114-i2c", .data = &tegra114_i2c_hw, },
-> >  	{ .compatible = "nvidia,tegra30-i2c", .data = &tegra30_i2c_hw, },
-> >  	{ .compatible = "nvidia,tegra20-i2c", .data = &tegra20_i2c_hw, },
-> > +#if IS_ENABLED(CONFIG_I2C_TEGRA_DVC)
-> >  	{ .compatible = "nvidia,tegra20-i2c-dvc", .data = &tegra20_i2c_hw, },
-> > +#endif
-> 
-> You can use IS_ENABLED(ARCH_TEGRA_2x_SOC), and similar for T210. Then
-> you won't need to add new Kconfig entries.
+On some chromebooks, the serdev is used to communicate with
+an embedded controller. When the controller is updated, the
+regular ttyS* is needed. Therefore unbind/bind needs to work
+to be able to switch between the two modes without having to
+reboot. In the case of ACPI enabled platforms, the underlying
+serial device is marked as enumerated but this is not cleared
+upon remove (unbind). In this state it can not be bound as
+serdev.
 
-I can do that, thanks! Indeed, the drivers won't be useful with the
-specific SoC support disabled anyway.
+Signed-off-by: julian schroeder <julianmarcusschroeder@gmail.com>
+---
+ drivers/tty/serdev/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Best Regards
-Michał Mirosław
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index 92e3433276f8..668fa570bc07 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -138,7 +138,11 @@ EXPORT_SYMBOL_GPL(serdev_device_add);
+ void serdev_device_remove(struct serdev_device *serdev)
+ {
+ 	struct serdev_controller *ctrl = serdev->ctrl;
++	struct acpi_device *adev;
+ 
++	adev = ACPI_COMPANION(&serdev->dev);
++	if (adev)
++		acpi_device_clear_enumerated(adev);
+ 	device_unregister(&serdev->dev);
+ 	ctrl->serdev = NULL;
+ }
+-- 
+2.20.1
+

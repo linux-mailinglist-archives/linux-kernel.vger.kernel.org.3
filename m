@@ -2,179 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D93D6493163
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0663493164
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 00:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350281AbiARXZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 18:25:54 -0500
-Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:51961 "EHLO
-        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234491AbiARXZx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:25:53 -0500
-Received: from dread.disaster.area (pa49-179-45-11.pa.nsw.optusnet.com.au [49.179.45.11])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 21DA262C2BA;
-        Wed, 19 Jan 2022 10:25:48 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1n9xrH-001StL-Oc; Wed, 19 Jan 2022 10:25:47 +1100
-Date:   Wed, 19 Jan 2022 10:25:47 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Brian Foster <bfoster@redhat.com>, Ian Kent <raven@themaw.net>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <20220118232547.GD59729@dread.disaster.area>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <20220118030041.GB59729@dread.disaster.area>
- <YeYxOadA0HgYfBjt@zeniv-ca.linux.org.uk>
- <20220118041253.GC59729@dread.disaster.area>
- <YeZW9s7x2uCBfNJD@zeniv-ca.linux.org.uk>
+        id S1350257AbiARX1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 18:27:21 -0500
+Received: from mga06.intel.com ([134.134.136.31]:56642 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234491AbiARX1T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 18:27:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642548439; x=1674084439;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FcuDy7Mjh0G8Fmr//5jE81ABQXB00sIEf3nMipzNJzY=;
+  b=mplHZ5EqVin04WGTfVGpS7QKzl8KjyTteWPvF6i8NpC+DvhLfffTHV3Y
+   dc0yHqankX/7d7a4eJ+jmznyifupftgn9Gnc5WLJH0lBWTlhDm2uXE+mi
+   4IzeBjrT0m+v5Y2bBCEk50LZGJuyX7Z134SSOZxJqBXNuSZa0MkkJeOHv
+   yp6fH7DimiEUleRgvlYT6EL/WwokQ197Ja1Y/du90jLbQ2udLMR7mKB8+
+   nG5/SeN5Yvq1r6QaJEHE0mr8G6eL2xemmSObK9R3W0Ba+lgEBBVE5lWPQ
+   zS4cPfuYboJOahggaysZJKObaZAvvkXxEyZpL+e/mg3yjOOLmXF1S5hH0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="305669906"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="305669906"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 15:27:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="625671254"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2022 15:27:11 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9xsc-000D26-L5; Tue, 18 Jan 2022 23:27:10 +0000
+Date:   Wed, 19 Jan 2022 07:26:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@protonmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 4/10] drivers/dma/apple-admac.c:137:22:
+ error: implicit declaration of function 'FIELD_GET'; did you mean
+ 'FOLL_GET'?
+Message-ID: <202201190747.aM6P94bs-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YeZW9s7x2uCBfNJD@zeniv-ca.linux.org.uk>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=61e74c7f
-        a=Eslsx4mF8WGvnV49LKizaA==:117 a=Eslsx4mF8WGvnV49LKizaA==:17
-        a=kj9zAlcOel0A:10 a=DghFqjY3_ZEA:10 a=7-415B0cAAAA:8
-        a=sC8CWpTUz8-MwOmwIq8A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 05:58:14AM +0000, Al Viro wrote:
-> On Tue, Jan 18, 2022 at 03:12:53PM +1100, Dave Chinner wrote:
-> 
-> > No, that just creates a black hole where the VFS inode has been
-> > destroyed but the XFS inode cache doesn't know it's been trashed.
-> > Hence setting XFS_IRECLAIMABLE needs to remain in the during
-> > ->destroy_inode, otherwise the ->lookup side of the cache will think
-> > that are currently still in use by the VFS and hand them straight
-> > back out without going through the inode recycling code.
-> > 
-> > i.e. XFS_IRECLAIMABLE is the flag that tells xfs_iget() that the VFS
-> > part of the inode has been torn down, and that it must go back
-> > through VFS re-initialisation before it can be re-instantiated as a
-> > VFS inode.
-> 
-> OK...
-> 
-> > It would also mean that the inode will need to go through two RCU
-> > grace periods before it gets reclaimed, because XFS uses RCU
-> > protected inode cache lookups internally (e.g. for clustering dirty
-> > inode writeback) and so freeing the inode from the internal
-> > XFS inode cache requires RCU freeing...
-> 
-> Wait a minute.  Where is that RCU delay of yours, relative to
-> xfs_vn_unlink() and xfs_vn_rename() (for target)?
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   63a99f1a44208593f5a423b5378824abc2246988
+commit: 87fbc71e4e06939d5036c063908f76f03e88abae [4/10] dmaengine: apple-admac: Add Apple ADMAC driver
+config: csky-allyesconfig (https://download.01.org/0day-ci/archive/20220119/202201190747.aM6P94bs-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/87fbc71e4e06939d5036c063908f76f03e88abae
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout 87fbc71e4e06939d5036c063908f76f03e88abae
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
 
-Both of those drop the inode on an on-disk unlinked list. When the
-last reference goes away, ->destroy_inode then runs inactivation.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Inactivation then runs transactions to free all the space attached
-to the inode and then removes the inode from the unlinked list and
-frees it. It then goes into the XFS_IRECLAIMABLE state and is dirty
-in memory. It can't be reclaimed until the inode is written to disk
-or the whole inode cluster is freed and the inode marked XFS_ISTALE
-(so won't get written back).
+All errors (new ones prefixed by >>):
 
-At that point, a background inode reclaim thread (runs every 5s)
-does a RCU protected lockless radix tree walk to find
-XFS_IRECLAIMABLE inodes (via radix tree tags). If they are clean, it
-moves them to XFS_IRECLAIM state, deletes them from the radix tree
-and frees them via a call_rcu() callback.
+   drivers/dma/apple-admac.c:125:5: warning: no previous prototype for 'admac_alloc_chan_resources' [-Wmissing-prototypes]
+     125 | int admac_alloc_chan_resources(struct dma_chan *chan)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/dma/apple-admac.c:130:6: warning: no previous prototype for 'admac_free_chan_resources' [-Wmissing-prototypes]
+     130 | void admac_free_chan_resources(struct dma_chan *chan)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/dma/apple-admac.c:135:5: warning: no previous prototype for 'admac_ring_noccupied_slots' [-Wmissing-prototypes]
+     135 | int admac_ring_noccupied_slots(int ringval)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/dma/apple-admac.c: In function 'admac_ring_noccupied_slots':
+>> drivers/dma/apple-admac.c:137:22: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
+     137 |         int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
+         |                      ^~~~~~~~~
+         |                      FOLL_GET
+   drivers/dma/apple-admac.c: At top level:
+   drivers/dma/apple-admac.c:155:5: warning: no previous prototype for 'admac_cyclic_read_residue' [-Wmissing-prototypes]
+     155 | u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/dma/apple-admac.c:181:17: warning: no previous prototype for 'admac_tx_status' [-Wmissing-prototypes]
+     181 | enum dma_status admac_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+         |                 ^~~~~~~~~~~~~~~
+   In file included from include/linux/printk.h:555,
+                    from include/asm-generic/bug.h:22,
+                    from arch/csky/include/asm/bug.h:18,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/dma/apple-admac.c:2:
+   drivers/dma/apple-admac.c: In function 'admac_tx_status':
+   drivers/dma/apple-admac.c:221:34: warning: format '%lx' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     221 |                 dev_dbg(ad->dev, "ch%d residue: %lx, (%ld%%)\n", adchan->no,
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
+     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                              ^~~~~~~
+   drivers/dma/apple-admac.c:221:17: note: in expansion of macro 'dev_dbg'
+     221 |                 dev_dbg(ad->dev, "ch%d residue: %lx, (%ld%%)\n", adchan->no,
+         |                 ^~~~~~~
+   drivers/dma/apple-admac.c:221:51: note: format string is defined here
+     221 |                 dev_dbg(ad->dev, "ch%d residue: %lx, (%ld%%)\n", adchan->no,
+         |                                                 ~~^
+         |                                                   |
+         |                                                   long unsigned int
+         |                                                 %x
+   In file included from include/linux/printk.h:555,
+                    from include/asm-generic/bug.h:22,
+                    from arch/csky/include/asm/bug.h:18,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/dma/apple-admac.c:2:
+   drivers/dma/apple-admac.c:221:34: warning: format '%ld' expects argument of type 'long int', but argument 6 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     221 |                 dev_dbg(ad->dev, "ch%d residue: %lx, (%ld%%)\n", adchan->no,
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
+     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                              ^~~~~~~
+   drivers/dma/apple-admac.c:221:17: note: in expansion of macro 'dev_dbg'
+     221 |                 dev_dbg(ad->dev, "ch%d residue: %lx, (%ld%%)\n", adchan->no,
+         |                 ^~~~~~~
+   drivers/dma/apple-admac.c:221:57: note: format string is defined here
+     221 |                 dev_dbg(ad->dev, "ch%d residue: %lx, (%ld%%)\n", adchan->no,
+         |                                                       ~~^
+         |                                                         |
+         |                                                         long int
+         |                                                       %d
+   drivers/dma/apple-admac.c: At top level:
+   drivers/dma/apple-admac.c:228:6: warning: no previous prototype for 'admac_start' [-Wmissing-prototypes]
+     228 | void admac_start(struct admac_chan *adchan)
+         |      ^~~~~~~~~~~
+   drivers/dma/apple-admac.c:244:6: warning: no previous prototype for 'admac_issue_pending' [-Wmissing-prototypes]
+     244 | void admac_issue_pending(struct dma_chan *chan)
+         |      ^~~~~~~~~~~~~~~~~~~
+   drivers/dma/apple-admac.c:263:5: warning: no previous prototype for 'admac_pause' [-Wmissing-prototypes]
+     263 | int admac_pause(struct dma_chan *chan)
+         |     ^~~~~~~~~~~
+   drivers/dma/apple-admac.c:272:5: warning: no previous prototype for 'admac_resume' [-Wmissing-prototypes]
+     272 | int admac_resume(struct dma_chan *chan)
+         |     ^~~~~~~~~~~~
+   drivers/dma/apple-admac.c:281:5: warning: no previous prototype for 'admac_terminate_all' [-Wmissing-prototypes]
+     281 | int admac_terminate_all(struct dma_chan *chan)
+         |     ^~~~~~~~~~~~~~~~~~~
+   drivers/dma/apple-admac.c:303:14: warning: no previous prototype for 'admac_tx_submit' [-Wmissing-prototypes]
 
-If memory reclaim comes along sooner than this, the
-->free_cached_objects() superblock shrinker callback runs that RCU
-protected lockless radix tree walk to find XFS_IRECLAIMABLE inodes.
 
-> And where does
-> it happen in case of e.g. open() + unlink() + close()?
+vim +137 drivers/dma/apple-admac.c
 
-Same thing - close() drops the last reference, the unlinked inode
-goes through inactivation, then moves into the XFS_IRECLAIMABLE
-state.
+   134	
+   135	int admac_ring_noccupied_slots(int ringval)
+   136	{
+ > 137		int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
+   138		int rdslot = FIELD_GET(RING_READ_SLOT, ringval);
+   139	
+   140		if (wrslot != rdslot) {
+   141			return (wrslot + 4 - rdslot) % 4;
+   142		} else {
+   143			WARN_ON((ringval & (RING_FULL | RING_EMPTY)) == 0);
+   144	
+   145			if (ringval & RING_FULL)
+   146				return 4;
+   147			else
+   148				return 0;
+   149		}
+   150	}
+   151	
 
-The problem is not -quite- open-unlink-close. The problem case is
-the reallocation of an on-disk inode in the case of
-unlink-close-open(O_CREATE) operations because of the on-disk inode
-allocator policy of aggressive reuse of recently freed inodes.  In
-that case the xfs_iget() lookup will reinstantiate the inode via
-xfs_iget_recycle() and the inode will change identity between VFS
-instantiations.
-
-This is where a RCU grace period is absolutely required, and we
-don't currently have one. The bug was introduced with RCU freeing of
-inodes (what, 15 years ago now?) and it's only recently that we've
-realised this bug exists via code inspection. We really have no
-evidence that it's actually been tripped over in the wild....
-
-Unfortunately, the simple fix of adding syncronize_rcu() to
-xfs_iget_recycle() causes significant performance regressions
-because we hit this path quite frequently when workloads use lots of
-temporary files - the on-disk inode allocator policy tends towards
-aggressive re-use of inodes for small sets of temporary files.
-
-The problem XFS is trying to address is that the VFS inode lifecycle
-does not cater for filesystems that need to both dirty and then
-clean unlinked inodes between iput_final() and ->destroy_inode. It's
-too late to be able to put the inode back on the LRU once we've
-decided to drop the inode if we need to dirty it again. ANd because
-evict() is part of the non-blocking memory reclaim, we aren't
-supposed to block for arbitrarily long periods of time or create
-unbound memory demand processing inode eviction (both of which XFS
-can do in inactivation).
-
-IOWs, XFS can't free the inode until it's journal releases the
-internal reference on the dirty inode. ext4 doesn't track inodes in
-it's journal - it only tracks inode buffers that contain the changes
-made to the inode, so once the transaction is committed in
-ext4_evict_inode() the inode can be immediately freed via either
-->destroy_inode or ->free_inode. That option does not exist for XFS
-because we have to wait for the journal to finish with the inode
-before it can be freed. Hence all the background reclaim stuff.
-
-We've recently solved several of the problems we need to solve to
-reduce the mismatch; avoiding blocking on inode writeback in reclaim
-and background inactivation are two of the major pieces of work we
-needed done before we could even consider more closely aligning XFS
-to the VFS inode cache life cycle model.
-
-The next step is to move the background inode inactivation triggers
-up into ->drop_inode so we can catch inodes that need to be dirtied
-by the filesysetm before they have been marked for eviction by the
-VFS. This will allow us to keep the inode on the VFS LRU (probably
-marked with I_WILL_FREE so everyone else keeps away from it) whilst
-we are waiting for the background inactivation work to be done, the
-journal flushed and the metadata written back. Once clean, we can
-directly evict the inode from the VFS ourselves.
-
-This would mean we only get clean, reclaimable inodes hitting the
-evict() path, and so at that point we can just remove the inode
-directly from the XFS inode cache from either ->destroy_inode or
-->free_inode and RCU free it. The recycling of in-memory inodes in
-xfs_iget_cache_hit can go away entirely because no inodes will
-linger in the XFS inode cache without being visible at the VFS
-layer as they do now...
-
-That's going to take a fair bit of work to realise, and I'm not sure
-yet exactly what mods are going to be needed to either the VFS inode
-infrastructure or the XFS inode cache. 
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

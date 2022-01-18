@@ -2,73 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 431074925C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A163A4925CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbiARMff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S235066AbiARMgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiARMfe (ORCPT
+        with ESMTP id S233436AbiARMgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:35:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B94C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 04:35:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EA36B8169C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 572DCC00446;
-        Tue, 18 Jan 2022 12:35:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642509331;
-        bh=VG2Z/EYZoovWfQJb9a0Asmj3TQLSNNxBCPcZ49i1f9I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uj8Sh6rkyoGZOzGYQsnt4Ma+SZk0BAxUHjY1hd61+mAez8Xa56vT2pDWo5jv0dArs
-         +VRLBO2KFHlRcX41FzGFYxMXzXbrxgCfZ8UNRmqF9coPLZegDTeBB2C6MStRQK1wiv
-         juhsOFIUWSyI3oxMk3rb+/k2wRaYEpUh0H1EVwMAjfyyWXKPYGRIH4Y6eheEZn9hcg
-         aNfDAgFgM2GFCwaH9Qkzx62r6jX7ANfLnArreK6iocVZn6ufc0QKkBC1eDlX6pRMPl
-         vnGtiiwsy4ueMgEr4MfevvrKDEM4FnNmUZnv41Q6Be7RYsNVyYLUyjqvKYcZ1Usq5H
-         QcnG+8CMHDV3A==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     miquel.raynal@bootlin.com, krzysztof.kozlowski@canonical.com
-Cc:     vigneshr@ti.com, nm@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH] mtd: rawnand: omap2: Prevent invalid configuration and build error
-Date:   Tue, 18 Jan 2022 14:35:25 +0200
-Message-Id: <20220118123525.8020-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Tue, 18 Jan 2022 07:36:04 -0500
+Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [IPv6:2001:1600:4:17::42aa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD8DC06161C;
+        Tue, 18 Jan 2022 04:36:04 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JdStT1zBDzMq01B;
+        Tue, 18 Jan 2022 13:36:01 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4JdStQ5z5tzlhMBj;
+        Tue, 18 Jan 2022 13:35:58 +0100 (CET)
+Message-ID: <8ea3bd61-8251-a5b6-c0b4-6d15bac4d2c5@digikod.net>
+Date:   Tue, 18 Jan 2022 13:35:46 +0100
+MIME-Version: 1.0
+User-Agent: 
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:LANDLOCK SECURITY MODULE" 
+        <linux-security-module@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>
+Cc:     kernel@collabora.com
+References: <20220118112909.1885705-1-usama.anjum@collabora.com>
+ <20220118112909.1885705-7-usama.anjum@collabora.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH 06/10] selftests: landlock: Add the uapi headers include
+ variable
+In-Reply-To: <20220118112909.1885705-7-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to select MEMORY as well otherwise OMAP_GPMC will not be built.
-For simplicity let's select MEMORY and OMAP_GPMC unconditionally as
-this driver depends on OMAP_GPMC driver and uses symbols from there.
 
-Fixes: dbcb124acebd ("mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/mtd/nand/raw/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 18/01/2022 12:29, Muhammad Usama Anjum wrote:
+> Out of tree build of this test fails if relative path of the output
+> directory is specified. Remove the un-needed include paths and use
+> KHDR_INCLUDES to correctly reach the headers.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/landlock/Makefile | 11 +++--------
+>   1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+> index a99596ca9882..44c724b38a37 100644
+> --- a/tools/testing/selftests/landlock/Makefile
+> +++ b/tools/testing/selftests/landlock/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> -CFLAGS += -Wall -O2
+> +CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
+>   
+>   src_test := $(wildcard *_test.c)
+>   
+> @@ -12,13 +12,8 @@ KSFT_KHDR_INSTALL := 1
+>   OVERRIDE_TARGETS := 1
+>   include ../lib.mk
+>   
+> -khdr_dir = $(top_srcdir)/usr/include
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 20408b7db540..d986ab4e4c35 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
- 	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
- 	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
- 	depends on HAS_IOMEM
--	select OMAP_GPMC if ARCH_K3
-+	select MEMORY
-+	select OMAP_GPMC
- 	help
- 	  Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
- 	  and Keystone platforms.
--- 
-2.17.1
+This should be updated to:
+khdr_dir = ${abs_srctree}/usr/include
 
+Using a global KHDR_DIR instead of khdr_dir could be useful for others too.
+
+> -
+> -$(khdr_dir)/linux/landlock.h: khdr
+> -	@:
+
+This should be kept as is, otherwise we loose this check to rebuild the 
+headers if linux/landlock.h is updated, which is handy for development.
+KVM lost a similar behavior with this patch series.
+
+> -
+>   $(OUTPUT)/true: true.c
+>   	$(LINK.c) $< $(LDLIBS) -o $@ -static
+>   
+> -$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
+
+This should not be changed.
+
+> -	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+> +$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+> +	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
+
+This doesn't work when building in the local directory because 
+$abs_srctree and $KHDR_INCLUDES are empty:
+cd tools/testing/selftests/landlock && make

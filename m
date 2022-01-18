@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54803492E82
+	by mail.lfdr.de (Postfix) with ESMTP id E9D39492E84
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 20:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348830AbiARTdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 14:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S1348858AbiARTdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 14:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348763AbiARTda (ORCPT
+        with ESMTP id S1348650AbiARTda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Jan 2022 14:33:30 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88CEC061401
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:29 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d1so2063870plh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:29 -0800 (PST)
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C36C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:30 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so3696643pja.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 11:33:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EtNhvDKyXQZ6Jo36sZZYMctRg/Y7isVGvsp0Av2OLNI=;
-        b=BdL5H9cYY+49MxXn/iNc78kLpAnP1DypS2/R4UfayzZ09NM0ONhgKl+LRx0Gu3cakI
-         K2K8w8c1rNuqroSg3BXmfl7zGIaeGTmES1D0niOyRHVWEoDGR3RzsWZGNO/sigNlPpwV
-         thDIWoCH/zMpN59d549rmUf5ock/JsxhOy67o=
+        bh=aqX8dLAZk8wfc9NVjjSeOsdVYBfiblTeQKsEfk0Fjss=;
+        b=XvICBIfInqBnoQKXRCnh+jMizVc1BJ/LqR/HbC+DCiPY4ODJx7pUDBy3bwYPLW7G1z
+         g2vBeVHFvcmNJAoW0RKG79PAoDxvCtw1jAdzQrBG52Tw1TBmzvfLkkvfKYYb9a+6TJpr
+         CauKKebA7W0rR1F5QodXJ3pR6yTlVTGALUAVw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EtNhvDKyXQZ6Jo36sZZYMctRg/Y7isVGvsp0Av2OLNI=;
-        b=GhkvSOTh5m+KCzBSQqXzUSPlU2eQbjxmdBSZJuC1Thw8qD+FObz/gYVGSgKQ/J3TJh
-         29uCXm5SW+/n7agZUMK2KF9lgg+2YcnEDWxp+SQZOLzIxDJWRazRqCiGP/vxWmSmUrqv
-         Y4ekgtPO5SqGEO+XRoyb79L7f8/9dPTl80Ju76nkUwyyVf4qF/+r8bRZaZ/jXkQ/3qw/
-         nrOtUnG6AzpBA+qtF8JB4atLTF98syW5OSdYQe4w3OPX99V6Tu9/sXMDH1m23cCNy2YM
-         M89DI6eZ+ji3+DpEaUf7yBaH//5n88DmRfs0fDHwdVWH+YMZ/Y7f/iaQxY4KBXyX75mB
-         Zp/A==
-X-Gm-Message-State: AOAM531CnbC82BkO1zLCwjZvpJlW4BdUHlrh5LoAoSogBxZjx5tDNhWc
-        yC5ssKxxk4NL1+WtybGfxM9I9w==
-X-Google-Smtp-Source: ABdhPJwgE8jcCT3labTDwao+nHGvfWqRwKzFNqt9hExsgXilGxYF0m09Y3u3MTDb4o9vay68AQtaOw==
-X-Received: by 2002:a17:902:aa4b:b0:14a:cff4:19ec with SMTP id c11-20020a170902aa4b00b0014acff419ecmr5946219plr.60.1642534409435;
+        bh=aqX8dLAZk8wfc9NVjjSeOsdVYBfiblTeQKsEfk0Fjss=;
+        b=JIe738hj35a+ypFdR4xHcBrqbIIeVbVa0TRc9KRf+G2bFhoGl+hx+tpuc6MgrKD9o9
+         rYS35MUl1EpPsB7L9RRtdGV+dgGc2cgQZeaSUtNXgDPoDoXRdKjaC0NoX4laS5j3V7Wg
+         zSEUH5jECqabhLdhKV1wj9g+WXkPmjZiGBLd1bpWsW8u4f9fATXod7UT+7KHpMwsVlke
+         Q28bOhk2Lnr0RC/flohFqqpkUgn75PeYSHqi6SY9AEHxRBNWNVFEZ4enKjoxIRNv4Bu5
+         4+Dad6cZXOVat4YAoig35NwNi5zsBwN3TIHTEV04WEbexkM4EtGPyNmuXB0ZtXUXKuH2
+         SKKA==
+X-Gm-Message-State: AOAM533Bvduksrd3TigJewag4RCTsBPa5NG2Dh20KnUksxXji7U19qDr
+        3HOAZyJTGaao1O0C8oy1TUyONw==
+X-Google-Smtp-Source: ABdhPJwU6yiePnJ9CTwtfjgrkn0os5MnxJeX8V5zhEo4TiSJFvZi/O/uKQo0nhs7FrcZRzy7jWp99Q==
+X-Received: by 2002:a17:90b:4b07:: with SMTP id lx7mr54874pjb.115.1642534409706;
         Tue, 18 Jan 2022 11:33:29 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 25sm3508985pje.22.2022.01.18.11.33.28
+        by smtp.gmail.com with ESMTPSA id i11sm15581824pgt.68.2022.01.18.11.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 18 Jan 2022 11:33:29 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
@@ -66,14 +66,14 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Joe Perches <joe@perches.com>,
         "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3 1/3] staging: r8188eu: Drop get_recvframe_data()
-Date:   Tue, 18 Jan 2022 11:33:25 -0800
-Message-Id: <20220118193327.2822099-2-keescook@chromium.org>
+Subject: [PATCH v3 2/3] staging: rtl8723bs: Drop get_recvframe_data()
+Date:   Tue, 18 Jan 2022 11:33:26 -0800
+Message-Id: <20220118193327.2822099-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220118193327.2822099-1-keescook@chromium.org>
 References: <20220118193327.2822099-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4934; h=from:subject; bh=91pfgNSNKQZ90Z5sOLt9nzmWsWo2UUEN0XKGD4U7vGE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh5xYFlQv2coVuKsjKL2V15ndg7Erkujlv2Soj3VY3 WBrgQfuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYecWBQAKCRCJcvTf3G3AJnjaEA CynCag1EmCrN2PCAl/92wBGlf4AvWgcHIHj6wnKvOw5aWiYVAqAo1X8Qwi+EKTR5MZUut7Q5EMdIHW uJ9QmMBEn3KKzX7RPfIWkz5winwPnvc7Xbue6U01mHxVkSjoh/aBuI8Whk4xxHll/onynWc9S3NwTR ciSzWlzxLnjr5FD4FLKHTvn3Ma8ggFIY+Hduqjud3Xyhpp74zl3dS7nt3YD1Zy/cAIq4RwXjkEqrgZ qVdnn/CZezaCzhRqkkRMA8x50L3spzYIK+1J9HxHDNkRuXWTv4Y8cznBKyzXPKmlNN0TMYU36RADnz SZc3tBVZeWsz9TWOFrEqfh/zCf7VdN51lJF63PljlnOHi3LOgvVlKHLDwpjPDThBwTX17uvKqdnAFE xTHa/z83bIofJg3uHxPOiF9eTP/O6rX4k/ggqxipSX0ow0xiDVVHIc17ypBm7SfunZFrYF3wRUttiB cqQENioI3v+tVIo996Y4NrODehhbe10kuEYQ2PQVnW8L4pHprLF6wjHVx8pMK4J+PANzx1I1xMihtO h6QaBVEeK+MD0imfaKC8ZlFG687xOOogHzI/TlYP2/fhLBRwJJtuiID1hhZ4zELVH3E1fYSmkVJ2gp VQ02QBXboNpzL+1REJ+FQn45ylj2NyFBAv27HMc56y3ATUMeX7fOGCHW6GvQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5268; h=from:subject; bh=ibysZA3Vsz9MiNMr6rGOGIbY1SMbUQc0iY8tYFGxqvE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh5xYFV20uWNTLjehe9N+JdiBXmh+Hsq1bR5aQ4fMw ff3gYgGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYecWBQAKCRCJcvTf3G3AJprJD/ 4ltN1DpOJHvt+JLFjQCfe3dGV8uLWTfTcNnDe/mNhoZS+gp7yH4bb+KHC9UdPIXjbQNFNcwebtdJgF /ViDS3Aj3RtlgHSA1FPzisXBkEH8W9rIpMLFkwP45A+5dAxmijTY0s+2DYzJ2lZyGctH4Oq6tIHiA6 pJdTQtOocXEOAVoJg79iu6k/qJmkq52DgLfuU2oqVY35bxGWDh24arhvhjvclcBeyuc18cC5oS+Cqm BhdnkwrTZPigJaQHg1+TWcIj7qhLf4yFk49SO850Sm6pMCkoQyo9LfoD9yxIMWbEpiOr8zx2BlR7WI YUZtuV2gElL1RGZmlHkCCHSArr94V2++re5cHqblywGFwpdmmoUfHV0tHPNrRDLlH+VZqrbh2M0ifr AyIeyybyfdA8rECmBcYBSHdSaMHzgOtTOngGh1sH3oZ5QmRKOzTB3lhLkpvS4D579TmdNVY9Lg35CR M5Zbo8OpnYfVxG+VweQj9NPDGPNCJSvisBz+F/BAU2YsIfJBrw7yfmu/xOa/SY5jktAgz7SAA96cDN d9ugDYT/s47SFTI750cdcygYVIkrtpsRU4Vca4MLtd7SlYvk+Zf5N6hnSXLP8j5kKETfAmM+Lnn7OA F4dp0qIxxHK8NzvCVgaTMA8vSrqhfSA4r9LPnAVA4FMusUpKEIuM42KoYd4g==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -116,81 +116,93 @@ Cc: Fabio Aiuto <fabioaiuto83@gmail.com>
 Cc: linux-staging@lists.linux.dev
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c       | 6 +++++-
- drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c | 4 +---
- drivers/staging/r8188eu/include/rtw_recv.h    | 9 ---------
- 3 files changed, 6 insertions(+), 13 deletions(-)
+ drivers/staging/rtl8723bs/core/rtw_recv.c      | 11 ++++++++---
+ drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c |  3 +--
+ drivers/staging/rtl8723bs/include/rtw_recv.h   | 11 -----------
+ 3 files changed, 9 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 51a13262a226..946e659ae97a 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1188,7 +1188,7 @@ static int wlanhdr_to_ethhdr(struct recv_frame *precvframe)
- 	struct adapter			*adapter = precvframe->adapter;
- 	struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
+diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
+index 41bfca549c64..36a50bccef08 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_recv.c
++++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
+@@ -465,7 +465,7 @@ static union recv_frame *portctrl(struct adapter *adapter, union recv_frame *pre
  
--	u8	*ptr = get_recvframe_data(precvframe); /*  point to frame_ctrl field */
-+	u8	*ptr = precvframe->rx_data; /*  point to frame_ctrl field */
- 	struct rx_pkt_attrib *pattrib = &precvframe->attrib;
+ 	auth_alg = adapter->securitypriv.dot11AuthAlgrthm;
+ 
+-	ptr = get_recvframe_data(precv_frame);
++	ptr = precv_frame->u.hdr.rx_data;
+ 	pfhdr = &precv_frame->u.hdr;
+ 	pattrib = &pfhdr->attrib;
+ 	psta_addr = pattrib->ta;
+@@ -1510,7 +1510,7 @@ static signed int wlanhdr_to_ethhdr(union recv_frame *precvframe)
+ 	__be16 be_tmp;
+ 	struct adapter			*adapter = precvframe->u.hdr.adapter;
+ 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
+-	u8 *ptr = get_recvframe_data(precvframe) ; /*  point to frame_ctrl field */
++	u8 *ptr = precvframe->u.hdr.rx_data; /*  point to frame_ctrl field */
+ 	struct rx_pkt_attrib *pattrib = &precvframe->u.hdr.attrib;
  
  	if (pattrib->encrypt)
-@@ -1223,10 +1223,14 @@ static int wlanhdr_to_ethhdr(struct recv_frame *precvframe)
+@@ -1546,10 +1546,15 @@ static signed int wlanhdr_to_ethhdr(union recv_frame *precvframe)
  		eth_type = 0x8712;
  		/*  append rx status for mp test packets */
- 		ptr = recvframe_pull(precvframe, (rmv_len - sizeof(struct ethhdr) + 2) - 24);
+ 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2)-24);
 +		if (!ptr)
 +			return _FAIL;
  		memcpy(ptr, get_rxmem(precvframe), 24);
  		ptr += 24;
- 	} else {
- 		ptr = recvframe_pull(precvframe, (rmv_len - sizeof(struct ethhdr) + (bsnaphdr ? 2 : 0)));
+-	} else
++	} else {
+ 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr) + (bsnaphdr?2:0)));
 +		if (!ptr)
 +			return _FAIL;
- 	}
++	}
  
  	memcpy(ptr, pattrib->dst, ETH_ALEN);
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
-index 90d426199f52..bf93ff3af140 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
-@@ -128,7 +128,7 @@ void update_recvframe_phyinfo_88e(struct recv_frame *precvframe, struct phy_stat
- 	struct rx_pkt_attrib *pattrib = &precvframe->attrib;
- 	struct hal_data_8188e *pHalData = &padapter->haldata;
- 	struct phy_info *pPHYInfo  = &pattrib->phy_info;
+ 	memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
+diff --git a/drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c b/drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c
+index c0a1a6fbeb91..74e75dc970f7 100644
+--- a/drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c
++++ b/drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c
+@@ -81,7 +81,7 @@ static void update_recvframe_phyinfo(union recv_frame *precvframe,
+ 	struct odm_phy_info *p_phy_info =
+ 		(struct odm_phy_info *)(&pattrib->phy_info);
+ 
 -	u8 *wlanhdr;
-+	u8 *wlanhdr = precvframe->rx_data;
- 	struct odm_per_pkt_info	pkt_info;
- 	u8 *sa = NULL;
++	u8 *wlanhdr = precvframe->u.hdr.rx_data;
+ 	u8 *my_bssid;
+ 	u8 *rx_bssid;
+ 	u8 *rx_ra;
+@@ -100,7 +100,6 @@ static void update_recvframe_phyinfo(union recv_frame *precvframe,
  	struct sta_priv *pstapriv;
-@@ -138,8 +138,6 @@ void update_recvframe_phyinfo_88e(struct recv_frame *precvframe, struct phy_stat
- 	pkt_info.bPacketToSelf = false;
- 	pkt_info.bPacketBeacon = false;
+ 	struct sta_info *psta;
  
 -	wlanhdr = get_recvframe_data(precvframe);
--
- 	pkt_info.bPacketMatchBSSID = ((!IsFrameTypeCtrl(wlanhdr)) &&
- 		!pattrib->icv_err && !pattrib->crc_err &&
- 		!memcmp(get_hdr_bssid(wlanhdr),
-diff --git a/drivers/staging/r8188eu/include/rtw_recv.h b/drivers/staging/r8188eu/include/rtw_recv.h
-index b43a46887343..920f33235e00 100644
---- a/drivers/staging/r8188eu/include/rtw_recv.h
-+++ b/drivers/staging/r8188eu/include/rtw_recv.h
-@@ -296,15 +296,6 @@ static inline u8 *get_rx_status(struct recv_frame *precvframe)
- 	return get_rxmem(precvframe);
+ 	my_bssid = get_bssid(&padapter->mlmepriv);
+ 	rx_bssid = get_hdr_bssid(wlanhdr);
+ 	pkt_info.bssid_match = ((!IsFrameTypeCtrl(wlanhdr)) &&
+diff --git a/drivers/staging/rtl8723bs/include/rtw_recv.h b/drivers/staging/rtl8723bs/include/rtw_recv.h
+index a88b7c088a86..44f67103503a 100644
+--- a/drivers/staging/rtl8723bs/include/rtw_recv.h
++++ b/drivers/staging/rtl8723bs/include/rtw_recv.h
+@@ -385,17 +385,6 @@ static inline u8 *get_rxmem(union recv_frame *precvframe)
+ 	return precvframe->u.hdr.rx_head;
  }
  
--static inline u8 *get_recvframe_data(struct recv_frame *precvframe)
+-static inline u8 *get_recvframe_data(union recv_frame *precvframe)
 -{
--	/* always return rx_data */
+-
+-	/* alwasy return rx_data */
 -	if (precvframe == NULL)
 -		return NULL;
 -
--	return precvframe->rx_data;
+-	return precvframe->u.hdr.rx_data;
+-
 -}
 -
- static inline u8 *recvframe_push(struct recv_frame *precvframe, int sz)
+ static inline u8 *recvframe_pull(union recv_frame *precvframe, signed int sz)
  {
- 	/*  append data before rx_data */
+ 	/*  rx_data += sz; move rx_data sz bytes  hereafter */
 -- 
 2.30.2
 

@@ -2,200 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C62B492FCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16798492FBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349417AbiARU5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:57:48 -0500
-Received: from chameleon.vennard.ch ([37.35.107.252]:52638 "EHLO
-        chameleon.vennard.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245609AbiARU5q (ORCPT
+        id S1349183AbiARUyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:54:16 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:54318 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232844AbiARUyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:57:46 -0500
-X-Greylist: delayed 422 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 15:57:44 EST
-Received: from localhost (localhost [IPv6:::1])
-        by chameleon.vennard.ch (Postfix) with ESMTP id BA7F9120BBF;
-        Tue, 18 Jan 2022 20:50:37 +0000 (GMT)
-Received: from chameleon.vennard.ch ([IPv6:::1])
-        by localhost (chameleon.vennard.ch [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id ooQvYuX_Bke6; Tue, 18 Jan 2022 20:50:32 +0000 (GMT)
-Received: from localhost (localhost [IPv6:::1])
-        by chameleon.vennard.ch (Postfix) with ESMTP id 6A7B2120BF2;
-        Tue, 18 Jan 2022 20:50:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 chameleon.vennard.ch 6A7B2120BF2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vennard.ch;
-        s=9ECFC226-3425-11E4-849C-FD7C69C5B08C; t=1642539032;
-        bh=h9L8ml/Dr+9Otc4vSQsu7LfWauQMaE0fP0OWB1a411E=;
-        h=From:To:Message-ID:Date:MIME-Version;
-        b=fVEfEhlpeNjsHYFnpFu3wB4XxSwlSACTv2MSWsmmDB92fE0zvL8m9j+/gw3Y4+HgZ
-         eG8K1weO39zugC808b8Dd0jM/h5egUD6NKoqptNcDksDs6KvS4MvpAV0SqA1eWSrD2
-         XkCrGKKOjbFpQYYzX/CVpukf3eEW3t6vp4+D8Ijz/Tg0HRxuTGOckh7zbpToAw6Zwk
-         b1Chf3ONUzVqQ83gitdTkDmzmIUjSZJdCoYMmATpRYPZYOxqwclgxPOKY+v//yPUA0
-         hvxXijEwlJEs/z/CAmRQay9qr0xs2u3y1m+VYbCnkDLDSz8heX9AWCCWv8MzKpgGPw
-         ERz40MpvfIYxW+ieirDsP7Txxn6dnGa/e7le5RqFU/oLcX5tvdvNblybTj4soB+XeU
-         27IiONqAwA38Otq+sLwnrv4eD5hMEgGKmEqHZimbtTX4fDlgLHHXZXqCn6oSHwb0r9
-         G1Chq9PVUxXsIwr0oSyjEmM9E5EhErGrUIQzS1JhhteRz/L8dJiinu0LXplJfHpDQy
-         +8V2UILXIm9pNdhENzSHVywRYd1l8VUBXZMDM43NgwfSq73LzqO2ZhX5jBet1yF2u6
-         LJkkkHza4DsVu8HauHhGqzU9agMt2GO5xcGzTYRWVSf0pqdyC3qdbgTziUnIhjKcqg
-         yheNz5YbYIAbPRekG6fYSSoQ=
-X-Virus-Scanned: amavisd-new at vennard.ch
-Received: from chameleon.vennard.ch ([IPv6:::1])
-        by localhost (chameleon.vennard.ch [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id xHHYNI3omkmN; Tue, 18 Jan 2022 20:50:23 +0000 (GMT)
-Received: from [IPV6:2001:470:26:1b7::8a8a] (unknown [IPv6:2001:470:26:1b7::8a8a])
-        by chameleon.vennard.ch (Postfix) with ESMTPSA id 249EE120BBF;
-        Tue, 18 Jan 2022 20:50:20 +0000 (GMT)
-Authentication-Results: chameleon.vennard.ch; dkim=none
-From:   Antony Vennard <antony@vennard.ch>
-Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        ebiggers@kernel.org
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
-Message-ID: <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
-Date:   Tue, 18 Jan 2022 21:50:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+        Tue, 18 Jan 2022 15:54:15 -0500
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8668F406E9;
+        Tue, 18 Jan 2022 20:54:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1642539255; bh=PcqrgOq+GudbN8Fd+nWDwwC5UzR6hmHIegLExa7EAH0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=JIrt9NkIVMZIhMSa1htvRuSrixnVaAeaQp0jgZEA5mEm5kg3M4xX24Wxl7Abgwh6E
+         +d5sa7xoXF2gcitN4XWZBoPYCnLYqLyrw/EO+0ec7wVd4LCUchRkxHiW5xcdqN7Yy4
+         U0uC3gFRABS2L5QL+BXMlgZ0EPEryhMO1r4yrMWVaFXMoDmSIqCQXtkOrNK5pzZMLM
+         2VC3LmQMIw+jz6b1s9CR9jLYQQpodYDQ8ivV6L+iM8R7AZP5+goP5Eix+1pgoFab2c
+         eBiXAratsopRXpTHqLi3PrirvihW+6LfeQu95SIzHNjtB3wj17SoKH+55X1dNmbHdu
+         XitTbyXT721SA==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 424FDA005F;
+        Tue, 18 Jan 2022 20:54:14 +0000 (UTC)
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2043.outbound.protection.outlook.com [104.47.51.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 59C494009D;
+        Tue, 18 Jan 2022 20:54:13 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="SExtQDWx";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N4U6GHHqMO9/xyJpckg6fuZ8Ve2HXGM8A1nLiX4ajkJb8clPp6I2eVSCKUokycVezRuLKBVUNBe/zq8Y+/WJKsO2mlQgjt+OvP+KPrfmU6+h4sdff4kQzd/1CVSY8haK8FEceLRExLHVThSBdWIKR0bTkn0zFbCmDNIHqZFInu5xCqen8W+wlTxKPUAMQPPTiRT663wMCSmz3YL/yeCxkmRupBi9Om41pw/5jM84UtOGg6pCvMDRtX2l+Xwkv2VMYqza4XZvAV+1Af5vxb+N93Bzche6xcctF94gN9Rj1Ci5cEdEuOvmdMdg06SqMmnWZhYneizA/DkNZF4rZz0y4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PcqrgOq+GudbN8Fd+nWDwwC5UzR6hmHIegLExa7EAH0=;
+ b=cI1i29a86NomtNU0+v17sPVYIIoDd6xU/xLsJbts8/Qfw+idMH688knT7yAvwXBOufgjRFgsIn+y8c07//PZPLZrKI5zhPHBlM6YY8pVi44IYw3rFrP8lOBP6MzWdBxpqr43FhSQ6GIAfA+qiPDEEnq9DsOdJF5HlGGGWYK0U2C9qq35KZda2PFrjZnTWfEYJfoAQfwT7JMLTKWJme7pJoo2vq1+52OXCpZx468D8Y402D5hLiKtm+mRF11msdu9zPm7+xFy0FMXZ1Xl8vbtsBAVoqGbm16jVy11PB8cnAgzRzyyTMOnwXd9/VLl7+aMYZcIIOuT+1DmdhVkrZaoyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PcqrgOq+GudbN8Fd+nWDwwC5UzR6hmHIegLExa7EAH0=;
+ b=SExtQDWxDoUaBZBVt3nOk2kY1vCciKmkOKxMmGiPtzk1jfXC5v68Lw0beQ6cqjWgrJtNDxEEsuhNoOhn2/FldUS0PwOvlWvtu/l25JyMvppvVbojGomayiphHgW8UqVbOe1gJCUNGUJ8To3sXGmsbRKH2Ld8tydc0Wqle/YldU8=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by MN2PR12MB2960.namprd12.prod.outlook.com (2603:10b6:208:101::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
+ 2022 20:54:09 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::8983:6493:8c38:d34a]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::8983:6493:8c38:d34a%3]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
+ 20:54:09 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Robert Hancock <robert.hancock@calian.com>,
+        "sean.anderson@seco.com" <sean.anderson@seco.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "baruch@tkos.co.il" <baruch@tkos.co.il>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "bjagadee@codeaurora.org" <bjagadee@codeaurora.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "agross@kernel.org" <agross@kernel.org>
+Subject: Re: [PATCH 0/6] usb: dwc3: Calculate REFCLKPER et. al. from reference
+ clock
+Thread-Topic: [PATCH 0/6] usb: dwc3: Calculate REFCLKPER et. al. from
+ reference clock
+Thread-Index: AQHYCaAEN5xMDjPNv0iLO+Qwz2hVyaxnCOeAgAIr9wCAAAIIAIAAAf+AgAAKzwCAAAQeAA==
+Date:   Tue, 18 Jan 2022 20:54:08 +0000
+Message-ID: <076fae75-d6e7-41bf-d9e6-c77d08aa51c4@synopsys.com>
+References: <20220114233904.907918-1-sean.anderson@seco.com>
+ <87iluifxy1.fsf@tarshish> <7831a4f7-7c3f-4a2a-be73-38f2c40a123c@synopsys.com>
+ <f28052d9-5dea-a05b-8745-09e4d237b539@seco.com>
+ <f53ba815-f2ee-a558-73f3-06c5a43f5c5e@synopsys.com>
+ <eb3ba4b54d09dbe413907adb86669096110bbd0d.camel@calian.com>
+In-Reply-To: <eb3ba4b54d09dbe413907adb86669096110bbd0d.camel@calian.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 34740568-70d6-41c8-0157-08d9dac4ac7e
+x-ms-traffictypediagnostic: MN2PR12MB2960:EE_
+x-microsoft-antispam-prvs: <MN2PR12MB296086D5D4B5ED2FAEF2792BAA589@MN2PR12MB2960.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aGbbYVsxbU3ZIIx22290dJJj1i2dM3CS8YRWwiAu+otEImz78BP/2Sq6xNeknTgRE3E3CewH/YnP2ms+w96Z269qUe8DeTwOHjahSYxFcRIbrnyFQEviGcETHPksHFZgx5F+/qZtD1MkRAj+y4jEs9Kl/utnRqTjJBb8zB3gbHIdr/6buIbywHaaiL0qIiLdUKZshDC9oqqtdj3NA9EAGupYeSs2UweXipiH+gXQeV3/UKsOomI31jNRUm1MsSOVCsxgW4HOOXGhs9kIfh+x2LjW3DX9geITkJ29YzyWJgoouAItqkXmlx37JgaD0M+G1z9rBDGuttsUX9FYTDKjVoJNO0A6TL2g73o8VMI8y/26o3rpKYVy/UGQR+fG1phcIVEZJfypW+x8mbGaAVpLGnrOBJCRbWCkczKQe/7cbVoCRRn2yMn0r3Y+WogUwY2thYM38WuN7aSVMJdydjBy4kPeD/PReTl9CY+pjPwXuxc3HLCJszdnfOSm+LNgszf85BQWVqZF/w8DCo2he3h9FUlN7lZUfa1K5HPDfmToluV2/pBkdmU/eShRKTfrVIY2VC5yGz2HZYtjiL31fVr1qYJwzqCnztByQn18Mat0244WBoyXzP2kaPeRu5vZHV2c1IruAIXpwFDL17KSU0ZQIefF9plXEVPZRU6IrxcEkyGBeBnNXLYdQPq8HF7jmmhk752jflVqBEjlPczdCT7lpI9g7aKIfdsIv4vWsHwMRdnrqeRKrTnDKIi/H/tDyFDz7bk9+tp/KQunlZ4TBPxpJPhfv+HlGY/KurYfUB7A4EJJMSjhQE0MQND/Sm+BxpJTi3Y8ohYSbf05X16tazrxpwZg1VXZ4404q1JOcyAJnK4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66446008)(83380400001)(64756008)(186003)(8936002)(110136005)(26005)(66556008)(66476007)(508600001)(2616005)(38070700005)(2906002)(54906003)(8676002)(316002)(31686004)(6486002)(966005)(7416002)(5660300002)(53546011)(6506007)(71200400001)(6512007)(86362001)(66946007)(36756003)(4326008)(38100700002)(31696002)(76116006)(122000001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SjJ6dC9xWUYvVllRbDA1NkUxMkVELzE1Uk1QL3BPMVAyeUtRR3ROaUljeFla?=
+ =?utf-8?B?V01rZklTT0ZXWHRzMmp0UlpiVUIvTjRtdFNraWcxMmZZb0dNdjhTVXMxcWly?=
+ =?utf-8?B?OTVJZ0lnZ3ZCVUhrTDBZRi9JdHM5dENDMnlxZEF3Y1lZZVQ5N25UcGxWQjJs?=
+ =?utf-8?B?VnNnc2pRZ2hnY2Z3SUp1ZnB1NEJhQkdSdTBiUWJpd1JzL0RZcUc1YVIxYU1R?=
+ =?utf-8?B?cm9oOFdyMEtTMEhMTWU1ZUVLSzROejRMb3V4NGYwdFE3RllxcG03NWY3QVM5?=
+ =?utf-8?B?d0NrMm4zd0RLMC9DdEFCbi82UVhlRjI3TFJGWVJ6NTVKNXNDSm52eGkva0JC?=
+ =?utf-8?B?bkRrSkowYXVCampVRUhQZnZpeUtJSzVLUWdyaXdvUUxkeW9aczZzZ2EzdXBD?=
+ =?utf-8?B?a043S2E5TnVUeGh6cFpOd2NMdUVHSG9vbW9SOU51Y25RSXVZeEMxdnZrQmZT?=
+ =?utf-8?B?a1B1dDFrWis4UGJRNmRUK0F4WVYxM1M3NU16eFhVeVQvRkJvTlluWlR2OVpr?=
+ =?utf-8?B?ZEtia3VmQ2trSkJmbVR6SEYyelJlTHBQUWlNeGhxY0M2RVBqRFJDZ3ZJZkhm?=
+ =?utf-8?B?ekhndXZTOVlBTFZJQ245RVRJTnpSYnpURy81akFNMEdmTzlSb0IvbXFnU1Mv?=
+ =?utf-8?B?djMvMmUyMlpwd3JYcGpDL1pSZnNRV2xEMGJCSE5peUhzUGNoWmd1eWFhNENl?=
+ =?utf-8?B?QnJQNms0YmQ3NVlRWlZXeVNEWFZXakNEMzFxQ2VsWjhUNnhUS0hpZkdkbFlN?=
+ =?utf-8?B?S3I3eUNmVkJxbko5TmppUTY2QmU1S3dSRE1hb0ordU5SMml1Wm43REEyL2JH?=
+ =?utf-8?B?M2VSNTd4R2JYMVFNeDZxUzFKYzlNenR6SmswTDZRQVpOQU9vM05FZEF0dGhU?=
+ =?utf-8?B?MU8xNFgxaVNaYWxtakllNGtMc21HT0dXclBiS3pMc3RtWXR4bWNTRnFCWWcr?=
+ =?utf-8?B?M2Jqd2J1aUE3aUJsblk5b0tsaDhEeE9TM2tSVGxqbDVjb2FkdkswYmNCYW5H?=
+ =?utf-8?B?VVYyTmdiSW1TeE5WT2pPWWNtMHJBNThkMktxaXpOUTJGaEpoZGFYcjlkbG81?=
+ =?utf-8?B?eFJONnF6QmhCK2hHV2dJcWJPSzRCUXpSeFhXWEI0S3FKQmZYVEZwZy90akRn?=
+ =?utf-8?B?VzVxSUNoZU9yT1VZYklwZE42ajJqMjcyblpqTkNWV201Mm9abG54Mk5sVkU1?=
+ =?utf-8?B?a1UzcHJzRE5UdUpoRkw0b1NsdDlmenpnWjRhbzRKSkJabHFyZTBxVHBtVk5E?=
+ =?utf-8?B?Mm5ZSzhhbkU1dDVxZFNRaWh2ekRBKzVFeTUwRkt5MmlCWjkra0xuc0FXNEhZ?=
+ =?utf-8?B?amY2eE1JN21aVElDNWFOVWVSUjNNTExHUFNEVTRYTUFEV2FzeUV6T1g0N2c4?=
+ =?utf-8?B?NXZ2b1ZqVTU0Sjk0bkZOZW9qL1RYczJiMnlQZ005R2ozWFEyMEtjamJDdXRD?=
+ =?utf-8?B?NDFNRWUxWFVqVE9VdXlQRU16RlMwTEc3WEM2YWZjd09tTklpT0trNHJteVFx?=
+ =?utf-8?B?YndXcXBBMVd5cXdpWnZLem0reUJHSjZhU1g3VDI5ZzU5czdLaWJvMnJLSUUw?=
+ =?utf-8?B?OFVwNzhNelhhbG5XV1NvME80Q3hnRk1kNmZoeE5zcWo3ZDMvSzBIK1pFc1dt?=
+ =?utf-8?B?SDdSTEEyVHkwNnVzcXVJS2JXK2UxaXE0aDNrSjBZRTlNS3dBdFJMcHcxMGRD?=
+ =?utf-8?B?SWhzR29MMXAzaEVuUUZyNXZmWXBVLzhrZmR4SkVSRE5xWjltZHZpZld0NFFK?=
+ =?utf-8?B?K2VhQTc1RUxQSy9rM2h3U05zdnU0SERDWGplUkJsNWRpbFdWQ2V6TnhlTmo2?=
+ =?utf-8?B?N0thTm9EOFA4M1IybXpZTGNPVnpKcWxQMlhCY1BaMkVnTnlSOVk1L25neFhn?=
+ =?utf-8?B?L0cxd3Z3KzZQTmx0K05QWjBpbXRqZ3dmM3I0MDlWN0xCOVp6Yk1Ia3lHVFgx?=
+ =?utf-8?B?TWRuNjUrdmJ1STdpYWlYRUU2RjBFRVFHWVF1T0RVbmtuRnVsYS82Y2FyemJq?=
+ =?utf-8?B?TDJyb3F0TEVxalNtUWVDdmxZZDdhaTNvWHc5eWJMZm9nSzNQV2E1RWQ4VlBr?=
+ =?utf-8?B?R1ppSXh6U1Fjc2huQWVoQUNqZFk0ODRHOXlMNmp3dzBsbExvMjlxV05NNHNm?=
+ =?utf-8?B?K2FiRVhzSDBOK1VneXo3NUNCQ1VMSEtsdjFMNllxVmFWSUZ4ZGw5VlhZWWgy?=
+ =?utf-8?B?L1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E0C70F98567A354DAF72A67994E06FB9@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34740568-70d6-41c8-0157-08d9dac4ac7e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2022 20:54:08.8426
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iRUGCkM7Jp2ercWANrOH3qKPmZm4L1mHtPG8cNHzFlscG84aCWp3bVSjDHZ+mIz+HdmvUf2kVk50V3wLd1ibTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2960
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi All,
-
-On 17/01/2022 16:02, James Bottomley wrote:
-> On Mon, 2022-01-17 at 15:34 +0100, Jason A. Donenfeld wrote:
->> Hi,
->>
->> While it looks like you put a lot of work into this patchset, I think
->> the general idea of adding PGP *to the kernel* is a pretty daunting
->> proposition. The general consensus in the crypto engineering world is
->> that PGP ought to be on its way out. We definitely don't want to
->> perpetuate this project-on-life-support into the permanence of kernel
->> code. Some quick Google searches will reveal a litany of blog posts
->> to the tune of, "why oh why are people still using this?" Here's one
->> from 2019:
->> https://latacora.micro.blog/2019/07/16/the-pgp-problem.html . I
->> think these are arguments to take seriously. And even if you disagree
->> with some parts, you may want to consider whether the remaining parts
->> warrant a bit of pause before adding this to the kernel and
->> perpetuating PGP's design further.
-
-So while I understand why this is being proposed and clearly effort has=20
-gone into it, I also think it is not the right approach. It seems this=20
-proposal is to include a full PGP packet parser and verification logic=20
-in the kernel as an equivalent to allow PGP signatures to be submitted=20
-via FS_IOC_ENABLE_VERITY:
-
-"FS_IOC_ENABLE_VERITY accepts a pointer to a PKCS#7 formatted detached=20
-signature in DER format of the file=E2=80=99s fs-verity digest."
-
-I may be misinterpreting, but as I understand it logic for X.509/PKCS=20
-validation already exists in-kernel because of UEFI and module signing,=20
-so this signature would be verified up to trusted roots. The proposal is=20
-to duplicate all of this logic but in terms of PGP-formatted keys.
-
-I believe this is unnecessary. Since it seems to require both a=20
-signature and verification up to a root, and distributions like Fedora=20
-already deal with x509 module signing keys for their kernel modules, I=20
-can't see the merit in including the full PGP system too. The=20
-least-effort approach, I would suggest, is to include an x509=20
-representation of the signature in the RPM and use the existing API to=20
-push that up into the kernel, with the trust anchor the same as is used=20
-for module signing keys, or whatever distributions prefer (they, after=20
-all, control the kernel trust anchors).
-
-I understand this requires some effort, but so too does maintaining a=20
-fully fledged PGP packet parser as privileged code for all time, and I=20
-think maintaining this in userspace is a) easier and b) less costly than=20
-doing it in kernel. As an added bonus, a PGP-parsing library in a=20
-memory-safe language could be used in userspace.
-
-A slightly more drastic step would be to wholesale move to PKCS=20
-signatures for packaging. Linux distributions could be their own trusted=20
-roots for this purpose if they so desired, and since they control=20
-certificate bundles anyway they've no need to add them to the browser=20
-list if that is a concern, and can issue certs without SSL Client/SSL=20
-Server types and OIDs.
-
-> The reason is simple though: for all the detractors and whining, no-
-> one's actually been able to come up with a more usable replacement.
-> Very few people who complain about GPG actually submit patches to fix
-> it.  A few come up with their own infrastructure which tends to have
-> even more problems.
-
-Probably replacing with PKCS is a non-starter, but it is at least=20
-possible and it is highly likely distros package one or more tools=20
-capable of validating such signatures in their base installs.
-
-There are multiple problems with PGP that receive complaints. They are:
-
-  1) No forward secrecy in messaging-based crypto.
-  2) The data format.
-  3) Outdated cryptography still supported.
-  4) UX.
-
-Of these, all four could be levelled against PKCS standards and related=20
-tools too (except TLS protocols for the first point), and only 2 and 3=20
-are relevant here since we are concerned with signature validation only.
-
-I'm not "against" PGP per se, but I'm not convinced by the idea of=20
-adding PGP support just for fs-verity.
-
->> If you're looking for a simple signature mechanism to replace the use
->> of X.509 and all of that infrastructure, may I suggest just coming up
->> with something simple using ed25519,
->=20
-> Please, no, use universally supported crypto that we can use TPM
-> hardware for, which for EC currently means P-256.  It may be possible
-> to get the TCG and the other security bodies to add Edwards signatures
-> but the rate of progression of quantum means that Grover's Algorithm
-> will likely get there first and we'll need P-521 or X448.
-
-I agree: whatever is chosen should in my view have decent support for=20
-hardware-backed keys, because I strongly hope that is what distribution=20
-key storage looks like. If not I might need to move to Gentoo.
-
-The current RPM signing keys for Fedora are RSA-4096, which in my=20
-opinion does not actually meet the bar for "good hardware support for=20
-algorithm". RSA-2048 tokens are common, but 4096 much less so.
-
-Unfortunately for this reason signify/minisign is not ideal as tools: so=20
-far as I can see it has no support for hardware-backed keys. That's not=20
-to say they couldn't, although they both use ed25519.
-
-I am not sure if we'll end up in the situation where Grover's algorithm=20
-is efficient but Shor is not, but this is all guesswork until we get=20
-closer to a quantum computer with enough logical Qubits. But your=20
-substantive point I think is valid: hardware vendors are disappointingly=20
-slow at adopting edwards curves.
-
->>   similar to signify or minisign? Very minimal code in the kernel, in
->> userspace, and very few moving parts to break.
->=20
-> Heh, this is the classic cryptographers dilemma: go for something
-> pejorative which can be minimal but which has only a relatively small
-> set of possible use cases and no future proofing or go for something
-> extensible which ends up more complex and others then criticize as
-> being a "swiss army knife".
-
-I think this is the wrong framing for the problem. We already have one=20
-extensible system that is complicated in the kernel. This patch proposes=20
-to add a second one achieving the same purpose instead of a userspace=20
-solution to take advantage of the existing code, which I think would be=20
-preferable and safer.
-
-Antony
+Um9iZXJ0IEhhbmNvY2sgd3JvdGU6DQo+IE9uIFR1ZSwgMjAyMi0wMS0xOCBhdCAyMDowMCArMDAw
+MCwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPj4gU2VhbiBBbmRlcnNvbiB3cm90ZToNCj4+PiBIaSBU
+aGluaCwNCj4+Pg0KPj4+IE9uIDEvMTgvMjIgMjo0NiBQTSwgVGhpbmggTmd1eWVuIHdyb3RlOg0K
+Pj4+PiBIaSBTZWFuLA0KPj4+Pg0KPj4+PiBCYXJ1Y2ggU2lhY2ggd3JvdGU6DQo+Pj4+PiBIaSBT
+ZWFuLCBUaGluaCwNCj4+Pj4+DQo+Pj4+PiBPbiBGcmksIEphbiAxNCAyMDIyLCBTZWFuIEFuZGVy
+c29uIHdyb3RlOg0KPj4+Pj4+IFRoaXMgaXMgYSByZXdvcmsgb2YgcGF0Y2hlcyAzLTUgb2YgWzFd
+LiBJdCBhdHRlbXB0cyB0byBjb3JyZWN0bHkNCj4+Pj4+PiBwcm9ncmFtDQo+Pj4+Pj4gUkVGQ0xL
+UEVSIGFuZCBSRUZDTEtfRkxBREogYmFzZWQgb24gdGhlIHJlZmVyZW5jZSBjbG9jayBmcmVxdWVu
+Y3kuDQo+Pj4+Pj4gU2luY2UNCj4+Pj4+PiB3ZSBubyBsb25nZXIgbmVlZCBhIHNwZWNpYWwgcHJv
+cGVydHkgZHVwbGljYXRpbmcgdGhpcyBjb25maWd1cmF0aW9uLA0KPj4+Pj4+IHNucHMscmVmLWNs
+b2NrLXBlcmlvZC1ucyBpcyBkZXByZWNhdGVkLg0KPj4+Pj4+DQo+Pj4+Pj4gUGxlYXNlIHRlc3Qg
+dGhpcyEgUGF0Y2hlcyAzLzQgaW4gdGhpcyBzZXJpZXMgaGF2ZSB0aGUgZWZmZWN0IG9mDQo+Pj4+
+Pj4gcHJvZ3JhbW1pbmcgUkVGQ0xLUEVSIGFuZCBSRUZDTEtfRkxBREogb24gYm9hcmRzIHdoaWNo
+IGFscmVhZHkNCj4+Pj4+PiBjb25maWd1cmUNCj4+Pj4+PiB0aGUgInJlZiIgY2xvY2suIEkgaGF2
+ZSBidWlsZCB0ZXN0ZWQsIGJ1dCBub3QgbXVjaCBlbHNlLg0KPj4+Pj4+DQo+Pj4+Pj4gWzFdDQo+
+Pj4+Pj4gaHR0cHM6Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
+L2xpbnV4LXVzYi8yMDIyMDExNDA0NDIzMC4yNjc3MjgzLTEtcm9iZXJ0LmhhbmNvY2tAY2FsaWFu
+LmNvbS9fXzshIUE0RjJSOUdfcGchTTN6S3hEWkM5YV9ldHF6WG83R1NFTVRIUldmYzF3Ul84NHd3
+TTQtZlNoaUEzNUNzR2N4Y1RFZmZIUGJwcmJkQzRkMlIkDQo+Pj4+Pj4NCj4+Pj4+DQo+Pj4+PiBU
+aGluaCwgeW91IHN1Z2dlc3RlZCB0aGUgZGVkaWNhdGVkIERUIHByb3BlcnR5IGZvciB0aGUgcmVm
+ZXJlbmNlIGNsb2NrOg0KPj4+Pj4NCj4+Pj4+ICANCj4+Pj4+IGh0dHBzOi8vdXJsZGVmZW5zZS5j
+b20vdjMvX19odHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvZDVhY2IxOTItODBiOS0zNmY3LTQz
+ZjUtODFmMjFjNGU2YmEwQHN5bm9wc3lzLmNvbS9fXzshIUE0RjJSOUdfcGchTTN6S3hEWkM5YV9l
+dHF6WG83R1NFTVRIUldmYzF3Ul84NHd3TTQtZlNoaUEzNUNzR2N4Y1RFZmZIUGJwcmJwT0Ztdlgk
+DQo+Pj4+Pg0KPj4+Pj4NCj4+Pj4+IENhbiB5b3UgY29tbWVudCBvbiB0aGlzIHNlcmllcz8NCj4+
+Pj4+DQo+Pj4+DQo+Pj4+IFVubGVzcyB0aGVyZSdzIGEgZ29vZCB3YXkgdG8gcGFzcyB0aGlzIGlu
+Zm9ybWF0aW9uIGZvciBQQ0kgZGV2aWNlcywgbXkNCj4+Pj4gb3BpbmlvbiBoYXNuJ3QgY2hhbmdl
+ZC4gKEJ0dywgSSBkb24ndCB0aGluayBjcmVhdGluZyBhIGR1bW15IGNsb2NrDQo+Pj4+IHByb3Zp
+ZGVyIGFuZCBpdHMgZHVtbXkgb3BzIGlzIGEgZ29vZCBzb2x1dGlvbiBhcyBzZWVtcyB0byBjb21w
+bGljYXRlIGFuZA0KPj4+PiBibG9hdCB0aGUgUENJIGdsdWUgZHJpdmVycykuDQo+Pj4NCj4+PiBD
+YW4geW91IGV4cGxhaW4geW91ciBzaXR1YXRpb24gYSBiaXQgbW9yZT8gSSdtIG5vdCBzdXJlIGhv
+dyB5b3UgY2FuDQo+Pj4gYWNjZXNzIGEgZGV2aWNlIHRyZWUgcHJvcGVydHkgYnV0IG5vdCBhZGQg
+YSBmaXhlZC1yYXRlIGNsb2NrLg0KPj4+DQo+Pj4gLS1TZWFuDQo+Pg0KPj4gQ3VycmVudGx5IGZv
+ciBkd2MzIHBjaSBkZXZpY2VzLCB3ZSBoYXZlIGdsdWUgZHJpdmVycyB0aGF0IGNyZWF0ZSBhDQo+
+PiBwbGF0Zm9ybV9kZXZpY2Ugd2l0aCBzcGVjaWZpYyBwcm9wZXJ0aWVzIHRvIHBhc3MgdG8gdGhl
+IGR3YzMgY29yZQ0KPj4gZHJpdmVyLiBXaXRob3V0IGEgcmVmIGNsb2NrIHByb3BlcnR5LCB3ZSB3
+b3VsZCBuZWVkIGFub3RoZXIgd2F5IHRvIHBhc3MNCj4+IHRoaXMgaW5mb3JtYXRpb24gdG8gdGhl
+IGNvcmUgZHJpdmVyIG9yIGFub3RoZXIgd2F5IGZvciB0aGUgZHdjMyBjb3JlDQo+PiBkcml2ZXIg
+dG8gY2hlY2sgZm9yIHNwZWNpZmljIHBjaSBkZXZpY2UncyBwcm9wZXJ0aWVzIGFuZCBxdWlya3Mu
+DQo+IA0KPiBXZSd2ZSB1c2VkIHRoZSBkZXZpY2UgdHJlZSB0byBpbnN0YW50aWF0ZS9jb25maWd1
+cmUgZGV2aWNlcyBpbnNpZGUgb2YgYSBQQ0kNCj4gZGV2aWNlLCB0aG91Z2ggb2J2aW91c2x5IHRo
+YXQgb25seSB3b3JrcyBvbiBEVC1iYXNlZCBwbGF0Zm9ybXMsIGFuZCBmb3INCj4gaGFyZHdhcmUg
+dGhhdCdzIHBhcnQgb2YgdGhlIGJvYXJkIGl0c2VsZiwgbm90IGFuIGFkZC1pbiBjYXJkLg0KPiAN
+Cj4gV2UndmUgYWxzbyB1c2VkIHRoZSBNRkQgaW5mcmFzdHJ1Y3R1cmUgdG8gaW5zdGFudGlhdGUg
+ZGV2aWNlcyBhbmQgZGV2aWNlDQo+IHByb3BlcnRpZXMgaW5zaWRlIGEgUENJIGRldmljZSBvbiB4
+ODYsIHdoaWNoIGNhbiBiZSB1c2VkIGlmIHRoZSBkcml2ZXIgeW91IGFyZQ0KPiBpbnN0YW50aWF0
+aW5nIHVzZXMgdGhlIGdlbmVyaWMgZGV2aWNlIHByb3BlcnR5IGFjY2Vzc29ycyBhbmQgbm90IHRo
+ZSBEVC0NCj4gc3BlY2lmaWMgb25lcy4gVGhhdCBnZXRzIGEgYml0IGRpcnR5IGhvd2V2ZXIgLSBJ
+IGRvbid0IHRoaW5rIHRoZXJlJ3MgYW4gZWFzeQ0KPiB3YXkgdG8gY3JlYXRlIHByb3BlcnRpZXMg
+dGhhdCBhcmUgcmVmZXJlbmNlcyB0byBvdGhlciBub2Rlcywgb3IgbW9yZSB0aGFuIGENCj4gc2lu
+Z2xlIGxldmVsIGRlZXAgaGVpcmFyY2h5IG9mIG5vZGVzLg0KPiANCj4gRm9yIGEgdXNlIGNhc2Ug
+bGlrZSB5b3UncmUgZGVzY3JpYmluZywgaXQgc291bmRzIGxpa2UgaXQgd291bGQgYmUgYmV0dGVy
+IHRvDQo+IGFic3RyYWN0IGF3YXkgc29tZSBvZiB0aGUgY29yZSBEV0MzIGNvZGUgZnJvbSByZWFk
+aW5nIHRoZSBzZXR0aW5ncyBmcm9tIERUDQo+IGRpcmVjdGx5LCBzbyB0aGF0IHRoZSBQQ0kgZGV2
+aWNlcyBjYW4gaW5zdGFudGlhdGUgaXQgYW5kIHNldCB0aGUgY29uZmlndXJhdGlvbg0KPiBob3dl
+dmVyIHRoZXkgd2FudCwgd2l0aG91dCBoYXZpbmcgdG8gd29ycnkgYWJvdXQgY3JlYXRpbmcgZmFr
+ZSBwcm9wZXJ0aWVzIGZvcg0KPiB0aGUgY29yZSB0byByZWFkLiBJIHRoaW5rIHRoYXQgcGF0dGVy
+biBoYXMgYmVlbiB1c2VkIHdpdGggc29tZSBvdGhlciBkcml2ZXJzDQo+IHN1Y2ggYXMgQUhDST8N
+Cj4gDQoNClllcy4gSXQgd291bGQgYmUgZ3JlYXQgaWYgd2UgY2FuIHJld29yayBhbmQgYWJzdHJh
+Y3QgdGhpcy4gSSdkIG5lZWQgdG8NCnJldmlldyBob3cgQUhDSSBoYW5kbGVzIGl0LiBJdCBkb2Vz
+bid0IHNlZW0gbGlrZSBhIHNtYWxsIHRhc2sgYXMgaXQNCnRvdWNoZXMgb24gbXVsdGlwbGUgZHJp
+dmVycy4gQnV0IGlmIGFueW9uZSBjYW4gc3RhcnQgdGhpcyBvZmYsIEkgY2FuDQpoZWxwIGZ1cnRo
+ZXIgY29udHJpYnV0ZS9yZXZpZXcuDQoNClRoYW5rcywNClRoaW5oDQoNCg==

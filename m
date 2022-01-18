@@ -2,101 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0BF4925FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F693492602
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbiARMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:48:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54189 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234541AbiARMs1 (ORCPT
+        id S239392AbiARMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:49:07 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4604 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234541AbiARMtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:48:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642510106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CB6tHFD3hrD0W0enC4pHpoosOH1HSXx3fWvCf7Pxffo=;
-        b=CZ2+wxhzXQAA+l7EqiAz+EClZbKR+5KLMf3bJHbrG18mC253Hfi1+aTwLWMFe2CSCDTnzm
-        2MPoj3l4XhYR7jCdpNVxTyD8rTyY58QYmu+88sLRwuuwABkPdLB+hPWfpN3aTGPtYaVVD3
-        CM7kAkfHaL2I/TGtHmICded/8a2d3S0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-306-6FX2kNaPP3Ch-pn68zxI-g-1; Tue, 18 Jan 2022 07:48:23 -0500
-X-MC-Unique: 6FX2kNaPP3Ch-pn68zxI-g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 26F0E1006AA5;
-        Tue, 18 Jan 2022 12:48:22 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1BF02B4BF;
-        Tue, 18 Jan 2022 12:48:07 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 4523D18000A6; Tue, 18 Jan 2022 13:48:06 +0100 (CET)
-Date:   Tue, 18 Jan 2022 13:48:06 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Message-ID: <20220118124806.ywmjxk6wstipzi56@sirius.home.kraxel.org>
-References: <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
- <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
- <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <ebe9c076-e2a9-0cb7-eb6a-ae71c075975e@gmx.de>
- <20220118091615.3ih5n7vhd6tgmnku@sirius.home.kraxel.org>
- <ffef1042-e1af-d5b5-b140-ae24fcc1855b@gmx.de>
+        Tue, 18 Jan 2022 07:49:05 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IC7hqD016559;
+        Tue, 18 Jan 2022 12:49:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7zk+7nKCLi9ENWrIDerU8vUeqRDxwurdAz2k0Ew1qF4=;
+ b=remzBvhSJOgBcBGIWMGUbbKxxnGtIZygt4s7WCdF/qSbB3yKWfghGslJ8vKEgCUzAzHf
+ UCAnxFAn+6QWKgP8kkfJNKbDmNi3lnaV3UZ1TvojBiy+Cl18pFV/GvmnZ5xROtDdHstZ
+ 6Ok3j9cNOtsA+OSZmshvTsRhnCx0KznWK3IZAgjOdIZS7yMhyWGArd/4+VcjLwaBs2/Q
+ Sze3v/bcazZiUIG+/+/yn3AURCxJPhpCzV51DW9P+cbSyLxU0qj/pDXJlJczeE/rX3Tm
+ PseZ29iQfl/BilnUcPDIz3vpIpY+ScLm/vBwAt82cUl5TqWoa4lXMw7FkfkTn7BoVQ1p Yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dntgf57pg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 12:49:03 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IClku1025136;
+        Tue, 18 Jan 2022 12:49:02 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dntgf57ng-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 12:49:02 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ICle8p025377;
+        Tue, 18 Jan 2022 12:49:00 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dknw9mauf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 12:49:00 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ICmwiB41615830
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 12:48:58 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AFC742078;
+        Tue, 18 Jan 2022 12:48:58 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A7DE142047;
+        Tue, 18 Jan 2022 12:48:57 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.88.172])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 18 Jan 2022 12:48:57 +0000 (GMT)
+Date:   Tue, 18 Jan 2022 13:48:55 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH] virtio: acknowledge all features before access
+Message-ID: <20220118134855.3e8cbce5.pasic@linux.ibm.com>
+In-Reply-To: <20220114200744.150325-1-mst@redhat.com>
+References: <20220114200744.150325-1-mst@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffef1042-e1af-d5b5-b140-ae24fcc1855b@gmx.de>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LgdXokpGAwTbj_bO38sN3_CjlvHbFl0p
+X-Proofpoint-ORIG-GUID: a3jZiu96mqtM74oEA5U3sDEb_0Bwm1nf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_03,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180077
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi,
+On Fri, 14 Jan 2022 15:09:14 -0500
+"Michael S. Tsirkin" <mst@redhat.com> wrote:
 
-> > fbcon/fbdev emulation: RGB332 support must be added I think.  But both
-> > argb888 and rgb565 are supported today, so it should not be hard to find
-> > the places where you have to add some code to handle RGB332 too.
+> The feature negotiation was designed in a way that
+> makes it possible for devices to know which config
+> fields will be accessed by drivers.
 > 
-> I'd expect that that framework is provided by DRM developers if there is the wish
-> to get rid of old fbdev and transition existing drivers over to use DRM.
-
-Good luck with that.  Asking people to code up stuff they can't even
-test due to lack of hardware isn't going to fly very well.
-
-> > Yes.  The world shifted from 2d acceleration to 3d acceleration.  Modern
-> > hardware simply has no classic blitter any more.  Which is a problem
-> > when it comes to keeping scroll acceleration alive, it is already a very
-> > niche use case and it will only become worse ...
+> This is broken since commit 404123c2db79 ("virtio: allow drivers to
+> validate features") with fallout in at least block and net.
+> We have a partial work-around in commit 2f9a174f918e ("virtio: write
+> back F_VERSION_1 before validate") which at least lets devices
+> find out which format should config space have, but this
+> is a partial fix: guests should not access config space
+> without acknowledging features since otherwise we'll never
+> be able to change the config space format.
 > 
-> For me it's Ok that the DRM drivers don't use 2d acceleration (as it is today
-> with the arguments mentioned multiple times).
-> But the patches broke existing fbdev acceleration which is available by
-> the fbdev drivers. That's a big regression from point of fbdev.
+> As a side effect, this also reduces the amount of hypervisor accesses -
+> we now only acknowledge features once unless we are clearing any
+> features when validating.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 404123c2db79 ("virtio: allow drivers to validate features")
+> Fixes: 2f9a174f918e ("virtio: write back F_VERSION_1 before validate")
+> Cc: "Halil Pasic" <pasic@linux.ibm.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+> 
+> Halil, I thought hard about our situation with transitional and
+> today I finally thought of something I am happy with.
+> Pls let me know what you think. Testing on big endian would
+> also be much appreciated!
+ 
+Hi Michael!
 
-Keeping it alive and working will be a tough challenge.  2d acceleration
-is a thing of the past and the number of people which are able and
-willing to put effort into supporting it will only decline.  It has been
-a problem for a while already, basically it was dropped due to lack of
-support ...
+I was just about to have a look into this. But it does not apply
+cleanly to Linus master (fetched a couple of minutes ago). I also tride
+with d9679d0013a66849~1 but no luck. What is a suitable base for this
+patch?
 
-take care,
-  Gerd
+Regards,
+Halil
+
+
+>  drivers/virtio/virtio.c | 31 +++++++++++++++++--------------
+>  1 file changed, 17 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index d891b0a354b0..2ed6e2451fd8 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -168,12 +168,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
+>  
+>  static int virtio_finalize_features(struct virtio_device *dev)
+>  {
+> -	int ret = dev->config->finalize_features(dev);
+>  	unsigned status;
+> +	int ret;
+>  
+>  	might_sleep();
+> -	if (ret)
+> -		return ret;
+>  
+>  	ret = arch_has_restricted_virtio_memory_access();
+>  	if (ret) {
+> @@ -244,17 +242,6 @@ static int virtio_dev_probe(struct device *_d)
+>  		driver_features_legacy = driver_features;
+>  	}
+>  
+> -	/*
+> -	 * Some devices detect legacy solely via F_VERSION_1. Write
+> -	 * F_VERSION_1 to force LE config space accesses before FEATURES_OK for
+> -	 * these when needed.
+> -	 */
+> -	if (drv->validate && !virtio_legacy_is_little_endian()
+> -			  && device_features & BIT_ULL(VIRTIO_F_VERSION_1)) {
+> -		dev->features = BIT_ULL(VIRTIO_F_VERSION_1);
+> -		dev->config->finalize_features(dev);
+> -	}
+> -
+>  	if (device_features & (1ULL << VIRTIO_F_VERSION_1))
+>  		dev->features = driver_features & device_features;
+>  	else
+> @@ -265,10 +252,22 @@ static int virtio_dev_probe(struct device *_d)
+>  		if (device_features & (1ULL << i))
+>  			__virtio_set_bit(dev, i);
+>  
+> +	err = dev->config->finalize_features(dev);
+> +	if (err)
+> +		goto err;
+> +
+>  	if (drv->validate) {
+> +		u64 features = dev->features;
+> +
+>  		err = drv->validate(dev);
+>  		if (err)
+>  			goto err;
+> +
+> +		if (features != dev->features) {
+> +			err = dev->config->finalize_features(dev);
+> +			if (err)
+> +				goto err;
+> +		}
+>  	}
+>  
+>  	err = virtio_finalize_features(dev);
+> @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device *dev)
+>  	/* We have a driver! */
+>  	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
+>  
+> +	ret = dev->config->finalize_features(dev);
+> +	if (ret)
+> +		goto err;
+> +
+>  	ret = virtio_finalize_features(dev);
+>  	if (ret)
+>  		goto err;
 

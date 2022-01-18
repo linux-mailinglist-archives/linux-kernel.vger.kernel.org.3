@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB5F492C48
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E54492C00
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347201AbiARRZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:25:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25318 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243633AbiARRZv (ORCPT
+        id S1346397AbiARRLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230060AbiARRLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:25:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642526751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rR/bu37Is80SlqeUGWI0t9CgSie0s+VhhWDwdSOZaOM=;
-        b=hsOP71oA+PDSdboeI2khzOr6xS3w+lvCfU9Q8QMlF3KWXG3ZzwcvhFk4uOo1XRsoQZl+VT
-        xRgixhZuW+SFYfOZqjFj+3tYDXFJW6xBExV98NblObTlN9U48eHviqcl9YvP75DW7J9GKy
-        Ri9lzgEWmFxKF6MnOyqQo8ngP+sc/z0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-p40EvUEhNN6kNZ7FxO2S4Q-1; Tue, 18 Jan 2022 12:25:46 -0500
-X-MC-Unique: p40EvUEhNN6kNZ7FxO2S4Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 18 Jan 2022 12:11:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D80C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 09:11:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51FCB11185D0;
-        Tue, 18 Jan 2022 17:10:07 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.139])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B74817A3F9;
-        Tue, 18 Jan 2022 17:10:06 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH] virtio: acknowledge all features before access
-In-Reply-To: <20220118104318-mutt-send-email-mst@kernel.org>
-Organization: Red Hat GmbH
-References: <20220114200744.150325-1-mst@redhat.com>
- <d6c4e521-1538-bbbf-30e6-f658a095b3ae@redhat.com>
- <20220117032429-mutt-send-email-mst@kernel.org>
- <87mtjuv8od.fsf@redhat.com>
- <20220118104318-mutt-send-email-mst@kernel.org>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Tue, 18 Jan 2022 18:10:05 +0100
-Message-ID: <871r15dl76.fsf@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20B31B81238
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C70FC340E0;
+        Tue, 18 Jan 2022 17:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642525860;
+        bh=9Oiq6z0NhX/tzLVnd+VfU3zd3DlXHBDOmoHeXqvmIik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bZSz15dqy7JLztDN0MIhWS0xoD/DVspHNJtE5Ot0Gf0c8sI9DkdUNhWxSgKcfDdmn
+         mi34k1CvopHdAisO9jdc1O495rvsnJn5vFg/Bg6Gi6j2LOH+15p2rjCWiz8l6tY/TJ
+         nK73s1klZDmx9/oQOpCm7GCbWOVNs3OOAxtKk1eOgiJlmS6rdvAqXNgCfzRfdBHS+N
+         3eTRk91Yhjs1GvNWbN5xA7o0DQAnuUQ5TjHVXzXPKUX4Pp8XeYJK3vWzOkdGMh85bK
+         zsqb0Dqk0KRemFCEmQBJGdAtwdUcYmLdgEEeaZAZbpmxJdGRxxaT+XxDzuTxfh/94Y
+         2/HNi66h9sN0Q==
+Date:   Tue, 18 Jan 2022 17:10:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Julian Braha <julianbraha@gmail.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        Vijendar.Mukunda@amd.com, AjitKumar.Pandey@amd.com,
+        pierre-louis.bossart@linux.intel.com, kai.vehmanen@linux.intel.com,
+        tanureal@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, fazilyildiran@gmail.com
+Subject: Re: [PATCH] ASoC: amd: fix unmet dependency on GPIOLIB for
+ SND_SOC_DMIC
+Message-ID: <Yeb0n9AVXeVzBHrT@sirena.org.uk>
+References: <20220117041528.59958-1-julianbraha@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CS/byuj3seJkHJeR"
+Content-Disposition: inline
+In-Reply-To: <20220117041528.59958-1-julianbraha@gmail.com>
+X-Cookie: Do YOU have redeeming social value?
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
 
-> On Mon, Jan 17, 2022 at 01:38:42PM +0100, Cornelia Huck wrote:
->> On Mon, Jan 17 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
->>=20
->> > On Mon, Jan 17, 2022 at 02:31:49PM +0800, Jason Wang wrote:
->> >>=20
->> >> =E5=9C=A8 2022/1/15 =E4=B8=8A=E5=8D=884:09, Michael S. Tsirkin =E5=86=
-=99=E9=81=93:
->> >> > @@ -495,6 +494,10 @@ int virtio_device_restore(struct virtio_device=
- *dev)
->> >> >   	/* We have a driver! */
->> >> >   	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER);
->> >> > +	ret =3D dev->config->finalize_features(dev);
->> >> > +	if (ret)
->> >> > +		goto err;
->> >>=20
->> >>=20
->> >> Is this part of code related?
->> >>=20
->> >> Thanks
->> >>=20
->> >
->> > Yes. virtio_finalize_features no longer calls dev->config->finalize_fe=
-atures.
->> >
->> > I think the dev->config->finalize_features callback is actually
->> > a misnomer now, it just sends the features to device,
->> > finalize is FEATURES_OK. Renaming that is a bigger
->> > patch though, and I'd like this one to be cherry-pickable
->> > to stable.
->>=20
->> Do we want to add a comment before the calls to ->finalize_features()
->> (/* write features to device */) and adapt the comment in virtio_ring.h?
->> Should still be stable-friendly, and giving the callback a better name
->> can be a follow-up patch.
->
-> Sorry which comment in virtio_ring.h?
-> Could not find anything.
+--CS/byuj3seJkHJeR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Typo; I ment virtio_config.h...
+On Sun, Jan 16, 2022 at 11:15:28PM -0500, Julian Braha wrote:
+> When SND_SOC_AMD_YC_MACH is selected,
+> and GPIOLIB is not selected,
+> Kbuild gives the following warning:
+>=20
+> WARNING: unmet direct dependencies detected for SND_SOC_DMIC
+>   Depends on [n]: SOUND [=3Dy] && !UML && SND [=3Dy] && SND_SOC [=3Dy] &&=
+ GPIOLIB [=3Dn]
+>   Selected by [y]:
+>   - SND_SOC_AMD_YC_MACH [=3Dy] && SOUND [=3Dy] && !UML && SND [=3Dy] && S=
+ND_SOC [=3Dy] && SND_SOC_AMD_ACP6x [=3Dy]
 
->
->> >
->> >> > +
->> >> >   	ret =3D virtio_finalize_features(dev);
->> >> >   	if (ret)
->> >> >   		goto err;
+Why is this a good fix and not removing the dependency on gpiolib from
+DMIC?  While a DMIC *can* use a GPIO it's not something that's an
+intrinsic requirement and it's entirely optional in the code.
 
+--CS/byuj3seJkHJeR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHm9J4ACgkQJNaLcl1U
+h9BKuwf/Z8fB1aPDyhYaL2XXxpKPsXuHvvGt5D8UkgJbTPWxZ7fSxW/y7c1N06wl
+kxUICkVKHTKHyml19J8jfBoMIiGtOsRj4FupD0ofYuyrBGt6kdMaVg+XVmkwtaDz
+MgivjuU+iWO3sX0N490JUfsKlAoZv2RpkrlkD7hHmYIl/ks1a2D695ZJ2vs3unJG
+nR8s5zDbf6Zjn6PedxL4uQ7XySc3WJvpcW8Y53ixZLsOiZc4gmA7LBKOXIaWyz4m
+bKq9QzokLmwVkB6o7KCVmRj2W9/s0m1X+LMmaAUhgdtBKjX6fyy6TvcFX02RoUUi
+LGU7wQKllI2X4535+htPG0KYmDChAg==
+=gjhz
+-----END PGP SIGNATURE-----
+
+--CS/byuj3seJkHJeR--

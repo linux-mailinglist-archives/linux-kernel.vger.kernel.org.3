@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A45491A81
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2DC491A6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352486AbiARDAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:00:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35086 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349179AbiARCri (ORCPT
+        id S1352315AbiARC7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:59:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54926 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344041AbiARCr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:47:38 -0500
+        Mon, 17 Jan 2022 21:47:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7057612CC;
-        Tue, 18 Jan 2022 02:47:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E52FC36AEF;
-        Tue, 18 Jan 2022 02:47:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64FD8B81132;
+        Tue, 18 Jan 2022 02:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BC9C36AE3;
+        Tue, 18 Jan 2022 02:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642474057;
-        bh=Bom9tySjE4yaK810prdtgeNbiLhRB7EH8JZuDDgOKlw=;
+        s=k20201202; t=1642474076;
+        bh=vPTjVddl5DKb6MbfQQ7t/DzPJ0dMH0IYt5/qolz2wgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NAIKIaJ0zzf5FRjwyNcLILmNsUp8Mhi7kQF7NNTP75M9BnQFKkPq7i1VmRGMg99Ni
-         AOYjx7JbUk06rUFBPJ0qGHb0u02Z3DHDG+0Zn4bKdmhREAN3QTHKZzZS81Q/XltSv3
-         aB/72jYkW5Bs71eAn1dt5wIR/1n8LgmayG8lDir7PgOlNFJ4agV7ZVTt3ADnyYwei5
-         oNZPqqS3ZNdPuPRdNDcHl0l69VcyYgKevCCNWldlPm3W/23WcTbTP3kVD+yOAVhk7Q
-         EKBSQoncKzmcXbgXsUy5SKRjSZpRAP99nfwa5/Y6afpEnXB4TVzyXbouYoZi9CspoR
-         R23aRGFnTIDFQ==
+        b=dekRbk3Mf5uMW6ECm/SHkeqhApRgYginnD9bvSv2hFeVSqAGKRI+8TCUMeSJB3rKb
+         wOvrQcLfVIJsa3kirnI9Cnn/9IHLqWWKUzoFflnsX5sSbvbfdYUjf6rj4lUNlu6r3q
+         hFbA4eOzGYdIjYIGwYiTPIcbiRRFf7i1Z9oVrpBy4M2Vsbd7IGLKsWybyTcWDv8Mb/
+         ybEOmhVVGsMDLXtOgiVzT3U3QY/cqUZTVDXf1SCeEMZYzs//np8IudVDpgFm080lYY
+         Ufsp6Oeyr9gBTuzeMb1KPLdvvC5QMH05CD17Np6PfHdzmVlXfKz+UqTgehYhd85Quf
+         MEDv1KuEX9IVQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 17/59] media: uvcvideo: Increase UVC_CTRL_CONTROL_TIMEOUT to 5 seconds.
-Date:   Mon, 17 Jan 2022 21:46:18 -0500
-Message-Id: <20220118024701.1952911-17-sashal@kernel.org>
+Cc:     Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Subject: [PATCH AUTOSEL 4.19 24/59] x86/mce: Mark mce_panic() noinstr
+Date:   Mon, 17 Jan 2022 21:46:25 -0500
+Message-Id: <20220118024701.1952911-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118024701.1952911-1-sashal@kernel.org>
 References: <20220118024701.1952911-1-sashal@kernel.org>
@@ -50,43 +48,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Hilliard <james.hilliard1@gmail.com>
+From: Borislav Petkov <bp@suse.de>
 
-[ Upstream commit c8ed7d2f614cd8b315981d116c7a2fb01829500d ]
+[ Upstream commit 3c7ce80a818fa7950be123cac80cd078e5ac1013 ]
 
-Some uvc devices appear to require the maximum allowed USB timeout
-for GET_CUR/SET_CUR requests.
+And allow instrumentation inside it because it does calls to other
+facilities which will not be tagged noinstr.
 
-So lets just bump the UVC control timeout to 5 seconds which is the
-same as the usb ctrl get/set defaults:
-USB_CTRL_GET_TIMEOUT 5000
-USB_CTRL_SET_TIMEOUT 5000
+Fixes
 
-It fixes the following runtime warnings:
-   Failed to query (GET_CUR) UVC control 11 on unit 2: -110 (exp. 1).
-   Failed to query (SET_CUR) UVC control 3 on unit 2: -110 (exp. 2).
+  vmlinux.o: warning: objtool: do_machine_check()+0xc73: call to mce_panic() leaves .noinstr.text section
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211208111343.8130-8-bp@alien8.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvcvideo.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/cpu/mcheck/mce.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index a738486fd9d64..839ba3cc53119 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -176,7 +176,7 @@
- /* Maximum status buffer size in bytes of interrupt URB. */
- #define UVC_MAX_STATUS_SIZE	16
+diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
+index 2a13468f87739..56c4456434a82 100644
+--- a/arch/x86/kernel/cpu/mcheck/mce.c
++++ b/arch/x86/kernel/cpu/mcheck/mce.c
+@@ -295,11 +295,17 @@ static void wait_for_panic(void)
+ 	panic("Panicing machine check CPU died");
+ }
  
--#define UVC_CTRL_CONTROL_TIMEOUT	500
-+#define UVC_CTRL_CONTROL_TIMEOUT	5000
- #define UVC_CTRL_STREAMING_TIMEOUT	5000
+-static void mce_panic(const char *msg, struct mce *final, char *exp)
++static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+ {
+-	int apei_err = 0;
+ 	struct llist_node *pending;
+ 	struct mce_evt_llist *l;
++	int apei_err = 0;
++
++	/*
++	 * Allow instrumentation around external facilities usage. Not that it
++	 * matters a whole lot since the machine is going to panic anyway.
++	 */
++	instrumentation_begin();
  
- /* Maximum allowed number of control mappings per device */
+ 	if (!fake_panic) {
+ 		/*
+@@ -314,7 +320,7 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 	} else {
+ 		/* Don't log too much for fake panic */
+ 		if (atomic_inc_return(&mce_fake_panicked) > 1)
+-			return;
++			goto out;
+ 	}
+ 	pending = mce_gen_pool_prepare_records();
+ 	/* First print corrected ones that are still unlogged */
+@@ -352,6 +358,9 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 		panic(msg);
+ 	} else
+ 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
++
++out:
++	instrumentation_end();
+ }
+ 
+ /* Support code for software error injection */
 -- 
 2.34.1
 

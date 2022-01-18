@@ -2,119 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A9E492F66
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A728492F6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349242AbiARUbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S1349247AbiARUeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349064AbiARUbi (ORCPT
+        with ESMTP id S233125AbiARUeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:31:38 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4ADC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:31:38 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id v10-20020a4a860a000000b002ddc59f8900so78457ooh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:31:38 -0800 (PST)
+        Tue, 18 Jan 2022 15:34:01 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CE5C061574;
+        Tue, 18 Jan 2022 12:34:01 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id p27so281722lfa.1;
+        Tue, 18 Jan 2022 12:34:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lS3GFrM29kfkWwvPWQIw4Pk6eycOPGCpsobayljmZkw=;
-        b=V9sBl3RXniA+oUbr5FnqqjPErpemmaL+yQmC7+wieMHA1rxEIMHEQP4+Yptu/ZLS1i
-         PEb6tz7rCo33HvMdh7OcQja7l54gxG1OQkx/I16eDZl2rqjp/r94C6LWg44v2DfNBmtA
-         0EaLrgcMP1wz+isVMSFmc+gYMUFLz4Pj9ARee4dTHPwiZhYkLt4phILDKcaG73lFo/sV
-         ENoGra2xi3AHouWAArmOgW0QlglmwS1brr0rku2pyW+BtwB6bf2NvKuSwW6sy1MJs+Yy
-         Dyy4HsBshi0av2Ut3fHrmL5RkRBuZ6T6l2slmxtTrIrHNPK5llCW0hUK4jh6ZHcrqwbg
-         KtSg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YOoXZ5fmqgf47wT9od2Gk2XcnDz6yNAacGEgIzOL5RU=;
+        b=DpeLAj85OBU+lLCoFpKnluQI+gaehDVbhIKjBUFf2mhLl7+MCCORlnJXIwxeuL8k2x
+         0asRtfUT6alcz+mKPhdWENMUPftQ2Z3zHPWf4WBFx8rYwhzksbcQBPEQkNkgsWGDWdNr
+         /cA3iMpwF2xgLN898GAdqMjdisQghHl9N2CEEKp5eFKYinhs6XRFB9KGbDNTNEBK256W
+         2PVPiB8yAvsFpIhsYVZzLiSRQP7laIPzdd8Z4+1jIOeyYAr4zjZFjsYjBAAVDhY0mAYI
+         e8pi8XsFyPYye1mo6yyHXIkzQOdsNfNcnV2A5osCXGbPW32zQHkpgtC74Tte9C1erxPn
+         j9PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lS3GFrM29kfkWwvPWQIw4Pk6eycOPGCpsobayljmZkw=;
-        b=1GqpwL6CQwEn3SEF5Hj1CZGuqN6zKWPoPDyQNPbK3birowc6BJWwpkc3CLhhz8zxMJ
-         7NofUackMwm6F/liF0Yf6Yhu3NNkfotg6xLn0unUNZRAlBWEPTzxaPocX0BMQtNvYTGF
-         1NwUZ7FfJq97G0sdXMFBvTS39oKrUyGNmYLnljjqy5lWrcwUpL94JoELBIHbLNpxUQsn
-         n87UIHe+I7Z2fi8p3bronQ6l/LuBYvmCqrw3jqJH5SNBiRxiVtY/RONhaMTWESzvKq1d
-         Rupm629K1Yhd2O3y0/1UW7+3h2OmHpdraRWL8bOaLsD6aod4Vwxn879kFrSisdBRDy4S
-         GT7Q==
-X-Gm-Message-State: AOAM531779Z4q+UpW0BcrGPw7FB2lIwjm/tzp0vWRlrQyVqChzSfE2xc
-        0rNNK/rHJpHmAcDzpFMhH0S3a00yTRQkM/Zmk1Q=
-X-Google-Smtp-Source: ABdhPJwC6J2yTtkomxVb1nBmVSS2A70Zz3uGg1xsukouvEGbNDpuyzjryP5ofkkY9baDzG+BHEx+p8BzBJelYa2CRdA=
-X-Received: by 2002:a4a:3412:: with SMTP id b18mr19430884ooa.23.1642537897267;
- Tue, 18 Jan 2022 12:31:37 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YOoXZ5fmqgf47wT9od2Gk2XcnDz6yNAacGEgIzOL5RU=;
+        b=tyBtoO1DD1aQxC/JlWBo74LHEkdjFxyk4l/cmOO7OSUzZ7BVCNTMEigybGpEzV83na
+         6GNsifd/QcPUVWaVTdsydyX7PexkiX1TbPsZIQjJyy6FOpFR5coXQY/lc33D368gYZBY
+         9G7ayk0EzoKhTCKM+JBvDLIAmrG8uoRUgHXUWoJ9MZDhgjlCA7QVoByVjBiMfpFSoU4y
+         KmLUsJ3CBU4cWjMMebLe5zfg2VSFEE344WZl0Qhy7+i0tiy7RoTHIhJC6Z3HSS8pt3rg
+         xzeyG6420EXQLCahSNonGxpw5btXLwTsT9WvBVPOtY9ClLUFeis9AJKZ1DFNoh5Itedc
+         k9JA==
+X-Gm-Message-State: AOAM531McszjS4ytSqqaWvHQNrg8YZQ+9Bn8JgBUu+y5OVF2QXIdB+Cb
+        C+kbH6QdKpApQ5Ryh3NXMxUjnu7NXzw=
+X-Google-Smtp-Source: ABdhPJzK7GKEaRKeU+FMnGENA+1pskWCzbefH8oZt/0UyM5JCFADc/h5ILb3ck3VZ32oJudLDkgdSA==
+X-Received: by 2002:a05:651c:199e:: with SMTP id bx30mr6761209ljb.415.1642538039413;
+        Tue, 18 Jan 2022 12:33:59 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id p15sm1310350lfc.150.2022.01.18.12.33.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 12:33:58 -0800 (PST)
+Message-ID: <b86fb2be-289c-dcb1-df3b-63171b8a050b@gmail.com>
+Date:   Tue, 18 Jan 2022 23:33:57 +0300
 MIME-Version: 1.0
-References: <20220118075702.925929-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220118075702.925929-1-chi.minghao@zte.com.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 18 Jan 2022 15:31:26 -0500
-Message-ID: <CADnq5_OeWEJq7Re-usY=m8vThD2jLyXObL6Cn_k3mZweFW_+Pg@mail.gmail.com>
-Subject: Re: [PATCH] amdgpu/amdgpu_psp: remove unneeded ret variable
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Lazar, Lijo" <lijo.lazar@amd.com>, Dave Airlie <airlied@linux.ie>,
-        Lang Yu <lang.yu@amd.com>, Oak Zeng <Oak.Zeng@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "Kim, Jonathan" <jonathan.kim@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "Li, Candice" <candice.li@amd.com>,
-        John Clements <john.clements@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] i2c: tegra: allow DVC support to be compiled out
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1642535860.git.mirq-linux@rere.qmqm.pl>
+ <ebe847bb25016e743c28bd38a10c966b04b06cc8.1642535860.git.mirq-linux@rere.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <ebe847bb25016e743c28bd38a10c966b04b06cc8.1642535860.git.mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
-
-Alex
-
-On Tue, Jan 18, 2022 at 2:57 AM <cgel.zte@gmail.com> wrote:
->
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Return value from amdgpu_bo_create_kernel() directly instead
-> of taking this in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+18.01.2022 23:00, Michał Mirosław пишет:
+> Save a bit of code for newer Tegra platforms by compiling out
+> DVC's I2C mode support that's used only for Tegra2.
+> 
+> $ size i2c-tegra.o
+>     text    data     bss     dec     hex filename
+> -  10385     240       8   10633    2989 i2c-tegra.o
+> +   9617     240       8    9865    2689 i2c-tegra.o
+> 
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-> index dee17a0e1187..ac2b87f81ef9 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-> @@ -914,19 +914,15 @@ static void psp_prep_ta_load_cmd_buf(struct psp_gfx_cmd_resp *cmd,
->  static int psp_ta_init_shared_buf(struct psp_context *psp,
->                                   struct ta_mem_context *mem_ctx)
->  {
-> -       int ret;
-> -
->         /*
->         * Allocate 16k memory aligned to 4k from Frame Buffer (local
->         * physical) for ta to host memory
->         */
-> -       ret = amdgpu_bo_create_kernel(psp->adev, mem_ctx->shared_mem_size,
-> +       return amdgpu_bo_create_kernel(psp->adev, mem_ctx->shared_mem_size,
->                                       PAGE_SIZE, AMDGPU_GEM_DOMAIN_VRAM,
->                                       &mem_ctx->shared_bo,
->                                       &mem_ctx->shared_mc_addr,
->                                       &mem_ctx->shared_buf);
-> -
-> -       return ret;
->  }
->
->  static void psp_ta_free_shared_buf(struct ta_mem_context *mem_ctx)
-> --
-> 2.25.1
->
+> v2: remove KConfig symbol as per Dmitry Osipenko's suggestion.
+>     (Assuming that for Tegra20 the DVC part will be used anyway.)
+> 
+> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>

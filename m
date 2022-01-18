@@ -2,121 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDD74913E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B4F4913E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244172AbiARCDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:03:00 -0500
-Received: from mga07.intel.com ([134.134.136.100]:30016 "EHLO mga07.intel.com"
+        id S244267AbiARCGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:06:51 -0500
+Received: from mga12.intel.com ([192.55.52.136]:41374 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236398AbiARCC7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:02:59 -0500
+        id S236398AbiARCGt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:06:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642471379; x=1674007379;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DO60SYZK55LqY+iI/tKbOiKvluu3V1PlqmIp6apEQP4=;
-  b=Hz2mr0nkqqeiav4H4MSOZI6lHY2rF1av4VvFsi9PG1m37WNlj5Gt/iZI
-   +11Wkwnhvj5JrUC4a6M3EEnMqQxLbrtxiFG+kkNvPYNC0cd0kjz4Wqy7/
-   drndY9Yhww/9Yqi2b7k32eyvtFupj+yWt/wpUrrCbab68VJTLSY2FhnG9
-   v2+XVxSKgdZX/nmrhhURGoEJxDjtGv/C+wcHphVY4r7qX2T7+617uAH+X
-   AXRTQbGYNZWlqEKfuskb8+Qa5VpmSw7Opb0+2fc1kjmvZ2U2vVXorLMxi
-   r3XS9yxpJKxe4fjImmIrpMVCKQLExTdjmQ1DKep6URG7EzRUFN66v0VIn
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="308058284"
+  t=1642471609; x=1674007609;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zFcz4EfRaJOhLzNoPPPBevL3oQF4dq/cHCBOUYLDbQc=;
+  b=I2DrJlczcQSBRSQElGdGTPDgL8JWuuB1F6eHwwAhOElP/rzoDuG8jAr8
+   rjUWgftFPw5O5oo5Ua0tOuRdPPFwl5wqu3UTs3JY4+WuL7e4c1+6PGD35
+   f+Wv4wkju/F8Cy1rk94lKqR+dC3xEEAajRRgttXETDcu/9B2nax3RdTKK
+   d6p4ie7h69868gkX/N386+bbKQihd95nvlZyKWISf1TbqLbp9TaQFIxRC
+   AFS+sYPVPBe3FWcDDhw1+H76yRDFKdseMR1A9A998PvccJGQr27NLUTx/
+   vryRQyZE53Wh2EjRHuboaCL8RxLHa+l2ljZN3mD4E4ey7PpNlc16mzmow
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224698633"
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="308058284"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 18:02:59 -0800
+   d="scan'208";a="224698633"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 18:06:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="693233113"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2022 18:02:57 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9dpo-000C3K-N6; Tue, 18 Jan 2022 02:02:56 +0000
-Date:   Tue, 18 Jan 2022 10:02:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 2757/2766] arch/arm64/kvm/arm.c:2011:46: error: 'smccc_trng_available'
- undeclared
-Message-ID: <202201181042.DbgIXpRm-lkp@intel.com>
+   d="scan'208";a="517590244"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 18:06:48 -0800
+Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 17 Jan 2022 18:06:47 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 18 Jan 2022 10:06:45 +0800
+Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
+ SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
+ Tue, 18 Jan 2022 10:06:45 +0800
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "Zeng, Guang" <guang.zeng@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+Subject: RE: [PATCH v6 19/21] kvm: selftests: Add support for KVM_CAP_XSAVE2
+Thread-Topic: [PATCH v6 19/21] kvm: selftests: Add support for KVM_CAP_XSAVE2
+Thread-Index: AQHYA/gqrQY7KCvJokuAQBWZoUkTxKxm9tMAgAEgdoA=
+Date:   Tue, 18 Jan 2022 02:06:45 +0000
+Message-ID: <6607eb58f61b44a5a9403cf275be4265@intel.com>
+References: <20220107185512.25321-1-pbonzini@redhat.com>
+ <20220107185512.25321-20-pbonzini@redhat.com>
+ <d47dc156-405f-77c5-787a-99073053a06b@linux.ibm.com>
+In-Reply-To: <d47dc156-405f-77c5-787a-99073053a06b@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   9c25e5d6f58362a8ff78327664a2e3c2a538009f
-commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2757/2766] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
-config: arm64-buildonly-randconfig-r006-20220116 (https://download.01.org/0day-ci/archive/20220118/202201181042.DbgIXpRm-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/arm64/kvm/arm.c: In function 'kvm_hyp_init_protection':
->> arch/arm64/kvm/arm.c:2011:46: error: 'smccc_trng_available' undeclared (first use in this function)
-    2011 |         kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-         |                                              ^~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/arm.c:2011:46: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
-
-  1997	
-  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
-  1999	{
-  2000		void *addr = phys_to_virt(hyp_mem_base);
-  2001		int ret;
-  2002	
-  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
-  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
-  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
-  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
-  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
-  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
-  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
-  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
-> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-  2012	
-  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
-  2014		if (ret)
-  2015			return ret;
-  2016	
-  2017		ret = init_stage2_iommu();
-  2018		if (ret < 0)
-  2019			return ret;
-  2020	
-  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
-  2022		if (ret)
-  2023			return ret;
-  2024	
-  2025		free_hyp_pgds();
-  2026	
-  2027		return 0;
-  2028	}
-  2029	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+T24gVHVlc2RheSwgSmFudWFyeSAxOCwgMjAyMiAxMjo1MSBBTSwgSmFuaXMgU2Nob2V0dGVybC1H
+bGF1c2NoIHdyb3RlOg0KPiA+ICsJLyoNCj4gPiArCSAqIFBlcm1pc3Npb24gbmVlZHMgdG8gYmUg
+cmVxdWVzdGVkIGJlZm9yZSBLVk1fU0VUX0NQVUlEMi4NCj4gPiArCSAqLw0KPiA+ICsJdm1feHNh
+dmVfcmVxX3Blcm0oKTsNCj4gPiArDQo+IA0KPiBTaW5jZQ0KPiANCj4gNzllMDZjNGM0OTUwIChN
+ZXJnZSB0YWcgJ2Zvci1saW51cycgb2YNCj4gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS92
+aXJ0L2t2bS9rdm0pDQo+IA0KPiBvbiBzMzkweCBJJ20gZ2V0dGluZzoNCj4gDQo+IC91c3IvYmlu
+L2xkOiB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vbGlia3ZtLmEoa3ZtX3V0aWwubyk6IGlu
+IGZ1bmN0aW9uDQo+IGB2bV9jcmVhdGVfd2l0aF92Y3B1cyc6DQo+IHRvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL2t2bS9saWIva3ZtX3V0aWwuYzozOTk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8NCj4g
+YHZtX3hzYXZlX3JlcV9wZXJtJw0KPiBjb2xsZWN0MjogZXJyb3I6IGxkIHJldHVybmVkIDEgZXhp
+dCBzdGF0dXMNCj4gbWFrZTogKioqIFsuLi9saWIubWs6MTQ2OiB0b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy9rdm0vczM5MHgvbWVtb3BdIEVycm9yIDENCj4gDQo+IExvb2tzIGxpa2UgaXQgb25seSBl
+eGlzdHMgZm9yIHg4Ni4NCj4gdjIgaGFkIGEgY29tbWVudCBhYm91dCB1bmNvbmRpdGlvbmFsIGVu
+YWJsZW1lbnQ6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2t2bS9lMjBmNTkwYi1iOWQ5LTIz
+N2QtM2I5Yy03N2RkODJhMjRiNDBAcmVkaA0KPiBhdC5jb20vDQo+IA0KPiBUaGFua3MgZm9yIGhh
+dmluZyBhIGxvb2suDQo+IA0KDQoNCk9LLCB3ZSBtYWRlIGl0IGNvbmRpdGlvbmFsbHkgZW5hYmxl
+ZCBhdCBydW50aW1lLCBidXQgdGhpcyBvbmUgcmVxdWlyZXMgY29uZGl0aW9uYWxseSBjb21waWxl
+ZC4gSSdsbCBnZXQgeW91IGEgcGF0Y2ggdG8gdGVzdCBzb29uLg0KDQpUaGFua3MsDQpXZWkNCg==

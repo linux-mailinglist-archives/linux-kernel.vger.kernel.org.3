@@ -2,99 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B4F4913E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB1B4913F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244267AbiARCGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:06:51 -0500
-Received: from mga12.intel.com ([192.55.52.136]:41374 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236398AbiARCGt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:06:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642471609; x=1674007609;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=zFcz4EfRaJOhLzNoPPPBevL3oQF4dq/cHCBOUYLDbQc=;
-  b=I2DrJlczcQSBRSQElGdGTPDgL8JWuuB1F6eHwwAhOElP/rzoDuG8jAr8
-   rjUWgftFPw5O5oo5Ua0tOuRdPPFwl5wqu3UTs3JY4+WuL7e4c1+6PGD35
-   f+Wv4wkju/F8Cy1rk94lKqR+dC3xEEAajRRgttXETDcu/9B2nax3RdTKK
-   d6p4ie7h69868gkX/N386+bbKQihd95nvlZyKWISf1TbqLbp9TaQFIxRC
-   AFS+sYPVPBe3FWcDDhw1+H76yRDFKdseMR1A9A998PvccJGQr27NLUTx/
-   vryRQyZE53Wh2EjRHuboaCL8RxLHa+l2ljZN3mD4E4ey7PpNlc16mzmow
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224698633"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="224698633"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 18:06:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="517590244"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 18:06:48 -0800
-Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 18:06:47 -0800
-Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
- SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 18 Jan 2022 10:06:45 +0800
-Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
- SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
- Tue, 18 Jan 2022 10:06:45 +0800
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "Zeng, Guang" <guang.zeng@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: RE: [PATCH v6 19/21] kvm: selftests: Add support for KVM_CAP_XSAVE2
-Thread-Topic: [PATCH v6 19/21] kvm: selftests: Add support for KVM_CAP_XSAVE2
-Thread-Index: AQHYA/gqrQY7KCvJokuAQBWZoUkTxKxm9tMAgAEgdoA=
-Date:   Tue, 18 Jan 2022 02:06:45 +0000
-Message-ID: <6607eb58f61b44a5a9403cf275be4265@intel.com>
-References: <20220107185512.25321-1-pbonzini@redhat.com>
- <20220107185512.25321-20-pbonzini@redhat.com>
- <d47dc156-405f-77c5-787a-99073053a06b@linux.ibm.com>
-In-Reply-To: <d47dc156-405f-77c5-787a-99073053a06b@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S244282AbiARCPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236398AbiARCP2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:15:28 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA082C061574;
+        Mon, 17 Jan 2022 18:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=nrC9v5TH5mhwcYLw5MQgkFk0+L190zpoOd9ftRKCwRI=; b=fiA9taDxGDlpNEyMgBxG+r8mcG
+        sQqY4MeaBicL8wGkJpLgSa9oIDEteMyNcCIGKzJU2+HQKxuRtgsj+Vg2DxQEoRt+dEe2fnz+zw3Zk
+        yIv2SIstLoUOep60Xv3fSXA91Dqm7V9EioiPdMFiCD9em4Qqk+a4vcLIQ+CqDsalnt6dFeTGB5kb0
+        6V4NAHDGah8IZuFUtAwUVWoDmwf9eCVfaxz3ci5Bev7AYOaYeuu3razOLnK93WsTNpCcpN3enmn2+
+        K8rgbg5v98w8WNzL1xxPL6vEE/69XSkVv/dQmMwrtvFvJCDldO9Mjrm455jY3TQ/1UwwYc5eX6E3J
+        9DL1fSMA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9e1r-00Gs6a-OI; Tue, 18 Jan 2022 02:15:23 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH -next] power: supply: fix table problem in sysfs-class-power
+Date:   Mon, 17 Jan 2022 18:15:22 -0800
+Message-Id: <20220118021522.1672-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlc2RheSwgSmFudWFyeSAxOCwgMjAyMiAxMjo1MSBBTSwgSmFuaXMgU2Nob2V0dGVybC1H
-bGF1c2NoIHdyb3RlOg0KPiA+ICsJLyoNCj4gPiArCSAqIFBlcm1pc3Npb24gbmVlZHMgdG8gYmUg
-cmVxdWVzdGVkIGJlZm9yZSBLVk1fU0VUX0NQVUlEMi4NCj4gPiArCSAqLw0KPiA+ICsJdm1feHNh
-dmVfcmVxX3Blcm0oKTsNCj4gPiArDQo+IA0KPiBTaW5jZQ0KPiANCj4gNzllMDZjNGM0OTUwIChN
-ZXJnZSB0YWcgJ2Zvci1saW51cycgb2YNCj4gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS92
-aXJ0L2t2bS9rdm0pDQo+IA0KPiBvbiBzMzkweCBJJ20gZ2V0dGluZzoNCj4gDQo+IC91c3IvYmlu
-L2xkOiB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vbGlia3ZtLmEoa3ZtX3V0aWwubyk6IGlu
-IGZ1bmN0aW9uDQo+IGB2bV9jcmVhdGVfd2l0aF92Y3B1cyc6DQo+IHRvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2t2bS9saWIva3ZtX3V0aWwuYzozOTk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8NCj4g
-YHZtX3hzYXZlX3JlcV9wZXJtJw0KPiBjb2xsZWN0MjogZXJyb3I6IGxkIHJldHVybmVkIDEgZXhp
-dCBzdGF0dXMNCj4gbWFrZTogKioqIFsuLi9saWIubWs6MTQ2OiB0b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9rdm0vczM5MHgvbWVtb3BdIEVycm9yIDENCj4gDQo+IExvb2tzIGxpa2UgaXQgb25seSBl
-eGlzdHMgZm9yIHg4Ni4NCj4gdjIgaGFkIGEgY29tbWVudCBhYm91dCB1bmNvbmRpdGlvbmFsIGVu
-YWJsZW1lbnQ6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2t2bS9lMjBmNTkwYi1iOWQ5LTIz
-N2QtM2I5Yy03N2RkODJhMjRiNDBAcmVkaA0KPiBhdC5jb20vDQo+IA0KPiBUaGFua3MgZm9yIGhh
-dmluZyBhIGxvb2suDQo+IA0KDQoNCk9LLCB3ZSBtYWRlIGl0IGNvbmRpdGlvbmFsbHkgZW5hYmxl
-ZCBhdCBydW50aW1lLCBidXQgdGhpcyBvbmUgcmVxdWlyZXMgY29uZGl0aW9uYWxseSBjb21waWxl
-ZC4gSSdsbCBnZXQgeW91IGEgcGF0Y2ggdG8gdGVzdCBzb29uLg0KDQpUaGFua3MsDQpXZWkNCg==
+Add a bottom table border to complete the table format and prevent
+a documentation build warning.
+
+Documentation/ABI/testing/sysfs-class-power:459: WARNING: Malformed table.
+No bottom table border found.
+
+Fixes: 1b0b6cc8030d0 ("power: supply: add charge_behaviour attributes")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Weißschuh <linux@weissschuh.net>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ Documentation/ABI/testing/sysfs-class-power |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- linux-next-20220117.orig/Documentation/ABI/testing/sysfs-class-power
++++ linux-next-20220117/Documentation/ABI/testing/sysfs-class-power
+@@ -468,6 +468,7 @@ Description:
+ 			auto:            Charge normally, respect thresholds
+ 			inhibit-charge:  Do not charge while AC is attached
+ 			force-discharge: Force discharge while AC is attached
++			================ ====================================
+ 
+ What:		/sys/class/power_supply/<supply_name>/technology
+ Date:		May 2007

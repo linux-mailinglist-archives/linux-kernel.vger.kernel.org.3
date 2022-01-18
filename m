@@ -2,233 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BAD492F8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215B0492F7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349364AbiARUjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:39:31 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:32582 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349288AbiARUjR (ORCPT
+        id S1349277AbiARUjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349143AbiARUjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:39:17 -0500
+        Tue, 18 Jan 2022 15:39:12 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E15C061574;
+        Tue, 18 Jan 2022 12:39:11 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id p125so297912pga.2;
+        Tue, 18 Jan 2022 12:39:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642538357; x=1674074357;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=lJ6X675PSa4PdR312Mckhju+ilEA+rWVcZK9+nF485c=;
-  b=gE5DztvyQVjJNHh8ioUdeQZ/Ae2Yh6FvFT1mBF9WDW0pburLzzWmAXLu
-   cVyuV7v2zgVl/IACDh4tleyiR+5OQVaszOf/7QTv1qeJ39E0n2Il1TBhb
-   AMK/UBiADqttPrgHteQKqGckze9Mfv/SBA6iVWuzAXvQU3LKv0RuSpXr+
-   0=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 18 Jan 2022 12:39:17 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Jan 2022 12:39:15 -0800
-X-QCInternal: smtphost
-Received: from rajeevny-linux.qualcomm.com ([10.204.66.121])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 19 Jan 2022 02:08:49 +0530
-Received: by rajeevny-linux.qualcomm.com (Postfix, from userid 2363605)
-        id 864B221A8B; Wed, 19 Jan 2022 02:08:48 +0530 (IST)
-From:   Rajeev Nandan <quic_rajeevny@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
-        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
-        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
-        jonathan@marek.ca, dmitry.baryshkov@linaro.org, airlied@linux.ie,
-        daniel@ffwll.ch, swboyd@chromium.org
-Subject: [v3 3/3] drm/msm/dsi: Add 10nm dsi phy tuning configuration support
-Date:   Wed, 19 Jan 2022 02:08:40 +0530
-Message-Id: <1642538320-1127-4-git-send-email-quic_rajeevny@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1642538320-1127-1-git-send-email-quic_rajeevny@quicinc.com>
-References: <1642538320-1127-1-git-send-email-quic_rajeevny@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rTxSIYtF/qhDMdpcunv+R2Pnv7mrcydD4DvIe4qQgBA=;
+        b=XzNVA7WFscHIr9quBbwN1Zl6DlOEBX9F8WsDR4fZuQmtO7dSeFEckqOuxbRK5Dbr36
+         /eNURLliqpELZFheqowDPzNq72XN2bbp84c7+2gEmZWBXHzwINhnbQmHL+COLhW/mH7B
+         sEyyYr0KSen0K0Oz8LuUJAMgc5YGn6FdzO6XUxUA0ZHD/46rOBRY6iZqcfjk3s4c3c+G
+         tQ0FJvOpkvJ1cM8BKRmRfnNY0v9QN+Kor7sdjGPNwfcPoNNyO9VuyPm3JdHZi95ha43F
+         kAYsOqWFk/ykFHxFzIQuyr5djbFrIif7ZEGmKHeNwzi3xNaqHdgLcnaN11LGGvahgN+J
+         qjXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=rTxSIYtF/qhDMdpcunv+R2Pnv7mrcydD4DvIe4qQgBA=;
+        b=4Z/dvufav4Wo9c1JRIIAkMQDTpAoFOh3UJI7ch95hsgeASuC+KgENvTnnMHMP+5PY3
+         nXS3eJDaWSFAkKZJikinZtbr3KLTC8oRAZdaJIuSSeIEPV3KHV/h6baBjQ5/e7J0AZjs
+         YSB4Ep1Agj8odLY6N8rSCdPu7vVQszFoCV+ok/R/VulrT4P9Yc3uJmgx6ggzje9Dg0BW
+         LKPt1tGswR5J+DMDBPJLe3DlMxPwj9nza66ZBToYcQ0rj8RcZ6lS0fbW4Ipq7ZdVhE3e
+         aTDGUYzPXswFO/HcmuQTPRlfVCZDsi3PXm5FJQRH0ky/Y99hkNFarI/bgHo+aojU3OoH
+         lI5A==
+X-Gm-Message-State: AOAM5312fx/7fo+T9KBwLSH9zgDl2p5dakka8tUwdf3dWaHiVt6Hvt+8
+        kC6oRAtTFP66A9DLGzHdoyM=
+X-Google-Smtp-Source: ABdhPJyeiRPViIFqLAMdX5NCXcv8RFZDx7ydr82FV18KzIXzXluRnjCoqA20Vyi5zu46O1Q7GFBlZw==
+X-Received: by 2002:a63:191a:: with SMTP id z26mr24598864pgl.593.1642538351256;
+        Tue, 18 Jan 2022 12:39:11 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id y64sm15227654pgy.12.2022.01.18.12.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 12:39:10 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 18 Jan 2022 10:39:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        pbonzini@redhat.com, seanjc@google.com, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, dmatlack@google.com, jiangshanlai@gmail.com,
+        kvm@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
+ cgroups before exiting.
+Message-ID: <Yeclbe3GNdCMLlHz@slm.duckdns.org>
+References: <20211222225350.1912249-1-vipinsh@google.com>
+ <20220105180420.GC6464@blackbody.suse.cz>
+ <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock and data lanes of the DSI PHY have a calibration circuitry
-feature. As per the MSM DSI PHY tuning guidelines, the drive strength
-tuning can be done by adjusting rescode offset for hstop/hsbot, and
-the drive level tuning can be done by adjusting the LDO output level
-for the HSTX drive.
+Hello,
 
-Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
----
+On Tue, Jan 18, 2022 at 12:25:48PM -0800, Vipin Sharma wrote:
+> Automated tools/scripts which delete VM cgroups after the main KVM
+> process ends were seeing deletion errors because kernel worker threads
+> were still running inside those cgroups. This is not a very frequent
+> issue but we noticed it happens every now and then.
 
-Changes in v2:
- - Split into generic code and 10nm-specific part (Dmitry Baryshkov)
- - Fix the backward compatibility (Dmitry Baryshkov)
+So, these are normally driven by the !populated events. That's how everyone
+else is doing it. If you want to tie the kvm workers lifetimes to kvm
+process, wouldn't it be cleaner to do so from kvm side? ie. let kvm process
+exit wait for the workers to be cleaned up.
 
-Changes in v3:
- - Address comments for phy tuning data structure (Dmitry Baryshkov)
- - Make changes as per updated dt-bindings
+Thanks.
 
-
- drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c | 97 ++++++++++++++++++++++++++++--
- 1 file changed, 91 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-index d8128f5..2d225fb 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-@@ -83,6 +83,18 @@ struct dsi_pll_10nm {
- 
- #define to_pll_10nm(x)	container_of(x, struct dsi_pll_10nm, clk_hw)
- 
-+/**
-+ * struct dsi_phy_10nm_tuning_cfg - Holds 10nm PHY tuning config parameters.
-+ * @rescode_offset_top: Offset for pull-up legs rescode.
-+ * @rescode_offset_bot: Offset for pull-down legs rescode.
-+ * @vreg_ctrl: vreg ctrl to drive LDO level
-+ */
-+struct dsi_phy_10nm_tuning_cfg {
-+	u8 rescode_offset_top[DSI_LANE_MAX];
-+	u8 rescode_offset_bot[DSI_LANE_MAX];
-+	u8 vreg_ctrl;
-+};
-+
- /*
-  * Global list of private DSI PLL struct pointers. We need this for bonded DSI
-  * mode, where the master PLL's clk_ops needs access the slave's private data
-@@ -747,6 +759,7 @@ static void dsi_phy_hw_v3_0_lane_settings(struct msm_dsi_phy *phy)
- 	int i;
- 	u8 tx_dctrl[] = { 0x00, 0x00, 0x00, 0x04, 0x01 };
- 	void __iomem *lane_base = phy->lane_base;
-+	struct dsi_phy_10nm_tuning_cfg *tuning_cfg = phy->tuning_cfg;
- 
- 	if (phy->cfg->quirks & DSI_PHY_10NM_QUIRK_OLD_TIMINGS)
- 		tx_dctrl[3] = 0x02;
-@@ -775,10 +788,13 @@ static void dsi_phy_hw_v3_0_lane_settings(struct msm_dsi_phy *phy)
- 		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG2(i), 0x0);
- 		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG3(i),
- 			      i == 4 ? 0x80 : 0x0);
--		dsi_phy_write(lane_base +
--			      REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i), 0x0);
--		dsi_phy_write(lane_base +
--			      REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i), 0x0);
-+
-+		/* platform specific dsi phy drive strength adjustment */
-+		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i),
-+				tuning_cfg->rescode_offset_top[i]);
-+		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i),
-+				tuning_cfg->rescode_offset_bot[i]);
-+
- 		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_TX_DCTRL(i),
- 			      tx_dctrl[i]);
- 	}
-@@ -799,6 +815,7 @@ static int dsi_10nm_phy_enable(struct msm_dsi_phy *phy,
- 	u32 const timeout_us = 1000;
- 	struct msm_dsi_dphy_timing *timing = &phy->timing;
- 	void __iomem *base = phy->base;
-+	struct dsi_phy_10nm_tuning_cfg *tuning_cfg = phy->tuning_cfg;
- 	u32 data;
- 
- 	DBG("");
-@@ -834,8 +851,9 @@ static int dsi_10nm_phy_enable(struct msm_dsi_phy *phy,
- 	/* Select MS1 byte-clk */
- 	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_GLBL_CTRL, 0x10);
- 
--	/* Enable LDO */
--	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL, 0x59);
-+	/* Enable LDO with platform specific drive level/amplitude adjustment */
-+	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL,
-+		      tuning_cfg->vreg_ctrl);
- 
- 	/* Configure PHY lane swap (TODO: we need to calculate this) */
- 	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_LANE_CFG0, 0x21);
-@@ -922,6 +940,71 @@ static void dsi_10nm_phy_disable(struct msm_dsi_phy *phy)
- 	DBG("DSI%d PHY disabled", phy->id);
- }
- 
-+static int dsi_10nm_phy_parse_dt(struct msm_dsi_phy *phy)
-+{
-+	struct device *dev = &phy->pdev->dev;
-+	struct dsi_phy_10nm_tuning_cfg *tuning_cfg;
-+	u8 offset_top[DSI_LANE_MAX] = { 0 }; /* No offset */
-+	u8 offset_bot[DSI_LANE_MAX] = { 0 }; /* No offset */
-+	u32 ldo_level = 400; /* 400mV */
-+	u8 level;
-+	int ret, i;
-+
-+	tuning_cfg = devm_kzalloc(dev, sizeof(*tuning_cfg), GFP_KERNEL);
-+	if (!tuning_cfg)
-+		return -ENOMEM;
-+
-+	/* Drive strength adjustment parameters */
-+	ret = of_property_read_u8_array(dev->of_node, "qcom,phy-rescode-offset-top",
-+					offset_top, DSI_LANE_MAX);
-+	if (ret && ret != -EINVAL)
-+		DRM_DEV_ERROR(dev, "failed to parse qcom,phy-rescode-offset-top, %d\n", ret);
-+
-+	for (i = 0; i < DSI_LANE_MAX; i++)
-+		tuning_cfg->rescode_offset_top[i] = 0x3f & offset_top[i];
-+
-+	ret = of_property_read_u8_array(dev->of_node, "qcom,phy-rescode-offset-bot",
-+					offset_bot, DSI_LANE_MAX);
-+	if (ret && ret != -EINVAL)
-+		DRM_DEV_ERROR(dev, "failed to parse qcom,phy-rescode-offset-bot, %d\n", ret);
-+
-+	for (i = 0; i < DSI_LANE_MAX; i++)
-+		tuning_cfg->rescode_offset_bot[i] = 0x3f & offset_bot[i];
-+
-+	/* Drive level/amplitude adjustment parameters */
-+	ret = of_property_read_u32(dev->of_node, "qcom,phy-drive-ldo-level", &ldo_level);
-+	if (ret && ret != -EINVAL)
-+		DRM_DEV_ERROR(dev, "failed to parse qcom,phy-drive-ldo-level, %d\n", ret);
-+
-+	switch (ldo_level) {
-+	case 375:
-+		level = 0;
-+		break;
-+	case 400:
-+		level = 1;
-+		break;
-+	case 425:
-+		level = 2;
-+		break;
-+	case 450:
-+		level = 3;
-+		break;
-+	case 475:
-+		level = 4;
-+		break;
-+	case 500:
-+		level = 5;
-+		break;
-+	default:
-+		level = 1; /* 400mV */
-+	}
-+	tuning_cfg->vreg_ctrl = 0x58 | (0x7 & level);
-+
-+	phy->tuning_cfg = tuning_cfg;
-+
-+	return 0;
-+}
-+
- const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
- 	.has_phy_lane = true,
- 	.reg_cfg = {
-@@ -936,6 +1019,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
- 		.pll_init = dsi_pll_10nm_init,
- 		.save_pll_state = dsi_10nm_pll_save_state,
- 		.restore_pll_state = dsi_10nm_pll_restore_state,
-+		.parse_dt_properties = dsi_10nm_phy_parse_dt,
- 	},
- 	.min_pll_rate = 1000000000UL,
- 	.max_pll_rate = 3500000000UL,
-@@ -957,6 +1041,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
- 		.pll_init = dsi_pll_10nm_init,
- 		.save_pll_state = dsi_10nm_pll_save_state,
- 		.restore_pll_state = dsi_10nm_pll_restore_state,
-+		.parse_dt_properties = dsi_10nm_phy_parse_dt,
- 	},
- 	.min_pll_rate = 1000000000UL,
- 	.max_pll_rate = 3500000000UL,
 -- 
-2.7.4
-
+tejun

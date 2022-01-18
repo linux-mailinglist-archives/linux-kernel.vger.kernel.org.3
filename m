@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFC549184E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B26491802
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 03:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348782AbiARCqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 21:46:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56058 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345285AbiARCim (ORCPT
+        id S240534AbiARCn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 21:43:58 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48106 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346406AbiARCis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:38:42 -0500
+        Mon, 17 Jan 2022 21:38:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19A9A611D6;
-        Tue, 18 Jan 2022 02:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B0AC36AEB;
-        Tue, 18 Jan 2022 02:38:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B228B811D6;
+        Tue, 18 Jan 2022 02:38:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D783C36AE3;
+        Tue, 18 Jan 2022 02:38:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473519;
-        bh=SwHp8z8g4fBVnumYsGHPVujRk5tCwr58kzWwwIKJFhQ=;
+        s=k20201202; t=1642473525;
+        bh=HqrnTGYFxniXIjgfZivyhZntxcZOuBQEGrR5SZ0LHaM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g6ACzTGagxJmWe/nJv3+V6MNcHLiAHd+81QWNHuAjBJL2xL2tqvgAUeALe18i/erb
-         8pB9iB3x+gG7fV4g4xvDWxXGNo1HU7s5lLC3yrAG50v+7IHs82uQV201rurWNn6ZPX
-         T+XJhSCy5jAcp2uUCSy4ejil1ee6NbhXjEqxuQEUBF1j49Ij/uv327EV1k+ebiH5j7
-         hfIISSm4LiOsc8Emc/k+6hAs297guGZjxzSobNAg4Duj8fIGnSDRt5/+s2JTLKTuuD
-         HPgQr5POjLOe4PhkmVhnwsL189BDhh28VlHsIX6VNkPq6YCLxmkWlG+DG3/oDAayPf
-         6+6LZI4b/VFsw==
+        b=opS1gP+ve6899cHQweNs6zUBGehqJIXE6JnwWvMIcUIvl/OqPY944+HJEXlvse6TF
+         PP7h2jljfihN280J1mKdvd1zQD0mzN7mpokxCztbAlYGFBXa+yvvaKXRY5ISZlsJdy
+         lJt91vf9zgaoZvZ4cbm0H2RUsFz7KqRCG4NJ0za4QBNkDb4JJSjf0XEodIiaadgTkZ
+         FCDYDJDgbp26m+B5VobTW3/0CVpKxdGoJOu095Y6F5EhDRoQPtMUtEGAmaEfri0yHH
+         zwowTfv6CD95cwwNuC7dPqCVhzQ+cD+45pExyQbsn91aFNo/XAp/W+VBkFG3CQyEpT
+         ntCATT9r+NdDQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, Sasha Levin <sashal@kernel.org>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        viro@zeniv.linux.org.uk
-Subject: [PATCH AUTOSEL 5.15 145/188] um: registers: Rename function names to avoid conflicts and build problems
-Date:   Mon, 17 Jan 2022 21:31:09 -0500
-Message-Id: <20220118023152.1948105-145-sashal@kernel.org>
+Cc:     Antony Antony <antony.antony@secunet.com>,
+        Thomas Egerer <thomas.egerer@secunet.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 149/188] xfrm: rate limit SA mapping change message to user space
+Date:   Mon, 17 Jan 2022 21:31:13 -0500
+Message-Id: <20220118023152.1948105-149-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
 References: <20220118023152.1948105-1-sashal@kernel.org>
@@ -53,101 +50,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Antony Antony <antony.antony@secunet.com>
 
-[ Upstream commit 077b7320942b64b0da182aefd83c374462a65535 ]
+[ Upstream commit 4e484b3e969b52effd95c17f7a86f39208b2ccf4 ]
 
-The function names init_registers() and restore_registers() are used
-in several net/ethernet/ and gpu/drm/ drivers for other purposes (not
-calls to UML functions), so rename them.
+Kernel generates mapping change message, XFRM_MSG_MAPPING,
+when a source port chage is detected on a input state with UDP
+encapsulation set.  Kernel generates a message for each IPsec packet
+with new source port.  For a high speed flow per packet mapping change
+message can be excessive, and can overload the user space listener.
 
-This fixes multiple build errors.
+Introduce rate limiting for XFRM_MSG_MAPPING message to the user space.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: linux-um@lists.infradead.org
-Signed-off-by: Richard Weinberger <richard@nod.at>
+The rate limiting is configurable via netlink, when adding a new SA or
+updating it. Use the new attribute XFRMA_MTIMER_THRESH in seconds.
+
+v1->v2 change:
+	update xfrm_sa_len()
+
+v2->v3 changes:
+	use u32 insted unsigned long to reduce size of struct xfrm_state
+	fix xfrm_ompat size Reported-by: kernel test robot <lkp@intel.com>
+	accept XFRM_MSG_MAPPING only when XFRMA_ENCAP is present
+
+Co-developed-by: Thomas Egerer <thomas.egerer@secunet.com>
+Signed-off-by: Thomas Egerer <thomas.egerer@secunet.com>
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/include/shared/registers.h | 4 ++--
- arch/um/os-Linux/registers.c       | 4 ++--
- arch/um/os-Linux/start_up.c        | 2 +-
- arch/x86/um/syscalls_64.c          | 3 ++-
- 4 files changed, 7 insertions(+), 6 deletions(-)
+ include/net/xfrm.h        |  5 +++++
+ include/uapi/linux/xfrm.h |  1 +
+ net/xfrm/xfrm_compat.c    |  6 ++++--
+ net/xfrm/xfrm_state.c     | 23 ++++++++++++++++++++++-
+ net/xfrm/xfrm_user.c      | 18 +++++++++++++++++-
+ 5 files changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/arch/um/include/shared/registers.h b/arch/um/include/shared/registers.h
-index 0c50fa6e8a55b..fbb709a222839 100644
---- a/arch/um/include/shared/registers.h
-+++ b/arch/um/include/shared/registers.h
-@@ -16,8 +16,8 @@ extern int restore_fp_registers(int pid, unsigned long *fp_regs);
- extern int save_fpx_registers(int pid, unsigned long *fp_regs);
- extern int restore_fpx_registers(int pid, unsigned long *fp_regs);
- extern int save_registers(int pid, struct uml_pt_regs *regs);
--extern int restore_registers(int pid, struct uml_pt_regs *regs);
--extern int init_registers(int pid);
-+extern int restore_pid_registers(int pid, struct uml_pt_regs *regs);
-+extern int init_pid_registers(int pid);
- extern void get_safe_registers(unsigned long *regs, unsigned long *fp_regs);
- extern unsigned long get_thread_reg(int reg, jmp_buf *buf);
- extern int get_fp_registers(int pid, unsigned long *regs);
-diff --git a/arch/um/os-Linux/registers.c b/arch/um/os-Linux/registers.c
-index 2d9270508e156..b123955be7acc 100644
---- a/arch/um/os-Linux/registers.c
-+++ b/arch/um/os-Linux/registers.c
-@@ -21,7 +21,7 @@ int save_registers(int pid, struct uml_pt_regs *regs)
- 	return 0;
- }
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index 2308210793a01..2589e4c0501bd 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -200,6 +200,11 @@ struct xfrm_state {
+ 	struct xfrm_algo_aead	*aead;
+ 	const char		*geniv;
  
--int restore_registers(int pid, struct uml_pt_regs *regs)
-+int restore_pid_registers(int pid, struct uml_pt_regs *regs)
- {
++	/* mapping change rate limiting */
++	__be16 new_mapping_sport;
++	u32 new_mapping;	/* seconds */
++	u32 mapping_maxage;	/* seconds for input SA */
++
+ 	/* Data for encapsulator */
+ 	struct xfrm_encap_tmpl	*encap;
+ 	struct sock __rcu	*encap_sk;
+diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
+index eda0426ec4c2b..4e29d78518902 100644
+--- a/include/uapi/linux/xfrm.h
++++ b/include/uapi/linux/xfrm.h
+@@ -313,6 +313,7 @@ enum xfrm_attr_type_t {
+ 	XFRMA_SET_MARK,		/* __u32 */
+ 	XFRMA_SET_MARK_MASK,	/* __u32 */
+ 	XFRMA_IF_ID,		/* __u32 */
++	XFRMA_MTIMER_THRESH,	/* __u32 in seconds for input SA */
+ 	__XFRMA_MAX
+ 
+ #define XFRMA_OUTPUT_MARK XFRMA_SET_MARK	/* Compatibility */
+diff --git a/net/xfrm/xfrm_compat.c b/net/xfrm/xfrm_compat.c
+index 2bf2693901631..a0f62fa02e06e 100644
+--- a/net/xfrm/xfrm_compat.c
++++ b/net/xfrm/xfrm_compat.c
+@@ -127,6 +127,7 @@ static const struct nla_policy compat_policy[XFRMA_MAX+1] = {
+ 	[XFRMA_SET_MARK]	= { .type = NLA_U32 },
+ 	[XFRMA_SET_MARK_MASK]	= { .type = NLA_U32 },
+ 	[XFRMA_IF_ID]		= { .type = NLA_U32 },
++	[XFRMA_MTIMER_THRESH]	= { .type = NLA_U32 },
+ };
+ 
+ static struct nlmsghdr *xfrm_nlmsg_put_compat(struct sk_buff *skb,
+@@ -274,9 +275,10 @@ static int xfrm_xlate64_attr(struct sk_buff *dst, const struct nlattr *src)
+ 	case XFRMA_SET_MARK:
+ 	case XFRMA_SET_MARK_MASK:
+ 	case XFRMA_IF_ID:
++	case XFRMA_MTIMER_THRESH:
+ 		return xfrm_nla_cpy(dst, src, nla_len(src));
+ 	default:
+-		BUILD_BUG_ON(XFRMA_MAX != XFRMA_IF_ID);
++		BUILD_BUG_ON(XFRMA_MAX != XFRMA_MTIMER_THRESH);
+ 		pr_warn_once("unsupported nla_type %d\n", src->nla_type);
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -431,7 +433,7 @@ static int xfrm_xlate32_attr(void *dst, const struct nlattr *nla,
  	int err;
  
-@@ -36,7 +36,7 @@ int restore_registers(int pid, struct uml_pt_regs *regs)
- static unsigned long exec_regs[MAX_REG_NR];
- static unsigned long exec_fp_regs[FP_SIZE];
+ 	if (type > XFRMA_MAX) {
+-		BUILD_BUG_ON(XFRMA_MAX != XFRMA_IF_ID);
++		BUILD_BUG_ON(XFRMA_MAX != XFRMA_MTIMER_THRESH);
+ 		NL_SET_ERR_MSG(extack, "Bad attribute");
+ 		return -EOPNOTSUPP;
+ 	}
+diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
+index a2f4001221d16..78d51399a0f4b 100644
+--- a/net/xfrm/xfrm_state.c
++++ b/net/xfrm/xfrm_state.c
+@@ -1593,6 +1593,9 @@ static struct xfrm_state *xfrm_state_clone(struct xfrm_state *orig,
+ 	x->km.seq = orig->km.seq;
+ 	x->replay = orig->replay;
+ 	x->preplay = orig->preplay;
++	x->mapping_maxage = orig->mapping_maxage;
++	x->new_mapping = 0;
++	x->new_mapping_sport = 0;
  
--int init_registers(int pid)
-+int init_pid_registers(int pid)
- {
- 	int err;
+ 	return x;
  
-diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
-index 8a72c99994eb1..e3ee4db58b40d 100644
---- a/arch/um/os-Linux/start_up.c
-+++ b/arch/um/os-Linux/start_up.c
-@@ -368,7 +368,7 @@ void __init os_early_checks(void)
- 	check_tmpexec();
- 
- 	pid = start_ptraced_child();
--	if (init_registers(pid))
-+	if (init_pid_registers(pid))
- 		fatal("Failed to initialize default registers");
- 	stop_ptraced_child(pid, 1, 1);
+@@ -2242,7 +2245,7 @@ int km_query(struct xfrm_state *x, struct xfrm_tmpl *t, struct xfrm_policy *pol)
  }
-diff --git a/arch/x86/um/syscalls_64.c b/arch/x86/um/syscalls_64.c
-index 58f51667e2e4b..8249685b40960 100644
---- a/arch/x86/um/syscalls_64.c
-+++ b/arch/x86/um/syscalls_64.c
-@@ -11,6 +11,7 @@
- #include <linux/uaccess.h>
- #include <asm/prctl.h> /* XXX This should get the constants from libc */
- #include <os.h>
-+#include <registers.h>
+ EXPORT_SYMBOL(km_query);
  
- long arch_prctl(struct task_struct *task, int option,
- 		unsigned long __user *arg2)
-@@ -35,7 +36,7 @@ long arch_prctl(struct task_struct *task, int option,
- 	switch (option) {
- 	case ARCH_SET_FS:
- 	case ARCH_SET_GS:
--		ret = restore_registers(pid, &current->thread.regs.regs);
-+		ret = restore_pid_registers(pid, &current->thread.regs.regs);
+-int km_new_mapping(struct xfrm_state *x, xfrm_address_t *ipaddr, __be16 sport)
++static int __km_new_mapping(struct xfrm_state *x, xfrm_address_t *ipaddr, __be16 sport)
+ {
+ 	int err = -EINVAL;
+ 	struct xfrm_mgr *km;
+@@ -2257,6 +2260,24 @@ int km_new_mapping(struct xfrm_state *x, xfrm_address_t *ipaddr, __be16 sport)
+ 	rcu_read_unlock();
+ 	return err;
+ }
++
++int km_new_mapping(struct xfrm_state *x, xfrm_address_t *ipaddr, __be16 sport)
++{
++	int ret = 0;
++
++	if (x->mapping_maxage) {
++		if ((jiffies / HZ - x->new_mapping) > x->mapping_maxage ||
++		    x->new_mapping_sport != sport) {
++			x->new_mapping_sport = sport;
++			x->new_mapping = jiffies / HZ;
++			ret = __km_new_mapping(x, ipaddr, sport);
++		}
++	} else {
++		ret = __km_new_mapping(x, ipaddr, sport);
++	}
++
++	return ret;
++}
+ EXPORT_SYMBOL(km_new_mapping);
+ 
+ void km_policy_expired(struct xfrm_policy *pol, int dir, int hard, u32 portid)
+diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
+index 3a3cb09eec122..d75ac53ee7b42 100644
+--- a/net/xfrm/xfrm_user.c
++++ b/net/xfrm/xfrm_user.c
+@@ -282,6 +282,10 @@ static int verify_newsa_info(struct xfrm_usersa_info *p,
+ 
+ 	err = 0;
+ 
++	if (attrs[XFRMA_MTIMER_THRESH])
++		if (!attrs[XFRMA_ENCAP])
++			err = -EINVAL;
++
+ out:
+ 	return err;
+ }
+@@ -521,6 +525,7 @@ static void xfrm_update_ae_params(struct xfrm_state *x, struct nlattr **attrs,
+ 	struct nlattr *lt = attrs[XFRMA_LTIME_VAL];
+ 	struct nlattr *et = attrs[XFRMA_ETIMER_THRESH];
+ 	struct nlattr *rt = attrs[XFRMA_REPLAY_THRESH];
++	struct nlattr *mt = attrs[XFRMA_MTIMER_THRESH];
+ 
+ 	if (re) {
+ 		struct xfrm_replay_state_esn *replay_esn;
+@@ -552,6 +557,9 @@ static void xfrm_update_ae_params(struct xfrm_state *x, struct nlattr **attrs,
+ 
+ 	if (rt)
+ 		x->replay_maxdiff = nla_get_u32(rt);
++
++	if (mt)
++		x->mapping_maxage = nla_get_u32(mt);
+ }
+ 
+ static void xfrm_smark_init(struct nlattr **attrs, struct xfrm_mark *m)
+@@ -1024,8 +1032,13 @@ static int copy_to_user_state_extra(struct xfrm_state *x,
  		if (ret)
- 			return ret;
- 		break;
+ 			goto out;
+ 	}
+-	if (x->security)
++	if (x->security) {
+ 		ret = copy_sec_ctx(x->security, skb);
++		if (ret)
++			goto out;
++	}
++	if (x->mapping_maxage)
++		ret = nla_put_u32(skb, XFRMA_MTIMER_THRESH, x->mapping_maxage);
+ out:
+ 	return ret;
+ }
+@@ -3069,6 +3082,9 @@ static inline unsigned int xfrm_sa_len(struct xfrm_state *x)
+ 	/* Must count x->lastused as it may become non-zero behind our back. */
+ 	l += nla_total_size_64bit(sizeof(u64));
+ 
++	if (x->mapping_maxage)
++		l += nla_total_size(sizeof(x->mapping_maxage));
++
+ 	return l;
+ }
+ 
 -- 
 2.34.1
 

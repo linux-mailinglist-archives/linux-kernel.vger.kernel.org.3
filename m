@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2589492AC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E489D492A9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347145AbiARQMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:12:52 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41990 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347401AbiARQLD (ORCPT
+        id S1347029AbiARQLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:11:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41108 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347017AbiARQKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:11:03 -0500
+        Tue, 18 Jan 2022 11:10:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2E9ECE1A4E;
-        Tue, 18 Jan 2022 16:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93F20C00446;
-        Tue, 18 Jan 2022 16:10:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA5D612C2;
+        Tue, 18 Jan 2022 16:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F77BC00446;
+        Tue, 18 Jan 2022 16:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522259;
-        bh=dnJnBqqXqjmuHagT1/YZePw1qawm1NKxJlMD0JTwrhg=;
+        s=korg; t=1642522205;
+        bh=kQOy95IhZSZw5cFxZAIB00jh2ltD6YlMb16JXwiYEjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aBxGwnfgQVme841JypALmS+63AJ2TneZAXyWWPLmp6wyeKk29qAt9jJYXAcxDzxX1
-         O4/GeP76chNxm0rvM0s/bEshVclK+Ez3fBmk2aa1dUl5kFJ0ncQ9XTyC1vc6koGQ7u
-         yqbutikfOZgbByPQGGZKKBYnDdFCoWOlvtKP5OBk=
+        b=rAuY11BY0XuO8+/jud2Gryd42rtl7vscyjgycBHybV+otTSZeDMIg9B+JVtB/p8iH
+         NDDjLizdcvWGeaNnOUb0sJnPUFaoadKva77t4s+TLu07lF48LExWRDcCHCQE8ACTLr
+         1mE0Rdef33burVYY8VH+R2XyvlXRk1OGqvsNPnQ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Jamie Hill-Daniel <jamie@hill-daniel.co.uk>,
-        William Liu <willsroot@protonmail.com>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 05/28] vfs: fs_context: fix up param length parsing in legacy_parse_param
-Date:   Tue, 18 Jan 2022 17:06:00 +0100
-Message-Id: <20220118160452.579694934@linuxfoundation.org>
+        syzbot+cce1ee31614c171f5595@syzkaller.appspotmail.com,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.15 15/28] rtlwifi: rtl8192cu: Fix WARNING when calling local_irq_restore() with interrupts enabled
+Date:   Tue, 18 Jan 2022 17:06:01 +0100
+Message-Id: <20220118160452.388722708@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
-References: <20220118160452.384322748@linuxfoundation.org>
+In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
+References: <20220118160451.879092022@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,37 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+From: Larry Finger <Larry.Finger@lwfinger.net>
 
-commit 722d94847de29310e8aa03fcbdb41fc92c521756 upstream.
+commit 8b144dedb928e4e2f433a328d58f44c3c098d63e upstream.
 
-The "PAGE_SIZE - 2 - size" calculation in legacy_parse_param() is an
-unsigned type so a large value of "size" results in a high positive
-value instead of a negative value as expected.  Fix this by getting rid
-of the subtraction.
+Syzbot reports the following WARNING:
 
-Signed-off-by: Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-Signed-off-by: William Liu <willsroot@protonmail.com>
-Tested-by: Salvatore Bonaccorso <carnil@debian.org>
-Tested-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+[200~raw_local_irq_restore() called with IRQs enabled
+WARNING: CPU: 1 PID: 1206 at kernel/locking/irqflag-debug.c:10
+   warn_bogus_irq_restore+0x1d/0x20 kernel/locking/irqflag-debug.c:10
+
+Hardware initialization for the rtl8188cu can run for as long as 350 ms,
+and the routine may be called with interrupts disabled. To avoid locking
+the machine for this long, the current routine saves the interrupt flags
+and enables local interrupts. The problem is that it restores the flags
+at the end without disabling local interrupts first.
+
+This patch fixes commit a53268be0cb9 ("rtlwifi: rtl8192cu: Fix too long
+disable of IRQs").
+
+Reported-by: syzbot+cce1ee31614c171f5595@syzkaller.appspotmail.com
+Cc: stable@vger.kernel.org
+Fixes: a53268be0cb9 ("rtlwifi: rtl8192cu: Fix too long disable of IRQs")
+Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20211215171105.20623-1-Larry.Finger@lwfinger.net
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fs_context.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/fs_context.c
-+++ b/fs/fs_context.c
-@@ -548,7 +548,7 @@ static int legacy_parse_param(struct fs_
- 			      param->key);
- 	}
- 
--	if (len > PAGE_SIZE - 2 - size)
-+	if (size + len + 2 > PAGE_SIZE)
- 		return invalf(fc, "VFS: Legacy: Cumulative options too large");
- 	if (strchr(param->key, ',') ||
- 	    (param->type == fs_value_is_string &&
+--- a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
++++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
+@@ -1000,6 +1000,7 @@ int rtl92cu_hw_init(struct ieee80211_hw
+ 	_initpabias(hw);
+ 	rtl92c_dm_init(hw);
+ exit:
++	local_irq_disable();
+ 	local_irq_restore(flags);
+ 	return err;
+ }
 
 

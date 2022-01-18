@@ -2,129 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AE1492F23
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B6D492F31
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349127AbiARUSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349112AbiARUSA (ORCPT
+        id S1349143AbiARUVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:21:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56898 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231687AbiARUVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:18:00 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9899C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:18:00 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso377715pjm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:18:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fTJy6r2petxIyCqlCeqcI3j0J1mr0+L2iTxm9kuz7Xs=;
-        b=inhbbrVy+Fl/lXwKK3g5gU174TWO3UbXPm6+kPhfHgNNQVApLzBtbDcGk4Xgom17AB
-         i3YZWJdLTgR31k1+RKgfidYdZUqNPiFDDZAGoFHkdyc4Ob67KE7sURHRukbTSubzASSf
-         maDQWVxRz4iuaY3PO0xLJR+1EQcEZT+I8Q6AQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fTJy6r2petxIyCqlCeqcI3j0J1mr0+L2iTxm9kuz7Xs=;
-        b=C405xfIacK2Fesp1/SE4deeKRuMFHpPcpPekzAtduOKoPtyR1CylyB8DYoTKTVIX6e
-         QY7X6n7X3EYwC3058dA3iZ8LrxQFwyX6p9ySOIrKm2XpJFKhZS0koof6zIahllQ9B1uT
-         ytqP2djFXv44GiLXO2Kbx//A15RpA0at0T6fveTitM+2RIl5I5OoUsSd6lhZg+hqC+Te
-         z4TZsSJrOVwMqtQ1g5q6qnfJt1cMqEUAft0u8yxSrvaBfdZ2rDDjdCMz0KK8hgEvuCWr
-         Z4A9CIfqFarh1Ae4f8zz4CSE+2JZFVhJIooLtONS/9Y54XDOFechYiWRqT6t9WIFROtf
-         Mfig==
-X-Gm-Message-State: AOAM532/jQY/subbsZWqfJH81zERFcak/E//AN+M8wNkzuPjQ0EdMl3F
-        x5SXv+dECLh1g0LxZ5cKPrLu1w==
-X-Google-Smtp-Source: ABdhPJxiIurI5FHOTYvsCLYSQboCxGuQP/VrNeICLl1afrsd2ymXtXw5svEXZBZPdy/+GQJ6NoXhPA==
-X-Received: by 2002:a17:90b:4b8a:: with SMTP id lr10mr278353pjb.58.1642537079558;
-        Tue, 18 Jan 2022 12:17:59 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:e4bb:67e6:f0b5:1b92])
-        by smtp.gmail.com with ESMTPSA id ha11sm1170099pjb.3.2022.01.18.12.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 12:17:58 -0800 (PST)
-Date:   Tue, 18 Jan 2022 12:17:55 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] ASoC: rk3399_gru_sound: Wire up DP jack detection
-Message-ID: <YecgcwXrQNzCesMN@google.com>
-References: <20220114230209.4091727-1-briannorris@chromium.org>
- <20220114150129.v2.3.I3c79b1466c14b02980071221e5b99283cd26ec77@changeid>
- <CAGXv+5HC00YU6ARtGDahxWLqivvUCowh7wDq5H5OzoGO9htB+g@mail.gmail.com>
+        Tue, 18 Jan 2022 15:21:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642537311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y8gyhqFvKMeBPNaQH3F4JAzHy306fMW6cgpFncW//cw=;
+        b=QV53UVZ/BYqP0ijap8Pv1d1/rtme04KvBjm9FN4cjeMpcMXivtSPd2p0P+EpmpD7muhDC2
+        qfw2w0/daZe3WYQyna3k+Z6gZofX7xK6u+yGRej+zRHVjV7ySHqrDKk3pzVww7eOWBO4PT
+        1erNdqDiBUfLYXhPfq5UNs0FNGguifo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-l7AtTti0MtW_Yr3i9Q5H5g-1; Tue, 18 Jan 2022 15:21:48 -0500
+X-MC-Unique: l7AtTti0MtW_Yr3i9Q5H5g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36BB784B9A4;
+        Tue, 18 Jan 2022 20:21:46 +0000 (UTC)
+Received: from [10.22.35.127] (unknown [10.22.35.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0BD365DB83;
+        Tue, 18 Jan 2022 20:21:44 +0000 (UTC)
+Message-ID: <7610638e-9954-a6b2-63b2-e1df334a288f@redhat.com>
+Date:   Tue, 18 Jan 2022 15:21:44 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGXv+5HC00YU6ARtGDahxWLqivvUCowh7wDq5H5OzoGO9htB+g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] cpuset: Fix the bug that subpart_cpus updated wrongly in
+ update_cpumask()
+Content-Language: en-US
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220118100518.2381118-1-dtcccc@linux.alibaba.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220118100518.2381118-1-dtcccc@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+On 1/18/22 05:05, Tianchen Ding wrote:
+> subparts_cpus should be limited as a subset of cpus_allowed, but it is
+> updated wrongly by using cpumask_andnot(). Use cpumask_and() instead to
+> fix it.
+>
+> Fixes: ee8dde0cd2ce ("cpuset: Add new v2 cpuset.sched.partition flag")
+> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+> ---
+>   kernel/cgroup/cpuset.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index bb3531e7fda7..804ff5738c5f 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1635,8 +1635,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+>   	 * Make sure that subparts_cpus is a subset of cpus_allowed.
+>   	 */
+>   	if (cs->nr_subparts_cpus) {
+> -		cpumask_andnot(cs->subparts_cpus, cs->subparts_cpus,
+> -			       cs->cpus_allowed);
+> +		cpumask_and(cs->subparts_cpus, cs->subparts_cpus, cs->cpus_allowed);
+>   		cs->nr_subparts_cpus = cpumask_weight(cs->subparts_cpus);
+>   	}
+>   	spin_unlock_irq(&callback_lock);
 
-On Mon, Jan 17, 2022 at 05:01:52PM +0800, Chen-Yu Tsai wrote:
-> On Sat, Jan 15, 2022 at 7:03 AM Brian Norris <briannorris@chromium.org> wrote:
-> >
-> > Now that the cdn-dp driver supports plug-change callbacks, let's wire it
-> > up.
-> >
-> > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> > ---
-> >
-> > (no changes since v1)
-> >
-> >  sound/soc/rockchip/rk3399_gru_sound.c | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> >
-> > diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
-> > index e2d52d8d0ff9..eeef3ed70037 100644
-> > --- a/sound/soc/rockchip/rk3399_gru_sound.c
-> > +++ b/sound/soc/rockchip/rk3399_gru_sound.c
-> > @@ -164,6 +164,25 @@ static int rockchip_sound_da7219_hw_params(struct snd_pcm_substream *substream,
-> >         return 0;
-> >  }
-> >
-> > +static struct snd_soc_jack cdn_dp_card_jack;
-> > +
-> > +static int rockchip_sound_cdndp_init(struct snd_soc_pcm_runtime *rtd)
-> > +{
-> > +       struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
-> 
-> Using snd_soc_card_get_codec_dai() might be a better choice throughout this
-> driver. While it will work for the cdn_dp case, because it is the first DAI
-> in |rockchip_dais[]|, all the invocations for the other codecs are likely
-> returning the wrong DAI.
+Thanks for the fix.
 
-I'll admit, I'm not very familiar with the ASoC object model, so you may
-well be correct that there's something fishy in here. But I did trace
-through the objects involved here, and we *are* getting the correct DAI
-for both this case and the DA7219 case (preexisting code).
+Reviewed-by: Waiman Long <longman@redhat.com>
 
-It looks like we actually have a new runtime for each of our static
-dai_links:
-
-devm_snd_soc_register_card()
-  ...
-  for_each_card_prelinks()
-    snd_soc_add_pcm_runtime()
-
-So I think this is valid to keep as-is.
-
-> For this particular patch it works either way, so
-> 
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-
-Thanks for looking!
-
-Brian

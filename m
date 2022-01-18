@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70319492AAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BF9492AB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346718AbiARQMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S1347521AbiARQMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346708AbiARQKw (ORCPT
+        with ESMTP id S1346711AbiARQKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:10:52 -0500
+        Tue, 18 Jan 2022 11:10:55 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C829C0617BC;
-        Tue, 18 Jan 2022 08:10:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB677C06138F;
+        Tue, 18 Jan 2022 08:10:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D3111CE1A4C;
-        Tue, 18 Jan 2022 16:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8625C00446;
-        Tue, 18 Jan 2022 16:10:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1C939CE1A42;
+        Tue, 18 Jan 2022 16:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3551C00446;
+        Tue, 18 Jan 2022 16:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522219;
-        bh=QGUxhGBilWf2yzYAsZvkl/FNKNHY8OjYtLqgw6U6rB0=;
+        s=korg; t=1642522223;
+        bh=ih3fgsRkGpEiiagHeNchYkaod06IHQ11LkVuBWjnYkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LGiCO5rM6cDha5SjFSSWxT0GbYcgefEcxdcYzbwrwUU/4Fkt6fe+xkvfJRaRtQhhF
-         +C/nIo47TW5xOu/Z/dZVCHBF2x1P8LpXPcGyOX4hfvrV9U+prWz+sr0QSR9VgGqKHi
-         ac37D3MJVNBbpBdt3Foz4p3NZJjEZsTJ9Z8a+ytY=
+        b=TYNisQExkqWK3dcP4GOt6amhjJ/vvAaf8J0kA6erw/ATxyQQH0jnohtMaxcHSeXgn
+         OTGzsoCPIdYK9rzw9en8u2+GAUl9Uj0oCZ4bVhAcJx8D0Q3qPDYfqRQ3IQDB5GD66V
+         2P1WMGNn4BLodjcSt05lPojCllUeXZZD2DPDq1s4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Li RongQing <lirongqing@baidu.com>, stable@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 09/28] KVM: x86: dont print when fail to read/write pv eoi memory
-Date:   Tue, 18 Jan 2022 17:05:55 +0100
-Message-Id: <20220118160452.185229184@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, NeilBrown <neilb@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 01/28] devtmpfs regression fix: reconfigure on each mount
+Date:   Tue, 18 Jan 2022 17:05:56 +0100
+Message-Id: <20220118160452.433295198@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
-References: <20220118160451.879092022@linuxfoundation.org>
+In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
+References: <20220118160452.384322748@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,64 +52,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li RongQing <lirongqing@baidu.com>
+From: NeilBrown <neilb@suse.de>
 
-commit ce5977b181c1613072eafbc7546bcb6c463ea68c upstream.
+commit a6097180d884ddab769fb25588ea8598589c218c upstream.
 
-If guest gives MSR_KVM_PV_EOI_EN a wrong value, this printk() will
-be trigged, and kernel log is spammed with the useless message
+Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
+mount options as "remount" options, so it updates the configuration of
+the single super_block on each mount.
 
-Fixes: 0d88800d5472 ("kvm: x86: ioapic and apic debug macros cleanup")
-Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Cc: stable@kernel.org
-Message-Id: <1636026974-50555-1-git-send-email-lirongqing@baidu.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Since that was changed, the mount options used for devtmpfs are ignored.
+This is a regression which affect systemd - which mounts devtmpfs with
+"-o mode=755,size=4m,nr_inodes=1m".
+
+This patch restores the "remount" effect by calling reconfigure_single()
+
+Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mount_single()")
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/lapic.c |   18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/base/devtmpfs.c    |    7 +++++++
+ fs/super.c                 |    4 ++--
+ include/linux/fs_context.h |    2 ++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -676,31 +676,25 @@ static inline bool pv_eoi_enabled(struct
- static bool pv_eoi_get_pending(struct kvm_vcpu *vcpu)
+--- a/drivers/base/devtmpfs.c
++++ b/drivers/base/devtmpfs.c
+@@ -59,8 +59,15 @@ static struct dentry *public_dev_mount(s
+ 		      const char *dev_name, void *data)
  {
- 	u8 val;
--	if (pv_eoi_get_user(vcpu, &val) < 0) {
--		printk(KERN_WARNING "Can't read EOI MSR value: 0x%llx\n",
--			   (unsigned long long)vcpu->arch.pv_eoi.msr_val);
-+	if (pv_eoi_get_user(vcpu, &val) < 0)
- 		return false;
--	}
+ 	struct super_block *s = mnt->mnt_sb;
++	int err;
 +
- 	return val & KVM_PV_EOI_ENABLED;
+ 	atomic_inc(&s->s_active);
+ 	down_write(&s->s_umount);
++	err = reconfigure_single(s, flags, data);
++	if (err < 0) {
++		deactivate_locked_super(s);
++		return ERR_PTR(err);
++	}
+ 	return dget(s->s_root);
  }
  
- static void pv_eoi_set_pending(struct kvm_vcpu *vcpu)
- {
--	if (pv_eoi_put_user(vcpu, KVM_PV_EOI_ENABLED) < 0) {
--		printk(KERN_WARNING "Can't set EOI MSR value: 0x%llx\n",
--			   (unsigned long long)vcpu->arch.pv_eoi.msr_val);
-+	if (pv_eoi_put_user(vcpu, KVM_PV_EOI_ENABLED) < 0)
- 		return;
--	}
-+
- 	__set_bit(KVM_APIC_PV_EOI_PENDING, &vcpu->arch.apic_attention);
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -1423,8 +1423,8 @@ struct dentry *mount_nodev(struct file_s
  }
+ EXPORT_SYMBOL(mount_nodev);
  
- static void pv_eoi_clr_pending(struct kvm_vcpu *vcpu)
+-static int reconfigure_single(struct super_block *s,
+-			      int flags, void *data)
++int reconfigure_single(struct super_block *s,
++		       int flags, void *data)
  {
--	if (pv_eoi_put_user(vcpu, KVM_PV_EOI_DISABLED) < 0) {
--		printk(KERN_WARNING "Can't clear EOI MSR value: 0x%llx\n",
--			   (unsigned long long)vcpu->arch.pv_eoi.msr_val);
-+	if (pv_eoi_put_user(vcpu, KVM_PV_EOI_DISABLED) < 0)
- 		return;
--	}
-+
- 	__clear_bit(KVM_APIC_PV_EOI_PENDING, &vcpu->arch.apic_attention);
- }
+ 	struct fs_context *fc;
+ 	int ret;
+--- a/include/linux/fs_context.h
++++ b/include/linux/fs_context.h
+@@ -142,6 +142,8 @@ extern void put_fs_context(struct fs_con
+ extern int vfs_parse_fs_param_source(struct fs_context *fc,
+ 				     struct fs_parameter *param);
+ extern void fc_drop_locked(struct fs_context *fc);
++int reconfigure_single(struct super_block *s,
++		       int flags, void *data);
  
+ /*
+  * sget() wrappers to be called from the ->get_tree() op.
 
 

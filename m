@@ -2,179 +2,669 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D84492EEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614BD492EF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349064AbiARUCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:02:44 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:38482 "EHLO mail.skyhub.de"
+        id S1349072AbiARUEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:04:10 -0500
+Received: from mga01.intel.com ([192.55.52.88]:19432 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245033AbiARUCn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:02:43 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 98B8C1EC018C;
-        Tue, 18 Jan 2022 21:02:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642536158;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FJzhlG/XZLRshl/TNOzuwLXpy1AY2QvmCVdCYi4DnC0=;
-        b=qV1sdj/NP50o/FgsFvzc+8ZCb1wKPOo6T+dScbwWa301T501gbNLG+JWjQc2ryzUopvFwj
-        xhMtkFflv6+Wqyn8Ni+ve5AMcGoF6CM3m5UrJhgKpT4hh9zWqGWfbyb3+FPXRs/jIGnXfY
-        kdyWEVRX4rgzmoo1awHEA3YgajePM84=
-Date:   Tue, 18 Jan 2022 21:02:41 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Smita Koralahalli Channabasappa 
-        <smita.koralahallichannabasappa@amd.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, patches@lists.linux.dev
-Subject: Re: [PATCH 1/5] x86/ras: Merge Intel and AMD ppin_init() functions
-Message-ID: <YecY/Ri6hvJGqNTT@zn.tnic>
-References: <20220107225442.1690165-1-tony.luck@intel.com>
- <20220107225442.1690165-2-tony.luck@intel.com>
+        id S231417AbiARUEK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 15:04:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642536249; x=1674072249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mFPND/Ud5ktDEhXhrONz1vQ8AVeVvRmT28NfeMdREgE=;
+  b=nJDQ0p3B1duS68LP4VUjZ4U/RVAPnUI1BmNQjmgXyZpWObymyINBYErY
+   Tm6zdfV7ut8aA/xVAqGHj+3T6Uh4vLaZn84ptpIr/vkUgu6Xwd+2bL/c0
+   L/VzFZxtFnwMdJ01lr6b8yw/1vL71BOQcEeDcokrHjPlhcaa6W2HtBpX2
+   mcIfEzO6Z/ZyYYk7VgGBK7qXWQ0oz0dO8OwzXKZdl8OBxHnXJalI4xvin
+   zg3pT48XoQ23TMk4PCyx62hkv3o5j+0mQ52g37nvhI01SAlMnusHcfvR7
+   vbtZVY3NpxL523lr2Ru+g8Y1HXvgSmIw3B266K1bxqBiQDPIoV0OXf7MA
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269290117"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="269290117"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 12:04:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="474880500"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2022 12:04:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9ui6-000CuT-2t; Tue, 18 Jan 2022 20:04:06 +0000
+Date:   Wed, 19 Jan 2022 04:03:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 36/78]
+ drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_UART_RX'
+ undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_RX'?
+Message-ID: <202201190414.wOMX1rDG-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220107225442.1690165-2-tony.luck@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 02:54:38PM -0800, Tony Luck wrote:
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   8da238492817fbbcbff77f105a752f98e7fb6df9
+commit: 6381f39190c40848e9838f4f811ed464e0a45ddd [36/78] pinctrl: mstar: msc313 pinctrl driver
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220119/202201190414.wOMX1rDG-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/linux-chenxing/linux/commit/6381f39190c40848e9838f4f811ed464e0a45ddd
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 6381f39190c40848e9838f4f811ed464e0a45ddd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-Make that subject prefix "x86/cpu" please. Same for patches 2 and 3.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Patch 4 is probably topology/sysfs - at least this is what past patches
-say. If you're not sure about the prefix, use git log on the files
-you're touching.
+Note: the chenxing/msc313_mainlining HEAD 8da238492817fbbcbff77f105a752f98e7fb6df9 builds fine.
+      It only hurts bisectability.
 
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 0083464de5e3..a1e29c0844d1 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -88,6 +88,80 @@ EXPORT_SYMBOL_GPL(get_llc_id);
->  /* L2 cache ID of each logical CPU */
->  DEFINE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id) = BAD_APICID;
->  
-> +static struct ppin_info {
-> +	int	feature;
-> +	int	msr_ppin_ctl;
-> +	int	msr_ppin;
+All errors (new ones prefixed by >>):
 
-That thing is unused in this patch and only accessed in patch 3. Please
-add it there.
+   In file included from drivers/pinctrl/mstar/pinctrl-msc313-pm.c:8:
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_UART_RX' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_RX'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:58:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      58 |         MSC313_COMMON_PIN(PM_UART_RX),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_UART_TX' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_TX'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:59:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      59 |         MSC313_COMMON_PIN(PM_UART_TX),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_CZ' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_SPI_CZ'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:60:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      60 |         MSC313_COMMON_PIN(PM_SPI_CZ),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_DI' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_SPI_DI'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:61:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      61 |         MSC313_COMMON_PIN(PM_SPI_DI),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_WPZ' undeclared here (not in a function); did you mean 'PIN_SSD210_PM_SPI_WPZ'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:62:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      62 |         MSC313_COMMON_PIN(PM_SPI_WPZ),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_DO' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_SPI_DO'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:63:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      63 |         MSC313_COMMON_PIN(PM_SPI_DO),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_CK' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_SPI_CK'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:64:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      64 |         MSC313_COMMON_PIN(PM_SPI_CK),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_IRIN' undeclared here (not in a function); did you mean 'GROUPNAME_PM_IRIN'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:65:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      65 |         MSC313_COMMON_PIN(PM_IRIN),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SD_CDZ' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_SD_CDZ'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:66:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      66 |         MSC313_COMMON_PIN(PM_SD_CDZ),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_GPIO4' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:54:37: note: in expansion of macro 'COMMON_PIN'
+      54 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:67:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+      67 |         MSC313_COMMON_PIN(PM_GPIO4),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_HLD' undeclared here (not in a function); did you mean 'PIN_SSD212_PM_SPI_HOLD'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:429:38: note: in expansion of macro 'COMMON_PIN'
+     429 | #define SSD20XD_COMMON_PIN(_pinname) COMMON_PIN(SSD20XD, _pinname)
+         |                                      ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:111:9: note: in expansion of macro 'SSD20XD_COMMON_PIN'
+     111 |         SSD20XD_COMMON_PIN(PM_SPI_HLD),
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_LED0' undeclared here (not in a function); did you mean 'FUNCTIONNAME_PM_LED'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:429:38: note: in expansion of macro 'COMMON_PIN'
+     429 | #define SSD20XD_COMMON_PIN(_pinname) COMMON_PIN(SSD20XD, _pinname)
+         |                                      ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:113:9: note: in expansion of macro 'SSD20XD_COMMON_PIN'
+     113 |         SSD20XD_COMMON_PIN(PM_LED0),
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_LED1' undeclared here (not in a function); did you mean 'FUNCTIONNAME_PM_LED'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:429:38: note: in expansion of macro 'COMMON_PIN'
+     429 | #define SSD20XD_COMMON_PIN(_pinname) COMMON_PIN(SSD20XD, _pinname)
+         |                                      ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:114:9: note: in expansion of macro 'SSD20XD_COMMON_PIN'
+     114 |         SSD20XD_COMMON_PIN(PM_LED1),
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_SPI_HOLD' undeclared here (not in a function); did you mean 'PIN_SSD212_PM_SPI_HOLD'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:176:39: note: in expansion of macro 'COMMON_PIN'
+     176 | #define SSC8336N_COMMON_PIN(_pinname) COMMON_PIN(SSC8336N, _pinname)
+         |                                       ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:187:9: note: in expansion of macro 'SSC8336N_COMMON_PIN'
+     187 |         SSC8336N_COMMON_PIN(PM_SPI_HOLD),
+         |         ^~~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_GPIO8' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:176:39: note: in expansion of macro 'COMMON_PIN'
+     176 | #define SSC8336N_COMMON_PIN(_pinname) COMMON_PIN(SSC8336N, _pinname)
+         |                                       ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:189:9: note: in expansion of macro 'SSC8336N_COMMON_PIN'
+     189 |         SSC8336N_COMMON_PIN(PM_GPIO8),
+         |         ^~~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_GPIO6' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:176:39: note: in expansion of macro 'COMMON_PIN'
+     176 | #define SSC8336N_COMMON_PIN(_pinname) COMMON_PIN(SSC8336N, _pinname)
+         |                                       ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:190:9: note: in expansion of macro 'SSC8336N_COMMON_PIN'
+     190 |         SSC8336N_COMMON_PIN(PM_GPIO6),
+         |         ^~~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_GPIO5' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:176:39: note: in expansion of macro 'COMMON_PIN'
+     176 | #define SSC8336N_COMMON_PIN(_pinname) COMMON_PIN(SSC8336N, _pinname)
+         |                                       ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:191:9: note: in expansion of macro 'SSC8336N_COMMON_PIN'
+     191 |         SSC8336N_COMMON_PIN(PM_GPIO5),
+         |         ^~~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_GPIO2' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:176:39: note: in expansion of macro 'COMMON_PIN'
+     176 | #define SSC8336N_COMMON_PIN(_pinname) COMMON_PIN(SSC8336N, _pinname)
+         |                                       ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:193:9: note: in expansion of macro 'SSC8336N_COMMON_PIN'
+     193 |         SSC8336N_COMMON_PIN(PM_GPIO2),
+         |         ^~~~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_PM_GPIO0' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:176:39: note: in expansion of macro 'COMMON_PIN'
+     176 | #define SSC8336N_COMMON_PIN(_pinname) COMMON_PIN(SSC8336N, _pinname)
+         |                                       ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313-pm.c:194:9: note: in expansion of macro 'SSC8336N_COMMON_PIN'
+     194 |         SSC8336N_COMMON_PIN(PM_GPIO0),
+         |         ^~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/gpio/driver.h:11,
+                    from drivers/pinctrl/mstar/pinctrl-msc313.c:7:
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_ETH_RN' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:260:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     260 |         MSC313_COMMON_PIN(ETH_RN),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_ETH_RN' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:260:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     260 |         MSC313_COMMON_PIN(ETH_RN),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_ETH_RP' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:261:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     261 |         MSC313_COMMON_PIN(ETH_RP),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_ETH_RP' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:261:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     261 |         MSC313_COMMON_PIN(ETH_RP),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_ETH_TN' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:262:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     262 |         MSC313_COMMON_PIN(ETH_TN),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_ETH_TN' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:262:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     262 |         MSC313_COMMON_PIN(ETH_TN),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_ETH_TP' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:263:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     263 |         MSC313_COMMON_PIN(ETH_TP),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_ETH_TP' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:263:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     263 |         MSC313_COMMON_PIN(ETH_TP),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_FUART_RX' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_RX'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:264:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     264 |         MSC313_COMMON_PIN(FUART_RX),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_FUART_RX' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:264:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     264 |         MSC313_COMMON_PIN(FUART_RX),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_FUART_TX' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_TX'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:265:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     265 |         MSC313_COMMON_PIN(FUART_TX),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_FUART_TX' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:265:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     265 |         MSC313_COMMON_PIN(FUART_TX),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_FUART_CTS' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_TX'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:266:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     266 |         MSC313_COMMON_PIN(FUART_CTS),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_FUART_CTS' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:266:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     266 |         MSC313_COMMON_PIN(FUART_CTS),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_FUART_RTS' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_UART_TX'?
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:267:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     267 |         MSC313_COMMON_PIN(FUART_RTS),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_FUART_RTS' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:267:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     267 |         MSC313_COMMON_PIN(FUART_RTS),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_I2C1_SCL' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:268:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     268 |         MSC313_COMMON_PIN(I2C1_SCL),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_I2C1_SCL' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:268:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     268 |         MSC313_COMMON_PIN(I2C1_SCL),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:21: error: 'PIN_MSC313_I2C1_SDA' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                     ^~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:269:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     269 |         MSC313_COMMON_PIN(I2C1_SDA),
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pinctrl/mstar/pinctrl-mstar.h:414:48: error: 'PINNAME_I2C1_SDA' undeclared here (not in a function)
+     414 |         PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+         |                                                ^~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:50: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                                  ^
+   drivers/pinctrl/mstar/pinctrl-mstar.h:424:37: note: in expansion of macro 'COMMON_PIN'
+     424 | #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+         |                                     ^~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:269:9: note: in expansion of macro 'MSC313_COMMON_PIN'
+     269 |         MSC313_COMMON_PIN(I2C1_SDA),
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/pinctrl/mstar/pinctrl-msc313.c:270:21: error: 'PIN_MSC313_SR_IO2' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     270 |         PINCTRL_PIN(PIN_MSC313_SR_IO2,  "sr_io2"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:271:21: error: 'PIN_MSC313_SR_IO3' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     271 |         PINCTRL_PIN(PIN_MSC313_SR_IO3,  "sr_io3"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:272:21: error: 'PIN_MSC313_SR_IO4' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     272 |         PINCTRL_PIN(PIN_MSC313_SR_IO4,  "sr_io4"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:273:21: error: 'PIN_MSC313_SR_IO5' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     273 |         PINCTRL_PIN(PIN_MSC313_SR_IO5,  "sr_io5"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:274:21: error: 'PIN_MSC313_SR_IO6' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     274 |         PINCTRL_PIN(PIN_MSC313_SR_IO6,  "sr_io6"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:275:21: error: 'PIN_MSC313_SR_IO7' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     275 |         PINCTRL_PIN(PIN_MSC313_SR_IO7,  "sr_io7"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:276:21: error: 'PIN_MSC313_SR_IO8' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     276 |         PINCTRL_PIN(PIN_MSC313_SR_IO8,  "sr_io8"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:277:21: error: 'PIN_MSC313_SR_IO9' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     277 |         PINCTRL_PIN(PIN_MSC313_SR_IO9,  "sr_io9"),
+         |                     ^~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:278:21: error: 'PIN_MSC313_SR_IO10' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     278 |         PINCTRL_PIN(PIN_MSC313_SR_IO10, "sr_io10"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:279:21: error: 'PIN_MSC313_SR_IO11' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     279 |         PINCTRL_PIN(PIN_MSC313_SR_IO11, "sr_io11"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:280:21: error: 'PIN_MSC313_SR_IO12' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     280 |         PINCTRL_PIN(PIN_MSC313_SR_IO12, "sr_io12"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:281:21: error: 'PIN_MSC313_SR_IO13' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     281 |         PINCTRL_PIN(PIN_MSC313_SR_IO13, "sr_io13"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:282:21: error: 'PIN_MSC313_SR_IO14' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_GPIO4'?
+     282 |         PINCTRL_PIN(PIN_MSC313_SR_IO14, "sr_io14"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:283:21: error: 'PIN_MSC313_SR_IO15' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     283 |         PINCTRL_PIN(PIN_MSC313_SR_IO15, "sr_io15"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
+         |                                       ^
+   drivers/pinctrl/mstar/pinctrl-msc313.c:284:21: error: 'PIN_MSC313_SR_IO16' undeclared here (not in a function); did you mean 'PIN_MSC313_PM_IRIN'?
+     284 |         PINCTRL_PIN(PIN_MSC313_SR_IO16, "sr_io16"),
+         |                     ^~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:43:39: note: in definition of macro 'PINCTRL_PIN'
+      43 | #define PINCTRL_PIN(a, b) { .number = a, .name = b }
 
-> +} ppin_info[] = {
-> +	[X86_VENDOR_INTEL] = {
-> +		.feature = X86_FEATURE_INTEL_PPIN,
-> +		.msr_ppin_ctl = MSR_PPIN_CTL,
-> +		.msr_ppin = MSR_PPIN
-> +	},
-> +	[X86_VENDOR_AMD] = {
 
-X86_VENDOR_AMD is index 2 not 1 so ppin_info[1] is empty.
+vim +414 drivers/pinctrl/mstar/pinctrl-mstar.h
 
-I wouldn't mind swapping the numbers here in a pre-patch:
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  411  
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  412  /* Helpers for pins that have the same on the different chips */
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  413  #define COMMON_PIN(_model, _pinname) \
+b4d3b8b1212c4d Daniel Palmer 2021-09-18 @414  	PINCTRL_PIN(PIN_##_model##_##_pinname, PINNAME_##_pinname)
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  415  
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  416  #define COMMON_FIXED_FUNCTION(_NAME, _name) \
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  417  	MSTAR_PINCTRL_FUNCTION(FUNCTIONNAME_##_NAME, -1, 0, _name##_groups, NULL)
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  418  #define COMMON_FUNCTION(_NAME, _name) \
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  419  	MSTAR_PINCTRL_FUNCTION(FUNCTIONNAME_##_NAME, REG_##_NAME, MASK_##_NAME, _name##_groups, _name##_values)
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  420  #define COMMON_FUNCTION_NULLVALUES(_NAME, _name) \
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  421  	MSTAR_PINCTRL_FUNCTION(FUNCTIONNAME_##_NAME, REG_##_NAME, MASK_##_NAME, _name##_groups, NULL)
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  422  
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  423  /* Helpers for msc313/msc313e pins and groups */
+b4d3b8b1212c4d Daniel Palmer 2021-09-18 @424  #define MSC313_COMMON_PIN(_pinname) COMMON_PIN(MSC313, _pinname)
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  425  #define MSC313_PINCTRL_GROUP(_NAME, _name) \
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  426  	MSTAR_PINCTRL_GROUP(GROUPNAME_##_NAME, msc313_##_name##_pins)
+b4d3b8b1212c4d Daniel Palmer 2021-09-18  427  
 
-#define X86_VENDOR_CYRIX        1
-#define X86_VENDOR_AMD          2
+:::::: The code at line 414 was first introduced by commit
+:::::: b4d3b8b1212c4d66caeb8836034568674450fa48 pinctrl: mstar: Add common code
 
-nothing would depend on those naked numbers, right? :)
+:::::: TO: Daniel Palmer <daniel@0x0f.com>
+:::::: CC: Daniel Palmer <daniel@0x0f.com>
 
-> +		.feature = X86_FEATURE_AMD_PPIN,
-> +		.msr_ppin_ctl = MSR_AMD_PPIN_CTL,
-> +		.msr_ppin = MSR_AMD_PPIN
-> +	},
-> +};
-> +
-> +static const struct x86_cpu_id ppin_cpuids[] = {
-> +	X86_MATCH_VENDOR_FEATURE(AMD, X86_FEATURE_AMD_PPIN, &ppin_info[X86_VENDOR_AMD]),
-
-X86_MATCH_FEATURE() I guess.
-
-> +	/* Legacy models without CPUID enumeration */
-> +	X86_MATCH_INTEL_FAM6_MODEL(IVYBRIDGE_X, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(HASWELL_X, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_D, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_X, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL, &ppin_info[X86_VENDOR_INTEL]),
-> +	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM, &ppin_info[X86_VENDOR_INTEL]),
-> +
-> +	{}
-> +};
-> +
-> +static void ppin_init(struct cpuinfo_x86 *c)
-> +{
-> +	const struct x86_cpu_id *id;
-> +	unsigned long long val;
-> +	struct ppin_info *info;
-> +
-> +	id = x86_match_cpu(ppin_cpuids);
-> +	if (!id)
-> +		return;
-> +
-> +	/*
-> +	 * Testing the prescence of the MSR is not enough. Need to check
-
-Unknown word [prescence] in comment.
-Suggestions: ['presence', 'prescience', 'putrescence', 'prepubescence', 'excrescence', 'concrescence']
-
-> +	 * that the PPIN_CTL allows reading of the PPIN.
-> +	 */
-> +	info = (struct ppin_info *)id->driver_data;
-> +
-> +	if (rdmsrl_safe(info->msr_ppin_ctl, &val))
-> +		goto clear_ppin;
-> +
-> +	if ((val & 3UL) == 1UL) {
-> +		/* PPIN locked in disabled mode */
-> +		goto clear_ppin;
-> +	}
-> +
-> +	/* If PPIN is disabled, try to enable */
-> +	if (!(val & 2UL)) {
-> +		wrmsrl_safe(info->msr_ppin_ctl,  val | 2UL);
-> +		rdmsrl_safe(info->msr_ppin_ctl, &val);
-> +	}
-> +
-> +	/* Is the enable bit set? */
-> +	if (val & 2UL) {
-> +		set_cpu_cap(c, info->feature);
-> +		return;
-> +	}
-> +
-> +clear_ppin:
-> +	clear_cpu_cap(c, info->feature);
-> +}
-> +
->  /* correctly size the local cpu masks */
->  void __init setup_cpu_local_masks(void)
->  {
-> @@ -1655,6 +1729,8 @@ static void identify_cpu(struct cpuinfo_x86 *c)
->  			c->x86_capability[i] |= boot_cpu_data.x86_capability[i];
->  	}
->  
-> +	ppin_init(c);
-
-I can't say that I'm crazy about all those miscellaneous
-feature-initializing functions sprinkled allround here but I don't have
-a better idea ... yet.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

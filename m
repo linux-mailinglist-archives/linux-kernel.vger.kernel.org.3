@@ -2,115 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FB349228E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C9B492295
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 10:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345610AbiARJUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 04:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S240758AbiARJV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 04:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240567AbiARJUQ (ORCPT
+        with ESMTP id S235153AbiARJV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:20:16 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A57C061746
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:20:16 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w12-20020a17090a528c00b001b276aa3aabso1778345pjh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:20:16 -0800 (PST)
+        Tue, 18 Jan 2022 04:21:26 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F40CC06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:21:26 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id h30so16975975ila.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 01:21:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Kp2JX1puGgzXBsvWu8HbdG09bQuSVyJ347xkXdyu4zM=;
-        b=iv59fl/+TUN+el5syUDm5Q/h9mk7/lMUY0VPBIFqmNn0QRc/6edIaPvpLBE72jhAlL
-         DarFZ6GtROPD9sX3dKbdtjgsvsmkQRPWJIBx7Cgn4CG8DAUa2+XxmKDSbQRcrX8pa7LZ
-         MVDz20uwoFy9g2As45611p0L/nstkFWaG1oM8=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5Zvs9+UMuisbE1S/G8Xv89qZmGNrRAyujh7XOE4Gpac=;
+        b=WNs7c1MTDzC9jGA7BOWDtnQYV9lhuodolnBJBBDhbPGOnvPzIRjK3ikEJe7FpeZWF7
+         khHNeCGff946aku7HKG4YWIraUbOgbcrban0UwppU+ZvLt5FwAd90Z6C41CEY9fpyNod
+         4Xx8cWlhS025exLxB0ao3sOAsRH921YrlE6z/uUtrHvv9SJWc7VY4EtPUyfSiDaKKqDr
+         hdRPjoope/KEeIneL+fkDjaHzun/u6EFFCHd0Gd10PGXeSknHaoyHcUEGJ8+UtjhrZwc
+         4q2WEwVmfoZON9nDK44fxgg7jqC5p7GuiDxZalbaTsqTm1pcX8RGq7sGmeYCmQLq9QSa
+         nv2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Kp2JX1puGgzXBsvWu8HbdG09bQuSVyJ347xkXdyu4zM=;
-        b=6goZVg/FZJwGCNV3jHWWNJjHbuQPzknhtfPViCgZauXxd0Vv0rAQus7DDwwKIatHWQ
-         +xB9NDQd5gG0e+ZLn+teH5zTzcbM5H+iGzq8E+7B8gZ8EvUG4C1IC9tvTyIHWEFQcpxA
-         dF6X1OjH/OFMWanFadTwlptOL4xeiFZOEDNEgQsFjE6HPspR+XV05EmKnV+KW+gEtmJa
-         NEMu+8711s8ljuYwhekAkwVp73XI2//AO3Na/Ps5B9/ris01fLYv7Sb2JQ/8sezgzyKn
-         Z6ampKNcWNvPp3CIFrYyrnzoJQjYUYaVJHQCK8hBkIEYnPc9A+FoK5hLDwSadDGB5nsR
-         MVrQ==
-X-Gm-Message-State: AOAM530BeumbjztGnQEDtOXixKFZiYRgOo6YNyTtS+Hd4PGKOT9LuZ31
-        wPzKEKs7cBy66MJy6DAW4LS9pw==
-X-Google-Smtp-Source: ABdhPJxSYdZj6GlxPX1EcP3nJedapwQ4dsYkk+FXgi6D1vUmmCz6wwa/8hmHr6JqKMsLEwhJm6YGHA==
-X-Received: by 2002:a17:902:ea85:b0:14a:3c49:f140 with SMTP id x5-20020a170902ea8500b0014a3c49f140mr26185537plb.31.1642497616208;
-        Tue, 18 Jan 2022 01:20:16 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:4448:8072:97f1:64dd])
-        by smtp.gmail.com with ESMTPSA id y1sm14691501pgs.4.2022.01.18.01.20.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5Zvs9+UMuisbE1S/G8Xv89qZmGNrRAyujh7XOE4Gpac=;
+        b=LqxgUlxashq8pCq0sJDopi6myh/ZMNr9bXRZBUTkCyF+MoPcDfj71u0YU6W26EgBD+
+         9rNDCc+WOIt1ozNi1RcO82TRQlDFk8DX+nEvic8eHqk2EspG8iUYYszgKfp8PkCoZghN
+         Wou9sI3xqeAz10VPhQFbNRRf0612Iwbsm2jBbUwoUz8IDcTDbAwTxKspESNq5aENEmVV
+         0+TlSKgiX1ttMWA1lUc1tUgFkvrbY0Y386p/gfjlgWAV0SWC1V7g4DoksY4VxiTzXG03
+         pdTo9hdt83ljHy8q/TQ6M6vp+5A329+z+ZbR+jfirOziQBMBXScxvOPgdynStXQgui2K
+         iDQg==
+X-Gm-Message-State: AOAM5336IJ+/U14xQnhLiBTVENUYL87/nQme2BFWLDu49Dh0D7WMuIXK
+        iXwZgm/lHBbg4RioV5RNxAqkrw==
+X-Google-Smtp-Source: ABdhPJzuNClvh26yBkKaIbqUIdOMn/cTG48kphsbceegwXKy1WFnvwj3FQC5I7nUchi8DS+vx4TyJA==
+X-Received: by 2002:a92:cd4b:: with SMTP id v11mr7081222ilq.3.1642497685350;
+        Tue, 18 Jan 2022 01:21:25 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:40dc:e0ca:c949:a83b])
+        by smtp.gmail.com with ESMTPSA id o10sm2389761iow.0.2022.01.18.01.21.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 01:20:15 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v4 4/4] dt-bindings: drm/bridge: anx7625: Add aux-bus node
-Date:   Tue, 18 Jan 2022 17:20:02 +0800
-Message-Id: <20220118092002.4267-4-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-In-Reply-To: <20220118092002.4267-1-hsinyi@chromium.org>
-References: <20220118092002.4267-1-hsinyi@chromium.org>
+        Tue, 18 Jan 2022 01:21:24 -0800 (PST)
+Date:   Tue, 18 Jan 2022 02:21:21 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Donald Carr <d@chaos-reins.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+Message-ID: <YeaGkZ50n7/mDuJX@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <YdSuSHa/Vjl6bPkg@google.com>
+ <Yd1Css8+jsspeZHh@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd1Css8+jsspeZHh@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-List panel under aux-bus node if it's connected to anx7625's aux bus.
+On Tue, Jan 11, 2022 at 01:41:22AM -0700, Yu Zhao wrote:
+> On Tue, Jan 04, 2022 at 01:30:00PM -0700, Yu Zhao wrote:
+> > On Tue, Jan 04, 2022 at 01:22:19PM -0700, Yu Zhao wrote:
+> > > TLDR
+> > > ====
+> > > The current page reclaim is too expensive in terms of CPU usage and it
+> > > often makes poor choices about what to evict. This patchset offers an
+> > > alternative solution that is performant, versatile and
+> > > straightforward.
+> > 
+> > <snipped>
+> > 
+> > > Summery
+> > > =======
+> > > The facts are:
+> > > 1. The independent lab results and the real-world applications
+> > >    indicate substantial improvements; there are no known regressions.
+> > > 2. Thrashing prevention, working set estimation and proactive reclaim
+> > >    work out of the box; there are no equivalent solutions.
+> > > 3. There is a lot of new code; nobody has demonstrated smaller changes
+> > >    with similar effects.
+> > > 
+> > > Our options, accordingly, are:
+> > > 1. Given the amount of evidence, the reported improvements will likely
+> > >    materialize for a wide range of workloads.
+> > > 2. Gauging the interest from the past discussions [14][15][16], the
+> > >    new features will likely be put to use for both personal computers
+> > >    and data centers.
+> > > 3. Based on Google's track record, the new code will likely be well
+> > >    maintained in the long term. It'd be more difficult if not
+> > >    impossible to achieve similar effects on top of the existing
+> > >    design.
+> > 
+> > Hi Andrew, Linus,
+> > 
+> > Can you please take a look at this patchset and let me know if it's
+> > 5.17 material?
+> > 
+> > My goal is to get it merged asap so that users can reap the benefits
+> > and I can push the sequels. Please examine the data provided -- I
+> > think the unprecedented coverage and the magnitude of the improvements
+> > warrant a green light.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Xin Ji <xji@analogixsemi.com>
----
- .../display/bridge/analogix,anx7625.yaml        | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+My gratitude to Donald who has been helping test MGLRU since v2:
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-index 1d3e88daca041a..0d38d6fe39830f 100644
---- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-@@ -83,6 +83,9 @@ properties:
-     type: boolean
-     description: let the driver enable audio HDMI codec function or not.
- 
-+  aux-bus:
-+    $ref: /schemas/display/dp-aux-bus.yaml#
-+
-   ports:
-     $ref: /schemas/graph.yaml#/properties/ports
- 
-@@ -167,5 +170,19 @@ examples:
-                     };
-                 };
-             };
-+
-+            aux-bus {
-+                panel {
-+                    compatible = "innolux,n125hce-gn1";
-+                    power-supply = <&pp3300_disp_x>;
-+                    backlight = <&backlight_lcd0>;
-+
-+                    port {
-+                        panel_in: endpoint {
-+                            remote-endpoint = <&anx7625_out>;
-+                        };
-+                    };
-+                };
-+            };
-         };
-     };
--- 
-2.34.1.703.g22d0c6ccf7-goog
+    Donald Carr (d@chaos-reins.com)
 
+    Founder of Chaos Reins (http://chaos-reins.com), an SF based
+    consultancy company specializing in designing/creating embedded
+    Linux appliances.
+
+Can you please provide your Tested-by tags? This will ensure the credit
+for your contributions.
+
+Thanks!

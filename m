@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0796491B85
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11AC491B8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349097AbiARDHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S1348982AbiARDHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349275AbiARCtU (ORCPT
+        with ESMTP id S1345173AbiARCtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:49:20 -0500
+        Mon, 17 Jan 2022 21:49:32 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD2BC06177D;
-        Mon, 17 Jan 2022 18:41:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDEBC0613E5;
+        Mon, 17 Jan 2022 18:41:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A39DE60C96;
-        Tue, 18 Jan 2022 02:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B799C36AE3;
-        Tue, 18 Jan 2022 02:41:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B678660C96;
+        Tue, 18 Jan 2022 02:41:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F54CC36AEB;
+        Tue, 18 Jan 2022 02:41:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473711;
-        bh=pDLLvoeU36LjGUQLKpr+514zihBBhyi8aheoZQjcDAU=;
+        s=k20201202; t=1642473717;
+        bh=kTg8vEfwcwCp1q4N3Z9VVLQobA/kn/bNqh568ct1VJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H6T4j6vgCUVlmQAO5SvlWEw+j3u75tHVb2NRTk4eJeJFS9ExlJsTCMjTY1zdirP0v
-         6s3dmStqHFlkx3jz749PmISrIp3T8Zy/h9Z5+zecrdHvsI4gY+lYyQ+6XDksK0ZCAZ
-         AbTtaFX/m1SUirdqHCREyeSJ25g686k9vbsyfl0Tf3SYBhx8XGoXIHATqipSHymSm2
-         ZDJJvvnUjICxhQUX6wea8E1OQT0ePTgdw/tkJFadxyiIFv+BLfn2izf0pZH4MaUPhJ
-         txodsBnq8UVf7iX5g2GrcPcA4eeTy2Z0enzRfDzfoQJCbZLSi6hdkmY9TtuQ/h/f9K
-         XQy1C8jaYCGbw==
+        b=CXgfV0QMrmA+9RThUcASnNt+AFRfx9jD7eiMEpmdO9tvYzxROep8ZsONySGMmoAou
+         GPuWFu1uq8I+Uncr/XQ5KLPY4Osp+vjC25VV0MPY+yo54AgxfRSGL1pfgG/o2KDTbS
+         numNUWiyHkku7DaIlEnFzfNsX9aXaiWZTZGtWMXDmFaQ5kKwuktbJSikRIiE39cVgm
+         nJ9ugazh8Dbgv/wTM2PgEws6xJ9v5XRFjxubF8CD9MbS0QfkX6FmNRXipw1qspvTco
+         zXGs8nN6ICh4X7uCVwr6oLNf6yr+kEduyTWki16TC5Mc3f8LSvKG9SZC1sqP/jSL4x
+         NaDK+vPhpAC+A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         mario.limonciello@amd.com, linux-acpi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 036/116] ACPI / x86: Drop PWM2 device on Lenovo Yoga Book from always present table
-Date:   Mon, 17 Jan 2022 21:38:47 -0500
-Message-Id: <20220118024007.1950576-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 038/116] ACPI / x86: Allow specifying acpi_device_override_status() quirks by path
+Date:   Mon, 17 Jan 2022 21:38:49 -0500
+Message-Id: <20220118024007.1950576-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
 References: <20220118024007.1950576-1-sashal@kernel.org>
@@ -54,44 +54,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit d431dfb764b145369be820fcdfd50f2159b9bbc2 ]
+[ Upstream commit ba46e42e925b5d09b4e441f8de3db119cc7df58f ]
 
-It turns out that there is a WMI object which controls the PWM2 device
-used for the keyboard backlight and that WMI object also provides some
-other useful functionality.
+Not all ACPI-devices have a HID + UID, allow specifying quirks for
+acpi_device_override_status() by path too.
 
-The upcoming lenovo-yogabook-wmi driver will offer both backlight
-control and the other functionality, so there no longer is a need
-to have the lpss-pwm driver binding to PWM2 for backlight control;
-and this is now actually undesirable because this will cause both
-the WMI code and the lpss-pwm driver to poke at the same PWM
-controller.
+Note this moves the path/HID+UID check to after the CPU + DMI checks
+since the path lookup is somewhat costly.
 
-Drop the always-present quirk for the PWM2 ACPI-device, so that the
- lpss-pwm controller will no longer bind to it.
+This way this lookup is only done on devices where the other checks
+match.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/x86/utils.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/acpi/x86/utils.c | 42 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 32 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-index bdc1ba00aee9f..baaa44edc9441 100644
+index c6b0782dcced5..91bbc4b6b8035 100644
 --- a/drivers/acpi/x86/utils.c
 +++ b/drivers/acpi/x86/utils.c
-@@ -54,10 +54,6 @@ static const struct always_present_id always_present_ids[] = {
- 	ENTRY("80860F09", "1", X86_MATCH(ATOM_SILVERMONT), {}),
- 	ENTRY("80862288", "1", X86_MATCH(ATOM_AIRMONT), {}),
+@@ -38,22 +38,30 @@ struct override_status_id {
+ 	struct x86_cpu_id cpu_ids[2];
+ 	struct dmi_system_id dmi_ids[2]; /* Optional */
+ 	const char *uid;
++	const char *path;
+ 	unsigned long long status;
+ };
  
--	/* Lenovo Yoga Book uses PWM2 for keyboard backlight control */
--	ENTRY("80862289", "2", X86_MATCH(ATOM_AIRMONT), {
--			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X9"),
--		}),
+-#define ENTRY(status, hid, uid, cpu_model, dmi...) {			\
++#define ENTRY(status, hid, uid, path, cpu_model, dmi...) {		\
+ 	{ { hid, }, {} },						\
+ 	{ X86_MATCH_INTEL_FAM6_MODEL(cpu_model, NULL), {} },		\
+ 	{ { .matches = dmi }, {} },					\
+ 	uid,								\
++	path,								\
+ 	status,								\
+ }
+ 
+ #define PRESENT_ENTRY_HID(hid, uid, cpu_model, dmi...) \
+-	ENTRY(ACPI_STA_DEFAULT, hid, uid, cpu_model, dmi)
++	ENTRY(ACPI_STA_DEFAULT, hid, uid, NULL, cpu_model, dmi)
+ 
+ #define NOT_PRESENT_ENTRY_HID(hid, uid, cpu_model, dmi...) \
+-	ENTRY(0, hid, uid, cpu_model, dmi)
++	ENTRY(0, hid, uid, NULL, cpu_model, dmi)
++
++#define PRESENT_ENTRY_PATH(path, cpu_model, dmi...) \
++	ENTRY(ACPI_STA_DEFAULT, "", NULL, path, cpu_model, dmi)
++
++#define NOT_PRESENT_ENTRY_PATH(path, cpu_model, dmi...) \
++	ENTRY(0, "", NULL, path, cpu_model, dmi)
+ 
+ static const struct override_status_id override_status_ids[] = {
  	/*
- 	 * The INT0002 device is necessary to clear wakeup interrupt sources
- 	 * on Cherry Trail devices, without it we get nobody cared IRQ msgs.
+@@ -120,13 +128,6 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(override_status_ids); i++) {
+-		if (acpi_match_device_ids(adev, override_status_ids[i].hid))
+-			continue;
+-
+-		if (!adev->pnp.unique_id ||
+-		    strcmp(adev->pnp.unique_id, override_status_ids[i].uid))
+-			continue;
+-
+ 		if (!x86_match_cpu(override_status_ids[i].cpu_ids))
+ 			continue;
+ 
+@@ -134,6 +135,27 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
+ 		    !dmi_check_system(override_status_ids[i].dmi_ids))
+ 			continue;
+ 
++		if (override_status_ids[i].path) {
++			struct acpi_buffer path = { ACPI_ALLOCATE_BUFFER, NULL };
++			bool match;
++
++			if (acpi_get_name(adev->handle, ACPI_FULL_PATHNAME, &path))
++				continue;
++
++			match = strcmp((char *)path.pointer, override_status_ids[i].path) == 0;
++			kfree(path.pointer);
++
++			if (!match)
++				continue;
++		} else {
++			if (acpi_match_device_ids(adev, override_status_ids[i].hid))
++				continue;
++
++			if (!adev->pnp.unique_id ||
++			    strcmp(adev->pnp.unique_id, override_status_ids[i].uid))
++				continue;
++		}
++
+ 		*status = override_status_ids[i].status;
+ 		ret = true;
+ 		break;
 -- 
 2.34.1
 

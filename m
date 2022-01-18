@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A252D49257F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165C1492580
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 13:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241450AbiARMMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 07:12:16 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:59526 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiARMML (ORCPT
+        id S241466AbiARMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 07:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231645AbiARMMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:12:11 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 91FE0212B6;
-        Tue, 18 Jan 2022 12:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642507930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BAig+NjBum0pFE5CXPXDhnOkcGNLCXTriyUlbNaH2qo=;
-        b=KESDI2yPd9alr/RiKIdKV8fXlvBJwj4qM8R9lZJLDRqHRaNfwkXi73AWe3iMWe2Gu07c9J
-        3DCLpp2YaBLiJhQoXnUAh/sWww3tJ1Yk/RaQ43Pvc+D/gthYUzR/xdwmq9RW8R5QipcPGm
-        tTnnnUpMgM2QM6f6dw7DYrbETnrlwus=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642507930;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BAig+NjBum0pFE5CXPXDhnOkcGNLCXTriyUlbNaH2qo=;
-        b=Gevp9tx796I/rcgNy9s3FRtzvuTqOHMDUP1xU6q+21kX405WolKw2pahkvC9TBtlEtw+wp
-        eSru745jzlOS91DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 441A113B26;
-        Tue, 18 Jan 2022 12:12:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uy/cD5qu5mEbaQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 18 Jan 2022 12:12:10 +0000
-Message-ID: <2f33bf19-4af7-30e7-f9f5-757c9f387bc0@suse.cz>
-Date:   Tue, 18 Jan 2022 13:12:09 +0100
+        Tue, 18 Jan 2022 07:12:30 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F513C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 04:12:29 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id o12so53072165lfu.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 04:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O0nO+p0mq+fNTi0hni+PrFNutDwLefWblmd/crLHIYA=;
+        b=c5MkvKz3tw6WehTzvGkTSapgdZqH37RI/Ggpn3ABaoOMcuSIKaXpptGFqfyvQPJzAX
+         Lbqiz9O1eOY34Sp7HHSF7x04xM1AZhWcDLB5PYfxxrbCzrfJmBcjrWxf1xRF4lcuTkAZ
+         +iocIoGaLzSm39rt3hniekTUmsSfcEYd76fNHV7Pfm6yloVq9e2dizU+218JMPjziWjY
+         yXE9cGw7Qzs7XrqWNXLZKcyND1KoA5WzKJjB5nIs6PUecZX7LJwKjf9vN0zxbfhN1J2C
+         AYc9wOFvLsSdcbBhEadamDZNWM2TsmkC6iGJovLIiz44dg7pqTnLCCYsp2ZuMABRWG3P
+         H3pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O0nO+p0mq+fNTi0hni+PrFNutDwLefWblmd/crLHIYA=;
+        b=V7d6cNylALmt2WOZbzC+jfaTdHwDVwg67noNggHBWEA5tjdm+FZCEvnojQ1GY4OreV
+         fIgDcoMDm1X1H2guqXVx7XpYDIbeL3QjcA4hPTVGojV8rho7Di9apR90WvInYC5vwi6c
+         dz8eQIpzef7Z8etYtUY211kY2MmRQk+4dZ7Oypg8p84GU/xICyOdkY04KF8wk1zS3f49
+         63tNxFv23Fnb8g8NkgtxCSSUVV4Jh1mWIc5OrwJ8AbirXNStldbPGU41N1gGLJHMStz6
+         ryqpHG3088Z/Bf+x7tiRNTGQmWfIKyylp3FcQoUJgyILqivW6SzvwVCqnny3Lh3f3wl7
+         +7Ow==
+X-Gm-Message-State: AOAM530cRQ8vBQAm4xVXcKCUDSOv/z/rlsk4fzwni7VasLyM4A7Xe7p6
+        C8zg2extEhcl773buZdveT+qGrn0N/ufukikgFOrGw==
+X-Google-Smtp-Source: ABdhPJwNkDZ0ELEXfXMdLuXClxR/z96DJExiguJEonSNk178iRMlQYAf8DHl3quU8Wz5IuMrUT4C0SP8P7DNrqLwtkM=
+X-Received: by 2002:ac2:4d59:: with SMTP id 25mr20046985lfp.327.1642507947618;
+ Tue, 18 Jan 2022 04:12:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 31/66] s390: Remove vma linked list walks
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-32-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-32-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220114150824.3578829-1-jens.wiklander@linaro.org> <20220114150824.3578829-2-jens.wiklander@linaro.org>
+In-Reply-To: <20220114150824.3578829-2-jens.wiklander@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 18 Jan 2022 17:42:16 +0530
+Message-ID: <CAFA6WYOrzbs-AYoMUGv5s_5k0cq0rqb7MVjr8szkB4mYakyJGg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/12] hwrng: optee-rng: use tee_shm_alloc_kernel_buf()
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Use the VMA iterator instead.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>
+> Uses the new simplified tee_shm_alloc_kernel_buf() function instead of
+> the old deprecated tee_shm_alloc() function which required specific
+> TEE_SHM-flags.
+>
+> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> ---
+>  drivers/char/hw_random/optee-rng.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+
+-Sumit
+
+> diff --git a/drivers/char/hw_random/optee-rng.c b/drivers/char/hw_random/optee-rng.c
+> index 135a82590923..a948c0727b2b 100644
+> --- a/drivers/char/hw_random/optee-rng.c
+> +++ b/drivers/char/hw_random/optee-rng.c
+> @@ -145,10 +145,10 @@ static int optee_rng_init(struct hwrng *rng)
+>         struct optee_rng_private *pvt_data = to_optee_rng_private(rng);
+>         struct tee_shm *entropy_shm_pool = NULL;
+>
+> -       entropy_shm_pool = tee_shm_alloc(pvt_data->ctx, MAX_ENTROPY_REQ_SZ,
+> -                                        TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> +       entropy_shm_pool = tee_shm_alloc_kernel_buf(pvt_data->ctx,
+> +                                                   MAX_ENTROPY_REQ_SZ);
+>         if (IS_ERR(entropy_shm_pool)) {
+> -               dev_err(pvt_data->dev, "tee_shm_alloc failed\n");
+> +               dev_err(pvt_data->dev, "tee_shm_alloc_kernel_buf failed\n");
+>                 return PTR_ERR(entropy_shm_pool);
+>         }
+>
+> --
+> 2.31.1
+>

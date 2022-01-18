@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DCF492F76
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770F4492F88
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245647AbiARUh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:37:58 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:41574 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234251AbiARUh5 (ORCPT
+        id S1349320AbiARUjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:39:23 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:32582 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349242AbiARUjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:37:57 -0500
-Received: by mail-ua1-f52.google.com with SMTP id i10so413755uab.8;
-        Tue, 18 Jan 2022 12:37:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rccm2Ng7Ygp1cY/As0QYhUzGpE8sU6W4R2NG0olHuac=;
-        b=eNh/IBBk4hyYz852AMrG2ovnWsKHp758oVpVmICAFSJSZARiAAkJvGSMxD5AG0jR84
-         GmYSA4nyQYFTDpx09bCKdMJdFMH62yRSWQhrluUKrFMvanvPjB6DclpVRVlMcPjCMRFa
-         XaHnLivk2i3uU50WuMafS3HD6ZWN/NOyWPOxSRFhm8ClFx+kSMYmrEuFuECUzoFEav/E
-         mFS4d3yFoIMpBivYQ5oflXRs4MGazy3DRJsgPBJQceZJoKiTbrkbldi9LyvuHfkNCH90
-         IrN40zyEGYUAsyZLhayRFI0ThqGbZEt9S+vsOsaghT6G9kMvCkNf5X4QPldR+ZHwdmSD
-         uOHw==
-X-Gm-Message-State: AOAM531zXiwfL6kMz6huL3TZDAj2LwX0mSWA74UWwcVQsxtLN1f1QzMs
-        66+DzYWOUmOHkCS1mn5Pdurhw2BViixUew==
-X-Google-Smtp-Source: ABdhPJwxE0WRP3zsobMcA4/zbKuQzV/vmvQXpoOtg4aIYa/fy1piy51AvDYqRlqi4OqrLR0icA92Ww==
-X-Received: by 2002:ab0:60d0:: with SMTP id g16mr10462759uam.121.1642538276786;
-        Tue, 18 Jan 2022 12:37:56 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id u107sm387690uau.6.2022.01.18.12.37.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 12:37:56 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id m90so469443uam.2;
-        Tue, 18 Jan 2022 12:37:56 -0800 (PST)
-X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr10453087vsu.5.1642538275904;
- Tue, 18 Jan 2022 12:37:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
- <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
- <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
- <20211129122052.GA7921@alpha.franken.de> <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
- <20211129130535.GA8644@alpha.franken.de> <CAMuHMdU94tk5pcTK4Fa-g9vm56oooCeWXkkL8nOgofk5aKbwig@mail.gmail.com>
- <alpine.DEB.2.21.2201090221150.56863@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2201090221150.56863@angie.orcam.me.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jan 2022 21:37:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXiLk+b2RtS+9xOfurVF2ajac92i_L48UAF_9B3Let0jQ@mail.gmail.com>
-Message-ID: <CAMuHMdXiLk+b2RtS+9xOfurVF2ajac92i_L48UAF_9B3Let0jQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software nodes
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 18 Jan 2022 15:39:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642538353; x=1674074353;
+  h=from:to:cc:subject:date:message-id;
+  bh=pQAKZfCHGK05kVj7Bze9qOhDkcnNULF2zH8KZDpgQxM=;
+  b=oD5b83UmUo+GVhWWtrq7iigU3CQWbeysm2aJy18Xups/rD5Mp6ycY3Ya
+   tK9YhkXqLHx2Im3scriRlsp4k43Wcj9j8DT21dldkndHau0n14FZXVvIM
+   U3UQkI6Ql0A3lCQSOKtCHEe0SZdjHyiqBfRIbxFrJ02n5U45p4SWlv+yM
+   U=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 18 Jan 2022 12:39:12 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Jan 2022 12:39:10 -0800
+X-QCInternal: smtphost
+Received: from rajeevny-linux.qualcomm.com ([10.204.66.121])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 19 Jan 2022 02:08:45 +0530
+Received: by rajeevny-linux.qualcomm.com (Postfix, from userid 2363605)
+        id A001421A8B; Wed, 19 Jan 2022 02:08:44 +0530 (IST)
+From:   Rajeev Nandan <quic_rajeevny@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
+        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
+        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
+        jonathan@marek.ca, dmitry.baryshkov@linaro.org, airlied@linux.ie,
+        daniel@ffwll.ch, swboyd@chromium.org
+Subject: [v3 0/3] drm/msm/dsi: Add 10nm dsi phy tuning configuration support 
+Date:   Wed, 19 Jan 2022 02:08:37 +0530
+Message-Id: <1642538320-1127-1-git-send-email-quic_rajeevny@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
+This series is to add DSI PHY tuning support in Qualcomm Snapdragon
+SoCs with 10nm DSI PHY e.g. SC7180
 
-On Tue, Jan 18, 2022 at 8:59 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> > Took me a bit to test proper operation, as contemporary cross-toolchains
-> > create userland binaries that can no longer run on MIPS-II/III CPUs,
-> > and native development is slow and memory-constrained (dpkg OOM)...
->
->  You mean cross-toolchains included with (some) distributions, right?
+In most cases the default values of DSI PHY tuning registers
+should be sufficient as they are fully optimized. However, in
+some cases (for example, where extreme board parasitics cause
+the eye shape to degrade), the override bits can be used to
+improve the signal quality.
 
-Yep, the MIPS cross-toolchain that comes with Ubuntu.
+Different DSI PHY versions have different configurations to adjust the
+drive strength, drive level, de-emphasis, etc. The current series has only
+those configuration options supported by 10nm PHY, e.g. drive strength and
+drive level. The number of registers to configure the drive strength are
+different for 7nm PHY. The design can be extended to other DSI PHY versions
+if required, as each PHY version can have its callback to get the input
+from DT and prepare register values.
 
->  I do hope so or otherwise I'd be very concerned.  Myself I've been using
-> a self-built MIPS cross-compiler, running on POWER9, which builds MIPS I
-> binaries just fine, e.g.:
->
-> $ file install/usr/sysroot/{lib/ld-2.32.9000.so,usr/bin/gdbserver}
-> install/usr/sysroot/lib/ld-2.32.9000.so: ELF 32-bit LSB pie executable, MIPS, MIPS-I version 1 (SYSV), dynamically linked, with debug_info, not stripped
-> install/usr/sysroot/usr/bin/gdbserver: ELF 32-bit LSB executable, MIPS, MIPS-I version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 3.2.0, not stripped
+Changes in v2:
+ - Addressed dt-bindings comments (Stephen Boyd, Dmitry Baryshkov)
+ - Split into generic code and 10nm-specific part (Dmitry Baryshkov)
+ - Fix the backward compatibility (Dmitry Baryshkov)
 
-Debian raised the minimum requirements for MIPS, hence mine are
-ELF 32-bit MSB shared object, MIPS, MIPS32 rel2 version 1 (SYSV)
+Changes in v3:
+ - Addressed dt-bindings comments (Rob Herring, Dmitry Baryshkov)
+ - Address comments for phy tuning data structure (Dmitry Baryshkov)
+ - s/ops.tuning_cfg_init/ops.parse_dt_properties (Dmitry Baryshkov)
 
-Gr{oetje,eeting}s,
+Rajeev Nandan (3):
+  dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
+  drm/msm/dsi: Add dsi phy tuning configuration support
+  drm/msm/dsi: Add 10nm dsi phy tuning configuration support
 
-                        Geert
+ .../bindings/display/msm/dsi-phy-10nm.yaml         | 34 ++++++++
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c              |  6 ++
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.h              |  4 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c         | 97 ++++++++++++++++++++--
+ 4 files changed, 135 insertions(+), 6 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-- 
+2.7.4
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

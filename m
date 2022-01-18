@@ -2,144 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C52A492D83
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1C1492D88
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348151AbiARShn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347998AbiARShk (ORCPT
+        id S235273AbiARSiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:38:50 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36828
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244716AbiARSio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:37:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1428C06161C;
-        Tue, 18 Jan 2022 10:37:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 18 Jan 2022 13:38:44 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C16DB81747;
-        Tue, 18 Jan 2022 18:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2BEC340E5;
-        Tue, 18 Jan 2022 18:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642531057;
-        bh=2tKT2LkkSw7F1pcMD5R/BU1/Sa9Qs105/gaBZjyvCHk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C1e7ptTAiQs29o0U7mXPHIJZ6gO/fvMYPlMLkKf3TYB3Jrbx3nFKNUOJV7aGNHoIt
-         53A0kLQ91GtbPr+i7hPxh3pCyYPsZjkBtysF+cqxMgK85endvY7uBwwbiQinWZJKaJ
-         23DC8TQZ9wh1nJCsH11GXXLF/Wk0rRNc4RKb8UjormQLU7b1E/AZXWhZrbtccBOQxj
-         /7+mdwUrP0o+zcrqc0ZNfo/wv7GssOrITR26dq/JUDXbULS7Fi5/0JDLGUqXDljlAa
-         zVAtwmQuF6YGXc5ApFDPy9oVnu5/c10YdI3rKABTHv6Wyf7Ga8PLnUIHvn6cgCaiJb
-         tIgR/qR9o5Gww==
-Received: by mail-ed1-f41.google.com with SMTP id m4so83511897edb.10;
-        Tue, 18 Jan 2022 10:37:37 -0800 (PST)
-X-Gm-Message-State: AOAM533VFtE6UGnhsSc71hxyhwSfFzGgl5OL8Xt8nDuhZC+Y5bxw1XWH
-        JA1Qa1050Qvoqe2ryFRLFASdXDMYdkrO+rfO8A==
-X-Google-Smtp-Source: ABdhPJxo3mZozVtV4I4Y2c/YrH36dX/A++g5u12oIgnT/QjoF3/dV6tPlV2CLl2cYfKHczrqCDPMtB0IsYYCJ5lI3xc=
-X-Received: by 2002:a17:906:1604:: with SMTP id m4mr14849598ejd.325.1642531055560;
- Tue, 18 Jan 2022 10:37:35 -0800 (PST)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0155E3FFD0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642531124;
+        bh=qiMWFcACm7KXDNL4mR8VjkWhK+rixFnnFkcu11vXqgg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=XZCj+bMvn633jV462x1t52CuIZPi9zKfcWfvwMLRgec6j1Y37eKPYYHL8bfp4BOJk
+         2jp6uAcqBvdAQxesAi+Nni6hgIiqJQvBbtMcFeSu3YG1hl26UDmdNJBgywt/HAVIPa
+         v3Fbg37w2NDrysNPsewE5TNjpMfWEVc0KFA9zjM4+8uiw8uMcBYMmKO0IPEoCWbdZu
+         3knB1fs1chsqkx+996krSN5HsXrSOrpt4SziqCJFjJC40X9O6biH9MhNCQfvihR8sG
+         L6dGWW0VwRZg3+qOizAbHxgaBMDAcX6gGYwW0kKF+uBkRc18Q0Ny1hGdmoRj7KH/7C
+         b2fpojgaO/QHw==
+Received: by mail-ed1-f71.google.com with SMTP id a8-20020a056402168800b004022fcdeb25so7117346edv.21
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:38:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qiMWFcACm7KXDNL4mR8VjkWhK+rixFnnFkcu11vXqgg=;
+        b=8Mca6BmRwc7OB4pcRhL6ib6LClOn1YBzUp1dpooA5vsYD8T3zgqLuQ4326hvQYux1d
+         +KnhWBOrIfi6gYwg8qdsuRbU4YL7HfMHgtIvUb76k34jwXzMJXLhGfGK8luGOeuzQ2Ex
+         PZemgvSNj/9zE6H/bg76Ki5bFwnIZLXNAFCPhWd5LHE5ncE7HV9u0RpNFkey8+dV9vja
+         ucPC4+ifcURXRy0E2blj79C/v44nYpSfe5o+4EpnzU6e+BAm+4hXihNpSrG96azGn4Y2
+         l5SHxFyjQL1EWugoPuV0zETBeu3Y0AaTqPkMYZhKIqujtgNhW3lH61hwHlrccrFZADua
+         na2g==
+X-Gm-Message-State: AOAM532sehJFS8arOJ1+X46GarspuxciLvRhWxDCxo6k0cR6NKA4CxcS
+        1FDc1MzjCDFOdRt/4Qx66tDphC8KR5REEQxMwN4Im3TckrKYGzP2BzuWBfQ8YIq6rXqVbCUq87f
+        vPzTDf8FSGGls8cB+Nhkt8p+n8acTpoD34K0W7Kn5Jg==
+X-Received: by 2002:a05:6402:13d4:: with SMTP id a20mr24451513edx.233.1642531123690;
+        Tue, 18 Jan 2022 10:38:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxooD5A0kIvNYe5f8A0rLWxL+hfWG//ldtWWszWaLLfWPoEYsl9gzRPsANc68kPgrb0WUfY1w==
+X-Received: by 2002:a05:6402:13d4:: with SMTP id a20mr24451497edx.233.1642531123570;
+        Tue, 18 Jan 2022 10:38:43 -0800 (PST)
+Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id f5sm199260edu.38.2022.01.18.10.38.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 10:38:43 -0800 (PST)
+Message-ID: <b165825c-a04f-d5bd-6bce-8725acdc461d@canonical.com>
+Date:   Tue, 18 Jan 2022 19:38:42 +0100
 MIME-Version: 1.0
-References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
- <5bd2dba7-c56f-4d8c-2f28-f2428afdcead@leemhuis.info> <CAL_JsqKH90fgSPjKqALweEmZDfxy88jAiRZ4uRKE3+-OZv1ZXQ@mail.gmail.com>
- <2f55b629-2e5b-bd45-e0ea-4e476f603dc8@leemhuis.info>
-In-Reply-To: <2f55b629-2e5b-bd45-e0ea-4e476f603dc8@leemhuis.info>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 18 Jan 2022 12:37:24 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLQnPc=eSz_OD4HaK-MqXmmnfQkRNbHHLXpRH--w=dBNQ@mail.gmail.com>
-Message-ID: <CAL_JsqLQnPc=eSz_OD4HaK-MqXmmnfQkRNbHHLXpRH--w=dBNQ@mail.gmail.com>
-Subject: Re: ChipIdea USB regression
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 11/16] dt-bindings: pinctrl: samsung: Add compatible
+ for Tesla FSD SoC
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+References: <20220118144851.69537-1-alim.akhtar@samsung.com>
+ <CGME20220118150056epcas5p4825077a17b8c37b0e7cea60c4dced3c8@epcas5p4.samsung.com>
+ <20220118144851.69537-12-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220118144851.69537-12-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 11:34 AM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> On 18.01.22 17:53, Rob Herring wrote:
-> > On Sun, Jan 16, 2022 at 4:21 AM Thorsten Leemhuis
-> > <regressions@leemhuis.info> wrote:
-> >>
-> >> [TLDR: I'm adding this regression to regzbot, the Linux kernel
-> >> regression tracking bot; most text you find below is compiled from a few
-> >> templates paragraphs some of you might have seen already.]
-> >>
-> >> Hi, this is your Linux kernel regression tracker speaking.
-> >>
-> >> Adding the regression mailing list to the list of recipients, as it
-> >> should be in the loop for all regressions, as explained here:
-> >> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
-> >>
-> >> On 14.01.22 11:56, Charles Keepax wrote:
-> >>> Hi guys,
-> >>>
-> >>> My Zynq based board stopped booting today, a bisect points to this
-> >>> patch:
-> >>>
-> >>> commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
-> >>
-> >> Thanks for the report.
-> >>
-> >> To be sure this issue doesn't fall through the cracks unnoticed, I'm
-> >> adding it to regzbot, my Linux kernel regression tracking bot:
-> >>
-> >> #regzbot ^introduced 0f153a1b8193
-> >> #regzbot title usb: chipidea: Zynq based board stopped booting today
-> >> #regzbot ignore-activity
-> >>
-> >> Reminder: when fixing the issue, please add a 'Link:' tag with the URL
-> >> to the report (the parent of this mail) using the kernel.org redirector,
-> >
-> > 'kernel.org redirector' is lore.kernel.org? It would be clearer to
-> > just say that.
->
-> Yes/No it's lore.kernel.org/r/ (and not lore.kernel.org/list-foo/).
-> You're right I'll rephrase next time.
+On 18/01/2022 15:48, Alim Akhtar wrote:
+> Add compatible for Tesla Full Self-Driving SoC. The
+> pinctrl hardware IP is similar to what found on most of the
+> exynos series of SoC, so this new compatible is added in
 
-Or now lore.kernel.org/all/...
+s/exynos/Exynos/
 
-> >> as explained in 'Documentation/process/submitting-patches.rst'. Regzbot
-> >> then will automatically mark the regression as resolved once the fix
-> >> lands in the appropriate tree. For more details about regzbot see footer.
-> >
-> > Would it be possible for you to provide the exact link tag in your
-> > reports? That would be easier and less error prone than describing
-> > what to do in prose.
->
-> Hmm. The webui already provides this (and other things you likely want
-> to add) when you show the details for a tracked regression or visit its
-> individual page:
->
-> https://linux-regtracking.leemhuis.info/regzbot/mainline/
-> https://linux-regtracking.leemhuis.info/regzbot/regression/20220114105620.GK18506@ediswmail.ad.cirrus.com/
+> samsung pinctrl binding.
 
-That is the link I was originally expecting for when I went back to this thread.
+s/samsung/Samsung/
 
-> I see that it would be convenient for developers and less error prone if
-> I could mention the proper Link: tag in mails like the one you quoted,
-> that's why I considered that already. But it would make the regression
-> tracker's job (aka my "job", which I'm kinda doing in my spare time) yet
-> again somewhat harder, as I see no easy solution to automate that when
-> writing these mails (which I do with thunderbird, currently). That's why
-> I decided to not do that for now, as that job is already hard enough and
-> I don't want to get burned out by this a second time; and those link
-> tags are something that were expected from developers even before I came
-> with regzbot.
+> 
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Fair enough, I thought this was more automated than it is. I have some
-scripts for writing replies[1] if that helps. I wrote them because I
-couldn't find any that would quote emails. (Maybe because it's a pain
-dealing with all the encodings). They are geared toward patches in
-terms of trimming the email, but shouldn't be too hard to adapt.
+It seems that I will take my dtschema patch (together with pinctrl
+driver changes) after merge window, so this will have to be rebased on
+new dtschema.
 
-Rob
-
-[1] https://gitlab.com/robherring/pw-utils
+Best regards,
+Krzysztof

@@ -2,132 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE6B492472
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1A649246F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 12:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239392AbiARLPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 06:15:17 -0500
-Received: from mga03.intel.com ([134.134.136.65]:21274 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239073AbiARLOg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 06:14:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642504476; x=1674040476;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vCIEMO8vnt+m4PzofXMvxSmuR6Gq6JalXfmkabBSbPM=;
-  b=bx40uoOos6zO95W9D2qRVT2ni3X2MocYwKl8IIN9Oal4SrSeDeUzcgcK
-   FiwcjiO5gd7dDNyIF2bWwgHbO4TLf16G/ikPbSm/0lBoWLX3CISEpUoKf
-   F85Fb3pw6IXppkZCHW2TxJTGdGpIqsrjF5bkZ79OCt4rXX5UVE9mc4rmQ
-   OlNyq6OwXxEGCm6NKloq+aonMu9hWtPsw2V4I+d7KkKd7aa3NnIua1R18
-   9rnAUDJKxBq+EhzOpKh+msnKYqc2hT/iNg5BMuFuLP04uc+6B+h7QkJKe
-   jVT10qbAun+qm9mVp1TX5TFTCpFe49kiXJxILwOEQA4TSflqEmOQ6sloy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="244751317"
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="244751317"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 03:14:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
-   d="scan'208";a="517728747"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Jan 2022 03:14:30 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9mRa-000CVM-4A; Tue, 18 Jan 2022 11:14:30 +0000
-Date:   Tue, 18 Jan 2022 19:14:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>
-Subject: fs/notify/fanotify/fanotify_user.c:154:24: warning: variable 'info'
- set but not used
-Message-ID: <202201181811.egJXbMCF-lkp@intel.com>
+        id S239134AbiARLOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 06:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230116AbiARLO2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 06:14:28 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57737C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:14:28 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso20498687otf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 03:14:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IE2Bi6BX71GxVQQunYcWXmzILspUK92Ha2RwuVxfI6g=;
+        b=LhkdNE7Wa26DngF4QUM7KSJu6ffhXhV5rJMzNxMrt1cOP43VQAYu3S47MmjB6Tokyu
+         g+i+uC7VE/qqn2eyLWNhPtarxTba/7Rt8z1VALemM5KSN00/UOLhnIKU9xtl0pFEv+3h
+         4yH4xyvyE6otKaXhN2fXWk3QwgUS3V76OsszQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IE2Bi6BX71GxVQQunYcWXmzILspUK92Ha2RwuVxfI6g=;
+        b=my+F6MqZCFK4RaqO/c85GV6wKtBbqJcjlPkN2XQjEK62BWj2AoqvFu3BroJlTTqEbb
+         E7QMsmwkYLW0hJgPF6G7H+JFOlnHmEYzsNqLn0Ce0Kfs9/EriVKDxinFoCP72H8o//f5
+         zQz5fYCwO7quQhX1JpKxmhh2wwd8AhLCP2HT0klfc6W9H+w/IOkce/Lo8JIZmoXrBB2C
+         QL2BbMWJ6qWO9ys1/v/ofi8DY7o5P6sl3yqAZzwQf0l4vv1EzDN0E62l97/V0H4aa+P+
+         HAqWjEgfzzLzOUcAoAmFmNb+sZbAKCx2OibKKq5zIcwRJfrJjclmz/3BvNulaK7oYtW9
+         P9zA==
+X-Gm-Message-State: AOAM533/FrmA98vkc9s9ahphHXjffNNnvNATeHJV4lRyTXgb3w7bu8GZ
+        VgnDzjGSwHWHwKRBgovUVlUo3pHdOjJo/W/QX08hwA==
+X-Google-Smtp-Source: ABdhPJz/h9I5sASIC1KgAr2w0o6g5bvtKYeaZaU2ifc/uG9A1tp3zEkGuLQZ79GYR8K7qHRcO4txTn0Lx+0OAr5LxfE=
+X-Received: by 2002:a9d:685a:: with SMTP id c26mr19640268oto.239.1642504467576;
+ Tue, 18 Jan 2022 03:14:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <CAKMK7uHVHn9apB6YYbLSwu+adEB2Fqp4FM0z582zf4F-v3_GnQ@mail.gmail.com>
+ <cf21018b-f231-7538-169e-2ad450643cbf@gmx.de> <97d49bca-f5f7-dba4-b62d-b6fcdd4276ac@suse.de>
+ <e19563aa-21a3-e13c-4143-847bd77a38c7@gmx.de> <e4242fe9-13b1-91b5-d254-992f48115589@gmx.de>
+ <CAKb7UvgXaeX7FRUK_Q35N=2zBms8WgCe=ZBKr3dHrixoJWtvqw@mail.gmail.com>
+In-Reply-To: <CAKb7UvgXaeX7FRUK_Q35N=2zBms8WgCe=ZBKr3dHrixoJWtvqw@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 18 Jan 2022 12:14:16 +0100
+Message-ID: <CAKMK7uH+88f6_NANd1F3ux7+j3iXg+AYWsNrVktuZOAAfc9Ngg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Ilia Mirkin <imirkin@alum.mit.edu>
+Cc:     Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-fbdev <linux-fbdev@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e3a8b6a1e70c37702054ae3c7c07ed828435d8ee
-commit: 7326e382c21e9c23c89c88369afdc90b82a14da8 fanotify: report old and/or new parent+name in FAN_RENAME event
-date:   5 weeks ago
-config: hexagon-randconfig-r045-20220117 (https://download.01.org/0day-ci/archive/20220118/202201181811.egJXbMCF-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7326e382c21e9c23c89c88369afdc90b82a14da8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7326e382c21e9c23c89c88369afdc90b82a14da8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/notify/fanotify/
+On Mon, Jan 17, 2022 at 10:55 PM Ilia Mirkin <imirkin@alum.mit.edu> wrote:
+>
+> On Mon, Jan 17, 2022 at 2:47 PM Helge Deller <deller@gmx.de> wrote:
+> >
+> > On 1/17/22 17:21, Helge Deller wrote:
+> > > On 1/17/22 16:58, Thomas Zimmermann wrote:
+> > >> Hi
+> > >>
+> > >> Am 17.01.22 um 16:42 schrieb Helge Deller:
+> > >>> [...]
+> > >>>>> c) reintroduce the state where fbcon is fast on fbdev. This is important for non-DRM machines,
+> > >>>>>     either when run on native hardware or in an emulator.
+> > >>>>> d) not break DRM development
+> > >>>>>
+> > >>>>> Especially regarding c) I complained in [1] and got no feedback. I really would like to
+> > >>>>> understand where the actual problems were and what's necessary to fix them.
+> > >>>>>
+> > >>>>> Helge
+> > >>>>>
+> > >>>>> [1] https://lore.kernel.org/r/feea8303-2b83-fc36-972c-4fc8ad723bde@gmx.de
+> > >>
+> > >> Seems like few people read linux-fbdev these days.
+> > >> I suggest to partly revert the patch to the point were performance
+> > >> gets better again.
+> > > Yes, *please*!
+> > > That would solve my biggest concern.
+> > >
+> > > As far as I can see that's only 2 commits to be reverted:
+> > > b3ec8cdf457e - "fbdev: Garbage collect fbdev scrolling acceleration, part 1 (from TODO list)"
+> > > 39aead8373b3 - "fbcon: Disable accelerated scrolling"for-next-next
+> > >
+> > > I think both were not related to any 0-day bug reports (but again, I might be wrong).
+> >
+> > I did some more checking...
+> >
+> > Both patches are not related to DRM, since no DRM driver sets the
+> > FBINFO_HWACCEL_COPYAREA or FBINFO_HWACCEL_FILLRECT flags.
+>
+> These used to be set by, at least, nouveau (which is a drm driver).
+> And yeah, console responsiveness is _way_ worse without that. People
+> keep pushing the messaging that it's the same speed to do it as
+> memcpy, but that's just not the case in my experience, on a pretty
+> bog-standard x86 desktop. The support got dumped, and it felt pretty
+> clear from the messaging at the time, "too bad". Would love to see it
+> come back.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+You need to add in a shadow buffer and it's fast. The problem is that
+the default fbcon sw code just replaces a hw blitter, and so does a
+_lot_ of memmoves reading from wc/uc memory. Which is an absolute
+disaster and results in a slideshow.
 
-All warnings (new ones prefixed by >>):
+Once you stop doing that the thing is pretty reasonable, which would
+also be what all the userspace sw compositors are doing. Fact that no
+one bothers to roll this out for most drivers just shows how little
+people care about accelerated fbcon.
+-Daniel
 
->> fs/notify/fanotify/fanotify_user.c:154:24: warning: variable 'info' set but not used [-Wunused-but-set-variable]
-           struct fanotify_info *info;
-                                 ^
-   1 warning generated.
+
+>
+> Cheers,
+>
+>   -ilia
 
 
-vim +/info +154 fs/notify/fanotify/fanotify_user.c
 
-7326e382c21e9c Amir Goldstein          2021-11-29  149  
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  150  static size_t fanotify_event_len(unsigned int info_mode,
-929943b38daf81 Amir Goldstein          2020-07-16  151  				 struct fanotify_event *event)
-5e469c830fdb5a Amir Goldstein          2019-01-10  152  {
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  153  	size_t event_len = FAN_EVENT_METADATA_LEN;
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25 @154  	struct fanotify_info *info;
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  155  	int fh_len;
-929943b38daf81 Amir Goldstein          2020-07-16  156  	int dot_len = 0;
-f454fa610a69b9 Amir Goldstein          2020-07-16  157  
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  158  	if (!info_mode)
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  159  		return event_len;
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  160  
-130a3c742107ac Gabriel Krisman Bertazi 2021-10-25  161  	if (fanotify_is_error_event(event->mask))
-130a3c742107ac Gabriel Krisman Bertazi 2021-10-25  162  		event_len += FANOTIFY_ERROR_INFO_LEN;
-130a3c742107ac Gabriel Krisman Bertazi 2021-10-25  163  
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  164  	info = fanotify_event_info(event);
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  165  
-7326e382c21e9c Amir Goldstein          2021-11-29  166  	if (fanotify_event_has_any_dir_fh(event)) {
-7326e382c21e9c Amir Goldstein          2021-11-29  167  		event_len += fanotify_dir_name_info_len(event);
-d3424c9bac893b Matthew Bobrowski       2021-08-08  168  	} else if ((info_mode & FAN_REPORT_NAME) &&
-d3424c9bac893b Matthew Bobrowski       2021-08-08  169  		   (event->mask & FAN_ONDIR)) {
-929943b38daf81 Amir Goldstein          2020-07-16  170  		/*
-929943b38daf81 Amir Goldstein          2020-07-16  171  		 * With group flag FAN_REPORT_NAME, if name was not recorded in
-929943b38daf81 Amir Goldstein          2020-07-16  172  		 * event on a directory, we will report the name ".".
-929943b38daf81 Amir Goldstein          2020-07-16  173  		 */
-929943b38daf81 Amir Goldstein          2020-07-16  174  		dot_len = 1;
-929943b38daf81 Amir Goldstein          2020-07-16  175  	}
-afc894c784c84c Jan Kara                2020-03-24  176  
-af579beb666aef Matthew Bobrowski       2021-08-08  177  	if (info_mode & FAN_REPORT_PIDFD)
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  178  		event_len += FANOTIFY_PIDFD_INFO_HDR_LEN;
-af579beb666aef Matthew Bobrowski       2021-08-08  179  
-4bd5a5c8e6e5cd Gabriel Krisman Bertazi 2021-10-25  180  	if (fanotify_event_has_object_fh(event)) {
-4bd5a5c8e6e5cd Gabriel Krisman Bertazi 2021-10-25  181  		fh_len = fanotify_event_object_fh_len(event);
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  182  		event_len += fanotify_fid_info_len(fh_len, dot_len);
-4bd5a5c8e6e5cd Gabriel Krisman Bertazi 2021-10-25  183  	}
-5e469c830fdb5a Amir Goldstein          2019-01-10  184  
-b9928e80dda84b Gabriel Krisman Bertazi 2021-10-25  185  	return event_len;
-5e469c830fdb5a Amir Goldstein          2019-01-10  186  }
-5e469c830fdb5a Amir Goldstein          2019-01-10  187  
-
-:::::: The code at line 154 was first introduced by commit
-:::::: b9928e80dda84b349ba8de01780b9bef2fc36ffa fanotify: Fold event size calculation to its own function
-
-:::::: TO: Gabriel Krisman Bertazi <krisman@collabora.com>
-:::::: CC: Jan Kara <jack@suse.cz>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

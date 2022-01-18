@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54D8491D96
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2A5491D27
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345602AbiARDjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376503AbiARDce (ORCPT
+        id S1350850AbiARDZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:25:51 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:14899 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353759AbiARDJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 22:32:34 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711CDC014F27;
-        Mon, 17 Jan 2022 19:08:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JdDHr1Dqhz4y7k;
-        Tue, 18 Jan 2022 14:08:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642475320;
-        bh=IEzbkjnLCSmDBFUOIpbhnHqWY1VZmR7u3ufGX8iAuu8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ECE59ixmvwezSMh82RTR/PB4nRqOfcL3KIeq7hgI8U7D5I4lW9+iVHp+dKqYiuaMp
-         RNnQK8amiA6Na2s1ySWfWGDOQXle/kDYFiXKBlnnnhIA1Qa7MqrGfF8c6PF2F+rb1R
-         nAvc4rtO0qZ3z4h01EiKFSoC9R086orCCBIPYHzMxgCRqhItjtzi4ZIT5vu1ht/awM
-         yh35E8dF0BXqlDL2SWExe98SrTo5his7B/nZ93C0oJlNv42266GJgUd07lU2H7JevH
-         VLbLDjCCIk51+z+n5yGv4OaQj0E4tfhDmeN1JNOq0fo4wciScnNYBw07xLJLprdhb8
-         U3d3NWBx6IrVw==
-Date:   Tue, 18 Jan 2022 14:08:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jan 18
-Message-ID: <20220118140839.121087df@canb.auug.org.au>
-In-Reply-To: <20220118135924.6bae0ae0@canb.auug.org.au>
-References: <20220118135924.6bae0ae0@canb.auug.org.au>
+        Mon, 17 Jan 2022 22:09:58 -0500
+Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Tue, 18 Jan 2022
+ 11:09:52 +0800
+From:   Yu Tu <yu.tu@amlogic.com>
+To:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Tu <yu.tu@amlogic.com>
+Subject: [PATCH V6 0/5] Use CCF to describe the UART baud rate clock
+Date:   Tue, 18 Jan 2022 11:09:06 +0800
+Message-ID: <20220118030911.12815-1-yu.tu@amlogic.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xJxWf0YqhwkuvLA8YFQoE86";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.18.11.248]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xJxWf0YqhwkuvLA8YFQoE86
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Using the common Clock code to describe the UART baud rate
+clock makes it easier for the UART driver to be compatible
+with the baud rate requirements of the UART IP on different
+meson chips. Add Meson S4 SoC compatible.
 
-Hi all,
+Yu Tu (5):
+  tty: serial: meson: Move request the register region to probe
+  tty: serial: meson: Use devm_ioremap_resource to get register mapped
+    memory
+  tty: serial: meson: Describes the calculation of the UART baud rate
+    clock using a clock frame
+  tty: serial: meson: Make some bit of the REG5 register writable
+  tty: serial: meson: Added S4 SOC compatibility
 
-On Tue, 18 Jan 2022 13:59:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Changes since 20220117:
+V5 -> V6: Change error format as discussed in the email.
+V4 -> V5: Change error format.
+V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
+in the email.
+V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
+the DTS before it can be deleted
+V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
+discussed in the email
 
-I forgot to say that there will be no linux-next release tomorrow.
+Link:https://lore.kernel.org/linux-amlogic/20220110104214.25321-4-yu.tu@amlogic.com/
 
---=20
-Cheers,
-Stephen Rothwell
+ drivers/tty/serial/meson_uart.c | 217 ++++++++++++++++++++++----------
+ 1 file changed, 149 insertions(+), 68 deletions(-)
 
---Sig_/xJxWf0YqhwkuvLA8YFQoE86
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+base-commit: 4d66020dcef83314092f2c8c89152a8d122627e2
+-- 
+2.33.1
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHmLzcACgkQAVBC80lX
-0GzQ0ggAjdpf5y99McaxmXCMJ7wToowh4enMCm+pt48o1R0eJjpvM2h6U8TEiADv
-wIF/nA+/8LDTKxfy0+aA/Z5V2PvmisFTw57mh+3nxbSA/h5Yq9/jNtAIiIC0QlFi
-2HiDuHgQ0A45kjbEP5q0xxSypY1eG9EiBQsEflDfoL9S3N/76D8JUI09xbeM9bS+
-HmfmFetHmOEfKvpEycdxfXb0K63oyfJIpiH7QnBT962/FjVbmUmnfa73M+BkDe3D
-y/Po2kdvgN9Jh4oJO3Yl5ewGfLH6euucPveg+/2nHteP3CemHl8gsht/dAnTqPAC
-FwVX84FHUYev3iuj+ISfJbjUsNvnVQ==
-=muM2
------END PGP SIGNATURE-----
-
---Sig_/xJxWf0YqhwkuvLA8YFQoE86--

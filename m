@@ -2,182 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02180491C0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB7F491CD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 04:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349492AbiARDNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 22:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S1354684AbiARDSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 22:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350973AbiARC5t (ORCPT
+        with ESMTP id S1353336AbiARDBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:57:49 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F100C061369;
-        Mon, 17 Jan 2022 18:46:08 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id i129so11790039pfe.13;
-        Mon, 17 Jan 2022 18:46:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=G7afKiI+gE5BvcSZZNsZkHZKk4Ry06NGlI7r6RoEIKE=;
-        b=Rc1D2DDu80wX82f3gReKMipNgtke5Ezoh5+9wP1vhbdzaMaDpuqodjUEIPM3EEkN6e
-         LgXUN0zYcVseRq4Frignh/DJoa5B+ejI/R86K6gVUs4KSmZonAsG8E+ISC0wxiWbybhF
-         sFXificRMOC2xpZ7KtIqyN2K0aiCO/s3go8noGaQHXcR+uqcDSh1kZsVYezqUxmq0/qz
-         OL7tPvDnqbGNxHrMNvu+qIsoAgVc3qknGLNJvsmigTagPY6FxXNh9CcCOocBbit0S/bj
-         QPOQoHItg72E/0+7MKT2m9nJCpmvz86e5RNpYYVLdt6+9paqz1AbJhAaBBdVWxJ7Li6P
-         etFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=G7afKiI+gE5BvcSZZNsZkHZKk4Ry06NGlI7r6RoEIKE=;
-        b=bGo1MGEhM1ChG7I/K76Gp4/BUvW/FjLe7eZcnMH6s/XPM6BzSJEGNMtU9vmxWGr1k5
-         TtXt1wSw9lByS5vR7k9he7Dslk2r06ih5MGpcA23vmqWfZEuGNIC3RpD9A5QT97W6hc3
-         Tpd2aA2qN70xQggEaA9hhKf5Q26fcLKedL07p1mvtbDCHSyQqr3uzq6xdjv3dp5M497e
-         xEWvrBquoWmwLyewvv9ycWnVt0ZMZCtrfNPQjlIhIr93tUrYaz/kvtaUiJINN89TpD8S
-         0lDoiB9Rxm89YE+dx59G0C6jAh6drUfYQiwUplE6kOJrS4X+V/qiEum1ky6jU2SE9Q0V
-         lQlQ==
-X-Gm-Message-State: AOAM533RomxH7em7w8/g6A6gcxdpWUnGkfiDGB32jeXb/Imyj73kQtPH
-        sDXWf8Ze5cCYxt8CpJqivS8=
-X-Google-Smtp-Source: ABdhPJwaTkO88Si8cY9Mt/mQhv8ZpVANJ2CdFYnmVifrVKXyLg/EiyceiwxjR12ycsrWtesBCh7+Uw==
-X-Received: by 2002:a63:8c57:: with SMTP id q23mr21680397pgn.625.1642473968155;
-        Mon, 17 Jan 2022 18:46:08 -0800 (PST)
-Received: from localhost (124-171-74-95.tpgi.com.au. [124.171.74.95])
-        by smtp.gmail.com with ESMTPSA id i123sm12180204pfe.13.2022.01.17.18.46.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 18:46:07 -0800 (PST)
-Date:   Tue, 18 Jan 2022 12:46:01 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, x86@kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
-        <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-        <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
-        <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
-        <31a75f95-6e6e-b640-2d95-08a95ea8cf51@intel.com>
-In-Reply-To: <31a75f95-6e6e-b640-2d95-08a95ea8cf51@intel.com>
+        Mon, 17 Jan 2022 22:01:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E38C028C30;
+        Mon, 17 Jan 2022 18:47:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97C67612FC;
+        Tue, 18 Jan 2022 02:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B2DC36AEF;
+        Tue, 18 Jan 2022 02:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642474024;
+        bh=ri41GA+rvvOGALv/2S5SeTe6pJ0+n/UxBzOZzgqgoRs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HF+WfEOkbCpqBH4TWzgRi2ElHmrqtRwl0hS2vjp6c0YHDPx6ihpOerkFW8df3VRUe
+         dCoQw/bj/StL+ow7oaEtSB+GMMuMTgKWb+g3fXxoBVpfi63ZTYntZpb2+tYQmHWJYS
+         n0XjF0jOG9TGbjflhibpY+kB7T5faOylzT7svJRcHgHCnDkHM8kc+tmbIdHsPMvInp
+         R8v13M4ieduNjUpFttfhVLdBYfHM4UfjuZUXNyW2z32Xh70x6HYqgFf8RB26OIEkQi
+         n27Z6rprTFbZu7MaZHrCgfC/x0LOEG0ce0UojYiKVWRgZbqe8nR1D9xPaAhebZ2MqR
+         4SgsjWM1gCXaQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>, johan.hedberg@gmail.com,
+        luiz.dentz@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/59] Bluetooth: Fix debugfs entry leak in hci_register_dev()
+Date:   Mon, 17 Jan 2022 21:46:02 -0500
+Message-Id: <20220118024701.1952911-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-Id: <1642472965.lgfksp6krp.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Dave Hansen's message of December 29, 2021 2:14 am:
-> On 12/28/21 2:26 AM, Kefeng Wang wrote:
->>>> There are some disadvantages about this feature[2], one of the main
->>>> concerns is the possible memory fragmentation/waste in some scenarios,
->>>> also archs must ensure that any arch specific vmalloc allocations that
->>>> require PAGE_SIZE mappings(eg, module alloc with STRICT_MODULE_RWX)
->>>> use the VM_NO_HUGE_VMAP flag to inhibit larger mappings.
->>> That just says that x86 *needs* PAGE_SIZE allocations.=C2=A0 But, what
->>> happens if VM_NO_HUGE_VMAP is not passed (like it was in v1)?=C2=A0 Wil=
-l the
->>> subsequent permission changes just fragment the 2M mapping?
->>=20
->> Yes, without VM_NO_HUGE_VMAP, it could fragment the 2M mapping.
->>=20
->> When module alloc with STRICT_MODULE_RWX on x86, it calls
->> __change_page_attr()
->>=20
->> from set_memory_ro/rw/nx which will split large page, so there is no
->> need to make
->>=20
->> module alloc with HUGE_VMALLOC.
->=20
-> This all sounds very fragile to me.  Every time a new architecture would
-> get added for huge vmalloc() support, the developer needs to know to go
-> find that architecture's module_alloc() and add this flag.
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-This is documented in the Kconfig.
+[ Upstream commit 5a4bb6a8e981d3d0d492aa38412ee80b21033177 ]
 
- #
- #  Archs that select this would be capable of PMD-sized vmaps (i.e.,
- #  arch_vmap_pmd_supported() returns true), and they must make no assumpti=
-ons
- #  that vmalloc memory is mapped with PAGE_SIZE ptes. The VM_NO_HUGE_VMAP =
-flag
- #  can be used to prohibit arch-specific allocations from using hugepages =
-to
- #  help with this (e.g., modules may require it).
- #
- config HAVE_ARCH_HUGE_VMALLOC
-         depends on HAVE_ARCH_HUGE_VMAP
-         bool
+Fault injection test report debugfs entry leak as follows:
 
-Is it really fair to say it's *very* fragile? Surely it's reasonable to=20
-read the (not very long) documentation ad understand the consequences for
-the arch code before enabling it.
+debugfs: Directory 'hci0' with parent 'bluetooth' already present!
 
-> They next
-> guy is going to forget, just like you did.
+When register_pm_notifier() failed in hci_register_dev(), the debugfs
+create by debugfs_create_dir() do not removed in the error handing path.
 
-The miss here could just be a simple oversight or thinko, and caught by=20
-review, as happens to a lot of things.
+Add the remove debugfs code to fix it.
 
->=20
-> Considering that this is not a hot path, a weak function would be a nice
-> choice:
->=20
-> /* vmalloc() flags used for all module allocations. */
-> unsigned long __weak arch_module_vm_flags()
-> {
-> 	/*
-> 	 * Modules use a single, large vmalloc().  Different
-> 	 * permissions are applied later and will fragment
-> 	 * huge mappings.  Avoid using huge pages for modules.
-> 	 */
-> 	return VM_NO_HUGE_VMAP;
-> }
->=20
-> Stick that in some the common module code, next to:
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/bluetooth/hci_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Then they have to think about it even less, so I don't know if that's an=20
-improvement. I don't know what else an arch might be doing with these
-allocations, at least modules will blow up pretty quickly, who knows=20
-what other rare code relies on 4k vmalloc mappings?
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 26acacb2fa95f..a5755e0645439 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -3263,6 +3263,7 @@ int hci_register_dev(struct hci_dev *hdev)
+ 	return id;
+ 
+ err_wqueue:
++	debugfs_remove_recursive(hdev->debugfs);
+ 	destroy_workqueue(hdev->workqueue);
+ 	destroy_workqueue(hdev->req_workqueue);
+ err:
+-- 
+2.34.1
 
-The huge vmalloc option is not supposed to be easy to enable. This is=20
-the same problem Andy was having with the TLB shootdown patches, he=20
-didn't read the documentation and thought it was supposed to be a=20
-trivial thing anybody could enable without thinking about it, and was
-dutifully pointing out the the nasty "bugs" the feature has in it if
-x86 were to enable it improperly.
-
-Thanks,
-Nick
-
->=20
->> void * __weak module_alloc(unsigned long size)
->> {
->>         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-> ...
->=20
-> Then, put arch_module_vm_flags() in *all* of the module_alloc()
-> implementations, including the generic one.  That way (even with a new
-> architecture) whoever copies-and-pastes their module_alloc()
-> implementation is likely to get it right.  The next guy who just does a
-> "select HAVE_ARCH_HUGE_VMALLOC" will hopefully just work.
->=20
-> VM_FLUSH_RESET_PERMS could probably be dealt with in the same way.
->=20

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF860492FFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CCC493000
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 22:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343960AbiARV2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 16:28:38 -0500
+        id S1344123AbiARV2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 16:28:40 -0500
 Received: from mail-eopbgr70055.outbound.protection.outlook.com ([40.107.7.55]:48165
         "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1343557AbiARV2f (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 16:28:35 -0500
+        id S1343671AbiARV2g (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 16:28:36 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iBJrwtq4ruasYMfeUuOUuNQwGUKwp02NgOSyqhG7ZHK2DGEIGdrkWAJfPFLcMZIlUIaoyASIZqT0mYpV8HJKyRErMyif3seqUuFogwlcO3zUEQNP8OQPADEv+PpKUxPmBSVY23lcmtWwUKN2hMn8vsXzcM31d6wzFC9V9qPwV+ZiDFkhH3AJhrLra+F0cM2hOTGDU8pW8AmPUTNgSGwEKtiY4a8JQR8wXrt2GHG8LAHNC4wzYOw4B5EWXFCrA0gemg2WXyJHrpshfpeflJyWQlhNkC+jeZcHcOCGbERWpiwqG9DrJRpEbQBoq4GgbBja+tnRe2SAglq72zeaeduFWw==
+ b=bAdzRKdONVbvkMDoseVsgWIVgnY2mZiM7jeHxTYO/f//XODbI7kDb7Yz4+CP089tXnqU/uBXsCDXk784COTo5Nx1bLCd+qtCEyFshlyOyGLeHfXcZsLZsoVGsGubtrPWtLa2Lb+ZhfJah3IXre/5zB8rPSQ0fRSccE3cZ0poX8jjtA+p0loazXN53UJ5/CCM5dbIAej3F4pBQajtg0Y1h2XK4onOXJGNodDpLefjy3KHU+IYRCHrOFKbH1NGKvRK1YL5ruceFbexJnFMWG31+zkTZRCdIJc7zBw8Dq2AWXGPzkSDVSdXCI4wBCJtb2ybNZuPTJLl7s73MGS5yz5pyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rioav/ch3hMYZTdHtzzxbAev/OjzxhpqSawCcMRmwp4=;
- b=L9oaejW8529PcwXjmVn7x/MJoQu1Dj0BLGzuloLsSZE+Kc+cepp6xeHzgn2VzGu2DH5Fu3MKhvQg5zWwJ3+pCNaLs5tWYnEEmN6o34GPST+ovIPu7bIBCmVKkHLIzD8C4LeuyJYkyb2/PDH2YYGVzBw0A49TKWmnSsYMpQc+XChWlgTY+5wVdS/+ovFjcOW4XZPpsraSTF7kWb64CkUCYCzZLj5I9tkATLMT6zyJkXrZyJnPGe/o3IIjQOPmsxdxZXD1Q7JGjwInNeZxfEHpowtfxlpvGVfZ9oq3ZugRS5JHgH44pJiuWt29A+S/5VUfuKwQaXR8S24PtYrsIFxqBg==
+ bh=DjbebqrOQnmZ+MAY3xb66wL5WM+ZeR4cUzc6RPgHqbg=;
+ b=QY8Dg6keFn/hFp1PU0Td4ZxjEicqdT/kfl6Xu/tMfktI6fB72gsv68ofoB9FYshGDXUfYiNlSZynni3J/zutSibt6L0mcAf4XRp5/eN1OeeD0hEZcYlnAJZNjie0+JF3QLZKBJfVY4IjrS3XBE1hrwb8m046C4BE8ny/8xFHXvllisxAMadRc2Jf3D/7v91OQaSZ1VADIakQBIzoHL60jlNJejDjhIYjf+ElP1fedpROzD3zZKoMGMqNCShJoMmeV3Y0ydEQu3ihNMDLZFH9VmUeDSAXMs4xq7kcVX74imjKNDzta2JjP6n+AKxbutrtEcBN7x265/MUMxEMS1kpSQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rioav/ch3hMYZTdHtzzxbAev/OjzxhpqSawCcMRmwp4=;
- b=ELg2QmjtzLWYfeij9S4Vp4YD/DCeHqcK9tTw8QNk0FlQQAH0Csu2yQXbJF7Y3yDw5z9Itb78D3+cEOGGWGowXYv6xSpSLu+mYlljT0UEXs5r6vWOFZddWJ90bo3WhcbHBadvtIgz86P2TuQHb96CM0hYe7o0DLX+V+E/n6cJQEo=
+ bh=DjbebqrOQnmZ+MAY3xb66wL5WM+ZeR4cUzc6RPgHqbg=;
+ b=RE5T1mM93puSlQAwoE65PA2L5BUP6Srmi7f/GzTDnyx1t76zTCc+Sg3iflMbUUeh5MYOJ/8yfFC3ADSsjGSHuwDFZwcuLbpiiqQgGAL6pUVU+fPP/eWELYaYoAiJpjdNC9f7rLxVPbBeimTfaoiMNgxHxFRalb9JNVItnyIUL0g=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com (2603:10a6:803:61::28)
  by PAXPR04MB8207.eurprd04.prod.outlook.com (2603:10a6:102:1cd::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Tue, 18 Jan
- 2022 21:28:33 +0000
+ 2022 21:28:34 +0000
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::3de6:806c:e71:2a2f]) by VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::3de6:806c:e71:2a2f%5]) with mapi id 15.20.4888.014; Tue, 18 Jan 2022
- 21:28:32 +0000
+ 21:28:34 +0000
 From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
 To:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
         broonie@kernel.org
@@ -46,9 +46,9 @@ Cc:     daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
         sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, cezary.rojewski@intel.com,
         paul.olaru@nxp.com
-Subject: [PATCH v2 1/2] ASoC: SOF: compr: Add compress ops implementation
-Date:   Tue, 18 Jan 2022 23:27:31 +0200
-Message-Id: <20220118212732.281657-2-daniel.baluta@oss.nxp.com>
+Subject: [PATCH v2 2/2] ASoC: SOF: compress: Implement get_caps and get_codec_caps
+Date:   Tue, 18 Jan 2022 23:27:32 +0200
+Message-Id: <20220118212732.281657-3-daniel.baluta@oss.nxp.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220118212732.281657-1-daniel.baluta@oss.nxp.com>
 References: <20220118212732.281657-1-daniel.baluta@oss.nxp.com>
@@ -60,382 +60,166 @@ X-ClientProxiedBy: AM3PR03CA0063.eurprd03.prod.outlook.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 72d66f26-6791-4a49-9fa1-08d9dac97a47
+X-MS-Office365-Filtering-Correlation-Id: 698cb43f-2d22-4069-a093-08d9dac97b32
 X-MS-TrafficTypeDiagnostic: PAXPR04MB8207:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <PAXPR04MB82071027F3700060AFC68A60B8589@PAXPR04MB8207.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
+X-Microsoft-Antispam-PRVS: <PAXPR04MB8207D39DC5DE858F2110D514B8589@PAXPR04MB8207.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d91nkhQQBTESgtZNYjIyLsPn+Jy/dQMK4SDG3PerG3rj2a0gP6PE116i8NfRqDuNVz7WJY/Lgy8FJYkLjFWL2pNZKLDhnA0SZZ+cH+aw67Y+EmTDnYfDRxQ5sfTqTtTBO7uozE+cSADx4H5MQSsLOCVC/obBMklkYr6wLkXWjYMw4NbqQRQagDlJUTOVs53vCE3yj9TX6l+dkFtgpVJVva02BlIX8IyxSkKpU/r2n2+k2XkESP4CU1R7TSWuQfC9XUE/zatAQMaaRGu6CJLMQOvlzb+0LLX22AbhgMXIEAQGwYzsxv0bZtdUsOk/NinYpj3BeLBeNQD421MfZh+N5T5YLnxKek8/8MPU8WKAIhGgcdmeRGb6y7v0Xys7atSuzLmUvwPlPIMTs9tjZYh8AzGtNjFh7SPdsUpeDCS+OcKrKts6vowya7xCfWi/RKIo6MMilycc+plQxHnxBn4BzLjNyGfCvectzrv9r84criancKeSPEwbA3Js6KSZ0hqbG7vq4i16Nybx9h86Luze+Tbl/OFOQw+8c8sF4Z5s2cP3Bl3YQ3YHYvUk0ot6qYXlWFnzDDnTK0khco2RbChAx9Yk7hJbncxpR0pP7UUTmvhBTrEVx3cwVD31YSofKJd3V5RRuHgg26C0F1rhChEACw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52116002)(38100700002)(5660300002)(86362001)(8936002)(508600001)(6506007)(66946007)(1076003)(2616005)(6512007)(66476007)(316002)(6486002)(186003)(44832011)(66556008)(2906002)(4326008)(83380400001)(8676002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: t9otbZeVlBbcD+P8BrfyXmij18E2W9uJD7EWzqxqxuhjna0ZeSUIdFqLHUIO3O2PfhPAfZXQiR2d0s/Js70zgt4TDPoFFmS3NnQO+8uAfdURgELZ42t4S9AfgSkQz/4p8PIQazy+FNFcPOVIxqIBUwGj2++mNaZ8k0l0ktPhjCNotBQCCjn5f1rWcVbJ4/xsv6lAQ5uTnQRDqG1EdeGfW08pCvl/RnI5BYJiv1081toXn3z7qvCThY1/ckYgtgvbGzb0997SdLxIP5wG7cDQjeyLG2djUjU7SjGSV1vOaaHUUgzHE2voQYih69waXLeMPJdydMU6T8bn+SMODMQtDy5kvHbqym1cknmDYhKVvTFA2X1544TenFjDJD2plo29xRdQ/1RvluKSHKmiwJ5KhkSyBjyKlOztbTzQx5h1quvkJgdUEoB6Y6hqpVjvCb6lfnMUHIB556I5yjRaOpX9Ld7S1EFyt69rCN39SVyKrFd3aPgTVyqKZFp9Tk1rDRndJeK5JD1aL45ukSob1ZIEyaCn6wHhZx2q1KKsb1pSN0a6kNDpaLSRb5+VhV+kf5inEFy814sFEuVaWf7B352YLyWdBOTFsL76zhSeCVeOcs0yrBrQ2ogF3G5bAfltSYFDcSpQDmcvhy54R8q+oSrAdQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52116002)(38100700002)(5660300002)(86362001)(8936002)(508600001)(6506007)(66946007)(1076003)(2616005)(6512007)(66476007)(316002)(6486002)(186003)(44832011)(66556008)(2906002)(4326008)(8676002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VjtVarO/2FqZ/E3KxNosLpupIp54RKa9Ey/vXjS3gna6xp/eF/dFj63cb7BE?=
- =?us-ascii?Q?bYQ0SiY1VgMGPygCwMx80rIx/fm545bBSOaD4YK/iolOJlInMisKv5n1+Q+q?=
- =?us-ascii?Q?tHQGfeaiSbujHL6dWg6NIwePHNxZWIPGbKBMsvKjxxur+VD9upHKCwrzSL1V?=
- =?us-ascii?Q?K1FZAl5azRQuqNGDkfcO2JD9vKJWbv3Vf8Aoa7JXj+ODpEu/R6Gu5BGSEDfw?=
- =?us-ascii?Q?O+I9DGzYjM8/r0m4gJMTGSeFbXT1Qe2M3EHVboh0Z8t8aR9cqslA43qg2Myc?=
- =?us-ascii?Q?3THuPldagAW5m7eY+4WvHnVMiFipu5eVijoVmA+iHuwT0u6sNJOMFD48ATLK?=
- =?us-ascii?Q?8K7BYtfmcnVsQSL2GjVQH4zdzcbJgMPZiJT27AzTDTM1x5tEJ/16JeUVmd/9?=
- =?us-ascii?Q?1iLvIjCppKvaA0Smx3a7kRiCgHLmbSAuMig7QA2TnsbtjnSVwX8SVejfD45V?=
- =?us-ascii?Q?155yK4hZ7bQdbfPfbdt/PAnKUybKvQlHsy6ddU06PimnXKb+R78cU4wAnp4P?=
- =?us-ascii?Q?NWaFhv6O1Co5gGoI/1ATAN1W+wLcN9DVLbsA3H+nU1AOPEvdn5yf5tFGAGlp?=
- =?us-ascii?Q?t+Rs9PtyWK2leK7l2rcdPQmPxVP5OFLJXpBkEbf9zbG8J61NruNQIyRs8rW1?=
- =?us-ascii?Q?YzGo/1dfeuPraYBIwypILPX376BsJ4+R9k5vh50EqRwtBKfxARBSypexKEZk?=
- =?us-ascii?Q?wysvGSJuANJNI0zX9xyLMaI3SQfRwok7BA0fol3gtPTcXvK/Dmnar9kmYIso?=
- =?us-ascii?Q?BYap6c6P0yHv2BsMbj5Lb6a8qxfAZ7U103KXwy1ILCRMy0dli+57MmrDK+TN?=
- =?us-ascii?Q?T2utUBOsVAnIYe9Yjy4l8TJNVFn1bET3S2swsS22HquncYeNvKNj1zjs84OH?=
- =?us-ascii?Q?cCTOLL9HYiO0iN2Ay9eZfcRUOfjEuamZpQ8Ufjh7UOb9V4ydTU9HDrFWQyxe?=
- =?us-ascii?Q?qEzTW+lmmgpTreXT0ldBktZT2GthX8oc3lx3/XTo3/fiQSqWe35KNnYAGASR?=
- =?us-ascii?Q?aWwnu/yE2bDEl4xEk9RIrh0Zk+FbbDProT0KdwjuP9Nu9NNXm7sR/CCCMCyh?=
- =?us-ascii?Q?zMYgQeZkBXcht2VESKcrEOgqqbTNcCYG52p1iU4iuH8gTrFx4J2lVzUMZj/c?=
- =?us-ascii?Q?HOW7uQxmlQXwhAHmFjYcPGjmPBtC4pjdCc2HqDIyzmJSgWtrwg6cQARY+Omc?=
- =?us-ascii?Q?2h5FhUHLOncWORHWKtK7T8goSNDcDR40Eqx5qmnRHwSJ0wbbr0YHVD/0oXrV?=
- =?us-ascii?Q?muXDzzInge395mcLzhn3i4zQkVvs4Kg2+c0i1Tj9ZKcfo0SQb4v8FrdmaGPv?=
- =?us-ascii?Q?gfg8y8az4mYWENlWfYIl6jkUrwX/WnXjWQxtoGSGQWU5cgh1r32IUQRFZkK6?=
- =?us-ascii?Q?frZEfCZWI/6KU2IRSvX+jp7F7oHelGM/ZSbwqnDnslJ5MSnKY9uarSGMJdz4?=
- =?us-ascii?Q?eMv/J1gHctPaLuuMmKM4wE1iUDGWvkHhB+GoAoCUYUy+3sDnnN5ais9w0gxx?=
- =?us-ascii?Q?0aE6YpomxngTULMzxTjVu/6L4pjz320OFAIzi2baARgQnOW3n9Jd3KOncWtt?=
- =?us-ascii?Q?SQ1rIhMSBt5giGH5zOKfXZSV43XsyUqAclNIjopBOnXIMqaECTwST7Apfl+r?=
- =?us-ascii?Q?jSn8ragp5xiLUFRxII5lM9QuiT9hnr1FFvMMMvUz7S7oISz4SebcjQNwrh0J?=
- =?us-ascii?Q?/AvndDws7/BInNoYIU9Wg6kXq0w=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2ZuwW2qfiHWUrFDzXJKWTm6tfz+MQxRdoACHcbTnZ5ZmlutBhGHpA7vQMmbm?=
+ =?us-ascii?Q?WRm7Rz7uLFnlcNzKZ6QuKJjf/ufyIeJeY+5PSkaCjkH7uOrq0dXL9gm8gxDB?=
+ =?us-ascii?Q?GOuEhULuFHnno5oOCQasfMjQi2ITagaU86T+U2DX1HU7mxBuQmWtS1ax+xif?=
+ =?us-ascii?Q?yFjQgemcjCPUmHQEm+BIGQIcD1bkVGlpMI7XI0zI7CW5vBIOL7zCTTKvlTb5?=
+ =?us-ascii?Q?m7uv0zvJr+JXmexXp21If+J4sLOkIkW+pkpM+W8k3gZ/7ySCMzErXOlTKuta?=
+ =?us-ascii?Q?a17GzjSKufTvchufDEkeo6QqgbC84HXYOO3Vp+pejMMxqPdBpP6OpR8+XOFE?=
+ =?us-ascii?Q?5TUELzLgHbcwkN7G6H+MD7AIqEQ9xoOPPFsT+m/MxlPKXtAOLmo58LdEFbaw?=
+ =?us-ascii?Q?CGUghfe7M/8Ca3JGglGnbEqvhx6KmvkoPm1ilpAxdGeMmDwyrbnHhy6mQ+ka?=
+ =?us-ascii?Q?qN4RENg1Da1v4dAJxn+dKDmt9Rm4ZIMLp1Djv07M9+L5QOdJmPpVaCFhvMn9?=
+ =?us-ascii?Q?4iWs+Q4Zj8PfQO/NAmD5guXS4htWOavNZnkwaX/yAaPVfPG7PEozqnK3X/bF?=
+ =?us-ascii?Q?s1YCtle4qzOHGmiU1oXjX2vArZnYnjYxlxf3h0zkKWaGDEP2JE3LmQ/TvVs3?=
+ =?us-ascii?Q?3nMqu0XEbbbN3KJ0W5DtZrDtI87aUdDN2muivAPNcI9O/irhtsd2iOGxh5BZ?=
+ =?us-ascii?Q?agyToF+B0+SZBA5aiswN1bGAEs/xuMlVE+snYp5CvR0p3bdUejDEeXSN5lgX?=
+ =?us-ascii?Q?qyJGAp7yQ/g7kf0ZFwXBHH4NHfHa/dVZ4AoO+kcC7eHt0j/84f2RqEoH7Bty?=
+ =?us-ascii?Q?lwAzd8kNpVuG1tAYxyHl4bsBDZRJgwicl3iktmbot4uYaWued7v1ZgpEOdQ7?=
+ =?us-ascii?Q?MNovxffPvDTo076Quk77jGCLke2pK31C83tkufYqu3eMTvHvb9kc2KtNBy72?=
+ =?us-ascii?Q?TKKwyYPcVpvRKctMhtheQxnKUgXxphNpYk/lBATo/B7Wp3pillzh7+O+H7Ea?=
+ =?us-ascii?Q?au1HBKIAVDlMmpPT9+QnxsuIYaJ6InD5AJjrsgehg9na4FEJQgnchLF6bbbx?=
+ =?us-ascii?Q?AnRdXF0mg9UvYqUWFVJIjZI9x0aR/VhmkBMTfXTaIVAubww2uEzqbqqX0B6+?=
+ =?us-ascii?Q?PpPSfNqD1FzhPY/Gyt7zlvmS+SOyidcAKVsYmaV+e4IlL/rFwnxYd07e2V8T?=
+ =?us-ascii?Q?fEHClX2KPAvrlA6H8zIhyJGojy5Y9fRj/oO7ZaZSTm1aAyyx53iVE61We+qV?=
+ =?us-ascii?Q?LFDvIjpslNIBMwrpD/qmvZj/DzNuMWCrNfK8wmsY+yGg3vvizUNH9tK857lS?=
+ =?us-ascii?Q?747S5M4VIeVpa0ZXbsVuwqPvGk4s1QHlCxkYG3hpePCUWeGqZNJp0DBG5llo?=
+ =?us-ascii?Q?jVOu3Ifd7IsrLzAjbmwryvr/aaHYo8WL6ahbKLoKNT0BpoMHubEiH1bUgoa+?=
+ =?us-ascii?Q?5T3R6yFzWd8uZ+YurzqoK5bYvFJh3QS6zFhyEVicCGY4jAzViX7ZtQljGKkY?=
+ =?us-ascii?Q?rOn9VJ74uPsEsQ4hfMqd8m9A6AKDIZWL9BKLKxSWIvIC/uzTTe3fqDPtfmmm?=
+ =?us-ascii?Q?GeF9nZ8bHAxZdOQb7xr+VkGzuhOknnJSAqxcnGbH5Vr/vfjBD4V23ON5r9LC?=
+ =?us-ascii?Q?F6rcDSsiKf2zaxIUhWFGUHJ4chEDFcjj4OnHUB8ZPLBTqS2lwZQqx4Cjhezj?=
+ =?us-ascii?Q?dzkUiPn6hMx4c/yZjp6EoDDGvTs=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72d66f26-6791-4a49-9fa1-08d9dac97a47
+X-MS-Exchange-CrossTenant-Network-Message-Id: 698cb43f-2d22-4069-a093-08d9dac97b32
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5151.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 21:28:32.7260
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2022 21:28:34.1542
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0AFxusAiesp+LtZp3mmBo67Hq/RqPOWHcFYNKlFpwycy5fslvpGqtdaU7T3MweypPIhwSdRcR0UojIKFmx33Qw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: oR9i9/DV8FMD1mhIWAVnQoWP+s3ytypVfsb/lLLCJtaWkIc8ViQmPCEmRZA/dyqq726k57HybpVbtxbAo73XmQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8207
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Baluta <daniel.baluta@nxp.com>
+From: Paul Olaru <paul.olaru@nxp.com>
 
-Implement snd_compress_ops. There are a lot of similarities with
-PCM implementation.
+These functions are used by the userspace to determine what the firmware
+supports and tools like cplay should use in terms of sample rate, bit
+rate, buffer size and channel count.
 
-For now we use sof_ipc_pcm_params to transfer compress parameters to SOF
-firmware.
+The current implementation uses i.MX8 tested scenarios!
 
-This will be changed in the future once we either add new compress
-parameters to SOF or enhance existing sof_ipc_pcm_params structure
-to support all native compress params.
-
+Signed-off-by: Paul Olaru <paul.olaru@nxp.com>
 Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
 ---
- sound/soc/sof/compress.c | 273 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 271 insertions(+), 2 deletions(-)
+ sound/soc/sof/compress.c | 74 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
 diff --git a/sound/soc/sof/compress.c b/sound/soc/sof/compress.c
-index 01ca85f0b87f..91a9c95929cd 100644
+index 91a9c95929cd..e3f3f309f312 100644
 --- a/sound/soc/sof/compress.c
 +++ b/sound/soc/sof/compress.c
-@@ -10,6 +10,22 @@
- #include "sof-audio.h"
- #include "sof-priv.h"
- 
-+static void sof_set_transferred_bytes(struct snd_compr_tstamp *tstamp,
-+				      u64 host_pos, u64 buffer_size)
-+{
-+	u64 prev_pos;
-+	unsigned int copied;
-+
-+	div64_u64_rem(tstamp->copied_total, buffer_size, &prev_pos);
-+
-+	if (host_pos < prev_pos)
-+		copied = (buffer_size - prev_pos) + host_pos;
-+	else
-+		copied = host_pos - prev_pos;
-+
-+	tstamp->copied_total += copied;
-+}
-+
- static void snd_sof_compr_fragment_elapsed_work(struct work_struct *work)
- {
- 	struct snd_sof_pcm_stream *sps =
-@@ -29,14 +45,16 @@ void snd_sof_compr_init_elapsed_work(struct work_struct *work)
-  */
- void snd_sof_compr_fragment_elapsed(struct snd_compr_stream *cstream)
- {
-+	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-+	struct snd_compr_runtime *crtd = cstream->runtime;
- 	struct snd_soc_component *component;
--	struct snd_soc_pcm_runtime *rtd;
-+	struct snd_compr_tstamp *tstamp;
- 	struct snd_sof_pcm *spcm;
- 
- 	if (!cstream)
- 		return;
- 
--	rtd = cstream->private_data;
-+	tstamp = crtd->private_data;
- 	component = snd_soc_rtdcom_lookup(rtd, SOF_AUDIO_PCM_DRV_NAME);
- 
- 	spcm = snd_sof_find_spcm_dai(component, rtd);
-@@ -46,6 +64,257 @@ void snd_sof_compr_fragment_elapsed(struct snd_compr_stream *cstream)
- 		return;
- 	}
- 
-+	sof_set_transferred_bytes(tstamp, spcm->stream[cstream->direction].posn.host_posn,
-+				  crtd->buffer_size);
-+
- 	/* use the same workqueue-based solution as for PCM, cf. snd_sof_pcm_elapsed */
- 	schedule_work(&spcm->stream[cstream->direction].period_elapsed_work);
+@@ -308,6 +308,78 @@ static int sof_compr_pointer(struct snd_soc_component *component,
+ 	return 0;
  }
-+
-+static int create_page_table(struct snd_soc_component *component,
-+			     struct snd_compr_stream *cstream,
-+			     unsigned char *dma_area, size_t size)
+ 
++static int sof_compr_get_caps(struct snd_soc_component *component,
++			      struct snd_compr_stream *cstream,
++			      struct snd_compr_caps *caps)
 +{
-+	struct snd_dma_buffer *dmab = cstream->runtime->dma_buffer_p;
-+	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-+	int dir = cstream->direction;
-+	struct snd_sof_pcm *spcm;
-+
-+	spcm = snd_sof_find_spcm_dai(component, rtd);
-+	if (!spcm)
-+		return -EINVAL;
-+
-+	return snd_sof_create_page_table(component->dev, dmab,
-+					 spcm->stream[dir].page_table.area, size);
-+}
-+
-+int sof_compr_open(struct snd_soc_component *component,
-+		   struct snd_compr_stream *cstream)
-+{
-+	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-+	struct snd_compr_runtime *crtd = cstream->runtime;
-+	struct snd_compr_tstamp *tstamp;
-+	struct snd_sof_pcm *spcm;
-+	int dir;
-+
-+	tstamp = kzalloc(sizeof(*tstamp), GFP_KERNEL);
-+	if (!tstamp)
-+		return -ENOMEM;
-+
-+	spcm = snd_sof_find_spcm_dai(component, rtd);
-+	if (!spcm) {
-+		kfree(tstamp);
-+		return -EINVAL;
-+	}
-+
-+	dir = cstream->direction;
-+
-+	if (spcm->stream[dir].cstream) {
-+		kfree(tstamp);
-+		return -EBUSY;
-+	}
-+
-+	spcm->stream[dir].cstream = cstream;
-+	spcm->stream[dir].posn.host_posn = 0;
-+	spcm->stream[dir].posn.dai_posn = 0;
-+	spcm->prepared[dir] = false;
-+
-+	crtd->private_data = tstamp;
++	caps->num_codecs = 3;
++	caps->min_fragment_size = 3840;
++	caps->max_fragment_size = 3840;
++	caps->min_fragments = 2;
++	caps->max_fragments = 2;
++	caps->codecs[0] = SND_AUDIOCODEC_MP3;
++	caps->codecs[1] = SND_AUDIOCODEC_AAC;
++	caps->codecs[2] = SND_AUDIOCODEC_PCM;
 +
 +	return 0;
 +}
 +
-+int sof_compr_free(struct snd_soc_component *component,
-+		   struct snd_compr_stream *cstream)
++static struct snd_compr_codec_caps caps_pcm = {
++	.num_descriptors = 1,
++	.descriptor[0].max_ch = 2,
++	.descriptor[0].sample_rates[0] = 48000,
++	.descriptor[0].num_sample_rates = 1,
++	.descriptor[0].bit_rate = {1536, 3072},
++	.descriptor[0].num_bitrates = 2,
++	.descriptor[0].profiles = SND_AUDIOPROFILE_PCM,
++	.descriptor[0].modes = 0,
++	.descriptor[0].formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S32_LE,
++};
++
++static struct snd_compr_codec_caps caps_mp3 = {
++	.num_descriptors = 1,
++	.descriptor[0].max_ch = 2,
++	.descriptor[0].sample_rates[0] = 48000,
++	.descriptor[0].num_sample_rates = 1,
++	.descriptor[0].bit_rate = {32, 40, 48, 56, 64, 80, 96, 112, 224, 256, 320},
++	.descriptor[0].num_bitrates = 11,
++	.descriptor[0].profiles = 0,
++	.descriptor[0].modes = SND_AUDIOCHANMODE_MP3_STEREO,
++	.descriptor[0].formats = 0,
++};
++
++static struct snd_compr_codec_caps caps_aac = {
++	.num_descriptors = 1,
++	.descriptor[0].max_ch = 2,
++	.descriptor[0].sample_rates[0] = 48000,
++	.descriptor[0].num_sample_rates = 1,
++	.descriptor[0].bit_rate = {128, 192},
++	.descriptor[0].num_bitrates = 2,
++	.descriptor[0].profiles = 0,
++	.descriptor[0].modes = 0,
++	.descriptor[0].formats = SND_AUDIOSTREAMFORMAT_MP4ADTS | SND_AUDIOSTREAMFORMAT_MP2ADTS,
++};
++
++static int sof_compr_get_codec_caps(struct snd_soc_component *component,
++				    struct snd_compr_stream *cstream,
++				    struct snd_compr_codec_caps *codec)
 +{
-+	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
-+	struct snd_compr_tstamp *tstamp = cstream->runtime->private_data;
-+	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-+	struct sof_ipc_stream stream;
-+	struct sof_ipc_reply reply;
-+	struct snd_sof_pcm *spcm;
-+	int ret = 0;
-+
-+	spcm = snd_sof_find_spcm_dai(component, rtd);
-+	if (!spcm)
-+		return -EINVAL;
-+
-+	stream.hdr.size = sizeof(stream);
-+	stream.hdr.cmd = SOF_IPC_GLB_STREAM_MSG | SOF_IPC_STREAM_PCM_FREE;
-+	stream.comp_id = spcm->stream[cstream->direction].comp_id;
-+
-+	if (spcm->prepared[cstream->direction]) {
-+		ret = sof_ipc_tx_message(sdev->ipc, stream.hdr.cmd,
-+					 &stream, sizeof(stream),
-+					 &reply, sizeof(reply));
-+		if (!ret)
-+			spcm->prepared[cstream->direction] = false;
-+	}
-+
-+	cancel_work_sync(&spcm->stream[cstream->direction].period_elapsed_work);
-+	spcm->stream[cstream->direction].cstream = NULL;
-+	kfree(tstamp);
-+
-+	return ret;
-+}
-+
-+int sof_compr_set_params(struct snd_soc_component *component,
-+			 struct snd_compr_stream *cstream, struct snd_compr_params *params)
-+{
-+	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
-+	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-+	struct snd_compr_runtime *crtd = cstream->runtime;
-+	struct sof_ipc_pcm_params_reply ipc_params_reply;
-+	struct snd_compr_tstamp *tstamp;
-+	struct sof_ipc_pcm_params pcm;
-+	struct snd_sof_pcm *spcm;
-+	int ret;
-+
-+	tstamp = crtd->private_data;
-+
-+	spcm = snd_sof_find_spcm_dai(component, rtd);
-+
-+	if (!spcm)
-+		return -EINVAL;
-+
-+	cstream->dma_buffer.dev.type = SNDRV_DMA_TYPE_DEV_SG;
-+	cstream->dma_buffer.dev.dev = sdev->dev;
-+	ret = snd_compr_malloc_pages(cstream, crtd->buffer_size);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = create_page_table(component, cstream, crtd->dma_area, crtd->dma_bytes);
-+	if (ret < 0)
-+		return ret;
-+
-+	memset(&pcm, 0, sizeof(pcm));
-+
-+	pcm.params.buffer.pages = PFN_UP(crtd->dma_bytes);
-+	pcm.hdr.size = sizeof(pcm);
-+	pcm.hdr.cmd = SOF_IPC_GLB_STREAM_MSG | SOF_IPC_STREAM_PCM_PARAMS;
-+
-+	pcm.comp_id = spcm->stream[cstream->direction].comp_id;
-+	pcm.params.hdr.size = sizeof(pcm.params);
-+	pcm.params.buffer.phy_addr = spcm->stream[cstream->direction].page_table.addr;
-+	pcm.params.buffer.size = crtd->dma_bytes;
-+	pcm.params.direction = cstream->direction;
-+	pcm.params.channels = params->codec.ch_out;
-+	pcm.params.rate = params->codec.sample_rate;
-+	pcm.params.buffer_fmt = SOF_IPC_BUFFER_INTERLEAVED;
-+	pcm.params.frame_fmt = SOF_IPC_FRAME_S32_LE;
-+	pcm.params.sample_container_bytes =
-+		snd_pcm_format_physical_width(SNDRV_PCM_FORMAT_S32) >> 3;
-+	pcm.params.host_period_bytes = params->buffer.fragment_size;
-+
-+	ret = sof_ipc_tx_message(sdev->ipc, pcm.hdr.cmd, &pcm, sizeof(pcm),
-+				 &ipc_params_reply, sizeof(ipc_params_reply));
-+	if (ret < 0) {
-+		dev_err(component->dev, "error ipc failed\n");
-+		return ret;
-+	}
-+
-+	tstamp->byte_offset = sdev->stream_box.offset + ipc_params_reply.posn_offset;
-+	tstamp->sampling_rate = params->codec.sample_rate;
-+
-+	spcm->prepared[cstream->direction] = true;
-+
-+	return 0;
-+}
-+
-+int sof_compr_get_params(struct snd_soc_component *component,
-+			 struct snd_compr_stream *cstream, struct snd_codec *params)
-+{
-+	/* TODO: we don't query the supported codecs for now, if the
-+	 * application asks for an unsupported codec the set_params() will fail.
-+	 */
-+	return 0;
-+}
-+
-+int sof_compr_trigger(struct snd_soc_component *component,
-+		      struct snd_compr_stream *cstream, int cmd)
-+{
-+	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
-+	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
-+	struct sof_ipc_stream stream;
-+	struct sof_ipc_reply reply;
-+	struct snd_sof_pcm *spcm;
-+
-+	spcm = snd_sof_find_spcm_dai(component, rtd);
-+	if (!spcm)
-+		return -EINVAL;
-+
-+	stream.hdr.size = sizeof(stream);
-+	stream.hdr.cmd = SOF_IPC_GLB_STREAM_MSG;
-+	stream.comp_id = spcm->stream[cstream->direction].comp_id;
-+
-+	switch (cmd) {
-+	case SNDRV_PCM_TRIGGER_START:
-+		stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_START;
++	switch (codec->codec) {
++	case SND_AUDIOCODEC_MP3:
++		*codec = caps_mp3;
 +		break;
-+	case SNDRV_PCM_TRIGGER_STOP:
-+		stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_STOP;
++	case SND_AUDIOCODEC_AAC:
++		*codec = caps_aac;
 +		break;
-+	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-+		stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_PAUSE;
-+		break;
-+	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-+		stream.hdr.cmd |= SOF_IPC_STREAM_TRIG_RELEASE;
++	case SND_AUDIOCODEC_PCM:
++		*codec = caps_pcm;
 +		break;
 +	default:
-+		dev_err(component->dev, "error: unhandled trigger cmd %d\n", cmd);
-+		break;
++		return -EINVAL;
 +	}
-+
-+	return sof_ipc_tx_message(sdev->ipc, stream.hdr.cmd,
-+				  &stream, sizeof(stream),
-+				  &reply, sizeof(reply));
-+}
-+
-+int sof_compr_copy(struct snd_soc_component *component,
-+		   struct snd_compr_stream *cstream,
-+		   char __user *buf, size_t count)
-+{
-+	struct snd_compr_runtime *rtd = cstream->runtime;
-+	unsigned int offset, n;
-+	void *ptr;
-+	int ret;
-+
-+	if (count > rtd->buffer_size)
-+		count = rtd->buffer_size;
-+
-+	div_u64_rem(rtd->total_bytes_available, rtd->buffer_size, &offset);
-+	ptr = rtd->dma_area + offset;
-+	n = rtd->buffer_size - offset;
-+
-+	if (count < n) {
-+		ret = copy_from_user(ptr, buf, count);
-+	} else {
-+		ret = copy_from_user(ptr, buf, n);
-+		ret += copy_from_user(rtd->dma_area, buf + n, count - n);
-+	}
-+
-+	return count - ret;
-+}
-+
-+static int sof_compr_pointer(struct snd_soc_component *component,
-+			     struct snd_compr_stream *cstream,
-+			     struct snd_compr_tstamp *tstamp)
-+{
-+	struct snd_compr_tstamp *pstamp = cstream->runtime->private_data;
-+
-+	tstamp->sampling_rate = pstamp->sampling_rate;
-+	tstamp->copied_total = pstamp->copied_total;
-+
 +	return 0;
 +}
 +
-+struct snd_compress_ops sof_compressed_ops = {
-+	.open		= sof_compr_open,
-+	.free		= sof_compr_free,
-+	.set_params	= sof_compr_set_params,
-+	.get_params	= sof_compr_get_params,
-+	.trigger	= sof_compr_trigger,
-+	.pointer	= sof_compr_pointer,
-+	.copy		= sof_compr_copy,
-+};
-+EXPORT_SYMBOL(sof_compressed_ops);
+ struct snd_compress_ops sof_compressed_ops = {
+ 	.open		= sof_compr_open,
+ 	.free		= sof_compr_free,
+@@ -316,5 +388,7 @@ struct snd_compress_ops sof_compressed_ops = {
+ 	.trigger	= sof_compr_trigger,
+ 	.pointer	= sof_compr_pointer,
+ 	.copy		= sof_compr_copy,
++	.get_caps	= sof_compr_get_caps,
++	.get_codec_caps	= sof_compr_get_codec_caps,
+ };
+ EXPORT_SYMBOL(sof_compressed_ops);
 -- 
 2.27.0
 

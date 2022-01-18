@@ -2,241 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF76492F09
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071F7492F0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 21:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349009AbiARUMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 15:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343489AbiARUMq (ORCPT
+        id S1349085AbiARUN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 15:13:28 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4820 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348488AbiARUNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:12:46 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31878C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:12:46 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id o80so376426yba.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 12:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OSqqLhyTtzJxhz0q3DXFIpxiiCpjsPm+6enDaOk0ioI=;
-        b=nZta7SvitwxRUx3wprgyqeBWZ0dDlrCpUUNu6Hic5upqDFiLjb9UqZBc+u2Dm6OgCy
-         xqddIBKlcrqDpBPrBTwBj0dnfPdNZIwZ7qCTO+scmQn874g6od62Vs0y9wPf7lZ43EUi
-         VyuHxuG0cP5Y807TjuGVSg9Mp+0nMGmaqTSjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OSqqLhyTtzJxhz0q3DXFIpxiiCpjsPm+6enDaOk0ioI=;
-        b=r+Ss/Ssy9/wAeyOV3lTDGgBFndAPvGpD/7fZVKr9KbqjC9rN8E9q6qywokme2T6zs1
-         IgIc7R21tSSguwvcAwl7WxYAZpf5Da4HmpL2b+xYFhHjcRvk6mwHfV4PC/pcn/aWA5Ww
-         Hu4IqTbO/S0U00p0BG3kYdeVjO14OQzCyLRwaAV8eKfE1qShigosipj4/zXZYMmEfb8X
-         WAIZO2T30VDDaQ/Gp44LulCEuDNHgh/wkUAWmuj16172mxmv9LOssgvU2Ax8tJgC0poh
-         VSN6Gxkc07l/Auh4fVXQgpnlf0oINF72tEqaFHUaaqWejGNW6/SFTXuekUTSRxw1LRBt
-         VCFg==
-X-Gm-Message-State: AOAM533R5KhndOGpDpM2r+7Z4TruurPxRZvWwVlBWymuxya4pGjPX7AX
-        XIAFdj3xX0F/sD1A/KyguFLFaCLtGN6UXyrT2KJv3g==
-X-Google-Smtp-Source: ABdhPJzBg853u2lGTlkCiNJtKQ4Gwcsbs1nSDNSQkRI1AEcQU6HgTkoPlk+g792B0DrAfLhwol9dhQYJJUfRuRWeKBc=
-X-Received: by 2002:a25:b7cd:: with SMTP id u13mr35687434ybj.93.1642536765437;
- Tue, 18 Jan 2022 12:12:45 -0800 (PST)
+        Tue, 18 Jan 2022 15:13:18 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IHRDhv010575;
+        Tue, 18 Jan 2022 20:13:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=APUYDznO3Quaz+Sc0s0sZb+MiLSW6FJB7cBY6Cn3RU8=;
+ b=ObkN5+WSWaysDU41ut+nVvODrD7MO2qpmHSCN9bE1sn8UfYMjbUkYF339tZ1YXVI1L7j
+ L7v4tSZQCL8uaNLgx4M4WXZp04y0FtPHINkf5thG3x/9PX4oMG1zBHtPXvhzGQ+3Ujdr
+ k2lWrcdt/mDP1CoWKaQCsvyhn5czaSA3nYNmFZDJNL/ljbcnIz1yCVwNCPhPQ+5TGqQp
+ 6QV7lVzPZOEaowdKH7Zhc7Bew0d1iY6IFMqto2UfjJaWfKEVbE90LXGJH/+VKJDZgaIA
+ oZKw5Vqwu5dX0HQRKB5/si1G5UnIxAoVQsFRbfdmmU53Jp1v+0qM0BLk2R+1EEhOztXm Zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yavjt1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 20:13:05 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IJZuSU004306;
+        Tue, 18 Jan 2022 20:13:05 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yavjsn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 20:13:05 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IK1xJP012541;
+        Tue, 18 Jan 2022 20:13:04 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 3dknwasc5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 20:13:04 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IKD3U815466788
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 20:13:03 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6372BE05A;
+        Tue, 18 Jan 2022 20:13:02 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C635BE059;
+        Tue, 18 Jan 2022 20:13:00 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 20:13:00 +0000 (GMT)
+Message-ID: <d53a66a2-17e2-54b3-f115-efd7c58080a7@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 15:12:59 -0500
 MIME-Version: 1.0
-References: <20220118163754.nfy53mfjpazgw2a2@eve> <YecV+rh/4rzygUbx@google.com>
- <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
-In-Reply-To: <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 18 Jan 2022 12:12:34 -0800
-Message-ID: <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
-Subject: Re: Null pointer dereference in cros-ec-typec
-To:     Benson Leung <bleung@google.com>, mr.chromebox@gmail.com
-Cc:     Alyssa Ross <hi@alyssa.is>, Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 07/19] ima: Move dentry into ima_namespace and others
+ onto stack
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-8-stefanb@linux.vnet.ibm.com>
+ <a7c5ac94b4c4d87b407353f74ff87bc0b13542a4.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <a7c5ac94b4c4d87b407353f74ff87bc0b13542a4.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3HaX4pOfEpqkwQI_nTwVgEtt-lcLRJrf
+X-Proofpoint-GUID: HTpAqsbImGmRNkb9a8LkaDtqEYrZAuWZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180119
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(+Mr.Chromebox team; using the address listed in
-https://mrchromebox.tech/#support )
 
-Hi Team Mr.Chromebox,
+On 1/13/22 15:28, Mimi Zohar wrote:
+> Hi Stefan,
+>
+> Nobody refers to the IMA securityfs files as dentries.  The Subject
+> line is suppose to provide a hint about the patch.  How about changing
+> the "Subject" line to "ima: Move IMA securityfs files into
+> ima_namespaces or onto stack".
+>
+> On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Move the policy file dentry into the ima_namespace for reuse by
+>> virtualized SecurityFS and for being able to remove it from
+>> the filesystem. Move the other dentries onto the stack.
+> Missing is an explanation why the other IMA securityfs files can be on
+> the stack.  Maybe start out by saying that the ns_ima_init securityfs
+> files are never deleted.  Then transition into the IMA namespaced
+> securityfs files and how they will be deleted.
 
-Could you kindly provide some more detail regarding how the GOOG0014
-Type C ACPI device is set up in the Mr Chromebox BIOS for Chromebooks
-(the driver expects it to be embedded in the GOOG0004 EC device)?
-We want to enable Alyssa and other developers using the Mr.Chromebox
-BIOS to have a functional cros-ec-typec driver, so would like to help
-ensure that the device is set up correctly in ACPI.
+How about this:
 
-Thanks!
+ima: Move IMA securityfs files into ima_namespace or onto stack
 
--Prashant
+Move the IMA policy file's dentry into the ima_namespace for reuse by
+virtualized securityfs and for being able to remove the file from the
+filesystem using securityfs_remove().
 
-On Tue, Jan 18, 2022 at 11:49 AM Prashant Malani <pmalani@chromium.org> wro=
-te:
+Move the other files' dentries onto the stack since they are not needed
+outside the function where they are created in. Also, their cleanup is
+automatically handled by the filesystem upon umount of a virtualized
+secruityfs instance, so they don't need to be explicitly freed anymore.
+
+When moving the dentry 'ima_policy' into ima_namespace rename it to
+'policy_dentry' to clarify its datatype and avoid a name clash with
+'int ima_policy' from ima_policy.c.
+
+    Stefan
+
+
+
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   security/integrity/ima/ima.h    |  2 ++
+>>   security/integrity/ima/ima_fs.c | 32 ++++++++++++++++++--------------
+>>   2 files changed, 20 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index 82b3f6a98320..224b09617c52 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -140,6 +140,8 @@ struct ima_namespace {
+>>   	struct mutex ima_write_mutex;
+>>   	unsigned long ima_fs_flags;
+>>   	int valid_policy;
+>> +
+>> +	struct dentry *policy_dentry;
+> None of the other securityfs files are renamed.  Why is "ima_policy"
+> being renamed to "policy_dentry"?  If there is a need, it should be
+> documented in the patch description.
 >
-> Hi Benson and Alyssa,
+> thanks,
 >
-> On Tue, Jan 18, 2022 at 11:33 AM Benson Leung <bleung@google.com> wrote:
-> >
-> > Hi Alyssa,
-> >
-> > Thanks for reaching out.
-> >
-> > On Tue, Jan 18, 2022 at 04:37:54PM +0000, Alyssa Ross wrote:
-> > > My distribution recently enabled the Chrome OS EC Type C control driv=
-er
-> > > in its kernel builds.  On my Google Pixelbook i7 (eve), the driver re=
-ports
-> > > a null pointer dereference at boot.  From what I can tell, this happe=
-ns
-> > > because typec->ec is set to NULL in cros_typec_probe.  Other drivers,
-> > > like cros-usbpd-notify, appear to be set up to handle this case.  As =
-a
-> > > result of this bug, I'm no longer able to reboot my computer, because
-> > > udevd hangs while trying to do something with the device whose driver
-> > > isn't working.
-> > >
-> >
-> > I've copied Prashant, who's the author of the typec driver as well as
-> > cros-usbpd-notify.
-> >
-> > Prashant, any thoughts on a more graceful failure out of the typec driv=
-er's
-> > probe in case there's no ec object?
+> Mimi
 >
-> We can add a NULL check and just abort the driver probe if the pointer is
-> not valid (the driver is useless without that pointer anyway).
->
-> A note: The NULL check makes sense on older drivers like cros-usbpd-notif=
-y since
-> they can exist in ACPI configurations where they are *not* embedded
-> inside the GOOG0004
-> EC device (on older Chromebooks). That is not the case for the EC Type C =
-device.
->
-> This raises another issue: the custom BIOS from Mr. Chromebox is
-> likely not setting
-> up the EC Type C ACPI (GOOG0014) device correctly; it *must* be
-> embedded inside the overall
-> EC device (GOOG0004). If this is not being done, then the GOOG0014
-> device should not
-> be added to the ACPI tables at all.
->
-> I would like to understand whether the above was intentional from the
-> Mr. Chromebox BIOS developers;
-> otherwise we are letting an incorrect ACPI configuration just fail
-> with a probe error.
->
-> Thanks,
->
-> -Prashant
->
-> >
-> > > Here's the full Oops.  I was able to reproduce the issue with every
-> > > kernel I tried, from 5.10 to mainline.
-> > >
-> > > cros-usbpd-notify-acpi GOOG0003:00: Couldn't get Chrome EC device poi=
-nter.
-> > > input: Intel Virtual Buttons as /devices/pci0000:00/0000:00:1f.0/PNP0=
-C09:00/INT33D6:00/input/input14
-> > > BUG: kernel NULL pointer dereference, address: 00000000000000d8
-> > > #PF: supervisor read access in kernel mode
-> > > #PF: error_code(0x0000) - not-present page
-> > > PGD 0 P4D 0
-> > > Oops: 0000 [#1] SMP PTI
-> > > CPU: 1 PID: 561 Comm: systemd-udevd Not tainted 5.15.12 #4
-> > > Hardware name: Google Eve/Eve, BIOS MrChromebox-4.14 08/06/2021
-> >
-> >
-> > Ah, here's the problem. It looks like this is a custom bios from Mr Chr=
-omebox,
-> > so this is not a bios combination we validate at Google.
-> >
-> > Thank you for the report. We'll look into fixing this and marking the f=
-ix
-> > for stable kernels so that it goes back to 5.10.
-> >
-> > Thanks,
-> >
-> > Benson
-> >
-> > > RIP: 0010:__mutex_lock+0x59/0x8c0
-> > > Code: 53 48 89 cb 48 83 ec 70 89 75 9c be 3d 02 00 00 4c 89 45 90 e8 =
-18 47 33 ff e8 e3 e2 ff ff 44 8b 35 a4 85 e8 02 45 85 f6 75 0a <4d> 3b 6d 6=
-8 0f 85 bf 07 00 00 65 ff 05 b6 5b 23 75 ff 75 90 4d 8d
-> > > RSP: 0018:ffffb44580a4bb50 EFLAGS: 00010246
-> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000001
-> > > RDX: 0000000000000000 RSI: ffffffff8bf91320 RDI: ffff922cbba50e20
-> > > RBP: ffffb44580a4bbf0 R08: 0000000000000000 R09: ffff922c5bac8140
-> > > R10: ffffb44580a4bc10 R11: 0000000000000000 R12: 0000000000000000
-> > > R13: 0000000000000070 R14: 0000000000000000 R15: 0000000000000001
-> > > FS:  00007f55338d6b40(0000) GS:ffff922fae200000(0000) knlGS:000000000=
-0000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00000000000000d8 CR3: 000000011bbb2006 CR4: 00000000003706e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  ? fs_reclaim_acquire+0x4d/0xd0
-> > >  ? lock_is_held_type+0xaa/0x120
-> > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
-> > >  ? lock_is_held_type+0xaa/0x120
-> > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
-> > >  cros_ec_cmd_xfer_status+0x1f/0x110
-> > >  cros_typec_ec_command+0x91/0x1c0 [cros_ec_typec]
-> > >  cros_typec_probe+0x7f/0x5a8 [cros_ec_typec]
-> > >  platform_probe+0x3f/0x90
-> > >  really_probe+0x1f5/0x3f0
-> > >  __driver_probe_device+0xfe/0x180
-> > >  driver_probe_device+0x1e/0x90
-> > >  __driver_attach+0xc4/0x1d0
-> > >  ? __device_attach_driver+0xe0/0xe0
-> > >  ? __device_attach_driver+0xe0/0xe0
-> > >  bus_for_each_dev+0x67/0x90
-> > >  bus_add_driver+0x12e/0x1f0
-> > >  driver_register+0x8f/0xe0
-> > >  ? 0xffffffffc04ec000
-> > >  do_one_initcall+0x67/0x320
-> > >  ? rcu_read_lock_sched_held+0x3f/0x80
-> > >  ? trace_kmalloc+0x38/0xe0
-> > >  ? kmem_cache_alloc_trace+0x17c/0x2b0
-> > >  do_init_module+0x5c/0x270
-> > >  __do_sys_finit_module+0x95/0xe0
-> > >  do_syscall_64+0x3b/0x90
-> > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > RIP: 0033:0x7f55344b1f3d
-> > > Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 =
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f=
-0 ff ff 73 01 c3 48 8b 0d bb ee 0e 00 f7 d8 64 89 01 48
-> > > RSP: 002b:00007fff187f1388 EFLAGS: 00000246 ORIG_RAX: 000000000000013=
-9
-> > > RAX: ffffffffffffffda RBX: 000055a53acbe6e0 RCX: 00007f55344b1f3d
-> > > RDX: 0000000000000000 RSI: 00007f553461732c RDI: 000000000000000e
-> > > RBP: 0000000000020000 R08: 0000000000000000 R09: 0000000000000002
-> > > R10: 000000000000000e R11: 0000000000000246 R12: 00007f553461732c
-> > > R13: 000055a53ad94010 R14: 0000000000000007 R15: 000055a53ad95690
-> > >  </TASK>
-> > > Modules linked in: fjes(+) cros_ec_typec(+) typec intel_vbtn(+) cros_=
-usbpd_notify sparse_keymap soc_button_array int3403_thermal int340x_thermal=
-_zone int3400_thermal acpi_thermal_rel cros_kbd_led_backlight zram ip_table=
-s i915 hid_multitouch i2c_algo_bit ttm crct10dif_pclmul crc32_pclmul crc32c=
-_intel drm_kms_helper nvme ghash_clmulni_intel sdhci_pci cqhci cec nvme_cor=
-e sdhci serio_raw drm mmc_core i2c_hid_acpi i2c_hid video pinctrl_sunrisepo=
-int fuse
-> > > CR2: 00000000000000d8
-> > > ---[ end trace 4a12c4896d70352b ]---
-> >
-> >
-> >
-> > --
-> > Benson Leung
-> > Staff Software Engineer
-> > Chrome OS Kernel
-> > Google Inc.
-> > bleung@google.com
-> > Chromium OS Project
-> > bleung@chromium.org
+>>   } __randomize_layout;
+>>   extern struct ima_namespace init_ima_ns;
+>>

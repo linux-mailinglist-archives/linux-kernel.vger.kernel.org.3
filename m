@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B11C4913C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC084913C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238898AbiARBvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 20:51:53 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:38748 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236467AbiARBvv (ORCPT
+        id S239068AbiARBwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 20:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236336AbiARBwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:51:51 -0500
-X-UUID: 7fe5b39085b348c1972f0ae24ea6cf92-20220118
-X-UUID: 7fe5b39085b348c1972f0ae24ea6cf92-20220118
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 805230940; Tue, 18 Jan 2022 09:51:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 18 Jan 2022 09:51:47 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 18 Jan 2022 09:51:45 +0800
-Message-ID: <f9e3a862ecdb914a0efb52582989e975a742e918.camel@mediatek.com>
-Subject: Re: [PATCH net-next v12 3/7] stmmac: dwmac-mediatek: re-arrange
- clock setting
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <dkirjanov@suse.de>
-Date:   Tue, 18 Jan 2022 09:51:45 +0800
-In-Reply-To: <2c62f337-5eb4-e525-7e3a-289435315c09@collabora.com>
-References: <20220117070706.17853-1-biao.huang@mediatek.com>
-         <20220117070706.17853-4-biao.huang@mediatek.com>
-         <2c62f337-5eb4-e525-7e3a-289435315c09@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 17 Jan 2022 20:52:33 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2C2C061574;
+        Mon, 17 Jan 2022 17:52:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JdBbt5Wkhz4xsm;
+        Tue, 18 Jan 2022 12:52:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642470748;
+        bh=kR/zK4xF3tyAN2VgcwkwIkvMU1E9aH33MEHQopQjlEk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pNdM6XYUaCXceej05bDsYWF6iwS8CJVM/B/xg60wpoi9LEXlfxJQdO7E8KAEzD4um
+         wapSA7r7Joq+ZVYFMmKHGYCbKWk0j6kmktDAl6ihPZJz7UHAISu8sjbeRrFXKMnxw4
+         xXNetK+qoPNJEuNKyjHPAG+JQ3b4a7lyXMLuEP0VybZgXTlfjxxryOy/2pD/8rI5r4
+         b1LySLw/jQszxn0A4rnYP0/Ayohc8VliJXJezyekCriGWI6lIPD4FbHQSN/KrzDG6w
+         73yeGusvlsHjY9uBF3fvNvMip/1XhveCS+OF1EVf2FdI9vn3fi/+qLvmeL8gYvubEg
+         v19V+RUUNAJFQ==
+Date:   Tue, 18 Jan 2022 12:52:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+Subject: linux-next: manual merge of the akpm tree with the random tree
+Message-ID: <20220118125225.31313015@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: multipart/signed; boundary="Sig_/HnRFYszX4qkU+HoY/VBET3S";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Angelo,
-	Thanks for your comments.
-On Mon, 2022-01-17 at 11:38 +0100, AngeloGioacchino Del Regno wrote:
-> Il 17/01/22 08:07, Biao Huang ha scritto:
-> > The rmii_internal clock is needed only when PHY
-> > interface is RMII, and reference clock is from MAC.
-> > 
-> > Re-arrange the clock setting as following:
-> > 1. the optional "rmii_internal" is controlled by devm_clk_get(),
-> > 2. other clocks still be configured by devm_clk_bulk_get().
-> > 
-> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> > ---
-> >   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 72 +++++++++++++-
-> > -----
-> >   1 file changed, 49 insertions(+), 23 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > index 8747aa4403e8..2678d2deb26a 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > @@ -49,14 +49,15 @@ struct mac_delay_struct {
-> >   struct mediatek_dwmac_plat_data {
-> >   	const struct mediatek_dwmac_variant *variant;
-> >   	struct mac_delay_struct mac_delay;
-> > +	struct clk *rmii_internal_clk;
-> >   	struct clk_bulk_data *clks;
-> > -	struct device_node *np;
-> >   	struct regmap *peri_regmap;
-> > +	struct device_node *np;
-> >   	struct device *dev;
-> >   	phy_interface_t phy_mode;
-> > -	int num_clks_to_config;
-> >   	bool rmii_clk_from_mac;
-> >   	bool rmii_rxc;
-> > +	int num_clks;
-> 
-> I don't see any need to get a num_clks here, at this point: since all
-> functions
-> reading this are getting passed a pointer to this entire structure,
-> you can
-> simply always access plat->variant->num_clks.
-> 
-> Please, drop the addition of num_clks in this struct.
-> 
-> Regards,
-> Angelo
-OK, will remove it in next send.
+--Sig_/HnRFYszX4qkU+HoY/VBET3S
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+Today's linux-next merge of the akpm tree got a conflict in:
+
+  drivers/char/random.c
+
+between commit:
+
+  b48e412a0b73 ("random: selectively clang-format where it makes sense")
+
+from the random tree and patch:
+
+  "random: move the random sysctl declarations to its own file"
+
+from the akpm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/char/random.c
+index b04664fa61a2,2ce43609dbc8..000000000000
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@@ -2055,7 -2076,18 +2054,18 @@@ static struct ctl_table random_table[]=20
+  #endif
+  	{ }
+  };
++=20
++ /*
++  * rand_initialize() is called before sysctl_init(),
++  * so we cannot call register_sysctl_init() in rand_initialize()
++  */
++ static int __init random_sysctls_init(void)
++ {
++ 	register_sysctl_init("kernel/random", random_table);
++ 	return 0;
++ }
++ device_initcall(random_sysctls_init);
+ -#endif 	/* CONFIG_SYSCTL */
+ +#endif	/* CONFIG_SYSCTL */
+ =20
+  struct batched_entropy {
+  	union {
+
+--Sig_/HnRFYszX4qkU+HoY/VBET3S
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHmHVkACgkQAVBC80lX
+0GwnYQf/fSVq8cqI92+/P6EHMHjoKIVR7fJG9FtXMcMwodg7wTjiRfwSHc90emOZ
+JVIQ97rLn+oW/vteFiwcJovEy9LzW/rtYyrHDHFJAvcslPWVEBkkAX3iYZGbQTAf
+4QTtJl5XXTJR6afLixC3avjkdhq/2wRE+m22ztlBqWL12iafCszgZuVqpEbIXGyc
+uRmyqPEn4r+9i0/nDRw46S3T71U+jSPDj3Hqrm0Wi1gvvbtzcNb937xtTw2zRNLD
+OvJ+dN3GLj25OEwd/NyaqAZzwAdUDuFftNi67E+8/fVOeDcX8wFxjMTFwlQrYGMh
+efprWeoaOMZr85KHOosWhuzMYhTx4g==
+=bq0K
+-----END PGP SIGNATURE-----
+
+--Sig_/HnRFYszX4qkU+HoY/VBET3S--

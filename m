@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F4B491365
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF61E491369
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 02:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238731AbiARBce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 20:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiARBcd (ORCPT
+        id S238777AbiARBcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 20:32:51 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:36428 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229705AbiARBcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:32:33 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DE6C061574;
-        Mon, 17 Jan 2022 17:32:33 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9dMF-002gha-WE; Tue, 18 Jan 2022 01:32:24 +0000
-Date:   Tue, 18 Jan 2022 01:32:23 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
- <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        Mon, 17 Jan 2022 20:32:50 -0500
+Received: by mail-ot1-f46.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso9571427otl.3;
+        Mon, 17 Jan 2022 17:32:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=P+Jxt0OvUrJ81v3jLKHEhk3u+ZCM+iY0mn9/RH2Mh1M=;
+        b=E7nrj5NvGOdT93pGBSG47DBUcQ1ISjAJR1UpXIwgpxqpI7UqE+Fx99+fm44VjcieER
+         nUOIoYJWgJQ41yY7G/A8fMqORkHVVsWnEf7tnt5JWxggIPpucspV7hIlXZbW6S7SFNxp
+         sMk4RR9yLm1osXHxuouyAo1DFI3Y+S+GXQVyK53f7r/hjRgC0ayJQoOzwWcTH30MckTg
+         44kWbrSpo5SPEGcocZXYB8oMH6f9JkD8pPa05/2MuJ8hhjBi9onyDTVqXVuKovO+CkOr
+         40Xcoblk2Hz3tSkaWFnshcWQaxRWHzXUCY/bNPCysxtEtxSrnpMnbgOHFZO7wTZ58bj1
+         ipUQ==
+X-Gm-Message-State: AOAM530ShVGuHuXHUagzXYdmyMlJ3BIxiYxaB16Sv0SHKQ0oRvBn/BOE
+        Z4LqiXDVDprWFWxlQ2aHFQ==
+X-Google-Smtp-Source: ABdhPJyUxD44GqSdP2i8ENrUIUJgbz0fin17AvAH/WFnn7fl33LyokLUv4ETiqhK5I/PAMSt4H0rLw==
+X-Received: by 2002:a9d:77c7:: with SMTP id w7mr5073140otl.48.1642469569535;
+        Mon, 17 Jan 2022 17:32:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s11sm1976253otv.19.2022.01.17.17.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 17:32:48 -0800 (PST)
+Received: (nullmailer pid 545740 invoked by uid 1000);
+        Tue, 18 Jan 2022 01:32:47 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <ba6346942dfed14440e0243a6da510581389fbdd.1642434222.git.sylv@sylv.io>
+References: <cover.1642434222.git.sylv@sylv.io> <ba6346942dfed14440e0243a6da510581389fbdd.1642434222.git.sylv@sylv.io>
+Subject: Re: [PATCH v1 2/4] dt-bindings: hwmon/pmbus: Add vicor,bcm6123 Bus Converter
+Date:   Mon, 17 Jan 2022 19:32:47 -0600
+Message-Id: <1642469567.779234.545737.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 07:48:49PM +0000, Al Viro wrote:
-> > But that critically depends upon the contents not getting mangled.  If it
-> > *can* be screwed by such unlink, we risk successful lookup leading to the
-> > wrong place, with nothing to tell us that it's happening.  We could handle
-> > that by adding a check to fs/namei.c:put_link(), and propagating the error
-> > to callers.  It's not impossible, but it won't be pretty.
-> > 
-> > And that assumes we avoid oopsen on string changing under us in the first
-> > place.  Which might or might not be true - I hadn't finished the audit yet.
-> > Note that it's *NOT* just fs/namei.c + fs/dcache.c + some fs methods -
-> > we need to make sure that e.g. everything called by ->d_hash() instances
-> > is OK with strings changing right under them.  Including utf8_to_utf32(),
-> > crc32_le(), utf8_casefold_hash(), etc.
+On Mon, 17 Jan 2022 17:12:48 +0100, Marcello Sylvester Bauer wrote:
+> Add bindings for BCM6123 Bus Converter from Vicor Corporation.
 > 
-> And AFAICS, ext4, xfs and possibly ubifs (I'm unfamiliar with that one and
-> the call chains there are deep enough for me to miss something) have the
-> "bugger the contents of string returned by RCU ->get_link() if unlink()
-> happens" problem.
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> ---
+>  .../bindings/hwmon/pmbus/vicor,bcm6123.yaml   | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml
 > 
-> I would very much prefer to have them deal with that crap, especially
-> since I don't see why does ext4_evict_inode() need to do that memset() -
-> can't we simply check ->i_op in ext4_can_truncate() and be done with
-> that?
 
-This reuse-without-delay has another fun side, AFAICS.  Suppose the new use
-for inode comes with the same ->i_op (i.e. it's a symlink again) and it
-happens right after ->get_link() has returned the pointer to body.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-We are already past whatever checks we might add in pick_link().  And the
-pointer is still valid.  So we end up quietly traversing the body of
-completely unrelated symlink that never had been anywhere near any directory
-we might be looking at.  With no indication of anything going wrong - just
-a successful resolution with bogus result.
+yamllint warnings/errors:
 
-Could XFS folks explain what exactly goes wrong if we make actual marking
-inode as ready for reuse RCU-delayed, by shifting just that into
-->free_inode()?  Why would we need any extra synchronize_rcu() anywhere?
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml: 'maintainers' is a required property
+	hint: Metaschema for devicetree binding documentation
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.yaml: ignoring, error in schema: 
+Documentation/devicetree/bindings/hwmon/pmbus/vicor,bcm6123.example.dt.yaml:0:0: /example-0/i2c/bcm6123@5f: failed to match any schema with compatible: ['vicor,bcm6123']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1580909
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

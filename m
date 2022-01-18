@@ -2,147 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCC6492CC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8755D492CAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347751AbiARRxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:53:49 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39860 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347631AbiARRxk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:53:40 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id E3C891F43F91
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642528419;
-        bh=ZPlwOY+VgFIW9bHeyG/JUeeqGePchWBvBOtEUiWKy3I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DyPU9PXksdffKxY7Ta1zW9QlKCUVAuJ4P+lcAriv5Hy0Udy9vRrEsQAjWaGAoWlPO
-         NbaBGQ3pLb/MDcBqEQUtkfhnzQnZ3NinU0Je2UG+uUGcTyiWRP0rRCSfmbeBeFVkUO
-         Jm2/J3xzCIJuKvI4Ot3+GDKD86+3OCBJ4zPXyuAZ+gBn1jaU7HpnlkICEObwclIGQp
-         rRK1J526JtjSdELf2QqOdTyAFWxSZTGg5UlNXfX63xMyxkh0m0OG9ryWlN4hpx62AW
-         8T+cHr8WKoB3nJd466j7xUTRbClW5cYXQZT+eVEBQGmwna17Adp/rwRjh8KtDn2mF8
-         bmWcUp5MkRgVg==
-From:   Robert Beckett <bob.beckett@collabora.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Jordan Justen <jordan.l.justen@intel.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] drm/i915/uapi: document behaviour for DG2 64K support
-Date:   Tue, 18 Jan 2022 17:50:37 +0000
-Message-Id: <20220118175036.3840934-5-bob.beckett@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220118175036.3840934-1-bob.beckett@collabora.com>
-References: <20220118175036.3840934-1-bob.beckett@collabora.com>
+        id S1347553AbiARRvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:51:05 -0500
+Received: from foss.arm.com ([217.140.110.172]:34458 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229934AbiARRvE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 12:51:04 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34280D6E;
+        Tue, 18 Jan 2022 09:51:04 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.37.52])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4186C3F774;
+        Tue, 18 Jan 2022 09:50:55 -0800 (PST)
+Date:   Tue, 18 Jan 2022 17:50:51 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup.patel@wdc.com,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
+        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
+        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
+        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
+Message-ID: <20220118175051.GE17938@C02TD0UTHF1T.local>
+References: <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
+ <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
+ <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
+ <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
+ <YeGUnwhbSvwJz5pD@FVFF77S0Q05N>
+ <8aa0cada-7f00-47b3-41e4-8a9e7beaae47@redhat.com>
+ <20220118120154.GA17938@C02TD0UTHF1T.local>
+ <6b6b8a2b-202c-8966-b3f7-5ce35cf40a7e@linux.ibm.com>
+ <20220118131223.GC17938@C02TD0UTHF1T.local>
+ <yt9dfsplc9fu.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dfsplc9fu.fsf@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Auld <matthew.auld@intel.com>
+On Tue, Jan 18, 2022 at 05:09:25PM +0100, Sven Schnelle wrote:
+> Hi Mark,
 
-On discrete platforms like DG2, we need to support a minimum page size
-of 64K when dealing with device local-memory. This is quite tricky for
-various reasons, so try to document the new implicit uapi for this.
+Hi Sven,
 
-v2: Fixed suggestions on formatting [Daniel]
+> Mark Rutland <mark.rutland@arm.com> writes:
+> > On Tue, Jan 18, 2022 at 01:42:26PM +0100, Christian Borntraeger wrote:
+> >> Will you provide an s390 patch in your next iteration or shall we then do
+> >> one as soon as there is a v2? We also need to look into vsie.c where we
+> >> also call sie64a
+> >
+> > I'm having a go at that now; my plan is to try to have an s390 patch as
+> > part of v2 in the next day or so.
+> >
+> > Now that I have a rough idea of how SIE and exception handling works on
+> > s390, I think the structural changes to kvm-s390.c:__vcpu_run() and
+> > vsie.c:do_vsie_run() are fairly simple.
+> >
+> > The only open bit is exactly how/where to identify when the interrupt
+> > entry code needs to wake RCU. I can add a per-cpu variable or thread
+> > flag to indicate that we're inside that EQS, or or I could move the irq
+> > enable/disable into the sie64a asm and identify that as with the OUTSIDE
+> > macro in the entry asm.
+> 
+> I wonder whether the code in irqentry_enter() should call a function
+> is_eqs() instead of is_idle_task(). The default implementation would
+> be just a
+> 
+> #ifndef is_eqs
+> #define is_eqs is_idle_task
+> #endif
+> 
+> and if an architecture has special requirements, it could just define
+> is_eqs() and do the required checks there. This way the architecture
+> could define whether it's a percpu bit, a cpu flag or something else.
 
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-cc: Simon Ser <contact@emersion.fr>
-cc: Pekka Paalanen <ppaalanen@gmail.com>
-Cc: Jordan Justen <jordan.l.justen@intel.com>
-Cc: Kenneth Graunke <kenneth@whitecape.org>
-Cc: mesa-dev@lists.freedesktop.org
-Cc: Tony Ye <tony.ye@intel.com>
-Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
----
- include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
+I had come to almost the same approach: I've added an arch_in_rcu_eqs()
+which is checked in addition to the existing is_idle_thread() check.
 
-diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
-index 5e678917da70..486b7b96291e 100644
---- a/include/uapi/drm/i915_drm.h
-+++ b/include/uapi/drm/i915_drm.h
-@@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
- 	/**
- 	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
- 	 * the user with the GTT offset at which this object will be pinned.
-+	 *
- 	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
- 	 * presumed_offset of the object.
-+	 *
- 	 * During execbuffer2 the kernel populates it with the value of the
- 	 * current GTT offset of the object, for future presumed_offset writes.
-+	 *
-+	 * See struct drm_i915_gem_create_ext for the rules when dealing with
-+	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
-+	 * minimum page sizes, like DG2.
- 	 */
- 	__u64 offset;
- 
-@@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
- 	 *
- 	 * The (page-aligned) allocated size for the object will be returned.
- 	 *
--	 * Note that for some devices we have might have further minimum
--	 * page-size restrictions(larger than 4K), like for device local-memory.
--	 * However in general the final size here should always reflect any
--	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
--	 * extension to place the object in device local-memory.
-+	 *
-+	 * **DG2 64K min page size implications:**
-+	 *
-+	 * On discrete platforms, starting from DG2, we have to contend with GTT
-+	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
-+	 * objects.  Specifically the hardware only supports 64K or larger GTT
-+	 * page sizes for such memory. The kernel will already ensure that all
-+	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
-+	 * sizes underneath.
-+	 *
-+	 * Note that the returned size here will always reflect any required
-+	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
-+	 * such as DG2.
-+	 *
-+	 * **Special DG2 GTT address alignment requirement:**
-+	 *
-+	 * The GTT alignment will also need be at least 2M for  such objects.
-+	 *
-+	 * Note that due to how the hardware implements 64K GTT page support, we
-+	 * have some further complications:
-+	 *
-+	 *   1) The entire PDE(which covers a 2MB virtual address range), must
-+	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
-+	 *   PDE is forbidden by the hardware.
-+	 *
-+	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
-+	 *   objects.
-+	 *
-+	 * To keep things simple for userland, we mandate that any GTT mappings
-+	 * must be aligned to and rounded up to 2MB. As this only wastes virtual
-+	 * address space and avoids userland having to copy any needlessly
-+	 * complicated PDE sharing scheme (coloring) and only affects GD2, this
-+	 * id deemed to be a good compromise.
- 	 */
- 	__u64 size;
- 	/**
--- 
-2.25.1
+In the case of checking is_idle_thread() and checking for PF_VCPU, I'm
+assuming the compiler can merge the loads of current->flags, and there's
+little gain by making this entirely architecture specific, but we can
+always check that and/or reconsider in future.
 
+Thanks,
+Mark.

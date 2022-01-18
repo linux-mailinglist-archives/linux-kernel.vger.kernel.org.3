@@ -2,133 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B4C492955
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45423492948
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344878AbiARPCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:02:24 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:52277 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345851AbiARPBZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:01:25 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220118150123epoutp03a66062876ce132ec6d42a69b46553ec5~LZX58sr--2046620466epoutp033
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 15:01:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220118150123epoutp03a66062876ce132ec6d42a69b46553ec5~LZX58sr--2046620466epoutp033
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642518083;
-        bh=cDzU9XPSHyqNaH4M/h3DMF34FfVxlA1olgy2CMDDxG0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gddQ2jI1KAouQePhCJVLMYLVcPE0xmjs/67PTxhavVC8OFwNpGfMaGJXJQZsi3DXG
-         Vu/cjsM/g4J/aFIu+aM3Q8IeXTqI41xd/lb5luAVl1NzcUkajYmOCf5JMjEjLIfAD7
-         VBNpweth8IZheQiTaK13Y0z+r8kywYUe/tDwJjSQ=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220118150122epcas5p352b0adde5cc2ab507bf2e15329c92a81~LZX4_5vHW0676106761epcas5p3E;
-        Tue, 18 Jan 2022 15:01:22 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4JdX646441z4x9Pt; Tue, 18 Jan
-        2022 15:01:16 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7D.29.06423.C36D6E16; Wed, 19 Jan 2022 00:01:16 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926~LZXzfNSlp1276312763epcas5p4M;
-        Tue, 18 Jan 2022 15:01:16 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220118150116epsmtrp20c26a06e9e08a384894795fafd4e8b86~LZXzeXnTn2220222202epsmtrp2W;
-        Tue, 18 Jan 2022 15:01:16 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-75-61e6d63cdda6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BB.F0.08738.B36D6E16; Wed, 19 Jan 2022 00:01:15 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220118150113epsmtip141d860c53dc5dbb6c894d36d8f6808fb~LZXxS7_hk0520405204epsmtip1Z;
-        Tue, 18 Jan 2022 15:01:13 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
-        pankaj.dubey@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-fsd@tesla.com
-Subject: [PATCH v2 16/16] arm64: defconfig: Enable Tesla FSD SoC
-Date:   Tue, 18 Jan 2022 20:18:51 +0530
-Message-Id: <20220118144851.69537-17-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220118144851.69537-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmpq7NtWeJBsvm6Vk8mLeNzeLvpGPs
-        Fu+X9TBazD9yjtVi49sfTBZT/ixnstj0+Bqrxceee6wWD1+FW1zeNYfNYsb5fUwWp65/ZrNY
-        tPULu0Xr3iPsFofftLNaPL7+h81BwGPNvDWMHr9/TWL0mNXQy+axaVUnm8eda3vYPDYvqfe4
-        cqKJ1aNvyypGj39Nc9k9Pm+SC+CKyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQw
-        V1LIS8xNtVVy8QnQdcvMAXpFSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgUqBX
-        nJhbXJqXrpeXWmJlaGBgZApUmJCdMfNxH1PBT5aKOd9WsTUwLmbpYuTkkBAwkdj3/zNrFyMX
-        h5DAbkaJc7/bmCCcT4wSi/8vg8p8ZpRY9ayTEaZl8tYTjBCJXYwSHRf+sUA4LUwSu5a8YQep
-        YhPQlrg7fQsTiC0i4CZxo7EDbC6zwFsmien7vrOBJIQFHCQeXJoGNpZFQFViQeNqsAZeAVuJ
-        NXu6mCDWyUus3nCAGcTmBIpPbZjKBjJIQmAth0TrigNQN7lI7F1yhx3CFpZ4dXwLlC0l8fnd
-        XqAGDiA7W6JnlzFEuEZi6bxj0BCwlzhwZQ4LSAmzgKbE+l36IGFmAT6J3t9PmCA6eSU62oQg
-        qlUlmt9dheqUlpjY3c0KYXtIbLn6BBpaExglpk5/wzqBUXYWwtQFjIyrGCVTC4pz01OLTQsM
-        81LL4TGVnJ+7iRGcRLU8dzDeffBB7xAjEwfjIUYJDmYlEV6p+meJQrwpiZVVqUX58UWlOanF
-        hxhNgUE2kVlKNDkfmMbzSuINTSwNTMzMzEwsjc0MlcR5T6dvSBQSSE8sSc1OTS1ILYLpY+Lg
-        lGpgEpGSPKLMa2XHWP7XO03oWv7uC8JbPwlU9P3Lmjhn63LPaH6rB5cc11YeerjRs9pwkqb1
-        7H0+vhmCp2YV3Hwl9s4s7Lr9fpu9r3Ky0necWVvomSZmLRCa5TLbc73vwe/1U9aF8gScs1Pq
-        VIl2ftcYxKq+W132loG5xcuo/ElTuz4vfWn1/LvERcVrqx+VSjKorN+uWrxt+YVJZtGx26Vy
-        bT7faAzarXpil9qZSRMVrmgfPXyMZ+ukye6eJ03Yi4/VvdF8+uE5w/qLW2WNMic9f7GQ/1oL
-        e/c3VgmPxvTpcyu8vY+ssbK3NXO+IpNx7tSn2yprtrEHnE2Pbloepa0/I7vOxuX/nsmv19gd
-        MPhyRYmlOCPRUIu5qDgRAFClocorBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSnK7NtWeJBtdPM1o8mLeNzeLvpGPs
-        Fu+X9TBazD9yjtVi49sfTBZT/ixnstj0+Bqrxceee6wWD1+FW1zeNYfNYsb5fUwWp65/ZrNY
-        tPULu0Xr3iPsFofftLNaPL7+h81BwGPNvDWMHr9/TWL0mNXQy+axaVUnm8eda3vYPDYvqfe4
-        cqKJ1aNvyypGj39Nc9k9Pm+SC+CK4rJJSc3JLEst0rdL4MqY+biPqeAnS8Wcb6vYGhgXs3Qx
-        cnJICJhITN56grGLkYtDSGAHo8T31T8YIRLSEtc3TmCHsIUlVv57zg5R1MQk0bVpLTNIgk1A
-        W+Lu9C1MILaIgIdE2797zCBFzAJ/mSS+vn4INklYwEHiwaVpYDaLgKrEgsbVYA28ArYSa/Z0
-        MUFskJdYveEA2FBOoPjUhqlsILaQgI3ExZXTmCcw8i1gZFjFKJlaUJybnltsWGCUl1quV5yY
-        W1yal66XnJ+7iREcAVpaOxj3rPqgd4iRiYPxEKMEB7OSCK9U/bNEId6UxMqq1KL8+KLSnNTi
-        Q4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpj6e26EpB27Wvjl4e+Z/zZItUxK3cq1
-        9gfrP5HHeRFpefqRUecm5NnlLvZRY7tkNtfwM6/Ii8hLbKWacze2seyU3Bay8XgWl27kydLV
-        sfkapy6+O7qoQ+Ti3lpz4RW9Wut4V1o7m8TzPl8+wcb9ePHnhaZOm5qnP1S2vRS+mXvX7qjo
-        qov3p/J8r5n1WzhN1GhfqKXjWsbyPXUqP0Pv/xRwT5nd7dzQN/UJx4MLr944JT/7y/AxdE7N
-        USdvtd0G6lv3evkmzrm8L2GF4g1uJ93S6eEOt7yXrGu/M9PyS77fyhtXZmhMvHK56OHTta0i
-        1sG8PNfn/76wQFl263Fux1qvtwon+WJNEjZ1MfkFqk5TYinOSDTUYi4qTgQAAtDPke8CAAA=
-X-CMS-MailID: 20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
-        <CGME20220118150116epcas5p415b4b658b3ca3fe5e52e11a33546b926@epcas5p4.samsung.com>
+        id S1345321AbiARPCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:02:14 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:35652 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345850AbiARPB0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:01:26 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1n9pyn-00084x-Lw; Tue, 18 Jan 2022 16:01:01 +0100
+Message-ID: <010ef70c-31a2-2831-a2a7-950db14baf23@maciej.szmigiero.name>
+Date:   Tue, 18 Jan 2022 16:00:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-7-nikunj@amd.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
+ sev_launch_update_data()
+In-Reply-To: <20220118110621.62462-7-nikunj@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables the Tesla FSD SoC in arm64 defconfig.
+Hi Nikunj,
 
-Cc: linux-fsd@tesla.com
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 18.01.2022 12:06, Nikunj A Dadhania wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> 
+> Pin the memory for the data being passed to launch_update_data()
+> because it gets encrypted before the guest is first run and must
+> not be moved which would corrupt it.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
+>    * Updated sev_pin_memory_in_mmu() error handling.
+>    * As pinning/unpining pages is handled within MMU, removed
+>      {get,put}_user(). ]
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> ---
+>   arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 119 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 14aeccfc500b..1ae714e83a3c 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -22,6 +22,7 @@
+>   #include <asm/trapnr.h>
+>   #include <asm/fpu/xcr.h>
+>   
+> +#include "mmu.h"
+>   #include "x86.h"
+>   #include "svm.h"
+>   #include "svm_ops.h"
+> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
+>   	return pages;
+>   }
+>   
+> +#define SEV_PFERR_RO (PFERR_USER_MASK)
+> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
+> +
+> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
+> +					      unsigned long hva)
+> +{
+> +	struct kvm_memslots *slots = kvm_memslots(kvm);
+> +	struct kvm_memory_slot *memslot;
+> +	int bkt;
+> +
+> +	kvm_for_each_memslot(memslot, bkt, slots) {
+> +		if (hva >= memslot->userspace_addr &&
+> +		    hva < memslot->userspace_addr +
+> +		    (memslot->npages << PAGE_SHIFT))
+> +			return memslot;
+> +	}
+> +
+> +	return NULL;
+> +}
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ee4bd7710a0d..7dd0693a233e 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -54,6 +54,7 @@ CONFIG_ARCH_SEATTLE=y
- CONFIG_ARCH_INTEL_SOCFPGA=y
- CONFIG_ARCH_SYNQUACER=y
- CONFIG_ARCH_TEGRA=y
-+CONFIG_ARCH_TESLA_FSD=y
- CONFIG_ARCH_SPRD=y
- CONFIG_ARCH_THUNDER=y
- CONFIG_ARCH_THUNDER2=y
--- 
-2.25.1
+We have kvm_for_each_memslot_in_hva_range() now, please don't do a linear
+search through memslots.
+You might need to move the aforementioned macro from kvm_main.c to some
+header file, though.
 
+> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
+> +{
+> +	struct kvm_memory_slot *memslot;
+> +	gpa_t gpa_offset;
+> +
+> +	memslot = hva_to_memslot(kvm, hva);
+> +	if (!memslot)
+> +		return UNMAPPED_GVA;
+> +
+> +	*ro = !!(memslot->flags & KVM_MEM_READONLY);
+> +	gpa_offset = hva - memslot->userspace_addr;
+> +	return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
+> +}
+> +
+> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
+> +					   unsigned long size,
+> +					   unsigned long *npages)
+> +{
+> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +	struct kvm_vcpu *vcpu;
+> +	struct page **pages;
+> +	unsigned long i;
+> +	u32 error_code;
+> +	kvm_pfn_t pfn;
+> +	int idx, ret = 0;
+> +	gpa_t gpa;
+> +	bool ro;
+> +
+> +	pages = sev_alloc_pages(sev, addr, size, npages);
+> +	if (IS_ERR(pages))
+> +		return pages;
+> +
+> +	vcpu = kvm_get_vcpu(kvm, 0);
+> +	if (mutex_lock_killable(&vcpu->mutex)) {
+> +		kvfree(pages);
+> +		return ERR_PTR(-EINTR);
+> +	}
+> +
+> +	vcpu_load(vcpu);
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +
+> +	kvm_mmu_load(vcpu);
+> +
+> +	for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
+> +		if (signal_pending(current)) {
+> +			ret = -ERESTARTSYS;
+> +			break;
+> +		}
+> +
+> +		if (need_resched())
+> +			cond_resched();
+> +
+> +		gpa = hva_to_gpa(kvm, addr, &ro);
+> +		if (gpa == UNMAPPED_GVA) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+
+This function is going to have worst case O(n²) complexity if called with
+the whole VM memory (or O(n * log(n)) when hva_to_memslot() is modified
+to use kvm_for_each_memslot_in_hva_range()).
+
+That's really bad for something that can be done in O(n) time - look how
+kvm_for_each_memslot_in_gfn_range() does it over gfns.
+
+Thanks,
+Maciej

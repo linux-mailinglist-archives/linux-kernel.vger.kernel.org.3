@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B3E492A4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D4D492A99
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 17:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346896AbiARQI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 11:08:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39272 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346502AbiARQIE (ORCPT
+        id S1347483AbiARQLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 11:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346958AbiARQKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:08:04 -0500
+        Tue, 18 Jan 2022 11:10:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D65C061751;
+        Tue, 18 Jan 2022 08:09:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC51061295;
-        Tue, 18 Jan 2022 16:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 893ADC00446;
-        Tue, 18 Jan 2022 16:08:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94CC8612DB;
+        Tue, 18 Jan 2022 16:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D41BC00446;
+        Tue, 18 Jan 2022 16:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642522083;
-        bh=ooeCTXbsV8TK6eaXLbRZtrYYQnam86g0dB0LpTyoBqI=;
+        s=korg; t=1642522199;
+        bh=r8FlrmrI35vVyw0pyT1BmGPRhUYFl0eRGJhsRoVy3tw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HLamsNEwvYUE7duix9oUK41QQfoCFXh2WALp64CBHYXEQFVlmbxMkLjYoZgUBV23p
-         isKPOxrxXQhYKEWRlKDm8Ub4rL+mYp808pK81i4ryeyJn3qFIHpqxd74pplql+CrLt
-         IJ45EQoIB/dNNNSwk5GJXBtZgI9LYwLe0+3aH0ig=
+        b=UtUfidkSvc2cUzfxjmcPADpfleJt9mA3ycsE04REMSaZdmzrgDzjuaECo7EehmtE3
+         OtXdSaUVz8CY0Np0akprvdaYZL6lh8bEx8NDSHt3SlRdLhm2YdojmjNrGsQEY9LdPY
+         13QGdolBLBd1ZgZM0MlcUMwE+nvo24LMexPaGlGw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Kroon <bart@tarmack.eu>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 19/23] ALSA: hda: ALC287: Add Lenovo IdeaPad Slim 9i 14ITL5 speaker quirk
+        stable@vger.kernel.org, Kris Karas <bugs-a21@moonlit-rail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 5.15 13/28] video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
 Date:   Tue, 18 Jan 2022 17:05:59 +0100
-Message-Id: <20220118160451.894324845@linuxfoundation.org>
+Message-Id: <20220118160452.320685489@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
-References: <20220118160451.233828401@linuxfoundation.org>
+In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
+References: <20220118160451.879092022@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,36 +49,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Kroon <bart@tarmack.eu>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-commit b81e9e5c723de936652653241d3dc4f33ae05e8c upstream.
+commit 0499f419b76f94ede08304aad5851144813ac55c upstream.
 
-The speaker fixup that is used for the Yoga 7 14ITL5 also applies to
-the IdeaPad Slim 9i 14ITL5. The attached patch applies the quirk to
-initialise the amplifier on the IdeaPad Slim 9i as well.
+The vga16fb framebuffer driver only supports Enhanced Graphics Adapter
+(EGA) and Video Graphics Array (VGA) 16 color graphic cards.
 
-This is validated to work on my laptop.
+But it doesn't check if the adapter is one of those or if a VGA16 mode
+is used. This means that the driver will be probed even if a VESA BIOS
+Extensions (VBE) or Graphics Output Protocol (GOP) interface is used.
 
-[ corrected the quirk entry position by tiwai ]
+This issue has been present for a long time but it was only exposed by
+commit d391c5827107 ("drivers/firmware: move x86 Generic System
+Framebuffers support") since the platform device registration to match
+the {vesa,efi}fb drivers is done later as a consequence of that change.
 
-Signed-off-by: Bart Kroon <bart@tarmack.eu>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/JAG24R.7NLJGWBF4G8U@tarmack.eu
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+All non-x86 architectures though treat orig_video_isVGA as a boolean so
+only do the supported video mode check for x86 and not for other arches.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215001
+Fixes: d391c5827107 ("drivers/firmware: move x86 Generic System Framebuffers support")
+Reported-by: Kris Karas <bugs-a21@moonlit-rail.com>
+Cc: <stable@vger.kernel.org> # 5.15.x
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Tested-by: Kris Karas <bugs-a21@moonlit-rail.com>
+Acked-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220110095625.278836-3-javierm@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/video/fbdev/vga16fb.c |   24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8887,6 +8887,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
- 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
- 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
-+	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
- 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+--- a/drivers/video/fbdev/vga16fb.c
++++ b/drivers/video/fbdev/vga16fb.c
+@@ -184,6 +184,25 @@ static inline void setindex(int index)
+ 	vga_io_w(VGA_GFX_I, index);
+ }
+ 
++/* Check if the video mode is supported by the driver */
++static inline int check_mode_supported(void)
++{
++	/* non-x86 architectures treat orig_video_isVGA as a boolean flag */
++#if defined(CONFIG_X86)
++	/* only EGA and VGA in 16 color graphic mode are supported */
++	if (screen_info.orig_video_isVGA != VIDEO_TYPE_EGAC &&
++	    screen_info.orig_video_isVGA != VIDEO_TYPE_VGAC)
++		return -ENODEV;
++
++	if (screen_info.orig_video_mode != 0x0D &&	/* 320x200/4 (EGA) */
++	    screen_info.orig_video_mode != 0x0E &&	/* 640x200/4 (EGA) */
++	    screen_info.orig_video_mode != 0x10 &&	/* 640x350/4 (EGA) */
++	    screen_info.orig_video_mode != 0x12)	/* 640x480/4 (VGA) */
++		return -ENODEV;
++#endif
++	return 0;
++}
++
+ static void vga16fb_pan_var(struct fb_info *info, 
+ 			    struct fb_var_screeninfo *var)
+ {
+@@ -1422,6 +1441,11 @@ static int __init vga16fb_init(void)
+ 
+ 	vga16fb_setup(option);
+ #endif
++
++	ret = check_mode_supported();
++	if (ret)
++		return ret;
++
+ 	ret = platform_driver_register(&vga16fb_driver);
+ 
+ 	if (!ret) {
 
 

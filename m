@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B69493106
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A8F493110
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 23:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350076AbiARWwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 17:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S1350114AbiARWya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 17:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240919AbiARWwd (ORCPT
+        with ESMTP id S231467AbiARWyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 17:52:33 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63F0C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:52:32 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id y10-20020a2586ca000000b006116aaeeee6so972050ybm.21
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:52:32 -0800 (PST)
+        Tue, 18 Jan 2022 17:54:25 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65431C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:54:25 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id z22so1467869ybi.11
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 14:54:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=+mzcJD1f4b16ra0GiHtWZ6d+B5dxCbu0iOYX1yklcN0=;
-        b=V2k6FqTnHCv81lfCofpGjlfsSFnf4w2i3VXnqucVxtJYzgsFuqDUPXRM/A3pAYQIf2
-         21zjW+AWg8beUxVB1OUmwjcX2XG4GpgtKnO3zixtmTM0yjFqdFqmGmIfsfeZ+wFbu4OY
-         b7lwPifB2TCUghDUNrWRJsjLc/qv6XfgHiQ50q9JLg9BigKpFIQfwRuUWB88TEqfeoxc
-         TpDGQjbdSDeCDQM1RZfFXoU4AqU44ElwX277YmqXJ2MWER2xZce2xzdCiWIua13C7Lhx
-         bTxckfTF4VcWFPURq6g303V3YGBw81TQz+3TAyp0fNlesoY9BTq+RBvy12L5Ps7evyH9
-         gHDw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2A0o9RStrnIxmL11KBIrT0fGYmNaZT0XLIaxHQF5rjs=;
+        b=dag6jxRDJUEiQYlvYUtjYS/OfkScCbS15kuV1kOlQvrem03MJYgdAwaEHsk7xkMGTO
+         kFHIj3pxg2l26Gamk9bynAV2Zfontn1hV5i3Z18gq3jN3xjnwhxB20CVOjA4+vlA0R02
+         ceyCS6rF1ci0H0IzntFxCa97kN3hwPwH9Z5sBLk8kMfM4ZECEp0lNsPAGgF1rYgVCvUR
+         PGkIyNBVj8eZ5YoiH4PXKb+AZcWt0b511F2zYUm4g2+HsrQfl/5+64z1s3gsYWingZHi
+         WN++EpOE6AguKoOdixg8BZ9R5wasNuqelZQvKvhUyQa3VDRdqhnIkSRieTj99s3sWzle
+         ku3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=+mzcJD1f4b16ra0GiHtWZ6d+B5dxCbu0iOYX1yklcN0=;
-        b=0Sdb4B1+Z8pbarddRhp/PcRxVWwwO6w/BS/9VdLudgvZ60UyY95JPhZaliCc6uFJMj
-         0WVWHIJfLQW02PltzbFqnYv3FI/zaP8EbFQXJPdhz+2L4dXNF0+MoclHT9KxTGhYoYh/
-         VeUO5nz1PGiECIGo7bUw16tbyE3cOnpi164b/B2MfC1TB7yzsz20oRfmU+MOZ9jrfsXr
-         auojsbbi4JujXJEdsFCSTufp6sYgKogHLbsYgvizW+UDNnDfaphp5MtatCQResVEJI7d
-         C7N41q+aITiNaa+fR3fazVDAJhim9NcbxAZMbwyzu2d780cRIzKXMqnhcXzSvM6bSh3J
-         pIgw==
-X-Gm-Message-State: AOAM532OppZQzHJ5OYpiqa1JHRAl5JEEYhSCsA+1v65eL+O98iCvQLlC
-        QddiSsApfJpN/Dr0Oz+vcpXUq7A=
-X-Google-Smtp-Source: ABdhPJzN+1lslSfZER8W3Mqe56Ilvc9Szjyr00149NsPQLB1VCQs9NPmdqhrpfxWCJH0Cf26KGI27lw=
-X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:1443:965d:6393:cd60])
- (user=pcc job=sendgmr) by 2002:a25:b683:: with SMTP id s3mr34831611ybj.293.1642546352072;
- Tue, 18 Jan 2022 14:52:32 -0800 (PST)
-Date:   Tue, 18 Jan 2022 14:52:15 -0800
-Message-Id: <20220118225215.318101-1-pcc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH v2] mm: use compare-exchange operation to set KASAN page tag
-From:   Peter Collingbourne <pcc@google.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2A0o9RStrnIxmL11KBIrT0fGYmNaZT0XLIaxHQF5rjs=;
+        b=AnLsTnGpm7cQk7mNX4jjQjiQhadshOyjGlJcRDVxtUgq6CldASa2yHwezWvBYjYbbM
+         R7rBSVG9bXHFTuTiZ4ecDqZhH9tE2E4L3UOX3YQxyl9Rnily+RS5Wc1k1x0fylnVCOuE
+         FXSBBhmHzSv2w4w83MGFX9a740s1gC+3WLVgSw4xVGtUNBBE+cMXzGtePEprImxdaDbf
+         WlDVrwzrHbQho35L34ia7rUhPsWF4a4tE7xndh5Pk1s2XHBwZmHko4KIL8DbyS0JJISM
+         Xk2JL005OIbNI7ggYfSfrNh4o1/NS1qk4YMPU+YZSUp0KtlvymDlZkavPYY2HXXIg69q
+         0FXg==
+X-Gm-Message-State: AOAM530HcafGvVk9aAuyiHRVr6ksS5FNvqmrmFaNKxePRhQOQWV3j8mj
+        +0yqklmCk19S9YykfTtMHaYI38zXUmPvkgozliE5/NtC81iLYQ==
+X-Google-Smtp-Source: ABdhPJwKhpxDqzsHYaDrecYU3+cgHLkJME7T1oocecMclqJnaqy7jDJK7leekDDAezlwQk6RPUBfNaub4qT6EIgRDRI=
+X-Received: by 2002:a25:d055:: with SMTP id h82mr6237602ybg.543.1642546464435;
+ Tue, 18 Jan 2022 14:54:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+ <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+ <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+ <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+ <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
+ <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
+ <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
+ <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
+ <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com>
+ <YeBfj89mIf8SezfD@google.com> <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
+In-Reply-To: <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 18 Jan 2022 14:54:13 -0800
+Message-ID: <CAJHc60zcwNskA7JCg9nQc4YhmLdziHVauf1gQQ48GHYtby_aYg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Reiji Watanabe <reijiw@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Peter Shier <pshier@google.com>,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jim Mattson <jmattson@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It has been reported that the tag setting operation on newly-allocated
-pages can cause the page flags to be corrupted when performed
-concurrently with other flag updates as a result of the use of
-non-atomic operations. Fix the problem by using a compare-exchange
-loop to update the tag.
+On Fri, Jan 14, 2022 at 1:51 PM Reiji Watanabe <reijiw@google.com> wrote:
+>
+> On Thu, Jan 13, 2022 at 9:21 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Wed, Jan 12, 2022, Raghavendra Rao Ananta wrote:
+> > > On Tue, Jan 11, 2022 at 11:16 AM Jim Mattson <jmattson@google.com> wrote:
+> > > > Perhaps it would help if you explained *why* you are doing this. It
+> > > > sounds like you are either trying to protect against a malicious
+> > > > userspace, or you are trying to keep userspace from doing something
+> > > > stupid. In general, kvm only enforces constraints that are necessary
+> > > > to protect the host. If that's what you're doing, I don't understand
+> > > > why live migration doesn't provide an end-run around your protections.
+> > > It's mainly to safeguard the guests. With respect to migration, KVM
+> > > and the userspace are collectively playing a role here. It's up to the
+> > > userspace to ensure that the registers are configured the same across
+> > > migrations and KVM ensures that the userspace doesn't modify the
+> > > registers after KVM_RUN so that they don't see features turned OFF/ON
+> > > during execution. I'm not sure if it falls into the definition of
+> > > protecting the host. Do you see a value in adding this extra
+> > > protection from KVM?
+> >
+> > Short answer: probably not?
+> >
+> > There is precedent for disallowing userspace from doing stupid things, but that's
+> > either for KVM's protection (as Jim pointed out), or because KVM can't honor the
+> > change, e.g. x86 is currently in the process of disallowing most CPUID changes
+> > after KVM_RUN because KVM itself consumes the CPUID information and KVM doesn't
+> > support updating some of it's own internal state (because removing features like
+> > GB hugepage support is nonsensical and would require a large pile of complicated,
+> > messy code).
+> >
+> > Restricing CPUID changes does offer some "protection" to the guest, but that's
+> > not the goal.  E.g. KVM won't detect CPUID misconfiguration in the migration
+> > case, and trying to do so is a fool's errand.
+> >
+> > If restricting updates in the arm64 is necessary to ensure KVM provides sane
+> > behavior, then it could be justified.  But if it's purely a sanity check on
+> > behalf of the guest, then it's not justified.
+>
+> The pseudo firmware hvc registers, which this series are adding, are
+> used by KVM to identify available hvc features for the guest, and not
+> directly exposed to the guest as registers.
+> The ways the KVM code in the series consumes the registers' values are
+> very limited, and no KVM data/state is created based on their values.
+> But, as the code that consumes the registers grows in the future,
+> I wouldn't be surprised if KVM consumes them differently than it does
+> now (e.g. create another data structure based on the register values).
+> I'm not sure though :)
+>
+> The restriction, with which KVM doesn't need to worry about the changes
+> in the registers after KVM_RUN, could potentially protect or be useful
+> to protect KVM and simplify future changes/maintenance of the KVM codes
+> that consumes the values.
+> I thought this was one of the reasons for having the restriction.
+>
+Well, that wasn't the original intention of the patch, but just to
+protect the guests from the userspace's dynamic updates. Having said
+that, and based on what Sean mentioned in his last reply, it could be
+inconsistent from what KVM has been doing so far and would be
+difficult to cover all the scenarios that userspace can mess things up
+for guests.
+I'll plan to drop this patch in the next version, and bring it back
+back to arm64 if we really need it.
 
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
-Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
-Cc: stable@vger.kernel.org
----
-v2:
-- use READ_ONCE()
+Thanks Sean, Jim, and Reiji for the comments and discussion.
 
- include/linux/mm.h | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index c768a7c81b0b..37d1aa65f28c 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1531,11 +1531,17 @@ static inline u8 page_kasan_tag(const struct page *page)
- 
- static inline void page_kasan_tag_set(struct page *page, u8 tag)
- {
--	if (kasan_enabled()) {
--		tag ^= 0xff;
--		page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
--		page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
--	}
-+	unsigned long old_flags, flags;
-+
-+	if (!kasan_enabled())
-+		return;
-+
-+	tag ^= 0xff;
-+	do {
-+		old_flags = flags = READ_ONCE(page->flags);
-+		flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
-+		flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
-+	} while (unlikely(cmpxchg(&page->flags, old_flags, flags) != old_flags));
- }
- 
- static inline void page_kasan_tag_reset(struct page *page)
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+Regards,
+Raghavendra
+> Thanks,
+> Reiji

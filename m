@@ -2,203 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A12492D3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D406F492D3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 19:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347973AbiARSZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 13:25:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43940 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244482AbiARSZV (ORCPT
+        id S1347997AbiARS0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 13:26:05 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55462 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231563AbiARSZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:25:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642530320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3MhpNbODvMKo6hEJEGqgokJYKmNiOJQtUtppd6rmbf4=;
-        b=NKMtPZPeCFIc9hWg7/dBGuX8a/qmX40LuKvA6Hpy30D/rkAPD9U4Gkt0Ys3TAQ77IMADlK
-        SpLCTK1l9pwufZ3+OOupAP3E2kdo1wp2tui8spqxEfE6yT8YCVQdiP2FG4zeeGxG7u3Kq+
-        buT7klbqCoYTXbgYlSMkVC1Ivzd1ZEA=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-74DyJbwYMy---1oFas5MIw-1; Tue, 18 Jan 2022 13:25:19 -0500
-X-MC-Unique: 74DyJbwYMy---1oFas5MIw-1
-Received: by mail-qk1-f197.google.com with SMTP id 81-20020a370454000000b00478f3a61beeso15831900qke.18
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 10:25:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3MhpNbODvMKo6hEJEGqgokJYKmNiOJQtUtppd6rmbf4=;
-        b=uoZSITjEBNv3rCyM3oDZo5+EkCqGBYjEVCF8cjJi0izg+KV+Xtqtec8OAEPMdNgLzG
-         3275iuqGsE/Gd//OhwBN+fTNpmQTpgH39auuUz8bRXyD9hqrx5edbCKI5tobUDs3Tn8d
-         dBEeSGsBUXnbvZ/zSDObqT4lELSx/OMwuJ2dW7/GYta2Pjun+Z5RpFY1S9zSsiKo6Y1A
-         uNop8S4ocu0HQLA708HDIcUvUAVZI47nSejL1BqpV9XtviyIA7MKZ0jI+0460X6amCTQ
-         6vEKjPzubWjpT/ORul5J8dBVg/B5ejZ5+8yu73XNOfiqJSU+09TzhRzuGH3zXOyv2mBZ
-         8XDg==
-X-Gm-Message-State: AOAM530PEBBjg+6jLf3gsGMrj+qK7pKxt2Ntg4O/JaoeSe52KECgTXcH
-        oPbEopc5Sobe4jlSyEXqgE3YNxxk+IoteeKQbEB9v2hGiZaylGD22dsilWfG1eqEyNAi2YXiP4O
-        4PKuL8GJ92kWbCjXy3oqDqzcp
-X-Received: by 2002:a05:620a:4594:: with SMTP id bp20mr8982482qkb.556.1642530318560;
-        Tue, 18 Jan 2022 10:25:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz91UOaUCACPM5lW3+SnvOJUJ/BJjaJLu9ntSYbEtlWK59wTvQ1gzG7iB444j0LBlkTzVEp/Q==
-X-Received: by 2002:a05:620a:4594:: with SMTP id bp20mr8982468qkb.556.1642530318231;
-        Tue, 18 Jan 2022 10:25:18 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id f14sm195078qtf.81.2022.01.18.10.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 10:25:17 -0800 (PST)
-Date:   Tue, 18 Jan 2022 13:25:15 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YecGC06UrGrfonS0@bfoster>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
- <YeXIIf6/jChv7JN6@zeniv-ca.linux.org.uk>
- <YeYYp89adipRN64k@zeniv-ca.linux.org.uk>
- <YebFCeLcbziyMjbA@bfoster>
+        Tue, 18 Jan 2022 13:25:59 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IH2P5o031785;
+        Tue, 18 Jan 2022 18:25:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=iE9WKD1YJTxYs5keYigsr8/4SV2jwquBdbV3r5pWp08=;
+ b=M9zkN6O4Bknm74VroZcEhcqzTgXhAJ7PWKSnOFk4IU9VTO+QrPS/XZkByB1fYYOvFUws
+ 0HrL+HOZCiPY4CkyQceEfXL3J3s1Hj3DO/8RBYa5uSEzpT7SdKMA95jK6T15y77Ucgyl
+ /tOae2iiWFPlzaotU0RZ2hqdU4rm/T1j8twm1yIkpjtm2ZYewwaexVowKTK9N9lgpJCp
+ RZuYQUdxiAk7HSBw0Mml7Tx3kblDHM4L3G8cdvbFijkJ/8yoLRJkFcEtiIPJZmr3IcZN
+ rQMnifUdQCE4LzHHxChUqdqY9/5VG00LMo8IgRIAtYEtx26ItaPgML0is5aZ2y8z1Nrr rQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dp1kq26kh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:25:44 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IH3WSH003597;
+        Tue, 18 Jan 2022 18:25:44 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dp1kq26k1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:25:44 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IIHeoF019546;
+        Tue, 18 Jan 2022 18:25:43 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma04dal.us.ibm.com with ESMTP id 3dknwavyjv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 18:25:43 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IIPfNF31326610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 18:25:42 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF2E86A05F;
+        Tue, 18 Jan 2022 18:25:41 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52B7E6A04D;
+        Tue, 18 Jan 2022 18:25:39 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 18:25:39 +0000 (GMT)
+Message-ID: <546afc0c-8d86-e471-49cd-8665cea643fb@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 13:25:38 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YebFCeLcbziyMjbA@bfoster>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 10/19] ima: Implement hierarchical processing of file
+ accesses
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-11-stefanb@linux.vnet.ibm.com>
+ <20220114112114.tu4f56bm7tewzfmj@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220114112114.tu4f56bm7tewzfmj@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VNH60PNfUU_LgIrC_cUmgkt2DVU7OxvU
+X-Proofpoint-GUID: aqpCJlpBsGArLMbKizDpsEL0PYhojCq-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ suspectscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 clxscore=1015 adultscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180109
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:47:53AM -0500, Brian Foster wrote:
-> On Tue, Jan 18, 2022 at 01:32:23AM +0000, Al Viro wrote:
-> > On Mon, Jan 17, 2022 at 07:48:49PM +0000, Al Viro wrote:
-> > > > But that critically depends upon the contents not getting mangled.  If it
-> > > > *can* be screwed by such unlink, we risk successful lookup leading to the
-> > > > wrong place, with nothing to tell us that it's happening.  We could handle
-> > > > that by adding a check to fs/namei.c:put_link(), and propagating the error
-> > > > to callers.  It's not impossible, but it won't be pretty.
-> > > > 
-> > > > And that assumes we avoid oopsen on string changing under us in the first
-> > > > place.  Which might or might not be true - I hadn't finished the audit yet.
-> > > > Note that it's *NOT* just fs/namei.c + fs/dcache.c + some fs methods -
-> > > > we need to make sure that e.g. everything called by ->d_hash() instances
-> > > > is OK with strings changing right under them.  Including utf8_to_utf32(),
-> > > > crc32_le(), utf8_casefold_hash(), etc.
-> > > 
-> > > And AFAICS, ext4, xfs and possibly ubifs (I'm unfamiliar with that one and
-> > > the call chains there are deep enough for me to miss something) have the
-> > > "bugger the contents of string returned by RCU ->get_link() if unlink()
-> > > happens" problem.
-> > > 
-> > > I would very much prefer to have them deal with that crap, especially
-> > > since I don't see why does ext4_evict_inode() need to do that memset() -
-> > > can't we simply check ->i_op in ext4_can_truncate() and be done with
-> > > that?
-> > 
-> > This reuse-without-delay has another fun side, AFAICS.  Suppose the new use
-> > for inode comes with the same ->i_op (i.e. it's a symlink again) and it
-> > happens right after ->get_link() has returned the pointer to body.
-> > 
-> 
-> Yep, I had reproduced this explicitly when playing around with some
-> instrumented delays and whatnot in the code. This and the similar
-> variant of just returning internal/non-string data fork metadata via
-> ->get_link() is why I asked to restore old behavior of returning -ECHILD
-> for inline symlinks.
-> 
-> > We are already past whatever checks we might add in pick_link().  And the
-> > pointer is still valid.  So we end up quietly traversing the body of
-> > completely unrelated symlink that never had been anywhere near any directory
-> > we might be looking at.  With no indication of anything going wrong - just
-> > a successful resolution with bogus result.
-> > 
-> > Could XFS folks explain what exactly goes wrong if we make actual marking
-> > inode as ready for reuse RCU-delayed, by shifting just that into
-> > ->free_inode()?  Why would we need any extra synchronize_rcu() anywhere?
-> > 
-> 
-> Dave already chimed in on why we probably don't want ->free_inode()
-> across the board. I don't think there's a functional problem with a more
-> selective injection of an rcu delay on the INACTIVE -> RECLAIMABLE
-> transition, based on the reasoning specified earlier (i.e., the iget
-> side already blocks on INACTIVE, so it's just a matter of a longer
-> delay).
-> 
-> Most of that long thread I previously linked to was us discussing pretty
-> much how to do something like that with minimal performance impact. The
-> experiment I ran to measure performance was use of queue_rcu_work() for
-> inactive inode processing. That resulted in a performance hit to single
-> threaded sequential file removal, but could be mitigated by increasing
-> the queue size (which may or may not have other side effects). Dave
-> suggested a more async approach to track the current grace period in the
-> inode and refer to it at lookup/alloc time, but that is notably more
-> involved and isn't clear if/how much it mitigates rcu delays.
-> 
-> IIUC, your thought here is to introduce an rcu delay on the destroy
-> side, but after the inactive processing rather than before it (as my
-> previous experiment did). IOW, basically invoke
-> xfs_inodegc_set_reclaimable() as an rcu callback via
-> xfs_inodegc_worker(), yes? If so, that seems like a potentially
-> reasonable option to me since it pulls the delay out of the inactivation
-> processing pipeline. I suspect the tradeoff with that is it might be
-> slightly less efficient than doing it earlier because we've lost any
-> grace period transitions that have occurred since before the inode was
-> queued and processed, but OTOH this might isolate the impact of that
-> delay to the inode reuse path. Maybe there's room for a simple
-> optimization there in cases where a gp may have expired already since
-> the inode was first queued. Hmm.. maybe I'll give that a try to see
-> if/how much impact there may be on an inode alloc/free workload..
-> 
 
-Here are results from a few quick tests running a tight inode alloc/free
-loop against an XFS filesystem with some concurrent kernel source tree
-recursive ls activity running on a separate (XFS) filesystem in the
-background. The loop runs for 60s and reports how many create/unlink
-cycles it was able to perform in that time:
+On 1/14/22 06:21, Christian Brauner wrote:
+> On Tue, Jan 04, 2022 at 12:04:07PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Implement hierarchical processing of file accesses in IMA namespaces by
+>> walking the list of user namespaces towards the root. This way file
+>> accesses can be audited in an IMA namespace and also be evaluated against
+>> the IMA policies of parent IMA namespaces.
+>>
+>> __process_measurement() returns either 0 or -EACCES. For hierarchical
+>> processing remember the -EACCES returned by this function but continue
+>> to the parent user namespace. At the end either return 0 or -EACCES
+>> if an error occurred in one of the IMA namespaces.
+>>
+>> Currently the ima_ns pointer of the user_namespace is always NULL except
+>> at the init_user_ns, so test ima_ns for NULL pointer and skip the call to
+>> __process_measurement() if it is NULL. Once IMA namespacing is fully
+>> enabled, the pointer may also be NULL due to late initialization of the
+>> IMA namespace.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   include/linux/ima.h               |  6 +++++
+>>   security/integrity/ima/ima_main.c | 37 +++++++++++++++++++++++++++----
+>>   2 files changed, 39 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/linux/ima.h b/include/linux/ima.h
+>> index b6ab66a546ae..fcee2a51bb87 100644
+>> --- a/include/linux/ima.h
+>> +++ b/include/linux/ima.h
+>> @@ -65,6 +65,12 @@ static inline const char * const *arch_get_ima_policy(void)
+>>   }
+>>   #endif
+>>   
+>> +static inline struct user_namespace
+>> +*ima_ns_to_user_ns(struct ima_namespace *ns)
+>> +{
+>> +	return current_user_ns();
+>> +}
+>> +
+>>   #else
+>>   static inline enum hash_algo ima_get_current_hash_algo(void)
+>>   {
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index 621685d4eb95..51b0ef1cebbe 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
+>>   	ima_check_last_writer(iint, inode, file);
+>>   }
+>>   
+>> -static int process_measurement(struct ima_namespace *ns,
+>> -			       struct file *file, const struct cred *cred,
+>> -			       u32 secid, char *buf, loff_t size, int mask,
+>> -			       enum ima_hooks func)
+>> +static int __process_measurement(struct ima_namespace *ns,
+>> +				 struct file *file, const struct cred *cred,
+>> +				 u32 secid, char *buf, loff_t size, int mask,
+>> +				 enum ima_hooks func)
+>>   {
+>>   	struct inode *inode = file_inode(file);
+>>   	struct integrity_iint_cache *iint = NULL;
+>> @@ -395,6 +395,35 @@ static int process_measurement(struct ima_namespace *ns,
+>>   	return 0;
+>>   }
+>>   
+>> +static int process_measurement(struct ima_namespace *ns,
+>> +			       struct file *file, const struct cred *cred,
+>> +			       u32 secid, char *buf, loff_t size, int mask,
+>> +			       enum ima_hooks func)
+>> +{
+>> +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
+>> +	int ret = 0;
+>> +
+>> +	while (user_ns) {
+>> +		ns = ima_ns_from_user_ns(user_ns);
+>> +		if (ns) {
+>> +			int rc;
+>> +
+>> +			rc = __process_measurement(ns, file, cred, secid, buf,
+>> +						   size, mask, func);
+>> +			switch (rc) {
+>> +			case -EACCES:
+>> +				/* return this error at the end but continue */
+>> +				ret = -EACCES;
+>> +				break;
+> This seems risky. Every error not -EACCES will be counted as a success.
+> It doesn't look like __process_measurement() will return anything else
+> but I would still place a WARN_ON() or WARN_ON_ONCE() in there to make
+> that assumption explicit.
+>
+> Right now it looks like your only error condition is -EACCES and non-ima
+> cracks like me need to read through __process_measurement() to figure
+> out that that's ok. With a WARN_ON* in there I'd not have needed to bother.
+>
+> switch (rc) {
+> case -EACCES:
+> 	/* return this error at the end but continue */
+> 	ret = -EACCES;
+> 	break
+> default:
+> 	WARN_ON_ONCE(true);
+              ret = -EINVAL;
+> }
+>
+> or sm similar.
 
-Baseline (xfs for-next, v5.16.0-rc5):	~34k cycles
-inactive -> reclaimable grace period:	~29k cycles
-unconditional iget rcu sync:		~4400 cycles
 
-Note that I did get a lockdep splat from _set_reclaimable() in rcu
-context that I've ignored for now because the test completed. That
-aside, that looks like about a ~15% or so hit from baseline. The last
-test inserts an unconditional synchronize_rcu() in the iget recycle path
-to provide a reference for the likely worst case implementation.
-
-If I go back to the inactive -> reclaimable grace period variant and
-also insert a start_poll_synchronize_rcu() and
-poll_state_synchronize_rcu() pair across the inactive processing
-sequence, I start seeing numbers closer to ~36k cycles. IOW, the
-xfs_inodegc_inactivate() helper looks something like this:
-
-        if (poll_state_synchronize_rcu(ip->i_destroy_gp))
-                xfs_inodegc_set_reclaimable(ip);
-        else
-                call_rcu(&VFS_I(ip)->i_rcu, xfs_inodegc_set_reclaimable_callback);
-
-... to skip the rcu grace period if one had already passed while the
-inode sat on the inactivation queue and was processed.
-
-However my box went haywire shortly after with rcu stall reports or
-something if I let that continue to run longer, so I'll probably have to
-look into that lockdep splat (complaining about &pag->pag_ici_lock in
-rcu context, perhaps needs to become irq safe?) or see if something else
-is busted..
-
-Brian
-
-> Brian
+Agreed. To be on the safe side I would add a ret = -EINVAL to it for the 
+unhandled case as shown above.
 

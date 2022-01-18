@@ -2,97 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D754929A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88A04929AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 16:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345740AbiARP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 10:28:28 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:34646 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235669AbiARP21 (ORCPT
+        id S1345827AbiARP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 10:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345760AbiARP3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:28:27 -0500
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 33D7A20B926E;
-        Tue, 18 Jan 2022 07:28:26 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 33D7A20B926E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1642519706;
-        bh=4Kxcr52+gHAbySx/ypcqz/aerBruEfVlDA6UU7MRmqA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rNo3lqJc3Fi043vZPmsF/n6MCeFaLJeFTsCY4AGA1bZ1ZkLUoffQShpUh6LKmgpwx
-         Lu9rlX3AoiV6JE2vfKIFapbVi+QfDXMnXRN1IRkWpTZZdcx8/fiepGX6ZjxyUc0mDS
-         5CevifvHgY5dnFd6H+Z4zn7IEr/r7OUC0EM1BWCQ=
-Date:   Tue, 18 Jan 2022 09:28:16 -0600
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Lei Wang <lewan@microsoft.com>, Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <20220118152816.GA89184@sequoia>
-References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
- <YeRkGvestiloCAUV@zn.tnic>
+        Tue, 18 Jan 2022 10:29:05 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D565C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:29:05 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id o14-20020a17090ac08e00b001b4b55792aeso2828311pjs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 07:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e8bsxgP9fDmzRuw6qWFf72IvrW3wUmdFHqldah+o4J0=;
+        b=DgzPo6PbYSkA1j3hhsET3Oq6gJO7Ge85+KB+0YOJp42yB32DkAmN6+yPoNo7jt4AlF
+         7yBHl2KWHSndYKakV+L2pdZ0kWButRoYTpQo9PVUHzeInoz+Ul5QXG2TRmwaRqnXSK/X
+         Nia5uKjZth/Gu3L/H+WqqOOTpbFm1NomF1olhKUc4Y0L63FdZGEjN8oZNRsExZAsE7eH
+         xYI2niCY4KfaWhKzpjDFflUiXCVtSHlCXT9Cd+FAD65Rq46sLVku7z+3Z+cZWNCSWP8j
+         NAO91SamqooTdor4AnB/wYQnrRIW5xmEfx7JHscddEtq6dBEnRheDpUTZKWhm408+OSW
+         HTuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e8bsxgP9fDmzRuw6qWFf72IvrW3wUmdFHqldah+o4J0=;
+        b=p1RaelcE8RAhmB71lZEOfApePJzoMcdFeVukaq3bVmYP1QDxbVZkOqyV7f4/xgxIZ5
+         L8oDk/qMcLzei3iHpV4UUCVhIMi1YZ3U/E+b2llrcKvIS9DPobzAB7EqnCceCI6t+TC7
+         WF3P8HTrixvhqG22bO3VG/GbPYH0vwbod8PBtvypmb7upP//PbgOa7cERSiwXYpEN0E5
+         NsGILgFQyca03mfjCyDOfyyCDyaP33AtsASVw5ViHV/t8prbnCqaiS2wllXELihfno8i
+         0jAWwO3R6VXOGs8ELZPBJC243aU0dM0nzeOlzrb4S0YKcuPlsjT82rjSNjT4BEhWm6+n
+         OQNw==
+X-Gm-Message-State: AOAM530lsCxJPd0gBCHsvNPJtCS1x+hjF+fck13E9cORRiDfhPwA4196
+        h4vq0luzcbWWQW1PPWIxWMdC/C1ZhQ9GZF7+5+AFew==
+X-Google-Smtp-Source: ABdhPJxNTswGKXkKxb/QjEvrhY8z2s3/j4H7t9WW/RzQe54opjBvzY70VWm5TRxHTG1OLSt74CJ9s4MQ2Cy1AdyAgCQ=
+X-Received: by 2002:a17:902:ce8f:b0:14a:b9c2:4e5b with SMTP id
+ f15-20020a170902ce8f00b0014ab9c24e5bmr10718304plg.132.1642519744882; Tue, 18
+ Jan 2022 07:29:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeRkGvestiloCAUV@zn.tnic>
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-2-lizhijian@cn.fujitsu.com> <20220106002130.GP6467@ziepe.ca>
+ <bf038e6c-66db-50ca-0126-3ad4ac1371e7@fujitsu.com> <CAPcyv4h2Cuzm_fn9fi9RqQ_iEwOwuc9qdk5x_7W=VXvsOAVPFA@mail.gmail.com>
+ <050c3183-2fc6-03a1-eecd-258744750972@fujitsu.com>
+In-Reply-To: <050c3183-2fc6-03a1-eecd-258744750972@fujitsu.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 18 Jan 2022 07:28:54 -0800
+Message-ID: <CAPcyv4h2wiJ+2h8Q9PKOysJ-3bG7N7yDeBucW+jWttUjPXRJ7Q@mail.gmail.com>
+Subject: Re: [RFC PATCH rdma-next 01/10] RDMA: mr: Introduce is_pmem
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-16 19:29:46, Borislav Petkov wrote:
-> On Tue, Jan 11, 2022 at 10:38:00AM -0600, Tyler Hicks wrote:
-> > The dmc520 driver requires that at least one interrupt line, out of the ten
-> > possible, is configured. The driver prints an error and returns -EINVAL
-> > from its .probe function if there are no interrupt lines configured.
-> > 
-> > Don't print a KERN_ERR level message for each interrupt line that's
-> > unconfigured as that can confuse users into thinking that there is an
-> > error condition.
-> > 
-> > Before this change, the following KERN_ERR level messages would be
-> > reported if only dram_ecc_errc and dram_ecc_errd were configured in the
-> > device tree:
-> > 
-> >  dmc520 68000000.dmc: IRQ ram_ecc_errc not found
-> >  dmc520 68000000.dmc: IRQ ram_ecc_errd not found
-> >  dmc520 68000000.dmc: IRQ failed_access not found
-> >  dmc520 68000000.dmc: IRQ failed_prog not found
-> >  dmc520 68000000.dmc: IRQ link_err not
-> >  dmc520 68000000.dmc: IRQ temperature_event not found
-> >  dmc520 68000000.dmc: IRQ arch_fsm not found
-> >  dmc520 68000000.dmc: IRQ phy_request not found
-> > 
-> > Fixes: 1088750d7839 ("EDAC: Add EDAC driver for DMC520")
-> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > Cc: <stable@vger.kernel.org>
-> 
-> Why stable? AFAICT, this is fixing only the spew of some error messages
-> but the driver is still functional.
+On Tue, Jan 18, 2022 at 12:55 AM lizhijian@fujitsu.com
+<lizhijian@fujitsu.com> wrote:
+>
+>
+>
+> On 17/01/2022 02:11, Dan Williams wrote:
+> > On Wed, Jan 5, 2022 at 10:13 PM lizhijian@fujitsu.com
+> > <lizhijian@fujitsu.com> wrote:
+> >>
+> >> Add Dan to the party :)
+> >>
+> >> May i know whether there is any existing APIs to check whether
+> >> a va/page backs to a nvdimm/pmem ?
+> >>
+> >>
+> >>
+> >> On 06/01/2022 08:21, Jason Gunthorpe wrote:
+> >>> On Tue, Dec 28, 2021 at 04:07:08PM +0800, Li Zhijian wrote:
+> >>>> We can use it to indicate whether the registering mr is associated with
+> >>>> a pmem/nvdimm or not.
+> >>>>
+> >>>> Currently, we only assign it in rxe driver, for other device/drivers,
+> >>>> they should implement it if needed.
+> >>>>
+> >>>> RDMA FLUSH will support the persistence feature for a pmem/nvdimm.
+> >>>>
+> >>>> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+> >>>>    drivers/infiniband/sw/rxe/rxe_mr.c | 47 ++++++++++++++++++++++++++++++
+> >>>>    include/rdma/ib_verbs.h            |  1 +
+> >>>>    2 files changed, 48 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> >>>> index 7c4cd19a9db2..bcd5e7afa475 100644
+> >>>> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> >>>> @@ -162,6 +162,50 @@ void rxe_mr_init_dma(struct rxe_pd *pd, int access, struct rxe_mr *mr)
+> >>>>       mr->type = IB_MR_TYPE_DMA;
+> >>>>    }
+> >>>>
+> >>>> +// XXX: the logic is similar with mm/memory-failure.c
+> >>>> +static bool page_in_dev_pagemap(struct page *page)
+> >>>> +{
+> >>>> +    unsigned long pfn;
+> >>>> +    struct page *p;
+> >>>> +    struct dev_pagemap *pgmap = NULL;
+> >>>> +
+> >>>> +    pfn = page_to_pfn(page);
+> >>>> +    if (!pfn) {
+> >>>> +            pr_err("no such pfn for page %p\n", page);
+> >>>> +            return false;
+> >>>> +    }
+> >>>> +
+> >>>> +    p = pfn_to_online_page(pfn);
+> >>>> +    if (!p) {
+> >>>> +            if (pfn_valid(pfn)) {
+> >>>> +                    pgmap = get_dev_pagemap(pfn, NULL);
+> >>>> +                    if (pgmap)
+> >>>> +                            put_dev_pagemap(pgmap);
+> >>>> +            }
+> >>>> +    }
+> >>>> +
+> >>>> +    return !!pgmap;
+> >>> You need to get Dan to check this out, but I'm pretty sure this should
+> >>> be more like this:
+> >>>
+> >>> if (is_zone_device_page(page) && page->pgmap->type == MEMORY_DEVICE_FS_DAX)
+> >> Great, i have added him.
+> >>
+> >>
+> >>
+> >>>
+> >>>> +static bool iova_in_pmem(struct rxe_mr *mr, u64 iova, int length)
+> >>>> +{
+> >>>> +    struct page *page = NULL;
+> >>>> +    char *vaddr = iova_to_vaddr(mr, iova, length);
+> >>>> +
+> >>>> +    if (!vaddr) {
+> >>>> +            pr_err("not a valid iova %llu\n", iova);
+> >>>> +            return false;
+> >>>> +    }
+> >>>> +
+> >>>> +    page = virt_to_page(vaddr);
+> >>> And obviously this isn't uniform for the entire umem, so I don't even
+> >>> know what this is supposed to mean.
+> >> My intention is to check if a memory region belongs to a nvdimm/pmem.
+> >> The approach is like that:
+> >> iova(user space)-+                     +-> page -> page_in_dev_pagemap()
+> >>                    |                     |
+> >>                    +-> va(kernel space) -+
+> >> Since current MR's va is associated with map_set where it record the relations
+> >> between iova and va and page. Do do you mean we should travel map_set to
+> >> get its page ? or by any other ways.
+> > Apologies for the delay in responding.
+> >
+> > The Subject line of this patch is confusing, if you want to know if a
+> > pfn is in persistent memory the only mechanism for that is:
+> >
+> > region_intersects(addr, length, IORESOURCE_MEM, IORES_DESC_PERSISTENT_MEMORY)
+> >
+> > ...there is otherwise nothing pmem specific about the dev_pagemap
+> > infrastructure. Yes, pmem is the primary user, but it is also used for
+> > mapping "soft-reserved" memory (See: the EFI_MEMORY_SP) attribute, and
+> > other users.
+> >
+> > Can you clarify the intent? I am missing some context.
+>
+> thanks for your help @Dan
+>
+> I'm going to implement a new ibvers called RDMA FLUSH, it will support global visibility
+> and persistence placement type.
+>
+> In my first design, only pmem can support persistence placement type, so i need to introduce
+> new attribute is_pmem to RDMA memory region where it associates to a user space address iova
+> so that i can reject a persistence placement type to DRAM(non-pmem).
 
-KERN_ERR messages trip log scanners and cause concern that the
-kernel/hardware is not configured or working correctly. They also add a
-little big of ongoing stress into kernel maintainer's lives, as we
-prepare and test kernel updates, since they show up as red text in
-journalctl output that we have to think about regularly. Multiple
-KERN_ERR messages, 8 in this case, can also be considered a little worse
-than a single error message.
-
-I feel like this trivial fix is worth taking into stable rather than
-suppressing these errors (mentally and in log scanners) for years.
-
-Tyler
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-> 
+Ok, I think for that case you are better served using the
+IORES_DESC_PERSISTENT_MEMORY designation as the gate for attempting
+the flush. The dev_pagemap is otherwise only indicating the presence
+of device-backed memory pages, not persistence.

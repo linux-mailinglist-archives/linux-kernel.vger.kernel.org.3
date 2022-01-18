@@ -2,72 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCCD4921B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F30C44921BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 09:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345048AbiARI4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 03:56:11 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:52064 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233210AbiARI4J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 03:56:09 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8EDBA1EC018C;
-        Tue, 18 Jan 2022 09:56:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642496163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=eAf1qbOkyIy1iU8T03DAQ6VYhyVjg5pw83Zn0LL7X/k=;
-        b=o+ZTpYGj0sqS5+8hg20lRWbuYojBrLFmZDgT3+T2OYDnmdIPVhvSfGnwhN87IAZPyv/J8I
-        umJDtvSmnDAdkjVFwLZ1rrQ6cmS0gO+w8htLK7r/N9Ny7hWpVbQBpW+UHY1Z6IrD/eHd/x
-        5ENmLNlOKrqvrwShHLoYkwjW3r+lMi8=
-Date:   Tue, 18 Jan 2022 09:56:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     cgel.zte@gmail.com
-Cc:     keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, rafael@kernel.org, lenb@kernel.org,
-        james.morse@arm.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] drivers/acpi/apei/erst: remove unneeded rc variable
-Message-ID: <YeaAofH7UrvaDOfa@zn.tnic>
-References: <20220118075349.925694-1-chi.minghao@zte.com.cn>
+        id S1345097AbiARI6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 03:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240431AbiARI6S (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 03:58:18 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE31CC061574;
+        Tue, 18 Jan 2022 00:58:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GPIVl475f8UFddNg+OludgqDGQTkzKzQzuYcVSAcSw4=; b=NWXtUzOr08XMubwhSysdp0GKYD
+        /1LjawvPEUyvMgVvCkIXnCt5NDZghDo5DbURPwhKBGygjb5+SXXsfhuSwIhSJw2NEQUaNz3gyVZ83
+        HkWIZsvV9Sio3eMt2RNnlajwJgxeR5K0cdgzsyT4p8k+E+H3RFQKlbNDBOOCdWusCPelXhHC7cRCH
+        FHsnFHllKXuopliB1VQSJDtKtMnaGPD4FyXqTF6OFkSEv4/KwuTkxpW3rzA/T003rtok5LEnCZZ6x
+        m10TwSHMNy9WDBA4IwFRd4vSdUb7wx41OSLZZW7dYMeEzwTeL3hQDSAHD8E3NaCFOkCKDYL9HJo62
+        Bolm4ylA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9kJI-001odZ-8t; Tue, 18 Jan 2022 08:57:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6E293001C0;
+        Tue, 18 Jan 2022 09:57:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A068020168646; Tue, 18 Jan 2022 09:57:45 +0100 (CET)
+Date:   Tue, 18 Jan 2022 09:57:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, gustavoars@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH -next, v2] sched: Use struct_size() helper in
+ task_numa_group()
+Message-ID: <YeaBCYiTM/mxtBDU@hirez.programming.kicks-ass.net>
+References: <20220110012354.144394-1-xiujianfeng@huawei.com>
+ <Ydy3N577YD0JJr2N@hirez.programming.kicks-ass.net>
+ <20220110193158.31e1eaea@gandalf.local.home>
+ <Yd1qYsFcgcp/uHSa@hirez.programming.kicks-ass.net>
+ <20220111101425.7c59de5b@rorschach.local.home>
+ <Yd/ugQ8kUmcceuex@hirez.programming.kicks-ass.net>
+ <202201141935.A3F2ED1CF@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118075349.925694-1-chi.minghao@zte.com.cn>
+In-Reply-To: <202201141935.A3F2ED1CF@keescook>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:53:49AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Fri, Jan 14, 2022 at 07:50:47PM -0800, Kees Cook wrote:
+> On Thu, Jan 13, 2022 at 10:18:57AM +0100, Peter Zijlstra wrote:
+
+> > Then I would still much prefer something like:
+> > 
+> > 	unsigned int size = sizeof(*grp) +
+> > 			    NR_NUMA_HINT_FAULT_STATS * numa_node_ids * sizeof(gfp->faults);
+> > 
+> > Which is still far more readable than some obscure macro. But again, the
 > 
-> Return value from erst_get_record_id_begin() directly instead
-> of taking this in another redundant variable.
+> I'm not sure it's _obscure_, but it is relatively new. It's even
+> documented. ;)
+> https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments
+
+I'm one of those people who doesn't read documentation, I read code.
+
+I also flat out refuse to read any documentation that isn't plain text.
+
+> > I can't, nor do I want to, remember all these stupid little macros. Esp.
+> > not for trivial things like this.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> Well, the good news is that other folks will (and are) fixing them for
+> you. :) Even if you never make mistakes with flexible arrays, other
+> people do, and so we need to take on some improvements to the robustness
+> of the kernel source tree-wide.
 
-"Well, this doesn't look like an e-mail address of a physical person
-which is required for S-o-b tags."
+But nobody helps me read the code when I trip over crap like this :/ Why
+do we have to have endless silly helpers for things that can be
+trivially expressed in regular C? I appreciate things like
+container_of() because if you write that out it's a mess, but this, very
+much not so.
 
-https://lore.kernel.org/r/CAJZ5v0iipOm6DX3Fd8iNKF_LC6kJWCy=1LxFsh47z01UYDrRow@mail.gmail.com
+	struct_size(grp, faults, NR_NUMA_HINT_FAULTS_STATS * numa_node_ids);
 
-Are you people actually reading email feedback or you're automatically
-dumping this crap to recipients without even looking?
+vs
 
-Because if so, we can automatically send all that crap to /dev/null and
-the only thing that's going to be wasted is the energy used to send crap
-mails back'n'forth...
+	sizeof(*gfp) + sizeof(grp->faults) * NR_NUMA_HINT_FAULT_STATS * nr_node_ids;
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+The latter wins hands down, instantly obvious what it does while with
+the former I'd have to look up the macro.

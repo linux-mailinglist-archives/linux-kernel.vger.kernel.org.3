@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 492BE492652
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4B849267C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 14:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241308AbiARNBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 08:01:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:56050 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241134AbiARNBv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:01:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD4B21FB;
-        Tue, 18 Jan 2022 05:01:50 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.37.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A0B43F73D;
-        Tue, 18 Jan 2022 05:01:45 -0800 (PST)
-Date:   Tue, 18 Jan 2022 13:01:42 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        maz@kernel.org, mingo@redhat.com, mpe@ellerman.id.au,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paulus@samba.org, paul.walmsley@sifive.com, pbonzini@redhat.com,
-        suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH 1/5] kvm: add exit_to_guest_mode() and
- enter_from_guest_mode()
-Message-ID: <20220118130142.GB17938@C02TD0UTHF1T.local>
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <20220111153539.2532246-2-mark.rutland@arm.com>
- <YeCMVGqiVfTKESzy@google.com>
- <YeFi9FTPSyLbQytu@FVFF77S0Q05N>
- <YeGgmgyz9q8AvpKN@google.com>
+        id S241857AbiARNKQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 08:10:16 -0500
+Received: from mail3.divigroup.com ([94.143.156.66]:59650 "EHLO
+        mail3.divigroup.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241564AbiARNKJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 08:10:09 -0500
+X-Greylist: delayed 9038 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 08:10:09 EST
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail3.divigroup.com (Postfix) with ESMTP id 19AC215A5A77;
+        Tue, 18 Jan 2022 11:07:14 +0100 (CET)
+Received: from mail3.divigroup.com ([127.0.0.1])
+        by localhost (z8.divitel.lan [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kdsYAwzkHw15; Tue, 18 Jan 2022 11:07:13 +0100 (CET)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail3.divigroup.com (Postfix) with ESMTP id 75FB819B8633;
+        Tue, 18 Jan 2022 11:01:08 +0100 (CET)
+X-Virus-Scanned: amavisd-new at z8.divitel.lan
+Received: from mail3.divigroup.com ([127.0.0.1])
+        by localhost (z8.divitel.lan [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id llIBmYVNMREO; Tue, 18 Jan 2022 11:01:08 +0100 (CET)
+Received: from [103.1.179.201] (unknown [103.1.179.201])
+        by mail3.divigroup.com (Postfix) with ESMTPSA id E41B715A5A70;
+        Tue, 18 Jan 2022 10:57:24 +0100 (CET)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeGgmgyz9q8AvpKN@google.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Regards
+To:     Recipients <butula@parliament.go.ke>
+From:   "Mr. Kai Wen" <butula@parliament.go.ke>
+Date:   Tue, 18 Jan 2022 15:27:19 +0530
+Reply-To: mrkkaiwwen@aol.com
+Message-Id: <20220118095724.E41B715A5A70@mail3.divigroup.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 04:11:06PM +0000, Sean Christopherson wrote:
-> On Fri, Jan 14, 2022, Mark Rutland wrote:
-> > I'd like to keep this somewhat orthogonal to the x86 changes (e.g. as other
-> > architectures will need backports to stable at least for the RCU bug fix), so
-> > I'd rather use a name that isn't immediately coupled with x86 changes.
-> 
-> Ah, gotcha.
->  
-> > Does the guest_context_{enter,exit}_irqoff() naming above work for you?
-> 
-> Yep, thanks!
+Greetings My Friend,
 
-I just realised that I already have guest_context_{enter,exit}_irqoff()
-for the context-tracking bits alone, and so I'll need to use a different
-name. For bisectability I can't use guest_{enter,exit}_irqoff()
-immediately, so for now I'll go with guest_state_{enter,exit}_irqoff().
+I am Mr. Kai Wen, I work with a bank here in China as head of the audit department. During our last year fiscal bank general account auditing, I discovered an overdue funds sum of USD19,500,000.00 Million belonging to my bank late customer who died over 10 years ago leaving no body to inherit his funds.
+ 
+I am contacting you so that we may have an agreement/proper arrangement. note 50% of the sum will be for you while the other 50% will be my share as well.
 
-Once the conversion is complete and the deprecated bits are removed we
-can rename those to guest_{enter,exit}_irqoff().
+I will be waiting for your quick response in order to update you with full detail and be informed that this deal will be executed legally.
 
-Thanks,
-Mark.
+Yours Sincerely,
+Mr. Kai Wen.

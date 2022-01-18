@@ -2,96 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C54492CD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166A0492C6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Jan 2022 18:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244547AbiARRzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 12:55:06 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:36360 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbiARRzE (ORCPT
+        id S1347354AbiARRdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 12:33:09 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61490 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1347149AbiARRdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 12:55:04 -0500
-Received: by mail-oi1-f169.google.com with SMTP id r138so71417oie.3;
-        Tue, 18 Jan 2022 09:55:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WrlSvVtBlJ0UjcFimAddRKRckytk7qO5txu8q+tq17c=;
-        b=NmpQkgW5HNXUfmq2AmLLMQ7zZwgEl0h4Jg1zEX8DaGQtjM320GZWWtLanrrTQtrl7H
-         TsuXc5ajs2RFWQxFFM8NPlwKGEj3MLjPYh0R7xGMSNfHQCIrF1OYeGPoLDpRtAtwhVwi
-         sxjaHABY6+inIpCzY27F5B7bf8m6UD4gauTbdNkCkY8GOJuEWEtO0mlZqlfzaZxcYCq4
-         Lnu2xHY/hMMdOssGjuvh+u8TpYeM0DUbkHk8s6hQwoOhEPtcb4gfHJQwp5UHbrUkX6o5
-         yI7YiPJtmsTmOQpGFFYg+Md3GFckf8kDZrj+Ldq5R2bGDqDCr2qhREtQ/sAblupINyse
-         hx7g==
-X-Gm-Message-State: AOAM532fsxIn7pL/4JzxlYTPTWVpgEbB2RxYgUTmyfIPvqhPBm4VJXqj
-        ZglJm69aGP3qCqAcT5E7XA==
-X-Google-Smtp-Source: ABdhPJw2nYy0X1fNyouL2DU2lX9WpvyUl95MKD/LaCjv61D5x0XYcQo1cI0oVz4ZIkGiExpEBNoYYQ==
-X-Received: by 2002:aca:f241:: with SMTP id q62mr9238160oih.64.1642528503551;
-        Tue, 18 Jan 2022 09:55:03 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id u12sm5162627oiw.54.2022.01.18.09.55.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 09:55:02 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Rowand <frowand.list@gmail.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Peter Chen <peter.chen@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] of: Check 'of_node_reused' flag on of_match_device()
-Date:   Tue, 18 Jan 2022 11:34:04 -0600
-Message-Id: <20220118173404.1891800-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 18 Jan 2022 12:33:08 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IH3H40005968;
+        Tue, 18 Jan 2022 17:33:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=39328zvZ2uGEJHdkCDp9nnhra7xAap49UzWa7tf+/1Q=;
+ b=hcMvmnzMjg+yCnR/5C77G3roJcU2+8mt/vmsijGrn+eiHUx0Id3rKy9uPj3XVs9El7Zw
+ MF3KW/Wl/k1AwCrcy0UgSkoayWiK9yR6a8L9s1+EYlQ2S6lnzJVjmPFljX8ZRku6xzA1
+ Q3hnqfpteQNnNXGkEwyWVUHRe1lIerJKrciig1op7Gbt9S6BgsWC4DRtIhVJ9+rG7XKu
+ SF2PgBmMveSROK4ThBPe3d7G36aJsa+y9Z+GaiIQTdM+/27eY4GgVvIxV3FVq4OR3PrO
+ YMbrtP4z4WFmQa3LEdJM2Yeu4PQqzL+x8Hw76GvJrU72vxQaNveRhoCGMQkRi7cPzIJP 4Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnvpmt1mq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:33:07 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IH0vht006339;
+        Tue, 18 Jan 2022 17:33:06 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dnvpmt1m7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:33:06 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IHWAHK005358;
+        Tue, 18 Jan 2022 17:33:05 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 3dknw9dcr3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 17:33:04 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IHX0pR37028348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 17:33:00 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09A53AE04D;
+        Tue, 18 Jan 2022 17:33:00 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0081BAE045;
+        Tue, 18 Jan 2022 17:32:59 +0000 (GMT)
+Received: from [9.171.70.230] (unknown [9.171.70.230])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 17:32:58 +0000 (GMT)
+Message-ID: <0af94334-27ac-7e05-86ea-465857e9dadd@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 18:34:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 24/30] vfio-pci/zdev: wire up group notifier
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-25-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-25-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: utkXg9xHv9wsjsiOQ8IMQKkAbL3jZUpn
+X-Proofpoint-GUID: MmR8zVuAnW-usI_EFMDF5_PEPy2C9a0G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
+ phishscore=0 bulkscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180105
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child
-device") caused the child device to match on the parent driver
-instead of the child's driver since the child's DT node pointer matched.
-The worst case result is a loop of the parent driver probing another
-instance and creating yet another child device eventually exhausting the
-stack. If the child driver happens to match first, then everything works
-fine.
 
-A device sharing the DT node should never do DT based driver matching,
-so let's simply check of_node_reused in of_match_device() to prevent
-that.
 
-Fixes: 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
-Link: https://lore.kernel.org/all/20220114105620.GK18506@ediswmail.ad.cirrus.com/
-Reported-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Tony Lindgren <tony@atomide.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Peter Chen <peter.chen@nxp.com>
-Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/of/device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 1/14/22 21:31, Matthew Rosato wrote:
+> KVM zPCI passthrough device logic will need a reference to the associated
+> kvm guest that has access to the device.  Let's register a group notifier
+> for VFIO_GROUP_NOTIFY_SET_KVM to catch this information in order to create
+> an association between a kvm guest and the host zdev.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/kvm_pci.h  |  2 ++
+>   drivers/vfio/pci/vfio_pci_core.c |  2 ++
+>   drivers/vfio/pci/vfio_pci_zdev.c | 46 ++++++++++++++++++++++++++++++++
+>   include/linux/vfio_pci_core.h    | 10 +++++++
+>   4 files changed, 60 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index fa90729a35cf..97a90b37c87d 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -17,6 +17,7 @@
+>   #include <linux/kvm.h>
+>   #include <linux/pci.h>
+>   #include <linux/mutex.h>
+> +#include <linux/notifier.h>
+>   #include <asm/pci_insn.h>
+>   #include <asm/pci_dma.h>
+>   
+> @@ -33,6 +34,7 @@ struct kvm_zdev {
+>   	u64 rpcit_count;
+>   	struct kvm_zdev_ioat ioat;
+>   	struct zpci_fib fib;
+> +	struct notifier_block nb;
+>   };
+>   
+>   int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index f948e6cd2993..fc57d4d0abbe 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -452,6 +452,7 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
+>   
+>   	vfio_pci_vf_token_user_add(vdev, -1);
+>   	vfio_spapr_pci_eeh_release(vdev->pdev);
+> +	vfio_pci_zdev_release(vdev);
+>   	vfio_pci_core_disable(vdev);
+>   
+>   	mutex_lock(&vdev->igate);
+> @@ -470,6 +471,7 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_close_device);
+>   void vfio_pci_core_finish_enable(struct vfio_pci_core_device *vdev)
+>   {
+>   	vfio_pci_probe_mmaps(vdev);
+> +	vfio_pci_zdev_open(vdev);
+>   	vfio_spapr_pci_eeh_open(vdev->pdev);
+>   	vfio_pci_vf_token_user_add(vdev, 1);
+>   }
+> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
+> index ea4c0d2b0663..5c2bddc57b39 100644
+> --- a/drivers/vfio/pci/vfio_pci_zdev.c
+> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/vfio_zdev.h>
+>   #include <asm/pci_clp.h>
+>   #include <asm/pci_io.h>
+> +#include <asm/kvm_pci.h>
+>   
+>   #include <linux/vfio_pci_core.h>
+>   
+> @@ -136,3 +137,48 @@ int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+>   
+>   	return ret;
+>   }
+> +
+> +static int vfio_pci_zdev_group_notifier(struct notifier_block *nb,
+> +					unsigned long action, void *data)
+> +{
+> +	struct kvm_zdev *kzdev = container_of(nb, struct kvm_zdev, nb);
+> +
+> +	if (action == VFIO_GROUP_NOTIFY_SET_KVM) {
+> +		if (!data || !kzdev->zdev)
+> +			return NOTIFY_DONE;
+> +		kvm_s390_pci_attach_kvm(kzdev->zdev, data);
 
-diff --git a/drivers/of/device.c b/drivers/of/device.c
-index b0800c260f64..874f031442dc 100644
---- a/drivers/of/device.c
-+++ b/drivers/of/device.c
-@@ -28,7 +28,7 @@
- const struct of_device_id *of_match_device(const struct of_device_id *matches,
- 					   const struct device *dev)
- {
--	if ((!matches) || (!dev->of_node))
-+	if (!matches || !dev->of_node || dev->of_node_reused)
- 		return NULL;
- 	return of_match_node(matches, dev->of_node);
- }
+Why not just set kzdev->kvm = data ?
+
+alternatively, define kvm_s390_pci_attach_kvm() as an inline instead of 
+a global function.
+
+otherwise LGTM
+
+> +	}
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +void vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
+> +{
+> +	unsigned long events = VFIO_GROUP_NOTIFY_SET_KVM;
+> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
+> +
+> +	if (!zdev)
+> +		return;
+> +
+> +	if (kvm_s390_pci_dev_open(zdev))
+> +		return;
+> +
+> +	zdev->kzdev->nb.notifier_call = vfio_pci_zdev_group_notifier;
+> +
+> +	if (vfio_register_notifier(vdev->vdev.dev, VFIO_GROUP_NOTIFY,
+> +				   &events, &zdev->kzdev->nb))
+> +		kvm_s390_pci_dev_release(zdev);
+> +}
+> +
+> +void vfio_pci_zdev_release(struct vfio_pci_core_device *vdev)
+> +{
+> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
+> +
+> +	if (!zdev || !zdev->kzdev)
+> +		return;
+> +
+> +	vfio_unregister_notifier(vdev->vdev.dev, VFIO_GROUP_NOTIFY,
+> +				 &zdev->kzdev->nb);
+> +
+> +	kvm_s390_pci_dev_release(zdev);
+> +}
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index 5e2bca3b89db..05287f8ac855 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -198,12 +198,22 @@ static inline int vfio_pci_igd_init(struct vfio_pci_core_device *vdev)
+>   #ifdef CONFIG_VFIO_PCI_ZDEV
+>   extern int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+>   				       struct vfio_info_cap *caps);
+> +void vfio_pci_zdev_open(struct vfio_pci_core_device *vdev);
+> +void vfio_pci_zdev_release(struct vfio_pci_core_device *vdev);
+>   #else
+>   static inline int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+>   					      struct vfio_info_cap *caps)
+>   {
+>   	return -ENODEV;
+>   }
+> +
+> +static inline void vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
+> +{
+> +}
+> +
+> +static inline void vfio_pci_zdev_release(struct vfio_pci_core_device *vdev)
+> +{
+> +}
+>   #endif
+>   
+>   /* Will be exported for vfio pci drivers usage */
+> 
+
 -- 
-2.32.0
-
+Pierre Morel
+IBM Lab Boeblingen

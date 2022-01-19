@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AE5493605
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350AF493606
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352205AbiASIGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 03:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S1352223AbiASIHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 03:07:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352034AbiASIGc (ORCPT
+        with ESMTP id S233338AbiASIHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 03:06:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6815BC061574;
-        Wed, 19 Jan 2022 00:06:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A094A61382;
-        Wed, 19 Jan 2022 08:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A523CC004E1;
-        Wed, 19 Jan 2022 08:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642579591;
-        bh=SCcj6+eO+kqSABLbbxGColCwz9zINcvY/v3iEtnNcdY=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=OcifZszkXCKpys3gR0718mwYXkj75AYEa71+hznSsXKUHXnCYh7Glk++kCejZmcLh
-         v7NTrt1Z7SDAbrxNfJJQpKKu4NojE7Rn4Ryg+e757C95vgQ2jdIbahkuW+FC5IThL4
-         beQzx5eG3LXO7352iO3+h895KZfufSWQVE7RIvdVlSL57QwusZVExB9MjrnYx6E53N
-         AOkSZWWHkbW5YmYIORl6DuWF31yczL6HguhVd950if0MyyppIHQwA/BSYDHWL7RcFy
-         5EQwBejj6+QR3j7MR4Bt/Ke0GoiwTHisa2ghDVVhfjhh+AZ9NPEsxc/bdeAATd3QD7
-         6gJ31GRLQ0wEw==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 19 Jan 2022 03:07:47 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED46C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:07:47 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id e3so5992149lfc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:07:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LvJhbswWbub3rJX8zyyNzHLh8QmAr6Ho6yFADPS8SWU=;
+        b=rgy/vdgrjHWkIx1GuiKunJnKxAdTb46B3TPpfCFZukMYmGqfJYQzQ5w/I/msUa24mk
+         ZVt/F+KEhEvkWoco1oRJeG0KkC+Kf4YzlTD4QWbqlMVIeRE4h4IIij/F1YtIKXTic7GR
+         xc6B2cUxC+yxKI5kcrxIKuldpC0ro+eFgn2RAU7rX2ZD3MF3nkkMuQ53T6LD7CvAxgjs
+         jtdwugKZ8t6ENVIYZs5rvMiQP9JuzPRLyCjGUGbTxyMeJXM0tf8VLChVkZ8aU8tECpjq
+         zfRR2UvO6R5Kf/mTh3dDjLklwHV9qNvWeHwEBuWNNMTcmrYkyOFC6PC36WEM15IkBfqc
+         6hTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LvJhbswWbub3rJX8zyyNzHLh8QmAr6Ho6yFADPS8SWU=;
+        b=zKKgKpURkg5O4W/acFZK8ttyauqYNGEEt+E2pT6q3M+HcqyMdfmKEFfmFLaFusVi9G
+         Qjc32ZLjlw5i4dpzzqSF1iWQ1ie0rxKxe9vsgT+/wflGtCk88d1UdNdGNskXEmxwyQQl
+         I1/ICOOMfwGoDdzTuGEEt0bVb9r6cZpiohgHdlvogpR395Q83Gv/aFkVD2IIR+xnzsCN
+         V9xHWAy0TQbGZ+s3QAPF+V/UMIihgPllhJDUzGKxJl7Dz59h0YuRvUIQTzguXoV9eGGB
+         gIZEcDNn3zaaAFgMqbn9d9egwJWVXETTRLx3rd4FxCmVDl3ef4d4A4ozd/PwOL5ey/Wh
+         PxOQ==
+X-Gm-Message-State: AOAM5307sdxafXhCSNuiVnRnevfLEriH51NKvKWJ6/+Nv7FegM31hhFT
+        3Dv3nkfPPHpLPptw2KmdEr0HDtraj486QQ==
+X-Google-Smtp-Source: ABdhPJzaxvPfdXIZzqg1DCoo/BpBWQ59h9gPQ+TaAtwFArDLaV7nicoaBm5rWP0O/Ah7MkhkXvKOcQ==
+X-Received: by 2002:a05:651c:171c:: with SMTP id be28mr23989056ljb.183.1642579665251;
+        Wed, 19 Jan 2022 00:07:45 -0800 (PST)
+Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id o9sm864100ljj.4.2022.01.19.00.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 00:07:44 -0800 (PST)
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH] optee: add error checks in optee_ffa_do_call_with_arg()
+Date:   Wed, 19 Jan 2022 09:07:36 +0100
+Message-Id: <20220119080736.2940906-1-jens.wiklander@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [wireless,v2,1/2] MAINTAINERS: add common wireless and
- wireless-next trees
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220117181958.3509-1-kvalo@kernel.org>
-References: <20220117181958.3509-1-kvalo@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sfr@canb.auug.org.au, lkp@intel.com
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164257958520.12296.8537972680747712627.kvalo@kernel.org>
-Date:   Wed, 19 Jan 2022 08:06:29 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> wrote:
+Adds error checking in optee_ffa_do_call_with_arg() for correctness.
 
-> For easier maintenance we have decided to create common wireless and
-> wireless-next trees for all wireless patches. Old mac80211 and wireless-drivers
-> trees will not be used anymore.
-> 
-> While at it, add a wiki link to wireless drivers section and a patchwork link
-> to 802.11, mac80211 and rfkill sections. Also use https in patchwork links.
-> 
-> Acked-by: Johannes Berg <johannes@sipsolutions.net>
-> Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Fixes: 4615e5a34b95 ("optee: add FF-A support")
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+---
+ drivers/tee/optee/ffa_abi.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-2 patches applied to wireless.git, thanks.
-
-51b667a32d61 MAINTAINERS: add common wireless and wireless-next trees
-a1222ca0681f MAINTAINERS: remove extra wireless section
-
+diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+index d8c8683863aa..d88bd2e41572 100644
+--- a/drivers/tee/optee/ffa_abi.c
++++ b/drivers/tee/optee/ffa_abi.c
+@@ -619,9 +619,18 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
+ 		.data2 = (u32)(shm->sec_world_id >> 32),
+ 		.data3 = shm->offset,
+ 	};
+-	struct optee_msg_arg *arg = tee_shm_get_va(shm, 0);
+-	unsigned int rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
+-	struct optee_msg_arg *rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
++	struct optee_msg_arg *arg;
++	unsigned int rpc_arg_offs;
++	struct optee_msg_arg *rpc_arg;
++
++	arg = tee_shm_get_va(shm, 0);
++	if (IS_ERR(arg))
++		return PTR_ERR(arg);
++
++	rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
++	rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
++	if (IS_ERR(arg))
++		return PTR_ERR(arg);
+ 
+ 	return optee_ffa_yielding_call(ctx, &data, rpc_arg);
+ }
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220117181958.3509-1-kvalo@kernel.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.31.1
 

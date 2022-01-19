@@ -2,117 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC33D4933FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F5A493402
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346353AbiASEMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:12:22 -0500
-Received: from mga02.intel.com ([134.134.136.20]:23119 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235242AbiASEMV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:12:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642565541; x=1674101541;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VZR2h/GvwBVB0YEd59gL2smSoKa+1JdaUfOKC6US0qc=;
-  b=PCVigqhpWg/ES9QEK2HIZcz4UuZzbSu3kwADAl5YyhH/r7Wq4L86i5il
-   fHN3+xfruT3bPhjx9Ladb8DTga11gl7ktbrnM9P5zL9pez+xhXFnxHNN2
-   fTOMMcE+j261bS95HfvV9S5hf90thRfu0PsJWyRMAjKS9u9Rt7g1NW9zN
-   U+yuK9OYKtygRxL2+WHv3qO/wnmkUKMEIvlhFVtgeCXAS116KN4GKSAUO
-   nNDk+Tn1X5mGSQvmIvhdSwO+d5nq6EKmyN5sWGZj5F9H2rDqFeKara76P
-   mg4ahMoQdpSUO/tA0RBrNwx4tPQwffn2D3bPTmy5xF0mKRrMwNSrdh7qH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232340424"
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="232340424"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 20:12:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="492892905"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2022 20:12:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nA2KY-000DF5-0p; Wed, 19 Jan 2022 04:12:18 +0000
-Date:   Wed, 19 Jan 2022 12:12:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     mziya <Mohammadzafar.ziya@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Stanley.Yang" <Stanley.Yang@amd.com>
-Subject: [agd5f:drm-next 56/91] drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:11:
- warning: variable 'umc_reg_offset' set but not used
-Message-ID: <202201191214.xx7M9Hem-lkp@intel.com>
+        id S1349342AbiASESJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235242AbiASESH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 23:18:07 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68114C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 20:18:07 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso4987071pjo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 20:18:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QADJhwGfWeBD6Mab8IMEbikObuIWFnSn6JyMiF5l1f8=;
+        b=cqL+3sNCG7rhdiOQGbVqo9iFDc2RbBerMjygIZ4wJNMAXmwCOGUZlQFoCMF1AN3toN
+         X8QW76PgubFLCYcEYsnvFbgpDfIoH9he38wPkhvNt9FdCPICm94wXvTXp4O3+L2TECIM
+         KGAyUQLLf/mX1hWz6AoNQmHSZuEAmSgYjCoFjSvB6wFcHnzP3QIq/2iXF1H1pOqgjd5p
+         5iWK2NR/gXiqcy0cULeKJV/UOI5KtRLYphFtkoXprgWopl6uxAmGY25zk+L86WL1Kkl9
+         rlC9k59JdjUmXYprts8cBswOBejQwqoRNjjXM8qsQHTXHrbgiK+c0Y29ZyBlNzF6Kf0E
+         nkDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QADJhwGfWeBD6Mab8IMEbikObuIWFnSn6JyMiF5l1f8=;
+        b=gjnk5CtLtg1i/CEPtrGaOBJQmGuyyZlGmjdRyH61p6LsdnTdLc/hCEa7JL11+kRBrt
+         17wANjDL4YDyhrTIHE3H9janhCWR487PDSUf244EChrFtH7TIloIe1QGkb9dl4x4LVh0
+         0N1lulm0Bh7oYyJgpSb6KQZ0XW0/44MVDKztp4XWxFpnSU58VL9oFD6wgNY3a+W5klU8
+         YVbQfrInsqXPHaYQu+tDzUKbJcdu3xSoco4aCCNv7SSJ8pdWkaqoXUR7FhvrpO9gSqH3
+         8XROEPRpB6VfRgfCYKnQAwsNeHYszbL9p5GF/XTBZlL5tM87TdZ006TtoyfqsbK+6HAI
+         xF4w==
+X-Gm-Message-State: AOAM532zFvo04BnfAfmSprCkYTzpS1Ij8qzh5e8jesR1LTyFkt8+M3n+
+        CgA8tXkyRvbuwTS51GMOG6A1tZ+SV8j+L7rL
+X-Google-Smtp-Source: ABdhPJyqt7d6eQXwc+2wp7Hxk4r7Nky0zs1z4l6wz0Nd5lYlTO6ElLmf138Xdym1GbNaTrc+Ll9v8A==
+X-Received: by 2002:a17:902:e5c4:b0:14a:70d1:4347 with SMTP id u4-20020a170902e5c400b0014a70d14347mr31123714plf.12.1642565886978;
+        Tue, 18 Jan 2022 20:18:06 -0800 (PST)
+Received: from vultr.guest ([141.164.42.249])
+        by smtp.gmail.com with ESMTPSA id p10sm19888069pfo.95.2022.01.18.20.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 20:18:06 -0800 (PST)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: Re: [PATCH] tracing: Remove redundant assignment to variable ret
+Date:   Wed, 19 Jan 2022 04:17:37 +0000
+Message-Id: <20220119041737.1805441-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220117074117.3770-1-lukas.bulwahn@gmail.com>
+References: <20220117074117.3770-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   e23fcf632883babbea03fc27f7993e151969b652
-commit: c34242eea16f7d973501267142dd340cad3caeec [56/91] drm/amdgpu: add new query interface for umc_v8_7 block
-config: i386-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220119/202201191214.xx7M9Hem-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout c34242eea16f7d973501267142dd340cad3caeec
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+On Mon, Jan 17, 2022 at 3:47 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> Dear Yuntao,
+>
+>
+> when you consider removing dead-store assignments guided by some static
+> analyzer, you need to check if the code you are looking at is actually
+> missing an error-handling branch.
+>
+> In this case, ftrace_process_locs() may return -ENOMEM, and the caller
+> needs to appropriately deal with this error return code. Your patch
+> does not change the code at all, i.e., the compiled object code is the
+> same as after the patch as before.
+>
+> Think about how to deal appropriately with the -ENOMEM return in this
+> caller and submit a patch that implements the right error-handling
+> branch or argue in your commit message why that is not needed at all.
+>
+> If you do not understand or cannot check such basic code properties for
+> dead-store assignments, it might be better to work on some other aspect
+> and area of the kernel repository. E.g., the kernel documentation build
+> also has a few warnings that deserve patches to be fixed.
+>
+>
+> Best regards,
+>
+> Lukas
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Dear Lukas,
 
-All warnings (new ones prefixed by >>):
+Thanks for your reply.
 
->> drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:11: warning: variable 'umc_reg_offset' set but not used [-Wunused-but-set-variable]
-           uint32_t umc_reg_offset  = 0;
-                    ^
-   1 warning generated.
+Actually, I had read the source code carefully and noticed the possible
+error return code -ENOMEM of the ftrace_process_locs() function.
 
+At first I was going to implement an error-handling branch as you said,
+but after digging into more details, I discovered:
 
-vim +/umc_reg_offset +97 drivers/gpu/drm/amd/amdgpu/umc_v8_7.c
+- The ftrace_init() function did not handle the error return code of the ftrace_process_locs() function since the first version.
+- The ftrace_module_init() function did not handle it either.
 
-    89	
-    90	static void umc_v8_7_ecc_info_query_ras_error_count(struct amdgpu_device *adev,
-    91						void *ras_error_status)
-    92	{
-    93		struct ras_err_data *err_data = (struct ras_err_data *)ras_error_status;
-    94	
-    95		uint32_t umc_inst        = 0;
-    96		uint32_t ch_inst         = 0;
-  > 97		uint32_t umc_reg_offset  = 0;
-    98		uint32_t channel_index   = 0;
-    99	
-   100		/* TODO: driver needs to toggle DF Cstate to ensure
-   101		 * safe access of UMC registers. Will add the protection
-   102		 */
-   103		LOOP_UMC_INST_AND_CH(umc_inst, ch_inst) {
-   104			umc_reg_offset = get_umc_v8_7_reg_offset(adev,
-   105								umc_inst,
-   106								ch_inst);
-   107			channel_index = get_umc_v8_7_channel_index(adev,
-   108								umc_inst,
-   109								ch_inst);
-   110			umc_v8_7_ecc_info_query_correctable_error_count(adev,
-   111								channel_index,
-   112								&(err_data->ce_count));
-   113			umc_v8_7_ecc_info_querry_uncorrectable_error_count(adev,
-   114								channel_index,
-   115								&(err_data->ue_count));
-   116		}
-   117	}
-   118	
+To keep consistent with the existing code, I just removed the assignment
+in that patch.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Maybe we should deal with the error return code more appropriately,
+at least print some warnings?
+
+Best regards,
+
+Yuntao

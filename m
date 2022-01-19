@@ -2,234 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E22493E2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC66493E3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353702AbiASQPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
+        id S1355926AbiASQVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346196AbiASQPI (ORCPT
+        with ESMTP id S1353702AbiASQVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:15:08 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97365C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:15:07 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id v123so6068623wme.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:15:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/740EhzwYoGWwplLvQqVEtpoUmpyOdkwft+pAru/eUg=;
-        b=CLleadD2rlpyVmC2Y6vZSEoLi9LN/RUvstwkUMHlt3h7gHDd+Twhzs8oNKymBLJ71M
-         +mCmZ512cWOY8OIf9l9LSqDn0RzEX5N4nNE80SRlE4EPdjhpbA+VFlLjEUNdd6c7+gmz
-         hc/Es0b3squc/LZ7AtYoKuJMwS6NkmXhvHLNA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=/740EhzwYoGWwplLvQqVEtpoUmpyOdkwft+pAru/eUg=;
-        b=p6y3l3RCHQ4Gj5ea99uibKBEvRUkPJVdjD4At+9G3zBDf/yF1JC1uKH5vGWe544jfJ
-         Fi9Bvpbg2o8A/saL944MaQDDdpRZeETHBZsigD80Z8BVHfeVxa/1wMIhVcqjXGTQMnku
-         kXynZpqm3c9vL/Ag8dUfqg9yJEtIjeBfECbIzUH2jhlyyVXyxR/5cdMiBNHGuHkRdQyF
-         p0fJCadX/0noR5LqJ+AKkQJbVA8QV21ySi1TXF6Lq9h2nVgqtA3MwE+1SD59dr0sMR2Y
-         Cbrr/aCfYEN0U50BNzKRQQ5QEkBjDb3wUTSfONqj6PR/d+A+mLq40qWWWamf+qIihmLN
-         7akw==
-X-Gm-Message-State: AOAM532k4cImOn71oaqm5ZQZ5rxxNFc2aOfwHUa7+SVGKeXvPu5WjGSV
-        flEqRwg1utNsgssVstCWAQMMIw==
-X-Google-Smtp-Source: ABdhPJwiLLIYLwmxveHTo+l6K6jAbRNMKsadqYtKqTPCn9x60CqA3JeQAqEpCJtSMiU+47LHV4yaMA==
-X-Received: by 2002:adf:fb84:: with SMTP id a4mr30060043wrr.315.1642608906005;
-        Wed, 19 Jan 2022 08:15:06 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id o13sm298372wrq.37.2022.01.19.08.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 08:15:05 -0800 (PST)
-Date:   Wed, 19 Jan 2022 17:15:02 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Wed, 19 Jan 2022 11:21:31 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC29C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:21:30 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nADiC-0001lS-Jy; Wed, 19 Jan 2022 17:21:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nADi8-00BD7u-GS; Wed, 19 Jan 2022 17:21:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nADi7-00036L-2R; Wed, 19 Jan 2022 17:21:23 +0100
+Date:   Wed, 19 Jan 2022 17:21:22 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Harald Seiler <hws@denx.de>
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [PATCH 0/3] lib/string_helpers: Add a few string helpers
-Message-ID: <Yeg5BpV8tknSPdSQ@phenom.ffwll.local>
-Mail-Followup-To: Jani Nikula <jani.nikula@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>, Mikita Lipski <mikita.lipski@amd.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <YegPiR7LU8aVisMf@alley>
- <87tudzbykz.fsf@intel.com>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
+Message-ID: <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
+References: <20220119145204.238767-1-hws@denx.de>
+ <20220119151145.zft47rzebnabiej2@pengutronix.de>
+ <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3lbu7jtqhrttkbqc"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87tudzbykz.fsf@intel.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 04:16:12PM +0200, Jani Nikula wrote:
-> On Wed, 19 Jan 2022, Petr Mladek <pmladek@suse.com> wrote:
-> > On Tue 2022-01-18 23:24:47, Lucas De Marchi wrote:
-> >> Add some helpers under lib/string_helpers.h so they can be used
-> >> throughout the kernel. When I started doing this there were 2 other
-> >> previous attempts I know of, not counting the iterations each of them
-> >> had:
-> >> 
-> >> 1) https://lore.kernel.org/all/20191023131308.9420-1-jani.nikula@intel.com/
-> >> 2) https://lore.kernel.org/all/20210215142137.64476-1-andriy.shevchenko@linux.intel.com/#t
-> >> 
-> >> Going through the comments I tried to find some common ground and
-> >> justification for what is in here, addressing some of the concerns
-> >> raised.
-> >> 
-> >> d. This doesn't bring onoff() helper as there are some places in the
-> >>    kernel with onoff as variable - another name is probably needed for
-> >>    this function in order not to shadow the variable, or those variables
-> >>    could be renamed.  Or if people wanting  <someprefix>
-> >>    try to find a short one
-> >
-> > I would call it str_on_off().
-> >
-> > And I would actually suggest to use the same style also for
-> > the other helpers.
-> >
-> > The "str_" prefix would make it clear that it is something with
-> > string. There are other <prefix>_on_off() that affect some
-> > functionality, e.g. mute_led_on_off(), e1000_vlan_filter_on_off().
-> >
-> > The dash '_' would significantly help to parse the name. yesno() and
-> > onoff() are nicely short and kind of acceptable. But "enabledisable()"
-> > is a puzzle.
-> >
-> > IMHO, str_yes_no(), str_on_off(), str_enable_disable() are a good
-> > compromise.
-> >
-> > The main motivation should be code readability. You write the
-> > code once. But many people will read it many times. Open coding
-> > is sometimes better than misleading macro names.
-> >
-> > That said, I do not want to block this patchset. If others like
-> > it... ;-)
-> 
-> I don't mind the names either way. Adding the prefix and dashes is
-> helpful in that it's possible to add the functions first and convert
-> users at leisure, though with a bunch of churn, while using names that
-> collide with existing ones requires the changes to happen in one go.
-> 
-> What I do mind is grinding this series to a halt once again. I sent a
-> handful of versions of this three years ago, with inconclusive
-> bikeshedding back and forth, eventually threw my hands up in disgust,
-> and walked away.
 
-Yeah we can sed this anytime later we want to, but we need to get the foot
-in the door. There's also a pile more of these all over.
+--3lbu7jtqhrttkbqc
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
+> Hi,
+>=20
+> On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
+> > > Right now, even when `delay_rts_before_send` and `delay_rts_after_sen=
+d`
+> > > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
+> > > few 100us of additional overhead on slower i.MX platforms.
+> > >=20
+> > > Implement a fast path when the delays are 0, where the RTS signal is
+> > > toggled immediately instead of going through an hrtimer.  This fast p=
+ath
+> > > behaves identical to the code before delay support was implemented.
+> > >=20
+> > > Signed-off-by: Harald Seiler <hws@denx.de>
+> > > ---
+> > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
+> > >  1 file changed, 14 insertions(+), 4 deletions(-)
+> > >=20
+> > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> > > index df8a0c8b8b29..67bbbb69229d 100644
+> > > --- a/drivers/tty/serial/imx.c
+> > > +++ b/drivers/tty/serial/imx.c
+> > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *p=
+ort)
+> > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
+> > >  		if (sport->tx_state =3D=3D SEND) {
+> > >  			sport->tx_state =3D WAIT_AFTER_SEND;
+> > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > +
+> > > +			if (port->rs485.delay_rts_after_send > 0) {
+> > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
+> > >  					 port->rs485.delay_rts_after_send);
+> > > -			return;
+> > > +				return;
+> > > +			}
+> > > +
+> > > +			/* continue without any delay */
+> >=20
+> > Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER_SEND ?
+>=20
+> I am keeping the assignment intentionally, to fall into the
+> if(state =3D=3D WAIT_AFTER_RTS) below (which then sets the state to OFF).
+> I originally had the code structured like this:
+>=20
+> 	if (port->rs485.delay_rts_after_send > 0) {
+> 		sport->tx_state =3D WAIT_AFTER_SEND;
+> 		start_hrtimer_ms(&sport->trigger_stop_tx,
+> 			 port->rs485.delay_rts_after_send);
+> 		return;
+> 	} else {
+> 		/* continue without any delay */
+> 		sport->tx_state =3D WAIT_AFTER_SEND;
+> 	}
+>=20
+> This is functionally identical, but maybe a bit more explicit.
+>=20
+> Not sure what is more clear to read?
 
-on the series, maybe it helps? And yes let's merge this through drm-misc.
--Daniel
+I didn't oppose to the readability thing. With your patch you skip
+starting the stop_tx timer and that would usually care for calling
+imx_uart_stop_tx and setting sport->tx_state =3D OFF. This doesn't happen
+with your patch any more.
 
-> 
-> >
-> >
-> >> e. One alternative to all of this suggested by Christian König
-> >>    (43456ba7-c372-84cc-4949-dcb817188e21@amd.com) would be to add a
-> >>    printk format. But besides the comment, he also seemed to like
-> >>    the common function. This brought the argument from others that the
-> >>    simple yesno()/enabledisable() already used in the code is easier to
-> >>    remember and use than e.g. %py[DOY]
-> >
-> > Thanks for not going this way :-)
-> >
-> >> Last patch also has some additional conversion of open coded cases. I
-> >> preferred starting with drm/ since this is "closer to home".
-> >> 
-> >> I hope this is a good summary of the previous attempts and a way we can
-> >> move forward.
-> >> 
-> >> Andrew Morton, Petr Mladek, Andy Shevchenko: if this is accepted, my
-> >> proposal is to take first 2 patches either through mm tree or maybe
-> >> vsprintf. Last patch can be taken later through drm.
-> >
-> > I agree with Andy that it should go via drm tree. It would make it
-> > easier to handle potential conflicts.
-> >
-> > Just in case, you decide to go with str_yes_no() or something similar.
-> > Mass changes are typically done at the end on the merge window.
-> > The best solution is when it can be done by a script.
-> >
-> > Best Regards,
-> > Petr
-> 
-> -- 
-> Jani Nikula, Intel Open Source Graphics Center
+Best regards
+Uwe
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--3lbu7jtqhrttkbqc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHoOoAACgkQwfwUeK3K
+7AlRAQgAgfdo/UnYSZL26GHCspaug9m4lKSf6QFlvEcKT5YXmO7pBNwvXZ7hX2aY
+GacleYsn5gUSEjQeNnUKFd7JafMsdtNnd2gFNe3FAguhWW3perUcuSPiZO9xtu5b
+HzQ9tEqmsNcumY1gvA0lwAOAc61XgHmxSsOW6twR/A/ldYYi0Q9iqUU0bGKsPWTI
+Q+Buv+xjgbXUNYUV8NVbfbsNVvw4v6ou+8DdPH2GUoN3K8/pwmqJZ50pfXMdCrQT
+d0iCMQ2bCnCWRzbvHLrTZ5yj59bgpBscZC27G5/zMJEKELufWbubOLpJhaIL+Xm6
+ygFBeDtGvYTLy9esxdUY2Bh2wUEszA==
+=WNP1
+-----END PGP SIGNATURE-----
+
+--3lbu7jtqhrttkbqc--

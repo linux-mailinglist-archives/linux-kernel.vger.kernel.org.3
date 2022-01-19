@@ -2,147 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804964937A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E03F4937A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353130AbiASJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S1352962AbiASJq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353118AbiASJos (ORCPT
+        with ESMTP id S1346503AbiASJqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:44:48 -0500
-Received: from mx.msync.work (mx.msync.work [IPv6:2a01:4f9:2b:2dc2::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:44:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2581F268DE1;
-        Wed, 19 Jan 2022 09:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1642585484; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-         content-transfer-encoding:content-language:in-reply-to:references:
-         disposition-notification-to; bh=9/eVGmOIV/oivfsHMmjhRHKvLdXI2EOqqyAI5/Fn9o8=;
-        b=Ma6JDhP7gn5zvQiHkgLJUOJw3XqcXv8cjotmm0ATM8DOmkZPLcIkjv5Wc0RERim0ue3kri
-        mOI/wwf7TWkYWFD8y64V6g1McUhCvU1IPkgusm20Q30DqWviW0XIiiA8mHp4MAq0rFEObK
-        MHF17rXoJ0/SorZFzC/ObJJZHyUshRtD1rcAQfzHGxGj4+hen3WW1LYLCEWNDd9aTZLDnR
-        pa7s1IDjJHpa4X+QANH35pGxZHar/7WHdmbZ0bOBIRWxvdqVGW2bMxqXmF0f6Uk9o+r+ED
-        g8cpYkOmPAJlHtswMEBJ7HdnO/CJppQ9O8Rv0CeLkQ8TCYX1U5oQd4zruqaEGg==
-Subject: Re: [PATCH v3 1/2] Bluetooth: btrtl: Add support for RTL8822C hci_ver
- 0x08
-To:     Rudi Heitbaum <rudi@heitbaum.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211027091416.1577668-1-adeep@lexina.in>
- <20211027091416.1577668-2-adeep@lexina.in> <20220119090140.GA24@4f18b3450899>
-From:   Vyacheslav <adeep@lexina.in>
-Message-ID: <6c73a271-01a3-6616-35ae-6db3f86538a3@lexina.in>
-Date:   Wed, 19 Jan 2022 12:44:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 19 Jan 2022 04:46:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACBCC061574;
+        Wed, 19 Jan 2022 01:46:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2357B81907;
+        Wed, 19 Jan 2022 09:46:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BAE7C004E1;
+        Wed, 19 Jan 2022 09:46:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642585581;
+        bh=+qQOh1PurSXvzxoWo6Z89b7E5FjgIwjP+Cb6PNVs2EU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CAGRGfQoAcOgl/Mq4niJaTi8+9CD/hjHAaly1vihDB6OnII6oVI23i2bxHkEtN9we
+         vhT91/iZV9ltw/vLMjlU08EyHnfRL+CG/dOJf4qTGMQZf4kXwipfQL0g63v4drTsig
+         nlV91Uno3swlWGVxSfX4bF8PyffofyATNJx/UVpoFfjxtVqmtMPzJdhvtnJaek00hS
+         dbYUIF+z/22uAQz8+vsv8krkyhu8dMibTJoWRUWRaw5UY06tOf/RG/ueU3oLILu8X4
+         DP6jwyjtHsa5upVb/EzddT7vQGm0s04oVVe4bIDveB7p3O2N4canBoxMjYxYMOb4zz
+         mqEmBu52oofkA==
+Date:   Wed, 19 Jan 2022 10:46:13 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v8 19/19] ima: Enable IMA namespaces
+Message-ID: <20220119094613.cxxxmz5qbuehd7c3@wittgenstein>
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
+ <20220114144515.vbler7ae3jqebhec@wittgenstein>
+ <8f7e0bcc-cd7c-723d-c544-300b5e8f3873@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20220119090140.GA24@4f18b3450899>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8f7e0bcc-cd7c-723d-c544-300b5e8f3873@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-Thanks for reply
+On Tue, Jan 18, 2022 at 01:09:12PM -0500, Stefan Berger wrote:
+> 
+> On 1/14/22 09:45, Christian Brauner wrote:
+> > On Tue, Jan 04, 2022 at 12:04:16PM -0500, Stefan Berger wrote:
+> > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > 
+> > > Introduce the IMA_NS in Kconfig for IMA namespace enablement.
+> > > 
+> > > Enable the lazy initialization of an IMA namespace when a user mounts
+> > > SecurityFS. Now a user_namespace will get a pointer to an ima_namespace
+> > > and therefore add an implementation of get_current_ns() that returns this
+> > > pointer.
+> > > 
+> > > get_current_ns() may now return a NULL pointer for as long as the IMA
+> > > namespace hasn't been created, yet. Therefore, return early from those
+> > > functions that may now get a NULL pointer from this call. The NULL
+> > > pointer can typically be treated similar to not having an IMA policy set
+> > > and simply return early from a function.
+> > > 
+> > > Implement ima_ns_from_file() for SecurityFS-related files where we can
+> > > now get the IMA namespace via the user namespace pointer associated
+> > > with the superblock of the SecurityFS filesystem instance. Since
+> > > the functions using ima_ns_from_file() will only be called after an
+> > > ima_namesapce has been allocated they will never get a NULL pointer
+> > > for the ima_namespace.
+> > > 
+> > > Switch access to userns->ima_ns to use acquire/release semantics to ensure
+> > > that a newly created ima_namespace structure is fully visible upon access.
+> > > 
+> > > Replace usage of current_user_ns() with ima_ns_from_user_ns() that
+> > > implements a method to derive the user_namespace from the given
+> > > ima_namespace. It leads to the same result.
+> > > 
+> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > ---
+> [...]
+> > > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > > index b7dbc687b6ff..5a9b511ebbae 100644
+> > > --- a/security/integrity/ima/ima_policy.c
+> > > +++ b/security/integrity/ima/ima_policy.c
+> > > @@ -1333,6 +1333,7 @@ static unsigned int ima_parse_appraise_algos(char *arg)
+> > >   static int ima_parse_rule(struct ima_namespace *ns,
+> > >   			  char *rule, struct ima_rule_entry *entry)
+> > >   {
+> > > +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
+> > So I think ima_policy_write() and therefore ima_parse_rule() can
+> > legitimately be reached at least from an ancestor userns but also from a
+> > completely unrelated userns via securityfs. Sorry, I didn't see this
+> > earlier. Think of the following two scenarios:
+> > 
+> > * userns1: unshare -U --map-root --mount
+> > -----------------------------------------
+> >     mount -t securityfs securityfs /userns1_securityfs
+> >     fd_in_userns1 = open("/userns1_securityfs/ima_file, O_RDWR);
+> > 
+> >     /* I _think_ that sending of fds here should work but I haven't
+> >      * bothered to recheck the scm code as I need to do some driving in a
+> >      * little bit so I'm running out of time...
+> >      */
+> >     send_fd_scm_rights(fd_in_userns1, task_in_userns2);
+> > 
+> > * userns2: unshare -U --map-root --mount
+> > -----------------------------------------
+> >     fd_from_userns1 = receive_fd_scm_rights();
+> >     write_policy(fd_from_userns1, "my fancy policy");
+> 
+> Passing an fd around like this presumably indicates that you intend to let
+> the recipient read/write to it.
 
-19.01.2022 12:01, Rudi Heitbaum wrote:
- > On Wed, Oct 27, 2021 at 12:14:15PM +0300, Vyacheslav Bocharov wrote:
- >> Add detection of RTL8822CS controller with hci_ver = 0x08
- >>
- >> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
- >> ---
- >>   drivers/bluetooth/btrtl.c | 7 +++++++
- >>   1 file changed, 7 insertions(+)
- >>
- >> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
- >> index c2bdd1e6060e..38d547cc6fcd 100644
- >> --- a/drivers/bluetooth/btrtl.c
- >> +++ b/drivers/bluetooth/btrtl.c
- >> @@ -156,6 +156,13 @@ static const struct id_table ic_id_table[] = {
- >>   	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
- >>   	  .cfg_name = "rtl_bt/rtl8822cs_config" },
- >>
- >> +	/* 8822C with UART interface */
- >> +	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
- >> +	  .config_needed = true,
- >> +	  .has_rom_version = true,
- >> +	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
- >> +	  .cfg_name = "rtl_bt/rtl8822cs_config" },
- >> +
- >>   	/* 8822C with USB interface */
- >>   	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_USB),
- >>   	  .config_needed = false,
- >
- > Hi Vyacheslav,
- >
- > Could I make a suggestion rebasing this patch against 5.16 and putting
- > the UART hci ver 0008 berore 000aI recently submitted a v4 patch with 
-the .has_msft_ext added based on bluetooth-next, but without the correct 
-order.
-https://patchwork.kernel.org/project/bluetooth/list/?series=606500
-Maybe the order of the lines is not so important?)
+Yes.
 
- >
- > this has been tested on Tanix TX6.also tested on JetHome JetHub H1 
-and applied to Armbian patchset 
-(https://github.com/armbian/build/pull/3201).
+> 
+> 
+> > It also means that if you inherit an fd from a more privileged imans
+> > instance you can write to it:
+> 
+> Now in this example we have to assume that root is making a mistake passing
+> the file descriptor around?
+> 
+> # ls -l /sys/kernel/security/ima/
+> total 0
+> -r--r-----. 1 root root 0 Jan 18 12:48 ascii_runtime_measurements
+> -r--r-----. 1 root root 0 Jan 18 12:48 binary_runtime_measurements
+> -rw-------. 1 root root 0 Jan 18 12:48 policy
+> -r--r-----. 1 root root 0 Jan 18 12:48 runtime_measurements_count
+> -r--r-----. 1 root root 0 Jan 18 12:48 violations
+> 
+> > 
+> > * initial_userns:
+> 
+> 
+> So that's the host, right? And this is a 2nd independent example from the
+> first.
 
-Also need to update the firmware in linux-firmware, the correct binaries 
-are in armbian-firmware.
+Yes, these are just two examples to give a more complete idea of the
+semantics by specifying two cases and how ima would behave.
 
- >
- > Before:
- >
- > [   11.512883] Bluetooth: hci0: RTL: examining hci_ver=08 
-hci_rev=000c lmp_ver=08 lmp_subver=8822
- > [   11.512940] Bluetooth: hci0: RTL: unknown IC info, lmp subver 
-8822, hci rev 000c, hci ver 0008
- > [   11.512957] Bluetooth: hci0: RTL: no config loaded
- >
- > After:
- >
- > [   12.642167] Bluetooth: hci0: RTL: examining hci_ver=08 
-hci_rev=000c lmp_ver=08 lmp_subver=8822
- > [   12.671911] Bluetooth: hci0: RTL: rom_version status=0 version=3
- > [   12.671961] Bluetooth: hci0: RTL: loading rtl_bt/rtl8822cs_fw.bin
- > [   12.706248] Bluetooth: hci0: RTL: loading rtl_bt/rtl8822cs_config.bin
- > [   12.730251] Bluetooth: hci0: RTL: cfg_sz 33, total sz 40737
- > [   13.318832] Bluetooth: hci0: RTL: fw version 0x05a91a4a
- >
- > Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
- >
- > ---
- >   drivers/bluetooth/btrtl.c | 10 +++++++++-
- >   1 file changed, 9 insertions(+), 1 deletion(-)
- >
- > diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
- > --- a/drivers/bluetooth/btrtl.c	2022-01-09 22:55:34.000000000 +0000
- > +++ b/drivers/bluetooth/btrtl.c	2022-01-15 07:12:21.102080089 +0000
- > @@ -148,7 +148,15 @@
- >   	  .fw_name  = "rtl_bt/rtl8761bu_fw.bin",
- >   	  .cfg_name = "rtl_bt/rtl8761bu_config" },
- >
- > + 	/* 8822C (hci ver 0008) with UART interface */
- > +	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
- > +	  .config_needed = true,
- > +	  .has_rom_version = true,
- > +	  .has_msft_ext = true,
- > +	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
- > +	  .cfg_name = "rtl_bt/rtl8822cs_config" },
- > +
- > -	/* 8822C with UART interface */
- > +	/* 8822C (hci ver 000a) with UART interface */
- >   	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_UART),
- >   	  .config_needed = true,
- >   	  .has_rom_version = true,
- > --
- > 2.25.1
- >
---
-Vyacheslav
+> 
+> > ------------------
+> 
+> >     mount -t securityfs securityfs /initial_securityfs
+> > 
+> >     fd_in_initial_securityfs = open("/initial_securityfs/ima_file, O_RDWR);
+> > 
+> >     pid = fork():
+> >     if (pid == 0) {
+> > 	unshare(CLONE_NEWUSER);
+> > 	/* write idmapping for yourself */
+> > 
+> > 	write_policy(fd_in_initial_securityfs, "my fancy policy");
+> >     }
+> > 
+> > would allow an unprivileged caller to alter the host's ima policy (as
+> > you can see the example requires cooperation).
+> 
+> Sorry, not currently following. Root is the only one being able to open that
+> IMA files on the host, right? Is this a mistake here where root passed the
+
+Yes.
+
+> fd onto the child and that child is not trusted to mess with the fd
+> including passing it on further?
+
+This is just an example what the current semantics mean in practice.
+The above code snippet is neither good nor bad by itself as that depends
+on context:
+
+1) Let's say for whatever reason you would like to let unprivileged
+   containers add policy rules (sorry in case I'm using the wrong ima
+   vernacular) for themselves to the initial ima namespace during
+   startup. That can be a rather valid and important use-case. Then this
+   code snipped above where root opens a policy fd in the host
+   securityfs instance and then let's the container access it across
+   fork() + post namespace creation is "good" as it will allow the
+   container to write the rules during setup while e.g. letting the
+   container manager process (the code prior to fork) continue doing
+   other stuff.
+
+2) If you only want to ever allow container manager on the host write
+   rules for the container in the initial ima ns but never the container
+   setup process itself then the above code is "bad". The policy fd
+   should've been closed before the fork() and definitely be opened
+   o-cloexec.
+
+The examples really were just trying to make obvious what the semantics
+are that you're buying.

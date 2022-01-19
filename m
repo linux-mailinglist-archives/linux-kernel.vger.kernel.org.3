@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEC54933CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 04:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01EF4933FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351411AbiASDwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 22:52:49 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:49802 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241235AbiASDws (ORCPT
+        id S1345050AbiASEIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:08:55 -0500
+Received: from out162-62-57-87.mail.qq.com ([162.62.57.87]:42919 "EHLO
+        out162-62-57-87.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235242AbiASEIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 22:52:48 -0500
-X-UUID: 977906052b8a4a76ac52b43372b3701a-20220119
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=rdjTSjD8++N4gFj+A35/zqJPc6D2tnr72tmO70rLMqc=;
-        b=ZcAu+KBbkzi0tlLGw/i/qzP25RqL6lToxfXhNBorSIMJ37ZB/PON1rsCjareqPjkuCfF681C5Rf580a0BTyStSlCWUiDXcLPJSezJ4kpz65o5k4lf0RYmVmFbWjS1x0AsWZh+XNLIkQYOHI70+M1uLYuHcuqq8zPESKscIend4U=;
-X-UUID: 977906052b8a4a76ac52b43372b3701a-20220119
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 39631038; Wed, 19 Jan 2022 11:52:44 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 19 Jan 2022 11:52:43 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 11:52:43 +0800
-Subject: Re: [PATCH] usb: gadget: at91_udc: fix incorrect print type
-To:     Miles Chen <miles.chen@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Dan Sneddon <dan.sneddon@microchip.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-References: <20220119020849.25732-1-miles.chen@mediatek.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-Message-ID: <eef429fa-d9d5-e0ea-8d19-45563fae27dc@mediatek.com>
-Date:   Wed, 19 Jan 2022 11:52:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20220119020849.25732-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: base64
+        Tue, 18 Jan 2022 23:08:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1642565330;
+        bh=Ql6j9PlAhOVvskyZmZUI53Opsdpkfj/d0GifJtIn9R8=;
+        h=From:To:Cc:Subject:Date;
+        b=eoJc+5YSKIw3L/9EzV0Xn9QIlT5gxn73zp+Y2g8xcjHnKqnWvZzU5kNTo6/R/zl7V
+         NVaN0eUGKVDDOib8HY5KkZDGTbHBS39MBclQTWA/iFL5fhVp+bioBlaG5Om5uMleog
+         YSQkjgMuskcTFBqbSs5Kc6Oy84LVQNHV+Hxk1/Lc=
+Received: from localhost.localdomain ([124.204.76.123])
+        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
+        id D4D1A6FE; Wed, 19 Jan 2022 11:53:13 +0800
+X-QQ-mid: xmsmtpt1642564393t6guz7zmq
+Message-ID: <tencent_5DA124DA30164B8C65F2406B34E193F70A09@qq.com>
+X-QQ-XMAILINFO: Mdw6+lqugK2CPiBgJlaJuwIPch7TgmoeikF7cM27REIhxqARxAyu5JsyLhEQ/U
+         NNCg0/2wPTPufA1pIbk0XUkzf3GF4ZZcVPZ5BJHOtHz+xcHtF8EaXL4zK4DXsG84L9Fscsv59ZWp
+         po8qFs7aiYW8pQy8yAIY9qtByY86cqJNQX/DClmKuQCX2mBb4MfbQ0Fm09QvK+01w2oMlgvbdfeM
+         ecARXHqxWqkwt5Al77bzZqvJKA9024Ga7NVjImOaNKWFEcsDiTEatoHiI3pnOY/FOSr0EcQt7cIn
+         Y6mR/MIThJgreRIzbZspbApztcgCqcOOnGuJDsjT8kqopWFIvDzidE841kIxD9i4HMfnS3SCn6A1
+         nlec+F6j53JS+A6lHEyJc4xTCICVOj/e0d+3dDZf9XCK+iFtWdWEwKCIYpg5YMaDYWkMSgScMIbX
+         H2/XVZ56rVBz5PgQi87rIAjgbtD07EzugG28Rs7HoXqUEhKfJVERLVxgIsl/3LLq44egM6/8GiEy
+         Lki32Ktzz1/qBs8tpF50TV1wQCia8/j50kP9uxZlYYXZf/HWVAUoOVXuDpmwJtAyBvHkjgyvJZLU
+         W7ak6VitUAsyumXHfE6Sg8Zg3OtVyfMDfY6dy/50q6wdXzozVehO97PpzKnQ37K3Y5Sx4tY686R+
+         wTLJK7tUCsHJFOo8IXoxN/gEqP+CwWasWuFFJLDIaxPA0MNJ1St/LiJg61EbeFrCMaiHVc8vLhq9
+         sh/dWoQvZjRr0g2LFGJg2zpuXIBHL7tES6Z1je4kKMcWWeU1W8F3hwArFkjAO6Pyfyp9LjRIHl7e
+         N/u9dhOFlXZYYWANv9AbbkULa/2SG2h32yyt0076ZDc0HUaFXseOU0fy4Hx+1GS2E=
+From:   elicec@foxmail.com
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hong Peng <elicec@foxmail.com>
+Subject: [PATCH] power: supply: ab8500_charger: fix spelling typo
+Date:   Wed, 19 Jan 2022 11:53:01 +0800
+X-OQ-MSGID: <20220119035301.29862-1-elicec@foxmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8xOS8yMiAxMDowOCBBTSwgTWlsZXMgQ2hlbiB3cm90ZToNCj4gRml4IGEgYnVpbGQgZXJy
-b3Igb2JzZXJ2ZWQgd2l0aCBBUkNIPWFybSBERUZDT05GSUc9YWxsbW9kY29uZmlnIGJ1aWxkLg0K
-PiANCj4gZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9hdDkxX3VkYy5oOjE3NDo0MjogZXJyb3I6IGZv
-cm1hdCAnJWQnIGV4cGVjdHMgYXJndW1lbnQgb2YgdHlwZSAnaW50JywgYnV0IGFyZ3VtZW50IDMg
-aGFzIHR5cGUgJ3N0cnVjdCBncGlvX2Rlc2MgKicgWy1XZXJyb3I9Zm9ybWF0PV0NCj4gDQo+IEZp
-eGVzOiA0YTU1NWYyYjhkMzEgKCJ1c2I6IGdhZGdldDogYXQ5MV91ZGM6IENvbnZlcnQgdG8gR1BJ
-TyBkZXNjcmlwdG9ycyIpDQo+IFNpZ25lZC1vZmYtYnk6IE1pbGVzIENoZW4gPG1pbGVzLmNoZW5A
-bWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2F0OTFfdWRj
-LmMgfCAyICstDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9u
-KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9hdDkxX3VkYy5j
-IGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9hdDkxX3VkYy5jDQo+IGluZGV4IGRkMDgxOWRmMDk2
-ZS4uOTA0MGEwNTYxNDY2IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2F0
-OTFfdWRjLmMNCj4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9hdDkxX3VkYy5jDQo+IEBA
-IC0xODk1LDcgKzE4OTUsNyBAQCBzdGF0aWMgaW50IGF0OTF1ZGNfcHJvYmUoc3RydWN0IHBsYXRm
-b3JtX2RldmljZSAqcGRldikNCj4gICAJCQkJCWF0OTFfdmJ1c19pcnEsIDAsIGRyaXZlcl9uYW1l
-LCB1ZGMpOw0KPiAgIAkJCWlmIChyZXR2YWwpIHsNCj4gICAJCQkJREJHKCJyZXF1ZXN0IHZidXMg
-aXJxICVkIGZhaWxlZFxuIiwNCj4gLQkJCQkgICAgdWRjLT5ib2FyZC52YnVzX3Bpbik7DQo+ICsJ
-CQkJICAgIGRlc2NfdG9fZ3Bpbyh1ZGMtPmJvYXJkLnZidXNfcGluKSk7DQo+ICAgCQkJCWdvdG8g
-ZXJyX3VucHJlcGFyZV9pY2xrOw0KPiAgIAkJCX0NCj4gICAJCX0NCj4gDQoNClJldmlld2VkLWJ5
-OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFua3MhDQpNYWNw
-YXVsIExpbg==
+From: Hong Peng <elicec@foxmail.com>
+
+fix the comment typo: "interrupts", "structcure"
+
+Signed-off-by: Hong Peng <elicec@foxmail.com>
+---
+ drivers/power/supply/ab8500_charger.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index ce074c018dcb..fcf4ed4e35aa 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -171,7 +171,7 @@ enum ab8500_usb_state {
+ 	struct ab8500_charger, ac_chg)
+ 
+ /**
+- * struct ab8500_charger_interrupts - ab8500 interupts
++ * struct ab8500_charger_interrupts - ab8500 interrupts
+  * @name:	name of the interrupt
+  * @isr		function pointer to the isr
+  */
+@@ -1083,7 +1083,7 @@ static int ab8500_vbus_in_curr_to_regval(struct ab8500_charger *di, int curr_ua)
+ 
+ /**
+  * ab8500_charger_get_usb_cur() - get usb current
+- * @di:		pointer to the ab8500_charger structre
++ * @di:		pointer to the ab8500_charger structure
+  *
+  * The usb stack provides the maximum current that can be drawn from
+  * the standard usb host. This will be in uA.
+-- 
+2.17.1
 

@@ -2,261 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA84F493932
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A47493924
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353981AbiASLFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:05:38 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:28692 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346901AbiASLFg (ORCPT
+        id S1353937AbiASLCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:02:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40716 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353857AbiASLCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:05:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642590336; x=1674126336;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1RxvszT2LIQhUMoamuH7jeB/HW54e0Ijr5Mvuivp4N0=;
-  b=tofEA4/AU3DIRSIdVs/VmNV3K/uUy42Lm52KMbbtjEql8W+bKRJuQb/a
-   qaa6IeD8oPIr0j10lglS2icT5sm3lh1LhUCQavNg50WrdsifeQ8WtHIHh
-   ntDT3elku1lu3KUl6VSusaypVu5cph0xnuSQzfrxpvKsfqdk/iwyGq8gV
-   g=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Jan 2022 03:05:36 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 03:05:34 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 19 Jan 2022 03:05:34 -0800
-Received: from [10.216.49.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 19 Jan
- 2022 03:05:28 -0800
-Message-ID: <7514ff7f-9979-e308-486e-def51ca8e943@quicinc.com>
-Date:   Wed, 19 Jan 2022 16:31:45 +0530
+        Wed, 19 Jan 2022 06:02:41 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20J9vnpx022766;
+        Wed, 19 Jan 2022 11:02:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=vuQsa7jcrh5TcCyBbceIuHnE31xEDzVmMebCUoCOxYw=;
+ b=LCoboYKCoL0/c06e4dDPbiATikYLGlXP2MrHYAB91djchq5IQMINmb2MQyq7WoeIEAUm
+ rapdlRaHo6j8ZNnMG1iZDtfanZLA6cWrbH2br8Jw6JogLCrqRjhXGbs6DwKK8djqNeiG
+ NQAQnCs4HuxWa95WeFQKGp+xCTRiGYkH4skX53doPhqWvjO+8hKEZAOsO0v1ZCzrHZyP
+ 52fMw6Sl9hXap9FHibpH06jRa/PXHwnVCiBNywqWQz/8fBjLmaODOj7Jvf9bDCGbWzrZ
+ 5ZojM97tthNVnymGwlZry4SB17lrKPsg7E55AfNUY2h5TJv/MRK6mo6oBitQAiw3LEhN Ow== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpgfm158r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 11:02:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JAxlsk001602;
+        Wed, 19 Jan 2022 11:02:38 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dknhjmhwr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 11:02:38 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JB2Zu436635094
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 11:02:35 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E100DA417A;
+        Wed, 19 Jan 2022 11:02:34 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 91FD4A4177;
+        Wed, 19 Jan 2022 11:02:34 +0000 (GMT)
+Received: from [9.171.12.6] (unknown [9.171.12.6])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 11:02:34 +0000 (GMT)
+Message-ID: <422595a5-b24b-8760-ff0e-112322142de7@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 12:02:34 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
- for dwc3 qcom
+Subject: Re: [RFC PATCH v1 01/10] s390/uaccess: Add storage key checked access
+ to user memory
 Content-Language: en-US
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-CC:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>
-References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
- <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
- <YXcBK7zqny0s4gd4@ripper>
- <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
- <YXck+xCJQBRGqTCw@ripper>
- <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
- <YXdsYlLWnjopyMn/@ripper>
- <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
- <YXjbs3Bv6Y3d87EC@yoga>
- <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
- <da877712-dac9-e9d0-0bfc-25bef450eb65@codeaurora.org>
- <0153c297-f648-25d1-7f0f-2114f07ef12b@quicinc.com>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <0153c297-f648-25d1-7f0f-2114f07ef12b@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-2-scgl@linux.ibm.com> <YefeakONMN4PLlml@osiris>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <YefeakONMN4PLlml@osiris>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: SORBrbFPWDMzbdnpNb8-49k4NAN0QjSu
+X-Proofpoint-GUID: SORBrbFPWDMzbdnpNb8-49k4NAN0QjSu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201190061
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/17/2022 11:33 AM, Sandeep Maheswaram wrote:
-> Hi Rajendra,
+On 1/19/22 10:48, Heiko Carstens wrote:
 > 
-> On 10/28/2021 9:26 AM, Rajendra Nayak wrote:
+> On Tue, Jan 18, 2022 at 10:52:01AM +0100, Janis Schoetterl-Glausch wrote:
+>> KVM needs a mechanism to do accesses to guest memory that honor
+>> storage key protection.
+>> Since the copy_to/from_user implementation makes use of move
+>> instructions that support having an additional access key supplied,
+>> we can implement __copy_from/to_user_with_key by enhancing the
+>> existing implementation.
 >>
+>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>> ---
+>>  arch/s390/include/asm/uaccess.h | 32 ++++++++++++++++++
+>>  arch/s390/lib/uaccess.c         | 57 +++++++++++++++++++++++----------
+>>  2 files changed, 72 insertions(+), 17 deletions(-)
 >>
->> On 10/27/2021 7:54 PM, Ulf Hansson wrote:
->>> On Wed, 27 Oct 2021 at 06:55, Bjorn Andersson
->>> <bjorn.andersson@linaro.org> wrote:
->>>>
->>>> On Tue 26 Oct 19:48 CDT 2021, Stephen Boyd wrote:
->>>>
->>>>> +Rajendra
->>>>>
->>>>> Quoting Bjorn Andersson (2021-10-25 19:48:02)
->>>>>> On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
->>>>>>
->>>>>>>
->>>>>>> When the binding was introduced I recall we punted on the parent child
->>>>>>> conversion stuff. One problem at a time. There's also the possibility
->>>>>>> for a power domain to be parented by multiple power domains so
->>>>>>> translation tables need to account for that.
->>>>>>>
->>>>>>
->>>>>> But for this case - and below display case - the subdomain (the device's
->>>>>> power-domain) is just a dumb gate. So there is no translation, the given
->>>>>> performance_state applies to the parent. Or perhaps such implicitness
->>>>>> will come back and bite us?
->>>>>
->>>>> In the gate case I don't see how the implicitness will ever be a
->>>>> problem.
->>>>>
->>>>>>
->>>>>> I don't think we allow a power-domain to be a subdomain of two
->>>>>> power-domains - and again it's not applicable to USB or display afaict.
->>>>>
->>>>> Ah maybe. I always confuse power domains and genpd.
->>>>>
->>>>>>
->>>>>>>>
->>>>>>>>> Or we may need to make another part of the OPP binding to indicate the
->>>>>>>>> relationship between the power domain and the OPP and the parent of
->>>>>>>>> the power domain.
->>>>>>>>
->>>>>>>> I suspect this would be useful if a power-domain provider needs to
->>>>>>>> translate a performance_state into a different supply-performance_state.
->>>>>>>> Not sure if we have such case currently; these examples are all an
->>>>>>>> adjustable power-domain with "gating" subdomains.
->>>>>>>
->>>>>>> Even for this case, we should be able to have the GDSC map the on state
->>>>>>> to some performance state in the parent domain. Maybe we need to add
->>>>>>> some code to the gdsc.c file to set a performance state on the parent
->>>>>>> domain when it is turned on. I'm not sure where the value for that perf
->>>>>>> state comes from. I guess we can hardcode it in the driver for now and
->>>>>>> if it needs to be multiple values based on the clk frequency we can push
->>>>>>> it out to an OPP table or something like that.
->>>>>>>
->>>>>>
->>>>>> For the GDSC I believe we only have 1:1 mapping, so implementing
->>>>>> set_performance_state to just pass that on to the parent might do the
->>>>>> trick (although I haven't thought this through).
->>>>>>
->>>>>> Conceptually I guess this would be like calling clk_set_rate() on a
->>>>>> clock gate, relying on it being propagated upwards. The problem here is
->>>>>> that the performance_state is just a "random" integer without a well
->>>>>> defined unit.
->>>>>>
->>>>>
->>>>> Right. Ideally it would be in the core code somehow so that if there
->>>>> isn't a set_performance_state function we go to the parent or some
->>>>> special return value from the function says "call it on my parent". The
->>>>> translation scheme could come later so we can translate the "random"
->>>>> integer between parent-child domains.
->>>>
->>>> As a proof of concept it should be sufficient to just add an
->>>> implementation of sc->pd.set_performance_state in gdsc.c. But I agree
->>>> that it would be nice to push this into some framework code, perhaps
->>>> made opt-in by some GENPD_FLAG_xyz.
->>>>
->>>>> At the end of the day the device
->>>>> driver wants to set a frequency or runtime pm get the device and let the
->>>>> OPP table or power domain code figure out what the level is supposed to
->>>>> be.
->>>>>
->>>>
->>>> Yes and this is already working for the non-nested case - where the
->>>> single power-domain jumps between performance states as the opp code
->>>> switches from one opp to another.
->>>>
->>>> So if we can list only the child power-domain (i.e. the GDSC) and have
->>>> the performance_stat requests propagate up to the parent rpmhpd resource
->>>> I think we're good.
->>>>
->>>>
->>>> Let's give this a spin and confirm that this is the case...
->>>>
->>>>>>
->>>>>>
->>>>>> The one case where I believe we talked about having different mapping
->>>>>> between the performance_state levels was in the relationship between CX
->>>>>> and MX. But I don't think we ever did anything about that...
->>>>>
->>>>> Hmm alright. I think there's a constraint but otherwise nobody really
->>>>> wants to change both at the same time.
->>>>>
->>>>>>>
->>>>>>> Yes, a GDSC is really a gate on a parent power domain like CX or MMCX,
->>>>>>> etc. Is the display subsystem an example of different clk frequencies
->>>>>>> wanting to change the perf state of CX? If so it's a good place to work
->>>>>>> out the translation scheme for devices that aren't listing the CX power
->>>>>>> domain in DT.
->>>>>>
->>>>>> Yes, the various display components sits in MDSS_GDSC but the opp-tables
->>>>>> needs to change the performance_state of MDSS_GDSC->parent (i.e. CX or
->>>>>> MMCX, depending on platform).
->>>>>>
->>>>>> As I said, today we hack this by trusting that the base drm/msm driver
->>>>>> will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain for each
->>>>>> of these components.
->>>>>>
->>>>>>
->>>>>> So if we solve this, then that seems to directly map to the static case
->>>>>> for USB as well.
->>>>>>
->>>>>
->>>>> Got it. So in this case we could have the various display components
->>>>> that are in the mdss gdsc domain set their frequency via OPP and then
->>>>> have that translate to a level in CX or MMCX. How do we parent the power
->>>>> domains outside of DT? I'm thinking that we'll need to do that if MMCX
->>>>> is parented by CX or something like that and the drivers for those two
->>>>> power domains are different. Is it basic string matching?
->>>>
->>>> In one way or another we need to invoke pm_genpd_add_subdomain() to link
->>>> the two power-domains (actually genpds) together, like what was done in
->>>> 3652265514f5 ("clk: qcom: gdsc: enable optional power domain support").
->>>>
->>>> In the case of MMCX and CX, my impression of the documentation is that
->>>> they are independent - but if we need to express that CX is parent of
->>>> MMCX, they are both provided by rpmhpd which already supports this by
->>>> just specifying .parent on mmcx to point to cx.
->>>
->>> I was trying to follow the discussion, but it turned out to be a bit
->>> complicated to catch up and answer all things. In any case, let me
->>> just add a few overall comments, perhaps that can help to move things
->>> forward.
->>>
->>> First, one domain can have two parent domains. Both from DT and from
->>> genpd point of view, just to make this clear.
->>>
->>> Although, it certainly looks questionable to me, to hook up the USB
->>> device to two separate power domains, one to control power and one to
->>> control performance. Especially, if it's really the same piece of HW
->>> that is managing both things. 
->> []..
->>> Additionally, if it's correct to model
->>> the USB GDSC power domain as a child to the CX power domain from HW
->>> point of view, we should likely do that.
->>
->> I think this would still require a few things in genpd, since
->> CX and USB GDSC are power domains from different providers.
->> Perhaps a pm_genpd_add_subdomain_by_name()?
->>
-> Tried with the changes provided by you  where USB GDSC power domains added as a child to the CX power domain
+>> diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
+>> index 02b467461163..5138040348cc 100644
+>> --- a/arch/s390/include/asm/uaccess.h
+>> +++ b/arch/s390/include/asm/uaccess.h
+>> @@ -33,6 +33,38 @@ static inline int __range_ok(unsigned long addr, unsigned long size)
+>>  
+>>  #define access_ok(addr, size) __access_ok(addr, size)
+>>  
+>> +unsigned long __must_check
+>> +raw_copy_from_user_with_key(void *to, const void __user *from, unsigned long n,
+>> +			    char key);
+>> +
+>> +unsigned long __must_check
+>> +raw_copy_to_user_with_key(void __user *to, const void *from, unsigned long n,
+>> +			  char key);
+>> +
+>> +static __always_inline __must_check unsigned long
+>> +__copy_from_user_with_key(void *to, const void __user *from, unsigned long n,
+>> +			  char key)
+>> +{
+>> +	might_fault();
+>> +	if (should_fail_usercopy())
+>> +		return n;
+>> +	instrument_copy_from_user(to, from, n);
+>> +	check_object_size(to, n, false);
+>> +	return raw_copy_from_user_with_key(to, from, n, key);
+>> +}
+>> +
+>> +static __always_inline __must_check unsigned long
+>> +__copy_to_user_with_key(void __user *to, const void *from, unsigned long n,
+>> +			char key)
+>> +{
+>> +	might_fault();
+>> +	if (should_fail_usercopy())
+>> +		return n;
+>> +	instrument_copy_to_user(to, from, n);
+>> +	check_object_size(from, n, true);
+>> +	return raw_copy_to_user_with_key(to, from, n, key);
+>> +}
+>> +
+>>  unsigned long __must_check
+>>  raw_copy_from_user(void *to, const void __user *from, unsigned long n);
 > 
-> But cx shutdown is not happening  during sytem suspend as we need to keep USB GDSC active in host mode .
+> That's a lot of code churn... I would have expected that the existing
+> functions will be renamed, get an additional key parameter, and the
+> current API is implemented by defines which map copy_to_user() &
+> friends to the new functions, and add a zero key.
 
-In the USB driver suspend when you check for this condition, in order to keep the GDSC active, you would
-perhaps have to drop the performance state vote and re-vote in resume.
-I don;t think the genpd core can handle this in any way.
+I don't think I understand you. I can implement raw_copy_from/to_user
+in terms of raw_copy_from/to_user_with_key, which does save a few lines,
+but that's it, isn't it?
 
+Thanks!
 > 
-> Regards
+> This would avoid a lot of code duplication, even though the kernel
+> image would get slightly larger.
 > 
-> Sandeep
+> Could you do that, please, and also provide bloat-a-meter results?
 > 
+> And as already mentioned: please don't use "char" for passing a
+> key. Besides that this leads to the overflow question as pointed out
+> by Sven, this might as usual also raise the question if there might be
+> any bugs wrt to sign extension. That is: for anything but characters,
+> please always explicitely use signed or unsigned char (or u8/s8), so
+> nobody has to think about this.
+
+Will do.
 > 
-> 
+> Thanks!
+

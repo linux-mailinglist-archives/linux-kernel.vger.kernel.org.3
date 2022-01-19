@@ -2,140 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E563C493786
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9360F49378B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351848AbiASJmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:42:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:59690 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbiASJmt (ORCPT
+        id S1353107AbiASJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353044AbiASJm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:42:49 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6F7542177B;
-        Wed, 19 Jan 2022 09:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642585368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bYZCV4bYim71AB+/QlUD1eg456naM2OEMt3lf0LO1HA=;
-        b=jIi92zpelf8mzF+0yk4eI/jvO3S6FlNCteJxLfwc7T8r1uHCbr7xuG4zEadbUA/uJV4yzZ
-        qUQfgJaXQeUFgTaqS6NtO++fEMmXmUkTiNdIpnj+ThLeu6yvWmkf7ciEjfnvm3GgpYz4Tv
-        4NRE1rxPOGuRTlwRVhHfBgsSxBQjA0Q=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Jan 2022 04:42:56 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375D3C061574;
+        Wed, 19 Jan 2022 01:42:56 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 83C7EA3B8D;
-        Wed, 19 Jan 2022 09:42:47 +0000 (UTC)
-Date:   Wed, 19 Jan 2022 10:42:47 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <YefdFwcoX4+ZcDSY@dhcp22.suse.cz>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <YdhR4vWdWksBALtM@dhcp22.suse.cz>
- <Ydu6fXg2FmrseQOn@google.com>
- <YdwQcl6D5Mbp9Z4h@dhcp22.suse.cz>
- <Yee36hPfWSs+jR0m@google.com>
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jf10G3v44z9scy;
+        Wed, 19 Jan 2022 10:42:54 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1642585372;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6yUiafitayqG9qVxmPKvPhVi5mgDkb14L3ujh+Xnamc=;
+        b=bgviz6d/ghsnghYiGAol8hFucAxD3VeMHq9rtMsJhC5CwnT+LfZrvR/nIKhfVSoxpH2BZT
+        j1QSF7QrSx+BTRUnZHDdUUxEwe4toBtiMlN4ftQshqD0c5ohEq5vF3nSHfQ2D9T8RRGs4+
+        yLjXw3qbZl/FIO0S5MdEZg7w0eQtrCQ9GCKJweZXnqfXoOfKdWmQsOBGBhdiY++4Usykfp
+        qdJ9ZiifZlCNL0bl0Ph91+IWXyR0XHjzZlSmcIjcHXkp77CLF9CWMd5A5+VEmJotHcOk4q
+        5muYsiathCc04rciGRZsLxJTZN4r17zQTTJNS8EErfe+xNi7JSFzYbsBydghPw==
+Message-ID: <06b7adc5612d9d0436cfb57e47518ad835b4fc62.camel@sylv.io>
+Subject: Re: [PATCH v2 2/4] hwmon: (max6639) Add regulator support
+From:   sylv <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Date:   Wed, 19 Jan 2022 10:42:49 +0100
+In-Reply-To: <20220118161108.GA4115171@roeck-us.net>
+References: <cover.1642413668.git.sylv@sylv.io>
+         <4c644f279f6e205d3c9540a4ad35825e4d5f2da1.1642413668.git.sylv@sylv.io>
+         <20220118161108.GA4115171@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yee36hPfWSs+jR0m@google.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 19-01-22 00:04:10, Yu Zhao wrote:
-> On Mon, Jan 10, 2022 at 11:54:42AM +0100, Michal Hocko wrote:
-> > On Sun 09-01-22 21:47:57, Yu Zhao wrote:
-> > > On Fri, Jan 07, 2022 at 03:44:50PM +0100, Michal Hocko wrote:
-> > > > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> > > > [...]
-> > > > > +static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
-> > > > > +{
-> > > > > +	static const struct mm_walk_ops mm_walk_ops = {
-> > > > > +		.test_walk = should_skip_vma,
-> > > > > +		.p4d_entry = walk_pud_range,
-> > > > > +	};
-> > > > > +
-> > > > > +	int err;
-> > > > > +#ifdef CONFIG_MEMCG
-> > > > > +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-> > > > > +#endif
-> > > > > +
-> > > > > +	walk->next_addr = FIRST_USER_ADDRESS;
-> > > > > +
-> > > > > +	do {
-> > > > > +		unsigned long start = walk->next_addr;
-> > > > > +		unsigned long end = mm->highest_vm_end;
-> > > > > +
-> > > > > +		err = -EBUSY;
-> > > > > +
-> > > > > +		rcu_read_lock();
-> > > > > +#ifdef CONFIG_MEMCG
-> > > > > +		if (memcg && atomic_read(&memcg->moving_account))
-> > > > > +			goto contended;
-> > > > > +#endif
-> > > > > +		if (!mmap_read_trylock(mm))
-> > > > > +			goto contended;
-> > > > 
-> > > > Have you evaluated the behavior under mmap_sem contention? I mean what
-> > > > would be an effect of some mms being excluded from the walk? This path
-> > > > is called from direct reclaim and we do allocate with exclusive mmap_sem
-> > > > IIRC and the trylock can fail in a presence of pending writer if I am
-> > > > not mistaken so even the read lock holder (e.g. an allocation from the #PF)
-> > > > can bypass the walk.
-> > > 
-> > > You are right. Here it must be a trylock; otherwise it can deadlock.
+On Tue, 2022-01-18 at 08:11 -0800, Guenter Roeck wrote:
+> On Mon, Jan 17, 2022 at 11:40:24AM +0100, Marcello Sylvester Bauer wrote:
+> > Add regulator support for boards where the fan-supply have to be
+> > powered up before it can be used.
 > > 
-> > Yeah, this is clear.
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > ---
+> >  drivers/hwmon/max6639.c | 64 +++++++++++++++++++++++++++++++++++------
+> >  1 file changed, 56 insertions(+), 8 deletions(-)
 > > 
-> > > I think there might be a misunderstanding: the aging doesn't
-> > > exclusively rely on page table walks to gather the accessed bit. It
-> > > prefers page table walks but it can also fallback to the rmap-based
-> > > function, i.e., lru_gen_look_around(), which only gathers the accessed
-> > > bit from at most 64 PTEs and therefore is less efficient. But it still
-> > > retains about 80% of the performance gains.
-> > 
-> > I have to say that I really have hard time to understand the runtime
-> > behavior depending on that interaction. How does the reclaim behave when
-> > the virtual scan is enabled, partially enabled and almost completely
-> > disabled due to different constrains? I do not see any such an
-> > evaluation described in changelogs and I consider this to be a rather
-> > important information to judge the overall behavior.
+> > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> > index ccc0f047bd44..0b241f029229 100644
+> > --- a/drivers/hwmon/max6639.c
+> > +++ b/drivers/hwmon/max6639.c
+> > @@ -87,6 +87,9 @@ struct max6639_data {
+> >  	/* Register values initialized only once */
+> >  	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
+> >  	u8 rpm_range;		/* Index in above rpm_ranges table */
+> > +
+> > +	/* Optional regulator for FAN supply */
+> > +	struct regulator *reg;
+> >  };
+> >  
+> >  static struct max6639_data *max6639_update_device(struct device *dev)
+> > @@ -516,6 +519,11 @@ static int max6639_detect(struct i2c_client *client,
+> >  	return 0;
+> >  }
+> >  
+> > +static void max6639_regulator_disable(void *data)
+> > +{
+> > +	regulator_disable(data);
+> > +}
+> > +
+> >  static int max6639_probe(struct i2c_client *client)
+> >  {
+> >  	struct device *dev = &client->dev;
+> > @@ -528,6 +536,30 @@ static int max6639_probe(struct i2c_client *client)
+> >  		return -ENOMEM;
+> >  
+> >  	data->client = client;
+> > +
+> > +	data->reg = devm_regulator_get_optional(dev, "fan");
+> > +	if (IS_ERR(data->reg)) {
+> > +		if (PTR_ERR(data->reg) != -ENODEV) {
+> > +			err = (int)PTR_ERR(data->reg);
+> > +			dev_warn(dev, "Failed looking up fan supply: %d\n", err);
 > 
-> It doesn't have (partially) enabled/disabled states nor does its
-> behavior change with different reclaim constraints. Having either
-> would make its design too complex to implement or benchmark.
+> This could be -EPROBE_DEFER. I do not think that warrants
+> an error message.
 
-Let me clarify. By "partially enabled" I really meant behavior depedning
-on runtime conditions. Say mmap_sem cannot be locked for half of scanned
-tasks and/or allocation for the mm walker fails due to lack of memory.
-How does this going to affect reclaim efficiency. How does a user/admin
-know that the memory reclaim is in a "degraded" mode because of the
-contention?
--- 
-Michal Hocko
-SUSE Labs
+I see. I'll adapt it analog to: drivers/hwmon/pwm-fan.c:323
+
+> 
+> > +			return err;
+> > +		}
+> > +		data->reg = NULL;
+> > +	} else {
+> > +		/* Spin up fans */
+> > +		err = regulator_enable(data->reg);
+> > +		if (err) {
+> > +			dev_err(dev, "Failed to enable fan supply: %d\n", err);
+> > +			return err;
+> > +		}
+> > +		err = devm_add_action_or_reset(dev, max6639_regulator_disable,
+> > +					       data->reg);
+> > +		if (err) {
+> > +			dev_err(dev, "Failed to register action: %d\n", err);
+> > +			return err;
+> > +		}
+> > +	}
+> > +
+> >  	mutex_init(&data->update_lock);
+> >  
+> >  	/* Initialize the max6639 chip */
+> > @@ -545,23 +577,39 @@ static int max6639_probe(struct i2c_client *client)
+> >  static int max6639_suspend(struct device *dev)
+> >  {
+> >  	struct i2c_client *client = to_i2c_client(dev);
+> > -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
+> > -	if (data < 0)
+> > -		return data;
+> > +	struct max6639_data *data = dev_get_drvdata(dev);
+> > +	int ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
+> > +
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	if (data->reg)
+> > +		regulator_disable(data->reg);
+> >  
+> >  	return i2c_smbus_write_byte_data(client,
+> > -			MAX6639_REG_GCONFIG, data | MAX6639_GCONFIG_STANDBY);
+> > +			MAX6639_REG_GCONFIG, ret | MAX6639_GCONFIG_STANDBY);
+> >  }
+> >  
+> >  static int max6639_resume(struct device *dev)
+> >  {
+> >  	struct i2c_client *client = to_i2c_client(dev);
+> > -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
+> > -	if (data < 0)
+> > -		return data;
+> > +	struct max6639_data *data = dev_get_drvdata(dev);
+> > +	int ret;
+> > +
+> > +	if (data->reg) {
+> > +		ret = regulator_enable(data->reg);
+> > +		if (ret) {
+> > +			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
+> > +			return ret;
+> > +		}
+> > +	}
+> > +
+> > +	ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
+> > +	if (ret < 0)
+> > +		return ret;
+> >  
+> >  	return i2c_smbus_write_byte_data(client,
+> > -			MAX6639_REG_GCONFIG, data & ~MAX6639_GCONFIG_STANDBY);
+> > +			MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
+> >  }
+> >  #endif /* CONFIG_PM_SLEEP */
+> >  
+

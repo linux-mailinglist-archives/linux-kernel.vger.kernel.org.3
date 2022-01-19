@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EE3493F87
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937C5493F89
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356597AbiASSCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356594AbiASSCx (ORCPT
+        id S1356612AbiASSDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:03:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34296 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356593AbiASSDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:02:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70ABC06161C;
-        Wed, 19 Jan 2022 10:02:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A05BFB81AD7;
-        Wed, 19 Jan 2022 18:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FFFC340E1;
-        Wed, 19 Jan 2022 18:02:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642615370;
-        bh=9tsmIKk0A/T3ybmJ17Mz4x6hwbmwrWo01oEf1EtfEjU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jJWykbxU+FJqWWtuK0PcUFRanCqkBGyLrRziCzQSf8plu+pluU/Td6H73cHNYxCIA
-         m7zrsja+9y3cuPn1YZ5ctXGN+WLrMGbh6z5u0n61QO4yrnAhEHiQCxNVl1Mv/pwRDH
-         hubnVMBsBy5e79ejxoFmyQgdE8g7R2qQ4DLtCyT5oNIIALvuANtSuiLL1ZG9uVZdfS
-         zK3fWvRC4mVfe/tqu9xazLzJXMCcxfwEmPNBOT9sGWv4NcCm7ARJZ5NbBQqSPwDLj/
-         +XgkUObaFXIJ0kchLJboPIIY26VT0A+MTBwPVwhsTfQUcuQk5D1i1ROi57vDXZIktL
-         KKNmtFl3Su42w==
-From:   Mark Brown <broonie@kernel.org>
-To:     amelie.delaunay@foss.st.com,
-        Alain Volmat <alain.volmat@foss.st.com>
-Cc:     alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mcoquelin.stm32@gmail.com,
-        linux-stm32@st-md-mailman.stormreply.com
-In-Reply-To: <20220119093245.624878-1-alain.volmat@foss.st.com>
-References: <20220119093245.624878-1-alain.volmat@foss.st.com>
-Subject: Re: [PATCH 0/2] spi: stm32: comments & SIMPLEX_RX fixes
-Message-Id: <164261536824.2816943.11806763183667927602.b4-ty@kernel.org>
-Date:   Wed, 19 Jan 2022 18:02:48 +0000
+        Wed, 19 Jan 2022 13:03:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642615380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=czyQcT5AvdpFdccMDnqOJP5PsUxctttwWttnV2WSAI4=;
+        b=T8gJ1i0aTtAdERDiXt4BeCytBiK3KhfgQQy9Gq7Wy33WoF52ZUe1UW1dpuvLrqAZdZVAQB
+        mbM9i88E0JobMJbh78/r6smiQDdfg3k/CFFEMRiopgN6fK8/XeV8daj3NXQucuCFGqgUIe
+        b/Dq+MExsOJjzxQeUHntfBfnK5am6XA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-VYf8phxVNM2lILB_6BELUw-1; Wed, 19 Jan 2022 13:02:58 -0500
+X-MC-Unique: VYf8phxVNM2lILB_6BELUw-1
+Received: by mail-wm1-f69.google.com with SMTP id o193-20020a1ca5ca000000b0034d78423625so3416641wme.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:02:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=czyQcT5AvdpFdccMDnqOJP5PsUxctttwWttnV2WSAI4=;
+        b=x45pVxj5aH8I0odZ3DPouvG05YZJN1LRctWO+cPmfjtjqfZmcza0XUvWs/rrD1yfHp
+         /wJacCyChEZWKQUmvqR7SmPRJR6i6iB4Ncka/N8Os6obOJj2dXOjCw6gA8d8QayV+NYP
+         rcA3ROpepf3B+3zwg9SQunFfA6BSOC9nyOtM4AZQLovtcBqkw82sHVuCcRHvdhBSdENz
+         +1xnzaORciQzv6ExtzVVynDnyrcdQ5eyysZZLoljgCkXS7dzN0iCPdzQOATpCa4MQM/F
+         rm2k0W9dOcvdQB/dsswKjTGji3snVfQruhLZlUpnuDUwd1ZXyCnzKdTn2iGlpCeQJYG/
+         +OcA==
+X-Gm-Message-State: AOAM5324iq6EAvRq6d7XBZ5byEqzdRx3zDqN8AE9i4RAs0e3esklys6M
+        QZur1avWGOxur3vML9frCbg0AfyOxKY4+y+bm6ji7xHFD0eADnctlsBho//CG07CwSjuX4A2Q5M
+        DOg5q4+zEsKhmR8fjimVUPyQE
+X-Received: by 2002:adf:d1e9:: with SMTP id g9mr16362039wrd.94.1642615377586;
+        Wed, 19 Jan 2022 10:02:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzWiK4YX1B5gdEVQZODtrmTI10OiMW4QGl94Z1D+eFnE79lslF625dzQ56217EHdanwhn1q9A==
+X-Received: by 2002:adf:d1e9:: with SMTP id g9mr16361991wrd.94.1642615376863;
+        Wed, 19 Jan 2022 10:02:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id u7sm233710wmc.11.2022.01.19.10.02.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 10:02:56 -0800 (PST)
+Message-ID: <7a0bc562-9f25-392d-5c05-9dbcd350d002@redhat.com>
+Date:   Wed, 19 Jan 2022 19:02:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
+ cgroups before exiting.
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Vipin Sharma <vipinsh@google.com>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        seanjc@google.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        dmatlack@google.com, jiangshanlai@gmail.com, kvm@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211222225350.1912249-1-vipinsh@google.com>
+ <20220105180420.GC6464@blackbody.suse.cz>
+ <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
+ <Yeclbe3GNdCMLlHz@slm.duckdns.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yeclbe3GNdCMLlHz@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 10:32:43 +0100, Alain Volmat wrote:
-> This series contains 2 fixes within the spi-stm32.c driver.  One is
-> removing comments regarding struct variables that do not exist and the
-> second one correct a previous STM32F4 related commit for SIMPLEX_RX which
-> happens to break SIMPLEX_RX for H7 since it enforces MUST_TX flags.
-> 
-> Alain Volmat (2):
->   spi: stm32: remove inexistant variables in struct stm32_spi_cfg
->     comment
->   spi: stm32: make SPI_MASTER_MUST_TX flags only specific to STM32F4
-> 
-> [...]
+On 1/18/22 21:39, Tejun Heo wrote:
+> So, these are normally driven by the !populated events. That's how everyone
+> else is doing it. If you want to tie the kvm workers lifetimes to kvm
+> process, wouldn't it be cleaner to do so from kvm side? ie. let kvm process
+> exit wait for the workers to be cleaned up.
 
-Applied to
+It does.  For example kvm_mmu_post_init_vm's call to
+kvm_vm_create_worker_thread is matched with the call to
+kthread_stop in kvm_mmu_pre_destroy_vm.
+  
+According to Vpin, the problem is that there's a small amount of time
+between the return from kthread_stop and the point where the cgroup
+can be removed.  My understanding of the race is the following:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+user process			kthread			management
+------------			-------			----------
+							wait4()
+exit_task_work()
+   ____fput()
+     kvm_mmu_pre_destroy_vm()
+       kthread_stop();
+         wait_for_completion();
+				exit_signals()
+				  /* set PF_EXITING */
+				exit_mm()
+				  exit_mm_release()
+				    complete_vfork_done()
+				      complete();
+cgroup_exit()
+   cgroup_set_move_task()
+     css_set_update_populated()
+exit_notify()
+   do_notify_parent()
+							<wakeup>
+							rmdir()
+							  cgroup_destroy_locked()
+							    cgroup_is_populated()
+							    return -EBUSY
+				cgroup_exit()
+				  cgroup_set_move_task()
+				    css_set_update_populated()
 
-Thanks!
+I cannot find the code that makes it possible to rmdir a cgroup
+if PF_EXITING is set.
 
-[1/2] spi: stm32: remove inexistant variables in struct stm32_spi_cfg comment
-      commit: 3cefddb72f80dc8d49ce605628ceb6525cfd64da
-[2/2] spi: stm32: make SPI_MASTER_MUST_TX flags only specific to STM32F4
-      commit: 9df15d842a0f77f2b8ee29386f6d714e4220df57
+Paolo
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

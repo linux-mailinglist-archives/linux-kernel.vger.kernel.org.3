@@ -2,140 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FE34940CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6817C494058
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239846AbiAST1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:27:16 -0500
-Received: from mga12.intel.com ([192.55.52.136]:65533 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229593AbiAST1P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:27:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642620434; x=1674156434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=dmpN7qUU9C3uIKfow/OKVaXBm34Ban3OqHYGXm/yruw=;
-  b=HuENwB+KiblncFi7b4ON8zpexWmy7WU8DzDmU80D+4f8eqK/gg8Q75yk
-   Fxk0LTVozkuRFOz6PZ/hBfLXCp6A9IqxFmqz9kh/GNYg/pSw+9GSuwtxH
-   ySsBO8OAw2DIx2N35p8KdU4NUjboDk9LI7T2lboXoCo2IELMjjsBvaxcm
-   qKj+/WrMzbl0YYiefehGa4zlCYl17AGNDGFhHi7e22yzIPUX1Jk5exYGs
-   MQ96dqY187LazQn1+mrLDB1ZoNbAOhCEWuWiGifYSxJgruofVfTeKPLof
-   6Nsgx8bClFHPny7/ZzfTJE6e92SGxOZtQH5RU232m3SZNTvBYrXrYSsJp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225147777"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="225147777"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:07:45 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="477498862"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:07:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAGHg-00CEIt-Ug;
-        Wed, 19 Jan 2022 21:06:16 +0200
-Date:   Wed, 19 Jan 2022 21:06:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Robert Richter <rric@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-Message-ID: <YehhKMl9ZIydj1fJ@smile.fi.intel.com>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
+        id S1357005AbiASTGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:06:45 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:35851 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356979AbiASTGg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 14:06:36 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 67B0C5806EB;
+        Wed, 19 Jan 2022 14:06:34 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 19 Jan 2022 14:06:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:reply-to:mime-version
+        :content-transfer-encoding; s=fm2; bh=XoGtHOG8AyFnf2S1JWsX18T68L
+        iZtgT1QGCS/Lzv0YE=; b=Z0dpaC+CnN0yiYzTq1mRWwOkyRPH017sN6ZHiGIChO
+        nmpfDjp8pp8RNPA+LdfgXzQBRUkihXdVIYSYo4szEZcidjaMBMDh+5kvIiubryoi
+        66m1R29c339JdNYRLdaaoS6iWxI+4RKk/z/0PsExH/w4UlGPDLIeX5twM+7umkqb
+        IhxJMQso5cS9cA87YHayQDC8NC9SF5OQpS19xpa9NpUuBDSy8S0DDv5jSih9f3W+
+        IT3pXQYau1KU8WlAQlPy8IbbDN03QhzGotU0zfvn4R4D72hslzoWXk08ltGOGSdY
+        okbjZHc7PbKQpsDNVTfhVBbBr2iDGQJeF77f6xB4EgsQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:reply-to:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=XoGtHO
+        G8AyFnf2S1JWsX18T68LiZtgT1QGCS/Lzv0YE=; b=gO/I3NtEdFsJenepxchu8j
+        UlgO3PKzV+G9z1b9Co4w3dxKEVm8aescI/cx7jrzM1sf2pxuX+4rKKtWucUgeHdK
+        7BZSvNyd66wLg8J/snTG92OG7v+luaxfdfUmhdME+MFgkwlJ7svlWfCm6Iyf5eOD
+        B0ZJaTfBr8q+eTAcR7vScMOfjuU3BNF+bsUIHlMJENDDitGX4+TwKqH+EUdabudu
+        rgBIIbcyivP/RNaj2l/nGgXEspAUhPVgFPmH3eeWw6T+WHpE1MhZk0j/AWOunRrG
+        gUyHXW4XSNfQHrsBJCBGOaFlGojH9mVZPiwPLkeuaxxZj/7MqGSO52jyoee8EeWQ
+        ==
+X-ME-Sender: <xms:OWHoYTW9q79dcH0I_y05ufdpEexSVpQv2pCP8mbq8wKYJQf0uUaNyQ>
+    <xme:OWHoYblJ75KeKpx-6iO3DY0uyzHzU1TD5wkPTTdItJ11kgQGTj38zriDpvxr7AKlq
+    7VRJ8dtCnSv2f8Otw>
+X-ME-Received: <xmr:OWHoYfbxCuhIczX6BzsDCjwxKuhdtcZdv3Hi74rHeFXEvP2XyTBHabpqgP2ZFyoNU58_SAAf>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggrnhcu
+    oeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeetieeitdejgf
+    fhfeeukeejvdeufedtvddulefhteduffeigfefteehgefhvdegudenucffohhmrghinhep
+    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
+X-ME-Proxy: <xmx:OWHoYeV1t0lxGc4gdWK-ouG9ad45A9L8NCoPoE92P1caNy2KsIL_Zw>
+    <xmx:OWHoYdm0aLgpkYzkLFSOMST8y9NsQrWLBjU6CRISanXt_CDFW1Jj0g>
+    <xmx:OWHoYbeSAv4kvACI_gTYkmwirMOq5KZfcgqziIj4zC8AjOHNuimYZA>
+    <xmx:OmHoYQ8ynrUETe1CpldILj1hXHQkvFnP8Zg-t5StFVxtTXErGBUnvg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Jan 2022 14:06:32 -0500 (EST)
+From:   Zi Yan <zi.yan@sent.com>
+To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>, Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v4 0/7] Use pageblock_order for cma and alloc_contig_range alignment.
+Date:   Wed, 19 Jan 2022 14:06:16 -0500
+Message-Id: <20220119190623.1029355-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.34.1
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-König wrote:
-> Hello,
-> 
-> I'm trying to objectively summarize the discussions in this thread in
-> the hope this helps finding a way that most people can live with.
-> 
-> First a description of the status quo:
+From: Zi Yan <ziy@nvidia.com>
 
-I do not really understand why we put an equal sign in all implications between
-meaning of the 0 cookie and NULL as an (non-existed) instance of an object?
+Hi all,
 
-It's like comparing None object in Python to False.
+This patchset tries to remove the MAX_ORDER-1 alignment requirement for CMA
+and alloc_contig_range(). It prepares for my upcoming changes to make
+MAX_ORDER adjustable at boot time[1]. It is on top of mmotm-2021-12-29-20-0=
+7.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Changelog from RFC
+=3D=3D=3D
+1. Dropped two irrelevant patches on non-lru compound page handling, as
+   it is not supported upstream.
+2. Renamed migratetype_has_fallback() to migratetype_is_mergeable().
+3. Always check whether two pageblocks can be merged in
+   __free_one_page() when order is >=3D pageblock_order, as the case (not
+   mergeable pageblocks are isolated, CMA, and HIGHATOMIC) becomes more com=
+mon.
+3. Moving has_unmovable_pages() is now a separate patch.
+4. Removed MAX_ORDER-1 alignment requirement in the comment in virtio_mem c=
+ode.
 
+Description
+=3D=3D=3D
+
+The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
+isolates pageblocks to remove free memory from buddy allocator but isolating
+only a subset of pageblocks within a page spanning across multiple pagebloc=
+ks
+causes free page accounting issues. Isolated page might not be put into the
+right free list, since the code assumes the migratetype of the first pagebl=
+ock
+as the whole free page migratetype. This is based on the discussion at [2].
+
+To remove the requirement, this patchset:
+1. still isolates pageblocks at MAX_ORDER - 1 granularity;
+2. but saves the pageblock migratetypes outside the specified range of
+   alloc_contig_range() and restores them after all pages within the range
+   become free after __alloc_contig_migrate_range();
+3. only checks unmovable pages within the range instead of MAX_ORDER - 1 al=
+igned
+   range during isolation to avoid alloc_contig_range() failure when pagebl=
+ocks
+   within a MAX_ORDER - 1 aligned range are allocated separately.
+3. splits free pages spanning multiple pageblocks at the beginning and the =
+end
+   of the range and puts the split pages to the right migratetype free lists
+   based on the pageblock migratetypes;
+4. returns pages not in the range as it did before.
+
+Isolation needs to be done at MAX_ORDER - 1 granularity, because otherwise
+either 1) it is needed to detect to-be-isolated page size (free, PageHuge, =
+THP,
+or other PageCompound) to make sure all pageblocks belonging to a single pa=
+ge
+are isolated together and later restore pageblock migratetypes outside the
+range, or 2) assuming isolation happens at pageblock granularity, a free pa=
+ge
+with multi-migratetype pageblocks can seen in free page path and needs
+to be split and freed at pageblock granularity.
+
+One optimization might come later:
+1. make MIGRATE_ISOLATE a separate bit to avoid saving and restoring existi=
+ng
+   migratetypes before and after isolation respectively.
+
+Feel free to give comments and suggestions. Thanks.
+
+[1] https://lore.kernel.org/linux-mm/20210805190253.2795604-1-zi.yan@sent.c=
+om/
+[2] https://lore.kernel.org/linux-mm/d19fb078-cb9b-f60f-e310-fdeea1b947d2@r=
+edhat.com/
+
+
+Zi Yan (7):
+  mm: page_alloc: avoid merging non-fallbackable pageblocks with others.
+  mm: page_isolation: move has_unmovable_pages() to mm/page_isolation.c
+  mm: page_isolation: check specified range for unmovable pages
+  mm: make alloc_contig_range work at pageblock granularity
+  mm: cma: use pageblock_order as the single alignment
+  drivers: virtio_mem: use pageblock size as the minimum virtio_mem
+    size.
+  arch: powerpc: adjust fadump alignment to be pageblock aligned.
+
+ arch/powerpc/include/asm/fadump-internal.h |   4 +-
+ drivers/virtio/virtio_mem.c                |   7 +-
+ include/linux/mmzone.h                     |  16 +-
+ include/linux/page-isolation.h             |   3 +-
+ kernel/dma/contiguous.c                    |   2 +-
+ mm/cma.c                                   |   6 +-
+ mm/memory_hotplug.c                        |  12 +-
+ mm/page_alloc.c                            | 337 +++++++++++----------
+ mm/page_isolation.c                        | 154 +++++++++-
+ 9 files changed, 352 insertions(+), 189 deletions(-)
+
+--=20
+2.34.1
 

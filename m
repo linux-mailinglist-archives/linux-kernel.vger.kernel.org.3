@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7784933A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 04:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17A74933A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 04:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351310AbiASD2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 22:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbiASD2x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 22:28:53 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4208CC061574;
-        Tue, 18 Jan 2022 19:28:53 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id r11so1095847pgr.6;
-        Tue, 18 Jan 2022 19:28:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vJF4j7McmN6NGFjUcNJT2nC2Arf7tOJynnQu/tMAGAE=;
-        b=epztSRp3deGpw95GiJhCU1vISAyvzA5voS3NT2kPHbElGawx2HKhtxeo5x80esHl89
-         g22obUlynxSWSsoSs0KqCfqxs1UFtxTk+d2lDRUgoHlfGsNo78P+uZsTBlfCxBIHcUN4
-         WTRRTyMSfeQT2c9Au3HoiGhqi5bd6yIVLV54FNJYXhhynrJ0Uc+nv/qz2QzxeGxX0jI9
-         Ub3Wpljm8e/Ft9B7xOfrOFLcYTC/GYF7UENDqSEoWRFiTCLfulvG8vNifnHO7Tftt+6J
-         PJ7U8F3K1tc6oP0Mmze6C1y2cyxlcpgRRcbMeKxsqueQaOEwykNylxfylC92hvi0d0Jq
-         6lhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vJF4j7McmN6NGFjUcNJT2nC2Arf7tOJynnQu/tMAGAE=;
-        b=f36jG5DGQqufZ9vsu50GDmoaUZ2HS7nRI+P6XHF8ij0Ryd67KBFGg500jRjt3Nj6yM
-         1PZ4uPASqDs1hAAdRd+AcL7ZK+NkB1asI7F70A6aOItTRIbAxpIMDr1LJujvaKGNgb4Z
-         lvRrYUupY/9Hn7WN78TAQIXPhUCQQVIJO1JFlNLElO2zqCnpQxTgX34oY9HjmXMH6I9F
-         kEPYLYl517/ih3YISrGZ3pqcUJCClZeRqOPB5zIzGGB47wpYx/uw/sMWMmHcIYIyP3b7
-         ezeBXhi55AhuNR81ySOB4FgWCLzywVU5Zqjkr4jcdZiGNghDbHH0jxgyfN+SHpeURb5h
-         OTtw==
-X-Gm-Message-State: AOAM532kIC2fHpYi2eV3x8HKX9iVFQDiocbNs6LzW0RvFEFQlmkCHYF8
-        /wNJfdAYO+2NAQDzCk4lrzM9dtIGUIxl3YvPBj0=
-X-Google-Smtp-Source: ABdhPJzhDDbAIc/Hu6OH5ojHDbvWcMm+aXz/wdJcT0j7bUarj6tBjHc5Pq6m7BOIW0oIEU6kpc0RpuBiQncdceMPUDo=
-X-Received: by 2002:a63:8c4c:: with SMTP id q12mr25917057pgn.149.1642562932667;
- Tue, 18 Jan 2022 19:28:52 -0800 (PST)
+        id S1351300AbiASDcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 22:32:18 -0500
+Received: from mga04.intel.com ([192.55.52.120]:43369 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240019AbiASDcR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 22:32:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642563137; x=1674099137;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NWb6o10YkMR7sZLMPrRdvgZA0dRx9dnvTEsr5v2wEKM=;
+  b=nWbPZcdKOoGY++PQaTAoaVfFM26ldHZpfJemSJsoCFV/2PrPsYyTigWf
+   gE7dygi4jBryCIgC3SI2badKe4wXo9mmksWhwWxbwm3BKbPrGemzSPYz/
+   m3CFmJmfpuBYcOblsdB98e2mgwvGyBu/w6+ULpD17p3TmhcUTDa/jctNE
+   JaS7TmVTQOyKfNZRnG4WHcl0HsNzjWlGoPErrSTMglkLJy2bzvtac3erI
+   NbtcLrAdS3B5+1kvXq+1GDpttvhC0QXEsm8eYp/v1f6BS0+XO2OsR4hDy
+   inG3gFCEqU8XgkN3cgGUu9s/FDElgULMzyhLy+UZ5J/FeNhsQrZjWv2+c
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="243795017"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="243795017"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 19:32:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="595267684"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Jan 2022 19:32:15 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA1hm-000DCi-TM; Wed, 19 Jan 2022 03:32:14 +0000
+Date:   Wed, 19 Jan 2022 11:31:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-sv48 7/9] WARNING: modpost:
+ vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function
+ pt_ops_set_early() to the function .init.text:alloc_pte_early()
+Message-ID: <202201191139.HXrwZv5w-lkp@intel.com>
 MIME-Version: 1.0
-References: <1642003482-48935-1-git-send-email-wang.yong12@zte.com.cn>
- <CAMU9jJquKLfzLOjN3xTLHgPJFWONpeVgUDG-0vsf_8ia3r3ALQ@mail.gmail.com>
- <CAOH5QeBxnK-vOwVh9HNeu5PjMPJrHtWCyTK_y43iCbfzN+aoEg@mail.gmail.com> <CAOH5QeAka4QsLCOHaNK8NBp1BUFsu3HqEqiOhWOewabA58fVqw@mail.gmail.com>
-In-Reply-To: <CAOH5QeAka4QsLCOHaNK8NBp1BUFsu3HqEqiOhWOewabA58fVqw@mail.gmail.com>
-From:   teng sterling <sterlingteng@gmail.com>
-Date:   Wed, 19 Jan 2022 11:28:42 +0800
-Message-ID: <CAMU9jJr4A0jsZGAqdOUTc-gBeshCgPAS=2Vvubs_kmsJSegzkQ@mail.gmail.com>
-Subject: Re: [PATCH] docs/zh_CN: Update zh_CN/accounting/delay-accounting.rst
-To:     yong w <yongw.pur@gmail.com>
-Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wang.yong12@zte.com.cn,
-        yang.yang29@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yong w <yongw.pur@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8818=E6=97=A5=E5=
-=91=A8=E4=BA=8C 20:38=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hello,
-> Is this patch OK?
->
-> yong w <yongw.pur@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8813=E6=97=A5=
-=E5=91=A8=E5=9B=9B 22:56=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > Hello,
-> > teng sterling <sterlingteng@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=88=
-13=E6=97=A5=E5=91=A8=E5=9B=9B 10:11=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > Hi Yong,
-> > > <yongw.pur@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8813=E6=97=A5=E5=
-=91=A8=E5=9B=9B 07:27=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > From: wangyong <wang.yong12@zte.com.cn>
-> > > >
-> > > > Update zh_CN/accounting/delay-accounting.rst.
-> > > > The document modification has been merged which refers to the follo=
-wing link:
-> > > > https://lore.kernel.org/all/1639583021-92977-1-git-send-email-wang.=
-yong12@zte.com.cn/
-> > > The normal way to handle this is to add an appropriate Fixes tag.
-Since 4d3959d65968(Documentation/accounting/delay-accounting.rst: add
-thrashing page cache and direct compact) Modified the original
-document=EF=BC=8C
-It seems we forgot to update the Chinese documentation, let's update it now=
-.
-> > >
-> > > By the way, this patch should be submitted together as part of that
-> > > patch series where you modified the original documentation. Also chec=
-k
-> > > out the documentation for other languages and send it in the same way=
-.
-> > > If you get stuck, simply --CC the maintainer is an elegant way to
-> > > handle it. >_<
-> > The previous patch has been merged into linux-next. There was no
-> > Chinese translation when I submitted it.
-> > At present, this document is only translated into Chinese, which was
-> > translated not long ago.
-> > So I update it in this patch.
-> > >
-> > > >
-> > > > Signed-off-by: wangyong <wang.yong12@zte.com.cn>
-> > > > Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-> > > This looks like the first version of the patch and doesn't seem to
-> > > have been reviewed by anyone yet, so you can't sign it instead of
-> > > someone else.
-> > Yang Yang reviewed it offline.
-I'm not sure if this is appropriate, but lore is missing the review
-process and the mailing list developers don't know what's going on,
-which in a way makes it more difficult for future developers to learn.
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-sv48
+head:   d87f3297c62644624bcb8efcb519a2e28d684b45
+commit: dee563c628683ce1fab7d0267ad96fc7d8503965 [7/9] riscv: Implement sv48 support
+config: riscv-randconfig-r042-20220116 (https://download.01.org/0day-ci/archive/20220119/202201191139.HXrwZv5w-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c10cbb243cafc0cf42c3e922cb29183279444432)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/dee563c628683ce1fab7d0267ad96fc7d8503965
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-sv48
+        git checkout dee563c628683ce1fab7d0267ad96fc7d8503965
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Apart from the above=EF=BC=8CLGTM.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Yanteng
-> > >
-> > > Thanks,
-> > > Yanteng
-> > Thanks for your reply.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function pt_ops_set_early() to the function .init.text:alloc_pte_early()
+The function pt_ops_set_early() references
+the function __init alloc_pte_early().
+This is often because pt_ops_set_early lacks a __init
+annotation or the annotation of alloc_pte_early is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0xb1f8): Section mismatch in reference from the function pt_ops_set_late() to the function .init.text:alloc_pte_late()
+The function pt_ops_set_late() references
+the function __init alloc_pte_late().
+This is often because pt_ops_set_late lacks a __init
+annotation or the annotation of alloc_pte_late is wrong.
+
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function pt_ops_set_early() to the variable .init.data:_pt_ops.1
+<< WARNING: modpost: vmlinux.o(.text+0xb208): Section mismatch in reference from the function pt_ops_set_late() to the variable .init.data:_pt_ops.1
+<< WARNING: modpost: vmlinux.o(.text+0xb1ae): Section mismatch in reference from the function pt_ops_set_early() to the variable .init.data:_pt_ops.1
+<< WARNING: modpost: vmlinux.o(.text+0xb208): Section mismatch in reference from the function pt_ops_set_late() to the variable .init.data:_pt_ops.1
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

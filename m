@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B321A494080
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0E6494077
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbiASTMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:12:39 -0500
-Received: from mga03.intel.com ([134.134.136.65]:63578 "EHLO mga03.intel.com"
+        id S234207AbiASTL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:11:59 -0500
+Received: from mga09.intel.com ([134.134.136.24]:45846 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236679AbiASTMe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:12:34 -0500
+        id S229783AbiASTL5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 14:11:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642619554; x=1674155554;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a7kJT8WZQ6q10SnbggD7Ch7bg5HxbpRC2T1+XzhMwz4=;
-  b=HHQos8U4yHshUsoSHQ2w6GSHCLdOXCt0C1UJWLIQiOCT6tEuKyjbovaR
-   Nbn52kizGtEYr/H7uEtPNf8pAZaMRXjjYiLqFXiTYYgEVbv1AWTzIXWP3
-   H02qnOsqv0+Bo0i7exzeixAMapVHnfd6DrfOqwG8hhhEHIHklFdLXEI6s
-   7h4MV0Dx+rJar234Wr6Z9GIelzMTFkQKgmgDJxh/caGMGMgOqnOkpWm/H
-   yEHfF0rQxPls59y8aTxuyLm4zD1jfSFdjk+U+fpGgKazP9RAHT0J9/MPK
-   vFyWh1Dpvjn1C9mFj2cIsVlFkPlCTDpYUTIu50P3x1/Ef5oCwUws+OvCH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245119140"
+  t=1642619517; x=1674155517;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pJ3GNueq7O6gH3lUcp2UWza1P3qxEpzR0oarM5vPP+c=;
+  b=UXLVajox5ZHllPCnKrC7EgcEY0WkG3m6cX5BGDcH3ZrXHJw+cD0doCzv
+   NcjaECXIeShaiMRsbLcZVcmNxKJRF36dpsiuorVfGGIGIUuBz8L8h7y6J
+   yq8vDhHqx15GUjymrF+eMLgmL4EF+kKerYykLDuLkdOPlLfwJ5ao9TBu3
+   /AFDXsjMJnw208Ua3r30h3ufnOYEAM3PxG1EuoNaAH9ckjycgCeQJRMAy
+   KoYSfIB/kqrI0neAGHwjB2R4DHGMNxevZv8xRU06XWDLxa/iijAYSe78q
+   k/9si/iJ0npCpGhv2oUNa725UWhV7x/9Xt5OjiesgCJf44N8M03cl2yRX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="244957549"
 X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="245119140"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:39:41 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="244957549"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:41:48 -0800
 X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="518286091"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Jan 2022 10:39:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAFru-000Dh1-TV; Wed, 19 Jan 2022 18:39:38 +0000
-Date:   Thu, 20 Jan 2022 02:38:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [ardb:for-kernelci 10/36] ld.lld: error: undefined symbol:
- generic_handle_arch_irq
-Message-ID: <202201200205.1qfWfUJ7-lkp@intel.com>
+   d="scan'208";a="765040746"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 10:41:32 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nAFsa-00CDtL-3g;
+        Wed, 19 Jan 2022 20:40:20 +0200
+Date:   Wed, 19 Jan 2022 20:40:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] driver core: platform: Rename
+ platform_get_irq_optional() to platform_get_irq_silent()
+Message-ID: <YehbE03fMBSuOleX@smile.fi.intel.com>
+References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
+ <cae0b73e-46df-a491-4a8e-415205038c2c@omp.ru>
+ <20220115135550.dr4ngiz2c6rfs2rl@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220115135550.dr4ngiz2c6rfs2rl@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   d2dc6a5332403ee74fe236e13ee12eb472028523
-commit: b101e912429f59169f78d933ba2b7e546b3af4c0 [10/36] ARM: remove old-style irq entry
-config: arm-randconfig-r023-20220117 (https://download.01.org/0day-ci/archive/20220120/202201200205.1qfWfUJ7-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=b101e912429f59169f78d933ba2b7e546b3af4c0
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout b101e912429f59169f78d933ba2b7e546b3af4c0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sat, Jan 15, 2022 at 02:55:50PM +0100, Uwe Kleine-König wrote:
+> On Fri, Jan 14, 2022 at 08:55:07PM +0300, Sergey Shtylyov wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Or do you think kmalloc should better be called
+> kmalloc_optional because it returns NULL if there is no more memory
+> available?
 
-All errors (new ones prefixed by >>):
+Oh, do you know that kmalloc() may return NULL and small cookie value and
+actually one has to check for that (yes, either before or after against
+different variables)?
 
->> ld.lld: error: undefined symbol: generic_handle_arch_irq
-   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
-   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
+kmalloc() is exactly an example that justifies the Sergey's patch.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 446A4493C36
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89815493C3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355275AbiASOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355256AbiASOtZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:49:25 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8C0C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:49:24 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id d4so2526182qtw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:49:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4ebj2v9aauSthzIYWo7QMYbJ7+f74Bs+InfheCepxYQ=;
-        b=UyBhcZyqV06Q+lerX33fodCKzbbo6UN21015hA1XzKQSN3/aDtkNZraQJqfTwrgQ9E
-         iJyEonr90tPHETmsWEVeKf5Fiv0ZY9Ojvum3iYQNo3dQBI+vbNsEig6xG0RhmLGyVv2L
-         A1eqnTBh4sxStbn7+6lmoo08j6xFIC7A5VQ07TpM83Xbae6snqjRS2y/vJtxEFOMS2M4
-         fktALHxE9fdS245d+fE6q7SWGXuhk8AJoFyibv2SC06N8v2e8bZy14soeOh1AwK8s2Dd
-         Qsflu8/pNW1JTBjN1A2W1xETT7Mhbp3igJF3HCSz7nrkfQhlTavAnt9VAMYvq7eLstHa
-         Y+TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4ebj2v9aauSthzIYWo7QMYbJ7+f74Bs+InfheCepxYQ=;
-        b=EdJK+iS/8h1dazFZWJqpfjcNVZHNs6UvgS4toFVUbqfjQEsFd03fPKKAejWtGHG1ge
-         IfBCJeXZYlLrJiVRJzakc9dcuj9FZQ8lliPeNEUHxHufXKjb8BgDWwvV+7a5lObeagWH
-         jLZJNleELCRHytFBwFok10e9KdnPNXeA6YYq3O6j0VW5bxHAOeF49IFx4fqsHxKTihGe
-         LbP3Edx4HX4mTzLL5RuNqS7jKybrii40fDkyX7mKppHWTkIqv8/phDSvyROdvRrFQCi0
-         t+hxrtNK2rbPgZHNek3lnX2bTKFRGkyeWEg2ETkjgYPcES1IxjEtPs2fW8uDmL3dPi6S
-         O7Aw==
-X-Gm-Message-State: AOAM531Y3VTRHGdgyO85QmTmS67B0iXlH+3WA4oDxzYLuqgVEvGn0jxX
-        gglhdb4T/97fcxNvltsBIJgz9w==
-X-Google-Smtp-Source: ABdhPJwXjosarVU94saEwb0jGHuMCRj1vwYmznYwIEPq2vSd7TMD3aSMRT0jmJFa6f8vi+PO/kemvQ==
-X-Received: by 2002:ac8:7c46:: with SMTP id o6mr4946928qtv.587.1642603763909;
-        Wed, 19 Jan 2022 06:49:23 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id z11sm4717707qta.1.2022.01.19.06.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 06:49:22 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nACH2-001K1X-E7; Wed, 19 Jan 2022 10:49:20 -0400
-Date:   Wed, 19 Jan 2022 10:49:20 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Praveen Kannoju <praveen.kannoju@oracle.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
-        Rajesh Sivaramasubramaniom 
-        <rajesh.sivaramasubramaniom@oracle.com>
-Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
- asynchronous workers to flush the mr pool
-Message-ID: <20220119144920.GL8034@ziepe.ca>
-References: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
- <53D98F26-FC52-4F3E-9700-ED0312756785@oracle.com>
- <20220118191754.GG8034@ziepe.ca>
- <CEFD48B4-3360-4040-B41A-49B8046D28E8@oracle.com>
- <Yee2tMJBd4kC8axv@unreal>
- <PH0PR10MB5515E99CA5DF423BDEBB038E8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
- <20220119130450.GJ8034@ziepe.ca>
- <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
- <20220119131728.GK8034@ziepe.ca>
- <PH0PR10MB5515039926FA5F66537A6EBB8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+        id S1355294AbiASOwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:52:35 -0500
+Received: from phobos.denx.de ([85.214.62.61]:37444 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234438AbiASOwe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 09:52:34 -0500
+Received: from maia.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: hws@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 3D76980FE7;
+        Wed, 19 Jan 2022 15:52:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1642603952;
+        bh=f1UL5ZbqpBe65Hd8Hn6QP0WymJkVOmVAYuASZr8TNFQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OkwiJm0jfjgthaYU/zkcIuYEQDYgX7Zhxm37trT8rpS4Kdzyi1BmbISbABYMYH4il
+         fRQOpJ64TTmCa+t9E8XTqNg4Q70UI6UV++T1s40pRN08T7gHiwTXVng8ILS1j19s2n
+         o0mnpXpwp+s6Ls1KM3dGRol9FKm02XJE+CQ/bdmCXi6D/g48qaQ/cVco3GI0KWBBKH
+         RV8J7tZw5U/GyiYigFp4LpKWZZYusm7wV8nAKRmuP+OAJXDjMesi5Bkz1bjEAB+fc7
+         whFFmlnSdgevnpqP+AjlTPx9uTZ6W6rzMXUBDoKcK1Wi53TPlGFFp1Kj3fZSxnWrW/
+         SYpIUKT9ZJ1yg==
+From:   Harald Seiler <hws@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Harald Seiler <hws@denx.de>, Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
+Date:   Wed, 19 Jan 2022 15:52:03 +0100
+Message-Id: <20220119145204.238767-1-hws@denx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR10MB5515039926FA5F66537A6EBB8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 02:08:48PM +0000, Praveen Kannoju wrote:
-> From: Jason Gunthorpe [mailto:jgg@ziepe.ca] 
-> Sent: 19 January 2022 06:47 PM
-> To: Praveen Kannoju <praveen.kannoju@oracle.com>
-> Cc: Leon Romanovsky <leon@kernel.org>; Santosh Shilimkar <santosh.shilimkar@oracle.com>; David S . Miller <davem@davemloft.net>; kuba@kernel.org; netdev@vger.kernel.org; linux-rdma@vger.kernel.org; rds-devel@oss.oracle.com; linux-kernel@vger.kernel.org; Rama Nichanamatlu <rama.nichanamatlu@oracle.com>; Rajesh Sivaramasubramaniom <rajesh.sivaramasubramaniom@oracle.com>
-> Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the asynchronous workers to flush the mr pool
-> 
-> On Wed, Jan 19, 2022 at 01:12:29PM +0000, Praveen Kannoju wrote:
-> 
-> > Yes, we are using the barriers. I was justifying the usage of
-> > smp_rmb() and smp_wmb() over smp_load_acquire() and
-> > smp_store_release() in the patch.
-> 
-> You failed to justify it.
-> 
-> Jason
-> 
-> Apologies, if my earlier point is not clear, Jason.
-> Let me reframe:
-> 
-> 1. The introduced bool variable "flush_ongoing", is being accessed only in the function "rds_ib_free_mr" while spawning asynchronous workers.
-> 
-> 2. The ordering guaranteed by smp_rmb() and smp_wmb() would be
-> sufficient for such simple usage and hence we did not use
-> smp_load_acquire() and smp_store_release().
+Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
+are 0, the hrtimer is triggered (with timeout 0) which can introduce a
+few 100us of additional overhead on slower i.MX platforms.
 
-Again you haven't defined why these barriers are any differnet from
-acquire/release or even *what they are doing*
+Implement a fast path when the delays are 0, where the RTS signal is
+toggled immediately instead of going through an hrtimer.  This fast path
+behaves identical to the code before delay support was implemented.
 
-Jason
+Signed-off-by: Harald Seiler <hws@denx.de>
+---
+ drivers/tty/serial/imx.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index df8a0c8b8b29..67bbbb69229d 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *port)
+ 	if (port->rs485.flags & SER_RS485_ENABLED) {
+ 		if (sport->tx_state == SEND) {
+ 			sport->tx_state = WAIT_AFTER_SEND;
+-			start_hrtimer_ms(&sport->trigger_stop_tx,
++
++			if (port->rs485.delay_rts_after_send > 0) {
++				start_hrtimer_ms(&sport->trigger_stop_tx,
+ 					 port->rs485.delay_rts_after_send);
+-			return;
++				return;
++			}
++
++			/* continue without any delay */
+ 		}
+ 
+ 		if (sport->tx_state == WAIT_AFTER_RTS ||
+@@ -698,9 +703,14 @@ static void imx_uart_start_tx(struct uart_port *port)
+ 				imx_uart_stop_rx(port);
+ 
+ 			sport->tx_state = WAIT_AFTER_RTS;
+-			start_hrtimer_ms(&sport->trigger_start_tx,
++
++			if (port->rs485.delay_rts_before_send > 0) {
++				start_hrtimer_ms(&sport->trigger_start_tx,
+ 					 port->rs485.delay_rts_before_send);
+-			return;
++				return;
++			}
++
++			/* continue without any delay */
+ 		}
+ 
+ 		if (sport->tx_state == WAIT_AFTER_SEND
+-- 
+2.34.1
+

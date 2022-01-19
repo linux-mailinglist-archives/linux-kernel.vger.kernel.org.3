@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93685493F78
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C497C493F7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349809AbiASSBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbiASSBm (ORCPT
+        id S1356563AbiASSCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:02:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60738 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234188AbiASSCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:01:42 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D7AC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wl35Nv5bzMCc708L4TqlyxLqxeH3mVDxX3k5zPuEGYo=; b=e6nKWnC2p+Tf/OuPB41XZewJTw
-        9aR5M2y6V/hfTahSIhFlgmKQoZ3OddEQoQb9TKA0jXQ2gbJRF6D0r6+TfbLm/heQJSprsV/QYpqcY
-        qq11o1p/4VBTmIwr4vC84NqqRk0geKSmNkyOUY69cPTWm88tcFDEhTdqyUm7MD1Lbct50fNlKC99a
-        BsyYPEPzDplXfd6VxNXD1dTJDfwfytPkKD8GZO/CVy0HjvUTo6ESV0VgcPXaG/+fAuvU5U+FtEZze
-        H0KgRLdO8+qm8+U5XG8DSeVKCdBYV9XUUZv9SK820h3R+8x+V0sT9bzgLLNLmFZSPNdd5Lmkzn0+L
-        h7HcSL4g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAFGu-00BeGf-9X; Wed, 19 Jan 2022 18:01:24 +0000
-Date:   Wed, 19 Jan 2022 18:01:24 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-Message-ID: <YehR9BiI92q5DSOu@casper.infradead.org>
-References: <20220118235244.540103-1-yury.norov@gmail.com>
- <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
- <Yeg79CcofyNuVLid@casper.infradead.org>
- <YehQR7NWKKzcyEq6@shell.armlinux.org.uk>
+        Wed, 19 Jan 2022 13:02:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 240C36164B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0858EC340E1;
+        Wed, 19 Jan 2022 18:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642615355;
+        bh=lFbFmk/aY3Awpx6kg8ejVPc7bOfnP/ly0j3vvYiYSLk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=X13pX4fJy3fRJZKI7F7MRVUE9FDrT6nBmOjzxghhUmAx2oa89pVuGluI1ZYQomcy6
+         J+u9NeebYvDBhaYmNBCPyWnAjj843aXJvGQIg5lEMex3rGmpPraZKtS0Sx3GixOSWu
+         vOFCHvDwIjpsucj9Dm3JF8fyjUVl+U1NJKul284TSlhz9ilYs39lj11XWUJ/f0eAWA
+         aoMRjTtdGCjJ1nOQKkTsTFwusUiXG8pCTiSkWRpA4jWRHdLqZ9X43k7TEqlfTQxDbf
+         s7aV3RXj48GWZ8ij+1oHhON0CDe042M5476jVs1mtL2ADTwQ7m1iF2hjoGebAbAjNd
+         8fitwOsx/LB2w==
+From:   Mark Brown <broonie@kernel.org>
+To:     tiwai@suse.com, lgirdwood@gmail.com,
+        Julian Braha <julianbraha@gmail.com>, matthias.bgg@gmail.com,
+        tzungbi@google.com, geert+renesas@glider.be, perex@perex.cz,
+        trevor.wu@mediatek.com
+Cc:     linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, fazilyildiran@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220117050324.68371-1-julianbraha@gmail.com>
+References: <20220117050324.68371-1-julianbraha@gmail.com>
+Subject: Re: [PATCH] ASoC: mediatek: fix unmet dependency on GPIOLIB for SND_SOC_DMIC
+Message-Id: <164261535273.2816847.12797426159265748718.b4-ty@kernel.org>
+Date:   Wed, 19 Jan 2022 18:02:32 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YehQR7NWKKzcyEq6@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 05:54:15PM +0000, Russell King (Oracle) wrote:
-> On Wed, Jan 19, 2022 at 04:27:32PM +0000, Matthew Wilcox wrote:
-> > On Wed, Jan 19, 2022 at 01:28:14PM +0000, Robin Murphy wrote:
-> > > > +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
-> > > 
-> > > Is it page_to_pfn() guaranteed to work without blowing up if page is invalid
-> > > in the first place? Looking at the CONFIG_SPARSEMEM case I'm not sure that's
-> > > true...
-> > 
-> > Even if it does blow up, at least it's blowing up here where someone
-> > can start to debug it, rather than blowing up on first access, where
-> > we no longer have the invlid struct page pointer.
-> > 
-> > I don't think we have a 'page_valid' function which will tell us whether
-> > a random pointer is actually a struct page or not.
+On Mon, 17 Jan 2022 00:03:24 -0500, Julian Braha wrote:
+> When SND_SOC_MT8195_MT6359_RT1011_RT5682 is selected,
+> and GPIOLIB is not selected,
+> Kbuild gives the following warning:
 > 
-> Isn't it supposed to be:
+> WARNING: unmet direct dependencies detected for SND_SOC_DMIC
+>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && GPIOLIB [=n]
+>   Selected by [y]:
+>   - SND_SOC_MT8195_MT6359_RT1011_RT5682 [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=y] && SND_SOC_MT8195 [=y] && MTK_PMIC_WRAP [=y]
 > 
-> 	if (!pfn_valid(pfn)) {
-> 		handle invalid pfn;
-> 	}
-> 
-> 	page = pfn_to_page(pfn);
-> 
-> Anything else - even trying to convert an invalid page back to a pfn,
-> could well be unreliable (sparsemem or discontigmem). 
+> [...]
 
-This function is passed an array of pages.  We have no way of doing
-what you propose.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-linus
+
+Thanks!
+
+[1/1] ASoC: mediatek: fix unmet dependency on GPIOLIB for SND_SOC_DMIC
+      commit: 579b2c8f72d974f27d85bbd53846f34675ee3b01
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

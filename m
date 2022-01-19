@@ -2,197 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5412493AAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F68493AAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243984AbiASMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:54:48 -0500
-Received: from mga02.intel.com ([134.134.136.20]:60748 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232897AbiASMyq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:54:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642596886; x=1674132886;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=HsBNXF1Neo+VKPSJeaMnfu5UzOOXS4H7YgH9m820TrM=;
-  b=OHcewzDlR+MndspF8lotRtOAu+Eqrbym8VRbT6FuECsTWUo77hvGdaGh
-   30N0IQYv55nURNPdkCA+YpXNvHTN1sXQcCTvysg3J4Yk8S9fXosM+Xqk4
-   QEwFHYuZvO0tHABy0R8JBSWb6Sj6PG5NVhZydyiLFXW8hWPKjcPlfmI0v
-   pm8+QYAkzOo6F8PX0XPpKz522/XeHgQcSg4CnR5+NiJ/41YJFZuD0nkIB
-   957fes5kMaW1keOFOhS6oZCl8DZtqKh9jS1nv+iSCrX2edE9uNlHyfV6S
-   Lx61JqrPXnWy+/qaYvLozLqv3FUTsVHGly/Mgdle349j8g8z5QAOlboix
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232422184"
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="232422184"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 04:54:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="493018486"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2022 04:54:46 -0800
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 04:54:45 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 04:54:45 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 19 Jan 2022 04:54:45 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 19 Jan 2022 04:54:45 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gSBkzhl2EdQqdNgCbltX87tb+VPC3IIj7WJkrJYxtchUy6AJlA7hOaIBDO1784PoglqF6y1xnY51/fXUJobRCufPCZrc5c6Wa2M4UBBA1ETQcMBQzAUsm8qBtvKHB2XMbMlLvRoIh8B6LStsdUjIL8ZQjY4F+ntWbV95XRDmr6xfPBcs/D72QLbtxUYh1oHwZoySK9Z7jkMxob3J1MX8BL5MZtzslloKBvnqAFjy408FZYSyLRHe+gEooM83EA4MRtG0ndOjMneDgH/5ZqFBAlBIp/v8Pf5+yzQZ5JPU6GPD/zM33WLB1iMfHZMp9x+l0aXGuyn2PPbFFDaWLb3Ajg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k/AhxZsSKwaKXAaWEXg5Qvl8gLTshV8XYRKzIm0nG7c=;
- b=OdoBpcH5fWnydylbc4P21RoPUyc38WkWsz37/IqfzGBD+xC2H0IbtnZvsXKi9dPjXH4JXZAczMWwuO9drSsTvhvJNIPW/fnR4kulf86ubkiR6394P6Ea6QIkii4N9q6n0wMFy65ne628YEwcaztKgmHnsZZ16YTjCckSCqgxdi8bJiDSZs+2bXz7S4k34H0ueNUeFD/waWkGNxpsPhkLtu3G2SYNwhR1HYxCF9zQmJHngHAS6N9/WF8h7YNpv9vTRkHsBNFLaO+RMAkjXrQJsRve11h2hcoDJvcIDoLjjkw/Zb+tqWARTkwD0PYxG83NtuzAhE8wcDo+20Ko1W4H4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from DM8PR11MB5621.namprd11.prod.outlook.com (2603:10b6:8:38::14) by
- MN2PR11MB3870.namprd11.prod.outlook.com (2603:10b6:208:152::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
- 2022 12:54:41 +0000
-Received: from DM8PR11MB5621.namprd11.prod.outlook.com
- ([fe80::fcc9:90bb:b249:e2e9]) by DM8PR11MB5621.namprd11.prod.outlook.com
- ([fe80::fcc9:90bb:b249:e2e9%8]) with mapi id 15.20.4909.008; Wed, 19 Jan 2022
- 12:54:41 +0000
-From:   "Jankowski, Konrad0" <konrad0.jankowski@intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>
-CC:     "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [Intel-wired-lan] [PATCH] igbvf: Remove useless DMA-32 fallback
- configuration
-Thread-Topic: [Intel-wired-lan] [PATCH] igbvf: Remove useless DMA-32 fallback
- configuration
-Thread-Index: AQHYBYjhQEW3+lq1qk6BWFQCzhhKr6xqXDyg
-Date:   Wed, 19 Jan 2022 12:54:40 +0000
-Message-ID: <DM8PR11MB56214F1217ED05D3EDAF7968AB599@DM8PR11MB5621.namprd11.prod.outlook.com>
-References: <dc75b24883381a060eaad21cb0deffb5a027b05f.1641753812.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <dc75b24883381a060eaad21cb0deffb5a027b05f.1641753812.git.christophe.jaillet@wanadoo.fr>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e70aac96-3fde-4119-df57-08d9db4adbbe
-x-ms-traffictypediagnostic: MN2PR11MB3870:EE_
-x-microsoft-antispam-prvs: <MN2PR11MB38705FE4C9DC6ED71B1B69E1AB599@MN2PR11MB3870.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2089;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T6im9y/eGwC47FBdPTX775jqkCHwZalgBqs42vwOlhweUseUdvq6/gAS/Co+UhBW9XkvztXBHGVL75OFOZL8O4FIcCa9X+f/P+kcAyhqKuGXZETKDLlPm7BxDmnIXmnX/4VFPTpetThLmy1RM594QmPRLD0bWd+vBI0R8YZlGUP9a5HQLgETxgQ688T8WFGXV2ICmX24BDTQYwggguCtSLKwcC1T1jd1cAWy/FVhbFTjDzvSCmoO1ir+pN8eowNl3Y21I3Ox/2PUdihOztP//clV8qmhLG8p8X+n1BEJYfc8nO9/zlI1x45OLyCpG8/aadblrV42rKA9WAXFwkR6OTp5vbPsMGaCj7clOFqCuoFZiUcIcZQ7CFySOET9qB2cr9xnzhPI57EJXazNsQQGPahpbyPlbkKn5orVCpyO7XB36xiWCRk93O4u3sbRor6Kl544//gSGWZtI+8EwtfN4ZCMWD814SAva+fEr/rsRcdD+itYkVkzeKNFkbjAxYjqO8c3qCtLwpU99HRIoNCoMFAXvFHqzKSZkerZM55DWHkReZM0aveuUwlWwHY2OSeuKObn3UGt9lDXux4syofXZKTcwhc74JBbLqHp9t/71V3LEAz3uOhePEEKwhziHKkD3cC3+/inQdCFH6lWbPmR8aBU4frhsac0Wvw9e/Ld9P9hoIaVEHswPr6MpxGPTqcN4trU0meRtoR3OIdvwVItRSCTrhPK/5oj01VRXAfVW6JiOsAG1mTEO9bWLV1B6WB0i4vDCoXPovNbH22OvKc1RdyE8ZtWWwRSQYNGb8hIJJY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5621.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(71200400001)(4326008)(110136005)(54906003)(7696005)(86362001)(38070700005)(33656002)(122000001)(66446008)(2906002)(64756008)(66946007)(76116006)(82960400001)(508600001)(8936002)(966005)(38100700002)(52536014)(6506007)(5660300002)(55016003)(9686003)(26005)(53546011)(8676002)(66476007)(66556008)(186003)(83380400001)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hiXRl2tMUf/BFOddFqn70xSBIjgd33nfyaSlkgwpGUY9YONoPdwt84v7gehb?=
- =?us-ascii?Q?p8W/7i7TpRref7flMsbLXB+RIlAhrTBtUVobvbAZEc6IcOCY9yInFZDMdqKR?=
- =?us-ascii?Q?ZMW8uMB3iFRrUwB7EVsL2qcK615uXbPakkFj8D8bPRKVbTHbBWY1G/w57S3Y?=
- =?us-ascii?Q?nxK0S20RC2FBlOuuSS2S2a1M44gh0XhiVDvUm4eDoKRdg+OzFQvmcv0YFMQe?=
- =?us-ascii?Q?IV191/yYq855HUmJzcnFpGm/LfLBMWO+HhCUOB7ZopUM9utDh2PmDcy4+c4Y?=
- =?us-ascii?Q?CM8ePi1fnLjbl7abZzyOVWpIvgxBuWMwoWWAH+QKVm1ZiWisqg5a4y0Jv300?=
- =?us-ascii?Q?TOfhmYEYv+QhEU2Bg6fecO/Esez3c6AgL5qfu8elf63A0iI3+0A5Kc7OQIsx?=
- =?us-ascii?Q?DswGZIcGaBQ4Molcm7/M/gdGWM001gMAKP8yqF1RvF/Mac8y/G3HaeaUKcAZ?=
- =?us-ascii?Q?kSIXp5gPDlA7EU+pRgq0J9Nacl8TjGsQBNNcGXrqvpjgar8sE3e0yh9V/z4K?=
- =?us-ascii?Q?sYg6cce3Ao/2NhHYJADRtUXvVd5vge+vaZYdk0MvCiMBf1O0pZjs4h+B4NhN?=
- =?us-ascii?Q?rEXpeWYKSCDU8CM5ZHphX6xnOAeequj1TNmK/x0H3cW9VSMjk2N6J7+mXh44?=
- =?us-ascii?Q?UTdXGo19coZMmBsEUDHOZCOta3kmS6ZFg7TOtONoO6FMp9Aph+RkCbaTRstw?=
- =?us-ascii?Q?SYEd1gBWvV9S7bgkzU0qqJ7gzVRSE0aYaoMrti+7veTlycHKj6NTVukHqsGr?=
- =?us-ascii?Q?XxQZxw8UUPl8i/il5FciNwtAa18Hbx/5NcM6ziKygNIEkoywEB45kWOR6uhR?=
- =?us-ascii?Q?Ggi4e0g9ISNOWSuXm2GKpQsVm9eKsEWGqdpGdHzjX01zp/UGw7I2o1lIgj0C?=
- =?us-ascii?Q?SxkKFLpF1vxAOYF4TIRNG+QJ3Ydpv3qmQWu8p5nbda9jyh2/H1WZ4qZ0UXVx?=
- =?us-ascii?Q?3RshryM3kGK2BrYAHush8bVBhJFNcgY6NUbyLm+uzZKeFjIiENR2P7tDGOf6?=
- =?us-ascii?Q?MMRUIBqFTmllksDPa4BdlVTwKgGSlwzRV/zibJcz3WrHbWs6/eJes34u0XMG?=
- =?us-ascii?Q?AiXrhP4IA1uvEStHVDXwA1uK2btfhuLL/bd3n/87qLk67eiMS6i3t1iq0Dev?=
- =?us-ascii?Q?NL0rrePg4bQk5YXLPGdzI+tshuUT0p5PD3F2mFzK0e0kfuoR64kqv3uyKJA5?=
- =?us-ascii?Q?dCf7IsUgfXAnnIlFazRr5aC4ifOtnzVsS3wq1a76t6OLwFXK6XIyRHFLww9U?=
- =?us-ascii?Q?Z4CjJq/Vja/4tMNemkUMI5+RoG2i8CqFYvRJYvIwBl6DbR7e+p7gakg0t0wL?=
- =?us-ascii?Q?z84d1XiU13SDDYEyNJ44PS68gjD3WyVyRC1gstY8EH4Q5PGjmZIs5DwvIOLh?=
- =?us-ascii?Q?Sy69+DjJdFcyQz8LUPAMPmbNF2CN+VsDBYMWgIOHxct2J20Ok8qcAJwKLcWN?=
- =?us-ascii?Q?QJOndwiKcVpCqeZLtW92zFcPzc39wyZhoooDerq65LuKYv8N2KzYgjIaL4jz?=
- =?us-ascii?Q?SNWP6LQp8HhtSGlct70c4vVLCu7v+2NxGT5B8NvSQVrIK8FS2BGXza2NT3Iq?=
- =?us-ascii?Q?iEdjoXkWBVHu3fWh2NG34It6mv+sr8X/Jzoi970ZGQ23dwfyY1EfiqvaE5hJ?=
- =?us-ascii?Q?nykfuuNKNTRhacjJUcByOV126t9DPq5gV2F0FMIkKwalzcQIBluhHx9BN5iL?=
- =?us-ascii?Q?0HV0jA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S244316AbiASMzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232897AbiASMzZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 07:55:25 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A992AC061574;
+        Wed, 19 Jan 2022 04:55:24 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id m3so9205973lfu.0;
+        Wed, 19 Jan 2022 04:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CkpzK6QyCgjOy6m0uZh925C04j1z8rB6D8/FeixmF08=;
+        b=ZVmtZJhIxrDC84ho7SdnLpjeF1W0L1ijKtwOPuKBcoRBxpp6U7Fikw8V0CU+de0EeX
+         fu7NsGHhrZILexhy7qkyNSvnag7YXXEvHL4Nh6QUGqy268I2cMB3EU5BNr6cNcAGeeEQ
+         nMlqBb3yUsulNZx9EG6d69BWaRCyQoiXO7QfOp6CMEhYwAcUbGVvwBKs4NAUmIGBtbOB
+         8PHRGgtk0ZaAaZwKso74chZ2wVn8RLb0yFTpCqRMU1d6ussT54ujNzepxC0rLDkcyxhJ
+         bFu+IC5bjdJafjaLFE1gSk2qcylhMGa7+J3f1r1IIr/k8VLIu6pCm3VpupYbY5nPFZGK
+         +pNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CkpzK6QyCgjOy6m0uZh925C04j1z8rB6D8/FeixmF08=;
+        b=HcD3wNeQ1lnrOTfNCLdXW4jzEVmDzRF9JxgWXmnz3T1aLcFfmSh6/5exq4dfvtmHGK
+         Mpo6WtGKEYZCtTPdl/udWnpAkGpu4UxIgn4CXeTYuqaLoCX1vfh0Aledzz9+aCghHow8
+         9POFvxkk1a6RTX7b6iTdngJV3YdKTXQbH04wAXgws915ilfy+LmAzRTVSsWKRo6OVM/M
+         fxKfHNgY+8HowcsSBgpysnU1bldr8ncC/Kg3R41jH8pkkNlHM96XXOQ7u8Ccum3F3jpg
+         yjU7uWhKxHb+2AD8XXdH+s+FqCSevdQZ4x4KPI9DWx9YYyF8xfK2wtH7f9UntAjrtT97
+         QqrQ==
+X-Gm-Message-State: AOAM530jzKcscDxZJwIu/KwmGBASY7z9r05T7VyHhYp1r4DYyippP1Ss
+        7dwo1ptimFF7Wa02JJfQuX8=
+X-Google-Smtp-Source: ABdhPJwAOMrkyUduYOuKrHQsIP5HtvIhdODe/m4cilEFyPaRYVH3U2NlYqGtD0WScq3NqLsgrXcGmQ==
+X-Received: by 2002:a05:6512:3a86:: with SMTP id q6mr21372729lfu.649.1642596922941;
+        Wed, 19 Jan 2022 04:55:22 -0800 (PST)
+Received: from localhost ([89.207.88.249])
+        by smtp.gmail.com with ESMTPSA id y20sm221791lji.82.2022.01.19.04.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 04:55:21 -0800 (PST)
+Date:   Wed, 19 Jan 2022 15:55:13 +0300
+From:   Alexander Fomichev <fomichev.ru@gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux@yadro.com,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
+ changes
+Message-ID: <20220119125513.bpnf563tjc2u6g47@yadro.com>
+References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+ <20220112170512.GO3301@suse.de>
+ <20220117081905.a4pwglxqj7dqpyql@yadro.com>
+ <20220117102701.GQ3301@suse.de>
+ <20220118020448.2399-1-hdanton@sina.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5621.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e70aac96-3fde-4119-df57-08d9db4adbbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2022 12:54:40.9324
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WbII+tHjLifU87mu7TknBxbK5J5YIXbQc8htnbAx9xzbLdQLCMd3s9zlPzXHQGTmE7YvwkPjEMrtEDZRwduzO5F8Zih3MuVgpKmVwaMmN0k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3870
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118020448.2399-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 18, 2022 at 10:04:48AM +0800, Hillf Danton wrote:
+> On Mon, 17 Jan 2022 20:44:19 +0300 Alexander Fomichev wrote:
+> > On Mon, Jan 17, 2022 at 10:27:01AM +0000, Mel Gorman wrote:
+> > > > 1) You're right. When options "noverify=1" and "polling=1" are used.
+> > > > then no performance reducing occurs.
+> > > 
+> > > How about just noverify=1 on its own? It's a stronger indicator that
+> > > cache hotness is a factor.
+> > > 
+> > 
+> > With "noverify=1 polled=0" the performance reduction is only 10-20%,
+> > but still exists.
+> > 
+> > -----< v5.15.8-vanilla >-----
+> > [17057.866760] dmatest: Added 1 threads using dma0chan0
+> > [17060.133880] dmatest: Started 1 threads using dma0chan0
+> > [17060.154343] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 49338.85 iops 3157686 KB/s (0)
+> > [17063.737887] dmatest: Added 1 threads using dma0chan0
+> > [17065.113838] dmatest: Started 1 threads using dma0chan0
+> > [17065.137659] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 42183.41 iops 2699738 KB/s (0)
+> > [17100.339989] dmatest: Added 1 threads using dma0chan0
+> > [17102.190764] dmatest: Started 1 threads using dma0chan0
+> > [17102.214285] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 42844.89 iops 2742073 KB/s (0)
+> > -----< end >-----
+> > 
+> > -----< 5.15.8-ioat-ptdma-dirty-fix+ >-----
+> > [ 6183.356549] dmatest: Added 1 threads using dma0chan0
+> > [ 6187.868237] dmatest: Started 1 threads using dma0chan0
+> > [ 6187.887389] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 52753.74 iops 3376239 KB/s (0)
+> > [ 6201.913154] dmatest: Added 1 threads using dma0chan0
+> > [ 6204.701340] dmatest: Started 1 threads using dma0chan0
+> > [ 6204.720490] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 52614.96 iops 3367357 KB/s (0)
+> > [ 6285.114603] dmatest: Added 1 threads using dma0chan0
+> > [ 6287.031875] dmatest: Started 1 threads using dma0chan0
+> > [ 6287.050278] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 54939.01 iops 3516097 KB/s (0)
+> > -----< end >-----
+> > 
+> 
+> Check if cold cache provides some room for selecting CPU.
+> 
+> Only for thoughts now.
+> 
+> Hillf
+> 
+> +++ x/kernel/sched/fair.c
+> @@ -5889,19 +5889,16 @@ static int
+>  wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+>  {
+>  	/*
+> -	 * If this_cpu is idle, it implies the wakeup is from interrupt
+> -	 * context. Only allow the move if cache is shared. Otherwise an
+> -	 * interrupt intensive workload could force all tasks onto one
+> -	 * node depending on the IO topology or IRQ affinity settings.
+> -	 *
+> -	 * If the prev_cpu is idle and cache affine then avoid a migration.
+> -	 * There is no guarantee that the cache hot data from an interrupt
+> -	 * is more important than cache hot data on the prev_cpu and from
+> -	 * a cpufreq perspective, it's better to have higher utilisation
+> -	 * on one CPU.
+> +	 * select this cpu if both are idle because of
+> +	 * cold shared cache
+>  	 */
+> -	if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
+> -		return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
+> +	if (cpus_share_cache(this_cpu, prev_cpu)) {
+> +		if (available_idle_cpu(this_cpu))
+> +			return this_cpu;
+> +
+> +		if (available_idle_cpu(prev_cpu))
+> +			return prev_cpu;
+> +	}
+>  
+>  	if (sync && cpu_rq(this_cpu)->nr_running == 1)
+>  		return this_cpu;
+
+Hi Hillf,
+
+The results with your patch are controversial:
+
+-----< v5.15.8-Hillf-Danton-patch+ >-----
+[ 1572.178884] dmatest: Added 1 threads using dma0chan0
+[ 1577.413535] dmatest: Started 1 threads using dma0chan0
+[ 1577.432495] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 53188.66 iops 3404074 KB/s (0)
+[ 1592.356173] dmatest: Added 1 threads using dma0chan0
+[ 1593.791100] dmatest: Started 1 threads using dma0chan0
+[ 1593.815282] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 41668.40 iops 2666777 KB/s (0)
+[ 1617.117040] dmatest: Added 1 threads using dma0chan0
+[ 1619.545890] dmatest: Started 1 threads using dma0chan0
+[ 1619.569639] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 42426.81 iops 2715316 KB/s (0)
+-----< end >-----
+
+Just to remind, used dmatest parameters:
+
+/sys/module/dmatest/parameters/iterations:1000
+/sys/module/dmatest/parameters/alignment:-1
+/sys/module/dmatest/parameters/verbose:N
+/sys/module/dmatest/parameters/norandom:Y
+/sys/module/dmatest/parameters/max_channels:0
+/sys/module/dmatest/parameters/dmatest:0
+/sys/module/dmatest/parameters/polled:N
+/sys/module/dmatest/parameters/threads_per_chan:1
+/sys/module/dmatest/parameters/noverify:Y
+/sys/module/dmatest/parameters/test_buf_size:1048576
+/sys/module/dmatest/parameters/transfer_size:65536
+/sys/module/dmatest/parameters/run:N
+/sys/module/dmatest/parameters/wait:Y
+/sys/module/dmatest/parameters/timeout:2000
+/sys/module/dmatest/parameters/xor_sources:3
+/sys/module/dmatest/parameters/pq_sources:3
 
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> Christophe JAILLET
-> Sent: niedziela, 9 stycznia 2022 19:44
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
-> Jakub Kicinski <kuba@kernel.org>
-> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>; intel-wired-
-> lan@lists.osuosl.org; kernel-janitors@vger.kernel.org; linux-
-> kernel@vger.kernel.org; netdev@vger.kernel.org
-> Subject: [Intel-wired-lan] [PATCH] igbvf: Remove useless DMA-32 fallback
-> configuration
->=20
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
->=20
-> So, if dma_set_mask_and_coherent() succeeds, 'pci_using_dac' is known to
-> be 1.
->=20
-> Simplify code and remove some dead code accordingly.
->=20
-> [1]: https://lkml.org/lkml/2021/6/7/398
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch was not part of the 1st serie I've sent. So there is no Review=
-ed-by
-> tag.
-> ---
->  drivers/net/ethernet/intel/igbvf/netdev.c | 22 ++++++----------------
->  1 file changed, 6 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c
-> b/drivers/net/ethernet/intel/igbvf/netdev.c
-> index b78407289741..43ced78c3a2e 100644
-> --- a/drivers/net/ethernet/intel/igbvf/netdev.c
-> +++ b/drivers/net/ethernet/intel/igbvf/netdev.c
-
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+-- 
+Regards,
+  Alexander

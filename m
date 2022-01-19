@@ -2,185 +2,530 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC404932E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7CA4932EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350963AbiASCZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 21:25:54 -0500
-Received: from mail-eopbgr70089.outbound.protection.outlook.com ([40.107.7.89]:49667
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238636AbiASCZw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 21:25:52 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mjH84sHkahHVJtbGdITCIgkDuzBuD9MiWUj3If3HSZFTH829aBV+RSTf+vG4TgUT2kgsa5pOT79TQ7EKkU7OPgJSGg89Cf0dGZrBJPQZyU+GhXdQuY12hhH90k5qkpCn96nFptMVROJ4ng4RaQVFwf+3+d0WJgZEZVMiUEk0EXoXh/47sNaw2zp3IsxNN+GJA5lf2pUUXcJtxnvNjczMUyitT2jqUbtDIV47PBZIjKqKxYHtmUrGXrQAppW0QacXv60n9H5sh5zYYtDv3sqPXgh7mpR+ublClnp2nkEWZTXQwelKfMLi/ISR8lHRAjlF+MdzwG2w1qgEdSMHgoI/Qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bUbDiQAKkAKH8/vHypuM7MhKLu5E+o9rPPGfeEX5GEc=;
- b=Iynow4udiVfDPwV1yTmt7zPbZElcLn9SkjkltTLcnKlYDqmkOY8F5WLbucpdIQXxiZT1wquXjsM78EpKfbeIxzbDTZgQcxC8nuMOzIrnohqR1EEr3cN60IL0bJKf4npIDeVC35RW5+4zDIxXoWuMYrK1ij4B8HUykarYTR7EqA/SwoXI1SlXSj9MnLfnPGxiSoVhlLcDir7qfm5ybuENNVfM99tYuBOlpb2nxo/XhhMV8CR47n6qGTkwJWN22conusx2qBgWSQ9ML9kNqlXBJcieErt14axFolFuYO90nEqxmjAbTOzP+eglHd+jeGCWV8KHWYPd+tisBjOY4t154g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bUbDiQAKkAKH8/vHypuM7MhKLu5E+o9rPPGfeEX5GEc=;
- b=I0T7LbGS6KslX4Av965tgeX6erJlebAqJgjXVfUEDLxZXYlld4sxAXzlTwIrCK+5q1lAdaEIYEnYb/5ok05yHMMPuka2y50a9itoHwRffJN2J859bkzM+pFcXbCj1nsoFVUDpIL9Vw326+ZtEOPHmlFjkqSrybqo1Cr5uHdYYbg=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM6PR04MB5045.eurprd04.prod.outlook.com (2603:10a6:20b:12::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 19 Jan
- 2022 02:25:48 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8%4]) with mapi id 15.20.4888.013; Wed, 19 Jan 2022
- 02:25:48 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 5/9] remoteproc: imx_rproc: make clk optional
-Thread-Topic: [PATCH 5/9] remoteproc: imx_rproc: make clk optional
-Thread-Index: AQHYBpwzP9GGJX1tsEmTz0jYXsJFWaxpK0KAgAB+tJA=
-Date:   Wed, 19 Jan 2022 02:25:48 +0000
-Message-ID: <DU0PR04MB9417B0AC80F41D425F43277C88599@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
- <20220111033333.403448-8-peng.fan@oss.nxp.com>
- <20220118185019.GG1119324@p14s>
-In-Reply-To: <20220118185019.GG1119324@p14s>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bff1c1c6-15e2-4fdf-8284-08d9daf30148
-x-ms-traffictypediagnostic: AM6PR04MB5045:EE_
-x-microsoft-antispam-prvs: <AM6PR04MB5045B6122AAFA11DA199AB1888599@AM6PR04MB5045.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a0/VCLvXMfYyCGkE1vBx6M6wmbcz8TzTehLNcE6hVXfUhICLtO3h83PBwULwz+S9xslam4iRPIEIy0zM59mC8/H1TqgCMYrY9tfCCmJ48BsUqbMJ2VQ1Y1E6lnNUHihn+6HFnBZme/2g9PniPYSuGNlqOJ/2BXAPcBZPe9l2yEU7cqLos8jgps4Xa6hSvv2zqpslOyAT3IZuX/Af9UVEXn6nd5T7cDAehbrhsTDi9HuoZJ0DTnsLswUdERASWDwCPb1Hu//UZYv9Ax7L7oNYJZMdlVVdJqVWQAInFnznQ7Yi/3UAys0vl9tvugKFV48HhlwtQ4Nxd0NgocvN8Hj4VE3pfsuJFGUQX2XsWgOl4M7AmjBCdfpHU4Dc0YoIDZWNnRUQINSYNkcsh4+lmRnvTWffGVHKTM/9RCLuMw8NaNqkI5Nr8cdtrJ/lrMEOCp1kS1EtIPHhFn0/JNr2AndJzWTG55GoaoqB4ENNbkhyWqf7rY8rH62+MEWI1eW5OWZwu//rVD8n2fua/lWmTzhhnLSxhhu5Pg4PaxLSk9hMLCbH0w9RFhv7Xnruf9yi71fjtJZ+t5Bhdom3MX/V5wBKF03fzHES4xIAprPxHiDWKjxt+iP64ppzclHgYfmMj81TuZDqsxZFJ+SJ4pWglS+MkmJ4g4qnfyK04ApvpuwEL/HjRB5c3nPDE23WIp69MdI22X99h4kJihshzZIFmHGvew==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(66556008)(55016003)(186003)(26005)(122000001)(44832011)(54906003)(66476007)(66946007)(86362001)(64756008)(33656002)(316002)(110136005)(4326008)(76116006)(9686003)(71200400001)(38100700002)(38070700005)(7696005)(83380400001)(2906002)(8676002)(8936002)(5660300002)(508600001)(66446008)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Tqq4FQRtDFwwNjyZ9VQUKkg7AY3IkDiGfHZ42LuqlDRaDP0LQopynv03aEe0?=
- =?us-ascii?Q?s9y/i7amufJ7mt0T1geS3FHWSZndSN3dgidZZMjWyRX+pMDAPwO9FiUU1OpJ?=
- =?us-ascii?Q?sWq46CzWNKUFSZPfUsH92pgXt20v6OQcof4mwbtBV6vg9vypgh32W+R96Pg2?=
- =?us-ascii?Q?hnEKpbPM/jd3SHHRi9PdV7U7BUTzGY9ue4WYPsT8qcfaDz/Nn1XvmPiQ8n9w?=
- =?us-ascii?Q?9GOgUX0/KT9aoi3zLWACOCxlbGZ9i+9/s03J7vQL8OgFaieLUSPimNQAaq0i?=
- =?us-ascii?Q?oGuy7ghOSwKH4mHyBhzV1W2dEOhnC8zlf7SzHm7nG9Bf/S7w6aw2RRbdOGlI?=
- =?us-ascii?Q?0KSwXytNK9RSmBw5TZNFjZrjeGgiWmSeO3kwP9htaq3oG3t/1cI0RLnrLqQ8?=
- =?us-ascii?Q?iTODpSGewEJaQp5aCyFhh/MqTJNsEo2Kgt3mjJZL+yLXtxMr5X7ZlzePmqWS?=
- =?us-ascii?Q?z5y7HxLhIQe/yZAFQN//Jp/3yIY8yKOWhxQV9VO45iY89PZto6J7fai1T8XM?=
- =?us-ascii?Q?lA2M0kCnRlEFogojGFhWBFBq6Kd3LOUWfHwBdwbPOLmKlgidUpPB+pr99zZX?=
- =?us-ascii?Q?UcaAh3trIXAdpj78+tKornp1q4ZyEiD9/MI+4P0kSMw7hUWtf5mpPX9WA/X7?=
- =?us-ascii?Q?3mh/sa/ZUeKDdMHMtbaDKCDC9o0lIbfmL54V1E2T3tutx/+psDFfd5PMkBOz?=
- =?us-ascii?Q?iXH76AlLZ5aegtahhSCYGFyywNazZjN/D/26sHqyCE3OvrLRtqB2JKBnQPBl?=
- =?us-ascii?Q?vu6mMS0kLEZEn9YOWXqpo8Mlbj3YtBRSiq0Hstz52BB6kJ3FeLfo1/S6XVzK?=
- =?us-ascii?Q?PJqGq6ojq39KUJxW8lGM0WNvfeWxXRDRz7inAZt6zHdAjgtU/4TI/wrf9AyR?=
- =?us-ascii?Q?XtjpKjXICHhPQWf7E3kZeZHcv71KijOU7oqGazhUDZlxKQPsHXHP4olboSFi?=
- =?us-ascii?Q?AndOqPgf9htoVIdK9FfhQOTO+a76XQMl/+vn7GTSap2rJdqSSY0HqjPtltKP?=
- =?us-ascii?Q?HdnQB5dFN8QFQG6EUI6h2txUga7HjrkRFugtou2KeOubGq9FoDol01y6+itU?=
- =?us-ascii?Q?Cp47dNmMaS8TrKULGNTs87e6+AkmhO2hdpKxmDwHRQcqi7ucvf+54vcKH4K5?=
- =?us-ascii?Q?eVAWuRfSar94KEfm7br8CFbFWAeqGUpXKJ0Q2mjif2kc949qWuZNCJ5ky0e4?=
- =?us-ascii?Q?VvRhEV+C7O0s+ARSVCGV7bgVzpF95+O8fyGoy8iAv28PN3eqU9JnBSctCMeO?=
- =?us-ascii?Q?VJW8827R3JssyUdrd1ywPaQXv4KEvI/tY9Wm64KoXXS3s2DlHRi9zlyu47Am?=
- =?us-ascii?Q?318O97CRa2rKInsDUHQETw3sUBXhWs4rk9VNo0bXtTMjQLnvu+YjB8M3IH2I?=
- =?us-ascii?Q?DQsmn2c0pVM+v9c+5MmtZO51vznIPWzkNjdx0tiIPkISXb2RedPUxfhHde9o?=
- =?us-ascii?Q?Hlb9tCVTCXKYwAFUqEbLTktl1VuQmkulGH5iy+Vq3rZ3dFuw+JJVe/+x2ov/?=
- =?us-ascii?Q?ufboJ5fgSp//NjHguImnHbJeCbWmrkc76SPLCsAiyhmJeoj0K1IourG9aaX1?=
- =?us-ascii?Q?YR/ZyqdGp1C2AadLolzpTNaSeKJNdYGy8m4Rv9ueHPkQKcADno1gliSC+zQ2?=
- =?us-ascii?Q?gRYrFagu1ubgw7FxGeBklZk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1348726AbiASC2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 21:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238636AbiASC2R (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 21:28:17 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2091FC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:28:17 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p18so2040106wmg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:28:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O1LsXbWam+BKI8xqcLlx4R6zRUKLsu3ZAy6sVWL3Hgw=;
+        b=nkOeeRy5lCMH1X87zOGcCtfaK2+bqea8H1/Dv3PfBoA3UgouSINMv7uevyX2z0JIic
+         xU84/zZjSbzHGhbZL9JYyZNFCLsF7EFbv4ohtt5DAs4iCotq/nbgB9cxCEVkjQwsMtyL
+         5bPODaloqW9MrEbPBhOQt56DV+O6gpvVCy5HFe5GXgqrMiAyCnFKvd97Gj0JjPmhb4jM
+         78m8r64hyj+HPwc7Mk9xv92MCytAwRrYU+8vB+dwS6iJMuNzPM7GXyShUONSPCBn52Ci
+         BUid5gP7JZiujfD5qxAWtWXXI11Pr0M2fvjtg3iwo0GoLOPLrsSOyTDreDZTLl5PpsX7
+         qd1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O1LsXbWam+BKI8xqcLlx4R6zRUKLsu3ZAy6sVWL3Hgw=;
+        b=Rfz/aZCk9NEKaeb2bQi14vZnA0hivhjFFBm5Py/SOXhH0fAlw1wTVEezz1yaf7Dsds
+         Ewl8U7/agML3bK2l0woBmlcKbMrlYpqX0i2g9dDssAlENblntCJbeANLChVFrH0U6sfW
+         RUBuu8t18t4nhBdp0GJRGJBEqZRwivcWYv7azKjsyT4NVL93Kl6EdgGb1x9WdcmsqNVZ
+         O1Fat9ZnKs35G/SfFxVI8drc9x7yGfj6dWiU/zibexvx4IDcYbPz846dKA/DMuYDEeM0
+         3/aFKqkM1+auPD5HXv7FpeloKpaF45Kg17HREzRcwuKYZ5hbCeHqrSR1Gu0c6rEDs8E3
+         dfig==
+X-Gm-Message-State: AOAM532XS9fvf/jAUmH000/zialh7NYMb04ZWdvHubMlKFifqguNeE6O
+        46YMO4TeedaKylDKYhDPvB25ufwuoo6ylniPM90=
+X-Google-Smtp-Source: ABdhPJxz9l8UmO4FnNI1o/4ICln/SEENzWSFtFC0G4xB7tyznurTtwFN6HS74h6LPsR+iOUsNxCJ7boRoWSjqRiKfdc=
+X-Received: by 2002:a5d:5909:: with SMTP id v9mr35605wrd.554.1642559295275;
+ Tue, 18 Jan 2022 18:28:15 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bff1c1c6-15e2-4fdf-8284-08d9daf30148
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2022 02:25:48.2136
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FU+8M1ABB9mFIfayNMNizSTznOVQvHFVog3Yti2St01YF6UXMy+Pdx+WtqhJU5hkrqcULvJ5CVgmLZFWh1Ojlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5045
+References: <20220113013835.503285-1-xiehuan09@gmail.com> <20220113013835.503285-3-xiehuan09@gmail.com>
+ <20220119001343.e9a07c7c0d8db586faeb5ae7@kernel.org>
+In-Reply-To: <20220119001343.e9a07c7c0d8db586faeb5ae7@kernel.org>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Wed, 19 Jan 2022 10:28:03 +0800
+Message-ID: <CAEr6+EA0vp3cTRqqSJvTEQtPCZ8p_6MxZWmQ5hPzQDWp=RusiQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/4] trace/objtrace: get the value of the object
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 5/9] remoteproc: imx_rproc: make clk optional
->=20
-> On Tue, Jan 11, 2022 at 11:33:29AM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
+Hi Masami,
+
+On Tue, Jan 18, 2022 at 11:13 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jeff,
+>
+> On Thu, 13 Jan 2022 09:38:33 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> > Using objtrace trigger to get the value of the object which from the kernel
+> > function parameter.
 > >
-> > To i.MX8QXP/QM/ULP and i.MX7ULP, Mcore maybe out of control of Linux.
-> > And in such case, no need clk, so make clk optional with has_clk.
+> > Syntax:
+> >       objtrace:add:obj[,offset][:type][:count][if <filter>]
 > >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > Usage:
+> >       # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> >       # gdb vmlinux
+> >       (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> >       $1 = (unsigned int *) 0x28
+> >       # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> >                p_bio_add_page_0/trigger
+> >       # cat /test.txt
+> >
+> > Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
 > > ---
-> >  drivers/remoteproc/imx_rproc.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
+> >  kernel/trace/trace.c         |   2 +-
+> >  kernel/trace/trace_entries.h |   5 +-
+> >  kernel/trace/trace_object.c  | 190 +++++++++++++++++++++++++++++------
+> >  kernel/trace/trace_output.c  |   6 +-
+> >  4 files changed, 169 insertions(+), 34 deletions(-)
 > >
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index 7b2578177ea8..0e99a3ca6fbc
-> > 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -89,6 +89,7 @@ struct imx_rproc {
-> >  	struct work_struct		rproc_work;
-> >  	struct workqueue_struct		*workqueue;
-> >  	void __iomem			*rsc_table;
-> > +	bool				has_clk;
->=20
-> I am usually weary of bloating structures with flags.  I suggest achievin=
-g the
-> same functionality with a macro that compares priv->dcfg with the right
-> imx_rproc_dcfg structure.
-
-priv->dcfg is some kind fixed settings, however has_clk could be runtime ch=
-anged,
-because i.MX platform M-core support multiple booting method and it
-could work w/o clk handled by Linux depending on some pre-configuration
-such as moving M-core in an separate hardware partition.
-
-Thanks,
-Peng.=20
-
->=20
-> >  };
+> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> > index 0b627963e343..d5332ece4c67 100644
+> > --- a/kernel/trace/trace.c
+> > +++ b/kernel/trace/trace.c
+> > @@ -5591,7 +5591,7 @@ static const char readme_msg[] =
+> >       "\t            disable_hist:<system>:<event>\n"
+> >  #endif
+> >  #ifdef CONFIG_TRACE_OBJECT
+> > -     "\t            objtrace:add:obj[:count][if <filter>]\n"
+> > +     "\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
+> >  #endif
+> >  #ifdef CONFIG_STACKTRACE
+> >       "\t\t    stacktrace\n"
+> > diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+> > index bb120d9498a9..2407c45a568c 100644
+> > --- a/kernel/trace/trace_entries.h
+> > +++ b/kernel/trace/trace_entries.h
+> > @@ -413,8 +413,9 @@ FTRACE_ENTRY(object, trace_object_entry,
+> >               __field(        unsigned long,          ip              )
+> >               __field(        unsigned long,          parent_ip       )
+> >               __field(        unsigned long,          object          )
+> > +             __field(        unsigned long,          value           )
+> >       ),
 > >
-> >  static const struct imx_rproc_att imx_rproc_att_imx8mn[] =3D { @@
-> > -724,6 +725,9 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv=
-)
-> >  	if (dcfg->method =3D=3D IMX_RPROC_NONE)
-> >  		return 0;
+> > -     F_printk(" %ps <-- %ps object:%lx\n",
+> > -              (void *)__entry->ip, (void *)__entry->parent_ip, __entry->object)
+> > +     F_printk(" %ps <-- %ps object:%lx value:%lx\n", (void *)__entry->ip,
+> > +            (void *)__entry->parent_ip, __entry->object, __entry->value)
+> >  );
+> > diff --git a/kernel/trace/trace_object.c b/kernel/trace/trace_object.c
+> > index 4af1c117cbfa..774a9dff4d0a 100644
+> > --- a/kernel/trace/trace_object.c
+> > +++ b/kernel/trace/trace_object.c
+> > @@ -11,7 +11,6 @@
+> >  #define MAX_TRACED_OBJECT 5
+> >  static DEFINE_RAW_SPINLOCK(trace_obj_lock);
+> >  static struct trace_event_file event_trace_file;
+> > -static const int max_args_num = 6;
+> >  static atomic_t trace_object_ref;
+> >  static atomic_t num_traced_obj;
+> >  static int exit_trace_object(void);
+> > @@ -19,8 +18,22 @@ static int init_trace_object(void);
 > >
-> > +	if (!priv->has_clk)
-> > +		return 0;
+> >  static struct object_instance {
+> >       void *obj;
+> > +     int obj_type_size;
+> >  } traced_obj[MAX_TRACED_OBJECT];
+> >
+> > +/* objtrace private data */
+> > +struct objtrace_trigger_data {
+> > +     struct ftrace_event_field *field;
+> > +     int offset;
+> > +     int obj_type_size;
+> > +};
 > > +
-> >  	priv->clk =3D devm_clk_get(dev, NULL);
-> >  	if (IS_ERR(priv->clk)) {
-> >  		dev_err(dev, "Failed to get clock\n"); @@ -768,6 +772,7 @@ static
-> > int imx_rproc_probe(struct platform_device *pdev)
-> >  	priv->rproc =3D rproc;
-> >  	priv->dcfg =3D dcfg;
-> >  	priv->dev =3D dev;
-> > +	priv->has_clk =3D true;
+> > +/* get the type size for the special object */
+> > +struct objtrace_fetch_type {
+> > +     char *name;
+> > +     int type_size;
+> > +};
+> > +
+> >  static bool object_exist(void *obj)
+> >  {
+> >       int i, max;
+> > @@ -39,7 +52,7 @@ static bool object_empty(void)
+> >       return !atomic_read(&num_traced_obj);
+> >  }
 > >
-> >  	dev_set_drvdata(dev, rproc);
-> >  	priv->workqueue =3D create_workqueue(dev_name(dev));
+> > -static void set_trace_object(void *obj)
+> > +static void set_trace_object(void *obj, int obj_type_size)
+> >  {
+> >       unsigned long flags;
+> >
+> > @@ -59,6 +72,7 @@ static void set_trace_object(void *obj)
+> >               goto out;
+> >       }
+> >       traced_obj[atomic_read(&num_traced_obj)].obj = obj;
+> > +     traced_obj[atomic_read(&num_traced_obj)].obj_type_size = obj_type_size;
+> >       /* make sure the num_traced_obj update always appears after traced_obj update */
+> >       smp_wmb();
+> >       atomic_inc(&num_traced_obj);
+> > @@ -67,7 +81,7 @@ static void set_trace_object(void *obj)
+> >  }
+> >
+> >  static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
+> > -                              unsigned long object)
+> > +                              unsigned long object, unsigned long value)
+> >  {
+> >
+> >       struct trace_buffer *buffer;
+> > @@ -84,18 +98,66 @@ static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
+> >       entry->ip                       = ip;
+> >       entry->parent_ip                = parent_ip;
+> >       entry->object                   = object;
+> > +     entry->value                    = value;
+> >
+> >       event_trigger_unlock_commit(&event_trace_file, buffer, event,
+> >               entry, pc);
+> >  }
+> >
+> > +static inline long get_object_value(unsigned long *val, void *obj, int type_size)
+> > +{
+> > +     long ret = 0;
+> > +
+> > +     switch (type_size) {
+> > +     case 1: {
+> > +             u8 tmp;
+> > +
+> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
+> > +             if (ret)
+> > +                     goto out;
+> > +             *val = tmp;
+> > +             break;
+> > +     }
+> > +     case 2: {
+> > +             u16 tmp;
+> > +
+> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
+> > +             if (ret)
+> > +                     goto out;
+> > +             *val = tmp;
+> > +             break;
+> > +     }
+> > +     case 4: {
+> > +             u32 tmp;
+> > +
+> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
+> > +             if (ret)
+> > +                     goto out;
+> > +             *val = tmp;
+> > +             break;
+> > +     }
+> > +     case 8: {
+> > +             u64 tmp;
+> > +
+> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
+> > +             if (ret)
+> > +                     goto out;
+> > +             *val = tmp;
+> > +             break;
+> > +     }
+>
+> Can't you move the copy_from_kernel_nofault() outside of the switch-case?
+> e.g.
+>
+>         char tmp[sizeof(u64)];
+>
+>         ret = copy_from_kernel_nofault(tmp, obj, sizeof(tmp));
+>         if (ret)
+>                 return ret;
+>
+>         switch (type_size) {
+>                 case 1:
+>                         *val = (unsigned long)*(u8 *)tmp;
+>                         break;
+>                 ...
+>         }
+>         return 0;
+
+Thanks, I will change it.
+
+> Thank you,
+>
+>
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +out:
+> > +     return ret;
+> > +}
+> > +
+> >  static void
+> >  trace_object_events_call(unsigned long ip, unsigned long parent_ip,
+> >               struct ftrace_ops *op, struct ftrace_regs *fregs)
+> >  {
+> > -     struct pt_regs *pt_regs = ftrace_get_regs(fregs);
+> > -     unsigned long obj;
+> > -     int bit, n;
+> > +     unsigned long val = 0;
+> > +     int bit, n, max;
+> >
+> >       bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> >       if (bit < 0)
+> > @@ -104,11 +166,12 @@ trace_object_events_call(unsigned long ip, unsigned long parent_ip,
+> >       if (object_empty())
+> >               goto out;
+> >
+> > -     for (n = 0; n < max_args_num; n++) {
+> > -             obj = regs_get_kernel_argument(pt_regs, n);
+> > -             if (object_exist((void *)obj))
+> > -                     submit_trace_object(ip, parent_ip, obj);
+>
+> This actually filtered the (function call) event which is related to the object.
+>
+> > -     /* The parameters of a function may match multiple objects */
+> > +     max = atomic_read(&num_traced_obj);
+> > +     smp_rmb();
+> > +     for (n = 0; n < max; n++) {
+> > +             if (get_object_value(&val, traced_obj[n].obj, traced_obj[n].obj_type_size))
+> > +                     goto out;
+> > +             submit_trace_object(ip, parent_ip, (unsigned long)traced_obj[n].obj, val);
+>
+> But you lost the filter here.
+> This is because you saves the "object + offset" address below;
+
+I misunderstood the previous discussion and thought that filter
+do not apply when getting the value of the object. ;-)
+I will add the filter.
+
+>
+> >       }
+> >  out:
+> >       ftrace_test_recursion_unlock(bit);
+> > @@ -124,12 +187,15 @@ trace_object_trigger(struct event_trigger_data *data,
+> >                  struct trace_buffer *buffer,  void *rec,
+> >                  struct ring_buffer_event *event)
+> >  {
+> > +     struct objtrace_trigger_data *obj_data = data->private_data;
+> > +     struct ftrace_event_field *field;
+> > +     void *obj, *val = NULL;
+> >
+> > -     struct ftrace_event_field *field = data->private_data;
+> > -     void *obj = NULL;
+> > -
+> > -     memcpy(&obj, rec + field->offset, sizeof(obj));
+> > -     set_trace_object(obj);
+> > +     field = obj_data->field;
+> > +     memcpy(&val, rec + field->offset, sizeof(val));
+> > +     /* get the final object */
+> > +     obj = val + obj_data->offset;
+>
+> Here, you saved the object address including offset. This means
+> you can not filter the actual function related to the object.
+>
+> Please recover the filter.
+>
+> > +     set_trace_object(obj, obj_data->obj_type_size);
+>
+> You can save the offset with type-size and object address itself.
+
+Thanks, I will recover it.
+
+> Thank you,
+>
+> >  }
+> >
+> >  static void
+> > @@ -140,8 +206,10 @@ trace_object_trigger_free(struct event_trigger_ops *ops,
+> >               return;
+> >
+> >       data->ref--;
+> > -     if (!data->ref)
+> > +     if (!data->ref) {
+> > +             kfree(data->private_data);
+> >               trigger_data_free(data);
+> > +     }
+> >  }
+> >
+> >  static void
+> > @@ -276,6 +344,22 @@ static void unregister_object_trigger(char *glob, struct event_trigger_ops *ops,
+> >       }
+> >  }
+> >
+> > +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
+> > +     {"u8", 1},
+> > +     {"s8", 1},
+> > +     {"x8", 1},
+> > +     {"u16", 2},
+> > +     {"s16", 2},
+> > +     {"x16", 2},
+> > +     {"u32", 4},
+> > +     {"s32", 4},
+> > +     {"x32", 4},
+> > +     {"u64", 8},
+> > +     {"s64", 8},
+> > +     {"x64", 8},
+> > +     {}
+> > +};
+> > +
+> >  static int
+> >  event_object_trigger_callback(struct event_command *cmd_ops,
+> >                      struct trace_event_file *file,
+> > @@ -283,19 +367,22 @@ event_object_trigger_callback(struct event_command *cmd_ops,
+> >  {
+> >       struct event_trigger_data *trigger_data;
+> >       struct event_trigger_ops *trigger_ops;
+> > +     struct objtrace_trigger_data *obj_data;
+> >       struct trace_event_call *call;
+> >       struct ftrace_event_field *field;
+> > -     char *objtrace_cmd;
+> > -     char *trigger = NULL;
+> > -     char *arg;
+> > -     char *number;
+> > -     int ret;
+> > +     char *type, *tr, *obj, *tmp, *trigger = NULL;
+> > +     char *number, *objtrace_cmd;
+> > +     int ret, i, def_type_size, obj_type_size = 0;
+> > +     long offset = 0;
+> >
+> >       ret = -EINVAL;
+> >       if (!param)
+> >               goto out;
+> >
+> > -     /* separate the trigger from the filter (c:a:n [if filter]) */
+> > +     /*
+> > +      * separate the trigger from the filter:
+> > +      * objtrace:add:OBJ[,OFFS][:TYPE][:COUNT] [if filter]
+> > +      */
+> >       trigger = strsep(&param, " \t");
+> >       if (!trigger)
+> >               goto out;
+> > @@ -309,33 +396,79 @@ event_object_trigger_callback(struct event_command *cmd_ops,
+> >       if (!objtrace_cmd || strcmp(objtrace_cmd, "add"))
+> >               goto out;
+> >
+> > -     arg = strsep(&trigger, ":");
+> > -     if (!arg)
+> > +     obj = strsep(&trigger, ":");
+> > +     if (!obj)
+> >               goto out;
+> > +
+> > +     tr = strchr(obj, ',');
+> > +     if (!tr)
+> > +             offset = 0;
+> > +     else {
+> > +             *tr++ = '\0';
+> > +             ret = kstrtol(tr, 0, &offset);
+> > +             if (ret)
+> > +                     goto out;
+> > +     }
+> > +
+> > +     ret = -EINVAL;
+> >       call = file->event_call;
+> > -     field = trace_find_event_field(call, arg);
+> > +     field = trace_find_event_field(call, obj);
+> >       if (!field)
+> >               goto out;
+> >
+> >       if (field->size != sizeof(void *))
+> >               goto out;
+> > +     def_type_size = sizeof(void *);
+> > +     if (!trigger) {
+> > +             obj_type_size = def_type_size;
+> > +             goto skip_get_type;
+> > +     }
+> >
+> > +     tmp = trigger;
+> > +     type = strsep(&trigger, ":");
+> > +     if (!type)
+> > +             obj_type_size = def_type_size;
+> > +     else if (isdigit(type[0])) {
+> > +             obj_type_size = def_type_size;
+> > +             trigger = tmp;
+> > +     } else {
+> > +             for (i = 0; objtrace_fetch_types[i].name; i++) {
+> > +                     if (strcmp(objtrace_fetch_types[i].name, type) == 0) {
+> > +                             obj_type_size = objtrace_fetch_types[i].type_size;
+> > +                             break;
+> > +                     }
+> > +             }
+> > +     }
+> > +     if (!obj_type_size)
+> > +             goto out;
+> > +skip_get_type:
+> >       trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
+> >
+> >       ret = -ENOMEM;
+> > +     obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
+> > +     if (!obj_data)
+> > +             goto out;
+> > +
+> > +     obj_data->field = field;
+> > +     obj_data->offset = offset;
+> > +     obj_data->obj_type_size = obj_type_size;
+> > +
+> >       trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
+> > -     if (!trigger_data)
+> > +     if (!trigger_data) {
+> > +             kfree(obj_data);
+> >               goto out;
+> > +     }
+> >
+> >       trigger_data->count = -1;
+> >       trigger_data->ops = trigger_ops;
+> >       trigger_data->cmd_ops = cmd_ops;
+> > -     trigger_data->private_data = field;
+> > +     trigger_data->private_data = obj_data;
+> >       INIT_LIST_HEAD(&trigger_data->list);
+> >       INIT_LIST_HEAD(&trigger_data->named_list);
+> >
+> >       if (glob[0] == '!') {
+> >               cmd_ops->unreg(glob+1, trigger_ops, trigger_data, file);
+> > +             kfree(obj_data);
+> >               kfree(trigger_data);
+> >               ret = 0;
+> >               goto out;
+> > @@ -390,6 +523,7 @@ event_object_trigger_callback(struct event_command *cmd_ops,
+> >   out_free:
+> >       if (cmd_ops->set_filter)
+> >               cmd_ops->set_filter(NULL, trigger_data, NULL);
+> > +     kfree(obj_data);
+> >       kfree(trigger_data);
+> >       goto out;
+> >  }
+> > diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+> > index d747aed27104..12a971927d8c 100644
+> > --- a/kernel/trace/trace_output.c
+> > +++ b/kernel/trace/trace_output.c
+> > @@ -1553,6 +1553,7 @@ static enum print_line_t trace_object_print(struct trace_iterator *iter, int fla
+> >       trace_assign_type(field, iter->ent);
+> >       print_fn_trace(s, field->ip, field->parent_ip, flags);
+> >       trace_seq_printf(s, " object:0x%lx", field->object);
+> > +     trace_seq_printf(s, " value:0x%lx", field->value);
+> >       trace_seq_putc(s, '\n');
+> >
+> >       return trace_handle_return(s);
+> > @@ -1565,9 +1566,8 @@ static enum print_line_t trace_object_raw(struct trace_iterator *iter, int flags
+> >
+> >       trace_assign_type(field, iter->ent);
+> >
+> > -     trace_seq_printf(&iter->seq, "%lx %lx\n",
+> > -                      field->ip,
+> > -                      field->parent_ip);
+> > +     trace_seq_printf(&iter->seq, "%lx %lx %lx %lx\n", field->ip,
+> > +                     field->parent_ip, field->object, field->value);
+> >
+> >       return trace_handle_return(&iter->seq);
+> >  }
 > > --
 > > 2.25.1
 > >
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
+---
+JeffXie

@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E01EE494215
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912BD494216
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240077AbiASUsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:48:35 -0500
-Received: from mout.gmx.net ([212.227.15.19]:36407 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234427AbiASUse (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:48:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642625308;
-        bh=Wq2wCMvJMRTznzWEUm9j4pZ5kEAN28YbqyR5A4QCv6o=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=SJJJl1aE8E5GXCpxnAKjgSjZpwbLJmRwxdvOvlIkO+JWixMLtB93WpTQTDFoLMvQo
-         P8pQepW+xDWU2GsHxYTzYk4VElamAyJQezzhAtPFnlBfPXI0pT4SVcwxPT7Fl3MZHd
-         wINXNIp9CbOcFO3y+zaMyS5Zw2sLVO4wRIFwY06w=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from homer.fritz.box ([185.191.218.185]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWASe-1mmVpm2K0w-00XeiY; Wed, 19
- Jan 2022 21:48:28 +0100
-Message-ID: <145440f77810f8091ff0621a0b7d0f08cc43f8d3.camel@gmx.de>
-Subject: Re: regression: LTP isofs testcase failure - bisection fingers
- "loop: make autoclear operation asynchronous"
-From:   Mike Galbraith <efault@gmx.de>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     lkml <linux-kernel@vger.kernel.org>
-Date:   Wed, 19 Jan 2022 21:48:27 +0100
-In-Reply-To: <dd6c1f86-9a4b-bc1d-8d9e-835e64a00638@I-love.SAKURA.ne.jp>
-References: <4eb771d2b48ee94ba2e3aa8706bce8117d398e80.camel@gmx.de>
-         <c53285e4-cbd4-5fd0-cbc9-93e2e3d3d88d@I-love.SAKURA.ne.jp>
-         <0a1c1464e40e4c60687bc715c0b78c9124e456f8.camel@gmx.de>
-         <dd6c1f86-9a4b-bc1d-8d9e-835e64a00638@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
-MIME-Version: 1.0
+        id S240305AbiASUsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232095AbiASUsv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 15:48:51 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCACBC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:48:50 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id r132-20020a1c448a000000b0034e043aaac7so684045wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=VUx/FixPaEe6YT7F4YysqIz+YufT/bqww2Y78WeYZFs=;
+        b=mDIxsahHNCOZMq2u6spiErkwTPbcHGPtRXj5dQGR5QmB0ZU56Z5BoDCoj6iItpBlpP
+         JEf8jxKyVWUNnSHQQPp/RGtng9w0DuZWAIy34RvdVllTdACcMBuD7IMtFvR2XOxiwj1A
+         OUvbAW/JQyzGfe/uxCb51JZL9WRfbnvJ0DPXIdjR5dey5yZtYGtPVcxGbHzNDGx7f0Tm
+         L6nEnANQCuzEiaN5epZkXOHaiwT/mLdsO4qK5A2PF2DnrfcbNuAnVrWzlZe7T2NL1jZe
+         bU1mWXESbAHBJcI7wjw+VaPQB7pgKQPfgZamh5otlqTcLIQw8nRGUsDNJRqTONOaWgpk
+         TQzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=VUx/FixPaEe6YT7F4YysqIz+YufT/bqww2Y78WeYZFs=;
+        b=phA+eoGiHdU9qWjaIjc2OHmSz1krG+GOImT2uzcey7ePzwQBBEgyqLyiM8am/RiSQO
+         sz3/XQ8cqgqQnwKrDg5PXe8fsPyM7CXk58hlBj8wF+90y9lRqcCR6Byn5t9UCz96T0kz
+         1hm1WU/mahpg0hbDwbe5oA9Qd9Bz+yfE72R0PwZ1SAjbAjfBpuZ1Wd6qCYUkru08SSkL
+         Q9ZqcNB56FpO7UfNZhnHmN+3gEZExtiLW8vFk9u+DC6mv9TbARNjDfYIGek0VG+FCxUQ
+         dnc6nheVMajL2YpXJ+9Rt7cHWM/7a09kU+eBAaS9eGAoi0iSi7J1M35JDv5kHCZl3ZZ+
+         OdTg==
+X-Gm-Message-State: AOAM530bKA49ISGFBMkZm6PAiv0TIef57fYKcrflv0+gVeUxzlrwq0uL
+        Xt7+ycq6kt79LKxTrxWaSgju5g==
+X-Google-Smtp-Source: ABdhPJxNQ7+g3Z8/6ZFolPPK7IHxtQZ8opBbkLpaHkG7DAXF52LD+FGIve4H0T+pKSZfKCmggxi1ew==
+X-Received: by 2002:a1c:4d09:: with SMTP id o9mr5402464wmh.22.1642625329512;
+        Wed, 19 Jan 2022 12:48:49 -0800 (PST)
+Received: from smtpclient.apple (global-5-142.nat-2.net.cam.ac.uk. [131.111.5.142])
+        by smtp.gmail.com with ESMTPSA id d11sm1134397wri.65.2022.01.19.12.48.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Jan 2022 12:48:49 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH] riscv: eliminate unreliable __builtin_frame_address(1)
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <8735lj78wu.fsf@igel.home>
+Date:   Wed, 19 Jan 2022 20:48:48 +0000
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WzWk5d7w6HARwCZs3WD8YMCBYHZruxC4slaqLynZlYdBAFi6Cek
- biYgMsKVTy3wEUMdtbh61QHXNUrAo1edAouuLIfY778005bOfOs4ljdh9S6TpeMyBn5YtAf
- VMzE6ZOwSBhKKYbB6t0YEZ3H3eP2bojcCfaT62e68CqndZvvVIBLUDu+MtZVRHvhioxLSRt
- dnYIl2QLYlzHVUfL+F/TA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ql/g2bDtDMg=:Fp5X/2uOrweWx4R95xGTzA
- L9lbT4FI1cMTmdQ3z9Drm5nMYjIUjn48x6gUc3mssDimE0spVxof9FHbywRISnGDgvSE0UVH4
- Kp3l9Hem4/kbBGT8TzfVDMW9ZlS96jfQKBQEu9DSZNTUtzzPmRIo6G3S6ZzClrxD6Br4+6DRs
- wrtj0WgIjTjZJl1tdc9N5639jgQVI33EUu5n5G5io4a2nWB3rhMnYO2Nrr4eJc/NC4l5230Xf
- /QlE60SUtXPHJfQ2sl+a0ESLlROsXlN4/N6nxqC3Scz0Sz+mzNr/SixY6SU9zBVbKDs7pcoSv
- Ci7eO+ctmQFvy7V6JCcOOFKpQZoRz5uLgVoV6anbPKrz3camaumOaCsD3wjCDBSTntIpzzuhg
- Ntz3qTqv7Hqhc2fpDHDkwa7wdgVonM9ixMbVwhAg6a+dePwU2FbHopyPUp+gHZJUVN2DebyG5
- HYW0hiMhjNX9Kw+SWalq5v3kJzTAASne3p7uYE/3e/4glgh9xpUXbRH60WtgY6r3c/P6y65Eb
- aHHW9iwgEc30r5b1u71JCzZU6iLuN5WbdewxFeZsz+OVYJVMCKq2E07nE+S2CP6ENHgeWlOz7
- /lHGIFf/MujeNuFg1fvJSuHIbTo9VHFTV4zV87OoKDwfLa2XmJtF0/hdrMPtgAc6MQg2AYYI3
- mI/SKjRMVshegTc44deYTkH45QABKc8j8lQu3jA+5tLaZUii8Qx5rn/0ZrKRNKG/FqQBVrDh3
- rOpo6sBkWxIoDq3rULptyDQZrV5WNNiHJBFGciPMrk6avU1mYRhRBT1oEiMUr5Kp/D652AOKk
- RdUVaPndNWw7ZZ5+r4EZTIntvRCYom4tJD4HFzzo7L6N6luAUuzbhRa5oOCDvnJcnOo7E7jb0
- Tr8LBmazZeO0aKd8gsaCJ/r+Zos7hZdpAxQuYcCT3bhzInuoL2bCFIMC39XY0VxmscdkWt5YH
- FqnKUMloJcNhDIVDHdJybixSxfsGa1M/HL9M7XU3/ZufnhkLDXS3hi+CsuJ3tvRHqGzbqHZVH
- u858eiREMwTxqNeyz9U7juGbAJRbuGTV2kYjHy6T4oGOT5504NGX9BrdVH+VrLFlf2JN3mYzf
- ojaHMoOmgPDrUU=
+Message-Id: <8F8D535F-3637-4BC7-8853-B709EC5D14C9@jrtc27.com>
+References: <20220117154433.3124-1-changbin.du@gmail.com>
+ <C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com> <87v8yg6lhf.fsf@igel.home>
+ <AAAA7852-EBCA-47A3-B74E-A425023468C6@jrtc27.com> <8735lj78wu.fsf@igel.home>
+To:     Andreas Schwab <schwab@linux-m68k.org>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 15:19 +0900, Tetsuo Handa wrote:
-> On 2022/01/18 12:21, Mike Galbraith wrote:
-> > On Tue, 2022-01-18 at 06:57 +0900, Tetsuo Handa wrote:
-> > > On 2022/01/18 0:34, Mike Galbraith wrote:
-> > > > Greetings,
-> > > >
-> > > > LTP's isofs testcase began failing this cycle, and bisected as bel=
-ow,
-> > > > which a revert then confirmed.=C2=A0 Full testcase output attached=
-.
-> > > >
-> > >
-> > > Thanks for reporting.
-> > > Discussion is continued at https://lkml.kernel.org/r/cdaf1346-2885-f=
-0da-8878-12264bd48348@I-love.SAKURA.ne.jp=C2=A0.
-> >
-> > FWIW, simply immediately flushing that shiny new rundown_work turned
-> > LTP's thumb back to upward pointing.
->
-> Unfortunately, that reintroduces the circular locking dependency problem
-> which my patch tried to solve.
+On 19 Jan 2022, at 20:44, Andreas Schwab <schwab@linux-m68k.org> wrote:
+>=20
+> On Jan 19 2022, Jessica Clarke wrote:
+>=20
+>> Leaf functions by definition don=E2=80=99t have callees that are =
+trying to read
+>> their frame pointer so aren=E2=80=99t relevant here.
+>=20
+> ??? __builtin_frame_address(1) is about the caller, not the callee.
 
-Hm, lockdep was green (and is, just double checked out of curiosity)
-with the LTP testcase (shrug).
+My point is that the only thing that can possibly read the incoming
+frame pointer of a leaf function is the leaf function itself, and since
+it knows where it=E2=80=99s putting it then there is no ABI issue, it =
+just
+remembers where it put it and loads it from there. The issue of whether
+it=E2=80=99s part of the ABI or not only arises when you=E2=80=99re =
+trying to read the
+incoming frame pointer from a caller, which by definition is not a leaf
+function.
 
-Happily, and as previously noted, both patch options at the link you
-provided restored the LTP testcase's happy camper status.
+Jess
 
-	-Mike

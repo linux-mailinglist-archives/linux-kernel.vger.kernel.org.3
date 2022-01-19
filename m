@@ -2,232 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C432049389D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA59A4938A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346911AbiASKfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S1350468AbiASKft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343802AbiASKfU (ORCPT
+        with ESMTP id S1343802AbiASKfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:35:20 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF0BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:35:20 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id v186so6084600ybg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rUKeKsjrWT9Cp/WtLJMVg1xmKzt09vNFzaRVXi5Pt+8=;
-        b=Ub6J0W3Y67POIPR1h338w1Mg85jgaV9lFjNg2DLDx+ZYkSzN+sG0hObnGVZtfw6lzo
-         7+MrS/lfE3CgnRo1ydR4VLPJNzFM8vsZsfaMLFh77fSi57UrkskqgFkiyaPoGePDm8qT
-         hGPu4cElSBb/YHj2IOYjMxwbepD9r0zvEElXzVybmBn24FEVpFYIS2N9rEoyztKOJFKE
-         ou6OuUTIS2WuwTIjP9x6AQl9aD5qiRrlHOaSOcDc7/5J9oWcHKAFguVEYQ1Tm9avryJi
-         pqn5yXd5nA/lKpjQrbpn3K9TCk4ZhFJ0X4GtbbpkrM7Qnenqf2anSgDXIlPTQeXW4yrB
-         uFqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rUKeKsjrWT9Cp/WtLJMVg1xmKzt09vNFzaRVXi5Pt+8=;
-        b=qfvvzxbKMrQ36QMoHXQdvB61J5wEOLnI7HeW96kY7KXBT9GZ/oA872ie4T1HpqJhmv
-         ri4lft0Nn64qdiGdkRjzJdNnMPt9MUak6ctuBq3QbbUnDqtr6Wai7x24G6EVwp+0HMul
-         8KtAnG8ZZv50YRsuWKaZaWtGiK/4kVlTRZhItxQMWyYfpnCGLvCjRA/CR4RrP85Hjg9H
-         tyGxgiikjhaU/YPoXz7/uJm7H6FjEVr+MbEGvL5a3iZ8SitrAAHsZW9UJihA1rAaNYTP
-         L7US6h4118Qiu4t9EVqvC5TUmhCq8eIWxPDLOhI3D1twgaxc3P1wPWGph/m1t+4sH1fa
-         624g==
-X-Gm-Message-State: AOAM531SspqaWfGHPcuujpS3/gJqzchwjLCw4t/LmoreOzrWCixN7QDB
-        AeYdRBSJWbLRyXjwjFqq1Kt9L3MzL6yZh8d/7XkKlA==
-X-Google-Smtp-Source: ABdhPJw/vYew1FkR09Brq4X0P17iLMqtPO7S0/RJNI9cQswIR9ZABIavOoLobixST2/jsgHrZ1rt30ueALY8g1uTpYY=
-X-Received: by 2002:a5b:346:: with SMTP id q6mr19257512ybp.704.1642588518011;
- Wed, 19 Jan 2022 02:35:18 -0800 (PST)
+        Wed, 19 Jan 2022 05:35:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BF4C061574;
+        Wed, 19 Jan 2022 02:35:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 210AAB81981;
+        Wed, 19 Jan 2022 10:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C6CC340EC;
+        Wed, 19 Jan 2022 10:35:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642588544;
+        bh=dLVBsjWsa3tGe7VI+gEjPAK21hcD2zsUppaxNspCidw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OY+FuNZsU4FCGv13S5pE17km9nFJ1sREVRgpDGQ3pF1hqIWYJj8cI5XCxXu372wy/
+         x8qRQrobeWclhryEaq/pzYK0MrdOCEu9NcYrJ29i4IpnUqbQXN5oZ/Ibd1wYTh7Icr
+         fIDmXjiYEcnQ4R5kQzKQWcrgUtdgL4TMU28ukJlmRMrmncy5mtPeWwlStAI7Z06KbW
+         tQJpb54LWKlSp0sliFIzFwuiS98/B9vCwQaZtKuYxBKehYH5lDeD2kdFGSgM2bLL+H
+         iYtuj0ZJhGM5vIlNeKiRPtvNK1JnwxlfhAVe7PRK4OZ9279oqgJmf5WHeBjEgVYksT
+         olvWSmwJx5vpg==
+Received: by mail-wm1-f43.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso13417779wmj.2;
+        Wed, 19 Jan 2022 02:35:44 -0800 (PST)
+X-Gm-Message-State: AOAM533KlsqsgcWikPieGJL2/nY1iuRJFxmdcWJBlFX3W58bSIP2WBtZ
+        ahm+KhqtcegR1kUDPpoUgKehHFjUFtOAWngRa7E=
+X-Google-Smtp-Source: ABdhPJxz62Vu1t8USPQKfzN9UxWCuXzIdAWIMYfTvzG08o48WSftiicOZMHsxR2P9Zuf5cNWB4skcW66Hpc+FiM5xGo=
+X-Received: by 2002:a05:600c:3c9c:: with SMTP id bg28mr2778170wmb.190.1642588543206;
+ Wed, 19 Jan 2022 02:35:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118160451.233828401@linuxfoundation.org>
-In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 19 Jan 2022 16:05:06 +0530
-Message-ID: <CA+G9fYujm6ezVyEq9PTJyo9Q9=9-goJtM3m7Ah70x-t0SZ9Zmw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/23] 5.10.93-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+References: <CAHmME9oX+4Ek81xy0nBOegqABH0xYqyONAqinsu7GZ7AaQaqYQ@mail.gmail.com>
+ <20220119100615.5059-1-miles.chen@mediatek.com> <CAMj1kXE_6WboUK0VPbTwzTbMNxv8b4XUp7USQUp=YqcCRMTZig@mail.gmail.com>
+ <CAHmME9o-=q6jT6mF3XsfoA17756YVEWdXGHukP=rxWS1gs5irg@mail.gmail.com>
+In-Reply-To: <CAHmME9o-=q6jT6mF3XsfoA17756YVEWdXGHukP=rxWS1gs5irg@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Jan 2022 11:35:32 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFdgPj7Ky-361QNAOLccr1mq5m9LSsPfbgpwV58fLAxJw@mail.gmail.com>
+Message-ID: <CAMj1kXFdgPj7Ky-361QNAOLccr1mq5m9LSsPfbgpwV58fLAxJw@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Miles Chen <miles.chen@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 at 21:37, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, 19 Jan 2022 at 11:20, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.10.93 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On 1/19/22, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > On Wed, 19 Jan 2022 at 11:06, Miles Chen <miles.chen@mediatek.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> >Hi Miles,
+> >> >
+> >> >I'm actually not able to reproduce your oops. I'm using vanilla clang
+> >> >13, cross compiling for arm64, with thin LTO enabled and CFI enabled.
+> >> >Kernel seems to run fine.
+> >> >
+> >> >
+> >> >Are there other settings that are needed to trigger this? Do you see
+> >> >it in upstream clang or just the Android fork of clang?
+> >> >
+> >> I will try another clang (the previous version I use).
+> >> I am using Android fork of clang and there is a clang upgrade in this
+> >> merge.
+> >>
+> >
+> > One thing that could be worth a try is to make __blake2s_update() and
+> > __blake2s_final() __always_inline rather than just inline, which by
+> > itself does not appear to be sufficient for the code to get inlined.
+> > (If it were, the indirect call should have disappeared as well)
+> >
+> > Given that indirect calls suck on x86, we should probably apply that
+> > change in any case, regardless of CFI.
+> >
 >
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
+> Had the same thought at first, but then looking at the original stack
+> trace, it looks like the __ function is inlined:
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.93-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
+> [    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
+> [    0.000000][    T0]  blake2s_update+0x14c/0x178
+> [    0.000000][    T0]  _extract_entropy+0xf4/0x29c
 >
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.93-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: e0476c04ea8991e23850dab84ce56ab557c56986
-* git describe: v5.10.91-50-ge0476c04ea89
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.91-50-ge0476c04ea89
-
-## Test Regressions (compared to v5.10.92)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.92)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.92)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.92)
-No metric fixes found.
-
-## Test result summary
-total: 91017, pass: 78176, fail: 498, skip: 11633, xfail: 796
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 37 total, 37 passed, 0 failed
-* i386: 35 total, 35 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 22 passed, 2 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Indeed. How odd. I hope this doesn't happen with the x86 backend
+because that would be plain silly. On arm64, it doesn't actually
+matter in terms of performance, it just needs one additional callee
+save register to preserve the function pointer across calls.

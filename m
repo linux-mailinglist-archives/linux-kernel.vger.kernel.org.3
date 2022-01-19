@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F93C493B01
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B961493B04
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354763AbiASNVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S1354780AbiASNWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiASNVj (ORCPT
+        with ESMTP id S232897AbiASNWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:21:39 -0500
+        Wed, 19 Jan 2022 08:22:19 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C69C061574;
-        Wed, 19 Jan 2022 05:21:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E994DC061574;
+        Wed, 19 Jan 2022 05:22:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+9su99qQAC8y6dKw8A2X//R/c9y7lfjPSaVbD0mlkIU=; b=E9ZM3eDC/vl/KH/yXJ7nUL6K/l
-        NCWWJpsHYRu1Feq1U/7U3Dgps87a3su50/wTSrphRvKDrVOgB9onW0JgyDy/vWUXEEyBnzV09sV/v
-        CjLzYgcKr9NmdAs+5tsVk4sPoXun8RfLC434MTzHuHdIZ5v8bNC5Yja1QEXMvMlb3u/TiVRKPRBXQ
-        MFPBhW+gZ31Q8UGF4A7OHNlrmAUElpBpZGA/HkIJ/J7UdBGEsgdSgPD/3BVUxkb4in/WFk4NJkNjU
-        ChPO1vBidjHj6rqG+FnVPCBrYCyERd3hp9apv88S/ATC6bT26oAkHbaWiVrg12fE3F3GBXn2Gy3i7
-        Uf5OpMKw==;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=XdBwF/RjhbWIU5o6Jz7HpuQNLjSadEnmWI/i7GCW5y0=; b=Cc09zlkLM5/Ab6cb+M3cwSs7PG
+        huGqk0aJjbCMfwx7cGINmtqiWpkOY2MZWDoKt5SA8m0jllV54qtTq+XMW167egJYN43cWA6wmB1kT
+        NSiw6gsSlTYaYYCOytDuMJy4dFx/vs+lSzcFzo9SptNPM3xm07UEtjKPEEPZNEk8oivGNJkbVOLpd
+        5E4WhC0Wuj3mmjvZ3xxOdSBKLgCT1DGgCxproJPPwnGtPAjYjE7oVogDUTUmyoh8RSR3wa/r3oLCM
+        BAkDt2EQRiO5AzaEt+RVfOvnIvPA1+sAN1KiGh40QWfqiVw95Gyi1Xn2ZGs2zJNxe5PnYpg//wkd6
+        sU6IJtWA==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAAtU-00AsCu-PA; Wed, 19 Jan 2022 13:20:56 +0000
-Date:   Wed, 19 Jan 2022 13:20:56 +0000
+        id 1nAAua-00AsKQ-Da; Wed, 19 Jan 2022 13:22:04 +0000
+Date:   Wed, 19 Jan 2022 13:22:04 +0000
 From:   Matthew Wilcox <willy@infradead.org>
-To:     JeffleXu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 19/23] cachefiles: implement .demand_read() for demand
- read
-Message-ID: <YegQOHs9yjIgu1Qi@casper.infradead.org>
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-20-jefflexu@linux.alibaba.com>
- <YcndgcpQQWY8MJBD@casper.infradead.org>
- <47831875-4bdd-8398-9f2d-0466b31a4382@linux.alibaba.com>
- <99c94a78-58c4-f0af-e1d4-9aaa51bab281@linux.alibaba.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 1/3] mm: vmalloc: Let user to control huge vmalloc
+ default behavior
+Message-ID: <YegQfIQibQi993dp@casper.infradead.org>
+References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
+ <20211227145903.187152-2-wangkefeng.wang@huawei.com>
+ <1642473992.qrnqczjfna.astroid@bobo.none>
+ <f0dd59eb-6eb8-5b60-508d-7f4022f655ec@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <99c94a78-58c4-f0af-e1d4-9aaa51bab281@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f0dd59eb-6eb8-5b60-508d-7f4022f655ec@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 05:02:13PM +0800, JeffleXu wrote:
-> I'm afraid IDR can't be replaced by xarray here. Because we need an 'ID'
-> for each pending read request, so that after fetching data from remote,
-> user daemon could notify kernel which read request has finished by this
-> 'ID'.
+On Wed, Jan 19, 2022 at 08:57:58PM +0800, Kefeng Wang wrote:
+> Only parts of our products wants this feature,  we add some interfaces which
+> only
 > 
-> Currently this 'ID' is get from idr_alloc(), and actually identifies the
-> position of corresponding read request inside the IDR tree. I can't find
-> similar API of xarray implementing similar function, i.e., returning an
-> 'ID'.
+> alloc hugevmalloc for them, eg,
+> vmap_hugepage/vmalloc_hugepage/remap_vmalloc_hugepage_range..
+> 
+> for our products, but it's not the choice of most products, also add
+> nohugevmalloc
+> 
+> for most products is expensive, so this is the reason for adding the patch.
+> 
+> more config/cmdline are more flexible for test/products，
 
-xa_alloc().
+But why do only some products want it?  What goes wrong if all products
+enable it?  Features should be auto-tuning, not relying on admins to
+understand them.

@@ -2,155 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BD9493B8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB873493BB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354980AbiASN7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:59:07 -0500
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:43878 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354967AbiASN7F (ORCPT
+        id S1355073AbiASOIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355049AbiASOIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:59:05 -0500
-Received: by mail-oo1-f44.google.com with SMTP id l7-20020a4a2707000000b002dde197c749so739449oof.10;
-        Wed, 19 Jan 2022 05:59:05 -0800 (PST)
+        Wed, 19 Jan 2022 09:08:30 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AD8C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:08:29 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id br17so9846693lfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:08:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9nBImq/nQkQnpOEWVoZQh94HXj35ecrQ4IXZo3Dyzmw=;
+        b=KSHMHMEeC0dv+WHm/tTZDcjCTpmGgJ+2O/Bcj5nqx14TU6rVFm0TYJQNimzbkDNAZn
+         R8D5a4s470rm4/0YtqDbW1Uye6IoKCIq7W9dhj78xwaHPlVVV6WmGawx0MQMZTuxkVFU
+         HmV0aG6V3m/+6aXvoG0EXnalfyW8QG4N8bJgA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uCDu8gGqnGOyopdxrK3qiBfxcFbMys/niWD98hfVaD0=;
-        b=FpPndhbEuTKKl7frtTcFQjk+tWNKlV8GcDA/I6HBzRfeg4uine1QFgBLEFFeZUVRYL
-         iLtCIJ0pqGAxa0ktgBCGi5nOmgQqrL65DLYglK5C6u0bB9LIZj+C+WIb1mjmJq6qM56I
-         0jFunZ1DjK8UiBPjGeEpEixOpPAynDMp41GPbYqHBJRrDyt/IxJaqkKdY2EldjjycTV+
-         kJTuUaUfwEEx+O31ORAQSAkR2i+8Zma3i+IPAJNj4P+C1uQWfMjMVXiC8pc2e7UYDZ1S
-         mzMA1mcnteQlGwNvhF0FjhERModTCkWrpHEAGP0/kLyre+SOUu2G6KmsT6sI2QosbqzD
-         pLdA==
-X-Gm-Message-State: AOAM533NEd6MO2J983UVIYfyefem+oTxukRrgOCA5kGTvDqYIyTPkfBG
-        7qVcvQsyBa2yiYZVSRczjZ54phgazQ==
-X-Google-Smtp-Source: ABdhPJx0epZEPyzAogUKD4aR4quBy/ZKIJ9ZjAMR3zdMKxmVAMj2tHoDljG76kkBHOh4W73aUH30pQ==
-X-Received: by 2002:a4a:db96:: with SMTP id s22mr19972002oou.66.1642600745068;
-        Wed, 19 Jan 2022 05:59:05 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w7sm6948270ott.4.2022.01.19.05.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 05:59:04 -0800 (PST)
-Received: (nullmailer pid 3467736 invoked by uid 1000);
-        Wed, 19 Jan 2022 13:59:03 -0000
-Date:   Wed, 19 Jan 2022 07:59:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/14] dt-bindings: clock: Document qcom,gcc-ipq8064
- binding
-Message-ID: <YegZJyIredPbQUKv@robh.at.kernel.org>
-References: <20220118004434.17095-1-ansuelsmth@gmail.com>
- <20220118004434.17095-2-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9nBImq/nQkQnpOEWVoZQh94HXj35ecrQ4IXZo3Dyzmw=;
+        b=EJYkV4h3Z24DGgULIiXNFcQjk1rmssrull7bsaBQ4AGJ1/OHrDJ9mwzhn091p/N7Ni
+         MiZpMNBVpzl72ZlwIjFkzVShFaXDOI3Sa+eMzI1I/NLDbd0NlXEKGmllaOOI2plj1uBs
+         vrKZwzujL8ZW/buEm6akWl1zEhq2juluuFvLThI48nvgUtBRpVsoEcnah0ht3UxiK/lM
+         uE09yVwYLhLuqNTYQMbk13V97+tfyieWgkiQMWJAk6pm81P2SolkZ06zQmq0b6EMSwQa
+         nD6tD/Vp7LDWBLaAdsDv6RVicb9We344lTZjhthQW/8R/OQCUvtaK5J+t7gCh3a4J9SV
+         ruTA==
+X-Gm-Message-State: AOAM53118k8jLhmon23dI8Trswh4TXsJXfmPlX4H/euPKIhHK0CZNw0p
+        WWlIX1+uzXxKKadmFGRZQ1TAp176vDJ/yK3jTZo=
+X-Google-Smtp-Source: ABdhPJwx8nPiyiKQOPIiZVKkhKUqNPKix1WQ79mO68rgk0BcojEiidYMOzLT3ft/sqeXZ4ygdnGicw==
+X-Received: by 2002:a05:6512:3407:: with SMTP id i7mr6804551lfr.346.1642601307619;
+        Wed, 19 Jan 2022 06:08:27 -0800 (PST)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id bp40sm2028003lfb.136.2022.01.19.06.08.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 06:08:27 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id p27so9947175lfa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:08:27 -0800 (PST)
+X-Received: by 2002:adf:c74e:: with SMTP id b14mr29011574wrh.97.1642600880273;
+ Wed, 19 Jan 2022 06:01:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118004434.17095-2-ansuelsmth@gmail.com>
+References: <20220119110839.33187-1-deller@gmx.de> <20220119110839.33187-3-deller@gmx.de>
+ <Yef0j8+DBbwC7Kjv@kroah.com> <Yef15k2GtC40aJEu@kroah.com> <CAMuHMdVWFJEDwjf-htZ_D1484efmuPnz_L-qhcTeUE-GVpvZXA@mail.gmail.com>
+ <4d8950c7-5f51-ca2b-4c93-741c7805a214@gmx.de>
+In-Reply-To: <4d8950c7-5f51-ca2b-4c93-741c7805a214@gmx.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 19 Jan 2022 16:01:01 +0200
+X-Gmail-Original-Message-ID: <CAHk-=wikFKjwdUBWCLCu=iL3rFq4BDDF0aBGdXC6ay74yJb+5Q@mail.gmail.com>
+Message-ID: <CAHk-=wikFKjwdUBWCLCu=iL3rFq4BDDF0aBGdXC6ay74yJb+5Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
+To:     Helge Deller <deller@gmx.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 01:44:21AM +0100, Ansuel Smith wrote:
-> Document qcom,gcc-ipq8064 binding needed to declare pxo and cxo source
-> clocks. The gcc node is also used by the tsens driver, already Documented,
-> to get the calib nvmem cells and the base reg from gcc.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/clock/qcom,gcc-ipq8064.yaml      | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
-> new file mode 100644
-> index 000000000000..2dc254fdf161
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,gcc-ipq8064.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Global Clock & Reset Controller Binding for IPQ8064
-> +
-> +maintainers:
-> +  - Ansuel Smith <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  Qualcomm global clock control module which supports the clocks, resets and
-> +  power domains on IPQ8064.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,gcc-ipq8064
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: PXO source
-> +      - description: CX0 source
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pxo
-> +      - const: cxo
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +  - '#reset-cells'
-> +  - '#power-domain-cells'
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: true
+On Wed, Jan 19, 2022 at 2:29 PM Helge Deller <deller@gmx.de> wrote:
+>
+> >>
+> >> Ah, no, that was just the soft scrollback code I was thinking of, which
+>
+> Right.
+> That was commit 973c096f6a85 and it was about vgacon, not fbcon.
 
-Must be 'false'. True is only for incomplete schemas included by other 
-schemas.
+No, fbcon had some bug too, although I've paged out the details. See
+commit 50145474f6ef ("fbcon: remove soft scrollback code").
 
-> +
-> +examples:
-> +  - |
-> +    gcc: clock-controller@900000 {
-> +      compatible = "qcom,gcc-ipq8064", "syscon";
-> +      reg = <0x00900000 0x4000>;
-> +      clocks = <&pxo_board>, <&cxo_board>;
-> +      clock-names = "pxo", "cxo";
-> +      #clock-cells = <1>;
-> +      #reset-cells = <1>;
-> +      #power-domain-cells = <1>;
-> +
-> +      /* Tsens node definition */
+If I remember correctly (and it's entirely possible that I don't), the
+whole "softback_lines" logic had serious problems with resizing the
+console (or maybe changing the font size).
 
-You need to define child nodes.
+There may have been some other bad interaction with
+foreground/background consoles too, I forget.
 
-> +
-> +    };
-> +...
-> -- 
-> 2.33.1
-> 
-> 
+       Linus

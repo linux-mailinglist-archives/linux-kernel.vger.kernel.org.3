@@ -2,179 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 538E9493418
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031C6493420
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351543AbiASEq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:46:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49820 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351512AbiASEqy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:46:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DC5AB80DF5;
-        Wed, 19 Jan 2022 04:46:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8052C004E1;
-        Wed, 19 Jan 2022 04:46:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642567609;
-        bh=Vpa9UuAY53sQIkH/qLs8hCTyPnrtBhfyRRMGetWd0zg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=n1S2mhG5HUzH/xvBwCylu2g6ulBxcKwrqQNkK0S2DMLjcvVBNl4ByXnN+lmrzhE5k
-         qi3keMvXu1CwrE32b2SggbjpwyRYpG6i/7Mas9aSF3tS+yMfzirvC+WO3HevV05bvt
-         2aUV/iltmmIJwrQ8sZ7gZ8s9AKN+/Oq5KL/qjNmjyyQ7ZKelJCTqmskSTC2y63e04p
-         sS+0xHsmxutvuhn9ZA8PI9qEyINVq2VdYBLQhtbKNp5I6s7CQI0Kmk9NDFfes4iNc4
-         UylgS0qZs9G3QZ+E+R0cQuAmg3CJgqcgKCMxAHBOYUMM5oORGHm38FIdqqmGmkiAqs
-         18gIDCgfPVkkA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 694C35C0A21; Tue, 18 Jan 2022 20:46:49 -0800 (PST)
-Date:   Tue, 18 Jan 2022 20:46:49 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other
- failures
-Message-ID: <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
- <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
- <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
- <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
- <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2yffDyg31smcCyqENFBvQPfmFCT_YwDM_DJ=S-3rjxKuQ@mail.gmail.com>
+        id S1351568AbiASExY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:53:24 -0500
+Received: from mga04.intel.com ([192.55.52.120]:47056 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349586AbiASExW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 23:53:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642568002; x=1674104002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3VyniYfxzb8QV4JMONvPYjE01jTYzB0RgF/1+pckj8w=;
+  b=Iw2KRQayoGiuIbWoScWvF/mLo7ObnII6j9MmulIEAdHwYA11Ghq0R09O
+   HoFadVGN2+vpG/bn1gL5w+gnNb/FGFZk5LwJk9/l+uIjR3R0VtJs6CqSu
+   ZGyR0ChhOcq/bPh0oJ/hhJNzEkfPIJKn96CJ+Y+GURbiSSvgGRgPR3HUH
+   NlJl3gZFDdiw0RqoKHwV5G8Iny2GRJjn4Q6ZzdKfPFdYo4F6Bpu9slYyM
+   Nt2oy0EluRfdHnrTuU+NcMvKK0b1nMyVG34KyIHII661iSkDt4Rrcr5Mq
+   WhPmr/55q9+XkWUNCCyaWMlA87HVdy6zV2DDlD4aBEdUGvb+J6EzCnxPJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="243803770"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="243803770"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 20:53:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="693645426"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Jan 2022 20:53:19 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA2yE-000DGf-J4; Wed, 19 Jan 2022 04:53:18 +0000
+Date:   Wed, 19 Jan 2022 12:52:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     mziya <Mohammadzafar.ziya@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Stanley.Yang" <Stanley.Yang@amd.com>
+Subject: [agd5f:drm-next 56/91] drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:18:
+ warning: variable 'umc_reg_offset' set but not used
+Message-ID: <202201191227.YskrG1I5-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAABZP2yffDyg31smcCyqENFBvQPfmFCT_YwDM_DJ=S-3rjxKuQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:07:42AM +0800, Zhouyi Zhou wrote:
-> Thanks Paul for looking into this
-> 
-> On Wed, Jan 19, 2022 at 7:46 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Tue, Jan 18, 2022 at 09:29:04AM -0800, Paul E. McKenney wrote:
-> > > On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
-> > > > Dear Zhouyi,
-> > > >
-> > > >
-> > > > Thank you for your quick response.
-> > > >
-> > > >
-> > > > Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
-> > > >
-> > > > > I have studied the rcu torture test recently. I am also interested in
-> > > > > this topic.
-> > > > > But I can't open
-> > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
-> > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
-> > > >
-> > > > Sorry, about that. I should have checked those. I had put them into a
-> > > > directory:
-> > > >
-> > > > [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
-> > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
-> > > >
-> > > > I am going to try to test your suggestions at the end of the day.
-> > >
-> > > On x86 rcutorture builds successfully.  However, allmodconfig
-> > > on semi-recent -next got me "Can't open perl script
-> > > "./usr/include/headers_check.pl": No such file or directory".
-> > > Which might well be a local problem or might well be fixed by now.
-> >
-> > Not fixed as of next-20220118.  Chasing it down...  ;-)
-> I can do allmodconfig on -next,
-> $git describe
-> next-20220118
-> $tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
->  ---  tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
->  --- Results directory:  2022.01.19-09.14.39-torture
-> $ ps -aux|grep qemu-system
-> zzy       470309  773  0.3 1876544 153936 pts/0  Sl+  09:55  31:27
-> qemu-system-x86_64 -enable-kvm -nographic -smp 16 -net none -machine
-> q35,accel=kvm -cpu kvm64 -serial
-> file:/tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/console.log
-> -m 512 -kernel /tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/bzImage
-> -append debug_boot_weak_hash panic=-1 selinux=0 initcall_debug debug
-> console=ttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=1
-> torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000
-> rcutorture.onoff_interval=200 rcutorture.onoff_holdoff=30
-> rcutree.gp_preinit_delay=12 rcutree.gp_init_delay=3
-> rcutree.gp_cleanup_delay=3 rcutree.kthread_prio=2 threadirqs
-> tree.use_softirq=0 rcutorture.n_barrier_cbs=4
-> rcutorture.stat_interval=15 rcutorture.shutdown_secs=420
-> rcutorture.test_no_idle_hz=1 rcutorture.verbose=1
-> zzy       755865  0.0  0.0  17676  2876 pts/2    S+   09:59   0:00
-> grep --color=auto qemu-system
-> $ ls -l vmlinux
-> -rwxrwxr-x 1 zzy zzy 69349872 1月  19 09:55 vmlinux
-> 
-> Could you please try the following command ?
-> linux-next$ perl ./usr/include/headers_check.pl usr/include x86
-> usr/include/rdma/hfi/hfi1_user.h
-> linux-next$ echo $?
-> 0
-> The headers_check.pl in linux-next
-> (https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/usr/include/headers_check.pl)
-> is used to check the validity of head files in ./usr/include
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   e23fcf632883babbea03fc27f7993e151969b652
+commit: c34242eea16f7d973501267142dd340cad3caeec [56/91] drm/amdgpu: add new query interface for umc_v8_7 block
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220119/202201191227.YskrG1I5-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout c34242eea16f7d973501267142dd340cad3caeec
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-I am currently bisecting, but once that finishes I will give this a
-try, thank you!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-							Thanx, Paul
+All warnings (new ones prefixed by >>):
 
-> > > Either way, it looks like I need to upgrade the torture.sh script's
-> > > checks for failed builds.  Thank you for reporting this!
-> >
-> > Does this make torture.sh more reliably report build failures?
-> I studied this commit line by line several times and benefited a lot. Thank you!
-> >
-> >                                                 Thanx, Paul
-> >
-> > ------------------------------------------------------------------------
-> >
-> > commit 0d302830515307ceb58e89d5fb91e81b6d22e0bf
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Tue Jan 18 15:40:49 2022 -0800
-> >
-> >     torture: Make kvm-find-errors.sh notice missing vmlinux file
-> >
-> >     Currently, an obtuse compiler diagnostic can fool kvm-find-errors.sh
-> >     into believing that the build was successful.  This commit therefore
-> >     adds a check for a missing vmlinux file.
-> >
-> >     Link: https://lore.kernel.org/lkml/36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de/
-> >     Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> >
-> > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-> > index 2e9e9e2eedb69..7d3e11a6b8290 100755
-> > --- a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-> > +++ b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-> > @@ -30,10 +30,15 @@ editor=${EDITOR-vi}
-> >  files=
-> >  for i in ${rundir}/*/Make.out
-> >  do
-> > +       scenariodir="`dirname $i`"
-> >         if egrep -q "error:|warning:|^ld: .*undefined reference to" < $i
-> >         then
-> >                 egrep "error:|warning:|^ld: .*undefined reference to" < $i > $i.diags
-> >                 files="$files $i.diags $i"
-> > +       elif ! test -f ${scenariodir}/vmlinux
-> > +       then
-> > +               echo No ${scenariodir}/vmlinux file > $i.diags
-> > +               files="$files $i.diags $i"
-> >         fi
-> >  done
-> >  if test -n "$files"
-> Thanks
-> Zhouyi
+   drivers/gpu/drm/amd/amdgpu/umc_v8_7.c: In function 'umc_v8_7_ecc_info_query_ras_error_count':
+>> drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:18: warning: variable 'umc_reg_offset' set but not used [-Wunused-but-set-variable]
+      97 |         uint32_t umc_reg_offset  = 0;
+         |                  ^~~~~~~~~~~~~~
+
+
+vim +/umc_reg_offset +97 drivers/gpu/drm/amd/amdgpu/umc_v8_7.c
+
+    89	
+    90	static void umc_v8_7_ecc_info_query_ras_error_count(struct amdgpu_device *adev,
+    91						void *ras_error_status)
+    92	{
+    93		struct ras_err_data *err_data = (struct ras_err_data *)ras_error_status;
+    94	
+    95		uint32_t umc_inst        = 0;
+    96		uint32_t ch_inst         = 0;
+  > 97		uint32_t umc_reg_offset  = 0;
+    98		uint32_t channel_index   = 0;
+    99	
+   100		/* TODO: driver needs to toggle DF Cstate to ensure
+   101		 * safe access of UMC registers. Will add the protection
+   102		 */
+   103		LOOP_UMC_INST_AND_CH(umc_inst, ch_inst) {
+   104			umc_reg_offset = get_umc_v8_7_reg_offset(adev,
+   105								umc_inst,
+   106								ch_inst);
+   107			channel_index = get_umc_v8_7_channel_index(adev,
+   108								umc_inst,
+   109								ch_inst);
+   110			umc_v8_7_ecc_info_query_correctable_error_count(adev,
+   111								channel_index,
+   112								&(err_data->ce_count));
+   113			umc_v8_7_ecc_info_querry_uncorrectable_error_count(adev,
+   114								channel_index,
+   115								&(err_data->ue_count));
+   116		}
+   117	}
+   118	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

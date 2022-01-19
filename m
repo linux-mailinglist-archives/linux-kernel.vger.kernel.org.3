@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1666B493AB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35EF493AB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349932AbiASM6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:58:02 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17354 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiASM6C (ORCPT
+        id S1354472AbiASM61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:58:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232897AbiASM6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:58:02 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jf5Hx5S6gz9s5T;
-        Wed, 19 Jan 2022 20:56:45 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 19 Jan 2022 20:57:59 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.21; Wed, 19 Jan 2022 20:57:58 +0800
-Message-ID: <f0dd59eb-6eb8-5b60-508d-7f4022f655ec@huawei.com>
-Date:   Wed, 19 Jan 2022 20:57:58 +0800
+        Wed, 19 Jan 2022 07:58:25 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA3AC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:58:25 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id j85so2579824qke.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ljitelCOfpQzYv6XgO/xaPCtLhXUjN10ZeP+Ct1mtqA=;
+        b=xZtoJmjKy9SyupAtRNIaKGXvdy8jemeJQpgTgSqnAqRSB5Q3ft8ObX/e9Ef81vuv5+
+         sBbGS6/JBe2HO5rI5zcvxjM1bLuMz7yV2XOcaVB0IeHG0f0wm23WAULB3GuTmsTKlsb8
+         1EtcQMemJojQeYaUKE8L/b7s13r/IWLK//vGT6MsPwz0c9YtpuLIMNcZHDSbWBRljy5w
+         nL1LnXNqsR48P+3pDWO6egNKZeFMyLuLCv2s3P+CrLwGpgv2udMdYz0LafYXSgzYu5z1
+         VottXP+dKRKbKLWVSZKrOh72L/dL3+RzHTrJiNwgalbKVduRkfjLQ0Aj/KvDSOdc1x9s
+         qOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ljitelCOfpQzYv6XgO/xaPCtLhXUjN10ZeP+Ct1mtqA=;
+        b=2doD09HqgKP/o4TNoyL0Rxi1nW8z0cwImApPb62SZU/LlTX51b7kDsjJi8powKkLKV
+         GrZhAhdYVFJ0qB28IP6gjvp5eLEkljEiBoWGsCkj1+ou5fEMJpToc2wUE+Ye2G9OrWHd
+         b0cLXhG9Je966WOQXfziWaFy4oA5uW0MPqj9BVrSLRqzkyBPv2ArUSf/lc5lsrfelCSB
+         Ee/BFERLTlAvZoTjp5i65aDfxXF2cVTrm2dOTYCtlynz6BdOWYfVJlUYwIeHLb6W/YTW
+         nZVLZZwh/px6p/psz+K70e5PMNnCNAWxYVtNlmlxVVGurapmkxU83gqXrO7j0lBSTyFq
+         MjtA==
+X-Gm-Message-State: AOAM5335jl0cFZQpAPDcmrTM6xTfWJcNNMZjOGG4W7W7092PGFzV/642
+        +mbQ/CPIDSJwGBD7/Vjw1h0zifXD3WvDUg==
+X-Google-Smtp-Source: ABdhPJwLORN/+MTxXfYIlaSR+5XM0UNw5NvRYkEsDblBY2pxwe2Qf1bjKa6295J4JQoX9goffwee+w==
+X-Received: by 2002:a05:620a:2901:: with SMTP id m1mr7524712qkp.598.1642597104488;
+        Wed, 19 Jan 2022 04:58:24 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id br11sm732167qkb.115.2022.01.19.04.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 04:58:23 -0800 (PST)
+Date:   Wed, 19 Jan 2022 07:58:23 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] psi: Treat ksm swapping in copy as memstall
+Message-ID: <YegK7+oKFG8EPRp9@cmpxchg.org>
+References: <20220116152150.859520-1-yang.yang29@zte.com.cn>
+ <YeVdvVVBvrXH5U0L@cmpxchg.org>
+ <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 1/3] mm: vmalloc: Let user to control huge vmalloc
- default behavior
-Content-Language: en-US
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <x86@kernel.org>
-CC:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
- <20211227145903.187152-2-wangkefeng.wang@huawei.com>
- <1642473992.qrnqczjfna.astroid@bobo.none>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <1642473992.qrnqczjfna.astroid@bobo.none>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme714-chm.china.huawei.com (10.1.199.110) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 19, 2022 at 06:13:54AM +0000, CGEL wrote:
+> I did a test, when we use zram, it takes longer time for ksm copying than
+> swap_readpage(). Ksm copying average takes 147263ns, swap_readpage()
+> average takes 55639ns. So I think this patch is reasonable.
 
-On 2022/1/18 10:52, Nicholas Piggin wrote:
-> Excerpts from Kefeng Wang's message of December 28, 2021 12:59 am:
->> Introduce HUGE_VMALLOC_DEFAULT_ENABLED and make it default y, this
->> let user to choose whether or not enable huge vmalloc mappings by
->> default.
->>
->> Meanwhile, add new hugevmalloc=on/off parameter to enable or disable
->> this feature at boot time, nohugevmalloc is still supported and
->> equivalent to hugevmalloc=off.
-> Runtime options are bad enough, Kconfig and boot options are even worse.
-
-nohugevmalloc is like blacklists, on the other hand, Add a 
-HUGE_VMALLOC_DEFAULT_ENABLED
-
-to close hugevmalloc default and enable it only via hugevmalloc=on is 
-whiteList.
-
-
-Only parts of our products wants this feature,  we add some interfaces 
-which only
-
-alloc hugevmalloc for them, eg, 
-vmap_hugepage/vmalloc_hugepage/remap_vmalloc_hugepage_range..
-
-for our products, but it's not the choice of most products, also add 
-nohugevmalloc
-
-for most products is expensive, so this is the reason for adding the patch.
-
-more config/cmdline are more flexible for test/products，
-
->
-> The 'nohugevmalloc' option mirrors 'nohugeiomap' and is not expected to
-> ever be understood by an administrator unless a kernel developer is
-> working with them to hunt down a regression.
->
-> IMO there should be no new options. You could switch it off for
-> CONFIG_BASE_SMALL perhaps, and otherwise just try to work on heuristics
-> first. Bring in new options once it's proven they're needed.
-
-but yes, this patch is optional， could others give some more comments 
-about this way？
-
-Thanks.
-
-> Aside from that, thanks for working on these ports, great work.
->
-> Thanks,
-> Nick
-> .
+Ok, that sounds reasonable to me as well. Please add the
+PageWorkingset() check and resubmit the patch. Thanks!

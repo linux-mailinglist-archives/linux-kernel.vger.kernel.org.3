@@ -2,176 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8296494139
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD72B494135
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357189AbiASTtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:49:17 -0500
-Received: from mga02.intel.com ([134.134.136.20]:53816 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357177AbiASTtP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:49:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642621755; x=1674157755;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b6hbTfgj+fQHgPfsGt8652Hu8ggXWoxy8VkobZmzJEg=;
-  b=dsy5U2dUovrqfl4CM1xvNc0RjXh1sRSM8O4gVQLK4Nh//v6Wm/OxY+Qh
-   4AA3n6bpO47bEovtTE781fae2/uKfUtZNhrMeAZ+q+Kd0OvK9b5hgKfr1
-   LWTGJ5oRN5bnNKxR53kJxNDK4EflRHYhraRpvZgpUJTTHHTfU0UxwOqKj
-   azGQnr39XNTHNcZxQxjJ09XtFCxpR/5FiuvZl7V4G44m9ZrJK+JA9TMvn
-   VSJS+4EVnEa5nZpJ3OqX+lootQBdB4EIydPL6HXA2c4LEDu9jeyFOZYjT
-   adUFWXhjWNWi8ItQ+fA19SsxrmQ+wqHz+WW7T1vmtqKEBsOdkDgeYZEAV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232540618"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="232540618"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:49:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="622642667"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:49:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAGw0-00CEvS-JK;
-        Wed, 19 Jan 2022 21:47:56 +0200
-Date:   Wed, 19 Jan 2022 21:47:56 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Axe Yang <axe.yang@mediatek.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Yong Mao <yong.mao@mediatek.com>
-Subject: Re: [PATCH v4 3/3] mmc: mediatek: add support for SDIO eint IRQ
-Message-ID: <Yehq7L36yfJ8D/j2@smile.fi.intel.com>
-References: <20220119103212.13158-1-axe.yang@mediatek.com>
- <20220119103212.13158-4-axe.yang@mediatek.com>
+        id S1357174AbiASTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230233AbiASTtN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 14:49:13 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359C8C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:49:13 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id EAFFE1F446F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642621751;
+        bh=UIoafffS0/l3S1GB6KgQfq7k8XDj/WzZMnJi03jT+4w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NNcsmrQbUywS/Hicnx0DJF53N17Jr42HJKPIKGUJaxLaQTDR+kveaR+cFJf+fyfwu
+         GMMAvv48j6+f2ZWTFED+g0ojdxBaXlOW8je2j2TQ1btl2H7c7kOhH7MTPs0+oJUxNe
+         VMB8fv4YSY7acGIBIlEsEKeTVu4/kj5E1/QCWENbP/syauBoeVGSh0Bqti9t6vEzoi
+         RwdnwaT3pL8jQEP8cZNjJRRVSRX6gVa9O2W2eegsEALXmPVxUyYqL66kgqm+KPE5f/
+         QBtS3Nlvh6LqNmT7MNOB93OfVwHlr0lBZBcj49BeEuLuZwcxPu3Do5qhXcfZ/pRawh
+         lRJA+NW1EyX0g==
+Message-ID: <accbc66b-08ca-aa2a-92e6-4d65359e9bf4@collabora.com>
+Date:   Wed, 19 Jan 2022 19:49:08 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119103212.13158-4-axe.yang@mediatek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 4/4] drm/i915/uapi: document behaviour for DG2 64K
+ support
+Content-Language: en-US
+To:     Jordan Justen <jordan.l.justen@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Matthew Auld <matthew.auld@intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Simon Ser <contact@emersion.fr>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Kenneth Graunke <kenneth@whitecape.org>,
+        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
+        Slawomir Milczarek <slawomir.milczarek@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220118175036.3840934-1-bob.beckett@collabora.com>
+ <20220118175036.3840934-5-bob.beckett@collabora.com>
+ <87zgnrefoo.fsf@jljusten-skl>
+From:   Robert Beckett <bob.beckett@collabora.com>
+In-Reply-To: <87zgnrefoo.fsf@jljusten-skl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:32:12PM +0800, Axe Yang wrote:
-> Add support for eint IRQ when MSDC is used as an SDIO host. This
-> feature requires SDIO device support async IRQ function. With this
-> feature, SDIO host can be awakened by SDIO card in suspend state,
-> without additional pin.
+
+
+On 19/01/2022 18:36, Jordan Justen wrote:
+> Robert Beckett <bob.beckett@collabora.com> writes:
 > 
-> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> resume, switch GPIO function back to DAT1 mode then turn on clock.
+>> From: Matthew Auld <matthew.auld@intel.com>
+>>
+>> On discrete platforms like DG2, we need to support a minimum page size
+>> of 64K when dealing with device local-memory. This is quite tricky for
+>> various reasons, so try to document the new implicit uapi for this.
+>>
+>> v2: Fixed suggestions on formatting [Daniel]
+>>
+>> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>> cc: Simon Ser <contact@emersion.fr>
+>> cc: Pekka Paalanen <ppaalanen@gmail.com>
+>> Cc: Jordan Justen <jordan.l.justen@intel.com>
+>> Cc: Kenneth Graunke <kenneth@whitecape.org>
+>> Cc: mesa-dev@lists.freedesktop.org
+>> Cc: Tony Ye <tony.ye@intel.com>
+>> Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
+>> ---
+>>   include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
+>>   1 file changed, 39 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
+>> index 5e678917da70..486b7b96291e 100644
+>> --- a/include/uapi/drm/i915_drm.h
+>> +++ b/include/uapi/drm/i915_drm.h
+>> @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
+>>   	/**
+>>   	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
+>>   	 * the user with the GTT offset at which this object will be pinned.
+>> +	 *
+>>   	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
+>>   	 * presumed_offset of the object.
+>> +	 *
+>>   	 * During execbuffer2 the kernel populates it with the value of the
+>>   	 * current GTT offset of the object, for future presumed_offset writes.
+>> +	 *
+>> +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
+>> +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
+>> +	 * minimum page sizes, like DG2.
+>>   	 */
+>>   	__u64 offset;
+>>   
+>> @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
+>>   	 *
+>>   	 * The (page-aligned) allocated size for the object will be returned.
+>>   	 *
+>> -	 * Note that for some devices we have might have further minimum
+>> -	 * page-size restrictions(larger than 4K), like for device local-memory.
+>> -	 * However in general the final size here should always reflect any
+>> -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
+>> -	 * extension to place the object in device local-memory.
+>> +	 *
+>> +	 * **DG2 64K min page size implications:**
 > 
-> Some device tree property should be added or modified in MSDC node
-> to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-> are mandatory. And cap-sdio-async-irq flag is necessary since this
-> feature depends on asynchronous interrupt:
->         &mmcX {
->                 ...
->                 pinctrl-names = "default", "state_uhs", "state_eint",
->                                 "state_dat1";
->                 ...
->                 pinctrl-2 = <&mmc2_pins_eint>;
->                 pinctrl-3 = <&mmc2_pins_dat1>;
->                 ...
->                 cap-sdio-async-irq;
->                 ...
->         };
+> Long term, I'm not sure that the "**" (for emphasis) is needed here or
+> below. It's interesting at the moment, but will be just another thing
+> baked into the kernel/user code in a month from now. :)
+
+fair point, I'll make it less shouty
+
 > 
-> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+>> +	 *
+>> +	 * On discrete platforms, starting from DG2, we have to contend with GTT
+>> +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
+>> +	 * objects.  Specifically the hardware only supports 64K or larger GTT
+>> +	 * page sizes for such memory. The kernel will already ensure that all
+>> +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
+>> +	 * sizes underneath.
+>> +	 *
+>> +	 * Note that the returned size here will always reflect any required
+>> +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
+>> +	 * such as DG2.
+>> +	 *
+>> +	 * **Special DG2 GTT address alignment requirement:**
+>> +	 *
+>> +	 * The GTT alignment will also need be at least 2M for  such objects.
+>> +	 *
+>> +	 * Note that due to how the hardware implements 64K GTT page support, we
+>> +	 * have some further complications:
+>> +	 *
+>> +	 *   1) The entire PDE(which covers a 2MB virtual address range), must
+>> +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
+>> +	 *   PDE is forbidden by the hardware.
+>> +	 *
+>> +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
+>> +	 *   objects.
+>> +	 *
+>> +	 * To keep things simple for userland, we mandate that any GTT mappings
+>> +	 * must be aligned to and rounded up to 2MB. As this only wastes virtual
+>> +	 * address space and avoids userland having to copy any needlessly
+>> +	 * complicated PDE sharing scheme (coloring) and only affects GD2, this
+>> +	 * id deemed to be a good compromise.
+> 
+> typos: GD2, id
 
-The submitters SoB must be last among all SoB tags. Please, read Submitting
-Patches document carefully.
+thanks
 
-> Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+> 
+> Isn't much of this more relavent to the vma offset at exec time? Is
+> there actually any new restriction on the size field during buffer
+> creation?
 
-Who is they, why their SoB appeared here?
+No new restriction on size, just placement, which mesa is already doing.
+The request for ack was just to get an ack from mesa folks that they are 
+happy with the mandatory 2MB alignment for DG2 vma.
 
-...
+> 
+> I see Matthew references these notes from the offset comments, so if the
+> kernel devs prefer it here, then you can add my Acked-by on this patch.
 
->  /*
-> - * Copyright (c) 2014-2015 MediaTek Inc.
-> + * Copyright (c) 2022 MediaTek Inc.
+thanks!
 
-This doesn't feel right. Why did you remove old years?
-
->   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
->   */
-
-...
-
-> +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-> +	if (IS_ERR(desc))
-> +		return PTR_ERR(desc);
-
-> +	ret = gpiod_to_irq(desc);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	irq = ret;
-
-Since both of them are local variables and there is no specific use of the
-returned value, I believe it's fine just to
-
-	irq = gpiod_to_irq(desc);
-	...
-
-Hmm... I was wondering if you can use fwnode_irq_get_byname().
-Ah, it's not (yet) in upstream.
-
-...
-
->  static int __maybe_unused msdc_runtime_suspend(struct device *dev)
->  {
-> +	unsigned long flags;
-
-Can you keep reversed xmas tree order?
-
->  	struct mmc_host *mmc = dev_get_drvdata(dev);
->  	struct msdc_host *host = mmc_priv(mmc);
-
-(it means to add new variable here)
-
->  	return 0;
->  }
-
-...
-
->  static int __maybe_unused msdc_runtime_resume(struct device *dev)
->  {
-> +	unsigned long flags;
-
-Ditto.
-
->  	struct mmc_host *mmc = dev_get_drvdata(dev);
->  	struct msdc_host *host = mmc_priv(mmc);
->  	int ret;
-
->  	return 0;
->  }
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
+> -Jordan
+> 
+>>   	 */
+>>   	__u64 size;
+>>   	/**
+>> -- 
+>> 2.25.1

@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BA24933E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904184933ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351480AbiASEGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:06:34 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:21010 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351468AbiASEGc (ORCPT
+        id S1351505AbiASEHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:07:19 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:1550 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351460AbiASEHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:06:32 -0500
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INx7Xn002453;
+        Tue, 18 Jan 2022 23:07:00 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INxWLW011214;
         Wed, 19 Jan 2022 04:06:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=ZFkTm14Hros7XNfwsRNUPHtpTppmIcVEtsV8v9/LdTY=;
- b=DzODZV+gPT67rWISunvpv+1AT5hBuJoOrAJwCK7OQZPHwLI9Wkt/8LLq1sxtRpbmyFiP
- CbhInYxFePWxPi0ng69tAmv71e/nPKqZ9B8mV0Q6/V2xp7hvnybNlbT7mAl1FYZooeNK
- XehWPiAAjaTir2BesxRMM1neCG8Xod6rtfeC0SadDNeTvJJuRYRDn1slAadZ7kSLMAVJ
- RaBV6+jtaYlLCDlWvHqWECI/dR6xSdepEj3M5YGM8Z2sX006e0QBCXFcoVKn/UPz+/qV
- +3nWWi9r5wkHxbBN0tbtBjeirfvWjQum4nlWdL86olDHGZL5RsRhEECaiNpkMVK/SutZ uA== 
+ bh=H/cAXg9i+HBl0Bby3Ibthhy7WNclNRAVPonQ55u3FwA=;
+ b=XrkBl4CazON7Z4h5mDCevYug26hzUmOkL5mbnb+B+zPz7dbAAf8izoo9o0Yfxcsi9EFa
+ ra6+NlXu54eJeTHLVZBzxi1k25Bws5Pl9kExvWkEzXygOsST2nLr/nYt33Njtc6S/vw+
+ FbVH2A4b0R8d7r4GvThe125jh7SucHZrlz3xHkg1WNFmAgC6/CJUTb/2jbGLANy5Ozv/
+ PjCEp4Mi/ha2UJVMVhN5bDzaX6NSOIZOiesGpe2GpeyixjbKe2r78ZLaXwNo5wnWg8lI
+ GW5ojDGSlPHc1PTe5e0WrkYpaSo4jcc3eCOFx3OkiCsJq5phegqdm9GfoQiLV4UWG/Cw BA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc5f3tfq-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnbrnuuek-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 04:06:22 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J42AnZ091612;
+        Wed, 19 Jan 2022 04:06:21 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3dkqqpnr97-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 19 Jan 2022 04:06:21 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J42AYr091589;
-        Wed, 19 Jan 2022 04:06:20 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3dkqqpnr8t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 04:06:20 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20J46HQ3110383;
-        Wed, 19 Jan 2022 04:06:19 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20J46HQ5110383;
+        Wed, 19 Jan 2022 04:06:20 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3dkqqpnr68-3;
-        Wed, 19 Jan 2022 04:06:19 +0000
+        by userp3020.oracle.com with ESMTP id 3dkqqpnr68-4;
+        Wed, 19 Jan 2022 04:06:20 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-kernel@vger.kernel.org, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, linux-scsi@vger.kernel.org,
-        beanhuo@micron.com, jejb@linux.ibm.com, bvanassche@acm.org,
-        SEO HOYOUNG <hy50.seo@samsung.com>, cang@codeaurora.org,
-        alim.akhtar@samsung.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2] scsi: ufs: modify Tactive time setting conditions
-Date:   Tue, 18 Jan 2022 23:06:11 -0500
-Message-Id: <164256513503.31841.5189730630900895646.b4-ty@oracle.com>
+To:     jejb@linux.ibm.com, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        yokota@netlab.is.tsukuba.ac.jp
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: nsp_cs: Check of ioremap return value
+Date:   Tue, 18 Jan 2022 23:06:12 -0500
+Message-Id: <164256513503.31841.14055206238562894525.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220106213924.186263-1-hy50.seo@samsung.com>
-References: <CGME20220107095451epcas2p2d06b23e50cbd46e910532e2d9078c912@epcas2p2.samsung.com> <20220106213924.186263-1-hy50.seo@samsung.com>
+In-Reply-To: <20211230021137.1823352-1-jiasheng@iscas.ac.cn>
+References: <20211230021137.1823352-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: IJdk2lgPZoJqd633EHY2QsuV4Pqv4EFG
-X-Proofpoint-ORIG-GUID: IJdk2lgPZoJqd633EHY2QsuV4Pqv4EFG
+X-Proofpoint-GUID: Fx2fiF4jQwsCq-XSdKEM-xYYqSI95i7q
+X-Proofpoint-ORIG-GUID: Fx2fiF4jQwsCq-XSdKEM-xYYqSI95i7q
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 06:39:24 +0900, SEO HOYOUNG wrote:
+On Thu, 30 Dec 2021 10:11:37 +0800, Jiasheng Jiang wrote:
 
-> The Tactive time determine the waiting time before burst
-> at hibern8 exit and is determined by H/W at linkup state
-> However, in the case of samsung devices, guided host's Tactive time
-> +100us for stability.
-> If the HCI's Tactive time is equal or greater than the device,
-> +100us should be set.
+> As the possible failure of the ioremap(), the 'data->MmioAddress' could
+> be NULL.
+> Therefore it should be better to check it in order to transfer the
+> error.
 > 
-> [...]
+> 
 
 Applied to 5.17/scsi-queue, thanks!
 
-[1/1] scsi: ufs: modify Tactive time setting conditions
-      https://git.kernel.org/mkp/scsi/c/9008661e1960
+[1/1] scsi: nsp_cs: Check of ioremap return value
+      https://git.kernel.org/mkp/scsi/c/2576e153cd98
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering

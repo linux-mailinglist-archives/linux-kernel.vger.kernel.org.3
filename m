@@ -2,140 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F400049318B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE632493197
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350339AbiASADj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 19:03:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34855 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350331AbiASADi (ORCPT
+        id S1350393AbiASAF5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Jan 2022 19:05:57 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:49077 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350358AbiASAFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:03:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642550618;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tVYvA6k75j8gln9tRsgy3BBh8Hq7EurwC1H6Kup6Uac=;
-        b=g3EcQiM/e/lFDvp0/Sivwfg5+r0TS+z1CTV5i/rhLmnfMRhAXcuMHwi/ScFfJZ/tDVtJ96
-        5iISZKg62zXx624F1McbTyN8gR4S5iDPSa1L+aYrNgHh5LOEOOTnfZI12tyN7Dksu3TBmx
-        mRbpFztR//CuHPu8g4FOPQzbMW65i94=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-217-DYXUu7DRMnSdBs1LlpSNUg-1; Tue, 18 Jan 2022 19:03:36 -0500
-X-MC-Unique: DYXUu7DRMnSdBs1LlpSNUg-1
-Received: by mail-oi1-f200.google.com with SMTP id d205-20020aca36d6000000b002c890f38d80so554486oia.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:03:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tVYvA6k75j8gln9tRsgy3BBh8Hq7EurwC1H6Kup6Uac=;
-        b=v82AMBrdFYVbuv0nfwCZVlOHhS+h/mnxQvl3syjjMPAUmlVUoZe+TebvAW6JGKe9fa
-         t7v6IdIu3WjglzikqN6P3XsvX8BLG6jv98gamwOWjs8cXBF8NcaSc12t79PZ+npODvbj
-         1byizjUsZFH7Vs1VOSzZmpZFlQdg80zzQWzYH7Nmr3KITBkhffYrAFKCUO7QZYCRIwvG
-         162eo1KBkNoLkwZJKWQEOh9GMB8uSiAQwahdBeqo2+ce9/NzlAtfXfOon0RV3mtqUxqm
-         iCuvZUwWQUpQ/8CFw0RiZUEUru2cGKwJwqQF4XuOOYpA+F9tDBa2XT+1uxUixmcYTXp3
-         xmJA==
-X-Gm-Message-State: AOAM530UXCXY9RxDavCRUzXwUsZSL/xYk5qcB4pxd4rutfaD97z7mj8I
-        2vMUphyhquAhzk/nNub9OQIoNaidVDTRGUFATnKGrITRMa+kgfDxqraekdex7OC2wciAS2FHzz5
-        LXaoB1dPN7Q2jHf+/oxyoC8lm
-X-Received: by 2002:a05:6830:2785:: with SMTP id x5mr22537881otu.187.1642550616005;
-        Tue, 18 Jan 2022 16:03:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwFSVupUWPVUpDZy728lBKKhw+a+1HU1Pevbh8pLavUmbWJOKEDeq0ntl5K4b6WWPcLn98w6Q==
-X-Received: by 2002:a05:6830:2785:: with SMTP id x5mr22537853otu.187.1642550615767;
-        Tue, 18 Jan 2022 16:03:35 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::c])
-        by smtp.gmail.com with ESMTPSA id ay40sm9106563oib.1.2022.01.18.16.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 16:03:35 -0800 (PST)
-Date:   Tue, 18 Jan 2022 16:03:27 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tue, 18 Jan 2022 19:05:44 -0500
+Received: from quad ([82.142.13.186]) by mrelayeu.kundenserver.de (mreue107
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MIxqu-1mty3j0nIg-00KSeM; Wed, 19
+ Jan 2022 01:05:09 +0100
+From:   Laurent Vivier <laurent@vivier.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        John Stultz <john.stultz@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        x86@kernel.org, llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile &
- __COUNTER__
-Message-ID: <20220119000327.oapghqad4lebnsra@treble>
-References: <20220114010526.1776605-1-ndesaulniers@google.com>
- <YeQei0xNzMq7bFdg@zn.tnic>
- <20220118192256.jzk5dnceeusq7x7u@treble>
- <20220118230120.pivvson7qekfiqic@treble>
- <YedOLva0zos3A1JE@zn.tnic>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH v10 0/5] m68k: Add Virtual M68k Machine
+Date:   Wed, 19 Jan 2022 01:05:01 +0100
+Message-Id: <20220119000506.1299843-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YedOLva0zos3A1JE@zn.tnic>
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:9f+Em6J6B1EHFTgdgt+hjwgrSknhcVBGF9xdkdVdLTmSG1KmJO2
+ 1Quaxc1/1IboAYoc1f+BHxAN2CUdEOIz02WxNG2ddKJGpgveQsiYwoOLCP9EQQbpmFnLs0D
+ XEEYzNJEy4E7l0aL9V25q9eaCmn9SksDiS5lL3o4fazSMGj+dmjs7icmTTOJHgh9MgX9wK5
+ 4GHPzF1tRIOxjpsfnXQaA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J/H5wYSs3XI=:/jNf5GtQNx7cK4sJNxlQC6
+ +O0F5hUlCLO9PrkhY+rjH/wfx7hXcIYORje/da6qrUxpKJz8kunTVUL2puCK7j4th1CsdAKxB
+ VSJExzjIRNf5fci5MW235F4hZJ9a1NA9RU67/w9J9iwZRtpnseMTggzS21RNSi/NkEEcXhlbx
+ 2jxdYuzbBg2K2lHzBcv9vDwnHn+Lo3B4v/jhkVGegSMPcuXlIJwTvxCO3tplBQrJ104yYIQLZ
+ lp4LjRT8Zs147vlgpGBz8YzbcMIVZSIbKlzq5OsKSNx2XiCyv9dPQoj2UW8lwP6fXabvfO3jv
+ aBeEK2BqZohvEqnrZGzVxZ2Krsu3IDr4HPkMQJw2QpK6W3SECohNNQE5R2Fs88KXmC3DJInXW
+ +YwnHozikr6jrGg5WEmDNo+Ej+sodQ346I8QOOoQWgRWH/2UOQhg56VuTtQRmUUXEn20XZZkE
+ hOuWWI7AJHE5vyaPbAFDf+cGC5/dLMsEXIlBA9jIxj7w+ieRLwKosaYffaQb3b4TyjDQo5vxF
+ X/iPIRDfrODwvYOsYphSERygEOieVOTgIzvAuYLZmy+Ep/Z92apXUzFsaXYqySV+aEC6h/T5U
+ JLTNmnPBLKq75UQ2m4I8tR3TNysHldvRcI0xRKzfaCeqQUa3VtaaVVNk23ZVcIBd3L53NwL9Q
+ HfwUlXL1pXd+ucIgTdZPFHX1Hhx0LHSfGl0DGXZaEtNTqN7rdzH5Dn9mp6qnE36f7cBc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 12:33:02AM +0100, Borislav Petkov wrote:
-> On Tue, Jan 18, 2022 at 03:01:20PM -0800, Josh Poimboeuf wrote:
-> > With the two WARN_ONs in media_request_object_complete(), GCC apparently
-> > considers the two reachable() asm statements as duplicates, and it
-> > removes the second one.
-> 
-> Could that be the same thing:
-> 
-> net/xfrm/xfrm_output.o: warning: objtool: xfrm_output_resume()+0x2e0: unreachable instruction
-> 
-> I see two WARN_ONs in asm output there too...
+The most powerful m68k machine emulated by QEMU is a Quadra 800,
+but this machine is very limited: only 1 GiB of memory and only some
+specific interfaces, with no DMA.
 
-If one of the '__bug_table' asm snippets isn't immediately followed by
-the .L[un]reachable asm, then yeah, it's the same issue.
+The Virtual M68k Machine is based on Goldfish interfaces defined by Google
+for Android simulator. It uses Goldfish-rtc (timer and RTC),
+Goldfish-pic (PIC) and Goldfish-tty (for early tty).
 
+The machine is created with 128 virtio-mmio buses, and they can
+be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
 
-For example it's supposed to look something like this:
+The virtual m68k machine has been merged in QEMU and will be available
+with the release 6.0.
 
+This series introduces the support of this new machine in the linux kernel.
 
-# 472 "net/xfrm/xfrm_output.c" 1
-	1:	.byte 0x0f, 0x0b
-.pushsection __bug_table,"aw"
-2:	.long 1b - 2b	# bug_entry::bug_addr
-	.long .LC4 - 2b	# bug_entry::file	#
-	.word 472	# bug_entry::line	#
-	.word 2307	# bug_entry::flags	#
-	.org 2b+12	#
-.popsection
-# 0 "" 2
-# 472 "net/xfrm/xfrm_output.c" 1
-	.Lreachable1666:
-	.pushsection .discard.reachable
-	.long .Lreachable1666 - .
-	.popsection
+If you want to try:
 
+- Configure and build latest QEMU with (or download qemu 6.0 binary):
 
-NOT just this:
+  .../configure --target-list=m68k-softmmu --enable-virglrenderer
+  make
 
+- Configure and build linux with:
 
-# 472 "net/xfrm/xfrm_output.c" 1
-	1:	.byte 0x0f, 0x0b
-.pushsection __bug_table,"aw"
-2:	.long 1b - 2b	# bug_entry::bug_addr
-	.long .LC4 - 2b	# bug_entry::file	#
-	.word 472	# bug_entry::line	#
-	.word 2307	# bug_entry::flags	#
-	.org 2b+12	#
-.popsection
-# some other code here...
+  make virt_defconfig
+  make vmlinux
 
+A pre-installed qcow2 disk image is available at:
 
-There's a bunch of those throughout the code base.  The current
-annotate_[un]reachable() implementations are carefully written to avoid
-that happening.
+http://vivier.eu/debian-10.0.qcow2
+
+You can run the machine with something like:
+
+qemu-system-m68k -M virt \
+  -m 3G \
+  -chardev stdio,signal=off,mux=on,id=char0 \
+  -mon chardev=char0,mode=readline \
+  -kernel vmlinux \
+  -append "console=hvc0 root=/dev/vda2" \
+  -blockdev node-name=system,driver=file,filename=debian-10.0.qcow2 \
+  -blockdev node-name=drive0,driver=qcow2,file=system \
+  -device virtio-blk-device,drive=drive0 \
+  -serial chardev:char0 \
+  -device virtio-net-device,netdev=hostnet0 \
+  -netdev bridge,id=hostnet0,br=virbr0,helper=/usr/libexec/qemu-bridge-helper \
+  -device virtio-serial-device \
+  -device virtio-gpu-device \
+  -device virtconsole,chardev=char0 \
+  -device virtio-keyboard-device \
+  -device virtio-mouse-device
+
+You can watch a presentation about the machine on the Planet m68k channel:
+
+    https://youtu.be/s_ve0bCC9q4
+    [Demo at 38:00]
+
+v10:
+- move goldfish_ioread32()/goldfish_iowrite32() to io.h
+- also update goldfish-tty
+- use READ_ONCE()/WRITE_ONCE() for in_nmi
+
+v9:
+- include <linux/memblock.h> to declare min_low_pfn
+- goldfish accessors: s/CONFIG_CPU_BIG_ENDIAN/CONFIG_M68K/
+
+v8:
+- GF_PUT_CHAR is a 32bit register (in arch/m68k/kernel/head.S)
+- rework goldfish-pic and virt_ctrl
+
+v7:
+- add "#include <linux/slab.h>" in timer-goldfish.c for kzalloc()
+- update timer-goldfish Kconfig
+- remove EXPORT_SYMBOL()
+- introduce goldfish_ioread32()/goldfish_iowrite32()
+
+v6:
+- fix goldfish-rtc endianness
+- move goldfish-timer code to drivers/clocksource
+- remove LEGACY_TIMER_TICK and use directly goldfish-timer
+
+v5:
+- add GENERIC_CLOCKEVENTS in Kconfig.machine
+
+v4:
+- update PATCH 1: comments and parameter names
+- add a patch to move to generic clockevents
+  (I prefer to have a separate patch as it can be used as an example to
+   move from legacy timer tick to generic clockevents)
+
+v3:
+- introduce config.h to export prototypes to arch/m68k/kernel/setup_mm.c
+- define virt_nmi_handler as static
+
+v2:
+- Remove VIRTO_MENU set y
+- sort the selects
+- add CONFIG_LOCALVERSION="-virt"
+- generate virt_defconfig using "make savedefconfig"
+- rename MACH_VIRTONLY to MACH_VIRT_ONLY
+- add a test_notvirt label in head.S
+- rework iounmap() to use two separate #ifdefs
+- use %u in virt_get_model()
+- drop show_registers() in config.c
+- drop pr_err() from config_virt()
+- sort includes in ints.c
+- call virt_irq_enable() in virt_irq_startup()
+- drop virt_irq_shutdown() and use virt_irq_disable()
+- move in_nmi into virt_nmi_handler()
+- use pr_warn() in virt_nmi_handler()
+- rework goldfish_pic_irq() IRQ scan
+- copy goldfish-pic IRQs related information from QEMU hw/m68k/virt
+- add a comment to "min_low_pfn = 0"
+- use platform_device_register_simple()
+- use goldfish_timer_read(), upper_32_bits() and lower_32_bits()
+
+Thanks,
+Laurent
+
+Laurent Vivier (5):
+  m68k: add asm/config.h
+  rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
+  tty: goldfish: use goldfish_ioread32()/goldfish_iowrite32()
+  clocksource/drivers: Add a goldfish-timer clocksource
+  m68k: introduce a virtual m68k machine
+
+ arch/m68k/Kbuild                           |   1 +
+ arch/m68k/Kconfig.machine                  |  17 +++
+ arch/m68k/amiga/config.c                   |   1 +
+ arch/m68k/apollo/config.c                  |   1 +
+ arch/m68k/atari/config.c                   |   1 +
+ arch/m68k/bvme6000/config.c                |   1 +
+ arch/m68k/configs/virt_defconfig           |  65 ++++++++++
+ arch/m68k/hp300/config.c                   |   1 +
+ arch/m68k/include/asm/config.h             |  35 ++++++
+ arch/m68k/include/asm/io.h                 |   3 +
+ arch/m68k/include/asm/irq.h                |   3 +-
+ arch/m68k/include/asm/pgtable_mm.h         |   7 ++
+ arch/m68k/include/asm/setup.h              |  44 +++++--
+ arch/m68k/include/asm/virt.h               |  25 ++++
+ arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 +++
+ arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
+ arch/m68k/kernel/Makefile                  |   1 +
+ arch/m68k/kernel/head.S                    |  31 +++++
+ arch/m68k/kernel/setup_mm.c                |  30 ++---
+ arch/m68k/mac/config.c                     |   1 +
+ arch/m68k/mm/kmap.c                        |  23 ++--
+ arch/m68k/mvme147/config.c                 |   1 +
+ arch/m68k/mvme16x/config.c                 |   1 +
+ arch/m68k/q40/config.c                     |   1 +
+ arch/m68k/virt/Makefile                    |   6 +
+ arch/m68k/virt/config.c                    | 119 ++++++++++++++++++
+ arch/m68k/virt/ints.c                      | 133 +++++++++++++++++++++
+ arch/m68k/virt/platform.c                  |  72 +++++++++++
+ drivers/clocksource/Kconfig                |   7 ++
+ drivers/clocksource/Makefile               |   1 +
+ drivers/clocksource/timer-goldfish.c       | 130 ++++++++++++++++++++
+ drivers/rtc/rtc-goldfish.c                 |  30 ++---
+ drivers/tty/goldfish.c                     |  20 ++--
+ include/asm-generic/io.h                   |   7 ++
+ include/clocksource/timer-goldfish.h       |  11 ++
+ 35 files changed, 784 insertions(+), 65 deletions(-)
+ create mode 100644 arch/m68k/configs/virt_defconfig
+ create mode 100644 arch/m68k/include/asm/config.h
+ create mode 100644 arch/m68k/include/asm/virt.h
+ create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
+ create mode 100644 arch/m68k/virt/Makefile
+ create mode 100644 arch/m68k/virt/config.c
+ create mode 100644 arch/m68k/virt/ints.c
+ create mode 100644 arch/m68k/virt/platform.c
+ create mode 100644 drivers/clocksource/timer-goldfish.c
+ create mode 100644 include/clocksource/timer-goldfish.h
 
 -- 
-Josh
+2.34.1
 

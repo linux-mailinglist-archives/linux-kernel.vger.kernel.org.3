@@ -2,142 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F014936C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43EDE4936CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352786AbiASJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352324AbiASJBv (ORCPT
+        id S1352799AbiASJFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:05:53 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38692 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351966AbiASJFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:01:51 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9C5C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:01:48 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id a7so1554038plh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HkJE1ypJqqATEA2dEa2I9wqRDOawHEAXImciHG8Ya1A=;
-        b=mXDGCiHAKOqxdyILIteaZ44S5Q2vi80TQVuhefF2XepaolE2t23HrqGpM7Fy+OBucx
-         2JIS9YByM2oQjA6m+C4t6L8I8wMdN1EZhixgr9ZjKyEbF6LlOvm2YN8YpLjD35HAj3uc
-         mwZl5ntX64Y6xOao53mcWnpFnK8lLBYy9wD9Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HkJE1ypJqqATEA2dEa2I9wqRDOawHEAXImciHG8Ya1A=;
-        b=W+xyYmyUuZLt5hGD232oVJeBh6K6AnYQvlfnX6MpmJ5tDYxvA/i3wX2S7eqFAGB0MG
-         iWY9OpT6btZlW4u7aJKmHaexNiLshs8i5oOhgLzVSZWwubsi2Ma2tL6nIIIhC9mTnuDV
-         ZXmVhhKo/wejN97Jv5bQ2RUFehfhPQilSJC4TMjRbOqySo6nZHzsZElTib9pj2A1904A
-         1ehnNljoNUzXAmwJOEDY4fyWWjutNyKliMyIoWAoCpqnrvtWWfpTPlSDFwQByN0IllTi
-         bvq8sxAbQLbo3b05SQ1+ZZxoZNJCh1MxxX63rJ51IbZSsiKGcSZH2nC3xeqN/p7iNzpa
-         5+RA==
-X-Gm-Message-State: AOAM530n+r/EoMzQx1bJmAEOK720GSRZd+mmm4KnN1vA8avthnYFFkOX
-        QVn2WxwYsKMqnmgpzb4O6V/frA==
-X-Google-Smtp-Source: ABdhPJy5NvmtZXmdrZEyVS4y5lUTxatF0BwaICcsaAEtPGLq5gN9l+5HZ/f84b1PZtfCT1b4nSij3A==
-X-Received: by 2002:a17:90a:9204:: with SMTP id m4mr3124332pjo.238.1642582908327;
-        Wed, 19 Jan 2022 01:01:48 -0800 (PST)
-Received: from 4f18b3450899 ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id kb2sm6199972pjb.14.2022.01.19.01.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 01:01:47 -0800 (PST)
-Date:   Wed, 19 Jan 2022 09:01:40 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Vyacheslav Bocharov <adeep@lexina.in>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] Bluetooth: btrtl: Add support for RTL8822C
- hci_ver 0x08
-Message-ID: <20220119090140.GA24@4f18b3450899>
-References: <20211027091416.1577668-1-adeep@lexina.in>
- <20211027091416.1577668-2-adeep@lexina.in>
+        Wed, 19 Jan 2022 04:05:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6B9B61455;
+        Wed, 19 Jan 2022 09:05:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D595C004E1;
+        Wed, 19 Jan 2022 09:05:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642583151;
+        bh=ZMOPZrlt2cfOSpv918Af7deBI9py27ecaOS2zZN7Fts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hk155RLaUI34TSdu/3GM/6cpGvyn1xUZLY3b5Hjh/SQ3Wcp90FhOyK91omzs4vaLP
+         dC0S2YhRU37+kkL/twHPgX90Lr+heQWM0QHrlv3zkp5bIRQa8t0TwcHbZ8L4nVadxH
+         /m+6uzkvqiEX5g9Y07El5k5avzpTn9EkNkcGdBmu8T6QpuupWR/DEv1h+Ttw4V7lUy
+         POLBBRxOcfDGR9aefBrKC7UGyFXA8UpozwKV2BTaeO56GXMftmhiSq0zC17RfOs0eM
+         QnFot1Rxish0OOwZ0JfMxo2hXVqq4AA2zXq0T0v8VTDxst29ODbAViC26bRYO7Ycdx
+         JORN+q7lEZuaw==
+Date:   Wed, 19 Jan 2022 10:05:45 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Brian Foster <bfoster@redhat.com>, Ian Kent <raven@themaw.net>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>
+Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
+Message-ID: <20220119090545.b25trkg2kjigf3fi@wittgenstein>
+References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
+ <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+ <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
+ <YeV+zseKGNqnSuKR@bfoster>
+ <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
+ <YeWxHPDbdSfBDtyX@zeniv-ca.linux.org.uk>
+ <20220118082911.rsmv5m2pjeyt6wpg@wittgenstein>
+ <YeblIix0fyXyBipW@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211027091416.1577668-2-adeep@lexina.in>
+In-Reply-To: <YeblIix0fyXyBipW@zeniv-ca.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 12:14:15PM +0300, Vyacheslav Bocharov wrote:
-> Add detection of RTL8822CS controller with hci_ver = 0x08
+On Tue, Jan 18, 2022 at 04:04:50PM +0000, Al Viro wrote:
+> On Tue, Jan 18, 2022 at 09:29:11AM +0100, Christian Brauner wrote:
+> > On Mon, Jan 17, 2022 at 06:10:36PM +0000, Al Viro wrote:
+> > > On Mon, Jan 17, 2022 at 04:28:52PM +0000, Al Viro wrote:
+> > > 
+> > > > IOW, ->free_inode() is RCU-delayed part of ->destroy_inode().  If both
+> > > > are present, ->destroy_inode() will be called synchronously, followed
+> > > > by ->free_inode() from RCU callback, so you can have both - moving just
+> > > > the "finally mark for reuse" part into ->free_inode() would be OK.
+> > > > Any blocking stuff (if any) can be left in ->destroy_inode()...
+> > > 
+> > > BTW, we *do* have a problem with ext4 fast symlinks.  Pathwalk assumes that
+> > > strings it parses are not changing under it.  There are rather delicate
+> > > dances in dcache lookups re possibility of ->d_name contents changing under
+> > > it, but the search key is assumed to be stable.
+> > > 
+> > > What's more, there's a correctness issue even if we do not oops.  Currently
+> > > we do not recheck ->d_seq of symlink dentry when we dismiss the symlink from
+> > > the stack.  After all, we'd just finished traversing what used to be the
+> > > contents of a symlink that used to be in the right place.  It might have been
+> > > unlinked while we'd been traversing it, but that's not a correctness issue.
+> > > 
+> > > But that critically depends upon the contents not getting mangled.  If it
+> > > *can* be screwed by such unlink, we risk successful lookup leading to the
+> > 
+> > Out of curiosity: whether or not it can get mangled depends on the
+> > filesystem and how it implements fast symlinks or do fast symlinks
+> > currently guarantee that contents are mangled?
 > 
-> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
-> ---
->  drivers/bluetooth/btrtl.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Not sure if I understand your question correctly...
 > 
-> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-> index c2bdd1e6060e..38d547cc6fcd 100644
-> --- a/drivers/bluetooth/btrtl.c
-> +++ b/drivers/bluetooth/btrtl.c
-> @@ -156,6 +156,13 @@ static const struct id_table ic_id_table[] = {
->  	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
->  	  .cfg_name = "rtl_bt/rtl8822cs_config" },
->  
-> +	/* 8822C with UART interface */
-> +	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
-> +	  .config_needed = true,
-> +	  .has_rom_version = true,
-> +	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
-> +	  .cfg_name = "rtl_bt/rtl8822cs_config" },
-> +
->  	/* 8822C with USB interface */
->  	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_USB),
->  	  .config_needed = false,
+> 	Filesystems should guarantee that the contents of string returned
+> by ->get_link() (or pointed to by ->i_link) remains unchanged for as long
+> as we are looking at it (until fs/namei.c:put_link() that drops it or
+> fs/namei.c:drop_links() in the end of pathwalk).  Fast symlinks or not -
+> doesn't matter.
 
-Hi Vyacheslav,
+Yep, got that.
 
-Could I make a suggestion rebasing this patch against 5.16 and putting 
-the UART hci ver 0008 berore 000a
+> 
+> 	The only cases where that does not hold (there are two of them in
+> the entire kernel) happen to be fast symlinks.	Both cases are bugs.
 
-this has been tested on Tanix TX6.
+Ok, that's what I was essentially after whether or not they were bugs in
+the filesystems or it's a generic bug.
 
-Before:
+> ext4 case is actually easy to fix - the only reason it ends up mangling
+> the string is the way ext4_truncate() implements its check for victim
+> being a fast symlink (and thus needing no work).  It gets disrupted
+> by zeroing ->i_size, which we need to do in this case (inode removal).
+> That's not hard to get right.
 
-[   11.512883] Bluetooth: hci0: RTL: examining hci_ver=08 hci_rev=000c lmp_ver=08 lmp_subver=8822
-[   11.512940] Bluetooth: hci0: RTL: unknown IC info, lmp subver 8822, hci rev 000c, hci ver 0008
-[   11.512957] Bluetooth: hci0: RTL: no config loaded
+Oh, I see, it zeroes i_size and erases i_data which obviously tramples
+the fast symlink contents.
 
-After:
+Given that ext4 makes use of i_flags for their ext4 inode containers why
+couldn't this just be sm like
 
-[   12.642167] Bluetooth: hci0: RTL: examining hci_ver=08 hci_rev=000c lmp_ver=08 lmp_subver=8822
-[   12.671911] Bluetooth: hci0: RTL: rom_version status=0 version=3
-[   12.671961] Bluetooth: hci0: RTL: loading rtl_bt/rtl8822cs_fw.bin
-[   12.706248] Bluetooth: hci0: RTL: loading rtl_bt/rtl8822cs_config.bin
-[   12.730251] Bluetooth: hci0: RTL: cfg_sz 33, total sz 40737
-[   13.318832] Bluetooth: hci0: RTL: fw version 0x05a91a4a
+#define EXT4_FAST_SYMLINK	        0x<some-free-value>
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+	if (EXT4_I(inode)->i_flags & EXT4_FAST_SYMLINK)
+		return <im-a-fast-symlink>;
 
----
- drivers/bluetooth/btrtl.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
---- a/drivers/bluetooth/btrtl.c	2022-01-09 22:55:34.000000000 +0000
-+++ b/drivers/bluetooth/btrtl.c	2022-01-15 07:12:21.102080089 +0000
-@@ -148,7 +148,15 @@
- 	  .fw_name  = "rtl_bt/rtl8761bu_fw.bin",
- 	  .cfg_name = "rtl_bt/rtl8761bu_config" },
- 
-+ 	/* 8822C (hci ver 0008) with UART interface */
-+	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .has_msft_ext = true,
-+	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8822cs_config" },
-+
--	/* 8822C with UART interface */
-+	/* 8822C (hci ver 000a) with UART interface */
- 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_UART),
- 	  .config_needed = true,
- 	  .has_rom_version = true,
---
-2.25.1
-
+? Which seems simpler and more obvious to someone reading that code than
+logic based on substracting blocks or checking i_size.

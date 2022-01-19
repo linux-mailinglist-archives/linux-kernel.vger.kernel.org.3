@@ -2,363 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B78494378
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB6B494384
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344290AbiASXGy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 18:06:54 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:41890 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344264AbiASXGt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:06:49 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JIs4Go030555
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:06:49 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dp0x32bxa-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:06:49 -0800
-Received: from twshared12416.02.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 15:06:42 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 126A928228258; Wed, 19 Jan 2022 15:06:39 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v4 bpf-next 7/7] bpf, x86_64: use bpf_prog_pack allocator
-Date:   Wed, 19 Jan 2022 15:06:20 -0800
-Message-ID: <20220119230620.3137425-8-song@kernel.org>
+        id S1344316AbiASXI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:08:28 -0500
+Received: from mail-dm6nam12on2078.outbound.protection.outlook.com ([40.107.243.78]:35008
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1357744AbiASXHL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 18:07:11 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AAPK3lQUhZ6w0TFXmKc3A4cFFaFFFursJdx1TJR6XKq0LhIBs3EhQDDl8UHVLToBJ/f8S1Qi8/YFp1i5BQsV9zRLBBU+VmT+fUAyOwkoDbYQFwr9lQyR4FdC5Xk6LuIlLXyO9NYX/rYdkF+ejdx40vhO1zCBwMnWUB1E4NRVQW42diVrFrmWPXjP1VH7Sm30PkFkV8FaqYdXdFvAWi+simLg4mVZwg+/QGdPyQPg5H88AIAB0NDrVVecEv91jH3LCDsKeVn0qpYYGPLrIf857rkm3MpMyMFSxgEkLPvnWMgcQW11IuNXlB8Bky8lXUzrIkCm2y6bCd8olAIsnV4jXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=05daaBYCHeVDep9kD4pl8GtZZOosFqIupaN0kKpkYS8=;
+ b=mP3Rp0QAzl3L+B7chsUX7FWFJLH+a2CYuX4me4eyjRTADZXeTKU06lsZ7gfOrvCjOgFHEDONKmBjzg5QHMlTXOpn1GUBXix96udX20/Ii7nwRu85J5yXlHS7gMiqWuVWSousjbcRVj1kregh6cvog5Fh6P9sRIfn49lF/9UEU2L9Gwly4FmttyE4OnZ1zUltcKyglyEeSyW12AIYFoiIVfLXXYf4Z2w3CJrfLABTydcsXuEYgp+T/hzny/fqwIXwXw7FZVvbEEToLJ110Eic3RwDKCIQNr9zAFsjwmRR56BEJZCVhj2iuvXCIdXezaqiGtRgy73x0HXd0VARYIskyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=05daaBYCHeVDep9kD4pl8GtZZOosFqIupaN0kKpkYS8=;
+ b=a7qXoodNWxrqqYiRfkurT+cxaENx4Arc7Up/1G2ATv0igTsgnjnldHM/9bhMmsRFBr57SBLSb/es9ACVPbYXBoZ+FeFkILLglFAXv2fevUdBUUvQuKA9TvxwPw4wxWuKA6MtttRIfHbNg7lMuqUrc9EXcrDPIAnY3cWUSzgUD7Q=
+Received: from DM6PR06CA0003.namprd06.prod.outlook.com (2603:10b6:5:120::16)
+ by BY5PR12MB3716.namprd12.prod.outlook.com (2603:10b6:a03:1a1::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
+ 2022 23:07:07 +0000
+Received: from DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:120:cafe::15) by DM6PR06CA0003.outlook.office365.com
+ (2603:10b6:5:120::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
+ Transport; Wed, 19 Jan 2022 23:07:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT012.mail.protection.outlook.com (10.13.173.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 23:07:06 +0000
+Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 19 Jan
+ 2022 17:07:05 -0600
+From:   Terry Bowman <terry.bowman@amd.com>
+To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: [PATCH v3 3/9] i2c: piix4: Move port I/O region request/release code into functions
+Date:   Wed, 19 Jan 2022 17:06:20 -0600
+Message-ID: <20220119230626.31560-4-terry.bowman@amd.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220119230620.3137425-1-song@kernel.org>
-References: <20220119230620.3137425-1-song@kernel.org>
+In-Reply-To: <20220119230626.31560-1-terry.bowman@amd.com>
+References: <20220119230626.31560-1-terry.bowman@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: NpThaehuWqSGDcd-MEnBoI5o0pFCPWDp
-X-Proofpoint-GUID: NpThaehuWqSGDcd-MEnBoI5o0pFCPWDp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_12,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 adultscore=0
- malwarescore=0 spamscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=816 suspectscore=0 bulkscore=0
- impostorscore=0 clxscore=1034 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201190122
-X-FB-Internal: deliver
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca766633-d22a-431e-d31c-08d9dba069de
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3716:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3716EB9278950C9E1D04584083599@BY5PR12MB3716.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GmfrqvBFbPeyMKA763X3JIqEbKUDWlvb42KUQqhrfF1xIf8Bv2gbpoN53N4AV0gq/E74jyhYr+0uOkw91t5KFRq4CviqPt5v5FPFLFMwoirahH6onlEETpxWpJ/ZGq40UucB1zFG44FKCKbF5lV20j5JWAko0XalgvaFQtnIyPXJCdLLmGeSvYSpr8cF7k81aXYLrlP8P9Y0cyaBnteKn7ohyIEhSqevvTqAGFik2K0hanXNkNPhA55P6byst70caRZoLI6Dj3zeNM1QmLR4B+NhTniqz6zYeA/Voo0E2Fb8PNOcyeLC2cGqnYGVERLnd2vDEGQuLc8xm/qNGw8Bfqh38q7Cgpyw6tIxzvF9w3NQZC6PWTz/zNOiNKPWF6wyj3VcpfUq/Dv3fpzCAzUA83gxkOZdoXh1Zc9jwt4nUP0j7uCj28RxeqdaW9UqjwuHW6jU1oPe0DmMSntUvtb1MQIAfGzzuDz0mjelqIqEaOjIPnO1gKJ/j4mr6fMX6blcit0DMIPXBVrWWiDpCHTjMAAEn0AFUJ0jOII2wlExALP8CNaywudWtS0BsaQeYHonaN3ealrQ1UoblQT8tGQrxNLIxgGNtJbBLkNtYHyt/Vm6fP5l7iGtEEyQnMIpN8Jku6bTW7pW3BXQ9cyeNwB5gSaSWHenuMS3wXE/WFQwiCwR7xn2hrU8XMOQBpVd24WWB0ZrdNarTziD0qFKL3AAjHXqTUdveETeAhwnbbpWkY5mSXg6TGrYWbGuIZWz7gJR5SGdLVJaxp7AVNjRUEN9jTARoGcAd4IyG/n7CeQiGTOx/PtvbeN5Mxi33oI3FNLe
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(81166007)(7696005)(508600001)(26005)(54906003)(2906002)(4326008)(40460700001)(6666004)(86362001)(82310400004)(8676002)(70586007)(316002)(336012)(426003)(1076003)(16526019)(2616005)(5660300002)(110136005)(356005)(36756003)(44832011)(70206006)(83380400001)(47076005)(186003)(8936002)(36860700001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 23:07:06.6315
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca766633-d22a-431e-d31c-08d9dba069de
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+Move duplicated region request and release code into a function. Move is
+in preparation for following MMIO changes.
 
-Use bpf_prog_pack allocator in x86_64 jit.
-
-The program header from bpf_prog_pack is read only during the jit process.
-Therefore, the binary is first written to a temporary buffer, and later
-copied to final location with text_poke_copy().
-
-Similarly, jit_fill_hole() is updated to fill the hole with 0xcc using
-text_poke_copy().
-
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 134 +++++++++++++++++++++++++++---------
- 1 file changed, 103 insertions(+), 31 deletions(-)
+ drivers/i2c/busses/i2c-piix4.c | 43 +++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index fe4f08e25a1d..6d97f7c24df2 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -216,11 +216,34 @@ static u8 simple_alu_opcodes[] = {
- 	[BPF_ARSH] = 0xF8,
+diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+index b88d990b013f..14324e03fe24 100644
+--- a/drivers/i2c/busses/i2c-piix4.c
++++ b/drivers/i2c/busses/i2c-piix4.c
+@@ -165,6 +165,26 @@ struct i2c_piix4_adapdata {
+ 	u8 port;		/* Port number, shifted */
  };
  
-+static char jit_hole_buffer[PAGE_SIZE] = {};
-+
- static void jit_fill_hole(void *area, unsigned int size)
++static int piix4_sb800_region_setup(struct device *dev)
 +{
-+	struct bpf_binary_header *hdr = area;
-+	int i;
-+
-+	for (i = 0; i < roundup(size, PAGE_SIZE); i += PAGE_SIZE) {
-+		int s;
-+
-+		s = min_t(int, PAGE_SIZE, size - i);
-+		text_poke_copy(area + i, jit_hole_buffer, s);
++	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
++				  SB800_PIIX4_SMB_MAP_SIZE,
++				  "sb800_piix4_smb")) {
++		dev_err(dev,
++			"SMB base address index region 0x%x already in use.\n",
++			SB800_PIIX4_SMB_IDX);
++		return -EBUSY;
 +	}
 +
-+	/*
-+	 * bpf_jit_binary_alloc_pack cannot write size directly to the ro
-+	 * mapping. Write it here with text_poke_copy().
-+	 */
-+	text_poke_copy(&hdr->size, &size, sizeof(size));
-+}
-+
-+static int __init x86_jit_fill_hole_init(void)
- {
- 	/* Fill whole space with INT3 instructions */
--	memset(area, 0xcc, size);
-+	memset(jit_hole_buffer, 0xcc, PAGE_SIZE);
 +	return 0;
- }
-+pure_initcall(x86_jit_fill_hole_init);
- 
- struct jit_context {
- 	int cleanup_addr; /* Epilogue code offset */
-@@ -361,14 +384,11 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 
- 	ret = -EBUSY;
- 	mutex_lock(&text_mutex);
--	if (memcmp(ip, old_insn, X86_PATCH_SIZE))
-+	if (text_live && memcmp(ip, old_insn, X86_PATCH_SIZE))
- 		goto out;
- 	ret = 1;
- 	if (memcmp(ip, new_insn, X86_PATCH_SIZE)) {
--		if (text_live)
--			text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
--		else
--			memcpy(ip, new_insn, X86_PATCH_SIZE);
-+		text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
- 		ret = 0;
- 	}
- out:
-@@ -537,7 +557,7 @@ static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
- 	*pprog = prog;
- }
- 
--static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
-+static void bpf_tail_call_direct_fixup(struct bpf_prog *prog, bool text_live)
- {
- 	struct bpf_jit_poke_descriptor *poke;
- 	struct bpf_array *array;
-@@ -558,24 +578,15 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
- 		mutex_lock(&array->aux->poke_mutex);
- 		target = array->ptrs[poke->tail_call.key];
- 		if (target) {
--			/* Plain memcpy is used when image is not live yet
--			 * and still not locked as read-only. Once poke
--			 * location is active (poke->tailcall_target_stable),
--			 * any parallel bpf_arch_text_poke() might occur
--			 * still on the read-write image until we finally
--			 * locked it as read-only. Both modifications on
--			 * the given image are under text_mutex to avoid
--			 * interference.
--			 */
- 			ret = __bpf_arch_text_poke(poke->tailcall_target,
- 						   BPF_MOD_JUMP, NULL,
- 						   (u8 *)target->bpf_func +
--						   poke->adj_off, false);
-+						   poke->adj_off, text_live);
- 			BUG_ON(ret < 0);
- 			ret = __bpf_arch_text_poke(poke->tailcall_bypass,
- 						   BPF_MOD_JUMP,
- 						   (u8 *)poke->tailcall_target +
--						   X86_PATCH_SIZE, NULL, false);
-+						   X86_PATCH_SIZE, NULL, text_live);
- 			BUG_ON(ret < 0);
- 		}
- 		WRITE_ONCE(poke->tailcall_target_stable, true);
-@@ -867,7 +878,7 @@ static void emit_nops(u8 **pprog, int len)
- 
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
- 
--static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
-+static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *tmp_image,
- 		  int oldproglen, struct jit_context *ctx, bool jmp_padding)
- {
- 	bool tail_call_reachable = bpf_prog->aux->tail_call_reachable;
-@@ -894,8 +905,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 	push_callee_regs(&prog, callee_regs_used);
- 
- 	ilen = prog - temp;
--	if (image)
--		memcpy(image + proglen, temp, ilen);
-+	if (tmp_image)
-+		memcpy(tmp_image + proglen, temp, ilen);
- 	proglen += ilen;
- 	addrs[0] = proglen;
- 	prog = temp;
-@@ -1324,8 +1335,10 @@ st:			if (is_imm8(insn->off))
- 					pr_err("extable->insn doesn't fit into 32-bit\n");
- 					return -EFAULT;
- 				}
--				ex->insn = delta;
-+				/* switch ex to temporary buffer for writes */
-+				ex = (void *)tmp_image + ((void *)ex - (void *)image);
- 
-+				ex->insn = delta;
- 				ex->type = EX_TYPE_BPF;
- 
- 				if (dst_reg > BPF_REG_9) {
-@@ -1706,7 +1719,7 @@ st:			if (is_imm8(insn->off))
- 				pr_err("bpf_jit: fatal error\n");
- 				return -EFAULT;
- 			}
--			memcpy(image + proglen, temp, ilen);
-+			memcpy(tmp_image + proglen, temp, ilen);
- 		}
- 		proglen += ilen;
- 		addrs[i] = proglen;
-@@ -2248,8 +2261,10 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs)
- 
- struct x64_jit_data {
- 	struct bpf_binary_header *header;
-+	struct bpf_binary_header *tmp_header;
- 	int *addrs;
- 	u8 *image;
-+	u8 *tmp_image;
- 	int proglen;
- 	struct jit_context ctx;
- };
-@@ -2259,6 +2274,7 @@ struct x64_jit_data {
- 
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- {
-+	struct bpf_binary_header *tmp_header = NULL;
- 	struct bpf_binary_header *header = NULL;
- 	struct bpf_prog *tmp, *orig_prog = prog;
- 	struct x64_jit_data *jit_data;
-@@ -2267,6 +2283,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	bool tmp_blinded = false;
- 	bool extra_pass = false;
- 	bool padding = false;
-+	u8 *tmp_image = NULL;
- 	u8 *image = NULL;
- 	int *addrs;
- 	int pass;
-@@ -2301,7 +2318,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		ctx = jit_data->ctx;
- 		oldproglen = jit_data->proglen;
- 		image = jit_data->image;
-+		tmp_image = jit_data->tmp_image;
- 		header = jit_data->header;
-+		tmp_header = jit_data->tmp_header;
- 		extra_pass = true;
- 		padding = true;
- 		goto skip_init_addrs;
-@@ -2332,14 +2351,18 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	for (pass = 0; pass < MAX_PASSES || image; pass++) {
- 		if (!padding && pass >= PADDING_PASSES)
- 			padding = true;
--		proglen = do_jit(prog, addrs, image, oldproglen, &ctx, padding);
-+		proglen = do_jit(prog, addrs, image, tmp_image, oldproglen, &ctx, padding);
- 		if (proglen <= 0) {
- out_image:
- 			image = NULL;
--			if (header)
--				bpf_jit_binary_free(header);
-+			tmp_image = NULL;
-+			if (header) {
-+				bpf_jit_binary_free_pack(header);
-+				kfree(tmp_header);
-+			}
- 			prog = orig_prog;
- 			header = NULL;
-+			tmp_header = NULL;
- 			goto out_addrs;
- 		}
- 		if (image) {
-@@ -2362,13 +2385,27 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 				sizeof(struct exception_table_entry);
- 
- 			/* allocate module memory for x86 insns and extable */
--			header = bpf_jit_binary_alloc(roundup(proglen, align) + extable_size,
--						      &image, align, jit_fill_hole);
-+			header = bpf_jit_binary_alloc_pack(roundup(proglen, align) + extable_size,
-+							   &image, align, jit_fill_hole);
- 			if (!header) {
- 				prog = orig_prog;
- 				goto out_addrs;
- 			}
--			prog->aux->extable = (void *) image + roundup(proglen, align);
-+			if (header->size > bpf_prog_pack_max_size()) {
-+				tmp_header = header;
-+				tmp_image = image;
-+			} else {
-+				tmp_header = kzalloc(header->size, GFP_KERNEL);
-+				if (!tmp_header) {
-+					bpf_jit_binary_free_pack(header);
-+					header = NULL;
-+					prog = orig_prog;
-+					goto out_addrs;
-+				}
-+				tmp_header->size = header->size;
-+				tmp_image = (void *)tmp_header + ((void *)image - (void *)header);
-+			}
-+			prog->aux->extable = (void *)image + roundup(proglen, align);
- 		}
- 		oldproglen = proglen;
- 		cond_resched();
-@@ -2379,14 +2416,24 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 
- 	if (image) {
- 		if (!prog->is_func || extra_pass) {
--			bpf_tail_call_direct_fixup(prog);
--			bpf_jit_binary_lock_ro(header);
-+			if (header->size > bpf_prog_pack_max_size()) {
-+				/*
-+				 * bpf_prog_pack cannot handle too big
-+				 * program (> ~2MB). Fall back to regular
-+				 * module_alloc(), and do the fixup and
-+				 * lock_ro here.
-+				 */
-+				bpf_tail_call_direct_fixup(prog, false);
-+				bpf_jit_binary_lock_ro(header);
-+			}
- 		} else {
- 			jit_data->addrs = addrs;
- 			jit_data->ctx = ctx;
- 			jit_data->proglen = proglen;
- 			jit_data->image = image;
-+			jit_data->tmp_image = tmp_image;
- 			jit_data->header = header;
-+			jit_data->tmp_header = tmp_header;
- 		}
- 		prog->bpf_func = (void *)image;
- 		prog->jited = 1;
-@@ -2402,6 +2449,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		kvfree(addrs);
- 		kfree(jit_data);
- 		prog->aux->jit_data = NULL;
-+		jit_data = NULL;
-+		if (tmp_header != header) {
-+			text_poke_copy(header, tmp_header, header->size);
-+			kfree(tmp_header);
-+			/*
-+			 * Do the fixup after final text_poke_copy().
-+			 * Otherwise, the fix up will be overwritten by
-+			 * text_poke_copy().
-+			 */
-+			bpf_tail_call_direct_fixup(prog, true);
-+		}
- 	}
- out:
- 	if (tmp_blinded)
-@@ -2415,3 +2473,17 @@ bool bpf_jit_supports_kfunc_call(void)
- {
- 	return true;
- }
-+
-+void bpf_jit_free(struct bpf_prog *fp)
-+{
-+	if (fp->jited) {
-+		struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
-+
-+		if (hdr->size > bpf_prog_pack_max_size())
-+			bpf_jit_binary_free(hdr);
-+		else
-+			bpf_jit_binary_free_pack(hdr);
-+	}
-+
-+	bpf_prog_unlock_free(fp);
 +}
++
++static void piix4_sb800_region_release(struct device *dev)
++{
++	release_region(SB800_PIIX4_SMB_IDX,
++		       SB800_PIIX4_SMB_MAP_SIZE);
++}
++
+ static int piix4_setup(struct pci_dev *PIIX4_dev,
+ 		       const struct pci_device_id *id)
+ {
+@@ -270,6 +290,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+ 	unsigned short piix4_smba;
+ 	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
+ 	u8 i2ccfg, i2ccfg_offset = 0x10;
++	int retval;
+ 
+ 	/* SB800 and later SMBus does not support forcing address */
+ 	if (force || force_addr) {
+@@ -291,21 +312,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+ 	else
+ 		smb_en = (aux) ? 0x28 : 0x2c;
+ 
+-	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
+-				  SB800_PIIX4_SMB_MAP_SIZE,
+-				  "sb800_piix4_smb")) {
+-		dev_err(&PIIX4_dev->dev,
+-			"SMB base address index region 0x%x already in use.\n",
+-			SB800_PIIX4_SMB_IDX);
+-		return -EBUSY;
+-	}
++	retval = piix4_sb800_region_setup(&PIIX4_dev->dev);
++	if (retval)
++		return retval;
+ 
+ 	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+ 	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
+ 	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
+ 	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+ 
+-	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
++	piix4_sb800_region_release(&PIIX4_dev->dev);
+ 
+ 	if (!smb_en) {
+ 		smb_en_status = smba_en_lo & 0x10;
+@@ -686,10 +702,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+ 	u8 port;
+ 	int retval;
+ 
+-	if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
+-				  SB800_PIIX4_SMB_MAP_SIZE,
+-				  "sb800_piix4_smb"))
+-		return -EBUSY;
++	retval = piix4_sb800_region_setup(&adap->dev);
++	if (retval)
++		return retval;
+ 
+ 	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
+ 	smbslvcnt  = inb_p(SMBSLVCNT);
+@@ -764,7 +779,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+ 		piix4_imc_wakeup();
+ 
+ release:
+-	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
++	piix4_sb800_region_release(&adap->dev);
+ 	return retval;
+ }
+ 
 -- 
 2.30.2
 

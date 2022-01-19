@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96F14934ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D904934F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351770AbiASGUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:20:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52980 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350102AbiASGUD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:20:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 483B0B811CC;
-        Wed, 19 Jan 2022 06:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C27C004E1;
-        Wed, 19 Jan 2022 06:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642573201;
-        bh=+/ZjQ3Ir+rum0nwu103J/f9YAv7hVQpz3n0F5Ixkyc4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=lesLyo+yE///z73mDnJfTRwJ6cZGH7ErAxRlnv70UeFMhPuqdlsiAkp7PM7kDzrBL
-         jZclQaLDF2MsX6gA0spNV88wxMl5y0actPxsZ8RPnSB/uXXvh+v+W2z9h4avud9XDA
-         TzhLJZznK6ZGO7Xvi7OicUR/yvZTg9uR6lLqWgY8QVhg5eWkOarn1b0IT9GC4Ly/2A
-         kddD9ozvKs0SLhrkQa0M5AhJH+vqXb6N3PT0/QdegMrx7v6HgM+KX9x8xb3/3cebl7
-         mUhVKo0OQDNB14Q6v25pLBAahX/UQxe7SXcWx2jarXEoN9iRCiT5OKTF7imBopoF75
-         XUQnHfoFCZXgA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Pkshih <pkshih@realtek.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma\@gmail.com" <tony0620emma@gmail.com>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [PATCH 3/4] rtw88: Move enum rtw_tx_queue_type mapping code to tx.{c,h}
-References: <20220114234825.110502-1-martin.blumenstingl@googlemail.com>
-        <20220114234825.110502-4-martin.blumenstingl@googlemail.com>
-        <b2bf2bc5f04b488487797aa21c50a130@realtek.com>
-Date:   Wed, 19 Jan 2022 08:19:55 +0200
-In-Reply-To: <b2bf2bc5f04b488487797aa21c50a130@realtek.com> (Pkshih's message
-        of "Wed, 19 Jan 2022 06:04:45 +0000")
-Message-ID: <87czkogsc4.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1351777AbiASG2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:28:23 -0500
+Received: from mga03.intel.com ([134.134.136.65]:41001 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351700AbiASG2W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 01:28:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642573702; x=1674109702;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WWPpMqAPxPCuRbsA26zAD576Bp3HmOEprdaixSO8FCA=;
+  b=JNWX3y3rre15r7bblziG4+7H40H/Lq46vWvMCh+DJK9sWZrBv27O9IqR
+   oWddKskfY2fOBs4QwEAZyWw0lr6W/oKDO+d30Z4elr0V9chIxZYHVKRtM
+   vfUB+I6oXMVj9EEeJk9zK+lQgfjc5vWT03d9OIKTXTEGrc2zaCQmZOYt9
+   rIGwwX3aP3yu0vJxqAZFcRL+2w0jVKm5mMJqN5PTjBqkCC2JO6fXkn6r8
+   TyxzAAavAsYGMIbncQnoIMC29a/fU6hLdufybfwWm67N8jVkKkaQkBqGH
+   dPND68cBT8UAnXIEU0KPyVbQNufDT4NwgVukrK8q31pfNbwFh8IyVTCOS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="244954019"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="244954019"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 22:28:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="625773243"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2022 22:28:20 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA4SC-000DL2-9w; Wed, 19 Jan 2022 06:28:20 +0000
+Date:   Wed, 19 Jan 2022 14:27:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [esmil:visionfive 75/80]
+ drivers/soc/sifive/sifive_l2_cache.c:157:17: error: implicit declaration of
+ function 'writeq'; did you mean 'writeb'?
+Message-ID: <202201191446.e8ud7CAP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pkshih <pkshih@realtek.com> writes:
+tree:   https://github.com/esmil/linux visionfive
+head:   e46c3a7e373e6faa03399f1a41c29cf7546c37cb
+commit: 37af0be028777ba2227a48b8d94ff92f52f7aba7 [75/80] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
+config: riscv-randconfig-r002-20220118 (https://download.01.org/0day-ci/archive/20220119/202201191446.e8ud7CAP-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/37af0be028777ba2227a48b8d94ff92f52f7aba7
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 37af0be028777ba2227a48b8d94ff92f52f7aba7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
->> -----Original Message-----
->> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->> Sent: Saturday, January 15, 2022 7:48 AM
->> To: linux-wireless@vger.kernel.org
->> Cc: tony0620emma@gmail.com; kvalo@codeaurora.org;
->> netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
->> Neo Jou <neojou@gmail.com>; Jernej Skrabec
->> <jernej.skrabec@gmail.com>; Pkshih <pkshih@realtek.com>; Martin
->> Blumenstingl <martin.blumenstingl@googlemail.com>
->> Subject: [PATCH 3/4] rtw88: Move enum rtw_tx_queue_type mapping code to tx.{c,h}
->> 
->> This code is not specific to the PCIe bus type but can be re-used by USB
->> and SDIO bus types. Move it to tx.{c,h} to avoid code-duplication in the
->> future.
->> 
->> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->
-> [...]
->
->> diff --git a/drivers/net/wireless/realtek/rtw88/tx.c b/drivers/net/wireless/realtek/rtw88/tx.c
->> index efcc1b0371a8..ec6a3683c3f8 100644
->> --- a/drivers/net/wireless/realtek/rtw88/tx.c
->> +++ b/drivers/net/wireless/realtek/rtw88/tx.c
->> @@ -665,3 +665,38 @@ void rtw_txq_cleanup(struct rtw_dev *rtwdev, struct ieee80211_txq *txq)
->>  		list_del_init(&rtwtxq->list);
->>  	spin_unlock_bh(&rtwdev->txq_lock);
->>  }
->> +
->> +static enum rtw_tx_queue_type ac_to_hwq[] = {
->> +	[IEEE80211_AC_VO] = RTW_TX_QUEUE_VO,
->> +	[IEEE80211_AC_VI] = RTW_TX_QUEUE_VI,
->> +	[IEEE80211_AC_BE] = RTW_TX_QUEUE_BE,
->> +	[IEEE80211_AC_BK] = RTW_TX_QUEUE_BK,
->> +};
->> +
->> +static_assert(ARRAY_SIZE(ac_to_hwq) == IEEE80211_NUM_ACS);
->> +
->> +enum rtw_tx_queue_type rtw_tx_ac_to_hwq(enum ieee80211_ac_numbers ac)
->> +{
->> +	return ac_to_hwq[ac];
->> +}
->> +EXPORT_SYMBOL(rtw_tx_ac_to_hwq);
->> +
->
-> Could I know why we can't just export the array ac_to_hwq[]?
-> Is there a strict rule?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I was about to answer that with a helper function it's easier to catch
-out of bands access, but then noticed the helper doesn't have a check
-for that. Should it have one?
+All errors (new ones prefixed by >>):
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+   drivers/soc/sifive/sifive_l2_cache.c: In function 'sifive_l2_flush64_range':
+>> drivers/soc/sifive/sifive_l2_cache.c:157:17: error: implicit declaration of function 'writeq'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+     157 |                 writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+         |                 ^~~~~~
+         |                 writeb
+   cc1: some warnings being treated as errors
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
+vim +157 drivers/soc/sifive/sifive_l2_cache.c
+
+a967a289f16969 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  125  
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  126  #ifdef CONFIG_SIFIVE_L2_FLUSH
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  {
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  	unsigned long line;
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  	if(!l2_base) {
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		return;
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  	}
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  	/* TODO: if (len == 0), skipping flush or going on? */
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	if(!len) {
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		return;
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  	}
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  
+09426958620627 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  142  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
+09426958620627 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
+09426958620627 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  145  	/* make sure the address is in the range */
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  148  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+36921b04361a57 drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  149  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  150  		     start, len);
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		return;
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  	}
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  	mb();	/* sync */
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	for (line = start; line < start + len;
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @157  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  158  		mb();
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  	}
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  }
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  #endif
+d21f24663c127e drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  
+
+:::::: The code at line 157 was first introduced by commit
+:::::: d21f24663c127ec288f925cd991a1d767e1dd609 sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+
+:::::: TO: Tom <support@vamrs.com>
+:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

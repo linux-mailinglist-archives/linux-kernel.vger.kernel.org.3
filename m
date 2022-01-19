@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 143FB493DBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F10493DC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355977AbiASPyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:54:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:55870 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238625AbiASPyt (ORCPT
+        id S1355980AbiASP4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237164AbiASPz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:54:49 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 814E2212C5;
-        Wed, 19 Jan 2022 15:54:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642607688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=huSQfD1kXWPxYY8LjOeU4PnuzXl1Fa3PIHCPfVNpPD4=;
-        b=OxRHgpGHsiS9/qgPyLl2pav/JxQzvHxK34IoXxp3fnsLA3qPye7uIIcuJqhmHMixmeqabl
-        wB7eS+pgOv3Ykrt9o57mOTGZCVuTT2nzsa/IG8JMWy82S7+BetcNbWLF9aDWC3Qr1Z/SRZ
-        gmeEQsWM6isiMtCR7jx/INvWrIyr0MM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642607688;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=huSQfD1kXWPxYY8LjOeU4PnuzXl1Fa3PIHCPfVNpPD4=;
-        b=MZLDgg5D8Y6admaU+zjUjBRQLolKcDdEg53rAerqr4l7oLUQsN3J/2xp7whmKS2Vtwp11y
-        0d0HLd08ApUmzIAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F01B13F84;
-        Wed, 19 Jan 2022 15:54:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eTw9Ekg06GHSEwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 19 Jan 2022 15:54:48 +0000
-Message-ID: <83484eca-8562-bf76-78f1-75b626a59029@suse.de>
-Date:   Wed, 19 Jan 2022 16:54:47 +0100
+        Wed, 19 Jan 2022 10:55:59 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36CEC061574;
+        Wed, 19 Jan 2022 07:55:59 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id l7-20020a4a2707000000b002dde197c749so853806oof.10;
+        Wed, 19 Jan 2022 07:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aSGUAl3gocAm+DLJ0aQCnbcEeJnsi/wUpekX13IHCuo=;
+        b=fOyNg4qcUt37pe7laWsmJ8fvNB0XmoDH2Mnynw/z/yiAIkeF9QGVcvVKHDh0CATJts
+         zO5iGRvLbyoJTlKkDb0qC2HqFADSFpf2c9tngfm67w5NUC+9WHmTuDLyY9dIx8JI4wcj
+         R6V/jy2GJKkgOyQEtcdR+lbPAtOh+jdCFpVnqTgid5j6cALrz+Fmd3raXSkpA5gqUmRi
+         YFTuf9Cqd09aQyjvX8yccM1BLzP0Q1K+iBxPbBxNraBAlC09a+0+FFxIrVxaKWZ5mFWF
+         X07qRou0GjQ94bld8IDC3F5eFMPKCi3qP3lXFhRlWhwfAAV2Y2/UaHJWBAnmFKo76Oij
+         DpbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aSGUAl3gocAm+DLJ0aQCnbcEeJnsi/wUpekX13IHCuo=;
+        b=z3WYPaMZgMQLK7DLVDe7CybDbiqdIy7x7jDkRcDK+lc/KzXtUEsF1SGf8KzJ0batM3
+         aS43hAAz1BxiY2ZCdm3b3h1cxDNqfbPyCNDO6UG2ksKQFLy8HdXKkrPHstiCXbhgUw6a
+         5+SzxG8Sk8ugMzGJ/QR7Mnv5y7h1DQ4pqHhNOyUfhsoJztSRggPitpTRxWAtsLxrcbT0
+         33BGNI5jjRYNoORLBY2+H39C7uGKe3I1LMZUZDLTC6bj2kqx9vefxBV0889LGCnS1e6V
+         rcr7QVnTRJkPPKtVk6bFfxlMDJoYF4J0ZNYyp+5d5LxnOH1Sa0ZFkrgptv2JB7Ks2uMv
+         43fA==
+X-Gm-Message-State: AOAM532nYg75ZgtyUZqEfOZ1h2fp0w7CmDjs9PQ/+tLsLAcqjnbC/t1B
+        dG1ZA1RfqPIWPmTZ96dS1Xw=
+X-Google-Smtp-Source: ABdhPJwVX9iXytkWG/lvP0m/HVAdUHyAlz8jdPDfjrDOPS01ehS+jf00fWaTpgkNwzul7ep+I3Zeng==
+X-Received: by 2002:a4a:3851:: with SMTP id o17mr22448953oof.6.1642607759105;
+        Wed, 19 Jan 2022 07:55:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t14sm8853466oth.81.2022.01.19.07.55.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 07:55:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        NeilBrown <neilb@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        stable <stable@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20220118160452.384322748@linuxfoundation.org>
+ <CA+G9fYvJaFVKu24oFuR1wGFRe4N2A=yxH6ksx61bunfR9Y3Ejw@mail.gmail.com>
+ <CAHk-=whJjHXGeVnVPmC8t_+Rie5N1tarrzsttECEh5efbXYUuA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
+Message-ID: <45b72e1b-d98b-ba4e-fc08-ab7b122d69ef@roeck-us.net>
+Date:   Wed, 19 Jan 2022 07:55:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/ast: Create threshold values for AST2600
+In-Reply-To: <CAHk-=whJjHXGeVnVPmC8t_+Rie5N1tarrzsttECEh5efbXYUuA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     hungju_huang@aspeedtech.com, airlied@linux.ie,
-        tommy_huang@aspeedtech.com, airlied@redhat.com,
-        arc_sung@aspeedtech.com, luke_chen@aspeedtech.com
-References: <20220117083643.41493-1-kuohsiang_chou@aspeedtech.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220117083643.41493-1-kuohsiang_chou@aspeedtech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------UM0o5JZz0JfmaFfA8BBBd2b7"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------UM0o5JZz0JfmaFfA8BBBd2b7
-Content-Type: multipart/mixed; boundary="------------pbZ4Zwa0cbdW7pS18cwzXL1v";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc: hungju_huang@aspeedtech.com, airlied@linux.ie,
- tommy_huang@aspeedtech.com, airlied@redhat.com, arc_sung@aspeedtech.com,
- luke_chen@aspeedtech.com
-Message-ID: <83484eca-8562-bf76-78f1-75b626a59029@suse.de>
-Subject: Re: [PATCH] drm/ast: Create threshold values for AST2600
-References: <20220117083643.41493-1-kuohsiang_chou@aspeedtech.com>
-In-Reply-To: <20220117083643.41493-1-kuohsiang_chou@aspeedtech.com>
+On 1/18/22 11:53 PM, Linus Torvalds wrote:
+> On Wed, Jan 19, 2022 at 9:30 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+>>
+>> Inconsistent kallsyms data
+> 
+> This tends to be a "odd build environment" problem, and very very
+> random. Triggered by very particular compiler versions and just some
+> odd code modement details.
+> 
 
---------------pbZ4Zwa0cbdW7pS18cwzXL1v
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+It happens once in a while depending on the compiler version and
+on how symbols are arranged, and new compiler specific symbols showing up.
+I had submitted a patch a while ago that kept retrying a few more times
+before giving up (that was rejected). We carry a patch in ChromeOS kernels
+which tells us what the offending symbols are in case we see the problem
+in our builds.
 
-SGkNCg0KQW0gMTcuMDEuMjIgdW0gMDk6MzYgc2NocmllYiBLdW9Ic2lhbmcgQ2hvdToNCj4g
-VGhlIHRocmVzaG9sZCB2YWx1ZSBpcyB1c2VkIGZvciBBU1QyNjAwIG9ubHkuDQo+IA0KPiBT
-aWduZWQtb2ZmLWJ5OiBLdW9Ic2lhbmcgQ2hvdSA8a3VvaHNpYW5nX2Nob3VAYXNwZWVkdGVj
-aC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21vZGUuYyB8IDUg
-KysrKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
-KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5j
-IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IGluZGV4IDFjN2E1N2EwMy4u
-N2YyZTI0OGE2IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2Rl
-LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IEBAIC00NzEs
-NyArNDcxLDEwIEBAIHN0YXRpYyB2b2lkIGFzdF9zZXRfY29sb3JfcmVnKHN0cnVjdCBhc3Rf
-cHJpdmF0ZSAqYXN0LA0KPiAgIHN0YXRpYyB2b2lkIGFzdF9zZXRfY3J0dGhkX3JlZyhzdHJ1
-Y3QgYXN0X3ByaXZhdGUgKmFzdCkNCj4gICB7DQo+ICAgCS8qIFNldCBUaHJlc2hvbGQgKi8N
-Cj4gLQlpZiAoYXN0LT5jaGlwID09IEFTVDIzMDAgfHwgYXN0LT5jaGlwID09IEFTVDI0MDAg
-fHwNCj4gKwlpZiAoYXN0LT5jaGlwID09IEFTVDI2MDApIHsNCj4gKwkJYXN0X3NldF9pbmRl
-eF9yZWcoYXN0LCBBU1RfSU9fQ1JUQ19QT1JULCAweGE3LCAweGUwKTsNCj4gKwkJYXN0X3Nl
-dF9pbmRleF9yZWcoYXN0LCBBU1RfSU9fQ1JUQ19QT1JULCAweGE2LCAweGEwKTsNCj4gKwl9
-IGVsc2UgaWYgKGFzdC0+Y2hpcCA9PSBBU1QyMzAwIHx8IGFzdC0+Y2hpcCA9PSBBU1QyNDAw
-IHx8DQo+ICAgCSAgICBhc3QtPmNoaXAgPT0gQVNUMjUwMCkgew0KPiAgIAkJYXN0X3NldF9p
-bmRleF9yZWcoYXN0LCBBU1RfSU9fQ1JUQ19QT1JULCAweGE3LCAweDc4KTsNCj4gICAJCWFz
-dF9zZXRfaW5kZXhfcmVnKGFzdCwgQVNUX0lPX0NSVENfUE9SVCwgMHhhNiwgMHg2MCk7DQo+
-IC0tDQo+IDIuMjcuMA0KPiANCg0KTWVyZ2VkIGludG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtz
-IGZvciB0aGUgcGF0Y2guDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCi0tIA0KVGhvbWFz
-IFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUg
-U29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJn
-LCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJl
-cjogSXZvIFRvdGV2DQo=
+> I'd suggest doing a completely clean build and disabling ccache, and
+> seeing if that makes it go away.
+> 
 
---------------pbZ4Zwa0cbdW7pS18cwzXL1v--
+My experience is that once it starts, it will show up randomly and become
+more and more prevalent over time until almost all builds fail. powerpc
+seems to be affected a lot by this problem, but we have also seen it
+on x86. When that happens, someone has to go in and figure out the
+offending symbol(s) and add it or them to some exception list.
 
---------------UM0o5JZz0JfmaFfA8BBBd2b7
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHoNEcFAwAAAAAACgkQlh/E3EQov+Bj
-TBAAqHNQCMhLLJVRD+PwOfYhzJrdCGFqVmqUFsq/etfNOgDANfIw1HcEeSlbLAtWHIZxvD/11C+q
-lTz7YdEoXgyA4mDaW8RKllMZaUXfCt8HUpt2tnBd1t8dmrZ7/QJGuJet+ZvwAjSu2pcQqt8Z1hyL
-sFV3XQSasx6ntFSBSkBJwvxTE3giJcH1unxwNfg6MRHpnBtP3UmhUzYIMbrlz63xdilKyePrdrkV
-BxdH+tLD3l4/JOGsJpbvZMK7DaX2Wbvaavsuf3fNz87hCcp7HRWCoH2cnMWazhDzNKN8ikNN9WrU
-+xy6gGShBDmmWJqFNYnVO38rU86Lb6QHtsUwXbZAIsIvPpuH6UdZYfdSbe5VdF9wjjgbjnQ7aMXL
-0Iu3wMPI7KoNB4z9GnrBJPhVwAHoip5q3gXYdg4BsPT2jy3wzOmwWwrb9Mu4dPuiGyNZi819K9mV
-yN9YomPYSsqRMJiRY9MfPK0K7T4elm7jWBhe9y0kzwtcPGoUbwZ6WwS6GId3QN1mWQ2tJr74rNur
-DFmmT0OEqJqYf8PMJ2iTlKNbi9PMwyY+CufBQTsetjzXITxWd88s1fGlrD4m2Ax6GsYZg12jnzDx
-J1WEW5h/YcIRnfVrFqAsb/pY//SXTcmmdWscSP0+OencE/FP8jifxA6w9cUFd3Uw3m8E1CP3EhFR
-Kz8=
-=+vsY
------END PGP SIGNATURE-----
-
---------------UM0o5JZz0JfmaFfA8BBBd2b7--
+Guenter

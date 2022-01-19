@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D3A494030
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB924494032
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356928AbiASSuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S1356911AbiASSvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350117AbiASSui (ORCPT
+        with ESMTP id S1344150AbiASSvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:50:38 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52683C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:50:35 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id d3so11822332lfv.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:50:35 -0800 (PST)
+        Wed, 19 Jan 2022 13:51:36 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3B7C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:51:36 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id p125so3446969pga.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:51:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wj3R0FRfn1yO5ogKeGc8aripFNfSyJxmajRu2on35kY=;
-        b=pe1iWhZirUTGmhYFeMyFbD34nGrpS52XKubMcy7XhUsPHYDaweveoSSJ0xnTHhRHWK
-         20m5NC6R9tJIDsHjIbD1VFPqYLDmsG/N0Szv1UrZm9xhVPlG9AJJli7CV6iYMrgR6Rwu
-         NhOEIJxv0osNjyejn4S6X35hD31YubMuEqCY2s7DYdDUc6uTefMSQbbc/Se0C5xs8nmB
-         ccI4yd5EFGZv+k4tvN8+95FjVBq0L8Uub4f5y/1nX/vM3XeUsEW7Audld9eBL5dk72Yu
-         AAkeVbwfhIrCNp+6Q4qlOOkWhGRMnA9Tb8TOCRMyLgl9GUZrTl+LJ2hRvgWNXwivZO25
-         2x+w==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p4+HpvQqpXWwOnnXQVxrBDcjJ5yInc/mHBvdCwo/eqE=;
+        b=jB8jTGftBMXo7MjLtldaBa1YH3NRmecF1y+pwQjHfQtUOVs0sUXRi5UTthYKtoUhfO
+         9gidudV/7NVCgC7Sy5njjUvBQuV82xuHTATdFKnFvPrzrV2Be/b4VTXhm+IPdPHi/95B
+         yhgMPppJjJm18KCshVGY3K2kICbvbWhXQPDis=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wj3R0FRfn1yO5ogKeGc8aripFNfSyJxmajRu2on35kY=;
-        b=bkY290Qw495oPSbnGW71OIURJdX3x1Ds0f51b8MYhhkXBrI8w9M1KnqYuSOTloUmcD
-         MhTQKiJ52awLupVbLCJKA4zv86FvE0lvLoAsFeHzd8KPgub1OxvhjZ/U7SQa53aG81VC
-         2r4N7ejeWMyPj8ykII6uhQB9gFckSQA9kFqULEcQG4XL4Kc8czKytQCokRf+HU3G/wHP
-         eYljMNoAaKPaYUIqDqDRI9fhvb0ns1642EfXhzE/YfQC5Xq0p/w9ZIjLecmMgZ7UGDiB
-         e8Hy2cAEVL6SToSvc+7AVb6/zDFpPURYlS6xkSzJkzmA/CUKo1Tm0UKmzQGB36HOffEr
-         eKag==
-X-Gm-Message-State: AOAM531pD/VFIsfwqeSegm8fSn3s3/cZsSoSflIAPi8aKq5jkuoAqZvb
-        t3Ds4aQ6CQwTHRViTXnmQwU5g8WhbOorE1vXRKvD9w==
-X-Google-Smtp-Source: ABdhPJxlWimiZNLmr8h++3TY1Fh0zvEgbDHKd8bwKwVQGXviRDQ5XXrBx6FNgZ9IhOY46CUuigHNzP3pTgPWPhbpLkM=
-X-Received: by 2002:a05:6512:3b94:: with SMTP id g20mr28870780lfv.119.1642618233416;
- Wed, 19 Jan 2022 10:50:33 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p4+HpvQqpXWwOnnXQVxrBDcjJ5yInc/mHBvdCwo/eqE=;
+        b=iWV/jaC4fXGLL7FvNAuiVcZzul/Bi8EkIIX9Za3Imd2T8tLXORco3fiUZ5L8ZqJ4aM
+         pv0RFLA8AwjdS6aPHPfUQDchFzKXjeu6SbOik39IS6kDryZ1QvHiexTqNbPZ70L+hxrK
+         3+DzzldZaJrabJSwqLtdFBnD7KSuu1Vd8IL8+xaCpvK507qdGc1drdZ/oD4GyzU0gAuA
+         9allrEzl70KQNBG0jO0IPDFgPcFZOfgGl1yPAbJSXYmfdJ5d5eNHgzAy1up3Jrkz3Abg
+         qOODXlqVrAMusjqxpf85GUpdvpgLZR9JlpJPFhrFKYoubfsr5SrkRJAeKv04AJJb0rB0
+         J39w==
+X-Gm-Message-State: AOAM530MwccknzzI+EqfxwTI1lcnFNBwwROjQ86QAYu6JJRVWX18a/T5
+        +RvlOnucGwCs6Lqrml0w68Numg==
+X-Google-Smtp-Source: ABdhPJyqQae4RrbN+8YvLzLqk5/OqW4MahzZOqILFVoW0wHcIsva/dbqktfdkKKRqs7wtIGsGOSxrw==
+X-Received: by 2002:a63:eb07:: with SMTP id t7mr28591515pgh.112.1642618295553;
+        Wed, 19 Jan 2022 10:51:35 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id md18sm108396pjb.9.2022.01.19.10.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 10:51:35 -0800 (PST)
+Date:   Wed, 19 Jan 2022 10:51:34 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     He Ying <heying24@huawei.com>
+Cc:     catalin.marinas@arm.com, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, sxwjean@gmail.com,
+        peterz@infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/process, kasan: Silence KASAN warnings in
+ __get_wchan()
+Message-ID: <202201191051.E49ED291@keescook>
+References: <20220119015025.136902-1-heying24@huawei.com>
 MIME-Version: 1.0
-References: <20211222225350.1912249-1-vipinsh@google.com> <20220105180420.GC6464@blackbody.suse.cz>
- <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
- <Yeclbe3GNdCMLlHz@slm.duckdns.org> <7a0bc562-9f25-392d-5c05-9dbcd350d002@redhat.com>
- <YehY0z2vHYVZk52J@slm.duckdns.org>
-In-Reply-To: <YehY0z2vHYVZk52J@slm.duckdns.org>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Wed, 19 Jan 2022 10:49:57 -0800
-Message-ID: <CAHVum0fqhMQd2uFic5_7RN=Ah6TTH2G2qLNZuxnQXSazR57m6g@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        seanjc@google.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        dmatlack@google.com, jiangshanlai@gmail.com, kvm@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119015025.136902-1-heying24@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:30 AM Tejun Heo <tj@kernel.org> wrote:
->
-> On Wed, Jan 19, 2022 at 07:02:53PM +0100, Paolo Bonzini wrote:
-> > On 1/18/22 21:39, Tejun Heo wrote:
-> > > So, these are normally driven by the !populated events. That's how everyone
-> > > else is doing it. If you want to tie the kvm workers lifetimes to kvm
-> > > process, wouldn't it be cleaner to do so from kvm side? ie. let kvm process
-> > > exit wait for the workers to be cleaned up.
-> >
-> > It does.  For example kvm_mmu_post_init_vm's call to
-> > kvm_vm_create_worker_thread is matched with the call to
-> > kthread_stop in kvm_mmu_pre_destroy_vm.
-> > According to Vpin, the problem is that there's a small amount of time
-> > between the return from kthread_stop and the point where the cgroup
-> > can be removed.  My understanding of the race is the following:
->
-> Okay, this is because kthread_stop piggy backs on vfork_done to wait for the
-> task exit intead of the usual exit notification, so it only waits till
-> exit_mm(), which is uhh... weird. So, migrating is one option, I guess,
-> albeit a rather ugly one. It'd be nicer if we can make kthread_stop()
-> waiting more regular but I couldn't find a good existing place and routing
-> the usual parent signaling might be too complicated. Anyone has better
-> ideas?
->
-Sean suggested that we can use the real_parent of the kthread task
-which will always be kthreadd_task, this will also not require any
-changes in the cgroup API. I like that approach, I will give it a try.
-This will avoid changes in cgroup APIs completely.
+On Tue, Jan 18, 2022 at 08:50:25PM -0500, He Ying wrote:
+> The following KASAN warning was reported in our kernel.
+> 
+>   BUG: KASAN: stack-out-of-bounds in get_wchan+0x188/0x250
+>   Read of size 4 at addr d216f958 by task ps/14437
+> 
+>   CPU: 3 PID: 14437 Comm: ps Tainted: G           O      5.10.0 #1
+>   Call Trace:
+>   [daa63858] [c0654348] dump_stack+0x9c/0xe4 (unreliable)
+>   [daa63888] [c035cf0c] print_address_description.constprop.3+0x8c/0x570
+>   [daa63908] [c035d6bc] kasan_report+0x1ac/0x218
+>   [daa63948] [c00496e8] get_wchan+0x188/0x250
+>   [daa63978] [c0461ec8] do_task_stat+0xce8/0xe60
+>   [daa63b98] [c0455ac8] proc_single_show+0x98/0x170
+>   [daa63bc8] [c03cab8c] seq_read_iter+0x1ec/0x900
+>   [daa63c38] [c03cb47c] seq_read+0x1dc/0x290
+>   [daa63d68] [c037fc94] vfs_read+0x164/0x510
+>   [daa63ea8] [c03808e4] ksys_read+0x144/0x1d0
+>   [daa63f38] [c005b1dc] ret_from_syscall+0x0/0x38
+>   --- interrupt: c00 at 0x8fa8f4
+>       LR = 0x8fa8cc
+> 
+>   The buggy address belongs to the page:
+>   page:98ebcdd2 refcount:0 mapcount:0 mapping:00000000 index:0x2 pfn:0x1216f
+>   flags: 0x0()
+>   raw: 00000000 00000000 01010122 00000000 00000002 00000000 ffffffff 00000000
+>   raw: 00000000
+>   page dumped because: kasan: bad access detected
+> 
+>   Memory state around the buggy address:
+>    d216f800: 00 00 00 00 00 f1 f1 f1 f1 00 00 00 00 00 00 00
+>    d216f880: f2 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>   >d216f900: 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00
+>                                             ^
+>    d216f980: f2 f2 f2 f2 f2 f2 f2 00 00 00 00 00 00 00 00 00
+>    d216fa00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 
+> After looking into this issue, I find the buggy address belongs
+> to the task stack region. It seems KASAN has something wrong.
+> I look into the code of __get_wchan in x86 architecture and
+> find the same issue has been resolved by the commit
+> f7d27c35ddff ("x86/mm, kasan: Silence KASAN warnings in get_wchan()").
+> The solution could be applied to powerpc architecture too.
+> 
+> As Andrey Ryabinin said, get_wchan() is racy by design, it may
+> access volatile stack of running task, thus it may access
+> redzone in a stack frame and cause KASAN to warn about this.
+> 
+> Use READ_ONCE_NOCHECK() to silence these warnings.
+> 
+> Signed-off-by: He Ying <heying24@huawei.com>
+
+Looks reasonable to me; thanks!
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> ---
+>  arch/powerpc/kernel/process.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
+> index 984813a4d5dc..a75d20f23dac 100644
+> --- a/arch/powerpc/kernel/process.c
+> +++ b/arch/powerpc/kernel/process.c
+> @@ -2160,12 +2160,12 @@ static unsigned long ___get_wchan(struct task_struct *p)
+>  		return 0;
+>  
+>  	do {
+> -		sp = *(unsigned long *)sp;
+> +		sp = READ_ONCE_NOCHECK(*(unsigned long *)sp);
+>  		if (!validate_sp(sp, p, STACK_FRAME_OVERHEAD) ||
+>  		    task_is_running(p))
+>  			return 0;
+>  		if (count > 0) {
+> -			ip = ((unsigned long *)sp)[STACK_FRAME_LR_SAVE];
+> +			ip = READ_ONCE_NOCHECK(((unsigned long *)sp)[STACK_FRAME_LR_SAVE]);
+>  			if (!in_sched_functions(ip))
+>  				return ip;
+>  		}
+> -- 
+> 2.17.1
+> 
+
+-- 
+Kees Cook

@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3823494258
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EAE49425B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245699AbiASVGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 16:06:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40454 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiASVGr (ORCPT
+        id S245720AbiASVHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 16:07:46 -0500
+Received: from mail-out.m-online.net ([212.18.0.9]:55296 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229564AbiASVHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 16:06:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 19 Jan 2022 16:07:42 -0500
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4JfJBN5hcHz1qwyD;
+        Wed, 19 Jan 2022 22:07:40 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4JfJBN54Cfz1qqkB;
+        Wed, 19 Jan 2022 22:07:40 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id fa2MReFuQDWV; Wed, 19 Jan 2022 22:07:39 +0100 (CET)
+X-Auth-Info: a+k5wgMBRWkntvg+3VX7x/EHIpisGRCFgjaQ+T+kj0Njbe4vckVflYo3aArUijhP
+Received: from igel.home (ppp-46-244-165-91.dynamic.mnet-online.de [46.244.165.91])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43C61B81B40;
-        Wed, 19 Jan 2022 21:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED186C004E1;
-        Wed, 19 Jan 2022 21:06:43 +0000 (UTC)
-Date:   Wed, 19 Jan 2022 16:06:42 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH] docs: Update the preferred line size to 100 characters
-Message-ID: <20220119160642.140e84c6@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Wed, 19 Jan 2022 22:07:39 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+        id 74A832C36EC; Wed, 19 Jan 2022 22:07:39 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: eliminate unreliable __builtin_frame_address(1)
+References: <20220117154433.3124-1-changbin.du@gmail.com>
+        <C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com>
+        <87v8yg6lhf.fsf@igel.home>
+        <AAAA7852-EBCA-47A3-B74E-A425023468C6@jrtc27.com>
+        <8735lj78wu.fsf@igel.home>
+        <8F8D535F-3637-4BC7-8853-B709EC5D14C9@jrtc27.com>
+X-Yow:  Uh-oh!!  I forgot to submit to COMPULSORY URINALYSIS!
+Date:   Wed, 19 Jan 2022 22:07:39 +0100
+In-Reply-To: <8F8D535F-3637-4BC7-8853-B709EC5D14C9@jrtc27.com> (Jessica
+        Clarke's message of "Wed, 19 Jan 2022 20:48:48 +0000")
+Message-ID: <87y23b5t9g.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.91 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Jan 19 2022, Jessica Clarke wrote:
 
-As commit bdc48fa11e46f ("checkpatch/coding-style: deprecate 80-column
-warning") states:
+> My point is that the only thing that can possibly read the incoming
+> frame pointer of a leaf function is the leaf function itself, and since
+> it knows where it’s putting it then there is no ABI issue, it just
+> remembers where it put it and loads it from there.
 
-    Increase the default limit to 100 characters.  Not because 100
-    characters is some hard limit either, but that's certainly a "what are
-    you doing" kind of value and less likely to be about the occasional
-    slightly longer lines.
+llvm sidesteps that issue by always saving ra when creating a frame,
+even in a leaf function, so it can use a constant offset.
 
-It's 2022, people are not using 80x24 terminals anymore (well I'm sure
-someone is, but they are the small minority).
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Documentation/process/coding-style.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-index 03eb53fd029a..73be9edffede 100644
---- a/Documentation/process/coding-style.rst
-+++ b/Documentation/process/coding-style.rst
-@@ -101,10 +101,10 @@ Get a decent editor and don't leave whitespace at the end of lines.
- Coding style is all about readability and maintainability using commonly
- available tools.
- 
--The preferred limit on the length of a single line is 80 columns.
-+The preferred limit on the length of a single line is 100 columns.
- 
--Statements longer than 80 columns should be broken into sensible chunks,
--unless exceeding 80 columns significantly increases readability and does
-+Statements longer than 100 columns should be broken into sensible chunks,
-+unless exceeding 100 columns significantly increases readability and does
- not hide information.
- 
- Descendants are always substantially shorter than the parent and
 -- 
-2.33.0
-
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

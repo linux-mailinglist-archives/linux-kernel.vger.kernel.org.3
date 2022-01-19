@@ -2,80 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50E64943EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECA64943EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbiASXxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:53:14 -0500
-Received: from mail-out.m-online.net ([212.18.0.10]:59730 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiASXxN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:53:13 -0500
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4JfMsJ5Bttz1s9Mk;
-        Thu, 20 Jan 2022 00:53:08 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4JfMsJ4Hbyz1qqkB;
-        Thu, 20 Jan 2022 00:53:08 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id dRGOlz5u8L7s; Thu, 20 Jan 2022 00:53:07 +0100 (CET)
-X-Auth-Info: 9m4bgV9T2M+yZZxp4SgYjNeW8kikBjyhixaHbLns0GY06zMhMO/XYHIJRr/oHbKB
-Received: from igel.home (ppp-46-244-165-91.dynamic.mnet-online.de [46.244.165.91])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 20 Jan 2022 00:53:07 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id 1F9032C3AD3; Thu, 20 Jan 2022 00:53:07 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: eliminate unreliable __builtin_frame_address(1)
-References: <20220117154433.3124-1-changbin.du@gmail.com>
-        <C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com>
-        <87v8yg6lhf.fsf@igel.home>
-        <AAAA7852-EBCA-47A3-B74E-A425023468C6@jrtc27.com>
-        <8735lj78wu.fsf@igel.home>
-        <8F8D535F-3637-4BC7-8853-B709EC5D14C9@jrtc27.com>
-        <87y23b5t9g.fsf@igel.home>
-        <BD64D67C-613B-495E-9FB7-2AFB6FA15308@jrtc27.com>
-X-Yow:  Now my EMOTIONAL RESOURCES are heavily committed to 23% of the
- SMELTING and REFINING industry of the state of NEVADA!!
-Date:   Thu, 20 Jan 2022 00:53:07 +0100
-In-Reply-To: <BD64D67C-613B-495E-9FB7-2AFB6FA15308@jrtc27.com> (Jessica
-        Clarke's message of "Wed, 19 Jan 2022 21:27:46 +0000")
-Message-ID: <87tudz5llo.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.91 (gnu/linux)
+        id S1344599AbiASXzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:55:44 -0500
+Received: from mga12.intel.com ([192.55.52.136]:24224 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230318AbiASXzn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 18:55:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642636543; x=1674172543;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=uCVZjXt17Nfv/G9qw2L3K1mqeAXwrnobzh2GWeu989k=;
+  b=Xq7ZTsMM63DynNcsOqCTWO9FYusqG5qQiUuqKR0FPqhtY4icnujnFHyU
+   uau5jvNDzfRG5GU0jcUokhVqOJPjGfCVFN8Ow/DgXp4QPoZKN/EZXVi1T
+   BPOkrsfGNACQGfrtbbeFZOZiFIEh5pgMSvTygfEkbXrHTHiwswnj8HEju
+   8t4Ps102BqAZ8uKBnuDJCrUwh0ENXwthh4immDu5DUlcvnuFMlIkvHU8T
+   XLgKC9jjM38JX6E9nzbzeXOz+10IeXOlZOem5tOYS0gDG9RTq0mdofhI3
+   mA4HNrE6UKdytsBONN/zKuq26tSj3gEpIna/IwwfebJSmLSog9aAHI6fl
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225208528"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="225208528"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 15:55:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="477585769"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 15:55:42 -0800
+Date:   Wed, 19 Jan 2022 15:55:42 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     David Airlie <airlied@linux.ie>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org,
+        Christian =?utf-8?B?S++/vW5pZw==?= <christian.koenig@amd.com>
+Subject: Re: [PATCH 0/7] DRM kmap() fixes and kmap_local_page() conversions
+Message-ID: <20220119235542.GF209936@iweiny-DESK2.sc.intel.com>
+References: <20211210232404.4098157-1-ira.weiny@intel.com>
+ <20220119165356.GD209936@iweiny-DESK2.sc.intel.com>
+ <YehJRt+JngIsj+Gd@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YehJRt+JngIsj+Gd@phenom.ffwll.local>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jan 19 2022, Jessica Clarke wrote:
+On Wed, Jan 19, 2022 at 06:24:22PM +0100, Daniel Vetter wrote:
+> On Wed, Jan 19, 2022 at 08:53:56AM -0800, Ira Weiny wrote:
+> > On Fri, Dec 10, 2021 at 03:23:57PM -0800, 'Ira Weiny' wrote:
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > This series starts by converting the last easy kmap() uses to
+> > > kmap_local_page().
+> > > 
+> > > There is one more call to kmap() wrapped in ttm_bo_kmap_ttm().  Unfortunately,
+> > > ttm_bo_kmap_ttm() is called in a number of different ways including some which
+> > > are not thread local.  I have a patch to convert that call.  However, it is not
+> > > straight forward so it is not included in this series.
+> > > 
+> > > The final 2 patches fix bugs found while working on the ttm_bo_kmap_ttm()
+> > > conversion.
+> > 
+> > Gentile ping on this series?  Will it make this merge window?
+> 
+> I think this fell through the cracks and so no. Note that generally we
+> feature-freeze drm tree around -rc6 anyway for the upcoming merge window,
+> so you were cutting this all a bit close anyway.
 
-> What’s your point?
+Ok, No problem.  I just had not heard if this was picked up or not.
 
-LLVM doesn't have to deal with the extra complexity.
+> Also looks like the ttm
+> kmap caching question didn't get resolved?
 
-> doesn’t mean other toolchains that do need that to be correct should
-> just do something wrong.
+I'm sorry I thought it was resolve for this series.  Christian said the patches
+in this series were "a good bug fix" even if not strictly necessary.[1]  Beyond
+this series I was discussing where to go from here, and is it possible to go
+further with more changes.[2]  At the moment I don't think I will.
 
-__builtin_frame_address with count > 0 is considered bad.  Nobody should
-use it.
+Christian did I misunderstand?  I can drop patch 6 and 7 if they are not proper
+bug fixes or at least clarifications to the code.
 
-You don't have to be arrogant.
+Ira
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+[1] https://lore.kernel.org/lkml/c3b173ea-6509-ebbe-b5f9-eeb29f1ce57e@amd.com/
+[2] https://lore.kernel.org/lkml/20211215210949.GW3538886@iweiny-DESK2.sc.intel.com/
+
+> 
+> Anyway if patches are stuck resend with RESEND and if people still don't
+> pick them up poke me and I'll apply as fallback.
+> 
+> Cheers, Daniel
+> 
+> > 
+> > Thanks,
+> > Ira
+> > 
+> > > 
+> > > 
+> > > Ira Weiny (7):
+> > > drm/i915: Replace kmap() with kmap_local_page()
+> > > drm/amd: Replace kmap() with kmap_local_page()
+> > > drm/gma: Remove calls to kmap()
+> > > drm/radeon: Replace kmap() with kmap_local_page()
+> > > drm/msm: Alter comment to use kmap_local_page()
+> > > drm/amdgpu: Ensure kunmap is called on error
+> > > drm/radeon: Ensure kunmap is called on error
+> > > 
+> > > drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
+> > > drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c | 1 +
+> > > drivers/gpu/drm/gma500/gma_display.c | 6 ++----
+> > > drivers/gpu/drm/gma500/mmu.c | 8 ++++----
+> > > drivers/gpu/drm/i915/gem/i915_gem_shmem.c | 4 ++--
+> > > drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 8 ++++----
+> > > drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c | 4 ++--
+> > > drivers/gpu/drm/i915/gt/shmem_utils.c | 4 ++--
+> > > drivers/gpu/drm/i915/i915_gem.c | 8 ++++----
+> > > drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
+> > > drivers/gpu/drm/msm/msm_gem_submit.c | 4 ++--
+> > > drivers/gpu/drm/radeon/radeon_ttm.c | 4 ++--
+> > > drivers/gpu/drm/radeon/radeon_uvd.c | 1 +
+> > > 13 files changed, 32 insertions(+), 32 deletions(-)
+> > > 
+> > > --
+> > > 2.31.1
+> > > 
+> 
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch

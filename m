@@ -2,178 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 045CB4939E8
+	by mail.lfdr.de (Postfix) with ESMTP id 0054E4939EB
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354315AbiASLua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:50:30 -0500
-Received: from mx405.baidu.com ([124.64.200.26]:32843 "EHLO mx421.baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1354318AbiASLuU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:50:20 -0500
-Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
-        by mx421.baidu.com (Postfix) with ESMTP id 454482F00920;
-        Wed, 19 Jan 2022 19:50:15 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id 35F5BD9932;
-        Wed, 19 Jan 2022 19:50:15 +0800 (CST)
-From:   Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com
-Cc:     lirongqing@baidu.com, kvm@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] KVM: X86: Introduce vfio_intr_stat per-vm debugfs file
-Date:   Wed, 19 Jan 2022 19:50:15 +0800
-Message-Id: <1642593015-28729-1-git-send-email-yuanzhaoxiong@baidu.com>
-X-Mailer: git-send-email 1.7.1
+        id S1354328AbiASLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:50:52 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48900 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241852AbiASLus (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:50:48 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id D56AC1F41B72
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642593047;
+        bh=ZDXusnKss3SgqSE9L3JA19reKc+Pw1Zd9j8G4yPKtAI=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=M4+gNzJ15og4zljTpYBotnMchN5cQKChFRvyR5ASSshs9VUJKYR4YdkLx7uQ3uRoS
+         zeRPLhF29Nuptro6qDkxhyi4wMoIUpJTA/vBhyf8aJW9iBfsD5/bXEUw8AXdiS/bi6
+         0nxlSzGQfoFrFLpQau6wq+7AfabYS3bLGrlTZBuJS5Oc18J4+UBMKB0nTGVgBlQ7Vb
+         PDrq6q6fSNbEg1QwwON2yrMsVbTZO0uwmK8ZJrYpak9ARwwUxHDBZRt95bcU0D0Npx
+         N+ivniF1PUxR8E6ohCrSiWgTy7+lspqYvMLCR0zUtiZ5nWAg7AMyL9fMOhWVL6I1uf
+         ybUE0eJPjwHTg==
+Subject: Re: [PATCH v5, 15/15] media: mtk-vcodec: support stateless VP9
+ decoding
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220117094001.20049-1-yunfei.dong@mediatek.com>
+ <20220117094001.20049-16-yunfei.dong@mediatek.com>
+ <275affff-12d9-4659-e900-aa9c306e6701@collabora.com>
+Message-ID: <eaf4f649-89fc-77ff-dab1-2c837cd8c877@collabora.com>
+Date:   Wed, 19 Jan 2022 12:50:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <275affff-12d9-4659-e900-aa9c306e6701@collabora.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use this file to export correspondence between guest_irq, host_irq,
-vector and vcpu belonging to VFIO passthrough devices.
+Il 19/01/22 12:28, AngeloGioacchino Del Regno ha scritto:
+> Il 17/01/22 10:40, Yunfei Dong ha scritto:
+>> Add support for VP9 decoding using the stateless API,
+>> as supported by MT8192. And the drivers is lat and core architecture.
+>>
+>> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+>> Signed-off-by: George Sun <george.sun@mediatek.com>
+>> ---
+>>   drivers/media/platform/mtk-vcodec/Makefile    |    1 +
+>>   .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |   26 +-
+>>   .../platform/mtk-vcodec/mtk_vcodec_drv.h      |    1 +
+>>   .../mtk-vcodec/vdec/vdec_vp9_req_lat_if.c     | 1973 +++++++++++++++++
+>>   .../media/platform/mtk-vcodec/vdec_drv_if.c   |    4 +
+>>   .../media/platform/mtk-vcodec/vdec_drv_if.h   |    1 +
+>>   6 files changed, 2003 insertions(+), 3 deletions(-)
+>>   create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
+>>
+> 
+> Hello Yunfei,
+> this driver is based on an older version of the VP9 stateless decoder uAPI,
+> hence this is not applicable upstream.
+> 
+> The latest linux-next tag (as of today) already contains the new and
+> accepted code; can you please rebase over that one?
+> 
+> Thanks,
+> Angelo
 
-An example output of this looks like (a vm with VFIO passthrough
-devices):
-   guest_irq     host_irq       vector         vcpu
-          24          201           37            8
-          25          202           35           25
-          26          203           35           20
-   ......
+While finishing a rebase, I had time to do a fast port of this patch; in hopes
+to spare you some time, I'm giving you my (fast) take at this.
 
-When a VM has VFIO passthrough devices, the correspondence between
-guest_irq, host_irq, vector and vcpu may need to be known especially
-in AMD platform with avic disabled. The AMD avic is disabled, and
-the passthrough devices may cause vcpu vm exit twice for a interrupt.
-One extrernal interrupt caused by vfio host irq, other ipi to inject
-a interrupt to vm.
+Feel free to use it as you wish!
 
-If the system administrator known these information, set vfio host
-irq affinity to Pcpu which the correspondece guest irq affinited vcpu,
-to avoid extra vm exit.
 
-Co-developed-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+ From 5f329ad271c94bf82d2dd12075372159466c28f9 Mon Sep 17 00:00:00 2001
+
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Date: Wed, 19 Jan 2022 12:45:18 +0100
+
+Subject: [PATCH] media: mtk-vcodec: Port VP9 stateless driver to upstream uAPI
+
+
+
+This driver was written based on an old VP9 uAPI, but that code
+
+changed over time: port this over the newest, and upstream accepted,
+
+VP9 uAPI.
+
+
+
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 ---
-diff with v0: modifying the code format.
 
- arch/x86/kvm/debugfs.c | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+  .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |  2 +-
 
-diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
-index 9240b3b..be16bfe 100644
---- a/arch/x86/kvm/debugfs.c
-+++ b/arch/x86/kvm/debugfs.c
-@@ -10,6 +10,11 @@
- #include "mmu.h"
- #include "mmu/mmu_internal.h"
- 
-+#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
-+#include <linux/kvm_irqfd.h>
-+#include <asm/irq_remapping.h>
-+#endif
-+
- static int vcpu_get_timer_advance_ns(void *data, u64 *val)
- {
- 	struct kvm_vcpu *vcpu = (struct kvm_vcpu *) data;
-@@ -181,9 +186,94 @@ static int kvm_mmu_rmaps_stat_release(struct inode *inode, struct file *file)
- 	.release	= kvm_mmu_rmaps_stat_release,
- };
- 
-+#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
-+static int kvm_vfio_intr_stat_show(struct seq_file *m, void *v)
-+{
-+	struct kvm_kernel_irq_routing_entry *e;
-+	struct kvm_irq_routing_table *irq_rt;
-+	unsigned int host_irq, guest_irq;
-+	struct kvm_kernel_irqfd *irqfd;
-+	struct kvm *kvm = m->private;
-+	struct kvm_lapic_irq irq;
-+	struct kvm_vcpu *vcpu;
-+	int idx;
-+
-+	if (!kvm_arch_has_assigned_device(kvm) ||
-+			!irq_remapping_cap(IRQ_POSTING_CAP)) {
-+		return 0;
-+	}
-+
-+	seq_printf(m, "%12s %12s %12s %12s\n",
-+			"guest_irq", "host_irq", "vector", "vcpu");
-+
-+	spin_lock_irq(&kvm->irqfds.lock);
-+	idx = srcu_read_lock(&kvm->irq_srcu);
-+	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
-+
-+	list_for_each_entry(irqfd, &kvm->irqfds.items, list) {
-+		if (!irqfd->producer)
-+			continue;
-+
-+		host_irq = irqfd->producer->irq;
-+		guest_irq = irqfd->gsi;
-+
-+		if (guest_irq >= irq_rt->nr_rt_entries ||
-+				hlist_empty(&irq_rt->map[guest_irq])) {
-+			pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
-+					guest_irq, irq_rt->nr_rt_entries);
-+			continue;
-+		}
-+
-+		hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
-+			if (e->type != KVM_IRQ_ROUTING_MSI)
-+				continue;
-+
-+			kvm_set_msi_irq(kvm, e, &irq);
-+			if (kvm_intr_is_single_vcpu(kvm, &irq, &vcpu)) {
-+				seq_printf(m, "%12u %12u %12u %12u\n",
-+						guest_irq, host_irq, irq.vector, vcpu->vcpu_id);
-+			}
-+		}
-+	}
-+	srcu_read_unlock(&kvm->irq_srcu, idx);
-+	spin_unlock_irq(&kvm->irqfds.lock);
-+	return 0;
-+}
-+
-+static int kvm_vfio_intr_stat_open(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = inode->i_private;
-+
-+	if (!kvm_get_kvm_safe(kvm))
-+		return -ENOENT;
-+
-+	return single_open(file, kvm_vfio_intr_stat_show, kvm);
-+}
-+
-+static int kvm_vfio_intr_stat_release(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = inode->i_private;
-+
-+	kvm_put_kvm(kvm);
-+	return single_release(inode, file);
-+}
-+
-+static const struct file_operations vfio_intr_stat_fops = {
-+	.open    = kvm_vfio_intr_stat_open,
-+	.read    = seq_read,
-+	.llseek  = seq_lseek,
-+	.release = kvm_vfio_intr_stat_release,
-+};
-+#endif
-+
- int kvm_arch_create_vm_debugfs(struct kvm *kvm)
- {
- 	debugfs_create_file("mmu_rmaps_stat", 0644, kvm->debugfs_dentry, kvm,
- 			    &mmu_rmaps_stat_fops);
-+
-+#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
-+	debugfs_create_file("vfio_intr_stat", 0444, kvm->debugfs_dentry, kvm,
-+			    &vfio_intr_stat_fops);
-+#endif
- 	return 0;
- }
+  .../mtk-vcodec/vdec/vdec_vp9_req_lat_if.c     | 29 +++++++------------
+
+  2 files changed, 12 insertions(+), 19 deletions(-)
+
+
+
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c 
+b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+
+index 26fd97d867e9..7f4baa39bf6c 100644
+
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+
+@@ -94,7 +94,7 @@ static const struct mtk_stateless_control 
+mtk_stateless_controls[] = {
+
+  	},
+
+  	{
+
+  		.cfg = {
+
+-			.id = V4L2_CID_MPEG_VIDEO_VP9_FRAME_DECODE_PARAMS,
+
++			.id = V4L2_CID_STATELESS_VP9_FRAME,
+
+  			},
+
+  		.codec_type = V4L2_PIX_FMT_VP9_FRAME,
+
+  	},
+
+diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c 
+b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
+
+index 92cd39f00840..8caf4f28db29 100644
+
+--- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
+
++++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
+
+@@ -711,7 +711,7 @@ static int vdec_vp9_slice_setup_lat_from_src_buf(struct 
+vdec_vp9_slice_instance
+
+
+
+  static void vdec_vp9_slice_setup_hdr(struct vdec_vp9_slice_instance *instance,
+
+  				     struct vdec_vp9_slice_uncompressed_header *uh,
+
+-				     struct v4l2_ctrl_vp9_frame_decode_params *hdr)
+
++				     struct v4l2_ctrl_vp9_frame *hdr)
+
+  {
+
+  	int i;
+
+
+
+@@ -749,13 +749,13 @@ static void vdec_vp9_slice_setup_hdr(struct 
+vdec_vp9_slice_instance *instance,
+
+  	 * - LAST_FRAME = 1,
+
+  	 * - GOLDEN_FRAME = 2,
+
+  	 * - ALTREF_FRAME = 3,
+
+-	 * ref_frame_sign_biases[INTRA_FRAME] is always 0
+
++	 * ref_frame_sign_bias[INTRA_FRAME] is always 0
+
+  	 * and VDA only passes another 3 directions
+
+  	 */
+
+  	uh->ref_frame_sign_bias[0] = 0;
+
+  	for (i = 0; i < 3; i++)
+
+  		uh->ref_frame_sign_bias[i + 1] =
+
+-			!!(hdr->ref_frame_sign_biases & (1 << i));
+
++			!!(hdr->ref_frame_sign_bias & (1 << i));
+
+  	uh->allow_high_precision_mv = HDR_FLAG(ALLOW_HIGH_PREC_MV);
+
+  	uh->interpolation_filter = hdr->interpolation_filter;
+
+  	uh->refresh_frame_context = HDR_FLAG(REFRESH_FRAME_CTX);
+
+@@ -772,7 +772,7 @@ static void vdec_vp9_slice_setup_hdr(struct 
+vdec_vp9_slice_instance *instance,
+
+
+
+  static void vdec_vp9_slice_setup_frame_ctx(struct vdec_vp9_slice_instance *instance,
+
+  					   struct vdec_vp9_slice_uncompressed_header *uh,
+
+-					   struct v4l2_ctrl_vp9_frame_decode_params *hdr)
+
++					   struct v4l2_ctrl_vp9_frame *hdr)
+
+  {
+
+  	int error_resilient_mode;
+
+  	int reset_frame_context;
+
+@@ -857,7 +857,7 @@ static void vdec_vp9_slice_setup_segmentation(struct 
+vdec_vp9_slice_uncompressed
+
+  }
+
+
+
+  static int vdec_vp9_slice_setup_tile(struct vdec_vp9_slice_vsi *vsi,
+
+-				     struct v4l2_ctrl_vp9_frame_decode_params *hdr)
+
++				     struct v4l2_ctrl_vp9_frame *hdr)
+
+  {
+
+  	unsigned int rows_log2;
+
+  	unsigned int cols_log2;
+
+@@ -909,19 +909,10 @@ static void vdec_vp9_slice_setup_state(struct 
+vdec_vp9_slice_vsi *vsi)
+
+  	memset(&vsi->state, 0, sizeof(vsi->state));
+
+  }
+
+
+
+-static void vdec_vp9_slice_setup_ref_idx(struct vdec_vp9_slice_pfc *pfc,
+
+-					 struct v4l2_ctrl_vp9_frame_decode_params *hdr)
+
+-{
+
+-	int i;
+
+-
+
+-	for (i = 0; i < 3; i++)
+
+-		pfc->ref_idx[i] = hdr->refs[i];
+
+-}
+
+-
+
+  static int vdec_vp9_slice_setup_pfc(struct vdec_vp9_slice_instance *instance,
+
+  				    struct vdec_vp9_slice_pfc *pfc)
+
+  {
+
+-	struct v4l2_ctrl_vp9_frame_decode_params *hdr;
+
++	struct v4l2_ctrl_vp9_frame *hdr;
+
+  	struct vdec_vp9_slice_uncompressed_header *uh;
+
+  	struct v4l2_ctrl *hdr_ctrl;
+
+  	struct vdec_vp9_slice_vsi *vsi;
+
+@@ -929,7 +920,7 @@ static int vdec_vp9_slice_setup_pfc(struct 
+vdec_vp9_slice_instance *instance,
+
+
+
+  	/* frame header */
+
+  	hdr_ctrl = v4l2_ctrl_find(&instance->ctx->ctrl_hdl,
+
+-				  V4L2_CID_MPEG_VIDEO_VP9_FRAME_DECODE_PARAMS);
+
++				  V4L2_CID_STATELESS_VP9_FRAME);
+
+  	if (!hdr_ctrl || !hdr_ctrl->p_cur.p)
+
+  		return -EINVAL;
+
+
+
+@@ -949,7 +940,9 @@ static int vdec_vp9_slice_setup_pfc(struct 
+vdec_vp9_slice_instance *instance,
+
+  	vdec_vp9_slice_setup_state(vsi);
+
+
+
+  	/* core stage needs buffer index to get ref y/c ... */
+
+-	vdec_vp9_slice_setup_ref_idx(pfc, hdr);
+
++	pfc->ref_idx[0] = hdr->last_frame_ts;
+
++	pfc->ref_idx[1] = hdr->golden_frame_ts;
+
++	pfc->ref_idx[2] = hdr->alt_frame_ts;
+
+
+
+  	pfc->seq = instance->seq;
+
+  	instance->seq++;
+
+@@ -1789,7 +1782,7 @@ static void vdec_vp9_slice_get_crop_info(struct 
+vdec_vp9_slice_instance *instanc
+
+  			 cr->left, cr->top, cr->width, cr->height);
+
+  }
+
+
+
+-static int vdec_vp9_slice_get_param(void *h_vdec, vdec_get_param_type type, void *out)
+
++static int vdec_vp9_slice_get_param(void *h_vdec, enum vdec_get_param_type type, 
+void *out)
+
+  {
+
+  	struct vdec_vp9_slice_instance *instance = h_vdec;
+
+
+
 -- 
-1.8.3.1
+
+2.33.1
 

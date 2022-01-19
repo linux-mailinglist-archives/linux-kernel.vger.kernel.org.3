@@ -2,192 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A724493D55
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2599493D59
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355817AbiASPhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:37:04 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:54300 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352437AbiASPhD (ORCPT
+        id S1355822AbiASPiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355749AbiASPiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:37:03 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 13986212C2;
-        Wed, 19 Jan 2022 15:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642606622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yy7uZ+QDDUdD3y4+31E5IV8g2YY1wZT39Hu1q90QqiQ=;
-        b=ooI513y+dRQPUFXznGYC9LkauTvhYG8rZxwhA7bwef27uwMZta/98j+G5D081dhGSBOaIY
-        D4U+iovUNK4e5xY/ZcGapIgq39Ppsxuon4dujIBK0xvI4xCfk6zH2nbe1s5mN8S1/S5UpZ
-        pPbpaWmkoUfagRfbF4Ce68fcxfm8TCQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642606622;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yy7uZ+QDDUdD3y4+31E5IV8g2YY1wZT39Hu1q90QqiQ=;
-        b=XxfXC8gOsY5+utbJpyv4l9EPUaobcr4jIMDKk/Y7QReTrHwiFoG/C7SZww42CJpB0joIMe
-        myTi7KlgEHuCO/Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B899013E15;
-        Wed, 19 Jan 2022 15:37:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id plT6Kx0w6GHVCgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 19 Jan 2022 15:37:01 +0000
-Message-ID: <ccec8635-6ec6-89c3-6738-65bd07a48508@suse.de>
-Date:   Wed, 19 Jan 2022 16:37:01 +0100
+        Wed, 19 Jan 2022 10:38:54 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E30C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:38:54 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so1805455pju.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:38:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ca2VVrnwlbvkOz2O67u7fxspTtkKF37Zaj8dip0NjTQ=;
+        b=D1jpejDpd9SMLs89An6WE28gBHy6FegBK7DonnMALByufJSIEcSb5p5hKjTI5MLl+4
+         iVi34d4vAd5Nc6xAEQk+tXbttiqJpqF6nCwqpIuEpUTyiLzHiGd3XGWYfJnvmAiyWs+h
+         ZAJ+N06nw7rDTplqkQnap/3m0bVd3LFKDRasAYV1DjbPbey3+1usvZABiFJKJUeCQI4i
+         m+l2ERGlwqscy0w1cWO0EuBZ6/y+S3+X4pAFCn0F3lw1ezfdKJdNhvva0shcKaiwqfSe
+         oLbLxHsWF06qBzzDvKZ1j1VZlyckuV3Eyf698jGbB1s6DmBpBA+btW+abEGT+nG9FPML
+         iCtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ca2VVrnwlbvkOz2O67u7fxspTtkKF37Zaj8dip0NjTQ=;
+        b=ml5lhHRGniQjj/mSY92/lAZ9s04qt6nAV0vXin0f0uzkStBH382sXmDtxszSWdTAUN
+         MbeDLWhq+ML+fRmTVGtIATVZQW27lCiJjUBsLibS9EL1i4FRaow7UWgL4dvqjDEg0IMt
+         NppezogyGSdtPlKMwFQ2Ze/2IFzMUmyepaBXYenSLV4xgsIOvdk8CtIZXBQxIjoUi7pn
+         Q5ZeJSU9VSuUwNQz1AmLGjVrLqpKcpUF5kOiBbGEuigvgm49RJKARHsWMKliSIPaB0C6
+         5DKjDPTaJ8SP+ZA8kxPYuJSlP5om0t1T6kkhDwfygz5tZ9jF+teZMu09I4nvBafzsq4w
+         Y0xQ==
+X-Gm-Message-State: AOAM5325o/688vRZlGW92XiAXF77Kh+DpYATUTa3KyyR3SO7WTcuw/Tk
+        2fa+G5G831pGtN3qZBzei0hUb6/Oe6PbdsInhipvfA==
+X-Google-Smtp-Source: ABdhPJyckmQwC/qNjWRRotvjJu/qG2q60dVDPU3XeJd75TWb7Jx+auxcDK3Hpfc+XfNGFfDj++T0IN+8JFs6IuRIuqk=
+X-Received: by 2002:a17:90b:3e8e:: with SMTP id rj14mr5020906pjb.179.1642606733843;
+ Wed, 19 Jan 2022 07:38:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-Content-Language: en-US
-To:     Sven Schnelle <svens@stackframe.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Gerd Hoffmann <kraxel@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de> <Yef0j8+DBbwC7Kjv@kroah.com>
- <Yef15k2GtC40aJEu@kroah.com>
- <CAMuHMdVWFJEDwjf-htZ_D1484efmuPnz_L-qhcTeUE-GVpvZXA@mail.gmail.com>
- <4d8950c7-5f51-ca2b-4c93-741c7805a214@gmx.de>
- <CAHk-=wikFKjwdUBWCLCu=iL3rFq4BDDF0aBGdXC6ay74yJb+5Q@mail.gmail.com>
- <CAKMK7uEb53iu_HxYSnFZ59j=vXQdMvTWT7xosEo85XkAwzDMnA@mail.gmail.com>
- <8735ljkboo.fsf@x1.stackframe.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <8735ljkboo.fsf@x1.stackframe.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------gWgXlBM6luHpgwUeody7d7Fc"
+References: <20220119151751.986185-1-hsinyi@chromium.org>
+In-Reply-To: <20220119151751.986185-1-hsinyi@chromium.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 19 Jan 2022 16:38:42 +0100
+Message-ID: <CAG3jFys5_jo68Arot=qYXjk0yL-5Z9-ybTipOTrS1Aa-C4PrNQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] drm/bridge: anx7625: send DPCD command to downstream
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------gWgXlBM6luHpgwUeody7d7Fc
-Content-Type: multipart/mixed; boundary="------------1n0AowBnC0QreoQcDd1C604p";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sven Schnelle <svens@stackframe.org>, Daniel Vetter <daniel@ffwll.ch>
-Cc: Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
- Daniel Vetter <daniel.vetter@intel.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, Helge Deller
- <deller@gmx.de>, Javier Martinez Canillas <javierm@redhat.com>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Tomi Valkeinen <tomi.valkeinen@ti.com>, Claudio Suarez <cssk@net-c.es>,
- Gerd Hoffmann <kraxel@redhat.com>, Pavel Machek <pavel@ucw.cz>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Sam Ravnborg <sam@ravnborg.org>
-Message-ID: <ccec8635-6ec6-89c3-6738-65bd07a48508@suse.de>
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de> <Yef0j8+DBbwC7Kjv@kroah.com>
- <Yef15k2GtC40aJEu@kroah.com>
- <CAMuHMdVWFJEDwjf-htZ_D1484efmuPnz_L-qhcTeUE-GVpvZXA@mail.gmail.com>
- <4d8950c7-5f51-ca2b-4c93-741c7805a214@gmx.de>
- <CAHk-=wikFKjwdUBWCLCu=iL3rFq4BDDF0aBGdXC6ay74yJb+5Q@mail.gmail.com>
- <CAKMK7uEb53iu_HxYSnFZ59j=vXQdMvTWT7xosEo85XkAwzDMnA@mail.gmail.com>
- <8735ljkboo.fsf@x1.stackframe.org>
-In-Reply-To: <8735ljkboo.fsf@x1.stackframe.org>
+On Wed, 19 Jan 2022 at 16:17, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> From: Xin Ji <xji@analogixsemi.com>
+>
+> Send DPCD command to downstream before anx7625 power down,
+> let downstream monitor enter into standby mode.
+>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
---------------1n0AowBnC0QreoQcDd1C604p
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hsin-Yi: Can you supply a r-b tag to this patch if it looks good to you?
 
-SGkNCg0KQW0gMTkuMDEuMjIgdW0gMTY6MDUgc2NocmllYiBTdmVuIFNjaG5lbGxlOg0KPiBE
-YW5pZWwgVmV0dGVyIDxkYW5pZWxAZmZ3bGwuY2g+IHdyaXRlczoNCj4gDQo+PiBPbiBXZWQs
-IEphbiAxOSwgMjAyMiBhdCAzOjAxIFBNIExpbnVzIFRvcnZhbGRzDQo+PiA8dG9ydmFsZHNA
-bGludXgtZm91bmRhdGlvbi5vcmc+IHdyb3RlOg0KPj4gSXJyZXNwZWN0aXZlIG9mIHRoaXMg
-Y29kZSBiZWluZyBidWdneSBvciBub3QgYnVnZ3kgSSB0aGluayB0aGUgYmlnZ2VyDQo+PiBw
-aWN0dXJlcywgYW5kIHJlYWxseSB0aGUgcmVhc29uIEkgd2FudCB0byBzZWUgYXMgbXVjaCBj
-b2RlIGRpdGNoZWQNCj4+IGZyb20gdGhlIGZiZGV2L2ZiY29uIHN0YWNrIGFzIHdlIHBvc3Np
-YmxlIGNhbiwgYXJlIHZlcnkgY2xlYXI6DQo+Pg0KPj4gLSBpdCdzIGZ1bGwgb2YgYnVncw0K
-Pj4gLSB0aGVyZSdzIG5vIHRlc3QgY292ZXJhZ2UvQ0kgdG8gc3BlYWsgb2YNCj4+IC0gaXQn
-cyB2ZXJ5IGFyY2FuZSBjb2RlIHdoaWNoIGlzIGRhbW4gaGFyZCB0byB1bmRlcnN0YW5kIGFu
-ZCBmaXggaXNzdWVzIHdpdGhpbg0KPj4gLSB0aGUgbG9ja2luZyBpcyBidXN0ZWQgKGxhcmdl
-bHkgdGhhbmtzIHRvIGNvbnNvbGVfbG9jaywgYW5kIHRoZQ0KPj4gZWZmb3J0IHRvIG1ha2Ug
-dGhhdCByZWFzb25hYmxlIGZyb20gLXJ0IGZvbGtzIGhhcyBiZWVuIHNsb3dseSBjcmVlcGlu
-Zw0KPj4gZm9yd2FyZCBmb3IgeWVhcnMpLg0KPj4NCj4+IElvdyB0aGlzIHN1YnN5c3RlbSBp
-cyBmaXJtbHkgc3R1Y2sgaW4gdGhlIDkwcywgYW5kIEkgdGhpbmsgaXQncyBiZXN0DQo+PiB0
-byBqdXN0IGxlYXZlIGl0IHRoZXJlLiBUaGVyZSdzIGFsc28gbm90IGJlZW4gYW55b25lIGFj
-dHVhbGx5IGNhcGFibGUNCj4+IGFuZCB3aWxsaW5nIHRvIHB1dCBpbiB0aGUgd29yayB0byBj
-aGFuZ2UgdGhpcyAocHJldHR5IG11Y2ggYWxsIGFjdHVhbA0KPj4gY2hhbmdlcy9maXhlcyBo
-YXZlIGJlZW4gZG9uZSBieSBkcm0gZm9sa3MgYW55d2F5LCBsaWtlIG1lIGhhdmluZyBhDQo+
-PiBzbWFsbCBwZXQgcHJvamVjdCB0byBtYWtlIHRoZSBmYmRldiB2cyBmYmNvbiBsb2NraW5n
-IHNsaWdodGx5IGxlc3MNCj4+IGJ1c3RlZCkuDQo+IA0KPiBTYXlpbmcgaXQncyBzdHVjayBp
-biB0aGUgOTBpZXMsIGFuZCBhY3RpdmVseSB0cnlpbmcgdG8gcHJldmVudA0KPiBIZWxnZSBm
-cm9tIHRha2luZyBvdmVyIG1haW50YWluZXJzaGlwIGF0IHRoZSBzYW1lIHRpbWUgbG9va3Mg
-b2RkLg0KDQpUaGUgaXNzdWVzIGFyZSBpbiB0aGUgZGVzaWduIGl0c2VsZi4gSXQncyBpbXBv
-c3NpYmxlIHRvIG1vZGVsIHRvZGF5J3MgDQpoYXJkd2FyZSBhbmQgY29uc3RyYWludHMgd2l0
-aCBmYmRldi4gSXQncyBpbXBvc3NpYmxlIHRvIGNoYW5nZSANCmNvbmZpZ3VyYXRpb24gaW4g
-YSByZWxpYWJsZSB3YXkgKGkuZS4sIHdoYXQgRFJNIGNhbGxzIGF0b21pYykuIEZiZGV2IA0K
-bW1hcHMgcGxhaW4gdmlkZW8gcmFtIHRvIHVzZXJzcGFjZSwgd2hpY2ggaXMgb25lIG9mIHRo
-ZSByZWFzb25zIHdoeSANCkRSTSdzIGZiZGV2IHN1cHBvcnQgaXMgaGFyZCB0byBpbXByb3Zl
-Lg0KDQo+IEkgdGhpbmsgSGVsZ2Ugc2hvdWxkIGF0IGxlYXN0IGdldCBhIGNoYW5jZSB0byBm
-aXggdGhlIGlzc3Vlcy4gSWYgdGhlDQo+IHN0YXRlIGlzIHN0aWxsIHRoZSBzYW1lIGluIGEg
-eWVhciBvciBzbyBpdCBzaG91bGQgYmUgZGlzY3Vzc2VkIGFnYWluLg0KDQpZb3UgY2Fubm90
-IGZpeCB0aGF0IGluIDEweXJzLg0KDQo+IA0KPj4gVGhlIG90aGVyIHNpZGUgaXMgdGhhdCBi
-ZWluZyBhIG1haW50YWluZXIgaXMgYWJvdXQgY29sbGFib3JhdGlvbiwgYW5kDQo+PiB0aGlz
-IGVudGlyZSBmYmRldiBtYWludGFpbmVyc2hpcCB0YWtlb3ZlciBoYXMgYmVlbiBhIGRlbW9u
-c3RyYXRpb24gb2YNCj4+IGFueXRoaW5nIGJ1dCB0aGF0LiBNQUlOVEFJTkVSUyBlbnRyeSB3
-YXMgYSBiaXQgY29uZnVzaW5nIHNpbmNlIGRlZmFjdG8NCj4+IGRybSBoYXMgYmVlbiBtYWlu
-dGFpbmluZyBpdCBmb3IgeWVhcnMuDQo+IA0KPiBJdCB3YXMgbWFya2VkIGFzICdPcnBoYW5l
-ZCcuIEFueW9uZSBpcyBmcmVlIHRvIHNlbmQgYSBQYXRjaC9QUiB0byB0YWtlDQo+IG92ZXIg
-bWFpbnRhaW5lcnNoaXAuIElmIHlvdSBoYXZlIHN0cm9uZyBvcGluaW9ucyBhYm91dCB0aGF0
-IGNvZGUgKEFuZCB5b3UNCj4gb2J2aW91c2x5IGhhdmUgcmVhZGluZyB5b3VyIG1haWwsIHNl
-dCBpdCB0byAnbWFpbnRhaW5lZCcgYW5kIGNhcmUgYWJvdXQNCj4gaXQuIEV2ZXJ5dGhpbmcg
-ZWxzZSBpcyBqdXN0IHdyb25nIGluIG15IG9waW5pb24uDQoNCk5vLCBpdCdzIG5vdCB3cm9u
-Zy4gSGVsZ2UgdGFrZXMgZmJkZXYgb3ZlciB0aGUgd2Vla2VuZCwgd2l0aG91dCANCm5vdGV3
-b3J0aHkgZXhwZXJpZW5jZSwgYW5kIGlnbm9yZXMgYWR2aWNlIGZyb20gdGhlIHBlb3BsZSB0
-aGF0IGhhdmUga2VwdCANCml0IGFsaXZlIG92ZXIgdGhlIHBhc3QgeWVhcnMuIFRoaXMgaXNu
-J3QgZ29pbmcgdG8gd29yayBpbiB0aGUgbG9uZyB0ZXJtLg0KDQpCZXN0IHJlZ2FyZHMNClRo
-b21hcw0KDQo+IA0KPiAvU3Zlbg0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGlj
-cyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdt
-YkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgw
-OSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
-
---------------1n0AowBnC0QreoQcDd1C604p--
-
---------------gWgXlBM6luHpgwUeody7d7Fc
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHoMB0FAwAAAAAACgkQlh/E3EQov+DD
-ABAAl6tvXvOROEJYeyhcthr4oAyhsP9RZGai62SVbs5YFEnjrBHJsOg822HsJLwQM78sUpi04tMl
-HNlGKteJxBL9I7ytTXo7sS5RFaNaC2DmugssxDX/kOe2kyBjBomLXsxYVf6s/uBFl1FMKYwAreS+
-xeUJAizResiT8i5kapbCVdUEc2siM0KlKOHgHdQC24G94KnV67JRJkewZhlJF4WyewtBQGeYKnPx
-Z00eP3z1i2h24wEq7aaDPRocViFksDosfvXl3i/ssrkQ4JLz22OFgW9S1uJjh0hHTlwdqInnTH8W
-PGuXVWC5L9/rFRCekpAOBCjr5DRzotXcD5r0XPqIlEnxHl82H67yQmEPvpC11JNjwOroTYcJ14Ai
-ohq0AvEaK0kNMNW19FCSnLwYXHCWiqzLfAo1oGst7TahwNgt0IP1JpyluTfSUAcmmRhZEI+RBDgb
-Sn7KP5V5dVzdOykuM322V3e6ZXukhzxJT+5AvC73Ir37V/ag2RWEy04QvYt2EUOwbsizI4F2bNah
-zDgEND9y1CE9YnEUiBHaL92IeLps4S7JK6tyVGfj/QaodrynBB09XL7TOzewF1zedMqwPxAAIK8s
-vmptZ03Q3/aMq1tYPMUx2slwYYB3KdiJxqRmuHYwdP6qnKbfh/kpUQzy2kzIT1IRVc3XAxJq+NP+
-bF0=
-=TGDD
------END PGP SIGNATURE-----
-
---------------gWgXlBM6luHpgwUeody7d7Fc--
+> ---
+> v3->v4:
+> Use common DP_AUX_NATIVE_READ/WRITE
+>
+> Previously in:
+> https://patchwork.kernel.org/project/dri-devel/patch/1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com/
+> ---
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 42 +++++++++++++++++++----
+>  drivers/gpu/drm/bridge/analogix/anx7625.h |  2 --
+>  2 files changed, 35 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 76662fce4ce61d..17b23940549a42 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -129,6 +129,23 @@ static int anx7625_reg_write(struct anx7625_data *ctx,
+>         return ret;
+>  }
+>
+> +static int anx7625_reg_block_write(struct anx7625_data *ctx,
+> +                                  struct i2c_client *client,
+> +                                  u8 reg_addr, u8 len, u8 *buf)
+> +{
+> +       int ret;
+> +       struct device *dev = &client->dev;
+> +
+> +       i2c_access_workaround(ctx, client);
+> +
+> +       ret = i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
+> +       if (ret < 0)
+> +               dev_err(dev, "write i2c block failed id=%x\n:%x",
+> +                       client->addr, reg_addr);
+> +
+> +       return ret;
+> +}
+> +
+>  static int anx7625_write_or(struct anx7625_data *ctx,
+>                             struct i2c_client *client,
+>                             u8 offset, u8 mask)
+> @@ -214,8 +231,8 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
+>         return 0;
+>  }
+>
+> -static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+> -                                u32 address, u8 len, u8 *buf)
+> +static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
+> +                                 u32 address, u8 len, u8 *buf)
+>  {
+>         struct device *dev = &ctx->client->dev;
+>         int ret;
+> @@ -231,8 +248,7 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+>         addrm = (address >> 8) & 0xFF;
+>         addrh = (address >> 16) & 0xFF;
+>
+> -       cmd = DPCD_CMD(len, DPCD_READ);
+> -       cmd = ((len - 1) << 4) | 0x09;
+> +       cmd = DPCD_CMD(len, op);
+>
+>         /* Set command and length */
+>         ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+> @@ -246,6 +262,9 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+>         ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+>                                  AP_AUX_ADDR_19_16, addrh);
+>
+> +       if (op == DP_AUX_NATIVE_WRITE)
+> +               ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
+> +                                              AP_AUX_BUFF_START, len, buf);
+>         /* Enable aux access */
+>         ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
+>                                 AP_AUX_CTRL_STATUS, AP_AUX_CTRL_OP_EN);
+> @@ -255,14 +274,17 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+>                 return -EIO;
+>         }
+>
+> -       usleep_range(2000, 2100);
+> -
+>         ret = wait_aux_op_finish(ctx);
+>         if (ret) {
+>                 dev_err(dev, "aux IO error: wait aux op finish.\n");
+>                 return ret;
+>         }
+>
+> +       /* Write done */
+> +       if (op == DP_AUX_NATIVE_WRITE)
+> +               return 0;
+> +
+> +       /* Read done, read out dpcd data */
+>         ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
+>                                      AP_AUX_BUFF_START, len, buf);
+>         if (ret < 0) {
+> @@ -845,7 +867,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+>         }
+>
+>         /* Read downstream capability */
+> -       anx7625_aux_dpcd_read(ctx, 0x68028, 1, &bcap);
+> +       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+>         if (!(bcap & 0x01)) {
+>                 pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+>                 return 0;
+> @@ -918,6 +940,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+>  {
+>         struct device *dev = &ctx->client->dev;
+>         int ret;
+> +       u8 data;
+>
+>         DRM_DEV_DEBUG_DRIVER(dev, "stop dp output\n");
+>
+> @@ -929,6 +952,11 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+>         ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client, 0x08, 0x7f);
+>
+>         ret |= anx7625_video_mute_control(ctx, 1);
+> +
+> +       dev_dbg(dev, "notify downstream enter into standby\n");
+> +       /* Downstream monitor enter into standby mode */
+> +       data = 2;
+> +       ret |= anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
+>         if (ret < 0)
+>                 DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> index 56165f5b254c14..64a8ab56529404 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> @@ -242,8 +242,6 @@
+>
+>  #define AP_AUX_COMMAND 0x27  /* com+len */
+>  #define LENGTH_SHIFT   4
+> -#define DPCD_READ      0x09
+> -#define DPCD_WRITE     0x08
+>  #define DPCD_CMD(len, cmd)     ((((len) - 1) << LENGTH_SHIFT) | (cmd))
+>
+>  /* Bit 0&1: 3D video structure */
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>

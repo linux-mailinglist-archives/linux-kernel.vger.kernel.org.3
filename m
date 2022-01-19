@@ -2,374 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBEE493CA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F293493CAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355529AbiASPIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S1355526AbiASPJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355517AbiASPIO (ORCPT
+        with ESMTP id S1355520AbiASPJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:08:14 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34305C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:08:14 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id h12so2710592pjq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:08:14 -0800 (PST)
+        Wed, 19 Jan 2022 10:09:06 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD901C06161C;
+        Wed, 19 Jan 2022 07:09:05 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id w7so3157619ioj.5;
+        Wed, 19 Jan 2022 07:09:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=865W3nngZbj66iHqIMRPmys+V8jiTQCV4utpzwueQJA=;
-        b=YG4ABSlLGxGSrrRltRwvLxFF9nwfGLmtMLgSHo2CdjLJO7BJknSzRna5RdBvJEZmQH
-         dQOw4YeX1AXc3l9hACYmCaxK7QJfkcBh73x/emEW8K6Y1SkZYcrKhEWTEu5E6aL7LAj2
-         0QoYBMz3lwS3KaWNjiZ1K0HChm/Mo8ejT2DlEof45M8NFRoLxouM8OJsrQikw9VAxcZj
-         iq2XmCv+uiksx0OBsdFf/D8UKdfkPExVFdi/+1fPnUyM4aRLi7Ovua474NO7A9chx3X4
-         FvQiCUJAhb25MBILLFGdyo9NOEN07tMgX4rO6x93aDlCO0IX/kwbk4pkuZa8hlk6Wc6y
-         ZsIQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rvoGj6ZYJR4bkFIZ4aH+9g/0KXb5mCEXSRTjlmku4Ew=;
+        b=LUSc4DQT5K2iYtsLubnv0nxvIRt2DKT5QCo/0+TzhpElkmxKSWYEDmVfZ/XyHSASvo
+         RgWK06W2UK/RnavP+bkIeaNWKa4+QDxK1cMUeN5iUCpew8bwP5LfXaraimqGxdQh4ksN
+         bvJUKWp1OcPjhfeM11PaV1cIEROhZUVlDjgQ9f9xnsEDGs04ZAaadDWS9wORAMtF4tea
+         dJJf5HxhcvqRrltm8qcLhPHxzSTw5y1FjGB7FFbiirRXgsSVBRsVQM0DmZWWedQJkeyL
+         hm9Hpyd5hxy62a3D9rBE3izm2qbO7XBxDAW44FkBad30hkL4Y0fgJ7oQE3l/I0rWOR0C
+         5/Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=865W3nngZbj66iHqIMRPmys+V8jiTQCV4utpzwueQJA=;
-        b=bcRnr6NGbTlmzOGw7KPf57zEZaliOvYk+vQ2s6mQaRjtu80Bkq5u1abYZY3AKOVbrs
-         3pb6ThNttXa9CzGwoJ4uFfp9UBOh33l9q0xLTC8Tcu7DBRB0S9fMdYxYN0XlIlLvKuh/
-         JeSkCL9lF8XsDcAF109nZyHyvPPgkYnG2wPqcv04wtrwscgZYTv3Yh0IDFDI2iBCnXvG
-         xrlQtz3BaxUOYUVhuQAdPCeNPCWsLheq/WBRWuf5G1FQh+NNn7UaoBqOB3q968t5jCxs
-         PdG0ETAXqqOj4DIFu6zeqTukuIkh1l8dN/31rdKwC4qnw3B6+muwwUnoHKeygi7sOc/L
-         xKZg==
-X-Gm-Message-State: AOAM530gWvf1jU4/9OA+fVY2yCnF9ddINhU1wo6JBKOFbHxO/E8Qtyy6
-        austuaxlcwS98bpvEHoznzjS3ff+BWol+Ea7180bRw==
-X-Google-Smtp-Source: ABdhPJwcMT4tKJiHJfVvi5WBPN/bKFpd/Igkn34qt9eq5pGeuRSYRN4P4yURkgQkDW3eKG7t314l2oIPFnAt+W7yYfc=
-X-Received: by 2002:a17:902:b189:b0:149:6c45:24c with SMTP id
- s9-20020a170902b18900b001496c45024cmr33019972plr.21.1642604893365; Wed, 19
- Jan 2022 07:08:13 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rvoGj6ZYJR4bkFIZ4aH+9g/0KXb5mCEXSRTjlmku4Ew=;
+        b=HDJjzjhzWybhfm/VXa/37DKxA83QheP7kr2BrIfbstf4VWM0LhTwShPanvoZkvd5uG
+         C1ublouwvETZ1YjmY8r5HUsX9CjXWLWoyycGSeUbq3LbO80bHVo7ZosopxyzUNkJGBOo
+         FpdsVHu/U556zsltXa073QHH26a0Eoh7+pxsMILU0p/F+Wz11zqaYBvAMiOxdZLwXp4E
+         mCZxPVfwd84pcahIuvvLOh+BjG042ctI8xwwkgJYvtF2pYBCi8vhYvu+fa50y1nCvYkY
+         ECyhwD1cM5ZwCFpC4vYEEcGlhgYlQFyp73tHdmAQrfOUmIORNWbNVa/jqSiOajVXUaFX
+         2BWQ==
+X-Gm-Message-State: AOAM530SONRlVmX9CrxPjEeaNPeVFN3KHNlVpAsPCtyjJC9CB79Ejruq
+        WMm1UhKmCmy9rhdxHedplAY=
+X-Google-Smtp-Source: ABdhPJwyTssGF185vTHFTWqzxox90exPkB2pfDdPQIWxluJAi0rgVk12bIo9q1Em4GqBMnkIzjDzZQ==
+X-Received: by 2002:a05:6638:3052:: with SMTP id u18mr14213985jak.211.1642604945253;
+        Wed, 19 Jan 2022 07:09:05 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id d12sm9995618ioe.27.2022.01.19.07.09.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 07:09:04 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9C06D27C005B;
+        Wed, 19 Jan 2022 10:09:02 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 19 Jan 2022 10:09:02 -0500
+X-ME-Sender: <xms:jSnoYYp5rH5aS2OSAB1fxa4tVLiuy4FwnPwl67mB6A7ZwX7jmakqmA>
+    <xme:jSnoYerXz-Muy9tIAjfsSJC8BFRENbU_QYCfRVHfwZWHTnwIsFuLbC6GnXo_0qYd_
+    DclZLGFuqmsJfZHeA>
+X-ME-Received: <xmr:jSnoYdOCk6o2gw-rRhaHWyxuwsB4zNprzs2bJgVZkMoBvO4PUQodkoNePns>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigddugecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
+    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:jSnoYf6xvwEGnkSoF-TtiRNefiCwt9E_DxVhrp6ZjN19I6Oa59MwuQ>
+    <xmx:jSnoYX7B9I7pnEqpirAwxnXRF963DOuTdKKj5wjQO2wL5uhivNOO3g>
+    <xmx:jSnoYfgyHOm4X_BVReJOSPRPQ2wKaW3TzksL0JUATRsOe4ilX2tBfw>
+    <xmx:jinoYbjzhL9GXUVzBkQF-D_lqJsfJLn2JaKgRiy9uouo1jgGsO04tck8FQA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Jan 2022 10:09:01 -0500 (EST)
+Date:   Wed, 19 Jan 2022 23:08:37 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Baoquan He <bhe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v1] proc/vmcore: fix false positive lockdep warning
+Message-ID: <YegpdRBSrkVBrwk3@boqun-archlinux>
+References: <20220119113702.102567-1-david@redhat.com>
 MIME-Version: 1.0
-References: <20220118092002.4267-1-hsinyi@chromium.org> <20220118092002.4267-3-hsinyi@chromium.org>
-In-Reply-To: <20220118092002.4267-3-hsinyi@chromium.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 19 Jan 2022 16:08:02 +0100
-Message-ID: <CAG3jFyvxRLYFeFzMEzWZSuyeSq_GzgW+h_KJE0NdAMnkinAn7w@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] drm/bridge: anx7625: Support reading edid through
- aux channel
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119113702.102567-1-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 at 10:20, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> Support reading edid through aux channel if panel is connected to aux
-> bus. Extend anx7625_aux_dpcd_trans() to implement aux transfer function:
->
-> 1. panel is populated in devm_of_dp_aux_populate_ep_devices(), so move
->    anx7625_parse_dt() after.
-> 2. Use pm runtime autosuspend since aux transfer function is called
->    multiple times when reading edid.
-> 3. No-op if aux transfer length is 0.
->
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Reviewed-by: Xin Ji <xji@analogixsemi.com>
+Hi,
+
+On Wed, Jan 19, 2022 at 12:37:02PM +0100, David Hildenbrand wrote:
+> Lockdep complains that we do during mmap of the vmcore:
+> 	down_write(mmap_lock);
+> 	down_read(vmcore_cb_rwsem);
+> And during read of the vmcore:
+> 	down_read(vmcore_cb_rwsem);
+> 	down_read(mmap_lock);
+> 
+> We cannot possibly deadlock when only taking vmcore_cb_rwsem in read
+> mode, however, it's hard to teach that to lockdep.
+> 
+
+Lockdep warned about the above sequences because rw_semaphore is a fair
+read-write lock, and the following can cause a deadlock:
+
+	TASK 1			TASK 2		TASK 3
+	======			======		======
+	down_write(mmap_lock);
+				down_read(vmcore_cb_rwsem)
+						down_write(vmcore_cb_rwsem); // blocked
+	down_read(vmcore_cb_rwsem); // cannot get the lock because of the fairness
+				down_read(mmap_lock); // blocked
+	
+IOW, a reader can block another read if there is a writer queued by the
+second reader and the lock is fair.
+
+So there is a deadlock possiblity.
+
+Regards,
+Boqun
+
+
+> So instead, convert to srcu to make lockdep happy. We need srcu as our
+> callbacks can sleep. Witht his change, I cannot trigger any lockdep
+> complaint.
+> 
+> [    6.386519] ======================================================
+> [    6.387203] WARNING: possible circular locking dependency detected
+> [    6.387965] 5.17.0-0.rc0.20220117git0c947b893d69.68.test.fc36.x86_64 #1 Not tainted
+> [    6.388899] ------------------------------------------------------
+> [    6.389657] makedumpfile/542 is trying to acquire lock:
+> [    6.390308] ffffffff832d2eb8 (vmcore_cb_rwsem){.+.+}-{3:3}, at: mmap_vmcore+0x340/0x580
+> [    6.391290]
+> [    6.391290] but task is already holding lock:
+> [    6.391978] ffff8880af226438 (&mm->mmap_lock#2){++++}-{3:3}, at: vm_mmap_pgoff+0x84/0x150
+> [    6.392898]
+> [    6.392898] which lock already depends on the new lock.
+> [    6.392898]
+> [    6.393866]
+> [    6.393866] the existing dependency chain (in reverse order) is:
+> [    6.394762]
+> [    6.394762] -> #1 (&mm->mmap_lock#2){++++}-{3:3}:
+> [    6.395530]        lock_acquire+0xc3/0x1a0
+> [    6.396047]        __might_fault+0x4e/0x70
+> [    6.396562]        _copy_to_user+0x1f/0x90
+> [    6.397093]        __copy_oldmem_page+0x72/0xc0
+> [    6.397663]        read_from_oldmem+0x77/0x1e0
+> [    6.398229]        read_vmcore+0x2c2/0x310
+> [    6.398742]        proc_reg_read+0x47/0xa0
+> [    6.399265]        vfs_read+0x101/0x340
+> [    6.399751]        __x64_sys_pread64+0x5d/0xa0
+> [    6.400314]        do_syscall_64+0x43/0x90
+> [    6.400778]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [    6.401390]
+> [    6.401390] -> #0 (vmcore_cb_rwsem){.+.+}-{3:3}:
+> [    6.402063]        validate_chain+0x9f4/0x2670
+> [    6.402560]        __lock_acquire+0x8f7/0xbc0
+> [    6.403054]        lock_acquire+0xc3/0x1a0
+> [    6.403509]        down_read+0x4a/0x140
+> [    6.403948]        mmap_vmcore+0x340/0x580
+> [    6.404403]        proc_reg_mmap+0x3e/0x90
+> [    6.404866]        mmap_region+0x504/0x880
+> [    6.405322]        do_mmap+0x38a/0x520
+> [    6.405744]        vm_mmap_pgoff+0xc1/0x150
+> [    6.406258]        ksys_mmap_pgoff+0x178/0x200
+> [    6.406823]        do_syscall_64+0x43/0x90
+> [    6.407339]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [    6.407975]
+> [    6.407975] other info that might help us debug this:
+> [    6.407975]
+> [    6.408945]  Possible unsafe locking scenario:
+> [    6.408945]
+> [    6.409684]        CPU0                    CPU1
+> [    6.410196]        ----                    ----
+> [    6.410703]   lock(&mm->mmap_lock#2);
+> [    6.411121]                                lock(vmcore_cb_rwsem);
+> [    6.411792]                                lock(&mm->mmap_lock#2);
+> [    6.412465]   lock(vmcore_cb_rwsem);
+> [    6.412873]
+> [    6.412873]  *** DEADLOCK ***
+> [    6.412873]
+> [    6.413522] 1 lock held by makedumpfile/542:
+> [    6.414006]  #0: ffff8880af226438 (&mm->mmap_lock#2){++++}-{3:3}, at: vm_mmap_pgoff+0x84/0x150
+> [    6.414944]
+> [    6.414944] stack backtrace:
+> [    6.415432] CPU: 0 PID: 542 Comm: makedumpfile Not tainted 5.17.0-0.rc0.20220117git0c947b893d69.68.test.fc36.x86_64 #1
+> [    6.416581] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+> [    6.417272] Call Trace:
+> [    6.417593]  <TASK>
+> [    6.417882]  dump_stack_lvl+0x5d/0x78
+> [    6.418346]  print_circular_bug+0x5d7/0x5f0
+> [    6.418821]  ? stack_trace_save+0x3a/0x50
+> [    6.419273]  ? save_trace+0x3d/0x330
+> [    6.419681]  check_noncircular+0xd1/0xe0
+> [    6.420217]  validate_chain+0x9f4/0x2670
+> [    6.420715]  ? __lock_acquire+0x8f7/0xbc0
+> [    6.421234]  ? __lock_acquire+0x8f7/0xbc0
+> [    6.421685]  __lock_acquire+0x8f7/0xbc0
+> [    6.422127]  lock_acquire+0xc3/0x1a0
+> [    6.422535]  ? mmap_vmcore+0x340/0x580
+> [    6.422965]  ? lock_is_held_type+0xe2/0x140
+> [    6.423432]  ? mmap_vmcore+0x340/0x580
+> [    6.423893]  down_read+0x4a/0x140
+> [    6.424321]  ? mmap_vmcore+0x340/0x580
+> [    6.424800]  mmap_vmcore+0x340/0x580
+> [    6.425237]  ? vm_area_alloc+0x1c/0x60
+> [    6.425661]  ? trace_kmem_cache_alloc+0x30/0xe0
+> [    6.426174]  ? kmem_cache_alloc+0x1e0/0x2f0
+> [    6.426641]  proc_reg_mmap+0x3e/0x90
+> [    6.427052]  mmap_region+0x504/0x880
+> [    6.427462]  do_mmap+0x38a/0x520
+> [    6.427842]  vm_mmap_pgoff+0xc1/0x150
+> [    6.428260]  ksys_mmap_pgoff+0x178/0x200
+> [    6.428701]  do_syscall_64+0x43/0x90
+> [    6.429126]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [    6.429745] RIP: 0033:0x7fc7359b8fc7
+> [    6.430157] Code: 00 00 00 89 ef e8 69 b3 ff ff eb e4 e8 c2 64 01 00 66 90 f3 0f 1e fa 41 89 ca 41 f7 c1 ff 0f 00 00 75 10 b8 09 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 21 c3 48 8b 05 21 7e 0e 00 64 c7 00 16 00 00
+> [    6.432147] RSP: 002b:00007fff35b4c208 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
+> [    6.432970] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fc7359b8fc7
+> [    6.433746] RDX: 0000000000000001 RSI: 0000000000400000 RDI: 0000000000000000
+> [    6.434529] RBP: 000055a1125ecf10 R08: 0000000000000003 R09: 0000000000002000
+> [    6.435310] R10: 0000000000000002 R11: 0000000000000246 R12: 0000000000002000
+> [    6.436093] R13: 0000000000400000 R14: 000055a1124269e2 R15: 0000000000000000
+> [    6.436887]  </TASK>
+> 
+> Reported-by: Baoquan He <bhe@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Baoquan He <bhe@redhat.com>
+> Cc: Vivek Goyal <vgoyal@redhat.com>
+> Cc: Dave Young <dyoung@redhat.com>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
-> v3->v4:
-> rebase to latest drm-misc-next
+> 
+> Based on next-20220118
+> 
 > ---
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 120 ++++++++++++++++++----
->  drivers/gpu/drm/bridge/analogix/anx7625.h |   1 +
->  2 files changed, 103 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index b7e3373994b480..50b9c98277f0d7 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -24,6 +24,7 @@
->  #include <drm/drm_atomic_helper.h>
->  #include <drm/drm_bridge.h>
->  #include <drm/drm_crtc_helper.h>
-> +#include <drm/drm_dp_aux_bus.h>
-
-drivers/gpu/drm/bridge/analogix/anx7625.c:27:10: fatal error:
-drm/drm_dp_aux_bus.h: No such file or directory
-   27 | #include <drm/drm_dp_aux_bus.h>
-
-drm/dp/rm_dp_aux_bus.h is probably the correct path.
-
->  #include <drm/dp/drm_dp_helper.h>
->  #include <drm/drm_edid.h>
->  #include <drm/drm_hdcp.h>
-> @@ -231,19 +232,23 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
->         return 0;
->  }
->
-> -static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
-> -                                 u32 address, u8 len, u8 *buf)
-> +static int anx7625_aux_trans(struct anx7625_data *ctx, u8 op, u32 address,
-> +                            u8 len, u8 *buf)
+>  fs/proc/vmcore.c | 41 ++++++++++++++++++++++-------------------
+>  1 file changed, 22 insertions(+), 19 deletions(-)
+> 
+> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+> index 702754dd1daf..edeb01dfe05d 100644
+> --- a/fs/proc/vmcore.c
+> +++ b/fs/proc/vmcore.c
+> @@ -62,7 +62,8 @@ core_param(novmcoredd, vmcoredd_disabled, bool, 0);
+>  /* Device Dump Size */
+>  static size_t vmcoredd_orig_sz;
+>  
+> -static DECLARE_RWSEM(vmcore_cb_rwsem);
+> +static DEFINE_SPINLOCK(vmcore_cb_lock);
+> +DEFINE_STATIC_SRCU(vmcore_cb_srcu);
+>  /* List of registered vmcore callbacks. */
+>  static LIST_HEAD(vmcore_cb_list);
+>  /* Whether the vmcore has been opened once. */
+> @@ -70,8 +71,8 @@ static bool vmcore_opened;
+>  
+>  void register_vmcore_cb(struct vmcore_cb *cb)
 >  {
->         struct device *dev = &ctx->client->dev;
->         int ret;
->         u8 addrh, addrm, addrl;
->         u8 cmd;
-> +       bool is_write = !(op & DP_AUX_I2C_READ);
->
-> -       if (len > MAX_DPCD_BUFFER_SIZE) {
-> +       if (len > DP_AUX_MAX_PAYLOAD_BYTES) {
->                 dev_err(dev, "exceed aux buffer len.\n");
->                 return -EINVAL;
->         }
->
-> +       if (!len)
-> +               return len;
-> +
->         addrl = address & 0xFF;
->         addrm = (address >> 8) & 0xFF;
->         addrh = (address >> 16) & 0xFF;
-> @@ -262,7 +267,7 @@ static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
->         ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
->                                  AP_AUX_ADDR_19_16, addrh);
->
-> -       if (op == DP_AUX_NATIVE_WRITE)
-> +       if (is_write)
->                 ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
->                                                AP_AUX_BUFF_START, len, buf);
->         /* Enable aux access */
-> @@ -275,14 +280,14 @@ static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
->         }
->
->         ret = wait_aux_op_finish(ctx);
-> -       if (ret) {
-> +       if (ret < 0) {
->                 dev_err(dev, "aux IO error: wait aux op finish.\n");
->                 return ret;
->         }
->
->         /* Write done */
-> -       if (op == DP_AUX_NATIVE_WRITE)
-> -               return 0;
-> +       if (is_write)
-> +               return len;
->
->         /* Read done, read out dpcd data */
->         ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
-> @@ -292,7 +297,7 @@ static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
->                 return -EIO;
->         }
->
-> -       return 0;
-> +       return len;
+> -	down_write(&vmcore_cb_rwsem);
+>  	INIT_LIST_HEAD(&cb->next);
+> +	spin_lock(&vmcore_cb_lock);
+>  	list_add_tail(&cb->next, &vmcore_cb_list);
+>  	/*
+>  	 * Registering a vmcore callback after the vmcore was opened is
+> @@ -79,14 +80,14 @@ void register_vmcore_cb(struct vmcore_cb *cb)
+>  	 */
+>  	if (vmcore_opened)
+>  		pr_warn_once("Unexpected vmcore callback registration\n");
+> -	up_write(&vmcore_cb_rwsem);
+> +	spin_unlock(&vmcore_cb_lock);
 >  }
->
->  static int anx7625_video_mute_control(struct anx7625_data *ctx,
-> @@ -867,7 +872,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
->         }
->
->         /* Read downstream capability */
-> -       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
-> +       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
->         if (!(bcap & 0x01)) {
->                 pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
->                 return 0;
-> @@ -956,7 +961,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
->         dev_dbg(dev, "notify downstream enter into standby\n");
->         /* Downstream monitor enter into standby mode */
->         data = 2;
-> -       ret |= anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
-> +       ret |= anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
->         if (ret < 0)
->                 DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
->
-> @@ -1655,11 +1660,56 @@ static int anx7625_parse_dt(struct device *dev,
->         return 0;
->  }
->
-> +static bool anx7625_of_panel_on_aux_bus(struct device *dev)
-> +{
-> +       struct device_node *bus, *panel;
-> +
-> +       bus = of_get_child_by_name(dev->of_node, "aux-bus");
-> +       if (!bus)
-> +               return false;
-> +
-> +       panel = of_get_child_by_name(bus, "panel");
-> +       of_node_put(bus);
-> +       if (!panel)
-> +               return false;
-> +       of_node_put(panel);
-> +
-> +       return true;
-> +}
-> +
->  static inline struct anx7625_data *bridge_to_anx7625(struct drm_bridge *bridge)
+>  EXPORT_SYMBOL_GPL(register_vmcore_cb);
+>  
+>  void unregister_vmcore_cb(struct vmcore_cb *cb)
 >  {
->         return container_of(bridge, struct anx7625_data, bridge);
+> -	down_write(&vmcore_cb_rwsem);
+> -	list_del(&cb->next);
+> +	spin_lock(&vmcore_cb_lock);
+> +	list_del_rcu(&cb->next);
+>  	/*
+>  	 * Unregistering a vmcore callback after the vmcore was opened is
+>  	 * very unusual (e.g., forced driver removal), but we cannot stop
+> @@ -94,7 +95,9 @@ void unregister_vmcore_cb(struct vmcore_cb *cb)
+>  	 */
+>  	if (vmcore_opened)
+>  		pr_warn_once("Unexpected vmcore callback unregistration\n");
+> -	up_write(&vmcore_cb_rwsem);
+> +	spin_unlock(&vmcore_cb_lock);
+> +
+> +	synchronize_srcu(&vmcore_cb_srcu);
 >  }
->
-> +static ssize_t anx7625_aux_transfer(struct drm_dp_aux *aux,
-> +                                    struct drm_dp_aux_msg *msg)
-
-checkpatch --strict is unhappy about the above line not using as many
-tabs as possible.
-
-> +{
-> +       struct anx7625_data *ctx = container_of(aux, struct anx7625_data, aux);
-> +       struct device *dev = &ctx->client->dev;
-> +       u8 request = msg->request & ~DP_AUX_I2C_MOT;
-> +       int ret = 0;
-> +
-> +       pm_runtime_get_sync(dev);
-> +       msg->reply = 0;
-> +       switch (request) {
-> +       case DP_AUX_NATIVE_WRITE:
-> +       case DP_AUX_I2C_WRITE:
-> +       case DP_AUX_NATIVE_READ:
-> +       case DP_AUX_I2C_READ:
-> +               break;
-> +       default:
-> +               ret = -EINVAL;
-> +       }
-> +       if (!ret)
-> +               ret = anx7625_aux_trans(ctx, msg->request, msg->address,
-> +                                       msg->size, msg->buffer);
-> +       pm_runtime_mark_last_busy(dev);
-> +       pm_runtime_put_autosuspend(dev);
-> +
-> +       return ret;
-> +}
-> +
->  static struct edid *anx7625_get_edid(struct anx7625_data *ctx)
->  {
->         struct device *dev = &ctx->client->dev;
-> @@ -2066,6 +2116,13 @@ static int anx7625_bridge_attach(struct drm_bridge *bridge,
->                 return -ENODEV;
->         }
->
-> +       ctx->aux.drm_dev = bridge->dev;
-> +       err = drm_dp_aux_register(&ctx->aux);
-> +       if (err) {
-> +               dev_err(dev, "failed to register aux channel: %d\n", err);
-> +               return err;
-> +       }
-> +
->         if (ctx->pdata.panel_bridge) {
->                 err = drm_bridge_attach(bridge->encoder,
->                                         ctx->pdata.panel_bridge,
-> @@ -2079,6 +2136,13 @@ static int anx7625_bridge_attach(struct drm_bridge *bridge,
->         return 0;
->  }
->
-> +static void anx7625_bridge_detach(struct drm_bridge *bridge)
-> +{
-> +       struct anx7625_data *ctx = bridge_to_anx7625(bridge);
-> +
-> +       drm_dp_aux_unregister(&ctx->aux);
-> +}
-> +
->  static enum drm_mode_status
->  anx7625_bridge_mode_valid(struct drm_bridge *bridge,
->                           const struct drm_display_info *info,
-> @@ -2344,6 +2408,7 @@ static struct edid *anx7625_bridge_get_edid(struct drm_bridge *bridge,
->
->  static const struct drm_bridge_funcs anx7625_bridge_funcs = {
->         .attach = anx7625_bridge_attach,
-> +       .detach = anx7625_bridge_detach,
->         .mode_valid = anx7625_bridge_mode_valid,
->         .mode_set = anx7625_bridge_mode_set,
->         .atomic_check = anx7625_bridge_atomic_check,
-> @@ -2501,6 +2566,12 @@ static const struct dev_pm_ops anx7625_pm_ops = {
->                            anx7625_runtime_pm_resume, NULL)
->  };
->
-> +static void anx7625_runtime_disable(void *data)
-> +{
-> +       pm_runtime_dont_use_autosuspend(data);
-> +       pm_runtime_disable(data);
-> +}
-> +
->  static int anx7625_i2c_probe(struct i2c_client *client,
->                              const struct i2c_device_id *id)
->  {
-> @@ -2523,13 +2594,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->
->         pdata = &platform->pdata;
->
-> -       ret = anx7625_parse_dt(dev, pdata);
-> -       if (ret) {
-> -               if (ret != -EPROBE_DEFER)
-> -                       DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
-> -               return ret;
-> -       }
+>  EXPORT_SYMBOL_GPL(unregister_vmcore_cb);
+>  
+> @@ -103,9 +106,8 @@ static bool pfn_is_ram(unsigned long pfn)
+>  	struct vmcore_cb *cb;
+>  	bool ret = true;
+>  
+> -	lockdep_assert_held_read(&vmcore_cb_rwsem);
 > -
->         platform->client = client;
->         i2c_set_clientdata(client, platform);
->
-> @@ -2577,6 +2641,19 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->                 }
->         }
->
-> +       platform->aux.name = "anx7625-aux";
-> +       platform->aux.dev = dev;
-> +       platform->aux.transfer = anx7625_aux_transfer;
-> +       drm_dp_aux_init(&platform->aux);
-> +       devm_of_dp_aux_populate_ep_devices(&platform->aux);
-> +
-> +       ret = anx7625_parse_dt(dev, pdata);
-> +       if (ret) {
-> +               if (ret != -EPROBE_DEFER)
-> +                       DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
-> +               return ret;
-> +       }
-> +
->         if (anx7625_register_i2c_dummy_clients(platform, client) != 0) {
->                 ret = -ENOMEM;
->                 DRM_DEV_ERROR(dev, "fail to reserve I2C bus.\n");
-> @@ -2584,6 +2661,12 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->         }
->
->         pm_runtime_enable(dev);
-> +       pm_runtime_set_autosuspend_delay(dev, 1000);
-> +       pm_runtime_use_autosuspend(dev);
-> +       pm_suspend_ignore_children(dev, true);
-> +       ret = devm_add_action_or_reset(dev, anx7625_runtime_disable, dev);
-> +       if (ret)
-> +               return ret;
->
->         if (!platform->pdata.low_power_mode) {
->                 anx7625_disable_pd_protocol(platform);
-> @@ -2596,7 +2679,8 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->
->         platform->bridge.funcs = &anx7625_bridge_funcs;
->         platform->bridge.of_node = client->dev.of_node;
-> -       platform->bridge.ops = DRM_BRIDGE_OP_EDID;
-> +       if (!anx7625_of_panel_on_aux_bus(&client->dev))
-> +               platform->bridge.ops |= DRM_BRIDGE_OP_EDID;
->         if (!platform->pdata.panel_bridge)
->                 platform->bridge.ops |= DRM_BRIDGE_OP_HPD |
->                                         DRM_BRIDGE_OP_DETECT;
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> index 64a8ab56529404..edbbfe410a56e8 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> @@ -472,6 +472,7 @@ struct anx7625_data {
->         u8 bridge_attached;
->         struct drm_connector *connector;
->         struct mipi_dsi_device *dsi;
-> +       struct drm_dp_aux aux;
->  };
->
->  #endif  /* __ANX7625_H__ */
-> --
-> 2.34.1.703.g22d0c6ccf7-goog
->
+> -	list_for_each_entry(cb, &vmcore_cb_list, next) {
+> +	list_for_each_entry_srcu(cb, &vmcore_cb_list, next,
+> +				 srcu_read_lock_held(&vmcore_cb_srcu)) {
+>  		if (unlikely(!cb->pfn_is_ram))
+>  			continue;
+>  		ret = cb->pfn_is_ram(cb, pfn);
+> @@ -118,9 +120,9 @@ static bool pfn_is_ram(unsigned long pfn)
+>  
+>  static int open_vmcore(struct inode *inode, struct file *file)
+>  {
+> -	down_read(&vmcore_cb_rwsem);
+> +	spin_lock(&vmcore_cb_lock);
+>  	vmcore_opened = true;
+> -	up_read(&vmcore_cb_rwsem);
+> +	spin_unlock(&vmcore_cb_lock);
+>  
+>  	return 0;
+>  }
+> @@ -133,6 +135,7 @@ ssize_t read_from_oldmem(char *buf, size_t count,
+>  	unsigned long pfn, offset;
+>  	size_t nr_bytes;
+>  	ssize_t read = 0, tmp;
+> +	int idx;
+>  
+>  	if (!count)
+>  		return 0;
+> @@ -140,7 +143,7 @@ ssize_t read_from_oldmem(char *buf, size_t count,
+>  	offset = (unsigned long)(*ppos % PAGE_SIZE);
+>  	pfn = (unsigned long)(*ppos / PAGE_SIZE);
+>  
+> -	down_read(&vmcore_cb_rwsem);
+> +	idx = srcu_read_lock(&vmcore_cb_srcu);
+>  	do {
+>  		if (count > (PAGE_SIZE - offset))
+>  			nr_bytes = PAGE_SIZE - offset;
+> @@ -165,7 +168,7 @@ ssize_t read_from_oldmem(char *buf, size_t count,
+>  						       offset, userbuf);
+>  		}
+>  		if (tmp < 0) {
+> -			up_read(&vmcore_cb_rwsem);
+> +			srcu_read_unlock(&vmcore_cb_srcu, idx);
+>  			return tmp;
+>  		}
+>  
+> @@ -176,8 +179,8 @@ ssize_t read_from_oldmem(char *buf, size_t count,
+>  		++pfn;
+>  		offset = 0;
+>  	} while (count);
+> +	srcu_read_unlock(&vmcore_cb_srcu, idx);
+>  
+> -	up_read(&vmcore_cb_rwsem);
+>  	return read;
+>  }
+>  
+> @@ -568,18 +571,18 @@ static int vmcore_remap_oldmem_pfn(struct vm_area_struct *vma,
+>  			    unsigned long from, unsigned long pfn,
+>  			    unsigned long size, pgprot_t prot)
+>  {
+> -	int ret;
+> +	int ret, idx;
+>  
+>  	/*
+> -	 * Check if oldmem_pfn_is_ram was registered to avoid
+> -	 * looping over all pages without a reason.
+> +	 * Check if a callback was registered to avoid looping over all
+> +	 * pages without a reason.
+>  	 */
+> -	down_read(&vmcore_cb_rwsem);
+> +	idx = srcu_read_lock(&vmcore_cb_srcu);
+>  	if (!list_empty(&vmcore_cb_list))
+>  		ret = remap_oldmem_pfn_checked(vma, from, pfn, size, prot);
+>  	else
+>  		ret = remap_oldmem_pfn_range(vma, from, pfn, size, prot);
+> -	up_read(&vmcore_cb_rwsem);
+> +	srcu_read_unlock(&vmcore_cb_srcu, idx);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.34.1
+> 

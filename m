@@ -2,246 +2,423 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185F8493FDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD246493FD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356746AbiASS1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:27:07 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19438 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348214AbiASS1A (ORCPT
+        id S1356737AbiASS0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:26:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43120 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348214AbiASS0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:27:00 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JIBX1I002452;
-        Wed, 19 Jan 2022 18:25:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ku5eYJkRRvfueSPTOnW7R+ianVZo6fvlHrek6jhf+XY=;
- b=sF2frLsX9qw/S2nVdvE6+U46vdpX434+PonN3f84f/9DfIR0RK7M1XwvJ/zFFhrW/is5
- PbDnMaYaYCp7Ns0k0uv9vuFe5t0T+8XB4IxK3JkNagH+obN2XBrieNruvAQ0N/iPCZGF
- o+9DrjkKMWOigUgKZA4LoJyuRFo+faJDFTu/Wd2/01R2GBIMVkO+mi5qPXJq1NvhWfzn
- TPVOFtiUoXxp5p7UPYU+tUb9lb0TAgIHAF22qTEoFOZT6ALUmTYW82UP7nQpUZpQfiBm
- doYkhBK2Zi9jf/FAjEegxmsNHMVUxnRbLyXx6sxAouSvVhAc4nZ0uyB04bnxsSqAEo6P sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmva4vbq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 18:25:31 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JIGDC5019359;
-        Wed, 19 Jan 2022 18:25:31 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmva4vam-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 18:25:30 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JIHfGX010896;
-        Wed, 19 Jan 2022 18:25:28 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3dknhjfnc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 18:25:28 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JIPMOt32440578
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 18:25:22 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A29E0A405B;
-        Wed, 19 Jan 2022 18:25:22 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25E95A4067;
-        Wed, 19 Jan 2022 18:25:21 +0000 (GMT)
-Received: from [9.171.34.112] (unknown [9.171.34.112])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 18:25:21 +0000 (GMT)
-Message-ID: <a4a26805-3a56-d264-0a7e-60bed1ada9f3@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 19:25:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 0/7] kvm: fix latent guest entry/exit bugs
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, frankja@linux.ibm.com,
-        frederic@kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
-        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
-        luto@kernel.org, maz@kernel.org, mingo@redhat.com,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paul.walmsley@sifive.com, peterz@infradead.org, seanjc@google.com,
-        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>
-References: <20220119105854.3160683-1-mark.rutland@arm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220119105854.3160683-1-mark.rutland@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8cyLvImprCnKTfTBQJM24Mh7mmd9b8TG
-X-Proofpoint-ORIG-GUID: ut1XHMXJWeosxeFmFYV_UtRnCTJjVtbk
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 19 Jan 2022 13:26:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA1A6168C;
+        Wed, 19 Jan 2022 18:26:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB883C004E1;
+        Wed, 19 Jan 2022 18:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642616772;
+        bh=NvrT/dDc0DcnZFzBs+zt/ziG8OWPA3G0GZg/SpUIVQ8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vBVCdG9CRXbFnVixDAfVx6KrBHtcdZ0qiMrAB/b+UlBrxKEzEenv2cLIZvODfKYCB
+         wRtHAIVJvPmFOXXOSGKy1EAZ++ZKIOqs83MC6x1s2HREbqWaK86eoM3UjUKbiCQArY
+         AeD63PnhwWmnBDbmvA1L/AWYF/73ejY4uXH3JHbSiiJqyBSNOHcaxXTmwlSk0QM0GW
+         HwbhvuU4lg/b3X+uX+2hZLn/whUTzm9x1p1pWxSBlcQhbTKb2KWGuI95r3KTkthY3C
+         GKtGBLOCx/Px+hatMDoCluDhHiLcrzH2WmyEC4xk6fa/yYid6TnWAwdGM9T6x1fEAq
+         qy7DXZRGaNtNw==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 5.17-rc1
+Date:   Wed, 19 Jan 2022 10:26:11 -0800
+Message-Id: <20220119182611.400333-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 clxscore=1011
- suspectscore=0 impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201190102
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 19.01.22 um 11:58 schrieb Mark Rutland:
+Hi Linus!
 
+Quite a handful of old regression fixes but of those all are pre-5.16.
 
-CCing new emails for Anup and Atish so that they are aware of this thread.
+The following changes since commit fe8152b38d3a994c4c6fdbc0cd6551d569a5715a:
 
-> Several architectures have latent bugs around guest entry/exit. This
-> series addresses those for:
-> 
-> 	arm64, mips, riscv, s390, x86
-> 
-> However, I'm not sure how to address powerpc and could do with some help
-> there. I have build-tested the arm64, mips, riscv, s390, and x86 cases,
-> but I don't have a suitable HW setup to test these, so any review and/or
-> testing would be much appreciated.
-> 
-> Issues include:
-> 
-> 1) Several architectures enable interrupts between guest_enter() and
->     guest_exit(). As this period is an RCU extended quiescent state (EQS)
->     this is unsound unless the irq entry code explicitly wakes RCU, which
->     most architectures only do for entry from usersapce or idle.
-> 
->     I believe this affects: arm64, riscv, s390
-> 
->     I am not sure about powerpc.
-> 
-> 2) Several architectures permit instrumentation of code between
->     guest_enter() and guest_exit(), e.g. KASAN, KCOV, KCSAN, etc. As
->     instrumentation may directly o indirectly use RCU, this has the same
->     problems as with interrupts.
-> 
->     I believe this affects: arm64, mips, powerpc, riscv, s390
-> 
-> 3) Several architectures do not inform lockdep and tracing that
->     interrupts are enabled during the execution of the guest, or do so in
->     an incorrect order. Generally this means that logs will report IRQs
->     being masked for much longer than is actually the case, which is not
->     ideal for debugging. I don't know whether this affects the
->     correctness of lockdep.
-> 
->     I believe this affects: arm64, mips, powerpc, riscv, s390
-> 
-> This was previously fixed for x86 specifically in a series of commits:
-> 
->    87fa7f3e98a1310e ("x86/kvm: Move context tracking where it belongs")
->    0642391e2139a2c1 ("x86/kvm/vmx: Add hardirq tracing to guest enter/exit")
->    9fc975e9efd03e57 ("x86/kvm/svm: Add hardirq tracing on guest enter/exit")
->    3ebccdf373c21d86 ("x86/kvm/vmx: Move guest enter/exit into .noinstr.text")
->    135961e0a7d555fc ("x86/kvm/svm: Move guest enter/exit into .noinstr.text")
->    160457140187c5fb ("KVM: x86: Defer vtime accounting 'til after IRQ handling")
->    bc908e091b326467 ("KVM: x86: Consolidate guest enter/exit logic to common helpers")
-> 
-> But other architectures were left broken, and the infrastructure for
-> handling this correctly is x86-specific.
-> 
-> This series introduces generic helper functions which can be used to
-> handle the problems above, and migrates architectures over to these,
-> fixing the latent issues. For s390, where the KVM guest EQS is
-> interruptible, I've added infrastructure to wake RCU during this EQS.
-> 
-> Since v1 [1]:
-> * Add arch_in_rcu_eqs()
-> * Convert s390
-> * Rename exit_to_guest_mode() -> guest_state_enter_irqoff()
-> * Rename enter_from_guest_mode() -> guest_state_exit_irqoff()
-> * Various commit message cleanups
-> 
-> I've pushed the series (based on v5.16) to my kvm/entry-rework branch:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
->    git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
-> 
-> ... with this version tagged as kvm-entry-rework-20210119.
-> 
-> [1] https://lore.kernel.org/r/20220111153539.2532246-1-mark.rutland@arm.com/
-> 
-> Thanks,
-> Mark.
-> 
-> Mark Rutland (7):
->    entry: add arch_in_rcu_eqs()
->    kvm: add guest_state_{enter,exit}_irqoff()
->    kvm/arm64: rework guest entry logic
->    kvm/mips: rework guest entry logic
->    kvm/riscv: rework guest entry logic
->    kvm/s390: rework guest entry logic
->    kvm/x86: rework guest entry logic
-> 
->   arch/arm64/kvm/arm.c                 |  51 +++++++-----
->   arch/mips/kvm/mips.c                 |  37 ++++++++-
->   arch/riscv/kvm/vcpu.c                |  44 +++++++----
->   arch/s390/include/asm/entry-common.h |  10 +++
->   arch/s390/include/asm/kvm_host.h     |   3 +
->   arch/s390/kvm/kvm-s390.c             |  49 +++++++++---
->   arch/s390/kvm/vsie.c                 |  17 ++--
->   arch/x86/kvm/svm/svm.c               |   4 +-
->   arch/x86/kvm/vmx/vmx.c               |   4 +-
->   arch/x86/kvm/x86.c                   |   4 +-
->   arch/x86/kvm/x86.h                   |  45 -----------
->   include/linux/entry-common.h         |  16 ++++
->   include/linux/kvm_host.h             | 112 ++++++++++++++++++++++++++-
->   kernel/entry/common.c                |   3 +-
->   14 files changed, 286 insertions(+), 113 deletions(-)
-> 
+  Merge tag 'devprop-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm (2022-01-10 20:48:19 -0800)
 
+are available in the Git repository at:
 
-I just gave this a spin on s390 with debugging on and I got the following:
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc1
 
-[  457.151295] ------------[ cut here ]------------
-[  457.151311] WARNING: CPU: 14 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter.constprop.0+0xf8/0x118
-[  457.151324] Modules linked in: vhost_vsock vmw_vsock_virtio_transport_common vsock vhost vhost_iotlb xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT xt_tcpudp nft_compat nf_nat_tftp nft_objref nf_conntrack_tftp nft_counter kvm nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink sunrpc mlx5_ib ib_uverbs s390_trng ib_core genwqe_card crc_itu_t vfio_ccw mdev vfio_iommu_type1 eadm_sch vfio zcrypt_cex4 sch_fq_codel configfs ip_tables x_tables mlx5_core ghash_s390 prng aes_s390 des_s390 libdes sha3_512_s390 sha3_256_s390 sha512_s390 sha256_s390 sha1_s390 sha_common pkey zcrypt rng_core autofs4
-[  457.151422] CPU: 14 PID: 0 Comm: swapper/14 Not tainted 5.16.0-00007-g89e9021389e2 #3
-[  457.151428] Hardware name: IBM 3906 M04 704 (LPAR)
-[  457.151432] Krnl PSW : 0404d00180000000 00000000a7c0495c (rcu_eqs_enter.constprop.0+0xfc/0x118)
-[  457.151440]            R:0 T:1 IO:0 EX:0 Key:0 M:1 W:0 P:0 AS:3 CC:1 PM:0 RI:0 EA:3
-[  457.151445] Krnl GPRS: ffffffffebd81d31 4000000000000000 0000000000000070 00000000a7fd7024
-[  457.151450]            0000000000000000 0000000000000001 0000000000000000 0000000000000000
-[  457.151454]            000000000000000e 000000000000000e 00000000a84d3a88 0000001fd8645c00
-[  457.151458]            0000000000000000 0000000000000000 00000000a7c04882 0000038000653dc0
-[  457.151468] Krnl Code: 00000000a7c0494c: ebaff0a00004	lmg	%r10,%r15,160(%r15)
-                           00000000a7c04952: c0f4fffffef7	brcl	15,00000000a7c04740
-                          #00000000a7c04958: af000000		mc	0,0
-                          >00000000a7c0495c: a7f4ffa3		brc	15,00000000a7c048a2
-                           00000000a7c04960: c0e500003f70	brasl	%r14,00000000a7c0c840
-                           00000000a7c04966: a7f4ffcd		brc	15,00000000a7c04900
-                           00000000a7c0496a: c0e500003f6b	brasl	%r14,00000000a7c0c840
-                           00000000a7c04970: a7f4ffde		brc	15,00000000a7c0492c
-[  457.151527] Call Trace:
-[  457.151530]  [<00000000a7c0495c>] rcu_eqs_enter.constprop.0+0xfc/0x118
-[  457.151536] ([<00000000a7c04882>] rcu_eqs_enter.constprop.0+0x22/0x118)
-[  457.151540]  [<00000000a7c14cd2>] default_idle_call+0x62/0xd8
-[  457.151545]  [<00000000a6f816c6>] do_idle+0xf6/0x1b0
-[  457.151553]  [<00000000a6f81a06>] cpu_startup_entry+0x36/0x40
-[  457.151558]  [<00000000a7c16abe>] restart_int_handler+0x6e/0x90
-[  457.151563] no locks held by swapper/14/0.
-[  457.151567] Last Breaking-Event-Address:
-[  457.151570]  [<00000000a7c0489e>] rcu_eqs_enter.constprop.0+0x3e/0x118
-[  457.151574] irq event stamp: 608654
-[  457.151578] hardirqs last  enabled at (608653): [<00000000a70190d8>] tick_nohz_idle_enter+0xb0/0x130
-[  457.151584] hardirqs last disabled at (608654): [<00000000a6f8173e>] do_idle+0x16e/0x1b0
-[  457.151589] softirqs last  enabled at (608586): [<00000000a7c1861a>] __do_softirq+0x4ba/0x668
-[  457.151594] softirqs last disabled at (608581): [<00000000a6f367c6>] __irq_exit_rcu+0x13e/0x170
-[  457.151600] ---[ end trace 2ae2154f9724de86 ]---
+for you to fetch changes up to ff9fc0a31d85fcf0011eb4bc4ecaf47d3cc9e21c:
 
-I can not see right now whats wrong, your patches look sane.
+  Merge branch 'ipv4-avoid-pathological-hash-tables' (2022-01-19 08:14:43 -0800)
+
+----------------------------------------------------------------
+Networking fixes for 5.17-rc1, including fixes from netfilter, bpf.
+
+Current release - regressions:
+
+ - fix memory leaks in the skb free deferral scheme if upper layer
+   protocols are used, i.e. in-kernel TCP readers like TLS
+
+Current release - new code bugs:
+
+ - nf_tables: fix NULL check typo in _clone() functions
+
+ - change the default to y for Vertexcom vendor Kconfig
+
+ - a couple of fixes to incorrect uses of ref tracking
+
+ - two fixes for constifying netdev->dev_addr
+
+Previous releases - regressions:
+
+ - bpf:
+   - various verifier fixes mainly around register offset handling
+     when passed to helper functions
+   - fix mount source displayed for bpffs (none -> bpffs)
+
+ - bonding:
+   - fix extraction of ports for connection hash calculation
+   - fix bond_xmit_broadcast return value when some devices are down
+
+ - phy: marvell: add Marvell specific PHY loopback
+
+ - sch_api: don't skip qdisc attach on ingress, prevent ref leak
+
+ - htb: restore minimal packet size handling in rate control
+
+ - sfp: fix high power modules without diagnostic monitoring
+
+ - mscc: ocelot:
+   - don't let phylink re-enable TX PAUSE on the NPI port
+   - don't dereference NULL pointers with shared tc filters
+
+ - smsc95xx: correct reset handling for LAN9514
+
+ - cpsw: avoid alignment faults by taking NET_IP_ALIGN into account
+
+ - phy: micrel: use kszphy_suspend/_resume for irq aware devices,
+   avoid races with the interrupt
+
+Previous releases - always broken:
+
+ - xdp: check prog type before updating BPF link
+
+ - smc: resolve various races around abnormal connection termination
+
+ - sit: allow encapsulated IPv6 traffic to be delivered locally
+
+ - axienet: fix init/reset handling, add missing barriers,
+   read the right status words, stop queues correctly
+
+ - add missing dev_put() in sock_timestamping_bind_phc()
+
+Misc:
+
+ - ipv4: prevent accidentally passing RTO_ONLINK to
+   ip_route_output_key_hash() by sanitizing flags
+
+ - ipv4: avoid quadratic behavior in netns dismantle
+
+ - stmmac: dwmac-oxnas: add support for OX810SE
+
+ - fsl: xgmac_mdio: add workaround for erratum A-009885
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Alex Elder (3):
+      net: ipa: fix atomic update in ipa_endpoint_replenish()
+      net: ipa: use a bitmap for endpoint replenish_enabled
+      net: ipa: prevent concurrent replenish
+
+Ard Biesheuvel (1):
+      net: cpsw: avoid alignment faults by taking NET_IP_ALIGN into account
+
+Christophe JAILLET (1):
+      net: ethernet: sun4i-emac: Fix an error handling path in emac_probe()
+
+Christy Lee (1):
+      bpf: Fix incorrect integer literal used for marking scratched stack.
+
+Claudiu Beznea (1):
+      net: phy: micrel: use kszphy_suspend()/kszphy_resume for irq aware devices
+
+Colin Ian King (3):
+      nfc: pn544: make array rset_cmd static const
+      net: phy: at803x: make array offsets static
+      atm: iphase: remove redundant pointer skb
+
+Conley Lee (1):
+      net: ethernet: sun4i-emac: replace magic number with macro
+
+Daniel Borkmann (7):
+      bpf: Generalize check_ctx_reg for reuse with other types
+      bpf: Mark PTR_TO_FUNC register initially with zero offset
+      bpf: Generally fix helper register offset check
+      bpf: Fix out of bounds access for ringbuf helpers
+      bpf: Fix ringbuf memory type confusion when passing to helpers
+      bpf, selftests: Add various ringbuf tests with invalid offset
+      bpf, selftests: Add ringbuf memory type confusion test
+
+David S. Miller (4):
+      Merge branch 'ipa-fixes'
+      Merge branch 'smc-race-fixes'
+      Merge branch 'skb-leak-fixes'
+      Merge branch 'axienet-fixes'
+
+Eric Dumazet (10):
+      net: sched: do not allocate a tracker in tcf_exts_init()
+      ref_tracker: use __GFP_NOFAIL more carefully
+      net: bridge: fix net device refcount tracking issue in error path
+      net/smc: fix possible NULL deref in smc_pnet_add_eth()
+      inet: frags: annotate races around fqdir->dead and fqdir->high_thresh
+      af_unix: annote lockless accesses to unix_tot_inflight & gc_in_progress
+      ipv4: update fib_info_cnt under spinlock protection
+      netns: add schedule point in ops_exit_list()
+      ipv4: avoid quadratic behavior in netns dismantle
+      ipv4: add net_hash_mix() dispersion to fib_info_laddrhash keys
+
+Gal Pressman (2):
+      net/tls: Fix another skb memory leak when running kTLS traffic
+      net: Flush deferred skb free on socket destroy
+
+Guillaume Nault (4):
+      xfrm: Don't accidentally set RTO_ONLINK in decode_session4()
+      gre: Don't accidentally set RTO_ONLINK in gre_fill_metadata_dst()
+      libcxgb: Don't accidentally set RTO_ONLINK in cxgb_find_route()
+      mlx5: Don't accidentally set RTO_ONLINK before mlx5e_route_lookup_ipv4_get()
+
+Horatiu Vultur (1):
+      net: ocelot: Fix the call to switchdev_bridge_port_offload
+
+Ignat Korchagin (1):
+      sit: allow encapsulated IPv6 traffic to be delivered locally
+
+Jakub Kicinski (5):
+      Merge branch 'ipv4-fix-accidental-rto_onlink-flags-passed-to-ip_route_output_key_hash'
+      Merge branch 'arm-ox810se-add-ethernet-support'
+      Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+      Merge branch 'net-fsl-xgmac_mdio-add-workaround-for-erratum-a-009885'
+      Merge branch 'ipv4-avoid-pathological-hash-tables'
+
+Jie Wang (1):
+      net: bonding: fix bond_xmit_broadcast return value error bug
+
+Jordy Zomer (1):
+      nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
+
+Kai-Heng Feng (1):
+      net: stmmac: Fix "Unbalanced pm_runtime_enable!" warning
+
+Kevin Bracey (1):
+      net_sched: restore "mpu xxx" handling
+
+Krzysztof Kozlowski (1):
+      nfc: llcp: fix NULL error pointer dereference on sendmsg() after failed bind()
+
+Kyoungkyu Park (1):
+      net: qmi_wwan: Add Hucom Wireless HM-211S/K
+
+Li Zhijian (2):
+      kselftests/net: adapt the timeout to the largest runtime
+      kselftests/net: list all available tests in usage()
+
+Markus Reichl (1):
+      net: usb: Correct reset handling of smsc95xx
+
+Matt Johnston (1):
+      mctp: test: zero out sockaddr
+
+Maxim Mikityanskiy (1):
+      sch_api: Don't skip qdisc attach on ingress
+
+Miaoqian Lin (1):
+      lib82596: Fix IRQ check in sni_82596_probe
+
+Michael Ellerman (2):
+      net: apple: mace: Fix build since dev_addr constification
+      net: apple: bmac: Fix build since dev_addr constification
+
+Michael Walle (1):
+      Revert "of: net: support NVMEM cells with MAC in text format"
+
+Miroslav Lichvar (1):
+      net: fix sock_timestamping_bind_phc() to release device
+
+Mohammad Athari Bin Ismail (1):
+      net: phy: marvell: add Marvell specific PHY loopback
+
+Moshe Tal (1):
+      bonding: Fix extraction of ports from the packet headers
+
+Neil Armstrong (2):
+      dt-bindings: net: oxnas-dwmac: Add bindings for OX810SE
+      net: stmmac: dwmac-oxnas: Add support for OX810SE
+
+Pablo Neira Ayuso (1):
+      netfilter: nf_tables: typo NULL check in _clone() function
+
+Pawel Dembicki (1):
+      net: qmi_wwan: add ZTE MF286D modem 19d2:1485
+
+Robert Hancock (9):
+      net: axienet: increase reset timeout
+      net: axienet: Wait for PhyRstCmplt after core reset
+      net: axienet: reset core on initialization prior to MDIO access
+      net: axienet: add missing memory barriers
+      net: axienet: limit minimum TX ring size
+      net: axienet: Fix TX ring slot available check
+      net: axienet: fix number of TX ring slots for available check
+      net: axienet: fix for TX busy handling
+      net: axienet: increase default TX ring size to 128
+
+Russell King (Oracle) (1):
+      net: sfp: fix high power modules without diagnostic monitoring
+
+Saeed Mahameed (1):
+      Revert "net: vertexcom: default to disabled on kbuild"
+
+Sergey Shtylyov (1):
+      bcmgenet: add WOL IRQ check
+
+Slark Xiao (1):
+      net: wwan: Fix MRU mismatch issue which may lead to data connection lost
+
+Tobias Waldekranz (4):
+      net/fsl: xgmac_mdio: Add workaround for erratum A-009885
+      dt-bindings: net: Document fsl,erratum-a009885
+      powerpc/fsl/dts: Enable WA for erratum A-009885 on fman3l MDIO buses
+      net/fsl: xgmac_mdio: Fix incorrect iounmap when removing module
+
+Toke Høiland-Jørgensen (3):
+      xdp: check prog type before updating BPF link
+      bpf/selftests: convert xdp_link test to ASSERT_* macros
+      bpf/selftests: Add check for updating XDP bpf_link with wrong program type
+
+Tom Rix (2):
+      net: ethernet: mtk_eth_soc: fix error checking in mtk_mac_config()
+      net: mscc: ocelot: fix using match before it is set
+
+Vladimir Oltean (2):
+      net: mscc: ocelot: don't let phylink re-enable TX PAUSE on the NPI port
+      net: mscc: ocelot: don't dereference NULL pointers with shared tc filters
+
+Wen Gu (5):
+      net/smc: Resolve the race between link group access and termination
+      net/smc: Introduce a new conn->lgr validity check helper
+      net/smc: Resolve the race between SMC-R link access and clear
+      net/smc: Remove unused function declaration
+      net/smc: Fix hung_task when removing SMC-R devices
+
+Yafang Shao (1):
+      bpf: Fix mount source show for bpffs
+
+Yevhen Orlov (4):
+      net: marvell: prestera: Cleanup router struct
+      net: marvell: prestera: Refactor get/put VR functions
+      net: marvell: prestera: Refactor router functions
+      net: marvell: prestera: Fix deinit sequence for router
+
+ Documentation/devicetree/bindings/net/fsl-fman.txt |   9 ++
+ .../devicetree/bindings/net/oxnas-dwmac.txt        |   3 +
+ arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi      |   2 +
+ drivers/atm/iphase.c                               |   4 +-
+ drivers/net/bonding/bond_main.c                    |  34 +++--
+ drivers/net/ethernet/allwinner/sun4i-emac.c        |  31 +++--
+ drivers/net/ethernet/allwinner/sun4i-emac.h        |  18 +++
+ drivers/net/ethernet/apple/bmac.c                  |   5 +-
+ drivers/net/ethernet/apple/mace.c                  |  16 ++-
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c     |  10 +-
+ drivers/net/ethernet/chelsio/libcxgb/libcxgb_cm.c  |   3 +-
+ drivers/net/ethernet/freescale/xgmac_mdio.c        |  28 +++--
+ drivers/net/ethernet/i825xx/sni_82596.c            |   3 +-
+ drivers/net/ethernet/marvell/prestera/prestera.h   |   1 -
+ .../net/ethernet/marvell/prestera/prestera_hw.c    |   4 +-
+ .../net/ethernet/marvell/prestera/prestera_main.c  |   1 +
+ .../ethernet/marvell/prestera/prestera_router.c    |  24 ++--
+ .../ethernet/marvell/prestera/prestera_router_hw.c |  40 +++---
+ .../ethernet/marvell/prestera/prestera_router_hw.h |   3 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c        |   2 +-
+ .../net/ethernet/mellanox/mlx5/core/en/tc_tun.c    |   5 +-
+ drivers/net/ethernet/mscc/ocelot.c                 |   5 +-
+ drivers/net/ethernet/mscc/ocelot_flower.c          |  44 +++++--
+ drivers/net/ethernet/mscc/ocelot_net.c             |   6 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c  | 101 +++++++++++----
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   3 +-
+ drivers/net/ethernet/ti/cpsw.c                     |   6 +-
+ drivers/net/ethernet/ti/cpsw_new.c                 |   6 +-
+ drivers/net/ethernet/ti/cpsw_priv.c                |   2 +-
+ drivers/net/ethernet/vertexcom/Kconfig             |   2 +-
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c  | 135 ++++++++++++--------
+ drivers/net/ipa/ipa_endpoint.c                     |  28 +++--
+ drivers/net/ipa/ipa_endpoint.h                     |  17 ++-
+ drivers/net/phy/at803x.c                           |   2 +-
+ drivers/net/phy/marvell.c                          |  56 ++++++++-
+ drivers/net/phy/micrel.c                           |  36 +++---
+ drivers/net/phy/sfp.c                              |  25 +++-
+ drivers/net/usb/qmi_wwan.c                         |   2 +
+ drivers/net/usb/smsc95xx.c                         |   3 +-
+ drivers/net/wwan/mhi_wwan_mbim.c                   |   4 +-
+ drivers/nfc/pn544/i2c.c                            |   2 +-
+ drivers/nfc/st21nfca/se.c                          |  10 ++
+ include/linux/bpf.h                                |   9 +-
+ include/linux/bpf_verifier.h                       |   4 +-
+ include/net/inet_frag.h                            |  11 +-
+ include/net/ipv6_frag.h                            |   3 +-
+ include/net/pkt_cls.h                              |   4 +-
+ include/net/sch_generic.h                          |   5 +
+ kernel/bpf/btf.c                                   |   2 +-
+ kernel/bpf/inode.c                                 |  14 ++-
+ kernel/bpf/verifier.c                              |  81 ++++++++----
+ lib/ref_tracker.c                                  |   5 +-
+ net/bridge/br_if.c                                 |   3 +-
+ net/core/dev.c                                     |   6 +
+ net/core/net_namespace.c                           |   4 +-
+ net/core/of_net.c                                  |  33 ++---
+ net/core/sock.c                                    |   5 +
+ net/ipv4/fib_semantics.c                           |  76 ++++++------
+ net/ipv4/inet_fragment.c                           |   8 +-
+ net/ipv4/ip_fragment.c                             |   3 +-
+ net/ipv4/ip_gre.c                                  |   5 +-
+ net/ipv6/sit.c                                     |   2 +-
+ net/mctp/test/route-test.c                         |   2 +-
+ net/netfilter/nft_connlimit.c                      |   2 +-
+ net/netfilter/nft_last.c                           |   2 +-
+ net/netfilter/nft_limit.c                          |   2 +-
+ net/netfilter/nft_quota.c                          |   2 +-
+ net/nfc/llcp_sock.c                                |   5 +
+ net/sched/sch_api.c                                |   2 +-
+ net/sched/sch_generic.c                            |   1 +
+ net/smc/af_smc.c                                   |   6 +-
+ net/smc/smc.h                                      |   1 +
+ net/smc/smc_cdc.c                                  |   3 +-
+ net/smc/smc_clc.c                                  |   2 +-
+ net/smc/smc_core.c                                 | 137 ++++++++++++++-------
+ net/smc/smc_core.h                                 |  12 ++
+ net/smc/smc_diag.c                                 |   6 +-
+ net/smc/smc_pnet.c                                 |   3 +-
+ net/smc/smc_wr.h                                   |   4 -
+ net/tls/tls_sw.c                                   |   1 +
+ net/unix/garbage.c                                 |  14 ++-
+ net/unix/scm.c                                     |   6 +-
+ net/xfrm/xfrm_policy.c                             |   3 +-
+ tools/testing/selftests/bpf/prog_tests/d_path.c    |  14 +++
+ tools/testing/selftests/bpf/prog_tests/xdp_link.c  |  61 +++++----
+ .../selftests/bpf/progs/test_d_path_check_types.c  |  32 +++++
+ tools/testing/selftests/bpf/progs/test_xdp_link.c  |   6 +
+ tools/testing/selftests/bpf/verifier/ringbuf.c     |  95 ++++++++++++++
+ tools/testing/selftests/bpf/verifier/spill_fill.c  |   2 +-
+ tools/testing/selftests/net/fcnal-test.sh          |   3 +
+ tools/testing/selftests/net/settings               |   2 +-
+ 91 files changed, 1041 insertions(+), 414 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_d_path_check_types.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/ringbuf.c

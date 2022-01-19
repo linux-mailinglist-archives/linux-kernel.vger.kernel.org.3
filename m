@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFEB493D75
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3729D493D77
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355860AbiASPmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:42:36 -0500
-Received: from www62.your-server.de ([213.133.104.62]:52166 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355832AbiASPmf (ORCPT
+        id S1355867AbiASPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355832AbiASPnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:42:35 -0500
-Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nAD6S-000FUR-0G; Wed, 19 Jan 2022 16:42:28 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nAD6R-000O1M-Iy; Wed, 19 Jan 2022 16:42:27 +0100
-Subject: Re: [PATCH riscv-next] riscv: bpf: Fix eBPF's exception tables
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, palmer@rivosinc.com
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Netdev <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>
-References: <20220110165208.1826-1-jszhang@kernel.org>
- <Ydxljv2Q4YNDYRTx@xhacker>
- <CAJ+HfNiS7Ss0FJowPUrrKvuC+1Kn9gXb=VqNoqh3eWJDu=m4Mg@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <1b104397-8cb7-c5c2-92cb-11ce56c9a8de@iogearbox.net>
-Date:   Wed, 19 Jan 2022 16:42:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 19 Jan 2022 10:43:25 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511C8C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:43:25 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so6852225pja.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:43:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=53cNgccwu9x9Cm08nPp6ZXfeb4MexT+F3e1jmMAvo+0=;
+        b=ZnbfZdtrXlDdROZR3VB9P8kHwkJ8JoLEB1jJI81NodHV0ZMJouA3lUhceDmHgimyYH
+         Cs698LS1FB9Zurj8tqf8CBkNca4Sq1w9NCGmuxj0QPIXQTYCnB4fV+vWteAqkXlsnPGK
+         wrVqK7cRLRtxgYVEAv/BEuDztO84EycdqwZ7ykkVDAHgbzrWT3YqLFx6Cf9iSnvAHpt9
+         s20s1WqRfwBXdRIHcwkZdAe6cDbBcfrOORahnxoRlBu7GtftINo8WS4wPawfvU4azpiX
+         wAoGfbsVIQeZpBVG8wajMR3YT896qRHgiPK56RdRrgdIaJ214j0fVJ6MA2aYdvPqdwzN
+         Dz1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=53cNgccwu9x9Cm08nPp6ZXfeb4MexT+F3e1jmMAvo+0=;
+        b=47zZj0L7G1BXiQiIllhPl0O8UWOrPCwoI88haBpME31cWU6zOZLa4LitHsMNmYg4Vg
+         odONGE8CfngOv827NvdOeNvMGnqFHr70KkoDt0t9YH4/MG9uXOlRbt3Xpe6ad5+K0PHh
+         OclYkrZwbMUtiP3eKsq5qnPpv5Q6nkAd/I/40a7CDDV7yXDlxt38L9gT8Fi9pH4VZ5Ek
+         RMQq+u1ydjKsH3/BYNAiQQGlNwQsb5xtWB9tI76bIiOJ6gpJnbWzCfoz1onY1OQSGfnD
+         R/1GBXairYZFMDmLf8hcLaqd3OspG3xX66dT3d2P1zhZDGB0d7dwOBVW+HPHlSjM0gje
+         mrAA==
+X-Gm-Message-State: AOAM5321WMefYyOwffM2EIdX3nh6CV8kTubUBeX00gDkjLEqJnji9Q6i
+        GRZ5AqBJirhNOaB5GQ7pyyH1DA==
+X-Google-Smtp-Source: ABdhPJzZ3X5cu1E7d552V+nPfhq7FeuqWMQJ62DP+ZAbXkWnIHVAhC1iu/lsqw6xlH2BP3WTf7yR6g==
+X-Received: by 2002:a17:90a:d3c8:: with SMTP id d8mr4980055pjw.189.1642607004807;
+        Wed, 19 Jan 2022 07:43:24 -0800 (PST)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id y16sm76086pfl.128.2022.01.19.07.43.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 07:43:24 -0800 (PST)
+Message-ID: <4e13ba95-815a-79a1-e521-5f794963b691@linaro.org>
+Date:   Wed, 19 Jan 2022 07:43:23 -0800
 MIME-Version: 1.0
-In-Reply-To: <CAJ+HfNiS7Ss0FJowPUrrKvuC+1Kn9gXb=VqNoqh3eWJDu=m4Mg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26427/Wed Jan 19 11:42:43 2022)
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220119012417.299060-1-tadeusz.struk@linaro.org>
+ <YefalbN+ApgkQ6zn@hirez.programming.kicks-ass.net>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH] sched/fair: Fix fault in reweight_entity
+In-Reply-To: <YefalbN+ApgkQ6zn@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 11:24 AM, Björn Töpel wrote:
-> On Mon, 10 Jan 2022 at 18:05, Jisheng Zhang <jszhang@kernel.org> wrote:
->> On Tue, Jan 11, 2022 at 12:52:08AM +0800, Jisheng Zhang wrote:
->>> eBPF's exception tables needs to be modified to relative synchronously.
->>>
->>> Suggested-by: Tong Tiangen <tongtiangen@huawei.com>
->>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> 
-> Nice catch, and apologies for the slow response.
-> 
-> Acked-by: Björn Töpel <bjorn@kernel.org>
-> 
->>> ---
->>>   arch/riscv/net/bpf_jit_comp64.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->>> index 69bab7e28f91..44c97535bc15 100644
->>> --- a/arch/riscv/net/bpf_jit_comp64.c
->>> +++ b/arch/riscv/net/bpf_jit_comp64.c
->>> @@ -498,7 +498,7 @@ static int add_exception_handler(const struct bpf_insn *insn,
->>>        offset = pc - (long)&ex->insn;
->>>        if (WARN_ON_ONCE(offset >= 0 || offset < INT_MIN))
->>>                return -ERANGE;
->>> -     ex->insn = pc;
->>> +     ex->insn = offset;
->>
->> Hi Palmer,
->>
->> Tong pointed out this issue but there was something wrong with my email
->> forwarding address, so I didn't get his reply. Today, I searched on
->> lore.kernel.org just found his reply, sorry for inconvenience.
-> 
-> AFAIK, Jisheng's extable work is still in Palmer's for-next tree.
-> 
-> Daniel/Alexei: This eBPF must follow commit 1f77ed9422cb ("riscv:
-> switch to relative extable and other improvements"), which is in
-> Palmer's tree. It cannot go via bpf-next.
+On 1/19/22 01:32, Peter Zijlstra wrote:
+> On Tue, Jan 18, 2022 at 05:24:17PM -0800, Tadeusz Struk wrote:
+>> Syzbot found a GPF in reweight_entity. This has been bisected to commit
+>> c85c6fadbef0 ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> That's a stable commit, the real commit is 4ef0c5c6b5ba1f38f0ea1cedad0cad722f00c14a
 
-Thanks for letting us know, then lets route this fix via Palmer. Maybe he could
-also add Fixes tags when applying, so stable can pick it up later on.
+This is what syzbot bisected it to. I will reference the original commit in the
+next version.
 
-Cheers,
-Daniel
+> 
+>> Looks like after this change there is a time window, when
+>> task_struct->se.cfs_rq can be NULL. This can be exploited to trigger
+>> null-ptr-deref by calling setpriority on that task.
+> Looks like isn't good enough, either there is, in which case you explain
+> the window, or there isn't in which case what are we doing here?
+
+There surely is something wrong, otherwise it wouldn't crash.
+I will try to narrow down the reproducer to better understand what causes
+the fault.
+
+-- 
+Thanks,
+Tadeusz

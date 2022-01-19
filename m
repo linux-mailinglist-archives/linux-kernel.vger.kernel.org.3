@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3E9493E8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5788493E93
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356236AbiASQr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:47:29 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57342 "EHLO
+        id S1356229AbiASQt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:49:57 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57826 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbiASQr2 (ORCPT
+        with ESMTP id S1356170AbiASQt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:47:28 -0500
+        Wed, 19 Jan 2022 11:49:56 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AC9F01F3BC;
-        Wed, 19 Jan 2022 16:47:27 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F3E441F3A8;
+        Wed, 19 Jan 2022 16:49:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642610847; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642610995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UjJ3ktaNdYSegyHdKVMGnjgtmvKLsfVFGp2ETAO7WAo=;
-        b=C3heU29HxtNr5BHLL9mQ2eUgu7bn1m60AhS2BPlfw4iGhItpUyMlWa99/U73lbJmxsEi0X
-        cy/oLEMQchZ4t4umRq7oamJBl85zZs06K0XD9Hs7f6pfZbTNEFaiCBjeuM655ngC2UOxad
-        ZuCAruENiJ9GD2cpC8LUuY/+XL8SPYQ=
+        bh=xyHLINDUQ4p2y/yWxMmsPLf/SDRFaxvEY50CdZCSCAo=;
+        b=HgKhSItFK+7qVaAWcHB1Pqtrbi7X9C5aSs8zeHcGH4nrShattVgbbUJkxCX4seNIYtFtBF
+        APm9WVcYO/rxGZ6LELfGI3eMY55KFNx1fRIQBMJlyAkZl+hLavMDPi3hdtXLTw/Wc/v3l0
+        Tm9vQpVcJv8F+4wpDYgmJVFwl4jufvk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642610847;
+        s=susede2_ed25519; t=1642610995;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UjJ3ktaNdYSegyHdKVMGnjgtmvKLsfVFGp2ETAO7WAo=;
-        b=mQ5yOIpSiWXqQ1B7dva0lqZDD7B/EtUKVlgnCp0qq0DBkkDQ9IBUaUqLUmUwN48zSSPEQi
-        hhz/zbdy+VTQM0CQ==
+        bh=xyHLINDUQ4p2y/yWxMmsPLf/SDRFaxvEY50CdZCSCAo=;
+        b=rBs4LAEl5PYjRPK4HOPx59oD3ebulig9ISiwAY7pY4ywLF6mOV9mfp2KVmydW7v1Zv0F/z
+        UD39kX5wZ6AKxQBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 67BDB13B77;
-        Wed, 19 Jan 2022 16:47:27 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0A1A13B77;
+        Wed, 19 Jan 2022 16:49:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Wv45GJ9A6GGeLQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 16:47:27 +0000
-Message-ID: <fee66042-29d1-15b3-ff99-f234d4537dba@suse.cz>
-Date:   Wed, 19 Jan 2022 17:47:27 +0100
+        id /jp1KjJB6GHtLgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 16:49:54 +0000
+Message-ID: <ae9da909-0d21-c2aa-fc69-764ebba29672@suse.cz>
+Date:   Wed, 19 Jan 2022 17:49:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 46/66] perf: Use VMA iterator
+Subject: Re: [PATCH v4 47/66] sched: Use maple tree iterator to walk VMAs
 Content-Language: en-US
 To:     Liam Howlett <liam.howlett@oracle.com>,
         "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
@@ -74,9 +74,9 @@ Cc:     Song Liu <songliubraving@fb.com>,
         Joel Fernandes <joelaf@google.com>,
         Rom Lemarchand <romlem@google.com>
 References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-47-Liam.Howlett@oracle.com>
+ <20211201142918.921493-48-Liam.Howlett@oracle.com>
 From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-47-Liam.Howlett@oracle.com>
+In-Reply-To: <20211201142918.921493-48-Liam.Howlett@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -86,8 +86,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 12/1/21 15:30, Liam Howlett wrote:
 > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> The VMA iterator is faster than the linked list and removing the linked
-> list will shrink the vm_area_struct.
+> The linked list is slower than walking the VMAs using the maple tree.
+> We can't use the VMA iterator here because it doesn't support
+> moving to an earlier position.
 > 
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
@@ -95,65 +96,39 @@ On 12/1/21 15:30, Liam Howlett wrote:
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
 > ---
->  kernel/events/core.c    | 3 ++-
->  kernel/events/uprobes.c | 9 ++++++---
->  2 files changed, 8 insertions(+), 4 deletions(-)
+>  kernel/sched/fair.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 523106a506ee..d839ba79fe5c 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -10218,8 +10218,9 @@ static void perf_addr_filter_apply(struct perf_addr_filter *filter,
->  				   struct perf_addr_filter_range *fr)
->  {
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6e476f6d9435..39bb4a6c8507 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -2672,6 +2672,7 @@ static void task_numa_work(struct callback_head *work)
+>  	struct task_struct *p = current;
+>  	struct mm_struct *mm = p->mm;
+>  	u64 runtime = p->se.sum_exec_runtime;
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
 >  	struct vm_area_struct *vma;
-> +	VMA_ITERATOR(vmi, mm, 0);
+>  	unsigned long start, end;
+>  	unsigned long nr_pte_updates = 0;
+> @@ -2728,13 +2729,16 @@ static void task_numa_work(struct callback_head *work)
 >  
-> -	for (vma = mm->mmap; vma; vma = vma->vm_next) {
-> +	for_each_vma(vmi, vma) {
->  		if (!vma->vm_file)
+>  	if (!mmap_read_trylock(mm))
+>  		return;
+> -	vma = find_vma(mm, start);
+> +	mas_set(&mas, start);
+> +	vma = mas_find(&mas, ULONG_MAX);
+>  	if (!vma) {
+>  		reset_ptenuma_scan(p);
+>  		start = 0;
+> -		vma = mm->mmap;
+> +		mas_set(&mas, start);
+> +		vma = mas_find(&mas, ULONG_MAX);
+>  	}
+> -	for (; vma; vma = vma->vm_next) {
+> +
+> +	for (; vma; vma = mas_find(&mas, ULONG_MAX)) {
+>  		if (!vma_migratable(vma) || !vma_policy_mof(vma) ||
+>  			is_vm_hugetlb_page(vma) || (vma->vm_flags & VM_MIXEDMAP)) {
 >  			continue;
->  
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index 6357c3580d07..5dee6c41f36d 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -356,9 +356,10 @@ static bool valid_ref_ctr_vma(struct uprobe *uprobe,
->  static struct vm_area_struct *
->  find_ref_ctr_vma(struct uprobe *uprobe, struct mm_struct *mm)
->  {
-> +	VMA_ITERATOR(vmi, mm, 0);
->  	struct vm_area_struct *tmp;
->  
-> -	for (tmp = mm->mmap; tmp; tmp = tmp->vm_next)
-> +	for_each_vma(vmi, tmp)
->  		if (valid_ref_ctr_vma(uprobe, tmp))
->  			return tmp;
->  
-> @@ -1237,11 +1238,12 @@ int uprobe_apply(struct inode *inode, loff_t offset,
->  
->  static int unapply_uprobe(struct uprobe *uprobe, struct mm_struct *mm)
->  {
-> +	VMA_ITERATOR(vmi, mm, 0);
->  	struct vm_area_struct *vma;
->  	int err = 0;
->  
->  	mmap_read_lock(mm);
-> -	for (vma = mm->mmap; vma; vma = vma->vm_next) {
-> +	for_each_vma(vmi, vma) {
->  		unsigned long vaddr;
->  		loff_t offset;
->  
-> @@ -1989,9 +1991,10 @@ bool uprobe_deny_signal(void)
->  
->  static void mmf_recalc_uprobes(struct mm_struct *mm)
->  {
-> +	VMA_ITERATOR(vmi, mm, 0);
->  	struct vm_area_struct *vma;
->  
-> -	for (vma = mm->mmap; vma; vma = vma->vm_next) {
-> +	for_each_vma(vmi, vma) {
->  		if (!valid_vma(vma, false))
->  			continue;
->  		/*
 

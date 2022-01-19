@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4916E494249
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C359349424A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245473AbiASVA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 16:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245242AbiASVAZ (ORCPT
+        id S245617AbiASVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 16:03:11 -0500
+Received: from 8.mo560.mail-out.ovh.net ([188.165.52.147]:37621 "EHLO
+        8.mo560.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245242AbiASVDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 16:00:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1E6C06173E;
-        Wed, 19 Jan 2022 13:00:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60B21B81BE0;
-        Wed, 19 Jan 2022 21:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86120C004E1;
-        Wed, 19 Jan 2022 21:00:18 +0000 (UTC)
-Date:   Wed, 19 Jan 2022 16:00:17 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [PATCH 1/3] lib/string_helpers: Consolidate yesno()
- implementation
-Message-ID: <20220119160017.65bd1fa5@gandalf.local.home>
-In-Reply-To: <YehllDq7wC3M2PQZ@smile.fi.intel.com>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
-        <20220119072450.2890107-2-lucas.demarchi@intel.com>
-        <YefXg03hXtrdUj6y@paasikivi.fi.intel.com>
-        <20220119100635.6c45372b@gandalf.local.home>
-        <YehllDq7wC3M2PQZ@smile.fi.intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 19 Jan 2022 16:03:09 -0500
+X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jan 2022 16:03:09 EST
+Received: from player791.ha.ovh.net (unknown [10.108.1.146])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id B63D422BFB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:55:55 +0000 (UTC)
+Received: from etezian.org (82-181-27-157.bb.dnainternet.fi [82.181.27.157])
+        (Authenticated sender: andi@etezian.org)
+        by player791.ha.ovh.net (Postfix) with ESMTPSA id D597A266CDB75;
+        Wed, 19 Jan 2022 20:55:36 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-106R006390dcab6-99cd-4766-9f5f-a59f7922d779,
+                    EAD790EBCBC9E102087108CB0F5556A3B44BAE4B) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 82.181.27.157
+Date:   Wed, 19 Jan 2022 22:55:35 +0200
+From:   Andi Shyti <andi@etezian.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Balletbo i Serra <enric.balletbo@collabora.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 5/5] spi: s3c64xx: allow controller-data to be optional
+Message-ID: <Yeh6x6U3tA7y5gvF@jack.zhora.eu>
+References: <20220119201005.13145-1-krzysztof.kozlowski@canonical.com>
+ <20220119201005.13145-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119201005.13145-6-krzysztof.kozlowski@canonical.com>
+X-Ovh-Tracer-Id: 8852669495508536017
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigdekgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucggtffrrghtthgvrhhnpedtgfduudfhfeeuueejfeeihedtfeetgfegveehgfeuleelhfduteegieekudeifeenucfkpheptddrtddrtddrtddpkedvrddukedurddvjedrudehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeeluddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 21:25:08 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Hi Krzysztof,
 
-> > I say keep it one line!
-> > 
-> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>  
+On Wed, Jan 19, 2022 at 09:10:05PM +0100, Krzysztof Kozlowski wrote:
+> The Samsung SoC SPI driver requires to provide controller-data node
+> for each of SPI peripheral device nodes.  Make this controller-data node
+> optional, so DTS could be simpler.
 > 
-> I believe Sakari strongly follows the 80 rule, which means...
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 8755cd85e83c..769d958a2f86 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> -	data_np = of_get_child_by_name(slave_np, "controller-data");
+> -	if (!data_np) {
+> -		dev_err(&spi->dev, "child node 'controller-data' not found\n");
+> -		return ERR_PTR(-EINVAL);
+> -	}
+> -
+>  	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
+> -	if (!cs) {
+> -		of_node_put(data_np);
+> +	if (!cs)
+>  		return ERR_PTR(-ENOMEM);
+> +
+> +	data_np = of_get_child_by_name(slave_np, "controller-data");
+> +	if (!data_np) {
+> +		dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
 
-Checkpatch says "100" I think we need to simply update the docs (the
-documentation always lags the code ;-)
+"not found" sounds like an error; I would just write something
+like "feedback delay set to '0' dfault", you also tell that the
+default value is '0'.
 
-	bdc48fa11e46f
+In any case,
 
--- Steve
+Reviewed-by: Andi Shyti <andi@etezian.org>
+
+Andi

@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31CE4933F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248914933E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351513AbiASEID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:08:03 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:41312 "EHLO
+        id S1351466AbiASEGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:06:24 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:25828 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351481AbiASEHh (ORCPT
+        by vger.kernel.org with ESMTP id S1345914AbiASEGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:07:37 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INx5iq012817;
-        Wed, 19 Jan 2022 04:06:19 GMT
+        Tue, 18 Jan 2022 23:06:22 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INxWLV011214;
+        Wed, 19 Jan 2022 04:06:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=bGCfCt6vCAi9RXyrfJqfylamdOtbNoBkaaat0IE/Mnw=;
- b=lJnCGbChCBWiNCJ81/oD1H2AgQZqUQa5nCeYEKv3GgIDNnniyAqdpYR6Amtq5UVy85+S
- bSf1F6fc782Zb3Hp+C/dNgfwXSix7WwLstwfNiw/46TSej1TijDQQYxcpVwee5QgPbXs
- 7qRvvqYwp1E1ZgJdwTidvqkrmMa2mDn9jRoaeO55cbOsT0QqUIBAR9kF8p5ggelQCa3G
- c12qT81DvBC9DrU2d50H1hksN5JKryq7e54/MdXUueGoXHOe0qsRXmf5/407TnolSx/k
- mH6KSOS3qms9+4ReTKr2kzH+nGTE/NnAmFSQ7vRhRr/fL6whaOCHGPK4AnnXhPGdKH9a 5A== 
+ bh=qfNHRZNAv5K92DWooDSEcud7+z+x1WfUa/KOsFKw/Yk=;
+ b=Z0ZcLCMAtix5E7lyqjR7zt63Wqjr+cvsFE/S0xWn5X5wiMaydDOyBjyfhCbzxgEE2jc9
+ VP7C7FkGo55bh//uhv0oZb2+SnAvZf4EpSWI+jCbTL7M7PXC4DHsdokTLPipbO3gSmLP
+ jNvy/+cXWlUHTiE9ouNR1973XSJn3pj9cldI9LPRndEz/+xV3mDO6kTPuMWSGbAu0YdF
+ Q188EjAI5O+uk0o40Eg7o/0CPqRpd8PDyjp0F1IxNUv8qS0b+LjsJIVaYM93KsP+p8U2
+ KHQFli8oebsjXyHxInln+wsVPpAswPei23ZeGppazHyqF9dU6zmCXmKpKPOJzMAniGjr Eg== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4q3wwt-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnbrnuueh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 04:06:20 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J42AZp091606;
+        Wed, 19 Jan 2022 04:06:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3dkqqpnr87-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 19 Jan 2022 04:06:19 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J42AEu091613;
-        Wed, 19 Jan 2022 04:06:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3dkqqpnr7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 04:06:18 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20J46HPx110383;
-        Wed, 19 Jan 2022 04:06:17 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20J46HQ1110383;
+        Wed, 19 Jan 2022 04:06:18 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3dkqqpnr68-1;
-        Wed, 19 Jan 2022 04:06:17 +0000
+        by userp3020.oracle.com with ESMTP id 3dkqqpnr68-2;
+        Wed, 19 Jan 2022 04:06:18 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     sreekanth.reddy@broadcom.com, mchehab@kernel.org, mdf@kernel.org,
-        mpe@ellerman.id.au, mporter@kernel.crashing.org, hch@infradead.org,
-        bhelgaas@google.com, airlied@linux.ie,
+To:     James Smart <james.smart@broadcom.com>,
+        Ram Vegesna <ram.vegesna@broadcom.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        benh@kernel.crashing.org, ink@jurassic.park.msu.ru,
-        davem@davemloft.net, akpm@linux-foundation.org, hao.wu@intel.com,
-        vkoul@kernel.org, sathya.prakash@broadcom.com, paulus@samba.org,
-        trix@redhat.com, arnd@arndb.de, yilun.xu@intel.com,
-        suganath-prabu.subramani@broadcom.com, alex.bou9@gmail.com,
-        awalls@md.metrocast.net, rth@twiddle.net, mattst88@gmail.com
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-alpha@vger.kernel.org, linux-fpga@vger.kernel.org,
-        MPT-FusionLinux.pdl@broadcom.com, linux-media@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-scsi@vger.kernel.org, dmaengine@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 00/16] Remove usage of the deprecated "pci-dma-compat.h" API
-Date:   Tue, 18 Jan 2022 23:06:09 -0500
-Message-Id: <164256513502.31841.5177778968152773786.b4-ty@oracle.com>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: efct: Remove useless DMA-32 fallback configuration
+Date:   Tue, 18 Jan 2022 23:06:10 -0500
+Message-Id: <164256513503.31841.13425632142718657762.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <958bcb2a6e86344c14f38369e8e7079615a2b0e3.1641754613.git.christophe.jaillet@wanadoo.fr>
+References: <958bcb2a6e86344c14f38369e8e7079615a2b0e3.1641754613.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: kv-6XMqJc6gHKjMkAhgWOkvxgVt6FLHh
-X-Proofpoint-ORIG-GUID: kv-6XMqJc6gHKjMkAhgWOkvxgVt6FLHh
+X-Proofpoint-GUID: vY66LZ6qZleUcXDEy6rM_neNllun1NS9
+X-Proofpoint-ORIG-GUID: vY66LZ6qZleUcXDEy6rM_neNllun1NS9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 22:45:13 +0100, Christophe JAILLET wrote:
+On Sun, 9 Jan 2022 19:57:04 +0100, Christophe JAILLET wrote:
 
-> This serie axes all the remaining usages of the deprecated "pci-dma-compat.h"
-> API.
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
 > 
-> All these patches have already been posted.
+> Simplify code and remove some dead code accordingly.
 > 
-> They have been generated with a coccinelle script.
-> The tricky parts are patches that use dma_alloc_coherent() because the correct
-> GFP flag has to be used in place of the previous embedded GFP_ATOMIC.
+> While at it, return the error code returned by dma_set_mask_and_coherent()
+> instead of -1.
 > 
 > [...]
 
 Applied to 5.17/scsi-queue, thanks!
 
-[10/16] scsi: message: fusion: Remove usage of the deprecated "pci-dma-compat.h" API
-        https://git.kernel.org/mkp/scsi/c/b114dda6f2f1
-[11/16] scsi: mptbase: Use dma_alloc_coherent() in 'mpt_alloc_fw_memory()'
-        https://git.kernel.org/mkp/scsi/c/2d50607260a6
-[12/16] scsi: mptbase: Use dma_alloc_coherent()
-        https://git.kernel.org/mkp/scsi/c/5c5e6b6f61e0
-[13/16] scsi: mptsas: Use dma_alloc_coherent() in mptsas_exp_repmanufacture_info()
-        https://git.kernel.org/mkp/scsi/c/7a960b3a5e37
-[14/16] scsi: mptsas: Use dma_alloc_coherent()
-        https://git.kernel.org/mkp/scsi/c/76a334d756c5
-[15/16] scsi: mptctl: Use dma_alloc_coherent()
-        https://git.kernel.org/mkp/scsi/c/706dc3b91989
+[1/1] scsi: efct: Remove useless DMA-32 fallback configuration
+      https://git.kernel.org/mkp/scsi/c/1aa7d9799e85
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering

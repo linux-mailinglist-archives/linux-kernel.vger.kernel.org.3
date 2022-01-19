@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CC149376D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C20949377B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351848AbiASJiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:38:03 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:43834 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235918AbiASJiC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:38:02 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7AA4B1EC01B5;
-        Wed, 19 Jan 2022 10:37:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642585077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=l8hXfzc4tNzXvNMHh+krnIwebhMr+nIyn6zzRElK4Jk=;
-        b=rAi6ielVyHsK6XXnVr54FincTmQbgFoG11uhjSI3ckEsiBZQnMzPsoJUE5+RKaCRdEaS2/
-        Qt1HwuI7liqPV+CGLh5ADMgLrhqhU3QjdjShMvpagkZRWq3DL9KN1d5C1CO6+RswfWPGnF
-        iWmhd37EXF6me00EQ1t+8DwFfNdqxDk=
-Date:   Wed, 19 Jan 2022 10:37:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Lei Wang <lewan@microsoft.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <Yefb7zO9p1iPF3Jm@zn.tnic>
-References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
- <YeRkGvestiloCAUV@zn.tnic>
- <20220118152816.GA89184@sequoia>
- <Yeb4sK+ZmSHjWPWL@zn.tnic>
- <20220118195401.GB89184@sequoia>
- <YecrXidqecoYI/xg@zn.tnic>
- <YefXQHXNlsxk8yUc@kroah.com>
+        id S1353090AbiASJjC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 04:39:02 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:52393 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352533AbiASJix (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 04:38:53 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20J9cSYa9024415, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20J9cSYa9024415
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 19 Jan 2022 17:38:28 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 19 Jan 2022 17:38:28 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 19 Jan 2022 01:38:26 -0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Wed, 19 Jan 2022 17:38:26 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ed Swierk <eswierk@gh.st>
+Subject: RE: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
+Thread-Topic: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
+Thread-Index: AQHYBCp/WStseF16x0uJ7VAbWo+1y6xqJTFA
+Date:   Wed, 19 Jan 2022 09:38:26 +0000
+Message-ID: <b1e89f471e824eaba27a5dcbc363974a@realtek.com>
+References: <20220108005533.947787-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20220108005533.947787-1-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/19_=3F=3F_08:01:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YefXQHXNlsxk8yUc@kroah.com>
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:17:52AM +0100, Greg Kroah-Hartman wrote:
-> For this specific change, I do NOT think it should be backported at all,
-> mostly for the reason that people are still arguing over the whole
-> platform_get_*_optional() mess that we currently have.  Let's not go and
-> backport anything right now to stable trees until we have all of that
-> sorted out, as it looks like it all might be changing again.  See:
-> 	https://lore.kernel.org/r/20220110195449.12448-1-s.shtylyov@omp.ru
-> for all of the gory details and the 300+ emails written on the topic so
-> far.
+Hi,
 
-It sounds to me I should not even take this patch upstream yet,
-considering that's still ongoing...
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Saturday, January 8, 2022 8:55 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: tony0620emma@gmail.com; kvalo@codeaurora.org; johannes@sipsolutions.net; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Neo Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
+> Pkshih <pkshih@realtek.com>; Ed Swierk <eswierk@gh.st>; Martin Blumenstingl
+> <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
+> 
 
--- 
-Regards/Gruss,
-    Boris.
+[...]
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I do stressed test of connection and suspend, and it get stuck after about
+4 hours but no useful messages. I will re-build my kernel and turn on lockdep debug
+to see if it can tell me what is wrong.
+
+--
+Ping-Ke
+

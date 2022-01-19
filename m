@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840304936E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFEE4936E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352852AbiASJKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352266AbiASJKr (ORCPT
+        id S1352865AbiASJLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:11:12 -0500
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:39863 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352858AbiASJLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:10:47 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3694C061574;
-        Wed, 19 Jan 2022 01:10:46 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 093B71F44374
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642583445;
-        bh=IY0TsKf1sV4zasOINyvJyjE0S/SNcaARx1RJpjSFlFk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=QRaDfysl0CJDjDqq1df7gr4YfD5pUJ/xuCpGRFmr/VcaXM2I9N53LwquKHDYsicm9
-         p0IsntKGidGnWVE05v4hmWB8wS9PTjB99UvQSIPgTPPy40CVnW0iH9YhJwCCa3DDKM
-         NZA+cqg9iWPcNvyxUzggA3YC/HR8UICU3F5w1Z9U585EGhnX6yGOtRPH5H87a5EQto
-         b9NmHyS42x44nQs1ffP9pSYOYqbAhEtIxBB6gvJC+4vKPOwvWtCAA8ty4Xy3r45Rwz
-         6dV6zIaSzdsR7PIMUXo0MxYAfM7CiNBTgfZohfRLss/VCUib54N/Sq+2XZuRgpFxDw
-         p7ri8JuH97fxw==
-Subject: Re: [PATCH] media: platform: mtk-vcodec: Do not force /dev/videoX
- node number
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        mchehab@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220118150717.706074-1-benjamin.gaignard@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <72ac959b-ad5f-8f4e-38d1-3da9d9866290@collabora.com>
-Date:   Wed, 19 Jan 2022 10:10:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 19 Jan 2022 04:11:09 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E2B173202112;
+        Wed, 19 Jan 2022 04:11:08 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 19 Jan 2022 04:11:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-type:content-transfer-encoding; s=fm1; bh=
+        F8MxcNmLbvsLd8ilfryFjFcJsELc7SyqXZ3lyhwudlw=; b=VGxZdy+d2f+pXpaw
+        4Lwmkhs9i43PfMrUvD3H5d90vl1wVROdW3mPM3ZVUiX0uwFSW3j34Sx5T2DgAU17
+        NmcDpMOGZntPmZrAeYj1v0W8ihIj3PG+/orvdahIZXjrDMK/AahsSpNkagxM4bNF
+        bAxDDiFvUaPmuvydPnC2mAdSWjWZBVAN+OwrPHBX/NOf11aZfD1MevUNLnKxlrFC
+        yLYhSlGtJRrk+axOUZM5YMLZkwPwsibIpoBPtp0Hx3Od8fasTC2kxGsFIDbkThfX
+        XsIgVFeFr5/7IKRRS4Dh0WeVwB8PiDaGWX6iIRgQiDGH4bAmq6NuM9XfnYUNDEh5
+        VjVhoQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=F8MxcNmLbvsLd8ilfryFjFcJsELc7SyqXZ3lyhwud
+        lw=; b=gQLdUDHZMidEsvUHpsZF1/Pw5tOEY/q9o9WLcuaRqjpz8YjeKATtl/Ktw
+        BIIEVPbKBfH0TlS25AjEU0dLO1tje6dy3calhGHEBZ297g6FJBEzfuJXSRfdbnxr
+        UTB17I6kngqxZ/f/IUZpVNT2NpiHTqPeyhTEWoTAMr0Kzth+Twgqn7y3Pae/WkXK
+        vuNPIyM3hhTFk/l2kZjw5XN+6P9pHvvxLpqZ/7B5QBraXsx54f8Mto/K2dfpr6W9
+        N8OfXaBUM6Bzb7aMoPMwfWfJwq4UihRXbvKLjA/0FtS03FWDsUjAxO8LXjPderT6
+        R8dFVRMy601sRQ5BxECZ2uc/YQVjA==
+X-ME-Sender: <xms:rNXnYWTawe_vfzd-vJTbVoSpw4-piG_y9FToZc_AvQNJjbYSy-naMg>
+    <xme:rNXnYbzw5ZO2soiAO5F5G1q0nXmdDFeIDDGgGv6UTaxFbrtP8UFdsAmlfnWpgbu1-
+    KvLno0hx7cik3w4IfQ>
+X-ME-Received: <xmr:rNXnYT3A4HufDxKHEUfZyN0d5dG3MRzZ91AqU6_zXf342dIJ0nJhvG49Jr2G_X3W27btLRd55xbyIau-DbxncpRTa-NOHe7zEta7bkI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehucetufdoteggodetrfdotffvucfrrh
+    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhggtgfgsehtkeertdertd
+    ejnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhho
+    rdhtvggthheqnecuggftrfgrthhtvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffje
+    ejvddvudduteehhfefhfefgeeikeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:rNXnYSAUiA6v_h17V9jckHuojx7z-eIvN0trA48ZnbPhopEpipKSQQ>
+    <xmx:rNXnYfgVyfthvRGL0aKSyhKMT_2ezW9W7IwXhv3ltw0P1yB54vWrjQ>
+    <xmx:rNXnYerG4a96VKOgcQcB1ztF4H6amfybKSVObaHr416YrhNuE7Wozg>
+    <xmx:rNXnYfgh3eDtsBLz7Tms6Wnb3huL2RETpaQOCCkDMzpor8GZB-QqCg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Jan 2022 04:11:07 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     dri-devel@lists.freedesktop.org,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        mripard@kernel.org, linux-kernel@vger.kernel.org, daniel@ffwll.ch,
+        airlied@linux.ie
+Cc:     Maxime Ripard <maxime@cerno.tech>, emma@anholt.net,
+        linux-rpi-kernel@lists.infradead.org
+Subject: Re: (subset) [PATCH] drm/vc4: Fix deadlock on DSI device attach error
+Date:   Wed, 19 Jan 2022 10:11:05 +0100
+Message-Id: <164258346063.31836.9424358467323476627.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220118005127.29015-1-treasure4paddy@gmail.com>
+References: <20220118005127.29015-1-treasure4paddy@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220118150717.706074-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/01/22 16:07, Benjamin Gaignard ha scritto:
-> Let's v4l2 framework use a free /dev/videoX node for decode and encoder.
-> For the decoder call video_register_device() before register the media
-> controller device so the mapping between ins correctly done.
-> Since the registering sequence has changed rework exiting errors case too.
+On Tue, 18 Jan 2022 01:51:26 +0100, Padmanabha Srinivasaiah wrote:
+> DSI device attach to DSI host will be done with host device's lock
+> held.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Un-registering host in "device attach" error path (ex: probe retry)
+> will result in deadlock with below call trace and non operational
+> DSI display.
+> 
+> [...]
 
-Hello Benjamin,
-please add the following Fixes tags to this commit:
+Applied to drm/drm-misc (drm-misc-next-fixes).
 
-Fixes: 590577a4e525 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Decoder 
-Driver")
-
-Fixes: 4e855a6efa54 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Encoder 
-Driver")
-
-After that..
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+Thanks!
+Maxime

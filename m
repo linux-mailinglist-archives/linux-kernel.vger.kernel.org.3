@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBFA4941FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF7C494208
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357399AbiASUoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S1357484AbiASUoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245198AbiASUn4 (ORCPT
+        with ESMTP id S1357376AbiASUoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:43:56 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C11C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:43:56 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id f13so3368138plg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:43:56 -0800 (PST)
+        Wed, 19 Jan 2022 15:44:01 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0361C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:43:58 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so3790174pjp.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:43:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aBnCws/J3yBxLfvHdmXmyJWct69R9h+zMBJizT7ymik=;
-        b=LI8MsXwP6awx7ie331rc+M//CIaQKd7Sbys1Vv8djTWUsR5zeh2GmMWegZiYOVGO7E
-         2k8wlMfUD0MDm2XKnDqPuVtyeKTnX3a28GUDZKSbLLWkjYfpXCHtyCKa1Y1R7Gp54+x/
-         rMGFADBaNG5iW00VpVp2MXt/uY0v0cxys+49w=
+        bh=bZcWEQ5Fu8Kd27+r2AXq/zEkJpO9p583fKhA3n76vVg=;
+        b=YaFtuZ1conMa1mNYI9ZivYW9O1tEGT9e1ngcXnBJp7kHWF4cQwfCCY/7oTy/jVTRvN
+         aiTXae8jY+NQLm1z8iDPdiDMUbl08E/vjWPFdyKAuEJ1RhoYsA4JVGqD0fL22uKhpxpP
+         DmnrI41IUKA9HbklmMI8WvDdm6GWbTFsLYTT0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aBnCws/J3yBxLfvHdmXmyJWct69R9h+zMBJizT7ymik=;
-        b=QOMpPvbDRoKX0NhoZFNmMnksQLXnVQYTQE+q6VBIh8A7daekG6rnIqOw0BVgjh/rnF
-         zqO297RsQo2hJ7yk3K7sr966M1mgz/gl58JJQWa2GdBDIHQdFah9bDmo/0DDbZmQFNlp
-         7hPYLYsfu+FZ8cxX1VXxXlydi8mgHwr2LVKHHA9YAWd08TO3sM7Hk49W3NQFRMza0H8F
-         7rJ+3K0BP2dl4iCBgJpJaAUwLx044fwJCklqB8MYHydPCAjB0+uLUv+WiLEQXE8oiq9A
-         dT5lY1zR2FcIukjvDzkPS0VgbM2wgHs8/Pknymjq1vJ8dxx8WPUq6aAsDjoImc65hrqC
-         uCxg==
-X-Gm-Message-State: AOAM530xwQnzMibf8+Yw821mtttFrJHZlEfi4RoSfaw9F6stMTcrzoSS
-        8y2BWIt7vHfwVl64IkirmWNc3A==
-X-Google-Smtp-Source: ABdhPJx+zRc6bwKkaYZ7xovg+TNn+XW/iI9YRIYuNg0xSIA9m43wEYyw/ph226fLEyRw+WF2mQVG6g==
-X-Received: by 2002:a17:903:52:b0:14a:4951:390a with SMTP id l18-20020a170903005200b0014a4951390amr34871511pla.54.1642625035702;
-        Wed, 19 Jan 2022 12:43:55 -0800 (PST)
+        bh=bZcWEQ5Fu8Kd27+r2AXq/zEkJpO9p583fKhA3n76vVg=;
+        b=D+OaR4P3ohLqkI1gkDywNjSGLWHvh/Pl2Yk11wjc5Hx7SAl9XliTfFEhK9XRfZfoOW
+         G5GsrT8NqlVQyjmGo2Tmtze+ZniYSLaz3Szu42Ex9OnPlx9+bgXzXqhegvVLwQVMTQ3M
+         EBXCaeKCexRXxygzlYa0qi/KoVlyirztyQB8eszGGFw7YVeo6LXV1a189gORdeVKdN5M
+         HyQEwIxVCSG7yovuyVqJCMd0YK3tZBDCrZPOyia8kGw3uaJPvi5i0Py7IAQi1UL1Tui1
+         QSqhTKS3Q8VGqvEssYcZoVGiKZSpynn1MR6nQ6RKqgeDqlAv4ibeCA4n+k5wRkj6eaRB
+         bDNQ==
+X-Gm-Message-State: AOAM532OGEXbapRAHUZgKAhUpeFCKfTF+9Mys+L83Dt7SiC7sLcUtQvd
+        RivQdzCO4RfN9lKJy0OZmeaJsQ==
+X-Google-Smtp-Source: ABdhPJxkDgNJUGBnGZ+MUZ9wgs+k0KumhW1WeZfmNWXC1BwxYPIokX2Bcm3q24M85Iq7J2dKVeNJOA==
+X-Received: by 2002:a17:902:b218:b0:149:936b:8306 with SMTP id t24-20020a170902b21800b00149936b8306mr35229092plr.134.1642625038318;
+        Wed, 19 Jan 2022 12:43:58 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:618e:efc:c014:d89c])
-        by smtp.gmail.com with UTF8SMTPSA id x18sm478531pgj.41.2022.01.19.12.43.54
+        by smtp.gmail.com with UTF8SMTPSA id a16sm520480pfv.97.2022.01.19.12.43.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 12:43:55 -0800 (PST)
+        Wed, 19 Jan 2022 12:43:58 -0800 (PST)
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -62,10 +62,10 @@ Cc:     devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
         linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v20 1/5] of/platform: Add stubs for of_platform_device_create/destroy()
-Date:   Wed, 19 Jan 2022 12:43:41 -0800
-Message-Id: <20220119124327.v20.1.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v20 2/5] driver core: Export device_is_bound()
+Date:   Wed, 19 Jan 2022 12:43:42 -0800
+Message-Id: <20220119124327.v20.2.Ie1de382686d61909e17fa8def2b83899256e8f5d@changeid>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 In-Reply-To: <20220119204345.3769662-1-mka@chromium.org>
 References: <20220119204345.3769662-1-mka@chromium.org>
@@ -75,110 +75,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code for platform_device_create() and of_platform_device_destroy() is
-only generated if CONFIG_OF_ADDRESS=y. Add stubs to avoid unresolved
-symbols when CONFIG_OF_ADDRESS is not set.
+Export device_is_bound() to enable its use by drivers that are
+built as modules.
 
 Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 ---
 
 Changes in v20:
-- added 'Reviewed-by' tags from Stephen and Doug
+- added 'Reviewed-by' tags from Doug and Stephen
 
 Changes in v19:
-- still no changes ...
+- none
 
 Changes in v18:
-- still no changes ...
-
-Changes in v17:
-- none
-
-Changes in v16:
-- none
-
-Changes in v15:
-- none
-
-Changes in v14:
-- none
-
-Changes in v13:
-- none
-
-Changes in v12:
-- none
-
-Changes in v11:
-- none
-
-Changes in v10:
-- none
-
-Changes in v9:
-- added Rob's 'Acked-by' tag
-
-Changes in v8:
-- fixed C&P error in commit message
-
-Changes in v7:
-- none
-
-Changes in v6:
 - patch added to the series
 
- include/linux/of_platform.h | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ drivers/base/dd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/of_platform.h b/include/linux/of_platform.h
-index 84a966623e78..d15b6cd5e1c3 100644
---- a/include/linux/of_platform.h
-+++ b/include/linux/of_platform.h
-@@ -61,16 +61,18 @@ static inline struct platform_device *of_find_device_by_node(struct device_node
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 68ea1f949daa..07eefddd4a77 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -370,6 +370,7 @@ bool device_is_bound(struct device *dev)
+ {
+ 	return dev->p && klist_node_attached(&dev->p->knode_driver);
  }
- #endif
++EXPORT_SYMBOL_GPL(device_is_bound);
  
-+extern int of_platform_bus_probe(struct device_node *root,
-+				 const struct of_device_id *matches,
-+				 struct device *parent);
-+
-+#ifdef CONFIG_OF_ADDRESS
- /* Platform devices and busses creation */
- extern struct platform_device *of_platform_device_create(struct device_node *np,
- 						   const char *bus_id,
- 						   struct device *parent);
- 
- extern int of_platform_device_destroy(struct device *dev, void *data);
--extern int of_platform_bus_probe(struct device_node *root,
--				 const struct of_device_id *matches,
--				 struct device *parent);
--#ifdef CONFIG_OF_ADDRESS
-+
- extern int of_platform_populate(struct device_node *root,
- 				const struct of_device_id *matches,
- 				const struct of_dev_auxdata *lookup,
-@@ -84,6 +86,18 @@ extern int devm_of_platform_populate(struct device *dev);
- 
- extern void devm_of_platform_depopulate(struct device *dev);
- #else
-+/* Platform devices and busses creation */
-+static inline struct platform_device *of_platform_device_create(struct device_node *np,
-+								const char *bus_id,
-+								struct device *parent)
-+{
-+	return NULL;
-+}
-+static inline int of_platform_device_destroy(struct device *dev, void *data)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int of_platform_populate(struct device_node *root,
- 					const struct of_device_id *matches,
- 					const struct of_dev_auxdata *lookup,
+ static void driver_bound(struct device *dev)
+ {
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 

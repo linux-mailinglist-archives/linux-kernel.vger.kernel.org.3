@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2B24937AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F30F4937B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345368AbiASJsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353289AbiASJsN (ORCPT
+        id S1353333AbiASJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:48:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51144 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353293AbiASJsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:48:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEFDC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:48:13 -0800 (PST)
+        Wed, 19 Jan 2022 04:48:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C48761543
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A42EBC004E1;
-        Wed, 19 Jan 2022 09:48:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35997B81915;
+        Wed, 19 Jan 2022 09:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E8BEC340E7;
+        Wed, 19 Jan 2022 09:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642585692;
-        bh=pY4KReaEw0u814aGXbae1WyLfrNWtzB5SMb+lpChISM=;
+        s=k20201202; t=1642585693;
+        bh=Tp+yamzMMMZE/cJq2iWgjrvAsPDxFtIqy1SheQLqfYM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WaKCI5QsFLbFjpCYXt0KJ3jRvCft2Q6SfOX7HC9+Pa0wF2dfVBp2LWq3HxzBrkoC/
-         gHMUZ9izqxfcYF0dohNDVqHef8/oodIANgF9YsIpYAth2W6KaLYgT17Nkg8yKOyTCg
-         KxvRo8AiCb0W1d+SxHzfnXmFl67bE4/ad5JvJQAPoTNeXuv6ympj7M8Prnt3dPXved
-         BDVyzteONLMqAet7fnqWgUDOedeOpPvUbElTa8nCTmNuMgsyWzjqog8Askh+r72UPr
-         aSylVWTyQoG5EkKJow24fexBzl+ClgigiFrG2+uUU3HQ/Hxgs5dVhsEiM3Xu6M+8DM
-         syAcbyzvQIYrg==
+        b=sq0TJLKa6h6g5bOL0n5UFI0YBx4rPvVUkenIUHgAeEkfZyaggw9DUIjkFCk8eq98Y
+         TWNxPc2G2SahqJ11M+yi7bwvE4DDSf7ZZ038T3fa+TcazyosNJV4hGUgE4E4SJpJdB
+         wD8GGmLV4ztXrrg5L2y+ZgLdkd1zxtf3soTVwWXZcAIvMatlmfWbGuqE6J6w2uSwI7
+         KLiazSvWgy93fi2/gxElDUBU75QDCKm7I0khXc4fVbwG3yvT5aOtwhJ3eJRXK2l4xl
+         AZz9QKeft7So+g05qkhOg9FkGhPKKvyRSsj2zy+tEw5hKSUJyH1rQ6RMOjnCAFgzZy
+         LI0OWQuq0RYlQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93C0EF60795;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF10FF6079B;
         Wed, 19 Jan 2022 09:48:12 +0000 (UTC)
-Subject: Re: [GIT PULL] random number generator fixes for 5.17-rc1
+Subject: Re: [GIT PULL] Kbuild updates for v5.17-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220118164906.402468-1-Jason@zx2c4.com>
-References: <20220118164906.402468-1-Jason@zx2c4.com>
+In-Reply-To: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
+References: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220118164906.402468-1-Jason@zx2c4.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git random-5.17-rc1-for-linus
-X-PR-Tracked-Commit-Id: a254a0e4093fce8c832414a83940736067eed515
+X-PR-Tracked-Message-Id: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-v5.17
+X-PR-Tracked-Commit-Id: c4d7f40b250c1a4d74ed259e84807f58032507b6
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0ed905975612ea67224af26fd6bfbac965b6d029
-Message-Id: <164258569260.19279.8339990399698192601.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: fd6f57bfda7c36f2d465cee39d5d8c623db5d7aa
+Message-Id: <164258569297.19279.13038889410759232745.pr-tracker-bot@kernel.org>
 Date:   Wed, 19 Jan 2022 09:48:12 +0000
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 18 Jan 2022 17:49:06 +0100:
+The pull request you sent on Wed, 19 Jan 2022 04:42:17 +0900:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git random-5.17-rc1-for-linus
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-v5.17
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0ed905975612ea67224af26fd6bfbac965b6d029
+https://git.kernel.org/torvalds/c/fd6f57bfda7c36f2d465cee39d5d8c623db5d7aa
 
 Thank you!
 

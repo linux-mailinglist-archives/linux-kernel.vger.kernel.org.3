@@ -2,37 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E1D4934E9
+	by mail.lfdr.de (Postfix) with ESMTP id D07A94934EA
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351753AbiASGSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
+        id S1351754AbiASGSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiASGSm (ORCPT
+        with ESMTP id S1351749AbiASGSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:18:42 -0500
+        Wed, 19 Jan 2022 01:18:45 -0500
 Received: from mx.msync.work (mx.msync.work [IPv6:2a01:4f9:2b:2dc2::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521A2C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 22:18:42 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 85C59268594;
-        Wed, 19 Jan 2022 06:18:38 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FD4C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 22:18:44 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 99AE3268595;
+        Wed, 19 Jan 2022 06:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1642573120; h=from:subject:date:message-id:to:cc:mime-version:
+        t=1642573122; h=from:subject:date:message-id:to:cc:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=ybniXIrEOqxaocCLo4H6sgbMzTcewbWc//VhVHc0XqQ=;
-        b=LopmprRQ/wNnKyxwWMOFtwK6L1/OfwS35DKuAlTa5bICXO4KY8cQBExNuTJSMrsi8+X5j9
-        KcpUmqy7bxHDSd1gonSQ/hqrPcP8B0Oi3xY57gFha67cD7gg+tSBglm8J5DlirsdAyppWd
-        kAkzzdkdVvME/sc6w6nTYqnBPpAjop3YJzjl7NtOOQu0uFx/FhBAgGSERF2IdWJCtjJBN7
-        S0tZ6yvElt4iUvIt0kV6svCdcbww06A0Dnor9+Tmz8tSfdQgChaVFj8j+hqLt48+fEz//n
-        7eNDXqTUWy/jMocRsyEQxG4e21LJhHAQ2heJd6oViT13LlDIS56X2vHbOtlUAQ==
+        bh=gFg+ke/Z2j4+lG2ytr+NSYtNJTydB+tssZm2cUg4qAk=;
+        b=eyy9Zo10uYBCvqpyWw428uIUjui8bLIdDcMoOHtm1SXszrQ8aeH21jAg/qPfkE5oyIh1Tg
+        olW8WnO1FJ6QTW9vH7EddIsNk0ubmryEPp65ObSO8Keh6bZVDndXxif5txAoNHY0+awRPJ
+        1hiN+CcJgSRtH9mw/sJd+6iw4Yo6IVzo4zggMJsmqrKquMtj24yEZhzFMS84oYWh0RuQ4l
+        x9PRH3Rp8dNv7qZBQEo6tTs53KLt3r3wvO6YPUarLzolCYxmcdgyWbwuVa2HG7n73dGtcD
+        7Y9GdRR1Hqs2NIwPCm70D1moiDPlbBewg52qFRJO84/FvQd5BM5ldu+FFYrcnA==
 From:   Vyacheslav Bocharov <adeep@lexina.in>
 To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rudi Heitbaum <rudi@heitbaum.com>
-Subject: [PATCH v4 1/2] Bluetooth: btrtl: Add support for RTL8822C hci_ver 0x08
-Date:   Wed, 19 Jan 2022 09:17:24 +0300
-Message-Id: <20220119061723.2862683-2-adeep@lexina.in>
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 2/2] Bluetooth: hci_h5: Add power reset via gpio in h5_btrtl_open
+Date:   Wed, 19 Jan 2022 09:17:25 +0300
+Message-Id: <20220119061723.2862683-3-adeep@lexina.in>
 In-Reply-To: <20220119061723.2862683-1-adeep@lexina.in>
 References: <20220119061723.2862683-1-adeep@lexina.in>
 MIME-Version: 1.0
@@ -42,37 +41,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a variation of RTL8822CS with hci_ver = 0x08. This is fully similar to RTL8822CS with hci_ver = 0x0a
-observed on the Tanix TX6 Android set-top box and JetHome JetHub H1.
-
-Changes from v3:
-- add has_msft_ext option
+Add power reset via enable-gpios in h5_btrtl_open function.
 
 Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
-Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
 ---
- drivers/bluetooth/btrtl.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/bluetooth/hci_h5.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index c2bdd1e6060e..13e82783c2b9 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -156,6 +156,14 @@ static const struct id_table ic_id_table[] = {
- 	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
- 	  .cfg_name = "rtl_bt/rtl8822cs_config" },
+diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
+index 34286ffe0568..fdf504b0d265 100644
+--- a/drivers/bluetooth/hci_h5.c
++++ b/drivers/bluetooth/hci_h5.c
+@@ -966,6 +966,11 @@ static void h5_btrtl_open(struct h5 *h5)
+ 		pm_runtime_enable(&h5->hu->serdev->dev);
+ 	}
  
-+	/* 8822C with UART interface */
-+	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .has_msft_ext = true,
-+	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8822cs_config" },
++	/* The controller needs reset to startup */
++	gpiod_set_value_cansleep(h5->enable_gpio, 0);
++	gpiod_set_value_cansleep(h5->device_wake_gpio, 0);
++	msleep(100);
 +
- 	/* 8822C with USB interface */
- 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_USB),
- 	  .config_needed = false,
+ 	/* The controller needs up to 500ms to wakeup */
+ 	gpiod_set_value_cansleep(h5->enable_gpio, 1);
+ 	gpiod_set_value_cansleep(h5->device_wake_gpio, 1);
 -- 
 2.30.2
 

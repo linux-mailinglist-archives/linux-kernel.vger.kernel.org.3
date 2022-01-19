@@ -2,200 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F158749E557
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D20A49E83F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242725AbiA0PCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:02:13 -0500
-Received: from mail-centralusazon11021027.outbound.protection.outlook.com ([52.101.62.27]:32731
-        "EHLO na01-obe.outbound.protection.outlook.com"
+        id S244239AbiA0RAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:00:37 -0500
+Received: from mail-bn8nam12on2053.outbound.protection.outlook.com ([40.107.237.53]:3040
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237314AbiA0PCK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:02:10 -0500
+        id S229861AbiA0RAe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 12:00:34 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HivM1KLWkF5O+OUizgMkw2/1gNNZkwT8yubqD0BFwUIlh/FUYMra/EfEJGLs4gROSvPbTyqP70upmfebchkmDCiuJpKm6Y2uljfaq3oL+ndpj12IRAVZfouVbpHg/4ML67XdglQt1+nFaLJ5vG6CiFQUmmNJUyY2vGxzgz9P/gIoGYICKOy/XYczlo25DTNMZJ0fxp9tyhgAZ9vyabNjx64gLAoJ/Qe2AkppHJ3q3C/i3XuhU00qin9H6fObtooEDpCIYb2igI1DbXLZIDZnZRKzTc02XhuMcAbY8WOiU0f1LRyuExPI16tiywsqwtb5sKM0S+E1ywyxGOTXGqA+sw==
+ b=jLdgbV+Ml0ySQLd4Lj//hXTEnvh1uhGOsriZpYbUCHc98Y81Pv98D5pNflrzyeMvdgwgkqCgdG2HTqvZp8bCBIq+0Z1aoETlLCY5Sta9T4hqUd7+fbrrezPShuKZSSsUFlaF8Y+JZyPXC+FZ8n2RHniLGQaaQeAnzHN8y5Pj8iQFF0oBwlBqVMR/BPZIwZelWo5i8ALeyC7+IN7ZfZ3C6tWRldIUEcTBiNGrqbqacnZsp5nX0tbwopgHF4P/GVK6V4ptO3svbRI1FLo5iRLq4AZuuS7d63YzxqLejEyBaiOdk6RFqjOcW0ob2feps0OcIe61o5T7Ea+koyoCIyWUnA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/a0XMVz1RG+YLTVA2V8RE8O0gSqZg+YWtAaOFFVUhMQ=;
- b=RY9oxkofKmYPnn+uoUVpDzavmk1yJCENz0Nr51UoZoyLmy+ICrczxWmJI2F6KGJJSWFWv3TkeU4nM5+hdhaYk2ygT54wrNkW0DZwdIJM8zGbxh32oQzfhOZC9IUjQ8Ddv0bbCHuqPcIfc0C7bvLzWMyOXGhbsL7+ThKRen5cjqWYi1gZBy7WoWOvDh0M0Mil8hRkeu8a7J3tqO/gQgdUV+lxfPlizBYUU04YGyg9gUK6eIZhE11+KTRBS2mTeg7rODMVao2JCHKoZAHTwTe76RjaLTNkfSQDF/u96AUCmh9AGL4Pi2g8HJexjaAyTTTo//xEgx2ynfdVqHcJjOXA6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ bh=cunN01VHRVxIyA3QvZpAEHjVfiFejgrRcAVfPkofpY0=;
+ b=VKE8y1gSNaf6fIazqZOMAFD6LRWljsb8XzTo3XpYNmvHysQpTNlH8fE0pT5T//1Bza0CXTS0R36nYUG8YYEV7TbwFwjcwiUeYFhwgaTtI/oNf3FDYabStGT7ebciS6Y+DhKv73DlpnLWqZnftalflzIOC1QNKOxvvN7pGUh/fGQFvstO3M8m625SwDTxS91YHblAYg90il0WecOmA4MYfUWex6O1tmqyi1jUMjv3ooyoFYX0yfcBlb2AHvmX58JqZNTusWXjP4VGPDac44flbwxZQJV8yGn0JAsT8Tjn0i7sibU5H5eatAf/zyGNcsT2nvNVhgDE7pAjlciYAjj3rw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/a0XMVz1RG+YLTVA2V8RE8O0gSqZg+YWtAaOFFVUhMQ=;
- b=djwxe5SnuSqwlZ0kv3+u3FE3VnjI+HEtHPI3KbaOv0GY2FMV1Gett5vPSVQcxWVc7XP3ItA9p8HtO9li8dMwdM5++bqhyApxco5VBZtcaigf7d6urXS7K71rmS+8jY13Ts2pO4HTL6RaC9kqZY3zbdGdnTr0EBuh4zzrQhK960g=
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by PH0PR21MB1880.namprd21.prod.outlook.com (2603:10b6:510:1a::13) with
+ bh=cunN01VHRVxIyA3QvZpAEHjVfiFejgrRcAVfPkofpY0=;
+ b=gPNID77eXTeJKK0M2jZAVTLKV78rWx0QFFF/9Za9Py86nHqrVc/XLMiUCB+EcCpK2Ad4taP2n3TYBVwXitoCepK3EvHtKppYDrnIMvjhWi9wEwH6kIilcyvF4ee6qS+PtlZXpyYSOOhfGqUUKsWa9c6S29WNx2NaIqam9Hwo8jc=
+Received: from BN9PR03CA0431.namprd03.prod.outlook.com (2603:10b6:408:113::16)
+ by SA1PR12MB5671.namprd12.prod.outlook.com (2603:10b6:806:23b::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.9; Thu, 27 Jan
- 2022 15:02:05 +0000
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::61d3:a4c2:9674:9db6]) by MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::61d3:a4c2:9674:9db6%7]) with mapi id 15.20.4951.003; Thu, 27 Jan 2022
- 15:02:05 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     vkuznets <vkuznets@redhat.com>, Yury Norov <yury.norov@gmail.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: RE: [PATCH 43/54] drivers/hv: replace cpumask_weight with
- cpumask_weight_eq
-Thread-Topic: [PATCH 43/54] drivers/hv: replace cpumask_weight with
- cpumask_weight_eq
-Thread-Index: AQHYEIkT9Q6vYA1gsUeLLWD0pXcM+qxx5hyAgAUUIpA=
-Date:   Thu, 27 Jan 2022 15:02:05 +0000
-Message-ID: <MWHPR21MB1593C8511E18E4539CECAEC5D7219@MWHPR21MB1593.namprd21.prod.outlook.com>
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-44-yury.norov@gmail.com> <87sftdij76.fsf@redhat.com>
-In-Reply-To: <87sftdij76.fsf@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=cf567589-b34f-4cc7-8eae-4173ac164e09;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-01-27T14:53:34Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 171bd682-13f8-47a1-c26f-08d9e1a5fb7c
-x-ms-traffictypediagnostic: PH0PR21MB1880:EE_
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <PH0PR21MB188021B99F06454C9B638824D7219@PH0PR21MB1880.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: I5k1LxknNRM7XUCc7AgiWzUoqqYBNKV8RVSPQdWvGRjJwbh3/MOE+0zv/QAitH638dc8AbkcDaMJZoZcgiL+BvHoiypMR6A19RXbsRnMDnSON7OVhTyJngosVlNTc7ESIsTVCXGkSTDMyFA7FnncZUIMJvtDvjBG4Kg33pLT5FpNF4dxDA27QaM11pzNc+o6bWWcRqyYIymaB5tlqZ2uIBBSDCEipISbeOXe6rOOtbsPg5YKLvWbsA9IZbMNYZoEkACXrtGGpJmR3yXFCABkvGYXMIbIDUaQ+XBX126EXFCEaqcMuyhyJK4+M/CsJ9Ep1HdO6EKE4QRo2ikXmG81lBohebi5/LJ6OACXBaEkETF9QYG7gJzMOS1qClr+L19MHLvE2N/EJ6SNmWoPXbJPHx0VPpFq5xHPHvdMg9Ml+Pe6wpIR8gTeYLXyYFMmgAKuu/ijdbUyBvf2/gas4ppRLmbtGciLu8uEFaVmhmiyeEOQas0Q25ep+/Ufh2+WbGPCikY0/Sp90mcms+oF3ufPTu9yzGy8FpEPTy6bGLUvb2/OuYIu+bwpPyxpNJlHMtKELMm9id4KO0KtSHxh/ykakFngxuIHmGL6Oj7EpzVgz+qq6xMZQw4EiaaqXlMRWegRFkMwQfwmh7A7Cc4xgogDBKQopW/W+JpOHu0ysWBRpb25pJCm1odMGBrtgo8RV+RnQaH/m6jBkveK/l9AN03FZZcOgXMadKpeQuh9vXJyRdzYlji/Ze7jatl9Tq3AInbZBvDLRTrrkOQEXsryR/OjYbLEB5NiRESDL++InlGsot4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(76116006)(82960400001)(82950400001)(4326008)(9686003)(38100700002)(66946007)(66556008)(7696005)(64756008)(8936002)(8676002)(8990500004)(66446008)(66476007)(33656002)(55016003)(6506007)(83380400001)(2906002)(54906003)(5660300002)(7416002)(26005)(186003)(122000001)(71200400001)(110136005)(508600001)(86362001)(10290500003)(52536014)(38070700005)(16393002)(20210929001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?kWXI4RfQ1+1CZH6oFxPmG/nPb0WPOsf56M/cPzLn+T2n1jGqc0UqFtcfpb?=
- =?iso-8859-2?Q?384CaxwyiwARE874+e+VLmXFtXkPPVt51BgXLP348CVxOrKVWITDMijIPd?=
- =?iso-8859-2?Q?/Oomm3ziUivu8eev3zIyz2SDYKWhUFia83ispAgfHbSv6e8BzbxtmSZ/UV?=
- =?iso-8859-2?Q?k29xW6zJPyv7LgPvFA1nOii5Jsph/eqYy4WdgYYiEfmmUuydt+ciyAWpnI?=
- =?iso-8859-2?Q?gvyGjeFUlESs7FgK/MFCGxdGFJFl+4VDydSuiMuHJTgRJqaG/pIqB5SiIC?=
- =?iso-8859-2?Q?/AZGR9a3Jqi/EBPeb20gyAEZRxNODvAuH9PdIJiDajv5jRSpHqj2WO5bU8?=
- =?iso-8859-2?Q?EGHI/0IyeG570kb3dyltMB/fjbrxHsXE/kyCbw4mH5QfK786Tu3RzW+CHU?=
- =?iso-8859-2?Q?iEpjKzpp7FyAgIlR/KXYjrfYEfbTUJseGwpypUJXrlR1FSTk2XjpKKaVN2?=
- =?iso-8859-2?Q?OL9L5CNfNUMrrF8YIZIMrh53oB51744bORHe5GsUHxNo1NDLL7ZhR98uIq?=
- =?iso-8859-2?Q?WYGUpdPZk029MCH0CLi/YuYpdX6/2QtSxiu2k6nvNMaryG7fwQYzA179dq?=
- =?iso-8859-2?Q?7g4CDMDTRYVy4dSZ8rKr9WVTw3c4BtylbIoEooLQ7n/hEaxnkw8gamv7ui?=
- =?iso-8859-2?Q?tHlbZZGdUk0iAhKnmbtLXCRzJh6l2f+0F6oWHT1VzhoCa9is9+8nQ1llhU?=
- =?iso-8859-2?Q?OVQm6l1rfLmaIMHzKOwC4dNGa5U4fOnB3QbSUI72ZGzkJhGIqgvpZxBe27?=
- =?iso-8859-2?Q?Qnhr18wAyCdrW1qeaVWqH54uCIPQKTjx4v/s2N41mAfOYeFtnwQwAfXr4/?=
- =?iso-8859-2?Q?x4l/CcrHssoqep4/pcu8IM4pbBQxFZnsjqnM6v8cA494T2dAMTfpqmrVjG?=
- =?iso-8859-2?Q?ei3eJ1U8V9+WI/+3mHgc8b5m48lpfJ1syeDHYqOOPrd0inS7yGSRWqJH/U?=
- =?iso-8859-2?Q?IOhTwRiJffu/ojXjzyqjpuzJLkch+Y5w6zM3orh/+il+xiPertW7ATzSpQ?=
- =?iso-8859-2?Q?xqOxsJNJpyYWvP3GVKrhHHmTvc3hZCV6S2UNDop2c9xj0AjNYDBoKhGcbU?=
- =?iso-8859-2?Q?OGnbpH2Q+22+xywiVDv6ctmIE9fbaHdSVQuaHyoGsY2eC9LKEosvdc0tbY?=
- =?iso-8859-2?Q?54SXs6BMr0cC0r7Ltg8wwwml5TvtWyP9YWMhzzo52yaUMdBPtlyOl13Zkd?=
- =?iso-8859-2?Q?MjaXnGABowQ5qPGH7oOOcUcsokfJx85juB4UNdG2R8Hg2X6Qj/Gu+y/Z/U?=
- =?iso-8859-2?Q?CNCxWyRdx0pkmKKRD45FI3B308XwqMMoFAWp3XtSrgIXFl49jSI223bEAd?=
- =?iso-8859-2?Q?m41KCGYRkdGcSABGkfTXwuxDVJOIDWWfmYc9N2iS5vwF89C8xWWDQN0/nd?=
- =?iso-8859-2?Q?X/FFlXNaR69vEEqjc9TO1AYtEDLHGVZTdpuI8x9KChmWJ4NCHa+strTj6S?=
- =?iso-8859-2?Q?3bbzLLo0EjPmAxapF9sk3RnLmYVTKMB0Ml0totoOCcrEfDuzOfalnUzeSZ?=
- =?iso-8859-2?Q?NQz09CBG8yOp1pmIwuL0UhoDp0IaZKhJIY5omnYhEnKtKgCi6yxpnp1nby?=
- =?iso-8859-2?Q?SieihRBEHqB8JVAHJ+duWrB9XAbffGawZWws/rr//C5vJ+mv9Y+eFRlrq+?=
- =?iso-8859-2?Q?tuGbhUGu8u5wtHHs53nc7eHfq02tj01/4nFpc59KXiwwOKVy8PIEaLc5IQ?=
- =?iso-8859-2?Q?8pERszcZuuElp6sIP/hUDoy4yiOzrO+4XpP2EtL2bazzVHJ/iuwirLle7Q?=
- =?iso-8859-2?Q?HS3w=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.13; Thu, 27 Jan
+ 2022 17:00:32 +0000
+Received: from BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:113:cafe::3) by BN9PR03CA0431.outlook.office365.com
+ (2603:10b6:408:113::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17 via Frontend
+ Transport; Thu, 27 Jan 2022 17:00:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT019.mail.protection.outlook.com (10.13.176.158) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4930.15 via Frontend Transport; Thu, 27 Jan 2022 17:00:31 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 27 Jan
+ 2022 11:00:25 -0600
+Date:   Wed, 19 Jan 2022 10:27:47 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <20220119162747.ewgxirwcnrcajazm@amd.com>
+References: <YebIiN6Ftq2aPtyF@zn.tnic>
+ <20220118142345.65wuub2p3alavhpb@amd.com>
+ <20220118143238.lu22npcktxuvadwk@amd.com>
+ <20220118143730.wenhm2bbityq7wwy@amd.com>
+ <YebsKcpnYzvjaEjs@zn.tnic>
+ <20220118172043.djhy3dwg4fhhfqfs@amd.com>
+ <Yeb7vOaqDtH6Fpsb@zn.tnic>
+ <20220118184930.nnwbgrfr723qabnq@amd.com>
+ <20220119011806.av5rtxfv4et2sfkl@amd.com>
+ <YefzQuqrV8kdLr9z@zn.tnic>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 171bd682-13f8-47a1-c26f-08d9e1a5fb7c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2022 15:02:05.2753
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YefzQuqrV8kdLr9z@zn.tnic>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 69d74272-89ac-49b7-fe42-08d9e1b686fc
+X-MS-TrafficTypeDiagnostic: SA1PR12MB5671:EE_
+X-Microsoft-Antispam-PRVS: <SA1PR12MB5671FD0B2E72B9D4F7630B5A95219@SA1PR12MB5671.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r8EycPUhCXElC6By25NxG8uxtrnScWXDZOS3p6LTos0iMt/zXYJqZ8J5kbyaDJ14FZSjnjUh+qLGyYLGgAnpen/qjTK6wOH1wW11x+V8VHgGp5VZZsEo020PDops54p/dK32sWGst2SGoZKkaWTWfKeYXm/y3ieHwTebYYJCyV2MtGo0F5HFFfySyPY2/VMo0+wnNzhl6uEmyxy8Qyl92ekogThID6Jqg7WO1yGohdxq+8AcPWDBju267AXtKvEwbQ059534WPFOyey9YrLpJ8WARJMu+8EJQJsHzRpQgYjTOSBktA0H4lKR0OMkqpxo/CPjdXEhMrd+/ZgXKoyEi0sl9pzhBty0vpO3/VNP/BuDjWcU1UkPKs5UN4iQk7tJ0mGJ/4gBIWDC27qhZcZPu/bB9n04D06yjuccem6RD0HV5B58rgQEVgeNJbQ3gcQgfkig2lOMYQbl9ypgR5McvJJdv/pxqZgJTZXQwP4egjlwwXyfpwWpdvjfB3R1sbVszdNJ3ccswNP07CFoLcHz8nhUhYR0GN3ogTvuSe5eoAgV7aF7zeJwAVzEtGuglPDie/WRZEg+UTNMV+TkPHUR80ymJb8mVFj36vsAxYdpcjFr4WC5sx5sMrZ3IfUDmbq8piEAMiBTOPb5xI2V7xrdC2mSU1ekM/WumZeTxcXq6DH4d814GzjIEcFjC27SPbWCDSNpnW1vOF40OlZu/P4tAAQW+MzXYyRNNY9fvzGMe2R9TVONpHOoZQttua/Dro75zmr0hAyOw+bsCvCSy9Ehju/6uv0BAnEPl0LU5n6Z8rk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700004)(36840700001)(46966006)(8676002)(2616005)(6666004)(1076003)(82310400004)(36860700001)(508600001)(16526019)(3716004)(186003)(70586007)(26005)(40460700003)(86362001)(426003)(4326008)(2906002)(54906003)(6916009)(7416002)(81166007)(7406005)(36756003)(83380400001)(70206006)(5660300002)(356005)(44832011)(47076005)(8936002)(316002)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 17:00:31.4035
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: a3nJO4R/3F7V8EnsSqnfIQ7zdVohFteG8QX6UoI104GJXRjazCTWei0avSpA7G2xKaeb8zIheRBfXkDU4uoc1JwQb91tI1xAVmVklMEtp/E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1880
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69d74272-89ac-49b7-fe42-08d9e1b686fc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5671
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Monday, January 24, 2022=
- 1:20 AM
->=20
-> Yury Norov <yury.norov@gmail.com> writes:
->=20
-> > init_vp_index() calls cpumask_weight() to compare the weights of cpumas=
-ks
-> > We can do it more efficiently with cpumask_weight_eq because conditiona=
-l
-> > cpumask_weight may stop traversing the cpumask earlier (at least one), =
-as
-> > soon as condition is met.
->=20
-> Same comment as for "PATCH 41/54": cpumask_weight_eq() can only stop
-> earlier if the condition is not met, to prove the equality all bits need
-> always have to be examined.
->=20
-> >
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  drivers/hv/channel_mgmt.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> > index 60375879612f..7420a5fd47b5 100644
-> > --- a/drivers/hv/channel_mgmt.c
-> > +++ b/drivers/hv/channel_mgmt.c
-> > @@ -762,8 +762,8 @@ static void init_vp_index(struct vmbus_channel *cha=
-nnel)
-> >  		}
-> >  		alloced_mask =3D &hv_context.hv_numa_map[numa_node];
-> >
-> > -		if (cpumask_weight(alloced_mask) =3D=3D
-> > -		    cpumask_weight(cpumask_of_node(numa_node))) {
-> > +		if (cpumask_weight_eq(alloced_mask,
-> > +			    cpumask_weight(cpumask_of_node(numa_node)))) {
->=20
-> This code is not performace critical and I prefer the old version:
->=20
->  	cpumask_weight() =3D=3D cpumask_weight()
->=20
->  looks better than
->=20
-> 	cpumask_weight_eq(..., cpumask_weight())
->=20
-> (let alone the inner cpumask_of_node()) to me.
->=20
-> >  			/*
-> >  			 * We have cycled through all the CPUs in the node;
-> >  			 * reset the alloced map.
->=20
-> --
-> Vitaly
+On Wed, Jan 19, 2022 at 12:17:22PM +0100, Borislav Petkov wrote:
+> On Tue, Jan 18, 2022 at 07:18:06PM -0600, Michael Roth wrote:
+> > If 'fake_count'/'reported_count' is greater than the actual number of
+> > entries in the table, 'actual_count', then all table entries up to
+> > 'fake_count' will also need to pass validation. Generally the table
+> > will be zero'd out initially, so those additional/bogus entries will
+> > be interpreted as a CPUID leaves where all fields are 0. Unfortunately,
+> > that's still considered a valid leaf, even if it's a duplicate of the
+> > *actual* 0x0 leaf present earlier in the table. The current code will
+> > handle this fine, since it scans the table in order, and uses the
+> > valid 0x0 leaf earlier in the table.
+> 
+> I guess it would be prudent to have some warnings when enumerating those
+> leafs and when the count index "goes off into the weeds", so to speak,
+> and starts reading 0-CPUID entries. I.e., "dear guest owner, your HV is
+> giving you a big lie: a weird/bogus CPUID leaf count..."
+> 
+> :-)
 
-I agree with Vitaly in preferring the old version, and indeed performance
-here is a shrug.  But actually, I think the old version is a poorly coded w=
-ay
-to determine if the two cpumasks are equal. The following would correctly
-capture the intent:
+Ok, there's some sanity checks that happen a little later in boot via
+snp_cpuid_check_status(), after printk is enabled, that reports some
+basic details to dmesg like the number of entries in the table. I can
+add some additional sanity checks to flag the above case (really,
+all-zero entries never make sense, since CPUID 0x0 is supposed to report
+the max standard-range CPUID leaf, and leaf 0x1 at least should always
+be present). I'll print a warning for such cases, add maybe dump the
+cpuid the table in that case so it can be examined more easily by
+owner.
 
-	if (cpumask_equal(alloced_mask, cpumask_of_node(numa_node))
+> 
+> And lemme make sure I understand it: the ->count itself is not
+> measured/encrypted because you want to be flexible here and supply
+> different blobs with different CPUID leafs?
 
-Michael
+Yes, but to be clear it's the entire CPUID page, including the count,
+that's not measured (though it is encrypted after passing PSP
+validation). Probably the biggest reason is the logistics of having
+untrusted cloud vendors provide a copy of the CPUID values they plan
+to pass to the guest, since a new measurement would need to be
+calculated for every new configuration (using different guest
+cpuflags, SMP count, etc.), since those table values will need to be
+made easily-accessible to guest owner for all these measurement
+calculations, and they can't be trusted so each table would need to
+be checked either manually or by some tooling that could be difficult
+to implement unless it was something simple like "give me the expected
+CPUID values and I'll check if the provided CPUID table agrees with
+that".
 
+At that point it's much easier for the guest owner to just check the
+CPUID values directly against known good values for a particular
+configuration as part of their attestation process and leave the
+untrusted cloud vendor out of it completely. So not measuring the
+CPUID page as part of SNP attestation allows for that flexibility.
 
+> 
+> > This is isn't really a special case though, it falls under the general
+> > category of a hypervisor inserting garbage entries that happen to pass
+> > validation, but don't reflect values that a guest would normally see.
+> > This will be detectable as part of guest owner attestation, since the
+> > guest code is careful to guarantee that the values seen after boot,
+> > once the attestation stage is reached, will be identical to the values
+> > seen during boot, so if this sort of manipulation of CPUID values
+> > occurred, the guest owner will notice this during attestation, and can
+> > abort the boot at that point. The Documentation patch addresses this
+> > in more detail.
+> 
+> Yap, it is important this is properly explained there so that people can
+> pay attention to during attestation.
+> 
+> > If 'fake_count' is less than 'actual_count', then the PSP skips
+> > validation for anything >= 'fake_count', and leaves them in the table.
+> > That should also be fine though, since guest code should never exceed
+> > 'fake_count'/'reported_count', as that's a blatant violation of the
+> > spec, and it doesn't make any sense for a guest to do this. This will
+> > effectively 'hide' entries, but those resulting missing CPUID leaves
+> > will be noticeable to the guest owner once attestation phase is
+> > reached.
+> 
+> Noticeable because the guest owner did supply a CPUID table with X
+> entries but the HV is reporting Y?
 
+Or even more simply by the guest owner simply running 'cpuid -r -1' on
+the guest after boot, and making sure all the expected entries are
+present. If the HV manipulated the count to be lower, there would be
+missing entries, if they manipulated it to be higher, then there would
+either be extra duplicate entries at the end of the table (which the
+#VC handler would ignore due to it using the first matching entry in
+the table when doing lookups), or additional non-duplicate garbage
+entries, which will show up in 'cpuid -r -1' as unexpected entries.
+
+Really 'cpuid -r -1' is the guest owner/userspace view of things, so
+some of these nuances about the table contents might be noteworthy,
+but wouldn't actually affect guest behavior, which would be the main
+thing attestation process should be concerned with.
+
+> 
+> If so, you can make this part of the attestation process: guest owners
+> should always check the CPUID entries count to be of a certain value.
+> 
+> > This does all highlight the need for some very thorough guidelines
+> > on how a guest owner should implement their attestation checks for
+> > cpuid, however. I think a section in the reference implementation
+> > notes/document that covers this would be a good starting point. I'll
+> > also check with the PSP team on tightening up some of these CPUID
+> > page checks to rule out some of these possibilities in the future.
+> 
+> Now you're starting to grow the right amount of paranoia - I'm glad I
+> was able to sensitize you properly!
+> 
+> :-)))
+
+Hehe =*D
+
+Thanks!
+
+-Mike

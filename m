@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4373649330A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A77493316
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351069AbiASCk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 21:40:26 -0500
-Received: from mga07.intel.com ([134.134.136.100]:44631 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351027AbiASCkQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 21:40:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642560016; x=1674096016;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oEh0Xgyw+JMALznUR0Xtdz2WLuMsivqdgfGVkYejpq8=;
-  b=BcgKr5xOWcx3g6kUOIuagqdajbRw5zoo2WdS4PwadEWkVP8iTmQJNGxV
-   3pvoDZqk+znXGBXugFJ9v/AU5lSRSwdJitik5+dblZP1a5A/NXnjfnSLJ
-   IHu6Xej60qyuBwsi3heAZxs9fuAFPDERtSAwv21w9s/JIDlBl/AenNU2Z
-   JZespRKE78rp3N/rneMq3Bi8Y21a2OlXbi5+rrT6R5zd4JF5ZdVpvh5cW
-   DHUAI+4PCoAp0g8uVeUCPwQzFJV+3IFls5mGuBPtFJ8xwghunjC4Q6CR4
-   7dIdIooHbcAtCqSK57Tay2SDFiBRTz6zBjBLeH+QTLu5TBeXJ5KDUa5Dp
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="308309738"
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="308309738"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 18:40:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="492874290"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2022 18:40:14 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nA0tR-000D9h-Ur; Wed, 19 Jan 2022 02:40:13 +0000
-Date:   Wed, 19 Jan 2022 10:40:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matteo Croce <mcroce@microsoft.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 19/80] mm/kasan/shadow.c:63:7: warning: no
- previous prototype for function 'memcpy'
-Message-ID: <202201191007.pTfIzJYE-lkp@intel.com>
+        id S1351050AbiASCpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 21:45:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26316 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344162AbiASCpR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 21:45:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642560317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2QbQg6mxiZtW68ExHgyVdc/QMifv6KYOVGiXP5EWIls=;
+        b=YJoLfA/rvI57FrBPt1NlOJ5OJ8wSWZAuB/cHlxPXyntHblWZJLEip03e0dXgTg9YZyLGoU
+        OR0SD74FsHuCioYdkBQq8xJOD8YemvOIajLS2zkMfr0lbDm4AQMgwsIULCFuZAXSEc2pb0
+        ro+6vCg6XW4MVgVnqOq971xGfbHnL90=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-GvCh6WxRMpeZ5vt4YUeEbQ-1; Tue, 18 Jan 2022 21:45:16 -0500
+X-MC-Unique: GvCh6WxRMpeZ5vt4YUeEbQ-1
+Received: by mail-lf1-f69.google.com with SMTP id v7-20020a056512048700b0042d99b3a962so513602lfq.23
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:45:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2QbQg6mxiZtW68ExHgyVdc/QMifv6KYOVGiXP5EWIls=;
+        b=TopnhnIsB3Xf+W6FwdiXxwi77rChZlssV3+T9QbkKgHqdRbLiJRD+UFjsmkQC06A+J
+         3PWbnTZGba2i6MOjQT7I8xHrZ9k5phmDwVtP+ol3KjlgWhKQcaXcgl370tW6c3IvO8SP
+         AAJHIKurj9xxPoSW1/7Xi9K/waENAnNsLLzKjhY4irnkRPwPg1GPpCz0NN+Pa/M6AQ+T
+         H7MNxkcMRJtzBzOnjtZ6036rtcsb0BsZ+SblOWZxe8wiFufHhQkBckvo3RDUcFud1rWz
+         Gr8DaDsBLs6zrLawvv9E/8C7waSHDjgyfeqLAn5dcnr24OmljXtkNM3uxTU0qQurrrQk
+         aREw==
+X-Gm-Message-State: AOAM533gIsAIrgvahXGpYG5y/8g02n2MYX9gY/GqAubaav4iwoUKqcLD
+        JLc3VTbFoDw44KD+MaGts3MIasR/wf3XafAX/D2WhETxW1ZPXkJ2RoBVNPi0qvg1RllJ0bR/7rB
+        CDwo5224Cmu2y5k4nwNDhp5mYrze+bSZJgUjvq6OV
+X-Received: by 2002:a2e:9843:: with SMTP id e3mr21777387ljj.277.1642560314285;
+        Tue, 18 Jan 2022 18:45:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzB9BW6WWCim9vDYU4kum1F16AkR869KEeJaKkIEYwrn5RQkE5MqxGYI12cabpygmhempbvUOpSdSvSn6zf90Q=
+X-Received: by 2002:a2e:9843:: with SMTP id e3mr21777377ljj.277.1642560314113;
+ Tue, 18 Jan 2022 18:45:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220118150631.167015-1-sgarzare@redhat.com>
+In-Reply-To: <20220118150631.167015-1-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 19 Jan 2022 10:45:03 +0800
+Message-ID: <CACGkMEtrH5dy7WxqEg7vNARUu3tsYZBtP8MX7a60VR+ZyWvVrw@mail.gmail.com>
+Subject: Re: [PATCH] tools/virtio: fix virtio_test execution
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   e46c3a7e373e6faa03399f1a41c29cf7546c37cb
-commit: 7c451b4efc456af4a20559eb4108b7f21b4c98b2 [19/80] riscv: optimized memcpy
-config: riscv-randconfig-r042-20220118 (https://download.01.org/0day-ci/archive/20220119/202201191007.pTfIzJYE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/7c451b4efc456af4a20559eb4108b7f21b4c98b2
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 7c451b4efc456af4a20559eb4108b7f21b4c98b2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash mm/kasan/
+On Tue, Jan 18, 2022 at 11:06 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>
+> virtio_test hangs on __vring_new_virtqueue() because `vqs_list_lock`
+> is not initialized.
+>
+> Let's initialize it in vdev_info_init().
+>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-All warnings (new ones prefixed by >>):
+> ---
+>  tools/virtio/virtio_test.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+> index cb3f29c09aff..23f142af544a 100644
+> --- a/tools/virtio/virtio_test.c
+> +++ b/tools/virtio/virtio_test.c
+> @@ -130,6 +130,7 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
+>         memset(dev, 0, sizeof *dev);
+>         dev->vdev.features = features;
+>         INIT_LIST_HEAD(&dev->vdev.vqs);
+> +       spin_lock_init(&dev->vdev.vqs_list_lock);
+>         dev->buf_size = 1024;
+>         dev->buf = malloc(dev->buf_size);
+>         assert(dev->buf);
+> --
+> 2.31.1
+>
 
->> mm/kasan/shadow.c:63:7: warning: no previous prototype for function 'memcpy' [-Wmissing-prototypes]
-   void *memcpy(void *dest, const void *src, size_t len)
-         ^
-   mm/kasan/shadow.c:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *memcpy(void *dest, const void *src, size_t len)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/memcpy +63 mm/kasan/shadow.c
-
-bb359dbcb70085 Andrey Konovalov 2020-12-22  61  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  62  #undef memcpy
-bb359dbcb70085 Andrey Konovalov 2020-12-22 @63  void *memcpy(void *dest, const void *src, size_t len)
-bb359dbcb70085 Andrey Konovalov 2020-12-22  64  {
-f00748bfa0246c Andrey Konovalov 2021-02-24  65  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
-f00748bfa0246c Andrey Konovalov 2021-02-24  66  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-bb359dbcb70085 Andrey Konovalov 2020-12-22  67  		return NULL;
-bb359dbcb70085 Andrey Konovalov 2020-12-22  68  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  69  	return __memcpy(dest, src, len);
-bb359dbcb70085 Andrey Konovalov 2020-12-22  70  }
-bb359dbcb70085 Andrey Konovalov 2020-12-22  71  
-
-:::::: The code at line 63 was first introduced by commit
-:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
-
-:::::: TO: Andrey Konovalov <andreyknvl@google.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

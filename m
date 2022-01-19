@@ -2,159 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0029A493229
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1242493230
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238630AbiASBK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S1350572AbiASBNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238605AbiASBK6 (ORCPT
+        with ESMTP id S238605AbiASBNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:10:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:10:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64CF2B8173F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6AAAC340E0;
-        Wed, 19 Jan 2022 01:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642554655;
-        bh=L1emoT2JOCxKxebRi7Jb6xfIULWVJUwDe1hefYltELs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tT8sBap/Ew0TeE/Rn/AiIxbj5kmqgTN3/4NepTVSZ/QbjGGACNeuXbJawRbPJhyE9
-         kIhzG/jfgBf972E4yq6/4z6oyV87WVIQ1lO2FgBWSeeWHL6g0W9yZFsQpY9PaQd2hU
-         5ZF+YFNECCELCmpRRvliZF0bZelAscRl3RLbbwRm37jCq0eECR8DQ+KFUnRQwW0eqR
-         R4IkwV+jet8/sulw3Qy0jkpSiIMIeNz09AYJtlUHCH1iY00v9yV5Cpt1mea87wWIOu
-         OZnuwhgghebmo5jAL7eQU/ijoTVhM3VgnyJkj4N2uUxVb4Dv0tcKjzb1AHUsrYDEET
-         szcuXq9uF2fLg==
-Date:   Tue, 18 Jan 2022 17:10:53 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] f2fs update for 5.17-rc1
-Message-ID: <YedlHVEa4sdbvB2F@google.com>
+        Tue, 18 Jan 2022 20:13:15 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC4AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:13:15 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso10411426wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=50MjByGIX6DHznMCkfHrBn75G4KYjzPHuR0BeBP+4t4=;
+        b=eyaRuv/9IDz5SsHVaZIYbvPV5L4hgH7nVY+howCDj+peJOAHOegbMCzzDDCJAEfjPS
+         qmH/u3tzcIzKXgpSiTw4jY/iixbJa9mMKwR90raAYkkV/EgKbO4NqfM9IGAb5t8adW87
+         4ZJ2GaSdEGiFTa1GLXT7GvyR3WCwd3Mdvia7UNpB3KxACkjApZaBeLa1FjBeUNJfehMa
+         hBKNhoWHG7KcK8XEq9bB6f63DtjN306ZtbdY8TvLn9kKGAWyKQmBPNb60GzPO6ZoJEIN
+         bwx5Qh/e+AuPaTqnuUghAgKlOeTZkHBg+ygCVtBJzc4ZyZUWAov1qB0Fp6xjgYeEnFkh
+         PUTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=50MjByGIX6DHznMCkfHrBn75G4KYjzPHuR0BeBP+4t4=;
+        b=Sea6mQTr8c/uTCP4eig1++g1WkN3SrD6SV36oJtmySEvkBd6fXaA8+q+3B6DnacMuP
+         +vQQMRRrWFIHGB3YAoQBY0Ak4eTEk97qwxuur+Rp4nYZAtVgVvOi3Vp254lOS1ZzZBO3
+         rIWcePdS0L9M8mVXniBVc4Q52byjuYR9Pkq/t6EzAKz2WaBuWNIRrmbzMtCgG6gtRKL4
+         rCdMig37O4+bDPmNbBSP0cfxm5ruBK85u38TunqCjabntfot8AiOBAdhlqJ9LxAgs5dp
+         zHbNJNN7fXDv0dVI4FS+2ELgrpo8hF396oFfO+GsFexxtieh0cLHsiPgKNeKh+jPRq4W
+         Rqhw==
+X-Gm-Message-State: AOAM532OfTYnE6hpuJ3is4/ObBoqanPpWKsRhtCtKrJPW7RdBweT2P/3
+        CN20iSvspHN4OS6x0PU8PLK/5aCH9fKphr7iWKD4bImjeSk=
+X-Google-Smtp-Source: ABdhPJzViwSfEJ/OAgfgTnkCENlbY8geeqDyp4ugmwJcbH27XepXu9DSfxNrnC2dpFSAgD0t/dRQURaQLmmYu2FccGw=
+X-Received: by 2002:adf:fec9:: with SMTP id q9mr26323640wrs.72.1642554793832;
+ Tue, 18 Jan 2022 17:13:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220118163754.nfy53mfjpazgw2a2@eve> <YecV+rh/4rzygUbx@google.com>
+ <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
+ <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
+ <CAFTm+6APx0PkRgp+7LLEOi=2E-7ZSgYdQ824U1XB+q1wMPNg3g@mail.gmail.com>
+ <CACeCKaeAaS3QcLwvcPNYVtkKxaBViij53TBjOXvwcpKQk+NDbA@mail.gmail.com>
+ <CAFTm+6BC--tNjbez_f_A_ckK7gjkbBMWHYSExxQcp9+u60Z2WQ@mail.gmail.com> <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
+In-Reply-To: <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
+From:   "Mr. Chromebox" <mrchromebox@gmail.com>
+Date:   Tue, 18 Jan 2022 19:13:02 -0600
+Message-ID: <CAFTm+6CYN8UhjM5DB97OJ0i4j821cExyhOQS22Spg_J_H8pDCg@mail.gmail.com>
+Subject: Re: Null pointer dereference in cros-ec-typec
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Benson Leung <bleung@google.com>, Alyssa Ross <hi@alyssa.is>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Tim Wawrzynczak <twawrzynczak@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Jan 18, 2022 at 6:35 PM Prashant Malani <pmalani@chromium.org> wrot=
+e:
+>
+> There seem to be some differences.
+> The Mr.Chromebox GOOG0004 device doesn't have any connectors listed.
+> See here for a BIOS snippet from voxel:
+> Scope (\_SB.PCI0.LPCB.EC0.CREC)
+>     {
+>         Device (USBC)
+>         {
+>             Name (_HID, "GOOG0014")  // _HID: Hardware ID
+>             Name (_DDN, "ChromeOS EC Embedded Controller USB Type-C
+> Control")  // _DDN: DOS Device Name
+>             Device (CON0)
+>             {
+>                 ...
+>             }
+>
+>             Device (CON1)
+>             {
+>                ...
+>             }
+>         }
+>     }
+>
+> Does the EC on this device support EC_CMD_GET_PD_PORT_CAPS , or
+> EC_CMD_USB_PD_PORTS ?
 
-Could you please consider this pull request?
+I'll have to check the EC source, that dump is from a google/hatch
+variant (Akemi), possibly running a custom ChromeEC build as well
 
-Thanks as always,
-
-The following changes since commit 8ab774587903771821b59471cc723bba6d893942:
-
-  Merge tag 'trace-v5.16-5' of git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace (2021-11-14 19:07:19 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-5.17-rc1
-
-for you to fetch changes up to 5fed0be8583f08c1548b4dcd9e5ee0d1133d0730:
-
-  f2fs: do not allow partial truncation on pinned file (2022-01-10 09:05:09 -0800)
-
-----------------------------------------------------------------
-f2fs-for-5.17-rc1
-
-In this round, we've tried to address some performance issues in f2fs_checkpoint
-and direct IO flows. Also, there was a work to enhance the page cache management
-used for compression. Other than them, we've done typical work including sysfs,
-code clean-ups, tracepoint, sanity check, in addition to bug fixes on corner
-cases.
-
-Enhancement:
- - use iomap for direct IO
- - try to avoid lock contention to improve f2fs_ckpt speed
- - avoid unnecessary memory allocation in compression flow
- - POSIX_FADV_DONTNEED drops the page cache containing compression pages
- - add some sysfs entries (gc_urgent_high_remaining, pending_discard)
-
-Bug fix:
- - try not to expose unwritten blocks to user by DIO
-   : this was added to avoid merge conflict; another patch is coming to address
-     other missing case.
- - relax minor error condition for file pinning feature used in Android OTA
- - fix potential deadlock case in compression flow
- - should not truncate any block on pinned file
-
-In addition, we've done some code clean-ups and tracepoint/sanity check
-improvement.
-
-----------------------------------------------------------------
-Chao Yu (9):
-      f2fs: fix to do sanity check on inode type during garbage collection
-      f2fs: fix to avoid panic in is_alive() if metadata is inconsistent
-      f2fs: fix to do sanity check in is_alive()
-      f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
-      f2fs: clean up __find_inline_xattr() with __find_xattr()
-      f2fs: support fault injection to f2fs_trylock_op()
-      f2fs: fix to check available space of CP area correctly in update_ckpt_flags()
-      f2fs: fix to reserve space for IO align feature
-      f2fs: don't drop compressed page cache in .{invalidate,release}page
-
-Daeho Jeong (1):
-      f2fs: add gc_urgent_high_remaining sysfs node
-
-Eric Biggers (5):
-      f2fs: rework write preallocations
-      f2fs: reduce indentation in f2fs_file_write_iter()
-      f2fs: fix the f2fs_file_write_iter tracepoint
-      f2fs: implement iomap operations
-      f2fs: use iomap for direct I/O
-
-Fengnan Chang (4):
-      f2fs: compress: reduce one page array alloc and free when write compressed page
-      f2fs: fix remove page failed in invalidate compress pages
-      f2fs: support POSIX_FADV_DONTNEED drop compressed page cache
-      f2fs: remove redunant invalidate compress pages
-
-Hyeong-Jun Kim (1):
-      f2fs: compress: fix potential deadlock of compress file
-
-Jaegeuk Kim (8):
-      f2fs: do not expose unwritten blocks to user by DIO
-      f2fs: show more DIO information in tracepoint
-      f2fs: show number of pending discard commands
-      f2fs: avoid duplicate call of mark_inode_dirty
-      f2fs: avoid EINVAL by SBI_NEED_FSCK when pinning a file
-      f2fs: avoid down_write on nat_tree_lock during checkpoint
-      f2fs: do not bother checkpoint by f2fs_get_node_info
-      f2fs: do not allow partial truncation on pinned file
-
-Yang Li (1):
-      f2fs: Simplify bool conversion
-
- Documentation/ABI/testing/sysfs-fs-f2fs |  12 +
- Documentation/filesystems/f2fs.rst      |   1 +
- fs/f2fs/Kconfig                         |   1 +
- fs/f2fs/checkpoint.c                    |   6 +-
- fs/f2fs/compress.c                      |  84 +++---
- fs/f2fs/data.c                          | 351 +++++-----------------
- fs/f2fs/f2fs.h                          |  43 ++-
- fs/f2fs/file.c                          | 509 ++++++++++++++++++++++++++------
- fs/f2fs/gc.c                            |  26 +-
- fs/f2fs/inline.c                        |   4 +-
- fs/f2fs/inode.c                         |  18 +-
- fs/f2fs/iostat.c                        |  40 ++-
- fs/f2fs/node.c                          |  23 +-
- fs/f2fs/recovery.c                      |   2 +-
- fs/f2fs/segment.c                       |   2 +-
- fs/f2fs/segment.h                       |   3 +-
- fs/f2fs/super.c                         |  46 +++
- fs/f2fs/sysfs.c                         |  26 +-
- fs/f2fs/xattr.c                         |  40 +--
- include/trace/events/f2fs.h             |  27 +-
- 20 files changed, 759 insertions(+), 505 deletions(-)
-
+> It doesn't look like the EC is returning anything for these commands,
+> which are used to populate GOOG0014.
+>
+> The CREC device looks about right:
+>
+> Device (CREC)
+>             {
+>                 Name (_HID, "GOOG0004")  // _HID: Hardware ID
+>                 Name (_UID, One)  // _UID: Unique ID
+>                 Name (_DDN, "EC Command Device")  // _DDN: DOS Device Nam=
+e
+>                 Name (_PRW, Package (0x02)  // _PRW: Power Resources for =
+Wake
+>                 {
+>                    ....
+>                 })
+>              }
+>
+> 2 observations:
+> - We probably shouldn't be generating a GOOG0014 device at all if the
+> EC_CMD_GET_PD_PORT_CAPS and EC_CMD_USB_PD_PORTS commands aren't
+> supported by the EC. I can work with coreboot to make that change
+> - Is the order of probing for some reason causing the GOOG0014 child
+> device to not be linked to the GOOG0004 device? Alyssa, does the
+> following diff help:
+>
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c
+> b/drivers/platform/chrome/cros_ec_typec.c
+> index 5de0bfb0bc4d..7059912b75c1 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -1076,6 +1076,10 @@ static int cros_typec_probe(struct platform_device=
+ *pdev)
+>
+>         typec->dev =3D dev;
+>         typec->ec =3D dev_get_drvdata(pdev->dev.parent);
+> +
+> +       if (!typec->ec)
+> +               return -EPROBE_DEFER;
+> +
+>         platform_set_drvdata(pdev, typec);
+>
+>         ret =3D cros_typec_get_cmd_version(typec);
+>
+>
+> On Tue, Jan 18, 2022 at 2:34 PM Mr. Chromebox <mrchromebox@gmail.com> wro=
+te:
+> >
+> > On Tue, Jan 18, 2022 at 4:16 PM Prashant Malani <pmalani@chromium.org> =
+wrote:
+> > >
+> > > Hi Matt,
+> > >
+> > > On Tue, Jan 18, 2022 at 2:04 PM Mr. Chromebox <mrchromebox@gmail.com>=
+ wrote:
+> > > >
+> > > > hi Prashant,
+> > > >
+> > > > my releases track upstream coreboot; my most recent release was bas=
+ed
+> > > > on coreboot 4.14 (I'm behind on getting a 4.15-based release out).
+> > > >
+> > > > A quick perusal of the source for src/ec/google/chromeec/ doesn't s=
+how
+> > > > any recent changes to the location of the GOOG0014 ACPI device. The
+> > > > most recent change was 2 years ago (so, landed in the 4.12 release)=
+,
+> > > > which moved the USB-C child device to its present location: under
+> > > > \_SB.PCI0.LPCB.EC0.CREC
+> > > >
+> > > > ref: https://github.com/coreboot/coreboot/commit/eec30f7beae074c3f8=
+0a182cc2950ed8e4f0a640
+> > > >
+> > > > prior to that, it was located under  \_SB.PCI0.LPCB.EC0.
+> > > >
+> > > > I also dumped/disassembled the ACPI from a recent build to confirm =
+the above.
+> > >
+> > > Is it possible to share the disassembled ACPI tables? We can then
+> > > compare it to the ones on shipping Chromebooks to identify a
+> > > discrepancy.
+> > > If the GOOG0014 device is correctly listed as a child of the EC devic=
+e
+> > > (GOOG0004), then the kernel ACPI framework should be setting
+> > > GOOG0004 as a parent (and dev_get_drvdata(pdev->dev.parent) shouldn't
+> > > return NULL).
+> >
+> > as the GOOG0014 device is runtime-generated, it's located in the SSDT:
+> >
+> > External (_SB_.PCI0.LPCB.EC0_.CREC, DeviceObj)
+> > ...
+> > Scope (\_SB.PCI0.LPCB.EC0.CREC)
+> > {
+> >     Device (USBC)
+> >     {
+> >         Name (_HID, "GOOG0014")  // _HID: Hardware ID
+> >         Name (_DDN, "ChromeOS EC Embedded Controller USB Type-C
+> > Control")  // _DDN: DOS Device Name
+> >     }
+> > }
+> >
+> > GOOG0004 is defined in the DSDT, under EC0:
+> >
+> > Device (CREC)
+> > {
+> >     Name (_HID, "GOOG0004")  // _HID: Hardware ID
+> >     Name (_UID, One)  // _UID: Unique ID
+> >     Name (_DDN, "EC Command Device")  // _DDN: DOS Device Name
+> >     Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
+> >     {
+> >         0x70,
+> >         0x05
+> >     })
+> > ...
+> > }
+> >
+> > -Matt
+> >
+> > > > regards,
+> > > > Matt / MrChromebox
+> > > >
+> > > > On Tue, Jan 18, 2022 at 2:12 PM Prashant Malani <pmalani@chromium.o=
+rg> wrote:
+> > > > >
+> > > > > (+Mr.Chromebox team; using the address listed in
+> > > > > https://mrchromebox.tech/#support )
+> > > > >
+> > > > > Hi Team Mr.Chromebox,
+> > > > >
+> > > > > Could you kindly provide some more detail regarding how the GOOG0=
+014
+> > > > > Type C ACPI device is set up in the Mr Chromebox BIOS for Chromeb=
+ooks
+> > > > > (the driver expects it to be embedded in the GOOG0004 EC device)?
+> > > > > We want to enable Alyssa and other developers using the Mr.Chrome=
+box
+> > > > > BIOS to have a functional cros-ec-typec driver, so would like to =
+help
+> > > > > ensure that the device is set up correctly in ACPI.
+> > > > >
+> > > > > Thanks!
+> > > > >
+> > > > > -Prashant
+> > > > >
+> > > > > On Tue, Jan 18, 2022 at 11:49 AM Prashant Malani <pmalani@chromiu=
+m.org> wrote:
+> > > > > >
+> > > > > > Hi Benson and Alyssa,
+> > > > > >
+> > > > > > On Tue, Jan 18, 2022 at 11:33 AM Benson Leung <bleung@google.co=
+m> wrote:
+> > > > > > >
+> > > > > > > Hi Alyssa,
+> > > > > > >
+> > > > > > > Thanks for reaching out.
+> > > > > > >
+> > > > > > > On Tue, Jan 18, 2022 at 04:37:54PM +0000, Alyssa Ross wrote:
+> > > > > > > > My distribution recently enabled the Chrome OS EC Type C co=
+ntrol driver
+> > > > > > > > in its kernel builds.  On my Google Pixelbook i7 (eve), the=
+ driver reports
+> > > > > > > > a null pointer dereference at boot.  From what I can tell, =
+this happens
+> > > > > > > > because typec->ec is set to NULL in cros_typec_probe.  Othe=
+r drivers,
+> > > > > > > > like cros-usbpd-notify, appear to be set up to handle this =
+case.  As a
+> > > > > > > > result of this bug, I'm no longer able to reboot my compute=
+r, because
+> > > > > > > > udevd hangs while trying to do something with the device wh=
+ose driver
+> > > > > > > > isn't working.
+> > > > > > > >
+> > > > > > >
+> > > > > > > I've copied Prashant, who's the author of the typec driver as=
+ well as
+> > > > > > > cros-usbpd-notify.
+> > > > > > >
+> > > > > > > Prashant, any thoughts on a more graceful failure out of the =
+typec driver's
+> > > > > > > probe in case there's no ec object?
+> > > > > >
+> > > > > > We can add a NULL check and just abort the driver probe if the =
+pointer is
+> > > > > > not valid (the driver is useless without that pointer anyway).
+> > > > > >
+> > > > > > A note: The NULL check makes sense on older drivers like cros-u=
+sbpd-notify since
+> > > > > > they can exist in ACPI configurations where they are *not* embe=
+dded
+> > > > > > inside the GOOG0004
+> > > > > > EC device (on older Chromebooks). That is not the case for the =
+EC Type C device.
+> > > > > >
+> > > > > > This raises another issue: the custom BIOS from Mr. Chromebox i=
+s
+> > > > > > likely not setting
+> > > > > > up the EC Type C ACPI (GOOG0014) device correctly; it *must* be
+> > > > > > embedded inside the overall
+> > > > > > EC device (GOOG0004). If this is not being done, then the GOOG0=
+014
+> > > > > > device should not
+> > > > > > be added to the ACPI tables at all.
+> > > > > >
+> > > > > > I would like to understand whether the above was intentional fr=
+om the
+> > > > > > Mr. Chromebox BIOS developers;
+> > > > > > otherwise we are letting an incorrect ACPI configuration just f=
+ail
+> > > > > > with a probe error.
+> > > > > >
+> > > > > > Thanks,
+> > > > > >
+> > > > > > -Prashant
+> > > > > >
+> > > > > > >
+> > > > > > > > Here's the full Oops.  I was able to reproduce the issue wi=
+th every
+> > > > > > > > kernel I tried, from 5.10 to mainline.
+> > > > > > > >
+> > > > > > > > cros-usbpd-notify-acpi GOOG0003:00: Couldn't get Chrome EC =
+device pointer.
+> > > > > > > > input: Intel Virtual Buttons as /devices/pci0000:00/0000:00=
+:1f.0/PNP0C09:00/INT33D6:00/input/input14
+> > > > > > > > BUG: kernel NULL pointer dereference, address: 000000000000=
+00d8
+> > > > > > > > #PF: supervisor read access in kernel mode
+> > > > > > > > #PF: error_code(0x0000) - not-present page
+> > > > > > > > PGD 0 P4D 0
+> > > > > > > > Oops: 0000 [#1] SMP PTI
+> > > > > > > > CPU: 1 PID: 561 Comm: systemd-udevd Not tainted 5.15.12 #4
+> > > > > > > > Hardware name: Google Eve/Eve, BIOS MrChromebox-4.14 08/06/=
+2021
+> > > > > > >
+> > > > > > >
+> > > > > > > Ah, here's the problem. It looks like this is a custom bios f=
+rom Mr Chromebox,
+> > > > > > > so this is not a bios combination we validate at Google.
+> > > > > > >
+> > > > > > > Thank you for the report. We'll look into fixing this and mar=
+king the fix
+> > > > > > > for stable kernels so that it goes back to 5.10.
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > >
+> > > > > > > Benson
+> > > > > > >
+> > > > > > > > RIP: 0010:__mutex_lock+0x59/0x8c0
+> > > > > > > > Code: 53 48 89 cb 48 83 ec 70 89 75 9c be 3d 02 00 00 4c 89=
+ 45 90 e8 18 47 33 ff e8 e3 e2 ff ff 44 8b 35 a4 85 e8 02 45 85 f6 75 0a <4=
+d> 3b 6d 68 0f 85 bf 07 00 00 65 ff 05 b6 5b 23 75 ff 75 90 4d 8d
+> > > > > > > > RSP: 0018:ffffb44580a4bb50 EFLAGS: 00010246
+> > > > > > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000=
+000001
+> > > > > > > > RDX: 0000000000000000 RSI: ffffffff8bf91320 RDI: ffff922cbb=
+a50e20
+> > > > > > > > RBP: ffffb44580a4bbf0 R08: 0000000000000000 R09: ffff922c5b=
+ac8140
+> > > > > > > > R10: ffffb44580a4bc10 R11: 0000000000000000 R12: 0000000000=
+000000
+> > > > > > > > R13: 0000000000000070 R14: 0000000000000000 R15: 0000000000=
+000001
+> > > > > > > > FS:  00007f55338d6b40(0000) GS:ffff922fae200000(0000) knlGS=
+:0000000000000000
+> > > > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > > > > > CR2: 00000000000000d8 CR3: 000000011bbb2006 CR4: 0000000000=
+3706e0
+> > > > > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000=
+000000
+> > > > > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000=
+000400
+> > > > > > > > Call Trace:
+> > > > > > > >  <TASK>
+> > > > > > > >  ? fs_reclaim_acquire+0x4d/0xd0
+> > > > > > > >  ? lock_is_held_type+0xaa/0x120
+> > > > > > > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
+> > > > > > > >  ? lock_is_held_type+0xaa/0x120
+> > > > > > > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
+> > > > > > > >  cros_ec_cmd_xfer_status+0x1f/0x110
+> > > > > > > >  cros_typec_ec_command+0x91/0x1c0 [cros_ec_typec]
+> > > > > > > >  cros_typec_probe+0x7f/0x5a8 [cros_ec_typec]
+> > > > > > > >  platform_probe+0x3f/0x90
+> > > > > > > >  really_probe+0x1f5/0x3f0
+> > > > > > > >  __driver_probe_device+0xfe/0x180
+> > > > > > > >  driver_probe_device+0x1e/0x90
+> > > > > > > >  __driver_attach+0xc4/0x1d0
+> > > > > > > >  ? __device_attach_driver+0xe0/0xe0
+> > > > > > > >  ? __device_attach_driver+0xe0/0xe0
+> > > > > > > >  bus_for_each_dev+0x67/0x90
+> > > > > > > >  bus_add_driver+0x12e/0x1f0
+> > > > > > > >  driver_register+0x8f/0xe0
+> > > > > > > >  ? 0xffffffffc04ec000
+> > > > > > > >  do_one_initcall+0x67/0x320
+> > > > > > > >  ? rcu_read_lock_sched_held+0x3f/0x80
+> > > > > > > >  ? trace_kmalloc+0x38/0xe0
+> > > > > > > >  ? kmem_cache_alloc_trace+0x17c/0x2b0
+> > > > > > > >  do_init_module+0x5c/0x270
+> > > > > > > >  __do_sys_finit_module+0x95/0xe0
+> > > > > > > >  do_syscall_64+0x3b/0x90
+> > > > > > > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > > > > > > RIP: 0033:0x7f55344b1f3d
+> > > > > > > > Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48=
+ 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <4=
+8> 3d 01 f0 ff ff 73 01 c3 48 8b 0d bb ee 0e 00 f7 d8 64 89 01 48
+> > > > > > > > RSP: 002b:00007fff187f1388 EFLAGS: 00000246 ORIG_RAX: 00000=
+00000000139
+> > > > > > > > RAX: ffffffffffffffda RBX: 000055a53acbe6e0 RCX: 00007f5534=
+4b1f3d
+> > > > > > > > RDX: 0000000000000000 RSI: 00007f553461732c RDI: 0000000000=
+00000e
+> > > > > > > > RBP: 0000000000020000 R08: 0000000000000000 R09: 0000000000=
+000002
+> > > > > > > > R10: 000000000000000e R11: 0000000000000246 R12: 00007f5534=
+61732c
+> > > > > > > > R13: 000055a53ad94010 R14: 0000000000000007 R15: 000055a53a=
+d95690
+> > > > > > > >  </TASK>
+> > > > > > > > Modules linked in: fjes(+) cros_ec_typec(+) typec intel_vbt=
+n(+) cros_usbpd_notify sparse_keymap soc_button_array int3403_thermal int34=
+0x_thermal_zone int3400_thermal acpi_thermal_rel cros_kbd_led_backlight zra=
+m ip_tables i915 hid_multitouch i2c_algo_bit ttm crct10dif_pclmul crc32_pcl=
+mul crc32c_intel drm_kms_helper nvme ghash_clmulni_intel sdhci_pci cqhci ce=
+c nvme_core sdhci serio_raw drm mmc_core i2c_hid_acpi i2c_hid video pinctrl=
+_sunrisepoint fuse
+> > > > > > > > CR2: 00000000000000d8
+> > > > > > > > ---[ end trace 4a12c4896d70352b ]---
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > --
+> > > > > > > Benson Leung
+> > > > > > > Staff Software Engineer
+> > > > > > > Chrome OS Kernel
+> > > > > > > Google Inc.
+> > > > > > > bleung@google.com
+> > > > > > > Chromium OS Project
+> > > > > > > bleung@chromium.org

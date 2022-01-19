@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE48B4933AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 04:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B903F4933AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 04:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351348AbiASDjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 22:39:20 -0500
-Received: from mga01.intel.com ([192.55.52.88]:54306 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351326AbiASDjR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 22:39:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642563557; x=1674099557;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qAUdyOMpjLXgFKoF0QifDorI3aMIdOzmR0SvIvEQHwA=;
-  b=iD2MWI7HGd8mvWSSD6bWsTIos7KcShYJnxJagHK+DCNlfRJZI/0+1nTk
-   s9t949/DHK7q62JfvDAyIoEq9S3DHM2hyHVLlAXA+DQWWRxixnUXQZNVN
-   zEPkV2wT2YNSBokrcU5v8B3ZW8gctoig7txPjodFeMKOdg9mO3Adu3GZm
-   64/HTegI3WJyvfDDh+QiYhDHQYJH6QgXMSgRO3JqC3AvKijxiped+Qk3S
-   2x2TlgOMrnahD/uxsKy0ItlB6XXULcK+9kurU91ktGeBuCNHSZpXEL5Nd
-   gXjrh/9FqHJ/lxkRFJEcniAtp3hJ10K9gnWT8Yep4rjQTOUjfh5XUxiDK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269361183"
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="269361183"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 19:39:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="625735673"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2022 19:39:15 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nA1oZ-000DDD-4k; Wed, 19 Jan 2022 03:39:15 +0000
-Date:   Wed, 19 Jan 2022 11:38:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH] riscv: fix boolconv.cocci warnings
-Message-ID: <20220119033836.GA4900@68f8e94b87ce>
-References: <202201191124.6Gmmz1ir-lkp@intel.com>
+        id S1351334AbiASDjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 22:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344436AbiASDjJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 22:39:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC12C061574;
+        Tue, 18 Jan 2022 19:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=EiVf29ZWa3UvVQ+Z++r4y2NqjonXxCbIKpWNeyKw/Ys=; b=mJVKtwN7WptoTQ+4Md43Z9gq7K
+        bPrzGVkt12QjZyl0S6tkMhYgZ2E+qtaIFUjlY0ugCmdXU9V0VJXGvrzudF0SOO+hhNwin72tuu/Ky
+        H6eokKlaShlOUBHYbZMycdhswkgNTvU6PwgL7yYEqRBEkXHcqKE5epcfEI8hhc5eXst+mvY//QrTw
+        CZjRW5C++mtHUAUj/JEIwbHexZgnh/IqnSUGn3ct3ZiViaLiN/vqaPqiD9i6+P5JIAkDjaQIoEW6e
+        i+arJziPge9IWig6oVqUctNlpUa/ltlmsK5m38Uij1c1SyzqXOVI4Mg5S+qdn2LOttQrLuWVc8vE8
+        5jt0fDkg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nA1oQ-003gb6-Fw; Wed, 19 Jan 2022 03:39:06 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH -next v2] Documentation: fix firewire.rst ABI file path error
+Date:   Tue, 18 Jan 2022 19:39:05 -0800
+Message-Id: <20220119033905.4779-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202201191124.6Gmmz1ir-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+Adjust the path of the ABI files for firewire.rst to prevent a
+documentation build error. Prevents this problem:
 
-arch/riscv/mm/init.c:48:11-16: WARNING: conversion to bool not needed here
+Sphinx parallel build error:
+docutils.utils.SystemMessage: Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
+InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
 
- Remove unneeded conversion to bool
-
-Semantic patch information:
- Relational and logical operators evaluate to bool,
- explicit conversion is overly verbose and unneeded.
-
-Generated by: scripts/coccinelle/misc/boolconv.cocci
-
-CC: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
+Fixes: 2f4830ef96d2 ("FireWire: add driver-api Introduction section")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Tested-by: Akira Yokosawa <akiyks@gmail.com>
 ---
+v2: Add Tested-by: and Fixes: from Akira (thanks!)
+    shorten path in error message;
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-sv48
-head:   d87f3297c62644624bcb8efcb519a2e28d684b45
-commit: dee563c628683ce1fab7d0267ad96fc7d8503965 [7/9] riscv: Implement sv48 support
-:::::: branch date: 8 hours ago
-:::::: commit date: 8 hours ago
+ Documentation/driver-api/firewire.rst |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- init.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -44,8 +44,7 @@ u64 satp_mode = SATP_MODE_32;
- #endif
- EXPORT_SYMBOL(satp_mode);
+--- linux-next-20220118.orig/Documentation/driver-api/firewire.rst
++++ linux-next-20220118/Documentation/driver-api/firewire.rst
+@@ -19,7 +19,7 @@ of kernel interfaces is available via ex
+ Firewire char device data structures
+ ====================================
  
--bool pgtable_l4_enabled = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL) ?
--				true : false;
-+bool pgtable_l4_enabled = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL);
- EXPORT_SYMBOL(pgtable_l4_enabled);
+-.. include:: /ABI/stable/firewire-cdev
++.. include:: ../ABI/stable/firewire-cdev
+     :literal:
  
- phys_addr_t phys_ram_base __ro_after_init;
+ .. kernel-doc:: include/uapi/linux/firewire-cdev.h
+@@ -28,7 +28,7 @@ Firewire char device data structures
+ Firewire device probing and sysfs interfaces
+ ============================================
+ 
+-.. include:: /ABI/stable/sysfs-bus-firewire
++.. include:: ../ABI/stable/sysfs-bus-firewire
+     :literal:
+ 
+ .. kernel-doc:: drivers/firewire/core-device.c

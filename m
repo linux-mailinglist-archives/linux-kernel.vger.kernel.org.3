@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3250D4931DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4414931E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350450AbiASAZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 19:25:19 -0500
-Received: from mail-eopbgr80059.outbound.protection.outlook.com ([40.107.8.59]:23461
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1350483AbiASAZH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:25:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nvLaxc7BvVf+xev5u41wCc2WBwaqo4iURwhQqGxT7K+e1Y5tDPx+ZfnynsfCvzAFBE+XUiWUmpQ9iG8Wng1EYbH1DP6Vo2mb4msMY4UNr75wOPIy97f/NIb3wJP4eWe60vFg6eCAzsMsvYhU85m2VtIBua4mJPU2RygpRRdW+RONoLfTJ/DXPpfG/TO9p+2mUZENxevxuEfTSg1yvP8mSVLZoyqmQY1bme59vhBhsCx8r60VePYGTRlRj9bqGoDwE0BPslkmQ+n0UuuVrYrfPbrOlItLjwqFPlhx4KpyvxoGOD5mIXy3BSgrw21dZ7x1aS7rC8q4L4IWmJUWKIETEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3iTbNcgMHKQDn2UQ5Q4s8qZrx9GE3+86V4LoAq9OCT8=;
- b=QQsF3n236BkxMIvrdwA5uT/3JZlBE+UQQfGKpbGTs5w0QrwrTXqmfheJXbdDRqXPybb4Mj0ieq18RIIfDOqp4ND1wIpmEIk8iBuGltRE7+2S3kwTvvOMhz4n1a/ed90avceqTH94zZo6sDMsEGYYUUDSR58heeUDiBlzwhGth4Sb+rJSpJO011tLx/Hpf+9cx2MerdyfX35UG4DfTkwCBAA9ZfWnfV326xILt2KWcNXqUUkUfXa9yk42L1g3l1bYoPXLUnSy3qQtnAAUhMQL50/ELzQVZZymRbIrAyafrUAZqVnsmfdF7mpbkLcL0NRO7+vcrEQHNc9RleBOKHcljA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3iTbNcgMHKQDn2UQ5Q4s8qZrx9GE3+86V4LoAq9OCT8=;
- b=jj+ue/MVo79U3u/bjRZUS9q/xNtBLBOvRiRgXFZjs5hZzuqrXsQLFm3CBLhdESxh+ZNW5IGtn0Gy0AOUtJgD/awxVNxJaxLx05zR+oLq2tli9cXiWp1y7EVlPgO92pI9d3+K9RP/096qSR16OWK4Mop+U2Jngz6b3BWbIdOClb2+GYpMpgo/ee9bAHpZpEbvFyv+1/JvaQ81jRJjq26e6LXSSSyOic+2U4eKCTbbIQyHB9QTDDzKBLzXGTHkgbsU28xotM04sI04+9et5yQmMkcY3tXDf2SkbNibsfxWWZ03m0EtyAoU3ImCYEPmKSA6j+K3vES1mLSuW1+2VeZH8w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
- by AM6PR03MB4373.eurprd03.prod.outlook.com (2603:10a6:20b:10::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
- 2022 00:25:03 +0000
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::d47e:81b0:256:3005]) by DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::d47e:81b0:256:3005%4]) with mapi id 15.20.4888.014; Wed, 19 Jan 2022
- 00:25:03 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Robert Hancock <robert.hancock@calian.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 7/7] arm64: dts: ipq6018: Use reference clock to set dwc3 period
-Date:   Tue, 18 Jan 2022 19:24:37 -0500
-Message-Id: <20220119002438.106079-8-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220119002438.106079-1-sean.anderson@seco.com>
-References: <20220119002438.106079-1-sean.anderson@seco.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR01CA0025.prod.exchangelabs.com (2603:10b6:208:10c::38)
- To DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+        id S1346022AbiASAe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 19:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237177AbiASAe2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 19:34:28 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12509C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:34:28 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id c3so547174pls.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:34:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fhtsshb779foHbUp9uRUsqpWENAGkHqJ8VEZb1EuPfo=;
+        b=cts+MA9AHHlyk9r+XBHTWM5nizuHm/1LTrjv907OodM2rP0bLUgF5TK5lIOAzVMUj1
+         HLVENadItvTm+SBpER3uaCQow8rmnlyfjxa0twynqbwUdgYG4VrBrmFTD8WeT6Xjj8j6
+         XWKN8YaFVAVY4z7kiQ3GKu3vC6oGB6krTdjpTRN1FzH2kZXit0Fc1xV0j6SDZJ6yuUPD
+         3RbMsb+P2OeNN2TNvsEtX03QC17a8E5xriYNXIDcRWsZBEX7ux8KHekB9cEH0kiOLQP1
+         tliQRaxGJiRzHqTsBDBMnBZL6q/Oq4iDSe0ObdfUe/6WWIxbL+9dRew7xxQtXnVXpM+N
+         vdCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fhtsshb779foHbUp9uRUsqpWENAGkHqJ8VEZb1EuPfo=;
+        b=2iHNaXuu4QYi8Yb/KkK27D0VzB1jlGBXci/swfP+QLHeA0JhRfoacCtnZeV1AYHxnI
+         TzcOGGwHWQUq8gIfQpRowUPJjv8ofjWwbUXC+7w9sXavqabPscnx1c6t/7dWcHouLVIW
+         xYNGeU18ufwSKSCLFfCgKwr88jFXFitNcR1G+zaRrcxgll5dURxL8dHMH3Ey5Q6iDELB
+         v0yYcbBh9SijzYL3rQemMkIrNao/l7k1Z9bxZGyzsWwTwXEPvRet6bseYuvrjIP1/ov2
+         R3wCwMTo7nOsFA8fAuF3UHIOaXThywAu1SYQ4R2zAPkbmTq8WH/M7lfZfwoVGphuFbpT
+         0+aw==
+X-Gm-Message-State: AOAM530t2Ev44Cu1rfGW21Rev5FYpuMrvYLKBq8jnT2cZR6yYh7CkSLn
+        owDn3dBRUnafer6A6xwc+CbeVg==
+X-Google-Smtp-Source: ABdhPJwzCq8jLEnOzlYAwNNMmWDUPgFImKOrZBeA6SdytoLo6ELVLP75EnatTaR9PDXpvl3+Xr8fRg==
+X-Received: by 2002:a17:902:b189:b0:143:8079:3d3b with SMTP id s9-20020a170902b18900b0014380793d3bmr30164103plr.71.1642552467215;
+        Tue, 18 Jan 2022 16:34:27 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a20sm9680713pfv.122.2022.01.18.16.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 16:34:26 -0800 (PST)
+Date:   Wed, 19 Jan 2022 00:34:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] KVM: x86: Remove WARN_ON in
+ kvm_arch_check_processor_compat
+Message-ID: <YedcjqmGYekhPgec@google.com>
+References: <20211227081515.2088920-1-chao.gao@intel.com>
+ <20211227081515.2088920-6-chao.gao@intel.com>
+ <Ydy6aIyI3jFQvF0O@google.com>
+ <BN9PR11MB5276DEA925C72AF585E7472C8C519@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Yd3fFxg3IjWPUIqH@google.com>
+ <20220112110000.GA10249@gao-cwp>
+ <Yd8RUJ6YpQrpe4Zf@google.com>
+ <20220117133503.GA27833@gao-cwp>
+ <20220117134608.GA30004@gao-cwp>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3d7dffc1-b60e-48c8-0838-08d9dae222c8
-X-MS-TrafficTypeDiagnostic: AM6PR03MB4373:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR03MB43737C8203418E1F6786E8BC96599@AM6PR03MB4373.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xDEjDsNFGNR1HZbz9XUBE0r/M9lUHyKdPO5IbVXZDzVT5O4f6k+Ew6Bk2rK7hFf2WYDCTLObexqgovjExEeASkSRLl2qgHnu3eFQJiewl8jsBdBNrckHsm1SnhHAqSYjrdOmxmuaPQxYH+tg6cZffIasIwPgww8Ko3KTsqOGUlaTZwCPdC0JuI+IdBU0SEuNVtYZ6UUdduly9LgqzMXMKhwZQglg+I+m4aoKgrtLkJ/m3s7TJFdkEZbpfP5ld3eGgfyDQ1DP09T7tsstsfQ4qbXmAiI1+q6D0aXFf9J5LokPrXUb7kt6ymSjlSUyosiAxtY6pnh4hoVldaeEUjsM1M9be77nN7KPCjkyBdIo8CqFyfD8XEa/DoS276EHhXrUgJ0sGsl3G05uqotBN6JV/lBz+GgCVmxVCxjnrngW179Sf1+SBSJIcPY7KQ2IwSjX9fW3ZLXvvmBxMVIFHOgW/OSCuCHB/TEovzy7I4y9pufxgHDZvkt0TmMa97fJhBu3pheH6eD9cgwqjSfkrvVzVU7AYiAFzTZKKTaqI6YxOZKVDrntKbDyjDB/Pvv3YbaT6REYDtTe5OK9oMpopJsAsmm0J4RXqymjZODQw+cR/2OjZDUK9cuBpvNA9UrMGe3kaZodVZ9WUqG09HhjpiJTTdtdSPDyZjKaIyfbls1rr1SQtGNDmNLSIhOl8nS0P90JXa0kxfMKmGXS65wSJYCqgw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(316002)(6666004)(5660300002)(186003)(4326008)(6512007)(44832011)(6486002)(6506007)(38100700002)(2616005)(1076003)(7416002)(66556008)(38350700002)(52116002)(54906003)(66946007)(8936002)(508600001)(2906002)(83380400001)(36756003)(26005)(8676002)(66476007)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T7nlWPx7Fbw7DQ5iBvqa7M71A+ZpE8cN33M3MnnjXBjzTS4On8/Uh6FHMLpt?=
- =?us-ascii?Q?VaslftwYzqwMBKjp7rtYz/nubaLZeRgHiFWRZ7MUK2gCyUQd1LRvxZW+G5b9?=
- =?us-ascii?Q?rYLFBFAbsZfT2Is4YyMy/w2MDwqgbkuyfzkYerVvsAn55so3y0KMGaOCKvXZ?=
- =?us-ascii?Q?7s8NqfgJDfJSXvp/WkOGWXP0qFatsKwomO/amKhLnBT4IBQIY0xhHsTI61PH?=
- =?us-ascii?Q?JJgREBvfg4vBtiGp5mCYs7qCAroHEXWaSD8aU0xqDZyEse/ZjflYX8hsvckX?=
- =?us-ascii?Q?90YeGKvazv5JSY2sc3GYpYZM5M6vKMeYKIaHXoTeyeNr8YpeDcnc1I67X8zu?=
- =?us-ascii?Q?8rGYe5h01qeJYzHw54zJKhpFE5yLV6uEa9ggyQGVYdhqQ3U/4KU9eVtmJI0k?=
- =?us-ascii?Q?HLTJ/4rGLRvCg/dzFuKW8JmurIiN+7l0ULOa/edskNns0XvHtw9Pu9zuEKEN?=
- =?us-ascii?Q?+TorUSUtqKhSRN8E1q/wDlqVrWlTE8XkAtga89MujRIhhY+cdv3Ba6qoD3Bh?=
- =?us-ascii?Q?5Yegx1baqLcxOByuR4F9bS8CS/WQDPzI1mOueTqXwm1cKT5QsCCLr4kUNfMB?=
- =?us-ascii?Q?Tombr9jiApsBtyD9duFfDeSzl2IrYGqycsm+4AhjBNG5rfDSAXNvC87elGid?=
- =?us-ascii?Q?HrUKU5ffuS4f4jCIAbKYAUcB5/u+AvTc6Ud58TEqh0p5VmM8lsLITjVuojI2?=
- =?us-ascii?Q?8xKujhqbnZ0+i7zkEXIpfxKpicPOVkWUufUfRs1zpOYBp1BYNzUZyFeQeNaC?=
- =?us-ascii?Q?RbuxRDdmSVr7SVifIGf6W9FS4aT7tt5OfZHX/fFjNR+r/wTCtiBC6r/SMxxO?=
- =?us-ascii?Q?ajChdfYHkaV/1xUU8Qt7w2DJwM/o4EE/AIK3mEiBGtqUui66lfdE8f+gYqtF?=
- =?us-ascii?Q?QMwoORpP2HKQvxdtFJaRwqObbyW0vxxizufvJ8chg8/TEo5o0AJ0R9awcxMM?=
- =?us-ascii?Q?MNclvIdB/TPzXYot8BAMDA72iNW4MjGm4aItF3eAbVUnmYPK9IypBbmW6roi?=
- =?us-ascii?Q?k8LB/Pm3cXgcrbjoT1lFznSiMtTcrw4wNQLa5QZ/4tvd9KwhDo76IfGezI+M?=
- =?us-ascii?Q?hU02uT65jxqYb4YtVWiyYiC+wW5H3j97brKldzJ4w0UZ6/GRyWnnB0mDVe+7?=
- =?us-ascii?Q?r+e3mk3132uV9XA8KIkWtTO5DHA6kUr3cbNixtaaq8lBVQ0j7QKNmJTM3qQC?=
- =?us-ascii?Q?j/mxLTrlAhCVwmjJp4s0W5fCuul0jn0ZyjmVUun52CfNf3VxCJupOlH3o4AD?=
- =?us-ascii?Q?iNdQtKFkWhCMEoI+RJFegFv4gbKz6FO6DLiVnx9IXFrhcPEspfDNJIh/ClpS?=
- =?us-ascii?Q?RysJ3pmjtqBOKw86SgckwA9A8wQFot48pZw+xn46wh7E7HTq5C6L3NFyL/Te?=
- =?us-ascii?Q?57Eh7yCqR0Po6HTlHr3wxtPzL4FxGNRKFdxXfvBDL878QrYMz0LO379Ly+nf?=
- =?us-ascii?Q?23VjdN/XkiGkYqwBWFWSEnqg8jn+W4+2rMEcyus/E4cr3B62OetVctMPN70i?=
- =?us-ascii?Q?hQXfmhz9jsDXt5PraeYMq54Ffli+td2xjRlEkzKiMXxzi4TQxUPWjuSewrVp?=
- =?us-ascii?Q?oSfKFVokLK5HGppoPSPt4P8XnRPknJ6COsGVwRvIh5n+07I71CZkpyNE905u?=
- =?us-ascii?Q?BspF3r1sCH9e6MFjV1nZOw4=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d7dffc1-b60e-48c8-0838-08d9dae222c8
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 00:25:03.3134
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 37h3oD5KSX9LcoI0jw4j5/8S5D68Quho4R+zNFO821dzA4nHmhwL44pAdSZPaHSAx7+dyez48+YOZTsblR+rLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB4373
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117134608.GA30004@gao-cwp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of manually setting snps,ref-clock-period-ns, we can let the
-driver calculate it automatically from the "ref" clock. I haven't
-reviewed this board's schematics, so please let me know if this is the
-wrong 24MHz clock to use.
+On Mon, Jan 17, 2022, Chao Gao wrote:
+> On Mon, Jan 17, 2022 at 09:35:04PM +0800, Chao Gao wrote:
+> >OK. How about:
+> >
+> >	/*
+> >	 * Compatibility checks are done when loading KVM or in KVM's CPU
+> >	 * hotplug callback. It ensures all online CPUs are compatible before
+> >	 * running any vCPUs. For other cases, compatibility checks are
+> >	 * unnecessary or even problematic. Try to detect improper usages here.
+> >	 */
+> >	WARN_ON(!irqs_disabled() && !cpu_active(smp_processor_id()));
+> 
+> Sorry. It should be:
+> 	WARN_ON(!irqs_disabled() && cpu_active(smp_processor_id()));
 
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
----
-
-(no changes since v1)
-
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index 66ec5615651d..a614b9f73e2c 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -743,12 +743,13 @@ dwc_0: usb@8A00000 {
- 				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
- 				phys = <&qusb_phy_0>, <&usb0_ssphy>;
- 				phy-names = "usb2-phy", "usb3-phy";
-+				clocks = <&xo>;
-+				clock-names = "ref";
- 				tx-fifo-resize;
- 				snps,is-utmi-l1-suspend;
- 				snps,hird-threshold = /bits/ 8 <0x0>;
- 				snps,dis_u2_susphy_quirk;
- 				snps,dis_u3_susphy_quirk;
--				snps,ref-clock-period-ns = <0x32>;
- 				dr_mode = "host";
- 			};
- 		};
--- 
-2.25.1
-
+Nice!  That's exactly what I was hoping we could do.

@@ -2,116 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B97493A41
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA92493A47
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354459AbiASM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347469AbiASM2s (ORCPT
+        id S1354469AbiASMaO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 07:30:14 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4430 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234862AbiASMaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:28:48 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF1BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:28:47 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso12789238wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:28:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r544K7uLseHgCwnr0wVsLsWb82uTNW4lOUdN19AMQDw=;
-        b=ceClqTAml5TYR5w+T+ZUWlwr1D+2NbFkj4hG8uCQABlOpUcRyrrtPMpIl7N/U2sTCd
-         uHy+5wvddi5ifxY2MRj4gPyKyMexkgoGN2BcnSdELPzOdgrBLXVyhyKFTVTAnBhjCaSq
-         upeG3CpIhfmFfjyZER+/wNiTMnAqdPBwK7PG6rB+BdYy2kmLDEzlVPLDAa6+9yQl51Mn
-         uX+3SYqEG0XjAQNmKp1DJRxIp2NdNDAuQZpw1PKuN0l4rJajkxh12xqHAqy5lQ0kE3yY
-         WmT6OzgdO2wTmA62wb/p7F09kM9gYqtMxelo/nX7EFeTqku29l9GNYSzhaAS2x8hkClm
-         sW2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r544K7uLseHgCwnr0wVsLsWb82uTNW4lOUdN19AMQDw=;
-        b=uYjKuH9NHPo3SNzhWEsHfs9zMS+I9mN2A6XYdRIIQVYsjMYHmSnl+e+UOJgSmHl9i1
-         Ll8LiHzogw89dFz+OCcFgswmHLU3leKjxLezBg3JxejoxCBMpbmNthxOmKF8z869MA5h
-         O68AN/gZfvq92HYyMeLIzTQAOtybHGSTPeAfoYDiM+CZEv5AWWzqiLz081Dn+UjTNikx
-         LLEhgP6WydQoo9zjarBoB5k4LD30NCL4jucGKFb5pHGY83y4dKUDjZof7E8XQu6jXjx0
-         6DguwAeXt+4Pzn41OpI5TWOjfXeZx1hLpc/0mWtSxuEyRT7D7UO+pT6K5sxFwGTFSZ3Z
-         aIyA==
-X-Gm-Message-State: AOAM533tDn0KhcLxZlCR1PlXp4/T2If5HwY4+FcanQEyri4Ke27O481P
-        DlZo0/8xN6SHlPP4Tz1XrcjCakpsya/CVQ==
-X-Google-Smtp-Source: ABdhPJyW0VTGSUd7xafQtG4NJPiTaXvdlNPbOk8sepjeULE2SjuZDvmR9Pomag4u/PrmPjUi+Tsqmw==
-X-Received: by 2002:adf:f94c:: with SMTP id q12mr28259235wrr.166.1642595325796;
-        Wed, 19 Jan 2022 04:28:45 -0800 (PST)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:d394:97d0:bc02:3846])
-        by smtp.gmail.com with ESMTPSA id j16sm19406933wrp.76.2022.01.19.04.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 04:28:45 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     robert.foss@linaro.org
-Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
-        biju.das.jz@bp.renesas.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH v2] drm/bridge: dw-hdmi: use safe format when first in bridge chain
-Date:   Wed, 19 Jan 2022 13:28:43 +0100
-Message-Id: <20220119122843.1455611-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 19 Jan 2022 07:30:12 -0500
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jf4ch6gXwz685gm;
+        Wed, 19 Jan 2022 20:26:12 +0800 (CST)
+Received: from lhreml721-chm.china.huawei.com (10.201.108.72) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Wed, 19 Jan 2022 13:30:09 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml721-chm.china.huawei.com (10.201.108.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 19 Jan 2022 12:30:09 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Wed, 19 Jan 2022 12:30:09 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "julien.thierry.kdev@gmail.com" <julien.thierry.kdev@gmail.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "Alexandru.Elisei@arm.com" <Alexandru.Elisei@arm.com>,
+        "qperret@google.com" <qperret@google.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
+Thread-Topic: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
+Thread-Index: AQHX35sqG4N0fL5BTkOeJNZZBpVcWaxpD9KAgAFUH+CAADI2AIAAApfw
+Date:   Wed, 19 Jan 2022 12:30:09 +0000
+Message-ID: <ab7dc77ee8804f1e958c18cc4dac4a65@huawei.com>
+References: <20211122121844.867-1-shameerali.kolothum.thodi@huawei.com>
+ <Yeazd1lLuYm4k3lH@arm.com> <207f800d1a67427a9771ffb06086365b@huawei.com>
+ <Yef65ng6pQK5yZDa@arm.com>
+In-Reply-To: <Yef65ng6pQK5yZDa@arm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.82.100]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the dw-hdmi bridge is in first place of the bridge chain, this
-means there is no way to select an input format of the dw-hdmi HW
-component.
 
-Since introduction of display-connector, negotiation was broken since
-the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
-in last position of the bridge chain or behind another bridge also
-supporting input & output format negotiation.
 
-Commit 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks")
-was introduced to make negotiation work again by making display-connector
-act as a pass-through concerning input & output format negotiation.
+> -----Original Message-----
+> From: Catalin Marinas [mailto:catalin.marinas@arm.com]
+> Sent: 19 January 2022 11:50
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: linux-arm-kernel@lists.infradead.org; kvmarm@lists.cs.columbia.edu;
+> linux-kernel@vger.kernel.org; maz@kernel.org; will@kernel.org;
+> james.morse@arm.com; julien.thierry.kdev@gmail.com;
+> suzuki.poulose@arm.com; jean-philippe@linaro.org;
+> Alexandru.Elisei@arm.com; qperret@google.com; Jonathan Cameron
+> <jonathan.cameron@huawei.com>; Linuxarm <linuxarm@huawei.com>
+> Subject: Re: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
+> 
+> On Wed, Jan 19, 2022 at 09:23:31AM +0000, Shameerali Kolothum Thodi
+> wrote:
+> > > On Mon, Nov 22, 2021 at 12:18:40PM +0000, Shameer Kolothum wrote:
+> > > >  -TLA+ model. Modified the asidalloc model to incorporate the new
+> > > >   VMID algo. The main differences are,
+> > > >   -flush_tlb_all() instead of local_tlb_flush_all() on rollover.
+> > > >   -Introduced INVALID_VMID and vCPU Sched Out logic.
+> > > >   -No CnP (Removed UniqueASIDAllCPUs & UniqueASIDActiveTask
+> invariants).
+> > > >   -Removed  UniqueVMIDPerCPU invariant for now as it looks like
+> > > >    because of the speculative fetching with flush_tlb_all() there
+> > > >    is a small window where this gets triggered. If I change the
+> > > >    logic back to local_flush_tlb_all(), UniqueVMIDPerCPU seems to
+> > > >    be fine. With my limited knowledge on TLA+ model, it is not
+> > > >    clear to me whether this is a problem with the above logic
+> > > >    or the VMID model implementation. Really appreciate any help
+> > > >    with the model.
+> > > >    The initial VMID TLA+ model is here,
+> > > >
+> https://github.com/shamiali2008/kernel-tla/tree/private-vmidalloc-v1
+> > >
+> > > I only had a brief look at the TLA+ model and I don't understand why you
+> > > have a separate 'shed_out' process. It would run in parallel with the
+> > > 'sched' but AFAICT you can't really schedule a guest out while you are
+> > > in the middle of scheduling it in. I'd rather use the same 'sched'
+> > > process and either schedule in an inactive task or schedule out an
+> > > active one for a given CPU.
+> > >
+> > > Also active_vmids[] for example is defined on the CPUS domain but you
+> > > call vcpu_sched_out() from a process that's not in the CPUS domain but
+> > > the SCHED_OUT one.
+> >
+> > Many thanks for taking a look. My bad!. The 'sched_out' would indeed run in
+> parallel
+> > and defeat the purpose. I must say I was really confused by the TLA+ syntax
+> and
+> > is still not very confident about it.
+> 
+> Yeah, it can be confusing. If you have time, you could give CBMC a try
+> and the 'spec' would be pretty close to your C version. Each CPU would
+> be modelled as a thread with an extra thread that simulates the
+> speculative TLB look-ups for all CPUS together with the asserts for the
+> invariants. The spinlocks would be pthread_mutexes.
 
-But in the case where the dw-hdmi is single in the bridge chain, for
-example on Renesas SoCs, with the display-connector bridge the dw-hdmi
-is no more single, breaking output format.
+Ok, will take a look.
 
-Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
-Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Fixes: 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks").
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
-Changes since v1:
-- Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
-- Fix typos in commit message
+> > Based on the above suggestion, I have modified it as below,
+> >
+> > \* vCPU is scheduled out by KVM
+> > macro vcpu_sched_out() {
+> >         active_kvm[self].task := 0;
+> >         active_vmids[self] := INVALID_VMID;
+> > }
+> 
+> Could you call cpu_switch_kvm(0, INVALID_VMID) instead? You could do
+> this directly below and avoid another macro. Well, whatever you find
+> clearer.
 
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Sure, will change that.
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index 54d8fdad395f..97cdc61b57f6 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
- 	if (!output_fmts)
- 		return NULL;
+> What confuses me is that your INVALID_VMID looks like a valid one: vmid
+> 0, generation 1. Do you ensure that you never allocate VMID 0?
+
+This is same as in asidalloc wherein the cur_idx starts at 1 for any new
+allocation. I think that guarantees VMID 0 is never allocated.  
+
+> 
+> > \* About to run a Guest VM
+> > process (sched \in CPUS)
+> > {
+> > sched_loop:
+> >         while (TRUE) {
+> >                 with (t \in TASKS) {
+> >                         if (t # ActiveTask(self))
+> >                                 call kvm_arm_vmid_update(t);
+> >                         else
+> >                                 vcpu_sched_out();
+> >                 }
+> >         }
+> > }
+> 
+> Yes, that's what I meant.
+
+Ok.
+
+> 
+> > > The corresponding
+> > > UniqueASIDPerCPU meant that for any two TLB entries on a single CPU, if
+> > > they correspond to different tasks (pgd), they should have different
+> > > ASIDs. That's a strong requirement, otherwise we end up with the wrong
+> > > translation.
+> >
+> > Yes, I understand that it is a strong requirement. Also, I thought this is
+> something
+> > that will trigger easily with the test setup I had with the real hardware. But
+> testing
+> > stayed on for days, so I was not sure it is a problem with the TLA+
+> implementation
+> > or not.
+> 
+> Well, you'd have to check the TLA+ state trace and see how it got
+> there, whether the last state would be a valid one. It's either
+> something missing in the spec that the hardware enforces or the
+> algorithm is wrong and just hard to hit in practice. If this condition
+> is violated in hardware for a very brief period, e.g. due to some TLBI,
+> you'd not notice an issue under normal circumstances. But it's still
+> incorrect.
+
+Hmm..I had a quick implementation with a separate thread for speculative
+load as done in the arm64kpti.tla, but still get the UniqueVMIDPerCPU violation
+error. I will go through the state trace and see whether I can interpret something :) 
  
--	/* If dw-hdmi is the only bridge, avoid negociating with ourselves */
--	if (list_is_singular(&bridge->encoder->bridge_chain)) {
-+	/* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
-+	if (list_is_singular(&bridge->encoder->bridge_chain) ||
-+	    list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
- 		*num_output_fmts = 1;
- 		output_fmts[0] = MEDIA_BUS_FMT_FIXED;
- 
--- 
-2.25.1
+> > > Why did you remove the CnP? Do we have this disabled for KVM guests?
+> >
+> > I removed CnP related Invariants to simplify things for the first version. Also
+> not sure
+> > what specific changes we need to do for CnP here. Do we still need that
+> switching to
+> > global pg_dir to prevent any speculative reading? I didn't see that being
+> done in KVM
+> > anywhere at the moment. Maybe I am missing something.
+> 
+> It make sense to ignore CnP for now. Maybe KVM doesn't even bother and
+> sets VTTBR_EL2.CnP to 0 (I haven't checked).
 
+I think KVM sets the CnP here,
+https://elixir.bootlin.com/linux/latest/source/arch/arm64/include/asm/kvm_mmu.h#L264
+
+But I haven't figured out what else we need to do in this new VMID allocator for
+CnP case. 
+
+Marc, Will?
+
+> 
+> > On a side note, In my setup, the CnP=TRUE case for asidalloc.tla now fails
+> with,
+> > "Error: Invariant TLBEmptyInvalPTE is violated.". Please check.
+> 
+> This was added later as part of try-to-unmap and I only checked this
+> with CnP = FALSE. I'll need to look into, it's possible that
+> flush_tlb_all() doesn't take into account that the pte is unmapped (as
+> cpu_switch_mm() does). I'll add a separate thread for speculative TLB
+> loads, it's easier to have them in one place. Thanks.
+
+Ok.
+
+Thanks,
+Shameer

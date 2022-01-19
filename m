@@ -2,153 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB924494032
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4AA494034
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356911AbiASSvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344150AbiASSvg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:51:36 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3B7C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:51:36 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id p125so3446969pga.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p4+HpvQqpXWwOnnXQVxrBDcjJ5yInc/mHBvdCwo/eqE=;
-        b=jB8jTGftBMXo7MjLtldaBa1YH3NRmecF1y+pwQjHfQtUOVs0sUXRi5UTthYKtoUhfO
-         9gidudV/7NVCgC7Sy5njjUvBQuV82xuHTATdFKnFvPrzrV2Be/b4VTXhm+IPdPHi/95B
-         yhgMPppJjJm18KCshVGY3K2kICbvbWhXQPDis=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p4+HpvQqpXWwOnnXQVxrBDcjJ5yInc/mHBvdCwo/eqE=;
-        b=iWV/jaC4fXGLL7FvNAuiVcZzul/Bi8EkIIX9Za3Imd2T8tLXORco3fiUZ5L8ZqJ4aM
-         pv0RFLA8AwjdS6aPHPfUQDchFzKXjeu6SbOik39IS6kDryZ1QvHiexTqNbPZ70L+hxrK
-         3+DzzldZaJrabJSwqLtdFBnD7KSuu1Vd8IL8+xaCpvK507qdGc1drdZ/oD4GyzU0gAuA
-         9allrEzl70KQNBG0jO0IPDFgPcFZOfgGl1yPAbJSXYmfdJ5d5eNHgzAy1up3Jrkz3Abg
-         qOODXlqVrAMusjqxpf85GUpdvpgLZR9JlpJPFhrFKYoubfsr5SrkRJAeKv04AJJb0rB0
-         J39w==
-X-Gm-Message-State: AOAM530MwccknzzI+EqfxwTI1lcnFNBwwROjQ86QAYu6JJRVWX18a/T5
-        +RvlOnucGwCs6Lqrml0w68Numg==
-X-Google-Smtp-Source: ABdhPJyqQae4RrbN+8YvLzLqk5/OqW4MahzZOqILFVoW0wHcIsva/dbqktfdkKKRqs7wtIGsGOSxrw==
-X-Received: by 2002:a63:eb07:: with SMTP id t7mr28591515pgh.112.1642618295553;
-        Wed, 19 Jan 2022 10:51:35 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id md18sm108396pjb.9.2022.01.19.10.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 10:51:35 -0800 (PST)
-Date:   Wed, 19 Jan 2022 10:51:34 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     He Ying <heying24@huawei.com>
-Cc:     catalin.marinas@arm.com, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, sxwjean@gmail.com,
-        peterz@infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/process, kasan: Silence KASAN warnings in
- __get_wchan()
-Message-ID: <202201191051.E49ED291@keescook>
-References: <20220119015025.136902-1-heying24@huawei.com>
+        id S1356921AbiASSww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:52:52 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:54600 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230509AbiASSwv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 13:52:51 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nAG4U-0005cZ-P9; Wed, 19 Jan 2022 19:52:38 +0100
+Message-ID: <416d8fde-9fbc-afaa-1abe-0a35fa2085c4@maciej.szmigiero.name>
+Date:   Wed, 19 Jan 2022 19:52:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119015025.136902-1-heying24@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Bharata B Rao <bharata@amd.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-7-nikunj@amd.com>
+ <010ef70c-31a2-2831-a2a7-950db14baf23@maciej.szmigiero.name>
+ <0e523405-f52c-b152-1dd3-aa65a9caee3c@amd.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
+ sev_launch_update_data()
+In-Reply-To: <0e523405-f52c-b152-1dd3-aa65a9caee3c@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:50:25PM -0500, He Ying wrote:
-> The following KASAN warning was reported in our kernel.
+On 19.01.2022 07:33, Nikunj A. Dadhania wrote:
+> Hi Maciej,
 > 
->   BUG: KASAN: stack-out-of-bounds in get_wchan+0x188/0x250
->   Read of size 4 at addr d216f958 by task ps/14437
+> On 1/18/2022 8:30 PM, Maciej S. Szmigiero wrote:
+>> Hi Nikunj,
+>>
+>> On 18.01.2022 12:06, Nikunj A Dadhania wrote:
+>>> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>>>
+>>> Pin the memory for the data being passed to launch_update_data()
+>>> because it gets encrypted before the guest is first run and must
+>>> not be moved which would corrupt it.
+>>>
+>>> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+>>> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
+>>>     * Updated sev_pin_memory_in_mmu() error handling.
+>>>     * As pinning/unpining pages is handled within MMU, removed
+>>>       {get,put}_user(). ]
+>>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>>> ---
+>>>    arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
+>>>    1 file changed, 119 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>>> index 14aeccfc500b..1ae714e83a3c 100644
+>>> --- a/arch/x86/kvm/svm/sev.c
+>>> +++ b/arch/x86/kvm/svm/sev.c
+>>> @@ -22,6 +22,7 @@
+>>>    #include <asm/trapnr.h>
+>>>    #include <asm/fpu/xcr.h>
+>>>    +#include "mmu.h"
+>>>    #include "x86.h"
+>>>    #include "svm.h"
+>>>    #include "svm_ops.h"
+>>> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
+>>>        return pages;
+>>>    }
+>>>    +#define SEV_PFERR_RO (PFERR_USER_MASK)
+>>> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
+>>> +
+>>> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
+>>> +                          unsigned long hva)
+>>> +{
+>>> +    struct kvm_memslots *slots = kvm_memslots(kvm);
+>>> +    struct kvm_memory_slot *memslot;
+>>> +    int bkt;
+>>> +
+>>> +    kvm_for_each_memslot(memslot, bkt, slots) {
+>>> +        if (hva >= memslot->userspace_addr &&
+>>> +            hva < memslot->userspace_addr +
+>>> +            (memslot->npages << PAGE_SHIFT))
+>>> +            return memslot;
+>>> +    }
+>>> +
+>>> +    return NULL;
+>>> +}
+>>
+>> We have kvm_for_each_memslot_in_hva_range() now, please don't do a linear
+>> search through memslots.
+>> You might need to move the aforementioned macro from kvm_main.c to some
+>> header file, though.
 > 
->   CPU: 3 PID: 14437 Comm: ps Tainted: G           O      5.10.0 #1
->   Call Trace:
->   [daa63858] [c0654348] dump_stack+0x9c/0xe4 (unreliable)
->   [daa63888] [c035cf0c] print_address_description.constprop.3+0x8c/0x570
->   [daa63908] [c035d6bc] kasan_report+0x1ac/0x218
->   [daa63948] [c00496e8] get_wchan+0x188/0x250
->   [daa63978] [c0461ec8] do_task_stat+0xce8/0xe60
->   [daa63b98] [c0455ac8] proc_single_show+0x98/0x170
->   [daa63bc8] [c03cab8c] seq_read_iter+0x1ec/0x900
->   [daa63c38] [c03cb47c] seq_read+0x1dc/0x290
->   [daa63d68] [c037fc94] vfs_read+0x164/0x510
->   [daa63ea8] [c03808e4] ksys_read+0x144/0x1d0
->   [daa63f38] [c005b1dc] ret_from_syscall+0x0/0x38
->   --- interrupt: c00 at 0x8fa8f4
->       LR = 0x8fa8cc
-> 
->   The buggy address belongs to the page:
->   page:98ebcdd2 refcount:0 mapcount:0 mapping:00000000 index:0x2 pfn:0x1216f
->   flags: 0x0()
->   raw: 00000000 00000000 01010122 00000000 00000002 00000000 ffffffff 00000000
->   raw: 00000000
->   page dumped because: kasan: bad access detected
-> 
->   Memory state around the buggy address:
->    d216f800: 00 00 00 00 00 f1 f1 f1 f1 00 00 00 00 00 00 00
->    d216f880: f2 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->   >d216f900: 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00
->                                             ^
->    d216f980: f2 f2 f2 f2 f2 f2 f2 00 00 00 00 00 00 00 00 00
->    d216fa00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> 
-> After looking into this issue, I find the buggy address belongs
-> to the task stack region. It seems KASAN has something wrong.
-> I look into the code of __get_wchan in x86 architecture and
-> find the same issue has been resolved by the commit
-> f7d27c35ddff ("x86/mm, kasan: Silence KASAN warnings in get_wchan()").
-> The solution could be applied to powerpc architecture too.
-> 
-> As Andrey Ryabinin said, get_wchan() is racy by design, it may
-> access volatile stack of running task, thus it may access
-> redzone in a stack frame and cause KASAN to warn about this.
-> 
-> Use READ_ONCE_NOCHECK() to silence these warnings.
-> 
-> Signed-off-by: He Ying <heying24@huawei.com>
+> Sure, let me try optimizing with this newly added macro.
 
-Looks reasonable to me; thanks!
+👍
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
-> ---
->  arch/powerpc/kernel/process.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>>> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
+>>> +{
+>>> +    struct kvm_memory_slot *memslot;
+>>> +    gpa_t gpa_offset;
+>>> +
+>>> +    memslot = hva_to_memslot(kvm, hva);
+>>> +    if (!memslot)
+>>> +        return UNMAPPED_GVA;
+>>> +
+>>> +    *ro = !!(memslot->flags & KVM_MEM_READONLY);
+>>> +    gpa_offset = hva - memslot->userspace_addr;
+>>> +    return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
+>>> +}
+>>> +
+>>> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
+>>> +                       unsigned long size,
+>>> +                       unsigned long *npages)
+>>> +{
+>>> +    struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>> +    struct kvm_vcpu *vcpu;
+>>> +    struct page **pages;
+>>> +    unsigned long i;
+>>> +    u32 error_code;
+>>> +    kvm_pfn_t pfn;
+>>> +    int idx, ret = 0;
+>>> +    gpa_t gpa;
+>>> +    bool ro;
+>>> +
+>>> +    pages = sev_alloc_pages(sev, addr, size, npages);
+>>> +    if (IS_ERR(pages))
+>>> +        return pages;
+>>> +
+>>> +    vcpu = kvm_get_vcpu(kvm, 0);
+>>> +    if (mutex_lock_killable(&vcpu->mutex)) {
+>>> +        kvfree(pages);
+>>> +        return ERR_PTR(-EINTR);
+>>> +    }
+>>> +
+>>> +    vcpu_load(vcpu);
+>>> +    idx = srcu_read_lock(&kvm->srcu);
+>>> +
+>>> +    kvm_mmu_load(vcpu);
+>>> +
+>>> +    for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
+>>> +        if (signal_pending(current)) {
+>>> +            ret = -ERESTARTSYS;
+>>> +            break;
+>>> +        }
+>>> +
+>>> +        if (need_resched())
+>>> +            cond_resched();
+>>> +
+>>> +        gpa = hva_to_gpa(kvm, addr, &ro);
+>>> +        if (gpa == UNMAPPED_GVA) {
+>>> +            ret = -EFAULT;
+>>> +            break;
+>>> +        }
+>>
+>> This function is going to have worst case O(n²) complexity if called with
+>> the whole VM memory (or O(n * log(n)) when hva_to_memslot() is modified
+>> to use kvm_for_each_memslot_in_hva_range()).
 > 
-> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-> index 984813a4d5dc..a75d20f23dac 100644
-> --- a/arch/powerpc/kernel/process.c
-> +++ b/arch/powerpc/kernel/process.c
-> @@ -2160,12 +2160,12 @@ static unsigned long ___get_wchan(struct task_struct *p)
->  		return 0;
->  
->  	do {
-> -		sp = *(unsigned long *)sp;
-> +		sp = READ_ONCE_NOCHECK(*(unsigned long *)sp);
->  		if (!validate_sp(sp, p, STACK_FRAME_OVERHEAD) ||
->  		    task_is_running(p))
->  			return 0;
->  		if (count > 0) {
-> -			ip = ((unsigned long *)sp)[STACK_FRAME_LR_SAVE];
-> +			ip = READ_ONCE_NOCHECK(((unsigned long *)sp)[STACK_FRAME_LR_SAVE]);
->  			if (!in_sched_functions(ip))
->  				return ip;
->  		}
-> -- 
-> 2.17.1
-> 
+> I understand your concern and will address it. BTW, this is called for a small
+> fragment of VM memory( <10MB), that needs to be pinned before the guest execution
+> starts.
 
--- 
-Kees Cook
+I understand it is a relatively small memory area now, but a rewrite of
+this patch that makes use of kvm_for_each_memslot_in_hva_range() while
+taking care of other considerations (like overlapping hva) will also
+solve the performance issue.
+
+>> That's really bad for something that can be done in O(n) time - look how
+>> kvm_for_each_memslot_in_gfn_range() does it over gfns.
+>>
+> 
+> I saw one use of kvm_for_each_memslot_in_gfn_range() in __kvm_zap_rmaps(), and
+> that too calls slot_handle_level_range() which has a for_each_slot_rmap_range().
+> How would that be O(n) ?
+> 
+> kvm_for_each_memslot_in_gfn_range() {
+> 	...
+> 	slot_handle_level_range()
+> 	...
+> }
+> 
+> slot_handle_level_range() {
+> 	...
+> 	for_each_slot_rmap_range() {
+> 		...
+> 	}
+> 	...
+> }
+
+kvm_for_each_memslot_in_gfn_range() iterates over gfns, which are unique,
+so at most one memslot is returned per gfn (and if a memslot covers
+multiple gfns in the requested range it will be returned just once).
+
+for_each_slot_rmap_range() then iterates over rmaps covering that
+*single* memslot: look at slot_rmap_walk_next() - the memslot under
+iteration is not advanced.
+
+So each memslot returned by kvm_for_each_memslot_in_gfn_range() is
+iterated over just once by the aforementioned macro.
+
+>> Besides performance considerations I can't see the code here taking into
+>> account the fact that a hva can map to multiple memslots (they an overlap
+>> in the host address space).
+> 
+> You are right I was returning at the first match, looks like if I switch to using 
+> kvm_for_each_memslot_in_hva_range() it should take care of overlapping hva, 
+> is this understanding correct ?
+
+Let's say that the requested range of hva for sev_pin_memory_in_mmu() to
+handle is 0x1000 - 0x2000.
+
+If there are three memslots:
+1: hva 0x1000 - 0x2000 -> gpa 0x1000 - 0x2000
+2: hva 0x1000 - 0x2000 -> gpa 0x2000 - 0x3000
+3: hva 0x2000 - 0x3000 -> gpa 0x3000 - 0x4000
+
+then kvm_for_each_memslot_in_hva_range() will return the first two,
+essentially covering the hva range of 0x1000 - 0x2000 twice.
+
+If such hva aliases are permitted the code has to be ready for this case
+and handle it sensibly:
+If you need to return just a single struct page per a hva AND / OR pin
+operations aren't idempotent then it has to keep track which hva were
+already processed.
+
+Another, and probably the easiest option would be to simply disallow
+such overlapping memslots in the requested range and make
+KVM_SEV_LAUNCH_UPDATE_DATA ioctl return something like EINVAL in this
+case - if that would be acceptable semantics for this ioctl.
+
+In any case, the main loop in sev_pin_memory_in_mmu() will probably
+need to be build around a kvm_for_each_memslot_in_hva_range() call,
+which will then solve the performance issue, too.
+
+> Regards,
+> Nikunj
+
+Thanks,
+Maciej

@@ -2,108 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F834942FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DECD494306
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357542AbiASWZM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 17:25:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:39280 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1357507AbiASWZF (ORCPT
+        id S244726AbiASWZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357562AbiASWZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:25:05 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-3-gc2FjgmsNLmz-uRweWCGWA-1; Wed, 19 Jan 2022 22:25:02 +0000
-X-MC-Unique: gc2FjgmsNLmz-uRweWCGWA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 19 Jan 2022 22:25:00 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 19 Jan 2022 22:25:00 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>
-CC:     'Steven Rostedt' <rostedt@goodmis.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        "Raju Rangoju" <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: RE: [PATCH 1/3] lib/string_helpers: Consolidate yesno()
- implementation
-Thread-Topic: [PATCH 1/3] lib/string_helpers: Consolidate yesno()
- implementation
-Thread-Index: AQHYDUVmV8sHy8JfXU2yTPkp1VbmK6xqitzAgAAAVLCAAC4ygIAAMm1Q
-Date:   Wed, 19 Jan 2022 22:25:00 +0000
-Message-ID: <2978e422e33f48f0bd07d937cdab13a5@AcuMS.aculab.com>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <20220119072450.2890107-2-lucas.demarchi@intel.com>
- <CAHp75Vf5QOD_UtDK8VbxNApEBuJvzUic0NkzDNmRo3Q7Ud+=qw@mail.gmail.com>
- <20220119100102.61f9bfde@gandalf.local.home>
- <06420a70f4434c2b8590cc89cad0dd6a@AcuMS.aculab.com>
- <9c26ca9bf75d494ea966059d9bcbc2b5@AcuMS.aculab.com>
- <YehlEe1prbwhxZEv@smile.fi.intel.com>
-In-Reply-To: <YehlEe1prbwhxZEv@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 19 Jan 2022 17:25:54 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E723C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:25:54 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id a18so19993533edj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:25:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cgjUtIp/NJ23YXRIEjOj0qjbOPGKNdYKcaS2fOswzbc=;
+        b=oGsu4bZqbrZah1XP9hAFPpaAxPc35v4wJQuOPO6BSg+l2m68e9br8SuK66riHukFLH
+         FXIxgXuLCj2g6EufW8wwPm1p/MvkT1nT1blp81zUvRKjiIloJ5HMv/mSEC5Hx1fjZ/gU
+         24pRsKr0zUguTJrpNO/ORsBpWNhlVRjbhQAAAi1Yr+ERmQeLw1l9tVJegpXqqIf6kihG
+         Fr5/fcaS+jKnxNy34qGp5472VvREqU/oI/9IRaT5Myb59dZYQ9AwZzifVIgXEt4SIzIE
+         lNLpwj1O9nQl1h87Mqzo6KjG6z5+7UzbgI5xmzlB53q6vEnT2MCTyzSkMN0jPg0QD6/M
+         DFmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cgjUtIp/NJ23YXRIEjOj0qjbOPGKNdYKcaS2fOswzbc=;
+        b=FH29/UCoPMBjW0vLC+t26eYey50IUxD3NakiK1iv6u3Uaxdz7rJdni+0fVpO5mhHPx
+         FOqmQ0UhBWdzD24tVuXwtark4FB0e3AxsIQ3bcWE+ecsKeuzl4uf6THlf7GjJqwdrsOw
+         C5gF/v1ltylQ/Y5XH7ac6N6Dk+ExygUbEDZQ/v0OP0PMaRrhshhvGXjyeKlDTd7sQQK6
+         DiXYUngrWgP8LUzu7i5P39J03vW51Wiq94Cg/PARHpHXtvPPnXlviy6O8F7y7vtJzmT3
+         24lJA2+e/1ux+JGHoOd9v4aoyg48YAdHiAt2+VeJZJY9+MItYSZ57dJNnWJGUc7rxROe
+         yqsQ==
+X-Gm-Message-State: AOAM533lyjpeh7XyP/xUODOP255kx7iXtKhliPEa/glvl8mL/5JaefZI
+        K5r5+VMC96b5QK3g4hoym44mXo87cIvKr+hkRNjYUg==
+X-Google-Smtp-Source: ABdhPJzkgP6BEDEgQhuAM2rXNU61+MwKYa2K+ClyYgh+IFMum6eOxwSxae/Wj82WqClt5hDJXhIt8J5jlLwZk0HJSxg=
+X-Received: by 2002:aa7:dc53:: with SMTP id g19mr32773866edu.294.1642631152867;
+ Wed, 19 Jan 2022 14:25:52 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20220104202227.2903605-1-yuzhao@google.com> <YdSuSHa/Vjl6bPkg@google.com>
+ <Yd1Css8+jsspeZHh@google.com>
+In-Reply-To: <Yd1Css8+jsspeZHh@google.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Wed, 19 Jan 2022 17:25:16 -0500
+Message-ID: <CADyq12z9LtDEURaKTY8qx8nb7mqUL5jLnO682DeweFOmw31LDQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Alexandre Frade <kernel@xanmod.org>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, page-reclaim@google.com,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > except '"no\0\0yes" + v * 4' works a bit better.
-> 
-> Is it a C code obfuscation contest?
+On Tue, Jan 11, 2022 at 3:41 AM Yu Zhao <yuzhao@google.com> wrote:
+>
+> On Tue, Jan 04, 2022 at 01:30:00PM -0700, Yu Zhao wrote:
+> > On Tue, Jan 04, 2022 at 01:22:19PM -0700, Yu Zhao wrote:
+> > > TLDR
+> > > ====
+> > > The current page reclaim is too expensive in terms of CPU usage and it
+> > > often makes poor choices about what to evict. This patchset offers an
+> > > alternative solution that is performant, versatile and
+> > > straightforward.
+> >
+> > <snipped>
+> >
+> > > Summery
+> > > =======
+> > > The facts are:
+> > > 1. The independent lab results and the real-world applications
+> > >    indicate substantial improvements; there are no known regressions.
+> > > 2. Thrashing prevention, working set estimation and proactive reclaim
+> > >    work out of the box; there are no equivalent solutions.
+> > > 3. There is a lot of new code; nobody has demonstrated smaller changes
+> > >    with similar effects.
+> > >
+> > > Our options, accordingly, are:
+> > > 1. Given the amount of evidence, the reported improvements will likely
+> > >    materialize for a wide range of workloads.
+> > > 2. Gauging the interest from the past discussions [14][15][16], the
+> > >    new features will likely be put to use for both personal computers
+> > >    and data centers.
+> > > 3. Based on Google's track record, the new code will likely be well
+> > >    maintained in the long term. It'd be more difficult if not
+> > >    impossible to achieve similar effects on top of the existing
+> > >    design.
+> >
+> > Hi Andrew, Linus,
+> >
+> > Can you please take a look at this patchset and let me know if it's
+> > 5.17 material?
+> >
+> > My goal is to get it merged asap so that users can reap the benefits
+> > and I can push the sequels. Please examine the data provided -- I
+> > think the unprecedented coverage and the magnitude of the improvements
+> > warrant a green light.
+>
+> Downstream kernel maintainers who have been carrying MGLRU for more than
+> 3 versions, can you please provide your Acked-by tags?
+>
+> Having this patchset in the mainline will make your job easier :)
+>
+>    Alexandre - the XanMod Kernel maintainer
+>                https://xanmod.org
+>
+>    Brian     - the Chrome OS kernel memory maintainer
+>                https://www.chromium.org
 
-That would be:
-	return &(v * 3)["no\0yes"];
+MGLRU has been maturing in ChromeOS for quite some time, we've
+maintained it in a number of different kernels between 4.14 and 5.15,
+and it's become the default
+for tens of millions of users. We've seen substantial improvements in
+terms of CPU utilization and memory pressure resulting in fewer OOM
+kills and reduced UI latency. I would love to see this make it
+upstream so more desktop users can benefit.
 
-:-)
+Acked-by: Brian Geffon <bgeffon@google.com>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+>
+>    Jan       - the Arch Linux Zen kernel maintainer
+>                https://archlinux.org
+>
+>    Steven    - the Liquorix kernel maintainer
+>                https://liquorix.net
+>
+>    Suleiman  - the ARCVM (Android downstream) kernel memory maintainer
+>                https://chromium.googlesource.com/chromiumos/third_party/kernel
+>
+> Also my gratitude to those who have helped test MGLRU:
+>
+>    Daniel - researcher at Michigan Tech
+>             benchmarked memcached
+>
+>    Holger - who has been testing/patching/contributing to various
+>             subsystems since ~2008
+>
+>    Shuang - researcher at University of Rochester
+>             benchmarked fio and provided a report
+>
+>    Sofia  - EDI https://www.edi.works
+>             benchmarked the top eight memory hogs and provided reports
+>
+> Can you please provide your Tested-by tags? This will ensure the credit
+> for your contributions.
+>
+> Thanks!

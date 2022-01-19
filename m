@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE5E493EC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC29493EC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356329AbiASRGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S1356299AbiASRFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356327AbiASRFs (ORCPT
+        with ESMTP id S243725AbiASRFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:05:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4224CC061401;
-        Wed, 19 Jan 2022 09:05:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7672615E1;
-        Wed, 19 Jan 2022 17:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4727CC36AE3;
-        Wed, 19 Jan 2022 17:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642611947;
-        bh=KKlzc8c5w+fq1k4uKo5Qwf+gm47vjQ8VvRXIbggWzbM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tH9EpPZohuwPlNyLgUQaSh2/TW27U3dWzvT8E96QQ1O49ak8F6oMNPCIpNqEW6u1n
-         dno4NiQcqiNnwkUnBF8/tvCcMhP66hUVF6RTYDKU3v+8xqFAi8TdtN6XL/ylAhlILt
-         TnhUxgAWojwpxC/Dsfb4F/dviiWsXf/JdBPpji4ZWgxzZnRX9ueGnepCyDIe4pFs4l
-         NmSxMUQXXy/74/u9/yf4iVff4NeZELpdPSjjyWb9omwGSxu4DWdRPzdnqQD4rnrxEi
-         +yH1RrQB2RDDQPNYjPeFFlwst1/afn2F3oy/VExs437dhiu5qbqGw5hJ5WFF/2A3FN
-         5ggoBNeKHDe3g==
-Received: by mail-ed1-f43.google.com with SMTP id 30so15475680edv.3;
-        Wed, 19 Jan 2022 09:05:47 -0800 (PST)
-X-Gm-Message-State: AOAM533VzpG2cBvqTJzXCLsyNOCL/bc4xL42w2XGQVXyvreW8gjchzBU
-        RGzVEcw/o4b5rWn3G0iT2GMz1jMFgUL1MTkNwg==
-X-Google-Smtp-Source: ABdhPJzBgPPIvP9HvnVg4dyNMmI5ujybpyr1kYU14iE13zheGQ3O2xg88wkrkwxTCk6RnznZtYMkYbIeJD0Kzr0Ph78=
-X-Received: by 2002:a17:906:7801:: with SMTP id u1mr8446002ejm.82.1642611945572;
- Wed, 19 Jan 2022 09:05:45 -0800 (PST)
+        Wed, 19 Jan 2022 12:05:36 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54715C061574;
+        Wed, 19 Jan 2022 09:05:36 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id v7so2588810qtw.13;
+        Wed, 19 Jan 2022 09:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xNn75qzGd+nXVzzF0p1+GWTBBuJh8tB0QC9sPPOPoXA=;
+        b=IUYiImLFgLU78AOUTXR831cGaiyP81q9NSSOZZ2cipZINeZmQ7JFs2NrHUtNbsGInd
+         H72z4Zvwto68QC257DI0lH2u/K3EraaRqvvA3mNGoePTEcF914PBsKhegWksOIpyXqik
+         fibHVhqhymWh3xVp37VLMJnjrDfUURNLDt8AjRGEEWMASo8lqK7k2RmQZL/IObhdg6u8
+         0Iw63nmaJbYM3dArTVMzacz/A27IOh4xyJ+9Lg5tKxWRz9rXnnojzoIl3v+nfVXgXfyH
+         /sg8hLcUt/mdwTF+6pd01gU60sUN0OFiPFlSiqlgaCNajcEHo6MZkRwWQDc5VHVRAvKg
+         MKyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xNn75qzGd+nXVzzF0p1+GWTBBuJh8tB0QC9sPPOPoXA=;
+        b=pKFmM9O1uoVFN9mksdqPieT6lMmQU6SIsE3gINsI8gk6DvvFvvqCbpqp2zp+Xo07Eb
+         Q66HXm3+cyNAEtsYYVwNjszXigiqEEmnJb8CRt0U2AGZUXei2oEfH8JDpRRJ5A7KIjv9
+         71513NLALg4y3cc2TN3gJF70SoxteJAUipcYzop6Afe1KA0SznHg2ITZHtXgHItKHUqG
+         YxOPiycyTK+M3n4yOXknp+7YCkz6Hu/w0WRXP1G+67UOXxTQjRBadRahTtmGwkIRg4tR
+         OAXIuiOqcLE+5FNV+nsojkGp2s4Z7eR6szcfLL98tL0omC79FimkB+4ZNlbb3B0QsuRv
+         k2dQ==
+X-Gm-Message-State: AOAM533AzacmdpodiXhMXOkFbgUtDjnvdQOzvAuhk2NvIN8Y59Su7O9M
+        9IDvOIghlU9vLYPyxboGWYos9Ed36wk=
+X-Google-Smtp-Source: ABdhPJy47q2V1IyLH6u81sprn0wRz8eHrH45ho8G02+/oBKHeAgc+IZMpN6H2VYHLkeCgYbpB45mDQ==
+X-Received: by 2002:a05:622a:343:: with SMTP id r3mr1255030qtw.443.1642611935363;
+        Wed, 19 Jan 2022 09:05:35 -0800 (PST)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id z2sm7521qtj.62.2022.01.19.09.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 09:05:34 -0800 (PST)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+        by vps.qemfd.net (Postfix) with ESMTP id 575F82B2D5;
+        Wed, 19 Jan 2022 12:05:34 -0500 (EST)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+        id 4C92460032B; Wed, 19 Jan 2022 12:05:34 -0500 (EST)
+Date:   Wed, 19 Jan 2022 12:05:34 -0500
+From:   nick black <dankamongmen@gmail.com>
+To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Cc:     linux-man@vger.kernel.org,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [patch] console_codes.4: ffix
+Message-ID: <YehE3p7es9/4wBuM@schwarzgerat.orthanc>
+References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
+ <98d87c52-da33-9ee4-b9df-253c8ae8e093@gmail.com>
 MIME-Version: 1.0
-References: <20220118194857.26546-1-julianmarcusschroeder@gmail.com>
-In-Reply-To: <20220118194857.26546-1-julianmarcusschroeder@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 19 Jan 2022 11:05:31 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ4MqMYNiKNF_3rkbnR0CE9GhV-jzbxKn2jeJBvPGibLA@mail.gmail.com>
-Message-ID: <CAL_JsqJ4MqMYNiKNF_3rkbnR0CE9GhV-jzbxKn2jeJBvPGibLA@mail.gmail.com>
-Subject: Re: [PATCH] fix serdev bind/unbind
-To:     julian schroeder <julianmarcusschroeder@gmail.com>
-Cc:     bhanumaiya@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98d87c52-da33-9ee4-b9df-253c8ae8e093@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Johan
+Alejandro Colomar (man-pages) left as an exercise for the reader:
+> As I understand it, it's there because CSI is not a CSI-prefixed sequence
+> (i.e., you have to first document CSI itself, and then in a different list
+> you can document sequences prefixed by CSI).
+> So I'd say it belongs there.
 
-On Tue, Jan 18, 2022 at 1:47 PM julian schroeder
-<julianmarcusschroeder@gmail.com> wrote:
->
-> On some chromebooks, the serdev is used to communicate with
-> an embedded controller. When the controller is updated, the
-> regular ttyS* is needed. Therefore unbind/bind needs to work
-> to be able to switch between the two modes without having to
-> reboot. In the case of ACPI enabled platforms, the underlying
-> serial device is marked as enumerated but this is not cleared
-> upon remove (unbind). In this state it can not be bound as
-> serdev.
+except this is literally in the table named "ESC- but not
+CSI-sequences". and it's not, by itself, a sequence. and it's
+detailed in the "ECMA-48 CSI Sequences" section below.
 
-'fix' implies this was supposed to work and doesn't, but unbind/bind
-was never a feature of serdev. Or more specifically, switching between
-serdev and tty was not a feature. There have been some attempts to add
-that. I suspect it is more than a 4 line change based on those, but
-maybe I'm wrong.
+so it is documented, near where it's relevant. IMHO.
 
-For your usecase, how does a given piece of h/w that needs and/or
-provides kernel support continue to work when the driver is unbound.
-Are you leaving any power controls that the serdev driver configured
-enabled so that the tty happens to keep working? What happens to
-interfaces the EC provides? The kernel doesn't deal with resources
-going away too well. I have to wonder if the existing serdev EC driver
-should learn to handle the 'update mode' itself or provide some sort
-of raw/passthru mode to userspace. A TTY, while standard, brings a lot
-of complexities.
+if we're going to keep it, we ought add OSC to this section by
+the same reasoning. i can do that and send a fresh patch, or you
+can do it to my patch, or we can do with what i have.
 
-> Signed-off-by: julian schroeder <julianmarcusschroeder@gmail.com>
-> ---
->  drivers/tty/serdev/core.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-> index 92e3433276f8..668fa570bc07 100644
-> --- a/drivers/tty/serdev/core.c
-> +++ b/drivers/tty/serdev/core.c
-> @@ -138,7 +138,11 @@ EXPORT_SYMBOL_GPL(serdev_device_add);
->  void serdev_device_remove(struct serdev_device *serdev)
->  {
->         struct serdev_controller *ctrl = serdev->ctrl;
-> +       struct acpi_device *adev;
->
-> +       adev = ACPI_COMPANION(&serdev->dev);
-> +       if (adev)
-> +               acpi_device_clear_enumerated(adev);
->         device_unregister(&serdev->dev);
->         ctrl->serdev = NULL;
->  }
-> --
-> 2.20.1
->
+> Maybe it should go into a separate subsection called "Operating system
+> commands"?
+
+well, there are only these few, and they are "ESC- but not CSI
+sequences". i don't honestly think the average reader cares
+whether something is a CSI or an OSC or linux-specific control
+sequence, especially since there's really no user-relevant
+reason as to why one is in any given group. but i can go ahead
+and break this section out if you'd like.
+
+put another way, some people might read the man page wanting to
+know "how do i change a color". i can't imagine anyone ever
+wanting to know "what are the various OSC-prefixed commands?"
+that said, i'm happy to introduce the substructure if it gets
+the formatting fixed =].
+
+-- 
+nick black -=- https://www.nick-black.com
+to make an apple pie from scratch,
+you need first invent a universe.

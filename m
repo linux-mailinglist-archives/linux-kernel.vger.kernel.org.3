@@ -2,61 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9AF493205
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C212493206
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350533AbiASAu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 19:50:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46548 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiASAu0 (ORCPT
+        id S1350516AbiASAvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 19:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235175AbiASAvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:50:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5AD9614DC;
-        Wed, 19 Jan 2022 00:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBE3C340E1;
-        Wed, 19 Jan 2022 00:50:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642553425;
-        bh=rzO5UClAJ3SgAR+tlxDdn1utdFlHQ8c52OzM8K1Blh0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i0VFhWRbucfzzWOLnwMiyXceFpLNJu8zn1n8IJf9/k589VWScde+1tXEItnP+iUKx
-         tyFeFy5+IwGNpfuUzYBgJqBb7SvYbwDVt+ZfbPAcgWRh2akY2/3wb+xhcFEomKtnFV
-         YIfLQxwFFvl70xW3rEwp8W/84PFfPUjMIfnd4kJ/6e7Td2QKct2CFsbWqSwN2MLAF6
-         NqSi60/nDtNfJ1fkUdJyLBOCbemDO+gvOcLTONSwLLRs8fX4Xe0K1Q/WVLRYksMdPF
-         S8MZ7PeCeXPCu16bK1wFdSM+uB2kffEZh9ubPCuROv7h0+jTSQB3GBSOVQh7ELub3D
-         xfWBl8MhGAnQQ==
-Date:   Tue, 18 Jan 2022 16:50:23 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        Tue, 18 Jan 2022 19:51:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498C7C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bSFNXBAL3L/sZMcUTYCHF8j9CNgzUTePNEfP42fi6WM=; b=ITKBmPkjINkr+kVaj6Y+dKIcDI
+        BvqOngu/9IT5Rn4s9sTLn2PzesWshv2YBsi96+rofQ3+BVYoqVcjkMtC6rlUmPtTMSq/ul5NyOAI/
+        q9DfCSH+rEK9qqPiFSGY2rKngDe1XMI3RfAvmOn5EOBwbK7ns9ErE/q+y6JdyZZMHbSjln06B+F5d
+        HQZHhSFi8mSfC9SP34IMzIrPdTN5zgIjUDjXMh1S7jqBjTqVUJ0QXKMfoUJYqorDpNzxB298VO7vG
+        XIkw1MnizDFVQjXTcqksKReY9AwdDKZBSf1YV0Kkn1jYYD8jqYGonSDHHpgNXaVS+PGt16D+BzX3X
+        cqw5cPlw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n9zCB-009rPJ-HZ; Wed, 19 Jan 2022 00:51:27 +0000
+Date:   Wed, 19 Jan 2022 00:51:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Alexey Klimov <aklimov@redhat.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nobuhiro1.iwamatsu@toshiba.co.jp
-Subject: Re: [PATCH 0/2] net: stmmac: dwmac-visconti: Fix bit definitions
- and clock configuration for RMII mode
-Message-ID: <20220118165023.559dfe3b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220118053950.2605-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20220118053950.2605-1-yuji2.ishikawa@toshiba.co.jp>
+        linux-mm@kvack.org, Uladzislau Rezki <urezki@gmail.com>
+Subject: Re: [PATCH] vmap(): don't allow invalid pages
+Message-ID: <Yedgj+Lo2eru8197@casper.infradead.org>
+References: <20220118235244.540103-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118235244.540103-1-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 14:39:48 +0900 Yuji Ishikawa wrote:
-> This series is a fix for RMII/MII operation mode of the dwmac-visconti driver.
-> It is composed of two parts:
-> 
-> * 1/2: fix constant definitions for cleared bits in ETHER_CLK_SEL register
-> * 2/2: fix configuration of ETHER_CLK_SEL register for running in RMII operation mode.
+On Tue, Jan 18, 2022 at 03:52:44PM -0800, Yury Norov wrote:
+> vmap() takes struct page *pages as one of arguments, and user may provide
+> an invalid pointer which would lead to DABT at address translation later.
 
-Please add appropriate Fixes tag pointing to the commits where the
-buggy code was introduced, even if it's the initial commit adding 
-the driver.
+Could we spell out 'DABT'?  Presumably that's an ARM-specific thing.
+Just like we don't say #PF for Intel page faults, I think this is
+probably a 'data abort'?
+
+> Currently, kernel checks the pages against NULL. In my case, however, the
+> address was not NULL, and was big enough so that the hardware generated
+> Address Size Abort on arm64.
+> 
+> Interestingly, this abort happens even if copy_from_kernel_nofault() is
+> used, which is quite inconvenient for debugging purposes. 
+> 
+> This patch adds a pfn_valid() check into vmap() path, so that invalid
+> mapping will not be created.
+> 
+> RFC: https://lkml.org/lkml/2022/1/18/815
+> v1: use pfn_valid() instead of adding an arch-specific
+>     arch_vmap_page_valid(). Thanks to Matthew Wilcox for the hint.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+
+Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+
+> ---
+>  mm/vmalloc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index d2a00ad4e1dd..a4134ee56b10 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -477,6 +477,8 @@ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+>  			return -EBUSY;
+>  		if (WARN_ON(!page))
+>  			return -ENOMEM;
+> +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
+> +			return -EINVAL;
+>  		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
+>  		(*nr)++;
+>  	} while (pte++, addr += PAGE_SIZE, addr != end);
+> -- 
+> 2.30.2
+> 

@@ -2,153 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC66493E3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DC7493E42
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355926AbiASQVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353702AbiASQVb (ORCPT
+        id S1356025AbiASQYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:24:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54644 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243264AbiASQYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:21:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC29C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:21:30 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nADiC-0001lS-Jy; Wed, 19 Jan 2022 17:21:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nADi8-00BD7u-GS; Wed, 19 Jan 2022 17:21:23 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nADi7-00036L-2R; Wed, 19 Jan 2022 17:21:23 +0100
-Date:   Wed, 19 Jan 2022 17:21:22 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Harald Seiler <hws@denx.de>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-Message-ID: <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
-References: <20220119145204.238767-1-hws@denx.de>
- <20220119151145.zft47rzebnabiej2@pengutronix.de>
- <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
+        Wed, 19 Jan 2022 11:24:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55E96B81A61;
+        Wed, 19 Jan 2022 16:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA98BC004E1;
+        Wed, 19 Jan 2022 16:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642609469;
+        bh=JLwjrMhYORjDbtJrdY9T2f6OhkR8YPmjN5TDxFOtFRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TeUDLGL01nUHVGOveQ/dYOFoUDrXDzLpsjnmz9L0FjnyRoTIinq+s8AtiNRncOnyf
+         +DqNkNi/AwfJg1stlufLgp42A3lw4g6dBmuPmtk0S9FQS87SuIX84AJewY6LJXK24G
+         FHBJWEH76Gr0GnO0d5BYCebvDo633iTfDbdCRo4Ep7Lf9AUWneN/e5VzDfcpEJHtcV
+         +fITMEn7L03AsvCQGMWuzl7bDGIB+hRR9PSRctqx+Q0oNw5ZZAKO/5TQ5t3tsFOUq1
+         VWCUVbir7yeBqQDlxSuW0IQYoKjaBwvRfQ9LqEt+tlh2jirhCwEis3P2h08j9au6GK
+         iC4S6Q6tSi2ZQ==
+Date:   Wed, 19 Jan 2022 17:24:23 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     viro@zeniv.linux.org.uk, ebiederm@xmission.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, stephen.s.brennan@oracle.com,
+        legion@kernel.org, cyphar@cyphar.com
+Subject: Re: [PATCH v2] proc: "mount -o lookup=" support
+Message-ID: <20220119162423.eqbyefywhtzm22tr@wittgenstein>
+References: <YegysyqL3LvljK66@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3lbu7jtqhrttkbqc"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <YegysyqL3LvljK66@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 19, 2022 at 06:48:03PM +0300, Alexey Dobriyan wrote:
+> From 61376c85daab50afb343ce50b5a97e562bc1c8d3 Mon Sep 17 00:00:00 2001
+> From: Alexey Dobriyan <adobriyan@gmail.com>
+> Date: Mon, 22 Nov 2021 20:41:06 +0300
+> Subject: [PATCH 1/1] proc: "mount -o lookup=..." support
+> 
+> Docker implements MaskedPaths configuration option
+> 
+> 	https://github.com/estesp/docker/blob/9c15e82f19b0ad3c5fe8617a8ec2dddc6639f40a/oci/defaults.go#L97
+> 
+> to disable certain /proc files. It overmounts them with /dev/null.
+> 
+> Implement proper mount option which selectively disables lookup/readdir
+> in the top level /proc directory so that MaskedPaths doesn't need
+> to be updated as time goes on.
 
---3lbu7jtqhrttkbqc
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I might've missed this when this was sent the last time so maybe it was
+clearly explained in an earlier thread: What's the reason this needs to
+live in the kernel?
 
-On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
-> Hi,
->=20
-> On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
-> > > Right now, even when `delay_rts_before_send` and `delay_rts_after_sen=
-d`
-> > > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
-> > > few 100us of additional overhead on slower i.MX platforms.
-> > >=20
-> > > Implement a fast path when the delays are 0, where the RTS signal is
-> > > toggled immediately instead of going through an hrtimer.  This fast p=
-ath
-> > > behaves identical to the code before delay support was implemented.
-> > >=20
-> > > Signed-off-by: Harald Seiler <hws@denx.de>
-> > > ---
-> > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
-> > >  1 file changed, 14 insertions(+), 4 deletions(-)
-> > >=20
-> > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > > index df8a0c8b8b29..67bbbb69229d 100644
-> > > --- a/drivers/tty/serial/imx.c
-> > > +++ b/drivers/tty/serial/imx.c
-> > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *p=
-ort)
-> > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > >  		if (sport->tx_state =3D=3D SEND) {
-> > >  			sport->tx_state =3D WAIT_AFTER_SEND;
-> > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > +
-> > > +			if (port->rs485.delay_rts_after_send > 0) {
-> > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
-> > >  					 port->rs485.delay_rts_after_send);
-> > > -			return;
-> > > +				return;
-> > > +			}
-> > > +
-> > > +			/* continue without any delay */
-> >=20
-> > Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER_SEND ?
->=20
-> I am keeping the assignment intentionally, to fall into the
-> if(state =3D=3D WAIT_AFTER_RTS) below (which then sets the state to OFF).
-> I originally had the code structured like this:
->=20
-> 	if (port->rs485.delay_rts_after_send > 0) {
-> 		sport->tx_state =3D WAIT_AFTER_SEND;
-> 		start_hrtimer_ms(&sport->trigger_stop_tx,
-> 			 port->rs485.delay_rts_after_send);
-> 		return;
-> 	} else {
-> 		/* continue without any delay */
-> 		sport->tx_state =3D WAIT_AFTER_SEND;
-> 	}
->=20
-> This is functionally identical, but maybe a bit more explicit.
->=20
-> Not sure what is more clear to read?
+The MaskedPaths entry is optional so runtimes aren't required to block
+anything by default and this mostly makes sense for workloads that run
+privileged.
 
-I didn't oppose to the readability thing. With your patch you skip
-starting the stop_tx timer and that would usually care for calling
-imx_uart_stop_tx and setting sport->tx_state =3D OFF. This doesn't happen
-with your patch any more.
+In addition MaskedPaths is a generic option which allows to hide any
+existing path, not just proc. Even in the very docker-specific defaults
+/sys/firmware is covered.
 
-Best regards
-Uwe
+I do see clear value in the subset= and hidepid= options. They are
+generally useful independent of opinionated container workloads. I don't
+see the same for lookup=.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3lbu7jtqhrttkbqc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHoOoAACgkQwfwUeK3K
-7AlRAQgAgfdo/UnYSZL26GHCspaug9m4lKSf6QFlvEcKT5YXmO7pBNwvXZ7hX2aY
-GacleYsn5gUSEjQeNnUKFd7JafMsdtNnd2gFNe3FAguhWW3perUcuSPiZO9xtu5b
-HzQ9tEqmsNcumY1gvA0lwAOAc61XgHmxSsOW6twR/A/ldYYi0Q9iqUU0bGKsPWTI
-Q+Buv+xjgbXUNYUV8NVbfbsNVvw4v6ou+8DdPH2GUoN3K8/pwmqJZ50pfXMdCrQT
-d0iCMQ2bCnCWRzbvHLrTZ5yj59bgpBscZC27G5/zMJEKELufWbubOLpJhaIL+Xm6
-ygFBeDtGvYTLy9esxdUY2Bh2wUEszA==
-=WNP1
------END PGP SIGNATURE-----
-
---3lbu7jtqhrttkbqc--
+An alternative I find more sensible is to add a new value for subset=
+that hides anything(?) that only global root should have read/write
+access too.

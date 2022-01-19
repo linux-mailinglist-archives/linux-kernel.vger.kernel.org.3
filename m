@@ -2,136 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810BE493400
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDB4493407
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346610AbiASERp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S1346652AbiASEYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiASERo (ORCPT
+        with ESMTP id S235242AbiASEYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:17:44 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D0AC061574;
-        Tue, 18 Jan 2022 20:17:43 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m8-20020a17090a4d8800b001b4f361964fso1373593pjh.3;
-        Tue, 18 Jan 2022 20:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=AKF/m4crRjUPKaEVyR47iJWpF9556rhB20qICdT0XMw=;
-        b=gAmqQ4rYYDr653fs21as+JGb8WVc3EmyhbYjx0q2IQ5dWwJZKJ4GnqrquUtrvSB9OB
-         yrB2KyU4M340MMrv250jTVTm9egqTgMtoitKsWrnZig7xF0hOskKydBZPGefcGE0csbP
-         AiWdymunWo98bs9atvLMSPnGTL+cKj+CVfnPBiHWx4Exxb8VTZv3RGeCwPszEkMQiHOl
-         7RVADXLKYlCe8CIcbja61x2w0JRXJUjn5z1wkaIVivzwlVoMaedV2Yu12vPxNe4yUID6
-         AI9KiKUKOHS2QOSPlOzLqKoMbfHEMjJecKbks82ZSv6NLKRWAaGowwlsYIP1sXYCr2Nk
-         XDhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=AKF/m4crRjUPKaEVyR47iJWpF9556rhB20qICdT0XMw=;
-        b=zZekgZJ11lWQ3RsoWrRewO5IAPPZ2rW7l93c2S51mXNUBf/SkOEAO0Ifb1oOcJezxr
-         sOhrtGhLMB2pj4npCxy/52wxrEUJ+UIsiXUHxkTzd5COs2MuIl94nPLmjjd/WZi45ETV
-         c68wzD+IuAL8dMBArMiFK88QQ3bkzKLRR+zkZUPzogdK1cjZ5Odp0O7cuKe8SQLRQIPk
-         NLhuSs9Y8dKbQ7v3AnAHyh0T2N7VBdTdCfVANJz+2TJrcgEdiCUufOhqmk9ORFYUvSiE
-         qkK75qHQYwwRp0rsop+vxczZrFhdvXnOAF00VqDjvx6gx/6ABHMEYu4A9pePTxtJmRpM
-         LH4Q==
-X-Gm-Message-State: AOAM532/FSglE71MJ8tHlOqviQEQ9a7bNeOFT6fDg9s8dLV7pkmHDsni
-        cfsbWwl0eHi+43juY/fyd+Y=
-X-Google-Smtp-Source: ABdhPJx3OvhLmFtcmBgPOWtTOgtFz5eNT+qAc0Hg/uqwpDFNuWOOlw66tKXtoYn5ZRQ3+6wnEZ9b/A==
-X-Received: by 2002:a17:902:6b89:b0:149:7aa8:d98c with SMTP id p9-20020a1709026b8900b001497aa8d98cmr30797727plk.72.1642565863190;
-        Tue, 18 Jan 2022 20:17:43 -0800 (PST)
-Received: from localhost (193-116-82-75.tpgi.com.au. [193.116.82.75])
-        by smtp.gmail.com with ESMTPSA id n5sm18226822pfo.39.2022.01.18.20.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 20:17:42 -0800 (PST)
-Date:   Wed, 19 Jan 2022 14:17:37 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, x86@kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
-        <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-        <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
-        <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
-        <31a75f95-6e6e-b640-2d95-08a95ea8cf51@intel.com>
-        <1642472965.lgfksp6krp.astroid@bobo.none>
-        <4488d39f-0698-7bfd-b81c-1e609821818f@intel.com>
-In-Reply-To: <4488d39f-0698-7bfd-b81c-1e609821818f@intel.com>
+        Tue, 18 Jan 2022 23:24:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3684AC061574;
+        Tue, 18 Jan 2022 20:24:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4433B818AF;
+        Wed, 19 Jan 2022 04:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D838C004E1;
+        Wed, 19 Jan 2022 04:23:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642566237;
+        bh=14cx5s1WHsPTvP5g/nc9FBRXmga8O2vQTNNDmJLESBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pPOR5BkcBLDhO2H/pTZcT8+l/nAp0/0NLvWxXO9Ru4apiAdDAJlPGdOXqqyEw6ajr
+         Mc+s7rilRXqrz/3swhQ+JxlQDxEJ/kkMOD5033+d8iw/OBv6zG34pCHGXI/kjoaD0z
+         4m9cnNlRhlF2ctDrUYd0DlMKXdnjcLzBzO0/1635J9cFhnLbkido0KT+AeL+x5vBXU
+         XpwQkznM86MuLOnQGv3nEGN7qIyNG5WOiDSiMAEQGrJ6/nlspp1XVPvXcsLVbSlbsa
+         aysj3VaoiRraNo+dF0cUxk1j0+rNO8hxSfxlYGGiacfDl4G5DsGZ+zH33H0R1lZt0a
+         1YC87sQA3eCWA==
+Date:   Wed, 19 Jan 2022 09:53:52 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Sanjay R Mehta <sanmehta@amd.com>
+Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, gregkh@linuxfoundation.org,
+        dan.j.williams@intel.com, Thomas.Lendacky@amd.com, robh@kernel.org,
+        mchehab+samsung@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: ptdma: fix concurrency issue with multiple
+ dma transfer
+Message-ID: <YeeSWEZi+BOWb3CK@matsya>
+References: <1639735118-9798-1-git-send-email-Sanju.Mehta@amd.com>
+ <YdLfLc8lfOektWmi@matsya>
+ <38ae8876-610a-3c32-5025-1419466167e4@amd.com>
 MIME-Version: 1.0
-Message-Id: <1642565468.c0jax91tvn.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38ae8876-610a-3c32-5025-1419466167e4@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Dave Hansen's message of January 19, 2022 3:28 am:
-> On 1/17/22 6:46 PM, Nicholas Piggin wrote:
->>> This all sounds very fragile to me.  Every time a new architecture woul=
-d
->>> get added for huge vmalloc() support, the developer needs to know to go
->>> find that architecture's module_alloc() and add this flag.
->> This is documented in the Kconfig.
->>=20
->>  #
->>  #  Archs that select this would be capable of PMD-sized vmaps (i.e.,
->>  #  arch_vmap_pmd_supported() returns true), and they must make no assum=
-ptions
->>  #  that vmalloc memory is mapped with PAGE_SIZE ptes. The VM_NO_HUGE_VM=
-AP flag
->>  #  can be used to prohibit arch-specific allocations from using hugepag=
-es to
->>  #  help with this (e.g., modules may require it).
->>  #
->>  config HAVE_ARCH_HUGE_VMALLOC
->>          depends on HAVE_ARCH_HUGE_VMAP
->>          bool
->>=20
->> Is it really fair to say it's *very* fragile? Surely it's reasonable to=20
->> read the (not very long) documentation ad understand the consequences fo=
-r
->> the arch code before enabling it.
->=20
-> Very fragile or not, I think folks are likely to get it wrong.  It would
-> be nice to have it default *everyone* to safe and slow and make *sure*
+On 10-01-22, 13:27, Sanjay R Mehta wrote:
+> On 1/3/2022 5:04 PM, Vinod Koul wrote:
+> > On 17-12-21, 03:58, Sanjay R Mehta wrote:
+> >> From: Sanjay R Mehta <sanju.mehta@amd.com>
+> >>
+> >> The command should be submitted only if the engine is idle,
+> >> for this, the next available descriptor is checked and set the flag
+> >> to false in case the descriptor is non-empty.
+> >>
+> >> Also need to segregate the cases when DMA is complete or not.
+> >> In case if DMA is already complete there is no need to handle it
+> >> again and gracefully exit from the function.
+> >>
+> >> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> >> ---
+> >>  drivers/dma/ptdma/ptdma-dmaengine.c | 24 +++++++++++++++++-------
+> >>  1 file changed, 17 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/dma/ptdma/ptdma-dmaengine.c b/drivers/dma/ptdma/ptdma-dmaengine.c
+> >> index c9e52f6..91b93e8 100644
+> >> --- a/drivers/dma/ptdma/ptdma-dmaengine.c
+> >> +++ b/drivers/dma/ptdma/ptdma-dmaengine.c
+> >> @@ -100,12 +100,17 @@ static struct pt_dma_desc *pt_handle_active_desc(struct pt_dma_chan *chan,
+> >>  		spin_lock_irqsave(&chan->vc.lock, flags);
+> >>  
+> >>  		if (desc) {
+> >> -			if (desc->status != DMA_ERROR)
+> >> -				desc->status = DMA_COMPLETE;
+> >> -
+> >> -			dma_cookie_complete(tx_desc);
+> >> -			dma_descriptor_unmap(tx_desc);
+> >> -			list_del(&desc->vd.node);
+> >> +			if (desc->status != DMA_COMPLETE) {
+> >> +				if (desc->status != DMA_ERROR)
+> >> +					desc->status = DMA_COMPLETE;
+> >> +
+> >> +				dma_cookie_complete(tx_desc);
+> >> +				dma_descriptor_unmap(tx_desc);
+> >> +				list_del(&desc->vd.node);
+> >> +			} else {
+> >> +				/* Don't handle it twice */
+> >> +				tx_desc = NULL;
+> >> +			}
+> >>  		}
+> >>  
+> >>  		desc = pt_next_dma_desc(chan);
+> >> @@ -233,9 +238,14 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
+> >>  	struct pt_dma_chan *chan = to_pt_chan(dma_chan);
+> >>  	struct pt_dma_desc *desc;
+> >>  	unsigned long flags;
+> >> +	bool engine_is_idle = true;
+> >>  
+> >>  	spin_lock_irqsave(&chan->vc.lock, flags);
+> >>  
+> >> +	desc = pt_next_dma_desc(chan);
+> >> +	if (desc)
+> >> +		engine_is_idle = false;
+> >> +
+> >>  	vchan_issue_pending(&chan->vc);
+> >>  
+> >>  	desc = pt_next_dma_desc(chan);
+> >> @@ -243,7 +253,7 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
+> >>  	spin_unlock_irqrestore(&chan->vc.lock, flags);
+> >>  
+> >>  	/* If there was nothing active, start processing */
+> >> -	if (desc)
+> >> +	if (engine_is_idle)
+> > 
+> > Can you explain why do you need this flag and why desc is not
+> > sufficient..
+> 
+> Here it is required to know if the engine was idle or not before
+> submitting new desc to the active list (i.e, before calling
+> "vchan_issue_pending()" API). So that if there was nothing active then
+> start processing this desc otherwise later.
+> 
+> Here desc is submitted to the engine after vchan_issue_pending() API
+> called which will actually put the desc into the active list and then if
+> I get the next desc, the condition will always be true. Therefore used
+> this flag here to solve this issue.
 
-It's not safe to enable though. That's the problem. If it was just=20
-modules then you'd have a point but it could be anything.
+ok
 
-> they go look at the architecture modules code itself before enabling
-> this for modules.
 
-This is required not just for modules for the whole arch code, it
-has to be looked at and decided this will work.
 
-> Just from that Kconfig text, I don't think I'd know off the top of my
-> head what do do for x86, or what code I needed to go touch.
 
-You have to make sure arch/x86 makes no assumptions that vmalloc memory
-is backed by PAGE_SIZE ptes. If you can't do that then you shouldn't=20
-enable the option. The option can not explain it any more because any
-arch could do anything with its mappings. The module code is an example,
-not the recipe.
 
-Thanks,
-Nick
+> 
+> > 
+> > It also sounds like 2 patches to me...
+> 
+> Once the desc is submitted to the engine that will be handled by
+> pt_handle_active_desc() function. This issue was resolved by making
+> these changes together. Hence kept into the single patch.
+> 
+> Please suggest to me, if this still needs to be split. I'll make the
+> changes accordingly.
+
+2 patches please
+
+-- 
+~Vinod

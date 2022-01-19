@@ -2,76 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 443E9493244
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9D349324A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350638AbiASBW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:22:58 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:48252
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343527AbiASBW5 (ORCPT
+        id S1350704AbiASBYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350658AbiASBYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:22:57 -0500
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 48D9340027
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:22:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642555376;
-        bh=xUJSqu8n1W3DwSb7KYDr8YeMmcT2ABKA6gJJDqW1UEM=;
-        h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type;
-        b=ht4rX9iC6du6XKlpljEps7xCmGScXDQJeKKV8lIInh7vFMuDIwYipEKatVDNF3L8w
-         JAspk7YDa6YUCRjG00Wdu2G596STsNLKEHKYFFGnlYz5SOzFcez1WUPD1Vae9epL9F
-         h1+p38r2pQ5w7bYHjPOke5xkVbSOf5zEZaDg/I6tgfh5hLZFOh7OaH749R3Tl1vkeD
-         A8biYLnfjIG1mWCT9/MvVRi5YRclMHulqi7udXUcRHPUvdMOs+vV0VWrUCo4Vpxi4C
-         U9xleaO1odJ3v2y95FOSQY2qOBkBJBV6MaAYjILZGxazi5gU8PTltIhYiSkI5lJs0w
-         ubmCdh7ssLy7g==
-Received: by mail-ot1-f70.google.com with SMTP id q12-20020a9d654c000000b0059103bdc5ecso410163otl.14
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:22:56 -0800 (PST)
+        Tue, 18 Jan 2022 20:24:43 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9C6C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:24:43 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id q25so994226pfl.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:24:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p9a1D5pmV4meg6CQGuPluc6XFagCjYKD6drtbQ058cc=;
+        b=zfArFxPdbwEvo40qrJXBnsNwMXTNDZwXC2MSacfoZ4aSq6lFZOfDPxz18fpOf5Rkti
+         HGGvWYmYlMtPRNG6SJ//QpqCYAI6J/Af24z4QC3+P61rKfEXS7Bawc8yLlRmHnZKHB4x
+         nPuX/YNLPJnw8M4t2W2GRvbS+8ws65xigUtoxPG06gwCds0RPvBmyOVS+I8SLJcyuKmw
+         edTP3xBACEoV/TIrZryl9Zkjnajd/7DCmBELv2ECPru3ilEELaoN0fmBMM03ERHHy87s
+         VRVOU8nUOr5231HIsSKkOYJXGqJ0wFfpTQvvq4TOIgc8kNIFr3iqKP1h9JORnRCsZmu2
+         UgwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=xUJSqu8n1W3DwSb7KYDr8YeMmcT2ABKA6gJJDqW1UEM=;
-        b=wNrEmLMukoohcJIcKm8mFmyHIVu9WtcZIbgKlWcIszfWb+BSPJZBWJLPXpKISjaPR0
-         AFSCb/X6ZfU+o6jtYmsA3ArQ9+6pJrCjJuiNuGJEvU54DBq6I4lAJ3NeIsFbyeE4okqR
-         DAwD57v5AKgxq1aWCmd76hk2MTubgjIWRNr9egPcM3Uvyy8bGax/Tpl1HnJTi4CVLedK
-         IKq8ghthHZoEwbx4dDq6UuOlPIMIVdEo6q2jZUcYI5fqB9imA5alft32e02T2l0nIqH4
-         w3Rc7uCQS130UnEyhomXaZgYPPSUgiLznO31etJrSgqL5Jr3vkEK4ZQLgTKBZ9X6wKf6
-         vfug==
-X-Gm-Message-State: AOAM530HSOh54nOtR+8NKZ1fDF395heMznOSOUeo7+3ypFZJMxlv1Iic
-        mLacDKhxsxNVgOtNyPi9IWAEpr9OkR5cPmWK2CnmMSXSTK3nD5DnvFVGDwW+/3UBxIglQ/aUVhX
-        sVM+vPJL/IEQhj3QzxzuvgUZIdtuRDPAJgYm9DSIdA331kz3gDMhpxVXywA==
-X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr8241661otq.269.1642555375089;
-        Tue, 18 Jan 2022 17:22:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyD9dH8jrVforfEi9y/GHyKd2pIoqDn192FDYsbvJeO9yTnyo/YEb/NrHtuEsitIgx7DECZ860NegD11YB3hEg=
-X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr8241640otq.269.1642555374835;
- Tue, 18 Jan 2022 17:22:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p9a1D5pmV4meg6CQGuPluc6XFagCjYKD6drtbQ058cc=;
+        b=X6WLQ1Z0nHrnil0+1VMz5SgoxLi7pHgjYn5xpUZqywmJnaDtmBpYTuJXrnTuxT9v9d
+         2kXO2SETMa6Co/ozWqPLE3LfJWslnoKqGyCzMx2NQF5xTJ31bRYqCbmRIK2Y4+Zz6YzH
+         RDiAxJaFNmKF8KEMOnfYW49wWKCAMGkYP2EklFmtm7h4DrPW/z0e2yT1oFhvVyBqp04X
+         xGac38eQElrnd5PQoA34UU04G4Rl1dOoEGlCS+4PtfriMWZ6tbf68gJQ+MRAPOgEMbGG
+         LESz32sNmD2PwkDw5tmht37dvIp0fuS8MakC43PlUG8sCAz5F5Ed5wnzTlKhU3lkwGkP
+         PK8Q==
+X-Gm-Message-State: AOAM533yPN49+AMbhJhVzmc1Ij4CZ5w/pDonVSCKizLSKdLl5j3/XxuT
+        IXcykVXRM+Mpi0ThR3vTLsBr2g==
+X-Google-Smtp-Source: ABdhPJzvszrBUj/mnxzS+wYrDiuF+IkE//2Tc3hRguE0N5ir5EI2ke7KCjVgQq6C3nHfdjLonSh3+w==
+X-Received: by 2002:a62:1b44:0:b0:4be:3d88:ea9c with SMTP id b65-20020a621b44000000b004be3d88ea9cmr28376548pfb.56.1642555482726;
+        Tue, 18 Jan 2022 17:24:42 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id ip2sm3820487pjb.11.2022.01.18.17.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 17:24:42 -0800 (PST)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     mingo@redhat.com
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] sched/fair: Fix fault in reweight_entity
+Date:   Tue, 18 Jan 2022 17:24:17 -0800
+Message-Id: <20220119012417.299060-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 19 Jan 2022 09:22:43 +0800
-Message-ID: <CAAd53p5EiTXfAhCFPDaicksQOa5usOkS5v7moPgM2A7QZ6QCqg@mail.gmail.com>
-Subject: Convert type of 'struct dmi_system_id -> driver_data' from 'void *'
- to kernel_ulong_t?
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     jkosina@suse.cz, Hans de Goede <hdegoede@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Bjorn Helgaas <bhelgaas@google.com>, mgurtovoy@nvidia.com,
-        linux@weissschuh.net, Arnd Bergmann <arnd@arndb.de>,
-        stephan@gerhold.net, "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Syzbot found a GPF in reweight_entity. This has been bisected to commit
+c85c6fadbef0 ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+Looks like after this change there is a time window, when
+task_struct->se.cfs_rq can be NULL. This can be exploited to trigger
+null-ptr-deref by calling setpriority on that task.
 
-I wonder if there's any reason to use 'void *' instead of
-kernel_ulong_t for 'driver_data' in 'struct dmi_system_id'?
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Zhang Qiao <zhangqiao22@huawei.com>
+Cc: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-I'd like to use the driver_data for applying quirk flags, and I found
-out unlike most other struct *_id, the dmi variant is using 'void *'
-for driver_data. Is there any technical reason for this?
+Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
+Fixes: c85c6fadbef0 ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+ kernel/sched/fair.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Kai-Heng
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 095b0aa378df..196f8cee3f9b 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3042,6 +3042,9 @@ dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) { }
+ static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
+ 			    unsigned long weight)
+ {
++	if (!cfs_rq)
++		return;
++
+ 	if (se->on_rq) {
+ 		/* commit outstanding execution time */
+ 		if (cfs_rq->curr == se)
+-- 
+2.34.1
+

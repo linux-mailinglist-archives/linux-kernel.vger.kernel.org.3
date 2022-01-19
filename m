@@ -2,95 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0230493DE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67235493DEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355998AbiASP7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235935AbiASP7y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:59:54 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4A6C061574;
-        Wed, 19 Jan 2022 07:59:53 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id v123so5959884wme.2;
-        Wed, 19 Jan 2022 07:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+vOb5yHTUTgHDDJX2OrXL/1O2I+8ETIcPsDexqsYa1Y=;
-        b=fYraz93MX4Xg4NtOpfPQ59K9zOTiqFaT0QfJNRUzZde4KwXyKNXQvByB6IiFd7oaIl
-         hV5QVjpdZBq6KWaOnHRlZui/ponpmAj49JbWd1Q7uGx/4H9BsrNEyngiok+2pDjp7kPz
-         A7+je10EtD2nsoGw0WQ7BxkzTCWskyvqecMmZbKAw9Z3bHd+uh0oDfxzDX1BKyFir8Da
-         YqgQ3KvlO0VJwTsi7XrNWKoSU18rZGG2hOQ+AqqHiLZrl5eHZG6uTQC7fYzlOCCe4unT
-         oH+djtM/VcPzktfiXU8ICsIsHRWVl2iRHUlW8cvM7sr0bXAgJZMr40qeyZsjqG0rWbRe
-         oJZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+vOb5yHTUTgHDDJX2OrXL/1O2I+8ETIcPsDexqsYa1Y=;
-        b=eZ0e7c4lkujIK0pbYrDB7t8WdpPDJcnZ+OUJagCLVg60fQLYUnOkiyhWh7zaobEDak
-         XjjA4069K5Nn5nYg8bjkbVDSdabjNTFYYdwaI2CEyMvo1N2uMTQKQtBrRqprLWuU+MCf
-         brlrrwSSRBuyyZmzCzWpyn2ifhyvaMJOFRgv3mIcoPz24YZdkyzrdIAsptTM5v+REeCU
-         QQ8o93tylFW6S7vHvwbRSNdayTgl97RdqsdDvj2rc/OC6l02O6L/6cJ4L10GDvrx0O/8
-         ThkM9vT/8ZaHcuIIz61S+t4ZcaVpKVRWX+IXdT5F5Ph1yw0l3WTHtzTnT+nELu2QPkvG
-         0sXQ==
-X-Gm-Message-State: AOAM533xjBP3BXkWFDE4350gkmUlpRiPpJXk7TbzQ8mqoRlixjk8Ui6G
-        RzKbpRlcsqjWgsvYCUXRSRoOJvP7oA16706r8wQ=
-X-Google-Smtp-Source: ABdhPJxllMHmNdo+PnzLV4B/leNYKBD0RcLgdBJ9d7U41dzillp07VzmjbjOGDrtTBkD7GmO0emmpFkyrOxTSsLuAH0=
-X-Received: by 2002:a1c:f70d:: with SMTP id v13mr4222288wmh.133.1642607992553;
- Wed, 19 Jan 2022 07:59:52 -0800 (PST)
+        id S1356021AbiASQCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:02:39 -0500
+Received: from mout.gmx.net ([212.227.17.22]:42863 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355744AbiASQCi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 11:02:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642608154;
+        bh=JEMjXleBru/gLCy/oOLYjEj9hZH6cOzwnx1wA8kkjSc=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=CDHzUakxxcAdHOyEkKCyU3lT7nfJ2tsFe1GWUX8TnNoSc7fSEQnoWmBOrwmz5hV53
+         nLeqceRQ2VB1p3f81HibXEsUCWqyroyJaMBX4Tjq2Nb6ybqXYnF2yzem3LO3gXcPbI
+         QviPoyHGYs/O+ynvL21lXmVMNcpqXmuKmvKFlPx8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.183.52]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Msq24-1mHR0D3cYC-00tC0V; Wed, 19
+ Jan 2022 17:02:33 +0100
+Date:   Wed, 19 Jan 2022 17:01:26 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev updates & fixes for v5.17-rc1
+Message-ID: <Yeg11pHSqx29yg/T@ls3530>
 MIME-Version: 1.0
-References: <20220110165208.1826-1-jszhang@kernel.org> <Ydxljv2Q4YNDYRTx@xhacker>
- <CAJ+HfNiS7Ss0FJowPUrrKvuC+1Kn9gXb=VqNoqh3eWJDu=m4Mg@mail.gmail.com> <1b104397-8cb7-c5c2-92cb-11ce56c9a8de@iogearbox.net>
-In-Reply-To: <1b104397-8cb7-c5c2-92cb-11ce56c9a8de@iogearbox.net>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Wed, 19 Jan 2022 16:59:40 +0100
-Message-ID: <CAJ+HfNikH3OMH_b3=uvfSqAJZkjJabn9yipbYdnTxsh_=VDHOQ@mail.gmail.com>
-Subject: Re: [PATCH riscv-next] riscv: bpf: Fix eBPF's exception tables
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, palmer@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Netdev <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:5O4+rNi6WJzQVMB+rTkMWYPHXQd1MKtr9EcwARWkfS6QfG+7GT9
+ 044Q6svnW1H9NthTjUk5BvGtYbh90Ql+LLim33SoXHyM9L1nAi1wNiQVSClob0fZ+AKvpYy
+ L+0y9SxutqityVLXJEiD2krOQqlMDSXKTtRxUJRAywiBSi3XFn5cy13Oeck+mKZx0Lv43TZ
+ 7yoOr9kSnGdUfkgG9/pYQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mGsiSMYeQpU=:tQdMhoIcPsY/hgXhctthf7
+ icNGYjXoR9CsRRO2QZRSkZfVAmMZwbu5hvLkdnCJX/sGYW46uQbKknOhl8FHz5jiA89LKB/h0
+ ZsMa7aWQw7XgQP0sVX5uP4E68YZkAPUUX3L0iK1jHuSXLIhHWjbPnaTHsIc9KO4MWnDD9ner+
+ zAgYbtayKkFNbS6bdBeOaonU8BGpMCokqAI8TcQChSwO7wKfKxvgEXiq1bM74IJJ6I1z+MZao
+ RJ58jegStheKNcs0/txV0WAYAMj2HquikR5POBsPdUo6QBz1byXAg6KqacKKjQbJzhhz41mAW
+ /QfxXlDWrnpOXfBV7XmuMJqXb3r2mGpV4H5nhnm+ej3agaRc4CA+ZX8oMLiPAXuD1L9XqGewf
+ ItZTsfFi1vbGrIsPbK8yavPrNV79CUrU9fiBU2AZJQljWO3omJBXz21likrb6ocXIxNL9CYlm
+ x/YmZaesD7I3SGSJfz8TzA+jIhtGVeK5RuBMrnmO6uPtzoV3yC2hT2NOc+0B34uxJdwt6mZSf
+ nvSNzvMIuQKHhafHrLgL0vSS4fzm9EAkmuQMqkM34rbV3x2VP302stxOYgShQYqO6h9evQu6N
+ +IFQ/G+LiEYhjSBqhSlICXoBO0ilnf2nY7bFA5ITEJXtEXjfKCm4sphxnfF99l0GTj6HZtVqd
+ 4WXB4QjfcDsiPfz0y9H6DKAQydJkk+E1ncYM2K2tb20ilScpNN/cNpYc3Sv3DJOyfkOyTXePJ
+ h5lzeXDF1ZjUv85YGSPqtzG1h4/SaQ5APBT5oUBcb0AYfECwlJGMAV3DdWxEXSQVHvvv4tS0+
+ LBOK/mMIkXL0SzvSiSSdoEF09cMkenMi/reehn85rfJAnZ0mmfJakpr1OlGhvs7c47xnR8rIC
+ ZN5HVSjN0Ah03Qcda7azy8nNTqi2y9LM4kGLawABZnV2rOoJS/wlhBoTmJxnav+1cksFmJxgU
+ qJJtZ1KxROwdwati8LNPOXLUW8Xszotn+JpSvdnKh4uYd2ABP1YlaTC/axpGnjH8Pp8J9+nAo
+ e6aQlXi2WehVgOCExPZ6BAXf7drIr84Vwv5vcmq59Z/ATlsw7lW4EyJHumoxZMfLMWJs8qW70
+ 2E0omya9j3bWnU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 16:42, Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-[...]
-> > AFAIK, Jisheng's extable work is still in Palmer's for-next tree.
-> >
-> > Daniel/Alexei: This eBPF must follow commit 1f77ed9422cb ("riscv:
-> > switch to relative extable and other improvements"), which is in
-> > Palmer's tree. It cannot go via bpf-next.
->
-> Thanks for letting us know, then lets route this fix via Palmer. Maybe he=
- could
-> also add Fixes tags when applying, so stable can pick it up later on.
->
+The following changes since commit 0c947b893d69231a9add855939da7c66237ab44=
+f:
 
-It shouldn't have a fixes-tag, since it's a new feature for RV. This
-was adapting to that new feature. It hasn't made it upstream yet (I
-hope!).
+  Merge tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs=
+-2.6 (2022-01-17 09:53:21 +0200)
 
+are available in the Git repository at:
 
-Cheers,
-Bj=C3=B6rn
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
+gs/fbdev-5.17-2
+
+for you to fetch changes up to 842086bc7262a36f002e0361f9dc351556cae3f3:
+
+  video: fbdev: controlfb: Fix COMPILE_TEST build (2022-01-17 22:39:37 +01=
+00)
+
+=2D---------------------------------------------------------------
+fbdev updates for v5.17-rc1
+
+A first bunch of updates and fixes for the following fbdev & backlight dri=
+vers:
+ocfb, aty128fb, mb862xx, omapfb, qcom-wled, dt-bindings, hyperv_fb,
+lm3630a_bl, omap2, controlfb, matroxfb
+
+Nothing really important, mostly cleanups, const conversions, added null
+pointer/boundary checks and build fixes.
+
+Signed-off-by: Helge Deller <deller@gmx.de>
+
+=2D---------------------------------------------------------------
+Chunyang Zhong (1):
+      video: ocfb: add const to of_device_id=A0
+
+Colin Ian King (2):
+      fbdev: aty128fb: make some arrays static const
+      video: fbdev: mb862xx: remove redundant assignment to pointer ptr
+
+Greg Kroah-Hartman (1):
+      omapfb: use default_groups in kobj_type
+
+Jiasheng Jiang (1):
+      video: fbdev: Check for null res pointer
+
+Luca Weiss (2):
+      backlight: qcom-wled: Add PM6150L compatible
+      dt-bindings: simple-framebuffer: allow standalone compatible
+
+Michael Kelley (1):
+      video: hyperv_fb: Fix validation of screen resolution
+
+Minghao Chi (1):
+      drivers/video: remove redundant res variable
+
+Xu Wang (2):
+      backlight: lm3630a_bl: Remove redundant 'flush_workqueue()' calls
+      fbdev: omap2: omapfb: Remove redundant 'flush_workqueue()' calls
+
+Yang Guang (1):
+      video: fbdev: use swap() to make code cleaner
+
+YueHaibing (1):
+      video: fbdev: controlfb: Fix COMPILE_TEST build
+
+Z. Liu (1):
+      matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid bla=
+ck screen
+
+ .../devicetree/bindings/display/simple-framebuffer.yaml  | 12 +++++++----=
+-
+ drivers/video/backlight/lm3630a_bl.c                     |  1 -
+ drivers/video/backlight/qcom-wled.c                      |  1 +
+ drivers/video/fbdev/aty/aty128fb.c                       | 10 ++++++----
+ drivers/video/fbdev/aty/mach64_ct.c                      |  4 +---
+ drivers/video/fbdev/controlfb.c                          |  2 ++
+ drivers/video/fbdev/hyperv_fb.c                          | 16 +++--------=
+-----
+ drivers/video/fbdev/imxfb.c                              |  2 ++
+ drivers/video/fbdev/matrox/matroxfb_base.c               |  2 +-
+ drivers/video/fbdev/mb862xx/mb862xxfb_accel.c            |  2 +-
+ drivers/video/fbdev/ocfb.c                               |  2 +-
+ drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c     |  3 ++-
+ drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c     |  3 ++-
+ drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c     |  3 ++-
+ drivers/video/fbdev/omap2/omapfb/omapfb-main.c           |  1 -
+ drivers/video/fbdev/sis/sis_main.c                       |  2 +-
+ 16 files changed, 32 insertions(+), 34 deletions(-)

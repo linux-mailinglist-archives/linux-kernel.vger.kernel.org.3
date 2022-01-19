@@ -2,66 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69872493E45
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC570493E4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356056AbiASQ1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S1356115AbiASQ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiASQ1t (ORCPT
+        with ESMTP id S231857AbiASQ3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:27:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E522BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:27:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=y+niaJZsQwGraQM2Scy9GSfhLJjB89yjTH8KmflesUE=; b=hs7gAhpAa0jbycG+pHIUD140H9
-        MEc+Hhq9eXKkyB0ZBoX20pZhcH702XDPdl5aDHEgFlg7mw328ff9uPl/On17vMLICS7HNqXgYJj9p
-        HkkRkhyAQLTk3OaC+Kj0EivULkAFGsg+VVrlLX+gsKLAwbCbbo4R9hfYu4l+U++XbGuNCxfGtNM9C
-        RG8WwC6bGESqC7Io4ngPhQcqcVUodlUVvf6g88ntU95gCwbxj0HskVMh0IvZxrGp11RwR1LUoo+v/
-        +yVHv5m8ZevAwlTKx1WW+yL36OKShVEA9sHg+xOpGXMj5oyKLrF/4iWVSrbhD1orgxvNKPndmPDkS
-        G0OQRXGQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nADo4-00BMnH-Eq; Wed, 19 Jan 2022 16:27:32 +0000
-Date:   Wed, 19 Jan 2022 16:27:32 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-Message-ID: <Yeg79CcofyNuVLid@casper.infradead.org>
-References: <20220118235244.540103-1-yury.norov@gmail.com>
- <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
+        Wed, 19 Jan 2022 11:29:54 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2316C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:29:53 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id r3so2189385iln.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Tg/o9Q4Kbn+I0820wcP01USyhFKpxhXCCDd08r5ctiY=;
+        b=CHZa9XKhvL4JtdhiGWaHO9wUILQlMegd6a44gX0MkYPusVedgHxEyuW+TH5shc5Sz4
+         Qwx3i/6vFZQKJ46JFMV/n64kdKHMHcsiNPKAuITwqj+mf9WPVK0I+h9J340V9Dcpw8S2
+         JOwrCUmoB1PxAv0mpOIJmZIje2I+TJ5iTVIvoSjls3hp9uab5O4aGQknaf8xEV+Gfv1M
+         jFXMlAcrVOI7IEZ16JslwplYPPp2v3Gecm+tbETlZ+/sIHCJsGlgJ9GXDl55MaB6Ne4f
+         vMWPV6F+1tIAtgUVdrbuH/irFiOT6tUwGucCYkkjaC9vPg1EMMSrOz1dVJVhXpy+ljTj
+         YYDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Tg/o9Q4Kbn+I0820wcP01USyhFKpxhXCCDd08r5ctiY=;
+        b=yJwQrYS2zhx0pvvjK6EOTHwrrfvslgishdvtvDagH0ozdXV4xEw7sg8rnX/lW+zDFs
+         Bq+zSiqVvTf0bQ6ME/m+6wri9a2Asdv47baOrA63TFmcOXVMTP0ueY99z1kcLKxvGRcU
+         t3x5rNZ3R8izjrxfcoxwU6O8vl/LfeD0hbIn+3Znndvw9rwk5Is+oXi6qbTz2/6yvpzK
+         buT+rZD0nZCYv80y2TIhkps9AkThxaycVxki5XiyJgEstUSqLmz2lv2h+i3ZjQ4VW6rl
+         qjqRoErDq+TU8zrgKONFVYyQu5n9x5AjaEpehWDJ67HLhZLFEOH2P1RNbeCBZD9pR46+
+         kJXA==
+X-Gm-Message-State: AOAM5321ES1AbfUpYZ+2tWlsqWnpHFHyaEYAoZ1lfPk6Fa0fplCbS1tc
+        LdjB4OXaSKJGY6eA9xeE5yJ/E+sueEEKLgTrXtrXpg==
+X-Google-Smtp-Source: ABdhPJxpa3KneiA5a8oIkCm4YRbDLbdiTy/mB/l8XArAz2qyIY0AlhvUm9vlVu+sChGJdZNH0AlvXkaomY2szYbzVvQ=
+X-Received: by 2002:a92:c9c8:: with SMTP id k8mr9105247ilq.2.1642609792961;
+ Wed, 19 Jan 2022 08:29:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
+References: <YebZKjwgfdOz0lAs@kernel.org>
+In-Reply-To: <YebZKjwgfdOz0lAs@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 19 Jan 2022 08:29:40 -0800
+Message-ID: <CAP-5=fVGf70w6wXTHfh8M4eimkONvLdjrz=dmd9_P=oW0cTFrg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] perf machine: Use path__join() to compose a path
+ instead of snprintf(dir, '/', filename)
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 01:28:14PM +0000, Robin Murphy wrote:
-> > +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
-> 
-> Is it page_to_pfn() guaranteed to work without blowing up if page is invalid
-> in the first place? Looking at the CONFIG_SPARSEMEM case I'm not sure that's
-> true...
+On Tue, Jan 18, 2022 at 7:13 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Its more intention revealing, and if we're interested in the odd cases
+> where this may end up truncating we can do debug checks at one
+> centralized place.
+>
+> Motivation, of all the container builds, fedora rawhide started
+> complaining of:
+>
+>   util/machine.c: In function =E2=80=98machine__create_modules=E2=80=99:
+>   util/machine.c:1419:50: error: =E2=80=98%s=E2=80=99 directive output ma=
+y be truncated writing up to 255 bytes into a region of size between 0 and =
+4095 [-Werror=3Dformat-truncation=3D]
+>    1419 |                 snprintf(path, sizeof(path), "%s/%s", dir_name,=
+ dent->d_name);
+>         |                                                  ^~
+>   In file included from /usr/include/stdio.h:894,
+>                    from util/branch.h:9,
+>                    from util/callchain.h:8,
+>                    from util/machine.c:7:
+>   In function =E2=80=98snprintf=E2=80=99,
+>       inlined from =E2=80=98maps__set_modules_path_dir=E2=80=99 at util/m=
+achine.c:1419:3,
+>       inlined from =E2=80=98machine__set_modules_path=E2=80=99 at util/ma=
+chine.c:1473:9,
+>       inlined from =E2=80=98machine__create_modules=E2=80=99 at util/mach=
+ine.c:1519:7:
+>   /usr/include/bits/stdio2.h:71:10: note: =E2=80=98__builtin___snprintf_c=
+hk=E2=80=99 output between 2 and 4352 bytes into a destination of size 4096
+>
+> There are other places where we should use path__join(), but lets get rid=
+ of
+> this one first.
 
-Even if it does blow up, at least it's blowing up here where someone
-can start to debug it, rather than blowing up on first access, where
-we no longer have the invlid struct page pointer.
+Acked-by: Ian Rogers <irogers@google.com>
 
-I don't think we have a 'page_valid' function which will tell us whether
-a random pointer is actually a struct page or not.
+Thanks,
+Ian
+
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>  tools/perf/util/machine.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index 3901440aeff92652..f70ba56912d4f9f8 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -16,6 +16,7 @@
+>  #include "map_symbol.h"
+>  #include "branch.h"
+>  #include "mem-events.h"
+> +#include "path.h"
+>  #include "srcline.h"
+>  #include "symbol.h"
+>  #include "sort.h"
+> @@ -1416,7 +1417,7 @@ static int maps__set_modules_path_dir(struct maps *=
+maps, const char *dir_name, i
+>                 struct stat st;
+>
+>                 /*sshfs might return bad dent->d_type, so we have to stat=
+*/
+> -               snprintf(path, sizeof(path), "%s/%s", dir_name, dent->d_n=
+ame);
+> +               path__join(path, sizeof(path), dir_name, dent->d_name);
+>                 if (stat(path, &st))
+>                         continue;
+>
+> --
+> 2.34.1
+>

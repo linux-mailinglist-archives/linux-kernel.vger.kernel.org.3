@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 736B3494317
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0798494319
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357523AbiASWgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 17:36:45 -0500
-Received: from mga01.intel.com ([192.55.52.88]:56248 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243245AbiASWgo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:36:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642631804; x=1674167804;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1gWGX1h8BWrCCIKoA/6KpIWfv4FlIBjGre0d3kpmSdU=;
-  b=eMJVCQNkr7dR3gWtIBo4bGcMb5s9yJG4EbTQwmkfW9urm5IvvHYHEAXD
-   0uXKaQQzdk9UCF7hY1eUlkL7d9EHGBska7voBT4ZKemdnWvxeHhTF+fB3
-   0f6Tx/0UEIHYDtpMaTipGhMwSVhIfcc7fWnsgiwBXRniLuz7HWVJAi61m
-   UfxX52WwD0yk/Lw/nnj2oTINElaAKF5bSdeylJ3UGvIUMWpLX7GTIlLAX
-   FBlML1UC7f2/GnqPSZhI1+QGs/Uxm1Pt9R/MzfAoEXRik4/8kOnWfHwyN
-   f71I2E1WlgPJOUYKLhUCeDpDSlol48pPJ8GbrXqOQhq17LDlCjvNYr/ps
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269608787"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="269608787"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 14:36:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="477562281"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2022 14:36:42 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAJZJ-000Dnc-UQ; Wed, 19 Jan 2022 22:36:41 +0000
-Date:   Thu, 20 Jan 2022 06:35:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 24/29]
- nios2-linux-ld: fs/cifs/file.o:undefined reference to `netfs_invalidatepage'
-Message-ID: <202201200630.EgURYeDW-lkp@intel.com>
+        id S1357555AbiASWhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243245AbiASWhB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 17:37:01 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB1DC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:37:01 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id s9so1692280plg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:37:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=dxE4r1z1cIfSGWJM621bK96VrUIyVV92x6PrrwpFRXY=;
+        b=3jmCLS/O1Tvc4I9EcgW+vSU8+bHw3fiuSLb8QBBFgnjhcJ5TBVgWAsgBRkL3a3BYKD
+         B38FGcRvYxRCPVi9I//mp1Op4BJClqNBzMkBUd6cytmd/QdYvSp7N0XjWzvC8oGGsiZP
+         YIoTbzn7LIhb7DJlIo12jni+ncZcxIDEl1lNAtS8/IYRdIMQhyD1m6LD7ntzYNxIi4sn
+         7yK8JltnuRpVwKYL85hmJpwtSbixKHx9L9ZLo7vnpI6W7mzH8+gTgQ9XuKzBg0btwiD4
+         lqiBj8d7xmg1PSH6vq7/iRvjAhhGASBFqeIMA7g6mDLZ9NltVPocwZazaaUs043hvvCW
+         OQOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=dxE4r1z1cIfSGWJM621bK96VrUIyVV92x6PrrwpFRXY=;
+        b=O1tqKhXgaHysRvuDlCUIax7x+f4P2Q024Qow0Ft9ZI++L2zVmV6O144GWrfVPvmSZM
+         52PnjvcPfC5/I9jmwYFFEk/1UcwLTOL/2R9WtpnhV4oAQgm7+ELsYXP25ptOOtOQk21K
+         v4fhDc8nC8rUiqjZ9xG5pKP/3MQr97np6lRayNxDH71uCkQFFic0EbPeH4LW4cUzI6oV
+         DGSOPiYSEbYUEXT9leps2mQPvvuAPa/yr0gvqsiLlRBFpmtJWeK3l55FouAJ5KsmwUC4
+         tfq40QnZXxnvqi+hbgepiWzUCqYd614u2xOYlsrusn1lkuGcjtYti81fVefc0eSZtHjl
+         98Zg==
+X-Gm-Message-State: AOAM530mzu/xRRnB2tk8FTrhy19H0v/pCUp5/1ykmZ2JZBBo0Uc5+z7w
+        ypXLrjVlN8fNouBxRjmzG3gE/w==
+X-Google-Smtp-Source: ABdhPJxv6F63q9VzJdxY0ckhpZZbC07AudfrnDivjIRxSeMR+ozHNzZi+g2TSfEoU169TmiRdyIcag==
+X-Received: by 2002:a17:90a:6288:: with SMTP id d8mr6922737pjj.199.1642631820957;
+        Wed, 19 Jan 2022 14:37:00 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id b9sm587995pfm.154.2022.01.19.14.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 14:37:00 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Tu <yu.tu@amlogic.com>
+Subject: Re: [PATCH V6 0/5] Use CCF to describe the UART baud rate clock
+In-Reply-To: <20220118030911.12815-1-yu.tu@amlogic.com>
+References: <20220118030911.12815-1-yu.tu@amlogic.com>
+Date:   Wed, 19 Jan 2022 14:37:00 -0800
+Message-ID: <7hfspjqrn7.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   893ce0d06d6627c743bf20d48234543ff9262d19
-commit: 7deb1d07f1b835b302c1a747312e02d2e1089578 [24/29] netfs: Provide invalidatepage and releasepage calls
-config: nios2-randconfig-r006-20220119 (https://download.01.org/0day-ci/archive/20220120/202201200630.EgURYeDW-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/7deb1d07f1b835b302c1a747312e02d2e1089578
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout 7deb1d07f1b835b302c1a747312e02d2e1089578
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yu Tu <yu.tu@amlogic.com> writes:
 
-All errors (new ones prefixed by >>):
+> Using the common Clock code to describe the UART baud rate
+> clock makes it easier for the UART driver to be compatible
+> with the baud rate requirements of the UART IP on different
+> meson chips. Add Meson S4 SoC compatible.
 
->> nios2-linux-ld: fs/cifs/file.o:(.rodata+0x48fc): undefined reference to `netfs_invalidatepage'
->> nios2-linux-ld: fs/cifs/file.o:(.rodata+0x4900): undefined reference to `netfs_releasepage'
-   nios2-linux-ld: fs/cifs/file.o:(.rodata+0x4954): undefined reference to `netfs_invalidatepage'
-   nios2-linux-ld: fs/cifs/file.o:(.rodata+0x4958): undefined reference to `netfs_releasepage'
+Could you describe how this was tested and on which SoCs?  There seem to
+be some changes in this series that might affect previous SoCs.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+
+Kevin
+
+

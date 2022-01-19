@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F39849434B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7854749434E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357626AbiASW4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 17:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S1357631AbiASW5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiASW4h (ORCPT
+        with ESMTP id S1357621AbiASW5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:56:37 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C25AC061574;
-        Wed, 19 Jan 2022 14:56:36 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso17766040wmj.2;
-        Wed, 19 Jan 2022 14:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GSd02jBcb0jQ7RFJ96vFIu10kcuFdGI3D3TahyBUmhw=;
-        b=NH6kgTlJGInhDsdPsMG2Rx77cwDs75i48T84WLDaZd1kpGpDbXFF+eylTQFpmQGR5c
-         Ji6yZAZsdrYVbj4Aau2iX9HSwmitdCXXN37gRgMofTZvd7Gfl6CL6Z0a7nwXNLcKy6zE
-         hTv0qoubohVCd2+lsGj4XlK0EAnDFRiRi/H1+9j5fC3BtheES6yh5ALrOBZajHldhCjd
-         0qWdOpbG4zSyDTike6sK+NmqLNmKof03IhGPt73kxr4jVNvOqxm2vtXzRCz+XsdsR5fT
-         ARBpYobdKVyXTFUK4c0vt0gfnta9vu9PZtXLc5m/xsw47BxS5jqZ65e4cgDHtb1bzxRH
-         hN8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GSd02jBcb0jQ7RFJ96vFIu10kcuFdGI3D3TahyBUmhw=;
-        b=KkjvGb5rO811odoMLuDoFTN5Y9N/jFb8WmdNEIVeNVflDnydjJzbtpctc+rBIAmUEm
-         Y1gynmgDUhYSsOt7USlFFFq6CSk3Bg7LTpXwZFcFdcmJKNQChAxrLfrhKWXDouEUx/fS
-         SegcUty1QpdFmyUrWxlZ2woR2mEbhei0HMV/z0rd073mfUw+H2ntXcKA/Jip0UFjRwE1
-         kd8Ov2n/PSDMyDbiUTC9yK4oqHzMrgeISw2OdLueFJEsUBE6N7QBr0GEdzj7ykhJGdKq
-         3TKNisaynnkDfOSSyW4QVU+WNnqu2AMnIS0q7WXa2suEyy7utQqkrmfOije6YsYEhauW
-         PJ8Q==
-X-Gm-Message-State: AOAM530zku1w9QNqEiGCtGVBCvJ0xTdZDaQbHn9/Z4Z8KDVneBjxf6zc
-        +gDGjvXxykVSnmN9bK8e8Qc=
-X-Google-Smtp-Source: ABdhPJwgYA5WZCznkbGu1gMfdgrKvSIe7e9u/EucbW88FoMfiygX866seOD/FSFRR+SJ0j8XdFs+Hw==
-X-Received: by 2002:a5d:6da2:: with SMTP id u2mr18562326wrs.453.1642632995199;
-        Wed, 19 Jan 2022 14:56:35 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id o33sm12359980wms.3.2022.01.19.14.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 14:56:34 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] pipe: remove redundant assignment to pointer buf
-Date:   Wed, 19 Jan 2022 22:56:33 +0000
-Message-Id: <20220119225633.147658-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 19 Jan 2022 17:57:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA5FC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:57:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADC9E614AB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 22:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA879C004E1;
+        Wed, 19 Jan 2022 22:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642633049;
+        bh=WXbJm60Y8i0E7yI6QfuZUdp9C4e7sxUkKhBYaq/RnAY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OqmhbW4OzWLfMCgxRHCC+cagdVBZ+leePTpJIApJjPxZw6oh3s7yZZNpgShCz5qA4
+         JeKs38pd1pC08jMpDF21BQvKC+lrWDrkIvU1z1F1QndGGOZS0h377N+FiwVENorj8R
+         LTP3Az39fmXDJ7Az1GF6JC97jYBR6+uPY9bvG7QuSSxof6Tt+2D+n/6ZsDS3bdUjoV
+         ehel2osn9h0TiUQe1sUq5+aa/4fz/7Q+3X2nY9bGRIb+a3gHkUSPv33meEqz5b5WkK
+         OHFtQU90N2bgg0KMAPTt1c8AuOgKiaal8ax3+WTieJjW6K44Tbykory9kEqRIxSesp
+         O/FdVh826XZKQ==
+Date:   Wed, 19 Jan 2022 14:57:27 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     kernel test robot <lkp@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: vmlinux.o: warning: objtool: do_machine_check()+0x5fa: call to
+ memset() leaves .noinstr.text section
+Message-ID: <20220119145727.2034a180@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <Yeh/oEYGyg2+XYSJ@zn.tnic>
+References: <202110261614.Bt8EM6Nj-lkp@intel.com>
+        <YXe7AnMmiWXk36NC@zn.tnic>
+        <20220119102250.7e20b3df@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <YehZsGAqgd3tJyDV@zn.tnic>
+        <20220119104017.31e5ecc7@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <20220119111523.71f8e9e3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <Yeh013gIveIKdFMP@zn.tnic>
+        <20220119123714.22b54d4c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <Yeh/oEYGyg2+XYSJ@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer buf is being assigned a value that is never read, it is
-being re-assigned later on closer to where is it required to be set.
-The assignment is redundant and can be removed. Cleans up clang
-scan build warning:
+On Wed, 19 Jan 2022 22:16:16 +0100 Borislav Petkov wrote:
+> On Wed, Jan 19, 2022 at 12:37:14PM -0800, Jakub Kicinski wrote:
+> > gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-3)  
+> 
+> I have
+> 
+> $ gcc-8 --version
+> gcc-8 (SUSE Linux) 8.2.1 20180831 [gcc-8-branch revision 264010]
+> 
+> but I can't trigger anything with it either.
+> 
+> So I had a report about a randconfig from the 0day robot guys which
+> doesn't look like allmodconfig but which triggered some of the issues
+> you're seeing and I have fixes for that one which we wanna queue after
+> -rc1.
+> 
+> You could try them to see if they fix your warnings too. First take the
+> 2 here:
+> 
+> https://lore.kernel.org/r/20220113155357.4706-1-bp@alien8.de
+> 
+> and then this one ontop:
+> 
+> https://lore.kernel.org/r/YeWsopFagTZ4W8WA@zn.tnic
+> 
+> Thx.
 
-fs/pipe.c:490:24: warning: Value stored to 'buf' during its
-initialization is never read [deadcode.DeadStores]
+That does fix one of the warnings, it seems.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/pipe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Before:
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index cc28623a67b6..d19229df66ee 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -487,7 +487,7 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 		head = pipe->head;
- 		if (!pipe_full(head, pipe->tail, pipe->max_usage)) {
- 			unsigned int mask = pipe->ring_size - 1;
--			struct pipe_buffer *buf = &pipe->bufs[head & mask];
-+			struct pipe_buffer *buf;
- 			struct page *page = pipe->tmp_page;
- 			int copied;
- 
--- 
-2.33.1
+vmlinux.o: warning: objtool: mce_start()+0x5e: call to __kasan_check_write() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.isra.1() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg() leaves .noinstr.text section
+vmlinux.o: warning: objtool: do_machine_check()+0x196: call to mce_no_way_out() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_severity_amd.constprop.1()+0xd1: call to mce_severity_amd_smca.isra.0() leaves .noinstr.text section
 
+After:
+
+vmlinux.o: warning: objtool: mce_start()+0x5e: call to __kasan_check_write() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.isra.1() leaves .noinstr.text section
+vmlinux.o: warning: objtool: do_machine_check()+0xa32: call to mce_clear_state() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_severity_amd.constprop.1()+0xd1: call to mce_severity_amd_smca.isra.0() leaves .noinstr.text section
+
+
+At a glance mce_read_aux() is gone and do_machine_check() complains
+about a different call.

@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE0049368C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5A749368E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352558AbiASItm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 03:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351869AbiASItl (ORCPT
+        id S1352591AbiASItq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 03:49:46 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:43209 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352570AbiASItn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 03:49:41 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3F4C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:49:41 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id c24so5446106edy.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=63UMAZJ8UaeleKSQ6Z/+YlL8VwCIenEbrG/mPXwnfMk=;
-        b=Gv3+5DO1cfhtUQ5wnH6KkC8emnTvlUJQged0Fdct2Z8i4KfApYAUjV+nODsQMxqUSS
-         S5F4sHex4RDFaUA6kBj0Psiv6W2OLJBmj/VBmXKYj+Z/kiL/Mbl5sp+1ljm4ApfBP09p
-         TA8XcMUB2fxG8IcTXTyy8GGzQU4qn0ZJn9oyI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=63UMAZJ8UaeleKSQ6Z/+YlL8VwCIenEbrG/mPXwnfMk=;
-        b=ThId8vQdLxapz7/GCWrWZ9+5byD3aasUdcn41+uCmtkH5rexXw+6Q1EzAcbjlMkKpK
-         nUfuMXpbjtHyTxD6uDG03/AbyGcUJ/n3+TREPSuih6xtTOPV7VJidyx5gMnAP1ZWFMaJ
-         bjMeHvt5LXogWE+r3Nh71ufqVpbNPPao6fRWfSDEdNSDkZNFgYm7aDCjXaUSoHan0Rpo
-         0tyxoiBirNQEftlZtpzw20jEXusBrZr+fCHpR+AYptMQO3D9svp0wkYBiHdlfoPkaXvw
-         3OYQJwno4Mo9lVuRR4li3aJv+p5J58PA/aE1YRJBIHw2i0DzXDu1rfbhAQnXfQcNJwDO
-         M5og==
-X-Gm-Message-State: AOAM533W+a8r2nItvI54Djx+c9tLrBqqKotuc1SiCPBJrGZmKKH/Eo3j
-        +aCHyhooDCv97eZt3HWSKn/7U65DvcrNkHqgmZY=
-X-Google-Smtp-Source: ABdhPJy5r9P8c9NtmOCZJ6AmW+YjlfI+s8OVi/2hcEoXSZj8JFOcQ5TY5ylkS7Wp8toCXsuHhHuovQ==
-X-Received: by 2002:a05:6402:1d4a:: with SMTP id dz10mr14285263edb.206.1642582180074;
-        Wed, 19 Jan 2022 00:49:40 -0800 (PST)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id o20sm497123ejb.33.2022.01.19.00.49.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 00:49:39 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso12710889wmj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:49:39 -0800 (PST)
-X-Received: by 2002:a05:600c:3482:: with SMTP id a2mr2413478wmq.152.1642582179436;
- Wed, 19 Jan 2022 00:49:39 -0800 (PST)
+        Wed, 19 Jan 2022 03:49:43 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MDy54-1n0FHu0eto-009uaz; Wed, 19 Jan 2022 09:49:42 +0100
+Received: by mail-wm1-f51.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4445691wme.0;
+        Wed, 19 Jan 2022 00:49:42 -0800 (PST)
+X-Gm-Message-State: AOAM531HpSMBtNzwKTRQ8WcxXAoH8J/QkIosXqJDLL07moPbMkSZACiR
+        lIAKMN2q9UJX4gfm9PhTtPULXNAVQCPyyQRDZEg=
+X-Google-Smtp-Source: ABdhPJxf3RtweRtU+CatTOtSpLEk3AYaK311IymBkfKp4ZAtysVZK4i4XHZhQpD0dg01dfcz9lpKSApJdra8Z56WbAg=
+X-Received: by 2002:a1c:2784:: with SMTP id n126mr162213wmn.1.1642582181746;
+ Wed, 19 Jan 2022 00:49:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118164906.402468-1-Jason@zx2c4.com>
-In-Reply-To: <20220118164906.402468-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 19 Jan 2022 10:49:23 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wj-DoruDmbAojOJ=VtpZG6piwbRJXO1N1Uq6uX7Q4UVoA@mail.gmail.com>
-Message-ID: <CAHk-=wj-DoruDmbAojOJ=VtpZG6piwbRJXO1N1Uq6uX7Q4UVoA@mail.gmail.com>
-Subject: Re: [GIT PULL] random number generator fixes for 5.17-rc1
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220119000506.1299843-1-laurent@vivier.eu> <20220119000506.1299843-3-laurent@vivier.eu>
+ <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 19 Jan 2022 09:49:25 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
+Message-ID: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
+Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        John Stultz <john.stultz@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:v6OniHMlZ2asXvsuvt5xjGOjmnpN2NziXswL6PV4E5EO0BjikRy
+ nBP0rrJpGswFUFl8kCQWx1pLn4tPpgeLLqqN8IrCLKrqVTLSqPrd+FoU/Uhf44ar+Lbg71L
+ FUIRwQyu0K11kOGvK3stquu+xIYC0wvj1rIa/uqUGFvYBdapQHf5IXda7eBlYuLP/K/AX/r
+ CB14/zRDy5mymMZIah1IA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I0+iep35erY=:H+hrOWw6j1pjB69vROamaW
+ jcp9SWBBJR8Gl0uPZzyeAsQmEPPvCwOEdeAetL6wF6g8qDCKYg9GLWN4+o6cOOx53GXciX65/
+ JfIy6KPE9j1LQmjQc5lyggZvspPIqJJg51tyUeKLJMdgDBwIDFLRKRZAUPvipFJ3cQwR13ppy
+ /I5MlPGgHjx184IpZmjsrkfI6Vh1Pk38dxD0F6VAL4AzzIoW+aZvAuA8m3L38UTgUkjCM2Wzx
+ qII+LhOkLH+qrt1qOKcfd44IlYQzaQZB1Wiv+8Joa+bIGZXVzCdmM3aajy959wz/K0qBQepZO
+ MCWSBXJpjyevKHZa1Dp8V++4geuh94McU7BZwr9w1fKrH1vHrXCyB9RDzutnytGU7LkfwhY7b
+ /Qm5vIYvmWOjkuSlIljZyxNKPsroGs8tZbOGWkfTb637IzGKqjIzE7WZjdrsfEQwgK3vePZqP
+ 0pxJ5HZy4xuYN4Iq3fDMG7SuJWElpj1cBwxMgFdNHrO4jcenKF/U9qAkMlqeZfQxRGIaxYgdr
+ ZYZwRPBvCplavKHWabgOUwTLUPXlWQtqJr4/Kan9sbCerSNK0xrWj8MAfAvhfMqJ/sIXc61Na
+ 64vAl4WWzIKoLkzj7QkmrHhGikLXQgyOKrL1VEYaVBmQlQC298Dt+IzMW851uE9WJlpCzGyhN
+ lRX9R60faA0fe90yfUUISfFuV+RGBB8AWHcSmUTW4w8lQfqMuH9T+s/ONq3DOl5ar6xI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 6:49 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
 >
-> 1) Some Kconfig changes resulted in BIG_KEYS being unselectable, which Justin
->    sent a patch to fix.
+> I've just discovered include/linux/goldfish.h, which already has gf_*()
+> accessors for 64-bit, so it'd make sense to move the above there,
+> and adjust the names.
 
-Ugh. I think the old "don't ask" model was the correct one, and
-BIG_KEYS is probably broken (ie it should just select whatever crypto
-it wants, not depend on people having selected it).
+Yes, good idea.
 
-But I've taken this.
+>
+> Arnd: note that the existing ones do use __raw_writel().
 
-On a tangential note - looking at the resulting config file, I do note
-that 'CRYPTO_LIB_POLY1305_RSIZE' should probably depend on
-CRYPTO_LIB_POLY1305, because right now that sily thing gets set
-whether POLY1305 is enabled or not.
+It looks like Laurent introduced that bug in da31de35cd2f ("tty: goldfish: use
+__raw_writel()/__raw_readl()") and could fix it up here. Laurent, was the intent
+of this earlier patch also to make the driver usabel for m68k, or are there
+any other targets you looked at that had mixed up endianness?
 
-That was true before too, of course - not related to this pull except
-in the "this caused me to look at the end result" sense.
-
-              Linus
+       Arnd

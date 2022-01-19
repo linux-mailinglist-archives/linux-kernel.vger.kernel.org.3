@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0401493752
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D57493750
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353034AbiASJaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:30:16 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:62642 "EHLO smtp1.axis.com"
+        id S1352934AbiASJaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:30:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:51446 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351878AbiASJaP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:30:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1642584615;
-  x=1674120615;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fVAwHaS1X7k3SDlOAWurnc8ko2g4X9eIjVrR29heTW0=;
-  b=mp0E++yT//XRuWTp4puaoxtdcK0RMESQEeEJPgTsGLJyEThSm+eCHWe1
-   fPr0zk2/v9I3JYIZAMiJeSLVpH3sht4p7NOh9HBFIMCQeLoA/AJCqOkU4
-   lU8VVT6fQ5eiscFAw9Y6Iu4ibm8tLx7VKr5IUGhAUECdrvsI17m11b8d8
-   oJsWII0qsjE2TUsBD8fv9DtOOpLdU7x4121S6248MxLNaL62VwqSHyPoH
-   DzPqyC8++E7PN08MCF1pYQWC7LM4ethWg8Gb/6BH3zi7cI/C5BMY3Iia4
-   wSommrN5DBprwNxlFb6IjJ/V93f3pMhCTNs+eAKfiNZ6lqgJdYdPFzv96
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>
-CC:     <kernel@axis.com>, <devicetree@vger.kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh@kernel.org>, <linux-um@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] um: Fix order of dtb unflatten/early init
-Date:   Wed, 19 Jan 2022 10:29:34 +0100
-Message-ID: <20220119092934.5285-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        id S234544AbiASJaA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 04:30:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 434F311D4;
+        Wed, 19 Jan 2022 01:30:00 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.38.123])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 560623F766;
+        Wed, 19 Jan 2022 01:29:58 -0800 (PST)
+Date:   Wed, 19 Jan 2022 09:29:50 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
+Message-ID: <20220119092950.GA42546@C02TD0UTHF1T.local>
+References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
+ <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
+ <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
+ <00e28671-8d3a-f789-91c4-109814792a07@arm.com>
+ <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
+ <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
+ <CAK8P3a1t5N_vW3rcMD_e+UMy5EQDrTrE4QqPDo7nM_s1-Bf0XQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1t5N_vW3rcMD_e+UMy5EQDrTrE4QqPDo7nM_s1-Bf0XQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Scan the tree for reserved memory before unflattening it.  As Rob
-Herring said:
-| These should be reversed. early_init_fdt_scan_reserved_mem() works on
-| the flat tree. Reserved memory needs to be reserved before
-| unflatten_device_tree() starts allocating memory. Though I imagine that
-| doesn't really matter for UML.
+Hi Arnd,
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/lkml/YeF%2FVbxo6fAt0WLp@robh.at.kernel.org/
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- arch/um/kernel/dtb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Jan 19, 2022 at 08:44:54AM +0100, Arnd Bergmann wrote:
+> On Wed, Jan 19, 2022 at 7:44 AM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+> > On 1/13/22 5:17 PM, Arnd Bergmann wrote:
+> > >
+> > > It also helps me personally to have a known place to look up the names
+> > > by value rather than chasing through reference manuals.
+> >
+> > IIUC the purpose here would be a quick CPU ID documentation reference check ?
+> > I will wait for other opinions here and add the remaining in a separate patch
+> > probably.
+> 
+> The purpose would be to do what is obviously the right thing, and to avoid
+> more patches getting sent the next time someone needs to add a workaround
+> for another core that is already known.
 
-diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
-index ca69d72025f3..484141b06938 100644
---- a/arch/um/kernel/dtb.c
-+++ b/arch/um/kernel/dtb.c
-@@ -25,8 +25,8 @@ void uml_dtb_init(void)
- 		return;
- 	}
- 
--	unflatten_device_tree();
- 	early_init_fdt_scan_reserved_mem();
-+	unflatten_device_tree();
- }
- 
- static int __init uml_dtb_setup(char *line, int *add)
--- 
-2.34.1
+The general policy we've taken is to only add part definitions as and
+when they're required (e.g. alongside an errata workaround that needs to
+identify the part), since the kernel doesn't otherwise need to know, and
+it keeps the errata workaround patches self-contained (and ensures the
+MIDR definitions get tested as they're added).
 
+So per usual policy I don't think we should add the other part
+definitions here. If and when errata appear that requires us to identify
+those parts we can add corresponding MIDR definitions.
+
+> If you can't do this without more discussion, then just use your
+> current version and let the next person do it.
+
+As above, for now I think we should leave this as-is, and only add the
+Cortex-X2 part definition.
+
+Thanks,
+Mark.

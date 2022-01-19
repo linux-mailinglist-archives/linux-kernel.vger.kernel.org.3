@@ -2,130 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7622494103
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49194940D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357055AbiASTgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:36:36 -0500
-Received: from mga07.intel.com ([134.134.136.100]:5752 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357020AbiASTg1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:36:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642620987; x=1674156987;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y7zetMO+F9o9TgvTfnNqU31+rhVBHq60hicGgEyx15I=;
-  b=HhzYV4lDUyY0zhE8U9LQ4rni4Lm3Ln4mXgY1xQjSoU0F2uTie+LxGlkM
-   oBRWJSzwQGh1DLAMGrizOHtiJEZmuHVs/sQ/H9wek9g+0jDqqizd21ahz
-   5Q6yuBeSbylYJ36SPljxQlWeqdMbmYGeqgD6driL4fn9Ed1koxRm6XfLl
-   z5U43+DqrU/2SojfAKvFemPc2jFBAJR0wJucfy+l95KoRsWQ0ZBDYX8Sh
-   /xiQwZyyoQftkKaXbMlqk+/fMXEOyY4f9m0w68N2+No83ldeVojKwQxcP
-   swXuoQLBb8M3RwThIz9M5DRnXpL7HCK6PUS3XTcXr6oOdv0dof51eYgIX
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="308510733"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="308510733"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:26:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="765057648"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:26:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAGZw-00CEZW-RK;
-        Wed, 19 Jan 2022 21:25:08 +0200
-Date:   Wed, 19 Jan 2022 21:25:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [PATCH 1/3] lib/string_helpers: Consolidate yesno()
- implementation
-Message-ID: <YehllDq7wC3M2PQZ@smile.fi.intel.com>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <20220119072450.2890107-2-lucas.demarchi@intel.com>
- <YefXg03hXtrdUj6y@paasikivi.fi.intel.com>
- <20220119100635.6c45372b@gandalf.local.home>
+        id S240387AbiAST2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:28:02 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32472 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239940AbiAST14 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 14:27:56 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JIRqJh038377;
+        Wed, 19 Jan 2022 19:27:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=82+shTmS4o0cfSrp/BPMR8f+Ux19g1x6eTQZujRGYDk=;
+ b=TxPbqYQBCdjrMIo45lc1BbdzqRNp6b17nNAi6hYdn+/1EESogz6YlakQYmlR9K8DB6Vh
+ i0ntwMCF+YeW1JYTkkLPjeMtueSYcz6moiAzu4/H8tRftic9tECgyOrK0QUkJLnngSee
+ l9M8l3Gj2iN7EQIFT9WEyu7Y91DBLpPm9rNCeIlzNWT7zENb17T0LiMGHClim2/miUPj
+ QgV50NKNIT4L3zfjkUpUMxVFf5JM2Ah6GtEGAqmQdH9Edk+IJbgt9LrN09o30ZhWiX3f
+ sKhKJCTUivB9pHgP2bCsJVX6b0TIftOFx5V/MgaeeQwZHDhEO0tgOYAz6Bh7RMMRuk6s nA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpqxsh208-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 19:27:54 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JJOEE4029666;
+        Wed, 19 Jan 2022 19:27:54 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpqxsh1yg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 19:27:54 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JJHkEh024488;
+        Wed, 19 Jan 2022 19:27:52 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3dknw9r52u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 19:27:52 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JJRmxH31195590
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 19:27:49 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D26C6A405C;
+        Wed, 19 Jan 2022 19:27:48 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C67BA4060;
+        Wed, 19 Jan 2022 19:27:48 +0000 (GMT)
+Received: from [9.171.34.112] (unknown [9.171.34.112])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 19:27:48 +0000 (GMT)
+Message-ID: <1bbc2b03-6daa-5e27-956c-4d022bd8e9cb@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 20:27:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119100635.6c45372b@gandalf.local.home>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 02/10] KVM: s390: Honor storage keys when accessing
+ guest memory
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-3-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220118095210.1651483-3-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7tDR0KUycFjp4Lsv5RKwE2wnjBxDMT9-
+X-Proofpoint-GUID: 1nw549AwDKrsGnOpDkSRKxOkHLr1kz5E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ impostorscore=0 spamscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201190104
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:06:35AM -0500, Steven Rostedt wrote:
-> On Wed, 19 Jan 2022 11:18:59 +0200
-> Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
-> > On Tue, Jan 18, 2022 at 11:24:48PM -0800, Lucas De Marchi wrote:
-> > > @@ -1354,8 +1345,7 @@ static bool tomoyo_print_condition(struct tomoyo_io_buffer *head,
-> > >  	case 3:
-> > >  		if (cond->grant_log != TOMOYO_GRANTLOG_AUTO)
-> > >  			tomoyo_io_printf(head, " grant_log=%s",
-> > > -					 tomoyo_yesno(cond->grant_log ==
-> > > -						      TOMOYO_GRANTLOG_YES));
-> > > +					 yesno(cond->grant_log == TOMOYO_GRANTLOG_YES));  
-> > 
-> > This would be better split on two lines.
+Am 18.01.22 um 10:52 schrieb Janis Schoetterl-Glausch:
+> Storage key checking had not been implemented for instructions emulated
+> by KVM. Implement it by enhancing the functions used for guest access,
+> in particular those making use of access_guest which has been renamed
+> to access_guest_with_key.
+> Accesses via access_guest_real should not be key checked.
 > 
-> Really? Yuck!
+> For actual accesses, key checking is done by __copy_from/to_user_with_key
+> (which internally uses MVCOS/MVCP/MVCS).
+> In cases where accessibility is checked without an actual access,
+> this is performed by getting the storage key and checking
+> if the access key matches.
+> In both cases, if applicable, storage and fetch protection override
+> are honored.
 > 
-> I thought the "max line size" guideline was going to grow to a 100, but I
-> still see it as 80. But anyway...
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/ctl_reg.h |   2 +
+>   arch/s390/include/asm/page.h    |   2 +
+>   arch/s390/kvm/gaccess.c         | 174 +++++++++++++++++++++++++++++---
+>   arch/s390/kvm/gaccess.h         |  78 ++++++++++++--
+>   arch/s390/kvm/intercept.c       |  12 +--
+>   arch/s390/kvm/kvm-s390.c        |   4 +-
+>   6 files changed, 241 insertions(+), 31 deletions(-)
 > 
-> 	cond->grant_log ==
-> 	TOMOYO_GRANTLOG_YES
-> 
-> is not readable at all. Not compared to
-> 
-> 	cond->grant_log == TOMOYO_GRANTLOG_YES
-> 
-> I say keep it one line!
-> 
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> diff --git a/arch/s390/include/asm/ctl_reg.h b/arch/s390/include/asm/ctl_reg.h
+> index 04dc65f8901d..c800199a376b 100644
+> --- a/arch/s390/include/asm/ctl_reg.h
+> +++ b/arch/s390/include/asm/ctl_reg.h
+> @@ -12,6 +12,8 @@
+>   
+>   #define CR0_CLOCK_COMPARATOR_SIGN	BIT(63 - 10)
+>   #define CR0_LOW_ADDRESS_PROTECTION	BIT(63 - 35)
+> +#define CR0_FETCH_PROTECTION_OVERRIDE	BIT(63 - 38)
+> +#define CR0_STORAGE_PROTECTION_OVERRIDE	BIT(63 - 39)
+>   #define CR0_EMERGENCY_SIGNAL_SUBMASK	BIT(63 - 49)
+>   #define CR0_EXTERNAL_CALL_SUBMASK	BIT(63 - 50)
+>   #define CR0_CLOCK_COMPARATOR_SUBMASK	BIT(63 - 52)
+> diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
+> index d98d17a36c7b..cfc4d6fb2385 100644
+> --- a/arch/s390/include/asm/page.h
+> +++ b/arch/s390/include/asm/page.h
+> @@ -20,6 +20,8 @@
+>   #define PAGE_SIZE	_PAGE_SIZE
+>   #define PAGE_MASK	_PAGE_MASK
+>   #define PAGE_DEFAULT_ACC	0
+> +/* storage-protection override */
+> +#define PAGE_SPO_ACC		9
+>   #define PAGE_DEFAULT_KEY	(PAGE_DEFAULT_ACC << 4)
+>   
+>   #define HPAGE_SHIFT	20
+> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> index 4460808c3b9a..92ab96d55504 100644
+> --- a/arch/s390/kvm/gaccess.c
+> +++ b/arch/s390/kvm/gaccess.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/mm_types.h>
+>   #include <linux/err.h>
+>   #include <linux/pgtable.h>
+> +#include <linux/bitfield.h>
+>   
+>   #include <asm/gmap.h>
+>   #include "kvm-s390.h"
+> @@ -794,6 +795,79 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
+>   	return 1;
+>   }
+>   
+> +static bool fetch_prot_override_applicable(struct kvm_vcpu *vcpu, enum gacc_mode mode,
+> +					   union asce asce)
+> +{
+> +	psw_t *psw = &vcpu->arch.sie_block->gpsw;
+> +	unsigned long override;
+> +
+> +	if (mode == GACC_FETCH || mode == GACC_IFETCH) {
+> +		/* check if fetch protection override enabled */
+> +		override = vcpu->arch.sie_block->gcr[0];
+> +		override &= CR0_FETCH_PROTECTION_OVERRIDE;
+> +		/* not applicable if subject to DAT && private space */
+> +		override = override && !(psw_bits(*psw).dat && asce.p);
+> +		return override;
+> +	}
+> +	return false;
+> +}
+> +
+> +static bool fetch_prot_override_applies(unsigned long ga, unsigned int len)
+> +{
+> +	return ga < 2048 && ga + len <= 2048;
+> +}
+> +
+> +static bool storage_prot_override_applicable(struct kvm_vcpu *vcpu)
+> +{
+> +	/* check if storage protection override enabled */
+> +	return vcpu->arch.sie_block->gcr[0] & CR0_STORAGE_PROTECTION_OVERRIDE;
+> +}
+> +
+> +static bool storage_prot_override_applies(char access_control)
+> +{
+> +	/* matches special storage protection override key (9) -> allow */
+> +	return access_control == PAGE_SPO_ACC;
+> +}
+> +
+> +static int vcpu_check_access_key(struct kvm_vcpu *vcpu, char access_key,
+> +				 enum gacc_mode mode, union asce asce, gpa_t gpa,
+> +				 unsigned long ga, unsigned int len)
+> +{
+> +	unsigned char storage_key, access_control;
+> +	unsigned long hva;
+> +	int r;
+> +
+> +	/* access key 0 matches any storage key -> allow */
+> +	if (access_key == 0)
+> +		return 0;
+> +	/*
+> +	 * caller needs to ensure that gfn is accessible, so we can
+> +	 * assume that this cannot fail
+> +	 */
+> +	hva = gfn_to_hva(vcpu->kvm, gpa_to_gfn(gpa));
+> +	mmap_read_lock(current->mm);
+> +	r = get_guest_storage_key(current->mm, hva, &storage_key);
+> +	mmap_read_unlock(current->mm);
+> +	if (r)
+> +		return r;
+> +	access_control = FIELD_GET(_PAGE_ACC_BITS, storage_key);
+> +	/* access key matches storage key -> allow */
+> +	if (access_control == access_key)
+> +		return 0;
+> +	if (mode == GACC_FETCH || mode == GACC_IFETCH) {
+> +		/* mismatching keys, no fetch protection -> allowed */
+> +		if (!(storage_key & _PAGE_FP_BIT))
+> +			return 0;
+> +		if (fetch_prot_override_applicable(vcpu, mode, asce))
+> +			if (fetch_prot_override_applies(ga, len))
+> +				return 0;
+> +	}
+> +	if (storage_prot_override_applicable(vcpu))
+> +		if (storage_prot_override_applies(access_control))
+> +			return 0;
+> +	return PGM_PROTECTION;
+> +}
 
-I believe Sakari strongly follows the 80 rule, which means...
-
-> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-...chose either of these tags and be happy with :-)
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+This function is just a pre-check (and early-exit) and we do an additional final check
+in the MVCOS routing later on, correct? It might actually be faster to get rid of this
+pre-test and simply rely on MVCOS. MVCOS is usually just some cycles while ISKE to read
+the key is really slow path and take hundreds of cycles. This would even simplify the
+patch (assuming that we do proper key checking all the time).

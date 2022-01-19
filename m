@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 937C5493F89
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40558493F94
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356612AbiASSDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:03:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34296 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356593AbiASSDA (ORCPT
+        id S1356617AbiASSEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347237AbiASSEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:03:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642615380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=czyQcT5AvdpFdccMDnqOJP5PsUxctttwWttnV2WSAI4=;
-        b=T8gJ1i0aTtAdERDiXt4BeCytBiK3KhfgQQy9Gq7Wy33WoF52ZUe1UW1dpuvLrqAZdZVAQB
-        mbM9i88E0JobMJbh78/r6smiQDdfg3k/CFFEMRiopgN6fK8/XeV8daj3NXQucuCFGqgUIe
-        b/Dq+MExsOJjzxQeUHntfBfnK5am6XA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-VYf8phxVNM2lILB_6BELUw-1; Wed, 19 Jan 2022 13:02:58 -0500
-X-MC-Unique: VYf8phxVNM2lILB_6BELUw-1
-Received: by mail-wm1-f69.google.com with SMTP id o193-20020a1ca5ca000000b0034d78423625so3416641wme.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:02:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=czyQcT5AvdpFdccMDnqOJP5PsUxctttwWttnV2WSAI4=;
-        b=x45pVxj5aH8I0odZ3DPouvG05YZJN1LRctWO+cPmfjtjqfZmcza0XUvWs/rrD1yfHp
-         /wJacCyChEZWKQUmvqR7SmPRJR6i6iB4Ncka/N8Os6obOJj2dXOjCw6gA8d8QayV+NYP
-         rcA3ROpepf3B+3zwg9SQunFfA6BSOC9nyOtM4AZQLovtcBqkw82sHVuCcRHvdhBSdENz
-         +1xnzaORciQzv6ExtzVVynDnyrcdQ5eyysZZLoljgCkXS7dzN0iCPdzQOATpCa4MQM/F
-         rm2k0W9dOcvdQB/dsswKjTGji3snVfQruhLZlUpnuDUwd1ZXyCnzKdTn2iGlpCeQJYG/
-         +OcA==
-X-Gm-Message-State: AOAM5324iq6EAvRq6d7XBZ5byEqzdRx3zDqN8AE9i4RAs0e3esklys6M
-        QZur1avWGOxur3vML9frCbg0AfyOxKY4+y+bm6ji7xHFD0eADnctlsBho//CG07CwSjuX4A2Q5M
-        DOg5q4+zEsKhmR8fjimVUPyQE
-X-Received: by 2002:adf:d1e9:: with SMTP id g9mr16362039wrd.94.1642615377586;
-        Wed, 19 Jan 2022 10:02:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzWiK4YX1B5gdEVQZODtrmTI10OiMW4QGl94Z1D+eFnE79lslF625dzQ56217EHdanwhn1q9A==
-X-Received: by 2002:adf:d1e9:: with SMTP id g9mr16361991wrd.94.1642615376863;
-        Wed, 19 Jan 2022 10:02:56 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id u7sm233710wmc.11.2022.01.19.10.02.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 10:02:56 -0800 (PST)
-Message-ID: <7a0bc562-9f25-392d-5c05-9dbcd350d002@redhat.com>
-Date:   Wed, 19 Jan 2022 19:02:53 +0100
+        Wed, 19 Jan 2022 13:04:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1AAC061574;
+        Wed, 19 Jan 2022 10:04:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8ED0B81AC7;
+        Wed, 19 Jan 2022 18:03:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09543C004E1;
+        Wed, 19 Jan 2022 18:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642615437;
+        bh=Ur3kMaWZaSi8Y1AlfKrGVvzr1w1PXgLKGlTQ8hbEPdg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UqtOEiVDmbJkeSg9ZBr4qVNEmD+RdY8gtfaHaYx4XaCSXa81H9wT213LyHP+HC6bN
+         dROwYJYBVU+H0oSM3maSBuGP5uetiU223PEUYfL6j703KBgJlN4IVBTn6u8UK5a6MX
+         xqtUn6CkVyeH/l/p6ERq8/vn+ezodc+D9lakA69o=
+Date:   Wed, 19 Jan 2022 19:03:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: 4.4 series end of line was Re: [PATCH 4.4 00/17] 4.4.297-rc1
+ review
+Message-ID: <YehSi9Bati3sNado@kroah.com>
+References: <20211227151315.962187770@linuxfoundation.org>
+ <20220119102858.GB4984@amd>
+ <YefooANkr6eem49U@kroah.com>
+ <20220119134943.GA1032@duo.ucw.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Vipin Sharma <vipinsh@google.com>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        seanjc@google.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        dmatlack@google.com, jiangshanlai@gmail.com, kvm@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211222225350.1912249-1-vipinsh@google.com>
- <20220105180420.GC6464@blackbody.suse.cz>
- <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
- <Yeclbe3GNdCMLlHz@slm.duckdns.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yeclbe3GNdCMLlHz@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119134943.GA1032@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 21:39, Tejun Heo wrote:
-> So, these are normally driven by the !populated events. That's how everyone
-> else is doing it. If you want to tie the kvm workers lifetimes to kvm
-> process, wouldn't it be cleaner to do so from kvm side? ie. let kvm process
-> exit wait for the workers to be cleaned up.
+On Wed, Jan 19, 2022 at 02:49:43PM +0100, Pavel Machek wrote:
+> Hi!
+> 
+> > > > This is the start of the stable review cycle for the 4.4.297 release.
+> > > > There are 17 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > 
+> > > 4.4.X series is scheduled for EOL next month. Do you have any
+> > > estimates if it will be more like Feb 2 or Feb 27?
+> > 
+> > I would bet on Feb 1 :)
+> 
+> Hmm. That does not leave us too much time.
+> 
+> FAQ states:
+> 
+> # Why are some longterm versions supported longer than others?  The
+> # "projected EOL" dates are not set in stone. Each new longterm kernel
+> # usually starts with only a 2-year projected EOL that can be extended
+> # further if there is enough interest from the industry at large to
+> # help support it for a longer period of time.
+> 
+> Is there anyone else interested in continued 4.4.X maintainence?
 
-It does.  For example kvm_mmu_post_init_vm's call to
-kvm_vm_create_worker_thread is matched with the call to
-kthread_stop in kvm_mmu_pre_destroy_vm.
-  
-According to Vpin, the problem is that there's a small amount of time
-between the return from kthread_stop and the point where the cgroup
-can be removed.  My understanding of the race is the following:
+I do not know of any companies or interested parties that is interested
+in this.  The ones that rely on 4.4.x right now are going to be dropping
+support for it this month, if they haven't already from what I know.
 
-user process			kthread			management
-------------			-------			----------
-							wait4()
-exit_task_work()
-   ____fput()
-     kvm_mmu_pre_destroy_vm()
-       kthread_stop();
-         wait_for_completion();
-				exit_signals()
-				  /* set PF_EXITING */
-				exit_mm()
-				  exit_mm_release()
-				    complete_vfork_done()
-				      complete();
-cgroup_exit()
-   cgroup_set_move_task()
-     css_set_update_populated()
-exit_notify()
-   do_notify_parent()
-							<wakeup>
-							rmdir()
-							  cgroup_destroy_locked()
-							    cgroup_is_populated()
-							    return -EBUSY
-				cgroup_exit()
-				  cgroup_set_move_task()
-				    css_set_update_populated()
+So I have no resources to maintain this anymore, sorry, and I STRONGLY
+recommend that everyone else just move off of it as well.
 
-I cannot find the code that makes it possible to rmdir a cgroup
-if PF_EXITING is set.
+> CIP project will need to maintain 4.4.X-cip and 4.4.X-cip-rt for some
+> more years.
 
-Paolo
+That is up to them to do, I wish them well, I think it is a loosing game
+and one that is going to cost more money than they realize.  Remember,
+it costs more money and time the older the kernel is to keep it "alive".
+It is cheaper and easier to use more modern kernels.
 
+> Do you think it would make sense to maintain 4.4.X-stable as well?
+
+Not at all.  It is barely alive as-is.  If you _HAVE_ to maintain it, I
+recommend only doing it on a very narrow way (i.e. limited functionality
+and hardware support).  That's the only possible way you will be able to
+do this.
+
+good luck!
+
+greg k-h

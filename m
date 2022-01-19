@@ -2,420 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B2F4931EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D549A4931F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347636AbiASAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 19:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
+        id S1347777AbiASAjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 19:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237177AbiASAf5 (ORCPT
+        with ESMTP id S237177AbiASAjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:35:57 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B528C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:35:57 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id o80so2137424yba.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:35:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MTqXfZlhO6toYlx7D7e5+KcxXQZ2s3nKjg9Y99u4cio=;
-        b=mg+VeNpNp/Np/9Fna/yDJYIIaguxzgtLTsWd74BzsffD5R8extKd0STeM2giIAlG4V
-         1XfmKYXfM5kYv/weWlDCLshY7w8mqlkrFTcYMRzgBIOEQ+CNPZaLd4CJT7aSi4FzmQW2
-         Pb3Cnzxp/TH8sYCRrGZU1yVd7q+V58/yqJwBU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MTqXfZlhO6toYlx7D7e5+KcxXQZ2s3nKjg9Y99u4cio=;
-        b=aeDijjL5jwuoBzCquN0L7nCaRXXFxcOrqRFO6i2HITb+FwG9T1M6tizTK1ezNnOd9c
-         beDul7Go2MJ340HfhhSCBmcyEYmKE6+pGqOfyCfJEGpV4ltKPeq99xnC7sX5RykxbKBP
-         dh3SKuDaTQ1Zza+oV2iCgmLuKzZJVOOr7Rtyc4pXy0LgdcFqMQlyU/hm0lTkwPJcaWux
-         G9ag1ICviXIvdv4JuWBZBKpcsJRYJx/yoXdWds6nqAdp/4u21td+uGWfmYxC2wJRKrCh
-         9ovVDKNoxlaJbmXurdGHbNU/1tL6IvCp3+ptrxxrfVM0pOqfQSmL7WGYKTUZ9h4/5O6z
-         ojSg==
-X-Gm-Message-State: AOAM530GtIQsQGf3pnPhseCMXjXGCW1v84Th3tPNgWgZHw6ZDJiLGgrr
-        vm+nYb+s9YsGRn2qmUOg8vb9EFbl5/ITCNNC0K2crhMvWCGBEw==
-X-Google-Smtp-Source: ABdhPJzd8GuDqESnyvmYN3nkjybVU6QXHDgp2q5RX5jChSjS1a0wH9HoHXObWjkyy+zqb7RK/gyzjFqCjKQjyLWIc8M=
-X-Received: by 2002:a25:6cc4:: with SMTP id h187mr36644812ybc.662.1642552556222;
- Tue, 18 Jan 2022 16:35:56 -0800 (PST)
+        Tue, 18 Jan 2022 19:39:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B001EC061574;
+        Tue, 18 Jan 2022 16:39:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3DD614CE;
+        Wed, 19 Jan 2022 00:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9F1C340E0;
+        Wed, 19 Jan 2022 00:39:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642552785;
+        bh=rlNJ3O+wBaQqAhYetNswbsESAgyvWjhZQPvJIQXyZHw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pFmSHxaan3THvA8LMLq/j+6MWtW7A9dgqpWgVlprDoW4EuqlYUuv0bbaV91nuVMbc
+         LNU1UvAOnF3yJPZZUR5/YxtLytQQNCxVUBbHodwdoCIyRpXna19488vqDEJkBcY8lF
+         V5YIXwTMWVZwhY12XWB3yIZ4gagahUp1x3gnxqt8bM9dgb2irXM6Ngajsj1mBsaYOB
+         azqE+cv0ENgI+FyTF9yIOAXkTJTmsvkW5yoENNYkoTKbODibf4pUHJVIuHJ61qY3P7
+         eBvy7Sheh6fGjzaSc+v0t5aVA5harnXCJdwdjXmHOWbraohTKGc16MtAG1vw6wKYnn
+         paO0KW6U91BOA==
+Date:   Tue, 18 Jan 2022 16:39:44 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
+Message-ID: <Yedd0CKCHSq1ugFk@sol.localdomain>
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+ <20211202215507.298415-5-zohar@linux.ibm.com>
+ <YalDvGjq0inMFKln@sol.localdomain>
+ <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
+ <YdYrw4eiQPryOMkZ@gmail.com>
+ <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
+ <YdtOhsv/A5dqlApY@sol.localdomain>
+ <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
+ <YeJn7hxLEfdVrUQT@sol.localdomain>
+ <bc803a35d914dde65640428d2b29cc6e89d176d4.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220118163754.nfy53mfjpazgw2a2@eve> <YecV+rh/4rzygUbx@google.com>
- <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
- <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
- <CAFTm+6APx0PkRgp+7LLEOi=2E-7ZSgYdQ824U1XB+q1wMPNg3g@mail.gmail.com>
- <CACeCKaeAaS3QcLwvcPNYVtkKxaBViij53TBjOXvwcpKQk+NDbA@mail.gmail.com> <CAFTm+6BC--tNjbez_f_A_ckK7gjkbBMWHYSExxQcp9+u60Z2WQ@mail.gmail.com>
-In-Reply-To: <CAFTm+6BC--tNjbez_f_A_ckK7gjkbBMWHYSExxQcp9+u60Z2WQ@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 18 Jan 2022 16:35:45 -0800
-Message-ID: <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
-Subject: Re: Null pointer dereference in cros-ec-typec
-To:     "Mr. Chromebox" <mrchromebox@gmail.com>
-Cc:     Benson Leung <bleung@google.com>, Alyssa Ross <hi@alyssa.is>,
-        Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Tim Wawrzynczak <twawrzynczak@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc803a35d914dde65640428d2b29cc6e89d176d4.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There seem to be some differences.
-The Mr.Chromebox GOOG0004 device doesn't have any connectors listed.
-See here for a BIOS snippet from voxel:
-Scope (\_SB.PCI0.LPCB.EC0.CREC)
-    {
-        Device (USBC)
-        {
-            Name (_HID, "GOOG0014")  // _HID: Hardware ID
-            Name (_DDN, "ChromeOS EC Embedded Controller USB Type-C
-Control")  // _DDN: DOS Device Name
-            Device (CON0)
-            {
-                ...
-            }
+On Sun, Jan 16, 2022 at 12:01:28PM -0500, Mimi Zohar wrote:
+> On Fri, 2022-01-14 at 22:21 -0800, Eric Biggers wrote:
+> > On Sat, Jan 15, 2022 at 08:31:01AM +0300, Vitaly Chikunov wrote:
+> > > Eric,
+> > > 
+> > > On Sun, Jan 09, 2022 at 01:07:18PM -0800, Eric Biggers wrote:
+> > > > On Sun, Jan 09, 2022 at 11:45:37PM +0300, Vitaly Chikunov wrote:
+> > > > > On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
+> > > > > > On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
+> > > > > > > On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
+> > > > > > > > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
+> > > > > > > > >  	case IMA_VERITY_DIGSIG:
+> > > > > > > > > -		fallthrough;
+> > > > > > > > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+> > > > > > > > > +
+> > > > > > > > > +		/*
+> > > > > > > > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
+> > > > > > > > > +		 * and the fs-verity file digest, not directly on the
+> > > > > > > > > +		 * fs-verity file digest.  Both digests should probably be
+> > > > > > > > > +		 * included in the IMA measurement list, but for now this
+> > > > > > > > > +		 * digest is only used for verifying the IMA signature.
+> > > > > > > > > +		 */
+> > > > > > > > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
+> > > > > > > > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
+> > > > > > > > > +		       iint->ima_hash->length);
+> > > > > > > > > +
+> > > > > > > > > +		hash.hdr.algo = iint->ima_hash->algo;
+> > > > > > > > > +		hash.hdr.length = iint->ima_hash->length;
+> > > > > > > > 
+> > > > > > > > This is still wrong because the bytes being signed don't include the hash
+> > > > > > > > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
+> > > > > > > > supports SHA-512 too, and it may support other hash algorithms in the future.
+> > > > > > > 
+> > > > > > > IMA assumes that the file hash algorithm and the signature algorithm
+> > > > > > > are the same.   If they're not the same, for whatever reason, the
+> > > > > > > signature verification would simply fail.
+> > > > > > > 
+> > > > > > > Based on the v2 signature header 'type' field, IMA can differentiate
+> > > > > > > between regular IMA file hash based signatures and fs-verity file
+> > > > > > > digest based signatures.  The digest field (d-ng) in the IMA
+> > > > > > > meausrement list prefixes the digest with the hash algorithm. I'm
+> > > > > > > missing the reason for needing to hash fs-verity's file digest with
+> > > > > > > other metadata, and sign that hash rather than fs-verity's file digest
+> > > > > > > directly.
+> > > > > > 
+> > > > > > Because if someone signs a raw hash, then they also implicitly sign the same
+> > > > > > hash value for all supported hash algorithms that produce the same length hash.
+> > > > > 
+> > > > > Unless there is broken hash algorithm allowing for preimage attacks this
+> > > > > is irrelevant. If there is two broken algorithms allowing for collisions,
+> > > > > colliding hashes could be prepared even if algo id is hashed too.
+> > > > > 
+> > > > 
+> > > > Only one algorithm needs to be broken.  For example, SM3 has the same hash
+> > > > length as SHA-256.  If SM3 support were to be added to fs-verity, and if someone
+> > > > were to find a way to find an input that has a specific SM3 digest, then they
+> > > > could also make it match a specific SHA-256 digest.  Someone might intend to
+> > > > sign a SHA-256 digest, but if they are only signing the raw 32 bytes of the
+> > > > digest, then they would also be signing the corresponding SM3 digest.  That's
+> > > > why the digest that is signed *must* also include the algorithm used in the
+> > > > digest (not the algorithm(s) used in the signature, which is different).
+> > > 
+> > > I think it will be beneficial if we pass hash algo id to the
+> > > akcipher_alg::verify. In fact, ecrdsa should only be used with streebog.
+> > > And perhaps, sm2 with sm3, pkcs1 with md/sha/sm3, and ecdsa with sha family
+> > > hashes.
+> > > 
+> > 
+> > I was going to reply to this thread again, but I got a bit distracted by
+> > everything else being broken.  Yes, the kernel needs to be restricting which
+> > hash algorithms can be used with each public key algorithm, along the lines of
+> > what you said.  I asked the BoringSSL maintainers for advice, and they confirmed
+> > that ECDSA just signs/verifies a raw hash, and in fact it *must* be a raw hash
+> > for it to be secure.  This is a design flaw in ECDSA, which was fixed in newer
+> > algorithms such as EdDSA and SM2 as those have a hash built-in to the signature
+> > scheme.  To mitigate it, the allowed hash algorithms must be restricted; in the
+> > case of ECDSA, that means to the SHA family (preferably excluding SHA-1).
+> > 
+> > akcipher_alg::verify doesn't actually know which hash algorithm is used, except
+> > in the case of rsa-pkcs1pad where it is built into the name of the algorithm.
+> > So it can't check the hash algorithm.  I believe it needs to happen in
+> > public_key_verify_signature() (and I'm working on a patch for that).
+> > 
+> > Now, SM2 is different from ECDSA and ECRDSA in that it uses the modern design
+> > that includes the hash into the signature algorithm.  This means that it must be
+> > used to sign/verify *data*, not a hash.  (Well, you can sign/verify a hash, but
+> > SM2 will hash it again internally.)  Currently, public_key_verify_signature()
+> > allows SM2 to be used to sign/verify a hash, skipping the SM2 internal hash, and
+> > IMA uses this.  This is broken and must be removed, since it isn't actually the
+> > SM2 algorithm as specified anymore, but rather some homebrew thing with unknown
+> > security properties. (Well, I'm not confident about SM2, but homebrew is worse.)
+> > 
+> > Adding fs-verity support to IMA also complicates things, as doing it naively
+> > would introduce an ambiguity about what is signed.  Naively, the *data* that is
+> > signed (considering the hash as part of the signature algorithm) would be either
+> > the whole file, in the case of traditional IMA, or the fsverity_descriptor
+> > struct, in the case of IMA with fs-verity.  However, a file could have contents
+> > which match an fsverity_descriptor struct; that would create an ambiguity.
+> > 
+> > Assuming that it needs to be allowed that the same key can sign files for both
+> > traditional and fs-verity hashing, solving this problem will require a second
+> > hash.
+> 
+> The IMA fs-verity policy rule could require specifying the hash
+> algorithm.  If it would require specifying a particular key as well,
+> would hashing the hash then not be needed?
 
-            Device (CON1)
-            {
-               ...
-            }
-        }
-    }
+If both of those were true, and if the key was never reused for other purposes
+(either for other hash algorithms or for full file hashes), that would be fine.
+Obviously, the IMA policy is trusted in this context, since it's what tells the
+kernel to verify signatures in the first place.
 
-Does the EC on this device support EC_CMD_GET_PD_PORT_CAPS , or
-EC_CMD_USB_PD_PORTS ?
-It doesn't look like the EC is returning anything for these commands,
-which are used to populate GOOG0014.
+But, I could see users getting this wrong and reusing keys.
 
-The CREC device looks about right:
+> 
+> > The easiest way to do this would be sign/verify the following struct:
+> > 	struct ima_file_id {
+> > 		u8 is_fsverity;
+> > 		u8 hash_algorithm;
+> > 		u8 hash[];
+> > 	};
+> > 
+> 
+> The v2 version of this patch introduces the "ima_tbs_hash" structure,
+> which is more generic, since it uses the IMA xattr record type.  Other
+> than that, I don't see a difference.
+> 
+> > This would be the *data* that is signed/verified -- meaning that it would be
+> > hashed again as part of the signature algorithm (whether that hash is built-in
+> > to the signature algorithm, as is the case for modern algorithms, or handled by
+> > the caller as is the case for legacy algorithms).
+> 
+> There seems to be an inconsistency, here, with what you said above,
+> "... ECDSA just signs/verifies a raw hash, and in fact it *must* be a
+> raw hash for it to be secure."
 
-Device (CREC)
-            {
-                Name (_HID, "GOOG0004")  // _HID: Hardware ID
-                Name (_UID, One)  // _UID: Unique ID
-                Name (_DDN, "EC Command Device")  // _DDN: DOS Device Name
-                Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wa=
-ke
-                {
-                   ....
-                })
-             }
+There isn't an inconsistency.  ECDSA is among the algorithms where the caller is
+expected to handle the hash.
 
-2 observations:
-- We probably shouldn't be generating a GOOG0014 device at all if the
-EC_CMD_GET_PD_PORT_CAPS and EC_CMD_USB_PD_PORTS commands aren't
-supported by the EC. I can work with coreboot to make that change
-- Is the order of probing for some reason causing the GOOG0014 child
-device to not be linked to the GOOG0004 device? Alyssa, does the
-following diff help:
+It is confusing dealing with all these different signature algorithms.  I think
+the right way to think about this is in terms of what *data* is being
+signed/verified.  Currently the data is the full file contents.  I think it
+needs to be made into an annotated hash, e.g. the struct I gave.
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c
-b/drivers/platform/chrome/cros_ec_typec.c
-index 5de0bfb0bc4d..7059912b75c1 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -1076,6 +1076,10 @@ static int cros_typec_probe(struct platform_device *=
-pdev)
+public_key_verify_signature() also needs to be fixed to support both types of
+signature algorithms (caller-provided hash and internal hash) in a logical way.
+Originally it only supported caller-provided hashes, but then SM2 support was
+added and now it is super broken.
 
-        typec->dev =3D dev;
-        typec->ec =3D dev_get_drvdata(pdev->dev.parent);
-+
-+       if (!typec->ec)
-+               return -EPROBE_DEFER;
-+
-        platform_set_drvdata(pdev, typec);
+> > Note that both traditional
+> > and fs-verity hashes would need to use this same method for it to be secure; the
+> > kernel must not accept signatures using the old method at the same time.
+> 
+> The v2 version of this patch set signed the hash of a hash just for fs-
+> verity signatures.  Adding the equivalent support for regular file
+> hashes will require the version in the IMA signature_v2_hdr to be
+> incremented.  If the version is incremented now, both signatures
+> versions should then be able to co-exist.
 
-        ret =3D cros_typec_get_cmd_version(typec);
+That seems like a good thing, unless you want users to be responsible for only
+ever signing full file hashes *or* fs-verity file hashes with each key.  That
+seems like something that users will get wrong.
 
-
-On Tue, Jan 18, 2022 at 2:34 PM Mr. Chromebox <mrchromebox@gmail.com> wrote=
-:
->
-> On Tue, Jan 18, 2022 at 4:16 PM Prashant Malani <pmalani@chromium.org> wr=
-ote:
-> >
-> > Hi Matt,
-> >
-> > On Tue, Jan 18, 2022 at 2:04 PM Mr. Chromebox <mrchromebox@gmail.com> w=
-rote:
-> > >
-> > > hi Prashant,
-> > >
-> > > my releases track upstream coreboot; my most recent release was based
-> > > on coreboot 4.14 (I'm behind on getting a 4.15-based release out).
-> > >
-> > > A quick perusal of the source for src/ec/google/chromeec/ doesn't sho=
-w
-> > > any recent changes to the location of the GOOG0014 ACPI device. The
-> > > most recent change was 2 years ago (so, landed in the 4.12 release),
-> > > which moved the USB-C child device to its present location: under
-> > > \_SB.PCI0.LPCB.EC0.CREC
-> > >
-> > > ref: https://github.com/coreboot/coreboot/commit/eec30f7beae074c3f80a=
-182cc2950ed8e4f0a640
-> > >
-> > > prior to that, it was located under  \_SB.PCI0.LPCB.EC0.
-> > >
-> > > I also dumped/disassembled the ACPI from a recent build to confirm th=
-e above.
-> >
-> > Is it possible to share the disassembled ACPI tables? We can then
-> > compare it to the ones on shipping Chromebooks to identify a
-> > discrepancy.
-> > If the GOOG0014 device is correctly listed as a child of the EC device
-> > (GOOG0004), then the kernel ACPI framework should be setting
-> > GOOG0004 as a parent (and dev_get_drvdata(pdev->dev.parent) shouldn't
-> > return NULL).
->
-> as the GOOG0014 device is runtime-generated, it's located in the SSDT:
->
-> External (_SB_.PCI0.LPCB.EC0_.CREC, DeviceObj)
-> ...
-> Scope (\_SB.PCI0.LPCB.EC0.CREC)
-> {
->     Device (USBC)
->     {
->         Name (_HID, "GOOG0014")  // _HID: Hardware ID
->         Name (_DDN, "ChromeOS EC Embedded Controller USB Type-C
-> Control")  // _DDN: DOS Device Name
->     }
-> }
->
-> GOOG0004 is defined in the DSDT, under EC0:
->
-> Device (CREC)
-> {
->     Name (_HID, "GOOG0004")  // _HID: Hardware ID
->     Name (_UID, One)  // _UID: Unique ID
->     Name (_DDN, "EC Command Device")  // _DDN: DOS Device Name
->     Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
->     {
->         0x70,
->         0x05
->     })
-> ...
-> }
->
-> -Matt
->
-> > > regards,
-> > > Matt / MrChromebox
-> > >
-> > > On Tue, Jan 18, 2022 at 2:12 PM Prashant Malani <pmalani@chromium.org=
-> wrote:
-> > > >
-> > > > (+Mr.Chromebox team; using the address listed in
-> > > > https://mrchromebox.tech/#support )
-> > > >
-> > > > Hi Team Mr.Chromebox,
-> > > >
-> > > > Could you kindly provide some more detail regarding how the GOOG001=
-4
-> > > > Type C ACPI device is set up in the Mr Chromebox BIOS for Chromeboo=
-ks
-> > > > (the driver expects it to be embedded in the GOOG0004 EC device)?
-> > > > We want to enable Alyssa and other developers using the Mr.Chromebo=
-x
-> > > > BIOS to have a functional cros-ec-typec driver, so would like to he=
-lp
-> > > > ensure that the device is set up correctly in ACPI.
-> > > >
-> > > > Thanks!
-> > > >
-> > > > -Prashant
-> > > >
-> > > > On Tue, Jan 18, 2022 at 11:49 AM Prashant Malani <pmalani@chromium.=
-org> wrote:
-> > > > >
-> > > > > Hi Benson and Alyssa,
-> > > > >
-> > > > > On Tue, Jan 18, 2022 at 11:33 AM Benson Leung <bleung@google.com>=
- wrote:
-> > > > > >
-> > > > > > Hi Alyssa,
-> > > > > >
-> > > > > > Thanks for reaching out.
-> > > > > >
-> > > > > > On Tue, Jan 18, 2022 at 04:37:54PM +0000, Alyssa Ross wrote:
-> > > > > > > My distribution recently enabled the Chrome OS EC Type C cont=
-rol driver
-> > > > > > > in its kernel builds.  On my Google Pixelbook i7 (eve), the d=
-river reports
-> > > > > > > a null pointer dereference at boot.  From what I can tell, th=
-is happens
-> > > > > > > because typec->ec is set to NULL in cros_typec_probe.  Other =
-drivers,
-> > > > > > > like cros-usbpd-notify, appear to be set up to handle this ca=
-se.  As a
-> > > > > > > result of this bug, I'm no longer able to reboot my computer,=
- because
-> > > > > > > udevd hangs while trying to do something with the device whos=
-e driver
-> > > > > > > isn't working.
-> > > > > > >
-> > > > > >
-> > > > > > I've copied Prashant, who's the author of the typec driver as w=
-ell as
-> > > > > > cros-usbpd-notify.
-> > > > > >
-> > > > > > Prashant, any thoughts on a more graceful failure out of the ty=
-pec driver's
-> > > > > > probe in case there's no ec object?
-> > > > >
-> > > > > We can add a NULL check and just abort the driver probe if the po=
-inter is
-> > > > > not valid (the driver is useless without that pointer anyway).
-> > > > >
-> > > > > A note: The NULL check makes sense on older drivers like cros-usb=
-pd-notify since
-> > > > > they can exist in ACPI configurations where they are *not* embedd=
-ed
-> > > > > inside the GOOG0004
-> > > > > EC device (on older Chromebooks). That is not the case for the EC=
- Type C device.
-> > > > >
-> > > > > This raises another issue: the custom BIOS from Mr. Chromebox is
-> > > > > likely not setting
-> > > > > up the EC Type C ACPI (GOOG0014) device correctly; it *must* be
-> > > > > embedded inside the overall
-> > > > > EC device (GOOG0004). If this is not being done, then the GOOG001=
-4
-> > > > > device should not
-> > > > > be added to the ACPI tables at all.
-> > > > >
-> > > > > I would like to understand whether the above was intentional from=
- the
-> > > > > Mr. Chromebox BIOS developers;
-> > > > > otherwise we are letting an incorrect ACPI configuration just fai=
-l
-> > > > > with a probe error.
-> > > > >
-> > > > > Thanks,
-> > > > >
-> > > > > -Prashant
-> > > > >
-> > > > > >
-> > > > > > > Here's the full Oops.  I was able to reproduce the issue with=
- every
-> > > > > > > kernel I tried, from 5.10 to mainline.
-> > > > > > >
-> > > > > > > cros-usbpd-notify-acpi GOOG0003:00: Couldn't get Chrome EC de=
-vice pointer.
-> > > > > > > input: Intel Virtual Buttons as /devices/pci0000:00/0000:00:1=
-f.0/PNP0C09:00/INT33D6:00/input/input14
-> > > > > > > BUG: kernel NULL pointer dereference, address: 00000000000000=
-d8
-> > > > > > > #PF: supervisor read access in kernel mode
-> > > > > > > #PF: error_code(0x0000) - not-present page
-> > > > > > > PGD 0 P4D 0
-> > > > > > > Oops: 0000 [#1] SMP PTI
-> > > > > > > CPU: 1 PID: 561 Comm: systemd-udevd Not tainted 5.15.12 #4
-> > > > > > > Hardware name: Google Eve/Eve, BIOS MrChromebox-4.14 08/06/20=
-21
-> > > > > >
-> > > > > >
-> > > > > > Ah, here's the problem. It looks like this is a custom bios fro=
-m Mr Chromebox,
-> > > > > > so this is not a bios combination we validate at Google.
-> > > > > >
-> > > > > > Thank you for the report. We'll look into fixing this and marki=
-ng the fix
-> > > > > > for stable kernels so that it goes back to 5.10.
-> > > > > >
-> > > > > > Thanks,
-> > > > > >
-> > > > > > Benson
-> > > > > >
-> > > > > > > RIP: 0010:__mutex_lock+0x59/0x8c0
-> > > > > > > Code: 53 48 89 cb 48 83 ec 70 89 75 9c be 3d 02 00 00 4c 89 4=
-5 90 e8 18 47 33 ff e8 e3 e2 ff ff 44 8b 35 a4 85 e8 02 45 85 f6 75 0a <4d>=
- 3b 6d 68 0f 85 bf 07 00 00 65 ff 05 b6 5b 23 75 ff 75 90 4d 8d
-> > > > > > > RSP: 0018:ffffb44580a4bb50 EFLAGS: 00010246
-> > > > > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 000000000000=
-0001
-> > > > > > > RDX: 0000000000000000 RSI: ffffffff8bf91320 RDI: ffff922cbba5=
-0e20
-> > > > > > > RBP: ffffb44580a4bbf0 R08: 0000000000000000 R09: ffff922c5bac=
-8140
-> > > > > > > R10: ffffb44580a4bc10 R11: 0000000000000000 R12: 000000000000=
-0000
-> > > > > > > R13: 0000000000000070 R14: 0000000000000000 R15: 000000000000=
-0001
-> > > > > > > FS:  00007f55338d6b40(0000) GS:ffff922fae200000(0000) knlGS:0=
-000000000000000
-> > > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > > > CR2: 00000000000000d8 CR3: 000000011bbb2006 CR4: 000000000037=
-06e0
-> > > > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000000=
-0000
-> > > > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000000000=
-0400
-> > > > > > > Call Trace:
-> > > > > > >  <TASK>
-> > > > > > >  ? fs_reclaim_acquire+0x4d/0xd0
-> > > > > > >  ? lock_is_held_type+0xaa/0x120
-> > > > > > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
-> > > > > > >  ? lock_is_held_type+0xaa/0x120
-> > > > > > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
-> > > > > > >  cros_ec_cmd_xfer_status+0x1f/0x110
-> > > > > > >  cros_typec_ec_command+0x91/0x1c0 [cros_ec_typec]
-> > > > > > >  cros_typec_probe+0x7f/0x5a8 [cros_ec_typec]
-> > > > > > >  platform_probe+0x3f/0x90
-> > > > > > >  really_probe+0x1f5/0x3f0
-> > > > > > >  __driver_probe_device+0xfe/0x180
-> > > > > > >  driver_probe_device+0x1e/0x90
-> > > > > > >  __driver_attach+0xc4/0x1d0
-> > > > > > >  ? __device_attach_driver+0xe0/0xe0
-> > > > > > >  ? __device_attach_driver+0xe0/0xe0
-> > > > > > >  bus_for_each_dev+0x67/0x90
-> > > > > > >  bus_add_driver+0x12e/0x1f0
-> > > > > > >  driver_register+0x8f/0xe0
-> > > > > > >  ? 0xffffffffc04ec000
-> > > > > > >  do_one_initcall+0x67/0x320
-> > > > > > >  ? rcu_read_lock_sched_held+0x3f/0x80
-> > > > > > >  ? trace_kmalloc+0x38/0xe0
-> > > > > > >  ? kmem_cache_alloc_trace+0x17c/0x2b0
-> > > > > > >  do_init_module+0x5c/0x270
-> > > > > > >  __do_sys_finit_module+0x95/0xe0
-> > > > > > >  do_syscall_64+0x3b/0x90
-> > > > > > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > > > > > RIP: 0033:0x7f55344b1f3d
-> > > > > > > Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 8=
-9 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>=
- 3d 01 f0 ff ff 73 01 c3 48 8b 0d bb ee 0e 00 f7 d8 64 89 01 48
-> > > > > > > RSP: 002b:00007fff187f1388 EFLAGS: 00000246 ORIG_RAX: 0000000=
-000000139
-> > > > > > > RAX: ffffffffffffffda RBX: 000055a53acbe6e0 RCX: 00007f55344b=
-1f3d
-> > > > > > > RDX: 0000000000000000 RSI: 00007f553461732c RDI: 000000000000=
-000e
-> > > > > > > RBP: 0000000000020000 R08: 0000000000000000 R09: 000000000000=
-0002
-> > > > > > > R10: 000000000000000e R11: 0000000000000246 R12: 00007f553461=
-732c
-> > > > > > > R13: 000055a53ad94010 R14: 0000000000000007 R15: 000055a53ad9=
-5690
-> > > > > > >  </TASK>
-> > > > > > > Modules linked in: fjes(+) cros_ec_typec(+) typec intel_vbtn(=
-+) cros_usbpd_notify sparse_keymap soc_button_array int3403_thermal int340x=
-_thermal_zone int3400_thermal acpi_thermal_rel cros_kbd_led_backlight zram =
-ip_tables i915 hid_multitouch i2c_algo_bit ttm crct10dif_pclmul crc32_pclmu=
-l crc32c_intel drm_kms_helper nvme ghash_clmulni_intel sdhci_pci cqhci cec =
-nvme_core sdhci serio_raw drm mmc_core i2c_hid_acpi i2c_hid video pinctrl_s=
-unrisepoint fuse
-> > > > > > > CR2: 00000000000000d8
-> > > > > > > ---[ end trace 4a12c4896d70352b ]---
-> > > > > >
-> > > > > >
-> > > > > >
-> > > > > > --
-> > > > > > Benson Leung
-> > > > > > Staff Software Engineer
-> > > > > > Chrome OS Kernel
-> > > > > > Google Inc.
-> > > > > > bleung@google.com
-> > > > > > Chromium OS Project
-> > > > > > bleung@chromium.org
+- Eric

@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1F5493A2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34D7493A2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354425AbiASMUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiASMUj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:20:39 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15592C06173E;
-        Wed, 19 Jan 2022 04:20:39 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id o12so8493274lfu.12;
-        Wed, 19 Jan 2022 04:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=x7T608envSn65mtmAeo3YxF/Yj94yNBfmWXtPvIkNW0=;
-        b=I/eG5Cu69oB4/0oQ+fNPOnT9X0A31uHTGLbkOqXSP7km1HqT2g9YJ8jwlJeqCJVsAy
-         R6huVxNhLier+x2F5E/+ai9eX5ff/0dNk1rb9ZMsVsD+hH3gq3zgg08CK5l/R8+wRIGc
-         cd3O1DQmqr1LBrAvWyqCKMB6NKrwgcRPjVV+aizoDmxbsXFyKb+GJaCT+MqqflrdLuD6
-         xA5dyqgr/r9CUvx02JhdnzXHqiX2QCLZVV1eHWt9bAG4Q5tQAhWETakkBjfSl12NJQs+
-         mkOGqBRzuql17MJxD1gOsHm0whP8y6DhyjdMZPI4EFEFyZ6eVnT9ZVqJyNQ3BdOUWiiS
-         5L0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x7T608envSn65mtmAeo3YxF/Yj94yNBfmWXtPvIkNW0=;
-        b=mmO5bLA5HmH/Ogfl8MOVwcamEb9ZY+9JPBFExgjU2DtUHHg8TthyP5ZALdbFa6OGqp
-         hhO390HVCoAJcD9PQ2yPeUefQjAC3O7MUSLnsCRTUojCM+YMDXTJ3mPryBp+K/FDEFvE
-         tZWouydomG6TrbZNZOR+U5Y8YHTHtvfr8EGUff3wSp+Zv79UrGGtVh/9e9QBAY3l5sWE
-         lo+kjd2DQZqat2X8LYQV04rjz7tiQYvVm8ZkLKFEkT3VEcBc04SbkkTMq2uHnZAyuQF3
-         ra6h9k+HWgNdT6TYVWmktOnHjzbh4/76a8BGFOjW9lbZmvHt4aZZcVD9cq5wp5wDzSa1
-         Ys3A==
-X-Gm-Message-State: AOAM530iSxChbOEeMWnxjJ1/sBwcBdhty2C+qGsGNnV/QSk9NCvF1ks8
-        DJNusHrzjNAZOdyAQRUcfyeq3nbjnGg=
-X-Google-Smtp-Source: ABdhPJwe3MenFJXbtwjTP43X46FVmE45XDOXbaFhj5zqSnHc1YYf6U7W+nqb8VaP4KwEdb0Uqiaqgg==
-X-Received: by 2002:a05:651c:2059:: with SMTP id t25mr24872735ljo.427.1642594837409;
-        Wed, 19 Jan 2022 04:20:37 -0800 (PST)
-Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
-        by smtp.googlemail.com with ESMTPSA id z13sm141770lfr.183.2022.01.19.04.20.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 04:20:36 -0800 (PST)
-Message-ID: <a7a33c29-427d-5e82-f327-aa4701d51898@gmail.com>
-Date:   Wed, 19 Jan 2022 15:20:35 +0300
+        id S1354423AbiASMVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:21:19 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:43214 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1354343AbiASMVR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 07:21:17 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADHpxQoAuhhdXyFBg--.58592S2;
+        Wed, 19 Jan 2022 20:20:56 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dan.carpenter@oracle.com, keescook@chromium.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] lkdtm/bugs: Check for the NULL pointer after calling kmalloc
+Date:   Wed, 19 Jan 2022 20:20:55 +0800
+Message-Id: <20220119122055.1826561-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/6] i2c: tegra: Add support for Tegra234 I2C
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Petlozu Pravareshwar <petlozup@nvidia.com>
-References: <1642080623-15980-1-git-send-email-akhilrajeev@nvidia.com>
- <1642080623-15980-2-git-send-email-akhilrajeev@nvidia.com>
- <d9a21970-b403-4674-dbd6-5dfab0a83a3b@gmail.com>
- <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHpxQoAuhhdXyFBg--.58592S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Wr4UGw4UJFyxAr4xKF43Awb_yoW8Jr47pr
+        s2gr1YqFn8Wan7CF4qkw13KFZ5Gan7tFWxW342v3s5ZFn5CryUAa45t3yj9r1kZrZ3J34I
+        vF4rtF93Ga4UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xr1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU0CJPDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-19.01.2022 11:20, Akhil R пишет:
->> 13.01.2022 16:30, Akhil R пишет:
->>> +static const struct tegra_i2c_hw_feature tegra234_i2c_hw = {
->>> +     .has_continue_xfer_support = true,
->>> +     .has_per_pkt_xfer_complete_irq = true,
->>> +     .clk_divisor_hs_mode = 0x2,
->>> +     .clk_divisor_std_mode = 0x4f,
->>> +     .clk_divisor_fast_mode = 0x58,
->>> +     .clk_divisor_fast_plus_mode = 0x24,
->>> +     .has_config_load_reg = true,
->>> +     .has_multi_master_mode = true,
->>> +     .has_slcg_override_reg = true,
->>> +     .has_mst_fifo = true,
->>> +     .quirks = &tegra194_i2c_quirks,
->>> +     .supports_bus_clear = true,
->>> +     .has_apb_dma = false,
->>> +     .tlow_std_mode = 0x8,
->>> +     .thigh_std_mode = 0x7,
->>> +     .tlow_fast_fastplus_mode = 0x1,
->>> +     .thigh_fast_fastplus_mode = 0x1,
->>> +     .setup_hold_time_std_mode = 0x08080808,
->>> +     .setup_hold_time_fast_fast_plus_mode = 0x02020202,
->>> +     .setup_hold_time_hs_mode = 0x090909,
->>> +     .has_interface_timing_reg = true, };
->>
->> Why tegra194_i2c_hw can't be reused by T234? Looks like I2C h/w hasn't
->> changed and somebody just made a minor tuning of the timing parameters, does
->> it really matter in practice?
-> The timing parameters are important to get the desired data rate for I2C. The values,
-> unfortunately, cannot be reused from Tegra194.
+As the possible failure of the kmalloc(), the not_checked and checked
+could be NULL pointer.
+Therefore, it should be better to check it in order to avoid the
+dereference of the NULL pointer.
+Also, we need to kfree the 'not_checked' and 'checked' to avoid
+the memory leak if fails.
+And since it is just a test, it may directly return without error
+number.
 
-From where those T194 parameters specified in the Tegra I2C driver came
-from?
+Fixes: ae2e1aad3e48 ("drivers/misc/lkdtm/bugs.c: add arithmetic overflow and array bounds checks")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
 
-I'm now looking at T194 TRM (Xavier_TRM_DP09253002_v1.3p 10.2.3.1.1
-Example Settings for Various I2C Speeds) and see that all the values
-should match T234. Please check whether T194 configuration is correct
-and fix it if needed.
+v1 -> v2
+
+* Change 1. Add the kfree if fails.
+---
+ drivers/misc/lkdtm/bugs.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index f4cb94a9aa9c..c35ea54824ac 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -325,6 +325,11 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 
+ 	not_checked = kmalloc(sizeof(*not_checked) * 2, GFP_KERNEL);
+ 	checked = kmalloc(sizeof(*checked) * 2, GFP_KERNEL);
++	if (!not_checked || !checked) {
++		kfree(not_checked);
++		kfree(checked);
++		return;
++	}
+ 
+ 	pr_info("Array access within bounds ...\n");
+ 	/* For both, touch all bytes in the actual member size. */
+-- 
+2.25.1
+

@@ -2,216 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16528493B23
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90284493B25
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354843AbiASNcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:32:55 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14790 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1354833AbiASNcs (ORCPT
+        id S1350255AbiASNes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238516AbiASNer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:32:48 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JAvcst028475;
-        Wed, 19 Jan 2022 13:32:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=iQOM2B7pBkIu/v+1xQgTsapMW9lVF15319i1ZV98854=;
- b=Vvjfbr4zVL9FdnR3nFn8gSMLljR+2Z6Aksroq4Msrzxn+vHEyENF1wVPHXz3aneaoRtm
- 7rsHbQLqOI63bM6IkQ51vu7v5/nH7QUCYhsCBIw37CCW6DB/pmGoNcjCYCIGlF5pJ0em
- Vwe6OiP5Upsi5xIt0swkziqFnh98Kj41NW3tqD5SMGeuJ/PVyUgQxoYfinOxALcOqW+/
- LLXYmEFexgHqaqWmdyq6QuOUOKTH+Q3udWsfku4rK0rHzrHiAE6Nq1nU3KN0UdbQZTUJ
- HOxNEkoWLLpgJBxXgaHtwKE0Nx8lIKUW82/4lRc899iK1sK7TyMeCkjLrRHVk/sPg80G ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dphbqb6h9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:32:32 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JDL71R012456;
-        Wed, 19 Jan 2022 13:32:31 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dphbqb6gj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:32:31 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JDH8nG016689;
-        Wed, 19 Jan 2022 13:32:30 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03wdc.us.ibm.com with ESMTP id 3dknwaggg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:32:30 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JDWTOi30409176
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 13:32:29 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14F6DBE05B;
-        Wed, 19 Jan 2022 13:32:29 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37A52BE053;
-        Wed, 19 Jan 2022 13:32:26 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 13:32:25 +0000 (GMT)
-Message-ID: <c76b2bfc-d629-c720-e13c-84367524b88f@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 08:32:24 -0500
+        Wed, 19 Jan 2022 08:34:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC01C061574;
+        Wed, 19 Jan 2022 05:34:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F974B8189A;
+        Wed, 19 Jan 2022 13:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B128C340E9;
+        Wed, 19 Jan 2022 13:34:43 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lo/qsE3O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642599280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KZuC6TmXhJQVSeFuSv1mMMFPmjV47Ffvc9/epCoTyMw=;
+        b=lo/qsE3OdM57p2UPmTM4vhgsJTwEd33zm6WXgphvGllfKgyMDMYAL/ekg+CEXfP4YXyYY6
+        etdTZ/wfi5hqt1w9QzeK76g8zOqVnVlqs9ATDpWRgNPoTvm89wvC/T6qXWD6iOH6npuQGi
+        bjRJctbJQH6hIDE37t1E6Rfmu4qT9TE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d4afa98c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 19 Jan 2022 13:34:40 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id m1so7467250ybo.5;
+        Wed, 19 Jan 2022 05:34:40 -0800 (PST)
+X-Gm-Message-State: AOAM530FrciVPFIeptolOo40eZbvW2d9OWsxNCvGTVpcDTYc1Zi78lNP
+        cygai3szlc/ZVqnlJaUgwphmib81FCBXLRx0MSg=
+X-Google-Smtp-Source: ABdhPJwl2oYebyTcjJJzYEcQx1P0FnZ8TEkLTKOLecv3UE1gMShS+rFpjiSNu6UvcQ2d9xR0yhRTcFuoVyPulYXQV48=
+X-Received: by 2002:a05:6902:709:: with SMTP id k9mr15518165ybt.113.1642599277841;
+ Wed, 19 Jan 2022 05:34:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 03/19] ima: Move policy related variables into
- ima_namespace
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-4-stefanb@linux.vnet.ibm.com>
- <150cb51f95c3fe54e94edc5b96b2e15edb3bf399.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <150cb51f95c3fe54e94edc5b96b2e15edb3bf399.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: J1Ciy3qNc1FEHBz2o0_fECRRD-mCAzYY
-X-Proofpoint-ORIG-GUID: Y6LSk7xDS6psh9z4QijZWX87OwSxJpQy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201190075
+References: <CAHmME9oX+4Ek81xy0nBOegqABH0xYqyONAqinsu7GZ7AaQaqYQ@mail.gmail.com>
+ <20220119100615.5059-1-miles.chen@mediatek.com> <CAHmME9pQcUxs87EwQwBZNDA4ZzqugTggH+uiNPh=mv5zjp3g3A@mail.gmail.com>
+ <CAHmME9pPKjRLmR6zpYFZT7rOOfHsG2ESnDi+QQrDJuGLo1X4JQ@mail.gmail.com>
+ <CAHmME9oGTPS-gVyHQ4o=AxvMJrGH44_tyQ2KPQcfAKgcqC2SnA@mail.gmail.com> <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 19 Jan 2022 14:34:27 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
+Message-ID: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Miles Chen <miles.chen@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/13/22 15:26, Mimi Zohar wrote:
-> Hi Stefan,
+On Wed, Jan 19, 2022 at 1:19 PM Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Move variables related to the IMA policy into the ima_namespace. This way
->> the IMA policy of an IMA namespace can be set and displayed using a
->> front-end like SecurityFS.
->>
->> Implement ima_ns_from_file() to get the IMA namespace via the user
->> namespace of the SecurityFS superblock that a file belongs to.
->>
->> To get the current ima_namespace use get_current_ns() when a function
->> that is related to a policy rule is called. In other cases where functions
->> are called due file attribute modifications, use init_ima_ns, since these
->> functions are related to IMA appraisal and changes to file attributes are
->> only relevant to the init_ima_ns until IMA namespaces also support IMA
->> appraisal. In ima_file_free() use init_ima_ns since in this case flags
->> related to file measurements may be affected, which is not supported in
->> IMA namespaces, yet.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Please split this patch into "ima: pass through ima namespace", or some
-> other name,  and "ima: Move policy related variables into
+> I'd prefer it if we could avoid magic #define's like this.
 
-What is supposed to happen in the 'ima: pass through ima namespace' 
-patch? What part of this patch do you expect to see there and what do 
-you want to see deferred to a 2nd patch?
-
-
-> ima_namespace".  The other option is to combine the "pass through ima
-> namespace" with the 2nd patch, like Christian's example.
-
-You mean I should merge this patch with the 2nd?
-
-I am a bit confused as to what you are proposing. The first option would 
-create 2 patches out of this one, the 2nd option would merge this one 
-with the 2nd patch.
-
-The equivalent of Christian's 2nd patch would be to merge this patch 
-into the 2nd. So then let's do that?
-
-
->
->> ---
->>   security/integrity/ima/ima.h                 |  49 ++++---
->>   security/integrity/ima/ima_api.c             |   8 +-
->>   security/integrity/ima/ima_appraise.c        |  28 ++--
->>   security/integrity/ima/ima_asymmetric_keys.c |   4 +-
->>   security/integrity/ima/ima_fs.c              |  16 ++-
->>   security/integrity/ima/ima_init.c            |   8 +-
->>   security/integrity/ima/ima_init_ima_ns.c     |   6 +
->>   security/integrity/ima/ima_main.c            |  83 +++++++----
->>   security/integrity/ima/ima_policy.c          | 142 ++++++++++---------
->>   security/integrity/ima/ima_queue_keys.c      |  11 +-
->>   10 files changed, 213 insertions(+), 142 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index c4af3275f015..0b3dc9425076 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -20,6 +20,7 @@
->>   #include <linux/hash.h>
->>   #include <linux/tpm.h>
->>   #include <linux/audit.h>
->> +#include <linux/user_namespace.h>
->>   #include <crypto/hash_info.h>
->>   
->>   #include "../integrity.h"
->> @@ -43,9 +44,6 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
->>   
->>   #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
->>   
->> -/* current content of the policy */
->> -extern int ima_policy_flag;
->> -
->>   /* bitset of digests algorithms allowed in the setxattr hook */
->>   extern atomic_t ima_setxattr_allowed_hash_algorithms;
->>   
->> @@ -120,6 +118,14 @@ struct ima_kexec_hdr {
->>   };
->>   
->>   struct ima_namespace {
->> +	struct list_head ima_default_rules;
->> +	/* ns's policy rules */
-> Thank you for adding comments.  Why is the ima_default_rules not
-> considered "ns's policy rules"?   Will this come later or is it limited
-> to init_ima_ns?
-Let me move the comment up.
->
->> +	struct list_head ima_policy_rules;
->> +	struct list_head ima_temp_rules;
->> +	/* Pointer to ns's current policy */
->> +	struct list_head __rcu *ima_rules;
-> Since "Pointer to ns's current policy" only refers to ima_rules, append
-> it to the variable definition.
-
-
-Ok, I will move it onto the same line then.
-
-
->
->> +	/* current content of the policy */
->> +	int ima_policy_flag;
-> Similarly here append the comment to the variable definition.
-
-Will do. Thanks.
-
-
->
->>   } __randomize_layout;
->>   extern struct ima_namespace init_ima_ns;
-> thanks,
->
-> Mimi
->
->
+I'll send something that just replaces it with a simple bool.

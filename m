@@ -2,171 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4111849357C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF4349357E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351386AbiASHas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242133AbiASHar (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:30:47 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D7C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:30:46 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id h14so4629667ybe.12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:30:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Klx4RzQ0BDuNT+ki5g9oKkuf71RbnaB1NJYG//vbHCU=;
-        b=dLFt7IMZdOeWJN+/buAb2gH8Pj1b1OfrdbHh9Ic3NoEL4vU6XfssQYw2jUSVTR/Dmu
-         5dI2ITPJr1aMiOCRyuWaPL4FEts7Hy0IeM1NRR8jQb+rg1nAYMK5qMYBJhYwB8Y4Tpcd
-         Ut9c/Abyo8mzf+g727gg/2AIIUuY7YVYGqXwmRwFOEjZS1mjQArNXsbL62wQ+8v0RmkP
-         S4fCGubdX0BP2TLgTE6Wc8K6Em6+1Xj6vqQdlFJPJOWJBeZU6kOR34EYosG+l3UyGRVl
-         B0+tDPF/bfmZNCXTH46KFniuQ7phsetxvnWutcF59U7BfO3tCrDpoLTNqV4YfWfT6o/0
-         ELvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Klx4RzQ0BDuNT+ki5g9oKkuf71RbnaB1NJYG//vbHCU=;
-        b=joAgxLnr+hIYCz0lwjjtgXh14V3TSLhiJKvqqrtPUQPUuIxluW05P4l9OUsAghLhcW
-         NcH1DCr/6c9l/pk3QHEjgrlQXGhEYB9lgOL48JgJ5EFtSONWSLpvqWtZAyuBDYYgXrFi
-         VyUYj9X9htjm91FV3V+AcUKcNREaJbuKnzEtLVLHPCclZa/gWJQrp+fnIJpvFi7Hle62
-         MmO2OyttNPCSgnLRU1W45J3GBSGYoKpuqSQ8goNpT/XPlUHgu9drNwh0ceD0LV309k8Z
-         Yg+Wzf/AuNmLyDaYry01WztyMYfpQnehEJ4MKxrtuRQbFRDvhlpVP3DuaMq71noz01PT
-         CLJg==
-X-Gm-Message-State: AOAM530f9WS5hcjtXV8QyZ+dY/ypcKNy5/le2mFrt4i9mzWRzMH8hN4G
-        LP0LB7rlpI3Z57bAu6mM8xnWy1Q7inJrCmGEfpavyw==
-X-Google-Smtp-Source: ABdhPJx14O3iuJhpQEbglBjfJUBPPdqOvAJzQIcvWXK74zSc3TPptBdwP6/Tm2mjBt/9Z+Lukq0BTo2sD/UcB5I266o=
-X-Received: by 2002:a25:9082:: with SMTP id t2mr15698199ybl.684.1642577445341;
- Tue, 18 Jan 2022 23:30:45 -0800 (PST)
+        id S1351658AbiASHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:31:25 -0500
+Received: from mga07.intel.com ([134.134.136.100]:52922 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242133AbiASHbX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 02:31:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642577483; x=1674113483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=inPQC+Kin2BkkrICkXSotI7BWW00tC+JnxcBKaC+xb8=;
+  b=aKLZrbJCl93ehM2s57HIHN5vUGrObTqWAEb9TLVvYefxf+eqsndgT9GG
+   VwqR7KZzlnqGwhVQS2g/qTDUtm/MmJenRctXF6pv4uCvrB3/hJzU+9mJW
+   +0L8yoJmmxJcRao4KnJncEt8nEASbwoO3HVvx4NkkN2l1ng7Ljed+5TV7
+   sCTwFPoR5YluyT3w6U6rN8BvQT3nT6afdT7npsoPBleeVSdue8HqNdV/s
+   9gsVO1LhA23k3kfxdZdR910fCLteQQOm5FR0fmXkdxpHvZGG7QhXkI7kq
+   yzOiE5NeKydmdvA7AWldvL4SaElKJA2DstvHwO4kUHKDx71ysXT/l298I
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="308347552"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="308347552"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:31:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="518072356"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 18 Jan 2022 23:31:21 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA5RB-000DNQ-8g; Wed, 19 Jan 2022 07:31:21 +0000
+Date:   Wed, 19 Jan 2022 15:30:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atish.patra@wdc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 76/80] ERROR: modpost: "arch_setup_dma_ops"
+ [drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.ko] undefined!
+Message-ID: <202201191504.JricJykh-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220118160452.384322748@linuxfoundation.org>
-In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 19 Jan 2022 13:00:33 +0530
-Message-ID: <CA+G9fYvJaFVKu24oFuR1wGFRe4N2A=yxH6ksx61bunfR9Y3Ejw@mail.gmail.com>
-Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        NeilBrown <neilb@suse.de>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 at 21:41, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.2 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+tree:   https://github.com/esmil/linux visionfive
+head:   e46c3a7e373e6faa03399f1a41c29cf7546c37cb
+commit: 3a5dd7a266966a7d41fcc6335af9329664d901d0 [76/80] RISC-V: Support non-coherent DMA operations
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220119/202201191504.JricJykh-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/3a5dd7a266966a7d41fcc6335af9329664d901d0
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 3a5dd7a266966a7d41fcc6335af9329664d901d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Following patch caused build regression for powerpc allnoconfig only on 5.16
-with gcc-9.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-5.16-powerpc-gcc-9-allnoconfig   - FAIL
-5.16-powerpc-gcc-10-allnoconfig  - PASS
-5.16-powerpc-gcc-11-allnoconfig  - PASS
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+ERROR: modpost: missing MODULE_LICENSE() in drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.o
+>> ERROR: modpost: "arch_setup_dma_ops" [drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.ko] undefined!
 
-make --silent --keep-going --jobs=8 \
-  O=/home/tuxbuild/.cache/tuxmake/builds/current \
-  ARCH=powerpc \
-  CROSS_COMPILE=powerpc64le-linux-gnu- \
- 'CC=sccache powerpc64le-linux-gnu-gcc' \
-  'HOSTCC=sccache gcc'
-
-Inconsistent kallsyms data
-Try make KALLSYMS_EXTRA_PASS=1 as a workaround
-make[1]: *** [/builds/linux/Makefile:1161: vmlinux] Error 1
-make[1]: *** Deleting file 'vmlinux'
-
-> NeilBrown <neilb@suse.de>
->     devtmpfs regression fix: reconfigure on each mount
-
-Bisect log:
-# bad: [979dd812ffb543a3f6218868a26a701054ba3b8c] Linux 5.16.2-rc1
-# good: [80820ae87cc8c09b828faa951f44b2396a5b48c4] drm/i915: Avoid
-bitwise vs logical OR warning in snb_wm_latency_quirk()
-git bisect start '979dd812ffb543a3f6218868a26a701054ba3b8c'
-'80820ae87cc8c09b828faa951f44b2396a5b48c4'
-# bad: [6cb89b83384df47b2def88870be10db707a77649] 9p: only copy valid
-iattrs in 9P2000.L setattr implementation
-git bisect bad 6cb89b83384df47b2def88870be10db707a77649
-# bad: [041b83007bd86ba0e7275e348eb13df13df669ef] vfs: fs_context: fix
-up param length parsing in legacy_parse_param
-git bisect bad 041b83007bd86ba0e7275e348eb13df13df669ef
-# bad: [a7458144427accc2b602a672b1f9435e00ba578e] devtmpfs regression
-fix: reconfigure on each mount
-git bisect bad a7458144427accc2b602a672b1f9435e00ba578e
-# good: [5c245afa643712977fd0a9c70ffbb9df5dbf204b] parisc: Fix
-pdc_toc_pim_11 and pdc_toc_pim_20 definitions
-git bisect good 5c245afa643712977fd0a9c70ffbb9df5dbf204b
-# good: [677615cd2689a0898dd58e51d12abe6663567b24] Linux 5.16.1
-git bisect good 677615cd2689a0898dd58e51d12abe6663567b24
-# first bad commit: [a7458144427accc2b602a672b1f9435e00ba578e]
-devtmpfs regression fix: reconfigure on each mount
-The first bad commit:
-commit a7458144427accc2b602a672b1f9435e00ba578e
-Author: NeilBrown <neilb@suse.de>
-Date:   Mon Jan 17 09:07:26 2022 +1100
-    devtmpfs regression fix: reconfigure on each mount
-
-    commit a6097180d884ddab769fb25588ea8598589c218c upstream.
-
-    Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
-    mount options as "remount" options, so it updates the configuration of
-    the single super_block on each mount.
-
-    Since that was changed, the mount options used for devtmpfs are ignored.
-    This is a regression which affect systemd - which mounts devtmpfs with
-    "-o mode=755,size=4m,nr_inodes=1m".
-
-    This patch restores the "remount" effect by calling reconfigure_single()
-
-    Fixes: d401727ea0d7 ("devtmpfs: don't mix
-{ramfs,shmem}_fill_super() with mount_single()")
-    Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-    Cc: Al Viro <viro@zeniv.linux.org.uk>
-    Signed-off-by: NeilBrown <neilb@suse.de>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- drivers/base/devtmpfs.c    | 7 +++++++
- fs/super.c                 | 4 ++--
- include/linux/fs_context.h | 2 ++
- 3 files changed, 11 insertions(+), 2 deletions(-)
-
-you may compare build results here.
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16-67-g979dd812ffb5/testrun/7410428/suite/build/test/gcc-9-allnoconfig/history/
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,91 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C16F4941AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1823D4941B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357287AbiASU14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiASU1y (ORCPT
+        id S1357314AbiASUaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:30:07 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:55140 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357292AbiASUaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:27:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34347C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:27:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Jan 2022 15:30:06 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFE54B81BB0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B317C004E1;
-        Wed, 19 Jan 2022 20:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642624071;
-        bh=LzLkZgOFjgp8994P3GdzCu+iD9iIF2FPHxl5u03Cm3I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=leRyJTutY9tBkIC2Tl5Vbjw8ipFO8VSae1aoMMlosrD+dLUuwTzM3HtJ30nZunmR7
-         tWir5vFjxe83f1xpSqg9t1kQDWgwl6Etxg2OujEXkhnvzSTdUAfojKHR67TJJHL4U1
-         WUiLKkS/J9DuWbZwpaJH1/g+10LYkGaybMlv/mInYIoaAjNMOoHupis4ZkkYHXQLTf
-         0zt6DS2byRCIOdnY28LoHME5SVeCR4pL8NAfzZVxrT2IujqJfSj9ih9UPHl8Eb3ys4
-         CRbUYPnFNuKztAmWqiTdqJd8H68MprfTpSM7lwEEYck1YRcYlluY/MXfaJW8SqXhwE
-         Il6F4y1C2iGTw==
-Date:   Wed, 19 Jan 2022 14:27:49 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>, jkosina@suse.cz,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Bjorn Helgaas <bhelgaas@google.com>, mgurtovoy@nvidia.com,
-        linux@weissschuh.net, Arnd Bergmann <arnd@arndb.de>,
-        stephan@gerhold.net, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: Convert type of 'struct dmi_system_id -> driver_data' from 'void
- *' to kernel_ulong_t?
-Message-ID: <20220119202749.GA959272@bhelgaas>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 364C1212C8;
+        Wed, 19 Jan 2022 20:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642624205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=uZCg3wYXWrxrjgYiJjCYzIEhgvSwdTdXDWWFM7+lkDU=;
+        b=fNYfNP6Cw/TJL7NbdSFuU/UgKANhcUJpWtK3dEcgC/91AJSoS1Qe8vvRBEYzOqpHJczIfs
+        4xT0WlOv6pVmMLw+8I9O+/zKujFDg3BuVZaI3cemZsx7XDOPIdaTY4vSgP3++0I7Y70crG
+        IAl89lFmUAqeaR6v6E2xY3ozz8n+8ck=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27B0713B9A;
+        Wed, 19 Jan 2022 20:30:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JdZKCc106GFPCwAAMHmgww
+        (envelope-from <ailiop@suse.com>); Wed, 19 Jan 2022 20:30:05 +0000
+From:   Anthony Iliopoulos <ailiop@suse.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] mount: warn only once about timestamp range expiration
+Date:   Wed, 19 Jan 2022 21:29:34 +0100
+Message-Id: <20220119202934.26495-1-ailiop@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa51355f-9ab6-7bbf-d7f6-e2af2d68056c@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 11:20:36AM +0100, Hans de Goede wrote:
-> On 1/19/22 02:22, Kai-Heng Feng wrote:
-> > I wonder if there's any reason to use 'void *' instead of
-> > kernel_ulong_t for 'driver_data' in 'struct dmi_system_id'?
-> > 
-> > I'd like to use the driver_data for applying quirk flags, and I found
-> > out unlike most other struct *_id, the dmi variant is using 'void *'
-> > for driver_data. Is there any technical reason for this?
-> > ...
+Commit f8b92ba67c5d ("mount: Add mount warning for impending timestamp
+expiry") introduced a mount warning regarding filesystem timestamp
+limits, that is printed upon each writable mount or remount.
 
-> You are asking for a technical reason why "void *" was used,
-> but lets turn that around, why do you believe that "unsigned long"
-> is inherently a better type here ?
-> 
-> driver_data in most places in the kernel (like data for
-> all sort of callback functions) actually typically is a void *
-> already, because often people want to pass more data then what
-> fits in a single long and this also applies to driver-id attached
-> data.
+This can result in a lot of unnecessary messages in the kernel log in
+setups where filesystems are being frequently remounted (or mounted
+multiple times).
 
-FWIW, "egrep "context;|data;|info;" include/linux/mod_devicetable.h"
-says 4 of the ~40 instances use a void *; the others use
-kernel_ulong_t.
+Avoid this by setting a superblock flag which indicates that the warning
+has been emitted at least once for any particular mount, as suggested in
+[1].
 
-f45d069a5628 ("PCI dynids - documentation fixes, id_table NULL check")
-[1] (from the tglx history tree) added the original hint for
-pci_device_id that:
+Signed-off-by: Anthony Iliopoulos <ailiop@suse.com>
 
-  Best practice for use of driver_data is to use it as an index into a
-  static list of equivalant device types, not to use it as a pointer.
+[1] https://lore.kernel.org/CAHk-=wim6VGnxQmjfK_tDg6fbHYKL4EFkmnTjVr9QnRqjDBAeA@mail.gmail.com/
+---
+ fs/namespace.c     | 2 ++
+ include/linux/fs.h | 1 +
+ 2 files changed, 3 insertions(+)
 
-I don't know the background of that, but I could imagine that using an
-index rather than a pointer makes things like /sys/bus/pci/.../new_id
-easier and safer.
+diff --git a/fs/namespace.c b/fs/namespace.c
+index c6feb92209a6..fec0f79aa2eb 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2583,6 +2583,7 @@ static void mnt_warn_timestamp_expiry(struct path *mountpoint, struct vfsmount *
+ 	struct super_block *sb = mnt->mnt_sb;
+ 
+ 	if (!__mnt_is_readonly(mnt) &&
++	   (!(sb->s_iflags & SB_I_TS_EXPIRY_WARNED)) &&
+ 	   (ktime_get_real_seconds() + TIME_UPTIME_SEC_MAX > sb->s_time_max)) {
+ 		char *buf = (char *)__get_free_page(GFP_KERNEL);
+ 		char *mntpath = buf ? d_path(mountpoint, buf, PAGE_SIZE) : ERR_PTR(-ENOMEM);
+@@ -2597,6 +2598,7 @@ static void mnt_warn_timestamp_expiry(struct path *mountpoint, struct vfsmount *
+ 			tm.tm_year+1900, (unsigned long long)sb->s_time_max);
+ 
+ 		free_page((unsigned long)buf);
++		sb->s_iflags |= SB_I_TS_EXPIRY_WARNED;
+ 	}
+ }
+ 
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index f3daaea16554..5c537cd9b006 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1435,6 +1435,7 @@ extern int send_sigurg(struct fown_struct *fown);
+ 
+ #define SB_I_SKIP_SYNC	0x00000100	/* Skip superblock at global sync */
+ #define SB_I_PERSB_BDI	0x00000200	/* has a per-sb bdi */
++#define SB_I_TS_EXPIRY_WARNED 0x00000400 /* warned about timestamp range expiry */
+ 
+ /* Possible states of 'frozen' field */
+ enum {
+-- 
+2.34.1
 
-Bjorn
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=f45d069a5628

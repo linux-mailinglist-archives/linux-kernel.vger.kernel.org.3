@@ -2,96 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EADF493BD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A196493BDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355104AbiASOSK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 09:18:10 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:32883 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354883AbiASOSK (ORCPT
+        id S1355117AbiASOUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:20:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34114 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355034AbiASOUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:18:10 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-243-kEKB9QAQOeyRAULQtHiVnQ-1; Wed, 19 Jan 2022 14:18:04 +0000
-X-MC-Unique: kEKB9QAQOeyRAULQtHiVnQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 19 Jan 2022 14:18:04 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 19 Jan 2022 14:18:03 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jens Wiklander' <jens.wiklander@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
-CC:     Sumit Garg <sumit.garg@linaro.org>
-Subject: RE: [PATCH] optee: add error checks in optee_ffa_do_call_with_arg()
-Thread-Topic: [PATCH] optee: add error checks in optee_ffa_do_call_with_arg()
-Thread-Index: AQHYDQuoEhzAP+30x0KhL4kws6vao6xqZH0A
-Date:   Wed, 19 Jan 2022 14:18:03 +0000
-Message-ID: <bf3c1583f8d7466a96bab8feb462bb36@AcuMS.aculab.com>
-References: <20220119080736.2940906-1-jens.wiklander@linaro.org>
-In-Reply-To: <20220119080736.2940906-1-jens.wiklander@linaro.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 19 Jan 2022 09:20:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59A4C61325;
+        Wed, 19 Jan 2022 14:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B84C8C36AE3;
+        Wed, 19 Jan 2022 14:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642602010;
+        bh=YG4wGVWRyWi+fWpJAklFNv/bYqksOn14JwbalX/xzTs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CQaJ+GN0diUlGnTZddXqMEe7PehfdSSy1IsFyNNlmQwkhixDeNVtnpfVhwdoCnMgx
+         K6cIf+lvKtmFBxIxWrr3s9ZixkNwhyV6z+LEYbUEYZyQBFAXtA6Q/A79PVoc72bONJ
+         Dh8b9xn5kIEwwtOrTys17BcPUlcgy+Aj0KZJrrt41rb2lJpoAUMkPHzhNunB+LVCX5
+         wRXGLbC2kIgHKb+HN0o9h7wRd56K1v585xRWp5OdDz1iGAqLe2Ie5OwDAYvVp3Hg92
+         Jb/o2ReoHHTeHTPN1dpzB6bPCnlROdA2BdMBliM3/h+rNZm0422EKdcot4pte4XV+1
+         fFeyY4f3ic15w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95CF4F6079C;
+        Wed, 19 Jan 2022 14:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/1] nfc: llcp: a fix after syzbot report
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164260201060.5270.11254904971363048637.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Jan 2022 14:20:10 +0000
+References: <20220119074816.6505-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220119074816.6505-1-krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Wiklander
-> Sent: 19 January 2022 08:08
-> 
-> Adds error checking in optee_ffa_do_call_with_arg() for correctness.
-> 
-> Fixes: 4615e5a34b95 ("optee: add FF-A support")
-> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> ---
->  drivers/tee/optee/ffa_abi.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> index d8c8683863aa..d88bd2e41572 100644
-> --- a/drivers/tee/optee/ffa_abi.c
-> +++ b/drivers/tee/optee/ffa_abi.c
-> @@ -619,9 +619,18 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
->  		.data2 = (u32)(shm->sec_world_id >> 32),
->  		.data3 = shm->offset,
->  	};
-> -	struct optee_msg_arg *arg = tee_shm_get_va(shm, 0);
-> -	unsigned int rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-> -	struct optee_msg_arg *rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-> +	struct optee_msg_arg *arg;
-> +	unsigned int rpc_arg_offs;
-> +	struct optee_msg_arg *rpc_arg;
-> +
-> +	arg = tee_shm_get_va(shm, 0);
-> +	if (IS_ERR(arg))
-> +		return PTR_ERR(arg);
-> +
-> +	rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-> +	rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-> +	if (IS_ERR(arg))
-> +		return PTR_ERR(arg);
+Hello:
 
-What's this duplicate test for?
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-	David
+On Wed, 19 Jan 2022 08:48:15 +0100 you wrote:
+> Hi,
+> 
+> Syzbot reported an easily reproducible NULL pointer dereference which I was
+> struggling to analyze:
+> https://syzkaller.appspot.com/bug?extid=7f23bcddf626e0593a39
+> 
+> Although direct fix is obvious, I could not actually find the exact race
+> condition scenario leading to it.  The patch fixes the issue - at least under
+> my QEMU - however all this code looks racy, so I have a feeling I am plumbing
+> one leak without fixing root cause.
+> 
+> [...]
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Here is the summary with links:
+  - [v2,1/1] nfc: llcp: fix NULL error pointer dereference on sendmsg() after failed bind()
+    https://git.kernel.org/netdev/net/c/dded08927ca3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

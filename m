@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B72493CB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4705A493CB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355593AbiASPLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355580AbiASPLu (ORCPT
+        id S1355604AbiASPMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:12:37 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:46962
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355628AbiASPMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:11:50 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5977C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:11:49 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nACcl-0001fG-4U; Wed, 19 Jan 2022 16:11:47 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nACck-00BCfP-E9; Wed, 19 Jan 2022 16:11:45 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nACcj-0006Jz-As; Wed, 19 Jan 2022 16:11:45 +0100
-Date:   Wed, 19 Jan 2022 16:11:45 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Harald Seiler <hws@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-Message-ID: <20220119151145.zft47rzebnabiej2@pengutronix.de>
-References: <20220119145204.238767-1-hws@denx.de>
+        Wed, 19 Jan 2022 10:12:03 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 82E8540027
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642605119;
+        bh=drjzBd6xSh2W3A1sdcF3qLyFND0naAGILhzsS9dD8A4=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=rlehtBxB6Z+y8+bmc22pQ0zkwX03Qq7d390fyUVpYt/BZ7TNZSdNgfNVdS4r/8UfD
+         vx6iDqD+UAXp0610d4PUb1De9ZyyLrOE5648BAB1ba3Fe2KofzymOal/cCHT2Yt2rA
+         kmlRGst5/ybvu3jeBtKhB8NtjJKggrzL8In/9MusyN4tpVhsNhPbaUe9Eg6to59R9Q
+         CQF3tp0+t4Av8LXAcOId9Pi7ENySI9scQwrsuWQAd3BfQmQ6ZmsyaNTEcA3R9LaXEh
+         8xpWiSxVca9fezsR42iLXqb4BDXgGcvIghk2eJcAwr3lCkfUD15JXfqJHv6zwq8Gve
+         GAlMcZkhBB9bg==
+Received: by mail-ed1-f72.google.com with SMTP id s9-20020aa7d789000000b004021d03e2dfso2769646edq.18
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:11:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=drjzBd6xSh2W3A1sdcF3qLyFND0naAGILhzsS9dD8A4=;
+        b=0XbYJepV8kauSfsfoLiTG0u/pJg/Wn+5j8VRtDhCVneZwyv0PD8UoTZThcbFojxAEl
+         m3hk164WLmGA3f0fAVofJagb/53mTq1pG7bXqya/PWlmeTd74Hhya/NTG9GucUYc9wZm
+         oZgB+Beaey2wcu6J3bJPedUiDzz3oD1pz2wys+GgTWWJY4+sAyK8pI07BI+otpEvCYV0
+         CsDREhs7tXsRqV/xdr0RaO3aA/LAk6KS1UHCfT4IdcaqSjdPA8bf2qkNnNoqqVQ+y/pg
+         yb3MYbhm2LpNvRD7Ny6gohdPt4tRM+JITfyEz07nEC1puc369KYaMQO0KD9oFETcazv0
+         2D1A==
+X-Gm-Message-State: AOAM532e0q0n0sEfLsHj/heMlrW4pNN03HpPJ3wal/ayNPFtXPiVEIqG
+        WGYMOhaKFQGAjv0jPYE8h1WrMneJ+fu8Fv9rc11Eu5EBJ1fH7klnZzl/o6nPzu/b77920WZ8WpS
+        gU+cwJiLvcJ37mklnJuuLu4IiuaR+CWAo3Ky0Pzee8A==
+X-Received: by 2002:a17:907:90d5:: with SMTP id gk21mr24657787ejb.359.1642605118417;
+        Wed, 19 Jan 2022 07:11:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxddTNyN9TBuuv8pGuZnGAB9t/ygdDr/3nax3MlitJXfQZJieVWGTj2hsRfDZn1PRaG5CZVnw==
+X-Received: by 2002:a17:907:90d5:: with SMTP id gk21mr24657762ejb.359.1642605118251;
+        Wed, 19 Jan 2022 07:11:58 -0800 (PST)
+Received: from krzk-bin (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id i23sm1339989edt.93.2022.01.19.07.11.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 07:11:57 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:11:56 +0100
+From:   'Krzysztof Kozlowski' <krzysztof.kozlowski@canonical.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, 'Arjun K V' <arjun.kv@samsung.com>,
+        'Aswani Reddy' <aswani.reddy@samsung.com>,
+        'Ajay Kumar' <ajaykumar.rs@samsung.com>,
+        'Sriranjani P' <sriranjani.p@samsung.com>,
+        'Chandrasekar R' <rcsekar@samsung.com>,
+        'Shashank Prashar' <s.prashar@samsung.com>
+Subject: Re: [PATCH v2 14/16] arm64: dts: fsd: Add initial device tree support
+Message-ID: <20220119151156.y2rzrk2gpoweiofc@krzk-bin>
+References: <20220118144851.69537-1-alim.akhtar@samsung.com>
+ <CGME20220118150108epcas5p2d9cd4db7cb368c2bfbd7d058eba4107c@epcas5p2.samsung.com>
+ <20220118144851.69537-15-alim.akhtar@samsung.com>
+ <43e72d34-0e11-9ff6-6924-0cab62b51891@canonical.com>
+ <000301d80d46$502ae590$f080b0b0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="crht6kysa5gyjzqm"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220119145204.238767-1-hws@denx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <000301d80d46$502ae590$f080b0b0$@samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 19, 2022 at 08:37:40PM +0530, Alim Akhtar wrote:
+> >Similarly to previous vendor-prefix patch, please let me know if it's expected
+> >me to take it. I assume no. :)
+> >
+> I am expecting this will go via your tree, but I am ok either ways. May be you and arm-soc maintainers (Arnd/Olof) can take the call here.
 
---crht6kysa5gyjzqm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I can take it, that would be the easiest, I guess.
 
-On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
-> Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
-> are 0, the hrtimer is triggered (with timeout 0) which can introduce a
-> few 100us of additional overhead on slower i.MX platforms.
->=20
-> Implement a fast path when the delays are 0, where the RTS signal is
-> toggled immediately instead of going through an hrtimer.  This fast path
-> behaves identical to the code before delay support was implemented.
->=20
-> Signed-off-by: Harald Seiler <hws@denx.de>
-> ---
->  drivers/tty/serial/imx.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index df8a0c8b8b29..67bbbb69229d 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *port)
->  	if (port->rs485.flags & SER_RS485_ENABLED) {
->  		if (sport->tx_state =3D=3D SEND) {
->  			sport->tx_state =3D WAIT_AFTER_SEND;
-> -			start_hrtimer_ms(&sport->trigger_stop_tx,
-> +
-> +			if (port->rs485.delay_rts_after_send > 0) {
-> +				start_hrtimer_ms(&sport->trigger_stop_tx,
->  					 port->rs485.delay_rts_after_send);
-> -			return;
-> +				return;
-> +			}
-> +
-> +			/* continue without any delay */
+Best regards,
+Krzysztof
 
-Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER_SEND ?
-
->  		}
-> =20
->  		if (sport->tx_state =3D=3D WAIT_AFTER_RTS ||
-> @@ -698,9 +703,14 @@ static void imx_uart_start_tx(struct uart_port *port)
->  				imx_uart_stop_rx(port);
-> =20
->  			sport->tx_state =3D WAIT_AFTER_RTS;
-> -			start_hrtimer_ms(&sport->trigger_start_tx,
-> +
-> +			if (port->rs485.delay_rts_before_send > 0) {
-> +				start_hrtimer_ms(&sport->trigger_start_tx,
->  					 port->rs485.delay_rts_before_send);
-> -			return;
-> +				return;
-> +			}
-> +
-> +			/* continue without any delay */
-
-Here similar question here about sport->tx_state =3D WAIT_AFTER_RTS;
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---crht6kysa5gyjzqm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHoKi4ACgkQwfwUeK3K
-7AkxHwf/ZLUsqC8FSuTk1mpDAsAeFlYV4Q+KaPUaQStofSEGdfVfttFyEXCybbvA
-Y7CDhHsS6GDbseJ5Kw4vDSwgGfJcoiy7Z1D/odYNy+Fp8FLuyjqaJyXH1xFqIgd2
-YmeDC2B8FzA+E9o6tTewX9wW2rJ0zGJLL55kI9yjcNqmxwjcPLe1G+qlwVO6Navu
-hqCiGX1KeeeAGDQ07dxbCsJQpfFDHz1Xu8OW2tTrrUDaScsQnLatXnh1ZMEB/JPs
-+LOIksHoLrjnRhH9jlytbr7vflOiAmTebmeHYSzX8IJfyBIFb1RVOiJNiHhDWAHy
-PgQ4Ndr6K/r4qk80uoPRnkaSdqkB4w==
-=AyeY
------END PGP SIGNATURE-----
-
---crht6kysa5gyjzqm--

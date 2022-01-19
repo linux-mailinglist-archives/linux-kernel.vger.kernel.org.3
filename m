@@ -2,108 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEE0493985
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0199C493999
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354149AbiASLbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S1354191AbiASLfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354064AbiASLbb (ORCPT
+        with ESMTP id S1354185AbiASLfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:31:31 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B275C061574;
-        Wed, 19 Jan 2022 03:31:31 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c2so4830733wml.1;
-        Wed, 19 Jan 2022 03:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B184jFapKUoaCmeCoLa/RY1yl2o5xLb5T8mZ+GEtvMc=;
-        b=kUJFN1kFYOr2PB86f3ofbWNuzAWIiKt4CKNBAuTjmwOxQ1X9fi8QrmX4DatmvxKL1a
-         eUJ2A8WsGvpPrtlbPPvHr08Z5pM7UGogwF6UHWa75ijA3H6Ujp2FpZ4qi8bikWY4urlt
-         qEQOLREVOYlF/fjPCN88aeKmFGwDjEZkTbuIR4BiyTBVAXqHGv+H+3R9Mjt8JBwPtUoP
-         s1dhuGhdOe2l2yz/+JPu2W6sD3MYRzlKCHH/Y+qXjH+Aruz8AiDkuGROnkYoyFwjEr6v
-         1wdX6SUeW59NCRGD/WnZHmOPxfkcjwayBjKTIchKBBLtT+P6/iADFFPYnx4//nG0db+j
-         GtKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B184jFapKUoaCmeCoLa/RY1yl2o5xLb5T8mZ+GEtvMc=;
-        b=ZICkMVceimrlF0SnZVk6cMbkuyRUrxvCkoo1ElC5Kl2D/EogSHXWAW+Rnz3+R+noC6
-         KECifiOgEJwhscbzNF0g/80v4FIirZqkrRw+PNtdpWkzowNJSOl2lwxrLFkZhH5gtFkh
-         tF0oGkr5ARRDJQksM+/hY760p7qMkrT2AtBGDFM/WIqADFd3o0eHlk/YmrvFs1HUwfIq
-         USlPzipwxqeLEnS7QrQLozLTIglwjrJEmu9+NgXFIfqc8NRcsfnuJZh+UCUPtdEqnt3v
-         9IXrSG7sNJobna6RPV/6JQztgQDtJSrYbIf9d+8J79f8lcDk/j2sEdtM69Le2I/NGUxJ
-         uf3g==
-X-Gm-Message-State: AOAM532xUFLu3resCI7gMBtpaf0i5mDIZX9wyRiwCqiztm7G9SI2YbNI
-        EOmKz7C3YTg/8nqjdJJilrrQa7nCOnq/vA==
-X-Google-Smtp-Source: ABdhPJyoASqFatmoRBFJhD6xsJLll7K5Y++9lZk9wFHgaVQ3B0ZBvKxlt3zqwehgaWMNAUDMO645EA==
-X-Received: by 2002:a1c:4c11:: with SMTP id z17mr409412wmf.0.1642591889196;
-        Wed, 19 Jan 2022 03:31:29 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id a20sm4778049wmb.27.2022.01.19.03.31.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 03:31:28 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] pwm: Changes for v5.17-rc1
-Date:   Wed, 19 Jan 2022 12:31:26 +0100
-Message-Id: <20220119113126.1244615-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Jan 2022 06:35:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2551DC061751
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 03:35:49 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nA9DT-0000wY-2d; Wed, 19 Jan 2022 12:33:27 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nA9DH-00BAYF-T8; Wed, 19 Jan 2022 12:33:15 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nA9DG-00031i-Rx; Wed, 19 Jan 2022 12:33:14 +0100
+Date:   Wed, 19 Jan 2022 12:33:14 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, linux-spi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>, linux-pwm@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+ (summary)
+Message-ID: <20220119113314.tpqfdgi6nurmzfun@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
+ <YeQpWu2sUVOSaT9I@kroah.com>
+ <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
+ <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hygdbs7bafily54q"
+Content-Disposition: inline
+In-Reply-To: <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+--hygdbs7bafily54q
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Hello Sergey,
 
-are available in the Git repository at:
+On Wed, Jan 19, 2022 at 01:56:12PM +0300, Sergey Shtylyov wrote:
+> On 1/18/22 12:18 PM, Uwe Kleine-K=F6nig wrote:
+> > On Sun, Jan 16, 2022 at 03:19:06PM +0100, Greg Kroah-Hartman wrote:
+> >> On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-K=F6nig wrote:
+> >>> A possible compromise: We can have both. We rename
+> >>> platform_get_irq_optional() to platform_get_irq_silent() (or
+> >>> platform_get_irq_silently() if this is preferred) and once all users =
+are
+> >>> are changed (which can be done mechanically), we reintroduce a
+> >>> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
+> >>> return 0 on not-found, no error message printking).
+> >>
+> >> Please do not do that as anyone trying to forward-port an old driver
+> >> will miss the abi change of functionality and get confused.  Make
+> >> build-breaking changes, if the way a function currently works is
+> >> changed in order to give people a chance.
+> >=20
+> > Fine for me. I assume this is a Nack for Sergey's patch?
+>=20
+>    Which patch do you mean? I'm starting to get really muddled... :-(
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-5.17-rc1
+I'm talking about "[PATCH 1/2] platform: make
+platform_get_irq_optional() optional" because "trying to forward-port an
+old driver will miss the abi" applies to it.
 
-for you to fetch changes up to 3f0565451cc0c5158513af0bc4e91aa8fb0b5e75:
+Best regards
+Uwe
 
-  dt-bindings: pwm: Avoid selecting schema on node name match (2021-12-09 18:17:02 +0100)
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Thanks,
-Thierry
+--hygdbs7bafily54q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-pwm: Changes for v5.17-rc1
+-----BEGIN PGP SIGNATURE-----
 
-This contains a number of nice cleanups and improvements for the core
-and various drivers as well as a minor tweak to the json-schema device
-tree bindings.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHn9vcACgkQwfwUeK3K
+7Anutgf9H+FHDCwHTQEg3PqL/MwBWEgm2ezhN3NYztqf3gciss+k2d18HSOoYC3U
+FVex76yzow2RaobKMmgXEqSv3MLbHgTm5YExNMaYIM5QuLAVJka/5uiXKJFMEsbE
+GvlbYU/QbcQ/pUw5PTRvi07XghgBpKALgy+DTeK/4cOMQSsHBG8z8q2PSA5T/YX4
+vqrrdvv7F0rIJR0pMUIVWZ0c15DeKt6fy53S9JW/ZQnBS/I7v1mJvP3kKo2+eEo6
+nmF3qMmYbnrzxpAXhhWoB67zMIC+fhq6cYyhS5LuiHRcyM/xej00L+S/ZfXHpRR3
+VTjGawN4GYEia7SPEAsh/CHlO3t4Vw==
+=2ru9
+-----END PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Thierry Reding (1):
-      dt-bindings: pwm: Avoid selecting schema on node name match
-
-Uwe Kleine-König (7):
-      pwm: Move legacy driver handling into a dedicated function
-      pwm: Prevent a glitch for legacy drivers
-      pwm: Restore initial state if a legacy callback fails
-      pwm: twl: Implement .apply() callback
-      pwm: img: Implement .apply() callback
-      pwm: vt8500: Implement .apply() callback
-      pwm: img: Use only a single idiom to get a runtime PM reference
-
- Documentation/devicetree/bindings/pwm/pwm.yaml |   2 +
- drivers/pwm/core.c                             | 139 ++++++++++++++-----------
- drivers/pwm/pwm-img.c                          |  35 +++++--
- drivers/pwm/pwm-twl.c                          |  62 +++++++++--
- drivers/pwm/pwm-vt8500.c                       |  57 ++++++++--
- 5 files changed, 213 insertions(+), 82 deletions(-)
+--hygdbs7bafily54q--

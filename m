@@ -2,145 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC5F4935BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CBC4935C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352104AbiASHoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351643AbiASHoE (ORCPT
+        id S1351490AbiASHpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:45:20 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:42399 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245700AbiASHpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:44:04 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F972C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:44:03 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 187so1463063pga.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:44:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wgsNFzNpSSdccSgxfw+zCKaHdZrvmLN4TxH4pmEqHFM=;
-        b=p+cHoZyZ/KxchMwriiVowMDalr/duztSsP8wupwGCXnhLANZc8nlOxi8DRiXRCJMIe
-         ThXD3VtztapjDQndPVMlgQCNBGdaB/6GtGter/A53dpnPy0/ro9sY23pR2hrOCNdpJ6x
-         A4o4u75fhuW3Mo06+JGLmcZyvqLXji4TLjjrijhdVwv1S53EEBqkn8vl1ndTRxbd3dZz
-         uybHANAtOcV/NY4/riEthmOAO/ZD0wmVB13Z8eWzwiHuCL/kM8zjRhZyQ+O10QzOw4WU
-         8T8YqXxpWNqIHjpyLGArRjsnP8Y9EWKTmKSTB1lK98Rd0uAtb5HaP0a2q3DyQSfNmTwM
-         RKFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wgsNFzNpSSdccSgxfw+zCKaHdZrvmLN4TxH4pmEqHFM=;
-        b=NkspAu97eqE7R+f+Sh4+bljsqbd7C6On4/PtHSDESTqsUmQi7FpkerGJ/xK4SHKusf
-         rfNfUkjVkf7Bv3dYOvyYfl7M9OTLsjKFJvl+s49C+Qj65y1kPLS1tBMt0WFeRzHjewoD
-         nX23ZXEOAwS9ZzWJMfKd7KpJgMxQvAbgljH91RJmieP9xXV23dHgVDhIvmKYMa6w3Uiu
-         A4rt1+w8I6ZwzXXaKmpNkijji5DmlZAR4kcFW20YRM8vIaX2+YcilZhQdu285TKVU15F
-         nFyIAN8t0ZC2j0zQ5X1Ko+mzlwuDogazdId/P/9PnHsWehmXya76bWM70WdQfG0iL/9B
-         1Vtg==
-X-Gm-Message-State: AOAM533SjOLarM6VSrLUPZTKPTxldfYASxHdFEwXWWtK6slLLgrw6tmm
-        jknlsxpvxRgK3gQqU25u/sWwsw==
-X-Google-Smtp-Source: ABdhPJyNKcbiEGUcgkz9zXpAgkBgubu/10nRg7X8eh23rlI2iY9kKxwwNMydTTsODjGuMFGY0jhtqA==
-X-Received: by 2002:a05:6a00:88f:b0:4bc:3b4e:255a with SMTP id q15-20020a056a00088f00b004bc3b4e255amr29453525pfj.79.1642578242462;
-        Tue, 18 Jan 2022 23:44:02 -0800 (PST)
-Received: from localhost ([223.184.90.234])
-        by smtp.gmail.com with ESMTPSA id g14sm16984301pgp.76.2022.01.18.23.44.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 23:44:01 -0800 (PST)
-Date:   Wed, 19 Jan 2022 13:14:00 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Message-ID: <20220119074400.rqldtq6wqo73lqqg@vireshk-i7>
-References: <20220119015038.2433585-1-robh@kernel.org>
+        Wed, 19 Jan 2022 02:45:12 -0500
+Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mgvan-1mg0ZH2l81-00hL0Q for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022
+ 08:45:10 +0100
+Received: by mail-wm1-f54.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4042332wme.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:45:10 -0800 (PST)
+X-Gm-Message-State: AOAM531dbBCanlVMAJYbrQvDvCoy2ZzZPgkv6A+ysB0fhEPlsTdcvk4a
+        JymfzP1wejZYyNA3jOB6Pluzh3flM2VbzK6GI9c=
+X-Google-Smtp-Source: ABdhPJyacKvJs/cpMGKfZs7foLPPZGv90A3Rb0UJJs4OpOlFFMxF6kfstoAm+J/PX+MK+DcAy8GPbxH87wXJjHSaXBc=
+X-Received: by 2002:a5d:6488:: with SMTP id o8mr6666149wri.219.1642578310310;
+ Tue, 18 Jan 2022 23:45:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
+ <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
+ <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
+ <00e28671-8d3a-f789-91c4-109814792a07@arm.com> <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
+ <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
+In-Reply-To: <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 19 Jan 2022 08:44:54 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1t5N_vW3rcMD_e+UMy5EQDrTrE4QqPDo7nM_s1-Bf0XQ@mail.gmail.com>
+Message-ID: <CAK8P3a1t5N_vW3rcMD_e+UMy5EQDrTrE4QqPDo7nM_s1-Bf0XQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:HPNtrAMsgSiYc1rC1lM4pWCGyB2YGxD6qosmU1jSNpYXrq+mw3a
+ Z1f3XbwJRzODHBo/iN5F7KAJFUIAlbyG+cfB0HnkK/2fV7ovaqWtG8hyEaZ1z69W5b7uWla
+ 7xWSbZ6faUwg2HCN+9M1PHD/jdg2Jr3m5LRS3iBHgvSFOLKki8iczz1zNhrOiERJJXnznYJ
+ 4CJlPjkawl80k9AJ7Xbew==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:umO5vec/4C8=:/+zB+S0NwM8CmoTeA8EkV1
+ aOGWCdkZUEcmVf0kWkpQgdS8dyMNTy1TdWIwoqzsiR/JaRl/++d06U38O2VBl220Wtr57E8Fu
+ R+VarlHmIMnyW1Imfho4ansLNvKmfmy4EHH1XAxUBaPrKq71QO3OlyFEqOijfJcwcRvhy/gXJ
+ HF7c3HhQuwcPQRfbGZwVMxzRV8Hets5jeukQ+lhou+xxjw1wa8KqtbuIPxeprLqwo+tahlhsS
+ Wt8O2o8hANY1ColXVCQeE5Br4eRaHnlBI09KR+l8o3b7ZTPRpKkYm2s59bvPt4d3w7t6EMh1y
+ AwGmpnL2+laWtH5vLryhy7pKhLwhqHVRSeX5v/FbVOkNF6Cl/6HW/4SyTWyn+m1MHcV0wBcv5
+ /z77fOlL/Pzmnp9sZzGfn9RnWIzVpQm7hhMJw7p248KikbpSP++vlk3SHyc4FYc47X2HabV9X
+ dGxvbQSSdxvvi1WIi0zKCZ2VBtt8bHNuZyKovXmPY7yyUEVwHBHPDuG3tW9+qJ+AighBc0OLJ
+ Ztio5+iM5gcolzxvtP5XxHEGSTmTOgC4KqsHpg/1HGLX/klXs2Xx54AcU/ZfnEkAXowqxczHB
+ lav1vN3hJrcbAlhf0oGXOctAAhp+iZyGHxIvmVwHxI3gOy7Ni3NfTh3zc8FewQL0/OwgQj8vG
+ UxzP+4yfF63yekMngIfy/MwBpPSs6/O3LlxNyoIGhTUYFNepRyXNvFr9/qZrmy0XwGvXQEaQA
+ KxELzKqpq79HGUfk3dkE1lHIe+6JL1/GLqdjWCg6+7ZtA5g8ApLae6TCWe6mv+HK+YW8JU07q
+ rGVDk23jimy5/jmBPp76XJdgqhPv0KK/ubjrQ58XMDP6HdVKzk=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-01-22, 19:50, Rob Herring wrote:
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
-> 
-> The array of phandles case boils down to needing:
-> 
-> items:
->   maxItems: 1
-> 
-> The phandle plus args cases should typically take this form:
-> 
-> items:
->   - items:
->       - description: A phandle
->       - description: 1st arg cell
->       - description: 2nd arg cell
-> 
-> With this change, some examples need updating so that the bracketing of
-> property values matches the schema.
-> 
+On Wed, Jan 19, 2022 at 7:44 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+> On 1/13/22 5:17 PM, Arnd Bergmann wrote:
+> >
+> > It also helps me personally to have a known place to look up the names
+> > by value rather than chasing through reference manuals.
+>
+> IIUC the purpose here would be a quick CPU ID documentation reference check ?
+> I will wait for other opinions here and add the remaining in a separate patch
+> probably.
 
->  .../devicetree/bindings/opp/opp-v2-base.yaml  |  2 +
->  .../bindings/power/power-domain.yaml          |  4 +
+The purpose would be to do what is obviously the right thing, and to avoid
+more patches getting sent the next time someone needs to add a workaround
+for another core that is already known.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+If you can't do this without more discussion, then just use your
+current version and
+let the next person do it.
 
--- 
-viresh
+        Arnd

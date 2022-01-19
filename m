@@ -2,75 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35EF493AB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E19493AC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354472AbiASM61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiASM6Z (ORCPT
+        id S1354602AbiASNCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:02:12 -0500
+Received: from outbound5b.eu.mailhop.org ([3.125.66.160]:24796 "EHLO
+        outbound5b.eu.mailhop.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354523AbiASNCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:58:25 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA3AC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:58:25 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id j85so2579824qke.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:58:25 -0800 (PST)
+        Wed, 19 Jan 2022 08:02:05 -0500
+X-Greylist: delayed 96044 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jan 2022 08:02:05 EST
+ARC-Seal: i=1; a=rsa-sha256; t=1642597321; cv=none;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        b=vHfpup2E1DbwqmhQeJ8+jlFBwORwx9h1K0RnM35cSzH9LGCJtqb4owzJTszkx6M+C74AhrqmEwBA0
+         rcmXeC8hJUkgbRqTXKAGv0jh7q3NdLhgsJR9u2k7CvDIq76pb97rp+8BTBGPG6IGMmwxggwPAohvRZ
+         hPFnnaJpQ7fCqGFJgN5pJhSLTp1gtFAyre9rX7HOfj464zxNdSkaoCNX6la/j5L2zczuepZYCxeonF
+         /apQOYl+BB65A8OrOpRTsFDMZFte7m4w2KTxdla8IKzABjRjPo7DT2Lv5KJSYBzKwjbuGccuoB7Pw0
+         vHMxc6b6sljzPcBTqm/D7TOSdabCbuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:dkim-signature:dkim-signature:from;
+        bh=c8r/igF5LndnA9H2CDXLuB0h9ElFTJCRkVRmiM0JaA8=;
+        b=JxDfVeb8uO8dxeKWNAZcU/5jtrgJYLrZ5fSqhEWx0bsDeC0wXoefR0hQtyhDRTPnsPS146sc77npz
+         bh1/CUSgdNxI1odZvk/iF3sJX/9PdzaDsx1D3N+jZ3CGWNW1kmjrney3mMJHuiW7YYzv9lgqpitD59
+         Cq2YnEfco8QHnjomcIM4DDyvhKKxklE9rB8eQqLN5FMLIhVngIeThYrmEkPVONLVTTdABb4Q6kdLaF
+         12oXIBPY5l4jlOmO1lyCzzTrkai7+MWj2IGBY8Po9Tu3K9qZELzTEOQVwGrVr90Y1kv2+DAzttlKuN
+         JO1bKJB8+ZABAq32zuwZae0Jh+NSZKA==
+ARC-Authentication-Results: i=1; outbound3.eu.mailhop.org;
+        spf=pass smtp.mailfrom=stackframe.org smtp.remote-ip=91.207.61.48;
+        dmarc=none header.from=stackframe.org;
+        arc=none header.oldest-pass=0;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ljitelCOfpQzYv6XgO/xaPCtLhXUjN10ZeP+Ct1mtqA=;
-        b=xZtoJmjKy9SyupAtRNIaKGXvdy8jemeJQpgTgSqnAqRSB5Q3ft8ObX/e9Ef81vuv5+
-         sBbGS6/JBe2HO5rI5zcvxjM1bLuMz7yV2XOcaVB0IeHG0f0wm23WAULB3GuTmsTKlsb8
-         1EtcQMemJojQeYaUKE8L/b7s13r/IWLK//vGT6MsPwz0c9YtpuLIMNcZHDSbWBRljy5w
-         nL1LnXNqsR48P+3pDWO6egNKZeFMyLuLCv2s3P+CrLwGpgv2udMdYz0LafYXSgzYu5z1
-         VottXP+dKRKbKLWVSZKrOh72L/dL3+RzHTrJiNwgalbKVduRkfjLQ0Aj/KvDSOdc1x9s
-         qOUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ljitelCOfpQzYv6XgO/xaPCtLhXUjN10ZeP+Ct1mtqA=;
-        b=2doD09HqgKP/o4TNoyL0Rxi1nW8z0cwImApPb62SZU/LlTX51b7kDsjJi8powKkLKV
-         GrZhAhdYVFJ0qB28IP6gjvp5eLEkljEiBoWGsCkj1+ou5fEMJpToc2wUE+Ye2G9OrWHd
-         b0cLXhG9Je966WOQXfziWaFy4oA5uW0MPqj9BVrSLRqzkyBPv2ArUSf/lc5lsrfelCSB
-         Ee/BFERLTlAvZoTjp5i65aDfxXF2cVTrm2dOTYCtlynz6BdOWYfVJlUYwIeHLb6W/YTW
-         nZVLZZwh/px6p/psz+K70e5PMNnCNAWxYVtNlmlxVVGurapmkxU83gqXrO7j0lBSTyFq
-         MjtA==
-X-Gm-Message-State: AOAM5335jl0cFZQpAPDcmrTM6xTfWJcNNMZjOGG4W7W7092PGFzV/642
-        +mbQ/CPIDSJwGBD7/Vjw1h0zifXD3WvDUg==
-X-Google-Smtp-Source: ABdhPJwLORN/+MTxXfYIlaSR+5XM0UNw5NvRYkEsDblBY2pxwe2Qf1bjKa6295J4JQoX9goffwee+w==
-X-Received: by 2002:a05:620a:2901:: with SMTP id m1mr7524712qkp.598.1642597104488;
-        Wed, 19 Jan 2022 04:58:24 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id br11sm732167qkb.115.2022.01.19.04.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 04:58:23 -0800 (PST)
-Date:   Wed, 19 Jan 2022 07:58:23 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] psi: Treat ksm swapping in copy as memstall
-Message-ID: <YegK7+oKFG8EPRp9@cmpxchg.org>
-References: <20220116152150.859520-1-yang.yang29@zte.com.cn>
- <YeVdvVVBvrXH5U0L@cmpxchg.org>
- <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
+        d=stackframe.org; s=duo-1634547266507-560c42ae;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=c8r/igF5LndnA9H2CDXLuB0h9ElFTJCRkVRmiM0JaA8=;
+        b=cIW020Kx5LLQrpVaGkWAZPwtPYraTHmndoUBbKJ59e9o/dQx4hdayXuyMPssZMGHB+NeN9C7dVHnR
+         l5XTnxAE6+iCwAdYHFcpV5zowI0G1rVk1q899PCLlmcvFQOHHZNeR9qXnwzpoZnd4mXQ0FVEhYYBnk
+         8OnY0sBrNG8IkKcE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=dkim-high;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=c8r/igF5LndnA9H2CDXLuB0h9ElFTJCRkVRmiM0JaA8=;
+        b=cB4CSqr0ylyQGLc1mYdPbZm/5YDJPww2xfo+Rp9noVOgwxTr18QZ73OIsEEJm0Rz3RiCZAkpDF/3R
+         F/6dwEW/QoBTtoo0q9vvT/LXGKw/QXHSG7l/kkfP90UqPGqYuZvIVkJr/EuIZjiUnf5j/fdpQtvS3p
+         NfkIfOTafc0o8zRwV3Yz29zJKTjwTYHwyWbSsuWMNvBj3TFJs2MKXx9EZefKcSsZgadKkGEkJlW1y9
+         QlH9WAuSV+mRu33peEJ2sJ2ZOlxA7RgodKTp5JfSArV15lG6wk1amYahA7xXb1GCcMsMg/9CQ7KRd4
+         Lyt/7EKYJ1xFHOuF4N1ha8LmKFy8Gfw==
+X-Originating-IP: 91.207.61.48
+X-MHO-RoutePath: dG9ta2lzdG5lcm51
+X-MHO-User: f6021dd5-7927-11ec-954c-95b64d6800c5
+X-Report-Abuse-To: https://support.duocircle.com/support/solutions/articles/5000540958-duocircle-standard-smtp-abuse-information
+X-Mail-Handler: DuoCircle Outbound SMTP
+Received: from mail.duncanthrax.net (propper.duncanthrax.net [91.207.61.48])
+        by outbound3.eu.mailhop.org (Halon) with ESMTPSA
+        id f6021dd5-7927-11ec-954c-95b64d6800c5;
+        Wed, 19 Jan 2022 13:01:50 +0000 (UTC)
+Received: from hsi-kbw-109-193-149-228.hsi7.kabel-badenwuerttemberg.de ([109.193.149.228] helo=x1.stackframe.org.stackframe.org)
+        by mail.duncanthrax.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <svens@stackframe.org>)
+        id 1nAAaw-0058WT-Pr; Wed, 19 Jan 2022 15:01:47 +0200
+From:   Sven Schnelle <svens@stackframe.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-fbdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        dri-devel@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
+Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
+References: <20220119110839.33187-1-deller@gmx.de>
+        <20220119110839.33187-3-deller@gmx.de> <Yef0j8+DBbwC7Kjv@kroah.com>
+        <Yef15k2GtC40aJEu@kroah.com>
+Date:   Wed, 19 Jan 2022 14:01:44 +0100
+In-Reply-To: <Yef15k2GtC40aJEu@kroah.com> (Greg Kroah-Hartman's message of
+        "Wed, 19 Jan 2022 12:28:38 +0100")
+Message-ID: <87o847khfr.fsf@x1.stackframe.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:13:54AM +0000, CGEL wrote:
-> I did a test, when we use zram, it takes longer time for ksm copying than
-> swap_readpage(). Ksm copying average takes 147263ns, swap_readpage()
-> average takes 55639ns. So I think this patch is reasonable.
+Hi Greg,
 
-Ok, that sounds reasonable to me as well. Please add the
-PageWorkingset() check and resubmit the patch. Thanks!
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+
+> On Wed, Jan 19, 2022 at 12:22:55PM +0100, Greg Kroah-Hartman wrote:
+>> On Wed, Jan 19, 2022 at 12:08:39PM +0100, Helge Deller wrote:
+>> > This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
+>> > 
+>> > Revert this patch.  This patch started to introduce the regression that
+>> > all hardware acceleration of more than 35 existing fbdev drivers were
+>> > bypassed and thus fbcon console output for those was dramatically slowed
+>> > down by factor of 10 and more.
+>> > 
+>> > Reverting this commit has no impact on DRM, since none of the DRM drivers are
+>> > tagged with the acceleration flags FBINFO_HWACCEL_COPYAREA,
+>> > FBINFO_HWACCEL_FILLRECT or others.
+>> > 
+>> > Signed-off-by: Helge Deller <deller@gmx.de>
+>> > Cc: stable@vger.kernel.org # v5.16
+>> 
+>> Why just 5.16?  This commit came in on 5.11 and was backported to
+>> 5.10.5.
+>> 
+>> As for "why", I think there was a number of private bugs that were
+>> reported in this code, which is why it was removed.  I do not think it
+>> can be safely added back in without addressing them first.  Let me go
+>> dig through my email to see if I can find them...
+>
+> Ah, no, that was just the soft scrollback code I was thinking of, which
+> was a different revert and is still gone, thankfully :)
+>
+> This one was just removed because Daniel noticed that only 3 drivers
+> used this (nouveau, omapdrm, and gma600), so this shouldn't have caused
+> any regressions in any other drivers like you are reporting here.
+
+I'm counting more than 3 drivers using this. I think one of the reasons
+why it was reverted was that no one is actively maintaining fbdev. With
+Helge now volunteering i don't see a reason why it should stay reverted.
+If there are issues coming up i'm pretty sure Helge would care, and i
+would probably also take a look.
+
+/Sven

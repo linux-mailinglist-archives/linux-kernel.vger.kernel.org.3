@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 214EC493759
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0007C493765
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352817AbiASJce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234544AbiASJcc (ORCPT
+        id S1352419AbiASJds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:33:48 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:38698 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235918AbiASJdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:32:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A2DC061574;
-        Wed, 19 Jan 2022 01:32:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y8LC3526/NOrnrZyFGRxwpREBuQN7kB9aPXpSl2xqp4=; b=XgGAPCv92Hm4F7nWhu4k+sK6u5
-        P/H+DUbzC1DugDqnAN/MySFch/GTyD07+hM7JAZRXRmp78jf9WeiQFISEGc582LNbd8laUizIONEb
-        3TJmzae/14L2QOhdj9JvHW6FQTYtVTGqVFB+qbEjSsM2t905RL7GaNPvYSw38b+2mLfMVJla5buBJ
-        Azms7XCgQD1jjyIDVuMPCWXSHyEMO6od8/ypRGUQrD3QRy7wWIozpgDDwzzGI1gmjyZhex8Z/AO0V
-        fndt8mKkfAvZGFAOWE22qEbjrpjybxsmJo9Qoi5bwI+G0sUbZ8NQnPjYiVHfI7uhswaM6NBuvUCFt
-        H7M+x1fQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nA7K3-0021Bn-Ov; Wed, 19 Jan 2022 09:32:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F008D300222;
-        Wed, 19 Jan 2022 10:32:05 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D3336200CA459; Wed, 19 Jan 2022 10:32:05 +0100 (CET)
-Date:   Wed, 19 Jan 2022 10:32:05 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     mingo@redhat.com, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/fair: Fix fault in reweight_entity
-Message-ID: <YefalbN+ApgkQ6zn@hirez.programming.kicks-ass.net>
-References: <20220119012417.299060-1-tadeusz.struk@linaro.org>
+        Wed, 19 Jan 2022 04:33:37 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20J3l3fW008034;
+        Wed, 19 Jan 2022 10:33:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=+ehtLtX70tce80lzBmhHxiTVMfeIYIulAFgG6k5Hb1Y=;
+ b=Bd2rZYNTXDa3wfl79ZYAhTWvOwrZNIlvzImgiAU6ZHTZKcLxA4pECjMdBhJjTf+bQieC
+ rqJY73L487mZKjnNUXAGHGssDEMR391eSQajKdX+7Wif9DsesnU9OmKdXhRJfZS1++Mb
+ dbBrjr2RzdOce095s6sXyE4oMkWBJOPI8RQjFUXTiJUDdPrr4Z6BuSxQooK/7aU7mVAK
+ 7jWuU5wB55YdCIYLDCpk5NCSsO+61td+dluozbEbEuYy9EhV8nQ5yNo3MUr1uUaO7fpM
+ 9hYk3wSNWpQa8PTRIo6TGLdFyjsLCw6OcPwXUeIbFjb4Gf+9tz6oBox3z+6zpsiQS7Xm hg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dnsd0e3j6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 10:33:15 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 78A9310002A;
+        Wed, 19 Jan 2022 10:33:14 +0100 (CET)
+Received: from Webmail-eu.st.com (gpxdag2node5.st.com [10.75.127.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 70E3220ED10;
+        Wed, 19 Jan 2022 10:33:14 +0100 (CET)
+Received: from localhost (10.75.127.48) by GPXDAG2NODE5.st.com (10.75.127.69)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 19 Jan 2022 10:33:13
+ +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <broonie@kernel.org>, <amelie.delaunay@foss.st.com>
+CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <alain.volmat@foss.st.com>
+Subject: [PATCH 0/2] spi: stm32: comments & SIMPLEX_RX fixes
+Date:   Wed, 19 Jan 2022 10:32:43 +0100
+Message-ID: <20220119093245.624878-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119012417.299060-1-tadeusz.struk@linaro.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To GPXDAG2NODE5.st.com
+ (10.75.127.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_06,2022-01-18_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 05:24:17PM -0800, Tadeusz Struk wrote:
-> Syzbot found a GPF in reweight_entity. This has been bisected to commit
-> c85c6fadbef0 ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+This series contains 2 fixes within the spi-stm32.c driver.  One is
+removing comments regarding struct variables that do not exist and the
+second one correct a previous STM32F4 related commit for SIMPLEX_RX which
+happens to break SIMPLEX_RX for H7 since it enforces MUST_TX flags.
 
-That's a stable commit, the real commit is 4ef0c5c6b5ba1f38f0ea1cedad0cad722f00c14a
+Alain Volmat (2):
+  spi: stm32: remove inexistant variables in struct stm32_spi_cfg
+    comment
+  spi: stm32: make SPI_MASTER_MUST_TX flags only specific to STM32F4
 
-> Looks like after this change there is a time window, when
-> task_struct->se.cfs_rq can be NULL. This can be exploited to trigger
-> null-ptr-deref by calling setpriority on that task.
+ drivers/spi/spi-stm32.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Looks like isn't good enough, either there is, in which case you explain
-the window, or there isn't in which case what are we doing here?
+-- 
+2.25.1
 

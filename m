@@ -2,235 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9D5493DFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089C0493E05
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356091AbiASQHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356084AbiASQHk (ORCPT
+        id S1356039AbiASQLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:11:38 -0500
+Received: from mail-oo1-f44.google.com ([209.85.161.44]:45687 "EHLO
+        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242993AbiASQLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:07:40 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2FDC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:07:40 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p27so11401833lfa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:07:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eswjr5Bz87q3EsUt/pv2Kdh92llEv1bESkAKh+3EVxk=;
-        b=Sb2vg2NB+/JisRX3kJhYIJb5Fh0ngSUP9AG6DUTYmba56HfzZNt7U9aeGH1nyljvBo
-         EGY9uRtf14qJ0jwWX6W34mY21rDYdhbPLco4rmeN9cpXCJJVt0qqphM8lLu+c9lpeNwT
-         R7209spplluAwiNIYY7IlPlSTrt0O/mM+h4EnY0dlYnDHO+XO255fE6dOGXXDXALwbDD
-         eBZtNKPN+440DgOj1KlJpkePWKzL+WSRxIX5ujBY8/b9nrXXAm/KtzxO6TdsBGLb56Je
-         X0tzhJfPgLXgNDfKNb6EOfddDZ+rbG1hT+kq4gKdZ2KuFAmKs601di1Z6wp9dgm62dlp
-         v7vg==
+        Wed, 19 Jan 2022 11:11:37 -0500
+Received: by mail-oo1-f44.google.com with SMTP id s13-20020a4aa38d000000b002e28c5100cbso865880ool.12;
+        Wed, 19 Jan 2022 08:11:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eswjr5Bz87q3EsUt/pv2Kdh92llEv1bESkAKh+3EVxk=;
-        b=Ec024lsj9jVAjPCIej6jytAis8bQmmevyZrzKecc1Yeu+vRGJwrwK0RanMgRQTDR2g
-         cnEDQJeCklRIo/s8fy2X2uSfUzr/ig3RI8+Q3UkggMpqmMjFNVH9UBz3zzMYvymGRH8O
-         QvH3EnJWuduOWtlI9GV/4g66LcxAIVgdoklCtmn8kLqutPvIFF2hcA2ypMUUVJJF4d1W
-         2ptyzEUUaGDSAcb1DYU9HNR4fLBw4idhReNwoxmBV7JXHeKdYYtv9qPT3kbxoLB0Rc8V
-         laAFzV6Oadq5fAFBYMSjQeEP7rXu0r/OpmPPgUsn+EKwLmuNet+Yrw5fjo/hN/QxQ9Xt
-         oa/w==
-X-Gm-Message-State: AOAM530NpwWOaxpZhRUiZ4/+aA0TNc8k7Lc90t57EW7OueM7d6NYkS+c
-        3VJ7464e/bovlRXWhxidJMCnWQE2AhXi6aEm
-X-Google-Smtp-Source: ABdhPJxVUOK7kQDfguFieQID5Ft6in9D6xJGPrqJpodfUcX0pTCrZ9g+TkuO3JrpCPxJ3Ns7n1+Ueg==
-X-Received: by 2002:a05:6512:3c85:: with SMTP id h5mr26712466lfv.273.1642608458617;
-        Wed, 19 Jan 2022 08:07:38 -0800 (PST)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id a1sm6783ljn.54.2022.01.19.08.07.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qeGs2znfOYUJDV20djJhQbgb6BR7nof7Sr6XBdv7Rks=;
+        b=zOkz3Zd1W3qu5Yz/cOCNiaiE0Stm26pM4ESpuPaCHrxjO9lZ47kEQIS/7nOY638F0L
+         IAp4kTuh7wxjgdbLgOXzsbApB5Y78bKzQcHjZ03cGSS//Hcq/P8nVKsYYIDxxgwMvd9l
+         0btxpPAV+V/J8sgZIXTvCo7NiGtMjOcIx1bq9zctq+0bnkxfeU7Vf+95P8DZzPWXV/5q
+         iZPt7O5dp1VdOECMOcdu1FTeR5uQ119QuIr5vg2anVKzDJTyVkO8l5dv1wFVT3r4lStC
+         JU6AgvxMMzT6YpUtxNOpMUTMVWgIWps8Suf1rYHxxj7pUNvAeIhhHXG39I7n/REiXzDh
+         IF4g==
+X-Gm-Message-State: AOAM532K05bH3H8Z5vh3fdNWIDx+9IvA6T3UOmcqLzO24eTcoM3U2xlD
+        Dg2fnNtzKslyTzsCC230Lg==
+X-Google-Smtp-Source: ABdhPJzI0d/xiZlJQGmn9s9YeQRGKDW0dZ/Xm2jNe7Av5k8UsWH1q5GQDLviqTYIHwryxVeRqKq4Ow==
+X-Received: by 2002:a4a:d116:: with SMTP id k22mr18660045oor.80.1642608696519;
+        Wed, 19 Jan 2022 08:11:36 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q15sm137490oiv.6.2022.01.19.08.11.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 08:07:37 -0800 (PST)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Marc Zyngier <maz@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH/RFC] gpiolib: create irq_domain hierarchy bottom if possible
-Date:   Wed, 19 Jan 2022 19:07:15 +0300
-Message-Id: <20220119160715.650535-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 19 Jan 2022 08:11:35 -0800 (PST)
+Received: (nullmailer pid 3681612 invoked by uid 1000);
+        Wed, 19 Jan 2022 16:11:34 -0000
+Date:   Wed, 19 Jan 2022 10:11:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Marek Belisko <marek@goldelico.com>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        devicetree@vger.kernel.org, Jonathan Bakker <xc-racer2@live.ca>,
+        David Airlie <airlied@linux.ie>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] dt-bindings: display: Add SPI peripheral schema to SPI
+ based displays
+Message-ID: <Yeg4NoFqgPIhbZov@robh.at.kernel.org>
+References: <20211221125209.1195932-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221125209.1195932-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, gpiolib creates irq_domain compatible with hierarchical API
-only when interrupts provided by gpiochip lay on top of existing
-hierarchy. Otherwise, legacy API is used.
+On Tue, 21 Dec 2021 08:52:09 -0400, Rob Herring wrote:
+> With 'unevaluatedProperties' support enabled, several SPI based display
+> binding examples have warnings:
+> 
+> Documentation/devicetree/bindings/display/panel/samsung,ld9040.example.dt.yaml: lcd@0: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
+> Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 'spi-3wire' were unexpected)
+> Documentation/devicetree/bindings/display/panel/ilitek,ili9322.example.dt.yaml: display@0: Unevaluated properties are not allowed ('reg' was unexpected)
+> Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.example.dt.yaml: display@0: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
+> Documentation/devicetree/bindings/display/panel/abt,y030xx067a.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
+> Documentation/devicetree/bindings/display/panel/sony,acx565akm.example.dt.yaml: panel@2: Unevaluated properties are not allowed ('spi-max-frequency', 'reg' were unexpected)
+> Documentation/devicetree/bindings/display/panel/tpo,td.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
+> Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('reg', 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
+> Documentation/devicetree/bindings/display/panel/innolux,ej030na.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
+> Documentation/devicetree/bindings/display/panel/sitronix,st7789v.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
+> 
+> Fix all of these by adding a reference to spi-peripheral-props.yaml.
+> With this, the description that the binding must follow
+> spi-controller.yaml is both a bit out of date and redundant, so remove
+> it.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> This is dependent on spi-peripheral-props.yaml landing in 5.17-rc1.
+> ---
+>  .../devicetree/bindings/display/panel/abt,y030xx067a.yaml  | 5 +----
+>  .../devicetree/bindings/display/panel/ilitek,ili9322.yaml  | 4 +---
+>  .../devicetree/bindings/display/panel/innolux,ej030na.yaml | 5 +----
+>  .../bindings/display/panel/kingdisplay,kd035g6-54nt.yaml   | 5 +----
+>  .../bindings/display/panel/lgphilips,lb035q02.yaml         | 5 +----
+>  .../devicetree/bindings/display/panel/samsung,ld9040.yaml  | 7 +------
+>  .../devicetree/bindings/display/panel/samsung,s6e63m0.yaml | 1 +
+>  .../bindings/display/panel/sitronix,st7789v.yaml           | 5 +----
+>  .../devicetree/bindings/display/panel/sony,acx565akm.yaml  | 5 +----
+>  .../devicetree/bindings/display/panel/tpo,td.yaml          | 5 +----
+>  10 files changed, 10 insertions(+), 37 deletions(-)
+> 
 
-With this patch, as soon as
-- irq_domain hierarchical API is enabled in the kernel config,
-- chip driver does not request preallocated interrupt numbers,
-- chip driver does not provide it's own irq_domain_ops,
-- chip driver provides fwnode, either explicitly or via it's struct
-  device,
-irq_domain created by gpiolib will use hierarchical API even without
-parent.
-
-This allows other irqchips to lay on top of this irq_domain.
-Example target use case is irq_inverter [1].
-
-[1] https://lore.kernel.org/lkml/87fsqbznc2.wl-maz@kernel.org/
-
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
----
- drivers/gpio/gpiolib.c | 99 +++++++++++++++++++++++++-----------------
- 1 file changed, 60 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index abfbf546d159..db8eee07a8d7 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1095,14 +1095,6 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
- 
- 	chip_dbg(gc, "allocate IRQ %d, hwirq %lu\n", irq,  hwirq);
- 
--	ret = girq->child_to_parent_hwirq(gc, hwirq, type,
--					  &parent_hwirq, &parent_type);
--	if (ret) {
--		chip_err(gc, "can't look up hwirq %lu\n", hwirq);
--		return ret;
--	}
--	chip_dbg(gc, "found parent hwirq %u\n", parent_hwirq);
--
- 	/*
- 	 * We set handle_bad_irq because the .set_type() should
- 	 * always be invoked and set the right type of handler.
-@@ -1116,27 +1108,40 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
- 			    NULL, NULL);
- 	irq_set_probe(irq);
- 
--	/* This parent only handles asserted level IRQs */
--	parent_arg = girq->populate_parent_alloc_arg(gc, parent_hwirq, parent_type);
--	if (!parent_arg)
--		return -ENOMEM;
--
--	chip_dbg(gc, "alloc_irqs_parent for %d parent hwirq %d\n",
--		  irq, parent_hwirq);
- 	irq_set_lockdep_class(irq, gc->irq.lock_key, gc->irq.request_key);
--	ret = irq_domain_alloc_irqs_parent(d, irq, 1, parent_arg);
--	/*
--	 * If the parent irqdomain is msi, the interrupts have already
--	 * been allocated, so the EEXIST is good.
--	 */
--	if (irq_domain_is_msi(d->parent) && (ret == -EEXIST))
--		ret = 0;
--	if (ret)
--		chip_err(gc,
--			 "failed to allocate parent hwirq %d for hwirq %lu\n",
--			 parent_hwirq, hwirq);
- 
--	kfree(parent_arg);
-+	if (d->parent) {
-+		ret = girq->child_to_parent_hwirq(gc, hwirq, type,
-+						  &parent_hwirq, &parent_type);
-+		if (ret) {
-+			chip_err(gc, "can't look up hwirq %lu\n", hwirq);
-+			return ret;
-+		}
-+		chip_dbg(gc, "found parent hwirq %u\n", parent_hwirq);
-+
-+		/* This parent only handles asserted level IRQs */
-+		parent_arg = girq->populate_parent_alloc_arg(gc, parent_hwirq,
-+							     parent_type);
-+		if (!parent_arg)
-+			return -ENOMEM;
-+
-+		chip_dbg(gc, "alloc_irqs_parent for %d parent hwirq %d\n",
-+			  irq, parent_hwirq);
-+		ret = irq_domain_alloc_irqs_parent(d, irq, 1, parent_arg);
-+		/*
-+		 * If the parent irqdomain is msi, the interrupts have already
-+		 * been allocated, so the EEXIST is good.
-+		 */
-+		if (irq_domain_is_msi(d->parent) && (ret == -EEXIST))
-+			ret = 0;
-+		if (ret)
-+			chip_err(gc,
-+				 "failed to allocate parent hwirq %d for hwirq %lu\n",
-+				 parent_hwirq, hwirq);
-+
-+		kfree(parent_arg);
-+	}
-+
- 	return ret;
- }
- 
-@@ -1164,8 +1169,8 @@ static void gpiochip_hierarchy_setup_domain_ops(struct irq_domain_ops *ops)
- 
- static int gpiochip_hierarchy_add_domain(struct gpio_chip *gc)
- {
--	if (!gc->irq.child_to_parent_hwirq ||
--	    !gc->irq.fwnode) {
-+	if (gc->irq.parent_domain &&
-+	    (!gc->irq.child_to_parent_hwirq || !gc->irq.fwnode)) {
- 		chip_err(gc, "missing irqdomain vital data\n");
- 		return -EINVAL;
- 	}
-@@ -1179,25 +1184,41 @@ static int gpiochip_hierarchy_add_domain(struct gpio_chip *gc)
- 
- 	gpiochip_hierarchy_setup_domain_ops(&gc->irq.child_irq_domain_ops);
- 
--	gc->irq.domain = irq_domain_create_hierarchy(
--		gc->irq.parent_domain,
--		0,
--		gc->ngpio,
--		gc->irq.fwnode,
--		&gc->irq.child_irq_domain_ops,
--		gc);
-+	if (gc->irq.parent_domain) {
-+		gc->irq.domain = irq_domain_create_hierarchy(
-+			gc->irq.parent_domain,
-+			0,
-+			gc->ngpio,
-+			gc->irq.fwnode,
-+			&gc->irq.child_irq_domain_ops,
-+			gc);
-+
-+		if (gc->irq.domain)
-+			gpiochip_set_hierarchical_irqchip(gc, gc->irq.chip);
-+	} else {
-+		gc->irq.domain = irq_domain_create_linear(
-+			gc->irq.fwnode ?: dev_fwnode(&gc->gpiodev->dev),
-+			gc->ngpio,
-+			&gc->irq.child_irq_domain_ops,
-+			gc);
-+	}
- 
- 	if (!gc->irq.domain)
- 		return -ENOMEM;
- 
--	gpiochip_set_hierarchical_irqchip(gc, gc->irq.chip);
--
- 	return 0;
- }
- 
- static bool gpiochip_hierarchy_is_hierarchical(struct gpio_chip *gc)
- {
--	return !!gc->irq.parent_domain;
-+	if (gc->irq.parent_domain)
-+		return true;	/* will add to existing hierarchy */
-+
-+	if (!gc->irq.first && !gc->irq.domain_ops &&
-+	    (gc->irq.fwnode || dev_fwnode(&gc->gpiodev->dev)))
-+		return true;	/* will create hierarchy bottom */
-+
-+	return false;
- }
- 
- void *gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *gc,
--- 
-2.30.2
-
+Applied, thanks!

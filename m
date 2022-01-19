@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF81249362A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D4649362F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245478AbiASIWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 03:22:00 -0500
-Received: from mail-vk1-f182.google.com ([209.85.221.182]:46891 "EHLO
-        mail-vk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbiASIV7 (ORCPT
+        id S1347898AbiASIWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 03:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238265AbiASIWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 03:21:59 -0500
-Received: by mail-vk1-f182.google.com with SMTP id bj47so1009050vkb.13;
-        Wed, 19 Jan 2022 00:21:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mNEeF7mEICXaIClDfLKBUPzmMnomVxgHrUkxe4T3tSU=;
-        b=MOmghSv3i7vASpRlDPK61llOlZCr8Qbu+4sB3Kc1tE/MkOar+P/4f4NFAe4yPXDCvh
-         yV++LDpgsTQ+0UCCb/EOTwMsdyZiZJl9MnIv27CIkPmCDPeh19bIi7hDfkAhX9YrAUZe
-         l3GjXL1FCJdlPQPS0Q/pR+XjPc7Uq/sY9C5LdOjBwTy66TlgeuzDg7YFJOWTgVCsKHFj
-         sGN3PXvsifHYC9Pjfp7SVh6VVFbvjN3RlMhgYEimqrx0YlQLly8B9YQncw1tJw7Cdxj6
-         gN4+/9awm9Bc/UG4KNeqU8MzvkPQEiOvTUguEvMmWZMwFKlJFW9nF2fXg2OtB8B93Pw3
-         lsAA==
-X-Gm-Message-State: AOAM532ThnmRqGnOsLQoxIbOGezMVgGQZ9XlZ70ywUhGDwms8CvcGjyq
-        5uB8djimPZGlsMoiXDWARptU4tK1gMoCOA==
-X-Google-Smtp-Source: ABdhPJxWFCNwzFTUlDQgQ0hDiPB59InqaAck4xuPxwrrYd0/b/btmSUFzFq1xwnVTqcD8+cXYdF4Nw==
-X-Received: by 2002:a05:6122:508:: with SMTP id x8mr5988706vko.14.1642580518260;
-        Wed, 19 Jan 2022 00:21:58 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id u124sm4213260vkg.3.2022.01.19.00.21.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 00:21:57 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id r15so3113666uao.3;
-        Wed, 19 Jan 2022 00:21:57 -0800 (PST)
-X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr11184748vsu.5.1642580517250;
- Wed, 19 Jan 2022 00:21:57 -0800 (PST)
+        Wed, 19 Jan 2022 03:22:38 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD8EC061574;
+        Wed, 19 Jan 2022 00:22:38 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 3E8C21F44337
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642580556;
+        bh=QAiGrnVKHtXCjw/54yKAb5LW6GftwIG4hgUhexVMISE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=JohVKnqdhrmr88zSpbdIWeVwW3aFTlZUvzKGmFDgndI5DqkPMsRlz8Z96jPFtiiX0
+         /VEFcHN1Eot2dnhZuuSiUQllmiUfT5+mkD2gM9mGlWWnt1S2TWLtumObED/Mhq+GZC
+         drcqHoTPrLauJseDOSsl5GxyC9Z+5+eERpBMq8Bd8JUkW0mJtwjMu3/2RgHxvwIEq7
+         pRFVMWddEY5sgUzcHQEEhqNbl+1xFwhtiaRVInPGfFIsYEl9C64wAmYfBTtq3Y70q4
+         J4Nie9+0qLfZyJTtQbBjtMgMjJgl+Nejt2uzZGLnRgV9etJ+3P7+6JzE2pyXUQcM67
+         8uQ3p0Sofitbg==
+Message-ID: <ccae1b7a-4888-ca86-9610-89fd4f3d714d@collabora.com>
+Date:   Wed, 19 Jan 2022 13:22:26 +0500
 MIME-Version: 1.0
-References: <20220119000506.1299843-1-laurent@vivier.eu> <20220119000506.1299843-3-laurent@vivier.eu>
-In-Reply-To: <20220119000506.1299843-3-laurent@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 19 Jan 2022 09:21:46 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
-Message-ID: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
-Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        John Stultz <john.stultz@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com
+Subject: Re: [PATCH 08/10] selftests: mptcp: Add the uapi headers include
+ variable
+Content-Language: en-US
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:LANDLOCK SECURITY MODULE" 
+        <linux-security-module@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>
+References: <20220118112909.1885705-1-usama.anjum@collabora.com>
+ <20220118112909.1885705-9-usama.anjum@collabora.com>
+ <4d60a170-53d7-3f9f-fa48-34d6c4020346@tessares.net>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <4d60a170-53d7-3f9f-fa48-34d6c4020346@tessares.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hi Matthieu,
 
-On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> The goldfish device always uses the same endianness as the architecture
-> using it:
-> https://android.googlesource.com/platform/external/qemu/+/refs/heads/emu-master-dev/hw/timer/goldfish_timer.c#177
->
-> On a big-endian machine, the device is also big-endian, on a
-> little-endian machine the device is little-endian.
->
-> So we need to use the right accessor to read/write values to the goldfish
-> registers: ioread32()/iowrite32() on a little-endian machine,
-> ioread32be()/iowrite32be() on a big-endian machine.
->
-> This patch introduces goldfish_ioread32()/goldfish_iowrite32() to allow
-> architectures to define them accordlingly to their endianness.
->
-> We define them by default in asm-generic/io.h to access the device using
-> little-endian access as it is the current use, but we will be able to define
-> big-endian version when new architectures will use them.
->
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+Thank you for putting details below.
 
-Thanks for your patch!
+On 1/19/22 2:47 AM, Matthieu Baerts wrote:
+> Hi Muhammad,
+> 
+> On 18/01/2022 12:29, Muhammad Usama Anjum wrote:
+>> Out of tree build of this test fails if relative path of the output
+>> directory is specified. Remove the un-needed include paths and use
+>> KHDR_INCLUDES to correctly reach the headers.
+> 
+> Thank you for looking at that!
+> 
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  tools/testing/selftests/net/mptcp/Makefile | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+>> index 0356c4501c99..fed6866d3b73 100644
+>> --- a/tools/testing/selftests/net/mptcp/Makefile
+>> +++ b/tools/testing/selftests/net/mptcp/Makefile
+>> @@ -1,9 +1,8 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  
+>> -top_srcdir = ../../../../..
+> 
+> Removing this line breaks our CI validating MPTCP selftests. That's
+> because this "top_srcdir" variable is needed in the "lib.mk" file which
+> is included at the end of this Makefile.
+> 
+> But that's maybe a misuse from our side. Indeed to avoid compiling
+> binaries and more from the VM, our CI does that as a preparation job
+> before starting the VM and run MPTCP selftests:
+> 
+>   $ make O=(...) INSTALL_HDR_PATH=(...)/kselftest/usr headers_install
+>   $ make O=(...) -C tools/testing/selftests/net/mptcp
+> 
+> From the VM, we re-use the same source directory and we can start
+> individual tests without having to compile anything else:
+> 
+>   $ cd tools/testing/selftests/net/mptcp
+>   $ ./mptcp_connect.sh
+> 
+> We want to do that because some scripts are launched multiple times with
+> different parameters.
+> 
+> With your modifications, we can drop the headers_install instruction but
+> we need to pass new parameters to the last 'make' command:
+> 
+>   $ make O=(...) top_srcdir=../../../../.. \
+>                  KHDR_INCLUDES=-I(...)/usr/include \
+>          -C tools/testing/selftests/net/mptcp
+> 
+> Or is there a better way to do that?
+> Can we leave the definition of "top_srcdir" like it was or did we miss
+> something else?
+> 
+It seems like I've missed this use cases where people can build only one
+individual test. It is not my intention to break individual test builds.
+I shouldn't be fixing one thing while breaking something else. I'll
+update these patches such that individual tests are also build-able. For
+this to happen, I'll just add $(KHDR_INCLUDES) to the build flags while
+leaving everything else intact. I'll send a V2.
 
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -906,6 +906,13 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
->  #endif /* CONFIG_64BIT */
->  #endif /* CONFIG_GENERIC_IOMAP */
->
-> +#ifndef goldfish_ioread32
-> +#define goldfish_ioread32 ioread32
-> +#endif
-> +#ifndef goldfish_iowrite32
-> +#define goldfish_iowrite32 iowrite32
-> +#endif
-> +
->  #ifdef __KERNEL__
-
-I've just discovered include/linux/goldfish.h, which already has gf_*()
-accessors for 64-bit, so it'd make sense to move the above there,
-and adjust the names.
-
-Arnd: note that the existing ones do use __raw_writel().
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>>  KSFT_KHDR_INSTALL := 1
+>>  
+>> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g  -I$(top_srcdir)/usr/include
+>> +CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g $(KHDR_INCLUDES)
+>>  
+>>  TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
+>>  	      simult_flows.sh mptcp_sockopt.sh
+> 
+> Note: I see there is a very long recipients list. If my issue is not
+> directly due to your modifications, we can probably continue the
+> discussion with a restricted audience.
+> 
+> Cheers,
+> Matt

@@ -2,110 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E44704934E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F9A4934E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351729AbiASGRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:17:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:47708 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234904AbiASGRT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:17:19 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4898FD6E;
-        Tue, 18 Jan 2022 22:17:19 -0800 (PST)
-Received: from [10.163.74.69] (unknown [10.163.74.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F7143F73D;
-        Tue, 18 Jan 2022 22:17:14 -0800 (PST)
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-To:     Matthew Wilcox <willy@infradead.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Uladzislau Rezki <urezki@gmail.com>
-References: <20220118235244.540103-1-yury.norov@gmail.com>
- <Yedgj+Lo2eru8197@casper.infradead.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <cfe4c63e-57c0-2a9d-c3e9-959bc77b87c6@arm.com>
-Date:   Wed, 19 Jan 2022 11:47:18 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1351742AbiASGST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234904AbiASGSR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 01:18:17 -0500
+Received: from mx.msync.work (mx.msync.work [IPv6:2a01:4f9:2b:2dc2::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B37C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 22:18:16 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A14D1268580;
+        Wed, 19 Jan 2022 06:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
+        t=1642573094; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding; bh=wRM67EIU2AyRE92xEs7W2+/TNxWTGS27ENje3MjFFyM=;
+        b=SHG3SO39hzxluPIXzsFqgh6Pxg0uZrf2Vp+6yikjAFN3gBEz4vELZCr/MAEZ+JlhsRD981
+        Hgj8qjU9ZjJLSnfbJuseVig5iuk1ubcdwm94UTu01ewTJGFnbgjpX8NzaaAV5iecKNpDtq
+        KzV9o2eiIoCvAHm6eohyK9rRDgOareDQCQve/ir95R6Y6jP9XBTmkXXgv4yQPDxmpbvxAt
+        qStOraNiqUQX6d9C3/Hgmt6gyXvmg6vcNif8GAq5CQvl9/aRfs0zCXgEKiL1k8tMrq4OJM
+        PdQT1vTpsGECvGDJOq1lPzneVM35MtDzZyoI9ue+eF8xqkPF4vyqIlYOxTt72w==
+From:   Vyacheslav Bocharov <adeep@lexina.in>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] Bluetooth: hci_h5: btrtl: Add support for RTL8822CS hci_ver 0x08
+Date:   Wed, 19 Jan 2022 09:17:22 +0300
+Message-Id: <20220119061723.2862683-1-adeep@lexina.in>
 MIME-Version: 1.0
-In-Reply-To: <Yedgj+Lo2eru8197@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add a variation of RTL8822CS with hci_ver = 0x08. This is fully similar to RTL8822CS with hci_ver = 0x0a
+observed on the Tanix TX6 Android set-top box and JetHome JetHub H1.
 
+The controller does not always start when the system starts up, so we do a forced reset via gpio during initialization.
 
-On 1/19/22 6:21 AM, Matthew Wilcox wrote:
-> On Tue, Jan 18, 2022 at 03:52:44PM -0800, Yury Norov wrote:
->> vmap() takes struct page *pages as one of arguments, and user may provide
->> an invalid pointer which would lead to DABT at address translation later.
-> 
-> Could we spell out 'DABT'?  Presumably that's an ARM-specific thing.
-> Just like we don't say #PF for Intel page faults, I think this is
-> probably a 'data abort'?
+Changes from v3:
+- add has_msft_ext option
+Changes from v2:
+- align the patches for bluetooth-next
+Changes from v1:
+- remove Signed-off-by chbgdn <chbgdn@gmail.com> as not reachable
 
-Right, it is data abort.
+Vyacheslav Bocharov (2):
+  Bluetooth: btrtl: Add support for RTL8822C hci_ver 0x08
+  Bluetooth: hci_h5: Add power reset via gpio in h5_btrtl_open
 
-> 
->> Currently, kernel checks the pages against NULL. In my case, however, the
->> address was not NULL, and was big enough so that the hardware generated
->> Address Size Abort on arm64.
+ drivers/bluetooth/btrtl.c  | 8 ++++++++
+ drivers/bluetooth/hci_h5.c | 5 +++++
+ 2 files changed, 13 insertions(+)
 
-Could you please provide the actual abort stack here with details.
+-- 
+2.30.2
 
->>
->> Interestingly, this abort happens even if copy_from_kernel_nofault() is
->> used, which is quite inconvenient for debugging purposes. 
->>
->> This patch adds a pfn_valid() check into vmap() path, so that invalid
->> mapping will not be created.
->>
->> RFC: https://lkml.org/lkml/2022/1/18/815
->> v1: use pfn_valid() instead of adding an arch-specific
->>     arch_vmap_page_valid(). Thanks to Matthew Wilcox for the hint.
-
-This should be after the '---' below.
-
->>
->> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> 
-> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> 
->> ---
->>  mm/vmalloc.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->> index d2a00ad4e1dd..a4134ee56b10 100644
->> --- a/mm/vmalloc.c
->> +++ b/mm/vmalloc.c
->> @@ -477,6 +477,8 @@ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
->>  			return -EBUSY;
->>  		if (WARN_ON(!page))
->>  			return -ENOMEM;
->> +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
->> +			return -EINVAL;
->>  		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
->>  		(*nr)++;
->>  	} while (pte++, addr += PAGE_SIZE, addr != end);
->> -- 
->> 2.30.2
->>
-
-Why should not this just scan over the entire user provided struct page
-array and make sure that all pages there in are valid via above method,
-but in vmap() itself before calling vmap_pages_range(). Because seems
-like a single invalid page detected in vmap_pages_pte_range() will
-anyways abort the entire vmap(). This will also enable us to drop the
-existing NULL check above.

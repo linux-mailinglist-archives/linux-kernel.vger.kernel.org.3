@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA58493AEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DAB493AF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354717AbiASNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236079AbiASNRc (ORCPT
+        id S1354738AbiASNRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:17:52 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54216 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236079AbiASNRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:17:32 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6937DC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:17:32 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id d4so2248407qtw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:17:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uLFGZqyJySmbyBQ4sjesJ1t4m/84/5hhnfPmzo+DBaE=;
-        b=HQt2tqp6zGYhfblEra0zM0+FR6k6EeUJiZDEUZWXH2TZNLdPWXYj3HNzafScmi92E0
-         6ZwiRGFw8bnL8Fu6BT7PEjlwuEMVONf2ofHY/L5Zm3cdachcT8xjhh4icQvmmpFmQXkO
-         Alu2+h+b2rBAnr1viwICoF32r6L5GU4VjQtMYktCOVD5Bp8Pud77VHQvOJvANaKfk3Ej
-         /f0v9Q3eGOB1k3u+jaPh+UYk8XSzOZt08O9+1HIRfDAngLpd1S1IWB9zV/4jhRmeYK0C
-         /t7DktEQ0t/YYeDUjdVlErCHCMRg6ToT8TpX9gu4KqI8twNLG6WN2JfDFVR6iS1DUSuK
-         C6lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uLFGZqyJySmbyBQ4sjesJ1t4m/84/5hhnfPmzo+DBaE=;
-        b=KQBrncKxpWgLBBxmhjXL9KRSB1gprNHv9J1ygJrS8i5G1uuvxSw8+5+Llxikxqt5+9
-         GYn16EYTyJG9Xmqlghv15SM7xwdJ976H9VT1qaoFexXS30VxCePajij6Ox3QAHHehB/D
-         92X++NTz//ZKKucXUVlmO7QfrexZDMpJVO/vDiRoK8226ytv7gbTvBfIj4qCK/RIs/Py
-         2bu0b77Y3AgBZwoYNHJz14Rch0AftPPMEoCR5lacPwksJ+wOAJs1lQUNhRupUX2TMDQy
-         /pfWtbTvLpGfHYhnvDDgiqH0u++mKglS971v3si9FFoMNzQKQ4pSHGABR2nPLguLMu4N
-         X9kA==
-X-Gm-Message-State: AOAM533BMSjY/rXmm2eugTyECPpA/hKJ8cDfQJDU3u+GeBVDOXrNvhz8
-        z+4HCXO7nqdxNdENcPUo+CRBYg==
-X-Google-Smtp-Source: ABdhPJw0y5MaVc+dgVB8CBigVZFZt3DgJA+Wkso3kEA+8IErd9EFFOFWXCTUIRdqKkU80gp5ZpjBBQ==
-X-Received: by 2002:ac8:5cd4:: with SMTP id s20mr18611650qta.299.1642598250063;
-        Wed, 19 Jan 2022 05:17:30 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id i14sm242296qko.18.2022.01.19.05.17.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 05:17:29 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nAAq8-001IVe-UU; Wed, 19 Jan 2022 09:17:28 -0400
-Date:   Wed, 19 Jan 2022 09:17:28 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Praveen Kannoju <praveen.kannoju@oracle.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
-        Rajesh Sivaramasubramaniom 
-        <rajesh.sivaramasubramaniom@oracle.com>
-Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
- asynchronous workers to flush the mr pool
-Message-ID: <20220119131728.GK8034@ziepe.ca>
-References: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
- <53D98F26-FC52-4F3E-9700-ED0312756785@oracle.com>
- <20220118191754.GG8034@ziepe.ca>
- <CEFD48B4-3360-4040-B41A-49B8046D28E8@oracle.com>
- <Yee2tMJBd4kC8axv@unreal>
- <PH0PR10MB5515E99CA5DF423BDEBB038E8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
- <20220119130450.GJ8034@ziepe.ca>
- <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+        Wed, 19 Jan 2022 08:17:51 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JDBbVu023669;
+        Wed, 19 Jan 2022 13:17:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qrKjuUZp1jlWDRxrOD22C+smX0Ri2Dq1Vk62uFD9g/c=;
+ b=OWzfYV3JMlVLcwLcFdOZbCD/+PUxjrZ5R2LUb5DShY+5PNK5sax06hLF4yZooJo3izcZ
+ IzuqZFiVf1fDytUUwHsfnuIEsGA0LqNQujsBXTP1VJlRZ3csI8IN8SQ7mz44sTSiAV1r
+ VSVWXh7i5PKfPlw2DfaeY+7V00SVoB14SD5iawI1wBm3x42X10Do0Zp4SAZ4zsXv7GJE
+ wgFBDoQQ5vB7AedEBD7dDBHmuKnk7XGVfAgWL1YY3SmzP4sDWUTPyMtGGEZeYg6zVMOp
+ jDAnI5tO0qwiISg0nahs2NI2PqSFVOwZz/UPj2dSl+idBsAa9hCF19Bpm08pCcTxPQ6e NA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpgwf3ef8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 13:17:50 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JDBJWU010009;
+        Wed, 19 Jan 2022 13:17:50 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpgwf3eeh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 13:17:50 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JD8DK7000494;
+        Wed, 19 Jan 2022 13:17:47 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 3dknw9m8kx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 13:17:47 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JDHhIi43188486
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 13:17:43 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2361A4051;
+        Wed, 19 Jan 2022 13:17:43 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AA0FA405B;
+        Wed, 19 Jan 2022 13:17:43 +0000 (GMT)
+Received: from [9.171.58.182] (unknown [9.171.58.182])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 13:17:43 +0000 (GMT)
+Message-ID: <39c529db-e7bd-c216-62b7-773a51d919b6@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 14:17:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 06/10] KVM: s390: Add vm IOCTL for key checked
+ guest absolute memory access
+Content-Language: en-US
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-7-scgl@linux.ibm.com>
+ <a3a143f8-8fd5-49bf-9b2b-2f7cb04732de@redhat.com>
+ <8d09dc2e-2d2d-e5f6-8cc7-eecfc94a17b2@linux.ibm.com>
+ <cd79f893-c711-1a60-47d6-7c392e02fc6a@redhat.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <cd79f893-c711-1a60-47d6-7c392e02fc6a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yvTMf-0c37rLRgbaF5TrBD3nRBdpeSOa
+X-Proofpoint-ORIG-GUID: j7bUy5w7TLbzcRNRXGAQcZe-G6khPu18
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 adultscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201190075
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 01:12:29PM +0000, Praveen Kannoju wrote:
+On 1/19/22 13:53, Thomas Huth wrote:
+> On 19/01/2022 13.46, Christian Borntraeger wrote:
+>>
+>>
+>> Am 19.01.22 um 12:52 schrieb Thomas Huth:
+>>> On 18/01/2022 10.52, Janis Schoetterl-Glausch wrote:
+>>>> Channel I/O honors storage keys and is performed on absolute memory.
+>>>> For I/O emulation user space therefore needs to be able to do key
+>>>> checked accesses.
+>>>
+>>> Can't we do the checking in userspace? We already have functions for handling the storage keys there (see hw/s390x/s390-skeys-kvm.c), so why can't we do the checking in QEMU?
+>>
+>> That would separate the key check from the memory operation. Potentially for a long time.
+>> Wenn we piggy back on access_guest_abs_with_key we use mvcos in the host and thus do the key check in lockstep with the keycheck which is the preferrable solution.
+> 
+> Ok, makes sense - Janis, could you please add this rationale to the patch description?
 
-> Yes, we are using the barriers. I was justifying the usage of
-> smp_rmb() and smp_wmb() over smp_load_acquire() and
-> smp_store_release() in the patch.
-
-You failed to justify it.
-
-Jason
+Will do.
+> 
+>  Thomas
+> 
 

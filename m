@@ -2,132 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E0A4942C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C144942CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357519AbiASWDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 17:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357511AbiASWDi (ORCPT
+        id S1343728AbiASWHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:07:55 -0500
+Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:56233 "EHLO
+        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236813AbiASWHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:03:38 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A487BC061574;
-        Wed, 19 Jan 2022 14:03:37 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id o64so3810925pjo.2;
-        Wed, 19 Jan 2022 14:03:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IOjldLrnWWwpwY+JkWf0ExE0MpMLGJQlI8NdiUeY93k=;
-        b=kSEl/U/1h+1dwvDi0hIgtKSfplmCWl9uNrp2KkVmOGqXTw3Qwmd1cnzjLT97tkOzj+
-         Zp2XNWdH8ZH0Ya8qZSIl4+za5S/JcIWOBvnThLOUlDkR0vZ+DSJmM4vVETBIO5uE1gB5
-         WemdUYctYV3UseKEp7Tur2cSdm6qMJR/ENUd02x3NghpHewgIS3fW7Ng3RgUzVkT6UiL
-         qHzack50wKSJWqqgHsznMtLdSJ4T9hRFlO+O4IPmfUdFN3ys1pUZR+7b8bMX7WWxFbwc
-         UpddAjlDPLcoO69i7cj091TwgLVJ7Eur5UCeH6ZAeXeWQheaSUj0OrTxObGS9/eEYCBZ
-         FxhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IOjldLrnWWwpwY+JkWf0ExE0MpMLGJQlI8NdiUeY93k=;
-        b=JVXz3FhZZ/FH39AZJVyI+ShTjejaQ1tygsSP6jaBuRpzHYmjdWbei8BNi37pCOFIhf
-         VIlJcJVGel3cxUq0HfiSQUNHBhqRenMJ0t9NGgYbLubzjTvw3TDxEPMYqrRNsgOo+ewq
-         HB0UU7HhgPzAzBcbkKjJ+JSRbL8g9jRmejtFa08Kzn28RnBg4Af6FaIAWB5zdqUQIKmW
-         cmB7PxpywPhEYmGhaGkiZCuoAw66bC2ZyzgfvMuPUn8LnqSCnYHnv18f9nPHm1M9BnR8
-         pGUuYDB+9I14QdMSspTcq31J353Ov7yvBSkP3bFOmwkxQv/EhgvwoHopzUTNDIO2EpPD
-         b65A==
-X-Gm-Message-State: AOAM531nk0w3rns3P2/+4DokcJSWQJDbMPGfVEIjXppbdXM7X+AUuXFs
-        XwjGGdwOgo8g+/vEQ9vt5tzLFf+8r3ILsI1vAPU=
-X-Google-Smtp-Source: ABdhPJzV1oAx/xoKU++dv1R8kUyf32CYmSuCtq2M5RRSdynsPZSmD55U0LG7xKsRNsiyyG6JEjOIsGEiHHaAgYSi7xw=
-X-Received: by 2002:a17:902:860c:b0:149:1017:25f0 with SMTP id
- f12-20020a170902860c00b00149101725f0mr34284326plo.116.1642629817114; Wed, 19
- Jan 2022 14:03:37 -0800 (PST)
+        Wed, 19 Jan 2022 17:07:53 -0500
+Received: from dread.disaster.area (pa49-179-45-11.pa.nsw.optusnet.com.au [49.179.45.11])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id CA2DB62B732;
+        Thu, 20 Jan 2022 09:07:49 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nAJ7L-001pwk-Vj; Thu, 20 Jan 2022 09:07:48 +1100
+Date:   Thu, 20 Jan 2022 09:07:47 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>
+Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
+Message-ID: <20220119220747.GF59729@dread.disaster.area>
+References: <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+ <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
+ <YeV+zseKGNqnSuKR@bfoster>
+ <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
+ <20220118030041.GB59729@dread.disaster.area>
+ <YeYxOadA0HgYfBjt@zeniv-ca.linux.org.uk>
+ <20220118041253.GC59729@dread.disaster.area>
+ <YeZW9s7x2uCBfNJD@zeniv-ca.linux.org.uk>
+ <20220118232547.GD59729@dread.disaster.area>
+ <YegbVhxSNtQFlSCr@bfoster>
 MIME-Version: 1.0
-References: <20220113070245.791577-1-imagedong@tencent.com>
-In-Reply-To: <20220113070245.791577-1-imagedong@tencent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 19 Jan 2022 14:03:26 -0800
-Message-ID: <CAADnVQKNCqUzPJAjSHMFr-Ewwtv5Cs3UCQpthaKDTd+YNRWqqg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct bpf_sock'
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        mengensun@tencent.com, flyingpeng@tencent.com,
-        mungerjiang@tencent.com, Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YegbVhxSNtQFlSCr@bfoster>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=61e88bb8
+        a=Eslsx4mF8WGvnV49LKizaA==:117 a=Eslsx4mF8WGvnV49LKizaA==:17
+        a=kj9zAlcOel0A:10 a=DghFqjY3_ZEA:10 a=7-415B0cAAAA:8
+        a=ajwNnfqt_jgpfc7MgyAA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 11:03 PM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> The description of 'dst_port' in 'struct bpf_sock' is not accurated.
-> In fact, 'dst_port' is not in network byte order, it is 'partly' in
-> network byte order.
->
-> We can see it in bpf_sock_convert_ctx_access():
->
-> > case offsetof(struct bpf_sock, dst_port):
-> >       *insn++ = BPF_LDX_MEM(
-> >               BPF_FIELD_SIZEOF(struct sock_common, skc_dport),
-> >               si->dst_reg, si->src_reg,
-> >               bpf_target_off(struct sock_common, skc_dport,
-> >                              sizeof_field(struct sock_common,
-> >                                           skc_dport),
-> >                              target_size));
->
-> It simply passes 'sock_common->skc_dport' to 'bpf_sock->dst_port',
-> which makes that the low 16-bits of 'dst_port' is equal to 'skc_port'
-> and is in network byte order, but the high 16-bites of 'dst_port' is
-> 0. And the actual port is 'bpf_ntohs((__u16)dst_port)', and
-> 'bpf_ntohl(dst_port)' is totally not the right port.
->
-> This is different form 'remote_port' in 'struct bpf_sock_ops' or
-> 'struct __sk_buff':
->
-> > case offsetof(struct __sk_buff, remote_port):
-> >       BUILD_BUG_ON(sizeof_field(struct sock_common, skc_dport) != 2);
-> >
-> >       *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, sk),
-> >                             si->dst_reg, si->src_reg,
-> >                                     offsetof(struct sk_buff, sk));
-> >       *insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->dst_reg,
-> >                             bpf_target_off(struct sock_common,
-> >                                            skc_dport,
-> >                                            2, target_size));
-> > #ifndef __BIG_ENDIAN_BITFIELD
-> >       *insn++ = BPF_ALU32_IMM(BPF_LSH, si->dst_reg, 16);
-> > #endif
->
-> We can see that it will left move 16-bits in little endian, which makes
-> the whole 'remote_port' is in network byte order, and the actual port
-> is bpf_ntohl(remote_port).
->
-> Note this in the document of 'dst_port'. ( Maybe this should be unified
-> in the code? )
+On Wed, Jan 19, 2022 at 09:08:22AM -0500, Brian Foster wrote:
+> On Wed, Jan 19, 2022 at 10:25:47AM +1100, Dave Chinner wrote:
+> > On Tue, Jan 18, 2022 at 05:58:14AM +0000, Al Viro wrote:
+> > > On Tue, Jan 18, 2022 at 03:12:53PM +1100, Dave Chinner wrote:
+> > Unfortunately, the simple fix of adding syncronize_rcu() to
+> > xfs_iget_recycle() causes significant performance regressions
+> > because we hit this path quite frequently when workloads use lots of
+> > temporary files - the on-disk inode allocator policy tends towards
+> > aggressive re-use of inodes for small sets of temporary files.
+> > 
+> > The problem XFS is trying to address is that the VFS inode lifecycle
+> > does not cater for filesystems that need to both dirty and then
+> > clean unlinked inodes between iput_final() and ->destroy_inode. It's
+> > too late to be able to put the inode back on the LRU once we've
+> > decided to drop the inode if we need to dirty it again. ANd because
+> > evict() is part of the non-blocking memory reclaim, we aren't
+> > supposed to block for arbitrarily long periods of time or create
+> > unbound memory demand processing inode eviction (both of which XFS
+> > can do in inactivation).
+> > 
+> > IOWs, XFS can't free the inode until it's journal releases the
+> > internal reference on the dirty inode. ext4 doesn't track inodes in
+> > it's journal - it only tracks inode buffers that contain the changes
+> > made to the inode, so once the transaction is committed in
+> > ext4_evict_inode() the inode can be immediately freed via either
+> > ->destroy_inode or ->free_inode. That option does not exist for XFS
+> > because we have to wait for the journal to finish with the inode
+> > before it can be freed. Hence all the background reclaim stuff.
+> > 
+> > We've recently solved several of the problems we need to solve to
+> > reduce the mismatch; avoiding blocking on inode writeback in reclaim
+> > and background inactivation are two of the major pieces of work we
+> > needed done before we could even consider more closely aligning XFS
+> > to the VFS inode cache life cycle model.
+> > 
+> 
+> The background inactivation work facilitates an incremental improvement
+> by nature because destroyed inodes go directly to a queue instead of
+> being processed synchronously. My most recent test to stamp the grace
+> period info at inode destroy time and conditionally sync at reuse time
+> shows pretty much no major cost because the common case is that a grace
+> period has already expired by the time the queue populates, is processed
+> and said inodes become reclaimable and reallocated.
 
-Looks like
- __sk_buff->remote_port
- bpf_sock_ops->remote_port
- sk_msg_md->remote_port
-are doing the right thing,
-but bpf_sock->dst_port is not correct?
+Yup. Remember that I suggested these conditional variants in the
+first place - I do understand what this code does...
 
-I think it's better to fix it,
-but probably need to consolidate it with
-convert_ctx_accesses() that deals with narrow access.
-I suspect reading u8 from three flavors of 'remote_port'
-won't be correct.
-'dst_port' works with a narrow load, but gets endianness wrong.
+> To go beyond just
+> the performance result, if I open code the conditional sync for tracking
+> purposes I only see something like 10-15 rcu waits out of the 36k
+> allocation cycles. If I increase the background workload 4x, the
+> allocation rate drops to ~33k cycles (which is still pretty much in line
+> with baseline) and the rcu sync count increases to 70, which again is
+> relatively nominal over tens of thousands of cycles.
+
+Yup. But that doesn't mean that the calls that trigger are free from
+impact. The cost and latency of waiting for an RCU grace period to
+expire goes up as the CPU count goes up. e.g. it requires every CPU
+running a task goes through a context switch before it returns.
+Hence if we end up with situations like, say, the ioend completion
+scheduling holdoffs, then that will prevent the RCU sync from
+returning for seconds.
+
+IOWs, we're effectively adding unpredictable and non-deterministic
+latency into the recycle path that is visible to userspace
+applications, and those latencies can be caused by subsystem
+functionality not related to XFS. Hence we need to carefully
+consider unexpected side-effects of adding a kernel global
+synchronisation point into a XFS icache lookup fast path, and these
+issues may not be immediately obvious from testing...
+
+> This all requires some more thorough testing, but I'm sure it won't be
+> absolutely free for every possible workload or environment. But given
+> that we know this infrastructure is fundamentally broken (by subtle
+> compatibilities between XFS and the VFS that have evolved over time),
+> will require some thought and time to fix properly in the filesystem,
+> that users are running into problems very closely related to it, why not
+> try to address the fundamental breakage if we can do so with an isolated
+> change with minimal (but probably not zero) performance impact?
+> 
+> I agree that the unconditional synchronize_rcu() on reuse approach is
+> just not viable, but so far tests using cond_synchronize_rcu() seem
+> fairly reasonable. Is there some other problem or concern with such an
+> approach?
+
+Just that the impact of adding RCU sync points means that bad
+behaviour outside XFS have a new point where they can adversely
+impact on applications doing filesystem operations.
+
+As a temporary mitigation strategy I think it will probably be fine,
+but I'd much prefer we get rid of the need for such an RCU sync
+point rather than try to maintain a mitigation like this in fast
+path code forever.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

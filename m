@@ -2,123 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A877493E94
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99DE493E98
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243513AbiASQvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:51:41 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33810 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243495AbiASQvi (ORCPT
+        id S1344405AbiASQxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:53:17 -0500
+Received: from mail-qt1-f182.google.com ([209.85.160.182]:38658 "EHLO
+        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237515AbiASQxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:51:38 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A2C3921126;
-        Wed, 19 Jan 2022 16:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642611097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dcNkutNEUdp9tNCGv2eq1CnHkXbyaGxeNqKqSZ28AG8=;
-        b=zVHxQO4Xv8Woim81RYvQnEF/90eYeX7QaT6p/QjrJcePnJFi85h9bqzpC3GBpn/jrixuRv
-        gv/FEAXdlQrvDbQ8dPBcr+zYisQr6NQyczJsLshSbS0N+F0MXJbCShXTmRW61mDHzllcm2
-        AYb2whyA9oiJtPvrPWw01+riG1X9o9g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642611097;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dcNkutNEUdp9tNCGv2eq1CnHkXbyaGxeNqKqSZ28AG8=;
-        b=4QThA5FBH2vf2Fqu5ss7T4AoRKDjRJboGbAyNcRe8QS2mLcNHt+gspF2HyI8/k6T24CEoK
-        BkA/g76kOjZhGXCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E8ED13B77;
-        Wed, 19 Jan 2022 16:51:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KoVRFplB6GHVLwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 16:51:37 +0000
-Message-ID: <3f565267-078e-ad4c-dfd2-36dba2201afe@suse.cz>
-Date:   Wed, 19 Jan 2022 17:51:37 +0100
+        Wed, 19 Jan 2022 11:53:16 -0500
+Received: by mail-qt1-f182.google.com with SMTP id bb9so2589637qtb.5;
+        Wed, 19 Jan 2022 08:53:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rSEzk8BcF5dmOAChCxcAbNaCIVCH+wJKAituA5N0HnY=;
+        b=uSm0CheGzLFBIntxYknUew/xQTQooK0Rt7XoO0jUsqGg+rpBTYQjbCYicb1swD/KNB
+         8k03tqdpxLWtvJwlJl1kOU5IZw7+5BryeUXhYLNMW0rpdj7tSnldhgzLSN0DA95/QqtZ
+         Gp1SwmpltAKQ0r1ODmqEpNEOHb/vfRdkWTgeCWvuK5WrA8R4FozV/5kvsH06SgHClSua
+         A3Bo9NizYTQnBfEBGbJouRMwJ6H34qlzZA+SamLsspkEBaAq4cPgzNSUrXpYShVRjHOg
+         cqPmawZ2esMCeZiZTtlny+PkFqVX2iihWEl8xEs4Qsk0uMwsr1f0Z58+/vlR+wE5x+e5
+         jsMA==
+X-Gm-Message-State: AOAM5306ejJ/pmgQZbA/2vZ2TWUgoLIc9w5TmTLWl2eAFs1zJodUS6K2
+        dZxcHR1qXCCqRCe4w8OUCRxY8NQpuOTKXk3+H+mBsEmi
+X-Google-Smtp-Source: ABdhPJxL6fAiWPnaDWtmGlMi8gk6mzbi83/3qUonNzAa3s8SLHRIwSduaptcTiEeu+Awb67ILI4/Jr/XlzTEvfA7fWw=
+X-Received: by 2002:a05:622a:1881:: with SMTP id v1mr25662181qtc.327.1642611196009;
+ Wed, 19 Jan 2022 08:53:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 48/66] fork: Use VMA iterator
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-49-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-49-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220118145251.1548-1-sbinding@opensource.cirrus.com> <20220118145251.1548-6-sbinding@opensource.cirrus.com>
+In-Reply-To: <20220118145251.1548-6-sbinding@opensource.cirrus.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 19 Jan 2022 17:53:05 +0100
+Message-ID: <CAJZ5v0g0n201FPcG9LBNG3e4UdNYSWmj_1sN3MxLxmK=GoF+tA@mail.gmail.com>
+Subject: Re: [PATCH v3 05/10] platform/x86: i2c-multi-instantiate: Move it to
+ drivers/acpi folder
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> The VMA iterator is faster than the linked list and removing the linked
-> list will shrink the vm_area_struct.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+On Tue, Jan 18, 2022 at 3:53 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
+>
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+>
+> Moving I2C multi instantiate driver to drivers/acpi folder for
+> upcoming conversion into a generic bus multi instantiate
+> driver for SPI and I2C
+>
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Why are you moving it away from platform/x86?
+
+Adding SPI to the mix doesn't seem to be a sufficient reason.
+
+If this were going to be needed on non-x86, that would be a good
+reason for moving it, but is that actually the case?  If so, why isn't
+that mentioned in the changelog above?
 
 > ---
->  kernel/fork.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 3493117c8d35..6de302e93519 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1228,13 +1228,16 @@ int replace_mm_exe_file(struct mm_struct *mm, struct file *new_exe_file)
->  	/* Forbid mm->exe_file change if old file still mapped. */
->  	old_exe_file = get_mm_exe_file(mm);
->  	if (old_exe_file) {
-> +		VMA_ITERATOR(vmi, mm, 0);
->  		mmap_read_lock(mm);
-> -		for (vma = mm->mmap; vma && !ret; vma = vma->vm_next) {
-> +		for_each_vma(vmi, vma) {
->  			if (!vma->vm_file)
->  				continue;
->  			if (path_equal(&vma->vm_file->f_path,
-> -				       &old_exe_file->f_path))
-> +				       &old_exe_file->f_path)) {
->  				ret = -EBUSY;
-> +				break;
-> +			}
->  		}
->  		mmap_read_unlock(mm);
->  		fput(old_exe_file);
-
+>  MAINTAINERS                                           |  2 +-
+>  drivers/acpi/Kconfig                                  | 11 +++++++++++
+>  drivers/acpi/Makefile                                 |  1 +
+>  .../{platform/x86 => acpi}/i2c-multi-instantiate.c    |  0
+>  drivers/acpi/scan.c                                   |  2 +-
+>  drivers/platform/x86/Kconfig                          | 11 -----------
+>  drivers/platform/x86/Makefile                         |  1 -
+>  7 files changed, 14 insertions(+), 14 deletions(-)
+>  rename drivers/{platform/x86 => acpi}/i2c-multi-instantiate.c (100%)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4e828542b089..546f9e149d28 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -392,7 +392,7 @@ ACPI I2C MULTI INSTANTIATE DRIVER
+>  M:     Hans de Goede <hdegoede@redhat.com>
+>  L:     platform-driver-x86@vger.kernel.org
+>  S:     Maintained
+> -F:     drivers/platform/x86/i2c-multi-instantiate.c
+> +F:     drivers/acpi/i2c-multi-instantiate.c
+>
+>  ACPI PCC(Platform Communication Channel) MAILBOX DRIVER
+>  M:     Sudeep Holla <sudeep.holla@arm.com>
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index ba45541b1f1f..2fd78366af6f 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -295,6 +295,17 @@ config ACPI_PROCESSOR
+>           To compile this driver as a module, choose M here:
+>           the module will be called processor.
+>
+> +config ACPI_I2C_MULTI_INST
+> +       tristate "I2C multi instantiate pseudo device driver"
+> +       depends on I2C
+> +       help
+> +         Some ACPI-based systems list multiple i2c-devices in a single ACPI
+> +         firmware-node. This driver will instantiate separate i2c-clients
+> +         for each device in the firmware-node.
+> +
+> +         To compile this driver as a module, choose M here: the module
+> +         will be called i2c-multi-instantiate.
+> +
+>  config ACPI_IPMI
+>         tristate "IPMI"
+>         depends on IPMI_HANDLER
+> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+> index bb757148e7ba..d4db7fb0baf0 100644
+> --- a/drivers/acpi/Makefile
+> +++ b/drivers/acpi/Makefile
+> @@ -104,6 +104,7 @@ obj-$(CONFIG_ACPI_SPCR_TABLE)       += spcr.o
+>  obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
+>  obj-$(CONFIG_ACPI_PPTT)        += pptt.o
+>  obj-$(CONFIG_ACPI_PFRUT)       += pfr_update.o pfr_telemetry.o
+> +obj-$(CONFIG_ACPI_I2C_MULTI_INST)      += i2c-multi-instantiate.o
+>
+>  # processor has its own "processor." module_param namespace
+>  processor-y                    := processor_driver.o
+> diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/acpi/i2c-multi-instantiate.c
+> similarity index 100%
+> rename from drivers/platform/x86/i2c-multi-instantiate.c
+> rename to drivers/acpi/i2c-multi-instantiate.c
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 1331756d4cfc..3e85a02f6ba2 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -1738,7 +1738,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+>          * must be instantiated for each, each with its own i2c_device_id.
+>          * Normally we only instantiate an i2c-client for the first resource,
+>          * using the ACPI HID as id. These special cases are handled by the
+> -        * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
+> +        * drivers/acpi/i2c-multi-instantiate.c driver, which knows
+>          * which i2c_device_id to use for each resource.
+>          */
+>                 {"BSG1160", },
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 24deeeb29af2..37c1c150508d 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -990,17 +990,6 @@ config TOPSTAR_LAPTOP
+>
+>           If you have a Topstar laptop, say Y or M here.
+>
+> -config I2C_MULTI_INSTANTIATE
+> -       tristate "I2C multi instantiate pseudo device driver"
+> -       depends on I2C && ACPI
+> -       help
+> -         Some ACPI-based systems list multiple i2c-devices in a single ACPI
+> -         firmware-node. This driver will instantiate separate i2c-clients
+> -         for each device in the firmware-node.
+> -
+> -         To compile this driver as a module, choose M here: the module
+> -         will be called i2c-multi-instantiate.
+> -
+>  config MLX_PLATFORM
+>         tristate "Mellanox Technologies platform support"
+>         depends on I2C && REGMAP
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index c12a9b044fd8..6c7870190564 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -110,7 +110,6 @@ obj-$(CONFIG_TOPSTAR_LAPTOP)        += topstar-laptop.o
+>
+>  # Platform drivers
+>  obj-$(CONFIG_FW_ATTR_CLASS)            += firmware_attributes_class.o
+> -obj-$(CONFIG_I2C_MULTI_INSTANTIATE)    += i2c-multi-instantiate.o
+>  obj-$(CONFIG_MLX_PLATFORM)             += mlx-platform.o
+>  obj-$(CONFIG_TOUCHSCREEN_DMI)          += touchscreen_dmi.o
+>  obj-$(CONFIG_WIRELESS_HOTKEY)          += wireless-hotkey.o
+> --
+> 2.25.1
+>

@@ -2,134 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B8F4943DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4240E4943E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344374AbiASX2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S1344508AbiASXcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiASX2p (ORCPT
+        with ESMTP id S232430AbiASXcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:28:45 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A53C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:28:44 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id p1so7569007uap.9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:28:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SAvFOz8ghr5oAZyEvyWgFSjE0cOqBv8pLZgD3az/Alw=;
-        b=bsrpLBeEmGPON4IVnn1J9LS41vfyBHVbscaKWsuCglNOrJmCd5wbVfUTccva0jnF4t
-         279q+9zbrD+ZWr8qrelwJQTRhNzSYbs5gig4TBG0nyZEqIinSkCPAxiYOvna0hrEiv5D
-         xoeJC9NwShyhujgekVKeZa14J68SMjQo3LSdBUda1rDhWMATtytzbjfPJCNxcthKatxB
-         wt70R5w+8MsTAylz4/5aRRwYbrOpRn5RU8pogPtfenu6omPyh9m0vxuWpD+rg4Rk5VS2
-         Cm+SF06WzCepcaQQeTQ12imr97K+3TkPsU54aR6k7wXd2b9y4OVXuKL4xdbvd/7zw4B+
-         P/YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SAvFOz8ghr5oAZyEvyWgFSjE0cOqBv8pLZgD3az/Alw=;
-        b=Rq90XMzM4N/9FPi32mVM8+LpdEkzljXK0aAk97hR5dtPfBb7xUaIynldgrb1eH9wLk
-         yzaB2qZlTgS2pfHE1FM9BT08u9q3FN4VDq0myfu2tYfPLH0aK3l/qSHwnKdSHMjgDqHI
-         7AZaIWLYNfq/6ezP9GVostB00YcFPFX+ztqIZs+AOiNNdYj6r7eFRxxb/qoIAYqP/ix+
-         cRqc73F50dwj+Q52IyvBgGlcUe1PDNgZEoyqfUiWMK3kB5oihBqXQooOkLxLyA4bSYNh
-         7SKNo6NmZHmEv3ux2ZB1iYgx9XQMAILzSL6TVdrkjP3LmVNPq6lv0V5O/8iQyATKEkcv
-         iMMA==
-X-Gm-Message-State: AOAM533vafVYEX+jlO6Tf6G7yiAMHc29OfasbQPYH7T9qu/HlPuUHW7j
-        wIPFD/ws3/d78n8bg/FnmT5aYDpzbiDNMYJf2J74Aw==
-X-Google-Smtp-Source: ABdhPJztNtP2ASrwQij4Hnq8zUdL8VnM6LFy0K4AN9sQGIkxltMSEPOR/5D8UuhwRg2Dmn31bBqJ3tpesxaIKOurOlI=
-X-Received: by 2002:a67:6587:: with SMTP id z129mr140195vsb.61.1642634923681;
- Wed, 19 Jan 2022 15:28:43 -0800 (PST)
+        Wed, 19 Jan 2022 18:32:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1743C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:32:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D677B81C25
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0606DC004E1;
+        Wed, 19 Jan 2022 23:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642635140;
+        bh=Uus0J0HgopD+MxeEpf7dm1D8Q2ch+7tnlV2ygA6lKsE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mcYrIc5ksgmGPxth2lZrTVNVKwF34XrQCsCT6ojm8eX5zAfo8oxxELRPMFIEL1LlC
+         dfP5MNKZkqwsyWq7tKwJev7bKCHNUmjhpqaHkZJJtx8JP/EpRpODd80YwS3dgf3DuB
+         yU6OVHEPi/6Nk64JbKqyt4/Isyh0CLU94bbeED5mZe93q0Uy9gLFxuypw1Sj8M4v0i
+         e/3G0eyA9a/oKCCKOytSFlvB7cY9E8TrFAonoP/8neuWWIM9E2aG8Xuy5tVb8WGgzw
+         UR99WWk2Rm26f9cRPehznvnP8gFzxOZ6XsDYhSJSSAKQEJ/CpMAey+cXMelYKrapRB
+         309Si6dg4h2EQ==
+Date:   Wed, 19 Jan 2022 15:32:18 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     kernel test robot <lkp@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: vmlinux.o: warning: objtool: do_machine_check()+0x5fa: call to
+ memset() leaves .noinstr.text section
+Message-ID: <20220119153218.02ee6789@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <YeicA7BKdstxbteX@zn.tnic>
+References: <202110261614.Bt8EM6Nj-lkp@intel.com>
+        <YXe7AnMmiWXk36NC@zn.tnic>
+        <20220119102250.7e20b3df@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <YehZsGAqgd3tJyDV@zn.tnic>
+        <20220119104017.31e5ecc7@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <20220119111523.71f8e9e3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <Yeh013gIveIKdFMP@zn.tnic>
+        <20220119123714.22b54d4c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <Yeh/oEYGyg2+XYSJ@zn.tnic>
+        <20220119145727.2034a180@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <YeicA7BKdstxbteX@zn.tnic>
 MIME-Version: 1.0
-References: <20220118230539.323058-1-pcc@google.com> <Yefh00fKOIPj+kYC@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yefh00fKOIPj+kYC@hirez.programming.kicks-ass.net>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Wed, 19 Jan 2022 15:28:32 -0800
-Message-ID: <CAMn1gO5n6GofyRv6dvpEe0xRekRx=wneQzwP-n=9Qj6Pez6eEg@mail.gmail.com>
-Subject: Re: [PATCH] mm/mmzone.c: fix page_cpupid_xchg_last() to READ_ONCE()
- the page flags
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        "# 3.4.x" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 2:03 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Jan 18, 2022 at 03:05:39PM -0800, Peter Collingbourne wrote:
-> > After submitting a patch with a compare-exchange loop similar to this
-> > one to set the KASAN tag in the page flags, Andrey Konovalov pointed
-> > out that we should be using READ_ONCE() to read the page flags. Fix
-> > it here.
->
-> What does it actually fix? If it manages to split the read and read
-> garbage the cmpxchg will fail and we go another round, no harm done.
+On Thu, 20 Jan 2022 00:17:23 +0100 Borislav Petkov wrote:
+> So, I'd like to reproduce that here and play with it a bit. What iso
+> can I install in a guest here so that I can get pretty close to your
+> environment?
 
-What I wasn't sure about was whether the compiler would be allowed to
-break this code by hoisting the read of page->flags out of the loop
-(because nothing in the loop actually writes to page->flags aside from
-the compare-exchange, and if that succeeds we're *leaving* the loop).
-That could potentially result in a loop that never terminates if the
-first compare-exchange fails. This is largely a theoretical problem as
-far as I know; the assembly produced by clang and gcc on x86_64 and
-arm64 appears to be doing the expected thing for now, and we're using
-inline asm for compare-exchange instead of the compiler builtins on
-those architectures (and on all other architectures it seems? no
-matches for __atomic_compare_exchange outside of kcsan and the
-selftests) so the compiler wouldn't be able to look inside it anyway.
-
-> > Fixes: 75980e97dacc ("mm: fold page->_last_nid into page->flags where possible")
->
-> As per the above argument, I don't think this rates a Fixes tag, there
-> is no actual fix.
-
-Okay, I'll remove it unless you find the above convincing.
-
-> > Signed-off-by: Peter Collingbourne <pcc@google.com>
-> > Link: https://linux-review.googlesource.com/id/I2e1f5b5b080ac9c4e0eb7f98768dba6fd7821693
->
-> That's that doing here?
-
-I upload my changes to Gerrit and link to them here so that I (and
-others) can see the progression of the patch via the web UI.
-
-> > Cc: stable@vger.kernel.org
->
-> That's massively over-selling things.
-
-Fair enough since it isn't causing an actual problem, I'll remove this tag.
-
-> > ---
-> >  mm/mmzone.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/mm/mmzone.c b/mm/mmzone.c
-> > index eb89d6e018e2..f84b84b0d3fc 100644
-> > --- a/mm/mmzone.c
-> > +++ b/mm/mmzone.c
-> > @@ -90,7 +90,7 @@ int page_cpupid_xchg_last(struct page *page, int cpupid)
-> >       int last_cpupid;
-> >
-> >       do {
-> > -             old_flags = flags = page->flags;
-> > +             old_flags = flags = READ_ONCE(page->flags);
-> >               last_cpupid = page_cpupid_last(page);
-> >
-> >               flags &= ~(LAST_CPUPID_MASK << LAST_CPUPID_PGSHIFT);
->
-> I think that if you want to touch that code, something like the below
-> makes more sense...
-
-Yeah, that looks a bit nicer. I'll send a v2 and update the other patch as well.
-
-Peter
+It's CentOS Stream 8. It may have some extra backports done by my $corp
+but I don't think the compiler is backported.

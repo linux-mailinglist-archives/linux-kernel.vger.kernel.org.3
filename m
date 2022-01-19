@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E5F493869
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F18349386D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353668AbiASK2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353429AbiASK2O (ORCPT
+        id S1353706AbiASK3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:29:03 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:44346 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240412AbiASK3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:28:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7184C061574;
-        Wed, 19 Jan 2022 02:28:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 755CAB81919;
-        Wed, 19 Jan 2022 10:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7085BC004E1;
-        Wed, 19 Jan 2022 10:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642588091;
-        bh=0jCJMjVYWUcxzXHIesD3FU8jEvbBrlINZq0n/Yx5ufA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mVsoStA8AfGP7kacCQWh7DOEew0wWHsb7nfEx20TWLXyJ4aZm19/S+6taVoIA+5KV
-         osLhrA9ulw9N3/oRT1dxRwC0DKUlWHb5MkFDiDNGhoSZOwA7LeS66QQIieS04IjaEQ
-         l55DBO5WE2LwdJY9JIUeSX50Zw3Az79aCuCcstIc=
-Date:   Wed, 19 Jan 2022 11:28:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Lei Wang <lewan@microsoft.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <YefnuCPwMq5V2lgl@kroah.com>
-References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
- <YeRkGvestiloCAUV@zn.tnic>
- <20220118152816.GA89184@sequoia>
- <Yeb4sK+ZmSHjWPWL@zn.tnic>
- <20220118195401.GB89184@sequoia>
- <YecrXidqecoYI/xg@zn.tnic>
- <YefXQHXNlsxk8yUc@kroah.com>
- <Yefb7zO9p1iPF3Jm@zn.tnic>
+        Wed, 19 Jan 2022 05:29:01 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 3FA051C0B9B; Wed, 19 Jan 2022 11:28:59 +0100 (CET)
+Date:   Wed, 19 Jan 2022 11:28:58 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: 4.4 series end of line was Re: [PATCH 4.4 00/17] 4.4.297-rc1 review
+Message-ID: <20220119102858.GB4984@amd>
+References: <20211227151315.962187770@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="61jdw2sOBCFtR2d/"
 Content-Disposition: inline
-In-Reply-To: <Yefb7zO9p1iPF3Jm@zn.tnic>
+In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:37:51AM +0100, Borislav Petkov wrote:
-> On Wed, Jan 19, 2022 at 10:17:52AM +0100, Greg Kroah-Hartman wrote:
-> > For this specific change, I do NOT think it should be backported at all,
-> > mostly for the reason that people are still arguing over the whole
-> > platform_get_*_optional() mess that we currently have.  Let's not go and
-> > backport anything right now to stable trees until we have all of that
-> > sorted out, as it looks like it all might be changing again.  See:
-> > 	https://lore.kernel.org/r/20220110195449.12448-1-s.shtylyov@omp.ru
-> > for all of the gory details and the 300+ emails written on the topic so
-> > far.
-> 
-> It sounds to me I should not even take this patch upstream yet,
-> considering that's still ongoing...
 
-Yes, I would not take that just yet at all.  Let's let the api argument
-settle down a bit first.
+--61jdw2sOBCFtR2d/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+Hi!
 
-greg k-h
+> This is the start of the stable review cycle for the 4.4.297 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+4.4.X series is scheduled for EOL next month. Do you have any
+estimates if it will be more like Feb 2 or Feb 27?
+
+CIP project is commited to maintaining 4.4.X after the EOL, and we
+need to figure out what to do next. Is there anyone else interested in
+maintaining 4.4.X after the February?
+
+Best regards,
+
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--61jdw2sOBCFtR2d/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmHn5+kACgkQMOfwapXb+vK8uwCgxIPieXyeg2AHYBxOvxbcuHrA
+Hw0AnjXHUxJS8GKTTn8ytrC3km7+L9WN
+=UDuj
+-----END PGP SIGNATURE-----
+
+--61jdw2sOBCFtR2d/--

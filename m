@@ -2,183 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E11493266
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E4E493269
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350712AbiASBkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:40:46 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16722 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350518AbiASBkn (ORCPT
+        id S1350720AbiASBmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:42:55 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:51420 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238680AbiASBmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:40:43 -0500
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JdpCW6bDVzZfGM;
-        Wed, 19 Jan 2022 09:36:55 +0800 (CST)
-Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 09:40:40 +0800
-Received: from DESKTOP-9883QJJ.china.huawei.com (10.136.114.155) by
- dggpeml500011.china.huawei.com (7.185.36.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 09:40:40 +0800
-From:   Di Zhu <zhudi2@huawei.com>
-To:     <andrii.nakryiko@gmail.com>, <ast@kernel.org>,
-        <davem@davemloft.net>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <jakub@cloudflare.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhudi2@huawei.com>, <luzhihao@huawei.com>, <rose.chen@huawei.com>
-Subject: [PATCH bpf-next v6 2/2] selftests: bpf: test BPF_PROG_QUERY for progs attached to sockmap
-Date:   Wed, 19 Jan 2022 09:40:05 +0800
-Message-ID: <20220119014005.1209-2-zhudi2@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220119014005.1209-1-zhudi2@huawei.com>
-References: <20220119014005.1209-1-zhudi2@huawei.com>
+        Tue, 18 Jan 2022 20:42:51 -0500
+X-UUID: 362a9280a10a4806bdaa4d8485ecdbad-20220119
+X-UUID: 362a9280a10a4806bdaa4d8485ecdbad-20220119
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <guodong.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2088102564; Wed, 19 Jan 2022 09:42:49 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 19 Jan 2022 09:42:47 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 19 Jan 2022 09:42:47 +0800
+Message-ID: <eca4a0c18fe75536c8276410628b9459c040dce2.camel@mediatek.com>
+Subject: Re: [PATCH 2/7] pinctrl: mediatek: paris: Fix
+ PIN_CONFIG_BIAS_DISABLE readback
+From:   Guodong Liu <guodong.liu@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-mediatek@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Zhiyong Tao" <zhiyong.tao@mediatek.com>,
+        Hui Liu <hui.liu@mediatek.com>,
+        Light Hsieh <light.hsieh@mediatek.com>
+Date:   Wed, 19 Jan 2022 09:42:46 +0800
+In-Reply-To: <20220111112244.1483783-3-wenst@chromium.org>
+References: <20220111112244.1483783-1-wenst@chromium.org>
+         <20220111112244.1483783-3-wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.136.114.155]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500011.china.huawei.com (7.185.36.84)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add test for querying progs attached to sockmap. we use an existing
-libbpf query interface to query prog cnt before and after progs
-attaching to sockmap and check whether the queried prog id is right.
+-----Original Message-----
+From: Chen-Yu Tsai <wenst@chromium.org>
+To: Sean Wang <sean.wang@kernel.org>, Linus Walleij <
+linus.walleij@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>, 
+linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org, 
+linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+Zhiyong Tao <zhiyong.tao@mediatek.com>, Guodong Liu <
+guodong.liu@mediatek.com>
+Subject: [PATCH 2/7] pinctrl: mediatek: paris: Fix
+PIN_CONFIG_BIAS_DISABLE readback
+Date: Tue, 11 Jan 2022 19:22:39 +0800
 
-Signed-off-by: Di Zhu <zhudi2@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+When reading back pin bias settings, if the pin is not in a
+bias-disabled state, the function should return -EINVAL.
+
+Fix this in the mediatek-paris pinctrl library so that the read back
+state is not littered with bogus a "input bias disabled" combined with
+"pull up" or "pull down" states.
+
+Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that
+implements the vendor dt-bindings")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 66 +++++++++++++++++++
- .../bpf/progs/test_sockmap_progs_query.c      | 24 +++++++
- 2 files changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
+ drivers/pinctrl/mediatek/pinctrl-paris.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 85db0f4cdd95..1ab57cdc4ae4 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -8,6 +8,7 @@
- #include "test_sockmap_update.skel.h"
- #include "test_sockmap_invalid_update.skel.h"
- #include "test_sockmap_skb_verdict_attach.skel.h"
-+#include "test_sockmap_progs_query.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
-@@ -315,6 +316,63 @@ static void test_sockmap_skb_verdict_attach(enum bpf_attach_type first,
- 	test_sockmap_skb_verdict_attach__destroy(skel);
- }
- 
-+static __u32 query_prog_id(int prog_fd)
-+{
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	int err;
-+
-+	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd") ||
-+	    !ASSERT_EQ(info_len, sizeof(info), "bpf_obj_get_info_by_fd"))
-+		return 0;
-+
-+	return info.id;
-+}
-+
-+static void test_sockmap_progs_query(enum bpf_attach_type attach_type)
-+{
-+	struct test_sockmap_progs_query *skel;
-+	int err, map_fd, verdict_fd, duration = 0;
-+	__u32 attach_flags = 0;
-+	__u32 prog_ids[3] = {};
-+	__u32 prog_cnt = 3;
-+
-+	skel = test_sockmap_progs_query__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_sockmap_progs_query__open_and_load"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.sock_map);
-+
-+	if (attach_type == BPF_SK_MSG_VERDICT)
-+		verdict_fd = bpf_program__fd(skel->progs.prog_skmsg_verdict);
-+	else
-+		verdict_fd = bpf_program__fd(skel->progs.prog_skb_verdict);
-+
-+	err = bpf_prog_query(map_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	ASSERT_OK(err, "bpf_prog_query failed");
-+	ASSERT_EQ(attach_flags,  0, "wrong attach_flags on query");
-+	ASSERT_EQ(prog_cnt, 0, "wrong program count on query");
-+
-+	err = bpf_prog_attach(verdict_fd, map_fd, attach_type, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach failed"))
-+		goto out;
-+
-+	prog_cnt = 1;
-+	err = bpf_prog_query(map_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	ASSERT_OK(err, "bpf_prog_query failed");
-+	ASSERT_EQ(attach_flags, 0, "wrong attach_flags on query");
-+	ASSERT_EQ(prog_cnt, 1, "wrong program count on query");
-+	ASSERT_EQ(prog_ids[0], query_prog_id(verdict_fd),
-+		  "wrong prog_ids on query");
-+
-+	bpf_prog_detach2(verdict_fd, map_fd, attach_type);
-+out:
-+	test_sockmap_progs_query__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -341,4 +399,12 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_attach(BPF_SK_SKB_STREAM_VERDICT,
- 						BPF_SK_SKB_VERDICT);
- 	}
-+	if (test__start_subtest("sockmap msg_verdict progs query"))
-+		test_sockmap_progs_query(BPF_SK_MSG_VERDICT);
-+	if (test__start_subtest("sockmap stream_parser progs query"))
-+		test_sockmap_progs_query(BPF_SK_SKB_STREAM_PARSER);
-+	if (test__start_subtest("sockmap stream_verdict progs query"))
-+		test_sockmap_progs_query(BPF_SK_SKB_STREAM_VERDICT);
-+	if (test__start_subtest("sockmap skb_verdict progs query"))
-+		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
-new file mode 100644
-index 000000000000..9d58d61c0dee
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sock_map SEC(".maps");
-+
-+SEC("sk_skb")
-+int prog_skb_verdict(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
-+SEC("sk_msg")
-+int prog_skmsg_verdict(struct sk_msg_md *msg)
-+{
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.27.0
+diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c
+b/drivers/pinctrl/mediatek/pinctrl-paris.c
+index f9f9110f2107..1ca598ea7ba7 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-paris.c
++++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+@@ -97,8 +97,8 @@ static int mtk_pinconf_get(struct pinctrl_dev
+*pctldev,
+ 			if (err)
+ 				goto out;
+ 			if (param == PIN_CONFIG_BIAS_DISABLE) {
+-				if (ret == MTK_PUPD_SET_R1R0_00)
+-					ret = MTK_DISABLE;
++				if (ret != MTK_PUPD_SET_R1R0_00)
++					err = -EINVAL;
+Hi Chen-Yu
+
+When tht API "hw->soc->bias_get_combo(hw, desc, &pullup, &ret)" is
+called,
+The ret vaule of may be MTK_DISABLE OR MTK_PUPD_SET_R1R0_00 or  (pullen
+== 0),  All those cases are expected to be as "bias-disable".
+We advices to keep original code,
+
++				if (ret == MTK_PUPD_SET_R1R0_00)
++	
+				ret = MTK_DISABLE;
++				if (ret != MTK_DISABLE)
++					err = -EINVAL;
+
+Thanks
+ 			} else if (param == PIN_CONFIG_BIAS_PULL_UP) {
+ 				/* When desire to get pull-up value,
+return
+ 				 *  error if current setting is pull-
+down
 

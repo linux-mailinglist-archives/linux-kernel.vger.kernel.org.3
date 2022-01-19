@@ -2,101 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEE84931F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5423A4931F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350399AbiASAkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 19:40:39 -0500
-Received: from mail-pf1-f178.google.com ([209.85.210.178]:43959 "EHLO
-        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237177AbiASAki (ORCPT
+        id S1350456AbiASAmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 19:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235175AbiASAme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:40:38 -0500
-Received: by mail-pf1-f178.google.com with SMTP id 78so897298pfu.10;
-        Tue, 18 Jan 2022 16:40:38 -0800 (PST)
+        Tue, 18 Jan 2022 19:42:34 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C19BC06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:42:33 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id o12so2191106lfu.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:42:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WC6vCmlBaJcnOq0yqjfAIqZ48ognlL3tNUNuOCNKcLA=;
+        b=JjdZ1Qa07omNstuAfkDNTfKeVCeI3Y9spOp3On6OcIMntUS3IS5W/0Jqr8JBWQcuuq
+         wvfuCIEq9LyVMNJhUREVCJJH/yzkpHWh/Jc+sx5VLJafgGpTKk90V/aeek82j8R9SpIG
+         ssvHuxn4pBXKmBCOrMUZV8jYXXphDOr8QW6G0KsuREth4TOM/Bvt9ZM9E117kgZgQPiV
+         IAjpkAYGdX9tH76Y4rt/BT4Rbqacl/i5q0/wIfHLLkuz1f/HVGDOzaUcZn45X1U659Ve
+         kDcqj1epuybqsUqzS2+tPbfOWz+IqOeEAjAJ30Z4hCxtFPMwwFg+tP2ftuSGjhbA6Jj4
+         fhLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=y1bB9qyB9ag+6vVeCbo5dc/vKI8cQJOaLo3No5lo+P8=;
-        b=nFktyUeZe2dimPnhcBmfxGMeVDN0egPAjVC6dYLCiOq507ZkdflG+vozxy2cL8/bUc
-         bfkdhD1HGwUi/BgITtLH93O93yl+SHYxOaTTYW+UkonnuiNzOB1vbWbL2/aKHSPfIwYS
-         vZgXRikX5POcYINrbLJlaF9pB3p3arl4p0X9UZKBr1UeRgtpeNT1YrVu7Hnrf7h6+ojc
-         u3gNY36CQBH15FWwT49+ZuFWUu8oEmpwX0Opj1zgUph+icA6C8s0P+Uao8QjkQC43mwc
-         pPbIjYQ/e3C7tK/GueUB2nWLel8Uuk1q2EwEwYs2x5zUcPNjhAex6Oa16ZjEeXWQ3/dc
-         4KEg==
-X-Gm-Message-State: AOAM532uwS1QYb4vcWuIl/JQLtmD42Zey5xtRLRHaKqXFDadgzvMDtMW
-        ft7I2BJzN9/CsghB1eGrVFM=
-X-Google-Smtp-Source: ABdhPJyoQQyu2Kg3q/7UKht4R4f/SQHNde7SFhs3HlxWVBvjcMqUU9INJhDiOzzaGyx/xetX8i19lA==
-X-Received: by 2002:a62:b503:0:b0:4bc:657e:cfa6 with SMTP id y3-20020a62b503000000b004bc657ecfa6mr28067825pfe.25.1642552837400;
-        Tue, 18 Jan 2022 16:40:37 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id q18sm19461083pfn.50.2022.01.18.16.40.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 16:40:36 -0800 (PST)
-Message-ID: <f68bd8fa-e848-df11-1493-aff82911eb2c@acm.org>
-Date:   Tue, 18 Jan 2022 16:40:33 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WC6vCmlBaJcnOq0yqjfAIqZ48ognlL3tNUNuOCNKcLA=;
+        b=U/6Z/7t9g1nFF0Gc4yCd7U0a4nFec86wDSJidsFlfxEZxh4admlH3F5VpTXh3a2AOg
+         msgqGnAuI+XGiQtazG4OMwmkxuTYomNZ2C9UYJbB4c8lmrMfwPR0brADxxr2DY4rEnpg
+         H4S8jKR+PCJ9bT+Z8w+S/WQLS479DgtD9p+B+M8QQ8fN+6p+UuehhiytBIyCTRvU8rt7
+         aM++T47enS5EHTRg+ayzp+RPorZz9N8IZuyQj70e/HQlxI7dQqsQghV0OraW0osIYfRb
+         4DZEr2b4oP3cPEHfV/D0n2XIodOPSkfIDlxChObAEQxKkkWWbnVHTxWsalHJJ8vwn7GE
+         EkxA==
+X-Gm-Message-State: AOAM532NGRNqYkSLexRfGAXOt0iecEd0unNi7rQdG+wD23+RBGYrd7YM
+        PCBDKWxSnSGBfiZ7YTSezS6/L9t1YQkIVsXniwVjRg==
+X-Google-Smtp-Source: ABdhPJyh4AKgqcun9w5U2hmSqhuaRzXvM7cXo5We6xiKZ5ywhTrrC+pfHoCKkGU6LnR5SyPjoI1uggDb8QK43Jy9o4Y=
+X-Received: by 2002:a2e:9e98:: with SMTP id f24mr22000014ljk.347.1642552951599;
+ Tue, 18 Jan 2022 16:42:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1] scsi: ufs: see link lost as fatal
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        cang@codeaurora.org, adrian.hunter@intel.com, sc.suh@samsung.com,
-        hy50.seo@samsung.com, sh425.lee@samsung.com,
-        bhoon95.kim@samsung.com, vkumar.1997@samsung.com
-References: <CGME20220117103912epcas2p41c5d54a9242e46264c4e388a1db27f6b@epcas2p4.samsung.com>
- <1642415846-141110-1-git-send-email-kwmad.kim@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1642415846-141110-1-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220118183650.3386989-1-keescook@chromium.org>
+ <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
+ <20220118193931.GH8034@ziepe.ca> <202201181255.DB5D38F6AA@keescook>
+In-Reply-To: <202201181255.DB5D38F6AA@keescook>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 19 Jan 2022 01:42:04 +0100
+Message-ID: <CAG48ez1iTF9KegKJrW5a3WzXgCPZJ73nS2_e5esKJRppdzvv8g@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/22 02:37, Kiwoong Kim wrote:
-> This event is raised when link is lost as specified
-> in UFSHCI spec. At the time, initializing UFS interface
-> needs to be done.
-> 
-> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
-> ---
->   drivers/scsi/ufs/ufshci.h | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
-> index 6a295c8..a7ff0e5 100644
-> --- a/drivers/scsi/ufs/ufshci.h
-> +++ b/drivers/scsi/ufs/ufshci.h
-> @@ -142,7 +142,8 @@ static inline u32 ufshci_version(u32 major, u32 minor)
->   #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
->   				CONTROLLER_FATAL_ERROR |\
->   				SYSTEM_BUS_FATAL_ERROR |\
-> -				CRYPTO_ENGINE_FATAL_ERROR)
-> +				CRYPTO_ENGINE_FATAL_ERROR |\
-> +				UIC_LINK_LOST)
->   
->   /* HCS - Host Controller Status 30h */
->   #define DEVICE_PRESENT				0x1
+On Tue, Jan 18, 2022 at 10:20 PM Kees Cook <keescook@chromium.org> wrote:
+> On Tue, Jan 18, 2022 at 03:39:31PM -0400, Jason Gunthorpe wrote:
+> > On Tue, Jan 18, 2022 at 08:32:43PM +0100, Jann Horn wrote:
+> > > On Tue, Jan 18, 2022 at 7:37 PM Kees Cook <keescook@chromium.org> wro=
+te:
+> > > > When building with -Warray-bounds, this warning was emitted:
+> > > >
+> > > > In function 'memset',
+> > > >     inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtp=
+m_proxy.c:102:2:
+> > > > ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset'=
+ pointer overflow between offset 164 and size [2147483648, 4294967295]
+> > > > [-Warray-bounds]
+> > > >    43 | #define __underlying_memset     __builtin_memset
+> > > >       |                                 ^
+> > >
+> > > Can you explain what that compiler warning actually means, and which
+> > > compiler it is from? Is this from a 32-bit or a 64-bit architecture?
+>
+> This is from ARCH=3Di386
+>
+> > >
+> > > It sounds like the compiler (GCC?) is hallucinating a codepath on
+>
+> Yes, GCC 11.2.
+>
+> > > which "len" is guaranteed to be >=3D2147483648, right? Why is it doin=
+g
+> > > that? Is this some kinda side effect from the fortify code?
+>
+> Right; I don't know what triggered it. I assume the "count" comparison.
+> The warning is generated with or without CONFIG_FORTIFY_SOURCE. It is
+> from adding -Warray-bounds. This is one of the last places in the kernel
+> where a warning is being thrown for this option, and it has found a lot
+> of real bugs, so Gustavo and I have been working to get the build
+> warning-clean so we can enable it globally.
+>
+> > I agree, this looks bogus, or at least the commit message neeeds alot
+> > more explaining.
+> >
+> > static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_=
+t count)
+> >
+> >         if (count > sizeof(proxy_dev->buffer))
+> >             [...]
+> >         proxy_dev->req_len =3D count;
+> >
+> > Not clear how req_len can be larger than sizeof(buffer)?
+>
+> Given the current code, I agree: it's not possible.
+>
+> As for the cause of the warning, my assumption is that since the compiler
+> only has visibility into vtpm_proxy_fops_read(), and sees size_t len set
+> from ((struct proxy_dev *)filp->private_data)->req_len, and it performs
+> range checking perhaps triggered by the "count" comparison:
+>
+>
+> static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+>                                     size_t count, loff_t *off)
+> {
+>         struct proxy_dev *proxy_dev =3D filp->private_data;
+>         size_t len;
+>         ...
+>         len =3D proxy_dev->req_len;
+>
+>         if (count < len) {
+>                 ...
+>                 return -EIO;
+>         }
+>
+>         rc =3D copy_to_user(buf, proxy_dev->buffer, len);
+>         memset(proxy_dev->buffer, 0, len);
+>
+>
+> I haven't been able to reproduce the specific cause of why GCC decided to
+> do the bounds checking, but it's not an unreasonable thing to check for,
+> just for robustness.
 
-A patch description should not only explain what is changed but also why
-a change is being made. Will the above patch cause the UFS error handler
-to trigger a controller reset after the link has been lost? I'm missing
-an explanation of why that change is necessary and also of why that
-change is the right thing to do. All I found in the UFSHCI specification
-about link loss is the following: "UIC Link Lost Status Enable (ULLSE): 
-When set and IS.ULLS is set, the controller shall generate an 
-interrupt." and also "UIC Link Lost Status (ULLS): This indicates a 
-condition where remote end is trying to reestablish a link and the link 
-is lost. This bit corresponds to the UniPro DME_LINKLOST.ind SAP primitive."
+Ok, I think this is what's happening:
 
-Did I perhaps overlook something?
 
-Thanks,
+$ cat bogus_bounds_warning_small.i
+struct proxy_dev {
+ unsigned char buffer[4096];
+};
 
-Bart.
+long state;
+
+void vtpm_proxy_fops_read(struct proxy_dev *proxy_dev, unsigned int len) {
+  /*
+   * sz =3D=3D SIZE_MAX =3D=3D -1  because the compiler can't prove whether=
+ proxy_dev
+   * points to an array or a single object and we're using the type-0 versi=
+on.
+   */
+  int sz =3D __builtin_object_size(proxy_dev->buffer, 0);
+  _Bool check_result;
+
+  /* always false but must keep this check to trigger the warning */
+  if (sz >=3D 0 && sz < len) {
+    check_result =3D 0;
+  /*
+   * compiler forks the rest of the function starting at this check, probab=
+ly
+   * because it sees that a branch further down has a condition that depend=
+s on
+   * which branch we took here
+   */
+  } else if (len > 0x7fffffff/*INT_MAX*/) {
+    check_result =3D 0;
+  } else {
+    check_result =3D 1;
+  }
+  /*
+   * this part is basically duplicated, it is compiled once for the
+   * len<=3D0x7fffffff case and once for the len>0x7fffffff case
+   */
+  __builtin_memset(proxy_dev->buffer, 0, len);
+
+  if (check_result)
+    state |=3D 1;
+}
+$ gcc -ggdb -std=3Dgnu89 -Warray-bounds -m32 -mregparm=3D3 -fno-pic
+-march=3Di686 -O2 -c -o bogus_bounds_warning.o
+bogus_bounds_warning_small.i
+bogus_bounds_warning_small.i: In function =E2=80=98vtpm_proxy_fops_read=E2=
+=80=99:
+bogus_bounds_warning_small.i:32:3: warning: =E2=80=98__builtin_memset=E2=80=
+=99
+specified bound between 2147483648 and 4294967295 exceeds maximum
+object size 2147483647 [-Wstringop-overflow=3D]
+   32 |   __builtin_memset(proxy_dev->buffer, 0, len);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Here's what the CFG of the generated machine code looks like - you can
+see how the function is split up starting at the "len > 0x7fffffff"
+check: https://var.thejh.net/gcc_bounds_warning_cfg.png
+
+(You can also see how the two copies of __builtin_memset() generate
+some pretty gross and bloated code...)

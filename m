@@ -2,205 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47D74941F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0EA4941F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244868AbiASUnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S240237AbiASUnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:43:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiASUnE (ORCPT
+        with ESMTP id S244899AbiASUny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:43:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AABDC061574;
-        Wed, 19 Jan 2022 12:43:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9A5AB81B40;
-        Wed, 19 Jan 2022 20:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EEBAC004E1;
-        Wed, 19 Jan 2022 20:43:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642624981;
-        bh=MYdffHsoiG3EHyAMjktxM2ofz/n5wkMwONpV0Nte2Cc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WNEtlRC2A1ACqYqANxnXl4w6LgJIsbTg1+FcDOru2xLG/04GiIHhpXHiypVxqPqoJ
-         mgcBHAhLy7od99+LxMNNv0llAle2tjK8UbIPaMXkc1j5TbFePbGhMpm6MeQKubXHqP
-         q6auDJ5MTnQPEi97UJDA6N3JyFcgWxVTcnxzoeHNEA+paE5ZT1Z1x0MIDETEHSGyDF
-         7U9Inogrtr0C5hTG1r+dD1yIN8zvQu1PONjkiNS91KFeY69YhQcCW8qJ6w/1wuESLK
-         svzdACsj7hCprWHtEZ7tr0PAICJpBvecPba5jGB6ezFwQiN1lhbVj1ti85tdDwWH7o
-         GR/6nrncDXW7A==
-Date:   Wed, 19 Jan 2022 14:42:59 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, bp@alien8.de,
-        tony.luck@intel.com, james.morse@arm.com, lenb@kernel.org,
-        rjw@rjwysocki.net, bhelgaas@google.com,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5] ACPI: Move sdei_init and ghes_init ahead to handle
- platform errors earlier
-Message-ID: <20220119204259.GA962224@bhelgaas>
+        Wed, 19 Jan 2022 15:43:54 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC079C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:43:53 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o64so3630736pjo.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:43:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V5BiuoCL3BS3pY0KUVzisKn5l9i+TTVG+bwUeabMhEk=;
+        b=OEC8GOFWmRCAUxMjicI179DKwx/otRIOUBh46/TZ2A9xSSIgYqB+478N/yd0nhPR3W
+         mYtwF2Sxu0/7XjCAZ/4uJbHdI20gy2o3yysOiVdr2kKi24Brvp8Y/9+zfWgM7VFgpCwz
+         roZ+4JWM1oD1YKA5guUn28hTf+tvJoGcWlA2s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V5BiuoCL3BS3pY0KUVzisKn5l9i+TTVG+bwUeabMhEk=;
+        b=nj9UNRw0CKE3VYM87mjofedHJMR/mV4I8C4bpftriEEJD3h6OxXMnN89agoMZmXyFz
+         CzNLKF8/fr7aOg9pCqLi75SZD4tM4IMkamaAMuhz0xXSqUnuClihvXUghwntRczNT/Fh
+         KEEHvQ+KRA4MP6NFUM/smTfH8LEVDlQFJ6POq1RTynNExnTxqey8CA3/FCL2384aTVJZ
+         f1KzVGRsgNCgNp1a/7tcQfb66NwDP1WmdDNNwUw7rL08KgaKuF7Um1cTGDtnK2vnfB1G
+         DLkss5bwbjp66hdpDNN3S0TkTHkCqDTWtHX7U9dFQHAERow88LGOMXOET5Nco04jWuPZ
+         lNfQ==
+X-Gm-Message-State: AOAM531qMhaRMS+LWET0uQ+M5pH/gHgtyGfVjhFDHCPm3pwBSTbsiHlV
+        gdG171H/McNWX86SZ6phrMhccw==
+X-Google-Smtp-Source: ABdhPJxjDw9F9EjF82NyBugY9LUS3IT0bEW9DZGFW+WJoX48x2Rllr6J+1usnpzep/toZlKfpHe46w==
+X-Received: by 2002:a17:90b:4b8c:: with SMTP id lr12mr6405892pjb.32.1642625033208;
+        Wed, 19 Jan 2022 12:43:53 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:618e:efc:c014:d89c])
+        by smtp.gmail.com with UTF8SMTPSA id ip2sm7033428pjb.11.2022.01.19.12.43.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 12:43:52 -0800 (PST)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Li Jun <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v20 0/5] usb: misc: Add onboard_usb_hub driver
+Date:   Wed, 19 Jan 2022 12:43:40 -0800
+Message-Id: <20220119204345.3769662-1-mka@chromium.org>
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e57cc874-dacd-912d-4282-3cb6b1b77323@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 02:40:11PM +0800, Shuai Xue wrote:
-> [+to Rafael, question about HEST/GHES/SDEI init]
-> 
-> Hi, Bjorn,
-> 
-> Thank you for your comments and quick reply.
-> 
-> 在 2022/1/19 AM6:49, Bjorn Helgaas 写道:
-> > On Sun, Jan 16, 2022 at 04:43:10PM +0800, Shuai Xue wrote:
-> >> On an ACPI system, ACPI is initialised very early from a
-> >> subsys_initcall(), while SDEI is not ready until a
-> >> subsys_initcall_sync(). This patch is to reduce the time before GHES
-> >> initialization.
-> >>
-> >> The SDEI driver provides functions (e.g. apei_sdei_register_ghes(),
-> >> apei_sdei_unregister_ghes()) to register or unregister event callback
-> >> for dispatcher in firmware. When the GHES driver probing, it registers
-> >> the corresponding callback according to the notification type specified
-> >> by GHES. If the GHES notification type is SDEI, the GHES driver will
-> >> call apei_sdei_register_ghes() to register event call.
-> >>
-> >> When the firmware emits an event, it migrates the handling of the event
-> >> into the kernel at the registered entry-point __sdei_asm_handler. And
-> >> finally, the kernel will call the registered event callback and return
-> >> status_code to indicate the status of event handling. SDEI_EV_FAILED
-> >> indicates that the kernel failed to handle the event.
-> >>
-> >> Consequently, when an error occurs during kernel booting, the kernel is
-> >> unable to handle and report errors until the GHES driver is initialized
-> >> by device_initcall(), in which the event callback is registered.  For
-> >> example, when the kernel booting, the console logs many times from
-> >> firmware before GHES drivers init in our platform:
-> >>
-> >> 	Trip in MM PCIe RAS handle(Intr:910)
-> >>   	Clean PE[1.1.1] ERR_STS:0x4000100 -> 0 INT_STS:F0000000
-> >> 	Find RP(98:1.0)
-> >> 	--Walk dev(98:1.0) CE:0 UCE:4000
-> >> 	...
-> >> 	ERROR:   sdei_dispatch_event(32a) ret:-1
-> >> 	--handler(910) end
-> > 
-> > If I understand correctly, the firmware noticed an error, tried to
-> > report it to the kernel, and is complaining because the kernel isn't
-> > ready to handle it yet.  And the reason for this patch is to reduce
-> > these complaints from the firmware.
-> 
-> My thoughts exactly :)
-> 
-> > That doesn't seem like a very good reason for this patch.  There is
-> > *always* a window before the kernel is ready to handle events from the
-> > firmware.
-> 
-> Yes, there is always a window. But if we could do better in kernel that
-> reduces the window by 90% (from 33 seconds to 3 second), why not?
-> 
-> > Why is the firmware noticing these errors in the first place?  If
-> > you're seeing these complaints regularly, my guess is that either you
-> > have some terrible hardware or (more likely) the firmware isn't
-> > clearing some expected error condition correctly.  For example, maybe
-> > the Unsupported Request errors that happen while enumerating PCIe
-> > devices are being reported.
-> >
-> > If you register the callback function, the kernel will now start
-> > seeing these error reports.  What happens then?  Does the kernel log
-> > the errors somewhere?  Is that better than the current situation where
-> > the firmware logs them?
-> 
-> Yep, it is a hardware issue. The firmware only logs in console
-> (ttyAMA0) and we can not see it in kernel side. After the kernel
-> starts seeing these error reports, we could see EDAC/ghes and
-> efi/cper detailed logs in dmesg. We did not notice the problem until
-> we check the console log, which inspired us to reduce the window
-> when kernel startup, so that we can see the message clearly and
-> properly. I think the intuition is to check the log of dmesg, not
-> the console.
+This series adds:
+- the onboard_usb_hub_driver
+- glue in the generic HCD code to create and destroy the
+  onboard_usb_hub platform devices if needed
+- device tree changes that add RTS5411 entries for the QCA SC7180
+  based boards trogdor and lazor
+- a couple of stubs for platform device functions to avoid
+  unresolved symbols with certain kernel configs
 
-> > However, I DO think that:
-> > 
-> >   - Removing acpi_hest_init() from acpi_pci_root_init(), and
-> > 
-> >   - Converting ghes_init() and sdei_init() from initcalls to explicit
-> >     calls
-> > 
-> > are very good reasons to do something like this patch because HEST is
-> > not PCI-specific, and IMO, explicit calls are better than initcalls
-> > because initcall ordering is implicit and not well-defined within a
-> > level.
-> 
-> Haha, if the above reasons still don't convince you, I would like to
-> accept yours :) Should we do it in one patch or separate it into two
-> patches?
+The main issue the driver addresses is that a USB hub needs to be
+powered before it can be discovered. For discrete onboard hubs (an
+example for such a hub is the Realtek RTS5411) this is often solved
+by supplying the hub with an 'always-on' regulator, which is kind
+of a hack. Some onboard hubs may require further initialization
+steps, like changing the state of a GPIO or enabling a clock, which
+requires even more hacks. This driver creates a platform device
+representing the hub which performs the necessary initialization.
+Currently it only supports switching on a single regulator, support
+for multiple regulators or other actions can be added as needed.
+Different initialization sequences can be supported based on the
+compatible string.
 
-IMO, this can be done in one patch, but this would probably go via
-Rafael.
+Besides performing the initialization the driver can be configured
+to power the hub off during system suspend. This can help to extend
+battery life on battery powered devices which have no requirements
+to keep the hub powered during suspend. The driver can also be
+configured to leave the hub powered when a wakeup capable USB device
+is connected when suspending, and power it off otherwise.
 
-> >> -static int __init ghes_init(void)
-> >> +void __init ghes_init(void)
-> >>  {
-> >>  	int rc;
-> >>  
-> >>  	if (acpi_disabled)
-> >> -		return -ENODEV;
-> >> +		return;
-> >>  
-> >>  	switch (hest_disable) {
-> >>  	case HEST_NOT_FOUND:
-> >> -		return -ENODEV;
-> >> +		pr_info(GHES_PFX "HEST is not found!\n");
-> > 
-> > I don't know whether this "HEST is not found" message is
-> > worthwhile or not.  I don't think lack of an HEST is an error, and
-> > users may be alarmed.  But this is an ACPI thing, so up to you and
-> > Rafael.
-> 
-> If we explicit call ghes_init(), we can't tell if ghes is
-> initialized successfully based on the return value of initcall. So I
-> add a info message.
+Changes in v20:
+- addressed review comments from Stephen
+- changed DT node names for hubs
 
-When ghes_init() is an initcall and you return -ENODEV for the
-HEST_NOT_FOUND case, I don't think we log any message about that, do
-we?  do_one_initcall() will capture and return the -ENODEV, but the
-caller (do_initcall_level()) just ignores it.
+Changes in v19:
+- added VID:PID pairs and compatible strings for RTS5414 hub
+- updated comments with RTS5411 USB versions to reflect those
+  reported/supported by the hub
+- rebased series on v5.16
 
-> >> @@ -1495,8 +1494,7 @@ static int __init ghes_init(void)
-> >>  	else
-> >>  		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
-> >>  
-> >> -	return 0;
-> >> +	return;
-> >>  err:
-> >> -	return rc;
-> >> +	ghes_disable = 1;
-> > 
-> > Why do you set ghes_disable here?  As far as I can tell, we will never
-> > look at it again.  The places we do look at it are:
-> > 
-> >   - ghes_init(): earlier in this function, so we've already done that,
-> > 
-> >   - acpi_hest_init(): we've already called that, too, and
-> > 
-> >   - acpi_bus_osc_negotiate_platform_control(): called from
-> >     acpi_bus_init(), which we've already called.
-> 
-> I add it for future potential usage. Thank you for pointing it out.
-> If you think it is not necessary, I will delete it in next version.
+Changes in v18:
+- introduced hidden Kconfig option to align module vs. builtin
+  choice with CONFIG_USB (thanks Doug!)
+- added patch 'driver core: Export device_is_bound()'
+- also adjust device tree of pompom rev1
+- dropped the following patches, which aren't needed anymore by this
+  series (though they might still be useful on their own):
+  - usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+  - arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+  - ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
 
-I think it is not necessary to save information that will never be
-used.  If you need it in the future, you can add it and the reason
-will be obvious.
+Changes in v17:
+- rebased on top of v5.16-rc1
+- moved creation of onboard_hub platform devices from xhci_platform
+  to the generic HCD code
+- addressed review comments for the onboard_hub driver
+- moved Kconfig/defconfig changes to the end of the series. The
+  onboard_hub driver doesn't depend on XHCI_PLATFORM anymore,
+  hence these changes aren't really required for the driver, but
+  they still seem to be a worthwhile improvement
 
-Bjorn
+Changes in v16:
+- added patch 'ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+  where needed' to keep arm32 defconfigs effectively unchanged
+
+Changes in v15:
+- adjusted dependencies of USB_DWC3_CORE to make sure it can only
+  be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+  or USB_DWC3_DUAL_ROLE is selectable
+
+Changes in v14:
+- rebased on top of v5.14-rc1
+- dropped DT binding patch which landed in v5.13
+
+Changes in v13:
+- added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+  'depends on'" to the series to avoid Kconfig conflicts
+- added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+  to the series to keep effective defconfig unchanged
+
+Changes in v12:
+- onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+  in onboard_hub.h to also check for the driver built as module
+- onboard_hub_driver: include onboard_hub.h again to make sure there
+  are prototype declarations for the public functions
+
+Changes in v11:
+- support multiple onboard hubs connected to the same parent
+- don't include ‘onboard_hub.h’ from the onboard hub driver
+
+Changes in v10:
+- always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+- keep 'regulator-boot-on' property for pp3300_hub
+
+Changes in v9:
+- added dependency on ONBOARD_USB_HUB (or !ONBOARD_USB_HUB) to
+  USB_PLATFORM_XHCI
+
+Changes in v7:
+- updated DT binding
+- series rebased on qcom/arm64-for-5.13
+
+Changes in v6:
+- updated summary
+
+Changes in v5:
+- cover letter added
+
+Matthias Kaehlcke (5):
+  of/platform: Add stubs for of_platform_device_create/destroy()
+  driver core: Export device_is_bound()
+  usb: misc: Add onboard_usb_hub driver
+  usb: core: hcd: Create platform devices for onboard hubs in probe()
+  arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+
+ .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
+ .../dts/qcom/sc7180-trogdor-pompom-r1.dts     |  11 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  20 +-
+ drivers/base/dd.c                             |   1 +
+ drivers/usb/core/hcd.c                        |   6 +
+ drivers/usb/misc/Kconfig                      |  23 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/onboard_usb_hub.c            | 511 ++++++++++++++++++
+ include/linux/of_platform.h                   |  22 +-
+ include/linux/usb/hcd.h                       |   1 +
+ include/linux/usb/onboard_hub.h               |  18 +
+ 15 files changed, 638 insertions(+), 41 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+ create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+ create mode 100644 include/linux/usb/onboard_hub.h
+
+-- 
+2.34.1.703.g22d0c6ccf7-goog
+

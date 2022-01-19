@@ -2,194 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3B4936EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0294936EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352915AbiASJL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352908AbiASJL5 (ORCPT
+        id S1352925AbiASJMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:12:45 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54736 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352899AbiASJMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:11:57 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17168C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:11:57 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ay14-20020a05600c1e0e00b0034d7bef1b5dso6111235wmb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:from:to:cc:references:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=C4Zc3pg97QhRBnCL31NpgyhTD5rJxIoNyw+4jb4dhT4=;
-        b=dUWihDw/VMRg6sA/GD788IM8rAYRtmQWSJS0gFREajow6TJlqI3HWG9LdfWCkdehns
-         NruAxdRRI2X+Uk+gUUPoKPdOTqJK+YDK5CJSoGRCB/3C7H1PyEBKYLOlsvC5+ZJ/iN7w
-         sLVmiGGMz+7vD7j4OmVYXcymVoKHfPrIaHnZ3daxol1b0YtUcOYxwHo6PwsMN0R4vXH8
-         DTRh4zjjMkj5ajGAHKUT6HdO38ZLsNatcyXDwdK57z8EjwHMEFKcVrpf7Ubb/Ad3YD34
-         JlNxxTB2K9aFdD9aoaNV9IX1b4N+K7GLAEmJpqEeXp5G6u+ccu8PtuiTHp4MBNzSnSiB
-         SL1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=C4Zc3pg97QhRBnCL31NpgyhTD5rJxIoNyw+4jb4dhT4=;
-        b=LgDlUP/1aOutEeVWAhyswTV+1PAHUylrkVPhV1SKos/VLXGbNnaGvMg1rhVu0XWfzJ
-         kxKpcUOgmrAC2pnShmOX/Psi3J/yuOKYyimkX0PeZlHjqbzYew//Y/bZ5KfZm/Zcw6ol
-         VMVB0tMHBptmHYLihtaZduiZhbFKcxXQT+jCvTwY7zOAtsdsa6rq/sr6ho7zn99K5bV2
-         gJpqtuNqm3plCPVNm2MiBJuKSoe4UGOOiZ0ZDEwrVEY4Y/OLRrpBMhJu7+rWiXMiSGgJ
-         eKfhLolqdXFIrL2YZn6Mmk1YN32pmdpB3TKIefr+2vwrVzor15CiWDgt23NrnLQ34Psd
-         P5KA==
-X-Gm-Message-State: AOAM5317MuHss65AKoW2QkHPibAGS52gA2hYAlUB74aea4hF502qAO4r
-        SmdSAV0Usf2qLgIIhHwOJpXsKg==
-X-Google-Smtp-Source: ABdhPJz+1YRs3ncIGZ6eu44qYuu3hW1X9+WEUA6N5BCKeE+8wCtHHZrHR1Q6yh29u8Ny4K2ju8jeqw==
-X-Received: by 2002:a5d:46c6:: with SMTP id g6mr27435133wrs.322.1642583513901;
-        Wed, 19 Jan 2022 01:11:53 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:d394:97d0:bc02:3846? ([2001:861:44c0:66c0:d394:97d0:bc02:3846])
-        by smtp.gmail.com with ESMTPSA id c8sm5634596wmq.34.2022.01.19.01.11.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 01:11:53 -0800 (PST)
-Subject: Re: [PATCH v2] phy: dphy: Correct clk_pre parameter
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Cc:     linux-imx@nxp.com, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>
-References: <20220119023714.1498508-1-victor.liu@nxp.com>
- <28e3f723-daf0-b3c5-ee10-519c4cabfe17@baylibre.com>
-Organization: Baylibre
-Message-ID: <5a638561-c704-49e7-1fed-70e26fedb186@baylibre.com>
-Date:   Wed, 19 Jan 2022 10:11:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <28e3f723-daf0-b3c5-ee10-519c4cabfe17@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 19 Jan 2022 04:12:44 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id BCEB81F384;
+        Wed, 19 Jan 2022 09:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642583563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vH8JJCBqQX/r+cXLJWue2nQbClIaooGKm6drd2hHgHQ=;
+        b=mvDsnSUy62bkFv+nJbEaV+oWfLYPEh2C8nNj0OST9zAbO7Jtg4uHYeIq7AAQhqVjseR4Ye
+        /3Mc9Sys+cQNL9qTWnqXd8CL50/IWaT/WKfiM3qGXMwp4jKOliUgSOHSWR87RXHHW4kmmS
+        d4uRfpsVMf+f7kRhiB1mcE8TmpY46uA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642583563;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vH8JJCBqQX/r+cXLJWue2nQbClIaooGKm6drd2hHgHQ=;
+        b=I2ZBpcB25T/tBsxPHjvnifs+8m/s307lPqmsM+XK6iGyrmdltXtYaqLi4VQSTjfNHYBFKD
+        X/2hXnzCQrRHX5Dw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 7F4C9A3B81;
+        Wed, 19 Jan 2022 09:12:43 +0000 (UTC)
+Date:   Wed, 19 Jan 2022 10:12:43 +0100
+Message-ID: <s5hilugw0l0.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855 G8
+In-Reply-To: <20220115152215.kprws5nja2i43qax@localhost.localdomain>
+References: <s5ho84h9tit.wl-tiwai@suse.de>
+        <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
+        <s5hilup9s87.wl-tiwai@suse.de>
+        <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
+        <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+        <s5h8rvk85uy.wl-tiwai@suse.de>
+        <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+        <s5ha6fy46jt.wl-tiwai@suse.de>
+        <20220114183720.n46wealclg6spxkp@localhost.localdomain>
+        <s5hsftp3027.wl-tiwai@suse.de>
+        <20220115152215.kprws5nja2i43qax@localhost.localdomain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2022 09:40, Neil Armstrong wrote:
-> Hi,
+On Sat, 15 Jan 2022 16:22:15 +0100,
+Alexander Sergeyev wrote:
 > 
-> On 19/01/2022 03:37, Liu Ying wrote:
->> The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
->> parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
->> kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
->> mentions that it should be in UI.  However, the dphy core driver wrongly
->> sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
->> And, the kernel doc of the 'clk_pre' member wrongly says the minimum value
->> is '8 UI', instead of 8.
->>
->> So, let's fix both the dphy core driver and the kernel doc of the 'clk_pre'
->> member to correctly reflect the T-CLK-PRE parameter's unit and the minimum
->> value according to the D-PHY specification.
->>
->> I'm assuming that all impacted custom drivers shall program values in
->> TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
->> specification mentions that the frequency of TxByteClkHS is exactly 1/8
->> the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
->> custom driver code is changed to program those values as
->> DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE), then.
->>
->> Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
->> Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
->> as I don't have the hardwares.
->>
->> Fixes: 2ed869990e14 ("phy: Add MIPI D-PHY configuration options")
->> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
->> Cc: Neil Armstrong <narmstrong@baylibre.com>
->> Cc: Robert Foss <robert.foss@linaro.org>
->> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
->> Cc: Jonas Karlman <jonas@kwiboo.se>
->> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
->> Cc: David Airlie <airlied@linux.ie>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: Kishon Vijay Abraham I <kishon@ti.com>
->> Cc: Vinod Koul <vkoul@kernel.org>
->> Cc: Kevin Hilman <khilman@baylibre.com>
->> Cc: Jerome Brunet <jbrunet@baylibre.com>
->> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->> Cc: Heiko Stuebner <heiko@sntech.de>
->> Cc: Maxime Ripard <mripard@kernel.org>
->> Cc: Guido Günther <agx@sigxcpu.org>
->> Tested-by: Liu Ying <victor.liu@nxp.com> # RM67191 DSI panel on i.MX8mq EVK
->> Signed-off-by: Liu Ying <victor.liu@nxp.com>
->> ---
->> v1->v2:
->> * Use BITS_PER_BYTE macro. (Andrzej)
->> * Drop dsi argument from ui2bc() in nwl-dsi.c.
->>
->>  drivers/gpu/drm/bridge/nwl-dsi.c                 | 12 +++++-------
->>  drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    |  3 ++-
->>  drivers/phy/phy-core-mipi-dphy.c                 |  4 ++--
->>  drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c |  3 ++-
->>  include/linux/phy/phy-mipi-dphy.h                |  2 +-
->>  5 files changed, 12 insertions(+), 12 deletions(-)
->>
-[...]
-
->> diff --git a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
->> index cd2332bf0e31..fdbd64c03e12 100644
->> --- a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
->> +++ b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
->> @@ -9,6 +9,7 @@
->>  
->>  #include <linux/bitfield.h>
->>  #include <linux/bitops.h>
->> +#include <linux/bits.h>
->>  #include <linux/clk.h>
->>  #include <linux/delay.h>
->>  #include <linux/io.h>
->> @@ -250,7 +251,7 @@ static int phy_meson_axg_mipi_dphy_power_on(struct phy *phy)
->>  		     (DIV_ROUND_UP(priv->config.clk_zero, temp) << 16) |
->>  		     (DIV_ROUND_UP(priv->config.clk_prepare, temp) << 24));
->>  	regmap_write(priv->regmap, MIPI_DSI_CLK_TIM1,
->> -		     DIV_ROUND_UP(priv->config.clk_pre, temp));
->> +		     DIV_ROUND_UP(priv->config.clk_pre, BITS_PER_BYTE));
->>  
->>  	regmap_write(priv->regmap, MIPI_DSI_HS_TIM,
->>  		     DIV_ROUND_UP(priv->config.hs_exit, temp) |
+> On Sat, Jan 15, 2022 at 08:55:28AM +0100, Takashi Iwai wrote:
+> > > This patch solved the BUG problem. But after unbind/bind micmute LED
+> > > stopped working. Speakers and mute LED are fine though.
+> > Does the corresponding sysfs entry exist in /sys/class/leds/*?
 > 
-> I'll try to run a test, currently the calculation gives 2, so this would give 1.
-
-The Amlogic vendor code does:
-
-/* >8*ui */
-#define DPHY_TIME_CLK_PRE(ui)       (10 * ui)
-
-t_ui = lcd_timing.bit_rate
-
-t_ui = (1000000 * 100) / (dsi_ui / 1000); /*100*ns */
-temp = t_ui * 8; /* lane_byte cycle time */
-
-dphy->clk_pre = ((DPHY_TIME_CLK_PRE(t_ui) + temp - 1) / temp) & 0xff;
-
-PHY Registers only says:
-MIPI_DSI_CLK_TIM1	[31:0]
-7:0 	R/W	0	 tCLK_PRE
-
+> Yes.
 > 
-> Neil
+> > And can you control LED over there?
 > 
+> After "out of range cmd" messages the sysfs entry remains present, but writing 
+> ones to the brightness file stops to produce any effect.
+> 
+> Actually, the timing issues are present here as well. Sometimes unbind & bind 
+> works fine. But fails on the second round.
 
-[...]
+Here "fails" means the kernel Oops / crash?  If yes, the back trace
+would be helpful.
+
+
+thanks,
+
+Takashi

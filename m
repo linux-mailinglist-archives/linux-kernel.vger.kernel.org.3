@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2C04941A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56FD4941AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357284AbiASUVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S1357255AbiASU0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiASUVU (ORCPT
+        with ESMTP id S231146AbiASU0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:21:20 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F11C061574;
-        Wed, 19 Jan 2022 12:21:20 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id w204so3309433pfc.7;
-        Wed, 19 Jan 2022 12:21:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D0IAhlKzMhVDSvOyrE7WOScz7H0kZ7M7h7y/9jjJAyo=;
-        b=B8z1c8TbozA4PbYfP8freTXuYQq4JYYeVme3C4wbQqfi3tgQGH4YBUg0HdBcmKhp7o
-         ofAu0L0YRVAqCRBecsdSlMI6v8ikYEelTdACKprfxmIF22aegr+b/r5RqIm79md/BrN9
-         hgMDa8wMovhEKiKfAi60H1SorCA3cErxVhFtUshtKQXlrcacGz+rn3KIqoEmIgGnsTrL
-         jR0ZzNyck+437UUSzTZCwxO2QRL8XSewL2UUkeOyR7BumpW4KGeibdko/uOisFMYwRtk
-         YEAZ+hf1f480kpSVPK2fb52fC3h2Ny/kIPQAA6sa4izf2rnvyzVPi1LgHDu1V+4g/RL0
-         8bOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D0IAhlKzMhVDSvOyrE7WOScz7H0kZ7M7h7y/9jjJAyo=;
-        b=BbBOCVNclF6Ti9dl9ZcM9VOjGR5IyoTF1p+e0yywBz2T0Y6wE9E2DgrqrV9ZL4wi0I
-         5U+u5i0uRL6bKnUrmWkOUAc4LBcSSt8QfOt90WhkYrjiXCBdaafkUV46Frb9kT8MVJs5
-         Ya1H+1aKHs4w0taxbmjjSa4uNTgTRzUXjgsYBJ/i8BBY1r1bKHSJ+l20pA4HtvuFZQrq
-         OB3yYUFEPt0RYCWASjS/F1vZDyo4T3eabW2plqiQraSAkRwt+U5IOOdYUxYO4Y3RUhe/
-         vLQWi1Q2ylyLhq+1Wnb/hi8XXxxglGHsHcqOsockh6QO7oplmgydbeHoKcTtRY61AtBC
-         M+uw==
-X-Gm-Message-State: AOAM533NuX2xNZrB4Edey8y7IHxw57F4orBqY/y8XATqwjhW26I0mx5Z
-        AxicK3oaaW6lx/ItV1jaRKA6xrkYd8GsYQ==
-X-Google-Smtp-Source: ABdhPJwb7K3ljzxYYG9xuDS6ic4TifxN04U+qgTiqu00O06zo+J+LuOFgAPmjp3nU89lxIgf9IEuJg==
-X-Received: by 2002:a63:b24e:: with SMTP id t14mr28937903pgo.381.1642623680041;
-        Wed, 19 Jan 2022 12:21:20 -0800 (PST)
-Received: from megumi-s.h.riat.re ([103.72.4.142])
-        by smtp.gmail.com with ESMTPSA id b4sm474346pfl.106.2022.01.19.12.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 12:21:19 -0800 (PST)
-From:   Yanming Liu <yanminglr@gmail.com>
-To:     linux-hyperv@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Andres Beltran <lkmlabelt@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Yanming Liu <yanminglr@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH] Drivers: hv: balloon: account for vmbus packet header in max_pkt_size
-Date:   Thu, 20 Jan 2022 04:20:52 +0800
-Message-Id: <20220119202052.3006981-1-yanminglr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Jan 2022 15:26:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61877C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:26:17 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 853361EC04EC;
+        Wed, 19 Jan 2022 21:26:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642623970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=gcsbQtvTIZjcCY2Tai3gH/ZSFkICJFR6G+ix5XAvRhg=;
+        b=k2wSjGGfuBDKNaKVP/qMJOn9ps1+pu3c3E0zXA8WQk40NF8todODr8JcT58jelE5We0m22
+        +XVBb3rNiOFZX5SwDV1SYrwf0gOkADaqkh3xityWpO+8c8ShK8A6VdnjfL/TqvEDK8OHee
+        yx7aHLHTW5wbRchV/rsrlxyWC+/UxC8=
+Date:   Wed, 19 Jan 2022 21:26:05 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        david@redhat.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/26] x86/tdx: Support TDX guest port I/O at
+ decompression time
+Message-ID: <Yehz3eqq670WRVJE@zn.tnic>
+References: <YeAuehoOEjUH3vZ3@zn.tnic>
+ <20220115010155.ss2hnyotw4a3nljf@black.fi.intel.com>
+ <YeK7AJXGN5GVGkRV@zn.tnic>
+ <20220117143920.3umnnlx7dl27cm5z@box.shutemov.name>
+ <YeW2U9vH65NcLHtY@zn.tnic>
+ <20220119115326.rw2aj3ho2mct4xxv@box.shutemov.name>
+ <YegTjdltOFBIDlf2@zn.tnic>
+ <20220119154925.mzri4zaz3o477e3k@box.shutemov.name>
+ <YehqkKNgQ65uUOe6@zn.tnic>
+ <20220119200841.fupa3hemmswllmxc@box.shutemov.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119200841.fupa3hemmswllmxc@box.shutemov.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit adae1e931acd ("Drivers: hv: vmbus: Copy packets sent by Hyper-V
-out of the ring buffer") introduced a notion of maximum packet size in
-vmbus channel and used that size to initialize a buffer holding all
-incoming packet along with their vmbus packet header. hv_balloon uses
-the default maximum packet size VMBUS_DEFAULT_MAX_PKT_SIZE which matches
-its maximum message size, however vmbus_open expects this size to also
-include vmbus packet header. This leads to 4096 bytes
-dm_unballoon_request messages being truncated to 4080 bytes. When the
-driver tries to read next packet it starts from a wrong read_index,
-receives garbage and prints a lot of "Unhandled message: type:
-<garbage>" in dmesg.
+On Wed, Jan 19, 2022 at 11:08:41PM +0300, Kirill A. Shutemov wrote:
+> > Relocation section '.rela.data.rel.local' at offset 0x5c18 contains 6 entries:
+			^^^^^^
 
-Allocate the buffer with HV_HYP_PAGE_SIZE more bytes to make room for
-the header.
+> JFYI, the message comes from ASSERT in vmlinux.lds.S.
 
-Fixes: adae1e931acd ("Drivers: hv: vmbus: Copy packets sent by Hyper-V out of the ring buffer")
-Suggested-by: Michael Kelley (LINUX) <mikelley@microsoft.com>
-Suggested-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Signed-off-by: Yanming Liu <yanminglr@gmail.com>
----
-The patch was "[PATCH v2] hv: account for packet descriptor in maximum
-packet size". As pointed out by Michael Kelley [1], other hv drivers
-already overallocate a lot, and hv_balloon is hopefully the only
-remaining affected driver. It's better to just fix hv_balloon. Patch
-summary is changed to reflect this new (much smaller) scope.
+Yah, because those relocations are put in a .rela section and that one
+matches.
 
-[1] https://lore.kernel.org/linux-hyperv/CY4PR21MB1586D30C6CEC81EFC37A9848D7599@CY4PR21MB1586.namprd21.prod.outlook.com/
+And looking at which commit added it:
 
- drivers/hv/hv_balloon.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+527afc212231 ("x86/boot: Check that there are no run-time relocations")
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index ca873a3b98db..f2d05bff4245 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1660,6 +1660,13 @@ static int balloon_connect_vsp(struct hv_device *dev)
- 	unsigned long t;
- 	int ret;
- 
-+	/*
-+	 * max_pkt_size should be large enough for one vmbus packet header plus
-+	 * our receive buffer size. Hyper-V sends messages up to
-+	 * HV_HYP_PAGE_SIZE bytes long on balloon channel.
-+	 */
-+	dev->channel->max_pkt_size = HV_HYP_PAGE_SIZE * 2;
-+
- 	ret = vmbus_open(dev->channel, dm_ring_size, dm_ring_size, NULL, 0,
- 			 balloon_onchannelcallback, dev);
- 	if (ret)
+the removed comment kinda explains it - decompressor kernel cannot
+handle runtime relocations. Obviously.
+
+Now we need to figure out how to avoid those...
+
+> I assume for now I can proceed with the assignment that works, right?
+> It can be changed later once we figure out what is going on.
+
+Right.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,99 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841F1493769
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CC149376D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352570AbiASJfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:35:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:51594 "EHLO foss.arm.com"
+        id S1351848AbiASJiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:38:03 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:43834 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348111AbiASJf3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:35:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A0906D;
-        Wed, 19 Jan 2022 01:35:29 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.38.123])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0C943F766;
-        Wed, 19 Jan 2022 01:35:27 -0800 (PST)
-Date:   Wed, 19 Jan 2022 09:35:25 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     He Ying <heying24@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, marcan@marcan.st,
-        maz@kernel.org, joey.gouly@arm.com, pcc@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: entry: Save some nops when
- CONFIG_ARM64_PSEUDO_NMI is not set
-Message-ID: <20220119093525.GB42546@C02TD0UTHF1T.local>
-References: <20220107085536.214501-1-heying24@huawei.com>
- <20220112032410.29231-1-heying24@huawei.com>
- <e6293ec4-7c56-194a-95f9-98b102d80b31@huawei.com>
+        id S235918AbiASJiC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 04:38:02 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7AA4B1EC01B5;
+        Wed, 19 Jan 2022 10:37:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642585077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=l8hXfzc4tNzXvNMHh+krnIwebhMr+nIyn6zzRElK4Jk=;
+        b=rAi6ielVyHsK6XXnVr54FincTmQbgFoG11uhjSI3ckEsiBZQnMzPsoJUE5+RKaCRdEaS2/
+        Qt1HwuI7liqPV+CGLh5ADMgLrhqhU3QjdjShMvpagkZRWq3DL9KN1d5C1CO6+RswfWPGnF
+        iWmhd37EXF6me00EQ1t+8DwFfNdqxDk=
+Date:   Wed, 19 Jan 2022 10:37:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Lei Wang <lewan@microsoft.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sinan Kaya <okaya@kernel.org>,
+        Shiping Ji <shiping.linux@gmail.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
+ interrupt line
+Message-ID: <Yefb7zO9p1iPF3Jm@zn.tnic>
+References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
+ <YeRkGvestiloCAUV@zn.tnic>
+ <20220118152816.GA89184@sequoia>
+ <Yeb4sK+ZmSHjWPWL@zn.tnic>
+ <20220118195401.GB89184@sequoia>
+ <YecrXidqecoYI/xg@zn.tnic>
+ <YefXQHXNlsxk8yUc@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e6293ec4-7c56-194a-95f9-98b102d80b31@huawei.com>
+In-Reply-To: <YefXQHXNlsxk8yUc@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 02:40:58PM +0800, He Ying wrote:
-> Hi all,
-> 
-> Ping. Any comments?
+On Wed, Jan 19, 2022 at 10:17:52AM +0100, Greg Kroah-Hartman wrote:
+> For this specific change, I do NOT think it should be backported at all,
+> mostly for the reason that people are still arguing over the whole
+> platform_get_*_optional() mess that we currently have.  Let's not go and
+> backport anything right now to stable trees until we have all of that
+> sorted out, as it looks like it all might be changing again.  See:
+> 	https://lore.kernel.org/r/20220110195449.12448-1-s.shtylyov@omp.ru
+> for all of the gory details and the 300+ emails written on the topic so
+> far.
 
-The patch looks fine, but as it's the middle of the merge window people
-are busy and unlikely to look at this for the next few days.
+It sounds to me I should not even take this patch upstream yet,
+considering that's still ongoing...
 
-Generally it's a good idea to wait until rc1 or rc2, rebase atop that,
-and post the updated patch. Stuff like this usually gets queued around
-rc3/rc4 time.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 锟斤拷 2022/1/12 11:24, He Ying 写锟斤拷:
-> > Arm64 pseudo-NMI feature code brings some additional nops
-> > when CONFIG_ARM64_PSEUDO_NMI is not set, which is not
-> > necessary. So add necessary ifdeffery to avoid it.
-> > 
-> > Signed-off-by: He Ying <heying24@huawei.com>
-
-FWIW:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> > ---
-> >   arch/arm64/kernel/entry.S | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> > index 2f69ae43941d..ffc32d3d909a 100644
-> > --- a/arch/arm64/kernel/entry.S
-> > +++ b/arch/arm64/kernel/entry.S
-> > @@ -300,6 +300,7 @@ alternative_else_nop_endif
-> >   	str	w21, [sp, #S_SYSCALLNO]
-> >   	.endif
-> > +#ifdef CONFIG_ARM64_PSEUDO_NMI
-> >   	/* Save pmr */
-> >   alternative_if ARM64_HAS_IRQ_PRIO_MASKING
-> >   	mrs_s	x20, SYS_ICC_PMR_EL1
-> > @@ -307,6 +308,7 @@ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
-> >   	mov	x20, #GIC_PRIO_IRQON | GIC_PRIO_PSR_I_SET
-> >   	msr_s	SYS_ICC_PMR_EL1, x20
-> >   alternative_else_nop_endif
-> > +#endif
-> >   	/* Re-enable tag checking (TCO set on exception entry) */
-> >   #ifdef CONFIG_ARM64_MTE
-> > @@ -330,6 +332,7 @@ alternative_else_nop_endif
-> >   	disable_daif
-> >   	.endif
-> > +#ifdef CONFIG_ARM64_PSEUDO_NMI
-> >   	/* Restore pmr */
-> >   alternative_if ARM64_HAS_IRQ_PRIO_MASKING
-> >   	ldr	x20, [sp, #S_PMR_SAVE]
-> > @@ -339,6 +342,7 @@ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
-> >   	dsb	sy				// Ensure priority change is seen by redistributor
-> >   .L__skip_pmr_sync\@:
-> >   alternative_else_nop_endif
-> > +#endif
-> >   	ldp	x21, x22, [sp, #S_PC]		// load ELR, SPSR
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5788493E93
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A877493E94
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356229AbiASQt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:49:57 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57826 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356170AbiASQt4 (ORCPT
+        id S243513AbiASQvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:51:41 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33810 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243495AbiASQvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:49:56 -0500
+        Wed, 19 Jan 2022 11:51:38 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F3E441F3A8;
-        Wed, 19 Jan 2022 16:49:54 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A2C3921126;
+        Wed, 19 Jan 2022 16:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642610995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642611097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xyHLINDUQ4p2y/yWxMmsPLf/SDRFaxvEY50CdZCSCAo=;
-        b=HgKhSItFK+7qVaAWcHB1Pqtrbi7X9C5aSs8zeHcGH4nrShattVgbbUJkxCX4seNIYtFtBF
-        APm9WVcYO/rxGZ6LELfGI3eMY55KFNx1fRIQBMJlyAkZl+hLavMDPi3hdtXLTw/Wc/v3l0
-        Tm9vQpVcJv8F+4wpDYgmJVFwl4jufvk=
+        bh=dcNkutNEUdp9tNCGv2eq1CnHkXbyaGxeNqKqSZ28AG8=;
+        b=zVHxQO4Xv8Woim81RYvQnEF/90eYeX7QaT6p/QjrJcePnJFi85h9bqzpC3GBpn/jrixuRv
+        gv/FEAXdlQrvDbQ8dPBcr+zYisQr6NQyczJsLshSbS0N+F0MXJbCShXTmRW61mDHzllcm2
+        AYb2whyA9oiJtPvrPWw01+riG1X9o9g=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642610995;
+        s=susede2_ed25519; t=1642611097;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xyHLINDUQ4p2y/yWxMmsPLf/SDRFaxvEY50CdZCSCAo=;
-        b=rBs4LAEl5PYjRPK4HOPx59oD3ebulig9ISiwAY7pY4ywLF6mOV9mfp2KVmydW7v1Zv0F/z
-        UD39kX5wZ6AKxQBA==
+        bh=dcNkutNEUdp9tNCGv2eq1CnHkXbyaGxeNqKqSZ28AG8=;
+        b=4QThA5FBH2vf2Fqu5ss7T4AoRKDjRJboGbAyNcRe8QS2mLcNHt+gspF2HyI8/k6T24CEoK
+        BkA/g76kOjZhGXCw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0A1A13B77;
-        Wed, 19 Jan 2022 16:49:54 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E8ED13B77;
+        Wed, 19 Jan 2022 16:51:37 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id /jp1KjJB6GHtLgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 16:49:54 +0000
-Message-ID: <ae9da909-0d21-c2aa-fc69-764ebba29672@suse.cz>
-Date:   Wed, 19 Jan 2022 17:49:54 +0100
+        id KoVRFplB6GHVLwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 16:51:37 +0000
+Message-ID: <3f565267-078e-ad4c-dfd2-36dba2201afe@suse.cz>
+Date:   Wed, 19 Jan 2022 17:51:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 47/66] sched: Use maple tree iterator to walk VMAs
+Subject: Re: [PATCH v4 48/66] fork: Use VMA iterator
 Content-Language: en-US
 To:     Liam Howlett <liam.howlett@oracle.com>,
         "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
@@ -74,9 +74,9 @@ Cc:     Song Liu <songliubraving@fb.com>,
         Joel Fernandes <joelaf@google.com>,
         Rom Lemarchand <romlem@google.com>
 References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-48-Liam.Howlett@oracle.com>
+ <20211201142918.921493-49-Liam.Howlett@oracle.com>
 From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-48-Liam.Howlett@oracle.com>
+In-Reply-To: <20211201142918.921493-49-Liam.Howlett@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -86,9 +86,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 12/1/21 15:30, Liam Howlett wrote:
 > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> The linked list is slower than walking the VMAs using the maple tree.
-> We can't use the VMA iterator here because it doesn't support
-> moving to an earlier position.
+> The VMA iterator is faster than the linked list and removing the linked
+> list will shrink the vm_area_struct.
 > 
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
@@ -96,39 +95,30 @@ On 12/1/21 15:30, Liam Howlett wrote:
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
 > ---
->  kernel/sched/fair.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+>  kernel/fork.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6e476f6d9435..39bb4a6c8507 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -2672,6 +2672,7 @@ static void task_numa_work(struct callback_head *work)
->  	struct task_struct *p = current;
->  	struct mm_struct *mm = p->mm;
->  	u64 runtime = p->se.sum_exec_runtime;
-> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
->  	struct vm_area_struct *vma;
->  	unsigned long start, end;
->  	unsigned long nr_pte_updates = 0;
-> @@ -2728,13 +2729,16 @@ static void task_numa_work(struct callback_head *work)
->  
->  	if (!mmap_read_trylock(mm))
->  		return;
-> -	vma = find_vma(mm, start);
-> +	mas_set(&mas, start);
-> +	vma = mas_find(&mas, ULONG_MAX);
->  	if (!vma) {
->  		reset_ptenuma_scan(p);
->  		start = 0;
-> -		vma = mm->mmap;
-> +		mas_set(&mas, start);
-> +		vma = mas_find(&mas, ULONG_MAX);
->  	}
-> -	for (; vma; vma = vma->vm_next) {
-> +
-> +	for (; vma; vma = mas_find(&mas, ULONG_MAX)) {
->  		if (!vma_migratable(vma) || !vma_policy_mof(vma) ||
->  			is_vm_hugetlb_page(vma) || (vma->vm_flags & VM_MIXEDMAP)) {
->  			continue;
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 3493117c8d35..6de302e93519 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -1228,13 +1228,16 @@ int replace_mm_exe_file(struct mm_struct *mm, struct file *new_exe_file)
+>  	/* Forbid mm->exe_file change if old file still mapped. */
+>  	old_exe_file = get_mm_exe_file(mm);
+>  	if (old_exe_file) {
+> +		VMA_ITERATOR(vmi, mm, 0);
+>  		mmap_read_lock(mm);
+> -		for (vma = mm->mmap; vma && !ret; vma = vma->vm_next) {
+> +		for_each_vma(vmi, vma) {
+>  			if (!vma->vm_file)
+>  				continue;
+>  			if (path_equal(&vma->vm_file->f_path,
+> -				       &old_exe_file->f_path))
+> +				       &old_exe_file->f_path)) {
+>  				ret = -EBUSY;
+> +				break;
+> +			}
+>  		}
+>  		mmap_read_unlock(mm);
+>  		fput(old_exe_file);
 

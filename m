@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C497C493F7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D77493F7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356563AbiASSCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:02:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60738 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbiASSCg (ORCPT
+        id S1356579AbiASSCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:02:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33414 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356584AbiASSCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:02:36 -0500
+        Wed, 19 Jan 2022 13:02:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 240C36164B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0858EC340E1;
-        Wed, 19 Jan 2022 18:02:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C4B5B81AD7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:02:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D252C004E1;
+        Wed, 19 Jan 2022 18:02:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642615355;
-        bh=lFbFmk/aY3Awpx6kg8ejVPc7bOfnP/ly0j3vvYiYSLk=;
+        s=k20201202; t=1642615363;
+        bh=Ejx70INqUp2bNwzG81sAJkFn1eHPuvsr8OaPqGMwytw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=X13pX4fJy3fRJZKI7F7MRVUE9FDrT6nBmOjzxghhUmAx2oa89pVuGluI1ZYQomcy6
-         J+u9NeebYvDBhaYmNBCPyWnAjj843aXJvGQIg5lEMex3rGmpPraZKtS0Sx3GixOSWu
-         vOFCHvDwIjpsucj9Dm3JF8fyjUVl+U1NJKul284TSlhz9ilYs39lj11XWUJ/f0eAWA
-         aoMRjTtdGCjJ1nOQKkTsTFwusUiXG8pCTiSkWRpA4jWRHdLqZ9X43k7TEqlfTQxDbf
-         s7aV3RXj48GWZ8ij+1oHhON0CDe042M5476jVs1mtL2ADTwQ7m1iF2hjoGebAbAjNd
-         8fitwOsx/LB2w==
+        b=Ot1iRp1P/g0SAktbGB2rKkL7a9cZYOfuvr2EhM2gRiu3FZDsKdeP3qY2rMFqpwsXG
+         z1PtK7M83y7nRBHb6l+E8JyKv+KU1belM8zTSVZdT50wuIptNCdwXbkhO5AsXN4oWW
+         00a7aiB7JeGvjSIWSli8mYOwz/mUuGIUE/PqvYXt6EyJDMXd/hHhRzSYmwAhXEEO8a
+         vN2PogPrN7IsHIKnRNWq8Khhrp9k3E6zFrbH9YiZAUtWkt+OL6DUqGs+XZ5N9VTirc
+         x2Ch7XQPxmSOyqYXKyGks9oI2JIp7ljoE8yCJK9FWx+h7qWtQPTLHLDVSRCrzt+rsu
+         6HWS1YiftM6nA==
 From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, lgirdwood@gmail.com,
-        Julian Braha <julianbraha@gmail.com>, matthias.bgg@gmail.com,
-        tzungbi@google.com, geert+renesas@glider.be, perex@perex.cz,
-        trevor.wu@mediatek.com
-Cc:     linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, fazilyildiran@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220117050324.68371-1-julianbraha@gmail.com>
-References: <20220117050324.68371-1-julianbraha@gmail.com>
-Subject: Re: [PATCH] ASoC: mediatek: fix unmet dependency on GPIOLIB for SND_SOC_DMIC
-Message-Id: <164261535273.2816847.12797426159265748718.b4-ty@kernel.org>
-Date:   Wed, 19 Jan 2022 18:02:32 +0000
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Watson Chow <watson.chow@avnet.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        kernel test robot <lkp@intel.com>
+In-Reply-To: <20220115033603.24473-1-rdunlap@infradead.org>
+References: <20220115033603.24473-1-rdunlap@infradead.org>
+Subject: Re: [PATCH] regulator: MAX20086: add gpio/consumer.h
+Message-Id: <164261536190.2816906.3585022513253702199.b4-ty@kernel.org>
+Date:   Wed, 19 Jan 2022 18:02:41 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -49,26 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 00:03:24 -0500, Julian Braha wrote:
-> When SND_SOC_MT8195_MT6359_RT1011_RT5682 is selected,
-> and GPIOLIB is not selected,
-> Kbuild gives the following warning:
+On Fri, 14 Jan 2022 19:36:03 -0800, Randy Dunlap wrote:
+> max20086-regulator.c needs <linux/gpio/consumer.h> for an enum, some
+> macros, and a function prototype. (seen on ARCH=m68k)
 > 
-> WARNING: unmet direct dependencies detected for SND_SOC_DMIC
->   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && GPIOLIB [=n]
->   Selected by [y]:
->   - SND_SOC_MT8195_MT6359_RT1011_RT5682 [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=y] && SND_SOC_MT8195 [=y] && MTK_PMIC_WRAP [=y]
+> Adding this header file fixes multiple build errors:
+> 
+> ../drivers/regulator/max20086-regulator.c: In function 'max20086_i2c_probe':
+> ../drivers/regulator/max20086-regulator.c:217:26: error: storage size of 'flags' isn't known
+>   217 |         enum gpiod_flags flags;
+> ../drivers/regulator/max20086-regulator.c:261:27: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
+>   261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
+>       |                           ^~~~~~~~~~~~~~
+> ../drivers/regulator/max20086-regulator.c:261:44: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
+>   261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
+> ../drivers/regulator/max20086-regulator.c:262:27: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
+>   262 |         chip->ena_gpiod = devm_gpiod_get(chip->dev, "enable", flags);
+> ../drivers/regulator/max20086-regulator.c:217:26: warning: unused variable 'flags' [-Wunused-variable]
+>   217 |         enum gpiod_flags flags;
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-linus
 
 Thanks!
 
-[1/1] ASoC: mediatek: fix unmet dependency on GPIOLIB for SND_SOC_DMIC
-      commit: 579b2c8f72d974f27d85bbd53846f34675ee3b01
+[1/1] regulator: MAX20086: add gpio/consumer.h
+      commit: b4c18c18ebf7cf1e602af88c12ef9cb0d6e5ce51
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

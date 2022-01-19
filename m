@@ -2,131 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEB04937FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCE2493867
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353490AbiASKLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:11:52 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41912 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1353474AbiASKLv (ORCPT
+        id S1353627AbiASK1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:27:52 -0500
+Received: from mail-m972.mail.163.com ([123.126.97.2]:29589 "EHLO
+        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353429AbiASK1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:11:51 -0500
-X-UUID: b0ba83a4b0f0412b94a673a793878491-20220119
-X-UUID: b0ba83a4b0f0412b94a673a793878491-20220119
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 599025123; Wed, 19 Jan 2022 18:11:47 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 19 Jan 2022 18:11:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 19 Jan
- 2022 18:11:45 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 18:11:44 +0800
-Message-ID: <068c965a0243486f0e1cabbafb8904a6a8ddcc9f.camel@mediatek.com>
-Subject: Re: [RESEND v3 3/3] mmc: mediatek: add support for SDIO eint IRQ
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Date:   Wed, 19 Jan 2022 18:11:43 +0800
-In-Reply-To: <CAHp75VdkKYujGZOdGkLK-tzC9q+RjkX59fFZe5cHajGOnDdL2w@mail.gmail.com>
-References: <20220117082539.18713-1-axe.yang@mediatek.com>
-         <20220117082539.18713-4-axe.yang@mediatek.com>
-         <CAHp75VdkKYujGZOdGkLK-tzC9q+RjkX59fFZe5cHajGOnDdL2w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 19 Jan 2022 05:27:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ggh+j
+        BUxPZigS6LulYn3qU9duz7ejB5F3vOjxnkFcnM=; b=XG+fovDDxuMf+QBe22rXp
+        enUNaRD5RQH6ET9DfO1BINiHo86WoM1gJ/iLvgqMh4Tl3PeZbbMZNjHwclLdV8cB
+        PMnqWu+5KJrWBxXTCT7tZ+ZxHmWfeFjdAQdl83gskpvp51BtTdDiC059pLaBJ4iC
+        ikx6m7gKePYsd2cvX+u9pg=
+Received: from localhost.localdomain (unknown [112.97.57.111])
+        by smtp2 (Coremail) with SMTP id GtxpCgDXTrP_4+dh2FkEAw--.8202S2;
+        Wed, 19 Jan 2022 18:12:17 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, hemantk@codeaurora.org, jarvis.w.jiang@gmail.com,
+        loic.poulain@linaro.org
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH net v3] bus: mhi: Add mru_default for Foxconn SDX55
+Date:   Wed, 19 Jan 2022 18:12:13 +0800
+Message-Id: <20220119101213.5008-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgDXTrP_4+dh2FkEAw--.8202S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw4xuw1rAFyxtF4xZFyfXrb_yoWDJFb_Cr
+        ZIgF4xuws8WrZ5Gwn2qan5Z3yrK3W7ZF1kZF10qrn8J34aqw1qqwn5trZ5AFn0gFW5AF9r
+        J34rWr1rAw1a9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjSoGtUUUUU==
+X-Originating-IP: [112.97.57.111]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwKNZFc7Vmlq1gAAsD
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 11:18 +0200, Andy Shevchenko wrote:
-> On Mon, Jan 17, 2022 at 7:33 PM Axe Yang <axe.yang@mediatek.com>
-> wrote:
-> > 
-> > Add support for eint IRQ when MSDC is used as an SDIO host. This
-> > feature requires SDIO device support async IRQ function. With this
-> > feature, SDIO host can be awakened by SDIO card in suspend state,
-> > without additional pin.
-> > 
-> > MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> > turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> > resume, switch GPIO function back to DAT1 mode then turn on clock.
-> > 
-> > Some device tree property should be added or modified in MSDC node
-> > to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-> > are mandatory. And cap-sdio-async-irq flag is necessary since this
-> > feature depends on asynchronous interrupt:
-> >         &mmcX {
-> >                 ...
-> >                 pinctrl-names = "default", "state_uhs",
-> > "state_eint",
-> >                                 "state_dat1";
-> >                 ...
-> >                 pinctrl-2 = <&mmc2_pins_eint>;
-> >                 pinctrl-3 = <&mmc2_pins_dat1>;
-> >                 ...
-> >                 cap-sdio-async-irq;
-> >                 ...
-> >         };
-> 
-> ...
-> 
-> > +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
-> > +{
-> > +       struct msdc_host *host = dev_id;
-> > +       struct mmc_host *mmc = mmc_from_priv(host);
-> > +       unsigned long flags;
-> 
-> Same Q as per v2. Why do you need this?
-> 
-> Yes, you did the first step to the answer, but I want you to go
-> deeper
-> and tell me why you need the spin_lock_irqsave() variant.
+For default mechanism, product would use default MRU 3500 if
+they didn't define it. But for Foxconn SDX55, there is a known
+issue which MRU 3500 would lead to data connection lost.
+So we align it with Qualcomm default MRU settings.
 
-You are right, no need to save/restore flags in irq handler.
-Will fix it in new version.
-Thanks.
+Fixes: aac426562f56 ("bus: mhi: pci_generic: Introduce Foxconn T99W175 support")
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+---
+ drivers/bus/mhi/pci_generic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> > +       spin_lock_irqsave(&host->lock, flags);
-> > +       if (likely(host->sdio_irq_cnt > 0)) {
-> > +               disable_irq_nosync(host->eint_irq);
-> > +               disable_irq_wake(host->eint_irq);
-> > +               host->sdio_irq_cnt--;
-> > +       }
-> > +       spin_unlock_irqrestore(&host->lock, flags);
-> > +
-> > +       sdio_signal_irq(mmc);
-> > +
-> > +       return IRQ_HANDLED;
-> > +}
-> 
-> 
+diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
+index 3a258a677df8..74e8fc342cfd 100644
+--- a/drivers/bus/mhi/pci_generic.c
++++ b/drivers/bus/mhi/pci_generic.c
+@@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
+ 	.config = &modem_foxconn_sdx55_config,
+ 	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
+ 	.dma_data_width = 32,
++	.mru_default = 32768,
+ 	.sideband_wake = false,
+ };
+ 
+-- 
+2.25.1
 

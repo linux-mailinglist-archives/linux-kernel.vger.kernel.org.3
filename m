@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E660B49391C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A2649391E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353996AbiASK7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:59:50 -0500
-Received: from foss.arm.com ([217.140.110.172]:53646 "EHLO foss.arm.com"
+        id S1353974AbiASLAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:00:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:53688 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353942AbiASK7o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:59:44 -0500
+        id S1353991AbiASK7u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 05:59:50 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE99F1063;
-        Wed, 19 Jan 2022 02:59:43 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B8C4113E;
+        Wed, 19 Jan 2022 02:59:49 -0800 (PST)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 22EF33F73D;
-        Wed, 19 Jan 2022 02:59:39 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CF3EC3F73D;
+        Wed, 19 Jan 2022 02:59:44 -0800 (PST)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
@@ -32,9 +32,9 @@ Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
         peterz@infradead.org, seanjc@google.com, suzuki.poulose@arm.com,
         svens@linux.ibm.com, tglx@linutronix.de, tsbogend@alpha.franken.de,
         vkuznets@redhat.com, wanpengli@tencent.com, will@kernel.org
-Subject: [PATCH v2 6/7] kvm/s390: rework guest entry logic
-Date:   Wed, 19 Jan 2022 10:58:53 +0000
-Message-Id: <20220119105854.3160683-7-mark.rutland@arm.com>
+Subject: [PATCH v2 7/7] kvm/x86: rework guest entry logic
+Date:   Wed, 19 Jan 2022 10:58:54 +0000
+Message-Id: <20220119105854.3160683-8-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220119105854.3160683-1-mark.rutland@arm.com>
 References: <20220119105854.3160683-1-mark.rutland@arm.com>
@@ -44,219 +44,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __vcpu_run() and do_vsie_run(), we enter an RCU extended quiescent
-state (EQS) by calling guest_enter_irqoff(), which lasts until
-__vcpu_run() calls guest_exit_irqoff(). However, during the two we
-enable interrupts and may handle interrupts during the EQS. As the IRQ
-entry code will not wake RCU in this case, we may run the core IRQ code
-and IRQ handler without RCU watching, leading to various potential
-problems.
+For consistency and clarity, migrate x86 over to the generic helpers for
+guest timing and lockdep/RCU/tracing management, and remove the
+x86-specific helpers.
 
-It is necessary to unmask (host) interrupts around entering the guest,
-as entering the guest via SIE will not automatically unmask these. When
-a host interrupts is taken from a guest, it is taken via its regular
-host IRQ handler rather than being treated as a direct exit from SIE.
-Due to this, we cannot simply mask interrupts around guest entry, and
-must handle interrupts during this window, waking RCU as required.
+Prior to this patch, the guest timing was entered in
+kvm_guest_enter_irqoff() (called by svm_vcpu_enter_exit() and
+svm_vcpu_enter_exit()), and was exited by the call to
+vtime_account_guest_exit() within vcpu_enter_guest().
 
-Additionally, between guest_exit_irqoff() and guest_exit_irqoff(), we
-use local_irq_enable() and local_irq_disable() to unmask interrupts,
-violating the ordering requirements for RCU/lockdep/tracing around
-entry/exit sequences. Further, since this occurs in an instrumentable
-function, it's possible that instrumented code runs during this window,
-with potential usage of RCU, etc.
+To minimize duplication and to more clearly balance entry and exit, both
+entry and exit of guest timing are placed in vcpu_enter_guest(), using
+the new guest_timing_{enter,exit}_irqoff() helpers. When context
+tracking is used a small amount of additional time will be accounted
+towards guests; tick-based accounting is unnaffected as IRQs are
+disabled at this point and not enabled until after the return from the
+guest.
 
-To fix the RCU wakeup problem, an s390 implementation of
-arch_in_rcu_eqs() is added which checks for PF_VCPU in current->flags.
-PF_VCPU is set/cleared by guest_timing_{enter,exit}_irqoff(), which
-surround the actual guest entry.
+This also corrects (benign) mis-balanced context tracking accounting
+introduced in commits:
 
-To fix the remaining issues, the lower-level guest entry logic is moved
-into a shared noinstr helper function using the
-guest_state_{enter,exit}_irqoff() helpers. These perform all the
-lockdep/RCU/tracing manipulation necessary, but as sie64a() does not
-enable/disable interrupts, we must do this explicitly with the
-non-instrumented arch_local_irq_{enable,disable}() helpers:
+  ae95f566b3d22ade ("KVM: X86: TSCDEADLINE MSR emulation fastpath")
+  26efe2fd92e50822 ("KVM: VMX: Handle preemption timer fastpath")
 
-	guest_state_enter_irqoff()
-
-	arch_local_irq_enable();
-	sie64a(...);
-	arch_local_irq_disable();
-
-	guest_state_exit_irqoff();
+Where KVM can enter a guest multiple times, calling vtime_guest_enter()
+without a corresponding call to vtime_account_guest_exit(), and with
+vtime_account_system() called when vtime_account_guest() should be used.
+As account_system_time() checks PF_VCPU and calls account_guest_time(),
+this doesn't result in any functional problem, but is unnecessarily
+confusing.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Joerg Roedel <joro@8bytes.org>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Wanpeng Li <wanpengli@tencent.com>
 ---
- arch/s390/include/asm/entry-common.h | 10 ++++++
- arch/s390/include/asm/kvm_host.h     |  3 ++
- arch/s390/kvm/kvm-s390.c             | 49 +++++++++++++++++++++-------
- arch/s390/kvm/vsie.c                 | 17 ++++------
- 4 files changed, 58 insertions(+), 21 deletions(-)
+ arch/x86/kvm/svm/svm.c |  4 ++--
+ arch/x86/kvm/vmx/vmx.c |  4 ++--
+ arch/x86/kvm/x86.c     |  4 +++-
+ arch/x86/kvm/x86.h     | 45 ------------------------------------------
+ 4 files changed, 7 insertions(+), 50 deletions(-)
 
-diff --git a/arch/s390/include/asm/entry-common.h b/arch/s390/include/asm/entry-common.h
-index 17aead80aadba..e69a2ab28b847 100644
---- a/arch/s390/include/asm/entry-common.h
-+++ b/arch/s390/include/asm/entry-common.h
-@@ -57,6 +57,16 @@ static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 5151efa424acb..1253add2c1075 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3814,7 +3814,7 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 	unsigned long vmcb_pa = svm->current_vmcb->pa;
  
- #define arch_exit_to_user_mode_prepare arch_exit_to_user_mode_prepare
+-	kvm_guest_enter_irqoff();
++	guest_state_enter_irqoff();
  
-+static __always_inline bool arch_in_rcu_eqs(void)
-+{
-+	if (IS_ENABLED(CONFIG_KVM))
-+		return current->flags & PF_VCPU;
-+
-+	return false;
-+}
-+
-+#define arch_in_rcu_eqs arch_in_rcu_eqs
-+
- static inline bool on_thread_stack(void)
- {
- 	return !(((unsigned long)(current->stack) ^ current_stack_pointer()) & ~(THREAD_SIZE - 1));
-diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-index a604d51acfc83..bf7efd990039b 100644
---- a/arch/s390/include/asm/kvm_host.h
-+++ b/arch/s390/include/asm/kvm_host.h
-@@ -995,6 +995,9 @@ void kvm_arch_crypto_set_masks(struct kvm *kvm, unsigned long *apm,
- extern int sie64a(struct kvm_s390_sie_block *, u64 *);
- extern char sie_exit;
+ 	if (sev_es_guest(vcpu->kvm)) {
+ 		__svm_sev_es_vcpu_run(vmcb_pa);
+@@ -3834,7 +3834,7 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
+ 		vmload(__sme_page_pa(sd->save_area));
+ 	}
  
-+extern int kvm_s390_enter_exit_sie(struct kvm_s390_sie_block *scb,
-+				   u64 *gprs);
-+
- extern int kvm_s390_gisc_register(struct kvm *kvm, u32 gisc);
- extern int kvm_s390_gisc_unregister(struct kvm *kvm, u32 gisc);
- 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 14a18ba5ff2c8..d13401bf6a5a2 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -4169,6 +4169,30 @@ static int vcpu_post_run(struct kvm_vcpu *vcpu, int exit_reason)
- 	return vcpu_post_run_fault_in_sie(vcpu);
+-	kvm_guest_exit_irqoff();
++	guest_state_exit_irqoff();
  }
  
-+int noinstr kvm_s390_enter_exit_sie(struct kvm_s390_sie_block *scb,
-+				    u64 *gprs)
-+{
-+	int ret;
-+
-+	guest_state_enter_irqoff();
-+
-+	/*
-+	 * The guest_state_{enter,exit}_irqoff() functions inform lockdep and
-+	 * tracing that entry to the guest will enable host IRQs, and exit from
-+	 * the guest will disable host IRQs.
-+	 *
-+	 * We must not use lockdep/tracing/RCU in this critical section, so we
-+	 * use the low-level arch_local_irq_*() helpers to enable/disable IRQs.
-+	 */
-+	arch_local_irq_enable();
-+	ret = sie64a(scb, gprs);
-+	arch_local_irq_disable();
-+
-+	guest_state_exit_irqoff();
-+
-+	return ret;
-+}
-+
- #define PSW_INT_MASK (PSW_MASK_EXT | PSW_MASK_IO | PSW_MASK_MCHECK)
- static int __vcpu_run(struct kvm_vcpu *vcpu)
+ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 0dbf94eb954fd..f458026a85159 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6593,7 +6593,7 @@ static fastpath_t vmx_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ 					struct vcpu_vmx *vmx)
  {
-@@ -4189,12 +4213,9 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
- 		srcu_read_unlock(&vcpu->kvm->srcu, vcpu->srcu_idx);
+-	kvm_guest_enter_irqoff();
++	guest_state_enter_irqoff();
+ 
+ 	/* L1D Flush includes CPU buffer clear to mitigate MDS */
+ 	if (static_branch_unlikely(&vmx_l1d_should_flush))
+@@ -6609,7 +6609,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ 
+ 	vcpu->arch.cr2 = native_read_cr2();
+ 
+-	kvm_guest_exit_irqoff();
++	guest_state_exit_irqoff();
+ }
+ 
+ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e50e97ac44084..bd3873b90889d 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9876,6 +9876,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 		set_debugreg(0, 7);
+ 	}
+ 
++	guest_timing_enter_irqoff();
++
+ 	for (;;) {
  		/*
- 		 * As PF_VCPU will be used in fault handler, between
--		 * guest_enter and guest_exit should be no uaccess.
-+		 * guest_timing_enter_irqoff and guest_timing_exit_irqoff
-+		 * should be no uaccess.
- 		 */
--		local_irq_disable();
--		guest_enter_irqoff();
--		__disable_cpu_timer_accounting(vcpu);
--		local_irq_enable();
- 		if (kvm_s390_pv_cpu_is_protected(vcpu)) {
- 			memcpy(sie_page->pv_grregs,
- 			       vcpu->run->s.regs.gprs,
-@@ -4202,8 +4223,18 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
- 		}
- 		if (test_cpu_flag(CIF_FPU))
- 			load_fpu_regs();
--		exit_reason = sie64a(vcpu->arch.sie_block,
--				     vcpu->run->s.regs.gprs);
-+
-+		local_irq_disable();
-+		guest_timing_enter_irqoff();
-+		__disable_cpu_timer_accounting(vcpu);
-+
-+		exit_reason = kvm_s390_enter_exit_sie(vcpu->arch.sie_block,
-+						      vcpu->run->s.regs.gprs);
-+
-+		__enable_cpu_timer_accounting(vcpu);
-+		guest_timing_exit_irqoff();
-+		local_irq_enable();
-+
- 		if (kvm_s390_pv_cpu_is_protected(vcpu)) {
- 			memcpy(vcpu->run->s.regs.gprs,
- 			       sie_page->pv_grregs,
-@@ -4219,10 +4250,6 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
- 				vcpu->arch.sie_block->gpsw.mask &= ~PSW_INT_MASK;
- 			}
- 		}
--		local_irq_disable();
--		__enable_cpu_timer_accounting(vcpu);
--		guest_exit_irqoff();
--		local_irq_enable();
- 		vcpu->srcu_idx = srcu_read_lock(&vcpu->kvm->srcu);
+ 		 * Assert that vCPU vs. VM APICv state is consistent.  An APICv
+@@ -9949,7 +9951,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 	 * of accounting via context tracking, but the loss of accuracy is
+ 	 * acceptable for all known use cases.
+ 	 */
+-	vtime_account_guest_exit();
++	guest_timing_exit_irqoff();
  
- 		rc = vcpu_post_run(vcpu, exit_reason);
-diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-index acda4b6fc8518..e9b0b2d04e1e3 100644
---- a/arch/s390/kvm/vsie.c
-+++ b/arch/s390/kvm/vsie.c
-@@ -1106,10 +1106,6 @@ static int do_vsie_run(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
- 	    vcpu->arch.sie_block->fpf & FPF_BPBC)
- 		set_thread_flag(TIF_ISOLATE_BP_GUEST);
+ 	if (lapic_in_kernel(vcpu)) {
+ 		s64 delta = vcpu->arch.apic->lapic_timer.advance_expire_delta;
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index 4abcd8d9836dd..8e50645ac740e 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -10,51 +10,6 @@
  
--	local_irq_disable();
+ void kvm_spurious_fault(void);
+ 
+-static __always_inline void kvm_guest_enter_irqoff(void)
+-{
+-	/*
+-	 * VMENTER enables interrupts (host state), but the kernel state is
+-	 * interrupts disabled when this is invoked. Also tell RCU about
+-	 * it. This is the same logic as for exit_to_user_mode().
+-	 *
+-	 * This ensures that e.g. latency analysis on the host observes
+-	 * guest mode as interrupt enabled.
+-	 *
+-	 * guest_enter_irqoff() informs context tracking about the
+-	 * transition to guest mode and if enabled adjusts RCU state
+-	 * accordingly.
+-	 */
+-	instrumentation_begin();
+-	trace_hardirqs_on_prepare();
+-	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+-	instrumentation_end();
+-
 -	guest_enter_irqoff();
--	local_irq_enable();
+-	lockdep_hardirqs_on(CALLER_ADDR0);
+-}
 -
- 	/*
- 	 * Simulate a SIE entry of the VCPU (see sie64a), so VCPU blocking
- 	 * and VCPU requests also hinder the vSIE from running and lead
-@@ -1120,15 +1116,16 @@ static int do_vsie_run(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
- 	barrier();
- 	if (test_cpu_flag(CIF_FPU))
- 		load_fpu_regs();
--	if (!kvm_s390_vcpu_sie_inhibited(vcpu))
--		rc = sie64a(scb_s, vcpu->run->s.regs.gprs);
-+	if (!kvm_s390_vcpu_sie_inhibited(vcpu)) {
-+		local_irq_disable();
-+		guest_timing_enter_irqoff();
-+		rc = kvm_s390_enter_exit_sie(scb_s, vcpu->run->s.regs.gprs);
-+		guest_timing_exit_irqoff();
-+		local_irq_enable();
-+	}
- 	barrier();
- 	vcpu->arch.sie_block->prog0c &= ~PROG_IN_SIE;
- 
--	local_irq_disable();
--	guest_exit_irqoff();
--	local_irq_enable();
+-static __always_inline void kvm_guest_exit_irqoff(void)
+-{
+-	/*
+-	 * VMEXIT disables interrupts (host state), but tracing and lockdep
+-	 * have them in state 'on' as recorded before entering guest mode.
+-	 * Same as enter_from_user_mode().
+-	 *
+-	 * context_tracking_guest_exit() restores host context and reinstates
+-	 * RCU if enabled and required.
+-	 *
+-	 * This needs to be done immediately after VM-Exit, before any code
+-	 * that might contain tracepoints or call out to the greater world,
+-	 * e.g. before x86_spec_ctrl_restore_host().
+-	 */
+-	lockdep_hardirqs_off(CALLER_ADDR0);
+-	context_tracking_guest_exit();
 -
- 	/* restore guest state for bp isolation override */
- 	if (!guest_bp_isolation)
- 		clear_thread_flag(TIF_ISOLATE_BP_GUEST);
+-	instrumentation_begin();
+-	trace_hardirqs_off_finish();
+-	instrumentation_end();
+-}
+-
+ #define KVM_NESTED_VMENTER_CONSISTENCY_CHECK(consistency_check)		\
+ ({									\
+ 	bool failed = (consistency_check);				\
 -- 
 2.30.2
 

@@ -2,99 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40484493B77
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F477493B79
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350928AbiASNwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:52:11 -0500
-Received: from mga05.intel.com ([192.55.52.43]:59410 "EHLO mga05.intel.com"
+        id S1354874AbiASNxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:53:45 -0500
+Received: from mout.gmx.net ([212.227.17.21]:44909 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235698AbiASNwK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:52:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642600330; x=1674136330;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V6xj/70rR9995gOWyZ2fhDWt5YCJUunhJStJfwvw0ds=;
-  b=Qr82z7QNjzR3qw3ritHdY4J04BfnBHWNhuIOzIdVxZmeonYFDNAj164X
-   BQpfpTTgBFz0DxuUnHqYksUXP/NArafEcdN5Kk+6TUPPiwpYEY1pRHIVP
-   gEoK7vvZ5LpGbOy+murd+TwbXOBVUNIdvw94w6Br7pbBxMDMd32WFwWAP
-   fJKSfN1PPQJYTcI3Eohip+vXKeN+voOaqLzTfel2PEnfVax70Cf+l018K
-   /++acZg5REwaEXC8VA6Xi1GcScDf9UWa/jLhgQZ9tModuCxQxK0eiY6RD
-   tpfXH1BWDwjYhG328HwlUnbThszOHYy582jt1bXzw3QWU5UPf2CudRSct
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="331419653"
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="331419653"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 05:52:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="477379673"
-Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2022 05:52:07 -0800
-From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-To:     linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Subject: [PATCH] Makefile: Fix build with scan-build
-Date:   Wed, 19 Jan 2022 14:51:47 +0100
-Message-Id: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S235698AbiASNxo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 08:53:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642600423;
+        bh=g8zJR2Jkab1ps8eQAvmK9ipWmEmdtAot34V34MMMnEM=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=dbOvYv7k00MMYrpwxpovh2XPzH/A2w6EiJ2bl6Y7zZRiUZEd8U1JGNkHWuW+XdJMA
+         pNrmIE8WFhYn8LstXdCckIMH0V8ztjbuEwFNiQEWZLcsflX/czLvXSOSFU2JN4lBOk
+         rBSUFZYv18fQKhtNWAmjF4t8Tt/WKN311hAa6woU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.97]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M42nY-1nABPD0lwu-0001xl; Wed, 19
+ Jan 2022 14:53:43 +0100
+Message-ID: <a8e70042-e1c6-1d32-42c8-9f31128353f0@gmx.de>
+Date:   Wed, 19 Jan 2022 14:53:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:XICGdjkHf2YuCXiFAqtfu1/2lrEIoddKJYLdgbvGaKjAB4Oqero
+ MkfGwithc56AkSe15vmLmkpn6Hg684SxhXD6LRGcsAgokiz/l/cXOa0F71anEtqjP7RsOwh
+ 03lSmWa9pBhSPNcBXQ8kVReOSmhRbqRympU7eT9EoRA4ot6wPKCVqAMNbIARMZdpHxxxe/p
+ a/CRhu5oQ3igG3rXVfRPA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Gf/B3JynFDQ=:+slPRfWeRsvp4qADstdrLB
+ 3w6OJ88eOlAmy2pisgK5HqDUn7HOUKToUFANj0DsyJB5SgyKUhVJ7ELKdJ69+Ogq5Ryq4UmO6
+ ANglGjyheDmO4yIvQixarKyFau6Ip296pSNsTRhslg0bziHZId1kJgzb6Ck/RihNn1LIHSI4a
+ zrwG8M/duj72ciqoIGgd8UpjOPfp2pQffpzEu8C38qjVGh2nAIvoM2f3bWw2nHTURodusQcO9
+ kgW7hCJM4DxAUTGm6WOLMV9RKPeD1JzQPYyflWiwFNZAD93V0pXHqMAaJwrDRWX0CVD6Wd5sE
+ BO/yQ3mYUshNf0uRFo9x9U9tx3gAbS3V4kudtaU1toElj8XOn5I8izB5lwUUl+lvlTgkTJ2kW
+ HMt44lReVU1/iP4EVqyswp4etE8AcI2AaR3uUqRCfvDELqPIbjNPCm67SCHz9jHq9qtBD6ChH
+ Y9G/1drmAkLhp6KBbWQjJsJVZZWntipzlxAm7hNWYEePs4FCmaUke6E05hRiACfPCssQG2qw5
+ 4AlbajM66onEDzfaPfxff6fwJRP9dGqupXpLhX7ddTLbY8LgE1qbd0TyAzcjk96y0Sd77ZZk1
+ g/VvBl+yoXQVvvzRKBAaiLeITRlXrkpbHCx5PzeL/0xQNRIJOyfDhx9dIlSkiDDnw84lj9Xkh
+ pbGInMiejzIi/eXtXZNaTkFw4fAjbvKPuDYqc69BiEj7x+VXf+RrO11ss+FVp/kFBNA1g8obo
+ M6XfvM0RmO208OV5dLkz1l1DPw73fV1YRkSVsbQYABsikUh0U9xiieGSmQCcnGnvH+vVNyLG/
+ 6hwsMN0/Ej8pAklEdgD8r4WB5wQESn/RgEjrnfwe3K7zZZobzddLCTVqkcVhOH1UkdRo6j2/Q
+ ETdoRA1BlNyLRits6A812YfFEdcMAEPuMCmbtoFycV/2HlpQTqA0e52WPd6TsOyeSI+0jo7Ef
+ aFah+8jIGxIurZ0NKOKnKXO77JiFamDLEvAfSds3k/esI7vC9GDugHi+tO62bEP+BQF6hH2V9
+ JuHog2kI/rR/50zL1RDvKElpGKam/pqmdko1UYdMZCQ1AOU/Dfu8++yLochK2Ck3iT1bzECge
+ Ki1AMeoipm+1mk=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building kernel with scan-build for analysis:
-$ scan-build make defconfig
-$ scan-build make menuconfig # disable RETPOLINE
-$ scan-build make -j16 bindeb-pkg
-since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-it fails with:
-  CC      scripts/mod/empty.o
-could not find clang line
-make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+hallo Greg
 
-Seems like changes to how -fconserve-stack support was detected broke
-build with scan-build. Revert part of mentioned commit which changed
-that.
+5.16.2-rc1
 
-Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-CC: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
----
- Makefile | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+compiles, boots, suspends on my x86_64
+(Intel i5-11400, Fedora 35)
 
-diff --git a/Makefile b/Makefile
-index 765115c99655..1174ccd182f5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
- KBUILD_CFLAGS  += -fno-stack-check
- 
- # conserve stack if available
--ifdef CONFIG_CC_IS_GCC
--KBUILD_CFLAGS   += -fconserve-stack
--endif
-+KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
- 
- # Prohibit date/time macros, which would make the build non-deterministic
- KBUILD_CFLAGS   += -Werror=date-time
--- 
-2.25.1
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
+regards
+Ronald
 

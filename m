@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F6F493D04
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9274E493D07
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355759AbiASPWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355766AbiASPWh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:22:37 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EBFC06176D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:22:30 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id v123so5695178wme.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:22:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=usKOzHTqDlxMHaMrzpxLAl/X0LyI8/CbyeCUrjTWq9k=;
-        b=ackHKEoZK3RCD5tfQsLKKL09VAzMa49DHmF4BgVjWukz1/DnbE5aOjfFSoYBSGe9E6
-         FVmizbjhR5rmXyPdXC8TswIfvvWJq67nuaxKKaxNNCyD+LnmU9V7gidTtJ6/o/jXJ36/
-         w4532Hdtr0RWZY1Ur+03BvQGfkoIY6Qv4D0fDU7a1X40SqSUgxgDpjxDwbCF5Y6TBQk4
-         pEjp1iCOkXpA5esFqn5CjPy5kUfFh5tXoh04oLLFPhmgVr6z3gvZm67RZOS/I8jI5sDC
-         wLyB8N1HcAM+Vwwq9NLWA/VcM9xb4P/OKXAGhjL/nI5EM+1/Rrccz9Ux5/hpTssiXLFD
-         BO5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=usKOzHTqDlxMHaMrzpxLAl/X0LyI8/CbyeCUrjTWq9k=;
-        b=lY/j6ftzuxtzdatzHl5LTff0wTkdPeUTlyxA7nyyYjhbjzMEVffuoql+DIdyYoS9Fr
-         Ylva7KQ/ej7eTjc4HoFwYoed0oNA7ALaaShYaBFr7ppQZeSIal3anRZIOBxtroymLiVn
-         H4kBnlww8Z8U1BoJ8ybnhKfbWq2ISomZvG5s+op4ychHciSbmSMW1cnk//WpnlcEkFsI
-         ZlpUI5WJQ14P56yJLUln/Cbk3g9uC8BMG6Hg+I8BtMdU6cefg+EyuIakf1IcGoEKIkZz
-         RHQt0Tua7drJfENGohV210dlAjeQPfwrZywOY8R7iSF5xUdXlyYXLEsMAtSc4LqblME+
-         JIZA==
-X-Gm-Message-State: AOAM532RDreWpanYz+i5NthJBAjrt/MzQJIM5ELYbg9jTbP5LS/r3GUJ
-        2sERANVGa5ljYhky+wHBqhC5xdEAo8AnWBU/0J/8ZQ==
-X-Google-Smtp-Source: ABdhPJwxrLEEFkkNXFaoF7sVZXJ04JNlpjOC76m88qV7aBTNHfuPX8FFAbqvmpWqNE0R8qFfpQ7l8U03n6xR7Ur5F0U=
-X-Received: by 2002:a5d:588e:: with SMTP id n14mr11663891wrf.658.1642605748846;
- Wed, 19 Jan 2022 07:22:28 -0800 (PST)
+        id S1355553AbiASPXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:23:10 -0500
+Received: from mga11.intel.com ([192.55.52.93]:41950 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355569AbiASPXJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 10:23:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642605789; x=1674141789;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=7v8+ytScz60DzQuNQqLNXPcL7UmX5D6rKpdw4oM8kV4=;
+  b=YNH2p0aJ7DVvprn7S5pd5FJtYQ1QXxiMyZXOU52zfdjU/yBLdSViG7yp
+   FLLmClzTk09gJ6bBgqROq01oCE1jFc1a7vV/9lVKiTIr7CiihDZgGUtxy
+   vL6z9ZGU8rrNSOIPfm/ha6usRXKXbyNsWCDzGiadml8hQRt70yg32Ygi/
+   z87xKQI7UbGjUekoccKrCpmMS/IblilS22Hi9OVJZcoCdbiX2K7JijYiG
+   8aBanf1KoixaGRAmAdEtzzDFmIWfL98vkfa94u2e4FMfbjahr7Cpfrzbw
+   oSZ0RLyW7EQYabxIvWxgPHX/b0TbtcpSM7/GL0A8u/W38xEgUGnsoaiyR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="242650707"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="242650707"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 07:23:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="578843564"
+Received: from wenwang3-mobl.amr.corp.intel.com (HELO [10.209.118.159]) ([10.209.118.159])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 07:23:08 -0800
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <likexu@tencent.com>
+References: <20220119070427.33801-1-likexu@tencent.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] KVM: x86/xcr0: Don't make XFEATURE_MASK_SSE a mandatory
+ bit setting
+Message-ID: <1b6a8366-d1ab-536f-9bad-8c2b7a822fcb@intel.com>
+Date:   Wed, 19 Jan 2022 07:23:05 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220114173254.1876151-1-james.clark@arm.com> <20220114173254.1876151-2-james.clark@arm.com>
-In-Reply-To: <20220114173254.1876151-2-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 19 Jan 2022 15:22:17 +0000
-Message-ID: <CAJ9a7VhedrLMKfXBqzD_9fFxzKTg63-9wUM38Tw6ukhmSR9aoA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] coresight: Fix TRCCONFIGR.QE sysfs interface
-To:     James Clark <James.Clark@arm.com>
-Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220119070427.33801-1-likexu@tencent.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James
+On 1/18/22 11:04 PM, Like Xu wrote:
+> Remove the XFEATURE_MASK_SSE bit as part of the XFEATURE_MASK_EXTEND
+> and opportunistically, move it into the context of its unique user KVM.
 
-On Fri, 14 Jan 2022 at 17:33, James Clark <james.clark@arm.com> wrote:
->
-> It's impossible to program a valid value for TRCCONFIGR.QE
-> when TRCIDR0.QSUPP==0b10. In that case the following is true:
->
->   Q element support is implemented, and only supports Q elements without
->   instruction counts. TRCCONFIGR.QE can only take the values 0b00 or 0b11.
->
-> Currently the low bit of QSUPP is checked to see if the low bit of QE can
-> be written to, but as you can see when QSUPP==0b10 the low bit is cleared
-> making it impossible to ever write the only valid value of 0b11 to QE.
-> 0b10 would be written instead, which is a reserved QE value even for all
-> values of QSUPP.
->
-> The fix is to allow writing the low bit of QE for any non zero value of
-> QSUPP.
->
-> This change doesn't go any further to validate if the user supplied value
-> is valid, because none of the other parts this function do, but it does fix
-> the case where it was impossible to ever set a valid value.
->
+Is this a problem for xstate_required_size()?  The rules for the CPUID
+sub-functions <=1 are different than those for >1.  Most importantly,
+'eax' doesn't enumerate the size of the feature for the XFEATURE_SSE
+sub-leaf.
 
-I concur that the input is not checked as valid, However all the other
-fields are single bit - with no invalid values - other than the cond
-field, which controls tracing of non-branch conditionals -
-architecturally unsupported for A profile in ETMv4/.
+I think XFEATURE_MASK_EXTEND was being used to avoid that oddity:
 
-
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index a0640fa5c55b..a99bb537ea23 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -368,7 +368,7 @@ static ssize_t mode_store(struct device *dev,
->         /* start by clearing QE bits */
->         config->cfg &= ~(BIT(13) | BIT(14));
->         /* if supported, Q elements with instruction counts are enabled */
-> -       if ((mode & BIT(0)) && (drvdata->q_support & BIT(0)))
-> +       if ((mode & BIT(0)) && drvdata->q_support)
->                 config->cfg |= BIT(13);
-
-This can be trivially changed to
-
-if ((mode)  && drvdata->q_support)
-         config->cfg |= BIT(13);
-
-to ensure that any input mode 2'b01, 2'b10, 2'b11 results in output
-settings of 2'b01, 2'b11, 2'b11 respectively
-
-With that
-
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
-
->         /*
->          * if supported, Q elements with and without instruction
-> --
-> 2.17.1
->
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+> u32 xstate_required_size(u64 xstate_bv, bool compacted)
+> {
+>         int feature_bit = 0;
+>         u32 ret = XSAVE_HDR_SIZE + XSAVE_HDR_OFFSET;
+> 
+>         xstate_bv &= XFEATURE_MASK_EXTEND;
+>         while (xstate_bv) {
+>                 if (xstate_bv & 0x1) {
+>                         u32 eax, ebx, ecx, edx, offset;
+>                         cpuid_count(0xD, feature_bit, &eax, &ebx, &ecx, &edx);
+>                         /* ECX[1]: 64B alignment in compacted form */
+>                         if (compacted)
+>                                 offset = (ecx & 0x2) ? ALIGN(ret, 64) : ret;
+>                         else
+>                                 offset = ebx;
+>                         ret = max(ret, offset + eax);
+>                 }
+> 
+>                 xstate_bv >>= 1;
+>                 feature_bit++;
+>         }
+> 
+>         return ret;
+> }

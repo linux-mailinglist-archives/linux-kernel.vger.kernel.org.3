@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4705A493CB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20103493CBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355604AbiASPMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:12:37 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:46962
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355628AbiASPMD (ORCPT
+        id S1355602AbiASPNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347595AbiASPNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:12:03 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 82E8540027
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:11:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642605119;
-        bh=drjzBd6xSh2W3A1sdcF3qLyFND0naAGILhzsS9dD8A4=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=rlehtBxB6Z+y8+bmc22pQ0zkwX03Qq7d390fyUVpYt/BZ7TNZSdNgfNVdS4r/8UfD
-         vx6iDqD+UAXp0610d4PUb1De9ZyyLrOE5648BAB1ba3Fe2KofzymOal/cCHT2Yt2rA
-         kmlRGst5/ybvu3jeBtKhB8NtjJKggrzL8In/9MusyN4tpVhsNhPbaUe9Eg6to59R9Q
-         CQF3tp0+t4Av8LXAcOId9Pi7ENySI9scQwrsuWQAd3BfQmQ6ZmsyaNTEcA3R9LaXEh
-         8xpWiSxVca9fezsR42iLXqb4BDXgGcvIghk2eJcAwr3lCkfUD15JXfqJHv6zwq8Gve
-         GAlMcZkhBB9bg==
-Received: by mail-ed1-f72.google.com with SMTP id s9-20020aa7d789000000b004021d03e2dfso2769646edq.18
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:11:59 -0800 (PST)
+        Wed, 19 Jan 2022 10:13:37 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D802EC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:13:36 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 25-20020a05600c231900b003497473a9c4so14710798wmo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nojvlSBxMxzR4GSErwgQdagPUIgNBTK8vSAAewWJfGo=;
+        b=UdOh/AhxxSV2+uxZH/MLQG8GMpYKK7LtGvtEgzc0oMjASCb0xgLv1JVkWwbP0Mcj+V
+         FTB44ALi2Dkmxa5TtFeeIbigQ+N1KF2QOFjs7nfHIYs/h2YuRCfAJjZQE2rSWo5KHyMt
+         4CPSxa99XOEfmjqqpp6mRZSATV4pq1lBLqP7Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=drjzBd6xSh2W3A1sdcF3qLyFND0naAGILhzsS9dD8A4=;
-        b=0XbYJepV8kauSfsfoLiTG0u/pJg/Wn+5j8VRtDhCVneZwyv0PD8UoTZThcbFojxAEl
-         m3hk164WLmGA3f0fAVofJagb/53mTq1pG7bXqya/PWlmeTd74Hhya/NTG9GucUYc9wZm
-         oZgB+Beaey2wcu6J3bJPedUiDzz3oD1pz2wys+GgTWWJY4+sAyK8pI07BI+otpEvCYV0
-         CsDREhs7tXsRqV/xdr0RaO3aA/LAk6KS1UHCfT4IdcaqSjdPA8bf2qkNnNoqqVQ+y/pg
-         yb3MYbhm2LpNvRD7Ny6gohdPt4tRM+JITfyEz07nEC1puc369KYaMQO0KD9oFETcazv0
-         2D1A==
-X-Gm-Message-State: AOAM532e0q0n0sEfLsHj/heMlrW4pNN03HpPJ3wal/ayNPFtXPiVEIqG
-        WGYMOhaKFQGAjv0jPYE8h1WrMneJ+fu8Fv9rc11Eu5EBJ1fH7klnZzl/o6nPzu/b77920WZ8WpS
-        gU+cwJiLvcJ37mklnJuuLu4IiuaR+CWAo3Ky0Pzee8A==
-X-Received: by 2002:a17:907:90d5:: with SMTP id gk21mr24657787ejb.359.1642605118417;
-        Wed, 19 Jan 2022 07:11:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxddTNyN9TBuuv8pGuZnGAB9t/ygdDr/3nax3MlitJXfQZJieVWGTj2hsRfDZn1PRaG5CZVnw==
-X-Received: by 2002:a17:907:90d5:: with SMTP id gk21mr24657762ejb.359.1642605118251;
-        Wed, 19 Jan 2022 07:11:58 -0800 (PST)
-Received: from krzk-bin (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id i23sm1339989edt.93.2022.01.19.07.11.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=nojvlSBxMxzR4GSErwgQdagPUIgNBTK8vSAAewWJfGo=;
+        b=eOulwYQog+SPXFL9rLK9BgDPcEkmJDY2m/Zc36uN4JzMg5WECIVwGbHBr+S/ahCX6B
+         sLVDrRUzopduY3A80hHcLWKo+Cp0w9MSagMxOrD0FU0JT6ND5Lbv0isQ8SvMTnwjqjfX
+         0NC/UaegF9Mesj/Qs5hm9ZvU9KGKY87fcboO3PhUkG4JLSy2o+yVX77a9v2eH0PaUi3r
+         jf28aHh1u12MuQF9ohsck7Zm/AygpCSVFwRawQ49L0XXbJAx4zk5aDw0cH6rzWLjGlj+
+         XjF8Q5iYwnythcg8akjtAUXyNwNomaAYY8wmyQ5J+sWkqXjzmRSaHIt9h8EQvh43C75b
+         oVmQ==
+X-Gm-Message-State: AOAM530Lad0XvkRDSuEqP7fSUBu9apXnE0ExRZ/0WS2csMyVSwZbShG2
+        kmhkaJzrPmvjWpi55SEoin8D4/3iy57+pQ==
+X-Google-Smtp-Source: ABdhPJzgCMa/tbYtoVRSIfTNfXLaMUVi4OH5qPmaP5VowNhx7sB3F/GwbvttLoWt7A3z38o+qBf4Sw==
+X-Received: by 2002:a05:6000:3c5:: with SMTP id b5mr26652200wrg.312.1642605215514;
+        Wed, 19 Jan 2022 07:13:35 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id z1sm5057694wma.20.2022.01.19.07.13.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 07:11:57 -0800 (PST)
-Date:   Wed, 19 Jan 2022 16:11:56 +0100
-From:   'Krzysztof Kozlowski' <krzysztof.kozlowski@canonical.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, 'Arjun K V' <arjun.kv@samsung.com>,
-        'Aswani Reddy' <aswani.reddy@samsung.com>,
-        'Ajay Kumar' <ajaykumar.rs@samsung.com>,
-        'Sriranjani P' <sriranjani.p@samsung.com>,
-        'Chandrasekar R' <rcsekar@samsung.com>,
-        'Shashank Prashar' <s.prashar@samsung.com>
-Subject: Re: [PATCH v2 14/16] arm64: dts: fsd: Add initial device tree support
-Message-ID: <20220119151156.y2rzrk2gpoweiofc@krzk-bin>
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
- <CGME20220118150108epcas5p2d9cd4db7cb368c2bfbd7d058eba4107c@epcas5p2.samsung.com>
- <20220118144851.69537-15-alim.akhtar@samsung.com>
- <43e72d34-0e11-9ff6-6924-0cab62b51891@canonical.com>
- <000301d80d46$502ae590$f080b0b0$@samsung.com>
+        Wed, 19 Jan 2022 07:13:34 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:13:33 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, lee.jones@linaro.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm/selftests/test-drm_dp_mst_helper: Fix memory leak
+ in sideband_msg_req_encode_decode
+Message-ID: <YegqnfDXHmxUBWxI@phenom.ffwll.local>
+Mail-Followup-To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        airlied@linux.ie, lee.jones@linaro.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220108165812.46797-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <000301d80d46$502ae590$f080b0b0$@samsung.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220108165812.46797-1-jose.exposito89@gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 08:37:40PM +0530, Alim Akhtar wrote:
-> >Similarly to previous vendor-prefix patch, please let me know if it's expected
-> >me to take it. I assume no. :)
-> >
-> I am expecting this will go via your tree, but I am ok either ways. May be you and arm-soc maintainers (Arnd/Olof) can take the call here.
+On Sat, Jan 08, 2022 at 05:58:12PM +0100, José Expósito wrote:
+> Avoid leaking the "out" variable if it is not possible to allocate
+> the "txmsg" variable.
+> 
+> Fixes: 09234b88ef55 ("drm/selftests/test-drm_dp_mst_helper: Move 'sideband_msg_req_encode_decode' onto the heap")
+> Addresses-Coverity-ID: 1475685 ("Resource leak")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> 
+> ---
+> 
+> v2: Improve commit message
 
-I can take it, that would be the easiest, I guess.
+Applied to drm-misc-next, thanks.
+-Daniel
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> index 6b4759ed6bfd..c491429f1a02 100644
+> --- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> +++ b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> @@ -131,8 +131,10 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
+>  		return false;
+>  
+>  	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
+> -	if (!txmsg)
+> +	if (!txmsg) {
+> +		kfree(out);
+>  		return false;
+> +	}
+>  
+>  	drm_dp_encode_sideband_req(in, txmsg);
+>  	ret = drm_dp_decode_sideband_req(txmsg, out);
+> -- 
+> 2.25.1
+> 
 
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,176 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCDC4943AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3ACE4943B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240355AbiASXJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:09:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S232883AbiASXM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344362AbiASXJA (ORCPT
+        with ESMTP id S231528AbiASXMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:09:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B172C06173F;
-        Wed, 19 Jan 2022 15:08:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28381614A2;
-        Wed, 19 Jan 2022 23:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA78C004E1;
-        Wed, 19 Jan 2022 23:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642633735;
-        bh=QTKHn4Wool6GWwOwKqjEm+TWC3X4GTauJMrreTZbgTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C+05iH4oJGO/396eleoANsH+yhRmco0H4a00oigax0iHe4MHaU8ILSVtBrV5RWu1x
-         lLtI6+pOFijSa580nfnuce9ov/AcZivjrkkCHxjAB8OCQwQvrvMBH/n/waYhlkc+qh
-         MpuNmbGUcGWDKSkDEgnB9GBVsV6zsWowznf79y94rJR7ssBEmpLfrXBoY3Fc73Fx1Z
-         oZShqamcZUMETYt4sTheCRlIOWGQ2ngYVDQFZ29MrvUiEI6LgxfTIYzDqZ6plZlSyD
-         RarvVr4Q3PuFtoZHVjd23UBNzZnrzEHx0+giKjMnyU1DdAtBY1Tik8Rz7AY3WpEOQf
-         DKfIMCS3EPLnA==
-Date:   Wed, 19 Jan 2022 16:08:50 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Subject: Re: [PATCH] Makefile: Fix build with scan-build
-Message-ID: <YeiaAgQ+gbZYTMwD@archlinux-ax161>
-References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
- <YeiAa/eCxVZC+QbS@archlinux-ax161>
+        Wed, 19 Jan 2022 18:12:55 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA44C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:12:55 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id m1so14486907lfq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U2dwbqcasQ5jAt+dZT0r0geSiO9Og0zFjtJjCnr7lCs=;
+        b=nwoSlp64QlHMhIXPAbqSlvtxn3YRmwGuo7gO9z+aJyjKE7+vGUsNePrlnd9gihi5Cv
+         +2/QZYmgoEypLlDZcKxH1xBn7ERBNTyQcDLz9/0Mr+kdiO6ZDMdAmAfB/OYxvdzGEUvQ
+         3OV5kWf4Op6Su8FEfxrPBhTn+HHIa5UT0ry6dssyU+V7b+IQJWFdqbZpKDMYqYOV70do
+         9ZK52EFTCsRvagLpb7P+t59v138vDT01JUF5KA8DeNO+yIe9OX3Z1Iknx2Vf+n4wZ4QT
+         EMXsApYX9RQleRf2uYL/GQv99KdQWAqiv4A6D5XTZMJrDRUc4RI2XNFqRQCant61Tqhw
+         TSGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U2dwbqcasQ5jAt+dZT0r0geSiO9Og0zFjtJjCnr7lCs=;
+        b=yIwLrF+OIDphxeeQhyvf2MKjd8JPMPTaTW03N5LlKG+4Hbc/k0inyzgtSXpg7vnaJE
+         i1LVoXwHXInavWeFMxaK6VCe/AKPBikypfoa2KrTpBd3kvwORkRG8X4Vnj/2hUWZOSPK
+         OSCCRXtouT15T5j0WE2oLgSAHPRDytCJElPJv+MNHWjf75fnBYHXrL77lb151+HpUnri
+         jXOc1/7tsrFbsgO1KO44ziCQzaL+nIy9nKNmF4VtWNGYWHhJjqSmgyoM8kUooBSt+lcB
+         gR95kwFNQZ+3BAbfJA4/y6ys+dKVWQILESKdMVvOJPGqZJPBHA+4UgMnDF/vt4A31066
+         i6VA==
+X-Gm-Message-State: AOAM533qJNOFUXkoNp3ZBJlnpCjmoT/IZuS28sJXhI8pUNPPZ1NvuyHr
+        LYz+iNZHJ21nEzGSR1cgQUeQkw==
+X-Google-Smtp-Source: ABdhPJzS0S2j0mE2ciBclrlhqyzVclucItRkmT/yH3LWXkOsMSX6ENnBKT8aGA/LNELrdDToVn+shw==
+X-Received: by 2002:a05:6512:3da1:: with SMTP id k33mr27853059lfv.212.1642633973353;
+        Wed, 19 Jan 2022 15:12:53 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id q27sm103546lfd.271.2022.01.19.15.12.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 15:12:52 -0800 (PST)
+Message-ID: <84bd598c-b1b7-984e-9fa1-94ad28087ef0@linaro.org>
+Date:   Thu, 20 Jan 2022 02:12:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YeiAa/eCxVZC+QbS@archlinux-ax161>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/msm/dpu: Bind pingpong block to intf on active ctls
+ in cmd encoder
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Bernard <bernard@vivo.com>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20211222105513.44860-1-marijn.suijten@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20211222105513.44860-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 02:19:39PM -0700, Nathan Chancellor wrote:
-> On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
-> > When building kernel with scan-build for analysis:
-> > $ scan-build make defconfig
-> > $ scan-build make menuconfig # disable RETPOLINE
-> > $ scan-build make -j16 bindeb-pkg
-> > since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-> > it fails with:
-> >   CC      scripts/mod/empty.o
-> > could not find clang line
-> > make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
-> > 
-> > Seems like changes to how -fconserve-stack support was detected broke
-> > build with scan-build. Revert part of mentioned commit which changed
-> > that.
-> > 
-> > Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
-> > CC: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> > Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> > ---
-> >  Makefile | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index 765115c99655..1174ccd182f5 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
-> >  KBUILD_CFLAGS  += -fno-stack-check
-> >  
-> >  # conserve stack if available
-> > -ifdef CONFIG_CC_IS_GCC
-> > -KBUILD_CFLAGS   += -fconserve-stack
-> > -endif
-> > +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
-> >  
-> >  # Prohibit date/time macros, which would make the build non-deterministic
-> >  KBUILD_CFLAGS   += -Werror=date-time
-> > -- 
-> > 2.25.1
-> > 
+On 22/12/2021 13:55, Marijn Suijten wrote:
+> As per the specification of DPU_CTL_ACTIVE_CFG the configuration of
+> active blocks should be proactively specified, and the pingpong block is
+> no different.
 > 
-> Okay, I think I understand why this happens...
+> The downstream display driver [1] confirms this by also calling
+> bind_pingpong_blk on CTL_ACTIVE_CFG.  Note that this else-if is always
+> entered, as setup_intf_cfg - unlike this mainline dpu driver that
+> combines both behind the same function pointer - is left NULL in favour
+> of using setup_intf_cfg_v1 when CTL_ACTIVE_CFG is set.
 > 
-> scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
-> code with a compiler [2] then runs clang for the static analyzer [3].
-> The problem is that the default compiler for ccc-analyzer is GCC, which
-> means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
-> but not clang will cause the clang analyzer part of ccc-analyzer to
-> error because ccc-analyzer just passes all '-f' flags along [4].
+> This solves continuous timeouts on at least the Qualcomm sm6125 SoC:
 > 
-> Prior to 7d73c3e9c514, there was no error because cc-option would run
-> the flag against ccc-analyzer, which would error out for the reason I
-> just described, which would prevent the flag from getting added to
-> KBUILD_CFLAGS.
+>      [drm:dpu_encoder_frame_done_timeout:2091] [dpu error]enc31 frame done timeout
+>      [drm:_dpu_encoder_phys_cmd_handle_ppdone_timeout.isra.0] *ERROR* id:31 pp:0 kickoff timeout 0 cnt 1 koff_cnt 1
+>      [drm:dpu_encoder_phys_cmd_prepare_for_kickoff] *ERROR* failed wait_for_idle: id:31 ret:-110 pp:0
 > 
-> Now, -fconserve-stack gets passed along to both gcc and clang but clang
-> does not recognize it and errors out.
+> In the same way this pingpong block should also be unbound followed by
+> an interface flush when the encoder is disabled, according to the
+> downstream display driver [2].
 > 
-> This should be fixed in clang, which already has the machinery to
-> recognize but ignore GCC flags for compatibility reasons (which is
-> probably how gcc and clang can use the same flags). I have pushed a
-> patch to Phabricator for review:
+> [1]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder_phys_cmd.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n167
+> [2]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n2986
 > 
-> https://reviews.llvm.org/D117717
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+>   .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  | 21 +++++++++++++++++++
+>   1 file changed, 21 insertions(+)
 > 
-> You need to disable CONFIG_RETPOLINE for the same reason but I don't
-> think working around that in clang is as simple.
-> 
-> Until that fix can proliferate through distributions and such, this is
-> not an unreasonable workaround (unless Masahiro or Nick have a better
-> idea) but I would really like a comment so that we can revert this once
-> that fix is more widely available (it is unlikely that clang will
-> actually support this option).
-> 
-> [1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
-> [2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
-> [3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
-> [4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> index 8e433af7aea4..e0e08a874f07 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> @@ -71,6 +71,13 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+>   	intf_cfg.stream_sel = cmd_enc->stream_sel;
+>   	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
+>   	ctl->ops.setup_intf_cfg(ctl, &intf_cfg);
+> +
+> +	/* setup which pp blk will connect to this intf */
+> +	if (test_bit(DPU_CTL_ACTIVE_CFG, &ctl->caps->features) && phys_enc->hw_intf->ops.bind_pingpong_blk)
 
-Thinking more about this after Fangrui commented on the clang patch
-above, using scan-build with GCC as the compiler is going to be hard to
-support, as we are basically trying to support using two different
-compilers with a unified set of '-f' flags, which I see as problematic
-for a few reasons.
+Nit: here we bind all interfaces, but later we unbind only master. Is 
+this correct?
 
-1. It restricts our ability to do cc-option cleanups like Nick did.
+> +		phys_enc->hw_intf->ops.bind_pingpong_blk(
+> +				phys_enc->hw_intf,
+> +				true,
+> +				phys_enc->hw_pp->idx);
+>   }
+>   
+>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
+> @@ -507,6 +514,7 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
+>   {
+>   	struct dpu_encoder_phys_cmd *cmd_enc =
+>   		to_dpu_encoder_phys_cmd(phys_enc);
+> +	struct dpu_hw_ctl *ctl;
+>   
+>   	if (!phys_enc->hw_pp) {
+>   		DPU_ERROR("invalid encoder\n");
+> @@ -523,6 +531,19 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
+>   
+>   	if (phys_enc->hw_pp->ops.enable_tearcheck)
+>   		phys_enc->hw_pp->ops.enable_tearcheck(phys_enc->hw_pp, false);
+> +
+> +	if (dpu_encoder_phys_cmd_is_master(phys_enc)) {
+> +		if (phys_enc->hw_intf->ops.bind_pingpong_blk) {
+> +			phys_enc->hw_intf->ops.bind_pingpong_blk(
+> +					phys_enc->hw_intf,
+> +					false,
+> +					phys_enc->hw_pp->idx);
+> +
+> +			ctl = phys_enc->hw_ctl;
+> +			ctl->ops.update_pending_flush_intf(ctl, phys_enc->intf_idx);
+> +		}
+> +	}
+> +
+>   	phys_enc->enable_state = DPU_ENC_DISABLED;
+>   }
+>   
 
-We should be eliminating cc-option calls that we know are specific to
-one compiler because checking the Kconfig variables (CONFIG_CC_IS_...)
-is much cheaper than invoking the compiler.
 
-2. Necessary GCC specific flags will get dropped.
-
-Adding back the call to cc-option will allow the build to succeed but it
-drops the flag from KBUILD_CFLAGS. If there were ever a time where an
-'-f' flag was needed to get a working kernel with GCC, it would not get
-added because clang would reject it.
-
-We already have a static-analyzer target that requires using CC=clang so
-I think there is some precedent here to say we require the kernel to be
-built with clang to use the static analyzer. The fact that it did prior
-to 7d73c3e9c514 can just be chalked up to luck.
-
-$ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
-
-would be the equivalent command to the original patch.
-
-You can still use scan-build with the '--use-cc=clang' flag, which will
-use clang for the compilation and analysis, if you so prefer.
-
-Masahiro and Nick may have further thoughts and I am open to other
-opinions but my vote is to say this is an issue we won't fix or
-workaround.
-
-Cheers,
-Nathan
+-- 
+With best wishes
+Dmitry

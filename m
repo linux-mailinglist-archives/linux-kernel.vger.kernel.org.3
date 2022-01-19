@@ -2,129 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4C7493904
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C25E493907
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353464AbiASK4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:56:23 -0500
-Received: from mxout04.lancloud.ru ([45.84.86.114]:57474 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240254AbiASK4V (ORCPT
+        id S1353602AbiASK4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346911AbiASK4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:56:21 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru A771820D27E6
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        <alsa-devel@alsa-project.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        "Guenter Roeck" <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        <linux-mtd@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, Lee Jones <lee.jones@linaro.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Tony Luck" <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-serial@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        <platform-driver-x86@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "Saravanan Sekar" <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>, <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "John Garry" <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        <openipmi-developer@lists.sourceforge.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>,
-        "Richard Weinberger" <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        "Hans de Goede" <hdegoede@redhat.com>, <netdev@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, <linux-mmc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de> <YeQpWu2sUVOSaT9I@kroah.com>
- <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
-Date:   Wed, 19 Jan 2022 13:56:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 19 Jan 2022 05:56:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF2BC061574;
+        Wed, 19 Jan 2022 02:56:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98C8E61564;
+        Wed, 19 Jan 2022 10:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89EAC340E8;
+        Wed, 19 Jan 2022 10:56:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="clSmDhQ9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642589801;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c6OIpweiYSlg1CO1oV/4/fX9PmbGWaJgEcK1s5L/UCM=;
+        b=clSmDhQ9v6mwT8AqA/7PddiliXjzCnVuKqGHWuRMScEBMvlsnTy8g6e1Y6cMjyqzqjVYOt
+        +xUXZMczZX6IXfAgbWAYUOdoJ2GpYjNYh3LGTJpoIkSRLGNNrO6HqGrfX+Sey4uOmMExW0
+        8PRRZeAuWLXdS31lzH9DCVM+ZQdLbGg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0f6fc849 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 19 Jan 2022 10:56:41 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id 23so6157072ybf.7;
+        Wed, 19 Jan 2022 02:56:40 -0800 (PST)
+X-Gm-Message-State: AOAM533OObl2AlyRmlPd3OUOVN8MmQgyuLx2HmsUKJzVpj+jPkxde6OC
+        uyc4yl4yjSEkZaL7DlqGmZjE8l8UtYLICdQwuf0=
+X-Google-Smtp-Source: ABdhPJwSrhUa6tV1Vuk+5uZ3ov5nQgpookiKOhJa3YUNCmP6fIkNz2Lw1CO4IK9upJuph+xxqIgYgHP4KC7FjLDB5Tw=
+X-Received: by 2002:a25:bc52:: with SMTP id d18mr9639032ybk.255.1642589799667;
+ Wed, 19 Jan 2022 02:56:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Received: by 2002:a05:7110:209:b0:11c:1b85:d007 with HTTP; Wed, 19 Jan 2022
+ 02:56:39 -0800 (PST)
+In-Reply-To: <CAHmME9pQcUxs87EwQwBZNDA4ZzqugTggH+uiNPh=mv5zjp3g3A@mail.gmail.com>
+References: <CAHmME9oX+4Ek81xy0nBOegqABH0xYqyONAqinsu7GZ7AaQaqYQ@mail.gmail.com>
+ <20220119100615.5059-1-miles.chen@mediatek.com> <CAHmME9pQcUxs87EwQwBZNDA4ZzqugTggH+uiNPh=mv5zjp3g3A@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 19 Jan 2022 11:56:39 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pPKjRLmR6zpYFZT7rOOfHsG2ESnDi+QQrDJuGLo1X4JQ@mail.gmail.com>
+Message-ID: <CAHmME9pPKjRLmR6zpYFZT7rOOfHsG2ESnDi+QQrDJuGLo1X4JQ@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     ardb@kernel.org, davem@davemloft.net, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 12:18 PM, Uwe Kleine-König wrote:
-> On Sun, Jan 16, 2022 at 03:19:06PM +0100, Greg Kroah-Hartman wrote:
->> On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-König wrote:
->>> A possible compromise: We can have both. We rename
->>> platform_get_irq_optional() to platform_get_irq_silent() (or
->>> platform_get_irq_silently() if this is preferred) and once all users are
->>> are changed (which can be done mechanically), we reintroduce a
->>> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
->>> return 0 on not-found, no error message printking).
->>
->> Please do not do that as anyone trying to forward-port an old driver
->> will miss the abi change of functionality and get confused.  Make
->> build-breaking changes, if the way a function currently works is
->> changed in order to give people a chance.
-> 
-> Fine for me. I assume this is a Nack for Sergey's patch?
+On 1/19/22, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> Hi Miles,
+>
+> Okay. Keep me posted.
+>
+> Just FYI, as mentioned, I'm unable to reproduce this, and you haven't
+> provided any further minimized guidance on how I might reproduce this,
+> so it'll sit in the "not a bug" bin until I have another clue on how
+> to reproduce. Alternatively, Nick and Nathan are now on this thread
+> and they usually have good luck teasing out compiler issues and such,
+> so maybe they'll have an idea. But I'm afraid with the information I
+> currently have, I'm at a dead end.
+>
+> Jason
+>
 
-   Which patch do you mean? I'm starting to get really muddled... :-(
-
-> Best regards
-> Uwe
-
-MBR, Sergey
+We're back in business! I was able to reproduce this using FullLTO
+rather than ThinLTO.

@@ -2,194 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE29493CA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBEE493CA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355513AbiASPH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:07:56 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:53135 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355521AbiASPHx (ORCPT
+        id S1355529AbiASPIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355517AbiASPIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:07:53 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220119150752epoutp01b87b6a4d524792b78997c083d613eecd~LtG3QAor02375323753epoutp01Y
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:07:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220119150752epoutp01b87b6a4d524792b78997c083d613eecd~LtG3QAor02375323753epoutp01Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642604872;
-        bh=TQ+FsQwiai2Dj/+nOjirxy4VgVsV7oTd5gfKNQLpgo4=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=QF1zZo75EVGq4Tzzmcg04zQkCfM/ufnP7N27PkSGyM1yEoz+EbE1FQ+sFWbhjUN1F
-         Guay7z9fEDE3s7BesryweEWqKM17g/UUCXWiC2HdQQs90DObGu5qtspyvYrE5Nvha6
-         2QI3lyjJ1YT6WhqYDkig8pcYy7oxApRZkCrhqW8Q=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220119150751epcas5p305e2bddab256f496fc71febbf68eaf0b~LtG2YB0co1458814588epcas5p3o;
-        Wed, 19 Jan 2022 15:07:51 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Jf8C64dPLz4x9Pr; Wed, 19 Jan
-        2022 15:07:46 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F9.49.05590.14928E16; Thu, 20 Jan 2022 00:07:45 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220119150746epcas5p135480c5f901d25cd1a85d5bfa3ed907d~LtGxFBzs91665516655epcas5p1M;
-        Wed, 19 Jan 2022 15:07:46 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220119150746epsmtrp25a2b096be50fb73c785f5c4b555ab7d5~LtGxCg_bw0098200982epsmtrp2L;
-        Wed, 19 Jan 2022 15:07:46 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-87-61e829418f5e
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        83.BD.29871.14928E16; Thu, 20 Jan 2022 00:07:45 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220119150742epsmtip22e012473e131fdc301c5bdcda968d414~LtGtlb63C0776207762epsmtip2M;
-        Wed, 19 Jan 2022 15:07:42 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <soc@kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <olof@lixom.net>, <arnd@arndb.de>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>, "'Arjun K V'" <arjun.kv@samsung.com>,
-        "'Aswani Reddy'" <aswani.reddy@samsung.com>,
-        "'Ajay Kumar'" <ajaykumar.rs@samsung.com>,
-        "'Sriranjani P'" <sriranjani.p@samsung.com>,
-        "'Chandrasekar R'" <rcsekar@samsung.com>,
-        "'Shashank Prashar'" <s.prashar@samsung.com>
-In-Reply-To: <43e72d34-0e11-9ff6-6924-0cab62b51891@canonical.com>
-Subject: RE: [PATCH v2 14/16] arm64: dts: fsd: Add initial device tree
- support
-Date:   Wed, 19 Jan 2022 20:37:40 +0530
-Message-ID: <000301d80d46$502ae590$f080b0b0$@samsung.com>
+        Wed, 19 Jan 2022 10:08:14 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34305C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:08:14 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id h12so2710592pjq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=865W3nngZbj66iHqIMRPmys+V8jiTQCV4utpzwueQJA=;
+        b=YG4ABSlLGxGSrrRltRwvLxFF9nwfGLmtMLgSHo2CdjLJO7BJknSzRna5RdBvJEZmQH
+         dQOw4YeX1AXc3l9hACYmCaxK7QJfkcBh73x/emEW8K6Y1SkZYcrKhEWTEu5E6aL7LAj2
+         0QoYBMz3lwS3KaWNjiZ1K0HChm/Mo8ejT2DlEof45M8NFRoLxouM8OJsrQikw9VAxcZj
+         iq2XmCv+uiksx0OBsdFf/D8UKdfkPExVFdi/+1fPnUyM4aRLi7Ovua474NO7A9chx3X4
+         FvQiCUJAhb25MBILLFGdyo9NOEN07tMgX4rO6x93aDlCO0IX/kwbk4pkuZa8hlk6Wc6y
+         ZsIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=865W3nngZbj66iHqIMRPmys+V8jiTQCV4utpzwueQJA=;
+        b=bcRnr6NGbTlmzOGw7KPf57zEZaliOvYk+vQ2s6mQaRjtu80Bkq5u1abYZY3AKOVbrs
+         3pb6ThNttXa9CzGwoJ4uFfp9UBOh33l9q0xLTC8Tcu7DBRB0S9fMdYxYN0XlIlLvKuh/
+         JeSkCL9lF8XsDcAF109nZyHyvPPgkYnG2wPqcv04wtrwscgZYTv3Yh0IDFDI2iBCnXvG
+         xrlQtz3BaxUOYUVhuQAdPCeNPCWsLheq/WBRWuf5G1FQh+NNn7UaoBqOB3q968t5jCxs
+         PdG0ETAXqqOj4DIFu6zeqTukuIkh1l8dN/31rdKwC4qnw3B6+muwwUnoHKeygi7sOc/L
+         xKZg==
+X-Gm-Message-State: AOAM530gWvf1jU4/9OA+fVY2yCnF9ddINhU1wo6JBKOFbHxO/E8Qtyy6
+        austuaxlcwS98bpvEHoznzjS3ff+BWol+Ea7180bRw==
+X-Google-Smtp-Source: ABdhPJwcMT4tKJiHJfVvi5WBPN/bKFpd/Igkn34qt9eq5pGeuRSYRN4P4yURkgQkDW3eKG7t314l2oIPFnAt+W7yYfc=
+X-Received: by 2002:a17:902:b189:b0:149:6c45:24c with SMTP id
+ s9-20020a170902b18900b001496c45024cmr33019972plr.21.1642604893365; Wed, 19
+ Jan 2022 07:08:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJMmkM0C21BpYmk5XGVS3CIVixL0wHpXZBSAtdH440B6AfsdatMCgwg
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta1ATZxSdb7PZBKbRNYB8jdM2ZkYsVCCREBcLLVaGbgtOqf6g5UdxB7aE
-        SUgy2aS1lI6pqbxphTJTDEIVECqg5WmTKKAh4mM6UAsiQ60PQC3yEOUhFISSrG35d86958y9
-        537z8TnCeUzET9UYaL2GUkswT/Rsp79/4C7/vyip7Y6cuPD4IkrUnLKjxPOiLh7haG7lEY+r
-        8wHxo7ObSzROzCNE8VINQjQN93OJJ/m3ucS9R/FEr/0YRpT0tCPEtZvTGFHROsMjLL9ZucTh
-        NieP6BzP4hLl1jJADN9cwog/xs9wI33I+vJ6QC7+XQRIi6kAI5tqczDyVv95jGyuOkj2XTnE
-        Jb9tqQXk8qEyHjnd9GqcZ4IqXElTybReTGuStMmpmpQIScy+xN2JoQqpLFAWRuyQiDVUGh0h
-        iYqNC4xOVa9mlIg/o9TG1VIcxTCS4LfC9VqjgRYrtYwhQkLrktU6uS6IodIYoyYlSEMbdsqk
-        0u2hq8L9KmXljUuornvjgUHLcdQEsrxyAZ8PcTk8ORiVCzz5QvwcgC1XCgFLngLYU9LIYckc
-        gP3FZdxc4OF2jF1tR9lGG4DfmIe4LBkFMNvaAlwqDA+E1spMzNXwxnMArHu2gLgIB3ei0F4/
-        4lZ54Ltg108PeC7shcdBx7lGN0bxLfByVinqwgI8DHbc+4HH4g3w6tERd52DvwGrT4xx2J3E
-        cOF+tXs/bzwaVk/NAVbjC0cvOXmuwRAv9YDNJifGGqLg6ZUqwGIv+OhyC4/FIjg92Yaxp1HB
-        fHsIW86AJ8u7UBa/DS/0HUNdEg7uD3+2B7Oj1sGCxRGEdQpgdqaQVW+B5skbL5ybYGFe3osr
-        ktDx5BfkCNhsWRPMsiaYZU0Ay//DjgO0FrxM65i0FJoJ1YVo6M//e/AkbVoTcH+BgBgrGLo7
-        FeQACB84AORzJN4C0cEHlFCQTH2RTuu1iXqjmmYcIHT12oUckU+SdvUPaQyJMnmYVK5QKORh
-        IQqZxFdwLaWBEuIplIFW0bSO1v/rQ/geIhNixuCXFXu37Rl8p27fazu3ZhRYiz89O2ObLaia
-        aNw6fH1iz1J0f1Fwk78x4noM8r0pwi41mFfkc69vTyv0GHj41fyssJJuzjJkFg7ZPjhdhzzc
-        mJNQpOpJmP9wONtvfXvMx52iwXhH1Zle29eCve+H54aY483WxQbLsyBb7LogW0nfeqv0bmZ4
-        rHNpsk3duuwz9mvMd9rqi/wA1YK32DBllaaHx9Welx9pU1YNfTLgeMVXYSwd7NhwdLNvpN/o
-        juWEjtnbeX8+T7eTyyNMze4RS/DAYYvfxO/mU7fuI08PqNsr3tN9NL6ucUV5wpZs2vTutjd7
-        ozXld2Yahl6aiuzO2M/4SlBGSckCOHqG+gfoPn/eiwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRmVeSWpSXmKPExsWy7bCSvK6j5otEg2s3rS0OvD/IYrF85S4W
-        i7+TjrFbHNq8ld3i/bIeRov5R86xWmx8+4PJYsqf5UwWmx5fY7X42HOP1eLhq3CLy7vmsFnM
-        OL+PyeLU9c9sFou2fmG3mHVhB6tF694j7BaH37SzWszbMZfR4vH1P2wWt9+sY3UQ9Vgzbw2j
-        x+9fkxg9ZjX0snlsWtXJ5nHn2h42j81L6j2unGhi9ejbsorR41/TXHaPz5vkAriiuGxSUnMy
-        y1KL9O0SuDIWN+QW/BatmLBKroFxk1AXIyeHhICJxOuT+1i6GLk4hAR2M0qcXf6OBSIhLXF9
-        4wR2CFtYYuW/5+wQRc8ZJRq2rGcCSbAJ6ErsWNzGBpIQEehmlLjSM5MRJMEscI1FYvKPAoiO
-        r4wSSzaeAOvgFHCUOLbiGdhYYQE/iQdHDrGB2CwCqhLH22eDreYVsJTY/3A6O4QtKHFy5hMW
-        iKHaEk9vPoWzly18zQxxnoLEz6fLWEFsEQE3iWUfvkEdIS7x8ugR9gmMwrOQjJqFZNQsJKNm
-        IWlZwMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/dxMjOBFoae5g3L7qg94hRiYOxkOM
-        EhzMSiK8UvXPEoV4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLg
-        lGpg4k9UF1Nx5Aryv2b7+lBCXYhL97Tm00VyYRqT567L2uXf5ae9YPaOlc9MLPPWBpxZUZ++
-        86dDc9Kq0kevwpflhTfVSC9/5BzQvuksa99ez1OLelm9m09PU7j3YKmEyefgC7WHeXa9P8N2
-        bXerRN+MW6xXGtr8K9qlw/YymxTX7i+cKzT7XbmB5IJk2bxA74A3H5uiFXYuWXswhVs5TMFF
-        ZcfpB+71XZe/ZfdO6Who3Go27eDM7sh68+vXl88X+VXMtHNGqOhS6deiT9U7av88jyqaE7HI
-        OkrtW0/Zmgqm0vPF2YG/YsNPXvuuLnJIIE1m99qvWSeXfbtxhX+54+vzczTlmX+w3bu2IF8m
-        VOWsEktxRqKhFnNRcSIAmFGTq3MDAAA=
-X-CMS-MailID: 20220119150746epcas5p135480c5f901d25cd1a85d5bfa3ed907d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220118150108epcas5p2d9cd4db7cb368c2bfbd7d058eba4107c
-References: <20220118144851.69537-1-alim.akhtar@samsung.com>
-        <CGME20220118150108epcas5p2d9cd4db7cb368c2bfbd7d058eba4107c@epcas5p2.samsung.com>
-        <20220118144851.69537-15-alim.akhtar@samsung.com>
-        <43e72d34-0e11-9ff6-6924-0cab62b51891@canonical.com>
+References: <20220118092002.4267-1-hsinyi@chromium.org> <20220118092002.4267-3-hsinyi@chromium.org>
+In-Reply-To: <20220118092002.4267-3-hsinyi@chromium.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 19 Jan 2022 16:08:02 +0100
+Message-ID: <CAG3jFyvxRLYFeFzMEzWZSuyeSq_GzgW+h_KJE0NdAMnkinAn7w@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] drm/bridge: anx7625: Support reading edid through
+ aux channel
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
->-----Original Message-----
->From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
->Sent: Wednesday, January 19, 2022 12:15 AM
->To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->Cc: soc=40kernel.org; linux-clk=40vger.kernel.org; devicetree=40vger.kerne=
-l.org;
->olof=40lixom.net; arnd=40arndb.de; linus.walleij=40linaro.org;
->catalin.marinas=40arm.com; robh+dt=40kernel.org; s.nawrocki=40samsung.com;
->linux-samsung-soc=40vger.kernel.org; pankaj.dubey=40samsung.com; linux-
->fsd=40tesla.com; Arjun K V <arjun.kv=40samsung.com>; Aswani Reddy
-><aswani.reddy=40samsung.com>; Ajay Kumar <ajaykumar.rs=40samsung.com>;
->Sriranjani P <sriranjani.p=40samsung.com>; Chandrasekar R
-><rcsekar=40samsung.com>; Shashank Prashar <s.prashar=40samsung.com>
->Subject: Re: =5BPATCH v2 14/16=5D arm64: dts: fsd: Add initial device tree=
- support
+On Tue, 18 Jan 2022 at 10:20, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
 >
->On 18/01/2022 15:48, Alim Akhtar wrote:
->> Add initial device tree support for =22Full Self-Driving=22 (FSD) SoC Th=
-is
->> SoC contain three clusters of four cortex-a72 CPUs and various
->> peripheral IPs.
->>
->> Cc: linux-fsd=40tesla.com
->> Signed-off-by: Arjun K V <arjun.kv=40samsung.com>
->> Signed-off-by: Aswani Reddy <aswani.reddy=40samsung.com>
->> Signed-off-by: Ajay Kumar <ajaykumar.rs=40samsung.com>
->> Signed-off-by: Sriranjani P <sriranjani.p=40samsung.com>
->> Signed-off-by: Chandrasekar R <rcsekar=40samsung.com>
->> Signed-off-by: Shashank Prashar <s.prashar=40samsung.com>
->> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
->> ---
->>  MAINTAINERS                           =7C   8 +
->>  arch/arm64/Kconfig.platforms          =7C   7 +
->>  arch/arm64/boot/dts/Makefile          =7C   1 +
->>  arch/arm64/boot/dts/tesla/Makefile    =7C   3 +
->>  arch/arm64/boot/dts/tesla/fsd-evb.dts =7C  39 ++
->>  arch/arm64/boot/dts/tesla/fsd.dtsi    =7C 651
->++++++++++++++++++++++++++
->>  6 files changed, 709 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/tesla/Makefile
->>  create mode 100644 arch/arm64/boot/dts/tesla/fsd-evb.dts
->>  create mode 100644 arch/arm64/boot/dts/tesla/fsd.dtsi
->>
+> Support reading edid through aux channel if panel is connected to aux
+> bus. Extend anx7625_aux_dpcd_trans() to implement aux transfer function:
 >
->I saw you dropped the MCT timer from DTSI. I wonder why?
+> 1. panel is populated in devm_of_dp_aux_populate_ep_devices(), so move
+>    anx7625_parse_dt() after.
+> 2. Use pm runtime autosuspend since aux transfer function is called
+>    multiple times when reading edid.
+> 3. No-op if aux transfer length is 0.
 >
-I dropped it intentionally, as you had a comment on MCT driver changes, so =
-will send later along with MCT driver fix.
-
->Not very happy with FSD naming (as discussed before), but board compatible
->looks reasonable. Code looks good to me:
->Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski=40canonical.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Reviewed-by: Xin Ji <xji@analogixsemi.com>
+> ---
+> v3->v4:
+> rebase to latest drm-misc-next
+> ---
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 120 ++++++++++++++++++----
+>  drivers/gpu/drm/bridge/analogix/anx7625.h |   1 +
+>  2 files changed, 103 insertions(+), 18 deletions(-)
 >
-Thanks Krzysztof for all the reviews.
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index b7e3373994b480..50b9c98277f0d7 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -24,6 +24,7 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_bridge.h>
+>  #include <drm/drm_crtc_helper.h>
+> +#include <drm/drm_dp_aux_bus.h>
 
->Similarly to previous vendor-prefix patch, please let me know if it's expe=
-cted
->me to take it. I assume no. :)
+drivers/gpu/drm/bridge/analogix/anx7625.c:27:10: fatal error:
+drm/drm_dp_aux_bus.h: No such file or directory
+   27 | #include <drm/drm_dp_aux_bus.h>
+
+drm/dp/rm_dp_aux_bus.h is probably the correct path.
+
+>  #include <drm/dp/drm_dp_helper.h>
+>  #include <drm/drm_edid.h>
+>  #include <drm/drm_hdcp.h>
+> @@ -231,19 +232,23 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
+>         return 0;
+>  }
 >
-I am expecting this will go via your tree, but I am ok either ways. May be =
-you and arm-soc maintainers (Arnd/Olof) can take the call here.
+> -static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
+> -                                 u32 address, u8 len, u8 *buf)
+> +static int anx7625_aux_trans(struct anx7625_data *ctx, u8 op, u32 address,
+> +                            u8 len, u8 *buf)
+>  {
+>         struct device *dev = &ctx->client->dev;
+>         int ret;
+>         u8 addrh, addrm, addrl;
+>         u8 cmd;
+> +       bool is_write = !(op & DP_AUX_I2C_READ);
+>
+> -       if (len > MAX_DPCD_BUFFER_SIZE) {
+> +       if (len > DP_AUX_MAX_PAYLOAD_BYTES) {
+>                 dev_err(dev, "exceed aux buffer len.\n");
+>                 return -EINVAL;
+>         }
+>
+> +       if (!len)
+> +               return len;
+> +
+>         addrl = address & 0xFF;
+>         addrm = (address >> 8) & 0xFF;
+>         addrh = (address >> 16) & 0xFF;
+> @@ -262,7 +267,7 @@ static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
+>         ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+>                                  AP_AUX_ADDR_19_16, addrh);
+>
+> -       if (op == DP_AUX_NATIVE_WRITE)
+> +       if (is_write)
+>                 ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
+>                                                AP_AUX_BUFF_START, len, buf);
+>         /* Enable aux access */
+> @@ -275,14 +280,14 @@ static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
+>         }
+>
+>         ret = wait_aux_op_finish(ctx);
+> -       if (ret) {
+> +       if (ret < 0) {
+>                 dev_err(dev, "aux IO error: wait aux op finish.\n");
+>                 return ret;
+>         }
+>
+>         /* Write done */
+> -       if (op == DP_AUX_NATIVE_WRITE)
+> -               return 0;
+> +       if (is_write)
+> +               return len;
+>
+>         /* Read done, read out dpcd data */
+>         ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
+> @@ -292,7 +297,7 @@ static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
+>                 return -EIO;
+>         }
+>
+> -       return 0;
+> +       return len;
+>  }
+>
+>  static int anx7625_video_mute_control(struct anx7625_data *ctx,
+> @@ -867,7 +872,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+>         }
+>
+>         /* Read downstream capability */
+> -       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+> +       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+>         if (!(bcap & 0x01)) {
+>                 pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+>                 return 0;
+> @@ -956,7 +961,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+>         dev_dbg(dev, "notify downstream enter into standby\n");
+>         /* Downstream monitor enter into standby mode */
+>         data = 2;
+> -       ret |= anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
+> +       ret |= anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
+>         if (ret < 0)
+>                 DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+>
+> @@ -1655,11 +1660,56 @@ static int anx7625_parse_dt(struct device *dev,
+>         return 0;
+>  }
+>
+> +static bool anx7625_of_panel_on_aux_bus(struct device *dev)
+> +{
+> +       struct device_node *bus, *panel;
+> +
+> +       bus = of_get_child_by_name(dev->of_node, "aux-bus");
+> +       if (!bus)
+> +               return false;
+> +
+> +       panel = of_get_child_by_name(bus, "panel");
+> +       of_node_put(bus);
+> +       if (!panel)
+> +               return false;
+> +       of_node_put(panel);
+> +
+> +       return true;
+> +}
+> +
+>  static inline struct anx7625_data *bridge_to_anx7625(struct drm_bridge *bridge)
+>  {
+>         return container_of(bridge, struct anx7625_data, bridge);
+>  }
+>
+> +static ssize_t anx7625_aux_transfer(struct drm_dp_aux *aux,
+> +                                    struct drm_dp_aux_msg *msg)
 
->Best regards,
->Krzysztof
+checkpatch --strict is unhappy about the above line not using as many
+tabs as possible.
 
+> +{
+> +       struct anx7625_data *ctx = container_of(aux, struct anx7625_data, aux);
+> +       struct device *dev = &ctx->client->dev;
+> +       u8 request = msg->request & ~DP_AUX_I2C_MOT;
+> +       int ret = 0;
+> +
+> +       pm_runtime_get_sync(dev);
+> +       msg->reply = 0;
+> +       switch (request) {
+> +       case DP_AUX_NATIVE_WRITE:
+> +       case DP_AUX_I2C_WRITE:
+> +       case DP_AUX_NATIVE_READ:
+> +       case DP_AUX_I2C_READ:
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +       if (!ret)
+> +               ret = anx7625_aux_trans(ctx, msg->request, msg->address,
+> +                                       msg->size, msg->buffer);
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put_autosuspend(dev);
+> +
+> +       return ret;
+> +}
+> +
+>  static struct edid *anx7625_get_edid(struct anx7625_data *ctx)
+>  {
+>         struct device *dev = &ctx->client->dev;
+> @@ -2066,6 +2116,13 @@ static int anx7625_bridge_attach(struct drm_bridge *bridge,
+>                 return -ENODEV;
+>         }
+>
+> +       ctx->aux.drm_dev = bridge->dev;
+> +       err = drm_dp_aux_register(&ctx->aux);
+> +       if (err) {
+> +               dev_err(dev, "failed to register aux channel: %d\n", err);
+> +               return err;
+> +       }
+> +
+>         if (ctx->pdata.panel_bridge) {
+>                 err = drm_bridge_attach(bridge->encoder,
+>                                         ctx->pdata.panel_bridge,
+> @@ -2079,6 +2136,13 @@ static int anx7625_bridge_attach(struct drm_bridge *bridge,
+>         return 0;
+>  }
+>
+> +static void anx7625_bridge_detach(struct drm_bridge *bridge)
+> +{
+> +       struct anx7625_data *ctx = bridge_to_anx7625(bridge);
+> +
+> +       drm_dp_aux_unregister(&ctx->aux);
+> +}
+> +
+>  static enum drm_mode_status
+>  anx7625_bridge_mode_valid(struct drm_bridge *bridge,
+>                           const struct drm_display_info *info,
+> @@ -2344,6 +2408,7 @@ static struct edid *anx7625_bridge_get_edid(struct drm_bridge *bridge,
+>
+>  static const struct drm_bridge_funcs anx7625_bridge_funcs = {
+>         .attach = anx7625_bridge_attach,
+> +       .detach = anx7625_bridge_detach,
+>         .mode_valid = anx7625_bridge_mode_valid,
+>         .mode_set = anx7625_bridge_mode_set,
+>         .atomic_check = anx7625_bridge_atomic_check,
+> @@ -2501,6 +2566,12 @@ static const struct dev_pm_ops anx7625_pm_ops = {
+>                            anx7625_runtime_pm_resume, NULL)
+>  };
+>
+> +static void anx7625_runtime_disable(void *data)
+> +{
+> +       pm_runtime_dont_use_autosuspend(data);
+> +       pm_runtime_disable(data);
+> +}
+> +
+>  static int anx7625_i2c_probe(struct i2c_client *client,
+>                              const struct i2c_device_id *id)
+>  {
+> @@ -2523,13 +2594,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>
+>         pdata = &platform->pdata;
+>
+> -       ret = anx7625_parse_dt(dev, pdata);
+> -       if (ret) {
+> -               if (ret != -EPROBE_DEFER)
+> -                       DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
+> -               return ret;
+> -       }
+> -
+>         platform->client = client;
+>         i2c_set_clientdata(client, platform);
+>
+> @@ -2577,6 +2641,19 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>                 }
+>         }
+>
+> +       platform->aux.name = "anx7625-aux";
+> +       platform->aux.dev = dev;
+> +       platform->aux.transfer = anx7625_aux_transfer;
+> +       drm_dp_aux_init(&platform->aux);
+> +       devm_of_dp_aux_populate_ep_devices(&platform->aux);
+> +
+> +       ret = anx7625_parse_dt(dev, pdata);
+> +       if (ret) {
+> +               if (ret != -EPROBE_DEFER)
+> +                       DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
+> +               return ret;
+> +       }
+> +
+>         if (anx7625_register_i2c_dummy_clients(platform, client) != 0) {
+>                 ret = -ENOMEM;
+>                 DRM_DEV_ERROR(dev, "fail to reserve I2C bus.\n");
+> @@ -2584,6 +2661,12 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>         }
+>
+>         pm_runtime_enable(dev);
+> +       pm_runtime_set_autosuspend_delay(dev, 1000);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_suspend_ignore_children(dev, true);
+> +       ret = devm_add_action_or_reset(dev, anx7625_runtime_disable, dev);
+> +       if (ret)
+> +               return ret;
+>
+>         if (!platform->pdata.low_power_mode) {
+>                 anx7625_disable_pd_protocol(platform);
+> @@ -2596,7 +2679,8 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>
+>         platform->bridge.funcs = &anx7625_bridge_funcs;
+>         platform->bridge.of_node = client->dev.of_node;
+> -       platform->bridge.ops = DRM_BRIDGE_OP_EDID;
+> +       if (!anx7625_of_panel_on_aux_bus(&client->dev))
+> +               platform->bridge.ops |= DRM_BRIDGE_OP_EDID;
+>         if (!platform->pdata.panel_bridge)
+>                 platform->bridge.ops |= DRM_BRIDGE_OP_HPD |
+>                                         DRM_BRIDGE_OP_DETECT;
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> index 64a8ab56529404..edbbfe410a56e8 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> @@ -472,6 +472,7 @@ struct anx7625_data {
+>         u8 bridge_attached;
+>         struct drm_connector *connector;
+>         struct mipi_dsi_device *dsi;
+> +       struct drm_dp_aux aux;
+>  };
+>
+>  #endif  /* __ANX7625_H__ */
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>

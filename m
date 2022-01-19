@@ -2,76 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB05493C2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A129493C33
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355256AbiASOrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:47:09 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:33714 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355269AbiASOrH (ORCPT
+        id S241974AbiASOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:49:09 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45464
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234438AbiASOtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:47:07 -0500
-Received: by mail-ot1-f44.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so3462069otu.0;
-        Wed, 19 Jan 2022 06:47:06 -0800 (PST)
+        Wed, 19 Jan 2022 09:49:08 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A3B1A3F1C4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:49:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642603746;
+        bh=8N0tMQvK/ddTr0m3n20Yg1rH+YmkdkWObImqke9HUbc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=nfHL8U2YIPQQtG6kzjBYRr1mbExrnaUmdvgXFdzE65sXDT+PX6UV3v3Qj5LByMkHe
+         ZVcocF+SMbtmZsrdkfEkJ4hK5jDy9RvEGtKCD3Ig9rAn6nXdRw9I59Vs5rnyH2VZwv
+         qRqZngRybbh2jGx2b/DtL3GfAQiPAjnfv5zsl1NElhbRzfne6uJvfckpHVfJIeftUh
+         KVbuy8kMN3mxqyv9nCOCeAcFS4M2fGxhXEwzhTkPP9YO0rat+Q1KIiIdF5mkrsg12A
+         jUOCBzcLGWUMx+TTwtaQp20/ElT2x7hKh70FwgiriwZbZYt+xX0pOGOREe2Sks7EDY
+         iOZGEIVT0xsYQ==
+Received: by mail-ed1-f69.google.com with SMTP id ej6-20020a056402368600b00402b6f12c3fso2736154edb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:49:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=By8MCaOUBXm4JFsoFgchXDiBCHq73b/VK8JwUra9Jqg=;
-        b=n22PQpmiTDIAzaJYMEPL7jrd3ES9QPCcygW9DJkrEx9ugspQd4D2VLURVe2R1K6ZJr
-         XiZ7UX+1Oh6iqoXcRXHNWdeoixEFuf4zR8BIYLAWaZxRVLeGdl1P+8MDaFWe7irbHyqz
-         10No200JR9TaNJVUAPxg+AXWUp86XA4u0sQzBr0bCLeqS804QhvoFlY77LZWh8cEowFw
-         KTgnyBhF+2PO95b/8LWeTd70x7FUzPck78HF97hj+sdHFNjMDFPipqSZc80iBHaGEPWI
-         3ZmNwYMmjDMyIqpFdBxrsMBApnIVEXfNDwU9KO8QsOt3ZigYw8ACqSAuRZxe2v1AHrks
-         VZLw==
-X-Gm-Message-State: AOAM5308sS/pFNP/LKnL+20yBssb+gPBeqHH8DV6nsaB8QLEyt4Vrq3N
-        WiJNR3zcWZ++16jIgELL8A==
-X-Google-Smtp-Source: ABdhPJxp9A2YTb4rIod/BHhcjrN+GmXr5oaQ5Ihbp3C5qD7s5hWwFzjwRycYR3w87G4fUPsDUSaq9g==
-X-Received: by 2002:a9d:6e16:: with SMTP id e22mr19236753otr.259.1642603626375;
-        Wed, 19 Jan 2022 06:47:06 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id ay40sm10264392oib.1.2022.01.19.06.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 06:47:05 -0800 (PST)
-Received: (nullmailer pid 3537590 invoked by uid 1000);
-        Wed, 19 Jan 2022 14:47:04 -0000
-Date:   Wed, 19 Jan 2022 08:47:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Eckert <fe@dev.tdt.de>
-Cc:     linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com, robh+dt@kernel.org, pavel@ucw.cz
-Subject: Re: [PATCH v3 2/2] dt: bindings: KTD20xx: Introduce the ktd20xx
- family of RGB drivers
-Message-ID: <YegkaA49xZONJcrx@robh.at.kernel.org>
-References: <20220117124741.7165-1-fe@dev.tdt.de>
- <20220117124741.7165-3-fe@dev.tdt.de>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8N0tMQvK/ddTr0m3n20Yg1rH+YmkdkWObImqke9HUbc=;
+        b=dDv1qNPLPhjCETg7WgBAISu2d4DOpBWxDNo3RaWiGuxHvpe/mZskldh5g2x2v+aVkO
+         xyaiYXg87BO/NnYfB0yQ8y3BMOap78FETe6guw6zbS/Hqkiqz0xIfBqu1HzF+STAJHxK
+         Pnmh1kSkMDxMWz9H0jTxuBUr39LKVeJsPwyxgl2W5vgrehrpnsMLs1gU83s8YceB+S2S
+         QdSVVo0rumA1CtYoXQhPvgMXsUT7tTyYtHzVFfCAy02C6cBbv4WxDcN9AHC5Tuuf9u08
+         TT990sif01G2z9WDznPhn165dAlS3izlp5LO3yul1BKOkrVb+En6qqSchy8kdUwBcdfA
+         lRfA==
+X-Gm-Message-State: AOAM531/vIzWy1/TabbpdJbhtl6XBWt2NxdIngdqEbn+OrCSZCnzG0s8
+        EgdxoWb2Ftn0sEYPvaEZtUP2g0RGf6ObLXmLAya9156vIhJZltCJeOdN4XH/TuzcCMUVQTLkTxB
+        DW08I4x9hvE3Xi3okv740djVe0xHvQDO8xkamPHV7Ig==
+X-Received: by 2002:a05:6402:1104:: with SMTP id u4mr31400250edv.24.1642603746384;
+        Wed, 19 Jan 2022 06:49:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJywQgiQXDsmm4wHMKZQDucd4VQ0O8UGKnCspPk9GOsHIfBhx/X6dSHuH1QGHo5nePUGxuaCHQ==
+X-Received: by 2002:a05:6402:1104:: with SMTP id u4mr31400233edv.24.1642603746228;
+        Wed, 19 Jan 2022 06:49:06 -0800 (PST)
+Received: from [192.168.0.45] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id d14sm1327637edu.57.2022.01.19.06.49.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 06:49:05 -0800 (PST)
+Message-ID: <495d7eee-ab87-d330-119c-eaafa6c1dee7@canonical.com>
+Date:   Wed, 19 Jan 2022 15:49:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117124741.7165-3-fe@dev.tdt.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 13:47:41 +0100, Florian Eckert wrote:
-> Introduce the bindings for the Kinetic KTD2061/58/59/60RGB LED device
-> driver. The KTD20xx can control RGB LEDs individually. Because of the
-> hardware limitations, only 7 colors and the color black (off) can be set.
+On 19/01/2022 15:35, Sam Protsenko wrote:
+> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> Hi,
+>>
+>> Second pull with DTS for ARM64, on top of previous pull.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>>
+>> The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
+>>
+>>   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
+>>
+>> are available in the Git repository at:
+>>
+>>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
+>>
+>> for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
+>>
+>>   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
+>>
+>> ----------------------------------------------------------------
+>> Samsung DTS ARM64 changes for v5.17, part two
+>>
+>> Add initial Exynos850 support and WinLink E850-96 board using it.
+>>
+>> ----------------------------------------------------------------
+>> Sam Protsenko (2):
+>>       arm64: dts: exynos: Add initial Exynos850 SoC support
+>>       arm64: dts: exynos: Add initial E850-96 board support
+>>
 > 
-> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
-> ---
->  .../bindings/leds/leds-ktd20xx.yaml           | 130 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 131 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/leds-ktd20xx.yaml
+> Hi Krzysztof,
 > 
+> Do you know if this series is going to land in v5.17? 
+
+I don't know, did not check.
+
+> The prediction
+> (by phb-crystal-ball) is that MW closes on 23 Jan. I can see those
+> patches in soc/for-next [1], but want to be sure those are scheduled
+> for v5.17.
+
+I don't get how can you be sure that they will be in v5.17. If they are
+not going to be pulled - what can you do?
 
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
+Best regards,
+Krzysztof

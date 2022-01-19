@@ -2,127 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D61493943
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D75493958
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354021AbiASLKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:10:11 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:45088 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353333AbiASLKI (ORCPT
+        id S1354069AbiASLQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353333AbiASLQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:10:08 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 19 Jan 2022 06:16:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7F9C061574;
+        Wed, 19 Jan 2022 03:16:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4FAD6218E4;
-        Wed, 19 Jan 2022 11:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642590607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQns7ry+S4QtQCYHYjH5vlhwIvoPhGouvztO1/xkhOw=;
-        b=TazNgORzPiPdgRTXlVdu2RRANPhrUJFZEv5id/U7dtjkdIMmC1rm7JkBPKqxwzICxBNelX
-        d9XqomwC+9ya7KB+qXtAveVCV9e9TTosR+5mg60AWMkW0BehhkdNn4SgmRgtlVyfai94zV
-        CjVPpd/YLmoGkARdp/pLgfiLnZA1ZAk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642590607;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQns7ry+S4QtQCYHYjH5vlhwIvoPhGouvztO1/xkhOw=;
-        b=8hxMguh1nXY//+N2o65JGa4x2elWOqSS3Gnrj7mLJUQPz+pb6axFSsnah15g+4iyTQrB3E
-        SslLsrJ9Z0uW+GDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14D2513B4A;
-        Wed, 19 Jan 2022 11:10:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JTt7BI/x52HuXwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 11:10:07 +0000
-Message-ID: <699d9f0c-e330-f651-a6c8-f9e11e1844fd@suse.cz>
-Date:   Wed, 19 Jan 2022 12:10:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 41/66] fs/proc/base: Use maple tree iterators in place
- of linked list
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D189061544;
+        Wed, 19 Jan 2022 11:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EC8C004E1;
+        Wed, 19 Jan 2022 11:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642590964;
+        bh=2yjBD4Zacw+5slFq4LLTP2+0CVP0ahv0ykBSsfMZgFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sWcBQNL3jsVDx8fbC4Tu3Z7AAaVmBxjdgAxC1FcAS8Ufemm9lwqE+FjUw8YobL0g5
+         maE0aFh0Blr15dbPkx6ryoeImGeucYTTcsECJx1mt0+jq0oQ6FQ5rulN3uruRj5DR9
+         7iDa/u8UQ46Ll1d02g4BzWZus5gttImEBP/RPvToowP4cEwiueV36Qa+mbLXKiKF1P
+         TDpAHrbrWHnvi/TfuAgEy+otbPNTxTNLfZLBje9IVSfCKF2Ngao1yFiRVXJhZg4UCw
+         U4FwtkiJsQmV/NTjtIL3341Q+Mvi5YeltCuHtB2mLD/ESo335mZI38irwhrXsAf0Se
+         tjihvN1DWwviQ==
+Date:   Wed, 19 Jan 2022 12:15:57 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-cachefs@redhat.com,
+        Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <smfrench@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
         Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-42-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-42-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] vfs, fscache: Add an IS_KERNEL_FILE() macro for
+ the S_KERNEL_FILE flag
+Message-ID: <20220119111557.gjrjwgib2wgteir6@wittgenstein>
+References: <YeefizLOGt1Qf35o@infradead.org>
+ <YebpktrcUZOlBHkZ@infradead.org>
+ <164251396932.3435901.344517748027321142.stgit@warthog.procyon.org.uk>
+ <164251409447.3435901.10092442643336534999.stgit@warthog.procyon.org.uk>
+ <3613681.1642527614@warthog.procyon.org.uk>
+ <3765724.1642583885@warthog.procyon.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3765724.1642583885@warthog.procyon.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On Wed, Jan 19, 2022 at 09:18:05AM +0000, David Howells wrote:
+> Christoph Hellwig <hch@infradead.org> wrote:
 > 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  fs/proc/base.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> > On Tue, Jan 18, 2022 at 05:40:14PM +0000, David Howells wrote:
+> > > Christoph Hellwig <hch@infradead.org> wrote:
+> > > 
+> > > > On Tue, Jan 18, 2022 at 01:54:54PM +0000, David Howells wrote:
+> > > > > Add an IS_KERNEL_FILE() macro to test the S_KERNEL_FILE inode flag as is
+> > > > > common practice for the other inode flags[1].
+> > > > 
+> > > > Please fix the flag to have a sensible name first, as the naming of the
+> > > > flag and this new helper is utterly wrong as we already discussed.
+> > > 
+> > > And I suggested a new name, which you didn't comment on.
+> > 
+> > Again, look at the semantics of the flag:  The only thing it does in the
+> > VFS is to prevent a rmdir.  So you might want to name it after that.
+> > 
+> > Or in fact drop the flag entirely.  We don't have that kind of
+> > protection for other in-kernel file use or important userspace daemons
+> > either.  I can't see why cachefiles is the magic snowflake here that
+> > suddenly needs semantics no one else has.
 > 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 13eda8de2998..ea17ee988158 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -2323,6 +2323,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
->  	GENRADIX(struct map_files_info) fa;
->  	struct map_files_info *p;
->  	int ret;
-> +	MA_STATE(mas, NULL, 0, 0);
->  
->  	genradix_init(&fa);
->  
-> @@ -2350,6 +2351,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
->  	}
->  
->  	nr_files = 0;
-> +	mas.tree = &mm->mm_mt;
->  
->  	/*
->  	 * We need two passes here:
-> @@ -2361,7 +2363,8 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
->  	 * routine might require mmap_lock taken in might_fault().
->  	 */
->  
-> -	for (vma = mm->mmap, pos = 2; vma; vma = vma->vm_next) {
-> +	pos = 2;
-> +	mas_for_each(&mas, vma, ULONG_MAX) {
->  		if (!vma->vm_file)
->  			continue;
->  		if (++pos <= ctx->pos)
+> The flag cannot just be dropped - it's an important part of the interaction
+> with cachefilesd with regard to culling.  Culling to free up space is
+> offloaded to userspace rather than being done within the kernel.
+> 
+> Previously, cachefiles, the kernel module, had to maintain a huge tree of
+> records of every backing inode that it was currently using so that it could
+> forbid cachefilesd to cull one when cachefilesd asked.  I've reduced that to a
+> single bit flag on the inode struct, thereby saving both memory and time.  You
+> can argue whether it's worth sacrificing an inode flag bit for that, but the
+> flag can be reused for any other kernel service that wants to similarly mark
+> an inode in use.
+> 
+> Further, it's used as a mark to prevent cachefiles accidentally using an inode
+> twice - say someone misconfigures a second cache overlapping the first - and,
+> again, this works if some other kernel driver wants to mark inode it is using
+> in use.  Cachefiles will refuse to use them if it ever sees them, so no
+> problem there.
+> 
+> And it's not true that we don't have that kind of protection for other
+> in-kernel file use.  See S_SWAPFILE.  I did consider using that, but that has
+> other side effects.  I mentioned that perhaps I should make swapon set
+> S_KERNEL_FILE also.  Also blockdevs have some exclusion also, I think.
+> 
+> The rmdir thing should really apply to rename and unlink also.  That's to
+> prevent someone, cachefilesd included, causing cachefiles to malfunction by
+> removing the directories it created.  Possibly this should be a separate bit
+> to S_KERNEL_FILE, maybe S_NO_DELETE.
+> 
+> So I could change S_KERNEL_FILE to S_KERNEL_LOCK, say, or maybe S_EXCLUSIVE.
 
+[ ] S_REMOVE_PROTECTED
+[ ] S_UNREMOVABLE
+[ ] S_HELD_BUSY
+[ ] S_KERNEL_BUSY
+[ ] S_BUSY_INTERNAL
+[ ] S_BUSY
+[ ] S_HELD
+
+?

@@ -2,118 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE71493FF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48820493FF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356803AbiASSaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:30:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42518 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356737AbiASSaJ (ORCPT
+        id S1356790AbiASSbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356793AbiASSal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:30:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B3D4B81B08;
-        Wed, 19 Jan 2022 18:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C61C340E1;
-        Wed, 19 Jan 2022 18:30:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642617006;
-        bh=dEcBVKy/pTvh9qFsuZNbinacCry4Xc/N2qu1yLmP2Fs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XKScT8liWwzFg7Ff6pkJj5HCt1iUUPHBGlzwSD0IfXchFZYeG1SVPuLpTyl6sVsK2
-         FYciVUDS/DfsrGBynx9nz4xJIaXhf322jGb4ySehjGogru4LL0TEQZCUMiOB6gegXx
-         DAGkjr4X2tEWa/wMLw7o7aPQC3DBTE98I+4ZnP5qkF77Sen2bpISTRbqgt4DPi59dx
-         he8xhPtDBm6dewNR2eW9/m5+mfSrFIg1x250YavQAVD5nie6cwcuq10KN6UvpOYLAm
-         So3gg+4pJiWJ2bVzlscOFgLz+X+nZrX8XmGX+kAWcLcu888xPQvaVgtZ9Ci1Bu2rUG
-         mq2e0qz93OK+w==
-Date:   Wed, 19 Jan 2022 19:30:00 +0100
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        stephen.s.brennan@oracle.com, cyphar@cyphar.com
-Subject: Re: [PATCH v2] proc: "mount -o lookup=" support
-Message-ID: <20220119183000.agmteejsb46dlkyj@example.org>
-References: <YegysyqL3LvljK66@localhost.localdomain>
- <20220119162423.eqbyefywhtzm22tr@wittgenstein>
- <20220119171522.pxmkbt5eu3rs5yik@example.org>
- <20220119173107.tcsrjml4ujrdcqyh@wittgenstein>
+        Wed, 19 Jan 2022 13:30:41 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB2C06174E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:30:25 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id q15-20020a4a6c0f000000b002dc415427d3so1018875ooc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:30:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=U6G+Od8CQz4yYwmxLKapX+tTbCZjVI4ky3vasHoI+EHfRF1d2+YcK39Z1g655nD69m
+         kwwsBgZuuhUTESSgiOj0KUGNOCw3XjERF9/wMRmr4qrY9BF8twk4JMfEP4T8BqB3OdW2
+         xcqd2aM76hLGsN0KSxJJ6SgtkOq0GChgsrnPtXBgN0QFM6gUSWkpSLuNyjdipWkRkRtM
+         wAM/jATYWTN+zuGr/DlRXxUy3DnZfnJSKOi4FKADT+rfyI1jYHr2q4qyva9tKF4s1UFV
+         dQMnTaycONlANUJUQQlTzsrK9jPvv0JUKC/KlHZXwKl+kXcxhU9QqeL7BtGCkkuO/a6B
+         gybA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=zoP5wf9h2ZtCQzInp1KMsEeCukoBc+4ETySt0eAW/D9yYDYY2tyOowO5BSdemLAH7C
+         VV7rYrQhRqB+kfYEIyOvqXBZgiiVlJeGnydPwkk1PVJaX1C0N3O48QybCP+tSxoId6LY
+         VxLGO8Tmy1jc18hImXvpC+7LcSd8Vtzkl+THluWpn4J3TvXmqfcBw3PF09P/kO2lTsPm
+         E7eVP+F7F96IyZgOMu0gtFpPCG1oneI/bdyYfk2fROU+g3tcnlm9zRzFPBwqgi0p9Bzs
+         xCXDGLvF4Egew5CZy9PV4oNvGePb4PAhZ0KeLjka/fcLbvXimt3KVBXpROf/CQo/Y+LP
+         LTvA==
+X-Gm-Message-State: AOAM532IPWdwDc+hSQkzXzvyHyA9MmKvPh1TmjNw7slluqmFVfXdFqX3
+        QYE+pZqunPZKKoMFiOedprwj/+pYlQgPH6MffNE=
+X-Google-Smtp-Source: ABdhPJx26lvtnYSDAkca2taWrc0XRer5hJXsQDBMbS915DGxrkPzzDAwqXKclXA6CJ/FoJmjIJnJ4TXRUEbGcvXi438=
+X-Received: by 2002:a4a:9747:: with SMTP id v7mr22613322ooi.31.1642617024881;
+ Wed, 19 Jan 2022 10:30:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119173107.tcsrjml4ujrdcqyh@wittgenstein>
+Received: by 2002:a05:6838:bd53:0:0:0:0 with HTTP; Wed, 19 Jan 2022 10:30:24
+ -0800 (PST)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <mistracywiliams@gmail.com>
+Date:   Wed, 19 Jan 2022 10:30:24 -0800
+Message-ID: <CAJH5YeMFjBF6vhmxsCawZxnvXt4ToJpF3_Pwsb4T4-E-kmAKgA@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:31:07PM +0100, Christian Brauner wrote:
-> On Wed, Jan 19, 2022 at 06:15:22PM +0100, Alexey Gladkov wrote:
-> > On Wed, Jan 19, 2022 at 05:24:23PM +0100, Christian Brauner wrote:
-> > > On Wed, Jan 19, 2022 at 06:48:03PM +0300, Alexey Dobriyan wrote:
-> > > > From 61376c85daab50afb343ce50b5a97e562bc1c8d3 Mon Sep 17 00:00:00 2001
-> > > > From: Alexey Dobriyan <adobriyan@gmail.com>
-> > > > Date: Mon, 22 Nov 2021 20:41:06 +0300
-> > > > Subject: [PATCH 1/1] proc: "mount -o lookup=..." support
-> > > > 
-> > > > Docker implements MaskedPaths configuration option
-> > > > 
-> > > > 	https://github.com/estesp/docker/blob/9c15e82f19b0ad3c5fe8617a8ec2dddc6639f40a/oci/defaults.go#L97
-> > > > 
-> > > > to disable certain /proc files. It overmounts them with /dev/null.
-> > > > 
-> > > > Implement proper mount option which selectively disables lookup/readdir
-> > > > in the top level /proc directory so that MaskedPaths doesn't need
-> > > > to be updated as time goes on.
-> > > 
-> > > I might've missed this when this was sent the last time so maybe it was
-> > > clearly explained in an earlier thread: What's the reason this needs to
-> > > live in the kernel?
-> > > 
-> > > The MaskedPaths entry is optional so runtimes aren't required to block
-> > > anything by default and this mostly makes sense for workloads that run
-> > > privileged.
-> > > 
-> > > In addition MaskedPaths is a generic option which allows to hide any
-> > > existing path, not just proc. Even in the very docker-specific defaults
-> > > /sys/firmware is covered.
-> > > 
-> > > I do see clear value in the subset= and hidepid= options. They are
-> > > generally useful independent of opinionated container workloads. I don't
-> > > see the same for lookup=.
-> > > 
-> > > An alternative I find more sensible is to add a new value for subset=
-> > > that hides anything(?) that only global root should have read/write
-> > > access too.
-> > 
-> > Or we can allow to change permissions in the procfs only in the direction
-> > of decreasing (if some file has 644 then allow to set 640 or 600). In this
-> > case, we will not need to constantly check the whitelist.
-> 
-> I don't fancy any filtering or allowlist approach. I find that rather
-> inelegant.
-
-Yep. I also don't find it very convenient if you need to allow more than
-one or two files. That's why I didn't do anything like that when I
-implemented subset=.
-
-> But if I understand you correctly is that if we were to have
-> decreasing permissions we could allow a (namespace) procfs-admin to set
-> permissions so that the relevant files are essentially read-only or not
-> even readable at all for container workloads. So once you've lowered
-> perms you can't raise them which ensures even namespace procfs-admin
-> can't raise them again.
-
-Yes. This is what I meant.
-
-> Might work as well. But that implies that we wouldn't need any allowlist
-> at all afaict.
-
-Yes, in this case we don't need a list.
-
 -- 
-Rgrds, legion
-
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

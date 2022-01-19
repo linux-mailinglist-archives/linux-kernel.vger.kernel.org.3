@@ -2,101 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75726493F13
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEE8493F1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356421AbiASRbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:31:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45272 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346866AbiASRbN (ORCPT
+        id S1356464AbiASRdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:33:38 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:19112 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356459AbiASRdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:31:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA351615E5;
-        Wed, 19 Jan 2022 17:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E93C004E1;
-        Wed, 19 Jan 2022 17:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642613472;
-        bh=VUM+zefqtgHBv4YnB4BhWYy0GNdhtJQ7lZ3gr/B8kU0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gWQ9fvpjan3htYRDTrUxthqZ5ZnJ0DG3/dzp9rAv1ndREXFq28YXGkzZ/2Edx6K7o
-         ptskYiLys411tP5Wp0jMzughZB7dnysDX96GkoAyHyul+t9vYKUK5S9OMoMWSlT5aC
-         boBbD3SnfDvOdAxyIL0wK9zhrqQVsRPMc1q3Acan1yg/opEsBJNpBQsDc8I6OtROKQ
-         xEz36f62ST87wBIkNzk9PZkOvLTIH1KxPCI4yFy0JXjOCPMUuogUiR3V3h2DD1TtEx
-         ObR2Y7fQBtETqgAeSwU7E7lde3U3NfwxCp5oXM5vP05rMt9ZtK3QXnqk8bRZtVeR2f
-         64hCBzstOF4Uw==
-Date:   Wed, 19 Jan 2022 18:31:07 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        stephen.s.brennan@oracle.com, cyphar@cyphar.com
-Subject: Re: [PATCH v2] proc: "mount -o lookup=" support
-Message-ID: <20220119173107.tcsrjml4ujrdcqyh@wittgenstein>
-References: <YegysyqL3LvljK66@localhost.localdomain>
- <20220119162423.eqbyefywhtzm22tr@wittgenstein>
- <20220119171522.pxmkbt5eu3rs5yik@example.org>
+        Wed, 19 Jan 2022 12:33:36 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JD9ur7018066;
+        Wed, 19 Jan 2022 11:33:09 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=LY8az2HAXRdiK9ynIDy8Pw58Iw4eWpj3/24rUT1e+os=;
+ b=n0QG9BKUv/1pDcuKvySsjS/eXUiHdN6Pa2KnT1oZgNYyDFNO+fwhDORWK1+fqQ7g43bk
+ Fort2dn9nT2QuJEFg7Tz9dFUfhIWfJZX1xBDtdHbWhjiJVS4CH0fSSJgmX2mRwvXPaO9
+ Txx7dhGfVOHBIpWG/BHtarUi4WS365imxDLrMAEOxV0Au4Ibz866GgJYxqHEfX/iq8PT
+ OJzMYlLhdOOMm37xlY8g4r/goafnb6vGYYI+jCPeV4sy8sVXPBkT27mWHh1AuygbeoOg
+ TXSWdobJjzdao/Ls+BZsEf9NaNOXZE0Dojpye0q6p9uC5hzh0eHVPlI4r+4Skvtcwlyp mQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dpk9mg9xg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 19 Jan 2022 11:33:09 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 19 Jan
+ 2022 17:33:07 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Wed, 19 Jan 2022 17:33:07 +0000
+Received: from [198.61.64.122] (unknown [198.61.64.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B1AA0B13;
+        Wed, 19 Jan 2022 17:33:06 +0000 (UTC)
+Message-ID: <a3522b5e-fb36-b959-d2ea-d141d3ad9999@opensource.cirrus.com>
+Date:   Wed, 19 Jan 2022 17:33:06 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220119171522.pxmkbt5eu3rs5yik@example.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 05/10] platform/x86: i2c-multi-instantiate: Move it to
+ drivers/acpi folder
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+CC:     Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20220118145251.1548-1-sbinding@opensource.cirrus.com>
+ <20220118145251.1548-6-sbinding@opensource.cirrus.com>
+ <CAJZ5v0g0n201FPcG9LBNG3e4UdNYSWmj_1sN3MxLxmK=GoF+tA@mail.gmail.com>
+From:   Lucas tanure <tanureal@opensource.cirrus.com>
+In-Reply-To: <CAJZ5v0g0n201FPcG9LBNG3e4UdNYSWmj_1sN3MxLxmK=GoF+tA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: pZTpulefTaRyopYGQrjbyoOJAYlFsx6q
+X-Proofpoint-GUID: pZTpulefTaRyopYGQrjbyoOJAYlFsx6q
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:15:22PM +0100, Alexey Gladkov wrote:
-> On Wed, Jan 19, 2022 at 05:24:23PM +0100, Christian Brauner wrote:
-> > On Wed, Jan 19, 2022 at 06:48:03PM +0300, Alexey Dobriyan wrote:
-> > > From 61376c85daab50afb343ce50b5a97e562bc1c8d3 Mon Sep 17 00:00:00 2001
-> > > From: Alexey Dobriyan <adobriyan@gmail.com>
-> > > Date: Mon, 22 Nov 2021 20:41:06 +0300
-> > > Subject: [PATCH 1/1] proc: "mount -o lookup=..." support
-> > > 
-> > > Docker implements MaskedPaths configuration option
-> > > 
-> > > 	https://github.com/estesp/docker/blob/9c15e82f19b0ad3c5fe8617a8ec2dddc6639f40a/oci/defaults.go#L97
-> > > 
-> > > to disable certain /proc files. It overmounts them with /dev/null.
-> > > 
-> > > Implement proper mount option which selectively disables lookup/readdir
-> > > in the top level /proc directory so that MaskedPaths doesn't need
-> > > to be updated as time goes on.
-> > 
-> > I might've missed this when this was sent the last time so maybe it was
-> > clearly explained in an earlier thread: What's the reason this needs to
-> > live in the kernel?
-> > 
-> > The MaskedPaths entry is optional so runtimes aren't required to block
-> > anything by default and this mostly makes sense for workloads that run
-> > privileged.
-> > 
-> > In addition MaskedPaths is a generic option which allows to hide any
-> > existing path, not just proc. Even in the very docker-specific defaults
-> > /sys/firmware is covered.
-> > 
-> > I do see clear value in the subset= and hidepid= options. They are
-> > generally useful independent of opinionated container workloads. I don't
-> > see the same for lookup=.
-> > 
-> > An alternative I find more sensible is to add a new value for subset=
-> > that hides anything(?) that only global root should have read/write
-> > access too.
+On 1/19/22 16:53, Rafael J. Wysocki wrote:
+> On Tue, Jan 18, 2022 at 3:53 PM Stefan Binding
+> <sbinding@opensource.cirrus.com> wrote:
+>>
+>> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+>>
+>> Moving I2C multi instantiate driver to drivers/acpi folder for
+>> upcoming conversion into a generic bus multi instantiate
+>> driver for SPI and I2C
+>>
+>> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+>> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 > 
-> Or we can allow to change permissions in the procfs only in the direction
-> of decreasing (if some file has 644 then allow to set 640 or 600). In this
-> case, we will not need to constantly check the whitelist.
+> Why are you moving it away from platform/x86?
+> 
+> Adding SPI to the mix doesn't seem to be a sufficient reason.
+> 
+> If this were going to be needed on non-x86, that would be a good
+> reason for moving it, but is that actually the case?  If so, why isn't
+> that mentioned in the changelog above?
+> 
 
-I don't fancy any filtering or allowlist approach. I find that rather
-inelegant. But if I understand you correctly is that if we were to have
-decreasing permissions we could allow a (namespace) procfs-admin to set
-permissions so that the relevant files are essentially read-only or not
-even readable at all for container workloads. So once you've lowered
-perms you can't raise them which ensures even namespace procfs-admin
-can't raise them again.
-Might work as well. But that implies that we wouldn't need any allowlist
-at all afaict.
+It was a request made by Andy Shevchenko:
+https://lkml.org/lkml/2021/12/3/347
+
+There is no plan to use our CS35L41 HDA with non-x86 platforms and we 
+can't comment about i2c-multi-instantiate use.
+For us it can stay in x86 folder until an actual request.
+
+Thanks
+Lucas Tanure
+
+
+>> ---
+>>   MAINTAINERS                                           |  2 +-
+>>   drivers/acpi/Kconfig                                  | 11 +++++++++++
+>>   drivers/acpi/Makefile                                 |  1 +
+>>   .../{platform/x86 => acpi}/i2c-multi-instantiate.c    |  0
+>>   drivers/acpi/scan.c                                   |  2 +-
+>>   drivers/platform/x86/Kconfig                          | 11 -----------
+>>   drivers/platform/x86/Makefile                         |  1 -
+>>   7 files changed, 14 insertions(+), 14 deletions(-)
+>>   rename drivers/{platform/x86 => acpi}/i2c-multi-instantiate.c (100%)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 4e828542b089..546f9e149d28 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -392,7 +392,7 @@ ACPI I2C MULTI INSTANTIATE DRIVER
+>>   M:     Hans de Goede <hdegoede@redhat.com>
+>>   L:     platform-driver-x86@vger.kernel.org
+>>   S:     Maintained
+>> -F:     drivers/platform/x86/i2c-multi-instantiate.c
+>> +F:     drivers/acpi/i2c-multi-instantiate.c
+>>
+>>   ACPI PCC(Platform Communication Channel) MAILBOX DRIVER
+>>   M:     Sudeep Holla <sudeep.holla@arm.com>
+>> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+>> index ba45541b1f1f..2fd78366af6f 100644
+>> --- a/drivers/acpi/Kconfig
+>> +++ b/drivers/acpi/Kconfig
+>> @@ -295,6 +295,17 @@ config ACPI_PROCESSOR
+>>            To compile this driver as a module, choose M here:
+>>            the module will be called processor.
+>>
+>> +config ACPI_I2C_MULTI_INST
+>> +       tristate "I2C multi instantiate pseudo device driver"
+>> +       depends on I2C
+>> +       help
+>> +         Some ACPI-based systems list multiple i2c-devices in a single ACPI
+>> +         firmware-node. This driver will instantiate separate i2c-clients
+>> +         for each device in the firmware-node.
+>> +
+>> +         To compile this driver as a module, choose M here: the module
+>> +         will be called i2c-multi-instantiate.
+>> +
+>>   config ACPI_IPMI
+>>          tristate "IPMI"
+>>          depends on IPMI_HANDLER
+>> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+>> index bb757148e7ba..d4db7fb0baf0 100644
+>> --- a/drivers/acpi/Makefile
+>> +++ b/drivers/acpi/Makefile
+>> @@ -104,6 +104,7 @@ obj-$(CONFIG_ACPI_SPCR_TABLE)       += spcr.o
+>>   obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
+>>   obj-$(CONFIG_ACPI_PPTT)        += pptt.o
+>>   obj-$(CONFIG_ACPI_PFRUT)       += pfr_update.o pfr_telemetry.o
+>> +obj-$(CONFIG_ACPI_I2C_MULTI_INST)      += i2c-multi-instantiate.o
+>>
+>>   # processor has its own "processor." module_param namespace
+>>   processor-y                    := processor_driver.o
+>> diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/acpi/i2c-multi-instantiate.c
+>> similarity index 100%
+>> rename from drivers/platform/x86/i2c-multi-instantiate.c
+>> rename to drivers/acpi/i2c-multi-instantiate.c
+>> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+>> index 1331756d4cfc..3e85a02f6ba2 100644
+>> --- a/drivers/acpi/scan.c
+>> +++ b/drivers/acpi/scan.c
+>> @@ -1738,7 +1738,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+>>           * must be instantiated for each, each with its own i2c_device_id.
+>>           * Normally we only instantiate an i2c-client for the first resource,
+>>           * using the ACPI HID as id. These special cases are handled by the
+>> -        * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
+>> +        * drivers/acpi/i2c-multi-instantiate.c driver, which knows
+>>           * which i2c_device_id to use for each resource.
+>>           */
+>>                  {"BSG1160", },
+>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+>> index 24deeeb29af2..37c1c150508d 100644
+>> --- a/drivers/platform/x86/Kconfig
+>> +++ b/drivers/platform/x86/Kconfig
+>> @@ -990,17 +990,6 @@ config TOPSTAR_LAPTOP
+>>
+>>            If you have a Topstar laptop, say Y or M here.
+>>
+>> -config I2C_MULTI_INSTANTIATE
+>> -       tristate "I2C multi instantiate pseudo device driver"
+>> -       depends on I2C && ACPI
+>> -       help
+>> -         Some ACPI-based systems list multiple i2c-devices in a single ACPI
+>> -         firmware-node. This driver will instantiate separate i2c-clients
+>> -         for each device in the firmware-node.
+>> -
+>> -         To compile this driver as a module, choose M here: the module
+>> -         will be called i2c-multi-instantiate.
+>> -
+>>   config MLX_PLATFORM
+>>          tristate "Mellanox Technologies platform support"
+>>          depends on I2C && REGMAP
+>> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+>> index c12a9b044fd8..6c7870190564 100644
+>> --- a/drivers/platform/x86/Makefile
+>> +++ b/drivers/platform/x86/Makefile
+>> @@ -110,7 +110,6 @@ obj-$(CONFIG_TOPSTAR_LAPTOP)        += topstar-laptop.o
+>>
+>>   # Platform drivers
+>>   obj-$(CONFIG_FW_ATTR_CLASS)            += firmware_attributes_class.o
+>> -obj-$(CONFIG_I2C_MULTI_INSTANTIATE)    += i2c-multi-instantiate.o
+>>   obj-$(CONFIG_MLX_PLATFORM)             += mlx-platform.o
+>>   obj-$(CONFIG_TOUCHSCREEN_DMI)          += touchscreen_dmi.o
+>>   obj-$(CONFIG_WIRELESS_HOTKEY)          += wireless-hotkey.o
+>> --
+>> 2.25.1
+>>
+

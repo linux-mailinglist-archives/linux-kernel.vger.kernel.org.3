@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4635A4933EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC33D4933FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351487AbiASEGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:06:38 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:24406 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351460AbiASEGf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:06:35 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INx3mT022260;
-        Wed, 19 Jan 2022 04:06:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Is0RxxFusS17EU4y8KEr+vNiOrU+GXKq+9bew6VJxEI=;
- b=QMR7bTqrOki/WC4guc/q8gseADxVFLpL/wxXO7JYN3ixr6tSBhDPdKsoJV3FXTvfgtJ+
- xI0GHJBFmOPSUMO5SUb2+zBc8wHTOVcUvCUycCJPq44y6RHNyAKYyfekp3NLGM0r7ncO
- GgFkk4LUCHld6HolSVzfr5sT0zMsXgfPrc+uXT11xZlIlqcnrvMEXwXozIrQqnoGGCYg
- p5li0RW4o3U89y/r6Vy0Hq+lxhAb9GBKrTLJSrlRRW2GGwJKdiOhPZIb8cv/xaOqJwhz
- lIYamnnhEUcNkPE8o85cRVFUsdLnuZL/D8p9i0L71SWnWnABvBowwmw8jCkuRWzuEaz0 Xg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc52uv8s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 04:06:23 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J42A5N091561;
-        Wed, 19 Jan 2022 04:06:22 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3dkqqpnr9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 04:06:22 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20J46HQ7110383;
-        Wed, 19 Jan 2022 04:06:22 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3dkqqpnr68-5;
-        Wed, 19 Jan 2022 04:06:21 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        id S1346353AbiASEMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:12:22 -0500
+Received: from mga02.intel.com ([134.134.136.20]:23119 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235242AbiASEMV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 23:12:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642565541; x=1674101541;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VZR2h/GvwBVB0YEd59gL2smSoKa+1JdaUfOKC6US0qc=;
+  b=PCVigqhpWg/ES9QEK2HIZcz4UuZzbSu3kwADAl5YyhH/r7Wq4L86i5il
+   fHN3+xfruT3bPhjx9Ladb8DTga11gl7ktbrnM9P5zL9pez+xhXFnxHNN2
+   fTOMMcE+j261bS95HfvV9S5hf90thRfu0PsJWyRMAjKS9u9Rt7g1NW9zN
+   U+yuK9OYKtygRxL2+WHv3qO/wnmkUKMEIvlhFVtgeCXAS116KN4GKSAUO
+   nNDk+Tn1X5mGSQvmIvhdSwO+d5nq6EKmyN5sWGZj5F9H2rDqFeKara76P
+   mg4ahMoQdpSUO/tA0RBrNwx4tPQwffn2D3bPTmy5xF0mKRrMwNSrdh7qH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232340424"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="232340424"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 20:12:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="492892905"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2022 20:12:18 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA2KY-000DF5-0p; Wed, 19 Jan 2022 04:12:18 +0000
+Date:   Wed, 19 Jan 2022 12:12:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     mziya <Mohammadzafar.ziya@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-scsi@vger.kernel.org, Stanley Chu <stanley.chu@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] scsi: ufs: ufs-mediatek : Fix NULL vs IS_ERR checking in ufs_mtk_init_va09_pwr_ctrl
-Date:   Tue, 18 Jan 2022 23:06:13 -0500
-Message-Id: <164256513503.31841.2498520978130234851.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211222070930.9449-1-linmq006@gmail.com>
-References: <CAGXv+5GF1WOeXVtnknAa4GYXE3Hd-UzcCBCyQzT6KY3tJCrVGA@mail.gmail.com> <20211222070930.9449-1-linmq006@gmail.com>
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Stanley.Yang" <Stanley.Yang@amd.com>
+Subject: [agd5f:drm-next 56/91] drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:11:
+ warning: variable 'umc_reg_offset' set but not used
+Message-ID: <202201191214.xx7M9Hem-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: aLqOXzXBfJv9DFzSfV1-xmycvzNoXC2E
-X-Proofpoint-ORIG-GUID: aLqOXzXBfJv9DFzSfV1-xmycvzNoXC2E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 07:09:30 +0000, Miaoqian Lin wrote:
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   e23fcf632883babbea03fc27f7993e151969b652
+commit: c34242eea16f7d973501267142dd340cad3caeec [56/91] drm/amdgpu: add new query interface for umc_v8_7 block
+config: i386-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220119/202201191214.xx7M9Hem-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout c34242eea16f7d973501267142dd340cad3caeec
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-> The function regulator_get() return error pointer,
-> use IS_ERR() to check if has error.
-> 
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Applied to 5.17/scsi-queue, thanks!
+All warnings (new ones prefixed by >>):
 
-[1/1] scsi: ufs: ufs-mediatek : Fix NULL vs IS_ERR checking in ufs_mtk_init_va09_pwr_ctrl
-      https://git.kernel.org/mkp/scsi/c/3ba880a12df5
+>> drivers/gpu/drm/amd/amdgpu/umc_v8_7.c:97:11: warning: variable 'umc_reg_offset' set but not used [-Wunused-but-set-variable]
+           uint32_t umc_reg_offset  = 0;
+                    ^
+   1 warning generated.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+
+vim +/umc_reg_offset +97 drivers/gpu/drm/amd/amdgpu/umc_v8_7.c
+
+    89	
+    90	static void umc_v8_7_ecc_info_query_ras_error_count(struct amdgpu_device *adev,
+    91						void *ras_error_status)
+    92	{
+    93		struct ras_err_data *err_data = (struct ras_err_data *)ras_error_status;
+    94	
+    95		uint32_t umc_inst        = 0;
+    96		uint32_t ch_inst         = 0;
+  > 97		uint32_t umc_reg_offset  = 0;
+    98		uint32_t channel_index   = 0;
+    99	
+   100		/* TODO: driver needs to toggle DF Cstate to ensure
+   101		 * safe access of UMC registers. Will add the protection
+   102		 */
+   103		LOOP_UMC_INST_AND_CH(umc_inst, ch_inst) {
+   104			umc_reg_offset = get_umc_v8_7_reg_offset(adev,
+   105								umc_inst,
+   106								ch_inst);
+   107			channel_index = get_umc_v8_7_channel_index(adev,
+   108								umc_inst,
+   109								ch_inst);
+   110			umc_v8_7_ecc_info_query_correctable_error_count(adev,
+   111								channel_index,
+   112								&(err_data->ce_count));
+   113			umc_v8_7_ecc_info_querry_uncorrectable_error_count(adev,
+   114								channel_index,
+   115								&(err_data->ue_count));
+   116		}
+   117	}
+   118	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

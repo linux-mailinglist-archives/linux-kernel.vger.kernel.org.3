@@ -2,146 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67235493DEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5BD493DEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356021AbiASQCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:02:39 -0500
-Received: from mout.gmx.net ([212.227.17.22]:42863 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355744AbiASQCi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:02:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642608154;
-        bh=JEMjXleBru/gLCy/oOLYjEj9hZH6cOzwnx1wA8kkjSc=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=CDHzUakxxcAdHOyEkKCyU3lT7nfJ2tsFe1GWUX8TnNoSc7fSEQnoWmBOrwmz5hV53
-         nLeqceRQ2VB1p3f81HibXEsUCWqyroyJaMBX4Tjq2Nb6ybqXYnF2yzem3LO3gXcPbI
-         QviPoyHGYs/O+ynvL21lXmVMNcpqXmuKmvKFlPx8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.183.52]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Msq24-1mHR0D3cYC-00tC0V; Wed, 19
- Jan 2022 17:02:33 +0100
-Date:   Wed, 19 Jan 2022 17:01:26 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [GIT PULL] fbdev updates & fixes for v5.17-rc1
-Message-ID: <Yeg11pHSqx29yg/T@ls3530>
+        id S1356037AbiASQDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:03:43 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:59748 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237164AbiASQDm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 11:03:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lJftPEJHRwVtXT5VmrtZuYaqnJ5uAXD+32MKyePnyww=; b=mLZX70R1FqWT9zRoFcLbGhFWnm
+        hSwlj4W88Od7ySlHXhrWLsBFzPikB/WOeEazMutsXJkIntsRXmT4fi5W7B7INkTQUNER/zo52kirO
+        wQgWw4CkgpAEw2QVdgyOyM/RIYFHLtK1KNnurUgZ2YsQuMXSftSA/doGdApM16efOY6x/n4xhC/R/
+        2svNgIknAg8fFstIlhc5AUm69TRrHUeYzR0i9gUhClPpB2FAzzE9hwh+DoTsrR11p6odK1sRWFiOm
+        uKVMcDA97wBm60FLYTB39H2lfAoYlDjyG2iflEFDISKL67oNrsTDQrEtWxUpPL683kV1WRf75BYnG
+        297ydupg==;
+Received: from [179.98.77.138] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nADQp-000AGF-6S; Wed, 19 Jan 2022 17:03:31 +0100
+Message-ID: <94bb12a2-a788-cee6-7d4f-dc0ac581fb39@igalia.com>
+Date:   Wed, 19 Jan 2022 13:03:15 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5O4+rNi6WJzQVMB+rTkMWYPHXQd1MKtr9EcwARWkfS6QfG+7GT9
- 044Q6svnW1H9NthTjUk5BvGtYbh90Ql+LLim33SoXHyM9L1nAi1wNiQVSClob0fZ+AKvpYy
- L+0y9SxutqityVLXJEiD2krOQqlMDSXKTtRxUJRAywiBSi3XFn5cy13Oeck+mKZx0Lv43TZ
- 7yoOr9kSnGdUfkgG9/pYQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mGsiSMYeQpU=:tQdMhoIcPsY/hgXhctthf7
- icNGYjXoR9CsRRO2QZRSkZfVAmMZwbu5hvLkdnCJX/sGYW46uQbKknOhl8FHz5jiA89LKB/h0
- ZsMa7aWQw7XgQP0sVX5uP4E68YZkAPUUX3L0iK1jHuSXLIhHWjbPnaTHsIc9KO4MWnDD9ner+
- zAgYbtayKkFNbS6bdBeOaonU8BGpMCokqAI8TcQChSwO7wKfKxvgEXiq1bM74IJJ6I1z+MZao
- RJ58jegStheKNcs0/txV0WAYAMj2HquikR5POBsPdUo6QBz1byXAg6KqacKKjQbJzhhz41mAW
- /QfxXlDWrnpOXfBV7XmuMJqXb3r2mGpV4H5nhnm+ej3agaRc4CA+ZX8oMLiPAXuD1L9XqGewf
- ItZTsfFi1vbGrIsPbK8yavPrNV79CUrU9fiBU2AZJQljWO3omJBXz21likrb6ocXIxNL9CYlm
- x/YmZaesD7I3SGSJfz8TzA+jIhtGVeK5RuBMrnmO6uPtzoV3yC2hT2NOc+0B34uxJdwt6mZSf
- nvSNzvMIuQKHhafHrLgL0vSS4fzm9EAkmuQMqkM34rbV3x2VP302stxOYgShQYqO6h9evQu6N
- +IFQ/G+LiEYhjSBqhSlICXoBO0ilnf2nY7bFA5ITEJXtEXjfKCm4sphxnfF99l0GTj6HZtVqd
- 4WXB4QjfcDsiPfz0y9H6DKAQydJkk+E1ncYM2K2tb20ilScpNN/cNpYc3Sv3DJOyfkOyTXePJ
- h5lzeXDF1ZjUv85YGSPqtzG1h4/SaQ5APBT5oUBcb0AYfECwlJGMAV3DdWxEXSQVHvvv4tS0+
- LBOK/mMIkXL0SzvSiSSdoEF09cMkenMi/reehn85rfJAnZ0mmfJakpr1OlGhvs7c47xnR8rIC
- ZN5HVSjN0Ah03Qcda7azy8nNTqi2y9LM4kGLawABZnV2rOoJS/wlhBoTmJxnav+1cksFmJxgU
- qJJtZ1KxROwdwati8LNPOXLUW8Xszotn+JpSvdnKh4uYd2ABP1YlaTC/axpGnjH8Pp8J9+nAo
- e6aQlXi2WehVgOCExPZ6BAXf7drIr84Vwv5vcmq59Z/ATlsw7lW4EyJHumoxZMfLMWJs8qW70
- 2E0omya9j3bWnU=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>, Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+References: <20220114183046.428796-1-gpiccoli@igalia.com>
+ <20220119071318.GA4977@MiWiFi-R3L-srv> <YegytkfED+QI56Y8@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YegytkfED+QI56Y8@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 0c947b893d69231a9add855939da7c66237ab44=
-f:
+Thanks again Petr, for the deep analysis! Much appreciated.
+Some comments inline below:
 
-  Merge tag '5.17-rc-part1-smb3-fixes' of git://git.samba.org/sfrench/cifs=
--2.6 (2022-01-17 09:53:21 +0200)
 
-are available in the Git repository at:
+On 19/01/2022 12:48, Petr Mladek wrote:
+>[...]
+> From my POV, the function of panic notifiers is not well defined. They
+> do various things, for example:
+> [...] 
+> 
+> The do more that just providing information. Some are risky. It is not
+> easy to disable a particular one.
 
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
-gs/fbdev-5.17-2
+We are trying to change that here:
+https://lore.kernel.org/lkml/20220108153451.195121-1-gpiccoli@igalia.com/
 
-for you to fetch changes up to 842086bc7262a36f002e0361f9dc351556cae3f3:
+Your review/comments are very welcome =)
 
-  video: fbdev: controlfb: Fix COMPILE_TEST build (2022-01-17 22:39:37 +01=
-00)
 
-=2D---------------------------------------------------------------
-fbdev updates for v5.17-rc1
+> [...] 
+> It might make sense to allow to call kmsg_dump before panic notifiers
+> to reduce the risk of a breakage. But I do not have enough experience
+> with them to judge this.
+> 
+> I can't remember any bug report in this code. I guess that only
+> few people use kmsg_dump.
 
-A first bunch of updates and fixes for the following fbdev & backlight dri=
-vers:
-ocfb, aty128fb, mb862xx, omapfb, qcom-wled, dt-bindings, hyperv_fb,
-lm3630a_bl, omap2, controlfb, matroxfb
+One of the problems doing that is that RCU and hung task detector, for
+example, have panic notifiers to disable themselves in the panic
+scenario - if we kmsg_dump() _before_ the panic notifiers, we may have
+intermixed messages, all messy...so for me it makes sense to keep the
+kmsg_dump() after panic notifiers.
 
-Nothing really important, mostly cleanups, const conversions, added null
-pointer/boundary checks and build fixes.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
+> [...]
+> Yes, panic_print_sys_info() increases the risk that the crash dump
+> will not succeed. But the change makes sense because:
+> 
+>   + panic_print_sys_info() does nothing by default. Most users will
+>     not enable it together with crash dump.
+> 
+>   + Guilherme uses crash dump only to dump the kernel log. It might
+>     be more reliable than kmsg_dump. In this case, panic_print_sys_info()
+>     is the only way to get the extra information.
+> 
+>   + panic_print_sys_info() might be useful even with full crash dump.
+>     For example, ftrace messages are not easy to read from the memory
+>     dump.
 
-=2D---------------------------------------------------------------
-Chunyang Zhong (1):
-      video: ocfb: add const to of_device_id=A0
+The last point is really good, I didn't consider that before but makes a
+lot of sense - we can now dump (a hopefully small!) ftrace/event trace
+buffer to dmesg before a kdump, making it pretty easy to read that later.
+Cheers,
 
-Colin Ian King (2):
-      fbdev: aty128fb: make some arrays static const
-      video: fbdev: mb862xx: remove redundant assignment to pointer ptr
 
-Greg Kroah-Hartman (1):
-      omapfb: use default_groups in kobj_type
-
-Jiasheng Jiang (1):
-      video: fbdev: Check for null res pointer
-
-Luca Weiss (2):
-      backlight: qcom-wled: Add PM6150L compatible
-      dt-bindings: simple-framebuffer: allow standalone compatible
-
-Michael Kelley (1):
-      video: hyperv_fb: Fix validation of screen resolution
-
-Minghao Chi (1):
-      drivers/video: remove redundant res variable
-
-Xu Wang (2):
-      backlight: lm3630a_bl: Remove redundant 'flush_workqueue()' calls
-      fbdev: omap2: omapfb: Remove redundant 'flush_workqueue()' calls
-
-Yang Guang (1):
-      video: fbdev: use swap() to make code cleaner
-
-YueHaibing (1):
-      video: fbdev: controlfb: Fix COMPILE_TEST build
-
-Z. Liu (1):
-      matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid bla=
-ck screen
-
- .../devicetree/bindings/display/simple-framebuffer.yaml  | 12 +++++++----=
--
- drivers/video/backlight/lm3630a_bl.c                     |  1 -
- drivers/video/backlight/qcom-wled.c                      |  1 +
- drivers/video/fbdev/aty/aty128fb.c                       | 10 ++++++----
- drivers/video/fbdev/aty/mach64_ct.c                      |  4 +---
- drivers/video/fbdev/controlfb.c                          |  2 ++
- drivers/video/fbdev/hyperv_fb.c                          | 16 +++--------=
------
- drivers/video/fbdev/imxfb.c                              |  2 ++
- drivers/video/fbdev/matrox/matroxfb_base.c               |  2 +-
- drivers/video/fbdev/mb862xx/mb862xxfb_accel.c            |  2 +-
- drivers/video/fbdev/ocfb.c                               |  2 +-
- drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c     |  3 ++-
- drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c     |  3 ++-
- drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c     |  3 ++-
- drivers/video/fbdev/omap2/omapfb/omapfb-main.c           |  1 -
- drivers/video/fbdev/sis/sis_main.c                       |  2 +-
- 16 files changed, 32 insertions(+), 34 deletions(-)
+Guilherme

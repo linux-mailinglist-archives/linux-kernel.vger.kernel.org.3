@@ -2,88 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDEE493B18
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9B0493B1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354812AbiASN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:28:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:56514 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350345AbiASN2V (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:28:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00E38ED1;
-        Wed, 19 Jan 2022 05:28:21 -0800 (PST)
-Received: from [10.57.67.190] (unknown [10.57.67.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F94E3F73D;
-        Wed, 19 Jan 2022 05:28:18 -0800 (PST)
-Message-ID: <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
-Date:   Wed, 19 Jan 2022 13:28:14 +0000
+        id S1354819AbiASNcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:32:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41868 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354780AbiASNcE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 08:32:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D81E60AE2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 13:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0C0C004E1;
+        Wed, 19 Jan 2022 13:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642599122;
+        bh=LJo017n4lXa66I4JspauneG5iK3AP7JKZnPkq0CjrXg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=es8Kw0PiFvtvOeQUvHrIzu4GlfL4lyOVw1vKN0O6hwV0PrctiEHGXv8tkr2BQmORf
+         v/7z9kF0mqO2W8a245JOY8wstUSS7G3spyLLoFO+tTtvMALjVN3140Y8MCX+3CDX+k
+         bn9hFLjN9xgtTOMd4DKi6AAUfgYkA3eTInQ16P3sCQt5pTOLcRACjeBMVfhTDh9J1A
+         0DZIzfvkgX//8UJMKq8sHO7JVdSVHnm4+khxrPYC0jX1CS82icQlsrF30JlTJgEOiM
+         J+ZjOCAb8qv62lIjMBaTW3glPnMSvhYV5A04EoGnrJw6Bc1W6UAaPSTWcjpVRlFPqL
+         NqTLxuBN7ZHqQ==
+From:   SeongJae Park <sj@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
+        Jonathan.Cameron@Huawei.com, amit@kernel.org,
+        benh@kernel.crashing.org, corbet@lwn.net, david@redhat.com,
+        dwmw@amazon.com, elver@google.com, foersleo@amazon.de,
+        gthelen@google.com, markubo@amazon.de, rientjes@google.com,
+        shakeelb@google.com, baolin.wang@linux.alibaba.com,
+        guoqing.jiang@linux.dev, xhao@linux.alibaba.com, hanyihao@vivo.com,
+        changbin.du@gmail.com, kuba@kernel.org,
+        rongwei.wang@linux.alibaba.com, rikard.falkeborn@gmail.com,
+        geert@linux-m68k.org, kilobyte@angband.pl, linux-damon@amazon.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [RFC PLAN] Some humble ideas for DAMON future works
+Date:   Wed, 19 Jan 2022 13:31:10 +0000
+Message-Id: <20220119133110.24901-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-Content-Language: en-GB
-To:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220118235244.540103-1-yury.norov@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220118235244.540103-1-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-18 23:52, Yury Norov wrote:
-> vmap() takes struct page *pages as one of arguments, and user may provide
-> an invalid pointer which would lead to DABT at address translation later.
-> 
-> Currently, kernel checks the pages against NULL. In my case, however, the
-> address was not NULL, and was big enough so that the hardware generated
-> Address Size Abort on arm64.
-> 
-> Interestingly, this abort happens even if copy_from_kernel_nofault() is
-> used, which is quite inconvenient for debugging purposes.
-> 
-> This patch adds a pfn_valid() check into vmap() path, so that invalid
-> mapping will not be created.
-> 
-> RFC: https://lkml.org/lkml/2022/1/18/815
-> v1: use pfn_valid() instead of adding an arch-specific
->      arch_vmap_page_valid(). Thanks to Matthew Wilcox for the hint.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->   mm/vmalloc.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index d2a00ad4e1dd..a4134ee56b10 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -477,6 +477,8 @@ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
->   			return -EBUSY;
->   		if (WARN_ON(!page))
->   			return -ENOMEM;
-> +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
+Hello,
 
-Is it page_to_pfn() guaranteed to work without blowing up if page is 
-invalid in the first place? Looking at the CONFIG_SPARSEMEM case I'm not 
-sure that's true...
 
-Robin.
+After the DAMON code is merged (kudos to the community for the great helps), a
+few people asked me about my plan for DAMON future works, and if DAMON will be
+somewhat usable for their use cases.  I indeed have some humble plans, though
+those are only in rough brainsorming level at the moment. so I'd like to share
+those here before going forward and start coding, so that I can get some
+feedback to fail fast.
 
-> +			return -EINVAL;
->   		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
->   		(*nr)++;
->   	} while (pte++, addr += PAGE_SIZE, addr != end);
+User-space Policy or In-kernel Policy?  Both.
+=============================================
+
+When discussing about a sort of kernel involved system efficiency
+optimizations, I show two kinds of people who have slightly different opinions.
+The first party prefer to implement only simple but efficient mechanisms in the
+kernel and export it to user space, so that users can make smart user space
+policy.  Meanwhile, the second party prefer the kernel just works.  I agree
+with both parties.
+
+I think the first opinion makes sense as there are some valuable information
+that only user space can know.  I think only such approaches could achieve the
+ultimate efficiency in such cases.
+I also agree to the second party, though, because there could be some people
+who don't have special information that only their applications know, or
+resources to do the additional work.  In-kernel simple policies will be still
+beneficial for some users even though those are sub-optimal compared to the
+highly tuned user space policy, if it provides some extent of efficiency gain
+and no regressions for most cases.
+
+I'd like to help both.  For the reason, I made DAMON as an in-kernel mechanism
+for both user and kernel-space policies.  It provides highly tunable general
+user space interface to help the first party.  It also provides in-kernel
+policies which built on top of DAMON using its kernel-space API for specific
+common use cases with conservative default parameters that assumed to incur no
+regression but some extent of benefits in most cases, namely DAMON-based
+proactive reclamation.  I will continue pursuing the two ways.
+
+Imaginable DAMON-based Policies
+===============================
+
+I'd like to start from listing some imaginable data access-aware operation
+policies that I hope to eventually be made.  The list will hopefully shed light
+on how DAMON should be evolved to efficiently support the policies.
+
+DAMON-based Proactive LRU-pages (de)Activation
+----------------------------------------------
+
+The reclamation mechanism which selects reclaim target using the
+active/inactive LRU lists sometimes doesn't work well.  According to my
+previous work, providing access pattern-based hints can significantly improve
+the performance under memory pressure[1,2].
+
+Proactive reclamation is known to be useful for many memory intensive systems,
+and now we have a DAMON-based implementation of it[3].  However, the proactive
+reclamation wouldn't be so welcome to some systems having high cost of I/O.
+Also, even though the system runs proactive reclamation, memory pressure can
+still occasionally triggered.
+
+My idea for helping this situation is manipulating the orders of pages in LRU
+lists using DAMON-provided monitoring results.  That is, making DAMON
+proactively finds hot/cold memory regions and moves pages of the hot regions to
+the head of the active list, while moving pages of the cold regions to the tail
+of the inactive list.  This will help eventual reclamation under memory
+pressure to evict cold pages first, so incur less additional page faults.
+
+[1] https://www.usenix.org/conference/hotstorage19/presentation/park
+[2] https://linuxplumbersconf.org/event/4/contributions/548/
+[3] https://docs.kernel.org/admin-guide/mm/damon/reclaim.html
+
+DAMON-based THP Coalesce/Split
+------------------------------
+
+THP is know to significantly improve performance, but also increase memory
+footprint[1].  We can minimize the memory overhead while preserving the
+performance benefit by asking DAMON to provide MADV_HUGEPAGE-like hints for hot
+memory regions of >= 2MiB size, and MADV_NOHUGEPAGE-like hints for cold memory
+regions.  Our experimental user space policy implementation[2] of this idea
+removes 76.15% of THP memory waste while preserving 51.25% of THP speedup in
+total.
+
+[1] https://www.usenix.org/conference/osdi16/technical-sessions/presentation/kwon
+[2] https://damonitor.github.io/doc/html/v34/vm/damon/eval.html
+
+DAMON-based Tiered Memory (Pro|De)motion
+----------------------------------------
+
+In tiered memory systems utilizing DRAM and PMEM[1], we can promote hot pages to
+DRAM and demote cold pages to PMEM using DAMON.  A patch for allowing
+access-aware demotion user space policy development is already submitted[2] by
+Baolin.
+
+[1] https://www.intel.com/content/www/us/en/products/details/memory-storage/optane-memory.html
+[2] https://lore.kernel.org/linux-mm/cover.1640171137.git.baolin.wang@linux.alibaba.com/
+
+DAMON-based Proactive Compaction
+--------------------------------
+
+Compaction uses migration scanner to find migration source pages.  Hot pages
+would be more likely to be unmovable compared to cold pages, so it would be
+better to try migration of cold pages first.  DAMON could be used here.  That
+is, proactively monitoring accesses via DAMON and start compaction so that the
+migration scanner scan cold memory ranges first.  I should admit I'm not
+familiar with compaction code and I have no PoC data for this but just the
+groundless idea, though.
+
+How We Can Implement These
+--------------------------
+
+Implementing most of the above mentioned policies wouldn't be too difficult
+because we have DAMON-based Operation Schemes (DAMOS).  That is, we will need
+to implement some more DAMOS action for each policy.  Some existing kernel
+functions can be reused.  Such actions would include LRU (de)activation, THP
+coalesce/split hints, memory (pro|de)motion, and cold pages first scanning
+compaction.  Then, supporting those actions with the user space interface will
+allows implementing user space policies.  If we find reasonably good default
+DAMOS parameters and some kernel side control mechanism, we can further make
+those as kernel policies in form of, say, builtin modules.
+
+How DAMON Should Be Evolved For Supporting Those
+================================================
+
+Let's discuss what kind of changes in DAMON will be needed to efficiently
+support above mentioned policies.
+
+Simultaneously Monitoring Different Types of Address Spaces
+-----------------------------------------------------------
+
+It would be better to run all the above mentioned policies simultaneously on
+single system.  As some policies such as LRU-pages (de)activation would better
+to run on physical address space while some policies such as THP coalesce/split
+would need to run on virtual address spaces, DAMON should support concurrently
+monitoring different address spaces.  We can always do this by creating one
+DAMON context for each address space and running those.  However, as the
+address spaces will conflict, each other will be interfered.  Current idea for
+avoiding this is allowing multiple DAMON contexts to run on a single thread,
+forcing them to have same monitoring contexts.
+
+Online Parameters Updates
+-------------------------
+
+Someone would also want to dynamically turn on/off and/or tune each policy.
+This is impossible with current DAMON, because it prohibits updating any
+parameter while it is running.  We disallow the online parameters update
+mainly because we want to avoid doing additional synchronization between the
+running kdamond and the parameters updater.  The idea for supporting the use
+case while avoiding the additional synchronization is, allowing users to pause
+DAMON and update parameters while it is paused.
+
+A Better DAMON interface
+------------------------
+
+DAMON is currently exposing its major functionality to the user space via the
+debugfs.  After all, DAMON is not for only debugging.  Also, this makes the
+interface depends on debugfs unnecessarily, and considered unreliable.  Also,
+the interface is quite unflexible for future interface extension.  I admit it
+was not a good choice.
+
+It would be better to implement another reliable and easily extensible
+interface, and deprecate the debugfs interface.  The idea is exposing the
+interface via sysfs using hierarchical Kobjects under mm_kobject.  For example,
+the usage would be something like below:
+
+    # cd /sys/kernel/mm/damon
+    # echo 1 > nr_kdamonds
+    # echo 1 > kdamond_1/contexts/nr_contexts
+    # echo va > kdamond_1/contexts/context_1/target_type
+    # echo 1 > kdamond_1/contexts/context_1/targets/nr_targets
+    # echo $(pidof <workload>) > \
+                    kdamond_1/contexts/context_1/targets/target_1/pid
+    # echo Y > monitor_on
+
+The underlying files hierarchy could be something like below.
+
+    /sys/kernel/mm/damon/
+    │ monitor_on
+    │ kdamonds
+    │ │ nr_kdamonds
+    │ │ kdamond_1/
+    │ │ │ kdamond_pid
+    │ │ │ contexts
+    │ │ │ │ nr_contexts
+    │ │ │ │ context_1/
+    │ │ │ │ │ target_type (va | pa)
+    │ │ │ │ │ attrs/
+    │ │ │ │ │ │ intervals/sampling,aggr,update
+    │ │ │ │ │ │ nr_regions/min,max
+    │ │ │ │ │ targets/
+    │ │ │ │ │ │ nr_targets
+    │ │ │ │ │ │ target_1/
+    │ │ │ │ │ │ │ pid
+    │ │ │ │ │ │ │ init_regions/
+    │ │ │ │ │ │ │ │ region1/
+    │ │ │ │ │ │ │ │ │ start,end
+    │ │ │ │ │ │ │ │ ...
+    │ │ │ │ │ │ ...
+    │ │ │ │ │ schemes/
+    │ │ │ │ │ │ nr_schemes
+    │ │ │ │ │ │ scheme_1/
+    │ │ │ │ │ │ │ action
+    │ │ │ │ │ │ │ target_access_pattern/
+    │ │ │ │ │ │ │ │ sz/min,max
+    │ │ │ │ │ │ │ │ nr_accesses/min,max
+    │ │ │ │ │ │ │ │ age/min,max
+    │ │ │ │ │ │ │ quotas/
+    │ │ │ │ │ │ │ │ ms,bytes,reset_interval
+    │ │ │ │ │ │ │ │ prioritization_weights/
+    │ │ │ │ │ │ │ │   sz,nr_accesses,age
+    │ │ │ │ │ │ │ watermarks/
+    │ │ │ │ │ │ │   metric,check_interval,high,mid,low
+    │ │ │ │ │ │ │ stats/
+    │ │ │ │ │ │ │ │ quota_exceeds
+    │ │ │ │ │ │ │ │ tried/nr,sz
+    │ │ │ │ │ │ │ │ applied/nr,sz
+    │ │ │ │ │ │ │ ...
+    │ │ │ │ ...
+    │ │ ...
+
+More DAMON Future Works
+=======================
+
+In addition to above mentioned things, there are many works to do.  It would be
+better to extend DAMON for more use cases and address spaces support, including
+page granularity, idleness only, read/write only, page cache only, and cgroups
+monitoring supports.
+
+Also it would be valuable to improve the accuracy of monitoring, using some
+adaptive monitoring attributes tuning or some new fancy idea[1].
+
+DAMOS could also be improved by utilizing its own autotuning feature, for
+example, by monitoring PSI and other metrics related to the given action.
+
+[1] https://linuxplumbersconf.org/event/11/contributions/984/
+
+
+Thank you For Reading This
+==========================
+
+So, I shared current rough and immature plans off the top of my head here.
+Hope this helps you understanding what I'm thinking about for the future of
+DAMON.  Please note again that those are only in brainstorming level and some
+are only groundless idea.  Some might be just insane ideas.  Hence, everything
+is open for change or failure.  If you have any comment, please feel free to
+let me know.
+
+
+Thanks,
+SJ

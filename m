@@ -2,138 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89980493523
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23066493528
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344439AbiASGmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:42:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38643 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236370AbiASGm0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:42:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642574546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MF1FuGFJdpOohIJ1ssXp+qAxwbB16v8stQCdey9tRcg=;
-        b=QZBh/S5obycedEYcYaocchDNEmgUeR43nEDnaNyTj+97rjCscl+6hH8qBqmrtIrZGvS/Xa
-        IENGxSyS1ox7p3VrJlpChoMs3i9h4aselNMMUw+gxFTCf4B4Ulf56hBDGbJzMDml1eDe7x
-        eLWC168nji/3dRoveVxYmSXaNGqRJWs=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-90E7adCIO0-IBJXRDM1T5Q-1; Wed, 19 Jan 2022 01:42:24 -0500
-X-MC-Unique: 90E7adCIO0-IBJXRDM1T5Q-1
-Received: by mail-pj1-f72.google.com with SMTP id q1-20020a17090a064100b001b4d85cbaf7so2690325pje.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 22:42:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MF1FuGFJdpOohIJ1ssXp+qAxwbB16v8stQCdey9tRcg=;
-        b=nWhvi7qCLXuki6k5zy/hhYyGbuV3l6cbHlxGtgYraHNhTK0/2tUB+8GL+ZfSGgy3GA
-         SXGFZDK4x89vNvIxvdDJJbwS2gtLm4lv4PO6baQNE7Qr+UBy2wF6o7NZqpojBegGum88
-         CfgE+ZKldIp+reYWI+MpS7c5spZ+m56ES8MwGFz2G2ocC4J7fykuA4sKG51o+gEsuXQq
-         fQCGYg8S+yUihJbwji3aZs50h7J3RDNTVdqlK4rVgk0i1TGa686o1OB+kOYtxS8OnOKJ
-         eu0DAPy3w2DSkzPG6uRqcUQ6YF21D3sBlv8Y7vXGF8eT/kn9gaINQw0t6Q2ZY605kCXS
-         UN4g==
-X-Gm-Message-State: AOAM531DxPbarHCYuZ6o8xmXdzs8+osg7GiFPsNFzHnXV9hKiNWFH2W8
-        RqAabblq067+QE2xXyarfugUduyH1eaSluTZYVaBZM3spXkI49Go+j/9/MhOprkmUf/hxDpv1ts
-        RQh0QArnSuMtwt4NtULdCEUVB
-X-Received: by 2002:a17:902:ac8f:b0:14a:ac30:47d7 with SMTP id h15-20020a170902ac8f00b0014aac3047d7mr16543325plr.168.1642574543714;
-        Tue, 18 Jan 2022 22:42:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzfLyBSLuUdFeXn+Bg5WDLz7nFtnsc2uixZcGKG5XSs6BPtw5MhYNQsaP8UjQVY658RSwJjgQ==
-X-Received: by 2002:a17:902:ac8f:b0:14a:ac30:47d7 with SMTP id h15-20020a170902ac8f00b0014aac3047d7mr16543301plr.168.1642574543414;
-        Tue, 18 Jan 2022 22:42:23 -0800 (PST)
-Received: from [10.72.13.227] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id x4sm4821921pjn.56.2022.01.18.22.42.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 22:42:22 -0800 (PST)
-Message-ID: <960d4166-1718-55ef-d324-507a8add7e3e@redhat.com>
-Date:   Wed, 19 Jan 2022 14:42:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v3 04/11] KVM: arm64: Setup a framework for hypercall
- bitmap firmware registers
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        id S1346230AbiASGoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:44:25 -0500
+Received: from foss.arm.com ([217.140.110.172]:48178 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236370AbiASGoY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 01:44:24 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE590D6E;
+        Tue, 18 Jan 2022 22:44:23 -0800 (PST)
+Received: from [10.163.74.69] (unknown [10.163.74.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 859653F73D;
+        Tue, 18 Jan 2022 22:44:20 -0800 (PST)
+Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220104194918.373612-1-rananta@google.com>
- <20220104194918.373612-5-rananta@google.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220104194918.373612-5-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
+ <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
+ <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
+ <00e28671-8d3a-f789-91c4-109814792a07@arm.com>
+ <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
+Date:   Wed, 19 Jan 2022 12:14:23 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/1/5 上午3:49, Raghavendra Rao Ananta 写道:
-> KVM regularly introduces new hypercall services to the guests without
-> any consent from the Virtual Machine Manager (VMM). This means, the
-> guests can observe hypercall services in and out as they migrate
-> across various host kernel versions. This could be a major problem
-> if the guest discovered a hypercall, started using it, and after
-> getting migrated to an older kernel realizes that it's no longer
-> available. Depending on how the guest handles the change, there's
-> a potential chance that the guest would just panic.
->
-> As a result, there's a need for the VMM to elect the services that
-> it wishes the guest to discover. VMM can elect these services based
-> on the kernels spread across its (migration) fleet. To remedy this,
-> extend the existing firmware psuedo-registers, such as
-> KVM_REG_ARM_PSCI_VERSION, for all the hypercall services available.
 
+On 1/13/22 5:17 PM, Arnd Bergmann wrote:
+> On Thu, Jan 13, 2022 at 4:03 AM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>> On 1/12/22 4:20 PM, Arnd Bergmann wrote:
+>>> On Wed, Jan 12, 2022 at 10:34 AM Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+>>>> Add the CPU Partnumbers for the new Arm designs.
+>>>> @@ -74,6 +74,7 @@
+>>>>  #define ARM_CPU_PART_NEOVERSE_N1       0xD0C
+>>>>  #define ARM_CPU_PART_CORTEX_A77                0xD0D
+>>>>  #define ARM_CPU_PART_CORTEX_A710       0xD47
+>>>> +#define ARM_CPU_PART_CORTEX_X2         0xD48
+>>>>  #define ARM_CPU_PART_NEOVERSE_N2       0xD49
+>>>
+>>> No objections to the patch, but would it be possible to just add all the missing
+>>> ones here to the degree that they are known already? I don't see any entries for
+>>> Cortex-A34, Cortex-A65AE, Cortex-A78, Cortex-A78C, Cortex-A78AE,
+>>> Neoverse-E1, Neoverse-V1, Cortex-X1, Cortex-X2, Cortex-A510, Cortex-A710
+>>> and Cortex-R82 among the Arm-designed cores that can run Linux, and there
+>>> are probably others that I missed going through the list.
+>>
+>> Hi Arnd,
+>>
+>> IIUC the part numbers are enumerated here only if there is an errata
+>> applicable for them which needs to be detected at boot. I am not sure
+>> whether all cpu versions that can run Linux, needs to be defined here.
+>> But then I might be missing something.
+> 
+> They clearly don't need to be defined here, and for other constants such
+> as the system registers we may not want to list them all, but I think for
+> the CPU IDs it makes sense to just list them all here rather than adding
+> them one at a time, as we tend to need them sooner or later anyway.
+> 
+> It also helps me personally to have a known place to look up the names
+> by value rather than chasing through reference manuals.
 
+IIUC the purpose here would be a quick CPU ID documentation reference check ?
+I will wait for other opinions here and add the remaining in a separate patch
+probably.
 
-Haven't gone through the series but I wonder whether it's better to have 
-a (e)BPF filter for this like seccomp.
-
-Thanks
-
-
->
-> These firmware registers are categorized based on the service call
-> owners, and unlike the existing firmware psuedo-registers, they hold
-> the features supported in the form of a bitmap.
->
-> The capability, KVM_CAP_ARM_HVC_FW_REG_BMAP, is used to announce
-> this extension, which returns the number of psuedo-firmware
-> registers supported. During the VM initialization, the registers
-> holds an upper-limit of the features supported by the corresponding
-> registers. It's expected that the VMMs discover the features
-> provided by each register via GET_ONE_REG, and writeback the
-> desired values using SET_ONE_REG. KVM allows this modification
-> only until the VM has started.
->
-> Older VMMs can simply ignore the capability and the hypercall services
-> will be exposed unconditionally to the guests, thus ensuring backward
-> compatibility.
->
-> In this patch, the framework adds the register only for ARM's standard
-> secure services (owner value 4). Currently, this includes support only
-> for ARM True Random Number Generator (TRNG) service, with bit-0 of the
-> register representing mandatory features of v1.0. Other services are
-> momentarily added in the upcoming patches.
->
-> Signed-off-by: Raghavendra Rao Ananta<rananta@google.com>
-
+> 
+>       Arnd
+> 

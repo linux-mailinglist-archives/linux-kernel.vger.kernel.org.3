@@ -2,136 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 266584943CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599C04943D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344208AbiASXTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:19:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56328 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240369AbiASXTX (ORCPT
+        id S240369AbiASXVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344260AbiASXVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:19:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9228BB81C34
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:19:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C57CC340EF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:19:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642634361;
-        bh=/VsvxrK8zyc2yNu4lRcxY8d4fLjYuopTGzFBWIpaZuU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WIzZvK3GtHo1SKGL3nZdobAbhHjEPpNeTEfI34CqWXsYRIBuTAruaBZVRj8jcx1Ds
-         Y5H5up3k8FgNKOZSpqmDHRlwA4WRfNB8G9XLg0iwICGdDflSawqY+nCV3QY5z9MHVj
-         JD313HNVbb+cF0UwToqBEv3Q8ktX1Xy7AEo3wojE/In9rIAbhSyFAn8N90R9qmHuD/
-         pGNJsvYU0cD51Ig65oCM1IOfcyBf9uJqeoYzJabOulkddlDz6PHGOMvV320YwxVjOh
-         t+116mj9rKdAeAFuce02xdM23Ln1eKKm3lAoxg6cd89Nz4ilJev+5lmaBO4Aldcok7
-         QtlizF6lLYTGw==
-Received: by mail-ed1-f49.google.com with SMTP id m4so20443310edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:19:21 -0800 (PST)
-X-Gm-Message-State: AOAM530pDDPOtYakiFm8gl/QWwDA6OvCR3keC2O/PQSWMWqeKRvN+wNV
-        tolSYq/+l2a9UFquLGB82ZvQ4GiaDjq+TcoNQA==
-X-Google-Smtp-Source: ABdhPJwC0NWnP7oymINNszu43Ouc3/FDCJmqCWPyJrv0Hx/yq+CETJQGIdgZZ3LK4mRd6SWiVqRx6NjLUZo8svP5CpY=
-X-Received: by 2002:a17:906:6c1:: with SMTP id v1mr25764169ejb.638.1642634359331;
- Wed, 19 Jan 2022 15:19:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119022543.26093-1-rex-bc.chen@mediatek.com> <20220119022543.26093-3-rex-bc.chen@mediatek.com>
-In-Reply-To: <20220119022543.26093-3-rex-bc.chen@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Thu, 20 Jan 2022 07:19:05 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__xbhyOaL-4BZP0n_HdvYz3f6SZzh-WSw-gVv=Yufjy8A@mail.gmail.com>
-Message-ID: <CAAOTY__xbhyOaL-4BZP0n_HdvYz3f6SZzh-WSw-gVv=Yufjy8A@mail.gmail.com>
-Subject: Re: [v10,2/3] drm/mediatek: implement the DSI HS packets aligned
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>, andrzej.hajda@intel.com,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Xin Ji <xji@analogixsemi.com>,
-        Jitao Shi <jitao.shi@mediatek.com>, xinlei.lee@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+        Wed, 19 Jan 2022 18:21:42 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEBBC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:21:42 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id h196-20020a6283cd000000b004bed33745c9so2430289pfe.23
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=R3Y/gOk08NgtXcS6vykPovrhRLCA2DpTaWszWvKKMv8=;
+        b=c5zgx/4itJnifU5XQnptwovLjitu5KxUpdScwBHS9ppYLx8ucjI2vrBYnNg7vFwLG7
+         VzFrLBx5t7DPwx/PJAna5plHjt7e7TgHwB/G8MXte8rSpYlwAoWRr14WybVs89QLUesC
+         pgsTFv1yPQkaCAzYO9fu7jkDmk6hMnMFPUc864hF/qsMPw8X1Jt+FCfsiojcg4ZvbLI8
+         102AZ7T1DxZAm95v5nl9qYZeoJWr2IO5mHLblewk4l/t/GU9ST8RtuDlZHyxZZkRdK9Z
+         Vfk2b+ssBm7uP69bDqqQQSekf/OqZkeGdNNLY8VgwQdSTBKxSAxeWdSLPREam0I4Tzqy
+         FLGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=R3Y/gOk08NgtXcS6vykPovrhRLCA2DpTaWszWvKKMv8=;
+        b=LwN+KWHC5RH153hVo8BQFn4zr6ot3b83yd5qeG2YaX0zZpJHy9rn4RlNvCpi0EjTC4
+         WR+JuZsyWWdfhHE069A4w5XEpao5GxfNxTf+soH3+B8wKY6aAjgaT2SMQ8dPxNZJUWnx
+         UzSpaRxhT3VIqFcXJ7lp38AQ2hC9tarwn9/akB/vyrX08SI8DugiGsZCZuuxw7lpCdRm
+         AywElZ9k7hAUlUXuF1Fd1LOeBEzg9+LUNqNJrM8cq1iMS04jsmzYTHXga1HK8fxIn8sb
+         UlgedoZ6qjjkHPqPVo1La2i20o1AM2Xz+sMYzst9mUvVHU+UhMtmOXzzfx5H7e/ZxdZV
+         eO0Q==
+X-Gm-Message-State: AOAM532t06PMuO470FBged00HINK6AH13UXSfMNAkL6XT1Ex6V/0+EKC
+        /0UaJCR2+7zW6syvDIJDYp2zKRAsl9TEtaVe8DRBgcLAWD8/BPusv8Job8BFMps84ZNfGw0M9hw
+        xUKwdm+zeEiL8lXqi40Dt7xuMtwBwkIT/ujHNm+n7MrnaTOd3bcMIjEQtCKcTE8sk/fcW6A==
+X-Google-Smtp-Source: ABdhPJy0tmrWl2qzWMTzlH8xT25SOYiP2Mzw6nzK3q3lsalSqLQ2INJtAheVNXowbPrtzMsxUnxlwxnh370=
+X-Received: from adelva.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:b2b])
+ (user=adelva job=sendgmr) by 2002:a05:6a00:2408:b0:4c1:e1a1:770 with SMTP id
+ z8-20020a056a00240800b004c1e1a10770mr32410337pfh.70.1642634501702; Wed, 19
+ Jan 2022 15:21:41 -0800 (PST)
+Date:   Wed, 19 Jan 2022 23:21:39 +0000
+Message-Id: <20220119232139.1125908-1-adelva@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] remoteproc: Fix count check in rproc_coredump_write()
+From:   Alistair Delva <adelva@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        stable@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        linux-remoteproc@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+Check count for 0, to avoid a potential underflow. Make the check the
+same as the one in rproc_recovery_write().
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=8819=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8810:26=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Some DSI RX devices (for example, anx7625) require last alignment of
-> packets on all lanes after each row of data is sent.
-> Otherwise, there will be some issues of shift or scroll for screen.
->
-> Take horizontal_sync_active_byte for a example,
-> we roundup the HSA packet data to lane number, and the subtraction of 2
-> is the packet data value added by the roundup operation, making the
-> long packets are integer multiples of lane number.
-> This value (2) varies with the lane number, and that is the reason we
-> do this operation when the lane number is 4.
->
-> In the previous operation of function "mtk_dsi_config_vdo_timing",
-> the length of HSA and HFP data packets has been adjusted to an
-> integration multiple of lane number.
-> Since the number of RGB data packets cannot be guaranteed to be an
-> integer multiple of lane number, we modify the data packet length of
-> HBP so that the number of HBP + RGB is equal to the lane number.
-> So after sending a line of data (HSA + HBP + RGB + HFP), the data
-> lanes are aligned.
+Fixes: 3afdc59e4390 ("remoteproc: Add coredump debugfs entry")
+Signed-off-by: Alistair Delva <adelva@google.com>
+Cc: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Cc: stable@vger.kernel.org
+Cc: Ohad Ben-Cohen <ohad@wizery.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Sibi Sankar <sibis@codeaurora.org>
+Cc: linux-remoteproc@vger.kernel.org
+Cc: kernel-team@android.com
+---
+ drivers/remoteproc/remoteproc_debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+index b5a1e3b697d9..581930483ef8 100644
+--- a/drivers/remoteproc/remoteproc_debugfs.c
++++ b/drivers/remoteproc/remoteproc_debugfs.c
+@@ -76,7 +76,7 @@ static ssize_t rproc_coredump_write(struct file *filp,
+ 	int ret, err = 0;
+ 	char buf[20];
+ 
+-	if (count > sizeof(buf))
++	if (count < 1 || count > sizeof(buf))
+ 		return -EINVAL;
+ 
+ 	ret = copy_from_user(buf, user_buf, count);
+-- 
+2.30.2
 
->
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediate=
-k/mtk_dsi.c
-> index 5d90d2eb0019..e91b3fff4342 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -500,6 +500,18 @@ static void mtk_dsi_config_vdo_timing(struct mtk_dsi=
- *dsi)
->                 DRM_WARN("HFP + HBP less than d-phy, FPS will under 60Hz\=
-n");
->         }
->
-> +       if ((dsi->mode_flags & MIPI_DSI_HS_PKT_END_ALIGNED) &&
-> +           (dsi->lanes =3D=3D 4)) {
-> +               horizontal_sync_active_byte =3D
-> +                       roundup(horizontal_sync_active_byte, dsi->lanes) =
-- 2;
-> +               horizontal_frontporch_byte =3D
-> +                       roundup(horizontal_frontporch_byte, dsi->lanes) -=
- 2;
-> +               horizontal_backporch_byte =3D
-> +                       roundup(horizontal_backporch_byte, dsi->lanes) - =
-2;
-> +               horizontal_backporch_byte -=3D
-> +                       (vm->hactive * dsi_tmp_buf_bpp + 2) % dsi->lanes;
-> +       }
-> +
->         writel(horizontal_sync_active_byte, dsi->regs + DSI_HSA_WC);
->         writel(horizontal_backporch_byte, dsi->regs + DSI_HBP_WC);
->         writel(horizontal_frontporch_byte, dsi->regs + DSI_HFP_WC);
-> --
-> 2.18.0
->

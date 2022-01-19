@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62992493FB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA448493FAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356670AbiASSMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:12:36 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:36508 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356655AbiASSMf (ORCPT
+        id S1356654AbiASSLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:11:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54879 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351117AbiASSLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:12:35 -0500
-Received: by mail-ot1-f41.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso4229542otl.3;
-        Wed, 19 Jan 2022 10:12:35 -0800 (PST)
+        Wed, 19 Jan 2022 13:11:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642615906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GNXJ0yqpaBu/M90jjOlDPwUordWMR9OUp0gxFTOdR3E=;
+        b=YUD+UFxP669f03vZUbnxPw5ltv30aiM284VPmWQvh5tNIazyR1c2bw9l2egnPAaCEZLs38
+        +OWMxxzMlX3b3J6dMUaRz9u+Kxb7RkV+xLGcXf3WUI2Dc8ML7UJ0O+TCvizi4i7KfA20RM
+        P92tCqrWzVKUCWQrPkKuhH2lMkMWvWA=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-a08oY-rQNKCPu7McfYFcRQ-1; Wed, 19 Jan 2022 13:11:45 -0500
+X-MC-Unique: a08oY-rQNKCPu7McfYFcRQ-1
+Received: by mail-ot1-f71.google.com with SMTP id 39-20020a9d0eaa000000b0058f56d89582so1988208otj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:11:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=KhnGgRppULmhUr9DM7eE177qZR72yiD2dlY3z/aqigQ=;
-        b=ZaaHwVdiPG+KTHBrdaKF5bIRpJcdz8ywkUgZ7NN0L9mbmTLHYmt5qs8vVaKPWaSNbS
-         rEAQx6ZiVjs/We/LEU0nlw4qXeAaZprgTtdNbmPmS1E7w8y7AawwwTVqpI46oN4HOAKk
-         7sFF8iuHlrD6NLen11SvwKA7BnXqJfOG3Km/lNx2tdPk02n2isDJP+38D7J/Nc2/YOcO
-         RWkCgQPGNZrC9PGP1Qnh4dsJsjWm5eCaFHjnDJ5o4AF35/Vg9zUJFfXVdFyYZ3MHzlBi
-         g551gLrEXZeF++so8WlfuiSxsf56r5VfIUlHPE6YAjlgMuP57LKeqLBja2mEvcuspjA0
-         k2Zg==
-X-Gm-Message-State: AOAM531WCcVQpiAfGE3JRlndMC8Hh5+Ac2Tp41UXoE8r7Wn5QzNL5QrV
-        xqPNnQGRJ8fjtyYWmSwu5Q==
-X-Google-Smtp-Source: ABdhPJzsbITfBARgU7b1i5+U3tC7JZJlZvXyEKRNEEAVQxSrK4IGBg/+pZtb+Z7s39J19P337Vlgkg==
-X-Received: by 2002:a05:6830:1be9:: with SMTP id k9mr13572805otb.217.1642615955104;
-        Wed, 19 Jan 2022 10:12:35 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id v22sm228657oot.10.2022.01.19.10.12.34
+        bh=GNXJ0yqpaBu/M90jjOlDPwUordWMR9OUp0gxFTOdR3E=;
+        b=LGPPaGf9/O3zi7gL3xMAe67jEnXalaj+9C+KKx0AaQAPPQMlVIGhOWkoRdqNECu/Ws
+         yHKatCQ/ZB5LUCi0BGZJ6AaWRIjOEUUoUKe7PqL6wwJHLhjkTK0CbarhEeamabPcZ2Pe
+         iTP3k2QNO6L7pJjM1kjT7YuihwPWO+26brnBTirb+39kOOqObIU401S7E6nUo1BgTvCI
+         TWoVLMWirBq//qEPS43FxC+PVA0/dqe3KQ1PhfQF26Xoblw+FiIyirB0Ou/n1sM5S0jl
+         ahZuy1zIQ6fCkcXRrHDqVghnbddv2LE/0a7sWeDyPqbqDAD51Ix2kXvTyw8P79JV2RE1
+         bUTw==
+X-Gm-Message-State: AOAM532pU9kekkAmD4is4RO7+EZ788JUqmAlRcgpn946QFivjtwuwTYd
+        so/eiZ6kjDBKbmiwaZEmvfss54o1mG42Mr75YTUr0ma1ZYO7kgvpavOPQ4wFAP+z534CoOfSrkp
+        BkVYAPn9SasEiLXHqdHHdQXU8
+X-Received: by 2002:a05:6808:1aa7:: with SMTP id bm39mr4204137oib.24.1642615904329;
+        Wed, 19 Jan 2022 10:11:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzlHar5MRRf6LI6ea4gKSaVnYZ8opJyKvRwJVoD+Mx/krYS1DYbDnuJxrNj15jwiF6kNtm4fQ==
+X-Received: by 2002:a05:6808:1aa7:: with SMTP id bm39mr4204120oib.24.1642615904111;
+        Wed, 19 Jan 2022 10:11:44 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id c26sm238327oov.22.2022.01.19.10.11.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 10:12:34 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suman Anna <s-anna@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: remoteproc: ti: Add mailbox provider nodes to example
-Date:   Wed, 19 Jan 2022 12:10:54 -0600
-Message-Id: <20220119181053.3846613-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Wed, 19 Jan 2022 10:11:43 -0800 (PST)
+Date:   Wed, 19 Jan 2022 11:11:42 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: [GIT PULL] VFIO updates for v5.17-rc1
+Message-ID: <20220119111142.6ecbab24.alex.williamson@redhat.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to make the 'mboxes' property in the TI remoteproc examples
-parseable, mailbox provider nodes are needed. Normally, the examples
-have a __fixup__ node which can be used for determining each
-phandle+arg entry. However, for this binding the arg cells contain a
-phandle, and the __fixups__ information can't be used.
+Hi Linus,
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2: Fix the example rather than changing the schema which was correct
+The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
 
- .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml   | 8 ++++++++
- .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml   | 8 ++++++++
- 2 files changed, 16 insertions(+)
+  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
-index 4323cefdf19b..cedbc5efdc56 100644
---- a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
-@@ -142,6 +142,14 @@ examples:
-         #address-cells = <2>;
-         #size-cells = <2>;
- 
-+        mailbox0_cluster3: mailbox-0 {
-+            #mbox-cells = <1>;
-+        };
-+
-+        mailbox0_cluster4: mailbox-1 {
-+            #mbox-cells = <1>;
-+        };
-+
-         bus@100000 {
-             compatible = "simple-bus";
-             #address-cells = <2>;
-diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-index 0f2bb06cb7b4..0868154a0364 100644
---- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-@@ -238,6 +238,14 @@ examples:
-         #address-cells = <2>;
-         #size-cells = <2>;
- 
-+        mailbox0: mailbox-0 {
-+            #mbox-cells = <1>;
-+        };
-+
-+        mailbox1: mailbox-1 {
-+            #mbox-cells = <1>;
-+        };
-+
-         bus@100000 {
-             compatible = "simple-bus";
-             #address-cells = <2>;
--- 
-2.32.0
+are available in the Git repository at:
+
+  git://github.com/awilliam/linux-vfio.git tags/vfio-v5.17-rc1
+
+for you to fetch changes up to 2bed2ced40c97b8540ff38df0149e8ecb2bf4c65:
+
+  vfio/iommu_type1: replace kfree with kvfree (2021-12-21 12:30:34 -0700)
+
+----------------------------------------------------------------
+VFIO updates for v5.17-rc1
+
+ - Fix sparse endian warnings in IGD code (Alex Williamson)
+
+ - Balance kvzalloc with kvfree (Jiacheng Shi)
+
+----------------------------------------------------------------
+Alex Williamson (1):
+      vfio/pci: Resolve sparse endian warnings in IGD support
+
+Jiacheng Shi (1):
+      vfio/iommu_type1: replace kfree with kvfree
+
+ drivers/vfio/pci/vfio_pci_igd.c | 15 +++++++++------
+ drivers/vfio/vfio_iommu_type1.c |  2 +-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 

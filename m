@@ -2,104 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97544932AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9244932B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350841AbiASCEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 21:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S1350871AbiASCH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 21:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350843AbiASCEe (ORCPT
+        with ESMTP id S1350649AbiASCHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 21:04:34 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EF9C061574;
-        Tue, 18 Jan 2022 18:04:34 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id p9so1274884qkh.3;
-        Tue, 18 Jan 2022 18:04:34 -0800 (PST)
+        Tue, 18 Jan 2022 21:07:55 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AE7C061574;
+        Tue, 18 Jan 2022 18:07:55 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id p12so3858239edq.9;
+        Tue, 18 Jan 2022 18:07:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=++gAg+l0dN/7B7vv6NjXKWxl8eRkjPVp8VF/W6XAH48=;
-        b=qIbZjUOjgsyq3RDMrd53p9/2IkNve51ftq1huuVJlh6tE7vUnupVpSUJXVn4NFOmqd
-         3fbMWzt7XlAJQU6fo3pTlWpx7hPgqbDSvklbRhWkEux2Piqgy3AQlk0ui0mLPPEG9NPj
-         9ix44G9XGNVm1l4ns4NXFPpwNkl9lbeu3w+raWCbnUx88QwVRrfPd13yrAogDJWqW+yo
-         Kv5fvBNCyz/slme/Cku12Czn6c6lqvYa8tF5keGjBUkM4sbUxwNJl6AqeKZ3n5DpBRKW
-         WjHkH1N3o5qx++0lah0zOEWo26pjTaEk+IuSaghm1SpI+1YJL47baQiI8EKXMbLT9V9L
-         LdCw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=U5yybkRyy74+vUgcdmJvZM65Xa1rfncQiIH2cIlKdHE=;
+        b=KTWes4lr7GZeDhVcRrU3n2cGz/V+jTCno+1aTbPMI8VYjB1V3Ytr1fL9FKReXX52c9
+         5aJMiw9Qrn+EvEvXb/dom7MnqWISD/zHADAYfRLJsBKiEY4o6iY9QbVlhNFr+NnMrrhh
+         WGPyBWE5+VwS3nZe/QD/+8QZUtgEHfyyLLJ+AU3wlCdA1Iv4hdD3CFtrXwSS96Nd9Iks
+         gVUK0/rgPOyl7XSL/T8jOLnK0GJYcxn6RgtklfWO7enutqzKpYsoQgh2GyyIXTyiWlzI
+         eMENpyMKJ7NEJH/DgKL8tMPkglg3xR7hJb97sOyKyb3hzKvf1m5i4VLRSu8SyQRsm2cy
+         XTHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=++gAg+l0dN/7B7vv6NjXKWxl8eRkjPVp8VF/W6XAH48=;
-        b=2OkD0k2ZnlCSoHqKPYCovpm7ATZcVJ4me2k3KSzheqXcelNmHTLYc9oVXhmxdgSeDX
-         iwQQrZAKM8zMnRNCDZMY1f4WT/YugZz7M7H8joKLomEwLz3OUBgIM9mv+7x+Glou2lDj
-         wL+wJ/tC6s9EEflf+FRZmKHpEnmw98THahDjSwyrJMAIhHJ9lGbQ0jp5oiYbeHENHp4p
-         k9rZjYXGbbHX929Lp2dRCgFkbVySMXMoACrpIc/x4sg4/6gNlElFo2t16Z2CLrua1/X/
-         u+ltD21qNyxzo4EfZ3RvYt4Mkmf21tXeah5H5MYQrKuevtguLENKO2XhGfvVGeA2Y+1g
-         jybQ==
-X-Gm-Message-State: AOAM530qQ/EbO+vUbNjlSvzUZ0PCr6HNw13ST+czpYroDHd5YNoB6/jj
-        VB2jiIcA0YSLyg++4GQTIig=
-X-Google-Smtp-Source: ABdhPJyOnunO+GeIz4tAdGx9vUTvZUmec5ggQsTIda8EZTmduN+ZerZqvwBHMJs2byK+fi3GSwrZoQ==
-X-Received: by 2002:a05:620a:410c:: with SMTP id j12mr5901891qko.636.1642557873672;
-        Tue, 18 Jan 2022 18:04:33 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o4sm5121072qkp.105.2022.01.18.18.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 18:04:33 -0800 (PST)
-From:   xu xin <cgel.zte@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     kuba@kernel.org
-Cc:     cgel.zte@gmail.com, davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        xu.xin16@zte.com.cn, yoshfuji@linux-ipv6.org
-Subject: Re: Re: [PATCH] ipv4: Namespaceify min_adv_mss sysctl knob
-Date:   Wed, 19 Jan 2022 02:04:27 +0000
-Message-Id: <20220119020427.929626-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220118112148.3e1acad4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <20220118112148.3e1acad4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=U5yybkRyy74+vUgcdmJvZM65Xa1rfncQiIH2cIlKdHE=;
+        b=qEBP9+Dt3yu0mW/fvR+Zf0OjRcb6srF+qPMOlO/4qGgHTfE8QKGOn8dT1/Rnn2pbu4
+         DrCyW8taaAvKby8Ot54THr38/0iGEY9K79Sv0fp9IH2DSmkaSd4oL2Z7E79El7jrJfTQ
+         WJC6tKPkeGIAJd9eQaTir8J+vzK2ICrFLLAQYA15rNSQ3U7b9oiAUs6U/JoCo+w4tdeM
+         hkrIkBxFwe12DyUaUCXzehzImCv9bs4QL1EgZAO61pVUdCIO0b2llLs/M7lSRhcqUPFP
+         lwjO1iMWW1tlX13Hf97a102u+O+lF+xy0fjjEdRsBiMg2m2kzWfCFD+W7/2TKpijrYeR
+         eZJw==
+X-Gm-Message-State: AOAM531YFaXjYZ6DS8phz4ASbZ6+FAPMrWEgGbz8n0FNGPDuUkqBwGp1
+        V7w9X+J9r5Z5f1u1hQfi5avbkWsvvPveUtc4Exg=
+X-Google-Smtp-Source: ABdhPJwu7q7MpAQLPPXfxVHIfcMWw6v/ODYbkPx0kUypo7cnOssvZ4mqSKpfTMBmvvJGzTqYOkYPuI7G/c7imbfVsBk=
+X-Received: by 2002:a05:6402:51c6:: with SMTP id r6mr28172784edd.129.1642558073780;
+ Tue, 18 Jan 2022 18:07:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+ <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
+ <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de> <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
+ <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 19 Jan 2022 10:07:42 +0800
+Message-ID: <CAABZP2yffDyg31smcCyqENFBvQPfmFCT_YwDM_DJ=S-3rjxKuQ@mail.gmail.com>
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > Different netns have different requirement on the setting of min_adv_mss
-> > sysctl that the advertised MSS will be never lower than. The sysctl
-> > min_adv_mss can indirectly affects the segmentation efficiency of TCP.
-> > 
-> > So enable min_adv_mss to be visible and configurable inside the netns.
-> > 
-> > Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> 
-> CGEL ZTE, whatever it is, is most definitely not a person so it can't
-> sign off patches. Please stop adding the CGEL task, you can tell us
-> what it stands for it you want us to suggest an alternative way of
-> marking.
+Thanks Paul for looking into this
 
-CGEL ZTE is a team(or project) focusing on Embedded Linux System. With
-the support of the team, I can devote myself to the development and 
-maintenance of the kernel and related patch work.
+On Wed, Jan 19, 2022 at 7:46 AM Paul E. McKenney <paulmck@kernel.org> wrote=
+:
+>
+> On Tue, Jan 18, 2022 at 09:29:04AM -0800, Paul E. McKenney wrote:
+> > On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
+> > > Dear Zhouyi,
+> > >
+> > >
+> > > Thank you for your quick response.
+> > >
+> > >
+> > > Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
+> > >
+> > > > I have studied the rcu torture test recently. I am also interested =
+in
+> > > > this topic.
+> > > > But I can't open
+> > > > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
+> > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
+> > >
+> > > Sorry, about that. I should have checked those. I had put them into a
+> > > directory:
+> > >
+> > > [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.o=
+ut.txt
+> > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.tx=
+t
+> > >
+> > > I am going to try to test your suggestions at the end of the day.
+> >
+> > On x86 rcutorture builds successfully.  However, allmodconfig
+> > on semi-recent -next got me "Can't open perl script
+> > "./usr/include/headers_check.pl": No such file or directory".
+> > Which might well be a local problem or might well be fixed by now.
+>
+> Not fixed as of next-20220118.  Chasing it down...  ;-)
+I can do allmodconfig on -next,
+$git describe
+next-20220118
+$tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+ ---  tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+ --- Results directory:  2022.01.19-09.14.39-torture
+$ ps -aux|grep qemu-system
+zzy       470309  773  0.3 1876544 153936 pts/0  Sl+  09:55  31:27
+qemu-system-x86_64 -enable-kvm -nographic -smp 16 -net none -machine
+q35,accel=3Dkvm -cpu kvm64 -serial
+file:/tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.01.19-09.1=
+4.39-torture/results-rcutorture/TREE03/console.log
+-m 512 -kernel /tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.=
+01.19-09.14.39-torture/results-rcutorture/TREE03/bzImage
+-append debug_boot_weak_hash panic=3D-1 selinux=3D0 initcall_debug debug
+console=3DttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=3D1
+torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=3D30000
+rcutorture.onoff_interval=3D200 rcutorture.onoff_holdoff=3D30
+rcutree.gp_preinit_delay=3D12 rcutree.gp_init_delay=3D3
+rcutree.gp_cleanup_delay=3D3 rcutree.kthread_prio=3D2 threadirqs
+tree.use_softirq=3D0 rcutorture.n_barrier_cbs=3D4
+rcutorture.stat_interval=3D15 rcutorture.shutdown_secs=3D420
+rcutorture.test_no_idle_hz=3D1 rcutorture.verbose=3D1
+zzy       755865  0.0  0.0  17676  2876 pts/2    S+   09:59   0:00
+grep --color=3Dauto qemu-system
+$ ls -l vmlinux
+-rwxrwxr-x 1 zzy zzy 69349872 1=E6=9C=88  19 09:55 vmlinux
 
-I'm not sure how to mark it here accurately. I am willing to hear your
-suggestions.
-
-> # Form letter - net-next is closed
-> 
-> We have already sent the networking pull request for 5.17
-> and therefore net-next is closed for new drivers, features,
-> code refactoring and optimizations. We are currently accepting
-> bug fixes only.
-> 
-> Please repost when net-next reopens after 5.17-rc1 is cut.
-> 
-> Look out for the announcement on the mailing list or check:
-> http://vger.kernel.org/~davem/net-next.html
-> 
-> RFC patches sent for review only are obviously welcome at any time.
-
-OK, thanks a lot.
+Could you please try the following command ?
+linux-next$ perl ./usr/include/headers_check.pl usr/include x86
+usr/include/rdma/hfi/hfi1_user.h
+linux-next$ echo $?
+0
+The headers_check.pl in linux-next
+(https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/u=
+sr/include/headers_check.pl)
+is used to check the validity of head files in ./usr/include
+>
+> > Either way, it looks like I need to upgrade the torture.sh script's
+> > checks for failed builds.  Thank you for reporting this!
+>
+> Does this make torture.sh more reliably report build failures?
+I studied this commit line by line several times and benefited a lot. Thank=
+ you!
+>
+>                                                 Thanx, Paul
+>
+> ------------------------------------------------------------------------
+>
+> commit 0d302830515307ceb58e89d5fb91e81b6d22e0bf
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Tue Jan 18 15:40:49 2022 -0800
+>
+>     torture: Make kvm-find-errors.sh notice missing vmlinux file
+>
+>     Currently, an obtuse compiler diagnostic can fool kvm-find-errors.sh
+>     into believing that the build was successful.  This commit therefore
+>     adds a check for a missing vmlinux file.
+>
+>     Link: https://lore.kernel.org/lkml/36bd91e4-8eda-5677-7fde-40295932a6=
+40@molgen.mpg.de/
+>     Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>
+> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh b/=
+tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> index 2e9e9e2eedb69..7d3e11a6b8290 100755
+> --- a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> @@ -30,10 +30,15 @@ editor=3D${EDITOR-vi}
+>  files=3D
+>  for i in ${rundir}/*/Make.out
+>  do
+> +       scenariodir=3D"`dirname $i`"
+>         if egrep -q "error:|warning:|^ld: .*undefined reference to" < $i
+>         then
+>                 egrep "error:|warning:|^ld: .*undefined reference to" < $=
+i > $i.diags
+>                 files=3D"$files $i.diags $i"
+> +       elif ! test -f ${scenariodir}/vmlinux
+> +       then
+> +               echo No ${scenariodir}/vmlinux file > $i.diags
+> +               files=3D"$files $i.diags $i"
+>         fi
+>  done
+>  if test -n "$files"
+Thanks
+Zhouyi

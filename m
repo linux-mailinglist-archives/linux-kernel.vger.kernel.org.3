@@ -2,80 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CCD4936D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFD54936D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352816AbiASJHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:07:46 -0500
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:44598 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352352AbiASJHn (ORCPT
+        id S1352822AbiASJIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237932AbiASJIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:07:43 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V2GH.UM_1642583260;
-Received: from localhost(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0V2GH.UM_1642583260)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 19 Jan 2022 17:07:40 +0800
-From:   Zelin Deng <zelin.deng@linux.alibaba.com>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Kyung Min Park <kyung.min.park@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/vt-d: Do not dump pasid table entries in kdump kernel
-Date:   Wed, 19 Jan 2022 17:07:40 +0800
-Message-Id: <1642583260-21095-1-git-send-email-zelin.deng@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 19 Jan 2022 04:08:39 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9849AC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:08:38 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id b14so6701751lff.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yk6ZU06f8iQAnFUq/Y5YZD/opTVQaQ5S7MbGVdU6/a8=;
+        b=J7oQTI/b0sE2aAgFehOjzBf85bwowWQizUpHYHenltV5UItibFerb9OxPzIrQYk7lD
+         XNpsqCV/x96//VVlmOubcFo7fnT6bFRXM057B3eTI2TjbK+/fkB9Ulj+0wTSiWpajgmX
+         sBgPYUCQBkhUQqTGLjpBi3b/T5s7fda1qNAOz0g/tlB+TJnRxQXNNYyGvEZdOIffPTfw
+         WlsjYDhG515tCD4kWKdp1VpBZPIXvyibzgC63qw5PZi3LAXiFqRIO8xjn/vy8YfQ/urU
+         LQ6biKJujGkPHvJETu2sk7mqJpYuMZb45P1QQqJP6CJYk2yJY/ExBLWdITtgX7VSRSgt
+         tV3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yk6ZU06f8iQAnFUq/Y5YZD/opTVQaQ5S7MbGVdU6/a8=;
+        b=5fla7KFYx5E0hcahXWJbBl+MIewvM35aLd62W5H7QkPFkMMY+R4fdvmnJQcInCKhjP
+         2JfA9eKaYYdmuYJF5JA6wzjJu4DtbzSqpvl8IxRluOrE0wmgvsgASSTw4I0uhUm5D+Tx
+         BsuGqPb5RcCKtqDr64UUWBqPhtZrj/adESNUZZ1O3y/pqHTgWzDqEFpMQfpwcb6cj7Vx
+         XDFlA5clBb+zEg++EmtvtKvbiDSz62mvLtQ2rKO3sAPXwqjKjJsruqQGEZeWuPPRVOR7
+         dQYaSaicJizKksVgtuJ8zod8ZFBq+7th7okQ5HSbtxEEZmozqHrs2K1RJmuxnRmnpGyf
+         kMzA==
+X-Gm-Message-State: AOAM532isl+rJy6Im/eMJ3IwGKkL6jUeXQGi0Vk1kORZebXX5WwAMs/G
+        9fl3HYP/kErIMvpksmhsTgG0PINDOAodeqo8kq675Q==
+X-Google-Smtp-Source: ABdhPJzojTYk1yjHC3AoabmS/fVnihuhK7j6tVcTY3t1b2Hv+mtzWQcHdYSOP0rTvdO+DWYyvY8n3/d0kAanMWYWwI0=
+X-Received: by 2002:a2e:908e:: with SMTP id l14mr13581522ljg.266.1642583316905;
+ Wed, 19 Jan 2022 01:08:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220119012417.299060-1-tadeusz.struk@linaro.org>
+In-Reply-To: <20220119012417.299060-1-tadeusz.struk@linaro.org>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 19 Jan 2022 10:08:25 +0100
+Message-ID: <CAKfTPtAxz4T++_1ZrqRFzdLo-r6CsF9iUECcpeghWwDHjeUhrQ@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Fix fault in reweight_entity
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     mingo@redhat.com, Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kdump kernel PASID translations won't be copied from previous kernel
-even if scalable-mode is enabled, so pages of PASID translations are
-non-present in kdump kernel. Attempt to access those address will cause
-PF fault:
+On Wed, 19 Jan 2022 at 02:24, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+>
+> Syzbot found a GPF in reweight_entity. This has been bisected to commit
+> c85c6fadbef0 ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> Looks like after this change there is a time window, when
+> task_struct->se.cfs_rq can be NULL. This can be exploited to trigger
+> null-ptr-deref by calling setpriority on that task.
+>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Zhang Qiao <zhangqiao22@huawei.com>
+> Cc: stable@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+>
+> Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
+> Fixes: c85c6fadbef0 ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
 
-[   13.396476] DMAR: DRHD: handling fault status reg 3
-[   13.396478] DMAR: [DMA Read NO_PASID] Request device [81:00.0] fault addr 0xffffd000 [fault reason 0x59] SM: Present bit in PA$
-[   13.396480] DMAR: Dump dmar5 table entries for IOVA 0xffffd000
-[   13.396481] DMAR: scalable mode root entry: hi 0x0000000000000000, low 0x00000000460d1001
-[   13.396482] DMAR: context entry: hi 0x0000000000000008, low 0x00000010c4237401
-[   13.396485] BUG: unable to handle page fault for address: ff110010c4237000
-[   13.396486] #PF: supervisor read access in kernel mode
-[   13.396487] #PF: error_code(0x0000) - not-present page
-[   13.396488] PGD 5d201067 P4D 5d202067 PUD 0
-[   13.396490] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[   13.396491] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc6-next-20211224+ #6
-[   13.396493] Hardware name: Intel Corporation EAGLESTREAM/EAGLESTREAM, BIOS EGSDCRB1.86B.0067.D12.2110190950 10/19/2021
-[   13.396494] RIP: 0010:dmar_fault_dump_ptes+0x13b/0x295
+The sha1 doesn't look correct.
 
-Hence skip dumping pasid table entries if in kdump kernel.
-
-Fixes: 914ff7719e8a (“iommu/vt-d: Dump DMAR translation structure when DMA fault occurs”)
-Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
----
- drivers/iommu/intel/iommu.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 92fea3fb..f0134cf 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1074,6 +1074,12 @@ void dmar_fault_dump_ptes(struct intel_iommu *iommu, u16 source_id,
- 	if (!sm_supported(iommu))
- 		goto pgtable_walk;
- 
-+	/* PASID translations is not copied, skip dumping pasid table entries
-+	 * otherwise non-present page will be accessed.
-+	 */
-+	if (is_kdump_kernel())
-+		goto pgtable_walk;
-+
- 	/* get the pointer to pasid directory entry */
- 	dir = phys_to_virt(ctx_entry->lo & VTD_PAGE_MASK);
- 	if (!dir) {
--- 
-1.8.3.1
-
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> ---
+>  kernel/sched/fair.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 095b0aa378df..196f8cee3f9b 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3042,6 +3042,9 @@ dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) { }
+>  static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
+>                             unsigned long weight)
+>  {
+> +       if (!cfs_rq)
+> +               return;
+> +
+>         if (se->on_rq) {
+>                 /* commit outstanding execution time */
+>                 if (cfs_rq->curr == se)
+> --
+> 2.34.1
+>

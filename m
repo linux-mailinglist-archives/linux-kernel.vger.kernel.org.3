@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8E64934C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB234934C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351653AbiASGAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:00:55 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:6385 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349845AbiASGAs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:00:48 -0500
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Wed, 19 Jan
- 2022 14:00:45 +0800
-Message-ID: <21eea0cd-5bf1-dec6-a776-f417aefa5bda@amlogic.com>
-Date:   Wed, 19 Jan 2022 14:00:44 +0800
+        id S1349845AbiASGBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:01:31 -0500
+Received: from mga11.intel.com ([192.55.52.93]:54346 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349913AbiASGBV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 01:01:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642572081; x=1674108081;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5rv+xSBsT22oCaIQgit01XOhBvVXX2X35GU74edUK8c=;
+  b=OytIXm4uYB9VYI5f8ofa8ppYGqEUuTYWkKWeCOqVjf3nfKcISwd9QR4h
+   uBxWN0VACGEIah/TuUzJ2EiPBwzgSIdnAYxxYy/S+oO2KZSBSYSYOs0pB
+   gYhjrkM1Y8eW2+cDVcWm+mkdWo//3RzAoEvwGHkHw3X7CtGlLFEOnyyS8
+   p8LLZSOgmOdSF9UtWd3R8yRZfrKESTS1dyDb8qGjvb0tJjqTgOJLxQ9bR
+   FPRAWO33DrgnsjFHSBEeBOOWHk7wki57aJHntR+qxvPwSAq5z4bBMgn53
+   5B+YM3eY8OPb217BpB1r2SPqWSZlv59ImL1RTwXNZ68AsDLDKpfDk7mnx
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="242555190"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="242555190"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 22:01:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="578716392"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2022 22:01:20 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA423-000DJc-J8; Wed, 19 Jan 2022 06:01:19 +0000
+Date:   Wed, 19 Jan 2022 14:00:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] nvdla: fix platform_no_drv_owner.cocci warnings
+Message-ID: <20220119060057.GA1143@7f39e361da8f>
+References: <202201191448.hkrxXxgW-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V6 3/5] tty: serial: meson: Describes the calculation of
- the UART baud rate clock using a clock frame
-Content-Language: en-US
-To:     Jiri Slaby <jirislaby@kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220118030911.12815-1-yu.tu@amlogic.com>
- <20220118030911.12815-4-yu.tu@amlogic.com>
- <7a8016ba-730b-f599-2032-31cf03990a55@kernel.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <7a8016ba-730b-f599-2032-31cf03990a55@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201191448.hkrxXxgW-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
-	Thank you very much for your patient reply.I learned a lot from your 
-response.
+From: kernel test robot <lkp@intel.com>
 
-On 2022/1/18 17:39, Jiri Slaby wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 18. 01. 22, 4:09, Yu Tu wrote:
->> Using the common Clock code to describe the UART baud rate clock
->> makes it easier for the UART driver to be compatible with the
->> baud rate requirements of the UART IP on different meson chips.
-> ...
->> --- a/drivers/tty/serial/meson_uart.c
->> +++ b/drivers/tty/serial/meson_uart.c
-> ...
->> @@ -629,57 +640,105 @@ static struct uart_driver meson_uart_driver = {
->>       .cons        = MESON_SERIAL_CONSOLE,
->>   };
->> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
->> -                         const char *id)
->> -{
->> -    struct clk *clk = NULL;
->> -    int ret;
->> -
->> -    clk = devm_clk_get(dev, id);
->> -    if (IS_ERR(clk))
->> -        return clk;
->> -
->> -    ret = clk_prepare_enable(clk);
->> -    if (ret) {
->> -        dev_err(dev, "couldn't enable clk\n");
->> -        return ERR_PTR(ret);
->> -    }
->> -
->> -    devm_add_action_or_reset(dev,
->> -            (void(*)(void *))clk_disable_unprepare,
->> -            clk);
->> -
->> -    return clk;
->> -}
->> +static struct clk_div_table xtal_div_table[] = {
-> 
-> This can be const, right?
-You are right.
-> 
->> +    {0, 3},
->> +    {1, 1},
->> +    {2, 2},
->> +    {3, 2},
-> 
-> Not sure if you didn't remove too much whitespace. I think it should be 
-> like: "{ 0, 3 },". But I actually don't care, it's a minor thing.
-> 
-Ok, I will correct it if it needs to be changed.
-> I cannot comment on the rest (clk and OF part) as my knowledge is pretty 
-> limited there. Leaving up to others.
-> 
-Anyway, thanks for your reply.
-> thanks,
+drivers/nvdla/nvdla_core_callbacks.c:437:3-8: No need to set .owner here. The core will do it.
+
+ Remove .owner field if calls are used which set it automatically
+
+Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   https://github.com/esmil/linux visionfive
+head:   e46c3a7e373e6faa03399f1a41c29cf7546c37cb
+commit: 72b025fa3bbfeb4e6df66d1753182be5d8ac2374 [73/80] nvdla: Support compilation as module
+:::::: branch date: 6 hours ago
+:::::: commit date: 9 days ago
+
+ nvdla_core_callbacks.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/drivers/nvdla/nvdla_core_callbacks.c
++++ b/drivers/nvdla/nvdla_core_callbacks.c
+@@ -434,7 +434,6 @@ static struct platform_driver nvdla_driv
+ 	.probe = nvdla_probe,
+ 	.remove = __exit_p(nvdla_remove),
+ 	.driver = {
+-		.owner = THIS_MODULE,
+ 		.name = "NVDLA",
+ 		.of_match_table = of_match_ptr(nvdla_of_match),
+ 	},

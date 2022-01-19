@@ -2,195 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF10493A88
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94BD493A8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354761AbiASMhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:37:13 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52260 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1354780AbiASMgt (ORCPT
+        id S1354629AbiASMhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354639AbiASMgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:36:49 -0500
-X-UUID: c16ece47013748989a5bd767ee54ecf8-20220119
-X-UUID: c16ece47013748989a5bd767ee54ecf8-20220119
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1926431416; Wed, 19 Jan 2022 20:36:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 19 Jan 2022 20:36:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 20:36:44 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     John Crispin <john@phrozen.org>, Ryder Lee <ryder.lee@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>
-Subject: [PATCH 1/1] arm64: dts: mediatek: add clock support for mt7986a
-Date:   Wed, 19 Jan 2022 20:36:24 +0800
-Message-ID: <20220119123624.10043-2-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220119123624.10043-1-sam.shih@mediatek.com>
-References: <20220119123624.10043-1-sam.shih@mediatek.com>
+        Wed, 19 Jan 2022 07:36:53 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3660C06175F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:36:52 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id u11so2011738plh.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:in-reply-to;
+        bh=PdBaGEL/rb3AWT5AJtY+NiVFwKClI6sqYqERZhU6EcA=;
+        b=RafIe+7I5Fqcd1heqO6CYlki9iDOHPc4wULX16AKt0adWBlhF1Ew7s0St5FyOWL4kC
+         o7tlidLESDSrKgFXMqCxY9e3WwDaQ0EYeP6R/N9raXYUgF6IaIYowFUVYTHuurpbESoz
+         sYYe33ggYzxfVs/c5QLOe/vls/EI1V9vYDvrc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:in-reply-to;
+        bh=PdBaGEL/rb3AWT5AJtY+NiVFwKClI6sqYqERZhU6EcA=;
+        b=wXJf5GH1Z3yQdU/agFI39ZLHnX85BDIqJ4jJXQYtsNGYeMfw6oOY2lX6jK1zlm2Hl4
+         SH1hEexbK9hvM3BoepdZcJM2irErZccdgTuWvqQUsiQwzNw4cZMWPiYJTL3tmtES+qoH
+         S3SUQQ3QbaUoYEeOOKnOoKDn+pXe+VWILX18khQl0s7xX5Crjlm7Secwnr4iDuQ/hPwE
+         Kp1pvZXAQ7XXlhpCIbr570ntXu9zyCszrlXZNseX3mKPkWlE3lXaWeC+2b7h3WriHYoK
+         X0WckZcWjVvJi/eAybV+YB+Ashzew5RV4tEjHxnvKGx4hGt/zogMrRVziR0zDRRlNAOs
+         9RHw==
+X-Gm-Message-State: AOAM531ZTyW2aC44f3vlkMhGrYxBQH3rXrJVyjENFNwA7tvQs+oxVKgf
+        EGcUW+jvZiVdDoS8C3bvTwzH6w==
+X-Google-Smtp-Source: ABdhPJwlOCggScmG2My37irsesppJgch7yHsmTNhwjVujZbFbhM7eCQk7OaUSHuFhPCciCdjRohTaA==
+X-Received: by 2002:a17:902:d50a:b0:14a:f80d:288c with SMTP id b10-20020a170902d50a00b0014af80d288cmr1259094plg.0.1642595812350;
+        Wed, 19 Jan 2022 04:36:52 -0800 (PST)
+Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id rj1sm6405149pjb.41.2022.01.19.04.36.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 04:36:51 -0800 (PST)
+Message-ID: <ed387a90-586d-5071-baa6-bc66d4e7f22f@broadcom.com>
+Date:   Wed, 19 Jan 2022 13:36:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+Subject: Re: [PATCH v2 22/35] brcmfmac: chip: Handle 1024-unit sizes for TCM
+ blocks
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-23-marcan@marcan.st>
+In-Reply-To: <20220104072658.69756-23-marcan@marcan.st>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ed9e7b05d5eea3ac"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clock controller nodes, include 40M clock source, topckgen,
-infracfg, apmixedsys and ethernet subsystem.
+--000000000000ed9e7b05d5eea3ac
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi | 68 +++++++++++++++++++++--
- 1 file changed, 63 insertions(+), 5 deletions(-)
+On 1/4/2022 8:26 AM, Hector Martin wrote:
+> BCM4387 has trailing odd-sized blocks as part of TCM which have
+> their size described as a multiple of 1024 instead of 8192. Handle this
+> so we can compute the TCM size properly.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index b8da76b6ba47..694acf8f5b70 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -6,16 +6,18 @@
- 
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/mt7986-clk.h>
- 
- / {
- 	interrupt-parent = <&gic>;
- 	#address-cells = <2>;
- 	#size-cells = <2>;
- 
--	system_clk: dummy40m {
-+	clk40m: oscillator@0 {
- 		compatible = "fixed-clock";
- 		clock-frequency = <40000000>;
- 		#clock-cells = <0>;
-+		clock-output-names = "clkxtal";
- 	};
- 
- 	cpus {
-@@ -98,6 +100,18 @@ gic: interrupt-controller@c000000 {
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		infracfg: infracfg@10001000 {
-+			compatible = "mediatek,mt7986-infracfg", "syscon";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		topckgen: topckgen@1001b000 {
-+			compatible = "mediatek,mt7986-topckgen", "syscon";
-+			reg = <0 0x1001B000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
- 		watchdog: watchdog@1001c000 {
- 			compatible = "mediatek,mt7986-wdt",
- 				     "mediatek,mt6589-wdt";
-@@ -107,6 +121,12 @@ watchdog: watchdog@1001c000 {
- 			status = "disabled";
- 		};
- 
-+		apmixedsys: apmixedsys@1001e000 {
-+			compatible = "mediatek,mt7986-apmixedsys";
-+			reg = <0 0x1001E000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
- 		pio: pinctrl@1001f000 {
- 			compatible = "mediatek,mt7986a-pinctrl";
- 			reg = <0 0x1001f000 0 0x1000>,
-@@ -128,11 +148,25 @@ pio: pinctrl@1001f000 {
- 			#interrupt-cells = <2>;
- 		};
- 
-+		sgmiisys0: syscon@10060000 {
-+			compatible = "mediatek,mt7986-sgmiisys_0",
-+				     "syscon";
-+			reg = <0 0x10060000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		sgmiisys1: syscon@10070000 {
-+			compatible = "mediatek,mt7986-sgmiisys_1",
-+				     "syscon";
-+			reg = <0 0x10070000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
- 		trng: trng@1020f000 {
- 			compatible = "mediatek,mt7986-rng",
- 				     "mediatek,mt7623-rng";
- 			reg = <0 0x1020f000 0 0x100>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_TRNG_CK>;
- 			clock-names = "rng";
- 			status = "disabled";
- 		};
-@@ -142,7 +176,13 @@ uart0: serial@11002000 {
- 				     "mediatek,mt6577-uart";
- 			reg = <0 0x11002000 0 0x400>;
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_UART0_SEL>,
-+				 <&infracfg CLK_INFRA_UART0_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&topckgen CLK_TOP_UART_SEL>,
-+					  <&infracfg CLK_INFRA_UART0_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_XTAL>,
-+						 <&topckgen CLK_TOP_UART_SEL>;
- 			status = "disabled";
- 		};
- 
-@@ -151,7 +191,11 @@ uart1: serial@11003000 {
- 				     "mediatek,mt6577-uart";
- 			reg = <0 0x11003000 0 0x400>;
- 			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_UART1_SEL>,
-+				 <&infracfg CLK_INFRA_UART1_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&infracfg CLK_INFRA_UART1_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
- 			status = "disabled";
- 		};
- 
-@@ -160,10 +204,24 @@ uart2: serial@11004000 {
- 				     "mediatek,mt6577-uart";
- 			reg = <0 0x11004000 0 0x400>;
- 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_UART2_SEL>,
-+				 <&infracfg CLK_INFRA_UART2_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&infracfg CLK_INFRA_UART2_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
- 			status = "disabled";
- 		};
- 
-+		ethsys: syscon@15000000 {
-+			 #address-cells = <1>;
-+			 #size-cells = <1>;
-+			 compatible = "mediatek,mt7986-ethsys",
-+				      "syscon";
-+			 reg = <0 0x15000000 0 0x1000>;
-+			 #clock-cells = <1>;
-+			 #reset-cells = <1>;
-+		};
-+
- 	};
- 
- };
--- 
-2.29.2
+Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>   .../wireless/broadcom/brcm80211/brcmfmac/chip.c | 17 ++++++++++++-----
+>   1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> index 713546cebd5a..cfa93e3ef1a1 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> @@ -212,8 +212,8 @@ struct sbsocramregs {
+>   #define	ARMCR4_TCBANB_MASK	0xf
+>   #define	ARMCR4_TCBANB_SHIFT	0
+>   
+> -#define	ARMCR4_BSZ_MASK		0x3f
+> -#define	ARMCR4_BSZ_MULT		8192
+> +#define	ARMCR4_BSZ_MASK		0x7f
+> +#define	ARMCR4_BLK_1K_MASK	0x200
+>   
+>   struct brcmf_core_priv {
+>   	struct brcmf_core pub;
+> @@ -675,7 +675,8 @@ static u32 brcmf_chip_sysmem_ramsize(struct brcmf_core_priv *sysmem)
+>   }
+>   
+>   /** Return the TCM-RAM size of the ARMCR4 core. */
+> -static u32 brcmf_chip_tcm_ramsize(struct brcmf_core_priv *cr4)
+> +static u32 brcmf_chip_tcm_ramsize(struct brcmf_chip_priv *ci,
+> +				  struct brcmf_core_priv *cr4)
 
+Not sure why you add ci parameter here. It is not used below or am I 
+overlooking something.
+
+>   {
+>   	u32 corecap;
+>   	u32 memsize = 0;
+> @@ -683,6 +684,7 @@ static u32 brcmf_chip_tcm_ramsize(struct brcmf_core_priv *cr4)
+>   	u32 nbb;
+>   	u32 totb;
+>   	u32 bxinfo;
+> +	u32 blksize;
+>   	u32 idx;
+>   
+>   	corecap = brcmf_chip_core_read32(cr4, ARMCR4_CAP);
+> @@ -694,7 +696,12 @@ static u32 brcmf_chip_tcm_ramsize(struct brcmf_core_priv *cr4)
+>   	for (idx = 0; idx < totb; idx++) {
+>   		brcmf_chip_core_write32(cr4, ARMCR4_BANKIDX, idx);
+>   		bxinfo = brcmf_chip_core_read32(cr4, ARMCR4_BANKINFO);
+> -		memsize += ((bxinfo & ARMCR4_BSZ_MASK) + 1) * ARMCR4_BSZ_MULT;
+> +		if (bxinfo & ARMCR4_BLK_1K_MASK)
+> +			blksize = 1024;
+> +		else
+> +			blksize = 8192;
+> +
+> +		memsize += ((bxinfo & ARMCR4_BSZ_MASK) + 1) * blksize;
+>   	}
+>   
+>   	return memsize;
+
+--000000000000ed9e7b05d5eea3ac
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBg1LzkYdjFgnElBM8Q
+O0vF8CvF1PECceAwJstHgdUuJTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMTkxMjM2NTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAE0oJ8IKnSQNJd5tmLPrMBzBk2KSRQtRM90+P
+q/rlosJSDqxjxbvGKzQs0/KKKeQLPc0EthM7hLMceWk/GfukG0oCJl13C/pstr1IfqAP3X/OisEL
+8Bdsk1iGYDstJQHsNct6iaY2Upm6Sdd9RkEeBgzLmuMk8ZatlfKhckvj54Iv2pqd5natGQ3CmiKm
+ofVATluaBf7pXfCGB7fY0KoZEmVWOgTO1zDTWMo3NYlsD8cXNKLQW8MHPVp7iIAqQwWu31pU1cWT
+QZEJadFCUacdO0W9jB4/A90gcwXSP2nHCOXNoPAjr+cSw+wv+SgxFTSDVUOYX8jBFU288Q3MQDGL
+5w==
+--000000000000ed9e7b05d5eea3ac--

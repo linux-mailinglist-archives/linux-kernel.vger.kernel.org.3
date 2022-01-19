@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626E8493D53
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6189E493D70
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355809AbiASPgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352437AbiASPgH (ORCPT
+        id S1355841AbiASPmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:42:13 -0500
+Received: from azure-sdnproxy.icoremail.net ([52.175.55.52]:56914 "HELO
+        azure-sdnproxy-2.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with SMTP id S1346675AbiASPmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:36:07 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEFDC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:36:07 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id n16-20020a17090a091000b001b46196d572so2933466pjn.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:36:07 -0800 (PST)
+        Wed, 19 Jan 2022 10:42:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OMrhSxzcq06Y5Du1J5LkmKoFAbKXMAXT3vH7sejriLY=;
-        b=ssfImEcNw476pH+KakbvvBbRQNHR8We3jAnB769CrsR7ZqdjUaTl54C8lg28NNpwt3
-         Ujsw27eeIbDM0koFZgiviggwBTeQ8pIjeVcgMaH+REWTo1G0rvLESHp0tpSQkfClxlwd
-         2mJasD5GOAEw50iMq2vIfwwGOXZeh6nenLxsszU6upFCfLwZvLFmOgFDEP/YteNgzZUS
-         cjs54BZG2ME/5bpw7J6x46p9gWGGFTnCbyuChO84a11jFnn4ZgBhuaf/PeXJh2NFEKpm
-         hn3fEtEtv0B+n7QD8jAlB0FqXoaJvl8AyYH5Wm0oZhDctURSmdH7zuB6yXwDNZvzBCX1
-         +oqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OMrhSxzcq06Y5Du1J5LkmKoFAbKXMAXT3vH7sejriLY=;
-        b=t7hwKSoRRtqt9cr8Na6KmGK4HSvPRMyWucXREArIJkt6oqx91nmho42HjnmHnoReEy
-         EJoyCcnqct13gEBGTn3T6KyR1Aq+4kO6tVDYeH4hSE+/XRyD2dqxZxZg08liFDWn36f9
-         +2RXGsrFkOuTkM1RQ5yMZL++Fp2rIbLONK1V4S9rCQfrD9BEJS/NKk4BG5dzHk9xbs9L
-         Tn8pKwAgCynVuB6s+ZcXmhv7kMbk8EBBHiKUk3+3X2hNCJ2IzzOnQ06QSBhQwudAdL3/
-         /WGbiLgl0xYmcxS6gDpb+5n5vi8Nk9bVBmdNZp+qVW5IaLEpVLeS1B4u05GKseuaX7OU
-         +fQg==
-X-Gm-Message-State: AOAM53016ooTLmncOcLZ3aUdKmbQPeL6L7KNshOwOFfv1JmT7B7kTxJH
-        t3XpxwuSI/+nD+cpcqSoQq07KCdiF9nah2Ciy9XSHg==
-X-Google-Smtp-Source: ABdhPJySyCqqeyw8uXJjJaFzQvTXGSC/lm5A2BRldYPOCcLjtNFpPECtLJjCIH4Pg2dEw9rTuxak1N3cylwER/vXAC8=
-X-Received: by 2002:a17:902:b189:b0:149:6c45:24c with SMTP id
- s9-20020a170902b18900b001496c45024cmr33136123plr.21.1642606566766; Wed, 19
- Jan 2022 07:36:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119151751.986185-1-hsinyi@chromium.org> <20220119151751.986185-4-hsinyi@chromium.org>
-In-Reply-To: <20220119151751.986185-4-hsinyi@chromium.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 19 Jan 2022 16:35:55 +0100
-Message-ID: <CAG3jFyv--OkEOxHr=61oAw8Q0bMdkftZu47M-N0YTiOB0YyiQA@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] dt-bindings: drm/bridge: anx7625: Add aux-bus node
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=4QbeHj/mFxJ/v8fgqCZQeYHZiwI5/cy8jAzM9NG4I58=; b=d
+        Nd/jNdsIacO8SRJmfAqrH6lbLiZZkSJsrcLG4CSzABDY7NK63PmcTEOIvJ/xe5Tp
+        avqni9Xd1/71yMZbYKT4IR0aLNAkiT3IIryRCCNKfFNqpRsX8hOkTbW6wZ7SyrPP
+        lF97qAd7DfljiMwru5b75dhPbLIzW9mWAcJjdT6ws4=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogCHjfXiL+hh9uF+AA--.10415S2;
+        Wed, 19 Jan 2022 23:36:02 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     a.hajda@samsung.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] drm/bridge: Add missing pm_runtime_put_sync
+Date:   Wed, 19 Jan 2022 07:36:00 -0800
+Message-Id: <1642606560-32287-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogCHjfXiL+hh9uF+AA--.10415S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw4Utw48CF4DAr45GrWkCrg_yoW8CFWfpF
+        4Ig34YyrW0vFZ7Kw4xAr1DZryru3s3tFW8CrW2qwn7Zw1Yy3Wqqr43AFWaqFyFgFy5Ar1U
+        Jr4ktFyfuFy0qr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
+        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w4UJr1UMxC20s026xCaFV
+        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+        x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+        JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUb0D73UUUUU==
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEKBlPy7uA+KwAssY
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Hsin-Yi,
+pm_runtime_get_sync() will increase the rumtime PM counter
+even it returns an error. Thus a pairing decrement is needed
+to prevent refcount leak. Fix this by replacing this API with
+pm_runtime_resume_and_get(), which will not change the runtime
+PM counter on error. Besides, a matching decrement is needed
+on the error handling path to keep the counter balanced.
 
-While I can review this patch, I don't have the authority to merge it
-since it is outside the scope of my maintainership. Rob Herring,
-Daniel Vetter or David Airlie would have to Ack this patch.
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/gpu/drm/bridge/nwl-dsi.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-On Wed, 19 Jan 2022 at 16:18, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> List panel under aux-bus node if it's connected to anx7625's aux bus.
->
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Reviewed-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  .../display/bridge/analogix,anx7625.yaml        | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> index 1d3e88daca041a..0d38d6fe39830f 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> @@ -83,6 +83,9 @@ properties:
->      type: boolean
->      description: let the driver enable audio HDMI codec function or not.
->
-> +  aux-bus:
-> +    $ref: /schemas/display/dp-aux-bus.yaml#
-> +
->    ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->
-> @@ -167,5 +170,19 @@ examples:
->                      };
->                  };
->              };
-> +
-> +            aux-bus {
-> +                panel {
-> +                    compatible = "innolux,n125hce-gn1";
-> +                    power-supply = <&pp3300_disp_x>;
-> +                    backlight = <&backlight_lcd0>;
-> +
-> +                    port {
-> +                        panel_in: endpoint {
-> +                            remote-endpoint = <&anx7625_out>;
-> +                        };
-> +                    };
-> +                };
-> +            };
->          };
->      };
-> --
-> 2.34.1.703.g22d0c6ccf7-goog
->
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index 9282e61..e7dce5a 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -862,18 +862,19 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
+ 	memcpy(&dsi->mode, adjusted_mode, sizeof(dsi->mode));
+ 	drm_mode_debug_printmodeline(adjusted_mode);
+ 
+-	pm_runtime_get_sync(dev);
++	if (pm_runtime_resume_and_get(dev) < 0)
++		return;
+ 
+ 	if (clk_prepare_enable(dsi->lcdif_clk) < 0)
+-		return;
++		goto runtime_put;
+ 	if (clk_prepare_enable(dsi->core_clk) < 0)
+-		return;
++		goto runtime_put;
+ 
+ 	/* Step 1 from DSI reset-out instructions */
+ 	ret = reset_control_deassert(dsi->rst_pclk);
+ 	if (ret < 0) {
+ 		DRM_DEV_ERROR(dev, "Failed to deassert PCLK: %d\n", ret);
+-		return;
++		goto runtime_put;
+ 	}
+ 
+ 	/* Step 2 from DSI reset-out instructions */
+@@ -883,13 +884,17 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
+ 	ret = reset_control_deassert(dsi->rst_esc);
+ 	if (ret < 0) {
+ 		DRM_DEV_ERROR(dev, "Failed to deassert ESC: %d\n", ret);
+-		return;
++		goto runtime_put;
+ 	}
+ 	ret = reset_control_deassert(dsi->rst_byte);
+ 	if (ret < 0) {
+ 		DRM_DEV_ERROR(dev, "Failed to deassert BYTE: %d\n", ret);
+-		return;
++		goto runtime_put;
+ 	}
++
++runtime_put:
++	pm_runtime_put_sync(dev);
++	return;
+ }
+ 
+ static void
+-- 
+2.7.4
+

@@ -2,156 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDB4493407
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8A149340A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 05:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346652AbiASEYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 23:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiASEYA (ORCPT
+        id S1349544AbiASEai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 23:30:38 -0500
+Received: from azure-sdnproxy.icoremail.net ([52.237.72.81]:56108 "HELO
+        azure-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with SMTP id S239122AbiASEag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 23:24:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3684AC061574;
-        Tue, 18 Jan 2022 20:24:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4433B818AF;
-        Wed, 19 Jan 2022 04:23:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D838C004E1;
-        Wed, 19 Jan 2022 04:23:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642566237;
-        bh=14cx5s1WHsPTvP5g/nc9FBRXmga8O2vQTNNDmJLESBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pPOR5BkcBLDhO2H/pTZcT8+l/nAp0/0NLvWxXO9Ru4apiAdDAJlPGdOXqqyEw6ajr
-         Mc+s7rilRXqrz/3swhQ+JxlQDxEJ/kkMOD5033+d8iw/OBv6zG34pCHGXI/kjoaD0z
-         4m9cnNlRhlF2ctDrUYd0DlMKXdnjcLzBzO0/1635J9cFhnLbkido0KT+AeL+x5vBXU
-         XpwQkznM86MuLOnQGv3nEGN7qIyNG5WOiDSiMAEQGrJ6/nlspp1XVPvXcsLVbSlbsa
-         aysj3VaoiRraNo+dF0cUxk1j0+rNO8hxSfxlYGGiacfDl4G5DsGZ+zH33H0R1lZt0a
-         1YC87sQA3eCWA==
-Date:   Wed, 19 Jan 2022 09:53:52 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Sanjay R Mehta <sanmehta@amd.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, gregkh@linuxfoundation.org,
-        dan.j.williams@intel.com, Thomas.Lendacky@amd.com, robh@kernel.org,
-        mchehab+samsung@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: ptdma: fix concurrency issue with multiple
- dma transfer
-Message-ID: <YeeSWEZi+BOWb3CK@matsya>
-References: <1639735118-9798-1-git-send-email-Sanju.Mehta@amd.com>
- <YdLfLc8lfOektWmi@matsya>
- <38ae8876-610a-3c32-5025-1419466167e4@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38ae8876-610a-3c32-5025-1419466167e4@amd.com>
+        Tue, 18 Jan 2022 23:30:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=pVx3rji8EfRmGd9+jC6YPLGoYCB/5mIfFOKfET28xas=; b=t
+        LEsg/AP1mY0C4yWp+SqnDztzzb0yI+GIq21du/pNQhG3AwIPcLWp8ly/kkERDuip
+        X4Vh6T1K7OOOr7/d60D6+jn/sELWXqMS0DEdbsoEAvATC5RzPA/CmRFN6uZADuRQ
+        nRhmyI+4O8pgMWrulDMiHu2EFjn1yY+6NuMjXy+WZg=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogDX3rork+dhICp7AA--.31166S2;
+        Wed, 19 Jan 2022 12:27:24 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     hjc@rock-chips.com, heiko@sntech.de, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] drm/rockchip: Fix runtime PM imbalance on error
+Date:   Tue, 18 Jan 2022 20:27:19 -0800
+Message-Id: <1642566439-25560-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogDX3rork+dhICp7AA--.31166S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW3Aw4rurW8GF1kAr48tFb_yoWDZrg_K3
+        yUXFnxWFsY9rZ8Gw17Cay3X3s2v3sF9F48Ca10yasxAFn5AwnFyryFgFyDuF15Xa17CFnr
+        Ka12qry7CFnxWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxAI
+        w28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
+        UU=
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEKBlPy7uA+KwARsl
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-01-22, 13:27, Sanjay R Mehta wrote:
-> On 1/3/2022 5:04 PM, Vinod Koul wrote:
-> > On 17-12-21, 03:58, Sanjay R Mehta wrote:
-> >> From: Sanjay R Mehta <sanju.mehta@amd.com>
-> >>
-> >> The command should be submitted only if the engine is idle,
-> >> for this, the next available descriptor is checked and set the flag
-> >> to false in case the descriptor is non-empty.
-> >>
-> >> Also need to segregate the cases when DMA is complete or not.
-> >> In case if DMA is already complete there is no need to handle it
-> >> again and gracefully exit from the function.
-> >>
-> >> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
-> >> ---
-> >>  drivers/dma/ptdma/ptdma-dmaengine.c | 24 +++++++++++++++++-------
-> >>  1 file changed, 17 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/dma/ptdma/ptdma-dmaengine.c b/drivers/dma/ptdma/ptdma-dmaengine.c
-> >> index c9e52f6..91b93e8 100644
-> >> --- a/drivers/dma/ptdma/ptdma-dmaengine.c
-> >> +++ b/drivers/dma/ptdma/ptdma-dmaengine.c
-> >> @@ -100,12 +100,17 @@ static struct pt_dma_desc *pt_handle_active_desc(struct pt_dma_chan *chan,
-> >>  		spin_lock_irqsave(&chan->vc.lock, flags);
-> >>  
-> >>  		if (desc) {
-> >> -			if (desc->status != DMA_ERROR)
-> >> -				desc->status = DMA_COMPLETE;
-> >> -
-> >> -			dma_cookie_complete(tx_desc);
-> >> -			dma_descriptor_unmap(tx_desc);
-> >> -			list_del(&desc->vd.node);
-> >> +			if (desc->status != DMA_COMPLETE) {
-> >> +				if (desc->status != DMA_ERROR)
-> >> +					desc->status = DMA_COMPLETE;
-> >> +
-> >> +				dma_cookie_complete(tx_desc);
-> >> +				dma_descriptor_unmap(tx_desc);
-> >> +				list_del(&desc->vd.node);
-> >> +			} else {
-> >> +				/* Don't handle it twice */
-> >> +				tx_desc = NULL;
-> >> +			}
-> >>  		}
-> >>  
-> >>  		desc = pt_next_dma_desc(chan);
-> >> @@ -233,9 +238,14 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
-> >>  	struct pt_dma_chan *chan = to_pt_chan(dma_chan);
-> >>  	struct pt_dma_desc *desc;
-> >>  	unsigned long flags;
-> >> +	bool engine_is_idle = true;
-> >>  
-> >>  	spin_lock_irqsave(&chan->vc.lock, flags);
-> >>  
-> >> +	desc = pt_next_dma_desc(chan);
-> >> +	if (desc)
-> >> +		engine_is_idle = false;
-> >> +
-> >>  	vchan_issue_pending(&chan->vc);
-> >>  
-> >>  	desc = pt_next_dma_desc(chan);
-> >> @@ -243,7 +253,7 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
-> >>  	spin_unlock_irqrestore(&chan->vc.lock, flags);
-> >>  
-> >>  	/* If there was nothing active, start processing */
-> >> -	if (desc)
-> >> +	if (engine_is_idle)
-> > 
-> > Can you explain why do you need this flag and why desc is not
-> > sufficient..
-> 
-> Here it is required to know if the engine was idle or not before
-> submitting new desc to the active list (i.e, before calling
-> "vchan_issue_pending()" API). So that if there was nothing active then
-> start processing this desc otherwise later.
-> 
-> Here desc is submitted to the engine after vchan_issue_pending() API
-> called which will actually put the desc into the active list and then if
-> I get the next desc, the condition will always be true. Therefore used
-> this flag here to solve this issue.
+pm_runtime_get_sync() will increase the rumtime PM counter
+even it returns an error. Thus a pairing decrement is needed
+to prevent refcount leak. Fix this by replacing this API with
+pm_runtime_resume_and_get(), which will not change the runtime
+PM counter on error.
 
-ok
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
-
-
-> 
-> > 
-> > It also sounds like 2 patches to me...
-> 
-> Once the desc is submitted to the engine that will be handled by
-> pt_handle_active_desc() function. This issue was resolved by making
-> these changes together. Hence kept into the single patch.
-> 
-> Please suggest to me, if this still needs to be split. I'll make the
-> changes accordingly.
-
-2 patches please
-
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index 9fb83b6..e0c48f1 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -588,7 +588,7 @@ static int vop_enable(struct drm_crtc *crtc, struct drm_crtc_state *old_state)
+ 	struct vop *vop = to_vop(crtc);
+ 	int ret, i;
+ 
+-	ret = pm_runtime_get_sync(vop->dev);
++	ret = pm_runtime_resume_and_get(vop->dev);
+ 	if (ret < 0) {
+ 		DRM_DEV_ERROR(vop->dev, "failed to get pm runtime: %d\n", ret);
+ 		return ret;
 -- 
-~Vinod
+2.7.4
+

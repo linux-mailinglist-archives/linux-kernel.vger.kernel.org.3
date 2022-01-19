@@ -2,227 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA92493A47
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776EC493A4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354469AbiASMaO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 07:30:14 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4430 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234862AbiASMaM (ORCPT
+        id S1354470AbiASMbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233253AbiASMbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:30:12 -0500
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jf4ch6gXwz685gm;
-        Wed, 19 Jan 2022 20:26:12 +0800 (CST)
-Received: from lhreml721-chm.china.huawei.com (10.201.108.72) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Wed, 19 Jan 2022 13:30:09 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml721-chm.china.huawei.com (10.201.108.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 19 Jan 2022 12:30:09 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Wed, 19 Jan 2022 12:30:09 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "julien.thierry.kdev@gmail.com" <julien.thierry.kdev@gmail.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "Alexandru.Elisei@arm.com" <Alexandru.Elisei@arm.com>,
-        "qperret@google.com" <qperret@google.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
-Thread-Topic: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
-Thread-Index: AQHX35sqG4N0fL5BTkOeJNZZBpVcWaxpD9KAgAFUH+CAADI2AIAAApfw
-Date:   Wed, 19 Jan 2022 12:30:09 +0000
-Message-ID: <ab7dc77ee8804f1e958c18cc4dac4a65@huawei.com>
-References: <20211122121844.867-1-shameerali.kolothum.thodi@huawei.com>
- <Yeazd1lLuYm4k3lH@arm.com> <207f800d1a67427a9771ffb06086365b@huawei.com>
- <Yef65ng6pQK5yZDa@arm.com>
-In-Reply-To: <Yef65ng6pQK5yZDa@arm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.82.100]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Wed, 19 Jan 2022 07:31:46 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D36C061574;
+        Wed, 19 Jan 2022 04:31:45 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id p12so10406588edq.9;
+        Wed, 19 Jan 2022 04:31:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cart7+xdbC9Wk/XNJI6gWqPHuAafijktc2+SQt11tWM=;
+        b=CxRWZSeKB4Zuz0VG9PkxoTpXop87diAvrviV55D0/OFfJ7W7PE7ZWrOotbHjuDSvhS
+         kUKrEFLFufOKW4p3QS6sxtLt1wo+lEi8gRNLymD7NeAMb5BrIE4kPw605iy5/zPGo/dd
+         ldbLL0HG3+cbGhMRiyaeoZkZw0upR/ZAVE2vhzHRZb+plcdgGRM1hESBrOREbfqxhH9D
+         aMMlar47sbHHfGd3SO2aq/j/CkhrmdoPRuHHO5d1CeBjD0/WLH/AedoQ/ETeVxZhZAeg
+         lxNz13Zd/rzfGdQjqRNpRlAmBPuS44epfVZhwLcsLTcu2zUHThb1+LE6byOdB0osUnDd
+         ckuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=cart7+xdbC9Wk/XNJI6gWqPHuAafijktc2+SQt11tWM=;
+        b=Wqqb9nwnJ75MERdZqqM764y2ITycAudwpBISxdKY7wjEWG33Btx0De2R1/H+e6mH8E
+         lfnBMzlspNiaYQYJFBvtufytrlzsM8pLNGDrKzQ5OpuOzjnOHwUbfwiY60RpD+rxU3zn
+         cHSBSZ3yQ7mUP8jCuydmbn2iKT2AwFa1loRrRx6IMoAJMRXMGEobj1fvj8xKNkqct4+L
+         udRQ6mNTme8dWYgjyBmjystBKfQqMFggi+RNkqW3vfa8vECAQuI/4wqNNVkIF2EWHDgj
+         IoNwTOlWNtMOAH75Alw4pjZf9wOLneG82CzsnkixqWjW5fsVUQKwLmsXZsRs5+dKtnsV
+         bS8w==
+X-Gm-Message-State: AOAM532M7wtU+J4iQ/EacsRWXd6KKlJBGYJtOHn5GNsjuwiT+3UlLMpo
+        2iE/Y41WZFO+8hlevLQqmkbyQWFIPglwfA==
+X-Google-Smtp-Source: ABdhPJxTSOvvr82F5EeTmdDfNroEDGRfI2M3XpoMX6XJfJUUd4oxpWqLMGMOrpdJmn2M4faKhrP16A==
+X-Received: by 2002:a17:906:dc95:: with SMTP id cs21mr15082558ejc.709.1642595504081;
+        Wed, 19 Jan 2022 04:31:44 -0800 (PST)
+Received: from gmail.com (563BB7FA.dsl.pool.telekom.hu. [86.59.183.250])
+        by smtp.gmail.com with ESMTPSA id f16sm1173877eds.6.2022.01.19.04.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 04:31:43 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 19 Jan 2022 13:31:41 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
+Message-ID: <YegErRbP+cT42oOC@gmail.com>
+References: <Ydm7ReZWQPrbIugn@gmail.com>
+ <CAK8P3a1emGYHPcjTfLqd-yyU8_9w88=2g_B_vfhbKeDtDHMM-w@mail.gmail.com>
+ <CAK8P3a3SpYe101RSFD5rzbTQNyQyfG1eb1sCY+rBO-DKVqBdBw@mail.gmail.com>
+ <Yd/idffvv8QIQcEU@gmail.com>
+ <CAK8P3a3FahVogb3wfbXSaCpnUsRBGmO9M56M+Cay=skc9rUzjw@mail.gmail.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3FahVogb3wfbXSaCpnUsRBGmO9M56M+Cay=skc9rUzjw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+* Arnd Bergmann <arnd@arndb.de> wrote:
 
-> -----Original Message-----
-> From: Catalin Marinas [mailto:catalin.marinas@arm.com]
-> Sent: 19 January 2022 11:50
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: linux-arm-kernel@lists.infradead.org; kvmarm@lists.cs.columbia.edu;
-> linux-kernel@vger.kernel.org; maz@kernel.org; will@kernel.org;
-> james.morse@arm.com; julien.thierry.kdev@gmail.com;
-> suzuki.poulose@arm.com; jean-philippe@linaro.org;
-> Alexandru.Elisei@arm.com; qperret@google.com; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Linuxarm <linuxarm@huawei.com>
-> Subject: Re: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
+> > I tried to avoid as many low level headers as possible from the main 
+> > types headers - and the get_order() functionality also brings in bitops 
+> > definitions, which I'm still hoping to be able to reduce from its 
+> > current ~95% utilization in a distro kernel ...
 > 
-> On Wed, Jan 19, 2022 at 09:23:31AM +0000, Shameerali Kolothum Thodi
-> wrote:
-> > > On Mon, Nov 22, 2021 at 12:18:40PM +0000, Shameer Kolothum wrote:
-> > > >  -TLA+ model. Modified the asidalloc model to incorporate the new
-> > > >   VMID algo. The main differences are,
-> > > >   -flush_tlb_all() instead of local_tlb_flush_all() on rollover.
-> > > >   -Introduced INVALID_VMID and vCPU Sched Out logic.
-> > > >   -No CnP (Removed UniqueASIDAllCPUs & UniqueASIDActiveTask
-> invariants).
-> > > >   -Removed  UniqueVMIDPerCPU invariant for now as it looks like
-> > > >    because of the speculative fetching with flush_tlb_all() there
-> > > >    is a small window where this gets triggered. If I change the
-> > > >    logic back to local_flush_tlb_all(), UniqueVMIDPerCPU seems to
-> > > >    be fine. With my limited knowledge on TLA+ model, it is not
-> > > >    clear to me whether this is a problem with the above logic
-> > > >    or the VMID model implementation. Really appreciate any help
-> > > >    with the model.
-> > > >    The initial VMID TLA+ model is here,
-> > > >
-> https://github.com/shamiali2008/kernel-tla/tree/private-vmidalloc-v1
-> > >
-> > > I only had a brief look at the TLA+ model and I don't understand why you
-> > > have a separate 'shed_out' process. It would run in parallel with the
-> > > 'sched' but AFAICT you can't really schedule a guest out while you are
-> > > in the middle of scheduling it in. I'd rather use the same 'sched'
-> > > process and either schedule in an inactive task or schedule out an
-> > > active one for a given CPU.
-> > >
-> > > Also active_vmids[] for example is defined on the CPUS domain but you
-> > > call vcpu_sched_out() from a process that's not in the CPUS domain but
-> > > the SCHED_OUT one.
-> >
-> > Many thanks for taking a look. My bad!. The 'sched_out' would indeed run in
-> parallel
-> > and defeat the purpose. I must say I was really confused by the TLA+ syntax
-> and
-> > is still not very confident about it.
+> Agreed, I think reducing bitops.h and atomic.h usage is fairly important, 
+> I think these are even bigger on arm64 than on x86.
+
+So what I'm using for 'header complexity metrics' is rather simple: passing 
+-P -H to the preprocessor: stripping comments & not generating 
+line-markers, and then counting linecount.
+
+Line-markers should *probably* remain, because the real build is generating 
+them too - but I wanted to gain a crude & easily available metric to 
+measure 'first-pass parsing complexity'. That's I think where most of the 
+header bloat is concentrated: later passes don't really get any of the 
+unused header definitions passed along. (But maybe this is an invalid 
+assumption, because compiler warnings do get generated by later passes, and 
+they are generated for mostly-unused header inlines too.)
+
+If we include comments & line-markers then the bloat goes up by another 
+~2x:
+
+ kepler:~/mingo.tip.git> ./st include/linux/sched.h 
+  #include <linux/sched.h>                | LOC:  2,186 | headers:  118
+ kepler:~/mingo.tip.git> ./st include/linux/sched.h 
+  #include <linux/sched.h>                | LOC:  4,092 | headers:    0
+
+
+> > We could add <linux/page_api.h> as well, as a standardized header. We 
+> > already have page_types.h and et_order() is a page types API.
 > 
-> Yeah, it can be confusing. If you have time, you could give CBMC a try
-> and the 'spec' would be pretty close to your C version. Each CPU would
-> be modelled as a thread with an extra thread that simulates the
-> speculative TLB look-ups for all CPUS together with the asserts for the
-> invariants. The spinlocks would be pthread_mutexes.
+> More generally speaking, do you have a plan for how to document which 
+> header to include for getting a particular symbol that is provided by a 
+> header we don't want to include directly? I think iwyu has a particular 
+> notation for it, but when I looked at using that in 2020 I decided it 
+> wouldn't scale to the size of the kernel. I did my own shell script with 
+> a long list of regex patterns, but I'm not convinced about that approach 
+> either.
 
-Ok, will take a look.
-
-> > Based on the above suggestion, I have modified it as below,
-> >
-> > \* vCPU is scheduled out by KVM
-> > macro vcpu_sched_out() {
-> >         active_kvm[self].task := 0;
-> >         active_vmids[self] := INVALID_VMID;
-> > }
-> 
-> Could you call cpu_switch_kvm(0, INVALID_VMID) instead? You could do
-> this directly below and avoid another macro. Well, whatever you find
-> clearer.
-
-Sure, will change that.
-
-> What confuses me is that your INVALID_VMID looks like a valid one: vmid
-> 0, generation 1. Do you ensure that you never allocate VMID 0?
-
-This is same as in asidalloc wherein the cur_idx starts at 1 for any new
-allocation. I think that guarantees VMID 0 is never allocated.  
-
-> 
-> > \* About to run a Guest VM
-> > process (sched \in CPUS)
-> > {
-> > sched_loop:
-> >         while (TRUE) {
-> >                 with (t \in TASKS) {
-> >                         if (t # ActiveTask(self))
-> >                                 call kvm_arm_vmid_update(t);
-> >                         else
-> >                                 vcpu_sched_out();
-> >                 }
-> >         }
-> > }
-> 
-> Yes, that's what I meant.
-
-Ok.
-
-> 
-> > > The corresponding
-> > > UniqueASIDPerCPU meant that for any two TLB entries on a single CPU, if
-> > > they correspond to different tasks (pgd), they should have different
-> > > ASIDs. That's a strong requirement, otherwise we end up with the wrong
-> > > translation.
-> >
-> > Yes, I understand that it is a strong requirement. Also, I thought this is
-> something
-> > that will trigger easily with the test setup I had with the real hardware. But
-> testing
-> > stayed on for days, so I was not sure it is a problem with the TLA+
-> implementation
-> > or not.
-> 
-> Well, you'd have to check the TLA+ state trace and see how it got
-> there, whether the last state would be a valid one. It's either
-> something missing in the spec that the hardware enforces or the
-> algorithm is wrong and just hard to hit in practice. If this condition
-> is violated in hardware for a very brief period, e.g. due to some TLBI,
-> you'd not notice an issue under normal circumstances. But it's still
-> incorrect.
-
-Hmm..I had a quick implementation with a separate thread for speculative
-load as done in the arm64kpti.tla, but still get the UniqueVMIDPerCPU violation
-error. I will go through the state trace and see whether I can interpret something :) 
- 
-> > > Why did you remove the CnP? Do we have this disabled for KVM guests?
-> >
-> > I removed CnP related Invariants to simplify things for the first version. Also
-> not sure
-> > what specific changes we need to do for CnP here. Do we still need that
-> switching to
-> > global pg_dir to prevent any speculative reading? I didn't see that being
-> done in KVM
-> > anywhere at the moment. Maybe I am missing something.
-> 
-> It make sense to ignore CnP for now. Maybe KVM doesn't even bother and
-> sets VTTBR_EL2.CnP to 0 (I haven't checked).
-
-I think KVM sets the CnP here,
-https://elixir.bootlin.com/linux/latest/source/arch/arm64/include/asm/kvm_mmu.h#L264
-
-But I haven't figured out what else we need to do in this new VMID allocator for
-CnP case. 
-
-Marc, Will?
-
-> 
-> > On a side note, In my setup, the CnP=TRUE case for asidalloc.tla now fails
-> with,
-> > "Error: Invariant TLBEmptyInvalPTE is violated.". Please check.
-> 
-> This was added later as part of try-to-unmap and I only checked this
-> with CnP = FALSE. I'll need to look into, it's possible that
-> flush_tlb_all() doesn't take into account that the pte is unmapped (as
-> cpu_switch_mm() does). I'll add a separate thread for speculative TLB
-> loads, it's easier to have them in one place. Thanks.
-
-Ok.
+Yeah, I don't think we should do much that hurts general usability of 
+headers: each symbol has a primary "natural" header, and .c code and other 
+headers are encouraged but not strictly required to include that.
 
 Thanks,
-Shameer
+
+	Ingo

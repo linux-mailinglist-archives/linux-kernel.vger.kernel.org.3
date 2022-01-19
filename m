@@ -2,211 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B609A4935ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC41F4935F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352288AbiASHzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345447AbiASHyT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:54:19 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE446C061748;
-        Tue, 18 Jan 2022 23:54:18 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id p37so1825809pfh.4;
-        Tue, 18 Jan 2022 23:54:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tDrXwcXiPuocleeGwMZcb0Ux64jdkepdRHT9ym5PgXc=;
-        b=Dd2jA8EtlZr59DCwPlPHGIomnZTLBe+3srsl5A/iBhV04X/1yR/JD+rpOxF1NYlQEG
-         sd3ZErPbAZNDwkLmDM4Mm2Y1/CiHJB4ewpmdF6K0jtiv2LDt+FAy2PV2oyN5H0b5Ako+
-         oUgDiUno7aZJfJ97/1ewz0gAKvSPXr7lSizoxWCUU8VXhAxLPxWR8ERJVvdD86+W0rp5
-         eFhoiru7hImNmK+p5CwQwoSXOHjaKbZAosfNBFdT9fGCELzkG8WAUOWdcV1pX1ACeuZv
-         4PK+wLpMiXl+BkoKQJYmQ/7cr5MvuHAuQJu60iY/VFPk4J4AJOoJylXc9Kfg8qF+z0yK
-         Grcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tDrXwcXiPuocleeGwMZcb0Ux64jdkepdRHT9ym5PgXc=;
-        b=clg+J7RyjmPXz9HD+CwYNIqi11tQ7SENRnFVhm1OpjQ0IbQzJ6ZnWb20IxBKHZ7/Tm
-         xcxnxFvJh6APPApCoowYUzQbB33qTLlKS9S7F2ccbka7hHml9TTgg6GTP746bmsAGTKA
-         /2o4/uxiuP2umVML9RJtQnlkLjSc6+C9ZEotH2ppTp85rDBz2N1zO2DzU8C9qAxLx82h
-         23q9G6LjQDOqG2GgdOR8JnPei/Ovs/ylx5tK3Jt70Bc7g4y22sXU0AQP5yPrbeY/QR5r
-         KMFTeG/XGWTj4W6sYXb69GYWgJJKFOsAmSgQsbV1kh4CbXfNnVOblFspOeJ/rw6o0FWx
-         oa6w==
-X-Gm-Message-State: AOAM530yRH74jA+XqthpdpDvbCug66RN3tL7n/0RnuTTw8X0FvnTRGVF
-        q3CC1UQs0I406v21ouKStDs=
-X-Google-Smtp-Source: ABdhPJw4zCcJ/pEmSHKAJ3TLZrErP/nCp7dS7s73OmABlaWSl8GlNA4GelRxfzkjixLIguF1wZKJoQ==
-X-Received: by 2002:a63:7258:: with SMTP id c24mr26790437pgn.11.1642578858477;
-        Tue, 18 Jan 2022 23:54:18 -0800 (PST)
-Received: from localhost.localdomain (60-251-58-169.hinet-ip.hinet.net. [60.251.58.169])
-        by smtp.gmail.com with ESMTPSA id y1sm17380058pgs.4.2022.01.18.23.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 23:54:18 -0800 (PST)
-From:   Ben Chuang <benchuanggli@gmail.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greg.tu@genesyslogic.com.tw, ben.chuang@genesyslogic.com.tw,
-        SeanHY.Chen@genesyslogic.com.tw,
-        Ben Chuang <benchuanggli@gmail.com>
-Subject: [PATCH 3/3] mmc: sdhci-pci-gli: Add a switch to enable/disable SSC for GL9750 and GL9755
-Date:   Wed, 19 Jan 2022 15:54:06 +0800
-Message-Id: <20220119075406.36321-1-benchuanggli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S1345447AbiASH4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:56:01 -0500
+Received: from mga14.intel.com ([192.55.52.115]:28552 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235096AbiASH4A (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 02:56:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642578960; x=1674114960;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Os56kLMd0kjXcgux4x7i9dbY012Pv8vPfsbJq5keC/4=;
+  b=M/grDbHjzpYn/pO0GX+Cp00Lv9t27OYGlyPcnZbrN/Yus+4FoduMvBT+
+   mF3fy6hSfw+NyhSTI4tJrX6BbsToq+UymSAHEK0UbJyCwaPENayLkzALL
+   BY0crew1G0M7T/ZEqubSaBds8/gBNre50zHk4IFihj8rnVn9YONke9vLd
+   C61/kz6u0eWUBvwxpwzUW4wa2Q5M82eqin2MbYObcG+TP8YoVCPFX63OS
+   UErs36Ak3AjCunNYxsfVYFyxwIS+wx0e5c4VKp4i9lJn2n60WYJ8g9Nas
+   zPjD0dZk5nSAv9mgc1aVikNKr5Wu4kQgOJ0vHB2LXPJ99KWmdiGD3HaeE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245205912"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="245205912"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:55:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="532162832"
+Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.238.0.96]) ([10.238.0.96])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:55:54 -0800
+Message-ID: <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
+Date:   Wed, 19 Jan 2022 15:55:47 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com> <YeCjHbdAikyIFQc9@google.com>
+ <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+ <YeGiVCn0wNH9eqxX@google.com>
+ <67262b95-d577-0620-79bf-20fc37906869@intel.com>
+ <Yeb1vkEclYzD27R/@google.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <Yeb1vkEclYzD27R/@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 
-Add a vendor-specific bit at the bit26 of GL9750's register 878h and
-GL9755's register 78h to decide whether to disable SSC function. If
-this bit is set, the SSC function will be disabled.
+On 1/19/2022 1:15 AM, Sean Christopherson wrote:
+> On Mon, Jan 17, 2022, Zeng Guang wrote:
+>> On 1/15/2022 12:18 AM, Sean Christopherson wrote:
+>>> Userspace can simply do KVM_CREATE_VCPU until it hits KVM_MAX_VCPU_IDS...
+>> IIUC, what you proposed is to use max_vcpus in kvm for x86 arch (currently
+>> not present yet) and
+>> provide new api for userspace to notify kvm how many vcpus in current vm
+>> session prior to vCPU creation.
+>> Thus IPIv can setup PID-table with this information in one shot.
+>> I'm thinking this may have several things uncertain:
+>> 1. cannot identify the exact max APIC ID corresponding to max vcpus
+>> APIC ID definition is platform dependent. A large APIC ID could be assigned
+>> to one vCPU in theory even running with
+>> small max_vcpus. We cannot figure out max APIC ID supported mapping to
+>> max_vcpus.
+> Gah, I conflated KVM_CAP_MAX_VCPUS and KVM_MAX_VCPU_IDS.  But the underlying idea
+> still works: extend KVM_MAX_VCPU_IDS to allow userspace to lower the max allowed
+> vCPU ID to reduce the memory footprint of densely "packed" and/or small VMs.
 
-Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
----
- drivers/mmc/host/sdhci-pci-gli.c | 66 ++++++++++++++++++++++++++------
- 1 file changed, 54 insertions(+), 12 deletions(-)
+Possibly it may not work well as expected. From user's perspective, 
+assigning
+max apic id requires knowledge of apic id implementation on various 
+platform.
+It's hard to let user to determine an appropriate value for every vm 
+session.
+User may know his exact demand on vcpu resource like cpu number of smp ,
+max cpus for cpu hotplug etc, but highly possibly not know or care about 
+what
+the apic id should be. If an improper value is provided, we cannot 
+achieve the
+goal to reduce the memory footprint, but also may lead to unexpected 
+failure on
+vcpu creation, e.g. actual vcpu id(=apic id) is larger than max apic id 
+assigned.  So
+this solution seems still have potential problem existing.
+Besides, it also need change user hypervisor(QEMU etc.) and kvm (kvm arch,
+vcpu creation policy etc.) which unnecessarily interrelate such modules 
+together.
+ From these point of view, it's given not much advantage other than 
+simplifying IPIv
+memory management on PID table.
 
-diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-index 9de3d91283af..b8cd7a365ec2 100644
---- a/drivers/mmc/host/sdhci-pci-gli.c
-+++ b/drivers/mmc/host/sdhci-pci-gli.c
-@@ -62,6 +62,7 @@
- #define   GLI_9750_MISC_RX_INV_OFF       0x0
- #define   GLI_9750_MISC_RX_INV_VALUE     GLI_9750_MISC_RX_INV_OFF
- #define   GLI_9750_MISC_TX1_DLY_VALUE    0x5
-+#define   SDHCI_GLI_9750_MISC_SSC_OFF    BIT(26)
- 
- #define SDHCI_GLI_9750_TUNING_CONTROL	          0x540
- #define   SDHCI_GLI_9750_TUNING_CONTROL_EN          BIT(4)
-@@ -134,6 +135,9 @@
- #define PCI_GLI_9755_SerDes  0x70
- #define PCI_GLI_9755_SCP_DIS   BIT(19)
- 
-+#define PCI_GLI_9755_MISC	    0x78
-+#define   PCI_GLI_9755_MISC_SSC_OFF    BIT(26)
-+
- #define GLI_MAX_TUNING_LOOP 40
- 
- /* Genesys Logic chipset */
-@@ -368,6 +372,19 @@ static void gl9750_set_pll(struct sdhci_host *host, u8 dir, u16 ldiv, u8 pdiv)
- 	mdelay(1);
- }
- 
-+static bool gl9750_ssc_enable(struct sdhci_host *host)
-+{
-+	u32 misc;
-+	u8 off;
-+
-+	gl9750_wt_on(host);
-+	misc = sdhci_readl(host, SDHCI_GLI_9750_MISC);
-+	off = FIELD_GET(SDHCI_GLI_9750_MISC_SSC_OFF, misc);
-+	gl9750_wt_off(host);
-+
-+	return !off;
-+}
-+
- static void gl9750_set_ssc(struct sdhci_host *host, u8 enable, u8 step, u16 ppm)
- {
- 	u32 pll;
-@@ -389,22 +406,28 @@ static void gl9750_set_ssc(struct sdhci_host *host, u8 enable, u8 step, u16 ppm)
- 
- static void gl9750_set_ssc_pll_205mhz(struct sdhci_host *host)
- {
--	/* set pll to 205MHz and enable ssc */
--	gl9750_set_ssc(host, 0x1, 0xF, 0x5A1D);
-+	bool enable = gl9750_ssc_enable(host);
-+
-+	/* set pll to 205MHz and ssc */
-+	gl9750_set_ssc(host, enable, 0xF, 0x5A1D);
- 	gl9750_set_pll(host, 0x1, 0x246, 0x0);
- }
- 
- static void gl9750_set_ssc_pll_100mhz(struct sdhci_host *host)
- {
--	/* set pll to 100MHz and enable ssc */
--	gl9750_set_ssc(host, 0x1, 0xE, 0x51EC);
-+	bool enable = gl9750_ssc_enable(host);
-+
-+	/* set pll to 100MHz and ssc */
-+	gl9750_set_ssc(host, enable, 0xE, 0x51EC);
- 	gl9750_set_pll(host, 0x1, 0x244, 0x1);
- }
- 
- static void gl9750_set_ssc_pll_50mhz(struct sdhci_host *host)
- {
--	/* set pll to 50MHz and enable ssc */
--	gl9750_set_ssc(host, 0x1, 0xE, 0x51EC);
-+	bool enable = gl9750_ssc_enable(host);
-+
-+	/* set pll to 50MHz and ssc */
-+	gl9750_set_ssc(host, enable, 0xE, 0x51EC);
- 	gl9750_set_pll(host, 0x1, 0x244, 0x3);
- }
- 
-@@ -529,6 +552,19 @@ static void gl9755_set_pll(struct pci_dev *pdev, u8 dir, u16 ldiv, u8 pdiv)
- 	mdelay(1);
- }
- 
-+static bool gl9755_ssc_enable(struct pci_dev *pdev)
-+{
-+	u32 misc;
-+	u8 off;
-+
-+	gl9755_wt_on(pdev);
-+	pci_read_config_dword(pdev, PCI_GLI_9755_MISC, &misc);
-+	off = FIELD_GET(PCI_GLI_9755_MISC_SSC_OFF, misc);
-+	gl9755_wt_off(pdev);
-+
-+	return !off;
-+}
-+
- static void gl9755_set_ssc(struct pci_dev *pdev, u8 enable, u8 step, u16 ppm)
- {
- 	u32 pll;
-@@ -550,22 +586,28 @@ static void gl9755_set_ssc(struct pci_dev *pdev, u8 enable, u8 step, u16 ppm)
- 
- static void gl9755_set_ssc_pll_205mhz(struct pci_dev *pdev)
- {
--	/* set pll to 205MHz and enable ssc */
--	gl9755_set_ssc(pdev, 0x1, 0xF, 0x5A1D);
-+	bool enable = gl9755_ssc_enable(pdev);
-+
-+	/* set pll to 205MHz and ssc */
-+	gl9755_set_ssc(pdev, enable, 0xF, 0x5A1D);
- 	gl9755_set_pll(pdev, 0x1, 0x246, 0x0);
- }
- 
- static void gl9755_set_ssc_pll_100mhz(struct pci_dev *pdev)
- {
--	/* set pll to 100MHz and enable ssc */
--	gl9755_set_ssc(pdev, 0x1, 0xE, 0x51EC);
-+	bool enable = gl9755_ssc_enable(pdev);
-+
-+	/* set pll to 100MHz and ssc */
-+	gl9755_set_ssc(pdev, enable, 0xE, 0x51EC);
- 	gl9755_set_pll(pdev, 0x1, 0x244, 0x1);
- }
- 
- static void gl9755_set_ssc_pll_50mhz(struct pci_dev *pdev)
- {
--	/* set pll to 50MHz and enable ssc */
--	gl9755_set_ssc(pdev, 0x1, 0xE, 0x51EC);
-+	bool enable = gl9755_ssc_enable(pdev);
-+
-+	/* set pll to 50MHz and ssc */
-+	gl9755_set_ssc(pdev, enable, 0xE, 0x51EC);
- 	gl9755_set_pll(pdev, 0x1, 0x244, 0x3);
- }
- 
--- 
-2.34.1
+>> 2. cannot optimize the memory consumption on PID table to the least at
+>> run-time
+>>   In case "-smp=small_n,maxcpus=large_N", kvm has to allocate memory to
+>> accommodate large_N vcpus at the
+>> beginning no matter whether all maxcpus will run.
+> That's a feature.  E.g. if userspace defines a max vCPU ID that is larger than
+> what is required at boot, e.g. to hotplug vCPUs, then consuming a few extra pages
+> of memory to ensure that IPIv will be supported for hotplugged vCPUs is very
+> desirable behavior.  Observing poor performance on hotplugged vCPUs because the
+> host was under memory pressure is far worse.
+>
+> And the goal isn't to achieve the smallest memory footprint possible, it's to
+> avoid allocating 32kb of memory when userspace wants to run a VM with only a
+> handful of vCPUs, i.e. when 4kb will suffice.  Consuming 32kb of memory for a VM
+> with hundreds of vCPUs is a non-issue, e.g. it's highly unlikely to be running
+> multiple such VMs on a single host, and such hosts will likely have hundreds of
+> gb of RAM.  Conversely, hosts running run small VMs will likely run tens or hudreds
+> of small VMs, e.g. for container scenarios, in which case reducing the per-VM memory
+> footprint is much more valuable and also easier to achieve.
+Agree. This is the purpose to implement this patch. With current 
+solution we proposed,  IPIv just
+use memory as less as possible in all kinds of scenarios, and keep 4Kb 
+in most cases instead of 32Kb.
+It's self-adaptive , standalone function module in kvm, no any extra 
+limitation introduced and scalable
+even future extension on KVM_MAX_VCPU_IDS or new apic id implementation 
+released.
+How do you think ? :)
+>> 3. Potential backward-compatible problem
+>> If running with old QEMU version,  kvm cannot get expected information so as
+>> to make a fallback to use
+>> KVM_MAX_VCPU_IDS by default. It's feasible but not benefit on memory
+>> optimization for PID table.
+> That's totally fine.  This is purely a memory optimization, IPIv will still work
+> as intended if usersepace doesn't lower the max vCPU ID, it'll just consume a bit
+> more memory.
 

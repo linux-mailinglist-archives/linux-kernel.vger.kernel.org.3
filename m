@@ -2,188 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0212649407E
+	by mail.lfdr.de (Postfix) with ESMTP id 66A6049407F
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236924AbiASTMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S236947AbiASTMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236679AbiASTMP (ORCPT
+        with ESMTP id S232902AbiASTMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:12:15 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFCBC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:12:14 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso2026988wmh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ji7iGAxDJEeqfoAnF5QNg6c4bsnLencbEnYiubnXrLA=;
-        b=QTF5V7vFYj7cQQydREB5BXMKVt4yV03Y5KYj1RbvffieD+/j9C4e5IDsXeoUXynC6p
-         fcy+UxQvYkY5evkuGk4B/UG893ZqNr0PW/EmPRgS0MEDcY6J832WcUOjnloC+Kv6Kj6O
-         1n/eZoo9TrjTeHcshGTVoXgq0ZZAKyFOhFUDfS+Q0+1VoYi4w6ZurwAqiamq6WcoDq9I
-         eJuP9UK9kXp+yV3WzA2zoeceX18K48FyNmz/QafrPWTkoYPafl5VjJHuulqPlzqjcOz8
-         fnRg4J/GpV2CItVXNowLOcJg3yX8dbSaSvnZpUPFAOjdJNpmzGiIwVsXu/7joHkQdmWt
-         R54g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ji7iGAxDJEeqfoAnF5QNg6c4bsnLencbEnYiubnXrLA=;
-        b=Azc/WLs73RC4JDhinBCKMUZM+xRnhxotFDidyiNJay4nF5Q1onG3E9zZAOYzwLgDPS
-         +1WBwXKLaK+73FtoaHeBsP2dqvt097iN5CFdSroJTUJ/DGmxRyk7c6mfggoFj5iOK7wr
-         kRpECdFFuaoo5y+VJmHEIRaso9nKcHThlZyLZ+nUPqLstuex/saMuBcrjunb51EGcsgy
-         FTQo80HuKSrEWBj6uvY0YuKaySKkfpnUyKO0hVEP6tVIJbLvqxT2mQLX3miDmlcS9f24
-         tTIc68cWdIXIQM9JIWdgmZ0Iui7rB0Mng/Hiv+ZqyIxrP/lzp5Q4wjqbYV7uC2JPpdk2
-         Ni2w==
-X-Gm-Message-State: AOAM532ZiCXe6pIIx1RrDAmxYhu959g5CoqLVcSxFyyQ6igRT6bk5Ckx
-        ZALvmuHmgfq2FNZHNs81hDeuzQ+s4svLWUjI
-X-Google-Smtp-Source: ABdhPJxSJjOOAhzSDEzao64v+l/uhAIPXHdJ8PsGS98R3R5M2TnclgkKBRK+l6kI9UZIRg/vwC5bbw==
-X-Received: by 2002:a1c:448b:: with SMTP id r133mr1554740wma.110.1642619533242;
-        Wed, 19 Jan 2022 11:12:13 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:ff82:2d59:f05c:6474? ([2a01:e34:ed2f:f020:ff82:2d59:f05c:6474])
-        by smtp.googlemail.com with ESMTPSA id o33sm11664320wms.3.2022.01.19.11.12.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 11:12:12 -0800 (PST)
-Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
- is disabled
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>, thara.gopinath@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
- <cf34f77e-587b-7f97-619f-dcbf431332ff@linaro.org>
- <7c29c833-b558-f0ab-83ab-08371785ffd1@quicinc.com>
- <9fb8fb88-73d7-771e-1309-4363907f7c01@quicinc.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <f8fc0f68-af7e-f009-4b94-fdb301db7019@linaro.org>
-Date:   Wed, 19 Jan 2022 20:12:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 19 Jan 2022 14:12:34 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BA2C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kfq6BtDbp9OpFo3P4pVC1BirR13ne2CthW+xXJdID+M=; b=GvHU3PaKQOlo0Hv93WyifT/5Kl
+        zS75z1K4qcrri5b+Jhl3HcS808J0atfkJlEi/6xfaFQOCUvy1hALu+SnQn1Z6Ex1Ha0kdAvi69rSA
+        4jT0j7ioTEza909AvkMWjk64fQQVUJf85mn2cC5DispMk7H9RRCa+Gmyc+vTgPNmmcQmf8bcCBe7E
+        G1H6y/JlOf7lwx7XjwdTUV5bRVUhWz6mdC55FFYzCm6OKXzvUrkkyCkRLEcyIJQo+oNKkHzwDyTwQ
+        Oins7PgQ0dDjLnr2o709Se/iEg/ZLEHKYp4Z0mQ2RhvMM08WXbe+xplRPA1VSb7BimqiNyQ4x1xoa
+        dvcnXonA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56788)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nAGNc-00053a-Ko; Wed, 19 Jan 2022 19:12:24 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nAGNa-0005VR-9Z; Wed, 19 Jan 2022 19:12:22 +0000
+Date:   Wed, 19 Jan 2022 19:12:22 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] vmap(): don't allow invalid pages
+Message-ID: <YehilqRvYLhryUk4@shell.armlinux.org.uk>
+References: <20220118235244.540103-1-yury.norov@gmail.com>
+ <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
+ <Yeg79CcofyNuVLid@casper.infradead.org>
+ <e9226eb4-4ecf-ac01-e823-ff507a354ac5@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <9fb8fb88-73d7-771e-1309-4363907f7c01@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9226eb4-4ecf-ac01-e823-ff507a354ac5@arm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 19, 2022 at 06:43:10PM +0000, Robin Murphy wrote:
+> Indeed, my impression is that the only legitimate way to get hold of a page
+> pointer without assumed provenance is via pfn_to_page(), which is where
+> pfn_valid() comes in. Thus pfn_valid(page_to_pfn()) really *should* be a
+> tautology.
 
-Hi Manaf,
+That can only be true if pfn == page_to_pfn(pfn_to_page(pfn)) for all
+values of pfn.
 
-On 19/01/2022 20:05, Manaf Meethalavalappu Pallikunhi wrote:
-> Hi Rafael/Daniel,
-> 
-> Could you please check and comment  ?
+Given how pfn_to_page() is defined in the sparsemem case:
 
-It is in my todo list, I'll review it before the end of the week.
+#define __pfn_to_page(pfn)                              \
+({	unsigned long __pfn = (pfn);                    \
+	struct mem_section *__sec = __pfn_to_section(__pfn);    \
+	__section_mem_map_addr(__sec) + __pfn;          \
+})
+#define page_to_pfn __page_to_pfn
 
-Regards
+that isn't the case, especially when looking at page_to_pfn():
 
-  -- Daniel
+#define __page_to_pfn(pg)                                       \
+({      const struct page *__pg = (pg);                         \
+        int __sec = page_to_section(__pg);                      \
+	(unsigned long)(__pg - __section_mem_map_addr(__nr_to_section(__sec))); \
+})
 
-> On 1/11/2022 2:15 AM, Manaf Meethalavalappu Pallikunhi wrote:
->> Hi Thara,
->>
->> On 1/10/2022 11:25 PM, Thara Gopinath wrote:
->>> Hi Manaf,
->>>
->>> On 1/7/22 1:56 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>>> Whenever a thermal zone is in trip violated state, there is a chance
->>>> that the same thermal zone mode can be disabled either via thermal
->>>> core API or via thermal zone sysfs. Once it is disabled, the framework
->>>> bails out any re-evaluation of thermal zone. It leads to a case where
->>>> if it is already in mitigation state, it will stay the same state
->>>> until it is re-enabled.
->>>>
->>>> To avoid above mentioned issue, on thermal zone disable request
->>>> reset thermal zone and clear mitigation for each trip explicitly.
->>>>
->>>> Signed-off-by: Manaf Meethalavalappu Pallikunhi
->>>> <quic_manafm@quicinc.com>
->>>> ---
->>>>   drivers/thermal/thermal_core.c | 12 ++++++++++--
->>>>   1 file changed, 10 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/thermal/thermal_core.c
->>>> b/drivers/thermal/thermal_core.c
->>>> index 51374f4..e288c82 100644
->>>> --- a/drivers/thermal/thermal_core.c
->>>> +++ b/drivers/thermal/thermal_core.c
->>>> @@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct
->>>> thermal_zone_device *tz,
->>>>         thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->>>>   -    if (mode == THERMAL_DEVICE_ENABLED)
->>>> +    if (mode == THERMAL_DEVICE_ENABLED) {
->>>>           thermal_notify_tz_enable(tz->id);
->>>> -    else
->>>> +    } else {
->>>> +        int trip;
->>>> +
->>>> +        /* make sure all previous throttlings are cleared */
->>>> +        thermal_zone_device_init(tz);
->>>
->>> It looks weird to do a init when you are actually disabling the
->>> thermal zone.
->>>
->>>
->>>> +        for (trip = 0; trip < tz->trips; trip++)
->>>> +            handle_thermal_trip(tz, trip);
->>>
->>> So this is exactly what thermal_zone_device_update does except that
->>> thermal_zone_device_update checks for the mode and bails out if the
->>> zone is disabled.
->>> This will work because as you explained in v2, the temperature is
->>> reset in thermal_zone_device_init and handle_thermal_trip will remove
->>> the mitigation if any.
->>>
->>> My two cents here (Rafael and Daniel can comment more on this).
->>>
->>> I think it will be cleaner if we can have a third mode
->>> THERMAL_DEVICE_DISABLING and have thermal_zone_device_update handle
->>> clearing the mitigation. So this will look like
->>> if (mode == THERMAL_DEVICE_DISABLED)
->>>     tz->mode = THERMAL_DEVICE_DISABLING;
->>> else
->>>     tz->mode = mode;
->>>
->>> thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->>>
->>> if (mode == THERMAL_DEVICE_DISABLED)
->>>     tz->mode = mode;
->>>
->>> You will have to update update_temperature to set tz->temperature =
->>> THERMAL_TEMP_INVALID and thermal_zone_set_trips to set
->>> tz->prev_low_trip = -INT_MAX and tz->prev_high_trip = INT_MAX for
->>> THERMAL_DEVICE_DISABLING mode.
->>
->> I think just updating above fields doesn't guarantee complete clearing
->> of mitigation for all governors. For  step_wise governor, to make sure
->> mitigation removed completely, we have to set each
->> thermal-instance->initialized = false as well.
->>
->> If we add that to above list of variables in update_temperature()
->> under if (mode == THERMAL_DEVICE_DISABLING) , it is same as
->> thermal_zone_device_init function does in current patch. We are just
->> resetting same fields in different place under a new mode, right ?
->>
->> Thanks,
->>
->> Manaf
->>
+Where:
 
+static inline unsigned long page_to_section(const struct page *page)
+{
+	return (page->flags >> SECTIONS_PGSHIFT) & SECTIONS_MASK;
+}
+
+So if page_to_section() returns something that is, e.g. zero for an
+invalid page in a non-zero section, you're not going to end up with
+the right pfn from page_to_pfn().
+
+As I've said now a couple of times, trying to determine of a struct
+page pointer is valid is the wrong question to be asking.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

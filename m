@@ -2,180 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A641493873
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3074949388C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353734AbiASKbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:31:49 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39078 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353717AbiASKbr (ORCPT
+        id S1353847AbiASKcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353806AbiASKcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:31:47 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 51C50212C5;
-        Wed, 19 Jan 2022 10:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642588306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X9qRWH+x26Qr4u/Aa2LMbQyTGFT6n1/mH2BEEh9FOqg=;
-        b=HoStwcSgLsublhBPtczgpImjMbXlE20cbFON5N3Tj2AtyKgDWRZTCiBlDqXzi/Si02jNqd
-        6L+C+sa7O8D8n25a1S0WptGfp81SoDTRVDJDdmhnUJIvTCFg/GIr4wgiY00SwxVixfZvAl
-        Zns/wjbl16KE8KA0lqSEbpQ95MURbWQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642588306;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X9qRWH+x26Qr4u/Aa2LMbQyTGFT6n1/mH2BEEh9FOqg=;
-        b=8TNgaCECyqe9pGDTpnk2f8H2flmFYqzscLzpyTw2VdpafTgZUXwi9m8he1KEI4VkNp2q0M
-        W7h0tXQrTRcT4GAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 098F113B3D;
-        Wed, 19 Jan 2022 10:31:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dfmyAZLo52EaSwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 10:31:46 +0000
-Message-ID: <381fab01-322a-a48a-0b27-ef7c95c3269f@suse.cz>
-Date:   Wed, 19 Jan 2022 11:31:45 +0100
+        Wed, 19 Jan 2022 05:32:24 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D3DC06174E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:32:24 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x11so7580345lfa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sr17yjVIJ3L6nqEXDMpIqK2xXImflLFzz6ALbEm9u68=;
+        b=Xp8s21ftcZ0WG13DDgbdH7NIUsuYX+ghvkD5zw1hiLod5qbV+yjC9/iw3BxedgypWz
+         j185xcOoN7LD6uCNH62mSJRvMAjwIi7qcbYCznd6Wd0VuvmCQ/sizMwR5aWhMScNA/rl
+         hmuEc+DbVv1NqMjk5IXcy/Hk3oFXKZ0haMWzOfivc06wvoxpEiX1vitoLqGmZuk04L2x
+         HC73i8VxJwVCI/4Mkmi2NET/E8BffuYg/4Zged81GUTCUySqRPVe2agczTV87+sP+2pN
+         pDJV7fJq03+xTsoQaVBtN6S+RGEn7oHeifzgS2DkyqcDDGnQ9aAHk1KN9hJBM2T+WaJf
+         EdtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sr17yjVIJ3L6nqEXDMpIqK2xXImflLFzz6ALbEm9u68=;
+        b=o1WYzrhqlqLv3h98GM1Qxhwra7aTEuRkNKKgo64WquDdh/xKaSakzLwK2+iDI3ppq9
+         EWFmZ3N0ZnsW0o2KIQ9S+NDBtQjWq+mIrdFIyzpit4gTSa1RF/p8Ek73eln1BS6eEfP7
+         +vt8v1A+7KvnJrCLFF4+k7bHsACzfTT2NoKAQri9PWCwzuvwXYWmATxdyYc8i0TqelTv
+         8Exxb+AuI7n0fd93r/4wHHt7VAdHKQpZv05QrZhxWPqSLQFThqY/vn6o7GzfnGMqJ/GL
+         F6sMNk4/EvAsIh0Zes5A2kVGbFLKBkAUUgbPsk84GScUiq7txlnUAywoX8DLfzXvW6Qe
+         mZEg==
+X-Gm-Message-State: AOAM533Pag+2YImxEeGVewKRQSPzaDkVbCTg6i6jO+3oQDPo4S44Uo9N
+        g2aC+hXloepJKgb/BtgRnTHxmDm2xylMFJY9pFfL+w==
+X-Google-Smtp-Source: ABdhPJz5t3UBuJxmMbI2E3pOLPGLQiV4ByMa0pgkUilXefnRDUK3bGbZ4bWfdB/wwOZVZ58x7DxfCbRQTc3tUAIioE8=
+X-Received: by 2002:a2e:a26d:: with SMTP id k13mr10012578ljm.300.1642588342599;
+ Wed, 19 Jan 2022 02:32:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-39-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 38/66] coredump: Remove vma linked list walk
-In-Reply-To: <20211201142918.921493-39-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220119015038.2433585-1-robh@kernel.org>
+In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 19 Jan 2022 11:31:45 +0100
+Message-ID: <CAPDyKFr5uT3H8NaAvPyGajo2R6DriYC92y=RdAk=G4PMC4MxYw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> 
-> Use the Maple Tree iterator instead.  This is too complicated for the
-> VMA iterator to handle, so let's open-code it for now.  If this turns
-> out to be a common pattern, we can migrate it to common code.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+On Wed, 19 Jan 2022 at 02:50, Rob Herring <robh@kernel.org> wrote:
+>
+> The 'phandle-array' type is a bit ambiguous. It can be either just an
+> array of phandles or an array of phandles plus args. Many schemas for
+> phandle-array properties aren't clear in the schema which case applies
+> though the description usually describes it.
+>
+> The array of phandles case boils down to needing:
+>
+> items:
+>   maxItems: 1
+>
+> The phandle plus args cases should typically take this form:
+>
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
+>
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
+>
+> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Georgi Djakov <djakov@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Jingoo Han <jingoohan1@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: linux-ide@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: iommu@lists.linux-foundation.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  fs/coredump.c | 33 ++++++++++++---------------------
->  1 file changed, 12 insertions(+), 21 deletions(-)
-> 
-> diff --git a/fs/coredump.c b/fs/coredump.c
-> index a6b3c196cdef..59347e42048d 100644
-> --- a/fs/coredump.c
-> +++ b/fs/coredump.c
-> @@ -997,30 +997,20 @@ static unsigned long vma_dump_size(struct vm_area_struct *vma,
->  	return vma->vm_end - vma->vm_start;
->  }
->  
-> -static struct vm_area_struct *first_vma(struct task_struct *tsk,
-> -					struct vm_area_struct *gate_vma)
-> -{
-> -	struct vm_area_struct *ret = tsk->mm->mmap;
-> -
-> -	if (ret)
-> -		return ret;
-> -	return gate_vma;
-> -}
-> -
->  /*
->   * Helper function for iterating across a vma list.  It ensures that the caller
->   * will visit `gate_vma' prior to terminating the search.
->   */
-> -static struct vm_area_struct *next_vma(struct vm_area_struct *this_vma,
-> +static struct vm_area_struct *coredump_next_vma(struct ma_state *mas,
-> +				       struct vm_area_struct *vma,
->  				       struct vm_area_struct *gate_vma)
->  {
-> -	struct vm_area_struct *ret;
-> -
-> -	ret = this_vma->vm_next;
-> -	if (ret)
-> -		return ret;
-> -	if (this_vma == gate_vma)
-> +	if (vma == gate_vma)
->  		return NULL;
-> +
-> +	vma = mas_next(mas, ULONG_MAX);
-> +	if (vma)
-> +		return vma;
 
-This looks suspicious. Before this patch if gate_vma was part of the linked
-list, it was returned. Even more than once if it was not the last vma in the
-list. After this patch, if it's part of the maple tree, it will not be
-returned and the iteration will stop.
+For CPUs and PM domains:
 
-But I don't know what are the rules for gate_vma being part of linked
-list/maple tree, thus whether this is a bug.
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
->  	return gate_vma;
->  }
->  
-> @@ -1032,9 +1022,10 @@ int dump_vma_snapshot(struct coredump_params *cprm, int *vma_count,
->  		      struct core_vma_metadata **vma_meta,
->  		      size_t *vma_data_size_ptr)
->  {
-> -	struct vm_area_struct *vma, *gate_vma;
-> +	struct vm_area_struct *gate_vma, *vma = NULL;
->  	struct mm_struct *mm = current->mm;
-> -	int i;
-> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
-> +	int i = 0;
->  	size_t vma_data_size = 0;
->  
->  	/*
-> @@ -1054,8 +1045,7 @@ int dump_vma_snapshot(struct coredump_params *cprm, int *vma_count,
->  		return -ENOMEM;
->  	}
->  
-> -	for (i = 0, vma = first_vma(current, gate_vma); vma != NULL;
-> -			vma = next_vma(vma, gate_vma), i++) {
-> +	while ((vma = coredump_next_vma(&mas, vma, gate_vma)) != NULL) {
->  		struct core_vma_metadata *m = (*vma_meta) + i;
->  
->  		m->start = vma->vm_start;
-> @@ -1064,6 +1054,7 @@ int dump_vma_snapshot(struct coredump_params *cprm, int *vma_count,
->  		m->dump_size = vma_dump_size(vma, cprm->mm_flags);
->  
->  		vma_data_size += m->dump_size;
-> +		i++;
->  	}
->  
->  	mmap_write_unlock(mm);
-
+Kind regards
+Uffe

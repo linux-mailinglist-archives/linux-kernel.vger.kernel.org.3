@@ -2,257 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB4F4931A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A624931BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 01:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346854AbiASAM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 19:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239681AbiASAM6 (ORCPT
+        id S1350399AbiASATK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 19:19:10 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47284
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244782AbiASATJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:12:58 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E9DC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:12:58 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id l16so840426pjl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:12:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n4TWRk7hzXbeao/XrGd6EQhvuc/9XakfdR31XJE7vm4=;
-        b=DQ/2Xm/b3RE1AxpowOFz1PgfxKHvLa5vPHDCRPJmcV6DFue3OJwclq/ZC6XOInWvzh
-         mvmlf1FqKToolRd8AmEp+2RkIIClj3C/EZocFF7P0YwkayrbDbeJUW2rEeC/Yt+m052t
-         bcTiRIjILDvRXlPPXTy2cSMVWTdlIeatBACCYl+GB11mJmDXy5DZ5SQtWTnBhhMyRYRL
-         jWPRuzqegE0Nk1TVzn5arTAcKZJOfBbgI5z+i37KDhuRw/GRv29HmkxT2LXk381uaCIG
-         0OQBZRnvs+YR0Yr3xdx+v0U/jORbQhE1aCg/A03rKmNG8tVsUOepHXwTsAyqlKWpB3Pn
-         UjyQ==
+        Tue, 18 Jan 2022 19:19:09 -0500
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 34E3D40515
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:19:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642551548;
+        bh=QSCplCLjAh3bK8fuBrxiKgKrA0P0KcoqVOgcqtRLwHE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=dO1jq4/pu7V7Qr85pdDQ1/ZYgFq6qniknp0d9jxAk0VFJML2+JL2RfzOkPmiY2J0V
+         EVWu0yRY+webtJaZej+qmsZIkXq4P4vyyjmBid4dejnbKsR56g7/baTWeSrl5HRDO2
+         4RFZHggvZbHmX8tIe1dfg+RWpvTAhyYZWHl/KTb0kBIuha7KJnVP7c6y5p70uZpIyG
+         fG8KS/w+s4T4XOdY1BVGOZdY9EAmsgOfqVXP8s4ikuNVkmicGEcdVy0bBxXh0r8UYP
+         U9H7e79aHxyPsPzTgF3eEH+mJYMDYrQsO6MtUdgt+c/3ogEwHJPWv+us5B+ZXXRAzV
+         CPtCeSp/TUEEg==
+Received: by mail-ot1-f70.google.com with SMTP id w8-20020a9d3608000000b0058f5caabe0dso313108otb.21
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 16:19:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=n4TWRk7hzXbeao/XrGd6EQhvuc/9XakfdR31XJE7vm4=;
-        b=tw3DnvChtWpxPwGx592tVz870V2144zgUKHgS04a0PhVM53khO3dg5qOLjHQSzjaF5
-         3a6IqZB1P1Us3YIbW7IMpTyzQcTa4NFJQRwmq/+Wg973eHXhh5m8C8GvOLRvz0hIyvYF
-         ozP7gBGjmWlqJPaJcR6mtFUp/2ZtxOGED3ktku4fIwzbNKGP9ZI0T+kgH+OphP+xueJ8
-         pmoedDjbNQsbXNi3Spy4V8ejfwcv/2HptmzasSFaImv26v9ShinbidHPD7KXMn1oZfDv
-         zFJsXMcoGedjspTy3cXoY6eADk/s5RH+czL/HIPaw2l87kC2FuE1WGsWSWVbYEruURkm
-         GEMA==
-X-Gm-Message-State: AOAM532981KQKqm0n+lxgdVJ5vHVpjnI1bKDeYc8Zr1BT5QPAXof2vRK
-        jlkxYQ0rDXgwFuinWq4KMVpYiaswY3k=
-X-Google-Smtp-Source: ABdhPJz7iyetZ1bxDTpsDG2A9gcCQVmadTzoPxXGkv9BY0f9kSFAV0y3H2N88xDmvO5M314d0gQvsA==
-X-Received: by 2002:a17:90a:940e:: with SMTP id r14mr1200789pjo.17.1642551177468;
-        Tue, 18 Jan 2022 16:12:57 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:f21:7e82:175f:6579])
-        by smtp.gmail.com with ESMTPSA id u30sm1739978pgl.6.2022.01.18.16.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 16:12:56 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 18 Jan 2022 16:12:54 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        John Dias <joaodias@google.com>
-Subject: Re: [RESEND][PATCH v2] mm: don't call lru draining in the nested
- lru_cache_disable
-Message-ID: <YedXhpwURNTkW1Z3@google.com>
-References: <20211230193627.495145-1-minchan@kernel.org>
- <YeVzWlrojI1+buQx@dhcp22.suse.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QSCplCLjAh3bK8fuBrxiKgKrA0P0KcoqVOgcqtRLwHE=;
+        b=PX6P/NBvFcPetagdgp32voK9WTnOehgCB031msZ2ZTGWWy1YTAJA2cFphvi7ecq7o3
+         LbVaeN2x9g/SUFLOgK0QGHjx78ez6iIkcB66QV8s8osABz2ofms8SgkTgMfZwBRltr/r
+         7UKJ1SJnlEPIV19IACX8HSoj9HSSB2hqcOQCNwURgy7+eUbIc5FS1mtaajAjhRU/x1oq
+         TtEJ+Ie+BtuXA/04+3XigFWZUIVVcefrajTwGy5ywCbM6WSA565b8+Wv7EXHeLovww25
+         lbe6c8dRYqnlx7782pKCNzWQfnnF+f0GNhh8o4EphktxPUtdjXw36N9Y1+I2494IFwbT
+         dUUA==
+X-Gm-Message-State: AOAM531AKeYoCZM3n5LzfGgqdowGN8S0YIpjF9V0P8fx59BuBQON2jBB
+        NvEtL8oWFLmumQx0G6s7kT0EEHybLP5vRQ4qCHGj5o3Z84tmFdl5NpIkVYDHuAz40MiwjyJa3OB
+        Gy2GbFx5nLu4sTp5JtN8AIv6+tBQ9tyc9lmkkx6Pk6lBs2/AnCJY97jRtMQ==
+X-Received: by 2002:a4a:4994:: with SMTP id z142mr20364633ooa.78.1642551545413;
+        Tue, 18 Jan 2022 16:19:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwK/qk0KbWw4aZe2tSGjXq4jI8Rl1MTLRatX+XFGTTKTsxvw3z9+j+R4HQU6W1TjVQYUbkgr5oXAPwXmzqbR7s=
+X-Received: by 2002:a4a:4994:: with SMTP id z142mr20364618ooa.78.1642551545067;
+ Tue, 18 Jan 2022 16:19:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeVzWlrojI1+buQx@dhcp22.suse.cz>
+References: <20220114164904.lgj7yimbei6fmloe@localhost.localdomain>
+ <20220114165050.ouw2nknuspclynro@localhost.localdomain> <CAAd53p6KXD2mEHgkU_TpTrsU-vQ9Vxdip+6sPfDaVoSOkmaz-g@mail.gmail.com>
+ <20220115163208.xmvum6ehqcadonj7@localhost.localdomain> <CAAd53p64w38NCo7c0cnKCyjaswa0_Rns-CjWBwOnph3V5J2taQ@mail.gmail.com>
+ <20220117181112.bmbjcofdjjpsfgzo@localhost.localdomain>
+In-Reply-To: <20220117181112.bmbjcofdjjpsfgzo@localhost.localdomain>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 19 Jan 2022 08:18:52 +0800
+Message-ID: <CAAd53p7OWs2ULT10hwC=E7t+KHEidUFMiRmDHGwEM_8+Bib8fA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] ALSA: hda/realtek: fix speakers and micmute on HP
+ 855 G8
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 02:47:06PM +0100, Michal Hocko wrote:
-> On Thu 30-12-21 11:36:27, Minchan Kim wrote:
-> > lru_cache_disable involves IPIs to drain pagevec of each core,
-> > which sometimes takes quite long time to complete depending
-> > on cpu's business, which makes allocation too slow up to
-> > sveral hundredth milliseconds. Furthermore, the repeated draining
-> > in the alloc_contig_range makes thing worse considering caller
-> > of alloc_contig_range usually tries multiple times in the loop.
+On Tue, Jan 18, 2022 at 2:05 AM Alexander Sergeyev <sergeev917@gmail.com> wrote:
+>
+> On Mon, Jan 17, 2022 at 08:12:08AM +0800, Kai-Heng Feng wrote:
+> > If this issue also happens to cold boot it seems to be a BIOS issue.
+>
+> I've discussed the problem in more detail [1] before sending the patch.
+> In short, speakers seems to reliably work in live Ubuntu which differs in
+> using initrd with modules vs UEFI stub with built-in drivers in my case
+> (I've tried Ubuntu kernel sources). I've tried using modules as well
+> (modprobe'ing the list of modules which are load by Ubuntu) with no
+> success.
+>
+> It was suggested that there is a timing issue somewhere. I'm opened for
+> ideas to try to debug the problem origins further (to avoid the need in
+> the fixup).
+
+Yes it does sound like a timing issue.
+Most system firmwares are only test against Windows.
+
+HP has started to enable Ubuntu on some of their systems, but your
+case (EFI stub) is uncovered.
+
+>
+> > > > If the issue only happen to warm boot, please try reverting commit
+> > > > 9d3fcb28f9b9 "Revert "PM: ACPI: reboot: Use S5 for reboot"".
+> > > > Many HP systems requires it to have a functional reboot.
 > >
-> > This patch makes the lru_cache_disable aware of the fact the
-> > pagevec was already disabled. With that, user of alloc_contig_range
-> > can disable the lru cache in advance in their context during the
-> > repeated trial so they can avoid the multiple costly draining
-> > in cma allocation.
-> 
-> Do you have any numbers on any improvements?
+> > If possible, please still give that commit a try.
+>
+> Well, the first cold boot (with this commit reverted) didn't have any
+> sound, the same goes for the subsequent reboot.
 
-The LRU draining consumed above 50% overhead for the 20M CMA alloc.
+Thanks for the testing.
 
-> 
-> Now to the change. I do not like this much to be honest. LRU cache
-> disabling is a complex synchronization scheme implemented in
-> __lru_add_drain_all now you are stacking another level on top of that.
-> 
-> More fundamentally though. I am not sure I understand the problem TBH.
+Kai-Heng
 
-The problem is that kinds of IPI using normal prority workqueue to drain
-takes much time depending on the system CPU business.
-
-> What prevents you from calling lru_cache_disable at the cma level in the
-> first place?
-
-You meant moving the call from alloc_contig_range to caller layer?
-So, virtio_mem_fake_online, too? It could and make sense from
-performance perspective since upper layer usually calls the
-alloc_contig_range multiple times on retrial loop.
-
-Havid said, semantically, not good in that why upper layer should
-know how alloc_contig_range works(LRU disable is too low level stuff)
-internally but I chose the performance here.
-
-There is an example why the stacking is needed.
-cma_alloc also can be called from outside.
-A usecase is try to call
-
-    lru_cache_disable
-    for (order = 10; order >= 0; order) {
-        page = cma_alloc(1<<order)
-        if (page)
-            break;
-    }
-    lru_cacne_enable
-
-Here, putting the disable lru outside of cma_alloc is
-much better than inside. That's why I put it outside.
-
-> 
-> > Signed-off-by: Minchan Kim <minchan@kernel.org>
-> > ---
-> >  * from v1 - https://lore.kernel.org/lkml/20211206221006.946661-1-minchan@kernel.org/
-> >    * fix lru_cache_disable race - akpm
-> > 
-> >  include/linux/swap.h | 14 ++------------
-> >  mm/cma.c             |  5 +++++
-> >  mm/swap.c            | 30 ++++++++++++++++++++++++++++--
-> >  3 files changed, 35 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/include/linux/swap.h b/include/linux/swap.h
-> > index ba52f3a3478e..fe18e86a4f13 100644
-> > --- a/include/linux/swap.h
-> > +++ b/include/linux/swap.h
-> > @@ -348,19 +348,9 @@ extern void lru_note_cost_page(struct page *);
-> >  extern void lru_cache_add(struct page *);
-> >  extern void mark_page_accessed(struct page *);
-> >  
-> > -extern atomic_t lru_disable_count;
-> > -
-> > -static inline bool lru_cache_disabled(void)
-> > -{
-> > -	return atomic_read(&lru_disable_count);
-> > -}
-> > -
-> > -static inline void lru_cache_enable(void)
-> > -{
-> > -	atomic_dec(&lru_disable_count);
-> > -}
-> > -
-> > +extern bool lru_cache_disabled(void);
-> >  extern void lru_cache_disable(void);
-> > +extern void lru_cache_enable(void);
-> >  extern void lru_add_drain(void);
-> >  extern void lru_add_drain_cpu(int cpu);
-> >  extern void lru_add_drain_cpu_zone(struct zone *zone);
-> > diff --git a/mm/cma.c b/mm/cma.c
-> > index 995e15480937..60be555c5b95 100644
-> > --- a/mm/cma.c
-> > +++ b/mm/cma.c
-> > @@ -30,6 +30,7 @@
-> >  #include <linux/cma.h>
-> >  #include <linux/highmem.h>
-> >  #include <linux/io.h>
-> > +#include <linux/swap.h>
-> >  #include <linux/kmemleak.h>
-> >  #include <trace/events/cma.h>
-> >  
-> > @@ -453,6 +454,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
-> >  	if (bitmap_count > bitmap_maxno)
-> >  		goto out;
-> >  
-> > +	lru_cache_disable();
-> > +
-> >  	for (;;) {
-> >  		spin_lock_irq(&cma->lock);
-> >  		bitmap_no = bitmap_find_next_zero_area_off(cma->bitmap,
-> > @@ -492,6 +495,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
-> >  		start = bitmap_no + mask + 1;
-> >  	}
-> >  
-> > +	lru_cache_enable();
-> > +
-> >  	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
-> >  
-> >  	/*
-> > diff --git a/mm/swap.c b/mm/swap.c
-> > index af3cad4e5378..5f89d7c9a54e 100644
-> > --- a/mm/swap.c
-> > +++ b/mm/swap.c
-> > @@ -847,7 +847,17 @@ void lru_add_drain_all(void)
-> >  }
-> >  #endif /* CONFIG_SMP */
-> >  
-> > -atomic_t lru_disable_count = ATOMIC_INIT(0);
-> > +static atomic_t lru_disable_count = ATOMIC_INIT(0);
-> > +
-> > +bool lru_cache_disabled(void)
-> > +{
-> > +	return atomic_read(&lru_disable_count) != 0;
-> > +}
-> > +
-> > +void lru_cache_enable(void)
-> > +{
-> > +	atomic_dec(&lru_disable_count);
-> > +}
-> >  
-> >  /*
-> >   * lru_cache_disable() needs to be called before we start compiling
-> > @@ -859,7 +869,21 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
-> >   */
-> >  void lru_cache_disable(void)
-> >  {
-> > -	atomic_inc(&lru_disable_count);
-> > +	static DEFINE_MUTEX(lock);
-> > +
-> > +	/*
-> > +	 * The lock gaurantees lru_cache is drained when the function
-> > +	 * returned.
-> > +	 */
-> > +	mutex_lock(&lock);
-> > +	/*
-> > +	 * If someone is already disabled lru_cache, just return with
-> > +	 * increasing the lru_disable_count.
-> > +	 */
-> > +	if (atomic_inc_not_zero(&lru_disable_count)) {
-> > +		mutex_unlock(&lock);
-> > +		return;
-> > +	}
-> >  #ifdef CONFIG_SMP
-> >  	/*
-> >  	 * lru_add_drain_all in the force mode will schedule draining on
-> > @@ -873,6 +897,8 @@ void lru_cache_disable(void)
-> >  #else
-> >  	lru_add_and_bh_lrus_drain();
-> >  #endif
-> > +	atomic_inc(&lru_disable_count);
-> > +	mutex_unlock(&lock);
-> >  }
-> >  
-> >  /**
-> > -- 
-> > 2.34.1.448.ga2b2bfdf31-goog
-> 
-> -- 
-> Michal Hocko
-> SUSE Labs
-> 
+>
+> [1] https://lkml.org/lkml/2022/1/12/221

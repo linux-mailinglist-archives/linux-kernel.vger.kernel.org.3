@@ -2,107 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B237D4937D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B06B4937DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353363AbiASJ6v convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 04:58:51 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:35654 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243186AbiASJ6q (ORCPT
+        id S1353389AbiASJ7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:59:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34428 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353384AbiASJ65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:58:46 -0500
-Received: by mail-ua1-f43.google.com with SMTP id m90so3529537uam.2;
-        Wed, 19 Jan 2022 01:58:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=e8QRIwDey7YYITBsuH1RwLEavOxMt4TqPLNn4dY2EeQ=;
-        b=F4YdqZHhrwOsG+jv+6ae1f2T/wSJ8ipvXMqaQ+qDn6lHIPCDqkavbKueWCOaBHS0A/
-         mrWKptNvplS2oqYor9REO/KDvaehb1QuAOyhemNTBDQ8CFc1Vu7zHym1Ry27UGxpOQJJ
-         y0SrX+XNOVO29VDVGiEamFSsK5delvqA1eTVAkGtj6lLzITJ549hBIQHYdMzcyr4OgLi
-         hX5bCOtqy+rLE8+Y3BRZSDnXzNBnfBwzJMCtbb5ZQ9wiNI6mSihksEx/VYWBZL/hXAAW
-         MKJnns+YNIJ5PFopXMTVBiiGm7SJ2uaj0Lwg7d0GTO2hEaBRvD7v7yYcQbo0TzNukFGB
-         TiNw==
-X-Gm-Message-State: AOAM531NpESG05seHncd+vJFgP4kwwnzu5QChqMtbJ3AM+U8xeaklB0h
-        8hU2mYvNYgTQNouS1Fs2gTO41hOG47+ZXzZo
-X-Google-Smtp-Source: ABdhPJx/RDK4NHBZcqx4fO744ByCnu/ubtQFFVrM98Oaok6cIyVSPCeXA7vcx75hDMp1mrpwaWNTnw==
-X-Received: by 2002:a67:cb0d:: with SMTP id b13mr11105188vsl.81.1642586325373;
-        Wed, 19 Jan 2022 01:58:45 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id w126sm2135824vka.25.2022.01.19.01.58.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 01:58:44 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id n15so1987279uaq.5;
-        Wed, 19 Jan 2022 01:58:44 -0800 (PST)
-X-Received: by 2002:a67:e95a:: with SMTP id p26mr7058311vso.38.1642586324355;
- Wed, 19 Jan 2022 01:58:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119000506.1299843-1-laurent@vivier.eu> <20220119000506.1299843-3-laurent@vivier.eu>
- <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
- <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com> <64d4b52f-cb5b-2024-e7f9-7a5babc62170@vivier.eu>
-In-Reply-To: <64d4b52f-cb5b-2024-e7f9-7a5babc62170@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 19 Jan 2022 10:58:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVfK9gsXphDepvQCdMpLjROiR9OKwdb28eCfVdDrQRVjQ@mail.gmail.com>
-Message-ID: <CAMuHMdVfK9gsXphDepvQCdMpLjROiR9OKwdb28eCfVdDrQRVjQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Wed, 19 Jan 2022 04:58:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D54D061531
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:58:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45C56C340E5;
+        Wed, 19 Jan 2022 09:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642586336;
+        bh=YK+NHYklnZnc5AIU2rcQ/ugY3qqF2EwcMoX/0pl/+sA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=nTCq/b988q3QVwf7qIrSTzbMlKR3pIqyZTqN+lweoSyiCmOT4hxwgm/V4YZH6t5uE
+         rfr1k1LUq3DN0JAyf1QDYbDyFul/Cs1EJedRNZKaNZKpzyUaFIR6sLRux6TUzUWtrw
+         4TI3c6HHXVxfFPeNEoTTQY4io2aidfKvGGTMxJXaycTEABsYu5ewaYGGZtEa36/UD6
+         cVOMTC1+w+hbYF6byDDJ2OFnTDjBzIUVmcVsnhidtXVkx4/qonHVUy6y7hnqVRLNlp
+         O7dQxtp3PRPpYrNL+Rs+fEOe/ZgkNgo35+8wcIViSSNBuFNR/qbprU1YDbOO2sumXY
+         vbBlqSU3dRq4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33529F60797;
+        Wed, 19 Jan 2022 09:58:56 +0000 (UTC)
+Subject: Re: [f2fs-dev] [GIT PULL] f2fs update for 5.17-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YedlHVEa4sdbvB2F@google.com>
+References: <YedlHVEa4sdbvB2F@google.com>
+X-PR-Tracked-List-Id: <linux-f2fs-devel.lists.sourceforge.net>
+X-PR-Tracked-Message-Id: <YedlHVEa4sdbvB2F@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-5.17-rc1
+X-PR-Tracked-Commit-Id: 5fed0be8583f08c1548b4dcd9e5ee0d1133d0730
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1d1df41c5a33359a00e919d54eaebfb789711fdc
+Message-Id: <164258633620.28417.9292686617329063876.pr-tracker-bot@kernel.org>
+Date:   Wed, 19 Jan 2022 09:58:56 +0000
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+The pull request you sent on Tue, 18 Jan 2022 17:10:53 -0800:
 
-On Wed, Jan 19, 2022 at 10:11 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> Le 19/01/2022 à 09:49, Arnd Bergmann a écrit :
-> > On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> >>
-> >> I've just discovered include/linux/goldfish.h, which already has gf_*()
-> >> accessors for 64-bit, so it'd make sense to move the above there,
-> >> and adjust the names.
-> >
-> > Yes, good idea.
->
-> So the idea is to put goldfish accessors inside a "#ifdef CONFIG_M68K ... #else ... #endif" in
-> include/linux/goldfish.h and not in generic-asm/io.h for the generic version and
-> m68k/include/ams/io.h for the m68k version?
+> git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-5.17-rc1
 
-No, just move
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1d1df41c5a33359a00e919d54eaebfb789711fdc
 
-+#ifndef goldfish_ioread32
-+#define goldfish_ioread32 ioread32
-+#endif
-+#ifndef goldfish_iowrite32
-+#define goldfish_iowrite32 iowrite32
-+#endif
+Thank you!
 
-to <linux/goldfish.h>, and rename them to gf_*().
-
-Architectures can still override them in their own <asm/io.h>
-(<linux/goldfish.h> includes <linux/io.h>).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,242 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8E04939D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAEC4939DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346984AbiASLr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:47:26 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:48718 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233640AbiASLrU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:47:20 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id F3A14FB03;
-        Wed, 19 Jan 2022 12:47:15 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Y9w4dTYgLJjm; Wed, 19 Jan 2022 12:47:14 +0100 (CET)
-Date:   Wed, 19 Jan 2022 12:47:12 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-imx@nxp.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH v2] phy: dphy: Correct clk_pre parameter
-Message-ID: <Yef6QJMNm1AAabp/@qwark.sigxcpu.org>
-References: <20220119023714.1498508-1-victor.liu@nxp.com>
+        id S1354201AbiASLsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:48:08 -0500
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:42929 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233640AbiASLsE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:48:04 -0500
+Received: by mail-ua1-f46.google.com with SMTP id p1so3923119uap.9;
+        Wed, 19 Jan 2022 03:48:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JCbX2OMJvl/EE6vcwTdZbTk0S6N5nx5++Qk7hJWCnWw=;
+        b=6ynxB6zjuNh7C8y/KfaG2P69DmrTo2wKsYLHt92OpNUH/BFq9jbiF9j+J/pYtv6Txw
+         TE11ImT4QTVH84vkcclXRWugm3LAhfGthsQm18atYI7YIdQLQ3ayUB243zVYDxoDdIuq
+         5PoQGep5MHgalvtPD27G85pEVaCGm/t7CO+H1M5TDayjOmXzXntQQTxKrMbdjIWqeaqi
+         mE7qBQovTIrYoVsTNk1aldqap6eH7B/5Zp0RGO5wm58TuU1qnaeitQX5q+chN7y95dr4
+         clFOC0A/JIS3kyFfAoO7FWNUL7BTOtBDZCd+3i7ANJa9wjslu4ZjI/gUz+PE2iPARNXg
+         JXvg==
+X-Gm-Message-State: AOAM531QajfPvZ+agOBlv3uoumIS9F2cBUB7mt+FYi+wGnMb5s5BMtjR
+        2jb8EbaP6m1MzAdCTENYSRfBI4C/jmWJlQ==
+X-Google-Smtp-Source: ABdhPJxTkH8KHcNKagOL1iqb4sxFVVyIV2kicNzKsbcUqtJjKDX4xWk2WC0LpPLFEXQsoMwUCXRFPA==
+X-Received: by 2002:a05:6102:b02:: with SMTP id b2mr10568744vst.52.1642592883776;
+        Wed, 19 Jan 2022 03:48:03 -0800 (PST)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
+        by smtp.gmail.com with ESMTPSA id b8sm4426601vsl.19.2022.01.19.03.48.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 03:48:02 -0800 (PST)
+Received: by mail-ua1-f54.google.com with SMTP id l1so2101791uap.8;
+        Wed, 19 Jan 2022 03:48:02 -0800 (PST)
+X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr11427171vsu.5.1642592881909;
+ Wed, 19 Jan 2022 03:48:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220119023714.1498508-1-victor.liu@nxp.com>
+References: <20220119110839.33187-1-deller@gmx.de> <20220119110839.33187-3-deller@gmx.de>
+ <Yef0j8+DBbwC7Kjv@kroah.com> <Yef15k2GtC40aJEu@kroah.com>
+In-Reply-To: <Yef15k2GtC40aJEu@kroah.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 19 Jan 2022 12:47:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVWFJEDwjf-htZ_D1484efmuPnz_L-qhcTeUE-GVpvZXA@mail.gmail.com>
+Message-ID: <CAMuHMdVWFJEDwjf-htZ_D1484efmuPnz_L-qhcTeUE-GVpvZXA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-On Wed, Jan 19, 2022 at 10:37:14AM +0800, Liu Ying wrote:
-> The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
-> parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
-> kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
-> mentions that it should be in UI.  However, the dphy core driver wrongly
-> sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
-> And, the kernel doc of the 'clk_pre' member wrongly says the minimum value
-> is '8 UI', instead of 8.
-> 
-> So, let's fix both the dphy core driver and the kernel doc of the 'clk_pre'
-> member to correctly reflect the T-CLK-PRE parameter's unit and the minimum
-> value according to the D-PHY specification.
-> 
-> I'm assuming that all impacted custom drivers shall program values in
-> TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
-> specification mentions that the frequency of TxByteClkHS is exactly 1/8
-> the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
-> custom driver code is changed to program those values as
-> DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE), then.
-> 
-> Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-> Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-> as I don't have the hardwares.
-> 
-> Fixes: 2ed869990e14 ("phy: Add MIPI D-PHY configuration options")
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Robert Foss <robert.foss@linaro.org>
-> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> Cc: Jonas Karlman <jonas@kwiboo.se>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Guido Günther <agx@sigxcpu.org>
-> Tested-by: Liu Ying <victor.liu@nxp.com> # RM67191 DSI panel on i.MX8mq EVK
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v1->v2:
-> * Use BITS_PER_BYTE macro. (Andrzej)
-> * Drop dsi argument from ui2bc() in nwl-dsi.c.
-> 
->  drivers/gpu/drm/bridge/nwl-dsi.c                 | 12 +++++-------
->  drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    |  3 ++-
->  drivers/phy/phy-core-mipi-dphy.c                 |  4 ++--
->  drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c |  3 ++-
->  include/linux/phy/phy-mipi-dphy.h                |  2 +-
->  5 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-> index a7389a0facfb..af07eeb47ca0 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -7,6 +7,7 @@
->   */
->  
->  #include <linux/bitfield.h>
-> +#include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/irq.h>
->  #include <linux/math64.h>
-> @@ -196,12 +197,9 @@ static u32 ps2bc(struct nwl_dsi *dsi, unsigned long long ps)
->  /*
->   * ui2bc - UI time periods to byte clock cycles
->   */
-> -static u32 ui2bc(struct nwl_dsi *dsi, unsigned long long ui)
-> +static u32 ui2bc(unsigned int ui)
->  {
-> -	u32 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
-> -
-> -	return DIV64_U64_ROUND_UP(ui * dsi->lanes,
-> -				  dsi->mode.clock * 1000 * bpp);
-> +	return DIV_ROUND_UP(ui, BITS_PER_BYTE);
->  }
->  
->  /*
-> @@ -232,12 +230,12 @@ static int nwl_dsi_config_host(struct nwl_dsi *dsi)
->  	}
->  
->  	/* values in byte clock cycles */
-> -	cycles = ui2bc(dsi, cfg->clk_pre);
-> +	cycles = ui2bc(cfg->clk_pre);
->  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_pre: 0x%x\n", cycles);
->  	nwl_dsi_write(dsi, NWL_DSI_CFG_T_PRE, cycles);
->  	cycles = ps2bc(dsi, cfg->lpx + cfg->clk_prepare + cfg->clk_zero);
->  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_tx_gap (pre): 0x%x\n", cycles);
-> -	cycles += ui2bc(dsi, cfg->clk_pre);
-> +	cycles += ui2bc(cfg->clk_pre);
->  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_post: 0x%x\n", cycles);
->  	nwl_dsi_write(dsi, NWL_DSI_CFG_T_POST, cycles);
->  	cycles = ps2bc(dsi, cfg->hs_exit);
-> diff --git a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> index cd2332bf0e31..fdbd64c03e12 100644
-> --- a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> +++ b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/bitops.h>
-> +#include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/io.h>
-> @@ -250,7 +251,7 @@ static int phy_meson_axg_mipi_dphy_power_on(struct phy *phy)
->  		     (DIV_ROUND_UP(priv->config.clk_zero, temp) << 16) |
->  		     (DIV_ROUND_UP(priv->config.clk_prepare, temp) << 24));
->  	regmap_write(priv->regmap, MIPI_DSI_CLK_TIM1,
-> -		     DIV_ROUND_UP(priv->config.clk_pre, temp));
-> +		     DIV_ROUND_UP(priv->config.clk_pre, BITS_PER_BYTE));
->  
->  	regmap_write(priv->regmap, MIPI_DSI_HS_TIM,
->  		     DIV_ROUND_UP(priv->config.hs_exit, temp) |
-> diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
-> index 288c9c67aa74..ccb4045685cd 100644
-> --- a/drivers/phy/phy-core-mipi-dphy.c
-> +++ b/drivers/phy/phy-core-mipi-dphy.c
-> @@ -36,7 +36,7 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
->  
->  	cfg->clk_miss = 0;
->  	cfg->clk_post = 60000 + 52 * ui;
-> -	cfg->clk_pre = 8000;
-> +	cfg->clk_pre = 8;
->  	cfg->clk_prepare = 38000;
->  	cfg->clk_settle = 95000;
->  	cfg->clk_term_en = 0;
-> @@ -97,7 +97,7 @@ int phy_mipi_dphy_config_validate(struct phy_configure_opts_mipi_dphy *cfg)
->  	if (cfg->clk_post < (60000 + 52 * ui))
->  		return -EINVAL;
->  
-> -	if (cfg->clk_pre < 8000)
-> +	if (cfg->clk_pre < 8)
->  		return -EINVAL;
->  
->  	if (cfg->clk_prepare < 38000 || cfg->clk_prepare > 95000)
-> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-> index 347dc79a18c1..630e01b5c19b 100644
-> --- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-> +++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-> @@ -5,6 +5,7 @@
->   * Author: Wyon Bi <bivvy.bi@rock-chips.com>
->   */
->  
-> +#include <linux/bits.h>
->  #include <linux/kernel.h>
->  #include <linux/clk.h>
->  #include <linux/iopoll.h>
-> @@ -364,7 +365,7 @@ static void inno_dsidphy_mipi_mode_enable(struct inno_dsidphy *inno)
->  	 * The value of counter for HS Tclk-pre
->  	 * Tclk-pre = Tpin_txbyteclkhs * value
->  	 */
-> -	clk_pre = DIV_ROUND_UP(cfg->clk_pre, t_txbyteclkhs);
-> +	clk_pre = DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE);
->  
->  	/*
->  	 * The value of counter for HS Tlpx Time
-> diff --git a/include/linux/phy/phy-mipi-dphy.h b/include/linux/phy/phy-mipi-dphy.h
-> index a877ffee845d..59a5e77ab409 100644
-> --- a/include/linux/phy/phy-mipi-dphy.h
-> +++ b/include/linux/phy/phy-mipi-dphy.h
-> @@ -42,7 +42,7 @@ struct phy_configure_opts_mipi_dphy {
->  	 * the transmitter prior to any associated Data Lane beginning
->  	 * the transition from LP to HS mode.
->  	 *
-> -	 * Minimum value: 8 UI
-> +	 * Minimum value: 8
->  	 */
->  	unsigned int		clk_pre;
+Hi Greg,
 
+On Wed, Jan 19, 2022 at 12:28 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Wed, Jan 19, 2022 at 12:22:55PM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 19, 2022 at 12:08:39PM +0100, Helge Deller wrote:
+> > > This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
+> > >
+> > > Revert this patch.  This patch started to introduce the regression that
+> > > all hardware acceleration of more than 35 existing fbdev drivers were
+> > > bypassed and thus fbcon console output for those was dramatically slowed
+> > > down by factor of 10 and more.
+> > >
+> > > Reverting this commit has no impact on DRM, since none of the DRM drivers are
+> > > tagged with the acceleration flags FBINFO_HWACCEL_COPYAREA,
+> > > FBINFO_HWACCEL_FILLRECT or others.
+> > >
+> > > Signed-off-by: Helge Deller <deller@gmx.de>
 
-Tested on the Librem 5 (imx8mq) with it's rather picky panel:
+> > As for "why", I think there was a number of private bugs that were
+> > reported in this code, which is why it was removed.  I do not think it
+> > can be safely added back in without addressing them first.  Let me go
+> > dig through my email to see if I can find them...
+>
+> Ah, no, that was just the soft scrollback code I was thinking of, which
 
-Tested-by: Guido Günther <agx@sigxcpu.org>
+So the bugs argument is moot.
 
-Cheers
- -- Guido
+> was a different revert and is still gone, thankfully :)
 
+FTR, not everyone else was thankful about that one...
 
->  
-> -- 
-> 2.25.1
-> 
+> This one was just removed because Daniel noticed that only 3 drivers
+> used this (nouveau, omapdrm, and gma600), so this shouldn't have caused
+> any regressions in any other drivers like you are reporting here.
+>
+> So perhaps this regression is caused by something else?
+
+1. Daniel's patch was not CCed to linux-fbdev,
+2. When I discovered the patch, I pointed out that the premise of 3
+   drivers was not true, and that it affects 32 more fbdev drivers[1] .
+   The patch was applied regardless.
+3. When the patch was suggested for backporting, I pointed out the
+   same[2].
+   The patch was backported regardless.
+
+[1] https://lore.kernel.org/r/alpine.DEB.2.22.394.2010311116530.379363@ramsan.of.borg/
+[2] https://lore.kernel.org/r/CAMuHMdXRgam2zahPEGcw8+76Xm-0AO-Ci9-YmVa5JpTKVHphRw@mail.gmail.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

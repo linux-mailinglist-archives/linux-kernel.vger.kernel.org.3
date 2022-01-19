@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F9D493A72
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B70493A81
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354680AbiASMgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S1354530AbiASMgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354501AbiASMgH (ORCPT
+        with ESMTP id S1354552AbiASMgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:36:07 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A724C061760
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:35:19 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id m8-20020a17090a4d8800b001b4f361964fso2509550pjh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:35:19 -0800 (PST)
+        Wed, 19 Jan 2022 07:36:11 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C99FC061765
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:35:27 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id p125so2402434pga.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:35:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:in-reply-to;
-        bh=QdA3yYddYNBCbSumdjYyzFSbUZXZL0dBuHQbxZq26nE=;
-        b=VHwEIUCF1ESIlDt0B24BwkXHzBBMXEY8s19UnhJ9exodDW6Y763XKMhvAeKjE/uJXD
-         SFn9bZkSGe5fqtcqq52o2Gzu8lpxPFunG34+4hfqrIwdCDWmuCs/bXFpErKYyfUfsbxY
-         RShzb53oXfV8k8XG69M+E2pT4WMrvFQ73W1cc=
+        bh=z6r3hFrnehXgtrud8I6/NxFjaQdfIoHD/sE/2LdldX8=;
+        b=Bscuo5GM3lO4hFfyJqlhK8JAgYOUhWxqvl3OS1ZfUZQqHiaz17MvXQ55MwNwTC8zdD
+         scTj+1Si7RIJMzGHvO9PVtRDLzNTk9gLpZBFjQ3OSkRicYZkIK8oQdwcWrfXPJUTjxlz
+         muZo8FBHUFzODeLeDClwpOslkFsnjzvXFCJKw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:in-reply-to;
-        bh=QdA3yYddYNBCbSumdjYyzFSbUZXZL0dBuHQbxZq26nE=;
-        b=SFDC7qCIDWNkboQzCCmU3141ST7+LdmlmCkSPL3VCNB3+/REt+kMM/NjDEH3jpD4cg
-         ztz/wYeCBKTbe65H+A/Z4j1C2tBjnlED0Bu72ixDImE/2KmqZZvxtPPsSBHsi2QaPrWh
-         0kRHM4Iw0/UHhXAjG96dwzs+vgFuBskJUQ4AXiARXhgXBz7vrJ3+kvC904e9DwgMw+c5
-         v4LAzBnHeJCyUUKikf9nwwjyxW9I+qvCV4pbfvFRVn+roNwTy8Du8Grdf3n+H/7QBdUO
-         FS4+RJZDnCjzebk8dNQwviOcA3PPy4inB1zr7wYtytTwUMSdChwGZ01qHs87V2rBqHg7
-         5b+w==
-X-Gm-Message-State: AOAM5315Wl+wzgPThndW85XCE4J6TKNuoYmTh/jBfwQY4SaQaL0n+7/g
-        A/Tq55+HiaP+Ml+eeLuRS2IgqA==
-X-Google-Smtp-Source: ABdhPJwrusuD/qL9K231awYVAMwS+S9SGGq3c1HId/giFJdkDIykagK7NZskbGIq1LfaYpKDJtWAUQ==
-X-Received: by 2002:a17:90b:1c11:: with SMTP id oc17mr4090997pjb.128.1642595718809;
-        Wed, 19 Jan 2022 04:35:18 -0800 (PST)
+        bh=z6r3hFrnehXgtrud8I6/NxFjaQdfIoHD/sE/2LdldX8=;
+        b=sx+LF/lFlIOai8+cP6Y0hvxmEFo86TsWnjfv9ETtwtsAjQACIK+FHTTm1pZvaZSwl1
+         5uG+MGfs01yWj6/Jn8UPEP8XXriiqVWFCVnKj7VJyEZK1/lnpGNZZUM8gHHDDSt2+9FE
+         bh9Yb7x+LL7PMWLCGtPCzdb9qkNxN1wUKgpYTV+y6Ul8Vjc6sHhaTTSrmiEahzCOQN0D
+         HhhSXN4U9zAQ16do5wny/rEej1Y7DXIeS7aXzSTsxgrOwIbDWjQF0kh0kvM+82WNy9sM
+         pOBJGGZ/JVk15Fd+amruBf5eMUv9d3YrqVCCtj5Vnx9qCrAUKZtpnETm4hz8BDiQsjnk
+         TkAA==
+X-Gm-Message-State: AOAM5320J3WBbQCvQCG6GvsI6ydZw4ukOTVNgT7FXiW+a9bu5Un0REpn
+        JalHb+gfPz1nJkPDJRPLR9cTQQ==
+X-Google-Smtp-Source: ABdhPJwRhjc2a4xjJc2yhjc8Bltw57NtRDzfym03GkTwM9b2cn9RX6YWmOWjIuuilLo5YEdfM3FbwA==
+X-Received: by 2002:aa7:8c41:0:b0:4bc:2888:6951 with SMTP id e1-20020aa78c41000000b004bc28886951mr30650341pfd.16.1642595726931;
+        Wed, 19 Jan 2022 04:35:26 -0800 (PST)
 Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id q1sm7720566pgi.25.2022.01.19.04.35.10
+        by smtp.gmail.com with ESMTPSA id d7sm14397964pfh.126.2022.01.19.04.35.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 04:35:17 -0800 (PST)
-Message-ID: <4ecd0d0f-6b9b-16aa-e270-d6095865fbc2@broadcom.com>
-Date:   Wed, 19 Jan 2022 13:35:09 +0100
+        Wed, 19 Jan 2022 04:35:25 -0800 (PST)
+Message-ID: <95bf2a46-8840-e09a-8723-7e590a6ae415@broadcom.com>
+Date:   Wed, 19 Jan 2022 13:35:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: Re: [PATCH v3 7/9] brcmfmac: of: Use devm_kstrdup for board_type &
- check for errors
+Subject: Re: [PATCH v3 8/9] brcmfmac: fwil: Constify iovar name arguments
 To:     Hector Martin <marcan@marcan.st>,
         Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -81,54 +80,33 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
         SHA-cyfmac-dev-list@infineon.com
 References: <20220117142919.207370-1-marcan@marcan.st>
- <20220117142919.207370-8-marcan@marcan.st>
-In-Reply-To: <20220117142919.207370-8-marcan@marcan.st>
+ <20220117142919.207370-9-marcan@marcan.st>
+In-Reply-To: <20220117142919.207370-9-marcan@marcan.st>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000058eab105d5ee9ed2"
+        boundary="000000000000d499d705d5ee9ec2"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000058eab105d5ee9ed2
+--000000000000d499d705d5ee9ec2
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/17/2022 3:29 PM, Hector Martin wrote:
-> This was missing a NULL check, and we can collapse the strlen/alloc/copy
-> into a devm_kstrdup().
 
+
+On 1/17/2022 3:29 PM, Hector Martin wrote:
+> Make all the iovar name arguments const char * instead of just char *.
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-> index 513c7e6421b2..5dc1e942e9e7 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-> @@ -79,8 +79,12 @@ void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
->   
->   		/* get rid of '/' in the compatible string to be able to find the FW */
->   		len = strlen(tmp) + 1;
-> -		board_type = devm_kzalloc(dev, len, GFP_KERNEL);
-> -		strscpy(board_type, tmp, len);
-> +		board_type = devm_kstrdup(dev, tmp, GFP_KERNEL);
-> +		if (!board_type) {
-> +			brcmf_err("out of memory allocating board_type\n");
+>   .../broadcom/brcm80211/brcmfmac/fwil.c        | 34 +++++++++----------
+>   .../broadcom/brcm80211/brcmfmac/fwil.h        | 28 +++++++--------
+>   2 files changed, 31 insertions(+), 31 deletions(-)
 
-Drop the message. mm will blurb out with a stack trace providing all the 
-info you need.
-
-> +			of_node_put(root);
-> +			return;
-> +		}
->   		for (i = 0; i < board_type[i]; i++) {
->   			if (board_type[i] == '/')
->   				board_type[i] = '-';
-
---00000000000058eab105d5ee9ed2
+--000000000000d499d705d5ee9ec2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -199,14 +177,14 @@ aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
 OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
 UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
 YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC3vRRoLPQSaMAd9aoT
-3gnTenZZwOdUZlr6OysPFdj0NjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMTkxMjM1MTlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAIL/pU/vjEYYbioABH
+45oxE4eHpgBa08V+2WhMG1XTgDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMTkxMjM1MjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
 AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAKdlKOBcvCVuM6NQ7nw3R4lhD15adPOTHADnm
-pRicEhyCWirg9q8xClsDLRE/mQcD6WencLaghsKM+q1l2xdKMt9vH5SrLSzGHVmZ2TxILCWnOm37
-h5APCQFqJA/jsmMjhUN3gnPNg/w2nrtdEclshn6wD7vYfO61c1TZTKiSnDPF5w9Z90sxqtspwr+W
-/qbWLppgSZShyQLlv+0Ok3FvQEyGns9fLGlPVFUHCPFZ5Ieu/6hKEoaoGTgozlSaf6SdF46tBsPn
-M9Y8cz7VJZQBCjm3xNp4F4MEi+xZyxkZA2TwsI+NNyEav0KlkDru/Oqsa31Iv36fqOMkaPtw8F90
-Mw==
---00000000000058eab105d5ee9ed2--
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQdOWim6jCIQXJsNlnxebRYVAZmW5I8dKEMiF
+p+8YbcjN09jR0BrCQgys0bXwR0ZkoUEzU9oZ2lnh2R6G1scO59eHi3Mpo0JIC2fERZrWQK7vk/bE
+GOd6b4cTNlGKDv0BJdqr7dPsXJNo0VLOTjOdnHglHDGAbWsJkTOe2z81ryxCTuPcORVdkDKOk9K5
+MEGCZVfyWS+rnFlOjQBO0l96lJBY8fp0ridXs6LTKEMd+fi7cCFFedPquriKcuaeiGcnf0GTDmpq
+nhxvvsqXq/qiGdgI8Q3yYOmMwtjqFsGfFErWztoLxB8mf4xXa0MrlZqpKQ/T/KVLH49TMU8wstvr
+iw==
+--000000000000d499d705d5ee9ec2--

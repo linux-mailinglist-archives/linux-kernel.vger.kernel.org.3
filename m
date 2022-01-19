@@ -2,180 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79085493B09
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA58493AEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354794AbiASNYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:24:38 -0500
-Received: from mx315.baidu.com ([180.101.52.204]:35294 "EHLO
-        njjs-sys-mailin04.njjs.baidu.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1350184AbiASNYb (ORCPT
+        id S1354717AbiASNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236079AbiASNRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:24:31 -0500
-X-Greylist: delayed 606 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jan 2022 08:24:30 EST
-Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
-        by njjs-sys-mailin04.njjs.baidu.com (Postfix) with ESMTP id 8FCFB11800042;
-        Wed, 19 Jan 2022 21:14:21 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id 6EB4DD9932;
-        Wed, 19 Jan 2022 21:14:21 +0800 (CST)
-From:   Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com
-Cc:     lirongqing@baidu.com, kvm@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] KVM: X86: Introduce vfio_intr_stat per-vm debugfs file
-Date:   Wed, 19 Jan 2022 21:14:21 +0800
-Message-Id: <1642598061-29454-1-git-send-email-yuanzhaoxiong@baidu.com>
-X-Mailer: git-send-email 1.7.1
+        Wed, 19 Jan 2022 08:17:32 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6937DC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:17:32 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id d4so2248407qtw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:17:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uLFGZqyJySmbyBQ4sjesJ1t4m/84/5hhnfPmzo+DBaE=;
+        b=HQt2tqp6zGYhfblEra0zM0+FR6k6EeUJiZDEUZWXH2TZNLdPWXYj3HNzafScmi92E0
+         6ZwiRGFw8bnL8Fu6BT7PEjlwuEMVONf2ofHY/L5Zm3cdachcT8xjhh4icQvmmpFmQXkO
+         Alu2+h+b2rBAnr1viwICoF32r6L5GU4VjQtMYktCOVD5Bp8Pud77VHQvOJvANaKfk3Ej
+         /f0v9Q3eGOB1k3u+jaPh+UYk8XSzOZt08O9+1HIRfDAngLpd1S1IWB9zV/4jhRmeYK0C
+         /t7DktEQ0t/YYeDUjdVlErCHCMRg6ToT8TpX9gu4KqI8twNLG6WN2JfDFVR6iS1DUSuK
+         C6lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uLFGZqyJySmbyBQ4sjesJ1t4m/84/5hhnfPmzo+DBaE=;
+        b=KQBrncKxpWgLBBxmhjXL9KRSB1gprNHv9J1ygJrS8i5G1uuvxSw8+5+Llxikxqt5+9
+         GYn16EYTyJG9Xmqlghv15SM7xwdJ976H9VT1qaoFexXS30VxCePajij6Ox3QAHHehB/D
+         92X++NTz//ZKKucXUVlmO7QfrexZDMpJVO/vDiRoK8226ytv7gbTvBfIj4qCK/RIs/Py
+         2bu0b77Y3AgBZwoYNHJz14Rch0AftPPMEoCR5lacPwksJ+wOAJs1lQUNhRupUX2TMDQy
+         /pfWtbTvLpGfHYhnvDDgiqH0u++mKglS971v3si9FFoMNzQKQ4pSHGABR2nPLguLMu4N
+         X9kA==
+X-Gm-Message-State: AOAM533BMSjY/rXmm2eugTyECPpA/hKJ8cDfQJDU3u+GeBVDOXrNvhz8
+        z+4HCXO7nqdxNdENcPUo+CRBYg==
+X-Google-Smtp-Source: ABdhPJw0y5MaVc+dgVB8CBigVZFZt3DgJA+Wkso3kEA+8IErd9EFFOFWXCTUIRdqKkU80gp5ZpjBBQ==
+X-Received: by 2002:ac8:5cd4:: with SMTP id s20mr18611650qta.299.1642598250063;
+        Wed, 19 Jan 2022 05:17:30 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id i14sm242296qko.18.2022.01.19.05.17.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 05:17:29 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nAAq8-001IVe-UU; Wed, 19 Jan 2022 09:17:28 -0400
+Date:   Wed, 19 Jan 2022 09:17:28 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Praveen Kannoju <praveen.kannoju@oracle.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
+        Rajesh Sivaramasubramaniom 
+        <rajesh.sivaramasubramaniom@oracle.com>
+Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
+ asynchronous workers to flush the mr pool
+Message-ID: <20220119131728.GK8034@ziepe.ca>
+References: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
+ <53D98F26-FC52-4F3E-9700-ED0312756785@oracle.com>
+ <20220118191754.GG8034@ziepe.ca>
+ <CEFD48B4-3360-4040-B41A-49B8046D28E8@oracle.com>
+ <Yee2tMJBd4kC8axv@unreal>
+ <PH0PR10MB5515E99CA5DF423BDEBB038E8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <20220119130450.GJ8034@ziepe.ca>
+ <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use this file to export correspondence between guest_irq, host_irq,
-vector and vcpu belonging to VFIO passthrough devices.
+On Wed, Jan 19, 2022 at 01:12:29PM +0000, Praveen Kannoju wrote:
 
-An example output of this looks like (a vm with VFIO passthrough
-devices):
-   guest_irq     host_irq       vector         vcpu
-          24          201           37            8
-          25          202           35           25
-          26          203           35           20
-   ......
+> Yes, we are using the barriers. I was justifying the usage of
+> smp_rmb() and smp_wmb() over smp_load_acquire() and
+> smp_store_release() in the patch.
 
-When a VM has VFIO passthrough devices, the correspondence between
-guest_irq, host_irq, vector and vcpu may need to be known especially
-in AMD platform with avic disabled. The AMD avic is disabled, and
-the passthrough devices may cause vcpu vm exit twice for a interrupt.
-One extrernal interrupt caused by vfio host irq, other ipi to inject
-a interrupt to vm.
+You failed to justify it.
 
-If the system administrator known these information, set vfio host
-irq affinity to Pcpu which the correspondece guest irq affinited vcpu,
-to avoid extra vm exit.
-
-Co-developed-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
----
-diff with v0: modifying the code format.
-
- arch/x86/kvm/debugfs.c | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
-
-diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
-index 9240b3b..be16bfe 100644
---- a/arch/x86/kvm/debugfs.c
-+++ b/arch/x86/kvm/debugfs.c
-@@ -10,6 +10,11 @@
- #include "mmu.h"
- #include "mmu/mmu_internal.h"
- 
-+#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
-+#include <linux/kvm_irqfd.h>
-+#include <asm/irq_remapping.h>
-+#endif
-+
- static int vcpu_get_timer_advance_ns(void *data, u64 *val)
- {
- 	struct kvm_vcpu *vcpu = (struct kvm_vcpu *) data;
-@@ -181,9 +186,94 @@ static int kvm_mmu_rmaps_stat_release(struct inode *inode, struct file *file)
- 	.release	= kvm_mmu_rmaps_stat_release,
- };
- 
-+#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
-+static int kvm_vfio_intr_stat_show(struct seq_file *m, void *v)
-+{
-+	struct kvm_kernel_irq_routing_entry *e;
-+	struct kvm_irq_routing_table *irq_rt;
-+	unsigned int host_irq, guest_irq;
-+	struct kvm_kernel_irqfd *irqfd;
-+	struct kvm *kvm = m->private;
-+	struct kvm_lapic_irq irq;
-+	struct kvm_vcpu *vcpu;
-+	int idx;
-+
-+	if (!kvm_arch_has_assigned_device(kvm) ||
-+			!irq_remapping_cap(IRQ_POSTING_CAP)) {
-+		return 0;
-+	}
-+
-+	seq_printf(m, "%12s %12s %12s %12s\n",
-+			"guest_irq", "host_irq", "vector", "vcpu");
-+
-+	spin_lock_irq(&kvm->irqfds.lock);
-+	idx = srcu_read_lock(&kvm->irq_srcu);
-+	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
-+
-+	list_for_each_entry(irqfd, &kvm->irqfds.items, list) {
-+		if (!irqfd->producer)
-+			continue;
-+
-+		host_irq = irqfd->producer->irq;
-+		guest_irq = irqfd->gsi;
-+
-+		if (guest_irq >= irq_rt->nr_rt_entries ||
-+				hlist_empty(&irq_rt->map[guest_irq])) {
-+			pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
-+					guest_irq, irq_rt->nr_rt_entries);
-+			continue;
-+		}
-+
-+		hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
-+			if (e->type != KVM_IRQ_ROUTING_MSI)
-+				continue;
-+
-+			kvm_set_msi_irq(kvm, e, &irq);
-+			if (kvm_intr_is_single_vcpu(kvm, &irq, &vcpu)) {
-+				seq_printf(m, "%12u %12u %12u %12u\n",
-+						guest_irq, host_irq, irq.vector, vcpu->vcpu_id);
-+			}
-+		}
-+	}
-+	srcu_read_unlock(&kvm->irq_srcu, idx);
-+	spin_unlock_irq(&kvm->irqfds.lock);
-+	return 0;
-+}
-+
-+static int kvm_vfio_intr_stat_open(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = inode->i_private;
-+
-+	if (!kvm_get_kvm_safe(kvm))
-+		return -ENOENT;
-+
-+	return single_open(file, kvm_vfio_intr_stat_show, kvm);
-+}
-+
-+static int kvm_vfio_intr_stat_release(struct inode *inode, struct file *file)
-+{
-+	struct kvm *kvm = inode->i_private;
-+
-+	kvm_put_kvm(kvm);
-+	return single_release(inode, file);
-+}
-+
-+static const struct file_operations vfio_intr_stat_fops = {
-+	.open    = kvm_vfio_intr_stat_open,
-+	.read    = seq_read,
-+	.llseek  = seq_lseek,
-+	.release = kvm_vfio_intr_stat_release,
-+};
-+#endif
-+
- int kvm_arch_create_vm_debugfs(struct kvm *kvm)
- {
- 	debugfs_create_file("mmu_rmaps_stat", 0644, kvm->debugfs_dentry, kvm,
- 			    &mmu_rmaps_stat_fops);
-+
-+#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
-+	debugfs_create_file("vfio_intr_stat", 0444, kvm->debugfs_dentry, kvm,
-+			    &vfio_intr_stat_fops);
-+#endif
- 	return 0;
- }
--- 
-1.8.3.1
+Jason
 

@@ -2,98 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB66E4943D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B8F4943DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344311AbiASX0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S1344374AbiASX2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343864AbiASX0O (ORCPT
+        with ESMTP id S229874AbiASX2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:26:14 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772FBC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:26:14 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 192so248479pfz.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:26:14 -0800 (PST)
+        Wed, 19 Jan 2022 18:28:45 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A53C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:28:44 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id p1so7569007uap.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:28:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r1BrZMEuUDk+2sfXVctDN6hyPwNL/9n18gjgSpq5RYs=;
-        b=QEfgfBiw9LyCRGvxE4oDjyAUOMjhA6PfbklcFCfNhp20IFa06NoxVVCzCx7QSp/tg7
-         vPxqDAj3m8ct3vewn/VMcwziq1+ELXR3dVLqGKtHiK3wTU36w5rSlBQzZc0raRj0q+sr
-         2cTGIEBsgfo2j8ngtuvCOAs3XmnVTRDdVqxlNBnohoofKjqXIQz6bs+mB+NWNoDIKZqB
-         LHldT6k4UX0/cfXvE/zsjbIwomUbUqeU+s/iENxLkkpSM0as7nXvDBg6sh30/cpiNvyV
-         2YSmHTQXgOyQBn6O1DhaLIbIQLw9sVJP7EFsCRpnUsOrPko55RmQKtems8enux2LVJq5
-         BMSQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SAvFOz8ghr5oAZyEvyWgFSjE0cOqBv8pLZgD3az/Alw=;
+        b=bsrpLBeEmGPON4IVnn1J9LS41vfyBHVbscaKWsuCglNOrJmCd5wbVfUTccva0jnF4t
+         279q+9zbrD+ZWr8qrelwJQTRhNzSYbs5gig4TBG0nyZEqIinSkCPAxiYOvna0hrEiv5D
+         xoeJC9NwShyhujgekVKeZa14J68SMjQo3LSdBUda1rDhWMATtytzbjfPJCNxcthKatxB
+         wt70R5w+8MsTAylz4/5aRRwYbrOpRn5RU8pogPtfenu6omPyh9m0vxuWpD+rg4Rk5VS2
+         Cm+SF06WzCepcaQQeTQ12imr97K+3TkPsU54aR6k7wXd2b9y4OVXuKL4xdbvd/7zw4B+
+         P/YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r1BrZMEuUDk+2sfXVctDN6hyPwNL/9n18gjgSpq5RYs=;
-        b=tknglcFG+DHqWzbYc+P1IcVC3D0+zb0KHkAwbysqfvyK2IIPZlgK4nimj8mICBghJ6
-         3lk2mjvZ6m9MyNfHv7/er+f40Lyol1cKztxXGvYk4PhzH7yhHvBayUkzUXrQfo+2rhB2
-         YyN0J92UXiO1EqpQj4t6uStYGzI03mkuG/veyOwSQ466MKfSRm6AKav4WoOgxRFYUY0h
-         LCPF1dSO0CxxBwRd2fWhJkLEOSkv7iwEnLCv8Choonr4KdKhEO2Ghw8MSHrtRYYxO5Ow
-         MPYkL4RxT62dVFLq95/4svginbnG0V75Zf3WoPw4cTQMGQkzDnCb9jKGa9TER525G4Uw
-         8H5g==
-X-Gm-Message-State: AOAM530UH6tCAPw0UNghV59q0meVo873OR/WBhcBQ/hNg2Pmwd18dB2S
-        wApvvOBUbRYaoeSGOUTGP18=
-X-Google-Smtp-Source: ABdhPJzM9YC3NsLH8dRSatWaoVSYt3jJno/5D1/wga980c+lxNS6gIW/n2C6/rt0o79E47c7tp2CkA==
-X-Received: by 2002:a63:b341:: with SMTP id x1mr29912496pgt.185.1642634773940;
-        Wed, 19 Jan 2022 15:26:13 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c70sm646991pfc.139.2022.01.19.15.26.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 15:26:13 -0800 (PST)
-Subject: Re: [PATCH 0/3] phy: phy-brcm-usb: Fixes for phy-brcm-usb driver
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20211201180653.35097-1-alcooperx@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <7cbb745e-8b95-1eed-0903-44070a112ec0@gmail.com>
-Date:   Wed, 19 Jan 2022 15:26:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SAvFOz8ghr5oAZyEvyWgFSjE0cOqBv8pLZgD3az/Alw=;
+        b=Rq90XMzM4N/9FPi32mVM8+LpdEkzljXK0aAk97hR5dtPfBb7xUaIynldgrb1eH9wLk
+         yzaB2qZlTgS2pfHE1FM9BT08u9q3FN4VDq0myfu2tYfPLH0aK3l/qSHwnKdSHMjgDqHI
+         7AZaIWLYNfq/6ezP9GVostB00YcFPFX+ztqIZs+AOiNNdYj6r7eFRxxb/qoIAYqP/ix+
+         cRqc73F50dwj+Q52IyvBgGlcUe1PDNgZEoyqfUiWMK3kB5oihBqXQooOkLxLyA4bSYNh
+         7SKNo6NmZHmEv3ux2ZB1iYgx9XQMAILzSL6TVdrkjP3LmVNPq6lv0V5O/8iQyATKEkcv
+         iMMA==
+X-Gm-Message-State: AOAM533vafVYEX+jlO6Tf6G7yiAMHc29OfasbQPYH7T9qu/HlPuUHW7j
+        wIPFD/ws3/d78n8bg/FnmT5aYDpzbiDNMYJf2J74Aw==
+X-Google-Smtp-Source: ABdhPJztNtP2ASrwQij4Hnq8zUdL8VnM6LFy0K4AN9sQGIkxltMSEPOR/5D8UuhwRg2Dmn31bBqJ3tpesxaIKOurOlI=
+X-Received: by 2002:a67:6587:: with SMTP id z129mr140195vsb.61.1642634923681;
+ Wed, 19 Jan 2022 15:28:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211201180653.35097-1-alcooperx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220118230539.323058-1-pcc@google.com> <Yefh00fKOIPj+kYC@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yefh00fKOIPj+kYC@hirez.programming.kicks-ass.net>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Wed, 19 Jan 2022 15:28:32 -0800
+Message-ID: <CAMn1gO5n6GofyRv6dvpEe0xRekRx=wneQzwP-n=9Qj6Pez6eEg@mail.gmail.com>
+Subject: Re: [PATCH] mm/mmzone.c: fix page_cpupid_xchg_last() to READ_ONCE()
+ the page flags
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+On Wed, Jan 19, 2022 at 2:03 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Jan 18, 2022 at 03:05:39PM -0800, Peter Collingbourne wrote:
+> > After submitting a patch with a compare-exchange loop similar to this
+> > one to set the KASAN tag in the page flags, Andrey Konovalov pointed
+> > out that we should be using READ_ONCE() to read the page flags. Fix
+> > it here.
+>
+> What does it actually fix? If it manages to split the read and read
+> garbage the cmpxchg will fail and we go another round, no harm done.
 
-On 12/1/21 10:06 AM, Al Cooper wrote:
-> A few fixes for the phy-brcm-usb driver.
-> 
-> Al Cooper (3):
->   phy: usb: Leave some clocks running during suspend
->   usb: Add "wake on" functionality for newer Synopsis XHCI controllers
->   phy: broadcom: Kconfig: Fix PHY_BRCM_USB config option
+What I wasn't sure about was whether the compiler would be allowed to
+break this code by hoisting the read of page->flags out of the loop
+(because nothing in the loop actually writes to page->flags aside from
+the compare-exchange, and if that succeeds we're *leaving* the loop).
+That could potentially result in a loop that never terminates if the
+first compare-exchange fails. This is largely a theoretical problem as
+far as I know; the assembly produced by clang and gcc on x86_64 and
+arm64 appears to be doing the expected thing for now, and we're using
+inline asm for compare-exchange instead of the compiler builtins on
+those architectures (and on all other architectures it seems? no
+matches for __atomic_compare_exchange outside of kcsan and the
+selftests) so the compiler wouldn't be able to look inside it anyway.
 
-Are you able to pick up those patches? Thank you
+> > Fixes: 75980e97dacc ("mm: fold page->_last_nid into page->flags where possible")
+>
+> As per the above argument, I don't think this rates a Fixes tag, there
+> is no actual fix.
 
-> 
->  drivers/phy/broadcom/Kconfig                  |  3 +-
->  .../phy/broadcom/phy-brcm-usb-init-synopsys.c | 46 +++++++++++++++----
->  drivers/phy/broadcom/phy-brcm-usb.c           | 38 +++++++++++++++
->  3 files changed, 77 insertions(+), 10 deletions(-)
-> 
-> 
-> base-commit: f080815fdb3e3cff5a004ca83b3815ac17ef71b1
-> 
+Okay, I'll remove it unless you find the above convincing.
 
+> > Signed-off-by: Peter Collingbourne <pcc@google.com>
+> > Link: https://linux-review.googlesource.com/id/I2e1f5b5b080ac9c4e0eb7f98768dba6fd7821693
+>
+> That's that doing here?
 
--- 
-Florian
+I upload my changes to Gerrit and link to them here so that I (and
+others) can see the progression of the patch via the web UI.
+
+> > Cc: stable@vger.kernel.org
+>
+> That's massively over-selling things.
+
+Fair enough since it isn't causing an actual problem, I'll remove this tag.
+
+> > ---
+> >  mm/mmzone.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/mm/mmzone.c b/mm/mmzone.c
+> > index eb89d6e018e2..f84b84b0d3fc 100644
+> > --- a/mm/mmzone.c
+> > +++ b/mm/mmzone.c
+> > @@ -90,7 +90,7 @@ int page_cpupid_xchg_last(struct page *page, int cpupid)
+> >       int last_cpupid;
+> >
+> >       do {
+> > -             old_flags = flags = page->flags;
+> > +             old_flags = flags = READ_ONCE(page->flags);
+> >               last_cpupid = page_cpupid_last(page);
+> >
+> >               flags &= ~(LAST_CPUPID_MASK << LAST_CPUPID_PGSHIFT);
+>
+> I think that if you want to touch that code, something like the below
+> makes more sense...
+
+Yeah, that looks a bit nicer. I'll send a v2 and update the other patch as well.
+
+Peter

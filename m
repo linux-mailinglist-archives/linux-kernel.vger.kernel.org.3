@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4247493688
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE0049368C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 09:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352522AbiASIsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 03:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S1352558AbiASItm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 03:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237729AbiASIsQ (ORCPT
+        with ESMTP id S1351869AbiASItl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 03:48:16 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4A5C061574;
-        Wed, 19 Jan 2022 00:48:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=id804dbsfqejPK5oRefHchyYSiupvM/8xrLRLyc6bqE=; b=DrCxgNBqn8qYFuoVPtXZH+3ZEQ
-        v1EmQwU7CA2xtAsN/J1fhnoyuGpLjlug3F6wyfSoIiXsc5T33lhJBVuMYABLjCUS0w+uu+x23Ccj4
-        NiyO+h5WA2nHTlI9HSgyyKsAMFuSQT3Kr8z+cQ1nx6l3tfCgIWiAQCQD18WkZ9YWu+ECRDkdD2/Ls
-        z7G8BfnFY8d5LtNwL4JPxhBXQqzVmVSlLILtVBpz/IqHLvpYauR5MrvjbmW3+8SoRasbN2XtgcNiq
-        JoxYpX5uy0lwGVMSbeMd5pi8it9pA6NHyoFjZtyCL5ZRV0ms4wi3JAG3fpkzihFp1ZFthlqTWfpsu
-        IypY5rdg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nA6cz-0020O1-T1; Wed, 19 Jan 2022 08:47:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 05513300140;
-        Wed, 19 Jan 2022 09:47:33 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CD1F8203C6487; Wed, 19 Jan 2022 09:47:33 +0100 (CET)
-Date:   Wed, 19 Jan 2022 09:47:33 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@google.com>
-Cc:     Peter Oskolkov <posk@posk.io>, mingo@redhat.com,
-        tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, avagin@google.com, jannh@google.com,
-        tdelisle@uwaterloo.ca
-Subject: Re: [RFC][PATCH 3/3] sched: User Mode Concurency Groups
-Message-ID: <YefQJXn3x3JJtB1d@hirez.programming.kicks-ass.net>
-References: <20211214204445.665580974@infradead.org>
- <20211214205358.701701555@infradead.org>
- <20211221171900.GA580323@dev-hv>
- <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
- <YeaRx9oDp08ABvyU@hirez.programming.kicks-ass.net>
- <CAPNVh5cdGiDqut90kUo-HXyya6Nbz_CjuUObYXfprgDhQHnUmg@mail.gmail.com>
+        Wed, 19 Jan 2022 03:49:41 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3F4C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:49:41 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id c24so5446106edy.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:49:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=63UMAZJ8UaeleKSQ6Z/+YlL8VwCIenEbrG/mPXwnfMk=;
+        b=Gv3+5DO1cfhtUQ5wnH6KkC8emnTvlUJQged0Fdct2Z8i4KfApYAUjV+nODsQMxqUSS
+         S5F4sHex4RDFaUA6kBj0Psiv6W2OLJBmj/VBmXKYj+Z/kiL/Mbl5sp+1ljm4ApfBP09p
+         TA8XcMUB2fxG8IcTXTyy8GGzQU4qn0ZJn9oyI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=63UMAZJ8UaeleKSQ6Z/+YlL8VwCIenEbrG/mPXwnfMk=;
+        b=ThId8vQdLxapz7/GCWrWZ9+5byD3aasUdcn41+uCmtkH5rexXw+6Q1EzAcbjlMkKpK
+         nUfuMXpbjtHyTxD6uDG03/AbyGcUJ/n3+TREPSuih6xtTOPV7VJidyx5gMnAP1ZWFMaJ
+         bjMeHvt5LXogWE+r3Nh71ufqVpbNPPao6fRWfSDEdNSDkZNFgYm7aDCjXaUSoHan0Rpo
+         0tyxoiBirNQEftlZtpzw20jEXusBrZr+fCHpR+AYptMQO3D9svp0wkYBiHdlfoPkaXvw
+         3OYQJwno4Mo9lVuRR4li3aJv+p5J58PA/aE1YRJBIHw2i0DzXDu1rfbhAQnXfQcNJwDO
+         M5og==
+X-Gm-Message-State: AOAM533W+a8r2nItvI54Djx+c9tLrBqqKotuc1SiCPBJrGZmKKH/Eo3j
+        +aCHyhooDCv97eZt3HWSKn/7U65DvcrNkHqgmZY=
+X-Google-Smtp-Source: ABdhPJy5r9P8c9NtmOCZJ6AmW+YjlfI+s8OVi/2hcEoXSZj8JFOcQ5TY5ylkS7Wp8toCXsuHhHuovQ==
+X-Received: by 2002:a05:6402:1d4a:: with SMTP id dz10mr14285263edb.206.1642582180074;
+        Wed, 19 Jan 2022 00:49:40 -0800 (PST)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id o20sm497123ejb.33.2022.01.19.00.49.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 00:49:39 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso12710889wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 00:49:39 -0800 (PST)
+X-Received: by 2002:a05:600c:3482:: with SMTP id a2mr2413478wmq.152.1642582179436;
+ Wed, 19 Jan 2022 00:49:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPNVh5cdGiDqut90kUo-HXyya6Nbz_CjuUObYXfprgDhQHnUmg@mail.gmail.com>
+References: <20220118164906.402468-1-Jason@zx2c4.com>
+In-Reply-To: <20220118164906.402468-1-Jason@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 19 Jan 2022 10:49:23 +0200
+X-Gmail-Original-Message-ID: <CAHk-=wj-DoruDmbAojOJ=VtpZG6piwbRJXO1N1Uq6uX7Q4UVoA@mail.gmail.com>
+Message-ID: <CAHk-=wj-DoruDmbAojOJ=VtpZG6piwbRJXO1N1Uq6uX7Q4UVoA@mail.gmail.com>
+Subject: Re: [GIT PULL] random number generator fixes for 5.17-rc1
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:19:21AM -0800, Peter Oskolkov wrote:
-> ============= worker-to-worker context switches
-> 
-> One example: absl::Mutex (https://abseil.io/about/design/mutex) has
-> google-internal extensions that are "fiber aware". More specifically,
-> consider this situation:
-> 
-> - worker W1 acqured the mutex and is doing its work
-> - worker W2 calls mutex::lock()
->   mutex::lock(), being aware of workers, understands that W2 is going to sleep;
->   so instead of just doing so, waking the server, and letting
->   the server figure out what to run in place of the sleeping worker,
-> mutex::lock()
->   calls into the userspace scheduler in the context of W2 running, and the
->   userspace scheduler then picks W3 to run and does W2->W3 context switch.
-> 
-> The optimization above replaces W2->Server and Server->W3 context switches
-> with a single W2->W3 context switch, which is a material performance gain.
+On Tue, Jan 18, 2022 at 6:49 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> 1) Some Kconfig changes resulted in BIG_KEYS being unselectable, which Justin
+>    sent a patch to fix.
 
-Yes, I've also already reconsidered. Things like pipelines and other
-fixed order scheduling policies will greatly benefit from
-worker-to-worker switching.
+Ugh. I think the old "don't ask" model was the correct one, and
+BIG_KEYS is probably broken (ie it should just select whatever crypto
+it wants, not depend on people having selected it).
 
-But I think all of them are explicit. That is, we can limit the
-::next_tid usage to sys_umcg_wait() and never look at it for implicit
-blocks.
+But I've taken this.
 
-> In addition, when W1 calls mutex::unlock(), the scheduling code determines
-> that W2 is waiting on the mutex, and thus calls W2::wake() from the context of
-> running W1 (you asked earlier why do we need "WAKE_ONLY").
+On a tangential note - looking at the resulting config file, I do note
+that 'CRYPTO_LIB_POLY1305_RSIZE' should probably depend on
+CRYPTO_LIB_POLY1305, because right now that sily thing gets set
+whether POLY1305 is enabled or not.
 
-This I'm not at all convinced on. That sounds like it will violate the
-1:1 thing.
+That was true before too, of course - not related to this pull except
+in the "this caused me to look at the end result" sense.
+
+              Linus

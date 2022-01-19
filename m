@@ -2,107 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C76649397D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F850493949
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354130AbiASL3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:29:24 -0500
-Received: from qproxy6-pub.mail.unifiedlayer.com ([69.89.23.12]:33534 "EHLO
-        qproxy6-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354064AbiASL3T (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:29:19 -0500
-X-Greylist: delayed 1259 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jan 2022 06:29:19 EST
-Received: from gproxy4-pub.mail.unifiedlayer.com (unknown [69.89.23.142])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id BF4D88037E14
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:08:17 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 083AE10050173
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:08:17 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id A8p6ncZWrEaNCA8p6nVwE0; Wed, 19 Jan 2022 11:08:17 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=dJtjJMVb c=1 sm=1 tr=0 ts=61e7f121
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pTASI+BTtOiq+6yCBe1T6PXhyzQPxP7+af1Mcxktvmw=; b=M0IHa2QOGblm8yzCxR/4y2W14Z
-        oxzCp6+BBCkpX4qFThL7KcVXwDB0CXRP2J06fHzt/kiFT5Qaz5tYrRjoo57l390WPGvAGqHLvqA/J
-        ftxw+E25ntzgdpfd2got5LwhS;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33360 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nA8p5-002KLK-S0; Wed, 19 Jan 2022 04:08:15 -0700
-Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-References: <20220118160452.384322748@linuxfoundation.org>
-In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <4ec8537c-b1bd-70d7-97b2-b3ad6e48d24d@w6rz.net>
-Date:   Wed, 19 Jan 2022 03:08:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1354045AbiASLKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:10:17 -0500
+Received: from mout.gmx.net ([212.227.15.19]:47251 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354024AbiASLKO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:10:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642590586;
+        bh=03ODW03j8YJfxEci8KnMyw4Mt/JjljIu8pLQIEO4aj0=;
+        h=X-UI-Sender-Class:From:To:Subject:Date;
+        b=ED7v8mlJwz/aUHJFcbJIKUCN+roP4i0vr/Wrjj/YL+6T+QsIo46E2H2Vf81urzIE9
+         KpS51FfQKNAfwA9WkwG5y/YwqwX7Ov+ffjEkbo+lVB33I7qZxRgEMqEbjSkty+u7pB
+         wXGHKIQqKKxH/ITKLgMXqIOGBawmrmKp4kYnuCA0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530.fritz.box ([92.116.183.52]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiacH-1mdGnd1wRj-00fhXJ; Wed, 19
+ Jan 2022 12:09:46 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        dri-devel@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
+Subject: [PATCH 0/2] Fix regression introduced by disabling accelerated scrolling in fbcon
+Date:   Wed, 19 Jan 2022 12:08:37 +0100
+Message-Id: <20220119110839.33187-1-deller@gmx.de>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nA8p5-002KLK-S0
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:33360
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qTmYAWli9L6TudjwN284cLCRYhReB55axJIO2pVzY3b+UC4RW6t
+ tnVdB2RrR5++3EZ8ZyPl9/F0oBmB2NjY9IFOawMo3lqoSpcFMLbHqCDdfg7JjEgXU6sCEb2
+ E+IXcJIvoQETmXnWfhWy2ID1ZcrtV3d1M6C+S1QFjKnTC86iXCONsc4nURwo9nWMnHpka0D
+ vloc84ERRzz85GQj+dbeQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:P/sA5GOmAxk=:Fx5fyN3Mc8+FOsPWITIPWM
+ H36ut17iHqkiPDl3YdxGmi+uhyKjt1A/+iEwY1Ya+0rOXyUb40323j5XAO1VC/+sP5wBUjaKC
+ iapmzojahcNlNsLBKr0YYU+iKSlp1aibERjzjbIDoJBsa+1EjI47NN3rnw8DL7OUSfOqzXu1p
+ x38f7bClH92GbMbaxHh338j/LeUKH05xAwjYqjZgkvQXDcTU5tmePY4PFEfrkVJhYDIxcxVAT
+ W2LcvMbMYku3/T0glVUB+aDQl9/rEk7mCWkhvUyKyVSyBFtwCdVuwxovEoPSJCkj72WZZ+naM
+ JeRvTRJO/4YhCMBybM+HfAM9+foINyveEwxQl5sLFmGrWdilkC7ZZ507LPgBFquLVWjNd1TGh
+ cha5y1NIXk4zOpLHK5TRR354yRv3UajE+BD+zJXT+6DIBQoCICEu41FQZoDEg5tZUhGoJTHXV
+ Ntz/4U9j2NDIMFbdHFciYMzdBiIMj/TmOi5oXiWPoK5+sS6Pc6O8D28y4nnPPPhzEB8juD0Gx
+ 0j2ir5BCaElpe3NJMc1nRo+95OWavGLfYmOV8yiXjDvUBNRaoVwb0iGx53C2L7UELAJw/xIcL
+ 3LiA9CfJ60JoMPWF6x0UwoEG9i+HlUQTxdhST5yR4afHGf2jWfGQKSmTYSONE3psgwOCcTQ7s
+ A0Tbyf295rZRyvpgMHIh7PdEhVTSwarEaxn3S9RwJerEjyi4lSaNpjAhMF9qKZL74pNiUmUvA
+ t0ZqbsVO4EvH+GSc/vwUmIXsr8oW8oeGaNC27kNuFLbPimsTKe9vFoOHFbTwpoFPTpKDJtqQQ
+ LivRBIYYCNSY1XgyLtIOWVMUax3IJPOZ9eGcI3oeLAg9r6ddVEUBQIUjWZO0sNuxd+ATV+Cf+
+ bKgEKImiLC49o4yq6WM36V0kwzPU+GIwE1JPk23Emy/k0H2vuns/DvtymKATeBEJHLs/zXu9a
+ 1Vuffuppgf2bV60Lkj7RvxFR/d9+o3I7tltzVihUU6AFJdn6PMfJsh43wESBZKybmLrD+SEDI
+ dxWRh4qYv5T+31j5lqbuZiLRmh3wk2TU/wZ5oUfF1OQgA6nKR5HUAbvxfd3Ca1UlGaGVOTuzT
+ +bTK5iFf2DZk3U=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 8:05 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.2 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
-
-Tested-by: Ron Economos <re@w6rz.net>
-
+This series reverts two patches which disabled scrolling acceleration in=0D
+fbcon/fbdev. Those patches introduced a regression for fbdev-supported grap=
+hic=0D
+cards because of the performance penalty by doing screen scrolling by softw=
+are=0D
+instead of using hardware acceleration.=0D
+=0D
+Console scrolling acceleration was disabled by dropping code which checked =
+at=0D
+runtime the driver hardware possibilities for the BINFO_HWACCEL_COPYAREA or=
+=0D
+FBINFO_HWACCEL_FILLRECT flags and if set, it enabled scrollmode SCROLL_MOVE=
+=0D
+which uses hardware acceleration to move screen contents.  After dropping t=
+hose=0D
+checks scrollmode was hard-wired to SCROLL_REDRAW instead, which forces all=
+=0D
+graphic cards to redraw every character at the new screen position when=0D
+scrolling.=0D
+=0D
+This change effectively disabled all hardware-based scrolling acceleration =
+for=0D
+ALL drivers, because now all kind of 2D hardware acceleration (bitblt,=0D
+fillrect) in the drivers isn't used any longer.=0D
+=0D
+The original commit message mentions that only 3 DRM drivers (nouveau, omap=
+drm=0D
+and gma500) used hardware acceleration in the past and thus code for checki=
+ng=0D
+and using scrolling acceleration is obsolete.=0D
+=0D
+This statement is NOT TRUE, because beside the DRM drivers there are around=
+ 35=0D
+other fbdev drivers which depend on fbdev/fbcon and still provide hardware=
+=0D
+acceleration for fbdev/fbcon.=0D
+=0D
+The original commit message also states that syzbot found lots of bugs in f=
+bcon=0D
+and thus it's "often the solution to just delete code and remove features".=
+=0D
+This is true, and the bugs - which actually affected all users of fbcon,=0D
+including DRM - were fixed, or code was dropped like e.g. the support for=0D
+software scrollback in vgacon (commit 973c096f6a85).=0D
+=0D
+So to further analyze which bugs were found by syzbot, I've looked through =
+all=0D
+patches in drivers/video which were tagged with syzbot or syzkaller back to=
+=0D
+year 2005. The vast majority fixed the reported issues on a higher level, e=
+.g.=0D
+when screen is to be resized, or when font size is to be changed. The few o=
+nes=0D
+which touched driver code fixed a real driver bug, e.g. by adding a check.=
+=0D
+=0D
+But NONE of those patches touched code of either the SCROLL_MOVE or the=0D
+SCROLL_REDRAW case.=0D
+=0D
+That means, there was no real reason why SCROLL_MOVE had to be ripped-out a=
+nd=0D
+just SCROLL_REDRAW had to be used instead. The only reason I can imagine so=
+ far=0D
+was that SCROLL_MOVE wasn't used by DRM and as such it was assumed that it=
+=0D
+could go away. That argument completely missed the fact that SCROLL_MOVE is=
+=0D
+still heavily used by fbdev (non-DRM) drivers.=0D
+=0D
+Some people mention that using memcpy() instead of the hardware acceleratio=
+n is=0D
+pretty much the same speed. But that's not true, at least not for older gra=
+phic=0D
+cards and machines where we see speed decreases by factor 10 and more and t=
+hus=0D
+this change leads to console responsiveness way worse than before.=0D
+=0D
+That's why I propose to revert those patches, re-introduce hardware-based=0D
+scrolling acceleration and fix the performance-regression for fbdev drivers=
+.=0D
+There isn't any impact on DRM when reverting those patches.=0D
+=0D
+Helge Deller (2):=0D
+  Revert "fbdev: Garbage collect fbdev scrolling acceleration, part 1=0D
+    (from TODO list)"=0D
+  Revert "fbcon: Disable accelerated scrolling"=0D
+=0D
+ Documentation/gpu/todo.rst              |  24 --=0D
+ drivers/video/fbdev/core/bitblit.c      |  16 +=0D
+ drivers/video/fbdev/core/fbcon.c        | 540 +++++++++++++++++++++++-=0D
+ drivers/video/fbdev/core/fbcon.h        |  59 +++=0D
+ drivers/video/fbdev/core/fbcon_ccw.c    |  28 +-=0D
+ drivers/video/fbdev/core/fbcon_cw.c     |  28 +-=0D
+ drivers/video/fbdev/core/fbcon_rotate.h |   9 +=0D
+ drivers/video/fbdev/core/fbcon_ud.c     |  37 +-=0D
+ drivers/video/fbdev/core/tileblit.c     |  16 +=0D
+ drivers/video/fbdev/skeletonfb.c        |  12 +-=0D
+ include/linux/fb.h                      |   2 +-=0D
+ 11 files changed, 703 insertions(+), 68 deletions(-)=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D

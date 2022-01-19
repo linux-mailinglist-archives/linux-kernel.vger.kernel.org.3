@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CFB49397C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEE0493985
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354045AbiASL2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:28:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46618 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354091AbiASL2n (ORCPT
+        id S1354149AbiASLbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354064AbiASLbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:28:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3CAE61614;
-        Wed, 19 Jan 2022 11:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFEAC004E1;
-        Wed, 19 Jan 2022 11:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642591722;
-        bh=ElyrY3LbS7t4UWyA3nEHAeLrBudEAMV1SNh2zYYZMrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H7ai/Do/xvZplRjwZrYAwLWE9d8RCzy+GFByCvkrfR12p/+GV42ByU1IoWfxknEpz
-         wq1w32l6Ql0XBE+SlcWGIWuoJXsji6cLhoWNUyJiDxPyQlsbcpyXggteoogyGNHxSi
-         +TmBym1WCkDUreD+U6s0isHLdqZjv3AqzxyeVfbo=
-Date:   Wed, 19 Jan 2022 12:28:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-Message-ID: <Yef15k2GtC40aJEu@kroah.com>
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de>
- <Yef0j8+DBbwC7Kjv@kroah.com>
+        Wed, 19 Jan 2022 06:31:31 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B275C061574;
+        Wed, 19 Jan 2022 03:31:31 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id c2so4830733wml.1;
+        Wed, 19 Jan 2022 03:31:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B184jFapKUoaCmeCoLa/RY1yl2o5xLb5T8mZ+GEtvMc=;
+        b=kUJFN1kFYOr2PB86f3ofbWNuzAWIiKt4CKNBAuTjmwOxQ1X9fi8QrmX4DatmvxKL1a
+         eUJ2A8WsGvpPrtlbPPvHr08Z5pM7UGogwF6UHWa75ijA3H6Ujp2FpZ4qi8bikWY4urlt
+         qEQOLREVOYlF/fjPCN88aeKmFGwDjEZkTbuIR4BiyTBVAXqHGv+H+3R9Mjt8JBwPtUoP
+         s1dhuGhdOe2l2yz/+JPu2W6sD3MYRzlKCHH/Y+qXjH+Aruz8AiDkuGROnkYoyFwjEr6v
+         1wdX6SUeW59NCRGD/WnZHmOPxfkcjwayBjKTIchKBBLtT+P6/iADFFPYnx4//nG0db+j
+         GtKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B184jFapKUoaCmeCoLa/RY1yl2o5xLb5T8mZ+GEtvMc=;
+        b=ZICkMVceimrlF0SnZVk6cMbkuyRUrxvCkoo1ElC5Kl2D/EogSHXWAW+Rnz3+R+noC6
+         KECifiOgEJwhscbzNF0g/80v4FIirZqkrRw+PNtdpWkzowNJSOl2lwxrLFkZhH5gtFkh
+         tF0oGkr5ARRDJQksM+/hY760p7qMkrT2AtBGDFM/WIqADFd3o0eHlk/YmrvFs1HUwfIq
+         USlPzipwxqeLEnS7QrQLozLTIglwjrJEmu9+NgXFIfqc8NRcsfnuJZh+UCUPtdEqnt3v
+         9IXrSG7sNJobna6RPV/6JQztgQDtJSrYbIf9d+8J79f8lcDk/j2sEdtM69Le2I/NGUxJ
+         uf3g==
+X-Gm-Message-State: AOAM532xUFLu3resCI7gMBtpaf0i5mDIZX9wyRiwCqiztm7G9SI2YbNI
+        EOmKz7C3YTg/8nqjdJJilrrQa7nCOnq/vA==
+X-Google-Smtp-Source: ABdhPJyoASqFatmoRBFJhD6xsJLll7K5Y++9lZk9wFHgaVQ3B0ZBvKxlt3zqwehgaWMNAUDMO645EA==
+X-Received: by 2002:a1c:4c11:: with SMTP id z17mr409412wmf.0.1642591889196;
+        Wed, 19 Jan 2022 03:31:29 -0800 (PST)
+Received: from localhost ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id a20sm4778049wmb.27.2022.01.19.03.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 03:31:28 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] pwm: Changes for v5.17-rc1
+Date:   Wed, 19 Jan 2022 12:31:26 +0100
+Message-Id: <20220119113126.1244615-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yef0j8+DBbwC7Kjv@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 12:22:55PM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 19, 2022 at 12:08:39PM +0100, Helge Deller wrote:
-> > This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
-> > 
-> > Revert this patch.  This patch started to introduce the regression that
-> > all hardware acceleration of more than 35 existing fbdev drivers were
-> > bypassed and thus fbcon console output for those was dramatically slowed
-> > down by factor of 10 and more.
-> > 
-> > Reverting this commit has no impact on DRM, since none of the DRM drivers are
-> > tagged with the acceleration flags FBINFO_HWACCEL_COPYAREA,
-> > FBINFO_HWACCEL_FILLRECT or others.
-> > 
-> > Signed-off-by: Helge Deller <deller@gmx.de>
-> > Cc: stable@vger.kernel.org # v5.16
-> 
-> Why just 5.16?  This commit came in on 5.11 and was backported to
-> 5.10.5.
-> 
-> As for "why", I think there was a number of private bugs that were
-> reported in this code, which is why it was removed.  I do not think it
-> can be safely added back in without addressing them first.  Let me go
-> dig through my email to see if I can find them...
+Hi Linus,
 
-Ah, no, that was just the soft scrollback code I was thinking of, which
-was a different revert and is still gone, thankfully :)
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-This one was just removed because Daniel noticed that only 3 drivers
-used this (nouveau, omapdrm, and gma600), so this shouldn't have caused
-any regressions in any other drivers like you are reporting here.
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-So perhaps this regression is caused by something else?
+are available in the Git repository at:
 
-thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-5.17-rc1
 
-greg k-h
+for you to fetch changes up to 3f0565451cc0c5158513af0bc4e91aa8fb0b5e75:
+
+  dt-bindings: pwm: Avoid selecting schema on node name match (2021-12-09 18:17:02 +0100)
+
+Thanks,
+Thierry
+
+----------------------------------------------------------------
+pwm: Changes for v5.17-rc1
+
+This contains a number of nice cleanups and improvements for the core
+and various drivers as well as a minor tweak to the json-schema device
+tree bindings.
+
+----------------------------------------------------------------
+Thierry Reding (1):
+      dt-bindings: pwm: Avoid selecting schema on node name match
+
+Uwe Kleine-König (7):
+      pwm: Move legacy driver handling into a dedicated function
+      pwm: Prevent a glitch for legacy drivers
+      pwm: Restore initial state if a legacy callback fails
+      pwm: twl: Implement .apply() callback
+      pwm: img: Implement .apply() callback
+      pwm: vt8500: Implement .apply() callback
+      pwm: img: Use only a single idiom to get a runtime PM reference
+
+ Documentation/devicetree/bindings/pwm/pwm.yaml |   2 +
+ drivers/pwm/core.c                             | 139 ++++++++++++++-----------
+ drivers/pwm/pwm-img.c                          |  35 +++++--
+ drivers/pwm/pwm-twl.c                          |  62 +++++++++--
+ drivers/pwm/pwm-vt8500.c                       |  57 ++++++++--
+ 5 files changed, 213 insertions(+), 82 deletions(-)

@@ -2,101 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7390849404A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAC949404D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356968AbiASTFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356952AbiASTFR (ORCPT
+        id S1356976AbiASTGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:06:02 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:51598 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356952AbiASTF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:05:17 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F68C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:05:16 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so7616388wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:05:16 -0800 (PST)
+        Wed, 19 Jan 2022 14:05:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=DWOJ/x2qrYLClfcPkF95pUctzsp1LecGRHAyU49C+UA=;
-        b=YK6o8hD5gFGRAp8tp4YVQydGmIMHSwCHo+EwL5lNkcog2WDKT/73n765xQdnecSYKf
-         ydcDvZZpXdBNdRB7+pOXnWXKLQlEpPpd0H1TA+eR74v5jFUQGhWVRhaf5m/pzUflgLjq
-         NVlH3Eea3+IZPtdPK/jGlMcE+c5LYQsjPOE0KrjIoUJc+r0i6d+dvsxQvgnTgbDsJnqs
-         r5Yz47O5inARvd25H8B6EXPIOogkmFNtHCIFbUZwNf/xJoV1oinP8YZx7oKSspS0J3aW
-         eFzytT/xM+nL7lUP2B3Rgsu7Iq/bc65yywCyb6xstCsG+TxXro4RZumdwsJpgEHgeN8q
-         0+Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=DWOJ/x2qrYLClfcPkF95pUctzsp1LecGRHAyU49C+UA=;
-        b=vfwC2O8NNAFdRHnzQ87Xnso+lskEjm+GV8KMaTSH/mQNO5cfeG5XlvG3cXtmMCPbJG
-         ozmiPJdnJTcIQacg1z8mNj3Er7q/zZjaBnHviO3jpaQoN0FYkV5aRE8d53hOJg47S9nj
-         qc1PmU4iyrclcnbMkUmNzBUSNppLcHvMY8dhlSyRQYFuPb38z1OsrfY7wK9FH5qGL405
-         8xzm8hYLVSV573uSnwhfhe9AoMGM+DACA5xZM5BMH/xRZAGtqinbWQio+YJ0mtjb7veU
-         RFEquN9FHFczgAZl581syagVuUDIg7D+AL3fcl5/nGoZYJAtCQi8kH76FVziphJSOV0v
-         8B2Q==
-X-Gm-Message-State: AOAM533VQXXAqWSb/0UvCoQbApWSDGTUVLiFFKV+RdotL4S/0weJ8cU5
-        rp7A8Bwel9QZZ17jqPxTuZn0Tw==
-X-Google-Smtp-Source: ABdhPJy7WMRSFCbTTVL097hhPPluIeFYXq1Tf/b63unQ25AnpQTFmG0xnV5NAe7lOXBhrq+T/8X9Sg==
-X-Received: by 2002:a05:600c:4f8c:: with SMTP id n12mr4976974wmq.108.1642619114821;
-        Wed, 19 Jan 2022 11:05:14 -0800 (PST)
-Received: from smtpclient.apple (global-5-142.nat-2.net.cam.ac.uk. [131.111.5.142])
-        by smtp.gmail.com with ESMTPSA id p4sm856793wrr.4.2022.01.19.11.05.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Jan 2022 11:05:14 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH] riscv: eliminate unreliable __builtin_frame_address(1)
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <87v8yg6lhf.fsf@igel.home>
-Date:   Wed, 19 Jan 2022 19:05:13 +0000
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AAAA7852-EBCA-47A3-B74E-A425023468C6@jrtc27.com>
-References: <20220117154433.3124-1-changbin.du@gmail.com>
- <C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com> <87v8yg6lhf.fsf@igel.home>
-To:     Andreas Schwab <schwab@linux-m68k.org>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642619157; x=1674155157;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=8tpMU1MPfLluRg4b410pi6oF7iQdI0FSUxvs6PPkE9o=;
+  b=QbByzD8acXaXWRd622LRwIzWjcVEhgkBwk8Jo2gf4nNLBUWtvNGcDSFQ
+   T+pOaXIhP/xQBI8V3klzHVCSTTlN4SZOotYfbJLJkcEUdhXPgc3y5fiXy
+   FZ3fng4HcBJuyKPL1bih9LIDsqjnMq99dwkHXc8T4N4CBvk5YpF3YBcEa
+   Q=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 19 Jan 2022 11:05:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:05:53 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 19 Jan 2022 11:05:54 -0800
+Received: from [10.216.15.20] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 19 Jan
+ 2022 11:05:47 -0800
+Message-ID: <9fb8fb88-73d7-771e-1309-4363907f7c01@quicinc.com>
+Date:   Thu, 20 Jan 2022 00:35:37 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
+ is disabled
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Matthias Kaehlcke" <mka@chromium.org>, <thara.gopinath@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
+ <cf34f77e-587b-7f97-619f-dcbf431332ff@linaro.org>
+ <7c29c833-b558-f0ab-83ab-08371785ffd1@quicinc.com>
+In-Reply-To: <7c29c833-b558-f0ab-83ab-08371785ffd1@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19 Jan 2022, at 10:58, Andreas Schwab <schwab@linux-m68k.org> wrote:
->=20
-> On Jan 17 2022, Jessica Clarke wrote:
->=20
->> Yes, this is a bug, that is always wrong. LLVM gets this right.
->=20
-> Is that an ABI requirement?  In case of a leaf function, gcc saves the
-> caller's frame pointer in the first slot, not the second (it doesn't
-> save the return address).
+Hi Rafael/Daniel,
 
-Leaf functions by definition don=E2=80=99t have callees that are trying =
-to read
-their frame pointer so aren=E2=80=99t relevant here. The stack frame =
-layout
-isn=E2=80=99t specified by the ABI, only that the in-memory outgoing =
-arguments
-be at the bottom when calling other functions. However, GCC knows what
-layout it uses, so it should be consistent and follow that layout for
-walking back up frames. Especially for __builtin_frame_address(1), that
-just pertains to the current function=E2=80=99s frame, which it clearly =
-knows
-without a doubt, so there=E2=80=99s no reason to get that wrong. =
-Accessing
-0(s0) is just straight up wrong, that=E2=80=99s accessing past the top =
-of the
-stack frame, which is never going to make any sense.
+Could you please check and comment  ?
 
-Jess
+Thanks,
 
+Manaf
+
+On 1/11/2022 2:15 AM, Manaf Meethalavalappu Pallikunhi wrote:
+> Hi Thara,
+>
+> On 1/10/2022 11:25 PM, Thara Gopinath wrote:
+>> Hi Manaf,
+>>
+>> On 1/7/22 1:56 PM, Manaf Meethalavalappu Pallikunhi wrote:
+>>> Whenever a thermal zone is in trip violated state, there is a chance
+>>> that the same thermal zone mode can be disabled either via thermal
+>>> core API or via thermal zone sysfs. Once it is disabled, the framework
+>>> bails out any re-evaluation of thermal zone. It leads to a case where
+>>> if it is already in mitigation state, it will stay the same state
+>>> until it is re-enabled.
+>>>
+>>> To avoid above mentioned issue, on thermal zone disable request
+>>> reset thermal zone and clear mitigation for each trip explicitly.
+>>>
+>>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>>> <quic_manafm@quicinc.com>
+>>> ---
+>>>   drivers/thermal/thermal_core.c | 12 ++++++++++--
+>>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_core.c 
+>>> b/drivers/thermal/thermal_core.c
+>>> index 51374f4..e288c82 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct 
+>>> thermal_zone_device *tz,
+>>>         thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>>>   -    if (mode == THERMAL_DEVICE_ENABLED)
+>>> +    if (mode == THERMAL_DEVICE_ENABLED) {
+>>>           thermal_notify_tz_enable(tz->id);
+>>> -    else
+>>> +    } else {
+>>> +        int trip;
+>>> +
+>>> +        /* make sure all previous throttlings are cleared */
+>>> +        thermal_zone_device_init(tz);
+>>
+>> It looks weird to do a init when you are actually disabling the 
+>> thermal zone.
+>>
+>>
+>>> +        for (trip = 0; trip < tz->trips; trip++)
+>>> +            handle_thermal_trip(tz, trip);
+>>
+>> So this is exactly what thermal_zone_device_update does except that 
+>> thermal_zone_device_update checks for the mode and bails out if the 
+>> zone is disabled.
+>> This will work because as you explained in v2, the temperature is 
+>> reset in thermal_zone_device_init and handle_thermal_trip will remove 
+>> the mitigation if any.
+>>
+>> My two cents here (Rafael and Daniel can comment more on this).
+>>
+>> I think it will be cleaner if we can have a third mode 
+>> THERMAL_DEVICE_DISABLING and have thermal_zone_device_update handle 
+>> clearing the mitigation. So this will look like
+>> if (mode == THERMAL_DEVICE_DISABLED)
+>>     tz->mode = THERMAL_DEVICE_DISABLING;
+>> else
+>>     tz->mode = mode;
+>>
+>> thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>>
+>> if (mode == THERMAL_DEVICE_DISABLED)
+>>     tz->mode = mode;
+>>
+>> You will have to update update_temperature to set tz->temperature = 
+>> THERMAL_TEMP_INVALID and thermal_zone_set_trips to set 
+>> tz->prev_low_trip = -INT_MAX and tz->prev_high_trip = INT_MAX for
+>> THERMAL_DEVICE_DISABLING mode.
+>
+> I think just updating above fields doesn't guarantee complete clearing 
+> of mitigation for all governors. For  step_wise governor, to make sure 
+> mitigation removed completely, we have to set each 
+> thermal-instance->initialized = false as well.
+>
+> If we add that to above list of variables in update_temperature() 
+> under if (mode == THERMAL_DEVICE_DISABLING) , it is same as 
+> thermal_zone_device_init function does in current patch. We are just 
+> resetting same fields in different place under a new mode, right ?
+>
+> Thanks,
+>
+> Manaf
+>

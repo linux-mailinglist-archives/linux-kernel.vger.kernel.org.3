@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF76249401A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE7649401D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356881AbiASSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S1356909AbiASSoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356876AbiASSn6 (ORCPT
+        with ESMTP id S1356889AbiASSoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:43:58 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0BC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:43:57 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so3466330pja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jf8NqUotnPuLOWKkBWsY7N81hJI6QC97c/XS/gK1dQY=;
-        b=N11ilHklzSQ0WWZfPdc6FtRUXJEdv0DcNOeFFxW6n8UwZ6OBlsA41AZ5W6YfGpPZie
-         hLnDFxME2FPL8SCyEnpHfiMyvAjK5WJYQUeLgwO5x4P3hj4gOVSl1jCZxc+tP2mBGdnQ
-         nOiQWgORh9ni/MDeF86SNSP9VS0es0qqzEmjU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jf8NqUotnPuLOWKkBWsY7N81hJI6QC97c/XS/gK1dQY=;
-        b=wJEOkmo5vdMRvIVANGQJTvCK+zqHZALWJn51Ux97tIK2L7G4oDs50HZQwqR3BwDNsn
-         GsLSqprsfo3M8BVI2dtZsW/IxPxuD+tOSJBaQZD/QeMt+BgwAImQKt2m9EfRO572+/8E
-         eGZEttUgBGkw6SvuzlnkN6zFUaieTqQcY+0oM9ywgPd4WnImlXBGbeGjbJwlsGOFw1A2
-         qI4dAl9KOnR9+G3r57RHfgKQk0pPMKMJIztBILgDadTa4i1hScx75GXrA1XqGYv2eU95
-         EXaQbVytU5pgJKspHtmaq1jX88v3xpAbStP9prv5ch7b44pJsjANQ2FxybJmGuM3ADNl
-         9zeQ==
-X-Gm-Message-State: AOAM533Dl0dl3i+yl0cWAQXSd8j0MKiRIr+FudJiIGVqQERnStW689s+
-        dMKvoBuW2dW6DZLjXqHZhaLA+g==
-X-Google-Smtp-Source: ABdhPJyj7rW9pev+19vkk1VY5IFms56pLKvuPJZzE3rnS4Rp81EcueRnKnSBiRJV3777NFMGoInxwA==
-X-Received: by 2002:a17:90a:77c6:: with SMTP id e6mr5873335pjs.41.1642617837196;
-        Wed, 19 Jan 2022 10:43:57 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z13sm430620pfe.20.2022.01.19.10.43.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 10:43:56 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Huewe <peterhuewe@gmx.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v3] tpm: vtpm_proxy: Check length to avoid compiler warning
-Date:   Wed, 19 Jan 2022 10:43:54 -0800
-Message-Id: <20220119184354.3367603-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 19 Jan 2022 13:44:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B17C061574;
+        Wed, 19 Jan 2022 10:44:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87ECBB81A88;
+        Wed, 19 Jan 2022 18:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC6DC004E1;
+        Wed, 19 Jan 2022 18:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642617845;
+        bh=BbszLFpC1Ue/+uWQOvLvyNU0J3sb2Vs5LQa3Gu5zVvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AYfjYRVA2ucIr0QDG6Pk90jFJAwY043Y2mCZvyUUegt3Un6th8GM6a4unw9a4bC3Y
+         SacoLtxxHvlprXtJxkWaeIXjylPeyZNLdZv4Lk0Pw8xKzVimAQCHQ0H8ZLWdT6ysqz
+         0HyrHho/qpFSfciSPHseL76yeYTnzDOwTapJU2fKB6Sc0ih4sKstFafC3Reg5C47nT
+         L0EVFiSW13nRyFhI062VHAw9fS3UBKyETQ6mqXC5/YjZmQeiNMOT6pI/jfCnRA8SFt
+         ei+NBphDb17Zf+UYXnKEWyXcmwXYf97LZ4kZ5yyvYCC24frSzPC0dV776ttHOOGJ9R
+         tN0B0FjEbJs+g==
+Date:   Wed, 19 Jan 2022 19:44:02 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
+ accesses with MMIO accesses
+Message-ID: <Yehb8h+C4A9/c1Z5@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-watchdog@vger.kernel.org,
+        jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220119163012.4274665d@endymion>
+ <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com>
+ <YehOmuqA008XuBHI@kunai>
+ <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2200; h=from:subject; bh=FIuPYqfJGsu4u4fPlDiJiKGwPnqpxta/IfVuwmIgSHA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh6FvpqUwHqXWWTKf52yeH1LE75+2AeiESR7YMnXap ySxSr4eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYehb6QAKCRCJcvTf3G3AJnOOD/ kBaMTOE3rFxJhqQiUJQqXi842KK2oyPTv7vXm9evBfQQ869APWfk/2BMgwO+jwdCl74tn9O0zWVg8z V+QnZSbLG4OLBXpn37q9PkB6cX06ZBiEeNNXor6nFEisZ3mOu25ecEaDsS3vUdTYcObjFKA9+/qHo9 KmRU1hBolXTp59eoCGkt9fWWDEMNXfcnz/O8a50cjOFMWI05O/0m2x9Q+JzVRpCKhmqH31mGNAJz3U mT3qYf/lKuUWnK5JZX/1pivFIzm3R8F3+SiQPSzlmPmmjI/XnEsjqo6lSvFZyYEfwSYkv7LJiqfAy5 ztIGElJRu+U+kL9cuaDxpUXP9IyNR+aDrdU4INhOyfjSbUS4ct+4xIv7YjOFyqI/9U3Jx/CalcYHet fDSFRVR+yklGYhHeiVDVmNA9kuwRWq97/IveqifJ71fJE7RK9TmO+GrD/5B9rewgjs8iL5WSGpetaU 5wuoV0W3L8oj5rim+ADX/c+xh/7V906rk2UJzcobRmjg/IzUPxYMPZjtxK0hQEJKlPk81KbwDconmS NVc+WN7KgkgL384tnmByElenJG41lFW5oy8pHSnnezm2g0Tfeo+kzFWYRw5RvoPQ7EBtb1uvmMmKEo yRfVCvq8hErY4dKJns87ys7J3CdF5Vnem5UDKkLVFir5+mD2VaPbTiBJ04tw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hVnjJj2sOhpzsCBJ"
+Content-Disposition: inline
+In-Reply-To: <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with -Warray-bounds under GCC 11.2, this warning was
-emitted:
 
-In function 'memset',
-    inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-[-Warray-bounds]
-   43 | #define __underlying_memset     __builtin_memset
-      |                                 ^
+--hVnjJj2sOhpzsCBJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This warning appears to be triggered due to the "count < len"
-check in vtpm_proxy_fops_read() splitting the CFG[1], and the compiler
-attempting to reason about the possible value range in len compared
-to the buffer size.
 
-In order to silence this warning, and to keep this code robust if the
-use of proxy_dev->req_len ever changes in the future, explicitly check
-the size of len before reaching the memset().
+> Also, if the immutable branch only includes the patch introducing
+> request_muxed_mem_region(), the pull order should not really matter.
 
-[1] https://lore.kernel.org/lkml/CAG48ez1iTF9KegKJrW5a3WzXgCPZJ73nS2_e5esKJRppdzvv8g@mail.gmail.com
+Right, good point!
 
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Link: https://lore.kernel.org/lkml/4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1: https://lore.kernel.org/lkml/20220113002727.3709495-1-keescook@chromium.org
-v2: https://lore.kernel.org/lkml/20220118183650.3386989-1-keescook@chromium.org
-v3: Add more details to the commit log, including a link to Jann's analysis
----
- drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 91c772e38bb5..5c865987ba5c 100644
---- a/drivers/char/tpm/tpm_vtpm_proxy.c
-+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-@@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
- 
- 	len = proxy_dev->req_len;
- 
--	if (count < len) {
-+	if (count < len || len > sizeof(proxy_dev->buffer)) {
- 		mutex_unlock(&proxy_dev->buf_lock);
- 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
- 			 count, len);
--- 
-2.30.2
+--hVnjJj2sOhpzsCBJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHoW/IACgkQFA3kzBSg
+Kba/HA//aVEDzV0cURi59julvcPSNd+S4bo255St0hZj9zUJEiScLukQYnlmY41L
+qMJDQG+XePJpSEJJRrhoSxYslyyoV1udifmHdMar2CJyky5e7htLd3yL+XeHgy+b
+l6G8JDFV2LdOlv+UPH6GCB+bt6bxhuloxslkMrKaUxwARWZvn9eIsV53pZMrRdXw
+MtXJaa/m5PCu2rYBXqR0bK6JF334p7utNumngeECn/Z7gSHD2p5fI1MruaAnQzXq
+LeBFDIZ9fU8vHi2v+slR/Cskcv5PijRaq/d2vnCaFZ00BUGWA6vEMdvg01q6fBm0
+WdoUXsEOP+BS8v48kU64Rjgw4WG5rHYsNzadKhsuzSokkGOM6NNJ4Xwr5i3tML/J
+2syLjil7ebjD6X5rwdMABydE+2T+MYapwod7PCZcaSaPQxQ/qRKPnW/L7C5mhtrT
+GNO1MKO7Ov3vvJz1z26nhS6w8w3IG3IAk+83rGhDDnDJ4iqv16mA/V5n2kJXn4o+
+uhobKjs3aHwj6coTBNy2FACt5Cu3+9PW7VT+nuLu+2FNld+3wMclM3satZ2HWucK
+CQ1YM0o5DR9uO+0bNpRfsxNjTRgVQrGXsSqrxUqvgcHRVAFxqckmcrJ7sToK1LUE
+LpfbeYvr1c5UY6MwmcDMaM+E1zwVHClou2fByOLBUuskroc7WE0=
+=CW1X
+-----END PGP SIGNATURE-----
+
+--hVnjJj2sOhpzsCBJ--

@@ -2,258 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4AA494034
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FD1494038
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356921AbiASSww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:52:52 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:54600 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230509AbiASSwv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:52:51 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1nAG4U-0005cZ-P9; Wed, 19 Jan 2022 19:52:38 +0100
-Message-ID: <416d8fde-9fbc-afaa-1abe-0a35fa2085c4@maciej.szmigiero.name>
-Date:   Wed, 19 Jan 2022 19:52:32 +0100
+        id S1356935AbiASSzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230509AbiASSzF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 13:55:05 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61493C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:55:05 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id l68so9773085ybl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Bfrvo9bqgk3sZVc8qEEfTZaGxKQeqAbP9aU1zSP7BUI=;
+        b=GtpipSzTM8S9+iN0X3exUHDc5SQ9/TLbaYAZR5KD3yxBIhPhPxyv8HcZH6GqpCVRSe
+         XgaYOjYPqsLq/P3FkSDeCAjXJtnzevsXpF0z6mcfV6yH1YDmV7itArdgBaB5o0jxks9O
+         0eueGXWZ/Vc0X3dN/Bcsc/5HiZ/yNfTC0kWxVSguBixcPv2+6xyg8/p5rvzJTxXXOeko
+         ntlQvoxQTeUpmxa7ZZWDbhFwZYnMR11vr5sL0OdBju7K1f3XKJwxc7hKRAvjQ4QC/uDM
+         GvKUdVMV3cGNbpxadcgH+8f1GVaSqVEqgZny/DojBqmuWVRGPviJzmG/O0wS74+/rTGM
+         zI+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bfrvo9bqgk3sZVc8qEEfTZaGxKQeqAbP9aU1zSP7BUI=;
+        b=jpMkMamu/cvhM6KlnGSg98JWnMhYj2LuyxuMFTQqjWyqh9Nj0BVQNrn4ZrlkymmCVr
+         DW2ZbjNDMX1WldPNqkGj9u2kDkVI2IUNA8oEquH9sv5ELZ+Zkl/mGm9MAlPpFqsqSzmC
+         WOs8Yn5llYS9CJYp/iIBQv0uZVk5CZYWgqrVIt6wWy+iI3F7mVLqlP0meljRLgmXkXCX
+         /MYjBAxNpaSnnYx6gw8KqgP1cLrQeo6DALlyzsgJvMTyBxR1ut8jcVOdqjpEQQCPhcnD
+         1Mh7MXyBz82tcyV3q8cXe9kW/Kucyn61cVIJKhJj3ovhxHk5oCS78q7lKIMgHzde0zQS
+         R3LQ==
+X-Gm-Message-State: AOAM531kOh8o3gPIW8Piwu3p/3uNRlwZZZ/eG6zYMYs0arWpXtaplaw7
+        rosg061y190UJAhLcKr9ATYcavfQPWTNqD9YmOk=
+X-Google-Smtp-Source: ABdhPJxj5hECHQXjlUcaMY0dnBSzLB21+xD6l/1GZbkiewR+tscSqcRtZ4ZU3AjuNSWz9sHweTmL/hfac2FDOCpd6GQ=
+X-Received: by 2002:a25:388a:: with SMTP id f132mr42386459yba.102.1642618504457;
+ Wed, 19 Jan 2022 10:55:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Bharata B Rao <bharata@amd.com>
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-7-nikunj@amd.com>
- <010ef70c-31a2-2831-a2a7-950db14baf23@maciej.szmigiero.name>
- <0e523405-f52c-b152-1dd3-aa65a9caee3c@amd.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
- sev_launch_update_data()
-In-Reply-To: <0e523405-f52c-b152-1dd3-aa65a9caee3c@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220117092759.1619771-1-ztong0001@gmail.com> <87ilui8yxt.wl-maz@kernel.org>
+ <CAA5qM4CfExWdg=Gp8OshKgYsi0A82nzTA1Uqu6nc_MQmdBfWzg@mail.gmail.com>
+ <87h7a28uhj.wl-maz@kernel.org> <87iluh9kgx.ffs@tglx> <877dawa70b.ffs@tglx> <87r1938vbn.ffs@tglx>
+In-Reply-To: <87r1938vbn.ffs@tglx>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Wed, 19 Jan 2022 10:54:53 -0800
+Message-ID: <CAA5qM4Dru8=Eptg96tWzGU018GSivxZYo90cs3az-OxPSBvH6g@mail.gmail.com>
+Subject: Re: [PATCH] PCI/MSI: Prevent UAF in error path
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Marc Zyngier <maz@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        open list <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.01.2022 07:33, Nikunj A. Dadhania wrote:
-> Hi Maciej,
-> 
-> On 1/18/2022 8:30 PM, Maciej S. Szmigiero wrote:
->> Hi Nikunj,
->>
->> On 18.01.2022 12:06, Nikunj A Dadhania wrote:
->>> From: Sean Christopherson <sean.j.christopherson@intel.com>
->>>
->>> Pin the memory for the data being passed to launch_update_data()
->>> because it gets encrypted before the guest is first run and must
->>> not be moved which would corrupt it.
->>>
->>> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
->>> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
->>>     * Updated sev_pin_memory_in_mmu() error handling.
->>>     * As pinning/unpining pages is handled within MMU, removed
->>>       {get,put}_user(). ]
->>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
->>> ---
->>>    arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
->>>    1 file changed, 119 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
->>> index 14aeccfc500b..1ae714e83a3c 100644
->>> --- a/arch/x86/kvm/svm/sev.c
->>> +++ b/arch/x86/kvm/svm/sev.c
->>> @@ -22,6 +22,7 @@
->>>    #include <asm/trapnr.h>
->>>    #include <asm/fpu/xcr.h>
->>>    +#include "mmu.h"
->>>    #include "x86.h"
->>>    #include "svm.h"
->>>    #include "svm_ops.h"
->>> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
->>>        return pages;
->>>    }
->>>    +#define SEV_PFERR_RO (PFERR_USER_MASK)
->>> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
->>> +
->>> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
->>> +                          unsigned long hva)
->>> +{
->>> +    struct kvm_memslots *slots = kvm_memslots(kvm);
->>> +    struct kvm_memory_slot *memslot;
->>> +    int bkt;
->>> +
->>> +    kvm_for_each_memslot(memslot, bkt, slots) {
->>> +        if (hva >= memslot->userspace_addr &&
->>> +            hva < memslot->userspace_addr +
->>> +            (memslot->npages << PAGE_SHIFT))
->>> +            return memslot;
->>> +    }
->>> +
->>> +    return NULL;
->>> +}
->>
->> We have kvm_for_each_memslot_in_hva_range() now, please don't do a linear
->> search through memslots.
->> You might need to move the aforementioned macro from kvm_main.c to some
->> header file, though.
-> 
-> Sure, let me try optimizing with this newly added macro.
+On Wed, Jan 19, 2022 at 9:54 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> When the core MSI allocation fails, then the PCI/MSI code uses an already
+> freed MSI descriptor to unmask the MSI mask register in order to bring it back
+> into reset state.
+>
+> Remove MSI_FLAG_FREE_MSI_DESCS from the PCI/MSI irqdomain flags and let the
+> PCI/MSI code free the MSI descriptors after usage.
+>
+> Fixes: 0f62d941acf9 ("genirq/msi: Provide msi_domain_alloc/free_irqs_descs_locked()")
+> Reported-by: Tong Zhang <ztong0001@gmail.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  drivers/pci/msi/irqdomain.c |    4 ++--
+>  drivers/pci/msi/legacy.c    |    1 -
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+>
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -28,6 +28,7 @@ void pci_msi_teardown_msi_irqs(struct pc
+>                 msi_domain_free_irqs_descs_locked(domain, &dev->dev);
+>         else
+>                 pci_msi_legacy_teardown_msi_irqs(dev);
+> +       msi_free_msi_descs(&dev->dev);
+>  }
+>
+>  /**
+> @@ -171,8 +172,7 @@ struct irq_domain *pci_msi_create_irq_do
+>         if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+>                 pci_msi_domain_update_chip_ops(info);
+>
+> -       info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS |
+> -                      MSI_FLAG_FREE_MSI_DESCS;
+> +       info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS;
+>         if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
+>                 info->flags |= MSI_FLAG_MUST_REACTIVATE;
+>
+> --- a/drivers/pci/msi/legacy.c
+> +++ b/drivers/pci/msi/legacy.c
+> @@ -77,5 +77,4 @@ void pci_msi_legacy_teardown_msi_irqs(st
+>  {
+>         msi_device_destroy_sysfs(&dev->dev);
+>         arch_teardown_msi_irqs(dev);
+> -       msi_free_msi_descs(&dev->dev);
+>  }
 
-👍
+Tested-by: Tong Zhang <ztong0001@gmail.com>
 
->>
->>> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
->>> +{
->>> +    struct kvm_memory_slot *memslot;
->>> +    gpa_t gpa_offset;
->>> +
->>> +    memslot = hva_to_memslot(kvm, hva);
->>> +    if (!memslot)
->>> +        return UNMAPPED_GVA;
->>> +
->>> +    *ro = !!(memslot->flags & KVM_MEM_READONLY);
->>> +    gpa_offset = hva - memslot->userspace_addr;
->>> +    return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
->>> +}
->>> +
->>> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
->>> +                       unsigned long size,
->>> +                       unsigned long *npages)
->>> +{
->>> +    struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
->>> +    struct kvm_vcpu *vcpu;
->>> +    struct page **pages;
->>> +    unsigned long i;
->>> +    u32 error_code;
->>> +    kvm_pfn_t pfn;
->>> +    int idx, ret = 0;
->>> +    gpa_t gpa;
->>> +    bool ro;
->>> +
->>> +    pages = sev_alloc_pages(sev, addr, size, npages);
->>> +    if (IS_ERR(pages))
->>> +        return pages;
->>> +
->>> +    vcpu = kvm_get_vcpu(kvm, 0);
->>> +    if (mutex_lock_killable(&vcpu->mutex)) {
->>> +        kvfree(pages);
->>> +        return ERR_PTR(-EINTR);
->>> +    }
->>> +
->>> +    vcpu_load(vcpu);
->>> +    idx = srcu_read_lock(&kvm->srcu);
->>> +
->>> +    kvm_mmu_load(vcpu);
->>> +
->>> +    for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
->>> +        if (signal_pending(current)) {
->>> +            ret = -ERESTARTSYS;
->>> +            break;
->>> +        }
->>> +
->>> +        if (need_resched())
->>> +            cond_resched();
->>> +
->>> +        gpa = hva_to_gpa(kvm, addr, &ro);
->>> +        if (gpa == UNMAPPED_GVA) {
->>> +            ret = -EFAULT;
->>> +            break;
->>> +        }
->>
->> This function is going to have worst case O(n²) complexity if called with
->> the whole VM memory (or O(n * log(n)) when hva_to_memslot() is modified
->> to use kvm_for_each_memslot_in_hva_range()).
-> 
-> I understand your concern and will address it. BTW, this is called for a small
-> fragment of VM memory( <10MB), that needs to be pinned before the guest execution
-> starts.
-
-I understand it is a relatively small memory area now, but a rewrite of
-this patch that makes use of kvm_for_each_memslot_in_hva_range() while
-taking care of other considerations (like overlapping hva) will also
-solve the performance issue.
-
->> That's really bad for something that can be done in O(n) time - look how
->> kvm_for_each_memslot_in_gfn_range() does it over gfns.
->>
-> 
-> I saw one use of kvm_for_each_memslot_in_gfn_range() in __kvm_zap_rmaps(), and
-> that too calls slot_handle_level_range() which has a for_each_slot_rmap_range().
-> How would that be O(n) ?
-> 
-> kvm_for_each_memslot_in_gfn_range() {
-> 	...
-> 	slot_handle_level_range()
-> 	...
-> }
-> 
-> slot_handle_level_range() {
-> 	...
-> 	for_each_slot_rmap_range() {
-> 		...
-> 	}
-> 	...
-> }
-
-kvm_for_each_memslot_in_gfn_range() iterates over gfns, which are unique,
-so at most one memslot is returned per gfn (and if a memslot covers
-multiple gfns in the requested range it will be returned just once).
-
-for_each_slot_rmap_range() then iterates over rmaps covering that
-*single* memslot: look at slot_rmap_walk_next() - the memslot under
-iteration is not advanced.
-
-So each memslot returned by kvm_for_each_memslot_in_gfn_range() is
-iterated over just once by the aforementioned macro.
-
->> Besides performance considerations I can't see the code here taking into
->> account the fact that a hva can map to multiple memslots (they an overlap
->> in the host address space).
-> 
-> You are right I was returning at the first match, looks like if I switch to using 
-> kvm_for_each_memslot_in_hva_range() it should take care of overlapping hva, 
-> is this understanding correct ?
-
-Let's say that the requested range of hva for sev_pin_memory_in_mmu() to
-handle is 0x1000 - 0x2000.
-
-If there are three memslots:
-1: hva 0x1000 - 0x2000 -> gpa 0x1000 - 0x2000
-2: hva 0x1000 - 0x2000 -> gpa 0x2000 - 0x3000
-3: hva 0x2000 - 0x3000 -> gpa 0x3000 - 0x4000
-
-then kvm_for_each_memslot_in_hva_range() will return the first two,
-essentially covering the hva range of 0x1000 - 0x2000 twice.
-
-If such hva aliases are permitted the code has to be ready for this case
-and handle it sensibly:
-If you need to return just a single struct page per a hva AND / OR pin
-operations aren't idempotent then it has to keep track which hva were
-already processed.
-
-Another, and probably the easiest option would be to simply disallow
-such overlapping memslots in the requested range and make
-KVM_SEV_LAUNCH_UPDATE_DATA ioctl return something like EINVAL in this
-case - if that would be acceptable semantics for this ioctl.
-
-In any case, the main loop in sev_pin_memory_in_mmu() will probably
-need to be build around a kvm_for_each_memslot_in_hva_range() call,
-which will then solve the performance issue, too.
-
-> Regards,
-> Nikunj
-
-Thanks,
-Maciej
+Tested on my setup, it no longer crashes.
+Thanks!
+- Tong

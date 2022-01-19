@@ -2,256 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2F3493BB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECCB493BBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355045AbiASOI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:08:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31008 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355036AbiASOI2 (ORCPT
+        id S1355067AbiASOI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:08:58 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:18428 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355049AbiASOI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:08:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642601307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oeUxYkXz7//k3sdzDCq556rbZt6V8Th4mOcrHxqg5Oo=;
-        b=TTS8mj0iiqjcYhYmoBihfPXCL5ZSAckahoqdJwVidCf0Lv8qxWhVIeJw9FhmrmVg5TYazy
-        ErsrZolQjBULVUM3yhNG3uySzJCWgobJAcQrRBl7Jj5iE7kntOPPccAcaAV1fsP7ZOpkCN
-        KxSctZVNyQ82cook6MRQ3ybEicoFu7I=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-355-DELaYI1ZMqubr_OByjpkhQ-1; Wed, 19 Jan 2022 09:08:26 -0500
-X-MC-Unique: DELaYI1ZMqubr_OByjpkhQ-1
-Received: by mail-qt1-f200.google.com with SMTP id e23-20020ac80117000000b002c92228f95eso1568260qtg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:08:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oeUxYkXz7//k3sdzDCq556rbZt6V8Th4mOcrHxqg5Oo=;
-        b=o8NSA8f8C5nzh1r6BKHoewd1zv7ZXy0OGpfSro5NVJRgfDOr+TonRQbHSnY1/GIMkn
-         gxOAbem1u/4sww7Bff0pCndsUyK2VHiiiSM5TnM0eQYPljBBa6e/Fq6ZhZjVlLKafvr4
-         2d1Rh2GN0OgOYxu13JZy3NyafGSjacbbYZekkM9IMVNTAiIO6N/jN2muwHOIizIea30u
-         jcG3JhhjuFOrHETZ2pLiT/p50PlrRDnc2Z731LBw+1y02RzkeDiM2jFd7bj+nY7izTSV
-         peli5Lr6NjNjbp/m5TRFSguigNbXxQvQ/O1LkEy/iitgfFkv1MMS3kGHGA8uyWlhQjjT
-         3mwg==
-X-Gm-Message-State: AOAM531NIApNNLjontVCjgpOJKIorfkdVwUkrCg9ItREVs0sbHyeJn8G
-        4ryGsrAwh7CzXAvidaObpWTKzkYrmWlBxQclDLUDdp42+Qb80iC8DQB/LVvv1e1hO0z58Ldgy8t
-        ffb0jW2kBRfsa/BMBT/4Pi0sA
-X-Received: by 2002:a05:622a:198d:: with SMTP id u13mr24911466qtc.501.1642601305748;
-        Wed, 19 Jan 2022 06:08:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxCDUZcFrxlcKboINrxvjp24P8kROpVL1kDhKb3KlJN6YHkyc16GPF6kqGW7dJqO2+7nCsqyg==
-X-Received: by 2002:a05:622a:198d:: with SMTP id u13mr24911435qtc.501.1642601305339;
-        Wed, 19 Jan 2022 06:08:25 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id r2sm1478730qkf.49.2022.01.19.06.08.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 06:08:24 -0800 (PST)
-Date:   Wed, 19 Jan 2022 09:08:22 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YegbVhxSNtQFlSCr@bfoster>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
- <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
- <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
- <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <20220118030041.GB59729@dread.disaster.area>
- <YeYxOadA0HgYfBjt@zeniv-ca.linux.org.uk>
- <20220118041253.GC59729@dread.disaster.area>
- <YeZW9s7x2uCBfNJD@zeniv-ca.linux.org.uk>
- <20220118232547.GD59729@dread.disaster.area>
+        Wed, 19 Jan 2022 09:08:56 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JE3dfX031218;
+        Wed, 19 Jan 2022 14:08:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=f30pugDFqmUKOzWNYjQxwNAGaetR/52T2we4bKcM0WQ=;
+ b=ic+EbE5LISr9sgDHJqh+LbDvtp7YO/4HHuUNKyivxz/sHcEnHeg4Cg/QcavduODYOJcH
+ cQXmL4TZvdQqXHn62K4DVK7v+VKjFLy3aZvzAhLlgN8EkULLYVAnPpM5EjVinf+Q5W6r
+ 6voekMo4ffTnkxpW3wNM47b7J7bZN+ESmG3c1L92/daYBr781F5MZQc14OXoU1Cm+mAQ
+ hpaAs6w27+BWaSEDItYQgxyiALBzU7EsqROZNVwXPV+eAEKksfZLEfVQ7DxvMIgqq0yR
+ WIY2+EnP/orWXtRIxq+LXtv+LxXODKTIHe58ZFkCJ9mwAI+CGjzXn0yvizZIS8NzPSFE FA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4vn7d4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 14:08:52 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20JE66Il082232;
+        Wed, 19 Jan 2022 14:08:51 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by userp3020.oracle.com with ESMTP id 3dkqqqe7f6-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 14:08:51 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gm26FvZCzG321HVSUEcMW92G0CIxNqj5ImtHi4pzJSZUfr94cW2ybi25NpkApj9O9aDt44YcpIHn9oxcLFTbiG9Zsfa6Kt0mretIqeWdqS34+gzCJMH28YtzJZpK5J7Gym8n8Qx4mppYiZejlp3p8LY/TtaPlioC58fQEIagQfpLYIWNNIxlquikA5ssYnng7c2FyYR/FV+oayH1bYpxhK0z7sA2Lt4yz6psCi7P6eGskpjkWfUY+X59bBdUPRoaMe7+tZ3WUuqIL14ExMvGFFLZ/eAKbEI3VsZWtHrD0OKPUCZNRrXINBYdI8tv7WNFp4+vAV3jDlMCG8vPORAjnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f30pugDFqmUKOzWNYjQxwNAGaetR/52T2we4bKcM0WQ=;
+ b=cyd5Un/JtQ/ikMt7gtnZ5yMT0i02H1xUKWraIHOfuJtiniZd+tU1gh8KJlvtgqIr2baIS/JZkoDbVZCu/zzEsG4UCfddP0auyWcCqwqLL6xKYGjbgQmf08kH1jFpwRXpikR/Be4nGBEv4L3BhYatHNwDpG7iSoggUoFDDaqP+4jTwoijzkFWKUZZ9bDrccgnVAxusDS7nXNERfKQt1CmHgZkUdQ++Kl+BhsVb/mNvPKq8YU7tVKIyzZjjsbMu/z0MUpDg67Xvsd0iuRrbUC+BLQY6xFtI/5rZml2U25AE5MCThNt44bkz84JDCeLldYerD4tMuKWdXTMl5JQWLU9QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f30pugDFqmUKOzWNYjQxwNAGaetR/52T2we4bKcM0WQ=;
+ b=i6kHVyvRcku43oot4BPObuVYK+KpU/rknhe9YFGeI7ALrynEbJf8MnT4Bfrcsjnz8x9m8oGk+bYH+pd792TRhWTdmLbn/pw9eSBVC5ckPHtfKtuxFkS5atw/BwttuEsABeNbxYZRhTDWR5bI3taFl7verUb7GYZEQ5Br1/Ov59I=
+Received: from PH0PR10MB5515.namprd10.prod.outlook.com (2603:10b6:510:109::7)
+ by SN6PR10MB2637.namprd10.prod.outlook.com (2603:10b6:805:44::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Wed, 19 Jan
+ 2022 14:08:48 +0000
+Received: from PH0PR10MB5515.namprd10.prod.outlook.com
+ ([fe80::edcf:c580:da6f:4a5]) by PH0PR10MB5515.namprd10.prod.outlook.com
+ ([fe80::edcf:c580:da6f:4a5%6]) with mapi id 15.20.4909.008; Wed, 19 Jan 2022
+ 14:08:48 +0000
+From:   Praveen Kannoju <praveen.kannoju@oracle.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+CC:     Leon Romanovsky <leon@kernel.org>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
+        Rajesh Sivaramasubramaniom 
+        <rajesh.sivaramasubramaniom@oracle.com>
+Subject: RE: [PATCH RFC] rds: ib: Reduce the contention caused by the
+ asynchronous workers to flush the mr pool
+Thread-Topic: [PATCH RFC] rds: ib: Reduce the contention caused by the
+ asynchronous workers to flush the mr pool
+Thread-Index: AQHYDHpMX8JHvK1k8kSJh1x30qsksqxo/YyAgAAprgCAAAb9AIAAvOYAgABQL4CAABYHAIAAAX/ggAACCQCAAAwU0A==
+Date:   Wed, 19 Jan 2022 14:08:48 +0000
+Message-ID: <PH0PR10MB5515039926FA5F66537A6EBB8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+References: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
+ <53D98F26-FC52-4F3E-9700-ED0312756785@oracle.com>
+ <20220118191754.GG8034@ziepe.ca>
+ <CEFD48B4-3360-4040-B41A-49B8046D28E8@oracle.com> <Yee2tMJBd4kC8axv@unreal>
+ <PH0PR10MB5515E99CA5DF423BDEBB038E8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <20220119130450.GJ8034@ziepe.ca>
+ <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <20220119131728.GK8034@ziepe.ca>
+In-Reply-To: <20220119131728.GK8034@ziepe.ca>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1086db53-c818-4d48-899d-08d9db5536dc
+x-ms-traffictypediagnostic: SN6PR10MB2637:EE_
+x-microsoft-antispam-prvs: <SN6PR10MB2637ECCA3113CA60402E04998C599@SN6PR10MB2637.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NQxRA5Jei0p3/Q4Th2PDqXgyoI73WFgXnSGIqXICVn2uz06Y4baQDFLuYPVhI6hiokCn08+hS8YLpupADqEJGtz+CCVDJmrYZ37HFJ1/+yyFUYRDKjMTEUGp7esbui12KDyDQ/BxIhCaEMBYbeerXz2Jc5NB6T+piOM4WKGlyKpHrbtN0MkeiEmOBs1+6lNCL9wHdPU2cbMnR8uyTWqe8jhIVOdvDbXvmn5n1YurIc4hPKVCXzqfyn3CHJs1G6Zjd7+XK582hqJ/9LksC0E3wTVj/Z3KUkWI9O4Yb1ynHODZPU9Omu2gED2Q+TExjydOv+NCCbUZW9X8MU4fuI92+IMSDsC2hbXZyhoGSv3dvb0fbtPQIstmodf5uS+xkFScWm/znnoGOQEwqnpXdNVMs38UJPqA9zp+D2Vdl1uCtBj29o9nDnQ7L7N68/+0pE+gtFdJ+w5QPDbldeltXLPQ9ud9an1AngQPdP37dv4AZlYOZabYNW9datlwsnjdg0Kv+OdBDY6CXAaYdA8c3swMSORHprc4viO7rgCEAQ9ivRJM3D6Hnu2t6hAhRSbEyJ7nWFlzbR0XzRddX9rKf0NgfN1/NobczQwpimKB2vJ60hY3tl/lDvbSnvqwvzvlYx33VFqTAmWzHPeS6ol9DGccbw51ijaXiKVwVtuvBOV2D+n+/h9iAloTEiRUwAHhGazf6UVDrjJ0+SBmm8snqOGR8w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5515.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(4326008)(26005)(83380400001)(7696005)(8676002)(8936002)(6916009)(107886003)(44832011)(66476007)(66446008)(66556008)(64756008)(66946007)(86362001)(6506007)(5660300002)(54906003)(122000001)(38100700002)(33656002)(9686003)(52536014)(38070700005)(53546011)(76116006)(71200400001)(186003)(316002)(55016003)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6q2eHj35sHLHE2HOsXjwAIJAuLf4x0XeL4cp0oXn5KUHFBWuI1bEJxrqLGc2?=
+ =?us-ascii?Q?AnHLga4VnZBdfffmDP/OG2uU6hADUFpzIlCDyzNY3jtHG0/EW8bFteWlgSqh?=
+ =?us-ascii?Q?XtqrXOUAWlGwrQTCnwTbxH4ru02BRUbf8kZgJxZ/ZmtuZ/fEZEq2szErTx6n?=
+ =?us-ascii?Q?CKkzM0NxaJ9BTIUf6743N+cmX2BV0UsP8UU1k97jTD7eloYXkMCXbcpMzbSM?=
+ =?us-ascii?Q?GCbTL0gGyXH84DQ4Mg2ZsEfMoWYaWGVKGf/qwcVP16iTg6lBriIzjYM92ktl?=
+ =?us-ascii?Q?cLV7QILpKbBw88I6W36qaVwbcqWr/jqLcFx9QMZJmFk5HASqfO2WndmnPh1H?=
+ =?us-ascii?Q?P7Ul83wp/YUpdQ+uc6p9ZlDVE97X1yu0RgAvccUDaHRHBNipycgg5FrKO+a7?=
+ =?us-ascii?Q?ZLUlR6lNBB13dZ0/kDNGIkTlHaKsWRSb4URlyxaTjzqW9Xs2SWSVKZcTqOfQ?=
+ =?us-ascii?Q?DIinTfeQRj6UZpd3ixUPzIKDf+Ocof8JU3FJfLHnF5BBUSh2qrYgU2ikIR+X?=
+ =?us-ascii?Q?0q3d63Mp3/lsj0N0RBRkjyqPt3360aAU/1BMA2kMxpuBfQNLNCiGpcUYK0iZ?=
+ =?us-ascii?Q?RAvvix0I3FLv/MmXkIdGER8GhHKfBqaSmLmgdNdysyghdZbV+flzjZxYNmA4?=
+ =?us-ascii?Q?XYD62jPEeNf0tdiX5dyygpsWbpRFL1Tl1ngd1bpUhjlPk+AtSgY6+tvUv5ZV?=
+ =?us-ascii?Q?OTlGQKAdFJFAxdZWe11YD1bW6OUsGVboznBclK+NAFg/OBBmzkXVkQQxtPm5?=
+ =?us-ascii?Q?hNSXPL05sj9H5WAxLoyoHA8on5azKdhCMmQc2L5SPU1e56Ph/azLvD5Qw6zW?=
+ =?us-ascii?Q?1Ehny1EgujMmKTxa2Ns9ldFeSaNEqdIzHPk3oUnBI871mFw4cjHkm6sP0/55?=
+ =?us-ascii?Q?lJM2xIDDjzOvNkc5AiGAId9R9L77rc8J8n5heePJrwG8vuVrgkqkE6MxW5Zo?=
+ =?us-ascii?Q?75ZHn3vQsEdIbCQg9u3kLvc8Y/sIgGnll+WiZqFk3JO5HPXkw6FPD0OFGvkm?=
+ =?us-ascii?Q?PetMXa+RS9gDnrdJoWZexTsD3OXKMMXyBh0xTnmqHP8PXKyefQcVkLGvAeZl?=
+ =?us-ascii?Q?SaPfh53uKrs8jCcEuxDReJsAURypcoeQ5aiVuCfmF9lflNtctCZyfi1/Ok2B?=
+ =?us-ascii?Q?MsiPHXcSxayuFN5GIIm6gku+RjcopekjulAV0y7dMG0guMXSH2Y44tkrNzRt?=
+ =?us-ascii?Q?6ogwC9oMT+JV4VIjgxt27vS+OHawcFY9wu6HMs0qQvWCKJhG0EySIBgwzfnh?=
+ =?us-ascii?Q?tzxzF+xu6a6jkuwsB4+9uOZ65x7ckjaph8eY59Vu/9zg87350S4EyqvrJvdL?=
+ =?us-ascii?Q?keF3TeBlIYAf9KRHs2zzhgXL9VAQoYH+2uXPdhDa+DdbEC7s+CqxmMLUrcbS?=
+ =?us-ascii?Q?uZxRyZZxIMlgcGBsSYfgNUi5nD/lmp2S4X0Qc8zy+RUTieDg3G73wewsUZAD?=
+ =?us-ascii?Q?1O/sdKXfScDWUxaqC5Rb0pb2cMwBseJDpiJOMIM8LmDbAVnhC80bPbXf1Dra?=
+ =?us-ascii?Q?f1oICX6uEwEzpeer6e7bQZCJZFHFHAJpC5jSKY+TvtOwzrQfwbBIWzG2+SZU?=
+ =?us-ascii?Q?FhaE0xAGMLDprm6HuEnms2TA+1zjICqJhFfWKQLTkE0bcibUbyHbWE0bp2hG?=
+ =?us-ascii?Q?f0vJalRc3raLlxTzO/TNFMtRlwM1AbqiljtW+5VTG6k0f7GPpNxDupr3bh6E?=
+ =?us-ascii?Q?Q2Z1nA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118232547.GD59729@dread.disaster.area>
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5515.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1086db53-c818-4d48-899d-08d9db5536dc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2022 14:08:48.7668
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pXrNrraK9Fv0cTnAJpPanl3D1ibNEwK/Fw5h5xuuSZDgf4gV05hG5/lhxgtzY6sXZgdtJ9YR/saK+RsHFXLUxOMDcT99JrvQEZmaUS+mE+M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2637
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10231 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 suspectscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190082
+X-Proofpoint-GUID: Av00NNdRwnw8hB5WqER779i9bKJ9C6_v
+X-Proofpoint-ORIG-GUID: Av00NNdRwnw8hB5WqER779i9bKJ9C6_v
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:25:47AM +1100, Dave Chinner wrote:
-> On Tue, Jan 18, 2022 at 05:58:14AM +0000, Al Viro wrote:
-> > On Tue, Jan 18, 2022 at 03:12:53PM +1100, Dave Chinner wrote:
-> > 
-> > > No, that just creates a black hole where the VFS inode has been
-> > > destroyed but the XFS inode cache doesn't know it's been trashed.
-> > > Hence setting XFS_IRECLAIMABLE needs to remain in the during
-> > > ->destroy_inode, otherwise the ->lookup side of the cache will think
-> > > that are currently still in use by the VFS and hand them straight
-> > > back out without going through the inode recycling code.
-> > > 
-> > > i.e. XFS_IRECLAIMABLE is the flag that tells xfs_iget() that the VFS
-> > > part of the inode has been torn down, and that it must go back
-> > > through VFS re-initialisation before it can be re-instantiated as a
-> > > VFS inode.
-> > 
-> > OK...
-> > 
-> > > It would also mean that the inode will need to go through two RCU
-> > > grace periods before it gets reclaimed, because XFS uses RCU
-> > > protected inode cache lookups internally (e.g. for clustering dirty
-> > > inode writeback) and so freeing the inode from the internal
-> > > XFS inode cache requires RCU freeing...
-> > 
-> > Wait a minute.  Where is that RCU delay of yours, relative to
-> > xfs_vn_unlink() and xfs_vn_rename() (for target)?
-> 
-> Both of those drop the inode on an on-disk unlinked list. When the
-> last reference goes away, ->destroy_inode then runs inactivation.
-> 
-> Inactivation then runs transactions to free all the space attached
-> to the inode and then removes the inode from the unlinked list and
-> frees it. It then goes into the XFS_IRECLAIMABLE state and is dirty
-> in memory. It can't be reclaimed until the inode is written to disk
-> or the whole inode cluster is freed and the inode marked XFS_ISTALE
-> (so won't get written back).
-> 
-> At that point, a background inode reclaim thread (runs every 5s)
-> does a RCU protected lockless radix tree walk to find
-> XFS_IRECLAIMABLE inodes (via radix tree tags). If they are clean, it
-> moves them to XFS_IRECLAIM state, deletes them from the radix tree
-> and frees them via a call_rcu() callback.
-> 
-> If memory reclaim comes along sooner than this, the
-> ->free_cached_objects() superblock shrinker callback runs that RCU
-> protected lockless radix tree walk to find XFS_IRECLAIMABLE inodes.
-> 
-> > And where does
-> > it happen in case of e.g. open() + unlink() + close()?
-> 
-> Same thing - close() drops the last reference, the unlinked inode
-> goes through inactivation, then moves into the XFS_IRECLAIMABLE
-> state.
-> 
-> The problem is not -quite- open-unlink-close. The problem case is
-> the reallocation of an on-disk inode in the case of
-> unlink-close-open(O_CREATE) operations because of the on-disk inode
-> allocator policy of aggressive reuse of recently freed inodes.  In
-> that case the xfs_iget() lookup will reinstantiate the inode via
-> xfs_iget_recycle() and the inode will change identity between VFS
-> instantiations.
-> 
-> This is where a RCU grace period is absolutely required, and we
-> don't currently have one. The bug was introduced with RCU freeing of
-> inodes (what, 15 years ago now?) and it's only recently that we've
-> realised this bug exists via code inspection. We really have no
-> evidence that it's actually been tripped over in the wild....
-> 
+-----Original Message-----
+From: Jason Gunthorpe [mailto:jgg@ziepe.ca]=20
+Sent: 19 January 2022 06:47 PM
+To: Praveen Kannoju <praveen.kannoju@oracle.com>
+Cc: Leon Romanovsky <leon@kernel.org>; Santosh Shilimkar <santosh.shilimkar=
+@oracle.com>; David S . Miller <davem@davemloft.net>; kuba@kernel.org; netd=
+ev@vger.kernel.org; linux-rdma@vger.kernel.org; rds-devel@oss.oracle.com; l=
+inux-kernel@vger.kernel.org; Rama Nichanamatlu <rama.nichanamatlu@oracle.co=
+m>; Rajesh Sivaramasubramaniom <rajesh.sivaramasubramaniom@oracle.com>
+Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the async=
+hronous workers to flush the mr pool
 
-To be fair, we have multiple reports of the NULL ->get_link() variant
-and my tests to this point to induce "unexpected" returns of that
-function don't manifest in as catastrophic a side effect, so might not
-be as immediately noticeable by users. I.e., returning non-string data
-doesn't seem to necessarily cause a crash in the vfs and the symlink to
-symlink variant is more of an unexpected redirection of a lookup.
+On Wed, Jan 19, 2022 at 01:12:29PM +0000, Praveen Kannoju wrote:
 
-IOW, I think it's fairly logical to assume that if users are hitting the
-originally reported problem, they're likely dangerously close to the
-subsequent problems that have been identified from further inspection of
-the related code. I don't think this is purely a case of a "theoretical"
-problem that doesn't warrant some form of prioritized fix.
+> Yes, we are using the barriers. I was justifying the usage of
+> smp_rmb() and smp_wmb() over smp_load_acquire() and
+> smp_store_release() in the patch.
 
-> Unfortunately, the simple fix of adding syncronize_rcu() to
-> xfs_iget_recycle() causes significant performance regressions
-> because we hit this path quite frequently when workloads use lots of
-> temporary files - the on-disk inode allocator policy tends towards
-> aggressive re-use of inodes for small sets of temporary files.
-> 
-> The problem XFS is trying to address is that the VFS inode lifecycle
-> does not cater for filesystems that need to both dirty and then
-> clean unlinked inodes between iput_final() and ->destroy_inode. It's
-> too late to be able to put the inode back on the LRU once we've
-> decided to drop the inode if we need to dirty it again. ANd because
-> evict() is part of the non-blocking memory reclaim, we aren't
-> supposed to block for arbitrarily long periods of time or create
-> unbound memory demand processing inode eviction (both of which XFS
-> can do in inactivation).
-> 
-> IOWs, XFS can't free the inode until it's journal releases the
-> internal reference on the dirty inode. ext4 doesn't track inodes in
-> it's journal - it only tracks inode buffers that contain the changes
-> made to the inode, so once the transaction is committed in
-> ext4_evict_inode() the inode can be immediately freed via either
-> ->destroy_inode or ->free_inode. That option does not exist for XFS
-> because we have to wait for the journal to finish with the inode
-> before it can be freed. Hence all the background reclaim stuff.
-> 
-> We've recently solved several of the problems we need to solve to
-> reduce the mismatch; avoiding blocking on inode writeback in reclaim
-> and background inactivation are two of the major pieces of work we
-> needed done before we could even consider more closely aligning XFS
-> to the VFS inode cache life cycle model.
-> 
+You failed to justify it.
 
-The background inactivation work facilitates an incremental improvement
-by nature because destroyed inodes go directly to a queue instead of
-being processed synchronously. My most recent test to stamp the grace
-period info at inode destroy time and conditionally sync at reuse time
-shows pretty much no major cost because the common case is that a grace
-period has already expired by the time the queue populates, is processed
-and said inodes become reclaimable and reallocated. To go beyond just
-the performance result, if I open code the conditional sync for tracking
-purposes I only see something like 10-15 rcu waits out of the 36k
-allocation cycles. If I increase the background workload 4x, the
-allocation rate drops to ~33k cycles (which is still pretty much in line
-with baseline) and the rcu sync count increases to 70, which again is
-relatively nominal over tens of thousands of cycles.
+Jason
 
-This all requires some more thorough testing, but I'm sure it won't be
-absolutely free for every possible workload or environment. But given
-that we know this infrastructure is fundamentally broken (by subtle
-compatibilities between XFS and the VFS that have evolved over time),
-will require some thought and time to fix properly in the filesystem,
-that users are running into problems very closely related to it, why not
-try to address the fundamental breakage if we can do so with an isolated
-change with minimal (but probably not zero) performance impact?
+Apologies, if my earlier point is not clear, Jason.
+Let me reframe:
 
-I agree that the unconditional synchronize_rcu() on reuse approach is
-just not viable, but so far tests using cond_synchronize_rcu() seem
-fairly reasonable. Is there some other problem or concern with such an
-approach?
+1. The introduced bool variable "flush_ongoing", is being accessed only in =
+the function "rds_ib_free_mr" while spawning asynchronous workers.
 
-Brian
+2. The ordering guaranteed by smp_rmb() and smp_wmb() would be sufficient f=
+or such simple usage and hence we did not use smp_load_acquire() and smp_st=
+ore_release().
 
-> The next step is to move the background inode inactivation triggers
-> up into ->drop_inode so we can catch inodes that need to be dirtied
-> by the filesysetm before they have been marked for eviction by the
-> VFS. This will allow us to keep the inode on the VFS LRU (probably
-> marked with I_WILL_FREE so everyone else keeps away from it) whilst
-> we are waiting for the background inactivation work to be done, the
-> journal flushed and the metadata written back. Once clean, we can
-> directly evict the inode from the VFS ourselves.
-> 
-> This would mean we only get clean, reclaimable inodes hitting the
-> evict() path, and so at that point we can just remove the inode
-> directly from the XFS inode cache from either ->destroy_inode or
-> ->free_inode and RCU free it. The recycling of in-memory inodes in
-> xfs_iget_cache_hit can go away entirely because no inodes will
-> linger in the XFS inode cache without being visible at the VFS
-> layer as they do now...
-> 
-> That's going to take a fair bit of work to realise, and I'm not sure
-> yet exactly what mods are going to be needed to either the VFS inode
-> infrastructure or the XFS inode cache. 
-> 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
-> 
+3. In case the function "rds_ib_free_mr", misses to spawn the flush functio=
+n, the same will be requested by the allocation path  "rds_ib_alloc_frmr" w=
+hich in-turn calls "rds_ib_try_reuse_ibmr", which finally calls the flush f=
+unction "rds_ib_flush_mr_pool" to obtain mr, during mr allocation requests.
 
+4. If you still insist, we can modify the patch to use  smp_load_acquire() =
+ and smp_store_release().
+
+Regards,
+Praveen.

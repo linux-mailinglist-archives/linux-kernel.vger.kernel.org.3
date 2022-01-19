@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D9C493BFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75769493BFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355172AbiASOeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S1355210AbiASOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355162AbiASOes (ORCPT
+        with ESMTP id S241536AbiASOes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Jan 2022 09:34:48 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104A4C061574;
-        Wed, 19 Jan 2022 06:34:47 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m3so10415638lfu.0;
-        Wed, 19 Jan 2022 06:34:46 -0800 (PST)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F15C06161C;
+        Wed, 19 Jan 2022 06:34:48 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id m3so10415867lfu.0;
+        Wed, 19 Jan 2022 06:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j/VfafbxJ+vp6TLOD2d5aFbCUTwMb6Qu1uU6PUy6ZDY=;
-        b=oNXoJ+Yv0sle8worfjKc44vP5FvZrKiUcMTeRgMq7lirjt+9TSX4YftgspWmiE3Kl3
-         nEj+EqKkE7a3KRCgPX35Ol9hwoe2iT6e554tNAodQVhAF6P/jwQrnyDYSfJHFamMj35N
-         bK0NbOi4QT8IDzyDvPQ0a2wcaUlfK4Hzm+lxbB45kkALrM7wn/MAS0Kj/MBGC4/CI3Ai
-         Ik75wfsNFA4vU0CR9aG32y4x59COEiWR5rlyboyyLEk987xHjDb3TGGZXmVHGEjnnt5i
-         2EaMNCufb1TCMSS/jXlr5jWPgNB4AlzxNB4lxCOS7UPVGAZWNtJKx0S+PhZvUfn5/TFr
-         HmQA==
+        bh=z9oiupD+98sSYT2szp0bLOwe4Lp388kc2c/Co3Zp20I=;
+        b=BqIimrRZwmOvFgyx9cgzcBJ/EblWz477Ctm8bBNPsnGN9/8bwRPd9sXHUAvAsUFhic
+         qzYX5IzN2AlbVcGY7yf9K4FmRJczFYFGjA/zlQ9oVc94iZm/eRlCxoLyRd1YZ2I8Exyj
+         /IGK6EYBVTo9Vj0j7WNdz47Reb65G+0A6qXyKlkoeKBYBtpBds1DD0jQfJbaVsj5z1B2
+         jo6+3p3JN93iFtvgRMIK72klJOwn8ncFmICDMbY+/yffT1Y1xYiVpDH8lTGPwmTFgCfV
+         BJ4Cf9JuzHBnjNabCXD6zYao/5fzFzoFAqZbIv/uqJ2hyHCAs+MtqiBK0d6U/XlDHW+1
+         xzkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j/VfafbxJ+vp6TLOD2d5aFbCUTwMb6Qu1uU6PUy6ZDY=;
-        b=exTj26OQRB748G/QGdq8aMjSERyTMM9iI0mTGB7HwH8Jxy/qmrz4H7olennLyf7FCD
-         UyLY9k7I9cKRhi5BbfJQypnbxZJj7quC/BZA5UcVVgFetI8cNF5zshaLQxyDKTytL7QY
-         yKqyC4rdQj3mykUMjmvSaT3vDMSbh9fQwI6yN+O5A6GYqs+1sRhEvWQRkZeuvRnOkaR4
-         Ruc9SUJLUTST0jocc7YgoSB4inCHNvzRBJ1nm0ntA7qGr0knDvFBkTJbsNDdQFfLUaAg
-         UVU9bv/OUtP//SPkd9KV/ZP87AZ2+Fc7ew/rqeUBjqInqvvz+pgnUOorxWGIZrJKGqXG
-         t8pA==
-X-Gm-Message-State: AOAM533d0N44qcxFf4STH5Wd7ZXm+8mhSMuAiM8beSEjbOIb9vlm4jcD
-        QTULLJdv1efBTAYvp5/FhV9eM71BGonn9g==
-X-Google-Smtp-Source: ABdhPJwBfzg0BB0tGZWDoMLrdTRTgPnva3KzMm8FVWCJ+49+WSbcyau6ZMa7sqksUnk6BTzBLSWEtA==
-X-Received: by 2002:a05:6512:3186:: with SMTP id i6mr25441091lfe.286.1642602885430;
-        Wed, 19 Jan 2022 06:34:45 -0800 (PST)
+        bh=z9oiupD+98sSYT2szp0bLOwe4Lp388kc2c/Co3Zp20I=;
+        b=PtNZ4alEO/pJGuOmcumsoIgQ6cQ4WZjQcrm6xdIe9LMXCxFC8bW43cHwYzhjkSv6Ib
+         4lu5ZnN0ChQbEJ0Sual0BKA1xVXEPw03d38p1MlC0ZPnp0b2WxOkP66cAiUN81ep6ayw
+         4E15Rq9Y9rJ1e4M9z8vzhx8ivWt7OBdypkAYcEFOyGK0Fsf4HgWTKFn+IA5rksuxmu5E
+         tGZnhx0TjSd0xyjOD0m/YfeyPJfKk5L+gDi905gxY8d2+3w1pOhaRwNDb2ZvNvVs5UqO
+         SkRs5wT/Mrnb1cOU2FCS1mLuBrySn6+B/1svW1iO/kyaPf6kpJgU1nhnGYunoS/RwpLV
+         JIpA==
+X-Gm-Message-State: AOAM530f3MdK4sJm/zL5hGP39j8hBKOX6bUYkrPS/QBwMxL2h9Kwu6SC
+        YjudbAWsy0veMerpsiWKVsZ92j1ZNCBUuQ==
+X-Google-Smtp-Source: ABdhPJze4R1mTMf13f6kPCl8W3juFpZNbCCHquzQQtr0pRw0f1EZguXPvQjzTYEjbEidx87nOeWJpg==
+X-Received: by 2002:a05:6512:3e5:: with SMTP id n5mr27231331lfq.146.1642602886707;
+        Wed, 19 Jan 2022 06:34:46 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id br14sm546234lfb.14.2022.01.19.06.34.44
+        by smtp.gmail.com with ESMTPSA id br14sm546234lfb.14.2022.01.19.06.34.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 06:34:44 -0800 (PST)
+        Wed, 19 Jan 2022 06:34:46 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
@@ -63,10 +63,10 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>
-Subject: [PATCH 2/3] mm/vmalloc: Add adjust_search_size parameter
-Date:   Wed, 19 Jan 2022 15:34:33 +0100
-Message-Id: <20220119143434.601059-2-urezki@gmail.com>
+        Vasily Averin <vvs@virtuozzo.com>
+Subject: [PATCH 3/3] mm/vmalloc: Eliminate an extra orig_gfp_mask
+Date:   Wed, 19 Jan 2022 15:34:34 +0100
+Message-Id: <20220119143434.601059-3-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220119143434.601059-1-urezki@gmail.com>
 References: <20220119143434.601059-1-urezki@gmail.com>
@@ -76,121 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uladzislau Rezki <uladzislau.rezki@sony.com>
+That extra variable has been introduced just for keeping an original
+passed gfp_mask because it is updated with __GFP_NOWARN on entry, thus
+error handling messages were broken.
 
-Extend the find_vmap_lowest_match() function with one more
-parameter. It is "adjust_search_size" boolean variable, so
-it is possible to control an accuracy of search block if a
-specific alignment is required.
+Instead we can keep an original gfp_mask without modifying it and add
+an extra __GFP_NOWARN flag together with gfp_mask as a parameter to
+the vm_area_alloc_pages() function. It will make it less confused.
 
-With this patch, a search size is always adjusted, to serve
-a request as fast as possible because of performance reason.
-
-But there is one exception though, it is short ranges where
-requested size corresponds to passed vstart/vend restriction
-together with a specific alignment request. In such scenario
-an adjustment wold not lead to success allocation.
-
-Signed-off-by: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Cc: Vasily Averin <vvs@virtuozzo.com>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- mm/vmalloc.c | 37 ++++++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
+ mm/vmalloc.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index ed0f9eaa61a9..52ee67107046 100644
+index 52ee67107046..04edd32ba6bc 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -1192,22 +1192,28 @@ is_within_this_va(struct vmap_area *va, unsigned long size,
- /*
-  * Find the first free block(lowest start address) in the tree,
-  * that will accomplish the request corresponding to passing
-- * parameters.
-+ * parameters. Please note, with an alignment bigger than PAGE_SIZE,
-+ * a search length is adjusted to account for worst case alignment
-+ * overhead.
-  */
- static __always_inline struct vmap_area *
--find_vmap_lowest_match(unsigned long size,
--	unsigned long align, unsigned long vstart)
-+find_vmap_lowest_match(unsigned long size, unsigned long align,
-+	unsigned long vstart, bool adjust_search_size)
+@@ -2953,7 +2953,6 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 				 int node)
  {
- 	struct vmap_area *va;
- 	struct rb_node *node;
-+	unsigned long length;
+ 	const gfp_t nested_gfp = (gfp_mask & GFP_RECLAIM_MASK) | __GFP_ZERO;
+-	const gfp_t orig_gfp_mask = gfp_mask;
+ 	bool nofail = gfp_mask & __GFP_NOFAIL;
+ 	unsigned long addr = (unsigned long)area->addr;
+ 	unsigned long size = get_vm_area_size(area);
+@@ -2967,7 +2966,6 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 	max_small_pages = ALIGN(size, 1UL << page_shift) >> PAGE_SHIFT;
  
- 	/* Start from the root. */
- 	node = free_vmap_area_root.rb_node;
+ 	array_size = (unsigned long)max_small_pages * sizeof(struct page *);
+-	gfp_mask |= __GFP_NOWARN;
+ 	if (!(gfp_mask & (GFP_DMA | GFP_DMA32)))
+ 		gfp_mask |= __GFP_HIGHMEM;
  
-+	/* Adjust the search size for alignment overhead. */
-+	length = adjust_search_size ? size + align - 1 : size;
-+
- 	while (node) {
- 		va = rb_entry(node, struct vmap_area, rb_node);
+@@ -2980,7 +2978,7 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 	}
  
--		if (get_subtree_max_size(node->rb_left) >= size &&
-+		if (get_subtree_max_size(node->rb_left) >= length &&
- 				vstart < va->va_start) {
- 			node = node->rb_left;
- 		} else {
-@@ -1217,9 +1223,9 @@ find_vmap_lowest_match(unsigned long size,
- 			/*
- 			 * Does not make sense to go deeper towards the right
- 			 * sub-tree if it does not have a free block that is
--			 * equal or bigger to the requested search size.
-+			 * equal or bigger to the requested search length.
- 			 */
--			if (get_subtree_max_size(node->rb_right) >= size) {
-+			if (get_subtree_max_size(node->rb_right) >= length) {
- 				node = node->rb_right;
- 				continue;
- 			}
-@@ -1235,7 +1241,7 @@ find_vmap_lowest_match(unsigned long size,
- 				if (is_within_this_va(va, size, align, vstart))
- 					return va;
+ 	if (!area->pages) {
+-		warn_alloc(orig_gfp_mask, NULL,
++		warn_alloc(gfp_mask, NULL,
+ 			"vmalloc error: size %lu, failed to allocated page array size %lu",
+ 			nr_small_pages * PAGE_SIZE, array_size);
+ 		free_vm_area(area);
+@@ -2990,8 +2988,8 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 	set_vm_area_page_order(area, page_shift - PAGE_SHIFT);
+ 	page_order = vm_area_page_order(area);
  
--				if (get_subtree_max_size(node->rb_right) >= size &&
-+				if (get_subtree_max_size(node->rb_right) >= length &&
- 						vstart <= va->va_start) {
- 					/*
- 					 * Shift the vstart forward. Please note, we update it with
-@@ -1283,7 +1289,7 @@ find_vmap_lowest_match_check(unsigned long size, unsigned long align)
- 	get_random_bytes(&rnd, sizeof(rnd));
- 	vstart = VMALLOC_START + rnd;
+-	area->nr_pages = vm_area_alloc_pages(gfp_mask, node,
+-		page_order, nr_small_pages, area->pages);
++	area->nr_pages = vm_area_alloc_pages(gfp_mask | __GFP_NOWARN,
++		node, page_order, nr_small_pages, area->pages);
  
--	va_1 = find_vmap_lowest_match(size, align, vstart);
-+	va_1 = find_vmap_lowest_match(size, align, vstart, false);
- 	va_2 = find_vmap_lowest_linear_match(size, align, vstart);
+ 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
+ 	if (gfp_mask & __GFP_ACCOUNT) {
+@@ -3007,7 +3005,7 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 	 * allocation request, free them via __vfree() if any.
+ 	 */
+ 	if (area->nr_pages != nr_small_pages) {
+-		warn_alloc(orig_gfp_mask, NULL,
++		warn_alloc(gfp_mask, NULL,
+ 			"vmalloc error: size %lu, page order %u, failed to allocate pages",
+ 			area->nr_pages * PAGE_SIZE, page_order);
+ 		goto fail;
+@@ -3035,7 +3033,7 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 		memalloc_noio_restore(flags);
  
- 	if (va_1 != va_2)
-@@ -1434,12 +1440,25 @@ static __always_inline unsigned long
- __alloc_vmap_area(unsigned long size, unsigned long align,
- 	unsigned long vstart, unsigned long vend)
- {
-+	bool adjust_search_size = true;
- 	unsigned long nva_start_addr;
- 	struct vmap_area *va;
- 	enum fit_type type;
- 	int ret;
- 
--	va = find_vmap_lowest_match(size, align, vstart);
-+	/*
-+	 * Do not adjust when:
-+	 *   a) align <= PAGE_SIZE, because it does not make any sense.
-+	 *      All blocks(their start addresses) are at least PAGE_SIZE
-+	 *      aligned anyway;
-+	 *   b) a short range where a requested size corresponds to exactly
-+	 *      specified [vstart:vend] interval and an alignment > PAGE_SIZE.
-+	 *      With adjusted search length an allocation would not succeed.
-+	 */
-+	if (align <= PAGE_SIZE || (align > PAGE_SIZE && (vend - vstart) == size))
-+		adjust_search_size = false;
-+
-+	va = find_vmap_lowest_match(size, align, vstart, adjust_search_size);
- 	if (unlikely(!va))
- 		return vend;
- 
+ 	if (ret < 0) {
+-		warn_alloc(orig_gfp_mask, NULL,
++		warn_alloc(gfp_mask, NULL,
+ 			"vmalloc error: size %lu, failed to map pages",
+ 			area->nr_pages * PAGE_SIZE);
+ 		goto fail;
 -- 
 2.30.2
 

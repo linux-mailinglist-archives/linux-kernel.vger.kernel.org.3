@@ -2,110 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F81C493F5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019C9493F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356536AbiASRuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        id S1356523AbiASRtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344353AbiASRur (ORCPT
+        with ESMTP id S1350491AbiASRtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:50:47 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F310CC061574;
-        Wed, 19 Jan 2022 09:50:46 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id j23so11382882edp.5;
-        Wed, 19 Jan 2022 09:50:46 -0800 (PST)
+        Wed, 19 Jan 2022 12:49:53 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1F7C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:49:53 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id c9so2876882plg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:49:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gYqrzHKY6NZ+smDMyNLEdjverS9Vu94GwZDjRJxBkqA=;
-        b=fiV7KO5DntXelX0OfsQwMZ+mrbf1r4MX4LvHgm8nKHMgHVomhgK2EstxRyA3k2PNMo
-         ND6qE2dpDjcyySIVQbG5BVociAX9RQp1Iw2qF9YaZ8bK+TpyP2WhWG4CjdC+phk37eWk
-         lLU4ZS/QTAU83uE54abGHGwTiTF78dMbRBXLbAHzdf2cGD3TMKnot0FBpYSy0VuXQdFJ
-         fpfwBXTYPRk+DhGZXarUHtCFXfDTBis8RDS0htGQ9pw2KI/2kW2KZyGVJx3p385LD/Zk
-         w/lT4WXLAEeeZNFZK9yR9E6LxldsRj44MO9GAv5RdQcKLN/G97hSFd1FYwOzRjwrwQ1s
-         U71g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m2jEv1T9iOrxqYTw18pKQSL30EzBZlle4dn9cK+DSqw=;
+        b=yYC/dxsoRFYYCmHQLUxvN9S6Rv06g14VEcDuzt4uz0F2KjwW1iRdeYUMBbaD6CNfWr
+         vGjuX5PoTNyF/MZkmPqlf33YZ7E5i4xXgmgCoIOHQ837W9l8Y2+qb8QXOF3gjGX5OJtH
+         cGb7/d6iQoFC82KaDydcPa4Kpaxm3dVjbY9+CKCMXd1YOIBxvuRPcTVCIDn1f1DcVHcR
+         KdvkiSBn9iDs1G7Cq4mcPUWahx+wTKMOqIQQWKuOZw7Q+tQW6nzhDfdU74gTDWRtl01h
+         aFNbRI3ZwzsK0r6I2N/NXKOkDetbIpEXZ+lBFniKWejE9KRAYslDjl8zBYJ8TQBKyLUT
+         3RAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gYqrzHKY6NZ+smDMyNLEdjverS9Vu94GwZDjRJxBkqA=;
-        b=yA5cMUcT/jqBKQVsjtM0NxjNGCfFKcI5812LRLRf2ehpeGpNQO1Ddn9ekLj4QMsFr5
-         XooxUAd/naHzr5w5H6S6tsyMQtqq6MdIOvsiMqc7vzJz380gXySjHg8mk7eXLiqdrKOC
-         9DgzfjIQIIlwd2pAwd9n9tYhK8hJOPY4p4FUXY8A/JsdHVQSLlTDEbJKbcwzbRmexfDY
-         T3PatmlK2NNxJNL0zePXM4s4cORqZVY2UEHZIb/dvTf+Pf0FST4d3sz/CvtvqBMXWc7Q
-         s/IxpKnrAEMufLwWUpoRr81sjDGdZyLNXnfB6PEIyQ8b/Nrv63725INjof2z16f97jSD
-         fKWg==
-X-Gm-Message-State: AOAM533fheJ3VJiSMU5ThDVYOucUUbFX5O442wMc/VlEoOvN1G0Pgl97
-        Lu3oTt87rOILNC744AAkjLshgyt4wFbr9GYJqgo=
-X-Google-Smtp-Source: ABdhPJxpCISVyWKWKmWvQqQZxVaOGKUDCOomH8fpNTQfnCEI6mNChEe1bV6hhw1xHpAzOHlmz0/2fU+h5aQ8rZLpMeU=
-X-Received: by 2002:a05:6402:4c5:: with SMTP id n5mr31968102edw.122.1642614645556;
- Wed, 19 Jan 2022 09:50:45 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m2jEv1T9iOrxqYTw18pKQSL30EzBZlle4dn9cK+DSqw=;
+        b=upKpXkWJEUSGUZ4pEO9+KNGHSvfn3YosiaH71Nk3XjdZyPBmtr+t5t/UsqN/9NfjuE
+         fBM0RBU3L+Lz4N3wLXoFuOGF2xL8kaMw379nL9nIvTaztDoqm/KLprPsJDg0ni7y0w3m
+         DtPgnWa+nZDJopIfQLZdhcCdE2KFAexjPAdCbAjk6N27SXoy6kYCptlG7d+f8TsAtYW4
+         tjiipw5zK0cnCYvN2ESFf3g5PklsYHI+zYnwYDTjJVHAebG7lcfuj9gVB07Yb05yR973
+         v92z9B6DrDi5QdLuUUMBZ3QXznrflw0f1DvlJfQq8u9F9xXTkqvwTLf7EKSTs2EF2EVd
+         Eo3g==
+X-Gm-Message-State: AOAM533TU8Dlutd0vieDaUJbOH8Mx3U+X8OTRpRnA/RrYcMxxzR0R4E4
+        rme9qGlVnbHzTPCon3QxVllw9Q==
+X-Google-Smtp-Source: ABdhPJw6QwCwyN0MLYbe0U5pzmVmTRgRp/n4pJ+Hy1u2Aykbx4Kawx2ncMpzUtvyGtt1RmXiGXfsOQ==
+X-Received: by 2002:a17:902:ecc6:b0:14a:fba3:168d with SMTP id a6-20020a170902ecc600b0014afba3168dmr1989056plh.8.1642614592561;
+        Wed, 19 Jan 2022 09:49:52 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id k16sm319644pff.39.2022.01.19.09.49.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 09:49:50 -0800 (PST)
+Date:   Wed, 19 Jan 2022 10:49:47 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/9] remoteproc: imx_rproc: make clk optional
+Message-ID: <20220119174947.GA1282028@p14s>
+References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
+ <20220111033333.403448-8-peng.fan@oss.nxp.com>
+ <20220118185019.GG1119324@p14s>
+ <DU0PR04MB9417B0AC80F41D425F43277C88599@DU0PR04MB9417.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220117142919.207370-1-marcan@marcan.st> <20220117142919.207370-2-marcan@marcan.st>
-In-Reply-To: <20220117142919.207370-2-marcan@marcan.st>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 19 Jan 2022 19:49:03 +0200
-Message-ID: <CAHp75VfVuX-BG1MJcEoQrOW6jn=PSMZH0jTcwGj9PwWxocG_Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] brcmfmac: pcie: Release firmwares in the
- brcmf_pcie_setup error path
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU0PR04MB9417B0AC80F41D425F43277C88599@DU0PR04MB9417.eurprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 4:30 PM Hector Martin <marcan@marcan.st> wrote:
->
-> This avoids leaking memory if brcmf_chip_get_raminfo fails. Note that
-> the CLM blob is released in the device remove path.
+On Wed, Jan 19, 2022 at 02:25:48AM +0000, Peng Fan wrote:
+> > Subject: Re: [PATCH 5/9] remoteproc: imx_rproc: make clk optional
+> > 
+> > On Tue, Jan 11, 2022 at 11:33:29AM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > To i.MX8QXP/QM/ULP and i.MX7ULP, Mcore maybe out of control of Linux.
+> > > And in such case, no need clk, so make clk optional with has_clk.
+> > >
+> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > ---
+> > >  drivers/remoteproc/imx_rproc.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/drivers/remoteproc/imx_rproc.c
+> > > b/drivers/remoteproc/imx_rproc.c index 7b2578177ea8..0e99a3ca6fbc
+> > > 100644
+> > > --- a/drivers/remoteproc/imx_rproc.c
+> > > +++ b/drivers/remoteproc/imx_rproc.c
+> > > @@ -89,6 +89,7 @@ struct imx_rproc {
+> > >  	struct work_struct		rproc_work;
+> > >  	struct workqueue_struct		*workqueue;
+> > >  	void __iomem			*rsc_table;
+> > > +	bool				has_clk;
+> > 
+> > I am usually weary of bloating structures with flags.  I suggest achieving the
+> > same functionality with a macro that compares priv->dcfg with the right
+> > imx_rproc_dcfg structure.
+> 
+> priv->dcfg is some kind fixed settings, however has_clk could be runtime changed,
+> because i.MX platform M-core support multiple booting method and it
+> could work w/o clk handled by Linux depending on some pre-configuration
+> such as moving M-core in an separate hardware partition.
 
-...
+Unless there is an FPGA in the mix, clocks and power domains should not change.
+Either clocks are handled by the remote processor or the application processor,
+regardless of the mode (attached or detached) the platform is booting into.
 
->         if (ret) {
-
->                 brcmf_err(bus, "Failed to get RAM info\n");
-> +               release_firmware(fw);
-> +               brcmf_fw_nvram_free(nvram);
-
-Can we first undo the things and only after print a message?
-
->                 goto fail;
->         }
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+> 
+> Thanks,
+> Peng. 
+> 
+> > 
+> > >  };
+> > >
+> > >  static const struct imx_rproc_att imx_rproc_att_imx8mn[] = { @@
+> > > -724,6 +725,9 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv)
+> > >  	if (dcfg->method == IMX_RPROC_NONE)
+> > >  		return 0;
+> > >
+> > > +	if (!priv->has_clk)
+> > > +		return 0;
+> > > +
+> > >  	priv->clk = devm_clk_get(dev, NULL);
+> > >  	if (IS_ERR(priv->clk)) {
+> > >  		dev_err(dev, "Failed to get clock\n"); @@ -768,6 +772,7 @@ static
+> > > int imx_rproc_probe(struct platform_device *pdev)
+> > >  	priv->rproc = rproc;
+> > >  	priv->dcfg = dcfg;
+> > >  	priv->dev = dev;
+> > > +	priv->has_clk = true;
+> > >
+> > >  	dev_set_drvdata(dev, rproc);
+> > >  	priv->workqueue = create_workqueue(dev_name(dev));
+> > > --
+> > > 2.25.1
+> > >

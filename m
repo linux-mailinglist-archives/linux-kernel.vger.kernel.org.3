@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BECB494330
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B72494336
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343956AbiASWm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 17:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S1357601AbiASWng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbiASWm5 (ORCPT
+        with ESMTP id S1344033AbiASWnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:42:57 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241C1C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:42:57 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id br17so14191185lfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:42:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QBGuTeJTY4evy0pXgZPGqi5/7wy93IQZWaIcsbMgY0o=;
-        b=dYC5q0yEQzPOlqU9aFZ+eQoQxQ3kRwyvkrWswfbjilki02dUSHfjXLVlYHyG3RbZc9
-         43iXn+7gaxMapqt/maDxgsSzOpqe1wO9m5FSHukYaVDr+dcjmxtWaCyeeixEpEZdtrFi
-         f/nHFkgj9vX6p11C4mVS5/7zRupL8vitbGDGjvryR3P9miQ5WminNEdIF5FIaXvcAZy9
-         gyYEdbXwSo7JfZHMDC7euBIbvNhbeo9d4jxoL+XyW2qF6I1b57PgBxxABMXFAw1LArhX
-         YZ0NEukdwR2+mL7Q6WEjyhu3flddZe+JjX2Z10mJP5CuhgoeQC7M9DKQDSnsjGlwBk1a
-         MoDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QBGuTeJTY4evy0pXgZPGqi5/7wy93IQZWaIcsbMgY0o=;
-        b=jtUz9aNV8wU2V8WUDluTwsJJX014QNYESwADM/ym/WuWCXESwp2Jivnl/o3Kg4/Msu
-         ouEmkwcgQ/irCJtD3RhSOwnUItz0Lq5oyKSahdM8imfODu+XzCJx94FXbMQtd5rSHZjU
-         EM/hacr1OcDapknWDaAV32lt6I8xG9Xvkzwq/DJGtsvK/eAdHjq/KSiavKd3dg0ZMVJ5
-         oiz3rHy/vwbfdjEj9Hs9Dc/KOfTX39wSANBqSDeFpL2dQH+SCuhvr052K17HP/wW+QcI
-         Rz62dXhIogZmUmj+w/daGohIhUxyt8aW8j5Osr75D0hopqk5Bss6knM9rRej0MhXCy5A
-         JooQ==
-X-Gm-Message-State: AOAM532fS6DswKOq1SWSPJU5UYl3bKGVbcJGde+wjzALaQZXRqJZZiZY
-        016J65S1XxqVIvi4xVqQhMlVTw==
-X-Google-Smtp-Source: ABdhPJyKemZP+GUHTthbYxnWBhvreucyqWDoJdwuFoi+Cbpif8CLT38VaRlhicyGPRXwE+Blu2cNfg==
-X-Received: by 2002:a05:6512:260c:: with SMTP id bt12mr29003355lfb.506.1642632175437;
-        Wed, 19 Jan 2022 14:42:55 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y19sm85202lji.135.2022.01.19.14.42.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 14:42:54 -0800 (PST)
-Message-ID: <74c6ad05-331f-5073-89ad-0efda6226dbc@linaro.org>
-Date:   Thu, 20 Jan 2022 01:42:54 +0300
+        Wed, 19 Jan 2022 17:43:31 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F177C061574;
+        Wed, 19 Jan 2022 14:43:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfLJw5xvFz4y3q;
+        Thu, 20 Jan 2022 09:43:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642632209;
+        bh=w4RJa7LhdlEwidZ+0nB3oeRlJt8ZXOwyiD8Czy99fzU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TA9kdtZ8Cax6NiKl4d2zCMZr/te6y4kixuSSJMFG7wFNCUjzHRsE6QATh2aSMV75t
+         ypR7Ndm073YXOfkqH0AfXLZ7z8tiIC6ZY1ZkZ8/7GuBkVGzMjKfLtCsldU5qokgb2L
+         n+w4bXCBu7slmY5/4BwBOLNfpV61YrrKug3/tqePZjj8338iXiUPwFmXoqUsa2qQqC
+         q/EMSMoV4pG57vcTVljnwzrPrqUbr7IGiR2yLNwdijtFErn2B6b7cz6M8+VHfwZegq
+         UJand6kq6LJULCgZLe6xQcsLXuHlQIJN9y6HZinSOzBmkHqILViUHdMZijTys90cOZ
+         WfCGRaxjY0BVA==
+Date:   Thu, 20 Jan 2022 09:43:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>
+Subject: linux-next: manual merge of the cifs tree with the fscache tree
+Message-ID: <20220120094328.1e7015cb@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] drm/msm: remove variable set but not used
-Content-Language: en-GB
-To:     Yang Li <yang.lee@linux.alibaba.com>, robdclark@gmail.com
-Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Abaci Robot <abaci@linux.alibaba.com>
-References: <20211216031103.34146-1-yang.lee@linux.alibaba.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20211216031103.34146-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/bOe_3LTxZ/S.vWHPjj+71Yj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2021 06:11, Yang Li wrote:
-> The code that uses variable mdss has been removed, So the declaration
-> and assignment of the variable can be removed.
-> 
-> Eliminate the following clang warning:
-> drivers/gpu/drm/msm/msm_drv.c:513:19: warning: variable 'mdss' set but
-> not used [-Wunused-but-set-variable]
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Fixes: 2027e5b3413d ("drm/msm: Initialize MDSS irq domain at probe time")
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+--Sig_/bOe_3LTxZ/S.vWHPjj+71Yj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi all,
 
-> ---
->   drivers/gpu/drm/msm/msm_drv.c | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index ad35a5d94053..59e30192cdf6 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -510,7 +510,6 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
->   	struct msm_drm_private *priv = dev_get_drvdata(dev);
->   	struct drm_device *ddev;
->   	struct msm_kms *kms;
-> -	struct msm_mdss *mdss;
->   	int ret, i;
->   
->   	ddev = drm_dev_alloc(drv, dev);
-> @@ -521,8 +520,6 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
->   	ddev->dev_private = priv;
->   	priv->dev = ddev;
->   
-> -	mdss = priv->mdss;
-> -
->   	priv->wq = alloc_ordered_workqueue("msm", 0);
->   	priv->hangcheck_period = DRM_MSM_HANGCHECK_DEFAULT_PERIOD;
->   
+Today's linux-next merge of the cifs tree got conflicts in:
 
+  fs/cifs/file.c
+  fs/cifs/fscache.h
 
--- 
-With best wishes
-Dmitry
+between commit:
+
+  a91e6e1c8074 ("cifs: Support fscache indexing rewrite")
+
+from the fscache tree and commit:
+
+  70431bfd825d ("cifs: Support fscache indexing rewrite")
+
+from the cifs tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bOe_3LTxZ/S.vWHPjj+71Yj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHolBAACgkQAVBC80lX
+0GwSuAf/dlThWpO7LU9wRWkFgFqPTONn2TeyQPiPn1nrP97g/M+82fxLpZRw2ez7
+oLh1iIqRV5xDdVlL9EIVZ5XWA1qc1WCZ3KYeBXHGv9tX8JYG6GlvhfrOHJoc3zbj
+7leI+pF1nIEg4gh+TXotCD8y09Vs0j8k/hVCXYAQrB8J4xhUFKd1NDKIY3ajdhax
+EGXjoGq/aj6OmD28LDkZ1HPPUIskkTL7tVa0gMExeX5PxhF+A5sU8/rrTtZBIce+
+PugOhy65ywGia7/FRErmu+rd4VPhNhxFTrdkNQLDzRuvapCUQNWGxUl2obJJsetU
+eXYJSKs2/AUKf/V8wIFmeAu02M4TgQ==
+=i3M4
+-----END PGP SIGNATURE-----
+
+--Sig_/bOe_3LTxZ/S.vWHPjj+71Yj--

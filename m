@@ -2,260 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4C6494303
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DDB49430C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357546AbiASWZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 17:25:32 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:52633 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357489AbiASWZb (ORCPT
+        id S1343906AbiASW1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234461AbiASW1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:25:31 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfKw91KTXz4y3q;
-        Thu, 20 Jan 2022 09:25:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642631129;
-        bh=HUdoUmXAE4umbq1ha82W4mzfeV6PIiWF9Q2FlUbPvhg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kot4OaUkUGOhlUT+7MXUvBZXx3gI0a6zPGKst2UDvK83yrHlpkmGkmyYmCyHF5aom
-         vXG3fycxnCL+7+Nn6ZHpWroq9gGR8RM0omi1bdi3cIeRrT5bL5ANgtgCOQwpAhKMrd
-         ptfmBB9jZhRRgMcvECVqlE6+0TuhOlQvc7hdwocpPKxDxomP1OPOSb3Vj4f+wcY/D4
-         PUzy6XVD277dp/t7HdyzmcTbKyf2P2Djis/77KqmpGzUysHXFvRmm4j7oDufqLt4GM
-         6NioQUwYNH/nCYPActkdAUdQDWuOMLlXRR9ZPw4Vza6COHJ0wqINzJtU4zdvPPPnzG
-         B9mQz/dQ4fPPQ==
-Date:   Thu, 20 Jan 2022 09:25:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm-fixes tree with Linus' tree
-Message-ID: <20220120092527.71e3a85f@canb.auug.org.au>
+        Wed, 19 Jan 2022 17:27:33 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C64C061574;
+        Wed, 19 Jan 2022 14:27:32 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id az27-20020a05600c601b00b0034d2956eb04so8838773wmb.5;
+        Wed, 19 Jan 2022 14:27:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DewfwLZFcsnQ9ncpMxSujVRfw0OZIAPpjTixgbn7cO4=;
+        b=FyWmTBJWfW4BZj88fk1zNS4Qk6/ciN00sglYtgb2SE6qohdf1AnadARKLw9ZcAfc/C
+         cONhz7zFV5vSPQw2AVl+MlZ9fkWmw3s4m8YgOBFqoByk/49H6Lg8WlWrKW+S+5sKeqpI
+         HeEu+JN/UVkrgyEhzl/RVbOWrUNKZHznXJZ7/hkw7HCVyNR2HAxGM5hJTYiVJoATCsar
+         BJl3VM2dnTCo8gDSNUDvK/+IngGNdkjyK486MkdIq168GVGyCEBjyY3PlgwpaCpzMDJx
+         cyWVUe+CRQzahl20+O4/S5WS5TSFQ3+LTJbSN1m0T0cFZ79O2PYnz10IRVFBODTQ26VT
+         bFSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DewfwLZFcsnQ9ncpMxSujVRfw0OZIAPpjTixgbn7cO4=;
+        b=xrqxBFpG6s1189vslYo0F1ZAaQgp1TSYMWyNUYMyokJAfCFek+fGqTjE34a1AUd26+
+         hOEpc+KiV8paMJUDEs/rRni39S3h5aTiBVcmYM9NO+qNTZ46Jw6lHs/fdjNQftIDLuno
+         qyFJZNs5AVYuKo0ZYdBqM3tGv9D47UObBfJ+7jq6Y1zVyNXYVOWfvLiM6WwD8Lel6p8o
+         IYWF9fbWw9CHCKx1mzw/ZzPLlEbju8Yf1yKsGPbtH51yGpP2Zs4MsPcGTr7io8n5mDDD
+         ILMBxBVsex9v1AOlGN7+tVc75o4mbHfVgzQFNB5LiT2k9jy5P1xqjg7PkcuYpoQnYbBF
+         iEeg==
+X-Gm-Message-State: AOAM530AAEu3kaePl0eV2Rr0ssYi+yuu1URNr66N+Cjl+tuvmrrFlDIQ
+        MMWYc0+CRijM5GeVi4H1jKJ9ieIxOn6ETg==
+X-Google-Smtp-Source: ABdhPJwdHP56Fn/iianQoY6+zo6qivLJMovmcOBNiZlgtysy3YcqH7ISqcGIWhnB51NmGEt8inpFvA==
+X-Received: by 2002:a05:600c:a47:: with SMTP id c7mr5776345wmq.23.1642631251405;
+        Wed, 19 Jan 2022 14:27:31 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l13sm982203wrs.109.2022.01.19.14.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 14:27:30 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs/coredump: rate limit the unsafe core_pattern warning
+Date:   Wed, 19 Jan 2022 22:27:29 +0000
+Message-Id: <20220119222729.98545-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SwT/asWo.n/bgmzssX9Tue0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/SwT/asWo.n/bgmzssX9Tue0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+It is possible to spam the kernel log with many invalid attempts
+to set the core_pattern. Rate limit the warning message to make
+it less spammy.
 
-Hi all,
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/coredump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Today's linux-next merge of the kvm-fixes tree got a conflict in:
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 1c060c0a2d72..2dadc1dcaa2c 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -898,7 +898,7 @@ void validate_coredump_safety(void)
+ {
+ 	if (suid_dumpable == SUID_DUMP_ROOT &&
+ 	    core_pattern[0] != '/' && core_pattern[0] != '|') {
+-		pr_warn(
++		pr_warn_ratelimited(
+ "Unsafe core_pattern used with fs.suid_dumpable=2.\n"
+ "Pipe handler or fully qualified core dump path required.\n"
+ "Set kernel.core_pattern before fs.suid_dumpable.\n"
+-- 
+2.33.1
 
-  arch/x86/kvm/vmx/posted_intr.c
-
-between commits:
-
-  c95717218add ("KVM: VMX: Drop unnecessary PI logic to handle impossible c=
-onditions")
-  29802380b679 ("KVM: VMX: Drop pointless PI.NDST update when blocking")
-  89ef0f21cf96 ("KVM: VMX: Save/restore IRQs (instead of CLI/STI) during PI=
- pre/post block")
-  cfb0e1306a37 ("KVM: VMX: Read Posted Interrupt "control" exactly once per=
- loop iteration")
-  baed82c8e489 ("KVM: VMX: Remove vCPU from PI wakeup list before updating =
-PID.NV")
-  45af1bb99b72 ("KVM: VMX: Clean up PI pre/post-block WARNs")
-
-from Linus' tree and commit:
-
-  5f02ef741a78 ("KVM: VMX: switch blocked_vcpu_on_cpu_lock to raw spinlock")
-
-from the kvm-fixes tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-It may be worth while rebasing this fix on top of Linus' current tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/kvm/vmx/posted_intr.c
-index 88c53c521094,21ea58d25771..000000000000
---- a/arch/x86/kvm/vmx/posted_intr.c
-+++ b/arch/x86/kvm/vmx/posted_intr.c
-@@@ -11,23 -11,11 +11,23 @@@
-  #include "vmx.h"
- =20
-  /*
- - * We maintain a per-CPU linked-list of vCPU, so in wakeup_handler() we
- - * can find which vCPU should be waken up.
- + * Maintain a per-CPU list of vCPUs that need to be awakened by wakeup_ha=
-ndler()
- + * when a WAKEUP_VECTOR interrupted is posted.  vCPUs are added to the li=
-st when
- + * the vCPU is scheduled out and is blocking (e.g. in HLT) with IRQs enab=
-led.
- + * The vCPUs posted interrupt descriptor is updated at the same time to s=
-et its
- + * notification vector to WAKEUP_VECTOR, so that posted interrupt from de=
-vices
- + * wake the target vCPUs.  vCPUs are removed from the list and the notifi=
-cation
- + * vector is reset when the vCPU is scheduled in.
-   */
-  static DEFINE_PER_CPU(struct list_head, blocked_vcpu_on_cpu);
- +/*
--  * Protect the per-CPU list with a per-CPU spinlock to handle task migrat=
-ion.
-++ * Protect the per-CPU list with a per-CPU raw_spinlock to handle task mi=
-gration.
- + * When a blocking vCPU is awakened _and_ migrated to a different pCPU, t=
-he
- + * ->sched_in() path will need to take the vCPU off the list of the _prev=
-ious_
- + * CPU.  IRQs must be disabled when taking this lock, otherwise deadlock =
-will
- + * occur if a wakeup IRQ arrives and attempts to acquire the lock.
- + */
-- static DEFINE_PER_CPU(spinlock_t, blocked_vcpu_on_cpu_lock);
-+ static DEFINE_PER_CPU(raw_spinlock_t, blocked_vcpu_on_cpu_lock);
- =20
-  static inline struct pi_desc *vcpu_to_pi_desc(struct kvm_vcpu *vcpu)
-  {
-@@@ -129,25 -103,17 +129,25 @@@ static void __pi_post_block(struct kvm_
-  	struct pi_desc old, new;
-  	unsigned int dest;
- =20
- -	do {
- -		old.control =3D new.control =3D pi_desc->control;
- -		WARN(old.nv !=3D POSTED_INTR_WAKEUP_VECTOR,
- -		     "Wakeup handler not enabled while the VCPU is blocked\n");
- +	/*
- +	 * Remove the vCPU from the wakeup list of the _previous_ pCPU, which
- +	 * will not be the same as the current pCPU if the task was migrated.
- +	 */
-- 	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-++	raw_spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
- +	list_del(&vcpu->blocked_vcpu_list);
-- 	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-++	raw_spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
- =20
- -		dest =3D cpu_physical_id(vcpu->cpu);
- +	dest =3D cpu_physical_id(vcpu->cpu);
- +	if (!x2apic_mode)
- +		dest =3D (dest << 8) & 0xFF00;
- =20
- -		if (x2apic_mode)
- -			new.ndst =3D dest;
- -		else
- -			new.ndst =3D (dest << 8) & 0xFF00;
- +	WARN(pi_desc->nv !=3D POSTED_INTR_WAKEUP_VECTOR,
- +	     "Wakeup handler not enabled while the vCPU was blocking");
- +
- +	do {
- +		old.control =3D new.control =3D READ_ONCE(pi_desc->control);
- +
- +		new.ndst =3D dest;
- =20
-  		/* set 'NV' to 'notification vector' */
-  		new.nv =3D POSTED_INTR_VECTOR;
-@@@ -170,27 -143,45 +170,27 @@@
-   */
-  int pi_pre_block(struct kvm_vcpu *vcpu)
-  {
- -	unsigned int dest;
-  	struct pi_desc old, new;
-  	struct pi_desc *pi_desc =3D vcpu_to_pi_desc(vcpu);
- +	unsigned long flags;
- =20
- -	if (!vmx_can_use_vtd_pi(vcpu->kvm))
- +	if (!vmx_can_use_vtd_pi(vcpu->kvm) ||
- +	    vmx_interrupt_blocked(vcpu))
-  		return 0;
- =20
- -	WARN_ON(irqs_disabled());
- -	local_irq_disable();
- -	if (!WARN_ON_ONCE(vcpu->pre_pcpu !=3D -1)) {
- -		vcpu->pre_pcpu =3D vcpu->cpu;
- -		raw_spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
- -		list_add_tail(&vcpu->blocked_vcpu_list,
- -			      &per_cpu(blocked_vcpu_on_cpu,
- -				       vcpu->pre_pcpu));
- -		raw_spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
- -	}
- +	local_irq_save(flags);
- +
- +	vcpu->pre_pcpu =3D vcpu->cpu;
-- 	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->cpu));
-++	raw_spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->cpu));
- +	list_add_tail(&vcpu->blocked_vcpu_list,
- +		      &per_cpu(blocked_vcpu_on_cpu, vcpu->cpu));
-- 	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->cpu));
-++	raw_spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->cpu));
- +
- +	WARN(pi_desc->sn =3D=3D 1,
- +	     "Posted Interrupt Suppress Notification set before blocking");
- =20
-  	do {
- -		old.control =3D new.control =3D pi_desc->control;
- -
- -		WARN((pi_desc->sn =3D=3D 1),
- -		     "Warning: SN field of posted-interrupts "
- -		     "is set before blocking\n");
- -
- -		/*
- -		 * Since vCPU can be preempted during this process,
- -		 * vcpu->cpu could be different with pre_pcpu, we
- -		 * need to set pre_pcpu as the destination of wakeup
- -		 * notification event, then we can find the right vCPU
- -		 * to wakeup in wakeup handler if interrupts happen
- -		 * when the vCPU is in blocked state.
- -		 */
- -		dest =3D cpu_physical_id(vcpu->pre_pcpu);
- -
- -		if (x2apic_mode)
- -			new.ndst =3D dest;
- -		else
- -			new.ndst =3D (dest << 8) & 0xFF00;
- +		old.control =3D new.control =3D READ_ONCE(pi_desc->control);
- =20
-  		/* set 'NV' to 'wakeup vector' */
-  		new.nv =3D POSTED_INTR_WAKEUP_VECTOR;
-@@@ -229,10 -220,10 +229,10 @@@ void pi_wakeup_handler(void
-  			blocked_vcpu_list) {
-  		struct pi_desc *pi_desc =3D vcpu_to_pi_desc(vcpu);
- =20
- -		if (pi_test_on(pi_desc) =3D=3D 1)
- +		if (pi_test_on(pi_desc))
-  			kvm_vcpu_kick(vcpu);
-  	}
-- 	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, cpu));
-+ 	raw_spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, cpu));
-  }
- =20
-  void __init pi_init_cpu(int cpu)
-
---Sig_/SwT/asWo.n/bgmzssX9Tue0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHoj9cACgkQAVBC80lX
-0Gxd9wf8DAP2lOImp9lnQArh/E/fz55khWRz9nh70lEZNgr8fB5bkL377MEkPEBU
-R096IX2DeDRPNiLOJGkyCOanzp6TbFKEcfQ1TPTtb4mFd9igcgLUqkTirwIA/wRP
-WpOAa+wRE3sxXwEDKKBFzsab8NTaGT26ygl/3KnbECqgPlJu5JD63ZK29OT6+v/9
-3fkorntB0p88kR0NnQWfkJrZ6xPwx+X1TIkZvtgbPrThGCFK/P5siNI6Zdd5F9vP
-iV1z/cVfo+RTwHIJC1vG5zpVcex0TExdubIkSs7AWRpTTv53zNWI1cWAJ9b/knUk
-g00pm3vVW858FPesIoJI1Eizb4KOXg==
-=1Eg8
------END PGP SIGNATURE-----
-
---Sig_/SwT/asWo.n/bgmzssX9Tue0--

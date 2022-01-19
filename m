@@ -2,149 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DE04941EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC4A4941EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240237AbiASUhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S244968AbiASUj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiASUhl (ORCPT
+        with ESMTP id S230288AbiASUj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:37:41 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219E4C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:37:41 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id m3so13259828lfu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:37:41 -0800 (PST)
+        Wed, 19 Jan 2022 15:39:26 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45570C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:39:26 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id a12so4379831iod.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:39:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SVNoxQMp637bgUGyLKUQMTT6jCUfGMhBKrAhjOzC1jA=;
-        b=Vw/hy5bg5C+CCYO+oJtgWYZCGRowuXfpuM1y/pli43kr+OiB3OWzkR6ZyW+nfXxt/s
-         VAn2AjX3mL+nlHsEF9z/pBhrlFgPcsEA0h1sAo1ZC4YcWsIWZ0jeb+wpDXa+U2omlUCF
-         pf/73OVbaBLU61/xMVSHktQI827IhnQn2hI4w8Tkbj/fmE8A6Xntpo4ktyfN/ATLaSyR
-         OmbGO1wuYpDN6JCPJ6apqXqpoeOCB/ZbqWFXSeJZIDyaqZ4S0vxFtOgFaUm3xw+cnlGx
-         I1oFnxocUDYadU9R73MgSd6PbQAJyeaWf6JpFnbLe1rT3w0y4YtI4EsZ5WHxq0hL/Blm
-         wwzA==
+        bh=kNU+FdYLrKPOgQIj1agnwH1VI7fH0SQWkYRERiohsr4=;
+        b=R+t6mn+zyrhjnP2i3YNGpY673VAoYMdW5RQez4bKJbB2j2L1tKlMQN14oVUBTg1+28
+         YeetO9IcMdGRsj6ImvJ5tjwiKwIHW8gcC66BCxV25JHAyUATjN1fjW4XiOLYobPcS5nZ
+         NeMjb0N72URvcM5cBHpoPJMLY/DCXexJ3+SOJaEuEVNEY4pEG/OOci4FaAg1cCnIA8GZ
+         8ZMv7UsneErhlOLq//TZK2vkkEU0EpIaeqI1luCfVsuPKJDNm2PMlVMJiiYyHBaSwJ1h
+         ZcBQsNjlzpJ50ZczMTJK5nlWPE9NWLpUSvIXwGjb2YzSvnNy90P36gHAIwmMPIF+dlSl
+         X5ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SVNoxQMp637bgUGyLKUQMTT6jCUfGMhBKrAhjOzC1jA=;
-        b=MpuveFq9I6XMiNEH9wg3gHKo8aRhwiPj37bIV/cjWUWccsAD5KCbMTeu21dqPFTeUU
-         /Vn1QASvXZ7OQFzRTXey6iMXaRyOzopQ+7Az1s6nIhKnvNLq4iye35I+34cPf+Og3SKE
-         L/xMgAUFGOJ9qCfXQ7I+cQf+/lQy5iRp2miGSvU5tPgcFspXLYwj5I13wDwmEZSItkb8
-         om1dERAAZLRlLi7Pcy4/jOOpzVUDqDa8wgQ9EzCm5UIgx5q7tgzaHUEquzUcb0nttLVp
-         dNdauS3EU+nE7nDV4GRf+Ytkh71WaV0Y2JUSdhoxVitrytWh7g+vq6glEGD3I2LycbPF
-         gnEQ==
-X-Gm-Message-State: AOAM533hy/KMR1Q4C+kxdin8L8uLm4pyyKVKwoayJ0eqRMtkR5QC6fw0
-        +IadOMnFgMuaFj4Q1dyT9d9g2E1D12KA+QKc2XMiYg==
-X-Google-Smtp-Source: ABdhPJwjspQiMNHOBlTaaj+hdTY9hJrpsFobebo94UsQ78o3vrS70VesOp4vSiK9m1G+NqmP7oa+dvJBc2Sn675qSo0=
-X-Received: by 2002:a05:6512:329b:: with SMTP id p27mr30040874lfe.36.1642624659492;
- Wed, 19 Jan 2022 12:37:39 -0800 (PST)
+        bh=kNU+FdYLrKPOgQIj1agnwH1VI7fH0SQWkYRERiohsr4=;
+        b=jA9QBBipUG+S1QHHymuFdWVC85HzIRxgyyDvLcEBSz5x+XsR3OBYV9ETmoQy6zVlY3
+         sIZlRdmkOVOOU6qbX8z4uaMY1mDnClShwzoJ+27OJiMmSjUahCCoRjzHSbrOVL3ROWgr
+         wXn/fzk5/qZWCGW/z38qPm4QV3EzhFcNJdQ5JVpCsVLS6nHS9P+uiN9pESHUPTlMeIB8
+         vtpUERQ2S+45hWMvMT93kGx9cIGxwHXkxRE4Nt1ZqyRX1Dxty6HBHyx+CHnLCsgBw6RQ
+         gLPmSjtb2nOfakGHLLjizftEt0sx2Te3tkhYSn/aBbaMhMvH9z3QLTntI8D/vDC3ggCF
+         ABdA==
+X-Gm-Message-State: AOAM532nSstmwNcK7Dm9uCb8HRC6Jao/+09bZ9tCVaUvZ7y6gZAWx33E
+        3gZxYDKUOwsWR6SXy8TABLAL1yWX6Egjw8V8wVkYvQ==
+X-Google-Smtp-Source: ABdhPJx2Ey+nuRIU/OyHyU6vfv2fQWh9FP8xkWY7cEgWNyngquM0FOYo8NXRpGid33Fo/Ct3dA6JNVgOSMnDr+8mTPU=
+X-Received: by 2002:a6b:5b05:: with SMTP id v5mr15785725ioh.138.1642624765402;
+ Wed, 19 Jan 2022 12:39:25 -0800 (PST)
 MIME-Version: 1.0
-References: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
- <20220113123406.11520-1-guangming.cao@mediatek.com> <4f88205c1b344aea8608960e2f85b8f4@intel.com>
- <e657f5257cbf4955817b0bbf037de9f9@intel.com> <24157767-dc29-bbdd-5428-d89ecc6b9606@amd.com>
- <CALAqxLXRtYDNQ8y1efVGa4SwUH_oAaHviZFjsOVSNFmUHnCCeQ@mail.gmail.com>
- <6b8182a1-7cdc-7369-5c34-e6d0c24efcca@amd.com> <82faa62f1bc946cf2f9ee2f7d15c567162238eab.camel@mediatek.com>
- <CALAqxLUSjHoLpgFLcvqmDfv7Uip2VwHS5d_5x2nzw=P3rA2NDA@mail.gmail.com> <f09938519f1fcf51f20a0de5eb4063b0ff1a1e87.camel@mediatek.com>
-In-Reply-To: <f09938519f1fcf51f20a0de5eb4063b0ff1a1e87.camel@mediatek.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 19 Jan 2022 12:37:27 -0800
-Message-ID: <CALAqxLUtK8V9LgC-DY+tkzFYyWfzF+JhbrLZk6UhEG57HQBDSA@mail.gmail.com>
-Subject: Re: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
-To:     "Guangming.Cao" <guangming.cao@mediatek.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "wsd_upstream@mediatek.com" <wsd_upstream@mediatek.com>,
-        "libo.kang@mediatek.com" <libo.kang@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "yf.wang@mediatek.com" <yf.wang@mediatek.com>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "lmark@codeaurora.org" <lmark@codeaurora.org>,
-        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
-        "bo.song@mediatek.com" <bo.song@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "labbott@redhat.com" <labbott@redhat.com>,
-        "mingyuan.ma@mediatek.com" <mingyuan.ma@mediatek.com>,
-        "jianjiao.zeng@mediatek.com" <jianjiao.zeng@mediatek.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+References: <202201170247.Cir3moOM-lkp@intel.com>
+In-Reply-To: <202201170247.Cir3moOM-lkp@intel.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Wed, 19 Jan 2022 12:38:48 -0800
+Message-ID: <CAJHvVchPpphLefKEOy_C6+0xrGtA3mNCBzQZ3j2i2RgXX3arXQ@mail.gmail.com>
+Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-5.4
+ 6517/9999] fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but
+ not used
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "GNU/Weeb Mailing List" <gwml@gnuweeb.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Todd Kjos <tkjos@google.com>, Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Lokesh Gidra <lokeshgidra@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 1:58 AM Guangming.Cao
-<guangming.cao@mediatek.com> wrote:
-> On Fri, 2022-01-14 at 17:17 -0800, John Stultz wrote:
-> > If the max value is per-heap, why not enforce that value in the
-> > per-heap allocation function?
-> >
-> > Moving the check to the heap alloc to me seems simpler to me than
-> > adding complexity to the infrastructure to add a heap max_size
-> > callback. Is there some other use for the callback that you envision?
-> >
+Lokesh, I only spent a few moments looking, but my suspicion is that
+this is the result of an incomplete backport of these patches to the
+Android kernel?
+
+The UFFDIO_CONTINUE patches introduced ioctls_out since the
+computation of it got more complicated, and those same patches also
+modified the put_user() on line 1533 here to use ioctls_out. I think
+Android backported the first part, but left out the second?
+
+On Sun, Jan 16, 2022 at 10:11 AM kernel test robot <lkp@intel.com> wrote:
 >
-> If you think max the value is per-heap, why not add an optional
-> callback for dma-heap to solve this issue(prevent consuming too much
-> time for a doomed to fail allocation), if the dma-heap doesn't have a
-> special size check, just use the default value(totalram) in dma-heap
-> framework to do the size check.
-
-As the totalram default isn't correct for all heaps (or necessarily
-even most heaps), so those heaps would need to implement the callback.
-
-I'm just not sure adding complexity to the framework to address this
-is useful. Instead of an additional check in the allocation function,
-heap implementers will need to assess if the default logic in a
-framework is correct, and then possibly implement the callback.
-
-> Yes, for linux dma-heaps, only system-heap needs it, so adding it in
-> system heap is the simplest. However, there are many vendor dma-heaps
-> like system-heap which won't be uploaded to linux codebase, and maybe
-> have same limitation, all these heaps need to add the same limitation.
-
-My worry is that without seeing these vendor heaps, this is a bit of a
-theoretical concern. We don't have the data on how common this is.
-I very much hope that vendors can start submitting their heaps
-upstream (along with drivers that benefit from the heaps). Then we can
-really assess what makes the most sense for the community maintained
-code.
-
-
-> I just think it's boring. However, If you think discussing these absent
-> cases based on current linux code is meaningless, I also agree to it.
-
-So, as a rule, the upstream kernel doesn't create/maintain logic to
-accommodate out of tree code.
-
-Now, I agree there is the potential for some duplication in the checks
-in the allocation logic, but until it affects the upstream kernel,
-community maintainers can't really make an appropriate evaluation.
-
-As a contra-example, if the allocation is some extreme hotpath, adding
-an extra un-inlinable function pointer traversal for the size callback
-may actually have a negative impact. This isn't likely but again, if
-we cannot demonstrate it one way or the other against the upstream
-tree, we can't figure out what the best solution might be.
-
-
-> So, to summarize, if you still think adding it in system_heap.c is
-> better, I also agree and I will update the patch to add it in
-> system_heap.c
-
-I think this is the best solution for now. As this is not part of an
-userland ABI, we can always change it in the future once we see the
-need.
-
-thanks
--john
+> Hi Axel,
+>
+> FYI, the error/warning still remains.
+>
+> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.4
+> head:   bdf17ba628090156b539b1474eb5c636eeaf571b
+> commit: b69f713e60d03ae448e5c9fd92e5b0b193dea7be [6517/9999] BACKPORT: FROMGIT: userfaultfd: add UFFDIO_CONTINUE ioctl
+> config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220117/202201170247.Cir3moOM-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ammarfaizi2/linux-block/commit/b69f713e60d03ae448e5c9fd92e5b0b193dea7be
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.4
+>         git checkout b69f713e60d03ae448e5c9fd92e5b0b193dea7be
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but not used [-Wunused-but-set-variable]
+>                    __u64 ioctls_out;
+>                          ^
+>    1 warning generated.
+>
+>
+> vim +/ioctls_out +1519 fs/userfaultfd.c
+>
+>   1311
+>   1312  static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>   1313                                  unsigned long arg)
+>   1314  {
+>   1315          struct mm_struct *mm = ctx->mm;
+>   1316          struct vm_area_struct *vma, *prev, *cur;
+>   1317          int ret;
+>   1318          struct uffdio_register uffdio_register;
+>   1319          struct uffdio_register __user *user_uffdio_register;
+>   1320          unsigned long vm_flags, new_flags;
+>   1321          bool found;
+>   1322          bool basic_ioctls;
+>   1323          unsigned long start, end, vma_end;
+>   1324
+>   1325          user_uffdio_register = (struct uffdio_register __user *) arg;
+>   1326
+>   1327          ret = -EFAULT;
+>   1328          if (copy_from_user(&uffdio_register, user_uffdio_register,
+>   1329                             sizeof(uffdio_register)-sizeof(__u64)))
+>   1330                  goto out;
+>   1331
+>   1332          ret = -EINVAL;
+>   1333          if (!uffdio_register.mode)
+>   1334                  goto out;
+>   1335          if (uffdio_register.mode & ~UFFD_API_REGISTER_MODES)
+>   1336                  goto out;
+>   1337          vm_flags = 0;
+>   1338          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MISSING)
+>   1339                  vm_flags |= VM_UFFD_MISSING;
+>   1340          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_WP) {
+>   1341                  vm_flags |= VM_UFFD_WP;
+>   1342                  /*
+>   1343                   * FIXME: remove the below error constraint by
+>   1344                   * implementing the wprotect tracking mode.
+>   1345                   */
+>   1346                  ret = -EINVAL;
+>   1347                  goto out;
+>   1348          }
+>   1349          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR) {
+>   1350  #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+>   1351                  goto out;
+>   1352  #endif
+>   1353                  vm_flags |= VM_UFFD_MINOR;
+>   1354          }
+>   1355
+>   1356          ret = validate_range(mm, &uffdio_register.range.start,
+>   1357                               uffdio_register.range.len);
+>   1358          if (ret)
+>   1359                  goto out;
+>   1360
+>   1361          start = uffdio_register.range.start;
+>   1362          end = start + uffdio_register.range.len;
+>   1363
+>   1364          ret = -ENOMEM;
+>   1365          if (!mmget_not_zero(mm))
+>   1366                  goto out;
+>   1367
+>   1368          down_write(&mm->mmap_sem);
+>   1369          if (!mmget_still_valid(mm))
+>   1370                  goto out_unlock;
+>   1371          vma = find_vma_prev(mm, start, &prev);
+>   1372          if (!vma)
+>   1373                  goto out_unlock;
+>   1374
+>   1375          /* check that there's at least one vma in the range */
+>   1376          ret = -EINVAL;
+>   1377          if (vma->vm_start >= end)
+>   1378                  goto out_unlock;
+>   1379
+>   1380          /*
+>   1381           * If the first vma contains huge pages, make sure start address
+>   1382           * is aligned to huge page size.
+>   1383           */
+>   1384          if (is_vm_hugetlb_page(vma)) {
+>   1385                  unsigned long vma_hpagesize = vma_kernel_pagesize(vma);
+>   1386
+>   1387                  if (start & (vma_hpagesize - 1))
+>   1388                          goto out_unlock;
+>   1389          }
+>   1390
+>   1391          /*
+>   1392           * Search for not compatible vmas.
+>   1393           */
+>   1394          found = false;
+>   1395          basic_ioctls = false;
+>   1396          for (cur = vma; cur && cur->vm_start < end; cur = cur->vm_next) {
+>   1397                  cond_resched();
+>   1398
+>   1399                  BUG_ON(!!cur->vm_userfaultfd_ctx.ctx ^
+>   1400                         !!(cur->vm_flags & __VM_UFFD_FLAGS));
+>   1401
+>   1402                  /* check not compatible vmas */
+>   1403                  ret = -EINVAL;
+>   1404                  if (!vma_can_userfault(cur, vm_flags))
+>   1405                          goto out_unlock;
+>   1406
+>   1407                  /*
+>   1408                   * UFFDIO_COPY will fill file holes even without
+>   1409                   * PROT_WRITE. This check enforces that if this is a
+>   1410                   * MAP_SHARED, the process has write permission to the backing
+>   1411                   * file. If VM_MAYWRITE is set it also enforces that on a
+>   1412                   * MAP_SHARED vma: there is no F_WRITE_SEAL and no further
+>   1413                   * F_WRITE_SEAL can be taken until the vma is destroyed.
+>   1414                   */
+>   1415                  ret = -EPERM;
+>   1416                  if (unlikely(!(cur->vm_flags & VM_MAYWRITE)))
+>   1417                          goto out_unlock;
+>   1418
+>   1419                  /*
+>   1420                   * If this vma contains ending address, and huge pages
+>   1421                   * check alignment.
+>   1422                   */
+>   1423                  if (is_vm_hugetlb_page(cur) && end <= cur->vm_end &&
+>   1424                      end > cur->vm_start) {
+>   1425                          unsigned long vma_hpagesize = vma_kernel_pagesize(cur);
+>   1426
+>   1427                          ret = -EINVAL;
+>   1428
+>   1429                          if (end & (vma_hpagesize - 1))
+>   1430                                  goto out_unlock;
+>   1431                  }
+>   1432
+>   1433                  /*
+>   1434                   * Check that this vma isn't already owned by a
+>   1435                   * different userfaultfd. We can't allow more than one
+>   1436                   * userfaultfd to own a single vma simultaneously or we
+>   1437                   * wouldn't know which one to deliver the userfaults to.
+>   1438                   */
+>   1439                  ret = -EBUSY;
+>   1440                  if (cur->vm_userfaultfd_ctx.ctx &&
+>   1441                      cur->vm_userfaultfd_ctx.ctx != ctx)
+>   1442                          goto out_unlock;
+>   1443
+>   1444                  /*
+>   1445                   * Note vmas containing huge pages
+>   1446                   */
+>   1447                  if (is_vm_hugetlb_page(cur))
+>   1448                          basic_ioctls = true;
+>   1449
+>   1450                  found = true;
+>   1451          }
+>   1452          BUG_ON(!found);
+>   1453
+>   1454          if (vma->vm_start < start)
+>   1455                  prev = vma;
+>   1456
+>   1457          ret = 0;
+>   1458          do {
+>   1459                  cond_resched();
+>   1460
+>   1461                  BUG_ON(!vma_can_userfault(vma, vm_flags));
+>   1462                  BUG_ON(vma->vm_userfaultfd_ctx.ctx &&
+>   1463                         vma->vm_userfaultfd_ctx.ctx != ctx);
+>   1464                  WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
+>   1465
+>   1466                  /*
+>   1467                   * Nothing to do: this vma is already registered into this
+>   1468                   * userfaultfd and with the right tracking mode too.
+>   1469                   */
+>   1470                  if (vma->vm_userfaultfd_ctx.ctx == ctx &&
+>   1471                      (vma->vm_flags & vm_flags) == vm_flags)
+>   1472                          goto skip;
+>   1473
+>   1474                  if (vma->vm_start > start)
+>   1475                          start = vma->vm_start;
+>   1476                  vma_end = min(end, vma->vm_end);
+>   1477
+>   1478                  new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
+>   1479                  prev = vma_merge(mm, prev, start, vma_end, new_flags,
+>   1480                                   vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+>   1481                                   vma_policy(vma),
+>   1482                                   ((struct vm_userfaultfd_ctx){ ctx }),
+>   1483                                   vma_get_anon_name(vma));
+>   1484                  if (prev) {
+>   1485                          vma = prev;
+>   1486                          goto next;
+>   1487                  }
+>   1488                  if (vma->vm_start < start) {
+>   1489                          ret = split_vma(mm, vma, start, 1);
+>   1490                          if (ret)
+>   1491                                  break;
+>   1492                  }
+>   1493                  if (vma->vm_end > end) {
+>   1494                          ret = split_vma(mm, vma, end, 0);
+>   1495                          if (ret)
+>   1496                                  break;
+>   1497                  }
+>   1498          next:
+>   1499                  /*
+>   1500                   * In the vma_merge() successful mprotect-like case 8:
+>   1501                   * the next vma was merged into the current one and
+>   1502                   * the current one has not been updated yet.
+>   1503                   */
+>   1504                  vma->vm_flags = new_flags;
+>   1505                  vma->vm_userfaultfd_ctx.ctx = ctx;
+>   1506
+>   1507                  if (is_vm_hugetlb_page(vma) && uffd_disable_huge_pmd_share(vma))
+>   1508                          hugetlb_unshare_all_pmds(vma);
+>   1509
+>   1510          skip:
+>   1511                  prev = vma;
+>   1512                  start = vma->vm_end;
+>   1513                  vma = vma->vm_next;
+>   1514          } while (vma && vma->vm_start < end);
+>   1515  out_unlock:
+>   1516          up_write(&mm->mmap_sem);
+>   1517          mmput(mm);
+>   1518          if (!ret) {
+> > 1519                  __u64 ioctls_out;
+>   1520
+>   1521                  ioctls_out = basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
+>   1522                      UFFD_API_RANGE_IOCTLS;
+>   1523
+>   1524                  /* CONTINUE ioctl is only supported for MINOR ranges. */
+>   1525                  if (!(uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR))
+>   1526                          ioctls_out &= ~((__u64)1 << _UFFDIO_CONTINUE);
+>   1527
+>   1528                  /*
+>   1529                   * Now that we scanned all vmas we can already tell
+>   1530                   * userland which ioctls methods are guaranteed to
+>   1531                   * succeed on this range.
+>   1532                   */
+>   1533                  if (put_user(basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
+>   1534                               UFFD_API_RANGE_IOCTLS,
+>   1535                               &user_uffdio_register->ioctls))
+>   1536                          ret = -EFAULT;
+>   1537          }
+>   1538  out:
+>   1539          return ret;
+>   1540  }
+>   1541
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3856C493EDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA6A493EDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356335AbiASROQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345023AbiASROO (ORCPT
+        id S1356349AbiASRP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:15:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38758 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345023AbiASRP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:14:14 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B54C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:14:14 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id c24so13247297edy.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v+iHHvLUDMZgd+1HatbMK7HIrN5RHH5OnH3MOXIw4cw=;
-        b=XxrXFUYwqHk69eId58EKHAV/+1ItyJO3kgrO1jYYM4t+DVUhWuei9GjTK4dVkMwNTs
-         /FW47fBcgABpWRiXFmEN7wX0esz6MCztSvTbNaTHgMvPo74X/9pGc4+zdAoHuZPW0aYJ
-         xRssSL6vr2GmpCMTkP6UIyfYpkixJwcGnsNG8s8xkxsYt5rExBPgsZ24XFThhRK3FiCg
-         HnJlkaV4KTP9Ri5o4lO/2o14fqLQI26XrBCtuZgbrD5PT4wKvdckRtHNQyfODHYiv17z
-         NDrjixqKRqSW5WXH4Nxhg+jlhoWjgVMbyATUfdKF0QN3JnoTaWdKvl2oT2/JE2E4uuYX
-         PLyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v+iHHvLUDMZgd+1HatbMK7HIrN5RHH5OnH3MOXIw4cw=;
-        b=nZfQYAL8GC/Z7IFSSQWxCcavPUlrGlfF30JXZdKDkgiXJ37HqgN7+ZdM2QYyukY/rb
-         z1QiLq8gapc9IsaO8uMfjDo6tsnBMOTjw58TzLbgVJkBD75XPt57LJyVB7ZKGVKCmDW2
-         z2nPA4QUb2iiDw5NYJ+f9HFNHFEIAPCC96N3ZejrfQQXOTOprWQePWU2UVcWXjnRQt6Z
-         IfOWsivNyNIqS5Vu6cESuQUkUZJDGLg6aGqNP8jEnzF6pSG2m755Sn+8shnSegk765Ok
-         w3L+zJgGII4ckmnrwnI79YesJPtIsdRLJqb3c8tkc4Jo+e+MV0yxpczKOjoaCW70PYA5
-         GxAg==
-X-Gm-Message-State: AOAM531Lq5qxnoJSLkP+R40bPwBpl58ABDTi5hQwHfWTIXNTcNzA102a
-        X4+JdNg/E8KRkCdyATlgIAquvDXVYPovPhhkmbe5lA==
-X-Google-Smtp-Source: ABdhPJzywlARa1B+zYORVQfDUt8Ut3CB0Cd5HbELiAWKPluFSA4/9ZlXHOkf5HMDXD+QsuGfry3ur2n5Vys40ufBI7I=
-X-Received: by 2002:a17:907:2d26:: with SMTP id gs38mr1736560ejc.693.1642612452855;
- Wed, 19 Jan 2022 09:14:12 -0800 (PST)
+        Wed, 19 Jan 2022 12:15:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A6D0615D4;
+        Wed, 19 Jan 2022 17:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB42CC004E1;
+        Wed, 19 Jan 2022 17:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642612526;
+        bh=kCmGFegGU0UXJw0qYj9i8M/LOTJRUthX1RUxcIMfmRg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UpIB2rKKcRlMbs+T3L5MjMesiEMgkqpstfj8SXlscXPIIHiA334UkJieeWdPMClMd
+         1xiJWopadQ0YfHcI/3NR1N8Kjn9PHWG+aGKKssXcfwMp/DYoEmzzK/jNQYPcB7ULvS
+         gUXIh0SpL0reB5VjYcQIh0l7NcwWblGzHBqU73AFOpf43QyQ90nqMulGaqhOz+/u2S
+         ZRLX2rxKPIbn8UVVdzrz4sV9Rbuz94gSeJTn0/O1nqdc7oOQCGRtbgrCMouS75W5nz
+         LZLFc0pjdx4u5dASvHNX0QBT6G9Hr82hiO+BJyAwckRLDmG3xbkdf/m2+uEElTwHT/
+         dlsoEWyxYu1Cg==
+Date:   Wed, 19 Jan 2022 18:15:22 +0100
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        stephen.s.brennan@oracle.com, cyphar@cyphar.com
+Subject: Re: [PATCH v2] proc: "mount -o lookup=" support
+Message-ID: <20220119171522.pxmkbt5eu3rs5yik@example.org>
+References: <YegysyqL3LvljK66@localhost.localdomain>
+ <20220119162423.eqbyefywhtzm22tr@wittgenstein>
 MIME-Version: 1.0
-References: <20220118160452.384322748@linuxfoundation.org> <CA+G9fYvJaFVKu24oFuR1wGFRe4N2A=yxH6ksx61bunfR9Y3Ejw@mail.gmail.com>
- <CAHk-=whJjHXGeVnVPmC8t_+Rie5N1tarrzsttECEh5efbXYUuA@mail.gmail.com>
-In-Reply-To: <CAHk-=whJjHXGeVnVPmC8t_+Rie5N1tarrzsttECEh5efbXYUuA@mail.gmail.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Wed, 19 Jan 2022 18:14:01 +0100
-Message-ID: <CADYN=9Kb5CNEMfN_iKW-tBaA65GsHR6-Sp0GA1Vi6H3nVanR4Q@mail.gmail.com>
-Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        NeilBrown <neilb@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        stable <stable@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119162423.eqbyefywhtzm22tr@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 09:00, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Jan 19, 2022 at 9:30 AM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > Inconsistent kallsyms data
->
-> This tends to be a "odd build environment" problem, and very very
-> random. Triggered by very particular compiler versions and just some
-> odd code modement details.
->
-> I'd suggest doing a completely clean build and disabling ccache, and
-> seeing if that makes it go away.
+On Wed, Jan 19, 2022 at 05:24:23PM +0100, Christian Brauner wrote:
+> On Wed, Jan 19, 2022 at 06:48:03PM +0300, Alexey Dobriyan wrote:
+> > From 61376c85daab50afb343ce50b5a97e562bc1c8d3 Mon Sep 17 00:00:00 2001
+> > From: Alexey Dobriyan <adobriyan@gmail.com>
+> > Date: Mon, 22 Nov 2021 20:41:06 +0300
+> > Subject: [PATCH 1/1] proc: "mount -o lookup=..." support
+> > 
+> > Docker implements MaskedPaths configuration option
+> > 
+> > 	https://github.com/estesp/docker/blob/9c15e82f19b0ad3c5fe8617a8ec2dddc6639f40a/oci/defaults.go#L97
+> > 
+> > to disable certain /proc files. It overmounts them with /dev/null.
+> > 
+> > Implement proper mount option which selectively disables lookup/readdir
+> > in the top level /proc directory so that MaskedPaths doesn't need
+> > to be updated as time goes on.
+> 
+> I might've missed this when this was sent the last time so maybe it was
+> clearly explained in an earlier thread: What's the reason this needs to
+> live in the kernel?
+> 
+> The MaskedPaths entry is optional so runtimes aren't required to block
+> anything by default and this mostly makes sense for workloads that run
+> privileged.
+> 
+> In addition MaskedPaths is a generic option which allows to hide any
+> existing path, not just proc. Even in the very docker-specific defaults
+> /sys/firmware is covered.
+> 
+> I do see clear value in the subset= and hidepid= options. They are
+> generally useful independent of opinionated container workloads. I don't
+> see the same for lookup=.
+> 
+> An alternative I find more sensible is to add a new value for subset=
+> that hides anything(?) that only global root should have read/write
+> access too.
 
-Clean build without ccache didn't help.
+Or we can allow to change permissions in the procfs only in the direction
+of decreasing (if some file has 644 then allow to set 640 or 600). In this
+case, we will not need to constantly check the whitelist.
 
-It seams that it fails randomly based on the size of the rodata section.
-This could probably happen with another toolchain too, trying enough
-configurations.
+-- 
+Rgrds, legion
 
-Diff of tmp_vmlinux.kallsyms2.symbols and
-tmp_vmlinux.kallsyms3.symbols [1] show why it fails to converge, while
-said that the __stop_notes address is on the page boundary, so
-__end_rodata has the same value as __stop_notes.
-All 3 tmp_vmlinux.kallsyms(1|2|3).symbols files can be found [2].
-
-Inserting padding before __end_rodata [3], or blacklisting __stop_notes [4]
-in kallsyms.c works around the problem, but neither of those seems like a
-good fix.
-
-The linker version I'm using are 'GNU ld (GNU Binutils for Debian) 2.35.2'.
-
-Cheers,
-Anders
-[1] http://ix.io/3ML7
-[2] https://people.linaro.org/~anders.roxell/kallsyms/
-[3] http://ix.io/3MN2
-[4] http://ix.io/3MN4

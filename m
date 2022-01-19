@@ -2,164 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A22B24939E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045CB4939E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354311AbiASLuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233640AbiASLuF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:50:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FBDC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 03:50:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB60A61647
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C78C004E1;
-        Wed, 19 Jan 2022 11:50:01 +0000 (UTC)
-Date:   Wed, 19 Jan 2022 11:49:58 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "julien.thierry.kdev@gmail.com" <julien.thierry.kdev@gmail.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "Alexandru.Elisei@arm.com" <Alexandru.Elisei@arm.com>,
-        "qperret@google.com" <qperret@google.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: Re: [PATCH v4 0/4] kvm/arm: New VMID allocator based on asid
-Message-ID: <Yef65ng6pQK5yZDa@arm.com>
-References: <20211122121844.867-1-shameerali.kolothum.thodi@huawei.com>
- <Yeazd1lLuYm4k3lH@arm.com>
- <207f800d1a67427a9771ffb06086365b@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <207f800d1a67427a9771ffb06086365b@huawei.com>
+        id S1354315AbiASLua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:50:30 -0500
+Received: from mx405.baidu.com ([124.64.200.26]:32843 "EHLO mx421.baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1354318AbiASLuU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:50:20 -0500
+Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
+        by mx421.baidu.com (Postfix) with ESMTP id 454482F00920;
+        Wed, 19 Jan 2022 19:50:15 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id 35F5BD9932;
+        Wed, 19 Jan 2022 19:50:15 +0800 (CST)
+From:   Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     lirongqing@baidu.com, kvm@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] KVM: X86: Introduce vfio_intr_stat per-vm debugfs file
+Date:   Wed, 19 Jan 2022 19:50:15 +0800
+Message-Id: <1642593015-28729-1-git-send-email-yuanzhaoxiong@baidu.com>
+X-Mailer: git-send-email 1.7.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 09:23:31AM +0000, Shameerali Kolothum Thodi wrote:
-> > On Mon, Nov 22, 2021 at 12:18:40PM +0000, Shameer Kolothum wrote:
-> > >  -TLA+ model. Modified the asidalloc model to incorporate the new
-> > >   VMID algo. The main differences are,
-> > >   -flush_tlb_all() instead of local_tlb_flush_all() on rollover.
-> > >   -Introduced INVALID_VMID and vCPU Sched Out logic.
-> > >   -No CnP (Removed UniqueASIDAllCPUs & UniqueASIDActiveTask invariants).
-> > >   -Removed  UniqueVMIDPerCPU invariant for now as it looks like
-> > >    because of the speculative fetching with flush_tlb_all() there
-> > >    is a small window where this gets triggered. If I change the
-> > >    logic back to local_flush_tlb_all(), UniqueVMIDPerCPU seems to
-> > >    be fine. With my limited knowledge on TLA+ model, it is not
-> > >    clear to me whether this is a problem with the above logic
-> > >    or the VMID model implementation. Really appreciate any help
-> > >    with the model.
-> > >    The initial VMID TLA+ model is here,
-> > >    https://github.com/shamiali2008/kernel-tla/tree/private-vmidalloc-v1
-> > 
-> > I only had a brief look at the TLA+ model and I don't understand why you
-> > have a separate 'shed_out' process. It would run in parallel with the
-> > 'sched' but AFAICT you can't really schedule a guest out while you are
-> > in the middle of scheduling it in. I'd rather use the same 'sched'
-> > process and either schedule in an inactive task or schedule out an
-> > active one for a given CPU.
-> > 
-> > Also active_vmids[] for example is defined on the CPUS domain but you
-> > call vcpu_sched_out() from a process that's not in the CPUS domain but
-> > the SCHED_OUT one.
-> 
-> Many thanks for taking a look. My bad!. The 'sched_out' would indeed run in parallel
-> and defeat the purpose. I must say I was really confused by the TLA+ syntax and
-> is still not very confident about it.
+Use this file to export correspondence between guest_irq, host_irq,
+vector and vcpu belonging to VFIO passthrough devices.
 
-Yeah, it can be confusing. If you have time, you could give CBMC a try
-and the 'spec' would be pretty close to your C version. Each CPU would
-be modelled as a thread with an extra thread that simulates the
-speculative TLB look-ups for all CPUS together with the asserts for the
-invariants. The spinlocks would be pthread_mutexes.
+An example output of this looks like (a vm with VFIO passthrough
+devices):
+   guest_irq     host_irq       vector         vcpu
+          24          201           37            8
+          25          202           35           25
+          26          203           35           20
+   ......
 
-> Based on the above suggestion, I have modified it as below,
-> 
-> \* vCPU is scheduled out by KVM
-> macro vcpu_sched_out() {
->         active_kvm[self].task := 0;
->         active_vmids[self] := INVALID_VMID;
-> }
+When a VM has VFIO passthrough devices, the correspondence between
+guest_irq, host_irq, vector and vcpu may need to be known especially
+in AMD platform with avic disabled. The AMD avic is disabled, and
+the passthrough devices may cause vcpu vm exit twice for a interrupt.
+One extrernal interrupt caused by vfio host irq, other ipi to inject
+a interrupt to vm.
 
-Could you call cpu_switch_kvm(0, INVALID_VMID) instead? You could do
-this directly below and avoid another macro. Well, whatever you find
-clearer.
+If the system administrator known these information, set vfio host
+irq affinity to Pcpu which the correspondece guest irq affinited vcpu,
+to avoid extra vm exit.
 
-What confuses me is that your INVALID_VMID looks like a valid one: vmid
-0, generation 1. Do you ensure that you never allocate VMID 0?
+Co-developed-by: Li RongQing <lirongqing@baidu.com>
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+---
+diff with v0: modifying the code format.
 
-> \* About to run a Guest VM
-> process (sched \in CPUS)
-> {
-> sched_loop:
->         while (TRUE) {
->                 with (t \in TASKS) {
->                         if (t # ActiveTask(self))
->                                 call kvm_arm_vmid_update(t);
->                         else
->                                 vcpu_sched_out();
->                 }
->         }
-> }
+ arch/x86/kvm/debugfs.c | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
-Yes, that's what I meant.
-
-> > The corresponding
-> > UniqueASIDPerCPU meant that for any two TLB entries on a single CPU, if
-> > they correspond to different tasks (pgd), they should have different
-> > ASIDs. That's a strong requirement, otherwise we end up with the wrong
-> > translation.
-> 
-> Yes, I understand that it is a strong requirement. Also, I thought this is something
-> that will trigger easily with the test setup I had with the real hardware. But testing
-> stayed on for days, so I was not sure it is a problem with the TLA+ implementation
-> or not.  
-
-Well, you'd have to check the TLA+ state trace and see how it got
-there, whether the last state would be a valid one. It's either
-something missing in the spec that the hardware enforces or the
-algorithm is wrong and just hard to hit in practice. If this condition
-is violated in hardware for a very brief period, e.g. due to some TLBI,
-you'd not notice an issue under normal circumstances. But it's still
-incorrect.
-
-> > Why did you remove the CnP? Do we have this disabled for KVM guests?
-> 
-> I removed CnP related Invariants to simplify things for the first version. Also not sure
-> what specific changes we need to do for CnP here. Do we still need that switching to 
-> global pg_dir to prevent any speculative reading? I didn't see that being done in KVM 
-> anywhere at the moment. Maybe I am missing something.
-
-It make sense to ignore CnP for now. Maybe KVM doesn't even bother and
-sets VTTBR_EL2.CnP to 0 (I haven't checked).
-
-> On a side note, In my setup, the CnP=TRUE case for asidalloc.tla now fails with,
-> "Error: Invariant TLBEmptyInvalPTE is violated.". Please check.
-
-This was added later as part of try-to-unmap and I only checked this
-with CnP = FALSE. I'll need to look into, it's possible that
-flush_tlb_all() doesn't take into account that the pte is unmapped (as
-cpu_switch_mm() does). I'll add a separate thread for speculative TLB
-loads, it's easier to have them in one place. Thanks.
-
+diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
+index 9240b3b..be16bfe 100644
+--- a/arch/x86/kvm/debugfs.c
++++ b/arch/x86/kvm/debugfs.c
+@@ -10,6 +10,11 @@
+ #include "mmu.h"
+ #include "mmu/mmu_internal.h"
+ 
++#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
++#include <linux/kvm_irqfd.h>
++#include <asm/irq_remapping.h>
++#endif
++
+ static int vcpu_get_timer_advance_ns(void *data, u64 *val)
+ {
+ 	struct kvm_vcpu *vcpu = (struct kvm_vcpu *) data;
+@@ -181,9 +186,94 @@ static int kvm_mmu_rmaps_stat_release(struct inode *inode, struct file *file)
+ 	.release	= kvm_mmu_rmaps_stat_release,
+ };
+ 
++#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
++static int kvm_vfio_intr_stat_show(struct seq_file *m, void *v)
++{
++	struct kvm_kernel_irq_routing_entry *e;
++	struct kvm_irq_routing_table *irq_rt;
++	unsigned int host_irq, guest_irq;
++	struct kvm_kernel_irqfd *irqfd;
++	struct kvm *kvm = m->private;
++	struct kvm_lapic_irq irq;
++	struct kvm_vcpu *vcpu;
++	int idx;
++
++	if (!kvm_arch_has_assigned_device(kvm) ||
++			!irq_remapping_cap(IRQ_POSTING_CAP)) {
++		return 0;
++	}
++
++	seq_printf(m, "%12s %12s %12s %12s\n",
++			"guest_irq", "host_irq", "vector", "vcpu");
++
++	spin_lock_irq(&kvm->irqfds.lock);
++	idx = srcu_read_lock(&kvm->irq_srcu);
++	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
++
++	list_for_each_entry(irqfd, &kvm->irqfds.items, list) {
++		if (!irqfd->producer)
++			continue;
++
++		host_irq = irqfd->producer->irq;
++		guest_irq = irqfd->gsi;
++
++		if (guest_irq >= irq_rt->nr_rt_entries ||
++				hlist_empty(&irq_rt->map[guest_irq])) {
++			pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
++					guest_irq, irq_rt->nr_rt_entries);
++			continue;
++		}
++
++		hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
++			if (e->type != KVM_IRQ_ROUTING_MSI)
++				continue;
++
++			kvm_set_msi_irq(kvm, e, &irq);
++			if (kvm_intr_is_single_vcpu(kvm, &irq, &vcpu)) {
++				seq_printf(m, "%12u %12u %12u %12u\n",
++						guest_irq, host_irq, irq.vector, vcpu->vcpu_id);
++			}
++		}
++	}
++	srcu_read_unlock(&kvm->irq_srcu, idx);
++	spin_unlock_irq(&kvm->irqfds.lock);
++	return 0;
++}
++
++static int kvm_vfio_intr_stat_open(struct inode *inode, struct file *file)
++{
++	struct kvm *kvm = inode->i_private;
++
++	if (!kvm_get_kvm_safe(kvm))
++		return -ENOENT;
++
++	return single_open(file, kvm_vfio_intr_stat_show, kvm);
++}
++
++static int kvm_vfio_intr_stat_release(struct inode *inode, struct file *file)
++{
++	struct kvm *kvm = inode->i_private;
++
++	kvm_put_kvm(kvm);
++	return single_release(inode, file);
++}
++
++static const struct file_operations vfio_intr_stat_fops = {
++	.open    = kvm_vfio_intr_stat_open,
++	.read    = seq_read,
++	.llseek  = seq_lseek,
++	.release = kvm_vfio_intr_stat_release,
++};
++#endif
++
+ int kvm_arch_create_vm_debugfs(struct kvm *kvm)
+ {
+ 	debugfs_create_file("mmu_rmaps_stat", 0644, kvm->debugfs_dentry, kvm,
+ 			    &mmu_rmaps_stat_fops);
++
++#ifdef CONFIG_HAVE_KVM_IRQ_BYPASS
++	debugfs_create_file("vfio_intr_stat", 0444, kvm->debugfs_dentry, kvm,
++			    &vfio_intr_stat_fops);
++#endif
+ 	return 0;
+ }
 -- 
-Catalin
+1.8.3.1
+

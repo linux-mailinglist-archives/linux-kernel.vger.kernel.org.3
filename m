@@ -2,193 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C9D4942AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50F34942B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357463AbiASVzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 16:55:51 -0500
-Received: from mga17.intel.com ([192.55.52.151]:59510 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343606AbiASVzr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 16:55:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642629347; x=1674165347;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=otFg3swqPlUELCxL5/8SOVueOWKX3jF6HqiI/xk8r4Q=;
-  b=D3Soczo6qeg8wtIIhuZ7Pe2fQzCHTgpg8orfVcLmuL+bKo/BAwuAr8W+
-   I/YooU+wpMTuLkU6nKgaJRdYCJQ8KykH9zcY5imt6jn2rwEfQe5pSs8I3
-   os9Ilc2Vk06plJcONhrbqp1WhaReSpfeoyMcnCD1F1ZDPBPmc/SKBcUAr
-   Qk75VBUvDyQqhSjB7wWQdQT72bphw3aBUq6Dd+IhiBQI5KfAAD2B/2SX/
-   3YKwplp7W1qKBdoJyxb8RGU7EUiTh6ehE/wg59iRe46/es4J51AhOmrsd
-   9bbhttOAOdi6Z9v9nA9HntJWZbQinlHi6EZSdYCCGiLvVJEWOdwlrK7Nk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225876262"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="225876262"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 13:55:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="477548959"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2022 13:55:42 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAIvd-000DmU-Ea; Wed, 19 Jan 2022 21:55:41 +0000
-Date:   Thu, 20 Jan 2022 05:54:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: mm/gup.c:1674:16: error: unexpected token, expected comma
-Message-ID: <202201200528.F5X9Vnfb-lkp@intel.com>
+        id S1357474AbiASWAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343606AbiASWA2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 17:00:28 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C302C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:00:28 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 188so3883538pgf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=JI5jEcI1hiEGc8WLPgbqQTxkl08Ju0kSWlXY2eIoY9Q=;
+        b=Qxk8ZlOzgx4vMG2yojzX5wqvtn5rpGheXm11Z2NyGGBIUXeWLr4XOg3b0q3SyZigtH
+         iGaQnWl3zb1OvgUv/kyJhvoC8mXZPAhUz50q7uhfasP7KXx2JeaPhKPNgtg4s8H9BDUo
+         vvaHlGGVz9UU7HVblsspusc51ErXeXhgqq8Bk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JI5jEcI1hiEGc8WLPgbqQTxkl08Ju0kSWlXY2eIoY9Q=;
+        b=u0OiFYYJL9Yag6XVcG3jCj6Cht0TR9yeMPLNy/+BQdMbJHr62zJEGIRLMCtowy8van
+         QGZmkvWOms6uKp/zb2K1HZKvOb3dRNBjyWkLBmy2wIXrDQAo6LLxpBAG0MeOVzGvbzMv
+         yGIJr6pu9sTmRz00OdEkHzioe47izylIzoyP+raVgcYnalenr5x5tj8Mvxw6iMFjdWeN
+         nRVROrFCaRZbWL0E71ESAzznZgk0B2DHcv2xYPQ++lxmoDhFQmnlt/gYaYXFYvxMw9sr
+         F7yTurYwHWk0jJELFfe8VmrhAjIgL1Yx4m7JJ/l7kKt6FZNp929tHpDHG68huxb85Ld8
+         my2w==
+X-Gm-Message-State: AOAM531kPGS0rpB244T6CQzSU5drfDU4eoQTUcvIzyyBIF+Nl3HhWxrM
+        NHFERZnmz+ogHKd6LYbTjUs0BQ==
+X-Google-Smtp-Source: ABdhPJwt4Nv5793SP6zTE20w2tmeoTfB5V156ftaoTtLpJsdxvELruQabzZX/RUlM9ATmwCRik8jUg==
+X-Received: by 2002:aa7:918e:0:b0:4bb:793:b7a7 with SMTP id x14-20020aa7918e000000b004bb0793b7a7mr32876692pfa.71.1642629627636;
+        Wed, 19 Jan 2022 14:00:27 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k12sm602597pfc.107.2022.01.19.14.00.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 14:00:26 -0800 (PST)
+Date:   Wed, 19 Jan 2022 14:00:26 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH v3 11/12] lkdtm: Fix execute_[user]_location()
+Message-ID: <202201191359.5E67E74A@keescook>
+References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
+ <d4688c2af08dda706d3b6786ae5ec5a74e6171f1.1634457599.git.christophe.leroy@csgroup.eu>
+ <e7793192-6879-490d-1f37-3d6d6908a121@csgroup.eu>
+ <c635dff6-2bca-3486-014f-12ae00bd1777@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c635dff6-2bca-3486-014f-12ae00bd1777@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
-commit: bb523b406c849eef8f265a07cd7f320f1f177743 gup: Turn fault_in_pages_{readable,writeable} into fault_in_{readable,writeable}
-date:   3 months ago
-config: mips-randconfig-r003-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200528.F5X9Vnfb-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb523b406c849eef8f265a07cd7f320f1f177743
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bb523b406c849eef8f265a07cd7f320f1f177743
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On Wed, Jan 19, 2022 at 08:28:54PM +0100, Christophe Leroy wrote:
+> Hi Kees,
+> 
+> 
+> Le 17/12/2021 à 12:49, Christophe Leroy a écrit :
+> > Hi Kees,
+> > 
+> > Le 17/10/2021 à 14:38, Christophe Leroy a écrit :
+> > > execute_location() and execute_user_location() intent
+> > > to copy do_nothing() text and execute it at a new location.
+> > > However, at the time being it doesn't copy do_nothing() function
+> > > but do_nothing() function descriptor which still points to the
+> > > original text. So at the end it still executes do_nothing() at
+> > > its original location allthough using a copied function descriptor.
+> > > 
+> > > So, fix that by really copying do_nothing() text and build a new
+> > > function descriptor by copying do_nothing() function descriptor and
+> > > updating the target address with the new location.
+> > > 
+> > > Also fix the displayed addresses by dereferencing do_nothing()
+> > > function descriptor.
+> > > 
+> > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > 
+> > Do you have any comment to this patch and to patch 12 ?
+> > 
+> > If not, is it ok to get your acked-by ?
+> 
+> Any feedback please, even if it's to say no feedback ?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi! Thanks for the ping; I haven't had time yet to look at this, but
+with -rc1 coming, I should be able to task-switch back to LKDTM for the
+dev cycle and I can give some feedback.
 
-All errors (new ones prefixed by >>):
+-Kees
 
->> mm/gup.c:1674:16: error: unexpected token, expected comma
-                   if (unlikely(__put_user(0, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sb, __pu_ptr);                      \
-                                  ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
->> mm/gup.c:1674:16: error: invalid operand for instruction
-                   if (unlikely(__put_user(0, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sb, __pu_ptr);                      \
-                                  ^
-   <inline asm>:4:10: note: instantiated into assembly here
-           sbe $0, 0($17)
-                   ^
-   mm/gup.c:1682:16: error: unexpected token, expected comma
-                   if (unlikely(__put_user(0, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sb, __pu_ptr);                      \
-                                  ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
-   mm/gup.c:1682:16: error: invalid operand for instruction
-                   if (unlikely(__put_user(0, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:171:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sb, __pu_ptr);                      \
-                                  ^
-   <inline asm>:4:10: note: instantiated into assembly here
-           sbe $0, 0($2)
-                   ^
-   mm/gup.c:1710:16: error: unexpected token, expected comma
-                   if (unlikely(__get_user(c, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
-                   __get_data_asm((x), user_lb, __gu_ptr);                 \
-                                       ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
-   mm/gup.c:1710:16: error: invalid operand for instruction
-                   if (unlikely(__get_user(c, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
-                   __get_data_asm((x), user_lb, __gu_ptr);                 \
-                                       ^
-   <inline asm>:4:10: note: instantiated into assembly here
-           lbe $3, 0($17)
-                   ^
-   mm/gup.c:1718:16: error: unexpected token, expected comma
-                   if (unlikely(__get_user(c, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
-                   __get_data_asm((x), user_lb, __gu_ptr);                 \
-                                       ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
-   mm/gup.c:1718:16: error: invalid operand for instruction
-                   if (unlikely(__get_user(c, uaddr) != 0))
-                                ^
-   arch/mips/include/asm/uaccess.h:218:23: note: expanded from macro '__get_user'
-                   __get_data_asm((x), user_lb, __gu_ptr);                 \
-                                       ^
-   <inline asm>:4:10: note: instantiated into assembly here
-           lbe $5, 0($2)
-                   ^
-   8 errors generated.
+> 
+> Many thanks,
+> Christophe
+> 
+> > 
+> > Thanks
+> > Christophe
+> > 
+> > > ---
+> > >   drivers/misc/lkdtm/perms.c | 37 ++++++++++++++++++++++++++++---------
+> > >   1 file changed, 28 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
+> > > index 035fcca441f0..1cf24c4a79e9 100644
+> > > --- a/drivers/misc/lkdtm/perms.c
+> > > +++ b/drivers/misc/lkdtm/perms.c
+> > > @@ -44,19 +44,34 @@ static noinline void do_overwritten(void)
+> > >       return;
+> > >   }
+> > > +static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
+> > > +{
+> > > +    if (!have_function_descriptors())
+> > > +        return dst;
+> > > +
+> > > +    memcpy(fdesc, do_nothing, sizeof(*fdesc));
+> > > +    fdesc->addr = (unsigned long)dst;
+> > > +    barrier();
+> > > +
+> > > +    return fdesc;
+> > > +}
+> > > +
+> > >   static noinline void execute_location(void *dst, bool write)
+> > >   {
+> > > -    void (*func)(void) = dst;
+> > > +    void (*func)(void);
+> > > +    func_desc_t fdesc;
+> > > +    void *do_nothing_text = dereference_function_descriptor(do_nothing);
+> > > -    pr_info("attempting ok execution at %px\n", do_nothing);
+> > > +    pr_info("attempting ok execution at %px\n", do_nothing_text);
+> > >       do_nothing();
+> > >       if (write == CODE_WRITE) {
+> > > -        memcpy(dst, do_nothing, EXEC_SIZE);
+> > > +        memcpy(dst, do_nothing_text, EXEC_SIZE);
+> > >           flush_icache_range((unsigned long)dst,
+> > >                      (unsigned long)dst + EXEC_SIZE);
+> > >       }
+> > > -    pr_info("attempting bad execution at %px\n", func);
+> > > +    pr_info("attempting bad execution at %px\n", dst);
+> > > +    func = setup_function_descriptor(&fdesc, dst);
+> > >       func();
+> > >       pr_err("FAIL: func returned\n");
+> > >   }
+> > > @@ -66,16 +81,19 @@ static void execute_user_location(void *dst)
+> > >       int copied;
+> > >       /* Intentionally crossing kernel/user memory boundary. */
+> > > -    void (*func)(void) = dst;
+> > > +    void (*func)(void);
+> > > +    func_desc_t fdesc;
+> > > +    void *do_nothing_text = dereference_function_descriptor(do_nothing);
+> > > -    pr_info("attempting ok execution at %px\n", do_nothing);
+> > > +    pr_info("attempting ok execution at %px\n", do_nothing_text);
+> > >       do_nothing();
+> > > -    copied = access_process_vm(current, (unsigned long)dst, do_nothing,
+> > > +    copied = access_process_vm(current, (unsigned long)dst,
+> > > do_nothing_text,
+> > >                      EXEC_SIZE, FOLL_WRITE);
+> > >       if (copied < EXEC_SIZE)
+> > >           return;
+> > > -    pr_info("attempting bad execution at %px\n", func);
+> > > +    pr_info("attempting bad execution at %px\n", dst);
+> > > +    func = setup_function_descriptor(&fdesc, dst);
+> > >       func();
+> > >       pr_err("FAIL: func returned\n");
+> > >   }
+> > > @@ -153,7 +171,8 @@ void lkdtm_EXEC_VMALLOC(void)
+> > >   void lkdtm_EXEC_RODATA(void)
+> > >   {
+> > > -    execute_location(lkdtm_rodata_do_nothing, CODE_AS_IS);
+> > > +    execute_location(dereference_function_descriptor(lkdtm_rodata_do_nothing),
+> > > 
+> > > +             CODE_AS_IS);
+> > >   }
+> > >   void lkdtm_EXEC_USERSPACE(void)
+> > > 
 
-
-vim +1674 mm/gup.c
-
-  1658	
-  1659	/**
-  1660	 * fault_in_writeable - fault in userspace address range for writing
-  1661	 * @uaddr: start of address range
-  1662	 * @size: size of address range
-  1663	 *
-  1664	 * Returns the number of bytes not faulted in (like copy_to_user() and
-  1665	 * copy_from_user()).
-  1666	 */
-  1667	size_t fault_in_writeable(char __user *uaddr, size_t size)
-  1668	{
-  1669		char __user *start = uaddr, *end;
-  1670	
-  1671		if (unlikely(size == 0))
-  1672			return 0;
-  1673		if (!PAGE_ALIGNED(uaddr)) {
-> 1674			if (unlikely(__put_user(0, uaddr) != 0))
-  1675				return size;
-  1676			uaddr = (char __user *)PAGE_ALIGN((unsigned long)uaddr);
-  1677		}
-  1678		end = (char __user *)PAGE_ALIGN((unsigned long)start + size);
-  1679		if (unlikely(end < start))
-  1680			end = NULL;
-  1681		while (uaddr != end) {
-  1682			if (unlikely(__put_user(0, uaddr) != 0))
-  1683				goto out;
-  1684			uaddr += PAGE_SIZE;
-  1685		}
-  1686	
-  1687	out:
-  1688		if (size > uaddr - start)
-  1689			return size - (uaddr - start);
-  1690		return 0;
-  1691	}
-  1692	EXPORT_SYMBOL(fault_in_writeable);
-  1693	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook

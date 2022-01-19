@@ -2,112 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CB4493EB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76097493ED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356255AbiASRBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:01:16 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39020
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243637AbiASRBP (ORCPT
+        id S1356328AbiASRKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:10:16 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:12614 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243695AbiASRKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:01:15 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5A5BD40053
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642611668;
-        bh=DsitdWyrjwAWvscnA5nwUVt0TQXqCXM23k2Tf31EYy4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=m6Ls6d+Y7Cjt9FjfcigDcsV0viL8Djf11XJfjHvtNa65b4Lwb/6JJJa/De7PymTjt
-         38fD1cg78rcfrNNUkd5/JxNGQODUB3HR/QO6cATBskpvJKoKvV3BqxArCE32PiIMar
-         HbqC2kLPlAJmuMpjG2wC3byUNnel2atnKomdu/m5lO5GGeQ5x9Z8+5wvcObeExXKQz
-         bhhINtDYzR/gzh2GCDyN9uC0wLRzGtSQxXQFkbSaBEnUFdWoNCMVA/h+MmlwJMWkWa
-         +AAgTVfg1FjTUJXh21F+23TAE4iTZyGeX8M66J956adbAM8YzEYHNaEVGukydbq8ZJ
-         FJM8a5zZRNg3g==
-Received: by mail-ed1-f70.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so3109794edb.14
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 09:01:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DsitdWyrjwAWvscnA5nwUVt0TQXqCXM23k2Tf31EYy4=;
-        b=M21pc/eLjuDnbvtUTbNjGAUdm9y8TceOZxakCjxTwL4/x5Zd81nylXNFOSREXHnES5
-         VfKL4dsj0UTS4fJIQEK9Cp56fdPUyIPbayUqG9DEtTbtj6jZjrJ+3OJIsE+h6ircy4wa
-         2Uwzb+0vFNo6ZvSSALTjoqNt7mPrbJFDXiNEwswNIXN2kVTIi3qAbUIJ0MzRdHeZVHpo
-         qMP+gJ3UHXGJFZMchLSGTY+eyPAG9OL9GSpAUld5Dm7kRUJ8kO/yvgZP8BwrfCjO5jWw
-         fqFjmMFh0wNa4aP6+957Nkw+dDSrz0OkoC1PHDB7Q8Vz1APAKBXaQAfMZ5uMygk8eo9K
-         OJXQ==
-X-Gm-Message-State: AOAM532+DvT76nsk34Ds0JsDocAb0/j4mH/6UDgNbm5yNMOsekiXIjjg
-        GroZm//XwOplq67Tn2qSPZcgROdDR6Ju/G9+0PtUjVRQRdXyoSdX+cYal6K64nyCKZFhv88kX6W
-        BPerMKR+Zy9wPPMUmNu/SEuSEHkbKloTGTnqwt8CLmqjW43vyKXqfkks9bw==
-X-Received: by 2002:aa7:d28e:: with SMTP id w14mr32087790edq.53.1642611667380;
-        Wed, 19 Jan 2022 09:01:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyyhnpS46ePzskaoSTeiKlHBBiCrPI1N2qHZbE92eCWdfUSfFp8D1OkXo3xWWwhcrEtVqXQLzR+2Mc1a01GT6g=
-X-Received: by 2002:aa7:d28e:: with SMTP id w14mr32087767edq.53.1642611667167;
- Wed, 19 Jan 2022 09:01:07 -0800 (PST)
+        Wed, 19 Jan 2022 12:10:15 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JGbhnK032613;
+        Wed, 19 Jan 2022 17:10:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=nVndqhoacnhbXwBF9pf4cAFgFP0E88ISYrB3jwZ4y+I=;
+ b=FqFKA3voXerD7DI+qB3SQfww7zmP4UdRafeOHKck+LDP6CFKNmO6uaYwgXqZKlpTq0Ee
+ mckqbCYXCLwkhnurtyhKViyT79C9hjL6aBMTPSUYvBi7C5uZigmSpnRSUCA4dc4kVZsZ
+ ZTIMY0He2OX6dPkH1N5uyq1Nj4QwKY6pA98ZDDTPY12EeO8sDcigQnDk+/F5m+64tBt2
+ 3shzMaOPygKPK5gmzF1D2RGQfy1Ytuh7lXYh8thBYgVhps5x4fhbdHCsbV2B3CoP60YE
+ QkAyJq3h1GIc9sofDeTUZxzISB4Hf8ojiKdTHJxPjZfrzE2bGQnuMJMBerCRSvg225kp 4w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4q5u63-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 17:10:11 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20JH6uxE193098;
+        Wed, 19 Jan 2022 17:10:10 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
+        by aserp3030.oracle.com with ESMTP id 3dkmae02hs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 17:10:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tu480p6fGyctGEVNw1tc4lzRPqOk251vIQbU+WTZGAht4/jaOBdxKYRBvkT+2QvFFDWsfuLIfPhQ2cD8A/pvNZ0UnLHzO8brPv8XsrTgTVabd0FiK2GC/a8NSB0bcPpuNAIU3RjTqwZMe1qBMWI9nqb5W8GwlYzAX7DuGgLtGQlLNfLBT5biVLCIYrjaD8DjIItzB+Y7l+MSqkBVaJPJ7qgtD/qz2cmgOYPScx8WeZW8FnSKX+/sBB2om2KFId7jkVKeEIGtHI8ZyPkdDg0zcS/a84VI9DU4BjlQOyfRBhZtCavMRo745yVAMB6r6C2fyuvHlHzArM47AqdM7tB0Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nVndqhoacnhbXwBF9pf4cAFgFP0E88ISYrB3jwZ4y+I=;
+ b=KVXDTXk5VXS35+DDkp1c6r1Lu9nMB/8GFR0YM5Atwybv6FLGExC6fDerLukOlI12UZtw3p/jxieQMDkyAYcNAR6WeZB+zth8qWSz7lvD3zzCSyeQHBRDNk+3oZTDsujvclMspsPB544BYf2xbr3D8m2EWj7JZJ9To3omVfCXmJgXmnv6k1rPDt7Jv6yE2hw2KOeEntJyA4zqVQLsXFiV2RV9cepVHTB4UIS39oCELgiMmj+uvnSeWt/5euQMpGvovcfRCWyei+hXONth8BhqR8fekUf0mhi7XeFNEV6H40un2rC7ixb7KZ4fxGqcGZp1LiLT9FYR9lT9RDt+q2PCZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nVndqhoacnhbXwBF9pf4cAFgFP0E88ISYrB3jwZ4y+I=;
+ b=KapuioueIeNPzrbPGgIbolbQ2+Nd33fNUDPp5Ph8dgiq1Z0QHesMQ4257+iZykOfbayHaoDF0ieax27oa4/ehqnVAIg3h8Cnx0/4QWg21VS7FGi8AgGv+qEMyuJT7EVKJ8B01SK5CjjKAZIlJMA7LtG8KQqlZjiLHA0PLrHYv6Q=
+Received: from PH0PR10MB5894.namprd10.prod.outlook.com (2603:10b6:510:14b::22)
+ by CH0PR10MB5099.namprd10.prod.outlook.com (2603:10b6:610:ca::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
+ 2022 17:10:08 +0000
+Received: from PH0PR10MB5894.namprd10.prod.outlook.com
+ ([fe80::b815:57ec:4994:e5cb]) by PH0PR10MB5894.namprd10.prod.outlook.com
+ ([fe80::b815:57ec:4994:e5cb%9]) with mapi id 15.20.4888.013; Wed, 19 Jan 2022
+ 17:10:08 +0000
+From:   Mihai Carabas <mihai.carabas@oracle.com>
+To:     ardb@kernel.org
+Cc:     mihai.carabas@oracle.com, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] efi/libstub: arm64: Fix image check alignment at entry
+Date:   Wed, 19 Jan 2022 18:14:27 +0200
+Message-Id: <1642608867-21307-1-git-send-email-mihai.carabas@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0031.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::6) To PH0PR10MB5894.namprd10.prod.outlook.com
+ (2603:10b6:510:14b::22)
 MIME-Version: 1.0
-References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
- <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
- <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com> <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
-In-Reply-To: <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Date:   Wed, 19 Jan 2022 18:00:56 +0100
-Message-ID: <CA+Eumj5sosSkCCANOVqN8fVUDFaSNtB7+f95o+FAp7w6rM4A=A@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
-To:     Olof Johansson <olof@lixom.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 09ab472d-c438-483d-61dc-08d9db6e8b92
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5099:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR10MB50992069FBDA79FFD3146A2588599@CH0PR10MB5099.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BfRveNuJ1A2N7TQgCwtC9zdjTZ0I1hwXSMYmh8pz7UmAYVJwzTyvdeDRUoTP2FpHDIk3LKaYVed4veAJ0zYIDlJdPKTldye1yUk0B/MoCEE5xvjY8ml5flMr1ct94hTUqD0hs4zZfBVtlpQ/O5E0MkHD0k95pDuG6qQSKCNdUbv228iC5EbbU5W8MomZfh6ahD4s1tuDR1lLuW6LfIxQtTJ6fnVRsv3JByzdN7BK31LS2N+Qh8xNM6xF/AGIs78CiVpgjeXOXowmwVH4BFrhkxuW2FwfAJ9C9D8Dckhg47ytIauXFQw2eQRv6MhQ1lJJl/JyXaCm5PXi7ouglzlQ3RL3nDPvoHdAowZuHhYddQ47U+Uy8/T9FNWWqTLFDDsNy0u+02Z/ZdDrDu+3W19SC4kmOa1xuza3C5s++USl1oJwDo7lyNrIbDkLW6ZpRHoKHETVfMLFPyAyUlqDwnWqGFUQ7Jmv9FpZM8u013B+319F0GgZ4jg9ok3LA54bLjQZvf8gcdJT6b0IpzJoj+SiSKSN/POU2rKVHQJzDURVL+MkZBEOO1LZ6ZxzIJPz0j767BAjpByN/I2MtIJz9OqM716uumQpRhC9Mr49tr7fPdNHcNPrGKRFoN9z9n4zm/G0LmLsWkQuXwI45LQFNwbcKsLXVEHdb2efaje88OmhIPKNYnjX6qBBoODv5mXwcoKKMZTWnpkffubnRVgdfuOluA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5894.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(52116002)(86362001)(44832011)(6666004)(66476007)(2616005)(186003)(36756003)(26005)(2906002)(8676002)(6506007)(316002)(8936002)(4326008)(6512007)(6916009)(83380400001)(66946007)(508600001)(5660300002)(6486002)(38100700002)(38350700002)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UhyLjmyTVLRKMcVcW5B7PkUQMxWfxuW+zCMkT53d8Qm8fYZxZrY1wAVyqQg8?=
+ =?us-ascii?Q?LPqrKvCgiF9iZf5M+Sx5a2F9GJ5IYOS/fBa+RSBowwl63q3aFLM5uJacVmo+?=
+ =?us-ascii?Q?Ait1ZXe4LTpS5zAbNR58RC436FnxmFiJu4lIcIfxcLoUsWX61pDGTVWSPLGI?=
+ =?us-ascii?Q?Bli73LI2bLPoVbNbpC2zO14/HLxhwVSriuYD5RYaztjNJqmd7zkoQjogIClC?=
+ =?us-ascii?Q?g1ehb6wywCcZgeq6IATcLxPyu3zr1NuMvdY9jGJQkyvuZMjpdNxHm4nTlzSp?=
+ =?us-ascii?Q?q2dH/OmsVzWiIvzl2Y1yTy9p22lPTygwm8WBRE9/LW2MLap6bjuGQ4IElIu5?=
+ =?us-ascii?Q?rRH7FmMtiPePUhVao1DiwqiN+VXpm9gUD8LYcJtucN+X1X3uL3LRd3jnuhYw?=
+ =?us-ascii?Q?j6BNvlp5PEB68W4kNuTivPeULpPEoD1UN0TMvBWR81jubBbTa4E009rhZ7dd?=
+ =?us-ascii?Q?uSXiUWW/lKOi7owMMD13QNSse9Y0lzfthe0CNun1UgQRICM7wAeGKclekpAt?=
+ =?us-ascii?Q?vwZJlQLohFcWYDh/olWkGnjzl/wWomJwG7GWE6EsLKyylj5cm/bmRMc763pu?=
+ =?us-ascii?Q?vacOfqc9+GiNW3IZhyEaYt3yQgfNSlOKESI2bbCMx+hEltiOX7qUDRt7pZh0?=
+ =?us-ascii?Q?+CvhvWDTHyZT12yo8vcPxZxOMRoChEv0VLuIBknxTS9kRWFlhPZXIxUoWh3z?=
+ =?us-ascii?Q?f6yEJJ8zdfebrpFfYCpXH057ltZGLVeB5tpTAEZOqzRs27nDld7DbcnrAXw8?=
+ =?us-ascii?Q?v2zt761tLoWx6FpHBxq1byn5OwuCd/1zIf/98rxEzMwQ0z8/eXl4gbonXF4h?=
+ =?us-ascii?Q?OU6foq8puAz67fwdfsrUkEhHKd6265JRUFJ0RxYm8+qEGpMhTz5fIDVJMYjK?=
+ =?us-ascii?Q?OnaaUJFSmS10HnK5ibdubO7yeefeYL9veidkuMHLQMpSRwJ3htVWycf9djQQ?=
+ =?us-ascii?Q?nE31tzkv6cZQ5/2Fy0lh0OdZ1emasxy/IQiOFtjs6q52TJpG60eMIYta6ZAt?=
+ =?us-ascii?Q?wYFD+lYbDM+U9R+FB/bJ/ooWqvsy4CG1zlfDWSdwFyx+E3Bn5bvEpSgPFoZT?=
+ =?us-ascii?Q?1d5M+kR8FnSi/4acCB1JSFfH5NaSElNHS6zFOQAjGXOcUo6Rg4kjiQQkyRuo?=
+ =?us-ascii?Q?FojGWhTrS8TOnaBr9mNSVq0EGttlma0cNKwzE9jdqv4QjWSbnAtA8wsJnYfz?=
+ =?us-ascii?Q?v+2T74sdRUdItc/tu24nLx0UIapQqzwvsH9Cnm/r2oqsKDY+Rz9Jd6qhwP5/?=
+ =?us-ascii?Q?wbL7HPUc6ifTg9PqUXAQKnBMmB9yBGdw1/pvxPt1darNgJbdZb4zClWMCLb+?=
+ =?us-ascii?Q?MSCxXH4QIluqYT2yCZqEJljloDs7+ARr3TCIy0mlLDg50MbwjscsMri7KxLo?=
+ =?us-ascii?Q?XKm7vbbIWTuYE46xi67ml7aoMtWrdD2HrzsxZj4eMnPlynCxmJ0uZxBAzQRe?=
+ =?us-ascii?Q?jicrr/FMIvOmcQZXt2e61X3mOXW4YweKTgojhkfbNF7rEVWsCYX4As7RmF26?=
+ =?us-ascii?Q?uap20LcIIGfQAZUNjBla5bAMPcWhjHW8vtum9KsrcJB/0/vqxEmulOSrYNCM?=
+ =?us-ascii?Q?Lf5+u3zAywuszKXOaHJLJWp1Cgt5A2d2zWQN8gvH608bHRe7BELsGbAF6mPi?=
+ =?us-ascii?Q?9OOrU/zgn5rpp8SUolkul5qUOjdPMp1+M/FksQB5OEXsEqICPOmdHs5tRXrB?=
+ =?us-ascii?Q?gPkrPQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09ab472d-c438-483d-61dc-08d9db6e8b92
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5894.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 17:10:08.5866
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zOcBiSZMUWzF7Gs4lj0IiVUtattFC70QkiNeWe3Zo4fj+cI4vHTGPu8RtS5emUCel6p3ycYwRoWk7LLgwbu8D+XlbHjGeY+IN4dCOPfF7Mc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5099
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10231 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201190097
+X-Proofpoint-GUID: ozTcPMtgxXl3upv2z5oqzbdr4QAtPYij
+X-Proofpoint-ORIG-GUID: ozTcPMtgxXl3upv2z5oqzbdr4QAtPYij
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 17:53, Olof Johansson <olof@lixom.net> wrote:
->
-> On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
-> > <semen.protsenko@linaro.org> wrote:
-> > > On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
-> > >
-> > > Hi Olof, Arnd,
-> > >
-> > > Just want to check if it's possible for those patches to be applied in
-> > > v5.17? Sorry for the noise, but that's important to me.
-> >
-> > I can see that Olof merged merged this into the "arm/late" branch in
-> > the soc tree,
-> > so I assume he still plans to send it in the next few days.
->
-> Yep, will be sent up today most likely.
->
-> > With the timing over Christmas, I sent out the large bulk of the
-> > contents (anything
-> > I merged before Dec 23) last year, and Linus already merged it, the rest ended
-> > up in the "late" branch.
-> >
-> > As usual, there is no guarantee that late changes make it in, but I have seen
-> > no indication of any problems so far.
->
-> Correct. Been sitting on it for a while in case there were fixes
-> coming in for the first pieces that got merged, but in traditional
-> fashion I'm guessing those will start to show up a few days after the
-> late branch gets merged. :)
+The kernel is aligned at SEGMENT_SIZE and this is the size populated in the PE
+headers:
 
-Actually I have such, but to prepare a pull with them, I would need to
-base it on some random Linus' commit, not on v5.17-rc1. Therefore I
-wait for v5.17-rc1. Would you prefer different approach?
+arch/arm64/kernel/efi-header.S: .long   SEGMENT_ALIGN // SectionAlignment
 
-Best regards,
-Krzysztof
+EFI_KIMG_ALIGN is defined as: (SEGMENT_ALIGN > THREAD_ALIGN ? SEGMENT_ALIGN :
+THREAD_ALIGN)
+
+So it depends on THREAD_ALIGN. On newer builds this message started to appear
+even though the loader is taking into account the PE header (which is stating
+SEGMENT_ALIGN).
+
+Fixes: c32ac11da3f8 ("efi/libstub: arm64: Double check image alignment at entry")
+Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
+---
+ drivers/firmware/efi/libstub/arm64-stub.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/firmware/efi/libstub/arm64-stub.c b/drivers/firmware/efi/libstub/arm64-stub.c
+index 2363fee9211c..9cc556013d08 100644
+--- a/drivers/firmware/efi/libstub/arm64-stub.c
++++ b/drivers/firmware/efi/libstub/arm64-stub.c
+@@ -119,9 +119,9 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
+ 	if (image->image_base != _text)
+ 		efi_err("FIRMWARE BUG: efi_loaded_image_t::image_base has bogus value\n");
+ 
+-	if (!IS_ALIGNED((u64)_text, EFI_KIMG_ALIGN))
+-		efi_err("FIRMWARE BUG: kernel image not aligned on %ldk boundary\n",
+-			EFI_KIMG_ALIGN >> 10);
++	if (!IS_ALIGNED((u64)_text, SEGMENT_ALIGN))
++		efi_err("FIRMWARE BUG: kernel image not aligned on %dk boundary\n",
++			SEGMENT_ALIGN >> 10);
+ 
+ 	kernel_size = _edata - _text;
+ 	kernel_memsize = kernel_size + (_end - _edata);
+-- 
+1.8.3.1
+

@@ -2,156 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E7849421F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BC4494221
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236412AbiASUxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:53:48 -0500
-Received: from mga09.intel.com ([134.134.136.24]:55117 "EHLO mga09.intel.com"
+        id S242646AbiASUyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:54:52 -0500
+Received: from mga01.intel.com ([192.55.52.88]:47390 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229683AbiASUxq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:53:46 -0500
+        id S245276AbiASUyq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 15:54:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642625626; x=1674161626;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=cH3bHFZpGH0RESw8RskOlsgeHxPQYCpLCLkrUAgJ7oE=;
-  b=N5V9BrYPZPe3+kNXJlVabWxsBtq7kBqY2EhPMRwpa8ZvXa3m07nkcgr/
-   Q+lHFLsNHXStpIWuiUtZGItH2cEt2JEjDp7IQJTpE1i6EEtbODPef+3FU
-   OV/JI1IKdZzmKbu3U+fFKqWZAM9JILGZwX0/w1JRjA7j/1bceMy3tF8eF
-   EN9/KiqLGG0M5+BKMQoOgiNZCU8eJ6023VC7oUVfoRqWPrmTbq8eH1TPS
-   Op2CrI2jwEiWYjtMNpUz2MJjz0S8HFb3rlTkR0sVfjMqtPe3dQTpWMtyV
-   bbemB1boFVF2qw/ZhBHqoiVlLgZ0CaXQ4zhReCc21iP3I119Ia2wPqalu
+  t=1642625686; x=1674161686;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ISpKOIpZwlrTJOcJB1gzYZxHJ1Ed3uzU5eT6nLXOfjI=;
+  b=X+wkktfII/V+ku4BI2K8CER4dkoBC+nI1DzscAmn1Rilq8u8cEDyz4OG
+   PZi7uqmuXJQCoJl3OY+orFbe1EWe2GuzILxFx/I2Xxt8sNShCiaeOJFcU
+   XFD+dqUbSWMddAFvlTUY3XznTwfiDu3m6WRd9QBnSNevF2aT+HnffWO3+
+   3w8QU5dCjLlLML9L4zFIJPpdA5YvUF+K56KAiUH8D4NBt/GPITbkdF5UE
+   iq1fMJNInMfNPvFf3SsD9GnEC5jVp5Ty2PwzabsskMHX8NpvoffZAKLgO
+   SWX7KofW2lwcGyrs3YQIt8l7OURILSBbfNLlw0As8tUDn7hvHyYmhHPYv
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="244984193"
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269585086"
 X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="244984193"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:53:45 -0800
+   d="scan'208";a="269585086"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:54:42 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="765081592"
-Received: from atefehad-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.238.132])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:53:44 -0800
-Date:   Wed, 19 Jan 2022 12:53:43 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [Intel-gfx] [PATCH 0/3] lib/string_helpers: Add a few string
- helpers
-Message-ID: <20220119205343.kd5cwfzpg4mlsekk@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <YegPiR7LU8aVisMf@alley>
- <87tudzbykz.fsf@intel.com>
- <Yeg5BpV8tknSPdSQ@phenom.ffwll.local>
+   d="scan'208";a="532475084"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2022 12:54:41 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAHya-000Dkc-OE; Wed, 19 Jan 2022 20:54:40 +0000
+Date:   Thu, 20 Jan 2022 04:54:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: include/linux/compiler_types.h:319:45: error: call to
+ '__compiletime_assert_242' declared with attribute error: BUILD_BUG_ON
+ failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
+Message-ID: <202201200455.gDoPashc-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yeg5BpV8tknSPdSQ@phenom.ffwll.local>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 05:15:02PM +0100, Daniel Vetter wrote:
->On Wed, Jan 19, 2022 at 04:16:12PM +0200, Jani Nikula wrote:
->> On Wed, 19 Jan 2022, Petr Mladek <pmladek@suse.com> wrote:
->> > On Tue 2022-01-18 23:24:47, Lucas De Marchi wrote:
->> >> Add some helpers under lib/string_helpers.h so they can be used
->> >> throughout the kernel. When I started doing this there were 2 other
->> >> previous attempts I know of, not counting the iterations each of them
->> >> had:
->> >>
->> >> 1) https://lore.kernel.org/all/20191023131308.9420-1-jani.nikula@intel.com/
->> >> 2) https://lore.kernel.org/all/20210215142137.64476-1-andriy.shevchenko@linux.intel.com/#t
->> >>
->> >> Going through the comments I tried to find some common ground and
->> >> justification for what is in here, addressing some of the concerns
->> >> raised.
->> >>
->> >> d. This doesn't bring onoff() helper as there are some places in the
->> >>    kernel with onoff as variable - another name is probably needed for
->> >>    this function in order not to shadow the variable, or those variables
->> >>    could be renamed.  Or if people wanting  <someprefix>
->> >>    try to find a short one
->> >
->> > I would call it str_on_off().
->> >
->> > And I would actually suggest to use the same style also for
->> > the other helpers.
->> >
->> > The "str_" prefix would make it clear that it is something with
->> > string. There are other <prefix>_on_off() that affect some
->> > functionality, e.g. mute_led_on_off(), e1000_vlan_filter_on_off().
->> >
->> > The dash '_' would significantly help to parse the name. yesno() and
->> > onoff() are nicely short and kind of acceptable. But "enabledisable()"
->> > is a puzzle.
->> >
->> > IMHO, str_yes_no(), str_on_off(), str_enable_disable() are a good
->> > compromise.
->> >
->> > The main motivation should be code readability. You write the
->> > code once. But many people will read it many times. Open coding
->> > is sometimes better than misleading macro names.
->> >
->> > That said, I do not want to block this patchset. If others like
->> > it... ;-)
->>
->> I don't mind the names either way. Adding the prefix and dashes is
->> helpful in that it's possible to add the functions first and convert
->> users at leisure, though with a bunch of churn, while using names that
->> collide with existing ones requires the changes to happen in one go.
->>
->> What I do mind is grinding this series to a halt once again. I sent a
->> handful of versions of this three years ago, with inconclusive
->> bikeshedding back and forth, eventually threw my hands up in disgust,
->> and walked away.
->
->Yeah we can sed this anytime later we want to, but we need to get the foot
->in the door. There's also a pile more of these all over.
->
->Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->
->on the series, maybe it helps? And yes let's merge this through drm-misc.
+Hi Thomas,
 
-Ok, it seems we are reaching some agreement here then:
+FYI, the error/warning still remains.
 
-- Change it to use str_ prefix
-- Wait -rc1 to avoid conflict
-- Merge through drm-misc
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
+commit: 39cac191ff37939544af80d5d2af6b870fd94c9b arc/mm/highmem: Use generic kmap atomic implementation
+date:   1 year, 2 months ago
+config: arc-randconfig-r033-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200455.gDoPashc-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=39cac191ff37939544af80d5d2af6b870fd94c9b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 39cac191ff37939544af80d5d2af6b870fd94c9b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/mm/
 
-I will re-send the series again soon.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Lucas De Marchi
+All errors (new ones prefixed by >>):
+
+   In file included from <command-line>:
+   arch/arc/mm/highmem.c: In function 'kmap_init':
+>> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_242' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
+     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
+     300 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
+     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
+      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
+         |         ^~~~~~~~~~~~
+
+
+vim +/__compiletime_assert_242 +319 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
+
+:::::: The code at line 319 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

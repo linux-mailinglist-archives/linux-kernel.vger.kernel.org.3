@@ -2,88 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CBC4935C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076954935C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351490AbiASHpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:45:20 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:42399 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245700AbiASHpM (ORCPT
+        id S1352150AbiASHq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245700AbiASHq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:45:12 -0500
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mgvan-1mg0ZH2l81-00hL0Q for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022
- 08:45:10 +0100
-Received: by mail-wm1-f54.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4042332wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:45:10 -0800 (PST)
-X-Gm-Message-State: AOAM531dbBCanlVMAJYbrQvDvCoy2ZzZPgkv6A+ysB0fhEPlsTdcvk4a
-        JymfzP1wejZYyNA3jOB6Pluzh3flM2VbzK6GI9c=
-X-Google-Smtp-Source: ABdhPJyacKvJs/cpMGKfZs7foLPPZGv90A3Rb0UJJs4OpOlFFMxF6kfstoAm+J/PX+MK+DcAy8GPbxH87wXJjHSaXBc=
-X-Received: by 2002:a5d:6488:: with SMTP id o8mr6666149wri.219.1642578310310;
- Tue, 18 Jan 2022 23:45:10 -0800 (PST)
+        Wed, 19 Jan 2022 02:46:26 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216B0C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:46:26 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id hv15so1725470pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:46:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CjGlKRPaKETs3fmFERLry6AgFLftgNGdja3wVLccreQ=;
+        b=ENZ0qaDCO/Qqijwn3xT4AR1ccgXJ0Uq9+CVyZu6IGdYtJzGVK3YN8ij4R9bbXd/jvV
+         oTE0u1ECOkbOGwK2Gwc/feo/n3AVlQccsa+IDzzgtxeXCUm4JoKWcpRjI/XUMmJtHTuo
+         QfaY4xsjhk/+a65svTKRyhH4H3cgXcP+LxEFo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CjGlKRPaKETs3fmFERLry6AgFLftgNGdja3wVLccreQ=;
+        b=4GQNhC5iNba0izN7wjavR75uF18oEAxPOgDF1z7l2ZAy6ppCIH1tJRh9lKw60SBKJk
+         tC/M+FqvXMpRcgnEinZ0qmUo6LrHPFMMzZxzQmIOoGDvL78Qk+c4ByGDyWnF9F3yGVme
+         f52lIHSWPEYvzpvaKSLkn1GuZQGDCtiCPK5lrdOn7pPBaqprvociSqtJoH3JPTRLQgdd
+         9fz0Czg318sz94gPjI9n255HFRvaBdizbjCSFkgjmOMP3RwVsPC3lo5vI9wuS60gaqzy
+         pvrarJNre7DF9jsJ0U2PlFyJfxypC6VUD0GAZ80kCEY9jWoen9AGqfmkt7cylFjoo9O1
+         97lQ==
+X-Gm-Message-State: AOAM532prfjVj5H7XeKJ2/48W8pPt8KTNuBEuEEn9yTAAIS9H4PfI661
+        J4zIWo/V3CByr/0YO9OBLESCuyImipYvH6OU
+X-Google-Smtp-Source: ABdhPJy2hLMp74v0H/70JiMyBH1BfKIbz4duQ7DFZwL+FqlfZsve7ZcWKQZk+XS10x/U7ji5pEpyzw==
+X-Received: by 2002:a17:902:dac7:b0:14a:537b:db2a with SMTP id q7-20020a170902dac700b0014a537bdb2amr31318501plx.3.1642578385636;
+        Tue, 18 Jan 2022 23:46:25 -0800 (PST)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:3343:314a:558d:5df7])
+        by smtp.gmail.com with ESMTPSA id r19sm8480476pgi.58.2022.01.18.23.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 23:46:25 -0800 (PST)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [RESEND][PATCH] checkpatch: make sure fix-up patches have Fixes tag
+Date:   Wed, 19 Jan 2022 16:46:09 +0900
+Message-Id: <20220119074609.4162747-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 MIME-Version: 1.0
-References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
- <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
- <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
- <00e28671-8d3a-f789-91c4-109814792a07@arm.com> <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
- <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
-In-Reply-To: <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 19 Jan 2022 08:44:54 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1t5N_vW3rcMD_e+UMy5EQDrTrE4QqPDo7nM_s1-Bf0XQ@mail.gmail.com>
-Message-ID: <CAK8P3a1t5N_vW3rcMD_e+UMy5EQDrTrE4QqPDo7nM_s1-Bf0XQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:HPNtrAMsgSiYc1rC1lM4pWCGyB2YGxD6qosmU1jSNpYXrq+mw3a
- Z1f3XbwJRzODHBo/iN5F7KAJFUIAlbyG+cfB0HnkK/2fV7ovaqWtG8hyEaZ1z69W5b7uWla
- 7xWSbZ6faUwg2HCN+9M1PHD/jdg2Jr3m5LRS3iBHgvSFOLKki8iczz1zNhrOiERJJXnznYJ
- 4CJlPjkawl80k9AJ7Xbew==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:umO5vec/4C8=:/+zB+S0NwM8CmoTeA8EkV1
- aOGWCdkZUEcmVf0kWkpQgdS8dyMNTy1TdWIwoqzsiR/JaRl/++d06U38O2VBl220Wtr57E8Fu
- R+VarlHmIMnyW1Imfho4ansLNvKmfmy4EHH1XAxUBaPrKq71QO3OlyFEqOijfJcwcRvhy/gXJ
- HF7c3HhQuwcPQRfbGZwVMxzRV8Hets5jeukQ+lhou+xxjw1wa8KqtbuIPxeprLqwo+tahlhsS
- Wt8O2o8hANY1ColXVCQeE5Br4eRaHnlBI09KR+l8o3b7ZTPRpKkYm2s59bvPt4d3w7t6EMh1y
- AwGmpnL2+laWtH5vLryhy7pKhLwhqHVRSeX5v/FbVOkNF6Cl/6HW/4SyTWyn+m1MHcV0wBcv5
- /z77fOlL/Pzmnp9sZzGfn9RnWIzVpQm7hhMJw7p248KikbpSP++vlk3SHyc4FYc47X2HabV9X
- dGxvbQSSdxvvi1WIi0zKCZ2VBtt8bHNuZyKovXmPY7yyUEVwHBHPDuG3tW9+qJ+AighBc0OLJ
- Ztio5+iM5gcolzxvtP5XxHEGSTmTOgC4KqsHpg/1HGLX/klXs2Xx54AcU/ZfnEkAXowqxczHB
- lav1vN3hJrcbAlhf0oGXOctAAhp+iZyGHxIvmVwHxI3gOy7Ni3NfTh3zc8FewQL0/OwgQj8vG
- UxzP+4yfF63yekMngIfy/MwBpPSs6/O3LlxNyoIGhTUYFNepRyXNvFr9/qZrmy0XwGvXQEaQA
- KxELzKqpq79HGUfk3dkE1lHIe+6JL1/GLqdjWCg6+7ZtA5g8ApLae6TCWe6mv+HK+YW8JU07q
- rGVDk23jimy5/jmBPp76XJdgqhPv0KK/ubjrQ58XMDP6HdVKzk=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 7:44 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> On 1/13/22 5:17 PM, Arnd Bergmann wrote:
-> >
-> > It also helps me personally to have a known place to look up the names
-> > by value rather than chasing through reference manuals.
->
-> IIUC the purpose here would be a quick CPU ID documentation reference check ?
-> I will wait for other opinions here and add the remaining in a separate patch
-> probably.
+If a patch contains "commit hash (commit name)", in other words
+if the patch fixes some particular commit, then require "Fixes:"
+tag.
 
-The purpose would be to do what is obviously the right thing, and to avoid
-more patches getting sent the next time someone needs to add a workaround
-for another core that is already known.
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Change-Id: I066ae0e607a67ac83c6ba0ff8d883f7e7a4a73e0
+---
+ scripts/checkpatch.pl | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-If you can't do this without more discussion, then just use your
-current version and
-let the next person do it.
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index df8b23dc1eb0..4e97d0f6b995 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -2493,6 +2493,9 @@ sub process {
+ 	my $commit_log_has_diff = 0;
+ 	my $reported_maintainer_file = 0;
+ 	my $non_utf8_charset = 0;
++	my $fixes_id = 0;
++	my $fixes_description = 0;
++	my $fixes_tag = 0;
+ 
+ 	my $last_blank_line = 0;
+ 	my $last_coalesced_string_linenr = -1;
+@@ -3076,6 +3079,11 @@ sub process {
+ 			}
+ 		}
+ 
++# Check for Fixes tag
++		if ($in_commit_log && $line =~ /\b[Ff]ixes:\s*[0-9a-f]{12,40}/) {
++			$fixes_tag = 1;
++		}
++
+ # Check for git id commit length and improperly formed commit descriptions
+ 		if ($in_commit_log && !$commit_log_possible_stack_dump &&
+ 		    $line !~ /^\s*(?:Link|Patchwork|http|https|BugLink|base-commit):/i &&
+@@ -3128,6 +3136,11 @@ sub process {
+ 			($id, $description) = git_commit_info($orig_commit,
+ 							      $id, $orig_desc);
+ 
++			if (defined($id)) {
++				$fixes_id = $id;
++				$fixes_description = $description;
++			}
++
+ 			if (defined($id) &&
+ 			   ($short || $long || $space || $case || ($orig_desc ne $description) || !$hasparens)) {
+ 				ERROR("GIT_COMMIT_ID",
+@@ -7326,6 +7339,12 @@ sub process {
+ 		}
+ 	}
+ 
++	if ($is_patch && $has_commit_log && $fixes_id && !$fixes_tag) {
++		ERROR("GIT_COMMIT_ID",
++		      "Please add 'Fixes: $fixes_id (\"$fixes_description\")'\n", );
++		$fixes_id = 0;
++	}
++
+ 	print report_dump();
+ 	if ($summary && !($clean == 1 && $quiet == 1)) {
+ 		print "$filename " if ($summary_file);
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-        Arnd

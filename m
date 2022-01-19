@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20103493CBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18A8493CC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355602AbiASPNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347595AbiASPNh (ORCPT
+        id S1355331AbiASPPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:15:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43190 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355311AbiASPPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:13:37 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D802EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:13:36 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 25-20020a05600c231900b003497473a9c4so14710798wmo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:13:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nojvlSBxMxzR4GSErwgQdagPUIgNBTK8vSAAewWJfGo=;
-        b=UdOh/AhxxSV2+uxZH/MLQG8GMpYKK7LtGvtEgzc0oMjASCb0xgLv1JVkWwbP0Mcj+V
-         FTB44ALi2Dkmxa5TtFeeIbigQ+N1KF2QOFjs7nfHIYs/h2YuRCfAJjZQE2rSWo5KHyMt
-         4CPSxa99XOEfmjqqpp6mRZSATV4pq1lBLqP7Y=
+        Wed, 19 Jan 2022 10:15:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642605320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VhiyyGkhKIQBD9y1CvQ+4U+Kmf7dcrXMU0CgM1XnnpI=;
+        b=U/wPP1qdQMqjjLS+J3Y+X+16vU5Cppbos9k2Z3sRqHMg35Uy2eRHSQSr/7dhKKpHytrSu7
+        w9f/xuHTn51vEOBRYYq5mjO3qjGsmDrtpTXkKWauilwMdEBTfwuXdbTcM+C1I7BA+c6lRj
+        HlTv2XLDWGwXlPiExAXegxyvvnAmQB4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-6cOSd3k9Nwa0jFnTSbBU_g-1; Wed, 19 Jan 2022 10:15:19 -0500
+X-MC-Unique: 6cOSd3k9Nwa0jFnTSbBU_g-1
+Received: by mail-ed1-f71.google.com with SMTP id a18-20020aa7d752000000b00403d18712beso2779491eds.17
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:15:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=nojvlSBxMxzR4GSErwgQdagPUIgNBTK8vSAAewWJfGo=;
-        b=eOulwYQog+SPXFL9rLK9BgDPcEkmJDY2m/Zc36uN4JzMg5WECIVwGbHBr+S/ahCX6B
-         sLVDrRUzopduY3A80hHcLWKo+Cp0w9MSagMxOrD0FU0JT6ND5Lbv0isQ8SvMTnwjqjfX
-         0NC/UaegF9Mesj/Qs5hm9ZvU9KGKY87fcboO3PhUkG4JLSy2o+yVX77a9v2eH0PaUi3r
-         jf28aHh1u12MuQF9ohsck7Zm/AygpCSVFwRawQ49L0XXbJAx4zk5aDw0cH6rzWLjGlj+
-         XjF8Q5iYwnythcg8akjtAUXyNwNomaAYY8wmyQ5J+sWkqXjzmRSaHIt9h8EQvh43C75b
-         oVmQ==
-X-Gm-Message-State: AOAM530Lad0XvkRDSuEqP7fSUBu9apXnE0ExRZ/0WS2csMyVSwZbShG2
-        kmhkaJzrPmvjWpi55SEoin8D4/3iy57+pQ==
-X-Google-Smtp-Source: ABdhPJzgCMa/tbYtoVRSIfTNfXLaMUVi4OH5qPmaP5VowNhx7sB3F/GwbvttLoWt7A3z38o+qBf4Sw==
-X-Received: by 2002:a05:6000:3c5:: with SMTP id b5mr26652200wrg.312.1642605215514;
-        Wed, 19 Jan 2022 07:13:35 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z1sm5057694wma.20.2022.01.19.07.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 07:13:34 -0800 (PST)
-Date:   Wed, 19 Jan 2022 16:13:33 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, lee.jones@linaro.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/selftests/test-drm_dp_mst_helper: Fix memory leak
- in sideband_msg_req_encode_decode
-Message-ID: <YegqnfDXHmxUBWxI@phenom.ffwll.local>
-Mail-Followup-To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        airlied@linux.ie, lee.jones@linaro.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220108165812.46797-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=VhiyyGkhKIQBD9y1CvQ+4U+Kmf7dcrXMU0CgM1XnnpI=;
+        b=3cdlPu8FZWICjb74siY3o/GfJbbcluoeo1IhKjgb8E9jXieIAiAcE0naxNbdM74wux
+         8bAKTtRPMic6hNlycw2JEMt4g7vyOu7qT0+sDkaLnaS0Cgzyc3J0M9AE9vs0kr9diUDe
+         G4XwJgP4QyAr8dUFSId0LMOo2WV3xOpT63YRucz2t2qnLVoU6nPstLWSOp+NPFsyHj6Z
+         xDRbRyaw7CaNgBnL6VbildW/rzOC0QeqjaodAYhyZbW+ZLTTHcW4kwC7Bl2gS96EV84B
+         OSAejfDjEa6dQOR4tF5NpUJTGr4E3iZA0juTb9IcQqrUZ2PLvCekjA8s2NYHgDVhIitt
+         7zQA==
+X-Gm-Message-State: AOAM532x/v+aHccGw/5iCbxiS2mU87Wihdyn06SA6lOsQAwRoNDNQSMh
+        dE8QtzbSyX/Y8OOaRVBp2iNorjHfie2uO7WxnBzSgYVP0RBwNrxKbp22g1c3tHf9fSuat1LV6B9
+        lTh+eK3TkicEnbAVqYzk/ZbVD
+X-Received: by 2002:a05:6402:22cb:: with SMTP id dm11mr368395edb.375.1642605318273;
+        Wed, 19 Jan 2022 07:15:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQZPjexJYBmnBwPzHL0GlxJX389hy6WmeWAsZPKQQv3SHfkBwtwlUfjT/aKiBMYeyF3B3VNw==
+X-Received: by 2002:a05:6402:22cb:: with SMTP id dm11mr368379edb.375.1642605318104;
+        Wed, 19 Jan 2022 07:15:18 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:fb00:c6c0:1fe6:bfa1:e868? (p200300cbc705fb00c6c01fe6bfa1e868.dip0.t-ipconnect.de. [2003:cb:c705:fb00:c6c0:1fe6:bfa1:e868])
+        by smtp.gmail.com with ESMTPSA id a27sm21089edj.17.2022.01.19.07.15.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 07:15:17 -0800 (PST)
+Message-ID: <ec19d477-a75c-1e5a-1c02-f62c8565f48d@redhat.com>
+Date:   Wed, 19 Jan 2022 16:15:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220108165812.46797-1-jose.exposito89@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1] proc/vmcore: fix false positive lockdep warning
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Baoquan He <bhe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220119113702.102567-1-david@redhat.com>
+ <YegpdRBSrkVBrwk3@boqun-archlinux>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YegpdRBSrkVBrwk3@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 05:58:12PM +0100, José Expósito wrote:
-> Avoid leaking the "out" variable if it is not possible to allocate
-> the "txmsg" variable.
+On 19.01.22 16:08, Boqun Feng wrote:
+> Hi,
 > 
-> Fixes: 09234b88ef55 ("drm/selftests/test-drm_dp_mst_helper: Move 'sideband_msg_req_encode_decode' onto the heap")
-> Addresses-Coverity-ID: 1475685 ("Resource leak")
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> On Wed, Jan 19, 2022 at 12:37:02PM +0100, David Hildenbrand wrote:
+>> Lockdep complains that we do during mmap of the vmcore:
+>> 	down_write(mmap_lock);
+>> 	down_read(vmcore_cb_rwsem);
+>> And during read of the vmcore:
+>> 	down_read(vmcore_cb_rwsem);
+>> 	down_read(mmap_lock);
+>>
+>> We cannot possibly deadlock when only taking vmcore_cb_rwsem in read
+>> mode, however, it's hard to teach that to lockdep.
+>>
 > 
-> ---
+> Lockdep warned about the above sequences because rw_semaphore is a fair
+> read-write lock, and the following can cause a deadlock:
 > 
-> v2: Improve commit message
+> 	TASK 1			TASK 2		TASK 3
+> 	======			======		======
+> 	down_write(mmap_lock);
+> 				down_read(vmcore_cb_rwsem)
+> 						down_write(vmcore_cb_rwsem); // blocked
+> 	down_read(vmcore_cb_rwsem); // cannot get the lock because of the fairness
+> 				down_read(mmap_lock); // blocked
+> 	
+> IOW, a reader can block another read if there is a writer queued by the
+> second reader and the lock is fair.
+> 
+> So there is a deadlock possiblity.
 
-Applied to drm-misc-next, thanks.
--Daniel
+Task 3 will never take the mmap_lock before doing a
+down_write(vmcore_cb_rwsem).
 
-> ---
->  drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-> index 6b4759ed6bfd..c491429f1a02 100644
-> --- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-> +++ b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-> @@ -131,8 +131,10 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
->  		return false;
->  
->  	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
-> -	if (!txmsg)
-> +	if (!txmsg) {
-> +		kfree(out);
->  		return false;
-> +	}
->  
->  	drm_dp_encode_sideband_req(in, txmsg);
->  	ret = drm_dp_decode_sideband_req(txmsg, out);
-> -- 
-> 2.25.1
-> 
+How would this happen?
+
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+
+David / dhildenb
+

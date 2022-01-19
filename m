@@ -2,83 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DC7493E42
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7FF493E43
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356025AbiASQYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:24:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54644 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243264AbiASQYb (ORCPT
+        id S1355926AbiASQ0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:26:09 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:59234 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233065AbiASQ0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:24:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Jan 2022 11:26:07 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55E96B81A61;
-        Wed, 19 Jan 2022 16:24:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA98BC004E1;
-        Wed, 19 Jan 2022 16:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642609469;
-        bh=JLwjrMhYORjDbtJrdY9T2f6OhkR8YPmjN5TDxFOtFRU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TeUDLGL01nUHVGOveQ/dYOFoUDrXDzLpsjnmz9L0FjnyRoTIinq+s8AtiNRncOnyf
-         +DqNkNi/AwfJg1stlufLgp42A3lw4g6dBmuPmtk0S9FQS87SuIX84AJewY6LJXK24G
-         FHBJWEH76Gr0GnO0d5BYCebvDo633iTfDbdCRo4Ep7Lf9AUWneN/e5VzDfcpEJHtcV
-         +fITMEn7L03AsvCQGMWuzl7bDGIB+hRR9PSRctqx+Q0oNw5ZZAKO/5TQ5t3tsFOUq1
-         VWCUVbir7yeBqQDlxSuW0IQYoKjaBwvRfQ9LqEt+tlh2jirhCwEis3P2h08j9au6GK
-         iC4S6Q6tSi2ZQ==
-Date:   Wed, 19 Jan 2022 17:24:23 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, ebiederm@xmission.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, stephen.s.brennan@oracle.com,
-        legion@kernel.org, cyphar@cyphar.com
-Subject: Re: [PATCH v2] proc: "mount -o lookup=" support
-Message-ID: <20220119162423.eqbyefywhtzm22tr@wittgenstein>
-References: <YegysyqL3LvljK66@localhost.localdomain>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9FF5121126;
+        Wed, 19 Jan 2022 16:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642609566; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E63fZnex+QYWg/yAICy72egnOKkZBYns0GaGlwhZloI=;
+        b=LuvxsKb7ymWW3zMsC881dMKP8ahssWpNTaVYSh5eMD7WiT3yBjPY0AeD1HDfOVCftIDYHM
+        3FfoXdSWo4j7AOgUs43xjj7VTB1rJNOi5SXpGxE7Q1892eRpCpbLp2kCqXXKWw77jxALFF
+        hLOMVPDMPeGkQalaaaZB3Fzvv/RMYDo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642609566;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E63fZnex+QYWg/yAICy72egnOKkZBYns0GaGlwhZloI=;
+        b=YoZh3GGZyRyuXu3SlblFiSvyHeu1GbaSDMGQ+6WXcs+FqJMZljtLFyxvCSUxaBPRbcLBDQ
+        A5XXdol8I0CM9UCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56B8913F84;
+        Wed, 19 Jan 2022 16:26:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6cd3FJ476GE6IwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 16:26:06 +0000
+Message-ID: <e0aa5cc6-0e3c-a642-5b51-66cffd9ea4c5@suse.cz>
+Date:   Wed, 19 Jan 2022 17:26:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YegysyqL3LvljK66@localhost.localdomain>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-44-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 43/66] userfaultfd: Use maple tree iterator to iterate
+ VMAs
+In-Reply-To: <20211201142918.921493-44-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:48:03PM +0300, Alexey Dobriyan wrote:
-> From 61376c85daab50afb343ce50b5a97e562bc1c8d3 Mon Sep 17 00:00:00 2001
-> From: Alexey Dobriyan <adobriyan@gmail.com>
-> Date: Mon, 22 Nov 2021 20:41:06 +0300
-> Subject: [PATCH 1/1] proc: "mount -o lookup=..." support
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> Docker implements MaskedPaths configuration option
+> Don't use the mm_struct linked list or the vma->vm_next in prep for removal
 > 
-> 	https://github.com/estesp/docker/blob/9c15e82f19b0ad3c5fe8617a8ec2dddc6639f40a/oci/defaults.go#L97
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> ---
+>  fs/userfaultfd.c              | 49 ++++++++++++++++++++++-------------
+>  include/linux/userfaultfd_k.h |  7 +++--
+>  mm/mmap.c                     | 12 ++++-----
+>  3 files changed, 40 insertions(+), 28 deletions(-)
 > 
-> to disable certain /proc files. It overmounts them with /dev/null.
-> 
-> Implement proper mount option which selectively disables lookup/readdir
-> in the top level /proc directory so that MaskedPaths doesn't need
-> to be updated as time goes on.
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 22bf14ab2d16..2880025598c7 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -606,14 +606,16 @@ static void userfaultfd_event_wait_completion(struct userfaultfd_ctx *ctx,
+>  	if (release_new_ctx) {
+>  		struct vm_area_struct *vma;
+>  		struct mm_struct *mm = release_new_ctx->mm;
+> +		VMA_ITERATOR(vmi, mm, 0);
+>  
+>  		/* the various vma->vm_userfaultfd_ctx still points to it */
+>  		mmap_write_lock(mm);
+> -		for (vma = mm->mmap; vma; vma = vma->vm_next)
+> +		for_each_vma(vmi, vma) {
+>  			if (vma->vm_userfaultfd_ctx.ctx == release_new_ctx) {
+>  				vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
+>  				vma->vm_flags &= ~__VM_UFFD_FLAGS;
+>  			}
+> +		}
+>  		mmap_write_unlock(mm);
+>  
+>  		userfaultfd_ctx_put(release_new_ctx);
+> @@ -794,11 +796,13 @@ static bool has_unmap_ctx(struct userfaultfd_ctx *ctx, struct list_head *unmaps,
+>  	return false;
+>  }
+>  
+> -int userfaultfd_unmap_prep(struct vm_area_struct *vma,
+> -			   unsigned long start, unsigned long end,
+> -			   struct list_head *unmaps)
+> +int userfaultfd_unmap_prep(struct mm_struct *mm, unsigned long start,
+> +			   unsigned long end, struct list_head *unmaps)
+>  {
+> -	for ( ; vma && vma->vm_start < end; vma = vma->vm_next) {
+> +	VMA_ITERATOR(vmi, mm, start);
+> +	struct vm_area_struct *vma;
+> +
+> +	for_each_vma_range(vmi, vma, end) {
+>  		struct userfaultfd_unmap_ctx *unmap_ctx;
+>  		struct userfaultfd_ctx *ctx = vma->vm_userfaultfd_ctx.ctx;
+>  
+> @@ -848,6 +852,7 @@ static int userfaultfd_release(struct inode *inode, struct file *file)
+>  	/* len == 0 means wake all */
+>  	struct userfaultfd_wake_range range = { .len = 0, };
+>  	unsigned long new_flags;
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
 
-I might've missed this when this was sent the last time so maybe it was
-clearly explained in an earlier thread: What's the reason this needs to
-live in the kernel?
+Again, it looks like this could also be VMA_ITERATOR, consistent with the
+one above?
 
-The MaskedPaths entry is optional so runtimes aren't required to block
-anything by default and this mostly makes sense for workloads that run
-privileged.
+>  
+>  	WRITE_ONCE(ctx->released, true);
+>  
+> @@ -864,7 +869,7 @@ static int userfaultfd_release(struct inode *inode, struct file *file)
+>  	 */
+>  	mmap_write_lock(mm);
+>  	prev = NULL;
+> -	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+> +	mas_for_each(&mas, vma, ULONG_MAX) {
+>  		cond_resched();
+>  		BUG_ON(!!vma->vm_userfaultfd_ctx.ctx ^
+>  		       !!(vma->vm_flags & __VM_UFFD_FLAGS));
+> @@ -1281,6 +1286,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  	bool found;
+>  	bool basic_ioctls;
+>  	unsigned long start, end, vma_end;
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
+>  
+>  	user_uffdio_register = (struct uffdio_register __user *) arg;
+>  
+> @@ -1323,7 +1329,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  		goto out;
+>  
+>  	mmap_write_lock(mm);
+> -	vma = find_vma_prev(mm, start, &prev);
+> +	mas_set(&mas, start);
+> +	vma = mas_find(&mas, ULONG_MAX);
+>  	if (!vma)
+>  		goto out_unlock;
+>  
+> @@ -1348,7 +1355,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  	 */
+>  	found = false;
+>  	basic_ioctls = false;
+> -	for (cur = vma; cur && cur->vm_start < end; cur = cur->vm_next) {
+> +	for (cur = vma; cur; cur = mas_next(&mas, end - 1)) {
+>  		cond_resched();
+>  
+>  		BUG_ON(!!cur->vm_userfaultfd_ctx.ctx ^
+> @@ -1408,8 +1415,10 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  	}
+>  	BUG_ON(!found);
+>  
+> -	if (vma->vm_start < start)
+> -		prev = vma;
+> +	mas_set(&mas, start);
+> +	prev = mas_prev(&mas, 0);
+> +	if (prev != vma)
+> +		mas_next(&mas, ULONG_MAX);
 
-In addition MaskedPaths is a generic option which allows to hide any
-existing path, not just proc. Even in the very docker-specific defaults
-/sys/firmware is covered.
+Hmm non-commented tricky stuff...
 
-I do see clear value in the subset= and hidepid= options. They are
-generally useful independent of opinionated container workloads. I don't
-see the same for lookup=.
+>  
+>  	ret = 0;
+>  	do {
+> @@ -1466,8 +1475,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  	skip:
+>  		prev = vma;
+>  		start = vma->vm_end;
+> -		vma = vma->vm_next;
+> -	} while (vma && vma->vm_start < end);
+> +		vma = mas_next(&mas, end - 1);
+> +	} while (vma);
+>  out_unlock:
+>  	mmap_write_unlock(mm);
+>  	mmput(mm);
+> @@ -1511,6 +1520,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	bool found;
+>  	unsigned long start, end, vma_end;
+>  	const void __user *buf = (void __user *)arg;
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
+>  
+>  	ret = -EFAULT;
+>  	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
+> @@ -1529,7 +1539,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  		goto out;
+>  
+>  	mmap_write_lock(mm);
+> -	vma = find_vma_prev(mm, start, &prev);
+> +	mas_set(&mas, start);
+> +	vma = mas_find(&mas, ULONG_MAX);
+>  	if (!vma)
+>  		goto out_unlock;
+>  
+> @@ -1554,7 +1565,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	 */
+>  	found = false;
+>  	ret = -EINVAL;
+> -	for (cur = vma; cur && cur->vm_start < end; cur = cur->vm_next) {
+> +	for (cur = vma; cur; cur = mas_next(&mas, end - 1)) {
+>  		cond_resched();
+>  
+>  		BUG_ON(!!cur->vm_userfaultfd_ctx.ctx ^
+> @@ -1574,8 +1585,10 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	}
+>  	BUG_ON(!found);
+>  
+> -	if (vma->vm_start < start)
+> -		prev = vma;
+> +	mas_set(&mas, start);
+> +	prev = mas_prev(&mas, 0);
+> +	if (prev != vma)
+> +		mas_next(&mas, ULONG_MAX);
 
-An alternative I find more sensible is to add a new value for subset=
-that hides anything(?) that only global root should have read/write
-access too.
+Same here.
+
+>  
+>  	ret = 0;
+>  	do {
+> @@ -1640,8 +1653,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	skip:
+>  		prev = vma;
+>  		start = vma->vm_end;
+> -		vma = vma->vm_next;
+> -	} while (vma && vma->vm_start < end);
+> +		vma = mas_next(&mas, end - 1);
+> +	} while (vma);
+>  out_unlock:
+>  	mmap_write_unlock(mm);
+>  	mmput(mm);
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 33cea484d1ad..e0b2ec2c20f2 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -139,9 +139,8 @@ extern bool userfaultfd_remove(struct vm_area_struct *vma,
+>  			       unsigned long start,
+>  			       unsigned long end);
+>  
+> -extern int userfaultfd_unmap_prep(struct vm_area_struct *vma,
+> -				  unsigned long start, unsigned long end,
+> -				  struct list_head *uf);
+> +extern int userfaultfd_unmap_prep(struct mm_struct *mm, unsigned long start,
+> +				  unsigned long end, struct list_head *uf);
+>  extern void userfaultfd_unmap_complete(struct mm_struct *mm,
+>  				       struct list_head *uf);
+>  
+> @@ -222,7 +221,7 @@ static inline bool userfaultfd_remove(struct vm_area_struct *vma,
+>  	return true;
+>  }
+>  
+> -static inline int userfaultfd_unmap_prep(struct vm_area_struct *vma,
+> +static inline int userfaultfd_unmap_prep(struct mm_struct *mm,
+>  					 unsigned long start, unsigned long end,
+>  					 struct list_head *uf)
+>  {
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 79b8494d83c6..dde74e0b195d 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -2449,7 +2449,7 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+>  		 * split, despite we could. This is unlikely enough
+>  		 * failure that it's not worth optimizing it for.
+>  		 */
+> -		int error = userfaultfd_unmap_prep(vma, start, end, uf);
+> +		int error = userfaultfd_unmap_prep(mm, start, end, uf);
+>  
+>  		if (error)
+>  			return error;
+> @@ -2938,10 +2938,7 @@ static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+>  		goto munmap_full_vma;
+>  	}
+>  
+> -	vma_init(&unmap, mm);
+> -	unmap.vm_start = newbrk;
+> -	unmap.vm_end = oldbrk;
+> -	ret = userfaultfd_unmap_prep(&unmap, newbrk, oldbrk, uf);
+> +	ret = userfaultfd_unmap_prep(mm, newbrk, oldbrk, uf);
+>  	if (ret)
+>  		return ret;
+>  	ret = 1;
+> @@ -2954,6 +2951,9 @@ static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+>  	}
+>  
+>  	vma->vm_end = newbrk;
+> +	vma_init(&unmap, mm);
+> +	unmap.vm_start = newbrk;
+> +	unmap.vm_end = oldbrk;
+>  	if (vma_mas_remove(&unmap, mas))
+>  		goto mas_store_fail;
+>  
+> @@ -2963,7 +2963,7 @@ static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+>  	}
+>  
+>  	unmap_pages = vma_pages(&unmap);
+> -	if (unmap.vm_flags & VM_LOCKED) {
+> +	if (vma->vm_flags & VM_LOCKED) {
+
+Hmm is this an unrelated bug fix? As unmap didn't have any vm_flags set even
+before this patch, right?
+
+>  		mm->locked_vm -= unmap_pages;
+>  		munlock_vma_pages_range(&unmap, newbrk, oldbrk);
+>  	}
+

@@ -2,148 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681FC493847
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD849384B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349406AbiASKUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:20:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35934 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240254AbiASKUo (ORCPT
+        id S1349608AbiASKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240254AbiASKVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:20:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642587642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CjTXHpMu7iQCe4aRsTdgqOxoinRj5QFe260cZ5ycsEc=;
-        b=hfXIyv0WdUsR0IV6hoHgTLTZq+u++0oMQ+e/r/SFLtJQ4FB/2zBNOHc9rQDQgGwE2yyqLx
-        jbOpzIG2gqzGTIlNDa7XduDNpxCNa7PpQzx9ZwE1fa6tzpdxkOx+bKCb/WU2XFbDHP6gSW
-        KaBAR8wF0d3H352XfhISTvKrLXQAv9Y=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-3VL1q2QONzKkXqFMv5r5BQ-1; Wed, 19 Jan 2022 05:20:40 -0500
-X-MC-Unique: 3VL1q2QONzKkXqFMv5r5BQ-1
-Received: by mail-ed1-f71.google.com with SMTP id ee53-20020a056402293500b004022f34edcbso1850996edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:20:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CjTXHpMu7iQCe4aRsTdgqOxoinRj5QFe260cZ5ycsEc=;
-        b=6bTVBSGtpL5v+TPqhl8N/rQ1K1E/LZLwhZ86eCBcLNk3zW6yaigH36IMmOUEwQnp/o
-         n6yleO5TQo+NSn7CrFzAJBDKjCxG4ClbqCn2IRpYDUxlTTAy/DQtIdNNntuvqP3d4GM5
-         iWT1ICN1WidCQQZRYNfIbFMHzdaHTdLabwJ9F2X2b1pgArQkco8UkSQw0Dt7Gogmri6Q
-         VN9AhY7iufwlZmyiWcITxemmI5oFwRWHe9xRmTdtD2qxJH3WDJ7F2GaxJXD2j4HPg/ev
-         n9mlXdaeQ3HhkjgCucF2SgjxR1SRHeJHK/3CozPv+m/efIPUa0ae/X6BRf1xDfoh5o6T
-         kHWg==
-X-Gm-Message-State: AOAM530sO9cOqtbDysoRhi3bWuyWzFu6gfNpk+h74W3JWMSYa473nzEq
-        Jyu82FYYxliUBo0uWRKI9KOlTyJ8fss4/v+EIKWELwJy4lSfsxhTetSJm84k601XJkTI4hF4t24
-        dSmrg5PiL+tdGQtcsff+lklSf
-X-Received: by 2002:a05:6402:1753:: with SMTP id v19mr107112edx.235.1642587638125;
-        Wed, 19 Jan 2022 02:20:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwoiJPGbOGpM4FmcLGm0Qj+Q8OOCakdv1fB7szWja2xhM3i4oxVE1YYw3gThDCOMr/vfhtx9Q==
-X-Received: by 2002:a05:6402:1753:: with SMTP id v19mr107084edx.235.1642587637864;
-        Wed, 19 Jan 2022 02:20:37 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id ek14sm952418edb.53.2022.01.19.02.20.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 02:20:37 -0800 (PST)
-Message-ID: <fa51355f-9ab6-7bbf-d7f6-e2af2d68056c@redhat.com>
-Date:   Wed, 19 Jan 2022 11:20:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: Convert type of 'struct dmi_system_id -> driver_data' from 'void
- *' to kernel_ulong_t?
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     jkosina@suse.cz, Jason Gunthorpe <jgg@ziepe.ca>,
-        Bjorn Helgaas <bhelgaas@google.com>, mgurtovoy@nvidia.com,
-        linux@weissschuh.net, Arnd Bergmann <arnd@arndb.de>,
-        stephan@gerhold.net, "Rafael J. Wysocki" <rafael@kernel.org>
-References: <CAAd53p5EiTXfAhCFPDaicksQOa5usOkS5v7moPgM2A7QZ6QCqg@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAAd53p5EiTXfAhCFPDaicksQOa5usOkS5v7moPgM2A7QZ6QCqg@mail.gmail.com>
+        Wed, 19 Jan 2022 05:21:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2730CC061574;
+        Wed, 19 Jan 2022 02:21:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBD6061571;
+        Wed, 19 Jan 2022 10:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC9AC004E1;
+        Wed, 19 Jan 2022 10:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642587683;
+        bh=cP9cLTMdUSfF40o+P6T3LFzIpDG8KykxdcBvwSmIf8o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CDzzzwVotsmKyOYUjqR0h8Y9SowCQOZoRlzI9UqqqOaI/AfV3HDu8bFn/q6AZ+e9Z
+         R8s6cbEQuw2EkCkBaYnhAEj1ROLtiqTbTAB8gqa+YPB/d7oYuJ4Bdy94IqngPMcJ1J
+         3OJbKVBq9DD1AD2PgsFWc6pag8DABg/JYHsY+Hae72JEu4mFUC/uZg7qOO5CIp2++i
+         t6J83yx7NxxjNPFsuTvWM9tSM//ASfPGxpLUn+huASndGzL0Gom8pGDYMoqs1aH2Nx
+         pEUGWDkyODqJ+AcaoqRC6Ko2ZX1w8BFl17pz3CjgQ9OUxkeukHDvueRJDL48Tzvvtu
+         HdLj31S+fGbTg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nA85g-001Ren-K2; Wed, 19 Jan 2022 10:21:20 +0000
+Date:   Wed, 19 Jan 2022 10:21:20 +0000
+Message-ID: <87ee5481r3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 04/11] KVM: arm64: Setup a framework for hypercall bitmap firmware registers
+In-Reply-To: <960d4166-1718-55ef-d324-507a8add7e3e@redhat.com>
+References: <20220104194918.373612-1-rananta@google.com>
+        <20220104194918.373612-5-rananta@google.com>
+        <960d4166-1718-55ef-d324-507a8add7e3e@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jasowang@redhat.com, rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, oupton@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kai-Heng,
+On Wed, 19 Jan 2022 06:42:15 +0000,
+Jason Wang <jasowang@redhat.com> wrote:
+>=20
+>=20
+> =E5=9C=A8 2022/1/5 =E4=B8=8A=E5=8D=883:49, Raghavendra Rao Ananta =E5=86=
+=99=E9=81=93:
+> > KVM regularly introduces new hypercall services to the guests without
+> > any consent from the Virtual Machine Manager (VMM). This means, the
+> > guests can observe hypercall services in and out as they migrate
+> > across various host kernel versions. This could be a major problem
+> > if the guest discovered a hypercall, started using it, and after
+> > getting migrated to an older kernel realizes that it's no longer
+> > available. Depending on how the guest handles the change, there's
+> > a potential chance that the guest would just panic.
+> >=20
+> > As a result, there's a need for the VMM to elect the services that
+> > it wishes the guest to discover. VMM can elect these services based
+> > on the kernels spread across its (migration) fleet. To remedy this,
+> > extend the existing firmware psuedo-registers, such as
+> > KVM_REG_ARM_PSCI_VERSION, for all the hypercall services available.
+>=20
+>=20
+>=20
+> Haven't gone through the series but I wonder whether it's better to
+> have a (e)BPF filter for this like seccomp.
 
-On 1/19/22 02:22, Kai-Heng Feng wrote:
-> Hi,
-> 
-> I wonder if there's any reason to use 'void *' instead of
-> kernel_ulong_t for 'driver_data' in 'struct dmi_system_id'?
-> 
-> I'd like to use the driver_data for applying quirk flags, and I found
-> out unlike most other struct *_id, the dmi variant is using 'void *'
-> for driver_data. Is there any technical reason for this?
+No, please. This has to fit in the save/restore model, and should be
+under control of the VMM. If you want to filter things using seccomp,
+that's fine, but also that's completely orthogonal.
 
-I don't know if there is a technical reason for this, nor
-why this choice was originally made.
+	M.
 
-But I do believe that changing this now will just lead to a lot
-of unnecessary churn.
-
-You can easily use the current void * for flags by doing;
-
-#define FLAG1	BIT(0)
-#define FLAG2	BIT(1)
-
-...
-		.driver_data = (void *)(FLAG1 | FLAG20,
-
-...
-
-	long quirks = (long)dmi_id->driver_data;
-
-
-It is already used this way in many places. Have you done a grep
-to see in how many places dmi_system_id is used? DMI based quirks
-are used all over the place, changing this will cause a really
-large amount of churn and for what?
-
-So I just did a quick check and dmi_system_id is used in
-*204* files in the kernel.
-
-You are asking for a technical reason why "void *" was used,
-but lets turn that around, why do you believe that "unsigned long"
-is inherently a better type here ?
-
-driver_data in most places in the kernel (like data for
-all sort of callback functions) actually typically is a void *
-already, because often people want to pass more data then what
-fits in a single long and this also applies to driver-id attached
-data.
-
-Just a random example from: drivers/mmc/host/sdhci-pci.h
-
-#define SDHCI_PCI_DEVICE(vend, dev, cfg) { \
-        .vendor = _PCI_VEND(vend), .device = _PCI_DEV(vend, dev), \
-        .subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID, \
-        .driver_data = (kernel_ulong_t)&(sdhci_##cfg) \
-}
-
-So here the unsigned long is actually not what we want and
-we have to do a cast the other way around; and again the
-kernel is full of these examples. So arguably if anything we
-should change the other driver_data fields from
-include/linux/mod_devicetable.h
-to avoid the need for these kinda casts all over the kernel
-(but again that would not be worth the churn IMHO).
-
-TL;DR: lets just leave this all as it is please.
-
-Regards,
-
-Hans
-
+--=20
+Without deviation from the norm, progress is not possible.

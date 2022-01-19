@@ -2,127 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3437A494175
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C73C49417D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357252AbiASUIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiASUIO (ORCPT
+        id S1357255AbiASUKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:10:16 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46190
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243247AbiASUKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:08:14 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530F0C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:08:14 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x11so12813216lfa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7XYML8NlB13bGuse2hF1bLIaMZ5sfkRPfFnmW1aohsc=;
-        b=rxUbtiRmtkky00vtyPWlAYOefjVAHqGIMV2Os4969SRTEatw086kKc5xyaUjFFXZ2l
-         SszLrySdH5wLQ+of9Rvam/Lg/qWCG9zxcmoA7VttOYi6avi8UxSS3gkvcgt6+PL3DvgT
-         obhvzOxR2cn1GULTv4So9YFRSp1RJSHaM6mypXXoXC/YIRqOeIQG6lxF4ELOHEnUb/LF
-         KWq/h53lou6blnK9Bq2i3fRJ0xHP/7/2g4RZ5QlTMnC3BdMowM2ledCTvIee3mh1jGjN
-         QZ/knKqUYIn/HfCWCe99En4lE8/F0uG4AR19j9+KaHUylpRF5tad3FUu6rLJf8EZQt5g
-         Fr5Q==
+        Wed, 19 Jan 2022 15:10:13 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5688C4004C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642623011;
+        bh=B0MRNjKyPBOkLqskhHhUYFAwrhXXjHwf0AFyIDpdjDg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=dGL7DvwWVnqj8a3LnyFOHTHRNaqJOg4+4sxY9r7eZ9Iu5uTuPlaFyvLDndlnx/LS9
+         wpJQWwOjpXePea1Mr5ywjN7zkkbCMOZh1J+9BSRfv5PImlPmQTYMnOlN2WGdppjh3f
+         jJa5UaCkGUkMqh4T/2CyklJto3pUpSzMyMIF3i1ad/q7f4/r1ZUx2DohQCe7++44We
+         6d0q8SMcl/3EvcSIifJl5cKYtKL3ADHh8UvwFyPVGzqK4fzZipzTatFS32WEJ6EjPM
+         0EImQMYP5hHwGP3q0++CY3wXWB8DxyeQ1mwDQTGyqTHqoJ6saianQIw6v9/HEI/ejE
+         AUZBESm4KiEug==
+Received: by mail-ed1-f71.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso3736663edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:10:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7XYML8NlB13bGuse2hF1bLIaMZ5sfkRPfFnmW1aohsc=;
-        b=ZoOcQNY0SqKyWZd/iTMYmfxLRhrydg+Cb0mBXX+arsJiJhaDCqbN7tvA5gEnmEuY+5
-         9g9FqCLccYC0UKbsPc3P6UAGT2xpew8oPgx3VWaMqWoYXvxfevo6RtY3GSOdQd/b3mrO
-         3h52YsedwGw2CRG5iXpuGJP7UPeJiW0E5aSNsQXziepy6LZhJ64QTI/jPDDGqDoqJk9y
-         eGZeSlqixsa76zAT6u2g4yhCj0w7wuxjtFAwxHN5uz+0lsZI7/ibIv1QJFP90PpNI7oi
-         3CKyf7KPH7v/k8ZUMLAlPEBFZq0Thc7lE15ZT5hI0sR7/n9+6Ayvsp74muw1fyv8Tg6q
-         2HOA==
-X-Gm-Message-State: AOAM5313rnXv+2z3VZlcPXejT9Q777lLYmkJniuHY46sQtigaNuAFbvj
-        D+lpP/Tl8U27OZL7R+UU9x1+mg==
-X-Google-Smtp-Source: ABdhPJwPEHkCPoo9NpCBThrfHsmy44IF3kMjyNQg16dvkReKSsZIiN0c4eZ1yyaRO0+SOj/b0DMFhQ==
-X-Received: by 2002:a2e:b80b:: with SMTP id u11mr1377463ljo.375.1642622892582;
-        Wed, 19 Jan 2022 12:08:12 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id p13sm57883lfh.189.2022.01.19.12.08.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B0MRNjKyPBOkLqskhHhUYFAwrhXXjHwf0AFyIDpdjDg=;
+        b=b/H2r2zUu+x8UX0jboYwxmg0LFw1n+TpccRkl1VC186siAXLEVisazswdAt+mgSfGn
+         RsRDh92bcdWusqCZ6e1QxNp21MCRe6B5vrOfCSzhsnU+HfKNuy1EuljLcYgd258NqrRO
+         oSgfXPXvQ++UqKTJPHr3cYZqrU6Nh5uGfEjCQGn3c51HotU9FumCEEi8SYZZk/4/dYTX
+         vEyRqECWcW97vovtc+JVb8OEm4ZfS0YA4opJn8WddqsrA+s+/s3phEyrOo+QFEDkNc9E
+         82FKxFgrpLXOsSTzKbeoBW2Av2gM1TAn81lLd6U8P7rmc81J292ELBPG45+QGmkf++J/
+         L/zA==
+X-Gm-Message-State: AOAM530Xqw8xkazqiXuUAXoeV5zoYwm5CbOS6num8oX0iSRt2EL7HqzS
+        AxqeEL+dKv0iDhBBHlF5D7wYxTzPLFxb3oP/fChmKoWYCL5qHcv3X51IxWevHrG+MrasRcxZ+mN
+        XxMaiKBM7sumeAuNJZTfBf6SBhL12y+Kj5TfHLAlQXw==
+X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr31876164edc.340.1642623009980;
+        Wed, 19 Jan 2022 12:10:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyyXY0vDwKSfhnExno/DI3+JyjNBt4Lf3DhxMlvfzqLgNypDn6KioMudJOfGjSmKq3JQmKr2Q==
+X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr31876128edc.340.1642623009706;
+        Wed, 19 Jan 2022 12:10:09 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id a26sm215005ejr.213.2022.01.19.12.10.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 12:08:11 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 216EA10369A; Wed, 19 Jan 2022 23:08:41 +0300 (+03)
-Date:   Wed, 19 Jan 2022 23:08:41 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/26] x86/tdx: Support TDX guest port I/O at
- decompression time
-Message-ID: <20220119200841.fupa3hemmswllmxc@box.shutemov.name>
-References: <20211214150304.62613-11-kirill.shutemov@linux.intel.com>
- <YeAuehoOEjUH3vZ3@zn.tnic>
- <20220115010155.ss2hnyotw4a3nljf@black.fi.intel.com>
- <YeK7AJXGN5GVGkRV@zn.tnic>
- <20220117143920.3umnnlx7dl27cm5z@box.shutemov.name>
- <YeW2U9vH65NcLHtY@zn.tnic>
- <20220119115326.rw2aj3ho2mct4xxv@box.shutemov.name>
- <YegTjdltOFBIDlf2@zn.tnic>
- <20220119154925.mzri4zaz3o477e3k@box.shutemov.name>
- <YehqkKNgQ65uUOe6@zn.tnic>
+        Wed, 19 Jan 2022 12:10:09 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Balletbo i Serra <enric.balletbo@collabora.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v4 0/5] spi: dt-bindings: samsung: convert to dtschema
+Date:   Wed, 19 Jan 2022 21:10:00 +0100
+Message-Id: <20220119201005.13145-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YehqkKNgQ65uUOe6@zn.tnic>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 08:46:24PM +0100, Borislav Petkov wrote:
-> On Wed, Jan 19, 2022 at 06:49:25PM +0300, Kirill A. Shutemov wrote:
-> > const struct port_io_ops default_pio_ops = {
-> > 	.inb = inb,
-> > 	.inw = inw,
-> > 	.inl = inl,
-> > 	.outb = outb,
-> > 	.outw = outw,
-> > 	.outl = outl,
-> > };
-> > 
-> > make pio_ops a pointer and assign it here:
-> > 
-> > 	pio_ops = &default_pio_ops;
-> > 
-> > But it leads to an issue on linking:
-> > 
-> > ld.lld: error: Unexpected run-time relocations (.rela) detected!
-> 
-> So the above generates absolute relocations of type R_X86_64_64
-> 
-> Relocation section '.rela.data.rel.local' at offset 0x5c18 contains 6 entries:
->   Offset          Info           Type           Sym. Value    Sym. Name + Addend
-> 000000000000  000200000001 R_X86_64_64       0000000000000000 .text + 10
-> 000000000008  000200000001 R_X86_64_64       0000000000000000 .text + 30
-> 000000000010  000200000001 R_X86_64_64       0000000000000000 .text + 50
-> 000000000018  000200000001 R_X86_64_64       0000000000000000 .text + 0
-> 000000000020  000200000001 R_X86_64_64       0000000000000000 .text + 20
-> 000000000028  000200000001 R_X86_64_64       0000000000000000 .text + 40
-> 
-> and the linker doesn't like them probably because of the mcmodel we use
-> but I need to talk to toolchain folks first to make sense of what's
-> going on...
+Hi,
 
-JFYI, the message comes from ASSERT in vmlinux.lds.S.
+Changes since v3
+================
+1. Patch 2: correct path in exynos-usi.yaml.
+2. Add patch 5.
+3. Add tags.
 
-I assume for now I can proceed with the assignment that works, right?
-It can be changed later once we figure out what is going on.
+Changes since v2
+================
+1. Patch 2: drop child device schema, as Rob suggested.
+
+Changes since v1
+================
+1. Patch 2: describe devices matching compatible, correct issues pointed out by
+   Rob, add reviewed-by tag.
+2. New patches 3 and 4.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (5):
+  ARM: dts: exynos: split dmas into array of phandles in Exynos5250
+  spi: dt-bindings: samsung: convert to dtschema
+  spi: dt-bindings: samsung: allow controller-data to be optional
+  mfd: dt-bindings: google,cros-ec: reference Samsung SPI bindings
+  spi: s3c64xx: allow controller-data to be optional
+
+ .../bindings/mfd/google,cros-ec.yaml          |  29 +--
+ .../bindings/soc/samsung/exynos-usi.yaml      |   2 +-
+ .../spi/samsung,spi-peripheral-props.yaml     |  36 ++++
+ .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
+ .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+ .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
+ MAINTAINERS                                   |   2 +-
+ arch/arm/boot/dts/exynos5250.dtsi             |   9 +-
+ drivers/spi/spi-s3c64xx.c                     |  14 +-
+ 9 files changed, 251 insertions(+), 151 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
 
 -- 
- Kirill A. Shutemov
+2.32.0
+

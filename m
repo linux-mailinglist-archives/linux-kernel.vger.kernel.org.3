@@ -2,157 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFE7493B07
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F27D493B0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354777AbiASNWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354669AbiASNWn (ORCPT
+        id S1354780AbiASNZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:25:19 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4432 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350184AbiASNZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:22:43 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1D6C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:22:42 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id x11so9371935lfa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:22:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K4NxkHaCPaZxAktRY7Z9j13Y+DVG/4Ag2JSyRXHqb24=;
-        b=ti8Gh06talRe37sOC29PCTTLR6mADi2r7ZHqYaJ5sSLO1zKq5s6E6T3q//czKCW1gM
-         JGha1wvCDGvl6QtuhvFxn3BdefYyH87USpFeB7wGsibh5eciB9mcxBO0wN5Dx4OY85/p
-         Z7ikhOitXFCQNo7KkI/zK/WT+j5FGaMJb2DDzjQ7P79MtllzXplRscjBTYceV/xvTD+b
-         j/aiMVtBriFmAN8WH0ijWgLN9t5EcbZsRLLEYOINaWTZfqFyWu3WjWnalXqtj2cumrrk
-         1n8d1Hf79gSwW3QqQ7D1lRK2QodZ5O6X0gD/RUB36B8+UeVgxCUEfXRcLVg41kkbr5Lb
-         A8Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K4NxkHaCPaZxAktRY7Z9j13Y+DVG/4Ag2JSyRXHqb24=;
-        b=qva6ySd+NXDxix8KoE87bRE9u0TOMLyc28hBqslSNemy/UHBf0Eury1CMJuAkSVkee
-         QxXWwa9IBRegTXXvc2z8Zp1F0FKicB4dt3JjsYFBsMAymp2ji7nLYBVRC08OPyjDylzD
-         ezmHoYhBA+52qWzyhxkTIPAhGkSMoJLc3sSJdXfcbkgOoZtubM+g+9XZtH+kidBkLDdQ
-         YmK0JgfZth/8+BvSOvO8RSOXGQqA0EXP2umn8o+5qEteCsYXumzaugKEzrjxyZpmXbaw
-         atOIM2h3L/x+unerjMgsWFYwqIOj0bdJdU6pHpv7X6LlHqJgU7hobM/FlSUauIW0VzFp
-         Ku2Q==
-X-Gm-Message-State: AOAM530v5bAsITrt2JsfNO9ezwqFnilagvXQQGRpRjtsWBw4Dz9TzjHD
-        DwKKuQhI6bTNFWyFx2Ne5av6JRhAJDNOeqbeqLjlSA==
-X-Google-Smtp-Source: ABdhPJx6GoAj8bSptRZ68c+ctdvk5tpIiiiFZFiN9pmrER+fTAfDbHQjRp8i5/be41dPbatXScHf/0ieDl9tc/5GPIs=
-X-Received: by 2002:a05:6512:308d:: with SMTP id z13mr18136533lfd.523.1642598561229;
- Wed, 19 Jan 2022 05:22:41 -0800 (PST)
+        Wed, 19 Jan 2022 08:25:15 -0500
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jf5wV6qk1z67HKP;
+        Wed, 19 Jan 2022 21:24:58 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 19 Jan 2022 14:25:12 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Wed, 19 Jan 2022 14:25:12 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Antony Vennard <antony@vennard.ch>
+CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xnP9oAgAAHlwCAAfOkgIAAJTmAgAD7bXA=
+Date:   Wed, 19 Jan 2022 13:25:12 +0000
+Message-ID: <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com>
+ <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
+ <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
+ <YedHR93wPLS/JEsE@sol.localdomain>
+In-Reply-To: <YedHR93wPLS/JEsE@sol.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.214.59]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220112161230.836326-1-vincent.donnefort@arm.com>
- <20220112161230.836326-3-vincent.donnefort@arm.com> <CAKfTPtC2wCw4U9w=saW0dGYHfOKo42nBKU7oHcEM7KeDj7MzWA@mail.gmail.com>
- <Yeac5Y5Fzu/jaUf0@FVFF7649Q05P> <CAKfTPtAdTTP+qGruYy8gi6rfhS0W1gAdjgeLCtrLZHxyCEHo9g@mail.gmail.com>
- <Yef8kTnlP5h4I7/1@FVFF7649Q05P>
-In-Reply-To: <Yef8kTnlP5h4I7/1@FVFF7649Q05P>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 19 Jan 2022 14:22:28 +0100
-Message-ID: <CAKfTPtB=CJNFDrpXY9o8g5XfjBfnVTUgb2rWke1SyWMUxz0M+g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] sched/fair: Decay task PELT values during migration
-To:     Vincent Donnefort <Vincent.Donnefort@arm.com>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Valentin.Schneider@arm.com, Morten.Rasmussen@arm.com,
-        Chris.Redpath@arm.com, qperret@google.com, Lukasz.Luba@arm.com
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 12:59, Vincent Donnefort
-<vincent.donnefort@arm.com> wrote:
->
-> [...]
->
-> > > >
-> > > > This has several shortfalls:
-> > > > - have a look at cfs_rq_clock_pelt() and rq_clock_pelt(). What you
-> > > > name clock_pelt in your commit message and is used to update PELT and
-> > > > saved in se->avg.last_update_time is : rq->clock_pelt -
-> > > > rq->lost_idle_time - cfs_rq->throttled_clock_task_time
-> > >
-> > > That's why, the PELT "lag" is added onto se->avg.last_update_time. (see the last
-> > > paragraph of the commit message) The estimator is just a time delta, that is
-> > > added on top of the entity's last_update_time. I don't see any problem with the
-> > > lost_idle_time here.
-> >
-> > lost_idle_time is updated before entering idle and after your
-> > clock_pelt_lag has been updated. This means that the delta that you
-> > are computing can be wrong
-> >
-> > I haven't look in details but similar problem probably happens for
-> > throttled_clock_task_time
-> >
-> > >
-> > > > - you are doing this whatever the state of the cpu : idle or not. But
-> > > > the clock cycles are not accounted for in the same way in both cases.
-> > >
-> > > If the CPU is idle and clock_pelt == clock_task, the component A of the
-> > > estimator would be 0 and we only would account for how outdated is the rq's
-> > > clock, i.e. component B.
-> >
-> > And if cpu is not idle, you can't apply the diff between clk_pelt and clock_task
-> >
-> > >
-> > > > - (B) doesn't seem to be accurate as you skip irq and steal time
-> > > > accounting and you don't apply any scale invariance if the cpu is not
-> > > > idle
-> > >
-> > > The missing irq and paravirt time is the reason why it is called "estimator".
-> > > But maybe there's a chance of improving this part with a lockless version of
-> > > rq->prev_irq_time and rq->prev_steal_time_rq?
-> > >
-> > > > - IIUC your explanation in the commit message above, the (A) period
-> > > > seems to be a problem only when idle but you apply it unconditionally.
-> > >
-> > > If the CPU is idle (and clock_pelt == clock_task), only the B part would be
-> > > worth something:
-> > >
-> > >   A + B = [clock_task - clock_pelt] + [sched_clock_cpu() - clock]
-> > >                       A                            B
-> > >
-> > > > If cpu is idle you can assume that clock_pelt should be equal to
-> > > > clock_task but you can't if cpu is not idle otherwise your sync will
-> > > > be inaccurate and defeat the primary goal of this patch. If your
-> > > > problem with clock_pelt is that the pending idle time is not accounted
-> > > > for when entering idle but only at the next update (update blocked
-> > > > load or wakeup of a thread). This patch below should fix this and
-> > > > remove your A.
-> > >
-> > > That would help slightly the current situation, but this part is already
-> > > covered by the estimator.
-> >
-> > But the estimator, as you name it, is wrong beaus ethe A part can't be
-> > applied unconditionally
->
-> Hum, it is used only in the !active migration. So we know the task was sleeping
-> before that migration. As a consequence, the time we need to account is "sleeping"
-> time from the task point of view, which is clock_pelt == clock_task (for
-> __update_load_avg_blocked_se()). Otherwise, we would only decay with the
-> "wallclock" idle time instead of the "scaled" one wouldn't we?
-
-clock_pelt == clock_task only when cpu is idle and after updating
-lost_idle_time but you have no idea of the state of the cpu when
-migrating the task
-
->
->
->      +-------------+--------------
->      |   Task A    |    Task B    .....
->               ^    ^             ^
->               |    |          migrate A
->               |    |             |
->               |    |             |
->               |    |             |
->               |    |<----------->|
->               |  Wallclock Task A idle time
->               |<---------------->|
->             "Scaled" Task A idle time
->
->
-> [...]
+PiBGcm9tOiBFcmljIEJpZ2dlcnMgW21haWx0bzplYmlnZ2Vyc0BrZXJuZWwub3JnXQ0KPiBTZW50
+OiBXZWRuZXNkYXksIEphbnVhcnkgMTksIDIwMjIgMTI6MDQgQU0NCj4gT24gVHVlLCBKYW4gMTgs
+IDIwMjIgYXQgMDk6NTA6MjFQTSArMDEwMCwgQW50b255IFZlbm5hcmQgd3JvdGU6DQo+ID4NCj4g
+PiBIaSBBbGwsDQo+ID4NCj4gPiBPbiAxNy8wMS8yMDIyIDE2OjAyLCBKYW1lcyBCb3R0b21sZXkg
+d3JvdGU6DQo+ID4gPiBPbiBNb24sIDIwMjItMDEtMTcgYXQgMTU6MzQgKzAxMDAsIEphc29uIEEu
+IERvbmVuZmVsZCB3cm90ZToNCj4gPiA+ID4gSGksDQo+ID4gPiA+DQo+ID4gPiA+IFdoaWxlIGl0
+IGxvb2tzIGxpa2UgeW91IHB1dCBhIGxvdCBvZiB3b3JrIGludG8gdGhpcyBwYXRjaHNldCwgSSB0
+aGluaw0KPiA+ID4gPiB0aGUgZ2VuZXJhbCBpZGVhIG9mIGFkZGluZyBQR1AgKnRvIHRoZSBrZXJu
+ZWwqIGlzIGEgcHJldHR5IGRhdW50aW5nDQo+ID4gPiA+IHByb3Bvc2l0aW9uLiBUaGUgZ2VuZXJh
+bCBjb25zZW5zdXMgaW4gdGhlIGNyeXB0byBlbmdpbmVlcmluZyB3b3JsZCBpcw0KPiA+ID4gPiB0
+aGF0IFBHUCBvdWdodCB0byBiZSBvbiBpdHMgd2F5IG91dC4gV2UgZGVmaW5pdGVseSBkb24ndCB3
+YW50IHRvDQo+ID4gPiA+IHBlcnBldHVhdGUgdGhpcyBwcm9qZWN0LW9uLWxpZmUtc3VwcG9ydCBp
+bnRvIHRoZSBwZXJtYW5lbmNlIG9mIGtlcm5lbA0KPiA+ID4gPiBjb2RlLiBTb21lIHF1aWNrIEdv
+b2dsZSBzZWFyY2hlcyB3aWxsIHJldmVhbCBhIGxpdGFueSBvZiBibG9nIHBvc3RzDQo+ID4gPiA+
+IHRvIHRoZSB0dW5lIG9mLCAid2h5IG9oIHdoeSBhcmUgcGVvcGxlIHN0aWxsIHVzaW5nIHRoaXM/
+IiBIZXJlJ3Mgb25lDQo+ID4gPiA+IGZyb20gMjAxOToNCj4gPiA+ID4gaHR0cHM6Ly9sYXRhY29y
+YS5taWNyby5ibG9nLzIwMTkvMDcvMTYvdGhlLXBncC1wcm9ibGVtLmh0bWwgLiBJDQo+ID4gPiA+
+IHRoaW5rIHRoZXNlIGFyZSBhcmd1bWVudHMgdG8gdGFrZSBzZXJpb3VzbHkuIEFuZCBldmVuIGlm
+IHlvdSBkaXNhZ3JlZQ0KPiA+ID4gPiB3aXRoIHNvbWUgcGFydHMsIHlvdSBtYXkgd2FudCB0byBj
+b25zaWRlciB3aGV0aGVyIHRoZSByZW1haW5pbmcgcGFydHMNCj4gPiA+ID4gd2FycmFudCBhIGJp
+dCBvZiBwYXVzZSBiZWZvcmUgYWRkaW5nIHRoaXMgdG8gdGhlIGtlcm5lbCBhbmQNCj4gPiA+ID4g
+cGVycGV0dWF0aW5nIFBHUCdzIGRlc2lnbiBmdXJ0aGVyLg0KPiA+DQo+ID4gU28gd2hpbGUgSSB1
+bmRlcnN0YW5kIHdoeSB0aGlzIGlzIGJlaW5nIHByb3Bvc2VkIGFuZCBjbGVhcmx5IGVmZm9ydCBo
+YXMgZ29uZQ0KPiA+IGludG8gaXQsIEkgYWxzbyB0aGluayBpdCBpcyBub3QgdGhlIHJpZ2h0IGFw
+cHJvYWNoLiBJdCBzZWVtcyB0aGlzIHByb3Bvc2FsDQo+ID4gaXMgdG8gaW5jbHVkZSBhIGZ1bGwg
+UEdQIHBhY2tldCBwYXJzZXIgYW5kIHZlcmlmaWNhdGlvbiBsb2dpYyBpbiB0aGUga2VybmVsDQo+
+ID4gYXMgYW4gZXF1aXZhbGVudCB0byBhbGxvdyBQR1Agc2lnbmF0dXJlcyB0byBiZSBzdWJtaXR0
+ZWQgdmlhDQo+ID4gRlNfSU9DX0VOQUJMRV9WRVJJVFk6DQo+ID4NCj4gPiAiRlNfSU9DX0VOQUJM
+RV9WRVJJVFkgYWNjZXB0cyBhIHBvaW50ZXIgdG8gYSBQS0NTIzcgZm9ybWF0dGVkIGRldGFjaGVk
+DQo+ID4gc2lnbmF0dXJlIGluIERFUiBmb3JtYXQgb2YgdGhlIGZpbGXigJlzIGZzLXZlcml0eSBk
+aWdlc3QuIg0KPiA+DQo+IA0KPiBJdCdzIHdvcnRoIG5vdGluZyB0aGF0IGlmIGZzLXZlcml0eSBi
+dWlsdC1pbiBzaWduYXR1cmVzIGFyZSB1c2VkLCBhIHRydXN0ZWQNCj4gdXNlcnNwYWNlIHByb2dy
+YW0gaXMgc3RpbGwgcmVxdWlyZWQgdG8gZGV0ZXJtaW5lIGFuZCBlbmZvcmNlIHRoZSBwb2xpY3kg
+b2Ygd2hpY2gNCj4gZmlsZXMgYXJlIHJlcXVpcmVkIHRvIGJlIHNpZ25lZC4gIFRoZSBrZXJuZWwg
+b25seSBoYW5kbGVzIHRoZSBhY3R1YWwgc2lnbmF0dXJlDQo+IHZlcmlmaWNhdGlvbi4gIFRoaXMg
+d2FzIGJhc2ljYWxseSBhIHByb29mLW9mLWNvbmNlcHQgd2hpY2ggcmV1c2VkIHRoZSBrZXJuZWwn
+cw0KPiBtb2R1bGUgc2lnbmF0dXJlIHZlcmlmaWNhdGlvbiBjb2RlICh3aGljaCBoYXBwZW5zIHRv
+IHVzZSBQS0NTIzcpLg0KDQpKdXN0IHRvIHNob3cgaG93IHRoZSBmc3Zlcml0eSBjb2RlIHdpbGwg
+bG9vayBsaWtlIGFmdGVyIGFkZGluZyBzdXBwb3J0DQpmb3IgUEdQIHNpZ25hdHVyZXM6DQoNCisg
+ICAgICAgc3dpdGNoICh2aS0+dHlwZSkgew0KKyAgICAgICBjYXNlIFBLRVlfSURfUEtDUzc6DQor
+ICAgICAgICAgICAgICAgZXJyID0gdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZShkLCBzaXplb2YoKmQp
+ICsgaGFzaF9hbGctPmRpZ2VzdF9zaXplLA0KKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgc2lnbmF0dXJlLCBzaWdfc2l6ZSwgZnN2ZXJpdHlfa2V5cmluZywNCisg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFZFUklGWUlOR19VTlNQ
+RUNJRklFRF9TSUdOQVRVUkUsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBOVUxMLCBOVUxMKTsNCisgICAgICAgICAgICAgICBicmVhazsNCisgICAgICAgY2Fz
+ZSBQS0VZX0lEX1BHUDoNCisgICAgICAgICAgICAgICBlcnIgPSB2ZXJpZnlfcGdwX3NpZ25hdHVy
+ZShkLCBzaXplb2YoKmQpICsgaGFzaF9hbGctPmRpZ2VzdF9zaXplLA0KKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpZ25hdHVyZSwgc2lnX3NpemUsIGZzdmVyaXR5
+X2tleXJpbmcsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVkVS
+SUZZSU5HX1VOU1BFQ0lGSUVEX1NJR05BVFVSRSwNCisgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBOVUxMLCBOVUxMKTsNCisgICAgICAgICAgICAgICBicmVhazsNCisg
+ICAgICAgZGVmYXVsdDoNCisgICAgICAgICAgICAgICBlcnIgPSAtRU9QTk9UU1VQUDsNCisgICAg
+ICAgfQ0KDQpBcyB5b3UgY2FuIHNlZSwgdGhlIGNoYW5nZSB3aWxsIGJlIHN0cmFpZ2h0Zm9yd2Fy
+ZC4NCg0KT24gdXNlciBzcGFjZSBzaWRlLCBJIHBsYW4gdG8gYWRkIHRoZSBjYXBhYmlsaXR5IHRv
+IGZzdmVyaXR5LXV0aWxzDQp0byBwcm9kdWNlIGEgUEdQIHNpZ25hdHVyZSB3aXRoIHRoZSBHUEcg
+a2V5IHBhc3NlZCBieSBycG1zaWduLg0KDQo+IEknZCBlbmNvdXJhZ2UgbmV3IHVzZXJzIHRvIGVp
+dGhlciBnbyBhbGwtaW4gb24gYSB1c2Vyc3BhY2Ugc29sdXRpb24sIHVzaW5nIGENCj4gdHJ1c3Rl
+ZCB1c2Vyc3BhY2UgcHJvZ3JhbSB0byB2ZXJpZnkgc2lnbmF0dXJlcyBvZiBmcy12ZXJpdHkgZmls
+ZSBkaWdlc3RzOw0KPiAqb3IqIGdvIGFsbC1pbiBvbiBhbiBpbi1rZXJuZWwgc29sdXRpb24sIHVz
+aW5nIHRoZSBJTUEgc3VwcG9ydCBmb3IgZnMtdmVyaXR5DQo+IHdoaWNoIE1pbWkgWm9oYXIgaXMg
+d29ya2luZyBvbi4gIEEgdXNlcnNwYWNlIHNvbHV0aW9uIGNvdWxkIHVzZSBhIHNpbXBsZQ0KDQpQ
+cm9iYWJseSwgdGhlcmUgaXMgYWxzbyB0aGUgdGhpcmQgb3B0aW9uIG9mIGFuIExTTSAoc3VjaCBh
+cyBJUEUpIHRoYXQgZ2V0cw0KZnJvbSBmc3Zlcml0eSB0aGUgaW5mb3JtYXRpb24gaWYgdGhlIHNp
+Z25hdHVyZSB3YXMgdmFsaWRhdGVkLCBhbmQgZGVjaWRlDQpkZXBlbmRpbmcgb24gYSBwb2xpY3ku
+IEkgd291bGQgYWxzbyBleHBvc2UgdGhlIGluZm9ybWF0aW9uIGFib3V0IHRoZQ0KcmVzdHJpY3Rp
+b24gaW1wb3NlZCBvbiB0aGUga2V5cmluZyBmcm9tIHdoaWNoIHRoZSBrZXkgdXNlZCB0byB2ZXJp
+ZnkNCnRoZSBzaWduYXR1cmUgd2FzIGZvdW5kLg0KDQpNYXliZSBJTUEgY291bGQgdXNlIHRoaXMg
+YXBwcm9hY2ggdG9vLCB3aGljaCB3b3VsZCBhdm9pZCB0aGUgbmVlZA0Kb2YgaW50cm9kdWNpbmcg
+YW5vdGhlciBzaWduYXR1cmUgZm9ybWF0LiBJZiB0aGF0IGlzIGRlc2lyZWQsIHlvdSBtaWdodA0K
+d2FudCB0byBjb29yZGluYXRlIHdpdGggdGhlIGF1dGhvcnMgb2YgYSBGZWRvcmEgZmVhdHVyZToN
+Cg0KaHR0cHM6Ly9mZWRvcmFwcm9qZWN0Lm9yZy93aWtpL0NoYW5nZXMvRnNWZXJpdHlSUE0NCg0K
+d2hpY2gsIGFzIGZhciBhcyBJIGtub3csIHBsYW4gdG8gdXNlIHRoZSBzaWduYXR1cmUgZm9ybWF0
+IGFscmVhZHkNCnVwc3RyZWFtZWQuDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNI
+Tk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3Rvcjog
+TGkgUGVuZywgWmhvbmcgUm9uZ2h1YQ0KDQo+IHNpZ25hdHVyZSBmb3JtYXQsIHVzaW5nIGEgbW9k
+ZXJuIGFsZ29yaXRobSBzdWNoIGFzIEVkMjU1MTkuICBJTUEgdXNlcyBhIHNpbXBsZQ0KPiBzaWdu
+YXR1cmUgZm9ybWF0IHRvbywgdGhvdWdoIGl0IHVzZXMgYSBjb21wbGV4IGZvcm1hdCAoWC41MDkp
+IGZvciBwdWJsaWMga2V5cy4NCj4gDQo+IC0gRXJpYw0K

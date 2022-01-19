@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D75493958
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849DB493960
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354069AbiASLQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353333AbiASLQF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:16:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7F9C061574;
-        Wed, 19 Jan 2022 03:16:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D189061544;
-        Wed, 19 Jan 2022 11:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EC8C004E1;
-        Wed, 19 Jan 2022 11:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642590964;
-        bh=2yjBD4Zacw+5slFq4LLTP2+0CVP0ahv0ykBSsfMZgFY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sWcBQNL3jsVDx8fbC4Tu3Z7AAaVmBxjdgAxC1FcAS8Ufemm9lwqE+FjUw8YobL0g5
-         maE0aFh0Blr15dbPkx6ryoeImGeucYTTcsECJx1mt0+jq0oQ6FQ5rulN3uruRj5DR9
-         7iDa/u8UQ46Ll1d02g4BzWZus5gttImEBP/RPvToowP4cEwiueV36Qa+mbLXKiKF1P
-         TDpAHrbrWHnvi/TfuAgEy+otbPNTxTNLfZLBje9IVSfCKF2Ngao1yFiRVXJhZg4UCw
-         U4FwtkiJsQmV/NTjtIL3341Q+Mvi5YeltCuHtB2mLD/ESo335mZI38irwhrXsAf0Se
-         tjihvN1DWwviQ==
-Date:   Wed, 19 Jan 2022 12:15:57 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-cachefs@redhat.com,
-        Jeff Layton <jlayton@kernel.org>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <smfrench@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
+        id S1354091AbiASLRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:17:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:54034 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354083AbiASLRh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:17:37 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C1945ED1;
+        Wed, 19 Jan 2022 03:17:36 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.3.112])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97B953F73D;
+        Wed, 19 Jan 2022 03:17:34 -0800 (PST)
+Date:   Wed, 19 Jan 2022 11:16:17 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/11] vfs, fscache: Add an IS_KERNEL_FILE() macro for
- the S_KERNEL_FILE flag
-Message-ID: <20220119111557.gjrjwgib2wgteir6@wittgenstein>
-References: <YeefizLOGt1Qf35o@infradead.org>
- <YebpktrcUZOlBHkZ@infradead.org>
- <164251396932.3435901.344517748027321142.stgit@warthog.procyon.org.uk>
- <164251409447.3435901.10092442643336534999.stgit@warthog.procyon.org.uk>
- <3613681.1642527614@warthog.procyon.org.uk>
- <3765724.1642583885@warthog.procyon.org.uk>
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] vmap(): don't allow invalid pages
+Message-ID: <YefzAQ5LXJk1ytfI@FVFF77S0Q05N>
+References: <20220118235244.540103-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3765724.1642583885@warthog.procyon.org.uk>
+In-Reply-To: <20220118235244.540103-1-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 09:18:05AM +0000, David Howells wrote:
-> Christoph Hellwig <hch@infradead.org> wrote:
-> 
-> > On Tue, Jan 18, 2022 at 05:40:14PM +0000, David Howells wrote:
-> > > Christoph Hellwig <hch@infradead.org> wrote:
-> > > 
-> > > > On Tue, Jan 18, 2022 at 01:54:54PM +0000, David Howells wrote:
-> > > > > Add an IS_KERNEL_FILE() macro to test the S_KERNEL_FILE inode flag as is
-> > > > > common practice for the other inode flags[1].
-> > > > 
-> > > > Please fix the flag to have a sensible name first, as the naming of the
-> > > > flag and this new helper is utterly wrong as we already discussed.
-> > > 
-> > > And I suggested a new name, which you didn't comment on.
-> > 
-> > Again, look at the semantics of the flag:  The only thing it does in the
-> > VFS is to prevent a rmdir.  So you might want to name it after that.
-> > 
-> > Or in fact drop the flag entirely.  We don't have that kind of
-> > protection for other in-kernel file use or important userspace daemons
-> > either.  I can't see why cachefiles is the magic snowflake here that
-> > suddenly needs semantics no one else has.
-> 
-> The flag cannot just be dropped - it's an important part of the interaction
-> with cachefilesd with regard to culling.  Culling to free up space is
-> offloaded to userspace rather than being done within the kernel.
-> 
-> Previously, cachefiles, the kernel module, had to maintain a huge tree of
-> records of every backing inode that it was currently using so that it could
-> forbid cachefilesd to cull one when cachefilesd asked.  I've reduced that to a
-> single bit flag on the inode struct, thereby saving both memory and time.  You
-> can argue whether it's worth sacrificing an inode flag bit for that, but the
-> flag can be reused for any other kernel service that wants to similarly mark
-> an inode in use.
-> 
-> Further, it's used as a mark to prevent cachefiles accidentally using an inode
-> twice - say someone misconfigures a second cache overlapping the first - and,
-> again, this works if some other kernel driver wants to mark inode it is using
-> in use.  Cachefiles will refuse to use them if it ever sees them, so no
-> problem there.
-> 
-> And it's not true that we don't have that kind of protection for other
-> in-kernel file use.  See S_SWAPFILE.  I did consider using that, but that has
-> other side effects.  I mentioned that perhaps I should make swapon set
-> S_KERNEL_FILE also.  Also blockdevs have some exclusion also, I think.
-> 
-> The rmdir thing should really apply to rename and unlink also.  That's to
-> prevent someone, cachefilesd included, causing cachefiles to malfunction by
-> removing the directories it created.  Possibly this should be a separate bit
-> to S_KERNEL_FILE, maybe S_NO_DELETE.
-> 
-> So I could change S_KERNEL_FILE to S_KERNEL_LOCK, say, or maybe S_EXCLUSIVE.
+Hi,
 
-[ ] S_REMOVE_PROTECTED
-[ ] S_UNREMOVABLE
-[ ] S_HELD_BUSY
-[ ] S_KERNEL_BUSY
-[ ] S_BUSY_INTERNAL
-[ ] S_BUSY
-[ ] S_HELD
+I replied ot the original RFC before spotting this; duplicating those comments
+here because I think they apply regardless of the mechanism used to work around
+this.
 
-?
+On Tue, Jan 18, 2022 at 03:52:44PM -0800, Yury Norov wrote:
+> vmap() takes struct page *pages as one of arguments, and user may provide
+> an invalid pointer which would lead to DABT at address translation later. 
+>
+> Currently, kernel checks the pages against NULL. In my case, however, the
+> address was not NULL, and was big enough so that the hardware generated
+> Address Size Abort on arm64.
+
+Can you give an example of when this might happen? It sounds like you're
+actually hitting this, so a backtrace would be nice.
+
+I'm a bit confused as to when why we'd try to vmap() pages that we
+didn't have a legitimate struct page for -- where did these addresses
+come from?
+
+It sounds like this is going wrong at a higher level, and we're passing
+entirely bogus struct page pointers around. This seems like the sort of
+thing DEBUG_VIRTUAL or similar should check when we initially generate
+the struct page pointer.
+
+> Interestingly, this abort happens even if copy_from_kernel_nofault() is
+> used, which is quite inconvenient for debugging purposes. 
+
+I can go take a look at this, but TBH we never expect to take an address size
+fault to begin with, so this is arguably correct -- it's an internal
+consistency problem.
+
+> This patch adds a pfn_valid() check into vmap() path, so that invalid
+> mapping will not be created.
+> 
+> RFC: https://lkml.org/lkml/2022/1/18/815
+> v1: use pfn_valid() instead of adding an arch-specific
+>     arch_vmap_page_valid(). Thanks to Matthew Wilcox for the hint.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  mm/vmalloc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index d2a00ad4e1dd..a4134ee56b10 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -477,6 +477,8 @@ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+>  			return -EBUSY;
+>  		if (WARN_ON(!page))
+>  			return -ENOMEM;
+> +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
+> +			return -EINVAL;
+
+My fear here is that for this to fire, we've already passed a bogus struct page
+pointer around the intermediate infrastructure, and any of that might try to
+use it in unsafe ways (in future even if we don't use it today).
+
+I think the fundamental issue here is that we generate a bogus struct page
+pointer at all, and knowing where that came from would help to fix that.
+
+Thanks,
+Mark.
+
+>  		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
+>  		(*nr)++;
+>  	} while (pte++, addr += PAGE_SIZE, addr != end);
+> -- 
+> 2.30.2
+> 

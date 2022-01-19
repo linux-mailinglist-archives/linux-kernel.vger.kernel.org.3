@@ -2,123 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3C649400C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE47149400D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356832AbiASSh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:37:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59078 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356825AbiASShz (ORCPT
+        id S1356853AbiASSi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:38:28 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:40730 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356825AbiASSi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:37:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642617475;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 19 Jan 2022 13:38:26 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7094D1F3C5;
+        Wed, 19 Jan 2022 18:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642617505; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=yEREuIwhli7iJjgFoyBi+FO+07r4F6yeofjnLnMk0U8=;
-        b=LIbir6FQ2mxNJqG95L+m2hbJigaYPq+7UhKORcHpx49QXOfZorbEeWUOcFVYsq+09P0mZi
-        B7tEtDcE99V3fhJTUbkLeldkhby0GPo3wvZG/VUyF+qx++RZMC8HuvszyA9t3+/fUBUJNX
-        2v5BaxREyVfqyepwXJ8sUyl8jHMd9o0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-d2SZZewOOleNv4eZ-loTWg-1; Wed, 19 Jan 2022 13:37:53 -0500
-X-MC-Unique: d2SZZewOOleNv4eZ-loTWg-1
-Received: by mail-wm1-f72.google.com with SMTP id f187-20020a1c38c4000000b0034d5c66d8f5so2448847wma.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:37:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yEREuIwhli7iJjgFoyBi+FO+07r4F6yeofjnLnMk0U8=;
-        b=OexKMTktQrAYCb7vdV442Z12HBp4njQbO1WiwoRH8Lw/lAz5QUWaoB7uGnEsxJbwrz
-         XNYC7OC0kf0T6o38H4377Li9+SL5BL97j1nI0os+cCwc4tN+53jBNLGk1MQaZKPWUtXe
-         26uDo6J9G0IIQwksFNEDL/1YBGly35vWrN0g0mMTskrPqWX4zW8w8WVE9KT/qoNThe62
-         2Ls/QfqEdcZUJwpTSIyNVBLf37QQVZPFzNl/KQ/McQ5tweks937amAsRekX6qyP3dyJU
-         1KKvNE129LwN8oglOnPS3lyfjx5vUwVEVwMGQWSFybWBHEIjm1Oh1q68tssxUq9CUhm6
-         e8xw==
-X-Gm-Message-State: AOAM530qzDTUxDZ7oTif7aQZdiwzavutDsZZ7X+Np4JNGg5QQF7ltxrx
-        aW2I/tLklLOfyiE2kXsiQvJ7VULXWJfB9UT83srNNJDeZ48zsnbD6Zj/qHqLvjBjWWNCG4JynJ9
-        xpOK8YTcuQpWp5nCZRpmDniIf
-X-Received: by 2002:a5d:4404:: with SMTP id z4mr14188671wrq.227.1642617472729;
-        Wed, 19 Jan 2022 10:37:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwyZFHgQhMucWDMGC5Bo4G9movDj4dSOqUphWsssCtw3O4y8rH0o4YVhpuc6L5s8ueVVP9c5g==
-X-Received: by 2002:a5d:4404:: with SMTP id z4mr14188657wrq.227.1642617472536;
-        Wed, 19 Jan 2022 10:37:52 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id n14sm590533wri.101.2022.01.19.10.37.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 10:37:51 -0800 (PST)
-Message-ID: <d4b47a8e-77f2-eef2-2245-bdc7eaf8f57f@redhat.com>
-Date:   Wed, 19 Jan 2022 19:37:50 +0100
+        bh=3Y5h830ZigcRpnlka0yHJyOSF1gSh6wxN3fyow/u9Wg=;
+        b=m+OQieTBArH3lLKFDbZNTvh3lZVP2/uUlbomT9Mx07bPwz3tpgvx0EfTvBRDyBxpLNJ/NX
+        Lkqv60+W1cJb4IMSLAB6BrTch6VyLwJm6wEAgDHcvPYGu/Z8pcVR5lNppBEknTp7CaswdH
+        qklGkRYS/pMIlhM1/4ZsdJljMl/o5Lk=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E4A3FA3B83;
+        Wed, 19 Jan 2022 18:38:24 +0000 (UTC)
+Date:   Wed, 19 Jan 2022 19:38:20 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Message-ID: <YehanMqSvL81DLqg@alley>
+References: <20220114183046.428796-1-gpiccoli@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] selftests: kvm/x86: Fix the warning in
- lib/x86_64/processor.c
-Content-Language: en-US
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220119140325.59369-1-cloudliang@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220119140325.59369-1-cloudliang@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114183046.428796-1-gpiccoli@igalia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 15:03, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
+On Fri 2022-01-14 15:30:46, Guilherme G. Piccoli wrote:
+> The panic_print setting allows users to collect more information in a
+> panic event, like memory stats, tasks, CPUs backtraces, etc.
+> This is a pretty interesting debug mechanism, but currently the print
+> event happens *after* kmsg_dump(), meaning that pstore, for example,
+> cannot collect a dmesg with the panic_print information.
+
+The above text is OK.
+
+The below commit message is quite hard to follow. The sentences are very
+long and complex. I tend to do the same mistakes. I will try to
+suggest some improvements.
+
+
+> This patch changes that in 2 ways:
+
+> (a) First, after a good discussion with Petr in the mailing-list[0],
+> he noticed
+
+The above is not needed ;-) It is better to just describe the problem
+and the solution a directive way.
+
+> that one specific setting of panic_print (the console replay,
+> bit 5) should not be executed before console proper flushing; hence we
+> hereby split the panic_print_sys_info() function in upper and lower
+> portions: if the parameter "after_kmsg_dumpers" is passed, only bit 5
+> (the console replay thing) is evaluated and the function returns - this
+> is the lower portion. Otherwise all other bits are checked and the
+> function prints the user required information; this is the upper/earlier
+> mode.
+
+The meaning of the boolean parameter might be explained by:
+
+    "panic_print_sys_info() allows to print additional information into the
+    kernel log. In addition, it allows to reply the existing log on the
+    console first.
+
+    The extra information is useful also when generating crash dump or
+    kmsg_dump. But the replay functionality makes sense only at the end
+    of panic().
+
+    Allow to distinguish the two situations by a boolean parameter."
+
+
+
+> (b) With the above change, we can safely insert a panic_print_sys_info()
+> call up some lines, in order kmsg_dump() accounts this new information
+> and exposes it through pstore or other kmsg dumpers. Notice that this
+> new earlier call doesn't set "after_kmsg_dumpers" so we print the
+> information set by user in panic_print, except the console replay that,
+> if set, will be executed after the console flushing.
+
+This paragraph is too complicated. The important information here is:
+
+     "panic_print_sys_info() is moved above kmsg_dump(). It allows to dump
+     the extra information."
+
+The trick with the boolean is already explained elsewhere. It is not
+needed to repeat it in this paragraph.
+
+
+> Also, worth to notice we needed to guard the panic_print_sys_info(false)
+> calls against double print - we use kexec_crash_loaded() helper for that
+> (see discussion [1] for more details).
+
+This should be explained together with the reason to call it on two
+locations, see below.
+
+
+> In the first version of this patch we discussed the risks in the
+> mailing-list [0], and seems this approach is the least terrible,
+
+the above is not needed.
+
+> despite still having risks of polluting the log with the bulk of
+> information that panic_print may bring, losing older messages.
+> In order to attenuate that, we've added a warning in the
+> kernel-parameters.txt so that users enabling this mechanism consider
+> to increase the log buffer size via "log_buf_len" as well.
+
+Again, I would describe the problem and solution a directive way.
+
+    "The additional messages might overwrite the oldest messages when
+     the buffer is full. The only reasonable solution is to use large
+     enough log buffer. The advice is added into kernel-parameters.txt."
+
+
+
+> Finally, another decision was to keep 2 panic_print_sys_info(false)
+> calls (instead of just bringing it up some code lines and keep a single
+> call) due to the panic notifiers:
+
+The above is too complicated and not important.
+
+> if kdump is not set, currently the
+> panic_print information is collected after the notifiers and since
+> it's a bit safer this way,
+
+The important information is why it is safer. Honestly, I am still not sure
+about this claim. I have checked several notifiers today and they did
+not added much stability.
+
+
+> we decided to keep it as is, only modifying
+> the kdump case as per the previous commit [2] (see more details about
+> this discussion also in thread [1]).
+
+This does not provide much information. Link to linux-next is bad
+idea, see below.
+
+
+> [0] https://lore.kernel.org/lkml/20211230161828.121858-1-gpiccoli@igalia.com
+> [1] https://lore.kernel.org/lkml/f25672a4-e4dd-29e8-b2db-f92dd9ff9f8a@igalia.com
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5613b7538f69
+
+linux-next is regularly rebased and Andrew's patches are always newly
+imported from quilt. The commit probably already has another hash.
+
 > 
-> The following warning appears when executing
-> make -C tools/testing/selftests/kvm
-> 
-> In file included from lib/x86_64/processor.c:11:
-> lib/x86_64/processor.c: In function ':
-> include/x86_64/processor.h:290:2: warning: 'ecx' may be used uninitialized in this
-> function [-Wmaybe-uninitialized]
->    asm volatile("cpuid"
->    ^~~
-> lib/x86_64/processor.c:1523:21: note: 'ecx' was declared here
->    uint32_t eax, ebx, ecx, edx, max_ext_leaf;
-> 
-> Just initialize ecx to remove this warning.
-> 
-> Fixes: c8cc43c1eae2 ("selftests: KVM: avoid failures due to reserved
-> HyperTransport region")
-> 
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> Cc: Feng Tang <feng.tang@intel.com>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 > ---
->   tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index 59dcfe1967cc..4a4c7945cf3e 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -1520,7 +1520,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
->   {
->   	const unsigned long num_ht_pages = 12 << (30 - vm->page_shift); /* 12 GiB */
->   	unsigned long ht_gfn, max_gfn, max_pfn;
-> -	uint32_t eax, ebx, ecx, edx, max_ext_leaf;
-> +	uint32_t eax, ebx, ecx = 0, edx, max_ext_leaf;
->   
->   	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
->   
+> 
+> V3: Added a guard in the 2nd panic_print_sys_info(false) to prevent
+> double print - thanks for catching this Petr!
+> 
+> I didn't implement your final suggestion Petr, i.e., putting the first
+> panic_print_sys_info(false) inside the if (!_crash_kexec_post_notifiers)
+> block, and the reason is that when we do this, there's 4 cases to consider:
 
-A separate assignment of "ecx = 0" is slightly more conforming to the 
-coding standards.  Queued nevertheless, thanks.
+But then it does not make sense to call panic_print_sys_info(false)
+from both locations.
 
-Paolo
+You say that it is called after kexec_post_notifiers because
+it is more safe. If this is true then it would make sense to
+always call it after the notifiers when _crash_kexec_post_notifiers
+is set.
 
+> !kexec_crash_load() && !_crash_kexec_post_notifiers
+> kexec_crash_load() && !_crash_kexec_post_notifiers
+> kexec_crash_load() && _crash_kexec_post_notifiers
+> !kexec_crash_load() && _crash_kexec_post_notifiers
+> 
+> The 3rd case, which means user enabled kdump and set the post_notifiers
+> in the cmdline fails - we end-up not reaching panic_print_sys_info(false)
+> in this case, unless we add another variable to track the function call
+> and prevent double print. My preference was to keep the first call
+> as introduced by commit [2] (mentioned above) and not rely in another
+> variable.
+
+You could do:
+
+	if (!_crash_kexec_post_notifiers) {
+		if (kexec_crash_loaded())
+			panic_print_sys_info(false);
+
+		__crash_kexec(NULL);
+		smp_send_stop();
+	} else {
+		crash_smp_send_stop();
+	}
+
+	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+
+	/* Just negate the condition here */
+	if (_crash_kexec_post_notifiers || !kexec_crash_loaded())
+		panic_print_sys_info(false);
+
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 41ecf9ab824a..4ae712665f75 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
+>  	 * show some extra information on kernel log if it was set...
+>  	 */
+>  	if (kexec_crash_loaded())
+> -		panic_print_sys_info();
+> +		panic_print_sys_info(false);
+>  
+>  	/*
+>  	 * If we have crashed and we have a crash kernel loaded let it handle
+> @@ -283,6 +286,15 @@ void panic(const char *fmt, ...)
+>  	 */
+>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+>  
+> +	/*
+> +	 * If kexec_crash_loaded() is true and we still reach this point,
+> +	 * kernel would double print the information from panic_print; so
+> +	 * let's guard against that possibility (it happens if kdump users
+> +	 * also set crash_kexec_post_notifiers in the command-line).
+> +	 */
+
+Too many words. Most of it is obvious from the code. The most important
+information is why it is called after the notifiers when the crash
+kernel is not loaded. And why it does not depend on _crash_kexec_post_notifiers
+setting.
+
+
+> +	if (!kexec_crash_loaded())
+> +		panic_print_sys_info(false);
+> +
+>  	kmsg_dump(KMSG_DUMP_PANIC);
+>  
+>  	/*
+
+Best Regards,
+Petr

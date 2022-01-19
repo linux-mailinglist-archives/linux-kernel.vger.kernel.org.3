@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8C8493C7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CB4493C94
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242754AbiASPDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S240248AbiASPFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbiASPDt (ORCPT
+        with ESMTP id S1355627AbiASPFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:03:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77552C061574;
-        Wed, 19 Jan 2022 07:03:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EFB6B81A13;
-        Wed, 19 Jan 2022 15:03:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5908C340EA;
-        Wed, 19 Jan 2022 15:03:46 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hBQSpQfl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642604623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCabguGiN7uT4MQN1kXder1vGuODWjOeHEelZ93JwRY=;
-        b=hBQSpQflXLHVazhaxkTthyTBxcaYO9N0NY0sU1Khwt6dMsxWHTbVyoowt90ivmRYdKDNuz
-        q3wwo702DCkg+uSBAoi6tibVPjTsX5gu/bvpvNeV6UknffvsRcM/mt1MH6Ejd+Z8QBmRT0
-        wqfhenwVX8YjZ+wFS27dPz1sx9fWwY8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bdfaf61d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 19 Jan 2022 15:03:43 +0000 (UTC)
-Received: by mail-yb1-f172.google.com with SMTP id o80so8276613yba.6;
-        Wed, 19 Jan 2022 07:03:42 -0800 (PST)
-X-Gm-Message-State: AOAM530vxNmXnXQvnL49Zh0unNFgnmma3ApqIsFuY+nUMIlZQl+lj5bq
-        EjdnNdlIsSsqIj789pJcVQsBdGDCxY3lWzTpMmU=
-X-Google-Smtp-Source: ABdhPJyPplsLL3VSpiK5D84dlkwlzW6DMV1FL5dXA8RsTT2mIPew8sKEZ8KIgnVmP6xFVtVk5brIoW5GPM78o5jqYZ0=
-X-Received: by 2002:a25:e90a:: with SMTP id n10mr14086571ybd.245.1642604620836;
- Wed, 19 Jan 2022 07:03:40 -0800 (PST)
+        Wed, 19 Jan 2022 10:05:23 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AA3C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:05:22 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id az27-20020a05600c601b00b0034d2956eb04so5980293wmb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:05:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0odyDD4qZWEyKf4dgk5bsg3tKYSY9CGvoUStfcevylA=;
+        b=KY4YCZwWueLtUID+/YuRziwAprnxroizrhhiLqgR+VJv0dvAqf6p/e/Z8+2hbD5td3
+         M1RXz2Ulz5/UO405poQs0LC2mWECerbCYmm6/PclkyYapoYCKVCVsrH7+qHMc7mD7DNG
+         yVv6KCpVaJQuyRwX173l73U/aTdl9LopqeRzs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=0odyDD4qZWEyKf4dgk5bsg3tKYSY9CGvoUStfcevylA=;
+        b=RkuDCglsVjcEBLNjHA7aXH53ijQqWm+awEYUL644VtemHj+Q+oLHPlrJ06gRs6oGp+
+         tq4fuvnXRXKrBwjUahug8jzholY6cn4BW1pQYWqL/n+YXzE4tOsq/UiOXKO9oeMogzod
+         epVXhiPUpRy8WDd1fpKZFlEUmijEC2ZMcKy45crg80o2R0cDqGCx2igIs+hYHZ6fQkxB
+         N6EXJ2hqZMGJ0TBCoQ1I5MSlCSku0yVhvHfeg/2TKECQr65wkfI3K1crKjom/OPa/BG1
+         zszhHx1YUv6+hmr1wDXKYiUsxNPGOOd2iRDivtO3tblJKXWJ+5sAcBujbdaqfUJrpuPV
+         rhzQ==
+X-Gm-Message-State: AOAM530GarK7JJg3p68l+yazTxpa8oAuMIR5dFxroS4E+P9yT0H20qYn
+        lN1XmKdxdx/CZILO1e5JvWiM/A==
+X-Google-Smtp-Source: ABdhPJxqxOTFLl5T1cf1q2Ex/gbOeL3/4WLRyt3JAUtwMEe4sBmurRyS45VDAxAFnc6SDjv5q4TcRQ==
+X-Received: by 2002:adf:fec2:: with SMTP id q2mr29547534wrs.546.1642604721320;
+        Wed, 19 Jan 2022 07:05:21 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id g17sm7645503wmq.9.2022.01.19.07.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 07:05:20 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:05:18 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Weizhao Ouyang <o451686892@gmail.com>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>, christian.koenig@amd.com,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] dma-buf: cma_heap: Fix mutex locking section
+Message-ID: <YegormDmEewox0MF@phenom.ffwll.local>
+Mail-Followup-To: Weizhao Ouyang <o451686892@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>, Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>, christian.koenig@amd.com,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
+References: <20220104073545.124244-1-o451686892@gmail.com>
 MIME-Version: 1.0
-References: <CAHmME9oX+4Ek81xy0nBOegqABH0xYqyONAqinsu7GZ7AaQaqYQ@mail.gmail.com>
- <20220119100615.5059-1-miles.chen@mediatek.com> <CAHmME9pQcUxs87EwQwBZNDA4ZzqugTggH+uiNPh=mv5zjp3g3A@mail.gmail.com>
- <CAHmME9pPKjRLmR6zpYFZT7rOOfHsG2ESnDi+QQrDJuGLo1X4JQ@mail.gmail.com>
- <CAHmME9oGTPS-gVyHQ4o=AxvMJrGH44_tyQ2KPQcfAKgcqC2SnA@mail.gmail.com>
- <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com> <13f9d24879e34914b1135a4d2ae48d73@AcuMS.aculab.com>
-In-Reply-To: <13f9d24879e34914b1135a4d2ae48d73@AcuMS.aculab.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 19 Jan 2022 16:03:29 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oON=XwOoMNyO+Uu6pEC5j=JvvfK5g2u7mFcM=Y_LZ3uw@mail.gmail.com>
-Message-ID: <CAHmME9oON=XwOoMNyO+Uu6pEC5j=JvvfK5g2u7mFcM=Y_LZ3uw@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104073545.124244-1-o451686892@gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Tue, Jan 04, 2022 at 03:35:45PM +0800, Weizhao Ouyang wrote:
+> Fix cma_heap_buffer mutex locking critical section to protect vmap_cnt
+> and vaddr.
+> 
+> Fixes: a5d2d29e24be ("dma-buf: heaps: Move heap-helper logic into the cma_heap implementation")
+> Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+> ---
+>  drivers/dma-buf/heaps/cma_heap.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
+> index 0c05b79870f9..83f02bd51dda 100644
+> --- a/drivers/dma-buf/heaps/cma_heap.c
+> +++ b/drivers/dma-buf/heaps/cma_heap.c
+> @@ -124,10 +124,11 @@ static int cma_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+>  	struct cma_heap_buffer *buffer = dmabuf->priv;
+>  	struct dma_heap_attachment *a;
+>  
+> +	mutex_lock(&buffer->lock);
+> +
+>  	if (buffer->vmap_cnt)
+>  		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
 
-On Wed, Jan 19, 2022 at 3:41 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Ard Biesheuvel
-> > Sent: 19 January 2022 12:19
-> ...
-> > -               (*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
-> > +               if (IS_ENABLED(CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S))
-> > +                       (*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
-> > +               else
-> > +                       blake2s_compress_generic(state, in, nblocks - 1,
-> > +                                                BLAKE2S_BLOCK_SIZE);
->
-> Isn't that a candidate for a 'static call' ?
->
-> And, maybe all these inlined functions should be real functions?
-> No point having all the bloat on every call site.
-> Much better to call a real function and used the cached instructions.
+Since this creates nesting with mm/, but optionally I think it'd be good
+to prime lockdep so it knows about this. See e.g. dma_resv_lockdep() in
+dma-resv.c, except I don't know offhand what the right lock for
+invalidate_kernel_vmap_range is.
+-Daniel
 
-Not a good candidate for static call, as this doesn't actually need to
-change at runtime ever. It's using a function pointer here out of
-laziness to keep the same body of the function, like a compile-time
-template. You can sort of squint and imagine the C++. Unfortunately,
-CFI felt differently and still treats it as an indirect call.
 
-https://lore.kernel.org/linux-crypto/20220119135450.564115-1-Jason@zx2c4.com/
-fixes it up to use a boolean instead, which will certainly be inlined
-away. So that's definitely an improvement on what's there now.
+>  
+> -	mutex_lock(&buffer->lock);
+>  	list_for_each_entry(a, &buffer->attachments, list) {
+>  		if (!a->mapped)
+>  			continue;
+> @@ -144,10 +145,11 @@ static int cma_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
+>  	struct cma_heap_buffer *buffer = dmabuf->priv;
+>  	struct dma_heap_attachment *a;
+>  
+> +	mutex_lock(&buffer->lock);
+> +
+>  	if (buffer->vmap_cnt)
+>  		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
+>  
+> -	mutex_lock(&buffer->lock);
+>  	list_for_each_entry(a, &buffer->attachments, list) {
+>  		if (!a->mapped)
+>  			continue;
+> -- 
+> 2.32.0
+> 
 
-For 5.18, I think it's probable that all of this stuff goes away
-anyway, and we don't need the templated helpers at all. So perhaps my
-patch will serve as an okay stop gap. Alternatively, maybe the clang
-people will say, "oh no, our bug" and then fix it in their
-neighborhood. According to
-https://github.com/ClangBuiltLinux/linux/issues/1567 it looks like
-that could be the case.
-
-> There are clearly optimisations for the top/bottom of the loop.
-> But they can be done to the generic C version.
-
-Optimizing the generic C version would be quite nice, as it'd help all
-platforms.
-
-Jason
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

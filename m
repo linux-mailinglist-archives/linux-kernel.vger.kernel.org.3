@@ -2,218 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895104938F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4C7493904
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349608AbiASKze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240254AbiASKzd (ORCPT
+        id S1353464AbiASK4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:56:23 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:57474 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240254AbiASK4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:55:33 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3865C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:55:32 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id x7so7686421lfu.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hv19+FUuJFtOAO6iaJuAnBrt1u4EzLcgQ5Z0F046cSc=;
-        b=b10bWonVa7wm11a1lLLgw2lVosLMoECr73kDitwGxNeQIDjcIoxbhUE2y8Y1nCL0sZ
-         3RizJd53LvzeMjHdK6ZD1P3jaTxeIJqI0H/980mbnQHQYQS2zvjVgpP2Q2TAisklLSwJ
-         BbEUVv2Me5t7kP+rJ2faWuz3VRVVrG9IN4YJKCzAwUodDBdCQ3jh3BsQvm89I8VUR5rE
-         4EAwom6ri3PPq5oB8tyrGwM1leXTpn+2unLTvOLkFffIlY4ICJh98eK/PRBmVUfRKkeL
-         h8Oa+zVqhnPN3N3Lfphur1o4cz0ULaXNZQka62N51olyeC5EXkkLvHPEXsiQkxzr/CFz
-         YKDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hv19+FUuJFtOAO6iaJuAnBrt1u4EzLcgQ5Z0F046cSc=;
-        b=nuV8RSeppsI9qogmBgW5KWiNMPrWzEPtecEweOn7pFraZ/XKRwK2Sm5at37RAhkZkr
-         Z4WvxXqUoFbjmXCwOxx1C0B5xj30vSNpvSgd0jFl2F6NB6IVPwYkuvMZX/BQER/NHktv
-         kAGs+DgV/ERAuhmBHm5qBdGMicMI8I16xD9cve/ULNkCYbLSZhQbuknDI0r2QYfmlSKY
-         eUCiYOjNLDfwccR9Etq/CjtPCY0pQPLUnIpgXuFoEyua3GDJB1U00haCTc+GFzPxR/dW
-         67JhHUumeCB3HGj5hwbcpWIqHqgorS6IUadN+YERvaXkpbJbp+o9Bd8csgNOby/XkjVF
-         y/2A==
-X-Gm-Message-State: AOAM5328xWJ4e8HhV65qONDJOol9OAsqqMMrhxaH1cAGXTA5ibDlu+cN
-        Qk/LiG8TPDHpO+WRKpzB689eRFwFq7pYF7yJhi/tE3KfAiNZSA==
-X-Google-Smtp-Source: ABdhPJy3QGVuAvoUQBcShKcLI+7zAxF67RgJ0fDrXQFaK/tU+aAU07QEp2wdslWpjbpv3BMHE84aXFNgkxel9dEdm8c=
-X-Received: by 2002:a05:6512:1293:: with SMTP id u19mr24170479lfs.373.1642589731024;
- Wed, 19 Jan 2022 02:55:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119085719.1357874-1-daniel.lezcano@linaro.org> <20220119085719.1357874-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20220119085719.1357874-2-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 19 Jan 2022 11:54:54 +0100
-Message-ID: <CAPDyKFp1s+Xvg5bE3J9GV6gkLB0vKDd1YdVdMPW-+vpAqiKcjA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/5] powercap/drivers/dtpm: Convert the init table
- section to a simple array
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, robh@kernel.org, lukasz.luba@arm.com,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Wed, 19 Jan 2022 05:56:21 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru A771820D27E6
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+ (summary)
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <kvm@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-iio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        <alsa-devel@alsa-project.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        "Guenter Roeck" <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <linux-mtd@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, Lee Jones <lee.jones@linaro.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Tony Luck" <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-serial@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "Saravanan Sekar" <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>, <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "John Garry" <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        <openipmi-developer@lists.sourceforge.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>,
+        "Richard Weinberger" <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "Hans de Goede" <hdegoede@redhat.com>, <netdev@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de> <YeQpWu2sUVOSaT9I@kroah.com>
+ <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <b6038ec2-da4a-de92-b845-cac2be0efcd1@omp.ru>
+Date:   Wed, 19 Jan 2022 13:56:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20220118091819.zzxpffrxbckoxiys@pengutronix.de>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 09:57, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> The init table section is freed after the system booted. However the
-> next changes will make per module the DTPM description, so the table
-> won't be accessible when the module is loaded.
->
-> In order to fix that, we should move the table to the data section
-> where there are very few entries and that makes strange to add it
-> there.
->
-> The main goal of the table was to keep self-encapsulated code and we
-> can keep it almost as it by using an array instead.
->
-> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On 1/18/22 12:18 PM, Uwe Kleine-König wrote:
+> On Sun, Jan 16, 2022 at 03:19:06PM +0100, Greg Kroah-Hartman wrote:
+>> On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-König wrote:
+>>> A possible compromise: We can have both. We rename
+>>> platform_get_irq_optional() to platform_get_irq_silent() (or
+>>> platform_get_irq_silently() if this is preferred) and once all users are
+>>> are changed (which can be done mechanically), we reintroduce a
+>>> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
+>>> return 0 on not-found, no error message printking).
+>>
+>> Please do not do that as anyone trying to forward-port an old driver
+>> will miss the abi change of functionality and get confused.  Make
+>> build-breaking changes, if the way a function currently works is
+>> changed in order to give people a chance.
+> 
+> Fine for me. I assume this is a Nack for Sergey's patch?
 
-Thanks for updating!
+   Which patch do you mean? I'm starting to get really muddled... :-(
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Best regards
+> Uwe
 
-Kind regards
-Uffe
-
-> ---
->  drivers/powercap/dtpm.c           |  2 ++
->  drivers/powercap/dtpm_cpu.c       |  5 ++++-
->  drivers/powercap/dtpm_subsys.h    | 18 ++++++++++++++++++
->  include/asm-generic/vmlinux.lds.h | 11 -----------
->  include/linux/dtpm.h              | 24 +++---------------------
->  5 files changed, 27 insertions(+), 33 deletions(-)
->  create mode 100644 drivers/powercap/dtpm_subsys.h
->
-> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> index 8cb45f2d3d78..0e5c93443c70 100644
-> --- a/drivers/powercap/dtpm.c
-> +++ b/drivers/powercap/dtpm.c
-> @@ -24,6 +24,8 @@
->  #include <linux/slab.h>
->  #include <linux/mutex.h>
->
-> +#include "dtpm_subsys.h"
-> +
->  #define DTPM_POWER_LIMIT_FLAG 0
->
->  static const char *constraint_name[] = {
-> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-> index b740866b228d..5763e0ce2af5 100644
-> --- a/drivers/powercap/dtpm_cpu.c
-> +++ b/drivers/powercap/dtpm_cpu.c
-> @@ -269,4 +269,7 @@ static int __init dtpm_cpu_init(void)
->         return 0;
->  }
->
-> -DTPM_DECLARE(dtpm_cpu, dtpm_cpu_init);
-> +struct dtpm_subsys_ops dtpm_cpu_ops = {
-> +       .name = KBUILD_MODNAME,
-> +       .init = dtpm_cpu_init,
-> +};
-> diff --git a/drivers/powercap/dtpm_subsys.h b/drivers/powercap/dtpm_subsys.h
-> new file mode 100644
-> index 000000000000..2a3a2055f60e
-> --- /dev/null
-> +++ b/drivers/powercap/dtpm_subsys.h
-> @@ -0,0 +1,18 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2022 Linaro Ltd
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + */
-> +#ifndef ___DTPM_SUBSYS_H__
-> +#define ___DTPM_SUBSYS_H__
-> +
-> +extern struct dtpm_subsys_ops dtpm_cpu_ops;
-> +
-> +struct dtpm_subsys_ops *dtpm_subsys[] = {
-> +#ifdef CONFIG_DTPM_CPU
-> +       &dtpm_cpu_ops,
-> +#endif
-> +};
-> +
-> +#endif
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 42f3866bca69..2a10db2f0bc5 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -321,16 +321,6 @@
->  #define THERMAL_TABLE(name)
->  #endif
->
-> -#ifdef CONFIG_DTPM
-> -#define DTPM_TABLE()                                                   \
-> -       . = ALIGN(8);                                                   \
-> -       __dtpm_table = .;                                               \
-> -       KEEP(*(__dtpm_table))                                           \
-> -       __dtpm_table_end = .;
-> -#else
-> -#define DTPM_TABLE()
-> -#endif
-> -
->  #define KERNEL_DTB()                                                   \
->         STRUCT_ALIGN();                                                 \
->         __dtb_start = .;                                                \
-> @@ -723,7 +713,6 @@
->         ACPI_PROBE_TABLE(irqchip)                                       \
->         ACPI_PROBE_TABLE(timer)                                         \
->         THERMAL_TABLE(governor)                                         \
-> -       DTPM_TABLE()                                                    \
->         EARLYCON_TABLE()                                                \
->         LSM_TABLE()                                                     \
->         EARLY_LSM_TABLE()                                               \
-> diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
-> index d37e5d06a357..506048158a50 100644
-> --- a/include/linux/dtpm.h
-> +++ b/include/linux/dtpm.h
-> @@ -32,29 +32,11 @@ struct dtpm_ops {
->         void (*release)(struct dtpm *);
->  };
->
-> -typedef int (*dtpm_init_t)(void);
-> -
-> -struct dtpm_descr {
-> -       dtpm_init_t init;
-> +struct dtpm_subsys_ops {
-> +       const char *name;
-> +       int (*init)(void);
->  };
->
-> -/* Init section thermal table */
-> -extern struct dtpm_descr __dtpm_table[];
-> -extern struct dtpm_descr __dtpm_table_end[];
-> -
-> -#define DTPM_TABLE_ENTRY(name, __init)                         \
-> -       static struct dtpm_descr __dtpm_table_entry_##name      \
-> -       __used __section("__dtpm_table") = {                    \
-> -               .init = __init,                                 \
-> -       }
-> -
-> -#define DTPM_DECLARE(name, init)       DTPM_TABLE_ENTRY(name, init)
-> -
-> -#define for_each_dtpm_table(__dtpm)    \
-> -       for (__dtpm = __dtpm_table;     \
-> -            __dtpm < __dtpm_table_end; \
-> -            __dtpm++)
-> -
->  static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
->  {
->         return container_of(zone, struct dtpm, zone);
-> --
-> 2.25.1
->
+MBR, Sergey

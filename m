@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC43549393B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C76649397D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354016AbiASLHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:07:06 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44634 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354027AbiASLHB (ORCPT
+        id S1354130AbiASL3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:29:24 -0500
+Received: from qproxy6-pub.mail.unifiedlayer.com ([69.89.23.12]:33534 "EHLO
+        qproxy6-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354064AbiASL3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:07:01 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 717A6212C2;
-        Wed, 19 Jan 2022 11:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642590420; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7s1cYTv7Y/FjbTSAc0sveKigpkrprMLr4cF2U4Mu5o=;
-        b=eFndhYkYz+ZsKaKD9OjE+wpr5l8Tvx7Nd4SXCxjgMQyNnM1KhYdaROqW7Y1HxcwECR81Rs
-        yZvsL166fIpQlit/N7bq73GJBYTWrngqvaodRO6VIKOOLTv9qndPsmlr177FTv+PUWLkmq
-        nrIpPJIBslu4Sx5JXDHt8qYmVPeqK2w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642590420;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7s1cYTv7Y/FjbTSAc0sveKigpkrprMLr4cF2U4Mu5o=;
-        b=zqyU8Os9T6/yvUMpjFQPRY52cKXqmS53Cw+PTNr28BCc2AR6Y+CuYWQBFHr57KzEBkqqhK
-        5k4/FBmknJrkgcDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E4EC913B4A;
-        Wed, 19 Jan 2022 11:06:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id J4oSN9Pw52EYXgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 11:06:59 +0000
-Message-ID: <5c67e6b5-8287-1b35-a6f6-b6f117290457@suse.cz>
-Date:   Wed, 19 Jan 2022 12:06:59 +0100
+        Wed, 19 Jan 2022 06:29:19 -0500
+X-Greylist: delayed 1259 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jan 2022 06:29:19 EST
+Received: from gproxy4-pub.mail.unifiedlayer.com (unknown [69.89.23.142])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id BF4D88037E14
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:08:17 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 083AE10050173
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:08:17 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id A8p6ncZWrEaNCA8p6nVwE0; Wed, 19 Jan 2022 11:08:17 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=dJtjJMVb c=1 sm=1 tr=0 ts=61e7f121
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pTASI+BTtOiq+6yCBe1T6PXhyzQPxP7+af1Mcxktvmw=; b=M0IHa2QOGblm8yzCxR/4y2W14Z
+        oxzCp6+BBCkpX4qFThL7KcVXwDB0CXRP2J06fHzt/kiFT5Qaz5tYrRjoo57l390WPGvAGqHLvqA/J
+        ftxw+E25ntzgdpfd2got5LwhS;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33360 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nA8p5-002KLK-S0; Wed, 19 Jan 2022 04:08:15 -0700
+Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+References: <20220118160452.384322748@linuxfoundation.org>
+In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <4ec8537c-b1bd-70d7-97b2-b3ad6e48d24d@w6rz.net>
+Date:   Wed, 19 Jan 2022 03:08:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 40/66] exec: Use VMA iterator instead of linked list
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-41-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-41-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nA8p5-002KLK-S0
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:33360
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Remove a use of the vm_next list by doing the initial lookup with the
-> VMA iterator and then using it to find the next entry.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+On 1/18/22 8:05 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.2 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> ---
->  fs/exec.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index fee18b63ed35..f033745c148a 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -680,6 +680,8 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
->  	unsigned long length = old_end - old_start;
->  	unsigned long new_start = old_start - shift;
->  	unsigned long new_end = old_end - shift;
-> +	VMA_ITERATOR(vmi, mm, new_start);
-> +	struct vm_area_struct *next;
->  	struct mmu_gather tlb;
->  
->  	BUG_ON(new_start > new_end);
-> @@ -688,7 +690,7 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
->  	 * ensure there are no vmas between where we want to go
->  	 * and where we are
->  	 */
-> -	if (vma != find_vma(mm, new_start))
-> +	if (vma != vma_next(&vmi))
->  		return -EFAULT;
->  
->  	/*
-> @@ -707,12 +709,13 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
->  
->  	lru_add_drain();
->  	tlb_gather_mmu(&tlb, mm);
-> +	next = vma_next(&vmi);
->  	if (new_end > old_start) {
->  		/*
->  		 * when the old and new regions overlap clear from new_end.
->  		 */
->  		free_pgd_range(&tlb, new_end, old_end, new_end,
-> -			vma->vm_next ? vma->vm_next->vm_start : USER_PGTABLES_CEILING);
-> +			next ? next->vm_start : USER_PGTABLES_CEILING);
->  	} else {
->  		/*
->  		 * otherwise, clean from old_start; this is done to not touch
-> @@ -721,7 +724,7 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
->  		 * for the others its just a little faster.
->  		 */
->  		free_pgd_range(&tlb, old_start, old_end, new_end,
-> -			vma->vm_next ? vma->vm_next->vm_start : USER_PGTABLES_CEILING);
-> +			next ? next->vm_start : USER_PGTABLES_CEILING);
->  	}
->  	tlb_finish_mmu(&tlb);
->  
+Tested-by: Ron Economos <re@w6rz.net>
 

@@ -2,156 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B76493576
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4111849357C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351376AbiASHZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S1351386AbiASHas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245723AbiASHZg (ORCPT
+        with ESMTP id S242133AbiASHar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:25:36 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251C8C061574;
-        Tue, 18 Jan 2022 23:25:36 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so483708pju.2;
-        Tue, 18 Jan 2022 23:25:36 -0800 (PST)
+        Wed, 19 Jan 2022 02:30:47 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D7C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:30:46 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id h14so4629667ybe.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:30:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=vfGaApu8wQmCPciFtkN6NAlobrxb1oXN8EoIi5l8GHQ=;
-        b=QppLXnIWB7RadcAP+fi1YRTqLnzMr67TF9r3sq5WSGiN0VOcDfUeeRRYu8T4vFhmEo
-         WHnD/3qhnFFJoascXBiYQLnqTKMK1k6onos0kS+o8pRCdErlbaD6KTxlG2BiricXI3mc
-         3yU7nmr9lqJV+9kDKS7WdiMpEeWsxET4QC2NK/FCQeKJp66NmNTRWDhbsiV+F+5evnKa
-         ATxu9MU6gA63cMGXuvTNOUa8xjQJpGdagYxkBwiThWxTWD+M9lU/RYmqPMy8yy8FotT0
-         0Gj1Jp/GmpJLvVkvpsG7XUD6Aok+W9vra/WC98H4IKI3tLZbgaWriM8CN04hThkHT5z6
-         1q6A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Klx4RzQ0BDuNT+ki5g9oKkuf71RbnaB1NJYG//vbHCU=;
+        b=dLFt7IMZdOeWJN+/buAb2gH8Pj1b1OfrdbHh9Ic3NoEL4vU6XfssQYw2jUSVTR/Dmu
+         5dI2ITPJr1aMiOCRyuWaPL4FEts7Hy0IeM1NRR8jQb+rg1nAYMK5qMYBJhYwB8Y4Tpcd
+         Ut9c/Abyo8mzf+g727gg/2AIIUuY7YVYGqXwmRwFOEjZS1mjQArNXsbL62wQ+8v0RmkP
+         S4fCGubdX0BP2TLgTE6Wc8K6Em6+1Xj6vqQdlFJPJOWJBeZU6kOR34EYosG+l3UyGRVl
+         B0+tDPF/bfmZNCXTH46KFniuQ7phsetxvnWutcF59U7BfO3tCrDpoLTNqV4YfWfT6o/0
+         ELvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=vfGaApu8wQmCPciFtkN6NAlobrxb1oXN8EoIi5l8GHQ=;
-        b=7CDRbz6/rbCQRcF/rLB/K7P0rMlYDVBJhhPu2Wmp/z/SGMVm9g6JPuGbtlrUXxijTU
-         3FgHka+qleuAjXsNtTOfmxCPk6xnj1xEf/Ich7bHokwPOnSTXk1pchTctxijX0f4/Kbr
-         Jqx2ExD2jW+/YdIMTeA29Hx/CDRM1spoXjilP/n8YSh5TMlhTfbP3CQdtYQk6NQ3Zazs
-         +ic9ZpHssR6SP8l+F7Jf1LV7aoFp85gC0qPYiV3rZ5wVlXcF5XMKoWe26F5G41gCyU2g
-         PxUhQm86l71FNKRB9Mc64uc8F7m15dLsnVzMtr7U4kNdPN/Egamu419yQ7qIOMbhWvO5
-         M6UA==
-X-Gm-Message-State: AOAM5316cAFOokp/96bF+e5MpdtiP/qWTbAwIu82nS+Ss7e0n6LA7zhY
-        LENI6w4QPxGNxJX8xVq0IMsgGmtjFIB8zMzs
-X-Google-Smtp-Source: ABdhPJxW/8NadmfPxqAtIs1ydmNWawR4Z0lXbnP3vjln6ZY4FIm+JyuhopJ00Gin+2IGL4v3kMt4FQ==
-X-Received: by 2002:a17:90b:4c52:: with SMTP id np18mr2826931pjb.192.1642577135517;
-        Tue, 18 Jan 2022 23:25:35 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id t126sm10541138pfd.143.2022.01.18.23.25.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 23:25:35 -0800 (PST)
-Message-ID: <a847ba90-7f15-4e79-b42b-75be0d6cf9fe@gmail.com>
-Date:   Wed, 19 Jan 2022 15:25:25 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Klx4RzQ0BDuNT+ki5g9oKkuf71RbnaB1NJYG//vbHCU=;
+        b=joAgxLnr+hIYCz0lwjjtgXh14V3TSLhiJKvqqrtPUQPUuIxluW05P4l9OUsAghLhcW
+         NcH1DCr/6c9l/pk3QHEjgrlQXGhEYB9lgOL48JgJ5EFtSONWSLpvqWtZAyuBDYYgXrFi
+         VyUYj9X9htjm91FV3V+AcUKcNREaJbuKnzEtLVLHPCclZa/gWJQrp+fnIJpvFi7Hle62
+         MmO2OyttNPCSgnLRU1W45J3GBSGYoKpuqSQ8goNpT/XPlUHgu9drNwh0ceD0LV309k8Z
+         Yg+Wzf/AuNmLyDaYry01WztyMYfpQnehEJ4MKxrtuRQbFRDvhlpVP3DuaMq71noz01PT
+         CLJg==
+X-Gm-Message-State: AOAM530f9WS5hcjtXV8QyZ+dY/ypcKNy5/le2mFrt4i9mzWRzMH8hN4G
+        LP0LB7rlpI3Z57bAu6mM8xnWy1Q7inJrCmGEfpavyw==
+X-Google-Smtp-Source: ABdhPJx14O3iuJhpQEbglBjfJUBPPdqOvAJzQIcvWXK74zSc3TPptBdwP6/Tm2mjBt/9Z+Lukq0BTo2sD/UcB5I266o=
+X-Received: by 2002:a25:9082:: with SMTP id t2mr15698199ybl.684.1642577445341;
+ Tue, 18 Jan 2022 23:30:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: x86: Update the states size cpuid even if
- XCR0/IA32_XSS is reset
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220117082631.86143-1-likexu@tencent.com>
- <YecHK2DmooVlMr2U@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <YecHK2DmooVlMr2U@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220118160452.384322748@linuxfoundation.org>
+In-Reply-To: <20220118160452.384322748@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 19 Jan 2022 13:00:33 +0530
+Message-ID: <CA+G9fYvJaFVKu24oFuR1wGFRe4N2A=yxH6ksx61bunfR9Y3Ejw@mail.gmail.com>
+Subject: Re: [PATCH 5.16 00/28] 5.16.2-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        NeilBrown <neilb@suse.de>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/1/2022 2:30 am, Sean Christopherson wrote:
-> On Mon, Jan 17, 2022, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
->> both RESET and INIT. In both cases, the size in bytes of the XSAVE
->> area containing all states enabled by XCR0 or (XCRO | IA32_XSS)
->> needs to be updated.
->>
->> Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   arch/x86/kvm/x86.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index 76b4803dd3bd..5748a57e1cb7 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -11134,6 +11134,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->>   	struct kvm_cpuid_entry2 *cpuid_0x1;
->>   	unsigned long old_cr0 = kvm_read_cr0(vcpu);
->>   	unsigned long new_cr0;
->> +	bool need_update_cpuid = false;
->>   
->>   	/*
->>   	 * Several of the "set" flows, e.g. ->set_cr0(), read other registers
->> @@ -11199,6 +11200,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->>   
->>   		vcpu->arch.msr_misc_features_enables = 0;
->>   
->> +		if (vcpu->arch.xcr0 != XFEATURE_MASK_FP)
->> +			need_update_cpuid = true;
->>   		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
->>   	}
->>   
->> @@ -11216,6 +11219,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->>   	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
->>   	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
->>   
->> +	if (vcpu->arch.ia32_xss)
->> +		need_update_cpuid = true;
-> 
-> This means that kvm_set_msr_common()'s handling of MSR_IA32_XSS also needs to
-> update kvm_update_cpuid_runtime().  And then for bnoth XCR0 and XSS, I would very
-> strongly prefer that use the helpers to write the values and let the helpers call
+On Tue, 18 Jan 2022 at 21:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.2 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.2-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Looks good to me and let me apply it in the next version.
+Following patch caused build regression for powerpc allnoconfig only on 5.16
+with gcc-9.
 
-> kvm_update_cpuid_runtime().  Yes, that will mean kvm_update_cpuid_runtime() may be
-> called multiple times during INIT, but that's already true (CR4), and this isn't
-> exactly a fast path.
+5.16-powerpc-gcc-9-allnoconfig   - FAIL
+5.16-powerpc-gcc-10-allnoconfig  - PASS
+5.16-powerpc-gcc-11-allnoconfig  - PASS
 
-An undisclosed lazy mechanism is under analyzed for performance gains.
 
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 55518b7d3b96..22d4b1d15e94 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11256,7 +11256,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> 
->                  vcpu->arch.msr_misc_features_enables = 0;
-> 
-> -               vcpu->arch.xcr0 = XFEATURE_MASK_FP;
-> +               __kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
->          }
-> 
->          /* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
-> @@ -11273,7 +11273,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->          cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
->          kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
-> 
-> -       vcpu->arch.ia32_xss = 0;
-> +       __kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
-> 
->          static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
-> 
-> 
+make --silent --keep-going --jobs=8 \
+  O=/home/tuxbuild/.cache/tuxmake/builds/current \
+  ARCH=powerpc \
+  CROSS_COMPILE=powerpc64le-linux-gnu- \
+ 'CC=sccache powerpc64le-linux-gnu-gcc' \
+  'HOSTCC=sccache gcc'
+
+Inconsistent kallsyms data
+Try make KALLSYMS_EXTRA_PASS=1 as a workaround
+make[1]: *** [/builds/linux/Makefile:1161: vmlinux] Error 1
+make[1]: *** Deleting file 'vmlinux'
+
+> NeilBrown <neilb@suse.de>
+>     devtmpfs regression fix: reconfigure on each mount
+
+Bisect log:
+# bad: [979dd812ffb543a3f6218868a26a701054ba3b8c] Linux 5.16.2-rc1
+# good: [80820ae87cc8c09b828faa951f44b2396a5b48c4] drm/i915: Avoid
+bitwise vs logical OR warning in snb_wm_latency_quirk()
+git bisect start '979dd812ffb543a3f6218868a26a701054ba3b8c'
+'80820ae87cc8c09b828faa951f44b2396a5b48c4'
+# bad: [6cb89b83384df47b2def88870be10db707a77649] 9p: only copy valid
+iattrs in 9P2000.L setattr implementation
+git bisect bad 6cb89b83384df47b2def88870be10db707a77649
+# bad: [041b83007bd86ba0e7275e348eb13df13df669ef] vfs: fs_context: fix
+up param length parsing in legacy_parse_param
+git bisect bad 041b83007bd86ba0e7275e348eb13df13df669ef
+# bad: [a7458144427accc2b602a672b1f9435e00ba578e] devtmpfs regression
+fix: reconfigure on each mount
+git bisect bad a7458144427accc2b602a672b1f9435e00ba578e
+# good: [5c245afa643712977fd0a9c70ffbb9df5dbf204b] parisc: Fix
+pdc_toc_pim_11 and pdc_toc_pim_20 definitions
+git bisect good 5c245afa643712977fd0a9c70ffbb9df5dbf204b
+# good: [677615cd2689a0898dd58e51d12abe6663567b24] Linux 5.16.1
+git bisect good 677615cd2689a0898dd58e51d12abe6663567b24
+# first bad commit: [a7458144427accc2b602a672b1f9435e00ba578e]
+devtmpfs regression fix: reconfigure on each mount
+The first bad commit:
+commit a7458144427accc2b602a672b1f9435e00ba578e
+Author: NeilBrown <neilb@suse.de>
+Date:   Mon Jan 17 09:07:26 2022 +1100
+    devtmpfs regression fix: reconfigure on each mount
+
+    commit a6097180d884ddab769fb25588ea8598589c218c upstream.
+
+    Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
+    mount options as "remount" options, so it updates the configuration of
+    the single super_block on each mount.
+
+    Since that was changed, the mount options used for devtmpfs are ignored.
+    This is a regression which affect systemd - which mounts devtmpfs with
+    "-o mode=755,size=4m,nr_inodes=1m".
+
+    This patch restores the "remount" effect by calling reconfigure_single()
+
+    Fixes: d401727ea0d7 ("devtmpfs: don't mix
+{ramfs,shmem}_fill_super() with mount_single()")
+    Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+    Cc: Al Viro <viro@zeniv.linux.org.uk>
+    Signed-off-by: NeilBrown <neilb@suse.de>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ drivers/base/devtmpfs.c    | 7 +++++++
+ fs/super.c                 | 4 ++--
+ include/linux/fs_context.h | 2 ++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+you may compare build results here.
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16-67-g979dd812ffb5/testrun/7410428/suite/build/test/gcc-9-allnoconfig/history/
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,93 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C56FD4941AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C16F4941AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357255AbiASU0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S1357287AbiASU14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiASU0R (ORCPT
+        with ESMTP id S231146AbiASU1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:26:17 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61877C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:26:17 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Wed, 19 Jan 2022 15:27:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34347C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:27:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 853361EC04EC;
-        Wed, 19 Jan 2022 21:26:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642623970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gcsbQtvTIZjcCY2Tai3gH/ZSFkICJFR6G+ix5XAvRhg=;
-        b=k2wSjGGfuBDKNaKVP/qMJOn9ps1+pu3c3E0zXA8WQk40NF8todODr8JcT58jelE5We0m22
-        +XVBb3rNiOFZX5SwDV1SYrwf0gOkADaqkh3xityWpO+8c8ShK8A6VdnjfL/TqvEDK8OHee
-        yx7aHLHTW5wbRchV/rsrlxyWC+/UxC8=
-Date:   Wed, 19 Jan 2022 21:26:05 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/26] x86/tdx: Support TDX guest port I/O at
- decompression time
-Message-ID: <Yehz3eqq670WRVJE@zn.tnic>
-References: <YeAuehoOEjUH3vZ3@zn.tnic>
- <20220115010155.ss2hnyotw4a3nljf@black.fi.intel.com>
- <YeK7AJXGN5GVGkRV@zn.tnic>
- <20220117143920.3umnnlx7dl27cm5z@box.shutemov.name>
- <YeW2U9vH65NcLHtY@zn.tnic>
- <20220119115326.rw2aj3ho2mct4xxv@box.shutemov.name>
- <YegTjdltOFBIDlf2@zn.tnic>
- <20220119154925.mzri4zaz3o477e3k@box.shutemov.name>
- <YehqkKNgQ65uUOe6@zn.tnic>
- <20220119200841.fupa3hemmswllmxc@box.shutemov.name>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFE54B81BB0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B317C004E1;
+        Wed, 19 Jan 2022 20:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642624071;
+        bh=LzLkZgOFjgp8994P3GdzCu+iD9iIF2FPHxl5u03Cm3I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=leRyJTutY9tBkIC2Tl5Vbjw8ipFO8VSae1aoMMlosrD+dLUuwTzM3HtJ30nZunmR7
+         tWir5vFjxe83f1xpSqg9t1kQDWgwl6Etxg2OujEXkhnvzSTdUAfojKHR67TJJHL4U1
+         WUiLKkS/J9DuWbZwpaJH1/g+10LYkGaybMlv/mInYIoaAjNMOoHupis4ZkkYHXQLTf
+         0zt6DS2byRCIOdnY28LoHME5SVeCR4pL8NAfzZVxrT2IujqJfSj9ih9UPHl8Eb3ys4
+         CRbUYPnFNuKztAmWqiTdqJd8H68MprfTpSM7lwEEYck1YRcYlluY/MXfaJW8SqXhwE
+         Il6F4y1C2iGTw==
+Date:   Wed, 19 Jan 2022 14:27:49 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        LKML <linux-kernel@vger.kernel.org>, jkosina@suse.cz,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Bjorn Helgaas <bhelgaas@google.com>, mgurtovoy@nvidia.com,
+        linux@weissschuh.net, Arnd Bergmann <arnd@arndb.de>,
+        stephan@gerhold.net, "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: Convert type of 'struct dmi_system_id -> driver_data' from 'void
+ *' to kernel_ulong_t?
+Message-ID: <20220119202749.GA959272@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119200841.fupa3hemmswllmxc@box.shutemov.name>
+In-Reply-To: <fa51355f-9ab6-7bbf-d7f6-e2af2d68056c@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 11:08:41PM +0300, Kirill A. Shutemov wrote:
-> > Relocation section '.rela.data.rel.local' at offset 0x5c18 contains 6 entries:
-			^^^^^^
+On Wed, Jan 19, 2022 at 11:20:36AM +0100, Hans de Goede wrote:
+> On 1/19/22 02:22, Kai-Heng Feng wrote:
+> > I wonder if there's any reason to use 'void *' instead of
+> > kernel_ulong_t for 'driver_data' in 'struct dmi_system_id'?
+> > 
+> > I'd like to use the driver_data for applying quirk flags, and I found
+> > out unlike most other struct *_id, the dmi variant is using 'void *'
+> > for driver_data. Is there any technical reason for this?
+> > ...
 
-> JFYI, the message comes from ASSERT in vmlinux.lds.S.
+> You are asking for a technical reason why "void *" was used,
+> but lets turn that around, why do you believe that "unsigned long"
+> is inherently a better type here ?
+> 
+> driver_data in most places in the kernel (like data for
+> all sort of callback functions) actually typically is a void *
+> already, because often people want to pass more data then what
+> fits in a single long and this also applies to driver-id attached
+> data.
 
-Yah, because those relocations are put in a .rela section and that one
-matches.
+FWIW, "egrep "context;|data;|info;" include/linux/mod_devicetable.h"
+says 4 of the ~40 instances use a void *; the others use
+kernel_ulong_t.
 
-And looking at which commit added it:
+f45d069a5628 ("PCI dynids - documentation fixes, id_table NULL check")
+[1] (from the tglx history tree) added the original hint for
+pci_device_id that:
 
-527afc212231 ("x86/boot: Check that there are no run-time relocations")
+  Best practice for use of driver_data is to use it as an index into a
+  static list of equivalant device types, not to use it as a pointer.
 
-the removed comment kinda explains it - decompressor kernel cannot
-handle runtime relocations. Obviously.
+I don't know the background of that, but I could imagine that using an
+index rather than a pointer makes things like /sys/bus/pci/.../new_id
+easier and safer.
 
-Now we need to figure out how to avoid those...
+Bjorn
 
-> I assume for now I can proceed with the assignment that works, right?
-> It can be changed later once we figure out what is going on.
-
-Right.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=f45d069a5628

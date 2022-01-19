@@ -2,132 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5A5493EF4
+	by mail.lfdr.de (Postfix) with ESMTP id 775AC493EF3
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356372AbiASRVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:21:06 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:43289 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356355AbiASRVA (ORCPT
+        id S1356335AbiASRVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:21:03 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45702 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345023AbiASRU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:21:00 -0500
-Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N5VPe-1mDVEe23Ss-016tVz; Wed, 19 Jan 2022 18:20:58 +0100
-Received: by mail-wm1-f43.google.com with SMTP id c66so6467944wma.5;
-        Wed, 19 Jan 2022 09:20:58 -0800 (PST)
-X-Gm-Message-State: AOAM530ExIW1CdWL3zLljqpQX/t/ALN9co1FfWvKHpBg21QjWhm/iFMt
-        s23CBId5kTKj54Q+O8hwXZoYTNJ/Q0FrJB2iL0k=
-X-Google-Smtp-Source: ABdhPJw8DlyT7pKhsJLWmueJ95RIFxvoT7HEoBLWXH1En39mN2I9a5at/6YQLxRx6DsDTBeawvhqxIHGFWkfKKALPzw=
-X-Received: by 2002:adf:e193:: with SMTP id az19mr23380958wrb.407.1642612857910;
- Wed, 19 Jan 2022 09:20:57 -0800 (PST)
+        Wed, 19 Jan 2022 12:20:56 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JGkBTB030110;
+        Wed, 19 Jan 2022 17:20:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=3uw+z/VojdzjNc/t+SKjEJeyaLUdroAxl9NK5dGEu14=;
+ b=VS2KXljTdlf+cbDp2BsbFmbzHvIWCyieLci2/2K/33dImS4/p2AbfBCnOn32BYKj6eO6
+ aLPZRQ0w8zTpe1As6ukpiOp8JOl37EkdluVnRVtZpdstYB8bm0TNOb4R6Sf3L5hTWioJ
+ 6WgrkUXOUns2Ig+pRJg+Gca9kmLlGsrY9yx6JRim5vvHE2oReaSKnfvxDMXlDdIOojFU
+ 4kidqm2g9fhcsXxPoh1kIemDJHQd7T9QXu8plDH2fKM3wslfzYhPR5G7wmY4pDvpenXd
+ 7yjs2SdSDnl53pBOSWhBe7o9rEBc/puTtVS9naW7GcP+BphSkajr7l+jXWKdE/wbUpbP Kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmeg44dc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 17:20:54 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JHEFGK020418;
+        Wed, 19 Jan 2022 17:20:53 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmeg44cs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 17:20:53 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JHDG5u012217;
+        Wed, 19 Jan 2022 17:20:52 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma03dal.us.ibm.com with ESMTP id 3dknwcyxya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 17:20:52 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JHKpPw32178528
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 17:20:51 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 210C313605D;
+        Wed, 19 Jan 2022 17:20:51 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 58E6513606E;
+        Wed, 19 Jan 2022 17:20:49 +0000 (GMT)
+Received: from [9.163.19.30] (unknown [9.163.19.30])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 17:20:49 +0000 (GMT)
+Message-ID: <06c00181-22f6-1807-b957-61a913758e03@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 12:20:48 -0500
 MIME-Version: 1.0
-References: <Ydm7ReZWQPrbIugn@gmail.com> <CAK8P3a1emGYHPcjTfLqd-yyU8_9w88=2g_B_vfhbKeDtDHMM-w@mail.gmail.com>
- <CAK8P3a3SpYe101RSFD5rzbTQNyQyfG1eb1sCY+rBO-DKVqBdBw@mail.gmail.com>
- <Yd/idffvv8QIQcEU@gmail.com> <CAK8P3a3FahVogb3wfbXSaCpnUsRBGmO9M56M+Cay=skc9rUzjw@mail.gmail.com>
- <YegErRbP+cT42oOC@gmail.com>
-In-Reply-To: <YegErRbP+cT42oOC@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 19 Jan 2022 18:20:41 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2XPwG7rP+TFdEYH7tutE7Zat5vf7PuV2idESZsrxBXyA@mail.gmail.com>
-Message-ID: <CAK8P3a2XPwG7rP+TFdEYH7tutE7Zat5vf7PuV2idESZsrxBXyA@mail.gmail.com>
-Subject: Re: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9bBkhrbDaG5PYnnmFLx5Puqtn6APHaGaSKks3C5hslvyToFEzly
- 7uWFCFq5IXoopmcuLLlJA3GJ8aTbMIWMU1/0L2w9yILxOCs3yMtuXPmUmM+wCBh5tSmGuW5
- yBwnvQlFaift4c/ErMJiBxHlBzFRXp8xccKpgSD/eOdrjmtYbbGkfODzkFVIyeCh2QcYwFY
- 4fDHvrlzEzbDoI0fgmxeQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vJZ1Dxb5cx4=:wNTfWpJLzYDAJNvCBYUpDP
- GXEZOe/FD1qfj8mIH8lkDKsmBQjnwBoRelLQ+kYpw2FMKUrjG7j9JGoNLmIhDoJ/zrjmwCQMy
- 5VF6CjcI3P1WqkmJndLKrWVMQnKzSvsV1hO1/oOvd3SnrwlsB8jd5+j76jB5N25LWj86iSkD+
- SgcsdoeAm63Y8xLadz+1Z94jFWyC9S8NJMqdhbCcsklBoffa9+fLCHGM623nmbFOOn7FYh+PF
- ZhBQQjHumkTQDv9M260DhN4nN0jPbOACaLKQlls22fUOzOsJEzaqhKBfLoFyd3R7AkzalD6QP
- BfektCwwbFp/joy1PuzUsCspYj8raQuUbEwkl7jy+DZx73kLdueR8GqgwiwYH7y0aDIfDCvXu
- jmAh0Jll00wMBZvZko2XOZECVDDLz4O+oTi8f7fu9wu6f/5ofUM2UNjQBk9JjKNWEryBuJC5D
- gGYeIZFWlBmhwZ+VQFoa5QsOdpfdvlFCw6oVvRU77MM/u3kfBCaXqeF8vX8w2C1JYAJrRgdyi
- 3YDnEj9YJ2PNUsF/sUfq4CXPk3AhDCUvpLPq+piWep9PGEcpcS5T7vF7cNmeGYo7dUli3EfwX
- Ho3ekmR+lXdfSC3eFxfSjCBnPbVH+6tWH3F57GT73whtnxteIienS2XPa8sKitl1kfx3pTuBa
- 1lKjqF0FwIplXi23vaR+6dsHw8yOXy7m560IuyO+WhMOIcIOEGPfWSW92eBATR9CHvyTMAljV
- X3O1lJMry2zN6iGOmwXBN05c84NrZDVhYh507w==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 26/30] vfio-pci/zdev: wire up zPCI adapter interrupt
+ forwarding support
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-27-mjrosato@linux.ibm.com>
+ <adc1df1b-97a0-c41b-cfbf-71a68ea4362d@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <adc1df1b-97a0-c41b-cfbf-71a68ea4362d@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cuZgQ90triUhTe-5MPixB4Bi-_oF-btt
+X-Proofpoint-ORIG-GUID: vr5C-0o5LWi1yf_eHSltZEcHaWRLLkIX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190096
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 1:31 PM Ingo Molnar <mingo@kernel.org> wrote:
->
-> * Arnd Bergmann <arnd@arndb.de> wrote:
->
-> > > I tried to avoid as many low level headers as possible from the main
-> > > types headers - and the get_order() functionality also brings in bitops
-> > > definitions, which I'm still hoping to be able to reduce from its
-> > > current ~95% utilization in a distro kernel ...
-> >
-> > Agreed, I think reducing bitops.h and atomic.h usage is fairly important,
-> > I think these are even bigger on arm64 than on x86.
->
-> So what I'm using for 'header complexity metrics' is rather simple: passing
-> -P -H to the preprocessor: stripping comments & not generating
-> line-markers, and then counting linecount.
->
-> Line-markers should *probably* remain, because the real build is generatinginclude/linux/mm_page_address.h
-> them too - but I wanted to gain a crude & easily available metric to
-> measure 'first-pass parsing complexity'. That's I think where most of the
-> header bloat is concentrated: later passes don't really get any of the
-> unused header definitions passed along. (But maybe this is an invalid
-> assumption, because compiler warnings do get generated by later passes, and
-> they are generated for mostly-unused header inlines too.)
->
-> If we include comments & line-markers then the bloat goes up by another
-> ~2x:
->
->  kepler:~/mingo.tip.git> ./st include/linux/sched.h
->   #include <linux/sched.h>                | LOC:  2,186 | headers:  118
->  kepler:~/mingo.tip.git> ./st include/linux/sched.h
->   #include <linux/sched.h>                | LOC:  4,092 | headers:    0
+On 1/19/22 12:10 PM, Pierre Morel wrote:
+> 
+> 
+> On 1/14/22 21:31, Matthew Rosato wrote:
+...
+>> diff --git a/include/uapi/linux/vfio_zdev.h 
+>> b/include/uapi/linux/vfio_zdev.h
+>> index 575f0410dc66..c574e23f9385 100644
+>> --- a/include/uapi/linux/vfio_zdev.h
+>> +++ b/include/uapi/linux/vfio_zdev.h
+>> @@ -90,4 +90,24 @@ struct vfio_device_zpci_interp {
+>>       __u32 fh;        /* Host device function handle */
+>>   };
+>> +/**
+>> + * VFIO_DEVICE_FEATURE_ZPCI_AIF
+>> + *
+>> + * This feature is used for enabling forwarding of adapter interrupts 
+>> directly
+>> + * from firmware to the guest.  When setting this feature, the flags 
+>> indicate
+>> + * whether to enable/disable the feature and the structure defined 
+>> below is
+>> + * used to setup the forwarding structures.  When getting this 
+>> feature, only
+>> + * the flags are used to indicate the current state.
+>> + */
+>> +struct vfio_device_zpci_aif {
+>> +    __u64 flags;
+>> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_FLOAT 1
+>> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_HOST 2
+> 
+> Generaly it looks good to me but I miss some explanation on these flags.
 
-The metric I've been focusing on is bytes of the preprocessed header, which
-is more sensitive to function definitions that get generated from macros,
-and I multiply this by the number of inclusions (from scanning the
-.file.o.cmd files). It probably helps to have a couple of metrics and look
-at all of them occasionally to not miss something important.
+I can add a small line comment for each, like:
 
-In the meantime, I have made some progress on reducing the headers
-for arm64, on top of your tree from Jan 8, but I have not looked at
-later changes from your side, and I need to work on this a bit more
-to ensure this doesn't break other architectures.
+  AIF_FLOAT 1 /* Floating interrupts enabled */
+  AIF_HOST 2  /* Host delivery forced */
 
-For an arm64 allmodconfig build, my additional improvements on top
-of yours are significant but not as good as I had hoped for, this
-can still improve I hope:
+But here's a bit more detail:
 
-5.16-rc8-vanilla  32640 seconds user, 3286 seconds sys
-5.16-rc8-mingo  22990 seconds user, 2304 seconds sys
-5.16-rc8-arnd   19007 seconds user, 1853 seconds sys
+On SET:
+AIF_FLOAT = 1 means enable the interrupt forwarding assist for floating 
+interrupt delivery
+AIF_FLOAT = 0 means to disable it.
+AIF_HOST = 1 means the assist will always deliver the interrupt to the 
+host and let the host inject it
+AIF_HOST = 0 host only gets interrupts when firmware can't deliver
 
-As my tree builds any randconfig cleanly, I keep looking at
-different configs and find that this has a big impact, some options
-end up eliminating most of the benefits until I add further changes
-to clean up certain files. This happened with kasan, kprobes,
-and lse-atomics for instance. After eliminating all circular includes,
-I was also able to revisit my old script to visualize the inclusions,
-see[1] for the current arm64 defconfig output. This version uses
-my arbitrary metric as font-size, and uses labels for the number
-of inclusions.
+on GET, we just indicate the current settings from the most recent SET, 
+meaning:
+AIF_FLOAT = 1 interrupt forwarding assist is currently active
+AIF_FLOAT = 0 interrupt forwarding assist is not currently active
+AIF_HOST = 1 interrupt forwarding will always go through host
+AIF_HOST = 0 interrupt forwarding will only go through the host when 
+necessary
 
-        Arnd
+> 
+> Which makes me realize that a more complete documentation under 
+> Documentation/S390 for VFIO zPCI as we have for VFIO AP and VFIO CCW 
+> would be of great interest.
 
-[1] https://drive.google.com/file/d/1wbs252I8LyswscBAeV3SpjBG2AGoBnB8/view?usp=sharing
+You're not wrong -- a similar comment came up for QEMU.  I will add this 
+to my todo list as a follow-on.
+
+
+

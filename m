@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40195494009
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3C649400C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356833AbiASShn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:37:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45190 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356825AbiASShm (ORCPT
+        id S1356832AbiASSh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:37:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59078 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356825AbiASShz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:37:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3CDAB81B00
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E24C004E1;
-        Wed, 19 Jan 2022 18:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642617459;
-        bh=szT+VEBWfzNOkhPz4gHRcX0/BQhdb2Yct5Xv9ggEJVc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=K1/QIx297J8TFKBJWjCktT3OfQuL0SvWzyfGIsCfFMILXqFjqlGRnzuksJh16gpDD
-         3aUSEAsHWi6udErj39AXGZdC5Dn2mdKAVxrmTQeG/X2bccT3pWLV5GxlWDsKJMzjXt
-         tD+J/PN9m47GOLAmSjxCKbWXPQpAF4Whh5grViOEL97Art1FYp+mJ0/uCKYqUHzMdM
-         rEVMUbibrwiM23aOnVmSZwiZNcjHMtaexPLC0A87tYP/+BEawVTGPcWk2m++PUVdGv
-         9bgGzkVFQgtznU9ENCiW2IjYf6AztysUU/yzwHB3zXXUjOujREEkPIm9d0SOtOrqGP
-         2NYWckqNsw5Vw==
-Date:   Wed, 19 Jan 2022 12:37:37 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Marc Zyngier <maz@kernel.org>, Tong Zhang <ztong0001@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI/MSI: Prevent UAF in error path
-Message-ID: <20220119183737.GA954267@bhelgaas>
+        Wed, 19 Jan 2022 13:37:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642617475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yEREuIwhli7iJjgFoyBi+FO+07r4F6yeofjnLnMk0U8=;
+        b=LIbir6FQ2mxNJqG95L+m2hbJigaYPq+7UhKORcHpx49QXOfZorbEeWUOcFVYsq+09P0mZi
+        B7tEtDcE99V3fhJTUbkLeldkhby0GPo3wvZG/VUyF+qx++RZMC8HuvszyA9t3+/fUBUJNX
+        2v5BaxREyVfqyepwXJ8sUyl8jHMd9o0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-d2SZZewOOleNv4eZ-loTWg-1; Wed, 19 Jan 2022 13:37:53 -0500
+X-MC-Unique: d2SZZewOOleNv4eZ-loTWg-1
+Received: by mail-wm1-f72.google.com with SMTP id f187-20020a1c38c4000000b0034d5c66d8f5so2448847wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:37:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yEREuIwhli7iJjgFoyBi+FO+07r4F6yeofjnLnMk0U8=;
+        b=OexKMTktQrAYCb7vdV442Z12HBp4njQbO1WiwoRH8Lw/lAz5QUWaoB7uGnEsxJbwrz
+         XNYC7OC0kf0T6o38H4377Li9+SL5BL97j1nI0os+cCwc4tN+53jBNLGk1MQaZKPWUtXe
+         26uDo6J9G0IIQwksFNEDL/1YBGly35vWrN0g0mMTskrPqWX4zW8w8WVE9KT/qoNThe62
+         2Ls/QfqEdcZUJwpTSIyNVBLf37QQVZPFzNl/KQ/McQ5tweks937amAsRekX6qyP3dyJU
+         1KKvNE129LwN8oglOnPS3lyfjx5vUwVEVwMGQWSFybWBHEIjm1Oh1q68tssxUq9CUhm6
+         e8xw==
+X-Gm-Message-State: AOAM530qzDTUxDZ7oTif7aQZdiwzavutDsZZ7X+Np4JNGg5QQF7ltxrx
+        aW2I/tLklLOfyiE2kXsiQvJ7VULXWJfB9UT83srNNJDeZ48zsnbD6Zj/qHqLvjBjWWNCG4JynJ9
+        xpOK8YTcuQpWp5nCZRpmDniIf
+X-Received: by 2002:a5d:4404:: with SMTP id z4mr14188671wrq.227.1642617472729;
+        Wed, 19 Jan 2022 10:37:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwyZFHgQhMucWDMGC5Bo4G9movDj4dSOqUphWsssCtw3O4y8rH0o4YVhpuc6L5s8ueVVP9c5g==
+X-Received: by 2002:a5d:4404:: with SMTP id z4mr14188657wrq.227.1642617472536;
+        Wed, 19 Jan 2022 10:37:52 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id n14sm590533wri.101.2022.01.19.10.37.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 10:37:51 -0800 (PST)
+Message-ID: <d4b47a8e-77f2-eef2-2245-bdc7eaf8f57f@redhat.com>
+Date:   Wed, 19 Jan 2022 19:37:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r1938vbn.ffs@tglx>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] selftests: kvm/x86: Fix the warning in
+ lib/x86_64/processor.c
+Content-Language: en-US
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220119140325.59369-1-cloudliang@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220119140325.59369-1-cloudliang@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:54:52PM +0100, Thomas Gleixner wrote:
-> When the core MSI allocation fails, then the PCI/MSI code uses an already
-> freed MSI descriptor to unmask the MSI mask register in order to bring it back
-> into reset state.
+On 1/19/22 15:03, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
 > 
-> Remove MSI_FLAG_FREE_MSI_DESCS from the PCI/MSI irqdomain flags and let the
-> PCI/MSI code free the MSI descriptors after usage.
+> The following warning appears when executing
+> make -C tools/testing/selftests/kvm
 > 
-> Fixes: 0f62d941acf9 ("genirq/msi: Provide msi_domain_alloc/free_irqs_descs_locked()")
-> Reported-by: Tong Zhang <ztong0001@gmail.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-What does "UAF" stand for?  Ah, "use after free" I guess?
-
-Let me know if I should take this.  Otherwise I assume it'll go
-whereever 0f62d941acf9 went.
-
+> In file included from lib/x86_64/processor.c:11:
+> lib/x86_64/processor.c: In function ':
+> include/x86_64/processor.h:290:2: warning: 'ecx' may be used uninitialized in this
+> function [-Wmaybe-uninitialized]
+>    asm volatile("cpuid"
+>    ^~~
+> lib/x86_64/processor.c:1523:21: note: 'ecx' was declared here
+>    uint32_t eax, ebx, ecx, edx, max_ext_leaf;
+> 
+> Just initialize ecx to remove this warning.
+> 
+> Fixes: c8cc43c1eae2 ("selftests: KVM: avoid failures due to reserved
+> HyperTransport region")
+> 
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 > ---
->  drivers/pci/msi/irqdomain.c |    4 ++--
->  drivers/pci/msi/legacy.c    |    1 -
->  2 files changed, 2 insertions(+), 3 deletions(-)
+>   tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> --- a/drivers/pci/msi/irqdomain.c
-> +++ b/drivers/pci/msi/irqdomain.c
-> @@ -28,6 +28,7 @@ void pci_msi_teardown_msi_irqs(struct pc
->  		msi_domain_free_irqs_descs_locked(domain, &dev->dev);
->  	else
->  		pci_msi_legacy_teardown_msi_irqs(dev);
-> +	msi_free_msi_descs(&dev->dev);
->  }
->  
->  /**
-> @@ -171,8 +172,7 @@ struct irq_domain *pci_msi_create_irq_do
->  	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
->  		pci_msi_domain_update_chip_ops(info);
->  
-> -	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS |
-> -		       MSI_FLAG_FREE_MSI_DESCS;
-> +	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS;
->  	if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
->  		info->flags |= MSI_FLAG_MUST_REACTIVATE;
->  
-> --- a/drivers/pci/msi/legacy.c
-> +++ b/drivers/pci/msi/legacy.c
-> @@ -77,5 +77,4 @@ void pci_msi_legacy_teardown_msi_irqs(st
->  {
->  	msi_device_destroy_sysfs(&dev->dev);
->  	arch_teardown_msi_irqs(dev);
-> -	msi_free_msi_descs(&dev->dev);
->  }
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 59dcfe1967cc..4a4c7945cf3e 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1520,7 +1520,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
+>   {
+>   	const unsigned long num_ht_pages = 12 << (30 - vm->page_shift); /* 12 GiB */
+>   	unsigned long ht_gfn, max_gfn, max_pfn;
+> -	uint32_t eax, ebx, ecx, edx, max_ext_leaf;
+> +	uint32_t eax, ebx, ecx = 0, edx, max_ext_leaf;
+>   
+>   	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
+>   
+
+A separate assignment of "ecx = 0" is slightly more conforming to the 
+coding standards.  Queued nevertheless, thanks.
+
+Paolo
+

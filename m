@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D77AE494372
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB01494379
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344059AbiASXGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:06:52 -0500
-Received: from mail-sn1anam02on2060.outbound.protection.outlook.com ([40.107.96.60]:10891
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344235AbiASXGr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:06:47 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FJ2Hutsk/8ZnGBLtuDFhhPP1gi9aZEI+AUFplsUyN+pwO6boRLCl9WgFpUrVY5JJIt/0LXk+rjULsTPBhNMBXRR60GOM1RhtUDcxdNMCVCxXt2vuYorpXI1A0cmPCu3gEKEGR1Re/rXRBA23HQSwwy1NtS2hr/nwOVp11OuI8TbJRfaIicjwXzXMMs0jZhD56pRev1TT7yGotKUm6fSVplZmoG7yR6MuONW5aaPf63JDIpzK2Q86GyspQ9rSiJ1CIM4ToIzB/Ely2b6rtQuqvnPlWstD+6cG/vsmTzxSG8YsxjaoS/nq4k3ZAYEtGFL2EFq8hoUIjUsTnPXw9YYIcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+eU624T2OHegeHXTVWHITMBKQovRd21Q8K8tCTHknKw=;
- b=B3fUONmcDwydJdCpRa8Ehe+zImU6uHRxbDaHlAWD0kha0QMwXtwYlOHMHXKLy7DZGUAy3YXSEDtfpwYdqhxSMiOx6/q4Tg4Ok7pUZB6+X8i8JThfEGAOf3iiVry3jHTbvD57poxqK/HxnjMEttegU6DoLcs0uIgPLhVhqqN3e8wE+vKuoXJaB+I72scfus3msR6k93WrZlAOksFSDgszDzrPOgor/dFcoUXJ8ILU+JrD+dE0RRjU0/Bam1csLLpKF4m2Mep8NEm/71F/csoIWYsnNt4hBy7B2BQDO24kUvKyB/i2PbRuBZQ6AOZpt+PYbu6SvnF28gFN7W9sPsj1Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+eU624T2OHegeHXTVWHITMBKQovRd21Q8K8tCTHknKw=;
- b=BXf87y1EWMyMsz47JfHtCZ9n4KTTm5tkMXePeOWGK0zZexhUXQMqZnK/m19pQrnoFzeaefFeC7mpUBfHkwCZZsjqXARgCbNYid//XIiTUpuIl1qSmATyjqlEN9vP9zjPepi5BaFzEIIVZr+ZFR63iUEHap560gpv9Dz4JRhcCBM=
-Received: from DM5PR08CA0056.namprd08.prod.outlook.com (2603:10b6:4:60::45) by
- DM6PR12MB2748.namprd12.prod.outlook.com (2603:10b6:5:43::28) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4909.8; Wed, 19 Jan 2022 23:06:44 +0000
-Received: from DM6NAM11FT017.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:60:cafe::4f) by DM5PR08CA0056.outlook.office365.com
- (2603:10b6:4:60::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
- Transport; Wed, 19 Jan 2022 23:06:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT017.mail.protection.outlook.com (10.13.172.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 23:06:44 +0000
-Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 19 Jan
- 2022 17:06:43 -0600
-From:   Terry Bowman <terry.bowman@amd.com>
-To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>
-CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        <Mario.Limonciello@amd.com>
-Subject: [PATCH v3 1/9] kernel/resource: Introduce request_muxed_mem_region()
-Date:   Wed, 19 Jan 2022 17:06:18 -0600
-Message-ID: <20220119230626.31560-2-terry.bowman@amd.com>
+        id S1344367AbiASXG6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 18:06:58 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35122 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344277AbiASXGu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 18:06:50 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JIs5VC030587
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:06:50 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dp0x32bxw-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:06:50 -0800
+Received: from twshared11487.23.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 19 Jan 2022 15:06:49 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 00D6428220D24; Wed, 19 Jan 2022 15:06:34 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v4 bpf-next 5/7] x86/alternative: introduce text_poke_copy
+Date:   Wed, 19 Jan 2022 15:06:18 -0800
+Message-ID: <20220119230620.3137425-6-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220119230626.31560-1-terry.bowman@amd.com>
-References: <20220119230626.31560-1-terry.bowman@amd.com>
+In-Reply-To: <20220119230620.3137425-1-song@kernel.org>
+References: <20220119230620.3137425-1-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a0ced1c5-f353-43cc-25a4-08d9dba05ca0
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2748:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB27488149528CFA7E2CB3BE9383599@DM6PR12MB2748.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TSKY7pR9OOLWPuRkEY7C5j6EwVCRSVnK9g8u/Fe4hjQXHTu8X4qsmeWgNUEA2fZSjGiMFvwKgIe0aEdFEYZHWuT3CbNJv4D7LG9LZxUJT9YVC147NqvOzmvqCQSvQMPEzS/JSwmh/xDlm0EZ+OSR6vZ9hyHzdchbaLqi1hLXQr7hll0Ptm/mi8hl4b2dTRmjaFIAjQMWvVlFU2k0oFBsHuqNpbuePlRuoRo7AuRqmZvTrhHYGBVKS5iGxc7H7CxUxMpKzVDv4++GJ61rAEjJxZCFrZHqQmfiOQdu/B6dIbGq5FXwZZBknLWtLy8s5+lUWNy3Me4JUA3aGNL1MTL0gf3Tncb0wjGhKadPPsOJ2ZY3i+psBaQ3qtVKpqWAcJftl2pz+91/UCk8K0fnxz3vDsrAw+PiHgpu9brZFUjWz3ECneNi1VtTuG3TtNBGCgE/tcrtyBZbyZy6m+6P0qxCF3yDjLHKRqUQi/ZbELIv11uDwo1Lq7dPO1Lx+fJda4P7U90Xyahou1x+EAuQ/N06U66Qq9Rb5dLMYNMcSbJ2zNvB4z+M0jRsVIVdNSnQUUsiKPEIwJoZvh92G83UmIJYLq1ZC4F8Nx3aU/YHlepOxbDdvZ3ZST1q16UZ1ZMoIUUKxUqqLFMxHLrQPelRYUfAvRcl/dsQ+7Eues+tXuq+ao1X+1GP/vkxiX1EtpEp/Pi7grvixifr1mBRQfMQUjIOFB4WHvGnJe5ccmL3sJRj2k+/2GWAVRGl/gLcCPPHwwzqGbNO/F037Des+go/pFd33jR8MhSwQyaqtqV96SdgnCZm6LbW81ExNa6cC5PWZJFU
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(8676002)(426003)(4326008)(7696005)(82310400004)(26005)(2616005)(40460700001)(6666004)(336012)(44832011)(1076003)(2906002)(36860700001)(54906003)(508600001)(70586007)(83380400001)(16526019)(36756003)(5660300002)(316002)(186003)(110136005)(81166007)(356005)(47076005)(86362001)(8936002)(70206006)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 23:06:44.3947
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0ced1c5-f353-43cc-25a4-08d9dba05ca0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT017.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2748
+X-Proofpoint-ORIG-GUID: yvoHhhzkV6eTa9xissRyn9nCuy5N0Fva
+X-Proofpoint-GUID: yvoHhhzkV6eTa9xissRyn9nCuy5N0Fva
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_12,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 adultscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=373 suspectscore=0 bulkscore=0
+ impostorscore=0 clxscore=1034 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201190122
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support for requesting muxed memory region is implemented but not
-currently callable as a macro. Add the request muxed memory
-region macro.
+This will be used by BPF jit compiler to dump JITed binary to a RX huge
+page, and thus allow multiple BPF programs sharing the a huge (2MB) page.
 
-MMIO memory accesses can be synchronized using request_mem_region() which
-is already available. This call will return failure if the resource is
-busy. The 'muxed' version of this macro will handle a busy resource by
-using a wait queue to retry until the resource is available.
-
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Signed-off-by: Song Liu <song@kernel.org>
 ---
- include/linux/ioport.h | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/include/asm/text-patching.h |  1 +
+ arch/x86/kernel/alternative.c        | 32 ++++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-index 8359c50f9988..2a5567de318b 100644
---- a/include/linux/ioport.h
-+++ b/include/linux/ioport.h
-@@ -262,6 +262,8 @@ resource_union(struct resource *r1, struct resource *r2, struct resource *r)
- #define request_muxed_region(start,n,name)	__request_region(&ioport_resource, (start), (n), (name), IORESOURCE_MUXED)
- #define __request_mem_region(start,n,name, excl) __request_region(&iomem_resource, (start), (n), (name), excl)
- #define request_mem_region(start,n,name) __request_region(&iomem_resource, (start), (n), (name), 0)
-+#define request_muxed_mem_region(start, n, name) \
-+	__request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
- #define request_mem_region_exclusive(start,n,name) \
- 	__request_region(&iomem_resource, (start), (n), (name), IORESOURCE_EXCLUSIVE)
- #define rename_region(region, newname) do { (region)->name = (newname); } while (0)
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index b7421780e4e9..4cc18ba1b75e 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -44,6 +44,7 @@ extern void text_poke_early(void *addr, const void *opcode, size_t len);
+ extern void *text_poke(void *addr, const void *opcode, size_t len);
+ extern void text_poke_sync(void);
+ extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
++extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
+ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
+ 
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 23fb4d51a5da..903a415c19fa 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1102,6 +1102,38 @@ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
+ 	return __text_poke(addr, opcode, len);
+ }
+ 
++/**
++ * text_poke_copy - Copy instructions into (an unused part of) RX memory
++ * @addr: address to modify
++ * @opcode: source of the copy
++ * @len: length to copy, could be more than 2x PAGE_SIZE
++ *
++ * Not safe against concurrent execution; useful for JITs to dump
++ * new code blocks into unused regions of RX memory. Can be used in
++ * conjunction with synchronize_rcu_tasks() to wait for existing
++ * execution to quiesce after having made sure no existing functions
++ * pointers are live.
++ */
++void *text_poke_copy(void *addr, const void *opcode, size_t len)
++{
++	unsigned long start = (unsigned long)addr;
++	size_t patched = 0;
++
++	if (WARN_ON_ONCE(core_kernel_text(start)))
++		return NULL;
++
++	while (patched < len) {
++		unsigned long ptr = start + patched;
++		size_t s;
++
++		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
++
++		__text_poke((void *)ptr, opcode + patched, s);
++		patched += s;
++	}
++	return addr;
++}
++
+ static void do_sync_core(void *info)
+ {
+ 	sync_core();
 -- 
 2.30.2
 

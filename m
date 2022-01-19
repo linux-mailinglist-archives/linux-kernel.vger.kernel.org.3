@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BB44935D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFAB4935D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352189AbiASHxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:53:06 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38462
+        id S1352205AbiASHxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:53:09 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38478
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239507AbiASHxG (ORCPT
+        by vger.kernel.org with ESMTP id S1352159AbiASHxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:53:06 -0500
+        Wed, 19 Jan 2022 02:53:07 -0500
 Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 07FFC3F306
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:53:05 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1D4623F313
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642578785;
-        bh=yRTE0dXDieeLqipRcJqUM5emUc5L/qHhnbBmseJ0BJU=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=pd4xDR/8GT3KSmpV4CahRaySN8DSI5/Jt/JRkU1lnTln2ir2E9HaZYk4AlZgOp/jF
-         Fo7ut7y1i023txHCLJXGaacm3RdrDKXCS8cTSVPPjGtkmmNnHFy8JrfpP+JI0AMSWz
-         VYyy6b+mu0J3+rRj1nmm/m2gjMKUwG7Y4Cc5iBtMX+OOw25V+QoRXgJk0T06o/R4Yu
-         RPr4yUqKcUq9kzwzgL/lvGu94j/m8qOrPyMHW1YNh4715hStcz6/pzxQZ1qUkUarKM
-         rb8ihSS1E8zqdmnwsUxVGDa7ttaKta1VaYqbgYaInx/SRg1fmWMW34vFUdyMlWo9Lg
-         YJ7BWAAM8ehdg==
-Received: by mail-ed1-f69.google.com with SMTP id en7-20020a056402528700b00404aba0a6ffso338568edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:53:05 -0800 (PST)
+        s=20210705; t=1642578786;
+        bh=5w/EAxi3BWNa4bEEDcXXXFqwUZVzXL/jpIlNMT11cAw=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=OSpdxSV//4TUVCUjNrLDf3cDGIXeu+DXjAGJv8zQKBJKGS1Bf0Ko8WQhQKBqn/x1Z
+         r3KSdBAvyL2vLSkknnIRHqb+YJ9ONX+1xKKyf1l+5bUUcesKeiFIfVzGedROqA/2pX
+         bDINgAaNkDr9kCzRm2sTmR7JCJxiYytoMZIBuwgKXlEiILYKk0QwJX5cimOwV/g+DL
+         XTtx8rtloKtqMDXpRc04BL4cIlB6kzfiFHWHWahRQj1fWWUu/dy6nPWXLpbRrpmUd8
+         7HlrAyahEutkcPfYar+a6zJiG5Yh04+iiu3qlK60FyRbqwElxwJFQhq03ExoXyqh1A
+         orBk+Bwt/e+MA==
+Received: by mail-ed1-f69.google.com with SMTP id o10-20020a056402438a00b00403212b6b1aso1464857edc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:53:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yRTE0dXDieeLqipRcJqUM5emUc5L/qHhnbBmseJ0BJU=;
-        b=UoT/troELpDGQG1tZmpxRxtDAi2GjznJs0WSbvBdKv61bhl9AgnfXbqMZPwZk3Xszq
-         TCpjz6BipuUzYVaZJNvaiW9HRYJBJQHMzkRPLkqMlhXtivlNeDl854OcRg/p8hfNaLC+
-         XH0/DSt6CK9pH9eShs0HA/0Yoo9L5T0o5VJHUcv9YsevFshg67b246flnb1c8wb6jxkr
-         /hcoN8cF2/rG7rrNoMN9HLSJxHWaH3HYnKTSfGezLv4Cm9/SZeU5w7xgl6CE8M9okrFh
-         FdnPFM6hAiXGkoZKguT5j7gHrZglhIsoMWo7xop/6Etf7xtwR+KZJerCifwtRz3z9j5Z
-         +ctw==
-X-Gm-Message-State: AOAM531NPrbJBSS0MOuqIH7znodg8WCqH+SAkhNYg1tDd0ZGLJ8QxdUv
-        y0rnoM31WM502nYjDmFvjsdmjZrgxzAUc/2ThhE0mAXnVmCGlzzRtuqxO+Cy/sgCg2LvX9kzVf8
-        SYmrB1AibcmZTx5V71sQa/4vQRTXnyi1XweLLBSSYUw==
-X-Received: by 2002:a05:6402:2550:: with SMTP id l16mr28981890edb.83.1642578784390;
-        Tue, 18 Jan 2022 23:53:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeJ973sell7ijTjlg0/rOOH2O7fjiphhNI7GxRSALdcgF4gRx3wFZOAIWZGt7K+MuWZVX4nA==
-X-Received: by 2002:a05:6402:2550:: with SMTP id l16mr28981884edb.83.1642578784265;
-        Tue, 18 Jan 2022 23:53:04 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5w/EAxi3BWNa4bEEDcXXXFqwUZVzXL/jpIlNMT11cAw=;
+        b=yJ0VX4td4epx6BWNNaHRg0vfghKD3SP+rVUrk/lKjnZEbMjoIr+cf9fLQrM/cBVPDt
+         T3SAyErnmcplN04tQ2f8mh9n3JpzR1hV4WPg2i0NLDtdL0FtMkkp/soaKNKE82QI+ED8
+         yOKjsuTUgTKNkipgErSP3ry4lX0rmr2my5Nc5MdTZlNjlUCzCvkNQEdVEYNrB1oroGPK
+         VOxlbVMilOckZS+qcekiJt+5vqItUQaL3vY1UQIuX3wa4LuYjglHHNTX/mV+TU5PA78R
+         UWnLpxsUXIiJJ1dprLbei2+tG187ndrX16gv+r/4fs0Bn9qTILAXrp4vj/qNgaVQQw0u
+         ft8A==
+X-Gm-Message-State: AOAM530CfzRtP1lmz2JAZtYGM3EdsK7I9zuzGGwf9SDlrGRDBID+otYK
+        bNSBmVyqf9Jfwpr7hAHSA8oZe8ZPaQwCZp2YGmxheDC+XjJZyzKDnd+z9ZTFCGlZrZmzWvAWis3
+        vdoqCDBestD3U0hZEJUUdFr3JXTYenRFd/oBbtBwLAQ==
+X-Received: by 2002:a05:6402:4244:: with SMTP id g4mr6483612edb.271.1642578785495;
+        Tue, 18 Jan 2022 23:53:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxYUDYe5Iu0UOqAPwEgNesa55/g4cd+jnk3TlZFlICHhPfLFfLvKw8cfJ2BVa1of970eRb/Ng==
+X-Received: by 2002:a05:6402:4244:: with SMTP id g4mr6483602edb.271.1642578785369;
+        Tue, 18 Jan 2022 23:53:05 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id w17sm805286edr.68.2022.01.18.23.53.03
+        by smtp.gmail.com with ESMTPSA id w17sm805286edr.68.2022.01.18.23.53.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 23:53:03 -0800 (PST)
+        Tue, 18 Jan 2022 23:53:04 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, linux-nfc@lists.01.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/6] nfc: llcp: few cleanups/improvements
-Date:   Wed, 19 Jan 2022 08:52:55 +0100
-Message-Id: <20220119075301.7346-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 1/6] nfc: llcp: nullify llcp_sock->dev on connect() error paths
+Date:   Wed, 19 Jan 2022 08:52:56 +0100
+Message-Id: <20220119075301.7346-2-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220119075301.7346-1-krzysztof.kozlowski@canonical.com>
+References: <20220119075301.7346-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Nullify the llcp_sock->dev on llcp_sock_connect() error paths,
+symmetrically to the code llcp_sock_bind().  The non-NULL value of
+llcp_sock->dev is used in a few places to check whether the socket is
+still valid.
 
-These are improvements, not fixing any experienced issue, just looking correct
-to me from the code point of view.
+There was no particular issue observed with missing NULL assignment in
+connect() error path, however a similar case - in the bind() error path
+- was triggereable.  That one was fixed in commit 4ac06a1e013c ("nfc:
+fix NULL ptr dereference in llcp_sock_getname() after failed connect"),
+so the change here seems logical as well.
 
-Changes since v1
-================
-1. Split from the fix.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ net/nfc/llcp_sock.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Testing
-=======
-Under QEMU only. The NFC/LLCP code was not really tested on a device.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (6):
-  nfc: llcp: nullify llcp_sock->dev on connect() error paths
-  nfc: llcp: simplify llcp_sock_connect() error paths
-  nfc: llcp: use centralized exiting of bind on errors
-  nfc: llcp: use test_bit()
-  nfc: llcp: protect nfc_llcp_sock_unlink() calls
-  nfc: llcp: Revert "NFC: Keep socket alive until the DISC PDU is
-    actually sent"
-
- net/nfc/llcp.h      |  1 -
- net/nfc/llcp_core.c |  9 +--------
- net/nfc/llcp_sock.c | 49 ++++++++++++++++++++++-----------------------
- 3 files changed, 25 insertions(+), 34 deletions(-)
-
+diff --git a/net/nfc/llcp_sock.c b/net/nfc/llcp_sock.c
+index 6cfd30fc0798..d951d4f0c87f 100644
+--- a/net/nfc/llcp_sock.c
++++ b/net/nfc/llcp_sock.c
+@@ -764,6 +764,7 @@ static int llcp_sock_connect(struct socket *sock, struct sockaddr *_addr,
+ 	llcp_sock->local = NULL;
+ 
+ put_dev:
++	llcp_sock->dev = NULL;
+ 	nfc_put_device(dev);
+ 
+ error:
 -- 
 2.32.0
 

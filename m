@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B95DB493A16
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7312D493A21
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354226AbiASMJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiASMJU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:09:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A51C061574;
-        Wed, 19 Jan 2022 04:09:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C30661659;
-        Wed, 19 Jan 2022 12:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C899C004E1;
-        Wed, 19 Jan 2022 12:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642594158;
-        bh=jTL1kOllWwNpAyRghJtzBJcKTv5b3vqCwXM1meqTpw0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EAM3BRW+CbiGfMCjMaveMIE0YyZKBv4YGXrhRLSxa7sz3YBI0QQEuz2LrLupXBm6Y
-         R889FqqDBLJRbmysGVMQsKr1+BPa+yDJxTjvvCiMdGOmw3WRnNeHLu+nDQzZ0VrcIg
-         537D4y6llCDYE69wujlX8OZOzzDzuUv4TZj1s79d9eFb+RXQG9+f7bhJe+cQ9hqXOs
-         UzplFSvX38xneJW3n6U2ZW+ZGtGaC4rD9CUZ5eJbXp53b/2qOgmJO8dTGx52wnNROz
-         mMWxGEVBV5Zu24UiKq2KQXFZoJvf1AB0QizfrxdUr/IZ5hnV98uHFEwvu8cGlN1QiB
-         De5JfwgYpTzOg==
-Message-ID: <07adcd47-79c9-ae37-80c6-d1204c6cfea4@kernel.org>
-Date:   Wed, 19 Jan 2022 14:09:01 +0200
+        id S1349057AbiASMOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:14:30 -0500
+Received: from mga14.intel.com ([192.55.52.115]:26037 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234677AbiASMO3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 07:14:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642594469; x=1674130469;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JoykHqTRCK3NznH7cESEkZESjiRiipnRIDgctDCMhxM=;
+  b=JuWpfG30WrkfXReNvnogolhpBm/FeJ1S8JAoPqnAkZmMOHvdkq2hrhzb
+   KcPB4Cd94NRESdef5uiVhfW6ZCjnfYds9kMUQfQ8V54VdgI3Z1MOZeFIF
+   NkZKRDfFckr4Hb3pe27U89PoRbZpsz6WIRPk39OewFm5lvEeeEBGU2OUK
+   VeaE/p12jmxKRJhSAWETKP6l5JWam5JhKG3ji6tgbxhBmeSKnYL3kr5zA
+   y0CdxkoCVEi86l+7kMDOQPb3SgcclhhcLcJb57gkwXBmzADkqxWp6ho0f
+   YaWeG6oVjzZv14ONr5Qoc3004nBkqIUi8AaIleahKxterckZUC45Sw0op
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245248966"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="245248966"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 04:14:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="693757771"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 19 Jan 2022 04:14:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA9r8-000DW1-UJ; Wed, 19 Jan 2022 12:14:26 +0000
+Date:   Wed, 19 Jan 2022 20:13:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: net/mctp/af_mctp.c:259:6: error: unexpected token, expected comma
+Message-ID: <202201192005.O7wDT8RE-lkp@intel.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-References: <20220119015038.2433585-1-robh@kernel.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
+commit: 99ce45d5e7dbde399997a630f45ac9f654fa4bcc mctp: Implement extended addressing
+date:   3 months ago
+config: mips-randconfig-r003-20220118 (https://download.01.org/0day-ci/archive/20220119/202201192005.O7wDT8RE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=99ce45d5e7dbde399997a630f45ac9f654fa4bcc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 99ce45d5e7dbde399997a630f45ac9f654fa4bcc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/ mm// net/
 
-On 19.01.22 3:50, Rob Herring wrote:
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
-> 
-> The array of phandles case boils down to needing:
-> 
-> items:
->    maxItems: 1
-> 
-> The phandle plus args cases should typically take this form:
-> 
-> items:
->    - items:
->        - description: A phandle
->        - description: 1st arg cell
->        - description: 2nd arg cell
-> 
-> With this change, some examples need updating so that the bracketing of
-> property values matches the schema.
-> 
-[..]
->   .../bindings/interconnect/qcom,rpmh.yaml      |  2 +
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Georgi Djakov <djakov@kernel.org>
+All errors (new ones prefixed by >>):
+
+>> net/mctp/af_mctp.c:259:6: error: unexpected token, expected comma
+           if (get_user(len, optlen))
+               ^
+   arch/mips/include/asm/uaccess.h:138:33: note: expanded from macro 'get_user'
+           access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :           \
+                                          ^
+   arch/mips/include/asm/uaccess.h:224:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lw, __gu_ptr);                 \
+                                       ^
+   <inline asm>:3:10: note: instantiated into assembly here
+           .set    eva
+                      ^
+>> net/mctp/af_mctp.c:259:6: error: invalid operand for instruction
+           if (get_user(len, optlen))
+               ^
+   arch/mips/include/asm/uaccess.h:138:33: note: expanded from macro 'get_user'
+           access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :           \
+                                          ^
+   arch/mips/include/asm/uaccess.h:224:23: note: expanded from macro '__get_user'
+                   __get_data_asm((x), user_lw, __gu_ptr);                 \
+                                       ^
+   <inline asm>:4:10: note: instantiated into assembly here
+           lwe $2, 0($20)
+                   ^
+   2 errors generated.
+
+
+vim +259 net/mctp/af_mctp.c
+
+   249	
+   250	static int mctp_getsockopt(struct socket *sock, int level, int optname,
+   251				   char __user *optval, int __user *optlen)
+   252	{
+   253		struct mctp_sock *msk = container_of(sock->sk, struct mctp_sock, sk);
+   254		int len, val;
+   255	
+   256		if (level != SOL_MCTP)
+   257			return -EINVAL;
+   258	
+ > 259		if (get_user(len, optlen))
+   260			return -EFAULT;
+   261	
+   262		if (optname == MCTP_OPT_ADDR_EXT) {
+   263			if (len != sizeof(int))
+   264				return -EINVAL;
+   265			val = !!msk->addr_ext;
+   266			if (copy_to_user(optval, &val, len))
+   267				return -EFAULT;
+   268			return 0;
+   269		}
+   270	
+   271		return -EINVAL;
+   272	}
+   273	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

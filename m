@@ -2,478 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F354932FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1FE493307
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350933AbiASCiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 21:38:02 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:52189 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238636AbiASCh4 (ORCPT
+        id S1351013AbiASCjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 21:39:18 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:31171 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350974AbiASCjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 21:37:56 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 10A8C3201FD3;
-        Tue, 18 Jan 2022 21:37:54 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 18 Jan 2022 21:37:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=o+gqiaXveu0uvhsGksunLb1bCgQ
-        7emHxE8ggFJen2U4=; b=SkekZZ2L0lZPLcP5yg8n1CPjEu57LKjKFOCd61vRzcj
-        rAsajryz2PP6dNePS/xEMwiJjejcB65Oidff4JFJla6Fuh9Hk47iQWYs1svYJLnD
-        71F6SpgRhd2DzyMos69IVEZ2/MU++A9WrPBGXZqGXGBu6WAl2CHG+GaSHWu1+Njl
-        Ra4uoa3dbDarYkrjoQm1TuiEb9+BR/fIkED90gGU/xqnCi4nTmxFDp5f4pNLjLhv
-        SbEq/9mdg+Wo+2oQFz4Lu2ZAisdktoEGYeUUebo97BmMHV/kMDe56bkcCSyBmJQR
-        CfU8ICt1xjhdYPtwZJdMF9PaPbEUqiMfEk/u+oqZHBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=o+gqia
-        Xveu0uvhsGksunLb1bCgQ7emHxE8ggFJen2U4=; b=KJuiz2W1+1Cc08oRoS+N5E
-        CCKn91oI6B+ySjfVS2z+C0I7s24qaMo6WRrxLnhIXs2k46plfy0LWUioEl8b+hfQ
-        worMUy/v45Yif+NkAv7nx695yVsdX8VZSn2QZHuQh0P7R9ahWgg0dISfVv0v3IZw
-        uu0x6Bfyl0nWTqyrJbeK16P6M90G9NWHYRKP7aS+tfbfrnJ3mOYBOSdmZ6uJVtf/
-        7WNifuGwb2QObziCrg4l/gbBUir0JrFhDZ2/g5dVdthPrGRk3rIM7nqDHyfaCFdI
-        tT4UgwzwBTqNNC9ReOyKNpeMeA6v1hZO/9Qk9eZtJ2KuCpY6f9b/LmbaPC8x5SQA
-        ==
-X-ME-Sender: <xms:gnnnYWI-Uxykq4_NlHqmlLBRlsMZ8ARfkv3FYmoVZXgTN7BOyKjT-w>
-    <xme:gnnnYeK3y5-hX-39CRfGy1ewdSjvJzxsuXPvXQ2VAZZ2eV3bYSiHt0Gj0-SXmTmw7
-    p0U_TrXud_bAxKMNQ>
-X-ME-Received: <xmr:gnnnYWuvqogACkLQbeuJzyUIcZG6togSb6Sq2JAdJu-zUyXawEkitwSYcGnuspalHacGK7KDWHCatJj_jUgtiXdQVoVtvVA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeggdegjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomheptehlhihsshgr
-    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhephfffve
-    dvjeeukeekteduhfeltedugfelgeejteefleehffefveeigefguddtiefgnecuffhomhgr
-    ihhnpehgihhthhhusgdrtghomhdpmhhrtghhrhhomhgvsghogidrthgvtghhnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepqhihlhhishhssegv
-    vhgvrdhqhihlihhsshdrnhgvth
-X-ME-Proxy: <xmx:gnnnYbY-zk8J19nrswtHmQwdv-b8KnZ9X3Ve8gMlGNL-GPtCGW2OxA>
-    <xmx:gnnnYdb7Mydyiogxe1lE-BtmRmtEU8YeiyzbyPJUObfu1jpzOrzS7Q>
-    <xmx:gnnnYXAak6M1ziLRPw-PA_RgimuXEsAD8dcp7G8P03cKPcWY0__EnQ>
-    <xmx:gnnnYcXynHYCqO1Bx4BpWOYVd7aMMcLyvncq2weTH1nty3A-Pz4EBQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Jan 2022 21:37:53 -0500 (EST)
-Received: by eve.qyliss.net (Postfix, from userid 1000)
-        id BF6F58270; Wed, 19 Jan 2022 02:37:52 +0000 (UTC)
-Date:   Wed, 19 Jan 2022 02:37:52 +0000
-From:   Alyssa Ross <hi@alyssa.is>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     "Mr. Chromebox" <mrchromebox@gmail.com>,
-        Benson Leung <bleung@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Tim Wawrzynczak <twawrzynczak@chromium.org>
-Subject: Re: Null pointer dereference in cros-ec-typec
-Message-ID: <20220119023752.ad34u6hgjpkpk4dw@eve>
-References: <20220118163754.nfy53mfjpazgw2a2@eve>
- <YecV+rh/4rzygUbx@google.com>
- <CACeCKaeHAV1RLovgMt43uFtHioOeKNrqEbaPq8ZtKNiCS_tTsQ@mail.gmail.com>
- <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
- <CAFTm+6APx0PkRgp+7LLEOi=2E-7ZSgYdQ824U1XB+q1wMPNg3g@mail.gmail.com>
- <CACeCKaeAaS3QcLwvcPNYVtkKxaBViij53TBjOXvwcpKQk+NDbA@mail.gmail.com>
- <CAFTm+6BC--tNjbez_f_A_ckK7gjkbBMWHYSExxQcp9+u60Z2WQ@mail.gmail.com>
- <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
+        Tue, 18 Jan 2022 21:39:17 -0500
+Received: from dggeme708-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JdqXB0Jsjz8wRW;
+        Wed, 19 Jan 2022 10:36:26 +0800 (CST)
+Received: from dggeme756-chm.china.huawei.com (10.3.19.102) by
+ dggeme708-chm.china.huawei.com (10.1.199.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Wed, 19 Jan 2022 10:39:15 +0800
+Received: from dggeme756-chm.china.huawei.com ([10.6.80.68]) by
+ dggeme756-chm.china.huawei.com ([10.6.80.68]) with mapi id 15.01.2308.021;
+ Wed, 19 Jan 2022 10:39:15 +0800
+From:   "zhangwensheng (E)" <zhangwensheng5@huawei.com>
+To:     Paolo Valente <paolo.valente@linaro.org>
+CC:     Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIIC1uZXh0IHYzXSBiZnE6IGZpeCB1c2UtYWZ0ZXItZnJl?=
+ =?gb2312?B?ZSBpbiBiZnFfZGlzcGF0Y2hfcmVxdWVzdA==?=
+Thread-Topic: [PATCH -next v3] bfq: fix use-after-free in bfq_dispatch_request
+Thread-Index: AQHX8pnSNnUYyqRnlESsN7jEp4m3R6w6palQgAS4csCAE08QwIAXKNBQ
+Date:   Wed, 19 Jan 2022 02:39:15 +0000
+Message-ID: <65fb83b796e84b5984fbf80804479a04@huawei.com>
+References: <20211216122157.672159-1-zhangwensheng5@huawei.com>
+ <42FD69CD-16CF-447D-AA69-621EE97CE3DC@linaro.org>   
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.176.103]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yr2tsegdvfyv5z5t"
-Content-Disposition: inline
-In-Reply-To: <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---yr2tsegdvfyv5z5t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jan 18, 2022 at 04:35:45PM -0800, Prashant Malani wrote:
-> There seem to be some differences.
-> The Mr.Chromebox GOOG0004 device doesn't have any connectors listed.
-> See here for a BIOS snippet from voxel:
-> Scope (\_SB.PCI0.LPCB.EC0.CREC)
->     {
->         Device (USBC)
->         {
->             Name (_HID, "GOOG0014")  // _HID: Hardware ID
->             Name (_DDN, "ChromeOS EC Embedded Controller USB Type-C
-> Control")  // _DDN: DOS Device Name
->             Device (CON0)
->             {
->                 ...
->             }
->
->             Device (CON1)
->             {
->                ...
->             }
->         }
->     }
->
-> Does the EC on this device support EC_CMD_GET_PD_PORT_CAPS , or
-> EC_CMD_USB_PD_PORTS ?
-> It doesn't look like the EC is returning anything for these commands,
-> which are used to populate GOOG0014.
->
-> The CREC device looks about right:
->
-> Device (CREC)
->             {
->                 Name (_HID, "GOOG0004")  // _HID: Hardware ID
->                 Name (_UID, One)  // _UID: Unique ID
->                 Name (_DDN, "EC Command Device")  // _DDN: DOS Device Name
->                 Name (_PRW, Package (0x02)  // _PRW: Power Resources for =
-Wake
->                 {
->                    ....
->                 })
->              }
->
-> 2 observations:
-> - We probably shouldn't be generating a GOOG0014 device at all if the
-> EC_CMD_GET_PD_PORT_CAPS and EC_CMD_USB_PD_PORTS commands aren't
-> supported by the EC. I can work with coreboot to make that change
-> - Is the order of probing for some reason causing the GOOG0014 child
-> device to not be linked to the GOOG0004 device? Alyssa, does the
-> following diff help:
-
-With the diff applied, I no longer see the Oops from cros_ec_typec, and
-I can reboot normally.  But, it looks like the driver is deferred
-indefinitely =E2=80=94 I added a debug print after the check, and it was ne=
-ver
-triggered.
-
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c
-> b/drivers/platform/chrome/cros_ec_typec.c
-> index 5de0bfb0bc4d..7059912b75c1 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -1076,6 +1076,10 @@ static int cros_typec_probe(struct platform_device=
- *pdev)
->
->         typec->dev =3D dev;
->         typec->ec =3D dev_get_drvdata(pdev->dev.parent);
-> +
-> +       if (!typec->ec)
-> +               return -EPROBE_DEFER;
-> +
->         platform_set_drvdata(pdev, typec);
->
->         ret =3D cros_typec_get_cmd_version(typec);
->
->
-> On Tue, Jan 18, 2022 at 2:34 PM Mr. Chromebox <mrchromebox@gmail.com> wro=
-te:
-> >
-> > On Tue, Jan 18, 2022 at 4:16 PM Prashant Malani <pmalani@chromium.org> =
-wrote:
-> > >
-> > > Hi Matt,
-> > >
-> > > On Tue, Jan 18, 2022 at 2:04 PM Mr. Chromebox <mrchromebox@gmail.com>=
- wrote:
-> > > >
-> > > > hi Prashant,
-> > > >
-> > > > my releases track upstream coreboot; my most recent release was bas=
-ed
-> > > > on coreboot 4.14 (I'm behind on getting a 4.15-based release out).
-> > > >
-> > > > A quick perusal of the source for src/ec/google/chromeec/ doesn't s=
-how
-> > > > any recent changes to the location of the GOOG0014 ACPI device. The
-> > > > most recent change was 2 years ago (so, landed in the 4.12 release),
-> > > > which moved the USB-C child device to its present location: under
-> > > > \_SB.PCI0.LPCB.EC0.CREC
-> > > >
-> > > > ref: https://github.com/coreboot/coreboot/commit/eec30f7beae074c3f8=
-0a182cc2950ed8e4f0a640
-> > > >
-> > > > prior to that, it was located under  \_SB.PCI0.LPCB.EC0.
-> > > >
-> > > > I also dumped/disassembled the ACPI from a recent build to confirm =
-the above.
-> > >
-> > > Is it possible to share the disassembled ACPI tables? We can then
-> > > compare it to the ones on shipping Chromebooks to identify a
-> > > discrepancy.
-> > > If the GOOG0014 device is correctly listed as a child of the EC device
-> > > (GOOG0004), then the kernel ACPI framework should be setting
-> > > GOOG0004 as a parent (and dev_get_drvdata(pdev->dev.parent) shouldn't
-> > > return NULL).
-> >
-> > as the GOOG0014 device is runtime-generated, it's located in the SSDT:
-> >
-> > External (_SB_.PCI0.LPCB.EC0_.CREC, DeviceObj)
-> > ...
-> > Scope (\_SB.PCI0.LPCB.EC0.CREC)
-> > {
-> >     Device (USBC)
-> >     {
-> >         Name (_HID, "GOOG0014")  // _HID: Hardware ID
-> >         Name (_DDN, "ChromeOS EC Embedded Controller USB Type-C
-> > Control")  // _DDN: DOS Device Name
-> >     }
-> > }
-> >
-> > GOOG0004 is defined in the DSDT, under EC0:
-> >
-> > Device (CREC)
-> > {
-> >     Name (_HID, "GOOG0004")  // _HID: Hardware ID
-> >     Name (_UID, One)  // _UID: Unique ID
-> >     Name (_DDN, "EC Command Device")  // _DDN: DOS Device Name
-> >     Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
-> >     {
-> >         0x70,
-> >         0x05
-> >     })
-> > ...
-> > }
-> >
-> > -Matt
-> >
-> > > > regards,
-> > > > Matt / MrChromebox
-> > > >
-> > > > On Tue, Jan 18, 2022 at 2:12 PM Prashant Malani <pmalani@chromium.o=
-rg> wrote:
-> > > > >
-> > > > > (+Mr.Chromebox team; using the address listed in
-> > > > > https://mrchromebox.tech/#support )
-> > > > >
-> > > > > Hi Team Mr.Chromebox,
-> > > > >
-> > > > > Could you kindly provide some more detail regarding how the GOOG0=
-014
-> > > > > Type C ACPI device is set up in the Mr Chromebox BIOS for Chromeb=
-ooks
-> > > > > (the driver expects it to be embedded in the GOOG0004 EC device)?
-> > > > > We want to enable Alyssa and other developers using the Mr.Chrome=
-box
-> > > > > BIOS to have a functional cros-ec-typec driver, so would like to =
-help
-> > > > > ensure that the device is set up correctly in ACPI.
-> > > > >
-> > > > > Thanks!
-> > > > >
-> > > > > -Prashant
-> > > > >
-> > > > > On Tue, Jan 18, 2022 at 11:49 AM Prashant Malani <pmalani@chromiu=
-m.org> wrote:
-> > > > > >
-> > > > > > Hi Benson and Alyssa,
-> > > > > >
-> > > > > > On Tue, Jan 18, 2022 at 11:33 AM Benson Leung <bleung@google.co=
-m> wrote:
-> > > > > > >
-> > > > > > > Hi Alyssa,
-> > > > > > >
-> > > > > > > Thanks for reaching out.
-> > > > > > >
-> > > > > > > On Tue, Jan 18, 2022 at 04:37:54PM +0000, Alyssa Ross wrote:
-> > > > > > > > My distribution recently enabled the Chrome OS EC Type C co=
-ntrol driver
-> > > > > > > > in its kernel builds.  On my Google Pixelbook i7 (eve), the=
- driver reports
-> > > > > > > > a null pointer dereference at boot.  From what I can tell, =
-this happens
-> > > > > > > > because typec->ec is set to NULL in cros_typec_probe.  Othe=
-r drivers,
-> > > > > > > > like cros-usbpd-notify, appear to be set up to handle this =
-case.  As a
-> > > > > > > > result of this bug, I'm no longer able to reboot my compute=
-r, because
-> > > > > > > > udevd hangs while trying to do something with the device wh=
-ose driver
-> > > > > > > > isn't working.
-> > > > > > > >
-> > > > > > >
-> > > > > > > I've copied Prashant, who's the author of the typec driver as=
- well as
-> > > > > > > cros-usbpd-notify.
-> > > > > > >
-> > > > > > > Prashant, any thoughts on a more graceful failure out of the =
-typec driver's
-> > > > > > > probe in case there's no ec object?
-> > > > > >
-> > > > > > We can add a NULL check and just abort the driver probe if the =
-pointer is
-> > > > > > not valid (the driver is useless without that pointer anyway).
-> > > > > >
-> > > > > > A note: The NULL check makes sense on older drivers like cros-u=
-sbpd-notify since
-> > > > > > they can exist in ACPI configurations where they are *not* embe=
-dded
-> > > > > > inside the GOOG0004
-> > > > > > EC device (on older Chromebooks). That is not the case for the =
-EC Type C device.
-> > > > > >
-> > > > > > This raises another issue: the custom BIOS from Mr. Chromebox is
-> > > > > > likely not setting
-> > > > > > up the EC Type C ACPI (GOOG0014) device correctly; it *must* be
-> > > > > > embedded inside the overall
-> > > > > > EC device (GOOG0004). If this is not being done, then the GOOG0=
-014
-> > > > > > device should not
-> > > > > > be added to the ACPI tables at all.
-> > > > > >
-> > > > > > I would like to understand whether the above was intentional fr=
-om the
-> > > > > > Mr. Chromebox BIOS developers;
-> > > > > > otherwise we are letting an incorrect ACPI configuration just f=
-ail
-> > > > > > with a probe error.
-> > > > > >
-> > > > > > Thanks,
-> > > > > >
-> > > > > > -Prashant
-> > > > > >
-> > > > > > >
-> > > > > > > > Here's the full Oops.  I was able to reproduce the issue wi=
-th every
-> > > > > > > > kernel I tried, from 5.10 to mainline.
-> > > > > > > >
-> > > > > > > > cros-usbpd-notify-acpi GOOG0003:00: Couldn't get Chrome EC =
-device pointer.
-> > > > > > > > input: Intel Virtual Buttons as /devices/pci0000:00/0000:00=
-:1f.0/PNP0C09:00/INT33D6:00/input/input14
-> > > > > > > > BUG: kernel NULL pointer dereference, address: 000000000000=
-00d8
-> > > > > > > > #PF: supervisor read access in kernel mode
-> > > > > > > > #PF: error_code(0x0000) - not-present page
-> > > > > > > > PGD 0 P4D 0
-> > > > > > > > Oops: 0000 [#1] SMP PTI
-> > > > > > > > CPU: 1 PID: 561 Comm: systemd-udevd Not tainted 5.15.12 #4
-> > > > > > > > Hardware name: Google Eve/Eve, BIOS MrChromebox-4.14 08/06/=
-2021
-> > > > > > >
-> > > > > > >
-> > > > > > > Ah, here's the problem. It looks like this is a custom bios f=
-rom Mr Chromebox,
-> > > > > > > so this is not a bios combination we validate at Google.
-> > > > > > >
-> > > > > > > Thank you for the report. We'll look into fixing this and mar=
-king the fix
-> > > > > > > for stable kernels so that it goes back to 5.10.
-> > > > > > >
-> > > > > > > Thanks,
-> > > > > > >
-> > > > > > > Benson
-> > > > > > >
-> > > > > > > > RIP: 0010:__mutex_lock+0x59/0x8c0
-> > > > > > > > Code: 53 48 89 cb 48 83 ec 70 89 75 9c be 3d 02 00 00 4c 89=
- 45 90 e8 18 47 33 ff e8 e3 e2 ff ff 44 8b 35 a4 85 e8 02 45 85 f6 75 0a <4=
-d> 3b 6d 68 0f 85 bf 07 00 00 65 ff 05 b6 5b 23 75 ff 75 90 4d 8d
-> > > > > > > > RSP: 0018:ffffb44580a4bb50 EFLAGS: 00010246
-> > > > > > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000=
-000001
-> > > > > > > > RDX: 0000000000000000 RSI: ffffffff8bf91320 RDI: ffff922cbb=
-a50e20
-> > > > > > > > RBP: ffffb44580a4bbf0 R08: 0000000000000000 R09: ffff922c5b=
-ac8140
-> > > > > > > > R10: ffffb44580a4bc10 R11: 0000000000000000 R12: 0000000000=
-000000
-> > > > > > > > R13: 0000000000000070 R14: 0000000000000000 R15: 0000000000=
-000001
-> > > > > > > > FS:  00007f55338d6b40(0000) GS:ffff922fae200000(0000) knlGS=
-:0000000000000000
-> > > > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > > > > CR2: 00000000000000d8 CR3: 000000011bbb2006 CR4: 0000000000=
-3706e0
-> > > > > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000=
-000000
-> > > > > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000=
-000400
-> > > > > > > > Call Trace:
-> > > > > > > >  <TASK>
-> > > > > > > >  ? fs_reclaim_acquire+0x4d/0xd0
-> > > > > > > >  ? lock_is_held_type+0xaa/0x120
-> > > > > > > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
-> > > > > > > >  ? lock_is_held_type+0xaa/0x120
-> > > > > > > >  ? cros_ec_cmd_xfer_status+0x1f/0x110
-> > > > > > > >  cros_ec_cmd_xfer_status+0x1f/0x110
-> > > > > > > >  cros_typec_ec_command+0x91/0x1c0 [cros_ec_typec]
-> > > > > > > >  cros_typec_probe+0x7f/0x5a8 [cros_ec_typec]
-> > > > > > > >  platform_probe+0x3f/0x90
-> > > > > > > >  really_probe+0x1f5/0x3f0
-> > > > > > > >  __driver_probe_device+0xfe/0x180
-> > > > > > > >  driver_probe_device+0x1e/0x90
-> > > > > > > >  __driver_attach+0xc4/0x1d0
-> > > > > > > >  ? __device_attach_driver+0xe0/0xe0
-> > > > > > > >  ? __device_attach_driver+0xe0/0xe0
-> > > > > > > >  bus_for_each_dev+0x67/0x90
-> > > > > > > >  bus_add_driver+0x12e/0x1f0
-> > > > > > > >  driver_register+0x8f/0xe0
-> > > > > > > >  ? 0xffffffffc04ec000
-> > > > > > > >  do_one_initcall+0x67/0x320
-> > > > > > > >  ? rcu_read_lock_sched_held+0x3f/0x80
-> > > > > > > >  ? trace_kmalloc+0x38/0xe0
-> > > > > > > >  ? kmem_cache_alloc_trace+0x17c/0x2b0
-> > > > > > > >  do_init_module+0x5c/0x270
-> > > > > > > >  __do_sys_finit_module+0x95/0xe0
-> > > > > > > >  do_syscall_64+0x3b/0x90
-> > > > > > > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > > > > > > RIP: 0033:0x7f55344b1f3d
-> > > > > > > > Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48=
- 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <4=
-8> 3d 01 f0 ff ff 73 01 c3 48 8b 0d bb ee 0e 00 f7 d8 64 89 01 48
-> > > > > > > > RSP: 002b:00007fff187f1388 EFLAGS: 00000246 ORIG_RAX: 00000=
-00000000139
-> > > > > > > > RAX: ffffffffffffffda RBX: 000055a53acbe6e0 RCX: 00007f5534=
-4b1f3d
-> > > > > > > > RDX: 0000000000000000 RSI: 00007f553461732c RDI: 0000000000=
-00000e
-> > > > > > > > RBP: 0000000000020000 R08: 0000000000000000 R09: 0000000000=
-000002
-> > > > > > > > R10: 000000000000000e R11: 0000000000000246 R12: 00007f5534=
-61732c
-> > > > > > > > R13: 000055a53ad94010 R14: 0000000000000007 R15: 000055a53a=
-d95690
-> > > > > > > >  </TASK>
-> > > > > > > > Modules linked in: fjes(+) cros_ec_typec(+) typec intel_vbt=
-n(+) cros_usbpd_notify sparse_keymap soc_button_array int3403_thermal int34=
-0x_thermal_zone int3400_thermal acpi_thermal_rel cros_kbd_led_backlight zra=
-m ip_tables i915 hid_multitouch i2c_algo_bit ttm crct10dif_pclmul crc32_pcl=
-mul crc32c_intel drm_kms_helper nvme ghash_clmulni_intel sdhci_pci cqhci ce=
-c nvme_core sdhci serio_raw drm mmc_core i2c_hid_acpi i2c_hid video pinctrl=
-_sunrisepoint fuse
-> > > > > > > > CR2: 00000000000000d8
-> > > > > > > > ---[ end trace 4a12c4896d70352b ]---
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > --
-> > > > > > > Benson Leung
-> > > > > > > Staff Software Engineer
-> > > > > > > Chrome OS Kernel
-> > > > > > > Google Inc.
-> > > > > > > bleung@google.com
-> > > > > > > Chromium OS Project
-> > > > > > > bleung@chromium.org
-
---yr2tsegdvfyv5z5t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEH9wgcxqlHM/ARR3h+dvtSFmyccAFAmHneW8ACgkQ+dvtSFmy
-ccC6xxAAj+atilDwg6j9P0+rPEmAtnj+QUNxenU1agG8ZRRxkyr/MdfcWz1IBhus
-BHrvLMc8y1BHXlyYvLU+43VM9vsAaeJg8zA3c9IsT6IORk3wajReEzdlEPoCbPwf
-w2r8CvbBXnfMRnEZLf3NAWsT3+6gRVXpja9pidl9YUHnd7SE29djprOlSuYYp9Fp
-Dug6euedFOY0/rrlFckSIEJu4KZzmffgC+xOUpnk3hCUnHnhMu8EIPFA40XDpt/d
-tqHK7GyJaAoEYN2q5GQxsGxVXd2eqrCPoBED+b6nBbjfTTZ4NJlwGANeo4KOYdhq
-NUl0jKxQ0toasItLboGaM0DdYhuABrVb/684SDI3bRHZ/8ZN7lscFJYyWF4Ay03Y
-WUYwfgkdXY8HQuCvqrFMgaiAs72x2V7mP8GAUrGhS7DLpkrDcbIBpwosTVd2+C2P
-/kbxqlhPUPL0XiGt192gI3H4SYTYCaZ6xy7mmc9OT9/IX6dQRoL/+dz7BYEWYdzw
-P7PbUKXsxpVTUolLzFh3mYGGeXwVzb5BSgcCBqA3ZziGWtxEv7umveYyVnUVdjs3
-cl32oULcshAuWpj1fmVADlKSfqU1I9aw+FUf/HFYy8NjS5AFSx78/CZWPF+bqpxE
-pdbobZssnvuu+gDWy2D0Ptr7gK3s2klh3arlzYBRoicvHAX38kY=
-=XE7p
------END PGP SIGNATURE-----
-
---yr2tsegdvfyv5z5t--
+UGluZy4uLg0KDQotLS0tLdPKvP7Urbz+LS0tLS0NCreivP7Iyzogemhhbmd3ZW5zaGVuZyAoRSkg
+DQq3osvNyrG85DogMjAyMsTqMdTCNMjVIDE2OjU4DQrK1bz+yMs6ICdQYW9sbyBWYWxlbnRlJyA8
+cGFvbG8udmFsZW50ZUBsaW5hcm8ub3JnPg0Ks63LzTogJ0plbnMgQXhib2UnIDxheGJvZUBrZXJu
+ZWwuZGs+OyAnbGludXgtYmxvY2tAdmdlci5rZXJuZWwub3JnJyA8bGludXgtYmxvY2tAdmdlci5r
+ZXJuZWwub3JnPjsgJ2xpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcnIDxsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnPg0K1vfM4jogtPC4tDogW1BBVENIIC1uZXh0IHYzXSBiZnE6IGZpeCB1
+c2UtYWZ0ZXItZnJlZSBpbiBiZnFfZGlzcGF0Y2hfcmVxdWVzdA0KDQpQaW5nLi4uDQoNCi0tLS0t
+08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiB6aGFuZ3dlbnNoZW5nIChFKQ0Kt6LLzcqxvOQ6IDIwMjHE
+6jEy1MIyM8jVIDEwOjA2DQrK1bz+yMs6ICdQYW9sbyBWYWxlbnRlJyA8cGFvbG8udmFsZW50ZUBs
+aW5hcm8ub3JnPg0Ks63LzTogJ0plbnMgQXhib2UnIDxheGJvZUBrZXJuZWwuZGs+OyAnbGludXgt
+YmxvY2tAdmdlci5rZXJuZWwub3JnJyA8bGludXgtYmxvY2tAdmdlci5rZXJuZWwub3JnPjsgJ2xp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcnIDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
+Pg0K1vfM4jogtPC4tDogW1BBVENIIC1uZXh0IHYzXSBiZnE6IGZpeCB1c2UtYWZ0ZXItZnJlZSBp
+biBiZnFfZGlzcGF0Y2hfcmVxdWVzdA0KDQpwaW5nLi4uDQoNCi0tLS0t08q8/tStvP4tLS0tLQ0K
+t6K8/sjLOiB6aGFuZ3dlbnNoZW5nIChFKQ0Kt6LLzcqxvOQ6IDIwMjHE6jEy1MIyMMjVIDEwOjM1
+DQrK1bz+yMs6ICdQYW9sbyBWYWxlbnRlJyA8cGFvbG8udmFsZW50ZUBsaW5hcm8ub3JnPg0Ks63L
+zTogSmVucyBBeGJvZSA8YXhib2VAa2VybmVsLmRrPjsgbGludXgtYmxvY2tAdmdlci5rZXJuZWwu
+b3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQrW98ziOiC08Li0OiBbUEFUQ0ggLW5l
+eHQgdjNdIGJmcTogZml4IHVzZS1hZnRlci1mcmVlIGluIGJmcV9kaXNwYXRjaF9yZXF1ZXN0DQoN
+CkhpIHBhb2xvo7oNCglUaGFua3MgZm9yIHlvdXIgcXVlc3Rpb24sIGl0IGlzIG15IG5lZ2xpZ2Vu
+Y2UuDQoJSSBoYXZlIHR3byBpZGVhcyBmb3IgcmVwYWlyaW5nIHRoZSBwcm9ibGVtOg0KDQoxLiB1
+c2UgcmVmKysgdG8gYXZvaWQgdGhlIGluX3NlcnZfcXVldWUgYmVpbmcgcmVsZWFzZWQuIFBhdGNo
+IGFzIGZvbGxvdzoNCg0KYmxvY2svYmZxLWlvc2NoZWQuYyB8IDUgKysrKysNCiAxIGZpbGUgY2hh
+bmdlZCwgNSBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9ibG9jay9iZnEtaW9zY2hlZC5j
+IGIvYmxvY2svYmZxLWlvc2NoZWQuYyBpbmRleCBmZWMxODExOGRjMzAuLjcwYmQyODAxNzBmOSAx
+MDA2NDQNCi0tLSBhL2Jsb2NrL2JmcS1pb3NjaGVkLmMNCisrKyBiL2Jsb2NrL2JmcS1pb3NjaGVk
+LmMNCkBAIC01MDY2LDYgKzUwNjYsNyBAQCBzdGF0aWMgc3RydWN0IHJlcXVlc3QgKmJmcV9kaXNw
+YXRjaF9yZXF1ZXN0KHN0cnVjdCBibGtfbXFfaHdfY3R4ICpoY3R4KQ0KICAgICAgICBzcGluX2xv
+Y2tfaXJxKCZiZnFkLT5sb2NrKTsNCg0KICAgICAgICBpbl9zZXJ2X3F1ZXVlID0gYmZxZC0+aW5f
+c2VydmljZV9xdWV1ZTsNCisgICAgICAgaW5fc2Vydl9xdWV1ZS0+cmVmKys7IC8qIGF2aW9kIGlu
+X3NlcnZfcXVldWUgcmVsZWFzZSAqLw0KICAgICAgICB3YWl0aW5nX3JxID0gaW5fc2Vydl9xdWV1
+ZSAmJiBiZnFfYmZxcV93YWl0X3JlcXVlc3QoaW5fc2Vydl9xdWV1ZSk7DQoNCiAgICAgICAgcnEg
+PSBfX2JmcV9kaXNwYXRjaF9yZXF1ZXN0KGhjdHgpOyBAQCAtNTA3Nyw2ICs1MDc4LDEwIEBAIHN0
+YXRpYyBzdHJ1Y3QgcmVxdWVzdCAqYmZxX2Rpc3BhdGNoX3JlcXVlc3Qoc3RydWN0IGJsa19tcV9o
+d19jdHggKmhjdHgpDQoNCiAgICAgICAgYmZxX3VwZGF0ZV9kaXNwYXRjaF9zdGF0cyhoY3R4LT5x
+dWV1ZSwgcnEsIGluX3NlcnZfcXVldWUsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgaWRsZV90aW1lcl9kaXNhYmxlZCk7DQorICAgICAgIC8qIHJlc3VtZSBpbl9zZXJ2X3F1ZXVl
+ICovDQorICAgICAgIHNwaW5fbG9ja19pcnEoJmJmcWQtPmxvY2spOw0KKyAgICAgICBiZnFfcHV0
+X3F1ZXVlKGluX3NlcnZfcXVldWUpOw0KKyAgICAgICBzcGluX3VubG9ja19pcnEoJmJmcWQtPmxv
+Y2spOw0KDQogICAgICAgIHJldHVybiBycTsNCiB9DQoNCjIuIGFkZCBuZXcgY2hhbmdlcyB0byBw
+cmV2aW91cywgdGFraW5nIG91dCBiZnFxX2dyb3VwKGluX3NlcnZfcXVldWUpIGZyb20gYmZxX3Vw
+ZGF0ZV9kaXNwYXRjaF9zdGF0cy4gUGF0Y2ggYXMgZm9sbG93Og0KDQpkaWZmIC0tZ2l0IGEvYmxv
+Y2svYmZxLWlvc2NoZWQuYyBiL2Jsb2NrL2JmcS1pb3NjaGVkLmMNCi0tLSBhL2Jsb2NrL2JmcS1p
+b3NjaGVkLmMNCisrKyBiL2Jsb2NrL2JmcS1pb3NjaGVkLmMNCkBAIC01MDA3LDcgKzUwMDcsNyBA
+QCBzdGF0aWMgc3RydWN0IHJlcXVlc3QgKl9fYmZxX2Rpc3BhdGNoX3JlcXVlc3Qoc3RydWN0IGJs
+a19tcV9od19jdHggKmhjdHgpICAjaWZkZWYgQ09ORklHX0JGUV9DR1JPVVBfREVCVUcgIHN0YXRp
+YyB2b2lkIGJmcV91cGRhdGVfZGlzcGF0Y2hfc3RhdHMoc3RydWN0IHJlcXVlc3RfcXVldWUgKnEs
+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCByZXF1ZXN0ICpy
+cSwNCi0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGJmcV9xdWV1
+ZSAqaW5fc2Vydl9xdWV1ZSwNCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+c3RydWN0IGJmcV9ncm91cCAqYmZxZ19pbl9zZXJ2LA0KICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBib29sIGlkbGVfdGltZXJfZGlzYWJsZWQpICB7DQogICAgICAgIHN0cnVj
+dCBiZnFfcXVldWUgKmJmcXEgPSBycSA/IFJRX0JGUVEocnEpIDogTlVMTDsgQEAgLTUwMzksNyAr
+NTAzOSw3IEBAIHN0YXRpYyB2b2lkIGJmcV91cGRhdGVfZGlzcGF0Y2hfc3RhdHMoc3RydWN0IHJl
+cXVlc3RfcXVldWUgKnEsDQogICAgICAgICAgICAgICAgICogdGhlcmVmb3JlIGd1YXJhbnRlZWQg
+dG8gZXhpc3QgYmVjYXVzZSBvZiB0aGUgYWJvdmUNCiAgICAgICAgICAgICAgICAgKiBhcmd1bWVu
+dHMuDQogICAgICAgICAgICAgICAgICovDQotICAgICAgICAgICAgICAgYmZxZ19zdGF0c191cGRh
+dGVfaWRsZV90aW1lKGJmcXFfZ3JvdXAoaW5fc2Vydl9xdWV1ZSkpOw0KKyAgICAgICAgICAgICAg
+IGJmcWdfc3RhdHNfdXBkYXRlX2lkbGVfdGltZShiZnFnX2luX3NlcnYpOw0KICAgICAgICBpZiAo
+YmZxcSkgew0KICAgICAgICAgICAgICAgIHN0cnVjdCBiZnFfZ3JvdXAgKmJmcWcgPSBiZnFxX2dy
+b3VwKGJmcXEpOw0KIA0KQEAgLTUwNTIsNyArNTA1Miw3IEBAIHN0YXRpYyB2b2lkIGJmcV91cGRh
+dGVfZGlzcGF0Y2hfc3RhdHMoc3RydWN0IHJlcXVlc3RfcXVldWUgKnEsICAjZWxzZSAgc3RhdGlj
+IGlubGluZSB2b2lkIGJmcV91cGRhdGVfZGlzcGF0Y2hfc3RhdHMoc3RydWN0IHJlcXVlc3RfcXVl
+dWUgKnEsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1
+Y3QgcmVxdWVzdCAqcnEsDQotICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBzdHJ1Y3QgYmZxX3F1ZXVlICppbl9zZXJ2X3F1ZXVlLA0KKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGJmcV9ncm91cCANCisgKmJmcWdfaW5f
+c2VydiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJvb2wg
+aWRsZV90aW1lcl9kaXNhYmxlZCkge30gICNlbmRpZiAvKiBDT05GSUdfQkZRX0NHUk9VUF9ERUJV
+RyAqLw0KIA0KQEAgLTUwNjIsMjAgKzUwNjIsMjMgQEAgc3RhdGljIHN0cnVjdCByZXF1ZXN0ICpi
+ZnFfZGlzcGF0Y2hfcmVxdWVzdChzdHJ1Y3QgYmxrX21xX2h3X2N0eCAqaGN0eCkNCiAgICAgICAg
+c3RydWN0IHJlcXVlc3QgKnJxOw0KICAgICAgICBzdHJ1Y3QgYmZxX3F1ZXVlICppbl9zZXJ2X3F1
+ZXVlOw0KICAgICAgICBib29sIHdhaXRpbmdfcnEsIGlkbGVfdGltZXJfZGlzYWJsZWQ7DQorICAg
+ICAgIHN0cnVjdCBiZnFfZ3JvdXAgKmJmcWdfaW5fc2VydjsNCiANCiAgICAgICAgc3Bpbl9sb2Nr
+X2lycSgmYmZxZC0+bG9jayk7DQogDQogICAgICAgIGluX3NlcnZfcXVldWUgPSBiZnFkLT5pbl9z
+ZXJ2aWNlX3F1ZXVlOw0KICAgICAgICB3YWl0aW5nX3JxID0gaW5fc2Vydl9xdWV1ZSAmJiBiZnFf
+YmZxcV93YWl0X3JlcXVlc3QoaW5fc2Vydl9xdWV1ZSk7DQorICAgICAgIGJmcWdfaW5fc2VydiA9
+IGJmcXFfZ3JvdXAoaW5fc2Vydl9xdWV1ZSk7DQogDQogICAgICAgIHJxID0gX19iZnFfZGlzcGF0
+Y2hfcmVxdWVzdChoY3R4KTsNCiANCi0gICAgICAgaWRsZV90aW1lcl9kaXNhYmxlZCA9DQotICAg
+ICAgICAgICAgICAgd2FpdGluZ19ycSAmJiAhYmZxX2JmcXFfd2FpdF9yZXF1ZXN0KGluX3NlcnZf
+cXVldWUpOw0KLQ0KKyAgICAgICBpZiAoaW5fc2Vydl9xdWV1ZSA9PSBiZnFkLT5pbl9zZXJ2aWNl
+X3F1ZXVlKSB7DQorICAgICAgICAgICAgICAgaWRsZV90aW1lcl9kaXNhYmxlZCA9DQorICAgICAg
+ICAgICAgICAgICAgICAgICB3YWl0aW5nX3JxICYmICFiZnFfYmZxcV93YWl0X3JlcXVlc3QoaW5f
+c2Vydl9xdWV1ZSk7DQorICAgICAgIH0NCiAgICAgICAgc3Bpbl91bmxvY2tfaXJxKCZiZnFkLT5s
+b2NrKTsNCiANCi0gICAgICAgYmZxX3VwZGF0ZV9kaXNwYXRjaF9zdGF0cyhoY3R4LT5xdWV1ZSwg
+cnEsIGluX3NlcnZfcXVldWUsDQorICAgICAgIGJmcV91cGRhdGVfZGlzcGF0Y2hfc3RhdHMoaGN0
+eC0+cXVldWUsIHJxLCBiZnFnX2luX3NlcnYsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgaWRsZV90aW1lcl9kaXNhYmxlZCk7DQogDQogICAgICAgIHJldHVybiBycTsNCg0KCXdo
+YXQgZG8geW91IHRoaW5rPw0KCQ0KCVRoYW5rcw0KCVpoYW5nIFdlbnNoZW5nDQotLS0tLdPKvP7U
+rbz+LS0tLS0NCreivP7IyzogUGFvbG8gVmFsZW50ZSBbbWFpbHRvOnBhb2xvLnZhbGVudGVAbGlu
+YXJvLm9yZ10NCreiy83KsbzkOiAyMDIxxOoxMtTCMTfI1SAwOjI4DQrK1bz+yMs6IHpoYW5nd2Vu
+c2hlbmcgKEUpIDx6aGFuZ3dlbnNoZW5nNUBodWF3ZWkuY29tPg0Ks63LzTogSmVucyBBeGJvZSA8
+YXhib2VAa2VybmVsLmRrPjsgbGludXgtYmxvY2tAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJu
+ZWxAdmdlci5rZXJuZWwub3JnDQrW98ziOiBSZTogW1BBVENIIC1uZXh0IHYzXSBiZnE6IGZpeCB1
+c2UtYWZ0ZXItZnJlZSBpbiBiZnFfZGlzcGF0Y2hfcmVxdWVzdA0KDQoNCg0KPiBJbCBnaW9ybm8g
+MTYgZGljIDIwMjEsIGFsbGUgb3JlIDEzOjIxLCBaaGFuZyBXZW5zaGVuZyA8emhhbmd3ZW5zaGVu
+ZzVAaHVhd2VpLmNvbT4gaGEgc2NyaXR0bzoNCj4gDQo+IEtBU0FOIHJlcG9ydHMgYSB1c2UtYWZ0
+ZXItZnJlZSByZXBvcnQgd2hlbiBkb2luZyBub3JtYWwgc2NzaS1tcSB0ZXN0DQo+IA0KPiBbNjk4
+MzIuMjM5MDMyXQ0KPiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0NCj4gWzY5ODMyLjI0MTgxMF0gQlVHOiBLQVNBTjogdXNl
+LWFmdGVyLWZyZWUgaW4NCj4gYmZxX2Rpc3BhdGNoX3JlcXVlc3QrMHgxMDQ1LzB4NDRiMA0KPiBb
+Njk4MzIuMjQzMjY3XSBSZWFkIG9mIHNpemUgOCBhdCBhZGRyIGZmZmY4ODgwMjYyMmJhODggYnkg
+dGFzaw0KPiBrd29ya2VyLzM6MUgvMTU1IFs2OTgzMi4yNDQ2NTZdIFs2OTgzMi4yNDUwMDddIENQ
+VTogMyBQSUQ6IDE1NSBDb21tOiANCj4ga3dvcmtlci8zOjFIIE5vdCB0YWludGVkIDUuMTAuMC0x
+MDI5NS1nNTc2YzYzODI1MjllICM4IFs2OTgzMi4yNDY2MjZdIA0KPiBIYXJkd2FyZSBuYW1lOiBR
+RU1VIFN0YW5kYXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSwgQklPUyANCj4gcmVsLTEuMTQu
+MC0wLWcxNTU4MjFhMTk5MGItcHJlYnVpbHQucWVtdS5vcmcgMDQvMDEvMjAxNCBbNjk4MzIuMjQ5
+MDY5XQ0KPiBXb3JrcXVldWU6IGtibG9ja2QgYmxrX21xX3J1bl93b3JrX2ZuIFs2OTgzMi4yNTAw
+MjJdIENhbGwgVHJhY2U6DQo+IFs2OTgzMi4yNTA1NDFdICBkdW1wX3N0YWNrKzB4OWIvMHhjZQ0K
+PiBbNjk4MzIuMjUxMjMyXSAgPyBiZnFfZGlzcGF0Y2hfcmVxdWVzdCsweDEwNDUvMHg0NGIwDQo+
+IFs2OTgzMi4yNTIyNDNdICBwcmludF9hZGRyZXNzX2Rlc2NyaXB0aW9uLmNvbnN0cHJvcC42KzB4
+M2UvMHg2MA0KPiBbNjk4MzIuMjUzMzgxXSAgPyBfX2NwdWlkbGVfdGV4dF9lbmQrMHg1LzB4NSBb
+Njk4MzIuMjU0MjExXSAgPyANCj4gdnByaW50a19mdW5jKzB4NmIvMHgxMjAgWzY5ODMyLjI1NDk5
+NF0gID8gDQo+IGJmcV9kaXNwYXRjaF9yZXF1ZXN0KzB4MTA0NS8weDQ0YjANCj4gWzY5ODMyLjI1
+NTk1Ml0gID8gYmZxX2Rpc3BhdGNoX3JlcXVlc3QrMHgxMDQ1LzB4NDRiMA0KPiBbNjk4MzIuMjU2
+OTE0XSAga2FzYW5fcmVwb3J0LmNvbGQuOSsweDIyLzB4M2EgWzY5ODMyLjI1Nzc1M10gID8gDQo+
+IGJmcV9kaXNwYXRjaF9yZXF1ZXN0KzB4MTA0NS8weDQ0YjANCj4gWzY5ODMyLjI1ODc1NV0gIGNo
+ZWNrX21lbW9yeV9yZWdpb24rMHgxYzEvMHgxZTAgWzY5ODMyLjI2MDI0OF0NCj4gYmZxX2Rpc3Bh
+dGNoX3JlcXVlc3QrMHgxMDQ1LzB4NDRiMA0KPiBbNjk4MzIuMjYxMTgxXSAgPyBiZnFfYmZxcV9l
+eHBpcmUrMHgyNDQwLzB4MjQ0MCBbNjk4MzIuMjYyMDMyXSAgPyANCj4gYmxrX21xX2RlbGF5X3J1
+bl9od19xdWV1ZXMrMHhmOS8weDE3MA0KPiBbNjk4MzIuMjYzMDIyXSAgX19ibGtfbXFfZG9fZGlz
+cGF0Y2hfc2NoZWQrMHg1MmYvMHg4MzANCj4gWzY5ODMyLjI2NDAxMV0gID8gYmxrX21xX3NjaGVk
+X3JlcXVlc3RfaW5zZXJ0ZWQrMHgxMDAvMHgxMDANCj4gWzY5ODMyLjI2NTEwMV0gIF9fYmxrX21x
+X3NjaGVkX2Rpc3BhdGNoX3JlcXVlc3RzKzB4Mzk4LzB4NGYwDQo+IFs2OTgzMi4yNjYyMDZdICA/
+IGJsa19tcV9kb19kaXNwYXRjaF9jdHgrMHg1NzAvMHg1NzANCj4gWzY5ODMyLjI2NzE0N10gID8g
+X19zd2l0Y2hfdG8rMHg1ZjQvMHhlZTAgWzY5ODMyLjI2Nzg5OF0NCj4gYmxrX21xX3NjaGVkX2Rp
+c3BhdGNoX3JlcXVlc3RzKzB4ZGYvMHgxNDANCj4gWzY5ODMyLjI2ODk0Nl0gIF9fYmxrX21xX3J1
+bl9od19xdWV1ZSsweGMwLzB4MjcwIFs2OTgzMi4yNjk4NDBdDQo+IGJsa19tcV9ydW5fd29ya19m
+bisweDUxLzB4NjAgWzY5ODMyLjI3ODE3MF0NCj4gcHJvY2Vzc19vbmVfd29yaysweDZkNC8weGZl
+MCBbNjk4MzIuMjc4OTg0XSAgd29ya2VyX3RocmVhZCsweDkxLzB4YzgwIA0KPiBbNjk4MzIuMjc5
+NzI2XSAgPyBfX2t0aHJlYWRfcGFya21lKzB4YjAvMHgxMTAgWzY5ODMyLjI4MDU1NF0gID8NCj4g
+cHJvY2Vzc19vbmVfd29yaysweGZlMC8weGZlMCBbNjk4MzIuMjgxNDE0XSAga3RocmVhZCsweDMy
+ZC8weDNmMCANCj4gWzY5ODMyLjI4MjA4Ml0gID8ga3RocmVhZF9wYXJrKzB4MTcwLzB4MTcwIFs2
+OTgzMi4yODI4NDldDQo+IHJldF9mcm9tX2ZvcmsrMHgxZi8weDMwIFs2OTgzMi4yODM1NzNdIFs2
+OTgzMi4yODM4ODZdIEFsbG9jYXRlZCBieSANCj4gdGFzayA3NzI1Og0KPiBbNjk4MzIuMjg0NTk5
+XSAga2FzYW5fc2F2ZV9zdGFjaysweDE5LzB4NDAgWzY5ODMyLjI4NTM4NV0NCj4gX19rYXNhbl9r
+bWFsbG9jLmNvbnN0cHJvcC4yKzB4YzEvMHhkMA0KPiBbNjk4MzIuMjg2MzUwXSAga21lbV9jYWNo
+ZV9hbGxvY19ub2RlKzB4MTNmLzB4NDYwIFs2OTgzMi4yODcyMzddDQo+IGJmcV9nZXRfcXVldWUr
+MHgzZDQvMHgxMTQwIFs2OTgzMi4yODc5OTNdDQo+IGJmcV9nZXRfYmZxcV9oYW5kbGVfc3BsaXQr
+MHgxMDMvMHg1MTANCj4gWzY5ODMyLjI4OTAxNV0gIGJmcV9pbml0X3JxKzB4MzM3LzB4MmQ1MCBb
+Njk4MzIuMjg5NzQ5XQ0KPiBiZnFfaW5zZXJ0X3JlcXVlc3RzKzB4MzA0LzB4NGUxMCBbNjk4MzIu
+MjkwNjM0XQ0KPiBibGtfbXFfc2NoZWRfaW5zZXJ0X3JlcXVlc3RzKzB4MTNlLzB4MzkwDQo+IFs2
+OTgzMi4yOTE2MjldICBibGtfbXFfZmx1c2hfcGx1Z19saXN0KzB4NGI0LzB4NzYwDQo+IFs2OTgz
+Mi4yOTI1MzhdICBibGtfZmx1c2hfcGx1Z19saXN0KzB4MmM1LzB4NDgwIFs2OTgzMi4yOTMzOTJd
+DQo+IGlvX3NjaGVkdWxlX3ByZXBhcmUrMHhiMi8weGQwIFs2OTgzMi4yOTQyMDldDQo+IGlvX3Nj
+aGVkdWxlX3RpbWVvdXQrMHgxMy8weDgwIFs2OTgzMi4yOTUwMTRdDQo+IHdhaXRfZm9yX2NvbW1v
+bl9pby5jb25zdHByb3AuMSsweDEzYy8weDI3MA0KPiBbNjk4MzIuMjk2MTM3XSAgc3VibWl0X2Jp
+b193YWl0KzB4MTAzLzB4MWEwIFs2OTgzMi4yOTY5MzJdDQo+IGJsa2Rldl9pc3N1ZV9kaXNjYXJk
+KzB4ZTYvMHgxNjAgWzY5ODMyLjI5Nzc5NF0NCj4gYmxrX2lvY3RsX2Rpc2NhcmQrMHgyMTkvMHgy
+OTAgWzY5ODMyLjI5ODYxNF0NCj4gYmxrZGV2X2NvbW1vbl9pb2N0bCsweDUwYS8weDE3NTAgWzY5
+ODMyLjMwNDcxNV0NCj4gYmxrZGV2X2lvY3RsKzB4NDcwLzB4NjAwIFs2OTgzMi4zMDU0NzRdICBi
+bG9ja19pb2N0bCsweGRlLzB4MTIwIA0KPiBbNjk4MzIuMzA2MjMyXSAgdmZzX2lvY3RsKzB4NmMv
+MHhjMCBbNjk4MzIuMzA2ODc3XQ0KPiBfX3NlX3N5c19pb2N0bCsweDkwLzB4YTAgWzY5ODMyLjMw
+NzYyOV0gIGRvX3N5c2NhbGxfNjQrMHgyZC8weDQwIA0KPiBbNjk4MzIuMzA4MzYyXSAgZW50cnlf
+U1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NDQvMHhhOQ0KPiBbNjk4MzIuMzA5MzgyXQ0KPiBb
+Njk4MzIuMzA5NzAxXSBGcmVlZCBieSB0YXNrIDE1NToNCj4gWzY5ODMyLjMxMDMyOF0gIGthc2Fu
+X3NhdmVfc3RhY2srMHgxOS8weDQwIFs2OTgzMi4zMTExMjFdDQo+IGthc2FuX3NldF90cmFjaysw
+eDFjLzB4MzAgWzY5ODMyLjMxMTg2OF0NCj4ga2FzYW5fc2V0X2ZyZWVfaW5mbysweDFiLzB4MzAg
+WzY5ODMyLjMxMjY5OV0NCj4gX19rYXNhbl9zbGFiX2ZyZWUrMHgxMTEvMHgxNjAgWzY5ODMyLjMx
+MzUyNF0NCj4ga21lbV9jYWNoZV9mcmVlKzB4OTQvMHg0NjAgWzY5ODMyLjMxNDM2N10gIGJmcV9w
+dXRfcXVldWUrMHg1ODIvMHg5NDAgDQo+IFs2OTgzMi4zMTUxMTJdICBfX2JmcV9iZnFkX3Jlc2V0
+X2luX3NlcnZpY2UrMHgxNjYvMHgxZDANCj4gWzY5ODMyLjMxNzI3NV0gIGJmcV9iZnFxX2V4cGly
+ZSsweGIyNy8weDI0NDAgWzY5ODMyLjMxODA4NF0NCj4gYmZxX2Rpc3BhdGNoX3JlcXVlc3QrMHg2
+OTcvMHg0NGIwIFs2OTgzMi4zMTg5OTFdDQo+IF9fYmxrX21xX2RvX2Rpc3BhdGNoX3NjaGVkKzB4
+NTJmLzB4ODMwDQo+IFs2OTgzMi4zMTk5ODRdICBfX2Jsa19tcV9zY2hlZF9kaXNwYXRjaF9yZXF1
+ZXN0cysweDM5OC8weDRmMA0KPiBbNjk4MzIuMzIxMDg3XSAgYmxrX21xX3NjaGVkX2Rpc3BhdGNo
+X3JlcXVlc3RzKzB4ZGYvMHgxNDANCj4gWzY5ODMyLjMyMjIyNV0gIF9fYmxrX21xX3J1bl9od19x
+dWV1ZSsweGMwLzB4MjcwIFs2OTgzMi4zMjMxMTRdDQo+IGJsa19tcV9ydW5fd29ya19mbisweDUx
+LzB4NjAgWzY5ODMyLjMyMzk0Ml0NCj4gcHJvY2Vzc19vbmVfd29yaysweDZkNC8weGZlMCBbNjk4
+MzIuMzI0NzcyXSAgd29ya2VyX3RocmVhZCsweDkxLzB4YzgwIA0KPiBbNjk4MzIuMzI1NTE4XSAg
+a3RocmVhZCsweDMyZC8weDNmMCBbNjk4MzIuMzI2MjA1XQ0KPiByZXRfZnJvbV9mb3JrKzB4MWYv
+MHgzMCBbNjk4MzIuMzI2OTMyXSBbNjk4MzIuMzM4Mjk3XSBUaGUgYnVnZ3kgDQo+IGFkZHJlc3Mg
+YmVsb25ncyB0byB0aGUgb2JqZWN0IGF0IGZmZmY4ODgwMjYyMmI5NjggWzY5ODMyLjMzODI5N10g
+d2hpY2ggDQo+IGJlbG9uZ3MgdG8gdGhlIGNhY2hlIGJmcV9xdWV1ZSBvZiBzaXplIDUxMiBbNjk4
+MzIuMzQwNzY2XSBUaGUgYnVnZ3kgDQo+IGFkZHJlc3MgaXMgbG9jYXRlZCAyODggYnl0ZXMgaW5z
+aWRlIG9mIFs2OTgzMi4zNDA3NjZdICA1MTItYnl0ZSByZWdpb24gDQo+IFtmZmZmODg4MDI2MjJi
+OTY4LCBmZmZmODg4MDI2MjJiYjY4KSBbNjk4MzIuMzQzMDkxXSBUaGUgYnVnZ3kgYWRkcmVzcyAN
+Cj4gYmVsb25ncyB0byB0aGUgcGFnZToNCj4gWzY5ODMyLjM0NDA5N10gcGFnZTpmZmZmZWEwMDAw
+OTg4YTAwIHJlZmNvdW50OjEgbWFwY291bnQ6MA0KPiBtYXBwaW5nOjAwMDAwMDAwMDAwMDAwMDAg
+aW5kZXg6MHhmZmZmODg4MDI2MjJhNTI4IHBmbjoweDI2MjI4IA0KPiBbNjk4MzIuMzQ2MjE0XSBo
+ZWFkOmZmZmZlYTAwMDA5ODhhMDAgb3JkZXI6MiBjb21wb3VuZF9tYXBjb3VudDowDQo+IGNvbXBv
+dW5kX3BpbmNvdW50OjAgWzY5ODMyLjM0NzcxOV0gZmxhZ3M6IDB4MWZmZmZmODAwMTAyMDAoc2xh
+YnxoZWFkKSANCj4gWzY5ODMyLjM0ODYyNV0gcmF3OiAwMDFmZmZmZjgwMDEwMjAwIGZmZmZlYTAw
+MDBkYmFjMDggZmZmZjg4ODAxN2E1NzY1MA0KPiBmZmZmODg4MDE3OWZlODQwIFs2OTgzMi4zNTQ5
+NzJdIHJhdzogZmZmZjg4ODAyNjIyYTUyOCAwMDAwMDAwMDAwMTIwMDA4IA0KPiAwMDAwMDAwMWZm
+ZmZmZmZmIDAwMDAwMDAwMDAwMDAwMDAgWzY5ODMyLjM1NjU0N10gcGFnZSBkdW1wZWQgYmVjYXVz
+ZToNCj4ga2FzYW46IGJhZCBhY2Nlc3MgZGV0ZWN0ZWQgWzY5ODMyLjM1NzY1Ml0gWzY5ODMyLjM1
+Nzk3MF0gTWVtb3J5IHN0YXRlIGFyb3VuZCB0aGUgYnVnZ3kgYWRkcmVzczoNCj4gWzY5ODMyLjM1
+ODkyNl0gIGZmZmY4ODgwMjYyMmI5ODA6IGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZi
+IGZiIA0KPiBmYiBmYiBmYiBmYiBbNjk4MzIuMzYwMzU4XSAgZmZmZjg4ODAyNjIyYmEwMDogZmIg
+ZmIgZmIgZmIgZmIgZmIgZmIgZmIgDQo+IGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIFs2OTgzMi4z
+NjE4MTBdID5mZmZmODg4MDI2MjJiYTgwOiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBm
+YiBmYiBmYiBmYiBmYiBmYg0KPiBbNjk4MzIuMzYzMjczXSAgICAgICAgICAgICAgICAgICAgICAg
+Xg0KPiBbNjk4MzIuMzYzOTc1XSAgZmZmZjg4ODAyNjIyYmIwMDogZmIgZmIgZmIgZmIgZmIgZmIg
+ZmIgZmIgZmIgZmIgZmIgZmIgDQo+IGZiIGZjIGZjIGZjIFs2OTgzMi4zNzU5NjBdICBmZmZmODg4
+MDI2MjJiYjgwOiBmYyBmYyBmYyBmYyBmYyBmYyBmYyBmYyANCj4gZmMgZmMgZmMgZmMgZmMgZmMg
+ZmMgZmMgWzY5ODMyLjM3NzQwNV0gDQo+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiANCj4gSW4gYmZxX2Rpc3BhdGNo
+X3JlcXVlc3RmdW5jdGlvbiwgaXQgbWF5IGhhdmUgZnVuY3Rpb24gY2FsbDoNCj4gDQo+IGJmcV9k
+aXNwYXRjaF9yZXF1ZXN0DQo+IAlfX2JmcV9kaXNwYXRjaF9yZXF1ZXN0DQo+IAkJYmZxX3NlbGVj
+dF9xdWV1ZQ0KPiAJCQliZnFfYmZxcV9leHBpcmUNCj4gCQkJCV9fYmZxX2JmcWRfcmVzZXRfaW5f
+c2VydmljZQ0KPiAJCQkJCWJmcV9wdXRfcXVldWUNCj4gCQkJCQkJa21lbV9jYWNoZV9mcmVlDQo+
+IEluIHRoaXMgZnVuY3Rpb24gY2FsbCwgaW5fc2Vydl9xdWV1ZSBoYXMgYmVlZCBleHBpcmVkIGFu
+ZCBtZWV0IHRoZSANCj4gY29uZGl0aW9ucyB0byBmcmVlLiBJbiB0aGUgZnVuY3Rpb24gYmZxX2Rp
+c3BhdGNoX3JlcXVlc3QsIHRoZSBhZGRyZXNzIA0KPiBvZiBpbl9zZXJ2X3F1ZXVlIHBvaW50aW5n
+IHRvIGhhcyBiZWVuIHJlbGVhc2VkLiBGb3IgZ2V0dGluZyB0aGUgdmFsdWUgDQo+IG9mIGlkbGVf
+dGltZXJfZGlzYWJsZWQsIGl0IHdpbGwgZ2V0IGZsYWdzIHZhbHVlIGZyb20gdGhlIGFkZHJlc3Mg
+d2hpY2ggDQo+IGluX3NlcnZfcXVldWUgcG9pbnRpbmcgdG8sIHRoZW4gdGhlIHByb2JsZW0gb2Yg
+dXNlLWFmdGVyLWZyZWUgaGFwcGVuczsNCj4gDQo+IEZpeCB0aGUgcHJvYmxlbSBieSBjaGVjayBp
+bl9zZXJ2X3F1ZXVlID09IGJmcWQtPmluX3NlcnZpY2VfcXVldWUsIHRvIA0KPiBnZXQgdGhlIHZh
+bHVlIG9mIGlkbGVfdGltZXJfZGlzYWJsZWQgaWYgaW5fc2VydmVfcXVldWUgaXMgZXF1ZWwgdG8N
+Cj4gYmZxZC0+aW5fc2VydmljZV9xdWV1ZS4gSWYgdGhlIHNwYWNlIG9mIGluX3NlcnZfcXVldWUg
+cG9pbnRpbmcgaGFzDQo+IGJlZW4gcmVsZWFzZWQsIHRoaXMganVkZ2Ugd2lsbCBhdmlvZCB1c2Ut
+YWZ0ZXItZnJlZSBwcm9ibGVtLg0KPiBBbmQgaWYgaW5fc2Vydl9xdWV1ZSBtYXkgYmUgZXhwaXJl
+ZCBidXQgaXQgc3RpbGwgZXhpc3RzLCB0aGlzIGp1ZGdlIA0KPiBtYXkgaGF2ZSBsaXR0bGUgZWZm
+ZWN0cyBvbiB0aGUgZnVuY3Rpb24gYmZxZ19zdGF0c191cGRhdGVfaWRsZV90aW1lIGluIA0KPiBi
+ZnFfdXBkYXRlX2Rpc3BhdGNoX3N0YXRzLg0KPiANCj4gUmVwb3J0ZWQtYnk6IEh1bGsgUm9ib3Qg
+PGh1bGtjaUBodWF3ZWkuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBaaGFuZyBXZW5zaGVuZyA8emhh
+bmd3ZW5zaGVuZzVAaHVhd2VpLmNvbT4NCj4gLS0tDQo+IGJsb2NrL2JmcS1pb3NjaGVkLmMgfCA5
+ICsrKysrLS0tLQ0KPiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9u
+cygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Jsb2NrL2JmcS1pb3NjaGVkLmMgYi9ibG9jay9iZnEt
+aW9zY2hlZC5jIGluZGV4IA0KPiBmZWMxODExOGRjMzAuLjk3NTMzNjM0Yjk5ZSAxMDA2NDQNCj4g
+LS0tIGEvYmxvY2svYmZxLWlvc2NoZWQuYw0KPiArKysgYi9ibG9jay9iZnEtaW9zY2hlZC5jDQo+
+IEBAIC01MDYxLDcgKzUwNjEsNyBAQCBzdGF0aWMgc3RydWN0IHJlcXVlc3QgKmJmcV9kaXNwYXRj
+aF9yZXF1ZXN0KHN0cnVjdCBibGtfbXFfaHdfY3R4ICpoY3R4KQ0KPiAJc3RydWN0IGJmcV9kYXRh
+ICpiZnFkID0gaGN0eC0+cXVldWUtPmVsZXZhdG9yLT5lbGV2YXRvcl9kYXRhOw0KPiAJc3RydWN0
+IHJlcXVlc3QgKnJxOw0KPiAJc3RydWN0IGJmcV9xdWV1ZSAqaW5fc2Vydl9xdWV1ZTsNCj4gLQli
+b29sIHdhaXRpbmdfcnEsIGlkbGVfdGltZXJfZGlzYWJsZWQ7DQo+ICsJYm9vbCB3YWl0aW5nX3Jx
+LCBpZGxlX3RpbWVyX2Rpc2FibGVkID0gZmFsc2U7DQo+IA0KPiAJc3Bpbl9sb2NrX2lycSgmYmZx
+ZC0+bG9jayk7DQo+IA0KPiBAQCAtNTA3MCw5ICs1MDcwLDEwIEBAIHN0YXRpYyBzdHJ1Y3QgcmVx
+dWVzdCANCj4gKmJmcV9kaXNwYXRjaF9yZXF1ZXN0KHN0cnVjdCBibGtfbXFfaHdfY3R4ICpoY3R4
+KQ0KPiANCj4gCXJxID0gX19iZnFfZGlzcGF0Y2hfcmVxdWVzdChoY3R4KTsNCj4gDQo+IC0JaWRs
+ZV90aW1lcl9kaXNhYmxlZCA9DQo+IC0JCXdhaXRpbmdfcnEgJiYgIWJmcV9iZnFxX3dhaXRfcmVx
+dWVzdChpbl9zZXJ2X3F1ZXVlKTsNCj4gLQ0KPiArCWlmIChpbl9zZXJ2X3F1ZXVlID09IGJmcWQt
+PmluX3NlcnZpY2VfcXVldWUpIHsNCj4gKwkJaWRsZV90aW1lcl9kaXNhYmxlZCA9DQo+ICsJCQl3
+YWl0aW5nX3JxICYmICFiZnFfYmZxcV93YWl0X3JlcXVlc3QoaW5fc2Vydl9xdWV1ZSk7DQo+ICsJ
+fQ0KDQpHb29kIGNhdGNoIQ0KDQo+IAlzcGluX3VubG9ja19pcnEoJmJmcWQtPmxvY2spOw0KPiAN
+Cj4gCWJmcV91cGRhdGVfZGlzcGF0Y2hfc3RhdHMoaGN0eC0+cXVldWUsIHJxLCBpbl9zZXJ2X3F1
+ZXVlLA0KDQpZZXQsIHdoYXQgYWJvdXQgdGhlIGFib3ZlIHVzZSBvZiBpbl9zZXJ2X3F1ZXVlIHRo
+ZW4/DQoNClRoYW5rcywNClBhb2xvDQoNCj4gLS0NCj4gMi4zMS4xDQo+IA0KDQo=

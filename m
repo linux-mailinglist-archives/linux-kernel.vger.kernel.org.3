@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A129493C33
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446A4493C36
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241974AbiASOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:49:09 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45464
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234438AbiASOtI (ORCPT
+        id S1355275AbiASOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355256AbiASOtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:49:08 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A3B1A3F1C4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:49:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642603746;
-        bh=8N0tMQvK/ddTr0m3n20Yg1rH+YmkdkWObImqke9HUbc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=nfHL8U2YIPQQtG6kzjBYRr1mbExrnaUmdvgXFdzE65sXDT+PX6UV3v3Qj5LByMkHe
-         ZVcocF+SMbtmZsrdkfEkJ4hK5jDy9RvEGtKCD3Ig9rAn6nXdRw9I59Vs5rnyH2VZwv
-         qRqZngRybbh2jGx2b/DtL3GfAQiPAjnfv5zsl1NElhbRzfne6uJvfckpHVfJIeftUh
-         KVbuy8kMN3mxqyv9nCOCeAcFS4M2fGxhXEwzhTkPP9YO0rat+Q1KIiIdF5mkrsg12A
-         jUOCBzcLGWUMx+TTwtaQp20/ElT2x7hKh70FwgiriwZbZYt+xX0pOGOREe2Sks7EDY
-         iOZGEIVT0xsYQ==
-Received: by mail-ed1-f69.google.com with SMTP id ej6-20020a056402368600b00402b6f12c3fso2736154edb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:49:06 -0800 (PST)
+        Wed, 19 Jan 2022 09:49:25 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8C0C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:49:24 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id d4so2526182qtw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:49:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4ebj2v9aauSthzIYWo7QMYbJ7+f74Bs+InfheCepxYQ=;
+        b=UyBhcZyqV06Q+lerX33fodCKzbbo6UN21015hA1XzKQSN3/aDtkNZraQJqfTwrgQ9E
+         iJyEonr90tPHETmsWEVeKf5Fiv0ZY9Ojvum3iYQNo3dQBI+vbNsEig6xG0RhmLGyVv2L
+         A1eqnTBh4sxStbn7+6lmoo08j6xFIC7A5VQ07TpM83Xbae6snqjRS2y/vJtxEFOMS2M4
+         fktALHxE9fdS245d+fE6q7SWGXuhk8AJoFyibv2SC06N8v2e8bZy14soeOh1AwK8s2Dd
+         Qsflu8/pNW1JTBjN1A2W1xETT7Mhbp3igJF3HCSz7nrkfQhlTavAnt9VAMYvq7eLstHa
+         Y+TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8N0tMQvK/ddTr0m3n20Yg1rH+YmkdkWObImqke9HUbc=;
-        b=dDv1qNPLPhjCETg7WgBAISu2d4DOpBWxDNo3RaWiGuxHvpe/mZskldh5g2x2v+aVkO
-         xyaiYXg87BO/NnYfB0yQ8y3BMOap78FETe6guw6zbS/Hqkiqz0xIfBqu1HzF+STAJHxK
-         Pnmh1kSkMDxMWz9H0jTxuBUr39LKVeJsPwyxgl2W5vgrehrpnsMLs1gU83s8YceB+S2S
-         QdSVVo0rumA1CtYoXQhPvgMXsUT7tTyYtHzVFfCAy02C6cBbv4WxDcN9AHC5Tuuf9u08
-         TT990sif01G2z9WDznPhn165dAlS3izlp5LO3yul1BKOkrVb+En6qqSchy8kdUwBcdfA
-         lRfA==
-X-Gm-Message-State: AOAM531/vIzWy1/TabbpdJbhtl6XBWt2NxdIngdqEbn+OrCSZCnzG0s8
-        EgdxoWb2Ftn0sEYPvaEZtUP2g0RGf6ObLXmLAya9156vIhJZltCJeOdN4XH/TuzcCMUVQTLkTxB
-        DW08I4x9hvE3Xi3okv740djVe0xHvQDO8xkamPHV7Ig==
-X-Received: by 2002:a05:6402:1104:: with SMTP id u4mr31400250edv.24.1642603746384;
-        Wed, 19 Jan 2022 06:49:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJywQgiQXDsmm4wHMKZQDucd4VQ0O8UGKnCspPk9GOsHIfBhx/X6dSHuH1QGHo5nePUGxuaCHQ==
-X-Received: by 2002:a05:6402:1104:: with SMTP id u4mr31400233edv.24.1642603746228;
-        Wed, 19 Jan 2022 06:49:06 -0800 (PST)
-Received: from [192.168.0.45] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id d14sm1327637edu.57.2022.01.19.06.49.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 06:49:05 -0800 (PST)
-Message-ID: <495d7eee-ab87-d330-119c-eaafa6c1dee7@canonical.com>
-Date:   Wed, 19 Jan 2022 15:49:02 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4ebj2v9aauSthzIYWo7QMYbJ7+f74Bs+InfheCepxYQ=;
+        b=EdJK+iS/8h1dazFZWJqpfjcNVZHNs6UvgS4toFVUbqfjQEsFd03fPKKAejWtGHG1ge
+         IfBCJeXZYlLrJiVRJzakc9dcuj9FZQ8lliPeNEUHxHufXKjb8BgDWwvV+7a5lObeagWH
+         jLZJNleELCRHytFBwFok10e9KdnPNXeA6YYq3O6j0VW5bxHAOeF49IFx4fqsHxKTihGe
+         LbP3Edx4HX4mTzLL5RuNqS7jKybrii40fDkyX7mKppHWTkIqv8/phDSvyROdvRrFQCi0
+         t+hxrtNK2rbPgZHNek3lnX2bTKFRGkyeWEg2ETkjgYPcES1IxjEtPs2fW8uDmL3dPi6S
+         O7Aw==
+X-Gm-Message-State: AOAM531Y3VTRHGdgyO85QmTmS67B0iXlH+3WA4oDxzYLuqgVEvGn0jxX
+        gglhdb4T/97fcxNvltsBIJgz9w==
+X-Google-Smtp-Source: ABdhPJwXjosarVU94saEwb0jGHuMCRj1vwYmznYwIEPq2vSd7TMD3aSMRT0jmJFa6f8vi+PO/kemvQ==
+X-Received: by 2002:ac8:7c46:: with SMTP id o6mr4946928qtv.587.1642603763909;
+        Wed, 19 Jan 2022 06:49:23 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id z11sm4717707qta.1.2022.01.19.06.49.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 06:49:22 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nACH2-001K1X-E7; Wed, 19 Jan 2022 10:49:20 -0400
+Date:   Wed, 19 Jan 2022 10:49:20 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Praveen Kannoju <praveen.kannoju@oracle.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
+        Rajesh Sivaramasubramaniom 
+        <rajesh.sivaramasubramaniom@oracle.com>
+Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
+ asynchronous workers to flush the mr pool
+Message-ID: <20220119144920.GL8034@ziepe.ca>
+References: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
+ <53D98F26-FC52-4F3E-9700-ED0312756785@oracle.com>
+ <20220118191754.GG8034@ziepe.ca>
+ <CEFD48B4-3360-4040-B41A-49B8046D28E8@oracle.com>
+ <Yee2tMJBd4kC8axv@unreal>
+ <PH0PR10MB5515E99CA5DF423BDEBB038E8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <20220119130450.GJ8034@ziepe.ca>
+ <PH0PR10MB551565CBAD2FF5CC0D3C69C48C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <20220119131728.GK8034@ziepe.ca>
+ <PH0PR10MB5515039926FA5F66537A6EBB8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
- <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAPLW+4=vEYm6dGSCXtmiXUVe7FT6p=6Uk=MCvEsEgcdTz-R0NA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR10MB5515039926FA5F66537A6EBB8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2022 15:35, Sam Protsenko wrote:
-> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> Hi,
->>
->> Second pull with DTS for ARM64, on top of previous pull.
->>
->> Best regards,
->> Krzysztof
->>
->>
->> The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
->>
->>   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
->>
->> are available in the Git repository at:
->>
->>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
->>
->> for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
->>
->>   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
->>
->> ----------------------------------------------------------------
->> Samsung DTS ARM64 changes for v5.17, part two
->>
->> Add initial Exynos850 support and WinLink E850-96 board using it.
->>
->> ----------------------------------------------------------------
->> Sam Protsenko (2):
->>       arm64: dts: exynos: Add initial Exynos850 SoC support
->>       arm64: dts: exynos: Add initial E850-96 board support
->>
+On Wed, Jan 19, 2022 at 02:08:48PM +0000, Praveen Kannoju wrote:
+> From: Jason Gunthorpe [mailto:jgg@ziepe.ca] 
+> Sent: 19 January 2022 06:47 PM
+> To: Praveen Kannoju <praveen.kannoju@oracle.com>
+> Cc: Leon Romanovsky <leon@kernel.org>; Santosh Shilimkar <santosh.shilimkar@oracle.com>; David S . Miller <davem@davemloft.net>; kuba@kernel.org; netdev@vger.kernel.org; linux-rdma@vger.kernel.org; rds-devel@oss.oracle.com; linux-kernel@vger.kernel.org; Rama Nichanamatlu <rama.nichanamatlu@oracle.com>; Rajesh Sivaramasubramaniom <rajesh.sivaramasubramaniom@oracle.com>
+> Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the asynchronous workers to flush the mr pool
 > 
-> Hi Krzysztof,
+> On Wed, Jan 19, 2022 at 01:12:29PM +0000, Praveen Kannoju wrote:
 > 
-> Do you know if this series is going to land in v5.17? 
+> > Yes, we are using the barriers. I was justifying the usage of
+> > smp_rmb() and smp_wmb() over smp_load_acquire() and
+> > smp_store_release() in the patch.
+> 
+> You failed to justify it.
+> 
+> Jason
+> 
+> Apologies, if my earlier point is not clear, Jason.
+> Let me reframe:
+> 
+> 1. The introduced bool variable "flush_ongoing", is being accessed only in the function "rds_ib_free_mr" while spawning asynchronous workers.
+> 
+> 2. The ordering guaranteed by smp_rmb() and smp_wmb() would be
+> sufficient for such simple usage and hence we did not use
+> smp_load_acquire() and smp_store_release().
 
-I don't know, did not check.
+Again you haven't defined why these barriers are any differnet from
+acquire/release or even *what they are doing*
 
-> The prediction
-> (by phb-crystal-ball) is that MW closes on 23 Jan. I can see those
-> patches in soc/for-next [1], but want to be sure those are scheduled
-> for v5.17.
-
-I don't get how can you be sure that they will be in v5.17. If they are
-not going to be pulled - what can you do?
-
-
-Best regards,
-Krzysztof
+Jason

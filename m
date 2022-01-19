@@ -2,142 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27989493B2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5EA493B3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240203AbiASNiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:38:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48580 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230422AbiASNiV (ORCPT
+        id S240467AbiASNlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234312AbiASNli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:38:21 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JBSog9005162;
-        Wed, 19 Jan 2022 13:38:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HbG6NWXqGqLalCu6NZEP7hHtQq8F8NOCoIRmlek7Bno=;
- b=SNSSV78S2GjtWceMDcycJ6VJ9AWL4E11EqTYNynwAasEj5DBs4ogyS8J2XCjHXDmV0Ve
- wjMatMIkU1jmIOsseB/l8dUPGNr4mN3qI+VXYiQOZIVJ0AhUVOFbGbBvDiCKMEoPPxMy
- DIyhKno3iF7Tr8nEyenIWOEoJG2V657zpLX+zwDHKVHMNhgDzBUALmPc+6po62qHPn6p
- 31yN2dhB/iiYpKgpOmJzuqYIYfKqVdYNE8UCVxRazUgPo5mAC9lY4oFtKB4Ji9505XER
- 9mLpmy1ioxbfe1bmrZlHUq1UUPw6KR6jAEPzwG+VJKCjnrPMfnk0Ga9KHXRdXxRmHcMC Yw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpht2jpfq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:38:21 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JDLsxm011940;
-        Wed, 19 Jan 2022 13:38:20 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpht2jpeu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:38:20 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JDXKtb001327;
-        Wed, 19 Jan 2022 13:38:17 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3dnm6rdhx4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:38:17 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JDcE3s41746752
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 13:38:14 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25B2DA4040;
-        Wed, 19 Jan 2022 13:38:14 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30FADA405F;
-        Wed, 19 Jan 2022 13:38:13 +0000 (GMT)
-Received: from [9.171.7.240] (unknown [9.171.7.240])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 13:38:13 +0000 (GMT)
-Message-ID: <27c5a295-8bb0-f6b2-bafe-9900e28403a7@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 14:39:57 +0100
+        Wed, 19 Jan 2022 08:41:38 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E15C061574;
+        Wed, 19 Jan 2022 05:41:38 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x7so9477431lfu.8;
+        Wed, 19 Jan 2022 05:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=E80AIJuq6LPMF9rIykqm1KYtwvgVA/MlGMAu7dFX5Ek=;
+        b=I8N4zkeDQGGY+JpK17xsljhDGBSRjOz6IoY+IvPzfLzIsFqc/aeNBrxqiYPZfu7Z6E
+         M3KNBjEfrHTfo0tU0u25PgeXtLPcrorYRrRRDtG0bMg376P4rHZk+s0kOfeh6iH8NcYL
+         8MhFzMA+H3J/EtNE12KqmWnrgPPjlzDzkScC0U1FOrAoNBQb73/xJ4SQS7djRna5pkhQ
+         yAViVWJFyZsD8x4kVBIGoLCK0TkCvpDNVGkeDhCL+b9TdrYIdF5cQjrPTeXPXavAM2sf
+         tHHIFi0sn7/9UpXbx7SqjQtVtSWOPLVtJQXCk7SLrrxv5Oln4MwBs26mf62xQMdiM0BL
+         9eWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E80AIJuq6LPMF9rIykqm1KYtwvgVA/MlGMAu7dFX5Ek=;
+        b=DtGIeB/SJUW9GYHXMDQKHsIpYOAJw5ZdKKfaCUujJ8UwZgnN2d68jUfShnCZTzB2oL
+         /NoLymdmSh7pqLN3SLr0wh13cUOwRrSe92Gcnej33WlgGDb8vWHd36n12FYwBv/9JV1C
+         YxgEhxKXPOyq8/eE8SlfDEzhx/v2z3kQrH30ydVzAkyVXhIBagJri+krimisOsNOcW4L
+         E5B4BYgT7oaFAz5XIJeTCQ0TUiTrQhvBC4bGNU8DO8XWhdyZn8QuUPxsiVKss7BfLTUD
+         si4waWN8hslMj3C0FlMbb3iCo3A1wIYQd8rwXd3J03qj7AD97rONkQ7WW4aZsB0MXRnT
+         n2qQ==
+X-Gm-Message-State: AOAM532xSFZ4kfoIyxBD68iC8aA0OT4x1DoTVqozAOMoWcNO/ZoGV88Y
+        OpDH5Kan2fFfMhKLABxUyiY=
+X-Google-Smtp-Source: ABdhPJw7CcqTRgFq0l669xagB3fK6l3pm0gwEuRtaDo2RiKzIhH+cD3GgxZzsX4rtvxoAOZ0tXrIkg==
+X-Received: by 2002:a2e:953:: with SMTP id 80mr24515560ljj.134.1642599696661;
+        Wed, 19 Jan 2022 05:41:36 -0800 (PST)
+Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
+        by smtp.googlemail.com with ESMTPSA id f30sm1825612lfv.40.2022.01.19.05.41.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 05:41:36 -0800 (PST)
+Message-ID: <f98df604-1b2b-3803-b415-445656a6fa4b@gmail.com>
+Date:   Wed, 19 Jan 2022 16:41:35 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 29/30] KVM: s390: introduce CPU feature for zPCI
- Interpretation
+ Thunderbird/91.5.0
+Subject: Re: [Patch V1 3/4] memory: tegra: add mc-err support for T186
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-30-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220114203145.242984-30-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BN6ZRbAKBMcKcLIfc0phijYHIHjy_GNf
-X-Proofpoint-ORIG-GUID: dUR76aNluFTFVqxfsaA22EhpFowP68QH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_08,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 lowpriorityscore=0 suspectscore=0 adultscore=0
- clxscore=1015 phishscore=0 spamscore=0 mlxscore=0 impostorscore=0
- bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201190078
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
+ <1641926750-27544-4-git-send-email-amhetre@nvidia.com>
+ <f9ca5794-55ac-803f-8606-f0b48e826eb7@gmail.com>
+ <a926e5aa-4872-5585-d367-da815518915c@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <a926e5aa-4872-5585-d367-da815518915c@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/14/22 21:31, Matthew Rosato wrote:
-> KVM_S390_VM_CPU_FEAT_ZPCI_INTERP relays whether zPCI interpretive
-> execution is possible based on the available hardware facilities.
+19.01.2022 11:53, Ashish Mhetre пишет:
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/uapi/asm/kvm.h | 1 +
->   arch/s390/kvm/kvm-s390.c         | 4 ++++
->   2 files changed, 5 insertions(+)
 > 
-> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
-> index 7a6b14874d65..ed06458a871f 100644
-> --- a/arch/s390/include/uapi/asm/kvm.h
-> +++ b/arch/s390/include/uapi/asm/kvm.h
-> @@ -130,6 +130,7 @@ struct kvm_s390_vm_cpu_machine {
->   #define KVM_S390_VM_CPU_FEAT_PFMFI	11
->   #define KVM_S390_VM_CPU_FEAT_SIGPIF	12
->   #define KVM_S390_VM_CPU_FEAT_KSS	13
-> +#define KVM_S390_VM_CPU_FEAT_ZPCI_INTERP 14
->   struct kvm_s390_vm_cpu_feat {
->   	__u64 feat[16];
->   };
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index b6c32fc3b272..3ed59fe512dd 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -434,6 +434,10 @@ static void kvm_s390_cpu_feat_init(void)
->   	if (test_facility(151)) /* DFLTCC */
->   		__insn32_query(INSN_DFLTCC, kvm_s390_available_subfunc.dfltcc);
->   
-> +	if (test_facility(69) && test_facility(70) && test_facility(71) &&
-> +	    test_facility(72)) /* zPCI Interpretation */
-> +		allow_cpu_feat(KVM_S390_VM_CPU_FEAT_ZPCI_INTERP);
-> +
-
-Don't we want to start the support of ZPCI interpretation starting with 
-Z14 ?
-
->   	if (MACHINE_HAS_ESOP)
->   		allow_cpu_feat(KVM_S390_VM_CPU_FEAT_ESOP);
->   	/*
+> On 1/12/2022 4:31 PM, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> 11.01.2022 21:45, Ashish Mhetre пишет:
+>>> Add all mc-errors supported by T186.
+>>> Implement mc interrupt handling routine for T186.
+>>>
+>>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>>> ---
+>>>   drivers/memory/tegra/mc.h       |  17 +++++++
+>>>   drivers/memory/tegra/tegra186.c | 100
+>>> ++++++++++++++++++++++++++++++++++++++++
+>>>   2 files changed, 117 insertions(+)
+>>>
+>>> diff --git a/drivers/memory/tegra/mc.h b/drivers/memory/tegra/mc.h
+>>> index 2d4f495..7817492 100644
+>>> --- a/drivers/memory/tegra/mc.h
+>>> +++ b/drivers/memory/tegra/mc.h
+>>> @@ -44,6 +44,15 @@
+>>>   #define MC_TIMING_CONTROL_DBG                                0xf8
+>>>   #define MC_TIMING_CONTROL                            0xfc
+>>>
+>>
+>> this empty line is unnecessary
+>>
+> I'll fix this in next version.
 > 
+>>> +#define MC_ERR_VPR_STATUS                            0x654
+>>> +#define MC_ERR_VPR_ADR                                       0x658
+>>> +#define MC_ERR_SEC_STATUS                            0x67c
+>>> +#define MC_ERR_SEC_ADR                                       0x680
+>>> +#define MC_ERR_MTS_STATUS                            0x9b0
+>>> +#define MC_ERR_MTS_ADR                                       0x9b4
+>>> +#define MC_ERR_GENERALIZED_CARVEOUT_STATUS           0xc00
+>>> +#define MC_ERR_GENERALIZED_CARVEOUT_ADR                      0xc04
+>>> +
+>>>   #define MC_INT_DECERR_ROUTE_SANITY                   BIT(20)
+>>>   #define MC_INT_WCAM_ERR                                      BIT(19)
+>>>   #define MC_INT_SCRUB_ECC_WR_ACK                              BIT(18)
+>>> @@ -159,6 +168,14 @@ extern const struct tegra_mc_ops tegra186_mc_ops;
+>>>   extern const char * const tegra_mc_status_names[32];
+>>>   extern const char * const tegra_mc_error_names[8];
+>>>
+>>> +struct tegra_mc_error {
+>>> +     u32 int_bit;
+>>> +     const char *msg;
+>>> +     u32 status_reg;
+>>> +     u32 addr_reg;
+>>> +     u32 addr_reg_hi;
+>>> +};
+>>> +
+>>>   /*
+>>>    * These IDs are for internal use of Tegra ICC drivers. The ID
+>>> numbers are
+>>>    * chosen such that they don't conflict with the device-tree ICC
+>>> node IDs.
+>>> diff --git a/drivers/memory/tegra/tegra186.c
+>>> b/drivers/memory/tegra/tegra186.c
+>>> index 6766cc4..4f3ae71 100644
+>>> --- a/drivers/memory/tegra/tegra186.c
+>>> +++ b/drivers/memory/tegra/tegra186.c
+>>> @@ -146,8 +146,107 @@ static void tegra186_mc_clear_interrupt(struct
+>>> tegra_mc *mc)
+>>>        mc_writel(mc, MC_INTSTATUS_CLEAR, MC_INTSTATUS);
+>>>   }
+>>>
+>>> +static const struct tegra_mc_error int_mc_errors[] = {
+>>> +     {
+>>> +             .int_bit = MC_INT_DECERR_EMEM,
+>>> +             .msg = "EMEM address decode error",
+>>> +             .status_reg = MC_ERR_STATUS,
+>>> +             .addr_reg = MC_ERR_ADR,
+>>> +     },
+>>> +     {
+>>> +             .int_bit = MC_INT_SECURITY_VIOLATION,
+>>> +             .msg = "non secure access to secure region",
+>>> +             .status_reg = MC_ERR_STATUS,
+>>> +             .addr_reg = MC_ERR_ADR,
+>>> +     },
+>>> +     {
+>>> +             .int_bit = MC_INT_DECERR_VPR,
+>>> +             .msg = "MC request violates VPR requirements",
+>>> +             .status_reg = MC_ERR_VPR_STATUS,
+>>> +             .addr_reg = MC_ERR_VPR_ADR,
+>>> +     },
+>>
+>> I see that these VPR registers present on all SoCs starting with T124.
+>> It doesn't look like you need the separate IRQ handlers at all, instead
+>> please extend the common T30 handler. For example, you may add a
+>> switch-case statements to handle those T124+ specific bits differently.
+>>
+>> static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>> {
+>> ...
+>>          switch (bit) {
+>>          case MC_INT_DECERR_VPR:
+>>                  status_reg = MC_ERR_VPR_STATUS;
+>>                  addr_reg   = MC_ERR_VPR_ADR;
+>>                  break;
+>>          ...
+>>          default:
+>>                  status_reg = MC_ERR_STATUS;
+>>                  addr_reg   = MC_ERR_ADR;
+>>          }
+>>
+>>          value = mc_readl(mc, status_reg);
+>>          ...
+>>
+>>          value = mc_readl(mc, addr_reg);
+> Okay. I'll use same handler as Tegra30 with additional Tegra186 onward
+> bits.
+> Also, shall I change name of tegra30_mc_handle_irq() to
+> tegra_mc_handle_irq() as we are using it across all Tegra SOCs ?
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+T20 won't use it, no need to change the name.

@@ -2,530 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7CA4932EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2125D4932F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348726AbiASC2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 21:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238636AbiASC2R (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 21:28:17 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2091FC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:28:17 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id p18so2040106wmg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:28:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O1LsXbWam+BKI8xqcLlx4R6zRUKLsu3ZAy6sVWL3Hgw=;
-        b=nkOeeRy5lCMH1X87zOGcCtfaK2+bqea8H1/Dv3PfBoA3UgouSINMv7uevyX2z0JIic
-         xU84/zZjSbzHGhbZL9JYyZNFCLsF7EFbv4ohtt5DAs4iCotq/nbgB9cxCEVkjQwsMtyL
-         5bPODaloqW9MrEbPBhOQt56DV+O6gpvVCy5HFe5GXgqrMiAyCnFKvd97Gj0JjPmhb4jM
-         78m8r64hyj+HPwc7Mk9xv92MCytAwRrYU+8vB+dwS6iJMuNzPM7GXyShUONSPCBn52Ci
-         BUid5gP7JZiujfD5qxAWtWXXI11Pr0M2fvjtg3iwo0GoLOPLrsSOyTDreDZTLl5PpsX7
-         qd1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O1LsXbWam+BKI8xqcLlx4R6zRUKLsu3ZAy6sVWL3Hgw=;
-        b=Rfz/aZCk9NEKaeb2bQi14vZnA0hivhjFFBm5Py/SOXhH0fAlw1wTVEezz1yaf7Dsds
-         Ewl8U7/agML3bK2l0woBmlcKbMrlYpqX0i2g9dDssAlENblntCJbeANLChVFrH0U6sfW
-         RUBuu8t18t4nhBdp0GJRGJBEqZRwivcWYv7azKjsyT4NVL93Kl6EdgGb1x9WdcmsqNVZ
-         O1Fat9ZnKs35G/SfFxVI8drc9x7yGfj6dWiU/zibexvx4IDcYbPz846dKA/DMuYDEeM0
-         3/aFKqkM1+auPD5HXv7FpeloKpaF45Kg17HREzRcwuKYZ5hbCeHqrSR1Gu0c6rEDs8E3
-         dfig==
-X-Gm-Message-State: AOAM532XS9fvf/jAUmH000/zialh7NYMb04ZWdvHubMlKFifqguNeE6O
-        46YMO4TeedaKylDKYhDPvB25ufwuoo6ylniPM90=
-X-Google-Smtp-Source: ABdhPJxz9l8UmO4FnNI1o/4ICln/SEENzWSFtFC0G4xB7tyznurTtwFN6HS74h6LPsR+iOUsNxCJ7boRoWSjqRiKfdc=
-X-Received: by 2002:a5d:5909:: with SMTP id v9mr35605wrd.554.1642559295275;
- Tue, 18 Jan 2022 18:28:15 -0800 (PST)
+        id S1351000AbiASC2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 21:28:35 -0500
+Received: from mail-eopbgr70079.outbound.protection.outlook.com ([40.107.7.79]:56008
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238636AbiASC2e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 21:28:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KMNWiEBPpkXaEpCW42085hkoDKmXHPnt6zXIdwP8AJ9TrWEmGP80kjA03W8LP7VPVl13K1tNHmvWye23vqxmf4itTXFge+z6Bdy4CUTRMHRLk3tURea1d553WnX7IXuhoST4CQ/unYHbELOxRdMlt+hr0REHN4UMy6EZEzhc34r2cutNVwXzQD+j1ZdQUEIjBzbnvRKav2cVjR1Av7ddyUF4+KPx3Asbj3eLqjEUHhQiWSrCQQjpNtJx0w+ETtmtHiSGPckq28kwWt7l113jC7R2HWOPzhltQpGY7xFAhwBRoCaXvS4VMEQY6j4+p/+yQMOVgP2xqtmKcCyKl1tj8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DySkXGajEHg4mKWzz2wXq9bwiCpprjz5GfZ7biiqV7I=;
+ b=K0RHYQRTam+RKnv4YR6jk4HDKaLQDK/Mxh6ImKdyCp5wNbL13qvjdgNbA8GHykd7iWMKpwPEAAajc/wqSua3iDyevaL7P73BgWsc8mOgBKO7ctM+9Ux95gv+dNYNZCqAVn9IZP4Wjy4YnGu7g7GYlKLXYPbt366NG4AZuj/nrxUv6JfSMQpKotqq/gpqu3x+OpaiSc+J/jq+/c6IqNceLRf583R6qMPEb9cY47/Cvt1hhhWJ+XbDr9hf9JO2PN+HnZCPflQzwBO4BjehzIuDbw3zQ8v3QZmNagy/IT/dC7Tqi4gLNIBmr77NTlNW1SB5BHyul6ushcF4cUFgrcLA7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DySkXGajEHg4mKWzz2wXq9bwiCpprjz5GfZ7biiqV7I=;
+ b=QNIvz7JP5LpiNgJMOl9RHpWqfKjFBFBpo2wKghQaTxKKfXPc6BF0kQC9KmB28kn1TBQMWhRtl1L5O44NKK69bUr0iy3SIkPDmlI23iNJ3Ybea8oDLDzPkz2Q3jUPBgDTer+zhO9AnQx18gKh9rcSDBCZjPnT3uGdb7KA2ni8oTc=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM6PR04MB5045.eurprd04.prod.outlook.com (2603:10a6:20b:12::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 19 Jan
+ 2022 02:28:31 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d4dc:8c9a:55d0:81d8%4]) with mapi id 15.20.4888.013; Wed, 19 Jan 2022
+ 02:28:31 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 6/9] remoteproc: imx_rproc: support attaching to i.MX8QXP
+ M4
+Thread-Topic: [PATCH 6/9] remoteproc: imx_rproc: support attaching to i.MX8QXP
+ M4
+Thread-Index: AQHYBpw1XSm7ohRXCUiPzYJqNJAQmaxpLUKAgAB9VcA=
+Date:   Wed, 19 Jan 2022 02:28:31 +0000
+Message-ID: <DU0PR04MB9417335FFEBEB5CE91A5A67888599@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
+ <20220111033333.403448-9-peng.fan@oss.nxp.com>
+ <20220118185729.GH1119324@p14s>
+In-Reply-To: <20220118185729.GH1119324@p14s>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1feed45f-888b-4d93-e4a9-08d9daf362a4
+x-ms-traffictypediagnostic: AM6PR04MB5045:EE_
+x-microsoft-antispam-prvs: <AM6PR04MB504516149BC3320652BBA45088599@AM6PR04MB5045.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1923;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /bTVodWnku6gUSurmsrjQ80Sq1tCvkwipd9nWkyzY9Ls6iWGpQow8KlNv8AduVI/oJdLEl76UasheirlEBjAvfWoTL9wMFrtSLKa5P8qZZ6AAyjhduddRZkF3bcnnhE9Aru0tLrhYFfc1jn1SflDJc3wm18+Ul0dxj80fRjCMC+qBRs18OxAugvF6Q79nDnaYkN3EVzpAZJFsuXxMwQmPh5kGb9JHxfyfjVKddhgyPl3rRN8L3IhVqi1J4TXeiAWn1+uU+jfC1OeIgJ93GNVSFWUCqh1m405WnLqBDo2Ld9dMs6ZNuG2zvAYWQUckhaYgZYklSKPP1VSXAUbOiNEDHT14MXok3hv/Fp2E+p+PDrtUayo4qwRgd9Ib/HUgmvHzxW2O6dxj2NnCVeyxsf+Rtik9+In/zkRe/6mFlBOatNW0yS7Xv5G2HJj6dm16yCM2dXZ1m0gsah6UYVUhoq8RyMDUUnVq/GiG2fT42Xrz/3hbXXEnhVbrEsUK06jkkZluIQNzIVvZ2klT4GBW/+aqDOOyfy4g/ofqGnF8sWLY7fYt9bEII1clwc3LUa3oc8YD6qXyw40x7YAHLLZQOk1gbAl72Wh1W0KhUK842DpwvMOwKTAthbev8WywqP6ryALm7ACIIx+dFG/TyroKbJDQIZtjpt1GvMtBu5xcu8g6U7NgMZbWwAvzntGzfRndL50Nx0XiJLiLndgAy2ai3/ApQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(66556008)(55016003)(186003)(26005)(122000001)(44832011)(54906003)(66476007)(66946007)(86362001)(64756008)(33656002)(316002)(110136005)(4326008)(76116006)(9686003)(71200400001)(38100700002)(38070700005)(7696005)(83380400001)(2906002)(8676002)(8936002)(5660300002)(508600001)(66446008)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gRvSRDV9nEcabyJeSY75mg7IeDm3IHZ6SiEY5L9qfIn+oPWi+vISC2//n0rB?=
+ =?us-ascii?Q?MIRCbIxLYLPIZEDbHeZzKxBOloJtldaCTk2vMfxIjd3lEfcvV4coWNfTHyJX?=
+ =?us-ascii?Q?iRtih69cJx3kF3/R2fYRRHl9Z40s+/NhtwBSSZd9z1hzy5OHU4P3VlP6xp1U?=
+ =?us-ascii?Q?9y49vmwi3lBOu3LDM7d2yH0NsfDlyTYLsPYh3kfJVWRhi1RohEgpgvK6CULn?=
+ =?us-ascii?Q?tV84vZh1ZeSsp6HtiiKel+SH5mEUlXIVTwO8YwQNlw9UqIWf4dld160aqxxk?=
+ =?us-ascii?Q?IydOmymh4oqcT/i5SJNlbA/c9AJzUo2U3ojzKy7gGix7rk78rxyZRp5CU5no?=
+ =?us-ascii?Q?lHwMfP+39QFrawN7viUummtlkWyKHcjbFpbtCTFChAO1d6N+ROQH4n9/77dd?=
+ =?us-ascii?Q?iDi+G4wIrbhyEbfmQ8aJ0l19YeRQzzX88pvNOzwl5ZUf5aJXtLEd4Z4GhytU?=
+ =?us-ascii?Q?paLaIa7b9GNTjuuk5qwtctEEUFw8mbsJqzrskM1FzVbyDx3ruKMfy9Uj9QHZ?=
+ =?us-ascii?Q?zGUBEdLwhV42hNDoQxS35vc9JK6v7mpgbJR8rEH48HWNP5h68WlRrDJQGqoK?=
+ =?us-ascii?Q?TA3MKr0tfc3v/H55SQrUa5CckpoczyqDZCX+aSxXs5yHtyhuCQ9jNlUQDVOF?=
+ =?us-ascii?Q?muXiP7yBuyTf+rFNV10RV0Bz3iLwW3WYKw/PedsdqL8sWOk4Al3NvZkWucHu?=
+ =?us-ascii?Q?MJPivUadVEVCTctUEESVo4+ZXCMURhpw+iPd7mV76qp8wIYCe0qPK1HTUTod?=
+ =?us-ascii?Q?hkvhjzHjFU7qg8LH4TUKW9NvUIGLleORqhsHiyB+Qgado9wpaPRmPp+KVqSM?=
+ =?us-ascii?Q?I7D9NgCEd/bbFnhCpwV4Cl0rn/r6JAeVZ8Zo3WwuCZS5N95RvdMke9liCKoX?=
+ =?us-ascii?Q?0JrOksJmN3pSWBjXY3L0ehEQ/1VsXwjlFad+KbkHPsRI2IEvo1TaYKWAWxWa?=
+ =?us-ascii?Q?0PV6KEgwSnqjZCWp70SzmGHcikboZHglYIDjP/Pnbt9YrjZ7WbuUkrifurVz?=
+ =?us-ascii?Q?tVhTTZvPfo5oft+5QCRA0U+2wigTT8otONHrCj/Q5+K0J9vXgPzNkMh/xX0s?=
+ =?us-ascii?Q?UlpgT2R7leYL65poD8CjWAErDJZlibSxEC1OfIeFrNk9CdpBBzSXuuP48aSN?=
+ =?us-ascii?Q?TkKIcm5XM/Y3e3p7Jnt0ed2aHFsCLH2t1UgEa6CM7XiMCrkgiA0OWDq8Wpci?=
+ =?us-ascii?Q?SAbZGTwkcNs3+s9Dt3f/1P+YY2TSwqhrQV3NPItrUUy4EIlnEfNeX2MfXCjp?=
+ =?us-ascii?Q?pEoXQkove0rJFztxm3lWgv30Yrp07zN5egpL1QnkXfssjKfOVPxneDjOOqju?=
+ =?us-ascii?Q?1P6GsDR1gc/XWhDEA4Q90ZCKGN/JffsomfxxheFmLCuyzrSBATCBSAd9DaRG?=
+ =?us-ascii?Q?ApqKjC+ajM3pBaV8NgcK9WxbVSz02Pa0pbcVzb5A5uYa4VbkmAe9fWy/fk6+?=
+ =?us-ascii?Q?f14I9Y57gmouYCYCFjyinmuoXoEGvYFqSmwSl2/+MEkWXbOMQ/i4zSWW5nAe?=
+ =?us-ascii?Q?hVrF9sS/OD2AwXg7+p3vn833fduS/uWALdxPPAstBo+qiuP6VOM7IXwYHng3?=
+ =?us-ascii?Q?3xTEaFNk0j53L71slR9n8gxPNmKNgQcLgHQCCqhICrfDMa0e32lUTaKVa3wX?=
+ =?us-ascii?Q?wYRAl+7EbLj1s6rRufqXTlQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220113013835.503285-1-xiehuan09@gmail.com> <20220113013835.503285-3-xiehuan09@gmail.com>
- <20220119001343.e9a07c7c0d8db586faeb5ae7@kernel.org>
-In-Reply-To: <20220119001343.e9a07c7c0d8db586faeb5ae7@kernel.org>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Wed, 19 Jan 2022 10:28:03 +0800
-Message-ID: <CAEr6+EA0vp3cTRqqSJvTEQtPCZ8p_6MxZWmQ5hPzQDWp=RusiQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] trace/objtrace: get the value of the object
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1feed45f-888b-4d93-e4a9-08d9daf362a4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2022 02:28:31.5424
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LdkD12OOmk2G6gtPoOxeOmBuoPp3LhqgwNwkABF2MQF1ml+BDb+e1CKmy2YMzPIWev0CfJcGBwjLX9yBoedrqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5045
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
-
-On Tue, Jan 18, 2022 at 11:13 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Hi Jeff,
->
-> On Thu, 13 Jan 2022 09:38:33 +0800
-> Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> > Using objtrace trigger to get the value of the object which from the kernel
-> > function parameter.
+> Subject: Re: [PATCH 6/9] remoteproc: imx_rproc: support attaching to
+> i.MX8QXP M4
+>=20
+> On Tue, Jan 11, 2022 at 11:33:30AM +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
 > >
-> > Syntax:
-> >       objtrace:add:obj[,offset][:type][:count][if <filter>]
+> > When M4 is kicked by SCFW, M4 runs in its own hardware partition,
+> > Linux could only do IPC with M4, it could not start, stop, update image=
+.
 > >
-> > Usage:
-> >       # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> >       # gdb vmlinux
-> >       (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-> >       $1 = (unsigned int *) 0x28
-> >       # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-> >                p_bio_add_page_0/trigger
-> >       # cat /test.txt
+> > When M4 crash reboot, it could notify Linux, so Linux could prepare to
+> > reattach to M4 after M4 recovery.
 > >
-> > Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > > ---
-> >  kernel/trace/trace.c         |   2 +-
-> >  kernel/trace/trace_entries.h |   5 +-
-> >  kernel/trace/trace_object.c  | 190 +++++++++++++++++++++++++++++------
-> >  kernel/trace/trace_output.c  |   6 +-
-> >  4 files changed, 169 insertions(+), 34 deletions(-)
+> >  drivers/remoteproc/imx_rproc.c | 96
+> > ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 96 insertions(+)
 > >
-> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > index 0b627963e343..d5332ece4c67 100644
-> > --- a/kernel/trace/trace.c
-> > +++ b/kernel/trace/trace.c
-> > @@ -5591,7 +5591,7 @@ static const char readme_msg[] =
-> >       "\t            disable_hist:<system>:<event>\n"
-> >  #endif
-> >  #ifdef CONFIG_TRACE_OBJECT
-> > -     "\t            objtrace:add:obj[:count][if <filter>]\n"
-> > +     "\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
-> >  #endif
-> >  #ifdef CONFIG_STACKTRACE
-> >       "\t\t    stacktrace\n"
-> > diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
-> > index bb120d9498a9..2407c45a568c 100644
-> > --- a/kernel/trace/trace_entries.h
-> > +++ b/kernel/trace/trace_entries.h
-> > @@ -413,8 +413,9 @@ FTRACE_ENTRY(object, trace_object_entry,
-> >               __field(        unsigned long,          ip              )
-> >               __field(        unsigned long,          parent_ip       )
-> >               __field(        unsigned long,          object          )
-> > +             __field(        unsigned long,          value           )
-> >       ),
+> > diff --git a/drivers/remoteproc/imx_rproc.c
+> > b/drivers/remoteproc/imx_rproc.c index 0e99a3ca6fbc..5f04aea2f6a1
+> > 100644
+> > --- a/drivers/remoteproc/imx_rproc.c
+> > +++ b/drivers/remoteproc/imx_rproc.c
+> > @@ -6,6 +6,7 @@
+> >  #include <linux/arm-smccc.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/err.h>
+> > +#include <linux/firmware/imx/sci.h>
+> >  #include <linux/interrupt.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/mailbox_client.h>
+> > @@ -59,6 +60,8 @@
+> >  #define IMX_SIP_RPROC_STARTED		0x01
+> >  #define IMX_SIP_RPROC_STOP		0x02
 > >
-> > -     F_printk(" %ps <-- %ps object:%lx\n",
-> > -              (void *)__entry->ip, (void *)__entry->parent_ip, __entry->object)
-> > +     F_printk(" %ps <-- %ps object:%lx value:%lx\n", (void *)__entry->ip,
-> > +            (void *)__entry->parent_ip, __entry->object, __entry->value)
-> >  );
-> > diff --git a/kernel/trace/trace_object.c b/kernel/trace/trace_object.c
-> > index 4af1c117cbfa..774a9dff4d0a 100644
-> > --- a/kernel/trace/trace_object.c
-> > +++ b/kernel/trace/trace_object.c
-> > @@ -11,7 +11,6 @@
-> >  #define MAX_TRACED_OBJECT 5
-> >  static DEFINE_RAW_SPINLOCK(trace_obj_lock);
-> >  static struct trace_event_file event_trace_file;
-> > -static const int max_args_num = 6;
-> >  static atomic_t trace_object_ref;
-> >  static atomic_t num_traced_obj;
-> >  static int exit_trace_object(void);
-> > @@ -19,8 +18,22 @@ static int init_trace_object(void);
-> >
-> >  static struct object_instance {
-> >       void *obj;
-> > +     int obj_type_size;
-> >  } traced_obj[MAX_TRACED_OBJECT];
-> >
-> > +/* objtrace private data */
-> > +struct objtrace_trigger_data {
-> > +     struct ftrace_event_field *field;
-> > +     int offset;
-> > +     int obj_type_size;
+> > +#define	IMX_SC_IRQ_GROUP_REBOOTED	5
+> > +
+> >  /**
+> >   * struct imx_rproc_mem - slim internal memory structure
+> >   * @cpu_addr: MPU virtual address of the memory region @@ -90,6
+> > +93,23 @@ struct imx_rproc {
+> >  	struct workqueue_struct		*workqueue;
+> >  	void __iomem			*rsc_table;
+> >  	bool				has_clk;
+> > +	struct imx_sc_ipc		*ipc_handle;
+> > +	struct notifier_block		proc_nb;
+> > +	u32				rproc_pt;
+> > +	u32				rsrc;
+>=20
+> There is no documentation for the above two fields and I have to guess wh=
+at
+> they do.
+
+Fix in V2.
+
+>=20
 > > +};
 > > +
-> > +/* get the type size for the special object */
-> > +struct objtrace_fetch_type {
-> > +     char *name;
-> > +     int type_size;
+> > +static const struct imx_rproc_att imx_rproc_att_imx8qxp[] =3D {
+> > +	/* dev addr , sys addr  , size	    , flags */
+> > +	{ 0x08000000, 0x08000000, 0x10000000, 0},
+> > +	/* TCML/U */
+> > +	{ 0x1FFE0000, 0x34FE0000, 0x00040000, ATT_OWN | ATT_IOMEM },
+> > +	/* OCRAM(Low 96KB) */
+> > +	{ 0x21000000, 0x00100000, 0x00018000, 0},
+> > +	/* OCRAM */
+> > +	{ 0x21100000, 0x00100000, 0x00040000, 0},
+> > +	/* DDR (Data) */
+> > +	{ 0x80000000, 0x80000000, 0x60000000, 0 },
+> >  };
+> >
+> >  static const struct imx_rproc_att imx_rproc_att_imx8mn[] =3D { @@
+> > -236,6 +256,12 @@ static const struct imx_rproc_dcfg
+> imx_rproc_cfg_imx8ulp =3D {
+> >  	.method		=3D IMX_RPROC_NONE,
+> >  };
+> >
+> > +static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qxp =3D {
+> > +	.att		=3D imx_rproc_att_imx8qxp,
+> > +	.att_size	=3D ARRAY_SIZE(imx_rproc_att_imx8qxp),
+> > +	.method		=3D IMX_RPROC_SCU_API,
 > > +};
 > > +
-> >  static bool object_exist(void *obj)
-> >  {
-> >       int i, max;
-> > @@ -39,7 +52,7 @@ static bool object_empty(void)
-> >       return !atomic_read(&num_traced_obj);
+> >  static const struct imx_rproc_dcfg imx_rproc_cfg_imx7ulp =3D {
+> >  	.att		=3D imx_rproc_att_imx7ulp,
+> >  	.att_size	=3D ARRAY_SIZE(imx_rproc_att_imx7ulp),
+> > @@ -491,6 +517,11 @@ static int imx_rproc_attach(struct rproc *rproc)
+> >  	return 0;
 > >  }
 > >
-> > -static void set_trace_object(void *obj)
-> > +static void set_trace_object(void *obj, int obj_type_size)
-> >  {
-> >       unsigned long flags;
-> >
-> > @@ -59,6 +72,7 @@ static void set_trace_object(void *obj)
-> >               goto out;
-> >       }
-> >       traced_obj[atomic_read(&num_traced_obj)].obj = obj;
-> > +     traced_obj[atomic_read(&num_traced_obj)].obj_type_size = obj_type_size;
-> >       /* make sure the num_traced_obj update always appears after traced_obj update */
-> >       smp_wmb();
-> >       atomic_inc(&num_traced_obj);
-> > @@ -67,7 +81,7 @@ static void set_trace_object(void *obj)
-> >  }
-> >
-> >  static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
-> > -                              unsigned long object)
-> > +                              unsigned long object, unsigned long value)
-> >  {
-> >
-> >       struct trace_buffer *buffer;
-> > @@ -84,18 +98,66 @@ static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
-> >       entry->ip                       = ip;
-> >       entry->parent_ip                = parent_ip;
-> >       entry->object                   = object;
-> > +     entry->value                    = value;
-> >
-> >       event_trigger_unlock_commit(&event_trace_file, buffer, event,
-> >               entry, pc);
-> >  }
-> >
-> > +static inline long get_object_value(unsigned long *val, void *obj, int type_size)
-> > +{
-> > +     long ret = 0;
-> > +
-> > +     switch (type_size) {
-> > +     case 1: {
-> > +             u8 tmp;
-> > +
-> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-> > +             if (ret)
-> > +                     goto out;
-> > +             *val = tmp;
-> > +             break;
-> > +     }
-> > +     case 2: {
-> > +             u16 tmp;
-> > +
-> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-> > +             if (ret)
-> > +                     goto out;
-> > +             *val = tmp;
-> > +             break;
-> > +     }
-> > +     case 4: {
-> > +             u32 tmp;
-> > +
-> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-> > +             if (ret)
-> > +                     goto out;
-> > +             *val = tmp;
-> > +             break;
-> > +     }
-> > +     case 8: {
-> > +             u64 tmp;
-> > +
-> > +             ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-> > +             if (ret)
-> > +                     goto out;
-> > +             *val = tmp;
-> > +             break;
-> > +     }
->
-> Can't you move the copy_from_kernel_nofault() outside of the switch-case?
-> e.g.
->
->         char tmp[sizeof(u64)];
->
->         ret = copy_from_kernel_nofault(tmp, obj, sizeof(tmp));
->         if (ret)
->                 return ret;
->
->         switch (type_size) {
->                 case 1:
->                         *val = (unsigned long)*(u8 *)tmp;
->                         break;
->                 ...
->         }
->         return 0;
+> > +static int imx_rproc_detach(struct rproc *rproc) {
+> > +	return 0;
+>=20
+> Is it possible to detach the remote processor from the application core? =
+ If
+> not please write a comment that says so.
 
-Thanks, I will change it.
+No from my understanding.
 
-> Thank you,
->
->
-> > +     default:
-> > +             return -EINVAL;
-> > +     }
-> > +out:
-> > +     return ret;
+  And shouldn't this return some
+> kind of error so that users don't think the operation was carried out
+> successfully?
+
+No. This is to match patch 3/9 to support M-core self recovery. After M-cor=
+e
+crash reboot, remoteproc framework just detach and re-attach.
+
+>=20
+> I am out of time for today and as such will continue with this set tomorr=
+ow.
+
+Thanks for you reviewing the patchset.
+
+Thanks,
+Peng.
+
+>=20
+> Thanks,
+> Mathieu
+>=20
 > > +}
 > > +
-> >  static void
-> >  trace_object_events_call(unsigned long ip, unsigned long parent_ip,
-> >               struct ftrace_ops *op, struct ftrace_regs *fregs)
-> >  {
-> > -     struct pt_regs *pt_regs = ftrace_get_regs(fregs);
-> > -     unsigned long obj;
-> > -     int bit, n;
-> > +     unsigned long val = 0;
-> > +     int bit, n, max;
-> >
-> >       bit = ftrace_test_recursion_trylock(ip, parent_ip);
-> >       if (bit < 0)
-> > @@ -104,11 +166,12 @@ trace_object_events_call(unsigned long ip, unsigned long parent_ip,
-> >       if (object_empty())
-> >               goto out;
-> >
-> > -     for (n = 0; n < max_args_num; n++) {
-> > -             obj = regs_get_kernel_argument(pt_regs, n);
-> > -             if (object_exist((void *)obj))
-> > -                     submit_trace_object(ip, parent_ip, obj);
->
-> This actually filtered the (function call) event which is related to the object.
->
-> > -     /* The parameters of a function may match multiple objects */
-> > +     max = atomic_read(&num_traced_obj);
-> > +     smp_rmb();
-> > +     for (n = 0; n < max; n++) {
-> > +             if (get_object_value(&val, traced_obj[n].obj, traced_obj[n].obj_type_size))
-> > +                     goto out;
-> > +             submit_trace_object(ip, parent_ip, (unsigned long)traced_obj[n].obj, val);
->
-> But you lost the filter here.
-> This is because you saves the "object + offset" address below;
-
-I misunderstood the previous discussion and thought that filter
-do not apply when getting the value of the object. ;-)
-I will add the filter.
-
->
-> >       }
-> >  out:
-> >       ftrace_test_recursion_unlock(bit);
-> > @@ -124,12 +187,15 @@ trace_object_trigger(struct event_trigger_data *data,
-> >                  struct trace_buffer *buffer,  void *rec,
-> >                  struct ring_buffer_event *event)
-> >  {
-> > +     struct objtrace_trigger_data *obj_data = data->private_data;
-> > +     struct ftrace_event_field *field;
-> > +     void *obj, *val = NULL;
-> >
-> > -     struct ftrace_event_field *field = data->private_data;
-> > -     void *obj = NULL;
-> > -
-> > -     memcpy(&obj, rec + field->offset, sizeof(obj));
-> > -     set_trace_object(obj);
-> > +     field = obj_data->field;
-> > +     memcpy(&val, rec + field->offset, sizeof(val));
-> > +     /* get the final object */
-> > +     obj = val + obj_data->offset;
->
-> Here, you saved the object address including offset. This means
-> you can not filter the actual function related to the object.
->
-> Please recover the filter.
->
-> > +     set_trace_object(obj, obj_data->obj_type_size);
->
-> You can save the offset with type-size and object address itself.
-
-Thanks, I will recover it.
-
-> Thank you,
->
+> >  static struct resource_table *imx_rproc_get_loaded_rsc_table(struct
+> > rproc *rproc, size_t *table_sz)  {
+> >  	struct imx_rproc *priv =3D rproc->priv; @@ -525,6 +556,7 @@
+> > imx_rproc_elf_find_loaded_rsc_table(struct rproc *rproc, const struct
+> > firmware *  static const struct rproc_ops imx_rproc_ops =3D {
+> >  	.prepare	=3D imx_rproc_prepare,
+> >  	.attach		=3D imx_rproc_attach,
+> > +	.detach		=3D imx_rproc_detach,
+> >  	.start		=3D imx_rproc_start,
+> >  	.stop		=3D imx_rproc_stop,
+> >  	.kick		=3D imx_rproc_kick,
+> > @@ -671,6 +703,22 @@ static void imx_rproc_free_mbox(struct rproc
+> *rproc)
+> >  	mbox_free_channel(priv->rx_ch);
 > >  }
 > >
-> >  static void
-> > @@ -140,8 +206,10 @@ trace_object_trigger_free(struct event_trigger_ops *ops,
-> >               return;
-> >
-> >       data->ref--;
-> > -     if (!data->ref)
-> > +     if (!data->ref) {
-> > +             kfree(data->private_data);
-> >               trigger_data_free(data);
-> > +     }
-> >  }
-> >
-> >  static void
-> > @@ -276,6 +344,22 @@ static void unregister_object_trigger(char *glob, struct event_trigger_ops *ops,
-> >       }
-> >  }
-> >
-> > +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
-> > +     {"u8", 1},
-> > +     {"s8", 1},
-> > +     {"x8", 1},
-> > +     {"u16", 2},
-> > +     {"s16", 2},
-> > +     {"x16", 2},
-> > +     {"u32", 4},
-> > +     {"s32", 4},
-> > +     {"x32", 4},
-> > +     {"u64", 8},
-> > +     {"s64", 8},
-> > +     {"x64", 8},
-> > +     {}
-> > +};
+> > +static int imx_rproc_partition_notify(struct notifier_block *nb,
+> > +				      unsigned long event, void *group) {
+> > +	struct imx_rproc *priv =3D container_of(nb, struct imx_rproc,
+> > +proc_nb);
 > > +
-> >  static int
-> >  event_object_trigger_callback(struct event_command *cmd_ops,
-> >                      struct trace_event_file *file,
-> > @@ -283,19 +367,22 @@ event_object_trigger_callback(struct event_command *cmd_ops,
-> >  {
-> >       struct event_trigger_data *trigger_data;
-> >       struct event_trigger_ops *trigger_ops;
-> > +     struct objtrace_trigger_data *obj_data;
-> >       struct trace_event_call *call;
-> >       struct ftrace_event_field *field;
-> > -     char *objtrace_cmd;
-> > -     char *trigger = NULL;
-> > -     char *arg;
-> > -     char *number;
-> > -     int ret;
-> > +     char *type, *tr, *obj, *tmp, *trigger = NULL;
-> > +     char *number, *objtrace_cmd;
-> > +     int ret, i, def_type_size, obj_type_size = 0;
-> > +     long offset = 0;
-> >
-> >       ret = -EINVAL;
-> >       if (!param)
-> >               goto out;
-> >
-> > -     /* separate the trigger from the filter (c:a:n [if filter]) */
-> > +     /*
-> > +      * separate the trigger from the filter:
-> > +      * objtrace:add:OBJ[,OFFS][:TYPE][:COUNT] [if filter]
-> > +      */
-> >       trigger = strsep(&param, " \t");
-> >       if (!trigger)
-> >               goto out;
-> > @@ -309,33 +396,79 @@ event_object_trigger_callback(struct event_command *cmd_ops,
-> >       if (!objtrace_cmd || strcmp(objtrace_cmd, "add"))
-> >               goto out;
-> >
-> > -     arg = strsep(&trigger, ":");
-> > -     if (!arg)
-> > +     obj = strsep(&trigger, ":");
-> > +     if (!obj)
-> >               goto out;
+> > +	/* Ignore other irqs */
+> > +	if (!((event & BIT(priv->rproc_pt)) && (*(u8 *)group =3D=3D
+> IMX_SC_IRQ_GROUP_REBOOTED)))
+> > +		return 0;
 > > +
-> > +     tr = strchr(obj, ',');
-> > +     if (!tr)
-> > +             offset = 0;
-> > +     else {
-> > +             *tr++ = '\0';
-> > +             ret = kstrtol(tr, 0, &offset);
-> > +             if (ret)
-> > +                     goto out;
-> > +     }
+> > +	rproc_report_crash(priv->rproc, RPROC_WATCHDOG);
 > > +
-> > +     ret = -EINVAL;
-> >       call = file->event_call;
-> > -     field = trace_find_event_field(call, arg);
-> > +     field = trace_find_event_field(call, obj);
-> >       if (!field)
-> >               goto out;
-> >
-> >       if (field->size != sizeof(void *))
-> >               goto out;
-> > +     def_type_size = sizeof(void *);
-> > +     if (!trigger) {
-> > +             obj_type_size = def_type_size;
-> > +             goto skip_get_type;
-> > +     }
-> >
-> > +     tmp = trigger;
-> > +     type = strsep(&trigger, ":");
-> > +     if (!type)
-> > +             obj_type_size = def_type_size;
-> > +     else if (isdigit(type[0])) {
-> > +             obj_type_size = def_type_size;
-> > +             trigger = tmp;
-> > +     } else {
-> > +             for (i = 0; objtrace_fetch_types[i].name; i++) {
-> > +                     if (strcmp(objtrace_fetch_types[i].name, type) == 0) {
-> > +                             obj_type_size = objtrace_fetch_types[i].type_size;
-> > +                             break;
-> > +                     }
-> > +             }
-> > +     }
-> > +     if (!obj_type_size)
-> > +             goto out;
-> > +skip_get_type:
-> >       trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
-> >
-> >       ret = -ENOMEM;
-> > +     obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
-> > +     if (!obj_data)
-> > +             goto out;
+> > +	pr_info("Patition%d reset!\n", priv->rproc_pt);
 > > +
-> > +     obj_data->field = field;
-> > +     obj_data->offset = offset;
-> > +     obj_data->obj_type_size = obj_type_size;
+> > +	return 0;
+> > +}
 > > +
-> >       trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
-> > -     if (!trigger_data)
-> > +     if (!trigger_data) {
-> > +             kfree(obj_data);
-> >               goto out;
-> > +     }
+> >  static int imx_rproc_detect_mode(struct imx_rproc *priv)  {
+> >  	struct regmap_config config =3D { .name =3D "imx-rproc" }; @@ -680,6
+> > +728,7 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
+> >  	struct arm_smccc_res res;
+> >  	int ret;
+> >  	u32 val;
+> > +	u8 pt;
 > >
-> >       trigger_data->count = -1;
-> >       trigger_data->ops = trigger_ops;
-> >       trigger_data->cmd_ops = cmd_ops;
-> > -     trigger_data->private_data = field;
-> > +     trigger_data->private_data = obj_data;
-> >       INIT_LIST_HEAD(&trigger_data->list);
-> >       INIT_LIST_HEAD(&trigger_data->named_list);
-> >
-> >       if (glob[0] == '!') {
-> >               cmd_ops->unreg(glob+1, trigger_ops, trigger_data, file);
-> > +             kfree(obj_data);
-> >               kfree(trigger_data);
-> >               ret = 0;
-> >               goto out;
-> > @@ -390,6 +523,7 @@ event_object_trigger_callback(struct event_command *cmd_ops,
-> >   out_free:
-> >       if (cmd_ops->set_filter)
-> >               cmd_ops->set_filter(NULL, trigger_data, NULL);
-> > +     kfree(obj_data);
-> >       kfree(trigger_data);
-> >       goto out;
-> >  }
-> > diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> > index d747aed27104..12a971927d8c 100644
-> > --- a/kernel/trace/trace_output.c
-> > +++ b/kernel/trace/trace_output.c
-> > @@ -1553,6 +1553,7 @@ static enum print_line_t trace_object_print(struct trace_iterator *iter, int fla
-> >       trace_assign_type(field, iter->ent);
-> >       print_fn_trace(s, field->ip, field->parent_ip, flags);
-> >       trace_seq_printf(s, " object:0x%lx", field->object);
-> > +     trace_seq_printf(s, " value:0x%lx", field->value);
-> >       trace_seq_putc(s, '\n');
-> >
-> >       return trace_handle_return(s);
-> > @@ -1565,9 +1566,8 @@ static enum print_line_t trace_object_raw(struct trace_iterator *iter, int flags
-> >
-> >       trace_assign_type(field, iter->ent);
-> >
-> > -     trace_seq_printf(&iter->seq, "%lx %lx\n",
-> > -                      field->ip,
-> > -                      field->parent_ip);
-> > +     trace_seq_printf(&iter->seq, "%lx %lx %lx %lx\n", field->ip,
-> > +                     field->parent_ip, field->object, field->value);
-> >
-> >       return trace_handle_return(&iter->seq);
-> >  }
+> >  	switch (dcfg->method) {
+> >  	case IMX_RPROC_NONE:
+> > @@ -690,6 +739,52 @@ static int imx_rproc_detect_mode(struct
+> imx_rproc *priv)
+> >  		if (res.a0)
+> >  			priv->rproc->state =3D RPROC_DETACHED;
+> >  		return 0;
+> > +	case IMX_RPROC_SCU_API:
+> > +		ret =3D imx_scu_get_handle(&priv->ipc_handle);
+> > +		if (ret)
+> > +			return ret;
+> > +		ret =3D of_property_read_u32(dev->of_node, "rsrc-id", &priv->rsrc);
+> > +		if (ret) {
+> > +			dev_err(dev, "no rsrc-id\n");
+> > +			return ret;
+> > +		}
+> > +
+> > +		/*
+> > +		 * If Mcore resource is not owned by Acore partition, It is kicked b=
+y
+> ROM,
+> > +		 * and Linux could only do IPC with Mcore and nothing else.
+> > +		 */
+> > +		if (!imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc)) {
+> > +
+> > +			priv->has_clk =3D false;
+> > +			priv->rproc->self_recovery =3D true;
+> > +			priv->rproc->state =3D RPROC_DETACHED;
+> > +
+> > +			/* Get partition id and enable irq in SCFW */
+> > +			ret =3D imx_sc_rm_get_resource_owner(priv->ipc_handle,
+> priv->rsrc, &pt);
+> > +			if (ret) {
+> > +				dev_err(dev, "not able to get resource owner\n");
+> > +				return ret;
+> > +			}
+> > +
+> > +			priv->rproc_pt =3D pt;
+> > +			priv->proc_nb.notifier_call =3D imx_rproc_partition_notify;
+> > +
+> > +			ret =3D imx_scu_irq_register_notifier(&priv->proc_nb);
+> > +			if (ret) {
+> > +				dev_warn(dev, "register scu notifier failed.\n");
+> > +				return ret;
+> > +			}
+> > +
+> > +			ret =3D
+> imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_REBOOTED,
+> > +						       BIT(priv->rproc_pt), true);
+> > +			if (ret) {
+> > +				imx_scu_irq_unregister_notifier(&priv->proc_nb);
+> > +				dev_warn(dev, "Enable irq failed.\n");
+> > +				return ret;
+> > +			}
+> > +		}
+> > +
+> > +		return 0;
+> >  	default:
+> >  		break;
+> >  	}
+> > @@ -847,6 +942,7 @@ static const struct of_device_id
+> imx_rproc_of_match[] =3D {
+> >  	{ .compatible =3D "fsl,imx8mm-cm4", .data =3D &imx_rproc_cfg_imx8mq }=
+,
+> >  	{ .compatible =3D "fsl,imx8mn-cm7", .data =3D &imx_rproc_cfg_imx8mn }=
+,
+> >  	{ .compatible =3D "fsl,imx8mp-cm7", .data =3D &imx_rproc_cfg_imx8mn }=
+,
+> > +	{ .compatible =3D "fsl,imx8qxp-cm4", .data =3D &imx_rproc_cfg_imx8qxp=
+ },
+> >  	{ .compatible =3D "fsl,imx8ulp-cm33", .data =3D &imx_rproc_cfg_imx8ul=
+p },
+> >  	{},
+> >  };
 > > --
 > > 2.25.1
 > >
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
----
-JeffXie

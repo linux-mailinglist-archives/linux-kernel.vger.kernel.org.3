@@ -2,182 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DECD494306
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49D4494304
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 23:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244726AbiASWZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 17:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357562AbiASWZy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 17:25:54 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E723C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:25:54 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a18so19993533edj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 14:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cgjUtIp/NJ23YXRIEjOj0qjbOPGKNdYKcaS2fOswzbc=;
-        b=oGsu4bZqbrZah1XP9hAFPpaAxPc35v4wJQuOPO6BSg+l2m68e9br8SuK66riHukFLH
-         FXIxgXuLCj2g6EufW8wwPm1p/MvkT1nT1blp81zUvRKjiIloJ5HMv/mSEC5Hx1fjZ/gU
-         24pRsKr0zUguTJrpNO/ORsBpWNhlVRjbhQAAAi1Yr+ERmQeLw1l9tVJegpXqqIf6kihG
-         Fr5/fcaS+jKnxNy34qGp5472VvREqU/oI/9IRaT5Myb59dZYQ9AwZzifVIgXEt4SIzIE
-         lNLpwj1O9nQl1h87Mqzo6KjG6z5+7UzbgI5xmzlB53q6vEnT2MCTyzSkMN0jPg0QD6/M
-         DFmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cgjUtIp/NJ23YXRIEjOj0qjbOPGKNdYKcaS2fOswzbc=;
-        b=FH29/UCoPMBjW0vLC+t26eYey50IUxD3NakiK1iv6u3Uaxdz7rJdni+0fVpO5mhHPx
-         FOqmQ0UhBWdzD24tVuXwtark4FB0e3AxsIQ3bcWE+ecsKeuzl4uf6THlf7GjJqwdrsOw
-         C5gF/v1ltylQ/Y5XH7ac6N6Dk+ExygUbEDZQ/v0OP0PMaRrhshhvGXjyeKlDTd7sQQK6
-         DiXYUngrWgP8LUzu7i5P39J03vW51Wiq94Cg/PARHpHXtvPPnXlviy6O8F7y7vtJzmT3
-         24lJA2+e/1ux+JGHoOd9v4aoyg48YAdHiAt2+VeJZJY9+MItYSZ57dJNnWJGUc7rxROe
-         yqsQ==
-X-Gm-Message-State: AOAM533lyjpeh7XyP/xUODOP255kx7iXtKhliPEa/glvl8mL/5JaefZI
-        K5r5+VMC96b5QK3g4hoym44mXo87cIvKr+hkRNjYUg==
-X-Google-Smtp-Source: ABdhPJzkgP6BEDEgQhuAM2rXNU61+MwKYa2K+ClyYgh+IFMum6eOxwSxae/Wj82WqClt5hDJXhIt8J5jlLwZk0HJSxg=
-X-Received: by 2002:aa7:dc53:: with SMTP id g19mr32773866edu.294.1642631152867;
- Wed, 19 Jan 2022 14:25:52 -0800 (PST)
+        id S1357553AbiASWZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 17:25:46 -0500
+Received: from mga03.intel.com ([134.134.136.65]:17079 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357552AbiASWZo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 17:25:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642631144; x=1674167144;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WN0pvM4jopLSBUBluS3CZLwpDafI5eTwwHlj7194ZwQ=;
+  b=AWMxgK56JQXqTQZbFswvexoS6RozCUii5UBj97KrwpQpSs9EREiSsuFq
+   dgs80y4W9mF8TOKT1w1tfBbzVKZzqXxXD+uXd4rmtHNH9vj0Dx1FHzfK/
+   D3uqwUy+ES+jWpl0koezKuyertc+Pln0jrXGgsCMA/NWZ+d/nPLz+rUVH
+   4Izks61fE8rG8l5G4zhU/m1VxvjUMlj6Yqv8aI7WhTo2sBFcv++K84Tce
+   fq1FUSGwBkYvofJxDPtOg+Do86qggVxEhWLH3b0ETRYyqz7+seckzAjcx
+   yU/jr4WUnwvcBmC0CQzWomcwfez6U+I7d8QdHjwp+8KT0ld4DW5hLHhMk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245165828"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="245165828"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 14:25:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="626064947"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2022 14:25:42 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAJOf-000DnO-T8; Wed, 19 Jan 2022 22:25:41 +0000
+Date:   Thu, 20 Jan 2022 06:25:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [rmk-arm:cex7 160/170] drivers/bus/fsl-mc/fsl-mc-bus.c:1111:39:
+ error: implicit declaration of function 'iommu_get_dma_domain'; did you mean
+ 'iommu_is_dma_domain'?
+Message-ID: <202201200604.v1t4HdLH-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220104202227.2903605-1-yuzhao@google.com> <YdSuSHa/Vjl6bPkg@google.com>
- <Yd1Css8+jsspeZHh@google.com>
-In-Reply-To: <Yd1Css8+jsspeZHh@google.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Wed, 19 Jan 2022 17:25:16 -0500
-Message-ID: <CADyq12z9LtDEURaKTY8qx8nb7mqUL5jLnO682DeweFOmw31LDQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Alexandre Frade <kernel@xanmod.org>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, page-reclaim@google.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 3:41 AM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Tue, Jan 04, 2022 at 01:30:00PM -0700, Yu Zhao wrote:
-> > On Tue, Jan 04, 2022 at 01:22:19PM -0700, Yu Zhao wrote:
-> > > TLDR
-> > > ====
-> > > The current page reclaim is too expensive in terms of CPU usage and it
-> > > often makes poor choices about what to evict. This patchset offers an
-> > > alternative solution that is performant, versatile and
-> > > straightforward.
-> >
-> > <snipped>
-> >
-> > > Summery
-> > > =======
-> > > The facts are:
-> > > 1. The independent lab results and the real-world applications
-> > >    indicate substantial improvements; there are no known regressions.
-> > > 2. Thrashing prevention, working set estimation and proactive reclaim
-> > >    work out of the box; there are no equivalent solutions.
-> > > 3. There is a lot of new code; nobody has demonstrated smaller changes
-> > >    with similar effects.
-> > >
-> > > Our options, accordingly, are:
-> > > 1. Given the amount of evidence, the reported improvements will likely
-> > >    materialize for a wide range of workloads.
-> > > 2. Gauging the interest from the past discussions [14][15][16], the
-> > >    new features will likely be put to use for both personal computers
-> > >    and data centers.
-> > > 3. Based on Google's track record, the new code will likely be well
-> > >    maintained in the long term. It'd be more difficult if not
-> > >    impossible to achieve similar effects on top of the existing
-> > >    design.
-> >
-> > Hi Andrew, Linus,
-> >
-> > Can you please take a look at this patchset and let me know if it's
-> > 5.17 material?
-> >
-> > My goal is to get it merged asap so that users can reap the benefits
-> > and I can push the sequels. Please examine the data provided -- I
-> > think the unprecedented coverage and the magnitude of the improvements
-> > warrant a green light.
->
-> Downstream kernel maintainers who have been carrying MGLRU for more than
-> 3 versions, can you please provide your Acked-by tags?
->
-> Having this patchset in the mainline will make your job easier :)
->
->    Alexandre - the XanMod Kernel maintainer
->                https://xanmod.org
->
->    Brian     - the Chrome OS kernel memory maintainer
->                https://www.chromium.org
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm cex7
+head:   cdfacabed5a40f44a694e4254ef37fcb4fee1e62
+commit: 9d9cfaf6528a80634c1aa12d94112e3adb05bdbb [160/170] bus: fsl-mc: add IOMMU mappings for MC firmware and DCFG
+config: arm-randconfig-r004-20220119 (https://download.01.org/0day-ci/archive/20220120/202201200604.v1t4HdLH-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm cex7
+        git checkout 9d9cfaf6528a80634c1aa12d94112e3adb05bdbb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/bus/fsl-mc/
 
-MGLRU has been maturing in ChromeOS for quite some time, we've
-maintained it in a number of different kernels between 4.14 and 5.15,
-and it's become the default
-for tens of millions of users. We've seen substantial improvements in
-terms of CPU utilization and memory pressure resulting in fewer OOM
-kills and reduced UI latency. I would love to see this make it
-upstream so more desktop users can benefit.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Brian Geffon <bgeffon@google.com>
+All error/warnings (new ones prefixed by >>):
+
+   drivers/bus/fsl-mc/fsl-mc-bus.c: In function 'fsl_mc_setup_iommu':
+>> drivers/bus/fsl-mc/fsl-mc-bus.c:1111:39: error: implicit declaration of function 'iommu_get_dma_domain'; did you mean 'iommu_is_dma_domain'? [-Werror=implicit-function-declaration]
+    1111 |         struct iommu_domain *domain = iommu_get_dma_domain(dev);
+         |                                       ^~~~~~~~~~~~~~~~~~~~
+         |                                       iommu_is_dma_domain
+>> drivers/bus/fsl-mc/fsl-mc-bus.c:1111:39: warning: initialization of 'struct iommu_domain *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
 
 
->
->    Jan       - the Arch Linux Zen kernel maintainer
->                https://archlinux.org
->
->    Steven    - the Liquorix kernel maintainer
->                https://liquorix.net
->
->    Suleiman  - the ARCVM (Android downstream) kernel memory maintainer
->                https://chromium.googlesource.com/chromiumos/third_party/kernel
->
-> Also my gratitude to those who have helped test MGLRU:
->
->    Daniel - researcher at Michigan Tech
->             benchmarked memcached
->
->    Holger - who has been testing/patching/contributing to various
->             subsystems since ~2008
->
->    Shuang - researcher at University of Rochester
->             benchmarked fio and provided a report
->
->    Sofia  - EDI https://www.edi.works
->             benchmarked the top eight memory hogs and provided reports
->
-> Can you please provide your Tested-by tags? This will ensure the credit
-> for your contributions.
->
-> Thanks!
+vim +1111 drivers/bus/fsl-mc/fsl-mc-bus.c
+
+  1108	
+  1109	static void fsl_mc_setup_iommu(struct device *dev, struct fsl_mc *mc)
+  1110	{
+> 1111		struct iommu_domain *domain = iommu_get_dma_domain(dev);
+  1112		struct resource dcfg_res = DEFINE_RES_MEM(0x01e00000, 0x10000);
+  1113		struct device_node *np;
+  1114		u64 firmware_base;
+  1115		u64 mc_ram_base;
+  1116		u32 mc_ram_size;
+  1117		u32 mcfbalr;
+  1118		u32 mcfbahr;
+  1119		int ret;
+  1120	
+  1121		if (!domain) {
+  1122			dev_err(dev, "Missing IOMMU domain - MC firmware will crash\n");
+  1123			return;
+  1124		}
+  1125	
+  1126		mcfbalr = readl(mc->fsl_mc_regs + FSL_MC_FBALR);
+  1127		mcfbahr = readl(mc->fsl_mc_regs + FSL_MC_FBAHR);
+  1128	
+  1129		firmware_base = mcfbalr & MCFBAR_LOW;
+  1130		firmware_base |= (u64)(mcfbahr & MCFBAR_HIGH) << 32;
+  1131	
+  1132		/* Calculate the size of MC RAM. */
+  1133		mc_ram_size = mcfbalr & MCFBAR_MEMSZ;
+  1134		if (mc_ram_size != 255)
+  1135			mc_ram_size = (mc_ram_size + 1) * SZ_256M;
+  1136		else
+  1137			mc_ram_size = SZ_128M;
+  1138	
+  1139		/*
+  1140		 * Calculate base address of MC RAM. U-Boot says:
+  1141		 * "As per MC design document, MC initial base address should be least
+  1142		 * significant 512MB address of MC private memory, i.e. address should
+  1143		 * point to end address masked with 512MB offset in private DRAM block."
+  1144		 * and uses the following calculation:
+  1145		 *
+  1146		 *    (gd->arch.resv_ram + mc_ram_size - 1) &
+  1147		 *       MC_RAM_BASE_ADDR_ALIGNMENT_MASK
+  1148		 *
+  1149		 * where gd->arch.resv_ram is the start of the MC reserved RAM block,
+  1150		 * and is itself aligned to 512MB.
+  1151		 *
+  1152		 * Hence, if the reserved RAM starts at 0x2780000000 and is 0x70000000
+  1153		 * in size, then the firmware address will be 0x27e0000000. However,
+  1154		 * if it is 512M, then the reserved RAM and the firmware base addresses
+  1155		 * will be identical.
+  1156		 */
+  1157		mc_ram_base = ALIGN(firmware_base - mc_ram_size + 1, SZ_512M);
+  1158	
+  1159		/*
+  1160		 * Give MC firmware access to the MC RAM, which includes the MC
+  1161		 * firmware image itself.
+  1162		 */
+  1163		ret = iommu_map(domain, mc_ram_base, mc_ram_base, mc_ram_size,
+  1164				IOMMU_CACHE | IOMMU_WRITE | IOMMU_READ);
+  1165		if (ret)
+  1166			dev_err(dev, "Failed to setup IOMMU mapping for MC RAM: %pe\n",
+  1167				ERR_PTR(ret));
+  1168	
+  1169		/* Give firmware access to the DCFG so it can read the SVR register */
+  1170		np = of_find_compatible_node(NULL, NULL, "fsl,lx2160a-dcfg");
+  1171		if (np) {
+  1172			ret = of_address_to_resource(np, 0, &dcfg_res);
+  1173			if (ret) {
+  1174				dev_err(dev, "Failed to get dcfg resource: %pe\n",
+  1175					ERR_PTR(ret));
+  1176				return;
+  1177			}
+  1178		} else {
+  1179			dev_warn(dev,
+  1180				 "Failed to find dcfg node - using default addresses\n");
+  1181		}
+  1182	
+  1183		ret = iommu_map(domain, dcfg_res.start, dcfg_res.start,
+  1184				resource_size(&dcfg_res), IOMMU_READ);
+  1185		if (ret)
+  1186			dev_err(dev, "Failed to setup IOMMU mapping for DCFG: %pe\n",
+  1187				ERR_PTR(ret));
+  1188	}
+  1189	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

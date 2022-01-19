@@ -2,51 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E73F493291
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CB3493298
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350768AbiASBxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:53:03 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:39839 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346039AbiASBxC (ORCPT
+        id S1350800AbiASByp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:54:45 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:33473 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350779AbiASByn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:53:02 -0500
-Received: by mail-oi1-f180.google.com with SMTP id e81so1786970oia.6;
-        Tue, 18 Jan 2022 17:53:02 -0800 (PST)
+        Tue, 18 Jan 2022 20:54:43 -0500
+Received: by mail-ot1-f44.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so1103811otu.0;
+        Tue, 18 Jan 2022 17:54:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IBx2/hOLa0TpamwOX/KePgd9G0kSxXsL1SCGAEjqAKs=;
-        b=MEV5/MSKtU1XNHEwMfFbaK0C1DgiwKc/xt3QzmA6fyepakFKbSinS1iZ/vH9YDJfcu
-         cdJUDqbTyhmBHN/5cixhkJQYmrrsHuL/8PPM+FHq5jYujg6hvHfKAmrRkLHcZw/McNXh
-         nn2cXeIV9tAPcNwMfltjrACYsCjiyD2TOYrSdsvwi3UBxAU7luWUaGg21tAHqO3cQ6Ke
-         t3aMCO3FH5C1rfPtWyzkwmHJRvnFG1xH+FzrcJiu7Rp/KcFJrUwr5AfWAXF3njS2A1Ka
-         iMYu1yCQ5tqGZI+FGXSEHcSZ4KdpPGlvoIuz+6oAi1PeL1Zw5ox1SV+RJLZ2rR+pDJe+
-         iU9A==
-X-Gm-Message-State: AOAM5313iNZLD+zugkOJKf0XVCLI9wN4UEqTemTCB8zi/lFFDPSfR0z9
-        0uKiHjJ5wTirvzId+FF8uw==
-X-Google-Smtp-Source: ABdhPJw5Kk+Aea7EBsfhNZT1i/XyZCdzhr8UixQ+0QzTi+XrZLb3uHhoffLAsnMAb1AfyYOKVZzjXA==
-X-Received: by 2002:aca:d704:: with SMTP id o4mr1140753oig.99.1642557182186;
-        Tue, 18 Jan 2022 17:53:02 -0800 (PST)
+        bh=qwNF7gDQbaVP4ndpQ6YMR5OTB3DEGyDODGB0cvvqRfI=;
+        b=Uv2i19NbpnnyyV2GJmevQVO2Sq8KR+/9DN9Td27rdvyhK0AJwiPDv8mdmZbyOfC/Bt
+         JLmuwZR03YB1bTXyYIyUnU6a8G41XrXL2/dkYooz2sPXfHJdEZI19LwSaa0nfNuN8unJ
+         0qN6LmcNPFK+p/aaWz3GAumICtL9F5zzSS/TIJOwNOYd5lFy+kksTO1GdGpTokAbC6tL
+         OEzS80qJMJ++BcMV9D1uBk4JLZuZjcWOu6kPJ+eVG+AEmwuvmBX0keJk0u2HMOXMxHQX
+         1V4tPegfRUqVqgccgwX8HvcrVN/AP6NnDrbfaEYUE8nS+YS3yOGVxcD9J3CFXGwFJha7
+         hRIg==
+X-Gm-Message-State: AOAM5310ful6QlKImfmatHT6c6C3fOZ6w7bLV5hhtE/TFmEhoO4cROcA
+        W+47O6sZfYiFgdr9NRRRhQ==
+X-Google-Smtp-Source: ABdhPJzVUKXAC2YcMFSv4hVv2ACgxjnkM4ifG2UCVa32kabvoUCd5Cz5lVIyctz4yYEGV/7yATw++g==
+X-Received: by 2002:a9d:4b13:: with SMTP id q19mr22246546otf.300.1642557282257;
+        Tue, 18 Jan 2022 17:54:42 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id l8sm3438274oot.19.2022.01.18.17.53.00
+        by smtp.googlemail.com with ESMTPSA id x26sm8030086ote.78.2022.01.18.17.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 17:53:01 -0800 (PST)
+        Tue, 18 Jan 2022 17:54:41 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: imx: Make each example a separate entry
-Date:   Tue, 18 Jan 2022 19:52:53 -0600
-Message-Id: <20220119015253.2437352-1-robh@kernel.org>
+To:     Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        - <patches@opensource.cirrus.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH] dt-bindings: Drop unnecessary pinctrl properties
+Date:   Tue, 18 Jan 2022 19:53:25 -0600
+Message-Id: <20220119015325.2438277-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,39 +64,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each independent example should be a separate entry. This allows for
-'interrupts' to have different cell sizes.
+For a single pinctrl mode, it is not necessary to define pinctrl
+properties as the tools always allow pinctrl properties.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ .../display/rockchip/rockchip,rk3066-hdmi.yaml         |  8 --------
+ Documentation/devicetree/bindings/input/gpio-keys.yaml |  6 ------
+ .../devicetree/bindings/pinctrl/cirrus,lochnagar.yaml  |  9 ---------
+ .../devicetree/bindings/pinctrl/cirrus,madera.yaml     | 10 ----------
+ .../devicetree/bindings/sound/samsung-i2s.yaml         |  6 ------
+ 5 files changed, 39 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-index c167958ae2a9..01720e338b4c 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-@@ -88,9 +88,7 @@ unevaluatedProperties: false
- examples:
-   - |
-     #include <dt-bindings/clock/imx5-clock.h>
--    #include <dt-bindings/clock/vf610-clock.h>
--    #include <dt-bindings/gpio/gpio.h>
--    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3066-hdmi.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3066-hdmi.yaml
+index 008c144257cb..1a68a940d165 100644
+--- a/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3066-hdmi.yaml
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3066-hdmi.yaml
+@@ -26,14 +26,6 @@ properties:
+   clock-names:
+     const: hclk
  
-     i2c@83fc4000 {
-         compatible = "fsl,imx51-i2c", "fsl,imx21-i2c";
-@@ -99,6 +97,9 @@ examples:
-         clocks = <&clks IMX5_CLK_I2C2_GATE>;
-     };
+-  pinctrl-0:
+-    maxItems: 2
+-
+-  pinctrl-names:
+-    const: default
+-    description:
+-      Switch the iomux for the HPD/I2C pins to HDMI function.
+-
+   power-domains:
+     maxItems: 1
  
-+  - |
-+    #include <dt-bindings/clock/vf610-clock.h>
-+
-     i2c@40066000 {
-         compatible = "fsl,vf610-i2c";
-         reg = <0x40066000 0x1000>;
+diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
+index dbe7ecc19ccb..7fe1966ea28a 100644
+--- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
++++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
+@@ -88,12 +88,6 @@ patternProperties:
+             which can be disabled to suppress events from the button.
+           type: boolean
+ 
+-        pinctrl-0:
+-          maxItems: 1
+-
+-        pinctrl-names:
+-          maxItems: 1
+-
+       required:
+         - linux,code
+ 
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
+index 80020539c3bb..5cd512b7d5ba 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
+@@ -51,15 +51,6 @@ properties:
+       appropriate of the LOCHNAGARx_PIN_NUM_GPIOS define, see [3].
+     maxItems: 1
+ 
+-  pinctrl-0:
+-    description:
+-      A phandle to the default pinctrl state.
+-
+-  pinctrl-names:
+-    description:
+-      A pinctrl state named "default" must be defined.
+-    const: default
+-
+   pin-settings:
+     type: object
+     patternProperties:
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+index e50d7ad5c229..c85f759ae5a3 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+@@ -30,16 +30,6 @@ description: |
+     Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
+ 
+ properties:
+-  pinctrl-0:
+-    description:
+-      A phandle to the node containing the subnodes containing default
+-      configurations.
+-
+-  pinctrl-names:
+-    description:
+-      A pinctrl state named "default" must be defined.
+-    const: default
+-
+   pin-settings:
+     description:
+       One subnode is required to contain the default settings. It
+diff --git a/Documentation/devicetree/bindings/sound/samsung-i2s.yaml b/Documentation/devicetree/bindings/sound/samsung-i2s.yaml
+index 2e3628ef48df..84c4d6cba521 100644
+--- a/Documentation/devicetree/bindings/sound/samsung-i2s.yaml
++++ b/Documentation/devicetree/bindings/sound/samsung-i2s.yaml
+@@ -110,12 +110,6 @@ properties:
+       Internal DMA register base address of the audio
+       subsystem (used in secondary sound source).
+ 
+-  pinctrl-0:
+-    description: Should specify pin control groups used for this controller.
+-
+-  pinctrl-names:
+-    const: default
+-
+   power-domains:
+     maxItems: 1
+ 
 -- 
 2.32.0
 

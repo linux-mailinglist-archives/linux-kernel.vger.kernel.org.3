@@ -2,108 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8159493AA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5412493AAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240986AbiASMxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:53:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53089 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235241AbiASMxn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:53:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642596822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SwkPmMBPZm2f8iJU9JjWAPgSwc2rs82HeO8OQaaXdTM=;
-        b=aLDS6/P8XXHlv8NBX27L2bhO16Y3WDEH43L+RKCyb7Q5eBEt+r5Mlhj09dBIaMbFr/YxH0
-        lfOAMWEf2FenExb4VqcESg1hSkZkjg7L03OeQZ9W+EMqZ0r3+fQ+QuU7yiIP990+YEzwZB
-        M1QeSYCv667UZcTWcMOAAk1CZ+DCoDI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-hGUiKVyePTGXrYbd4N60IQ-1; Wed, 19 Jan 2022 07:53:41 -0500
-X-MC-Unique: hGUiKVyePTGXrYbd4N60IQ-1
-Received: by mail-wm1-f71.google.com with SMTP id i26-20020a1c541a000000b0034dc8bd7078so800990wmb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 04:53:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SwkPmMBPZm2f8iJU9JjWAPgSwc2rs82HeO8OQaaXdTM=;
-        b=VBTHCVD0/7wsBP/UTNSz1ZKHpk/hhf5IX1CYXjX5XTMzv/Y8tSeFX45HjwwpzILBJg
-         RDP9UagGWw7C51FKX6AUCf6XGGT2mPrQ75oo/pMQwfTm4BJK7QSpbw3HLdsIhtsZdsBc
-         cdKsrNrzUBJD3ctOhyTQm0VDxdHr8sGsmym6M4EY75d5eFu7UCSVBrOqeIrFYMxZ7p2O
-         feFM9GBlVPaoBsTLRC6Yct8Oy503IfGnH/3TKAfyM/aeMy84nrvF0966QCT+98qlWyeX
-         sM8cDTUOlHJ/fXyBqm4L1+Rm9c0G+Rvq+SSPbpaM8PvnBeapEfqF5DeajuybmGmFmIDh
-         wiUA==
-X-Gm-Message-State: AOAM530GfAd2fAQUvur94+Pk0qYhR/tnbSvbPuAiiPAbpPV6HmzaA/fn
-        bdwuje1u75H17At8K9ykYKG01iWsIqqux+BEg1eTn8WifiIAP4GdGMxqiPugecKQQO2v55QiwZU
-        M+Beix+moz5Y451htj4J71cOB
-X-Received: by 2002:a05:600c:6013:: with SMTP id az19mr3437722wmb.53.1642596820159;
-        Wed, 19 Jan 2022 04:53:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzl2LhxxLXcQ3l1w+0b9fNtM4mTDLYNCleWpHbCvPchbFDiCFpgnulBIbXALU2MHPtkg5nlPw==
-X-Received: by 2002:a05:600c:6013:: with SMTP id az19mr3437714wmb.53.1642596819996;
-        Wed, 19 Jan 2022 04:53:39 -0800 (PST)
-Received: from [192.168.8.100] (tmo-096-151.customers.d1-online.com. [80.187.96.151])
-        by smtp.gmail.com with ESMTPSA id i12sm18158062wrf.100.2022.01.19.04.53.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 04:53:39 -0800 (PST)
-Message-ID: <cd79f893-c711-1a60-47d6-7c392e02fc6a@redhat.com>
-Date:   Wed, 19 Jan 2022 13:53:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 06/10] KVM: s390: Add vm IOCTL for key checked
- guest absolute memory access
+        id S243984AbiASMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:54:48 -0500
+Received: from mga02.intel.com ([134.134.136.20]:60748 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232897AbiASMyq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 07:54:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642596886; x=1674132886;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HsBNXF1Neo+VKPSJeaMnfu5UzOOXS4H7YgH9m820TrM=;
+  b=OHcewzDlR+MndspF8lotRtOAu+Eqrbym8VRbT6FuECsTWUo77hvGdaGh
+   30N0IQYv55nURNPdkCA+YpXNvHTN1sXQcCTvysg3J4Yk8S9fXosM+Xqk4
+   QEwFHYuZvO0tHABy0R8JBSWb6Sj6PG5NVhZydyiLFXW8hWPKjcPlfmI0v
+   pm8+QYAkzOo6F8PX0XPpKz522/XeHgQcSg4CnR5+NiJ/41YJFZuD0nkIB
+   957fes5kMaW1keOFOhS6oZCl8DZtqKh9jS1nv+iSCrX2edE9uNlHyfV6S
+   Lx61JqrPXnWy+/qaYvLozLqv3FUTsVHGly/Mgdle349j8g8z5QAOlboix
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232422184"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="232422184"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 04:54:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="493018486"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2022 04:54:46 -0800
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 19 Jan 2022 04:54:45 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 19 Jan 2022 04:54:45 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 19 Jan 2022 04:54:45 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 19 Jan 2022 04:54:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gSBkzhl2EdQqdNgCbltX87tb+VPC3IIj7WJkrJYxtchUy6AJlA7hOaIBDO1784PoglqF6y1xnY51/fXUJobRCufPCZrc5c6Wa2M4UBBA1ETQcMBQzAUsm8qBtvKHB2XMbMlLvRoIh8B6LStsdUjIL8ZQjY4F+ntWbV95XRDmr6xfPBcs/D72QLbtxUYh1oHwZoySK9Z7jkMxob3J1MX8BL5MZtzslloKBvnqAFjy408FZYSyLRHe+gEooM83EA4MRtG0ndOjMneDgH/5ZqFBAlBIp/v8Pf5+yzQZ5JPU6GPD/zM33WLB1iMfHZMp9x+l0aXGuyn2PPbFFDaWLb3Ajg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k/AhxZsSKwaKXAaWEXg5Qvl8gLTshV8XYRKzIm0nG7c=;
+ b=OdoBpcH5fWnydylbc4P21RoPUyc38WkWsz37/IqfzGBD+xC2H0IbtnZvsXKi9dPjXH4JXZAczMWwuO9drSsTvhvJNIPW/fnR4kulf86ubkiR6394P6Ea6QIkii4N9q6n0wMFy65ne628YEwcaztKgmHnsZZ16YTjCckSCqgxdi8bJiDSZs+2bXz7S4k34H0ueNUeFD/waWkGNxpsPhkLtu3G2SYNwhR1HYxCF9zQmJHngHAS6N9/WF8h7YNpv9vTRkHsBNFLaO+RMAkjXrQJsRve11h2hcoDJvcIDoLjjkw/Zb+tqWARTkwD0PYxG83NtuzAhE8wcDo+20Ko1W4H4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from DM8PR11MB5621.namprd11.prod.outlook.com (2603:10b6:8:38::14) by
+ MN2PR11MB3870.namprd11.prod.outlook.com (2603:10b6:208:152::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
+ 2022 12:54:41 +0000
+Received: from DM8PR11MB5621.namprd11.prod.outlook.com
+ ([fe80::fcc9:90bb:b249:e2e9]) by DM8PR11MB5621.namprd11.prod.outlook.com
+ ([fe80::fcc9:90bb:b249:e2e9%8]) with mapi id 15.20.4909.008; Wed, 19 Jan 2022
+ 12:54:41 +0000
+From:   "Jankowski, Konrad0" <konrad0.jankowski@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>
+CC:     "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [Intel-wired-lan] [PATCH] igbvf: Remove useless DMA-32 fallback
+ configuration
+Thread-Topic: [Intel-wired-lan] [PATCH] igbvf: Remove useless DMA-32 fallback
+ configuration
+Thread-Index: AQHYBYjhQEW3+lq1qk6BWFQCzhhKr6xqXDyg
+Date:   Wed, 19 Jan 2022 12:54:40 +0000
+Message-ID: <DM8PR11MB56214F1217ED05D3EDAF7968AB599@DM8PR11MB5621.namprd11.prod.outlook.com>
+References: <dc75b24883381a060eaad21cb0deffb5a027b05f.1641753812.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <dc75b24883381a060eaad21cb0deffb5a027b05f.1641753812.git.christophe.jaillet@wanadoo.fr>
+Accept-Language: pl-PL, en-US
 Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-7-scgl@linux.ibm.com>
- <a3a143f8-8fd5-49bf-9b2b-2f7cb04732de@redhat.com>
- <8d09dc2e-2d2d-e5f6-8cc7-eecfc94a17b2@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <8d09dc2e-2d2d-e5f6-8cc7-eecfc94a17b2@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e70aac96-3fde-4119-df57-08d9db4adbbe
+x-ms-traffictypediagnostic: MN2PR11MB3870:EE_
+x-microsoft-antispam-prvs: <MN2PR11MB38705FE4C9DC6ED71B1B69E1AB599@MN2PR11MB3870.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2089;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T6im9y/eGwC47FBdPTX775jqkCHwZalgBqs42vwOlhweUseUdvq6/gAS/Co+UhBW9XkvztXBHGVL75OFOZL8O4FIcCa9X+f/P+kcAyhqKuGXZETKDLlPm7BxDmnIXmnX/4VFPTpetThLmy1RM594QmPRLD0bWd+vBI0R8YZlGUP9a5HQLgETxgQ688T8WFGXV2ICmX24BDTQYwggguCtSLKwcC1T1jd1cAWy/FVhbFTjDzvSCmoO1ir+pN8eowNl3Y21I3Ox/2PUdihOztP//clV8qmhLG8p8X+n1BEJYfc8nO9/zlI1x45OLyCpG8/aadblrV42rKA9WAXFwkR6OTp5vbPsMGaCj7clOFqCuoFZiUcIcZQ7CFySOET9qB2cr9xnzhPI57EJXazNsQQGPahpbyPlbkKn5orVCpyO7XB36xiWCRk93O4u3sbRor6Kl544//gSGWZtI+8EwtfN4ZCMWD814SAva+fEr/rsRcdD+itYkVkzeKNFkbjAxYjqO8c3qCtLwpU99HRIoNCoMFAXvFHqzKSZkerZM55DWHkReZM0aveuUwlWwHY2OSeuKObn3UGt9lDXux4syofXZKTcwhc74JBbLqHp9t/71V3LEAz3uOhePEEKwhziHKkD3cC3+/inQdCFH6lWbPmR8aBU4frhsac0Wvw9e/Ld9P9hoIaVEHswPr6MpxGPTqcN4trU0meRtoR3OIdvwVItRSCTrhPK/5oj01VRXAfVW6JiOsAG1mTEO9bWLV1B6WB0i4vDCoXPovNbH22OvKc1RdyE8ZtWWwRSQYNGb8hIJJY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5621.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(71200400001)(4326008)(110136005)(54906003)(7696005)(86362001)(38070700005)(33656002)(122000001)(66446008)(2906002)(64756008)(66946007)(76116006)(82960400001)(508600001)(8936002)(966005)(38100700002)(52536014)(6506007)(5660300002)(55016003)(9686003)(26005)(53546011)(8676002)(66476007)(66556008)(186003)(83380400001)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hiXRl2tMUf/BFOddFqn70xSBIjgd33nfyaSlkgwpGUY9YONoPdwt84v7gehb?=
+ =?us-ascii?Q?p8W/7i7TpRref7flMsbLXB+RIlAhrTBtUVobvbAZEc6IcOCY9yInFZDMdqKR?=
+ =?us-ascii?Q?ZMW8uMB3iFRrUwB7EVsL2qcK615uXbPakkFj8D8bPRKVbTHbBWY1G/w57S3Y?=
+ =?us-ascii?Q?nxK0S20RC2FBlOuuSS2S2a1M44gh0XhiVDvUm4eDoKRdg+OzFQvmcv0YFMQe?=
+ =?us-ascii?Q?IV191/yYq855HUmJzcnFpGm/LfLBMWO+HhCUOB7ZopUM9utDh2PmDcy4+c4Y?=
+ =?us-ascii?Q?CM8ePi1fnLjbl7abZzyOVWpIvgxBuWMwoWWAH+QKVm1ZiWisqg5a4y0Jv300?=
+ =?us-ascii?Q?TOfhmYEYv+QhEU2Bg6fecO/Esez3c6AgL5qfu8elf63A0iI3+0A5Kc7OQIsx?=
+ =?us-ascii?Q?DswGZIcGaBQ4Molcm7/M/gdGWM001gMAKP8yqF1RvF/Mac8y/G3HaeaUKcAZ?=
+ =?us-ascii?Q?kSIXp5gPDlA7EU+pRgq0J9Nacl8TjGsQBNNcGXrqvpjgar8sE3e0yh9V/z4K?=
+ =?us-ascii?Q?sYg6cce3Ao/2NhHYJADRtUXvVd5vge+vaZYdk0MvCiMBf1O0pZjs4h+B4NhN?=
+ =?us-ascii?Q?rEXpeWYKSCDU8CM5ZHphX6xnOAeequj1TNmK/x0H3cW9VSMjk2N6J7+mXh44?=
+ =?us-ascii?Q?UTdXGo19coZMmBsEUDHOZCOta3kmS6ZFg7TOtONoO6FMp9Aph+RkCbaTRstw?=
+ =?us-ascii?Q?SYEd1gBWvV9S7bgkzU0qqJ7gzVRSE0aYaoMrti+7veTlycHKj6NTVukHqsGr?=
+ =?us-ascii?Q?XxQZxw8UUPl8i/il5FciNwtAa18Hbx/5NcM6ziKygNIEkoywEB45kWOR6uhR?=
+ =?us-ascii?Q?Ggi4e0g9ISNOWSuXm2GKpQsVm9eKsEWGqdpGdHzjX01zp/UGw7I2o1lIgj0C?=
+ =?us-ascii?Q?SxkKFLpF1vxAOYF4TIRNG+QJ3Ydpv3qmQWu8p5nbda9jyh2/H1WZ4qZ0UXVx?=
+ =?us-ascii?Q?3RshryM3kGK2BrYAHush8bVBhJFNcgY6NUbyLm+uzZKeFjIiENR2P7tDGOf6?=
+ =?us-ascii?Q?MMRUIBqFTmllksDPa4BdlVTwKgGSlwzRV/zibJcz3WrHbWs6/eJes34u0XMG?=
+ =?us-ascii?Q?AiXrhP4IA1uvEStHVDXwA1uK2btfhuLL/bd3n/87qLk67eiMS6i3t1iq0Dev?=
+ =?us-ascii?Q?NL0rrePg4bQk5YXLPGdzI+tshuUT0p5PD3F2mFzK0e0kfuoR64kqv3uyKJA5?=
+ =?us-ascii?Q?dCf7IsUgfXAnnIlFazRr5aC4ifOtnzVsS3wq1a76t6OLwFXK6XIyRHFLww9U?=
+ =?us-ascii?Q?Z4CjJq/Vja/4tMNemkUMI5+RoG2i8CqFYvRJYvIwBl6DbR7e+p7gakg0t0wL?=
+ =?us-ascii?Q?z84d1XiU13SDDYEyNJ44PS68gjD3WyVyRC1gstY8EH4Q5PGjmZIs5DwvIOLh?=
+ =?us-ascii?Q?Sy69+DjJdFcyQz8LUPAMPmbNF2CN+VsDBYMWgIOHxct2J20Ok8qcAJwKLcWN?=
+ =?us-ascii?Q?QJOndwiKcVpCqeZLtW92zFcPzc39wyZhoooDerq65LuKYv8N2KzYgjIaL4jz?=
+ =?us-ascii?Q?SNWP6LQp8HhtSGlct70c4vVLCu7v+2NxGT5B8NvSQVrIK8FS2BGXza2NT3Iq?=
+ =?us-ascii?Q?iEdjoXkWBVHu3fWh2NG34It6mv+sr8X/Jzoi970ZGQ23dwfyY1EfiqvaE5hJ?=
+ =?us-ascii?Q?nykfuuNKNTRhacjJUcByOV126t9DPq5gV2F0FMIkKwalzcQIBluhHx9BN5iL?=
+ =?us-ascii?Q?0HV0jA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5621.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e70aac96-3fde-4119-df57-08d9db4adbbe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2022 12:54:40.9324
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WbII+tHjLifU87mu7TknBxbK5J5YIXbQc8htnbAx9xzbLdQLCMd3s9zlPzXHQGTmE7YvwkPjEMrtEDZRwduzO5F8Zih3MuVgpKmVwaMmN0k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3870
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2022 13.46, Christian Borntraeger wrote:
-> 
-> 
-> Am 19.01.22 um 12:52 schrieb Thomas Huth:
->> On 18/01/2022 10.52, Janis Schoetterl-Glausch wrote:
->>> Channel I/O honors storage keys and is performed on absolute memory.
->>> For I/O emulation user space therefore needs to be able to do key
->>> checked accesses.
->>
->> Can't we do the checking in userspace? We already have functions for 
->> handling the storage keys there (see hw/s390x/s390-skeys-kvm.c), so why 
->> can't we do the checking in QEMU?
-> 
-> That would separate the key check from the memory operation. Potentially for 
-> a long time.
-> Wenn we piggy back on access_guest_abs_with_key we use mvcos in the host and 
-> thus do the key check in lockstep with the keycheck which is the preferrable 
-> solution.
 
-Ok, makes sense - Janis, could you please add this rationale to the patch 
-description?
 
-  Thomas
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
+> Christophe JAILLET
+> Sent: niedziela, 9 stycznia 2022 19:44
+> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
+> Jakub Kicinski <kuba@kernel.org>
+> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>; intel-wired-
+> lan@lists.osuosl.org; kernel-janitors@vger.kernel.org; linux-
+> kernel@vger.kernel.org; netdev@vger.kernel.org
+> Subject: [Intel-wired-lan] [PATCH] igbvf: Remove useless DMA-32 fallback
+> configuration
+>=20
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+>=20
+> So, if dma_set_mask_and_coherent() succeeds, 'pci_using_dac' is known to
+> be 1.
+>=20
+> Simplify code and remove some dead code accordingly.
+>=20
+> [1]: https://lkml.org/lkml/2021/6/7/398
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This patch was not part of the 1st serie I've sent. So there is no Review=
+ed-by
+> tag.
+> ---
+>  drivers/net/ethernet/intel/igbvf/netdev.c | 22 ++++++----------------
+>  1 file changed, 6 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c
+> b/drivers/net/ethernet/intel/igbvf/netdev.c
+> index b78407289741..43ced78c3a2e 100644
+> --- a/drivers/net/ethernet/intel/igbvf/netdev.c
+> +++ b/drivers/net/ethernet/intel/igbvf/netdev.c
 
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>

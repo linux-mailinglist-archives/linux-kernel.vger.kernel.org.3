@@ -2,169 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87576493CDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB0E493CF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355669AbiASPUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:20:21 -0500
-Received: from phobos.denx.de ([85.214.62.61]:33902 "EHLO phobos.denx.de"
+        id S1351717AbiASPVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:21:51 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:54395 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238769AbiASPUT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:20:19 -0500
-Received: from maia.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S1344565AbiASPVj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 10:21:39 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1642605698; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=nDQ1Iy4S4g8WjOjL3PAXt1koaRqeDxEXd8ZQbmvqGI4=; b=iyP7e7m5ZdbvoL1YVl0Y6idO0EjZI+MCbA7WxsXaTiBr837rd2y/ehSXCB/WD+hVMPzK6Stb
+ lGGmceC+ZvTRCPp4UgTlad4/a0CEC4XmQlKmtPIcp0+8PrLhazoUb6e36HTUVPnJMPvRq0Pr
+ IjKih9cIxGkeCtQaQE/uRRj5Dyo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 61e82c811b960c38b715bcd8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 19 Jan 2022 15:21:37
+ GMT
+Sender: quic_akhilpo=quicinc.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B44A7C4338F; Wed, 19 Jan 2022 15:21:37 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from hyd-lnxbld559.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: hws@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id CE92980F9E;
-        Wed, 19 Jan 2022 16:20:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1642605618;
-        bh=7B4oNDkbh8GhEvlk0UqgZzjj2/33cChE0+LE0LwNNao=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=X6JUIFsxNwkyCqWvt65PoMmKKlthEQ0aRnVyteLgctpsmfDtov98ilzjvEj/UlnPS
-         GCK+9G2wKkYWw8rmeX4AsholAExyE1MbeDQV/vn5gEpg/5fg1mK+8K98Y7vildwX5l
-         eKC9RH14qgwfe5PVvMvlXcgHOGorYQ9ndrQAua1HEjeEW6mjkzpPSBJl49Uz1qyduW
-         yamv8o8txFBoty5dmuqi1uCA3VhBBxkHR1mq9uRhKVBrBOE5oaHu42wmUHKmWp0Yud
-         WYoBSTY0NQ+JVKX7XHLXhtw0dKQq0I4ZIKXojofrnH12qw3gkI39nDs8ea3R8stdwL
-         K3P9P/BlBEc4Q==
-Message-ID: <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-From:   Harald Seiler <hws@denx.de>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 19 Jan 2022 16:20:12 +0100
-In-Reply-To: <20220119151145.zft47rzebnabiej2@pengutronix.de>
-References: <20220119145204.238767-1-hws@denx.de>
-         <20220119151145.zft47rzebnabiej2@pengutronix.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-Ije/lCSSUJW1kFgl5Yjm"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
-MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
-X-Virus-Status: Clean
+        (Authenticated sender: akhilpo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 74C74C4360D;
+        Wed, 19 Jan 2022 15:21:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 74C74C4360D
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eric Anholt <eric@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sean Paul <sean@poorly.run>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] drm/msm/adreno: Add support for Adreno 8c Gen 3
+Date:   Wed, 19 Jan 2022 20:51:18 +0530
+Message-Id: <20220119205012.v2.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for "Adreno 8c Gen 3" gpu along with the necessary speedbin
+support.
 
---=-Ije/lCSSUJW1kFgl5Yjm
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+---
 
-Hi,
+Changes in v2:
+- Fix a bug in adreno_cmp_rev()
 
-On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K=C3=B6nig wrote:
-> On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
-> > Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
-> > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
-> > few 100us of additional overhead on slower i.MX platforms.
-> >=20
-> > Implement a fast path when the delays are 0, where the RTS signal is
-> > toggled immediately instead of going through an hrtimer.  This fast pat=
-h
-> > behaves identical to the code before delay support was implemented.
-> >=20
-> > Signed-off-by: Harald Seiler <hws@denx.de>
-> > ---
-> >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
-> >  1 file changed, 14 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > index df8a0c8b8b29..67bbbb69229d 100644
-> > --- a/drivers/tty/serial/imx.c
-> > +++ b/drivers/tty/serial/imx.c
-> > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *por=
-t)
-> >  	if (port->rs485.flags & SER_RS485_ENABLED) {
-> >  		if (sport->tx_state =3D=3D SEND) {
-> >  			sport->tx_state =3D WAIT_AFTER_SEND;
-> > -			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > +
-> > +			if (port->rs485.delay_rts_after_send > 0) {
-> > +				start_hrtimer_ms(&sport->trigger_stop_tx,
-> >  					 port->rs485.delay_rts_after_send);
-> > -			return;
-> > +				return;
-> > +			}
-> > +
-> > +			/* continue without any delay */
->=20
-> Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER_SEND ?
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 21 ++++++++++++++----
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 34 +++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h    | 10 +++++++--
+ 3 files changed, 56 insertions(+), 9 deletions(-)
 
-I am keeping the assignment intentionally, to fall into the
-if(state =3D=3D WAIT_AFTER_RTS) below (which then sets the state to OFF).
-I originally had the code structured like this:
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 51b8377..9268ce3 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -10,7 +10,6 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/devfreq.h>
+-#include <linux/nvmem-consumer.h>
+ #include <linux/soc/qcom/llcc-qcom.h>
+ 
+ #define GPU_PAS_ID 13
+@@ -1734,6 +1733,18 @@ static u32 a618_get_speed_bin(u32 fuse)
+ 	return UINT_MAX;
+ }
+ 
++static u32 adreno_7c3_get_speed_bin(u32 fuse)
++{
++	if (fuse == 0)
++		return 0;
++	else if (fuse == 117)
++		return 0;
++	else if (fuse == 190)
++		return 1;
++
++	return UINT_MAX;
++}
++
+ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ {
+ 	u32 val = UINT_MAX;
+@@ -1741,6 +1752,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ 	if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
+ 		val = a618_get_speed_bin(fuse);
+ 
++	if (adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), rev))
++		val = adreno_7c3_get_speed_bin(fuse);
++
+ 	if (val == UINT_MAX) {
+ 		DRM_DEV_ERROR(dev,
+ 			"missing support for speed-bin: %u. Some OPPs may not be supported by hardware",
+@@ -1753,11 +1767,10 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ 
+ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
+ {
+-	u32 supp_hw = UINT_MAX;
+-	u32 speedbin;
++	u32 speedbin, supp_hw = UINT_MAX;
+ 	int ret;
+ 
+-	ret = nvmem_cell_read_variable_le_u32(dev, "speed_bin", &speedbin);
++	ret = adreno_read_speedbin(dev, &speedbin);
+ 	/*
+ 	 * -ENOENT means that the platform doesn't support speedbin which is
+ 	 * fine
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 9300583..946f505 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -6,6 +6,7 @@
+  * Copyright (c) 2014,2017 The Linux Foundation. All rights reserved.
+  */
+ 
++#include <linux/nvmem-consumer.h>
+ #include "adreno_gpu.h"
+ 
+ bool hang_debug = false;
+@@ -317,6 +318,17 @@ static const struct adreno_info gpulist[] = {
+ 		.zapfw = "a660_zap.mdt",
+ 		.hwcg = a660_hwcg,
+ 	}, {
++		.rev = ADRENO_REV_SKU(6, 3, 5, ANY_ID, 190),
++		.name = "Adreno 8c Gen 3",
++		.fw = {
++			[ADRENO_FW_SQE] = "a660_sqe.fw",
++			[ADRENO_FW_GMU] = "a660_gmu.bin",
++		},
++		.gmem = SZ_512K,
++		.inactive_period = DRM_MSM_INACTIVE_PERIOD,
++		.init = a6xx_gpu_init,
++		.hwcg = a660_hwcg,
++	}, {
+ 		.rev = ADRENO_REV(6, 3, 5, ANY_ID),
+ 		.name = "Adreno 7c Gen 3",
+ 		.fw = {
+@@ -365,13 +377,19 @@ static inline bool _rev_match(uint8_t entry, uint8_t id)
+ 	return (entry == ANY_ID) || (entry == id);
+ }
+ 
++static inline bool _rev_match_sku(uint16_t entry, uint16_t id)
++{
++	return (entry == ANY_SKU) || (entry == id);
++}
++
+ bool adreno_cmp_rev(struct adreno_rev rev1, struct adreno_rev rev2)
+ {
+ 
+ 	return _rev_match(rev1.core, rev2.core) &&
+ 		_rev_match(rev1.major, rev2.major) &&
+ 		_rev_match(rev1.minor, rev2.minor) &&
+-		_rev_match(rev1.patchid, rev2.patchid);
++		_rev_match(rev1.patchid, rev2.patchid) &&
++		_rev_match_sku(rev1.sku, rev2.sku);
+ }
+ 
+ const struct adreno_info *adreno_info(struct adreno_rev rev)
+@@ -445,12 +463,17 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
+ 	return gpu;
+ }
+ 
++int adreno_read_speedbin(struct device *dev, u32 *speedbin)
++{
++	return nvmem_cell_read_variable_le_u32(dev, "speed_bin", speedbin);
++}
++
+ static int find_chipid(struct device *dev, struct adreno_rev *rev)
+ {
+ 	struct device_node *node = dev->of_node;
+ 	const char *compat;
+ 	int ret;
+-	u32 chipid;
++	u32 chipid, speedbin;
+ 
+ 	/* first search the compat strings for qcom,adreno-XYZ.W: */
+ 	ret = of_property_read_string_index(node, "compatible", 0, &compat);
+@@ -466,7 +489,7 @@ static int find_chipid(struct device *dev, struct adreno_rev *rev)
+ 			rev->minor = r;
+ 			rev->patchid = patch;
+ 
+-			return 0;
++			goto done;
+ 		}
+ 	}
+ 
+@@ -486,6 +509,11 @@ static int find_chipid(struct device *dev, struct adreno_rev *rev)
+ 	dev_warn(dev, "Use compatible qcom,adreno-%u%u%u.%u instead.\n",
+ 		rev->core, rev->major, rev->minor, rev->patchid);
+ 
++done:
++	if (adreno_read_speedbin(dev, &speedbin))
++		speedbin = ANY_SKU;
++
++	rev->sku = (uint16_t) (0xffff & speedbin);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+index cffabe7..52bd93a 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+@@ -40,12 +40,16 @@ struct adreno_rev {
+ 	uint8_t  major;
+ 	uint8_t  minor;
+ 	uint8_t  patchid;
++	uint16_t sku;
+ };
+ 
+-#define ANY_ID 0xff
++#define ANY_ID	0xff
++#define ANY_SKU 0xffff
+ 
+ #define ADRENO_REV(core, major, minor, patchid) \
+-	((struct adreno_rev){ core, major, minor, patchid })
++	((struct adreno_rev){ core, major, minor, patchid, ANY_SKU })
++#define ADRENO_REV_SKU(core, major, minor, patchid, sku) \
++	((struct adreno_rev){ core, major, minor, patchid, sku })
+ 
+ struct adreno_gpu_funcs {
+ 	struct msm_gpu_funcs base;
+@@ -324,6 +328,8 @@ adreno_iommu_create_address_space(struct msm_gpu *gpu,
+ 
+ void adreno_set_llc_attributes(struct iommu_domain *iommu);
+ 
++int adreno_read_speedbin(struct device *dev, u32 *speedbin);
++
+ /*
+  * For a5xx and a6xx targets load the zap shader that is used to pull the GPU
+  * out of secure mode
+-- 
+2.7.4
 
-	if (port->rs485.delay_rts_after_send > 0) {
-		sport->tx_state =3D WAIT_AFTER_SEND;
-		start_hrtimer_ms(&sport->trigger_stop_tx,
-			 port->rs485.delay_rts_after_send);
-		return;
-	} else {
-		/* continue without any delay */
-		sport->tx_state =3D WAIT_AFTER_SEND;
-	}
-
-This is functionally identical, but maybe a bit more explicit.
-
-Not sure what is more clear to read?
-
-> >  		}
-> > =20
-> >  		if (sport->tx_state =3D=3D WAIT_AFTER_RTS ||
-> > @@ -698,9 +703,14 @@ static void imx_uart_start_tx(struct uart_port *po=
-rt)
-> >  				imx_uart_stop_rx(port);
-> > =20
-> >  			sport->tx_state =3D WAIT_AFTER_RTS;
-> > -			start_hrtimer_ms(&sport->trigger_start_tx,
-> > +
-> > +			if (port->rs485.delay_rts_before_send > 0) {
-> > +				start_hrtimer_ms(&sport->trigger_start_tx,
-> >  					 port->rs485.delay_rts_before_send);
-> > -			return;
-> > +				return;
-> > +			}
-> > +
-> > +			/* continue without any delay */
->=20
-> Here similar question here about sport->tx_state =3D WAIT_AFTER_RTS;
-
-Same as above, but with WAIT_AFTER_RTS of course...
-
---=20
-Harald
-
---=-Ije/lCSSUJW1kFgl5Yjm
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQJABAABCAAqFiEETcH23ThHylbMjihC+a//80/kShkFAmHoLCwMHGh3c0BkZW54
-LmRlAAoJEPmv//NP5EoZlaQP/18hVpxOfVIAdWcKZTKiXGzS4KtLUzu9YRES2HmE
-LcjVZJFe1wa77reft5ceHWCWnKCSmDKihMvquvnHjtdWVqwqxdRvEXp14c3P1zhs
-lim9dYDzLqm8/lU3LOU/JIjIozcPk149Xsq4Ja4me8shyaQ3zWwhzI50YxBhh6VU
-/zRyslnrSFQGjqj6SYW2sqnSvzXw7+rVYGQoTBe1qVDdia1EbgCS76KQTmwidEPn
-wIaT9NjqSJPAJyGVv65XGb85MwI5Zb7O4Zb/9gLJZTAgTNhhEirograVyW1+wVW4
-78ualeLnhNIp7f2M6ZH5sfdSus8TIeNkUYN915z524vx1Z8chSE5IE12FqtTSaoZ
-oO2Tv2Tr5MWi207jhDX8Go/JVzeHfceSgRlIlHY58GSV6y73eHa3oq7n0ig/3FZq
-oYPz+cV1T5/1iahMZiFKaGr3i8lgTgU6NE0J71X4oEwurFAWli04dPvrnjoK8rZn
-L3VRi7ZY+eT6jlqoS542aQj3/HokQ5gM5kJU2b4JDQDqnjXilpp1ZfN6JcUh0s29
-u2//AK9ATTaKAlnrRqsWMtHC9FkVXSH2QnrQrQQa3CGa6VtcEF1onBcCS80553WF
-YlycYWnz1t2KDMZ9PNOzI8+oSrI+s2dHHgAqJez9J4i07eb+gSwVCIIkpxGDVOA+
-oJFT
-=U071
------END PGP SIGNATURE-----
-
---=-Ije/lCSSUJW1kFgl5Yjm--

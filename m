@@ -2,134 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CB4493C94
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE384493C8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbiASPFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S1348843AbiASPFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355627AbiASPFX (ORCPT
+        with ESMTP id S1355617AbiASPFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:05:23 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AA3C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:05:22 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id az27-20020a05600c601b00b0034d2956eb04so5980293wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:05:22 -0800 (PST)
+        Wed, 19 Jan 2022 10:05:19 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46ECC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:05:18 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso3437056otj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:05:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0odyDD4qZWEyKf4dgk5bsg3tKYSY9CGvoUStfcevylA=;
-        b=KY4YCZwWueLtUID+/YuRziwAprnxroizrhhiLqgR+VJv0dvAqf6p/e/Z8+2hbD5td3
-         M1RXz2Ulz5/UO405poQs0LC2mWECerbCYmm6/PclkyYapoYCKVCVsrH7+qHMc7mD7DNG
-         yVv6KCpVaJQuyRwX173l73U/aTdl9LopqeRzs=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rT9FJ0j7/GR3QV3pYKP9vdE5VbXyREPL1/JFSj49N9s=;
+        b=TkP0onxPtD5jB1gt+D1/yPotxgObqZuoJ/oopIGNyr03TMDZ7ffUflSnGXNAV0hBNY
+         BNwV6mQbgB6X6N1lGoQnuS3jSZr3RFboo+vWCYPZ7/Auy9axTIv6HvhunxexwcEsulex
+         TXvAqRxLAMXqpjBfp/a3bOjQ4fvrv1DATGjwX5CjV/byPb+y5ESE3Y5Mb78UYIy+VXSZ
+         1je7N4dc4VJZ3qCyrJ/0MO2YrAYFMOQ4E/lSrau8JkqGfzbBbrrsMMxazFTSCI4UQqGN
+         cNfBwEAtOLJxHzE6fYt9uGIk7onUWOkr8hJG57D8d0ukqepWeoTI8A+a1kkktS9KWcBM
+         JSBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=0odyDD4qZWEyKf4dgk5bsg3tKYSY9CGvoUStfcevylA=;
-        b=RkuDCglsVjcEBLNjHA7aXH53ijQqWm+awEYUL644VtemHj+Q+oLHPlrJ06gRs6oGp+
-         tq4fuvnXRXKrBwjUahug8jzholY6cn4BW1pQYWqL/n+YXzE4tOsq/UiOXKO9oeMogzod
-         epVXhiPUpRy8WDd1fpKZFlEUmijEC2ZMcKy45crg80o2R0cDqGCx2igIs+hYHZ6fQkxB
-         N6EXJ2hqZMGJ0TBCoQ1I5MSlCSku0yVhvHfeg/2TKECQr65wkfI3K1crKjom/OPa/BG1
-         zszhHx1YUv6+hmr1wDXKYiUsxNPGOOd2iRDivtO3tblJKXWJ+5sAcBujbdaqfUJrpuPV
-         rhzQ==
-X-Gm-Message-State: AOAM530GarK7JJg3p68l+yazTxpa8oAuMIR5dFxroS4E+P9yT0H20qYn
-        lN1XmKdxdx/CZILO1e5JvWiM/A==
-X-Google-Smtp-Source: ABdhPJxqxOTFLl5T1cf1q2Ex/gbOeL3/4WLRyt3JAUtwMEe4sBmurRyS45VDAxAFnc6SDjv5q4TcRQ==
-X-Received: by 2002:adf:fec2:: with SMTP id q2mr29547534wrs.546.1642604721320;
-        Wed, 19 Jan 2022 07:05:21 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id g17sm7645503wmq.9.2022.01.19.07.05.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rT9FJ0j7/GR3QV3pYKP9vdE5VbXyREPL1/JFSj49N9s=;
+        b=Pr2ssvanCX9Cdb47wwqkJ7M5mJ5j7+9EtitzoZkLNUG7PT7CmqBkEy/Ns+9XXZtubY
+         +fMwu48KrhXJxotuhHi4E4UvCaEdC//oihxQghYMPi2iEvY0Q2Fiq8yS3zM/7aBXnuEN
+         gwykjDQOgUfB3uHzw+hmbbC82tmYCxJFGraozmks1qk5ETp07WdQCbnd0vjSct8I4Yx9
+         /0tkW0RUilHEpmMrHiV6dc7+Q3KWGKWas+qynpG+6/EmYi4GTBvdSkgvQ/GdkHyUnu5A
+         jxPfHlFG8d1Z9lP55q95JaUAn9Y2SbCD/blI2TyM1pNs7mK/mPcSzeEfqtp4dH8pGvs9
+         koEg==
+X-Gm-Message-State: AOAM531Jmbh7DdWL04mDvCic5ZucpK3h3wQ8i0VnqfzXwfe73Z7P9L1B
+        qXl+lh0sZy4J96kyuv9wC6UeaQ==
+X-Google-Smtp-Source: ABdhPJzUIi3KXQuwlo8bH34JPGPPIl8ckdmaGpfQ9ZMEiW7t0Q0G9kj77P/h92SFPMEX42ha38Va0Q==
+X-Received: by 2002:a05:6830:2684:: with SMTP id l4mr14282953otu.79.1642604717967;
+        Wed, 19 Jan 2022 07:05:17 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w22sm9105oov.24.2022.01.19.07.05.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 07:05:20 -0800 (PST)
-Date:   Wed, 19 Jan 2022 16:05:18 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Weizhao Ouyang <o451686892@gmail.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>, christian.koenig@amd.com,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH] dma-buf: cma_heap: Fix mutex locking section
-Message-ID: <YegormDmEewox0MF@phenom.ffwll.local>
-Mail-Followup-To: Weizhao Ouyang <o451686892@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>, Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>, christian.koenig@amd.com,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <20220104073545.124244-1-o451686892@gmail.com>
+        Wed, 19 Jan 2022 07:05:17 -0800 (PST)
+Date:   Wed, 19 Jan 2022 07:05:52 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq: qcom-hw: Use initialized cpumask for
+ thermal pressure update
+Message-ID: <Yego0BwrVXkqqJOm@ripper>
+References: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
+ <20220119063547.hktwzbycf7trqjju@vireshk-i7>
+ <20220119064029.b2yhqcazhpdbhasc@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104073545.124244-1-o451686892@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <20220119064029.b2yhqcazhpdbhasc@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 03:35:45PM +0800, Weizhao Ouyang wrote:
-> Fix cma_heap_buffer mutex locking critical section to protect vmap_cnt
-> and vaddr.
+On Tue 18 Jan 22:40 PST 2022, Viresh Kumar wrote:
+
+> On 19-01-22, 12:05, Viresh Kumar wrote:
+> > policy->cpus keeps on changing with CPU hotplug and this can leave
+> > your platform in an inconsistent state. For example, in case where you
+> > offline a CPU from policy, other CPUs get their thermal pressure
+> > updated, online the CPU back and all CPUs of a policy don't have the
+> > same settings anymore.
+> > 
+
+Oh, I didn't know that. Then my proposal doesn't seem that awesome.
+
+> > There are few things we can do here now:
+> > 
+> > - Check for empty related_cpus and return early. Since related_cpus is
+> >   updated only once, this shall work just fine and must not be racy.
+> > 
+> >   While at it, I think we can also do something like this in
+> >   topology_update_thermal_pressure() instead:
+> > 
+> >   	cpu = cpumask_first(cpus);
+> >         if (unlikely(cpu >= NR_CPUS))
+> >                 return;
+> > 
+> > - And while writing this email, I dropped all other ideas in favor of
+> >   change to topology_update_thermal_pressure() :)
 > 
-> Fixes: a5d2d29e24be ("dma-buf: heaps: Move heap-helper logic into the cma_heap implementation")
-> Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
-> ---
->  drivers/dma-buf/heaps/cma_heap.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> And then I saw your second patch, which looks good as otherwise we
+> will not be able to catch the bug in our system where we are sending
+> the empty cpumask :)
 > 
-> diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
-> index 0c05b79870f9..83f02bd51dda 100644
-> --- a/drivers/dma-buf/heaps/cma_heap.c
-> +++ b/drivers/dma-buf/heaps/cma_heap.c
-> @@ -124,10 +124,11 @@ static int cma_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
->  	struct cma_heap_buffer *buffer = dmabuf->priv;
->  	struct dma_heap_attachment *a;
->  
-> +	mutex_lock(&buffer->lock);
-> +
->  	if (buffer->vmap_cnt)
->  		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
-
-Since this creates nesting with mm/, but optionally I think it'd be good
-to prime lockdep so it knows about this. See e.g. dma_resv_lockdep() in
-dma-resv.c, except I don't know offhand what the right lock for
-invalidate_kernel_vmap_range is.
--Daniel
-
-
->  
-> -	mutex_lock(&buffer->lock);
->  	list_for_each_entry(a, &buffer->attachments, list) {
->  		if (!a->mapped)
->  			continue;
-> @@ -144,10 +145,11 @@ static int cma_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
->  	struct cma_heap_buffer *buffer = dmabuf->priv;
->  	struct dma_heap_attachment *a;
->  
-> +	mutex_lock(&buffer->lock);
-> +
->  	if (buffer->vmap_cnt)
->  		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
->  
-> -	mutex_lock(&buffer->lock);
->  	list_for_each_entry(a, &buffer->attachments, list) {
->  		if (!a->mapped)
->  			continue;
-> -- 
-> 2.32.0
+> So the other idea is:
+> 
+> - Revert, or bring back a new version of this and register the
+>   interrupt from there. But that is also not a very clean solution.
+> 
+>   commit 4bf8e582119e ("cpufreq: Remove ready() callback")
 > 
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+We could do this and keep the interrupt disabled until we hit ready().
+
+But I found the resulting issue non-trivial to debug, so I would prefer
+if arch_update_thermal_pressure() dealt with the empty cpumask. So as
+you suggest in your first reply, I'll respin the second patch alone,
+without the WARN_ON().
+
+Thanks,
+Bjorn

@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C359349424A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A64494252
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 22:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245617AbiASVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 16:03:11 -0500
-Received: from 8.mo560.mail-out.ovh.net ([188.165.52.147]:37621 "EHLO
-        8.mo560.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245242AbiASVDJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 16:03:09 -0500
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jan 2022 16:03:09 EST
-Received: from player791.ha.ovh.net (unknown [10.108.1.146])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id B63D422BFB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:55:55 +0000 (UTC)
-Received: from etezian.org (82-181-27-157.bb.dnainternet.fi [82.181.27.157])
-        (Authenticated sender: andi@etezian.org)
-        by player791.ha.ovh.net (Postfix) with ESMTPSA id D597A266CDB75;
-        Wed, 19 Jan 2022 20:55:36 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-106R006390dcab6-99cd-4766-9f5f-a59f7922d779,
-                    EAD790EBCBC9E102087108CB0F5556A3B44BAE4B) smtp.auth=andi@etezian.org
-X-OVh-ClientIp: 82.181.27.157
-Date:   Wed, 19 Jan 2022 22:55:35 +0200
-From:   Andi Shyti <andi@etezian.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Balletbo i Serra <enric.balletbo@collabora.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 5/5] spi: s3c64xx: allow controller-data to be optional
-Message-ID: <Yeh6x6U3tA7y5gvF@jack.zhora.eu>
-References: <20220119201005.13145-1-krzysztof.kozlowski@canonical.com>
- <20220119201005.13145-6-krzysztof.kozlowski@canonical.com>
+        id S245473AbiASVF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 16:05:29 -0500
+Received: from mga02.intel.com ([134.134.136.20]:60076 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229544AbiASVFZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 16:05:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642626325; x=1674162325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3TDiFifv04AcCVYzOm6HZ64dJH3KSAV3f2PXyUIwWhM=;
+  b=R0NNDNg+oL89hCIEiopjNT00tweh3W1TfwUR0AxFC77+bQIaLEO7OHTs
+   TzChL0unoy6nhwWPpSuWytNV8+s0RcOBfcuaUibhIi77RNYm3NgTBaBX/
+   adEZ3ixnv/dFl49+V9LMAI+V15+bA2WJJ1XNbOYJ2/r4G97dB1VmHLdH6
+   4lWXZF0YPQUWAJd22RSMItDER7HPpry7jkrRcUDMVoi55D5AqbdjQ/Ac4
+   QcaDZgVAo8ZNEMQarck21zArybA2jZvYmjBajWglTE14k0bkQGNHTs2Ow
+   SfCmSgHibV782uQh7Zv3gDOBAumFcL3R2w6qLcQ/0e4j4I9ryfX8jxdSC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232555374"
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="232555374"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 13:05:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
+   d="scan'208";a="765084718"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 13:05:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nAI7i-00CH8V-7G;
+        Wed, 19 Jan 2022 23:04:06 +0200
+Date:   Wed, 19 Jan 2022 23:04:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-security-module@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Leo Li <sunpeng.li@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>
+Subject: Re: [PATCH 1/3] lib/string_helpers: Consolidate yesno()
+ implementation
+Message-ID: <Yeh8xRCcR7D1xdxz@smile.fi.intel.com>
+References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
+ <20220119072450.2890107-2-lucas.demarchi@intel.com>
+ <YefXg03hXtrdUj6y@paasikivi.fi.intel.com>
+ <20220119100635.6c45372b@gandalf.local.home>
+ <YehllDq7wC3M2PQZ@smile.fi.intel.com>
+ <20220119160017.65bd1fa5@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119201005.13145-6-krzysztof.kozlowski@canonical.com>
-X-Ovh-Tracer-Id: 8852669495508536017
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigdekgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucggtffrrghtthgvrhhnpedtgfduudfhfeeuueejfeeihedtfeetgfegveehgfeuleelhfduteegieekudeifeenucfkpheptddrtddrtddrtddpkedvrddukedurddvjedrudehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeeluddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+In-Reply-To: <20220119160017.65bd1fa5@gandalf.local.home>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Wed, Jan 19, 2022 at 09:10:05PM +0100, Krzysztof Kozlowski wrote:
-> The Samsung SoC SPI driver requires to provide controller-data node
-> for each of SPI peripheral device nodes.  Make this controller-data node
-> optional, so DTS could be simpler.
+On Wed, Jan 19, 2022 at 04:00:17PM -0500, Steven Rostedt wrote:
+> On Wed, 19 Jan 2022 21:25:08 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  drivers/spi/spi-s3c64xx.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
+> > > I say keep it one line!
+> > > 
+> > > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>  
+> > 
+> > I believe Sakari strongly follows the 80 rule, which means...
 > 
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index 8755cd85e83c..769d958a2f86 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
->  		return ERR_PTR(-EINVAL);
->  	}
->  
-> -	data_np = of_get_child_by_name(slave_np, "controller-data");
-> -	if (!data_np) {
-> -		dev_err(&spi->dev, "child node 'controller-data' not found\n");
-> -		return ERR_PTR(-EINVAL);
-> -	}
-> -
->  	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
-> -	if (!cs) {
-> -		of_node_put(data_np);
-> +	if (!cs)
->  		return ERR_PTR(-ENOMEM);
-> +
-> +	data_np = of_get_child_by_name(slave_np, "controller-data");
-> +	if (!data_np) {
-> +		dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
+> Checkpatch says "100" I think we need to simply update the docs (the
+> documentation always lags the code ;-)
 
-"not found" sounds like an error; I would just write something
-like "feedback delay set to '0' dfault", you also tell that the
-default value is '0'.
+The idea of checkpatch change is for old code to avoid tons of patches
+to satisfy 80 rule in (mostly) staging code. Some maintainers started /
+have been using relaxed approach.
 
-In any case,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Reviewed-by: Andi Shyti <andi@etezian.org>
 
-Andi

@@ -2,161 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775AC493EF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5956493EF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356335AbiASRVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:21:03 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45702 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345023AbiASRU4 (ORCPT
+        id S1349093AbiASRXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239852AbiASRXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:20:56 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JGkBTB030110;
-        Wed, 19 Jan 2022 17:20:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3uw+z/VojdzjNc/t+SKjEJeyaLUdroAxl9NK5dGEu14=;
- b=VS2KXljTdlf+cbDp2BsbFmbzHvIWCyieLci2/2K/33dImS4/p2AbfBCnOn32BYKj6eO6
- aLPZRQ0w8zTpe1As6ukpiOp8JOl37EkdluVnRVtZpdstYB8bm0TNOb4R6Sf3L5hTWioJ
- 6WgrkUXOUns2Ig+pRJg+Gca9kmLlGsrY9yx6JRim5vvHE2oReaSKnfvxDMXlDdIOojFU
- 4kidqm2g9fhcsXxPoh1kIemDJHQd7T9QXu8plDH2fKM3wslfzYhPR5G7wmY4pDvpenXd
- 7yjs2SdSDnl53pBOSWhBe7o9rEBc/puTtVS9naW7GcP+BphSkajr7l+jXWKdE/wbUpbP Kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmeg44dc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 17:20:54 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JHEFGK020418;
-        Wed, 19 Jan 2022 17:20:53 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmeg44cs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 17:20:53 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JHDG5u012217;
-        Wed, 19 Jan 2022 17:20:52 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03dal.us.ibm.com with ESMTP id 3dknwcyxya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 17:20:52 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JHKpPw32178528
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 17:20:51 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 210C313605D;
-        Wed, 19 Jan 2022 17:20:51 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58E6513606E;
-        Wed, 19 Jan 2022 17:20:49 +0000 (GMT)
-Received: from [9.163.19.30] (unknown [9.163.19.30])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 17:20:49 +0000 (GMT)
-Message-ID: <06c00181-22f6-1807-b957-61a913758e03@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 12:20:48 -0500
+        Wed, 19 Jan 2022 12:23:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FA6C061574;
+        Wed, 19 Jan 2022 09:23:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C878B81A71;
+        Wed, 19 Jan 2022 17:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EABC340E1;
+        Wed, 19 Jan 2022 17:23:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642612981;
+        bh=/AmB+R8lcjTOaUWVStWTJfgQQeNwP0ttFYlVemKo8zo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FiHjmEiEBEtFlJ1f2yV2o1QH1sI9wPNewlUGRpUTRS5XHnehzcMakrrHZz7+3UTfW
+         3HMzcE00/KK4yXf9FNuCclCGl7LskHwDKfM39R0FiXQ8CHbAem7WvcWZYF+7UAdT2A
+         wqtqJZsbk0+V8dvtd4eWoTDGy/T2O42OoxXteWZeWCHLtY1R1vpwEifUm4QsXrVPkV
+         bmiQx6OH+mITGuZVqdttxqbJ/hzmVoTctgnMlJeXNMcOHwN4B8viCAvqKMutAQGqAX
+         IJfMUyQNrwlnz2lyUOcExjLy20+Mt95O5VNUm3yPVW37BIhlh7PSYT63H0iPq693Gu
+         swYlpltJMZA/A==
+Received: by mail-wm1-f49.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso6897676wms.4;
+        Wed, 19 Jan 2022 09:23:00 -0800 (PST)
+X-Gm-Message-State: AOAM531UXc8RuP66mzOJmUbNsJQ8tWaUymkEnU78XDBA9n0BLj1df0Rs
+        tx4f+5KH80t5bpXSl8YMUtke7S3YbsCOrtSgo6U=
+X-Google-Smtp-Source: ABdhPJzYEncUKv+J2k0P025BJCluvJy2Isp3uxz1uZU+POwVDgYLA/ypp2CGvDj+1iEqW9QpNbityUTG9HOwpaCSk78=
+X-Received: by 2002:a7b:c34b:: with SMTP id l11mr4713576wmj.56.1642612979347;
+ Wed, 19 Jan 2022 09:22:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 26/30] vfio-pci/zdev: wire up zPCI adapter interrupt
- forwarding support
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-27-mjrosato@linux.ibm.com>
- <adc1df1b-97a0-c41b-cfbf-71a68ea4362d@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <adc1df1b-97a0-c41b-cfbf-71a68ea4362d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cuZgQ90triUhTe-5MPixB4Bi-_oF-btt
-X-Proofpoint-ORIG-GUID: vr5C-0o5LWi1yf_eHSltZEcHaWRLLkIX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- suspectscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201190096
+References: <1642608867-21307-1-git-send-email-mihai.carabas@oracle.com>
+In-Reply-To: <1642608867-21307-1-git-send-email-mihai.carabas@oracle.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Jan 2022 18:22:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG14Tx41JZ1NZXkJVTSai++eb-zfv1Dk5dP1QDoDkDFEQ@mail.gmail.com>
+Message-ID: <CAMj1kXG14Tx41JZ1NZXkJVTSai++eb-zfv1Dk5dP1QDoDkDFEQ@mail.gmail.com>
+Subject: Re: [PATCH] efi/libstub: arm64: Fix image check alignment at entry
+To:     Mihai Carabas <mihai.carabas@oracle.com>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 12:10 PM, Pierre Morel wrote:
-> 
-> 
-> On 1/14/22 21:31, Matthew Rosato wrote:
-...
->> diff --git a/include/uapi/linux/vfio_zdev.h 
->> b/include/uapi/linux/vfio_zdev.h
->> index 575f0410dc66..c574e23f9385 100644
->> --- a/include/uapi/linux/vfio_zdev.h
->> +++ b/include/uapi/linux/vfio_zdev.h
->> @@ -90,4 +90,24 @@ struct vfio_device_zpci_interp {
->>       __u32 fh;        /* Host device function handle */
->>   };
->> +/**
->> + * VFIO_DEVICE_FEATURE_ZPCI_AIF
->> + *
->> + * This feature is used for enabling forwarding of adapter interrupts 
->> directly
->> + * from firmware to the guest.  When setting this feature, the flags 
->> indicate
->> + * whether to enable/disable the feature and the structure defined 
->> below is
->> + * used to setup the forwarding structures.  When getting this 
->> feature, only
->> + * the flags are used to indicate the current state.
->> + */
->> +struct vfio_device_zpci_aif {
->> +    __u64 flags;
->> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_FLOAT 1
->> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_HOST 2
-> 
-> Generaly it looks good to me but I miss some explanation on these flags.
+On Wed, 19 Jan 2022 at 18:10, Mihai Carabas <mihai.carabas@oracle.com> wrote:
+>
+> The kernel is aligned at SEGMENT_SIZE and this is the size populated in the PE
+> headers:
+>
+> arch/arm64/kernel/efi-header.S: .long   SEGMENT_ALIGN // SectionAlignment
+>
+> EFI_KIMG_ALIGN is defined as: (SEGMENT_ALIGN > THREAD_ALIGN ? SEGMENT_ALIGN :
+> THREAD_ALIGN)
+>
+> So it depends on THREAD_ALIGN. On newer builds this message started to appear
+> even though the loader is taking into account the PE header (which is stating
+> SEGMENT_ALIGN).
+>
+> Fixes: c32ac11da3f8 ("efi/libstub: arm64: Double check image alignment at entry")
+> Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
 
-I can add a small line comment for each, like:
+Thanks. I'll queue this up as a fix.
 
-  AIF_FLOAT 1 /* Floating interrupts enabled */
-  AIF_HOST 2  /* Host delivery forced */
-
-But here's a bit more detail:
-
-On SET:
-AIF_FLOAT = 1 means enable the interrupt forwarding assist for floating 
-interrupt delivery
-AIF_FLOAT = 0 means to disable it.
-AIF_HOST = 1 means the assist will always deliver the interrupt to the 
-host and let the host inject it
-AIF_HOST = 0 host only gets interrupts when firmware can't deliver
-
-on GET, we just indicate the current settings from the most recent SET, 
-meaning:
-AIF_FLOAT = 1 interrupt forwarding assist is currently active
-AIF_FLOAT = 0 interrupt forwarding assist is not currently active
-AIF_HOST = 1 interrupt forwarding will always go through host
-AIF_HOST = 0 interrupt forwarding will only go through the host when 
-necessary
-
-> 
-> Which makes me realize that a more complete documentation under 
-> Documentation/S390 for VFIO zPCI as we have for VFIO AP and VFIO CCW 
-> would be of great interest.
-
-You're not wrong -- a similar comment came up for QEMU.  I will add this 
-to my todo list as a follow-on.
-
-
-
+> ---
+>  drivers/firmware/efi/libstub/arm64-stub.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/arm64-stub.c b/drivers/firmware/efi/libstub/arm64-stub.c
+> index 2363fee9211c..9cc556013d08 100644
+> --- a/drivers/firmware/efi/libstub/arm64-stub.c
+> +++ b/drivers/firmware/efi/libstub/arm64-stub.c
+> @@ -119,9 +119,9 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
+>         if (image->image_base != _text)
+>                 efi_err("FIRMWARE BUG: efi_loaded_image_t::image_base has bogus value\n");
+>
+> -       if (!IS_ALIGNED((u64)_text, EFI_KIMG_ALIGN))
+> -               efi_err("FIRMWARE BUG: kernel image not aligned on %ldk boundary\n",
+> -                       EFI_KIMG_ALIGN >> 10);
+> +       if (!IS_ALIGNED((u64)_text, SEGMENT_ALIGN))
+> +               efi_err("FIRMWARE BUG: kernel image not aligned on %dk boundary\n",
+> +                       SEGMENT_ALIGN >> 10);
+>
+>         kernel_size = _edata - _text;
+>         kernel_memsize = kernel_size + (_end - _edata);
+> --
+> 1.8.3.1
+>

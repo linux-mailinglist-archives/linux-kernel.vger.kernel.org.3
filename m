@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8FC4943CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 206F24943CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344145AbiASXQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240379AbiASXQ5 (ORCPT
+        id S1344178AbiASXRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:17:47 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:36756 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240369AbiASXRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:16:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EF0C061574;
-        Wed, 19 Jan 2022 15:16:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Jan 2022 18:17:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A72614DE;
-        Wed, 19 Jan 2022 23:16:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFF3C004E1;
-        Wed, 19 Jan 2022 23:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642634216;
-        bh=4uRWizOBaKdIv4eU9IeBasCKBDNbDWDfxnzAhH/pWmA=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=X1gZj0K+EKHFwCdIhhAp3VDq76WY7t/Bs9cCB+zpi5VjmmifIdDGRqps1pyyx7HkS
-         zVhwkegi8UHZrFp0+Qp+PpAMdJzJrmZFaL9QLUOWnvzKs6xzcYPcPGYDXvnP+Q9KdZ
-         wP8oqelNhZpHZyMVkPKcGcB0uSIVKLnQGeahXW8s9d9Dkq9EOXYEXGnMX9eBqpl1ko
-         idXYWoZebJZnaf7uzEg6bQ9f1rUkKH/RZ8T64xtzqwb+g7ZoSVyTbP8Q4d6dG9JRxK
-         jstQK5Le9qmgf87xFOcK96D7cAw2ucX18ENoKRkIIE0ryvxsQCp1mVRsBknkp0QrG6
-         5KE/VZssUw4Ag==
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ED04C2170E;
+        Wed, 19 Jan 2022 23:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642634249; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uP1TACAgTpMagaF8KuJohAJ2TbdJF9uOAojOAb7wVMA=;
+        b=0QXiciCKn3XmFUUCc+8a3IsVvaBXgbHJGr5NSg8S41UTKacA9PKfL01m4rl91kC9RVQMtm
+        dwVDFcP8PDpTXqRmkZJ+Wra+boHkmUUeZyTWb6lyJnYmkhRhpmiYZTbwl5YBiLqWm4tREv
+        ujsfoEIFnzMia463z+icO0GYu3PQiPU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642634249;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uP1TACAgTpMagaF8KuJohAJ2TbdJF9uOAojOAb7wVMA=;
+        b=4QPx+mYD5tz2nZHg/ZPvk1v/DRNRsu89DArQAxJ2zUof/U5Ta1pA0BbAVQl00xw1XgPG8Z
+        CwsRXLirPo91EdAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1BE713BBC;
+        Wed, 19 Jan 2022 23:17:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Oe3SMgmc6GGURwAAMHmgww
+        (envelope-from <bp@suse.de>); Wed, 19 Jan 2022 23:17:29 +0000
+Date:   Thu, 20 Jan 2022 00:17:23 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: vmlinux.o: warning: objtool: do_machine_check()+0x5fa: call to
+ memset() leaves .noinstr.text section
+Message-ID: <YeicA7BKdstxbteX@zn.tnic>
+References: <202110261614.Bt8EM6Nj-lkp@intel.com>
+ <YXe7AnMmiWXk36NC@zn.tnic>
+ <20220119102250.7e20b3df@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <YehZsGAqgd3tJyDV@zn.tnic>
+ <20220119104017.31e5ecc7@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <20220119111523.71f8e9e3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <Yeh013gIveIKdFMP@zn.tnic>
+ <20220119123714.22b54d4c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <Yeh/oEYGyg2+XYSJ@zn.tnic>
+ <20220119145727.2034a180@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220115122618.plhiqnjh2755bv5h@pali>
-References: <20210930095838.28145-1-pali@kernel.org> <163425678347.1688384.10695189000353676651@swboyd.mtv.corp.google.com> <20211015090937.gnt66hgugrhwnkei@pali> <20211015093701.pfvkighxsndj4ujg@pali> <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com> <20211016064210.7ahqfqcvf66wtt66@pali> <20220115080213.0CCAFC36AE3@smtp.kernel.org> <20220115115018.he4hnnhlvrb6kann@pali> <20220115130509.4a240730@thinkpad> <20220115122618.plhiqnjh2755bv5h@pali>
-Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings for marvell,armada-3700-uart-clock
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-To:     Marek =?utf-8?q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Pali =?utf-8?q?Roh=C3=A1r?= <pali@kernel.org>
-Date:   Wed, 19 Jan 2022 15:16:54 -0800
-User-Agent: alot/0.10
-Message-Id: <20220119231655.EFFF3C004E1@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220119145727.2034a180@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Pali Roh=C3=A1r (2022-01-15 04:26:18)
-> On Saturday 15 January 2022 13:05:09 Marek Beh=C3=BAn wrote:
-> > On Sat, 15 Jan 2022 12:50:18 +0100
-> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> >=20
-> > > On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
-> > > > Quoting Pali Roh=C3=A1r (2021-10-15 23:42:10) =20
-> > > > >=20
-> > > > > If I was designing this driver and DTS bindings I would have choo=
-se
-> > > > > something like this:
-> > > > >=20
-> > > > > uart@0x12000 { =20
-> > > >=20
-> > > > Drop the 0x
-> > > >  =20
-> > > > >     reg =3D <0x12000 0x18>, <0x12200 0x30>;
-> > > > >     clock-controller {
-> > > > >         ...
-> > > > >     }; =20
-> > > >=20
-> > > > Drop this node and put whatever properties are inside into the pare=
-nt
-> > > > node.
-> > > >  =20
-> > > > >     serial1 {
-> > > > >         ...
-> > > > >         status =3D "disabled";
-> > > > >     };
-> > > > >     serial2 {
-> > > > >         ...
-> > > > >         status =3D "disabled";
-> > > > >     };
-> > > > > };
-> > > > >=20
-> > > > > Meaning that 0x12000 node would be 3 subnodes and all registers w=
-ould be
-> > > > > defined in top level nodes and would be handled by one driver.
-> > > > >=20
-> > > > > This is really how hardware block looks like. But it is not backw=
-ard
-> > > > > compatible... =20
-> > > >=20
-> > > > Sounds good to me. I presume we need the serial child nodes so we c=
-an
-> > > > reference them from the stdout-path? =20
-> > >=20
-> > > Yes, exactly, separate nodes for serial1 and serial2 are still requir=
-ed.
-> > >=20
-> > > But dropping clock controller is not possible as for higher baudrates=
- we
-> > > need to use and configure uart clock controller. Without it we just g=
-et
-> > > comparable feature support which is already present in driver.
-> >=20
-> > What Stephen means is making clock controller out of the uart node
-> > directly. No need to add separate subnode just for clock controller.
->=20
-> This is already implemented in v7 patch series. Clock controller is
-> already outside of uart nodes.
+Just some off-the-top-of-my-head thoughts:
 
-I mean to combine the uart node and the clock-controller node together
+On Wed, Jan 19, 2022 at 02:57:27PM -0800, Jakub Kicinski wrote:
+> vmlinux.o: warning: objtool: mce_start()+0x5e: call to __kasan_check_write() leaves .noinstr.text section
 
-	uart-wrapper {
-		reg =3D <0x12000 0x18>, <0x12200 0x30>;
-		#clock-cells ...
+Disable KASAN for the whole of MCE, I dunno.
 
-		serial1 {
-			...
-		};
+> vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.isra.1() leaves .noinstr.text section
 
-		serial2 {
-			...
-		};
-	};
+v8086_mode() is a oneliner which does "return 0;" on 64-bit. I can't
+fathom how your crazy compiler decided not to inline it. Unless there's
+instrumentation gunk blowing this function up.
+
+> vmlinux.o: warning: objtool: do_machine_check()+0xa32: call to mce_clear_state() leaves .noinstr.text section
+
+I guess we can inline that - it is simple and has a single call site.
+The compiler should have inlined it but for some reason I doesn't want
+to.
+
+> vmlinux.o: warning: objtool: mce_severity_amd.constprop.1()+0xd1: call to mce_severity_amd_smca.isra.0() leaves .noinstr.text section
+
+Your funny compiler doesn't inline that one either even if it is called
+only once, just like the above.
+
+So, I'd like to reproduce that here and play with it a bit. What iso
+can I install in a guest here so that I can get pretty close to your
+environment?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

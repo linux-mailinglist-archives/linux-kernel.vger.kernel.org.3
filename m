@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C5449405F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C758494060
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiASTH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:07:27 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:42369 "EHLO
+        id S234219AbiASTHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:07:30 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:42909 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356998AbiASTGk (ORCPT
+        by vger.kernel.org with ESMTP id S1356972AbiASTGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:06:40 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4B986580730;
-        Wed, 19 Jan 2022 14:06:40 -0500 (EST)
+        Wed, 19 Jan 2022 14:06:41 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3A41E5806C4;
+        Wed, 19 Jan 2022 14:06:41 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 19 Jan 2022 14:06:40 -0500
+  by compute2.internal (MEProxy); Wed, 19 Jan 2022 14:06:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
         :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=VbnqumJAL4r7o
-        PXU1B7/2AqlEeyilMgkB8Z6AdGXQWo=; b=iI0XifscyxRyNU2nNcg0p2IMkEy3e
-        1EuyVZfwKTLv+XEo9nCFdk0H5mkwD7i7Aq+gayhI/BlCO24BAgXF5jaHx3S3FQRE
-        rxdrdZsc12FBtiE2Dpar0r6YxrhJU+WU6hTXLnsZjClhQ8cTTWFKKq7ea+N9rq6T
-        Xh7uK0moTsH4LK4/jK0QbDVdODFQa1o+99M/gn46XI67hUpfY65bcPCyJHv6PHF/
-        bGcAwer4Ms9MbJmV2ET/Tw3v54jfWJgP92rHXTF0kbhZEMuiK8LZWVccwfOF9NRx
-        Y8wYL2JPLD1mXMtkWQCf9fE74qq7bnrnrOC3VPh40ulPoeJZs3qjZc/dA==
+        :mime-version:content-transfer-encoding; s=fm2; bh=8yuexR1+nrtHG
+        SO8wGNcV0MvB+tGU4p0S4nQ2u6/h9Y=; b=yepEWOhqQwJaAjEwgeK7ltMCvFLxT
+        bWHWuUq61bCnebk+XIZWZAbFWk2RZ4zogGXrQCh4S3EqNI3esApEtzpXvRH//XK9
+        eNIm42Ph0bcPylp93/Lty3jNJFArwl0QKNutZPJuX0/Fjx/MQ6HjhOr6wt6vKxEs
+        TRNmtz+ct8O0ERpGexJ2iByprgaswMXxFk3ALJOX6SH2VyrYksrNsF4TbLK3pED9
+        r/98U7UrkyTJi3Ru9PqNb6rWFsBx0tnpxsIJ6gic+V50zRFXhfVhO6JOBeu3mbdd
+        OL676jHn8AyPIDpdmBLzCffgesZROjN+Dy9eGlciRFAUP490htMC8JebQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:reply-to:subject
         :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=VbnqumJAL4r7oPXU1B7/2AqlEeyilMgkB8Z6AdGXQWo=; b=ln/IExRu
-        IX3Ngu9Srz6FhkcAULotpPuKNYZGxiHzOvW3borqnE/QzdlHZ9Z7R/ZXOULt5zd7
-        XgZdpUUIVFX2rj1W7OkdqrhQa5/SfoU/EZFTMye5P5+TmSbriwaBHVWc7xXT8Bd7
-        9rbQ4Q0A+UecyD0TADRV1zaCKmgjNeWOE0EuXw9widzTi6YryjkGqp11INm1zwzk
-        CvdrBNAUGz0bxozLyW5o9FMi//QVU3lBQAUCFoUQvB4xWcxrHjUzHmn1hmFreVpN
-        V7dPt938YbZA1XI5W/flHNeegA98GnbKMOpTdQw5i4iUI92GTwy0mrqC6jT77Gv/
-        KSZUvGlhcve8Wg==
-X-ME-Sender: <xms:QGHoYbtp_B1wdpMo5t2l9oE7stqZFzq20lCeQ4uCxBMgaZV1F2c9MA>
-    <xme:QGHoYcci0XXibWIkEosG1VlR9Rvx_MHnWSEf1IBPA2w39EMp3Ho4N5nk0VBIMoW6u
-    1-fMcFG49YaHimOSg>
-X-ME-Received: <xmr:QGHoYezwHqjwC8A7_YI1pFVJYTWHfhXWYwjdXWq7D1l2WsX7CQUGIUK_Mt8WTAHKp8M2cak1>
+        fm1; bh=8yuexR1+nrtHGSO8wGNcV0MvB+tGU4p0S4nQ2u6/h9Y=; b=kp2bX3kb
+        DYDCMRBL8FNpr/1RYUeTX4yIw+9hmcc9JbIz1l0nG9kHJcva/xj2cSyefBW1Zg/y
+        7UY6tJbAjM9/NlOqrL0e03iIuaofDBz8zH7kJYwk5k2pNr2VmufUXz3GUM58IVJl
+        UPRGcbxcBpQNIezbpGuM7GzCeIvSMJjS/jizBkPGNr/RZYcRoC0TgFPg3IJYXQpJ
+        /U1E68h5gHpx/fXj9oTWwVBmJVejbAMSb6H1ekIFqjaBRlOc5HSSQkgAEfY4S6P8
+        TVcvVHEDCdHT8Tm4jlWsKdwo8VTkJHy93+I+Lo4VWReK6LwVCTuiw1JZe7ksJr69
+        ajUi4jX5K5sTWA==
+X-ME-Sender: <xms:QGHoYSRY4H48mGFpQ1CYPHyM51xpyR0Al1_H13wTS9AbpSsy3mnllg>
+    <xme:QGHoYXz721WeYmo8ZWwPJd_3L6arLfMxqoveB9_LEgRi0yO0Wcv7YbYYgVeqC5SOU
+    DWg4ztmeNxL78gMdQ>
+X-ME-Received: <xmr:QGHoYf3TS4gy4tX3peD_EMagLecgnVFgDRcOpyz_KwQvnlkLOdpKJX9teb6VTYLB09ZGJ4Nv>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigdeivdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -49,12 +49,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigdeivdcutefuodetggdote
     euudeuhfeghfehieeuvdetvdeugfeigeevteeuieeuhedtgeduheefleenucevlhhushht
     vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhesshgvnh
     htrdgtohhm
-X-ME-Proxy: <xmx:QGHoYaMIFGiyyNjgwRGKm380P0rbj2Frq10NmQVKCCjaPPhbW2Flpw>
-    <xmx:QGHoYb_j0dzi9YXmkoNqMy_hu9Ge4gKGK02fSjLO7eZTdA8DYz4a_Q>
-    <xmx:QGHoYaUu9q5u7A5e7HgnMDS97TVHUVwdqePaaQYgyTAa3wtxSiJAUg>
-    <xmx:QGHoYeUrjpbHQ0fZM8NhK9zLdS_e2FUfjnVkcUw25okDdKH3fWbFAg>
+X-ME-Proxy: <xmx:QGHoYeD83UCxVKejVvzNy4cLR9rUbiULW6CM9EaY0fTgQ_uKqDUgdQ>
+    <xmx:QGHoYbivearrSCITj7TM-fzcwlLJ2ggHNiGuBrZ1rkUyox129k262Q>
+    <xmx:QGHoYaq9NfgZWCAYbskDkwvoVZ_gksJGQg-pwYNaAnFaY7A1riXFYQ>
+    <xmx:QWHoYUaZC_pi-6q7r2ORLbdTqmqr4tk1pWSC9MlpMxQTkzjMR-4J3g>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Jan 2022 14:06:39 -0500 (EST)
+ 19 Jan 2022 14:06:40 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
 To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org,
         iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
         Mel Gorman <mgorman@techsingularity.net>,
         Eric Ren <renzhengeek@gmail.com>, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v4 6/7] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-Date:   Wed, 19 Jan 2022 14:06:22 -0500
-Message-Id: <20220119190623.1029355-7-zi.yan@sent.com>
+Subject: [PATCH v4 7/7] arch: powerpc: adjust fadump alignment to be pageblock aligned.
+Date:   Wed, 19 Jan 2022 14:06:23 -0500
+Message-Id: <20220119190623.1029355-8-zi.yan@sent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220119190623.1029355-1-zi.yan@sent.com>
 References: <20220119190623.1029355-1-zi.yan@sent.com>
@@ -82,37 +82,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-alloc_contig_range() now only needs to be aligned to pageblock_order,
-drop virtio_mem size requirement that it needs to be the max of
-pageblock_order and MAX_ORDER.
+CMA only requires pageblock alignment now. Change CMA alignment in
+fadump too.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
 ---
- drivers/virtio/virtio_mem.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ arch/powerpc/include/asm/fadump-internal.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index a6a78685cfbe..eafba2119ae3 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2476,13 +2476,12 @@ static int virtio_mem_init_hotplug(struct virtio_me=
-m *vm)
- 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
+diff --git a/arch/powerpc/include/asm/fadump-internal.h b/arch/powerpc/incl=
+ude/asm/fadump-internal.h
+index 52189928ec08..fbfca85b4200 100644
+--- a/arch/powerpc/include/asm/fadump-internal.h
++++ b/arch/powerpc/include/asm/fadump-internal.h
+@@ -20,9 +20,7 @@
+ #define memblock_num_regions(memblock_type)	(memblock.memblock_type.cnt)
 =20
- 	/*
--	 * We want subblocks to span at least MAX_ORDER_NR_PAGES and
--	 * pageblock_nr_pages pages. This:
-+	 * We want subblocks to span at least pageblock_nr_pages pages.
-+	 * This:
- 	 * - Is required for now for alloc_contig_range() to work reliably -
- 	 *   it doesn't properly handle smaller granularity on ZONE_NORMAL.
- 	 */
--	sb_size =3D max_t(uint64_t, MAX_ORDER_NR_PAGES,
--			pageblock_nr_pages) * PAGE_SIZE;
-+	sb_size =3D pageblock_nr_pages * PAGE_SIZE;
- 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
+ /* Alignment per CMA requirement. */
+-#define FADUMP_CMA_ALIGNMENT	(PAGE_SIZE <<				\
+-				 max_t(unsigned long, MAX_ORDER - 1,	\
+-				 pageblock_order))
++#define FADUMP_CMA_ALIGNMENT	(PAGE_SIZE << pageblock_order)
 =20
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
+ /* FAD commands */
+ #define FADUMP_REGISTER			1
 --=20
 2.34.1
 

@@ -2,108 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1589E493C0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05370493C0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355215AbiASOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:41:03 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:46991 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355175AbiASOlC (ORCPT
+        id S1355219AbiASOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355133AbiASOnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:41:02 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-56-LQ0FXddLOfCr6qw0uAVh6w-1; Wed, 19 Jan 2022 14:40:59 +0000
-X-MC-Unique: LQ0FXddLOfCr6qw0uAVh6w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 19 Jan 2022 14:40:58 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 19 Jan 2022 14:40:58 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ard Biesheuvel' <ardb@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>
-Subject: RE: [PATCH] lib/crypto: blake2s: fix a CFI failure
-Thread-Topic: [PATCH] lib/crypto: blake2s: fix a CFI failure
-Thread-Index: AQHYDS69GuHcqhw6yUKTzpetNPFOeaxqZdAw
-Date:   Wed, 19 Jan 2022 14:40:58 +0000
-Message-ID: <13f9d24879e34914b1135a4d2ae48d73@AcuMS.aculab.com>
-References: <CAHmME9oX+4Ek81xy0nBOegqABH0xYqyONAqinsu7GZ7AaQaqYQ@mail.gmail.com>
- <20220119100615.5059-1-miles.chen@mediatek.com>
- <CAHmME9pQcUxs87EwQwBZNDA4ZzqugTggH+uiNPh=mv5zjp3g3A@mail.gmail.com>
- <CAHmME9pPKjRLmR6zpYFZT7rOOfHsG2ESnDi+QQrDJuGLo1X4JQ@mail.gmail.com>
- <CAHmME9oGTPS-gVyHQ4o=AxvMJrGH44_tyQ2KPQcfAKgcqC2SnA@mail.gmail.com>
- <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 19 Jan 2022 09:43:24 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37644C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:43:24 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id f21so13082757eds.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=1B7gKkp/V59032Beh6WUJ+9HEHsJlJHAmkImNDK7IMs=;
+        b=VOVKxA9flWIK/6tPdvLhR4vpkIOs2ampx6Vv3lvnmme8mECVrhkXyXmFBpAtEj2zbn
+         FqG5QOvPSQlI436LUyF5LEGAnsiWKMTh+ORAubxI8zOoaPft7WKOL6K9gqNJ3zuaxJlP
+         vP9J5hUa+WaKg56sfiRfNBIxyHKXg7rq/PcPQOs3g5OLk8V5VFRUPRS6bbFKDmgZ7Mas
+         CKQbY3BLNkfICaFhvG+c3B/CuQJigzTSQn7F1yPQrKdYzCb1YU/nYubc253nPKkHH5XL
+         XmeZ8YhuQ5iVB7LzyzhKsRuIxBWpdf/TbIYx/9WhIjWyG6L/GhcxeU7lTw5AB3Rcf3xY
+         iGrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=1B7gKkp/V59032Beh6WUJ+9HEHsJlJHAmkImNDK7IMs=;
+        b=YsHP7c3fxKeqAaRbmJVsWttbqM9Yab73N2T7Inx5hRcTj9q0/IR1luRAKJRy2rIVkX
+         GQv7w3d+MqKxg1m79NG8u9eUqYpYijSCp7FIu0mgSgHNe59wJovGSuvPqHHzXahG4VPj
+         NHsYhZvR2sVppbXQK4Avz/CW+QfGw2hG/Ru/ok3smIugL2U+vnWH+FlA7WCre9To7rFb
+         3d2mvWPmFjNT+YXtilteZQJattV9zewNz/M0wFNZN9XOiF47bEDiTkMOlkTMV0zJINJs
+         7coPxffRv6q5ydTveJ/wl4BcdxDWQjrFWoMV9TXaeSMOEaaftd2aDguLUtd8552XGZmS
+         6jSw==
+X-Gm-Message-State: AOAM53194Qs6I+Ip8pAfJpZRLvEOnJc+VRRl4AnVzEVI/Mjz0u1zSADb
+        v4agMTtNB2l50fBrlEm0J51KGGi8vrXEk7XrI70=
+X-Google-Smtp-Source: ABdhPJwQvjDMQPU7gOxDEWYt2s7fiJWoZldX8DEXfS1psXVzWqne488hJ3WdT/1fiwKo6s6MnheLJeKMcHcqUJIAFgI=
+X-Received: by 2002:a05:6402:22b3:: with SMTP id cx19mr4977795edb.37.1642603401765;
+ Wed, 19 Jan 2022 06:43:21 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Received: by 2002:a55:819a:0:b0:13d:b464:ee91 with HTTP; Wed, 19 Jan 2022
+ 06:43:20 -0800 (PST)
+Reply-To: mrsbillchantal455@gmail.com
+From:   MRS BILL Chantal Lawrence <kaborzongo01@gmail.com>
+Date:   Wed, 19 Jan 2022 06:43:20 -0800
+Message-ID: <CAJ5_0V7ASa-d=CWC=7xm8NfbJ8btYz3bXqtPLDWF2vXpcApbnw@mail.gmail.com>
+Subject: Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQXJkIEJpZXNoZXV2ZWwNCj4gU2VudDogMTkgSmFudWFyeSAyMDIyIDEyOjE5DQouLi4N
-Cj4gLSAgICAgICAgICAgICAgICgqY29tcHJlc3MpKHN0YXRlLCBpbiwgbmJsb2NrcyAtIDEsIEJM
-QUtFMlNfQkxPQ0tfU0laRSk7DQo+ICsgICAgICAgICAgICAgICBpZiAoSVNfRU5BQkxFRChDT05G
-SUdfQ1JZUFRPX0FSQ0hfSEFWRV9MSUJfQkxBS0UyUykpDQo+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICgqY29tcHJlc3MpKHN0YXRlLCBpbiwgbmJsb2NrcyAtIDEsIEJMQUtFMlNfQkxPQ0tfU0la
-RSk7DQo+ICsgICAgICAgICAgICAgICBlbHNlDQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGJs
-YWtlMnNfY29tcHJlc3NfZ2VuZXJpYyhzdGF0ZSwgaW4sIG5ibG9ja3MgLSAxLA0KPiArICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQkxBS0UyU19CTE9DS19T
-SVpFKTsNCg0KSXNuJ3QgdGhhdCBhIGNhbmRpZGF0ZSBmb3IgYSAnc3RhdGljIGNhbGwnID8NCg0K
-QW5kLCBtYXliZSBhbGwgdGhlc2UgaW5saW5lZCBmdW5jdGlvbnMgc2hvdWxkIGJlIHJlYWwgZnVu
-Y3Rpb25zPw0KTm8gcG9pbnQgaGF2aW5nIGFsbCB0aGUgYmxvYXQgb24gZXZlcnkgY2FsbCBzaXRl
-Lg0KTXVjaCBiZXR0ZXIgdG8gY2FsbCBhIHJlYWwgZnVuY3Rpb24gYW5kIHVzZWQgdGhlIGNhY2hl
-ZCBpbnN0cnVjdGlvbnMuDQoNCkFsdGhvdWdoLCBoYXZpbmcgbG9va2VkIGF0IHRoZSBzb3VyY2Ug
-YW5kIHRoZSBnZW5lcmF0ZWQgY29kZSBmb3INCng4Ni02NCBhbmQgYXJtNjQgSSdtIG5vdCBzdXJl
-IEknZCB3YW50IHRvIHRyeSB0byBnZW5lcmF0ZQ0Kb3B0aW1pc2VkIGFzc2VtYmxlciBmb3IgaXQu
-DQooVW5sZXNzIHlvdSBjYW4gYSBpbnN0cnVjdGlvbiB0aGF0IGRvZXMgZXhhY3RseSB3aGF0IHRo
-ZSBjb2RlIHdhbnRzLikNCg0KQmFzaWNhbGx5IHRoZSBjb21waWxlciBjYW4gbWVyZ2UgdGhlIGlu
-c3RydWN0aW9ucyBmb3IgNCBvZiB0aGUNCkcoKSBleHBhbnNpb25zIHNvIHRoYXQgdGhleSBjYW4g
-ZXhlY3V0ZSBpbiBwYXJhbGxlbCBvbiBhIG11bHRpLWlzc3VlDQpjcHUuIERvaW5nIHRoYXQgYnkg
-aGFuZCB3aWxsIGJlIGVycm9yIHByb25lLg0KRWFjaCBHKCkgZXhwYW5zaW9uIGlzIHByZXR0eSBt
-dWNoIGEgcmVnaXN0ZXIgZGVwZW5kZW5jeSBjaGFpbiwNCm5vdCBtdWNoIGNoYW5jZSBvZiBwYXJh
-bGxlbCBleGVjdXRpb24uDQoNClRoZXJlIGFyZSBjbGVhcmx5IG9wdGltaXNhdGlvbnMgZm9yIHRo
-ZSB0b3AvYm90dG9tIG9mIHRoZSBsb29wLg0KQnV0IHRoZXkgY2FuIGJlIGRvbmUgdG8gdGhlIGdl
-bmVyaWMgQyB2ZXJzaW9uLg0KDQpUaGUgcmVhbCBwcm9ibGVtIGlzIGxhY2sgb2YgcmVnaXN0ZXJz
-IC0gdGhlIGNvZGUgbmVlZHMgMTYgZm9yIHRoZQ0KdltdIGFycmF5IHBsdXMgYSBmZXcgZXh0cmFz
-Lg0KU28gc29tZSBoYXZlIHRvIHNwaWxsIHRvIHN0YWNrLg0KDQpUaGUgdW5yb2xsZWQgY29kZSBp
-cyBhYm91dCAxMjAwIGluc3RydWN0aW9ucyBvbiBhcm02NCBhbmQgeDg2LTY0Lg0KRWFjaCBvZiB0
-aGUgMTAgcm91bmRzIHJlYWRzIGFsbCAxNiBvZiB0aGUgdTMyIGlucHV0IHZhbHVlcy4NClNvIHRo
-YXQgaXMgYWJvdXQgOCAoMTIwMC8xNjApIGluc3RydWN0aW9ucyBmb3IgZWFjaCByZWFkLg0KV2hp
-Y2ggbWVhbnMgdGhlcmUgaXMgcGxlbnR5IG9mIG1lbW9yeSBiYW5kd2lkdGggZm9yIG90aGVyDQpy
-ZWFkcy4NCg0KU28gJ3JvbGxpbmcgdXAnIHRoZSByb3VuZHMgLSB3aGljaCBhZGRzIGluIHRoZSBi
-bGFrZTJzX3NpZ21hW10NCnJlYWRzIGNvdWxkIGVhc2lseSBiZSAnYWxtb3N0IGZyZWUnLg0KQ2Vy
-dGFpbmx5IG9uIHg4NiB3aGVyZSB5b3UgYXJlIGp1c3QgKHdlbGwgc2hvdWxkIGJlIGp1c3QpIGFk
-ZGluZyBhbg0KZXh0cmEgbWVtb3J5IHVvcCBmb3IgZWFjaCBpbnB1dCBidWZmZXIgcmVhZHMuDQoN
-CkknbSBub3Qgc3VyZSB0aGUgOCBHKCkgY2FsbHMgY2FuIGJlIGZvbGRlZCBpbnRvIHR3byBzZXRz
-IG9mIDQNCndoaWxlIHN0aWxsIGdldHRpbmcgdGhlIGNvbXBpbGVyIHRvIGludGVybGVhdmUgdGhl
-IGdlbmVyYXRlZCBjb2RlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
-aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
-DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Attention
 
+
+You have Been Compensated with the sum of 4.6 million dollars in this
+United Nation the Payment will be issue into Atm Visa Card and send to you
+
+from the Santander Bank of Spain we need your address, Passport and your
+Whatsapp Number.
+
+
+THANKS
+MRS Bill Chantal Lawrence

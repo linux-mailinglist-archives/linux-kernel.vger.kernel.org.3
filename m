@@ -2,258 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E63649325A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AD149325B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350686AbiASBay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350680AbiASBaw (ORCPT
+        id S1350693AbiASBcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:32:13 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53160 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350638AbiASBcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:30:52 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A96C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:30:51 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 30so3636261edv.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:30:50 -0800 (PST)
+        Tue, 18 Jan 2022 20:32:09 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INxY7m012923;
+        Wed, 19 Jan 2022 01:31:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=ygn7zjz5BpX6o1wqjv/Vlj+1w6kXB6Q7ikydnONXfRA=;
+ b=T6mGMrtXPaF+lV4h8F78xC6U/J0Sk6ixGKyhq/4FqErF7Gs2RunZ32+qKUr3HovClvtz
+ piEgT/zFHkxK0UQURgQS5EGhAAw4vU6t6vZlX7myKJxq3eCr6gj6fPt7v9spA7T9yHeR
+ 1jINGR15XCUIhRyxdi6CF3ulQ0zVDz/2QQ49EJoLTvkhhMYnOFz7UnAqB01228ytCeKy
+ k9aujmYewTIq1dJX9n5wsPogncIZHGbvzCqfEvA+1CURl1c7AX3Uox7d1qXz/X2VL0VV
+ WdBX0nZEN/fW4s/7+WVGheQCGrInJjcsBWmJRFXBtOypmJZBw9XMCLAVy0S88uhep6+S tg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4q3pqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 01:31:46 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J1GPCG072683;
+        Wed, 19 Jan 2022 01:31:45 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
+        by aserp3020.oracle.com with ESMTP id 3dkp3552mv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 01:31:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J0S1S5raMIMlFIgUt/pauK1QnGO6lOwMBhxyuXO9UyyG60O6rCyHabl1ni6kt9ng8s+xHpMLA173Zm7PILHgS4NCs2MDMIWwfocohQmUvYV0ULSsLAhZQw2xvLlcMereJ/GNcVAG8ZpazFUV57V0P1XBjj9MHsmHXFIuJrh1iEaCZpgTGG1esQPOXOPktbMEPJnG4dS0e0NL2xI9/8av5ktlQ8eSl1sKEJsRFeDbzexm0kUEZgF2QiSNOuBk/BV/FoXKdREEj83Ya7yk5YwjYyDX5jlkufBPhgioIxD1F9qUgbPtraodGcuD0rbNPG4aDyObGb9kZr+zcHaeeXPY5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ygn7zjz5BpX6o1wqjv/Vlj+1w6kXB6Q7ikydnONXfRA=;
+ b=c9alym+M0wX80FgHgh4suf/9THG/3ilyHGGoBv4k84/e5YC2aM0z/Zze4qx3GcK/gA8Ejyl+27qzEjg/Iou0cDIb3tx4MloppEJ1ViBln9DepK/ompsUPJCO6kEu0QETTwyjNH7EGwcKT4zPgKM4WAOsH866M+pbxFl0MaaFWgXCvmQpgZUJyukrIYkvOElowemP3wYoi15ZuZQnsxkgrpFtfnCqkiZIj7b6K2x7YBj0Fx20BmDLFyTxa/bpaNyyzpzGkPnV/Zv4T6ccbFIV/fwQp1jSq/T69PtYtjrF0pndQOAAGldt2HTU6ckaLn7EqBMvjANMIYGNVkwSgvFxkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ObzWOFozxlrYSTqy3Vly2Oy/aim15nW57FvB/rEORCI=;
-        b=rrKJfAqvrVA47ByhBSqJQSdawaCBuK8ZON1w8xmGXpZDGYgXclWgZGeI56VRHDzvM6
-         Soldo6cqw5VdRU8wITrFF2SSoOK/ipoEEjdeHC4k1Gq+qt7z1Naf9A/YNLGQdrKlapCc
-         gZD7l+1ksWg0+5M28eITncO3RprOCZGr9SUlLk1mR4XM1eK8Ccxi3ElPAVgSe+diCe4C
-         0ukOsehEz6X54k8WxFPcbUvV1EnS70GRNv8b2Q5THdbL/KemKiTtuoBrzTPff5zTmVtx
-         tB0gW7HOo5U4Hl/SkXRu9HMSUKImUAFrW10E0y+S6/X/ZpnpYbwmOGIYVgT9LxuTf6Dl
-         whUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ObzWOFozxlrYSTqy3Vly2Oy/aim15nW57FvB/rEORCI=;
-        b=hqMLdP6ifHRkvgQrvJzo+5P595brMESO+nb01YDEunRe9plNLLur4F0nn+N2c217oU
-         /4orgxKZzxaNbRyfvjyua8w0tWYGpQizsHZfCbC7IFQGkvxUFrEma5ZixPhaqmgIl815
-         XISKLYjKKu/uxPhxatZyfQ9/wj/xktixGXeb8b0Zjj3SeJyvVtc1e7zibDwpaTwdvr2y
-         RQicoVJ2ar2Zq0rwynqJRifId6dw9+fN5a2E9qLCIW4XkNEQfI5gMPby5fAfcgLNpoSJ
-         UUBFwJ+wqAlvUEH7tgWv/8qRUickkIZBiQW9zIelF6M4Ih2WpHNm3dO/Lfmz41PdV7/1
-         ZMrw==
-X-Gm-Message-State: AOAM5309PUWyZE2tGfi7gizqKULV7Hn7YqjGnRC56phYdfqqpY1Y7whE
-        7hqt2ViTMZt3Sm4K6edbnigH3C3hXU2DiQnhveFjxQ==
-X-Google-Smtp-Source: ABdhPJw8FgRwtjJo/mUrHumHyy+5UgblK4uNn9ooMNerZhb50kaYpgW5QuemaW4CsmPJqOMuXQXorYQj+BhKWkFEtIc=
-X-Received: by 2002:a17:907:6da5:: with SMTP id sb37mr22217371ejc.631.1642555849271;
- Tue, 18 Jan 2022 17:30:49 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ygn7zjz5BpX6o1wqjv/Vlj+1w6kXB6Q7ikydnONXfRA=;
+ b=nODMAhfml/D+X7KctOd5LZ2N1pkF7hrMuI5HrS2oy/t+OvS9uDKyQuyzaf7aKTiC3TlVJF2cWGDcXr7KRDnh2GgPGCbVITHJ0kwD5gKRvjmGsYxZs+9HBy2K4zk/RfMgLtOj4V+hFD29mDAZjjbBDxnQqR5jOrvd5Z358ym1S9U=
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
+ by CH2PR10MB4055.namprd10.prod.outlook.com (2603:10b6:610:5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Wed, 19 Jan
+ 2022 01:31:43 +0000
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::e430:bb9e:c983:23bf]) by CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::e430:bb9e:c983:23bf%4]) with mapi id 15.20.4888.014; Wed, 19 Jan 2022
+ 01:31:43 +0000
+From:   Stephen Brennan <stephen.s.brennan@oracle.com>
+To:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
+Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] printk: disable optimistic spin during panic
+Date:   Tue, 18 Jan 2022 17:31:40 -0800
+Message-Id: <20220119013140.383261-1-stephen.s.brennan@oracle.com>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR17CA0068.namprd17.prod.outlook.com
+ (2603:10b6:a03:167::45) To CH2PR10MB4166.namprd10.prod.outlook.com
+ (2603:10b6:610:78::20)
 MIME-Version: 1.0
-References: <20220115080657.2780989-1-sboyd@kernel.org> <CAGS_qxpbOM4KuRe_SZ+es7K49_dV+2A1rwKX9bvjeGfSn04s6w@mail.gmail.com>
- <20220119012051.E3738C340E0@smtp.kernel.org>
-In-Reply-To: <20220119012051.E3738C340E0@smtp.kernel.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 18 Jan 2022 17:30:37 -0800
-Message-ID: <CAGS_qxqzHq4ZQeSFg-Uxg30x70v5sCu23zooYNHFm9cX-XyPTQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: gate: Add some kunit test suites
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 50fa0d5d-0617-497d-b841-08d9daeb731e
+X-MS-TrafficTypeDiagnostic: CH2PR10MB4055:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR10MB40558D3F8D696307D343D438DB599@CH2PR10MB4055.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rR4j2tTo9DK4mOalY7RIYYgwt+fFRHCgJ685wS5kWwOnMLJvMbneOcpIgrb4yyjZF88Rjahna5LroDMJ4Coku2xnYi7xgD29xVruHmi5C1jXuqrumofY8QX6j18K0aPvlxY+8bZYe+057dvxUNlYm+WT0BACnkrhoQtk+VvH0tT24CmtkubdI2U/lHU/iV9T87r6q4GqlaSTYDUltzBkMEmRV5mIRWdPDKA37Lnm6Jp6afqnkT9q8Eyhyc0Fqw6P2Gf/EZ9LI7wMsDlbrZzyDV6kYItyx5wAlLbwxukPYInn7nA2/EbvUCL5LAv7GQ7kzXNapo4yjbge8s5IiidKoTKHK6qcZbm3dR+ZxW1vkgDHX5l1d4FpNnebyY2+TRSqZDjucGnJ5AqPFGkx2gJqyGwIG18lDT8FwRYURynM89vfWv5UszuLxYIcNoYrdLXWObOGy0br8kZohmMlvoGaAkaGvoh+PNLe+dR/bB8vnGcQNWZ/G7M5A5TIeAfkEKSNvo1sgWutc32U3fnGHsjVzwNOoDCfOHfHk/H5vJFurWH1c4qXYZKarwj4IXKffTsS0N2ujJN7UtR32xzSC9gBDNGhcKKrRccfrUvaqmy7PLLmTnD59Sq3/dZwcvkIpePKEpXmZA2ZHFLRzS2vL+lXYNhNOY2ctB8uIdVbHDEcSHQvsdYuDpNgGj1+qFF0NFS2TKDRkwCgiWwvIieL+68KvQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66946007)(1076003)(4326008)(110136005)(86362001)(83380400001)(66556008)(26005)(316002)(66476007)(54906003)(508600001)(6486002)(52116002)(6506007)(38350700002)(8676002)(2906002)(103116003)(38100700002)(2616005)(6512007)(8936002)(5660300002)(36756003)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?flO8wCwGHdXaabGPiibNS27EnC6vm0N56sgy8yJeNTSpG+c4heAXS8pxmCVB?=
+ =?us-ascii?Q?yYDHjwhmx9lSgb/BMRCaGev2jo8CzuSWIYjdTj48iFoCd2+wWHokWNlJN1j3?=
+ =?us-ascii?Q?1p7VC7+YIaklhUcoltmZBcLsgEaliy423kyuDM20fjUHbaPXNgnL3FyMXL6A?=
+ =?us-ascii?Q?V0lOhMh0mOTz4/XZwzimYeLu4odE9DyMoHUmfsKr/7fsj3CyuZktxQYSZmwj?=
+ =?us-ascii?Q?0e20zNEfy6hBhkWWcw3Rlt0tdIfuZSOEtPe6wJLoLKv23Ct4SCzv2gmjcVRH?=
+ =?us-ascii?Q?I+IwE3RD7u9LpUHd4sWywjCEiGCrRRoJMrtdZb/TDQkwY2gmTTyX1y4gKlfb?=
+ =?us-ascii?Q?xXRiFBzatWbsLxPyFXx19Z3/4YKe7Qnijv00u/dVBNMTupYkvPAbELVwc6ur?=
+ =?us-ascii?Q?gJpEfL4mh55OoF+dhf4l6o5tccNmWnRipHi3bvk3JUp+WR72N3N9evlbPV2g?=
+ =?us-ascii?Q?tMOzz/Y2bGdEwH/Kj3Cmz6c0o716VsOPjjVEATJ258dbYUcpc9dJKEWyfW9r?=
+ =?us-ascii?Q?Gnma0mYgOhAdhCP79ne08woG0t3FhEUzfrGgoIQ603fMuNU/dAGL1KibIFZx?=
+ =?us-ascii?Q?YdgrBkDzWvn39SkRcVi4Ml6MJBPz+nehBn+FqJtJWAO2DFg1PFDhdgoQcY3b?=
+ =?us-ascii?Q?VxaB7ctSAuHxGvU21J8SmLodt5+Dabt31WuHYIQ4Ke/6Hxcyfi+a4DC30ZPl?=
+ =?us-ascii?Q?eNtfQK1kgjOG6XS+tuCk+OLMV5PRl8L08MQoMgVaIMErepJCG5BCC30AWbLJ?=
+ =?us-ascii?Q?1oKhCEJvZdLxlRDff1k0OaZGEYu1Gqi5qz/2hQ9G5nrx9N7fXEeTzQwIIug3?=
+ =?us-ascii?Q?mPGvxoAfFk8YTzj895fOVla949G1dcfsMC1H4TKmtTg2p44ZoP+omcYkgm5t?=
+ =?us-ascii?Q?6KgD+jqUoybumirgLcjjhvYHe1h7Ysb6BmZUdeYNpI08p1QyLBq+UTVcMTuC?=
+ =?us-ascii?Q?VpdveBOQkCWzC8DZSSmKwwnSTvh3Jo+0QLxpEBICpwnrDaSe4YE1Awh7WztQ?=
+ =?us-ascii?Q?VduLvvgzZjoxarbpHSDEwwzGi0aS80dm520UALlAsOPF8uoCiOv/+2ESrqII?=
+ =?us-ascii?Q?L65tWFqbJV/PopixoP5E1BUfLrvIPX9AxQDxl5QSTyKQtF7zYpEE+O7U1NUJ?=
+ =?us-ascii?Q?424UyQT7wGfesP0Wvq2IQ9VbG9fgtHqoDJOe2htZecPKomEoHQr4eaPeiAoE?=
+ =?us-ascii?Q?NpPwmpD5KecJBYU7SHyiGZgeEQSombHi2szTbgtIR6aRBgw0NDSwXgP0993k?=
+ =?us-ascii?Q?fqgXcQ+CWguv/OIYvSvinK6wV7G8v1R/XU/ihgkwPq956Z7684Cyp8zpJNDE?=
+ =?us-ascii?Q?CUtETUOe5p42zq3YJdNaIwK8C8uF4r9TrGBR6TVLrL27L5RBa4HxtARAreaH?=
+ =?us-ascii?Q?7ssPM61UvQDCa2sppvBLB1+rblL4nTUWovEnH++MDeQ4EWACoeZyxDv3LYh0?=
+ =?us-ascii?Q?AVSbQJ/DvCExlrYoMKPX8gr+3FixizSWJWOoheTd4MfmVEZ8W/VAhzy2Oq8I?=
+ =?us-ascii?Q?tPRmxM2ChFlR6w1cBfrtjVZwzHC0lvkNXVgSsUP+x1Hv0k0DCZkCfXhV2VfA?=
+ =?us-ascii?Q?c+4PUfIpfxOGFa9SJcrl8KqArbUHdbeRB/xSYS/mG2+6/rbDun4zJ+0e9dB5?=
+ =?us-ascii?Q?8eXfHH9TLYqSQhulhD5OmcN+SP0iXbgBwWiscd4sDieMkV3HwABtJCWKgca7?=
+ =?us-ascii?Q?TWTxzQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50fa0d5d-0617-497d-b841-08d9daeb731e
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 01:31:43.5702
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c0HBXeeTcS5CDMAVn86mFAoL6wZpLu4rK36BFHiMiaigZ+i/2jA59Nz61TOv3CHWGtLAAsN5ssBvLnKuV85RNLT4jW+n4wE+Zw4IT2v0QYQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4055
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10231 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190004
+X-Proofpoint-GUID: DaU0y8nkpJ1u0Qd8ebZ3xVpODpbzh61b
+X-Proofpoint-ORIG-GUID: DaU0y8nkpJ1u0Qd8ebZ3xVpODpbzh61b
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 5:20 PM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Daniel Latypov (2022-01-15 13:48:42)
-> > On Sat, Jan 15, 2022 at 12:07 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > > Test various parts of the clk gate implementation with the kunit testing
-> > > framework.
-> > >
-> > > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> > > Cc: <kunit-dev@googlegroups.com>
-> > > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> >
-> > Nice!
-> > Some minor nits and suggestions re kunit usage below.
-> >
-> > Acked-by: Daniel Latypov <dlatypov@google.com>
-> >
-> > > ---
-> > >
-> > > This is a resend of the RFC[1] from almost two years ago! It will be
-> > > merged after the merge window closes.
-> > >
-> > > [1] https://lore.kernel.org/r/20200408035637.110858-1-sboyd@kernel.org
-> > >
-> > >  drivers/clk/Kconfig         |   8 +
-> > >  drivers/clk/Makefile        |   1 +
-> > >  drivers/clk/clk-gate-test.c | 481 ++++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 490 insertions(+)
-> > >  create mode 100644 drivers/clk/clk-gate-test.c
-> > >
-> > > diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> > > index c5b3dc97396a..41e560249370 100644
-> > > --- a/drivers/clk/Kconfig
-> > > +++ b/drivers/clk/Kconfig
-> > > @@ -421,4 +421,12 @@ source "drivers/clk/x86/Kconfig"
-> > >  source "drivers/clk/xilinx/Kconfig"
-> > >  source "drivers/clk/zynqmp/Kconfig"
-> > >
-> > > +# Kunit test cases
-> > > +config CLK_GATE_TEST
-> > > +       tristate "Basic gate type Kunit test"
-> > > +       depends on KUNIT
-> > > +       default KUNIT
-> > > +       help
-> > > +         Kunit test for the basic clk gate type.
-> >
-> > minor nit: since the previous version, there is now
-> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kconfig-entries
-> >
-> > so something like:
-> > config CLK_GATE_KUNIT_TEST
-> >   tristate "Basic gate type KUnit test" if !KUNIT_ALL_TESTS
-> >   depends on KUNIT
-> >   default KUNIT_ALL_TESTS
-> > ...
-> >
-> > would be the way to go.
->
-> Got it. Thanks!
->
-> >
-> > On a related note, you could add a .kunitconfig file to make running
-> > this easier:
-> > $ cat drivers/clk/.kunitconfig
-> > CONFIG_KUNIT=y
-> > CONFIG_COMMON_CLK=y
-> > CONFIG_CLK_GATE_TEST=y
->
-> Sure that works for me. I was using my own kunitconfig file and then
-> running all 'clk*' tests. This would make it easier I suppose. Too bad
-> the pattern match can't figure out what dependencies to enable.
->
-> >
-> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/clk
-> > ...
-> > Testing complete. Passed: 17, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
-> >
-> > There's not much in the way of dependencies here so it doesn't help that much.
-> > But it is an option if you want a one-liner way to be able to run the test.
-> >
-> > > +
-> > >  endif
-> > > diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> > > index e42312121e51..dcdb75712940 100644
-> > > --- a/drivers/clk/Makefile
-> > > +++ b/drivers/clk/Makefile
-> > > @@ -6,6 +6,7 @@ obj-$(CONFIG_COMMON_CLK)        += clk-divider.o
-> > >  obj-$(CONFIG_COMMON_CLK)       += clk-fixed-factor.o
-> > >  obj-$(CONFIG_COMMON_CLK)       += clk-fixed-rate.o
-> > >  obj-$(CONFIG_COMMON_CLK)       += clk-gate.o
-> > > +obj-$(CONFIG_CLK_GATE_TEST)    += clk-gate-test.o
-> > >  obj-$(CONFIG_COMMON_CLK)       += clk-multiplier.o
-> > >  obj-$(CONFIG_COMMON_CLK)       += clk-mux.o
-> > >  obj-$(CONFIG_COMMON_CLK)       += clk-composite.o
-> > > diff --git a/drivers/clk/clk-gate-test.c b/drivers/clk/clk-gate-test.c
-> > > new file mode 100644
-> > > index 000000000000..b499c2ffa815
-> > > --- /dev/null
-> > > +++ b/drivers/clk/clk-gate-test.c
-> >
-> > again a minor nit: clk_gate_test.c or clk_gate_kunit.c would be the
-> > preferred names now:
-> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kconfig-entries
-> >
-> > Note that KUnit itself doesn't follow its own naming guidelines unfortunately.
->
-> How about clk-gate_test.c then? I'd like it to match the clk-gate.c
-> file but can support the _test suffix.
+A CPU executing with console lock spinning enabled might be halted
+during a panic. Before the panicking CPU calls console_flush_on_panic(),
+it may call console_trylock(), which attempts to optimistically spin,
+deadlocking the panic CPU:
 
-That sounds completely reasonable to me.
-I'd say go for it, if no one chimes in w/ any objections.
+CPU 0 (panic CPU)             CPU 1
+-----------------             ------
+                              printk() {
+                                vprintk_func() {
+                                  vprintk_default() {
+                                    vprintk_emit() {
+                                      console_unlock() {
+                                        console_lock_spinning_enable();
+                                        ... printing to console ...
+panic() {
+  crash_smp_send_stop() {
+    NMI  -------------------> HALT
+  }
+  atomic_notifier_call_chain() {
+    printk() {
+      ...
+      console_trylock_spinnning() {
+        // optimistic spin infinitely
 
->
-> >
-> > > @@ -0,0 +1,481 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Kunit test for clk gate basic type
-> > > + */
-> > > +#include <linux/clk.h>
-> > > +#include <linux/clk-provider.h>
-> > > +#include <linux/platform_device.h>
-> > > +
-> > > +#include <kunit/test.h>
-> > > +
-> > > +static void clk_gate_register_test_dev(struct kunit *test)
-> > > +{
-> > > +       struct clk_hw *ret;
-> > > +       struct platform_device *pdev;
-> > > +
-> > > +       pdev = platform_device_register_simple("test_gate_device", -1, NULL, 0);
-> > > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-> > > +
-> > > +       ret = clk_hw_register_gate(&pdev->dev, "test_gate", NULL, 0, NULL,
-> > > +                                  0, 0, NULL);
-> > > +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, ret);
-> >
-> > I think we want ASSERT here, otherwise we segfault below.
->
-> Fixed.
->
-> >
-> > > +       KUNIT_EXPECT_STREQ(test, "test_gate", clk_hw_get_name(ret));
-> > > +       KUNIT_EXPECT_EQ(test, 0UL, clk_hw_get_flags(ret));
-> > > +
-> [...]
-> > > +
-> > > +static struct clk_gate_test_context *clk_gate_test_alloc_ctx(struct kunit *test)
-> > > +{
-> > > +       struct clk_gate_test_context *ctx;
-> > > +
-> > > +       test->priv = ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-> >
-> > It looks like kunit_kzalloc() here would work as well.
-> > It should also be a bit safer, i.e. we won't leak ctx if
-> > clk_hw_register_fixed_rate() errors out in the init func.
->
-> Ok.
->
-> >
-> > > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-> > > +       ctx->fake_mem = (void __force __iomem *)&ctx->fake_reg;
-> > > +
-> > > +       return ctx;
-> > > +}
-> > > +
-> > > +static void clk_gate_test_parent_rate(struct kunit *test)
-> > > +{
-> > > +       struct clk_gate_test_context *ctx = test->priv;
-> > > +       struct clk_hw *parent = ctx->parent;
-> > > +       struct clk_hw *hw = ctx->hw;
-> > > +       unsigned long prate = clk_hw_get_rate(parent);
-> > > +       unsigned long rate = clk_hw_get_rate(hw);
-> > > +
-> > > +       KUNIT_EXPECT_EQ(test, prate, rate);
-> > > +}
-> > > +
-> > > +static void clk_gate_test_enable(struct kunit *test)
-> > > +{
-> > > +       struct clk_gate_test_context *ctx = test->priv;
-> > > +       struct clk_hw *parent = ctx->parent;
-> > > +       struct clk_hw *hw = ctx->hw;
-> > > +       struct clk *clk = hw->clk;
-> > > +       int ret;
-> > > +       u32 enable_val = BIT(5);
-> > > +
-> > > +       ret = clk_prepare_enable(clk);
-> > > +       KUNIT_ASSERT_EQ(test, ret, 0);
-> >
-> > optional: in the cases where it's short enough, I'd personally favor
-> > KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-> >
-> > That way we get more context in the assertion failure messages.
->
-> Makes sense.
+This hang during panic can be induced when a kdump kernel is loaded, and
+crash_kexec_post_notifiers=1 is present on the kernel command line. The
+following script which concurrently writes to /dev/kmsg, and triggers a
+panic, can result in this hang:
+
+    #!/bin/bash
+    date
+    # 991 chars (based on log buffer size):
+    chars="$(printf 'a%.0s' {1..991})"
+    while :; do
+        echo $chars > /dev/kmsg
+    done &
+    echo c > /proc/sysrq-trigger &
+    date
+    exit
+
+To avoid this deadlock, ensure that console_trylock_spinning() does not
+allow spinning once a panic has begun. Below are the hang rates for the
+above test case, based on v5.16-rc8 before and after this patch:
+
+before:  776 hangs / 1484 trials - 52.3%
+after :    0 hangs /  102 trials -  0.0%
+
+Fixes: dbdda842fe96 ("printk: Add console owner and waiter logic to load balance console writes")
+
+Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+---
+
+Note: I continue to run my tests past 100 trials, but at this point I'm
+confident enough in the fix to send the patch.
+
+As Petr suggested I will send another patch making the non-panic CPUs
+bail out of console_unlock(), but I wanted to get this one first, since
+it is implemented and ready now.
+
+ kernel/printk/printk.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 57b132b658e1..612ed895b967 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -1843,6 +1843,16 @@ static int console_trylock_spinning(void)
+ 	if (console_trylock())
+ 		return 1;
+ 
++	/*
++	 * It's unsafe for the panic CPU to spin, since the CPU holding the
++	 * console_sem may have already been halted. However, if a panic has
++	 * started, but we're not the panic CPU, we still spin. This protects
++	 * the panic CPU from needing to write out messages buffered by other
++	 * CPUs in console_unlock().
++	 */
++	if (atomic_read(&panic_cpu) == raw_smp_processor_id())
++		return 0;
++
+ 	printk_safe_enter_irqsave(flags);
+ 
+ 	raw_spin_lock(&console_owner_lock);
+-- 
+2.30.2
+

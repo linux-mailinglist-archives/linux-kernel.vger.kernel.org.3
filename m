@@ -2,136 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3758493537
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAEE493542
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239394AbiASHEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiASHEi (ORCPT
+        id S1351944AbiASHJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:09:51 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:31105 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351920AbiASHJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:04:38 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844D0C061574;
-        Tue, 18 Jan 2022 23:04:38 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id t32so1562435pgm.7;
-        Tue, 18 Jan 2022 23:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wCiIeaOP7iQ1GVdByBpgubBq7flsYPm7+h11Tiuiwpg=;
-        b=I/Zq9ZxoUoy7LGYzlgDjcgi95DDZ4Fe0Pb6n5U+cqjcUR0Et5Pr7UDDZTqOCpfLFBp
-         nEH7GcdRDoD5xDR/tUlhHBREYwpJfnwA60VtG0JCEqf3nxUVBvv1oTZLTn6K3Yvu+hK+
-         MmXCVl0up0iY7uVROgHbQ9pdOWZxbrpVlHN4Y4Q5WewojP3zXhzqsKoPj1tWGcqIRnfu
-         BYsCgTw4uvrA4sCh3lOrWg9RLNTrpKIqaFAcoZeM/oZ2RoXpONfMs3QBJMpXrJVgTy3A
-         czU/m8edbY7P/SxdshnY9eEJz2nCSwfolO25LTfhQEuygQTg7Jx4dcWWysw4BTWZZz72
-         hVlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wCiIeaOP7iQ1GVdByBpgubBq7flsYPm7+h11Tiuiwpg=;
-        b=i5ZB0VWPmLsLw0MrdXYisGHSVdVdA7jaTdicyjEifuIQiWGSYPTSORB1Opb3Y0FCaL
-         J63pVcEK9R2iKgD3LPlZnVtbKdz4vOtU7m66HVDALq02sLfd11DfZPLZ3s35qdWHthtg
-         KC1R4HzlcVmuotGlbvhvG0/vzsWzDYOL7SPsdp8eTfXMmJgf/Mn8Q4Xk5l0eFawsMU8V
-         gPgR7frllqhqVZAaSEjOGXFVwRsemBbq0qB3CXMuBwSu5SqqxObE8Hw3R9D0yAD/Khwh
-         Nz5kR88T9m2jSlAnrcXqOCSorxnmwaYCsS11KOSruNuH43sFx7tx3cY7KrcGsizxLCWW
-         bKcg==
-X-Gm-Message-State: AOAM532Ps4pgoB2ULNN8ZVPdk6Dkq7Dx9DPsxU4wh1nPhmt41XTO14fJ
-        T+Tqkdg90JtpRy+Z+baOZzY=
-X-Google-Smtp-Source: ABdhPJxe3J12qmVF/Tu9pqymxRi/8Bzrvkc5t/ws3HbbSLQmN0Vk87KavUmmzNc1OqaHgFRMaeidfQ==
-X-Received: by 2002:a63:7946:: with SMTP id u67mr26261546pgc.83.1642575877947;
-        Tue, 18 Jan 2022 23:04:37 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id nl17sm5486973pjb.42.2022.01.18.23.04.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 23:04:37 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <likexu@tencent.com>
-Subject: [PATCH] KVM: x86/xcr0: Don't make XFEATURE_MASK_SSE a mandatory bit setting
-Date:   Wed, 19 Jan 2022 15:04:27 +0800
-Message-Id: <20220119070427.33801-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 19 Jan 2022 02:09:41 -0500
+Received: from dggeme755-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JdxW619tGz1FCqP;
+        Wed, 19 Jan 2022 15:05:54 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggeme755-chm.china.huawei.com
+ (10.3.19.101) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Wed, 19
+ Jan 2022 15:09:38 +0800
+From:   Zhou Guanghui <zhouguanghui1@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux-foundation.org>
+CC:     <will@kernel.org>, <joro@8bytes.org>, <jean-philippe@linaro.org>,
+        <xuqiang36@huawei.com>
+Subject: [PATCH] iommu/arm-smmu-v3: fix event handling soft lockup
+Date:   Wed, 19 Jan 2022 07:07:54 +0000
+Message-ID: <20220119070754.26528-1-zhouguanghui1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme755-chm.china.huawei.com (10.3.19.101)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+During event processing, events are read from the event queue one
+by one until the queue is empty.If the master device continuously
+requests address access at the same time and the SMMU generates
+events, the cyclic processing of the event takes a long time and
+softlockup warnings may be reported.
 
-If "bits 1 and 2 of XCR0" are cleared and set only "bit 0 of XCR0",
-the x86 hardware does work properly and the CPUID leaf of the states
-size will be updated as follows:
+arm-smmu-v3 arm-smmu-v3.34.auto: event 0x0a received:
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00007f220000280a
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x000010000000007e
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00000000034e8670
+watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [irq/268-arm-smm:247]
+Call trace:
+ _dev_info+0x7c/0xa0
+ arm_smmu_evtq_thread+0x1c0/0x230
+ irq_thread_fn+0x30/0x80
+ irq_thread+0x128/0x210
+ kthread+0x134/0x138
+ ret_from_fork+0x10/0x1c
+Kernel panic - not syncing: softlockup: hung tasks
 
-xsetbv(XCR_XFEATURE_ENABLED_MASK, 0x2e7);
-  CPUID[0d, 00]: eax=000002e7 ebx=00000a88 ecx=00000a88 edx=00000000
-xsetbv(XCR_XFEATURE_ENABLED_MASK, 0x1);
-  CPUID[0d, 00]: eax=000002e7 ebx=00000240 ecx=00000a88 edx=00000000
+Fix this by calling cond_resched() after the event information is
+printed.
 
-According to Intel SDM "XSETBV - Set Extended Control Register",
-the truth emerges: only the "bit 0 of XCR0 (corresponding to x87 state)
-must be set to 1", and in addition, it's necessary to set both bits
-(XCR0[1] and XCR0[2]) to use AVX instructions".
-
-Therefore, it's pretty safe for KVM to run a user-defined guest w/o
-using AVX instructions and in that case, the kvm_update_cpuid_runtime()
-cannot work as expected due to the wrong macro definition.
-
-Remove the XFEATURE_MASK_SSE bit as part of the XFEATURE_MASK_EXTEND
-and opportunistically, move it into the context of its unique user KVM.
-
-Fixes: 56c103ec040b ("KVM: x86: Fix xsave cpuid exposing bug")
-Signed-off-by: Like Xu <likexu@tencent.com>
+Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
 ---
- arch/x86/include/asm/fpu/xstate.h | 3 ---
- arch/x86/kvm/cpuid.h              | 8 ++++++++
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/include/asm/fpu/xstate.h b/arch/x86/include/asm/fpu/xstate.h
-index cd3dd170e23a..7d331a4aa2e2 100644
---- a/arch/x86/include/asm/fpu/xstate.h
-+++ b/arch/x86/include/asm/fpu/xstate.h
-@@ -9,9 +9,6 @@
- #include <asm/fpu/api.h>
- #include <asm/user.h>
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index 6dc6d8b6b368..f60381cdf1c4 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -1558,6 +1558,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
+ 				dev_info(smmu->dev, "\t0x%016llx\n",
+ 					 (unsigned long long)evt[i]);
  
--/* Bit 63 of XCR0 is reserved for future expansion */
--#define XFEATURE_MASK_EXTEND	(~(XFEATURE_MASK_FPSSE | (1ULL << 63)))
--
- #define XSTATE_CPUID		0x0000000d
++			cond_resched();
+ 		}
  
- #define TILE_CPUID		0x0000001d
-diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-index 8a770b481d9d..5e36157febb2 100644
---- a/arch/x86/kvm/cpuid.h
-+++ b/arch/x86/kvm/cpuid.h
-@@ -8,6 +8,14 @@
- #include <asm/processor.h>
- #include <uapi/asm/kvm_para.h>
- 
-+/*
-+ * Bit 63 of XCR0 is reserved for future expansion,
-+ * and will not represent a processor state component.
-+ *
-+ * Only bit 0 of XCR0 (x87 state) must be set to 1.
-+ */
-+#define XFEATURE_MASK_EXTEND	(~(XFEATURE_MASK_FP | (1ULL << 63)))
-+
- extern u32 kvm_cpu_caps[NR_KVM_CPU_CAPS] __read_mostly;
- void kvm_set_cpu_caps(void);
- 
+ 		/*
 -- 
-2.33.1
+2.17.1
 

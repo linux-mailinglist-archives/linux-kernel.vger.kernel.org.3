@@ -2,116 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D94A493242
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443E9493244
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350643AbiASBVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:21:31 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:46930 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1350638AbiASBVX (ORCPT
+        id S1350638AbiASBW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:22:58 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:48252
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343527AbiASBW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:21:23 -0500
-X-UUID: bf9e6ac19536479c95c34f0e9dfed317-20220119
-X-UUID: bf9e6ac19536479c95c34f0e9dfed317-20220119
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2129486808; Wed, 19 Jan 2022 09:21:18 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 19 Jan 2022 09:21:17 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 09:21:16 +0800
-Message-ID: <c6f990fdf047eb90acaeb29f9f9b2941d6b7bf30.camel@mediatek.com>
-Subject: Re: [PATCH net-next v12 7/7] net: dt-bindings: dwmac: add support
- for mt8195
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <macpaul.lin@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
-        Jakub Kicinski <kuba@kernel.org>, <davem@davemloft.net>,
-        Jose Abreu <joabreu@synopsys.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <netdev@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dkirjanov@suse.de>, Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Date:   Wed, 19 Jan 2022 09:21:15 +0800
-In-Reply-To: <1642433742.934070.3923086.nullmailer@robh.at.kernel.org>
-References: <20220117070706.17853-1-biao.huang@mediatek.com>
-         <20220117070706.17853-8-biao.huang@mediatek.com>
-         <1642433742.934070.3923086.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 18 Jan 2022 20:22:57 -0500
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 48D9340027
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:22:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642555376;
+        bh=xUJSqu8n1W3DwSb7KYDr8YeMmcT2ABKA6gJJDqW1UEM=;
+        h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type;
+        b=ht4rX9iC6du6XKlpljEps7xCmGScXDQJeKKV8lIInh7vFMuDIwYipEKatVDNF3L8w
+         JAspk7YDa6YUCRjG00Wdu2G596STsNLKEHKYFFGnlYz5SOzFcez1WUPD1Vae9epL9F
+         h1+p38r2pQ5w7bYHjPOke5xkVbSOf5zEZaDg/I6tgfh5hLZFOh7OaH749R3Tl1vkeD
+         A8biYLnfjIG1mWCT9/MvVRi5YRclMHulqi7udXUcRHPUvdMOs+vV0VWrUCo4Vpxi4C
+         U9xleaO1odJ3v2y95FOSQY2qOBkBJBV6MaAYjILZGxazi5gU8PTltIhYiSkI5lJs0w
+         ubmCdh7ssLy7g==
+Received: by mail-ot1-f70.google.com with SMTP id q12-20020a9d654c000000b0059103bdc5ecso410163otl.14
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 17:22:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=xUJSqu8n1W3DwSb7KYDr8YeMmcT2ABKA6gJJDqW1UEM=;
+        b=wNrEmLMukoohcJIcKm8mFmyHIVu9WtcZIbgKlWcIszfWb+BSPJZBWJLPXpKISjaPR0
+         AFSCb/X6ZfU+o6jtYmsA3ArQ9+6pJrCjJuiNuGJEvU54DBq6I4lAJ3NeIsFbyeE4okqR
+         DAwD57v5AKgxq1aWCmd76hk2MTubgjIWRNr9egPcM3Uvyy8bGax/Tpl1HnJTi4CVLedK
+         IKq8ghthHZoEwbx4dDq6UuOlPIMIVdEo6q2jZUcYI5fqB9imA5alft32e02T2l0nIqH4
+         w3Rc7uCQS130UnEyhomXaZgYPPSUgiLznO31etJrSgqL5Jr3vkEK4ZQLgTKBZ9X6wKf6
+         vfug==
+X-Gm-Message-State: AOAM530HSOh54nOtR+8NKZ1fDF395heMznOSOUeo7+3ypFZJMxlv1Iic
+        mLacDKhxsxNVgOtNyPi9IWAEpr9OkR5cPmWK2CnmMSXSTK3nD5DnvFVGDwW+/3UBxIglQ/aUVhX
+        sVM+vPJL/IEQhj3QzxzuvgUZIdtuRDPAJgYm9DSIdA331kz3gDMhpxVXywA==
+X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr8241661otq.269.1642555375089;
+        Tue, 18 Jan 2022 17:22:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyD9dH8jrVforfEi9y/GHyKd2pIoqDn192FDYsbvJeO9yTnyo/YEb/NrHtuEsitIgx7DECZ860NegD11YB3hEg=
+X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr8241640otq.269.1642555374835;
+ Tue, 18 Jan 2022 17:22:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 19 Jan 2022 09:22:43 +0800
+Message-ID: <CAAd53p5EiTXfAhCFPDaicksQOa5usOkS5v7moPgM2A7QZ6QCqg@mail.gmail.com>
+Subject: Convert type of 'struct dmi_system_id -> driver_data' from 'void *'
+ to kernel_ulong_t?
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     jkosina@suse.cz, Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Bjorn Helgaas <bhelgaas@google.com>, mgurtovoy@nvidia.com,
+        linux@weissschuh.net, Arnd Bergmann <arnd@arndb.de>,
+        stephan@gerhold.net, "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rob,
-	Thanks for your comments.
+Hi,
 
-	If patch "[PATCH net-next v12 4/7] arm64: dts: mt2712: update
-ethernet device node" is applied with dt-binding patches, "make
-dtbs_check" will not report 
-such warnings.
-	Please review it kindly, thanks.
+I wonder if there's any reason to use 'void *' instead of
+kernel_ulong_t for 'driver_data' in 'struct dmi_system_id'?
 
-On Mon, 2022-01-17 at 09:35 -0600, Rob Herring wrote:
-> On Mon, 17 Jan 2022 15:07:06 +0800, Biao Huang wrote:
-> > Add binding document for the ethernet on mt8195.
-> > 
-> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> > ---
-> >  .../bindings/net/mediatek-dwmac.yaml          | 28
-> > ++++++++++++++++---
-> >  1 file changed, 24 insertions(+), 4 deletions(-)
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for
-> dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: 
-> https://patchwork.ozlabs.org/patch/1580608
-> 
-> 
-> ethernet@1101c000: clock-names: ['axi', 'apb', 'mac_main', 'ptp_ref']
-> is too short
-> 	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
-> 
-> ethernet@1101c000: clocks: [[27, 34], [27, 37], [6, 154], [6, 155]]
-> is too short
-> 	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
-> 
-> ethernet@1101c000: compatible: ['mediatek,mt2712-gmac'] does not
-> contain items matching the given schema
-> 	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
-> 
-> ethernet@1101c000: compatible: 'oneOf' conditional failed, one must
-> be fixed:
-> 	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
-> 
-> ethernet@1101c000: Unevaluated properties are not allowed
-> ('compatible', 'reg', 'interrupts', 'interrupt-names', 'mac-address', 
-> 'clock-names', 'clocks', 'power-domains', 'snps,axi-config',
-> 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,txpbl',
-> 'snps,rxpbl', 'clk_csr', 'phy-mode', 'phy-handle', 'snps,reset-gpio', 
-> 'mdio' were unexpected)
-> 	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
-> 
+I'd like to use the driver_data for applying quirk flags, and I found
+out unlike most other struct *_id, the dmi variant is using 'void *'
+for driver_data. Is there any technical reason for this?
 
+Kai-Heng

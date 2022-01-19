@@ -2,302 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE9A49356F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B76493576
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352075AbiASHYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:24:37 -0500
-Received: from mga09.intel.com ([134.134.136.24]:35948 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352004AbiASHY2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:24:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642577068; x=1674113068;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Vu0ELTEtpJhWmPKuiI8R3xh/gKCGIqar+M1Hh1oUySM=;
-  b=PWF8h1eP4as1wKDv8HpRKcPo3y91fUatqsfMA2PazAxctsJhSnbtoITz
-   QNnOPnfDxQ+j93XuTUa1PNTdocy+U6AcWGZG32qtDMBVtfcnaLsb47dlu
-   Fb0L75aUUDINwubH3jLGzg+FpKt3D2wxf3w+bkNsfz+CGuzwx/JN9Aqc0
-   uvOapg5VXoFWrSZjRRXmWHnsTYT4rCRviEiCsN3dbK26ry8y2vMd0cpsw
-   B9mYM0bcFQcQFPGX13z2RW3X3uVHOZSNlA10eBUbFG0qmQLpXgppMKzoz
-   NKLEL+E73uu4YCEeQvKnFLnTbYsVtlw2ihCOZDK2uc6Dln2/oFv53MmpF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="244799935"
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="244799935"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:24:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
-   d="scan'208";a="530544516"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:24:27 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: [PATCH 3/3] drm: Convert open yes/no strings to yesno()
-Date:   Tue, 18 Jan 2022 23:24:50 -0800
-Message-Id: <20220119072450.2890107-4-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220119072450.2890107-1-lucas.demarchi@intel.com>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
+        id S1351376AbiASHZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245723AbiASHZg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 02:25:36 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251C8C061574;
+        Tue, 18 Jan 2022 23:25:36 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so483708pju.2;
+        Tue, 18 Jan 2022 23:25:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=vfGaApu8wQmCPciFtkN6NAlobrxb1oXN8EoIi5l8GHQ=;
+        b=QppLXnIWB7RadcAP+fi1YRTqLnzMr67TF9r3sq5WSGiN0VOcDfUeeRRYu8T4vFhmEo
+         WHnD/3qhnFFJoascXBiYQLnqTKMK1k6onos0kS+o8pRCdErlbaD6KTxlG2BiricXI3mc
+         3yU7nmr9lqJV+9kDKS7WdiMpEeWsxET4QC2NK/FCQeKJp66NmNTRWDhbsiV+F+5evnKa
+         ATxu9MU6gA63cMGXuvTNOUa8xjQJpGdagYxkBwiThWxTWD+M9lU/RYmqPMy8yy8FotT0
+         0Gj1Jp/GmpJLvVkvpsG7XUD6Aok+W9vra/WC98H4IKI3tLZbgaWriM8CN04hThkHT5z6
+         1q6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=vfGaApu8wQmCPciFtkN6NAlobrxb1oXN8EoIi5l8GHQ=;
+        b=7CDRbz6/rbCQRcF/rLB/K7P0rMlYDVBJhhPu2Wmp/z/SGMVm9g6JPuGbtlrUXxijTU
+         3FgHka+qleuAjXsNtTOfmxCPk6xnj1xEf/Ich7bHokwPOnSTXk1pchTctxijX0f4/Kbr
+         Jqx2ExD2jW+/YdIMTeA29Hx/CDRM1spoXjilP/n8YSh5TMlhTfbP3CQdtYQk6NQ3Zazs
+         +ic9ZpHssR6SP8l+F7Jf1LV7aoFp85gC0qPYiV3rZ5wVlXcF5XMKoWe26F5G41gCyU2g
+         PxUhQm86l71FNKRB9Mc64uc8F7m15dLsnVzMtr7U4kNdPN/Egamu419yQ7qIOMbhWvO5
+         M6UA==
+X-Gm-Message-State: AOAM5316cAFOokp/96bF+e5MpdtiP/qWTbAwIu82nS+Ss7e0n6LA7zhY
+        LENI6w4QPxGNxJX8xVq0IMsgGmtjFIB8zMzs
+X-Google-Smtp-Source: ABdhPJxW/8NadmfPxqAtIs1ydmNWawR4Z0lXbnP3vjln6ZY4FIm+JyuhopJ00Gin+2IGL4v3kMt4FQ==
+X-Received: by 2002:a17:90b:4c52:: with SMTP id np18mr2826931pjb.192.1642577135517;
+        Tue, 18 Jan 2022 23:25:35 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id t126sm10541138pfd.143.2022.01.18.23.25.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 23:25:35 -0800 (PST)
+Message-ID: <a847ba90-7f15-4e79-b42b-75be0d6cf9fe@gmail.com>
+Date:   Wed, 19 Jan 2022 15:25:25 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH] KVM: x86: Update the states size cpuid even if
+ XCR0/IA32_XSS is reset
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220117082631.86143-1-likexu@tencent.com>
+ <YecHK2DmooVlMr2U@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <YecHK2DmooVlMr2U@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-linux/string_helpers.h provides a helper to return "yes"/"no"
-strings. Replace the open coded versions with yesno(). The places were
-identified with the following semantic patch:
+On 19/1/2022 2:30 am, Sean Christopherson wrote:
+> On Mon, Jan 17, 2022, Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
+>> both RESET and INIT. In both cases, the size in bytes of the XSAVE
+>> area containing all states enabled by XCR0 or (XCRO | IA32_XSS)
+>> needs to be updated.
+>>
+>> Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>>   arch/x86/kvm/x86.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 76b4803dd3bd..5748a57e1cb7 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -11134,6 +11134,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>>   	struct kvm_cpuid_entry2 *cpuid_0x1;
+>>   	unsigned long old_cr0 = kvm_read_cr0(vcpu);
+>>   	unsigned long new_cr0;
+>> +	bool need_update_cpuid = false;
+>>   
+>>   	/*
+>>   	 * Several of the "set" flows, e.g. ->set_cr0(), read other registers
+>> @@ -11199,6 +11200,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>>   
+>>   		vcpu->arch.msr_misc_features_enables = 0;
+>>   
+>> +		if (vcpu->arch.xcr0 != XFEATURE_MASK_FP)
+>> +			need_update_cpuid = true;
+>>   		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
+>>   	}
+>>   
+>> @@ -11216,6 +11219,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>>   	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
+>>   	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
+>>   
+>> +	if (vcpu->arch.ia32_xss)
+>> +		need_update_cpuid = true;
+> 
+> This means that kvm_set_msr_common()'s handling of MSR_IA32_XSS also needs to
+> update kvm_update_cpuid_runtime().  And then for bnoth XCR0 and XSS, I would very
+> strongly prefer that use the helpers to write the values and let the helpers call
 
-	@@
-	expression b;
-	@@
+Looks good to me and let me apply it in the next version.
 
-	- b ? "yes" : "no"
-	+ yesno(b)
+> kvm_update_cpuid_runtime().  Yes, that will mean kvm_update_cpuid_runtime() may be
+> called multiple times during INIT, but that's already true (CR4), and this isn't
+> exactly a fast path.
 
-Then the includes were added, so we include-what-we-use, and parenthesis
-adjusted in drivers/gpu/drm/v3d/v3d_debugfs.c. After the conversion we
-still see the same binary sizes:
+An undisclosed lazy mechanism is under analyzed for performance gains.
 
-   text    data     bss     dec     hex filename
-1442171   60344     800 1503315  16f053 ./drivers/gpu/drm/radeon/radeon.ko
-1442171   60344     800 1503315  16f053 ./drivers/gpu/drm/radeon/radeon.ko.old
-5985991  324439   33808 6344238  60ce2e ./drivers/gpu/drm/amd/amdgpu/amdgpu.ko
-5985991  324439   33808 6344238  60ce2e ./drivers/gpu/drm/amd/amdgpu/amdgpu.ko.old
- 411986   10490    6176  428652   68a6c ./drivers/gpu/drm/drm.ko
- 411986   10490    6176  428652   68a6c ./drivers/gpu/drm/drm.ko.old
-1970292  109515    2352 2082159  1fc56f ./drivers/gpu/drm/nouveau/nouveau.ko
-1970292  109515    2352 2082159  1fc56f ./drivers/gpu/drm/nouveau/nouveau.ko.old
-
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
----
- drivers/gpu/drm/amd/amdgpu/atom.c             |  3 ++-
- drivers/gpu/drm/drm_client_modeset.c          |  3 ++-
- drivers/gpu/drm/drm_dp_helper.c               |  3 ++-
- drivers/gpu/drm/drm_gem.c                     |  3 ++-
- drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c |  4 +++-
- drivers/gpu/drm/radeon/atom.c                 |  3 ++-
- drivers/gpu/drm/v3d/v3d_debugfs.c             | 11 ++++++-----
- drivers/gpu/drm/virtio/virtgpu_debugfs.c      |  3 ++-
- 8 files changed, 21 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/atom.c b/drivers/gpu/drm/amd/amdgpu/atom.c
-index 6fa2229b7229..3d7d0f4cfc05 100644
---- a/drivers/gpu/drm/amd/amdgpu/atom.c
-+++ b/drivers/gpu/drm/amd/amdgpu/atom.c
-@@ -25,6 +25,7 @@
- #include <linux/module.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-+#include <linux/string_helpers.h>
- #include <asm/unaligned.h>
- 
- #include <drm/drm_util.h>
-@@ -740,7 +741,7 @@ static void atom_op_jump(atom_exec_context *ctx, int *ptr, int arg)
- 		break;
- 	}
- 	if (arg != ATOM_COND_ALWAYS)
--		SDEBUG("   taken: %s\n", execute ? "yes" : "no");
-+		SDEBUG("   taken: %s\n", yesno(execute));
- 	SDEBUG("   target: 0x%04X\n", target);
- 	if (execute) {
- 		if (ctx->last_jump == (ctx->start + target)) {
-diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
-index ced09c7c06f9..3c55156a75fa 100644
---- a/drivers/gpu/drm/drm_client_modeset.c
-+++ b/drivers/gpu/drm/drm_client_modeset.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/slab.h>
-+#include <linux/string_helpers.h>
- 
- #include <drm/drm_atomic.h>
- #include <drm/drm_client.h>
-@@ -241,7 +242,7 @@ static void drm_client_connectors_enabled(struct drm_connector **connectors,
- 		connector = connectors[i];
- 		enabled[i] = drm_connector_enabled(connector, true);
- 		DRM_DEBUG_KMS("connector %d enabled? %s\n", connector->base.id,
--			      connector->display_info.non_desktop ? "non desktop" : enabled[i] ? "yes" : "no");
-+			      connector->display_info.non_desktop ? "non desktop" : yesno(enabled[i]));
- 
- 		any_enabled |= enabled[i];
- 	}
-diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
-index 4d0d1e8e51fa..f600616839f3 100644
---- a/drivers/gpu/drm/drm_dp_helper.c
-+++ b/drivers/gpu/drm/drm_dp_helper.c
-@@ -28,6 +28,7 @@
- #include <linux/module.h>
- #include <linux/sched.h>
- #include <linux/seq_file.h>
-+#include <linux/string_helpers.h>
- 
- #include <drm/drm_dp_helper.h>
- #include <drm/drm_print.h>
-@@ -1122,7 +1123,7 @@ void drm_dp_downstream_debug(struct seq_file *m,
- 	bool branch_device = drm_dp_is_branch(dpcd);
- 
- 	seq_printf(m, "\tDP branch device present: %s\n",
--		   branch_device ? "yes" : "no");
-+		   yesno(branch_device));
- 
- 	if (!branch_device)
- 		return;
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index 4dcdec6487bb..6436876341bb 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -39,6 +39,7 @@
- #include <linux/dma-buf-map.h>
- #include <linux/mem_encrypt.h>
- #include <linux/pagevec.h>
-+#include <linux/string_helpers.h>
- 
- #include <drm/drm.h>
- #include <drm/drm_device.h>
-@@ -1145,7 +1146,7 @@ void drm_gem_print_info(struct drm_printer *p, unsigned int indent,
- 			  drm_vma_node_start(&obj->vma_node));
- 	drm_printf_indent(p, indent, "size=%zu\n", obj->size);
- 	drm_printf_indent(p, indent, "imported=%s\n",
--			  obj->import_attach ? "yes" : "no");
-+			  yesno(obj->import_attach));
- 
- 	if (obj->funcs->print_info)
- 		obj->funcs->print_info(p, indent, obj);
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c
-index a11637b0f6cc..d39a9c1a2a6e 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c
-@@ -21,6 +21,8 @@
-  *
-  * Authors: Ben Skeggs
-  */
-+#include <linux/string_helpers.h>
-+
- #include "aux.h"
- #include "pad.h"
- 
-@@ -94,7 +96,7 @@ void
- nvkm_i2c_aux_monitor(struct nvkm_i2c_aux *aux, bool monitor)
- {
- 	struct nvkm_i2c_pad *pad = aux->pad;
--	AUX_TRACE(aux, "monitor: %s", monitor ? "yes" : "no");
-+	AUX_TRACE(aux, "monitor: %s", yesno(monitor));
- 	if (monitor)
- 		nvkm_i2c_pad_mode(pad, NVKM_I2C_PAD_AUX);
- 	else
-diff --git a/drivers/gpu/drm/radeon/atom.c b/drivers/gpu/drm/radeon/atom.c
-index f15b20da5315..77ef7d136530 100644
---- a/drivers/gpu/drm/radeon/atom.c
-+++ b/drivers/gpu/drm/radeon/atom.c
-@@ -25,6 +25,7 @@
- #include <linux/module.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-+#include <linux/string_helpers.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -722,7 +723,7 @@ static void atom_op_jump(atom_exec_context *ctx, int *ptr, int arg)
- 		break;
- 	}
- 	if (arg != ATOM_COND_ALWAYS)
--		SDEBUG("   taken: %s\n", execute ? "yes" : "no");
-+		SDEBUG("   taken: %s\n", yesno(execute));
- 	SDEBUG("   target: 0x%04X\n", target);
- 	if (execute) {
- 		if (ctx->last_jump == (ctx->start + target)) {
-diff --git a/drivers/gpu/drm/v3d/v3d_debugfs.c b/drivers/gpu/drm/v3d/v3d_debugfs.c
-index e76b24bb8828..22c23f3a691e 100644
---- a/drivers/gpu/drm/v3d/v3d_debugfs.c
-+++ b/drivers/gpu/drm/v3d/v3d_debugfs.c
-@@ -6,6 +6,7 @@
- #include <linux/debugfs.h>
- #include <linux/pm_runtime.h>
- #include <linux/seq_file.h>
-+#include <linux/string_helpers.h>
- 
- #include <drm/drm_debugfs.h>
- 
-@@ -148,15 +149,15 @@ static int v3d_v3d_debugfs_ident(struct seq_file *m, void *unused)
- 		   V3D_GET_FIELD(ident3, V3D_HUB_IDENT3_IPREV),
- 		   V3D_GET_FIELD(ident3, V3D_HUB_IDENT3_IPIDX));
- 	seq_printf(m, "MMU:        %s\n",
--		   (ident2 & V3D_HUB_IDENT2_WITH_MMU) ? "yes" : "no");
-+		   yesno(ident2 & V3D_HUB_IDENT2_WITH_MMU));
- 	seq_printf(m, "TFU:        %s\n",
--		   (ident1 & V3D_HUB_IDENT1_WITH_TFU) ? "yes" : "no");
-+		   yesno(ident1 & V3D_HUB_IDENT1_WITH_TFU));
- 	seq_printf(m, "TSY:        %s\n",
--		   (ident1 & V3D_HUB_IDENT1_WITH_TSY) ? "yes" : "no");
-+		   yesno(ident1 & V3D_HUB_IDENT1_WITH_TSY));
- 	seq_printf(m, "MSO:        %s\n",
--		   (ident1 & V3D_HUB_IDENT1_WITH_MSO) ? "yes" : "no");
-+		   yesno(ident1 & V3D_HUB_IDENT1_WITH_MSO));
- 	seq_printf(m, "L3C:        %s (%dkb)\n",
--		   (ident1 & V3D_HUB_IDENT1_WITH_L3C) ? "yes" : "no",
-+		   yesno(ident1 & V3D_HUB_IDENT1_WITH_L3C),
- 		   V3D_GET_FIELD(ident2, V3D_HUB_IDENT2_L3C_NKB));
- 
- 	for (core = 0; core < cores; core++) {
-diff --git a/drivers/gpu/drm/virtio/virtgpu_debugfs.c b/drivers/gpu/drm/virtio/virtgpu_debugfs.c
-index b6954e2f75e6..c7f675721840 100644
---- a/drivers/gpu/drm/virtio/virtgpu_debugfs.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_debugfs.c
-@@ -22,6 +22,7 @@
-  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  */
-+#include <linux/string_helpers.h>
- 
- #include <drm/drm_debugfs.h>
- #include <drm/drm_file.h>
-@@ -31,7 +32,7 @@
- static void virtio_gpu_add_bool(struct seq_file *m, const char *name,
- 				bool value)
- {
--	seq_printf(m, "%-16s : %s\n", name, value ? "yes" : "no");
-+	seq_printf(m, "%-16s : %s\n", name, yesno(value));
- }
- 
- static void virtio_gpu_add_int(struct seq_file *m, const char *name, int value)
--- 
-2.34.1
-
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 55518b7d3b96..22d4b1d15e94 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11256,7 +11256,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> 
+>                  vcpu->arch.msr_misc_features_enables = 0;
+> 
+> -               vcpu->arch.xcr0 = XFEATURE_MASK_FP;
+> +               __kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
+>          }
+> 
+>          /* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
+> @@ -11273,7 +11273,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>          cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
+>          kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
+> 
+> -       vcpu->arch.ia32_xss = 0;
+> +       __kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
+> 
+>          static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
+> 
+> 

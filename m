@@ -2,80 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED4F493BEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627AD493BEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241536AbiASOaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:30:12 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38902 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235332AbiASOaL (ORCPT
+        id S1355141AbiASOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241578AbiASOc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:30:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D54E6133E;
-        Wed, 19 Jan 2022 14:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB6A2C340E1;
-        Wed, 19 Jan 2022 14:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642602610;
-        bh=cqYXfpaFMP1VTeXlqw/vuOnER1tXJuFUpdLwPglyVZo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uWaJUYr9prJyLDPfC2fa18jZNPJ7BKqNSqSwAWvcLCI8NRHbPLfwnCA52cy2ozI1G
-         0vBXvtUZ7Z29OZ69GMdEpLxhBXb327Afi4I5cbS8UHSjs3Jb7OxWkAsoobTuv7wAOP
-         QrmUlhgo2F1Pu08+P90cttLDewOGr+DivwxtNbFmClQEyL3ghertRdpWbGSJ60DTIm
-         BtMeafAZHjZ9BpixAfQpovlxxC7slwk1ZxkTtWOWCmMBLXy1yr2PdHNTtxk4+gcjjl
-         EGNl6NQHgmShT7bWJvYSg/+OoLgexOgVnhd6MutpEJlkgO+jZkWNETwqjRHGBSM6pW
-         qim19LERW/lpQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CF0C2F60795;
-        Wed, 19 Jan 2022 14:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 19 Jan 2022 09:32:28 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B521DC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:32:27 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id x11so10228343lfa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:32:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NB/vQ4pMEzBEyabQQGEF0mW1uoppa6ljxHmIWmaiMMU=;
+        b=TcmfJNZ45XN49S6qVu3+pGBvHpDDsGV5+10C5dJQTTRgv8Mrqk7px7RkbmQHa7Yj4V
+         +BjADP9LvJ9VTzpfqUuTGkWy44yC0oYwKYqZ98Y7y5pp4HwUobhpmNOGU3roh3OPwzGz
+         ZVznxZz2ylWvO6E8beMcjnDUVGUxGzFjdqePvNaGDDz55fl5U0my8gp3WazZeKUp9Y5t
+         bNLxAv5XpED5j7JXpuDLPwnFYqzCVyyEgi7XYoY+lufbpGZrUFYxe81MKuD9ti5ha8+y
+         iHDRjya7cXT7EZGFGJxgw7iyTTB+MIcsUGZ1NTVjVecM0vcuLFhzWKbT6ZPe6D3bNcIg
+         op+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NB/vQ4pMEzBEyabQQGEF0mW1uoppa6ljxHmIWmaiMMU=;
+        b=LKda6vEkaFgPoB47EOii6MEffNq/GcUEM/AEZblWAoGC6ErGidpIaXiX5XZuhh4eSK
+         yhMLn2QXR+PKbB9dOgO1Vfr8/ePEiEEXXJAlfujyH6a7ybTirRp/rbmHAo/dMYMPHebG
+         jzOYkreYNupcCY5UOJHa1vI6cbXKGtkgPCSP+bLObEnhkaWAK4Wu4R8aYwojoZsY24UM
+         Z/icTQFn8RKe47L/bDqbndw5eP3jplZ2zSOEU5h9hgFIVVVk4GxYty+eQqeZm0uOYmtv
+         0YyjnWWKkZ/Um4T3XgRW/GCKJEm6Vpd6C9u3uXsPzz5T5r0y3hFMv1ZTr+gabDWs5hql
+         1y1A==
+X-Gm-Message-State: AOAM533k3ulkLHsA7nalt+LgwS2qmB0MDItcgb2gwhLsVuEqBCjnVhlW
+        Q2sYmjS4NRcbF9HIcUa+8UClzQ==
+X-Google-Smtp-Source: ABdhPJz84y58rnuSFcOOsyInV+5CQShzojBGnQl4qUf416L86uWHT+PtC0/JfyQJvkcPYkw286uj9Q==
+X-Received: by 2002:a19:7010:: with SMTP id h16mr27670537lfc.561.1642602746102;
+        Wed, 19 Jan 2022 06:32:26 -0800 (PST)
+Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id bu1sm2033020lfb.164.2022.01.19.06.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 06:32:25 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH] irq: manage power of chip hierarchy
+Date:   Wed, 19 Jan 2022 17:32:11 +0300
+Message-Id: <20220119143211.633399-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: phy: micrel: use kszphy_suspend()/kszphy_resume for irq
- aware devices
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164260260984.9645.1800345294074661941.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Jan 2022 14:30:09 +0000
-References: <20220118110812.1767997-1-claudiu.beznea@microchip.com>
-In-Reply-To: <20220118110812.1767997-1-claudiu.beznea@microchip.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, kuba@kernel.org, ioana.ciornei@nxp.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+In case of hierarchical irq domains, it can be not enough to enable
+power of the topmost chip at irq request time. Need to handle entire
+chip hierarchy.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+This patch updates irq_chip_pm_(get|put) to do so.
 
-On Tue, 18 Jan 2022 13:08:12 +0200 you wrote:
-> On a setup with KSZ9131 and MACB drivers it happens on suspend path, from
-> time to time, that the PHY interrupt arrives after PHY and MACB were
-> suspended (PHY via genphy_suspend(), MACB via macb_suspend()). In this
-> case the phy_read() at the beginning of kszphy_handle_interrupt() will
-> fail (as MACB driver is suspended at this time) leading to phy_error()
-> being called and a stack trace being displayed on console. To solve this
-> .suspend/.resume functions for all KSZ devices implementing
-> .handle_interrupt were replaced with kszphy_suspend()/kszphy_resume()
-> which disable/enable interrupt before/after calling
-> genphy_suspend()/genphy_resume().
-> 
-> [...]
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+ kernel/irq/chip.c | 43 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 37 insertions(+), 6 deletions(-)
 
-Here is the summary with links:
-  - net: phy: micrel: use kszphy_suspend()/kszphy_resume for irq aware devices
-    https://git.kernel.org/netdev/net/c/f1131b9c23fb
-
-You are awesome, thank you!
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index f895265d7548..d1b786f29d30 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -1569,15 +1569,30 @@ int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+  */
+ int irq_chip_pm_get(struct irq_data *data)
+ {
++#if IS_ENABLED(CONFIG_PM)
++	struct device *dev = data->chip->parent_device;
+ 	int retval;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && data->chip->parent_device) {
+-		retval = pm_runtime_get_sync(data->chip->parent_device);
++#if IS_ENABLED(CONFIG_IRQ_DOMAIN_HIERARCHY)
++	if (data->parent_data) {
++		retval = irq_chip_pm_get(data->parent_data);
++		if (retval < 0)
++			return retval;
++	}
++#endif
++
++	if (dev) {
++		retval = pm_runtime_get_sync(dev);
+ 		if (retval < 0) {
+-			pm_runtime_put_noidle(data->chip->parent_device);
++			pm_runtime_put_noidle(dev);
++#if IS_ENABLED(CONFIG_IRQ_DOMAIN_HIERARCHY)
++			if (data->parent_data)
++				irq_chip_pm_put(data->parent_data);
++#endif
+ 			return retval;
+ 		}
+ 	}
++#endif	/* CONFIG_PM */
+ 
+ 	return 0;
+ }
+@@ -1594,8 +1609,24 @@ int irq_chip_pm_put(struct irq_data *data)
+ {
+ 	int retval = 0;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && data->chip->parent_device)
+-		retval = pm_runtime_put(data->chip->parent_device);
++#if IS_ENABLED(CONFIG_PM)
++	do {
++		struct device *dev = data->chip->parent_device;
++		int retval2;
++
++		if (dev) {
++			retval2 = pm_runtime_put(dev);
++			if (retval == 0 && retval2 < 0)
++				retval = retval2;
++		}
++
++#if IS_ENABLED(CONFIG_IRQ_DOMAIN_HIERARCHY)
++		data = data->parent_data;
++#else
++		data = NULL;
++#endif
++	} while (data);
++#endif	/* CONFIG_PM */
+ 
+-	return (retval < 0) ? retval : 0;
++	return retval;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 

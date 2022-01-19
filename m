@@ -2,229 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D4149323B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D457049323D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 02:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350611AbiASBSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 20:18:35 -0500
-Received: from mail-co1nam11on2070.outbound.protection.outlook.com ([40.107.220.70]:14471
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238605AbiASBSd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:18:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l4PBFjB+3nBFgS9ZkAetpK3xHt17dSJ7QXKDPySrMs5T+F+Di4m9KZatSsnZQ/cLhZ0yukDZiMMfzejBnt8FDjSXnr7AtAMvOBBTMRVOYSD2GKZLXbKlsOj3OsGB3SFHkomSCmYDZbYSCmzbFoNpDjesT2UWv5Q/hbkcD1SJkw+dYgfObAkagUby2emWgRYYbc3hVpDMff2h8dU429TurRmx2JO5odf/7i1dQhQcFzVDvf8xH21cIaNFQKlV32RbnG5QCWdeUYYmyiYyCsftTttAnroWMTpzapTPzRjC8xm2nFlm6z53IhBoTMyEprADQGCwbcO2S5PpYOorcRaOYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XqvCQLTZkIfD6QpHY8rNtMGQ6189mSy+Rf5pFonC+F4=;
- b=FsGe/8bEzXpJB1QeUb79DpDb4ASs75fxiqlf0d8ad9aFvS6QwQEugQbz0gmeFenWqdWerq6h84p+MR83JrqSHy8iBoGn1TqNMu0XTPK7I/mNlPlu8bc8Ur2DR2gdcGMfcLSjvo80TMHAIhx1KAsfXVJLPz5lWL66krDsabueoeGnGuaOdtOr6r6VvqndjXfbsTheqJdIZiwVbWUrmamwvgLxbZxnUXoPHB0ooS7EOZaH+P7qg4XHJP2JsX9RprZdKV7UHX6INrawviAz+ATf9ZxAEVpJ+WzPZD4GHYuoKU0kFGpJS06dzbIRGQ/TOBnwYPpPL6uOqvrxWz8Nat2y8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XqvCQLTZkIfD6QpHY8rNtMGQ6189mSy+Rf5pFonC+F4=;
- b=JZcllDf4pnhpmdK/9ItP426msdoQgmbBMvxjvGdP+9p+QHgXrLVlPhpjoEs2pwu147Qyy0CPWffwWRqDlr30sCFmEgxLTtUEfUyLy9+/pj1cx7N3RjMLGf4Ohto+5JsH6/S3eAMmBlL4OprsTRa8LyhZVMno8cASXjOxFUcW8M0=
-Received: from BN6PR11CA0070.namprd11.prod.outlook.com (2603:10b6:404:f7::32)
- by CH0PR12MB5089.namprd12.prod.outlook.com (2603:10b6:610:bc::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 19 Jan
- 2022 01:18:31 +0000
-Received: from BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:f7:cafe::9f) by BN6PR11CA0070.outlook.office365.com
- (2603:10b6:404:f7::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
- Transport; Wed, 19 Jan 2022 01:18:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT029.mail.protection.outlook.com (10.13.177.68) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 01:18:30 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 18 Jan
- 2022 19:18:29 -0600
-Date:   Tue, 18 Jan 2022 19:18:06 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
- CPUID table in #VC handlers
-Message-ID: <20220119011806.av5rtxfv4et2sfkl@amd.com>
-References: <YeGhKll2fTcTr2wS@zn.tnic>
- <20220118043521.exgma53qrzrbalpd@amd.com>
- <YebIiN6Ftq2aPtyF@zn.tnic>
- <20220118142345.65wuub2p3alavhpb@amd.com>
- <20220118143238.lu22npcktxuvadwk@amd.com>
- <20220118143730.wenhm2bbityq7wwy@amd.com>
- <YebsKcpnYzvjaEjs@zn.tnic>
- <20220118172043.djhy3dwg4fhhfqfs@amd.com>
- <Yeb7vOaqDtH6Fpsb@zn.tnic>
- <20220118184930.nnwbgrfr723qabnq@amd.com>
+        id S1350623AbiASBUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 20:20:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35770 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238605AbiASBUy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 20:20:54 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A3CBB81888;
+        Wed, 19 Jan 2022 01:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3738C340E0;
+        Wed, 19 Jan 2022 01:20:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642555252;
+        bh=IdKEiKpGHXzv1BpSQvf0H/cY6Y+Lf9aU6BjdVqTjtXA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=VAOADwpenDmbm3NYL3N/LZ8k7ITTxcXGKcf+ourxpmgOZ7BpgCS2Wah6QnKru5tMq
+         4E6U9UxkwbocpNU0sjOZP1BQHlb0aw4n1pAQx4hH8SmbtEiwz+jquvhIuZkFgoq1N/
+         tz69w/fYZemPgswMjd8+W7H2OQonHP35ECxMOyB3QHRULQMH7z/UCLHU/JsPKH8nhI
+         fK5u+f0wkh9xDu04of7bG76f411T5ycS3bQ0lTcQIPq0lSFGgip5u84t81Z2cYIAVF
+         jywBzwOwO2Rs8PKZkZs53xvNZAYSsUN7UUeNvW5RZRLpUK5OGSNhOpFB7BNfXHpEfo
+         RMkWobWcWdtNA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220118184930.nnwbgrfr723qabnq@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c8197a3-5fdc-4d2c-b54a-08d9dae99ab8
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5089:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR12MB5089DA1DCB8E4F54095E00B595599@CH0PR12MB5089.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kQ2mFLt+XU1EwoxmefkJ7EWhb1MFzbg3w7/E+jfoOub3uRs3lRjOQElqDM/HG8AKhEfIXcvrVSnDFxnTMbjJ30tctSnQv5W8NqBhBP512RaVEgBdT4/sSAP2Np5gqAaLdikO+JzMdB05RYKTTZ+qz+DSd+PY/eLBrkkyrfKq+FRBq/2IrfTE3HahqtYgzt2SATWxZuveGfvaiMAWoZfDxSTCIeN/y0FIRmzkBfoPRMkeMiWulCZmc5zbCvVtHbN8gkNmoWXWBEK1gvR2diqf8X0K0Q6iPuWHvYymbtD2mlF3KkhiLj0Ve3XdntOomfeUbokK+6rwCDYMhcE/EXiHcF0a0ceFs9GynSV2BV50w1IATSL5HUKtiDi7F51GjANtRu/K9SHyboLunMmZwG1o7YGqxJg7kfKIvVEQwWzxkYBN2iK+hmTgDGwo/mGMOYQNgPRRfOXrlFblvyr4hE+frDoob5XMThgFk35UAyjXshZt7lVJGwzZ/D4ZrcXf7NO0VpofEzR8vWPR0lJlB1/wUKNAKJAIzH2iPtNqYyVgb/0/X63VKyGCk/AMQ0b7LvIOgce2DV7ZJk1w9M4oTYkUDs/Ya8iTeMfAdTCup2OcmRiUv4odW+2Kzcpl08TKOTEvRZSJkSBKG40qxer52rv2MHB/xIG46WTcMxnLdcwvfgDJS55yRW126kl6qHVXRxDJbKUO/v/L7jGTRiwha3dHe463/STxa8B5shwtC8AqcvErdi+T/EpnjRjduJSl3XDYtMFSQR8G+R+KR5jWSlUyzGibTP3+wi9+HZV/pSLA4h4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(7416002)(81166007)(70206006)(356005)(2906002)(2616005)(82310400004)(26005)(44832011)(8936002)(336012)(4326008)(40460700001)(6666004)(7406005)(8676002)(316002)(426003)(54906003)(1076003)(47076005)(5660300002)(86362001)(70586007)(36756003)(36860700001)(16526019)(6916009)(508600001)(186003)(83380400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 01:18:30.6573
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c8197a3-5fdc-4d2c-b54a-08d9dae99ab8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5089
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAGS_qxpbOM4KuRe_SZ+es7K49_dV+2A1rwKX9bvjeGfSn04s6w@mail.gmail.com>
+References: <20220115080657.2780989-1-sboyd@kernel.org> <CAGS_qxpbOM4KuRe_SZ+es7K49_dV+2A1rwKX9bvjeGfSn04s6w@mail.gmail.com>
+Subject: Re: [PATCH] clk: gate: Add some kunit test suites
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kunit-dev@googlegroups.com
+To:     Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 18 Jan 2022 17:20:50 -0800
+User-Agent: alot/0.10
+Message-Id: <20220119012051.E3738C340E0@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 12:49:30PM -0600, Michael Roth wrote:
-> On Tue, Jan 18, 2022 at 06:41:16PM +0100, Borislav Petkov wrote:
-> > On Tue, Jan 18, 2022 at 11:20:43AM -0600, Michael Roth wrote:
-> > > The HV fills out the initial contents of the CPUID page, which includes
-> > > the count. SNP/PSP firmware will validate the contents the HV tries to put
-> > > in the initial page, but does not currently enforce that the 'count' field
-> > > is non-zero.
-> > 
-> > And regardless, what if the HV fakes the count - how do you figure out
-> > what the proper count is? You go and read the whole CPUID page and try
-> > to make sense of what's there, even beyond the "last" function leaf.
-> 
-> 
+Quoting Daniel Latypov (2022-01-15 13:48:42)
+> On Sat, Jan 15, 2022 at 12:07 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> > Test various parts of the clk gate implementation with the kunit testing
+> > framework.
+> >
+> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> > Cc: <kunit-dev@googlegroups.com>
+> > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+>=20
+> Nice!
+> Some minor nits and suggestions re kunit usage below.
+>=20
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+>=20
+> > ---
+> >
+> > This is a resend of the RFC[1] from almost two years ago! It will be
+> > merged after the merge window closes.
+> >
+> > [1] https://lore.kernel.org/r/20200408035637.110858-1-sboyd@kernel.org
+> >
+> >  drivers/clk/Kconfig         |   8 +
+> >  drivers/clk/Makefile        |   1 +
+> >  drivers/clk/clk-gate-test.c | 481 ++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 490 insertions(+)
+> >  create mode 100644 drivers/clk/clk-gate-test.c
+> >
+> > diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> > index c5b3dc97396a..41e560249370 100644
+> > --- a/drivers/clk/Kconfig
+> > +++ b/drivers/clk/Kconfig
+> > @@ -421,4 +421,12 @@ source "drivers/clk/x86/Kconfig"
+> >  source "drivers/clk/xilinx/Kconfig"
+> >  source "drivers/clk/zynqmp/Kconfig"
+> >
+> > +# Kunit test cases
+> > +config CLK_GATE_TEST
+> > +       tristate "Basic gate type Kunit test"
+> > +       depends on KUNIT
+> > +       default KUNIT
+> > +       help
+> > +         Kunit test for the basic clk gate type.
+>=20
+> minor nit: since the previous version, there is now
+> https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kc=
+onfig-entries
+>=20
+> so something like:
+> config CLK_GATE_KUNIT_TEST
+>   tristate "Basic gate type KUnit test" if !KUNIT_ALL_TESTS
+>   depends on KUNIT
+>   default KUNIT_ALL_TESTS
+> ...
+>=20
+> would be the way to go.
 
-<snip>
+Got it. Thanks!
 
-> > 
-> > But see above, how do you check whether the HV hasn't "hidden" some
-> > entries by modifying the count field?
-> > 
-> > Either I'm missing something or this sounds really weird...
-> 
-> ...count must match the actual number of entries in the table in all
-> cases.
+>=20
+> On a related note, you could add a .kunitconfig file to make running
+> this easier:
+> $ cat drivers/clk/.kunitconfig
+> CONFIG_KUNIT=3Dy
+> CONFIG_COMMON_CLK=3Dy
+> CONFIG_CLK_GATE_TEST=3Dy
 
-Turns out in my testing earlier there was a separate check that was
-causing the PSP to fail, so I re-tested the behavior, and things are
-actually a bit more interesting, but nothing too concerning:
+Sure that works for me. I was using my own kunitconfig file and then
+running all 'clk*' tests. This would make it easier I suppose. Too bad
+the pattern match can't figure out what dependencies to enable.
 
-If 'fake_count'/'reported_count' is greater than the actual number of
-entries in the table, 'actual_count', then all table entries up to
-'fake_count' will also need to pass validation. Generally the table
-will be zero'd out initially, so those additional/bogus entries will
-be interpreted as a CPUID leaves where all fields are 0. Unfortunately,
-that's still considered a valid leaf, even if it's a duplicate of the
-*actual* 0x0 leaf present earlier in the table. The current code will
-handle this fine, since it scans the table in order, and uses the
-valid 0x0 leaf earlier in the table.
+>=20
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/clk
+> ...
+> Testing complete. Passed: 17, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
+>=20
+> There's not much in the way of dependencies here so it doesn't help that =
+much.
+> But it is an option if you want a one-liner way to be able to run the tes=
+t.
+>=20
+> > +
+> >  endif
+> > diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> > index e42312121e51..dcdb75712940 100644
+> > --- a/drivers/clk/Makefile
+> > +++ b/drivers/clk/Makefile
+> > @@ -6,6 +6,7 @@ obj-$(CONFIG_COMMON_CLK)        +=3D clk-divider.o
+> >  obj-$(CONFIG_COMMON_CLK)       +=3D clk-fixed-factor.o
+> >  obj-$(CONFIG_COMMON_CLK)       +=3D clk-fixed-rate.o
+> >  obj-$(CONFIG_COMMON_CLK)       +=3D clk-gate.o
+> > +obj-$(CONFIG_CLK_GATE_TEST)    +=3D clk-gate-test.o
+> >  obj-$(CONFIG_COMMON_CLK)       +=3D clk-multiplier.o
+> >  obj-$(CONFIG_COMMON_CLK)       +=3D clk-mux.o
+> >  obj-$(CONFIG_COMMON_CLK)       +=3D clk-composite.o
+> > diff --git a/drivers/clk/clk-gate-test.c b/drivers/clk/clk-gate-test.c
+> > new file mode 100644
+> > index 000000000000..b499c2ffa815
+> > --- /dev/null
+> > +++ b/drivers/clk/clk-gate-test.c
+>=20
+> again a minor nit: clk_gate_test.c or clk_gate_kunit.c would be the
+> preferred names now:
+> https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-kc=
+onfig-entries
+>=20
+> Note that KUnit itself doesn't follow its own naming guidelines unfortuna=
+tely.
 
-This is isn't really a special case though, it falls under the general
-category of a hypervisor inserting garbage entries that happen to pass
-validation, but don't reflect values that a guest would normally see.
-This will be detectable as part of guest owner attestation, since the
-guest code is careful to guarantee that the values seen after boot,
-once the attestation stage is reached, will be identical to the values
-seen during boot, so if this sort of manipulation of CPUID values
-occurred, the guest owner will notice this during attestation, and can
-abort the boot at that point. The Documentation patch addresses this
-in more detail.
+How about clk-gate_test.c then? I'd like it to match the clk-gate.c
+file but can support the _test suffix.
 
-If 'fake_count' is less than 'actual_count', then the PSP skips
-validation for anything >= 'fake_count', and leaves them in the table.
-That should also be fine though, since guest code should never exceed
-'fake_count'/'reported_count', as that's a blatant violation of the
-spec, and it doesn't make any sense for a guest to do this. This will
-effectively 'hide' entries, but those resulting missing CPUID leaves
-will be noticeable to the guest owner once attestation phase is
-reached.
+>=20
+> > @@ -0,0 +1,481 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Kunit test for clk gate basic type
+> > + */
+> > +#include <linux/clk.h>
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/platform_device.h>
+> > +
+> > +#include <kunit/test.h>
+> > +
+> > +static void clk_gate_register_test_dev(struct kunit *test)
+> > +{
+> > +       struct clk_hw *ret;
+> > +       struct platform_device *pdev;
+> > +
+> > +       pdev =3D platform_device_register_simple("test_gate_device", -1=
+, NULL, 0);
+> > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+> > +
+> > +       ret =3D clk_hw_register_gate(&pdev->dev, "test_gate", NULL, 0, =
+NULL,
+> > +                                  0, 0, NULL);
+> > +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, ret);
+>=20
+> I think we want ASSERT here, otherwise we segfault below.
 
-This does all highlight the need for some very thorough guidelines
-on how a guest owner should implement their attestation checks for
-cpuid, however. I think a section in the reference implementation
-notes/document that covers this would be a good starting point. I'll
-also check with the PSP team on tightening up some of these CPUID
-page checks to rule out some of these possibilities in the future.
+Fixed.
 
-> in the table. count==0 is only special in that code might erroneously
-> decide to treat it as an indicator that cpuid table isn't enabled at
-> all, but since that case causes termination it should actually be ok.
-> 
-> Though I wonder if we should do something like this to still keep
-> callers from relying on checking count==0 directly:
-> 
->   static const struct snp_cpuid_info *
->   snp_cpuid_info_get_ptr(void)
->   {
->           const struct snp_cpuid_info *cpuid_info;
->           void *ptr;
->   
->           /*
->            * This may be called early while still running on the initial identity
->            * mapping. Use RIP-relative addressing to obtain the correct address
->            * in both for identity mapping and after switch-over to kernel virtual
->            * addresses.
->            */
->           asm ("lea cpuid_info_copy(%%rip), %0"
->                : "=r" (ptr)
->                : "p" (&cpuid_info_copy));
->   
->           cpuid_info = ptr;
->           if (cpuid_info->count == 0)
->                   return NULL
->   
->           return cpuid_info;
->   }
+>=20
+> > +       KUNIT_EXPECT_STREQ(test, "test_gate", clk_hw_get_name(ret));
+> > +       KUNIT_EXPECT_EQ(test, 0UL, clk_hw_get_flags(ret));
+> > +
+[...]
+> > +
+> > +static struct clk_gate_test_context *clk_gate_test_alloc_ctx(struct ku=
+nit *test)
+> > +{
+> > +       struct clk_gate_test_context *ctx;
+> > +
+> > +       test->priv =3D ctx =3D kzalloc(sizeof(*ctx), GFP_KERNEL);
+>=20
+> It looks like kunit_kzalloc() here would work as well.
+> It should also be a bit safer, i.e. we won't leak ctx if
+> clk_hw_register_fixed_rate() errors out in the init func.
 
-Nevermind, that doesn't work since snp_cpuid_info_get_ptr() is also called
-by snp_cpuid_info_get_ptr() *prior* to initializing the table, so it ends
-seeing cpuid->count==0 and fails right away. So your initial suggestion
-of checking cpuid->count==0 at the call-sites to determine if the table
-is enabled is probably the best option.
+Ok.=20
 
-Sorry for the noise/confusion.
+>=20
+> > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+> > +       ctx->fake_mem =3D (void __force __iomem *)&ctx->fake_reg;
+> > +
+> > +       return ctx;
+> > +}
+> > +
+> > +static void clk_gate_test_parent_rate(struct kunit *test)
+> > +{
+> > +       struct clk_gate_test_context *ctx =3D test->priv;
+> > +       struct clk_hw *parent =3D ctx->parent;
+> > +       struct clk_hw *hw =3D ctx->hw;
+> > +       unsigned long prate =3D clk_hw_get_rate(parent);
+> > +       unsigned long rate =3D clk_hw_get_rate(hw);
+> > +
+> > +       KUNIT_EXPECT_EQ(test, prate, rate);
+> > +}
+> > +
+> > +static void clk_gate_test_enable(struct kunit *test)
+> > +{
+> > +       struct clk_gate_test_context *ctx =3D test->priv;
+> > +       struct clk_hw *parent =3D ctx->parent;
+> > +       struct clk_hw *hw =3D ctx->hw;
+> > +       struct clk *clk =3D hw->clk;
+> > +       int ret;
+> > +       u32 enable_val =3D BIT(5);
+> > +
+> > +       ret =3D clk_prepare_enable(clk);
+> > +       KUNIT_ASSERT_EQ(test, ret, 0);
+>=20
+> optional: in the cases where it's short enough, I'd personally favor
+> KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+>=20
+> That way we get more context in the assertion failure messages.
+
+Makes sense.

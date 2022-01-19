@@ -2,83 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414A2493CD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87576493CDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 16:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355639AbiASPTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 10:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355674AbiASPTh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 10:19:37 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA87C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:19:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=kk4iiZlTUErZ2U15xjq9e8hcwi3VB+ffwZoiM0tGleg=; b=BfpWeP5Q4p+zlpOPaS7txxFJfQ
-        ctKueDE3fz6BuT0dnaxoZf4OIds4bagEHeOR2KwwuG/1qFxCnRZ7oQ1ee9luKYtL1DLekZpzmzgIr
-        spOia+ET4pSxtbIFHSCFE1pQKFMB1A4zAdQCabTNY+DtyAKymHIeWFQAxwNuhu1Rqq6UaYoptO4y9
-        gwPr30497c5060Yi50OAN9mumd4Eumxqhp8UHvV4a7I46Jp6vjXe0Qu2/lUSIczLyVQu6wemyqUEz
-        K1VmDV3E6Sw7a3b5IqNyN3HO9OSvfHE8m+JQhyY9dFRMpiKLQB7WSSlbGXiU9AT2X9JsWtZw/6whr
-        /RbSRw9g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nACkD-0026hj-SG; Wed, 19 Jan 2022 15:19:31 +0000
-Message-ID: <dd6c45ef-70a4-9a54-affe-2bab17e13ce0@infradead.org>
-Date:   Wed, 19 Jan 2022 07:19:24 -0800
+        id S1355669AbiASPUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 10:20:21 -0500
+Received: from phobos.denx.de ([85.214.62.61]:33902 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238769AbiASPUT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 10:20:19 -0500
+Received: from maia.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: hws@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id CE92980F9E;
+        Wed, 19 Jan 2022 16:20:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1642605618;
+        bh=7B4oNDkbh8GhEvlk0UqgZzjj2/33cChE0+LE0LwNNao=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=X6JUIFsxNwkyCqWvt65PoMmKKlthEQ0aRnVyteLgctpsmfDtov98ilzjvEj/UlnPS
+         GCK+9G2wKkYWw8rmeX4AsholAExyE1MbeDQV/vn5gEpg/5fg1mK+8K98Y7vildwX5l
+         eKC9RH14qgwfe5PVvMvlXcgHOGorYQ9ndrQAua1HEjeEW6mjkzpPSBJl49Uz1qyduW
+         yamv8o8txFBoty5dmuqi1uCA3VhBBxkHR1mq9uRhKVBrBOE5oaHu42wmUHKmWp0Yud
+         WYoBSTY0NQ+JVKX7XHLXhtw0dKQq0I4ZIKXojofrnH12qw3gkI39nDs8ea3R8stdwL
+         K3P9P/BlBEc4Q==
+Message-ID: <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
+Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
+From:   Harald Seiler <hws@denx.de>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 19 Jan 2022 16:20:12 +0100
+In-Reply-To: <20220119151145.zft47rzebnabiej2@pengutronix.de>
+References: <20220119145204.238767-1-hws@denx.de>
+         <20220119151145.zft47rzebnabiej2@pengutronix.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-Ije/lCSSUJW1kFgl5Yjm"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] staging: fwserial: rearrange comment to avoid warning
-Content-Language: en-US
-To:     Ajith P V <ajithpv.linux@gmail.com>, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220119084159.5759-1-ajithpv.linux@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220119084159.5759-1-ajithpv.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 1/19/22 00:41, Ajith P V wrote:
-> fwserial.h comment contains word "bits" 2 times together.
-> The sentence required this however it produce warning.
-> Change the comment to make it proper.
+--=-Ije/lCSSUJW1kFgl5Yjm
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Is that a warning from checkpatch?
-If so, it's OK to ignore something like that.
-checkpatch isn't perfect and we know that.
+Hi,
 
+On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K=C3=B6nig wrote:
+> On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
+> > Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
+> > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
+> > few 100us of additional overhead on slower i.MX platforms.
+> >=20
+> > Implement a fast path when the delays are 0, where the RTS signal is
+> > toggled immediately instead of going through an hrtimer.  This fast pat=
+h
+> > behaves identical to the code before delay support was implemented.
+> >=20
+> > Signed-off-by: Harald Seiler <hws@denx.de>
+> > ---
+> >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
+> >  1 file changed, 14 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> > index df8a0c8b8b29..67bbbb69229d 100644
+> > --- a/drivers/tty/serial/imx.c
+> > +++ b/drivers/tty/serial/imx.c
+> > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *por=
+t)
+> >  	if (port->rs485.flags & SER_RS485_ENABLED) {
+> >  		if (sport->tx_state =3D=3D SEND) {
+> >  			sport->tx_state =3D WAIT_AFTER_SEND;
+> > -			start_hrtimer_ms(&sport->trigger_stop_tx,
+> > +
+> > +			if (port->rs485.delay_rts_after_send > 0) {
+> > +				start_hrtimer_ms(&sport->trigger_stop_tx,
+> >  					 port->rs485.delay_rts_after_send);
+> > -			return;
+> > +				return;
+> > +			}
+> > +
+> > +			/* continue without any delay */
+>=20
+> Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER_SEND ?
 
-or if someone wants to apply the patch, ok.
+I am keeping the assignment intentionally, to fall into the
+if(state =3D=3D WAIT_AFTER_RTS) below (which then sets the state to OFF).
+I originally had the code structured like this:
 
-> Signed-off-by: Ajith P V <ajithpv.linux@gmail.com>
-> ---
->  drivers/staging/fwserial/fwserial.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/fwserial/fwserial.h b/drivers/staging/fwserial/fwserial.h
-> index 1d15f183e0fa..ae7cf84ceafc 100644
-> --- a/drivers/staging/fwserial/fwserial.h
-> +++ b/drivers/staging/fwserial/fwserial.h
-> @@ -203,7 +203,7 @@ struct fwconsole_ops {
->   * @break_last: timestamp in jiffies from last emit_breaks
->   * @hangup: work responsible for HUPing when carrier is dropped/lost
->   * @mstatus: loose virtualization of LSR/MSR
-> - *         bits 15..0  correspond to TIOCM_* bits
-> + *         bits 15..0  correspond to bits TIOCM_*
->   *         bits 19..16 reserved for mctrl
->   *         bit 20      OOB_TX_THROTTLE
->   *	   bits 23..21 reserved
+	if (port->rs485.delay_rts_after_send > 0) {
+		sport->tx_state =3D WAIT_AFTER_SEND;
+		start_hrtimer_ms(&sport->trigger_stop_tx,
+			 port->rs485.delay_rts_after_send);
+		return;
+	} else {
+		/* continue without any delay */
+		sport->tx_state =3D WAIT_AFTER_SEND;
+	}
 
-thanks.
--- 
-~Randy
+This is functionally identical, but maybe a bit more explicit.
+
+Not sure what is more clear to read?
+
+> >  		}
+> > =20
+> >  		if (sport->tx_state =3D=3D WAIT_AFTER_RTS ||
+> > @@ -698,9 +703,14 @@ static void imx_uart_start_tx(struct uart_port *po=
+rt)
+> >  				imx_uart_stop_rx(port);
+> > =20
+> >  			sport->tx_state =3D WAIT_AFTER_RTS;
+> > -			start_hrtimer_ms(&sport->trigger_start_tx,
+> > +
+> > +			if (port->rs485.delay_rts_before_send > 0) {
+> > +				start_hrtimer_ms(&sport->trigger_start_tx,
+> >  					 port->rs485.delay_rts_before_send);
+> > -			return;
+> > +				return;
+> > +			}
+> > +
+> > +			/* continue without any delay */
+>=20
+> Here similar question here about sport->tx_state =3D WAIT_AFTER_RTS;
+
+Same as above, but with WAIT_AFTER_RTS of course...
+
+--=20
+Harald
+
+--=-Ije/lCSSUJW1kFgl5Yjm
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJABAABCAAqFiEETcH23ThHylbMjihC+a//80/kShkFAmHoLCwMHGh3c0BkZW54
+LmRlAAoJEPmv//NP5EoZlaQP/18hVpxOfVIAdWcKZTKiXGzS4KtLUzu9YRES2HmE
+LcjVZJFe1wa77reft5ceHWCWnKCSmDKihMvquvnHjtdWVqwqxdRvEXp14c3P1zhs
+lim9dYDzLqm8/lU3LOU/JIjIozcPk149Xsq4Ja4me8shyaQ3zWwhzI50YxBhh6VU
+/zRyslnrSFQGjqj6SYW2sqnSvzXw7+rVYGQoTBe1qVDdia1EbgCS76KQTmwidEPn
+wIaT9NjqSJPAJyGVv65XGb85MwI5Zb7O4Zb/9gLJZTAgTNhhEirograVyW1+wVW4
+78ualeLnhNIp7f2M6ZH5sfdSus8TIeNkUYN915z524vx1Z8chSE5IE12FqtTSaoZ
+oO2Tv2Tr5MWi207jhDX8Go/JVzeHfceSgRlIlHY58GSV6y73eHa3oq7n0ig/3FZq
+oYPz+cV1T5/1iahMZiFKaGr3i8lgTgU6NE0J71X4oEwurFAWli04dPvrnjoK8rZn
+L3VRi7ZY+eT6jlqoS542aQj3/HokQ5gM5kJU2b4JDQDqnjXilpp1ZfN6JcUh0s29
+u2//AK9ATTaKAlnrRqsWMtHC9FkVXSH2QnrQrQQa3CGa6VtcEF1onBcCS80553WF
+YlycYWnz1t2KDMZ9PNOzI8+oSrI+s2dHHgAqJez9J4i07eb+gSwVCIIkpxGDVOA+
+oJFT
+=U071
+-----END PGP SIGNATURE-----
+
+--=-Ije/lCSSUJW1kFgl5Yjm--

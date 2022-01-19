@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1912494006
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40195494009
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356819AbiASShd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:37:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45809 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355446AbiASShc (ORCPT
+        id S1356833AbiASShn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:37:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45190 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356825AbiASShm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:37:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642617451;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rorpKq4thwCv1KEG1dELrIisL1eH74YJusfX4RC+vh4=;
-        b=azI1ISY57b4AsjAmL6ue/VoZ4b4FnuFqUjsKTHo7D5qHKvX7iFyBFhPQMEzPxuXDBJ0psu
-        x/jMbm/00EHIefDnugZg5eRefR9KTPgupDHmRbO2pZdv+eLqtZI1KYvYqMjiquUingHhtb
-        rTwUXTjaAJS2RpI6Nzf4eV6UmZRmvus=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-359-2KBUa5ZdNuGk8k1auccOkA-1; Wed, 19 Jan 2022 13:37:30 -0500
-X-MC-Unique: 2KBUa5ZdNuGk8k1auccOkA-1
-Received: by mail-wm1-f71.google.com with SMTP id f187-20020a1c38c4000000b0034d5c66d8f5so2448155wma.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:37:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rorpKq4thwCv1KEG1dELrIisL1eH74YJusfX4RC+vh4=;
-        b=mjsqRM/1VsAq44JRiZQUcKiMY8Sd9yiaVTXfe8IEHArF+BjoVMaSmPMmCYrDibLZPK
-         rQbygyWYFTs3jADJkYCMq0tToIjiU+FYhDlCpi85oloZrDFOI9Lsw1ikhcbGApVojEhc
-         syFpkKei2GPF5LJMvgzq/Hp2PlwrohAbztQ3oDa/IyGTGGqURCY45hg8VYNo4+IbICHA
-         fWWTpZEPv41G9ImLRujWAZpc1TOBw9jioz4aBlpg/FL15mEGByarprN5DmWcDDrS30M1
-         lwqIFKQiNEcT+IeRs65ib/Zmm4GM7Yh1i7PYUlFvpEXLPBDNE3ptl/eOOmt2ZJd4Ncf1
-         Z5zA==
-X-Gm-Message-State: AOAM533LBkFN/d6TZU1cPDS7IWWzM59+g7KegGUndsTkAk6pwOQxKzF7
-        iF7v8PHt+C95bJ6xhVBfwrAKGFGiu7OJgsOeJ2z9i2CIvQIHnFmGa7rbIek+GVb7TQkju3FseKK
-        hgjKpyY4g8bzweGIggswveN3c
-X-Received: by 2002:a7b:c5c4:: with SMTP id n4mr4881008wmk.134.1642617449192;
-        Wed, 19 Jan 2022 10:37:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyuPjrpRwwRlHfIoCBn2mOel4lTHQHrc3MO/7ZP8UPstbYjQOqGevgMBrzyQV+VDTreeNVJ+A==
-X-Received: by 2002:a7b:c5c4:: with SMTP id n4mr4880983wmk.134.1642617448949;
-        Wed, 19 Jan 2022 10:37:28 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id 9sm793256wrb.77.2022.01.19.10.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 10:37:28 -0800 (PST)
-Message-ID: <06e16701-1380-8186-2f21-e5cc5a5c8467@redhat.com>
-Date:   Wed, 19 Jan 2022 19:37:26 +0100
+        Wed, 19 Jan 2022 13:37:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3CDAB81B00
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:37:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E24C004E1;
+        Wed, 19 Jan 2022 18:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642617459;
+        bh=szT+VEBWfzNOkhPz4gHRcX0/BQhdb2Yct5Xv9ggEJVc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=K1/QIx297J8TFKBJWjCktT3OfQuL0SvWzyfGIsCfFMILXqFjqlGRnzuksJh16gpDD
+         3aUSEAsHWi6udErj39AXGZdC5Dn2mdKAVxrmTQeG/X2bccT3pWLV5GxlWDsKJMzjXt
+         tD+J/PN9m47GOLAmSjxCKbWXPQpAF4Whh5grViOEL97Art1FYp+mJ0/uCKYqUHzMdM
+         rEVMUbibrwiM23aOnVmSZwiZNcjHMtaexPLC0A87tYP/+BEawVTGPcWk2m++PUVdGv
+         9bgGzkVFQgtznU9ENCiW2IjYf6AztysUU/yzwHB3zXXUjOujREEkPIm9d0SOtOrqGP
+         2NYWckqNsw5Vw==
+Date:   Wed, 19 Jan 2022 12:37:37 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Marc Zyngier <maz@kernel.org>, Tong Zhang <ztong0001@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI/MSI: Prevent UAF in error path
+Message-ID: <20220119183737.GA954267@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] selftests: kvm/x86: Fix the warning in
- pmu_event_filter_test.c
-Content-Language: en-US
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220119133910.56285-1-cloudliang@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220119133910.56285-1-cloudliang@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r1938vbn.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 14:39, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
+On Wed, Jan 19, 2022 at 06:54:52PM +0100, Thomas Gleixner wrote:
+> When the core MSI allocation fails, then the PCI/MSI code uses an already
+> freed MSI descriptor to unmask the MSI mask register in order to bring it back
+> into reset state.
 > 
-> The following warning appears when executing
-> make -C tools/testing/selftests/kvm
+> Remove MSI_FLAG_FREE_MSI_DESCS from the PCI/MSI irqdomain flags and let the
+> PCI/MSI code free the MSI descriptors after usage.
 > 
-> x86_64/pmu_event_filter_test.c: In function ‘vcpu_supports_intel_br_retired’:
-> x86_64/pmu_event_filter_test.c:241:28: warning: variable ‘cpuid’ set but not used [-Wunused-but-set-variable]
->    241 |         struct kvm_cpuid2 *cpuid;
->        |                            ^~~~~
-> x86_64/pmu_event_filter_test.c: In function ‘vcpu_supports_amd_zen_br_retired’:
-> x86_64/pmu_event_filter_test.c:258:28: warning: variable ‘cpuid’ set but not used [-Wunused-but-set-variable]
->    258 |         struct kvm_cpuid2 *cpuid;
->        |                            ^~~~~
-> 
-> Just delete the unused variables to stay away from warnings.
-> 
-> Fixes: dc7e75b3b3ee ("selftests: kvm/x86: Add test for KVM_SET_PMU_EVENT_FILTER")
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> Fixes: 0f62d941acf9 ("genirq/msi: Provide msi_domain_alloc/free_irqs_descs_locked()")
+> Reported-by: Tong Zhang <ztong0001@gmail.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+What does "UAF" stand for?  Ah, "use after free" I guess?
+
+Let me know if I should take this.  Otherwise I assume it'll go
+whereever 0f62d941acf9 went.
+
 > ---
->   tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c | 4 ----
->   1 file changed, 4 deletions(-)
+>  drivers/pci/msi/irqdomain.c |    4 ++--
+>  drivers/pci/msi/legacy.c    |    1 -
+>  2 files changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> index 8ac99d4cbc73..0611a5c24bbc 100644
-> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> @@ -238,9 +238,7 @@ static void test_not_member_allow_list(struct kvm_vm *vm)
->   static bool vcpu_supports_intel_br_retired(void)
->   {
->   	struct kvm_cpuid_entry2 *entry;
-> -	struct kvm_cpuid2 *cpuid;
->   
-> -	cpuid = kvm_get_supported_cpuid();
->   	entry = kvm_get_supported_cpuid_index(0xa, 0);
->   	return entry &&
->   		(entry->eax & 0xff) &&
-> @@ -255,9 +253,7 @@ static bool vcpu_supports_intel_br_retired(void)
->   static bool vcpu_supports_amd_zen_br_retired(void)
->   {
->   	struct kvm_cpuid_entry2 *entry;
-> -	struct kvm_cpuid2 *cpuid;
->   
-> -	cpuid = kvm_get_supported_cpuid();
->   	entry = kvm_get_supported_cpuid_index(1, 0);
->   	return entry &&
->   		((x86_family(entry->eax) == 0x17 &&
-
-Queued, thanks.
-
-Paolo
-
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -28,6 +28,7 @@ void pci_msi_teardown_msi_irqs(struct pc
+>  		msi_domain_free_irqs_descs_locked(domain, &dev->dev);
+>  	else
+>  		pci_msi_legacy_teardown_msi_irqs(dev);
+> +	msi_free_msi_descs(&dev->dev);
+>  }
+>  
+>  /**
+> @@ -171,8 +172,7 @@ struct irq_domain *pci_msi_create_irq_do
+>  	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+>  		pci_msi_domain_update_chip_ops(info);
+>  
+> -	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS |
+> -		       MSI_FLAG_FREE_MSI_DESCS;
+> +	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS;
+>  	if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
+>  		info->flags |= MSI_FLAG_MUST_REACTIVATE;
+>  
+> --- a/drivers/pci/msi/legacy.c
+> +++ b/drivers/pci/msi/legacy.c
+> @@ -77,5 +77,4 @@ void pci_msi_legacy_teardown_msi_irqs(st
+>  {
+>  	msi_device_destroy_sysfs(&dev->dev);
+>  	arch_teardown_msi_irqs(dev);
+> -	msi_free_msi_descs(&dev->dev);
+>  }

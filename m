@@ -2,63 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2A74936FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669BE493700
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352852AbiASJQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:16:37 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:53414 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1352882AbiASJQb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:16:31 -0500
-X-UUID: f7433a76f4a14f8b8af01be528ce64f4-20220119
-X-UUID: f7433a76f4a14f8b8af01be528ce64f4-20220119
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 974005258; Wed, 19 Jan 2022 17:16:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 19 Jan 2022 17:16:26 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 17:16:26 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <jason@zx2c4.com>
-CC:     <ardb@kernel.org>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
-Date:   Wed, 19 Jan 2022 17:16:23 +0800
-Message-ID: <20220119091626.3636-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <CAHmME9rWs_w_dMfDLFuD-tr79cnVyuny4fLn9Wh0+bs76Nt0MA@mail.gmail.com>
-References: <CAHmME9rWs_w_dMfDLFuD-tr79cnVyuny4fLn9Wh0+bs76Nt0MA@mail.gmail.com>
+        id S1352952AbiASJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:16:56 -0500
+Received: from mga01.intel.com ([192.55.52.88]:30150 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352542AbiASJQz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 04:16:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642583815; x=1674119815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T5k5+aL/Td18XDwN5Hgq2WXf3US5aHXEp9ssQzoBTQA=;
+  b=PDyUQHDF6SL78ub9w59FDyAFJTna80cNeZ5qffudTIScQEYvmQVpbPi1
+   yKnWksK1HohVVnbzBrEU50lNhbNF/T4JnAQkjBxwrutBWJKMTDoixwRCG
+   tpUguRKnAeyXUFcK9VWpfQhxaIMqWLkmtFSvGYqjhOPNh0N+sww30po+J
+   AmGieYLtKjwdnUFsMtt8jh4puO3omVjUZiLtT7bYro/p4zHMAGpJb9YoM
+   ffGjzI7Ri2he6nDpu5Loo23iEYUgvWIkmvlatyqrTrNtWNQBlkLwdLFOu
+   MSyfzUBddu54vT/wXPfFq9e6dR6eGXMyQ/vtPSDsQ+xmlyXmBOL6G/d8K
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269413694"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="269413694"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 01:16:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="475070518"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 01:16:53 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 0112E203C8;
+        Wed, 19 Jan 2022 11:16:51 +0200 (EET)
+Date:   Wed, 19 Jan 2022 11:16:50 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Tu, ShawnX" <shawnx.tu@intel.com>
+Cc:     lkp <lkp@intel.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [sailus-media-tree:master 15/16]
+ drivers/media/i2c/hi847.c:2700:35: error: incompatible pointer types passing
+ 'struct v4l2_subdev_pad_config *' to parameter of type 'struct
+ v4l2_subdev_state *'
+Message-ID: <YefXAutAzAtffdpf@paasikivi.fi.intel.com>
+References: <202201141739.Q7kFIE7g-lkp@intel.com>
+ <3e680a691f9543fabf4b2cdc5de2bf6d@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e680a691f9543fabf4b2cdc5de2bf6d@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->typedef void (*blake2s_compress_t)(struct blake2s_state *state,
->				   const u8 *block, size_t nblocks, u32 inc);
->
->should become
->
->typedef void (*blake2s_compress_t)(struct blake2s_state *state,
->				   const u8 *block, size_t nblocks, const u32 inc);
->
->Does making that change fix things for you?
->
->Thanks,
->Jason
+Hi Shawn,
 
-Thanks for your fast response.
-It does not work. I tried this before reverting the commit 6048fdcc5f26.
+On Wed, Jan 19, 2022 at 03:06:09AM +0000, Tu, ShawnX wrote:
+> Hi Sakari,
+> 
+> It has uploaded fixed V2 patch to the server.
+> * [PATCH v2] media: hi847: Add support for Hi-847 sensor
+> https://github.com/0day-ci/linux/commits/Shawnx-Tu/media-hi847-Add-support-for-Hi-847-sensor/20220113-120102
+> 
+> But I still see the lkp build error message and use previous V1 patch to build.
+> Could you help to check? If needs to fix the driver, I'll upload new one.
 
-Miles
+I've replaced the earlier one by v2 in my tree.
+
+-- 
+Sakari Ailus

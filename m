@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C91C49354F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD35493555
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351958AbiASHSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:18:21 -0500
-Received: from smtpcmd14161.aruba.it ([62.149.156.161]:40320 "EHLO
-        smtpcmd14161.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239455AbiASHSU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:18:20 -0500
-Received: from [192.168.50.220] ([146.241.178.108])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id A5EWnaozcNVvLA5EWnhZOS; Wed, 19 Jan 2022 08:18:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1642576697; bh=mJN2JzB66nhzQ/3dLiZz1vk067KP4+Y0QiJnGlWs43w=;
-        h=Subject:To:From:Date:MIME-Version:Content-Type;
-        b=kT7f0RNpEyFgKoct160Th8nr5N7jy5yk+An5U97QHYIWmI4O+BYpFqDk6zhinBqBa
-         3nrRkicW64KbVpfJY2W7yZyj9AW6Q5jmNYlJOfuFkQTJrny6PxiFSZaQvcmMtJfXZi
-         gIPLE0xqqGoRbmCvOiqd/Ck95WTrbLpkwjYo5jAVk7QehcGssQc/L/xHpuaD260b0I
-         RVlRgE/JEbRwX4llXAztV9/1IgWWoxkMJ41c4I3WEZgJ/Lo3QeqrbdsLmMLz9JwFZT
-         kLmBllVCsGQoz8HqSq9oxHh0TAz6m0vdS5xsObFGFB6glzT1ntcqj5qHQYgY5GSxTb
-         Vk30DeEtlDaYQ==
-Subject: Re: [PATCH 0/7] Fix wrong static ip autoconf in some dts and
- defconfig
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Rob Herring <robh+dt@kernel.org>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211102235456.710617-1-giulio.benetti@benettiengineering.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <15227efe-0a85-b36d-41dd-28b93e3d35b3@benettiengineering.com>
-Date:   Wed, 19 Jan 2022 08:18:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1351922AbiASHVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:21:23 -0500
+Received: from mga11.intel.com ([192.55.52.93]:59860 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239455AbiASHVX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 02:21:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642576883; x=1674112883;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UlyLrecXPFLtaUGmJDSkWxMDzv0o/7oN26Rnww04KwA=;
+  b=NxdK7ltY3DpkkgXbFlra7KFrYv4s5XO0cbdqIvZ+pBpkrRR7nA/eLFww
+   FZiCCXjej5qO0PDqQAIVBYbw6DlO5tgnzicYFO7WrciCta7HKBhj1E7BJ
+   Yzb4xJzY3yjeGJc8CujZTqnqK1kAB5cOAvCM8BMOByOntPW86KGtsYlfG
+   gVqjHQZcGUcn2P4C2tshDysdqUFULzGH0bndRQvhqh44iievj73uVlW0d
+   uE4bUTB4LhHvDSDmyonJRfNPBykw/zUWhUkn+AtlLhg+2fcSXSyMsDtul
+   cECql9Uddj44B87CD7KxJO57TebHavVf59LaCgL9KIFlIf8CVanxTk8xk
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="242566853"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="242566853"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 23:21:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="767165783"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Jan 2022 23:21:21 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA5HV-000DMh-4S; Wed, 19 Jan 2022 07:21:21 +0000
+Date:   Wed, 19 Jan 2022 15:20:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matteo Croce <mcroce@microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 21/80] string.c:(.text+0x1184): multiple
+ definition of `memset'; mm/kasan/shadow.o:shadow.c:(.text+0xfc): first
+ defined here
+Message-ID: <202201191551.ZXYUjRiZ-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211102235456.710617-1-giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfOWKvyd8chqFGfnfQ8iHIc7WmNyH2l7dxsRKNKk2ldRelx9vHYvzURLnUyjIz2fc/WU8I+UrjBf6Cdp4QiOHO7Z6OsVikwvCvgEvQZ523O68rSMhZUt5
- G5j5f7X1P7thcK9ge5aTTkLOlszSQCKlOJHfp9lnhd9KaUaxWyUOVQS84Inm6H7Zon/Z9cwzcXLhD8CH3nPEYBBhFLNKEOkyMGLCpq8x/ZeBtlJA8J2l36jj
- OJzHfQmZpPVBMZJAELZCHqfibUNHamoQOfcvxRcLQhENni8gIdztFwsP3ysTFzTthzqEWof76wDAnzCOI5Oma/ShOJ4JU7tSQfLP6w9grUkKHAn5Mih1Kemk
- JeMJd2mfTcX6A6jgD2JhXSPMxUBBz2ekxHyszCCEWlzw5CCGpMy/opWOnrG2eSpEyqM/XCESKF6foyJq74XpfvdJEhFdHLsnbRaq81HYgF0tCt8yeo5tahjZ
- oOtsnXBr7eaxLvNCFWvT0C+A39k67k8aKy0Pc3a/xFNTlqsnjBZChtMyvxO2fHUq0weeg8YKCnHBkltlle3UVBtCptxwxT/I9Nnc/BTWL0bT+aXkF+Q+jkfM
- Uk48hp8aoPE1E+CTN7894flif4dAWn79MDi/jgVlUmo6YsiZXabO6VpwVlx2GZdkocA=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello All,
+tree:   https://github.com/esmil/linux visionfive
+head:   e46c3a7e373e6faa03399f1a41c29cf7546c37cb
+commit: 55f013c0bc3e224cf34271c3cc11f7443b11553f [21/80] riscv: optimized memset
+config: riscv-randconfig-r042-20220119 (https://download.01.org/0day-ci/archive/20220119/202201191551.ZXYUjRiZ-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/55f013c0bc3e224cf34271c3cc11f7443b11553f
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 55f013c0bc3e224cf34271c3cc11f7443b11553f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-kindly ping,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On 03/11/21 00:54, Giulio Benetti wrote:
-> While trying to have a working nfsroot through RNDIS on sunxi I've found
-> that in bootargs <autoconf> must be set to 'off' to use a static ip setup,
-> but I've also found that the following boards have it set to 'on' that is
-> not the <autoconf> setting for static ip as stated here:
-> https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt
+All error/warnings (new ones prefixed by >>):
 
-the documentantion states "<autoconf> must be set to 'off' to use a 
-static ip setup"...
+   riscv64-linux-ld: lib/string.o: in function `memset':
+>> string.c:(.text+0x1184): multiple definition of `memset'; mm/kasan/shadow.o:shadow.c:(.text+0xfc): first defined here
+   riscv64-linux-ld: lib/string.o: in function `memcpy':
+   string.c:(.text+0x1414): multiple definition of `memcpy'; mm/kasan/shadow.o:shadow.c:(.text+0x174): first defined here
+--
+>> mm/kasan/shadow.c:42:7: warning: no previous prototype for 'memset' [-Wmissing-prototypes]
+      42 | void *memset(void *addr, int c, size_t len)
+         |       ^~~~~~
+   mm/kasan/shadow.c:63:7: warning: no previous prototype for 'memcpy' [-Wmissing-prototypes]
+      63 | void *memcpy(void *dest, const void *src, size_t len)
+         |       ^~~~~~
 
-> And most of all on sunxi RNDIS it doesn't work as static ip nfsroot.
-> 
-> Unfortunately I don't have such boards to give a build and a test, so if
-> there is someone who could give a try it would be great.
-
-...so I don't even think it really deserves a test IMHO.
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Best regards
-> ---
-> Giulio Benetti
-> Benetti Engineering sas
-> 
-> Giulio Benetti (7):
->    ARM: dts: mmp2-brownstone: fix wrong static ip autoconf
->    ARM: dts: pxa168-aspenite: fix wrong static ip autoconf
->    ARM: dts: pxa910-dkb: fix wrong static ip autoconf
->    ARM: mmp2: update mmp2_defconfig to fix wrong static ip autoconf
->    ARM: pxa168: update pxa168_defconfig to fix wrong static ip autoconf
->    ARM: pxa3xx: update pxa3xx_defconfig to fix wrong static ip autoconf
->    ARM: pxa910: update pxa910_defconfig to fix wrong static ip autoconf
-> 
->   arch/arm/boot/dts/mmp2-brownstone.dts | 2 +-
->   arch/arm/boot/dts/pxa168-aspenite.dts | 2 +-
->   arch/arm/boot/dts/pxa910-dkb.dts      | 2 +-
->   arch/arm/configs/mmp2_defconfig       | 2 +-
->   arch/arm/configs/pxa168_defconfig     | 2 +-
->   arch/arm/configs/pxa3xx_defconfig     | 2 +-
->   arch/arm/configs/pxa910_defconfig     | 2 +-
->   7 files changed, 7 insertions(+), 7 deletions(-)
-> 
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

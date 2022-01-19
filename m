@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5CB494018
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF76249401A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356873AbiASSnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:43:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:34984 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356833AbiASSnU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:43:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C31131FB;
-        Wed, 19 Jan 2022 10:43:19 -0800 (PST)
-Received: from [10.57.67.190] (unknown [10.57.67.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E4B93F73D;
-        Wed, 19 Jan 2022 10:43:16 -0800 (PST)
-Message-ID: <e9226eb4-4ecf-ac01-e823-ff507a354ac5@arm.com>
-Date:   Wed, 19 Jan 2022 18:43:10 +0000
+        id S1356881AbiASSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356876AbiASSn6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 13:43:58 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0BC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:43:57 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so3466330pja.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 10:43:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jf8NqUotnPuLOWKkBWsY7N81hJI6QC97c/XS/gK1dQY=;
+        b=N11ilHklzSQ0WWZfPdc6FtRUXJEdv0DcNOeFFxW6n8UwZ6OBlsA41AZ5W6YfGpPZie
+         hLnDFxME2FPL8SCyEnpHfiMyvAjK5WJYQUeLgwO5x4P3hj4gOVSl1jCZxc+tP2mBGdnQ
+         nOiQWgORh9ni/MDeF86SNSP9VS0es0qqzEmjU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jf8NqUotnPuLOWKkBWsY7N81hJI6QC97c/XS/gK1dQY=;
+        b=wJEOkmo5vdMRvIVANGQJTvCK+zqHZALWJn51Ux97tIK2L7G4oDs50HZQwqR3BwDNsn
+         GsLSqprsfo3M8BVI2dtZsW/IxPxuD+tOSJBaQZD/QeMt+BgwAImQKt2m9EfRO572+/8E
+         eGZEttUgBGkw6SvuzlnkN6zFUaieTqQcY+0oM9ywgPd4WnImlXBGbeGjbJwlsGOFw1A2
+         qI4dAl9KOnR9+G3r57RHfgKQk0pPMKMJIztBILgDadTa4i1hScx75GXrA1XqGYv2eU95
+         EXaQbVytU5pgJKspHtmaq1jX88v3xpAbStP9prv5ch7b44pJsjANQ2FxybJmGuM3ADNl
+         9zeQ==
+X-Gm-Message-State: AOAM533Dl0dl3i+yl0cWAQXSd8j0MKiRIr+FudJiIGVqQERnStW689s+
+        dMKvoBuW2dW6DZLjXqHZhaLA+g==
+X-Google-Smtp-Source: ABdhPJyj7rW9pev+19vkk1VY5IFms56pLKvuPJZzE3rnS4Rp81EcueRnKnSBiRJV3777NFMGoInxwA==
+X-Received: by 2002:a17:90a:77c6:: with SMTP id e6mr5873335pjs.41.1642617837196;
+        Wed, 19 Jan 2022 10:43:57 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z13sm430620pfe.20.2022.01.19.10.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 10:43:56 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Huewe <peterhuewe@gmx.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3] tpm: vtpm_proxy: Check length to avoid compiler warning
+Date:   Wed, 19 Jan 2022 10:43:54 -0800
+Message-Id: <20220119184354.3367603-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-Content-Language: en-GB
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220118235244.540103-1-yury.norov@gmail.com>
- <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
- <Yeg79CcofyNuVLid@casper.infradead.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Yeg79CcofyNuVLid@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2200; h=from:subject; bh=FIuPYqfJGsu4u4fPlDiJiKGwPnqpxta/IfVuwmIgSHA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh6FvpqUwHqXWWTKf52yeH1LE75+2AeiESR7YMnXap ySxSr4eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYehb6QAKCRCJcvTf3G3AJnOOD/ kBaMTOE3rFxJhqQiUJQqXi842KK2oyPTv7vXm9evBfQQ869APWfk/2BMgwO+jwdCl74tn9O0zWVg8z V+QnZSbLG4OLBXpn37q9PkB6cX06ZBiEeNNXor6nFEisZ3mOu25ecEaDsS3vUdTYcObjFKA9+/qHo9 KmRU1hBolXTp59eoCGkt9fWWDEMNXfcnz/O8a50cjOFMWI05O/0m2x9Q+JzVRpCKhmqH31mGNAJz3U mT3qYf/lKuUWnK5JZX/1pivFIzm3R8F3+SiQPSzlmPmmjI/XnEsjqo6lSvFZyYEfwSYkv7LJiqfAy5 ztIGElJRu+U+kL9cuaDxpUXP9IyNR+aDrdU4INhOyfjSbUS4ct+4xIv7YjOFyqI/9U3Jx/CalcYHet fDSFRVR+yklGYhHeiVDVmNA9kuwRWq97/IveqifJ71fJE7RK9TmO+GrD/5B9rewgjs8iL5WSGpetaU 5wuoV0W3L8oj5rim+ADX/c+xh/7V906rk2UJzcobRmjg/IzUPxYMPZjtxK0hQEJKlPk81KbwDconmS NVc+WN7KgkgL384tnmByElenJG41lFW5oy8pHSnnezm2g0Tfeo+kzFWYRw5RvoPQ7EBtb1uvmMmKEo yRfVCvq8hErY4dKJns87ys7J3CdF5Vnem5UDKkLVFir5+mD2VaPbTiBJ04tw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-19 16:27, Matthew Wilcox wrote:
-> On Wed, Jan 19, 2022 at 01:28:14PM +0000, Robin Murphy wrote:
->>> +		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
->>
->> Is it page_to_pfn() guaranteed to work without blowing up if page is invalid
->> in the first place? Looking at the CONFIG_SPARSEMEM case I'm not sure that's
->> true...
-> 
-> Even if it does blow up, at least it's blowing up here where someone
-> can start to debug it, rather than blowing up on first access, where
-> we no longer have the invlid struct page pointer.
+When building with -Warray-bounds under GCC 11.2, this warning was
+emitted:
 
-But if that were the case then we'd blow up on the following line when 
-mk_pte(page, prot) ends up calling it same anyway. Indeed it's arguably 
-the best-case scenario since it would also blow up in page_address() if 
-we hit the vmap_range loop rather than going down the 
-vmap_small_pages_range_noflush() path.
+In function 'memset',
+    inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
+./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
+[-Warray-bounds]
+   43 | #define __underlying_memset     __builtin_memset
+      |                                 ^
 
-Furthermore, if you *are* lucky enough to take a fault upon accessing a 
-bogus mapping, then surely a phys_to_page() calculation on whatever 
-ended up in the PTE should get you back the original "pointer" anyway, 
-shouldn't it? Sure it's a bit more work to extract the caller out of the 
-VMA if necessary, but hey, that's debugging! Maybe vmap() failing means 
-you then pass the offending nonsense to __free_pages() and that ruins 
-your day anyway...
+This warning appears to be triggered due to the "count < len"
+check in vtpm_proxy_fops_read() splitting the CFG[1], and the compiler
+attempting to reason about the possible value range in len compared
+to the buffer size.
 
-The implications are infinitely worse if you've mapped something that 
-did happen to be a valid page, but wasn't the *right* page, such that 
-you don't fault but corrupt things or trigger a fatal system error 
-instead. I'd echo Mark's point that if we can't trust a page pointer to 
-be correct then we've already lost. In general the proportion of "wrong" 
-pointers one can viably attempt to detect is so small that it's rarely 
-ever worth trying, and the cases that are so obviously wrong tend to 
-show up well enough in normal operation (although NULL-safety is of 
-course a bit of a special case when it can simplify API usage).
+In order to silence this warning, and to keep this code robust if the
+use of proxy_dev->req_len ever changes in the future, explicitly check
+the size of len before reaching the memset().
 
-> I don't think we have a 'page_valid' function which will tell us whether
-> a random pointer is actually a struct page or not.
+[1] https://lore.kernel.org/lkml/CAG48ez1iTF9KegKJrW5a3WzXgCPZJ73nS2_e5esKJRppdzvv8g@mail.gmail.com
 
-Indeed, my impression is that the only legitimate way to get hold of a 
-page pointer without assumed provenance is via pfn_to_page(), which is 
-where pfn_valid() comes in. Thus pfn_valid(page_to_pfn()) really 
-*should* be a tautology.
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Link: https://lore.kernel.org/lkml/4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v1: https://lore.kernel.org/lkml/20220113002727.3709495-1-keescook@chromium.org
+v2: https://lore.kernel.org/lkml/20220118183650.3386989-1-keescook@chromium.org
+v3: Add more details to the commit log, including a link to Jann's analysis
+---
+ drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I guess in this instance it would be technically feasible to implement a 
-function which checks "is this a correctly-aligned pointer within memmap 
-bounds", but IMO that would be a massive step in the wrong direction. 
-We're developers; sometimes we introduce bugs when developing code, and 
-it takes effort to debug them, but that still doesn't make it a good 
-idea to optimise normal code paths for the expectation of writing new 
-catastrophically-bad bugs. Plus logically if such a "page_valid()" check 
-could be justified at all then that should rightfully lead to a 
-churn-fest of adding it to pretty much every interface which accepts 
-page pointers - one half of vmap() is hardly special.
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 91c772e38bb5..5c865987ba5c 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+ 
+ 	len = proxy_dev->req_len;
+ 
+-	if (count < len) {
++	if (count < len || len > sizeof(proxy_dev->buffer)) {
+ 		mutex_unlock(&proxy_dev->buf_lock);
+ 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
+ 			 count, len);
+-- 
+2.30.2
 
-FWIW, If anything I reckon a DEBUG_VM option that made checks within 
-page_to_x/x_to_page as appropriate would help Yury's issue just as much, 
-while having the potential to be considerably more useful in general.
-
-Cheers,
-Robin.

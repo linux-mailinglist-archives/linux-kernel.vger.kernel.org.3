@@ -2,76 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90284493B25
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8921E493B29
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 14:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350255AbiASNes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 08:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S1354863AbiASNfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 08:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238516AbiASNer (ORCPT
+        with ESMTP id S238516AbiASNfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:34:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC01C061574;
-        Wed, 19 Jan 2022 05:34:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 19 Jan 2022 08:35:21 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B827C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 05:35:21 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F974B8189A;
-        Wed, 19 Jan 2022 13:34:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B128C340E9;
-        Wed, 19 Jan 2022 13:34:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lo/qsE3O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642599280;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B91271EC01A9;
+        Wed, 19 Jan 2022 14:35:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642599315;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KZuC6TmXhJQVSeFuSv1mMMFPmjV47Ffvc9/epCoTyMw=;
-        b=lo/qsE3OdM57p2UPmTM4vhgsJTwEd33zm6WXgphvGllfKgyMDMYAL/ekg+CEXfP4YXyYY6
-        etdTZ/wfi5hqt1w9QzeK76g8zOqVnVlqs9ATDpWRgNPoTvm89wvC/T6qXWD6iOH6npuQGi
-        bjRJctbJQH6hIDE37t1E6Rfmu4qT9TE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d4afa98c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 19 Jan 2022 13:34:40 +0000 (UTC)
-Received: by mail-yb1-f173.google.com with SMTP id m1so7467250ybo.5;
-        Wed, 19 Jan 2022 05:34:40 -0800 (PST)
-X-Gm-Message-State: AOAM530FrciVPFIeptolOo40eZbvW2d9OWsxNCvGTVpcDTYc1Zi78lNP
-        cygai3szlc/ZVqnlJaUgwphmib81FCBXLRx0MSg=
-X-Google-Smtp-Source: ABdhPJwl2oYebyTcjJJzYEcQx1P0FnZ8TEkLTKOLecv3UE1gMShS+rFpjiSNu6UvcQ2d9xR0yhRTcFuoVyPulYXQV48=
-X-Received: by 2002:a05:6902:709:: with SMTP id k9mr15518165ybt.113.1642599277841;
- Wed, 19 Jan 2022 05:34:37 -0800 (PST)
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BNGvzXGl/y0GbmZJgEe+t3c2zavYEGr3Ohli9ZTv3qU=;
+        b=PGQe7g9+fK2wO3nnqpEKLhnjgfeB0YDXKsYHahlQeGjJ6uQm4UCjAdlxYcl1t+P2Du8LNv
+        SVebiSGevl/ZLy0iARZZV8WwBUHIWcTh9yNINLJ6raSCHUNcStrh9Ci0D0oM1/2BaAr/YP
+        qHrNjF9pkciv86/QNNJ/7EKnLcfOjX8=
+Date:   Wed, 19 Jan 2022 14:35:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        david@redhat.com, hpa@zytor.com, jgross@suse.com,
+        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
+        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
+        seanjc@google.com, tony.luck@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/26] x86/tdx: Support TDX guest port I/O at
+ decompression time
+Message-ID: <YegTjdltOFBIDlf2@zn.tnic>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-11-kirill.shutemov@linux.intel.com>
+ <YeAuehoOEjUH3vZ3@zn.tnic>
+ <20220115010155.ss2hnyotw4a3nljf@black.fi.intel.com>
+ <YeK7AJXGN5GVGkRV@zn.tnic>
+ <20220117143920.3umnnlx7dl27cm5z@box.shutemov.name>
+ <YeW2U9vH65NcLHtY@zn.tnic>
+ <20220119115326.rw2aj3ho2mct4xxv@box.shutemov.name>
 MIME-Version: 1.0
-References: <CAHmME9oX+4Ek81xy0nBOegqABH0xYqyONAqinsu7GZ7AaQaqYQ@mail.gmail.com>
- <20220119100615.5059-1-miles.chen@mediatek.com> <CAHmME9pQcUxs87EwQwBZNDA4ZzqugTggH+uiNPh=mv5zjp3g3A@mail.gmail.com>
- <CAHmME9pPKjRLmR6zpYFZT7rOOfHsG2ESnDi+QQrDJuGLo1X4JQ@mail.gmail.com>
- <CAHmME9oGTPS-gVyHQ4o=AxvMJrGH44_tyQ2KPQcfAKgcqC2SnA@mail.gmail.com> <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXEo8kQNeoCdwvBkkW0UeYFQEJwkZ_nj06qjsBDF2Qu2pQ@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 19 Jan 2022 14:34:27 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
-Message-ID: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Miles Chen <miles.chen@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119115326.rw2aj3ho2mct4xxv@box.shutemov.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 1:19 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> I'd prefer it if we could avoid magic #define's like this.
+Raise hpa and tglx to To: for the general direction.
 
-I'll send something that just replaces it with a simple bool.
+Full mail is at
+
+https://lore.kernel.org/r/20220119115326.rw2aj3ho2mct4xxv@box.shutemov.name
+
+On Wed, Jan 19, 2022 at 02:53:26PM +0300, Kirill A. Shutemov wrote:
+> Could you take a look if the diff below is the right direction?
+> 
+> If yes, I will prepare a proper patches. My plan is 3 patches: introduce
+> <asm/shared/io.h>, add 'struct port_io_ops' for early boot, hook up
+> alternative 'struct port_io_ops' for TDX.
+
+Makes sense.
+
+> diff --git a/arch/x86/boot/boot.h b/arch/x86/boot/boot.h
+> index 34c9dbb6a47d..27ce7cef13aa 100644
+> --- a/arch/x86/boot/boot.h
+> +++ b/arch/x86/boot/boot.h
+> @@ -18,11 +18,14 @@
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> +#undef CONFIG_PARAVIRT
+
+Yeah, this is the stuff I'd like to avoid in boot/. Can we get rid of
+any ifdeffery in the shared/ namespace?
+
+I see this slow_down_io()-enforced CONFIG_PARAVIRT ifdeffery and that
+should not be there but in the ...asm/io.h kernel proper header. In the
+shared header we should have only basic functions which are shared by
+all.
+
+For the same reason I don't think the shared header should have those
+if (cc_platform_has... branches but just the basic bits with the asm
+wrappers.
+
+Hmmm.
+
+> diff --git a/arch/x86/boot/compressed/io.h b/arch/x86/boot/compressed/io.h
+> new file mode 100644
+> index 000000000000..e69de29bb2d1
+
+That one's empty.
+
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index d8373d766672..48de56f2219d 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -15,9 +15,12 @@
+>  #include "misc.h"
+>  #include "error.h"
+>  #include "pgtable.h"
+> +#include "tdx.h"
+> +#include "io.h"
+>  #include "../string.h"
+>  #include "../voffset.h"
+>  #include <asm/bootparam_utils.h>
+> +#include <asm/shared/io.h>
+>  
+>  /*
+>   * WARNING!!
+> @@ -47,6 +50,8 @@ void *memmove(void *dest, const void *src, size_t n);
+>   */
+>  struct boot_params *boot_params;
+>  
+> +struct port_io_ops port_io_ops;
+
+call that pio_ops to differ from the struct name.
+
+> +
+>  memptr free_mem_ptr;
+>  memptr free_mem_end_ptr;
+>  
+> @@ -103,10 +108,12 @@ static void serial_putchar(int ch)
+>  {
+>  	unsigned timeout = 0xffff;
+>  
+> -	while ((inb(early_serial_base + LSR) & XMTRDY) == 0 && --timeout)
+> +	while ((port_io_ops.inb(early_serial_base + LSR) & XMTRDY) == 0 &&
+> +	       --timeout) {
+>  		cpu_relax();
+> +	}
+>  
+> -	outb(ch, early_serial_base + TXR);
+> +	port_io_ops.outb(ch, early_serial_base + TXR);
+>  }
+>  
+>  void __putstr(const char *s)
+> @@ -152,10 +159,10 @@ void __putstr(const char *s)
+>  	boot_params->screen_info.orig_y = y;
+>  
+>  	pos = (x + cols * y) * 2;	/* Update cursor position */
+> -	outb(14, vidport);
+> -	outb(0xff & (pos >> 9), vidport+1);
+> -	outb(15, vidport);
+> -	outb(0xff & (pos >> 1), vidport+1);
+> +	port_io_ops.outb(14, vidport);
+> +	port_io_ops.outb(0xff & (pos >> 9), vidport+1);
+> +	port_io_ops.outb(15, vidport);
+> +	port_io_ops.outb(0xff & (pos >> 1), vidport+1);
+>  }
+>  
+>  void __puthex(unsigned long value)
+> @@ -370,6 +377,15 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>  	lines = boot_params->screen_info.orig_video_lines;
+>  	cols = boot_params->screen_info.orig_video_cols;
+>  
+> +	port_io_ops = (const struct port_io_ops){
+> +		.inb = inb,
+> +		.inw = inw,
+> +		.inl = inl,
+> +		.outb = outb,
+> +		.outw = outw,
+> +		.outl = outl,
+> +	};
+
+Why here and not statically defined above?
+
+> +
+>  	/*
+>  	 * Detect TDX guest environment.
+>  	 *
+> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> index 6502adf71a2f..74951befb240 100644
+> --- a/arch/x86/boot/compressed/misc.h
+> +++ b/arch/x86/boot/compressed/misc.h
+> @@ -19,26 +19,23 @@
+>  /* cpu_feature_enabled() cannot be used this early */
+>  #define USE_EARLY_PGTABLE_L5
+>  
+> -/*
+> - * Redefine __in/__out macros via tdx.h before including
+> - * linux/io.h.
+> - */
+> -#include "tdx.h"
+> -
+>  #include <linux/linkage.h>
+>  #include <linux/screen_info.h>
+>  #include <linux/elf.h>
+> -#include <linux/io.h>
+>  #include <asm/page.h>
+>  #include <asm/boot.h>
+>  #include <asm/bootparam.h>
+>  #include <asm/desc_defs.h>
+>  
+> +/* Avoid pulling outb()/inb() from <asm/io.h> */
+> +#define _ACPI_IO_H_
+> +
+
+This too. I think those shared headers should contain the basic
+functionality which all stages share and can include without ifdeffery.
+
+If they have to change that functionality, they will have to define
+their own io.h header, extend it there by using the basic one and then
+use it.
+
+This way we'll always have the common, shared stuff in, well, a shared
+header.
+
+IMNSVHO.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

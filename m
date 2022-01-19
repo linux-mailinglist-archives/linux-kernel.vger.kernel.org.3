@@ -2,364 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2125D4932F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0104932F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 03:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351000AbiASC2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Jan 2022 21:28:35 -0500
-Received: from mail-eopbgr70079.outbound.protection.outlook.com ([40.107.7.79]:56008
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238636AbiASC2e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Jan 2022 21:28:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KMNWiEBPpkXaEpCW42085hkoDKmXHPnt6zXIdwP8AJ9TrWEmGP80kjA03W8LP7VPVl13K1tNHmvWye23vqxmf4itTXFge+z6Bdy4CUTRMHRLk3tURea1d553WnX7IXuhoST4CQ/unYHbELOxRdMlt+hr0REHN4UMy6EZEzhc34r2cutNVwXzQD+j1ZdQUEIjBzbnvRKav2cVjR1Av7ddyUF4+KPx3Asbj3eLqjEUHhQiWSrCQQjpNtJx0w+ETtmtHiSGPckq28kwWt7l113jC7R2HWOPzhltQpGY7xFAhwBRoCaXvS4VMEQY6j4+p/+yQMOVgP2xqtmKcCyKl1tj8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DySkXGajEHg4mKWzz2wXq9bwiCpprjz5GfZ7biiqV7I=;
- b=K0RHYQRTam+RKnv4YR6jk4HDKaLQDK/Mxh6ImKdyCp5wNbL13qvjdgNbA8GHykd7iWMKpwPEAAajc/wqSua3iDyevaL7P73BgWsc8mOgBKO7ctM+9Ux95gv+dNYNZCqAVn9IZP4Wjy4YnGu7g7GYlKLXYPbt366NG4AZuj/nrxUv6JfSMQpKotqq/gpqu3x+OpaiSc+J/jq+/c6IqNceLRf583R6qMPEb9cY47/Cvt1hhhWJ+XbDr9hf9JO2PN+HnZCPflQzwBO4BjehzIuDbw3zQ8v3QZmNagy/IT/dC7Tqi4gLNIBmr77NTlNW1SB5BHyul6ushcF4cUFgrcLA7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DySkXGajEHg4mKWzz2wXq9bwiCpprjz5GfZ7biiqV7I=;
- b=QNIvz7JP5LpiNgJMOl9RHpWqfKjFBFBpo2wKghQaTxKKfXPc6BF0kQC9KmB28kn1TBQMWhRtl1L5O44NKK69bUr0iy3SIkPDmlI23iNJ3Ybea8oDLDzPkz2Q3jUPBgDTer+zhO9AnQx18gKh9rcSDBCZjPnT3uGdb7KA2ni8oTc=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM6PR04MB5045.eurprd04.prod.outlook.com (2603:10a6:20b:12::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 19 Jan
- 2022 02:28:31 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8%4]) with mapi id 15.20.4888.013; Wed, 19 Jan 2022
- 02:28:31 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 6/9] remoteproc: imx_rproc: support attaching to i.MX8QXP
- M4
-Thread-Topic: [PATCH 6/9] remoteproc: imx_rproc: support attaching to i.MX8QXP
- M4
-Thread-Index: AQHYBpw1XSm7ohRXCUiPzYJqNJAQmaxpLUKAgAB9VcA=
-Date:   Wed, 19 Jan 2022 02:28:31 +0000
-Message-ID: <DU0PR04MB9417335FFEBEB5CE91A5A67888599@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
- <20220111033333.403448-9-peng.fan@oss.nxp.com>
- <20220118185729.GH1119324@p14s>
-In-Reply-To: <20220118185729.GH1119324@p14s>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1feed45f-888b-4d93-e4a9-08d9daf362a4
-x-ms-traffictypediagnostic: AM6PR04MB5045:EE_
-x-microsoft-antispam-prvs: <AM6PR04MB504516149BC3320652BBA45088599@AM6PR04MB5045.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1923;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /bTVodWnku6gUSurmsrjQ80Sq1tCvkwipd9nWkyzY9Ls6iWGpQow8KlNv8AduVI/oJdLEl76UasheirlEBjAvfWoTL9wMFrtSLKa5P8qZZ6AAyjhduddRZkF3bcnnhE9Aru0tLrhYFfc1jn1SflDJc3wm18+Ul0dxj80fRjCMC+qBRs18OxAugvF6Q79nDnaYkN3EVzpAZJFsuXxMwQmPh5kGb9JHxfyfjVKddhgyPl3rRN8L3IhVqi1J4TXeiAWn1+uU+jfC1OeIgJ93GNVSFWUCqh1m405WnLqBDo2Ld9dMs6ZNuG2zvAYWQUckhaYgZYklSKPP1VSXAUbOiNEDHT14MXok3hv/Fp2E+p+PDrtUayo4qwRgd9Ib/HUgmvHzxW2O6dxj2NnCVeyxsf+Rtik9+In/zkRe/6mFlBOatNW0yS7Xv5G2HJj6dm16yCM2dXZ1m0gsah6UYVUhoq8RyMDUUnVq/GiG2fT42Xrz/3hbXXEnhVbrEsUK06jkkZluIQNzIVvZ2klT4GBW/+aqDOOyfy4g/ofqGnF8sWLY7fYt9bEII1clwc3LUa3oc8YD6qXyw40x7YAHLLZQOk1gbAl72Wh1W0KhUK842DpwvMOwKTAthbev8WywqP6ryALm7ACIIx+dFG/TyroKbJDQIZtjpt1GvMtBu5xcu8g6U7NgMZbWwAvzntGzfRndL50Nx0XiJLiLndgAy2ai3/ApQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(66556008)(55016003)(186003)(26005)(122000001)(44832011)(54906003)(66476007)(66946007)(86362001)(64756008)(33656002)(316002)(110136005)(4326008)(76116006)(9686003)(71200400001)(38100700002)(38070700005)(7696005)(83380400001)(2906002)(8676002)(8936002)(5660300002)(508600001)(66446008)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gRvSRDV9nEcabyJeSY75mg7IeDm3IHZ6SiEY5L9qfIn+oPWi+vISC2//n0rB?=
- =?us-ascii?Q?MIRCbIxLYLPIZEDbHeZzKxBOloJtldaCTk2vMfxIjd3lEfcvV4coWNfTHyJX?=
- =?us-ascii?Q?iRtih69cJx3kF3/R2fYRRHl9Z40s+/NhtwBSSZd9z1hzy5OHU4P3VlP6xp1U?=
- =?us-ascii?Q?9y49vmwi3lBOu3LDM7d2yH0NsfDlyTYLsPYh3kfJVWRhi1RohEgpgvK6CULn?=
- =?us-ascii?Q?tV84vZh1ZeSsp6HtiiKel+SH5mEUlXIVTwO8YwQNlw9UqIWf4dld160aqxxk?=
- =?us-ascii?Q?IydOmymh4oqcT/i5SJNlbA/c9AJzUo2U3ojzKy7gGix7rk78rxyZRp5CU5no?=
- =?us-ascii?Q?lHwMfP+39QFrawN7viUummtlkWyKHcjbFpbtCTFChAO1d6N+ROQH4n9/77dd?=
- =?us-ascii?Q?iDi+G4wIrbhyEbfmQ8aJ0l19YeRQzzX88pvNOzwl5ZUf5aJXtLEd4Z4GhytU?=
- =?us-ascii?Q?paLaIa7b9GNTjuuk5qwtctEEUFw8mbsJqzrskM1FzVbyDx3ruKMfy9Uj9QHZ?=
- =?us-ascii?Q?zGUBEdLwhV42hNDoQxS35vc9JK6v7mpgbJR8rEH48HWNP5h68WlRrDJQGqoK?=
- =?us-ascii?Q?TA3MKr0tfc3v/H55SQrUa5CckpoczyqDZCX+aSxXs5yHtyhuCQ9jNlUQDVOF?=
- =?us-ascii?Q?muXiP7yBuyTf+rFNV10RV0Bz3iLwW3WYKw/PedsdqL8sWOk4Al3NvZkWucHu?=
- =?us-ascii?Q?MJPivUadVEVCTctUEESVo4+ZXCMURhpw+iPd7mV76qp8wIYCe0qPK1HTUTod?=
- =?us-ascii?Q?hkvhjzHjFU7qg8LH4TUKW9NvUIGLleORqhsHiyB+Qgado9wpaPRmPp+KVqSM?=
- =?us-ascii?Q?I7D9NgCEd/bbFnhCpwV4Cl0rn/r6JAeVZ8Zo3WwuCZS5N95RvdMke9liCKoX?=
- =?us-ascii?Q?0JrOksJmN3pSWBjXY3L0ehEQ/1VsXwjlFad+KbkHPsRI2IEvo1TaYKWAWxWa?=
- =?us-ascii?Q?0PV6KEgwSnqjZCWp70SzmGHcikboZHglYIDjP/Pnbt9YrjZ7WbuUkrifurVz?=
- =?us-ascii?Q?tVhTTZvPfo5oft+5QCRA0U+2wigTT8otONHrCj/Q5+K0J9vXgPzNkMh/xX0s?=
- =?us-ascii?Q?UlpgT2R7leYL65poD8CjWAErDJZlibSxEC1OfIeFrNk9CdpBBzSXuuP48aSN?=
- =?us-ascii?Q?TkKIcm5XM/Y3e3p7Jnt0ed2aHFsCLH2t1UgEa6CM7XiMCrkgiA0OWDq8Wpci?=
- =?us-ascii?Q?SAbZGTwkcNs3+s9Dt3f/1P+YY2TSwqhrQV3NPItrUUy4EIlnEfNeX2MfXCjp?=
- =?us-ascii?Q?pEoXQkove0rJFztxm3lWgv30Yrp07zN5egpL1QnkXfssjKfOVPxneDjOOqju?=
- =?us-ascii?Q?1P6GsDR1gc/XWhDEA4Q90ZCKGN/JffsomfxxheFmLCuyzrSBATCBSAd9DaRG?=
- =?us-ascii?Q?ApqKjC+ajM3pBaV8NgcK9WxbVSz02Pa0pbcVzb5A5uYa4VbkmAe9fWy/fk6+?=
- =?us-ascii?Q?f14I9Y57gmouYCYCFjyinmuoXoEGvYFqSmwSl2/+MEkWXbOMQ/i4zSWW5nAe?=
- =?us-ascii?Q?hVrF9sS/OD2AwXg7+p3vn833fduS/uWALdxPPAstBo+qiuP6VOM7IXwYHng3?=
- =?us-ascii?Q?3xTEaFNk0j53L71slR9n8gxPNmKNgQcLgHQCCqhICrfDMa0e32lUTaKVa3wX?=
- =?us-ascii?Q?wYRAl+7EbLj1s6rRufqXTlQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1351006AbiASCdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Jan 2022 21:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238636AbiASCdD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Jan 2022 21:33:03 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB5AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:33:03 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id w26so2182146wmi.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 18:33:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Jo4m/kDU7bD6uVH76qeZbDQVg9E+WokGX2yPLC7fnuI=;
+        b=mZN4HjK9D8RGQ9dMfefNiLHAsgX63jHV16sVV4mv+NnT6jt/YXE2tuBCp3FMBLOwx9
+         hV4sDnP0e/RjZlf+872l5e7JF+WAacRERVKWhgkBMTe7NqKTbL3Qq6a7TUx38rGhKRId
+         BmNBuits9kDtfdTXOsSnitg6dUQkOeAu51ke/e01GTSwJzx9y1xyWXtpWqUDgQow2VWI
+         MZAOu/nhOgwvvGRbPuZ3z0MJoGVIIuC+JyS1AoDyZVxAclHiuoB/NTARQ3RrhRrtug55
+         HtAdB/230UNjr2Jz7KHX+cq+b3JGUYte2co14nYvofQW84GWuCXrccVMrh6ag5G1VhlM
+         n2+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Jo4m/kDU7bD6uVH76qeZbDQVg9E+WokGX2yPLC7fnuI=;
+        b=Wkngjjfopp/E+D11vkynJ2tY1E5Bgnm6g2RItcaJ8IQfUUpn70QOdjauiqMP1eziP9
+         /MLJgp7NbmmjbKXhIFQ2nsACkgyxQgvmNj+17BzpvAnB0nNX5zmYWjxkTw7Iqyjs2Q77
+         KmokE3tosHasCh3MkJJQf5LvXpS7EzTLG7i1OIbqhixtWFnSceoYrGYeXj6slrQ89d3o
+         WP1veZSA0/HnO6YZgyq3y/zaga3Uy3uLr6bw1pzK7EFAPwzCYWpdKG71LdWA32lrP9Uf
+         uaStsV2s6ZxQpx+9ZQq5dXU8HiDv0uQvUS9qiNt5anCQ4LOjCEFtZbrMlNb1v4+3cRXA
+         TksA==
+X-Gm-Message-State: AOAM531Klc16OtQwMKMYYhAu61souO+zYAuFstf5GsYkSpFjQCOnjZQq
+        +qbG6N7wqMVBk4nSfuUMMm1Jzufb5xym7Vd/LrQ=
+X-Google-Smtp-Source: ABdhPJxu5bGdeTKhiTpmGmpJZySyY+3ujcx8kwWBwevnmiup2H1193ralS5z7EGmi5rLChdPTTq90rMFhEiAZXseX7U=
+X-Received: by 2002:adf:eb87:: with SMTP id t7mr27008717wrn.147.1642559581193;
+ Tue, 18 Jan 2022 18:33:01 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1feed45f-888b-4d93-e4a9-08d9daf362a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2022 02:28:31.5424
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LdkD12OOmk2G6gtPoOxeOmBuoPp3LhqgwNwkABF2MQF1ml+BDb+e1CKmy2YMzPIWev0CfJcGBwjLX9yBoedrqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5045
+References: <20220113013835.503285-1-xiehuan09@gmail.com> <20220118232448.891fbf550b50193e0155b59c@kernel.org>
+In-Reply-To: <20220118232448.891fbf550b50193e0155b59c@kernel.org>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Wed, 19 Jan 2022 10:32:49 +0800
+Message-ID: <CAEr6+EB+ENLJM1vU1pPgQ4ZcYe6FDSRWwdSpY_dLq0tGqr+tnQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 6/9] remoteproc: imx_rproc: support attaching to
-> i.MX8QXP M4
->=20
-> On Tue, Jan 11, 2022 at 11:33:30AM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > When M4 is kicked by SCFW, M4 runs in its own hardware partition,
-> > Linux could only do IPC with M4, it could not start, stop, update image=
-.
-> >
-> > When M4 crash reboot, it could notify Linux, so Linux could prepare to
-> > reattach to M4 after M4 recovery.
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 96
-> > ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 96 insertions(+)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index 0e99a3ca6fbc..5f04aea2f6a1
-> > 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/arm-smccc.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/err.h>
-> > +#include <linux/firmware/imx/sci.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/mailbox_client.h>
-> > @@ -59,6 +60,8 @@
-> >  #define IMX_SIP_RPROC_STARTED		0x01
-> >  #define IMX_SIP_RPROC_STOP		0x02
-> >
-> > +#define	IMX_SC_IRQ_GROUP_REBOOTED	5
-> > +
-> >  /**
-> >   * struct imx_rproc_mem - slim internal memory structure
-> >   * @cpu_addr: MPU virtual address of the memory region @@ -90,6
-> > +93,23 @@ struct imx_rproc {
-> >  	struct workqueue_struct		*workqueue;
-> >  	void __iomem			*rsc_table;
-> >  	bool				has_clk;
-> > +	struct imx_sc_ipc		*ipc_handle;
-> > +	struct notifier_block		proc_nb;
-> > +	u32				rproc_pt;
-> > +	u32				rsrc;
->=20
-> There is no documentation for the above two fields and I have to guess wh=
-at
-> they do.
+Hi Masami,
 
-Fix in V2.
-
->=20
-> > +};
-> > +
-> > +static const struct imx_rproc_att imx_rproc_att_imx8qxp[] =3D {
-> > +	/* dev addr , sys addr  , size	    , flags */
-> > +	{ 0x08000000, 0x08000000, 0x10000000, 0},
-> > +	/* TCML/U */
-> > +	{ 0x1FFE0000, 0x34FE0000, 0x00040000, ATT_OWN | ATT_IOMEM },
-> > +	/* OCRAM(Low 96KB) */
-> > +	{ 0x21000000, 0x00100000, 0x00018000, 0},
-> > +	/* OCRAM */
-> > +	{ 0x21100000, 0x00100000, 0x00040000, 0},
-> > +	/* DDR (Data) */
-> > +	{ 0x80000000, 0x80000000, 0x60000000, 0 },
-> >  };
-> >
-> >  static const struct imx_rproc_att imx_rproc_att_imx8mn[] =3D { @@
-> > -236,6 +256,12 @@ static const struct imx_rproc_dcfg
-> imx_rproc_cfg_imx8ulp =3D {
-> >  	.method		=3D IMX_RPROC_NONE,
-> >  };
-> >
-> > +static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qxp =3D {
-> > +	.att		=3D imx_rproc_att_imx8qxp,
-> > +	.att_size	=3D ARRAY_SIZE(imx_rproc_att_imx8qxp),
-> > +	.method		=3D IMX_RPROC_SCU_API,
-> > +};
-> > +
-> >  static const struct imx_rproc_dcfg imx_rproc_cfg_imx7ulp =3D {
-> >  	.att		=3D imx_rproc_att_imx7ulp,
-> >  	.att_size	=3D ARRAY_SIZE(imx_rproc_att_imx7ulp),
-> > @@ -491,6 +517,11 @@ static int imx_rproc_attach(struct rproc *rproc)
-> >  	return 0;
-> >  }
-> >
-> > +static int imx_rproc_detach(struct rproc *rproc) {
-> > +	return 0;
->=20
-> Is it possible to detach the remote processor from the application core? =
- If
-> not please write a comment that says so.
-
-No from my understanding.
-
-  And shouldn't this return some
-> kind of error so that users don't think the operation was carried out
-> successfully?
-
-No. This is to match patch 3/9 to support M-core self recovery. After M-cor=
+On Tue, Jan 18, 2022 at 10:24 PM Masami Hiramatsu <mhiramat@kernel.org> wro=
+te:
+>
+> On Thu, 13 Jan 2022 09:38:31 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> > Introduce a method based on function tracer to trace any object and get
+> > the value of the object dynamically. the object can be obtained from th=
 e
-crash reboot, remoteproc framework just detach and re-attach.
-
->=20
-> I am out of time for today and as such will continue with this set tomorr=
-ow.
-
-Thanks for you reviewing the patchset.
-
-Thanks,
-Peng.
-
->=20
-> Thanks,
-> Mathieu
->=20
-> > +}
-> > +
-> >  static struct resource_table *imx_rproc_get_loaded_rsc_table(struct
-> > rproc *rproc, size_t *table_sz)  {
-> >  	struct imx_rproc *priv =3D rproc->priv; @@ -525,6 +556,7 @@
-> > imx_rproc_elf_find_loaded_rsc_table(struct rproc *rproc, const struct
-> > firmware *  static const struct rproc_ops imx_rproc_ops =3D {
-> >  	.prepare	=3D imx_rproc_prepare,
-> >  	.attach		=3D imx_rproc_attach,
-> > +	.detach		=3D imx_rproc_detach,
-> >  	.start		=3D imx_rproc_start,
-> >  	.stop		=3D imx_rproc_stop,
-> >  	.kick		=3D imx_rproc_kick,
-> > @@ -671,6 +703,22 @@ static void imx_rproc_free_mbox(struct rproc
-> *rproc)
-> >  	mbox_free_channel(priv->rx_ch);
-> >  }
+> > dynamic event (kprobe_event/uprobe_event) or the static event(tracepoin=
+t).
 > >
-> > +static int imx_rproc_partition_notify(struct notifier_block *nb,
-> > +				      unsigned long event, void *group) {
-> > +	struct imx_rproc *priv =3D container_of(nb, struct imx_rproc,
-> > +proc_nb);
-> > +
-> > +	/* Ignore other irqs */
-> > +	if (!((event & BIT(priv->rproc_pt)) && (*(u8 *)group =3D=3D
-> IMX_SC_IRQ_GROUP_REBOOTED)))
-> > +		return 0;
-> > +
-> > +	rproc_report_crash(priv->rproc, RPROC_WATCHDOG);
-> > +
-> > +	pr_info("Patition%d reset!\n", priv->rproc_pt);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int imx_rproc_detect_mode(struct imx_rproc *priv)  {
-> >  	struct regmap_config config =3D { .name =3D "imx-rproc" }; @@ -680,6
-> > +728,7 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
-> >  	struct arm_smccc_res res;
-> >  	int ret;
-> >  	u32 val;
-> > +	u8 pt;
+> > Usage:
+> > When using the kprobe event, only need to set the objtrace(a new trigge=
+r),
+> > we can get the value of the object. The object is from the setting of t=
+he
+> > kprobe event.
 > >
-> >  	switch (dcfg->method) {
-> >  	case IMX_RPROC_NONE:
-> > @@ -690,6 +739,52 @@ static int imx_rproc_detect_mode(struct
-> imx_rproc *priv)
-> >  		if (res.a0)
-> >  			priv->rproc->state =3D RPROC_DETACHED;
-> >  		return 0;
-> > +	case IMX_RPROC_SCU_API:
-> > +		ret =3D imx_scu_get_handle(&priv->ipc_handle);
-> > +		if (ret)
-> > +			return ret;
-> > +		ret =3D of_property_read_u32(dev->of_node, "rsrc-id", &priv->rsrc);
-> > +		if (ret) {
-> > +			dev_err(dev, "no rsrc-id\n");
-> > +			return ret;
-> > +		}
-> > +
-> > +		/*
-> > +		 * If Mcore resource is not owned by Acore partition, It is kicked b=
-y
-> ROM,
-> > +		 * and Linux could only do IPC with Mcore and nothing else.
-> > +		 */
-> > +		if (!imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc)) {
-> > +
-> > +			priv->has_clk =3D false;
-> > +			priv->rproc->self_recovery =3D true;
-> > +			priv->rproc->state =3D RPROC_DETACHED;
-> > +
-> > +			/* Get partition id and enable irq in SCFW */
-> > +			ret =3D imx_sc_rm_get_resource_owner(priv->ipc_handle,
-> priv->rsrc, &pt);
-> > +			if (ret) {
-> > +				dev_err(dev, "not able to get resource owner\n");
-> > +				return ret;
-> > +			}
-> > +
-> > +			priv->rproc_pt =3D pt;
-> > +			priv->proc_nb.notifier_call =3D imx_rproc_partition_notify;
-> > +
-> > +			ret =3D imx_scu_irq_register_notifier(&priv->proc_nb);
-> > +			if (ret) {
-> > +				dev_warn(dev, "register scu notifier failed.\n");
-> > +				return ret;
-> > +			}
-> > +
-> > +			ret =3D
-> imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_REBOOTED,
-> > +						       BIT(priv->rproc_pt), true);
-> > +			if (ret) {
-> > +				imx_scu_irq_unregister_notifier(&priv->proc_nb);
-> > +				dev_warn(dev, "Enable irq failed.\n");
-> > +				return ret;
-> > +			}
-> > +		}
-> > +
-> > +		return 0;
-> >  	default:
-> >  		break;
-> >  	}
-> > @@ -847,6 +942,7 @@ static const struct of_device_id
-> imx_rproc_of_match[] =3D {
-> >  	{ .compatible =3D "fsl,imx8mm-cm4", .data =3D &imx_rproc_cfg_imx8mq }=
-,
-> >  	{ .compatible =3D "fsl,imx8mn-cm7", .data =3D &imx_rproc_cfg_imx8mn }=
-,
-> >  	{ .compatible =3D "fsl,imx8mp-cm7", .data =3D &imx_rproc_cfg_imx8mn }=
-,
-> > +	{ .compatible =3D "fsl,imx8qxp-cm4", .data =3D &imx_rproc_cfg_imx8qxp=
- },
-> >  	{ .compatible =3D "fsl,imx8ulp-cm33", .data =3D &imx_rproc_cfg_imx8ul=
-p },
-> >  	{},
-> >  };
-> > --
-> > 2.25.1
+> > For example:
+> > For the function bio_add_page():
 > >
+> > int bio_add_page(struct bio *bio, struct page *page,
+> >       unsigned int len, unsigned int offset)
+> >
+> > Firstly, we can set the base of the object, thus the first string "arg1=
+"
+> > stands for the value of the first parameter of this function bio_add_ga=
+ge(),
+> >
+> > # echo 'p bio_add_page arg1=3D$arg1' >> ./kprobe_events
+> >
+> > Secondly, we can get the value dynamically base the above object.
+> >
+> > find the offset of the bi_size in struct bio:
+> > $ gdb vmlinux
+> > (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> > $1 =3D (unsigned int *) 0x28
+> >
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm =3D=3D "cat"' > ./events/k=
+probes/ \
+> >       p_bio_add_page_0/trigger
+> >
+> > The best way to use this is that we can set the entrance event and exit
+> > event, for example, the following example is to set the read_papes as
+> > the entrance event, and set the __blk_account_io_start as the exit even=
+t.
+> >
+> > # cd /sys/kernel/debug/tracing/
+> > # echo 0 > ./tracing_on
+> > # echo 'p read_pages' >> ./kprobe_events
+> > # echo 'p __blk_account_io_start' >> ./kprobe_events
+> > # echo 'traceon if comm =3D=3D "cat"' > ./events/kprobes/p_read_pages_0=
+/trigger
+> > # echo 'traceoff if comm =3D=3D "cat"' > ./events/kprobes/p___blk_accou=
+nt_io_start_0/trigger
+> > # echo 'p bio_add_page arg1=3D$arg1' >> ./kprobe_events
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm =3D=3D "cat"' > ./events/k=
+probes/p_bio_add_page_0/trigger
+> >
+> > # du -sh /test.txt
+> > 12.0K   /test.txt
+> >
+> > # cat  /test.txt > /dev/null
+> > # cat ./trace
+> >
+> > # tracer: nop
+> > #
+> > # entries-in-buffer/entries-written: 50/50   #P:1
+> > #
+> > #                                _-----=3D> irqs-off
+> > #                               / _----=3D> need-resched
+> > #                              | / _---=3D> hardirq/softirq
+> > #                              || / _--=3D> preempt-depth
+> > #                              ||| / _-=3D> migrate-disable
+> > #                              |||| /     delay
+> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> > #              | |         |   |||||     |         |
+> >              cat-95      [000] .....     1.412065: _raw_spin_unlock_irq=
+restore <-event_triggers_call object:0xffff888108af6328 value:0x0
+> >              cat-95      [000] .....     1.412066: __bio_try_merge_page=
+ <-bio_add_page object:0xffff888108af6328 value:0x0
+> >              cat-95      [000] .....     1.412066: __bio_add_page <-bio=
+_add_page object:0xffff888108af6328 value:0x0
+> >              cat-95      [000] .....     1.412066: rcu_read_unlock_stri=
+ct <-xa_load object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412066: bio_add_page <-ext4_=
+mpage_readpages object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412066: kprobe_ftrace_handle=
+r <-ftrace_ops_list_func object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_=
+ftrace_handler object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: __bio_try_merge_page=
+ <-bio_add_page object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: __bio_add_page <-bio=
+_add_page object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: rcu_read_unlock_stri=
+ct <-xa_load object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: bio_add_page <-ext4_=
+mpage_readpages object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: kprobe_ftrace_handle=
+r <-ftrace_ops_list_func object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_=
+ftrace_handler object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: __bio_try_merge_page=
+ <-bio_add_page object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412068: submit_bio <-ext4_mp=
+age_readpages object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: submit_bio_noacct <-=
+ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: __submit_bio <-submi=
+t_bio_noacct object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: blk_try_enter_queue =
+<-__submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: rcu_read_unlock_stri=
+ct <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: rcu_read_unlock_stri=
+ct <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: submit_bio_checks <-=
+__submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: __cond_resched <-sub=
+mit_bio_checks object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: rcu_all_qs <-__cond_=
+resched object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: should_fail_bio <-su=
+bmit_bio_checks object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: create_task_io_conte=
+xt <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: kmem_cache_alloc_nod=
+e <-create_task_io_context object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: should_failslab <-km=
+em_cache_alloc_node object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: _raw_spin_lock <-cre=
+ate_task_io_context object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: blk_mq_submit_bio <-=
+__submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: __blk_queue_split <-=
+blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: bvec_split_segs <-__=
+blk_queue_split object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: blk_attempt_plug_mer=
+ge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: __blk_mq_sched_bio_m=
+erge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: dd_bio_merge <-blk_m=
+q_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: _raw_spin_lock <-dd_=
+bio_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: blk_mq_sched_try_mer=
+ge <-dd_bio_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: elv_merge <-blk_mq_s=
+ched_try_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: elv_rqhash_find <-el=
+v_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: dd_request_merge <-b=
+lk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: elv_rb_find <-dd_req=
+uest_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: __blk_mq_alloc_reque=
+st <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: dd_limit_depth <-__b=
+lk_mq_alloc_request object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: blk_mq_get_tag <-__b=
+lk_mq_alloc_request object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: __blk_mq_get_tag <-b=
+lk_mq_get_tag object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: blk_mq_rq_ctx_init.i=
+sra.0 <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: ktime_get <-blk_mq_r=
+q_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: dd_prepare_request <=
+-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: __blk_account_io_sta=
+rt <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: kprobe_ftrace_handle=
+r <-ftrace_ops_list_func object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: get_kprobe <-kprobe_=
+ftrace_handler object:0xffff888108af6328 value:0x3000
+> >
+> > Almost all changelogs were suggested by Masami(mhiramat@kernel.org)
+> > and steve(rostedt@goodmis.org), thank you all so much.
+> >
+> > v7:
+> > - use fixed-size array for object pool instead of list structure
+> > - use ftrace_test_recursion_trylock for function trace hook function
+> > - fix trace_object_ref reference count in the init_trace_object
+> > - invoke exit_trace_object no matter whether data->ops->free is null
+> >   in the unregister_object_trigger
+> > - release private_data of event_trigger_data in the trace_object_trigge=
+r_free
+> > - remove [RFC] tag
+> >
+> > Note: when change to use the ftrace_test_recursion_trylock, all the fun=
+ctions
+> > will call the copy_from_kernel_nofault, I don't know where this is the =
+problem now,
+> > maybe should fall back to the usage in v6.
+> >
+> > for example:
+> >
+> > cat-118     [000] ...1.     1.458998: __bio_add_page <-bio_add_page obj=
+ect:0xffff88811a12e9e8 value:0x0
+> > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault <-trace_=
+object_events_call object:0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault_allowed =
+<-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...1.     1.458998: __rcu_read_lock <-xa_load object:=
+0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault <-trace_=
+object_events_call object:0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault_allowed =
+<-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...1.     1.458998: __rcu_read_unlock <-xa_load objec=
+t:0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...3.     1.458998: copy_from_kernel_nofault <-trace_=
+object_events_call object:0xffff88811a12e9e8 value:0x1000
+> > cat-118     [000] ...3.     1.458998: copy_from_kernel_nofault_allowed =
+<-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
+> > ....
+>
+> Hmm, this is strange, but I got it is the expected behavior, since the
+> ftrace_test_recursion_trylock() accepts one stage recursion for the
+> first event in the interrupt as transition event.
+> Steve, any good way to limit probing this transition events?
+>
+>
+> BTW, I tried your series on the
+> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git ftr=
+ace/core
+> and got below build errors.
+>
+> linux/kernel/trace/trace_object.c:266:3: error: =E2=80=98struct event_tri=
+gger_ops=E2=80=99 has no member named =E2=80=98func=E2=80=99
+>   266 |  .func   =3D trace_object_trigger,
+>       |   ^~~~
+> linux/kernel/trace/trace_object.c:273:3: error: =E2=80=98struct event_tri=
+gger_ops=E2=80=99 has no member named =E2=80=98func=E2=80=99
+>   273 |  .func   =3D trace_object_count_trigger,
+>       |   ^~~~
+> linux/kernel/trace/trace_object.c:535:3: error: =E2=80=98struct event_com=
+mand=E2=80=99 has no member named =E2=80=98func=E2=80=99
+>   535 |  .func   =3D event_object_trigger_callback,
+>       |   ^~~~
+>   CC      net/ipv6/sysctl_net_ipv6.o
+>
+> This is because commit 7d28e1e7d4fa ("tracing: Change event_trigger_ops f=
+unc() to trigger()")
+> and commit 4dfe5dff80a4 ("tracing: Change event_command func() to parse()=
+") changed the field
+> names. Please update it.
+>
+Thanks, I will update it.
+>
+> Thank you,
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
+---
+JeffXie

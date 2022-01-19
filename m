@@ -2,246 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E483D493A9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD187493AA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349563AbiASMpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:45:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2106 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245463AbiASMpl (ORCPT
+        id S1349746AbiASMqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:46:10 -0500
+Received: from mail-ua1-f47.google.com ([209.85.222.47]:40756 "EHLO
+        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245463AbiASMqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:45:41 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JASJH3039141;
-        Wed, 19 Jan 2022 12:45:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=6yzDw/gpAJiqHTep4LgtMJ0ZuVvn8GL6qyJEFI+xT78=;
- b=NQ5k6KzmtuA7k/CW8J+sllm50GwE77ycRyG1ZgwKwQH1JKd05Zk5qDhT9c0jU3GgSUXT
- HxQ9scwAgo8/ddXacBSGEXjFbTCmtehY88/tP6s7XXZ6IbX7fpBDYr9KAvjsVj+3UJi1
- ZtGluArXCX4p3maC/N0e8BMo+Dw9UuL6eYdDBnRGvH8SNw4/ivgsHz5EawPSK8DWLGXC
- Hs+R75EBgTEJuD0aCtrqv6Uo1ImlgtOc5wPD2PsHVPLRMmUaoJyVMLlPBqW0ZDfN7qSF
- ytVJeOiwyQQBiPZ5b0O+iMITJr0A5IgSbleXZUgZldCa6govDXpCnFxsOCWxtcjO+a3v yQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpgwyahhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 12:45:27 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JCjQNe014414;
-        Wed, 19 Jan 2022 12:45:26 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpgwyahh0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 12:45:26 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JChffG013665;
-        Wed, 19 Jan 2022 12:45:25 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04dal.us.ibm.com with ESMTP id 3dknwbgje6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 12:45:25 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JCjNPR35455432
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 12:45:23 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45DAFAC06A;
-        Wed, 19 Jan 2022 12:45:23 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD211AC05E;
-        Wed, 19 Jan 2022 12:45:22 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 12:45:22 +0000 (GMT)
-Message-ID: <e3604476-5255-109e-994f-01e09b5340c0@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 07:45:22 -0500
+        Wed, 19 Jan 2022 07:46:07 -0500
+Received: by mail-ua1-f47.google.com with SMTP id w21so4222273uan.7;
+        Wed, 19 Jan 2022 04:46:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jSJaWLFbSmKDo2PDFLJ/OlDDjxv/sePlYig27gKKORM=;
+        b=3u7mBhgt4YNpY8+GLAA3HgafJhumKwn/Ezbwe1mi2JXqzneBntTFm2v4wsKncJyrBg
+         JXhxSaCN8J1Imv/b2zjhELBY6dw5XxArAK5hdm1JERlR4JOUpCzu76AEdfKVMXGJNom5
+         ADZD3jB4IDLh9cQM2ONdzosGrcjRkXzS1ILZFKxW/eiGdqciOI93/sM3F2MEcGvSBn83
+         UW+OgwXP7n2OxAkTugcub1pmE6HECaEDroSHpSui3f+g2W80X1AgANRv06N+Nhi3i/6c
+         +kW/q5Ux/RoG0w3liBbV4dvVlWsVn76Z43TIwtrkM/JU+0lvS00h1WL0VRrGsdIx2sfJ
+         /swQ==
+X-Gm-Message-State: AOAM530+k0Wk1vPcmpJz22UslLn4Idt56zDUD4gvokW+E7S74AV1nOOa
+        kW/FlIl7OlAr0kIMZ2qVc9dDH+mFw0bTig==
+X-Google-Smtp-Source: ABdhPJxgr0MrFCoZkDTidnW4zpKhPY5nlGmAJKRr85MEKl8yXKrsd4U82JVD9D0ezLjK2BOLByjuBg==
+X-Received: by 2002:a67:d315:: with SMTP id a21mr11100069vsj.51.1642596366888;
+        Wed, 19 Jan 2022 04:46:06 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id k5sm2243920vsc.14.2022.01.19.04.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 04:46:05 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id m90so4279777uam.2;
+        Wed, 19 Jan 2022 04:46:04 -0800 (PST)
+X-Received: by 2002:a9f:3e01:: with SMTP id o1mr11968203uai.89.1642596364458;
+ Wed, 19 Jan 2022 04:46:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 19/19] ima: Enable IMA namespaces
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
- <20220114144515.vbler7ae3jqebhec@wittgenstein>
- <8f7e0bcc-cd7c-723d-c544-300b5e8f3873@linux.ibm.com>
- <20220119094613.cxxxmz5qbuehd7c3@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220119094613.cxxxmz5qbuehd7c3@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IExwXAEo3gIY2aVYt0igMMKKWRK9XsxE
-X-Proofpoint-ORIG-GUID: DVxWANrqBnT629G0Cf_Wb-jQ35DIhlee
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0 adultscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201190072
+References: <20220119110839.33187-1-deller@gmx.de>
+In-Reply-To: <20220119110839.33187-1-deller@gmx.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 19 Jan 2022 13:45:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXj2WsQ2htP63vXD_PRuhrqry3GgD8U1tJQ99BkQPQL=w@mail.gmail.com>
+Message-ID: <CAMuHMdXj2WsQ2htP63vXD_PRuhrqry3GgD8U1tJQ99BkQPQL=w@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix regression introduced by disabling accelerated
+ scrolling in fbcon
+To:     Helge Deller <deller@gmx.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Helge,
 
-On 1/19/22 04:46, Christian Brauner wrote:
-> On Tue, Jan 18, 2022 at 01:09:12PM -0500, Stefan Berger wrote:
->> On 1/14/22 09:45, Christian Brauner wrote:
->>> On Tue, Jan 04, 2022 at 12:04:16PM -0500, Stefan Berger wrote:
->>>> From: Stefan Berger <stefanb@linux.ibm.com>
->>>>
->>>> Introduce the IMA_NS in Kconfig for IMA namespace enablement.
->>>>
->>>> Enable the lazy initialization of an IMA namespace when a user mounts
->>>> SecurityFS. Now a user_namespace will get a pointer to an ima_namespace
->>>> and therefore add an implementation of get_current_ns() that returns this
->>>> pointer.
->>>>
->>>> get_current_ns() may now return a NULL pointer for as long as the IMA
->>>> namespace hasn't been created, yet. Therefore, return early from those
->>>> functions that may now get a NULL pointer from this call. The NULL
->>>> pointer can typically be treated similar to not having an IMA policy set
->>>> and simply return early from a function.
->>>>
->>>> Implement ima_ns_from_file() for SecurityFS-related files where we can
->>>> now get the IMA namespace via the user namespace pointer associated
->>>> with the superblock of the SecurityFS filesystem instance. Since
->>>> the functions using ima_ns_from_file() will only be called after an
->>>> ima_namesapce has been allocated they will never get a NULL pointer
->>>> for the ima_namespace.
->>>>
->>>> Switch access to userns->ima_ns to use acquire/release semantics to ensure
->>>> that a newly created ima_namespace structure is fully visible upon access.
->>>>
->>>> Replace usage of current_user_ns() with ima_ns_from_user_ns() that
->>>> implements a method to derive the user_namespace from the given
->>>> ima_namespace. It leads to the same result.
->>>>
->>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>>> ---
->> [...]
->>>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->>>> index b7dbc687b6ff..5a9b511ebbae 100644
->>>> --- a/security/integrity/ima/ima_policy.c
->>>> +++ b/security/integrity/ima/ima_policy.c
->>>> @@ -1333,6 +1333,7 @@ static unsigned int ima_parse_appraise_algos(char *arg)
->>>>    static int ima_parse_rule(struct ima_namespace *ns,
->>>>    			  char *rule, struct ima_rule_entry *entry)
->>>>    {
->>>> +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
->>> So I think ima_policy_write() and therefore ima_parse_rule() can
->>> legitimately be reached at least from an ancestor userns but also from a
->>> completely unrelated userns via securityfs. Sorry, I didn't see this
->>> earlier. Think of the following two scenarios:
->>>
->>> * userns1: unshare -U --map-root --mount
->>> -----------------------------------------
->>>      mount -t securityfs securityfs /userns1_securityfs
->>>      fd_in_userns1 = open("/userns1_securityfs/ima_file, O_RDWR);
->>>
->>>      /* I _think_ that sending of fds here should work but I haven't
->>>       * bothered to recheck the scm code as I need to do some driving in a
->>>       * little bit so I'm running out of time...
->>>       */
->>>      send_fd_scm_rights(fd_in_userns1, task_in_userns2);
->>>
->>> * userns2: unshare -U --map-root --mount
->>> -----------------------------------------
->>>      fd_from_userns1 = receive_fd_scm_rights();
->>>      write_policy(fd_from_userns1, "my fancy policy");
->> Passing an fd around like this presumably indicates that you intend to let
->> the recipient read/write to it.
-> Yes.
+On Wed, Jan 19, 2022 at 12:10 PM Helge Deller <deller@gmx.de> wrote:
+> This series reverts two patches which disabled scrolling acceleration in
+> fbcon/fbdev. Those patches introduced a regression for fbdev-supported graphic
+> cards because of the performance penalty by doing screen scrolling by software
+> instead of using hardware acceleration.
 >
->>
->>> It also means that if you inherit an fd from a more privileged imans
->>> instance you can write to it:
->> Now in this example we have to assume that root is making a mistake passing
->> the file descriptor around?
->>
->> # ls -l /sys/kernel/security/ima/
->> total 0
->> -r--r-----. 1 root root 0 Jan 18 12:48 ascii_runtime_measurements
->> -r--r-----. 1 root root 0 Jan 18 12:48 binary_runtime_measurements
->> -rw-------. 1 root root 0 Jan 18 12:48 policy
->> -r--r-----. 1 root root 0 Jan 18 12:48 runtime_measurements_count
->> -r--r-----. 1 root root 0 Jan 18 12:48 violations
->>
->>> * initial_userns:
->>
->> So that's the host, right? And this is a 2nd independent example from the
->> first.
-> Yes, these are just two examples to give a more complete idea of the
-> semantics by specifying two cases and how ima would behave.
+> Console scrolling acceleration was disabled by dropping code which checked at
+> runtime the driver hardware possibilities for the BINFO_HWACCEL_COPYAREA or
+> FBINFO_HWACCEL_FILLRECT flags and if set, it enabled scrollmode SCROLL_MOVE
+> which uses hardware acceleration to move screen contents.  After dropping those
+> checks scrollmode was hard-wired to SCROLL_REDRAW instead, which forces all
+> graphic cards to redraw every character at the new screen position when
+> scrolling.
 >
->>> ------------------
->>>      mount -t securityfs securityfs /initial_securityfs
->>>
->>>      fd_in_initial_securityfs = open("/initial_securityfs/ima_file, O_RDWR);
->>>
->>>      pid = fork():
->>>      if (pid == 0) {
->>> 	unshare(CLONE_NEWUSER);
->>> 	/* write idmapping for yourself */
->>>
->>> 	write_policy(fd_in_initial_securityfs, "my fancy policy");
->>>      }
->>>
->>> would allow an unprivileged caller to alter the host's ima policy (as
->>> you can see the example requires cooperation).
->> Sorry, not currently following. Root is the only one being able to open that
->> IMA files on the host, right? Is this a mistake here where root passed the
-> Yes.
+> This change effectively disabled all hardware-based scrolling acceleration for
+> ALL drivers, because now all kind of 2D hardware acceleration (bitblt,
+> fillrect) in the drivers isn't used any longer.
 >
->> fd onto the child and that child is not trusted to mess with the fd
->> including passing it on further?
-> This is just an example what the current semantics mean in practice.
-> The above code snippet is neither good nor bad by itself as that depends
-> on context:
+> The original commit message mentions that only 3 DRM drivers (nouveau, omapdrm
+> and gma500) used hardware acceleration in the past and thus code for checking
+> and using scrolling acceleration is obsolete.
 >
-> 1) Let's say for whatever reason you would like to let unprivileged
->     containers add policy rules (sorry in case I'm using the wrong ima
->     vernacular) for themselves to the initial ima namespace during
->     startup. That can be a rather valid and important use-case. Then this
->     code snipped above where root opens a policy fd in the host
->     securityfs instance and then let's the container access it across
->     fork() + post namespace creation is "good" as it will allow the
->     container to write the rules during setup while e.g. letting the
->     container manager process (the code prior to fork) continue doing
->     other stuff.
-
-I would agree to supporting passing the fd to other containers to have 
-them add rules to the policy, if that's what is intended.
-
-
+> This statement is NOT TRUE, because beside the DRM drivers there are around 35
+> other fbdev drivers which depend on fbdev/fbcon and still provide hardware
+> acceleration for fbdev/fbcon.
 >
-> 2) If you only want to ever allow container manager on the host write
->     rules for the container in the initial ima ns but never the container
->     setup process itself then the above code is "bad". The policy fd
->     should've been closed before the fork() and definitely be opened
->     o-cloexec.
-
-I would treat the IMA files' file descriptors like those of fd = 
-open("/top/secret/file", O_RDWR) assuming the programmer knows the 
-implications of passing the fd around, including knowing that open fds 
-are inherited by child processes... I don't see that there's anything 
-wrong with that.
-
-
+> The original commit message also states that syzbot found lots of bugs in fbcon
+> and thus it's "often the solution to just delete code and remove features".
+> This is true, and the bugs - which actually affected all users of fbcon,
+> including DRM - were fixed, or code was dropped like e.g. the support for
+> software scrollback in vgacon (commit 973c096f6a85).
 >
-> The examples really were just trying to make obvious what the semantics
-> are that you're buying.
+> So to further analyze which bugs were found by syzbot, I've looked through all
+> patches in drivers/video which were tagged with syzbot or syzkaller back to
+> year 2005. The vast majority fixed the reported issues on a higher level, e.g.
+> when screen is to be resized, or when font size is to be changed. The few ones
+> which touched driver code fixed a real driver bug, e.g. by adding a check.
+>
+> But NONE of those patches touched code of either the SCROLL_MOVE or the
+> SCROLL_REDRAW case.
+>
+> That means, there was no real reason why SCROLL_MOVE had to be ripped-out and
+> just SCROLL_REDRAW had to be used instead. The only reason I can imagine so far
+> was that SCROLL_MOVE wasn't used by DRM and as such it was assumed that it
+> could go away. That argument completely missed the fact that SCROLL_MOVE is
+> still heavily used by fbdev (non-DRM) drivers.
+>
+> Some people mention that using memcpy() instead of the hardware acceleration is
+> pretty much the same speed. But that's not true, at least not for older graphic
+> cards and machines where we see speed decreases by factor 10 and more and thus
+> this change leads to console responsiveness way worse than before.
+>
+> That's why I propose to revert those patches, re-introduce hardware-based
+> scrolling acceleration and fix the performance-regression for fbdev drivers.
+> There isn't any impact on DRM when reverting those patches.
+>
+> Helge Deller (2):
+>   Revert "fbdev: Garbage collect fbdev scrolling acceleration, part 1
+>     (from TODO list)"
+>   Revert "fbcon: Disable accelerated scrolling"
+
+Thank you for this series, and the prior analysis!
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,217 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7BE49394A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D61493943
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354041AbiASLKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:10:30 -0500
-Received: from mout.gmx.net ([212.227.15.15]:49047 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354027AbiASLKV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:10:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642590588;
-        bh=RGiIIof/++wYXg6xAlJlqJrLedfDeADl0VZRLLIROQA=;
-        h=X-UI-Sender-Class:From:To:Subject:Date:In-Reply-To:References;
-        b=Oe10AR4JkCg160gI7uvY57z0umFQNt5bKmahozBPxl0wx85r+zQteEaxYrd1v9+uR
-         7Q36lpdLd4fZ7pHzpao2Tu7ikk5SyRlQ0V1e0eRWnKhlBGn4QVDgrvoTkJ5kn6VQTr
-         5wCELjmJVZ2LyPVddmsrZ1YdfRLy5W2UEa3k5iw0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530.fritz.box ([92.116.183.52]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MnaoZ-1mQbLa3R9Z-00jX0h; Wed, 19
- Jan 2022 12:09:47 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
-Subject: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-Date:   Wed, 19 Jan 2022 12:08:39 +0100
-Message-Id: <20220119110839.33187-3-deller@gmx.de>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220119110839.33187-1-deller@gmx.de>
-References: <20220119110839.33187-1-deller@gmx.de>
+        id S1354021AbiASLKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:10:11 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45088 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353333AbiASLKI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:10:08 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4FAD6218E4;
+        Wed, 19 Jan 2022 11:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642590607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XQns7ry+S4QtQCYHYjH5vlhwIvoPhGouvztO1/xkhOw=;
+        b=TazNgORzPiPdgRTXlVdu2RRANPhrUJFZEv5id/U7dtjkdIMmC1rm7JkBPKqxwzICxBNelX
+        d9XqomwC+9ya7KB+qXtAveVCV9e9TTosR+5mg60AWMkW0BehhkdNn4SgmRgtlVyfai94zV
+        CjVPpd/YLmoGkARdp/pLgfiLnZA1ZAk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642590607;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XQns7ry+S4QtQCYHYjH5vlhwIvoPhGouvztO1/xkhOw=;
+        b=8hxMguh1nXY//+N2o65JGa4x2elWOqSS3Gnrj7mLJUQPz+pb6axFSsnah15g+4iyTQrB3E
+        SslLsrJ9Z0uW+GDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14D2513B4A;
+        Wed, 19 Jan 2022 11:10:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JTt7BI/x52HuXwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 11:10:07 +0000
+Message-ID: <699d9f0c-e330-f651-a6c8-f9e11e1844fd@suse.cz>
+Date:   Wed, 19 Jan 2022 12:10:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Roi+RGUkFP/ZjyHOVDyhOFbAk4MIfBdlPeQy/dls++mRYGy/G33
- TXlCK+Rl1iZFrJ/pPRsyP1hVUEoVJcV10TNFk88b4fke7C199gmzM/Od8cCvhGCGm3xa9jo
- 2dQf5U/OEBZhgrhUEvm/OKIdaRMooaLsfLnCXHhixPHJKJN+OX0hJR99bfyDrxrBU3eJ60D
- A2C8n/TpWNEzNaUZ5AFHg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:i8VsAxP1Cto=:EcQZcKgte4cEUKEORz5Npv
- YSa/An/vjP7tEnxHbOeWBqsSHbsr6Ud/Pgy+jn2uEayw7lL4Zp4t6xFAE6+HSfEy+zq3zZPV+
- k2u5Q9YKY/KhU3rq9dqWcvHwSnIDyfKsEohptq0/3injCNIE39oJ413CjkkcbKNKykJWgbgl6
- pp5gFYfDZkCMUu98FHQD5mKSaZzttx3hiYmGamLIsNoZMxfki958WeT11wNG1bx8HGPqYAitL
- +cQBOeLUJWPHjJI3u4aQTgWtKKY5MLGfUZVgjV+UJlH0vTe6OgMFgEOKqN6QPGcFk4b6IWZqP
- FAGpFfbf1hT096Oxjbvv70MxJwkUk7iMR3LmH8shxlxUGM13LSZbcpJ5gsxpwu43MqM3LblN3
- CDTZFvBcO7m8KhBeU2OGWuSyaHReiktPj8dJEFzg9HyStPWEmY7Be6n5XOn4Qp2dh1MxzZ8rS
- p1q5thIzzpbLpUPAwfhJZk4vxBeLVO/snqFODrvwKo1CRmjOAguoIMC6X2t7xjmci5xgNfU4z
- 8h1xQ+HxgII3Cz8O7sDkhgaNqjfR+MO32dWiM/+TtriBF3PZ67Ij9mJ3U5VMr9myt2pr/Hn6p
- OX1GaxZBZC/TH8NTs7WrR78SllP+uG+XHyhxencuoed0hYBHAByfqfHhNgIzUaBcQq1jZJHs+
- RrV4nwmyhcJLB+cwlY3g6h0BB3MkSMMKvgmTUbfjfKefNUf5UQKXoIhVEJlLzFm7ugF/dy2IG
- 6K7An8uTGaGEqX/03EaWttCkpi+49jO5iX5YPEUVPbUuGLpm7dyIMG0vmxy0UKrEAiu6UYVPX
- 5kdIFc02nj4ZIvYSNZCowJtttBWk2YVtHbKJJNV4ndYGrf/A3IXtxA4vu1YOAMbNTVZjJ0SI9
- tcdwFCLGkeqmgaR/06LVCgy+l6kHTc5E6+WjuoGNRC2rW4KOZxF/j9FImtQSqWGDpzxKRGFeV
- N6T/01a1kk/8essodfJIZLuTKl6RnbhQO1CJbcvh0qwp0vZH8+C4cQHpY/WhJjhKQYe+/ZgGh
- 68J2s99AFvxnGf1tPHYrLSq33/2rGQBJRP4sgAy02AwEQEcmXJse4vygsGk2O9xWFlbUL8mls
- pGlv8WjvSTQPjQ=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 41/66] fs/proc/base: Use maple tree iterators in place
+ of linked list
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-42-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-42-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 
-Revert this patch.  This patch started to introduce the regression that
-all hardware acceleration of more than 35 existing fbdev drivers were
-bypassed and thus fbcon console output for those was dramatically slowed
-down by factor of 10 and more.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Reverting this commit has no impact on DRM, since none of the DRM drivers =
-are
-tagged with the acceleration flags FBINFO_HWACCEL_COPYAREA,
-FBINFO_HWACCEL_FILLRECT or others.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: stable@vger.kernel.org # v5.16
-=2D--
- Documentation/gpu/todo.rst       | 21 ---------------
- drivers/video/fbdev/core/fbcon.c | 45 ++++++++++++++++++++++++++------
- 2 files changed, 37 insertions(+), 29 deletions(-)
-
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 29506815d24a..a1212b5b3026 100644
-=2D-- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -300,27 +300,6 @@ Contact: Daniel Vetter, Noralf Tronnes
-
- Level: Advanced
-
--Garbage collect fbdev scrolling acceleration
-=2D--------------------------------------------
--
--Scroll acceleration is disabled in fbcon by hard-wiring p->scrollmode =3D
--SCROLL_REDRAW. There's a ton of code this will allow us to remove:
--
-=2D- lots of code in fbcon.c
--
-=2D- a bunch of the hooks in fbcon_ops, maybe the remaining hooks could be=
- called
--  directly instead of the function table (with a switch on p->rotate)
--
-=2D- fb_copyarea is unused after this, and can be deleted from all drivers
--
--Note that not all acceleration code can be deleted, since clearing and cu=
-rsor
--support is still accelerated, which might be good candidates for further
--deletion projects.
--
--Contact: Daniel Vetter
--
--Level: Intermediate
--
- idr_init_base()
- ---------------
-
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/f=
-bcon.c
-index 22bb3892f6bd..b813985f1403 100644
-=2D-- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1025,7 +1025,7 @@ static void fbcon_init(struct vc_data *vc, int init)
- 	struct vc_data *svc =3D *default_mode;
- 	struct fbcon_display *t, *p =3D &fb_display[vc->vc_num];
- 	int logo =3D 1, new_rows, new_cols, rows, cols;
--	int ret;
-+	int cap, ret;
-
- 	if (WARN_ON(info_idx =3D=3D -1))
- 	    return;
-@@ -1034,6 +1034,7 @@ static void fbcon_init(struct vc_data *vc, int init)
- 		con2fb_map[vc->vc_num] =3D info_idx;
-
- 	info =3D registered_fb[con2fb_map[vc->vc_num]];
-+	cap =3D info->flags;
-
- 	if (logo_shown < 0 && console_loglevel <=3D CONSOLE_LOGLEVEL_QUIET)
- 		logo_shown =3D FBCON_LOGO_DONTSHOW;
-@@ -1135,13 +1136,11 @@ static void fbcon_init(struct vc_data *vc, int ini=
-t)
-
- 	ops->graphics =3D 0;
-
--	/*
--	 * No more hw acceleration for fbcon.
--	 *
--	 * FIXME: Garbage collect all the now dead code after sufficient time
--	 * has passed.
--	 */
--	p->scrollmode =3D SCROLL_REDRAW;
-+	if ((cap & FBINFO_HWACCEL_COPYAREA) &&
-+	    !(cap & FBINFO_HWACCEL_DISABLED))
-+		p->scrollmode =3D SCROLL_MOVE;
-+	else /* default to something safe */
-+		p->scrollmode =3D SCROLL_REDRAW;
-
- 	/*
- 	 *  ++guenther: console.c:vc_allocate() relies on initializing
-@@ -1953,15 +1952,45 @@ static void updatescrollmode(struct fbcon_display =
-*p,
- {
- 	struct fbcon_ops *ops =3D info->fbcon_par;
- 	int fh =3D vc->vc_font.height;
-+	int cap =3D info->flags;
-+	u16 t =3D 0;
-+	int ypan =3D FBCON_SWAP(ops->rotate, info->fix.ypanstep,
-+				  info->fix.xpanstep);
-+	int ywrap =3D FBCON_SWAP(ops->rotate, info->fix.ywrapstep, t);
- 	int yres =3D FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
- 	int vyres =3D FBCON_SWAP(ops->rotate, info->var.yres_virtual,
- 				   info->var.xres_virtual);
-+	int good_pan =3D (cap & FBINFO_HWACCEL_YPAN) &&
-+		divides(ypan, vc->vc_font.height) && vyres > yres;
-+	int good_wrap =3D (cap & FBINFO_HWACCEL_YWRAP) &&
-+		divides(ywrap, vc->vc_font.height) &&
-+		divides(vc->vc_font.height, vyres) &&
-+		divides(vc->vc_font.height, yres);
-+	int reading_fast =3D cap & FBINFO_READS_FAST;
-+	int fast_copyarea =3D (cap & FBINFO_HWACCEL_COPYAREA) &&
-+		!(cap & FBINFO_HWACCEL_DISABLED);
-+	int fast_imageblit =3D (cap & FBINFO_HWACCEL_IMAGEBLIT) &&
-+		!(cap & FBINFO_HWACCEL_DISABLED);
-
- 	p->vrows =3D vyres/fh;
- 	if (yres > (fh * (vc->vc_rows + 1)))
- 		p->vrows -=3D (yres - (fh * vc->vc_rows)) / fh;
- 	if ((yres % fh) && (vyres % fh < yres % fh))
- 		p->vrows--;
-+
-+	if (good_wrap || good_pan) {
-+		if (reading_fast || fast_copyarea)
-+			p->scrollmode =3D good_wrap ?
-+				SCROLL_WRAP_MOVE : SCROLL_PAN_MOVE;
-+		else
-+			p->scrollmode =3D good_wrap ? SCROLL_REDRAW :
-+				SCROLL_PAN_REDRAW;
-+	} else {
-+		if (reading_fast || (fast_copyarea && !fast_imageblit))
-+			p->scrollmode =3D SCROLL_MOVE;
-+		else
-+			p->scrollmode =3D SCROLL_REDRAW;
-+	}
- }
-
- #define PITCH(w) (((w) + 7) >> 3)
-=2D-
-2.31.1
+> ---
+>  fs/proc/base.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 13eda8de2998..ea17ee988158 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -2323,6 +2323,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+>  	GENRADIX(struct map_files_info) fa;
+>  	struct map_files_info *p;
+>  	int ret;
+> +	MA_STATE(mas, NULL, 0, 0);
+>  
+>  	genradix_init(&fa);
+>  
+> @@ -2350,6 +2351,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+>  	}
+>  
+>  	nr_files = 0;
+> +	mas.tree = &mm->mm_mt;
+>  
+>  	/*
+>  	 * We need two passes here:
+> @@ -2361,7 +2363,8 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+>  	 * routine might require mmap_lock taken in might_fault().
+>  	 */
+>  
+> -	for (vma = mm->mmap, pos = 2; vma; vma = vma->vm_next) {
+> +	pos = 2;
+> +	mas_for_each(&mas, vma, ULONG_MAX) {
+>  		if (!vma->vm_file)
+>  			continue;
+>  		if (++pos <= ctx->pos)
 

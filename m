@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E69D9493934
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18595493937
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353994AbiASLGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:06:32 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55807 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346901AbiASLG2 (ORCPT
+        id S1353999AbiASLGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353984AbiASLGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:06:28 -0500
+        Wed, 19 Jan 2022 06:06:31 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8091DC061574;
+        Wed, 19 Jan 2022 03:06:31 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jf2rd34Tcz4y3t;
-        Wed, 19 Jan 2022 22:06:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jf2rg1CJpz4y4Z;
+        Wed, 19 Jan 2022 22:06:27 +1100 (AEDT)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Paul Mackerras <paulus@samba.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <247e01e0e10f4dbc59b5ff89e81702eb1ee7641e.1641828571.git.christophe.leroy@csgroup.eu>
-References: <247e01e0e10f4dbc59b5ff89e81702eb1ee7641e.1641828571.git.christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] powerpc/time: Fix build failure due to do_hard_irq_enable() on PPC32
-Message-Id: <164259036177.3588160.5245172703887799778.b4-ty@ellerman.id.au>
-Date:   Wed, 19 Jan 2022 22:06:01 +1100
+Cc:     linuxppc-dev@lists.ozlabs.org, Maxime Bizon <mbizon@freebox.fr>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <7a50ef902494d1325227d47d33dada01e52e5518.1641818726.git.christophe.leroy@csgroup.eu>
+References: <7a50ef902494d1325227d47d33dada01e52e5518.1641818726.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v3] powerpc/32s: Fix kasan_init_region() for KASAN
+Message-Id: <164259036257.3588160.3465491440781256341.b4-ty@ellerman.id.au>
+Date:   Wed, 19 Jan 2022 22:06:02 +1100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -37,34 +40,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 15:29:53 +0000, Christophe Leroy wrote:
-> 	  CC      arch/powerpc/kernel/time.o
-> 	In file included from <command-line>:
-> 	./arch/powerpc/include/asm/hw_irq.h: In function 'do_hard_irq_enable':
-> 	././include/linux/compiler_types.h:335:45: error: call to '__compiletime_assert_35' declared with attribute error: BUILD_BUG failed
-> 	  335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> 	      |                                             ^
-> 	././include/linux/compiler_types.h:316:25: note: in definition of macro '__compiletime_assert'
-> 	  316 |                         prefix ## suffix();                             \
-> 	      |                         ^~~~~~
-> 	././include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-> 	  335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> 	      |         ^~~~~~~~~~~~~~~~~~~
-> 	./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-> 	   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> 	      |                                     ^~~~~~~~~~~~~~~~~~
-> 	./include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-> 	   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-> 	      |                     ^~~~~~~~~~~~~~~~
-> 	./arch/powerpc/include/asm/hw_irq.h:483:9: note: in expansion of macro 'BUILD_BUG'
-> 	  483 |         BUILD_BUG();
-> 	      |         ^~~~~~~~~
+On Mon, 10 Jan 2022 15:29:25 +0000, Christophe Leroy wrote:
+> It has been reported some configuration where the kernel doesn't
+> boot with KASAN enabled.
+> 
+> This is due to wrong BAT allocation for the KASAN area:
+> 
+> 	---[ Data Block Address Translation ]---
+> 	0: 0xc0000000-0xcfffffff 0x00000000       256M Kernel rw      m
+> 	1: 0xd0000000-0xdfffffff 0x10000000       256M Kernel rw      m
+> 	2: 0xe0000000-0xefffffff 0x20000000       256M Kernel rw      m
+> 	3: 0xf8000000-0xf9ffffff 0x2a000000        32M Kernel rw      m
+> 	4: 0xfa000000-0xfdffffff 0x2c000000        64M Kernel rw      m
 > 
 > [...]
 
 Applied to powerpc/fixes.
 
-[1/1] powerpc/time: Fix build failure due to do_hard_irq_enable() on PPC32
-      https://git.kernel.org/powerpc/c/87b9d74fb0be80054c729e8d6a119ca0955cedf3
+[1/1] powerpc/32s: Fix kasan_init_region() for KASAN
+      https://git.kernel.org/powerpc/c/d37823c3528e5e0705fc7746bcbc2afffb619259
 
 cheers

@@ -2,606 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86482493753
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0A949373A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353188AbiASJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353116AbiASJ26 (ORCPT
+        id S1353076AbiASJ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:27:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45008 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1352766AbiASJ12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:28:58 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE63EC061757
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:28:57 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id w204so2011924pfc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:28:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=180cyjRz+Y9+rOwCZ/fWUBjCQvnVUVC7b1b1X/dONts=;
-        b=iPbsP82FmRznLy4gTSjHzhizg0qfrWchL2wpnC4bQt/DdyOE73RIyLkDshoXu8HxvI
-         z6CpIv3IciEE1kNGHRWNclBsMm37UGGg7AK6NIC71XEKuaM+DdejU0saS951ByUvkCcA
-         /WbhPI/t9q5AaIOU2SvNL7j8RUXQEJ10H2x8IUSlxNiQr2KTwkJZDHWAUk16yqprxf2X
-         uY1z2zxWrEzx9PT04KGLSIrFG/ezC6poG0j2TjOil1kwHiFvHRLsSvMEs9XBzvX2JOar
-         4Mq0bFG3G6inDkPTUhM/CYtnrbbLgf0HmY6cDEp9qdolMzAi+AqrVlG3z4n3vcFrop6o
-         wavQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=180cyjRz+Y9+rOwCZ/fWUBjCQvnVUVC7b1b1X/dONts=;
-        b=zJxLnBa0pL/w9AJBBximJNcYPMgOoOnDxdhIS97qAnoKzt2KETL1cp7x+KU5Nmnmkz
-         GjKfnUdNRIMESxBdVYdLZ9C4JjbgTG6v8dP4k6gimiq0YkscbavBI9RvNfVHLzZHmAhO
-         UQNCf7jGdFSUaT+4DJfC27aFQj1tvon3uSLdFvy8BuGan01iLj+P6KuedyoEHQcbEKDy
-         tHkbcP3VRopoE2Vu5YsVKCqVHhMWJS4z+GxMqbze75aKl4b1AMpI/CGlc2ztjl2EDY/d
-         +OShwX2rKaXvuvTyyfQazQTQUcgUlWBC+ImeMFVZi6onwwoKy8cq2UtbuTAEj9o2liqc
-         tg0A==
-X-Gm-Message-State: AOAM531Yl0oPlh9qoSKKpsbCuUAIGNXvA5LpDZ6M3vzueXyn5YZ6tiKE
-        FEj7HA6uBk/uB6wcM550qpQLaA==
-X-Google-Smtp-Source: ABdhPJyBFMPVyaih6xzsH/uRKzZ3LYs5/ZwJEyECUWh4k3pJOZxT4zrHCoOs7R1HZJQzH1LdGPcabw==
-X-Received: by 2002:a63:eb07:: with SMTP id t7mr26798287pgh.112.1642584537296;
-        Wed, 19 Jan 2022 01:28:57 -0800 (PST)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id y8sm1415894pfl.207.2022.01.19.01.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 01:28:56 -0800 (PST)
-From:   Zong Li <zong.li@sifive.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH 4/4] clk: sifive: Move all stuff into SoCs header files from C files
-Date:   Wed, 19 Jan 2022 17:28:41 +0800
-Message-Id: <70c9317814b06c7ce37688b158178b188d3fd604.1642582832.git.zong.li@sifive.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1642582832.git.zong.li@sifive.com>
-References: <cover.1642582832.git.zong.li@sifive.com>
+        Wed, 19 Jan 2022 04:27:28 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20J8Rq63014373;
+        Wed, 19 Jan 2022 09:27:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9W0ifsnFqqA1O4RNHpUc+NyrcJ9s6shJm0TwViRtohc=;
+ b=M8rOlqOMVclrdWfLHBDv+yeWXX/uFTJRstfMtGD+ddMmQPzxcp/9Pn8PSfBS+W34ZCh6
+ fMh1HsDLf2Ps4FHrb/2H/49qkjz9EuGY+kDis64QhxGo8Ry+EhKPQcb87xTwRiYCBufl
+ 9NqSpJlRG9N4Yzjl/AKr/VziJ9WSu4tr6o36Ptek5b68EdRqk2tX5fVlGExxvGzWCrci
+ kPxlgNTaj3/RIY4FQW6Pxs/kENpuyP5gzV2L9iLlAD2HVtUcoPxdm1128+BsrDkoDV6k
+ 71+e9wt3eXVl6zIGR9dmICJlt8iyT+z0nW/39GypBOtkekEttmr9L3lcUAbDOMTXc3H2 CA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dpf5h14xx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 09:27:27 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20J8gQc3002328;
+        Wed, 19 Jan 2022 09:27:26 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dpf5h14xk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 09:27:26 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20J9BxNM004010;
+        Wed, 19 Jan 2022 09:27:25 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dknw9uq72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 09:27:24 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20J9I0GG14352660
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 09:18:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6EF7A4059;
+        Wed, 19 Jan 2022 09:27:19 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5F2B8A4051;
+        Wed, 19 Jan 2022 09:27:18 +0000 (GMT)
+Received: from [9.171.7.240] (unknown [9.171.7.240])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 09:27:18 +0000 (GMT)
+Message-ID: <265e3448-2e8e-c38b-e625-1546ae3d408b@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 10:29:02 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 21/30] KVM: s390: pci: handle refresh of PCI
+ translations
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-22-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-22-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6WhABobjSFm26SEWLViY8CmpSRwVVrsc
+X-Proofpoint-ORIG-GUID: Y3UPRGUPpAyRqclYPeei0QMdl_O-2v6w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_06,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 mlxscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201190049
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve PRCI driver to reduce the complexity, we remove the SoCs C files
-by putting all stuff in each SoCs header files, and include these
-SoCs-specific header files in core of PRCI. It can also avoid the W=1
-kernel build warnings about variable defined but not used
-[-Wunused-const-variable=], like commit 487dc7bb6a0c ("clk: sifive:
-fu540-prci: Declare static const variable 'prci_clk_fu540' where it's
-used") does.
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
-Suggested-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/clk/sifive/Makefile      |   2 +-
- drivers/clk/sifive/fu540-prci.c  |  89 --------------------
- drivers/clk/sifive/fu540-prci.h  |  91 ++++++++++++++++++++-
- drivers/clk/sifive/fu740-prci.c  | 134 -------------------------------
- drivers/clk/sifive/fu740-prci.h  | 130 +++++++++++++++++++++++++++++-
- drivers/clk/sifive/sifive-prci.c |   5 --
- 6 files changed, 214 insertions(+), 237 deletions(-)
- delete mode 100644 drivers/clk/sifive/fu540-prci.c
- delete mode 100644 drivers/clk/sifive/fu740-prci.c
 
-diff --git a/drivers/clk/sifive/Makefile b/drivers/clk/sifive/Makefile
-index 7b06fc04e6b3..efdf01f1c8d5 100644
---- a/drivers/clk/sifive/Makefile
-+++ b/drivers/clk/sifive/Makefile
-@@ -1,2 +1,2 @@
- # SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_CLK_SIFIVE_PRCI)	+= sifive-prci.o fu540-prci.o fu740-prci.o
-+obj-$(CONFIG_CLK_SIFIVE_PRCI)	+= sifive-prci.o
-diff --git a/drivers/clk/sifive/fu540-prci.c b/drivers/clk/sifive/fu540-prci.c
-deleted file mode 100644
-index d686f5cf3f71..000000000000
---- a/drivers/clk/sifive/fu540-prci.c
-+++ /dev/null
-@@ -1,89 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2018-2021 SiFive, Inc.
-- * Copyright (C) 2018-2019 Wesley Terpstra
-- * Copyright (C) 2018-2019 Paul Walmsley
-- * Copyright (C) 2020-2021 Zong Li
-- *
-- * The FU540 PRCI implements clock and reset control for the SiFive
-- * FU540-C000 chip.  This driver assumes that it has sole control
-- * over all PRCI resources.
-- *
-- * This driver is based on the PRCI driver written by Wesley Terpstra:
-- * https://github.com/riscv/riscv-linux/commit/999529edf517ed75b56659d456d221b2ee56bb60
-- *
-- * References:
-- * - SiFive FU540-C000 manual v1p0, Chapter 7 "Clocking and Reset"
-- */
--
--#include <linux/module.h>
--
--#include <dt-bindings/clock/sifive-fu540-prci.h>
--
--#include "fu540-prci.h"
--#include "sifive-prci.h"
--
--/* PRCI integration data for each WRPLL instance */
--
--static struct __prci_wrpll_data sifive_fu540_prci_corepll_data = {
--	.cfg0_offs = PRCI_COREPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_COREPLLCFG1_OFFSET,
--	.enable_bypass = sifive_prci_coreclksel_use_hfclk,
--	.disable_bypass = sifive_prci_coreclksel_use_corepll,
--};
--
--static struct __prci_wrpll_data sifive_fu540_prci_ddrpll_data = {
--	.cfg0_offs = PRCI_DDRPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_DDRPLLCFG1_OFFSET,
--};
--
--static struct __prci_wrpll_data sifive_fu540_prci_gemgxlpll_data = {
--	.cfg0_offs = PRCI_GEMGXLPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_GEMGXLPLLCFG1_OFFSET,
--};
--
--/* Linux clock framework integration */
--
--static const struct clk_ops sifive_fu540_prci_wrpll_clk_ops = {
--	.set_rate = sifive_prci_wrpll_set_rate,
--	.round_rate = sifive_prci_wrpll_round_rate,
--	.recalc_rate = sifive_prci_wrpll_recalc_rate,
--	.enable = sifive_prci_clock_enable,
--	.disable = sifive_prci_clock_disable,
--	.is_enabled = sifive_clk_is_enabled,
--};
--
--static const struct clk_ops sifive_fu540_prci_wrpll_ro_clk_ops = {
--	.recalc_rate = sifive_prci_wrpll_recalc_rate,
--};
--
--static const struct clk_ops sifive_fu540_prci_tlclksel_clk_ops = {
--	.recalc_rate = sifive_prci_tlclksel_recalc_rate,
--};
--
--/* List of clock controls provided by the PRCI */
--struct __prci_clock __prci_init_clocks_fu540[] = {
--	[FU540_PRCI_CLK_COREPLL] = {
--		.name = "corepll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu540_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu540_prci_corepll_data,
--	},
--	[FU540_PRCI_CLK_DDRPLL] = {
--		.name = "ddrpll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu540_prci_wrpll_ro_clk_ops,
--		.pwd = &sifive_fu540_prci_ddrpll_data,
--	},
--	[FU540_PRCI_CLK_GEMGXLPLL] = {
--		.name = "gemgxlpll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu540_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu540_prci_gemgxlpll_data,
--	},
--	[FU540_PRCI_CLK_TLCLK] = {
--		.name = "tlclk",
--		.parent_name = "corepll",
--		.ops = &sifive_fu540_prci_tlclksel_clk_ops,
--	},
--};
-diff --git a/drivers/clk/sifive/fu540-prci.h b/drivers/clk/sifive/fu540-prci.h
-index c220677dc010..e0173324f3c5 100644
---- a/drivers/clk/sifive/fu540-prci.h
-+++ b/drivers/clk/sifive/fu540-prci.h
-@@ -1,16 +1,99 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Copyright (C) 2020 SiFive, Inc.
-- * Zong Li
-+ * Copyright (C) 2018-2021 SiFive, Inc.
-+ * Copyright (C) 2018-2019 Wesley Terpstra
-+ * Copyright (C) 2018-2019 Paul Walmsley
-+ * Copyright (C) 2020-2021 Zong Li
-+ *
-+ * The FU540 PRCI implements clock and reset control for the SiFive
-+ * FU540-C000 chip.  This driver assumes that it has sole control
-+ * over all PRCI resources.
-+ *
-+ * This driver is based on the PRCI driver written by Wesley Terpstra:
-+ * https://github.com/riscv/riscv-linux/commit/999529edf517ed75b56659d456d221b2ee56bb60
-+ *
-+ * References:
-+ * - SiFive FU540-C000 manual v1p0, Chapter 7 "Clocking and Reset"
-  */
- 
- #ifndef __SIFIVE_CLK_FU540_PRCI_H
- #define __SIFIVE_CLK_FU540_PRCI_H
- 
-+
-+#include <linux/module.h>
-+
-+#include <dt-bindings/clock/sifive-fu540-prci.h>
-+
- #include "sifive-prci.h"
- 
--#define NUM_CLOCK_FU540	4
-+/* PRCI integration data for each WRPLL instance */
-+
-+static struct __prci_wrpll_data sifive_fu540_prci_corepll_data = {
-+	.cfg0_offs = PRCI_COREPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_COREPLLCFG1_OFFSET,
-+	.enable_bypass = sifive_prci_coreclksel_use_hfclk,
-+	.disable_bypass = sifive_prci_coreclksel_use_corepll,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu540_prci_ddrpll_data = {
-+	.cfg0_offs = PRCI_DDRPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_DDRPLLCFG1_OFFSET,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu540_prci_gemgxlpll_data = {
-+	.cfg0_offs = PRCI_GEMGXLPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_GEMGXLPLLCFG1_OFFSET,
-+};
-+
-+/* Linux clock framework integration */
-+
-+static const struct clk_ops sifive_fu540_prci_wrpll_clk_ops = {
-+	.set_rate = sifive_prci_wrpll_set_rate,
-+	.round_rate = sifive_prci_wrpll_round_rate,
-+	.recalc_rate = sifive_prci_wrpll_recalc_rate,
-+	.enable = sifive_prci_clock_enable,
-+	.disable = sifive_prci_clock_disable,
-+	.is_enabled = sifive_clk_is_enabled,
-+};
-+
-+static const struct clk_ops sifive_fu540_prci_wrpll_ro_clk_ops = {
-+	.recalc_rate = sifive_prci_wrpll_recalc_rate,
-+};
-+
-+static const struct clk_ops sifive_fu540_prci_tlclksel_clk_ops = {
-+	.recalc_rate = sifive_prci_tlclksel_recalc_rate,
-+};
-+
-+/* List of clock controls provided by the PRCI */
-+static struct __prci_clock __prci_init_clocks_fu540[] = {
-+	[FU540_PRCI_CLK_COREPLL] = {
-+		.name = "corepll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu540_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu540_prci_corepll_data,
-+	},
-+	[FU540_PRCI_CLK_DDRPLL] = {
-+		.name = "ddrpll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu540_prci_wrpll_ro_clk_ops,
-+		.pwd = &sifive_fu540_prci_ddrpll_data,
-+	},
-+	[FU540_PRCI_CLK_GEMGXLPLL] = {
-+		.name = "gemgxlpll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu540_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu540_prci_gemgxlpll_data,
-+	},
-+	[FU540_PRCI_CLK_TLCLK] = {
-+		.name = "tlclk",
-+		.parent_name = "corepll",
-+		.ops = &sifive_fu540_prci_tlclksel_clk_ops,
-+	},
-+};
- 
--extern struct __prci_clock __prci_init_clocks_fu540[NUM_CLOCK_FU540];
-+static const struct prci_clk_desc prci_clk_fu540 = {
-+	.clks = __prci_init_clocks_fu540,
-+	.num_clks = ARRAY_SIZE(__prci_init_clocks_fu540),
-+};
- 
- #endif /* __SIFIVE_CLK_FU540_PRCI_H */
-diff --git a/drivers/clk/sifive/fu740-prci.c b/drivers/clk/sifive/fu740-prci.c
-deleted file mode 100644
-index bd66559fe2f8..000000000000
---- a/drivers/clk/sifive/fu740-prci.c
-+++ /dev/null
-@@ -1,134 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2020-2021 SiFive, Inc.
-- * Copyright (C) 2020-2021 Zong Li
-- */
--
--#include <linux/module.h>
--
--#include <dt-bindings/clock/sifive-fu740-prci.h>
--
--#include "fu540-prci.h"
--#include "sifive-prci.h"
--
--/* PRCI integration data for each WRPLL instance */
--
--static struct __prci_wrpll_data sifive_fu740_prci_corepll_data = {
--	.cfg0_offs = PRCI_COREPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_COREPLLCFG1_OFFSET,
--	.enable_bypass = sifive_prci_coreclksel_use_hfclk,
--	.disable_bypass = sifive_prci_coreclksel_use_final_corepll,
--};
--
--static struct __prci_wrpll_data sifive_fu740_prci_ddrpll_data = {
--	.cfg0_offs = PRCI_DDRPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_DDRPLLCFG1_OFFSET,
--};
--
--static struct __prci_wrpll_data sifive_fu740_prci_gemgxlpll_data = {
--	.cfg0_offs = PRCI_GEMGXLPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_GEMGXLPLLCFG1_OFFSET,
--};
--
--static struct __prci_wrpll_data sifive_fu740_prci_dvfscorepll_data = {
--	.cfg0_offs = PRCI_DVFSCOREPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_DVFSCOREPLLCFG1_OFFSET,
--	.enable_bypass = sifive_prci_corepllsel_use_corepll,
--	.disable_bypass = sifive_prci_corepllsel_use_dvfscorepll,
--};
--
--static struct __prci_wrpll_data sifive_fu740_prci_hfpclkpll_data = {
--	.cfg0_offs = PRCI_HFPCLKPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_HFPCLKPLLCFG1_OFFSET,
--	.enable_bypass = sifive_prci_hfpclkpllsel_use_hfclk,
--	.disable_bypass = sifive_prci_hfpclkpllsel_use_hfpclkpll,
--};
--
--static struct __prci_wrpll_data sifive_fu740_prci_cltxpll_data = {
--	.cfg0_offs = PRCI_CLTXPLLCFG0_OFFSET,
--	.cfg1_offs = PRCI_CLTXPLLCFG1_OFFSET,
--};
--
--/* Linux clock framework integration */
--
--static const struct clk_ops sifive_fu740_prci_wrpll_clk_ops = {
--	.set_rate = sifive_prci_wrpll_set_rate,
--	.round_rate = sifive_prci_wrpll_round_rate,
--	.recalc_rate = sifive_prci_wrpll_recalc_rate,
--	.enable = sifive_prci_clock_enable,
--	.disable = sifive_prci_clock_disable,
--	.is_enabled = sifive_clk_is_enabled,
--};
--
--static const struct clk_ops sifive_fu740_prci_wrpll_ro_clk_ops = {
--	.recalc_rate = sifive_prci_wrpll_recalc_rate,
--};
--
--static const struct clk_ops sifive_fu740_prci_tlclksel_clk_ops = {
--	.recalc_rate = sifive_prci_tlclksel_recalc_rate,
--};
--
--static const struct clk_ops sifive_fu740_prci_hfpclkplldiv_clk_ops = {
--	.recalc_rate = sifive_prci_hfpclkplldiv_recalc_rate,
--};
--
--static const struct clk_ops sifive_fu740_prci_pcie_aux_clk_ops = {
--	.enable = sifive_prci_pcie_aux_clock_enable,
--	.disable = sifive_prci_pcie_aux_clock_disable,
--	.is_enabled = sifive_prci_pcie_aux_clock_is_enabled,
--};
--
--/* List of clock controls provided by the PRCI */
--struct __prci_clock __prci_init_clocks_fu740[] = {
--	[FU740_PRCI_CLK_COREPLL] = {
--		.name = "corepll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu740_prci_corepll_data,
--	},
--	[FU740_PRCI_CLK_DDRPLL] = {
--		.name = "ddrpll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_wrpll_ro_clk_ops,
--		.pwd = &sifive_fu740_prci_ddrpll_data,
--	},
--	[FU740_PRCI_CLK_GEMGXLPLL] = {
--		.name = "gemgxlpll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu740_prci_gemgxlpll_data,
--	},
--	[FU740_PRCI_CLK_DVFSCOREPLL] = {
--		.name = "dvfscorepll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu740_prci_dvfscorepll_data,
--	},
--	[FU740_PRCI_CLK_HFPCLKPLL] = {
--		.name = "hfpclkpll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu740_prci_hfpclkpll_data,
--	},
--	[FU740_PRCI_CLK_CLTXPLL] = {
--		.name = "cltxpll",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_wrpll_clk_ops,
--		.pwd = &sifive_fu740_prci_cltxpll_data,
--	},
--	[FU740_PRCI_CLK_TLCLK] = {
--		.name = "tlclk",
--		.parent_name = "corepll",
--		.ops = &sifive_fu740_prci_tlclksel_clk_ops,
--	},
--	[FU740_PRCI_CLK_PCLK] = {
--		.name = "pclk",
--		.parent_name = "hfpclkpll",
--		.ops = &sifive_fu740_prci_hfpclkplldiv_clk_ops,
--	},
--	[FU740_PRCI_CLK_PCIE_AUX] = {
--		.name = "pcie_aux",
--		.parent_name = "hfclk",
--		.ops = &sifive_fu740_prci_pcie_aux_clk_ops,
--	},
--};
-diff --git a/drivers/clk/sifive/fu740-prci.h b/drivers/clk/sifive/fu740-prci.h
-index 511a0bf7ba2b..f31cd30fc395 100644
---- a/drivers/clk/sifive/fu740-prci.h
-+++ b/drivers/clk/sifive/fu740-prci.h
-@@ -1,17 +1,139 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Copyright (C) 2020 SiFive, Inc.
-- * Zong Li
-+ * Copyright (C) 2020-2021 SiFive, Inc.
-+ * Copyright (C) 2020-2021 Zong Li
-  */
- 
- #ifndef __SIFIVE_CLK_FU740_PRCI_H
- #define __SIFIVE_CLK_FU740_PRCI_H
- 
-+#include <linux/module.h>
-+
-+#include <dt-bindings/clock/sifive-fu740-prci.h>
-+
- #include "sifive-prci.h"
- 
--#define NUM_CLOCK_FU740	9
-+/* PRCI integration data for each WRPLL instance */
-+
-+static struct __prci_wrpll_data sifive_fu740_prci_corepll_data = {
-+	.cfg0_offs = PRCI_COREPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_COREPLLCFG1_OFFSET,
-+	.enable_bypass = sifive_prci_coreclksel_use_hfclk,
-+	.disable_bypass = sifive_prci_coreclksel_use_final_corepll,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu740_prci_ddrpll_data = {
-+	.cfg0_offs = PRCI_DDRPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_DDRPLLCFG1_OFFSET,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu740_prci_gemgxlpll_data = {
-+	.cfg0_offs = PRCI_GEMGXLPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_GEMGXLPLLCFG1_OFFSET,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu740_prci_dvfscorepll_data = {
-+	.cfg0_offs = PRCI_DVFSCOREPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_DVFSCOREPLLCFG1_OFFSET,
-+	.enable_bypass = sifive_prci_corepllsel_use_corepll,
-+	.disable_bypass = sifive_prci_corepllsel_use_dvfscorepll,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu740_prci_hfpclkpll_data = {
-+	.cfg0_offs = PRCI_HFPCLKPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_HFPCLKPLLCFG1_OFFSET,
-+	.enable_bypass = sifive_prci_hfpclkpllsel_use_hfclk,
-+	.disable_bypass = sifive_prci_hfpclkpllsel_use_hfpclkpll,
-+};
-+
-+static struct __prci_wrpll_data sifive_fu740_prci_cltxpll_data = {
-+	.cfg0_offs = PRCI_CLTXPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_CLTXPLLCFG1_OFFSET,
-+};
-+
-+/* Linux clock framework integration */
-+
-+static const struct clk_ops sifive_fu740_prci_wrpll_clk_ops = {
-+	.set_rate = sifive_prci_wrpll_set_rate,
-+	.round_rate = sifive_prci_wrpll_round_rate,
-+	.recalc_rate = sifive_prci_wrpll_recalc_rate,
-+	.enable = sifive_prci_clock_enable,
-+	.disable = sifive_prci_clock_disable,
-+	.is_enabled = sifive_clk_is_enabled,
-+};
- 
--extern struct __prci_clock __prci_init_clocks_fu740[NUM_CLOCK_FU740];
-+static const struct clk_ops sifive_fu740_prci_wrpll_ro_clk_ops = {
-+	.recalc_rate = sifive_prci_wrpll_recalc_rate,
-+};
-+
-+static const struct clk_ops sifive_fu740_prci_tlclksel_clk_ops = {
-+	.recalc_rate = sifive_prci_tlclksel_recalc_rate,
-+};
-+
-+static const struct clk_ops sifive_fu740_prci_hfpclkplldiv_clk_ops = {
-+	.recalc_rate = sifive_prci_hfpclkplldiv_recalc_rate,
-+};
-+
-+static const struct clk_ops sifive_fu740_prci_pcie_aux_clk_ops = {
-+	.enable = sifive_prci_pcie_aux_clock_enable,
-+	.disable = sifive_prci_pcie_aux_clock_disable,
-+	.is_enabled = sifive_prci_pcie_aux_clock_is_enabled,
-+};
-+
-+/* List of clock controls provided by the PRCI */
-+static struct __prci_clock __prci_init_clocks_fu740[] = {
-+	[FU740_PRCI_CLK_COREPLL] = {
-+		.name = "corepll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu740_prci_corepll_data,
-+	},
-+	[FU740_PRCI_CLK_DDRPLL] = {
-+		.name = "ddrpll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_wrpll_ro_clk_ops,
-+		.pwd = &sifive_fu740_prci_ddrpll_data,
-+	},
-+	[FU740_PRCI_CLK_GEMGXLPLL] = {
-+		.name = "gemgxlpll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu740_prci_gemgxlpll_data,
-+	},
-+	[FU740_PRCI_CLK_DVFSCOREPLL] = {
-+		.name = "dvfscorepll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu740_prci_dvfscorepll_data,
-+	},
-+	[FU740_PRCI_CLK_HFPCLKPLL] = {
-+		.name = "hfpclkpll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu740_prci_hfpclkpll_data,
-+	},
-+	[FU740_PRCI_CLK_CLTXPLL] = {
-+		.name = "cltxpll",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_wrpll_clk_ops,
-+		.pwd = &sifive_fu740_prci_cltxpll_data,
-+	},
-+	[FU740_PRCI_CLK_TLCLK] = {
-+		.name = "tlclk",
-+		.parent_name = "corepll",
-+		.ops = &sifive_fu740_prci_tlclksel_clk_ops,
-+	},
-+	[FU740_PRCI_CLK_PCLK] = {
-+		.name = "pclk",
-+		.parent_name = "hfpclkpll",
-+		.ops = &sifive_fu740_prci_hfpclkplldiv_clk_ops,
-+	},
-+	[FU740_PRCI_CLK_PCIE_AUX] = {
-+		.name = "pcie_aux",
-+		.parent_name = "hfclk",
-+		.ops = &sifive_fu740_prci_pcie_aux_clk_ops,
-+	},
-+};
- 
- static const struct prci_clk_desc prci_clk_fu740 = {
- 	.clks = __prci_init_clocks_fu740,
-diff --git a/drivers/clk/sifive/sifive-prci.c b/drivers/clk/sifive/sifive-prci.c
-index 80a288c59e56..916d2fc28b9c 100644
---- a/drivers/clk/sifive/sifive-prci.c
-+++ b/drivers/clk/sifive/sifive-prci.c
-@@ -12,11 +12,6 @@
- #include "fu540-prci.h"
- #include "fu740-prci.h"
- 
--static const struct prci_clk_desc prci_clk_fu540 = {
--	.clks = __prci_init_clocks_fu540,
--	.num_clks = ARRAY_SIZE(__prci_init_clocks_fu540),
--};
--
- /*
-  * Private functions
-  */
+On 1/14/22 21:31, Matthew Rosato wrote:
+> Add a routine that will perform a shadow operation between a guest
+> and host IOAT.  A subsequent patch will invoke this in response to
+> an 04 RPCIT instruction intercept.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/kvm_pci.h |   1 +
+>   arch/s390/include/asm/pci_dma.h |   1 +
+>   arch/s390/kvm/pci.c             | 208 +++++++++++++++++++++++++++++++-
+>   arch/s390/kvm/pci.h             |   8 +-
+>   4 files changed, 216 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index 770849f13a70..fa90729a35cf 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -30,6 +30,7 @@ struct kvm_zdev_ioat {
+>   struct kvm_zdev {
+>   	struct zpci_dev *zdev;
+>   	struct kvm *kvm;
+> +	u64 rpcit_count;
+>   	struct kvm_zdev_ioat ioat;
+>   	struct zpci_fib fib;
+>   };
+> diff --git a/arch/s390/include/asm/pci_dma.h b/arch/s390/include/asm/pci_dma.h
+> index 69e616d0712c..38004e0a4383 100644
+> --- a/arch/s390/include/asm/pci_dma.h
+> +++ b/arch/s390/include/asm/pci_dma.h
+> @@ -52,6 +52,7 @@ enum zpci_ioat_dtype {
+>   #define ZPCI_TABLE_ENTRIES		(ZPCI_TABLE_SIZE / ZPCI_TABLE_ENTRY_SIZE)
+>   #define ZPCI_TABLE_PAGES		(ZPCI_TABLE_SIZE >> PAGE_SHIFT)
+>   #define ZPCI_TABLE_ENTRIES_PAGES	(ZPCI_TABLE_ENTRIES * ZPCI_TABLE_PAGES)
+> +#define ZPCI_TABLE_ENTRIES_PER_PAGE	(ZPCI_TABLE_ENTRIES / ZPCI_TABLE_PAGES)
+>   
+>   #define ZPCI_TABLE_BITS			11
+>   #define ZPCI_PT_BITS			8
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index 39c13c25a700..38d2b77ec565 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -149,6 +149,208 @@ int kvm_s390_pci_aen_init(u8 nisc)
+>   	return rc;
+>   }
+>   
+> +static int dma_shadow_cpu_trans(struct kvm_vcpu *vcpu, unsigned long *entry,
+> +				unsigned long *gentry)
+> +{
+> +	phys_addr_t gaddr = 0;
+> +	unsigned long idx;
+> +	struct page *page;
+> +	kvm_pfn_t pfn;
+> +	gpa_t addr;
+> +	int rc = 0;
+> +
+> +	if (pt_entry_isvalid(*gentry)) {
+> +		/* pin and validate */
+> +		addr = *gentry & ZPCI_PTE_ADDR_MASK;
+> +		idx = srcu_read_lock(&vcpu->kvm->srcu);
+> +		page = gfn_to_page(vcpu->kvm, gpa_to_gfn(addr));
+> +		srcu_read_unlock(&vcpu->kvm->srcu, idx);
+> +		if (is_error_page(page))
+> +			return -EIO;
+> +		gaddr = page_to_phys(page) + (addr & ~PAGE_MASK);
+> +	}
+> +
+> +	if (pt_entry_isvalid(*entry)) {
+> +		/* Either we are invalidating, replacing or no-op */
+> +		if (gaddr != 0) {
+> +			if ((*entry & ZPCI_PTE_ADDR_MASK) == gaddr) {
+> +				/* Duplicate */
+> +				kvm_release_pfn_dirty(*entry >> PAGE_SHIFT);
+> +			} else {
+> +				/* Replace */
+> +				pfn = (*entry >> PAGE_SHIFT);
+> +				invalidate_pt_entry(entry);
+> +				set_pt_pfaa(entry, gaddr);
+> +				validate_pt_entry(entry);
+> +				kvm_release_pfn_dirty(pfn);
+> +				rc = 1;
+> +			}
+> +		} else {
+> +			/* Invalidate */
+> +			pfn = (*entry >> PAGE_SHIFT);
+> +			invalidate_pt_entry(entry);
+> +			kvm_release_pfn_dirty(pfn);
+> +			rc = 1;
+> +		}
+> +	} else if (gaddr != 0) {
+> +		/* New Entry */
+> +		set_pt_pfaa(entry, gaddr);
+> +		validate_pt_entry(entry);
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+> +static unsigned long *dma_walk_guest_cpu_trans(struct kvm_vcpu *vcpu,
+> +					       struct kvm_zdev_ioat *ioat,
+> +					       dma_addr_t dma_addr)
+> +{
+> +	unsigned long *rto, *sto, *pto;
+> +	unsigned int rtx, rts, sx, px, idx;
+> +	struct page *page;
+> +	gpa_t addr;
+> +	int i;
+> +
+> +	/* Pin guest segment table if needed */
+> +	rtx = calc_rtx(dma_addr);
+> +	rto = ioat->head[(rtx / ZPCI_TABLE_ENTRIES_PER_PAGE)];
+> +	rts = rtx * ZPCI_TABLE_PAGES;
+> +	if (!ioat->seg[rts]) {
+> +		if (!reg_entry_isvalid(rto[rtx % ZPCI_TABLE_ENTRIES_PER_PAGE]))
+> +			return NULL;
+> +		sto = get_rt_sto(rto[rtx % ZPCI_TABLE_ENTRIES_PER_PAGE]);
+> +		addr = ((u64)sto & ZPCI_RTE_ADDR_MASK);
+> +		idx = srcu_read_lock(&vcpu->kvm->srcu);
+> +		for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
+> +			page = gfn_to_page(vcpu->kvm, gpa_to_gfn(addr));
+> +			if (is_error_page(page)) {
+> +				srcu_read_unlock(&vcpu->kvm->srcu, idx);
+> +				return NULL;
+> +			}
+> +			ioat->seg[rts + i] = page_to_virt(page) +
+> +					     (addr & ~PAGE_MASK);
+> +			addr += PAGE_SIZE;
+> +		}
+> +		srcu_read_unlock(&vcpu->kvm->srcu, idx);
+> +	}
+> +
+> +	/* Allocate pin pointers for another segment table if needed */
+> +	if (!ioat->pt[rtx]) {
+> +		ioat->pt[rtx] = kcalloc(ZPCI_TABLE_ENTRIES,
+> +					(sizeof(unsigned long *)), GFP_KERNEL);
+> +		if (!ioat->pt[rtx])
+> +			return NULL;
+> +	}
+> +	/* Pin guest page table if needed */
+> +	sx = calc_sx(dma_addr);
+> +	sto = ioat->seg[(rts + (sx / ZPCI_TABLE_ENTRIES_PER_PAGE))];
+> +	if (!ioat->pt[rtx][sx]) {
+> +		if (!reg_entry_isvalid(sto[sx % ZPCI_TABLE_ENTRIES_PER_PAGE]))
+> +			return NULL;
+> +		pto = get_st_pto(sto[sx % ZPCI_TABLE_ENTRIES_PER_PAGE]);
+> +		if (!pto)
+> +			return NULL;
+> +		addr = ((u64)pto & ZPCI_STE_ADDR_MASK);
+> +		idx = srcu_read_lock(&vcpu->kvm->srcu);
+> +		page = gfn_to_page(vcpu->kvm, gpa_to_gfn(addr));
+> +		srcu_read_unlock(&vcpu->kvm->srcu, idx);
+> +		if (is_error_page(page))
+> +			return NULL;
+> +		ioat->pt[rtx][sx] = page_to_virt(page) + (addr & ~PAGE_MASK);
+> +	}
+> +	pto = ioat->pt[rtx][sx];
+> +
+> +	/* Return guest PTE */
+> +	px = calc_px(dma_addr);
+> +	return &pto[px];
+> +}
+> +
+> +
+> +static int dma_table_shadow(struct kvm_vcpu *vcpu, struct zpci_dev *zdev,
+> +			    dma_addr_t dma_addr, size_t size)
+> +{
+> +	unsigned int nr_pages = PAGE_ALIGN(size) >> PAGE_SHIFT;
+> +	struct kvm_zdev *kzdev = zdev->kzdev;
+> +	unsigned long *entry, *gentry;
+> +	int i, rc = 0, rc2;
+> +
+> +	if (!nr_pages || !kzdev)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&kzdev->ioat.lock);
+> +	if (!zdev->dma_table || !kzdev->ioat.head[0]) {
+> +		rc = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +
+> +	for (i = 0; i < nr_pages; i++) {
+> +		gentry = dma_walk_guest_cpu_trans(vcpu, &kzdev->ioat, dma_addr);
+> +		if (!gentry)
+> +			continue;
+> +		entry = dma_walk_cpu_trans(zdev->dma_table, dma_addr);
+> +
+> +		if (!entry) {
+> +			rc = -ENOMEM;
+> +			goto out_unlock;
+> +		}
+> +
+> +		rc2 = dma_shadow_cpu_trans(vcpu, entry, gentry);
+> +		if (rc2 < 0) {
+> +			rc = -EIO;
+> +			goto out_unlock;
+> +		}
+> +		dma_addr += PAGE_SIZE;
+> +		rc += rc2;
+> +	}
+> +
+
+In case of error, shouldn't we invalidate the shadow tables entries we 
+did validate until the error?
+
+> +out_unlock:
+> +	mutex_unlock(&kzdev->ioat.lock);
+> +	return rc;
+> +}
+> +
+> +int kvm_s390_pci_refresh_trans(struct kvm_vcpu *vcpu, unsigned long req,
+> +			       unsigned long start, unsigned long size,
+> +			       u8 *status)
+> +{
+> +	struct zpci_dev *zdev;
+> +	u32 fh = req >> 32;
+> +	int rc;
+> +
+> +	/* Make sure this is a valid device associated with this guest */
+> +	zdev = get_zdev_by_fh(fh);
+> +	if (!zdev || !zdev->kzdev || zdev->kzdev->kvm != vcpu->kvm) {
+> +		*status = 0;
+
+Wouldn't it be interesting to add some debug information here.
+When would this appear?
+
+Also if we have this error this looks like we have a VM problem, 
+shouldn't we treat this in QEMU and return -EOPNOTSUPP ?
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Only proceed if the device is using the assist */
+> +	if (zdev->kzdev->ioat.head[0] == 0)
+> +		return -EOPNOTSUPP;
+> +
+> +	rc = dma_table_shadow(vcpu, zdev, start, size);
+> +	if (rc < 0) {
+> +		/*
+> +		 * If errors encountered during shadow operations, we must
+> +		 * fabricate status to present to the guest
+> +		 */
+> +		switch (rc) {
+> +		case -ENOMEM:
+> +			*status = KVM_S390_RPCIT_INS_RES;
+> +			break;
+> +		default:
+> +			*status = KVM_S390_RPCIT_ERR;
+> +			break;
+> +		}
+> +	} else if (rc > 0) {
+> +		/* Host RPCIT must be issued */
+> +		rc = zpci_refresh_trans((u64) zdev->fh << 32, start, size,
+> +					status);
+> +	}
+> +	zdev->kzdev->rpcit_count++;
+> +
+> +	return rc;
+> +}
+> +
+>   /* Modify PCI: Register floating adapter interruption forwarding */
+>   static int kvm_zpci_set_airq(struct zpci_dev *zdev)
+>   {
+> @@ -620,6 +822,8 @@ EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
+>   
+>   int kvm_s390_pci_init(void)
+>   {
+> +	int rc;
+> +
+>   	aift = kzalloc(sizeof(struct zpci_aift), GFP_KERNEL);
+>   	if (!aift)
+>   		return -ENOMEM;
+> @@ -627,5 +831,7 @@ int kvm_s390_pci_init(void)
+>   	spin_lock_init(&aift->gait_lock);
+>   	mutex_init(&aift->lock);
+>   
+> -	return 0;
+> +	rc = zpci_get_mdd(&aift->mdd);
+> +
+> +	return rc;
+>   }
+> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
+> index 54355634df82..bb2be7fc3934 100644
+> --- a/arch/s390/kvm/pci.h
+> +++ b/arch/s390/kvm/pci.h
+> @@ -18,6 +18,9 @@
+>   
+>   #define KVM_S390_PCI_DTSM_MASK 0x40
+>   
+> +#define KVM_S390_RPCIT_INS_RES 0x10
+> +#define KVM_S390_RPCIT_ERR 0x28
+> +
+>   struct zpci_gaite {
+>   	u32 gisa;
+>   	u8 gisc;
+> @@ -33,6 +36,7 @@ struct zpci_aift {
+>   	struct kvm_zdev **kzdev;
+>   	spinlock_t gait_lock; /* Protects the gait, used during AEN forward */
+>   	struct mutex lock; /* Protects the other structures in aift */
+> +	u32 mdd;
+>   };
+>   
+>   extern struct zpci_aift *aift;
+> @@ -47,7 +51,9 @@ static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
+>   
+>   int kvm_s390_pci_aen_init(u8 nisc);
+>   void kvm_s390_pci_aen_exit(void);
+> -
+> +int kvm_s390_pci_refresh_trans(struct kvm_vcpu *vcpu, unsigned long req,
+> +			       unsigned long start, unsigned long end,
+> +			       u8 *status);
+>   int kvm_s390_pci_init(void);
+>   
+>   #endif /* __KVM_S390_PCI_H */
+> 
+
 -- 
-2.31.1
-
+Pierre Morel
+IBM Lab Boeblingen

@@ -2,98 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071F34936EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCFC4936E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352894AbiASJLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:11:54 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:50175 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352902AbiASJLu (ORCPT
+        id S1352882AbiASJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352871AbiASJLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:11:50 -0500
-Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MD9Ox-1n14SZ1YyP-0096n7; Wed, 19 Jan 2022 10:11:30 +0100
-Message-ID: <64d4b52f-cb5b-2024-e7f9-7a5babc62170@vivier.eu>
-Date:   Wed, 19 Jan 2022 10:11:28 +0100
+        Wed, 19 Jan 2022 04:11:41 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BB1C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:11:41 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id n15so1793255uaq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:11:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=Db2mQxADcnB4Y0Y5fpffuJoiOxsZDM1AOxk+ZDm/G3M=;
+        b=LtJKLUPIVcxaV+x52cpTng7+kYBaiUrkzMYfSy8JUtOCM4hzo36t9ewI3VfNEKRxqb
+         LsVCU2BUtEoYRWuYn4HiOAxUiPhIS1WBjsRODNHa8OcZOlr/Tg9V2kyC3U3gwOhUKb10
+         Tu6lIHQGdJBcl/rdnjT0INwTMbB6yYmJ7hC1qt/FPSYYW3KwtfdbbQB4M8ZwUV7z9O4+
+         hGJFz8vlDSGY/uo9ydIt3qd+gTcDnIFLpniHZ0Y43ROxrBI05TVAKPst6fDqxIbiHVeP
+         iqURaknt2APMGKgD5thmkOEkzAgtD5uMBNUY5GvnO2gXzzsuwZ3vF4V3bhHzAln2nscp
+         v6Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=Db2mQxADcnB4Y0Y5fpffuJoiOxsZDM1AOxk+ZDm/G3M=;
+        b=LR2L+HAuWv7IVzTib5XlAuzekUkEdnnDvK/DjknXAt59AoJt1jhsdA26/dcq5Wto6q
+         GVpbh56KnXhsmneZpSPnpoZG7Wp61e6KtoRsPrZTaDyuwr5UMk8FPZFSboVoUqirlt5A
+         z4hln74mKeFmAEMm3XdYcPIXH//x6G1eQhHj35BTSohEZFhi/kpWBwV36DZ6dPtF833e
+         v+a4XM6X/lL9WtvrHQ7pxjyM2HWpVUWwg9B9GuctSsy0deR4ArpXR6Fysh78DtG0S7Jx
+         Dqv9JZJiR5KRPiYIOfHtSRI3kcCEclAxclkLL+qAp9bNnOmveGRucu6XRuNlolS9kLG4
+         5N+g==
+X-Gm-Message-State: AOAM531SOOjcyDIWr6rvVvWK56fD1tVn0eLEpQeSBzJGbORhMSDinL/+
+        OzPHTwPV18kwYwIMYVVxKWXeR5atIQTVYnPOpmE=
+X-Google-Smtp-Source: ABdhPJzVFut5m7Ox/0zi0PLBF7Qd8fFQMOP+ovgciopFt1Pf3yMWPVxwXmwNJ+enZSNPXFkQ/mj6TxxxUZPckz38jpg=
+X-Received: by 2002:ab0:2a58:: with SMTP id p24mr11951496uar.99.1642583500643;
+ Wed, 19 Jan 2022 01:11:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: fr
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20220119000506.1299843-1-laurent@vivier.eu>
- <20220119000506.1299843-3-laurent@vivier.eu>
- <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
- <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce
- goldfish_ioread32()/goldfish_iowrite32()
-In-Reply-To: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:T8yz0Y+A0/3p3L7v1wsH3Yxt6aKOeLEtDNJA8XfpY1VbjBfwuVk
- oq9p2rDgpFNv1++PCs29juQIeH4xVkxXK5RBZYlvQv7NehCInfzg3jvkl7z9mOebjwQrRRG
- M9zKL5wO3JV8hFx5jg+NEaHYNA2Xig9X0Pm4mRnh9hBROaACy3WggZ+oAdr/InqPnQtoy9y
- CdxQ92cnnbUusSWDuvcEw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MmoFlM7kCwg=:g3v93sE9r6Lpnljay8IzKn
- v0nf4mf9Ovz+FF4N34vKQy6Fs1sTM3Ko9ywe5XEUyciHJWkHJEAnTC5yJD5HPjLgL/aJCuNMU
- V1PUJ27HWxJ0FyfogHkSCcaN95bF4jb3cOojiruzCs9MIqYXHd6zyrZjI4lgrgLWA6guX2rJy
- szrTbez7SeGXywrgX9Culgw/s/YNLxl+k7tWRiRfxTWBGbBk1ZR9eUjbq/+/IlGNMMtjP7gb4
- V7u+px1ZHFsIHmyJyfGB3500BI5Q67z8tpcKf47lke0gvIOW1t6y1+OBfiN0EUMzqCMNeM9/z
- Cl0YQjpZt9Ro/4o0AhauOBHTMmqIIcstJEZB7XaeaWipmvzQ1Z1i/L8+zWsvlBc13K3m7Ivs7
- UIQczmxjOkcAGhaYqOxSB+K0PG8a1nZETqUxagKfKP8KbFsYY9KpXZcCa65dek9m2w3W2JFa3
- ScHqDOt9BwA3gZBPuMEidJP/lhVaYJC6C/vAKJccPz5vd0IKyH4B6CQQFUZ9bjL15MZoDjgZw
- zoazURbMEw4PjR9qgxGcXUCnakvOeZ3jKcrTZ+YCR+b6BRzeZN9jIctpdN3CN3lZceAmiioof
- KLYb59dnZ0d30i1+JIOORWYIpmSxjYQUftGsQ6sq2ODUL42DESTeQD9GQxJc3ohXPaHXxUy/Y
- O0R0vDkv9UxuyGnjrraczCd3Hn5uh/E7QAJWTGiyTFXC7lGL1yanTy4mUxjQadnXPrFA=
+Sender: saniumarm46@gmail.com
+Received: by 2002:a67:b70c:0:0:0:0:0 with HTTP; Wed, 19 Jan 2022 01:11:40
+ -0800 (PST)
+From:   Mrs Riva Mimi <mrsriva8mimi@gmail.com>
+Date:   Wed, 19 Jan 2022 01:11:40 -0800
+X-Google-Sender-Auth: 5UsdADFhd-YM_J0HeU27S-sPcug
+Message-ID: <CAEBNbt4yCdTMk+goXEFKEe3mDuo-NKdGQ5naUPnUcMcO4ED=6g@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 19/01/2022 à 09:49, Arnd Bergmann a écrit :
-> On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
->>
->> I've just discovered include/linux/goldfish.h, which already has gf_*()
->> accessors for 64-bit, so it'd make sense to move the above there,
->> and adjust the names.
-> 
-> Yes, good idea.
+Hello
+I'm "Mrs Riva Mimi." married to Mr. Riva( an International
+Contractor and Oil Merchant/ jointly in Exposition of Agro  Equipment
+) who died in  Burkina Faso attack, and diagnosed of cancer for about
+2 years ago  and my husband informed me that he deposited the sum of
+(22.3Million USD Only) with a Finance house) in OUAGADOUGOU BURKINA
+FASO.
+I want you to help me to use this money  for a charity project before
+I die, for the Poor, Less-privileged and  ORPHANAGES in
+your country.  Please kindly respond quickly for further details.
 
-So the idea is to put goldfish accessors inside a "#ifdef CONFIG_M68K ... #else ... #endif" in 
-include/linux/goldfish.h and not in generic-asm/io.h for the generic version and 
-m68k/include/ams/io.h for the m68k version?
-
-> 
->>
->> Arnd: note that the existing ones do use __raw_writel().
-> 
-> It looks like Laurent introduced that bug in da31de35cd2f ("tty: goldfish: use
-> __raw_writel()/__raw_readl()") and could fix it up here. Laurent, was the intent
-
-The idea was to use the native endianness of the CPU, I missed it can differ from the one of the 
-architecture.
-
-> of this earlier patch also to make the driver usabel for m68k, or are there
-> any other targets you looked at that had mixed up endianness?
-> 
-
-Yes, the intent was to make it usable for m68k.
-I think all the targets that use goldfish are little-endian, it's why there was no problem until now.
-
-Let me know which solution you prefer, I will update the series accordingly.
-
-Thanks,
-Laurent
+Yours fairly friend,
+Mrs Riva Mimi.

@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD187493AA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA73F493AA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 13:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349746AbiASMqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 07:46:10 -0500
-Received: from mail-ua1-f47.google.com ([209.85.222.47]:40756 "EHLO
-        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245463AbiASMqH (ORCPT
+        id S1354452AbiASMrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 07:47:01 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35136 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245463AbiASMqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:46:07 -0500
-Received: by mail-ua1-f47.google.com with SMTP id w21so4222273uan.7;
-        Wed, 19 Jan 2022 04:46:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jSJaWLFbSmKDo2PDFLJ/OlDDjxv/sePlYig27gKKORM=;
-        b=3u7mBhgt4YNpY8+GLAA3HgafJhumKwn/Ezbwe1mi2JXqzneBntTFm2v4wsKncJyrBg
-         JXhxSaCN8J1Imv/b2zjhELBY6dw5XxArAK5hdm1JERlR4JOUpCzu76AEdfKVMXGJNom5
-         ADZD3jB4IDLh9cQM2ONdzosGrcjRkXzS1ILZFKxW/eiGdqciOI93/sM3F2MEcGvSBn83
-         UW+OgwXP7n2OxAkTugcub1pmE6HECaEDroSHpSui3f+g2W80X1AgANRv06N+Nhi3i/6c
-         +kW/q5Ux/RoG0w3liBbV4dvVlWsVn76Z43TIwtrkM/JU+0lvS00h1WL0VRrGsdIx2sfJ
-         /swQ==
-X-Gm-Message-State: AOAM530+k0Wk1vPcmpJz22UslLn4Idt56zDUD4gvokW+E7S74AV1nOOa
-        kW/FlIl7OlAr0kIMZ2qVc9dDH+mFw0bTig==
-X-Google-Smtp-Source: ABdhPJxgr0MrFCoZkDTidnW4zpKhPY5nlGmAJKRr85MEKl8yXKrsd4U82JVD9D0ezLjK2BOLByjuBg==
-X-Received: by 2002:a67:d315:: with SMTP id a21mr11100069vsj.51.1642596366888;
-        Wed, 19 Jan 2022 04:46:06 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id k5sm2243920vsc.14.2022.01.19.04.46.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 04:46:05 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id m90so4279777uam.2;
-        Wed, 19 Jan 2022 04:46:04 -0800 (PST)
-X-Received: by 2002:a9f:3e01:: with SMTP id o1mr11968203uai.89.1642596364458;
- Wed, 19 Jan 2022 04:46:04 -0800 (PST)
+        Wed, 19 Jan 2022 07:46:51 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JAWUAn023804;
+        Wed, 19 Jan 2022 12:46:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+8DautfAf7BgVWzYAboFyiMn420308+cvph1666VKY4=;
+ b=StEn+GryRyiQv8/0PP4AdNBdWIzQSDgvfphtJVTZwDZF46mJ4BY4evgtneKKmv9k1wyX
+ zPI4ucFvMC9zVFlwopEQ1K6cxOJ15MBOQf9Dg++gSJ3MUMHWVXVlAXCmMHDX3OLd3iGK
+ DhoDTJ+Zi0WpHMXRTzU5nsfJW07MejpDKIfF/l/uPn1fqrhPLO1IhhiCXH7Qry37m39k
+ rVuOezMwzgNm+VVK2NRIMtuxE/bzcrnq2aEPytYuoHKrTCY05QbDksvAIMcmvRKPwU7K
+ 6nE5E/Imd+d9CwmykqiJr+Qb0qPNUYnuFd+NErNfAzyd636azGP/DDOMm8AvKDmwAmTd rA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpe8wwwsv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 12:46:50 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JCiJJ6026073;
+        Wed, 19 Jan 2022 12:46:49 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpe8wwws1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 12:46:49 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JChinQ026495;
+        Wed, 19 Jan 2022 12:46:47 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3dknw9de2s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 12:46:47 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JCkiVj46072306
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 12:46:44 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DC5142045;
+        Wed, 19 Jan 2022 12:46:44 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8133742059;
+        Wed, 19 Jan 2022 12:46:43 +0000 (GMT)
+Received: from [9.171.34.112] (unknown [9.171.34.112])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 12:46:43 +0000 (GMT)
+Message-ID: <8d09dc2e-2d2d-e5f6-8cc7-eecfc94a17b2@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 13:46:43 +0100
 MIME-Version: 1.0
-References: <20220119110839.33187-1-deller@gmx.de>
-In-Reply-To: <20220119110839.33187-1-deller@gmx.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 19 Jan 2022 13:45:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXj2WsQ2htP63vXD_PRuhrqry3GgD8U1tJQ99BkQPQL=w@mail.gmail.com>
-Message-ID: <CAMuHMdXj2WsQ2htP63vXD_PRuhrqry3GgD8U1tJQ99BkQPQL=w@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Fix regression introduced by disabling accelerated
- scrolling in fbcon
-To:     Helge Deller <deller@gmx.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 06/10] KVM: s390: Add vm IOCTL for key checked
+ guest absolute memory access
+Content-Language: en-US
+To:     Thomas Huth <thuth@redhat.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-7-scgl@linux.ibm.com>
+ <a3a143f8-8fd5-49bf-9b2b-2f7cb04732de@redhat.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <a3a143f8-8fd5-49bf-9b2b-2f7cb04732de@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bJpodnGc9-EjSFp9-feKh7OQTPh98REC
+X-Proofpoint-GUID: J0iRc98eGf8GZ7Wrc_Yr8FV1QDO5siR-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 impostorscore=0 malwarescore=0 priorityscore=1501
+ adultscore=0 mlxscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190072
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Helge,
 
-On Wed, Jan 19, 2022 at 12:10 PM Helge Deller <deller@gmx.de> wrote:
-> This series reverts two patches which disabled scrolling acceleration in
-> fbcon/fbdev. Those patches introduced a regression for fbdev-supported graphic
-> cards because of the performance penalty by doing screen scrolling by software
-> instead of using hardware acceleration.
->
-> Console scrolling acceleration was disabled by dropping code which checked at
-> runtime the driver hardware possibilities for the BINFO_HWACCEL_COPYAREA or
-> FBINFO_HWACCEL_FILLRECT flags and if set, it enabled scrollmode SCROLL_MOVE
-> which uses hardware acceleration to move screen contents.  After dropping those
-> checks scrollmode was hard-wired to SCROLL_REDRAW instead, which forces all
-> graphic cards to redraw every character at the new screen position when
-> scrolling.
->
-> This change effectively disabled all hardware-based scrolling acceleration for
-> ALL drivers, because now all kind of 2D hardware acceleration (bitblt,
-> fillrect) in the drivers isn't used any longer.
->
-> The original commit message mentions that only 3 DRM drivers (nouveau, omapdrm
-> and gma500) used hardware acceleration in the past and thus code for checking
-> and using scrolling acceleration is obsolete.
->
-> This statement is NOT TRUE, because beside the DRM drivers there are around 35
-> other fbdev drivers which depend on fbdev/fbcon and still provide hardware
-> acceleration for fbdev/fbcon.
->
-> The original commit message also states that syzbot found lots of bugs in fbcon
-> and thus it's "often the solution to just delete code and remove features".
-> This is true, and the bugs - which actually affected all users of fbcon,
-> including DRM - were fixed, or code was dropped like e.g. the support for
-> software scrollback in vgacon (commit 973c096f6a85).
->
-> So to further analyze which bugs were found by syzbot, I've looked through all
-> patches in drivers/video which were tagged with syzbot or syzkaller back to
-> year 2005. The vast majority fixed the reported issues on a higher level, e.g.
-> when screen is to be resized, or when font size is to be changed. The few ones
-> which touched driver code fixed a real driver bug, e.g. by adding a check.
->
-> But NONE of those patches touched code of either the SCROLL_MOVE or the
-> SCROLL_REDRAW case.
->
-> That means, there was no real reason why SCROLL_MOVE had to be ripped-out and
-> just SCROLL_REDRAW had to be used instead. The only reason I can imagine so far
-> was that SCROLL_MOVE wasn't used by DRM and as such it was assumed that it
-> could go away. That argument completely missed the fact that SCROLL_MOVE is
-> still heavily used by fbdev (non-DRM) drivers.
->
-> Some people mention that using memcpy() instead of the hardware acceleration is
-> pretty much the same speed. But that's not true, at least not for older graphic
-> cards and machines where we see speed decreases by factor 10 and more and thus
-> this change leads to console responsiveness way worse than before.
->
-> That's why I propose to revert those patches, re-introduce hardware-based
-> scrolling acceleration and fix the performance-regression for fbdev drivers.
-> There isn't any impact on DRM when reverting those patches.
->
-> Helge Deller (2):
->   Revert "fbdev: Garbage collect fbdev scrolling acceleration, part 1
->     (from TODO list)"
->   Revert "fbcon: Disable accelerated scrolling"
 
-Thank you for this series, and the prior analysis!
+Am 19.01.22 um 12:52 schrieb Thomas Huth:
+> On 18/01/2022 10.52, Janis Schoetterl-Glausch wrote:
+>> Channel I/O honors storage keys and is performed on absolute memory.
+>> For I/O emulation user space therefore needs to be able to do key
+>> checked accesses.
+> 
+> Can't we do the checking in userspace? We already have functions for handling the storage keys there (see hw/s390x/s390-skeys-kvm.c), so why can't we do the checking in QEMU?
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+That would separate the key check from the memory operation. Potentially for a long time.
+Wenn we piggy back on access_guest_abs_with_key we use mvcos in the host and thus do the key check in lockstep with the keycheck which is the preferrable solution.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I would also like to avoid reading guest storage keys via the ioctl that was done for migration in the I/O path just to do a single key check. This has peformance concerns.

@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CC14937D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B237D4937D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353347AbiASJ5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:57:38 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:60952 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243186AbiASJ5h (ORCPT
+        id S1353363AbiASJ6v convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Jan 2022 04:58:51 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:35654 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243186AbiASJ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:57:37 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C401A1F38B;
-        Wed, 19 Jan 2022 09:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642586256; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aOo66zzdOMi0rKAhY9iaubkRgFnRqTsRXgFgd3j6mFM=;
-        b=uFW9RzhIJpN4/rZlqR7nXLuC190DVZMJvokDVE16qI38mCEYY9cBcrW+cNx7miZXaCgI3y
-        zw9mSbbTcNWE0x34R5N90vtTjXvLJIFql3cDiVAn+46QWbWJz5s5A2qPUKl7D6hPe+Mvdk
-        x20NcS5GFmXrpMX1oUfXA5RVoPKu/Ao=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642586256;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aOo66zzdOMi0rKAhY9iaubkRgFnRqTsRXgFgd3j6mFM=;
-        b=wKxd7NxQ1NZ0+7+Hu9pUfc8w8YfU2CZgp2Oyi/ZhUQ9arOSA/XxE/43M1PxVNTwnoRof/8
-        WfMWpOP6fckXMYAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A71113E11;
-        Wed, 19 Jan 2022 09:57:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id z9cNHZDg52GUNgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Jan 2022 09:57:36 +0000
-Message-ID: <7323485e-9385-0171-7e61-6926d9480992@suse.cz>
-Date:   Wed, 19 Jan 2022 10:57:36 +0100
+        Wed, 19 Jan 2022 04:58:46 -0500
+Received: by mail-ua1-f43.google.com with SMTP id m90so3529537uam.2;
+        Wed, 19 Jan 2022 01:58:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=e8QRIwDey7YYITBsuH1RwLEavOxMt4TqPLNn4dY2EeQ=;
+        b=F4YdqZHhrwOsG+jv+6ae1f2T/wSJ8ipvXMqaQ+qDn6lHIPCDqkavbKueWCOaBHS0A/
+         mrWKptNvplS2oqYor9REO/KDvaehb1QuAOyhemNTBDQ8CFc1Vu7zHym1Ry27UGxpOQJJ
+         y0SrX+XNOVO29VDVGiEamFSsK5delvqA1eTVAkGtj6lLzITJ549hBIQHYdMzcyr4OgLi
+         hX5bCOtqy+rLE8+Y3BRZSDnXzNBnfBwzJMCtbb5ZQ9wiNI6mSihksEx/VYWBZL/hXAAW
+         MKJnns+YNIJ5PFopXMTVBiiGm7SJ2uaj0Lwg7d0GTO2hEaBRvD7v7yYcQbo0TzNukFGB
+         TiNw==
+X-Gm-Message-State: AOAM531NpESG05seHncd+vJFgP4kwwnzu5QChqMtbJ3AM+U8xeaklB0h
+        8hU2mYvNYgTQNouS1Fs2gTO41hOG47+ZXzZo
+X-Google-Smtp-Source: ABdhPJx/RDK4NHBZcqx4fO744ByCnu/ubtQFFVrM98Oaok6cIyVSPCeXA7vcx75hDMp1mrpwaWNTnw==
+X-Received: by 2002:a67:cb0d:: with SMTP id b13mr11105188vsl.81.1642586325373;
+        Wed, 19 Jan 2022 01:58:45 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id w126sm2135824vka.25.2022.01.19.01.58.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 01:58:44 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id n15so1987279uaq.5;
+        Wed, 19 Jan 2022 01:58:44 -0800 (PST)
+X-Received: by 2002:a67:e95a:: with SMTP id p26mr7058311vso.38.1642586324355;
+ Wed, 19 Jan 2022 01:58:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 37/66] binfmt_elf: Remove vma linked list walk
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-38-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-38-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220119000506.1299843-1-laurent@vivier.eu> <20220119000506.1299843-3-laurent@vivier.eu>
+ <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+ <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com> <64d4b52f-cb5b-2024-e7f9-7a5babc62170@vivier.eu>
+In-Reply-To: <64d4b52f-cb5b-2024-e7f9-7a5babc62170@vivier.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 19 Jan 2022 10:58:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVfK9gsXphDepvQCdMpLjROiR9OKwdb28eCfVdDrQRVjQ@mail.gmail.com>
+Message-ID: <CAMuHMdVfK9gsXphDepvQCdMpLjROiR9OKwdb28eCfVdDrQRVjQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-rtc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Use the VMA iterator instead.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Hi Laurent,
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+On Wed, Jan 19, 2022 at 10:11 AM Laurent Vivier <laurent@vivier.eu> wrote:
+> Le 19/01/2022 à 09:49, Arnd Bergmann a écrit :
+> > On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
+> >>
+> >> I've just discovered include/linux/goldfish.h, which already has gf_*()
+> >> accessors for 64-bit, so it'd make sense to move the above there,
+> >> and adjust the names.
+> >
+> > Yes, good idea.
+>
+> So the idea is to put goldfish accessors inside a "#ifdef CONFIG_M68K ... #else ... #endif" in
+> include/linux/goldfish.h and not in generic-asm/io.h for the generic version and
+> m68k/include/ams/io.h for the m68k version?
 
-> ---
->  fs/binfmt_elf.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index f8c7f26f1fbb..d41cca755ff9 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-> @@ -1622,6 +1622,7 @@ static void fill_siginfo_note(struct memelfnote *note, user_siginfo_t *csigdata,
->  static int fill_files_note(struct memelfnote *note)
->  {
->  	struct mm_struct *mm = current->mm;
-> +	VMA_ITERATOR(vmi, mm, 0);
->  	struct vm_area_struct *vma;
->  	unsigned count, size, names_ofs, remaining, n;
->  	user_long_t *data;
-> @@ -1651,7 +1652,7 @@ static int fill_files_note(struct memelfnote *note)
->  	name_base = name_curpos = ((char *)data) + names_ofs;
->  	remaining = size - names_ofs;
->  	count = 0;
-> -	for (vma = mm->mmap; vma != NULL; vma = vma->vm_next) {
-> +	for_each_vma(vmi, vma) {
->  		struct file *file;
->  		const char *filename;
->  
+No, just move
 
++#ifndef goldfish_ioread32
++#define goldfish_ioread32 ioread32
++#endif
++#ifndef goldfish_iowrite32
++#define goldfish_iowrite32 iowrite32
++#endif
+
+to <linux/goldfish.h>, and rename them to gf_*().
+
+Architectures can still override them in their own <asm/io.h>
+(<linux/goldfish.h> includes <linux/io.h>).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

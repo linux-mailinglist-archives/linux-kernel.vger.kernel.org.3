@@ -2,81 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A39E749396F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F671493977
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354120AbiASLXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:23:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44372 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354010AbiASLW7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:22:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54CAD6160D;
-        Wed, 19 Jan 2022 11:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B5FC004E1;
-        Wed, 19 Jan 2022 11:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642591378;
-        bh=jegHKN0bBaSspavhWGcwQyFSU9HKZKotBKUqdEtAleg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=srXoYu/F0rbeaX+2DbbbpRjsS8xmS6TtocpzmIeABFpPX8KPm3qyHmnWuHfP92+uE
-         V+ZfPqKmP1pHWSejUj4bSpZ1C6MIZoUu6/kKNssdPRJCYAMv+i/TnMEQyBaYcd9Mul
-         w6QwaMH8Wjlhd9OCqe+DOCfJsd6LexeLXU7De3Ew=
-Date:   Wed, 19 Jan 2022 12:22:55 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-Message-ID: <Yef0j8+DBbwC7Kjv@kroah.com>
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de>
+        id S1354053AbiASL2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:28:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:54236 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353983AbiASL2P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:28:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AD5CED1;
+        Wed, 19 Jan 2022 03:28:14 -0800 (PST)
+Received: from [192.168.0.5] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 222DD3F73D;
+        Wed, 19 Jan 2022 03:28:12 -0800 (PST)
+Subject: Re: [RFC PATCH 1/2] perf: arm_spe: Fix consistency of PMSCR register
+ bit CX
+From:   German Gomez <german.gomez@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, james.clark@arm.com, leo.yan@linaro.org
+References: <20220117124432.3119132-1-german.gomez@arm.com>
+ <20220117124432.3119132-2-german.gomez@arm.com>
+ <20220118100702.GB16547@willie-the-truck>
+ <2cb1baab-fd9c-ea20-2a09-4cd60d9d5531@arm.com>
+Message-ID: <b417d710-2b45-791b-1707-175dd4398701@arm.com>
+Date:   Wed, 19 Jan 2022 11:27:50 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119110839.33187-3-deller@gmx.de>
+In-Reply-To: <2cb1baab-fd9c-ea20-2a09-4cd60d9d5531@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 12:08:39PM +0100, Helge Deller wrote:
-> This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
-> 
-> Revert this patch.  This patch started to introduce the regression that
-> all hardware acceleration of more than 35 existing fbdev drivers were
-> bypassed and thus fbcon console output for those was dramatically slowed
-> down by factor of 10 and more.
-> 
-> Reverting this commit has no impact on DRM, since none of the DRM drivers are
-> tagged with the acceleration flags FBINFO_HWACCEL_COPYAREA,
-> FBINFO_HWACCEL_FILLRECT or others.
-> 
-> Signed-off-by: Helge Deller <deller@gmx.de>
-> Cc: stable@vger.kernel.org # v5.16
 
-Why just 5.16?  This commit came in on 5.11 and was backported to
-5.10.5.
+On 18/01/2022 14:04, German Gomez wrote:
+> Hi Will,
+>
+> Many thanks for your comments
+>
+> On 18/01/2022 10:07, Will Deacon wrote:
+>> On Mon, Jan 17, 2022 at 12:44:31PM +0000, German Gomez wrote:
+>>> [...]
+>>>
+>>>   1. Run a process in the background with capability CAP_SYS_ADMIN in CPU0.
+>>>
+>>>     $ taskset --cpu-list 0 sudo dd if=/dev/random of=/dev/null &
+>>>     [3] 3806
+>>>
+>>>   2. Begin a perf session _without_ capabilities (we shouldn't see CONTEXT packets).
+>>>
+>>>     $ perf record -e arm_spe_0// -C0 -- sleep 1
+>>>     $ perf report -D | grep CONTEXT
+>>>     .  0000000e:  65 df 0e 00 00                                  CONTEXT 0xedf el2
+>>>     .  0000004e:  65 df 0e 00 00                                  CONTEXT 0xedf el2
+>>>     .  0000008e:  65 df 0e 00 00                                  CONTEXT 0xedf el2
+>>>     [...]
+>>>
+>>> As can be seen, the traces begin showing CONTEXT packets when the pid is
+>>> 0xedf (3807).
+>> So to be clear: we shouldn't be reporting these packets because 'perf'
+>> doesn't have the right capabilities, but we evaluate that in the context of
+>> 'dd' (running as root) and so incorrectly grant the permission. Correct?
+> Yes, correct. My guess was that "perfmon_capable()" was being called
+> under the assumption that it would always be evaluated in the context of
+> 'perf'. Is that correct?
+>
+>>> This happens because the pmu start callback is run when
+>>> the current process is not the owner of the perf session, so the CX
+>>> register bit is set.
+>> This doesn't really seem SPE-specific to me -- the perf_allow_*() helpers
+>> also operate implicitly on the current task. How do other PMU drivers avoid
+>> falling into this trap?
+> I'm not as familiar with the other PMU drivers. I quickly tried grepping
+> something related in the cs_etm drivers as they use CONTEXTIDR as well,
+> but couldn't find references to perfmon_capable() or similar checks.
+>
+> Grepping for "perf_allow_" inside of drivers doesn't yield results.
+> There's some gpu driver that has similar perfmon_capable() checks but
+> unlike spe, they error out if they don't pass (drivers/gpu/drm/i915/i915_perf.c).
 
-As for "why", I think there was a number of private bugs that were
-reported in this code, which is why it was removed.  I do not think it
-can be safely added back in without addressing them first.  Let me go
-dig through my email to see if I can find them...
+Just to expand a bit more on this (I missed grepping the other directories)
 
-thanks,
+./arch/powerpc/perf/imc-pmu.c => perfmon_capable() only called on init
+./kernel/events/core.c        => perfmon_capable() only called on init
+./arch/x86/events/core.c      => perf_allow_*() function only called on init
 
-greg k-h
+As far as I see, currently spe seems to be the only PMU event that
+checks capabilities in the start callback. 'perf' may not be the current
+task in this callback.
+
+>
+>>> One way to fix this is by caching the value of the CX bit during the
+>>> initialization of the PMU event, so that it remains consistent for the
+>>> duration of the session.
+>> It doesn't feel right to stash this in 'struct arm_spe_pmu' during event
+>> initialisation -- wouldn't that allow perf to continue creating new events
+>> with CX set, even if the paranoid sysctl was changed dynamically? Instead,
+>> I think it would be better if the capabilities were stash in the event
+>> itself somehow at initialisation time.
+> I hadn't considered this. Makes more sense to store in the perf_event
+> or via some type of mapping in the struct spe_pmu if not possible. Do
+> you have any idea for the former? Or an idiomatic structure from the
+> kernel for the later?
+>
+> Thanks,
+> German
+>
+>> Will

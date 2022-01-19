@@ -2,170 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA3D49353F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B4F493541
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351917AbiASHI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:08:27 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:18131 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351902AbiASHIU (ORCPT
+        id S1351900AbiASHJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:09:36 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:49969 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230223AbiASHJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:08:20 -0500
-Received: from droid09-sz.software.amlogic (10.28.8.19) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Wed, 19 Jan 2022
- 15:08:13 +0800
-From:   Qianggui Song <qianggui.song@amlogic.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-CC:     Qianggui Song <qianggui.song@amlogic.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>
-Subject: [PATCH v2 4/4] irqchip/meson-gpio: Add support for meson s4 SoCs
-Date:   Wed, 19 Jan 2022 15:08:09 +0800
-Message-ID: <20220119070809.15563-5-qianggui.song@amlogic.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220119070809.15563-1-qianggui.song@amlogic.com>
-References: <20220119070809.15563-1-qianggui.song@amlogic.com>
+        Wed, 19 Jan 2022 02:09:31 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E91585C0051;
+        Wed, 19 Jan 2022 02:09:29 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 19 Jan 2022 02:09:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=dsFZk3OV8wFHLwBUcIdejqKR+2u
+        r7cWYhm0QCOUx9y4=; b=ldQ0dqI4JJPbTI7hYUcX4Ver9v0walFYsc6173VhOF2
+        mFeIQOELr6sq4DbTIF6pIXUzZdUMaulLC+ggwDN52OgjgIVyU7sLg6JzsoRSGUU9
+        7AG0Qp5lwvScjPRmkQteuZbD86wgo797zyDRlyRzgr3iFyyhtRatNlYH1mH1E8jn
+        BulT21H+i7uSmqmwNgbrXCvec7jke7sZqAa9MbOz1Ceg0ySRU0yfy5Tag4kKbsku
+        4GmVwYlaIj92FFec2WFoxpe8ytImTA8SlVhsvw5Z2HkaogLxwKLVtvIxV4JSpmyZ
+        JID0BIIkguRq73UXY8KNqdltRXSNvbW6T8+eVrFb24g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=dsFZk3
+        OV8wFHLwBUcIdejqKR+2ur7cWYhm0QCOUx9y4=; b=Y7KYK+ScVvH/o1L+RwuK/C
+        yWQe6IoPzmEbHjddN15rDgY7sl7Tg3z0e1ZvFLIWuWNoCY25qbPKAY9AcWggWcuM
+        HRdUa7bCuZAoXKhFaf09jzNLtUJFF1OfBRw+INN0MPfOgySaV76fMmQW6QOcbpTu
+        17bBeGFfzjr6PsTSFwW3WpJM9l7s7+x9wQSSy6hcF2Di1l1+i/EaH1563Inapacn
+        Njjg0ysaDnoqRY7ZRIRnEUJMhz3JtCjEqs9ZGo8rmWtzjbj/Z9ONENZF+MvNkX9e
+        3NN6z/CTiAlQwfQr/7qhLXeFmW66ah+HC/6kZhEf5ssYLmEPbRP0hs2SkuRKdmSw
+        ==
+X-ME-Sender: <xms:KbnnYdRz1zBKoi9DPrJ-eTTo4ZCLDPVVHVsnvtjN-hQMG_SKYkbcLQ>
+    <xme:KbnnYWzlMkXrPss76YqqIgIz_SKa89kCH1m0CEwvjwIOSKnymfPzOT2VDPx5mgpsD
+    E6K7BuzFzPE12PbFmA>
+X-ME-Received: <xmr:KbnnYS0Pu08rScJr7HO20yXl7yKjhsFug3hOPteQSOzwvU_BxCr97g7Y-Ug2MezVQWfFygOIPlr75UBoA14RNXA36Xa1PkKGSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeggddutdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
+    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
+    hpqeenucggtffrrghtthgvrhhnpeegkeeuvdffieelledvleeufffhleduueeufefhieek
+    ffehhfejgfeuleduffeggfenucffohhmrghinhepshhouhhrtggvfhhorhhgvgdrihhopd
+    duhedrshhonecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:KbnnYVBQp0p7dWFpUrm6JXc0Ksm53cHQKto7EgSASIWw9QEW4r9T9w>
+    <xmx:KbnnYWjWaMGHAwxoQXBGgGZEeqmKDH5U7VQotTufzYi_hapreaUYRA>
+    <xmx:KbnnYZpWC-PHKdOzr5AFIoi0vDsQ2ZdRwue-2d0UF62TKRCru2QWQw>
+    <xmx:KbnnYYbQXkZF7YxO78d09Cmli0fQXdxTbH0fcHtO027wW8NSdBAtMA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Jan 2022 02:09:27 -0500 (EST)
+Date:   Wed, 19 Jan 2022 16:09:24 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH -next] Documentation: fix firewire.rst ABI file path error
+Message-ID: <Yee5JHUa53dj2ErZ@workstation>
+Mail-Followup-To: Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220118010517.20826-1-rdunlap@infradead.org>
+ <dc527b05-2b65-cf88-c174-6fec6d458de4@gmail.com>
+ <7f4e454c-5f79-7fd7-2866-8db682cc656b@infradead.org>
+ <99e1e781-0761-2d47-954f-f75aac6e5049@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.19]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99e1e781-0761-2d47-954f-f75aac6e5049@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The meson s4 SoCs support 12 gpio irq lines compared with previous
-serial chips and have something different, details are as below.
+Hi,
 
-IRQ Number:
-- 80:68 13 pins on bank Z
-- 67:48 20 pins on bank X
-- 47:36 12 pins on bank H
-- 35:24 12 pins on bank D
-- 23:22 2  pins on bank E
-- 21:14 8  pins on bank C
-- 13:0  13 pins on bank B
+On Tue, Jan 18, 2022 at 03:30:40PM +0900, Akira Yokosawa wrote:
+> (+Cc: Takashi)
+> On Mon, 17 Jan 2022 22:05:21 -0800,
+> Randy Dunlap wrote:
+> > 
+> > On 1/17/22 20:08, Akira Yokosawa wrote:
+> >> On Mon, 17 Jan 2022 17:05:17 -0800,
+> >> Randy Dunlap wrote:
+> >>> Adjust the path of the ABI files for firewire.rst to prevent a
+> >>> documentation build error. Prevents this problem:
+> >>>
+> >>> Sphinx parallel build error:
+> >>> docutils.utils.SystemMessage: /work/lnx/next/linux-next-20220117/Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
+> >>> InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
+> >>>
+> >>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> >>> Cc: Jonathan Corbet <corbet@lwn.net>
+> >>> Cc: linux-doc@vger.kernel.org
+> >>> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> >>> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> >>> ---
+> >>> I don't see what is causing this problem...
+> >>
+> >> Randy, did you run "make SPHINXDIRS=driver-api htmldocs"?
+> > 
+> > Yes.
+> > Does that cause a problem when just "make htmldocs" does not?
+> 
+> No, that should not cause such a problem.
+> 
+> https://docutils.sourceforge.io/docs/ref/rst/directives.html#include
+> says (emphasis by me):
+> 
+>     The "include" directive reads a text file. The directive argument
+>     is the path to the file to be included, *relative* to the document
+>     containing the directive. 
+> 
+> So I think your patch is the right fix.
+> You might like to add:
+> 
+> Fixes: 2f4830ef96d2 ("FireWire: add driver-api Introduction section")
+> 
+> And please feel free to add:
+> 
+> Tested-by: Akira Yokosawa <akiyks@gmail.com>
+> 
+>         Thanks, Akira
+>
+> > thanks.
+> > 
+> >> I remember seeing similar errors with v5.14 or v5.15.
+> >> So I don't think this is a new issue.
+> >>
+> >> Without "SPHINXDIRS=driver-api", I don't get this error on -next.
+> >>
+> >> I didn't report it at the time as I was not sure it was expected
+> >> or not.
+> >>
+> >>         Thanks, Akira
+> >>
+> >>>
+> >>>  Documentation/driver-api/firewire.rst |    4 ++--
+> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>>
+> >>> --- linux-next-20220117.orig/Documentation/driver-api/firewire.rst
+> >>> +++ linux-next-20220117/Documentation/driver-api/firewire.rst
+> >>> @@ -19,7 +19,7 @@ of kernel interfaces is available via ex
+> >>>  Firewire char device data structures
+> >>>  ====================================
+> >>>  
+> >>> -.. include:: /ABI/stable/firewire-cdev
+> >>> +.. include:: ../ABI/stable/firewire-cdev
+> >>>      :literal:
+> >>>  
+> >>>  .. kernel-doc:: include/uapi/linux/firewire-cdev.h
+> >>> @@ -28,7 +28,7 @@ Firewire char device data structures
+> >>>  Firewire device probing and sysfs interfaces
+> >>>  ============================================
+> >>>  
+> >>> -.. include:: /ABI/stable/sysfs-bus-firewire
+> >>> +.. include:: ../ABI/stable/sysfs-bus-firewire
+> >>>      :literal:
+> >>>  
+> >>>  .. kernel-doc:: drivers/firewire/core-device.c
 
-Signed-off-by: Qianggui Song <qianggui.song@amlogic.com>
----
- drivers/irqchip/irq-meson-gpio.c | 64 ++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+I can regenerate the problem and check that the patch can solve it.
 
-diff --git a/drivers/irqchip/irq-meson-gpio.c b/drivers/irqchip/irq-meson-gpio.c
-index b511f9532adc..896201d2f01f 100644
---- a/drivers/irqchip/irq-meson-gpio.c
-+++ b/drivers/irqchip/irq-meson-gpio.c
-@@ -42,6 +42,9 @@
- #define REG_PIN_SEL_SHIFT(x)	(((x) % 4) * 8)
- #define REG_FILTER_SEL_SHIFT(x)	((x) * 4)
- 
-+/* Used for s4 chips */
-+#define REG_EDGE_POL_S4	0x1c
-+
- struct meson_gpio_irq_controller;
- static void meson8_gpio_irq_sel_pin(struct meson_gpio_irq_controller *ctl,
- 				    unsigned int channel, unsigned long hwirq);
-@@ -50,6 +53,8 @@ static void meson_a1_gpio_irq_sel_pin(struct meson_gpio_irq_controller *ctl,
- 				      unsigned int channel,
- 				      unsigned long hwirq);
- static void meson_a1_gpio_irq_init(struct meson_gpio_irq_controller *ctl);
-+static void meson_s4_gpio_irq_sel_type(struct meson_gpio_irq_controller *ctl,
-+				       unsigned int idx, u32 val);
- 
- struct irq_ctl_ops {
- 	void (*gpio_irq_sel_pin)(struct meson_gpio_irq_controller *ctl,
-@@ -95,6 +100,20 @@ struct meson_gpio_irq_params {
- 	.pin_sel_mask = 0x7f,					\
- 	.nr_channels = 8,					\
- 
-+#define INIT_MESON_S4_COMMON_DATA(irqs)				\
-+	.nr_hwirq = irqs,					\
-+	.ops = {						\
-+		.gpio_irq_init = meson_a1_gpio_irq_init,	\
-+		.gpio_irq_sel_pin = meson_a1_gpio_irq_sel_pin,	\
-+		.gpio_irq_sel_type = meson_s4_gpio_irq_sel_type,\
-+	},							\
-+	.support_edge_both = true,				\
-+	.edge_both_offset = 0,					\
-+	.edge_single_offset = 12,				\
-+	.pol_low_offset = 0,					\
-+	.pin_sel_mask = 0xff,					\
-+	.nr_channels = 12,					\
-+
- static const struct meson_gpio_irq_params meson8_params = {
- 	INIT_MESON8_COMMON_DATA(134)
- };
-@@ -125,6 +144,10 @@ static const struct meson_gpio_irq_params a1_params = {
- 	INIT_MESON_A1_COMMON_DATA(62)
- };
- 
-+static const struct meson_gpio_irq_params s4_params = {
-+	INIT_MESON_S4_COMMON_DATA(82)
-+};
-+
- static const struct of_device_id meson_irq_gpio_matches[] = {
- 	{ .compatible = "amlogic,meson8-gpio-intc", .data = &meson8_params },
- 	{ .compatible = "amlogic,meson8b-gpio-intc", .data = &meson8b_params },
-@@ -134,6 +157,7 @@ static const struct of_device_id meson_irq_gpio_matches[] = {
- 	{ .compatible = "amlogic,meson-g12a-gpio-intc", .data = &axg_params },
- 	{ .compatible = "amlogic,meson-sm1-gpio-intc", .data = &sm1_params },
- 	{ .compatible = "amlogic,meson-a1-gpio-intc", .data = &a1_params },
-+	{ .compatible = "amlogic,meson-s4-gpio-intc", .data = &s4_params },
- 	{ }
- };
- 
-@@ -200,6 +224,46 @@ static void meson_a1_gpio_irq_init(struct meson_gpio_irq_controller *ctl)
- 	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL, BIT(31), BIT(31));
- }
- 
-+/*
-+ * gpio irq relative registers for s4
-+ * -PADCTRL_GPIO_IRQ_CTRL0
-+ * bit[31]:    enable/disable all the irq lines
-+ * bit[12-23]: single edge trigger
-+ * bit[0-11]:  polarity trigger
-+ *
-+ * -PADCTRL_GPIO_IRQ_CTRL[X]
-+ * bit[0-16]: 7 bits to choose gpio source for irq line 2*[X] - 2
-+ * bit[16-22]:7 bits to choose gpio source for irq line 2*[X] - 1
-+ * where X = 1-6
-+ *
-+ * -PADCTRL_GPIO_IRQ_CTRL[7]
-+ * bit[0-11]: both edge trigger
-+ */
-+static void
-+meson_s4_gpio_irq_sel_type(struct meson_gpio_irq_controller *ctl,
-+			   unsigned int idx, unsigned int type)
-+{
-+	unsigned int val = 0;
-+
-+	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL_S4, BIT(idx), 0);
-+
-+	if (type == IRQ_TYPE_EDGE_BOTH) {
-+		val |= BIT(ctl->params->edge_both_offset + idx);
-+		meson_gpio_irq_update_bits(ctl, REG_EDGE_POL_S4,
-+					   BIT(ctl->params->edge_both_offset + idx), val);
-+		return;
-+	}
-+
-+	if (type & (IRQ_TYPE_LEVEL_LOW | IRQ_TYPE_EDGE_FALLING))
-+		val |= BIT(ctl->params->pol_low_offset + idx);
-+
-+	if (type & (IRQ_TYPE_EDGE_RISING | IRQ_TYPE_EDGE_FALLING))
-+		val |= BIT(ctl->params->edge_single_offset + idx);
-+
-+	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL,
-+				   BIT(idx) | BIT(12 + idx), val);
-+};
-+
- static int
- meson_gpio_irq_request_channel(struct meson_gpio_irq_controller *ctl,
- 			       unsigned long  hwirq,
--- 
-2.34.1
+Tested-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 
+
+Thanks
+
+Takashi Sakamoto

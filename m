@@ -2,180 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9360F49378B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF918493789
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353107AbiASJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353044AbiASJm4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:42:56 -0500
-Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375D3C061574;
-        Wed, 19 Jan 2022 01:42:56 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4Jf10G3v44z9scy;
-        Wed, 19 Jan 2022 10:42:54 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1642585372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6yUiafitayqG9qVxmPKvPhVi5mgDkb14L3ujh+Xnamc=;
-        b=bgviz6d/ghsnghYiGAol8hFucAxD3VeMHq9rtMsJhC5CwnT+LfZrvR/nIKhfVSoxpH2BZT
-        j1QSF7QrSx+BTRUnZHDdUUxEwe4toBtiMlN4ftQshqD0c5ohEq5vF3nSHfQ2D9T8RRGs4+
-        yLjXw3qbZl/FIO0S5MdEZg7w0eQtrCQ9GCKJweZXnqfXoOfKdWmQsOBGBhdiY++4Usykfp
-        qdJ9ZiifZlCNL0bl0Ph91+IWXyR0XHjzZlSmcIjcHXkp77CLF9CWMd5A5+VEmJotHcOk4q
-        5muYsiathCc04rciGRZsLxJTZN4r17zQTTJNS8EErfe+xNi7JSFzYbsBydghPw==
-Message-ID: <06b7adc5612d9d0436cfb57e47518ad835b4fc62.camel@sylv.io>
-Subject: Re: [PATCH v2 2/4] hwmon: (max6639) Add regulator support
-From:   sylv <sylv@sylv.io>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Date:   Wed, 19 Jan 2022 10:42:49 +0100
-In-Reply-To: <20220118161108.GA4115171@roeck-us.net>
-References: <cover.1642413668.git.sylv@sylv.io>
-         <4c644f279f6e205d3c9540a4ad35825e4d5f2da1.1642413668.git.sylv@sylv.io>
-         <20220118161108.GA4115171@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        id S1352962AbiASJmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:42:53 -0500
+Received: from mga01.intel.com ([192.55.52.88]:32092 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235918AbiASJmv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 04:42:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642585371; x=1674121371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LxWQZjhb/fNbEShE73X5g5DvnhYQLiQO3Stdcf1bZhA=;
+  b=PZlBTFIUoLS1PtpsQP14JHhklMx4Yedi4yLPuigaWjdeYYI7HZ+SBw2I
+   u1TuGl2uW0oYWknBTM3AgwQlVaHhYnJFnzKj4vjzBxLnJFQkaLssOZ2gi
+   cRDQgBA7fANq0KGW2EFVFHhxN4EQ1bucK4DhhAFh51DdAGepl8+c1YUa8
+   eoTB134DoOAFtd+yPhtejGZr597DosZnJv3qXRpvHsJa9RT0Bknf/xKwF
+   yewkX/4LBf4eTjyvEeEuCn1J0ceRI55UCG47VqTDbc3i7mR9kIJjpAIVG
+   RKS+tteXGKAcpEtm6r6MfXv9HRk3RjkhpsxSXTdbzaUKAotCnf8vxk0C+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="269418425"
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="269418425"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 01:42:50 -0800
+X-IronPort-AV: E=Sophos;i="5.88,299,1635231600"; 
+   d="scan'208";a="532207547"
+Received: from atefehad-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.238.132])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 01:42:49 -0800
+Date:   Wed, 19 Jan 2022 01:42:49 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Eryk Brol <eryk.brol@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 2/3] lib/string_helpers: Add helpers for
+ enable[d]/disable[d]
+Message-ID: <20220119094249.6g24562y2b4iwtvk@ldmartin-desk2>
+References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
+ <20220119072450.2890107-3-lucas.demarchi@intel.com>
+ <CAHp75Vc4bdu1OTi2t-fHeHkmnVgd6LCdeotnGEH_+q4EGk3OmQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vc4bdu1OTi2t-fHeHkmnVgd6LCdeotnGEH_+q4EGk3OmQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 08:11 -0800, Guenter Roeck wrote:
-> On Mon, Jan 17, 2022 at 11:40:24AM +0100, Marcello Sylvester Bauer wrote:
-> > Add regulator support for boards where the fan-supply have to be
-> > powered up before it can be used.
-> > 
-> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > ---
-> >  drivers/hwmon/max6639.c | 64 +++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 56 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> > index ccc0f047bd44..0b241f029229 100644
-> > --- a/drivers/hwmon/max6639.c
-> > +++ b/drivers/hwmon/max6639.c
-> > @@ -87,6 +87,9 @@ struct max6639_data {
-> >  	/* Register values initialized only once */
-> >  	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
-> >  	u8 rpm_range;		/* Index in above rpm_ranges table */
-> > +
-> > +	/* Optional regulator for FAN supply */
-> > +	struct regulator *reg;
-> >  };
-> >  
-> >  static struct max6639_data *max6639_update_device(struct device *dev)
-> > @@ -516,6 +519,11 @@ static int max6639_detect(struct i2c_client *client,
-> >  	return 0;
-> >  }
-> >  
-> > +static void max6639_regulator_disable(void *data)
-> > +{
-> > +	regulator_disable(data);
-> > +}
-> > +
-> >  static int max6639_probe(struct i2c_client *client)
-> >  {
-> >  	struct device *dev = &client->dev;
-> > @@ -528,6 +536,30 @@ static int max6639_probe(struct i2c_client *client)
-> >  		return -ENOMEM;
-> >  
-> >  	data->client = client;
-> > +
-> > +	data->reg = devm_regulator_get_optional(dev, "fan");
-> > +	if (IS_ERR(data->reg)) {
-> > +		if (PTR_ERR(data->reg) != -ENODEV) {
-> > +			err = (int)PTR_ERR(data->reg);
-> > +			dev_warn(dev, "Failed looking up fan supply: %d\n", err);
-> 
-> This could be -EPROBE_DEFER. I do not think that warrants
-> an error message.
+On Wed, Jan 19, 2022 at 11:20:38AM +0200, Andy Shevchenko wrote:
+>On Wednesday, January 19, 2022, Lucas De Marchi <lucas.demarchi@intel.com>
+>wrote:
+>
+>> Follow the yes/no logic and add helpers for enabled/disabled and
+>> enable/disable - those are not so common throughout the kernel,
+>> but they give a nice way to reuse the strings to log things as
+>> enabled/disabled or enable/disable.
+>>
+>> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>> ---
+>>  drivers/gpu/drm/i915/i915_utils.h | 10 ----------
+>>  include/linux/string_helpers.h    |  2 ++
+>>  2 files changed, 2 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/i915_utils.h
+>> b/drivers/gpu/drm/i915/i915_utils.h
+>> index 2a8781cc648b..cbec79bae0d2 100644
+>> --- a/drivers/gpu/drm/i915/i915_utils.h
+>> +++ b/drivers/gpu/drm/i915/i915_utils.h
+>> @@ -419,16 +419,6 @@ static inline const char *onoff(bool v)
+>>         return v ? "on" : "off";
+>>  }
+>>
+>> -static inline const char *enabledisable(bool v)
+>> -{
+>> -       return v ? "enable" : "disable";
+>> -}
+>> -
+>> -static inline const char *enableddisabled(bool v)
+>> -{
+>> -       return v ? "enabled" : "disabled";
+>> -}
+>> -
+>>  void add_taint_for_CI(struct drm_i915_private *i915, unsigned int taint);
+>>  static inline void __add_taint_for_CI(unsigned int taint)
+>>  {
+>> diff --git a/include/linux/string_helpers.h b/include/linux/string_
+>> helpers.h
+>> index e980dec05d31..e4b82f364ee1 100644
+>> --- a/include/linux/string_helpers.h
+>> +++ b/include/linux/string_helpers.h
+>> @@ -103,5 +103,7 @@ char *kstrdup_quotable_file(struct file *file, gfp_t
+>> gfp);
+>>  void kfree_strarray(char **array, size_t n);
+>>
+>>  static inline const char *yesno(bool v) { return v ? "yes" : "no"; }
+>> +static inline const char *enabledisable(bool v) { return v ? "enable" :
+>> "disable"; }
+>> +static inline const char *enableddisabled(bool v) { return v ? "enabled"
+>> : "disabled"; }
+>
+>
+>Looks not readable even if takes 80 characters. Please, keep original style.
+>
+>
+>I believe you wanted to have nice negative statistics from day 1, then you
+>may add more patches in the series to cleanup more users.
 
-I see. I'll adapt it analog to: drivers/hwmon/pwm-fan.c:323
+not really the reason... it was just "this is small enough and
+checkpatch doesn't complain" (it checks for 100 chars nowadays). But yes,
+I can keep it in 4 lines.
 
-> 
-> > +			return err;
-> > +		}
-> > +		data->reg = NULL;
-> > +	} else {
-> > +		/* Spin up fans */
-> > +		err = regulator_enable(data->reg);
-> > +		if (err) {
-> > +			dev_err(dev, "Failed to enable fan supply: %d\n", err);
-> > +			return err;
-> > +		}
-> > +		err = devm_add_action_or_reset(dev, max6639_regulator_disable,
-> > +					       data->reg);
-> > +		if (err) {
-> > +			dev_err(dev, "Failed to register action: %d\n", err);
-> > +			return err;
-> > +		}
-> > +	}
-> > +
-> >  	mutex_init(&data->update_lock);
-> >  
-> >  	/* Initialize the max6639 chip */
-> > @@ -545,23 +577,39 @@ static int max6639_probe(struct i2c_client *client)
-> >  static int max6639_suspend(struct device *dev)
-> >  {
-> >  	struct i2c_client *client = to_i2c_client(dev);
-> > -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > -	if (data < 0)
-> > -		return data;
-> > +	struct max6639_data *data = dev_get_drvdata(dev);
-> > +	int ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > +
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	if (data->reg)
-> > +		regulator_disable(data->reg);
-> >  
-> >  	return i2c_smbus_write_byte_data(client,
-> > -			MAX6639_REG_GCONFIG, data | MAX6639_GCONFIG_STANDBY);
-> > +			MAX6639_REG_GCONFIG, ret | MAX6639_GCONFIG_STANDBY);
-> >  }
-> >  
-> >  static int max6639_resume(struct device *dev)
-> >  {
-> >  	struct i2c_client *client = to_i2c_client(dev);
-> > -	int data = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > -	if (data < 0)
-> > -		return data;
-> > +	struct max6639_data *data = dev_get_drvdata(dev);
-> > +	int ret;
-> > +
-> > +	if (data->reg) {
-> > +		ret = regulator_enable(data->reg);
-> > +		if (ret) {
-> > +			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> > +	ret = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-> > +	if (ret < 0)
-> > +		return ret;
-> >  
-> >  	return i2c_smbus_write_byte_data(client,
-> > -			MAX6639_REG_GCONFIG, data & ~MAX6639_GCONFIG_STANDBY);
-> > +			MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
-> >  }
-> >  #endif /* CONFIG_PM_SLEEP */
-> >  
-
+thanks
+Lucas De Marchi

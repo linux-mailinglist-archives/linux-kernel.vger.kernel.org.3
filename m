@@ -2,90 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23066493528
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D29749352C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346230AbiASGoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:44:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:48178 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236370AbiASGoY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:44:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE590D6E;
-        Tue, 18 Jan 2022 22:44:23 -0800 (PST)
-Received: from [10.163.74.69] (unknown [10.163.74.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 859653F73D;
-        Tue, 18 Jan 2022 22:44:20 -0800 (PST)
-Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
- <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
- <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
- <00e28671-8d3a-f789-91c4-109814792a07@arm.com>
- <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <519f3b4e-e790-c051-3cb1-3fd229a3e498@arm.com>
-Date:   Wed, 19 Jan 2022 12:14:23 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1346122AbiASGtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345647AbiASGte (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 01:49:34 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EF8C061574;
+        Tue, 18 Jan 2022 22:49:33 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id m1so5373100lfq.4;
+        Tue, 18 Jan 2022 22:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4qGM2PfWPk6RGTVLrrFSHYqmCik/v9iLb4ZUp6ZvJnw=;
+        b=NnxaFzVW7dVtK/7bDW/MwUcZfru0yFMo1fnaIQZHCUiblkQmRt/V5WqnrtmbuX2w/v
+         5zgYuqibtmKjNA4Fh1AB+tkKs/Z/bcf6BrB0nut9GhN2JJjSAaZWqesrMAHYQR+5ZJ0Q
+         3kYPRJEXHSiAick74qhTVLnNxLL5SBiaDPbySbuG7YkvafPWrHeMOONUhdjmCuLBICqr
+         tPNOf1qsnivsLVQtUMXwC5Mh9cGVlfNcm1H+y/Ed1PjExvhBxY3cAqskg/90Ckm89hVy
+         5l/xh2EGQgMC006XiLoIFn4Wexx+JLO0tE3h4cGgcCFWgItZuG9es2UpT2YTEQu4I7ZO
+         1BTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=4qGM2PfWPk6RGTVLrrFSHYqmCik/v9iLb4ZUp6ZvJnw=;
+        b=yFEo2I69A//phjAnIjRjFHU9nM9wnipePNq8T1MKNQaPKHnlFwwBiRC0j97QKujgpz
+         DM2+f/gW3eco0VNRTmy7Nzjsw/pB83I9uiypVAnMVW+IzpBWJ9Zg//oGXVPzAgWEv51D
+         CrUQJE46bpZmL+2457JNuJ+28ll7jzXB2NXM/Wq208dwSerbWCREg8WAuZjZTE6XL/gi
+         NmKi5dS8zfe814vngAmbEJeVDJSZoy4C/0uAZ6jZGsNJ/QLw9OgnzZDIh8GVhHfeQiAt
+         ocrc7aSh7PpynRArBvJNMr6rXS1SXb+k5g6aANq11CBMgD8DKipKJw7pwojlZYCIy06D
+         r+Bg==
+X-Gm-Message-State: AOAM530bwrhtIvlQl0BZYnqWBe4JidFnpCwEqIK7xkk81sBYT/tB4dMo
+        FyaYg8Tfd3cvJI+qBYexP28=
+X-Google-Smtp-Source: ABdhPJxbU8IfDu3SpJWUT2eTInv3+sMu15J2Fqypqq8yvoUkpJqf1uIPFt/Ebj0L/92FbMSZnudvBg==
+X-Received: by 2002:a05:6512:787:: with SMTP id x7mr25529594lfr.647.1642574971753;
+        Tue, 18 Jan 2022 22:49:31 -0800 (PST)
+Received: from localhost ([2a05:3580:f312:6c01:1b6d:df4d:cbec:e4a2])
+        by smtp.gmail.com with ESMTPSA id b23sm1756726lfv.22.2022.01.18.22.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 22:49:31 -0800 (PST)
+Date:   Wed, 19 Jan 2022 09:49:30 +0300
+From:   Andrey Skvortsov <andrej.skvortzov@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>,
+        Yue Hu <huyue2@yulong.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mmc: core: Wait for command setting 'Power Off
+ Notification' bit to complete
+Message-ID: <Yee0ejAQeL+wSRsz@skv.local>
+Mail-Followup-To: Andrey Skvortsov <andrej.skvortzov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>,
+        Yue Hu <huyue2@yulong.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220115121447.641524-1-andrej.skvortzov@gmail.com>
+ <CAPDyKFr_9kfAns2p6fsUck93s3peyrHvCtv5M9E3fnxLmHbRqQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr_9kfAns2p6fsUck93s3peyrHvCtv5M9E3fnxLmHbRqQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Ulf
 
+On 22-01-18 19:48, Ulf Hansson wrote:
+> On Sat, 15 Jan 2022 at 13:15, Andrey Skvortsov
+> <andrej.skvortzov@gmail.com> wrote:
+> >
+> > SD card is allowed to signal busy on DAT0 up to 1s after the
+> > CMD49. According to SD spec (version 6.0 section 5.8.1.3) first host
+> > waits until busy of CMD49 is released and only then polls Power
+> > Management Status register up to 1s until the card indicates ready to
+> > power off.
+> >
+> > Without waiting for busy before polling status register sometimes card
+> > becomes unresponsive and system fails to suspend:
+> >
+> >   [  205.907459] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+> >   [  206.421274] sunxi-mmc 1c0f000.mmc: data error, sending stop command
+> >   [  206.421321] sunxi-mmc 1c0f000.mmc: send stop command failed
+> >   [  206.421347] mmc0: error -110 reading status reg of PM func
+> >   [  206.421366] PM: dpm_run_callback(): mmc_bus_suspend+0x0/0x74 returns -110
+> >   [  206.421402] mmcblk mmc0:aaaa: PM: failed to suspend async: error -110
+> >   [  206.437064] PM: Some devices failed to suspend, or early wake event detected
+> 
+> Thanks for your patch!
+> 
+> I recall I was hesitating on adding another busy completion check for
+> this, but thought polling the status register for the power management
+> function should be sufficient.
+> 
+> >
+> > Tested with Sandisk Extreme PRO A2 64GB on Allwinner A64 system.
+> 
+> I will give this patch a try too, to make sure it still works on my
+> side. Assuming that works fine, I will queue this up for fixes and by
+> adding a fixes/stable tag.
 
-On 1/13/22 5:17 PM, Arnd Bergmann wrote:
-> On Thu, Jan 13, 2022 at 4:03 AM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->> On 1/12/22 4:20 PM, Arnd Bergmann wrote:
->>> On Wed, Jan 12, 2022 at 10:34 AM Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>>> Add the CPU Partnumbers for the new Arm designs.
->>>> @@ -74,6 +74,7 @@
->>>>  #define ARM_CPU_PART_NEOVERSE_N1       0xD0C
->>>>  #define ARM_CPU_PART_CORTEX_A77                0xD0D
->>>>  #define ARM_CPU_PART_CORTEX_A710       0xD47
->>>> +#define ARM_CPU_PART_CORTEX_X2         0xD48
->>>>  #define ARM_CPU_PART_NEOVERSE_N2       0xD49
->>>
->>> No objections to the patch, but would it be possible to just add all the missing
->>> ones here to the degree that they are known already? I don't see any entries for
->>> Cortex-A34, Cortex-A65AE, Cortex-A78, Cortex-A78C, Cortex-A78AE,
->>> Neoverse-E1, Neoverse-V1, Cortex-X1, Cortex-X2, Cortex-A510, Cortex-A710
->>> and Cortex-R82 among the Arm-designed cores that can run Linux, and there
->>> are probably others that I missed going through the list.
->>
->> Hi Arnd,
->>
->> IIUC the part numbers are enumerated here only if there is an errata
->> applicable for them which needs to be detected at boot. I am not sure
->> whether all cpu versions that can run Linux, needs to be defined here.
->> But then I might be missing something.
-> 
-> They clearly don't need to be defined here, and for other constants such
-> as the system registers we may not want to list them all, but I think for
-> the CPU IDs it makes sense to just list them all here rather than adding
-> them one at a time, as we tend to need them sooner or later anyway.
-> 
-> It also helps me personally to have a known place to look up the names
-> by value rather than chasing through reference manuals.
+Thank you! More testing would be certainly great, because only one of my SD-cards
+supports "Power Notification".
 
-IIUC the purpose here would be a quick CPU ID documentation reference check ?
-I will wait for other opinions here and add the remaining in a separate patch
-probably.
-
-> 
->       Arnd
-> 
+-- 
+Best regards,
+Andrey Skvortsov

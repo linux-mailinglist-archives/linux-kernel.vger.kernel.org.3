@@ -2,171 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A47493924
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E24749392B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 12:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353937AbiASLCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 06:02:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40716 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353857AbiASLCl (ORCPT
+        id S1353979AbiASLDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 06:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353967AbiASLCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:02:41 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20J9vnpx022766;
-        Wed, 19 Jan 2022 11:02:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=vuQsa7jcrh5TcCyBbceIuHnE31xEDzVmMebCUoCOxYw=;
- b=LCoboYKCoL0/c06e4dDPbiATikYLGlXP2MrHYAB91djchq5IQMINmb2MQyq7WoeIEAUm
- rapdlRaHo6j8ZNnMG1iZDtfanZLA6cWrbH2br8Jw6JogLCrqRjhXGbs6DwKK8djqNeiG
- NQAQnCs4HuxWa95WeFQKGp+xCTRiGYkH4skX53doPhqWvjO+8hKEZAOsO0v1ZCzrHZyP
- 52fMw6Sl9hXap9FHibpH06jRa/PXHwnVCiBNywqWQz/8fBjLmaODOj7Jvf9bDCGbWzrZ
- 5ZojM97tthNVnymGwlZry4SB17lrKPsg7E55AfNUY2h5TJv/MRK6mo6oBitQAiw3LEhN Ow== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpgfm158r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 11:02:40 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JAxlsk001602;
-        Wed, 19 Jan 2022 11:02:38 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dknhjmhwr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 11:02:38 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JB2Zu436635094
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 11:02:35 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E100DA417A;
-        Wed, 19 Jan 2022 11:02:34 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91FD4A4177;
-        Wed, 19 Jan 2022 11:02:34 +0000 (GMT)
-Received: from [9.171.12.6] (unknown [9.171.12.6])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 11:02:34 +0000 (GMT)
-Message-ID: <422595a5-b24b-8760-ff0e-112322142de7@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 12:02:34 +0100
+        Wed, 19 Jan 2022 06:02:55 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDFAC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 03:02:54 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso13681703wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 03:02:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=y3GaD+SwN8APMQh031bGmSeVhkIovJ6kmTWH0X4e1qs=;
+        b=a6dQ+O363irHUe/2uR6WdKPelWnbsGOe88aYXZJWYu3+R/9z0BBECAZLkfcQyAIb7K
+         BuOGMmgyUuAsXMLD7g/PBRldy0iYCslevoNDB9GKInXvWMHAp9ZpbtfoWkVgiRq8np+a
+         ES/7nyOiJGW1FiUwq2GKq3n87Nw1OyOCNaLqzWUa6al8gXCelS4Stk4LNgzahgmTLHCP
+         tYsEFbjLqH5RqCAkUCl37Y/xgoU7XN4N1rgBXThWeRkntCS8B+51Fjil534FR2DQbH7Y
+         3Oukbh2d5EilpYtLc4uiRsX7txttv8BHU5O4v9HhcdNmd5bP4hg5nDZ8sBD5ykU9e1Vz
+         dUCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y3GaD+SwN8APMQh031bGmSeVhkIovJ6kmTWH0X4e1qs=;
+        b=dDS8ao8R/Wo0I1C2mQaA4RiFMrPjbAAYjQNOq2SrVoyMZKBcDshK1UPOvPiXH2As7J
+         P256pOP/eSCGixr0Bb8kc3LQuc12+lebZ0U8IVl1KAFR79QwJ2AlZnaSo+czVeqF35My
+         tLnDBuXBnKibvyJHo2Ko0HWQJ/QBf9MpbUlaPzjArfTtbEiUgr7ZNcxwbZoXWB3beCQB
+         2OafqWzamFzDkwsfvfn3FRMq/DViOEFTt2MQcH94jtzZxk1b/cL5HxHZETrmXEWgHPca
+         rcS63CSJ/LoScnXbj5/2qGR3lAFuHeIEqZUVpt3HSPsMhd/KKWAJxpk1u7HKysM862w0
+         GDuA==
+X-Gm-Message-State: AOAM53322Ac0kJAOoK9unso4mbTVb2ju0ziZpqXBHlqwlR/h85/xme3e
+        3Oi5i9Tw/td8MyU12GGSak17aQ==
+X-Google-Smtp-Source: ABdhPJxX7fgAprwygcmLbv/bWso8tv6+jbaJ2Y6smRT4U6jn90jPf3xZUhJtuZxCXWHTGChun0sZpw==
+X-Received: by 2002:a1c:a102:: with SMTP id k2mr2688174wme.78.1642590173201;
+        Wed, 19 Jan 2022 03:02:53 -0800 (PST)
+Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
+        by smtp.gmail.com with ESMTPSA id bj6sm313517wrb.48.2022.01.19.03.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 03:02:52 -0800 (PST)
+Date:   Wed, 19 Jan 2022 11:02:50 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Zong Li <zong.li@sifive.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] clk: sifive: Move all stuff into SoCs header files
+ from C files
+Message-ID: <Yefv2uFYme4+GDdL@google.com>
+References: <cover.1642582832.git.zong.li@sifive.com>
+ <70c9317814b06c7ce37688b158178b188d3fd604.1642582832.git.zong.li@sifive.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 01/10] s390/uaccess: Add storage key checked access
- to user memory
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-2-scgl@linux.ibm.com> <YefeakONMN4PLlml@osiris>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <YefeakONMN4PLlml@osiris>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SORBrbFPWDMzbdnpNb8-49k4NAN0QjSu
-X-Proofpoint-GUID: SORBrbFPWDMzbdnpNb8-49k4NAN0QjSu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201190061
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <70c9317814b06c7ce37688b158178b188d3fd604.1642582832.git.zong.li@sifive.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 10:48, Heiko Carstens wrote:
-> 
-> On Tue, Jan 18, 2022 at 10:52:01AM +0100, Janis Schoetterl-Glausch wrote:
->> KVM needs a mechanism to do accesses to guest memory that honor
->> storage key protection.
->> Since the copy_to/from_user implementation makes use of move
->> instructions that support having an additional access key supplied,
->> we can implement __copy_from/to_user_with_key by enhancing the
->> existing implementation.
->>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>  arch/s390/include/asm/uaccess.h | 32 ++++++++++++++++++
->>  arch/s390/lib/uaccess.c         | 57 +++++++++++++++++++++++----------
->>  2 files changed, 72 insertions(+), 17 deletions(-)
->>
->> diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
->> index 02b467461163..5138040348cc 100644
->> --- a/arch/s390/include/asm/uaccess.h
->> +++ b/arch/s390/include/asm/uaccess.h
->> @@ -33,6 +33,38 @@ static inline int __range_ok(unsigned long addr, unsigned long size)
->>  
->>  #define access_ok(addr, size) __access_ok(addr, size)
->>  
->> +unsigned long __must_check
->> +raw_copy_from_user_with_key(void *to, const void __user *from, unsigned long n,
->> +			    char key);
->> +
->> +unsigned long __must_check
->> +raw_copy_to_user_with_key(void __user *to, const void *from, unsigned long n,
->> +			  char key);
->> +
->> +static __always_inline __must_check unsigned long
->> +__copy_from_user_with_key(void *to, const void __user *from, unsigned long n,
->> +			  char key)
->> +{
->> +	might_fault();
->> +	if (should_fail_usercopy())
->> +		return n;
->> +	instrument_copy_from_user(to, from, n);
->> +	check_object_size(to, n, false);
->> +	return raw_copy_from_user_with_key(to, from, n, key);
->> +}
->> +
->> +static __always_inline __must_check unsigned long
->> +__copy_to_user_with_key(void __user *to, const void *from, unsigned long n,
->> +			char key)
->> +{
->> +	might_fault();
->> +	if (should_fail_usercopy())
->> +		return n;
->> +	instrument_copy_to_user(to, from, n);
->> +	check_object_size(from, n, true);
->> +	return raw_copy_to_user_with_key(to, from, n, key);
->> +}
->> +
->>  unsigned long __must_check
->>  raw_copy_from_user(void *to, const void __user *from, unsigned long n);
-> 
-> That's a lot of code churn... I would have expected that the existing
-> functions will be renamed, get an additional key parameter, and the
-> current API is implemented by defines which map copy_to_user() &
-> friends to the new functions, and add a zero key.
+On Wed, 19 Jan 2022, Zong Li wrote:
 
-I don't think I understand you. I can implement raw_copy_from/to_user
-in terms of raw_copy_from/to_user_with_key, which does save a few lines,
-but that's it, isn't it?
+> Improve PRCI driver to reduce the complexity, we remove the SoCs C files
+> by putting all stuff in each SoCs header files, and include these
+> SoCs-specific header files in core of PRCI. It can also avoid the W=1
+> kernel build warnings about variable defined but not used
+> [-Wunused-const-variable=], like commit 487dc7bb6a0c ("clk: sifive:
+> fu540-prci: Declare static const variable 'prci_clk_fu540' where it's
+> used") does.
+> 
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> Suggested-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/clk/sifive/Makefile      |   2 +-
+>  drivers/clk/sifive/fu540-prci.c  |  89 --------------------
+>  drivers/clk/sifive/fu540-prci.h  |  91 ++++++++++++++++++++-
+>  drivers/clk/sifive/fu740-prci.c  | 134 -------------------------------
+>  drivers/clk/sifive/fu740-prci.h  | 130 +++++++++++++++++++++++++++++-
+>  drivers/clk/sifive/sifive-prci.c |   5 --
+>  6 files changed, 214 insertions(+), 237 deletions(-)
+>  delete mode 100644 drivers/clk/sifive/fu540-prci.c
+>  delete mode 100644 drivers/clk/sifive/fu740-prci.c
 
-Thanks!
-> 
-> This would avoid a lot of code duplication, even though the kernel
-> image would get slightly larger.
-> 
-> Could you do that, please, and also provide bloat-a-meter results?
-> 
-> And as already mentioned: please don't use "char" for passing a
-> key. Besides that this leads to the overflow question as pointed out
-> by Sven, this might as usual also raise the question if there might be
-> any bugs wrt to sign extension. That is: for anything but characters,
-> please always explicitely use signed or unsigned char (or u8/s8), so
-> nobody has to think about this.
+This is the sort of thing I was after.
 
-Will do.
-> 
-> Thanks!
+This patch at least LGTM.
 
+Reviewed-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

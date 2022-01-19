@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA64493519
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF0449351E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 07:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351841AbiASGlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 01:41:11 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31104 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351825AbiASGlB (ORCPT
+        id S1350228AbiASGlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 01:41:20 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:42580 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351795AbiASGlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 01:41:01 -0500
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Jdwt14BbSz1FCt8;
-        Wed, 19 Jan 2022 14:37:13 +0800 (CST)
-Received: from [10.67.110.136] (10.67.110.136) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Wed, 19 Jan 2022 14:40:58 +0800
-Subject: Re: [PATCH] arm64: entry: Save some nops when CONFIG_ARM64_PSEUDO_NMI
- is not set
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>, <marcan@marcan.st>, <maz@kernel.org>,
-        <joey.gouly@arm.com>, <pcc@google.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220107085536.214501-1-heying24@huawei.com>
- <20220112032410.29231-1-heying24@huawei.com>
-From:   He Ying <heying24@huawei.com>
-Message-ID: <e6293ec4-7c56-194a-95f9-98b102d80b31@huawei.com>
-Date:   Wed, 19 Jan 2022 14:40:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 19 Jan 2022 01:41:05 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V2FvZDV_1642574459;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V2FvZDV_1642574459)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 19 Jan 2022 14:41:01 +0800
+Date:   Wed, 19 Jan 2022 14:40:59 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
+        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Linux-cachefs] [PATCH v2 00/20] fscache,  erofs: fscache-based
+ demand-read semantics
+Message-ID: <Yeeye2AUZITDsdh8@B-P7TQMD6M-0146.local>
+Mail-Followup-To: David Howells <dhowells@redhat.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
+        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-In-Reply-To: <20220112032410.29231-1-heying24@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.136]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220118131216.85338-1-jefflexu@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi David,
 
-Ping. Any comments?
+On Tue, Jan 18, 2022 at 09:11:56PM +0800, Jeffle Xu wrote:
+> changes since v1:
+> - rebase to v5.17
+> - erofs: In chunk based layout, since the logical file offset has the
+>   same remainder over PAGE_SIZE with the corresponding physical address
+>   inside the data blob file, the file page cache can be directly
+>   transferred to netfs library to contain the data from data blob file.
+>   (patch 15) (Gao Xiang)
+> - netfs,cachefiles: manage logical/physical offset separately. (patch 2)
+>   (It is used by erofs_begin_cache_operation() in patch 15.)
+> - cachefiles: introduce a new devnode specificaly for on-demand reading.
+>   (patch 6)
+> - netfs,fscache,cachefiles: add new CONFIG_* for on-demand reading.
+>   (patch 3/5)
+> - You could start a quick test by
+>   https://github.com/lostjeffle/demand-read-cachefilesd
+> - add more background information (mainly introduction to nydus) in the
+>   "Background" part of this cover letter
+> 
+> [Important Issues]
+> The following issues still need further discussion. Thanks for your time
+> and patience.
+> 
+> 1. I noticed that there's refactoring of netfs library[1], and patch 1
+> is not needed since [2].
+> 
+> 2. The current implementation will severely conflict with the
+> refactoring of netfs library[1][2]. The assumption of 'struct
+> netfs_i_context' [2] is that, every file in the upper netfs will
+> correspond to only one backing file. While in our scenario, one file in
+> erofs can correspond to multiple backing files. That is, the content of
+> one file can be divided into multiple chunks, and are distrubuted over
+> multiple blob files, i.e. multiple backing files. Currently I have no
+> good idea solving this conflic.
+>
 
-ÔÚ 2022/1/12 11:24, He Ying Ð´µÀ:
-> Arm64 pseudo-NMI feature code brings some additional nops
-> when CONFIG_ARM64_PSEUDO_NMI is not set, which is not
-> necessary. So add necessary ifdeffery to avoid it.
->
-> Signed-off-by: He Ying <heying24@huawei.com>
-> ---
->   arch/arm64/kernel/entry.S | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index 2f69ae43941d..ffc32d3d909a 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-> @@ -300,6 +300,7 @@ alternative_else_nop_endif
->   	str	w21, [sp, #S_SYSCALLNO]
->   	.endif
->   
-> +#ifdef CONFIG_ARM64_PSEUDO_NMI
->   	/* Save pmr */
->   alternative_if ARM64_HAS_IRQ_PRIO_MASKING
->   	mrs_s	x20, SYS_ICC_PMR_EL1
-> @@ -307,6 +308,7 @@ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
->   	mov	x20, #GIC_PRIO_IRQON | GIC_PRIO_PSR_I_SET
->   	msr_s	SYS_ICC_PMR_EL1, x20
->   alternative_else_nop_endif
-> +#endif
->   
->   	/* Re-enable tag checking (TCO set on exception entry) */
->   #ifdef CONFIG_ARM64_MTE
-> @@ -330,6 +332,7 @@ alternative_else_nop_endif
->   	disable_daif
->   	.endif
->   
-> +#ifdef CONFIG_ARM64_PSEUDO_NMI
->   	/* Restore pmr */
->   alternative_if ARM64_HAS_IRQ_PRIO_MASKING
->   	ldr	x20, [sp, #S_PMR_SAVE]
-> @@ -339,6 +342,7 @@ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
->   	dsb	sy				// Ensure priority change is seen by redistributor
->   .L__skip_pmr_sync\@:
->   alternative_else_nop_endif
-> +#endif
->   
->   	ldp	x21, x22, [sp, #S_PC]		// load ELR, SPSR
->   
+Would you mind give more hints on this? Personally, I still think fscache
+is useful and clean way for image distribution on-demand load use cases
+in addition to cache network fs data as a more generic in-kernel caching
+framework. From the point view of current codestat, it has slight
+modification of netfslib and cachefiles (except for a new daemon):
+ fs/netfs/Kconfig         |   8 +
+ fs/netfs/read_helper.c   |  65 ++++++--
+ include/linux/netfs.h    |  10 ++
+
+ fs/cachefiles/Kconfig    |   8 +
+ fs/cachefiles/daemon.c   | 147 ++++++++++++++++-
+ fs/cachefiles/internal.h |  23 +++
+ fs/cachefiles/io.c       |  82 +++++++++-
+ fs/cachefiles/main.c     |  27 ++++
+ fs/cachefiles/namei.c    |  60 ++++++-
+
+Besides, I think that cookies can be set according to data mapping
+(instead of fixed per file) will benefit the following scenario in
+addition to our on-demand load use cases:
+  It will benefit file cache data deduplication. What I can see is that
+netfslib may have some follow-on development in order to support
+encryption and compression. However, I think cache data deduplication
+is also potentially useful to minimize cache storage since many local
+fses already support reflink. However, I'm not sure if it's a great
+idea that cachefile relies on underlayfs abilities for cache deduplication.
+So for cache deduplication scenarios, I'm not sure per-file cookie is
+still a good idea for us (or alternatively, maintain more complicated
+mapping per cookie inside fscache besides filesystem mapping, too
+unnecessary IMO).
+  
+By the way, in general, I'm not sure if it's a great idea to cache in
+per-file basis (especially for too many small files), that is why we
+introduced data deduplicated blobs. At least, it's simpler for read-only
+fses. Recently, I found another good article to summarize this:
+http://0pointer.net/blog/casync-a-tool-for-distributing-file-system-images.html
+
+Thanks,
+Gao Xiang

@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 599C04943D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB66E4943D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240369AbiASXVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S1344311AbiASX0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 18:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344260AbiASXVm (ORCPT
+        with ESMTP id S1343864AbiASX0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:21:42 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEBBC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:21:42 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id h196-20020a6283cd000000b004bed33745c9so2430289pfe.23
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:21:42 -0800 (PST)
+        Wed, 19 Jan 2022 18:26:14 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772FBC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:26:14 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 192so248479pfz.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 15:26:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=R3Y/gOk08NgtXcS6vykPovrhRLCA2DpTaWszWvKKMv8=;
-        b=c5zgx/4itJnifU5XQnptwovLjitu5KxUpdScwBHS9ppYLx8ucjI2vrBYnNg7vFwLG7
-         VzFrLBx5t7DPwx/PJAna5plHjt7e7TgHwB/G8MXte8rSpYlwAoWRr14WybVs89QLUesC
-         pgsTFv1yPQkaCAzYO9fu7jkDmk6hMnMFPUc864hF/qsMPw8X1Jt+FCfsiojcg4ZvbLI8
-         102AZ7T1DxZAm95v5nl9qYZeoJWr2IO5mHLblewk4l/t/GU9ST8RtuDlZHyxZZkRdK9Z
-         Vfk2b+ssBm7uP69bDqqQQSekf/OqZkeGdNNLY8VgwQdSTBKxSAxeWdSLPREam0I4Tzqy
-         FLGQ==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=r1BrZMEuUDk+2sfXVctDN6hyPwNL/9n18gjgSpq5RYs=;
+        b=QEfgfBiw9LyCRGvxE4oDjyAUOMjhA6PfbklcFCfNhp20IFa06NoxVVCzCx7QSp/tg7
+         vPxqDAj3m8ct3vewn/VMcwziq1+ELXR3dVLqGKtHiK3wTU36w5rSlBQzZc0raRj0q+sr
+         2cTGIEBsgfo2j8ngtuvCOAs3XmnVTRDdVqxlNBnohoofKjqXIQz6bs+mB+NWNoDIKZqB
+         LHldT6k4UX0/cfXvE/zsjbIwomUbUqeU+s/iENxLkkpSM0as7nXvDBg6sh30/cpiNvyV
+         2YSmHTQXgOyQBn6O1DhaLIbIQLw9sVJP7EFsCRpnUsOrPko55RmQKtems8enux2LVJq5
+         BMSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=R3Y/gOk08NgtXcS6vykPovrhRLCA2DpTaWszWvKKMv8=;
-        b=LwN+KWHC5RH153hVo8BQFn4zr6ot3b83yd5qeG2YaX0zZpJHy9rn4RlNvCpi0EjTC4
-         WR+JuZsyWWdfhHE069A4w5XEpao5GxfNxTf+soH3+B8wKY6aAjgaT2SMQ8dPxNZJUWnx
-         UzSpaRxhT3VIqFcXJ7lp38AQ2hC9tarwn9/akB/vyrX08SI8DugiGsZCZuuxw7lpCdRm
-         AywElZ9k7hAUlUXuF1Fd1LOeBEzg9+LUNqNJrM8cq1iMS04jsmzYTHXga1HK8fxIn8sb
-         UlgedoZ6qjjkHPqPVo1La2i20o1AM2Xz+sMYzst9mUvVHU+UhMtmOXzzfx5H7e/ZxdZV
-         eO0Q==
-X-Gm-Message-State: AOAM532t06PMuO470FBged00HINK6AH13UXSfMNAkL6XT1Ex6V/0+EKC
-        /0UaJCR2+7zW6syvDIJDYp2zKRAsl9TEtaVe8DRBgcLAWD8/BPusv8Job8BFMps84ZNfGw0M9hw
-        xUKwdm+zeEiL8lXqi40Dt7xuMtwBwkIT/ujHNm+n7MrnaTOd3bcMIjEQtCKcTE8sk/fcW6A==
-X-Google-Smtp-Source: ABdhPJy0tmrWl2qzWMTzlH8xT25SOYiP2Mzw6nzK3q3lsalSqLQ2INJtAheVNXowbPrtzMsxUnxlwxnh370=
-X-Received: from adelva.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:b2b])
- (user=adelva job=sendgmr) by 2002:a05:6a00:2408:b0:4c1:e1a1:770 with SMTP id
- z8-20020a056a00240800b004c1e1a10770mr32410337pfh.70.1642634501702; Wed, 19
- Jan 2022 15:21:41 -0800 (PST)
-Date:   Wed, 19 Jan 2022 23:21:39 +0000
-Message-Id: <20220119232139.1125908-1-adelva@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] remoteproc: Fix count check in rproc_coredump_write()
-From:   Alistair Delva <adelva@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        stable@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        linux-remoteproc@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=r1BrZMEuUDk+2sfXVctDN6hyPwNL/9n18gjgSpq5RYs=;
+        b=tknglcFG+DHqWzbYc+P1IcVC3D0+zb0KHkAwbysqfvyK2IIPZlgK4nimj8mICBghJ6
+         3lk2mjvZ6m9MyNfHv7/er+f40Lyol1cKztxXGvYk4PhzH7yhHvBayUkzUXrQfo+2rhB2
+         YyN0J92UXiO1EqpQj4t6uStYGzI03mkuG/veyOwSQ466MKfSRm6AKav4WoOgxRFYUY0h
+         LCPF1dSO0CxxBwRd2fWhJkLEOSkv7iwEnLCv8Choonr4KdKhEO2Ghw8MSHrtRYYxO5Ow
+         MPYkL4RxT62dVFLq95/4svginbnG0V75Zf3WoPw4cTQMGQkzDnCb9jKGa9TER525G4Uw
+         8H5g==
+X-Gm-Message-State: AOAM530UH6tCAPw0UNghV59q0meVo873OR/WBhcBQ/hNg2Pmwd18dB2S
+        wApvvOBUbRYaoeSGOUTGP18=
+X-Google-Smtp-Source: ABdhPJzM9YC3NsLH8dRSatWaoVSYt3jJno/5D1/wga980c+lxNS6gIW/n2C6/rt0o79E47c7tp2CkA==
+X-Received: by 2002:a63:b341:: with SMTP id x1mr29912496pgt.185.1642634773940;
+        Wed, 19 Jan 2022 15:26:13 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c70sm646991pfc.139.2022.01.19.15.26.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 15:26:13 -0800 (PST)
+Subject: Re: [PATCH 0/3] phy: phy-brcm-usb: Fixes for phy-brcm-usb driver
+To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-phy@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211201180653.35097-1-alcooperx@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <7cbb745e-8b95-1eed-0903-44070a112ec0@gmail.com>
+Date:   Wed, 19 Jan 2022 15:26:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211201180653.35097-1-alcooperx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check count for 0, to avoid a potential underflow. Make the check the
-same as the one in rproc_recovery_write().
+Hi Vinod,
 
-Fixes: 3afdc59e4390 ("remoteproc: Add coredump debugfs entry")
-Signed-off-by: Alistair Delva <adelva@google.com>
-Cc: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Cc: stable@vger.kernel.org
-Cc: Ohad Ben-Cohen <ohad@wizery.com>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Sibi Sankar <sibis@codeaurora.org>
-Cc: linux-remoteproc@vger.kernel.org
-Cc: kernel-team@android.com
----
- drivers/remoteproc/remoteproc_debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 12/1/21 10:06 AM, Al Cooper wrote:
+> A few fixes for the phy-brcm-usb driver.
+> 
+> Al Cooper (3):
+>   phy: usb: Leave some clocks running during suspend
+>   usb: Add "wake on" functionality for newer Synopsis XHCI controllers
+>   phy: broadcom: Kconfig: Fix PHY_BRCM_USB config option
 
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index b5a1e3b697d9..581930483ef8 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -76,7 +76,7 @@ static ssize_t rproc_coredump_write(struct file *filp,
- 	int ret, err = 0;
- 	char buf[20];
- 
--	if (count > sizeof(buf))
-+	if (count < 1 || count > sizeof(buf))
- 		return -EINVAL;
- 
- 	ret = copy_from_user(buf, user_buf, count);
+Are you able to pick up those patches? Thank you
+
+> 
+>  drivers/phy/broadcom/Kconfig                  |  3 +-
+>  .../phy/broadcom/phy-brcm-usb-init-synopsys.c | 46 +++++++++++++++----
+>  drivers/phy/broadcom/phy-brcm-usb.c           | 38 +++++++++++++++
+>  3 files changed, 77 insertions(+), 10 deletions(-)
+> 
+> 
+> base-commit: f080815fdb3e3cff5a004ca83b3815ac17ef71b1
+> 
+
+
 -- 
-2.30.2
-
+Florian

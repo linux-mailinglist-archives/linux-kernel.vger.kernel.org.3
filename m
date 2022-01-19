@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68204494209
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13DC49420D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357509AbiASUoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S1357420AbiASUor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357395AbiASUoG (ORCPT
+        with ESMTP id S1357406AbiASUoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:44:06 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC04C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:44:04 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id br22-20020a17090b0f1600b001b50eaa9e8bso1587963pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:44:04 -0800 (PST)
+        Wed, 19 Jan 2022 15:44:07 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D97C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:44:07 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n16-20020a17090a091000b001b46196d572so3727821pjn.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 12:44:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dLI5uHzLJX9BhzFSIqWpwYSyzOLcVU04ghKiiMsJQ7E=;
-        b=WVjgtmQc1OAcrX8BDpCfRRvHTIVt+7VDPBV1sILej0bCFo0gssayqOA79ortD/cz8Q
-         fazWVAWOXRm2On+qImSPzC1SmzEWjYvEP6Wj39bEnW8QB/Zr5th6Q9MbBgYV2UDJupn1
-         40vhXatO5FV8fgxXVBUJvzz8NWZk/c0qMtrrM=
+        bh=tJ5lLLdSCeNvt2ZI1+v6LXdLP5izzC+/ppZtPbMuaA4=;
+        b=KJsVAkJVn8mblr6TPMU3BOXA4T+7aZr39DS6lCyx8RF3S+HhylJtXcMcid2oGCfJ5K
+         xM9xaUr9ZWW2Hs8a6ypHfBYZuiWoHTa1SZbEKijYdafaWkgrc4N04+SGGvUR6bNNhbBO
+         ng0wD4dKX2tEm0t8QEcL7yUnETpDCGqiaQj/I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dLI5uHzLJX9BhzFSIqWpwYSyzOLcVU04ghKiiMsJQ7E=;
-        b=xwCXfpO4PRZO3KCXzmfokZZM68z7typ6g5DxAHvaelDJGqoUesItFffe2jDIP/jUXP
-         Ax4edyR5LWPE19ZAx9nzbxwKaWuNsIDwkESbWZeGP03y3Og0I0x2goCpZQgQxKorA1Vb
-         UJpfNJ1bpMM8wLXrr5m5UEOiU+Wl4CgGzFOTPnPlZyojNYIOjJdUTLTwMIVZP2UNNo3Y
-         Z1fDpeGC2Gm4XJc76QcMQHuvEiNiSv4uGiikHjs15lGY+/xbojxNnOVkykhSMKD2CxJs
-         fCQtcl0voAjZG0umEKEuqvW+9UElSHnTpgxmTDBu/9ZWoyKrhVaUTqYVrxHiwYxxOX39
-         U5FA==
-X-Gm-Message-State: AOAM533DZ5AwzFiPB6auNlOmMpGg363Y26T8evT9x/lZpAST5V3OvRRJ
-        KWUNfjZ+gLMueZzbd3qlBMxXFQ==
-X-Google-Smtp-Source: ABdhPJwNgJA5a+22JMacSNrKazbWDTgGPTKljjGzSNrAt4lgDDxKu1xSV764PaEYjZt64RiX47xiXQ==
-X-Received: by 2002:a17:902:c64b:b0:14a:94ba:763e with SMTP id s11-20020a170902c64b00b0014a94ba763emr25709980pls.63.1642625044277;
-        Wed, 19 Jan 2022 12:44:04 -0800 (PST)
+        bh=tJ5lLLdSCeNvt2ZI1+v6LXdLP5izzC+/ppZtPbMuaA4=;
+        b=JvnaZMSEh1F1EegGuhcoSngqQPq4rXWRkgyVE0dc3FUAWfveykWPTcfoFUoEQg9Ii8
+         Jho8KZ9I6mUV4vhfqQGu/aZIZeovRakAG+BQCdoMlUJAfY41b2a6JXXj7xKkZMe0K5q7
+         VwdxCYkAwrSYjAXN9wUvznYLuS3CIAJquiTOdv3pwuqclYnDosJ7jitW7KYgZUxFs/nV
+         zB0bd+ZGFfOJLuwRDYxbMoGuFSNdEoZuEG+porbqfdhuY0eksw42WRP2/S5c+QS2BiRA
+         niUnzIIa8x3M6B7SE+zYxAObuD/9UWM3kGYNf2jvm9aZLTRVSW5ZfJgsnZhB60aOAoJk
+         dcsA==
+X-Gm-Message-State: AOAM531OIH0EyEuJokiteVJnycXXCgNlASFIyLo/HRXTfhUBs2nCMHw7
+        r9MogTSnVFl5mAlfZdGrnfoZhQ==
+X-Google-Smtp-Source: ABdhPJwWK14isWM3EDWa4Tamw/urSWdvnGdT3e9EN1ZzbjaY8+j0Gom4jp2zN/ek+vUhhmoPCBs69A==
+X-Received: by 2002:a17:902:f54a:b0:14a:6827:8d01 with SMTP id h10-20020a170902f54a00b0014a68278d01mr34880338plf.127.1642625046836;
+        Wed, 19 Jan 2022 12:44:06 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:618e:efc:c014:d89c])
-        by smtp.gmail.com with UTF8SMTPSA id l21sm491572pfu.120.2022.01.19.12.44.02
+        by smtp.gmail.com with UTF8SMTPSA id k17sm566753pff.25.2022.01.19.12.44.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 12:44:03 -0800 (PST)
+        Wed, 19 Jan 2022 12:44:06 -0800 (PST)
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -62,14 +62,12 @@ Cc:     devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
         linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Li Jun <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v20 4/5] usb: core: hcd: Create platform devices for onboard hubs in probe()
-Date:   Wed, 19 Jan 2022 12:43:44 -0800
-Message-Id: <20220119124327.v20.4.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v20 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+Date:   Wed, 19 Jan 2022 12:43:45 -0800
+Message-Id: <20220119124327.v20.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 In-Reply-To: <20220119204345.3769662-1-mka@chromium.org>
 References: <20220119204345.3769662-1-mka@chromium.org>
@@ -79,34 +77,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Call onboard_hub_create/destroy_pdevs() from usb_add/remove_hcd()
-for primary HCDs to create/destroy platform devices for onboard
-USB hubs that may be connected to the root hub of the controller.
-These functions are a NOP unless CONFIG_USB_ONBOARD_HUB=y/m.
-
-Also add a field to struct usb_hcd to keep track of the onboard hub
-platform devices that are owned by the HCD.
+Add nodes for the onboard USB hub on trogdor devices. Remove the
+'always-on' property from the hub regulator, since the regulator
+is now managed by the onboard_usb_hub driver.
 
 Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 ---
 
 Changes in v20:
-- added 'Reviewed-by' tags from Doug and Stephen
+- renamed hub labels to 'usb_hub_2/3_x'
+- added comment for 'regulator-boot-on' of 'pp3300_hub'
+- added 'Reviewed-by' tags from Stephen and Doug
 
 Changes in v19:
 - none
 
 Changes in v18:
-- none
+- also adjust config for pompom rev1
 
 Changes in v17:
-- create the platform devices in the generic HCD code instead of
-  the xhci_platform driver
-- updated subject and commit message to reflect the above change
-- dropped initialization of platform device list, which is now
-  done in onboard_hub_create_pdevs()
+- none
 
 Changes in v16:
 - none
@@ -118,85 +110,195 @@ Changes in v14:
 - none
 
 Changes in v13:
-- added comment for 'depends on USB_ONBOARD_HUB || !USB_ONBOARD_HUB'
-  construct
+- none
 
 Changes in v12:
 - none
 
 Changes in v11:
-- use onboard_hub_create/destroy_pdevs() to support multiple onboard
-  hubs that are connected to the same root hub
-- moved field/list to keep track of platform devices from struct
-  usb_hcd to struct xhci_hcd
-- updated commit message
+- rebased on qcom/arm64-for-5.14 (with the rest of the series)
 
 Changes in v10:
-- none
+- keep 'regulator-boot-on' property
+- updated commit message
 
 Changes in v9:
-- added dependency on USB_ONBOARD_HUB (or !!USB_ONBOARD_HUB) to
-  USB_XHCI_PLATFORM
+- none
 
 Changes in v8:
 - none
 
 Changes in v7:
-- none
+- rebased on qcom/arm64-for-5.13 (with the rest of the series)
 
 Changes in v6:
-- none
+- added 'companion-hub' entry to both USB devices
+- added 'vdd-supply' also to hub@2
 
 Changes in v5:
 - patch added to the series
 
- drivers/usb/core/hcd.c  | 6 ++++++
- include/linux/usb/hcd.h | 1 +
- 2 files changed, 7 insertions(+)
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++----------
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++------
+ .../dts/qcom/sc7180-trogdor-pompom-r1.dts     | 11 ++++------
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++----------
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 20 ++++++++++++++++++-
+ 5 files changed, 44 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 4d326ee12c36..b8220e411e07 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -36,6 +36,7 @@
- #include <linux/phy/phy.h>
- #include <linux/usb.h>
- #include <linux/usb/hcd.h>
-+#include <linux/usb/onboard_hub.h>
- #include <linux/usb/otg.h>
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
+index 30e3e769d2b4..b69590a17cab 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
+@@ -14,17 +14,6 @@ / {
+ 	compatible = "google,lazor-rev0", "qcom,sc7180";
+ };
  
- #include "usb.h"
-@@ -2963,6 +2964,9 @@ int usb_add_hcd(struct usb_hcd *hcd,
- 	if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
- 		usb_hcd_poll_rh_status(hcd);
- 
-+	if (usb_hcd_is_primary_hcd(hcd))
-+		onboard_hub_create_pdevs(hcd->self.root_hub, &hcd->onboard_hub_devs);
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
+-};
+-
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
+-};
+-
+ &sn65dsi86_out {
+ 	/*
+ 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
+@@ -33,3 +22,11 @@ &sn65dsi86_out {
+ 	 */
+ 	lane-polarities = <1 0>;
+ };
 +
- 	return retval;
- 
- err_register_root_hub:
-@@ -3041,6 +3045,8 @@ void usb_remove_hcd(struct usb_hcd *hcd)
- 	if (usb_hcd_is_primary_hcd(hcd)) {
- 		if (hcd->irq > 0)
- 			free_irq(hcd->irq, hcd);
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
 +
-+		onboard_hub_destroy_pdevs(&hcd->onboard_hub_devs);
- 	}
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
+index c2ef06367baf..25f178c3c6eb 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
+@@ -14,13 +14,11 @@ / {
+ 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
+ };
  
- 	usb_deregister_bus(&hcd->self);
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 548a028f2dab..4ebc91c09182 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -198,6 +198,7 @@ struct usb_hcd {
- 	struct usb_hcd		*shared_hcd;
- 	struct usb_hcd		*primary_hcd;
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
++
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
  
-+	struct list_head	onboard_hub_devs;
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+index 76a130bad60a..8467ff41e6d5 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+@@ -34,13 +34,10 @@ &pm6150_adc_tm {
+ 	/delete-node/ charger-thermistor@0;
+ };
  
- #define HCD_BUFFER_POOLS	4
- 	struct dma_pool		*pool[HCD_BUFFER_POOLS];
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+ 
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
+index 457c25499863..0cbb7a68d58b 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
+@@ -43,17 +43,6 @@ &panel {
+ 	compatible = "auo,b116xa01";
+ };
+ 
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
+-};
+-
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
+-};
+-
+ &sdhc_2 {
+ 	status = "okay";
+ };
+@@ -62,6 +51,14 @@ &trackpad {
+ 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
+ };
+ 
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
++
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
++
+ /* PINCTRL - modifications to sc7180-trogdor.dtsi */
+ 
+ &trackpad_int_1v8_odl {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index d4f4441179fc..be06938872ca 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -202,7 +202,7 @@ pp3300_hub: pp3300-hub {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&en_pp3300_hub>;
+ 
+-		regulator-always-on;
++		/* The BIOS leaves this regulator on */
+ 		regulator-boot-on;
+ 
+ 		vin-supply = <&pp3300_a>;
+@@ -839,6 +839,24 @@ &usb_1 {
+ 
+ &usb_1_dwc3 {
+ 	dr_mode = "host";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	/* 2.x hub on port 1 */
++	usb_hub_2_x: hub@1 {
++		compatible = "usbbda,5411";
++		reg = <1>;
++		vdd-supply = <&pp3300_hub>;
++		companion-hub = <&usb_hub_3_x>;
++	};
++
++	/* 3.x hub on port 2 */
++	usb_hub_3_x: hub@2 {
++		compatible = "usbbda,411";
++		reg = <2>;
++		vdd-supply = <&pp3300_hub>;
++		companion-hub = <&usb_hub_2_x>;
++	};
+ };
+ 
+ &usb_1_hsphy {
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 

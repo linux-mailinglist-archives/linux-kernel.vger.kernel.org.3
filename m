@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7909E494151
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7511149415F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243144AbiASTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:52:02 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:33872 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237153AbiASTv7 (ORCPT
+        id S1357132AbiAST7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:59:15 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36944 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233089AbiAST7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:51:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hULID9ARBzCzTKyApZceV6aQZfeqhuzP2G3GKg8FSE0=; b=KBhy/k9jKn0BooVDBBznx+z53o
-        LjUyQdT/9Bm1XE5L2mMYp2oChGCc05Ptm7TjNl9O+ZSGML03SitoV6kpSXVZ82oUJWEwnDwvSXH1J
-        68Fb9Cp8Y1mbkqdAa1poso0ar7LUbwS4Zrj9kSR4p7iLSc5b89JLhHzSMWUKWy6uKp3vfj+aeoEhn
-        VStZPDUvO2KGAHvHry+TMJ+3j4VjOnIXzyKFtt5HPYmF5SYWt/rQkcEJU7oc+WIfkOv1CKyu1S55+
-        tz4nUbZ1TKjssn7kgdmfa/+n4h0QGRpf8UO+XQJ7yM5Tdesp/+FIoRDQMuK7r8zbpvzInt6rknz7H
-        UZ6L9Blg==;
-Received: from [179.98.77.138] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nAGzo-0006fQ-3K; Wed, 19 Jan 2022 20:51:52 +0100
-Message-ID: <b10749a2-d5e9-389d-921a-467cf1860075@igalia.com>
-Date:   Wed, 19 Jan 2022 16:51:34 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-References: <20220114183046.428796-1-gpiccoli@igalia.com>
- <YehanMqSvL81DLqg@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YehanMqSvL81DLqg@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Wed, 19 Jan 2022 14:59:14 -0500
+Received: by linux.microsoft.com (Postfix, from userid 1004)
+        id 17C9120B928C; Wed, 19 Jan 2022 11:59:14 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 17C9120B928C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxonhyperv.com;
+        s=default; t=1642622354;
+        bh=TD73FcumVjwPMYsmdCD93SR7TD3EAZF9X2RVmwm/lbs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eBvUCcyv6tq41PGYBlI74LOyTjvHHTYpcxewTdJK7b/PCtWXhy9pmiMzl8ZMksVL6
+         FjxzZ+Y96/psPocglPaicK6+Fuh5qfkiyliSiGTQLgbFzbsZHuwY+LadvtPy4WLx92
+         1r/PCsusCwUZkRTUYcuR83CpwzFVIwQ2kPVMOovQ=
+From:   longli@linuxonhyperv.com
+To:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, paekkaladevi@microsoft.com
+Cc:     Long Li <longli@microsoft.com>
+Subject: [Patch v3] PCI: hv: Fix NUMA node assignment when kernel boots with custom NUMA topology
+Date:   Wed, 19 Jan 2022 11:59:06 -0800
+Message-Id: <1642622346-22861-1-git-send-email-longli@linuxonhyperv.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Petr, thanks again for the thorough review! I will implement all your
-suggestions and submit a V4, all makes sense to me =)
+From: Long Li <longli@microsoft.com>
 
-Cheers,
+When kernel boots with a NUMA topology with some NUMA nodes offline, the PCI
+driver should only set an online NUMA node on the device. This can happen
+during KDUMP where some NUMA nodes are not made online by the KDUMP kernel.
 
+This patch also fixes the case where kernel is booting with "numa=off".
 
-Guilherme
+Fixes: 999dd956d838 ("PCI: hv: Add support for protocol 1.3 and support PCI_BUS_RELATIONS2")
 
+Signed-off-by: Long Li <longli@microsoft.com>
+
+Change log:
+v2: use numa_map_to_online_node() to assign a node to device (suggested by
+Michael Kelly <mikelley@microsoft.com>)
+
+v3: add "Fixes" and check for num_possible_nodes()
+---
+ drivers/pci/controller/pci-hyperv.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index 6c9efeefae1b..b5276e81bb44 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -2129,8 +2129,17 @@ static void hv_pci_assign_numa_node(struct hv_pcibus_device *hbus)
+ 		if (!hv_dev)
+ 			continue;
+ 
+-		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
+-			set_dev_node(&dev->dev, hv_dev->desc.virtual_numa_node);
++		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY &&
++		    hv_dev->desc.virtual_numa_node < num_possible_nodes())
++			/*
++			 * The kernel may boot with some NUMA nodes offline
++			 * (e.g. in a KDUMP kernel) or with NUMA disabled via
++			 * "numa=off". In those cases, adjust the host provided
++			 * NUMA node to a valid NUMA node used by the kernel.
++			 */
++			set_dev_node(&dev->dev,
++				     numa_map_to_online_node(
++					     hv_dev->desc.virtual_numa_node));
+ 
+ 		put_pcichild(hv_dev);
+ 	}
+-- 
+2.25.1
 

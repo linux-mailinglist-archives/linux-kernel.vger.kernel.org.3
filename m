@@ -2,75 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2146A4936C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F014936C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352768AbiASJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:00:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59532 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237437AbiASJAj (ORCPT
+        id S1352786AbiASJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352324AbiASJBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 04:00:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2793B81910;
-        Wed, 19 Jan 2022 09:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C44C340E6;
-        Wed, 19 Jan 2022 09:00:36 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="c3dQq4AT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642582833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2dOFJ+UpcJtVObG5xI+XoGYifJptafHjJhs8HGfwX1w=;
-        b=c3dQq4ATbm3F/187EqTQn/DEc2+TVz5Z6Leei8F10Yf3ixE2Uu6PJW8ci1EnHZrfZM0tzK
-        HOkeqMqMuOacinhQ2L5LbbQObXWehm5LhxLXbvyOgx2P8gpomIxL5mz6xFs3X39Twpe18H
-        6UV6m97d9dMYHbb/v+7tKMp5de21ePo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 421036da (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 19 Jan 2022 09:00:32 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id h14so5248579ybe.12;
-        Wed, 19 Jan 2022 01:00:32 -0800 (PST)
-X-Gm-Message-State: AOAM530BhqfR3QltI3Z7G0ouie/zAHliCS+NY/St1793O9Xz0eMhzuTM
-        GtHe7NGb1D1BfdzgEVAsDpWx6R8yivZkteqdB/M=
-X-Google-Smtp-Source: ABdhPJx4RyuigxoTOZs8Or8CkU4hkibFalbgQMbYzSXkFlEEIcgX6zw0oBRh/W5vLkIRmue8eoXzbhHlni3UQuAdKpE=
-X-Received: by 2002:a25:e7c7:: with SMTP id e190mr12418681ybh.457.1642582830614;
- Wed, 19 Jan 2022 01:00:30 -0800 (PST)
+        Wed, 19 Jan 2022 04:01:51 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9C5C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:01:48 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id a7so1554038plh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:01:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HkJE1ypJqqATEA2dEa2I9wqRDOawHEAXImciHG8Ya1A=;
+        b=mXDGCiHAKOqxdyILIteaZ44S5Q2vi80TQVuhefF2XepaolE2t23HrqGpM7Fy+OBucx
+         2JIS9YByM2oQjA6m+C4t6L8I8wMdN1EZhixgr9ZjKyEbF6LlOvm2YN8YpLjD35HAj3uc
+         mwZl5ntX64Y6xOao53mcWnpFnK8lLBYy9wD9Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HkJE1ypJqqATEA2dEa2I9wqRDOawHEAXImciHG8Ya1A=;
+        b=W+xyYmyUuZLt5hGD232oVJeBh6K6AnYQvlfnX6MpmJ5tDYxvA/i3wX2S7eqFAGB0MG
+         iWY9OpT6btZlW4u7aJKmHaexNiLshs8i5oOhgLzVSZWwubsi2Ma2tL6nIIIhC9mTnuDV
+         ZXmVhhKo/wejN97Jv5bQ2RUFehfhPQilSJC4TMjRbOqySo6nZHzsZElTib9pj2A1904A
+         1ehnNljoNUzXAmwJOEDY4fyWWjutNyKliMyIoWAoCpqnrvtWWfpTPlSDFwQByN0IllTi
+         bvq8sxAbQLbo3b05SQ1+ZZxoZNJCh1MxxX63rJ51IbZSsiKGcSZH2nC3xeqN/p7iNzpa
+         5+RA==
+X-Gm-Message-State: AOAM530n+r/EoMzQx1bJmAEOK720GSRZd+mmm4KnN1vA8avthnYFFkOX
+        QVn2WxwYsKMqnmgpzb4O6V/frA==
+X-Google-Smtp-Source: ABdhPJy5NvmtZXmdrZEyVS4y5lUTxatF0BwaICcsaAEtPGLq5gN9l+5HZ/f84b1PZtfCT1b4nSij3A==
+X-Received: by 2002:a17:90a:9204:: with SMTP id m4mr3124332pjo.238.1642582908327;
+        Wed, 19 Jan 2022 01:01:48 -0800 (PST)
+Received: from 4f18b3450899 ([203.221.136.13])
+        by smtp.gmail.com with ESMTPSA id kb2sm6199972pjb.14.2022.01.19.01.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 01:01:47 -0800 (PST)
+Date:   Wed, 19 Jan 2022 09:01:40 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Vyacheslav Bocharov <adeep@lexina.in>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] Bluetooth: btrtl: Add support for RTL8822C
+ hci_ver 0x08
+Message-ID: <20220119090140.GA24@4f18b3450899>
+References: <20211027091416.1577668-1-adeep@lexina.in>
+ <20211027091416.1577668-2-adeep@lexina.in>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:209:b0:11c:1b85:d007 with HTTP; Wed, 19 Jan 2022
- 01:00:30 -0800 (PST)
-In-Reply-To: <20220119082447.1675-1-miles.chen@mediatek.com>
-References: <20220119082447.1675-1-miles.chen@mediatek.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 19 Jan 2022 10:00:30 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pv4WWATjdqZgwrtHDmq3sX4ABfB9PoNT9Z4tSEduR2Lw@mail.gmail.com>
-Message-ID: <CAHmME9pv4WWATjdqZgwrtHDmq3sX4ABfB9PoNT9Z4tSEduR2Lw@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: fix a CFI failure
-To:     miles.chen@mediatek.com
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211027091416.1577668-2-adeep@lexina.in>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miles,
+On Wed, Oct 27, 2021 at 12:14:15PM +0300, Vyacheslav Bocharov wrote:
+> Add detection of RTL8822CS controller with hci_ver = 0x08
+> 
+> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
+> ---
+>  drivers/bluetooth/btrtl.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+> index c2bdd1e6060e..38d547cc6fcd 100644
+> --- a/drivers/bluetooth/btrtl.c
+> +++ b/drivers/bluetooth/btrtl.c
+> @@ -156,6 +156,13 @@ static const struct id_table ic_id_table[] = {
+>  	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
+>  	  .cfg_name = "rtl_bt/rtl8822cs_config" },
+>  
+> +	/* 8822C with UART interface */
+> +	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
+> +	  .config_needed = true,
+> +	  .has_rom_version = true,
+> +	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
+> +	  .cfg_name = "rtl_bt/rtl8822cs_config" },
+> +
+>  	/* 8822C with USB interface */
+>  	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_USB),
+>  	  .config_needed = false,
 
-Thanks for the patch. Could you let me know which architecture and
-compiler this was broken on? If I had to guess, I'd wager arm32, and
-you hit this by enabling optimized blake2s?
+Hi Vyacheslav,
 
-If so, I'm not sure the problem is with weak symbols. Why should CFI
-break weak symbols? Rather, perhaps the issue is that the function is
-defined in blake2s-core.S? Are there some CFI macros we need for that
-definition?
+Could I make a suggestion rebasing this patch against 5.16 and putting 
+the UART hci ver 0008 berore 000a
 
-Jason
+this has been tested on Tanix TX6.
+
+Before:
+
+[   11.512883] Bluetooth: hci0: RTL: examining hci_ver=08 hci_rev=000c lmp_ver=08 lmp_subver=8822
+[   11.512940] Bluetooth: hci0: RTL: unknown IC info, lmp subver 8822, hci rev 000c, hci ver 0008
+[   11.512957] Bluetooth: hci0: RTL: no config loaded
+
+After:
+
+[   12.642167] Bluetooth: hci0: RTL: examining hci_ver=08 hci_rev=000c lmp_ver=08 lmp_subver=8822
+[   12.671911] Bluetooth: hci0: RTL: rom_version status=0 version=3
+[   12.671961] Bluetooth: hci0: RTL: loading rtl_bt/rtl8822cs_fw.bin
+[   12.706248] Bluetooth: hci0: RTL: loading rtl_bt/rtl8822cs_config.bin
+[   12.730251] Bluetooth: hci0: RTL: cfg_sz 33, total sz 40737
+[   13.318832] Bluetooth: hci0: RTL: fw version 0x05a91a4a
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+
+---
+ drivers/bluetooth/btrtl.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+--- a/drivers/bluetooth/btrtl.c	2022-01-09 22:55:34.000000000 +0000
++++ b/drivers/bluetooth/btrtl.c	2022-01-15 07:12:21.102080089 +0000
+@@ -148,7 +148,15 @@
+ 	  .fw_name  = "rtl_bt/rtl8761bu_fw.bin",
+ 	  .cfg_name = "rtl_bt/rtl8761bu_config" },
+ 
++ 	/* 8822C (hci ver 0008) with UART interface */
++	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
++	  .config_needed = true,
++	  .has_rom_version = true,
++	  .has_msft_ext = true,
++	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
++	  .cfg_name = "rtl_bt/rtl8822cs_config" },
++
+-	/* 8822C with UART interface */
++	/* 8822C (hci ver 000a) with UART interface */
+ 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_UART),
+ 	  .config_needed = true,
+ 	  .has_rom_version = true,
+--
+2.25.1
+

@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 929A3493719
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3329493718
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 10:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353019AbiASJU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 04:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352755AbiASJUZ (ORCPT
+        id S1353003AbiASJU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 04:20:26 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57526 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352985AbiASJUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Jan 2022 04:20:25 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8136FC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:20:25 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id z22so8060344edd.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:20:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CrKLop8goJNAb7F3nsn024T54b0Rb1lNYvD3dS3QIUg=;
-        b=IysqV66EW2ES4sCLHdqMGUXBEuQJc4fTU3SXkhhXKLiMJAWtXrH5G+5FT/Jm4oauK1
-         OndgKqCg0VKgwrpn9LiBUfoANaWFs71Hu8FjcSLktWZFpxHzkgN4PdgqA7jeuFABJwhw
-         AI3KoA629xhfoZN9ioXEHjbTTG8OtmtEmxIb8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CrKLop8goJNAb7F3nsn024T54b0Rb1lNYvD3dS3QIUg=;
-        b=gJLDV+YGe1WMPqnT3ZU6BCf4scajScHoBScVKrkGI7JV11VVccbT4+p9kPKZ2HqBR3
-         8OE0r7JqGs6TLA2GZ1nGBLowUXeAdHoft62NbU5iRW0W2xfrxc0y5Bz9l06rM8aVe809
-         gGzTLsl1f9UblQYiyT7Ph1/szxVMaNzlBaFtBYdzr2ci1XElhaFA1IBOSaB3RGkNdcn9
-         8IRP90eySgdIS5Il6ATuv8HbaXt+1NIZThDScQ17IarR1Rz7N6Qspgo7GKa8BndtfVqC
-         /0wRkQhgYSWrXwRf7wjDVkYymHyXPSfV4CfynlFnZh8SsVwp8VREtRD40pXD3YjuYfMD
-         JPkg==
-X-Gm-Message-State: AOAM531BDkRRW7lJWSLZgHO5A6ZCSmt7kQh1ERrmHnd1HcjZYUoqTBDN
-        Af+Pcvl9uqtjmjPUvTsT4T0lj/KG1c13yZJ18gw=
-X-Google-Smtp-Source: ABdhPJxja0fUzwvLzt+AtxFc8CGANqUwEO7eM+NHLAUywlmMjxKeRD+cyW8N/0AgWxrnk037PANwSw==
-X-Received: by 2002:a17:906:5d05:: with SMTP id g5mr23681005ejt.61.1642584023847;
-        Wed, 19 Jan 2022 01:20:23 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id qa35sm6112220ejc.67.2022.01.19.01.20.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 01:20:23 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id v123so4004788wme.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 01:20:23 -0800 (PST)
-X-Received: by 2002:a5d:5582:: with SMTP id i2mr3756654wrv.442.1642584022918;
- Wed, 19 Jan 2022 01:20:22 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A98ED21125;
+        Wed, 19 Jan 2022 09:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642584024; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kmxhGAX60wrjunqbjCCAgalS1xNjG4gQYc11az3AVr4=;
+        b=QPnamv229lqVT8gWP1H39M9eIW1NnK6TYGnE9yq6XuKZ7/FnsTmurANTXfSOhonzXoxHub
+        AiaLl+b5E4gTbuZ2PM5I3qWDW6/DVt2u+JnGKncJHOAqx/ZNSDT6e/qJv+cH9VC76/3kei
+        Lh9JOg91ST+wHWyIpIWyMtEKw+l5YoU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7A47FA3B81;
+        Wed, 19 Jan 2022 09:20:24 +0000 (UTC)
+Date:   Wed, 19 Jan 2022 10:20:22 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>
+Subject: Re: [RESEND][PATCH v2] mm: don't call lru draining in the nested
+ lru_cache_disable
+Message-ID: <YefX1t4owjlx/m5I@dhcp22.suse.cz>
+References: <20211230193627.495145-1-minchan@kernel.org>
+ <YeVzWlrojI1+buQx@dhcp22.suse.cz>
+ <YedXhpwURNTkW1Z3@google.com>
 MIME-Version: 1.0
-References: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
-In-Reply-To: <CAK7LNAShL3dfQ0Ter2avCvGPjrd0YTJau-S4+8rJyWXmu0tG0Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 19 Jan 2022 11:20:06 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wiizVi7p_VbaXgKxSne9fAEqNR8F_ivx95_2mkGOxxPqg@mail.gmail.com>
-Message-ID: <CAHk-=wiizVi7p_VbaXgKxSne9fAEqNR8F_ivx95_2mkGOxxPqg@mail.gmail.com>
-Subject: Re: [GIT PULL] Kbuild updates for v5.17-rc1
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YedXhpwURNTkW1Z3@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 9:43 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> You will see a trivial conflict in scripts/link-vmlinux.sh
-> (commit 72b3942a173c in the mainline
-> vs 7d153696e5db from this PR)
-> The fix is available in linux-next.
+On Tue 18-01-22 16:12:54, Minchan Kim wrote:
+> On Mon, Jan 17, 2022 at 02:47:06PM +0100, Michal Hocko wrote:
+> > On Thu 30-12-21 11:36:27, Minchan Kim wrote:
+> > > lru_cache_disable involves IPIs to drain pagevec of each core,
+> > > which sometimes takes quite long time to complete depending
+> > > on cpu's business, which makes allocation too slow up to
+> > > sveral hundredth milliseconds. Furthermore, the repeated draining
+> > > in the alloc_contig_range makes thing worse considering caller
+> > > of alloc_contig_range usually tries multiple times in the loop.
+> > >
+> > > This patch makes the lru_cache_disable aware of the fact the
+> > > pagevec was already disabled. With that, user of alloc_contig_range
+> > > can disable the lru cache in advance in their context during the
+> > > repeated trial so they can avoid the multiple costly draining
+> > > in cma allocation.
+> > 
+> > Do you have any numbers on any improvements?
+> 
+> The LRU draining consumed above 50% overhead for the 20M CMA alloc.
 
-The resolution in linux-next seems to be wrong.
+This doesn't say much about the improvement itself.
+ 
+> > Now to the change. I do not like this much to be honest. LRU cache
+> > disabling is a complex synchronization scheme implemented in
+> > __lru_add_drain_all now you are stacking another level on top of that.
+> > 
+> > More fundamentally though. I am not sure I understand the problem TBH.
+> 
+> The problem is that kinds of IPI using normal prority workqueue to drain
+> takes much time depending on the system CPU business.
 
-It missed a new case of
+How does this patch address that problem? The IPI has to happen at some
+point as we need to sync up with pcp caches.
 
-        if [ -n "${CONFIG_SLS}" ]; then
+> > What prevents you from calling lru_cache_disable at the cma level in the
+> > first place?
+> 
+> You meant moving the call from alloc_contig_range to caller layer?
 
-in scripts/link-vmlinux.sh, which no longer works after commit
-7d153696e5db ("kbuild: do not include include/config/auto.conf from
-shell scripts").
+Yes.
 
-That needed to be converted to
+> So, virtio_mem_fake_online, too? It could and make sense from
+> performance perspective since upper layer usually calls the
+> alloc_contig_range multiple times on retrial loop.
+> 
+> Havid said, semantically, not good in that why upper layer should
+> know how alloc_contig_range works(LRU disable is too low level stuff)
+> internally but I chose the performance here.
+> 
+> There is an example why the stacking is needed.
+> cma_alloc also can be called from outside.
+> A usecase is try to call
+> 
+>     lru_cache_disable
+>     for (order = 10; order >= 0; order) {
+>         page = cma_alloc(1<<order)
+>         if (page)
+>             break;
+>     }
+>     lru_cacne_enable
+> 
+> Here, putting the disable lru outside of cma_alloc is
+> much better than inside. That's why I put it outside.
 
-        if is_enabled CONFIG_SLS; then
-
-too.
-
-I think that was the only case. Knock wood.
-
-             Linus
+What does prevent you from calling lru_cache_{disable,enable} this way
+with the existing implementation? AFAICS calls can be nested just fine.
+Or am I missing something?
+-- 
+Michal Hocko
+SUSE Labs

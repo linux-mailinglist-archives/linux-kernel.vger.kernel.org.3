@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05370493C0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA135493C15
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 15:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355219AbiASOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 09:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355133AbiASOnY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 09:43:24 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37644C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:43:24 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id f21so13082757eds.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 06:43:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1B7gKkp/V59032Beh6WUJ+9HEHsJlJHAmkImNDK7IMs=;
-        b=VOVKxA9flWIK/6tPdvLhR4vpkIOs2ampx6Vv3lvnmme8mECVrhkXyXmFBpAtEj2zbn
-         FqG5QOvPSQlI436LUyF5LEGAnsiWKMTh+ORAubxI8zOoaPft7WKOL6K9gqNJ3zuaxJlP
-         vP9J5hUa+WaKg56sfiRfNBIxyHKXg7rq/PcPQOs3g5OLk8V5VFRUPRS6bbFKDmgZ7Mas
-         CKQbY3BLNkfICaFhvG+c3B/CuQJigzTSQn7F1yPQrKdYzCb1YU/nYubc253nPKkHH5XL
-         XmeZ8YhuQ5iVB7LzyzhKsRuIxBWpdf/TbIYx/9WhIjWyG6L/GhcxeU7lTw5AB3Rcf3xY
-         iGrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1B7gKkp/V59032Beh6WUJ+9HEHsJlJHAmkImNDK7IMs=;
-        b=YsHP7c3fxKeqAaRbmJVsWttbqM9Yab73N2T7Inx5hRcTj9q0/IR1luRAKJRy2rIVkX
-         GQv7w3d+MqKxg1m79NG8u9eUqYpYijSCp7FIu0mgSgHNe59wJovGSuvPqHHzXahG4VPj
-         NHsYhZvR2sVppbXQK4Avz/CW+QfGw2hG/Ru/ok3smIugL2U+vnWH+FlA7WCre9To7rFb
-         3d2mvWPmFjNT+YXtilteZQJattV9zewNz/M0wFNZN9XOiF47bEDiTkMOlkTMV0zJINJs
-         7coPxffRv6q5ydTveJ/wl4BcdxDWQjrFWoMV9TXaeSMOEaaftd2aDguLUtd8552XGZmS
-         6jSw==
-X-Gm-Message-State: AOAM53194Qs6I+Ip8pAfJpZRLvEOnJc+VRRl4AnVzEVI/Mjz0u1zSADb
-        v4agMTtNB2l50fBrlEm0J51KGGi8vrXEk7XrI70=
-X-Google-Smtp-Source: ABdhPJwQvjDMQPU7gOxDEWYt2s7fiJWoZldX8DEXfS1psXVzWqne488hJ3WdT/1fiwKo6s6MnheLJeKMcHcqUJIAFgI=
-X-Received: by 2002:a05:6402:22b3:: with SMTP id cx19mr4977795edb.37.1642603401765;
- Wed, 19 Jan 2022 06:43:21 -0800 (PST)
+        id S1355234AbiASOoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 09:44:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:58214 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355133AbiASOoG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 09:44:06 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42849ED1;
+        Wed, 19 Jan 2022 06:44:04 -0800 (PST)
+Received: from bogus (unknown [10.57.34.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DEC5B3F774;
+        Wed, 19 Jan 2022 06:44:01 -0800 (PST)
+Date:   Wed, 19 Jan 2022 14:43:28 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/2] arch_topology: Sanity check cpumask in thermal
+ pressure update
+Message-ID: <20220119144328.cvt76mhsufxg7qbr@bogus>
+References: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
+ <20220118185612.2067031-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a55:819a:0:b0:13d:b464:ee91 with HTTP; Wed, 19 Jan 2022
- 06:43:20 -0800 (PST)
-Reply-To: mrsbillchantal455@gmail.com
-From:   MRS BILL Chantal Lawrence <kaborzongo01@gmail.com>
-Date:   Wed, 19 Jan 2022 06:43:20 -0800
-Message-ID: <CAJ5_0V7ASa-d=CWC=7xm8NfbJ8btYz3bXqtPLDWF2vXpcApbnw@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118185612.2067031-2-bjorn.andersson@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention
+On Tue, Jan 18, 2022 at 10:56:12AM -0800, Bjorn Andersson wrote:
+> Occasionally during boot the Qualcomm cpufreq driver was able to cause
+> an invalid memory access in topology_update_thermal_pressure() on the
+> line:
+> 
+> 	if (max_freq <= capped_freq)
+> 
+> It turns out that this was caused by a race, which resulted in the
+> cpumask passed to the function being empty, in which case
+> cpumask_first() will return a cpu beyond the number of valid cpus, which
+> when used to access the per_cpu max_freq would return invalid pointer.
+> 
+> The bug in the Qualcomm cpufreq driver is being fixed, but having a
+> sanity check of the arguments would have saved quite a bit of time and
+> it's not unlikely that others will run into the same issue.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/base/arch_topology.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 976154140f0b..6560a0c3b969 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -177,6 +177,9 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
+>  	u32 max_freq;
+>  	int cpu;
+>  
+> +	if (WARN_ON(cpumask_empty(cpus)))
+> +		return;
+> +
 
+Why can't the caller check and call this only when cpus is not empty ?
+IIUC there are many such APIs that use cpumask and could result in similar
+issues if called with empty cpus. Probably we could add a note that cpus
+must not be empty if that helps the callers ?
 
-You have Been Compensated with the sum of 4.6 million dollars in this
-United Nation the Payment will be issue into Atm Visa Card and send to you
-
-from the Santander Bank of Spain we need your address, Passport and your
-Whatsapp Number.
-
-
-THANKS
-MRS Bill Chantal Lawrence
+-- 
+Regards,
+Sudeep

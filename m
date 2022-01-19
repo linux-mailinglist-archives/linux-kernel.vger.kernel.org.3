@@ -2,165 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71B8493F23
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B73493F26
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 18:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349093AbiASReO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 12:34:14 -0500
-Received: from mail-bn8nam12on2042.outbound.protection.outlook.com ([40.107.237.42]:46049
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1356453AbiASReD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 12:34:03 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cDcAtFzU/RDFQ1MTpn+j2etkpVhI+5bTdlBoR5zewBxZB89WBUoY2ExUzqupD0UXz/eONVv5Gywo2d/UlF2R+F2YvxTicrrtnnQgkCJsHWC/yaBtU11f3H5XNuysIrFrB8k5U+EmsEiggTxTFOV62mr5fU1ogRaF3pXKOUmULJV6sMTMUykWEqnWJIxmA9JP4oDDoTnzV6YIL+olD54Ua5rT7fizxTiH+eazaWivB/HJ4ucq6TugqFHlEa+z1Q7uCwn9nUBOo9FTyZ+JcgXKBHFiy1BCpgdjZdEd4yo0n6vK0RxuR6XypwLIYdzsSFsjUX7zbtjhZqGQoItJF2j2sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WeZOycq8MjIbE5qRqxDna860qOGxTmFNRf9fiH9fd44=;
- b=TyyyO6JcGL4wzkaaXg1wAlg3Isypu99VsnLyHAiAzDkogqGhdWKj9kaAlppHA8Df6jGCVrDoOqyqpYnoBxwnecqS/zv6M3/o/4NJOzm1+c1pLoY8agFqqydn2iccFYFPOJvTsyX5mAfJQRBaT7p+7SY06vcuO39bThsAnuyFxfGRYOx1SxFc7Do5ZDHlm9kD4cfgQLxKHflV3x7rA2J0Zp1ZbtCLT+IsgKLafRbkGg4R7h11Igzp6Z5CQ/RD28ArKJt96zunXKPGB60eIMJN7aXmV3MCm+u2CSUCXbU2DeiBtpRmZuTmPd2UA2Z+hV0peCyXLJqC32kNCNtqea+6Ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WeZOycq8MjIbE5qRqxDna860qOGxTmFNRf9fiH9fd44=;
- b=yTEueLyTYZiSHynLbjqTCmPd3OrtDCt5ewfdvvRkJ3jHiLMVl8aTOLtRMVmBcT782RljgfZIKqxfAE0fAqJ93dn+XJQ9yKs76KSsz257i2kZOplHmIiphHbrCeiV0OKDNIQh84p4GWZ2ZPZPfchgIQgM5aHrPshMDzKeMlnYBb0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5346.namprd12.prod.outlook.com (2603:10b6:610:d5::24)
- by BYAPR12MB2600.namprd12.prod.outlook.com (2603:10b6:a03:69::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 19 Jan
- 2022 17:33:57 +0000
-Received: from CH0PR12MB5346.namprd12.prod.outlook.com
- ([fe80::ad10:b9b4:d5cb:af1e]) by CH0PR12MB5346.namprd12.prod.outlook.com
- ([fe80::ad10:b9b4:d5cb:af1e%4]) with mapi id 15.20.4909.008; Wed, 19 Jan 2022
- 17:33:57 +0000
-Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
- accesses with MMIO accesses
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        jdelvare@suse.com, linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-References: <20220118202234.410555-1-terry.bowman@amd.com>
- <20220119163012.4274665d@endymion>
-From:   Terry Bowman <Terry.Bowman@amd.com>
-Message-ID: <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com>
-Date:   Wed, 19 Jan 2022 11:33:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20220119163012.4274665d@endymion>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR19CA0048.namprd19.prod.outlook.com
- (2603:10b6:208:19b::25) To CH0PR12MB5346.namprd12.prod.outlook.com
- (2603:10b6:610:d5::24)
+        id S1348133AbiASRhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 12:37:21 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25630 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240001AbiASRhT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 12:37:19 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JGqVGT015428;
+        Wed, 19 Jan 2022 17:35:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=/0Z8QYS0nLOz3a5RutI/Gbw9i54s709vbyKdY5R00f0=;
+ b=OeWL1bURpwyaAqEu+oFBVP54KDqSCKtaWgBdiJUwQ8GpOFTdzNE9b2jnmh9cbVRxNQ10
+ J7HC8SQLFioDYGI2tAQ8d6ACEKe43hp3uqaykP5aoLTnjEoFC3pt7S2+AkAIyy4dV9ZU
+ XkcCAkyZWj2ENDSdy2R0XWbiSdxBoLgT59MWBnBCY5ZXf4neSV6BdUtSEdfsE5bLS2aF
+ gwKD2TsKqrS0NUnmKAMQ3VlUDnhG8pbrgjqyLwRGcEDxXbf2r62/Qz4HACMJkLrrGPLb
+ u3hC/tLFtqphxombl6T55NvlRiFkwyCCSPFOh1s8y9Er1Z6aTO2K/Cyv/ZPXGUXYxweF aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmehven0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 17:35:51 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JHMp5N026971;
+        Wed, 19 Jan 2022 17:35:51 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmehvekw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 17:35:50 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JHXlvK006903;
+        Wed, 19 Jan 2022 17:35:48 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3dknw9q6an-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 17:35:48 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JHZi0b45285636
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 17:35:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B959A405F;
+        Wed, 19 Jan 2022 17:35:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13256A4067;
+        Wed, 19 Jan 2022 17:35:43 +0000 (GMT)
+Received: from [9.171.34.112] (unknown [9.171.34.112])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 17:35:43 +0000 (GMT)
+Message-ID: <e66d71dd-aeb9-3905-754a-8fb36385db12@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 18:35:42 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9cffd506-721d-4886-3a97-08d9db71df70
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2600:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB2600D16CCF4DC7FEA91CE0E583599@BYAPR12MB2600.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ueVRrXf0kMBL80HsU84go1uBM4K2YOpoRSP++ni/BSC2yJKv3gy/skOtEcJjNC6r7oPSKR0BssX+00u9PLGTKG/bRSKSu1NdDCsDFKBQ21KYeF5YK61gvdHeTx0ckfs8KoyfzqkD5iqQkFyQZkSWPnqrLR212pSxQ/1C3+NpQOKR6oRhclZy8GVaV0AtoMshmH3NELCzz9FKgcuYIbz+sKpEyM3T3Lh1bJ3QdPMmv48fAv9z3Jyo8VdYZSzGAoq8AUdxIUeUoxkQcUtbCGROxu4fXZYGlaI3w7w1Lg1Ei1sKg2/VuWFBfZZacVBlcvANt9JrZvBkex/YKbBv568KvYC5IyslMXpcUH9bYNJ6depfE+6wL0DeICPwEGrL1X+rAoOu61oF0OEPK3hQk9RthGZ1zB7XEV14JeckvIVRfxurOAU+VagkyFZNHA1mN1cI474z7yArxhzS7J7jyfunBW6sb95PUyrd7/YaChhe/vh54nja7Wje+LDgSs9VMUfr5x+Ei0OX9S4B7Tkx2YJGQXWvqjK6+SDYmG03PCbMbw2dOgHsmaeWMArnvvYYprQ1HLdXT/aLilrHTCSxOtm5920kAsQL/aoqJUcBjLRl9B/xyh62vRKKCNORx1ECkitpMYzdzwc/CtR4GWdZTrMZhmUhcs5QRrfeqLoGxVqcG0fxDZN86JhmnNrEYU5yRXc/PNtCR0pTGMXpu8lHQhmSfAw6sBrs16OxhyCmF9OSSbLUpTYFduUZU6NjrJaILm2AzNFmq8A93H33Wpf+qDONsw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(6916009)(186003)(6506007)(86362001)(8676002)(31696002)(2906002)(53546011)(5660300002)(26005)(38100700002)(66556008)(66476007)(2616005)(6486002)(316002)(36756003)(66946007)(508600001)(6512007)(31686004)(4326008)(7416002)(83380400001)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TmExQkNHdDlKbkxiMTZRaHZFLy8wVXh2eEdxalZ6ZmxPamJtVE1hTDNCSmhW?=
- =?utf-8?B?Z210NDFDTmp4cVpudW9MSEszbFgrenpDb2hRaFV0N0ZHdGxXUS96NEYyQlZq?=
- =?utf-8?B?NzBubmt0TGhxYjlSZ2pGdUhLOVVlakZQMWxWMDdWbVNPYTVCTlAxcVdXbDRK?=
- =?utf-8?B?aS9KdFZ6WlI3Q0crakx1OHhKQUJ3Q1V3Wm0ydjUwOHBmKzhIbFpqMWxmanRh?=
- =?utf-8?B?TzVDVUlVeWxHS1J5RFdZRVdjYUdaWUx1MlNKd2tVK1l3aGxDSy9ZdklBSEEv?=
- =?utf-8?B?QUF6aGxkU1ZGTlRRV3QzS1RDZ01OUUNMcUUxYUxrZnhRY244R0xYekZidVk2?=
- =?utf-8?B?WVNudldWa3oxYUp2MW9vNUUvbUZoeEVIVHZpaVBqc1FNNjErZzNTL3lMb2RZ?=
- =?utf-8?B?SnZqaFQ5Nkc5cGNRWVprR2hRNmcxdjVtSjI0K3grVjRMTWsxRGZvNkdvaHo1?=
- =?utf-8?B?WGNhWE5qaTRBcnE5WCswTnZhVzRzT0VvN0pPcTRVUW5WU2lOaU11SFArOXJ1?=
- =?utf-8?B?Z3BjWHpQd2VBUkRhSGdnVE1KVlZLc2gwbEhSUUdjNlFUc0xKSE9Jamw4Umkv?=
- =?utf-8?B?MW1IaWRYRk94dzVodER6T1k5aHMxS2hPMHJvMnFkUlV4NmRFZS9ETHByMk9G?=
- =?utf-8?B?YjUrZFdNeVhFTW96U0JrZXNKd051Rm5iZVpWeVUwTWR4MXVWbjJ5UUxvQTV0?=
- =?utf-8?B?Y3RrTnJhRXpaSW4rM3duWGxvMHc1WWIzamN4Z2hnZ0xpekIzSDlMUnBjUnAx?=
- =?utf-8?B?dEYvRHRRcVY5Q0RkaitIa0haM3R6LzNBRnEwc2RJK2h0bXZxeHR3SVRHRUNz?=
- =?utf-8?B?dlY2bkowSVdYTjQvVGhZa0lxZjdUUExLUEFyTXVJZDAvamhITVR3Q281RUM2?=
- =?utf-8?B?dGJucE5iNnpYSjdtZWVWdHVqaXVQaXA2cEhURE9tZkdPY0dIRnE0Nko1c2dz?=
- =?utf-8?B?YUF6ZXJMNnJhcUEyNHRQTDZCVjNZWkdxTkhvYVk0SXRwUWpXdzJ6MjhaNUxL?=
- =?utf-8?B?dEQ5RnJIZXZaaFFaU3BjQXBGYUlBcklTR0U2VEJjWWNQVS9NZWtQUFUvNmtp?=
- =?utf-8?B?WDRQOWZMaCtWSldaTUN6VU5kby9kZnZhNGdaT3RaN3VrQVM4bW8weDJkQTha?=
- =?utf-8?B?WjRSR0N4RTh3QVZucmVFdHlzQjBhVDFsM2lFUUVRUllsTFFEMkdkdzZmREhw?=
- =?utf-8?B?d2I0MGlEdTJZTTRtcmNhZUNRMG1YK0cwRVhDVnBlT1krZE96c0R6aHhRT1l2?=
- =?utf-8?B?ZWwxVXUrakxhQjFPcHZ2WUcwenNxZjZxaFBqcnEyMlByZ0UzckM3Y0t0ZWVn?=
- =?utf-8?B?anlsbXFEWWVkSW5BaUMwNEppZEJjYTVrelZDSGNCVWpjUXVmbEVFdTBNZDY3?=
- =?utf-8?B?MUZ1MHZJRWFYek5oUWdaWkNmcVc1QWhBRmVWbzdlQ3h6K3p1SHZJQnJOM1R5?=
- =?utf-8?B?UzVLVzFsdyttNzJZUG5sOEplUTNiQ243eTIyOEU2aXllN3BsdlovVzdqbzFF?=
- =?utf-8?B?WFc5VVBONWZGYURxcy94QTFsM0hNT3F3L2NiRU9Za2hCNlpRdVludTV5VGRU?=
- =?utf-8?B?OWVtTExTdHAxZXBmL1pqK05BOVQ4RXFoclFIVFlHRDliRjNjTWE0TjJFN1d0?=
- =?utf-8?B?aWFkZzZhNmhYSWJ4ajMwVk4xSWRyck01MnVHcElWTk5VUkVDRC8xVUVHWTZ0?=
- =?utf-8?B?T1FZZFFoWFJLWjUwclVJZkdjRlRtY01lVzNWeURoUHVkRUVJNEdsd1VrQmpp?=
- =?utf-8?B?d0NKNExia0ltZjhOVlFHT0prV0gwSnhJUTMxZjJTVTViWHl2ZmhJc0dsRDY0?=
- =?utf-8?B?OVYxV04wUzNkS0VvbHRXT25VR1hvNzlrUVpDdnV1NERPajR0dVlFc3VHTUp6?=
- =?utf-8?B?Um9qOS8rMFd3NERBcExrbjhPRlRRSENveURGRUk2dzhJaWs4MXBsS0lQWmpP?=
- =?utf-8?B?QSs0d21FY2JVNTBFOWJOUmFZTGlSLzk5M2x6ZUhuN0ZidUJGWUY1aHVqazhm?=
- =?utf-8?B?d2liY2M2NGh0L2JXdysrZHgweVdGT055UTJnQnIwcEI5Vk01aytuRWY3dVRj?=
- =?utf-8?B?VHBQTVRlTFluZ01Pa001aVR1bTlpU2hpc045b0VTWUFNbmNwYXRlMkJUVVRq?=
- =?utf-8?B?MGN5SlU3aVd3Uit1T3RrbzZJa25DdG9ZekZ5bWZpWGQ3STFXQVE4c0J3OC80?=
- =?utf-8?Q?mSvK4Hd+ePuTnLXLErIBdpw=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cffd506-721d-4886-3a97-08d9db71df70
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5346.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 17:33:57.7972
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I4CYxjlIB8PxSwJRYNEsaw0QXak7Hjwg3fOaGe7fqpyFOzJnSkaJ/WCA6M4IMAM592porA0ujmKZdLY79FMvoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 1/7] entry: add arch_in_rcu_eqs()
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, frankja@linux.ibm.com,
+        frederic@kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        maz@kernel.org, mingo@redhat.com, mpe@ellerman.id.au,
+        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
+        paul.walmsley@sifive.com, pbonzini@redhat.com, seanjc@google.com,
+        suzuki.poulose@arm.com, svens@linux.ibm.com,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+References: <20220119105854.3160683-1-mark.rutland@arm.com>
+ <20220119105854.3160683-2-mark.rutland@arm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220119105854.3160683-2-mark.rutland@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: T7dDEW5eHjQD5yXB-fIIRUvZI1_j7pcT
+X-Proofpoint-ORIG-GUID: _dlTkwOX-zj2vV5lG52KwsOpwxPoH58P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 adultscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 malwarescore=0 clxscore=1011 mlxlogscore=874
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190099
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/19/22 9:30 AM, Jean Delvare wrote:
-> Hi Terry,
+Am 19.01.22 um 11:58 schrieb Mark Rutland:
+> All architectures have an interruptible RCU extended quiescent state
+> (EQS) as part of their idle sequences, where interrupts can occur
+> without RCU watching. Entry code must account for this and wake RCU as
+> necessary; the common entry code deals with this in irqentry_enter() by
+> treating any interrupt from an idle thread as potentially having
+> occurred with an EQS and waking RCU for the duration of the interrupt
+> via rcu_irq_enter() .. rcu_irq_exit().
 > 
-> On Tue, 18 Jan 2022 14:22:30 -0600, Terry Bowman wrote:
->> This series uses request_mem_region() to synchronize accesses to the MMIO
->> registers mentioned above. request_mem_region() is missing the retry
->> logic in the case the resource is busy. As a result, request_mem_region()
->> will fail immediately if the resource is busy. The 'muxed' variant is
->> needed here but request_muxed_mem_region() is not defined to use.  I will
->> follow up with another patch series to define the
->> request_muxed_mem_region() and use in both drivers.
+> Some architectures may have other interruptible EQSs which require
+> similar treatment. For example, on s390 is it necessary to enable
+> interrupts around guest entry in the middle of a period where core KVM
+> code has entered an EQS.
 > 
-> Shouldn't this be done the other way around, first introducing
-> request_muxed_mem_region() and then using it directly in both drivers,
-> rather than having a temporary situation where a failure can happen?
+> So that architectueres can wake RCU in these cases, this patch adds a
+                     ^
+> new arch_in_rcu_eqs() hook to the common entry code which is checked in
+> addition to the existing is_idle_thread() check, with RCU woken if
+> either returns true. A default implementation is provided which always
+> returns false, which suffices for most architectures.
 > 
-> As far as I'm concerned, the patch series you just posted are
-> acceptable only if request_muxed_mem_region() gets accepted too.
-> Otherwise we end up with the situation where a driver could randomly
-> fail.
+> As no architectures currently implement arch_in_rcu_eqs(), there should
+> be no functional change as a result of this patch alone. A subsequent
+> patch will add an s390 implementation to fix a latent bug with missing
+> RCU wakeups.
 > 
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
 
-Hi Jean,
-                                                                      
-I considered sending the request_muxed_mem_region() patch series first but 
-was concerned the patch might not be accepted without a need or usage. I 
-didn't see an obvious path forward for the order of submissions because of 
-the dependencies. 
-
-I need to make the review easy for you and the other maintainers. I can 
-send the request_muxed_mem_region() single patch series ASAP if you like. 
-Then I change the request_mem_region() -> request_muxed_mem_region() as 
-needed in the piix4_smbus v3 and sp5100_tco v4 and add dependency line as 
-well? Is their a risk the driver patches will take 2 merge windows before 
-added to the tree ? Is there anything I can do to avoid this?
-
-Regards,
-Terry
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> ---
+>   include/linux/entry-common.h | 16 ++++++++++++++++
+>   kernel/entry/common.c        |  3 ++-
+>   2 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+> index 2e2b8d6140ed4..f1b91a13a15a6 100644
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -99,6 +99,22 @@ static inline __must_check int arch_syscall_enter_tracehook(struct pt_regs *regs
+>   }
+>   #endif
+>   
+> +/**
+> + * arch_in_rcu_eqs - Architecture specific check for RCU extended quiescent
+> + * states.
+> + *
+> + * Returns: true if the CPU is potentially in an RCU EQS, false otherwise.
+> + *
+> + * Architectures only need to define this if threads other than the idle thread
+> + * may have an interruptible EQS. This does not need to handle idle threads. It
+> + * is safe to over-estimate at the cost of redundant RCU management work.
+> + *
+> + * Invoked from irqentry_enter()
+> + */
+> +#ifndef arch_in_rcu_eqs
+> +static __always_inline bool arch_in_rcu_eqs(void) { return false; }
+> +#endif
+> +
+>   /**
+>    * enter_from_user_mode - Establish state when coming from user mode
+>    *
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index d5a61d565ad5d..b13d4e0b0b643 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -349,7 +349,8 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+>   	 * TINY_RCU does not support EQS, so let the compiler eliminate
+>   	 * this part when enabled.
+>   	 */
+> -	if (!IS_ENABLED(CONFIG_TINY_RCU) && is_idle_task(current)) {
+> +	if (!IS_ENABLED(CONFIG_TINY_RCU) &&
+> +	    (is_idle_task(current) || arch_in_rcu_eqs())) {
+>   		/*
+>   		 * If RCU is not watching then the same careful
+>   		 * sequence vs. lockdep and tracing is required

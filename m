@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E3B493E4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0248A493E53
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 17:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356129AbiASQa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 11:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356144AbiASQaW (ORCPT
+        id S1356146AbiASQao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 11:30:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56892 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356145AbiASQaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 11:30:22 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED9BC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:30:22 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id v123so6172083wme.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 08:30:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kcVKA3cO1gMjv5znetYf0gFrDVY8f+ZwutG6o8Ga6LM=;
-        b=IhNIoFSrR1xUQmRTkygi8eVtSAV917TMwd/C4acdPt/AnQdQtaHjnZetbdOAic8uPF
-         L/OpokHD8oxH6EjUSLalVxIJCo+bnZUouhEpkZSRIw3SARnzK8FHIULZZfqrdFnkeCqZ
-         5ZeMF3rY6HjUPY8TK5khep/e4j4CIESxlPbiE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=kcVKA3cO1gMjv5znetYf0gFrDVY8f+ZwutG6o8Ga6LM=;
-        b=lRTOLscVw/30yeRCqorh2qVA26LBM/TsY4MfNIGXlC+y+ItxDQx38tcaqY1kpKBeC/
-         NccrqysjQ5s4rkwHap/i2VI0O+xZBT7Le2SIutiiRnpOuCJQ8pJfj+MZ3hIuVN458HuH
-         wzPfjsSPvkqHH1yGHhX9uQYmypNhmR05U+xM7BP2ouiXnoWaYCRRceWJK2CYaFHSZGSU
-         qxoqai2QhNXyz7o5ENUmhcaiwgkx4YguD45yRhVJDQL+gYFgwgK8u+iMR530M/0WM6MO
-         4mKIWIK58eXL3qFK/nQzdhAI9FYCtLt7Jpw1HMkSUbMEqYKzECW+zBKddei/KzfMJNkL
-         r9ew==
-X-Gm-Message-State: AOAM532VS7I+ek71udpR4M0l9IUcxgrvn2FRfEj7Tzz4R7xAo53Eyhdi
-        vEV4oSHK9cNaYNv906fIFiHAdw==
-X-Google-Smtp-Source: ABdhPJxtMCdwKeJWfO01Q5W4lZzfQ9YUzdTVJunRD/rLU9x6y6GqnC4P7AYJfyGItM4UOJBUrUvN2A==
-X-Received: by 2002:a5d:588d:: with SMTP id n13mr16737444wrf.153.1642609820911;
-        Wed, 19 Jan 2022 08:30:20 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id x4sm367217wrp.13.2022.01.19.08.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 08:30:20 -0800 (PST)
-Date:   Wed, 19 Jan 2022 17:30:18 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Daniel Palmer <daniel@0x0f.com>,
-        Hans de Goede <j.w.r.degoede@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] How to add hardware rotation, scaling etc to a DRM/KMS
- driver
-Message-ID: <Yeg8mi0S2ACy9q8O@phenom.ffwll.local>
-Mail-Followup-To: Daniel Palmer <daniel@0x0f.com>,
-        Hans de Goede <j.w.r.degoede@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAFr9PXnig9YfnwSzMg5UPm3UtAsEAQT_xVheBbLppiU45mc_QQ@mail.gmail.com>
+        Wed, 19 Jan 2022 11:30:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 095FBB80E09;
+        Wed, 19 Jan 2022 16:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955B2C004E1;
+        Wed, 19 Jan 2022 16:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642609836;
+        bh=NPkrUgRYzcxwa3lnZh2dJ3qyPo1V5StcWneeKtWaOTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GMhWu7C3B60BdL8/99pPFWzH0CB7LU7Dz7GFXyQtbGWeKeKQJEE+V2fEbRhv/QrJW
+         yYagtUm7pysfgqkJMyR27/xktDwbdWcoif82n5bf4F716uAgvyW4CrM7nnlUKhGZf0
+         FU8zZ8ZvZl+QEyzj+ByrVczubpcuk9CdfXWCIEjg23SntmAfLaHiquJ5KbvTGWQWfn
+         Hr8GUX32FKay/k82RyllkJOyRWhWEFPpRz5SEs7TiLsMcVgix5+RDcoF6No3Mm8HeE
+         dgP9NlrSSG2qLfoDBPumyLb9lbK1A0ADtU3DkLXQ9hZS91Urze/uzDqpkaas6/c5dZ
+         OCMIIrEVF0X5A==
+Date:   Wed, 19 Jan 2022 16:30:29 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        - <patches@opensource.cirrus.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] dt-bindings: Drop unnecessary pinctrl properties
+Message-ID: <Yeg8pWYUwWKqOjhe@sirena.org.uk>
+References: <20220119015325.2438277-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pa3KE12yHs9Xnd2D"
 Content-Disposition: inline
-In-Reply-To: <CAFr9PXnig9YfnwSzMg5UPm3UtAsEAQT_xVheBbLppiU45mc_QQ@mail.gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <20220119015325.2438277-1-robh@kernel.org>
+X-Cookie: This bag is recyclable.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 05:55:22PM +0900, Daniel Palmer wrote:
-> Hi all,
-> 
-> I've copied and pasted my way to mostly working DRM/KMS driver for a
-> low cost ARM SoC (Sigmastar SSD202D). The hardware is 2D only.
-> 
-> One of the devices that uses this SoC has the screen upside down so it
-> needs the screen rotated.
-> The hardware doesn't have bits that change the scan out direction from
-> what I can tell (so it can't mirror/flip while feeding it to the
-> screen) but it does have a 2D blitter style block that can take a
-> framebuffer and flip/mirror/scale/convert the colour space into
-> another buffer.
-> 
-> My idea was to create a buffer for the rotated image when allocating
-> the framebuffer and trigger the hardware to do the conversion each
-> vblank or something.
-> 
-> While reading the discussion about maintaining fbdev I realised maybe
-> I should ask instead of wasting too much time on something that's
-> wrong.
-> 
-> I got the feeling that maybe I should just provide an interface to the
-> blitter from userspace and userspace should be doing the rotation. I'd
-> like to do it in the kernel so stuff like SDL1 apps just work but
-> maybe that isn't possible?
 
-panel orientation property is for that stuff:
+--pa3KE12yHs9Xnd2D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#standard-connector-properties
+On Tue, Jan 18, 2022 at 07:53:25PM -0600, Rob Herring wrote:
+> For a single pinctrl mode, it is not necessary to define pinctrl
+> properties as the tools always allow pinctrl properties.
 
-You need to scroll down to the "panel orientation:" property. And here's
-how to quirk this for at least some cases (for dt panels it should be in
-the dt):
+Acked-by: Mark Brown <broonie@kernel.org>
 
-https://dri.freedesktop.org/docs/drm/gpu/drm-kms-helpers.html?highlight=drm_get_panel_orientation_quirk#c.drm_get_panel_orientation_quirk"
+--pa3KE12yHs9Xnd2D
+Content-Type: application/pgp-signature; name="signature.asc"
 
-fbcon will head this and rotate in sw, as should any competent compositor
-in userspace (but some might not, it depends).
+-----BEGIN PGP SIGNATURE-----
 
-Also ping Hans de Geode if you have any questions, he's done this.
--Daniel
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHoPKQACgkQJNaLcl1U
+h9CK5ggAgSoOi6gEd+9fFCP6FCxOQatzUUojOHSGhmWyvIDZNwu17IQjUqhzZ5Lk
+8Z9Or7iFzVcEVfaKQ0w1HRWHQIrPLjnGtm1pnD26p3iqmdDC/1hDvKb/kd7EjOmF
+NEx6LRQoJL0LQX9I/c8rkwoW5mXpxaBck270IlQAaOI5/iOQFHp2oDn02Csbli0e
+XtJH3S6dPtjKQN/+SC9ruVF3usw6u4Vxi5FNXA1ABQYeKP+4/lyft2SWzGZEShhy
+Kmn6JJCH6fa4Aqbz85d4dpvuG9t9ukvdK8zrRCpsH2xw8AlHDeJtcDG6/LXw5hPG
+u+NgtzFSWl0tPBvoyeSNpNi3YEkbyg==
+=vG1Q
+-----END PGP SIGNATURE-----
 
-> 
-> Cheers,
-> 
-> Daniel
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--pa3KE12yHs9Xnd2D--

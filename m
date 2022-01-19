@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAEE493542
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBEE49353A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351944AbiASHJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:09:51 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31105 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351920AbiASHJl (ORCPT
+        id S1351877AbiASHIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:08:14 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:18131 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230223AbiASHIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:09:41 -0500
-Received: from dggeme755-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JdxW619tGz1FCqP;
-        Wed, 19 Jan 2022 15:05:54 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggeme755-chm.china.huawei.com
- (10.3.19.101) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Wed, 19
- Jan 2022 15:09:38 +0800
-From:   Zhou Guanghui <zhouguanghui1@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux-foundation.org>
-CC:     <will@kernel.org>, <joro@8bytes.org>, <jean-philippe@linaro.org>,
-        <xuqiang36@huawei.com>
-Subject: [PATCH] iommu/arm-smmu-v3: fix event handling soft lockup
-Date:   Wed, 19 Jan 2022 07:07:54 +0000
-Message-ID: <20220119070754.26528-1-zhouguanghui1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 19 Jan 2022 02:08:14 -0500
+Received: from droid09-sz.software.amlogic (10.28.8.19) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Wed, 19 Jan 2022
+ 15:08:12 +0800
+From:   Qianggui Song <qianggui.song@amlogic.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+CC:     Qianggui Song <qianggui.song@amlogic.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 0/4] irqchip/meson-gpio: Add support for Meson-S4 SoC
+Date:   Wed, 19 Jan 2022 15:08:05 +0800
+Message-ID: <20220119070809.15563-1-qianggui.song@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme755-chm.china.huawei.com (10.3.19.101)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.19]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During event processing, events are read from the event queue one
-by one until the queue is empty.If the master device continuously
-requests address access at the same time and the SMMU generates
-events, the cyclic processing of the event takes a long time and
-softlockup warnings may be reported.
+This patchset add support for GPIO interrupt controller of Meson-S4 SoC
+Which has something different with current other meson chips. To
+support the new chips, current gpio irqchip driver need to rework as
+below:
+1. support more than 8 gpio irq lines.
+2. add a set trigger type callback function.
 
-arm-smmu-v3 arm-smmu-v3.34.auto: event 0x0a received:
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00007f220000280a
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x000010000000007e
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00000000034e8670
-watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [irq/268-arm-smm:247]
-Call trace:
- _dev_info+0x7c/0xa0
- arm_smmu_evtq_thread+0x1c0/0x230
- irq_thread_fn+0x30/0x80
- irq_thread+0x128/0x210
- kthread+0x134/0x138
- ret_from_fork+0x10/0x1c
-Kernel panic - not syncing: softlockup: hung tasks
+With above work, add support for S4 gpio irqchip
 
-Fix this by calling cond_resched() after the event information is
-printed.
+Changes since v1 at [0]:
+- fix leaking issue
+- fix some typos
+- change implementation of new feature.
 
-Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
- 1 file changed, 1 insertion(+)
+[0] https://lore.kernel.org/linux-amlogic/20220108084218.31877-1-qianggui.song@amlogic.com/
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 6dc6d8b6b368..f60381cdf1c4 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1558,6 +1558,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
- 				dev_info(smmu->dev, "\t0x%016llx\n",
- 					 (unsigned long long)evt[i]);
- 
-+			cond_resched();
- 		}
- 
- 		/*
+Qianggui Song (4):
+  dt-bindings: interrupt-controller: New binding for Meson-S4 SoCs
+  irqchip/meson-gpio: support more than 8 channels gpio irq line
+  irqchip/meson-gpio: add select trigger type callback
+  irqchip/meson-gpio: Add support for meson s4 SoCs
+
+ .../amlogic,meson-gpio-intc.txt               |   1 +
+ drivers/irqchip/irq-meson-gpio.c              | 105 ++++++++++++++++--
+ 2 files changed, 97 insertions(+), 9 deletions(-)
+
 -- 
-2.17.1
+2.34.1
 

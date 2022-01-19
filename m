@@ -2,120 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EBB493594
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F89493598
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352088AbiASHiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:38:17 -0500
-Received: from mail-mw2nam12on2088.outbound.protection.outlook.com ([40.107.244.88]:29536
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1352070AbiASHiP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:38:15 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ahaQCaySE09m3eL6qgv4HaE3zmnN7KU+Rm1UhGjGXJJHoG47sFIwvEAFSWlTurpz8E7P/eKGY01/QU71Zeyc+oyPhNdD0vAlC6d9HSZWBnduuJS+Clq/Tm6IYdhmZzKHl0tEolSqcK7vaf1FsYl6uqcvwTPJM5woald9hmyuDAjF4Q/Z0QZpVKaSvM/8OGIxvO1Joqu5dCmKNaO3lpDCH0QelwMr2IQAMuFvZ6U4tXG4/gNVuIns1y7sNgcDFEg/FxP0Dzsp8Q+HNrhWH9P1EWB/9GPO/gmAkNfSQvOa/M+yMf22aBQQgn6X4LcOL9pMpXEktcz8RvktXHcSVAoq0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jvfZmg/c6Gbqq2vY26s987dhQ3HrH7gh9cQ7JFBl8WA=;
- b=nJ6QfKG4/YXd2Ycg+em+lorknDHTInTvt96Zj4BCNVfRZHBGUNbiGthd6fVLMGhpoCkAwpa5dQD6yL4g9ADf4DyzxAUOtSgaDGWTlTkiuqCp3PhcZKLp/5AvN4UaN52foWjtEVaJqot2Uc9AuxQQmKVPQbKe4+m4UuaA8VV1edlMGSWTs5pMzYKyVl4gZp+tuJtbML/bq5OKQwX4+1aOJddlgMQoOPLNWuUJFFZ4/Za54rDsTyBzPr/Zl0KbGjPdlyWtP8NXXSCRjiYOAbu2Rd3wUuRhaelAgHHAdsn5cWz2yxxgRIiiuz8V+hD7Vce+5fKB7pf1JKZbd/kUAZHXhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jvfZmg/c6Gbqq2vY26s987dhQ3HrH7gh9cQ7JFBl8WA=;
- b=Im/Rl+XzikP24uOUyWQo3TLyr4dYVph5C4XAm41+oouKdKwEcS7SA30/+jlRsuu9Pk/RTyp8hk/tRxJirjQTD91UN+GVqrp2FyS/uq6bOQsFNflpu8ieq5+MzQjwqHRrEbEUxVbQnJpnKX3wKcfOiX92GXE746lvNqP+qhoJdKrkenMVMmLe9ScsP3lUBetlihE72H2YsCGBxIaEH4fGOBgc0vGY2gQJ4LSM9A+0We9c49l8iIrHNmO30HbbMTHuRBTSzyf9yuDOcq0f7C0kVXU/WnjNFEe0491Om3qIUuvExxd73kchku7PizQbSyJn2Emytt+H5+RQob5m7lGo6w==
-Received: from MWHPR2201CA0039.namprd22.prod.outlook.com
- (2603:10b6:301:16::13) by SN6PR12MB4670.namprd12.prod.outlook.com
- (2603:10b6:805:11::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.12; Wed, 19 Jan
- 2022 07:38:13 +0000
-Received: from CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:301:16:cafe::c2) by MWHPR2201CA0039.outlook.office365.com
- (2603:10b6:301:16::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
- Transport; Wed, 19 Jan 2022 07:38:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT029.mail.protection.outlook.com (10.13.174.214) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 07:38:12 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 19 Jan
- 2022 07:38:12 +0000
-Received: from [10.25.78.231] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Tue, 18 Jan 2022
- 23:38:09 -0800
-Message-ID: <3ba51978-2aca-c2b4-e2b0-7e06db221618@nvidia.com>
-Date:   Wed, 19 Jan 2022 13:08:06 +0530
+        id S1352092AbiASHk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:40:56 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38038
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351425AbiASHkx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 02:40:53 -0500
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C526F40053
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 07:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642578052;
+        bh=KOwrbfmVaaY4sfUgcL8mu/NpRfAwFGVtSAETT0kqBAg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=nWEu+jGMj1FJ3/JFrNCNRWcrAgA7ULncUgZATh2wXD4936EoufJ27K5UIUNruVGFB
+         OUJTIDjH3K+aQfwAeMrwVZplhgPrtJgt6m4RX1812H9cXBsV9eq3k8kKqS8u9b9+hl
+         7oRCsoeM9/ivgnEUaf1VVJ3LZamN4HZSKfqZZHSJumVLEwKkihRyHbyuL791RM/K4z
+         23TW7bBjf1u74E0XGEgtVhHDT9WXN/M3IfVAaaZ6EMvxMNLpMMialNyIcYO80EeyYs
+         VVe+75P76Owv3P06DpmJ77i8axmsF9uTj6eW87X7IAir9wzRCwMNyHNgItiPbe0dev
+         vA5VsmdAf3obw==
+Received: by mail-ed1-f70.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so1442966edt.15
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:40:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KOwrbfmVaaY4sfUgcL8mu/NpRfAwFGVtSAETT0kqBAg=;
+        b=PBAuXwjG/xXIND29yfqU6G5dNInZe6mjaICYGs4nlRWQH3MypyVpZMAKj4oFcD+SRr
+         fkGphMMzlLb+wr25ip7eSME66BeA+aKAGiB0YNN/XoOwGFsqGnC8qTOqBeVYn3niZlvy
+         xRS3FQPr4rz0T0gsT4PblEgKwyDsULWLOdqXWCUmoyPEpkft4VjMPec0Qmsi9JWidNqP
+         04N7086AMZ5sRe9z8pqc6unbqTUMaC6jX+jEiN/NgvaqpxZLOqLmKHbKU7YNyIzvN9QP
+         uYLycI4sQvvdwnWsVpr19FyhPGLEX5i699OUPVgmvzwJjISSUIrQTABLIoTIuml2ALAu
+         djbw==
+X-Gm-Message-State: AOAM533xXKJOibRiqr6iDDp24bI8X8CDH6etGx0eel0/ray46BYe7Eij
+        JvfVYMKSyfur5OmxbMpiv4+wKD+ElKS/5n0r07JbDzy8IoWCpGk5ajKTBwKrS80sk8vjhOh6fy7
+        rT69UyaRE62Lrub03HdF09WGc/Qt5qVZCNOkzWuqICA==
+X-Received: by 2002:a17:907:7ea6:: with SMTP id qb38mr23673557ejc.557.1642578052184;
+        Tue, 18 Jan 2022 23:40:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwcC/F4TT/k1wEFa2HsX2oDgdxrLKxkyNjrLq8ReErAXQsVWpB2ePW4VmJCVcsiAdC0JWuWGg==
+X-Received: by 2002:a17:907:7ea6:: with SMTP id qb38mr23673541ejc.557.1642578052033;
+        Tue, 18 Jan 2022 23:40:52 -0800 (PST)
+Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id d2sm791994edy.86.2022.01.18.23.40.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 23:40:51 -0800 (PST)
+Message-ID: <21b72055-e158-6586-f48a-17695128b507@canonical.com>
+Date:   Wed, 19 Jan 2022 08:40:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Patch V1 2/4] memory: tegra: Add interrupt mask
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <Snikam@nvidia.com>, <vdumpa@nvidia.com>
-References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
- <1641926750-27544-3-git-send-email-amhetre@nvidia.com>
- <c78b8062-20a8-262c-99de-8c6b481584cd@canonical.com>
-From:   Ashish Mhetre <amhetre@nvidia.com>
-In-Reply-To: <c78b8062-20a8-262c-99de-8c6b481584cd@canonical.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+References: <20220119015038.2433585-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9742c25d-0ef0-4178-ecc1-08d9db1ea5f2
-X-MS-TrafficTypeDiagnostic: SN6PR12MB4670:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB46706C9B8577A16A3493CBF8CA599@SN6PR12MB4670.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:192;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eoE+jlcrIJoMa0WvU6Mphhxk6KpNZYc5qbUUdBz9bSiLqRX0KVxavwqhwdo4EWy0F3KsGYCOcM68bTVuFtxZv2h7J5mH+mOM7JG/cBukOJCse5NWcZ9S+IiBERVSfiFUh8SZTW+ad2ZntVSw08QUyD7eWOJGyMj1ORangukTKR0dNRPcax2XQYfatZGjZkI+PKDFzM7y4Azsr4hQ4WRohSgJdCbmjvEkBqrlzWARZyHXddlr9CTC9+i+towJUS0YbVjyjyclQqiCq0BamvyS2rYieiuoyPWtT8NphrzyYs+Rhd5uPIUVb817dDQri0Z6/lseQwoibAMbacjD0txmVE1/KqfsyuNI2G5OpWvxojD5MO8HwD2fGOvmkAqQ3aRTlMSwdPlYBB0XYa5DWnzOTW4z5ZvBMSsIRq3AVffk5EQPeftAZL1RRI9/krTz3KHJkFQF4FlJYb4s/ZGTfyJTBj5rClQJt283shFWNx+dmFQXgAdSQ+GJk17sBl0UnFTgrbQx4eQHPc7CTVoMJ7qPj+n8xepp0Qri/LQXBAHYROfQAlpFvRcnK9J0YMGspyoc2GSivS9W0ML2wPre5OJmlLKdE8HzfpPvaWd+CWr3sC9pHdoVQygyz4fpiWpDRP5cWtqZI1NleS0Bq+FTS+5g7ZGy0Mhu+jxv5rcNskqJ6affHK8WMN7QLq/t/QztNJwRWAhue/xluDggC2IfKGYg7wXErx4roNZz6HytB+BvB8wC+6DyF3u/1kichFqdJ0E82X1SnrKWlxm8wV7HxNx4W9ei1Ld0D3eEDmEHXOPWzku6tKur10doqiPsbMwqEG3MN/Q0E54r4SoS1evMxYDmjA==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(40470700002)(36840700001)(4326008)(70586007)(6666004)(36860700001)(81166007)(40460700001)(8936002)(70206006)(356005)(107886003)(26005)(2906002)(31686004)(86362001)(83380400001)(54906003)(16576012)(316002)(110136005)(508600001)(53546011)(2616005)(47076005)(8676002)(426003)(336012)(82310400004)(5660300002)(4744005)(36756003)(186003)(31696002)(16526019)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 07:38:12.8048
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9742c25d-0ef0-4178-ecc1-08d9db1ea5f2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4670
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/01/2022 02:50, Rob Herring wrote:
+> The 'phandle-array' type is a bit ambiguous. It can be either just an
+> array of phandles or an array of phandles plus args. Many schemas for
+> phandle-array properties aren't clear in the schema which case applies
+> though the description usually describes it.
+> 
+> The array of phandles case boils down to needing:
+> 
+> items:
+>   maxItems: 1
+> 
+> The phandle plus args cases should typically take this form:
+> 
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
+> 
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
+> 
+
+Samsung and memory controller bits look good:
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
-On 1/12/2022 2:02 AM, Krzysztof Kozlowski wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 11/01/2022 19:45, Ashish Mhetre wrote:
->> Add interrupt masks for all supported interrupts on tegra MCs.
->> Update interrupt mask value for T186 and T194 as per supported interrupts.
-> 
-> The commit subject is too generic. The commit description need to also
-> describe why you are doing it and what you want achieve.
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-Sure, I'll update the commit message.
+Best regards,
+Krzysztof

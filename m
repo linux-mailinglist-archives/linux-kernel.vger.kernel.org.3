@@ -2,186 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9147493535
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3758493537
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 08:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbiASHET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 02:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S239394AbiASHEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 02:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiASHER (ORCPT
+        with ESMTP id S230223AbiASHEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 02:04:17 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E389EC06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:04:16 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id i82so1681130ioa.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Jan 2022 23:04:16 -0800 (PST)
+        Wed, 19 Jan 2022 02:04:38 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844D0C061574;
+        Tue, 18 Jan 2022 23:04:38 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id t32so1562435pgm.7;
+        Tue, 18 Jan 2022 23:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WF2XhxdWcahC6NDYs1rosQPA8N+0DlTVNlcv63XewtM=;
-        b=khTBgUDeaNd9UcmIIpibbFHM09F3LKlr3TK5ulNywzTejrw/DKsawyIYDnirLCXiTO
-         A02mwiiBXy+7XRBWgRcC5E0qynNbb++dGa5R31uCoyzx0k4OJFe6Ssasx+kKrUz9v0Bx
-         FbVDqwa21wOF/m1+/hncxDpD26vALVz3nqexAABzIc2WON754Mbt9UOIGi6TUDwf+eS7
-         mzVjgjl6jHPGGLWaQloSaaIdKbmGrK2bmRNzsTZWIvqAUZM/LiVrhcNBHvbl2ZQFG5Fz
-         CoXEl5NeduyP9Jn4lDbpZh8bDiUmin03FUXBIlIBU9k7QLBqUhTB5WqLZYg5whbArpb2
-         +DTA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wCiIeaOP7iQ1GVdByBpgubBq7flsYPm7+h11Tiuiwpg=;
+        b=I/Zq9ZxoUoy7LGYzlgDjcgi95DDZ4Fe0Pb6n5U+cqjcUR0Et5Pr7UDDZTqOCpfLFBp
+         nEH7GcdRDoD5xDR/tUlhHBREYwpJfnwA60VtG0JCEqf3nxUVBvv1oTZLTn6K3Yvu+hK+
+         MmXCVl0up0iY7uVROgHbQ9pdOWZxbrpVlHN4Y4Q5WewojP3zXhzqsKoPj1tWGcqIRnfu
+         BYsCgTw4uvrA4sCh3lOrWg9RLNTrpKIqaFAcoZeM/oZ2RoXpONfMs3QBJMpXrJVgTy3A
+         czU/m8edbY7P/SxdshnY9eEJz2nCSwfolO25LTfhQEuygQTg7Jx4dcWWysw4BTWZZz72
+         hVlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WF2XhxdWcahC6NDYs1rosQPA8N+0DlTVNlcv63XewtM=;
-        b=skgocyjklIxDwVx93deuwuCmzJDpDHiNVI3miK4IlOOYgiMJ44PDgeF6Mt6hjartls
-         h2Yzj3iDd5DYTOBedLFGlFjapMpHefrBf5zMZQWPw+Gli4ozD1HmNCuJgEJ3OimBwm5o
-         6t9thiucoDiOeFwbWCgepJ+FtWsxopfP0idDnKIvoOoMV/rwFNvExoBMPISYEHsVjaGi
-         xNxLOzE4HPnT1i7XudKKaTqoDumeFOdKqwyafkxlE2hlm8sJMlAN1NGQT5YPEvJWX4HA
-         p7nfsumbg1N39WQoHab1KP+IPBu6i59BzlhTnlrcf/Bhcu7rH3HKTOPHzUyiOheJNUOX
-         qF3Q==
-X-Gm-Message-State: AOAM530eANDTeh8kuRVzYkM0ck/QD95SuJZ4Gh5j90prcTlgdWy6xu0s
-        itxbnbE/1mHZUn/z/3U6LVeqkQ==
-X-Google-Smtp-Source: ABdhPJwZIVI0EYafR2e3oyg6eDCnWq2adkd5lzKzCsC1VUUPRKtQvAXZJR5pQTRKLatrdMi5K6n9xQ==
-X-Received: by 2002:a02:3b0d:: with SMTP id c13mr13936220jaa.126.1642575855825;
-        Tue, 18 Jan 2022 23:04:15 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:90fc:e0c9:c69f:bede])
-        by smtp.gmail.com with ESMTPSA id j18sm10892127ila.86.2022.01.18.23.04.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wCiIeaOP7iQ1GVdByBpgubBq7flsYPm7+h11Tiuiwpg=;
+        b=i5ZB0VWPmLsLw0MrdXYisGHSVdVdA7jaTdicyjEifuIQiWGSYPTSORB1Opb3Y0FCaL
+         J63pVcEK9R2iKgD3LPlZnVtbKdz4vOtU7m66HVDALq02sLfd11DfZPLZ3s35qdWHthtg
+         KC1R4HzlcVmuotGlbvhvG0/vzsWzDYOL7SPsdp8eTfXMmJgf/Mn8Q4Xk5l0eFawsMU8V
+         gPgR7frllqhqVZAaSEjOGXFVwRsemBbq0qB3CXMuBwSu5SqqxObE8Hw3R9D0yAD/Khwh
+         Nz5kR88T9m2jSlAnrcXqOCSorxnmwaYCsS11KOSruNuH43sFx7tx3cY7KrcGsizxLCWW
+         bKcg==
+X-Gm-Message-State: AOAM532Ps4pgoB2ULNN8ZVPdk6Dkq7Dx9DPsxU4wh1nPhmt41XTO14fJ
+        T+Tqkdg90JtpRy+Z+baOZzY=
+X-Google-Smtp-Source: ABdhPJxe3J12qmVF/Tu9pqymxRi/8Bzrvkc5t/ws3HbbSLQmN0Vk87KavUmmzNc1OqaHgFRMaeidfQ==
+X-Received: by 2002:a63:7946:: with SMTP id u67mr26261546pgc.83.1642575877947;
+        Tue, 18 Jan 2022 23:04:37 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id nl17sm5486973pjb.42.2022.01.18.23.04.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 23:04:15 -0800 (PST)
-Date:   Wed, 19 Jan 2022 00:04:10 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Yee36hPfWSs+jR0m@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <YdhR4vWdWksBALtM@dhcp22.suse.cz>
- <Ydu6fXg2FmrseQOn@google.com>
- <YdwQcl6D5Mbp9Z4h@dhcp22.suse.cz>
+        Tue, 18 Jan 2022 23:04:37 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <likexu@tencent.com>
+Subject: [PATCH] KVM: x86/xcr0: Don't make XFEATURE_MASK_SSE a mandatory bit setting
+Date:   Wed, 19 Jan 2022 15:04:27 +0800
+Message-Id: <20220119070427.33801-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdwQcl6D5Mbp9Z4h@dhcp22.suse.cz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:54:42AM +0100, Michal Hocko wrote:
-> On Sun 09-01-22 21:47:57, Yu Zhao wrote:
-> > On Fri, Jan 07, 2022 at 03:44:50PM +0100, Michal Hocko wrote:
-> > > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> > > [...]
-> > > > +static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
-> > > > +{
-> > > > +	static const struct mm_walk_ops mm_walk_ops = {
-> > > > +		.test_walk = should_skip_vma,
-> > > > +		.p4d_entry = walk_pud_range,
-> > > > +	};
-> > > > +
-> > > > +	int err;
-> > > > +#ifdef CONFIG_MEMCG
-> > > > +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-> > > > +#endif
-> > > > +
-> > > > +	walk->next_addr = FIRST_USER_ADDRESS;
-> > > > +
-> > > > +	do {
-> > > > +		unsigned long start = walk->next_addr;
-> > > > +		unsigned long end = mm->highest_vm_end;
-> > > > +
-> > > > +		err = -EBUSY;
-> > > > +
-> > > > +		rcu_read_lock();
-> > > > +#ifdef CONFIG_MEMCG
-> > > > +		if (memcg && atomic_read(&memcg->moving_account))
-> > > > +			goto contended;
-> > > > +#endif
-> > > > +		if (!mmap_read_trylock(mm))
-> > > > +			goto contended;
-> > > 
-> > > Have you evaluated the behavior under mmap_sem contention? I mean what
-> > > would be an effect of some mms being excluded from the walk? This path
-> > > is called from direct reclaim and we do allocate with exclusive mmap_sem
-> > > IIRC and the trylock can fail in a presence of pending writer if I am
-> > > not mistaken so even the read lock holder (e.g. an allocation from the #PF)
-> > > can bypass the walk.
-> > 
-> > You are right. Here it must be a trylock; otherwise it can deadlock.
-> 
-> Yeah, this is clear.
-> 
-> > I think there might be a misunderstanding: the aging doesn't
-> > exclusively rely on page table walks to gather the accessed bit. It
-> > prefers page table walks but it can also fallback to the rmap-based
-> > function, i.e., lru_gen_look_around(), which only gathers the accessed
-> > bit from at most 64 PTEs and therefore is less efficient. But it still
-> > retains about 80% of the performance gains.
-> 
-> I have to say that I really have hard time to understand the runtime
-> behavior depending on that interaction. How does the reclaim behave when
-> the virtual scan is enabled, partially enabled and almost completely
-> disabled due to different constrains? I do not see any such an
-> evaluation described in changelogs and I consider this to be a rather
-> important information to judge the overall behavior.
+From: Like Xu <likexu@tencent.com>
 
-It doesn't have (partially) enabled/disabled states nor does its
-behavior change with different reclaim constraints. Having either
-would make its design too complex to implement or benchmark.
+If "bits 1 and 2 of XCR0" are cleared and set only "bit 0 of XCR0",
+the x86 hardware does work properly and the CPUID leaf of the states
+size will be updated as follows:
 
-There is feedback loop connecting page table walks and rmap walks by
-Bloom filters. The Bloom filters hold dense hot areas. Page table walks
-test whether virtual areas are in the Bloom filters and scan those that
-were tested positive. Anything they miss will be caught by rmap walks
-later (shrink_page_list()). And when rmap walks find new dense hot
-areas, they add those area to the Bloom filters.
+xsetbv(XCR_XFEATURE_ENABLED_MASK, 0x2e7);
+  CPUID[0d, 00]: eax=000002e7 ebx=00000a88 ecx=00000a88 edx=00000000
+xsetbv(XCR_XFEATURE_ENABLED_MASK, 0x1);
+  CPUID[0d, 00]: eax=000002e7 ebx=00000240 ecx=00000a88 edx=00000000
 
-A dense hot area means it has many accessed pages belonging to the
-reclaim domain, and clearing the accessed bit in all PTEs within this
-area by one page table walk is more efficient than doing it one by one
-by many rmap walks, in terms of cacheline utilization.
+According to Intel SDM "XSETBV - Set Extended Control Register",
+the truth emerges: only the "bit 0 of XCR0 (corresponding to x87 state)
+must be set to 1", and in addition, it's necessary to set both bits
+(XCR0[1] and XCR0[2]) to use AVX instructions".
 
-> > > Or is this considered statistically insignificant thus a theoretical
-> > > problem?
-> > 
-> > Yes. People who work on the maple tree and SPF at Google expressed the
-> > same concern during the design review meeting (all stakeholders on the
-> > mailing list were also invited). So we had a counter to monitor the
-> > contention in previous versions, i.e., MM_LOCK_CONTENTION in v4 here:
-> > https://lore.kernel.org/lkml/20210818063107.2696454-8-yuzhao@google.com/
-> > 
-> > And we also combined this patchset with the SPF patchset to see if the
-> > latter makes any difference. Our conclusion was the contention is
-> > statistically insignificant to the performance under memory pressure.
-> > 
-> > This can be explained by how often we create a new generation. (We
-> > only walk page tables when we create a new generation. And it's
-> > similar to the low inactive condition for the active/inactive lru.)
-> > 
-> > Usually we only do so every few seconds. We'd run into problems with
-> > other parts of the kernel, e.g., lru lock contention, i/o congestion,
-> > etc. if we create more than a few generation every second.
-> 
-> This would be a very good information to have in changelogs. Ideally
-> with some numbers and analysis.
+Therefore, it's pretty safe for KVM to run a user-defined guest w/o
+using AVX instructions and in that case, the kvm_update_cpuid_runtime()
+cannot work as expected due to the wrong macro definition.
 
-Will do. Thanks.
+Remove the XFEATURE_MASK_SSE bit as part of the XFEATURE_MASK_EXTEND
+and opportunistically, move it into the context of its unique user KVM.
+
+Fixes: 56c103ec040b ("KVM: x86: Fix xsave cpuid exposing bug")
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/include/asm/fpu/xstate.h | 3 ---
+ arch/x86/kvm/cpuid.h              | 8 ++++++++
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/fpu/xstate.h b/arch/x86/include/asm/fpu/xstate.h
+index cd3dd170e23a..7d331a4aa2e2 100644
+--- a/arch/x86/include/asm/fpu/xstate.h
++++ b/arch/x86/include/asm/fpu/xstate.h
+@@ -9,9 +9,6 @@
+ #include <asm/fpu/api.h>
+ #include <asm/user.h>
+ 
+-/* Bit 63 of XCR0 is reserved for future expansion */
+-#define XFEATURE_MASK_EXTEND	(~(XFEATURE_MASK_FPSSE | (1ULL << 63)))
+-
+ #define XSTATE_CPUID		0x0000000d
+ 
+ #define TILE_CPUID		0x0000001d
+diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+index 8a770b481d9d..5e36157febb2 100644
+--- a/arch/x86/kvm/cpuid.h
++++ b/arch/x86/kvm/cpuid.h
+@@ -8,6 +8,14 @@
+ #include <asm/processor.h>
+ #include <uapi/asm/kvm_para.h>
+ 
++/*
++ * Bit 63 of XCR0 is reserved for future expansion,
++ * and will not represent a processor state component.
++ *
++ * Only bit 0 of XCR0 (x87 state) must be set to 1.
++ */
++#define XFEATURE_MASK_EXTEND	(~(XFEATURE_MASK_FP | (1ULL << 63)))
++
+ extern u32 kvm_cpu_caps[NR_KVM_CPU_CAPS] __read_mostly;
+ void kvm_set_cpu_caps(void);
+ 
+-- 
+2.33.1
+

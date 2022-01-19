@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9003249400F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B40C494012
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 19:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355459AbiASSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 13:39:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:34882 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347148AbiASSix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:38:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8FB281FB;
-        Wed, 19 Jan 2022 10:38:52 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B93483F73D;
-        Wed, 19 Jan 2022 10:38:49 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Kenta.Tada\@sony.com" <Kenta.Tada@sony.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ed Tsai <ed.tsai@mediatek.com>, linux-api@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] sched/tracing: Add TASK_RTLOCK_WAIT to TASK_REPORT
-In-Reply-To: <87h7a06hkr.fsf@email.froward.int.ebiederm.org>
-References: <20220117164633.322550-1-valentin.schneider@arm.com> <20220117164633.322550-3-valentin.schneider@arm.com> <878rve89cc.fsf@email.froward.int.ebiederm.org> <878rvd6jgu.mognet@arm.com> <87h7a06hkr.fsf@email.froward.int.ebiederm.org>
-Date:   Wed, 19 Jan 2022 18:38:43 +0000
-Message-ID: <875yqf7eq4.mognet@arm.com>
+        id S1356862AbiASSj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 13:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356857AbiASSjP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 13:39:15 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EB1C061746;
+        Wed, 19 Jan 2022 10:39:15 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id s13-20020a4aa38d000000b002e28c5100cbso1012246ool.12;
+        Wed, 19 Jan 2022 10:39:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JwZrhFyXsesNVW0APPBg8u3AGppH28QOmr0Jo7e1xnU=;
+        b=D0qv88QdOyLWJ9xkmMNElPXJyrJNGSYG26h6gsP+Eo4MWjvGhpi+2upWiJhJXMM+gu
+         2D/7L02b4n9jYPNsBmFUaxwc1u5pkwSw4CojHtVYnNszJAndeXyJL2cTo/fXbDp9ye3K
+         BalSwWGgsQm+qFNhocYjm0GsEdUM3RrTalqYkUt0YdbdhhRU3MFtOvjpV4AsGLA+rW+q
+         U/tU0sNYxY/UlYisIVzuovqkOBgkvYxfpB44KHKjLsAMAvEd9WuQG5AkaBEe0Jv01aoO
+         Zh9CX3txIJLbgiSjR5U7aBP7l4wxQWF3DARxqopgCsrCID4+qc26DlRDQlbZt1e5T2rE
+         T28A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JwZrhFyXsesNVW0APPBg8u3AGppH28QOmr0Jo7e1xnU=;
+        b=eXlv2ZQVmxHYZrjffg4LRK7SRth81BYqS3IaXakM44mMx4awmsyG/Atg26NR/3Ge7L
+         ogqX+N6phOw7vPJaDy142t2bj4/h3R+eFpPZAx4VQH2hf3J3LHPFo7zZ0MaKH7yjyOkl
+         zPFr8t3Ta8GgIAEkboSoHLECqlkVYS59HMCutukSuhOz0SUSnoRk2aHqd5/9YtTGIT6m
+         UsgSV0f2+0Ar5KCT2LGxOK2mxYCn/TrFV3+sa+nPd1lA4DbB78cEe2pGXxTipln88/L8
+         eb+hVgD2RxijLITrSzAuZoJQzvdjxBFzRJ1uQJkfDRX08K7fTSKs3oRrGVBmbEWnpmif
+         vuAg==
+X-Gm-Message-State: AOAM531KYy6CjGXV4LyQiDx1Ws2iWo/yqop71EseGgRLD/c411nLZpPP
+        hTvc3mjfnF4zf60cL02jUPM=
+X-Google-Smtp-Source: ABdhPJyk87oj50nv+Tg34twrpB9CQenCphokibMHi78uMIFkKgpizwmVvJVEPQRFCIX3Zea5JRK7fQ==
+X-Received: by 2002:a4a:e5d7:: with SMTP id r23mr23162915oov.77.1642617554485;
+        Wed, 19 Jan 2022 10:39:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u12sm256467ote.26.2022.01.19.10.39.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 10:39:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
+ accesses with MMIO accesses
+To:     Wolfram Sang <wsa@kernel.org>, Terry Bowman <Terry.Bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220119163012.4274665d@endymion>
+ <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com> <YehOmuqA008XuBHI@kunai>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
+Date:   Wed, 19 Jan 2022 10:39:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <YehOmuqA008XuBHI@kunai>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/22 12:10, Eric W. Biederman wrote:
-> Valentin Schneider <valentin.schneider@arm.com> writes:
->>
->> Alternatively, TASK_RTLOCK_WAIT could be masqueraded as
->> TASK_(UN)INTERRUPTIBLE when reported to userspace - it is actually somewhat
->> similar, unlike TASK_IDLE vs TASK_UNINTERRUPTIBLE for instance. The
->> handling in get_task_state() will be fugly, but it might be preferable over
->> exposing a detail userspace might not need to be made aware of?
->
-> Right.
->
-> Frequently I have seen people do a cost/benefit analysis.
->
-> If the benefit is enough, and tracking down the userspace programs that
-> need to be verified to work with the change is inexpensive enough the
-> change is made.  Always keeping in mind that if something was missed and
-> the change causes a regression the change will need to be reverted.
->
-> If there is little benefit or the cost to track down userspace is great
-> enough the work is put in to hide the change from userspace.  Just
-> because it is too much trouble to expose it to userspace.
->
-> I honestly don't have any kind of sense about how hard it is to verify
-> that a userspace regression won't result from a change like this.  I
-> just know that the question needs to be asked.
->
+On 1/19/22 9:47 AM, Wolfram Sang wrote:
+> 
+>> I considered sending the request_muxed_mem_region() patch series first but
+>> was concerned the patch might not be accepted without a need or usage. I
+>> didn't see an obvious path forward for the order of submissions because of
+>> the dependencies.
+> 
+> My suggestion: make the request_muxed_mem_region() patch the new patch 1
+> of the piix4 series. Then, the user will directly come in the following
+> patches. From this series, I will create an immutable branch which can
+> be pulled in by the watchdog tree. It will then have the dependency for
+> your watchdog series. During next merge window, we (the maintainers)
+> will make sure that I2C will hit Linus' tree before the watchdog tree.
+> 
+> This works the other way around as well, if needed. Make
+> request_muxed_mem_region() the first patch of the watchdog series and
+> let me pull an immutable branch from watchdog into I2C.
+> 
 
-I see it as: does it actually make sense to expose a new state? All the
-information this is conveying is: "this task took a lock that is
-substituted by a sleepable lock under PREEMPT_RT". Now that you brought
-this up, I don't really see much value in this vs just conveying that the
-task is sleeping on a lock, i.e. just report the same as if it had gone
-through rt_mutex_lock(), aka:
+Creating an immutable branch from i2c is fine. Also, typically Wim sends
+his pull request late in the commit window, so i2c first should be no
+problem either.
 
----
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index d00837d12b9d..ac7b3eef4a61 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1626,6 +1626,14 @@ static inline unsigned int __task_state_index(unsigned int tsk_state,
- 	if (tsk_state == TASK_IDLE)
- 		state = TASK_REPORT_IDLE;
- 
-+	/*
-+	 * We're lying here, but rather than expose a completely new task state
-+	 * to userspace, we can make this appear as if the task had gone through
-+	 * a regular rt_mutex_lock() call.
-+	 */
-+	if (tsk_state == TASK_RTLOCK_WAIT)
-+		state = TASK_UNINTERRUPTIBLE;
-+
- 	return fls(state);
- }
- 
+Also, if the immutable branch only includes the patch introducing
+request_muxed_mem_region(), the pull order should not really matter.
 
+Guenter

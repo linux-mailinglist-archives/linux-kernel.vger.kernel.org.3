@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2AE494168
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EDC49416D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 21:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357221AbiASUD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 15:03:27 -0500
-Received: from mail-qv1-f52.google.com ([209.85.219.52]:35600 "EHLO
-        mail-qv1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiASUDT (ORCPT
+        id S1357250AbiASUEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 15:04:39 -0500
+Received: from smtp1.de.opalstack.com ([46.165.236.26]:50990 "EHLO
+        smtp1.de.opalstack.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231420AbiASUEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:03:19 -0500
-Received: by mail-qv1-f52.google.com with SMTP id a8so4403590qvx.2;
-        Wed, 19 Jan 2022 12:03:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i6H2VKS3zi/cgFysvmh7unIKg4DB6PbdGxzowpLmDaU=;
-        b=CJ99qgEFoDUo2ZIZ14ec9g/86Zdw0vNX7lI02lowM6WJWAtKkTmdbcAULWMww4fQeu
-         NRscoXuttUo4nxC31JmISH1sO/Mxaht+nbFdUcenzdjICAUIKV1IgIp3DD4SaCoY4bOu
-         7QJUdcAS1xSgJrqsZeswn5k2aSywOLq9av02T6ywq2nCqRsyzJ9S9rILkmT+XyyYoNur
-         4AEr3XailYPRUuxhODl4FCt8O2Vc+Rz7XW2yHdimjLntog1b5HpamKlPHUm5LLshVo5M
-         f0TSLpmsV857p65lmGD1Z2bWs1OtPw38NrYbtjI0+jKYkqdNHPAyL/5NU1cBntDu05Vs
-         nJ+Q==
-X-Gm-Message-State: AOAM53318llr9Q7SK59UPGpV+eTmpZSXn1fuB99+b0LQelrt9hN+veNZ
-        l0/A7VwVLfjDXzSnxtJyRHD6kODg7jnmIlV0zLo=
-X-Google-Smtp-Source: ABdhPJzdALW3SvsJguJtgX59bIlxS60hq/WRQkKiDMElgbYYw99/mWKTR8dPKC61ilAxM7f1iHdfDo5yers+g5u0M90=
-X-Received: by 2002:a05:6214:509e:: with SMTP id kk30mr28063261qvb.61.1642622598524;
- Wed, 19 Jan 2022 12:03:18 -0800 (PST)
+        Wed, 19 Jan 2022 15:04:31 -0500
+Received: from jason.localnet (host-37-191-188-128.lynet.no [37.191.188.128])
+        by smtp1.de.opalstack.com (Postfix) with ESMTPSA id 315A1597BF;
+        Wed, 19 Jan 2022 20:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=boddie.org.uk;
+        s=dkim; t=1642622668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=po9hq9rmhf2YbTEj2O10FmEatAdhCMfHcJA0LgFOME4=;
+        b=ZKQVjxa+3edL+tX+24evaOXUuzyb1vQVd1rSbZh7q2vZTz9GfkW/k9w+a/SFXQ0UvOg8sF
+        OnH9xYrbzWReaJjVwX5HzqGC/nj8U0VnMtVR3PafaVpPEmJ5uuoku1NVAxDiYOFSsN8Mzr
+        nxqy4rzH1A1xzUs+YQhm4VDa9MFGF28=
+From:   Paul Boddie <paul@boddie.org.uk>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans Verku il <hverkuil-cisco@xs4all.nl>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI output
+Date:   Wed, 19 Jan 2022 21:04:22 +0100
+Message-ID: <4681844.iUxLBkU96p@jason>
+In-Reply-To: <D0989ACA-F6DB-4E16-8D95-5ACBAD90AACD@goldelico.com>
+References: <cover.1633436959.git.hns@goldelico.com> <13356060.GkHXLIg068@jason> <D0989ACA-F6DB-4E16-8D95-5ACBAD90AACD@goldelico.com>
 MIME-Version: 1.0
-References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
-In-Reply-To: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 19 Jan 2022 21:03:07 +0100
-Message-ID: <CAJZ5v0jVgpjyHfuvzDYu-4yjMsRh4dJpGhKi1wwT5AOA4rsA_A@mail.gmail.com>
-Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
- is disabled
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.85
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 7:57 PM Manaf Meethalavalappu Pallikunhi
-<quic_manafm@quicinc.com> wrote:
->
-> Whenever a thermal zone is in trip violated state, there is a chance
-> that the same thermal zone mode can be disabled either via thermal
-> core API or via thermal zone sysfs. Once it is disabled, the framework
-> bails out any re-evaluation of thermal zone. It leads to a case where
-> if it is already in mitigation state, it will stay the same state
-> until it is re-enabled.
->
-> To avoid above mentioned issue, on thermal zone disable request
-> reset thermal zone and clear mitigation for each trip explicitly.
->
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> ---
->  drivers/thermal/thermal_core.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 51374f4..e288c82 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->
->         thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->
-> -       if (mode == THERMAL_DEVICE_ENABLED)
-> +       if (mode == THERMAL_DEVICE_ENABLED) {
->                 thermal_notify_tz_enable(tz->id);
-> -       else
-> +       } else {
-> +               int trip;
-> +
-> +               /* make sure all previous throttlings are cleared */
-> +               thermal_zone_device_init(tz);
-> +               for (trip = 0; trip < tz->trips; trip++)
-> +                       handle_thermal_trip(tz, trip);
-> +
+On Wednesday, 19 January 2022 07:40:22 CET H. Nikolaus Schaller wrote:
+> Hi Paul,
+> 
+> > Am 18.01.2022 um 23:59 schrieb Paul Boddie <paul@boddie.org.uk>:
+> > 
+> > On Tuesday, 18 January 2022 17:58:58 CET Paul Cercueil wrote:
+> >>
+> >> Why is this JZ_LCD_OSDC_ALPHAEN bit needed now? I remember it working
+> >> fine last time I tried, and now I indeed get a black screen unless this
+> >> bit is set. The PM doesn't make it obvious that the bit is required,
+> >> but that wouldn't be surprising.
+> > 
+> > It isn't actually needed. If the DMA descriptors are set up appropriately,
+> > the OSD alpha bit seems to be set as a consequence. In my non-Linux
+> > testing environment I don't even set any OSD registers explicitly, but
+> > the OSD alpha and enable flags become set when the display is active.
+> 
+> Is it set by DMA descriptors or by explicit code?
 
-It looks to me like this has a potential of confusing user space by
-setting the temperature to invalid before notifying it that the zone
-has been disabled.
+The descriptors will cause it to be set when the peripheral is enabled, as far 
+as I can tell.
 
->                 thermal_notify_tz_disable(tz->id);
-> +       }
->
->         return ret;
->  }
->
+> We did have an explicit setting of JZ_LCD_OSDC_ALPHAEN
+> 
+> https://www.spinics.net/lists/devicetree/msg438447.html
+> 
+> but that was postponed for further discussion. And now if we
+> add it (from basic functionality) back, it is fine again.
+
+It may be set in various versions of the Linux driver, but my observation was 
+that in a non-Linux environment where nothing else is setting anything in the 
+register concerned, initialising the descriptors seems to enable OSD and the 
+OSD alpha enable bit.
+
+Yesterday, I did consider what might be done to avoid the alpha bit being set, 
+but I didn't immediately see anything in the descriptor fields that would 
+offer such an alternative. The bit in question seems to be a global alpha 
+enable setting, and so choosing per-pixel alpha would probably also result in 
+it being set, although I didn't fire up the CI20 to check.
+
+Paul
+
+

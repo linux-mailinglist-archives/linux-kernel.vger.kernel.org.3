@@ -2,377 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D5D4937F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D370C4937F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 11:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353439AbiASKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 05:09:01 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:37144 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235647AbiASKJA (ORCPT
+        id S1353449AbiASKJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 05:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353441AbiASKJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:09:00 -0500
-X-UUID: 49d83384142440208d0a257734441af4-20220119
-X-UUID: 49d83384142440208d0a257734441af4-20220119
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 386561848; Wed, 19 Jan 2022 18:08:57 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 19 Jan 2022 18:08:56 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 19 Jan
- 2022 18:08:55 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Jan 2022 18:08:54 +0800
-Message-ID: <923906efde997b1ad338c1f5d7748acd078e2438.camel@mediatek.com>
-Subject: Re: [PATCH 3/3] mmc: mediatek: add support for SDIO eint IRQ
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Chaotian Jing" <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Date:   Wed, 19 Jan 2022 18:08:54 +0800
-In-Reply-To: <754779eb-71f9-2083-a204-1d98b4a04a08@collabora.com>
-References: <20220117071220.17330-1-axe.yang@mediatek.com>
-         <20220117071220.17330-4-axe.yang@mediatek.com>
-         <754779eb-71f9-2083-a204-1d98b4a04a08@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 19 Jan 2022 05:09:10 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5C8C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:09:09 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b14so7312332lff.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 02:09:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mp8cMbcJDEiYzY+0yULuk+0IcGw5L33ZvIFmWfHUqAU=;
+        b=CQvRhkfnbC+xD8QF/rVpqr3rywffgrz1rcm8TJg2p+6bTu3kG30nI17/JHEnfynDsf
+         I8kq5s8xsY/LoxUk82328JCQ29XQ0FWGLnpoTGfWTP7M4F8bBb+2vTWmj4KT2oaiAWCF
+         z853+DhFFiedtMMyOhmrHprbwX9L0OWxfRbCM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mp8cMbcJDEiYzY+0yULuk+0IcGw5L33ZvIFmWfHUqAU=;
+        b=ePumuGryfQPtgoQUbz1BWn3rQ0SB/pIk/rFet4iP1cyEiu89BnNOfJ3Wan7FeVrM65
+         jg/9uaWD8UOt7xTTca7TN+xCq4rYYFREhL4RRfImF9OMYlg/V2SG6aEiF52d04sbWzAG
+         IPBVjTp5eW4p3NLgfVhaHZxWzwcHEK/7VvUjX/AgUk/jxDzd1j5fp6W3uWMedTED55WF
+         nXVmNPUHD0h9REhOGBQPqx1uTdsqtFIW3kfdXzDMUVRLL/oF6N+QyjuABUBcqxRMPA92
+         4rf1Qy7z7TmDJs0kz4BElhEpM1ZYdjuJlkW0DS9ddrBgsuw84FEvFoDSXKjLILOALmOZ
+         MLBw==
+X-Gm-Message-State: AOAM533iyY8FJY8f4tYzgKf3ZYd6IcqeizReCYr0Jdhc8oMcu0aVAZGq
+        uNRdUvaWWZbZeRP33Uup08qjI+kx9toMeP6iZPGYhw==
+X-Google-Smtp-Source: ABdhPJzzCt9OqNfhyesxI3ZvR/vgllDW+/NJmVfRwMNDy+lAtRJIOv/McQhcCJ+BEdYu/p5s21P0oPy1na3quUG/R40=
+X-Received: by 2002:a2e:2285:: with SMTP id i127mr13773495lji.414.1642586948036;
+ Wed, 19 Jan 2022 02:09:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+References: <20220107093455.73766-1-wenst@chromium.org> <20220107093455.73766-2-wenst@chromium.org>
+ <Yecq111pZDP9XFNO@eze-laptop>
+In-Reply-To: <Yecq111pZDP9XFNO@eze-laptop>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 19 Jan 2022 18:08:57 +0800
+Message-ID: <CAGXv+5GfNgQGJOBihdpGQDbdx-1co_wi0m=-HyxiHDn-kKZBsA@mail.gmail.com>
+Subject: Re: [PATCH RFT v2 1/8] media: hantro: jpeg: Relax register writes
+ before write starting hardware
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-17 at 11:50 +0100, AngeloGioacchino Del Regno wrote:
-> Il 17/01/22 08:12, Axe Yang ha scritto:
-> > Add support for eint IRQ when MSDC is used as an SDIO host. This
-> > feature requires SDIO device support async IRQ function. With this
-> > feature, SDIO host can be awakened by SDIO card in suspend state,
-> > without additional pin.
-> > 
-> > MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> > turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> > resume, switch GPIO function back to DAT1 mode then turn on clock.
-> > 
-> > Some device tree property should be added or modified in MSDC node
-> > to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-> > are mandatory. And cap-sdio-async-irq flag is necessary since this
-> > feature depends on asynchronous interrupt:
-> >          &mmcX {
-> >                  ...
-> >                  pinctrl-names = "default", "state_uhs",
-> > "state_eint",
-> >                                  "state_dat1";
-> >                  ...
-> >                  pinctrl-2 = <&mmc2_pins_eint>;
-> >                  pinctrl-3 = <&mmc2_pins_dat1>;
-> >                  ...
-> >                  cap-sdio-async-irq;
-> >                  ...
-> >          };
-> > 
-> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> > Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+Hi,
+
+On Wed, Jan 19, 2022 at 5:02 AM Ezequiel Garcia
+<ezequiel@vanguardiasur.com.ar> wrote:
+>
+> Hi Chen-Yu,
+>
+> The series looks good, thanks for picking up this task.
+>
+> Just a one comment.
+>
+> On Fri, Jan 07, 2022 at 05:34:48PM +0800, Chen-Yu Tsai wrote:
+> > In the earlier submissions of the Hantro/Rockchip JPEG encoder driver, a
+> > wmb() was inserted before the final register write that starts the
+> > encoder. In v11, it was removed and the second-to-last register write
+> > was changed to a non-relaxed write, which has an implicit wmb() [1].
+> > The rockchip_vpu2 (then rk3399_vpu) variant is even weirder as there
+> > is another writel_relaxed() following the non-relaxed one.
+> >
+> > Turns out only the last writel() needs to be non-relaxed. Device I/O
+> > mappings already guarantee strict ordering to the same endpoint, and
+> > the writel() triggering the hardware would force all writes to memory
+> > to be observed before the writel() to the hardware is observed.
+> >
+> > [1] https://lore.kernel.org/linux-media/CAAFQd5ArFG0hU6MgcyLd+_UOP3+T_U-aw2FXv6sE7fGqVCVGqw@mail.gmail.com/
+> >
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 > > ---
-> >   drivers/mmc/host/mtk-sd.c | 125
-> > +++++++++++++++++++++++++++++++++++---
-> >   1 file changed, 117 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> > index 65037e1d7723..cbdbcce99fd9 100644
-> > --- a/drivers/mmc/host/mtk-sd.c
-> > +++ b/drivers/mmc/host/mtk-sd.c
-> > @@ -1,6 +1,6 @@
-> >   // SPDX-License-Identifier: GPL-2.0-only
-> >   /*
-> > - * Copyright (c) 2014-2015 MediaTek Inc.
-> > + * Copyright (c) 2022 MediaTek Inc.
-> >    * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-> >    */
-> >   
-> > @@ -9,6 +9,7 @@
-> >   #include <linux/clk.h>
-> >   #include <linux/delay.h>
-> >   #include <linux/dma-mapping.h>
-> > +#include <linux/gpio/consumer.h>
-> >   #include <linux/iopoll.h>
-> >   #include <linux/ioport.h>
-> >   #include <linux/irq.h>
-> > @@ -440,8 +441,12 @@ struct msdc_host {
-> >   	struct pinctrl *pinctrl;
-> >   	struct pinctrl_state *pins_default;
-> >   	struct pinctrl_state *pins_uhs;
-> > +	struct pinctrl_state *pins_eint;
-> > +	struct pinctrl_state *pins_dat1;
-> >   	struct delayed_work req_timeout;
-> >   	int irq;		/* host interrupt */
-> > +	int eint_irq;		/* device interrupt */
-> > +	int sdio_irq_cnt;	/* irq enable cnt */
-> >   	struct reset_control *reset;
-> >   
-> >   	struct clk *src_clk;	/* msdc source clock */
-> > @@ -465,6 +470,7 @@ struct msdc_host {
-> >   	bool hs400_tuning;	/* hs400 mode online tuning */
-> >   	bool internal_cd;	/* Use internal card-detect logic */
-> >   	bool cqhci;		/* support eMMC hw cmdq */
-> > +	bool sdio_eint_ready;	/* Ready to support SDIO eint
-> > interrupt */
-> >   	struct msdc_save_para save_para; /* used when gate HCLK */
-> >   	struct msdc_tune_para def_tune_para; /* default tune setting */
-> >   	struct msdc_tune_para saved_tune_para; /* tune result of
-> > CMD21/CMD19 */
-> > @@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct
-> > mmc_host *mmc, int enb)
-> >   	__msdc_enable_sdio_irq(host, enb);
-> >   	spin_unlock_irqrestore(&host->lock, flags);
-> >   
-> > -	if (enb)
-> > -		pm_runtime_get_noresume(host->dev);
-> > -	else
-> > -		pm_runtime_put_noidle(host->dev);
-> > +	if (mmc->card && !mmc->card->cccr.enable_async_irq) {
-> > +		if (enb)
-> > +			pm_runtime_get_noresume(host->dev);
-> > +		else
-> > +			pm_runtime_put_noidle(host->dev);
-> > +	}
-> >   }
-> >   
-> >   static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32
-> > intsts)
-> > @@ -2461,6 +2469,50 @@ static const struct mmc_host_ops mt_msdc_ops
-> > = {
-> >   	.hw_reset = msdc_hw_reset,
-> >   };
-> >   
-> > +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
-> > +{
-> > +	struct msdc_host *host = dev_id;
-> > +	struct mmc_host *mmc = mmc_from_priv(host);
-> > +	unsigned long flags;
-> > +
-> > +	spin_lock_irqsave(&host->lock, flags);
-> > +	if (likely(host->sdio_irq_cnt > 0)) {
-> > +		disable_irq_nosync(host->eint_irq);
-> > +		disable_irq_wake(host->eint_irq);
-> > +		host->sdio_irq_cnt--;
-> > +	}
-> > +	spin_unlock_irqrestore(&host->lock, flags);
-> > +
-> > +	sdio_signal_irq(mmc);
-> > +
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static int msdc_request_dat1_eint_irq(struct msdc_host *host)
-> > +{
-> > +	struct gpio_desc *desc;
-> > +	int irq, ret;
-> > +
-> > +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-> > +	if (IS_ERR(desc))
-> > +		return PTR_ERR(desc);
-> > +
-> > +	ret = gpiod_to_irq(desc);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	irq = ret;
-> > +	ret = devm_request_threaded_irq(host->dev, irq, NULL,
-> > msdc_sdio_eint_irq,
-> > +					IRQF_TRIGGER_LOW | IRQF_ONESHOT
-> > | IRQF_NO_AUTOEN,
-> > +					"sdio-eint", host);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	host->eint_irq = irq;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static const struct cqhci_host_ops msdc_cmdq_ops = {
-> >   	.enable         = msdc_cqe_enable,
-> >   	.disable        = msdc_cqe_disable,
-> > @@ -2631,6 +2683,23 @@ static int msdc_drv_probe(struct
-> > platform_device *pdev)
-> >   		goto host_free;
-> >   	}
-> >   
-> > +	if (!(mmc->caps2 & MMC_CAP2_NO_SDIO)) {
-> 
-> Please, also check for the async irq capability here:
-> 
-> if (!(mmc->caps2 & MMC_CAP2_NO_SDIO) && (mmc->caps2 &
-> MMC_CAP2_SDIO_ASYNC_IRQ)) {
-> 
-> ...because if we have "state_eint" specified in DT, but we didn't
-> *also* specify
-> cap-sdio-async-irq, then clearly we don't want to use this
-> functionality - hence
-> it becomes useless to register the interrupt handler for that because
-> we're never
-> enabling the CCCR_INTERRUPT_EXT on the card (from
-> drivers/mmc/core/host.c).
-> 
-> Regards,
-> Angelo
+> >  drivers/staging/media/hantro/hantro_h1_jpeg_enc.c        | 3 +--
+> >  drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c | 3 +--
+> >  2 files changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+> > index 1450013d3685..03db1c3444f8 100644
+> > --- a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+> > +++ b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+> > @@ -123,8 +123,7 @@ int hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx)
+> >               | H1_REG_AXI_CTRL_INPUT_SWAP32
+> >               | H1_REG_AXI_CTRL_OUTPUT_SWAP8
+> >               | H1_REG_AXI_CTRL_INPUT_SWAP8;
+> > -     /* Make sure that all registers are written at this point. */
+> > -     vepu_write(vpu, reg, H1_REG_AXI_CTRL);
+> > +     vepu_write_relaxed(vpu, reg, H1_REG_AXI_CTRL);
+> >
+>
+> As far as I can remember, this logic comes from really old Chromium Kernels.
+> You might be right, and this barrier isn't needed... but then OTOH the comment
+> is here for a reason, so maybe it is needed (or was needed on some RK3288 SoC revision).
 
-Thanks, will fix this in next version.
+I just realized that my commit log is wrong.
 
-> 
-> > +		/* Support for SDIO eint irq */
-> > +		host->pins_eint = pinctrl_lookup_state(host->pinctrl,
-> > "state_eint");
-> > +		if (IS_ERR(host->pins_eint)) {
-> > +			dev_dbg(&pdev->dev, "Cannot find pinctrl
-> > eint!\n");
-> > +		} else {
-> > +			host->pins_dat1 = pinctrl_lookup_state(host-
-> > >pinctrl, "state_dat1");
-> > +			if (IS_ERR(host->pins_dat1)) {
-> > +				ret = dev_err_probe(&pdev->dev,
-> > PTR_ERR(host->pins_dat1),
-> > +						    "Cannot find
-> > pinctrl dat1!\n");
-> > +				goto host_free;
-> > +			}
-> > +
-> > +			host->sdio_eint_ready = true;
-> > +		}
-> > +	}
-> > +
-> >   	msdc_of_property_parse(pdev, host);
-> >   
-> >   	host->dev = &pdev->dev;
-> > @@ -2722,6 +2791,16 @@ static int msdc_drv_probe(struct
-> > platform_device *pdev)
-> >   	if (ret)
-> >   		goto release;
-> >   
-> > +	if (host->sdio_eint_ready) {
-> > +		ret = msdc_request_dat1_eint_irq(host);
-> > +		if (ret) {
-> > +			dev_err(host->dev, "Failed to register data1
-> > eint irq!\n");
-> > +			goto release;
-> > +		}
-> > +
-> > +		pinctrl_select_state(host->pinctrl, host->pins_dat1);
-> > +	}
-> > +
-> >   	pm_runtime_set_active(host->dev);
-> >   	pm_runtime_set_autosuspend_delay(host->dev,
-> > MTK_MMC_AUTOSUSPEND_DELAY);
-> >   	pm_runtime_use_autosuspend(host->dev);
-> > @@ -2841,16 +2920,31 @@ static void msdc_restore_reg(struct
-> > msdc_host *host)
-> >   
-> >   static int __maybe_unused msdc_runtime_suspend(struct device
-> > *dev)
-> >   {
-> > +	unsigned long flags;
-> >   	struct mmc_host *mmc = dev_get_drvdata(dev);
-> >   	struct msdc_host *host = mmc_priv(mmc);
-> >   
-> >   	msdc_save_reg(host);
-> > +
-> > +	if (host->sdio_eint_ready) {
-> > +		disable_irq(host->irq);
-> > +		pinctrl_select_state(host->pinctrl, host->pins_eint);
-> > +		spin_lock_irqsave(&host->lock, flags);
-> > +		if (host->sdio_irq_cnt == 0) {
-> > +			enable_irq(host->eint_irq);
-> > +			enable_irq_wake(host->eint_irq);
-> > +			host->sdio_irq_cnt++;
-> > +		}
-> > +		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-> > +		spin_unlock_irqrestore(&host->lock, flags);
-> > +	}
-> >   	msdc_gate_clock(host);
-> >   	return 0;
-> >   }
-> >   
-> >   static int __maybe_unused msdc_runtime_resume(struct device *dev)
-> >   {
-> > +	unsigned long flags;
-> >   	struct mmc_host *mmc = dev_get_drvdata(dev);
-> >   	struct msdc_host *host = mmc_priv(mmc);
-> >   	int ret;
-> > @@ -2860,10 +2954,25 @@ static int __maybe_unused
-> > msdc_runtime_resume(struct device *dev)
-> >   		return ret;
-> >   
-> >   	msdc_restore_reg(host);
-> > +
-> > +	if (host->sdio_eint_ready) {
-> > +		spin_lock_irqsave(&host->lock, flags);
-> > +		if (host->sdio_irq_cnt > 0) {
-> > +			disable_irq_nosync(host->eint_irq);
-> > +			disable_irq_wake(host->eint_irq);
-> > +			host->sdio_irq_cnt--;
-> > +			sdr_set_bits(host->base + SDC_CFG,
-> > SDC_CFG_SDIOIDE);
-> > +		} else {
-> > +			sdr_clr_bits(host->base + MSDC_INTEN,
-> > MSDC_INTEN_SDIOIRQ);
-> > +		}
-> > +		spin_unlock_irqrestore(&host->lock, flags);
-> > +		pinctrl_select_state(host->pinctrl, host->pins_uhs);
-> > +		enable_irq(host->irq);
-> > +	}
-> >   	return 0;
-> >   }
-> >   
-> > -static int __maybe_unused msdc_suspend(struct device *dev)
-> > +static int __maybe_unused msdc_suspend_noirq(struct device *dev)
-> >   {
-> >   	struct mmc_host *mmc = dev_get_drvdata(dev);
-> >   	int ret;
-> > @@ -2877,13 +2986,13 @@ static int __maybe_unused
-> > msdc_suspend(struct device *dev)
-> >   	return pm_runtime_force_suspend(dev);
-> >   }
-> >   
-> > -static int __maybe_unused msdc_resume(struct device *dev)
-> > +static int __maybe_unused msdc_resume_noirq(struct device *dev)
-> >   {
-> >   	return pm_runtime_force_resume(dev);
-> >   }
-> >   
-> >   static const struct dev_pm_ops msdc_dev_pm_ops = {
-> > -	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
-> > +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq,
-> > msdc_resume_noirq)
-> >   	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume,
-> > NULL)
-> >   };
-> >   
-> > 
-> 
-> 
+" ... a wmb() was inserted before the final register write that starts the
+encoder. ... " . It is actually before the second-to-last register write.
 
+> I don't have RK3288 boards near me, but in any case, I'm not sure
+> we'd be able to test this easily (maybe there are issues that only
+> trigger under a certain load).
+
+I see. I do have a Veyron around that I haven't used in awhile. But as you
+said, it might not be an obvious hardware limitation.
+
+> I'd personally avoid this one change, but if you are confident enough with it
+> that's fine too.
+
+Unfortunately they didn't leave a whole lot of clues around. For most hardware,
+as I mentioned in the commit log, I think the final non-relaxed write should
+suffice. I'd point to the decoder drivers not having any barriers or
+non-relaxed writes except the final one, but IIUC they are actually two
+distinct pieces of hardware.
+
+I suspect we will never know. This JPEG encoder doesn't seem to get used
+a lot. The VP8 and H.264 encoders on ChromeOS work correctly without the
+extra barrier and get tested a lot, but that's only testing the RK3399.
+
+Hans, would it be possible for you to skip this patch and pick the rest?
+Or would you like me to resent without this one?
+
+
+Thanks
+ChenYu
+
+> Thanks!
+> Ezequiel
+>
+> >       reg = H1_REG_ENC_CTRL_WIDTH(MB_WIDTH(ctx->src_fmt.width))
+> >               | H1_REG_ENC_CTRL_HEIGHT(MB_HEIGHT(ctx->src_fmt.height))
+> > diff --git a/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c b/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
+> > index 4df16f59fb97..b931fc5fa1a9 100644
+> > --- a/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
+> > +++ b/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
+> > @@ -152,8 +152,7 @@ int rockchip_vpu2_jpeg_enc_run(struct hantro_ctx *ctx)
+> >               | VEPU_REG_INPUT_SWAP8
+> >               | VEPU_REG_INPUT_SWAP16
+> >               | VEPU_REG_INPUT_SWAP32;
+> > -     /* Make sure that all registers are written at this point. */
+> > -     vepu_write(vpu, reg, VEPU_REG_DATA_ENDIAN);
+> > +     vepu_write_relaxed(vpu, reg, VEPU_REG_DATA_ENDIAN);
+> >
+> >       reg = VEPU_REG_AXI_CTRL_BURST_LEN(16);
+> >       vepu_write_relaxed(vpu, reg, VEPU_REG_AXI_CTRL);
+> > --
+> > 2.34.1.575.g55b058a8bb-goog
+> >

@@ -2,190 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD72B494135
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E69749413E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Jan 2022 20:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357174AbiASTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 14:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiASTtN (ORCPT
+        id S1357203AbiASTt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 14:49:59 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45710
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1357193AbiASTts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:49:13 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359C8C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:49:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id EAFFE1F446F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642621751;
-        bh=UIoafffS0/l3S1GB6KgQfq7k8XDj/WzZMnJi03jT+4w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NNcsmrQbUywS/Hicnx0DJF53N17Jr42HJKPIKGUJaxLaQTDR+kveaR+cFJf+fyfwu
-         GMMAvv48j6+f2ZWTFED+g0ojdxBaXlOW8je2j2TQ1btl2H7c7kOhH7MTPs0+oJUxNe
-         VMB8fv4YSY7acGIBIlEsEKeTVu4/kj5E1/QCWENbP/syauBoeVGSh0Bqti9t6vEzoi
-         RwdnwaT3pL8jQEP8cZNjJRRVSRX6gVa9O2W2eegsEALXmPVxUyYqL66kgqm+KPE5f/
-         QBtS3Nlvh6LqNmT7MNOB93OfVwHlr0lBZBcj49BeEuLuZwcxPu3Do5qhXcfZ/pRawh
-         lRJA+NW1EyX0g==
-Message-ID: <accbc66b-08ca-aa2a-92e6-4d65359e9bf4@collabora.com>
-Date:   Wed, 19 Jan 2022 19:49:08 +0000
+        Wed, 19 Jan 2022 14:49:48 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 86DDA40051
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 19:49:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642621786;
+        bh=dmsErNaRfriLUQ7jgb1pj+z+Bm18TKaEXTieKxP3MNs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=HlQzRz8+CRcEr+pFW51QBxf7CEhkxPNRB4cvj0Nzis4Hb5GpEkcer9G/pk2L6mpKa
+         AWbCrEh1CaMDW6B536RLMEx7Fbu/3WghxLJe0oFuk8jJZX34G1MBJlL+3GHB7KNmYq
+         M8D1uyJ4WV4ukzf2bmGiT+6io9xUZGTV2oXCp78tZx/qMA58GEHNkytCy5pU4mvHM3
+         EZLIejLIx612NsBdJxOERD5xsvEZB+fIWDQecQL8oow6wFVFUawfZpJ1tjF3ofnolK
+         hV8tUzZ57lSK0CnUMWnjiXjrMaU9dc5IrD941UW95n/ov5dNjYPhkp8V5x9UVPYNg7
+         TXn223KBzN+eA==
+Received: by mail-ed1-f71.google.com with SMTP id z6-20020a50eb46000000b00403a7687b5bso3686426edp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 11:49:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dmsErNaRfriLUQ7jgb1pj+z+Bm18TKaEXTieKxP3MNs=;
+        b=y6t9be8CFoW9+jv7Y6F6MLdJfMNOBpY+E+SKS4/VZWg3wR6dyAEcqe98E4cBDR+Ef+
+         uJHVLt08GTKavVRJXvv0GrJbrlYzz1HkiMfysr6kDbGHUntkLubv+nDI/7hSvvdFg/5E
+         M50m5CP/D/llxhqCBTHYnqrJa0wza7bD/bcqeesnSmp8IMmWZeRjWv9jpgmuBZYaWm28
+         COjKerCK+8NVLYJgJ3ZkGX4SCbz5L+be78a69hSolngqbjjWHs/ykzYGBnrEjDpnGAh9
+         H1nQRNv3P8xMpZh01n4C8EcNJgFnUwPCjbLnQkxEcMukz3ziCixBxhaCX3OyxuYOQJNk
+         1Nug==
+X-Gm-Message-State: AOAM530dOGV2DzLx1mMjw6PiQWRYWRxM22f+Dt4cq2MyceHQh8AODk/s
+        nUIXP2BR4SK4XgOtk4u3KqVz5j0bBNhaOoi/CEOyhQ3s/6LkiSu8FL13ideKT6+b7hmFI9wwv2i
+        tcqmHp+nyw0JZyAOVsohqcchwMSZM1w6Tfd6tydoT/A==
+X-Received: by 2002:aa7:db8f:: with SMTP id u15mr31741147edt.36.1642621785853;
+        Wed, 19 Jan 2022 11:49:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwm7E7JLHnP0IxJR0A8wZMRPT/L4qGOUdI9+u8XzF5UfnOBvGC8X9Rx6LzD1fgoC4pxVXU6Jg==
+X-Received: by 2002:aa7:db8f:: with SMTP id u15mr31741131edt.36.1642621785658;
+        Wed, 19 Jan 2022 11:49:45 -0800 (PST)
+Received: from [192.168.0.45] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id s7sm211711ejo.53.2022.01.19.11.49.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 11:49:45 -0800 (PST)
+Message-ID: <5f912896-0635-fbe7-4fda-f4cb569190d9@canonical.com>
+Date:   Wed, 19 Jan 2022 20:49:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH v2 4/4] drm/i915/uapi: document behaviour for DG2 64K
- support
+Subject: Re: [PATCH v3 2/4] spi: dt-bindings: samsung: convert to dtschema
 Content-Language: en-US
-To:     Jordan Justen <jordan.l.justen@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220118175036.3840934-1-bob.beckett@collabora.com>
- <20220118175036.3840934-5-bob.beckett@collabora.com>
- <87zgnrefoo.fsf@jljusten-skl>
-From:   Robert Beckett <bob.beckett@collabora.com>
-In-Reply-To: <87zgnrefoo.fsf@jljusten-skl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sam Protsenko <semen.protsenko@linaro.org>
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
+ <20220112100046.68068-3-krzysztof.kozlowski@canonical.com>
+ <20220119192758.z3lvlkaeyeiqi73a@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220119192758.z3lvlkaeyeiqi73a@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 19/01/2022 18:36, Jordan Justen wrote:
-> Robert Beckett <bob.beckett@collabora.com> writes:
-> 
->> From: Matthew Auld <matthew.auld@intel.com>
+On 19/01/2022 20:31, Pratyush Yadav wrote:
+> On 12/01/22 11:00AM, Krzysztof Kozlowski wrote:
+>> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+>> controller bindings to DT schema format
 >>
->> On discrete platforms like DG2, we need to support a minimum page size
->> of 64K when dealing with device local-memory. This is quite tricky for
->> various reasons, so try to document the new implicit uapi for this.
->>
->> v2: Fixed suggestions on formatting [Daniel]
->>
->> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
->> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
->> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->> cc: Simon Ser <contact@emersion.fr>
->> cc: Pekka Paalanen <ppaalanen@gmail.com>
->> Cc: Jordan Justen <jordan.l.justen@intel.com>
->> Cc: Kenneth Graunke <kenneth@whitecape.org>
->> Cc: mesa-dev@lists.freedesktop.org
->> Cc: Tony Ye <tony.ye@intel.com>
->> Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 >> ---
->>   include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
->>   1 file changed, 39 insertions(+), 5 deletions(-)
+>>  .../spi/samsung,spi-peripheral-props.yaml     |  35 ++++
+>>  .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
+>>  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+>>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
+>>  MAINTAINERS                                   |   2 +-
+>>  5 files changed, 224 insertions(+), 123 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+>>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
 >>
->> diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
->> index 5e678917da70..486b7b96291e 100644
->> --- a/include/uapi/drm/i915_drm.h
->> +++ b/include/uapi/drm/i915_drm.h
->> @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
->>   	/**
->>   	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
->>   	 * the user with the GTT offset at which this object will be pinned.
->> +	 *
->>   	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
->>   	 * presumed_offset of the object.
->> +	 *
->>   	 * During execbuffer2 the kernel populates it with the value of the
->>   	 * current GTT offset of the object, for future presumed_offset writes.
->> +	 *
->> +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
->> +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
->> +	 * minimum page sizes, like DG2.
->>   	 */
->>   	__u64 offset;
->>   
->> @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
->>   	 *
->>   	 * The (page-aligned) allocated size for the object will be returned.
->>   	 *
->> -	 * Note that for some devices we have might have further minimum
->> -	 * page-size restrictions(larger than 4K), like for device local-memory.
->> -	 * However in general the final size here should always reflect any
->> -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
->> -	 * extension to place the object in device local-memory.
->> +	 *
->> +	 * **DG2 64K min page size implications:**
+>> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>> new file mode 100644
+>> index 000000000000..aa5a1f48494b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>> @@ -0,0 +1,35 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/samsung,spi-peripheral-props.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Peripheral-specific properties for Samsung S3C/S5P/Exynos SoC SPI controller
+>> +
+>> +maintainers:
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> +
+>> +description:
+>> +  See spi-peripheral-props.yaml for more info.
+>> +
+>> +properties:
+>> +  controller-data:
+>> +    type: object
+>> +    additionalProperties: false
+>> +
+>> +    properties:
+>> +      samsung,spi-feedback-delay:
+>> +        description: |
+>> +          The sampling phase shift to be applied on the miso line (to account
+>> +          for any lag in the miso line). Valid values:
+>> +           - 0: No phase shift.
+>> +           - 1: 90 degree phase shift sampling.
+>> +           - 2: 180 degree phase shift sampling.
+>> +           - 3: 270 degree phase shift sampling.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        enum: [0, 1, 2, 3]
+>> +
+>> +    required:
+>> +      - samsung,spi-feedback-delay
 > 
-> Long term, I'm not sure that the "**" (for emphasis) is needed here or
-> below. It's interesting at the moment, but will be just another thing
-> baked into the kernel/user code in a month from now. :)
+> I am not quite sure if this required would work here. Let's say another 
+> controller also uses a controller-data node, but it contains a different 
+> set of properties. Won't this cause an error to be raised for that 
+> controller since this property is not there?
 
-fair point, I'll make it less shouty
+The controller-data is Samsung SPI specific (does not exist in any other
+binding), so why would controller-data get added to a different controller?
 
-> 
->> +	 *
->> +	 * On discrete platforms, starting from DG2, we have to contend with GTT
->> +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
->> +	 * objects.  Specifically the hardware only supports 64K or larger GTT
->> +	 * page sizes for such memory. The kernel will already ensure that all
->> +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
->> +	 * sizes underneath.
->> +	 *
->> +	 * Note that the returned size here will always reflect any required
->> +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
->> +	 * such as DG2.
->> +	 *
->> +	 * **Special DG2 GTT address alignment requirement:**
->> +	 *
->> +	 * The GTT alignment will also need be at least 2M for  such objects.
->> +	 *
->> +	 * Note that due to how the hardware implements 64K GTT page support, we
->> +	 * have some further complications:
->> +	 *
->> +	 *   1) The entire PDE(which covers a 2MB virtual address range), must
->> +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
->> +	 *   PDE is forbidden by the hardware.
->> +	 *
->> +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
->> +	 *   objects.
->> +	 *
->> +	 * To keep things simple for userland, we mandate that any GTT mappings
->> +	 * must be aligned to and rounded up to 2MB. As this only wastes virtual
->> +	 * address space and avoids userland having to copy any needlessly
->> +	 * complicated PDE sharing scheme (coloring) and only affects GD2, this
->> +	 * id deemed to be a good compromise.
-> 
-> typos: GD2, id
-
-thanks
-
-> 
-> Isn't much of this more relavent to the vma offset at exec time? Is
-> there actually any new restriction on the size field during buffer
-> creation?
-
-No new restriction on size, just placement, which mesa is already doing.
-The request for ack was just to get an ack from mesa folks that they are 
-happy with the mandatory 2MB alignment for DG2 vma.
-
-> 
-> I see Matthew references these notes from the offset comments, so if the
-> kernel devs prefer it here, then you can add my Acked-by on this patch.
-
-thanks!
-
-> 
-> -Jordan
-> 
->>   	 */
->>   	__u64 size;
->>   	/**
->> -- 
->> 2.25.1
+Best regards,
+Krzysztof

@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2C84954A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617804954AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377439AbiATTNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 14:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377410AbiATTM5 (ORCPT
+        id S1377433AbiATTNV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Jan 2022 14:13:21 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59154 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1377415AbiATTNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 14:12:57 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE16AC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:12:56 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id o9so3795253qvy.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:12:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=/lrhieXAQjpkgK4+rimVAixmRMROqE/GcACBpp2RziA=;
-        b=DVbJt984cdsTf0nLyL0gU+CRPeI6csgRuWb0tYVjhrI1WKObUvjWiJH3vkiFqxeXv6
-         DGDPkwoRX5AKCXqVNns18Tl1MheshVE0QOVPsw+a5azPgWxiRQlnp8toELV+g+0koCpD
-         EXmmlh0mVnvWi3Bd9TaiLKo1E++CJb2OBDNan93i7tO9ODFWsRVISd8blF1c+C7BZqOW
-         AcM5kBPI9Zta1hy4wePoAnTjZ7kNNY6TJp538BwMkMc3Yl49am02dp6618Wso6ozgF4e
-         4+Ri0un9Nw1/L0A2LhfqJ+KCGA9Tr3cym3CSlFBCIMGmaGB091V2I7z7tPgcXu1I+DM2
-         3lzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/lrhieXAQjpkgK4+rimVAixmRMROqE/GcACBpp2RziA=;
-        b=nHAiu123IKe+mkR4QoxPSaUr5L9cOz6fWOh5Bii7Cmi1ynrdmenrpb4z4u34uvtxEp
-         BrsryLGISAVdMtCTZHq88JUgGltIz6XUL21nod2Hv7GrSyaTrbBfi/telnRgdb1qnJXO
-         nO6SIbjqP63tRI0lUTaQBaZWnQ7Fjo633GlzypnqQQtswwuVHQ4U3yoL3xHy5L3cXnAc
-         sqO9Nv/WDbErdGEKzMxsIG+JmbqtWc/rcjRoScZcZ1Ycdq4QL1KZiaQUqtipdKdBxPY1
-         ks9dxprjtzyLYbhvpEoZAki1e0zdzkAGVRC3lu14ahpDoQqoguuXMfREnGU1WFMYe+Ub
-         RngA==
-X-Gm-Message-State: AOAM531pTsmh9AITRO6QuC6I2L3LO1GFXHv2+PhHV4RACRmC1V/lhBu+
-        qm0787hjvmQ+FA83Eh3b3geB8A==
-X-Google-Smtp-Source: ABdhPJzX9ogZQNd0p5asU4lyl7+h+DwhcECJON4g0QSGJOOD4M1nujIMQK+391N6XK1gOndyju7qjQ==
-X-Received: by 2002:a05:6214:2428:: with SMTP id gy8mr359142qvb.117.1642705975967;
-        Thu, 20 Jan 2022 11:12:55 -0800 (PST)
-Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id w1sm1822509qko.40.2022.01.20.11.12.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 11:12:55 -0800 (PST)
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, rientjes@google.com,
-        pjt@google.com, weixugc@google.com, gthelen@google.com,
-        mingo@redhat.com, will@kernel.org, rppt@kernel.org,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
-        songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
-        ziy@nvidia.com, anshuman.khandual@arm.com
-Subject: [PATCH v2 3/3] mm/page_table_check: use unsigned long for page counters
-Date:   Thu, 20 Jan 2022 19:12:50 +0000
-Message-Id: <20220120191250.2671557-4-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-In-Reply-To: <20220120191250.2671557-1-pasha.tatashin@soleen.com>
-References: <20220120191250.2671557-1-pasha.tatashin@soleen.com>
+        Thu, 20 Jan 2022 14:13:20 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20KHwrMU016820
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:13:19 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dq56xkcsv-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:13:19 -0800
+Received: from twshared3205.02.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 20 Jan 2022 11:13:17 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 2144328324561; Thu, 20 Jan 2022 11:13:13 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v5 bpf-next 0/7] bpf_prog_pack allocator
+Date:   Thu, 20 Jan 2022 11:12:58 -0800
+Message-ID: <20220120191306.1801459-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 0B6U4CX6806ZmgrbzorUDmxPLKW1-ACK
+X-Proofpoint-ORIG-GUID: 0B6U4CX6806ZmgrbzorUDmxPLKW1-ACK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_07,2022-01-20_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ suspectscore=0 clxscore=1015 mlxlogscore=677 phishscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201200097
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the consistency, use "unsigned long" for all page counters.
+Changes v4 => v5:
+1. Do not use atomic64 for bpf_jit_current. (Alexei)
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Wei Xu <weixugc@google.com>
----
- mm/page_table_check.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Changes v3 => v4:
+1. Rename text_poke_jit() => text_poke_copy(). (Peter)
+2. Change comment style. (Peter)
 
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 877d967742bc..f1db4de8bed2 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -86,8 +86,8 @@ static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
- {
- 	struct page_ext *page_ext;
- 	struct page *page;
-+	unsigned long i;
- 	bool anon;
--	int i;
- 
- 	if (!pfn_valid(pfn))
- 		return;
-@@ -121,8 +121,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
- {
- 	struct page_ext *page_ext;
- 	struct page *page;
-+	unsigned long i;
- 	bool anon;
--	int i;
- 
- 	if (!pfn_valid(pfn))
- 		return;
-@@ -176,10 +176,10 @@ static void pmd_clear_level(struct mm_struct *mm, unsigned long addr,
- void __page_table_check_zero(struct page *page, unsigned int order)
- {
- 	struct page_ext *page_ext = lookup_page_ext(page);
--	int i;
-+	unsigned long i;
- 
- 	BUG_ON(!page_ext);
--	for (i = 0; i < (1 << order); i++) {
-+	for (i = 0; i < (1ul << order); i++) {
- 		struct page_table_check *ptc = get_page_table_check(page_ext);
- 
- 		BUG_ON(atomic_read(&ptc->anon_map_count));
--- 
-2.34.1.703.g22d0c6ccf7-goog
+Changes v2 => v3:
+1. Fix tailcall.
 
+Changes v1 => v2:
+1. Use text_poke instead of writing through linear mapping. (Peter)
+2. Avoid making changes to non-x86_64 code.
+
+Most BPF programs are small, but they consume a page each. For systems
+with busy traffic and many BPF programs, this could also add significant
+pressure to instruction TLB.
+
+This set tries to solve this problem with customized allocator that pack
+multiple programs into a huge page.
+
+Patches 1-5 prepare the work. Patch 6 contains key logic of the allocator.
+Patch 7 uses this allocator in x86_64 jit compiler.
+
+Song Liu (7):
+  x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
+  bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
+  bpf: use size instead of pages in bpf_binary_header
+  bpf: add a pointer of bpf_binary_header to bpf_prog
+  x86/alternative: introduce text_poke_copy
+  bpf: introduce bpf_prog_pack allocator
+  bpf, x86_64: use bpf_prog_pack allocator
+
+ arch/x86/Kconfig                     |   1 +
+ arch/x86/include/asm/text-patching.h |   1 +
+ arch/x86/kernel/alternative.c        |  32 ++++
+ arch/x86/net/bpf_jit_comp.c          | 136 +++++++++++++----
+ include/linux/bpf.h                  |   4 +-
+ include/linux/filter.h               |  23 ++-
+ kernel/bpf/core.c                    | 211 ++++++++++++++++++++++++---
+ kernel/bpf/trampoline.c              |   6 +-
+ 8 files changed, 356 insertions(+), 58 deletions(-)
+
+--
+2.30.2

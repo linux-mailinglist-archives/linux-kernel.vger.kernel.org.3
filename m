@@ -2,143 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 943DB49509C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 998BD4950A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357711AbiATOyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 09:54:33 -0500
-Received: from mga17.intel.com ([192.55.52.151]:9944 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356917AbiATOyb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 09:54:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642690471; x=1674226471;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kZ/6QRCbXKz2uPbny7BLUdY7VrneEb9rP+jgHoalIWo=;
-  b=cTTVbNtzKdLz2BZNP7aa7Q1mMeexx1iWef5feBiMCDvVMIDKvFiUYF8v
-   Wyv0cU/0Mg0YQ42XdxBDDKLZwaZZgEWP4DfNEQisCDhMZzifjVQvnxH6G
-   8Z+X7L2QoFf2cMJG39vtnCGH6Gx4hLWOGCNobq5H1cuVvoUqN0o3o/Fee
-   4McnuLvHBR2REwp2MyzVT2pndCE4OR/SBr3jciGzT0MkPjDjBSzreZBgH
-   MyViKJ4YRqJXNsQdbMKcU+n37PNXBJoH82iPuFF0Pw2jOMTHrRVGcePHm
-   eGBmMW57/u32QXhjkDzlitA0q6MCCXweF9IrmSqw0i7gOZlV++6n0djhn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="226043299"
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="226043299"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 06:54:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="532797640"
-Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 06:54:24 -0800
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ashutosh Dixit <ashutosh.dixit@intel.com>
-Subject: [PATCH v3 5/5] mei: gsc: retrieve the firmware version
-Date:   Thu, 20 Jan 2022 16:53:51 +0200
-Message-Id: <20220120145351.520555-6-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220120145351.520555-1-alexander.usyskin@intel.com>
-References: <20220120145351.520555-1-alexander.usyskin@intel.com>
+        id S1345991AbiATO5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 09:57:01 -0500
+Received: from mail-vk1-f178.google.com ([209.85.221.178]:42639 "EHLO
+        mail-vk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232592AbiATO5A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 09:57:00 -0500
+Received: by mail-vk1-f178.google.com with SMTP id m57so3726299vkf.9;
+        Thu, 20 Jan 2022 06:56:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1L35cmAx7uCLqrcryWAZKBNOGx+ekbrBkpQCXHRgWJQ=;
+        b=oEJ0SaQXI4alA5reStSBMsu+rR77UWNbxgSB4YjV2zNu21QyT0ULxYvpB741T+zCrx
+         Ce1vo+XVBj/Fvs9g2XlKGZ4B8yBTLAVPOvi8oE/zCvlvF+UGuxIBftD+EblhAiV0KZeS
+         zNThkrRGwyxQ3b7t7Rg6QB6SB3HHMdUTRftK2GiVVkcCXpY6y4wa7ums24QlsUJhoEoo
+         tUp6yEZRg6DGXmVIUXku1zblaZXROtR8buqyBkLBQBICj+HtDvFafMD6DmS0EiwIITj7
+         9VoLrKfQxhFgL++SDeFjoKSFP4spgjg/YQfkQ17ItqaEvi9fb8bu1A2Zv+Bbbb9iuku4
+         Or8A==
+X-Gm-Message-State: AOAM533Ypntc+0G3BNd3a388YHlSJcm29LRBHvLOoXxyNjO2kWEupfKY
+        3mORqfYZCwEdv++xk1jB4eFw04uyN8Hp0w==
+X-Google-Smtp-Source: ABdhPJwtBz5xu6kkUSgMDWT3reX8oOw/ICTZRv6mefGmvRx9v+0CD6OCOR52cNTnIgrnTf+RyXzN5A==
+X-Received: by 2002:a05:6122:208c:: with SMTP id i12mr14370747vkd.2.1642690619315;
+        Thu, 20 Jan 2022 06:56:59 -0800 (PST)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id ba16sm474926vkb.39.2022.01.20.06.56.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 06:56:58 -0800 (PST)
+Received: by mail-ua1-f50.google.com with SMTP id n15so9789369uaq.5;
+        Thu, 20 Jan 2022 06:56:57 -0800 (PST)
+X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr14235247vsu.5.1642690617601;
+ Thu, 20 Jan 2022 06:56:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220117110755.3433142-1-conor.dooley@microchip.com>
+ <20220117110755.3433142-4-conor.dooley@microchip.com> <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
+ <889dab52-95eb-f36d-0af9-beea958a97e7@microchip.com>
+In-Reply-To: <889dab52-95eb-f36d-0af9-beea958a97e7@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 20 Jan 2022 15:56:46 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXU_M89W7w064YsjuFfqE2m_PeM9HVps0nmaC1+aUHAQw@mail.gmail.com>
+Message-ID: <CAMuHMdXU_M89W7w064YsjuFfqE2m_PeM9HVps0nmaC1+aUHAQw@mail.gmail.com>
+Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
+ mpfs i2c
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lewis Hanly <Lewis.Hanly@microchip.com>,
+        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
+        Atish Patra <atishp@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a hook to retrieve the firmware version of the
-GSC devices to bus-fixup.
-GSC has a different MKHI clients GUIDs but the same message structure
-to retrieve the firmware version as MEI so mei_fwver() can be reused.
+Hi Conor,
 
-CC: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
----
- drivers/misc/mei/bus-fixup.c | 25 +++++++++++++++++++++++++
- drivers/misc/mei/hw-me.c     |  2 ++
- 2 files changed, 27 insertions(+)
+On Thu, Jan 20, 2022 at 2:42 PM <Conor.Dooley@microchip.com> wrote:
+> On 20/01/2022 08:30, Geert Uytterhoeven wrote:
+> > On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >>
+> >> Add device tree bindings for the i2c controller on
+> >> the Microchip PolarFire SoC.
+> >>
+> >> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >
+> > Thanks for your patch!
+> >
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+> >> @@ -0,0 +1,55 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Microchip MPFS I2C Controller Device Tree Bindings
+> >> +
+> >> +maintainers:
+> >> +  - Daire McNamara <daire.mcnamara@microchip.com>
+> >> +
+> >> +allOf:
+> >> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+> >> +      - microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+> >
+> > Wouldn't it be more logical to have:
+> >
+> >      items:
+> >        - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+> >        - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+> >
+> > ?
+> This would be fine for mpfs-i2c since corei2c is a "superset" - but how
+> would that look for the fabric core? I don't think falling back from the
+> fabric core onto the "hard" one makes sense. This would mean the
+> following two entries:
+>
+> i2c2: i2c@44000000 { //fabric
+>         compatible = "microchip,corei2c-rtl-v7";
+> };
+> i2c1: i2c@2010b000 { //"hard" mpfs peripheral
+>         compatible = "microchip,mpfs-i2c", "microchip,corei2c-rtl-v7";
+> };
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 67844089db21..59506ba6fc48 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -30,6 +30,12 @@ static const uuid_le mei_nfc_info_guid = MEI_UUID_NFC_INFO;
- #define MEI_UUID_MKHIF_FIX UUID_LE(0x55213584, 0x9a29, 0x4916, \
- 			0xba, 0xdf, 0xf, 0xb7, 0xed, 0x68, 0x2a, 0xeb)
- 
-+#define MEI_UUID_IGSC_MKHI UUID_LE(0xE2C2AFA2, 0x3817, 0x4D19, \
-+			0x9D, 0x95, 0x06, 0xB1, 0x6B, 0x58, 0x8A, 0x5D)
-+
-+#define MEI_UUID_IGSC_MKHI_FIX UUID_LE(0x46E0C1FB, 0xA546, 0x414F, \
-+			0x91, 0x70, 0xB7, 0xF4, 0x6D, 0x57, 0xB4, 0xAD)
-+
- #define MEI_UUID_HDCP UUID_LE(0xB638AB7E, 0x94E2, 0x4EA2, \
- 			      0xA5, 0x52, 0xD1, 0xC5, 0x4B, 0x62, 0x7F, 0x04)
- 
-@@ -241,6 +247,23 @@ static void mei_mkhi_fix(struct mei_cl_device *cldev)
- 	mei_cldev_disable(cldev);
- }
- 
-+static void mei_gsc_mkhi_ver(struct mei_cl_device *cldev)
-+{
-+	int ret;
-+
-+	/* No need to enable the client if nothing is needed from it */
-+	if (!cldev->bus->fw_f_fw_ver_supported)
-+		return;
-+
-+	ret = mei_cldev_enable(cldev);
-+	if (ret)
-+		return;
-+
-+	ret = mei_fwver(cldev);
-+	if (ret < 0)
-+		dev_err(&cldev->dev, "FW version command failed %d\n", ret);
-+	mei_cldev_disable(cldev);
-+}
- /**
-  * mei_wd - wd client on the bus, change protocol version
-  *   as the API has changed.
-@@ -492,6 +515,8 @@ static struct mei_fixup {
- 	MEI_FIXUP(MEI_UUID_NFC_HCI, mei_nfc),
- 	MEI_FIXUP(MEI_UUID_WD, mei_wd),
- 	MEI_FIXUP(MEI_UUID_MKHIF_FIX, mei_mkhi_fix),
-+	MEI_FIXUP(MEI_UUID_IGSC_MKHI, mei_gsc_mkhi_ver),
-+	MEI_FIXUP(MEI_UUID_IGSC_MKHI_FIX, mei_gsc_mkhi_ver),
- 	MEI_FIXUP(MEI_UUID_HDCP, whitelist),
- 	MEI_FIXUP(MEI_UUID_ANY, vt_support),
- 	MEI_FIXUP(MEI_UUID_PAVP, whitelist),
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index 9748d14849a1..7e77328142ff 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -1577,12 +1577,14 @@ static const struct mei_cfg mei_me_pch15_sps_cfg = {
- static const struct mei_cfg mei_me_gsc_cfg = {
- 	MEI_CFG_TYPE_GSC,
- 	MEI_CFG_PCH8_HFS,
-+	MEI_CFG_FW_VER_SUPP,
- };
- 
- /* Graphics System Controller Firmware Interface */
- static const struct mei_cfg mei_me_gscfi_cfg = {
- 	MEI_CFG_TYPE_GSCFI,
- 	MEI_CFG_PCH8_HFS,
-+	MEI_CFG_FW_VER_SUPP,
- };
- 
- /*
--- 
-2.32.0
+Oops, I missed that you have both forms.
+But in se, they're the same IP core, just hard vs. soft? Then the
+below makes sense.
 
+> But this generates errors in dt_binding_check w/ your suggestion - so
+> how about the following (similar to ti,omap4-i2c.yaml):
+>
+>    compatible:
+>      oneOf:
+>        - items:
+>          - const: microchip,mpfs-i2c #  Microchip PolarFire...
+>          - const: microchip,corei2c-rtl-v7 # Microchip Fabric...
+>        - const: microchip,corei2c-rtl-v7 # Microchip Fabric...
+>
+> Is there a prettier way than this duplication?
+
+I'm afraid not, and the above scheme is used a lot.
+
+> > If the IP core is reused, it can become:
+> >
+> >      items:
+> >        - enum:
+> >            - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+> >            - microchip,<foo>-i2c # ...
+> >        - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+> >
+> > That way the driver can just match on the second (fallback) value,
+> > and no further driver changes will be needed (until v8 or later).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

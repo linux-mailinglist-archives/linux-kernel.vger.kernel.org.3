@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5BE494C8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCB0494CA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiATLMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S230468AbiATLSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiATLMk (ORCPT
+        with ESMTP id S230429AbiATLS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:12:40 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903F4C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:12:40 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id p7so2930223uao.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:12:40 -0800 (PST)
+        Thu, 20 Jan 2022 06:18:28 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192DC061574;
+        Thu, 20 Jan 2022 03:18:27 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id b13so27401866edn.0;
+        Thu, 20 Jan 2022 03:18:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=kMjIpt1c5UKX7PMhTqHhaYPV9fI4F7FYowL5GOMYs44=;
-        b=tvhKKbhfRUYInyIiGIV5u/96f/Zn6BZyUGMKxGENe8EXBb4F2V7wMUCXY5jgTU0YIr
-         KGZiRSDEIYO7pVT7CnUvWo2FhVG83bdHOaLv5KPi+LqPCXz4hiUiqNfv+zYRCjVbUqu6
-         tUEqPEdRxAaknOe1O78vlXUR483l0JYosJNUQ=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wYznKRiK5g7CfFmaVdNvA0d2kFj3axg/oPfOo8yHfjI=;
+        b=dN1JxNjzaE6UypiJKF16uylqBOqi3bSxi3++gJeedb4nf+GlXG/9wwYo90YWmgQr3X
+         dLV4hYuvI8QOJnTVGYYznGTVPYs64OOhUq5jERz7xSJv1ZzQAlCcQzjabSrd48mUmPQX
+         CTYWzGzZgBPllFmp9xlrwlZgHxP4Zdvukenk3Cc7gdCLD0vuOn7ObG0dbrFJbwucgSMq
+         XHfCYUm9pyLsJjkq9MTD6t+ojBV0zLrGmYnAsdyYEhvejybXobZ3fqB8SCDwC8hM+S/Y
+         eiidnynCUtj9jxVrBhb8voK3veTIDFDMbeoNhUcQNCj7Fxl4/gZtKSVWCeBQayj/fXuc
+         uN9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=kMjIpt1c5UKX7PMhTqHhaYPV9fI4F7FYowL5GOMYs44=;
-        b=uIkaVB2NBZy6FjXrjY6cPcQV9TThNJnTx3fGz+uKiLlMG2VIUJPt1EiSzdV5DoKuW1
-         Eehb6UfGFuOmO1iZleqjZ+AjQdwCGf7v7KTpFwEePXWU2nj/l5RRog2JJnNyWKCDQtyr
-         lrDsDJITqxmGQZdKbnjZLb7eAhuM3ISfjfKv6lPbEBROklnitSo96BwkySrocI+pWa1A
-         OP7LiN3aasOIbW9qleqe6fFiC1aNllfGgFNIkFmnC32/nPbgDGYJYgEAUcCuXLjk46KF
-         hmOuW+jLz+iv8agDIpfnHTJfBVzuK1ylvAxIly6Z1+dwYqtT54v/nBIqav8YobKLFzDn
-         o1OA==
-X-Gm-Message-State: AOAM531GE4dCqbJhRAgCY43C0NfoObJsqE3faKxj06v+r6EeOOql7hQz
-        G+fOQ5Tq9GuasDOuYXEgdUgsVwYl7Hu9x3KUgF5cJ3F8hQpDtNRn
-X-Google-Smtp-Source: ABdhPJxPvd0PThfv03SEpUww64Zb4UBGpIXRyKp92BrZVZyTlM5MOR6vAhcFdFjhNi7v17pf6fH0w6ae5M564YvMyP0=
-X-Received: by 2002:ab0:6f90:: with SMTP id f16mr6800254uav.113.1642677159660;
- Thu, 20 Jan 2022 03:12:39 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=wYznKRiK5g7CfFmaVdNvA0d2kFj3axg/oPfOo8yHfjI=;
+        b=d+Z6jnKGckaCdi0jGdHdDvPMbO7yGGw70BDiVmdwTRELtpTB2AZ5rnK1r1Q6kastT7
+         bxV3sr4+erkEWBPvl9nuJF+2fRk8SIFU8Q0zwpYLjM2y8SAFkWbwe4/kAtqscYvNDJWw
+         QsV7ZAWGQv/LSR7te76r0bkRkm6xaw+A5YnLF2vowEN96TJtKa8x9yvTWs7TKeM4oqqI
+         8256IAW9pQpF91wg+G2sEAOxv7j1B2uftv00vwMQ7g+9ypxWHQZjB22LacYs07ms3biL
+         icF8F1kPAafOKGZekZXTVgtFRLmX6eCaYaXtipP9QPM2eVRiYoR8f2JF0B8ZQiMM1tj8
+         HVhA==
+X-Gm-Message-State: AOAM531LnZGTRzJE93T7+H3ZT8dI+kbm2lvsoaa7PKDXR8lp7Hnst/L0
+        M+SZ3jfybuxfb0mqI1hhiEM3toYfrKj26YtZGzU=
+X-Google-Smtp-Source: ABdhPJx767rJLMA6eTAcCaq9p5AJkD+2oVe3jWOiDHLuHzoCUpNyU5SrSAyKwHIGM9AHUpjcTTRQU4a/hfKE05d8Gb8=
+X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr20435289edc.29.1642677506548;
+ Thu, 20 Jan 2022 03:18:26 -0800 (PST)
 MIME-Version: 1.0
-References: <CAFr9PXnig9YfnwSzMg5UPm3UtAsEAQT_xVheBbLppiU45mc_QQ@mail.gmail.com>
- <Yeg8mi0S2ACy9q8O@phenom.ffwll.local>
-In-Reply-To: <Yeg8mi0S2ACy9q8O@phenom.ffwll.local>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Thu, 20 Jan 2022 20:15:40 +0900
-Message-ID: <CAFr9PXkUwfyZ9yJgNYHX5_jo_SFfDU9wKA3Ldf+hbVL23faqKQ@mail.gmail.com>
-Subject: Re: [RFC] How to add hardware rotation, scaling etc to a DRM/KMS driver
-To:     Daniel Palmer <daniel@0x0f.com>,
-        Hans de Goede <j.w.r.degoede@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220119230626.31560-1-terry.bowman@amd.com> <20220119230626.31560-2-terry.bowman@amd.com>
+In-Reply-To: <20220119230626.31560-2-terry.bowman@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 20 Jan 2022 13:16:44 +0200
+Message-ID: <CAHp75VcA56fe2Q=LGbmNDknbsupkKnxGqLBvm3ADPBJRAy6rsw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/9] kernel/resource: Introduce request_muxed_mem_region()
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Robert Richter <rrichter@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        sudheesh.mavila@amd.com,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-On Thu, 20 Jan 2022 at 01:30, Daniel Vetter <daniel@ffwll.ch> wrote:
-> > I got the feeling that maybe I should just provide an interface to the
-> > blitter from userspace and userspace should be doing the rotation. I'd
-> > like to do it in the kernel so stuff like SDL1 apps just work but
-> > maybe that isn't possible?
+On Thu, Jan 20, 2022 at 1:06 AM Terry Bowman <terry.bowman@amd.com> wrote:
 >
-> panel orientation property is for that stuff:
-> fbcon will head this and rotate in sw,
+> Support for requesting muxed memory region is implemented but not
+> currently callable as a macro. Add the request muxed memory
+> region macro.
+>
+> MMIO memory accesses can be synchronized using request_mem_region() which
+> is already available. This call will return failure if the resource is
+> busy. The 'muxed' version of this macro will handle a busy resource by
+> using a wait queue to retry until the resource is available.
 
-This is working. On boot I get Tux rotated correctly etc.
+...
 
-> as should any competent compositor
-> in userspace (but some might not, it depends).
+> @@ -262,6 +262,8 @@ resource_union(struct resource *r1, struct resource *r2, struct resource *r)
+>  #define request_muxed_region(start,n,name)     __request_region(&ioport_resource, (start), (n), (name), IORESOURCE_MUXED)
+>  #define __request_mem_region(start,n,name, excl) __request_region(&iomem_resource, (start), (n), (name), excl)
+>  #define request_mem_region(start,n,name) __request_region(&iomem_resource, (start), (n), (name), 0)
 
-That's the problem I guess. I don't have one. SDL1 apps like prboom
-use the fbdev emulation as-is so they render upside down[0].
-I have 16MB of local storage and 128MB of RAM so I don't think I'll
-manage to get the standard userland bits onto it.
+> +#define request_muxed_mem_region(start, n, name) \
+> +       __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
 
-I wanted to do the rotation in the kernel so I didn't have to hack up SDL1.
+Looking around tells me that this name is inconsistent, I would expect it to be
 
-Cheers,
+request_mem_region_muxed()
 
-Daniel
+>  #define request_mem_region_exclusive(start,n,name) \
+>         __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_EXCLUSIVE)
 
-0 - https://twitter.com/linux_chenxing/status/1479801511274491909
+If you are fine with this, take my
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,149 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF8E4949A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C76494984
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359269AbiATIg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:36:26 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:44026 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiATIgZ (ORCPT
+        id S1359228AbiATIbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359238AbiATIaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:36:25 -0500
-Received: by mail-ua1-f43.google.com with SMTP id 2so9420095uax.10;
-        Thu, 20 Jan 2022 00:36:24 -0800 (PST)
+        Thu, 20 Jan 2022 03:30:30 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6134C06175B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:29 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id e9-20020a05600c4e4900b0034d23cae3f0so11876289wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wXedjPA/g0d5fwBmS5yesJEwHUKsb9qj6umHUF7IzOs=;
+        b=dqJ+1OZaOizvZwHF8PGNtXy8Nq55gAekvHaEHYOCK/oaoVf9ow+zA9vLERR7KXaw4G
+         tQAXXqM1ICIFN0/Okp6W6BkvzDEXaQnstSDJ3L+shGqaCZ+FHhstKrlK5FRpvoXjyJbE
+         91iGl7CpCaB4MRXXlh7iYvOIXlAKgHKKxhet3sCzf6wiCidEMdc6YOTlfnmdBRrgjVzb
+         6RIEmKTM3PHHRdD4n3LhroMPlVu/EmfUevCeL/PrnPRpRWn7QYsqwAhFTDk5O3rxpnvb
+         S0RcIawvC9RsAF6ANAEwKxGgOiS+DB9aHUuHHsg+Vndx8Njw9jVOcqPjELhI/MCv4RfX
+         ZMJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rjpWEc8ofW9Ln+ZzVM/iDZ8qr5vzNcJvKqxioEzCZGY=;
-        b=K8E1eXzycKiQIRWxj6qfUFajLTr2sy1dSiMuVac4Ojo2F6egeEaTWG9ZbEsgSkDSEw
-         qRqO5uQssP45mWIaWpG7nVB3Q97Z1Jr6E/38JLbdq15EI8lBonmLG/R6A0L2wQywHdjM
-         tlbG4o+STxkRss/G4WwK4qJM73GTuEXEIIUh6QnfAQP1F4VZPE5JUYse+fcFqMZoHYGf
-         ZafxGxjyuI5ZOlCI72DNOr278MsPXFnFRVZNTSTswiks1K2dV8F/xbDEQ2JSlTgfnhoE
-         hGKLjtKpj5enGPziEdb98hFXbm2BZ4uB/Zgol/rIMf2zdXs4p+1IuBSGQGYYFahsa+z3
-         ATDw==
-X-Gm-Message-State: AOAM5316YKeuEQHWPMSP3XHEStDeK+5+1EWFv3Cbk15N8tilVELLYVbW
-        GecERymnasaq70RxfNTmqifMrUS2CgMjdQ==
-X-Google-Smtp-Source: ABdhPJxGe1OsDYfyTFLeqMrnaPPS7g1NHd4Hi0o7FeKUu5n/kYgAXhvWwHI1mDzEE/HawGiFuMYvRg==
-X-Received: by 2002:a05:6102:3a68:: with SMTP id bf8mr13173693vsb.63.1642667783746;
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id bj23sm432855vkb.23.2022.01.20.00.36.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id r15so9486981uao.3;
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-X-Received: by 2002:a1f:a2d3:: with SMTP id l202mr4847687vke.7.1642667418540;
- Thu, 20 Jan 2022 00:30:18 -0800 (PST)
+        bh=wXedjPA/g0d5fwBmS5yesJEwHUKsb9qj6umHUF7IzOs=;
+        b=FSSScgZmu+GcP+btBCbL6qwAwFHs8lFqS6umF3qKtDB1T9/bJvqRFMMida0WxHKsPl
+         bWWfXYlsZl8s6qPK5K0OWofFdoHO14DovPdgDK9zQUjI9M9AihFbbk5rX3n2YzzlvSF/
+         EIRJYf7JdgUtskdCVdVO+/L9dUqz41MZcDDJGtZGlhYzqb+lTQZFiHiV2OGpfHrozLsx
+         92rRvVIBJ/ULUDGYFFj/rXfOY/WQDnLlUAWWQYKACaEq5cZmaQBYNmaFSbt8qXrcD9AC
+         szMl7ioVsJo5UHbeJCQpXKTbWB1bx2QSAUf+MH9VDLMbI0p2gAjOyNGZEtsrFohXlV7s
+         7wTQ==
+X-Gm-Message-State: AOAM531hLio7O5twmadO5/q1VImcygWbQ6enjFw+bzxxbsMhT0ku5sjl
+        G+k5iucpJkVckD0a69ix+6JAbGEpj8QbrGeuMx8pEg==
+X-Google-Smtp-Source: ABdhPJzcit5rt3hKupQG4ZURXNYVJMJJWGZ/kgbfgL97XYtFfQQ0g7Eb+WWtqtEbimJgAHMcZfX3i4ibcRabJbGoWBE=
+X-Received: by 2002:a05:600c:1e19:: with SMTP id ay25mr7640548wmb.131.1642667427972;
+ Thu, 20 Jan 2022 00:30:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com>
-In-Reply-To: <20220117110755.3433142-4-conor.dooley@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Jan 2022 09:30:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-5-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-5-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 20 Jan 2022 16:30:16 +0800
+Message-ID: <CABVgOSk621CwPZ9LMdLuY7WkmDfoS6_zpeyphCubWPGGiWLvKg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] kunit: tool: simplify code since build_dir can't be None
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Add device tree bindings for the i2c controller on
-> the Microchip PolarFire SoC.
+> --build_dir is set to a default of '.kunit' since commit ddbd60c779b4
+> ("kunit: use --build_dir=.kunit as default"), but even before then it
+> was explicitly set to ''.
 >
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> So outside of one unit test, there was no way for the build_dir to be
+> ever be None, and we can simplify code by fixing the unit test and
+> enforcing that via updated type annotations.
+>
+> E.g. this lets us drop `get_file_path()` since it's now exactly
+> equivalent to os.path.join().
+>
+> Note: there's some `if build_dir` checks that also fail if build_dir is
+> explicitly set to '' that just guard against passing "O=" to make.
+> But running `make O=` works just fine, so drop these checks.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Thanks for your patch!
+Looks good to me.
+Passing "--build_dir=" to KUnit didn't work before, as well, as "" is
+not considered a valid path. You've got to specify --build-dir=. to
+get anything useful to happen.
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip MPFS I2C Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Daire McNamara <daire.mcnamara@microchip.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-> +      - microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+Reviewed-by: David Gow <davidgow@google.com>
 
-Wouldn't it be more logical to have:
+-- David
 
-    items:
-      - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
-
-?
-
-If the IP core is reused, it can become:
-
-    items:
-      - enum:
-          - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-          - microchip,<foo>-i2c # ...
-      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
-
-That way the driver can just match on the second (fallback) value,
-and no further driver changes will be needed (until v8 or later).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  tools/testing/kunit/kunit_json.py      |  8 ++--
+>  tools/testing/kunit/kunit_kernel.py    | 51 ++++++++++----------------
+>  tools/testing/kunit/kunit_tool_test.py |  2 +-
+>  3 files changed, 24 insertions(+), 37 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+> index 61091878f51e..24d103049bca 100644
+> --- a/tools/testing/kunit/kunit_json.py
+> +++ b/tools/testing/kunit/kunit_json.py
+> @@ -12,12 +12,11 @@ import os
+>  import kunit_parser
+>
+>  from kunit_parser import Test, TestStatus
+> -from typing import Any, Dict, Optional
+> +from typing import Any, Dict
+>
+>  JsonObj = Dict[str, Any]
+>
+> -def _get_group_json(test: Test, def_config: str,
+> -               build_dir: Optional[str]) -> JsonObj:
+> +def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
+>         sub_groups = []  # List[JsonObj]
+>         test_cases = []  # List[JsonObj]
+>
+> @@ -50,8 +49,7 @@ def _get_group_json(test: Test, def_config: str,
+>         }
+>         return test_group
+>
+> -def get_json_result(test: Test, def_config: str,
+> -               build_dir: Optional[str]) -> str:
+> +def get_json_result(test: Test, def_config: str, build_dir: str) -> str:
+>         test_group = _get_group_json(test, def_config, build_dir)
+>         test_group["name"] = "KUnit Test Group"
+>         return json.dumps(test_group, indent=4)
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 44bbe54f25f1..fe159e7ff697 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -28,11 +28,6 @@ OUTFILE_PATH = 'test.log'
+>  ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
+>  QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
+>
+> -def get_file_path(build_dir, default):
+> -       if build_dir:
+> -               default = os.path.join(build_dir, default)
+> -       return default
+> -
+>  class ConfigError(Exception):
+>         """Represents an error trying to configure the Linux kernel."""
+>
+> @@ -59,17 +54,15 @@ class LinuxSourceTreeOperations(object):
+>         def make_arch_qemuconfig(self, kconfig: kunit_config.Kconfig) -> None:
+>                 pass
+>
+> -       def make_allyesconfig(self, build_dir, make_options) -> None:
+> +       def make_allyesconfig(self, build_dir: str, make_options) -> None:
+>                 raise ConfigError('Only the "um" arch is supported for alltests')
+>
+> -       def make_olddefconfig(self, build_dir, make_options) -> None:
+> -               command = ['make', 'ARCH=' + self._linux_arch, 'olddefconfig']
+> +       def make_olddefconfig(self, build_dir: str, make_options) -> None:
+> +               command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, 'olddefconfig']
+>                 if self._cross_compile:
+>                         command += ['CROSS_COMPILE=' + self._cross_compile]
+>                 if make_options:
+>                         command.extend(make_options)
+> -               if build_dir:
+> -                       command += ['O=' + build_dir]
+>                 print('Populating config with:\n$', ' '.join(command))
+>                 try:
+>                         subprocess.check_output(command, stderr=subprocess.STDOUT)
+> @@ -78,14 +71,12 @@ class LinuxSourceTreeOperations(object):
+>                 except subprocess.CalledProcessError as e:
+>                         raise ConfigError(e.output.decode())
+>
+> -       def make(self, jobs, build_dir, make_options) -> None:
+> -               command = ['make', 'ARCH=' + self._linux_arch, '--jobs=' + str(jobs)]
+> +       def make(self, jobs, build_dir: str, make_options) -> None:
+> +               command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
+>                 if make_options:
+>                         command.extend(make_options)
+>                 if self._cross_compile:
+>                         command += ['CROSS_COMPILE=' + self._cross_compile]
+> -               if build_dir:
+> -                       command += ['O=' + build_dir]
+>                 print('Building with:\n$', ' '.join(command))
+>                 try:
+>                         proc = subprocess.Popen(command,
+> @@ -143,14 +134,12 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         def __init__(self, cross_compile=None):
+>                 super().__init__(linux_arch='um', cross_compile=cross_compile)
+>
+> -       def make_allyesconfig(self, build_dir, make_options) -> None:
+> +       def make_allyesconfig(self, build_dir: str, make_options) -> None:
+>                 kunit_parser.print_with_timestamp(
+>                         'Enabling all CONFIGs for UML...')
+> -               command = ['make', 'ARCH=um', 'allyesconfig']
+> +               command = ['make', 'ARCH=um', 'O=' + build_dir, 'allyesconfig']
+>                 if make_options:
+>                         command.extend(make_options)
+> -               if build_dir:
+> -                       command += ['O=' + build_dir]
+>                 process = subprocess.Popen(
+>                         command,
+>                         stdout=subprocess.DEVNULL,
+> @@ -167,24 +156,24 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>
+>         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+>                 """Runs the Linux UML binary. Must be named 'linux'."""
+> -               linux_bin = get_file_path(build_dir, 'linux')
+> +               linux_bin = os.path.join(build_dir, 'linux')
+>                 return subprocess.Popen([linux_bin] + params,
+>                                            stdin=subprocess.PIPE,
+>                                            stdout=subprocess.PIPE,
+>                                            stderr=subprocess.STDOUT,
+>                                            text=True, errors='backslashreplace')
+>
+> -def get_kconfig_path(build_dir) -> str:
+> -       return get_file_path(build_dir, KCONFIG_PATH)
+> +def get_kconfig_path(build_dir: str) -> str:
+> +       return os.path.join(build_dir, KCONFIG_PATH)
+>
+> -def get_kunitconfig_path(build_dir) -> str:
+> -       return get_file_path(build_dir, KUNITCONFIG_PATH)
+> +def get_kunitconfig_path(build_dir: str) -> str:
+> +       return os.path.join(build_dir, KUNITCONFIG_PATH)
+>
+> -def get_old_kunitconfig_path(build_dir) -> str:
+> -       return get_file_path(build_dir, OLD_KUNITCONFIG_PATH)
+> +def get_old_kunitconfig_path(build_dir: str) -> str:
+> +       return os.path.join(build_dir, OLD_KUNITCONFIG_PATH)
+>
+> -def get_outfile_path(build_dir) -> str:
+> -       return get_file_path(build_dir, OUTFILE_PATH)
+> +def get_outfile_path(build_dir: str) -> str:
+> +       return os.path.join(build_dir, OUTFILE_PATH)
+>
+>  def get_source_tree_ops(arch: str, cross_compile: Optional[str]) -> LinuxSourceTreeOperations:
+>         config_path = os.path.join(QEMU_CONFIGS_DIR, arch + '.py')
+> @@ -268,7 +257,7 @@ class LinuxSourceTree(object):
+>                         return False
+>                 return True
+>
+> -       def validate_config(self, build_dir) -> bool:
+> +       def validate_config(self, build_dir: str) -> bool:
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 validated_kconfig = kunit_config.parse_file(kconfig_path)
+>                 if self._kconfig.is_subset_of(validated_kconfig):
+> @@ -283,7 +272,7 @@ class LinuxSourceTree(object):
+>                 logging.error(message)
+>                 return False
+>
+> -       def build_config(self, build_dir, make_options) -> bool:
+> +       def build_config(self, build_dir: str, make_options) -> bool:
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 if build_dir and not os.path.exists(build_dir):
+>                         os.mkdir(build_dir)
+> @@ -311,7 +300,7 @@ class LinuxSourceTree(object):
+>                 old_kconfig = kunit_config.parse_file(old_path)
+>                 return old_kconfig.entries() != self._kconfig.entries()
+>
+> -       def build_reconfig(self, build_dir, make_options) -> bool:
+> +       def build_reconfig(self, build_dir: str, make_options) -> bool:
+>                 """Creates a new .config if it is not a subset of the .kunitconfig."""
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 if not os.path.exists(kconfig_path):
+> @@ -326,7 +315,7 @@ class LinuxSourceTree(object):
+>                 os.remove(kconfig_path)
+>                 return self.build_config(build_dir, make_options)
+>
+> -       def build_kernel(self, alltests, jobs, build_dir, make_options) -> bool:
+> +       def build_kernel(self, alltests, jobs, build_dir: str, make_options) -> bool:
+>                 try:
+>                         if alltests:
+>                                 self._ops.make_allyesconfig(build_dir, make_options)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index f7cbc248a405..a3c036a620b2 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -469,7 +469,7 @@ class KUnitJsonTest(unittest.TestCase):
+>                         json_obj = kunit_json.get_json_result(
+>                                 test=test_result,
+>                                 def_config='kunit_defconfig',
+> -                               build_dir=None)
+> +                               build_dir='.kunit')
+>                 return json.loads(json_obj)
+>
+>         def test_failed_test_json(self):
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>

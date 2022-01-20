@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CAF49459F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F6C4945A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358111AbiATBsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 20:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiATBsa (ORCPT
+        id S1358123AbiATBtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 20:49:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44948 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231600AbiATBtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:48:30 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FFCC061574;
-        Wed, 19 Jan 2022 17:48:29 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso5745723otl.3;
-        Wed, 19 Jan 2022 17:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=74BtsnIM1Do25h2pr2aLjfS1D1bQFN2QCAj85PkHcLY=;
-        b=jYwP8I98dCQc3Hy7BY86CiJtgViUfob9Mo83VzbMTUlHoCn90o9woIahLEvs1LSRk/
-         98dXSUUPptIJBuXGfwqy301bAFTTZMNzCKZ1ggG0V+291lGMOjSjLdXyxMbM2l4fZ9IQ
-         NM+i6Oh6Q4ykJSIl+7mhWpB/PXPJvGCHThL3tE9utpytBQSass3SuJ1sIpX4sBpCGZNd
-         AbdqCRsZykw5UzDuaAictBvGh2rJdYfQh6cSw2nhc/rtE3KGmZqeKO4fRbSHMMNS2a+p
-         X/mqVacmBH/tqiTPxEYNhYA4pQTBAexAUKTcdJDDwXL4H7IXBsZ0lm2Tr39K6PmqSMiD
-         Zvlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=74BtsnIM1Do25h2pr2aLjfS1D1bQFN2QCAj85PkHcLY=;
-        b=BXAIAeMVQgKJCtgAdGcqiW5FM1xe+/8FI1/bLP6khTPJLpu4Y83wNHS1Im7H+WaWjR
-         o2r0khnfT1Ka4Od7OcNqCbp/MccIWHp+lOQCUTvxWBeis4RNmth57IecfTkKKcVtIKp+
-         dwOfBOwq3erV7iWRqfPn+6JLZibV0BA1pH+2EUL0l/LQzpBCy3xrsDtzXxmZfd4DuXI/
-         bu9TZAyFnxGTzeY7a3Sh70NVRxFxmG9wiA830hJEfXYX+bxlGKtE3L0UELLxkFtld/IK
-         KAaAaMqhK7GnqDtO+6Y161GBalNzXwfE5ny3BiBLgx7QfzfM81RXkhe94KkutP5QliqF
-         zEtw==
-X-Gm-Message-State: AOAM533gl7Ndsy2RBRT4xk1ilkAWjbRyWXEdvUZIW7wCQbu8FRvQVIEC
-        pxvqRHwvO3kQK0p84OlJu33SFaGjEkI=
-X-Google-Smtp-Source: ABdhPJzBOHTPjdJOReTPvrB6BaQEX4vRputs7UOtOtZ4L6lalloVBABvkOU9HpXjIWGnPvdwXM12KQ==
-X-Received: by 2002:a9d:483:: with SMTP id 3mr26836530otm.214.1642643308799;
-        Wed, 19 Jan 2022 17:48:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w14sm651954ooq.37.2022.01.19.17.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 17:48:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 19 Jan 2022 17:48:26 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 00/28] 5.15.16-rc1 review
-Message-ID: <20220120014826.GA3476209@roeck-us.net>
-References: <20220118160451.879092022@linuxfoundation.org>
+        Wed, 19 Jan 2022 20:49:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3314B81BFA;
+        Thu, 20 Jan 2022 01:49:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA429C004E1;
+        Thu, 20 Jan 2022 01:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642643353;
+        bh=XVNGFC1UcemnELjzQ0k/YD0qA9SM3qfudnkbbNl7eqE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Oj4rKPsIwX2nhI+KKfEncfk32rHuyVRxiOhLR9sN7mCedxrBAwxOAM2S+04QZMvhB
+         2CFyfb2nqjwRG07Cy5TBeYDYr+OyZPzT/iYrNE1PdXdgN9E5+VSCaae7NVr4AO8keo
+         /qw9pRpUTEbG6ies/dSh05mnFpX6+imOb1VihoEPx/jwqhTzy5ABSzbDSvyrFLq0r5
+         XjOR9rtiS4xskS7WywYM0GtizrXQ7tskiwY/01yU9o+CXn0xhWOc+p8yhr2UWNcM/y
+         yOEPvut2r8wd/fGyQ2RGyjc4f7E83DO37cArweQKwB1HGMXGuLwm4aZJC0PI4pkZPe
+         xBxI9A5LMmjYw==
+Date:   Wed, 19 Jan 2022 19:55:46 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] usb: xhci-mtk: Use struct_size() helper in
+ create_sch_ep()
+Message-ID: <20220120015546.GA75917@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 05:05:46PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.16 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
-> 
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 485 pass: 485 fail: 0
+Also, address the following sparse warnings:
+drivers/usb/host/xhci-mtk-sch.c:265:20: warning: using sizeof on a flexible structure
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://github.com/KSPP/linux/issues/160
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/host/xhci-mtk-sch.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Guenter
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index edbfa82c6565..f3139ce7b0a9 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -248,7 +248,6 @@ create_sch_ep(struct xhci_hcd_mtk *mtk, struct usb_device *udev,
+ 	struct mu3h_sch_bw_info *bw_info;
+ 	struct mu3h_sch_tt *tt = NULL;
+ 	u32 len_bw_budget_table;
+-	size_t mem_size;
+ 
+ 	bw_info = get_bw_info(mtk, udev, ep);
+ 	if (!bw_info)
+@@ -262,9 +261,9 @@ create_sch_ep(struct xhci_hcd_mtk *mtk, struct usb_device *udev,
+ 	else
+ 		len_bw_budget_table = 1;
+ 
+-	mem_size = sizeof(struct mu3h_sch_ep_info) +
+-			len_bw_budget_table * sizeof(u32);
+-	sch_ep = kzalloc(mem_size, GFP_KERNEL);
++	sch_ep = kzalloc(struct_size(sch_ep, bw_budget_table,
++				     len_bw_budget_table),
++			 GFP_KERNEL);
+ 	if (!sch_ep)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-- 
+2.27.0
+

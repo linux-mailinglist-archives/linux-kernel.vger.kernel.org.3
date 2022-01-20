@@ -2,126 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4A6494C85
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FEB494C82
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiATLJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiATLJh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229576AbiATLJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 20 Jan 2022 06:09:37 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E82C061574;
-        Thu, 20 Jan 2022 03:09:36 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id c24so24739331edy.4;
-        Thu, 20 Jan 2022 03:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wSZuENnQtvpSb9XtNjDDtEDFI7SfngDO55OTaUOdmw4=;
-        b=g7OIi0GtebZGboMXAanw7y/VpJ/1Ulx94qe38Ts36dUTPuIus4WUyOQzORpupDgwTr
-         JLWdlRiF6LCXYRTxAxfujua7EynlrZN3tyfhlzDkusqbsv20lFibq62IcEBO+AVukAQc
-         n1rABmd78KdBSe3rh1URZiWlxYAG0129Ke7IFn5omYXK7YAB3Pc8K5yCwJ7MBg53Z0S1
-         WbhjWP2wzmUkIZbjgT3yBNy1ewGhXRbkt3gFd0H95ErBGpGItazyBb+fD4ohByxtQAyB
-         XRyaXryUF+SlvGD2eI9I7bSum7iNa6Gb3OBiGoJAn8enpv9NNKZM2aHEL8xWbKyYWlKm
-         Qnuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wSZuENnQtvpSb9XtNjDDtEDFI7SfngDO55OTaUOdmw4=;
-        b=MPgCDhsL4v6sqkb7XVfFj2ik5qe0Bwg2BpcyUI2gQTLkjfQiUSWgrGzN9Kex9VAOov
-         /HkUaKNsC3TcNKSt5CTC+NbrMQius08qCVw+bdSj+eJGqTI+N4NvQN4WuPU2GIV7agmy
-         PnsfS5GDkqcp1miKWxj6I5VAh1VpgaddDHlmGxZk2Rjen8jJ04fXy0gJ55sPqNoGFaXb
-         XdCITuQI3bsek7RAbkN6ZCsVGENaZlA87/CdROvP0Yy29O/Ci/Czm/W7mxFRMmnKyi++
-         9K/Uw1ofOAPZgtPHMAF5XDk/81RMBeOXHyu6XOMYeVBkavpMZzqdLGr44XY2bUBE5Wfc
-         RBsA==
-X-Gm-Message-State: AOAM5335zqdnkIvywkDkt1HtN3QKIqzJe0sEWW5qvlT/zud3+NTT8fcr
-        76OJ7lveMSQWDIqiAgbTqxU1HjgnEL+2A1LHkP8=
-X-Google-Smtp-Source: ABdhPJyeqHQILu1JRTaWq3VF7OKVfjjePuQs/kowTNknuojPUjwSNhIHGqw2wflIoOnDcAzr+FuK4BHeTIuxxPFg4XE=
-X-Received: by 2002:aa7:cf0e:: with SMTP id a14mr2624400edy.296.1642676974640;
- Thu, 20 Jan 2022 03:09:34 -0800 (PST)
+Received: from szxga08-in.huawei.com ([45.249.212.255]:31109 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230315AbiATLJe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 06:09:34 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JffnP2sjDz1FCph;
+        Thu, 20 Jan 2022 19:05:45 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 20 Jan 2022 19:09:31 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.21; Thu, 20 Jan 2022 19:09:30 +0800
+Message-ID: <e1c7a290-45ac-25ab-018e-2289fad72413@huawei.com>
+Date:   Thu, 20 Jan 2022 19:09:29 +0800
 MIME-Version: 1.0
-References: <20220118202234.410555-1-terry.bowman@amd.com> <20220118202234.410555-3-terry.bowman@amd.com>
- <CAHp75VdBFN+QMJpYDp8ytGGrBKYyjxU8u=Xrn44Lc3UGLPRQOA@mail.gmail.com> <b609230d-37e5-d7a3-3dff-5980c1cca5f7@amd.com>
-In-Reply-To: <b609230d-37e5-d7a3-3dff-5980c1cca5f7@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 13:07:52 +0200
-Message-ID: <CAHp75Vf6_SKT94rDQMLWah-WgdP=w1YZ=X+cHS0SWr_26b+u0g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] Watchdog: sp5100_tco: Refactor MMIO base address initialization
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] powerpc: Fix virt_addr_valid() check
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+References: <20211225120621.13908-1-wangkefeng.wang@huawei.com>
+ <20211225120621.13908-2-wangkefeng.wang@huawei.com>
+ <09ed46a5-6df3-ffc0-8243-61612c06153a@huawei.com>
+ <1641871726.fshx7g5r92.astroid@bobo.none>
+ <ca351bfc-3507-11ad-73f1-79ca772b55fd@csgroup.eu>
+ <8a24ef1d-1c93-416d-cfbe-e63aacfb25cc@huawei.com>
+ <017744c1-1252-a25c-3dcc-057ee18d0769@csgroup.eu>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <017744c1-1252-a25c-3dcc-057ee18d0769@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 6:57 PM Terry Bowman <Terry.Bowman@amd.com> wrote:
-> On 1/19/22 5:53 AM, Andy Shevchenko wrote:
-> > On Tue, Jan 18, 2022 at 10:23 PM Terry Bowman <terry.bowman@amd.com> wrote:
 
-> Ok. I'll reduce the patches' to/cc list to only contain maintainers owning
-> the current patch. I prefer to leave the lengthy list in the cover letter
-> if that is ok because it will not be added to the tree but will provide
-> context this series has multiple systems and may need communication
-> between maintainers. I'll use the -to & -cc commandline as you mentioned to
-> send to the longer list of recipients without cluttering the patch. Let me
-> know if you prefer otherwise.
-
-My point is that: supply the list implicitly.
-For the help of choosing the right people I have written a script [1]
-that shows a very good heuristics approach to me.
-
-[1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
-
-...
-
-> >> +       if (!devm_request_mem_region(dev, mmio_addr,
-> >> +                                   SP5100_WDT_MEM_MAP_SIZE,
-> >> +                                   dev_name)) {
-> >> +               dev_dbg(dev, "MMIO address 0x%08x already in use\n",
-> >> +                       mmio_addr);
-> >> +               return -EBUSY;
-> >> +       }
-> >> +
-> >> +       tco->tcobase = devm_ioremap(dev, mmio_addr,
-> >> +                                   SP5100_WDT_MEM_MAP_SIZE);
-> >> +       if (!tco->tcobase) {
-> >> +               dev_dbg(dev, "MMIO address 0x%08x failed mapping.\n",
-> >> +                       mmio_addr);
-
-> > On top of above it's a NIH devm_ioremap_resource().
+On 2022/1/20 15:31, Christophe Leroy wrote:
 >
-> I'm not familiar with NIH term. My friends google and grep weren't much help.
+> Le 19/01/2022 à 02:15, Kefeng Wang a écrit :
+>> On 2022/1/11 14:04, Christophe Leroy wrote:
+>>> Le 11/01/2022 à 05:37, Nicholas Piggin a écrit :
+>>>> Excerpts from Kefeng Wang's message of January 8, 2022 9:58 pm:
+>>>>> Hi PPC maintainers， ping..
+>>>> Hmm. I might have confused myself about this. I'm going back and
+>>>> trying to work out what I was thinking when I suggested it. This
+>>>> works on 64e because vmalloc space is below the kernel linear map,
+>>>> right?
+>>>>
+>>>> On 64s it is the other way around and it is still possible to enable
+>>>> flatmem on 64s. Altough we might just not hit the problem there because
+>>>> __pa() will not mask away the vmalloc offset for 64s so it will still
+>>>> return something that's outside the pfn_valid range for flatmem. That's
+>>>> very subtle though.
+>>> That's the way it works on PPC32 at least, so for me it's not chocking
+>>> to have it work the same way on PPC64s.
+>>>
+>>> The main issue here is the way __pa() works. On PPC32 __pa = va -
+>>> PAGE_OFFSET, so it works correctly for any address.
+>>> On PPC64, __pa() works by masking out the 2 top bits instead of
+>>> substracting PAGE_OFFSET, so the test must add a verification that we
+>>> really have the 2 top bits set at first. This is what (addr >=
+>>> PAGE_OFFSET) does. Once this first test is done, we can perfectly rely
+>>> on pfn_valid() just like PPC32, I see absolutely no point in an
+>>> additionnal test checking the addr is below KERN_VIRT_START.
+>>
+>> Hi Christophe and Nicholas， for ppc32， I think we need check the upper
+>> limit,
+> Why ? Have you experimented any problem at all on PPC32 with the way it
+> is done at the moment ?
+>
+> I don't think we have to change PPC32 at all unless we have a real
+> reason to do it.
 
-[2]: https://en.wikipedia.org/wiki/Not_invented_here
+yes, I missed this commit in old kernel(lts5.10), you have fixed the 
+upper limit.
 
-Means that you could very well simplify the code by using existing functions.
+commit 602946ec2f90d5bd965857753880db29d2d9a1e9
+Author: Christophe Leroy <christophe.leroy@csgroup.eu>
+Date:   Tue Oct 12 12:40:37 2021 +0200
 
-...
+     powerpc: Set max_mapnr correctly
 
-> > Okay, I see this is the original code like this... Perhaps it makes
-> > sense to reshuffle them (indentation-wise) at the same time and
-> > mention this in the changelog.
 
-Here is the explanation that I noticed that the code you move is
-original, and not written by you.
-
--- 
-With Best Regards,
-Andy Shevchenko
+>
+>> eg,  addr >= PAGE_OFFSET && addr < high_memory
+> Isn't it exactly what pfn_valid() already do today ?
+> Why change that at all ?
+>
+> Christophe
+>
+>> arch/powerpc/mm/mem.c:  high_memory = (void *) __va(max_low_pfn *
+>> PAGE_SIZE);
+>>
+>> for ppc32 max_low_pfn is the upper low memory pfn,  and For ppc64,
+>> high_memory is
+>>
+>> the max memory pfn, it looks good too, correct me if I'm wrong, if the
+>> above check
+>>
+>> is ok, I will send a new v3,  thanks.
+>>
+>>
+>>
+>>
+>>>
+>>>> The checks added to __pa actually don't prevent vmalloc memory from
+>>>> being passed to it either on 64s, only a more basic test.
+>>> That's correct. It is the role of pfn_valid() to check that.
+>>>
+>>> Christophe
+>>>
+>>>> I think 64s wants (addr >= PAGE_OFFSET && addr < KERN_VIRT_START) as
+>>>> the condition.  Could possibly add that check to __pa as well to
+>>>> catch vmalloc addresses.
+>>>>
+>>>> Thanks,
+>>>> Nick
+>>>>
+>>> >

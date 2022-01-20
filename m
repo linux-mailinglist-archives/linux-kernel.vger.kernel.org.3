@@ -2,110 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1B04950E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAB34950EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376365AbiATPEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:04:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346055AbiATPE2 (ORCPT
+        id S1376407AbiATPEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:04:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20710 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376401AbiATPEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:04:28 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67184C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:04:28 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id r7-20020a1c4407000000b0034e043aaac7so232212wma.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:04:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=+Aq1htCCe4J+KaYbiBgsGd/SMns1HeFPyllEeH0HLrE=;
-        b=xDCfSkp4gVRyMCsNHMACNwvOjOLWGCCFvpl6FBksdSeKoOo8g6aWif0LxVqFjOA8K6
-         SwgwL+uPlvH6X5/3gjhPYOvsH4UENcXKqKMQwxp9hLNBjiXf0PgD2pYGZNtl0Gm1VHL3
-         WWOxhUf62gw61bEpmXA/voFCTI40ph5VuEWl+kUuds7jetvsgWyBD+vzhqGGncSGVSRI
-         9QZqQzq+AOO1prrNXCDR9JIoLxWQBDBZRS2iSbsPNDuF6app0wb5qr0ONR+r9OQ1KkcN
-         wViG/TyNyKD76jQEnzEXS6zldfkxblvIY691z0e8gIOaMgOGOnNPslRA/xTk6un6u4Ix
-         yZzg==
+        Thu, 20 Jan 2022 10:04:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642691073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=To2wpxuY27WAnz4SIl/hJ0+xCm0ywOKL7oN+T9JQDqU=;
+        b=gPU8mNrovp/OB9nT+qQdrYDv4LQ4TFUejlaeojg2oBqwH6PDLs1rrUVC4Rf7OP4pU8uhh/
+        Ypli+unm0XKL6NpA1DpyOuCPP/pBO7o/Uvru/0dfhOrEZIg9tO5lDrSSC5Yd6hGO7kav4G
+        Vvxl+k7szARWJhuGHYRNq2itbwUD6A4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-n5LrcJB1OX-hBMr6-AxjPA-1; Thu, 20 Jan 2022 10:04:31 -0500
+X-MC-Unique: n5LrcJB1OX-hBMr6-AxjPA-1
+Received: by mail-ed1-f70.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so2091757eds.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:04:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+Aq1htCCe4J+KaYbiBgsGd/SMns1HeFPyllEeH0HLrE=;
-        b=vpVKeGHiYjsADq3xvnyDdu8UCE9Uk0Oxuw0GlsxWjGB4NH565CTgamh7YlIFHiNXJF
-         J9Zm6HgMfx4DMIdyRMnWbuFNw2bFovm6MsvubX0itke7TeuTTHEhLeNwl9mabdtVELDe
-         5eDYCAGlpUIypyGQpa5MrDOy7OnXCgKwhzjfSXIjTmtQFDI/nmKg4OIiftUjNIfLWgrY
-         g7IRQF0njZ5REPvxbd/r7xkDFgSknKWkC3LmpI8AvWvySaFmZVgFsPj3jEmR0CrR+en9
-         RvvHh16nJNP0xqNYy+ChCGWdWPUtko4ZMu/qcrB6XpdV3QswvpjCCzICNqmu+6TfgbNu
-         h3lw==
-X-Gm-Message-State: AOAM533L7xJrHLdn4V1Qb4gOUj+G7ARH+uvqqLsGfoMBE+bZwZh8C54z
-        bFt9s7BQCgS+pHP8qayQQUDjKw==
-X-Google-Smtp-Source: ABdhPJxyBL43fH2rXCx547on3ZZXkYJE/PFoHnZpDzKy6MwUXjE0eMc+fSxR2ii4QVcAX1EUgjzuxg==
-X-Received: by 2002:a1c:7205:: with SMTP id n5mr8271022wmc.35.1642691066931;
-        Thu, 20 Jan 2022 07:04:26 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id bg23sm3487872wmb.5.2022.01.20.07.04.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 07:04:26 -0800 (PST)
-Date:   Thu, 20 Jan 2022 15:04:24 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Simon Glass <sjg@chromium.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: google,cros-ec: drop Enric Balletbo i
- Serra from maintainers
-Message-ID: <Yel5+DiQoOtV7x6Q@google.com>
-References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
- <20220120104009.159147-2-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=To2wpxuY27WAnz4SIl/hJ0+xCm0ywOKL7oN+T9JQDqU=;
+        b=UbiWjX7+4aXV2WwrT753N6jcY/tdNg7EaRuUUfiShEu+SlMOvfY9FC2KmT5VChE4OW
+         s108pOgr16ybg+nuzuw6HZ4c3AsYnVA+RJoaP3O4lU6OJlzjd48NvqFFYcgEO+vCdeVt
+         8b6HGc5x7mxQDdNU1iKpVIERrCAg9MicRmt8vpRt6mq8LGy8eMmmxsW9mUYEXI5lY1Pa
+         ZLILWg/fmspN9gabFvbQKQmWtrr24bVtCoXk6EaN6Kl28OnfZK7Yu1MwPy4P8pDy8dVk
+         8Rh35zKclCL5ba+z/UV56Y48/iP2c648IxGg+NtLkQfg2ADKU7ZWPrR6AINg+irNDbuW
+         WYug==
+X-Gm-Message-State: AOAM531paiERyxCXACTI28v4lwGhpyQd70pPwexFyUZjalh4gpGRRJ03
+        b+sNN33JRynWbVicvYQ6qqE96P5mNvxepwHAHMgB4MKGZ06Dw57VOpHN/hvhE+4ShfkmSVdt4Go
+        RDqUs3spJiwK3H3wPVTVDXaZA
+X-Received: by 2002:a17:907:6da4:: with SMTP id sb36mr28535597ejc.542.1642691070468;
+        Thu, 20 Jan 2022 07:04:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyghiAn88f/FuP8ckekTfjsMklMLqYCh+mLdlTm7Wp0lVLOMWfL9/cqIYmnkwrbVIhfgzxPWA==
+X-Received: by 2002:a17:907:6da4:: with SMTP id sb36mr28535566ejc.542.1642691070203;
+        Thu, 20 Jan 2022 07:04:30 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id gh14sm1090985ejb.38.2022.01.20.07.04.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 07:04:29 -0800 (PST)
+Message-ID: <78979080-1338-002c-ee16-5213415095da@redhat.com>
+Date:   Thu, 20 Jan 2022 16:04:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220120104009.159147-2-krzysztof.kozlowski@canonical.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 4/9] spi: Add API to count spi acpi resources
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
+References: <20220120134326.5295-1-sbinding@opensource.cirrus.com>
+ <20220120134326.5295-5-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220120134326.5295-5-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022, Krzysztof Kozlowski wrote:
+Hi,
 
-> Enric Balletbo i Serra emails bounce:
+On 1/20/22 14:43, Stefan Binding wrote:
+> Some ACPI nodes may have more than one Spi Resource.
+> To be able to handle these case, its necessary to have
+> a way of counting these resources.
 > 
->   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
-> 
-> so drop him from the maintainers, similarly to commit 3119c28634dd
-> ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 > ---
->  .../devicetree/bindings/extcon/extcon-usbc-cros-ec.yaml          | 1 -
->  .../devicetree/bindings/i2c/google,cros-ec-i2c-tunnel.yaml       | 1 -
->  .../bindings/iio/proximity/google,cros-ec-mkbp-proximity.yaml    | 1 -
->  Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml | 1 -
+>  drivers/spi/spi.c       | 40 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/spi/spi.h |  6 ++++++
+>  2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 898cc9931490..8c0c2e26609a 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -2325,6 +2325,46 @@ struct acpi_spi_lookup {
+>  	int			irq_index;
+>  };
+>  
+> +static int acpi_spi_count(struct acpi_resource *ares, void *data)
+> +{
+> +	struct acpi_resource_spi_serialbus *sb;
+> +	int *count = data;
+> +
+> +	if (ares->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
+> +		return 1;
+> +
+> +	sb = &ares->data.spi_serial_bus;
+> +	if (sb->type != ACPI_RESOURCE_SERIAL_TYPE_SPI)
+> +		return 1;
+> +
+> +	*count = *count + 1;
+> +
+> +	return 1;
+> +}
+> +
+> +/**
+> + * acpi_spi_count_resources - Count the number of SpiSerialBus resources
+> + * @adev:	ACPI device
+> + *
+> + * Returns the number of SpiSerialBus resources in the ACPI-device's
+> + * resource-list; or a negative error code.
+> + */
+> +int acpi_spi_count_resources(struct acpi_device *adev)
+> +{
+> +	LIST_HEAD(r);
+> +	int count = 0;
+> +	int ret;
+> +
+> +	ret = acpi_dev_get_resources(adev, &r, acpi_spi_count, &count);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	acpi_dev_free_resource_list(&r);
+> +
+> +	return count;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_spi_count_resources);
+> +
+>  static void acpi_spi_parse_apple_properties(struct acpi_device *dev,
+>  					    struct acpi_spi_lookup *lookup)
+>  {
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 1a34fd0f6ca2..25a82729f8da 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -764,6 +764,7 @@ extern void spi_unregister_controller(struct spi_controller *ctlr);
+>  extern struct spi_device *acpi_spi_device_alloc(struct spi_controller *ctlr,
+>  						struct acpi_device *adev,
+>  						int index, int irq_index);
+> +int acpi_spi_count_resources(struct acpi_device *adev);
+>  #else
+>  static inline struct spi_device *acpi_spi_device_alloc(struct spi_controller *ctlr,
+>  						       struct acpi_device *adev,
+> @@ -771,6 +772,11 @@ static inline struct spi_device *acpi_spi_device_alloc(struct spi_controller *ct
+>  {
+>  	return ERR_PTR(-EOPNOTSUPP);
+>  }
+> +
+> +int acpi_spi_count_resources(struct acpi_device *adev)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  #endif
+>  
+>  /*
 
->  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml        | 1 -
+I just realized I miss this bit, like with my review of patch 2/9,
+I don't think we need stubs here.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Regards,
 
->  5 files changed, 5 deletions(-)
+Hans
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+

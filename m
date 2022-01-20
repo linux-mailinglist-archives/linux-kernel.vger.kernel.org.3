@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 161F0494824
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA3B494836
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358992AbiATHQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 02:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S238399AbiATHWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 02:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358963AbiATHQx (ORCPT
+        with ESMTP id S230113AbiATHWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 02:16:53 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BB8C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:16:52 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id c66so9960704wma.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:16:52 -0800 (PST)
+        Thu, 20 Jan 2022 02:22:46 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F864C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:22:46 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id l7so1623531pls.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:22:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OsD3k1h/nXxoPdyVVpQ8b0kr7k1JbcCpQdORRhv5nNk=;
-        b=Pd9MXqHzmjLqLXrq8pGttPV02KvMxPcm0E6IecpykLhy9Qt2a9LDE6mj46syCuR2R5
-         hP/tkpERNch28OfoU6o6fDZIAHGmtp0yw0VBVfzeIVB3X1gO8exiiNB8NkSdf3lHv9gQ
-         B8X5zFcv4aJvHnnMbEHGDQ96Or2C0sWCA4+aUfHKUPEeH1efJ3VOZrv7fYndF3pn9BQm
-         nSCAYepJlbmc2F6myG0VcUAM37BVvJWz3wtXpotv+hNS3XsWYtsYZRWeorJWwoQ8tNTg
-         svU9EpimKH77lhZTTIAgv+0VV7edhg+pM2sukeJjb1XZFlGnxhASM+pN45huiD+L/q7p
-         vJKg==
+        d=9elements.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=ZRxwcVlpApYNja35uESlyHh+Aq0A/JBcPYglQHnpxW4=;
+        b=hKAqSGG+nMmYSnqifUNG35XVscjwBWBm8zbL8UdAf7cOMNI4zeFluBknagzTUO+EN7
+         cjpRTSKxvNZpfQ+e6ypqnlNTBDQi+LYMRHEN86A1VfKyvrxcUcgGhOYkmMy+KxjGX5W6
+         agsqGGZTrUvo6YdDtWSaDObutt3aQxTzzIbSRPd4IFTTYKap3PL6BnhzAeMMtCPxTwOp
+         SGwAEiFPCKoqLIHLV1JQa+KNHXw/i8JFIrjGkc5i22lyeo5xmviZzDZBK0QTnB4Iugeh
+         NwDDG5fAyfxSq2bhCjtofAPFE9OsqIKi+H7Youho96WadoLWC9IWaAbFnHO6S0UrBLqG
+         zkcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OsD3k1h/nXxoPdyVVpQ8b0kr7k1JbcCpQdORRhv5nNk=;
-        b=UTyLh4hvrZpScmSaAyvlul20uUvAIwe5RrdomWYGCWX0qVFbMMRCZi/ArDpKnQ0dfJ
-         ZI827LeQctQ2ca7BBOVWfKVtrBUbURlLRJguE5Ab15/LAiy9ZckBMJJgLFADc2HsY95X
-         gJ0mZ1NdK+WzcTSFXfPm1vZ0MG401otEBISiLMdDL8S3DoBrfKSoT4AI45+YLZ6AQ1EX
-         QKymeZ79V3fq0BMgnVoIGwljZC7e5u7OlF6LLDLiPTByH4Eu3CdCQJzyKNjSYD0PsIbZ
-         OGQcXRjWBFu3J48RlX5iZ85B6pCyBagr6fQrtGeaRyAPyVmXQRmyx4XRXdvKGY1Ijwxc
-         SeMw==
-X-Gm-Message-State: AOAM531LFUI/YC+dxETszkWRc3+w1b3Zl1SuaCWGHiBnDYX3scYVi6U5
-        7DIi8cJU2u/9OPm5na6ck/SPBfaxkkCDa7soXKQPbg==
-X-Google-Smtp-Source: ABdhPJx5U4jr9wAtr1IWKyENq8OQEH+vZKcHFKhhWeMXvMi0q0I6HjNIdQdtUrzjKwdjSMNs8qU/ByGePsAqjXbO30c=
-X-Received: by 2002:a05:6000:1146:: with SMTP id d6mr31052507wrx.497.1642663011221;
- Wed, 19 Jan 2022 23:16:51 -0800 (PST)
+         :message-id:subject:to;
+        bh=ZRxwcVlpApYNja35uESlyHh+Aq0A/JBcPYglQHnpxW4=;
+        b=HlGRZQUWcDbI3R8gdRZrwpttVUDHQfgv3+gSepvz+4E+4pp5cpomrRk3ksa1Cq8W2m
+         5dzVfeGLRI3KshXSH4HwvQ4SWF5Nc63zWL1P4CLEXQ0fOO/L/rRxduz1He9iOkVVZU2a
+         /YJzrfTiFosdwpunZD6VLFcNTb8bWLr2BaMLFg5XmB6llaws1n7tnOtIo4waUuUbXhJ7
+         GyXDDtlTYdQVZDZzHMY07htgvmEaNaW5UFhBXHuyEME65BFl6z0MJ7iKyOToIz7wuAEq
+         fwSsRfKmvHO9SNcIN36rDaKpP8tzn9CYetr3mZr/4QuBj7cY1XMQ7rl/6hApb2KYfbef
+         VPDw==
+X-Gm-Message-State: AOAM532DHyvJQzZB/jVNwnFxTLgyMGxVl/o2xyVeIW5Dh4Ezpv5IwDej
+        KbeXbAQ3gljgs1TW1wgUruO1/40KSJshFONNJTYpammTOlSEdA==
+X-Google-Smtp-Source: ABdhPJzHuZU7pMvBOJ7wvcK2N+adNzki3KH18IGdHn9Y4cLIsBdVsayINev5TxA/m10DTJPgtlzfR/THz0V+8TIxs7I=
+X-Received: by 2002:a17:902:c9d2:b0:14a:3335:accd with SMTP id
+ q18-20020a170902c9d200b0014a3335accdmr36148352pld.94.1642663365804; Wed, 19
+ Jan 2022 23:22:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119080736.2940906-1-jens.wiklander@linaro.org> <bf3c1583f8d7466a96bab8feb462bb36@AcuMS.aculab.com>
-In-Reply-To: <bf3c1583f8d7466a96bab8feb462bb36@AcuMS.aculab.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 20 Jan 2022 08:16:40 +0100
-Message-ID: <CAHUa44EYeRy-xzmCvp5g276s4CT+wGBPR_cGDDBtjuzeeERSfw@mail.gmail.com>
-Subject: Re: [PATCH] optee: add error checks in optee_ffa_do_call_with_arg()
-To:     David Laight <david.laight@aculab.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        Sumit Garg <sumit.garg@linaro.org>
+References: <20220108185759.2086347-1-patrick.rudolph@9elements.com>
+ <20220108185759.2086347-5-patrick.rudolph@9elements.com> <Yd6f8kQ59kcY7JH6@ninjato>
+In-Reply-To: <Yd6f8kQ59kcY7JH6@ninjato>
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+Date:   Thu, 20 Jan 2022 08:22:34 +0100
+Message-ID: <CALNFmy2H2hQX5iLQdJj1pd8_eN5Ohs14NcAhhcTeRssmuUZ3iw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] i2c: muxes: pca954x: Add regulator support
+To:     Wolfram Sang <wsa@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 3:18 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Jens Wiklander
-> > Sent: 19 January 2022 08:08
-> >
-> > Adds error checking in optee_ffa_do_call_with_arg() for correctness.
-> >
-> > Fixes: 4615e5a34b95 ("optee: add FF-A support")
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > ---
-> >  drivers/tee/optee/ffa_abi.c | 15 ++++++++++++---
-> >  1 file changed, 12 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> > index d8c8683863aa..d88bd2e41572 100644
-> > --- a/drivers/tee/optee/ffa_abi.c
-> > +++ b/drivers/tee/optee/ffa_abi.c
-> > @@ -619,9 +619,18 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
-> >               .data2 = (u32)(shm->sec_world_id >> 32),
-> >               .data3 = shm->offset,
-> >       };
-> > -     struct optee_msg_arg *arg = tee_shm_get_va(shm, 0);
-> > -     unsigned int rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-> > -     struct optee_msg_arg *rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-> > +     struct optee_msg_arg *arg;
-> > +     unsigned int rpc_arg_offs;
-> > +     struct optee_msg_arg *rpc_arg;
-> > +
-> > +     arg = tee_shm_get_va(shm, 0);
-> > +     if (IS_ERR(arg))
-> > +             return PTR_ERR(arg);
-> > +
-> > +     rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-> > +     rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-> > +     if (IS_ERR(arg))
-> > +             return PTR_ERR(arg);
->
-> What's this duplicate test for?
+Hi Wolfram,
+I don't think that it's possible to use the generic vbus-supply.
+In my case the complete chip, not only the bus, is powered by a regulator.
+In addition it looks like this works only for platform drivers where
+you can set the bus_regulator
+before the i2c core probe function is invoked.
 
-Oh, that's a copy & paste error, I should have tested rpc_arg here.
-I'll fix it in the V2.
+Regards,
+Patrick Rudolph
 
-Thanks,
-Jens
 
+
+On Wed, Jan 12, 2022 at 10:31 AM Wolfram Sang <wsa@kernel.org> wrote:
 >
->         David
+> On Sat, Jan 08, 2022 at 07:57:58PM +0100, Patrick Rudolph wrote:
+> > Add an optional vdd regulator and enable it when found for devices
+> > that are powered off by default.
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> regulator support was recently added to the I2C core but had to be
+> reverted because of side effects [1]. I think you could make use of it
+> if it gets readded?
+>
+> [1] a19f75de73c2 ("Revert "i2c: core: support bus regulator controlling in adapter"")
 >

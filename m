@@ -2,372 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 617AB494D6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F375494E6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbiATLv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbiATLv0 (ORCPT
+        id S243298AbiATMzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:55:53 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:56067 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236052AbiATMzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:51:26 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45D6C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:51:25 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id b14so20688741lff.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:51:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=93p6hvOXn5uTYzDS8qmbb8kxxAARtxbHtUvJK3rnNys=;
-        b=Yn6CQFdS4gziNY1lqTBMLVZIQh70Iwq+YK4hOmrQB//kFmNJbRlPNsbNP7zeWgkaUK
-         V8DkWDgsNU0GO3rHNQqodN4f6/k2R+WxIhehHRvhP2EzJTbOR2+2tVZ6QJdohplkPrNO
-         dKvrpBuDD3XNrDZoYWFlMEc0/zx3tM1vMiAW9JXzn0CMGc9ffCw8Ay+WxwDfD3UePWwA
-         5Po1CzQM6qZqOjpvhcSmTMBDxjYBlojU6EMn8rRPSoT+RP8857esPN2IOecj6J4GE14w
-         Za5UpWMzTv7sV738pFRMdBN9fIqO/ZPXM9D7eWMmCdLiUHxzeZuI18d3RAqUJ22x7g3l
-         Ndtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=93p6hvOXn5uTYzDS8qmbb8kxxAARtxbHtUvJK3rnNys=;
-        b=Ut7qrLPOErFPcBoneinaWRd1jt5b7M2ijMFzdPEaVB0r6UVYpXEEVInEajOkRekXqX
-         1Rd5nuk4h7xC8psy8MhKnGUTOFPxIg+HX0rDuBJ0b8dFYdrK7B0OpVzp0+lk8USQLvPZ
-         lcNfffUJTruAt1EDuKZNlVPD2YYII+gOoRkbkcFBxI+dk6HUqcMv6c5hXoPlAKDCC2Ly
-         9c8T41tXxgsJOl7/BbLpfx6Rp0e6SEY/VVfZo7r7kbBBfSKPFCiBeqKfNaWdhsar5e2a
-         T/MBYsjgamCSNEshdwPh6Nqa8MDQ9x9LuKHLUdt3/WKdu5Qe4msVVp07N18NhHnEZYBT
-         0Hdw==
-X-Gm-Message-State: AOAM532f0ueubrXCPhz8qOIfPqnyw0jeLJI/4Fxq4kF1HdbZwyyr3onk
-        T/ovaBSKnyLg0THIys2PnlfOBNvZQB/Nr/0HOVRubQ==
-X-Google-Smtp-Source: ABdhPJwywxrdKA8zELmq+74gsbaNzg9xa1hx5RJvxHTYJe07Rfvn8nGytgpd9wMfsEeCzD/PZjgf89cGeass24j+tQQ=
-X-Received: by 2002:a05:6512:34d3:: with SMTP id w19mr12702688lfr.253.1642679483885;
- Thu, 20 Jan 2022 03:51:23 -0800 (PST)
+        Thu, 20 Jan 2022 07:55:52 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MxUjv-1mLhTY2loH-00xqkF; Thu, 20 Jan 2022 13:55:49 +0100
+Received: by mail-oi1-f179.google.com with SMTP id s127so8754054oig.2;
+        Thu, 20 Jan 2022 04:55:48 -0800 (PST)
+X-Gm-Message-State: AOAM5319YPSe1THOcSSBjDeAAH3V3HEsqy3bWprGM+/85SEmBRqPI55X
+        ze0eFOclK1X/uSRuFvU0dttsz7kIAsgSX0LKlxU=
+X-Google-Smtp-Source: ABdhPJydc5loEDqeQgQKrusgbi1aGxD+tZ0GQwF7Qc/YGyFSxdDyRJjWKaddNyUDdWoTK5tk0vBiI2MFsnHozVbpMM8=
+X-Received: by 2002:a05:6808:2206:: with SMTP id bd6mr7227920oib.11.1642679565024;
+ Thu, 20 Jan 2022 03:52:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20220114150824.3578829-1-jens.wiklander@linaro.org> <20220114150824.3578829-12-jens.wiklander@linaro.org>
-In-Reply-To: <20220114150824.3578829-12-jens.wiklander@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 20 Jan 2022 17:21:12 +0530
-Message-ID: <CAFA6WYMQX_e4JKugQFV=87Wvvo2HAfpWLHHK2_MShGBqHBvh-A@mail.gmail.com>
-Subject: Re: [PATCH v2 11/12] tee: replace tee_shm_register()
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
+References: <20220120073911.99857-4-guoren@kernel.org>
+In-Reply-To: <20220120073911.99857-4-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 20 Jan 2022 12:52:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
+Message-ID: <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
+Subject: Re: [PATCH V3 03/17] asm-generic: compat: Cleanup duplicate definitions
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lCsHI9rHfZLXnkV3dfivYMnD6jrOglxU7oaZk08tRFkPrpeG0fc
+ HD7q3LqubhJw2M4BBmJJripLWFBc9IHurENJcnEwZ526tnZBiQz0iHHMsU6FpCMMtR3OkoU
+ uKH6YpISiZPOs40GV019o9s9mYLGfEeW+lhGwYH77CCiUEflurR3qBPjEZ2pRgwtWVvFV0M
+ UZUAaoyTqqojrqECgUMjA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wGZ+H9xEMTs=:APK36IfZSJNk4XMXh/6BEq
+ 2IzkaLQnLBZ6xC8KrVATSsP9mViZvnc5UFujJR7u/XdQiJQOUWmYSeGCkGDsaqXl3mC2Y78aS
+ 0jZbCGH0n0/she6jobPiP+Imnfpln4WvwW+wribOOzmns5E+3dijimjU9QriLaKYMRY6XNNYJ
+ 5z/92LzQFwEiXZKr6jTZTflsV/RcfUWo8TQ9Vk5PEnZisCx9fnESSuAellFOF+oQGRkw4BZP2
+ dCF0CSRvswuIELQPIaM9VGO8Dd3VTKew1I1Nk3CxVsOAO78lF5P8gsEVkoBKdACFN+6fMTsRR
+ nOHKBvm6wl75S24yAYmudmMY2h5L+CO69mvZLzKr16NUrLv0nuOuNcw9PNtQEfZJZ89N3owOK
+ 7nRp9htE3ceLTRNjtw+qq9qFgBi1UXFhpL7s8XWpO/ZkHH/oowoUGWHFSeIlGRHVe1yymiCRp
+ u1ipdpZ+JBWiGznqZQkXhMsHcRtwjjhetwoLdJeEth5UaV/R6WNqocKHemFlr/QMpq+qaGeeS
+ zZmu/TQAI5YDNbMQGU5VE5MLmYJQcXdgzQR1hAK3pV5yjd/By9FmNwlOplt2bxbGYpvCD/IWy
+ 0HUwXZaGyCs41eEm9W3rpvaIwEvO0Nohz0FIMF0dLssQb+p9V9fwZA885lzvL/4ukSUaBlMs7
+ OXWioxXPDyhzwvobFot+Jx5CJBJKDXgH9p/zItmvxK0hywgnkAfPUqcqz9HngZYMHOyOANX9Z
+ BIIejvL/S6uwGtTbvBR/Jn99I60wf6cIdlgZHsZKveKIYr8lB9LOYC8Z8vN04gnHiuquxIwB4
+ 62ldoNDHB/HV72vTKBhyeV7B1bVInJ+ftPiTjwwfuL1ou29H+0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+  On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
 >
-> tee_shm_register() is replaced by the previously introduced functions
-> tee_shm_register_user_buf() and tee_shm_register_kernel_buf().
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Since there are not external callers left we can remove tee_shm_register()
-> and refactor the remains.
+> There are 7 64bit architectures that support Linux COMPAT mode to
+> run 32bit applications. A lot of definitions are duplicate:
+>  - COMPAT_USER_HZ
+>  - COMPAT_RLIM_INFINITY
+>  - COMPAT_OFF_T_MAX
+>  - __compat_uid_t, __compat_uid_t
+>  - compat_dev_t
+>  - compat_ipc_pid_t
+>  - struct compat_flock
+>  - struct compat_flock64
+>  - struct compat_statfs
+>  - struct compat_ipc64_perm, compat_semid64_ds,
+>           compat_msqid64_ds, compat_shmid64_ds
 >
-> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> Cleanup duplicate definitions and merge them into asm-generic.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+
 > ---
->  drivers/tee/tee_shm.c   | 157 +++++++++++++++++++++++-----------------
->  include/linux/tee_drv.h |  11 ---
->  2 files changed, 91 insertions(+), 77 deletions(-)
+>  arch/arm64/include/asm/compat.h   | 108 +++-----------------------
+>  arch/mips/include/asm/compat.h    |  24 ++----
+>  arch/parisc/include/asm/compat.h  |  47 ++----------
+>  arch/powerpc/include/asm/compat.h |  47 ++----------
+>  arch/s390/include/asm/compat.h    | 109 +++-----------------------
+>  arch/sparc/include/asm/compat.h   |  39 ++++------
+>  arch/x86/include/asm/compat.h     | 114 +++-------------------------
+>  include/asm-generic/compat.h      | 122 ++++++++++++++++++++++++++++++
+>  8 files changed, 191 insertions(+), 419 deletions(-)
 >
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index 6a1dbce75616..fe3e5977dd7c 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -12,17 +12,43 @@
->  #include <linux/uio.h>
->  #include "tee_private.h"
+> diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
+> index eaa6ca062d89..f54f295efae3 100644
+> --- a/arch/arm64/include/asm/compat.h
+> +++ b/arch/arm64/include/asm/compat.h
+> @@ -5,9 +5,18 @@
+>  #ifndef __ASM_COMPAT_H
+>  #define __ASM_COMPAT_H
 >
-> +static void shm_put_kernel_pages(struct page **pages, unsigned long npages)
-> +{
-> +       unsigned long n;
+> +#define COMPAT_RLIM_INFINITY           0xffffffff
+...
+> +#ifndef COMPAT_RLIM_INFINITY
+> +#define COMPAT_RLIM_INFINITY   0x7fffffff
+> +#endif
 
-nit: Can we have a consistent prototype for the number of pages?
-size_t as used by struct tee_shm or unsigned long? Same holds true for
-variables below as well: npages, page_count, num_pages, n.
+While this is a correct conversion, I think the default should
+be 0xffffffff, to match the asm-generic RLIM_INFINITY
+definition, with only mips and sparc getting the exception
 
-> +
-> +       for (n = 0; n < npages; n++)
-> +               put_page(pages[n]);
-> +}
-> +
-> +static int shm_get_kernel_pages(unsigned long start, int page_count,
-> +                               struct page **pages)
-> +{
-> +       struct kvec *kiov;
-> +       unsigned int n;
-> +       int rc;
-> +
-> +       kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
-> +       if (!kiov)
-> +               return -ENOMEM;
-> +
-> +       for (n = 0; n < page_count; n++) {
-> +               kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
-> +               kiov[n].iov_len = PAGE_SIZE;
-> +       }
-> +
-> +       rc = get_kernel_pages(kiov, page_count, 0, pages);
-> +       kfree(kiov);
-> +
-> +       return rc;
-> +}
-> +
->  static void release_registered_pages(struct tee_shm *shm)
->  {
->         if (shm->pages) {
-> -               if (shm->flags & TEE_SHM_USER_MAPPED) {
-> +               if (shm->flags & TEE_SHM_USER_MAPPED)
->                         unpin_user_pages(shm->pages, shm->num_pages);
-> -               } else {
-> -                       size_t n;
-> -
-> -                       for (n = 0; n < shm->num_pages; n++)
-> -                               put_page(shm->pages[n]);
-> -               }
-> +               else
-> +                       shm_put_kernel_pages(shm->pages, shm->num_pages);
->
->                 kfree(shm->pages);
->         }
-> @@ -191,28 +217,24 @@ struct tee_shm *tee_shm_alloc_priv_kernel_buf(struct tee_context *ctx,
->  }
->  EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_kernel_buf);
->
-> -struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
-> -                                size_t length, u32 flags)
-> +static struct tee_shm *
-> +register_shm_helper(struct tee_context *ctx, unsigned long addr,
-> +                   size_t length, u32 flags, int id)
->  {
->         struct tee_device *teedev = ctx->teedev;
-> -       const u32 req_user_flags = TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED;
-> -       const u32 req_kernel_flags = TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED;
->         struct tee_shm *shm;
-> +       unsigned long start;
-> +       int num_pages;
->         void *ret;
->         int rc;
-> -       int num_pages;
-> -       unsigned long start;
-> -
-> -       if (flags != req_user_flags && flags != req_kernel_flags)
-> -               return ERR_PTR(-ENOTSUPP);
->
->         if (!tee_device_get(teedev))
->                 return ERR_PTR(-EINVAL);
->
->         if (!teedev->desc->ops->shm_register ||
->             !teedev->desc->ops->shm_unregister) {
-> -               tee_device_put(teedev);
-> -               return ERR_PTR(-ENOTSUPP);
-> +               ret = ERR_PTR(-ENOTSUPP);
+> -struct compat_flock {
+> -       short           l_type;
+> -       short           l_whence;
+> -       compat_off_t    l_start;
+> -       compat_off_t    l_len;
+> -       compat_pid_t    l_pid;
+> -};
+...
+> +#ifndef compat_flock
+> +struct compat_flock {
+> +       compat_short_t  l_type;
+> +       compat_short_t  l_whence;
+> +       compat_off_t    l_start;
+> +       compat_off_t    l_len;
+> +       compat_pid_t    l_pid;
+> +} __attribute__((packed));
+> +#endif
 
-Checkpatch warns about this error code:
+You are adding __attribute__((packed)) here, which I think has
+no effect on the layout on the structure on any of the architectures
+but it does change the alignment requirements needlessly.
 
-WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-#104: FILE: drivers/tee/tee_shm.c:236:
-+ ret = ERR_PTR(-ENOTSUPP);
+Better leave it without the attribute.
 
-> +               goto err_dev_put;
->         }
->
->         teedev_ctx_get(ctx);
-> @@ -220,13 +242,13 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
->         shm = kzalloc(sizeof(*shm), GFP_KERNEL);
->         if (!shm) {
->                 ret = ERR_PTR(-ENOMEM);
-> -               goto err;
-> +               goto err_ctx_put;
->         }
->
->         refcount_set(&shm->refcount, 1);
-> -       shm->flags = flags | TEE_SHM_REGISTER;
-> +       shm->flags = flags;
->         shm->ctx = ctx;
-> -       shm->id = -1;
-> +       shm->id = id;
->         addr = untagged_addr(addr);
->         start = rounddown(addr, PAGE_SIZE);
->         shm->offset = addr - start;
-> @@ -235,71 +257,45 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
->         shm->pages = kcalloc(num_pages, sizeof(*shm->pages), GFP_KERNEL);
->         if (!shm->pages) {
->                 ret = ERR_PTR(-ENOMEM);
-> -               goto err;
-> +               goto err_free_shm;
->         }
->
-> -       if (flags & TEE_SHM_USER_MAPPED) {
-> +       if (flags & TEE_SHM_USER_MAPPED)
->                 rc = pin_user_pages_fast(start, num_pages, FOLL_WRITE,
->                                          shm->pages);
-> -       } else {
-> -               struct kvec *kiov;
-> -               int i;
-> -
-> -               kiov = kcalloc(num_pages, sizeof(*kiov), GFP_KERNEL);
-> -               if (!kiov) {
-> -                       ret = ERR_PTR(-ENOMEM);
-> -                       goto err;
-> -               }
-> -
-> -               for (i = 0; i < num_pages; i++) {
-> -                       kiov[i].iov_base = (void *)(start + i * PAGE_SIZE);
-> -                       kiov[i].iov_len = PAGE_SIZE;
-> -               }
-> -
-> -               rc = get_kernel_pages(kiov, num_pages, 0, shm->pages);
-> -               kfree(kiov);
-> -       }
-> +       else
-> +               rc = shm_get_kernel_pages(start, num_pages, shm->pages);
->         if (rc > 0)
->                 shm->num_pages = rc;
->         if (rc != num_pages) {
->                 if (rc >= 0)
->                         rc = -ENOMEM;
->                 ret = ERR_PTR(rc);
-> -               goto err;
-> -       }
-> -
-> -       mutex_lock(&teedev->mutex);
-> -       shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
-> -       mutex_unlock(&teedev->mutex);
-> -
-> -       if (shm->id < 0) {
-> -               ret = ERR_PTR(shm->id);
-> -               goto err;
-> +               goto err_put_shm_pages;
->         }
->
->         rc = teedev->desc->ops->shm_register(ctx, shm, shm->pages,
->                                              shm->num_pages, start);
->         if (rc) {
->                 ret = ERR_PTR(rc);
-> -               goto err;
-> +               goto err_put_shm_pages;
->         }
->
->         return shm;
-> -err:
-> -       if (shm) {
-> -               if (shm->id >= 0) {
-> -                       mutex_lock(&teedev->mutex);
-> -                       idr_remove(&teedev->idr, shm->id);
-> -                       mutex_unlock(&teedev->mutex);
-> -               }
-> -               release_registered_pages(shm);
-> -       }
-> +err_put_shm_pages:
-> +       if (flags & TEE_SHM_USER_MAPPED)
-> +               unpin_user_pages(shm->pages, shm->num_pages);
-> +       else
-> +               shm_put_kernel_pages(shm->pages, shm->num_pages);
-> +       kfree(shm->pages);
-> +err_free_shm:
->         kfree(shm);
-> +err_ctx_put:
->         teedev_ctx_put(ctx);
-> +err_dev_put:
->         tee_device_put(teedev);
->         return ret;
->  }
-> -EXPORT_SYMBOL_GPL(tee_shm_register);
->
->  /**
->   * tee_shm_register_user_buf() - Register a userspace shared memory buffer
-> @@ -312,8 +308,36 @@ EXPORT_SYMBOL_GPL(tee_shm_register);
->  struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
->                                           unsigned long addr, size_t length)
->  {
-> -       return tee_shm_register(ctx, addr, length,
-> -                               TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
-> +       u32 f = TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED | TEE_SHM_REGISTER;
+> -struct compat_flock64 {
+> -       short           l_type;
+> -       short           l_whence;
+> -       compat_loff_t   l_start;
+> -       compat_loff_t   l_len;
+> -       compat_pid_t    l_pid;
+> -};
+...
+> +#ifndef compat_flock64
+> +struct compat_flock64 {
+> +       compat_short_t  l_type;
+> +       compat_short_t  l_whence;
+> +       compat_loff_t   l_start;
+> +       compat_loff_t   l_len;
+> +       compat_pid_t    l_pid;
+> +} __attribute__((packed));
+> +#endif
 
-nit: I would prefer to write variable name as "flags" for clarity.
+This one is different: on all architectures other than x86,
+the added packed attribute changes the size of the
+structure by removing the four padding bytes at the
+end. x86 originally added the attribute here to work around
+the weirdness of the x86-32 ABI that aligns 64-bit values
+on a 4-byte boundary.
 
-> +       struct tee_device *teedev = ctx->teedev;
-> +       struct tee_shm *shm;
-> +       void *ret;
-> +       int id;
+The easiest workaround would be to have x86 keep its
+custom definition. A slightly nicer version would drop the
+attribute on x86 as well but instead change the compat_loff_t
+definition to use compat_s64 instead of s64, giving it the
+correct alignment.
+
+> -struct compat_statfs {
+> -       int             f_type;
+> -       int             f_bsize;
+> -       int             f_blocks;
+> -       int             f_bfree;
+> -       int             f_bavail;
+> -       int             f_files;
+> -       int             f_ffree;
+> -       compat_fsid_t   f_fsid;
+> -       int             f_namelen;      /* SunOS ignores this field. */
+> -       int             f_frsize;
+> -       int             f_flags;
+> -       int             f_spare[4];
+> -};
+...
+> +#ifndef compat_statfs
+> +struct compat_statfs {
+> +       compat_uint_t   f_type;
+> +       compat_uint_t   f_bsize;
+> +       compat_uint_t   f_blocks;
+> +       compat_uint_t   f_bfree;
+> +       compat_uint_t   f_bavail;
+> +       compat_uint_t   f_files;
+> +       compat_uint_t   f_ffree;
+> +       __kernel_fsid_t f_fsid;
+> +       compat_uint_t   f_namelen;
+> +       compat_uint_t   f_frsize;
+> +       compat_uint_t   f_flags;
+> +       compat_uint_t   f_spare[4];
+> +} __attribute__((packed));
+> +#endif
+
+None of the architectures use the packed attribute at the moment,
+so please don't add one here.
+
+Changing compat_fsid_t to __kernel_fsid_t is harmless, but seems
+unnecessary.
+
+Changing the signed int to an unsigned int (regardless of notation)
+may be a change in behavior. s390 is the only architecture
+using unsigned members here at the moment, as of b8668fd0a7e1
+("s390/uapi: change struct statfs[64] member types to unsigned
+values").
+The description of that patch sounds like this was changed to fix
+a bug, but I don't see what the actual problem would be in the
+put_compat_statfs().
+
+For the moment I'd suggest leaving this with the signed version,
+with s390 being another exception next to mips. We can follow-up
+with merging s390 into the common definition using either the
+signed or unsigned types, but I think that needs to be a separate
+patch with a detailed explanation.
+
+ +#ifndef compat_ipc64_perm
+> +struct compat_ipc64_perm {
+> +       compat_key_t key;
+> +       __compat_uid32_t uid;
+> +       __compat_gid32_t gid;
+> +       __compat_uid32_t cuid;
+> +       __compat_gid32_t cgid;
+> +       compat_mode_t   mode;
+> +       unsigned char   __pad1[4 - sizeof(compat_mode_t)];
+> +       compat_ushort_t seq;
+> +       compat_ushort_t __pad2;
+> +       compat_ulong_t  unused1;
+> +       compat_ulong_t  unused2;
+> +} __attribute__((packed));
 > +
-> +       mutex_lock(&teedev->mutex);
-> +       id = idr_alloc(&teedev->idr, NULL, 1, 0, GFP_KERNEL);
-> +       mutex_unlock(&teedev->mutex);
+> +struct compat_semid64_ds {
+> +       struct compat_ipc64_perm sem_perm;
+> +       compat_ulong_t sem_otime;
+> +       compat_ulong_t sem_otime_high;
+> +       compat_ulong_t sem_ctime;
+> +       compat_ulong_t sem_ctime_high;
+> +       compat_ulong_t sem_nsems;
+> +       compat_ulong_t __unused3;
+> +       compat_ulong_t __unused4;
+> +} __attribute__((packed));
 > +
-
-nit: redundant extra line.
-
-> +       if (id < 0)
-> +               return ERR_PTR(id);
+> +struct compat_msqid64_ds {
+> +       struct compat_ipc64_perm msg_perm;
+> +       compat_ulong_t msg_stime;
+> +       compat_ulong_t msg_stime_high;
+> +       compat_ulong_t msg_rtime;
+> +       compat_ulong_t msg_rtime_high;
+> +       compat_ulong_t msg_ctime;
+> +       compat_ulong_t msg_ctime_high;
+> +       compat_ulong_t msg_cbytes;
+> +       compat_ulong_t msg_qnum;
+> +       compat_ulong_t msg_qbytes;
+> +       compat_pid_t   msg_lspid;
+> +       compat_pid_t   msg_lrpid;
+> +       compat_ulong_t __unused4;
+> +       compat_ulong_t __unused5;
+> +} __attribute__((packed));
 > +
-> +       shm = register_shm_helper(ctx, addr, length, f, id);
-> +       if (IS_ERR(shm)) {
-> +               mutex_lock(&teedev->mutex);
-> +               idr_remove(&teedev->idr, id);
-> +               mutex_unlock(&teedev->mutex);
-> +               return shm;
-> +       }
-> +
-> +       mutex_lock(&teedev->mutex);
-> +       ret = idr_replace(&teedev->idr, shm, id);
-> +       mutex_unlock(&teedev->mutex);
-> +       if (IS_ERR(ret)) {
-> +               tee_shm_free(shm);
-> +               return ret;
-> +       }
-> +
-> +       return shm;
->  }
->  EXPORT_SYMBOL_GPL(tee_shm_register_user_buf);
->
-> @@ -330,8 +354,9 @@ EXPORT_SYMBOL_GPL(tee_shm_register_user_buf);
->  struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
->                                             void *addr, size_t length)
->  {
-> -       return tee_shm_register(ctx, (unsigned long)addr, length,
-> -                               TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED);
-> +       u32 f = TEE_SHM_REGISTER | TEE_SHM_KERNEL_MAPPED;
+> +struct compat_shmid64_ds {
+> +       struct compat_ipc64_perm shm_perm;
+> +       compat_size_t  shm_segsz;
+> +       compat_ulong_t shm_atime;
+> +       compat_ulong_t shm_atime_high;
+> +       compat_ulong_t shm_dtime;
+> +       compat_ulong_t shm_dtime_high;
+> +       compat_ulong_t shm_ctime;
+> +       compat_ulong_t shm_ctime_high;
+> +       compat_pid_t   shm_cpid;
+> +       compat_pid_t   shm_lpid;
+> +       compat_ulong_t shm_nattch;
+> +       compat_ulong_t __unused4;
+> +       compat_ulong_t __unused5;
+> +} __attribute__((packed));
+> +#endif
 
-Ditto.
+I checked these in detail, looking at the seven architectures, and your
+conversion looks exactly right (I had initially missed the part about
+compat_mode_t that you got right).
 
--Sumit
+As with compat_flock, the packed attribute has no impact on the layout
+here, but please drop it anyway for consistency.
 
-> +
-> +       return register_shm_helper(ctx, (unsigned long)addr, length, f, -1);
->  }
->  EXPORT_SYMBOL_GPL(tee_shm_register_kernel_buf);
->
-> diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-> index 029c9a0590cc..e4f32885e273 100644
-> --- a/include/linux/tee_drv.h
-> +++ b/include/linux/tee_drv.h
-> @@ -278,17 +278,6 @@ struct tee_shm *tee_shm_alloc_priv_kernel_buf(struct tee_context *ctx,
->                                               size_t size);
->  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size);
->
-> -/**
-> - * tee_shm_register() - Register shared memory buffer
-> - * @ctx:       Context that registers the shared memory
-> - * @addr:      Address is userspace of the shared buffer
-> - * @length:    Length of the shared buffer
-> - * @flags:     Flags setting properties for the requested shared memory.
-> - *
-> - * @returns a pointer to 'struct tee_shm'
-> - */
-> -struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
-> -                                size_t length, u32 flags);
->  struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
->                                           unsigned long addr, size_t length);
->  struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
-> --
-> 2.31.1
->
+        Arnd

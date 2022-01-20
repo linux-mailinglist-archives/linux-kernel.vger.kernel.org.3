@@ -2,107 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01807494E75
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B44B7494E76
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244318AbiATM5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:57:48 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:41688 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239164AbiATM5r (ORCPT
+        id S244520AbiATM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:58:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36758 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231253AbiATM6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:57:47 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0C7511F3AA;
-        Thu, 20 Jan 2022 12:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642683466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YMMjYEG0Y0nE2gvxBL0+Nw0acduELSURUuZFPQ/x55Q=;
-        b=0ZOKOZKLG2cZ3XSGmfd5Bov7SBFHth7ser4occYtJKOU8MInVtqY8aMgOeoJayAGqhLYwp
-        VGRLck5JmDbNmRmnEmELv/N+h8uCCWo55qAVI1A2CXhpuCICGe7xL95pkwrQEgQ3o0CWn8
-        Zf6X6gAS3gvcnsHMDa5flPCUwf4etUM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642683466;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YMMjYEG0Y0nE2gvxBL0+Nw0acduELSURUuZFPQ/x55Q=;
-        b=E4SMuZ4WknAmHiuW47w6AUYFkdy/i0QJ6dVlvHOQ2u1/vzdmyqXWaXEr4PiJiliJPqJmZP
-        LWGTRCbvLPu8yQAw==
-Received: from quack3.suse.cz (unknown [10.100.200.198])
+        Thu, 20 Jan 2022 07:58:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D2F36A3B83;
-        Thu, 20 Jan 2022 12:57:45 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 886C5A05D9; Thu, 20 Jan 2022 13:57:45 +0100 (CET)
-Date:   Thu, 20 Jan 2022 13:57:45 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     jack@suse.cz, amir73il@gmail.com, repnop@google.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] fanotify: remove variable set but not used
-Message-ID: <20220120125745.axdqtnasbivkulsm@quack3.lan>
-References: <20220112085403.74670-1-yang.lee@linux.alibaba.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E755C616F2;
+        Thu, 20 Jan 2022 12:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC7EC340E0;
+        Thu, 20 Jan 2022 12:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642683492;
+        bh=PjsGNV1TcOlrmGioweXTIZy082puxUuggsqwMwI5MpU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Mx1W0FiMlD35wnnWBZfIXrXLDShM3EwMl1GNK30GOr7khcsY3oXmwRX5jgHz+yVRw
+         Qn+IrwNTxZkvR1KtBDtich2OaVcjzsSzyb/WnAehzDJh5TFx4sf9M/ylVazu+1BVhL
+         NrD9PH/J+5R9BODGMuddhCf7Ske77FeYXHvOfLtCz6TBHhkems4fy7pNl/vkS+nwNu
+         lR54GWBs8r6htUqebRIN0GC5mhCgt9TfVDiSEVYAxKzSlnrXAeNPV/ZTSFO4rXV6kH
+         vkqfmgNHLqnSPNiBWj5zEyP9P/4kJHbZ5IQGlkfKT9np+UP+sZd1OMGqBZMsvV0IeL
+         GnRfFLMNKn4qg==
+Message-ID: <80083e5ca3fd0a5bd2de43ebc803fc914d09ac3c.camel@kernel.org>
+Subject: Re: [PATCH] x86/sgx: Add poison handling to reclaimer
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Thu, 20 Jan 2022 14:57:56 +0200
+In-Reply-To: <ef74bd9548df61f77e802e7505affcfb5159c48c.1642545829.git.reinette.chatre@intel.com>
+References: <ef74bd9548df61f77e802e7505affcfb5159c48c.1642545829.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220112085403.74670-1-yang.lee@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-01-22 16:54:03, Yang Li wrote:
-> The code that uses the pointer info has been removed in
-> 'https://lore.kernel.org/all/20211129201537.1932819-11-amir73il@gmail.com/'
-> and fanotify_event_info() doesn't change 'event', so the declaration and 
-> assignment of info can be removed.
-> 
-> Eliminate the following clang warning:
-> fs/notify/fanotify/fanotify_user.c:161:24: warning: variable ‘info’ set
-> but not used
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+On Tue, 2022-01-18 at 15:05 -0800, Reinette Chatre wrote:
+> The machine check recovery handling in SGX added the changes
+> listed below to the freeing of pages in sgx_free_epc_page().
+> The SGX reclaimer contains an open coded version of
+> sgx_free_epc_page() and thus did not obtain the changes in
+> support of poison handling.
+>=20
+> The changes made to EPC page freeing in support of poison handling
+> are:
+> 1) A new SGX_EPC_PAGE_IS_FREE flag is set when the EPC page is
+> =C2=A0=C2=A0 freed. Introduced in commit d6d261bded8a ("x86/sgx: Add new
+> =C2=A0=C2=A0 sgx_epc_page flag bit to mark free pages").
+> 2) A new "poison" field in struct sgx_epc_page is used to
+> =C2=A0=C2=A0 determine whether a newly freed EPC page should be placed
+> =C2=A0=C2=A0 on the list of poisoned or list of free pages. Introduced
+> =C2=A0=C2=A0 in commit 992801ae9243 ("x86/sgx: Initial poison handling
+> =C2=A0=C2=A0 for dirty and free pages").
+> 3) The owner field in struct sgx_epc_page is cleared when the EPC
+> =C2=A0=C2=A0 page is freed.=C2=A0 Introduced in commit 992801ae9243 ("x86=
+/sgx:
+> =C2=A0=C2=A0 Initial poison handling for dirty and free pages").
+>=20
+> Replace the open coded enclave page freeing code in the reclaimer
+> with sgx_free_epc_page() to obtain support for poison page handling.
+>=20
+> Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark
+> free pages")
 
-Thanks! I've added the patch to my tree.
+AFAIK, this patch does not semantically break anything so it is not
+a legit fixes tag.
 
-								Honza
-
-> ---
->  fs/notify/fanotify/fanotify_user.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-> index 73b1615f9d96..1026f67b1d1e 100644
-> --- a/fs/notify/fanotify/fanotify_user.c
-> +++ b/fs/notify/fanotify/fanotify_user.c
-> @@ -158,7 +158,6 @@ static size_t fanotify_event_len(unsigned int info_mode,
->  				 struct fanotify_event *event)
->  {
->  	size_t event_len = FAN_EVENT_METADATA_LEN;
-> -	struct fanotify_info *info;
->  	int fh_len;
->  	int dot_len = 0;
->  
-> @@ -168,8 +167,6 @@ static size_t fanotify_event_len(unsigned int info_mode,
->  	if (fanotify_is_error_event(event->mask))
->  		event_len += FANOTIFY_ERROR_INFO_LEN;
->  
-> -	info = fanotify_event_info(event);
-> -
->  	if (fanotify_event_has_any_dir_fh(event)) {
->  		event_len += fanotify_dir_name_info_len(event);
->  	} else if ((info_mode & FAN_REPORT_NAME) &&
-> -- 
-> 2.20.1.7.g153144c
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+BR, Jarkko

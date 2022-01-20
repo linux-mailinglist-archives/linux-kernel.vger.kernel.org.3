@@ -2,95 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF2B495240
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153D1495243
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376953AbiATQWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:22:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:43870 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235587AbiATQWb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:22:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42D7011B3;
-        Thu, 20 Jan 2022 08:22:31 -0800 (PST)
-Received: from [10.57.67.151] (unknown [10.57.67.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E36D13F73D;
-        Thu, 20 Jan 2022 08:22:28 -0800 (PST)
-Subject: Re: [RFC PATCH v2 0/5] topdown with metrics
-To:     John Garry <john.garry@huawei.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, irogers@google.com, ak@linux.intel.com
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <4fefb1bc-49b2-bc5b-23cd-cd8fabe8c588@huawei.com>
- <20220111150749.13365-1-andrew.kilroy@arm.com>
- <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
-From:   Al Grant <al.grant@foss.arm.com>
-Message-ID: <b82a3b6a-ec02-09ff-8630-e7647491470c@foss.arm.com>
-Date:   Thu, 20 Jan 2022 16:22:37 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.0.1
+        id S1376964AbiATQWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:22:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:32950 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376957AbiATQWp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:22:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66946B81DB4;
+        Thu, 20 Jan 2022 16:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1AFC340E0;
+        Thu, 20 Jan 2022 16:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642695763;
+        bh=nAL+9EUzWg/VrpxcuKiEa2MCqLsPygZexwnmRgYCpj4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=i00f7Xhs2vtYGBvTf0qEya6e2YHNqDbb4NGL5j72h9W5HNKLdKZ7eAB4OlWbqlyeS
+         SoTF197WIJJlyHSfZ8VFdC/DkqP98TfpDZNlzTWruh/5mbjaOVIhu8U8n7lvtQdPuT
+         FUGoxdXDKEmXnsYORRTTDjxV8djZwrDbrmS5il+T0UEaJ2THUUxm83JMlln/rXHL7W
+         FheRqJxYuEu5rfUR3I/5f/+0UWRqk/c/HrCDaUta4meLzGeFWkJONezRNH9T9Q27U3
+         pybMMOLnVjxe2TRD+WYdovOjmi4pzy+C4hw1BoAXcNt9bNMqUtScKadqCO5qO7ITl3
+         qk41k/gvxbjiA==
+Date:   Thu, 20 Jan 2022 10:22:41 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     rafael@kernel.org, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, lenb@kernel.org, rjw@rjwysocki.net,
+        bhelgaas@google.com, zhangliguang@linux.alibaba.com,
+        zhuo.song@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6] ACPI: explicit init HEST, SDEI and GHES in apci_init
+Message-ID: <20220120162241.GA1047212@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120050522.23689-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2022 09:26, John Garry wrote:
-> On 11/01/2022 15:07, Andrew Kilroy wrote:
->> This patch series adds the ability for the --topdown option to use
->> metrics (defined in json files in the pmu-events directory) to describe
->> how to calculate and determine the output columns for topdown level 1.
->>
->> For this to work, a number of metrics have to be defined for the
->> relevant processor with the MetricGroup name "TopDownL1".  perf will
->> arrange for the events defined in each metric to be collected, and each
->> metric will be displayed in the output, as if
->>
->>    perf stat -M 'TopDownL1' --metric-only -- exampleapp
->>
->> had been used.
->>
->> Topdown was already implemented where certain kernel events are defined.
->> If these kernel events are defined, the new json metrics behaviour is
->> not used.  The json metrics approach is only used if the kernel events
->> are absent.
->>
->> The last patch in the series disables the json metrics behaviour on x86.
->> This is because of concerns that due to SMT it's not straightforward to
->> express the various formulas as json for certain x86 cpus.  See
+On Thu, Jan 20, 2022 at 01:05:22PM +0800, Shuai Xue wrote:
+> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
+> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
+> the estatus memory pool. On the other hand, ghes_init() relies on
+> sdei_init() to detect the SDEI version and (un)register events. The
+> dependencies are as follows:
 > 
-> I suppose this solution is ok.
+>     ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
+>     ghes_init() => sdei_init()
 > 
-> A concern is that today we only have 1x arm64 platform which actually supports this in mainline.
+> HEST is not PCI-specific and initcall ordering is implicit and not
+> well-defined within a level.
 > 
-> Do you have any more which you plan to support?
+> Based on above, remove acpi_hest_init() from acpi_pci_root_init() and
+> convert ghes_init() and sdei_init() from initcalls to explicit calls in the
+> following order:
 > 
-> I think that it's the frontend bound and fetch_bubble event which doesn't have a standard arm solution.
+>     acpi_hest_init()
+>     sdei_init()
+>     ghes_init()
 > 
-> Note that I do have a series for perf tool which can read arm cpu pmu sysfs events folder to find events which are implemented (I don't think all required events are mandated) and match that against the common arch events JSON, so that we don't need a JSON definition file for each core implementation from all implementators - this would improve scalability.However a concern is that some events - like inst_spec - have imp def meaning, so may not be good to always use by default for all cores metrics.
+> Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
 
-Sadly the sysfs list isn't complete, it only includes the events
-discoverable from the PMCEIDx registers, and they only cover the
-ranges 0x0000-0x003f and 0x4000-0x403f. Although that covers most
-events used in standard metrics, it doesn't cover all. Most CPUs
-have many more events besides these, and there are now architected
-(common) events in the 0x8000 range.
+I didn't suggest the approach; I just reviewed the patch and the
+commit log and proposed moving it out of acpi_pci_root_init().  That
+doesn't need to be acknowledged.
 
-There's a lot to be said for having the kernel expose the complete
-list to userspace via sysfs. It would save each userspace tool
-needing its own set of vendor-supplied information. But to get
-that complete list, the kernel would need the same vendor
-information the userspace tools are using now.
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
-(And your concern about the metrics varying even when the same
-events are present, is quite valid.)
+Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Al
+Minor extra "return" below.
+
+> ---
+>  drivers/acpi/apei/ghes.c    | 17 +++++++----------
+>  drivers/acpi/bus.c          |  4 ++++
+>  drivers/acpi/pci_root.c     |  3 ---
+>  drivers/firmware/arm_sdei.c | 13 ++-----------
+>  include/acpi/apei.h         |  4 +++-
+>  include/linux/arm_sdei.h    |  2 ++
+>  6 files changed, 18 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 0c5c9acc6254..bed4f10cfcb8 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -1457,33 +1457,33 @@ static struct platform_driver ghes_platform_driver = {
+>  	.remove		= ghes_remove,
+>  };
+>  
+> -static int __init ghes_init(void)
+> +void __init ghes_init(void)
+>  {
+>  	int rc;
+>  
+>  	if (acpi_disabled)
+> -		return -ENODEV;
+> +		return;
+>  
+>  	switch (hest_disable) {
+>  	case HEST_NOT_FOUND:
+> -		return -ENODEV;
+> +		return;
+>  	case HEST_DISABLED:
+>  		pr_info(GHES_PFX "HEST is not enabled!\n");
+> -		return -EINVAL;
+> +		return;
+>  	default:
+>  		break;
+>  	}
+>  
+>  	if (ghes_disable) {
+>  		pr_info(GHES_PFX "GHES is not enabled!\n");
+> -		return -EINVAL;
+> +		return;
+>  	}
+>  
+>  	ghes_nmi_init_cxt();
+>  
+>  	rc = platform_driver_register(&ghes_platform_driver);
+>  	if (rc)
+> -		goto err;
+> +		return;
+>  
+>  	rc = apei_osc_setup();
+>  	if (rc == 0 && osc_sb_apei_support_acked)
+> @@ -1495,8 +1495,5 @@ static int __init ghes_init(void)
+>  	else
+>  		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
+>  
+> -	return 0;
+> -err:
+> -	return rc;
+> +	return;
+
+Unnecessary "return".
+
+>  }
+> -device_initcall(ghes_init);
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 07f604832fd6..1dcd71df2cd5 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/acpi_viot.h>
+>  #include <linux/pci.h>
+>  #include <acpi/apei.h>
+> +#include <linux/arm_sdei.h>
+
+This "arm" looks a little out of place in this supposedly arch-generic
+code.  Not really a new thing with this patch, since this #include
+already appears in drivers/acpi/apei/ghes.c.  Maybe it's unavoidable.
+
+>  #include <linux/suspend.h>
+>  #include <linux/prmt.h>
+>  
+> @@ -1331,6 +1332,9 @@ static int __init acpi_init(void)
+>  
+>  	pci_mmcfg_late_init();
+>  	acpi_iort_init();
+> +	acpi_hest_init();
+> +	sdei_init();
+> +	ghes_init();
+>  	acpi_scan_init();
+>  	acpi_ec_init();
+>  	acpi_debugfs_init();
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index b76db99cced3..6f9e75d14808 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -22,8 +22,6 @@
+>  #include <linux/slab.h>
+>  #include <linux/dmi.h>
+>  #include <linux/platform_data/x86/apple.h>
+> -#include <acpi/apei.h>	/* for acpi_hest_init() */
+> -
+>  #include "internal.h"
+>  
+>  #define ACPI_PCI_ROOT_CLASS		"pci_bridge"
+> @@ -943,7 +941,6 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
+>  
+>  void __init acpi_pci_root_init(void)
+>  {
+> -	acpi_hest_init();
+>  	if (acpi_pci_disabled)
+>  		return;
+>  
+> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+> index a7e762c352f9..1e1a51510e83 100644
+> --- a/drivers/firmware/arm_sdei.c
+> +++ b/drivers/firmware/arm_sdei.c
+> @@ -1059,14 +1059,14 @@ static bool __init sdei_present_acpi(void)
+>  	return true;
+>  }
+>  
+> -static int __init sdei_init(void)
+> +void __init sdei_init(void)
+>  {
+>  	struct platform_device *pdev;
+>  	int ret;
+>  
+>  	ret = platform_driver_register(&sdei_driver);
+>  	if (ret || !sdei_present_acpi())
+> -		return ret;
+> +		return;
+>  
+>  	pdev = platform_device_register_simple(sdei_driver.driver.name,
+>  					       0, NULL, 0);
+> @@ -1076,17 +1076,8 @@ static int __init sdei_init(void)
+>  		pr_info("Failed to register ACPI:SDEI platform device %d\n",
+>  			ret);
+>  	}
+> -
+> -	return ret;
+>  }
+>  
+> -/*
+> - * On an ACPI system SDEI needs to be ready before HEST:GHES tries to register
+> - * its events. ACPI is initialised from a subsys_initcall(), GHES is initialised
+> - * by device_initcall(). We want to be called in the middle.
+> - */
+> -subsys_initcall_sync(sdei_init);
+> -
+>  int sdei_event_handler(struct pt_regs *regs,
+>  		       struct sdei_registered_event *arg)
+>  {
+> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+> index ece0a8af2bae..4e60dd73c3bb 100644
+> --- a/include/acpi/apei.h
+> +++ b/include/acpi/apei.h
+> @@ -27,14 +27,16 @@ extern int hest_disable;
+>  extern int erst_disable;
+>  #ifdef CONFIG_ACPI_APEI_GHES
+>  extern bool ghes_disable;
+> +void __init ghes_init(void);
+>  #else
+>  #define ghes_disable 1
+> +static inline void ghes_init(void) { }
+>  #endif
+>  
+>  #ifdef CONFIG_ACPI_APEI
+>  void __init acpi_hest_init(void);
+>  #else
+> -static inline void acpi_hest_init(void) { return; }
+> +static inline void acpi_hest_init(void) { }
+>  #endif
+>  
+>  int erst_write(const struct cper_record_header *record);
+> diff --git a/include/linux/arm_sdei.h b/include/linux/arm_sdei.h
+> index 0a241c5c911d..14dc461b0e82 100644
+> --- a/include/linux/arm_sdei.h
+> +++ b/include/linux/arm_sdei.h
+> @@ -46,9 +46,11 @@ int sdei_unregister_ghes(struct ghes *ghes);
+>  /* For use by arch code when CPU hotplug notifiers are not appropriate. */
+>  int sdei_mask_local_cpu(void);
+>  int sdei_unmask_local_cpu(void);
+> +void __init sdei_init(void);
+>  #else
+>  static inline int sdei_mask_local_cpu(void) { return 0; }
+>  static inline int sdei_unmask_local_cpu(void) { return 0; }
+> +static inline void sdei_init(void) { }
+>  #endif /* CONFIG_ARM_SDE_INTERFACE */
+>  
+>  
+> -- 
+> 2.20.1.12.g72788fdb
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

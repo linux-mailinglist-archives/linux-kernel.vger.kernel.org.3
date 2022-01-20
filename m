@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6D2495481
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D02495488
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377384AbiATS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S1377383AbiATS7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377373AbiATS4w (ORCPT
+        with ESMTP id S1346922AbiATS7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:56:52 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A32C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:56:51 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id r29so838232pfl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BLjtA7Aums/ilXFg+4gjh+nfchSZIUu6a21JuAeXehM=;
-        b=1r7ggSjoyjiEd0AgERULWPQKaqUaILvMLutii1XqZIybZBPD173WhgtoRWQ5dB7bxJ
-         pdVZtqJWOHBYqyrmwsfefuhQ0coEepqdXHfu5zQnB1VpbSCOR1LRNmkFnW5/HiUW0oNA
-         eojnyHhq6AsFTvbWG5Tk+6coYuGPWIFa7meblIfUBMhjKSqMGNcLYn9om51xCcBiS6c0
-         3cu03oNy8YmWTky1JwuR3D+7cVMIEQByfN8SqvEhSujckzxsJkA2sdRD0v21DkdVjQRm
-         ShzllnfXIy3Zx6gHc/PdNmLTHn5/X/Y+TqvnszOEq/+BTRfVrvKTxzTRA8YEMlAGjlEz
-         6Y+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=BLjtA7Aums/ilXFg+4gjh+nfchSZIUu6a21JuAeXehM=;
-        b=OWk/oG7zeJNyFsXfG2/souKo4kkH2VJG6FWNzhhrOxg5F9PLXIqDqjpkKO0DLS3N7H
-         yPZpt/c0RAx/pfmNPK9DD//BYyuUjdyerxouW44oXyoYilN70coQAqKLg8YPSV3tWuxs
-         UYbbKeHpTQ4nwiwHsW6lSVnbo1ljBGXShb/IUyztDamav7kQdUuG2WmjsVI94kdkh2WK
-         z74CnPK1GRmK/47qnVeXAfEFgOJ8oSKRMzdZHd7bCZkE2LlutcxdEzWk8O0hZwRdWhKw
-         F01/iMC7XqUK+Eq8/LHtgVWXoPTNhtwvvZ6x3HRK+bfbllVYt4YVMf3HH6LQSCGotOT+
-         znIA==
-X-Gm-Message-State: AOAM530gDuie4Rg2tyFhXec6Yp8N/DOxMj+bMA3MMdkOvzRmnpZVimGM
-        rGvY9doDnVxPUxMLqTGwVyO4cw==
-X-Google-Smtp-Source: ABdhPJxdE/w6f1aJwRVw74resTa1XXc33k37AYF3EbNOLlPLmRzeKe7qDQ0i6GxH8YBBPkP+X3A5HQ==
-X-Received: by 2002:a63:610b:: with SMTP id v11mr111312pgb.183.1642705011241;
-        Thu, 20 Jan 2022 10:56:51 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id v17sm4231250pfu.220.2022.01.20.10.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 10:56:50 -0800 (PST)
-Date:   Thu, 20 Jan 2022 10:56:50 -0800 (PST)
-X-Google-Original-Date: Thu, 20 Jan 2022 10:56:08 PST (-0800)
-Subject:     Re: [PATCH] arch/riscv/kernel: remove redundant err variable
-In-Reply-To: <20220112082729.667743-1-chi.minghao@zte.com.cn>
-CC:     oleg@redhat.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn,
-        zealci@zte.com.cn, cgel.zte@gmail.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     cgel.zte@gmail.com
-Message-ID: <mhng-c795fe10-28e3-4762-92ae-0b8a99b58f96@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Thu, 20 Jan 2022 13:59:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87623C061574;
+        Thu, 20 Jan 2022 10:59:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B357E617BE;
+        Thu, 20 Jan 2022 18:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEA8C340E0;
+        Thu, 20 Jan 2022 18:59:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642705161;
+        bh=Uz+ErrzCvsPs8XI14OrT140VYUl1+xldNmUfTLio22M=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ATDC0bEoLEh2/8T7ESqS8zsslSvruR+pnXqkSrY9LpKZ1kD3kMN3rs2G3xleWnGRK
+         CeaCh/bGZl7EKxv2IOv/1/w2ZjC8Tqq78K1Da1yP8RaqkVuc9PYSGXHRxAaDcpi4kg
+         2iK6AboStWMRHLU+dr5Qq0JW5KZQHact99A2KSnD/HTbyoIcrWDwXiDYj4usILNaiy
+         M6c49exdlFi6WKp7Cj3jBLUuIWG89IfhZjib//UINlIHJMe8/KnV+WR+dpaj+MtKaK
+         JMDRrRYW9tERQY1Hi06Sksz5uOD3FYkJW0NHHXM49VQL0LFpT24cOw68UqnrDjJ7Ci
+         UHX/KB4xrmOvQ==
+Date:   Thu, 20 Jan 2022 10:59:20 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+Subject: [GIT PULL] xfs: legacy Irix ioctl housecleaning for 5.17-rc1, part 2
+Message-ID: <20220120185920.GP13540@magnolia>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 00:27:29 PST (-0800), cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Return value from user_regset_copyin() directly instead
-> of taking this in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> ---
->  arch/riscv/kernel/ptrace.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-> index 9c0511119bad..a89243730153 100644
-> --- a/arch/riscv/kernel/ptrace.c
-> +++ b/arch/riscv/kernel/ptrace.c
-> @@ -42,12 +42,10 @@ static int riscv_gpr_set(struct task_struct *target,
->  			 unsigned int pos, unsigned int count,
->  			 const void *kbuf, const void __user *ubuf)
->  {
-> -	int ret;
->  	struct pt_regs *regs;
->
->  	regs = task_pt_regs(target);
-> -	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
-> -	return ret;
-> +	return user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
->  }
->
->  #ifdef CONFIG_FPU
+Hi Linus,
 
-Thanks, this is on for-next.
+This is the third and final of a series of small pull requests that
+perform some long overdue housecleaning of XFS ioctls.  This time, we're
+withdrawing all variants of the ALLOCSP and FREESP ioctls from XFS'
+userspace API.  This might be a little premature since we've only just
+removed the functionality, but as I pointed out in the last pull
+request, nobody (including fstests) noticed that it was broken for 20
+years.
+
+In response to the patch, we received a single comment from someone who
+stated that they 'augment' the ioctl for their own purposes, but
+otherwise acquiesced to the withdrawal.  I still want to try to clobber
+these old ioctl definitions in 5.17, but if you decide that we should
+wait longer, I can work with that.
+
+As usual, I did a test-merge with upstream master as of a few minutes
+ago, and didn't see any conflicts.  Please let me know if you encounter
+any problems.
+
+--D
+
+The following changes since commit 4d1b97f9ce7c0d2af2bb85b12d48e6902172a28e:
+
+  xfs: kill the XFS_IOC_{ALLOC,FREE}SP* ioctls (2022-01-17 09:16:41 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-6
+
+for you to fetch changes up to b3bb9413e717b44e4aea833d07f14e90fb91cf97:
+
+  xfs: remove the XFS_IOC_{ALLOC,FREE}SP* definitions (2022-01-17 09:17:11 -0800)
+
+----------------------------------------------------------------
+Withdraw the XFS_IOC_ALLOCSP* and XFS_IOC_FREESP* ioctl definitions.
+
+Remove the header definitions for these ioctls.  The just-removed
+implementation has allowed callers to read stale disk contents for more
+than **21 years** and nobody noticed or complained, which implies a lack
+of users aside from exploit programs.
+
+----------------------------------------------------------------
+Darrick J. Wong (1):
+      xfs: remove the XFS_IOC_{ALLOC,FREE}SP* definitions
+
+ fs/xfs/libxfs/xfs_fs.h | 8 ++++----
+ fs/xfs/xfs_ioctl.c     | 9 +++++++++
+ fs/xfs/xfs_ioctl32.h   | 4 ----
+ 3 files changed, 13 insertions(+), 8 deletions(-)

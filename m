@@ -2,177 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5983A494DBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16358494DC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbiATMQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:16:23 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43602 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiATMQV (ORCPT
+        id S237469AbiATMST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232764AbiATMSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:16:21 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0FF182170E;
-        Thu, 20 Jan 2022 12:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642680980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KxjCyPB/TvQhq50NprkltYrk8TlOycec4dlTnsG9qZA=;
-        b=3bjfKDfvTfOlzkQJwrpwAEUvihELw0gZRTvUB6I23XJKhAXD4mvd2hiDua9ewpcYwTtWM9
-        o6rQhsWN0rywimL7gzTiM/GXxKsTXtol0nZbtRx1vNmqt3PcWG2DMUb2en7KPGaQzISEAo
-        F4phEP5uKwWJDD7XmYcJGwCUEJGS2OA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642680980;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KxjCyPB/TvQhq50NprkltYrk8TlOycec4dlTnsG9qZA=;
-        b=j5evB57e9KE/c3hUml0HBRtDbIzfe9UP68bVpR78IE9oBWnAmEBSXbC+AML0tYWh9Dc5Jj
-        p30R0xWifY46M+Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9909413B51;
-        Thu, 20 Jan 2022 12:16:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id G9aoJJNS6WGlWQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 20 Jan 2022 12:16:19 +0000
-Message-ID: <75a30665-9884-ac6d-c526-e7deb1e4e879@suse.cz>
-Date:   Thu, 20 Jan 2022 13:16:19 +0100
+        Thu, 20 Jan 2022 07:18:18 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DB4C061574;
+        Thu, 20 Jan 2022 04:18:18 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id x37so1413496pfh.8;
+        Thu, 20 Jan 2022 04:18:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Ik94/eld5uHGn3bZKP+GwLJe2ovChEc9eeEQCx97DA=;
+        b=fabB3iISSP9VCRA/ON+MRMlr44Tb3dhfBGhBTJXPfS/t1oeQHbga2DcV/kTfjLeNeY
+         dz5Xi7Xz0s8G48vtK0IactR9wnjZjApjMFDVP9siMUXdqmOWVvWEPI5LEhU1RfENSVt7
+         YhiNxqsf75W8Z4iDxcNTPBXJVepgsWbYbHA3gKk8oY4DauCtbCODmH9zmyYfNRMqdAaJ
+         bS6oARI9LCLMU/pCAJr+aEdqMlQ+uqvkWFJzF6MGT0ThHDEmPW6qv514SoN1VsF+n2NH
+         mIjfENDEMA2TNdMfZWRjkTmIHcM3FH4VCtNowX/dNCBT44SoUCxYcgfaiZUDRI40oroK
+         3qog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Ik94/eld5uHGn3bZKP+GwLJe2ovChEc9eeEQCx97DA=;
+        b=cDefyIKpXK1GfeYM5x2txc671XEu5CqtNQSuHcT/lYH2b+9m1E+sUxxLbz5PSRFTig
+         vVP1gY4UMA/Y8LbeYoqrgMxX+EAnCE2Bm4JU1SgOb50Ku1pAX7DKl9kEVEKs3vVerYwD
+         tZxVl8SzbUtbWCfe1Z40GwKJKsb/1t13mSkoEAbdllSrJU7UW+uCE3dAafvikFewJVob
+         BSeeSVHMB8S0f2Kvdp+iHhhuECFyj3hqUY3GEv51DI9l7KU5nuHFzyZAGlYWq0LZaV4R
+         djlCVDZ8I/Ag5ixwsg+g0bAZfkkm45YYB9/IxyquEXeX4Sxeuhrqndq0a8/OpAUuHIga
+         jY2w==
+X-Gm-Message-State: AOAM532K1u1Gpa/jno/eRDWBzXLSoCJ+n8ZMhGOn17v8/FjtauU5Mt8i
+        CAiX/Vv71+xWEXgPO3KybdU=
+X-Google-Smtp-Source: ABdhPJziVWpUMMjAt6OqkDffgHJvUinzucSciCJlcXVk2GC0MdW92szy+GiTxOmSUoDL3aAs0KMTjQ==
+X-Received: by 2002:a63:2a0d:: with SMTP id q13mr9391353pgq.601.1642681097684;
+        Thu, 20 Jan 2022 04:18:17 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id n4sm2307360pjf.0.2022.01.20.04.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 04:18:17 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@suse.de>,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] parisc: pdc_stable: Fix memory leak in pdcs_register_pathentries
+Date:   Thu, 20 Jan 2022 12:18:12 +0000
+Message-Id: <20220120121812.14943-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-57-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 56/66] mm/mlock: Use maple tree iterators instead of
- vma linked list
-In-Reply-To: <20211201142918.921493-57-Liam.Howlett@oracle.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> ---
->  mm/mlock.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index e263d62ae2d0..feb691eb4c64 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -563,6 +563,7 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
->  	unsigned long nstart, end, tmp;
->  	struct vm_area_struct *vma, *prev;
->  	int error;
-> +	MA_STATE(mas, &current->mm->mm_mt, start, start);
->  
->  	VM_BUG_ON(offset_in_page(start));
->  	VM_BUG_ON(len != PAGE_ALIGN(len));
-> @@ -571,11 +572,11 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
->  		return -EINVAL;
->  	if (end == start)
->  		return 0;
-> -	vma = find_vma(current->mm, start);
-> -	if (!vma || vma->vm_start > start)
-> +	vma = mas_walk(&mas);
-> +	if (!vma)
->  		return -ENOMEM;
->  
-> -	prev = vma->vm_prev;
-> +	prev = mas_prev(&mas, 0);
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()：
 
-Could be only done as an 'else' of the 'if' below?
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
->  	if (start > vma->vm_start)
->  		prev = vma;
->  
-> @@ -597,7 +598,7 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
->  		if (nstart >= end)
->  			break;
->  
-> -		vma = prev->vm_next;
-> +		vma = find_vma(prev->vm_mm, prev->vm_end);
->  		if (!vma || vma->vm_start != nstart) {
->  			error = -ENOMEM;
->  			break;
-> @@ -618,15 +619,12 @@ static unsigned long count_mm_mlocked_page_nr(struct mm_struct *mm,
->  {
->  	struct vm_area_struct *vma;
->  	unsigned long count = 0;
-> +	MA_STATE(mas, &mm->mm_mt, start, start);
->  
->  	if (mm == NULL)
->  		mm = current->mm;
->  
-> -	vma = find_vma(mm, start);
-> -	if (vma == NULL)
-> -		return 0;
-> -
-> -	for (; vma ; vma = vma->vm_next) {
-> +	mas_for_each(&mas, vma, start + len) {
+Fix memory leak by calling kobject_put().
 
-Could be for_each_vma_range()?
+Fixes: 73f368cf679b ("Kobject: change drivers/parisc/pdc_stable.c to use kobject_init_and_add")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/parisc/pdc_stable.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->  		if (start >= vma->vm_end)
->  			continue;
-
-Unnecessary? (even before this patch, I think?)
-
->  		if (start + len <=  vma->vm_start)
-
-Unnecessary after your patch?
-
-> @@ -741,6 +739,7 @@ static int apply_mlockall_flags(int flags)
->  {
->  	struct vm_area_struct *vma, *prev = NULL;
->  	vm_flags_t to_add = 0;
-> +	unsigned long addr = 0;
->  
->  	current->mm->def_flags &= VM_LOCKED_CLEAR_MASK;
->  	if (flags & MCL_FUTURE) {
-> @@ -759,7 +758,7 @@ static int apply_mlockall_flags(int flags)
->  			to_add |= VM_LOCKONFAULT;
->  	}
->  
-> -	for (vma = current->mm->mmap; vma ; vma = prev->vm_next) {
-> +	mt_for_each(&current->mm->mm_mt, vma, addr, ULONG_MAX) {
->  		vm_flags_t newflags;
->  
->  		newflags = vma->vm_flags & VM_LOCKED_CLEAR_MASK;
+diff --git a/drivers/parisc/pdc_stable.c b/drivers/parisc/pdc_stable.c
+index 9513c39719d1..d9e51036a4fa 100644
+--- a/drivers/parisc/pdc_stable.c
++++ b/drivers/parisc/pdc_stable.c
+@@ -980,8 +980,10 @@ pdcs_register_pathentries(void)
+ 		entry->kobj.kset = paths_kset;
+ 		err = kobject_init_and_add(&entry->kobj, &ktype_pdcspath, NULL,
+ 					   "%s", entry->name);
+-		if (err)
++		if (err) {
++			kobject_put(&entry->kobj);
+ 			return err;
++		}
+ 
+ 		/* kobject is now registered */
+ 		write_lock(&entry->rw_lock);
+-- 
+2.17.1
 

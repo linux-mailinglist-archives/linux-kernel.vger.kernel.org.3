@@ -2,160 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7620494C9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8DA494C9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiATLPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:15:51 -0500
-Received: from comms.puri.sm ([159.203.221.185]:45242 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230345AbiATLPb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:15:31 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id B5734DF770;
-        Thu, 20 Jan 2022 03:15:29 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Bkfp2F8h1pmr; Thu, 20 Jan 2022 03:15:29 -0800 (PST)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     martin.kepplinger@puri.sm, mchehab@kernel.org, broonie@kernel.org,
-        sakari.ailus@linux.intel.com
-Cc:     kernel@puri.sm, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Angus Ainslie <angus@akkea.ca>
-Subject: [PATCH v4] media: i2c: dw9714: add optional regulator support
-Date:   Thu, 20 Jan 2022 12:14:53 +0100
-Message-Id: <20220120111453.2244905-1-martin.kepplinger@puri.sm>
+        id S230380AbiATLPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:15:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32243 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230341AbiATLPY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 06:15:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642677323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vQBpjT+kj6ZZxOkSDlCWAHrGVsW61JOlDxXM5602yq4=;
+        b=Duh13BJ8uxG1Q9l+wmJrgbh/EtTre06VpUlPH7+8q32EC14T2Ca4YliObar04edrB4Z2bU
+        aRYI+aobZUoYe6MUuv2Bn7P8UiT29ApSLuzHsGbnWxIu1t8nFPD+f0QIb5Dbh9QuZPI8IZ
+        +k9ghu6kC2YyI7exRWEEZbTvDx0v3AA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-HCZxrXmUMj2F575-Yh6hOA-1; Thu, 20 Jan 2022 06:15:22 -0500
+X-MC-Unique: HCZxrXmUMj2F575-Yh6hOA-1
+Received: by mail-ed1-f70.google.com with SMTP id z6-20020a50eb46000000b00403a7687b5bso5583451edp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:15:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vQBpjT+kj6ZZxOkSDlCWAHrGVsW61JOlDxXM5602yq4=;
+        b=i3/Fn8g8oBiDWGBqSItQX0z56+kB8ajiqCp1SHz5+DukXCo9YR7CmHtZK5a1pfQzRS
+         ohK3aTkw10RuqzeMoKZrxf3hJPdHldvBxrDHQuikZQzziUotKvRyomKEuoYeVCbf/kMQ
+         1tCJ+zXCZm0RhQGBOPX5UCHok+nX/g9de4EXjaxcRdKh/bbRa3+wy3TCHSuJNs9Z8YfS
+         x9Ldv3CfNMChxHURr18rHfqjFYQgmk04Ks+RT7iHdY6x/WuC8w19yqw0EfIzL3kd0ctw
+         jysuRga/zLYMDyOXhmFYkq1B4eZ0frRsWFQdkgSyMF6CekWaI/gYnsr5N+gJBtvnfnOy
+         ngcg==
+X-Gm-Message-State: AOAM530oGqzcFuPakh6thC4vBksAr/mVITpBIsJ65z0DNg6VwkTuxbAX
+        dFvIOFcl49lnAyF8STSd7kfPYjh13fCajL4WImo+YWUmtOeKftx46C4nMq9zu9SsBcEPcFQ7tk1
+        FUsOYvZgBtCWfVjTuYov0baJa
+X-Received: by 2002:a17:906:5042:: with SMTP id e2mr29524813ejk.647.1642677320641;
+        Thu, 20 Jan 2022 03:15:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwgK8gHzHK+jDFpiYJdsSWiB1s995PwIhJdMkaqCFyhsbryno7/zVtgIK+VKB6b9RsLSmKlFw==
+X-Received: by 2002:a17:906:5042:: with SMTP id e2mr29524795ejk.647.1642677320416;
+        Thu, 20 Jan 2022 03:15:20 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id jt14sm884296ejc.32.2022.01.20.03.15.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 03:15:19 -0800 (PST)
+Message-ID: <2f7610dc-ab57-ddbf-277f-e84680da71bd@redhat.com>
+Date:   Thu, 20 Jan 2022 12:15:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 0/2] i2c-designware: Add support for AMD PSP semaphore
+Content-Language: en-US
+To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com
+Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
+        jaz@semihalf.com, upstream@semihalf.com
+References: <20220120001621.705352-1-jsd@semihalf.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220120001621.705352-1-jsd@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Angus Ainslie <angus@akkea.ca>
+Hi Jan,
 
-Allow the dw9714 to control a regulator and adjust suspend() and resume()
-to support both runtime and system pm.
+On 1/20/22 01:16, Jan Dabros wrote:
+> This patchset comprises support for new i2c-designware controller setup on some
+> AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the same
+> controller and acts as an i2c arbitrator there (x86 is leasing bus from it).
+> 
+> First commit aims to improve generic i2c-designware code by adding extra locking
+> on probe() and disable() paths. I would like to ask someone with access to
+> boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to verify
+> behavior of my changes on such setup.
+> 
+> Second commit adds support for new PSP semaphore arbitration mechanism.
+> Implementation is similar to the one from i2c-designware-baytrail.c however
+> there are two main differences:
+> 1) Add new ACPI ID in order to protect against silent binding of the old driver
+> to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added to this
+> new _HID allows to recognize setup with PSP.
+> 2) Beside acquire_lock() and release_lock() methods we are also applying quirks
+> to the lock_bus() and unlock_bus() global adapter methods. With this in place
+> all i2c clients drivers may lock i2c bus for a desired number of i2c
+> transactions (e.g. write-wait-read) without being aware of that such bus is
+> shared with another entity.
+> 
+> This patchset is a follow-up to the RFC sent earlier on LKML [1], with review
+> comments applied.
+> 
+> Looking forward to some feedback.
+> 
+> [1] https://lkml.org/lkml/2021/12/22/219
 
-Signed-off-by: Angus Ainslie <angus@akkea.ca>
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
 
-v4: (thank you Sakari)
- * ensure suspend / power off in module remove()
+Thank you for your patch series.
 
-v3: (thank you Mark and Sakari)
- * use regulator_get() instead of regulator_get_optional()
-https://lore.kernel.org/linux-media/20211129120754.1766570-1-martin.kepplinger@puri.sm/
+As you may have seen I've done a lot of work on the Bay Trail semaphore
+thing. I also own several Bay Trail and Cherry Trail based devices which
+use this setup.
 
-v2: (thank you Mark)
- * simplify the regulator_get_optional() error path
- * fix regulator usage during probe()
-https://lore.kernel.org/linux-media/20211126090107.1243558-1-martin.kepplinger@puri.sm/
+I'll add your patches to my personal WIP tree which I regularly run
+on these devices and I'll report back if I notice any issues.
 
-v1:
-https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
+One remark, I notice that there are no AMD people in the Cc, it
+would be good if you can find someone from AMD to look at this,
+also see my remarks to the 2nd patch in my reply to that patch.
 
- drivers/media/i2c/dw9714.c | 42 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 41 insertions(+), 1 deletion(-)
+Regards,
 
-diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
-index 3863dfeb8293..cd7008ad8f2f 100644
---- a/drivers/media/i2c/dw9714.c
-+++ b/drivers/media/i2c/dw9714.c
-@@ -5,6 +5,7 @@
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
-@@ -36,6 +37,7 @@ struct dw9714_device {
- 	struct v4l2_ctrl_handler ctrls_vcm;
- 	struct v4l2_subdev sd;
- 	u16 current_val;
-+	struct regulator *vcc;
- };
- 
- static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl *ctrl)
-@@ -145,6 +147,16 @@ static int dw9714_probe(struct i2c_client *client)
- 	if (dw9714_dev == NULL)
- 		return -ENOMEM;
- 
-+	dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
-+	if (IS_ERR(dw9714_dev->vcc))
-+		return PTR_ERR(dw9714_dev->vcc);
-+
-+	rval = regulator_enable(dw9714_dev->vcc);
-+	if (rval < 0) {
-+		dev_err(&client->dev, "failed to enable vcc: %d\n", rval);
-+		return rval;
-+	}
-+
- 	v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
- 	dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
- 				V4L2_SUBDEV_FL_HAS_EVENTS;
-@@ -181,8 +193,18 @@ static int dw9714_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
-+	int ret;
- 
- 	pm_runtime_disable(&client->dev);
-+	if (!pm_runtime_status_suspended(&client->dev)) {
-+		ret = regulator_disable(dw9714_dev->vcc);
-+		if (ret) {
-+			dev_err(&client->dev,
-+				"Failed to disable vcc: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+	pm_runtime_set_suspended(&client->dev);
- 	dw9714_subdev_cleanup(dw9714_dev);
- 
- 	return 0;
-@@ -200,6 +222,9 @@ static int __maybe_unused dw9714_vcm_suspend(struct device *dev)
- 	struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
- 	int ret, val;
- 
-+	if (pm_runtime_suspended(&client->dev))
-+		return 0;
-+
- 	for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS - 1);
- 	     val >= 0; val -= DW9714_CTRL_STEPS) {
- 		ret = dw9714_i2c_write(client,
-@@ -208,7 +233,12 @@ static int __maybe_unused dw9714_vcm_suspend(struct device *dev)
- 			dev_err_once(dev, "%s I2C failure: %d", __func__, ret);
- 		usleep_range(DW9714_CTRL_DELAY_US, DW9714_CTRL_DELAY_US + 10);
- 	}
--	return 0;
-+
-+	ret = regulator_disable(dw9714_dev->vcc);
-+	if (ret)
-+		dev_err(dev, "Failed to disable vcc: %d\n", ret);
-+
-+	return ret;
- }
- 
- /*
-@@ -224,6 +254,16 @@ static int  __maybe_unused dw9714_vcm_resume(struct device *dev)
- 	struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
- 	int ret, val;
- 
-+	if (pm_runtime_suspended(&client->dev))
-+		return 0;
-+
-+	ret = regulator_enable(dw9714_dev->vcc);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable vcc: %d\n", ret);
-+		return ret;
-+	}
-+	usleep_range(1000, 2000);
-+
- 	for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
- 	     val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
- 	     val += DW9714_CTRL_STEPS) {
--- 
-2.30.2
+Hans
+
+
+
+
+> 
+> Jan Dabros (2):
+>   i2c: designware: Add missing locks
+>   i2c: designware: Add AMD PSP I2C bus support
+> 
+>  MAINTAINERS                                  |   1 +
+>  drivers/acpi/acpi_apd.c                      |   1 +
+>  drivers/i2c/busses/Kconfig                   |  10 +
+>  drivers/i2c/busses/Makefile                  |   1 +
+>  drivers/i2c/busses/i2c-designware-amdpsp.c   | 357 +++++++++++++++++++
+>  drivers/i2c/busses/i2c-designware-baytrail.c |  10 +-
+>  drivers/i2c/busses/i2c-designware-common.c   |  12 +
+>  drivers/i2c/busses/i2c-designware-core.h     |  18 +-
+>  drivers/i2c/busses/i2c-designware-master.c   |   6 +
+>  drivers/i2c/busses/i2c-designware-platdrv.c  |  61 ++++
+>  10 files changed, 469 insertions(+), 8 deletions(-)
+>  create mode 100644 drivers/i2c/busses/i2c-designware-amdpsp.c
+> 
 

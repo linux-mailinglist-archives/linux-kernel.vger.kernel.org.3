@@ -2,174 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A8F495569
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5450C49556C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377682AbiATU0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 15:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
+        id S1347203AbiATU2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 15:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377645AbiATU0X (ORCPT
+        with ESMTP id S229701AbiATU2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 15:26:23 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7735BC061574;
-        Thu, 20 Jan 2022 12:26:23 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso24558978wmj.2;
-        Thu, 20 Jan 2022 12:26:23 -0800 (PST)
+        Thu, 20 Jan 2022 15:28:09 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B404C061574;
+        Thu, 20 Jan 2022 12:28:09 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h12so7054674pjq.3;
+        Thu, 20 Jan 2022 12:28:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bFvuHlWBlhLrQ+Wqzd7mZdO7/KSfytbRxINKe6WN5eE=;
-        b=XpDnnLyRe3o+MVTmrl6vqky0nXyAmWk4qCjC4veYaXRI1Y/G6cKAk7YsAFLJmxRUqh
-         LOMrNJCRQR1uN9kKzqsoImINJr2O/qUMhfFg/U5oWi2cBwnJdeY31sYlP8u3c+FeYVt7
-         geDunL98zItlxnDP0dxncde7Lcu4HXn0sDPKfqeuRPTig/s2Qj+hyEOLXavH4a/JZdOU
-         IyY1fMzRqtPvJKHBLGn4e2s7UJRMwRUBvQ684CGhmX1v/aNGaNzVGsEFbmBeeKSTLwWp
-         wW5EAOmqrqyTbewOOG0kK7uDV9bFbNhqKNxtC39SX1gx1g2UvD8XY1QNOGNmrFOHfBxG
-         z5Kg==
+        bh=CI7NDBFAkGXfidbJOW8wXZoiOshWSUhW2QoHzW3cfQk=;
+        b=O6ImPnT/ScJ1yJPH0+wBjdMg0vhRmstquWv/7DS5f3LQBN8VcQEhubPmYPrfp0FY7u
+         9Gw8EvurKwLcqMBeeKVj2NqK9c7DLJmIX7zyXE6AzMckd5UAOZtPrP11GkMYfIZvt0Mv
+         /CjMLlnlsEFMq1/IvKxAdlnYiVJxZvTEj5KF/Vphuk7lmfiLtJcA2/3p6JfXrpgow98q
+         HjdwJsfprOK/lGs288M6WtAeqjA3lpG3B944t5o2Lr8wFIFL6MSfUY3OSVDP9j3Uxi4r
+         gZ7jf/6WIUpDA5q1RgRrP8tb0b7U7wtd84cM5TGoCs2Bec4Iz1Sia582iVjFCanYP0m8
+         omNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bFvuHlWBlhLrQ+Wqzd7mZdO7/KSfytbRxINKe6WN5eE=;
-        b=jFSMM0K0PdF1+12fJs1NNs53tl0+7Di4DckEhApNMK3Dgh3fQSwrS7Ah+EH26pV92o
-         1ytk0f/yyF9qJSEVYrjpPSY1rgzeEkfNgHJD1yVTtqqUU/YbNmDuQKN5j3yDonp/qwql
-         W21dV4Y5TUL/TXJvE6MGMniLOIjAj0CRhP3UtlgS3xdAdIy2W00YzXqtYuJBPxW8PjKu
-         bjetR9ZuFunfGMA2ZU0gJ1JNdObGd2G2x/NxeKxEOqK4I7UiUaljrARWOIXqpQiMA49N
-         JpL5BsFRdP/Kh/S9uSCstbMeurgzSSXwNHOKlL2kPaRg2nwF9+SAg6Bj79XYaGetZinp
-         0vMQ==
-X-Gm-Message-State: AOAM532Q0oVlGCv48r2Z0/oFYxsv6T+8xZ+egLKg0TaLJDIwVVdtwHow
-        J/BX+lU1igKH+QMqe4sHnTY=
-X-Google-Smtp-Source: ABdhPJy4+EZNqDhc98GJ7UGzRSXGekPNjSWG4HtF0A8Nj0VApqAotQncU4wsGvPNIsfYdQI1OzY1sg==
-X-Received: by 2002:a05:600c:4ca7:: with SMTP id g39mr3847605wmp.158.1642710381739;
-        Thu, 20 Jan 2022 12:26:21 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id n11sm862919wms.3.2022.01.20.12.26.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CI7NDBFAkGXfidbJOW8wXZoiOshWSUhW2QoHzW3cfQk=;
+        b=aRSEMaDWkshIEeuq64ukjg2D7YgtVY/fPLSUHKg1ixhG75/sQyJoEr1AwX6VSgp+Ed
+         2OOMyvBc2YwqMwgEd6bkFFfslTKUXFsU/67mbyp13WeMcNd7eVQL2wP7WLZ7YbWm4lry
+         pGn7J1KjojlUBMNDebq2wsF9yNZG9cH+PNBe1okLQbffklLeiJdn0O8rgkkJmWH9FWX6
+         gFkdqDtJQq9N8SWvmaktIKdXtZuGC0Kgifx/TFf/XaroruSJSO02luCGY0vzjAK8rKB9
+         ZlTj4oBPGtzuJCo+pzweYrUcXcVzMjRsgJPfygsOWwwmU4Eet+hvMx5N6R8wB8BQa+cN
+         ajIQ==
+X-Gm-Message-State: AOAM530Fu8sIwnEyJm3KsKRdWg2jZX25sbdq94F7uUFcfTErUllKUsgj
+        jEwc8wqRTy3o8g6SP7CIK6Y=
+X-Google-Smtp-Source: ABdhPJzrkABpytO1HoyWMwxlgkChZMTBPkgeCN4n/9xZP6sdrZo+BE52sUsnimcBi7XyC/6qS7cC2w==
+X-Received: by 2002:a17:902:f545:b0:14b:18f:9389 with SMTP id h5-20020a170902f54500b0014b018f9389mr436844plf.25.1642710488625;
+        Thu, 20 Jan 2022 12:28:08 -0800 (PST)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id d18sm4506668pfv.173.2022.01.20.12.28.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 12:26:21 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] mtd: core: introduce of support for dynamic partitions
-Date:   Thu, 20 Jan 2022 21:26:15 +0100
-Message-Id: <20220120202615.28076-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220120202615.28076-1-ansuelsmth@gmail.com>
-References: <20220120202615.28076-1-ansuelsmth@gmail.com>
+        Thu, 20 Jan 2022 12:28:07 -0800 (PST)
+From:   Yang Shi <shy828301@gmail.com>
+To:     kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+Date:   Thu, 20 Jan 2022 12:28:05 -0800
+Message-Id: <20220120202805.3369-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have many parser that register mtd partitions at runtime. One example
-is the cmdlinepart or the smem partition where the compatible is defined
-in the dts and the partitions gets detected and registered by the
-parser. This is problematic for the Nvmem system that requires an of node
-to detect nvmem cells. To fix this problem, introduce an additional node
-called "dynamic-partitions" that must be defined at the same level of
-the "partitions" node that will contain all the required partitions
-where a nvmem cell has to be declared. When a mtd_get_of_node() is
-called, the function will first check the default dev_of_node() and then
-check this alternative partitions node and optionally if a "nvmem-cells"
-compatible is detected, sets the of node for the mtd.
+The syzbot reported the below BUG:
 
-The "dynamic-partitions" requires the label set to the mtd name from the
-dynamic partition. All the nvmem-cells will be declared in this node and
-nvmem will use this node to register the nvmem cells.
+kernel BUG at include/linux/page-flags.h:785!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ page_mapcount include/linux/mm.h:837 [inline]
+ smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+ smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+ smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+ walk_pmd_range mm/pagewalk.c:128 [inline]
+ walk_pud_range mm/pagewalk.c:205 [inline]
+ walk_p4d_range mm/pagewalk.c:240 [inline]
+ walk_pgd_range mm/pagewalk.c:277 [inline]
+ __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+ walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+ smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+ smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+ show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+ seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+ seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+ vfs_read+0x1b5/0x600 fs/read_write.c:479
+ ksys_read+0x12d/0x250 fs/read_write.c:619
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7faa2af6c969
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 24ec93ff95e4ac3d ]---
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+The reproducer was trying to reading /proc/$PID/smaps when calling
+MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
+for partial THP.  It may trigger the below race:
+
+         CPU A                         CPU B
+         -----                         -----
+smaps walk:                      MADV_FREE:
+page_mapcount()
+  PageCompound()
+                                 split_huge_page()
+  page = compound_head(page)
+  PageDoubleMap(page)
+
+When calling PageDoubleMap() this page is not a tail page of THP anymore
+so the BUG is triggered.
+
+This could be fixed by elevated refcount of the page before calling
+mapcount, but it prevents from counting migration entries, and it seems
+overkilling because the race just could happen when PMD is split so all
+PTE entries of tail pages are actually migration entries, and
+smaps_account() does treat migration entries as mapcount == 1 as Kirill
+pointed out.
+
+Add a new parameter for smaps_account() to tell this entry is migration
+entry then skip calling page_mapcount().  Don't skip getting mapcount for
+device private entries since they do track references with mapcount.
+
+Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
+Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
 ---
- drivers/mtd/mtdcore.c   | 45 +++++++++++++++++++++++++++++++++++++++++
- include/linux/mtd/mtd.h |  6 +-----
- 2 files changed, 46 insertions(+), 5 deletions(-)
+v2: * Added proper fix tag per Jann Horn
+    * Rebased to the latest linus's tree
 
-diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-index 9186268d361b..ccf350337811 100644
---- a/drivers/mtd/mtdcore.c
-+++ b/drivers/mtd/mtdcore.c
-@@ -563,6 +563,51 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
- 	return 0;
+ fs/proc/task_mmu.c | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 18f8c3acbb85..2bb567014d77 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
  }
  
-+struct device_node *mtd_get_of_node(struct mtd_info *mtd)
-+{
-+	struct device_node *dynamic_partitions, *parent_dn, *dn, *mtd_dn = NULL;
-+	struct mtd_info *parent;
-+	const char *mtd_name;
-+	int plen;
-+
-+	/* Check if mtd has a device node */
-+	dn = dev_of_node(&mtd->dev);
-+	if (dn)
-+		return dn;
-+
-+	/* Check if a dynamic-partitions node exist */
-+	parent = mtd->parent;
-+	parent_dn = dev_of_node(&parent->dev);
-+	if (!parent_dn)
-+		return NULL;
-+
-+	dynamic_partitions = of_get_compatible_child(parent_dn, "dynamic-partitions");
-+	if (!dynamic_partitions)
-+		goto exit_parent;
-+
-+	/* Search if a dynamic partition is defined with the same name */
-+	for_each_child_of_node(dynamic_partitions, dn) {
-+		mtd_name = of_get_property(dn, "label", &plen);
-+		if (!strncmp(mtd->name, mtd_name, plen)) {
-+			mtd_dn = dn;
-+			break;
-+		}
-+	}
-+
-+	if (!mtd_dn)
-+		goto exit_partitions;
-+
-+	/* Set of_node only for nvmem */
-+	if (of_device_is_compatible(mtd_dn, "nvmem-cells"))
-+		mtd_set_of_node(mtd, mtd_dn);
-+
-+exit_partitions:
-+	of_node_put(dynamic_partitions);
-+exit_parent:
-+	of_node_put(parent_dn);
-+	return mtd_dn;
-+}
-+
- /**
-  *	add_mtd_device - register an MTD device
-  *	@mtd: pointer to new MTD device info structure
-diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
-index f5e7dfc2e4e9..f73d65817468 100644
---- a/include/linux/mtd/mtd.h
-+++ b/include/linux/mtd/mtd.h
-@@ -464,11 +464,6 @@ static inline void mtd_set_of_node(struct mtd_info *mtd,
- 		of_property_read_string(np, "label", &mtd->name);
- }
- 
--static inline struct device_node *mtd_get_of_node(struct mtd_info *mtd)
--{
--	return dev_of_node(&mtd->dev);
--}
--
- static inline u32 mtd_oobavail(struct mtd_info *mtd, struct mtd_oob_ops *ops)
+ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+-		bool compound, bool young, bool dirty, bool locked)
++		bool compound, bool young, bool dirty, bool locked,
++		bool migration)
  {
- 	return ops->mode == MTD_OPS_AUTO_OOB ? mtd->oobavail : mtd->oobsize;
-@@ -489,6 +484,7 @@ static inline int mtd_max_bad_blocks(struct mtd_info *mtd,
- 				       len);
+ 	int i, nr = compound ? compound_nr(page) : 1;
+ 	unsigned long size = nr * PAGE_SIZE;
+@@ -467,8 +468,12 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+ 	 * page_count(page) == 1 guarantees the page is mapped exactly once.
+ 	 * If any subpage of the compound page mapped with PTE it would elevate
+ 	 * page_count().
++	 *
++	 * Treated regular migration entries as mapcount == 1 without reading
++	 * mapcount since calling page_mapcount() for migration entries is
++	 * racy against THP splitting.
+ 	 */
+-	if (page_count(page) == 1) {
++	if ((page_count(page) == 1) || migration) {
+ 		smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
+ 			locked, true);
+ 		return;
+@@ -517,6 +522,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pte_present(*pte)) {
+ 		page = vm_normal_page(vma, addr, *pte);
+@@ -536,8 +542,11 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 			} else {
+ 				mss->swap_pss += (u64)PAGE_SIZE << PSS_SHIFT;
+ 			}
+-		} else if (is_pfn_swap_entry(swpent))
++		} else if (is_pfn_swap_entry(swpent)) {
++			if (is_migration_entry(swpent))
++				migration = true;
+ 			page = pfn_swap_entry_to_page(swpent);
++		}
+ 	} else {
+ 		smaps_pte_hole_lookup(addr, walk);
+ 		return;
+@@ -546,7 +555,8 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	if (!page)
+ 		return;
+ 
+-	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte), locked);
++	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
++		      locked, migration);
  }
  
-+struct device_node *mtd_get_of_node(struct mtd_info *mtd);
- int mtd_wunit_to_pairing_info(struct mtd_info *mtd, int wunit,
- 			      struct mtd_pairing_info *info);
- int mtd_pairing_info_to_wunit(struct mtd_info *mtd,
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+@@ -557,6 +567,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pmd_present(*pmd)) {
+ 		/* FOLL_DUMP will return -EFAULT on huge zero page */
+@@ -564,8 +575,10 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	} else if (unlikely(thp_migration_supported() && is_swap_pmd(*pmd))) {
+ 		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+ 
+-		if (is_migration_entry(entry))
++		if (is_migration_entry(entry)) {
++			migration = true;
+ 			page = pfn_swap_entry_to_page(entry);
++		}
+ 	}
+ 	if (IS_ERR_OR_NULL(page))
+ 		return;
+@@ -577,7 +590,9 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 		/* pass */;
+ 	else
+ 		mss->file_thp += HPAGE_PMD_SIZE;
+-	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd), locked);
++
++	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
++		      locked, migration);
+ }
+ #else
+ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
 -- 
-2.33.1
+2.26.3
 

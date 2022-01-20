@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CEE494C19
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CC7494C22
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiATKuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S229885AbiATKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376410AbiATKtc (ORCPT
+        with ESMTP id S232804AbiATKuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:49:32 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81707C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:49:32 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id p5so16388292ybd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6Llb3z0/5OIzG6RJ3l9/Z14PDgc6xtj5MthS1YNcYzc=;
-        b=eHf7VM8nwKnMuPlR+rCoLSiO9EmRnsWfVr0RRKXi/fwOIHWiKOODrw6FLkTVvG0tZH
-         2cFw9u4SmT/PpLSFb3jl3RSQKuWR0BbNdrRD1fVGYWkGWyKaoqH5f+1+JlyQ/CSZo+BL
-         XBugH95SB5SMVUoqeYdSZF+fPxV8tk15nu5e4Wra2eMjxV+ojLiTkDfW7ONz3VZMm51b
-         f2pbUx6bDnaYZxRJpGQ/HeLiDUvJLr4P3QynSAoHOWMEzsmfPE9XArOwSAwSg2vgIcGv
-         rq6rc7o4ojdmeOhPWzn2lW03PAKsW8Zq8m4UyEOpi6/ylFOMBrxJZtcB/JHQZ3WR2EQw
-         LaSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6Llb3z0/5OIzG6RJ3l9/Z14PDgc6xtj5MthS1YNcYzc=;
-        b=OK9d7eH3XIhG9ZAwQ4r8Az+rrlIrHJN/J6D1eJm9XC8Q9Pjb1Rj4Z19Q/QC+KduWot
-         n1ARarlqhOv+C8vNPmhGtFYyrrpHUHeu4cICwFOfnqE+wGxDK+K3rYj98DuuOR/hu6d0
-         hjBi676f4E96gauOyf70rF/GxYMZ8TTsG5ZyOij9LSluFd2PJDSKTkNT86uv2M4ztHzj
-         QEkOZhXU7NNJE+0xIYh+d371XfOx/gs7sOYDbzkK7ImWnpRCpqCqgSp9ibACpD/NgB0x
-         5VQ/km0C8mh0+Bvhw4QGi7Bmdp14MCZrd55BV/bFn8/QtFkZ1MqMq1srLS/Fzy6tFk1p
-         nofQ==
-X-Gm-Message-State: AOAM533VR3gX+OOGrbhj/VOP7d0gsDVSLDCKrm2AFuKyHnKAngiU+vLv
-        cpu8C5D1j5XQ9hbU/xehUiKcGq9/T9/m5vLhmyQ=
-X-Google-Smtp-Source: ABdhPJzZMsqM9GJcLX58zAOeMA22IYBlCD5R1pK8NsHzK/VPEDbXzqFuCYxQsQb9XYkftW0VZZQfuhIakSL3UKhBXBg=
-X-Received: by 2002:a25:73d6:: with SMTP id o205mr13544613ybc.678.1642675771801;
- Thu, 20 Jan 2022 02:49:31 -0800 (PST)
+        Thu, 20 Jan 2022 05:50:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05978C061574;
+        Thu, 20 Jan 2022 02:50:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B6F76151B;
+        Thu, 20 Jan 2022 10:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC172C340E2;
+        Thu, 20 Jan 2022 10:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642675810;
+        bh=NqowiAMeZDXoTZn1mzYNvP3gKL0n2MW5IpjY4dst0aM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KPhUmUvmhNZwdfeBhmuWepa9loN49yjSHyzxSsGBDHoEEBHh4Wmnj9JwVv/GYOjVx
+         IGDGwXg8o47UXbtLS0W3R83VJWqigS8+zPGs5zUPzEO/t13Z5vMvl2c3NjUplu0Bgx
+         f/5Op1rf8WDFiVsp4hZxdAKDcv67mnGcAw520rkk7xUGfg4ReNQMrZ5h0tU8caetl0
+         GK0lp5Q5h3rhXe5AOEONRQ9FGOBlBBtpNDFDeS3GNbKGIw5VJH+J0p5aJFa+XavXOr
+         cfuqRqc3DvpBNw+Dv3z1TzCXWQg8JKFkQIEYV93o9f9Fh0MmKGTOT+xRK7XFBgUrM1
+         kBnqtHlPPln+g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5CC7F6079B;
+        Thu, 20 Jan 2022 10:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:7000:49c7:0:0:0:0 with HTTP; Thu, 20 Jan 2022 02:49:31
- -0800 (PST)
-Reply-To: barristerjohnsonphillip1@gmail.com
-From:   Johnson Phillip <bourahime.saliou0907521@gmail.com>
-Date:   Thu, 20 Jan 2022 10:49:31 +0000
-Message-ID: <CAE7kwUav3OiHqxm+8e9gTNuvjYYY0Q8_9+jvKqJGNsXDskx4qQ@mail.gmail.com>
-Subject: Hallo
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net] net: fix information leakage in /proc/net/ptype
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164267580986.26718.1893811896925655041.git-patchwork-notify@kernel.org>
+Date:   Thu, 20 Jan 2022 10:50:09 +0000
+References: <20220118192013.1608432-1-liu3101@purdue.edu>
+In-Reply-To: <20220118192013.1608432-1-liu3101@purdue.edu>
+To:     Congyu Liu <liu3101@purdue.edu>
+Cc:     davem@davemloft.net, kuba@kernel.org, yajun.deng@linux.dev,
+        edumazet@google.com, willemb@google.com, mkl@pengutronix.de,
+        rsanger@wand.net.nz, wanghai38@huawei.com, pablo@netfilter.org,
+        jiapeng.chong@linux.alibaba.com, xemul@openvz.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello:
 
-I am still waiting for your response.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Regards
-Barr. Johnson Phillip
+On Tue, 18 Jan 2022 14:20:13 -0500 you wrote:
+> In one net namespace, after creating a packet socket without binding
+> it to a device, users in other net namespaces can observe the new
+> `packet_type` added by this packet socket by reading `/proc/net/ptype`
+> file. This is minor information leakage as packet socket is
+> namespace aware.
+> 
+> Add a net pointer in `packet_type` to keep the net namespace of
+> of corresponding packet socket. In `ptype_seq_show`, this net pointer
+> must be checked when it is not NULL.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net] net: fix information leakage in /proc/net/ptype
+    https://git.kernel.org/netdev/net/c/47934e06b656
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A3E4945A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9E54945B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 03:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358130AbiATBzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 20:55:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46728 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbiATBzX (ORCPT
+        id S1358164AbiATCD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 21:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232041AbiATCD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:55:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFD3DB81C97;
-        Thu, 20 Jan 2022 01:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53833C004E1;
-        Thu, 20 Jan 2022 01:55:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642643720;
-        bh=UBA9EAgXb+ndoEEnlylpF1zO8z2g96V3hPj15HRcAfo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hTAD6NZzQUZRVWlrg08cB/oSXOrRYxSxV43MFikx9DTJBxdy2ucAbg84idFWkdNRV
-         B/RDhzWSaiRnbsCVaoksK6xFGqjGYypV3fgghZqQ8a3pV+b3yM3C3odylOF+l5UT8P
-         3I31vwTMa9reYVdt0tVbUKM6tXyDkgcuhE/Lahh6VX/WId8kWRRsAwUQYRCWiFa9IN
-         g1DuJawcjB8ViBxapaF4dYorah58Z9hSOtigQWJ/rIjYVtPHoz/Y2/LyF4b0b8aPyI
-         X3Cegww/ufVf8wgpbvKbHT0QanEPrE/oVOY71G75SRvz5PL2pmtUmvEjAp5fcHnooN
-         545XOG3Iz5T2g==
-Date:   Wed, 19 Jan 2022 20:01:55 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] usb: gadget: f_phonet: Use struct_size() helper in
- kzalloc()
-Message-ID: <20220120020155.GA76981@embeddedor>
+        Wed, 19 Jan 2022 21:03:58 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E6C061574;
+        Wed, 19 Jan 2022 18:03:57 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id c9so3893736plg.11;
+        Wed, 19 Jan 2022 18:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FKvsHgDw8lU7jb9gWUC0NOGdDixcuWetMqLuAq7PwQk=;
+        b=o6VUFhVlB0pYLSWPb/UZeFqVVej8u+WF+PSwjJN9+5ssoieo8N4WeZrIh5VptUcPMP
+         Yy2xN+SiwfsNLWiqKcdWGZU2uPMigFiLbo4rNpg3xEt+GRlNsN0IcQC8qDqKeEpHdg8f
+         ehV3GX9s86sZd8SEXW5Fg9pypmrrxHZfKERT8Wr9LW+RHJCje/gSrZex6uQSVCPPHFOU
+         mgv32i8qekMw7qZSqRF1dEZVxBqfQu5vcoCsUVck04uS8iFtDzpR10WyfV3BxUNeWs6a
+         EMkkO3AMIqiZuH3aHLSMm4KRtr1R2sC2SDkvDOhBJlabYH4hWZp2Fy9e88qi13XGH00N
+         bgaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FKvsHgDw8lU7jb9gWUC0NOGdDixcuWetMqLuAq7PwQk=;
+        b=DhP8QtLVZM6yztHNe+u/b9Hkf2aCLWAVM0K5R5jYIJquy/SKgFumc/uJdKHG2z6OUR
+         5taGV9wmYwHZ992H6JhsCx1kdaJN0c6XC5Xr5a6CMCPdaSuuXyL36Yd4ZvxXyXJvCWa2
+         xBFgRCIJ2tgoWm4BulxOMUHKLuiZOgkZus+8cyDCMXgwajFlswiD84lb1/g9RoxCU9Bg
+         vWVOkxMI4Idf7tf7FTa9NnJL4GYHWnrc8sXO04A83mI2eqWVsEBKS4urItDptkZXITLI
+         qnXagLx5Wj4gnrMFPYhIUhC5baCSmuzpQsOD0J+sBanNTDrx3fQuIDqutDUjZB2x9FX3
+         KsgA==
+X-Gm-Message-State: AOAM532MMzRQF+QgBHXfjHo3rYKP6CnGR0lRPvbG59FY7e/QcMmYKhF4
+        go1mbRozKaQAchrDrI6cA4CQ3KE5pdLJcSnbTJg=
+X-Google-Smtp-Source: ABdhPJxBYyolCvoIAI4tRvAxPacUY//mEyQ2pvpMHa4c+K+6l58b4cCzU4JXW1oxXz/ozcRHDj0xk9dvkouvzalSHl4=
+X-Received: by 2002:a17:903:24d:b0:14a:677d:843a with SMTP id
+ j13-20020a170903024d00b0014a677d843amr36538680plh.129.1642644237330; Wed, 19
+ Jan 2022 18:03:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220118002214.18271-1-dipenp@nvidia.com> <20220118002214.18271-2-dipenp@nvidia.com>
+In-Reply-To: <20220118002214.18271-2-dipenp@nvidia.com>
+From:   teng sterling <sterlingteng@gmail.com>
+Date:   Thu, 20 Jan 2022 10:03:48 +0800
+Message-ID: <CAMU9jJoFAG4taoN0SSbVGPFMKyUnkT9VkrtatGuRpU-ek+hJ2g@mail.gmail.com>
+Subject: Re: [RFC v4 01/11] Documentation: Add HTE subsystem guide
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     smangipudi@nvidia.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        warthog618@gmail.com, devicetree@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        robh+dt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
+Dipen Patel <dipenp@nvidia.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8818=E6=97=A5=
+=E5=91=A8=E4=BA=8C 11:06=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Adding hte document which can help understand various APIs implemented
+> in HTE framework for the HTE producers and the consumers.
+>
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> ---
+> Changes in v2:
+> - Removed explanation, instead added kernel-doc references.
+>
+> Changes in v3:
+> - Addressed grammatical errors.
+>
+> Changes in v4:
+> - Added new API hte_req_ts_by_linedata_ns description.
+> - Removed hte_req_ts_by_hte_name.
+>
+>  Documentation/hte/hte.rst | 83 +++++++++++++++++++++++++++++++++++++++
+Hi Dipen
 
-Also, address the following sparse warnings:
-drivers/usb/gadget/function/f_phonet.c:673:16: warning: using sizeof on a flexible structure
+A document build warning will be introduced=EF=BC=8CNeed to add it to the i=
+ndex:
 
-Link: https://github.com/KSPP/linux/issues/160
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/usb/gadget/function/f_phonet.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+1) Create Documentation/hte/index.rst
+2) Add hte/index.rst into Documentation/index.rst
+3) Add hte.rst into Documentation/hte/index.rst
 
-diff --git a/drivers/usb/gadget/function/f_phonet.c b/drivers/usb/gadget/function/f_phonet.c
-index 068ed8417e5a..0bebbdf3f213 100644
---- a/drivers/usb/gadget/function/f_phonet.c
-+++ b/drivers/usb/gadget/function/f_phonet.c
-@@ -668,10 +668,8 @@ static struct usb_function *phonet_alloc(struct usb_function_instance *fi)
- {
- 	struct f_phonet *fp;
- 	struct f_phonet_opts *opts;
--	int size;
- 
--	size = sizeof(*fp) + (phonet_rxq_size * sizeof(struct usb_request *));
--	fp = kzalloc(size, GFP_KERNEL);
-+	fp = kzalloc(struct_size(fp, out_reqv, phonet_rxq_size), GFP_KERNEL);
- 	if (!fp)
- 		return ERR_PTR(-ENOMEM);
- 
--- 
-2.27.0
-
+Thanks,
+Yanteng

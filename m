@@ -2,98 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6924D49526D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FDA495270
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377043AbiATQcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:32:00 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:35625 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346858AbiATQby (ORCPT
+        id S1377046AbiATQee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:34:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30457 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346977AbiATQed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:31:54 -0500
-Received: by mail-oi1-f171.google.com with SMTP id s127so9665475oig.2;
-        Thu, 20 Jan 2022 08:31:54 -0800 (PST)
+        Thu, 20 Jan 2022 11:34:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642696473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+1sc4JZ0+7MrtJWFMrOPG0iw0Wa1Lhn4BX5CbDefiMM=;
+        b=i3JsigAM1RinhaHV+8XTxdUNTghWVD5GAD0E0m168M2QO1HkSZBRGDeFO3HAKMy5j8dTgW
+        lKOJTlzRoeJqy8EA++Z6lUuSHvibae5Mdw3K+yF9zT+ZBVjXUf+GY3UZl4hu3m93t87LUr
+        JHqiu6J8Zit9SfxRxlyTS5oejLaM4F0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-437-zgH5KjuiNpS98m0VuLozdg-1; Thu, 20 Jan 2022 11:34:31 -0500
+X-MC-Unique: zgH5KjuiNpS98m0VuLozdg-1
+Received: by mail-ed1-f70.google.com with SMTP id ee53-20020a056402293500b004022f34edcbso6406404edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:34:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=oIS21M3kDACk8JCT5uuyNKZCe6YGCb1Ik2cXn3T5AB0=;
-        b=TH5G2TplCGappsYRRkehXFphvULbK2Jkksqbl0djI8I7s/f7tWiVOPDxR1R6TVIgIh
-         9Wx4pzzMsw3slayECc1l/ab45OYw8WIX4qOaE1nM3qHLGSMR7X3WkzB4w2X1aaXgSk/0
-         7b4ySIKa9mPUk/8X5yvXfTfchHIIlWf0kVo53+oQ4txrl33jFHjbLBIBX2y/IhxJYaq2
-         YTsVDGGb9/WzjpTI7Imr93my6a0EQStuu02bppYr6QW0EpA2vWFhUi4noAUTLsAIII0M
-         y/rGascBhz+/RMg0moCLontIwaApyIY4ThkhY2plr29BlUQPRZemlvlmSsFwhjZPIiAN
-         sUGw==
-X-Gm-Message-State: AOAM5331WgnymGmaG+0ZdXk6fl11jlR7YG6vW0XeRj/Tbl8PWs84U8ko
-        6LkkBhWpPdzY1CPgaRGeJQ==
-X-Google-Smtp-Source: ABdhPJyAmQH8lK/5INP9kdsaboVqe2rh5v2NQ1dA3JLRep7fGroWXk18fJqb9O1GEwXs999OdcKCYQ==
-X-Received: by 2002:aca:2409:: with SMTP id n9mr8475446oic.120.1642696313584;
-        Thu, 20 Jan 2022 08:31:53 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f8sm1343757oop.46.2022.01.20.08.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 08:31:53 -0800 (PST)
-Received: (nullmailer pid 1556364 invoked by uid 1000);
-        Thu, 20 Jan 2022 16:31:52 -0000
-Date:   Thu, 20 Jan 2022 10:31:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/11] PCI: Small improvements for pci-bridge-emul and
- mvebu
-Message-ID: <YemOeJ2qIJV9dzO6@robh.at.kernel.org>
-References: <20211221141455.30011-1-pali@kernel.org>
- <20220104153529.31647-1-pali@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+1sc4JZ0+7MrtJWFMrOPG0iw0Wa1Lhn4BX5CbDefiMM=;
+        b=LOWSijkrLlVB6BryW9ia2Kl4GIwuIeVH0N52cVc4O7xNwSpKPSpl7sOSx4d2yJcf1A
+         WxVpdAuj83W7RB8SD2d78pqwKzVd9XVQff9wA75L/A8ehoAyxl2t5k3FLPsFdx3bmqVs
+         O/t6Q0RBscvjujhfmmNhN6/ryPs39iZ4g7xJiK06UUgTkMrdJsL6JkoT6TlijNl8VO9s
+         zXQjwCDqqzRezYMVZjDsUIi7qbH1z+NbqYe3I0DRqVShD7kBjEQ7sndasYO+reE7MKTR
+         x/mrsd/tslFxU8ol74L2Ohj3jrlgh0swq5bzsY1Qhy5sDGXa47C16aJ1jbn1lLcgVviD
+         ENAg==
+X-Gm-Message-State: AOAM5331gwwgMNc6OxXGRAqQb+eXZfjWHyMocjqLrQyhe6ak7A0Elx/m
+        3Ew5vZ03z0n5KvcDC7EaTk6JvknzhPjfdNmTWOy115YbwPEcD7yE3tLb0lXhCsM732EfS4s9r8n
+        asBglf8MJsBm2gQHS8xlWRxJ3
+X-Received: by 2002:a17:907:6e0b:: with SMTP id sd11mr30574240ejc.132.1642696470217;
+        Thu, 20 Jan 2022 08:34:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwF9+NmsBb9KPVuUgSXvv1RUm6gGRw3HsBpgMAdYinUYF2Y/bfZO+s9YZARtMUaHR9LPOCCTg==
+X-Received: by 2002:a17:907:6e0b:: with SMTP id sd11mr30574226ejc.132.1642696470043;
+        Thu, 20 Jan 2022 08:34:30 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id dt15sm1157616ejb.190.2022.01.20.08.34.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 08:34:29 -0800 (PST)
+Message-ID: <d6958153-7747-bc4b-2de0-57aa3226d984@redhat.com>
+Date:   Thu, 20 Jan 2022 17:34:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220104153529.31647-1-pali@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 0/9] Support Spi in i2c-multi-instantiate driver
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
+References: <20220120134326.5295-1-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220120134326.5295-1-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 04:35:18PM +0100, Pali Rohár wrote:
-> This patch series contains small improvements for pci-bridge-emul and
-> mvebu drivers. This patch series is based on top of the patches:
-> https://lore.kernel.org/linux-pci/20211125124605.25915-1-pali@kernel.org/
-> (which are now in pci/mvebu branch)
+Hi Mark,
+
+On 1/20/22 14:43, Stefan Binding wrote:
+> Add support for SPI bus in the i2c-multi-instantiate driver as
+> upcoming laptops will need to multi instantiate SPI devices from
+> a single device node, which has multiple SpiSerialBus entries at
+> the ACPI table.
 > 
-> In V2 was added comment into code explaining PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
-> and PCI_BRIDGE_EMUL_NO_IO_FORWARD flags.
+> With the new SPI support, i2c-multi-instantiate becomes
+> bus-multi-instantiate and is moved to the ACPI folder.
 > 
-> Pali Rohár (11):
->   MAINTAINERS: Add Pali Rohár as pci-mvebu.c maintainer
->   PCI: pci-bridge-emul: Make struct pci_bridge_emul_ops as const
->   PCI: pci-bridge-emul: Rename PCI_BRIDGE_EMUL_NO_PREFETCHABLE_BAR to
->     PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
->   PCI: pci-bridge-emul: Add support for new flag
->     PCI_BRIDGE_EMUL_NO_IO_FORWARD
->   PCI: mvebu: Add help string for CONFIG_PCI_MVEBU option
->   PCI: mvebu: Remove duplicate nports assignment
->   PCI: mvebu: Set PCI_BRIDGE_EMUL_NO_IO_FORWARD when IO is unsupported
->   PCI: mvebu: Properly initialize vendor, device and revision of
->     emulated bridge
->   PCI: mvebu: Update comment for PCI_EXP_LNKCAP register on emulated
->     bridge
->   PCI: mvebu: Update comment for PCI_EXP_LNKCTL register on emulated
->     bridge
->   PCI: mvebu: Fix reporting Data Link Layer Link Active on emulated
->     bridge
+> The intention is to support the SPI bus by re-using the current
+> I2C multi instantiate, instead of creating a new SPI multi
+> instantiate, to make it possible for peripherals that can be
+> controlled by I2C or SPI to have the same HID at the ACPI table.
+> 
+> The new driver (Bus multi instantiate, bmi) checks for the
+> hard-coded bus type and returns -ENODEV in case of zero devices
+> found for that bus. In the case of automatic bus detection, 
+> the driver will give preference to I2C.
+> 
+> The expectation is for a device node in the ACPI table to have
+> multiple I2cSerialBus only or multiple SpiSerialBus only, not
+> a mix of both; and for the case where there are both entries in
+> one device node, only the I2C ones would be probed.
+> 
+> This new bus multi instantiate will be used in CS35L41 HDA new
+> driver.
 
-For the series,
+Mark, since most of my review remarks are small(ish) I expect
+the next version of this (except patch 8/9) to be ready for
+merging.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I can either merge all patches on top of 5.17-rc1 once released;
+and provide an immutable-branch for you to merge for the SPI
+bits; or you can merge patches 1-4 (the SPI patches) and then
+send me a pull-req for an immutable-branch with those 4,
+so that I can merge that and then the rest on top.
 
-In the future, please do not thread new versions with the old version 
-of the series.
+Mark, please let me know how you want to proceed with merging this.
 
-Rob
+Regards,
+
+Hans
+
+
+
+
+> 
+> Changes since V2:
+>  - Moved bus-multi-instantiate back into platform/x86
+> 
+> Lucas Tanure (4):
+>   platform/x86: i2c-multi-instantiate: Rename it for a generic bus
+>     driver name
+>   platform/x86: bus-multi-instantiate: Reorganize I2C functions
+>   ALSA: hda/realtek: Add support for HP Laptops
+>   ACPI / scan: Create platform device for CS35L41
+> 
+> Stefan Binding (5):
+>   spi: Make spi_alloc_device and spi_add_device public again
+>   spi: Create helper API to lookup ACPI info for spi device
+>   spi: Support selection of the index of the ACPI Spi Resource before
+>     alloc
+>   spi: Add API to count spi acpi resources
+>   platform/x86: bus-multi-instantiate: Add SPI support
+> 
+>  MAINTAINERS                                  |   4 +-
+>  drivers/acpi/scan.c                          |  16 +-
+>  drivers/platform/x86/Kconfig                 |  14 +-
+>  drivers/platform/x86/Makefile                |   2 +-
+>  drivers/platform/x86/bus-multi-instantiate.c | 369 +++++++++++++++++++
+>  drivers/platform/x86/i2c-multi-instantiate.c | 174 ---------
+>  drivers/spi/spi.c                            | 142 ++++++-
+>  include/linux/spi/spi.h                      |  32 ++
+>  sound/pci/hda/patch_realtek.c                |  43 ++-
+>  9 files changed, 588 insertions(+), 208 deletions(-)
+>  create mode 100644 drivers/platform/x86/bus-multi-instantiate.c
+>  delete mode 100644 drivers/platform/x86/i2c-multi-instantiate.c
+> 
+

@@ -2,251 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0652494A0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBD8494A11
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359415AbiATIuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:50:19 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22816 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238235AbiATIuR (ORCPT
+        id S1359425AbiATIuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:50:51 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:51351 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359384AbiATIut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:50:17 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K815gR018086;
-        Thu, 20 Jan 2022 08:50:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4sJvHNysTSAvNELX7praqW5ThBNnyttJKpqfuTDEyUc=;
- b=bMdxs70lDt+Kcw41shQXrKyx3cUJrIPvCQpo8OvXBI8OpuZyb9Sk6INPjBSVJV0mnvkc
- NDlUaJMaQwYS05cpcXlHiZc+Fqv5BppWEv1CcdSXU1tUc4uyLsbSetTU3yYfobqhjZKn
- Ac40MmGFLVnIDEKUUYmRqtdvvfb81oj2bhS+FlE7e+mmWBg/kN3FjwplgZ9mCyJxv7Zc
- hCE7auBNvs3Pln5Ex8/p9ruAYTKijqevd4HNWH7FL7BaZuBYgpF1YpMT/fFKwge12hKp
- iC2id9iVllb1sceU+5fAaSUBIOAIkxrrZQmvNt0+e1Wii4vJP7nKgk3wHe+n2cOXA1ZY fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dq0qjc85k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 08:50:16 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20K8lN8e013035;
-        Thu, 20 Jan 2022 08:50:16 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dq0qjc84r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 08:50:15 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20K8XoSK029225;
-        Thu, 20 Jan 2022 08:50:14 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dknw9q3xj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 08:50:13 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20K8oAfh45941074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 08:50:10 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70BB711C069;
-        Thu, 20 Jan 2022 08:50:10 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 033A911C06E;
-        Thu, 20 Jan 2022 08:50:10 +0000 (GMT)
-Received: from [9.171.38.24] (unknown [9.171.38.24])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Jan 2022 08:50:09 +0000 (GMT)
-Message-ID: <3e50722f-0b96-78ce-6d5a-6b6f9931f218@linux.ibm.com>
-Date:   Thu, 20 Jan 2022 09:50:09 +0100
+        Thu, 20 Jan 2022 03:50:49 -0500
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M2w4S-1n9Nl516nU-003Iri; Thu, 20 Jan 2022 09:50:47 +0100
+Received: by mail-wm1-f50.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso18739180wma.1;
+        Thu, 20 Jan 2022 00:50:47 -0800 (PST)
+X-Gm-Message-State: AOAM532+T5PvVkwuwVqOAgwW+JAlCBQwuxJ/v/rEw11TyDyI2Vm2oy2m
+        5oL27DNA+HYoJVpKnzG7qUhcJcIzrtBw4hiH2Wk=
+X-Google-Smtp-Source: ABdhPJwa2TLFWWtVzRt+gvdo3caSsHZVcnbUi/A/hVZ7P0/vZnDNJpHv52UMEl2oHT4PQoB1G9hWQmqPRnKWtHwc0qw=
+X-Received: by 2002:a1c:2784:: with SMTP id n126mr5427772wmn.1.1642668646881;
+ Thu, 20 Jan 2022 00:50:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 02/10] KVM: s390: Honor storage keys when accessing
- guest memory
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-3-scgl@linux.ibm.com>
- <1bbc2b03-6daa-5e27-956c-4d022bd8e9cb@linux.ibm.com>
- <f507580f-ab5b-827f-592e-42d38e639c71@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <f507580f-ab5b-827f-592e-42d38e639c71@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Zd4P_GTLo4m8_aTFBWjsJmXHBHeCxShS
-X-Proofpoint-GUID: jx3PtmaG6mdzKZfI7hk48k_8Ed3FID-L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-20_03,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
- suspectscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201200044
+References: <20220120080347.1595379-1-laurent@vivier.eu> <20220120080347.1595379-3-laurent@vivier.eu>
+In-Reply-To: <20220120080347.1595379-3-laurent@vivier.eu>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 20 Jan 2022 09:50:30 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
+Message-ID: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
+Subject: Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:hjIIYFRUUftOuns46pp36ouon+Tk8dXglaJJkI5uFMgrWcu517j
+ n69BfYDFLCyRSD3bRS7eYpW7kYAdDUQ2B7fNXsUyGaGFz3MqorGhZfb7MPy2FAYhOikPrNb
+ 2/OArlbT47nI5ipx2ZbTud9SnRXTo7+xCF6JZmisUOnX61sGAZS444c9LrjiHQC2r9O0MYG
+ 7US8SFjqpWwkZJZng+XVg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HcOR5JkVswQ=:JnjTHhX2usyp9GNrmWwikf
+ cAsJ6rg4xHyqAjHaCvnCwN4DeG5OLAe5vu/tatZ8yfBu1+1HPYN1XDVL1RmO/SxnBFflI7MBF
+ UrUheH1rZk2KNwgOxkljSOlrk2jwUw7vuPA4N8nA0aXQz5c1lnNPYu3UXo6cQSkOJsvui0cph
+ NMIHWFMOXPpTmoIh8CMNWEq2Lxt3n4GRUNp4bau/JHjRjj6zE35mv+qPgNkQ80ukbvq5BFXKx
+ ZxBC7w014NPW3e9hDnWtpYjoHHjUe8ZY4S1RIvuhSD/u2dqAvVMTg8iAyU/Xe9fk/oXJnk1UK
+ c4FexPtqJ5GD2D5y2u+d+6xAgco76evBhazktf43no+RTWRtluz6moJFbF74CtSG0zoHaOAbK
+ c+IJH5xvkR493RA/g9+o7ra2fwFCa7Sd7kqKy4/Mm6dZ2CTNqNCUDuBYPd1lVJ4XWUat/Jhxu
+ vSpV4cEpWSdnD2ZhaeFgkIjPk6X8xduudTUpy2cG8ajd5zo9u6vvkfaRCTZSh84CAKTgvMnl/
+ JzFIEawqZ9zRkTdkhtr2JXEGzY1AsA76+3YKFRM8dkmyLFEo0zH6Nn5JbTGk+BbjmGsrkjmBO
+ 4VhQrXYkNcaaBYx9lP6mIx+hvzvoSpoe0RHWX6wYcXArbEYH4weo1E81Q/FvQPv8GnD3CWj36
+ ZdlAxEG0RgSBsYIOI6fbAbbzCRyGx4p5kNswSXQyfu1AT36n2Q5lal9dl0aNJ37Pqq7dWT8lH
+ +M6arKhHIxTLdEkY9u+4k5HgojZLeTucZRa8/1aQDiCl9Qtdr37Rx/ELUWRFZFGMMPbVYNJR/
+ LPrWpg1QsopFjPVfXhdqtUXrVxRorv+rJbeXgVyhT9V23Yruj0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 20, 2022 at 9:03 AM Laurent Vivier <laurent@vivier.eu> wrote:
+>
+> Revert
+> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+>
+> to use accessors defined by the architecture.
+>
+> Define by default the accessor to be little-endian as we
+> have only little-endian architectures using goldfish devices.
+>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
+The patch looks good, but the description seems wrong to me:
 
-Am 20.01.22 um 09:11 schrieb Janis Schoetterl-Glausch:
-> On 1/19/22 20:27, Christian Borntraeger wrote:
->> Am 18.01.22 um 10:52 schrieb Janis Schoetterl-Glausch:
->>> Storage key checking had not been implemented for instructions emulated
->>> by KVM. Implement it by enhancing the functions used for guest access,
->>> in particular those making use of access_guest which has been renamed
->>> to access_guest_with_key.
->>> Accesses via access_guest_real should not be key checked.
->>>
->>> For actual accesses, key checking is done by __copy_from/to_user_with_key
->>> (which internally uses MVCOS/MVCP/MVCS).
->>> In cases where accessibility is checked without an actual access,
->>> this is performed by getting the storage key and checking
->>> if the access key matches.
->>> In both cases, if applicable, storage and fetch protection override
->>> are honored.
->>>
->>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->>> ---
->>>    arch/s390/include/asm/ctl_reg.h |   2 +
->>>    arch/s390/include/asm/page.h    |   2 +
->>>    arch/s390/kvm/gaccess.c         | 174 +++++++++++++++++++++++++++++---
->>>    arch/s390/kvm/gaccess.h         |  78 ++++++++++++--
->>>    arch/s390/kvm/intercept.c       |  12 +--
->>>    arch/s390/kvm/kvm-s390.c        |   4 +-
->>>    6 files changed, 241 insertions(+), 31 deletions(-)
->>>
->>> diff --git a/arch/s390/include/asm/ctl_reg.h b/arch/s390/include/asm/ctl_reg.h
->>> index 04dc65f8901d..c800199a376b 100644
->>> --- a/arch/s390/include/asm/ctl_reg.h
->>> +++ b/arch/s390/include/asm/ctl_reg.h
->>> @@ -12,6 +12,8 @@
->>>      #define CR0_CLOCK_COMPARATOR_SIGN    BIT(63 - 10)
->>>    #define CR0_LOW_ADDRESS_PROTECTION    BIT(63 - 35)
->>> +#define CR0_FETCH_PROTECTION_OVERRIDE    BIT(63 - 38)
->>> +#define CR0_STORAGE_PROTECTION_OVERRIDE    BIT(63 - 39)
->>>    #define CR0_EMERGENCY_SIGNAL_SUBMASK    BIT(63 - 49)
->>>    #define CR0_EXTERNAL_CALL_SUBMASK    BIT(63 - 50)
->>>    #define CR0_CLOCK_COMPARATOR_SUBMASK    BIT(63 - 52)
->>> diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
->>> index d98d17a36c7b..cfc4d6fb2385 100644
->>> --- a/arch/s390/include/asm/page.h
->>> +++ b/arch/s390/include/asm/page.h
->>> @@ -20,6 +20,8 @@
->>>    #define PAGE_SIZE    _PAGE_SIZE
->>>    #define PAGE_MASK    _PAGE_MASK
->>>    #define PAGE_DEFAULT_ACC    0
->>> +/* storage-protection override */
->>> +#define PAGE_SPO_ACC        9
->>>    #define PAGE_DEFAULT_KEY    (PAGE_DEFAULT_ACC << 4)
->>>      #define HPAGE_SHIFT    20
->>> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
->>> index 4460808c3b9a..92ab96d55504 100644
->>> --- a/arch/s390/kvm/gaccess.c
->>> +++ b/arch/s390/kvm/gaccess.c
->>> @@ -10,6 +10,7 @@
->>>    #include <linux/mm_types.h>
->>>    #include <linux/err.h>
->>>    #include <linux/pgtable.h>
->>> +#include <linux/bitfield.h>
->>>      #include <asm/gmap.h>
->>>    #include "kvm-s390.h"
->>> @@ -794,6 +795,79 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
->>>        return 1;
->>>    }
->>>    +static bool fetch_prot_override_applicable(struct kvm_vcpu *vcpu, enum gacc_mode mode,
->>> +                       union asce asce)
->>> +{
->>> +    psw_t *psw = &vcpu->arch.sie_block->gpsw;
->>> +    unsigned long override;
->>> +
->>> +    if (mode == GACC_FETCH || mode == GACC_IFETCH) {
->>> +        /* check if fetch protection override enabled */
->>> +        override = vcpu->arch.sie_block->gcr[0];
->>> +        override &= CR0_FETCH_PROTECTION_OVERRIDE;
->>> +        /* not applicable if subject to DAT && private space */
->>> +        override = override && !(psw_bits(*psw).dat && asce.p);
->>> +        return override;
->>> +    }
->>> +    return false;
->>> +}
->>> +
->>> +static bool fetch_prot_override_applies(unsigned long ga, unsigned int len)
->>> +{
->>> +    return ga < 2048 && ga + len <= 2048;
->>> +}
->>> +
->>> +static bool storage_prot_override_applicable(struct kvm_vcpu *vcpu)
->>> +{
->>> +    /* check if storage protection override enabled */
->>> +    return vcpu->arch.sie_block->gcr[0] & CR0_STORAGE_PROTECTION_OVERRIDE;
->>> +}
->>> +
->>> +static bool storage_prot_override_applies(char access_control)
->>> +{
->>> +    /* matches special storage protection override key (9) -> allow */
->>> +    return access_control == PAGE_SPO_ACC;
->>> +}
->>> +
->>> +static int vcpu_check_access_key(struct kvm_vcpu *vcpu, char access_key,
->>> +                 enum gacc_mode mode, union asce asce, gpa_t gpa,
->>> +                 unsigned long ga, unsigned int len)
->>> +{
->>> +    unsigned char storage_key, access_control;
->>> +    unsigned long hva;
->>> +    int r;
->>> +
->>> +    /* access key 0 matches any storage key -> allow */
->>> +    if (access_key == 0)
->>> +        return 0;
->>> +    /*
->>> +     * caller needs to ensure that gfn is accessible, so we can
->>> +     * assume that this cannot fail
->>> +     */
->>> +    hva = gfn_to_hva(vcpu->kvm, gpa_to_gfn(gpa));
->>> +    mmap_read_lock(current->mm);
->>> +    r = get_guest_storage_key(current->mm, hva, &storage_key);
->>> +    mmap_read_unlock(current->mm);
->>> +    if (r)
->>> +        return r;
->>> +    access_control = FIELD_GET(_PAGE_ACC_BITS, storage_key);
->>> +    /* access key matches storage key -> allow */
->>> +    if (access_control == access_key)
->>> +        return 0;
->>> +    if (mode == GACC_FETCH || mode == GACC_IFETCH) {
->>> +        /* mismatching keys, no fetch protection -> allowed */
->>> +        if (!(storage_key & _PAGE_FP_BIT))
->>> +            return 0;
->>> +        if (fetch_prot_override_applicable(vcpu, mode, asce))
->>> +            if (fetch_prot_override_applies(ga, len))
->>> +                return 0;
->>> +    }
->>> +    if (storage_prot_override_applicable(vcpu))
->>> +        if (storage_prot_override_applies(access_control))
->>> +            return 0;
->>> +    return PGM_PROTECTION;
->>> +}
->>
->> This function is just a pre-check (and early-exit) and we do an additional final check
->> in the MVCOS routing later on, correct? It might actually be faster to get rid of this
-> 
-> No, this exists for those cases that do not do an actual access, that is MEMOPs with
-> the check only flag, as well as the TEST PROTECTION emulation. access_guest_with_key
-> passes key 0 so we take the early return. It's easy to miss so Janosch suggested a comment there.
+Talking about "little-endian architectures" makes no sense here, the
+point is that the device was clearly defined as having little-endian
+registers, and your earlier patch broke this driver when running
+on big-endian kernels (if anyone ever tried this).
 
-Dont we always call it in guest_range_to_gpas, which is also called for the memory access in
-access_guest_with_key?
+This means you should also add
 
-> 
->> pre-test and simply rely on MVCOS. MVCOS is usually just some cycles while ISKE to read
->> the key is really slow path and take hundreds of cycles. This would even simplify the
->> patch (assuming that we do proper key checking all the time).
-> 
+Cc: stable@vger.kernel.org # v5.11+
+Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+
+The fact that m68k gets this wrong is just a bug in qemu, but it's
+probably impossible to fix that since there is no way of knowing which
+other operating systems have started relying on that bug over the years.
+
+It might be a good idea to revisit the qemu implementation and make
+sure that the extra byteswap is only inserted on m68k and not on
+other targets, but hopefully there are no new targets based on goldfish
+anymore and we don't need to care.
+
+        Arnd

@@ -2,92 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C220E4955BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3044955C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377736AbiATVCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 16:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S1377742AbiATVFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 16:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347149AbiATVCC (ORCPT
+        with ESMTP id S1347149AbiATVFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 16:02:02 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E83C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:02:01 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id p12so34022592edq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=XIum57TJjEo8tnkhLenk48MFnTWbdQGql8jgVrRZrVA=;
-        b=YH2v2+9pTd78pnbGqjWf4/DZy1kW35keM4s1BStZ/eZ6A1rL48Bc8v28pOYDsMeRDP
-         cavnlCDiBUJM3wMMiktRQZMWWCAYLm7uoRr+m6qAMZmNb6B4EcNnpPI4yoO7KKjlAuHC
-         585H43vZ+2jid3cJlQGJYgIF+2eWbM6rhLQtLgxylbh6j1z8uXy9CULr8a1163xupUms
-         tHuGPJQJbAJ2RzvIN3r5yoCCVe/WFM9qM9ecGoX8DZf27SZztOpyDT/6VhsGt7U5l9SS
-         8bmgfy42KBEHhGXi9QeGahj1pvkIPJxRcMMI47pMjW2jiyzoiZkFAWT/79c5eYySJhm8
-         YMZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=XIum57TJjEo8tnkhLenk48MFnTWbdQGql8jgVrRZrVA=;
-        b=nHifs1JIj+VJ+Wpb4diH4Z3tBZohRSx1p7EbGSj4HwIiTFnDvieRxi7LyPXaN12YD9
-         MQS0ZdPy+w6XFblifq2HsOCL7Saqu/Cga0RmDrDtbKmw6E7Pf58ZEaOoBRz5fcpewugA
-         zg6yBUyt9B8xMvW4v7YoljYQp/W7bvtOxhfGZFiEfBQFNoQpRDfCvZl/KJB0K2P0Uzqm
-         LIs3Brhk1g+KSDoEbzTTl3wCQmFvDHfZ4Pk6HukEz/WHRJUXKS6TXhJdVvMUGJV/GMbB
-         hZeW3jm3KlGTJlKgWBH+yUXZz52/dXYcECJ7CAsW+sDy6TmH0D75bbKNOuaWHQd9pO/W
-         C42g==
-X-Gm-Message-State: AOAM533AxBKN/BhSIwISof8cDQYK7Zqs9zEk1AVE0mnjoui1RFS069cN
-        DWHel5Z2/77CfcbNr1uAdK0JJ/yqbJAFEYdCPUw=
-X-Google-Smtp-Source: ABdhPJzW7hBL0innaC/hnsRdQUVeG2pBexL7qjsMr00+ZTb+ot351gHo4KqyMge9ml7yumjDFK2lR2CU6LmsFK9tejQ=
-X-Received: by 2002:a17:907:1709:: with SMTP id le9mr576475ejc.449.1642712519902;
- Thu, 20 Jan 2022 13:01:59 -0800 (PST)
+        Thu, 20 Jan 2022 16:05:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A43C061574;
+        Thu, 20 Jan 2022 13:05:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6AD461881;
+        Thu, 20 Jan 2022 21:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0807DC340E0;
+        Thu, 20 Jan 2022 21:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642712746;
+        bh=QG0w1QxyWXBXF08ydmzYpj/kUSr7oA+nVV6K7TKRTlQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=plnjsfwST8po8W1XACJ8CrFOfSxWQC0R8tRaUIuiE0ncoDtJPlQ8kKoPmZcr1mHLr
+         e3lGfQG2P4/lV4vP8xSrRv7QuuyLfHjAqJA54y7kgEpX9bDBpNyUgPJUrSP/rxgge/
+         bV5IkyL6exYoIrx8mcqylkRYoguCp8jynLI2e3dFUrfvfWB8S+GSmd72FESgU5T67z
+         9+4vRyCpsTB6Ju/uNyUx2UFLywzM0+LBsRie6g61Wacodo1iBEaROVFQxoCbCtf4kV
+         H0b5oU8FPI6J12ig1kF0ViWt80UxDHBaVfk2T2NIXXMeG7F9Dro9UI6OUmo5UKfMA+
+         g2qPSOjQHWylA==
+Date:   Thu, 20 Jan 2022 13:05:44 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
+Message-ID: <YenOqJtjS/Y2zBQC@sol.localdomain>
+References: <YalDvGjq0inMFKln@sol.localdomain>
+ <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
+ <YdYrw4eiQPryOMkZ@gmail.com>
+ <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
+ <YdtOhsv/A5dqlApY@sol.localdomain>
+ <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
+ <YeJn7hxLEfdVrUQT@sol.localdomain>
+ <bc803a35d914dde65640428d2b29cc6e89d176d4.camel@linux.ibm.com>
+ <Yedd0CKCHSq1ugFk@sol.localdomain>
+ <c0676336a7992b6495c5f5dec7ca1897fb4005eb.camel@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:6b81:0:0:0:0 with HTTP; Thu, 20 Jan 2022 13:01:59
- -0800 (PST)
-Reply-To: mrahmedibrahim199@gmail.com
-From:   Mr Ahmed Ibrahim <karimakabirmani@gmail.com>
-Date:   Thu, 20 Jan 2022 13:01:59 -0800
-Message-ID: <CAHqvSK2B74qQMC0h5R_DqhqYu0Chz8rFwrKmL8Z2J2cyaZ-TTg@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c0676336a7992b6495c5f5dec7ca1897fb4005eb.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-My Good Friend
+On Thu, Jan 20, 2022 at 11:39:56AM -0500, Mimi Zohar wrote:
+> Eric, Vitaly,
+> 
+> On Tue, 2022-01-18 at 16:39 -0800, Eric Biggers wrote:
+> 
+> > > > The easiest way to do this would be sign/verify the following struct:
+> > > > 	struct ima_file_id {
+> > > > 		u8 is_fsverity;
+> > > > 		u8 hash_algorithm;
+> > > > 		u8 hash[];
+> > > > 	};
+> 
+> 
+> > > This would be the *data* that is signed/verified -- meaning that it
+> would be
+> > > > hashed again as part of the signature algorithm (whether that hash is built-in
+> > > > to the signature algorithm, as is the case for modern algorithms, or handled by
+> > > > the caller as is the case for legacy algorithms).
+> > > 
+> > > There seems to be an inconsistency, here, with what you said above,
+> > > "... ECDSA just signs/verifies a raw hash, and in fact it *must* be a
+> > > raw hash for it to be secure."
+> > 
+> > There isn't an inconsistency.  ECDSA is among the algorithms where the caller is
+> > expected to handle the hash.
+> > 
+> > It is confusing dealing with all these different signature algorithms.  I think
+> > the right way to think about this is in terms of what *data* is being
+> > signed/verified.  Currently the data is the full file contents.  I think it
+> > needs to be made into an annotated hash, e.g. the struct I gave.
+> > 
+> > public_key_verify_signature() also needs to be fixed to support both types of
+> > signature algorithms (caller-provided hash and internal hash) in a logical way.
+> > Originally it only supported caller-provided hashes, but then SM2 support was
+> > added and now it is super broken.
+> 
+> Eric, did you say you're working on fixes to address these problems?
 
-I'm deeply sorry to berg into your privacy as we haven't met before,
-as a matter of fact, I will be very brief since I'm in urgent need of
-a trust person to help move out a valuable funds deposit by later
-Libyan leader Muammar Gaddafi into a foreign bank account which will
-later be used for any profitable joint investment between me and you,
+Yes, I was working on some patches at
+https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=wip-keys-fixes
+but got distracted by other things, as well as finding the problems with SM2
+which will take some time to decide what to do with.  I'll try to get some
+patches ready, but there are a lot of things to fix.
 
-as a civil servant i cannot do this alone, The Libya=E2=80=99s sovereign
-wealth fund said five EU countries paid out money from frozen accounts
-in Europe that once belonged to Muammar Qaddafi despite international
-sanctions, according to POLITICO.
+> 
+> Instead of using a flexible array, Vitaly suggested defining the hash
+> as FS_VERITY_MAX_DIGEST_SIZE, so that it could be allocated temporarily
+> on stack
+> instead of kalloc.
+> 
+> As the above struct is not limited to fsverity, we could use
+> MAX_HASH_DIGESTSIZE, if it was exported, but it isn't.  Would the
+> following work for you?
+> 
+> /*
+>  * IMA signature header version 3 disambiguates the data that is signed
+> by
+>  * indirectly signing the hash of this structure, containing either the
+>  * fsverity_descriptor struct digest or, in the future, the traditional
+> IMA
+>  * file hash.
+>  */
+> struct ima_file_id {
+>         __u8 is_fsverity;       /* set to 1 for IMA_VERITY_DIGSIG */
+>         __u8 hash_algorithm;    /* Digest algorithm [enum hash_algo] */
+> #ifdef __KERNEL__
+>         __u8 hash[HASH_MAX_DIGESTSIZE];
+> #else
+>         __u8 hash[];
+> #endif
+> };
 
-But no one are aware of this Total Amount is $19.5 Million us Dollars
-that currently available under QNB Fineness bank Turkey and placed in
-an ESCROW CALL ACCOUNT without a beneficiary, it will be of advantage
-for me to solicit for a foreigner on my behalf since the funds origin
-is from a genuine source. Total Amount is $19.5 Million us Dollars.
+You could certainly declare a fixed-length struct, but only sign/verify the used
+portion of it.  The fixed-length struct would just be an implementation detail.
 
-https://english.alarabiya.net/en/features/2018/11/18/Where-are-Libya-s-bill=
-ions-under-Qaddafi-abroad-and-who-benefits-from-them-
+Alternatively, you could always sign/verify a fixed-length struct, with any
+shorter hashes zero-padded to HASH_MAX_DIGESTSIZE (64 bytes).  This would be
+fine if you're confident that hashes longer than 64 bytes will never be used.
+(They don't make sense cryptographically, but who knows.)
 
-https://www.politico.eu/article/muammar-gaddafi-frozen-funds-belgium-unknow=
-n-beneficiaries/
+For future extensibility, you might want to call the 'is_fsverity' field
+something like 'hash_type', so it would be like an enum rather than a bool.  I
+just used 'is_fsverity' as a minimal example.
 
-For more details kindly indicate your willingness by responding via my
-private email id below=3D=3D=3D=3D
-mrahmedibrahim199@gmail.com
-
- Best regards,
-From Mr Ahmed Ibrahim
+- Eric

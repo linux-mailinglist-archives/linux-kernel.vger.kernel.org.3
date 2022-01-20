@@ -2,77 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA449494704
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA6449470A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358612AbiATFq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 00:46:26 -0500
-Received: from conuserg-11.nifty.com ([210.131.2.78]:34409 "EHLO
-        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiATFqY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 00:46:24 -0500
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 20K5iPc1014412;
-        Thu, 20 Jan 2022 14:44:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 20K5iPc1014412
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1642657466;
-        bh=6NBzqKga/+HNsV98/PVzJhpBeK1/WIjSf8sHuENVzx0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=l4h4ieWNaDiDamIOQdOEyCjjFaKazFjf5XcE+i5edODj38bdWDUVxg6bussfVDIOo
-         1vPbeOO9bf+7k2XmwJqVLmswwAZhBB2GmNqxeFYm14wJJdmplFUpKoldhZpq5Ad+ke
-         BDESRoH+fXu8Fj8rkmVpMFtQ7o6dFFw+lLbUSnM2f3nNaXFW9QgpRX8K2OF9zoU1IV
-         4hrbcFCx84ingIE8Vxww5qLBOCHiSP5tvZDqgSC0MlrJmbdBJNWgoKiAPwsivoiGUJ
-         4Len3aCJbxgd7d4j8Andhhwt+Pe45bPGX+vdx5JtqFYVHKbO4pugq2opnNE3AP8MvO
-         gLjugG4+oS6dQ==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     patches@arm.linux.org.uk
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: vdso: remove -nostdlib compiler flag
-Date:   Thu, 20 Jan 2022 14:44:18 +0900
-Message-Id: <20220120054418.409817-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S1358624AbiATFwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 00:52:37 -0500
+Received: from mga03.intel.com ([134.134.136.65]:41294 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231271AbiATFwg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 00:52:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642657956; x=1674193956;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=BYJrrQ55/DFzpaXRLZo3N+MuYUX2sDTrt8TueusAL7w=;
+  b=m/5wEAlT+rPYRKdRo+H0BeDTAUrw8XJ9D+riOqjeigX7LaK9ZvJm34XM
+   cLvVXjfYaKLFLaFzxOLSb2plsCwAE17x2qGkoOoiM4SDpHLFolMHwYt3S
+   plsSJTlNHOe20pcoO5ftKtd7IQD9rvPCRrRbiJ4v6b6JkzYAlhNIMaX4B
+   9HGROtwlrrpK6dDFtsLMr+DZ7VQuKep7OMBk5kiky25RQf1BKfXLniQAU
+   VJD3JYxCwKI9fvQtupFIGHqwwR5mArMTzYvJGVqV+eCvsJdrJcoN6bIj6
+   elOYGtLtCT9KA9QikolFHaJEqyBBwAHqlPN5d9aRPxeRY4TdPliMH6J+k
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="245231934"
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="245231934"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 21:52:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="532628456"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2022 21:52:35 -0800
+Received: from shsmsx604.ccr.corp.intel.com (10.109.6.214) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 19 Jan 2022 21:52:34 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ SHSMSX604.ccr.corp.intel.com (10.109.6.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 20 Jan 2022 13:52:33 +0800
+Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
+ SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
+ Thu, 20 Jan 2022 13:52:33 +0800
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>
+CC:     KVM <kvm@vger.kernel.org>, "Zeng, Guang" <guang.zeng@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: RE: linux-next: build warning after merge of the kvm tree
+Thread-Topic: linux-next: build warning after merge of the kvm tree
+Thread-Index: AQHYBgBN69PH6Lz/KEmG8MHTlxN3gqxdIKNggA2rBYCAAKqEYA==
+Date:   Thu, 20 Jan 2022 05:52:32 +0000
+Message-ID: <f7518e59c3c94498a42f61b51050403f@intel.com>
+References: <20220110195844.7de09681@canb.auug.org.au>
+        <507a652f97de4e0fb26d604084ef6f25@intel.com>
+ <20220120143619.4803cb36@canb.auug.org.au>
+In-Reply-To: <20220120143619.4803cb36@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The -nostdlib option requests the compiler to not use the standard
-system startup files or libraries when linking. It is effective only
-when $(CC) is used as a linker driver.
+On Thursday, January 20, 2022 11:36 AM, Stephen Rothwell wrote:
+> On Tue, 11 Jan 2022 02:55:56 +0000 "Wang, Wei W" <wei.w.wang@intel.com>
+> wrote:
+> >
+> > On Monday, January 10, 2022 4:59 PM, Stephen Rothwell wrote:
+> > > After merging the kvm tree, today's linux-next build (htmldocs) produ=
+ced
+> this
+> > > warning:
+> > >
+> > > Documentation/virt/kvm/api.rst:5549: WARNING: Title underline too
+> short.
+> > >
+> > > 4.42 KVM_GET_XSAVE2
+> > > ------------------
+> >
+> > Should add one more "_" above.
+> > 4.42 KVM_GET_XSAVE2
+> > -------------------
+> > +-------------------
+> >
+> > Paolo, do you want us to send another patch to add it or you can just a=
+dd it?
+>=20
+> I am still seeing this warning.
+>=20
 
-Since commit fe00e50b2db8 ("ARM: 8858/1: vdso: use $(LD) instead of
-$(CC) to link VDSO"), $(LD) is directly used, hence -nostdlib is
-unneeded.
+I'll get you a patch to test soon.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
----
-
-KernelVersion: 5.16
-
- arch/arm/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
-index 7c9e395b77f7..ec52b776f926 100644
---- a/arch/arm/vdso/Makefile
-+++ b/arch/arm/vdso/Makefile
-@@ -18,7 +18,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
- 
- ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
- ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
--	    -z max-page-size=4096 -nostdlib -shared $(ldflags-y) \
-+	    -z max-page-size=4096 -shared $(ldflags-y) \
- 	    --hash-style=sysv --build-id=sha1 \
- 	    -T
- 
--- 
-2.32.0
-
+Thanks,
+Wei

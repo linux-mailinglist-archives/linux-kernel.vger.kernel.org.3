@@ -2,245 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 405014946A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EC04946B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbiATFFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 00:05:32 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:49466 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229446AbiATFFb (ORCPT
+        id S235102AbiATFPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 00:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229446AbiATFPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 00:05:31 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R761e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V2KArl._1642655125;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2KArl._1642655125)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 20 Jan 2022 13:05:26 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     helgaas@kernel.org, rafael@kernel.org
-Cc:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
-        lenb@kernel.org, rjw@rjwysocki.net, bhelgaas@google.com,
-        xueshuai@linux.alibaba.com, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH v6] ACPI: explicit init HEST, SDEI and GHES in apci_init
-Date:   Thu, 20 Jan 2022 13:05:22 +0800
-Message-Id: <20220120050522.23689-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20211126070422.73234-1-xueshuai@linux.alibaba.com>
-References: <20211126070422.73234-1-xueshuai@linux.alibaba.com>
+        Thu, 20 Jan 2022 00:15:03 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDB2C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 21:15:03 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id p12so23548313edq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 21:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wBZ3EI10U9UXarSM6J3+DYPKZJSi0FN5MQmJ2ljGh3A=;
+        b=RH5VxPM0TvMWOkIqcGhOgztHOcerYs4FQq5+uTqXP98fHlsxqe41R8HYbBVfoEgT1e
+         CgiHjjRFUf02bWKuDgI90+TsYG8vCwiNna8m7Vr8Zy+L7JdAUKlLz63E/e8j5eJFGFc5
+         efezFa5Ei6YImj3Mgn0EKBeLaqFde/BMY8/4FlE1Z1rR0H1W+5GRMYj7Sy81tE7Y/T8K
+         yQDHSCeDtugO9RfyKt6jnALtqbnFsFYYRzqDZPbHOJjmId/MEEY1pMcAIg2Os/ijAjMR
+         ZFbkarXWFPhhShQeCSqH6mmY+XD24QZ0bXhhLLUCFMkawuLE1JwUXv1FqvE+zCKtKfjZ
+         Q8CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wBZ3EI10U9UXarSM6J3+DYPKZJSi0FN5MQmJ2ljGh3A=;
+        b=FHCvtzvIO4byesQAtjPcAekFUidGs90ZjZOAo76CTVDd5zOT91qm2fKio8AxG2M8pE
+         4BnwSxbAoQY9egactJxjlC7xUQY7KuzKJC5sOCWGgkDgpx1mkQTsN5KkP8jXd8fwwm9+
+         3bJY+X0QF2NDtoHjw9ryNIZ9hB5501mS6x1ICxhVBi6C0JXsobY5nMb9jVtQmZEZOxmi
+         Z1uNeI3cSBES63iMrXn/MRjaCSZ56VEo0eV5ABuwAQDrGmiDoC6/oBkn0uRWLnivv7kg
+         k1i9JRSnaUHaXs7NykbNekeMDA5N9e4e781hN6gmBNMeJICQ/ur0o952ZIFc3FAj3c+M
+         F3JA==
+X-Gm-Message-State: AOAM5300IfdeYpztoEbXTSzO01qegiI72GP4OJjsGM9BAQBVoIs7BA8i
+        mqnUYkNNP6A6vXrGhP+n2nzgOVqTsJlR8zobJ4pJJtBcGGQ=
+X-Google-Smtp-Source: ABdhPJyRJReKxS3lgAXIrWkKWQuSeDByJCK1TATU8l1CLwivtDAELwuiIklEZUomVNxOgcK0JEfBJvH4y/XoIVooSgY=
+X-Received: by 2002:a17:907:94c6:: with SMTP id dn6mr821979ejc.477.1642655701299;
+ Wed, 19 Jan 2022 21:15:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAPDLWs_iSrbXwfKa6CQ0f6H6GE4U88uRhaFgabRjMmSuSEpsiA@mail.gmail.com>
+ <20220117194836.vj2rxr3wocrtdx7k@treble> <20220117202751.bmwvfsnqxokob6d2@treble>
+ <CAPDLWs-yX4FNrmnF3rHrEoHNktcw2Yi8X6qidss-qKpdw=r4RQ@mail.gmail.com>
+ <20220118175239.lqxi2ycgeusk5pxl@treble> <CAPDLWs_mirot76g==TPRZDsB6Qn99kxw2N5V=PaDYqBLf=ZSCQ@mail.gmail.com>
+ <20220119212126.aydgx62abbngumwy@treble> <20220119234303.tmebbcrg2vpnri4s@treble>
+In-Reply-To: <20220119234303.tmebbcrg2vpnri4s@treble>
+From:   Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Date:   Thu, 20 Jan 2022 10:44:44 +0530
+Message-ID: <CAPDLWs-DM64k6z3G7qgYwYm=F8piehYhLfaaXc3fDtnBBQiu=Q@mail.gmail.com>
+Subject: Re: Issue using faddr2line on kernel modules
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chi-Thanh Hoang <chithanh.hoang@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
-memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
-the estatus memory pool. On the other hand, ghes_init() relies on
-sdei_init() to detect the SDEI version and (un)register events. The
-dependencies are as follows:
+On Thu, Jan 20, 2022 at 5:13 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Wed, Jan 19, 2022 at 01:21:29PM -0800, Josh Poimboeuf wrote:
+> > > $ nm -n ./oops_tryv2.ko |grep -C5 do_the_work
+> > > 0000000000000000 r __func__.24215
+> > > 0000000000000000 r __param_bug_in_workq
+> > > 0000000000000000 D __this_module
+> > > 0000000000000000 r _note_7
+> > > 0000000000000000 T cleanup_module
+> > > 0000000000000000 t do_the_work
+> > > 0000000000000000 t do_the_work.cold
+> > > 0000000000000000 b gctx
+> > > 0000000000000000 T init_module
+> > > 0000000000000000 t try_oops_exit
+> > > 0000000000000000 t try_oops_init
+> > > 0000000000000008 b t1
+> > > $
+> > >
+> > > BTW, here's the code:
+> > > https://github.com/PacktPublishing/Linux-Kernel-Debugging/tree/main/ch7/oops_tryv2
+> >
+> > Ok, it looks like the symbols aren't sorted like the code expects.  I
+> > need to do a more robust fix.
+>
+> Ok, please try this instead.  This takes a much more robust approach to
+> the function size calculation, using readelf to confine the symbol
+> search to the section matching the original symbol.
+>
+> This actually has multiple fixes and cleanups, so it'll eventually be
+> split up into a patch set.
 
-    ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
-    ghes_init() => sdei_init()
+Great. Am facing a few issues though:
 
-HEST is not PCI-specific and initcall ordering is implicit and not
-well-defined within a level.
+1. Not sure if it's me but am having issues applying your patches; it
+seems to fail:
 
-Based on above, remove acpi_hest_init() from acpi_pci_root_init() and
-convert ghes_init() and sdei_init() from initcalls to explicit calls in the
-following order:
+$ patch -p1 --dry-run < ./fa1.patch
+checking file scripts/faddr2line
+Hunk #1 FAILED at 97.
+Hunk #2 FAILED at 110.
+Hunk #3 FAILED at 189.
+3 out of 3 hunks FAILED
+$
 
-    acpi_hest_init()
-    sdei_init()
-    ghes_init()
+Against which ver are you generating the patch?
+(Am using 5.10.60; i noticed the last commit in mainline was f5f67cc
+in Nov 2018, so vanilla 5.10.60 should be fine, no?).
 
-Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/acpi/apei/ghes.c    | 17 +++++++----------
- drivers/acpi/bus.c          |  4 ++++
- drivers/acpi/pci_root.c     |  3 ---
- drivers/firmware/arm_sdei.c | 13 ++-----------
- include/acpi/apei.h         |  4 +++-
- include/linux/arm_sdei.h    |  2 ++
- 6 files changed, 18 insertions(+), 25 deletions(-)
+2. I manually applied your patch :)   This is the output I then get:
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 0c5c9acc6254..bed4f10cfcb8 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -1457,33 +1457,33 @@ static struct platform_driver ghes_platform_driver = {
- 	.remove		= ghes_remove,
- };
- 
--static int __init ghes_init(void)
-+void __init ghes_init(void)
- {
- 	int rc;
- 
- 	if (acpi_disabled)
--		return -ENODEV;
-+		return;
- 
- 	switch (hest_disable) {
- 	case HEST_NOT_FOUND:
--		return -ENODEV;
-+		return;
- 	case HEST_DISABLED:
- 		pr_info(GHES_PFX "HEST is not enabled!\n");
--		return -EINVAL;
-+		return;
- 	default:
- 		break;
- 	}
- 
- 	if (ghes_disable) {
- 		pr_info(GHES_PFX "GHES is not enabled!\n");
--		return -EINVAL;
-+		return;
- 	}
- 
- 	ghes_nmi_init_cxt();
- 
- 	rc = platform_driver_register(&ghes_platform_driver);
- 	if (rc)
--		goto err;
-+		return;
- 
- 	rc = apei_osc_setup();
- 	if (rc == 0 && osc_sb_apei_support_acked)
-@@ -1495,8 +1495,5 @@ static int __init ghes_init(void)
- 	else
- 		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
- 
--	return 0;
--err:
--	return rc;
-+	return;
- }
--device_initcall(ghes_init);
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 07f604832fd6..1dcd71df2cd5 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -30,6 +30,7 @@
- #include <linux/acpi_viot.h>
- #include <linux/pci.h>
- #include <acpi/apei.h>
-+#include <linux/arm_sdei.h>
- #include <linux/suspend.h>
- #include <linux/prmt.h>
- 
-@@ -1331,6 +1332,9 @@ static int __init acpi_init(void)
- 
- 	pci_mmcfg_late_init();
- 	acpi_iort_init();
-+	acpi_hest_init();
-+	sdei_init();
-+	ghes_init();
- 	acpi_scan_init();
- 	acpi_ec_init();
- 	acpi_debugfs_init();
-diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-index b76db99cced3..6f9e75d14808 100644
---- a/drivers/acpi/pci_root.c
-+++ b/drivers/acpi/pci_root.c
-@@ -22,8 +22,6 @@
- #include <linux/slab.h>
- #include <linux/dmi.h>
- #include <linux/platform_data/x86/apple.h>
--#include <acpi/apei.h>	/* for acpi_hest_init() */
--
- #include "internal.h"
- 
- #define ACPI_PCI_ROOT_CLASS		"pci_bridge"
-@@ -943,7 +941,6 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
- 
- void __init acpi_pci_root_init(void)
- {
--	acpi_hest_init();
- 	if (acpi_pci_disabled)
- 		return;
- 
-diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
-index a7e762c352f9..1e1a51510e83 100644
---- a/drivers/firmware/arm_sdei.c
-+++ b/drivers/firmware/arm_sdei.c
-@@ -1059,14 +1059,14 @@ static bool __init sdei_present_acpi(void)
- 	return true;
- }
- 
--static int __init sdei_init(void)
-+void __init sdei_init(void)
- {
- 	struct platform_device *pdev;
- 	int ret;
- 
- 	ret = platform_driver_register(&sdei_driver);
- 	if (ret || !sdei_present_acpi())
--		return ret;
-+		return;
- 
- 	pdev = platform_device_register_simple(sdei_driver.driver.name,
- 					       0, NULL, 0);
-@@ -1076,17 +1076,8 @@ static int __init sdei_init(void)
- 		pr_info("Failed to register ACPI:SDEI platform device %d\n",
- 			ret);
- 	}
--
--	return ret;
- }
- 
--/*
-- * On an ACPI system SDEI needs to be ready before HEST:GHES tries to register
-- * its events. ACPI is initialised from a subsys_initcall(), GHES is initialised
-- * by device_initcall(). We want to be called in the middle.
-- */
--subsys_initcall_sync(sdei_init);
--
- int sdei_event_handler(struct pt_regs *regs,
- 		       struct sdei_registered_event *arg)
- {
-diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-index ece0a8af2bae..4e60dd73c3bb 100644
---- a/include/acpi/apei.h
-+++ b/include/acpi/apei.h
-@@ -27,14 +27,16 @@ extern int hest_disable;
- extern int erst_disable;
- #ifdef CONFIG_ACPI_APEI_GHES
- extern bool ghes_disable;
-+void __init ghes_init(void);
- #else
- #define ghes_disable 1
-+static inline void ghes_init(void) { }
- #endif
- 
- #ifdef CONFIG_ACPI_APEI
- void __init acpi_hest_init(void);
- #else
--static inline void acpi_hest_init(void) { return; }
-+static inline void acpi_hest_init(void) { }
- #endif
- 
- int erst_write(const struct cper_record_header *record);
-diff --git a/include/linux/arm_sdei.h b/include/linux/arm_sdei.h
-index 0a241c5c911d..14dc461b0e82 100644
---- a/include/linux/arm_sdei.h
-+++ b/include/linux/arm_sdei.h
-@@ -46,9 +46,11 @@ int sdei_unregister_ghes(struct ghes *ghes);
- /* For use by arch code when CPU hotplug notifiers are not appropriate. */
- int sdei_mask_local_cpu(void);
- int sdei_unmask_local_cpu(void);
-+void __init sdei_init(void);
- #else
- static inline int sdei_mask_local_cpu(void) { return 0; }
- static inline int sdei_unmask_local_cpu(void) { return 0; }
-+static inline void sdei_init(void) { }
- #endif /* CONFIG_ARM_SDE_INTERFACE */
- 
- 
--- 
-2.20.1.12.g72788fdb
+$ <...>linux-5.10.60/scripts/faddr2line ./oops_tryv2.ko do_the_work+0x16f/0x194
+awk: not an option: --bignum
+bad symbol size: addr: 0x0000000000000000
+$
 
+(Not sure if this helps but am running on Ubuntu 20.04; my awk is mawk
+v 1.3.4.20200120-2).
+
+Thanks,
+Kaiwan.
+
+>
+> ----
+>
+> diff --git a/scripts/faddr2line b/scripts/faddr2line
+> index 6c6439f69a72..1acb68927977 100755
+> --- a/scripts/faddr2line
+> +++ b/scripts/faddr2line
+> @@ -97,10 +97,11 @@ __faddr2line() {
+>         local dir_prefix=$3
+>         local print_warnings=$4
+>
+> +       local first=1
+>         local func=${func_addr%+*}
+>         local offset=${func_addr#*+}
+>         offset=${offset%/*}
+> -       local size=
+> +       local user_size=
+>         [[ $func_addr =~ "/" ]] && size=${func_addr#*/}
+>
+>         if [[ -z $func ]] || [[ -z $offset ]] || [[ $func = $func_addr ]]; then
+> @@ -110,73 +111,87 @@ __faddr2line() {
+>         fi
+>
+>         # Go through each of the object's symbols which match the func name.
+> -       # In rare cases there might be duplicates.
+> -       file_end=$(${SIZE} -Ax $objfile | awk '$1 == ".text" {print $2}')
+> +       # In rare cases there might be duplicates, in which case we print both.
+>         while read symbol; do
+>                 local fields=($symbol)
+> -               local sym_base=0x${fields[0]}
+> -               local sym_type=${fields[1]}
+> -               local sym_end=${fields[3]}
+> -
+> -               # calculate the size
+> -               local sym_size=$(($sym_end - $sym_base))
+> -               if [[ -z $sym_size ]] || [[ $sym_size -le 0 ]]; then
+> -                       warn "bad symbol size: base: $sym_base end: $sym_end"
+> +               local sym_addr=0x${fields[1]}
+> +               local sym_size=${fields[2]}
+> +               local sym_sec=${fields[6]}
+> +
+> +               # Get the section size:
+> +               local sec_size=$(${READELF} --section-headers --wide $objfile |
+> +                       sed 's/\[ /\[/' |
+> +                       awk -v sec=$sym_sec '$1 == "[" sec "]" { print "0x" $6; exit }')
+> +
+> +               if [[ -z $sec_size ]]; then
+> +                       warn "bad section size: section: $sym_sec"
+>                         DONE=1
+>                         return
+>                 fi
+> -               sym_size=0x$(printf %x $sym_size)
+>
+> -               # calculate the address
+> -               local addr=$(($sym_base + $offset))
+> -               if [[ -z $addr ]] || [[ $addr = 0 ]]; then
+> -                       warn "bad address: $sym_base + $offset"
+> +               # Calculate the symbol size:
+> +               #
+> +               # We can't use the ELF size, because kallsyms also includes the
+> +               # padding bytes in its size calculation.  For kallsyms, the
+> +               # size calculation is the distance between the symbol and the
+> +               # next symbol in a sorted list.
+> +               local size=$(${READELF} --symbols --wide $objfile |
+> +                       awk -v sec=$sym_sec '$7 == sec' |
+> +                       sort --key=2 |
+> +                       awk --bignum -v sym_addr=${sym_addr#0x} -v sym_size=${sym_size} -v sym_name=${func} -v sec_size=${sec_size} \
+> +                               '$2 == sym_addr && $3 == sym_size && $8 == sym_name { found = 1; next } \
+> +                               found == 1 { size = strtonum("0x" $2) - strtonum("0x" sym_addr); if (size < sym_size) next; found = 2; print size; exit } \
+> +                               END { if (found == 1) print strtonum(sec_size) }')
+> +
+> +               if [[ -z $size ]]; then
+> +                       warn "bad symbol size: addr: $sym_addr"
+>                         DONE=1
+>                         return
+>                 fi
+> -               addr=0x$(printf %x $addr)
+>
+> -               # weed out non-function symbols
+> -               if [[ $sym_type != t ]] && [[ $sym_type != T ]]; then
+> -                       [[ $print_warnings = 1 ]] &&
+> -                               echo "skipping $func address at $addr due to non-function symbol of type '$sym_type'"
+> -                       continue
+> +               # Calculate the specified address:
+> +               local addr=$(($sym_addr + $offset))
+> +               if [[ -z $addr ]] || [[ $addr = 0 ]]; then
+> +                       warn "bad address: $sym_addr + $offset"
+> +                       DONE=1
+> +                       return
+>                 fi
+> +               addr=0x$(printf %x $addr)
+>
+> -               # if the user provided a size, make sure it matches the symbol's size
+> -               if [[ -n $size ]] && [[ $size -ne $sym_size ]]; then
+> +               # If the user provided a size, make sure it matches the symbol's size:
+> +               if [[ -n $user_size ]] && [[ $user_size -ne $size ]]; then
+>                         [[ $print_warnings = 1 ]] &&
+> -                               echo "skipping $func address at $addr due to size mismatch ($size != $sym_size)"
+> +                               echo "skipping $func address at $addr due to size mismatch ($user_size != $size)"
+>                         continue;
+>                 fi
+>
+> -               # make sure the provided offset is within the symbol's range
+> -               if [[ $offset -gt $sym_size ]]; then
+> +               # Make sure the provided offset is within the symbol's range:
+> +               if [[ $offset -gt $size ]]; then
+>                         [[ $print_warnings = 1 ]] &&
+> -                               echo "skipping $func address at $addr due to size mismatch ($offset > $sym_size)"
+> +                               echo "skipping $func address at $addr due to size mismatch ($offset > $size)"
+>                         continue
+>                 fi
+>
+> -               # separate multiple entries with a blank line
+> -               [[ $FIRST = 0 ]] && echo
+> -               FIRST=0
+> +               # In case of duplicates, separate multiple entries with a blank line:
+> +               [[ $first = 0 ]] && echo
+> +               first=0
+>
+> -               # pass real address to addr2line
+> -               echo "$func+$offset/$sym_size:"
+> -               local file_lines=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
+> -               [[ -z $file_lines ]] && return
+> +               # Pass full address to addr2line:
+> +               echo "$func+$offset/$size:"
+> +               local output=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
+> +               [[ -z $output ]] && continue
+>
+>                 if [[ $LIST = 0 ]]; then
+> -                       echo "$file_lines" | while read -r line
+> +                       echo "$output" | while read -r line
+>                         do
+>                                 echo $line
+>                         done
+>                         DONE=1;
+> -                       return
+> +                       continue
+>                 fi
+>
+> -               # show each line with context
+> -               echo "$file_lines" | while read -r line
+> +               # If --list was specified, show each line with context:
+> +               echo "$output" | while read -r line
+>                 do
+>                         echo
+>                         echo $line
+> @@ -189,7 +204,7 @@ __faddr2line() {
+>
+>                 DONE=1
+>
+> -       done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
+> +       done < <(${READELF} --symbols --wide $objfile | awk -v fn=$func '$4 == "FUNC" && $8 == fn')
+>  }
+>
+>  [[ $# -lt 2 ]] && usage
+>

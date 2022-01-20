@@ -2,151 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 834C049497E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF8E4949A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbiATIa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359269AbiATIaM (ORCPT
+        id S1359269AbiATIg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:36:26 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:44026 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234250AbiATIgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:30:12 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A2C061753
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:11 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id v123so10356103wme.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f598GxBX3eYMMeExQx/Xgejk6SKcvZUYFtg4erPpbmA=;
-        b=AYhSOilisYtm5Kva53WYknZU/cP0nBLrKX+D5I5wa60go1JcqjfG8boGZx7MEqCG4n
-         H1AIzJNsNFhkvcg0e+v0rIbxV0bskcFjv6KOCcbshPSdC7Ihq1JnTnsEIL+Bgmw1UcpQ
-         uiM3A6/GFcOMq0lUwFIhluvY64B1n1khk8pw2h5P/jXNjCiqhfwjARf+zF5ibOQgLK/j
-         SLM6S4eCuBTOCdBRRM63jLCRXDyBX5dN0XASh7COboD4KOCpJgZ3oqxjO+63IdrWzILZ
-         YluFiNt7Fo453BO2lkxMdzKejEe7sfE01xg8/t7tuj/gGhhBJzPtkLKOR2qV93/YRRA+
-         D3cA==
+        Thu, 20 Jan 2022 03:36:25 -0500
+Received: by mail-ua1-f43.google.com with SMTP id 2so9420095uax.10;
+        Thu, 20 Jan 2022 00:36:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f598GxBX3eYMMeExQx/Xgejk6SKcvZUYFtg4erPpbmA=;
-        b=lJ7y5WVu8eKXJNvLOks5RmaoMwb6IHQjai4trfQA/ef7ng7grYTX7+q8hkpfbS/4gx
-         +sCZktFlgqs3eN7ggztfKQDUw71l9p1r4gAltf1S7V9GQwRCmO1T2O2sIJPYn5j4kmr1
-         YZbketWx8JXJfM8X5Q4yLvWS6n9+rDFLDfS17tJML7CizBavL0MerbMd6D79mDrIGltB
-         36ElA68/GU3rJpSg3m3iXw/KNoEtROOiF8JiRnhMSiHOM8KZE9q4VaInBXWoACiW56sE
-         Zcx7zve4o863uY0OuKKWaXfr5WzALPcUPAhUBolALtdNi+6zJBPGue2lh4cSwaRsKsNQ
-         VuwQ==
-X-Gm-Message-State: AOAM530E/o9AAERyizRE0SADVAOdw826T7SPNQIh0vlS+oCHA6lB2ISr
-        pHv0JJQZITdClCyU24crDVVZeUQuaoVKtck5jCdLKg==
-X-Google-Smtp-Source: ABdhPJyBLRZv0QzjJfHJWKm1oD8j2btPknNw9AvpKSc6Oq5Bi32otoRK6KPR4Ba+Fi5gaAJQVUtXkySKvELZI5lP5ZM=
-X-Received: by 2002:a05:600c:28cc:: with SMTP id h12mr7749968wmd.18.1642667410465;
- Thu, 20 Jan 2022 00:30:10 -0800 (PST)
+        bh=rjpWEc8ofW9Ln+ZzVM/iDZ8qr5vzNcJvKqxioEzCZGY=;
+        b=K8E1eXzycKiQIRWxj6qfUFajLTr2sy1dSiMuVac4Ojo2F6egeEaTWG9ZbEsgSkDSEw
+         qRqO5uQssP45mWIaWpG7nVB3Q97Z1Jr6E/38JLbdq15EI8lBonmLG/R6A0L2wQywHdjM
+         tlbG4o+STxkRss/G4WwK4qJM73GTuEXEIIUh6QnfAQP1F4VZPE5JUYse+fcFqMZoHYGf
+         ZafxGxjyuI5ZOlCI72DNOr278MsPXFnFRVZNTSTswiks1K2dV8F/xbDEQ2JSlTgfnhoE
+         hGKLjtKpj5enGPziEdb98hFXbm2BZ4uB/Zgol/rIMf2zdXs4p+1IuBSGQGYYFahsa+z3
+         ATDw==
+X-Gm-Message-State: AOAM5316YKeuEQHWPMSP3XHEStDeK+5+1EWFv3Cbk15N8tilVELLYVbW
+        GecERymnasaq70RxfNTmqifMrUS2CgMjdQ==
+X-Google-Smtp-Source: ABdhPJxGe1OsDYfyTFLeqMrnaPPS7g1NHd4Hi0o7FeKUu5n/kYgAXhvWwHI1mDzEE/HawGiFuMYvRg==
+X-Received: by 2002:a05:6102:3a68:: with SMTP id bf8mr13173693vsb.63.1642667783746;
+        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id bj23sm432855vkb.23.2022.01.20.00.36.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id r15so9486981uao.3;
+        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
+X-Received: by 2002:a1f:a2d3:: with SMTP id l202mr4847687vke.7.1642667418540;
+ Thu, 20 Jan 2022 00:30:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-4-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-4-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 20 Jan 2022 16:29:59 +0800
-Message-ID: <CABVgOSnSrsTn0_9FuFzvFXd=H8uQEaLWMnP=3Y=xeGGS=J2JtA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] kunit: tool: drop last uses of collections.namedtuple
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com>
+In-Reply-To: <20220117110755.3433142-4-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 20 Jan 2022 09:30:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
+Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
+Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
+ mpfs i2c
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atishp@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Since we formally require python3.7+ since commit df4b0807ca1a
-> ("kunit: tool: Assert the version requirement"), we can just use
-> @dataclasses.dataclass instead.
->
-> In kunit_config.py, we used namedtuple to create a hashable type that
-> had `name` and `value` fields and had to subclass it to define a custom
-> `__str__()`.
-> @datalcass lets us just define one type instead.
->
-> In qemu_config.py, we use namedtuple to allow modules to define various
-> parameters. Using @dataclass, we can add type-annotations for all these
-> fields, making our code more typesafe and making it easier for users to
-> figure out how to define new configs.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+Hi Conor,
 
-This seems sensible, and the type-annotations are definitely a good thing.
+On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Add device tree bindings for the i2c controller on
+> the Microchip PolarFire SoC.
+>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-I guess I'm going to have to learn how to use @dataclass, though...
+Thanks for your patch!
 
-Reviewed-by: David Gow <davidgow@google.com>
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip MPFS I2C Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Daire McNamara <daire.mcnamara@microchip.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+> +      - microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
 
--- David
+Wouldn't it be more logical to have:
 
->  tools/testing/kunit/kunit_config.py |  9 +++++----
->  tools/testing/kunit/qemu_config.py  | 17 ++++++++++-------
->  2 files changed, 15 insertions(+), 11 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-> index 677354546156..ca33e4b7bcc5 100644
-> --- a/tools/testing/kunit/kunit_config.py
-> +++ b/tools/testing/kunit/kunit_config.py
-> @@ -6,16 +6,17 @@
->  # Author: Felix Guo <felixguoxiuping@gmail.com>
->  # Author: Brendan Higgins <brendanhiggins@google.com>
->
-> -import collections
-> +from dataclasses import dataclass
->  import re
->  from typing import List, Set
->
->  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
->  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
->
-> -KconfigEntryBase = collections.namedtuple('KconfigEntryBase', ['name', 'value'])
-> -
-> -class KconfigEntry(KconfigEntryBase):
-> +@dataclass(frozen=True)
-> +class KconfigEntry:
-> +       name: str
-> +       value: str
->
->         def __str__(self) -> str:
->                 if self.value == 'n':
-> diff --git a/tools/testing/kunit/qemu_config.py b/tools/testing/kunit/qemu_config.py
-> index 1672f6184e95..0b6a80398ccc 100644
-> --- a/tools/testing/kunit/qemu_config.py
-> +++ b/tools/testing/kunit/qemu_config.py
-> @@ -5,12 +5,15 @@
->  # Copyright (C) 2021, Google LLC.
->  # Author: Brendan Higgins <brendanhiggins@google.com>
->
-> -from collections import namedtuple
-> +from dataclasses import dataclass
-> +from typing import List
->
->
-> -QemuArchParams = namedtuple('QemuArchParams', ['linux_arch',
-> -                                              'kconfig',
-> -                                              'qemu_arch',
-> -                                              'kernel_path',
-> -                                              'kernel_command_line',
-> -                                              'extra_qemu_params'])
-> +@dataclass(frozen=True)
-> +class QemuArchParams:
-> +  linux_arch: str
-> +  kconfig: str
-> +  qemu_arch: str
-> +  kernel_path: str
-> +  kernel_command_line: str
-> +  extra_qemu_params: List[str]
-> --
-> 2.34.1.703.g22d0c6ccf7-goog
->
+    items:
+      - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+
+?
+
+If the IP core is reused, it can become:
+
+    items:
+      - enum:
+          - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
+          - microchip,<foo>-i2c # ...
+      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+
+That way the driver can just match on the second (fallback) value,
+and no further driver changes will be needed (until v8 or later).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

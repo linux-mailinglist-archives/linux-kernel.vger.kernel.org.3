@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB20A49540C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BEE495410
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346389AbiATST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:19:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16276 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233332AbiATST1 (ORCPT
+        id S1346559AbiATST5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:19:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50751 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233514AbiATST4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:19:27 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20KGM1Zh001474;
-        Thu, 20 Jan 2022 18:19:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=WPFpWAdP7and+FKr6Wq+Q68wA2Yfmcy0zvGP+nmcYPU=;
- b=rAuq4hg18XaaZqnbUxpEI75F161TrQFsLe+QEoPiM8Z3Up5rgypdpSFfxYexSffsq9B9
- b3skQ/dgyv5lTQrCoDbeOVeRDwI1OSC9EazBe8Fbdkmzo/8r1F9y0vTSTF3VmFA7rxoo
- m8bXnDn+RzcwK1J4rSHDIa2uzvABlhyORJ8WlfNxAlzA/v7mmb8rieH2SrKKzNizyDM3
- A6ZPKd9bzZN41zlvw/Uq4ieGIXXiOfBr3HgXOq0zKUqG9RMmGFM/bDpo5rL4dtg2Oguk
- HV8+xVwNbtgxM2JJmNAhgh8pXof0m8yLHZ2egb/9ZHJJk+Aoib+sv/mSMZMM+/M1YL5D 8w== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq60e2me4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 18:19:26 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KI4Kd2014630;
-        Thu, 20 Jan 2022 18:19:24 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dknwac4ap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 18:19:23 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KIJKk338011292
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 18:19:20 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8679A4C058;
-        Thu, 20 Jan 2022 18:19:20 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25A874C040;
-        Thu, 20 Jan 2022 18:19:20 +0000 (GMT)
-Received: from osiris (unknown [9.145.85.126])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 20 Jan 2022 18:19:20 +0000 (GMT)
-Date:   Thu, 20 Jan 2022 19:19:18 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 01/10] s390/uaccess: Add storage key checked
- access to user memory
-Message-ID: <YemnprCIEjjGFeTn@osiris>
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-2-scgl@linux.ibm.com>
- <YefeakONMN4PLlml@osiris>
- <422595a5-b24b-8760-ff0e-112322142de7@linux.ibm.com>
- <YegQCTqEsiFTUZ2R@osiris>
- <dbfec527-b995-e382-dafa-c3459e1e45ed@linux.ibm.com>
- <YelcCEuVbIg9ND90@osiris>
+        Thu, 20 Jan 2022 13:19:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642702795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rKxyIeZW7RYW3u4+X955jRymBZg+th+EIWA7v064V2E=;
+        b=cAUtShJbQ+jTNurs/x79rMhXzP44gJ15ynQgkbwKWZyrYtfEIn8O9h/c1Gk7/zZCbWge0p
+        MTkvegqKUPPKlSB1Fo1BmDs3tWiXz5Z0O+tTTAUCnr3ye4Tb3Q2kvrz3++i4h3So2jABdi
+        RFiM00h8+sYRauNfpCX7fSR2oChB9UU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-c0gIOMpuMJ2JZ6CTwJwVew-1; Thu, 20 Jan 2022 13:19:54 -0500
+X-MC-Unique: c0gIOMpuMJ2JZ6CTwJwVew-1
+Received: by mail-ed1-f72.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso6676964edb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:19:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=rKxyIeZW7RYW3u4+X955jRymBZg+th+EIWA7v064V2E=;
+        b=YeVEH95dHj94zxU6bRGjS7s3Gop/fCId4tOB1lPjG5KWJm9tO17Db6vCa96A3kjnZ2
+         oa7Fvw4TwIrbJqKXXpEchyvDYOTGsab9ZPmYerMKpz8BRWNW6qejBjzGvbfG95F2WMsB
+         u33XClW5S1DHZq0dTswe6rMvQb0zTWDO71ErKIVojrYTa93h0xvSHQIo92U6eKeXcuuy
+         +P1CGaKaZH0/06Hb6Ruth5G1vzOzltkQVzI82fQOPUM1SkcU0seaf42F5HfykT0zIbIu
+         udK310uBd7rConzNEaNYi6mY3MSMlMXa/o1e4TQTo94VqUzQJvBmpvKnfVXlt+0SUv8f
+         Z1Zg==
+X-Gm-Message-State: AOAM532StVcUQ5wrmoJA9GPXp24aalSzcVVM8qjEwcBa5BkQC8mRoIiq
+        1PHooLg9+ozGCwE6OOhuiIggHxdnt0ypFdDfmPjwqIs6b2icnoBWdtbTLS+oJaTp2oUKRHgyMqH
+        6fL4YUkHbfY/XvSmYtwhlqZhn
+X-Received: by 2002:a17:907:7d8a:: with SMTP id oz10mr113652ejc.320.1642702792938;
+        Thu, 20 Jan 2022 10:19:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwU9TWkRnVmK3HK4zfioqdII11rqxD40tMTTzfgBpEJQdwiaFvEt+7U82gMa0IM1APSiHIlfg==
+X-Received: by 2002:a17:907:7d8a:: with SMTP id oz10mr113628ejc.320.1642702792649;
+        Thu, 20 Jan 2022 10:19:52 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
+        by smtp.gmail.com with ESMTPSA id g9sm1287766ejf.33.2022.01.20.10.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 10:19:52 -0800 (PST)
+Message-ID: <0b734af9-d2c3-acef-3804-3a87e1e61a59@redhat.com>
+Date:   Thu, 20 Jan 2022 19:19:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YelcCEuVbIg9ND90@osiris>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wO7_9hgtjWZi7Q1IkVvIssjmPN7AVpE6
-X-Proofpoint-GUID: wO7_9hgtjWZi7Q1IkVvIssjmPN7AVpE6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-20_07,2022-01-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=729 malwarescore=0
- priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201200091
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com, Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
+ <YeA5oP/iaxtVPHb3@casper.infradead.org>
+ <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+ <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com>
+ <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
+ <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
+ <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
+ <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
+ <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
+ <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
+ <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
+ <8931808d-db61-0f06-ceb3-f48a83b1f74c@redhat.com>
+ <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 01:56:40PM +0100, Heiko Carstens wrote:
-> > 2. Implementation changes
-> >    2.1 Modify common code
+>> Sounds good? At least to me. If only swap/migration entries wouldn't be
+>> harder to handle than I'd wish, that's why it's taking a little and will
+>> take a little longer.
 > 
-> In general such changes are done in way that common code is or _may_ be
-> modified to fulfill our needs. Common code header file explicitely states
-> that architectures should get rid of private instances of
-> copy_{to,from}_user() and __copy_{to,from}_user{,_inatomic}().
+> Thanks for the quick response. I would have to see the logic to set/clear
+> PageAnonExclusive to fully understand how things are handled.
 > 
-> So we should not add anything like that to arch code again, since nobody
-> would expect that.
 
-Or to be more specific: I think the most simple solution would be to
-try to get the new *key variants into include/linux/uaccess.h, and add
-the raw variants in architecture code, similar to the rest of the
-uaccess functions.
-There is some (sort of) prior art with copy_mc_to_kernel() even,
-though that can only partially be compared.
+I'll let you know as soon as I have something. I'll most probably share
+a document explaining the design first.
+
+> BTW, I just saw this patch form PeterZ [1] that seems to be related, as
+> it deals with changing protection on pinned pages.
+
+Unfortunately the use of page_maybe_dma_pinned() is racy, as we can race
+with GUP fast. It's a problem for vmscan which currently relies on it
+for correctness. For migration, it might be good enough as we should
+fail later when trying to freeze the refcount.
+
+> 
+> 
+> [1] https://lore.kernel.org/linux-mm/20220120160822.666778608@infradead.org/
+> 
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

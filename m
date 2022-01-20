@@ -2,115 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 284A9495421
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EBD495426
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbiATSZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:25:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33022 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232758AbiATSZO (ORCPT
+        id S244047AbiATS0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:26:00 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:50288 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238856AbiATSZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:25:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642703113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XlnvntdKeyJn6a4H1tGpGm3klYe/KenHIfs6bqVWGYE=;
-        b=ZEU57fg4hA5rrLVpL8BTfW8TJ4aZ8tATFMNLoUZtGNqbxFhIOZo9ctOcr6iuh6JFoPDGGy
-        po370Zgc8+DhSC1gAQEdiaUmbX0guVF1w6vNTWOyri3Z9WIKo5qpwO67+bvFNF4bEK0EN+
-        fQQ+w79FjQFC9jher9FmA2ZLRaGOIgk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-Aq9WOkzzO2a1gbzrCmH2KQ-1; Thu, 20 Jan 2022 13:25:12 -0500
-X-MC-Unique: Aq9WOkzzO2a1gbzrCmH2KQ-1
-Received: by mail-ed1-f72.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so6657377edb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:25:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=XlnvntdKeyJn6a4H1tGpGm3klYe/KenHIfs6bqVWGYE=;
-        b=Sch7hPSHVhuG636KaJKTgV7bME7xsysJyBXaXnSYTjBS0EiEPaG4vMmm00rpfsZvIY
-         ++akniq6seSnItLTwVyxOiokPmIaxEoggZ6itrDMHB0weCKSfKdvq8oRwr/d1j/dg4Po
-         yyTGFaw/zbRlvmKJVqPIbhgmYcJxxZjSjQLNzOvu3bohI/vMkPWBxwXtu5wQ3/JEUMYH
-         wolMDXxJbApYE+BLuIuuVRrFGliha26a2K5iU/hhp1kgC62LqIB4xnIs/J/zf+fqMnjQ
-         cl9RcDBk2r/meNPVeVHPM2xh30rvshyPgVpOgJqTv9QnJ04KaWVBsOrEJUco5tagcxX7
-         +1wQ==
-X-Gm-Message-State: AOAM531Wc/47diOlZn9WXgyjDnFsaqgf0yWk/JtZvj3J81ri1iVHBpU1
-        qdPytBP91W6yOxmQDaYRFAhSVbDzO8H6Gupw5WEhWTZiiGs1J1WqxbzhBYAyTU+5d/2KSBF9sGz
-        sBESiZXegx4d7YNGFtseqRzhq
-X-Received: by 2002:a05:6402:21d4:: with SMTP id bi20mr385570edb.20.1642703110675;
-        Thu, 20 Jan 2022 10:25:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzL4ltr5hInC42l83cLMKXDoEXStlOPH8wqTyTd77EKcWq1GJwQnQrfyKMpFyZLHhZ4ojwR4A==
-X-Received: by 2002:a05:6402:21d4:: with SMTP id bi20mr385543edb.20.1642703110497;
-        Thu, 20 Jan 2022 10:25:10 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
-        by smtp.gmail.com with ESMTPSA id dk3sm1650309edb.33.2022.01.20.10.25.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 10:25:10 -0800 (PST)
-Message-ID: <ffb88819-a392-84f3-d40f-7406be8e3165@redhat.com>
-Date:   Thu, 20 Jan 2022 19:25:08 +0100
+        Thu, 20 Jan 2022 13:25:54 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20KIPQTJ035437;
+        Thu, 20 Jan 2022 12:25:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642703126;
+        bh=2/qtOiX8+RrhrE/rS2MPeAIX4aF+I40EDhFEBNmbWWs=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=y9WuRckUOeM+AD+vJnd2PCAaS9YpWbv3AURxDJuziO+sisVCApOE1M990Iarng8Ug
+         j8Y+w2Rjc3TSI8hFbuEanqcgLBaYzzxIKRgj4+LCiFlfgz6gG9dqaG224EGX/pdSW1
+         4QjfCcbFAB6R8RFU8GE1vlrQEAmG/gtacvC21zZo=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20KIPQpT126366
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Jan 2022 12:25:26 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 20
+ Jan 2022 12:25:25 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 20 Jan 2022 12:25:26 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20KIPPOv044230;
+        Thu, 20 Jan 2022 12:25:25 -0600
+Date:   Thu, 20 Jan 2022 23:55:24 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [PATCH v5 2/4] spi: dt-bindings: samsung: convert to dtschema
+Message-ID: <20220120182524.d5fe3uigbelhcs7l@ti.com>
+References: <20220120175747.43403-1-krzysztof.kozlowski@canonical.com>
+ <20220120175747.43403-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC][PATCH v2 1/5] mm: Avoid unmapping pinned pages
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-api@vger.kernel.org, x86@kernel.org, pjt@google.com,
-        posk@google.com, avagin@google.com, jannh@google.com,
-        tdelisle@uwaterloo.ca, mark.rutland@arm.com, posk@posk.io
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.666778608@infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220120160822.666778608@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220120175747.43403-3-krzysztof.kozlowski@canonical.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.01.22 16:55, Peter Zijlstra wrote:
-> Add a guarantee for Anon pages that pin_user_page*() ensures the
-> user-mapping of these pages stay preserved. In order to ensure this
-> all rmap users have been audited:
+On 20/01/22 06:57PM, Krzysztof Kozlowski wrote:
+> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+> controller bindings to DT schema format.
 > 
->  vmscan:	already fails eviction due to page_maybe_dma_pinned()
+> The conversion also drops requirement from providing controller-data and
+> its data for each of SPI peripheral device nodes.  The dtschema cannot
+> express this and the requirement is being relaxed in the driver now.
 > 
->  migrate:	migration will fail on pinned pages due to
-> 		expected_page_refs() not matching, however that is
-> 		*after* try_to_migrate() has already destroyed the
-> 		user mapping of these pages. Add an early exit for
-> 		this case.
-> 
->  numa-balance:	as per the above, pinned pages cannot be migrated,
-> 		however numa balancing scanning will happily PROT_NONE
-> 		them to get usage information on these pages. Avoid
-> 		this for pinned pages.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-page_maybe_dma_pinned() can race with GUP-fast without
-mm->write_protect_seq. This is a real problem for vmscan() with
-concurrent GUP-fast as it can result in R/O mappings of pinned pages and
-GUP will lose synchronicity to the page table on write faults due to
-wrong COW.
+Thanks.
 
-If you're just using it as an optimization, that should work just fine.
-I assume all migration will freeze the refcount and consequently  bail
-out at that point. In that case, LGTM.
-
+Acked-by: Pratyush Yadav <p.yadav@ti.com>
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

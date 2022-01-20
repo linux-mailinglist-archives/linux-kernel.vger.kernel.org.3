@@ -2,128 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA409494D90
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145CA494D98
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiATMBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbiATMBR (ORCPT
+        id S232720AbiATMD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:03:56 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62254 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232748AbiATMDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:01:17 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF26BC061574;
-        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id s9so3154788plg.7;
-        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=x6xQErWbh59MRMGPWppnidXCP7KCrvl8zZIZXHQJ4v8=;
-        b=SYRqlyczXDZgRbvOhDXZ6p6W5Bq4QT8tnHBlDL7/cwOc2GxCv3oCCFm6Am5gyaFRp3
-         1/ZXS3gXVA/l8KUABtLdctctQTXQwMnlzRgz8fiS2zWxcozcOjiuD9cX9MHaZ7j6pEfE
-         8n1//0+ry1vThYz5hiS4/lWK55BgFneKNdy7cKuQI2gxgpL/ZEjpL5/+cxVNX78xKZBK
-         S7q30h7zYxfwez+upBdXtQxKgDLkuUDJTJjgVw8yP5M4sNsFBbOiRy4vEdqPc9i6cuHo
-         DcO6rKTS4YIk9c8aI2nl7UPSgU7vAzsWPlRNSyf49R3IgybPV5urcAv444CLBQrYGvng
-         1BIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=x6xQErWbh59MRMGPWppnidXCP7KCrvl8zZIZXHQJ4v8=;
-        b=NmL8zTk/O753IqWqBZWeSQWkTSFJwK0dUBcvyTibX3O/ZZ8rT7I1oRKXdXvO//zvNc
-         Ydc/DsxMbSedBueH4/8jzdMlB96XCh5uEzds9PCF88O4aUBp9JhgDXH9GppWzVnXTRrT
-         b3QJdmn8WbJqYkPOuGGkqHMHzYfdWOp0gYb3jTsZOur1uOU9FVi4hR/X2AN5cr5jeOws
-         4Gtd5LLzhpoCVh8hnbo1PdW2WHQLaJ181I3Li1uhanMrnsDw7Lg8iRxBynWl7ytTgTkm
-         L4HEiEhBD5WULxXCK+QUu1v7Z5i6ec35XHlDjlsqL43HaYlfo8YF4v1PeC4oyC6fEbPF
-         vB/A==
-X-Gm-Message-State: AOAM530FcZ3YblFSj9BVrcWwiP0J/xWh34osG6lEy+gDYlvO2aTQoyME
-        pLtQZx8GzrJRSgawMM2wWLs=
-X-Google-Smtp-Source: ABdhPJy3BOoGH7B5EYj2r1GYJWj5Hj3gMIYEYcM3MkqwCBJQ/gEl8hVhsNSvCV/vgQk+m/JEw7hYqg==
-X-Received: by 2002:a17:902:b206:b0:149:3b5d:2b8b with SMTP id t6-20020a170902b20600b001493b5d2b8bmr37236865plr.162.1642680076472;
-        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id b22sm3176413pfl.121.2022.01.20.04.01.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
-Message-ID: <fc6b44e8-350b-7f66-132f-a02dfe7b97a8@gmail.com>
-Date:   Thu, 20 Jan 2022 20:01:05 +0800
+        Thu, 20 Jan 2022 07:03:54 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20KBZ0f2016646;
+        Thu, 20 Jan 2022 12:02:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=k5o6ODXwuLUj4i7YdvLA0ynpqLCOuB0YKgzZpKET9f4=;
+ b=Dxoi/O51zVP7/OFIYcCK0BvBuJubQUmEEWcu8ZxtgojlPBjfyBs3I8SMrSkhvapLfbyp
+ 1kFdNWtNxpsU/Jqe75dIlVBGNGIs0rj0PaDSTY0lbQGvsawoCtyJLA7gpg3pC9LGCC1O
+ 1VLkGCWz3zUjyiK/TRPQZlPak/Cd2WPxYCdEbTHCw/BH3s1kCGKsWRcjnVubXjijqZoL
+ eJxwAyaUu//tbseC6hsVB58j8O1MYO5Du5tbRNaWs5lzJ3eGHNLuBbHMiump/7/CeX4n
+ KIxkkOA2UfiMlpi8p23YHbEAtEFq9wc8XDpHtQFuuHca3aHHaaYk4Y/rIGQnJ1UHFp5/ oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq1mgq4fx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 12:02:16 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20KBlxYu030083;
+        Thu, 20 Jan 2022 12:02:15 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq1mgq4ep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 12:02:15 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KC264g009570;
+        Thu, 20 Jan 2022 12:02:12 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3dnm6rr24u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 12:02:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KBqlVA22282656
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jan 2022 11:52:47 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F154611C06C;
+        Thu, 20 Jan 2022 12:02:08 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3AB3411C052;
+        Thu, 20 Jan 2022 12:02:07 +0000 (GMT)
+Received: from [9.171.13.121] (unknown [9.171.13.121])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Jan 2022 12:02:07 +0000 (GMT)
+Message-ID: <25fae2b8-e71e-e97f-a08b-b88a1ae608de@linux.ibm.com>
+Date:   Thu, 20 Jan 2022 13:02:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [DROP][PATCH] KVM: x86/xcr0: Don't make XFEATURE_MASK_SSE a
- mandatory bit setting
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 0/7] kvm: fix latent guest entry/exit bugs
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220119070427.33801-1-likexu@tencent.com>
- <1b6a8366-d1ab-536f-9bad-8c2b7a822fcb@intel.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <1b6a8366-d1ab-536f-9bad-8c2b7a822fcb@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, frankja@linux.ibm.com,
+        frederic@kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        luto@kernel.org, maz@kernel.org, mingo@redhat.com,
+        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
+        paul.walmsley@sifive.com, peterz@infradead.org, seanjc@google.com,
+        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>
+References: <20220119105854.3160683-1-mark.rutland@arm.com>
+ <a4a26805-3a56-d264-0a7e-60bed1ada9f3@linux.ibm.com>
+ <20220119192217.GD43919@C02TD0UTHF1T.local>
+ <0654e667-1cfa-5147-6661-b3b63288be0b@linux.ibm.com>
+ <YelOGjuRsMfUb3e7@FVFF77S0Q05N>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <YelOGjuRsMfUb3e7@FVFF77S0Q05N>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WNzbkVsveAGBzNlLtgH6K8X7aHqWWHTF
+X-Proofpoint-GUID: MI0AoZPoXEFhVoUPnFbrFyPiFxjeKY2D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_04,2022-01-20_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=897
+ mlxscore=0 bulkscore=0 malwarescore=0 suspectscore=0 phishscore=0
+ clxscore=1015 impostorscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201200062
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/1/2022 11:23 pm, Dave Hansen wrote:
-> On 1/18/22 11:04 PM, Like Xu wrote:
->> Remove the XFEATURE_MASK_SSE bit as part of the XFEATURE_MASK_EXTEND
->> and opportunistically, move it into the context of its unique user KVM.
-> 
-> Is this a problem for xstate_required_size()?  The rules for the CPUID
-> sub-functions <=1 are different than those for >1.  Most importantly,
-> 'eax' doesn't enumerate the size of the feature for the XFEATURE_SSE
-> sub-leaf.
 
-Indeed.
 
-> 
-> I think XFEATURE_MASK_EXTEND was being used to avoid that oddity:
-
-It seems that the cpuid.0xd.0.ebx size update for the SSE+AVX state needs
-to be triggered by setting bit 2 which is quite odd:
-
-  XCR0 = 001B, ebx=00000240
-  XCR0 = 011B, ebx=00000240
-  XCR0 = 111B, ebx=00000340
-
-Thank you and sorry for the noise.
-
-> 
->> u32 xstate_required_size(u64 xstate_bv, bool compacted)
->> {
->>          int feature_bit = 0;
->>          u32 ret = XSAVE_HDR_SIZE + XSAVE_HDR_OFFSET;
+Am 20.01.22 um 12:57 schrieb Mark Rutland:
+> On Wed, Jan 19, 2022 at 08:30:17PM +0100, Christian Borntraeger wrote:
 >>
->>          xstate_bv &= XFEATURE_MASK_EXTEND;
->>          while (xstate_bv) {
->>                  if (xstate_bv & 0x1) {
->>                          u32 eax, ebx, ecx, edx, offset;
->>                          cpuid_count(0xD, feature_bit, &eax, &ebx, &ecx, &edx);
->>                          /* ECX[1]: 64B alignment in compacted form */
->>                          if (compacted)
->>                                  offset = (ecx & 0x2) ? ALIGN(ret, 64) : ret;
->>                          else
->>                                  offset = ebx;
->>                          ret = max(ret, offset + eax);
->>                  }
 >>
->>                  xstate_bv >>= 1;
->>                  feature_bit++;
->>          }
+>> Am 19.01.22 um 20:22 schrieb Mark Rutland:
+>>> On Wed, Jan 19, 2022 at 07:25:20PM +0100, Christian Borntraeger wrote:
+>>>> Am 19.01.22 um 11:58 schrieb Mark Rutland:
+>>>>
+>>>>
+>>>> CCing new emails for Anup and Atish so that they are aware of this thread.
+>>>
+>>> Ah; whoops. I'd meant to fix the Ccs on the patches.
+>>>
+>>> Thanks!
+>>>
+>>> [...]
+>>>
+>>>> I just gave this a spin on s390 with debugging on and I got the following:
+>>>>
+>>>> [  457.151295] ------------[ cut here ]------------
+>>>> [  457.151311] WARNING: CPU: 14 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter.constprop.0+0xf8/0x118
+>>>
+>>> Hmm, so IIUC that's:
+>>>
+>>> 	WARN_ON_ONCE(rdp->dynticks_nmi_nesting != DYNTICK_IRQ_NONIDLE);
+>>>
+>>> ... and we're clearly in the idle thread here.
+>>>
+>>> I wonder, is the s390 guest entry/exit *preemptible* ?
 >>
->>          return ret;
->> }
+>> Looks like debug_defconfig is indeed using preemption:
+>>
+>> CONFIG_PREEMPT_BUILD=y
+>> # CONFIG_PREEMPT_NONE is not set
+>> # CONFIG_PREEMPT_VOLUNTARY is not set
+>> CONFIG_PREEMPT=y
+>> CONFIG_PREEMPT_COUNT=y
+>> CONFIG_PREEMPTION=y
+>> CONFIG_PREEMPT_RCU=y
+>> CONFIG_PREEMPT_NOTIFIERS=y
+>> CONFIG_DEBUG_PREEMPT=y
+>> CONFIG_PREEMPTIRQ_TRACEPOINTS=y
+>> CONFIG_TRACE_PREEMPT_TOGGLE=y
+>> CONFIG_PREEMPT_TRACER=y
+>> # CONFIG_PREEMPTIRQ_DELAY_TEST is not set
+> 
+> Thanks for confirming!
+> 
+> Could you try with CONFIG_PROVE_RCU=y ? That can't be selected directly, but
+> selecting PROVE_LOCKING=y will enable it.
+
+PROVE_LOCKING was enabled in my runs as well as PROVE_RCU.

@@ -2,24 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40BB495181
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D36495182
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376673AbiATPds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:33:48 -0500
-Received: from mail-108-mta72.mxroute.com ([136.175.108.72]:37637 "EHLO
-        mail-108-mta72.mxroute.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346385AbiATPdq (ORCPT
+        id S1376681AbiATPdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:33:49 -0500
+Received: from mail-108-mta162.mxroute.com ([136.175.108.162]:43515 "EHLO
+        mail-108-mta162.mxroute.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376566AbiATPdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:33:46 -0500
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jan 2022 10:33:46 EST
+        Thu, 20 Jan 2022 10:33:47 -0500
 Received: from filter004.mxroute.com ([149.28.56.236] filter004.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta72.mxroute.com (ZoneMTA) with ESMTPSA id 17e781aa05f000bdf2.004
+ by mail-108-mta162.mxroute.com (ZoneMTA) with ESMTPSA id 17e781aa047000bdf2.004
  for <linux-kernel@vger.kernel.org>
  (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256);
  Thu, 20 Jan 2022 15:28:37 +0000
-X-Zone-Loop: c327753b08390804ea7040d86b10ac987a6a94d25386
+X-Zone-Loop: b61b96cfdf2c5d8532f2da1808cbab4edd671aa8cc35
 X-Originating-IP: [149.28.56.236]
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ds0.me; s=x
         ; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:
@@ -27,19 +26,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ds0.me; s=x
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=JVQnv3AVsUWy3ZjxZJjNI7QObG4R6sq0+QS/JmmuFdE=; b=BHtxwMqbuCOrh5i+9PW87UjR3Z
-        shdKUIWt8HVX/Q4R5RJ8L8tXXo5mt+zn8ZqWivYivdEdEDt9H17hFYjryZr3HEG+FBZmv3/x2ggoL
-        Err2M46S5F0MdpUug5lgrHjIxkBl7rl5VJ/rqWM9CyKbqHIhRAkEkNhACM2gHnUKHO8bbM8HgI9Fj
-        BPxWEfhvjzRCvjMvrOBtBtlkANGH/tTHcoaqHyLz2q/L/HftRq2MK5pytRjgPiXeJe1OCN4wkhl8L
-        jVZyYhyqgGaTBxBFjUgid4GrGm92sxKaNclKxesBXV2Jg/GKdGeq5W4pkDYUS/EJd/JlSQPIvxyNG
-        5BfcLToQ==;
+        bh=f5DSyw8Jktl2OVLrktO0AZ8z+S3qRtxlhEygciHsFM0=; b=QdHjhTksC/LcefLXrzjBNyPewf
+        p1pSvWd7frxT1A0ZsHAQymG9gGiNnbgE0LvNVTlntHKa/lvaQlq6XoWlqiAgAVaGgJ7txx6x9jnku
+        GjOWbFbpVpKRfmDCd5UGcIWJF5PgGY2dYXoFaWoyvJ8x/+xmHn5z7VnvN7btifAAYFiYpPupQCdQx
+        WnTs/Vzde5IKViqz3p4BKaHxUXFqf0xi/mwNX1kiDSBCEFdVZ2trReSy3Q9GR5ArVea2vFwxy5W/J
+        KgFYNAtcddt0/QD9IetVUOlmh9wHZAx4Gzp84H2EnJhXFayEVzylduVC7kLr36c32aZrzvBtew7sn
+        NE8BsJBA==;
 From:   Myrtle Shah <gatecat@ds0.me>
 To:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
         palmer@dabbelt.com
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] riscv: Fix XIP_FIXUP_FLASH_OFFSET
-Date:   Thu, 20 Jan 2022 15:28:27 +0000
-Message-Id: <20220120152828.4089364-2-gatecat@ds0.me>
+Subject: [PATCH 2/2] riscv/mm: Add some missing XIP_FIXUPs
+Date:   Thu, 20 Jan 2022 15:28:28 +0000
+Message-Id: <20220120152828.4089364-3-gatecat@ds0.me>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220120152828.4089364-1-gatecat@ds0.me>
 References: <20220120152828.4089364-1-gatecat@ds0.me>
@@ -55,44 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There were several problems with the calculation. Not only was an 'and'
-being computed into t1 but thrown away; but the 'and' itself would
-cause problems if the granularity of the XIP physical address was less
-than XIP_OFFSET - in my case I had the kernel image at 2MB in SPI flash.
-
-I believe this approach is more generic.
-
-Fixes: f9ace4ede49b ("riscv: remove .text section size limitation for XIP")
-
 Signed-off-by: Myrtle Shah <gatecat@ds0.me>
 ---
- arch/riscv/kernel/head.S | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ arch/riscv/mm/init.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-index 604d60292dd8..b1ca65abeb1e 100644
---- a/arch/riscv/kernel/head.S
-+++ b/arch/riscv/kernel/head.S
-@@ -21,14 +21,13 @@
- 	add \reg, \reg, t0
- .endm
- .macro XIP_FIXUP_FLASH_OFFSET reg
--	la t1, __data_loc
--	li t0, XIP_OFFSET_MASK
--	and t1, t1, t0
--	li t1, XIP_OFFSET
--	sub t0, t0, t1
--	sub \reg, \reg, t0
-+	la t0, __data_loc
-+	REG_L t1, _xip_phys_offset
-+	sub \reg, \reg, t1
-+	add \reg, \reg, t0
- .endm
- _xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
-+_xip_phys_offset: .dword CONFIG_XIP_PHYS_ADDR + XIP_OFFSET
- #else
- .macro XIP_FIXUP_OFFSET reg
- .endm
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 0624c68331d8..eeafefd1c2b3 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -41,6 +41,7 @@ phys_addr_t phys_ram_base __ro_after_init;
+ EXPORT_SYMBOL(phys_ram_base);
+ 
+ #ifdef CONFIG_XIP_KERNEL
++#define phys_ram_base  (*(phys_addr_t *)XIP_FIXUP(&phys_ram_base))
+ extern char _xiprom[], _exiprom[], __data_loc;
+ #endif
+ 
+@@ -248,6 +249,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
+ 
+ #ifdef CONFIG_XIP_KERNEL
++#define riscv_pfn_base         (*(unsigned long  *)XIP_FIXUP(&riscv_pfn_base))
+ #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
+ #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
+ #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
 -- 
 2.34.1
 

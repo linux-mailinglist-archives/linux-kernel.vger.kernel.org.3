@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B44B7494E76
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A58494E7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244520AbiATM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:58:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36758 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiATM6N (ORCPT
+        id S244544AbiATM7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237067AbiATM7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:58:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E755C616F2;
-        Thu, 20 Jan 2022 12:58:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC7EC340E0;
-        Thu, 20 Jan 2022 12:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642683492;
-        bh=PjsGNV1TcOlrmGioweXTIZy082puxUuggsqwMwI5MpU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Mx1W0FiMlD35wnnWBZfIXrXLDShM3EwMl1GNK30GOr7khcsY3oXmwRX5jgHz+yVRw
-         Qn+IrwNTxZkvR1KtBDtich2OaVcjzsSzyb/WnAehzDJh5TFx4sf9M/ylVazu+1BVhL
-         NrD9PH/J+5R9BODGMuddhCf7Ske77FeYXHvOfLtCz6TBHhkems4fy7pNl/vkS+nwNu
-         lR54GWBs8r6htUqebRIN0GC5mhCgt9TfVDiSEVYAxKzSlnrXAeNPV/ZTSFO4rXV6kH
-         vkqfmgNHLqnSPNiBWj5zEyP9P/4kJHbZ5IQGlkfKT9np+UP+sZd1OMGqBZMsvV0IeL
-         GnRfFLMNKn4qg==
-Message-ID: <80083e5ca3fd0a5bd2de43ebc803fc914d09ac3c.camel@kernel.org>
-Subject: Re: [PATCH] x86/sgx: Add poison handling to reclaimer
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Thu, 20 Jan 2022 14:57:56 +0200
-In-Reply-To: <ef74bd9548df61f77e802e7505affcfb5159c48c.1642545829.git.reinette.chatre@intel.com>
-References: <ef74bd9548df61f77e802e7505affcfb5159c48c.1642545829.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.3 
+        Thu, 20 Jan 2022 07:59:54 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2F6C061574;
+        Thu, 20 Jan 2022 04:59:53 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m1so21357735lfq.4;
+        Thu, 20 Jan 2022 04:59:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LsmckIhI4rAR2wBGS0GbJd6b2Xr2c/U/68CeWyncqcA=;
+        b=YzqLYvoBCsUBhWov+dYz9LNmT70qVxSj+G4GHIh6zRcgXktSuRKn6RiJM5FXIzJDz+
+         leoMlA7y9fBhMFW2a8tLX/qBJYDGotwpgq2UsqSI2lkDZPnZJgifwW3GBLubfP+OOrFK
+         sKpExBmAvhJL8Zd7v59DW11zpDSNm1+VQSPjP6x40fMG4vjoo4T185xht6Ln+b1fe+KN
+         HaC+szCJyuIqyucXrJqcjpVgdbBBsKXAWEelr7B6UYL95HGssmmFxoXEm5RcWKjHbO9V
+         6BBrMEQGeCzOwgd3GUsXIT1cxvDYPijW0Aa0gryj0EhLJ63tarAuwLjUpM02aoXFV/zb
+         U37A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LsmckIhI4rAR2wBGS0GbJd6b2Xr2c/U/68CeWyncqcA=;
+        b=kLZYJRC6dzZBXv8mT9ba9dn2q34nS0hxKCOe9snN45e3OUbRblUFtbJi98dUHSeGrc
+         OrZZ8AQkEYi/5KPSX2HsOm/iwq0PyLz944CYR4lGybouLmVXmKaWoOH4u0XP5EmO6f/u
+         ylGLouBmyad3kiqLIdffF1R049pLaAQxGT4KH8DT0v6ipUsF8QqXu/DvLbuo+HJX3If0
+         MvaIHHc7eIinRUpHKCcM/osqcYhAEZ31ilC1CDuoDcaZOt1NCO6n9QOG6c4r3RuemJQS
+         TTFQ4Vm4mKRghS6WD5ofxQN94H22bVpzZGK/vAft/2poyNFBVViz39ePUPJDOMedKUTP
+         QQSw==
+X-Gm-Message-State: AOAM530xIxfU7njws14ymWPizWkiRZeGA6SG0ljC5SJh9bo1T+eenOQp
+        5k3xwp1SxuwMbg+XHKeA3vUN5vBTBa8=
+X-Google-Smtp-Source: ABdhPJwFfQkBgrktKE3ju6bGfP+W7sKeTkfRmdmm9IaX1Ybzae/qv3ZGsSRrv49/hXVQMWFKOfCzQg==
+X-Received: by 2002:a05:651c:1a29:: with SMTP id by41mr19572266ljb.151.1642683592339;
+        Thu, 20 Jan 2022 04:59:52 -0800 (PST)
+Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
+        by smtp.googlemail.com with ESMTPSA id p25sm351459lfa.49.2022.01.20.04.59.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 04:59:51 -0800 (PST)
+Message-ID: <cd7a212e-71ff-90a6-d3dc-1391567fc113@gmail.com>
+Date:   Thu, 20 Jan 2022 15:59:51 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Patch V2] memory: tegra: Add MC error logging on tegra186 onward
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 15:05 -0800, Reinette Chatre wrote:
-> The machine check recovery handling in SGX added the changes
-> listed below to the freeing of pages in sgx_free_epc_page().
-> The SGX reclaimer contains an open coded version of
-> sgx_free_epc_page() and thus did not obtain the changes in
-> support of poison handling.
->=20
-> The changes made to EPC page freeing in support of poison handling
-> are:
-> 1) A new SGX_EPC_PAGE_IS_FREE flag is set when the EPC page is
-> =C2=A0=C2=A0 freed. Introduced in commit d6d261bded8a ("x86/sgx: Add new
-> =C2=A0=C2=A0 sgx_epc_page flag bit to mark free pages").
-> 2) A new "poison" field in struct sgx_epc_page is used to
-> =C2=A0=C2=A0 determine whether a newly freed EPC page should be placed
-> =C2=A0=C2=A0 on the list of poisoned or list of free pages. Introduced
-> =C2=A0=C2=A0 in commit 992801ae9243 ("x86/sgx: Initial poison handling
-> =C2=A0=C2=A0 for dirty and free pages").
-> 3) The owner field in struct sgx_epc_page is cleared when the EPC
-> =C2=A0=C2=A0 page is freed.=C2=A0 Introduced in commit 992801ae9243 ("x86=
-/sgx:
-> =C2=A0=C2=A0 Initial poison handling for dirty and free pages").
->=20
-> Replace the open coded enclave page freeing code in the reclaimer
-> with sgx_free_epc_page() to obtain support for poison page handling.
->=20
-> Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark
-> free pages")
+20.01.2022 12:02, Ashish Mhetre пишет:
+> @@ -521,23 +535,64 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>  
+>  	for_each_set_bit(bit, &status, 32) {
+>  		const char *error = tegra_mc_status_names[bit] ?: "unknown";
+> +		u32 status_reg = MC_ERR_STATUS, addr_reg = MC_ERR_ADR;
 
-AFAIK, this patch does not semantically break anything so it is not
-a legit fixes tag.
+No need to initialize these variables, since they are always initialized
+by the further code.
 
-BR, Jarkko
+Please write it like this:
+
+u32 addr_hi_reg = 0, status_reg, addr_reg;

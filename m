@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6D34956E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 00:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9394956EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 00:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378335AbiATXVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 18:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
+        id S1378286AbiATXW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 18:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378232AbiATXUu (ORCPT
+        with ESMTP id S244408AbiATXWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 18:20:50 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127B9C061574;
-        Thu, 20 Jan 2022 15:20:50 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso14390158wmf.1;
-        Thu, 20 Jan 2022 15:20:50 -0800 (PST)
+        Thu, 20 Jan 2022 18:22:13 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B17C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 15:22:13 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id e28so2772670pfj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 15:22:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=70y9nP+1TJuyoQVHWKHYrgk62/1kbAozVgHhQoGQnWU=;
-        b=W9FIXQ88UaSTP59Qi7+oime1sFU7XPsBBr+GgtIZuDCxabPolRSg0UVB57+j7xn3TL
-         L4J7c3XN5cVXU9vUf/jC5K7uxhGch/2CdvfibqBaKT5alYLpdgoGJC0Sechz5wI13ueW
-         yz1HoXFN/s6m+/l2+I2rKH/GFcdU6pu9U14eRH0Vb4jaqUZSyKndqo0sqB3evNjZHBfe
-         9MgvwW7Su+DfBOpYp0wZpCnECInP2+66b0NQDJscSnZgYRNWUL8Bs3pua9a6K1rwKdtY
-         TTyirOIfrj5QFrdL/rS8eb23El1xVwL1JItJRWwdE30ei42exZSy7tk421zuJVgwzPRz
-         gavQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=egMwIptYpGbsC4XxY+2pETIXKwRmweD4aAOClQc8FOg=;
+        b=j4GGCU1LW7aQgvrd+Lz43oPyrQTqCIyQoc6damDU85BEiX4EjPHox+J6XMEr6p37Ug
+         FUVyNP5vcpMg6VQVjWSQsAXBlSyyHvX1azVDGc6U6R65pQjxW9MeXOI5KViTR8vEFY8o
+         ANrlB37o2SeyYSXsKBblX32sWYT9tDRU319IY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=70y9nP+1TJuyoQVHWKHYrgk62/1kbAozVgHhQoGQnWU=;
-        b=ryWacxUS5gcpzIpAapqVN/nXu+mTYaCl07RCEn222HIN73nJ8anwgGJtOQDJxRvRWK
-         yKR4eX97TNvuCSLfXOyCwwxbraHHAkGRnfNf3Y1itRpsUsrWPugps/RLGLL8gOJKWw9k
-         t1vNnn21+A3fqfxfRbv46TmYE1mMlsvng/aEyPna7HkSe6l20Yd1zQvNA+VLxZhgoYkj
-         6giLeHjOCuixBtCeQm02RV8bIPkIjwjoHl5xGZhx9dGBVIha8SDfVQDBcJBeTZIH1JSL
-         RsrNr5O8Tqk7RJk/zeK6Sq7jMslwXunUibh+1+Jixgmb64s8oHgfTuZI8nABF7Ml9WtN
-         ilCA==
-X-Gm-Message-State: AOAM533jLCkXh2hQCvUNuC97ObA1SPjKLzcf8Eo4JkOI1zUuhiZeKRir
-        lpzOJiW8gMB0zKiEWMciGak=
-X-Google-Smtp-Source: ABdhPJy2EAGYqEGxCHtEc43zDu9wvxI6e81Sk5trFgKtuU1q9UCCbNWoXPBJztPhW8RkxnbwpfmtgQ==
-X-Received: by 2002:a05:600c:5125:: with SMTP id o37mr1107030wms.161.1642720848419;
-        Thu, 20 Jan 2022 15:20:48 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id a9sm3939283wmm.32.2022.01.20.15.20.47
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=egMwIptYpGbsC4XxY+2pETIXKwRmweD4aAOClQc8FOg=;
+        b=0Qvrmx5LaPbIIQme/h/I5FHgrfB3fcg+ddtXTBPfSXfL8CaJgelgmWpWJ27aGfGtT5
+         KjT7b5vNpUeAb6MT/3hlZ/5pxblkMT88vuSb97zIYCwBIfP61x3/mT7KwTM/odxVB8UK
+         xtbbmAUxmKZskSrNH4sDm90sK+KugC+pu29B9G7ZdtjQh56nkblGe78y7sQITYKwaI5h
+         nszd3huhsnCwewujvwEWFJT4WgPi0rZhb5STQUUD2HANO8UeTlhIy0nI1Ac6N+webhfC
+         ATVV5/DXC5Aln13bttgz+Fa711Q6S1cdjzUqJMhZRe/iP86rPwbdK65Q8aAROIP9LdAn
+         vmGQ==
+X-Gm-Message-State: AOAM532Azmd4jaOXONvkP8lh+jwXuv6LZ7Zb5rQbXSyI2EdyFE/JzCsv
+        tM4J/20ZwcKPYWDUWYJSvEksxg==
+X-Google-Smtp-Source: ABdhPJym1c+5Elx/jqSx5/twwAq6/wX0UlB8jSjMP5BZBOA7fq0C2i3GvWJv84TUYMV6NEMTCS4VFg==
+X-Received: by 2002:a63:1d7:: with SMTP id 206mr840156pgb.111.1642720932694;
+        Thu, 20 Jan 2022 15:22:12 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x18sm3202700pgj.41.2022.01.20.15.22.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 15:20:48 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 15/15] ARM: dts: qcom: Add syscon and cxo/pxo clock to gcc node for ipq8064
-Date:   Fri, 21 Jan 2022 00:20:28 +0100
-Message-Id: <20220120232028.6738-16-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220120232028.6738-1-ansuelsmth@gmail.com>
-References: <20220120232028.6738-1-ansuelsmth@gmail.com>
+        Thu, 20 Jan 2022 15:22:12 -0800 (PST)
+Date:   Thu, 20 Jan 2022 15:22:11 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Geoffrey D. Bennett" <g@b4.vu>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] ALSA: usb-audio: scarlett2: Use struct_size()
+ helper in scarlett2_usb()
+Message-ID: <202201201522.5E744C15E9@keescook>
+References: <20220120211600.GA28841@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120211600.GA28841@embeddedor>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add syscon compatible required for tsens driver to correctly probe driver
-and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-now requires them for the ipq8064 gcc driver that has now been modernized.
+On Thu, Jan 20, 2022 at 03:16:00PM -0600, Gustavo A. R. Silva wrote:
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
+> 
+> Also, address the following sparse warnings:
+> sound/usb/mixer_scarlett_gen2.c:1064:28: warning: using sizeof on a flexible structure
+> sound/usb/mixer_scarlett_gen2.c:1065:29: warning: using sizeof on a flexible structure
+> 
+> Link: https://github.com/KSPP/linux/issues/174
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Looks good to me!
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 11481313bdb6..5524a68cf3d1 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -298,13 +298,13 @@ smem: smem@41000000 {
- 	};
- 
- 	clocks {
--		cxo_board {
-+		cxo_board: cxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
- 		};
- 
--		pxo_board {
-+		pxo_board: pxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
-@@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
- 		};
- 
- 		gcc: clock-controller@900000 {
--			compatible = "qcom,gcc-ipq8064";
-+			compatible = "qcom,gcc-ipq8064", "syscon";
-+			clocks = <&pxo_board>, <&cxo_board>;
-+			clock-names = "pxo", "cxo";
- 			reg = <0x00900000 0x4000>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+> ---
+> Changes in v2:
+>  - Use correct format specifier %zu for type size_t argument.
+> 
+>  sound/usb/mixer_scarlett_gen2.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/sound/usb/mixer_scarlett_gen2.c b/sound/usb/mixer_scarlett_gen2.c
+> index 53ebabf42472..7ff8a4817c67 100644
+> --- a/sound/usb/mixer_scarlett_gen2.c
+> +++ b/sound/usb/mixer_scarlett_gen2.c
+> @@ -1061,9 +1061,9 @@ static int scarlett2_usb(
+>  {
+>  	struct scarlett2_data *private = mixer->private_data;
+>  	struct usb_device *dev = mixer->chip->dev;
+> -	u16 req_buf_size = sizeof(struct scarlett2_usb_packet) + req_size;
+> -	u16 resp_buf_size = sizeof(struct scarlett2_usb_packet) + resp_size;
+>  	struct scarlett2_usb_packet *req, *resp = NULL;
+> +	size_t req_buf_size = struct_size(req, data, req_size);
+> +	size_t resp_buf_size = struct_size(resp, data, resp_size);
+>  	int err;
+>  
+>  	req = kmalloc(req_buf_size, GFP_KERNEL);
+> @@ -1111,7 +1111,7 @@ static int scarlett2_usb(
+>  		usb_audio_err(
+>  			mixer->chip,
+>  			"Scarlett Gen 2/3 USB response result cmd %x was %d "
+> -			"expected %d\n",
+> +			"expected %zu\n",
+>  			cmd, err, resp_buf_size);
+>  		err = -EINVAL;
+>  		goto unlock;
+> -- 
+> 2.27.0
+> 
+
 -- 
-2.33.1
-
+Kees Cook

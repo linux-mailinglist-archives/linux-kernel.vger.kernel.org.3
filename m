@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0701249497C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834C049497E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359297AbiATIas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S239964AbiATIa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359226AbiATIaB (ORCPT
+        with ESMTP id S1359269AbiATIaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:30:01 -0500
+        Thu, 20 Jan 2022 03:30:12 -0500
 Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8C8C061748
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:01 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id n8so10311678wmk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A2C061753
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:11 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id v123so10356103wme.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:30:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MwGv/8SwrgHrrCdD+znAh14qmRCXOFOe1aQhnNfhrho=;
-        b=VeCt/8C9JFyQWmFn0h8Me/FbyrtYM1CBBgou8p+ugm9uUDLSM06LuVzMdc5GGNpi6k
-         Zf66K9dKqHmH0XDg8g8sXdZDoidK777CM7WCMk7zr79iu7Gwl4/KZcKPxvLzPvoUR2gl
-         fy/UJpiNFpgyT8JQqw/aUtxfr6RyrjG1T7ocaGqYqFl+BF2xLhTgI6rf99es95iqmvaV
-         Ajxp9MaqUn1KfO6AyEEYUe+CvfdUjRIOPurTrwqi5SvM+dn6kS1I7AmqXfTyI7fiAS7f
-         dnB0/1bRSed+4CqfY9n84s5lfVvQtCCzGDISB9ajRjrAfRwvuxA8FYogIu/VQmFsMLF3
-         e7tA==
+        bh=f598GxBX3eYMMeExQx/Xgejk6SKcvZUYFtg4erPpbmA=;
+        b=AYhSOilisYtm5Kva53WYknZU/cP0nBLrKX+D5I5wa60go1JcqjfG8boGZx7MEqCG4n
+         H1AIzJNsNFhkvcg0e+v0rIbxV0bskcFjv6KOCcbshPSdC7Ihq1JnTnsEIL+Bgmw1UcpQ
+         uiM3A6/GFcOMq0lUwFIhluvY64B1n1khk8pw2h5P/jXNjCiqhfwjARf+zF5ibOQgLK/j
+         SLM6S4eCuBTOCdBRRM63jLCRXDyBX5dN0XASh7COboD4KOCpJgZ3oqxjO+63IdrWzILZ
+         YluFiNt7Fo453BO2lkxMdzKejEe7sfE01xg8/t7tuj/gGhhBJzPtkLKOR2qV93/YRRA+
+         D3cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MwGv/8SwrgHrrCdD+znAh14qmRCXOFOe1aQhnNfhrho=;
-        b=rFdvwXhdYVrYyLkQcrBNqIj6u+AYO1Bzqw0XWgYKM76Zz04SkU+MuTZD3xi7g7hoOJ
-         5HXA9iSqetOtLu1rWbKsNNb31c4kgCKu6WN6sw9BcujV8U4BYC1/N0oeJ2A3HkuM5TO0
-         tTZB3WWHn6FwXs90j/6q2vXHaW8OAT9e/DgnIwZAFTxZhkmWVNuyJAQ23p+QLnQy+4YG
-         TVXYWjgfAxP0RDKujhAqxoHRXyqb/WgVcaANiNJvBAk1P2PebVpjAeLCnypNaVrlt9dT
-         ITDr6o0Xu8SAbX2eZAcZRrNmgmXd/kCqx0UCS8YHUAzwo41RW0nbLoeE30yizm+SDVj8
-         ifxw==
-X-Gm-Message-State: AOAM533E7IZaaVG2quDn3eZWvYBhJ3KDbftw0FXAK2YT6OVH5aWFFwek
-        mkEw1bshu8hQkcxOV1KA4dfTxkI3V4oC3616ozZR1A==
-X-Google-Smtp-Source: ABdhPJwTkcuZQfeVqYEksff78+o7mq5FMu1onryN8ZF/bwp0cD0njfJHKM0V2MqP/f/7srKx7XbtSlFnmnH1jhYBEt4=
-X-Received: by 2002:adf:f48a:: with SMTP id l10mr32377787wro.220.1642667400108;
- Thu, 20 Jan 2022 00:30:00 -0800 (PST)
+        bh=f598GxBX3eYMMeExQx/Xgejk6SKcvZUYFtg4erPpbmA=;
+        b=lJ7y5WVu8eKXJNvLOks5RmaoMwb6IHQjai4trfQA/ef7ng7grYTX7+q8hkpfbS/4gx
+         +sCZktFlgqs3eN7ggztfKQDUw71l9p1r4gAltf1S7V9GQwRCmO1T2O2sIJPYn5j4kmr1
+         YZbketWx8JXJfM8X5Q4yLvWS6n9+rDFLDfS17tJML7CizBavL0MerbMd6D79mDrIGltB
+         36ElA68/GU3rJpSg3m3iXw/KNoEtROOiF8JiRnhMSiHOM8KZE9q4VaInBXWoACiW56sE
+         Zcx7zve4o863uY0OuKKWaXfr5WzALPcUPAhUBolALtdNi+6zJBPGue2lh4cSwaRsKsNQ
+         VuwQ==
+X-Gm-Message-State: AOAM530E/o9AAERyizRE0SADVAOdw826T7SPNQIh0vlS+oCHA6lB2ISr
+        pHv0JJQZITdClCyU24crDVVZeUQuaoVKtck5jCdLKg==
+X-Google-Smtp-Source: ABdhPJyBLRZv0QzjJfHJWKm1oD8j2btPknNw9AvpKSc6Oq5Bi32otoRK6KPR4Ba+Fi5gaAJQVUtXkySKvELZI5lP5ZM=
+X-Received: by 2002:a05:600c:28cc:: with SMTP id h12mr7749968wmd.18.1642667410465;
+ Thu, 20 Jan 2022 00:30:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-3-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-3-dlatypov@google.com>
+References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-4-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-4-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 20 Jan 2022 16:29:48 +0800
-Message-ID: <CABVgOS=290dX4JnBj+d9jTMVvEJXude0Xxk9fdSZbU9xNQ8_pw@mail.gmail.com>
-Subject: Re: [PATCH 3/5] kunit: tool: drop unused KernelDirectoryPath var
+Date:   Thu, 20 Jan 2022 16:29:59 +0800
+Message-ID: <CABVgOSnSrsTn0_9FuFzvFXd=H8uQEaLWMnP=3Y=xeGGS=J2JtA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] kunit: tool: drop last uses of collections.namedtuple
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -65,37 +65,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Commit be886ba90cce ("kunit: run kunit_tool from any directory")
-> introduced this variable, but it was unused even in that commit.
+> Since we formally require python3.7+ since commit df4b0807ca1a
+> ("kunit: tool: Assert the version requirement"), we can just use
+> @dataclasses.dataclass instead.
 >
-> Since it's still unused now and callers can instead use
-> get_kernel_root_path(), delete this var.
+> In kunit_config.py, we used namedtuple to create a hashable type that
+> had `name` and `value` fields and had to subclass it to define a custom
+> `__str__()`.
+> @datalcass lets us just define one type instead.
+>
+> In qemu_config.py, we use namedtuple to allow modules to define various
+> parameters. Using @dataclass, we can add type-annotations for all these
+> fields, making our code more typesafe and making it easier for users to
+> figure out how to define new configs.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
+This seems sensible, and the type-annotations are definitely a good thing.
+
+I guess I'm going to have to learn how to use @dataclass, though...
+
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
 -- David
 
-
->  tools/testing/kunit/kunit.py | 2 --
->  1 file changed, 2 deletions(-)
+>  tools/testing/kunit/kunit_config.py |  9 +++++----
+>  tools/testing/kunit/qemu_config.py  | 17 ++++++++++-------
+>  2 files changed, 15 insertions(+), 11 deletions(-)
 >
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index bd2f7f088c72..4cb91d191f1d 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -63,8 +63,6 @@ class KunitRequest(KunitExecRequest, KunitBuildRequest):
->         pass
+> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+> index 677354546156..ca33e4b7bcc5 100644
+> --- a/tools/testing/kunit/kunit_config.py
+> +++ b/tools/testing/kunit/kunit_config.py
+> @@ -6,16 +6,17 @@
+>  # Author: Felix Guo <felixguoxiuping@gmail.com>
+>  # Author: Brendan Higgins <brendanhiggins@google.com>
 >
+> -import collections
+> +from dataclasses import dataclass
+>  import re
+>  from typing import List, Set
 >
-> -KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
+>  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+>  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+>
+> -KconfigEntryBase = collections.namedtuple('KconfigEntryBase', ['name', 'value'])
 > -
->  def get_kernel_root_path() -> str:
->         path = sys.argv[0] if not __file__ else __file__
->         parts = os.path.realpath(path).split('tools/testing/kunit')
+> -class KconfigEntry(KconfigEntryBase):
+> +@dataclass(frozen=True)
+> +class KconfigEntry:
+> +       name: str
+> +       value: str
+>
+>         def __str__(self) -> str:
+>                 if self.value == 'n':
+> diff --git a/tools/testing/kunit/qemu_config.py b/tools/testing/kunit/qemu_config.py
+> index 1672f6184e95..0b6a80398ccc 100644
+> --- a/tools/testing/kunit/qemu_config.py
+> +++ b/tools/testing/kunit/qemu_config.py
+> @@ -5,12 +5,15 @@
+>  # Copyright (C) 2021, Google LLC.
+>  # Author: Brendan Higgins <brendanhiggins@google.com>
+>
+> -from collections import namedtuple
+> +from dataclasses import dataclass
+> +from typing import List
+>
+>
+> -QemuArchParams = namedtuple('QemuArchParams', ['linux_arch',
+> -                                              'kconfig',
+> -                                              'qemu_arch',
+> -                                              'kernel_path',
+> -                                              'kernel_command_line',
+> -                                              'extra_qemu_params'])
+> +@dataclass(frozen=True)
+> +class QemuArchParams:
+> +  linux_arch: str
+> +  kconfig: str
+> +  qemu_arch: str
+> +  kernel_path: str
+> +  kernel_command_line: str
+> +  extra_qemu_params: List[str]
 > --
 > 2.34.1.703.g22d0c6ccf7-goog
 >

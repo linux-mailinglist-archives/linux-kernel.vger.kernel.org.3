@@ -2,108 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 770CC4952E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640324952E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377240AbiATRJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:09:55 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:54389 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377242AbiATRJe (ORCPT
+        id S1377233AbiATRJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:09:20 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:45585 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377203AbiATRJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:09:34 -0500
-Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
- (mreue009 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1MatZr-1mZLAn3xiF-00cUYe; Thu, 20 Jan 2022 18:09:07 +0100
-Message-ID: <cb884368-0226-e913-80d2-62d2b7b2e761@vivier.eu>
-Date:   Thu, 20 Jan 2022 18:09:04 +0100
+        Thu, 20 Jan 2022 12:09:19 -0500
+Received: by mail-ot1-f41.google.com with SMTP id v8-20020a9d6048000000b005960952c694so8359538otj.12;
+        Thu, 20 Jan 2022 09:09:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Euwjo6CgoOD4aO0544Go5k7bgAvjOJGkS5qDpA3RUSc=;
+        b=cdQYEKMNjQnDmCDxj5d7aXmc/U5J0ZVeNi9apCWGD+skO354oajSamNhwuUIjDxSNz
+         jVuRLmKWWVMetR37g9Achs4liAAldBFA+ubIx8dpSMaxgfEZAGjNkZAsrtc7aDNeO2Iu
+         wAaKG9KdCe1kMObVzaYKXF11wYQP7DemLC+TjqBfXTjRo+DTAjU7IyYlSkZwx6rTKutP
+         AZdqjODeXEedAdXVhrtT2J6uMCiXnSVD6VsLeTX7aTMfrhCSzSVZsRlfFiTum8NXncv6
+         rpmJH1Na1zDYbymJGRoZrwJ6seC7M722wKIiFKgW/bzcDaDR3568nAwZtS8zLVwUHrTJ
+         Yrig==
+X-Gm-Message-State: AOAM530Ssbgt48ZC3SjufASO8eqmKpJLw/7dLq0Mwf9IGIR9/KyxJM+h
+        rM51WoeNDYZgfSou/hz/WT3QDPDmKQ==
+X-Google-Smtp-Source: ABdhPJz4bpxpNcmiI8YWg3qvT0F0SvrpJ4m2JLdSJmUlrVteXsDv4EbixpwWMFD7H2CVINSHcnvp2A==
+X-Received: by 2002:a9d:22c3:: with SMTP id y61mr431937ota.248.1642698558566;
+        Thu, 20 Jan 2022 09:09:18 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c20sm1747132ots.50.2022.01.20.09.09.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 09:09:17 -0800 (PST)
+Received: (nullmailer pid 1607218 invoked by uid 1000);
+        Thu, 20 Jan 2022 17:09:17 -0000
+Date:   Thu, 20 Jan 2022 11:09:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 05/11] PCI: mvebu: Correctly configure x1/x4 mode
+Message-ID: <YemXPQx4F1eRtLxO@robh.at.kernel.org>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220112151814.24361-1-pali@kernel.org>
+ <20220112151814.24361-6-pali@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220120080347.1595379-1-laurent@vivier.eu>
- <20220120080347.1595379-3-laurent@vivier.eu>
- <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v11 2/5] tty: goldfish: introduce
- gf_ioread32()/gf_iowrite32()
-In-Reply-To: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:dddbphkpSIF6p9YP9xYcw9vEmF+op0Ndo1F40uOawLCcXjeMmby
- bzCBkRZkM916Hemr2XwL4CE+QGkvN9gPsdnDZSoBwFeEEF1+P71tAnSEekxfLcnseozmQIZ
- BFedbjRVjUqTrfdGkbfmRKXX3eHaVOMuukaBkOkfkMxV736K6p9Vw1SPkFrsNFT2UjO+T0c
- kA55JRy6V+N/CaihCUAVw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Dy7v5wb7I0k=:yylvJx+860sEkjPyrIC1H8
- gVm97KvhlrbB7LDmCyziiAT8iq/NfLr2vvH5lp3V5l8hQiyEbH2DoO0Re2ofm8pId0JZ/EiBN
- B2cu949M9qo/mqWwSEipoGgH7fNy1b8Vx4RAxLGz4k+9det3NYOz4YMSN13/agp5gcQaIBlcp
- fVlJ8rIQbiJmiTKXvjRe0g0F9IOdz4xDES+FGeeqS6UI8/PmQicu9sKGIB5TwqkNl05RhcoRm
- nqXRkgjBTILY9TuOplO0v3dw8QubtGKug/O0EB/o34hmLo5n6QT6Vhc/jIgvM4aNEFOV/YoMb
- IW6RfezQCCe7HzGreO+6KpRXuz4We17N6wlr8rKpBPgjE0W0jJZPZs7jVl8YiPPvLVjNxbeNt
- +CDACzRdD4WODjEBfVRE0xYbZUpUoi/OZFL4lbiA8KrnRhGe86CW36Mbfs95Tuxq+up/HN0zy
- BRnVF4DbBpNW/Pgj6qM1XPdSZIRZ5FP1cixDGWpud2Ine6WpIQrH9cPiA0jaftWv4cZqK/xRV
- hTv0N3mIjhKbIXR+W88kvpJVkbjpy+XCd19S2i7IgUsvOcm2UurA9fWHxqFTdih3JvOscxZ4G
- olAP2EPrLZtUcgK9ZZNc3pNjiU1CgiA2OhzxMHAXtInR2BzoUIALDTbEdhDFMadAWI88Nm3FU
- mALgZhB2l9/KRGEMhZIlRPb7Lgfxj0m4Plz4hwBIujqUjQBKiTeRpa8UTmxmW4s58YfE=
+In-Reply-To: <20220112151814.24361-6-pali@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 20/01/2022 Ã  09:50, Arnd Bergmann a Ã©critÂ :
-> On Thu, Jan 20, 2022 at 9:03 AM Laurent Vivier <laurent@vivier.eu> wrote:
->>
->> Revert
->> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->>
->> to use accessors defined by the architecture.
->>
->> Define by default the accessor to be little-endian as we
->> have only little-endian architectures using goldfish devices.
->>
->> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+On Wed, Jan 12, 2022 at 04:18:08PM +0100, Pali Rohár wrote:
+> If x1/x4 mode is not set correctly then link with endpoint card is not
+> established.
 > 
-> The patch looks good, but the description seems wrong to me:
+> Use DTS property 'num-lanes' to deteriminate x1/x4 mode.
 > 
-> Talking about "little-endian architectures" makes no sense here, the
-> point is that the device was clearly defined as having little-endian
-> registers, and your earlier patch broke this driver when running
-> on big-endian kernels (if anyone ever tried this).
-To explain why I did that:
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  drivers/pci/controller/pci-mvebu.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> index a075ba26cff1..0f2ec0a17874 100644
+> --- a/drivers/pci/controller/pci-mvebu.c
+> +++ b/drivers/pci/controller/pci-mvebu.c
+> @@ -93,6 +93,7 @@ struct mvebu_pcie_port {
+>  	void __iomem *base;
+>  	u32 port;
+>  	u32 lane;
+> +	bool is_x4;
 
-The reference document[1] doesn't define the endianness of goldfish.
+I would just store the number of lanes.
 
-In QEMU, goldfish devices are defined with the DEVICE_NATIVE_ENDIAN flag [2], that means all the 
-target architectures defined in QEMU with TARGET_WORDS_BIGENDIAN will present them as big-endian 
-devices, the others as little-endian devices.
+>  	int devfn;
+>  	unsigned int mem_target;
+>  	unsigned int mem_attr;
+> @@ -233,13 +234,25 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
+>  
+>  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+>  {
+> -	u32 ctrl, cmd, dev_rev, mask;
+> +	u32 ctrl, lnkcap, cmd, dev_rev, mask;
+>  
+>  	/* Setup PCIe controller to Root Complex mode. */
+>  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
+>  	ctrl |= PCIE_CTRL_RC_MODE;
+>  	mvebu_writel(port, ctrl, PCIE_CTRL_OFF);
+>  
+> +	/*
+> +	 * Set Maximum Link Width to X1 or X4 in Root Port's PCIe Link
+> +	 * Capability register. This register is defined by PCIe specification
+> +	 * as read-only but this mvebu controller has it as read-write and must
+> +	 * be set to number of SerDes PCIe lanes (1 or 4). If this register is
+> +	 * not set correctly then link with endpoint card is not established.
+> +	 */
+> +	lnkcap = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
+> +	lnkcap &= ~PCI_EXP_LNKCAP_MLW;
+> +	lnkcap |= (port->is_x4 ? 4 : 1) << 4;
 
-According to TARGET_WORDS_BIGENDIAN definition:
+then this is just: lanes << 4
 
-On the following QEMU target architectures (qemu-system-XXX), goldfish devices must be accessed with 
-big-endian read/write:
+> +	mvebu_writel(port, lnkcap, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
+> +
+>  	/* Disable Root Bridge I/O space, memory space and bus mastering. */
+>  	cmd = mvebu_readl(port, PCIE_CMD_OFF);
+>  	cmd &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
+> @@ -986,6 +999,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+>  	struct device *dev = &pcie->pdev->dev;
+>  	enum of_gpio_flags flags;
+>  	int reset_gpio, ret;
+> +	u32 num_lanes;
+>  
+>  	port->pcie = pcie;
+>  
+> @@ -998,6 +1012,9 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+>  	if (of_property_read_u32(child, "marvell,pcie-lane", &port->lane))
+>  		port->lane = 0;
+>  
+> +	if (!of_property_read_u32(child, "num-lanes", &num_lanes) && num_lanes == 4)
+> +		port->is_x4 = true;
 
-mips, mips64, s390x, sparc, sparc64, or1k, m68k, ppc, ppc64, xtensaeb, hppa, sh4eb, microblaze
+And this can be:
 
-On the following QEMU target architectures, goldfish devices must be accessed with little-endian 
-read/write:
+num_lanes = 1;
+of_property_read_u32(child, "num-lanes", &num_lanes);
 
-arm, aarch64, alpha, avr, cris, i386, x86_64, microblazeel, mipsel, mips64el, nios2, riscv32, 
-riscv64, rx, sh4, tricore, xtensa
+If you want to validate the DT is only 1 or 4, make the DT schema do 
+that.
 
-Thanks,
-Laurent
 
-[1] https://android.googlesource.com/platform/external/qemu/+/master/docs/GOLDFISH-VIRTUAL-HARDWARE.TXT
-[2] 
-https://android.googlesource.com/platform/external/qemu/+/refs/heads/emu-master-dev/hw/char/goldfish_tty.c#222
+> +
+>  	port->name = devm_kasprintf(dev, GFP_KERNEL, "pcie%d.%d", port->port,
+>  				    port->lane);
+>  	if (!port->name) {
+> -- 
+> 2.20.1
+> 
+> 

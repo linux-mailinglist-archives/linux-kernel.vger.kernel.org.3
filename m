@@ -2,119 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E51494B32
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FC3494B3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359701AbiATJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:56:10 -0500
-Received: from mga07.intel.com ([134.134.136.100]:51681 "EHLO mga07.intel.com"
+        id S1359687AbiATJ5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:57:14 -0500
+Received: from mga14.intel.com ([192.55.52.115]:53476 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359683AbiATJz4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:55:56 -0500
+        id S234649AbiATJ44 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 04:56:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642672556; x=1674208556;
+  t=1642672616; x=1674208616;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7Jt2Js2JOtnvL4mYuFnW/EzkdCTVSihhHWbNkdDiFR8=;
-  b=I/K9bIbmw6xDqfj5dYHnlpFuRrdRAMhc0Hvw6qwI2jTD2oFPC9LXioZG
-   JqHrzbkdMF++UPpNTGYRydiSRIzzqAxJrY3H/27CQWIrrdDvCcJbWNjjE
-   SSmXN84UWyQEeuVg3CyyUgZ4Etu65fvK3uy0sponQKbJA5FjWon3Uvkzh
-   YUrNFdysmwA8yyegIgd4fC1wlyMk7J1SpjEm+giSD7tJndDoRQyxJo5Xt
-   p166YjBqSn/4ewIa1F6yfpfFSO6xGS3nONJKbqpzf4JVENC7keqOojJlh
-   HOCDUYaPhwOctGyKpTjuy5XfuhNX+4V25d62/C6LF8uyGGhHzrksFmLwk
+  bh=GPPqEEya5Djn2FMh4k7K1ILiDGJZo64bnZksGVpDU44=;
+  b=gYJJLGmWD4cRpDx8belNarmy7ygRhlByejziDVPluXkcuI+3tZgpgmGo
+   4ghsCkwI2XUe9p1LIvOHjJ7qEGllpo8oFitIaXJ3NksNbv8attbE5P4ZO
+   rp6LVxe1QPC07XYJDA+gUeOJJrMf6I5GENsDZN5B06HfS8KiRkIODcoGa
+   rOzPnmkmi0sCvKwTgvANWbSgPSDh/aua+hty7I6TiImB4Cl5nrAbV3r1c
+   P70bOdJAmjgKVAsJJxow6g4psAYhemIVy6EZ4Fs80A6MTVgjrGDhIEgof
+   kvNwKZj67kscdxOZPPIj6mixh2Sjf5AFwStt/tJDNw9vFICwAw/ad+MEB
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="308651537"
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="245513190"
 X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="308651537"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:55:53 -0800
+   d="scan'208";a="245513190"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:56:52 -0800
 X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="595700060"
+   d="scan'208";a="626235260"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:55:50 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:56:45 -0800
 Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 5ACE9203C8;
-        Thu, 20 Jan 2022 11:55:46 +0200 (EET)
-Date:   Thu, 20 Jan 2022 11:55:46 +0200
+        by paasikivi.fi.intel.com (Postfix) with SMTP id AA0EE203C8;
+        Thu, 20 Jan 2022 11:56:43 +0200 (EET)
+Date:   Thu, 20 Jan 2022 11:56:43 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs: Update the preferred line size to 100 characters
-Message-ID: <YekxouspRBkzHpKO@paasikivi.fi.intel.com>
-References: <20220119160642.140e84c6@gandalf.local.home>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     broonie@kernel.org, angus@akkea.ca, kernel@puri.sm,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pm@vger.kernel.org, mchehab@kernel.org
+Subject: Re: [PATCH v3] media: i2c: dw9714: add optional regulator support
+Message-ID: <Yekx25NEQZ7iownA@paasikivi.fi.intel.com>
+References: <20211129120754.1766570-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119160642.140e84c6@gandalf.local.home>
+In-Reply-To: <20211129120754.1766570-1-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+Hi Martin,
 
-Thank you for cc'ing me.
+Apologies for the delay.
 
-On Wed, Jan 19, 2022 at 04:06:42PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, Nov 29, 2021 at 01:07:54PM +0100, Martin Kepplinger wrote:
+> From: Angus Ainslie <angus@akkea.ca>
 > 
-> As commit bdc48fa11e46f ("checkpatch/coding-style: deprecate 80-column
-> warning") states:
+> Allow the dw9714 to control a regulator and adjust suspend() and resume()
+> to support both runtime and system pm.
 > 
->     Increase the default limit to 100 characters.  Not because 100
->     characters is some hard limit either, but that's certainly a "what are
->     you doing" kind of value and less likely to be about the occasional
->     slightly longer lines.
-> 
-> It's 2022, people are not using 80x24 terminals anymore (well I'm sure
-> someone is, but they are the small minority).
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Signed-off-by: Angus Ainslie <angus@akkea.ca>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 > ---
->  Documentation/process/coding-style.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-> index 03eb53fd029a..73be9edffede 100644
-> --- a/Documentation/process/coding-style.rst
-> +++ b/Documentation/process/coding-style.rst
-> @@ -101,10 +101,10 @@ Get a decent editor and don't leave whitespace at the end of lines.
->  Coding style is all about readability and maintainability using commonly
->  available tools.
+> 
+> revision history
+> ----------------
+> v3: (thank you Mark and Sakari)
+>  * use regulator_get() instead of regulator_get_optional()
+> 
+> v2: (thank you Mark)
+>  * simplify the regulator_get_optional() error path
+>  * fix regulator usage during probe()
+> https://lore.kernel.org/linux-media/20211126090107.1243558-1-martin.kepplinger@puri.sm/
+> 
+> v1:
+> https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
+> 
+> 
+> 
+>  drivers/media/i2c/dw9714.c | 32 +++++++++++++++++++++++++++++++-
+>  1 file changed, 31 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
+> index 3863dfeb8293..81170bbe0e55 100644
+> --- a/drivers/media/i2c/dw9714.c
+> +++ b/drivers/media/i2c/dw9714.c
+> @@ -5,6 +5,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <media/v4l2-ctrls.h>
+>  #include <media/v4l2-device.h>
+>  #include <media/v4l2-event.h>
+> @@ -36,6 +37,7 @@ struct dw9714_device {
+>  	struct v4l2_ctrl_handler ctrls_vcm;
+>  	struct v4l2_subdev sd;
+>  	u16 current_val;
+> +	struct regulator *vcc;
+>  };
 >  
-> -The preferred limit on the length of a single line is 80 columns.
-> +The preferred limit on the length of a single line is 100 columns.
+>  static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl *ctrl)
+> @@ -145,6 +147,16 @@ static int dw9714_probe(struct i2c_client *client)
+>  	if (dw9714_dev == NULL)
+>  		return -ENOMEM;
 >  
-> -Statements longer than 80 columns should be broken into sensible chunks,
-> -unless exceeding 80 columns significantly increases readability and does
-> +Statements longer than 100 columns should be broken into sensible chunks,
-> +unless exceeding 100 columns significantly increases readability and does
->  not hide information.
+> +	dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
+> +	if (IS_ERR(dw9714_dev->vcc))
+> +		return PTR_ERR(dw9714_dev->vcc);
+> +
+> +	rval = regulator_enable(dw9714_dev->vcc);
 
-As others have already opined, I agree that increasing the line length from
-80 isn't going to make the code universally (or even mostly) more readable.
-There are probably cases it does but this is not necessarily common.
+You'll need to disable the regulator in driver's remove callback. That also
+depends on runtime PM.
 
-I think the original text puts it well: there is a limit of 80 but that is
-not a hard limit. When reviewing code, I often ask to wrap lines if there's
-really no reason to keep them longer (in this case that seldom is the only
-problem with the code). Of course you could argue what these reasons might
-be. At the very least indentation has a higher precedence that the line
-length. This is also written in the documentation.
+See e.g. ccs_remove() in drivers/media/i2c/ccs/ccs-core.c .
 
-My view is that this recommendation is not, at least today, relevant for
-the purpose of making the code readable for someone with a VT100 terminal,
-but a part of a recipe for writing good code simply expressed in units
-everyone knows: VT100 terminal size. Also 80x24 is still the default window
-size of many if not most terminal emulators.
+> +	if (rval < 0) {
+> +		dev_err(&client->dev, "failed to enable vcc: %d\n", rval);
+> +		return rval;
+> +	}
+> +
+>  	v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
+>  	dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+>  				V4L2_SUBDEV_FL_HAS_EVENTS;
+> @@ -200,6 +212,9 @@ static int __maybe_unused dw9714_vcm_suspend(struct device *dev)
+>  	struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+>  	int ret, val;
+>  
+> +	if (pm_runtime_suspended(&client->dev))
+> +		return 0;
+> +
+>  	for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS - 1);
+>  	     val >= 0; val -= DW9714_CTRL_STEPS) {
+>  		ret = dw9714_i2c_write(client,
+> @@ -208,7 +223,12 @@ static int __maybe_unused dw9714_vcm_suspend(struct device *dev)
+>  			dev_err_once(dev, "%s I2C failure: %d", __func__, ret);
+>  		usleep_range(DW9714_CTRL_DELAY_US, DW9714_CTRL_DELAY_US + 10);
+>  	}
+> -	return 0;
+> +
+> +	ret = regulator_disable(dw9714_dev->vcc);
+> +	if (ret)
+> +		dev_err(dev, "Failed to disable vcc: %d\n", ret);
+> +
+> +	return ret;
+>  }
+>  
+>  /*
+> @@ -224,6 +244,16 @@ static int  __maybe_unused dw9714_vcm_resume(struct device *dev)
+>  	struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+>  	int ret, val;
+>  
+> +	if (pm_runtime_suspended(&client->dev))
+> +		return 0;
+> +
+> +	ret = regulator_enable(dw9714_dev->vcc);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enable vcc: %d\n", ret);
+> +		return ret;
+> +	}
+> +	usleep_range(1000, 2000);
+> +
+>  	for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
+>  	     val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
+>  	     val += DW9714_CTRL_STEPS) {
 
 -- 
-Kind regards,
-
 Sakari Ailus

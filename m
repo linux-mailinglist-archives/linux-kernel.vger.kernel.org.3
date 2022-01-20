@@ -2,86 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34133494751
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B596B494755
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358744AbiATGbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358734AbiATGbP (ORCPT
+        id S1358755AbiATGcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:32:06 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:37972 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1358734AbiATGcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:31:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 22:31:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B82BB81A74
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 06:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55985C340E0;
-        Thu, 20 Jan 2022 06:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642660271;
-        bh=Irfj9p2ilfq4lKdinTmm7EYh2n65nyXEfW/EZ4F6L88=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BxwCDDIoxdIbMOX1Z3bDU4RzztcfdvnPW58QvPUat301IajS76TSK3/rK8qCQR2Zj
-         fe55Pnd7ZkwIlNuXr6GnwRqh7sDposyKCL0WvpbzNDuCFVDUIr354K+tHqL5V7dqOv
-         ctOW3Xtm0WTGIyAf4MRrTrN2beEGs+5UzbCXfzeU=
-Date:   Thu, 20 Jan 2022 07:31:09 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     keescook@chromium.org, dan.carpenter@oracle.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] lkdtm/bugs: Check for the NULL pointer after calling
- kmalloc
-Message-ID: <YekBrYDA+/Vxxwwr@kroah.com>
-References: <20220120012552.1851621-1-jiasheng@iscas.ac.cn>
+        Thu, 20 Jan 2022 01:32:00 -0500
+X-UUID: 3d966be7bc2f400a8fac4100e6b395ce-20220120
+X-UUID: 3d966be7bc2f400a8fac4100e6b395ce-20220120
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1493656480; Thu, 20 Jan 2022 14:31:57 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 20 Jan 2022 14:31:56 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 20 Jan 2022 14:31:55 +0800
+Message-ID: <b7d0e7572ce7f7958f579ac564d25cbfee497cdc.camel@mediatek.com>
+Subject: Re: [PATCH][next] usb: xhci-mtk: Use struct_size() helper in
+ create_sch_ep()
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
+Date:   Thu, 20 Jan 2022 14:31:55 +0800
+In-Reply-To: <20220120015546.GA75917@embeddedor>
+References: <20220120015546.GA75917@embeddedor>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120012552.1851621-1-jiasheng@iscas.ac.cn>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 09:25:51AM +0800, Jiasheng Jiang wrote:
-> As the possible failure of the kmalloc(), the not_checked and checked
-> could be NULL pointer.
-> Therefore, it should be better to check it in order to avoid the
-> dereference of the NULL pointer.
-> Also, we need to explicitly yell about the memory failure and then
-> kfree the 'not_checked' and 'checked' to avoid the memory leak if fails.
-> And since it is just a test, it may directly return without error
-> number.
+On Wed, 2022-01-19 at 19:55 -0600, Gustavo A. R. Silva wrote:
+> Make use of the struct_size() helper instead of an open-coded
+> version,
+> in order to avoid any potential type mistakes or integer overflows
+> that,
+> in the worst scenario, could lead to heap overflows.
 > 
-> Fixes: ae2e1aad3e48 ("drivers/misc/lkdtm/bugs.c: add arithmetic overflow and array bounds checks")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Also, address the following sparse warnings:
+> drivers/usb/host/xhci-mtk-sch.c:265:20: warning: using sizeof on a
+> flexible structure
+> 
+> Link: https://github.com/KSPP/linux/issues/160
+> Link: https://github.com/KSPP/linux/issues/174
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 > ---
-> Changelog
+>  drivers/usb/host/xhci-mtk-sch.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> v1 -> v2
-> 
-> * Change 1. Add the kfree if fails.
-> 
-> v2 -> v3
-> 
-> * Change 1. Add pr_err if fails.
-> ---
->  drivers/misc/lkdtm/bugs.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-> index f4cb94a9aa9c..c64ab6f387eb 100644
-> --- a/drivers/misc/lkdtm/bugs.c
-> +++ b/drivers/misc/lkdtm/bugs.c
-> @@ -325,6 +325,12 @@ void lkdtm_ARRAY_BOUNDS(void)
+> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-
+> mtk-sch.c
+> index edbfa82c6565..f3139ce7b0a9 100644
+> --- a/drivers/usb/host/xhci-mtk-sch.c
+> +++ b/drivers/usb/host/xhci-mtk-sch.c
+> @@ -248,7 +248,6 @@ create_sch_ep(struct xhci_hcd_mtk *mtk, struct
+> usb_device *udev,
+>  	struct mu3h_sch_bw_info *bw_info;
+>  	struct mu3h_sch_tt *tt = NULL;
+>  	u32 len_bw_budget_table;
+> -	size_t mem_size;
 >  
->  	not_checked = kmalloc(sizeof(*not_checked) * 2, GFP_KERNEL);
->  	checked = kmalloc(sizeof(*checked) * 2, GFP_KERNEL);
-> +	if (!not_checked || !checked) {
-> +		pr_err("FAIL: could not allocate required buffers!\n");
+>  	bw_info = get_bw_info(mtk, udev, ep);
+>  	if (!bw_info)
+> @@ -262,9 +261,9 @@ create_sch_ep(struct xhci_hcd_mtk *mtk, struct
+> usb_device *udev,
+>  	else
+>  		len_bw_budget_table = 1;
+>  
+> -	mem_size = sizeof(struct mu3h_sch_ep_info) +
+> -			len_bw_budget_table * sizeof(u32);
+> -	sch_ep = kzalloc(mem_size, GFP_KERNEL);
+> +	sch_ep = kzalloc(struct_size(sch_ep, bw_budget_table,
+> +				     len_bw_budget_table),
+> +			 GFP_KERNEL);
+>  	if (!sch_ep)
+>  		return ERR_PTR(-ENOMEM);
+Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-As was pointed out, this is now a checkpatch failure :(
+Thanks a lot
+
+>  
 

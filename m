@@ -2,124 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0E4494496
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005E04944B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357767AbiATA1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S1357800AbiATAdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbiATA1U (ORCPT
+        with ESMTP id S237314AbiATAdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:27:20 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B035FC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:27:20 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so3286323pju.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:27:20 -0800 (PST)
+        Wed, 19 Jan 2022 19:33:24 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B90C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:33:23 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso5548066otl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:33:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+TqAt14XKXCbtB/P6ewZv6dez1U9WqxQBNJ+sItXmlI=;
-        b=F/r6jm4JzyNVaU7DF6e9U4M2zV1h4k4Mrg4VYBW7l2IN1j8EcwrQiXOcu6Gvnk3jmR
-         Zm2RatSb4zvpG74iCIhDtzCg6rvMo+nBURyCB3QB1+fQAnKweumNAkvx1I0SD+PE25XA
-         5QD9kMNy3iNJXNSIyNTNzCWpvVz749GYxa3+R3vpzTKty2zLTAegEINhm195SOL+mC+y
-         tkU6I6kM6Ccpiy6EtPro96tevnIfYb9L/UeN5LaOpwbNxRGL8uOeJwIGfpi1eufa0kdF
-         F7O2Ur+Xe5ycOLIpqYgay4HF0msKYazYuSjCZjRzZrXKKAgO4PZHEWZ7mwcdTem4h2oT
-         zocg==
+        bh=XI0YKgrX96jrRqJX0xTirhQDqynoAmpoLgDxtstEk0I=;
+        b=z8oZ5Kpgc5dBpj8kOuTY4Eudhob0nTtmDUBa3JtW4JrKkYpg0NA7DaBeAVjXDiP4+O
+         JIjxKWffcXfOCVeOhm/uvHDXqKiVxM1Cqzl0+XP9n7RZs4jP6Apuz7UCP0a6lOg0zq3q
+         6cgO7Kzu1F1c+OpVkpqzP6hYWhST5UHtINBJw20WsOYRZeigxzX5LTtHZjo0HFAGADI5
+         lyoxTSltXu79nlOgrAp9I0zSwVU1G+AFd3yVi74O7lDpzJgx/Oz/xcxabXqz4HulrIVS
+         w+AAyt41Vr8Yb04M+FQd3BHlBG1kVtdzIonPqpo+MH9/w3GY53qchM+lQM5qnqF+m4zS
+         rYcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+TqAt14XKXCbtB/P6ewZv6dez1U9WqxQBNJ+sItXmlI=;
-        b=vuK/ybU4mOHkhgLBZf3tpa8mSQtcHBYbK7UDUXRpQENqPpIIl13bwjHbKqpPpKu/ei
-         5jRYtuyvXClA4ISfDbuvvGpo2ggdHHEi7bbptS7cYNQ2LCDE0xTPBp8lx+c0fsmPtOFB
-         TJrIVBXjDD9LLzTr+FwLsoDylhW+BEqT2WC8msDhh44HQU7bHFpc89oNpj3+RxcYlxM7
-         SCKYUG3WkoKWwdmru05M2sXurgWfBOImQv15jGNh5xNih3OZBz+EqC4JwD1HljCXnKXe
-         J9m1GHdQmJo9n+PhPVAUv9uA8vjLmXBNhF5kBXf2gTFEWzqRqI4dUktE4olCPMEj1yV+
-         pSgg==
-X-Gm-Message-State: AOAM530KAkb8GqjYfBSMp1iHauzu12QdXlw9kSSNT1vxMJfZFsjThmGz
-        q/V94BXhnCeD75+JAnJu/fZdVA==
-X-Google-Smtp-Source: ABdhPJy8eb351Wq5iEXEb6Pkw/V9Y3ntyEY4dpEYnYofdfrP1ruzhmhasshPA0tIWyfCz/62Czq8cA==
-X-Received: by 2002:a17:90a:5d07:: with SMTP id s7mr7432257pji.226.1642638440008;
-        Wed, 19 Jan 2022 16:27:20 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a3sm706367pfo.163.2022.01.19.16.27.19
+        bh=XI0YKgrX96jrRqJX0xTirhQDqynoAmpoLgDxtstEk0I=;
+        b=n1FXAlWqlZcPZflzopvCmsUMHWCCoI5tAFqmVjBDO+NwWsPThVufCEWVDbS5TiZ6Rb
+         njhLUMU3lt4UH0bR+hYPzemgBhFohCq9AZIuMrSky+6C1Zy7Msy2QIfVXP+cvMGN4Pq3
+         OCIUo25/cxdT5xAu3X7rTHsFCU4mpExxQuflwLihR/BkvE6dZDDrXchn8NCWNKLtdjtx
+         uQE7du9rHTPOZZ+hGeV873hg0VuwOarbYVr5UXxW1sf8DE5Qzbb5LwpdpGYI8fgyDsFq
+         LPwKLCRh2B9S2PA5tWRSWBVBnQK4AfBq3V/oCGQUi3aM5sCepW1VrXjPaNF9IPa259rW
+         zVKw==
+X-Gm-Message-State: AOAM53146D4fGNlA3b7/UgcQrFqmeSNMKsiG9eN8M3I20forXvnU/Dpt
+        vKqXUJehJ3K+dYthhYicJzJZHjBqPz3YKQ==
+X-Google-Smtp-Source: ABdhPJzeXboRJRatdu05KzVyDKwnnW2vtxjtTUwciHWbIWWVta4xpf8URS13rB7eFo3fSSkTj5X4Lg==
+X-Received: by 2002:a05:6830:3115:: with SMTP id b21mr26749635ots.27.1642638803019;
+        Wed, 19 Jan 2022 16:33:23 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id bj19sm886796oib.9.2022.01.19.16.33.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 16:27:19 -0800 (PST)
-Date:   Thu, 20 Jan 2022 00:27:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Reiji Watanabe <reijiw@google.com>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, Peter Shier <pshier@google.com>,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-Message-ID: <YeisZCJedWYJPLV5@google.com>
-References: <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
- <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
- <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
- <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
- <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
- <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com>
- <YeBfj89mIf8SezfD@google.com>
- <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
- <YedWUJNnQK3HFrWC@google.com>
- <CAAeT=FyJAG1dEFLvrQ4UXrwUqBUhY0AKkjzFpyi74zCJZUEYVg@mail.gmail.com>
+        Wed, 19 Jan 2022 16:33:22 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:33:57 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Benjamin Li <benl@squareup.com>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: thermal: tsens: respect thermal_device_mode in
+ threshold irq reporting
+Message-ID: <Yeit9QQhVsnDX6TT@ripper>
+References: <20220114031337.24741-1-benl@squareup.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAeT=FyJAG1dEFLvrQ4UXrwUqBUhY0AKkjzFpyi74zCJZUEYVg@mail.gmail.com>
+In-Reply-To: <20220114031337.24741-1-benl@squareup.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022, Reiji Watanabe wrote:
-> On Tue, Jan 18, 2022 at 4:07 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Fri, Jan 14, 2022, Reiji Watanabe wrote:
-> > > The restriction, with which KVM doesn't need to worry about the changes
-> > > in the registers after KVM_RUN, could potentially protect or be useful
-> > > to protect KVM and simplify future changes/maintenance of the KVM codes
-> > > that consumes the values.
-> >
-> > That sort of protection is definitely welcome, the previously mentioned CPUID mess
-> > on x86 would have benefit greatly by KVM being restrictive in the past.  That said,
-> > hooking KVM_RUN is likely the wrong way to go about implementing any restrictions.
-> > Running a vCPU is where much of the vCPU's state is explicitly consumed, but it's
-> > all too easy for KVM to implicity/indirectly consume state via a different ioctl(),
-> > e.g. if there are side effects that are visible in other registers, than an update
-> > can also be visible to userspace via KVM_{G,S}ET_{S,}REGS, at which point disallowing
-> > modifying state after KVM_RUN but not after reading/writing regs is arbitrary and
-> > inconsitent.
+On Thu 13 Jan 19:13 PST 2022, Benjamin Li wrote:
+
+> 'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
+> polling mechanism to check for threshold trips. However, tsens supports
+> an interrupt mechanism to receive notification of trips, implemented in
+> commit 634e11d5b450 ("drivers: thermal: tsens: Add interrupt support").
+> This is used sometimes to run performance test cases.
 > 
-> Thank you for your comments !
-> I think I understand your concern, and that's a great point.
-> That's not the case for those pseudo registers though at least for now :)
-> BTW, is this concern specific to hooking KVM_RUN ? (Wouldn't it be the
-> same for the option with "if kvm->created_vcpus > 0" ?)
-
-Not really?  The goal with created_vcpus is to avoid having inconsistent state in
-"struct kvm_vcpu" with respect to the VM as whole.  "struct kvm" obvioulsy can't
-be inconsistent with itself, e.g. even if userspace consumes some side effect,
-that's simply "the state".  Did that make sense?  Hard to explain in writing :-)
-
-> > If possible, preventing modification if kvm->created_vcpus > 0 is ideal as it's
-> > a relatively common pattern in KVM, and provides a clear boundary to userpace
-> > regarding what is/isn't allowed.
+> Currently the thermal zone mode that's set by userspace is not checked
+> before propagating threshold trip events from IRQs. Let's fix this to
+> restore the abilty to disable thermal throttling at runtime.
 > 
-> Yes, I agree that would be better in general.  For (pseudo) registers,
+> ====================
+> 
+> Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
+> four thermal zones control cpu0-3 and the last zone is for the other four
+> CPUs together.
+> 
+>   for f in /sys/class/thermal/thermal_zone*; do
+>     echo "disabled" > $f/mode
+>     echo $f | paste - $f/type $f/mode
+>   done
+> 
+> /sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
+> /sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
+> /sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
+> /sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
+> /sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
+> 
+> With mitigation thresholds at 75 degC and load running, we can now cruise
+> past temp=75000 without CPU throttling kicking in.
+> 
+>   watch -n 1 "grep '' /sys/class/thermal/*/temp
+>       /sys/class/thermal/*/cur_state
+>       /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
+> 
+> /sys/class/thermal/thermal_zone0/temp:82000
+> /sys/class/thermal/thermal_zone1/temp:84000
+> /sys/class/thermal/thermal_zone2/temp:87000
+> /sys/class/thermal/thermal_zone3/temp:84000
+> /sys/class/thermal/thermal_zone4/temp:84000
+> /sys/class/thermal/cooling_device0/cur_state:0
+> /sys/class/thermal/cooling_device1/cur_state:0
+> /sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
+> 
+> Reported-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
 
-What exactly are these pseudo registers?  If it's something that's an immutable
-property of the (virtual) system, then it might make sense to use a separate,
-non-vCPU mechanism for setting/getting their values.  Then you can easily restrict
-the <whatever> to pre-created_vcpus, e.g. see x86's KVM_SET_IDENTITY_MAP_ADDR.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> I would think preventing modification if kvm->created_vcpus > 0 might
-> not be a very good option for KVM/ARM though considering usage of
-> KVM_GET_REG_LIST and KVM_{G,S}ET_ONE_REG.
+Regards,
+Bjorn
+
+> ---
+>  drivers/thermal/qcom/tsens.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 99a8d9f3e03c..0b6299512e7c 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -509,13 +509,16 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+>  		spin_unlock_irqrestore(&priv->ul_lock, flags);
+>  
+>  		if (trigger) {
+> -			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> -				hw_id, __func__, temp);
+> -			thermal_zone_device_update(s->tzd,
+> -						   THERMAL_EVENT_UNSPECIFIED);
+> +			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> +					hw_id, __func__, temp);
+> +				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+> +			} else {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped as zone disabled\n",
+> +					hw_id, __func__, temp);
+> +			}
+>  		} else {
+> -			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+> -				hw_id, __func__, temp);
+> +			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n", hw_id, __func__, temp);
+>  		}
+>  
+>  		if (tsens_version(priv) < VER_0_1) {
+> -- 
+> 2.17.1
+> 

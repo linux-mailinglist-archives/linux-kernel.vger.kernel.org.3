@@ -2,147 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00292494D04
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D725494D11
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiATLbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        id S231245AbiATLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiATLbL (ORCPT
+        with ESMTP id S230037AbiATLdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:31:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15B1C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:31:10 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nAVeb-0003Ed-UQ; Thu, 20 Jan 2022 12:30:57 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nAVeZ-00BLYg-Sj; Thu, 20 Jan 2022 12:30:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nAVeY-000E9C-HJ; Thu, 20 Jan 2022 12:30:54 +0100
-Date:   Thu, 20 Jan 2022 12:30:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Akhil R <akhilrajeev@nvidia.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of
- of_*()
-Message-ID: <20220120113054.lmd5rmvmflaf7v7t@pengutronix.de>
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
- <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
- <DM5PR12MB18509C555A8A6F5891F0CC28C05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
- <CAHp75VfVJo=8FPX_Pw15X5B3awFXpuEq+=LryxB6M4Ub-YJ7uA@mail.gmail.com>
- <DM5PR12MB185098D36F665AC5702D47DDC05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
- <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
+        Thu, 20 Jan 2022 06:33:11 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40CEC06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:33:10 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so7100083otc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:33:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f+OEkxn4NakLGLT2aLZNbBo/yxXriEj8f/NZ6PMsXkA=;
+        b=D/cV3Z013jsfQfCjTfYLYoU/Nfvo04vCLc5JfdNQAJ9VK2jat1BKsNrsHhDt1GUC1U
+         M8OmYvquL8tqRHYrTsKBwZPZZy66HZsWfc7kejODp1QyjJOrZCgdUTB7rMvmYMwSoYs3
+         4pWI/2QQczbTgPQAGCQUu/N6YZ4xrMord2kec=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f+OEkxn4NakLGLT2aLZNbBo/yxXriEj8f/NZ6PMsXkA=;
+        b=NbZS0Gtc4ig60Evwa1l9M3s9sYNvzmlLe/78WhZ8Ov9+j6HuuKdeXk4Rf2Cwb1JTxB
+         wXuA5U6SSPuR4Rnvcg2QBB5qTkNzGyenPl64F2BlxammRvd4XynSU256jh40oBeq9HlB
+         XcAugkaN3kuOkgAw3/lllC1B6NL3ty6g76pSwlDd6nq5qwemm6tip6y58CiNrnpPvzHO
+         yy+OmgA4bVRkqKWyEfuVv4gGX0v+PQ9QSOPJ/u43OhkVZr4f7TZt8ir2WMy+f7aYKlJH
+         NaU73SOUcb/ti/G+s6EGO/IwMxeS47JrEcSrTWVqecSxOVflHrQ8qHuuzSOnUMNB/9uS
+         v6Ng==
+X-Gm-Message-State: AOAM532DqqALYlJOAWO9tOzfHGnDPM3XylxH4ScmVmtU1p2OOqJEPNmP
+        q5SouMmCPPHKZ+9K/n7AEJpN2AN0AAdAaHfYpADKHw==
+X-Google-Smtp-Source: ABdhPJwpgfUsa4H2B5o2SXGcAXjYQNL5392vttSDan+DK2TkQUL9WGK7eutH4BDga0De/2cHyXd07fHl7K0b/Ox99rY=
+X-Received: by 2002:a05:6830:2704:: with SMTP id j4mr15756956otu.323.1642678390125;
+ Thu, 20 Jan 2022 03:33:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cdxvf7ymm4mv6sgi"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+References: <YeG8ydoJNWWkGrTb@ls3530> <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+ <87bl0amc6s.fsf@x1.stackframe.org> <20220118103323.4bae3a7d@eldfell>
+ <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org> <CAMuHMdWV+-+Jr7HggbfH_GEDcdep4pJLiMG+15jxBvQ91BCS0w@mail.gmail.com>
+In-Reply-To: <CAMuHMdWV+-+Jr7HggbfH_GEDcdep4pJLiMG+15jxBvQ91BCS0w@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Thu, 20 Jan 2022 12:32:58 +0100
+Message-ID: <CAKMK7uEOFg3z2btFERQ5XBQ7hqex6bXCb9X=SdwCjeLfX_SdFw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sven Schnelle <svens@stackframe.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---cdxvf7ymm4mv6sgi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 20, 2022 at 12:43:02PM +0200, Andy Shevchenko wrote:
-> On Thu, Jan 20, 2022 at 12:29 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+On Thu, Jan 20, 2022 at 10:06 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Gerd,
+>
+> On Thu, Jan 20, 2022 at 4:29 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
+> > On Tue, Jan 18, 2022 at 10:33:23AM +0200, Pekka Paalanen wrote:
+> > > On Mon, 17 Jan 2022 19:47:39 +0100
+> > > Sven Schnelle <svens@stackframe.org> wrote:
+> > >
+> > > > I also tested the speed on my Thinkpad X1 with Intel graphics, and there
+> > > > a dmesg with 919 lines one the text console took about 2s to display. In
+> > > > x11, i measure 22ms. This might be unfair because encoding might be
+> > > > different, but i cannot confirm the 'memcpy' is faster than hardware
+> > > > blitting' point. I think if that would be the case, no-one would care
+> > > > about 2D acceleration.
+> > >
+> > > I think that is an extremely unfair comparison, because a graphical
+> > > terminal app is not going to render every line of text streamed to it.
+> > > It probably renders only the final view alone if you simply run
+> > > 'dmesg', skipping the first 800-900 lines completely.
 > >
-> > > ...
-> > >
-> > > > > This change reveals potential issue:
-> > > > >
-> > > > > > -               irq =3D of_irq_get_byname(adapter->dev.of_node,=
- "smbus_alert");
-> > > > > > +               irq =3D device_irq_get_byname(adapter->dev.pare=
-nt,
-> > > "smbus_alert");
-> > > > >
-> > > > > >                 if (irq <=3D 0)
-> > > > >
-> > > > > I guess this '=3D 0' part should be fixed first.
-> > > >
-> > > > '0' is a failure as per the documentation of of_irq_get_byname() as=
- well as
-> > > > of_irq_get(). The case is different for acpi_irq_get(), but it is h=
-andled in
-> > > > fwnode_irq_get(). If I understood it right, a return value of '0' s=
-hould be
-> > > > considered a failure here.
-> > >
-> > > Depends. I have no idea what the original code does here. But
-> > > returning an error or 0 from this function seems confusing to me.
-> > >
-> > The description in of_irq_get*() says -
-> > /* Return: Linux IRQ number on success, or 0 on the IRQ mapping failure=
-, or
-> >  * -EPROBE_DEFER if the IRQ domain is not yet created, or error code in=
- case
-> >  * of any other failure.
-> >  */
-> > As I see from the code of fwnode_irq_get(), which is used in this case,=
- returns
-> > either the return value of of_irq_get() or error code from acpi_irq_get=
-() when
-> > it fails, or res.start if it didn't fail. I guess, any of these would n=
-ot be 0 unless
-> > there is an error.
->=20
-> of_irq_get*() seems inconsistent...
->=20
-> Uwe, what do you think?
+> > Probably more like "render on every vblank", but yes, unlike fbcon it
+> > surely wouldn't render every single character sent to the terminal.
+> >
+> > Also acceleration on modern hardware is more like "compose window
+> > content using the 3d engine" than "use 2d blitter to scroll the window".
+> >
+> > > Maybe fbcon should do the same when presented with a flood of text,
+> > > but I don't know how or why it works like it works.
+> >
+> > fbcon could do the same, i.e. render to fbdev in a 60Hz timer instead of
+> > doing it synchronously.
+>
+> Hopefully only the parts of the screen which need a redraw?
+>
+> Not all displays can be updated that fast. For a "modern" example, see
+> https://patchwork.freedesktop.org/series/93070/.
 
-Yeah, this is something I stumbled over during the platform_get_irq*()
-discussion. But I don't feel like investing any more energy there.
+drm does damage tracking throughout the stack, e.g.
 
-Best regards
-Uwe
+https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#damage-tracking-properties
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+And unlike fbdev, it's explicit (so less overhead since userspace
+generally knows what it's drawn) and doesn't rely on page fault
+intercepting and fun stuff like that.
 
---cdxvf7ymm4mv6sgi
-Content-Type: application/pgp-signature; name="signature.asc"
+Like do people actually know what drm can and cannot do, or would that
+take out all the fun?
+-Daniel
 
------BEGIN PGP SIGNATURE-----
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHpR+sACgkQwfwUeK3K
-7AlVDQf/UyEbXUuWCywlD2V5dd6jAINm1Cg0yyuFPxHty9d7WFBu0iL+OmYwdKsf
-VNESVe1lcz+AUYaov33RaM0cMCqR2tZ+i3tnoyxBH80xIRTE0ncyW1zhg0pxkQnE
-vQZRkHAjVtz1DzmOKVP1FPCRqh0H9LmZXfaSJL7lhHDLe5WgAhzXszGDVY1J9xZi
-tlR1vB91vzTk/+TLVsj3l+NU5qbrhqx6Cqwktlnn00XX9QMkH5+FApDMC8NfZ9qI
-CMAh5RjiEBoZEKQY70Ix70kyVLAblmNkVY5rvbie9YoZ+fBMMpRNdykLgPqPUaBv
-kEdOP8qlPlbAKVs7MmUfMgtl+IVocg==
-=bB3r
------END PGP SIGNATURE-----
 
---cdxvf7ymm4mv6sgi--
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

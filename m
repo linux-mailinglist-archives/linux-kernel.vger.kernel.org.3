@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 980D749533E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EC5495342
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiATRae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:30:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27141 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230486AbiATR3b (ORCPT
+        id S230129AbiATRag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230382AbiATRaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:29:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642699771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fGfF78FiR/TzahdqKpCXizGLCvDzp3FWHvuTZrk93bk=;
-        b=SlJzSBpkK8dnhDHxdGBe9NHnWTnADpf+fft8HmFBfjG56NnZfZTSlhSWz1sL2OsCGzcazG
-        hUM9HedSgYPwlKwQxY1rxFXt+EitJrM6aM+AHOwT/jJaL5rQfcL8bh9d3ErjVLgH68+bOJ
-        BuffdLJbr3rATvwW/G6+Q5PGtfzLFd8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-aLP9_HRXMQqWu-9DzwhrYg-1; Thu, 20 Jan 2022 12:29:29 -0500
-X-MC-Unique: aLP9_HRXMQqWu-9DzwhrYg-1
-Received: by mail-wm1-f72.google.com with SMTP id j6-20020a05600c1c0600b0034c02775da7so3224195wms.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:29:29 -0800 (PST)
+        Thu, 20 Jan 2022 12:30:05 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1E4C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:30:04 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id t18so5709304plg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nWuQlNh1+FFK77BDf2dM2joOBNRuxhXU9eZ1lL6RJ9U=;
+        b=Vt1BML/8C1w1Q+B4uH6TEBe5Bp0XbsvPs4rQ6vDbh4AQAMJsx6vpR/THGjnP986NTs
+         4d1TEV4riAkWtTWI+l1jErkyQaKUeVe8WtypsjRoeZgbZXQIZ+pX7nRZnQ7iTfTU9B2y
+         BtUyTG8OcdTCpFbU/VnEt3Wh9cjUEYvkCPXzI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fGfF78FiR/TzahdqKpCXizGLCvDzp3FWHvuTZrk93bk=;
-        b=03P7tOCDnc25/KfI1f0zmHSXeXs1Ro4SCufWkhvNGyw4JZFk1nRLxtupwMge4m175G
-         8ObgHF3IdOQN3FZbPBCk3wCm1+T+zOIe5yKyCBmkGxEUQMWuoPHa9waeosYvO198hC54
-         ZahjHQp3GHi8u8nqfRrrjSyOMr7SAULdHFw7Z0Ci5wD1aGJI/S0iUhIYpOQ0gY2oT+dH
-         1lx+7fJ68VJzTYanr46NKA4Mi3CCCvUwqFMSl5rO7gDRfhQUE3yIZIjeQ3EltnjvePd1
-         ug3jWEgOGqdS11bifaNnYnEV5spSVacHH64zrwk4APOJHZrJIZNUh9yeDWV+K14TkVSW
-         TdfQ==
-X-Gm-Message-State: AOAM530R18AbpYC8pMM/6R41Ymk5LaXRQHDN0L3kjsZjLja/Cq2xhoWo
-        KmtboSql/ASA+BKQBZqy+NyZt8mQRwso3mOwSTpBMPGUVfrCFKM4Mva3UmXC2R0sGCJ8cQZqDXf
-        kcYfz07o1aAT7I4saSsXMBRfB
-X-Received: by 2002:a05:600c:502a:: with SMTP id n42mr10159475wmr.17.1642699768475;
-        Thu, 20 Jan 2022 09:29:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwOLpt9bWrFi8wq1OKXWM943uI9rcK9LKtFK7tuoO5lzYUIgZU9u0GfBs1pC7CiHnudNbuldA==
-X-Received: by 2002:a05:600c:502a:: with SMTP id n42mr10159460wmr.17.1642699768245;
-        Thu, 20 Jan 2022 09:29:28 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id f9sm3958172wry.115.2022.01.20.09.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 09:29:27 -0800 (PST)
-Message-ID: <f7413789-f6f2-612e-2323-bf35afdb8a02@redhat.com>
-Date:   Thu, 20 Jan 2022 18:29:25 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nWuQlNh1+FFK77BDf2dM2joOBNRuxhXU9eZ1lL6RJ9U=;
+        b=1/SQEJOLacF+MRty2uujzKfncgJmiB2ogwYfS38EdWopVw6NUCWzCBiiArXntGUZR6
+         UxirJ5Ba+Y6C6v96oe+gdUf/3krY2JIui2/0PHekyqKsIei4uPWTjFfZRS27xkj9cu3Z
+         YpCrIKlrAMcWo2oPi0FL4uhPZ0BN9rgx1GYaDbXRT/kZJcLG7BTxZjKrk4n6uxGFBlmB
+         w9OSgAZ/litNmCyvpl3ScCoGz30Q76PBNWiqEuypVopxFd17jvGMntsWr14R405l4dlN
+         82crtE3IHZLf5pdIlmi2oRu7jz3ivcy0TwtbphXbBQ03DxmtRUWQ881v/17Ow/dy9i7t
+         4Nsg==
+X-Gm-Message-State: AOAM531PJyRiSK58DneTTaNAnHJKX3ys217v8ZY5oS4Yqt61AUuJMlgK
+        N33H5sCZ0OBOc2XeMoSHJoqOXA8LEkmcJvzTgeXYbw==
+X-Google-Smtp-Source: ABdhPJycFKl02Oq1wNGDCLiXjMub65SO5ZLEVDaIoyisqTvtciMEWjY7xyrtl1oNS1NiH4FU0GVEpBm3W0Z0Wb9yuws=
+X-Received: by 2002:a17:902:8208:b0:14a:c442:8ca2 with SMTP id
+ x8-20020a170902820800b0014ac4428ca2mr27948pln.12.1642699803642; Thu, 20 Jan
+ 2022 09:30:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 4/7] kvm/mips: rework guest entry logic
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, luto@kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paul.walmsley@sifive.com, peterz@infradead.org,
-        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220119105854.3160683-1-mark.rutland@arm.com>
- <20220119105854.3160683-5-mark.rutland@arm.com>
- <20220120164455.GA15464@C02TD0UTHF1T.local>
- <a2b628b4-907c-4e15-df91-18c0db099228@redhat.com>
- <20220120171551.GB15464@C02TD0UTHF1T.local>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220120171551.GB15464@C02TD0UTHF1T.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CA+wXwBRbLq6SW39qCD8GNG98YD5BJR2MFXmJV2zU1xwFjC-V0A@mail.gmail.com>
+ <CANn89iLbKNkB9bzkA2nk+d2c6rq40-6-h9LXAVFCkub=T4BGsQ@mail.gmail.com>
+ <CA+wXwBTQtzgsErFZZEUbEq=JMhdq-fF2OXJ7ztnnq6hPXs_L3Q@mail.gmail.com>
+ <CANn89iKTw5aZ0GvybkO=3B17HkGRmFKcqz9FqJFuo5r--=afOA@mail.gmail.com> <CANn89iKBqPRHFy5U+SMxT5RUPkioDFrZ5rN5WKNwfzA-TkMhwA@mail.gmail.com>
+In-Reply-To: <CANn89iKBqPRHFy5U+SMxT5RUPkioDFrZ5rN5WKNwfzA-TkMhwA@mail.gmail.com>
+From:   Daniel Dao <dqminh@cloudflare.com>
+Date:   Thu, 20 Jan 2022 17:29:52 +0000
+Message-ID: <CA+wXwBSGsBjovTqvoPQEe012yEF2eYbnC5_0W==EAvWH1zbOAg@mail.gmail.com>
+Subject: Re: Expensive tcp_collapse with high tcp_rmem limit
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Marek Majkowski <marek@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/22 18:15, Mark Rutland wrote:
-> As above, we'll also need the guest_state_{enter,exit}() calls
-> surrounding this (e.g. before that local_irq_enable() at the start of
-> kvm_mips_handle_exit(),
+On Thu, Jan 6, 2022 at 6:55 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Thu, Jan 6, 2022 at 10:52 AM Eric Dumazet <edumazet@google.com> wrote:
+>
+> > I think that you should first look if you are under some kind of attack [1]
+> >
+> > Eventually you would still have to make room, involving expensive copies.
+> >
+> > 12% of 16MB is still a lot of memory to copy.
+> >
+> > [1] Detecting an attack signature could allow you to zap the socket
+> > and save ~16MB of memory per flow.
 
-Oh, indeed.  And there is also an interrupt-enabled area similar to 
-s390's, in both vcpu_run and the exception handler entry point (which 
-falls through to the exit handler created by kvm_mips_build_exit).  For 
-example:
+Sorry for the late reply, we spent more time over the past weeks to
+gather more data.
 
-         /* Setup status register for running guest in UM */
-         uasm_i_ori(&p, V1, V1, ST0_EXL | KSU_USER | ST0_IE);
-         UASM_i_LA(&p, AT, ~(ST0_CU0 | ST0_MX | ST0_SX | ST0_UX));
-         uasm_i_and(&p, V1, V1, AT);
-         uasm_i_mtc0(&p, V1, C0_STATUS);
-         uasm_i_ehb(&p);
+>   tid 0: rmem_alloc=16780416 sk_rcvbuf=16777216 rcv_ssthresh=2920
+>   tid 0: advmss=1460 wclamp=4194304 rcv_wnd=450560
+>   tid 0: len=3316 truesize=15808
+>   tid 0: len=4106 truesize=16640
+>   tid 0: len=3967 truesize=16512
+>   tid 0: len=2988 truesize=15488
+> > I think that you should first look if you are under some kind of attack [1]
 
-I'd rather get rid altogether of the EQS for MIPS.
+This and indeed the majority of similar occurrences come from a
+websocket origin that can
+emit a large flow of tiny packets. As the tcp_collapse hiccups occur
+in a proxy node, we think that
+a combination of slow / unresponsive clients and the websocket traffic
+can trigger this.
 
-> and that needs to happen in noinstr code, etc.
+We made a workaround to clamp the websocket's rcvbuf to a smaller
+value and it reduces
+the peak latency of tcp_collapse as we no longer need to collapse up to 16MB.
 
-There are bigger problems with instrumentation, because the 
-runtime-generated code as far as I can tell is not noinstr.
+> What kind of NIC driver is used on your host ?
 
-Paolo
+We are running mlx5
 
+> Except that you would still have to parse the linear list.
+
+Most of the time when we see a high value of tcp_collapse, the bloated
+skb is almost always at the top
+of the list. I guess the client is already unresponsive so the flow is
+full of bloated skbs. I would rather not
+having to spend too much time collapsing these skbs.

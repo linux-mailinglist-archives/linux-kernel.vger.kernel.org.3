@@ -2,144 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A544953C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EFE4953CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiATSAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:00:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43805 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232955AbiATSAn (ORCPT
+        id S236425AbiATSCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:02:04 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:56204 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233344AbiATSB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:00:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642701643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xG8ATCiG+XFzwKW1rvbLJULeQ6x9hpa2tAuaM5r+WyQ=;
-        b=TLUlTy7iIgKYakROEwST4kWsp07FINY/d11FHzR6xKnkrnJ6+vRI7syhaGlyF8gCyZPLl+
-        K+byI7nJwqFkfWmnW3zd2/dohiReb6u8sPORvIA9oF/AHNT90rq1qSRgUaQCRvEhWAoldQ
-        GqNZ2OAafmn4h3XmtKJ1+HKjGpUpgCc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-95QDHf30P12D_lCqrLT89Q-1; Thu, 20 Jan 2022 13:00:41 -0500
-X-MC-Unique: 95QDHf30P12D_lCqrLT89Q-1
-Received: by mail-ed1-f71.google.com with SMTP id j1-20020aa7c341000000b0040417b84efeso6525041edr.21
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:00:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=xG8ATCiG+XFzwKW1rvbLJULeQ6x9hpa2tAuaM5r+WyQ=;
-        b=NrWix9PzOGBnoOphLQm/U6Wrbmb3nJsbJaTqH03QzSlNjYdNRZNBxU3S+LYlPAhOpi
-         Vl1HNt+yti9Ge5/fRUmXKvQCNXthorF0GnAC6gegeWPTR8dzkJiUqRrmMwB3u8NOo89D
-         xYrHuXbvv2Mkg/1LY6GS40pILAmE0+tuzhSWlXnLzAr7MM/a/8L5UvfUWCQc1l0O7lMp
-         k1xz1rk/ybgwvddElP0juwblU2XPUheAppnuiQ5n/LNYT/CvfthTcaBkiNtmRobGKMEP
-         ONQ4MA7NoIX5xndvadWqAKCcwMN+rC4vPEvd2ySjzADrrPa01xo4DLQ8Mral+ntrYlx0
-         Zxfw==
-X-Gm-Message-State: AOAM533DjIvJdSIf0H+fbdhc5U5v6XWAMbv/RHbdsSKGOP1EBYTpHrDL
-        O+FhkSXOUILhVDg9tD7Pr08CG5ar8RKQW+527y3uQn0TzvD8OOsVmdhxnYs5vJ8Sye/Ik1sjSTQ
-        nL2qy1JGsGa8P72M5tHRKtX2w
-X-Received: by 2002:a17:906:c058:: with SMTP id bm24mr46488ejb.50.1642701640134;
-        Thu, 20 Jan 2022 10:00:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx5bWIoqRADndOdik1C8nbEca2kYtg300FlXfWdlrg8NTMyukErf+Y3mpewRw+ZcpU7tJkDpA==
-X-Received: by 2002:a17:906:c058:: with SMTP id bm24mr46462ejb.50.1642701639906;
-        Thu, 20 Jan 2022 10:00:39 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
-        by smtp.gmail.com with ESMTPSA id h15sm1274546ejg.144.2022.01.20.10.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 10:00:39 -0800 (PST)
-Message-ID: <8931808d-db61-0f06-ceb3-f48a83b1f74c@redhat.com>
-Date:   Thu, 20 Jan 2022 19:00:38 +0100
+        Thu, 20 Jan 2022 13:01:59 -0500
+Received: from machine.home (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr [86.207.51.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9771020B6C61;
+        Thu, 20 Jan 2022 10:01:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9771020B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1642701718;
+        bh=a5fVWGlzwUBqYrtxpw1SkQ2TEhRIbUpc2aCbvXgA0vc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FLe3Rgw3w3pOq64l+izGov9JOcfZvEFA1tD9y9/ZAdw/49HNyCkUKhlwKW3WqBoDn
+         cjHVf2h7BJ+sMXVxQPMTrL4A2pYYsoW2W6ytf6v4+vLKQaD2LP110tJD0IxaBTkwRb
+         sTj1gAN3mhFwTsbAbzzI5wnRTCO9eGE1L5Hi8kq4=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org,
+        Serge Hallyn <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Francis Laniel <flaniel@linux.microsoft.com>
+Subject: [RFC PATCH v3 0/2] Add capabilities file to sysfs
+Date:   Thu, 20 Jan 2022 19:01:14 +0100
+Message-Id: <20220120180116.167702-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wangzhigang17@huawei.com, Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220113140318.11117-1-zhangliang5@huawei.com>
- <YeA5oP/iaxtVPHb3@casper.infradead.org>
- <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
- <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com>
- <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
- <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
- <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
- <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
- <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
- <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
- <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-In-Reply-To: <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.01.22 18:48, Nadav Amit wrote:
-> 
->> On Jan 20, 2022, at 6:15 AM, David Hildenbrand <david@redhat.com> wrote:
->>
->> On 17.01.22 14:31, zhangliang (AG) wrote:
->>> Sure, I will do that :)
->>
->> I'm polishing up / testing the patches and might send something out for discussion shortly.
->> Just a note that on my branch was a version with a wrong condition that should have been fixed now.
->>
-> 
-> Sorry for being late for the discussion.
-> 
-> David, does any of it regards the lru_cache_add() reference issue that I
-> mentioned? [1]
+Hi.
 
-No, unfortunately not in that part of my work. *Maybe* we could also try
-to handle that reference similarly to the swapcache, but the question is
-if we can't wait for PageAnonExclusive.
 
-Right now I have the following in mind to get most parts working as
-exptected:
+First, I hope you are fine and the same for your relatives.
 
-1. Optimize reuse logic for the swapcache as it seems to be easy
-2. Streamline COW logic and remove reuse_swap_page() -- fix the CVE for
-   THP.
-3. Introduce PageAnonExclusive and allow FOLL_PIN only on
-   PageAnonExclusive pages.
-4. Convert O_DIRECT to FOLL_PIN
+Capabilities are used to check if a thread has the right to perform a given
+action [1].
+For example, a thread with CAP_BPF set can use the bpf() syscall.
 
-We will never ever have to copy a page PageAnonExclusive page in the COW
-handler and can immediately reuse it without even locking the page. The
-existing reuse logic is essentially then used to reset PageAnonExclusive
-on a page (thus it makes sense to work on it) where the flag is not set
-anymore -- or on a fresh page if we have to copy.
+Capabilities are used in the container world.
+In terms of code, several projects related to container maintain code where the
+capabilities are written alike include/uapi/linux/capability.h [2][3][4][5].
+For these projects, their codebase should be updated when a new capability is
+added to the kernel.
+Some other projects rely on <sys/capability.h> [6].
+In this case, this header file should reflect the capabilities offered by the
+kernel.
 
-That implies that all these additional references won't care if your app
-doesn't fork() or KSM isn't active. Consequently, anything that
-read-protects anonymous pages will work as expected and should be as
-fast as it gets.
+So, in this series, I added a new file to sysfs:
+/sys/kernel/security/capabilities.
+The goal of this file is to be used by "container world" software to know kernel
+capabilities at run time instead of compile time.
 
-Sounds good? At least to me. If only swap/migration entries wouldn't be
-harder to handle than I'd wish, that's why it's taking a little and will
-take a little longer.
+The "file" is read-only and its content is the capability number associated with
+the capability name:
+root@vm-amd64:~# cat /sys/kernel/security/capabilities
+0       CAP_CHOWN
+1       CAP_DAC_OVERRIDE
+...
+40      CAP_CHECKPOINT_RESTORE
 
-> 
-> Seems to me that any solution should also regard this problem, or am I
-> missing something?
+The kernel already exposes the last capability number under:
+/proc/sys/kernel/cap_last_cap
+So, I think there should not be any issue exposing all the capabilities it
+offers.
+If there is any, please share it as I do not want to introduce issue with this
+series.
 
-The bigger picture has to handle it, yes!
+Also, if you see any way to improve this series please share it as it would
+increase this contribution quality.
 
+Change since v2:
+* Use a char * for cap_string instead of an array, each line of this char *
+contains the capability number and its name.
+* Move the file under /sys/kernel/security instead of /sys/kernel.
+
+Francis Laniel (2):
+  capability: Add cap_string.
+  security/inode.c: Add capabilities file.
+
+ include/uapi/linux/capability.h |  1 +
+ kernel/capability.c             | 45 +++++++++++++++++++++++++++++++++
+ security/inode.c                | 16 ++++++++++++
+ 3 files changed, 62 insertions(+)
+
+
+Best regards and thank you in advance for your reviews.
+---
+[1] man capabilities
+[2] https://github.com/containerd/containerd/blob/1a078e6893d07fec10a4940a5664fab21d6f7d1e/pkg/cap/cap_linux.go#L135
+[3] https://github.com/moby/moby/commit/485cf38d48e7111b3d1f584d5e9eab46a902aabc#diff-2e04625b209932e74c617de96682ed72fbd1bb0d0cb9fb7c709cf47a86b6f9c1
+moby relies on containerd code.
+[4] https://github.com/syndtr/gocapability/blob/42c35b4376354fd554efc7ad35e0b7f94e3a0ffb/capability/enum.go#L47
+[5] https://github.com/opencontainers/runc/blob/00f56786bb220b55b41748231880ba0e6380519a/libcontainer/capabilities/capabilities.go#L12
+runc relies on syndtr package.
+[6] https://github.com/containers/crun/blob/fafb556f09e6ffd4690c452ff51856b880c089f1/src/libcrun/linux.c#L35
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 

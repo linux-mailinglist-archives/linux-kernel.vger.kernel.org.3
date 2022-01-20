@@ -2,137 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCF849553B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F03495540
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377562AbiATUH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 15:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347187AbiATUHW (ORCPT
+        id S1377576AbiATUHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 15:07:51 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:41630 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347187AbiATUHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 15:07:22 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EF1C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:07:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B3+5396UaXvFEYhBocmsmHaWNgzX8iVJrkcpnR2FF40=; b=nx0iaBmPPuLI2/9GOonlnPUSEq
-        EjWGaxtTNM6+8VbIeQAvX0LFJiPXBZbrZ1B4JFvGcNdcHTYt5wT0LE/lMp33cwXQrKfIbSj3E+UxZ
-        Wx1HAtlu8CDzAp/1baDqEy+kggiFLdHMOWnD06RsHjYJeNBv+GZ1XynH0yF/Fnbp5yvbMDCPsHzp4
-        eBbnl6Jf5HYMiPtqiyx/ztodvX2TN6qgtC80jf68vikKwyexUZoXlVV4K/n9ZGFvLTB8YKqIZM74N
-        S0KuXfXftssDpaPGglmGRIwAKUz2baSxvDcU7OCWasjbcacAmFIaq8Ygnm4U1/EnPGDa8uIZI42Le
-        xw7/ST2g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAdi9-00Eivm-3a; Thu, 20 Jan 2022 20:07:09 +0000
-Date:   Thu, 20 Jan 2022 20:07:09 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        "zhangliang (AG)" <zhangliang5@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wangzhigang17@huawei.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Message-ID: <YenA7Xzd2G2OYvqz@casper.infradead.org>
-References: <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
- <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
- <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
- <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
- <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
- <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
- <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
- <8931808d-db61-0f06-ceb3-f48a83b1f74c@redhat.com>
- <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
- <9071d5a8-ed2d-5cf5-5526-43fe7dd377ec@redhat.com>
+        Thu, 20 Jan 2022 15:07:49 -0500
+Received: by mail-ot1-f48.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso9006343otj.8;
+        Thu, 20 Jan 2022 12:07:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A7A03fobW8KrhhrAYsRR6uBEmk1aUXQHP9DOBsxx+q0=;
+        b=tKAsifwi+v89Idylq5U8UuoOKdSNSapynjreywcSa+mkZ59Xx3yNady/E53PY+GE30
+         OkHOF6YsZtEv5edaH9NcMNCm3YRqcWeWBN2molhAK3/KmuqQXDEqfRUYgR3ymWDgy07Q
+         iXZIoO1s2vdFgnUbqb8LrsIG/syqYIqrmHXux27z+GwoByJW4f8n5UN5u7cVK1xrsXKH
+         BOySItZ7PEiwQ3ljIJvdxpZp8OjQGyFUpBaOJezJtjb/PnuiJSIHUkO/fQCDE41DaplD
+         61e6n3iAVMEdbkkTIvWT0pxOufmqq4OtPf/Md9hBwIjyjJwK9l+JD3JxdX14Kq1FgyO+
+         rU3A==
+X-Gm-Message-State: AOAM5322mKd2L19jJj36G6i9WkndHoECLkOqvzCEF/JzrBqHtRI5YgYB
+        Wstv6lLNCCT6o3vyE6xwrw==
+X-Google-Smtp-Source: ABdhPJxbxIflcch5R4oxGHShBE6tJfUiV1UbfNjqHTtYf43uNivgQHODfl34Q6F+PyYBwVlIKKujFA==
+X-Received: by 2002:a9d:5a01:: with SMTP id v1mr304431oth.337.1642709268550;
+        Thu, 20 Jan 2022 12:07:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o22sm74120oor.34.2022.01.20.12.07.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 12:07:47 -0800 (PST)
+Received: (nullmailer pid 1858977 invoked by uid 1000);
+        Thu, 20 Jan 2022 20:07:46 -0000
+Date:   Thu, 20 Jan 2022 14:07:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Simon Glass <sjg@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-iio@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: drop Enric Balletbo i
+ Serra from maintainers
+Message-ID: <YenBEq1Gqpw8GJNQ@robh.at.kernel.org>
+References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9071d5a8-ed2d-5cf5-5526-43fe7dd377ec@redhat.com>
+In-Reply-To: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 08:55:12PM +0100, David Hildenbrand wrote:
-> >>> David, does any of it regards the lru_cache_add() reference issue that I
-> >>> mentioned? [1]
+On Thu, 20 Jan 2022 11:40:08 +0100, Krzysztof Kozlowski wrote:
+> Enric Balletbo i Serra emails bounce:
+> 
+>   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
+> 
+> so drop him from the maintainers, similarly to commit 3119c28634dd
+> ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").  Add generic DRM
+> bridge maintainers to Analogix ANX7814.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../devicetree/bindings/display/bridge/analogix,anx7814.yaml  | 4 +++-
+>  .../bindings/display/bridge/google,cros-ec-anx7688.yaml       | 1 -
+>  Documentation/devicetree/bindings/display/bridge/ps8640.yaml  | 1 -
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
 
-> +++ b/mm/memory.c
-> @@ -3291,19 +3291,28 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->         if (PageAnon(vmf->page)) {
->                 struct page *page = vmf->page;
->  
-> -               /* PageKsm() doesn't necessarily raise the page refcount */
-> -               if (PageKsm(page) || page_count(page) != 1)
-> +               /*
-> +                * PageKsm() doesn't necessarily raise the page refcount.
-> +                *
-> +                * These checks are racy as long as we haven't locked the page;
-> +                * they are a pure optimization to avoid trying to lock the page
-> +                * and trying to free the swap cache when there is little hope
-> +                * it will actually result in a refcount of 1.
-> +                */
-> +               if (PageKsm(page) || page_count(page) > 1 + PageSwapCache(page))
->                         goto copy;
->                 if (!trylock_page(page))
->                         goto copy;
-> -               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
-> +               if (PageSwapCache(page))
-> +                       try_to_free_swap(page);
-> +               if (PageKsm(page) || page_count(page) != 1) {
->                         unlock_page(page);
->                         goto copy;
->                 }
->                 /*
-> -                * Ok, we've got the only map reference, and the only
-> -                * page count reference, and the page is locked,
-> -                * it's dark out, and we're wearing sunglasses. Hit it.
-> +                * Ok, we've got the only page reference from our mapping
-> +                * and the page is locked, it's dark out, and we're wearing
-> +                * sunglasses. Hit it.
->                  */
->                 unlock_page(page);
->                 wp_page_reuse(vmf);
-> 
-> 
-> I added some vmstats that monitor various paths. After one run of
-> 	./forceswap 2 1000000 1
-> I'm left with a rough delta (including some noise) of
-> 	anon_wp_copy_count 1799
-> 	anon_wp_copy_count_early 1
-> 	anon_wp_copy_lock 983396
-> 	anon_wp_reuse 0
-> 
-> The relevant part of your reproducer is
-> 
-> 	for (i = 0; i < nops; i++) {
-> 		if (madvise((void *)p, PAGE_SIZE * npages, MADV_PAGEOUT)) {
-> 			perror("madvise");
-> 			exit(-1);
-> 		}
-> 
-> 		for (j = 0; j < npages; j++) {
-> 			c = p[j * PAGE_SIZE];
-> 			c++;
-> 			time -= rdtscp();
-> 			p[j * PAGE_SIZE] = c;
-> 			time += rdtscp();
-> 		}
-> 	}
-> 
-> For this specific reproducer at least, the page lock seems to be the thingy that prohibits
-> reuse if I interpret the numbers correctly. We pass the initial page_count() check.
-> 
-> Haven't looked into the details, and I would be curious how that performs with actual
-> workloads, if we can reproduce similar behavior.
-
-I don't see how that patch addresses the lru issue.  Wouldn't we need
-something like ...
-
-	if (!PageLRU(page))
-		lru_add_drain_all();
-
+Applied, thanks!

@@ -2,231 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB464946B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B7E4946BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358552AbiATFQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 00:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236290AbiATFQ3 (ORCPT
+        id S1358561AbiATFTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 00:19:43 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:46382
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236290AbiATFTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 00:16:29 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3007C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 21:16:28 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id m3so17435787lfu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 21:16:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dIfZNDPfDKqkYcN4EVrMCTxIOzhlZwaXVhl3QVcx8G0=;
-        b=af6o9+A/c0IMnAu2aYltxQJPfWUl5Z/dWratF1h9NAfNuRQi4PKp7jImvfCgtfmM3d
-         JTyp9JCBQnPOWI58bbc2kJ6mvH/dCV3d5hJxqyOn9VUYWacIGV3NjOWYzwhNEx6oc5zh
-         KkfZSurp99JX+jHYXF+vmWeFrm9y/xfG1FNew9kHZ+5VBcnJzFl4hWaTFPqMJiyfgl5j
-         kBBz9jq1sw3Z+TD6XPcz+PPHjHhzRUGU9tZxDdc1DhwOEpam2HuHvRzSvUw86YWnj23S
-         ZNt3aBtvQ9uCtuv7c801zQpNVDt9B4/TMYX4aTipQ8X4+8v1d2/XIx1b0oQELsnpkrYS
-         hccA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dIfZNDPfDKqkYcN4EVrMCTxIOzhlZwaXVhl3QVcx8G0=;
-        b=LmlBK+PPWIDJg8Qb7Zq0aR4salxwQtjrjdgPGZBtQxbYh5I16K8bzb/3j2BAGjOsUk
-         U0pFufioMOKPGBfQZ0KTSBY4xta28ZZ6arMK5A7vOYluhWxgQZT5SMe7p3V6iUfTs3qB
-         X/EEPzFugMUgXksrwMlASTXhTIb6iKaRmCg+nzo46hZYNbXCryuwSGS39FsZJUz+uPxi
-         1bPdtJu8oLQj+Dzy0JSXu8qjpaQE83TA731oP5hOUGyntxkNsi1KnnpK7wRbpbs5PYKL
-         UZB6TY3tXIohIvwoLa1LqI50UKU7KsWLG/xo3+lT/vI3cGNmnKgJ5rPuqh2UYib+/sbU
-         Kevg==
-X-Gm-Message-State: AOAM533m6QKz9XvS7pzyHEkjE+z/VyIhCt8s3syGA1O6x5zc4aoFu2nI
-        uYKf+7LIcNtCi087fsEkreuMCA==
-X-Google-Smtp-Source: ABdhPJzCW27YgEuEp9c0NqtsFJsFA8BwBAU9C8dFth98HZpCAcFc/IpT73EFUXpXoOLnSbBG9jelTg==
-X-Received: by 2002:a19:f202:: with SMTP id q2mr23455504lfh.650.1642655787034;
-        Wed, 19 Jan 2022 21:16:27 -0800 (PST)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id s14sm213516lfp.79.2022.01.19.21.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 21:16:26 -0800 (PST)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH v3] arm64: dts: renesas: add MOST device
-Date:   Thu, 20 Jan 2022 08:15:59 +0300
-Message-Id: <20220120051559.746322-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 20 Jan 2022 00:19:41 -0500
+Received: from localhost.localdomain (1-171-82-176.dynamic-ip.hinet.net [1.171.82.176])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id D061440D2E;
+        Thu, 20 Jan 2022 05:19:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642655979;
+        bh=LDTRKyufVIbBOkW2X/i15inUM9Sh3auq+doIIyGR024=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=fzqh5T5Gycbs8DJLrvgH2TroN8G+nvnVs2/97sXH2aqyjNLgr1Sxtry8hWGrcPxGs
+         VdhGKAFUt071AI+l0pBg3468VrM+CMqiTZd4GqjXOLURTo8OGxzaVmHIHqMPwQhLH1
+         49Rh4h8ki4aqJRGfKYAUjF8LnUgNh3E3mUxLOvrVVLL3MRJfmpVeiO7qIPcpkzaZMT
+         /HplfJpTuPHIPB1g7Egj4KTrkcl20pAt7U5POjSsU5JBZnC4atx2v+iPzGY9vG/ZzQ
+         Vtt9l+7Q3VbUoA/iZU0viOX9yQnxXiWgODWZJvPohvT2EYQqZjPAPXt/z5erHw7JiR
+         pmQXcC1Szn6Ow==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: phy: marvell: Honor phy LED set by system firmware on a Dell hardware
+Date:   Thu, 20 Jan 2022 13:19:29 +0800
+Message-Id: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds mlp device to dtsi files for R-Car Gen3 SoCs that have
-it.
+BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
+instead of setting another value, keep it untouched and restore the saved
+value on system resume.
 
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Introduce config_led() callback in phy_driver() to make the implemtation
+generic.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
-v2: https://lore.kernel.org/lkml/20211226153349.2296024-1-nikita.yoush@cogentembedded.com/
-Changes from v2:
-- no longer part of patchset - other parts already merged
-- add per-SoC compatible strings
-- add resets
-- keep only two interrupts - those used by the driver
+v2:
+ - Split with a new helper to find default LED config.
+ - Make the patch more generic.
 
-v1: https://lore.kernel.org/lkml/20211226082530.2245198-4-nikita.yoush@cogentembedded.com/
-Changes from v1:
-- fix power domain ids so all dtbs build properly
+ drivers/net/phy/marvell.c    | 43 +++++++++++++++++++++++++++++-------
+ drivers/net/phy/phy_device.c | 21 ++++++++++++++++++
+ include/linux/phy.h          |  9 ++++++++
+ 3 files changed, 65 insertions(+), 8 deletions(-)
 
- arch/arm64/boot/dts/renesas/r8a77951.dtsi | 12 ++++++++++++
- arch/arm64/boot/dts/renesas/r8a77960.dtsi | 12 ++++++++++++
- arch/arm64/boot/dts/renesas/r8a77961.dtsi | 12 ++++++++++++
- arch/arm64/boot/dts/renesas/r8a77965.dtsi | 12 ++++++++++++
- arch/arm64/boot/dts/renesas/r8a77990.dtsi | 12 ++++++++++++
- arch/arm64/boot/dts/renesas/r8a77995.dtsi | 12 ++++++++++++
- 6 files changed, 72 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/renesas/r8a77951.dtsi b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-index 1768a3e6bb8d..d09f725a33f3 100644
---- a/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-@@ -2412,6 +2412,18 @@ ssi9: ssi-9 {
- 			};
- 		};
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 739859c0dfb18..54ee54a6895c9 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -746,10 +746,14 @@ static int m88e1510_config_aneg(struct phy_device *phydev)
+ 	return err;
+ }
  
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,r8a7795-mlp",
-+				     "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			resets = <&cpg 802>;
-+			status = "disabled";
-+		};
+-static void marvell_config_led(struct phy_device *phydev)
++static int marvell_find_led_config(struct phy_device *phydev)
+ {
+-	u16 def_config;
+-	int err;
++	int def_config;
 +
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a7795",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77960.dtsi b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-index 2bd8169735d3..280ed4249dad 100644
---- a/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-@@ -2284,6 +2284,18 @@ ssiu97: ssiu-51 {
- 			};
- 		};
++	if (phydev->dev_flags & PHY_USE_FIRMWARE_LED) {
++		def_config = phy_read_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL);
++		return def_config < 0 ? -1 : def_config;
++	}
  
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,r8a7796-mlp",
-+				     "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7796_PD_ALWAYS_ON>;
-+			resets = <&cpg 802>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a7796",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77961.dtsi b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-index a34d5b1d6431..cd212628a910 100644
---- a/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-@@ -2128,6 +2128,18 @@ ssiu97: ssiu-51 {
- 			};
- 		};
+ 	switch (MARVELL_PHY_FAMILY_ID(phydev->phy_id)) {
+ 	/* Default PHY LED config: LED[0] .. Link, LED[1] .. Activity */
+@@ -769,20 +773,30 @@ static void marvell_config_led(struct phy_device *phydev)
+ 			def_config = MII_88E1510_PHY_LED_DEF;
+ 		break;
+ 	default:
+-		return;
++		return -1;
+ 	}
  
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,r8a77961-mlp",
-+				     "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A77961_PD_ALWAYS_ON>;
-+			resets = <&cpg 802>;
-+			status = "disabled";
-+		};
++	return def_config;
++}
 +
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77961",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77965.dtsi b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-index 08df75606430..c7e3ed0e0814 100644
---- a/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-@@ -2147,6 +2147,18 @@ ssi9: ssi-9 {
- 			};
- 		};
++static void marvell_config_led(struct phy_device *phydev, bool resume)
++{
++	int err;
++
++	if (!resume)
++		phydev->led_config = marvell_find_led_config(phydev);
++
++	if (phydev->led_config == -1)
++		return;
++
+ 	err = phy_write_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL,
+-			      def_config);
++			      phydev->led_config);
+ 	if (err < 0)
+ 		phydev_warn(phydev, "Fail to config marvell phy LED.\n");
+ }
  
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,r8a77965-mlp",
-+				     "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A77965_PD_ALWAYS_ON>;
-+			resets = <&cpg 802>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77965",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77990.dtsi b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-index 0ea300a8147d..f3ac5f087ba7 100644
---- a/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-@@ -1682,6 +1682,18 @@ ssi9: ssi-9 {
- 			};
- 		};
+ static int marvell_config_init(struct phy_device *phydev)
+ {
+-	/* Set default LED */
+-	marvell_config_led(phydev);
+-
+ 	/* Set registers from marvell,reg-init DT property */
+ 	return marvell_of_reg_init(phydev);
+ }
+@@ -2845,6 +2859,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		/* PHY_GBIT_FEATURES */
+ 		.probe = marvell_probe,
+ 		.config_init = marvell_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1101_config_aneg,
+ 		.config_intr = marvell_config_intr,
+ 		.handle_interrupt = marvell_handle_interrupt,
+@@ -2944,6 +2959,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		/* PHY_GBIT_FEATURES */
+ 		.probe = marvell_probe,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1121_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -2965,6 +2981,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		/* PHY_GBIT_FEATURES */
+ 		.probe = marvell_probe,
+ 		.config_init = m88e1318_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1318_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3044,6 +3061,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		/* PHY_GBIT_FEATURES */
+ 		.probe = marvell_probe,
+ 		.config_init = m88e1116r_config_init,
++		.config_led = marvell_config_led,
+ 		.config_intr = marvell_config_intr,
+ 		.handle_interrupt = marvell_handle_interrupt,
+ 		.resume = genphy_resume,
+@@ -3065,6 +3083,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.flags = PHY_POLL_CABLE_TEST,
+ 		.probe = m88e1510_probe,
+ 		.config_init = m88e1510_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1510_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3094,6 +3113,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.flags = PHY_POLL_CABLE_TEST,
+ 		.probe = marvell_probe,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1510_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3120,6 +3140,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		/* PHY_GBIT_FEATURES */
+ 		.flags = PHY_POLL_CABLE_TEST,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1510_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3144,6 +3165,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		/* PHY_BASIC_FEATURES */
+ 		.probe = marvell_probe,
+ 		.config_init = m88e3016_config_init,
++		.config_led = marvell_config_led,
+ 		.aneg_done = marvell_aneg_done,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3165,6 +3187,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.flags = PHY_POLL_CABLE_TEST,
+ 		.probe = marvell_probe,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e6390_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3191,6 +3214,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.flags = PHY_POLL_CABLE_TEST,
+ 		.probe = marvell_probe,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e6390_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3217,6 +3241,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.flags = PHY_POLL_CABLE_TEST,
+ 		.probe = marvell_probe,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1510_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3242,6 +3267,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.probe = marvell_probe,
+ 		/* PHY_GBIT_FEATURES */
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1510_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+@@ -3264,6 +3290,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.probe = marvell_probe,
+ 		.features = PHY_GBIT_FIBRE_FEATURES,
+ 		.config_init = marvell_1011gbe_config_init,
++		.config_led = marvell_config_led,
+ 		.config_aneg = m88e1510_config_aneg,
+ 		.read_status = marvell_read_status,
+ 		.config_intr = marvell_config_intr,
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 74d8e1dc125f8..c9e97206aa9e8 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -12,6 +12,7 @@
+ #include <linux/acpi.h>
+ #include <linux/bitmap.h>
+ #include <linux/delay.h>
++#include <linux/dmi.h>
+ #include <linux/errno.h>
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool.h>
+@@ -1157,6 +1158,7 @@ static int phy_poll_reset(struct phy_device *phydev)
+ int phy_init_hw(struct phy_device *phydev)
+ {
+ 	int ret = 0;
++	bool resume = phydev->suspended;
  
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,r8a77990-mlp",
-+				     "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A77990_PD_ALWAYS_ON>;
-+			resets = <&cpg 802>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77990",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77995.dtsi b/arch/arm64/boot/dts/renesas/r8a77995.dtsi
-index 16ad5fc23a67..27b1b5e32175 100644
---- a/arch/arm64/boot/dts/renesas/r8a77995.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77995.dtsi
-@@ -1132,6 +1132,18 @@ ssi4: ssi-4 {
- 			};
- 		};
+ 	/* Deassert the reset signal */
+ 	phy_device_reset(phydev, 0);
+@@ -1184,6 +1186,9 @@ int phy_init_hw(struct phy_device *phydev)
+ 			return ret;
+ 	}
  
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,r8a77995-mlp",
-+				     "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A77995_PD_ALWAYS_ON>;
-+			resets = <&cpg 802>;
-+			status = "disabled";
-+		};
++	if (phydev->drv->config_led)
++		phydev->drv->config_led(phydev, resume);
 +
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77995",
- 				     "renesas,rcar-dmac";
+ 	if (phydev->drv->config_intr) {
+ 		ret = phydev->drv->config_intr(phydev);
+ 		if (ret < 0)
+@@ -1342,6 +1347,17 @@ int phy_sfp_probe(struct phy_device *phydev,
+ }
+ EXPORT_SYMBOL(phy_sfp_probe);
+ 
++static const struct dmi_system_id platform_flags[] = {
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell EMC"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Edge Gateway 3200"),
++		},
++		.driver_data = (void *)PHY_USE_FIRMWARE_LED,
++	},
++	{}
++};
++
+ /**
+  * phy_attach_direct - attach a network device to a given PHY device pointer
+  * @dev: network device to attach
+@@ -1363,6 +1379,7 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
+ 	struct mii_bus *bus = phydev->mdio.bus;
+ 	struct device *d = &phydev->mdio.dev;
+ 	struct module *ndev_owner = NULL;
++	const struct dmi_system_id *dmi;
+ 	bool using_genphy = false;
+ 	int err;
+ 
+@@ -1443,6 +1460,10 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
+ 			phydev_err(phydev, "error creating 'phy_standalone' sysfs entry\n");
+ 	}
+ 
++	dmi = dmi_first_match(platform_flags);
++	if (dmi)
++		phydev->dev_flags |= (u32)dmi->driver_data;
++
+ 	phydev->dev_flags |= flags;
+ 
+ 	phydev->interface = interface;
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index 6de8d7a90d78e..3a944a6564f43 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -517,6 +517,8 @@ struct phy_c45_device_ids {
+ struct macsec_context;
+ struct macsec_ops;
+ 
++#define PHY_USE_FIRMWARE_LED 0x1000000
++
+ /**
+  * struct phy_device - An instance of a PHY
+  *
+@@ -663,6 +665,7 @@ struct phy_device {
+ 
+ 	struct phy_led_trigger *led_link_trigger;
+ #endif
++	int led_config;
+ 
+ 	/*
+ 	 * Interrupt number for this PHY
+@@ -776,6 +779,12 @@ struct phy_driver {
+ 	 */
+ 	int (*config_init)(struct phy_device *phydev);
+ 
++	/**
++	 * @config_led: Called to config the PHY LED,
++	 * Use the resume flag to indicate init or resume
++	 */
++	void (*config_led)(struct phy_device *phydev, bool resume);
++
+ 	/**
+ 	 * @probe: Called during discovery.  Used to set
+ 	 * up device-specific structures, if any
 -- 
-2.30.2
+2.33.1
 

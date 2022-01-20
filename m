@@ -2,169 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573E2494DB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97FE494DAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbiATMOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbiATMOe (ORCPT
+        id S232682AbiATMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:14:03 -0500
+Received: from mail-ua1-f41.google.com ([209.85.222.41]:39459 "EHLO
+        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230093AbiATMN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:14:34 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1494BC061751
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 04:14:27 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id r9-20020a1c4409000000b0034e043aaac7so335576wma.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 04:14:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=esc1uJ/1b1Bl5sIRdBGqAaIciPpRZPZmuwi/GvPIASI=;
-        b=HTONie7dMdtGsPLTyvbZfSGUG6+xqdnKWgOaR+qCVxHQRkzxY+vMBxXGXg/5BpxV+b
-         IsDXlYTyi+qXSq+o2cF6MB4vfE+NibpgVZTErgz7kRO3NbuFwIHHojyWk+NGNIO9UnnA
-         QOgrlhvgK9+7zJCfkdZu1+NdcAJ5BJC0d6F9tqWwopjxTY93nBMXwovpVIAtO1PSZys2
-         +xRTK4eY62C1fAimw/6q6j6jT0brcpFfNvdDkVT1WB8+d/jFM/UAWtE9vklfOYwBTxAB
-         6lGJnLsH7bcwADr01qo5DiEENNOMYSuZWWjf+DKi97Se3DRIZhayFeeO2V1ARqdAX5/c
-         9cnA==
+        Thu, 20 Jan 2022 07:13:56 -0500
+Received: by mail-ua1-f41.google.com with SMTP id p7so3224137uao.6;
+        Thu, 20 Jan 2022 04:13:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=esc1uJ/1b1Bl5sIRdBGqAaIciPpRZPZmuwi/GvPIASI=;
-        b=eIwYCB/VGP9YMTFxbI2uZ0tTruo8GNh9hz3Xmy72y0AtLiO0U43puWne5YgwsL+8qJ
-         eftmLX90mL9bRMKr7nYWMJgAFtGUOjwriCz+fCOvqihiTtWrakOiIi+pXQOYyqJDICUQ
-         d/4EiPwtVKgdpqfGV+r5jb6BgwfBiK2XeJ5xk1fPqVo0a7bPsVj7gZd9OMZMlz+ycz7U
-         NUMRVWsxmtOUspFpoEBUxoIyLF1gUyV9YOmtMjtyPDZTGjn2nlJe2aHL0KO3i3TSJPTt
-         Xm+f5ghWcoIAvdzOWBXWsFrNLDkxY2l+LiC8ECqERhene9UkSAFK7O2IhluZXQE81Lbz
-         fQ2A==
-X-Gm-Message-State: AOAM533IbKVN/3hb1SrdCd/0p+9MNf4fFGjZ7DU9oHeeTERzR7QJRjPz
-        nZvPSTIFHJ8bP45dZYlNkeit0g==
-X-Google-Smtp-Source: ABdhPJzyrsxABb5+2MQcEebguHu+jFibhrZ6TUJ8eIM4jhWsekHkOasUh0vYuPh5kGAaTeCWgnT/RA==
-X-Received: by 2002:a5d:548b:: with SMTP id h11mr33145701wrv.12.1642680865670;
-        Thu, 20 Jan 2022 04:14:25 -0800 (PST)
-Received: from fedora.sec.9e.network (ip-088-153-139-166.um27.pools.vodafone-ip.de. [88.153.139.166])
-        by smtp.gmail.com with ESMTPSA id x4sm2853863wrp.13.2022.01.20.04.14.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 04:14:25 -0800 (PST)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v3 3/3] i2c: muxes: pca954x: Add regulator support
-Date:   Thu, 20 Jan 2022 13:13:13 +0100
-Message-Id: <20220120121314.463944-4-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220120121314.463944-1-patrick.rudolph@9elements.com>
-References: <20220120121314.463944-1-patrick.rudolph@9elements.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=olNvo1hlOps7yRNGdWPhIvGrV31s5RQbZPcE1Lfk/FY=;
+        b=DPYJ92Mw1I2q8aKrJ0lGi3LDJ1jkP1hsAXidhUNlxbbp5DKsUBDRIGJaxx5IPBcxMg
+         +scjWssmycN5Mx/pVYF7JzPJU9XG6Y6weUaQdIaOhlZk0UZKesZgibSSNmje79Owdc7R
+         RUAEz/1Z7WNyF7abNMxc64RntmC+jfIfNgD4OxTiI1svXYxrkEdKRNd++0vionl14Asm
+         CwuvONKs/XboBl9WQ6ukcfxOxCmfYE9HP/2ZQCVCvnEL/Mco79R0aaw8BoGW+8NPYmlG
+         i5UJ9syUp9HOJq8QkWYZsBMkJXabSsXy13bDLHS6b6fmoASnzUMvLAAZjictT0qE7ETl
+         XHDA==
+X-Gm-Message-State: AOAM531S3SP+bH4gtBIh+1JIR8vV60yDAxw0nSPN+X1dZbzofPJRCAqm
+        i38lOYLpQhIS9wRIIymrByHvhUTB86ecdQ==
+X-Google-Smtp-Source: ABdhPJz10yFfydZ2MyS/VscLmlnd50fxuJ8Fa/CJ2sGh4z+eWVPfuJo8I+95gQfk3FoXG7IxuBDkHw==
+X-Received: by 2002:a05:6102:94e:: with SMTP id a14mr519914vsi.86.1642680835432;
+        Thu, 20 Jan 2022 04:13:55 -0800 (PST)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id m6sm420318vsc.28.2022.01.20.04.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 04:13:55 -0800 (PST)
+Received: by mail-ua1-f49.google.com with SMTP id l1so8555495uap.8;
+        Thu, 20 Jan 2022 04:13:55 -0800 (PST)
+X-Received: by 2002:a67:e055:: with SMTP id n21mr551166vsl.57.1642680834901;
+ Thu, 20 Jan 2022 04:13:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <YeG8ydoJNWWkGrTb@ls3530> <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+ <87bl0amc6s.fsf@x1.stackframe.org> <20220118103323.4bae3a7d@eldfell>
+ <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org> <CAMuHMdWV+-+Jr7HggbfH_GEDcdep4pJLiMG+15jxBvQ91BCS0w@mail.gmail.com>
+ <CAKMK7uEOFg3z2btFERQ5XBQ7hqex6bXCb9X=SdwCjeLfX_SdFw@mail.gmail.com>
+In-Reply-To: <CAKMK7uEOFg3z2btFERQ5XBQ7hqex6bXCb9X=SdwCjeLfX_SdFw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 20 Jan 2022 13:13:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVjv1+UNeXkCBE+80tdtLuNg=5d6N12hNLgJdaS-jxERg@mail.gmail.com>
+Message-ID: <CAMuHMdVjv1+UNeXkCBE+80tdtLuNg=5d6N12hNLgJdaS-jxERg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sven Schnelle <svens@stackframe.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an optional vdd regulator and enable it when found for devices
-that are powered off by default.
+Hi Daniel,
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 32 ++++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 5 deletions(-)
+On Thu, Jan 20, 2022 at 12:33 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> On Thu, Jan 20, 2022 at 10:06 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Thu, Jan 20, 2022 at 4:29 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
+> > > On Tue, Jan 18, 2022 at 10:33:23AM +0200, Pekka Paalanen wrote:
+> > > > On Mon, 17 Jan 2022 19:47:39 +0100
+> > > > Sven Schnelle <svens@stackframe.org> wrote:
+> > > > > I also tested the speed on my Thinkpad X1 with Intel graphics, and there
+> > > > > a dmesg with 919 lines one the text console took about 2s to display. In
+> > > > > x11, i measure 22ms. This might be unfair because encoding might be
+> > > > > different, but i cannot confirm the 'memcpy' is faster than hardware
+> > > > > blitting' point. I think if that would be the case, no-one would care
+> > > > > about 2D acceleration.
+> > > >
+> > > > I think that is an extremely unfair comparison, because a graphical
+> > > > terminal app is not going to render every line of text streamed to it.
+> > > > It probably renders only the final view alone if you simply run
+> > > > 'dmesg', skipping the first 800-900 lines completely.
+> > >
+> > > Probably more like "render on every vblank", but yes, unlike fbcon it
+> > > surely wouldn't render every single character sent to the terminal.
+> > >
+> > > Also acceleration on modern hardware is more like "compose window
+> > > content using the 3d engine" than "use 2d blitter to scroll the window".
+> > >
+> > > > Maybe fbcon should do the same when presented with a flood of text,
+> > > > but I don't know how or why it works like it works.
+> > >
+> > > fbcon could do the same, i.e. render to fbdev in a 60Hz timer instead of
+> > > doing it synchronously.
+> >
+> > Hopefully only the parts of the screen which need a redraw?
+> >
+> > Not all displays can be updated that fast. For a "modern" example, see
+> > https://patchwork.freedesktop.org/series/93070/.
+>
+> drm does damage tracking throughout the stack, e.g.
+>
+> https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#damage-tracking-properties
+>
+> And unlike fbdev, it's explicit (so less overhead since userspace
+> generally knows what it's drawn) and doesn't rely on page fault
+> intercepting and fun stuff like that.
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 33b9a6a1fffa..086647193ea9 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -119,6 +120,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the PCA954x and MAX735x types we know about */
-@@ -459,6 +461,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	if (!IS_ERR_OR_NULL(data->supply))
-+		regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -513,15 +518,30 @@ static int pca954x_probe(struct i2c_client *client,
- 			     pca954x_select_chan, pca954x_deselect_mux);
- 	if (!muxc)
- 		return -ENOMEM;
-+
- 	data = i2c_mux_priv(muxc);
- 
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get_optional(dev, "vdd");
-+	if (IS_ERR(data->supply)) {
-+		if ((PTR_ERR(data->supply) == -EPROBE_DEFER))
-+			return -EPROBE_DEFER;
-+	} else {
-+		ret = regulator_enable(data->supply);
-+		if (ret) {
-+			dev_err(dev, "Failed to enable regulator vdd: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -538,7 +558,7 @@ static int pca954x_probe(struct i2c_client *client,
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -546,7 +566,8 @@ static int pca954x_probe(struct i2c_client *client,
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -565,7 +586,8 @@ static int pca954x_probe(struct i2c_client *client,
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
--- 
-2.34.1
+My reply was to a paragraph about rendering text by fbcon, not about
+userspace rendering graphics.
 
+> Like do people actually know what drm can and cannot do, or would that
+> take out all the fun?
+
+;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

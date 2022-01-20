@@ -2,272 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C886D494B00
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A98A494B0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359633AbiATJp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:45:56 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58150 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229545AbiATJpz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:45:55 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K93jMi006002;
-        Thu, 20 Jan 2022 09:45:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=m2UnY34z1fLdUSsd0XKoRjMMXPuxyH2F26o9GksoHmk=;
- b=Bvpn8LdftFfXN9YO1yDdb0ss/PdZ7s1c6anhvrwgENoZmxpl3zvvGa/JtTiFcO+OyWxp
- Mzr9FkNEO3v/pv6b4Rji30Dtih5iGE56pxQUaX8fhge77T5458jYPLSjdxpFRY55jZaL
- bYmaT2VXe3MmcWVTKmwh1FnCXSjw34+mjv4ZZEKKZLxP0q5fL9uCiH6GHass6UPi8BW1
- 79jeRrOdis8vJpBt400rqpYmQqVP8uvK018XVJP3OzybCiu5HSyjyYqDlcVXAdHArtY8
- 4XdlNeVB3e7HIHVvBjer3XR4kNjaYTSHrwDC3yWiFRxgwTy3F1I2KPfekHFeXbqMFuj4 Mg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq22h3waq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 09:45:54 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20K968W1013322;
-        Thu, 20 Jan 2022 09:45:54 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq22h3w9m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 09:45:54 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20K9VwW0009737;
-        Thu, 20 Jan 2022 09:45:51 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3dknw9nkvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 09:45:51 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20K9jliZ43450842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 09:45:47 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 03D9BAE055;
-        Thu, 20 Jan 2022 09:45:47 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB536AE058;
-        Thu, 20 Jan 2022 09:45:45 +0000 (GMT)
-Received: from [9.171.87.242] (unknown [9.171.87.242])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Jan 2022 09:45:45 +0000 (GMT)
-Message-ID: <dcfe1661-0779-6c50-6126-e9d0609e3911@linux.ibm.com>
-Date:   Thu, 20 Jan 2022 10:47:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 21/30] KVM: s390: pci: handle refresh of PCI
- translations
+        id S1359016AbiATJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:48:28 -0500
+Received: from mail-dm6nam08on2070.outbound.protection.outlook.com ([40.107.102.70]:15265
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233682AbiATJs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 04:48:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ib0uE0qWqPhg37qz2Qs6zJWP77waJBRYK/S8hgIzKESZumEs6f1v85VlKiidQwft/ln43Y1IDJxQksB0A1d1XPgNHl6u/23QW4b0/fKheEKMwBiDAGIePUeU0g2z65gPJFUDNzeOBaNpX6ZjsRwD8AUe9/JWIBD6pITlXltK2ssGtIPlokr8/Zwyb0h+oyIOvEF0KcCYxVC5XA5cvLnSdfk7F+Wbr5Lu7a79surBifFL5gKSRQuv1cgh2cEVgkbb7QYAYf7NGquu9kStaysZ2r57bQboKXEfCCnQqGt9faEQsk3PI59Fh/cKEKPPgaF8T3fhnlR4o+moTCdkQLH9Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dowi54OZgwHPLeajJWVC7MUVuBOBjmGG+WM4Ynw2In8=;
+ b=PEajxqXn5kfJ9j6RuQvqSr0WR/PaZ1kVkWyQR0PkOXKmae491WHcWNdtMxrZYxMdVEjxg3fUL1HBOYpbbi4QJClV/LzDST01Mx+gRbFYIt+59A/dC+zKtZtbuRs/1//zZJbqQ9w2s1fHpElZlsiYjcAUsGQcgOZXS0MEAOYg1KDSMzcek8LAwtZMFDc8XvqUcbvrl8DVe+CRGsjag9L0BudWUKi65NvmVmPOikNWKRLjK2D6naUOg07pxL0uLHdkilB8dGe0zlxknYka/KpXarOnBIUen7/kgWic6gn0Ty7feX+B/qx6SUE96t1XzyFwwYjLpMZytkyjKPTE8yZKKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dowi54OZgwHPLeajJWVC7MUVuBOBjmGG+WM4Ynw2In8=;
+ b=RdqheraNQntVSsp8+DSwv9QYqK/yRIc0nZGtef7y44fcX6TWUw19ZGgO1bIqhkgE5wOKJWTYHRXnd1+xJUhtitAvteQXSE/+o1QZsJKIZdoyETt2BJnw0dCE0BZutn89rKTEQayKdRRINn1I3a0NggTqXRO2Sk0Vdox9yY3YPY/94HN2yt03eEw6VqATSKCWyvQ+LHk7z0j1M4h4L9A2Wafw9+/3b014x66n1+IF922E4Vb5fsKr+ePQhFW1nIIm/akSqBv4VaXG5TRb85MhdZQiJ1sWOPaZ5JywK9reIHA1cwPcGtLhtf1Z+bmJuuDp2Pz5p7zZVBZ/KFwkNnOtRg==
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
+ by DM6PR12MB4249.namprd12.prod.outlook.com (2603:10b6:5:223::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Thu, 20 Jan
+ 2022 09:48:25 +0000
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::880d:1407:db31:5851]) by DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::880d:1407:db31:5851%11]) with mapi id 15.20.4888.014; Thu, 20 Jan
+ 2022 09:48:25 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Christian Koenig <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of
+ of_*()
+Thread-Topic: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of
+ of_*()
+Thread-Index: AQHYB77a/fG7hzWmEkq6PyblO45xR6xfhiQAgAwmIIA=
+Date:   Thu, 20 Jan 2022 09:48:24 +0000
+Message-ID: <DM5PR12MB18509C555A8A6F5891F0CC28C05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
+References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
+ <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
+ <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
+In-Reply-To: <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-22-mjrosato@linux.ibm.com>
- <265e3448-2e8e-c38b-e625-1546ae3d408b@linux.ibm.com>
- <3d8c05d7-79ec-dfa8-bfcb-b8888183612a@linux.ibm.com>
- <cebcc3de-e332-6381-f450-a6a26ef88182@linux.ibm.com>
- <bbd5a23e-0f83-cc35-5ea1-79ce015d2105@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <bbd5a23e-0f83-cc35-5ea1-79ce015d2105@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lqGiQmUkD8JYe7c6VMyjEn5V7AEmBjxt
-X-Proofpoint-ORIG-GUID: 5gRLWhVQka7NcHIaY2SFt87d6112DZTM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-20_03,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- suspectscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- mlxscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201200048
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a59abbe5-6308-4251-a333-08d9dbfa00d1
+x-ms-traffictypediagnostic: DM6PR12MB4249:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB42497F7F800A4CF30E9EB7FBC05A9@DM6PR12MB4249.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kCW+QtQ9nV41VzsgcBGa2cni17r0/zy8y/BR3ilqecW4KQWFiSwt96dxD64w3MHZm7GwdjlTqkARYLOmjzbYN71fkTv7uNizDSl8+DTVPOv1ccsVKmttVxTAqowszngUQP1sqB1ms5S89z14lYK3MtHYgDPDgEPuY6zF28XOcNu6AudnNC+xsxPbgM2MMGsEqCKCJFmvnvJQDfYaAeIUcB3+OW9GyM+b7tzzOBvlumsmkBJVLF1sRc7S67I+en2Yi1BXBlKYeBTcI5T+gSE/6LaX8UKUaXvchE1BJYsTkWLTmCM2VEli0SBPFoJ+wvvLnmSv9Eox7zAF/W6qso+7JRo4QS6ZVBMCMH2b7ilbTChKqI8j49295N0uVJ7dwe8nA3sjz/q08WmnQE52zysrnfQ5s3GYMuqEaBRLA1ohUxxVjWSb3/LaFiAkwUjQFXpqAdcWDzQ9T90DlREGhyXt1X1afB44dlyeOuqLr2x51c7TJjoprG5lvW04hh1lG0EV4Y/5T7rPC11aDhbo8E5pjE6ztUG7e2wPoBQ0R416cY9QeE9aiM88wVBpJj43wE3DUf3jjsX62JjvH3rJ4bOIoJM2se+fA5TLxFeYe160uKaWRJPufuVCM/M9kWujuyNStoeGjetCHNtDJKIDhHrW98zZZC5pI6wC4CRf3849ejCFCNCmYCfltA0bIEG1ePNjBOnnaiJoZ5Gag/9gtkQOJg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(8676002)(5660300002)(38100700002)(6506007)(54906003)(86362001)(186003)(4326008)(9686003)(2906002)(55016003)(7696005)(122000001)(66476007)(71200400001)(508600001)(8936002)(66446008)(26005)(66946007)(6916009)(38070700005)(53546011)(64756008)(66556008)(76116006)(83380400001)(4744005)(316002)(33656002)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnlqZnFQaGRLRjVOQmNQelVnMXd0STlQRTdrVWdsMmdyRmRtTStCbjRFMGdy?=
+ =?utf-8?B?TlBXVjhmdFhPRDAwT25xdWxWOU14L0pyWXo4Qi83QlNWcUl2eGMwLzVXZFVL?=
+ =?utf-8?B?MzhUMXVzSjJVbHlET2ZJalZxTWQ1K0ZDMWpGNkRsaFVEcDF6MlFuOENLSWtm?=
+ =?utf-8?B?ak9aRnJCZmUxQjF2RGk4S3U5TDdUYW9WVjZEV01oTTF0bDA1ZC9Gc3FGMTlD?=
+ =?utf-8?B?ay9KT0JCbXl5R3FhR2RRRi9EZ054T0FiclBSV0FoNXVGZFp1VUxJN3JpaFRV?=
+ =?utf-8?B?bURPdm45VDVIWnlrOW5XdFlUMHcrdkwzeTZmdWtKOTh4NEVRWUdmS0QxSzBu?=
+ =?utf-8?B?WHNCZDhzRVNvdGNKTjFRZ0Vjb2pnNEpWMEsySjRmNG9VSHJ5TXVDOThVV3ls?=
+ =?utf-8?B?eGRFaURxREhDcXJqR3dtUndva1ZEc0t4KzhsK1NFOFVRbUtyZEI4V2RlYVNM?=
+ =?utf-8?B?MTIxZy9pS3RhSmRaZkdGMzMxYzRnMyt1UFM4VFZYWHc2Mm9HN0dKU25ZdzFt?=
+ =?utf-8?B?K3ZiMlozV3A1LzUxZkoycnBSRnl0SnpEV3BGQUc5dHVad3dRSUJFWnFGaUgr?=
+ =?utf-8?B?UG9oTGg3UllteTZZcC9pVlNKMlpQTEsxbGxXdGR6UHJnNnRnVW9IVVNxVnMx?=
+ =?utf-8?B?QVhrNFR2WnovYU5XOG56c1ZKbEl4WUVyL1NtYzd2RTFsMjVNZXhSSzBzZER0?=
+ =?utf-8?B?Y1ZuZGJCbzRQS1J5YnFxK2N4MFB2SStabEtPT2h5L05TVmROODVCSzNKckJw?=
+ =?utf-8?B?NklUZkVJWkNtV0s1eisvaS8yZ3hVSFlHNGR2TG5GQnI1ZTlGYzhjNloxdk1E?=
+ =?utf-8?B?MjIwOXgwazZSRWlTOUlKU1VOaS9GNzlWOGRsbDZOSGx3QkEyaVlkZVRLSWxD?=
+ =?utf-8?B?bWc2Mm5nUmF6UzhMZTc0Mk43d1BjejhrVnFNR1VHYk5kQnhLeVcrZm4rRXBR?=
+ =?utf-8?B?MU9ocFpCM01Qc0ZoYTNLWHpSNU9YV09uN1NVRENuZmswSmZsaWV6MGRZWXJz?=
+ =?utf-8?B?ZEgzQzA5TzFsdDROSlVGQXVPVVNXRnpyYWE5ajJDVVMzdHVybkVYOHAwMTRX?=
+ =?utf-8?B?dEFaZnFwNlM4ajdCVHpCRTg4NFlHbWFzLzROYjhMc1pQM1hGekszdEQ4b01o?=
+ =?utf-8?B?MVhZbzJsRVpnSzNxSWlibjdSbm9PazNhZklnR09NNk1OcCtzdnd0YXpmWWMz?=
+ =?utf-8?B?M25IM1psWVZEZGhEZ1pHSVJsWUl1ZVdobDJIbTlOazltdXUveFBsMlBTNStq?=
+ =?utf-8?B?NEZtYy9qMzFibTFQcTRiaXpCb3pWQy85UUViUlB2YXlmc2ZTbzRNazFFQ1Rw?=
+ =?utf-8?B?K0l1c29YM1dXd0RFZDZIU0c4TGhJRDNSM3p2ZmJ2NUlNZ1ZNS2dXY05KZmdt?=
+ =?utf-8?B?ZkduSFZZRzFQZWZGSnN5Rk1VdUdzY241T3pRVkkzZDlVby83VVZVS21kZ2pX?=
+ =?utf-8?B?QWpuZzZIWm14QnBWeWRTaE1wdlFiY2ttRUk5ZDdWNisxTXVhbzNtY2ZSRVdO?=
+ =?utf-8?B?UlRWN1Q1K2FMeWtkR05sMXJZVHorQnA0Z0EreHFJNmk3RmtlSk5TK3pSYmJ2?=
+ =?utf-8?B?M2k2WVRaeGxROXpmL2c1b2tyZHRrU2RhYjI0Z1lreXlpRnBQRlVTWWVBTXZD?=
+ =?utf-8?B?d2dQN1YwczlKbnhKMXJ5T01lWTVrbUJkblBrU1FRV2xlSkNHbkpxMk5GcWJo?=
+ =?utf-8?B?Y005V0hqZ1lNRUQ5ekpzUzFZa0dGMXMvYnhjcTVBOEl1QmllVGVYNUI1bnpB?=
+ =?utf-8?B?Y1VMeENtVFAwRTE0UEg4YVRqclpoVlZWWEdyd0RvenMzcUZyQkZnODNQcEVS?=
+ =?utf-8?B?V20rWU5vVW83U1lOZUh0ckEwcndXeVIzU1Z4ck1aUDJ3Z21rbUFLKzQ2c0Jn?=
+ =?utf-8?B?RDk4WkJUOWRvTGVJRmNqNmRLb1FGeEtWYjhXRTRsQkQzMUtGdDg5NkFQQkdD?=
+ =?utf-8?B?ZCtHeFYzSVgrWXdDNE1lTnJ6NWRDNHU5MWQ3WUxXaytIQWpEOUMzZ0NYR0VF?=
+ =?utf-8?B?UlZMZ0pmRUJpcG9UeWk4SEhqVHZ0TXhPMDVjbXhlS1plamkzRDF1c2xJNUc0?=
+ =?utf-8?B?RW1waVE2RS9sTG5FOHI1TEpGaERMVmNsYmozbzJlc2NKb2hkc3FFVnlZa1Qr?=
+ =?utf-8?B?YXkwMERlUmRxVnhTOC91RjlmRnBIc3JBWnR6Z1lKYnJ1MFVqd3RuZnpyUXdD?=
+ =?utf-8?Q?KaHAiLPbjZRr/+KP1ez5kEE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a59abbe5-6308-4251-a333-08d9dbfa00d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 09:48:25.0431
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: w8H9bmWBvXsWC9bXffHRFv64C0jQe3LqUqRzWSQj2qZIx/c8Uo86tKmsJxhWZPZ6JOjYeaYeoL6oXrqLF2wVSg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4249
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/19/22 21:02, Matthew Rosato wrote:
-> On 1/19/22 1:25 PM, Pierre Morel wrote:
->>
->>
->> On 1/19/22 17:39, Matthew Rosato wrote:
->>> On 1/19/22 4:29 AM, Pierre Morel wrote:
->>>>
->>>>
->>>> On 1/14/22 21:31, Matthew Rosato wrote:
->>> ...
->>>>> +static int dma_table_shadow(struct kvm_vcpu *vcpu, struct zpci_dev 
->>>>> *zdev,
->>>>> +                dma_addr_t dma_addr, size_t size)
->>>>> +{
->>>>> +    unsigned int nr_pages = PAGE_ALIGN(size) >> PAGE_SHIFT;
->>>>> +    struct kvm_zdev *kzdev = zdev->kzdev;
->>>>> +    unsigned long *entry, *gentry;
->>>>> +    int i, rc = 0, rc2;
->>>>> +
->>>>> +    if (!nr_pages || !kzdev)
->>>>> +        return -EINVAL;
->>>>> +
->>>>> +    mutex_lock(&kzdev->ioat.lock);
->>>>> +    if (!zdev->dma_table || !kzdev->ioat.head[0]) {
->>>>> +        rc = -EINVAL;
->>>>> +        goto out_unlock;
->>>>> +    }
->>>>> +
->>>>> +    for (i = 0; i < nr_pages; i++) {
->>>>> +        gentry = dma_walk_guest_cpu_trans(vcpu, &kzdev->ioat, 
->>>>> dma_addr);
->>>>> +        if (!gentry)
->>>>> +            continue;
->>>>> +        entry = dma_walk_cpu_trans(zdev->dma_table, dma_addr);
->>>>> +
->>>>> +        if (!entry) {
->>>>> +            rc = -ENOMEM;
->>>>> +            goto out_unlock;
->>>>> +        }
->>>>> +
->>>>> +        rc2 = dma_shadow_cpu_trans(vcpu, entry, gentry);
->>>>> +        if (rc2 < 0) {
->>>>> +            rc = -EIO;
->>>>> +            goto out_unlock;
->>>>> +        }
->>>>> +        dma_addr += PAGE_SIZE;
->>>>> +        rc += rc2;
->>>>> +    }
->>>>> +
->>>>
->>>> In case of error, shouldn't we invalidate the shadow tables entries 
->>>> we did validate until the error?
->>>
->>> Hmm, I don't think this is strictly necessary - the status returned 
->>> should indicate the specified DMA range is now in an indeterminate 
->>> state (putting the onus on the guest to take corrective action via a 
->>> global refresh).
->>>
->>> In fact I think I screwed that up below in 
->>> kvm_s390_pci_refresh_trans, the fabricated status should always be 
->>> KVM_S390_RPCIT_INS_RES.
->>
->> OK
->>
->>>
->>>>
->>>>> +out_unlock:
->>>>> +    mutex_unlock(&kzdev->ioat.lock);
->>>>> +    return rc;
->>>>> +}
->>>>> +
->>>>> +int kvm_s390_pci_refresh_trans(struct kvm_vcpu *vcpu, unsigned 
->>>>> long req,
->>>>> +                   unsigned long start, unsigned long size,
->>>>> +                   u8 *status)
->>>>> +{
->>>>> +    struct zpci_dev *zdev;
->>>>> +    u32 fh = req >> 32;
->>>>> +    int rc;
->>>>> +
->>>>> +    /* Make sure this is a valid device associated with this guest */
->>>>> +    zdev = get_zdev_by_fh(fh);
->>>>> +    if (!zdev || !zdev->kzdev || zdev->kzdev->kvm != vcpu->kvm) {
->>>>> +        *status = 0;
->>>>
->>>> Wouldn't it be interesting to add some debug information here.
->>>> When would this appear?
->>>
->>> Yes, I agree -- One of the follow-ons I'd like to add after this 
->>> series is s390dbf entries; this seems like a good spot for one.
->>>
->>> As to when this could happen; it should not under normal 
->>> circumstances, but consider something like arbitrary function handles 
->>> coming from the intercepted guest instruction.  We need to ensure 
->>> that the specified function 1) exists and 2) is associated with the 
->>> guest issuing the refresh.
->>>
->>>>
->>>> Also if we have this error this looks like we have a VM problem, 
->>>> shouldn't we treat this in QEMU and return -EOPNOTSUPP ?
->>>>
->>>
->>> Well, I'm not sure if we can really tell where the problem is (it 
->>> could for example indicate a misbehaving guest, or a bug in our KVM 
->>> tracking of hostdevs).
->>>
->>> The guest chose the function handle, and if we got here then that 
->>> means it doesn't indicate that it's an emulated device, which means 
->>> either we are using the assist and KVM should handle the intercept or 
->>> we are not and userspace should handle it.  But in both of those 
->>> cases, there should be a host device and it should be associated with 
->>> the guest.
->>
->> That is right if we can not find an associated zdev = F(fh)
->> but the two other errors are KVM or QEMU errors AFAIU.
-> 
-> I don't think we know for sure for any of the cases...  For a 
-> well-behaved guest I agree with your assessment.  However, the guest 
-> decides what fh to put into its refresh instruction and so a misbehaving 
-> guest could just pick arbitrary numbers for fh and circumstantially 
-> match some other host device.  What if the guest just decided to try 
-> every single possible fh number in a loop with a refresh instruction? 
-> That's neither KVM nor QEMU's fault but can trip each of these cases.
-> 
-> Consider the different cases:
-> 
-> !zdev - Either the guest provided a bogus fh, KVM provided a bad fh via 
-> the VFIO ioctl which then QEMU fed into CLP or KVM provided the right fh 
-> via ioctl but QEMU clobbered it when providing it to the guest via CLP.
-> 
-> !zdev->kzdev - Either the guest provided a bogus fh that just so 
-> happened to match a host fh that has no KVM association, or KVM or QEMU 
-> screwed up somewhere (as above or because we failed to make the KVM 
-> assocation somehow)
-> 
-> kzdev->kvm != vcpu->kvm - Pretty much the same as above, but the 
-> matching device is actually in use by some other guest.  Again it's 
-> possible the a misbehaving guest 'got lucky' with an arbitrary fh that 
-> happened to match a host fh with an existing KVM association -- or more 
-> likely that KVM or QEMU screwed up somewhere.
-
-OK, I understand and you are right, my error was to consider that 
-get_zdev_by_fh() returns a zdev associated with a valid FH for the guest 
-while it returns a zdev associated with a valid FH for the host.
-
-If the comment would have been after the get_zdev_by_fh() and before the 
-test I may be wouldn't have done this mistake.
-
-> 
->>
->>>
->>> I think if we decide to throw this to userspace in this event, QEMU 
->>> needs some extra code to handle it (basically, if QEMU receives the 
->>> intercept and the device is neither emulated nor using intercept mode 
->>> then we must treat as an invalid handle as this intercept should have 
->>> been handled by KVM)
->>
->> I do not want to start a discussion on this, I think we can let it 
->> like this at first and come back to it when we have a good idea on how 
->> to handle this.
->> May be just add a /* TODO */
-> 
-> OK, sure.  In any of the above cases, we are certainly done in KVM 
-> anyway.  Whether there's value in passing it onto userspace vs 
-> immediately giving an error, let's think about it.
-
-No, I do not think we should anymore.
-Sorry for this wrong idea.
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+PiBPbiBXZWQsIEphbiAxMiwgMjAyMiBhdCA0OjE1IFBNIEFraGlsIFIgPGFraGlscmFqZWV2QG52
+aWRpYS5jb20+IHdyb3RlOg0KPiA+DQo+ID4gQ2hhbmdlIG9mXyooKSBmdW5jdGlvbnMgdG8gZGV2
+aWNlXyooKSBmb3IgZmlybXdhcmUgYWdub3N0aWMgdXNhZ2UuDQo+ID4gVGhpcyBhbGxvd3MgdG8g
+aGF2ZSBzbWJ1c19hbGVydCBpbnRlcnJ1cHQgd2l0aG91dCBhbnkgY2hhbmdlcw0KPiANCj4gdGhl
+IHNtYnVzX2FsZXJ0DQo+IA0KPiA+IGluIHRoZSBjb250cm9sbGVyIGRyaXZlcnMgdXNpbmcgQUNQ
+SSB0YWJsZS4NCj4gDQo+IHRoZSBBQ1BJDQo+IA0KPiAuLi4NCj4gDQo+IFRoaXMgY2hhbmdlIHJl
+dmVhbHMgcG90ZW50aWFsIGlzc3VlOg0KPiANCj4gPiAtICAgICAgICAgICAgICAgaXJxID0gb2Zf
+aXJxX2dldF9ieW5hbWUoYWRhcHRlci0+ZGV2Lm9mX25vZGUsICJzbWJ1c19hbGVydCIpOw0KPiA+
+ICsgICAgICAgICAgICAgICBpcnEgPSBkZXZpY2VfaXJxX2dldF9ieW5hbWUoYWRhcHRlci0+ZGV2
+LnBhcmVudCwgInNtYnVzX2FsZXJ0Iik7DQo+IA0KPiA+ICAgICAgICAgICAgICAgICBpZiAoaXJx
+IDw9IDApDQo+IA0KPiBJIGd1ZXNzIHRoaXMgJz0gMCcgcGFydCBzaG91bGQgYmUgZml4ZWQgZmly
+c3QuDQoNCicwJyBpcyBhIGZhaWx1cmUgYXMgcGVyIHRoZSBkb2N1bWVudGF0aW9uIG9mIG9mX2ly
+cV9nZXRfYnluYW1lKCkgYXMgd2VsbCBhcw0Kb2ZfaXJxX2dldCgpLiBUaGUgY2FzZSBpcyBkaWZm
+ZXJlbnQgZm9yIGFjcGlfaXJxX2dldCgpLCBidXQgaXQgaXMgaGFuZGxlZCBpbg0KZndub2RlX2ly
+cV9nZXQoKS4gSWYgSSB1bmRlcnN0b29kIGl0IHJpZ2h0LCBhIHJldHVybiB2YWx1ZSBvZiAnMCcg
+c2hvdWxkIGJlIA0KY29uc2lkZXJlZCBhIGZhaWx1cmUgaGVyZS4NCg0KVGhhbmtzLA0KQWtoaWwN
+Cg==

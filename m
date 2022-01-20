@@ -2,353 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CF0495712
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 00:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE74495708
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 00:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378204AbiATXlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 18:41:04 -0500
-Received: from m228-6.mailgun.net ([159.135.228.6]:60791 "EHLO
-        m228-6.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244889AbiATXk6 (ORCPT
+        id S1348190AbiATXf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 18:35:56 -0500
+Received: from mail.hugovil.com ([162.243.120.170]:49952 "EHLO
+        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbiATXfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 18:40:58 -0500
-X-Greylist: delayed 305 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jan 2022 18:40:58 EST
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
- s=k1; t=1642722056; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=Cy6tIjM9sRgDUTNoIKHXr4iFY4oMmMOX9cOVZGirez8=; b=NBzaOOxNPuaPmfYXY+dMOXzCHj3ljDMudsYvXieXdCopgEEpdKZAFk6CymQgDCnk4sA/QkYh
- 58bO31hE5UlAepPS0O3U/ZWQAVeh+pmcLm4mBDsR/n9QsKOVhPbXTzl91J5PLQ7eK11JnXzv
- 5xl137gMJm4A4b/7ZgLNt0ppKJk=
-X-Mailgun-Sending-Ip: 159.135.228.6
-X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
-Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
- [67.205.190.89]) by smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 61e9f1d6e0071250cf66942b (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Thu, 20 Jan 2022 23:35:50 GMT
-Sender: michael@michaelkloos.com
-Received: from qpc.home.michaelkloos.com (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
-        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 636FB40267;
-        Thu, 20 Jan 2022 23:35:49 +0000 (UTC)
-From:   "Michael T. Kloos" <michael@michaelkloos.com>
-To:     paul.walmsley@sifive.com
-Cc:     palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Michael T. Kloos" <michael@michaelkloos.com>
-Subject: [PATCH] Fixed: Misaligned memory access.  Fixed pointer comparison.
-Date:   Thu, 20 Jan 2022 18:34:27 -0500
-Message-Id: <20220120233427.262098-1-michael@michaelkloos.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 20 Jan 2022 18:35:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=f3L6TZiJ+uQRcJZkGE5CwwCr2VwQ6AVuXmjyr0r35t4=; b=GNE+s1WZLCKxV6C7H88EjIH/Bv
+        DQJfa+dfUFhV7NDRzEUQ3Urc1qjZVMXLkF+vhLtaXkeXTJ7KUGr6+/xJDfFG5HLVHWkYAOR5427qP
+        LQpGsDnX8DyciLozziTRcwpUEhEf+hgyXoZIc1gAVNTuPnGRTId6wevvaCmL2aSC6olo=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:54882 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1nAgy4-0004Me-LJ; Thu, 20 Jan 2022 18:35:50 -0500
+Date:   Thu, 20 Jan 2022 18:35:48 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20220120183548.e6a8f46ede2a636a8eaf11c1@hugovil.com>
+In-Reply-To: <YehiHJXP23TSREbE@piout.net>
+References: <20220119172740.1856302-1-hugo@hugovil.com>
+        <YehMZC4vduvSH5HA@piout.net>
+        <20220119130845.6de245b8b217e659cd319328@hugovil.com>
+        <YehiHJXP23TSREbE@piout.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
+X-Spam-Level: 
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: bootlin.com]
+        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 NICE_REPLY_A Looks like a legit reply (A)
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.2
+Subject: Re: [PATCH] rtc: pcf2127: add error message if writing to CLKOUT
+ register fails
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rewrote the riscv memmove() assembly implementation.  The
-previous implementation did not check memory alignment and it
-compared 2 pointers with a signed comparison.  The misaligned
-memory access would cause the kernel to crash on systems that
-did not emulate it firmware and did support it in hardware.
-Firmware emulation is slow may not exist.  Additionally, hardware
-support may not exist and would likely still run slower than
-aligned	accesses even if it did.  The RISC-V spec does not
-guarantee that support for misaligned memory accesses will exist.
-It should not be depended on.
+On Wed, 19 Jan 2022 20:10:20 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-This patch now checks for the maximum granularity of co-alignment
-between the pointers and copies them with that, using single-byte
-copy for any unaligned data at their terminations.  It also now uses
-unsigned comparison for the pointers.
+> On 19/01/2022 13:08:45-0500, Hugo Villeneuve wrote:
+> > On Wed, 19 Jan 2022 18:37:40 +0100
+> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > 
+> > > On 19/01/2022 12:27:39-0500, Hugo Villeneuve wrote:
+> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > 
+> > > > If writing to CLKOUT register fails, the probe operation will be aborted
+> > > > without a meaningful error message.
+> > > > 
+> > > 
+> > > The current trend is to remove debug messages, please do not add more :)
+> > 
+> > Hi,
+> > If the read operation fails, the probe function will exit silently, and our RTC chip will not work. In that case, if we parse the dmesg logs, I think we  should have an indication that something went wrong.
+> > 
+> 
+> This is not true, it doesn't fail silently, you'd get:
+> rtc-pcf2127: probe of 1-0051 failed with error -121
 
-Added half-word and, if built for 64-bit, double-word copy.
+Well this is certainly true for me because I am not seing the same error message as you :)
 
-Migrated to the	newer assembler annotations from the now deprecated
-ones.
+Just for context, I have defined a dummy pcf2127 on I2C bus 0 in my device tree (no actual hardware is present). I also added some debug messages to investigate (rtc-pcf2127.c and dd.c files), and here is the dmesg log after issuing "modprobe rtc-pcf2127":
 
-Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
----
- arch/riscv/lib/memmove.S | 264 +++++++++++++++++++++++++++++++--------
- 1 file changed, 210 insertions(+), 54 deletions(-)
+[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: pcf2127_i2c_probe
+[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: pcf2127_probe
+[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: PORO disabling failed with error -6
+[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: call_driver_probe probe error: -6
 
-diff --git a/arch/riscv/lib/memmove.S b/arch/riscv/lib/memmove.S
-index 07d1d2152ba5..df7cd7a559ae 100644
---- a/arch/riscv/lib/memmove.S
-+++ b/arch/riscv/lib/memmove.S
-@@ -1,64 +1,220 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 Michael T. Kloos <michael@michaelkloos.com>
-+ */
- 
- #include <linux/linkage.h>
- #include <asm/asm.h>
- 
--ENTRY(__memmove)
--WEAK(memmove)
--        move    t0, a0
--        move    t1, a1
-+SYM_FUNC_START(__memmove)
-+SYM_FUNC_START_ALIAS(memmove)
-+	/*
-+	 * Returns
-+	 *   a0 - dest
-+	 *
-+	 * Parameters
-+	 *   a0 - Inclusive first byte of dest
-+	 *   a1 - Inclusive first byte of src
-+	 *   a2 - Length of copy
-+	 *
-+	 * Because the return matches the parameter register a0,
-+	 * we will not clobber or modify that register.
-+	 */
- 
--        beq     a0, a1, exit_memcpy
--        beqz    a2, exit_memcpy
--        srli    t2, a2, 0x2
-+	/* Return if nothing to do */
-+	beq a0, a1, exit_memmove
-+	beqz a2, exit_memmove
- 
--        slt     t3, a0, a1
--        beqz    t3, do_reverse
-+	/*
-+	 * Register Uses
-+	 *   a3 - Inclusive first multibyte of src
-+	 *   a4 - Non-inclusive last multibyte of src
-+	 *   a5 - Non-inclusive last byte of src
-+	 *
-+	 * During the copy
-+	 *      Forward Copy: a1 - Index counter of src
-+	 *      Reverse Copy: a5 - Index counter of src
-+	 *   Both Copy Modes: t2 - Index counter of dest
-+	 *   Both Copy Modes: t1 - Temporary for load-store
-+	 *   Both Copy Modes: t0 - Link
-+	 */
- 
--        andi    a2, a2, 0x3
--        li      t4, 1
--        beqz    t2, byte_copy
-+	/*
-+	 * Solve for last byte now.  We will solve the rest when
-+	 * they are needed for the copy because either byte copy
-+	 * does not require any of the others (Wasted effort if
-+	 * byte copy gets used) or we do not yet have enough
-+	 * information to solve them.
-+	 */
-+	add  a5, a1, a2
- 
--word_copy:
--        lw      t3, 0(a1)
--        addi    t2, t2, -1
--        addi    a1, a1, 4
--        sw      t3, 0(a0)
--        addi    a0, a0, 4
--        bnez    t2, word_copy
--        beqz    a2, exit_memcpy
--        j       byte_copy
--
--do_reverse:
--        add     a0, a0, a2
--        add     a1, a1, a2
--        andi    a2, a2, 0x3
--        li      t4, -1
--        beqz    t2, reverse_byte_copy
--
--reverse_word_copy:
--        addi    a1, a1, -4
--        addi    t2, t2, -1
--        lw      t3, 0(a1)
--        addi    a0, a0, -4
--        sw      t3, 0(a0)
--        bnez    t2, reverse_word_copy
--        beqz    a2, exit_memcpy
--
--reverse_byte_copy:
--        addi    a0, a0, -1
--        addi    a1, a1, -1
-+	/*
-+	 * Byte copy if copying less than SZREG bytes.
-+	 * This can cause problems with the bulk copy
-+	 * implementation below and is small enough not
-+	 * to bother.
-+	 */
-+	andi t0, a2, -SZREG
-+	beqz t0, byte_copy
-+
-+	/* Determine the maximum granularity of co-alignment. */
-+	xor  t0, a0, a1
-+#if   SZREG >= 8
-+	andi t1, t0, 0x7
-+	beqz t1, doubleword_copy
-+#endif
-+	andi t1, t0, 0x3
-+	beqz t1, word_copy
-+	andi t1, t0, 0x1
-+	beqz t1, halfword_copy
-+	/* Fall through to byte copy if nothing larger is found. */
- 
- byte_copy:
--        lb      t3, 0(a1)
--        addi    a2, a2, -1
--        sb      t3, 0(a0)
--        add     a1, a1, t4
--        add     a0, a0, t4
--        bnez    a2, byte_copy
--
--exit_memcpy:
--        move a0, t0
--        move a1, t1
--        ret
--END(__memmove)
-+	bltu a1, a0, byte_copy_reverse
-+
-+byte_copy_forward:
-+	add  t2, a0, zero
-+byte_copy_fw_callin:
-+	beq  a1, a5, exit_memmove
-+	lb   t1, (a1)
-+	sb   t1, (t2)
-+	addi a1, a1, 1
-+	addi t2, t2, 1
-+	j byte_copy_fw_callin
-+
-+byte_copy_reverse:
-+	add  t2, a0, a2
-+byte_copy_rv_callin:
-+	beq  a1, a5, exit_memmove
-+	addi a5, a5, -1
-+	addi t2, t2, -1
-+	lb   t1, (a5)
-+	sb   t1, (t2)
-+	j byte_copy_rv_callin
-+
-+exit_memmove:
-+	ret
-+
-+copy_bytes_until_aligned_fw:
-+	beq  a1, a3, 1f /* Reuse the return from the other copy loop */
-+	lb   t1, (a1)
-+	sb   t1, (t2)
-+	addi a1, a1, 1
-+	addi t2, t2, 1
-+	j copy_bytes_until_aligned_fw
-+
-+copy_bytes_until_aligned_rv:
-+	beq  a4, a5, 1f
-+	addi a5, a5, -1
-+	addi t2, t2, -1
-+	lb   t1, (a5)
-+	sb   t1, (t2)
-+	j copy_bytes_until_aligned_rv
-+	1: jalr zero, (t0) /* Return */
-+
-+#if   SZREG >= 8
-+doubleword_copy:
-+	andi a3, a1, -8
-+	andi a4, a5, -8
-+	beq  a3, a1, 1f
-+	addi a3, a3, 8
-+	1:
-+	bltu a1, a0, doubleword_copy_reverse
-+
-+doubleword_copy_forward:
-+	add  t2, a0, zero
-+
-+	jal t0, copy_bytes_until_aligned_fw
-+
-+	1:
-+	beq  a1, a4, byte_copy_fw_callin
-+	ld   t1, (a1)
-+	sd   t1, (t2)
-+	addi a1, a1, 8
-+	addi t2, t2, 8
-+	j 1b
-+
-+doubleword_copy_reverse:
-+	add  t2, a0, a2
-+
-+	jal t0, copy_bytes_until_aligned_rv
-+
-+	1:
-+	beq  a3, a5, byte_copy_rv_callin
-+	addi a5, a5, -8
-+	addi t2, t2, -8
-+	ld   t1, (a5)
-+	sd   t1, (t2)
-+	j 1b
-+#endif
-+
-+word_copy:
-+	andi a3, a1, -4
-+	andi a4, a5, -4
-+	beq  a3, a1, 1f
-+	addi a3, a3, 4
-+	1:
-+	bltu a1, a0, word_copy_reverse
-+
-+word_copy_forward:
-+	add  t2, a0, zero
-+
-+	jal t0, copy_bytes_until_aligned_fw
-+
-+	1:
-+	beq  a1, a4, byte_copy_fw_callin
-+	lw   t1, (a1)
-+	sw   t1, (t2)
-+	addi a1, a1, 4
-+	addi t2, t2, 4
-+	j 1b
-+
-+word_copy_reverse:
-+	add  t2, a0, a2
-+
-+	jal t0, copy_bytes_until_aligned_rv
-+
-+	1:
-+	beq  a3, a5, byte_copy_rv_callin
-+	addi a5, a5, -4
-+	addi t2, t2, -4
-+	lw   t1, (a5)
-+	sw   t1, (t2)
-+	j 1b
-+
-+halfword_copy:
-+	andi a3, a1, -2
-+	andi a4, a5, -2
-+	beq  a3, a1, 1f
-+	addi a3, a3, 2
-+	1:
-+	bltu a1, a0, halfword_reverse
-+
-+halfword_forward:
-+	add  t2, a0, zero
-+
-+	jal t0, copy_bytes_until_aligned_fw
-+
-+	1:
-+	beq  a1, a4, byte_copy_fw_callin
-+	lh   t1, (a1)
-+	sh   t1, (t2)
-+	addi a1, a1, 2
-+	addi t2, t2, 2
-+	j 1b
-+
-+halfword_reverse:
-+	add  t2, a0, a2
-+
-+	jal t0, copy_bytes_until_aligned_rv
-+
-+	1:
-+	beq  a3, a5, byte_copy_rv_callin
-+	addi a5, a5, -2
-+	addi t2, t2, -2
-+	lh   t1, (a5)
-+	sh   t1, (t2)
-+	j 1b
-+
-+SYM_FUNC_END_ALIAS(memmove)
-+SYM_FUNC_END(__memmove)
+Error code -6 is -ENXIO, and looking at the call_driver_probe() function in dd.c, I now understand why I didn't see the error message (line 531):
+
+	case -ENXIO:
+		pr_debug("%s: probe of %s rejects match %d\n",
+			 drv->name, dev_name(dev), ret);
+
+So it seems that the return code is different than what you got?
+
+
+> > I had a case where my dev board was not properly plugged-in, and before this patch, I didn't notice it because of the silent abort of the probe function.
+> > 
+> 
+> Again, not silent.
+> 
+> > > 
+> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > ---
+> > > >  drivers/rtc/rtc-pcf2127.c | 4 +++-
+> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > > > index 3d1f57e54372..823abe2a7147 100644
+> > > > --- a/drivers/rtc/rtc-pcf2127.c
+> > > > +++ b/drivers/rtc/rtc-pcf2127.c
+> > > > @@ -717,8 +717,10 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > > >  	if (!(val & PCF2127_BIT_CLKOUT_OTPR)) {
+> > > >  		ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
+> > > >  				      PCF2127_BIT_CLKOUT_OTPR);
+> > > > -		if (ret < 0)
+> > > > +		if (ret < 0) {
+> > > > +			dev_err(dev, "writing to CLKOUT register failed\n");
+> > > >  			return ret;
+> > > > +		}
+> > > >  
+> > > >  		msleep(100);
+> > > >  	}
+> > > > -- 
+> > > > 2.30.2
+> > > > 
+> > > 
+> > > -- 
+> > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > > 
+> > 
+> > 
+> > -- 
+> > Hugo Villeneuve <hugo@hugovil.com>
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+
 -- 
-2.34.1
-
+Hugo Villeneuve <hugo@hugovil.com>

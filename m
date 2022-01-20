@@ -2,112 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E50F4943F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649944943FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344719AbiATAER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S1344763AbiATAGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344602AbiATAEP (ORCPT
+        with ESMTP id S230064AbiATAGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:04:15 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687FEC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:04:15 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id v70-20020a25c549000000b006130de5790aso8207860ybe.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:04:15 -0800 (PST)
+        Wed, 19 Jan 2022 19:06:30 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28666C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:06:30 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id q3-20020a638c43000000b0034c9c0fb2d2so2566065pgn.22
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:06:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=k7+5PtSi2SaE/0SJmGi4QGUE4EmxDvz5Ukuy4725lAE=;
-        b=Iyr+MG88n+iHRt04O0HAxgK5CL4awNioywRv0cYQLtlwJ7Cp2SF2E+wRqKyckrKrSy
-         hmfqoFYVLlfPXiyjZU06fsJiaM/B8aeEaNl3VbXQGhaWdYv6ndFzA8ejdebFsaE4eeIH
-         kEvmt22o01TDRtXrlTgL3RIJthagpYwzNqQ089bNvHagB0KLUVE+3Qebav6fE5W+MVK6
-         0aES0QD7R8qT9H/ciOd7arS2npXxDYv2+lDyzoviHA4D/0fKmtDzFqx3ZZuExjD1dTVD
-         6mRh2ScSTKfbsEbGwT5BFTnd5Hj5sxoVitLpDVQeh5FObEJFXH+HRD6SHTvrHlLmyzbR
-         fK9A==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=frZ7Kn6il6EA/Sc4lSu7iKex2wppY/L5v7EjTL3Zk00=;
+        b=I16sXiQtWhOPCE5+QKwq7dmnACs5A1B/OmmgXUJxWlWfU2WSF1HVK7t1fJe6/kLCbp
+         Gh3ch69F1EAmMUzPEydXEJ8O4j/GkCV6o7JMiH/LELYOFr83/pccJrOTTxfYq/+0d7ey
+         XJsqGpUp2QFJARde2D/9Isv5MTjL29vboF8L2hgB1hXv19UvZZ0oRqFY1rFRkSOIWabd
+         q7sDMcZx4YXipkQ7IqtqL2dSi+zUQypSwpOYOOdyjLcSl0esmYp74goKlbHAz3L598TS
+         B+mRu/dLyNlkg6VyaG+Tx+vctza54r5KMbVTLmwTMSteMsZlAoxLbInOAbxSlZnwcuTQ
+         n7gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=k7+5PtSi2SaE/0SJmGi4QGUE4EmxDvz5Ukuy4725lAE=;
-        b=Vhe8De35opc4KT6heD2TXbkG+L1xVHNCSAOi2uZ7bAklG6Ltly0jtI49wsoJkeNlNi
-         jG02Si3MDwEVJ7m6vq+LRNKqwovRawzj3kM1q2qDf1KMf3vBXsN5iYnqlWlUm1YMnbTW
-         vLkueFIuV2AK5VFV3p7Pib+6nzTll6Vq6otc4GMmcmTayA06aIeCqAWxUW1hG2fZ/gP1
-         P3I9dZ7ZsW8rJqxmuSry7TWPQIn00RlvPyBYLwh69Zj9Ha2BO0drEtArZ6a8vZwZfTxU
-         tz+5zMh/y21j7GSEzjhNPhSzLFZzBKrZxRB4tJWkdb3ZtIrDhvT/Om/NCtiyTQKBJOlh
-         636g==
-X-Gm-Message-State: AOAM5331RcrYljoO9bW5xc2VZU25nYWIJnIlicjRxY+auFJPQj6WlGTd
-        DLVkxcQH30nNf8t9tWRiozzcGfXRh1TR
-X-Google-Smtp-Source: ABdhPJxHY8jtaOES8j1o7rDLaIqeTvHnKwyZJ56vMd87GW+rxIi4jQUMPrzyY5G6j/GnKeYEUMVs8qiGk8ds
-X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:4305:5632:a281:7eb0])
- (user=rajatja job=sendgmr) by 2002:a25:7e87:: with SMTP id
- z129mr45619551ybc.719.1642637054515; Wed, 19 Jan 2022 16:04:14 -0800 (PST)
-Date:   Wed, 19 Jan 2022 16:04:09 -0800
-Message-Id: <20220120000409.2706549-1-rajatja@google.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=frZ7Kn6il6EA/Sc4lSu7iKex2wppY/L5v7EjTL3Zk00=;
+        b=bFlS/jwBdWNSiUxrPEFUzWAo5F/Pl2WnOlwql5C69+rBMC/JmIKQcK7p/25nSmUBt1
+         7VwAqnGkW7uRRujEv1lGtKWSiJefuOqlC+KU+A2jzl5G8jBGPeEBAKBg45V6P41Lsb0d
+         RoCccQe1cy17VcvR7q2Slb8Kmn9x7l1IQ9DUk+NKHgTtGE21XkZGIEVXjmlcLQ76kFzc
+         LoNx8ubEQS4jReF/lZ9G76uSs514ONDZZmUncgXWkd1mZrRF7y4EPKd9ZrTbH2raeuUF
+         FwaLVcI7piNWyTzVwPftyt7Tc9vql8qBzW9X1DA4twMx8IRQd4rTA7YGzdKj2dUfBox1
+         n0tw==
+X-Gm-Message-State: AOAM53314zV9B/m6fuY2qNrVH2eSlzbn3L6IIHcbJ2OiLkfdHB+A2rLb
+        bbDJ/MEFZhcTo/2rvbDSrJBjKdqTcGM=
+X-Google-Smtp-Source: ABdhPJx1rp2WlxQ0mvrptdGhmccaJOJ0IV2q9N2i/NtSdyyrDpYZSLiCaci8oNY334GVJxXkOZxx2EXxcQQ=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:ab12:b0:149:c5a5:5323 with SMTP id
+ ik18-20020a170902ab1200b00149c5a55323mr35793911plb.97.1642637189571; Wed, 19
+ Jan 2022 16:06:29 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 20 Jan 2022 00:06:24 +0000
+Message-Id: <20220120000624.655815-1-seanjc@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
-From:   Rajat Jain <rajatja@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rajat Jain <rajatja@google.com>, rajatxjain@gmail.com,
-        dtor@google.com, jsbarnes@google.com
+Subject: [PATCH] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS
+ blocking shadow
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Alexander Graf <graf@amazon.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today the pci_dev->untrusted is set for any devices sitting downstream
-an external facing port (determined via "ExternalFacingPort" property).
-This however, disallows any internal devices to be marked as untrusted.
+Set vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS, a.k.a. the pending single-step
+breakpoint flag, when re-injecting a #DB with RFLAGS.TF=1, and STI or
+MOVSS blocking is active.  Setting the flag is necessary to make VM-Entry
+consistency checks happy, as VMX has an invariant that if RFLAGS.TF is
+set and STI/MOVSS blocking is true, then the previous instruction must
+have been STI or MOV/POP, and therefore a single-step #DB must be pending
+since the RFLAGS.TF cannot have been set by the previous instruction,
+i.e. the one instruction delay after setting RFLAGS.TF must have already
+expired.
 
-There are use-cases though, where a platform would like to treat an
-internal device as untrusted (perhaps because it runs untrusted
-firmware, or offers an attack surface by handling untrusted network
-data etc).
+Normally, the CPU sets vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS appropriately
+when recording guest state as part of a VM-Exit, but #DB VM-Exits
+intentionally do not treat the #DB as "guest state" as interception of
+the #DB effectively makes the #DB host-owned, thus KVM needs to manually
+set PENDING_DBG.BS when forwarding/re-injecting the #DB to the guest.
 
-This patch introduces a new "UntrustedDevice" property that can be used
-by the firmware to mark any device as untrusted.
+Note, although this bug can be triggered by guest userspace, doing so
+requires IOPL=3, and guest userspace running with IOPL=3 has full access
+to all I/O ports (from the guest's perspective) and can crash/reboot the
+guest any number of ways.  IOPL=3 is required because STI blocking kicks
+in if and only if RFLAGS.IF is toggled 0=>1, and if CPL>IOPL, STI either
+takes a #GP or modifies RFLAGS.VIF, not RFLAGS.IF.
 
-Signed-off-by: Rajat Jain <rajatja@google.com>
+MOVSS blocking can be initiated by userspace, but can be coincident with
+a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
+executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
+is problematic only for CPL0 (and only if the guest is crazy enough to
+access a DR in a MOVSS shadow).  All other sources of #DBs are either
+suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
+are mutually exclusive with MOVSS blocking (T-bit task switch), or are
+already handled by KVM (ICEBP, a.k.a. INT1).
+
+This bug was originally found by running tests[1] created for XSA-308[2].
+Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
+presumably why the Xen bug was deemed to be an exploitable DOS from guest
+userspace.  KVM already handles ICEBP by skipping the ICEBP instruction
+and thus clears MOVSS blocking as a side effect of its "emulation".
+
+[1] http://xenbits.xenproject.org/docs/xtf/xsa-308_2main_8c_source.html
+[2] https://xenbits.xen.org/xsa/advisory-308.html
+
+Reported-by: David Woodhouse <dwmw2@infradead.org>
+Reported-by: Alexander Graf <graf@amazon.de>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- drivers/pci/pci-acpi.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/x86/kvm/vmx/vmx.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index a42dbf448860..3d9e5fa49451 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -1350,12 +1350,25 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
- 		dev->external_facing = 1;
- }
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index a02a28ce7cc3..3f7b09a24d1e 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -4901,8 +4901,33 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
+ 		dr6 = vmx_get_exit_qual(vcpu);
+ 		if (!(vcpu->guest_debug &
+ 		      (KVM_GUESTDBG_SINGLESTEP | KVM_GUESTDBG_USE_HW_BP))) {
++			/*
++			 * If the #DB was due to ICEBP, a.k.a. INT1, skip the
++			 * instruction.  ICEBP generates a trap-like #DB, but
++			 * despite its interception control being tied to #DB,
++			 * is an instruction intercept, i.e. the VM-Exit occurs
++			 * on the ICEBP itself.  Note, skipping ICEBP also
++			 * clears STI and MOVSS blocking.
++			 *
++			 * For all other #DBs, set vmcs.PENDING_DBG_EXCEPTIONS.BS
++			 * if single-step is enabled in RFLAGS and STI or MOVSS
++			 * blocking is active, as the CPU doesn't set the bit
++			 * on VM-Exit due to #DB interception.  VM-Entry has a
++			 * consistency check that a single-step #DB is pending
++			 * in this scenario as the previous instruction cannot
++			 * have toggled RFLAGS.TF 0=>1 (because STI and POP/MOV
++			 * don't modify RFLAGS), therefore the one instruction
++			 * delay when activating single-step breakpoints must
++			 * have already expired.  Note, the CPU sets/clears BS
++			 * as appropriate for all other VM-Exits types.
++			 */
+ 			if (is_icebp(intr_info))
+ 				WARN_ON(!skip_emulated_instruction(vcpu));
++			else if ((vmx_get_rflags(vcpu) & X86_EFLAGS_TF) &&
++				 (vmcs_read32(GUEST_INTERRUPTIBILITY_INFO) &
++				  (GUEST_INTR_STATE_STI | GUEST_INTR_STATE_MOV_SS)))
++				vmcs_writel(GUEST_PENDING_DBG_EXCEPTIONS,
++					    vmcs_readl(GUEST_PENDING_DBG_EXCEPTIONS) | DR6_BS);
  
-+static void pci_acpi_set_untrusted(struct pci_dev *dev)
-+{
-+	u8 val;
-+
-+	if (device_property_read_u8(&dev->dev, "UntrustedDevice", &val))
-+		return;
-+
-+	/* These PCI devices are not trustworthy */
-+	if (val)
-+		dev->untrusted = 1;
-+}
-+
- void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
- {
- 	struct pci_dev *pci_dev = to_pci_dev(dev);
- 
- 	pci_acpi_optimize_delay(pci_dev, adev->handle);
- 	pci_acpi_set_external_facing(pci_dev);
-+	pci_acpi_set_untrusted(pci_dev);
- 	pci_acpi_add_edr_notifier(pci_dev);
- 
- 	pci_acpi_add_pm_notifier(adev, pci_dev);
+ 			kvm_queue_exception_p(vcpu, DB_VECTOR, dr6);
+ 			return 1;
+
+base-commit: edb9e50dbe18394d0fc9d0494f5b6046fc912d33
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 

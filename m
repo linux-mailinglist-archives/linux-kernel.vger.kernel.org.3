@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D9E494CB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C40B494CBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiATLUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:20:18 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17758 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230429AbiATLUL (ORCPT
+        id S230037AbiATLUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:20:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26428 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229779AbiATLU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:20:11 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K8wQN6013978;
-        Thu, 20 Jan 2022 11:20:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=q8d+JmubsiEGkGrlJwoa+jl3OgIFkhx9mMub8kNkuwE=;
- b=crIM0taexLN+W2B7IMoHp+XMgll4k3V/oB2ffYahGgQMUDAZcsmpozh8LAPS+rjvIPcs
- 738xynN6nUSukPDApbDRdOcWZl4bjRxbXVoc1WIKeM2JGBv1IC8JNRluQzJ9W6EvtlDw
- volLiN7ZEn09PvhnWEF+wNMskYBwsSl/uKbckbegP/0LSBk54fZn5T6Bx1NZpOQr9h+J
- TJIL7g4Ar4Wju7f2tmn70eAkNXtWgfmUhjLs8w4brPtXiTnCVnhqEJQweNDoeIZcHdRq
- CXI1v0IH/h4JistnUodBLllRZxTq5RqLZRD8oVXJH6fv6ceqshjvAkWO/VnEfLGdgRMo UA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dq4putp9n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 11:20:09 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20KA8iuL029890;
-        Thu, 20 Jan 2022 11:20:09 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dq4putp94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 11:20:09 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KB7wOt003547;
-        Thu, 20 Jan 2022 11:20:07 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3dknhjpraf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 11:20:07 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KBK3O639715222
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 11:20:03 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45BEB11C07B;
-        Thu, 20 Jan 2022 11:20:03 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1F6F11C04C;
-        Thu, 20 Jan 2022 11:20:02 +0000 (GMT)
-Received: from [9.171.13.121] (unknown [9.171.13.121])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Jan 2022 11:20:02 +0000 (GMT)
-Message-ID: <6de14f3a-fd8a-49d4-3102-ca8f339d8728@linux.ibm.com>
-Date:   Thu, 20 Jan 2022 12:20:02 +0100
+        Thu, 20 Jan 2022 06:20:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642677628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oxb420uCG8aBuWa1aCClpOccejYPa+jGmi+S8D+HWIA=;
+        b=dqZ2bOH7D8vjoQ7O8sfP2d3GQIfozdQ/nufUUfANVRlQO3OgjoLUIVWuPF6O3YwXS5W/pT
+        EsJCBJGjQDGudQrVJPiR7utmCXfSDPJTDeAr7gySpH8E8S1+AY7KpyEDCtQdWUTaSGeGT/
+        rZBiTVldn10ZKj1mdQraGcn99skROcs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-Ob-x14i1MFOoWEmJULK6Xg-1; Thu, 20 Jan 2022 06:20:26 -0500
+X-MC-Unique: Ob-x14i1MFOoWEmJULK6Xg-1
+Received: by mail-wm1-f71.google.com with SMTP id f188-20020a1c1fc5000000b0034d79edde84so2628819wmf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:20:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oxb420uCG8aBuWa1aCClpOccejYPa+jGmi+S8D+HWIA=;
+        b=Yq+lz9Nytanp5UhRNzZ9wCV5Pkmno5XaSPn0wXNE8g5Xf3Ly0YIRHyMOzmZYnY7Xac
+         jEvpdcfmwi+vy3g11TWMpinDaXbGsNCob6IblVo26KZ5ySAyXPCOVKEimLNGlPLtunYj
+         EZpW1Awspwys+OJ8hc2hqWMBY6vZFPqA9ziccMvgmgyaf87VskI6n81OH3LfHrQ1IAfi
+         6z6wBDzn1zsPEQHQrcfCMJ9tyNj/83vhsrDfwzS7BJ4en75Vq3jTt1Gei6Nc5Jxni+bp
+         6DkoTeqbRgzADP/H1fBI3DkJ4vjDBKjE5UDooye4LGZD4ZG3hYj7P6rMBJBypLNzmvCb
+         6kHQ==
+X-Gm-Message-State: AOAM531sK6x35fhvHmkJpoDvUuNKthEazB8lQ/BHh9MDGq9xEWPoXgFj
+        UTrsWsnh2AtK+K9akTNa3POYdJvOHRjPHC58yKpP/7mSVNuJrqYWA03EbfIn65iUNgQuBHgw4AE
+        0nur5EWtyB4wzwbW9KovS0dDw
+X-Received: by 2002:a05:600c:3b9e:: with SMTP id n30mr8578825wms.180.1642677625121;
+        Thu, 20 Jan 2022 03:20:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx7Cz1Uxk2SJP0IdOYpHjH87YRl1ckQst1vd6li4i603rWoRBIOUpateX35UnGplxJW3hlwRQ==
+X-Received: by 2002:a05:600c:3b9e:: with SMTP id n30mr8578776wms.180.1642677624854;
+        Thu, 20 Jan 2022 03:20:24 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id l9sm2098284wrs.43.2022.01.20.03.20.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 03:20:24 -0800 (PST)
+Message-ID: <ae988971-4184-36f4-98e8-32936dd7ea85@redhat.com>
+Date:   Thu, 20 Jan 2022 12:20:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 06/10] KVM: s390: Add vm IOCTL for key checked
- guest absolute memory access
+Subject: Re: [PATCH v2 7/7] kvm/x86: rework guest entry logic
 Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-7-scgl@linux.ibm.com>
- <069c72b6-457f-65c7-652e-e6eca7235fca@redhat.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <069c72b6-457f-65c7-652e-e6eca7235fca@redhat.com>
+To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org
+Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
+        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
+        joro@8bytes.org, luto@kernel.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paul.walmsley@sifive.com, peterz@infradead.org,
+        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
+        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+References: <20220119105854.3160683-1-mark.rutland@arm.com>
+ <20220119105854.3160683-8-mark.rutland@arm.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220119105854.3160683-8-mark.rutland@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tEaNHQjN40Df7antsZ4nerz26218eQ_Y
-X-Proofpoint-ORIG-GUID: fjL2rJnzhgeRNE88aRdwV5xNHiHpvwZt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-20_04,2022-01-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 phishscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201200056
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/19/22 11:58, Mark Rutland wrote:
+> 
+> To minimize duplication and to more clearly balance entry and exit, both
+> entry and exit of guest timing are placed in vcpu_enter_guest(), using
+> the new guest_timing_{enter,exit}_irqoff() helpers. When context
+> tracking is used a small amount of additional time will be accounted
+> towards guests; tick-based accounting is unnaffected as IRQs are
+> disabled at this point and not enabled until after the return from the
+> guest.
+> 
+> This also corrects (benign) mis-balanced context tracking accounting
+> introduced in commits:
+> 
+>    ae95f566b3d22ade ("KVM: X86: TSCDEADLINE MSR emulation fastpath")
+>    26efe2fd92e50822 ("KVM: VMX: Handle preemption timer fastpath")
+> 
+> Where KVM can enter a guest multiple times, calling vtime_guest_enter()
+> without a corresponding call to vtime_account_guest_exit(), and with
+> vtime_account_system() called when vtime_account_guest() should be used.
+> As account_system_time() checks PF_VCPU and calls account_guest_time(),
+> this doesn't result in any functional problem, but is unnecessarily
+> confusing.
 
+Yes, I agree.
 
-Am 20.01.22 um 11:38 schrieb Thomas Huth:
-> On 18/01/2022 10.52, Janis Schoetterl-Glausch wrote:
->> Channel I/O honors storage keys and is performed on absolute memory.
->> For I/O emulation user space therefore needs to be able to do key
->> checked accesses.
->> The vm IOCTL supports read/write accesses, as well as checking
->> if an access would succeed.
-> ...
->> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->> index e3f450b2f346..dd04170287fd 100644
->> --- a/include/uapi/linux/kvm.h
->> +++ b/include/uapi/linux/kvm.h
->> @@ -572,6 +572,8 @@ struct kvm_s390_mem_op {
->>   #define KVM_S390_MEMOP_LOGICAL_WRITE    1
->>   #define KVM_S390_MEMOP_SIDA_READ    2
->>   #define KVM_S390_MEMOP_SIDA_WRITE    3
->> +#define KVM_S390_MEMOP_ABSOLUTE_READ    4
->> +#define KVM_S390_MEMOP_ABSOLUTE_WRITE    5
-> 
-> Not quite sure about this - maybe it is, but at least I'd like to see this discussed: Do we really want to re-use the same ioctl layout for both, the VM and the VCPU file handles? Where the userspace developer has to know that the *_ABSOLUTE_* ops only work with VM handles, and the others only work with the VCPU handles? A CPU can also address absolute memory, so why not adding the *_ABSOLUTE_* ops there, too? And if we'd do that, wouldn't it be sufficient to have the VCPU ioctls only - or do you want to call these ioctls from spots in QEMU where you do not have a VCPU handle available? (I/O instructions are triggered from a CPU, so I'd assume that you should have a VCPU handle around?)
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
-I paritally agree. the ABSOLUTE calls should also work from a VCPU handle. But you also want to be able to call this from a different thread than the vpcu threads as you do not want to kick a CPU out of the kernel just for that. So it makes sense to have this ioctl also for the VM fd.
-> 
->   Thomas
-> 
-> 
+Paolo
+

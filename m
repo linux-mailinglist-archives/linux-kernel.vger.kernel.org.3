@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9676494551
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372AD494553
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345688AbiATBGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 20:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S1358026AbiATBHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 20:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345578AbiATBGd (ORCPT
+        with ESMTP id S1357983AbiATBHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:06:33 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77543C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:06:33 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id e9so664847pgn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:06:33 -0800 (PST)
+        Wed, 19 Jan 2022 20:07:24 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5A0C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:07:24 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id x22-20020a056a00189600b004be094fc848so2636589pfh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:07:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Cn8y2MduSfxpaUqgG70M6OfS7ciqUGnpG7newRRVGPo=;
-        b=l9//kvAqzr4TuZQOO5YZKMU5K+Nz/XqA2W8mABc4KeB0yGrfqBBq4kx2YfXYRGnmr6
-         U27+GMDDLWM+9p1myl0pCQNxtGLVjmwRvs7Q58qRhTHaNtAbqWG7kF3z1/TXbFni3YQx
-         BKZXCgPFF54pw4BZTc8lZvGrjxCHFz3eRBg5IjXWkiZ7qSdDgjBKujwCswcM7n+ftqli
-         qzk/694Fo7qKRGCoEb5H+i0aMcf8iDbIjutDmDpYDN11368ebUpJUC8oMadzTD0s766P
-         MluaYOSWQlvvG/YRm0yfhQK1z/go8/OpbmPHDk7XKforxsXh6aM2m/YPHRnEkd4BBbae
-         1a9Q==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=8k4Y3VNhARizHBLoBeVlBsEIO9RktxArLbOUz+wMzEA=;
+        b=opu/MwONHVOFKyzulY2hDvm6HGIeLsEVzxDtlWA8Pqsdn9s/lbq2LRxB/OUq63udCV
+         3BYO/p8t1E2G1dSKTTryOXmEdToPoUXnmDEUFTvHNYgRgAznPfR3VzuK0B6ZnvAfV2YW
+         9KQK/NFRbYv3gzhweDbHOg2LWEIS/4fbKe1nhhRKEY3+ujaG/Io+e1eX5YuXicLNuU8d
+         v0OF8yPXnXBDOIU+alEU54SD7r9YP3AlzZbI9rOQ0n7Y3VtB77VBYezQA8pOS5v2dVZN
+         FVwlfk3v5LtCW+p/5UBWZv+5A6JEem+1JNYrYgEzx1VAV9/lfbB3sQ67oxDsS5DxZMw4
+         /7kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Cn8y2MduSfxpaUqgG70M6OfS7ciqUGnpG7newRRVGPo=;
-        b=ijLGtHm6Nk4XC3roaF+CZTBGLeK8qQ1/0YLvX5C9ngUd3FuyX/nSwJGiJemQsSAm7X
-         8+LydUMyTxu0QYP8IKnJN3u9xaxo7AckmJgluC5wMhDb/f3J1r9xpbsWWr7oliWoHUh1
-         WLCirpzpgnqAiIlsrOyEyeoiZyigTmoSvqAQFIP3Z1ZfRJpyBkmX/aOQVq2Uqpoxf5bg
-         DSR2DC9akd8uF1P/mqN53F5kslK8ORyT/pxgi8KVq/YhnqjcT+Hwtfd3a72350lW+cCI
-         99z6ybn7S0eupfe1Nh1j4aCKDnykEuphxJhlCiVUcfKeXa8EIhqJXzhqCiaUIrjKuj7B
-         YIxg==
-X-Gm-Message-State: AOAM5318jWhBPfUYBXaJ94Af2yCmpxGqk9Iht+nhWtjEM8w6qh52icV+
-        Pa+3kLF5Nz10kk9QRoCAYlX+rg==
-X-Google-Smtp-Source: ABdhPJwhpHGT8KOOuEPAQImew6soTRUO2yMGEdyts2hB/E1RwOriB5vWheLq4HUU+aewl1urvRc1oA==
-X-Received: by 2002:a63:fe10:: with SMTP id p16mr29143931pgh.546.1642640792646;
-        Wed, 19 Jan 2022 17:06:32 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m17sm843462pfk.62.2022.01.19.17.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 17:06:31 -0800 (PST)
-Date:   Thu, 20 Jan 2022 01:06:28 +0000
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=8k4Y3VNhARizHBLoBeVlBsEIO9RktxArLbOUz+wMzEA=;
+        b=0beSfUoRhSno+7dYnabaOxWya/pNfVEJ/ADH3pBVSmzTejUdYJn4MQkwMmhPLCfcsS
+         WqGs6ejlXDzEJrGjc5WCND0KN44A2inhNTtsxESc4m68Mx2/KUwjSAEsqXCLKDSecsKp
+         6Odat4Lg5IWSInQ8NJzP853T4DcCQcAp+Ewwb+PXt2k86evam5shWjsP51XcTBh63E1a
+         I5u0TYf8Dnargnosb/1Lx+NClYwT1fV1L+5fVcC7iXi3bbzZwj4qw7LzDpxPUCxa63bQ
+         +55Hni+zgbWA5oyg44a+xEiYI2mCVyZECmr4bJikQdiz/0rvn1t62X4QDHKVYzgwvWL5
+         Yxdw==
+X-Gm-Message-State: AOAM533dOtWVztNohqy6T403t5NRvLT4OBjDxLQKdbhsVdQl/hirLtOo
+        Gzm2Svb4XzuA97lnk4VFfgpz5yF0gi8=
+X-Google-Smtp-Source: ABdhPJyiA7Rs4s7U+9aku6ZWeT21TC8qBXpEH9hQ0bc+CUBqZUFu088Wf24TiSfmeDGGQh8PhVQ1OqU77PY=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:3b52:: with SMTP id
+ ot18mr7688600pjb.129.1642640843789; Wed, 19 Jan 2022 17:07:23 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 20 Jan 2022 01:07:10 +0000
+Message-Id: <20220120010719.711476-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH 0/9] KVM: SVM: Fix and clean up "can emulate" mess
 From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        Robert Hoo <robert.hu@linux.intel.com>
-Subject: Re: [PATCH v5 4/8] KVM: VMX: dump_vmcs() reports
- tertiary_exec_control field as well
-Message-ID: <Yei1lODnpQTZLa7s@google.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-5-guang.zeng@intel.com>
- <YeCTsVCwEkT2N6kQ@google.com>
- <7fd4cb11-9920-6432-747e-633b96db0598@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7fd4cb11-9920-6432-747e-633b96db0598@intel.com>
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Liam Merwick <liam.merwick@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022, Zeng Guang wrote:
-> On 1/14/2022 5:03 AM, Sean Christopherson wrote:
-> > Can you provide a sample dump?  It's hard to visualize the output, e.g. I'm worried
-> > this will be overly log and harder to read than putting tertiary controls on their
-> > own line.
-> 
-> Sample dump here.
-> *** Control State ***
-> 
->  PinBased=0x000000ff CPUBased=0xb5a26dfa SecondaryExec=0x061037eb
-> TertiaryExec=0x0000000000000010
+Revert an amusing/embarassing goof reported by Liam Merwick, where KVM
+attempts to determine if RIP is backed by a valid memslot without first
+translating RIP to its associated GPA/GFN.  Fix the underlying bug that
+was "fixed" by the misguided memslots check by (a) never rejecting
+emulation for !SEV guests and (b) using the #NPF error code to determine
+if the fault happened on the code fetch or on guest page tables, which is
+effectively what the memslots check attempted to do.
 
-That's quite the line.  What if we reorganize the code to generate output like:
+Further clean up, harden, and document SVM's "can emulate" helper, and
+fix a #GP interception SEV bug found in the process of doing so.
 
-  CPUBased=0xb5a26dfa SecondaryExec=0x061037eb TertiaryExec=0x0000000000000010
-  PinBased=0x000000ff EntryControls=0000d1ff ExitControls=002befff
+Sean Christopherson (9):
+  KVM: SVM: Never reject emulation due to SMAP errata for !SEV guests
+  Revert "KVM: SVM: avoid infinite loop on NPF from bad address"
+  KVM: SVM: Don't intercept #GP for SEV guests
+  KVM: SVM: Explicitly require DECODEASSISTS to enable SEV support
+  KVM: x86: Pass emulation type to can_emulate_instruction()
+  KVM: SVM: WARN if KVM attempts emulation on #UD or #GP for SEV guests
+  KVM: SVM: Inject #UD on attempted emulation for SEV guest w/o insn
+    buffer
+  KVM: SVM: Don't apply SEV+SMAP workaround on code fetch or PT access
+  KVM: SVM: Don't kill SEV guest if SMAP erratum triggers in usermode
 
-That keeps the lines reasonable and IMO is better organization too, e.g. it captures
-the relationship between primary, secondary, and tertiary controls.
+ arch/x86/include/asm/kvm_host.h |   3 +-
+ arch/x86/kvm/svm/sev.c          |   9 +-
+ arch/x86/kvm/svm/svm.c          | 162 ++++++++++++++++++++++----------
+ arch/x86/kvm/vmx/vmx.c          |   7 +-
+ arch/x86/kvm/x86.c              |  11 ++-
+ virt/kvm/kvm_main.c             |   1 -
+ 6 files changed, 135 insertions(+), 58 deletions(-)
 
->  EntryControls=0000d1ff ExitControls=002befff
->  ExceptionBitmap=00060042 PFECmask=00000000 PFECmatch=00000000
->  VMEntry: intr_info=00000000 errcode=00000000 ilen=00000000
->  VMExit: intr_info=00000000 errcode=00000000 ilen=00000003
->          reason=00000030 qualification=0000000000000784
-> > >   	pr_err("EntryControls=%08x ExitControls=%08x\n", vmentry_ctl, vmexit_ctl);
-> > >   	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
-> > >   	       vmcs_read32(EXCEPTION_BITMAP),
-> > > -- 
-> > > 2.27.0
-> > > 
+
+base-commit: edb9e50dbe18394d0fc9d0494f5b6046fc912d33
+-- 
+2.34.1.703.g22d0c6ccf7-goog
+

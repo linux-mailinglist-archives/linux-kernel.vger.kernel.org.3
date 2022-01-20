@@ -2,592 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3A94946C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 698444946CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358580AbiATFXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 00:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236406AbiATFXH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 00:23:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA0BC061574;
-        Wed, 19 Jan 2022 21:23:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1358585AbiATFXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 00:23:47 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:29664 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234514AbiATFXq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 00:23:46 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1642656225; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=vEiCXHErX20m/K0YBx8lGnkGsE7rCgRUytoX0CrA3Qk=;
+ b=Q9V5SMBH4RJpcY/kieguRN3peC4hBRR0YEZGdqUWqF47PyvJ5qipgFl1S/rEx23QMO2xmTuU
+ ptB4stATTl/gFGHxPGCH08OAzjQrBSF6JiyRsJudxxgzWaKG2Q66ES0upDzh33pnD2g2A1eE
+ eHYKdZB8TWKSy63LwZH6yDkigzE=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 61e8f1dfe0071250cfff8890 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 20 Jan 2022 05:23:43
+ GMT
+Sender: kathirav=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1C8DEC4360D; Thu, 20 Jan 2022 05:23:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ACAAB81A7F;
-        Thu, 20 Jan 2022 05:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4E3C340E0;
-        Thu, 20 Jan 2022 05:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642656184;
-        bh=GMuCIX9M1dkV+7hodC+6sJPsSwJVn4rR3g//sqz8eHk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AQKLjZkTl5KmwBuycDwhRqPRh2oiaPwpisI/6JvizoNSCg/rMktsdimeduxITIBlu
-         UWXF6WCnC5ThXlzFtSyzTLqIJX3K3UJjQ2oBs2x96cThgOFMRcq5LpWA+TaUAdLElO
-         pH+uW0KYlyVHjGILqapWJNUd3ixwykwEZaYiJItt4GOMWm+K9qCNmkSbpr3n3amhrk
-         N6xQG4olDSYazSpGADoJIGtboj+oQ/KDFxe2kxT1xe8oiVZnszz9T4tvy/gCR0A3Qh
-         fRuVmZmXQ0v08GG0Vs6TJZx7Ul8VrKX6dPn00Y7lcO9CJh/FZnGPOaMjOB34jnCesN
-         57R97XUxpgj6Q==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com
-Subject: [PATCH v2] clk: gate: Add some kunit test suites
-Date:   Wed, 19 Jan 2022 21:23:03 -0800
-Message-Id: <20220120052303.2098394-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+        (Authenticated sender: kathirav)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 073CEC4338F;
+        Thu, 20 Jan 2022 05:23:41 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 20 Jan 2022 10:53:41 +0530
+From:   Kathiravan T <kathirav@codeaurora.org>
+To:     Baruch Siach <baruch@tkos.co.il>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        linux-kernel@vger.kernel.org,
+        Robert Hancock <robert.hancock@calian.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] usb: dwc3: Calculate REFCLKPER et. al. from
+ reference clock
+In-Reply-To: <87ee53fv01.fsf@tarshish>
+References: <20220119002438.106079-1-sean.anderson@seco.com>
+ <87ee53fv01.fsf@tarshish>
+Message-ID: <1965fc315525b8ab26cf9f71f939c24d@codeaurora.org>
+X-Sender: kathirav@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test various parts of the clk gate implementation with the kunit testing
-framework.
+On 2022-01-19 23:44, Baruch Siach wrote:
+> Hi Sean,
+> 
+> On Tue, Jan 18 2022, Sean Anderson wrote:
+>> This is a rework of patches 3-5 of [1]. It attempts to correctly 
+>> program
+>> REFCLKPER and REFCLK_FLADJ based on the reference clock frequency. 
+>> Since
+>> we no longer need a special property duplicating this configuration,
+>> snps,ref-clock-period-ns is deprecated.
+>> 
+>> Please test this! Patches 3/4 in this series have the effect of
+>> programming REFCLKPER and REFCLK_FLADJ on boards which already 
+>> configure
+>> the "ref" clock. I have build tested, but not much else.
+> 
+> Tested here on IPQ6010 based system. USB still works. But the with 
+> "ref"
+> clock at 24MHz, period is calculated as 0x29. Previous
+> snps,ref-clock-period-ns value used to be 0x32.
+> 
+> Is that expected?
+> 
+> Thanks,
+> baruch
+> 
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Cc: <kunit-dev@googlegroups.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
 
-Changes from v1 (https://lore.kernel.org/r/20220115080657.2780989-1-sboyd@kernel.org):
- * Changed file name to semi-match convention
- * Changed Kconfig symbol name to match convention
- * Changed kzalloc to test managed allocation
- * Inlined check for ret where possible
+Hi Baruch,
 
- drivers/clk/.kunitconfig    |   3 +
- drivers/clk/Kconfig         |   8 +
- drivers/clk/Makefile        |   1 +
- drivers/clk/clk-gate_test.c | 469 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 481 insertions(+)
- create mode 100644 drivers/clk/.kunitconfig
- create mode 100644 drivers/clk/clk-gate_test.c
+Yes, it is 0x29 for IPQ60xx based SoCs. In downstream it was wrongly 
+mentioned as 0x32, which was corrected recently.
 
-diff --git a/drivers/clk/.kunitconfig b/drivers/clk/.kunitconfig
-new file mode 100644
-index 000000000000..3754fdb9485a
---- /dev/null
-+++ b/drivers/clk/.kunitconfig
-@@ -0,0 +1,3 @@
-+CONFIG_KUNIT=y
-+CONFIG_COMMON_CLK=y
-+CONFIG_CLK_GATE_KUNIT_TEST=y
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index c5b3dc97396a..947cd0b12dbd 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -421,4 +421,12 @@ source "drivers/clk/x86/Kconfig"
- source "drivers/clk/xilinx/Kconfig"
- source "drivers/clk/zynqmp/Kconfig"
- 
-+# Kunit test cases
-+config CLK_GATE_KUNIT_TEST
-+	tristate "Basic gate type Kunit test" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Kunit test for the basic clk gate type.
-+
- endif
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index e42312121e51..52faef37bc9b 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_COMMON_CLK)	+= clk-divider.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-factor.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-rate.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-gate.o
-+obj-$(CONFIG_CLK_GATE_KUNIT_TEST) += clk-gate_test.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-multiplier.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-mux.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-composite.o
-diff --git a/drivers/clk/clk-gate_test.c b/drivers/clk/clk-gate_test.c
-new file mode 100644
-index 000000000000..2448ff0d1d68
---- /dev/null
-+++ b/drivers/clk/clk-gate_test.c
-@@ -0,0 +1,469 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Kunit test for clk gate basic type
-+ */
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/platform_device.h>
-+
-+#include <kunit/test.h>
-+
-+static void clk_gate_register_test_dev(struct kunit *test)
-+{
-+	struct clk_hw *ret;
-+	struct platform_device *pdev;
-+
-+	pdev = platform_device_register_simple("test_gate_device", -1, NULL, 0);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	ret = clk_hw_register_gate(&pdev->dev, "test_gate", NULL, 0, NULL,
-+				   0, 0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
-+	KUNIT_EXPECT_STREQ(test, "test_gate", clk_hw_get_name(ret));
-+	KUNIT_EXPECT_EQ(test, 0UL, clk_hw_get_flags(ret));
-+
-+	clk_hw_unregister_gate(ret);
-+	platform_device_put(pdev);
-+}
-+
-+static void clk_gate_register_test_parent_names(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *ret;
-+
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    1000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+
-+	ret = clk_hw_register_gate(NULL, "test_gate", "test_parent", 0, NULL,
-+				   0, 0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
-+	KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
-+
-+	clk_hw_unregister_gate(ret);
-+	clk_hw_unregister_fixed_rate(parent);
-+}
-+
-+static void clk_gate_register_test_parent_data(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *ret;
-+	struct clk_parent_data pdata = { };
-+
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    1000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+	pdata.hw = parent;
-+
-+	ret = clk_hw_register_gate_parent_data(NULL, "test_gate", &pdata, 0,
-+					       NULL, 0, 0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
-+	KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
-+
-+	clk_hw_unregister_gate(ret);
-+	clk_hw_unregister_fixed_rate(parent);
-+}
-+
-+static void clk_gate_register_test_parent_data_legacy(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *ret;
-+	struct clk_parent_data pdata = { };
-+
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    1000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+	pdata.name = "test_parent";
-+
-+	ret = clk_hw_register_gate_parent_data(NULL, "test_gate", &pdata, 0,
-+					       NULL, 0, 0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
-+	KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
-+
-+	clk_hw_unregister_gate(ret);
-+	clk_hw_unregister_fixed_rate(parent);
-+}
-+
-+static void clk_gate_register_test_parent_hw(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *ret;
-+
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    1000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+
-+	ret = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0, NULL,
-+					     0, 0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
-+	KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
-+
-+	clk_hw_unregister_gate(ret);
-+	clk_hw_unregister_fixed_rate(parent);
-+}
-+
-+static void clk_gate_register_test_hiword_invalid(struct kunit *test)
-+{
-+	struct clk_hw *ret;
-+
-+	ret = clk_hw_register_gate(NULL, "test_gate", NULL, 0, NULL,
-+				   20, CLK_GATE_HIWORD_MASK, NULL);
-+
-+	KUNIT_EXPECT_TRUE(test, IS_ERR(ret));
-+}
-+
-+static struct kunit_case clk_gate_register_test_cases[] = {
-+	KUNIT_CASE(clk_gate_register_test_dev),
-+	KUNIT_CASE(clk_gate_register_test_parent_names),
-+	KUNIT_CASE(clk_gate_register_test_parent_data),
-+	KUNIT_CASE(clk_gate_register_test_parent_data_legacy),
-+	KUNIT_CASE(clk_gate_register_test_parent_hw),
-+	KUNIT_CASE(clk_gate_register_test_hiword_invalid),
-+	{}
-+};
-+
-+static struct kunit_suite clk_gate_register_test_suite = {
-+	.name = "clk-gate-register-test",
-+	.test_cases = clk_gate_register_test_cases,
-+};
-+
-+struct clk_gate_test_context {
-+	void __iomem *fake_mem;
-+	struct clk_hw *hw;
-+	struct clk_hw *parent;
-+	u32 fake_reg; /* Keep at end, KASAN can detect out of bounds */
-+};
-+
-+static struct clk_gate_test_context *clk_gate_test_alloc_ctx(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx;
-+
-+	test->priv = ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+	ctx->fake_mem = (void __force __iomem *)&ctx->fake_reg;
-+
-+	return ctx;
-+}
-+
-+static void clk_gate_test_parent_rate(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	unsigned long prate = clk_hw_get_rate(parent);
-+	unsigned long rate = clk_hw_get_rate(hw);
-+
-+	KUNIT_EXPECT_EQ(test, prate, rate);
-+}
-+
-+static void clk_gate_test_enable(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	struct clk *clk = hw->clk;
-+	u32 enable_val = BIT(5);
-+
-+	KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-+
-+	KUNIT_EXPECT_EQ(test, enable_val, ctx->fake_reg);
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(hw));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(hw));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(parent));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(parent));
-+}
-+
-+static void clk_gate_test_disable(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	struct clk *clk = hw->clk;
-+	u32 enable_val = BIT(5);
-+	u32 disable_val = 0;
-+
-+	KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-+	KUNIT_ASSERT_EQ(test, enable_val, ctx->fake_reg);
-+
-+	clk_disable_unprepare(clk);
-+	KUNIT_EXPECT_EQ(test, disable_val, ctx->fake_reg);
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(hw));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(hw));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(parent));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(parent));
-+}
-+
-+static struct kunit_case clk_gate_test_cases[] = {
-+	KUNIT_CASE(clk_gate_test_parent_rate),
-+	KUNIT_CASE(clk_gate_test_enable),
-+	KUNIT_CASE(clk_gate_test_disable),
-+	{}
-+};
-+
-+static int clk_gate_test_init(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    2000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+
-+	hw = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0,
-+					    ctx->fake_mem, 5, 0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+
-+	ctx->hw = hw;
-+	ctx->parent = parent;
-+
-+	return 0;
-+}
-+
-+static void clk_gate_test_exit(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+
-+	clk_hw_unregister_gate(ctx->hw);
-+	clk_hw_unregister_fixed_rate(ctx->parent);
-+	kfree(ctx);
-+}
-+
-+static struct kunit_suite clk_gate_test_suite = {
-+	.name = "clk-gate-test",
-+	.init = clk_gate_test_init,
-+	.exit = clk_gate_test_exit,
-+	.test_cases = clk_gate_test_cases,
-+};
-+
-+static void clk_gate_test_invert_enable(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	struct clk *clk = hw->clk;
-+	u32 enable_val = 0;
-+
-+	KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-+
-+	KUNIT_EXPECT_EQ(test, enable_val, ctx->fake_reg);
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(hw));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(hw));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(parent));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(parent));
-+}
-+
-+static void clk_gate_test_invert_disable(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	struct clk *clk = hw->clk;
-+	u32 enable_val = 0;
-+	u32 disable_val = BIT(15);
-+
-+	KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-+	KUNIT_ASSERT_EQ(test, enable_val, ctx->fake_reg);
-+
-+	clk_disable_unprepare(clk);
-+	KUNIT_EXPECT_EQ(test, disable_val, ctx->fake_reg);
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(hw));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(hw));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(parent));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(parent));
-+}
-+
-+static struct kunit_case clk_gate_test_invert_cases[] = {
-+	KUNIT_CASE(clk_gate_test_invert_enable),
-+	KUNIT_CASE(clk_gate_test_invert_disable),
-+	{}
-+};
-+
-+static int clk_gate_test_invert_init(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    2000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+
-+	ctx->fake_reg = BIT(15); /* Default to off */
-+	hw = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0,
-+					    ctx->fake_mem, 15,
-+					    CLK_GATE_SET_TO_DISABLE, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+
-+	ctx->hw = hw;
-+	ctx->parent = parent;
-+
-+	return 0;
-+}
-+
-+static struct kunit_suite clk_gate_test_invert_suite = {
-+	.name = "clk-gate-invert-test",
-+	.init = clk_gate_test_invert_init,
-+	.exit = clk_gate_test_exit,
-+	.test_cases = clk_gate_test_invert_cases,
-+};
-+
-+static void clk_gate_test_hiword_enable(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	struct clk *clk = hw->clk;
-+	u32 enable_val = BIT(9) | BIT(9 + 16);
-+
-+	KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-+
-+	KUNIT_EXPECT_EQ(test, enable_val, ctx->fake_reg);
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(hw));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(hw));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(parent));
-+	KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(parent));
-+}
-+
-+static void clk_gate_test_hiword_disable(struct kunit *test)
-+{
-+	struct clk_gate_test_context *ctx = test->priv;
-+	struct clk_hw *parent = ctx->parent;
-+	struct clk_hw *hw = ctx->hw;
-+	struct clk *clk = hw->clk;
-+	u32 enable_val = BIT(9) | BIT(9 + 16);
-+	u32 disable_val = BIT(9 + 16);
-+
-+	KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
-+	KUNIT_ASSERT_EQ(test, enable_val, ctx->fake_reg);
-+
-+	clk_disable_unprepare(clk);
-+	KUNIT_EXPECT_EQ(test, disable_val, ctx->fake_reg);
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(hw));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(hw));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(parent));
-+	KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(parent));
-+}
-+
-+static struct kunit_case clk_gate_test_hiword_cases[] = {
-+	KUNIT_CASE(clk_gate_test_hiword_enable),
-+	KUNIT_CASE(clk_gate_test_hiword_disable),
-+	{}
-+};
-+
-+static int clk_gate_test_hiword_init(struct kunit *test)
-+{
-+	struct clk_hw *parent;
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
-+					    2000000);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
-+
-+	hw = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0,
-+					    ctx->fake_mem, 9,
-+					    CLK_GATE_HIWORD_MASK, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+
-+	ctx->hw = hw;
-+	ctx->parent = parent;
-+
-+	return 0;
-+}
-+
-+static struct kunit_suite clk_gate_test_hiword_suite = {
-+	.name = "clk-gate-hiword-test",
-+	.init = clk_gate_test_hiword_init,
-+	.exit = clk_gate_test_exit,
-+	.test_cases = clk_gate_test_hiword_cases,
-+};
-+
-+static void clk_gate_test_is_enabled(struct kunit *test)
-+{
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	ctx->fake_reg = BIT(7);
-+	hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 7,
-+				  0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_TRUE(test, clk_hw_is_enabled(hw));
-+
-+	clk_hw_unregister_gate(hw);
-+	kfree(ctx);
-+}
-+
-+static void clk_gate_test_is_disabled(struct kunit *test)
-+{
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	ctx->fake_reg = BIT(4);
-+	hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 7,
-+				  0, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_FALSE(test, clk_hw_is_enabled(hw));
-+
-+	clk_hw_unregister_gate(hw);
-+	kfree(ctx);
-+}
-+
-+static void clk_gate_test_is_enabled_inverted(struct kunit *test)
-+{
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	ctx->fake_reg = BIT(31);
-+	hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 2,
-+				  CLK_GATE_SET_TO_DISABLE, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_TRUE(test, clk_hw_is_enabled(hw));
-+
-+	clk_hw_unregister_gate(hw);
-+	kfree(ctx);
-+}
-+
-+static void clk_gate_test_is_disabled_inverted(struct kunit *test)
-+{
-+	struct clk_hw *hw;
-+	struct clk_gate_test_context *ctx;
-+
-+	ctx = clk_gate_test_alloc_ctx(test);
-+	ctx->fake_reg = BIT(29);
-+	hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 29,
-+				  CLK_GATE_SET_TO_DISABLE, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_FALSE(test, clk_hw_is_enabled(hw));
-+
-+	clk_hw_unregister_gate(hw);
-+	kfree(ctx);
-+}
-+
-+static struct kunit_case clk_gate_test_enabled_cases[] = {
-+	KUNIT_CASE(clk_gate_test_is_enabled),
-+	KUNIT_CASE(clk_gate_test_is_disabled),
-+	KUNIT_CASE(clk_gate_test_is_enabled_inverted),
-+	KUNIT_CASE(clk_gate_test_is_disabled_inverted),
-+	{}
-+};
-+
-+static struct kunit_suite clk_gate_test_enabled_suite = {
-+	.name = "clk-gate-is_enabled-test",
-+	.test_cases = clk_gate_test_enabled_cases,
-+};
-+
-+kunit_test_suites(
-+	&clk_gate_register_test_suite,
-+	&clk_gate_test_suite,
-+	&clk_gate_test_invert_suite,
-+	&clk_gate_test_hiword_suite,
-+	&clk_gate_test_enabled_suite
-+);
-+MODULE_LICENSE("GPL v2");
+Thanks,
+Kathiravan T.
 
-base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+>> 
+>> [1] 
+>> https://lore.kernel.org/linux-usb/20220114044230.2677283-1-robert.hancock@calian.com/
+>> 
+>> Changes in v2:
+>> - Document clock members
+>> - Also program GFLADJ.240MHZDECR
+>> - Don't program GFLADJ if the version is < 2.50a
+>> - Add snps,ref-clock-frequency-hz property for ACPI
+>> 
+>> Sean Anderson (7):
+>>   dt-bindings: usb: dwc3: Deprecate snps,ref-clock-period-ns
+>>   usb: dwc3: Get clocks individually
+>>   usb: dwc3: Calculate REFCLKPER based on reference clock
+>>   usb: dwc3: Program GFLADJ
+>>   usb: dwc3: Add snps,ref-clock-frequency-hz property for ACPI
+>>   arm64: dts: zynqmp: Move USB clocks to dwc3 node
+>>   arm64: dts: ipq6018: Use reference clock to set dwc3 period
+>> 
+>>  .../devicetree/bindings/usb/snps,dwc3.yaml    |   7 +-
+>>  arch/arm64/boot/dts/qcom/ipq6018.dtsi         |   3 +-
+>>  .../arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi |   4 +-
+>>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   4 +-
+>>  drivers/usb/dwc3/core.c                       | 112 
+>> +++++++++++++++---
+>>  drivers/usb/dwc3/core.h                       |  17 ++-
+>>  6 files changed, 120 insertions(+), 27 deletions(-)
+
 -- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member of Code Aurora Forum, hosted by The Linux Foundation

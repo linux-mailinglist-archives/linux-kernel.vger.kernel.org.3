@@ -2,303 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F375494E6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEC1494D6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243298AbiATMzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:55:53 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:56067 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236052AbiATMzw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:55:52 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MxUjv-1mLhTY2loH-00xqkF; Thu, 20 Jan 2022 13:55:49 +0100
-Received: by mail-oi1-f179.google.com with SMTP id s127so8754054oig.2;
-        Thu, 20 Jan 2022 04:55:48 -0800 (PST)
-X-Gm-Message-State: AOAM5319YPSe1THOcSSBjDeAAH3V3HEsqy3bWprGM+/85SEmBRqPI55X
-        ze0eFOclK1X/uSRuFvU0dttsz7kIAsgSX0LKlxU=
-X-Google-Smtp-Source: ABdhPJydc5loEDqeQgQKrusgbi1aGxD+tZ0GQwF7Qc/YGyFSxdDyRJjWKaddNyUDdWoTK5tk0vBiI2MFsnHozVbpMM8=
-X-Received: by 2002:a05:6808:2206:: with SMTP id bd6mr7227920oib.11.1642679565024;
- Thu, 20 Jan 2022 03:52:45 -0800 (PST)
+        id S232174AbiATLyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:54:07 -0500
+Received: from mga06.intel.com ([134.134.136.31]:47456 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231604AbiATLyG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 06:54:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642679646; x=1674215646;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hWH9CQcyJ3OyvK1GCGLRnCY5B+LN3QzOt6ywsVoqDPA=;
+  b=Ksjkhc82EQmFEnBRIG95KJv+DXGgAslCX+u5picgjiN8c92U4cIuvLtM
+   61fks0TdEdNzeb1biZhK0FoBbn03iikAZsSPMTUewfYI6kPKbE2iErYJJ
+   e5t4hsLegv4KcQ8w43CDRX0YrAP1goW+cI6KOzNDw620sOeHXEWts1eTd
+   ttb3M/u/jjSRcY1UKuM1QNa0tTiBcMy0nCPVKfTP3nlAZpxCrv3M7xjfi
+   KPLAADqoBbDTHNY6QgA5OPRyS5UMteh/1qF2cBiP82HYzrZ/xprreO4gQ
+   yfeRtcqtlNTN4wWIdiOq8fGOyUhHYbPaqLTBo0TbhiuCi9mE+sc47i8bh
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="306066367"
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="306066367"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 03:54:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="767572817"
+Received: from ramaling-i9x.iind.intel.com (HELO intel.com) ([10.203.144.108])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 03:54:01 -0800
+Date:   Thu, 20 Jan 2022 17:23:58 +0530
+From:   Ramalingam C <ramalingam.c@intel.com>
+To:     Robert Beckett <bob.beckett@collabora.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Simon Ser <contact@emersion.fr>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Jordan Justen <jordan.l.justen@intel.com>,
+        Kenneth Graunke <kenneth@whitecape.org>,
+        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
+        Slawomir Milczarek <slawomir.milczarek@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] drm/i915/uapi: document behaviour for DG2 64K
+ support
+Message-ID: <20220120115357.GB8264@intel.com>
+References: <20220118175036.3840934-1-bob.beckett@collabora.com>
+ <20220118175036.3840934-5-bob.beckett@collabora.com>
 MIME-Version: 1.0
-References: <20220120073911.99857-4-guoren@kernel.org>
-In-Reply-To: <20220120073911.99857-4-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 20 Jan 2022 12:52:28 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
-Message-ID: <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
-Subject: Re: [PATCH V3 03/17] asm-generic: compat: Cleanup duplicate definitions
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lCsHI9rHfZLXnkV3dfivYMnD6jrOglxU7oaZk08tRFkPrpeG0fc
- HD7q3LqubhJw2M4BBmJJripLWFBc9IHurENJcnEwZ526tnZBiQz0iHHMsU6FpCMMtR3OkoU
- uKH6YpISiZPOs40GV019o9s9mYLGfEeW+lhGwYH77CCiUEflurR3qBPjEZ2pRgwtWVvFV0M
- UZUAaoyTqqojrqECgUMjA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wGZ+H9xEMTs=:APK36IfZSJNk4XMXh/6BEq
- 2IzkaLQnLBZ6xC8KrVATSsP9mViZvnc5UFujJR7u/XdQiJQOUWmYSeGCkGDsaqXl3mC2Y78aS
- 0jZbCGH0n0/she6jobPiP+Imnfpln4WvwW+wribOOzmns5E+3dijimjU9QriLaKYMRY6XNNYJ
- 5z/92LzQFwEiXZKr6jTZTflsV/RcfUWo8TQ9Vk5PEnZisCx9fnESSuAellFOF+oQGRkw4BZP2
- dCF0CSRvswuIELQPIaM9VGO8Dd3VTKew1I1Nk3CxVsOAO78lF5P8gsEVkoBKdACFN+6fMTsRR
- nOHKBvm6wl75S24yAYmudmMY2h5L+CO69mvZLzKr16NUrLv0nuOuNcw9PNtQEfZJZ89N3owOK
- 7nRp9htE3ceLTRNjtw+qq9qFgBi1UXFhpL7s8XWpO/ZkHH/oowoUGWHFSeIlGRHVe1yymiCRp
- u1ipdpZ+JBWiGznqZQkXhMsHcRtwjjhetwoLdJeEth5UaV/R6WNqocKHemFlr/QMpq+qaGeeS
- zZmu/TQAI5YDNbMQGU5VE5MLmYJQcXdgzQR1hAK3pV5yjd/By9FmNwlOplt2bxbGYpvCD/IWy
- 0HUwXZaGyCs41eEm9W3rpvaIwEvO0Nohz0FIMF0dLssQb+p9V9fwZA885lzvL/4ukSUaBlMs7
- OXWioxXPDyhzwvobFot+Jx5CJBJKDXgH9p/zItmvxK0hywgnkAfPUqcqz9HngZYMHOyOANX9Z
- BIIejvL/S6uwGtTbvBR/Jn99I60wf6cIdlgZHsZKveKIYr8lB9LOYC8Z8vN04gnHiuquxIwB4
- 62ldoNDHB/HV72vTKBhyeV7B1bVInJ+ftPiTjwwfuL1ou29H+0=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220118175036.3840934-5-bob.beckett@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> There are 7 64bit architectures that support Linux COMPAT mode to
-> run 32bit applications. A lot of definitions are duplicate:
->  - COMPAT_USER_HZ
->  - COMPAT_RLIM_INFINITY
->  - COMPAT_OFF_T_MAX
->  - __compat_uid_t, __compat_uid_t
->  - compat_dev_t
->  - compat_ipc_pid_t
->  - struct compat_flock
->  - struct compat_flock64
->  - struct compat_statfs
->  - struct compat_ipc64_perm, compat_semid64_ds,
->           compat_msqid64_ds, compat_shmid64_ds
->
-> Cleanup duplicate definitions and merge them into asm-generic.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-
+On 2022-01-18 at 17:50:37 +0000, Robert Beckett wrote:
+> From: Matthew Auld <matthew.auld@intel.com>
+> 
+> On discrete platforms like DG2, we need to support a minimum page size
+> of 64K when dealing with device local-memory. This is quite tricky for
+> various reasons, so try to document the new implicit uapi for this.
+> 
+> v2: Fixed suggestions on formatting [Daniel]
+> 
+> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> cc: Simon Ser <contact@emersion.fr>
+> cc: Pekka Paalanen <ppaalanen@gmail.com>
+> Cc: Jordan Justen <jordan.l.justen@intel.com>
+> Cc: Kenneth Graunke <kenneth@whitecape.org>
+> Cc: mesa-dev@lists.freedesktop.org
+> Cc: Tony Ye <tony.ye@intel.com>
+> Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
 > ---
->  arch/arm64/include/asm/compat.h   | 108 +++-----------------------
->  arch/mips/include/asm/compat.h    |  24 ++----
->  arch/parisc/include/asm/compat.h  |  47 ++----------
->  arch/powerpc/include/asm/compat.h |  47 ++----------
->  arch/s390/include/asm/compat.h    | 109 +++-----------------------
->  arch/sparc/include/asm/compat.h   |  39 ++++------
->  arch/x86/include/asm/compat.h     | 114 +++-------------------------
->  include/asm-generic/compat.h      | 122 ++++++++++++++++++++++++++++++
->  8 files changed, 191 insertions(+), 419 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
-> index eaa6ca062d89..f54f295efae3 100644
-> --- a/arch/arm64/include/asm/compat.h
-> +++ b/arch/arm64/include/asm/compat.h
-> @@ -5,9 +5,18 @@
->  #ifndef __ASM_COMPAT_H
->  #define __ASM_COMPAT_H
->
-> +#define COMPAT_RLIM_INFINITY           0xffffffff
-...
-> +#ifndef COMPAT_RLIM_INFINITY
-> +#define COMPAT_RLIM_INFINITY   0x7fffffff
-> +#endif
+>  include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
+>  1 file changed, 39 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
+> index 5e678917da70..486b7b96291e 100644
+> --- a/include/uapi/drm/i915_drm.h
+> +++ b/include/uapi/drm/i915_drm.h
+> @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
+>  	/**
+>  	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
+>  	 * the user with the GTT offset at which this object will be pinned.
+> +	 *
+>  	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
+>  	 * presumed_offset of the object.
+> +	 *
+>  	 * During execbuffer2 the kernel populates it with the value of the
+>  	 * current GTT offset of the object, for future presumed_offset writes.
+> +	 *
+> +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
+> +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
+> +	 * minimum page sizes, like DG2.
+>  	 */
+>  	__u64 offset;
+>  
+> @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
+>  	 *
+>  	 * The (page-aligned) allocated size for the object will be returned.
+>  	 *
+> -	 * Note that for some devices we have might have further minimum
+> -	 * page-size restrictions(larger than 4K), like for device local-memory.
+> -	 * However in general the final size here should always reflect any
+> -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
+> -	 * extension to place the object in device local-memory.
+> +	 *
+> +	 * **DG2 64K min page size implications:**
+> +	 *
+> +	 * On discrete platforms, starting from DG2, we have to contend with GTT
+> +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
+> +	 * objects.  Specifically the hardware only supports 64K or larger GTT
+> +	 * page sizes for such memory. The kernel will already ensure that all
+> +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
+> +	 * sizes underneath.
+> +	 *
+> +	 * Note that the returned size here will always reflect any required
+> +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
+> +	 * such as DG2.
+> +	 *
+> +	 * **Special DG2 GTT address alignment requirement:**
+> +	 *
+> +	 * The GTT alignment will also need be at least 2M for  such objects.
+> +	 *
+> +	 * Note that due to how the hardware implements 64K GTT page support, we
+> +	 * have some further complications:
+> +	 *
+> +	 *   1) The entire PDE(which covers a 2MB virtual address range), must
+> +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
+> +	 *   PDE is forbidden by the hardware.
+> +	 *
+> +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
+> +	 *   objects.
+> +	 *
+> +	 * To keep things simple for userland, we mandate that any GTT mappings
+> +	 * must be aligned to and rounded up to 2MB. As this only wastes virtual
+> +	 * address space and avoids userland having to copy any needlessly
+> +	 * complicated PDE sharing scheme (coloring) and only affects GD2, this
+> +	 * id deemed to be a good compromise.
+"only affects DG2, this is" 
 
-While this is a correct conversion, I think the default should
-be 0xffffffff, to match the asm-generic RLIM_INFINITY
-definition, with only mips and sparc getting the exception
+Except these typos, patch looks good to me
 
-> -struct compat_flock {
-> -       short           l_type;
-> -       short           l_whence;
-> -       compat_off_t    l_start;
-> -       compat_off_t    l_len;
-> -       compat_pid_t    l_pid;
-> -};
-...
-> +#ifndef compat_flock
-> +struct compat_flock {
-> +       compat_short_t  l_type;
-> +       compat_short_t  l_whence;
-> +       compat_off_t    l_start;
-> +       compat_off_t    l_len;
-> +       compat_pid_t    l_pid;
-> +} __attribute__((packed));
-> +#endif
-
-You are adding __attribute__((packed)) here, which I think has
-no effect on the layout on the structure on any of the architectures
-but it does change the alignment requirements needlessly.
-
-Better leave it without the attribute.
-
-> -struct compat_flock64 {
-> -       short           l_type;
-> -       short           l_whence;
-> -       compat_loff_t   l_start;
-> -       compat_loff_t   l_len;
-> -       compat_pid_t    l_pid;
-> -};
-...
-> +#ifndef compat_flock64
-> +struct compat_flock64 {
-> +       compat_short_t  l_type;
-> +       compat_short_t  l_whence;
-> +       compat_loff_t   l_start;
-> +       compat_loff_t   l_len;
-> +       compat_pid_t    l_pid;
-> +} __attribute__((packed));
-> +#endif
-
-This one is different: on all architectures other than x86,
-the added packed attribute changes the size of the
-structure by removing the four padding bytes at the
-end. x86 originally added the attribute here to work around
-the weirdness of the x86-32 ABI that aligns 64-bit values
-on a 4-byte boundary.
-
-The easiest workaround would be to have x86 keep its
-custom definition. A slightly nicer version would drop the
-attribute on x86 as well but instead change the compat_loff_t
-definition to use compat_s64 instead of s64, giving it the
-correct alignment.
-
-> -struct compat_statfs {
-> -       int             f_type;
-> -       int             f_bsize;
-> -       int             f_blocks;
-> -       int             f_bfree;
-> -       int             f_bavail;
-> -       int             f_files;
-> -       int             f_ffree;
-> -       compat_fsid_t   f_fsid;
-> -       int             f_namelen;      /* SunOS ignores this field. */
-> -       int             f_frsize;
-> -       int             f_flags;
-> -       int             f_spare[4];
-> -};
-...
-> +#ifndef compat_statfs
-> +struct compat_statfs {
-> +       compat_uint_t   f_type;
-> +       compat_uint_t   f_bsize;
-> +       compat_uint_t   f_blocks;
-> +       compat_uint_t   f_bfree;
-> +       compat_uint_t   f_bavail;
-> +       compat_uint_t   f_files;
-> +       compat_uint_t   f_ffree;
-> +       __kernel_fsid_t f_fsid;
-> +       compat_uint_t   f_namelen;
-> +       compat_uint_t   f_frsize;
-> +       compat_uint_t   f_flags;
-> +       compat_uint_t   f_spare[4];
-> +} __attribute__((packed));
-> +#endif
-
-None of the architectures use the packed attribute at the moment,
-so please don't add one here.
-
-Changing compat_fsid_t to __kernel_fsid_t is harmless, but seems
-unnecessary.
-
-Changing the signed int to an unsigned int (regardless of notation)
-may be a change in behavior. s390 is the only architecture
-using unsigned members here at the moment, as of b8668fd0a7e1
-("s390/uapi: change struct statfs[64] member types to unsigned
-values").
-The description of that patch sounds like this was changed to fix
-a bug, but I don't see what the actual problem would be in the
-put_compat_statfs().
-
-For the moment I'd suggest leaving this with the signed version,
-with s390 being another exception next to mips. We can follow-up
-with merging s390 into the common definition using either the
-signed or unsigned types, but I think that needs to be a separate
-patch with a detailed explanation.
-
- +#ifndef compat_ipc64_perm
-> +struct compat_ipc64_perm {
-> +       compat_key_t key;
-> +       __compat_uid32_t uid;
-> +       __compat_gid32_t gid;
-> +       __compat_uid32_t cuid;
-> +       __compat_gid32_t cgid;
-> +       compat_mode_t   mode;
-> +       unsigned char   __pad1[4 - sizeof(compat_mode_t)];
-> +       compat_ushort_t seq;
-> +       compat_ushort_t __pad2;
-> +       compat_ulong_t  unused1;
-> +       compat_ulong_t  unused2;
-> +} __attribute__((packed));
-> +
-> +struct compat_semid64_ds {
-> +       struct compat_ipc64_perm sem_perm;
-> +       compat_ulong_t sem_otime;
-> +       compat_ulong_t sem_otime_high;
-> +       compat_ulong_t sem_ctime;
-> +       compat_ulong_t sem_ctime_high;
-> +       compat_ulong_t sem_nsems;
-> +       compat_ulong_t __unused3;
-> +       compat_ulong_t __unused4;
-> +} __attribute__((packed));
-> +
-> +struct compat_msqid64_ds {
-> +       struct compat_ipc64_perm msg_perm;
-> +       compat_ulong_t msg_stime;
-> +       compat_ulong_t msg_stime_high;
-> +       compat_ulong_t msg_rtime;
-> +       compat_ulong_t msg_rtime_high;
-> +       compat_ulong_t msg_ctime;
-> +       compat_ulong_t msg_ctime_high;
-> +       compat_ulong_t msg_cbytes;
-> +       compat_ulong_t msg_qnum;
-> +       compat_ulong_t msg_qbytes;
-> +       compat_pid_t   msg_lspid;
-> +       compat_pid_t   msg_lrpid;
-> +       compat_ulong_t __unused4;
-> +       compat_ulong_t __unused5;
-> +} __attribute__((packed));
-> +
-> +struct compat_shmid64_ds {
-> +       struct compat_ipc64_perm shm_perm;
-> +       compat_size_t  shm_segsz;
-> +       compat_ulong_t shm_atime;
-> +       compat_ulong_t shm_atime_high;
-> +       compat_ulong_t shm_dtime;
-> +       compat_ulong_t shm_dtime_high;
-> +       compat_ulong_t shm_ctime;
-> +       compat_ulong_t shm_ctime_high;
-> +       compat_pid_t   shm_cpid;
-> +       compat_pid_t   shm_lpid;
-> +       compat_ulong_t shm_nattch;
-> +       compat_ulong_t __unused4;
-> +       compat_ulong_t __unused5;
-> +} __attribute__((packed));
-> +#endif
-
-I checked these in detail, looking at the seven architectures, and your
-conversion looks exactly right (I had initially missed the part about
-compat_mode_t that you got right).
-
-As with compat_flock, the packed attribute has no impact on the layout
-here, but please drop it anyway for consistency.
-
-        Arnd
+Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
+>  	 */
+>  	__u64 size;
+>  	/**
+> -- 
+> 2.25.1
+> 

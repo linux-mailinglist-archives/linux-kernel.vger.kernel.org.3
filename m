@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7907E495427
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30ED49542F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243863AbiATS0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S1346676AbiATS21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346388AbiATS0E (ORCPT
+        with ESMTP id S233412AbiATS20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:26:04 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5807C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:26:03 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id r3so5279493iln.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:26:03 -0800 (PST)
+        Thu, 20 Jan 2022 13:28:26 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82985C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:28:26 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id u11so5830133plh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VM3tBp/CA+4wTCBfmyWMTm1eADRMbsKEHQheO5QR1dg=;
-        b=kjWd/gluHnZp28leoLrw9gVa9JtC0gx9dMDDSiGyx17HhEXqLHPyCYCzdGIexOoC8W
-         4G7du2uwS/k0/bIytNp0rc0EgcgQAZOWNTcelWkw1KWz8v25VxHJv8bBaEu+xev52pr0
-         yDCNIMUZtZFYIhSqsr8nRFoqnYiBUWRDmCSYVDp42bEEPcVGUv98j6uMJhzrhqkjmY1A
-         0sUNXlpXKp9uDnK24r1+W+twtCQJHhJ0fpOGJ6Aml6R0tKZ3uJu/b/xwW1bfHrjxIUWK
-         dUTOLmDhjr/FzvCK5yRQJJEgKC7rlQODvqDIN9S3XcNzqprC79Wf9xJ3mvKxxxX7Fk/p
-         +KQg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cll/Fz+oRzTg4NkYGgse3QyvCmyGspXQFPzsSfhpD4Q=;
+        b=XTbLMgr6L9Hf10tLGk72ynIT5OU06Oi/93dAe867TV67BFnxFSL7S54t3bJEN1hzB3
+         GBalv7/XAe2tp/skOHkOvqgpT0CZtMxIMMIEwneAx5lF9mugf5ADQ89q0kJ4/8Vi2zWk
+         XFK0uNXhdQ2VgGdzMgxmHNHaQmUZIyxJsZDBfSKGyxhLO5eL91ji53ckCuXzbNsOMekR
+         IwZaQiEjzdzaPq6g6VNDxWqf3/KH13kE5IiGJwpBvyigdUAYxVVn0XB12HRqCyD3HTq3
+         4FgeoCoABh93e9JDeijtrhTDlPpZpJK6nlX/oWXeNXyaKr16/gf3jBRlhEJZvfuYm2nT
+         WB7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VM3tBp/CA+4wTCBfmyWMTm1eADRMbsKEHQheO5QR1dg=;
-        b=MPzDtnim++uRpeT2jVuwPf3dpaJUDLqZvml1WEZyykvh5Y1kAJUhUR8eiQe0my6QGI
-         lShpb721KLgrbU0H+lcAUyyTadNUpvE0Z+MbQahkRIN2GoykDHajdv303QKf+A2sjHzj
-         r9lFsxFUxzvimqx75sfTVOZNs/TuCbO0nqFbdiHNFPlBIg+5oNSLDtn0+2QieZ/9K3GK
-         YrYKrcyqHDX2Zhv9XdvzwcynJv8Uf78tC6MO069nT9UQOcjz0SjBW9ZcTkOOghP+Z4EA
-         xSb+pYFcE+ejyfrXOMzaUR8hBZDCnDBcmFP7RPN1K35hK4kzpLcWGJw/hz3N/uU8gFW2
-         dujg==
-X-Gm-Message-State: AOAM531A9lfub5Xmj9usRE9yDH2HiPcxbIN1+iXYdGUfpPWzlvfDXCCA
-        Hx0FnVk2kyukXdXqkYQowWfSGE5n1zmRcDBf8U42ew==
-X-Google-Smtp-Source: ABdhPJyQ3HkdPr2dC0EIXetDOosxZkhDjZaOvxxWcA/Q1gWYGTNgeHnozQdeSnPQOpPK5nbkCvbWVSiPRWzUg5y1bYI=
-X-Received: by 2002:a05:6e02:1847:: with SMTP id b7mr135351ilv.300.1642703163043;
- Thu, 20 Jan 2022 10:26:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cll/Fz+oRzTg4NkYGgse3QyvCmyGspXQFPzsSfhpD4Q=;
+        b=5n1MTE4SYyJouKgHwtJPPVlFxvhSBUod7rsXnxgPQjKntqUNx1o965Wah+S+FYoDqd
+         iyrUzYGA7DPQe00aILGwuMwufAU7gBQg72GZuWrYlX506mK5K7pqeHsldzlezjdctkNd
+         PvOq5RBZlHzRPO9smxU1w2tXferNiy3M0EeIW0KkrQitmxyJ+X6bdLX6Utkc534jIWzD
+         4I9+bT39lySH6JUskwAh/WkzT3IxLTt4ApHK6t8oY7N+aGuYfLmFV3FiqkYAwoAakgae
+         px9jdoo4eYcQs54c6dzxbJFIQrZzO9b6YHW6k5r29aQvjTObRBk/EJ3iQ/pu40au+4gp
+         wntQ==
+X-Gm-Message-State: AOAM533d16BTlkYKYq2Fk88SEMbsUaITCY+lpQvkN958OKrozo6zVGTx
+        e/UI7c90j3H8AHoiLYRfSQQt1w==
+X-Google-Smtp-Source: ABdhPJzaPlt6MPQpB5TqcZOSwNiTVTpKDx+isyPvbrL5Zw93YzzhMY1p4pVnjgjvN5lkHq1Z+lKBYQ==
+X-Received: by 2002:a17:902:a38f:b0:14a:ec8d:51ac with SMTP id x15-20020a170902a38f00b0014aec8d51acmr11724250pla.132.1642703305917;
+        Thu, 20 Jan 2022 10:28:25 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id t9sm9197455pjg.44.2022.01.20.10.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 10:28:24 -0800 (PST)
+Date:   Thu, 20 Jan 2022 11:28:22 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] coresight: syscfg: Fix memleak on registration failure
+ in cscfg_create_device
+Message-ID: <20220120182822.GA1342128@p14s>
+References: <20220110073100.15497-1-linmq006@gmail.com>
+ <20220120175642.GB1338735@p14s>
 MIME-Version: 1.0
-References: <20220120042513.1648831-1-pasha.tatashin@soleen.com> <20220120042513.1648831-4-pasha.tatashin@soleen.com>
-In-Reply-To: <20220120042513.1648831-4-pasha.tatashin@soleen.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Thu, 20 Jan 2022 10:25:52 -0800
-Message-ID: <CAAPL-u8g3Yuh2Z6rb8ct=mVvNtJe6bHZEiPU2hdoCJKd93H-5g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] mm/page_table_check: use unsigned long for page counters
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, Greg Thelen <gthelen@google.com>,
-        mingo@redhat.com, will@kernel.org, rppt@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
-        songmuchun@bytedance.com, qydwhotmail@gmail.com,
-        Hugh Dickins <hughd@google.com>, Zi Yan <ziy@nvidia.com>,
-        anshuman.khandual@arm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120175642.GB1338735@p14s>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 8:25 PM Pasha Tatashin
-<pasha.tatashin@soleen.com> wrote:
->
-> For the consistency, use "unsigned long" for all page counters.
->
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  mm/page_table_check.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-> index 2341ac382cd5..22dd285ab8d5 100644
-> --- a/mm/page_table_check.c
-> +++ b/mm/page_table_check.c
-> @@ -86,8 +86,8 @@ static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
->  {
->         struct page_ext *page_ext;
->         struct page *page;
-> +       unsigned long i;
->         bool anon;
-> -       int i;
->
->         if (!pfn_valid(pfn))
->                 return;
-> @@ -121,8 +121,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
->  {
->         struct page_ext *page_ext;
->         struct page *page;
-> +       unsigned long i;
->         bool anon;
-> -       int i;
->
->         if (!pfn_valid(pfn))
->                 return;
-> @@ -186,10 +186,10 @@ static void pmd_clear_level(struct mm_struct *mm, unsigned long addr,
->  void __page_table_check_zero(struct page *page, unsigned int order)
->  {
->         struct page_ext *page_ext = lookup_page_ext(page);
-> -       int i;
-> +       unsigned long i;
->
->         BUG_ON(!page_ext);
-> -       for (i = 0; i < (1 << order); i++) {
-> +       for (i = 0; i < (1ul << order); i++) {
->                 struct page_table_check *ptc = get_page_table_check(page_ext);
->
->                 BUG_ON(atomic_read(&ptc->anon_map_count));
-> --
-> 2.34.1.703.g22d0c6ccf7-goog
->
+On Thu, Jan 20, 2022 at 10:56:42AM -0700, Mathieu Poirier wrote:
+> Good morning,
+> 
+> On Mon, Jan 10, 2022 at 07:31:00AM +0000, Miaoqian Lin wrote:
+> > device_register() calls device_initialize(),
+> > according to doc of device_initialize:
+> > 
+> >     Use put_device() to give up your reference instead of freeing
+> >     * @dev directly once you have called this function.
+> 
+> That is _if_ device_initialize() is called manually.  In this instance
+> @dev is registered with device_register() and unregistered with
+> device_unregister().  The latter conforms to the comment you pointed out and
+> calls put_device() as expected.
 
-Reviewed-by: Wei Xu <weixugc@google.com>
+I originally misunderstood the context - you are referring to the failure path in
+cscfg_create_device().  You are correct about needing to call put_device() but
+your solution will not work when the module is unloaded properly and
+device_unregister() is called by way of cscfg_clear_device().  In that case
+device_unregister() is already calling put_device().
+
+Here simply calling put_device() instead of cscfg_dev_release() in the error
+path should do just fine.  That will call cscfg_dev_release() and the memory
+allocated for cscfg_mgr will be release.
+
+> 
+> Thanks,
+> Mathieu
+> 
+> > 
+> > To prevent potential memleak, use put_device() instead call kfree
+> > directly.
+> > 
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > ---
+> >  drivers/hwtracing/coresight/coresight-syscfg.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/hwtracing/coresight/coresight-syscfg.c b/drivers/hwtracing/coresight/coresight-syscfg.c
+> > index 43054568430f..007fa1c761a7 100644
+> > --- a/drivers/hwtracing/coresight/coresight-syscfg.c
+> > +++ b/drivers/hwtracing/coresight/coresight-syscfg.c
+> > @@ -764,7 +764,7 @@ struct device *cscfg_device(void)
+> >  /* Must have a release function or the kernel will complain on module unload */
+> >  static void cscfg_dev_release(struct device *dev)
+> >  {
+> > -	kfree(cscfg_mgr);
+> > +	put_device(dev);
+> >  	cscfg_mgr = NULL;
+> >  }
+> >  
+> > -- 
+> > 2.17.1
+> > 

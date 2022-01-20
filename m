@@ -2,258 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67413495552
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3EA495554
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377594AbiATUSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 15:18:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43738 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229626AbiATUSh (ORCPT
+        id S1377606AbiATUUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 15:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235399AbiATUUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 15:18:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642709916;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f+ulNj0C+UncEzUU3lB3FXFcKi2cQR09+RDgCW05Fkg=;
-        b=i/j50nJxeHbVustRuhQdtbD6km6SrmCXS1mONzrVewTzDL5MGWBJMlZwaHhX4iFCOta9Dv
-        WYRz4bIBVgO8N+PVuVJed/DcGpX2FSSY7t8KOGUx2KZUPD4pZopDr3gcewbWsuNJA4BP8x
-        q3RsDbnDQScIOzw56pA/XQcs8h/9IB8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-15ul2eHWPze0BV7Uw-ImCg-1; Thu, 20 Jan 2022 15:18:35 -0500
-X-MC-Unique: 15ul2eHWPze0BV7Uw-ImCg-1
-Received: by mail-wm1-f70.google.com with SMTP id f187-20020a1c38c4000000b0034d5c66d8f5so5332710wma.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:18:35 -0800 (PST)
+        Thu, 20 Jan 2022 15:20:02 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2CEC06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:20:01 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id x11so26050530lfa.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:20:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SV2+kbDgVtw0lV31uGNVO0MZ2UY0VfBryzePxW9RfDo=;
+        b=hjq4AM/+aWwjiHOTI1IslNvdQgEv7Wbun6S6h7xb8cEm5+1TLN/d0WYqA/mc6RvKNN
+         gQoe6LKKSpfjOZLCLTLw4Trrwoy5pXt9ZXEhM1B1luwTPNTaZHvZvecumQPBw/nPJ8Vb
+         ENXUAiSZ2tztrL1y2h31ulq2bhNPSHGHa5MWThKCSMSusMuK0rbzEQpVlpSLdzHb6Bpk
+         FmouJtfAYUYKVnFOUw5o0tObrSmDtyx8Zst5xGxBpe6NhnhpFeLs+PX4HmQJsf0jHfK7
+         yOZ9Wp7UrHJmxsXvIXLkY3xAI4Thzz/XA+rA0ufps2f8KuC/1LSFCNNgdMYPwAWozk0B
+         8qMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=f+ulNj0C+UncEzUU3lB3FXFcKi2cQR09+RDgCW05Fkg=;
-        b=FFIo0mm+Qzcm0g8hIsCw58YSlHBkR2Up4c/MxhqNjrmew77FHrw/6ke5girVhsdEH/
-         +ie2gBrmxe0ddRM07mNidy7lOLGviswUmuOfZxYk6UXN73BBP4depXm0iFVURSOJH7LG
-         xknltddQtz51y7v4KvrvUOlfOTYyovX49WhmTT6I6vT+rxAtttzsEBHAp1vyTvP2+agM
-         aqVpaTZ+gDQ3Na6wS/FZCZOoa3f0DBAecvrDcFkLIKlsgqjKWXzzG6sRJk+X/Uv+v2I2
-         qah6sLSlC7qfSDbyciiY3g9mSMDSfghqSHAc+BgIcduOIu9vogbE+hRCYg/lIIp4tPEg
-         D1gA==
-X-Gm-Message-State: AOAM532xrsTONp3cwBAhsQzMtj4O4BGjlilGkucFWs+JR6yD3kXmReEA
-        Bt2kD21bwDVBqpu/VCwSFKUI8BWafx0YDoxF8NU+HcTkD+r8pcCtk9lYE9Ai2059ikwvKEUHCPM
-        B2Hhq2/WuSLLyTmupo1sTchnV
-X-Received: by 2002:a5d:4301:: with SMTP id h1mr627422wrq.511.1642709914260;
-        Thu, 20 Jan 2022 12:18:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyJ8V2NVDzKCKd9gXtzmEPNaFiVrFo5Ga1bUGA5CfK3IpuQ1rxGzdnyQtbsRWiOfTEjy11CpQ==
-X-Received: by 2002:a5d:4301:: with SMTP id h1mr627408wrq.511.1642709914038;
-        Thu, 20 Jan 2022 12:18:34 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
-        by smtp.gmail.com with ESMTPSA id bg26sm8586342wmb.48.2022.01.20.12.18.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 12:18:33 -0800 (PST)
-Message-ID: <0c48872e-f927-d36a-b9b6-10e2e2cacb3b@redhat.com>
-Date:   Thu, 20 Jan 2022 21:18:32 +0100
+        bh=SV2+kbDgVtw0lV31uGNVO0MZ2UY0VfBryzePxW9RfDo=;
+        b=QVb13Jt4AvM35JkiSg5Zq3FYQC38MLr4k2evwV5vIEngWIgRz+G/4YmOus/8HLyxEt
+         DiTVHbejYEg70r0KLhSwHwYOowfShCMUDdf6VupqM/ZIknKp9DzLTOIBf+A3Bqbls8tk
+         Y6BOQ8VWJXfvrBKqbqekeCdVHHTg36aD1Ch4PCtHBmEdqJ31hD/MudCWuqSdIs1hDfGo
+         P8fZmz+UgzmzOnKJGFMvi4cabpP4SXTTkuwMKiM2PRsMe8Eb6ehGGTgT9+xvJnBXPC1+
+         ABA6esqLnKwztGtujqgruDAV2SYIcko3FPas6c9MVhjguMIbnZQ4TI/R5MMbUiAmT9j0
+         OqyQ==
+X-Gm-Message-State: AOAM531/HtvygPmhTQ38ItcJPspRBQNpCfa9biZg+8XyJLr+OBMUXzz+
+        fF0BsEhM0tU3jvKMQlTc5geKQg==
+X-Google-Smtp-Source: ABdhPJxE6MkmquotwQB0ocKSKdWoDh5ulhRTbJKLE+X/Kg/iQUIIWJNEWpJYx5Uhrcqz6/tpYGTFTw==
+X-Received: by 2002:a05:651c:511:: with SMTP id o17mr559195ljp.435.1642709999939;
+        Thu, 20 Jan 2022 12:19:59 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id q17sm21155lfb.271.2022.01.20.12.19.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 12:19:59 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Jinkyu Yang <jinkyu1.yang@samsung.com>,
+        Alex <acnwigwe@google.com>, Carlos Llamas <cmllamas@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Erick Reyes <erickreyes@google.com>,
+        "J . Avila" <elavila@google.com>, Jonglin Lee <jonglin@google.com>,
+        Mark Salyzyn <salyzyn@google.com>,
+        Thierry Strudel <tstrudel@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [RFC 0/3] iommu/samsung: Introduce Exynos sysmmu-v8 driver
+Date:   Thu, 20 Jan 2022 22:19:55 +0200
+Message-Id: <20220120201958.2649-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wangzhigang17@huawei.com, Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220113140318.11117-1-zhangliang5@huawei.com>
- <YeA5oP/iaxtVPHb3@casper.infradead.org>
- <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
- <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com>
- <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
- <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
- <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
- <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
- <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
- <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
- <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
- <8931808d-db61-0f06-ceb3-f48a83b1f74c@redhat.com>
- <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
- <9071d5a8-ed2d-5cf5-5526-43fe7dd377ec@redhat.com>
-Organization: Red Hat
-In-Reply-To: <9071d5a8-ed2d-5cf5-5526-43fe7dd377ec@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.01.22 20:55, David Hildenbrand wrote:
-> On 20.01.22 19:11, Nadav Amit wrote:
->>
->>
->>> On Jan 20, 2022, at 10:00 AM, David Hildenbrand <david@redhat.com> wrote:
->>>
->>> On 20.01.22 18:48, Nadav Amit wrote:
->>>>
->>>>> On Jan 20, 2022, at 6:15 AM, David Hildenbrand <david@redhat.com> wrote:
->>>>>
->>>>> On 17.01.22 14:31, zhangliang (AG) wrote:
->>>>>> Sure, I will do that :)
->>>>>
->>>>> I'm polishing up / testing the patches and might send something out for discussion shortly.
->>>>> Just a note that on my branch was a version with a wrong condition that should have been fixed now.
->>>>>
->>>>
->>>> Sorry for being late for the discussion.
->>>>
->>>> David, does any of it regards the lru_cache_add() reference issue that I
->>>> mentioned? [1]
->>>
->>> No, unfortunately not in that part of my work. *Maybe* we could also try
->>> to handle that reference similarly to the swapcache, but the question is
->>> if we can't wait for PageAnonExclusive.
->>>
->>> Right now I have the following in mind to get most parts working as
->>> exptected:
->>>
->>> 1. Optimize reuse logic for the swapcache as it seems to be easy
->>> 2. Streamline COW logic and remove reuse_swap_page() -- fix the CVE for
->>>   THP.
->>> 3. Introduce PageAnonExclusive and allow FOLL_PIN only on
->>>   PageAnonExclusive pages.
->>> 4. Convert O_DIRECT to FOLL_PIN
->>>
->>> We will never ever have to copy a page PageAnonExclusive page in the COW
->>> handler and can immediately reuse it without even locking the page. The
->>> existing reuse logic is essentially then used to reset PageAnonExclusive
->>> on a page (thus it makes sense to work on it) where the flag is not set
->>> anymore -- or on a fresh page if we have to copy.
->>>
->>> That implies that all these additional references won't care if your app
->>> doesn't fork() or KSM isn't active. Consequently, anything that
->>> read-protects anonymous pages will work as expected and should be as
->>> fast as it gets.
->>>
->>> Sounds good? At least to me. If only swap/migration entries wouldn't be
->>> harder to handle than I'd wish, that's why it's taking a little and will
->>> take a little longer.
->>
->> Thanks for the quick response. I would have to see the logic to set/clear
->> PageAnonExclusive to fully understand how things are handled.
->>
->> BTW, I just saw this patch form PeterZ [1] that seems to be related, as
->> it deals with changing protection on pinned pages.
-> 
-> Hi Nadav,
-> 
-> I'm trying to see how effective the following patch is with your forceswap.c [1] reproducer.
-> 
-> commit b08d494deb319a63b7c776636b960258c48775e1
-> Author: David Hildenbrand <david@redhat.com>
-> Date:   Fri Jan 14 09:29:52 2022 +0100
-> 
->     mm: optimize do_wp_page() for exclusive pages in the swapcache
->     
->     Let's optimize for a page with a single user that has been added to the
->     swapcache. Try removing the swapcache reference if there is hope that
->     we're the exclusive user, but keep the page_count(page) == 1 check in
->     place.
->     
->     Avoid using reuse_swap_page(), we'll streamline all reuse_swap_page()
->     users next.
->     
->     While at it, remove the superfluous page_mapcount() check: it's
->     implicitly covered by the page_count() for ordinary anon pages.
->     
->     Signed-off-by: David Hildenbrand <david@redhat.com>
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index f306e698a1e3..d9186981662a 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3291,19 +3291,28 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->         if (PageAnon(vmf->page)) {
->                 struct page *page = vmf->page;
->  
-> -               /* PageKsm() doesn't necessarily raise the page refcount */
-> -               if (PageKsm(page) || page_count(page) != 1)
-> +               /*
-> +                * PageKsm() doesn't necessarily raise the page refcount.
-> +                *
-> +                * These checks are racy as long as we haven't locked the page;
-> +                * they are a pure optimization to avoid trying to lock the page
-> +                * and trying to free the swap cache when there is little hope
-> +                * it will actually result in a refcount of 1.
-> +                */
-> +               if (PageKsm(page) || page_count(page) > 1 + PageSwapCache(page))
->                         goto copy;
->                 if (!trylock_page(page))
->                         goto copy;
-> -               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
-> +               if (PageSwapCache(page))
-> +                       try_to_free_swap(page);
-> +               if (PageKsm(page) || page_count(page) != 1) {
->                         unlock_page(page);
->                         goto copy;
->                 }
->                 /*
-> -                * Ok, we've got the only map reference, and the only
-> -                * page count reference, and the page is locked,
-> -                * it's dark out, and we're wearing sunglasses. Hit it.
-> +                * Ok, we've got the only page reference from our mapping
-> +                * and the page is locked, it's dark out, and we're wearing
-> +                * sunglasses. Hit it.
->                  */
->                 unlock_page(page);
->                 wp_page_reuse(vmf);
-> 
-> 
-> I added some vmstats that monitor various paths. After one run of
-> 	./forceswap 2 1000000 1
-> I'm left with a rough delta (including some noise) of
-> 	anon_wp_copy_count 1799
-> 	anon_wp_copy_count_early 1
-> 	anon_wp_copy_lock 983396
-> 	anon_wp_reuse 0
-> 
-> The relevant part of your reproducer is
-> 
-> 	for (i = 0; i < nops; i++) {
-> 		if (madvise((void *)p, PAGE_SIZE * npages, MADV_PAGEOUT)) {
-> 			perror("madvise");
-> 			exit(-1);
-> 		}
-> 
-> 		for (j = 0; j < npages; j++) {
-> 			c = p[j * PAGE_SIZE];
-> 			c++;
-> 			time -= rdtscp();
-> 			p[j * PAGE_SIZE] = c;
-> 			time += rdtscp();
-> 		}
-> 	}
-> 
-> For this specific reproducer at least, the page lock seems to be the thingy that prohibits
-> reuse if I interpret the numbers correctly. We pass the initial page_count() check.
-> 
-> Haven't looked into the details, and I would be curious how that performs with actual
-> workloads, if we can reproduce similar behavior.
+This is a draft of a new IOMMU driver used in modern Exynos SoCs (like
+Exynos850) and Google's GS101 SoC (used in Pixel 6 phone). Most of its
+code were taken from GS101 downstream kernel [1], with some extra
+patches on top (fixes from Exynos850 downstream kernel and some porting
+changes to adapt it to the mainline kernel). All development history can
+be found at [2].
 
-I should stop working for today, I messed up the counter names *cries in
-German* :(
+Similarities with existing exynos-iommu.c is minimal. I did some
+analysis using similarity-tester tool:
 
-anon_wp_reuse 1799
-anon_wp_copy_count 1
-anon_wp_copy_count_early 983396
-anon_wp_copy_lock 0
+8<-------------------------------------------------------------------->8
+    $ sim_c -peu -S exynos-iommu.c "|" samsung-*
 
-which makes *a lot* more sense and might indicate the PageLRU() issue.
+    exynos-iommu.c consists for 15 % of samsung-iommu.c material
+    exynos-iommu.c consists for 1 %  of samsung-iommu-fault.c material
+    exynos-iommu.c consists for 3 %  of samsung-iommu.h material
+8<-------------------------------------------------------------------->8
+
+So the similarity is very low, most of that code is some boilerplate
+that shouldn't be extracted to common code (like allocating the memory
+and requesting clocks/interrupts in probe function).
+
+It was tested on v5.4 Android kernel on Exynos850 (E850-96 board) with
+DPU use-case (displaying some graphics to the screen). Also it
+apparently works fine on v5.10 GS101 kernel (on Pixel 6). On mainline
+kernel I managed to build, match and bind the driver. No real world test
+was done, but the changes from v5.10 (where it works fine) are minimal
+(see [2] for details). So I'm pretty sure the driver is functional.
+
+For this patch series I'd like to receive some high-level review for
+driver's design and architecture. Coding style and API issues I can fix
+later, when sending real (not RFC) series. Particularly I'd like to hear
+some opinions about:
+  - namings: Kconfig option, file names, module name, compatible, etc
+  - modularity: should this driver be a different platform driver (like
+    in this series), or should it be integrated into existing
+    exynos-iommu.c driver somehow
+  - dt-bindings: does it look ok as it is, or some interface changes are
+    needed
+  - internal driver architecture: approach seems to be similar to
+    exynos-iommu.c, but any comments are welcome
+  - ongoing work: please let me know if you're aware of some efforts to
+    upstream this driver by some other party (e.g. Google engineers
+    might be working on something similar)
+
+Basically, I want to figure out what should be changed/fixed in this
+driver (on a high level), so it can be considered "upstreamable".
+
+[1] https://android.googlesource.com/kernel/gs/
+[2] https://github.com/joe-skb7/linux/commits/iommu-exynos850-dev
+
+Sam Protsenko (3):
+  dt-bindings: iommu: Add bindings for samsung,sysmmu-v8
+  iommu/samsung: Introduce Exynos sysmmu-v8 driver
+  arm64: defconfig: Enable sysmmu-v8 IOMMU
+
+ .../bindings/iommu/samsung,sysmmu-v8.txt      |   31 +
+ arch/arm64/configs/defconfig                  |    2 +
+ drivers/iommu/Kconfig                         |   13 +
+ drivers/iommu/Makefile                        |    3 +
+ drivers/iommu/samsung-iommu-fault.c           |  617 +++++++
+ drivers/iommu/samsung-iommu-group.c           |   50 +
+ drivers/iommu/samsung-iommu.c                 | 1521 +++++++++++++++++
+ drivers/iommu/samsung-iommu.h                 |  216 +++
+ include/dt-bindings/soc/samsung,sysmmu-v8.h   |   43 +
+ 9 files changed, 2496 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iommu/samsung,sysmmu-v8.txt
+ create mode 100644 drivers/iommu/samsung-iommu-fault.c
+ create mode 100644 drivers/iommu/samsung-iommu-group.c
+ create mode 100644 drivers/iommu/samsung-iommu.c
+ create mode 100644 drivers/iommu/samsung-iommu.h
+ create mode 100644 include/dt-bindings/soc/samsung,sysmmu-v8.h
 
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 

@@ -2,164 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2B44949C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C139E4949CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359329AbiATIpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:45:17 -0500
-Received: from mail-ua1-f46.google.com ([209.85.222.46]:33384 "EHLO
-        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240038AbiATIpQ (ORCPT
+        id S1359346AbiATIqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:46:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41066 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240038AbiATIqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:45:16 -0500
-Received: by mail-ua1-f46.google.com with SMTP id u6so9600000uaq.0;
-        Thu, 20 Jan 2022 00:45:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lv2jFAKWB+Jny0Y4PrrNR/cuL3vXxueExme2w68uWOY=;
-        b=Rd/w1+QwYzUk6KBg33XOJuaMGdP1XDaX9HHCMSE7Fqe6KyU4Rji9sURgITFujinIoq
-         L3u0n12FQk6pbN6heI3byCw/0rTpNDbRTC/oF5ZuVI2CkKQi2tZ8kxRmSf0iqH/mGPal
-         GuYSM+lWc3oV7KVFASOt7fiMmo7duOkq24VSftR2b91eOurLiNc4F26NJKdeVwpG8uQ7
-         kmR66WEA3bICvua+l73JJXpzAnDOkVXAhl+2afWHs44+1jRfgi/s7w7UNglHsxCxUPHV
-         M6W3G0fhdchxSS6A1SIVHYH34/Im8+mK4q7NZkHDpClyPjFxZqKeWpIQKkKuVqsLYX0r
-         CMVg==
-X-Gm-Message-State: AOAM530Ay7QkjzR7gOwhUPIM+BhHN4McusS0Z62T09DAllAVihQ/EKNm
-        2li+zEAFBHfaWJ+LFbVPzTrAC3aVVfktlQ==
-X-Google-Smtp-Source: ABdhPJzhNnVO3mlOOi3f8HurwC42j6bDnk0FoGBdk7q3F8EjkMl1/o/BnERdtMehICC+2xbNVXVPFA==
-X-Received: by 2002:a05:6102:b0a:: with SMTP id b10mr8264747vst.39.1642668315540;
-        Thu, 20 Jan 2022 00:45:15 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id b26sm494028uam.6.2022.01.20.00.45.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 00:45:15 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id 19so3155951vkl.2;
-        Thu, 20 Jan 2022 00:45:15 -0800 (PST)
-X-Received: by 2002:a05:6122:c89:: with SMTP id ba9mr14222109vkb.39.1642668314846;
- Thu, 20 Jan 2022 00:45:14 -0800 (PST)
+        Thu, 20 Jan 2022 03:46:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A9B36176A;
+        Thu, 20 Jan 2022 08:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FEFC340E0;
+        Thu, 20 Jan 2022 08:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642668377;
+        bh=zP3H8L0yrvKhCJfCDvCtc/pV9g2tPG9DoyeOBdGOFKs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FeqtfDGRhBQtFD2IqzWbr3Kxs0Me8/suyudAtJOzH9rAjOtfnKPcohQMveqex58mu
+         t++C1E6Tyty/Uaf92mvE7AE91N5g3FcgyNSvL7h9inT7bdG1rjYc+8/jlVG7TPZ0tf
+         ZXGRXqh7SDvqyZY7u1qhYxVw/izQXd5J2/585OpJHu171enVfwYqkVoTcIQrX50FX0
+         GRICs1LgU/Rm00W+3lDyT+vTyhSg/6xCjP7qrRVPEk1wmG2u16vTf6HrVHdxDgrx8B
+         +9sPgnfQ5ffK+MIwMD3Xl0tla7QoKVmqjDoz9AfLVloLu3pf3qqMh3zxpc4ddcBGtj
+         8SGyJ8HQiSIYg==
+Date:   Thu, 20 Jan 2022 09:46:12 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Anthony Iliopoulos <ailiop@suse.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] devtmpfs: drop redundant fs parameters from internal fs
+Message-ID: <20220120084612.hl5ekd4aplmduj6u@wittgenstein>
+References: <20220119220248.32225-1-ailiop@suse.com>
 MIME-Version: 1.0
-References: <20211220170357.7899-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211220170357.7899-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Jan 2022 09:45:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXKRNDAGqwz0oqJyCWq6LyTdJ7BEe2uCmek60x3Ec2-GA@mail.gmail.com>
-Message-ID: <CAMuHMdXKRNDAGqwz0oqJyCWq6LyTdJ7BEe2uCmek60x3Ec2-GA@mail.gmail.com>
-Subject: Re: [PATCH] soc: renesas: Add support for reading product revision
- for RZ/G2L family
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119220248.32225-1-ailiop@suse.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Mon, Dec 20, 2021 at 6:04 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->
-> As per RZ/G2L HW manual (Rev.1.00 Sep, 2021) DEV_ID [31:28] indicates
-> product revision. Use this information to populate the revision info
-> for RZ/G2L family.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Thanks for your patch!
-
-> Below is the log from Renesas RZ/G2L SMARC EVK:
->
-> root@smarc-rzg2l:~#
-> at /sys/devices/soc0/$i; donemachine family soc_id revision; do echo -n "$i: ";ca
-
-This looks a bit mangled ;-)
-
-> machine: Renesas SMARC EVK based on r9a07g044l2
-> family: RZ/G2L
-> soc_id: r9a07g044
-> revision: Rev 1
-> root@smarc-rzg2l:~#
->
-> Cheers,
-> Prabhakar
+On Wed, Jan 19, 2022 at 11:02:48PM +0100, Anthony Iliopoulos wrote:
+> The internal_fs_type is mounted via vfs_kernel_mount() and is never
+> registered as a filesystem, thus specifying the parameters is redundant
+> as those params will not be validated by fs_validate_description().
+> 
+> Both {shmem,ramfs}_fs_parameters are anyway validated when those
+> respective filesystems are first registered, so there is no reason to
+> pass them to devtmpfs too, drop them.
+> 
+> Signed-off-by: Anthony Iliopoulos <ailiop@suse.com>
 > ---
->  drivers/soc/renesas/renesas-soc.c | 31 +++++++++++++++++--------------
->  1 file changed, 17 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-> index 8f82749f182f..6ecd2763d100 100644
-> --- a/drivers/soc/renesas/renesas-soc.c
-> +++ b/drivers/soc/renesas/renesas-soc.c
-> @@ -416,6 +416,17 @@ static int __init renesas_soc_init(void)
->                 chipid = ioremap(family->reg, 4);
->         }
->
-> +       soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
 
-This is not freed in case of SoC mismatch error below.
+Ah yes, I "complained" about this on the patch re-enabling
+reconfigure_mnt() for devtmpfs.
 
-> +       if (!soc_dev_attr)
-> +               return -ENOMEM;
-> +
-> +       np = of_find_node_by_path("/");
-> +       of_property_read_string(np, "model", &soc_dev_attr->machine);
-> +       of_node_put(np);
-> +
-> +       soc_dev_attr->family = kstrdup_const(family->name, GFP_KERNEL);
-> +       soc_dev_attr->soc_id = kstrdup_const(soc_id, GFP_KERNEL);
-> +
->         if (chipid) {
->                 product = readl(chipid + id->offset);
->                 iounmap(chipid);
-> @@ -430,6 +441,12 @@ static int __init renesas_soc_init(void)
->
->                         eshi = ((product >> 4) & 0x0f) + 1;
->                         eslo = product & 0xf;
-> +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL, "ES%u.%u",
-> +                                                          eshi, eslo);
-> +               }  else if (id == &id_rzg2l) {
-> +                       eshi =  ((product >> 28) & 0x0f);
-> +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL, "Rev %u",
-> +                                                          eshi);
-
-These are not freed in case of SoC mismatch error below.
-
->                 }
->
->                 if (soc->id &&
-> @@ -439,20 +456,6 @@ static int __init renesas_soc_init(void)
->                 }
->         }
->
-> -       soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
-> -       if (!soc_dev_attr)
-> -               return -ENOMEM;
-> -
-> -       np = of_find_node_by_path("/");
-> -       of_property_read_string(np, "model", &soc_dev_attr->machine);
-> -       of_node_put(np);
-> -
-> -       soc_dev_attr->family = kstrdup_const(family->name, GFP_KERNEL);
-> -       soc_dev_attr->soc_id = kstrdup_const(soc_id, GFP_KERNEL);
-> -       if (eshi)
-> -               soc_dev_attr->revision = kasprintf(GFP_KERNEL, "ES%u.%u", eshi,
-> -                                                  eslo);
-> -
->         pr_info("Detected Renesas %s %s %s\n", soc_dev_attr->family,
->                 soc_dev_attr->soc_id, soc_dev_attr->revision ?: "");
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>

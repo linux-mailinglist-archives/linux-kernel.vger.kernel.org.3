@@ -2,159 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 649944943FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299D04943FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344763AbiATAGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S1345020AbiATAG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiATAGa (ORCPT
+        with ESMTP id S1344841AbiATAG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:06:30 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28666C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:06:30 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id q3-20020a638c43000000b0034c9c0fb2d2so2566065pgn.22
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:06:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=frZ7Kn6il6EA/Sc4lSu7iKex2wppY/L5v7EjTL3Zk00=;
-        b=I16sXiQtWhOPCE5+QKwq7dmnACs5A1B/OmmgXUJxWlWfU2WSF1HVK7t1fJe6/kLCbp
-         Gh3ch69F1EAmMUzPEydXEJ8O4j/GkCV6o7JMiH/LELYOFr83/pccJrOTTxfYq/+0d7ey
-         XJsqGpUp2QFJARde2D/9Isv5MTjL29vboF8L2hgB1hXv19UvZZ0oRqFY1rFRkSOIWabd
-         q7sDMcZx4YXipkQ7IqtqL2dSi+zUQypSwpOYOOdyjLcSl0esmYp74goKlbHAz3L598TS
-         B+mRu/dLyNlkg6VyaG+Tx+vctza54r5KMbVTLmwTMSteMsZlAoxLbInOAbxSlZnwcuTQ
-         n7gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=frZ7Kn6il6EA/Sc4lSu7iKex2wppY/L5v7EjTL3Zk00=;
-        b=bFlS/jwBdWNSiUxrPEFUzWAo5F/Pl2WnOlwql5C69+rBMC/JmIKQcK7p/25nSmUBt1
-         7VwAqnGkW7uRRujEv1lGtKWSiJefuOqlC+KU+A2jzl5G8jBGPeEBAKBg45V6P41Lsb0d
-         RoCccQe1cy17VcvR7q2Slb8Kmn9x7l1IQ9DUk+NKHgTtGE21XkZGIEVXjmlcLQ76kFzc
-         LoNx8ubEQS4jReF/lZ9G76uSs514ONDZZmUncgXWkd1mZrRF7y4EPKd9ZrTbH2raeuUF
-         FwaLVcI7piNWyTzVwPftyt7Tc9vql8qBzW9X1DA4twMx8IRQd4rTA7YGzdKj2dUfBox1
-         n0tw==
-X-Gm-Message-State: AOAM53314zV9B/m6fuY2qNrVH2eSlzbn3L6IIHcbJ2OiLkfdHB+A2rLb
-        bbDJ/MEFZhcTo/2rvbDSrJBjKdqTcGM=
-X-Google-Smtp-Source: ABdhPJx1rp2WlxQ0mvrptdGhmccaJOJ0IV2q9N2i/NtSdyyrDpYZSLiCaci8oNY334GVJxXkOZxx2EXxcQQ=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:ab12:b0:149:c5a5:5323 with SMTP id
- ik18-20020a170902ab1200b00149c5a55323mr35793911plb.97.1642637189571; Wed, 19
- Jan 2022 16:06:29 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 20 Jan 2022 00:06:24 +0000
-Message-Id: <20220120000624.655815-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS
- blocking shadow
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Alexander Graf <graf@amazon.de>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 19 Jan 2022 19:06:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB0C061574;
+        Wed, 19 Jan 2022 16:06:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF26D61456;
+        Thu, 20 Jan 2022 00:06:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD47C004E1;
+        Thu, 20 Jan 2022 00:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642637215;
+        bh=r4bINdjoOTnEU/UYxNN2T4b77oF6UWi884STkiJNMhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VrlMGGnvNIAwtjHyYDxmlQVpDYOsczv97GeteddoOdjqAro80WlhkzE4b3lRVNxoM
+         c4HXMJjtZWqBxSbK+k1ZqBgTaaYUXJAmx4/uhyyr6pN92//p3QIly3t0cX8vjHjZMd
+         L9SNnz5cDcaNzl9A7ZD0UC5UC1IaBLHzdZSdUxQs1OG4Ue52WfaQILP/00JKS+/GUf
+         Bq40dkTEwSqZUiIZU75owstSUs1RFxxZX+N9nAvmlErwnNKZmfUfcC0uQCbECOh71Y
+         v1z78h6gqDS1d7G5/9UfmM+X+dFBXp2KqrIClOz096U6imXl7CTA8HaRCPQWOfR7eM
+         EWVTmmbcKwTzA==
+Received: by pali.im (Postfix)
+        id 1EBC07DF; Thu, 20 Jan 2022 01:06:52 +0100 (CET)
+Date:   Thu, 20 Jan 2022 01:06:51 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings for
+ marvell,armada-3700-uart-clock
+Message-ID: <20220120000651.in7s6nazif5qjkme@pali>
+References: <163425678347.1688384.10695189000353676651@swboyd.mtv.corp.google.com>
+ <20211015090937.gnt66hgugrhwnkei@pali>
+ <20211015093701.pfvkighxsndj4ujg@pali>
+ <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com>
+ <20211016064210.7ahqfqcvf66wtt66@pali>
+ <20220115080213.0CCAFC36AE3@smtp.kernel.org>
+ <20220115115018.he4hnnhlvrb6kann@pali>
+ <20220115130509.4a240730@thinkpad>
+ <20220115122618.plhiqnjh2755bv5h@pali>
+ <20220119231655.EFFF3C004E1@smtp.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220119231655.EFFF3C004E1@smtp.kernel.org>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS, a.k.a. the pending single-step
-breakpoint flag, when re-injecting a #DB with RFLAGS.TF=1, and STI or
-MOVSS blocking is active.  Setting the flag is necessary to make VM-Entry
-consistency checks happy, as VMX has an invariant that if RFLAGS.TF is
-set and STI/MOVSS blocking is true, then the previous instruction must
-have been STI or MOV/POP, and therefore a single-step #DB must be pending
-since the RFLAGS.TF cannot have been set by the previous instruction,
-i.e. the one instruction delay after setting RFLAGS.TF must have already
-expired.
+On Wednesday 19 January 2022 15:16:54 Stephen Boyd wrote:
+> Quoting Pali Rohár (2022-01-15 04:26:18)
+> > On Saturday 15 January 2022 13:05:09 Marek Behún wrote:
+> > > On Sat, 15 Jan 2022 12:50:18 +0100
+> > > Pali Rohár <pali@kernel.org> wrote:
+> > > 
+> > > > On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
+> > > > > Quoting Pali Rohár (2021-10-15 23:42:10)  
+> > > > > > 
+> > > > > > If I was designing this driver and DTS bindings I would have choose
+> > > > > > something like this:
+> > > > > > 
+> > > > > > uart@0x12000 {  
+> > > > > 
+> > > > > Drop the 0x
+> > > > >   
+> > > > > >     reg = <0x12000 0x18>, <0x12200 0x30>;
+> > > > > >     clock-controller {
+> > > > > >         ...
+> > > > > >     };  
+> > > > > 
+> > > > > Drop this node and put whatever properties are inside into the parent
+> > > > > node.
+> > > > >   
+> > > > > >     serial1 {
+> > > > > >         ...
+> > > > > >         status = "disabled";
+> > > > > >     };
+> > > > > >     serial2 {
+> > > > > >         ...
+> > > > > >         status = "disabled";
+> > > > > >     };
+> > > > > > };
+> > > > > > 
+> > > > > > Meaning that 0x12000 node would be 3 subnodes and all registers would be
+> > > > > > defined in top level nodes and would be handled by one driver.
+> > > > > > 
+> > > > > > This is really how hardware block looks like. But it is not backward
+> > > > > > compatible...  
+> > > > > 
+> > > > > Sounds good to me. I presume we need the serial child nodes so we can
+> > > > > reference them from the stdout-path?  
+> > > > 
+> > > > Yes, exactly, separate nodes for serial1 and serial2 are still required.
+> > > > 
+> > > > But dropping clock controller is not possible as for higher baudrates we
+> > > > need to use and configure uart clock controller. Without it we just get
+> > > > comparable feature support which is already present in driver.
+> > > 
+> > > What Stephen means is making clock controller out of the uart node
+> > > directly. No need to add separate subnode just for clock controller.
+> > 
+> > This is already implemented in v7 patch series. Clock controller is
+> > already outside of uart nodes.
+> 
+> I mean to combine the uart node and the clock-controller node together
+> 
+> 	uart-wrapper {
+> 		reg = <0x12000 0x18>, <0x12200 0x30>;
+> 		#clock-cells ...
+> 
+> 		serial1 {
+> 			...
+> 		};
+> 
+> 		serial2 {
+> 			...
+> 		};
+> 	};
 
-Normally, the CPU sets vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS appropriately
-when recording guest state as part of a VM-Exit, but #DB VM-Exits
-intentionally do not treat the #DB as "guest state" as interception of
-the #DB effectively makes the #DB host-owned, thus KVM needs to manually
-set PENDING_DBG.BS when forwarding/re-injecting the #DB to the guest.
+Ok, now I see what you mean.
 
-Note, although this bug can be triggered by guest userspace, doing so
-requires IOPL=3, and guest userspace running with IOPL=3 has full access
-to all I/O ports (from the guest's perspective) and can crash/reboot the
-guest any number of ways.  IOPL=3 is required because STI blocking kicks
-in if and only if RFLAGS.IF is toggled 0=>1, and if CPL>IOPL, STI either
-takes a #GP or modifies RFLAGS.VIF, not RFLAGS.IF.
+But problem is that this is not backward compatible change. And would
+not work per existing DT bindings definitions, which defines how
+bootloader should set configured clocks.
 
-MOVSS blocking can be initiated by userspace, but can be coincident with
-a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
-executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
-is problematic only for CPL0 (and only if the guest is crazy enough to
-access a DR in a MOVSS shadow).  All other sources of #DBs are either
-suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
-are mutually exclusive with MOVSS blocking (T-bit task switch), or are
-already handled by KVM (ICEBP, a.k.a. INT1).
+As I wrote in emails 3 months ago, this new "proposed" DTS definition is
+something which I would have chosen if I had designed this driver and
+bindings in past. But that did not happen and different approach is
+already widely in used.
 
-This bug was originally found by running tests[1] created for XSA-308[2].
-Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
-presumably why the Xen bug was deemed to be an exploitable DOS from guest
-userspace.  KVM already handles ICEBP by skipping the ICEBP instruction
-and thus clears MOVSS blocking as a side effect of its "emulation".
+To support existing DTS definitions and bootloaders, it is really
+required to have current structure backward compatible like it is
+defined in current DT bindings document. And my changes in this patch
+series are backward compatible.
 
-[1] http://xenbits.xenproject.org/docs/xtf/xsa-308_2main_8c_source.html
-[2] https://xenbits.xen.org/xsa/advisory-308.html
+To change DTS structure, it would be needed to provide uart nodes in DTS
+files two times: once in old style (the current one) and second time in
+this new style.
 
-Reported-by: David Woodhouse <dwmw2@infradead.org>
-Reported-by: Alexander Graf <graf@amazon.de>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+But such thing would even more complicate updating driver and it needs
+to be implemented.
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index a02a28ce7cc3..3f7b09a24d1e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4901,8 +4901,33 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
- 		dr6 = vmx_get_exit_qual(vcpu);
- 		if (!(vcpu->guest_debug &
- 		      (KVM_GUESTDBG_SINGLESTEP | KVM_GUESTDBG_USE_HW_BP))) {
-+			/*
-+			 * If the #DB was due to ICEBP, a.k.a. INT1, skip the
-+			 * instruction.  ICEBP generates a trap-like #DB, but
-+			 * despite its interception control being tied to #DB,
-+			 * is an instruction intercept, i.e. the VM-Exit occurs
-+			 * on the ICEBP itself.  Note, skipping ICEBP also
-+			 * clears STI and MOVSS blocking.
-+			 *
-+			 * For all other #DBs, set vmcs.PENDING_DBG_EXCEPTIONS.BS
-+			 * if single-step is enabled in RFLAGS and STI or MOVSS
-+			 * blocking is active, as the CPU doesn't set the bit
-+			 * on VM-Exit due to #DB interception.  VM-Entry has a
-+			 * consistency check that a single-step #DB is pending
-+			 * in this scenario as the previous instruction cannot
-+			 * have toggled RFLAGS.TF 0=>1 (because STI and POP/MOV
-+			 * don't modify RFLAGS), therefore the one instruction
-+			 * delay when activating single-step breakpoints must
-+			 * have already expired.  Note, the CPU sets/clears BS
-+			 * as appropriate for all other VM-Exits types.
-+			 */
- 			if (is_icebp(intr_info))
- 				WARN_ON(!skip_emulated_instruction(vcpu));
-+			else if ((vmx_get_rflags(vcpu) & X86_EFLAGS_TF) &&
-+				 (vmcs_read32(GUEST_INTERRUPTIBILITY_INFO) &
-+				  (GUEST_INTR_STATE_STI | GUEST_INTR_STATE_MOV_SS)))
-+				vmcs_writel(GUEST_PENDING_DBG_EXCEPTIONS,
-+					    vmcs_readl(GUEST_PENDING_DBG_EXCEPTIONS) | DR6_BS);
- 
- 			kvm_queue_exception_p(vcpu, DB_VECTOR, dr6);
- 			return 1;
+Plus this would open a question how to define default stdout-path if
+there would be 4 serial nodes, where one pair would describe old style
+and second pair new style; meaning that 2 cross nodes would describe
+same define.
 
-base-commit: edb9e50dbe18394d0fc9d0494f5b6046fc912d33
--- 
-2.34.1.703.g22d0c6ccf7-goog
+For me this looks like a more complications and I do not see any benefit
+from it.
 
+It is really important to break backward compatibility, just to try
+having new cleaner API at the cost of having more complications and
+requirement for more development and also important maintenance?

@@ -2,111 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19139494D7D
+	by mail.lfdr.de (Postfix) with ESMTP id 01B8E494D7F
 	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbiATL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:57:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:35194 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232258AbiATL5Y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:57:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33FA2ED1;
-        Thu, 20 Jan 2022 03:57:24 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.11.183])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CAF73F774;
-        Thu, 20 Jan 2022 03:57:18 -0800 (PST)
-Date:   Thu, 20 Jan 2022 11:57:14 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, frankja@linux.ibm.com,
-        frederic@kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
-        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
-        luto@kernel.org, maz@kernel.org, mingo@redhat.com,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paul.walmsley@sifive.com, peterz@infradead.org, seanjc@google.com,
-        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>
-Subject: Re: [PATCH v2 0/7] kvm: fix latent guest entry/exit bugs
-Message-ID: <YelOGjuRsMfUb3e7@FVFF77S0Q05N>
-References: <20220119105854.3160683-1-mark.rutland@arm.com>
- <a4a26805-3a56-d264-0a7e-60bed1ada9f3@linux.ibm.com>
- <20220119192217.GD43919@C02TD0UTHF1T.local>
- <0654e667-1cfa-5147-6661-b3b63288be0b@linux.ibm.com>
+        id S232258AbiATL5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232262AbiATL5e (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 06:57:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776A7C061574;
+        Thu, 20 Jan 2022 03:57:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 161E9614B9;
+        Thu, 20 Jan 2022 11:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD932C340E0;
+        Thu, 20 Jan 2022 11:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642679853;
+        bh=J9yCPRxNgwHF3+Ta+2Qkq3JMYTM+kuO4Z0znjDOPNqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tK+l0/oYIX0r4VNk3nStcVlefV38W5QtP7/TP8lKOMI2jhp2YhbxqhXe/WD+qsjb3
+         ldxsJ/uGYd6dcMuEoL7E+q7W9scg4S2Mds0uOfvxKH6i6zGRl2V1tOMomxu2vC0yZk
+         pqfeZahj8YEo0ykmPCZkWAfhzGdG9yulvzGdIyaM=
+Date:   Thu, 20 Jan 2022 12:57:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Li Chen <lchen.firstlove@zohomail.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?utf-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3] misc: pci_endpoint_test: simplify endpoint test read
+ and write operations
+Message-ID: <YelOKkg4SIiRJmz5@kroah.com>
+References: <17e76f86155.1222b3923123229.7199263965880267375@zohomail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0654e667-1cfa-5147-6661-b3b63288be0b@linux.ibm.com>
+In-Reply-To: <17e76f86155.1222b3923123229.7199263965880267375@zohomail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 08:30:17PM +0100, Christian Borntraeger wrote:
+On Thu, Jan 20, 2022 at 06:11:36PM +0800, Li Chen wrote:
+> Introduce pci_endpoint_epf_transfer_data to simplify
+> read and write operations.
 > 
-> 
-> Am 19.01.22 um 20:22 schrieb Mark Rutland:
-> > On Wed, Jan 19, 2022 at 07:25:20PM +0100, Christian Borntraeger wrote:
-> > > Am 19.01.22 um 11:58 schrieb Mark Rutland:
-> > > 
-> > > 
-> > > CCing new emails for Anup and Atish so that they are aware of this thread.
-> > 
-> > Ah; whoops. I'd meant to fix the Ccs on the patches.
-> > 
-> > Thanks!
-> > 
-> > [...]
-> > 
-> > > I just gave this a spin on s390 with debugging on and I got the following:
-> > > 
-> > > [  457.151295] ------------[ cut here ]------------
-> > > [  457.151311] WARNING: CPU: 14 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter.constprop.0+0xf8/0x118
-> > 
-> > Hmm, so IIUC that's:
-> > 
-> > 	WARN_ON_ONCE(rdp->dynticks_nmi_nesting != DYNTICK_IRQ_NONIDLE);
-> > 
-> > ... and we're clearly in the idle thread here.
-> > 
-> > I wonder, is the s390 guest entry/exit *preemptible* ?
-> 
-> Looks like debug_defconfig is indeed using preemption:
-> 
-> CONFIG_PREEMPT_BUILD=y
-> # CONFIG_PREEMPT_NONE is not set
-> # CONFIG_PREEMPT_VOLUNTARY is not set
-> CONFIG_PREEMPT=y
-> CONFIG_PREEMPT_COUNT=y
-> CONFIG_PREEMPTION=y
-> CONFIG_PREEMPT_RCU=y
-> CONFIG_PREEMPT_NOTIFIERS=y
-> CONFIG_DEBUG_PREEMPT=y
-> CONFIG_PREEMPTIRQ_TRACEPOINTS=y
-> CONFIG_TRACE_PREEMPT_TOGGLE=y
-> CONFIG_PREEMPT_TRACER=y
-> # CONFIG_PREEMPTIRQ_DELAY_TEST is not set
+> Signed-off-by: Li Chen <lchen@ambarella.com>
 
-Thanks for confirming!
+Does not match the From: line.  Please read the documentation for how to
+fix this up and add a From: line to the email body itself.
 
-Could you try with CONFIG_PROVE_RCU=y ? That can't be selected directly, but
-selecting PROVE_LOCKING=y will enable it.
+thanks,
 
-If I'm right, with that we should get a splat out of
-rcu_irq_exit_check_preempt().
-
-If so, I think we can solve this with preempt_{disable,enable}() around the
-guest_timing_{enter,exit}_irqoff() calls. We'll also need to add some more
-comments around arch_in_rcu_eqs() that arch-specific EQSs should be
-non-preemptible.
-
-Thanks,
-Mark.
+greg k-h

@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF4B494F0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7749494F10
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbiATNcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:32:45 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56094 "EHLO mail.skyhub.de"
+        id S238193AbiATNdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:33:00 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:56156 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230470AbiATNcn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 08:32:43 -0500
+        id S232587AbiATNcz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 08:32:55 -0500
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 772C11EC0495;
-        Thu, 20 Jan 2022 14:32:42 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 815A91EC058B;
+        Thu, 20 Jan 2022 14:32:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642685562;
+        t=1642685570;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=28wI6iedsNvzH0vXzCzIubkiRJPe6oBSNXexv601jfA=;
-        b=bR9MG4UEhv5B+m20bHlrVDgjDm9PHntMieBMJoipMJhkHBOvvbCO01uwDoR2ZWYTKCYWlM
-        Wow0cEUPaIQ2HO1XURYKxLvTohalSkhHAcrLrsKwIje1jH9uplE8LRV3VF4RKMppJsYnWr
-        WaNAj/jV7TkU1kbAV0JUBijJ+f3bBMw=
-Date:   Thu, 20 Jan 2022 14:32:35 +0100
+        bh=2hznwbD/44heQ23WOkITnKU6REvxxfzaQbLfKHpWOFc=;
+        b=RB6gHMhlMP55xTESokokGGRtbnYRdZSSqNqvRk8Ynqq+tqCTKjcsS2DUoMzyl6Rew6FStR
+        rzWWhrZs1s+8Q2ylOaQZnCkSrRlXMbYq9tu2l9EloCzTGUWLlKQH7bOhg2Eovzxzl5otvc
+        t/65A3ApH8bvkD5DpKa5KLvPv4wt9lU=
+Date:   Thu, 20 Jan 2022 14:32:47 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     Tony Luck <tony.luck@intel.com>
 Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
@@ -34,23 +34,35 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         <smita.koralahallichannabasappa@amd.com>,
         Wei Huang <wei.huang2@amd.com>,
         Tom Lendacky <thomas.lendacky@amd.com>, patches@lists.linux.dev
-Subject: Re: [PATCH 2/5] x86/ras: X86_FEATURE_INTEL_PPIN finally has a CPUID
- bit
-Message-ID: <Yelkc2Lcul0hAV5A@zn.tnic>
+Subject: Re: [PATCH 4/5] x86/sysfs: Add format parameter to macro defining
+ "show" functions for proc
+Message-ID: <YelkfwUW7wjJ9ry7@zn.tnic>
 References: <20220107225442.1690165-1-tony.luck@intel.com>
- <20220107225442.1690165-3-tony.luck@intel.com>
+ <20220107225442.1690165-5-tony.luck@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220107225442.1690165-3-tony.luck@intel.com>
+In-Reply-To: <20220107225442.1690165-5-tony.luck@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 02:54:39PM -0800, Tony Luck wrote:
-> After nine generations of adding to model specific list of CPUS that
+On Fri, Jan 07, 2022 at 02:54:41PM -0800, Tony Luck wrote:
+> All the simple (non-mask and non-list files in
+> /sys/devices/system/cpu/cpu0/topology/ are currently printed as decimal
+> integers.
+> 
+> Refactor the macro that generates the "show" functions to take a format
+> parameter to allow future files to display in other formats.
+> 
+> No functional change.
+> 
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> ---
+>  drivers/base/topology.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 
-CPUs
+This one doesn't apply anymore.
 
 -- 
 Regards/Gruss,

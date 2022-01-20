@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF0C494543
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9676494551
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiATBBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 20:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S1345688AbiATBGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 20:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiATBBs (ORCPT
+        with ESMTP id S1345578AbiATBGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:01:48 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37075C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:01:48 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id x16so381034pfu.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:01:48 -0800 (PST)
+        Wed, 19 Jan 2022 20:06:33 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77543C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:06:33 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id e9so664847pgn.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:06:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2mfWUUkdEONMpGOlT6Rolu4VTQEpKACj2ssCBbPWHRQ=;
-        b=MZyC4bb/dwsiefnVH0I7NG1POrw6S9lLex8pyoPh9/ZCHIzABO2zi4jvhM5U00TVHj
-         Bdr8TVxSl4z2a/3v9UQcGnaUpRvxtt21TohxflF4DYioyS9WnWoKFac27ha+qMsLRV6a
-         87pbcXdwlTADh+lIgbmb8jySFU0CiUzjB97q4e9ZY2b4oRQDhj73HPMCWtc9CbkAzzcN
-         DXB5swzvsz/4nIqu9EqHLmDd6AQQeYczTOCqz6XWDoe/MUNDGvzsF0RyYqaZaUCMHwCS
-         lfTCJZhbRSW8O20+zf3hPl2hiwWUWfkuG7HuBYjQTRA3XzFLZo1FKVl0hrnwOlZSuTMU
-         LjOg==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Cn8y2MduSfxpaUqgG70M6OfS7ciqUGnpG7newRRVGPo=;
+        b=l9//kvAqzr4TuZQOO5YZKMU5K+Nz/XqA2W8mABc4KeB0yGrfqBBq4kx2YfXYRGnmr6
+         U27+GMDDLWM+9p1myl0pCQNxtGLVjmwRvs7Q58qRhTHaNtAbqWG7kF3z1/TXbFni3YQx
+         BKZXCgPFF54pw4BZTc8lZvGrjxCHFz3eRBg5IjXWkiZ7qSdDgjBKujwCswcM7n+ftqli
+         qzk/694Fo7qKRGCoEb5H+i0aMcf8iDbIjutDmDpYDN11368ebUpJUC8oMadzTD0s766P
+         MluaYOSWQlvvG/YRm0yfhQK1z/go8/OpbmPHDk7XKforxsXh6aM2m/YPHRnEkd4BBbae
+         1a9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2mfWUUkdEONMpGOlT6Rolu4VTQEpKACj2ssCBbPWHRQ=;
-        b=Try9cuWSSkxSj8OhPxB0/yZBjAhwAFK3bmO+9qVnyH/B+Lup5lA2xq+sKDI8kptT48
-         nJv1nU7ZhbVC14y6frb664lczHCxioqugxLfhYt5e6OAWyuhZJ3Mx0sok/X97hOblvBL
-         Wwn4sen4ji44xQnzffyn4/Xe5XilWZBpajfHj594bWnSYv1r00JABqlk7HvdsTw6DCIV
-         Mu12UAtgQJmDsizbokyNVhq5QCWvp6yF3pDr+JePnw7zVKlBNQRFghm24H5oHo6zPIvq
-         vxOR7g2mEMxveeok/lXzFZ5eR3YYtrhqzZ//92dXY0X719YeBeT9qtWuqwErLaOLLtp1
-         bdjg==
-X-Gm-Message-State: AOAM533Bxj1ElLJX/OkrRMJP5nXvd8tLdaM2ejbkesGTNVtf1xCtjsAg
-        gRDnWqtFkAG6n/40ec5DL15vhQ==
-X-Google-Smtp-Source: ABdhPJzntDENP9AYuT7H4j+098QA18SsfU+Q2JPLu9VgsH1SlSi1UmHfR7SWTzjGW/VtiKk4aFQQ6g==
-X-Received: by 2002:a63:8f09:: with SMTP id n9mr29365981pgd.38.1642640507369;
-        Wed, 19 Jan 2022 17:01:47 -0800 (PST)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Cn8y2MduSfxpaUqgG70M6OfS7ciqUGnpG7newRRVGPo=;
+        b=ijLGtHm6Nk4XC3roaF+CZTBGLeK8qQ1/0YLvX5C9ngUd3FuyX/nSwJGiJemQsSAm7X
+         8+LydUMyTxu0QYP8IKnJN3u9xaxo7AckmJgluC5wMhDb/f3J1r9xpbsWWr7oliWoHUh1
+         WLCirpzpgnqAiIlsrOyEyeoiZyigTmoSvqAQFIP3Z1ZfRJpyBkmX/aOQVq2Uqpoxf5bg
+         DSR2DC9akd8uF1P/mqN53F5kslK8ORyT/pxgi8KVq/YhnqjcT+Hwtfd3a72350lW+cCI
+         99z6ybn7S0eupfe1Nh1j4aCKDnykEuphxJhlCiVUcfKeXa8EIhqJXzhqCiaUIrjKuj7B
+         YIxg==
+X-Gm-Message-State: AOAM5318jWhBPfUYBXaJ94Af2yCmpxGqk9Iht+nhWtjEM8w6qh52icV+
+        Pa+3kLF5Nz10kk9QRoCAYlX+rg==
+X-Google-Smtp-Source: ABdhPJwhpHGT8KOOuEPAQImew6soTRUO2yMGEdyts2hB/E1RwOriB5vWheLq4HUU+aewl1urvRc1oA==
+X-Received: by 2002:a63:fe10:: with SMTP id p16mr29143931pgh.546.1642640792646;
+        Wed, 19 Jan 2022 17:06:32 -0800 (PST)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l8sm790580pfc.187.2022.01.19.17.01.46
+        by smtp.gmail.com with ESMTPSA id m17sm843462pfk.62.2022.01.19.17.06.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 17:01:46 -0800 (PST)
-Date:   Thu, 20 Jan 2022 01:01:43 +0000
+        Wed, 19 Jan 2022 17:06:31 -0800 (PST)
+Date:   Thu, 20 Jan 2022 01:06:28 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Zeng Guang <guang.zeng@intel.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -70,41 +71,52 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
- IPI virtualization
-Message-ID: <Yei0d0KVnNphPrP3@google.com>
+        "Gao, Chao" <chao.gao@intel.com>,
+        Robert Hoo <robert.hu@linux.intel.com>
+Subject: Re: [PATCH v5 4/8] KVM: VMX: dump_vmcs() reports
+ tertiary_exec_control field as well
+Message-ID: <Yei1lODnpQTZLa7s@google.com>
 References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-9-guang.zeng@intel.com>
- <YeCjHbdAikyIFQc9@google.com>
- <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
- <YeGiVCn0wNH9eqxX@google.com>
- <67262b95-d577-0620-79bf-20fc37906869@intel.com>
- <Yeb1vkEclYzD27R/@google.com>
- <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
+ <20211231142849.611-5-guang.zeng@intel.com>
+ <YeCTsVCwEkT2N6kQ@google.com>
+ <7fd4cb11-9920-6432-747e-633b96db0598@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7fd4cb11-9920-6432-747e-633b96db0598@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022, Zeng Guang wrote:
-> It's self-adaptive , standalone function module in kvm, no any extra
-> limitation introduced
+On Fri, Jan 14, 2022, Zeng Guang wrote:
+> On 1/14/2022 5:03 AM, Sean Christopherson wrote:
+> > Can you provide a sample dump?  It's hard to visualize the output, e.g. I'm worried
+> > this will be overly log and harder to read than putting tertiary controls on their
+> > own line.
+> 
+> Sample dump here.
+> *** Control State ***
+> 
+>  PinBased=0x000000ff CPUBased=0xb5a26dfa SecondaryExec=0x061037eb
+> TertiaryExec=0x0000000000000010
 
-I disagree.  Its failure mode on OOM is to degrade guest performance, _that_ is
-a limitation.  OOM is absolutely something that should be immediately communicated
-to userspace in a way that userspace can take action.
+That's quite the line.  What if we reorganize the code to generate output like:
 
-> and scalable even future extension on KVM_MAX_VCPU_IDS or new apic id
-> implementation released.
->
-> How do you think ? :)
+  CPUBased=0xb5a26dfa SecondaryExec=0x061037eb TertiaryExec=0x0000000000000010
+  PinBased=0x000000ff EntryControls=0000d1ff ExitControls=002befff
 
-Heh, I think I've made it quite clear that I think it's unnecesary complexity in
-KVM.  It's not a hill I'll die on, e.g. if Paolo and others feel it's the right
-approach then so be it, but I really, really dislike the idea of dynamically
-changing the table, KVM has a long and sordid history of botching those types
-of flows/features.
+That keeps the lines reasonable and IMO is better organization too, e.g. it captures
+the relationship between primary, secondary, and tertiary controls.
+
+>  EntryControls=0000d1ff ExitControls=002befff
+>  ExceptionBitmap=00060042 PFECmask=00000000 PFECmatch=00000000
+>  VMEntry: intr_info=00000000 errcode=00000000 ilen=00000000
+>  VMExit: intr_info=00000000 errcode=00000000 ilen=00000003
+>          reason=00000030 qualification=0000000000000784
+> > >   	pr_err("EntryControls=%08x ExitControls=%08x\n", vmentry_ctl, vmexit_ctl);
+> > >   	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
+> > >   	       vmcs_read32(EXCEPTION_BITMAP),
+> > > -- 
+> > > 2.27.0
+> > > 

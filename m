@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 046484951D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1CC4951D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376718AbiATPyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S1376781AbiATPyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiATPyU (ORCPT
+        with ESMTP id S229628AbiATPyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:54:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B6CC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:54:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kIXpdsh41zq3qV5zSU+6YaFVVe/5lMdBHdT7s/njr3M=; b=b3VoM5L2H0yyRU/sq6U28sPPB+
-        WyqdiZMLOfGkC4aBu1atF0VThkYJkgJXPgIlj1Th5vGBypFd/73s0q/VrZ7H9aQMZ0ZbLCd+/uaEa
-        H7nk1N/2bSLUkz2RKQiymgiSJVrgSjiSSnHH+7SfSvkMv5DsQZwPgWZojw9p4TY0dYkV6humnkPBK
-        /Gguq3ldz7g3IYBKpcwqsJyFgQGRLPdYo7zoUy6NtwgVKE+faX4plUenNNU+5gB7mFo2RLM1vLYQ2
-        YR3uR+Fmgi9SiQAvNHdFdLE3NzdgjzmjzYb1zJp9AopY+TvcXZ8FkLKnoFKRmaJObVorUiW87hlUq
-        C8Hgc2Jw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAZlO-00EOxj-8l; Thu, 20 Jan 2022 15:54:14 +0000
-Date:   Thu, 20 Jan 2022 15:54:14 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-Subject: Re: [PATCH v4 64/66] nommu: Remove uses of VMA linked list
-Message-ID: <YemFpinGspNII+hl@casper.infradead.org>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-65-Liam.Howlett@oracle.com>
- <3709289f-fe78-3e7a-649a-a38fb1b3329e@suse.cz>
+        Thu, 20 Jan 2022 10:54:53 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFC1C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:54:52 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id p9so6189164qkh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3imv5N5fxywtvSvcA2lQJudUo3fZTOe6sHyrTTAExJM=;
+        b=M1lffiwB1KLYq1J8nAT8JMcPgGsU1FzGHHWsTq/K9IshZRpLxrNhWmd6QP1GKfUxBA
+         76O/l8kWD+mTeEzqyt8BVi/KLfTidOI3ObbhdFhQ7HJJqoWxY+xk0JohOp+jz8ogimnF
+         4VcDUXDdCgEyFQMp5xyxyppINhHLU5i7nIitnLJfJvMwqyc6gna3wktp0CTGu+vCGibC
+         ZBJ7z1+5M9bGooXjUGG2JyUKJR0+qiiP4mK77u9Xx9DuWvavFKEWrTI6IPX8geSXs0qN
+         EWJxGcDHHl/lryEyhQrj1vyLblQllLSPGI0REIHU3nqxW/3NxCaJYJctv1HjGRUHux3v
+         KArw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3imv5N5fxywtvSvcA2lQJudUo3fZTOe6sHyrTTAExJM=;
+        b=utkFpjZvwT27SkhcOMkSlyQYGzDEXf961dmecSzT5RzSto2y3AOZx/DWsIsv4jAfHP
+         Taj7XR4f9h9Nb2D3szGvQTlsgVFjeauHIii7f7NEO8XhR2+yXZtVbELrMq+zEVXDzFx/
+         6qPXaTIA8HYWkbEXjCMfMx7gnvVXx95TY3SN+ObtmOZVpKyYXa3ZpQtp7lFUFnnIG8t/
+         k5oit/pYOaTtY3JCx1sSAxZTw2vc5Got2UAvLAyOQyCRkTL7NAyN6vT7pmyeZljj5YUN
+         DEpBy37h9qgXabTAd8kCwZzSVxp9Lo9G755Fe+cfwO4Zvl4XhfIZl+ChD4d9bzr2DFPZ
+         5GoQ==
+X-Gm-Message-State: AOAM531qLxadWUYxXYoVM64zBlkWv8SElCDRVP00gUoI4rkTjZz79fbc
+        +ulseuUp8x3MSMmLIkF6Gg+GDA==
+X-Google-Smtp-Source: ABdhPJy8Eyfg4/k+3lg4PinOuMHDcU903HioGbTVEy2SNs/dfAxM73fcSY50ZYRcg4rrzXZ+fF7mbA==
+X-Received: by 2002:a05:620a:4707:: with SMTP id bs7mr17590848qkb.69.1642694091949;
+        Thu, 20 Jan 2022 07:54:51 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id p64sm1610570qkf.38.2022.01.20.07.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 07:54:51 -0800 (PST)
+Date:   Thu, 20 Jan 2022 10:54:50 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, ebiggers@kernel.org,
+        tj@kernel.org, willy@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 2/2] psi: Fix "defined but not used" warnings when
+ CONFIG_PROC_FS=n
+Message-ID: <YemFypC3TKwpuUvm@cmpxchg.org>
+References: <20220119223940.787748-1-surenb@google.com>
+ <20220119223940.787748-3-surenb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3709289f-fe78-3e7a-649a-a38fb1b3329e@suse.cz>
+In-Reply-To: <20220119223940.787748-3-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 04:06:21PM +0100, Vlastimil Babka wrote:
-> On 12/1/21 15:30, Liam Howlett wrote:
-> > From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> > 
-> > Use the maple tree or VMA iterator instead.  This is faster and will
-> > allow us to shrink the VMA.
-> > 
-> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+On Wed, Jan 19, 2022 at 02:39:40PM -0800, Suren Baghdasaryan wrote:
+> When CONFIG_PROC_FS is disabled psi code generates the following warnings:
 > 
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> kernel/sched/psi.c:1364:30: warning: 'psi_cpu_proc_ops' defined but not used [-Wunused-const-variable=]
+>     1364 | static const struct proc_ops psi_cpu_proc_ops = {
+>          |                              ^~~~~~~~~~~~~~~~
+> kernel/sched/psi.c:1355:30: warning: 'psi_memory_proc_ops' defined but not used [-Wunused-const-variable=]
+>     1355 | static const struct proc_ops psi_memory_proc_ops = {
+>          |                              ^~~~~~~~~~~~~~~~~~~
+> kernel/sched/psi.c:1346:30: warning: 'psi_io_proc_ops' defined but not used [-Wunused-const-variable=]
+>     1346 | static const struct proc_ops psi_io_proc_ops = {
+>          |                              ^~~~~~~~~~~~~~~
 > 
-> But I think some fixup needed:
+> Make definitions of these structures and related functions conditional on
+> CONFIG_PROC_FS config.
 > 
-> > @@ -1456,12 +1458,14 @@ void exit_mmap(struct mm_struct *mm)
-> >  
-> >  	mm->total_vm = 0;
-> >  
-> > -	while ((vma = mm->mmap)) {
-> > -		mm->mmap = vma->vm_next;
-> > +	mmap_write_lock(mm);
-> 
-> If locking was missing, should have been added sooner than now?
+> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-I don't think so?  This is the exit_mmap() path, so we know nobody
-has access to the mm.  We didn't need to hold the lock at this point
-before, but now for_each_vma() will check we're holding the mmap_lock.
-
-> > +	for_each_vma(vmi, vma) {
-> >  		delete_vma_from_mm(vma);
-> >  		delete_vma(mm, vma);
-> >  		cond_resched();
-> >  	}
-> > +	__mt_destroy(&mm->mm_mt);
-> 
-> And this at the point mm_mt was added?
-
-You mean we should have been calling __mt_destroy() earlier in the
-patch series?  Umm ... I'll defer to Liam on that one.
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>

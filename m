@@ -2,179 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12145494AA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F301B494AB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358903AbiATJZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:25:17 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47852
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242012AbiATJZE (ORCPT
+        id S1359410AbiATJ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:26:43 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4433 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359226AbiATJ0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:25:04 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A6C8B40023
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642670702;
-        bh=EJnsqS+Yl91TEoL6UGlpWnR4T5zcb/hsyJCaq1j9yiE=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=gnzZp9sFb4Id3GlxWDU39mWGg74rfCalSHe/ju9XIzT61Zj5TeJ7nc7kl3Kf+tCJA
-         WpH/a6ZfdDYbj3LuoLbjCi9Q1LkUOcRXj2N5WO4gbK1Ul7YR/H/vlWiZwkgIGDhrzQ
-         H8EtGDiSVrH/pBESnr8ojxTLCl6VYVm+/oNuHWLHMX3tQlotJVIF6jL585AqdwZM//
-         xD9PZRlUQ/6hBxCyL5X2bd00cjjx2bs+GTy5dHzU4tMT97zzfi0tUjgGpYewN8z/J9
-         cctQNZ8Mg6p5EMeAPDz21QNI5cE/ktexREpzZljxCfVeFW67587biAqgOC48cesR5R
-         8OvvGQYg7f5CQ==
-Received: by mail-ed1-f70.google.com with SMTP id k10-20020a50cb8a000000b00403c8326f2aso5369126edi.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 01:25:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EJnsqS+Yl91TEoL6UGlpWnR4T5zcb/hsyJCaq1j9yiE=;
-        b=h+SPg4oTCCJm+DECYBNk/nToO/6CAXx5COoV6kbcKI7A6emT7WDv9O6fDcn1jd/6EA
-         pvaSOxcLLf7+NXl+z6IqAqvdQSIihQArPT873YuAY3rH2xcgd2Cpeiy/Pklm3KL74QZ9
-         QzFiDozKDBByW6uq1zK9GIMzJ8xZMGd45UPQxMFinExePwRxJRao9sjMfLXCaw/qrGC1
-         qEA6brjtgY+I0JtC7ZeWqAZi4b7ClZrKVQpGVg3bnzojX/HIZwx6OQjvNf+ka/85IXXi
-         syMd+za374Mh9yRLOSPBBnCU3sz+H/CMy7R3Ejd/iUKGtjeJZBAnM54JL9jAAFVj2gyn
-         bHVQ==
-X-Gm-Message-State: AOAM531x3ZXeH681+z0WRU13BFKTOZt9B5W4bhYNdeF78kiA4/wL9Hao
-        HNv3fvVfd9FzOcy+i3Lf1Xzk9nSHv0Mp1elUEks8wVoGzYYYFmrwyMe9BweMCrRYVjPwiIkSzrl
-        iCvEH7vCKYoOIBtmsvozlm0TSzRXM/oyLcKGLLaB1Yw==
-X-Received: by 2002:a17:907:c0c:: with SMTP id ga12mr17141455ejc.676.1642670701796;
-        Thu, 20 Jan 2022 01:25:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKtVARCwsexGDUUf9MujOL36JGyNyCggPfIbaa5PrKFu5DBQFsqZtbJArlkq2kkmWtRBPDvQ==
-X-Received: by 2002:a17:907:c0c:: with SMTP id ga12mr17141437ejc.676.1642670701583;
-        Thu, 20 Jan 2022 01:25:01 -0800 (PST)
-Received: from krzk-bin (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id by22sm753903ejb.5.2022.01.20.01.25.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 01:25:00 -0800 (PST)
-Date:   Thu, 20 Jan 2022 10:24:59 +0100
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Subject: Re: [PATCH v3 2/4] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <20220120092459.gbaoief77p2tynaf@krzk-bin>
-References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
- <20220112100046.68068-3-krzysztof.kozlowski@canonical.com>
- <20220119192758.z3lvlkaeyeiqi73a@ti.com>
- <5f912896-0635-fbe7-4fda-f4cb569190d9@canonical.com>
- <20220120070620.wyeosdstbfcsaplt@ti.com>
- <0c0a22ed-2c4b-374c-4f4c-06afd4e8681d@canonical.com>
- <20220120090002.hg4jmb7q2s25k64y@ti.com>
+        Thu, 20 Jan 2022 04:26:41 -0500
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JfcWM42WHz682sD;
+        Thu, 20 Jan 2022 17:23:27 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 20 Jan 2022 10:26:37 +0100
+Received: from [10.47.81.141] (10.47.81.141) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 20 Jan
+ 2022 09:26:37 +0000
+Subject: Re: [RFC PATCH v2 0/5] topdown with metrics
+To:     Andrew Kilroy <andrew.kilroy@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>, <irogers@google.com>, <ak@linux.intel.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Namhyung Kim" <namhyung@kernel.org>
+References: <4fefb1bc-49b2-bc5b-23cd-cd8fabe8c588@huawei.com>
+ <20220111150749.13365-1-andrew.kilroy@arm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
+Date:   Thu, 20 Jan 2022 09:26:12 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220120090002.hg4jmb7q2s25k64y@ti.com>
+In-Reply-To: <20220111150749.13365-1-andrew.kilroy@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.81.141]
+X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 02:30:02PM +0530, Pratyush Yadav wrote:
-> On 20/01/22 08:36AM, Krzysztof Kozlowski wrote:
-> > On 20/01/2022 08:06, Pratyush Yadav wrote:
-> > > On 19/01/22 08:49PM, Krzysztof Kozlowski wrote:
-> > >> On 19/01/2022 20:31, Pratyush Yadav wrote:
-> > >>> On 12/01/22 11:00AM, Krzysztof Kozlowski wrote:
-> > >>>> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> > >>>> controller bindings to DT schema format
-> > >>>>
-> > >>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > >>>> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > >>>> ---
-> > >>>>  .../spi/samsung,spi-peripheral-props.yaml     |  35 ++++
-> > >>>>  .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
-> > >>>>  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
-> > >>>>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
-> > >>>>  MAINTAINERS                                   |   2 +-
-> > >>>>  5 files changed, 224 insertions(+), 123 deletions(-)
-> > >>>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> > >>>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> > >>>>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
-> > >>>>
-> > >>>> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> > >>>> new file mode 100644
-> > >>>> index 000000000000..aa5a1f48494b
-> > >>>> --- /dev/null
-> > >>>> +++ b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> > >>>> @@ -0,0 +1,35 @@
-> > >>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > >>>> +%YAML 1.2
-> > >>>> +---
-> > >>>> +$id: http://devicetree.org/schemas/spi/samsung,spi-peripheral-props.yaml#
-> > >>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > >>>> +
-> > >>>> +title: Peripheral-specific properties for Samsung S3C/S5P/Exynos SoC SPI controller
-> > >>>> +
-> > >>>> +maintainers:
-> > >>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > >>>> +
-> > >>>> +description:
-> > >>>> +  See spi-peripheral-props.yaml for more info.
-> > >>>> +
-> > >>>> +properties:
-> > >>>> +  controller-data:
-> > >>>> +    type: object
-> > >>>> +    additionalProperties: false
-> > >>>> +
-> > >>>> +    properties:
-> > >>>> +      samsung,spi-feedback-delay:
-> > >>>> +        description: |
-> > >>>> +          The sampling phase shift to be applied on the miso line (to account
-> > >>>> +          for any lag in the miso line). Valid values:
-> > >>>> +           - 0: No phase shift.
-> > >>>> +           - 1: 90 degree phase shift sampling.
-> > >>>> +           - 2: 180 degree phase shift sampling.
-> > >>>> +           - 3: 270 degree phase shift sampling.
-> > >>>> +        $ref: /schemas/types.yaml#/definitions/uint32
-> > >>>> +        enum: [0, 1, 2, 3]
-> > >>>> +
-> > >>>> +    required:
-> > >>>> +      - samsung,spi-feedback-delay
-> > >>>
-> > >>> I am not quite sure if this required would work here. Let's say another 
-> > >>> controller also uses a controller-data node, but it contains a different 
-> > >>> set of properties. Won't this cause an error to be raised for that 
-> > >>> controller since this property is not there?
-> > >>
-> > >> The controller-data is Samsung SPI specific (does not exist in any other
-> > >> binding), so why would controller-data get added to a different controller?
-> > > 
-> > > It does not as of now, but the name is fairly generic and some 
-> > > controller in the future might use it. I do not think it is a good idea 
-> > > to list required properties in X-peripheral-props.yaml in general since 
-> > > all those will be collected by spi-peripheral-props.yaml and so will 
-> > > apply to _all_ controllers that reference it.
-> > 
-> > Right, but have in mind this is merely a bindings conversion. These were
-> > made like this long time ago.
+On 11/01/2022 15:07, Andrew Kilroy wrote:
+> This patch series adds the ability for the --topdown option to use
+> metrics (defined in json files in the pmu-events directory) to describe
+> how to calculate and determine the output columns for topdown level 1.
 > 
-> Yes, but the bindings infrastructure is not capable of handling these 
-> required properties as of now. So even if your next patch was _not_ 
-> making it optional, I would still say you should drop the "required:". 
-> Even though the property is actually a required one, we currently do not 
-> have the means to express that.
+> For this to work, a number of metrics have to be defined for the
+> relevant processor with the MetricGroup name "TopDownL1".  perf will
+> arrange for the events defined in each metric to be collected, and each
+> metric will be displayed in the output, as if
 > 
-> > 
-> > I think we can drop the "required:" entirely with the commit 3/4 which
-> > makes it optional.
+>    perf stat -M 'TopDownL1' --metric-only -- exampleapp
 > 
-> I would prefer you never add it in the first place.
+> had been used.
+> 
+> Topdown was already implemented where certain kernel events are defined.
+> If these kernel events are defined, the new json metrics behaviour is
+> not used.  The json metrics approach is only used if the kernel events
+> are absent.
+> 
+> The last patch in the series disables the json metrics behaviour on x86.
+> This is because of concerns that due to SMT it's not straightforward to
+> express the various formulas as json for certain x86 cpus.  See
 
-If I understand correctly, you propose to squash next patch making it
-optional to this conversion? I believe there is a value in splitting
-conversion of existing bindings from making changes to the bindings, but
-I don't mind squashing them if that is desired.
+I suppose this solution is ok.
 
-Best regards,
-Krzysztof
+A concern is that today we only have 1x arm64 platform which actually 
+supports this in mainline.
 
+Do you have any more which you plan to support?
+
+I think that it's the frontend bound and fetch_bubble event which 
+doesn't have a standard arm solution.
+
+Note that I do have a series for perf tool which can read arm cpu pmu 
+sysfs events folder to find events which are implemented (I don't think 
+all required events are mandated) and match that against the common arch 
+events JSON, so that we don't need a JSON definition file for each core 
+implementation from all implementators - this would improve scalability. 
+However a concern is that some events - like inst_spec - have imp def 
+meaning, so may not be good to always use by default for all cores metrics.
+
+Thanks,
+John

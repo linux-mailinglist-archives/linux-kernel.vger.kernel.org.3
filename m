@@ -2,278 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C5D49539E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33324953A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiATR4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:56:06 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:21024 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233067AbiATR4F (ORCPT
+        id S233116AbiATR4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231135AbiATR4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:56:05 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K4urv7021640;
-        Thu, 20 Jan 2022 11:55:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=XvGB7UycBpGzVQC72iu2qmzvGDvfYND/7pGY61cSEew=;
- b=FVEuddPreuC2YhzhmQ1QaTpD6VdnDatajMnkMfWWRzVYVuuc6+dlc9Ajgne202AoCgbM
- mfHm+VPMurhxIVqpMRfWGixTMHFgj8Dkr6Af6ERLwpANiIQ9R0ztaLAV8bqUZxheuopz
- rSKRnNa4LKk30USK+3+o1EDy+A0v9jsPNNJzSOvvpNGbveKs+46QEQbqawbpL6CXmO6n
- jR7xN1JBkBGmBvZ3CvmSqKp0r4f2viQB+3wXjiPJmC+yRYuHUmPhukJxQhrEO+SpiMQZ
- VhaeqS/c785gH6hgcjxzflW5XNyzQkhDpwpRJLNjRpgCrDbT2Op1xAJ+RGDs8ShJnywe bw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dpms0hh18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 20 Jan 2022 11:55:58 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 20 Jan
- 2022 17:55:54 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Thu, 20 Jan 2022 17:55:54 +0000
-Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.33])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 33DD711D7;
-        Thu, 20 Jan 2022 17:55:54 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 3/3] ASoC: cs42l42: Handle system suspend
-Date:   Thu, 20 Jan 2022 17:55:49 +0000
-Message-ID: <20220120175549.671831-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220120175549.671831-1-rf@opensource.cirrus.com>
-References: <20220120175549.671831-1-rf@opensource.cirrus.com>
+        Thu, 20 Jan 2022 12:56:47 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E454C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:56:47 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so6519489pjp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eQK5zVzqLI6klwHyZj/+smdOpWkvGx4b96oH7k78DVI=;
+        b=h3qF4O7gvq4Ngmvx2/kjn9H6OS8Lau1YuC4M8nMdC4/En8aXI85M6NX9I4dtxPuOvR
+         LNGI3s0xYtWiTsLZfVyvPffs9SGIdhwwhB08iHTgIbwdEKrOpN6nExX/Zskqq4UoQy3k
+         0f03014Xr2C6BvgmptvCARFJ9pal8Hm7K/4ilIj5aKBePIr+EzC6iQgAxhA9rthj6zmc
+         YxyrQhJYlnF+K8UUOOi49dbDeQhGLo1Sw/G6XAhjUCofgEfj4fFt6xPZdx0LmQtijzzL
+         +lcuDM95hzIzn4gLZ244o+UN20aYeZLYV5Vq0FHitFwHP7OmtX2iiCe/0wb5VIKGjXe+
+         6J0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eQK5zVzqLI6klwHyZj/+smdOpWkvGx4b96oH7k78DVI=;
+        b=jVUS9yMu4NTOkkBjfTXNRAW/Zt7kqwHov8Z/TFpVM0Hf0V2vY8XLmer4MwVy5P9C/G
+         E3Dmt2w4sJLJSOz1FbtsZZAt1Lq8aZP3L281gDi5uI65Ri3ptzoCyNBerXFMXImzlmvi
+         aNQO+DgYyMY+gb7pihHbP/KoL4ylp40ey9aJMcgoY8SD0L7d03eCaW6APFG1s6sZesep
+         DyexWvms/EnzJu+3JUHbZ1ofO8syBXx7f+c4LQUYwAVm+iT1VZWLB9rklfPvhS2XruU3
+         mfwk3XTk9BCwZVetPRGshLH+wzg5uEMoIdUqKlA3eMM4YXiafiG5Sxnn/MZHXS7Sjpm1
+         5TpQ==
+X-Gm-Message-State: AOAM532PjVN3jSDjKwqjkpNiaNcBAAOAHlUjoEiivFtZO3ii7Z1Gqr6W
+        WKOyA6/4fzpgNjfUPZZcMy/MQA==
+X-Google-Smtp-Source: ABdhPJwUKxMCYglR9XOpdXVnTtB/k9OqpDZEl+oS4hqc6RRWe0ciZkXLEvosyCk8upOLgBMKD0Y5YA==
+X-Received: by 2002:a17:90a:c08f:: with SMTP id o15mr2479838pjs.204.1642701405601;
+        Thu, 20 Jan 2022 09:56:45 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id rj2sm9860364pjb.54.2022.01.20.09.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 09:56:44 -0800 (PST)
+Date:   Thu, 20 Jan 2022 10:56:42 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] coresight: syscfg: Fix memleak on registration failure
+ in cscfg_create_device
+Message-ID: <20220120175642.GB1338735@p14s>
+References: <20220110073100.15497-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: a_vnEG4sxbh_94GlblzDDpmx9wrfu0q_
-X-Proofpoint-GUID: a_vnEG4sxbh_94GlblzDDpmx9wrfu0q_
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110073100.15497-1-linmq006@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add system suspend functions to handle clean power-down on suspend and
-restoring registers on resume.
+Good morning,
 
-The jack state could change during suspend. Plug->unplug and unplug->plug
-are straightforward because this looks no different from any other plug
-state change - there will be a plugged or unplugged interrupt pending.
-The jack could be unplugged and a different type of jack plugged, and on
-resume the plug state would not have changed. Setting plug_state back to
-TS_TRANS (transitioning) will make the next plug interrupt after resume
-run a type detection.
+On Mon, Jan 10, 2022 at 07:31:00AM +0000, Miaoqian Lin wrote:
+> device_register() calls device_initialize(),
+> according to doc of device_initialize:
+> 
+>     Use put_device() to give up your reference instead of freeing
+>     * @dev directly once you have called this function.
 
-During system suspend any jack plug/unplug and button events will not be
-reported or generate a system wakeup. If the plug state or headset type
-has changed it will be reported after resume.
+That is _if_ device_initialize() is called manually.  In this instance
+@dev is registered with device_register() and unregistered with
+device_unregister().  The latter conforms to the comment you pointed out and
+calls put_device() as expected.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- sound/soc/codecs/cs42l42.c | 139 +++++++++++++++++++++++++++++++++++++++++++++
- sound/soc/codecs/cs42l42.h |   5 ++
- 2 files changed, 144 insertions(+)
+Thanks,
+Mathieu
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index f1b95d45af4a..f577b39a2fc0 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -1614,6 +1614,10 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 	int report = 0;
- 
- 	mutex_lock(&cs42l42->irq_lock);
-+	if (cs42l42->suspended) {
-+		mutex_unlock(&cs42l42->irq_lock);
-+		return IRQ_NONE;
-+	}
- 
- 	/* Read sticky registers to clear interurpt */
- 	for (i = 0; i < ARRAY_SIZE(stickies); i++) {
-@@ -2047,6 +2051,136 @@ static int cs42l42_handle_device_data(struct device *dev,
- 	return 0;
- }
- 
-+/* Datasheet suspend sequence */
-+static const struct reg_sequence __maybe_unused cs42l42_shutdown_seq[] = {
-+	REG_SEQ0(CS42L42_MIC_DET_CTL1,		0x9F),
-+	REG_SEQ0(CS42L42_ADC_OVFL_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_MIXER_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_SRC_INT_MASK,		0x0F),
-+	REG_SEQ0(CS42L42_ASP_RX_INT_MASK,	0x1F),
-+	REG_SEQ0(CS42L42_ASP_TX_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_CODEC_INT_MASK,	0x03),
-+	REG_SEQ0(CS42L42_SRCPL_INT_MASK,	0x7F),
-+	REG_SEQ0(CS42L42_VPMON_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_PLL_LOCK_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_TSRS_PLUG_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_WAKE_CTL,		0xE1),
-+	REG_SEQ0(CS42L42_DET_INT1_MASK,		0xE0),
-+	REG_SEQ0(CS42L42_DET_INT2_MASK,		0xFF),
-+	REG_SEQ0(CS42L42_MIXER_CHA_VOL,		0x3F),
-+	REG_SEQ0(CS42L42_MIXER_ADC_VOL,		0x3F),
-+	REG_SEQ0(CS42L42_MIXER_CHB_VOL,		0x3F),
-+	REG_SEQ0(CS42L42_HP_CTL,		0x0F),
-+	REG_SEQ0(CS42L42_ASP_RX_DAI0_EN,	0x00),
-+	REG_SEQ0(CS42L42_ASP_CLK_CFG,		0x00),
-+	REG_SEQ0(CS42L42_HSDET_CTL2,		0x00),
-+	REG_SEQ0(CS42L42_PWR_CTL1,		0xFE),
-+	REG_SEQ0(CS42L42_PWR_CTL2,		0x8C),
-+	REG_SEQ0(CS42L42_DAC_CTL2,		0x02),
-+	REG_SEQ0(CS42L42_HS_CLAMP_DISABLE,	0x00),
-+	REG_SEQ0(CS42L42_MISC_DET_CTL,		0x03),
-+	REG_SEQ0(CS42L42_TIPSENSE_CTL,		0x02),
-+	REG_SEQ0(CS42L42_HSBIAS_SC_AUTOCTL,	0x03),
-+	REG_SEQ0(CS42L42_PWR_CTL1,		0xFF)
-+};
-+
-+static int __maybe_unused cs42l42_suspend(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	unsigned int reg;
-+	u8 save_regs[ARRAY_SIZE(cs42l42_shutdown_seq)];
-+	int i, ret;
-+
-+	/*
-+	 * Wait for threaded irq handler to be idle and stop it processing
-+	 * future interrupts. This ensures a safe disable if the interrupt
-+	 * is shared.
-+	 */
-+	mutex_lock(&cs42l42->irq_lock);
-+	cs42l42->suspended = true;
-+
-+	/* Save register values that will be overwritten by shutdown sequence */
-+	for (i = 0; i < ARRAY_SIZE(cs42l42_shutdown_seq); ++i) {
-+		regmap_read(cs42l42->regmap, cs42l42_shutdown_seq[i].reg, &reg);
-+		save_regs[i] = (u8)reg;
-+	}
-+
-+	/* Shutdown codec */
-+	regmap_multi_reg_write(cs42l42->regmap,
-+			       cs42l42_shutdown_seq,
-+			       ARRAY_SIZE(cs42l42_shutdown_seq));
-+
-+	/* All interrupt sources are now disabled */
-+	mutex_unlock(&cs42l42->irq_lock);
-+
-+	/* Wait for power-down complete */
-+	msleep(CS42L42_PDN_DONE_TIME_MS);
-+	ret = regmap_read_poll_timeout(cs42l42->regmap,
-+				       CS42L42_CODEC_STATUS, reg,
-+				       (reg & CS42L42_PDN_DONE_MASK),
-+				       CS42L42_PDN_DONE_POLL_US,
-+				       CS42L42_PDN_DONE_TIMEOUT_US);
-+	if (ret)
-+		dev_warn(dev, "Failed to get PDN_DONE: %d\n", ret);
-+
-+	/* Discharge FILT+ */
-+	regmap_update_bits(cs42l42->regmap, CS42L42_PWR_CTL2,
-+			   CS42L42_DISCHARGE_FILT_MASK, CS42L42_DISCHARGE_FILT_MASK);
-+	msleep(CS42L42_FILT_DISCHARGE_TIME_MS);
-+
-+	regcache_cache_only(cs42l42->regmap, true);
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 0);
-+	regulator_bulk_disable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+
-+	/* Restore register values to the regmap cache */
-+	for (i = 0; i < ARRAY_SIZE(cs42l42_shutdown_seq); ++i)
-+		regmap_write(cs42l42->regmap, cs42l42_shutdown_seq[i].reg, save_regs[i]);
-+
-+	/* The cached address page register value is now stale */
-+	regcache_drop_region(cs42l42->regmap, CS42L42_PAGE_REGISTER, CS42L42_PAGE_REGISTER);
-+
-+	dev_dbg(dev, "System suspended\n");
-+
-+	return 0;
-+
-+}
-+
-+static int __maybe_unused cs42l42_resume(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/*
-+	 * If jack was unplugged and re-plugged during suspend it could
-+	 * have changed type but the tip-sense state hasn't changed.
-+	 * Force a plugged state to be re-evaluated.
-+	 */
-+	if (cs42l42->plug_state != CS42L42_TS_UNPLUG)
-+		cs42l42->plug_state = CS42L42_TS_TRANS;
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+	if (ret != 0) {
-+		dev_err(dev, "Failed to enable supplies: %d\n", ret);
-+		return ret;
-+	}
-+
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 1);
-+	usleep_range(CS42L42_BOOT_TIME_US, CS42L42_BOOT_TIME_US * 2);
-+
-+	regcache_cache_only(cs42l42->regmap, false);
-+	regcache_mark_dirty(cs42l42->regmap);
-+
-+	/* Sync LATCH_TO_VP first so the VP domain registers sync correctly */
-+	regcache_sync_region(cs42l42->regmap, CS42L42_MIC_DET_CTL1, CS42L42_MIC_DET_CTL1);
-+	regcache_sync(cs42l42->regmap);
-+
-+	cs42l42->suspended = false;
-+
-+	dev_dbg(dev, "System resumed\n");
-+
-+	return 0;
-+}
-+
- static int cs42l42_i2c_probe(struct i2c_client *i2c_client,
- 				       const struct i2c_device_id *id)
- {
-@@ -2217,6 +2351,10 @@ static int cs42l42_i2c_remove(struct i2c_client *i2c_client)
- 	return 0;
- }
- 
-+static const struct dev_pm_ops cs42l42_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l42_resume)
-+};
-+
- #ifdef CONFIG_OF
- static const struct of_device_id cs42l42_of_match[] = {
- 	{ .compatible = "cirrus,cs42l42", },
-@@ -2243,6 +2381,7 @@ MODULE_DEVICE_TABLE(i2c, cs42l42_id);
- static struct i2c_driver cs42l42_i2c_driver = {
- 	.driver = {
- 		.name = "cs42l42",
-+		.pm = &cs42l42_pm_ops,
- 		.of_match_table = of_match_ptr(cs42l42_of_match),
- 		.acpi_match_table = ACPI_PTR(cs42l42_acpi_match),
- 		},
-diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index 53d96287abba..244b24d1f5e9 100644
---- a/sound/soc/codecs/cs42l42.h
-+++ b/sound/soc/codecs/cs42l42.h
-@@ -826,6 +826,10 @@
- #define CS42L42_PLL_LOCK_POLL_US	250
- #define CS42L42_PLL_LOCK_TIMEOUT_US	1250
- #define CS42L42_HP_ADC_EN_TIME_US	20000
-+#define CS42L42_PDN_DONE_POLL_US	1000
-+#define CS42L42_PDN_DONE_TIMEOUT_US	200000
-+#define CS42L42_PDN_DONE_TIME_MS	100
-+#define CS42L42_FILT_DISCHARGE_TIME_MS	46
- 
- static const char *const cs42l42_supply_names[CS42L42_NUM_SUPPLIES] = {
- 	"VA",
-@@ -860,6 +864,7 @@ struct  cs42l42_private {
- 	u8 hs_bias_sense_en;
- 	u8 stream_use;
- 	bool hp_adc_up_pending;
-+	bool suspended;
- };
- 
- #endif /* __CS42L42_H__ */
--- 
-2.11.0
-
+> 
+> To prevent potential memleak, use put_device() instead call kfree
+> directly.
+> 
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/hwtracing/coresight/coresight-syscfg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-syscfg.c b/drivers/hwtracing/coresight/coresight-syscfg.c
+> index 43054568430f..007fa1c761a7 100644
+> --- a/drivers/hwtracing/coresight/coresight-syscfg.c
+> +++ b/drivers/hwtracing/coresight/coresight-syscfg.c
+> @@ -764,7 +764,7 @@ struct device *cscfg_device(void)
+>  /* Must have a release function or the kernel will complain on module unload */
+>  static void cscfg_dev_release(struct device *dev)
+>  {
+> -	kfree(cscfg_mgr);
+> +	put_device(dev);
+>  	cscfg_mgr = NULL;
+>  }
+>  
+> -- 
+> 2.17.1
+> 

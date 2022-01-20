@@ -2,166 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4426A4950B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D104950B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359370AbiATO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 09:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346102AbiATO7d (ORCPT
+        id S1357821AbiATO7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 09:59:19 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33522 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346102AbiATO7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 09:59:33 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6D7C061574;
-        Thu, 20 Jan 2022 06:59:33 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u18so15694959edt.6;
-        Thu, 20 Jan 2022 06:59:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q7/Art4fi7Ys+mKvfMJYfxSvlOJsbRKucqQhRA69bnI=;
-        b=aCGGxiYLTv4SVejDvxcNOhoE/tXZlskJXY4VdLXFx7mLuYAEGN0y7HJkr0NsYalnEj
-         qyZxOKRhUUWEWuQ5yuX7PeLNomLeYNJ80ht2YlxtYMHiQPMx57Cr+/GnEVnrm5Hwrz7A
-         Ded9EA6M5zwg/Niqvo4kPTj4BETD1QBYifj1csdmxV0LL0GTRok8pLpKEvZAxEoMpRVf
-         v+21aTOeFoZVzH3cJGmg4/zxgAUrBXr96IklYlqz/fMYRt0gq4SqDWSI34Cd1t9YBWxE
-         8g4DOcJGTw+2XEzikWXINsbY77/wFQvzbX88dn+RRbeL9bbJ3YH5Z2HnAQASFJZrnz8t
-         g/TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q7/Art4fi7Ys+mKvfMJYfxSvlOJsbRKucqQhRA69bnI=;
-        b=q3bjOPX1TY689RRLrJ7rPRz/605+J+PKtX/PN4mtaNyZMH3m843zPBK1uBjBgPk0HT
-         3FMM/B/lOVo98Pr0YKiN7hzUaBS8lrcOpN1jwYiHSsbM5CS/Y5o0kVxFcEcO9FN86GfP
-         y0XFjapdJerNwaDtniEhKOo3adJF8oorBGe9y/SpYhswk5llfs/3Lgz7EtauOyiVWSl9
-         LgmpIkSvV7wXnoz6jdWbOE0l+uXNg9KItguWl8DIfX2kYkIhwAOBdgisnOa27JqvMvgA
-         3+AYr/i+JGcctXMJa0SrNTnlSqaod4PqbblVWD4seHOJfxn6QY5mwIJhlJTY275bEnbv
-         OfAw==
-X-Gm-Message-State: AOAM5323sNHBc6LnDJqgEexONtKZ65SJB/2lEiA/TRnhMmhuMI6VwGBb
-        AJnEmalfRZjk/uirBGkIssEPZ1MjaplSWlK0iyk=
-X-Google-Smtp-Source: ABdhPJwJVZLjArtFZ3WPYTSEiSnskUTscXctdXqraZCdNwhkNDk6+IBeo6b/0RhdSTM9KnC3e6bg4B5GGbj3/jTa6EI=
-X-Received: by 2002:a17:907:94d3:: with SMTP id dn19mr2304620ejc.77.1642690771754;
- Thu, 20 Jan 2022 06:59:31 -0800 (PST)
+        Thu, 20 Jan 2022 09:59:14 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8A24E21906;
+        Thu, 20 Jan 2022 14:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642690752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DL3B1IO3fZVXuhiBZXzTq6wFq3VQYTl8syynoxUgKjg=;
+        b=FS83u84srngcHTE69hytGOIlMTCDiRWDIztkO2NjkKltuZgh4NWPK4c8t2LMaW/hYlWPff
+        Rqg8rQF+GlsWbtzo60YDAZC07dZP5Qc7iJdi8tlMrGfzhfMBlBm6RqisJulOaA+Ig6gPU0
+        HeD7ZQv8V+pT8EtOEcoluKk0qACA6Kc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642690752;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DL3B1IO3fZVXuhiBZXzTq6wFq3VQYTl8syynoxUgKjg=;
+        b=tyt3IlqYMBdLvexWL/ZRt99q/mP3Kk0FhMjyx0Vpg9KzBMFuvr4MgD8uRPcUgfBSAgk4D8
+        eeugbMTMda9AVOCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3930A13BCF;
+        Thu, 20 Jan 2022 14:59:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zYZNDcB46WHJLAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 20 Jan 2022 14:59:12 +0000
+Message-ID: <807fa53c-6492-52ca-abf3-ce58cc84ca08@suse.cz>
+Date:   Thu, 20 Jan 2022 15:59:11 +0100
 MIME-Version: 1.0
-References: <1642686255-25951-1-git-send-email-akhilrajeev@nvidia.com> <1642686255-25951-2-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1642686255-25951-2-git-send-email-akhilrajeev@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 16:57:49 +0200
-Message-ID: <CAHp75VeOvXf6twskZp-Y-s8AQEpftA0SOUJfXqO5sJ1FKNKgCA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] device property: Add device_irq_get_byname
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 63/66] i915: Use the VMA iterator
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-64-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-64-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 3:45 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> 
+> Replace the O(n.log(n)) loop with an O(n) loop.
 
-Thanks, my comments below.
+Not true?
 
-> Add device_irq_get_byname() to get an interrupt by name from both the
-> ACPI table and the Device Tree.
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 
-This needs to be clarified (it's not and, but or), what about:
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-  Add device_irq_get_byname() to get an interrupt by name from either
-  ACPI table or Device Tree whichever has it.
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_userptr.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> index 3173c9f9a040..39960973c130 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> @@ -425,12 +425,11 @@ static const struct drm_i915_gem_object_ops i915_gem_userptr_ops = {
+>  static int
+>  probe_range(struct mm_struct *mm, unsigned long addr, unsigned long len)
+>  {
+> -	const unsigned long end = addr + len;
+> +	VMA_ITERATOR(vmi, mm, addr);
+>  	struct vm_area_struct *vma;
+> -	int ret = -EFAULT;
+>  
+>  	mmap_read_lock(mm);
+> -	for (vma = find_vma(mm, addr); vma; vma = vma->vm_next) {
+> +	for_each_vma_range(vmi, vma, addr + len) {
+>  		/* Check for holes, note that we also update the addr below */
+>  		if (vma->vm_start > addr)
+>  			break;
+> @@ -438,16 +437,13 @@ probe_range(struct mm_struct *mm, unsigned long addr, unsigned long len)
+>  		if (vma->vm_flags & (VM_PFNMAP | VM_MIXEDMAP))
+>  			break;
+>  
+> -		if (vma->vm_end >= end) {
+> -			ret = 0;
+> -			break;
+> -		}
+> -
+>  		addr = vma->vm_end;
+>  	}
+>  	mmap_read_unlock(mm);
+>  
+> -	return ret;
+> +	if (vma)
+> +		return -EFAULT;
+> +	return 0;
+>  }
+>  
+>  /*
 
-> This will allow to use 'interrupt-names' in _DSD which can be mapped to
-
-In the ACPI case this
-allow us to
-
-> Interrupt() resource by index. The implementation is similar to
-> 'interrupt-names' in the Device Tree.
-
-...
-
->  /**
-> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
-> + * @fwnode:    Pointer to the firmware node
-> + * @name:      IRQ name
-> + *
-> + * Description:
-> + * Find a match to the string 'name' in the 'interrupt-names' string array
-
-'name' --> @name
-
-> + * in _DSD for ACPI, or of_node for device tree. Then get the Linux IRQ
-
-Device Tree
-
-> + * number of the IRQ resource corresponding to the index of the matched
-> + * string.
-> + *
-> + * Return:
-
-> + * Linux IRQ number on success
-> + * Negative errno otherwise.
-
- * Linux IRQ number on success, or negative errno otherwise.
-
-> + */
-> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
-> +{
-> +       int index;
-> +
-> +       if (!name)
-> +               return -EINVAL;
-> +
-> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
-> +       if (index < 0)
-> +               return index;
-> +
-> +       return fwnode_irq_get(fwnode, index);
-> +}
-
-...
-
-> +/**
-> + * device_irq_get_byname - Get IRQ of a device using interrupt name
-> + * @dev: Device to get the interrupt
-> + * @name: IRQ name
-> + *
-> + * Description:
-> + * Find a match to the string 'name' in the 'interrupt-names' string array
-> + * in _DSD for ACPI, or of_node for device tree. Then get the Linux IRQ
-> + * number of the IRQ resource corresponding to the index of the matched
-> + * string.
-> + *
-> + * Return:
-> + * Linux IRQ number on success
-> + * Negative errno otherwise.
-> + */
-
-As per above.
-
-...
-
-> +int device_irq_get_byname(struct device *dev, const char *name);
-
-Since we don't have device_irq_get() perhaps we don't need this one
-right now (just open code it in the caller). This will satisfy
-Rafael's request.
-
--- 
-With Best Regards,
-Andy Shevchenko

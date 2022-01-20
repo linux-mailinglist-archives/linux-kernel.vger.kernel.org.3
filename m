@@ -2,233 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 767A249530F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1883F495314
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377308AbiATRTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S1377300AbiATRW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377302AbiATRTw (ORCPT
+        with ESMTP id S1377233AbiATRWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:19:52 -0500
+        Thu, 20 Jan 2022 12:22:25 -0500
 Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A537C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:19:52 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id m4so31519556edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:19:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39329C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:22:25 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z22so31534603edd.12
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:22:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oApbJYbC2vwY2nc2YKcA8roeaa4QUYOOXYGsFKjSttA=;
-        b=d498xJZB8hN7YfcMY2u7LlRejndB+ZCqdzyTi+57fbLLOuRfkI7skorKmwjeRPFNf9
-         8oziVWInJB3yLnL6XHrhvnjgMtw0k+DPsll2KcI8ZsW1m/X0Vh1tUf6mw6CLHBJ1APj4
-         n6Lc/+CAlHML+MCvr/eZ+cs09QTHDiCIqKfGN6qMpR/88NBhZPk1CVlWBDTt7Pvya3Xi
-         6S3TixkE0pprGH/MWGxhtfQxxzBYRlNhZNjfvxSFO6bjxzveJd9Aphuzz4LrnCRdJMf3
-         UfYcKFDufAkZhDoxaiThuxpEiC+F/lA3xImfigYtLyLhg+GHjE60onUhEU9n872DOyQ6
-         X/XA==
+        bh=ncvlTAS0L4yQCHvxcXlz75YOuPdmsFVoVMirXa2zJSc=;
+        b=T1GENQb9E1UWqRHycMNTqlUbmq3o2r29qENRdmVki77UXsvLGqjYxS/6zQawXlMadi
+         HjsVwbkLX6gCgiYKZngNC32r2Io5yH9L4N1HbshyAFc7PNzBDS5J7pmlN0W3UiBxvGtv
+         Py1S5HNdjmSWUrNKfZdIGApUVY+OjZUybBl44=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oApbJYbC2vwY2nc2YKcA8roeaa4QUYOOXYGsFKjSttA=;
-        b=wk/f23bvNx/lCP8tMYHfH8TCTACYJAPzOOefB0qy2UAeAZ/rmJVhCW+4Xi4P6E79og
-         FbtobnfnojMcIysfr5hK9bwwFX3FiJM9vFoFmKqWh0rRqFBjpcWNSK5/z+ztuJXguAe3
-         F51VJgU7Ewd47AbP46ZqRfKau9t+L4DZ8LyybltHEwvYC/DQwYwx+mDMkWV0QwO7xlGH
-         KA10wneMVSfs81YtbM6qJv8LVC5gD6OK80oIZqG0cBc+cbe/F+mKcWqnjsljq4NAdgZ9
-         IHvZcO8+1IoTwY7FQqdgxE50FW/DR3mu3cPUYw/bwcALiR3X3xkziliorPuute3QBHsX
-         jQCA==
-X-Gm-Message-State: AOAM531LWZzY2Rzcx7wyjlTmBpkKNU0LfGgjczeimBqj9ykGy/J1NiUp
-        gAitQMCcKjJPKMglVK0DN4zQUfQopHMR3frAcdt1jg==
-X-Google-Smtp-Source: ABdhPJwud0a7Qw33P4ieVWvZrM2RSisE09WrEtZ56YE7MVgTeP5gpd2DgvOdhX7j4DDLEnixM77I+AYhU+CPYlABqgM=
-X-Received: by 2002:a17:907:7215:: with SMTP id dr21mr3848896ejc.75.1642699190403;
- Thu, 20 Jan 2022 09:19:50 -0800 (PST)
+        bh=ncvlTAS0L4yQCHvxcXlz75YOuPdmsFVoVMirXa2zJSc=;
+        b=4E6RjBb3ORBTGKI5iOC8y1c3HcdumxBz44v7yrVXogOxPzHQJbzDw32O1ky4ua+O2V
+         uD99yLx8Z5YM1gNrIG7xUcmFKEiLrCWLynVuVF8bwlV8Y62Lu2r+v2yPn4IUc0PPC09g
+         6uqVF2ze+bPzydvjIWTFdc+HGP9rB52s8Qv9q6WKF27BtQ7QwHJCzQNAwCCh2SSmo+xt
+         Hv8WCJLksSxPpJP6uonmmtzBSg9I9FMBo3+R3ni+vXeLF3ka+j5XiD5qyQL5vqn2eFGh
+         jKyuKQ+5qEXkTj9V41SAdeZ7hc080ry6m3PkYWgJgeNWZyp0bTWUtunr6d6P0siOaMDi
+         tzyg==
+X-Gm-Message-State: AOAM531ChpHcFONStKQ5rg+06R4KOtYZtQKaZoI3jQeKXAuwufU3ItH9
+        ueKcTeZMBCzKp73aKNXzhV8aFWdPWz6JAhy1kNQ=
+X-Google-Smtp-Source: ABdhPJxixmdgc2+yAUKBFZNOBuDbpUQiO6pelb6gH7NNY6VJ1TBOHWLMnigfBIeMTCabT/j0B0u2RA==
+X-Received: by 2002:a17:906:4796:: with SMTP id cw22mr31476921ejc.594.1642699342389;
+        Thu, 20 Jan 2022 09:22:22 -0800 (PST)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id d25sm1252609ejz.4.2022.01.20.09.22.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 09:22:20 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso15302007wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:22:20 -0800 (PST)
+X-Received: by 2002:a05:6000:1846:: with SMTP id c6mr31585wri.193.1642699339801;
+ Thu, 20 Jan 2022 09:22:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
-In-Reply-To: <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 20 Jan 2022 09:19:39 -0800
-Message-ID: <CAGS_qxqx+wcruc7DAD9TQjk27OF+VDo1n9S6atRx+dDG5cr=6g@mail.gmail.com>
-Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
+ <YeA5oP/iaxtVPHb3@casper.infradead.org> <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+ <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com> <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
+ <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com> <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
+ <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com> <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
+ <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com> <Yel0BXVyj8uvsWJX@casper.infradead.org>
+ <e2580cfa-a529-934d-861a-091c4a9714d4@redhat.com> <CAHk-=wjBFF_EJHVRe48jAjb7Xwu0aRNejyefzLOAGW_qnNu=-w@mail.gmail.com>
+ <43e41259-b228-2a75-e59d-0c6a1e81912f@redhat.com>
+In-Reply-To: <43e41259-b228-2a75-e59d-0c6a1e81912f@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 20 Jan 2022 19:22:03 +0200
+X-Gmail-Original-Message-ID: <CAHk-=wirJT_K381J+8AAnOeyEtUuQ=eAwg=EzBJPcN7TyygNbg@mail.gmail.com>
+Message-ID: <CAHk-=wirJT_K381J+8AAnOeyEtUuQ=eAwg=EzBJPcN7TyygNbg@mail.gmail.com>
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "zhangliang (AG)" <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        wangzhigang17@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 12:29 AM David Gow <davidgow@google.com> wrote:
+On Thu, Jan 20, 2022 at 5:46 PM David Hildenbrand <david@redhat.com> wrote:
 >
-> On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > This field is only used to pass along the parsed Test object from
-> > parse_tests().
-> > Everywhere else the `result` field is ignored.
-> >
-> > Instead make parse_tests() explicitly return a KunitResult and Test so
-> > we can retire the `result` field.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> I personally prefer having the Test as part of the result -- it gives
-> a slightly rust-esque sense of needing to check the actual result
-> before using anything that's parsed. (Also, I'm still not used to the
-> whole multiple return value thing, which is not as clear as an
-> explicit named struct member, IMHO).
-> That being said, we're not actually checking the result before using
-> the Test, and certainly the use of Any and mashing a textual error
-> message in the same field is rather unpleasant.
->
-> My ideal solution would be to rename 'result' to something more
-> sensible ('parsed_test', maybe?), and make it explicitly a Test rather
-> than Any (and either add a separate field for the textual error
-> message, or remove it as in this patch, having noticed that it's
-> almost completely redundant to the enum).
+> I'm, not concerned about fork(), I'm concerned about other false positives.
 
-Yeah, I considered that for a bit, but I don't like having a field
-that is only sometimes set.
-I had thought we were passing back the test object from exec_tests(),
-but I was wrong.
-We were actually passing back a KunitResult with a KunitResult[Test] in it.
+Without a fork(), you won't have the THP marked for COW, so is it
+really an issue?
 
-So when I saw only parse_tests() actually wanted to pass back a test
-object, I thought it was cleaner to just use a separate return value.
+> Here is what I currently have, I hope that makes sense:
 
->
-> That being said, I can live with the current solution, but'd ideally
-> like a comment or something to make the return value Tuple a bit more
-> obvious.
+From a quick look, that patch looks fine to me, but there might be
+something I'm missing... And who knows what odd usage patterns there
+might be in this area. The whole odd Android thing with forking that
+zygote process.
 
-A comment to explain that Tuple == multiple return values from a func?
-Or something else?
+Because that zygote thing _does_ use THP, I think, and it's where the
+wrong-way COW thing mattered. Obviously doing COW is the right thing
+to do, and that case doesn't want any sharing of pages (all copies),
+but it might be worth at least checking that it works and there isn't
+some odd performance gotcha.
 
-Also ah, I thought we had more instances of multiple return in kunit.py.
-Looks like the only other is get_source_tree_ops_from_qemu_config().
-isolate_ktap_output() technically shows this off as well, but via yields.
-
->
-> Thoughts?
->
->
-> -- David
->
-> >  tools/testing/kunit/kunit.py | 24 ++++++++----------------
-> >  1 file changed, 8 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > index 7a706f96f68d..9274c6355809 100755
-> > --- a/tools/testing/kunit/kunit.py
-> > +++ b/tools/testing/kunit/kunit.py
-> > @@ -17,7 +17,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
-> >
-> >  from dataclasses import dataclass
-> >  from enum import Enum, auto
-> > -from typing import Any, Iterable, Sequence, List, Optional
-> > +from typing import Iterable, List, Optional, Sequence, Tuple
-> >
-> >  import kunit_json
-> >  import kunit_kernel
-> > @@ -32,7 +32,6 @@ class KunitStatus(Enum):
-> >  @dataclass
-> >  class KunitResult:
-> >         status: KunitStatus
-> > -       result: Any
-> >         elapsed_time: float
-> >
-> >  @dataclass
-> > @@ -82,10 +81,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
-> >         config_end = time.time()
-> >         if not success:
-> >                 return KunitResult(KunitStatus.CONFIG_FAILURE,
-> > -                                  'could not configure kernel',
-> >                                    config_end - config_start)
-> >         return KunitResult(KunitStatus.SUCCESS,
-> > -                          'configured kernel successfully',
-> >                            config_end - config_start)
-> >
-> >  def build_tests(linux: kunit_kernel.LinuxSourceTree,
-> > @@ -100,14 +97,11 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
-> >         build_end = time.time()
-> >         if not success:
-> >                 return KunitResult(KunitStatus.BUILD_FAILURE,
-> > -                                  'could not build kernel',
-> >                                    build_end - build_start)
-> >         if not success:
-> >                 return KunitResult(KunitStatus.BUILD_FAILURE,
-> > -                                  'could not build kernel',
-> >                                    build_end - build_start)
-> >         return KunitResult(KunitStatus.SUCCESS,
-> > -                          'built kernel successfully',
-> >                            build_end - build_start)
-> >
-> >  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
-> > @@ -173,14 +167,14 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
-> >                         filter_glob=filter_glob,
-> >                         build_dir=request.build_dir)
-> >
-> > -               result = parse_tests(request, run_result)
-> > +               _, test_result = parse_tests(request, run_result)
-> >                 # run_kernel() doesn't block on the kernel exiting.
-> >                 # That only happens after we get the last line of output from `run_result`.
-> >                 # So exec_time here actually contains parsing + execution time, which is fine.
-> >                 test_end = time.time()
-> >                 exec_time += test_end - test_start
-> >
-> > -               test_counts.add_subtest_counts(result.result.counts)
-> > +               test_counts.add_subtest_counts(test_result.counts)
-> >
-> >         if len(filter_globs) == 1 and test_counts.crashed > 0:
-> >                 bd = request.build_dir
-> > @@ -189,7 +183,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
-> >                                 bd, bd, kunit_kernel.get_outfile_path(bd), bd, sys.argv[0]))
-> >
-> >         kunit_status = _map_to_overall_status(test_counts.get_status())
-> > -       return KunitResult(status=kunit_status, result=result, elapsed_time=exec_time)
-> > +       return KunitResult(status=kunit_status, elapsed_time=exec_time)
-> >
-> >  def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
-> >         if test_status in (kunit_parser.TestStatus.SUCCESS, kunit_parser.TestStatus.SKIPPED):
-> > @@ -197,7 +191,7 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
-> >         else:
-> >                 return KunitStatus.TEST_FAILURE
-> >
-> > -def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
-> > +def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
-> >         parse_start = time.time()
-> >
-> >         test_result = kunit_parser.Test()
-> > @@ -231,11 +225,9 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitR
-> >                         print(json_obj)
-> >
-> >         if test_result.status != kunit_parser.TestStatus.SUCCESS:
-> > -               return KunitResult(KunitStatus.TEST_FAILURE, test_result,
-> > -                                  parse_end - parse_start)
-> > +               return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
-> >
-> > -       return KunitResult(KunitStatus.SUCCESS, test_result,
-> > -                               parse_end - parse_start)
-> > +       return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
-> >
-> >  def run_tests(linux: kunit_kernel.LinuxSourceTree,
-> >               request: KunitRequest) -> KunitResult:
-> > @@ -513,7 +505,7 @@ def main(argv, linux=None):
-> >                 request = KunitParseRequest(raw_output=cli_args.raw_output,
-> >                                             build_dir='',
-> >                                             json=cli_args.json)
-> > -               result = parse_tests(request, kunit_output)
-> > +               result, _ = parse_tests(request, kunit_output)
-> >                 if result.status != KunitStatus.SUCCESS:
-> >                         sys.exit(1)
-> >         else:
-> >
-> > base-commit: f079ab01b5609fb0c9acc52c88168bf1eed82373
-> > --
-> > 2.34.1.703.g22d0c6ccf7-goog
-> >
+               Linus

@@ -2,83 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CC7494C22
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3FB494C2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiATKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
+        id S229660AbiATKwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbiATKuL (ORCPT
+        with ESMTP id S229617AbiATKv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:50:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05978C061574;
-        Thu, 20 Jan 2022 02:50:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B6F76151B;
-        Thu, 20 Jan 2022 10:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EC172C340E2;
-        Thu, 20 Jan 2022 10:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642675810;
-        bh=NqowiAMeZDXoTZn1mzYNvP3gKL0n2MW5IpjY4dst0aM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KPhUmUvmhNZwdfeBhmuWepa9loN49yjSHyzxSsGBDHoEEBHh4Wmnj9JwVv/GYOjVx
-         IGDGwXg8o47UXbtLS0W3R83VJWqigS8+zPGs5zUPzEO/t13Z5vMvl2c3NjUplu0Bgx
-         f/5Op1rf8WDFiVsp4hZxdAKDcv67mnGcAw520rkk7xUGfg4ReNQMrZ5h0tU8caetl0
-         GK0lp5Q5h3rhXe5AOEONRQ9FGOBlBBtpNDFDeS3GNbKGIw5VJH+J0p5aJFa+XavXOr
-         cfuqRqc3DvpBNw+Dv3z1TzCXWQg8JKFkQIEYV93o9f9Fh0MmKGTOT+xRK7XFBgUrM1
-         kBnqtHlPPln+g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5CC7F6079B;
-        Thu, 20 Jan 2022 10:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 20 Jan 2022 05:51:57 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D10C061746
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:51:56 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id p18so11133872wmg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:51:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:references:from:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0mEqvDNu9Zk6sTqlde6UJTd4iKTAhS2ZsSWCjtjL8Js=;
+        b=IbMaG71swN4sg6h7akifeOkgqmBmzGXKACVQZ7YeIkKLuvwtXX6p+6UctVNQY/APfF
+         bQqm3tf1/cVG4tduVkPRsNK0yY6hBpMXqtmBMl+cteiTxRv6AEClmvr74ai7lRU76R27
+         3U88OB7w/lEDblM5xJGdIi02EnnM6d2kY/MojR4TSfmNCbsVEUCVsO9fFo0hfM/B6Uvl
+         eeJNrt99WTtMoPozJa45ASMZicDTzwsh8BZkL0q8+S6jBl7Lx9BUo04suJkGEb2gT9g1
+         XVIDjgSG3Ad0UDwiLL+X6gg9rE3VO4BvA/h1Pgcp6OJRlgivxq/eMqUpWh7ANX6Vp4U5
+         7yTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0mEqvDNu9Zk6sTqlde6UJTd4iKTAhS2ZsSWCjtjL8Js=;
+        b=4rBEEM3Lhz1WqT+Sv/B/Knn+aZdvJAwjazDvc4VUr/7SfgaHSPGmFtDubP/ATa7oLZ
+         cmA93o98r1l1vm9WKPPTJtCk83sEbgQQcywhHVmmOUJMGaHefmZAQz6vez24J0t0Kopt
+         Byj6fUKB/eAc3WTT26HagJ/PuKM8U6r0o7DALQN9c0PfpAhPckZ/Jh17xoPXlUYpnCf8
+         yg5tE1+KJglEx0s7r62YcPS3531/LGosVyuDRiEYNwUA+N9udoxudpe46Ketut6uV2BU
+         WBNbzmKua+AT5CAhncAAiYvbusah15OBWmFE2XMfE5oRq43Djzg7iq0vgpbSb2w2+c5F
+         PcaQ==
+X-Gm-Message-State: AOAM533auFtPWOb3WlpRs3gL+jzB4wcgqjHLRpt4iEeqJRP3nC1LtJRi
+        ulPL9RPhPt2qBd4mG3+ncAhNAw==
+X-Google-Smtp-Source: ABdhPJxCmfCA/1jlhXZWdxR9sWvgeiXVFA3T8nw7/QKA41S71Chv5KYtJpjPG5UiXpySFQYrnJk1dQ==
+X-Received: by 2002:a05:6000:1d84:: with SMTP id bk4mr31790024wrb.708.1642675914618;
+        Thu, 20 Jan 2022 02:51:54 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:ced2:397a:bee8:75f5? ([2001:861:44c0:66c0:ced2:397a:bee8:75f5])
+        by smtp.gmail.com with ESMTPSA id b62sm1834642wmb.16.2022.01.20.02.51.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 02:51:53 -0800 (PST)
+Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: drop Enric Balletbo i
+ Serra from maintainers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Simon Glass <sjg@chromium.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org
+References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <a370a74a-2548-fc20-20b0-89e48645086f@baylibre.com>
+Date:   Thu, 20 Jan 2022 11:51:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net] net: fix information leakage in /proc/net/ptype
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164267580986.26718.1893811896925655041.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Jan 2022 10:50:09 +0000
-References: <20220118192013.1608432-1-liu3101@purdue.edu>
-In-Reply-To: <20220118192013.1608432-1-liu3101@purdue.edu>
-To:     Congyu Liu <liu3101@purdue.edu>
-Cc:     davem@davemloft.net, kuba@kernel.org, yajun.deng@linux.dev,
-        edumazet@google.com, willemb@google.com, mkl@pengutronix.de,
-        rsanger@wand.net.nz, wanghai38@huawei.com, pablo@netfilter.org,
-        jiapeng.chong@linux.alibaba.com, xemul@openvz.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 18 Jan 2022 14:20:13 -0500 you wrote:
-> In one net namespace, after creating a packet socket without binding
-> it to a device, users in other net namespaces can observe the new
-> `packet_type` added by this packet socket by reading `/proc/net/ptype`
-> file. This is minor information leakage as packet socket is
-> namespace aware.
+On 20/01/2022 11:40, Krzysztof Kozlowski wrote:
+> Enric Balletbo i Serra emails bounce:
 > 
-> Add a net pointer in `packet_type` to keep the net namespace of
-> of corresponding packet socket. In `ptype_seq_show`, this net pointer
-> must be checked when it is not NULL.
+>   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
 > 
-> [...]
+> so drop him from the maintainers, similarly to commit 3119c28634dd
+> ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").  Add generic DRM
+> bridge maintainers to Analogix ANX7814.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../devicetree/bindings/display/bridge/analogix,anx7814.yaml  | 4 +++-
+>  .../bindings/display/bridge/google,cros-ec-anx7688.yaml       | 1 -
+>  Documentation/devicetree/bindings/display/bridge/ps8640.yaml  | 1 -
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
+> index 8e13f27b28ed..bce96b5b0db0 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
+> @@ -7,7 +7,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Analogix ANX7814 SlimPort (Full-HD Transmitter)
+>  
+>  maintainers:
+> -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> +  - Andrzej Hajda <andrzej.hajda@intel.com>
+> +  - Neil Armstrong <narmstrong@baylibre.com>
+> +  - Robert Foss <robert.foss@linaro.org>
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+> index 9f7cc6b757cb..a88a5d8c7ba5 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
+> @@ -8,7 +8,6 @@ title: ChromeOS EC ANX7688 HDMI to DP Converter through Type-C Port
+>  
+>  maintainers:
+>    - Nicolas Boichat <drinkcat@chromium.org>
+> -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>  
+>  description: |
+>    ChromeOS EC ANX7688 is a display bridge that converts HDMI 2.0 to
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
+> index cdaf7a7a8f88..186e17be51fb 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
+> @@ -8,7 +8,6 @@ title: MIPI DSI to eDP Video Format Converter Device Tree Bindings
+>  
+>  maintainers:
+>    - Nicolas Boichat <drinkcat@chromium.org>
+> -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>  
+>  description: |
+>    The PS8640 is a low power MIPI-to-eDP video format converter supporting
+> 
 
-Here is the summary with links:
-  - [v2,net] net: fix information leakage in /proc/net/ptype
-    https://git.kernel.org/netdev/net/c/47934e06b656
+Let's wait for Enric's response, but in any case (removal or new address):
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Neil

@@ -2,146 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B02494618
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EB649461B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358332AbiATDZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 22:25:43 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:35739 "EHLO
+        id S1358339AbiATD0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 22:26:45 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:54069 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358325AbiATDZm (ORCPT
+        with ESMTP id S229601AbiATD0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 22:25:42 -0500
+        Wed, 19 Jan 2022 22:26:41 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfSZX2MRSz4y3h;
-        Thu, 20 Jan 2022 14:25:40 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfSbg5bpkz4y3h;
+        Thu, 20 Jan 2022 14:26:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642649141;
-        bh=BSJaYZtaWNqvMmQ161KljdzjK3UMjtU9hJ54yKVDuaQ=;
+        s=201702; t=1642649200;
+        bh=FT3/xS+i3pKO1Rq5p3/rgHtAgCACk52OCkLLXm/hxl8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gt5J4iAV9LgfRW72OSXoK+e0sTaCnzaQblxmzPE9rmuF8hv+KCsf/pGqYBfssmWbo
-         kKSU8jEBZCFF5exfr6WM57KcKqVJ+K9PT0uxGTL7EJ5VqxpB44rrJ68tU9DNEHw9WD
-         Mvdj4fXwAUUNaaTe5+j83539YAactYtdbjlJke6izKefJjmaEnoa7YbGCMlsLQ38qi
-         SvsqoT/jST0EAgS4J1EPV1AVuNzwSYbHLX1lG8+XrX7qK/qUkxXxMikCQDFeAZkRik
-         mGQfZFFTu5QOpwsgrIZ6GyTApc08JoGixoVqiPm5jE0NjZCbWfF2LeGVCCGRPYqv1v
-         zFw49fPEHfGkQ==
-Date:   Thu, 20 Jan 2022 14:25:39 +1100
+        b=pwBctDf9UXYvLw9avbNru0hoc+QC78quF5aL0hsg6kSxqN+ScdEb6wk2Og5Wdyybj
+         GCd7sqiIHpG26yRbi5V5VzDcqEpemBZ8VoYRbOhvTjyLh1AmIHTiNqRR8BQ0NmeD3x
+         qhSzp3ZRBcnk08HsHtGQR4LywBcisWKnyzVL1zikdq+0ca46OAXTHWgmgdM7Erh927
+         Dtz5OYoYk0fzqaHe57VAoHsoiQYShuyhjLRz4K4Ffl1+UFJcmvO6o1aTsNlhtyPlLi
+         VD7SrfDoTqX+hwIA/MLqaH9xt5/BdATjT0ddAamYlc4VCyN0UzMWCA+wHJbZU4vTE2
+         i8JPQjhtTCXew==
+Date:   Thu, 20 Jan 2022 14:26:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joey Gouly <joey.gouly@arm.com>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pinctrl tree
-Message-ID: <20220120142539.6d1fac12@canb.auug.org.au>
-In-Reply-To: <20211028080331.6d199082@sal.lan>
-References: <20211027220118.71a229ab@canb.auug.org.au>
-        <874k92bu4q.wl-maz@kernel.org>
-        <20211028080331.6d199082@sal.lan>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20220120142639.02c54ae9@canb.auug.org.au>
+In-Reply-To: <20211117134926.1d339d71@canb.auug.org.au>
+References: <20211117134926.1d339d71@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k0TcC6Wp9bi=4NpQQykgMOj";
+Content-Type: multipart/signed; boundary="Sig_/Xhb9mvR1geFap9+==HkXU1D";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/k0TcC6Wp9bi=4NpQQykgMOj
+--Sig_/Xhb9mvR1geFap9+==HkXU1D
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 28 Oct 2021 08:03:31 +0100 Mauro Carvalho Chehab <mchehab@kernel.or=
-g> wrote:
->
-> Em Wed, 27 Oct 2021 12:10:45 +0100
-> Marc Zyngier <maz@kernel.org> escreveu:
+On Wed, 17 Nov 2021 13:49:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
-> > On Wed, 27 Oct 2021 12:01:18 +0100, Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote: =20
-> > >=20
-> > > After merging the pinctrl tree, today's linux-next build (htmldocs)
-> > > produced this warning:
-> > >=20
-> > > include/linux/gpio/driver.h:284: warning: Function parameter or membe=
-r 'parent_handler_data_array' not described in 'gpio_irq_chip'
-> > >=20
-> > > Introduced by commit
-> > >=20
-> > >   cfe6807d82e9 ("gpio: Allow per-parent interrupt data")
-> > >=20
-> > > But may actually be a problem with the tool :-(   =20
-> >=20
-> > I guess the tool doesn't like having two fields that are part of a
-> > union documented together... Happy to tweak it if someone tells me how
-> > this should be written. =20
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced this warning:
 >=20
-> Yes, that's the case. See, when you do:
+> include/drm/gpu_scheduler.h:316: warning: Function parameter or member 'w=
+ork' not described in 'drm_sched_job'
 >=20
-> 	/**
-> 	 * @parent_handler_data:
-> 	 * @parent_handler_data_array:
-> 	 *
-> 	 * Data associated, and passed to, the handler for the parent
-> 	 * interrupt. Can either be a single pointer if @per_parent_data
-> 	 * is false, or an array of @num_parents pointers otherwise.  If
-> 	 * @per_parent_data is true, @parent_handler_data_array cannot be
-> 	 * NULL.
-> 	 */
-> 	union {
-> 		void *parent_handler_data;
-> 		void **parent_handler_data_array;
-> 	};
+> Introduced by commit
 >=20
-> The tool will understand it as an undocumented "parent_handler_data" and
-> a documented "parent_handler_data_array".
->=20
-> It has to do that, as otherwise it won't get cases where people just adds=
- a
-> @foo: as a template but actually forgets to fill it.
->=20
-> The solution would be to add a description for both, e. g. something
-> similar to:
->=20
-> 	/**
-> 	 * @parent_handler_data:
-> 	 *
-> 	 * If @per_parent_data is false, contains a single pointer=20
-> 	 * with the data associated, and passed to, the handler for the=20
-> 	 * parent interrupt.
-> 	 *
-> 	 * @parent_handler_data_array:
-> 	 *
-> 	 * If @per_parent_data is true, it should contain an array of=20
-> 	 * @num_parents pointers with the data associated, and passed to,
-> 	 * the handler for the parent interrupt. Cannot be NULL.
-> 	 */
+>   542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
 
-I am still getting this warning.
-
+I am still seeing this warning.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/k0TcC6Wp9bi=4NpQQykgMOj
+--Sig_/Xhb9mvR1geFap9+==HkXU1D
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHo1jMACgkQAVBC80lX
-0GwOngf/QdrATg8xG8CNo0+qRiR+8Sr2oTKU/tmpN/tF+grDOhv9EnHLKTa4UnBy
-ZWrZCuslIRIaP5MlMOYj2CIBNp8T0jQzLt3hrKTvFP3z12yvJLYF859RDCDT7ggV
-sga4gy+YMF18ksHbFTy5ikmN+mW40RIolbFsmsJ9Wr+8DYqS2LVlBNkN2aWL/JbO
-hTX1m3e8f8379shn8vYaNYDE786Bt7n1d8Be5xOqmlTP4s8swOd6ywjcJE9IBjw0
-3vLqAGXgDkTb3TZ7zroiptu1VpjjxAWF4wOnJjC0SW6OAtJLwDOtanWMCuTaDjMN
-Zeim4r5l8p5+ZwtrvgL+wy5y3HdfJQ==
-=ucEL
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHo1m8ACgkQAVBC80lX
+0Gwe4wgAg1Avti7A8EJ2DCMxpGmXL4BjKZeX0jKKbDuPJTDrMgGR7S3duunC7waT
+7QFTHTxnEwSeRt+sm8ZkofrBvLxkZg4WUCn8YkxcTU7S1H9SY/r86+zJMlPCc/xB
+GyMv7oY+G1HkG7XA0Ou5FgBjTxHyqrWr9a462Fosim2CEr1klT4H+uP7DGoc/oKY
+o0PKTBp0TEfd1i2RmqnlomxZlGZiiGpT6CvXJDfGX5kM8OghwpLc1YyJwANaDOC2
+E2Kziy2wtE+ig2Sgr6liMEKyyb/qTRjhN4VcF8/BGB/SEkHMKsY5pywJQzk7Y8i1
+gj28nDpwihp9p7PVvjawsreyD/pbVg==
+=xwhi
 -----END PGP SIGNATURE-----
 
---Sig_/k0TcC6Wp9bi=4NpQQykgMOj--
+--Sig_/Xhb9mvR1geFap9+==HkXU1D--

@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D8E495192
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865EF495190
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376725AbiATPhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:37:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52501 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376710AbiATPhU (ORCPT
+        id S1346240AbiATPhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376597AbiATPhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:37:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642693040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SmcLr0IIgjk5E/Z+252y945aI6lCNDB2A2KVxeXJlYE=;
-        b=W1ZC849D20k2TwfAtWxoHBGco+zi0MQWTwHD0lF+sWZO09/6jEREsjCLav3Ouo9GKCOGr+
-        4WAmSg3JMnfFyruTc2Fn14CfMA6NTCvvd//gOdiEDsoDU0BnCCgTS5EqTX5/Coa4leTDps
-        +Av2PZ7pTnDoglJDGlyux/uUi4NsMSA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-Or3o5Ri8M2ejhRrZ9kaIuw-1; Thu, 20 Jan 2022 10:37:16 -0500
-X-MC-Unique: Or3o5Ri8M2ejhRrZ9kaIuw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 052D7192D789;
-        Thu, 20 Jan 2022 15:37:15 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BC4A47D3DF;
-        Thu, 20 Jan 2022 15:37:06 +0000 (UTC)
-Date:   Thu, 20 Jan 2022 23:37:00 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 2/2] block: hold queue lock while iterating in
- diskstats_show
-Message-ID: <YemBnAvtNkIjVc7t@T590>
-References: <20220120105248.117025-1-dwagner@suse.de>
- <20220120105248.117025-3-dwagner@suse.de>
- <Yelb4+r5KuV67tO0@T590>
- <20220120131936.mlug7nhnoe73abx5@carbon.lan>
- <Yelo1gx5cp1l4npK@T590>
- <20220120140126.ntzvrcmczd7pph75@carbon.lan>
+        Thu, 20 Jan 2022 10:37:12 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F99C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:37:12 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id m1so18937936ybo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:37:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=benBYMoxl2IjLGX3aLWpdBFmHNqoAhtj/Izde371FoY=;
+        b=rGryBx3vren0FD6AusA1Z+oP0Tpy1Yv7hYzLnhMNzuXAN7gebacnfe5EbYerti6xcN
+         GieILVBlmUdl93RlOazApxh6v6WlvnyEViBXaG2HwYjzS1bKFS3RRuucmGFKL6GQhSiu
+         94GqfAlUFI7XS5NC7SGxGVpma78wezjs4dVdo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=benBYMoxl2IjLGX3aLWpdBFmHNqoAhtj/Izde371FoY=;
+        b=bxBAxElogRSEZTuUUuWYkQ142O7SqG45r8rf7lwMJWmyMMXZ7aRykmfPkbORZL0ntU
+         k7JoSmPKdGjWxKvJjiptBxlX+/3Tk+DJfb39ZU6m7X7myoL2V3MuD37FMK285HhvkjZb
+         yqOufUKxxbr/8cn+eaHezzJHzDnyCFChWRPY5efXWnJg8qT8Dbu0MNuoz+dlynWAdvuJ
+         h9kwE3OoEREWDwZSaQJvghrDnALRMniGWC0kPUzW4OI/m2GUK1cgEzxSP9sDE/6oisPX
+         e4LQ+8VNHOjvyRW82dpVrDHF7mV5ZpnrlsGF0r+sR54nEE8smC6Diy53N6lhSXOEeN4D
+         ilbw==
+X-Gm-Message-State: AOAM533DjEw0k3sNCZwj88yOvAS0M+30nRYUH7d8+iEruNYUagc8Nwap
+        znPPsgLNbx5nzGm4vZYuS64kImvQJ7yfl9CPXpHahoKxSMc=
+X-Google-Smtp-Source: ABdhPJx2HqNHCErP0SUwdj2Z1T8Vj/J/PMhk2VH+lfME52ufBieeE0xLdK6sxbq8ha/DtDdJx1U69QLbOKV1hW1csVw=
+X-Received: by 2002:a25:4b84:: with SMTP id y126mr44574295yba.487.1642693031719;
+ Thu, 20 Jan 2022 07:37:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120140126.ntzvrcmczd7pph75@carbon.lan>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+References: <20220120152828.4089364-1-gatecat@ds0.me>
+In-Reply-To: <20220120152828.4089364-1-gatecat@ds0.me>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Thu, 20 Jan 2022 16:37:00 +0100
+Message-ID: <CAM4kBBJqHVX_Q2C0VO7qKNZywRiWbHK9t0G076ov6u+_gwO2=A@mail.gmail.com>
+Subject: Re:
+To:     Myrtle Shah <gatecat@ds0.me>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 03:01:26PM +0100, Daniel Wagner wrote:
-> On Thu, Jan 20, 2022 at 09:51:18PM +0800, Ming Lei wrote:
-> > Then Can you figure out where blk_mq_queue_tag_busy_iter+0x1e4 points to
-> > in source code? And what is NULL pointer?
-> 
-> Here we go:
-> 
-> /usr/src/debug/kernel-default-5.3.18-59.27.1.x86_64/linux-5.3/linux-obj/../include/linux/sbitmap.h: 249
-> 0xffffffffb244a254 <blk_mq_queue_tag_busy_iter+484>:    mov    (%rax),%rdx
-> 
-> 234static inline void __sbitmap_for_each_set(struct sbitmap *sb,
-> 235                                          unsigned int start,
-> 236                                          sb_for_each_fn fn, void *data)
-> 237{
-> 238        unsigned int index;
-> 239        unsigned int nr;
-> 240        unsigned int scanned = 0;
-> 241
-> 242        if (start >= sb->depth)
-> 243                start = 0;
-> 244        index = SB_NR_TO_INDEX(sb, start);
-> 245        nr = SB_NR_TO_BIT(sb, start);
-> 246
-> 247        while (scanned < sb->depth) {
-> 248                unsigned long word;
-> 249                unsigned int depth = min_t(unsigned int,
-> 250                                           sb->map[index].depth - nr,
-> 251                                           sb->depth - scanned);
-> 
+Hey,
 
-Seems more likely nvme recovery issue, tags is changed even though
-->q_usage_counter is grabbed in blk_mq_queue_tag_busy_iter(), which is
-added in v4.19.
+On Thu, Jan 20, 2022 at 4:30 PM Myrtle Shah <gatecat@ds0.me> wrote:
+>
+> These are some initial patches to bugs I found attempting to
+> get a XIP kernel working on hardware:
+>  - 32-bit VexRiscv processor
+>  - kernel in SPI flash, at 0x00200000
+>  - 16MB of RAM at 0x10000000
+>  - MMU enabled
+>
+> I still have some more debugging to do, but these at least
+> get the kernel as far as initialising the MMU, and I would
+> appreciate feedback if anyone else is working on RISC-V XIP.
 
-You may check dmesg log and see if there is any nvme error recovery info.
+I'll try to support you as much as I can, unfortunately I don't have
+any 32-bit RISC-V around so I was rather thinking of extending the
+RISC-V XIP support to 64-bit non-MMU targets.
+For now just please keep in mind that there might be some inherent
+assumptions that a target is 64 bit.
 
-Thanks,
-Ming
+Best regards,
+Vitaly
 
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

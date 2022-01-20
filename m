@@ -2,170 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BA2494A81
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4CE494A7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbiATJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:12:51 -0500
-Received: from mga11.intel.com ([192.55.52.93]:41324 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237469AbiATJMu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:12:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642669970; x=1674205970;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=O6+9vsSDVilrh7UjW1BQCXvdPjMTCzf/nC38lgkfjeM=;
-  b=AHA02wk5ouwuy6W2HYrPYzS3lrrL/+qHOg0CYICTR4e+NnGDFVlrPQJY
-   gUj38EYBjNh8qH1E352SLmi7aiETla3w5jUoSe+DLdc6dwhtORh48OxAB
-   wwXh0qh8dDeN8ZpYxipzfTpLjwedgt6UZTGuVuF0tPJWiTOD8Hb6lBqYz
-   TUbCocR9flrnZDvAlhu8UmnmUBvlBMKQk8+wBnGcT+5/+LbCwKTmYYJFo
-   5Zdbc2SDIn7jtDAU5Mcfjj2Ul9fOOFojNnFmVlLIhBT6wLzbLvZBezAhi
-   o0Krv3L9xYhq5xaiCt5g4CTKMsIURyXAl01a6ZaGbJ/PxuOdz23nu1+ji
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="242871050"
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="242871050"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:12:43 -0800
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="532691996"
-Received: from davidfsc-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.52.140])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:12:32 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [PATCH 0/3] lib/string_helpers: Add a few string helpers
-In-Reply-To: <YekfbKMjOP9ecc5v@alley>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <YegPiR7LU8aVisMf@alley> <87tudzbykz.fsf@intel.com>
- <YekfbKMjOP9ecc5v@alley>
-Date:   Thu, 20 Jan 2022 11:12:27 +0200
-Message-ID: <8735libwjo.fsf@intel.com>
+        id S240937AbiATJMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237469AbiATJMc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 04:12:32 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A76FC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 01:12:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=z+hrGHd2PH766bmL4VHMjzgrJYc+sxstWyvPap6zHJA=; b=wKti/GUKfRupgC0O/4WzY1lX57
+        +RXOD/ZxxhgGsWlM0jFQlxrMUX7qEIQf199YDPvkKaD5bN0rpm71YbxIJeyRvbEIIHhaFNLJqIRyx
+        agmZ5WBmkqRiC+w0m8r5jTeiHc48vP84ai2KXrYRJlnIMwj0616Et6y8PTvJN0oY3hud2/+GBw3AF
+        bKQkstnMa5E3ipZ0fl9WPkn3pnk2DILGSxsO5g0KlCXGx+uLnc9brpdxZkGxL+W/mGucVnzSVRCgA
+        6JOUKZmSWZxkbc570UGs1aMS+56RPvbwvabOJvInmWI4RAhgofmXsFRxKpNkO3MW2iUZ+q+WXB/wl
+        RmZV5kAw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nATUb-00A7F4-7N; Thu, 20 Jan 2022 09:12:29 +0000
+Date:   Thu, 20 Jan 2022 01:12:29 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Subject: Re: [PATCH 1/3] mm/vmalloc: Move draining areas out of caller context
+Message-ID: <YeknfRnxaxcVxEjF@infradead.org>
+References: <20220119143540.601149-1-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119143540.601149-1-urezki@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022, Petr Mladek <pmladek@suse.com> wrote:
-> On Wed 2022-01-19 16:16:12, Jani Nikula wrote:
->> On Wed, 19 Jan 2022, Petr Mladek <pmladek@suse.com> wrote:
->> > On Tue 2022-01-18 23:24:47, Lucas De Marchi wrote:
->> >> d. This doesn't bring onoff() helper as there are some places in the
->> >>    kernel with onoff as variable - another name is probably needed for
->> >>    this function in order not to shadow the variable, or those variables
->> >>    could be renamed.  Or if people wanting  <someprefix>
->> >>    try to find a short one
->> >
->> > I would call it str_on_off().
->> >
->> > And I would actually suggest to use the same style also for
->> > the other helpers.
->> >
->> > The "str_" prefix would make it clear that it is something with
->> > string. There are other <prefix>_on_off() that affect some
->> > functionality, e.g. mute_led_on_off(), e1000_vlan_filter_on_off().
->> >
->> > The dash '_' would significantly help to parse the name. yesno() and
->> > onoff() are nicely short and kind of acceptable. But "enabledisable()"
->> > is a puzzle.
->> >
->> > IMHO, str_yes_no(), str_on_off(), str_enable_disable() are a good
->> > compromise.
->> >
->> > The main motivation should be code readability. You write the
->> > code once. But many people will read it many times. Open coding
->> > is sometimes better than misleading macro names.
->> >
->> > That said, I do not want to block this patchset. If others like
->> > it... ;-)
->> 
->> I don't mind the names either way. Adding the prefix and dashes is
->> helpful in that it's possible to add the functions first and convert
->> users at leisure, though with a bunch of churn, while using names that
->> collide with existing ones requires the changes to happen in one go.
->
-> It is also possible to support both notations at the beginning.
-> And convert the existing users in the 2nd step.
->
->> What I do mind is grinding this series to a halt once again. I sent a
->> handful of versions of this three years ago, with inconclusive
->> bikeshedding back and forth, eventually threw my hands up in disgust,
->> and walked away.
->
-> Yeah, and I am sorry for bikeshedding. Honestly, I do not know what is
-> better. This is why I do not want to block this series when others
-> like this.
->
-> My main motivation is to point out that:
->
->     enabledisable(enable)
->
-> might be, for some people, more eye bleeding than
->
->     enable ? "enable" : "disable"
->
->
-> The problem is not that visible with yesno() and onoff(). But as you said,
-> onoff() confliscts with variable names. And enabledisable() sucks.
-> As a result, there is a non-trivial risk of two mass changes:
+On Wed, Jan 19, 2022 at 03:35:38PM +0100, Uladzislau Rezki (Sony) wrote:
+> +static void drain_vmap_area(struct work_struct *work)
 
-My point is, in the past three years we could have churned through more
-than two mass renames just fine, if needed, *if* we had just managed to
-merge something for a start!
+Nit, but I prefer to have a _work postix for workers just to keep
+it easy to ready.
 
-BR,
-Jani.
+>  	/* After this point, we may free va at any time */
+>  	if (unlikely(nr_lazy > lazy_max_pages()))
+> -		try_purge_vmap_area_lazy();
+> +		if (!atomic_xchg(&drain_vmap_area_work_in_progress, 1))
+> +			schedule_work(&drain_vmap_area_work);
 
->
-> now:
->
-> - contition ? "yes" : "no"
-> + yesno(condition)
->
-> a few moths later:
->
-> - yesno(condition)
-> + str_yes_no(condition)
->
->
-> Best Regards,
-> Petr
+Work items are defined to be single threaded, so I don't think we need
+the drain_vmap_area_work_in_progress hack.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+>  
+>  /*
+> -- 
+> 2.30.2
+> 
+> 
+---end quoted text---

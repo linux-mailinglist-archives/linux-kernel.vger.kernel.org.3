@@ -2,144 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D05494F84
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E64494F92
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbiATNrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:47:02 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:46274 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235845AbiATNrB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 08:47:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=LI7fgGU1QLBmTbo6Itbou4oEcT/ffjAEXYDBbz7bC8o=; b=DcGAfY3n9u4WLa8D6DpfOrUvEA
-        BWinE8CxJwNtOpCkJ0qNrH/j5cIt7/jIP/slGn/CFIBsWkB9yrPSoza2OPvy4fNXZmNa1q4mL6cgJ
-        VI135fzyhLv7Px03eaHzpnh/9ryUvD89FDRrG2b4VfjKxwYl31R8UdrIuAXfIjRUAWXM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nAXmA-001zjh-Ij; Thu, 20 Jan 2022 14:46:54 +0100
-Date:   Thu, 20 Jan 2022 14:46:54 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
- firmware on a Dell hardware
-Message-ID: <Yelnzrrd0a4Bl5AL@lunn.ch>
-References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+        id S240430AbiATNve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:51:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60168 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230115AbiATNve (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 08:51:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642686693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbzRm40XNOcc6LfnmL8S8oFyNln2jL+JuCRRkKkQZQ4=;
+        b=CM+ZayUKOWifgX5cuGRIOzmiuBnrozQCthPM/oQvvWTlC851UIWmCzRWCpjt28BSIF/BtO
+        X0s+N7RquB6lHtmndfV/ljj6zPkF8gAgpM9dW13E60XlBV63+ZMEGQxZQAAxB0+s4iY6sj
+        sGzvhghNA/IfSiZkOlLmDUyRy7iybLM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-443--boour0kOmOdZ1mVIFBM1g-1; Thu, 20 Jan 2022 08:51:30 -0500
+X-MC-Unique: -boour0kOmOdZ1mVIFBM1g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3FB9B1935790;
+        Thu, 20 Jan 2022 13:51:29 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5842278AA6;
+        Thu, 20 Jan 2022 13:51:24 +0000 (UTC)
+Date:   Thu, 20 Jan 2022 21:51:18 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Daniel Wagner <dwagner@suse.de>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH 2/2] block: hold queue lock while iterating in
+ diskstats_show
+Message-ID: <Yelo1gx5cp1l4npK@T590>
+References: <20220120105248.117025-1-dwagner@suse.de>
+ <20220120105248.117025-3-dwagner@suse.de>
+ <Yelb4+r5KuV67tO0@T590>
+ <20220120131936.mlug7nhnoe73abx5@carbon.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20220120131936.mlug7nhnoe73abx5@carbon.lan>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 01:19:29PM +0800, Kai-Heng Feng wrote:
-> BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
-> instead of setting another value, keep it untouched and restore the saved
-> value on system resume.
+On Thu, Jan 20, 2022 at 02:19:36PM +0100, Daniel Wagner wrote:
+> Hi Ming,
+> 
+> On Thu, Jan 20, 2022 at 08:56:03PM +0800, Ming Lei wrote:
+> [323467.255527] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [323467.255538] #PF: supervisor read access in kernel mode
+> [323467.255541] #PF: error_code(0x0000) - not-present page
+> [323467.255544] PGD 0 P4D 0 
+> [323467.255550] Oops: 0000 [#1] SMP PTI
+> [323467.255555] CPU: 13 PID: 17640 Comm: iostat Kdump: loaded Tainted: G          IOE  X    5.3.18-59.27-default #1 SLE15-SP3
+> [323467.255559] Hardware name: Dell Inc. PowerEdge R940xa/08XR9M, BIOS 2.12.2 07/12/2021
+> [323467.255569] RIP: 0010:blk_mq_queue_tag_busy_iter+0x1e4/0x2e0
 
-Please split this patch into two:
+Then Can you figure out where blk_mq_queue_tag_busy_iter+0x1e4 points to
+in source code? And what is NULL pointer?
 
-Don't touch the LEDs
+With this kind of info, we may know the root cause.
 
-Save and restore the LED configuration over suspend/resume.
+Thanks,
+Ming
 
-> -static void marvell_config_led(struct phy_device *phydev)
-> +static int marvell_find_led_config(struct phy_device *phydev)
->  {
-> -	u16 def_config;
-> -	int err;
-> +	int def_config;
-> +
-> +	if (phydev->dev_flags & PHY_USE_FIRMWARE_LED) {
-> +		def_config = phy_read_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL);
-> +		return def_config < 0 ? -1 : def_config;
-
-What about the other two registers which configure the LEDs?
-
-Since you talked about suspend/resume, does this machine support WoL?
-Is the BIOS configuring LED2 to be used as an interrupt when WoL is
-enabled in the BIOS? Do you need to save/restore that configuration
-over suspend/review? And prevent the driver from changing the
-configuration?
-
-> +static const struct dmi_system_id platform_flags[] = {
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell EMC"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Edge Gateway 3200"),
-> +		},
-> +		.driver_data = (void *)PHY_USE_FIRMWARE_LED,
-> +	},
-
-This needs a big fat warning, that it will affect all LEDs for PHYs
-which linux is driving, on that machine. So PHYs on USB dongles, PHYs
-in SFPs, PHYs on plugin PCIe card etc.
-
-Have you talked with Dells Product Manager and do they understand the
-implications of this? 
-
-> +	{}
-> +};
-> +
->  /**
->   * phy_attach_direct - attach a network device to a given PHY device pointer
->   * @dev: network device to attach
-> @@ -1363,6 +1379,7 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
->  	struct mii_bus *bus = phydev->mdio.bus;
->  	struct device *d = &phydev->mdio.dev;
->  	struct module *ndev_owner = NULL;
-> +	const struct dmi_system_id *dmi;
->  	bool using_genphy = false;
->  	int err;
->  
-> @@ -1443,6 +1460,10 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
->  			phydev_err(phydev, "error creating 'phy_standalone' sysfs entry\n");
->  	}
->  
-> +	dmi = dmi_first_match(platform_flags);
-> +	if (dmi)
-> +		phydev->dev_flags |= (u32)dmi->driver_data;
-
-Please us your new flag directly. We don't want this abused to pass
-any old flag to the PHY.
-
-> +
->  /**
->   * struct phy_device - An instance of a PHY
->   *
-> @@ -663,6 +665,7 @@ struct phy_device {
->  
->  	struct phy_led_trigger *led_link_trigger;
->  #endif
-> +	int led_config;
-
-You cannot put this here because you don't know how many registers are
-used to hold the configuration. Marvell has 3, other drivers can have
-other numbers. The information needs to be saved into the drivers on
-priv structure.
-
->  
->  	/*
->  	 * Interrupt number for this PHY
-> @@ -776,6 +779,12 @@ struct phy_driver {
->  	 */
->  	int (*config_init)(struct phy_device *phydev);
->  
-> +	/**
-> +	 * @config_led: Called to config the PHY LED,
-> +	 * Use the resume flag to indicate init or resume
-> +	 */
-> +	void (*config_led)(struct phy_device *phydev, bool resume);
-
-I don't see any need for this.
-
-  Andrew

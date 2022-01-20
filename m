@@ -2,285 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C66495216
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9568649521A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347042AbiATQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:11:49 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:10510 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233045AbiATQLr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:11:47 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20KFhRob018332;
-        Thu, 20 Jan 2022 16:11:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=6Ox8eyWrLwQAtzexuRRN3SRkI2nODJsGswFIkHW/wl4=;
- b=XYZfOQrTydseA8YT/xQzJvaG0Cp1otfVVN7XLaY26P5XE6GAhk3lUSs71huKjxGeeezu
- FJ5QcDEW9pPiPhgSuk7A52lBUBIiBqIUE/8VhuKJisCMxq69aYN16gn3EyZ3fiVDU16A
- MsYoARx4MiTbgFcqujKA0IercbsLsBb71LknA/LHf3/Kt5HuhwzbbKcm4HTvMea2kHKj
- HmONdCk4TZvRqAhVnrDD2Ta1JA/pE9OYvk+zJp1kteYw3cZE+OW25/HmLchZ2gnSvYO/
- Xm6UJcfajBeD/xAueJ1WPAQfppbSMKNwKLU0qD5dTVHSoRy11pY88hNWQIM5RfxOp39k Qw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dqamq82j9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 16:11:13 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20KFug7w089783;
-        Thu, 20 Jan 2022 16:11:11 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
-        by userp3030.oracle.com with ESMTP id 3dkkd2hd9p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 16:11:11 +0000
+        id S1376885AbiATQNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:13:33 -0500
+Received: from mail-vi1eur05on2053.outbound.protection.outlook.com ([40.107.21.53]:24650
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347315AbiATQNc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:13:32 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DRftiK0jMWjKWBnPq4YeD6QlgPT5yGz50Jc65lSGuVnbQenXoD78A2jNhA0AfpuRLTGbFUNXOLbFk4Cgk6EHfiD+M8mz+s4qr6OffaygNMsRhojVziJAd+JIr/lPTSp1yz9v9jKQfh+AGMSJpsm2lVIkiXAgGxsoMvokCwWTD6Raol+gdhfRI7mihLsNZIxUpzv65/8tSvxuUmlXe1kOC0P8GOZPtkpbMfhW0xDqpv6M1vIAFs60P6SX+ZjkaDwpN3+x1gxs8O+W0dk2gf6wGYTjXtM8MGJ5ewnn5crxYAuLF2JGrfsVWz6lJL607sD12lcjA8hCM9+D26IMfvpB9w==
+ b=LQcxCE4nmkb7YZzqOSetY67keOr/tngvAqIYsZrnsywhoNg5lUllmfIE8T8hgPWbEj7Azo8CR2beoYqXNETMzMcQdDgwCXDLR0bMJAVzHl+gKLg1hBtet95GOWSfaWMnwjREMchZeDeieKcUwI3TNtBkQ4sWJL8TicELOFdTNtGdH08m4gyOi+A9MKwcxMQMrCxH6eCihR4TX1PSdmrxwTDTpHughZy7B01PaVdgQk8vjCeGqTowXbPSQP8rFYHvnhdSWIF/P1CvBu15unPWt5JueEZAGg/awBGIzQtPtQoEOQvSKsRQicpOab5Wgapr5mNd6opeSCbx99XJVLakng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Ox8eyWrLwQAtzexuRRN3SRkI2nODJsGswFIkHW/wl4=;
- b=hxuCq/tv+2vhx6zIQQSRhkigcb8iloCEWwqz5XBV0luGzYaTOZMUaswWbsDhbEnWML3zJcnhmT+zGRPMGzN2CmeyYgKuMu1doJN7iRsJg9liajGb9I9M4xjm+8V9D0OQcgpF8bF2dVUjpse4twjSoGDxb+8j6h28BSxcu9l4k69oSEbQp46bZFTMEbor+Sdr+6WRt9iECXD3cbQT+QzTwVfEUa+28iqTbW1oParepmBbf9PX3nPDlT6CwND4bnfarlViM+eQcE5VM9Ikpr+l74pnjO4NyVb4aNbUBNA3YLAKVJ4Y5Uy6hPGPE4nO//egA3vhEIwdAxU0GaPmchMObg==
+ bh=1Z8erYZxbdl6oNJl2YAmpKfW9PIalfAb3MUG+br4cWk=;
+ b=SRDIzwcgWakHB3cos37SDkd3mnafbj0YH+G6W2njXgoc8dFgXER/1A/VmQZzXdP/9HQ2Ep4HgQ6qv1boi0su4ilD4qdfoJXS/VoEJcznBAz5Un9tmV6CRe4fwbWCRewrQbEkhG/XZaklBVPvKapzRi8HByfNu7SgPVN0k9CynfbRpqx3ynTZv6zttTOh5y/skbmGyRDrCfEWm98ANIgSEnZHCwDQ3jl8Ns+ic0th3J6dz9Ql847Ymdc4XGrQgmYoy4NCzlyK9l/2xBLgC0m8lVHDoDVxvzz4emeP/rx4lZy/Wjsp4xnU5MsWykuq8WZDRk8UmMoF363DPFidIADE8g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Ox8eyWrLwQAtzexuRRN3SRkI2nODJsGswFIkHW/wl4=;
- b=gQ+KR54vdMPC6SeQgRwqsf925gTA5J+B10DJ+pgb+0NpenhYHo9QfUEwpmk+rdLECy43t8KCM3heXq5abtueUlXFfwgCLEYrpektwvLrtU1pss7bOE+tsOyD8kM7NHzs0jrkTHWelWbl23nOMcw9cimpFBPXDqKoD7WVR4wbvvs=
-Received: from DS7PR10MB5038.namprd10.prod.outlook.com (2603:10b6:5:38c::5) by
- BN8PR10MB3123.namprd10.prod.outlook.com (2603:10b6:408:c7::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4909.7; Thu, 20 Jan 2022 16:11:09 +0000
-Received: from DS7PR10MB5038.namprd10.prod.outlook.com
- ([fe80::e01a:f38f:1282:5677]) by DS7PR10MB5038.namprd10.prod.outlook.com
- ([fe80::e01a:f38f:1282:5677%3]) with mapi id 15.20.4909.008; Thu, 20 Jan 2022
- 16:11:09 +0000
-Message-ID: <ac496e47-c949-0e9d-4735-d51a7c9c0f62@oracle.com>
-Date:   Thu, 20 Jan 2022 16:11:02 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 7/9] KVM: SVM: Inject #UD on attempted emulation for SEV
- guest w/o insn buffer
-Content-Language: en-GB
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Liam Merwick <liam.merwick@oracle.com>
-References: <20220120010719.711476-1-seanjc@google.com>
- <20220120010719.711476-8-seanjc@google.com>
-From:   Liam Merwick <liam.merwick@oracle.com>
-In-Reply-To: <20220120010719.711476-8-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0059.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:60::23) To DS7PR10MB5038.namprd10.prod.outlook.com
- (2603:10b6:5:38c::5)
+ bh=1Z8erYZxbdl6oNJl2YAmpKfW9PIalfAb3MUG+br4cWk=;
+ b=RkQyBFetqRctsgUL/gFulfrq+LtZ05VObgIpgO6CVRlgZ99Rq+pHK50iXuvCJtjoGamGq9QLh6KH7blcf1yg4N+4l2xQH2y6vUI/mUc3gE2NDYtM24O3+2i+fH0+eDdiO/46zUKKDKbC06MxfMAoJnAtycPEHHq4t8I6f4Fzajw=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by DBBPR04MB7611.eurprd04.prod.outlook.com (2603:10a6:10:1f4::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Thu, 20 Jan
+ 2022 16:13:29 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::c84:1f0b:cc79:9226]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::c84:1f0b:cc79:9226%3]) with mapi id 15.20.4909.010; Thu, 20 Jan 2022
+ 16:13:29 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Richard Cochran <richardcochran@gmail.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        David Miller <davem@davemloft.net>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        Russell King <linux@arm.linux.org.uk>,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: Re: [PATCH RFC V1 net-next 1/4] net: ethtool: Refactor identical
+ get_ts_info implementations.
+Thread-Topic: [PATCH RFC V1 net-next 1/4] net: ethtool: Refactor identical
+ get_ts_info implementations.
+Thread-Index: AQHYAPlFvlt8L++r9US5MwpcK3ucvKxsL2CA
+Date:   Thu, 20 Jan 2022 16:13:29 +0000
+Message-ID: <20220120161329.fbniou5kzn2x4rp7@skbuf>
+References: <20220103232555.19791-2-richardcochran@gmail.com>
+In-Reply-To: <20220103232555.19791-2-richardcochran@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 639c1f6e-eb8b-4dcc-42ba-08d9dc2fcc40
+x-ms-traffictypediagnostic: DBBPR04MB7611:EE_
+x-microsoft-antispam-prvs: <DBBPR04MB761103EE5815633A06386A6EE05A9@DBBPR04MB7611.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: q4/r7hXbZCk9MDcL/sFzjUKK9sxgaRKqE4fp5a1xeIPENZeGd4ovZgT42awiCnp4nJ0zZu9MrV+8XKEotK5CIbAg8iFG6OK7q8Kxu0gfn3t4MLdy9U320REQH35MrBx7ZwjmqrUQnE54gsPqmNjsJdIY4C7TkcP7yGaH7/LNjVeqAlHhUsQYDfIQWm+PbR5SBL9HtFW2umRwGQf+ACRc+99reliM2v5bujfSZKeJqV872joT2eHYyriBtWxay2dLGv2TjLuvXhys7WNh8plIkiRck2jyifa4w+XKPnzueU5otz9BB1bQT/APWmgullUQudHxRgucKzl779TjT5lxxt3DdIwolDtHlaLLUDr/i6psZdz0E7d7r3Gnm/9+n8ib8mMG5zibx8+18am+2sCGJYy7NbNvnKwwbxO+4VpHGJYD4BBmO6LyNrg5mPAMN2QKcZXF5nqacWiRMw1YgQxwN7HcP8k3ZWHd2dz/Ydzf6Ks1VpOjN6fx9wvXVSCyx5tx6oGVUrJmD3NW8D53/BKmArs0ZOqceL5CHOdUmsSYGpb0Mq1WpqDjRoLDQVHhs1GjgukO2o62oyaNatpKlZ71qKzRnaBrGNqs+mAbn7FINVigxy4rtUlh3Rnl3xbS+lLnYNlHyDigKI9XnJdlrYT8PUw+ZDfO2oDO1Zfvb+OS/Ci0UgUbg4FeRCw2n/oYajK3yCFKyYzOEy4yA33xjQnVOg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(6506007)(122000001)(508600001)(7416002)(38070700005)(33716001)(316002)(8676002)(71200400001)(54906003)(6916009)(9686003)(86362001)(8936002)(44832011)(5660300002)(66556008)(6512007)(38100700002)(4326008)(1076003)(66476007)(2906002)(6486002)(66946007)(83380400001)(76116006)(26005)(64756008)(66446008)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ft/nXqmOZdksjU4josB34tMDhjfY3oKQmN3y/i/+5gX+40I6zPDlCeulBERa?=
+ =?us-ascii?Q?OsGO+iuJsJwzxcwCpvoYkWO3hyp1mlby3FM9IEoc8XgVbByM5EqqRlNH7b5q?=
+ =?us-ascii?Q?THIzkNrjDmn07T/vB0zp5yafn3jJQsmwd1xxFRRjdFLZPYQtHB1XxZMQlnX2?=
+ =?us-ascii?Q?O2Bs+ZuXpH7ElMt/oDJlhgoPZQcAdA1bmdzc72yDkkV2rSmbsCN3AXr/jzQN?=
+ =?us-ascii?Q?xTb7MPu1b2bVfilFNOgxvulKhEYwrBYVtl/Z03HW5cc/iinke/+cvxz+DJ3c?=
+ =?us-ascii?Q?oaRnwwqVBZR0Uwqk1Awsp6Ml3dJydHYFYGYD9VhzlBKfNkXIqlvVZzvjWmbt?=
+ =?us-ascii?Q?TvhzJlQOUzteroqlPCqka9O9gLLkHF5x+MtMWzIPVr2Qx5uLYeCU1Wvlhm8F?=
+ =?us-ascii?Q?p+5qhIbqnTLJrDsqJOAa2/9JeFkC77+T17EahZxSYLSqd+2RecY2c9ahclfh?=
+ =?us-ascii?Q?JJCB/6EsU6GRMmD1apPanfgDz0nG135uwwYTAQcudAUb467NTs6Mw/W/kYcz?=
+ =?us-ascii?Q?GBjaPGRKYlR9dBQM0EurwQZtElARM9YCI6cMQl6PpKdWL970xnmvF7IAoxoa?=
+ =?us-ascii?Q?WbKTc5bN6Iq1f4+A7ZdREyVwCGJNxzxWLNHIzJFFQXfSK2Q9SH5GeuJr+A+p?=
+ =?us-ascii?Q?g/v8T4NBFgoLRJCFX3vcuw8cAgvvy+x/XkXGP+EXeSgMoqgvgKif25BWP85V?=
+ =?us-ascii?Q?EJPcevi2GWELEYb/L2eZUDmDzrVCok78JNxbGPK7OiPXpiGnKruIyJk5jnVb?=
+ =?us-ascii?Q?tbqzC0Fh5x7fEdqHjWgBuo/xB+64F++LwMJ8VKiGhTkqSboecHcYJYeT86Hg?=
+ =?us-ascii?Q?RGK7SdbGbDP5yIzcyGX++SuvovzWJJSsspkrlkU/GMv2ya9Z09sJbX70ArD7?=
+ =?us-ascii?Q?gpejWLWqMbtoGGwt4aC3WaW+3QsCKhgcrrNotv/W5KN7A+2Hg9rCSuJhbjDY?=
+ =?us-ascii?Q?oWBIt5SoOKo5RvnIp0wGZFFZBLW8IKbD1YT0R7lTI7dOFaCZGbscRj1vW2rk?=
+ =?us-ascii?Q?bE/ugZuQk32tkR8px6zCl0KeeobLANLNtq8kTMgEFqJcPmNQbOB3B/s94AeV?=
+ =?us-ascii?Q?NZinOwJogWASGl6V4+d5tv4YjZk0TK+02O5qDP9kdRUQXwUhly/CRh13M4iU?=
+ =?us-ascii?Q?xZRBE+i2r7iw1r69Uv5GQwW8R3Uw12RrDqL/NY2NJQ2nfX4OOW01bhvrR+wR?=
+ =?us-ascii?Q?qWm0aFKsprFHacPaMVZ4fwTmaGL0uMLX+lTR/jPxGxsMj6C2kPV6uBam9Vzs?=
+ =?us-ascii?Q?eQoa2vf1JF204DptDgQoIqEq78Nd/HVDbauVaE1kV/2rTHeOh9Fzp4sqI0nl?=
+ =?us-ascii?Q?FlFAuOxLGxdPBZicJx5Rc92XThjD43Io4kO+4rBKBlQNIGlxeYm4HWG71E2P?=
+ =?us-ascii?Q?OJvoPhIvAvxQ/P4dOi3631bbdY323ZIua9zAwQt+rFyH2IhDFZq28dLAP1pn?=
+ =?us-ascii?Q?j18QYq3eH6VPy0d6Mq5AKWWoGNTLYXAXv25FP09WmFvGdT+4Ws4wwJ3grGoS?=
+ =?us-ascii?Q?j++v8sv2aQPx2Iyaki9Uqdf8SYEFL8YQRZNQaIyyBs+bQ1uPBw7Qfqlgybhd?=
+ =?us-ascii?Q?O5IVOEjDxssiBsbqs0tDxDpj1UuLA0wuK4dxXgFBNXZNMsG+8zuMxYQimcm5?=
+ =?us-ascii?Q?FaLL80Vb4hiQZmKSE6qZtio=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BF37F859A02BC742A34B072FD5430A0A@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1365683a-ccd0-435b-1958-08d9dc2f782b
-X-MS-TrafficTypeDiagnostic: BN8PR10MB3123:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR10MB3123DA5B891233AB69349007E85A9@BN8PR10MB3123.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6YKVhBByct1EMoin0bBI8nAbNarYrk+6c0op7pYov3XFzzXCvXcIVbQUxgImZsqcitojIUbmcwKqoPjp8jKdxqqv6PVYtAZKznjpo0X3ZZiNfNI7PMFvHdI/pBqeqpEYS8/u+Iy3bw9mJzCmT3wjGqH4UhwcHCxqgAHQFqugsB8Oa9fz2PuRf0Zy76cH4FGZ6WtyrbVipknUFZtfgUKfk4uvZAzabNqREY/T6n+j0wpmZ2e65KbOfAuza53qcJak/U+w6cs/i8JBqLLA4BDv5wQPJ8nCOmaufosy4YasHI0zuxR9txudD8LnMNBgvcFOKmOFFNlXFas3PkQ6H1adJlYEqlT/Bpzles/mAR51SAmYEIi0xjmAbJYkLS1iXpCVjwplANTg36rbBug3urOoQ2ra8ONWYEdsVjFm+WUpi6eROIctOuX1UBWDmiNTe00FTSwdPf1F5RphLGMaVIYnlY2SLRlsh8xJPmhtLR8FBn/MYKxBT7fNo1TFP+ksuwKGz5qygfruhslm3C29DkRI13TX1vzKMuNoVZl4cDwGT8+owXjU5+Qv/nQIxbE85r/1x9v9D4wX34taCbgqSsxybVjsG59rD01XonmjXPhnlgquenvmg17jt0bpDmSVZ4WOvdW2Is/D13ectybvagyHY8sqv+14phwOxqQ4+jBbC7Z9MN/7x0KaBqkKyQLKaiKC4WgsxH0h6x8zM9k4ZblldmF5GPf374SAyPw2gXPW1DibCLul4Aa3fx2k46/P9uau62zekV6QIOjNvbx15q+3VA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5038.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(52116002)(6506007)(107886003)(6486002)(83380400001)(6666004)(5660300002)(186003)(2616005)(2906002)(7416002)(53546011)(66556008)(66476007)(54906003)(86362001)(8936002)(26005)(8676002)(38100700002)(38350700002)(44832011)(66946007)(110136005)(4326008)(31686004)(316002)(508600001)(6512007)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TDZvY1lybiswMmVXOEkxMExra1VsZ3JjdVZYNi9YOWsvOWpwVjRaT1h3eitV?=
- =?utf-8?B?U2IzR1dmcEFWVmpqV3pONXJ2TURxWVFQeHF2TWZuMGFtd3h1MzFrcFFCWG4z?=
- =?utf-8?B?ODV1cHg1RGl6aE1zZXg0UkIwOEFlcGlqOENYMjdVdzhzTHRmMExreWZEOUxO?=
- =?utf-8?B?bFZ3UUs5QjdmTlJwOThNcG9oVkd2VDErU0FDRU9JaEJQL3NibEc1SGV0aVI5?=
- =?utf-8?B?WmJZMkx0T1NRQ0p6b3FhTXRmeHVDd0JSK2IzakY0d0RWeUZxNzVNTnBSdExL?=
- =?utf-8?B?eFd5TXYwK0lWRnAzTkhyZTcxTEgyVU9tNmJRU1BmWWNLTzJlUlh5TTloT1BR?=
- =?utf-8?B?SkMxdnFKK3FOZG9VNjRVWGtpemdOSmxjQVUwZVFlS29rSjNOMDU5ak1ub1Ry?=
- =?utf-8?B?eVB4N1YwVDZoMWZRYTU1ZENtYlVEblM5RWVib3Fid1E5aXQxQnU2OUhvbDk5?=
- =?utf-8?B?WXRBVzA3ajNYeHBLUFV0dEpMaDNjTEVaYWNiRTNqRjJrYXMrY2hrR1J6dThE?=
- =?utf-8?B?bXY5ZUc0c3IvQTBtNytxeCtST3Jjd3VGQitES3g2NXBPOVhCR3pocEpwai9q?=
- =?utf-8?B?RTJHWUxUUWprU3NEOFU4ek9yZEJEZGxnQkp3QlJQY3NTcHBvOTNGVFRaaUo2?=
- =?utf-8?B?WnN4cDIzRlZBZ0sweDcxcWc0cTcxcktFV3hHRitLd09WcXRXdFZnQ0l4SjZB?=
- =?utf-8?B?a1lyYXFVd29zRDVKVDhYVGV4cUNiSEVReEtkNjVNYVlWKzkveXhhMDVpdjV4?=
- =?utf-8?B?STIzVGZmcEpMYU5jMHY3blYzaFF1WnJLYlRzREIwSy9GTTB6aFRYSUYvTngy?=
- =?utf-8?B?bmhvUnNpZVFMTkttZUtYZTY3djMxMkREVi93YVBLZWRTMjRkQWRJU0tzRWdn?=
- =?utf-8?B?RGllcVp2aStWeExQWmhFQWt1cXlUQnZOTlR4dS9TY2FzY2t3LzFsTHFTWTht?=
- =?utf-8?B?Q0JvZjI2L2I2Zkl3amJqRHkrWUVyanUrQXpQWnR1eTZCSjdmSmxQNW5iZHhV?=
- =?utf-8?B?TDNEUW1jTFhieGpJRGdodEQ0UGE0TFNOUHdXeURxWFJNNHc1S21CTzNCSVdF?=
- =?utf-8?B?MlV0bzNRVlRKbE12UmNsODl4cGJPTEVDUk5NMjVmYUtKRkphQktwdktsYWI3?=
- =?utf-8?B?aElBYVlnU1RrNzN5Ky9Dc1Y2ZTZRZVNsVG9qN1JxbHRNTlVyaGVaWVBjRllk?=
- =?utf-8?B?MENOMHd4VGhsUlluS2licnpaY2JSTXBrZ0xNOUgvekx0ekE1RGhScVRDVktY?=
- =?utf-8?B?TVNrcU16T2kzVVNwZzdhRmlUS2E0QUVYc05LNkhoejJPdTA4cng3ZzNXcUpp?=
- =?utf-8?B?elM1VEt1MXU1RUR5UGZWcjB3Q0hMbmEzYmxCSVcxL2FNZnFaT1U0UUR6N0RL?=
- =?utf-8?B?T2VJNll6cTRvZlZzYXBiSUdFVzgwTzJtSUdGeEd6TjY2L3ptMUtKWXR4aDBM?=
- =?utf-8?B?R3Z1eVcxdW5JZ3QrUzVsY2xvSVZpeC8yQlJBTER2RkQzejkxRTBKcXJCMitQ?=
- =?utf-8?B?Y2s2Ukh1UnVmNkdYbWlyRUZ1YXZwVzJoZXlPbCtiLzNTSGJIbkQzallLaVhE?=
- =?utf-8?B?b2RpWHhEVStITXNHK1FOYWx2WEJDM25WRENpdlBpaVhabWllakJyTWFuK3Q5?=
- =?utf-8?B?c09sVjdzakZDNFhzVThaaGNpcGtDUUVGblMzSXpzVnM5TFVoMGZPZVhZNWdM?=
- =?utf-8?B?Vlkxb2xpQlF4SlRMdE9mb0pYQ3VjQVYyZ1JTQmE5b2UxTzBWdnhHa2x3TUYz?=
- =?utf-8?B?MjVNMWZNYW5EWnFHa292V2JpMXFCRFNRUjVkdHZBOVI1NGZ1L1hKUDNhSWNj?=
- =?utf-8?B?WnpEK2hxMkNrd1ptK3dMUFQ3dGV0UU9RYTVESVhTTy9zR2pmNGVnMUtSYkxy?=
- =?utf-8?B?QzQ4K3dtQXVQcUNYZlVFYjh2ZWg0TFhWRGFBVDQrTjVEWGp6L3pWRE5Xd2pX?=
- =?utf-8?B?K0s2Y0ZKZkxFeVMyc3lsZ2F2K21WL0lxSHJ2d0xZckthWGh6RWtKWW8wUjhW?=
- =?utf-8?B?TUd4L2sxbllwcmdjb0U4eE5NZmdJdlZPTk0xNWttWWhqd1JmcXJLWTQ0cDlM?=
- =?utf-8?B?dkk0Q09LMy9GUTMwWFYzTE1nYmRmakNIcmZnVzdxekRPalY2b0dqeXEvN2tm?=
- =?utf-8?B?RlNkNnVoNjFzRnV2UEtzWUIzRFh2UmtpcFFZSVk3aXNKRnZROXFrbWdYZnNL?=
- =?utf-8?Q?rRtuOmZcV21atz/x8sdKbUw=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1365683a-ccd0-435b-1958-08d9dc2f782b
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5038.namprd10.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2022 16:11:08.9799
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 639c1f6e-eb8b-4dcc-42ba-08d9dc2fcc40
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 16:13:29.6410
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C+CK4N+UOaG0T9n7ym2VM4jwuPLSaYDtGn/VcHvBoFWnigbl4VwpNxQJzg1e1ddm7BA1O2aVuzRLA2uWzbgwDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3123
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10233 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 adultscore=0 phishscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201200083
-X-Proofpoint-GUID: vXNG9d46771HpImfWZDTqw6zQpupjTo3
-X-Proofpoint-ORIG-GUID: vXNG9d46771HpImfWZDTqw6zQpupjTo3
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: THYvRsuH7cjeD8inDVI43lorkWsqdhKQbIE4y7lEcBRjWjgnYU5KsEhlRmBW8+JjmPkBKOPcyw2ZhTBPp7gHyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7611
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2022 01:07, Sean Christopherson wrote:
-> Inject #UD if KVM attempts emulation for an SEV guests without an insn
-> buffer and instruction decoding is required.  The previous behavior of
-> allowing emulation if there is no insn buffer is undesirable as doing so
-> means KVM is reading guest private memory and thus decoding cyphertext,
-> i.e. is emulating garbage.  The check was previously necessary as the
-> emulation type was not provided, i.e. SVM needed to allow emulation to
-> handle completion of emulation after exiting to userspace to handle I/O.
-> 
-
-A few cyphertext references...
-
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-
-Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
-
+On Mon, Jan 03, 2022 at 03:25:52PM -0800, Richard Cochran wrote:
+> Both the vlan and the bonding drivers call their "real" device driver
+> in order to report the time stamping capabilities.  Provide a core
+> ethtool helper function to avoid copy/paste in the stack.
+>=20
+> Signed-off-by: Richard Cochran <richardcochran@gmail.com>
 > ---
->   arch/x86/kvm/svm/svm.c | 89 ++++++++++++++++++++++++++----------------
->   1 file changed, 55 insertions(+), 34 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index ed2ca875b84b..d324183fc596 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4277,49 +4277,70 @@ static bool svm_can_emulate_instruction(struct kvm_vcpu *vcpu, int emul_type,
->   	if (sev_es_guest(vcpu->kvm))
->   		return false;
->   
-> +	/*
-> +	 * Emulation is possible if the instruction is already decoded, e.g.
-> +	 * when completing I/O after returning from userspace.
-> +	 */
-> +	if (emul_type & EMULTYPE_NO_DECODE)
-> +		return true;
-> +
-> +	/*
-> +	 * Emulation is possible for SEV guests if and only if a prefilled
-> +	 * buffer containing the bytes of the intercepted instruction is
-> +	 * available. SEV guest memory is encrypted with a guest specific key
-> +	 * and cannot be decrypted by KVM, i.e. KVM would read cyphertext and
-> +	 * decode garbage.
-> +	 *
-> +	 * Inject #UD if KVM reached this point without an instruction buffer.
-> +	 * In practice, this path should never be hit by a well-behaved guest,
-> +	 * e.g. KVM doesn't intercept #UD or #GP for SEV guests, but this path
-> +	 * is still theoretically reachable, e.g. via unaccelerated fault-like
-> +	 * AVIC access, and needs to be handled by KVM to avoid putting the
-> +	 * guest into an infinite loop.   Injecting #UD is somewhat arbitrary,
-> +	 * but its the least awful option given lack of insight into the guest.
-> +	 */
-> +	if (unlikely(!insn)) {
-> +		kvm_queue_exception(vcpu, UD_VECTOR);
-> +		return false;
-> +	}
-> +
-> +	/*
-> +	 * Emulate for SEV guests if the insn buffer is not empty.  The buffer
-> +	 * will be empty if the DecodeAssist microcode cannot fetch bytes for
-> +	 * the faulting instruction because the code fetch itself faulted, e.g.
-> +	 * the guest attempted to fetch from emulated MMIO or a guest page
-> +	 * table used to translate CS:RIP resides in emulated MMIO.
-> +	 */
-> +	if (likely(insn_len))
-> +		return true;
-> +
->   	/*
->   	 * Detect and workaround Errata 1096 Fam_17h_00_0Fh.
->   	 *
->   	 * Errata:
-> -	 * When CPU raise #NPF on guest data access and vCPU CR4.SMAP=1, it is
-> -	 * possible that CPU microcode implementing DecodeAssist will fail
-> -	 * to read bytes of instruction which caused #NPF. In this case,
-> -	 * GuestIntrBytes field of the VMCB on a VMEXIT will incorrectly
-> -	 * return 0 instead of the correct guest instruction bytes.
-> -	 *
-> -	 * This happens because CPU microcode reading instruction bytes
-> -	 * uses a special opcode which attempts to read data using CPL=0
-> -	 * privileges. The microcode reads CS:RIP and if it hits a SMAP
-> -	 * fault, it gives up and returns no instruction bytes.
-> +	 * When CPU raises #NPF on guest data access and vCPU CR4.SMAP=1, it is
-> +	 * possible that CPU microcode implementing DecodeAssist will fail to
-> +	 * read guest memory at CS:RIP and vmcb.GuestIntrBytes will incorrectly
-> +	 * be '0'.  This happens because microcode reads CS:RIP using a _data_
-> +	 * loap uop with CPL=0 privileges.  If the load hits a SMAP #PF, ucode
-> +	 * gives up and does not fill the instruction bytes buffer.
->   	 *
->   	 * Detection:
-> -	 * We reach here in case CPU supports DecodeAssist, raised #NPF and
-> -	 * returned 0 in GuestIntrBytes field of the VMCB.
-> -	 * First, errata can only be triggered in case vCPU CR4.SMAP=1.
-> -	 * Second, if vCPU CR4.SMEP=1, errata could only be triggered
-> -	 * in case vCPU CPL==3 (Because otherwise guest would have triggered
-> -	 * a SMEP fault instead of #NPF).
-> -	 * Otherwise, vCPU CR4.SMEP=0, errata could be triggered by any vCPU CPL.
-> -	 * As most guests enable SMAP if they have also enabled SMEP, use above
-> -	 * logic in order to attempt minimize false-positive of detecting errata
-> -	 * while still preserving all cases semantic correctness.
-> +	 * KVM reaches this point if the VM is an SEV guest, the CPU supports
-> +	 * DecodeAssist, a #NPF was raised, KVM's page fault handler triggered
-> +	 * emulation (e.g. for MMIO), and the CPU returned 0 in GuestIntrBytes
-> +	 * field of the VMCB.
->   	 *
-> -	 * Workaround:
-> -	 * To determine what instruction the guest was executing, the hypervisor
-> -	 * will have to decode the instruction at the instruction pointer.
-> +	 * This does _not_ mean that the erratum has been encountered, as the
-> +	 * DecodeAssist will also fail if the load for CS:RIP hits a legitimate
-> +	 * #PF, e.g. if the guest attempt to execute from emulated MMIO and
-> +	 * encountered a reserved/not-present #PF.
->   	 *
-> -	 * In non SEV guest, hypervisor will be able to read the guest
-> -	 * memory to decode the instruction pointer when insn_len is zero
-> -	 * so we return true to indicate that decoding is possible.
-> -	 *
-> -	 * But in the SEV guest, the guest memory is encrypted with the
-> -	 * guest specific key and hypervisor will not be able to decode the
-> -	 * instruction pointer so we will not able to workaround it. Lets
-> -	 * print the error and request to kill the guest.
-> +	 * To reduce the likelihood of false positives, take action if and only
-> +	 * if CR4.SMAP=1 (obviously required to hit the erratum) and CR4.SMEP=0
-> +	 * or CPL=3.  If SMEP=1 and CPL!=3, the erratum cannot have been hit as
-> +	 * the guest would have encountered a SMEP violation #PF, not a #NPF.
->   	 */
-> -	if (likely(!insn || insn_len))
-> -		return true;
-> -
->   	cr4 = kvm_read_cr4(vcpu);
->   	smep = cr4 & X86_CR4_SMEP;
->   	smap = cr4 & X86_CR4_SMAP;
 
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+
+>  drivers/net/bonding/bond_main.c | 14 ++------------
+>  include/linux/ethtool.h         |  8 ++++++++
+>  net/8021q/vlan_dev.c            | 15 +--------------
+>  net/ethtool/common.c            |  6 ++++++
+>  4 files changed, 17 insertions(+), 26 deletions(-)
+>=20
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
+ain.c
+> index b60e22f6394a..f28b88b67b9e 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -5353,23 +5353,13 @@ static int bond_ethtool_get_ts_info(struct net_de=
+vice *bond_dev,
+>  				    struct ethtool_ts_info *info)
+>  {
+>  	struct bonding *bond =3D netdev_priv(bond_dev);
+> -	const struct ethtool_ops *ops;
+>  	struct net_device *real_dev;
+> -	struct phy_device *phydev;
+> =20
+>  	rcu_read_lock();
+>  	real_dev =3D bond_option_active_slave_get_rcu(bond);
+>  	rcu_read_unlock();
+
+Side note: I'm a bit confused about this rcu_read_lock() ->
+rcu_dereference_protected() -> rcu_read_unlock() pattern, and use of the
+real_dev outside the RCU critical section. Isn't ->get_ts_info()
+protected by the rtnl_mutex? Shouldn't there be a
+bond_option_active_slave_get() which uses rtnl_dereference()?
+I see the code has been recently added by Hangbin Liu.
+
+> -	if (real_dev) {
+> -		ops =3D real_dev->ethtool_ops;
+> -		phydev =3D real_dev->phydev;
+> -
+> -		if (phy_has_tsinfo(phydev)) {
+> -			return phy_ts_info(phydev, info);
+> -		} else if (ops->get_ts_info) {
+> -			return ops->get_ts_info(real_dev, info);
+> -		}
+> -	}
+> +	if (real_dev)
+> +		return ethtool_get_ts_info_by_layer(real_dev, info);
+> =20
+>  	info->so_timestamping =3D SOF_TIMESTAMPING_RX_SOFTWARE |
+>  				SOF_TIMESTAMPING_SOFTWARE;
+> diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
+> index a26f37a27167..1d72344493bb 100644
+> --- a/include/linux/ethtool.h
+> +++ b/include/linux/ethtool.h
+> @@ -824,6 +824,14 @@ ethtool_params_from_link_mode(struct ethtool_link_ks=
+ettings *link_ksettings,
+>   */
+>  int ethtool_get_phc_vclocks(struct net_device *dev, int **vclock_index);
+> =20
+> +/**
+> + * ethtool_get_ts_info_by_layer - Obtains time stamping capabilities fro=
+m the MAC or PHY layer.
+> + * @dev: pointer to net_device structure
+> + * @info: buffer to hold the result
+> + * Returns zero on sauces, non-zero otherwise.
+> + */
+> +int ethtool_get_ts_info_by_layer(struct net_device *dev, struct ethtool_=
+ts_info *info);
+> +
+>  /**
+>   * ethtool_sprintf - Write formatted string to ethtool string data
+>   * @data: Pointer to start of string to update
+> diff --git a/net/8021q/vlan_dev.c b/net/8021q/vlan_dev.c
+> index 26d031a43cc1..c645d7c46d78 100644
+> --- a/net/8021q/vlan_dev.c
+> +++ b/net/8021q/vlan_dev.c
+> @@ -679,20 +679,7 @@ static int vlan_ethtool_get_ts_info(struct net_devic=
+e *dev,
+>  				    struct ethtool_ts_info *info)
+>  {
+>  	const struct vlan_dev_priv *vlan =3D vlan_dev_priv(dev);
+> -	const struct ethtool_ops *ops =3D vlan->real_dev->ethtool_ops;
+> -	struct phy_device *phydev =3D vlan->real_dev->phydev;
+> -
+> -	if (phy_has_tsinfo(phydev)) {
+> -		return phy_ts_info(phydev, info);
+> -	} else if (ops->get_ts_info) {
+> -		return ops->get_ts_info(vlan->real_dev, info);
+> -	} else {
+> -		info->so_timestamping =3D SOF_TIMESTAMPING_RX_SOFTWARE |
+> -			SOF_TIMESTAMPING_SOFTWARE;
+> -		info->phc_index =3D -1;
+> -	}
+> -
+> -	return 0;
+> +	return ethtool_get_ts_info_by_layer(vlan->real_dev, info);
+>  }
+> =20
+>  static void vlan_dev_get_stats64(struct net_device *dev,
+> diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+> index 0c5210015911..651d18eef589 100644
+> --- a/net/ethtool/common.c
+> +++ b/net/ethtool/common.c
+> @@ -569,6 +569,12 @@ int ethtool_get_phc_vclocks(struct net_device *dev, =
+int **vclock_index)
+>  }
+>  EXPORT_SYMBOL(ethtool_get_phc_vclocks);
+> =20
+> +int ethtool_get_ts_info_by_layer(struct net_device *dev, struct ethtool_=
+ts_info *info)
+> +{
+> +	return __ethtool_get_ts_info(dev, info);
+> +}
+> +EXPORT_SYMBOL(ethtool_get_ts_info_by_layer);
+
+I would probably replace all __ethtool_get_ts_info() function name
+occurrences with ethtool_get_ts_info_by_layer() (since it isn't a bad
+name) to make it absolutely clear that it's recursive for VLAN and bond
+interfaces. But maybe that's just me.
+
+> +
+>  const struct ethtool_phy_ops *ethtool_phy_ops;
+> =20
+>  void ethtool_set_ethtool_phy_ops(const struct ethtool_phy_ops *ops)
+> --=20
+> 2.20.1
+>=

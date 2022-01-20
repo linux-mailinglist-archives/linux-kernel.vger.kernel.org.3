@@ -2,342 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBA1494856
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779F349485B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359030AbiATHfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 02:35:33 -0500
-Received: from mga09.intel.com ([134.134.136.24]:63310 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238012AbiATHfc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 02:35:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642664132; x=1674200132;
-  h=mime-version:content-transfer-encoding:in-reply-to:
-   references:subject:to:from:cc:message-id:date;
-  bh=dmZcvNAqzeN/yeDa/mmZFwzZZino+XkNkWDuITyi1Wo=;
-  b=YMdXiKzY+MGgWZvY3fDNJXe7J3f3ugmCZm3MsMh/JUkPJ4KvMoml0SPY
-   HgU2LwhTsgrlIEh570qBndIywOjuh+2Ih6bP28wzOxFkwEwvD+s/klKoJ
-   cyaHjIhy+GvjgryFED8AidL9w7eNQ20NGCuBug2+HalXErO1kB0DMSIbn
-   2p+fzNvrefV+daryx5RgdPl5rzsP/mcyi2Cr7d/QO5Es5zLoFHk9eWR8s
-   VLHsP2lj+oMIuRpEW+8BOWv+RDviZn1xaqciRYI+gt9hXAMOZ2vodOceQ
-   yMwPYytu6rzTxtYbTKGcc7eUap1l3fSPgTGKBnRmDCZ5w28LxeorcNUmF
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="245085230"
-X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="245085230"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 23:35:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="626197288"
-Received: from cmathias-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.254.27])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 23:35:27 -0800
-Content-Type: text/plain; charset="utf-8"
+        id S1359039AbiATHgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 02:36:11 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:34402
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359036AbiATHgH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 02:36:07 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 634D740049
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642664166;
+        bh=zhYn8boZjrSS5W0P+2ZuZiKfL1ZEsv8IDdezIAswal4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=E+FTgTdnm6O2/xXog9zJcp8hgqw/8BUE5rkKp8Rz2iyysKy2o52c5TPbT3K1WmiWb
+         btlPRcm0stbLYoPICcYS+uB6xB6i+yM4BdaV3YV4tjl+HftejxO9CObE6M+b1IMlKl
+         AywmGGpJc29aD3IlfyiOeRBKarD06vXEsNsvc2wwQ4vMOMaMQ+PSnprC6b0Y9dM+3Z
+         U+A9elBmG61OyJwSfpOiL9dX5SHcJGD6s8U+bHkEnL1f0AwEwBeBt92GoeOo9Aob8Q
+         uRM3EQ7py5Y/zb20mPswssZlJUFxOn1ffYyKhnJdzal8GXD3nszPbeBD4XPJQeDdwE
+         Bp65bleQ9gdZw==
+Received: by mail-ed1-f72.google.com with SMTP id en7-20020a056402528700b00404aba0a6ffso3927613edb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:36:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zhYn8boZjrSS5W0P+2ZuZiKfL1ZEsv8IDdezIAswal4=;
+        b=hVR9Q719sRQzuBlNtiOz+mpwdepi7ZFmyPqotYB08Lt5zfj5wV5/hNpH2G9X4tD351
+         5gkMpSefObxgGr2ZCC8DYifo3b1eUCDwdHhQ/qkoeMDHuuBdqoae1Y0czQgId4Z25bIE
+         fwXiXhlsTrnmsJaqaseVaGEw2hbM2hVPpXptEjmiW9AAs4YVZ67pH7d0F4Gxj9fus1T5
+         rb0hE7kV8hZg9Kd7Sek66to1eSbGrKEXAbGdOFyMKsL6taliWZ05Oy7dXHV7zW2obp1C
+         myCinXQuVMpv7sve31fY9yBvVVmXCN6L00Wsla49bzJYCYkBLSaHkIzwsbTqYkPsju7n
+         NLLg==
+X-Gm-Message-State: AOAM531dpO+jlzZNcyASXZrtmHFVryhbeRDO4yGZDu+LsmTupTxQjN4X
+        ge/mkMQNy7dat49cQ7Zpj6S2Q7K3Fuuh5KrQFNGgSYZUpJ2SJ5jpd3UEIIVxgp/7d7TXQ6ANl8Z
+        pT6t6TUHIY3xpI0BCcDuQ+HEFf1wqw9k2y3kTf7oCUA==
+X-Received: by 2002:a50:cc47:: with SMTP id n7mr35474292edi.12.1642664165700;
+        Wed, 19 Jan 2022 23:36:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzRo4NxIGorVtNdob0Lm6QIN6OP4s0aOpoSNREkcHOOEBwGNSi+1C/m3PhCGISP9/C0vDH51Q==
+X-Received: by 2002:a50:cc47:: with SMTP id n7mr35474270edi.12.1642664165509;
+        Wed, 19 Jan 2022 23:36:05 -0800 (PST)
+Received: from [192.168.0.45] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id g27sm878115edj.79.2022.01.19.23.36.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 23:36:04 -0800 (PST)
+Message-ID: <0c0a22ed-2c4b-374c-4f4c-06afd4e8681d@canonical.com>
+Date:   Thu, 20 Jan 2022 08:36:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220120011008.6tmvfnvr2zqedhkj@ldmartin-desk2>
-References: <CAKMK7uEjj-Od3B=RtQDV_7ibDOsY6WxKGiJXt0MYq3C6kaVPcQ@mail.gmail.com> <20201119191932.GA121237@bjorn-Precision-5520> <CAJmaN=kU4Rf62rZt-eDWW5M2CPHmxA4ZzX+AXJx6vjVhoGn13w@mail.gmail.com> <20220120011008.6tmvfnvr2zqedhkj@ldmartin-desk2>
-Subject: Re: [PATCH] x86/gpu: add JSL stolen memory support
-To:     Jesse Barnes <jsbarnes@google.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Matthew D Roper <matthew.d.roper@intel.com>,
-        hariom.pandey@intel.com, Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Message-ID: <164266412489.4417.7304113188282977117@jlahtine-mobl.ger.corp.intel.com>
-User-Agent: alot/0.8.1
-Date:   Thu, 20 Jan 2022 09:35:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 2/4] spi: dt-bindings: samsung: convert to dtschema
+Content-Language: en-US
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sam Protsenko <semen.protsenko@linaro.org>
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
+ <20220112100046.68068-3-krzysztof.kozlowski@canonical.com>
+ <20220119192758.z3lvlkaeyeiqi73a@ti.com>
+ <5f912896-0635-fbe7-4fda-f4cb569190d9@canonical.com>
+ <20220120070620.wyeosdstbfcsaplt@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220120070620.wyeosdstbfcsaplt@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Tvrtko
+On 20/01/2022 08:06, Pratyush Yadav wrote:
+> On 19/01/22 08:49PM, Krzysztof Kozlowski wrote:
+>> On 19/01/2022 20:31, Pratyush Yadav wrote:
+>>> On 12/01/22 11:00AM, Krzysztof Kozlowski wrote:
+>>>> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+>>>> controller bindings to DT schema format
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>>> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+>>>> ---
+>>>>  .../spi/samsung,spi-peripheral-props.yaml     |  35 ++++
+>>>>  .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
+>>>>  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+>>>>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
+>>>>  MAINTAINERS                                   |   2 +-
+>>>>  5 files changed, 224 insertions(+), 123 deletions(-)
+>>>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>>>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+>>>>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..aa5a1f48494b
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>>>> @@ -0,0 +1,35 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/spi/samsung,spi-peripheral-props.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Peripheral-specific properties for Samsung S3C/S5P/Exynos SoC SPI controller
+>>>> +
+>>>> +maintainers:
+>>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>>> +
+>>>> +description:
+>>>> +  See spi-peripheral-props.yaml for more info.
+>>>> +
+>>>> +properties:
+>>>> +  controller-data:
+>>>> +    type: object
+>>>> +    additionalProperties: false
+>>>> +
+>>>> +    properties:
+>>>> +      samsung,spi-feedback-delay:
+>>>> +        description: |
+>>>> +          The sampling phase shift to be applied on the miso line (to account
+>>>> +          for any lag in the miso line). Valid values:
+>>>> +           - 0: No phase shift.
+>>>> +           - 1: 90 degree phase shift sampling.
+>>>> +           - 2: 180 degree phase shift sampling.
+>>>> +           - 3: 270 degree phase shift sampling.
+>>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +        enum: [0, 1, 2, 3]
+>>>> +
+>>>> +    required:
+>>>> +      - samsung,spi-feedback-delay
+>>>
+>>> I am not quite sure if this required would work here. Let's say another 
+>>> controller also uses a controller-data node, but it contains a different 
+>>> set of properties. Won't this cause an error to be raised for that 
+>>> controller since this property is not there?
+>>
+>> The controller-data is Samsung SPI specific (does not exist in any other
+>> binding), so why would controller-data get added to a different controller?
+> 
+> It does not as of now, but the name is fairly generic and some 
+> controller in the future might use it. I do not think it is a good idea 
+> to list required properties in X-peripheral-props.yaml in general since 
+> all those will be collected by spi-peripheral-props.yaml and so will 
+> apply to _all_ controllers that reference it.
 
-Quoting Lucas De Marchi (2022-01-20 03:10:08)
-> Resurrecting this thread after the other discussion on stolen memory
-> for Intel integrated GPU when there are Intel discrete GPU present:
-> https://lore.kernel.org/linux-pci/20220118200145.GA887728@bhelgaas/
->=20
-> see below.
->=20
-> On Thu, Nov 19, 2020 at 02:01:50PM -0800, Jesse Barnes wrote:
-> >On Thu, Nov 19, 2020 at 11:19 AM Bjorn Helgaas <helgaas@kernel.org> wrot=
-e:
-> >>
-> >> [+cc Jesse]
-> >>
-> >> On Thu, Nov 19, 2020 at 10:37:10AM +0100, Daniel Vetter wrote:
-> >> > On Thu, Nov 19, 2020 at 12:14 AM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
-> >> > > On Wed, Nov 18, 2020 at 10:57:26PM +0100, Daniel Vetter wrote:
-> >> > > > On Wed, Nov 18, 2020 at 5:02 PM Bjorn Helgaas <helgaas@kernel.or=
-g> wrote:
-> >> > > > > On Fri, Nov 06, 2020 at 10:39:16AM +0100, Daniel Vetter wrote:
-> >> > > > > > On Thu, Nov 5, 2020 at 3:17 PM Bjorn Helgaas <helgaas@kernel=
-.org> wrote:
-> >> > > > > > > On Thu, Nov 05, 2020 at 11:46:06AM +0200, Joonas Lahtinen =
-wrote:
-> >> > > > > > > > Quoting Bjorn Helgaas (2020-11-04 19:35:56)
-> >> > > > > > > > > [+cc Jani, Joonas, Rodrigo, David, Daniel]
-> >> > > > > > > > >
-> >> > > > > > > > > On Wed, Nov 04, 2020 at 05:35:06PM +0530, Tejas Upadhy=
-ay wrote:
-> >> > > > > > > > > > JSL re-uses the same stolen memory as ICL and EHL.
-> >> > > > > > > > > >
-> >> > > > > > > > > > Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-> >> > > > > > > > > > Cc: Matt Roper <matthew.d.roper@intel.com>
-> >> > > > > > > > > > Signed-off-by: Tejas Upadhyay <tejaskumarx.surendrak=
-umar.upadhyay@intel.com>
-> >> > > > > > > > >
-> >> > > > > > > > > I don't plan to do anything with this since previous s=
-imilar patches
-> >> > > > > > > > > have gone through some other tree, so this is just kib=
-itzing.
-> >> > > > > > > > >
-> >> > > > > > > > > But the fact that we have this long list of Intel devi=
-ces [1] that
-> >> > > > > > > > > constantly needs updates [2] is a hint that something =
-is wrong.
-> >> > > > > > > >
-> >> > > > > > > > We add an entry for every new integrated graphics platfo=
-rm. Once the
-> >> > > > > > > > platform is added, there have not been changes lately.
-> >> > > > > > > >
-> >> > > > > > > > > IIUC the general idea is that we need to discover Inte=
-l gfx memory by
-> >> > > > > > > > > looking at device-dependent config space and add it to=
- the E820 map.
-> >> > > > > > > > > Apparently the quirks discover this via PCI config reg=
-isters like
-> >> > > > > > > > > I830_ESMRAMC, I845_ESMRAMC, etc, and tell the driver a=
-bout it via the
-> >> > > > > > > > > global "intel_graphics_stolen_res"?
-> >> > > > > > > >
-> >> > > > > > > > We discover what is called the graphics data stolen memo=
-ry. It is regular
-> >> > > > > > > > system memory range that is not CPU accessible. It is ac=
-cessible by the
-> >> > > > > > > > integrated graphics only.
-> >> > > > > > > >
-> >> > > > > > > > See: https://git.kernel.org/pub/scm/linux/kernel/git/tor=
-valds/linux.git/commit/arch/x86/kernel/early-quirks.c?h=3Dv5.10-rc2&id=3D81=
-4c5f1f52a4beb3710317022acd6ad34fc0b6b9
-> >> > > > > > > >
-> >> > > > > > > > > That's not the way this should work.  There should som=
-e generic, non
-> >> > > > > > > > > device-dependent PCI or ACPI method to discover the me=
-mory used, or at
-> >> > > > > > > > > least some way to do it in the driver instead of early=
- arch code.
-> >> > > > > > > >
-> >> > > > > > > > It's used by the early BIOS/UEFI code to set up initial =
-framebuffer.
-> >> > > > > > > > Even if i915 driver is never loaded, the memory ranges s=
-till need to
-> >> > > > > > > > be fixed. They source of the problem is that the OEM BIO=
-S which are
-> >> > > > > > > > not under our control get the programming wrong.
-> >> > > > > > > >
-> >> > > > > > > > We used to detect the memory region size again at i915 i=
-nitialization
-> >> > > > > > > > but wanted to eliminate the code duplication and resulti=
-ng subtle bugs
-> >> > > > > > > > that caused. Conclusion back then was that storing the s=
-truct resource
-> >> > > > > > > > in memory is the best trade-off.
-> >> > > > > > > >
-> >> > > > > > > > > How is this *supposed* to work?  Is there something we=
- can do in E820
-> >> > > > > > > > > or other resource management that would make this easi=
-er?
-> >> > > > > > > >
-> >> > > > > > > > The code was added around Haswell (HSW) device generatio=
-n to mitigate
-> >> > > > > > > > bugs in BIOS. It is traditionally hard to get all OEMs t=
-o fix their
-> >> > > > > > > > BIOS when things work for Windows. It's only later years=
- when some
-> >> > > > > > > > laptop models are intended to be sold with Linux.
-> >> > > > > > > >
-> >> > > > > > > > The alternative would be to get all the OEM to fix their=
- BIOS for Linux,
-> >> > > > > > > > but that is not very realistic given past experiences. S=
-o it seems
-> >> > > > > > > > a better choice to to add new line per platform generati=
-on to make
-> >> > > > > > > > sure the users can boot to Linux.
-> >> > > > > > >
-> >> > > > > > > How does Windows do this?  Do they have to add similar cod=
-e for each
-> >> > > > > > > new platform?
-> >> > > > > >
-> >> > > > > > Windows is chicken and doesn't move any mmio bar around on i=
-ts own.
-> >> > > > > > Except if the bios explicitly told it somehow (e.g. for the =
-64bit bar
-> >> > > > > > stuff amd recently announced for windows, that linux support=
-s since
-> >> > > > > > years by moving the bar). So except if you want to preemptiv=
-ely
-> >> > > > > > disable the pci code that does this anytime there's an intel=
- gpu, this
-> >> > > > > > is what we have to do.
-> >> > > > >
-> >> > > > > I think Windows *does* move BARs (they use the more generic
-> >> > > > > terminology of "rebalancing PNP resources") in some cases [3,4=
-].  Of
-> >> > > > > course, I'm pretty sure Windows will only assign PCI resources=
- inside
-> >> > > > > the windows advertised in the host bridge _CRS.
-> >> > > > >
-> >> > > > > Linux *used* to ignore that host bridge _CRS and could set BAR=
-s to
-> >> > > > > addresses that appeared available but were in fact used by the
-> >> > > > > platform somehow.  But Linux has been paying attention to host=
- bridge
-> >> > > > > _CRS for a long time now, so it should also only assign resour=
-ces
-> >> > > > > inside those windows.
-> >> > > >
-> >> > > > If this behaviour is newer than the addition of these quirks the=
-n yeah
-> >> > > > they're probably not needed anymore, and we can move all this ba=
-ck
-> >> > > > into the driver. Do you have the commit when pci core started
-> >> > > > observing _CRS on the host bridge?
-> >> > >
-> >> > > I think the most relevant commit is this:
-> >> > >
-> >> > >   2010-02-23 7bc5e3f2be32 ("x86/PCI: use host bridge _CRS info by =
-default on 2008 and newer machines")
-> >> > >
-> >> > > but the earliest quirk I found is over three years later:
-> >> > >
-> >> > >   2013-07-26 814c5f1f52a4 ("x86: add early quirk for reserving Int=
-el graphics stolen memory v5")
-> >> > >
-> >> > > So there must be something else going on.  814c5f1f52a4 mentions a
-> >> > > couple bug reports.  The dmesg from 66726 [5] shows that we *are*
-> >> > > observing the host bridge _CRS, but Linux just used the BIOS
-> >> > > configuration without changing anything:
-> >> > >
-> >> > >   BIOS-e820: [mem 0x000000007f49_f000-0x000000007f5f_ffff] usable
-> >> > >   BIOS-e820: [mem 0x00000000fec0_0000-0x00000000fec0_0fff] reserved
-> >> > >   PCI: Using host bridge windows from ACPI; if necessary, use "pci=
-=3Dnocrs" and report a bug
-> >> > >   ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
-> >> > >   pci_bus 0000:00: root bus resource [mem 0x7f70_0000-0xffff_ffff]
-> >> > >   pci 0000:00:1c.0: PCI bridge to [bus 01]
-> >> > >   pci 0000:00:1c.0:   bridge window [io  0x1000-0x1fff]
-> >> > >   pci 0000:00:1c.0:   bridge window [mem 0xfe90_0000-0xfe9f_ffff]
-> >> > >   pci 0000:00:1c.0:   bridge window [mem 0x7f70_0000-0x7f8f_ffff 6=
-4bit pref]
-> >> > >   pci 0000:01:00.0: [1814:3090] type 00 class 0x028000
-> >> > >   pci 0000:01:00.0: reg 10: [mem 0xfe90_0000-0xfe90_ffff]
-> >> > >   [drm:i915_stolen_to_physical] *ERROR* conflict detected with sto=
-len region: [0x7f80_0000 - 0x8000_0000]
-> >> > >
-> >> > > So the BIOS programmed the 00:1c.0 bridge prefetchable window to
-> >> > > [mem 0x7f70_0000-0x7f8f_ffff], and i915 thinks that's a conflict.
-> >> > >
-> >> > > On this system, there are no PCI BARs in that range.  01:00.0 looks
-> >> > > like a Ralink RT3090 Wireless 802.11n device that only has a
-> >> > > non-prefetchable BAR at [mem 0xfe90_0000-0xfe90_ffff].
-> >> > >
-> >> > > I don't know the details of the conflict.  IIUC, Joonas said the
-> >> > > stolen memory is accessible only by the integrated graphics, not by
-> >> > > the CPU.  The bridge window is CPU accessible, of course, and the
-> >> > > [mem 0x7f70_0000-0x7f8f_ffff] range contains the addresses the CPU
-> >> > > uses for programmed I/O to BARs below the bridge.
-> >> > >
-> >> > > The graphics accesses sound like they would be DMA in the *bus*
-> >> > > address space, which is frequently, but not always, identical to t=
-he
-> >> > > CPU address space.
-> >> >
-> >> > So apparently on some platforms the conflict is harmless because the
-> >> > BIOS puts BARs and stuff over it from boot-up, and things work:
-> >> > 0b6d24c01932 ("drm/i915: Don't complain about stolen conflicts on
-> >> > gen3") But we also had conflict reports on other machines.
-> >>
-> >> The bug reports mentioned in 814c5f1f52a4 ("x86: add early quirk for
-> >> reserving Intel graphics stolen memory v5") and 0b6d24c01932
-> >> ("drm/i915: Don't complain about stolen conflicts on gen3") seem to be
-> >> basically complaints about the *message*, not anything that's actually
-> >> broken.
-> >>
-> >> Jesse's comment [6]:
-> >>
-> >>   Given the decode priority on our GMCHs, it's fine if the regions
-> >>   overlap.  However it doesn't look like there's a nice way to detect
-> >>   it.  In this case, part of the range occupied by the stolen space is
-> >>   simply "reserved" per the E820, but the rest of it is under the bus
-> >>   0 range (which kind of makes sense too).
-> >>
-> >> sounds relevant but I don't know enough to interpret it.  I added
-> >> Jesse in case he wants to comment.
-> >>
-> >> > GPU does all its access with CPU address space (after the iommu, whi=
-ch
-> >> > is entirely integrated). So I'm not sure whether we've seen something
-> >> > go boom or whether reserving that resource was just precaution in
-> >> > eaba1b8f3379 ("drm/i915: Verify that our stolen memory doesn't
-> >> > conflict"), it's all a bit way back in history.
-> >> >
-> >> > So really not sure what to do here or what the risks are.
-> >>
-> >> I'm not either.  Seems like we're not really converging on anything
-> >> useful we can do at this point.  The only thing I can think of would
-> >> be to collect data about actual failures (not just warning messages).
-> >> That might lead to something we could improve in the future.
-> >
-> >I don't have any brilliant ideas here unfortunately.  Maybe it's worth
-> >talking to some of the Windows folks internally to see how these
-> >ranges are handled these days and matching it?  Historically this has
-> >been an area fraught with danger because getting things wrong can lead
-> >to corruption of various kinds or boot hangs.
->=20
-> We could try something else, but if there are bios bugs for old systems
-> preventing us to do this entirely in i915, I'm not sure that would
-> solve it.
->=20
-> What if we phase out the quirks for new platforms? Idea would be to
-> revive eaba1b8f3379 ("drm/i915: Verify that our stolen memory doesn't con=
-flict")
-> adapted to the current code. Then we can move some o the latest
-> platforms and watch out for regressions. At least we would stop
-> additions to this early-quirk.c
+Right, but have in mind this is merely a bindings conversion. These were
+made like this long time ago.
 
-I'm not really a big fan of doing that unless we follow with the
-hardware and Windows folks to double-check that the problem really
-shouldn't occur anymore in the BIOS.
+I think we can drop the "required:" entirely with the commit 3/4 which
+makes it optional.
 
-Considering the trade-off here: we eliminate a few line additions and
-risk making user systems non-bootable. I don't think doing that blindly
-is very friendly to our users.
 
-Regards, Joonas
 
->=20
-> Another idea: wouldn't DECLARE_PCI_FIXUP_EARLY work? AFAICS this is
-> early enough to reserve the memory.
->=20
-> Also We could add only those systems where we reproduce bugs
-> rather than preemptively adding them to the table - it would at least
-> allow to catch those bugs in bioses rather than hiding them.
->=20
->=20
-> Lucas De Marchi
->=20
-> >
-> >Jesse
+Best regards,
+Krzysztof

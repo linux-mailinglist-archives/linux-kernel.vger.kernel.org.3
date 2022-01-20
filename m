@@ -2,80 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B825F494D8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA409494D90
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbiATMAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:00:12 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39092 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiATMAL (ORCPT
+        id S232629AbiATMBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231892AbiATMBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:00:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD76A61696;
-        Thu, 20 Jan 2022 12:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E7D7C340E5;
-        Thu, 20 Jan 2022 12:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642680010;
-        bh=B0LNF65epiT75ISbYwnKBeSakjUZozKKuUL/HAv2CUg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iVv87KJZJOcHfIk0r8gXIs43F4GfMHvzMBjw8CRLtbMQ2oTumfkSaIYYukAZAzNBw
-         atyiSP47B1DWGX5FRSeJA70BAQk6p73LawaWeIJDnNbORlRu/bpJ3MBYNuOakmibZL
-         Q66hw9cWJFIc3nZyrFGSDJLyJNHgXmms4R5Nk/OD/MPsGAozmAXrKFZnZGBdmXxrOC
-         oAc2wgBQ0grQKPBBSmaxIYWrYnap5nvqwJCCU9bz4QB8FZSeNDw/BIEkiddmoJ+zh7
-         5dxKtoBADa+iH7q3/Gn0WBZKrFu5jMdg8FaX2eqxrNpBRD+y7P9zWSbOAr53sNo0dl
-         RlqHIRwqVhsbQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 38527F6079B;
-        Thu, 20 Jan 2022 12:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 20 Jan 2022 07:01:17 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF26BC061574;
+        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id s9so3154788plg.7;
+        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=x6xQErWbh59MRMGPWppnidXCP7KCrvl8zZIZXHQJ4v8=;
+        b=SYRqlyczXDZgRbvOhDXZ6p6W5Bq4QT8tnHBlDL7/cwOc2GxCv3oCCFm6Am5gyaFRp3
+         1/ZXS3gXVA/l8KUABtLdctctQTXQwMnlzRgz8fiS2zWxcozcOjiuD9cX9MHaZ7j6pEfE
+         8n1//0+ry1vThYz5hiS4/lWK55BgFneKNdy7cKuQI2gxgpL/ZEjpL5/+cxVNX78xKZBK
+         S7q30h7zYxfwez+upBdXtQxKgDLkuUDJTJjgVw8yP5M4sNsFBbOiRy4vEdqPc9i6cuHo
+         DcO6rKTS4YIk9c8aI2nl7UPSgU7vAzsWPlRNSyf49R3IgybPV5urcAv444CLBQrYGvng
+         1BIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=x6xQErWbh59MRMGPWppnidXCP7KCrvl8zZIZXHQJ4v8=;
+        b=NmL8zTk/O753IqWqBZWeSQWkTSFJwK0dUBcvyTibX3O/ZZ8rT7I1oRKXdXvO//zvNc
+         Ydc/DsxMbSedBueH4/8jzdMlB96XCh5uEzds9PCF88O4aUBp9JhgDXH9GppWzVnXTRrT
+         b3QJdmn8WbJqYkPOuGGkqHMHzYfdWOp0gYb3jTsZOur1uOU9FVi4hR/X2AN5cr5jeOws
+         4Gtd5LLzhpoCVh8hnbo1PdW2WHQLaJ181I3Li1uhanMrnsDw7Lg8iRxBynWl7ytTgTkm
+         L4HEiEhBD5WULxXCK+QUu1v7Z5i6ec35XHlDjlsqL43HaYlfo8YF4v1PeC4oyC6fEbPF
+         vB/A==
+X-Gm-Message-State: AOAM530FcZ3YblFSj9BVrcWwiP0J/xWh34osG6lEy+gDYlvO2aTQoyME
+        pLtQZx8GzrJRSgawMM2wWLs=
+X-Google-Smtp-Source: ABdhPJy3BOoGH7B5EYj2r1GYJWj5Hj3gMIYEYcM3MkqwCBJQ/gEl8hVhsNSvCV/vgQk+m/JEw7hYqg==
+X-Received: by 2002:a17:902:b206:b0:149:3b5d:2b8b with SMTP id t6-20020a170902b20600b001493b5d2b8bmr37236865plr.162.1642680076472;
+        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id b22sm3176413pfl.121.2022.01.20.04.01.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 04:01:16 -0800 (PST)
+Message-ID: <fc6b44e8-350b-7f66-132f-a02dfe7b97a8@gmail.com>
+Date:   Thu, 20 Jan 2022 20:01:05 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/2] net: stmmac: dwmac-visconti: Fix bit definitions and
- clock configuration for RMII mode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164268001022.32466.14296016089234300224.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Jan 2022 12:00:10 +0000
-References: <20220119044648.18094-1-yuji2.ishikawa@toshiba.co.jp>
-In-Reply-To: <20220119044648.18094-1-yuji2.ishikawa@toshiba.co.jp>
-To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc:     davem@davemloft.net, kuba@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@st.com, joabreu@synopsys.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [DROP][PATCH] KVM: x86/xcr0: Don't make XFEATURE_MASK_SSE a
+ mandatory bit setting
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220119070427.33801-1-likexu@tencent.com>
+ <1b6a8366-d1ab-536f-9bad-8c2b7a822fcb@intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <1b6a8366-d1ab-536f-9bad-8c2b7a822fcb@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 19 Jan 2022 13:46:46 +0900 you wrote:
-> Hi,
+On 19/1/2022 11:23 pm, Dave Hansen wrote:
+> On 1/18/22 11:04 PM, Like Xu wrote:
+>> Remove the XFEATURE_MASK_SSE bit as part of the XFEATURE_MASK_EXTEND
+>> and opportunistically, move it into the context of its unique user KVM.
 > 
-> This series is a fix for RMII/MII operation mode of the dwmac-visconti driver.
-> It is composed of two parts:
+> Is this a problem for xstate_required_size()?  The rules for the CPUID
+> sub-functions <=1 are different than those for >1.  Most importantly,
+> 'eax' doesn't enumerate the size of the feature for the XFEATURE_SSE
+> sub-leaf.
+
+Indeed.
+
 > 
-> * 1/2: fix constant definitions for cleared bits in ETHER_CLK_SEL register
-> * 2/2: fix configuration of ETHER_CLK_SEL register for running in RMII operation mode.
+> I think XFEATURE_MASK_EXTEND was being used to avoid that oddity:
+
+It seems that the cpuid.0xd.0.ebx size update for the SSE+AVX state needs
+to be triggered by setting bit 2 which is quite odd:
+
+  XCR0 = 001B, ebx=00000240
+  XCR0 = 011B, ebx=00000240
+  XCR0 = 111B, ebx=00000340
+
+Thank you and sorry for the noise.
+
 > 
-> [...]
-
-Here is the summary with links:
-  - [v2,1/2] net: stmmac: dwmac-visconti: Fix bit definitions for ETHER_CLK_SEL
-    https://git.kernel.org/netdev/net/c/1ba1a4a90fa4
-  - [v2,2/2] net: stmmac: dwmac-visconti: Fix clock configuration for RMII mode
-    https://git.kernel.org/netdev/net/c/0959bc4bd420
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>> u32 xstate_required_size(u64 xstate_bv, bool compacted)
+>> {
+>>          int feature_bit = 0;
+>>          u32 ret = XSAVE_HDR_SIZE + XSAVE_HDR_OFFSET;
+>>
+>>          xstate_bv &= XFEATURE_MASK_EXTEND;
+>>          while (xstate_bv) {
+>>                  if (xstate_bv & 0x1) {
+>>                          u32 eax, ebx, ecx, edx, offset;
+>>                          cpuid_count(0xD, feature_bit, &eax, &ebx, &ecx, &edx);
+>>                          /* ECX[1]: 64B alignment in compacted form */
+>>                          if (compacted)
+>>                                  offset = (ecx & 0x2) ? ALIGN(ret, 64) : ret;
+>>                          else
+>>                                  offset = ebx;
+>>                          ret = max(ret, offset + eax);
+>>                  }
+>>
+>>                  xstate_bv >>= 1;
+>>                  feature_bit++;
+>>          }
+>>
+>>          return ret;
+>> }

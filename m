@@ -2,115 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84997494BB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B01494BBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376277AbiATKaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:30:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43758 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1359764AbiATKaP (ORCPT
+        id S1376285AbiATKbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359803AbiATKbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:30:15 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K8VU0T007756;
-        Thu, 20 Jan 2022 10:30:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yRChjvKoG7qtxswec0iJDshzNuJRtiMV9rzF7i/n/n0=;
- b=EirXxrMyg5NmpQs7tx8eRx0LX1qO1Y961YG6oqjLmZdXLeUwUnDwdCtP7sxMGdETmavK
- dDNglpt+A+e3OKMa2UUMgMIpcRl8ZNDge+YszQKW+zy+1ryhMLXaGvzcFDb8p05gYD4/
- xnrGtep00fsvmFKRUY5fIDtJLfUbkbnC6T4GGaytAQpWVQixLaLsKiqbtkaYTWSCGlml
- c+xARFi20nkT0PZhHDNzSdvVpoPLJHBHDzUEoUsj4pWNaMjV7m/cQA3t5d8/+Ay0/2LY
- vCW+1OmPKfkUbjVC4IYh2c8uGuF0mamHMkWKnII7Vvgb1MVQruA0g/cBy9gu2ITbj4+K QQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq15w5u5h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 10:30:15 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20K8hFvZ000513;
-        Thu, 20 Jan 2022 10:30:15 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq15w5u4r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 10:30:15 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KAO64n009235;
-        Thu, 20 Jan 2022 10:30:13 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dknwa817h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 10:30:12 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KAU9SH40370464
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jan 2022 10:30:09 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 939F011C052;
-        Thu, 20 Jan 2022 10:30:09 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29B0311C069;
-        Thu, 20 Jan 2022 10:30:09 +0000 (GMT)
-Received: from [9.171.35.3] (unknown [9.171.35.3])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Jan 2022 10:30:09 +0000 (GMT)
-Message-ID: <6d3a4e4e-a038-0a30-6846-3f07948dab08@linux.ibm.com>
-Date:   Thu, 20 Jan 2022 11:30:08 +0100
+        Thu, 20 Jan 2022 05:31:19 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56688C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:31:19 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id y27so898397pfa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:31:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=33//Ifqafj5vah3eayUSf6uENYY18HgBL4WzLbzW/gM=;
+        b=UIRoYs6yFPWded3aTQ/t6p8+0BDAFpJdjqR2oEdXX1E6Gq2a8Rnvj8AE4emGaPmJ+T
+         meunv5BfqRMBi/5OMKTprHyFOgLtq7s1C5t8vIb5t6iqVpQdDdKiJJv+XLGmihrvMNyz
+         JtMKgMhwp/TkUq2VMCFiOmuP5aXRjb42EqhpJZw+EKrIEK1dPNG2KdDktKqTc7KkgYH2
+         Ew2RjdphED4BH3Mu95WrpmDDjciXUgV+TWLFqNQfVlm3/RRbjjo3dcGtkO3PeRV4Ovcz
+         uw7SXYaY8VSJuoeYKYlloR1rIq/RSwzAKey3jYwz0tiHyP3X20KpMCWm20epjUjhE3cy
+         T7DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=33//Ifqafj5vah3eayUSf6uENYY18HgBL4WzLbzW/gM=;
+        b=iPF0A7ZjTXt/NmCXu+dOdJ3TmtzQgSYANOaCjcpLKK9UyQMAl/O5P4H5383N7vE10g
+         nU9zBP4WFmW/E9ewBD+OHmzsfGHkH1azjML0yaIL/F3+kw4I1ZzMApox/VJzKjS+tFRZ
+         hb4dc82Z4ziuGuCoGEpV+vEIn9esOURiNZmir7m9VZxwtuhozxvSf08ddjWvWAPlyPTQ
+         nrDUGt5W/AFMrsGs5PSoHFwit1CpNg2EHR1Q/TJ7tsqyZ4sBXL0ndt/js/gkU2ILYaeN
+         BsK9gXv6jLqdCu6YCbH069W5bAgP7azvAcUQ3WKAj9tA4jBwCzAmOqt2gbOfZ+zgyMSR
+         vQtQ==
+X-Gm-Message-State: AOAM532Na0g19GfXjqy9ZfEXwDE2uPsxNa10z10YP2wXW2gj6vY1SF/L
+        CdoGGTIV2OpbPMDpMSNdOovxqeq5laUi8DbIo34=
+X-Google-Smtp-Source: ABdhPJxfx7TwEN87yKpqxJuo+g1dMh7RIvjXNlHc8QlKfAGFq/33UeGHXcJgwaG9uN364IDf17jIpdYF7UE3bCqbdzU=
+X-Received: by 2002:a63:7f4d:: with SMTP id p13mr30508684pgn.29.1642674678286;
+ Thu, 20 Jan 2022 02:31:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 02/10] KVM: s390: Honor storage keys when accessing
- guest memory
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-3-scgl@linux.ibm.com>
- <e5b06907-471d-fe4f-8461-a7dea37abca2@linux.ibm.com>
- <d5247a6c-2088-cbfa-20f9-c1c748f90daf@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <d5247a6c-2088-cbfa-20f9-c1c748f90daf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jktopad3-aKLUFRDUQDC5Cibu0GFaRG9
-X-Proofpoint-ORIG-GUID: Q60RhR0WIN1eMZlM16l0CWCZJmaTI9DY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-20_03,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 lowpriorityscore=0
- impostorscore=0 adultscore=0 suspectscore=0 phishscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201200050
+Received: by 2002:a05:6a10:cac9:0:0:0:0 with HTTP; Thu, 20 Jan 2022 02:31:17
+ -0800 (PST)
+Reply-To: fulhammartins8@gmail.com
+From:   Fulham Martins <whoknowsladyjay@gmail.com>
+Date:   Thu, 20 Jan 2022 11:31:17 +0100
+Message-ID: <CAMhEkO6JB8QPy8CLrCTwJDXuD3Ys0x901oQdT3+MxdMVPDA3pg@mail.gmail.com>
+Subject: INVESTMENT PARTNERSHIP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/22 11:27, Christian Borntraeger wrote:
-> 
-> 
-> Am 18.01.22 um 15:38 schrieb Janosch Frank:
-> [...]
->> /*
->> We'll do an actual access via the mv instruction which will return access errors to us so we don't need to check here.
->> */
-> 
-> Be slightly more verbose I guess. Something like
-> We'll do an actual access via the mv instruction which will return access errors to us so we don't need to check here.
-> By using key 0 all checks are skipped and no performance overhead occurs.
-> 
-> ?
+Dear friend,
 
-Yes, I'll also mention that we implement storage protection override by retrying.
-> 
->>> +    rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode, 0);
+My Name is Mr. Fulham Martins. I am from the United Kingdom.
+It is my resolve to contact you for an investment plan in your country. It is
+no more a secret that investments are thriving fast in your country.
+Therefore, I want to invest in your country and want you to be my
+business partner.
+I am ready to invest in any sector such as Manufacturing, Agriculture,
+Real Estate, Hoteling, etc. or any other business that has good return
+on investment/profitable.
 
+If you choose to be of assistance,I am ready to send the consignment
+box to your country regarding the investment
+partnership or do a direct bank transfer to your account based on
+whatever modalities the investment will entail.
+Like I mentioned earlier, I am presently based in the United Kingdom
+and would like to know whether you are ready to partner with me on
+this. Kindly indicate your interest to enable us to proceed.
+Thank you in anticipation as I look forward to reading your reply.
+
+
+Best regards.
+
+Mr.Fulham Martins.

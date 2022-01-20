@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C55494CA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9E494CB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiATLS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:18:28 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39116 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiATLSZ (ORCPT
+        id S229945AbiATLUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:20:18 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17758 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230429AbiATLUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:18:25 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 92BE3218A9;
-        Thu, 20 Jan 2022 11:18:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642677504; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d8VO0ro5++eVxYPby3+L4F01fUksoPWmYpmpbS50Btk=;
-        b=nuvuzlBVkYDxr2xgcBnJJiv47ULnPtdRTDJScmiMOA8+bNYz8tWoANqYonVXzt4soCYFrK
-        +/jLJxWE56mdhnq1q+62Zw/5zOjz7ksITJrIeLbJdbhfzzK8wn4/sBB/6KUEnTOf5cj7G4
-        b1X1qXujMdoGKFuHdMhXOwJAVF1wau4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642677504;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d8VO0ro5++eVxYPby3+L4F01fUksoPWmYpmpbS50Btk=;
-        b=o/YDxOoqxKLCyAgRaLIyLdzQLNJAPwzZkHyjn/gD5o0DZnCJU+JSia1+osg7H6mZ385V6a
-        BmCE59UmpQyevtBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 857CD13E46;
-        Thu, 20 Jan 2022 11:18:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dewfIABF6WFKPwAAMHmgww
-        (envelope-from <hare@suse.de>); Thu, 20 Jan 2022 11:18:24 +0000
-Subject: Re: [PATCH 2/2] block: hold queue lock while iterating in
- diskstats_show
-To:     Daniel Wagner <dwagner@suse.de>, linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-References: <20220120105248.117025-1-dwagner@suse.de>
- <20220120105248.117025-3-dwagner@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <bcd9ee08-d751-84f4-7334-b107ee3ca294@suse.de>
-Date:   Thu, 20 Jan 2022 12:18:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Thu, 20 Jan 2022 06:20:11 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K8wQN6013978;
+        Thu, 20 Jan 2022 11:20:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=q8d+JmubsiEGkGrlJwoa+jl3OgIFkhx9mMub8kNkuwE=;
+ b=crIM0taexLN+W2B7IMoHp+XMgll4k3V/oB2ffYahGgQMUDAZcsmpozh8LAPS+rjvIPcs
+ 738xynN6nUSukPDApbDRdOcWZl4bjRxbXVoc1WIKeM2JGBv1IC8JNRluQzJ9W6EvtlDw
+ volLiN7ZEn09PvhnWEF+wNMskYBwsSl/uKbckbegP/0LSBk54fZn5T6Bx1NZpOQr9h+J
+ TJIL7g4Ar4Wju7f2tmn70eAkNXtWgfmUhjLs8w4brPtXiTnCVnhqEJQweNDoeIZcHdRq
+ CXI1v0IH/h4JistnUodBLllRZxTq5RqLZRD8oVXJH6fv6ceqshjvAkWO/VnEfLGdgRMo UA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dq4putp9n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 11:20:09 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20KA8iuL029890;
+        Thu, 20 Jan 2022 11:20:09 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dq4putp94-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 11:20:09 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KB7wOt003547;
+        Thu, 20 Jan 2022 11:20:07 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3dknhjpraf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 11:20:07 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KBK3O639715222
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jan 2022 11:20:03 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45BEB11C07B;
+        Thu, 20 Jan 2022 11:20:03 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1F6F11C04C;
+        Thu, 20 Jan 2022 11:20:02 +0000 (GMT)
+Received: from [9.171.13.121] (unknown [9.171.13.121])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Jan 2022 11:20:02 +0000 (GMT)
+Message-ID: <6de14f3a-fd8a-49d4-3102-ca8f339d8728@linux.ibm.com>
+Date:   Thu, 20 Jan 2022 12:20:02 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220120105248.117025-3-dwagner@suse.de>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 06/10] KVM: s390: Add vm IOCTL for key checked
+ guest absolute memory access
 Content-Language: en-US
+To:     Thomas Huth <thuth@redhat.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-7-scgl@linux.ibm.com>
+ <069c72b6-457f-65c7-652e-e6eca7235fca@redhat.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <069c72b6-457f-65c7-652e-e6eca7235fca@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tEaNHQjN40Df7antsZ4nerz26218eQ_Y
+X-Proofpoint-ORIG-GUID: fjL2rJnzhgeRNE88aRdwV5xNHiHpvwZt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_04,2022-01-20_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201200056
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/22 11:52 AM, Daniel Wagner wrote:
-> The request queues can be freed while we operate on them. Make sure we
-> hold a reference when using blk_mq_queue_tag_busy_iter.
-> 
-> RIP: blk_mq_queue_tag_busy_iter
-> Call Trace:
->  ? blk_mq_hctx_mark_pending
->  ? diskstats_show
->  ? blk_mq_hctx_mark_pending
->  blk_mq_in_flight
->  diskstats_show
->  ? klist_next
->  seq_read
->  proc_reg_read
->  vfs_read
->  ksys_read
->  do_syscall_64
->  entry_SYSCALL_64_after_hwframe
-> 
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
-> ---
->  block/genhd.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/block/genhd.c b/block/genhd.c
-> index c9d4386dd177..0e163055a4e6 100644
-> --- a/block/genhd.c
-> +++ b/block/genhd.c
-> @@ -1167,10 +1167,13 @@ static int diskstats_show(struct seq_file *seqf, void *v)
->  		if (bdev_is_partition(hd) && !bdev_nr_sectors(hd))
->  			continue;
->  		part_stat_read_all(hd, &stat);
-> +		if (blk_queue_enter(gp->queue, BLK_MQ_REQ_NOWAIT))
-> +			continue;
->  		if (queue_is_mq(gp->queue))
->  			inflight = blk_mq_in_flight(gp->queue, hd);
->  		else
->  			inflight = part_in_flight(hd);
-> +		blk_queue_exit(gp->queue);
->  
->  		seq_printf(seqf, "%4d %7d %pg "
->  			   "%lu %lu %lu %u "
-> 
-While this looks good, it seems to have been cut against an earlier
-branch; the code in question looks different in my copy.
 
-Cheers,
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Am 20.01.22 um 11:38 schrieb Thomas Huth:
+> On 18/01/2022 10.52, Janis Schoetterl-Glausch wrote:
+>> Channel I/O honors storage keys and is performed on absolute memory.
+>> For I/O emulation user space therefore needs to be able to do key
+>> checked accesses.
+>> The vm IOCTL supports read/write accesses, as well as checking
+>> if an access would succeed.
+> ...
+>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>> index e3f450b2f346..dd04170287fd 100644
+>> --- a/include/uapi/linux/kvm.h
+>> +++ b/include/uapi/linux/kvm.h
+>> @@ -572,6 +572,8 @@ struct kvm_s390_mem_op {
+>>   #define KVM_S390_MEMOP_LOGICAL_WRITE    1
+>>   #define KVM_S390_MEMOP_SIDA_READ    2
+>>   #define KVM_S390_MEMOP_SIDA_WRITE    3
+>> +#define KVM_S390_MEMOP_ABSOLUTE_READ    4
+>> +#define KVM_S390_MEMOP_ABSOLUTE_WRITE    5
+> 
+> Not quite sure about this - maybe it is, but at least I'd like to see this discussed: Do we really want to re-use the same ioctl layout for both, the VM and the VCPU file handles? Where the userspace developer has to know that the *_ABSOLUTE_* ops only work with VM handles, and the others only work with the VCPU handles? A CPU can also address absolute memory, so why not adding the *_ABSOLUTE_* ops there, too? And if we'd do that, wouldn't it be sufficient to have the VCPU ioctls only - or do you want to call these ioctls from spots in QEMU where you do not have a VCPU handle available? (I/O instructions are triggered from a CPU, so I'd assume that you should have a VCPU handle around?)
+
+I paritally agree. the ABSOLUTE calls should also work from a VCPU handle. But you also want to be able to call this from a different thread than the vpcu threads as you do not want to kick a CPU out of the kernel just for that. So it makes sense to have this ioctl also for the VM fd.
+> 
+>   Thomas
+> 
+> 

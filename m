@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AD1494910
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6826494915
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359065AbiATIEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:04:38 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:33789 "EHLO
+        id S1358423AbiATIFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:05:04 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:58995 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358391AbiATIEV (ORCPT
+        with ESMTP id S1358448AbiATIE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:04:21 -0500
+        Thu, 20 Jan 2022 03:04:28 -0500
 Received: from quad ([82.142.13.186]) by mrelayeu.kundenserver.de (mreue107
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MTAS1-1mjL0v21hH-00UbNX; Thu, 20
- Jan 2022 09:03:54 +0100
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mnqfc-1mVN6P2AqA-00pJic; Thu, 20
+ Jan 2022 09:03:55 +0100
 From:   Laurent Vivier <laurent@vivier.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
@@ -28,172 +28,133 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-Date:   Thu, 20 Jan 2022 09:03:44 +0100
-Message-Id: <20220120080347.1595379-3-laurent@vivier.eu>
+Subject: [PATCH v11 3/5] rtc: goldfish: use gf_ioread32()/gf_iowrite32()
+Date:   Thu, 20 Jan 2022 09:03:45 +0100
+Message-Id: <20220120080347.1595379-4-laurent@vivier.eu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220120080347.1595379-1-laurent@vivier.eu>
 References: <20220120080347.1595379-1-laurent@vivier.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:dJDSImD3kRyXEJdZ97I6Z1oPvkUw0A+R37WfUDA+HmbJZPkdRv6
- h3xLhhkYKYqikVzzyc5QQZEIWdDmgAKKUQ0UoJi4XHRwVjWCjqg4m9ypQhdGjfTA6zKZ9qr
- 9SYerVo07QzqYQ0fRsnRb0rtQv4T3HZIf2zpQrVlms8AQHG3sl3vS6PgYs8YjqeN2agcch1
- 3a304KWYcVg6juwIX7qYg==
+X-Provags-ID: V03:K1:PDlTvEErr5w6REUxeS4f2MUuaTmpsPqLy8NBpWsWLJ7HitgBOLP
+ j8hOIts9trIqV0mIBdQzPWMXhzv/1yO3Y9mBAjx7hTkUdXL9DzUhQdMbOJ5ljGLRom48J5E
+ FVzWOuy+dn16RlGPpr4JPQjA+J0w0GW0keR512UgAnzHa51ef0Ugrd0QX3S3cwPvCwYW19M
+ NeteAPzQotgVF2T/v+OKw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wVMKcL8y36M=:cGtbXVXjpWs96O1RFZ1Xrp
- 85st+Hag15JRWdUeOl9Xvh0ePhdMtRZRKUvMHy0FOqpqpyMey65YMZExJ3Z08L39SUx1a/Q1D
- DnHfBuwByGcQ0rXLQNEX/TvPp+h6wob7rVQ8p6ONlXHGDze0uk3Ck9UQY7aQfK3JFjCciwjN1
- 9uq1m+gOZLu44ljunalK5yCAt7RB8HIHFXD2mCqeaLUv67JX2BgXW5jqGdJklALcUVD2qO1lm
- SaUAAsA8v2+jgkmH6woRfoOhKxo2PT23Kqji0g4IlMwkWc6jV+eCH+7K6dGEYMMMyoDocI564
- p114i1hzTOkXhQe+Kmc6GWkExL+ibaZHTOCM6823cxYUcL6nrLbgk6Nlb+iwkCVhX639YnCqY
- y6K6nrulCLjVYiDbFEt9XmGAODUFxbajzhhclP5TWDrB9APEeV8kEPCscHvjgAHTJ8kxVoVRZ
- MMvwes5MRsX6cg3MEFPCJzVlY7et96h1gJluzRyqeIVZi0NDd7kGs3IhnwohulvMlTvhEW//Q
- gCyECfUamJhU2TaRumpWGQC3ZI/t+Wn09o5r9/AABT8nlZvonVPTr/D5i4jQZgjxQ3n3xY89q
- OIJ1MbTD2Q1hbKVy4oA7EsGk9p10vcLpbKcKon78PhrCYFXFAnzbW1fblOSs08KNifB1PF6Ev
- KXnKTTRFP0umEc8u7C+qscoN6C7q6PlAXBQNk6ACXuyn8I5ZpfcEFtSJlpP7tFcl6EHU=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IXTJ/PC8SO8=:hOtS4rQX09Ypm+WJJiDFVN
+ WmoA5tMLstWnfC/eAk9DwElhUKRlH/dQCTQ/52Imeuc5nhFNsytHZPTxzPM3CtFnAdL/xXTJh
+ 961yf4MbNZOffBoLzvuEzIwoS0G2C4g4H5bgaKE8HiKxDZYMThMKbNI2+YgADN5Fg5KLIeV2a
+ /7skmHjjiPaKKM2p5Eypj16zfIJQzIg3hWwflwJ4DyB2w7drLMUNtOyFeeHffazAasGJ8pAaL
+ 2B+rjVTqHPaS1BSk1vxRBLIO+XpWzZRI/ZlcKuLwek/gKSN3xFX5SIBWBeNLIQpGZvibF95ZA
+ +EJ2WBvaXKP95+s8jWvNfCBiXF3vIWNvD93mGs+ZzBXU3Dskf2Xd4CfTLARTJtp8dIryU5kAZ
+ +GAGxhqXZl0VMQmi4U+cOslIY84UATnP6cLoUj9Hq/hHwNAKfIbECv4zrybpHkKIvkhe9RTWG
+ yGEVQv3eZBTEPULat9GrsmCRpYVwBfQ5x15uxWdHOUQs7jWZg2lOLxkjlWAwMZMF8rClG3ZZq
+ Fk9fL9LUK7Y5BgASpcj9UP4QLWgFq07xHvvzY352FKNlufStP7tlPjlIWUNsIfNd2u9xVb5IV
+ Gplbq77+qOYuHhp04vqYWpRYzAARE/2YOHnA4YjDdWoICNorJojKxnK93+ZxLRS+eImFuu1lK
+ dcYd2G/DWm0oPd39FJlan23DxeO73D81+xRzU98wk3B+Sm/tsPWUeKyQG4GZZfbId9XQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Revert
-commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-
-to use accessors defined by the architecture.
-
-Define by default the accessor to be little-endian as we
-have only little-endian architectures using goldfish devices.
+replace readl()/writel() by gf_ioread32()/gf_iowrite32()
+as done for goldfish-tty.
 
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 ---
- drivers/tty/goldfish.c   | 20 ++++++++++----------
- include/linux/goldfish.h | 15 +++++++++++----
- 2 files changed, 21 insertions(+), 14 deletions(-)
+ drivers/rtc/rtc-goldfish.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
-index 5ed19a9857ad..10c13b93ed52 100644
---- a/drivers/tty/goldfish.c
-+++ b/drivers/tty/goldfish.c
-@@ -61,13 +61,13 @@ static void do_rw_io(struct goldfish_tty *qtty,
- 	spin_lock_irqsave(&qtty->lock, irq_flags);
- 	gf_write_ptr((void *)address, base + GOLDFISH_TTY_REG_DATA_PTR,
- 		     base + GOLDFISH_TTY_REG_DATA_PTR_HIGH);
--	__raw_writel(count, base + GOLDFISH_TTY_REG_DATA_LEN);
-+	gf_iowrite32(count, base + GOLDFISH_TTY_REG_DATA_LEN);
+diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
+index 7ab95d052644..a3a556f6a3e0 100644
+--- a/drivers/rtc/rtc-goldfish.c
++++ b/drivers/rtc/rtc-goldfish.c
+@@ -41,8 +41,8 @@ static int goldfish_rtc_read_alarm(struct device *dev,
+ 	rtcdrv = dev_get_drvdata(dev);
+ 	base = rtcdrv->base;
  
- 	if (is_write)
--		__raw_writel(GOLDFISH_TTY_CMD_WRITE_BUFFER,
-+		gf_iowrite32(GOLDFISH_TTY_CMD_WRITE_BUFFER,
- 		       base + GOLDFISH_TTY_REG_CMD);
+-	rtc_alarm_low = readl(base + TIMER_ALARM_LOW);
+-	rtc_alarm_high = readl(base + TIMER_ALARM_HIGH);
++	rtc_alarm_low = gf_ioread32(base + TIMER_ALARM_LOW);
++	rtc_alarm_high = gf_ioread32(base + TIMER_ALARM_HIGH);
+ 	rtc_alarm = (rtc_alarm_high << 32) | rtc_alarm_low;
+ 
+ 	do_div(rtc_alarm, NSEC_PER_SEC);
+@@ -50,7 +50,7 @@ static int goldfish_rtc_read_alarm(struct device *dev,
+ 
+ 	rtc_time64_to_tm(rtc_alarm, &alrm->time);
+ 
+-	if (readl(base + TIMER_ALARM_STATUS))
++	if (gf_ioread32(base + TIMER_ALARM_STATUS))
+ 		alrm->enabled = 1;
  	else
--		__raw_writel(GOLDFISH_TTY_CMD_READ_BUFFER,
-+		gf_iowrite32(GOLDFISH_TTY_CMD_READ_BUFFER,
- 		       base + GOLDFISH_TTY_REG_CMD);
+ 		alrm->enabled = 0;
+@@ -71,18 +71,18 @@ static int goldfish_rtc_set_alarm(struct device *dev,
  
- 	spin_unlock_irqrestore(&qtty->lock, irq_flags);
-@@ -142,7 +142,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
- 	unsigned char *buf;
- 	u32 count;
- 
--	count = __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-+	count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
- 	if (count == 0)
- 		return IRQ_NONE;
- 
-@@ -159,7 +159,7 @@ static int goldfish_tty_activate(struct tty_port *port, struct tty_struct *tty)
- {
- 	struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
- 									port);
--	__raw_writel(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-+	gf_iowrite32(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
- 	return 0;
- }
- 
-@@ -167,7 +167,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
- {
- 	struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
- 									port);
--	__raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-+	gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
- }
- 
- static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
-@@ -202,7 +202,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
- {
- 	struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
- 	void __iomem *base = qtty->base;
--	return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-+	return gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
- }
- 
- static void goldfish_tty_console_write(struct console *co, const char *b,
-@@ -355,7 +355,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
- 	 * on Ranchu emulator (qemu2) returns 1 here and
- 	 * driver will use physical addresses.
- 	 */
--	qtty->version = __raw_readl(base + GOLDFISH_TTY_REG_VERSION);
-+	qtty->version = gf_ioread32(base + GOLDFISH_TTY_REG_VERSION);
- 
- 	/*
- 	 * Goldfish TTY device on Ranchu emulator (qemu2)
-@@ -374,7 +374,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
- 		}
+ 	if (alrm->enabled) {
+ 		rtc_alarm64 = rtc_tm_to_time64(&alrm->time) * NSEC_PER_SEC;
+-		writel((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+-		writel(rtc_alarm64, base + TIMER_ALARM_LOW);
+-		writel(1, base + TIMER_IRQ_ENABLED);
++		gf_iowrite32((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
++		gf_iowrite32(rtc_alarm64, base + TIMER_ALARM_LOW);
++		gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+ 	} else {
+ 		/*
+ 		 * if this function was called with enabled=0
+ 		 * then it could mean that the application is
+ 		 * trying to cancel an ongoing alarm
+ 		 */
+-		rtc_status_reg = readl(base + TIMER_ALARM_STATUS);
++		rtc_status_reg = gf_ioread32(base + TIMER_ALARM_STATUS);
+ 		if (rtc_status_reg)
+-			writel(1, base + TIMER_CLEAR_ALARM);
++			gf_iowrite32(1, base + TIMER_CLEAR_ALARM);
  	}
  
--	__raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
-+	gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
+ 	return 0;
+@@ -98,9 +98,9 @@ static int goldfish_rtc_alarm_irq_enable(struct device *dev,
+ 	base = rtcdrv->base;
  
- 	ret = request_irq(irq, goldfish_tty_interrupt, IRQF_SHARED,
- 			  "goldfish_tty", qtty);
-@@ -436,7 +436,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
- #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
- static void gf_early_console_putchar(struct uart_port *port, int ch)
- {
--	__raw_writel(ch, port->membase);
-+	gf_iowrite32(ch, port->membase);
+ 	if (enabled)
+-		writel(1, base + TIMER_IRQ_ENABLED);
++		gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+ 	else
+-		writel(0, base + TIMER_IRQ_ENABLED);
++		gf_iowrite32(0, base + TIMER_IRQ_ENABLED);
+ 
+ 	return 0;
  }
+@@ -110,7 +110,7 @@ static irqreturn_t goldfish_rtc_interrupt(int irq, void *dev_id)
+ 	struct goldfish_rtc *rtcdrv = dev_id;
+ 	void __iomem *base = rtcdrv->base;
  
- static void gf_early_write(struct console *con, const char *s, unsigned int n)
-diff --git a/include/linux/goldfish.h b/include/linux/goldfish.h
-index 12be1601fd84..bcc17f95b906 100644
---- a/include/linux/goldfish.h
-+++ b/include/linux/goldfish.h
-@@ -8,14 +8,21 @@
+-	writel(1, base + TIMER_CLEAR_INTERRUPT);
++	gf_iowrite32(1, base + TIMER_CLEAR_INTERRUPT);
  
- /* Helpers for Goldfish virtual platform */
+ 	rtc_update_irq(rtcdrv->rtc, 1, RTC_IRQF | RTC_AF);
  
-+#ifndef gf_ioread32
-+#define gf_ioread32 ioread32
-+#endif
-+#ifndef gf_iowrite32
-+#define gf_iowrite32 iowrite32
-+#endif
-+
- static inline void gf_write_ptr(const void *ptr, void __iomem *portl,
- 				void __iomem *porth)
- {
- 	const unsigned long addr = (unsigned long)ptr;
+@@ -128,8 +128,8 @@ static int goldfish_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	rtcdrv = dev_get_drvdata(dev);
+ 	base = rtcdrv->base;
  
--	__raw_writel(lower_32_bits(addr), portl);
-+	gf_iowrite32(lower_32_bits(addr), portl);
- #ifdef CONFIG_64BIT
--	__raw_writel(upper_32_bits(addr), porth);
-+	gf_iowrite32(upper_32_bits(addr), porth);
- #endif
+-	time_low = readl(base + TIMER_TIME_LOW);
+-	time_high = readl(base + TIMER_TIME_HIGH);
++	time_low = gf_ioread32(base + TIMER_TIME_LOW);
++	time_high = gf_ioread32(base + TIMER_TIME_HIGH);
+ 	time = (time_high << 32) | time_low;
+ 
+ 	do_div(time, NSEC_PER_SEC);
+@@ -149,8 +149,8 @@ static int goldfish_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	base = rtcdrv->base;
+ 
+ 	now64 = rtc_tm_to_time64(tm) * NSEC_PER_SEC;
+-	writel((now64 >> 32), base + TIMER_TIME_HIGH);
+-	writel(now64, base + TIMER_TIME_LOW);
++	gf_iowrite32((now64 >> 32), base + TIMER_TIME_HIGH);
++	gf_iowrite32(now64, base + TIMER_TIME_LOW);
+ 
+ 	return 0;
  }
- 
-@@ -23,9 +30,9 @@ static inline void gf_write_dma_addr(const dma_addr_t addr,
- 				     void __iomem *portl,
- 				     void __iomem *porth)
- {
--	__raw_writel(lower_32_bits(addr), portl);
-+	gf_iowrite32(lower_32_bits(addr), portl);
- #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
--	__raw_writel(upper_32_bits(addr), porth);
-+	gf_iowrite32(upper_32_bits(addr), porth);
- #endif
- }
- 
 -- 
 2.34.1
 

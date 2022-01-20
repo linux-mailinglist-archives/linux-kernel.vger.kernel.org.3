@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC30494612
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB84494615
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358317AbiATDW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 22:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbiATDW1 (ORCPT
+        id S1358323AbiATDXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 22:23:25 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:48595 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232282AbiATDXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 22:22:27 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF006C061574;
-        Wed, 19 Jan 2022 19:22:26 -0800 (PST)
+        Wed, 19 Jan 2022 22:23:24 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfSVh745lz4y3V;
-        Thu, 20 Jan 2022 14:22:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfSWs6x8yz4xmx;
+        Thu, 20 Jan 2022 14:23:21 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642648945;
-        bh=OG0rkIcDCcesSdBh9lbVJxVgPqCl19hYHy5bCxOnPMA=;
+        s=201702; t=1642649002;
+        bh=x+ViRMIJACXLSqkJmJJjjNHld8f+oujYjCTwU+wJ7PQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Qe4Q3tmHkAQTqIUyYxfDh/yyMgVpWVncHb9KgNViMSC9GI86UXxq+FNana2LAxbOv
-         zRQFxlwHJjWpF5MHfJIQWtxIV44W+gusHE1ItHjwBzTpC0nnmtXpKLqeAea9zdqPQ5
-         yn5oLvzeLI98zp/yByEyOuSaR3gwJt26qNVMv4459lNJxMbqb22zMC0Bxjn8gK9S9A
-         Pu+MIat/qXTHSNkc4teNacMBfE0FdJdo9v0KnwBsOmMB8hsdGl5tprXwF7qVC3R5M3
-         SDeAiUSmN2l1auDGCJc9kcDhhVTwq0sg/+bu/07XRgjdAFHe2FVkJSoPoTtqnYmCB1
-         9dJQWgQptiN/A==
-Date:   Thu, 20 Jan 2022 14:22:20 +1100
+        b=FGlmeEjYCPz63o1gWPxK/jk+wBKLQ+rZW1+eLAhT4UY4p6HvwavwcfXz7h7MCt01a
+         I83hWe4jVah8mC68ISaiEEZcy4+n02oWqF/ris/XqhI8aTEIwUqthDwO4I2sDq2jzc
+         UfbA1QSUUzIrV0c2n72N1pPX5IeCyE5QomEhJg5IGEExvL7qIkw/cMvw0uFGNFidKH
+         3cHuiwsTc6QV9NqOv6K0SP68YXK9hMPnAQ+b3jPlNktuG0f8Hry6x3mo5oBEFKGRZP
+         KrRtrf4vMvcfaI+5aDqlqZ2Rx0UT+9VgmKTwm+Xc6BNlaYU53uPHNRwCD1A78ToBwZ
+         MTdqXzYCEWH3w==
+Date:   Thu, 20 Jan 2022 14:23:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        Oskar Senft <osk@google.com>,
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Colin Ian King <colin.king@canonical.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the arm-soc tree
-Message-ID: <20220120142220.1717e755@canb.auug.org.au>
-In-Reply-To: <CACPK8XfS+Gy1dhL-_uWKhW1D4++6LdWM-SdXtnsEV15OUhiK1w@mail.gmail.com>
-References: <20211026103939.136dc73b@canb.auug.org.au>
-        <CACPK8XfS+Gy1dhL-_uWKhW1D4++6LdWM-SdXtnsEV15OUhiK1w@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the gpio-sim tree
+Message-ID: <20220120142321.548cc57b@canb.auug.org.au>
+In-Reply-To: <20211027213437.2414fb46@canb.auug.org.au>
+References: <20211027213437.2414fb46@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LRD4QWe=n7Ka/Sy4NwaWNAa";
+Content-Type: multipart/signed; boundary="Sig_/ui9SAgWuY2OyFjf7OKWGIKR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LRD4QWe=n7Ka/Sy4NwaWNAa
+--Sig_/ui9SAgWuY2OyFjf7OKWGIKR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 26 Oct 2021 06:15:29 +0000 Joel Stanley <joel@jms.id.au> wrote:
->
-> On Mon, 25 Oct 2021 at 23:39, Stephen Rothwell <sfr@canb.auug.org.au> wro=
-te:
-> >
-> > After merging the arm-soc tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >
-> > Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing:2: WARNING: =
-Inline emphasis start-string without end-string.
-> >
-> > Introduced by commit
-> >
-> >   c6807970c3bc ("soc: aspeed: Add UART routing support")
-> >
-> > The problem is (probably) the '*'s on the previous line. =20
+On Wed, 27 Oct 2021 21:34:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
-> Chai-Wei, are you able to send a fix for this issue?
+> After merging the gpio-sim tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> Documentation/admin-guide/gpio/gpio-sim.rst: WARNING: document isn't incl=
+uded in any toctree
+>=20
+> Introduced by commit
+>=20
+>   b48f6b466e44 ("gpio: sim: new testing module")
 
 I am still getting this warning.
 
@@ -83,20 +71,20 @@ I am still getting this warning.
 Cheers,
 Stephen Rothwell
 
---Sig_/LRD4QWe=n7Ka/Sy4NwaWNAa
+--Sig_/ui9SAgWuY2OyFjf7OKWGIKR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHo1WwACgkQAVBC80lX
-0Gyo+Qf9GsCMMFNaGAWVW2bsYgR8ZJn6rkR+g55eeV2YT0L5WnAgIsvrxM+32IGW
-Sl/EdKjRRCaSLUL9SBRXZH/vkC+G/WkL1tMKe92YNop2gXHp6IhO9EAVU4a0ph/5
-WLD4J55BVScBQ8lFrH/36VlhtpfPMUUd3/f/QtAxgWDMIoNRwsvQA87pjaoBusxy
-2JMj5BfczOOFdDvAHTY6BpDnk9beIAiYv1cJ8hDyJKzsjBhDjF5lvUY58HPnMUVi
-+PqJvtgdexOrW/UnP//ywR8R7EaW5qdZ2QBucjZqWh3g3Evib06deosVYOUK6JHY
-yn1q7BNjGfgL6d0DQ+Ximxu+SVZY2g==
-=ehth
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHo1akACgkQAVBC80lX
+0GxGXAf/Vk0W0JLK0JDhU5o4HwHLLlWvBJQuGJKaHCuw9h7JWGJTqB9cbLiUr5Nc
+V2PN6us1xhZj8uHjRlMzfDX/bUIDgwEi0q9Gt7tkTnmzGDV4MvAiqSP5kfXLCC5h
+4FhoudH2+0r9XRsJGEweT4m0H/yz4t98nk9I579SPEx3Dj+kc0FX2HtcanYU4eM+
+Il64BhQasvL7SVr9uKTA0wdmRJb8vlCV/T+LLtikps7uqFfPaDo/wQVCkwNbGprD
+cq76dPKOLmFYQXzwUiGkwlSY5W9s+eBm5UQC7ahILfxisCD4A0cQHyF8xpuLDSfe
+q7k1exvrg1PHCD4fCOru4gz1w6x+gg==
+=1AzD
 -----END PGP SIGNATURE-----
 
---Sig_/LRD4QWe=n7Ka/Sy4NwaWNAa--
+--Sig_/ui9SAgWuY2OyFjf7OKWGIKR--

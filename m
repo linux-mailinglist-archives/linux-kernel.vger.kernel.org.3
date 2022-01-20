@@ -2,175 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299D04943FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DD4494408
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345020AbiATAG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S1357643AbiATALl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344841AbiATAG4 (ORCPT
+        with ESMTP id S1344778AbiATALj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:06:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB0C061574;
-        Wed, 19 Jan 2022 16:06:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF26D61456;
-        Thu, 20 Jan 2022 00:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD47C004E1;
-        Thu, 20 Jan 2022 00:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642637215;
-        bh=r4bINdjoOTnEU/UYxNN2T4b77oF6UWi884STkiJNMhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VrlMGGnvNIAwtjHyYDxmlQVpDYOsczv97GeteddoOdjqAro80WlhkzE4b3lRVNxoM
-         c4HXMJjtZWqBxSbK+k1ZqBgTaaYUXJAmx4/uhyyr6pN92//p3QIly3t0cX8vjHjZMd
-         L9SNnz5cDcaNzl9A7ZD0UC5UC1IaBLHzdZSdUxQs1OG4Ue52WfaQILP/00JKS+/GUf
-         Bq40dkTEwSqZUiIZU75owstSUs1RFxxZX+N9nAvmlErwnNKZmfUfcC0uQCbECOh71Y
-         v1z78h6gqDS1d7G5/9UfmM+X+dFBXp2KqrIClOz096U6imXl7CTA8HaRCPQWOfR7eM
-         EWVTmmbcKwTzA==
-Received: by pali.im (Postfix)
-        id 1EBC07DF; Thu, 20 Jan 2022 01:06:52 +0100 (CET)
-Date:   Thu, 20 Jan 2022 01:06:51 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings for
- marvell,armada-3700-uart-clock
-Message-ID: <20220120000651.in7s6nazif5qjkme@pali>
-References: <163425678347.1688384.10695189000353676651@swboyd.mtv.corp.google.com>
- <20211015090937.gnt66hgugrhwnkei@pali>
- <20211015093701.pfvkighxsndj4ujg@pali>
- <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com>
- <20211016064210.7ahqfqcvf66wtt66@pali>
- <20220115080213.0CCAFC36AE3@smtp.kernel.org>
- <20220115115018.he4hnnhlvrb6kann@pali>
- <20220115130509.4a240730@thinkpad>
- <20220115122618.plhiqnjh2755bv5h@pali>
- <20220119231655.EFFF3C004E1@smtp.kernel.org>
+        Wed, 19 Jan 2022 19:11:39 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39833C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:11:39 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so4224960pjp.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:11:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xVjyliV2Seqod5G5KIrqETEB6DdMnlj/gwwO0Ms37r0=;
+        b=m2Cq3pKgOPSZH8kQrR3RmS6xRkj5mu1noGfRe3JZhs8okQ1LqSuYyK//XFTZkx1aQs
+         yHUXZol3p03WVKjGCTEpbNIwX1Y17hojgjvIyt4T8a5US0T0fRGuh5XrTFE7N2jsmURt
+         d5YyE0CUQIeGJ0Q571BvcoBoXM5+SCFLLetkw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xVjyliV2Seqod5G5KIrqETEB6DdMnlj/gwwO0Ms37r0=;
+        b=Rt9o9rcQO5HDqEvyhzfTxUGIQyIb1ef5ePR4kZSHrGSYiqfH7YgFMI7H+NlKIQmaPa
+         JdJh/NGg2E85uiTnNJvX6Lsvklso1+9vnq5nUrA8G+oducfmg68NLF5C95xB/lyKpgTB
+         1GvTAzhhzAJiOlN7Dl+u8w/lzh8CoO+RBEaz6wnkLK/q5OkyB52WbhWqvc8KzU+jtp26
+         yde2e6xMt/w4Gk0/Q7Dp/le7u/B7q4dHHRTo3us4M2RWJ7qct4SPW6SMGLEIFuk2I+tW
+         3bqXdSlh9rkQpRRXxTPVywKAuMDgEc+294MFQKkihdSxAvEuMobZKMGjph0SHwpJ8PYE
+         GecA==
+X-Gm-Message-State: AOAM531mNRBlDTXC+iilC7Og+vQ330beh3Hem59iGgkOD2SwdDYfKw9R
+        r9ngIbs5jCigQDIEVcFQn76+SQ==
+X-Google-Smtp-Source: ABdhPJwLpxXuY7FO2TAuqYWaVf818ZHbHTTM8JXzcEhXz0whOElvDA2CBgU9tYGH1YmFEb+a9qtFGg==
+X-Received: by 2002:a17:902:7c89:b0:14a:a76f:78d2 with SMTP id y9-20020a1709027c8900b0014aa76f78d2mr21640702pll.166.1642637498672;
+        Wed, 19 Jan 2022 16:11:38 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:bebd:c462:321a:9b63])
+        by smtp.gmail.com with UTF8SMTPSA id j4sm804788pfc.125.2022.01.19.16.11.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jan 2022 16:11:37 -0800 (PST)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Mark Yao <markyao0591@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Brian Norris <briannorris@chromium.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] drm/rockchip: vop: Correct RK3399 VOP register fields
+Date:   Wed, 19 Jan 2022 16:11:22 -0800
+Message-Id: <20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid>
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220119231655.EFFF3C004E1@smtp.kernel.org>
-User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 19 January 2022 15:16:54 Stephen Boyd wrote:
-> Quoting Pali Rohár (2022-01-15 04:26:18)
-> > On Saturday 15 January 2022 13:05:09 Marek Behún wrote:
-> > > On Sat, 15 Jan 2022 12:50:18 +0100
-> > > Pali Rohár <pali@kernel.org> wrote:
-> > > 
-> > > > On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
-> > > > > Quoting Pali Rohár (2021-10-15 23:42:10)  
-> > > > > > 
-> > > > > > If I was designing this driver and DTS bindings I would have choose
-> > > > > > something like this:
-> > > > > > 
-> > > > > > uart@0x12000 {  
-> > > > > 
-> > > > > Drop the 0x
-> > > > >   
-> > > > > >     reg = <0x12000 0x18>, <0x12200 0x30>;
-> > > > > >     clock-controller {
-> > > > > >         ...
-> > > > > >     };  
-> > > > > 
-> > > > > Drop this node and put whatever properties are inside into the parent
-> > > > > node.
-> > > > >   
-> > > > > >     serial1 {
-> > > > > >         ...
-> > > > > >         status = "disabled";
-> > > > > >     };
-> > > > > >     serial2 {
-> > > > > >         ...
-> > > > > >         status = "disabled";
-> > > > > >     };
-> > > > > > };
-> > > > > > 
-> > > > > > Meaning that 0x12000 node would be 3 subnodes and all registers would be
-> > > > > > defined in top level nodes and would be handled by one driver.
-> > > > > > 
-> > > > > > This is really how hardware block looks like. But it is not backward
-> > > > > > compatible...  
-> > > > > 
-> > > > > Sounds good to me. I presume we need the serial child nodes so we can
-> > > > > reference them from the stdout-path?  
-> > > > 
-> > > > Yes, exactly, separate nodes for serial1 and serial2 are still required.
-> > > > 
-> > > > But dropping clock controller is not possible as for higher baudrates we
-> > > > need to use and configure uart clock controller. Without it we just get
-> > > > comparable feature support which is already present in driver.
-> > > 
-> > > What Stephen means is making clock controller out of the uart node
-> > > directly. No need to add separate subnode just for clock controller.
-> > 
-> > This is already implemented in v7 patch series. Clock controller is
-> > already outside of uart nodes.
-> 
-> I mean to combine the uart node and the clock-controller node together
-> 
-> 	uart-wrapper {
-> 		reg = <0x12000 0x18>, <0x12200 0x30>;
-> 		#clock-cells ...
-> 
-> 		serial1 {
-> 			...
-> 		};
-> 
-> 		serial2 {
-> 			...
-> 		};
-> 	};
+Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
+the rk3399_vop_big[] register windows, but it did so incorrectly.
 
-Ok, now I see what you mean.
+The biggest problem is in rk3288_win23_data[] vs.
+rk3368_win23_data[] .format field:
 
-But problem is that this is not backward compatible change. And would
-not work per existing DT bindings definitions, which defines how
-bootloader should set configured clocks.
+  RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
+  RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
 
-As I wrote in emails 3 months ago, this new "proposed" DTS definition is
-something which I would have chosen if I had designed this driver and
-bindings in past. But that did not happen and different approach is
-already widely in used.
+Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
+the TRM.
 
-To support existing DTS definitions and bootloaders, it is really
-required to have current structure backward compatible like it is
-defined in current DT bindings document. And my changes in this patch
-series are backward compatible.
+There are a few other small differences between the 3288 and 3368
+definitions that were swapped in commit 7707f7227f09. I reviewed them to
+the best of my ability according to the RK3399 TRM and fixed them up.
 
-To change DTS structure, it would be needed to provide uart nodes in DTS
-files two times: once in old style (the current one) and second time in
-this new style.
+This fixes IOMMU issues (and display errors) when testing with BG24
+color formats.
 
-But such thing would even more complicate updating driver and it needs
-to be implemented.
+Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
+I'd appreciate notes or testing from Andrzej, since I'm not sure how he
+tested his original AFBC work.
 
-Plus this would open a question how to define default stdout-path if
-there would be 4 serial nodes, where one pair would describe old style
-and second pair new style; meaning that 2 cross nodes would describe
-same define.
+ drivers/gpu/drm/rockchip/rockchip_vop_reg.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-For me this looks like a more complications and I do not see any benefit
-from it.
+diff --git a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
+index 1f7353f0684a..798b542e5916 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
++++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
+@@ -902,6 +902,7 @@ static const struct vop_win_phy rk3399_win01_data = {
+ 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
+ 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
+ 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
++	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
+ 	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
+ 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
+ 	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
+@@ -912,6 +913,7 @@ static const struct vop_win_phy rk3399_win01_data = {
+ 	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
+ 	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
+ 	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
++	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
+ };
+ 
+ /*
+@@ -922,11 +924,11 @@ static const struct vop_win_phy rk3399_win01_data = {
+ static const struct vop_win_data rk3399_vop_win_data[] = {
+ 	{ .base = 0x00, .phy = &rk3399_win01_data,
+ 	  .type = DRM_PLANE_TYPE_PRIMARY },
+-	{ .base = 0x40, .phy = &rk3288_win01_data,
++	{ .base = 0x40, .phy = &rk3368_win01_data,
+ 	  .type = DRM_PLANE_TYPE_OVERLAY },
+-	{ .base = 0x00, .phy = &rk3288_win23_data,
++	{ .base = 0x00, .phy = &rk3368_win23_data,
+ 	  .type = DRM_PLANE_TYPE_OVERLAY },
+-	{ .base = 0x50, .phy = &rk3288_win23_data,
++	{ .base = 0x50, .phy = &rk3368_win23_data,
+ 	  .type = DRM_PLANE_TYPE_CURSOR },
+ };
+ 
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-It is really important to break backward compatibility, just to try
-having new cleaner API at the cost of having more complications and
-requirement for more development and also important maintenance?

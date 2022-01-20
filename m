@@ -2,119 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D7049551B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5CA49552C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377499AbiATT6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 14:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S1377528AbiATUCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 15:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbiATT6v (ORCPT
+        with ESMTP id S1377519AbiATUB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 14:58:51 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707CDC061574;
-        Thu, 20 Jan 2022 11:58:51 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id s9so10458342oib.11;
-        Thu, 20 Jan 2022 11:58:51 -0800 (PST)
+        Thu, 20 Jan 2022 15:01:58 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99057C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:01:58 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id u130so2275767pfc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cMSYOOirRbmB4CuiP19pVfQ8SAEbMYedFbvRx1ugaeY=;
-        b=U09yDaEIseG7zVAOlncNJCApY+NkMrp25gGn2zZdkCYaf99GeWcO4TCTPnxMeda49k
-         N63nQQKGxUUyEPnTt3SDGtZsUfgZT6rbgcSCG5qYHFGEj0+GzkegXY+Mj/qy619j7LGW
-         horPght71ErI+GAKCSQ8EFmq8mJoIeKdgDsjNfmyMsL2DQzdQ+kRsAT9ClIk9PjBiTii
-         rJeszWPmZtwNSrlL+MWRDBK2+O9tRMTtuqcFNFfDfJouGBLtqa/vOdBmo+2DGXBLQFdP
-         Jkgpsjk5FNV0lhVnwEGXRyQpLxuE/vvBQxPyxMAQ5TODfTbrmuoczCRlZ9JlpRhrZtFw
-         sH5A==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TinsR6fwhbMn8mnFX1YE59uVnDN8ArT+vYrOu2Poyew=;
+        b=ZjLrcQEGPB04NxTW8f2C5j3T6ETKzqiv0H2LBpfT9SPGbhQTy8pUeaWxA+LqhCWBjh
+         GQxpBsa8eq5HEnqF+rOxMh6h8L76HVeYRGdP7R3h8XdDJAMC9oDiJOi4CwcHZ234EDiO
+         46MKayb5qnUAcZTpWf7nfhCf2bQA2OeyXoFlD1onxqzIvCmPuCMZoyU7FvRj/BOxNVXb
+         q3xluIKFUs6JJzopkpJDZmFNOf6HXQ6hIUY9ACx2sOJyVGQzSOTGY0rIsk10sDD3yBSL
+         AfO8r68v0QrLo5sJCtUG9ObailBZiaI62+lc+XoViYMyV5djv8ACAAOyFPzJK7IH+EsG
+         ExpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cMSYOOirRbmB4CuiP19pVfQ8SAEbMYedFbvRx1ugaeY=;
-        b=EDwPicFTgajLTtKuZjtvpVU4FmBv9UledgRmbSrdSzJnjaUnhi0AjLV334oB9qFjKq
-         NMVEYMb7TmyHnSWqSkH5HHxAd3PmFF9oV4uVhdNh574zbQ9QYPhTbbeYVCAeD1bBpxD1
-         7scpiRKNU4hRu5nWsEcwQySDSfhWi2C2/bmKnE6Uw7pFpNT30RVGnFZndqyIZMXvNWmB
-         q+3Lp3I7rMJzmGny/ufSxI9K2zOOR5GJXnQ/bZ1aH7pzDK++jEXh1j6GCKCCfXvD/4AT
-         8J1TIJw3+PMGvfaYW+UdzHZUJDFP7iepTDAqIQUsY8igKIvwN3AvZTFrNhkBxk7aZGWO
-         TTbQ==
-X-Gm-Message-State: AOAM530ZFbqeu5cvnixV3aVxxe0F9vhfV3VqWVrFCTJbq/OAUnqMwLeS
-        lpWgRfY/URD+LP6CJn72rac71ukc+zc=
-X-Google-Smtp-Source: ABdhPJzLiNl70STng0A+cOuw/BUoEcvsNlKo2E795+VlffZHR/tnYamuVO45GxiAEfJNQO8lF7Y8eA==
-X-Received: by 2002:a05:6808:10d5:: with SMTP id s21mr432377ois.49.1642708730435;
-        Thu, 20 Jan 2022 11:58:50 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3sm56077oou.48.2022.01.20.11.58.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 11:58:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: fsl-imx7ulp-wdt: Fix
- assigned-clock-parents
-To:     Rob Herring <robh@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220120172333.1628990-1-robh@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f1df742c-2f97-75d6-9fe2-4cc508dc9937@roeck-us.net>
-Date:   Thu, 20 Jan 2022 11:58:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=TinsR6fwhbMn8mnFX1YE59uVnDN8ArT+vYrOu2Poyew=;
+        b=L+Kw1l/ynnWlvsW4l8Le+DWGbZTwXS+CZR8u8wGqJxnatRkBxJGannojmmRvfCoixn
+         BL8JCqXuSBhDGWzm4DcWMkl1WAR1xi4ZZVvNI9hWo5g9ZFGIc3t3gl7FEqP56u60PJ42
+         rx5L+RtlFmzl/ux2q/Na+VJsC4D28OIc6sbHTBNQJbC9zwcbEp5+un2K1aiQDDlfBZCa
+         iR7t+RilOvmMQQFKQgewYOGMp3tRH8fJ6YoIHay/8ZKWQOAY+1UhvhQUTQKV7D5Uehia
+         Goa+hdblh9qYnkZEBwusH6sPrmr+5yI1eeVq5xjziID6i8pSGdEA3c3ZIXKn/g1MIUKT
+         SCJw==
+X-Gm-Message-State: AOAM5326ker+WSZzzRQzwe0bIyT/eK8BCHp+oNJ1Xg85P4+WqE+BZsWt
+        ZopupFXoAuGsOYX1nNNOm+z/jQ==
+X-Google-Smtp-Source: ABdhPJxBGzyGMNzupDgYFLIBpsDmpYwNhvD/X4HuX6a01w/mLd74reeYcK4cSwfdQnRitfb5IwWXLg==
+X-Received: by 2002:a63:774c:: with SMTP id s73mr280660pgc.473.1642708917266;
+        Thu, 20 Jan 2022 12:01:57 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id n26sm638089pgf.49.2022.01.20.12.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 12:01:56 -0800 (PST)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     peterz@infradead.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+Subject: [PATCH v2] sched/fair: Fix fault in reweight_entity
+Date:   Thu, 20 Jan 2022 12:01:39 -0800
+Message-Id: <20220120200139.118978-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20220120172333.1628990-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/22 9:23 AM, Rob Herring wrote:
-> The schema has a typo with 'assigned-clocks-parents'. As it is not
-> required to list assigned clocks in bindings, just drop the assigned-clocks
-> property definitions to fix this.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Syzbot found a GPF in reweight_entity(). This has been bisected to commit
+4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
+within a thread group that causes a null-ptr-deref in reweight_entity()
+in CFS. The scenario is that the main process spawns number of new
+threads, which then call setpriority(PRIO_PGRP, 0, prio), wait, and exit.
+For each of the new threads the copy_process() gets invoked, which adds
+the new task_struct to the group, and eventually calls sched_post_fork() for it.
 
-> ---
->   .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml     | 8 +-------
->   1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-> index fb603a20e396..4ca8a31359a5 100644
-> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-> @@ -29,12 +29,6 @@ properties:
->     clocks:
->       maxItems: 1
->   
-> -  assigned-clocks:
-> -    maxItems: 1
-> -
-> -  assigned-clocks-parents:
-> -    maxItems: 1
-> -
->     timeout-sec: true
->   
->   required:
-> @@ -56,7 +50,7 @@ examples:
->           interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
->           clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
->           assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
-> -        assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
-> +        assigned-clock-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
->           timeout-sec = <40>;
->       };
->   
-> 
+In the above scenario there is a possibility that setpriority(PRIO_PGRP)
+and set_one_prio() will be called for a thread in the group that is just
+being created by copy_process(), and for which the sched_post_fork() has
+not been executed yet. This will trigger a null pointer dereference in
+reweight_entity(), as it will try to access the run queue pointer, which
+hasn't been set. This results it a crash as shown below:
+
+KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
+CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 5.16.0-11201-gb42c5a161ea3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
+RIP: 0010:reweight_entity+0x15d/0x440
+RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
+Call Trace:
+<TASK>
+reweight_task+0xde/0x1c0
+set_load_weight+0x21c/0x2b0
+set_user_nice.part.0+0x2d1/0x519
+set_user_nice.cold+0x8/0xd
+set_one_prio+0x24f/0x263
+__do_sys_setpriority+0x2d3/0x640
+__x64_sys_setpriority+0x84/0x8b
+do_syscall_64+0x35/0xb0
+entry_SYSCALL_64_after_hwframe+0x44/0xae
+</TASK>
+---[ end trace 9dc80a9d378ed00a ]---
+
+Before the mentioned change the cfs_rq pointer for the task  has been
+set in sched_fork(), which is called much earlier in copy_process(),
+before the new task is added to the thread_group.
+Now it is done in the sched_post_fork(), which is called after that.
+
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Zhang Qiao <zhangqiao22@huawei.com>
+Cc: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
+Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+Changes in v2:
+- Added a check in set_user_nice(), and return from there if the task
+  is not fully setup instead of returning from reweight_entity()
+---
+ kernel/sched/core.c  |  4 ++++
+ kernel/sched/sched.h | 11 +++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 2e4ae00e52d1..c3e74b6d595b 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6897,6 +6897,10 @@ void set_user_nice(struct task_struct *p, long nice)
+ 
+ 	if (task_nice(p) == nice || nice < MIN_NICE || nice > MAX_NICE)
+ 		return;
++
++	/* Check if the task's schedule run queue is setup correctly */
++	if (!task_rq_ready(p))
++		return;
+ 	/*
+ 	 * We have to be careful, if called from sys_setpriority(),
+ 	 * the task might be in the middle of scheduling on another CPU.
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index de53be905739..464f629bff5a 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1394,6 +1394,12 @@ static inline struct cfs_rq *group_cfs_rq(struct sched_entity *grp)
+ 	return grp->my_q;
+ }
+ 
++/* returns true if cfs run queue is set for the task */
++static inline bool task_rq_ready(struct task_struct *p)
++{
++	return !!task_cfs_rq(p);
++}
++
+ #else
+ 
+ static inline struct task_struct *task_of(struct sched_entity *se)
+@@ -1419,6 +1425,11 @@ static inline struct cfs_rq *group_cfs_rq(struct sched_entity *grp)
+ {
+ 	return NULL;
+ }
++
++static inline bool task_rq_ready(struct task_struct *p)
++{
++	return true;
++}
+ #endif
+ 
+ extern void update_rq_clock(struct rq *rq);
+-- 
+2.34.1
 

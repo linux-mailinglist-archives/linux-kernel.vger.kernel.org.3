@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 742844952D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DC54952DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377212AbiATREX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347408AbiATREQ (ORCPT
+        id S1377214AbiATRG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:06:27 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47138 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243979AbiATRG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:04:16 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D5EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:04:16 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id 128so6125719pfe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:04:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=X+dlhCbZ1T5bEOv35DYnl7QCyW3kKdcFIjuIjbSmC1g=;
-        b=St3JnP6QUs2HRDevifufDbBMbF0cWX2WnRDleOvqov0iUtvDBmX+Fb1SteYzmz+sEq
-         /bFyQ7jeNbQIjcpNeMGkfGM0bMw2XgcMVKd5VQe47fXv2k+as7+Iok3mRNyMHYZaYPSj
-         uVECXjRj6XczcuM7iwuNuiLizJWgY4WEQ9SN+MfF+avoFFN0e0OuVJqN0jN6aDg8gcuv
-         ROIdN+/QWovhjXk9+7/90qv/SYD4IX3D3h1e3z3eqSr6Fi2t2gvYED6Fvjyss5+ngs24
-         KVK4/TdXAU1yQjYHFBFYiPCTb2Ocj08DKDYs9jKoEwIrFZBzsxA12ihbVFEQl0OhC96g
-         X2AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X+dlhCbZ1T5bEOv35DYnl7QCyW3kKdcFIjuIjbSmC1g=;
-        b=saXHvDYmZUgybhgPN8QTiVPIv2JoHvf8E/a6WKMAzo9Uhvcn/WZ7wK+fZJSwkeSIEt
-         dd8/eFL4UGAROxSbIHgxeupgnt4En9+unBJTYhEF3VbhERhXYbJFgjE8KgHj+pqgXjKb
-         qM3mOcL/C+sJs0qocj/zgEKwUKYLecX1QjsznXdJyrQ1TptS5doMciI7H8m2B66hZLpk
-         2uvts6A7IidTrJpiDT/h0BEwc5o9cbJs+qQXONdxYtaGx+rU6eptFBKPGbkW3oE0fF2w
-         s6JucSS3bHNI7PQh5eizVSc7bgvOqMOVzZWKm6kTFpHuZIcMRNjSANZSdl2krNLErfYv
-         8/7A==
-X-Gm-Message-State: AOAM533M0gGj6xqx5cjonUq9pVjW69RcWJQ2OABZkTIA/DXtbnSbsDGH
-        NyU4wtRowLIzj0E0Pt7vze9orw==
-X-Google-Smtp-Source: ABdhPJzFn3mYlfxXIvBSzOPt1u8pptmsUxahomIWS83zSxjIk1TcuWEgX+FYkyvyadwpq8zn9db2mQ==
-X-Received: by 2002:a63:f508:: with SMTP id w8mr17788070pgh.152.1642698255953;
-        Thu, 20 Jan 2022 09:04:15 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h14sm4366518pfh.95.2022.01.20.09.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:04:15 -0800 (PST)
-Date:   Thu, 20 Jan 2022 17:04:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Liam Merwick <liam.merwick@oracle.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH 6/9] KVM: SVM: WARN if KVM attempts emulation on #UD or
- #GP for SEV guests
-Message-ID: <YemWCwhQ8aYcqUw9@google.com>
-References: <20220120010719.711476-1-seanjc@google.com>
- <20220120010719.711476-7-seanjc@google.com>
- <483ed34e-3125-7efb-1178-22f02173667a@oracle.com>
+        Thu, 20 Jan 2022 12:06:26 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A705F21923;
+        Thu, 20 Jan 2022 17:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642698385; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cXz02UyD8cIbOQQZPbROB09tychDefhAh9aq7UM2Y7A=;
+        b=EM7y7490Ebku75fSgL/AyiRihLakefHh0s8/9SF/gILgFDQYiUf5WJzZl3sUnqKtNs23kA
+        w7O9oHwnHCrFYdPAhIvYLB7T8YYAFRbgkOYcna3jXG1sS3Ma+sdNi21Eh7MDYbVFMMxVDF
+        KyvbjBDikiKyAPcJ21lK0MtMRDLRsCk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642698385;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cXz02UyD8cIbOQQZPbROB09tychDefhAh9aq7UM2Y7A=;
+        b=8xS5qDSj7H5Tj8bs8AsZ7/rK9TyIAj0DqmSf7ysyom3C1Yyngixsf5aB9X66iVTz8MLy0S
+        f2KM6/oypCnlWgAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E7B513E8A;
+        Thu, 20 Jan 2022 17:06:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3lhEFpGW6WGSbAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 20 Jan 2022 17:06:25 +0000
+Message-ID: <56968b52-8629-2751-6a95-3bffa84a2326@suse.cz>
+Date:   Thu, 20 Jan 2022 18:06:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <483ed34e-3125-7efb-1178-22f02173667a@oracle.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 64/66] nommu: Remove uses of VMA linked list
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-65-Liam.Howlett@oracle.com>
+ <3709289f-fe78-3e7a-649a-a38fb1b3329e@suse.cz>
+ <YemFpinGspNII+hl@casper.infradead.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <YemFpinGspNII+hl@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022, Liam Merwick wrote:
-> On 20/01/2022 01:07, Sean Christopherson wrote:
-> > WARN if KVM attempts to emulate in response to #UD or #GP for SEV guests,
-> > i.e. if KVM intercepts #UD or #GP, as emulation on any fault except #NPF
-> > is impossible since KVM cannot read guest private memory to get the code
-> > stream, and the CPU's DecodeAssists feature only provides the instruction
-> > bytes on #NPF.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/x86/kvm/svm/svm.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index 994224ae2731..ed2ca875b84b 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -4267,6 +4267,9 @@ static bool svm_can_emulate_instruction(struct kvm_vcpu *vcpu, int emul_type,
-> >   	if (!sev_guest(vcpu->kvm))
-> >   		return true;
-> > +	/* #UD and #GP should never be intercepted for SEV guests. */
-> > +	WARN_ON_ONCE(emul_type & (EMULTYPE_TRAP_UD | EMULTYPE_VMWARE_GP));
+On 1/20/22 16:54, Matthew Wilcox wrote:
+> On Thu, Jan 20, 2022 at 04:06:21PM +0100, Vlastimil Babka wrote:
+>> On 12/1/21 15:30, Liam Howlett wrote:
+>> > From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+>> > 
+>> > Use the maple tree or VMA iterator instead.  This is faster and will
+>> > allow us to shrink the VMA.
+>> > 
+>> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>> 
+>> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>> 
+>> But I think some fixup needed:
+>> 
+>> > @@ -1456,12 +1458,14 @@ void exit_mmap(struct mm_struct *mm)
+>> >  
+>> >  	mm->total_vm = 0;
+>> >  
+>> > -	while ((vma = mm->mmap)) {
+>> > -		mm->mmap = vma->vm_next;
+>> > +	mmap_write_lock(mm);
+>> 
+>> If locking was missing, should have been added sooner than now?
 > 
-> What about EMULTYPE_TRAP_UD_FORCED?
+> I don't think so?  This is the exit_mmap() path, so we know nobody
+> has access to the mm.  We didn't need to hold the lock at this point
+> before, but now for_each_vma() will check we're holding the mmap_lock.
 
-Hmm, yeah, it's worth adding, there's no additional cost.  I was thinking it was
-a modifier to EMULTYPE_TRAP_UD, but it's a replacement specifically to bypass
-the EmulateOnUD check (which I should have remembered since I added the type...).
+It has crossed my mind that it is there to make asserts happy, in which case
+a clarifying comment would be useful.
+
+>> > +	for_each_vma(vmi, vma) {
+>> >  		delete_vma_from_mm(vma);
+>> >  		delete_vma(mm, vma);
+>> >  		cond_resched();
+>> >  	}
+>> > +	__mt_destroy(&mm->mm_mt);
+>> 
+>> And this at the point mm_mt was added?
+> 
+> You mean we should have been calling __mt_destroy() earlier in the
+> patch series?
+
+Yeah.
+
+> Umm ... I'll defer to Liam on that one.
+
+
+

@@ -2,198 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6943D4953DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 276F04953E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243692AbiATSEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:04:10 -0500
-Received: from mail-bn8nam12on2069.outbound.protection.outlook.com ([40.107.237.69]:38844
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236454AbiATSEI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:04:08 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WWDKmU7BLMEN07xvuuJv5SFwPP4Tzz6WTkRUghqCoQuDBXxDLUn5PM2fMfggsDoKGZTsIoKWdeLgpZzJFP9vOQcTKUWfJMI63Uq1ZJBLbPcZJ4t7A4Eyi24v65KgsZJgm9qkrFHq7B6EuhHcoFOxeFlXZaahJEC8fUaDvV9qjm8HCWme7CHopyk6B1hDHv3ieEvdA0FVr8cJFxqE3ioZH+G/J81BcMRatliTf+lvDr1oYkkKphvI7TrFBDUOL9sdXl1VQ7/7Nf1eL1DFdT75PKS2LBJ8M7SO2Xkg0j4VJMS6hDoxAWQCJTXZRhjZQ+DjvbTkuAaJ+AeJHUIa3Miq7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/uZC9Pr1+LVUe0GWybwRb74fGl+bY8gywyyqZ3nVZIw=;
- b=irnzKw4PsshumTaKl/HNclBON3fXVWbFf/HN1GdhGRveEeuusH1+s0OmUw8OuUGoFw7vaEi3G/f1Yur5aVJsN1y9iH279MsqlrWNBsEHwf8SAaQvi634mAayt7ClmZ5XYtXn/a7PdqoafQYViNkhVf3Or9XCrbcz9shUho/1/wxgyL8es1LsexrAP2dfHnq8RCsMAxrjgxGE3/MwTZYNdn0kdR5BeyCGfm+o6BU6udlFfT6qcJ1JVXB2YhoY64NOpz5xqX5mZtZrRTVXOlozVfG+UewS380IvKyRAdkm7hLQN/gFpScry8foonjz8IJJq3O+9/79i3LngruTrD5fdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/uZC9Pr1+LVUe0GWybwRb74fGl+bY8gywyyqZ3nVZIw=;
- b=sUpn6YIrP+bIMYHUY9mz8G1tSfX3QQx71yT8wgqA4AHB9vKsU2ESvPvbhovp8HD4neHlU4nLeOJhxbL17yDK087jFZuonf6zV1iVqMQ/EQgNpRcFkYmsODtUmvK87aRt63cmzOBiLvzNxxn9JiXmbiZLqNpBpnlGJ6F0PXPaIsM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by SA0PR12MB4447.namprd12.prod.outlook.com (2603:10b6:806:9b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Thu, 20 Jan
- 2022 18:04:06 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::971:531c:e4f4:8a9a]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::971:531c:e4f4:8a9a%7]) with mapi id 15.20.4909.011; Thu, 20 Jan 2022
- 18:04:06 +0000
-Subject: Re: [PATCH] drm/amdgpu: Fix double free in amdgpu_get_xgmi_hive
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        John Clements <john.clements@amd.com>,
-        Jonathan Kim <jonathan.kim@amd.com>,
-        Bernard Zhao <bernard@vivo.com>,
-        Kevin Wang <kevin1.wang@amd.com>,
-        shaoyunl <shaoyun.liu@amd.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220120101746.24847-1-linmq006@gmail.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Message-ID: <33f459af-7731-fb39-ec6f-059cf1a77bb4@amd.com>
-Date:   Thu, 20 Jan 2022 13:04:02 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20220120101746.24847-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: YT3PR01CA0050.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:82::24) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        id S238352AbiATSJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:09:57 -0500
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com ([66.163.189.89]:40038
+        "EHLO sonic306-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232336AbiATSJ4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 13:09:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1642702196; bh=RpKbOUBqPqoxbnyP6odJcyOj3qk0N00ED3xegLWnZdU=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=kzlgmVLO0lstwmpyT2DvzvHdrgO1/BfKW0uzJz+XN1UU7FI+X4MgA8YuMGccHFiaJMDWMovqK3ZVSKuS0KDIA6fd1tKUGMJFfgZTA5rUs47gvtI0GnqygHV09n2Yja5WBPw0Ax0aPNgUIKikRXBtCws0jOmhmfkHP46+Vl1TqaLk3onngCdJj1Yop+Q/kU4f0WXhj/PdLmwpPJSQggd07NpqYerxWQE0Gre3BmjmBkiz6XQH9LRGp4dnmz+4pBqeCBuBvrxySyaQW1SDPK12b4J8WwOFovsC8XGFm5Nkhv82Ro4f3hWFR6yzRbDPZMxyiW3QqojrpgLpL+K+4xsfmw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1642702196; bh=pdHftM5rh9oWaQ9zhW9zp8LXboWN3V+OqB2MJnDG4Vc=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=eq+Hq2/uZbYTVzyVG3dPDzfUba24sSY8kKCjpK99fOIbh1K7gdtorpm3zWE8J6MEvh6SQ0pON7Zzc/TRKC0sNoW0pZXzaqt73H/wdOa9id/Kd19xPO3Xb9NH8P+ww0Ps3AK9cgTqKQb7c9bi+tExdf7+myahrENCvFVglU+6o7RyGSihbklgChWpoXFeC7epVwpF6dqZDIfdceIRZ4sH02jPyVEothNU4dVABwzBLpx7PHU4rTrZ1Iz1SAYLWC+rl47rwBpYUWc41T8VP2YGf4Qi/+pRkAqk8T0dQSIeKpKuCMIej11TRpk9DhgcQBNJW1sD6DGn11SSIb8XYvDRpg==
+X-YMail-OSG: .0.4HVAVM1k5R_YvpAT_6BUd_UVfts7qd5yFtYtGqYIl2Hn.8iityHCDImbpenI
+ r5eTzVbiQZvgKHr2U0PBjZRBiYUJtZPSAISvxorNK0RDACugCWdoKV4AayTzFHs50mff1GTptLWA
+ 3PED95FRrxsxzhf.P.171kkn8Tekz.ev3OSD1LfI8cET1xsn8TK3cYgCYdHz4SSQZ7NJTEEb7R_1
+ LGO0f03lSUwPUbxVkninMsayZPXEjMdDdEsRYGcVaN0avp4J.4ViGLcnRO9j_eVL7DS7tldJ073g
+ sduryN8tT.GLtlUykwb3m2L854Hl4BwOutUqsgrAUgZTDWPZzxbmfzx6wnEmXU_Gee.IFdoVTSX9
+ 5Mjkw1X2BUlxd.2RNL60C.Me7T6zCNH5YNuakkQHyT5oReLggcIPlYD_KbAYshFxtMDmuen8zh3f
+ aVY6mlL7Rik0r5YJDwJUD4TYYw_vHY4OGZYJNcxJ26CUQiw3ab3YNcO6Z_Y2wK21XIZ.K.Q6_z.7
+ S3Alj2YiX3.uSd18QVGCxg.Y8ZNbWrUTQTdL6yHKQrpaApdNNhdmcH_edt.U_PqL.c0LQ_E1uwGV
+ 98779qtLaeOfG9up5514dok4Q.l6z.LeON59_F5.kb9Sr27hm81C652IyrAPhzvh6zW8EuSuB9vw
+ etoP7DmaEZKM.WhbolrYH9pTjBKvUVtm5CGztr9sNUtVlpSz4gljMmUl6hOMjPS26yqEWuXmHxkv
+ d2E0yo79ko0Cl8O5aZTfUFzWMEgAM4n0NW4a3TSDwQHb9bnoWYOVSTDagvZ98OBOTnWTbVHwetK6
+ JoZEY.25K7KV4XYUvCL6oT2875pQcPY9pXWaVsR042Amkl0WmHcPRV3Ptjtw8eJwx_rfm_MAARTP
+ YTDpB26jiqKFHOJEbxyQaFjOypv85dZHDqR_p5xJk5lWHyVuQPSCaIrRuj3V9KLpTefHqsHKFJtw
+ JqOUIOC3v63ls7Kzb_Tl2_8qP_gTmwFlRYK3C0cbKP9ssWjkurkOj9hP51DnvCGrCsMDQiNVBHv4
+ 5ODWUYLZcPV6v94uWzjGFo1zgPYPzGH0URbPcggqdhP17Ks72.NeTvnn6smDaAssheQDMsgbwJpr
+ kjXhKhuAZsIMW4jV0yljPkFCTnvgsP.5fqrmfuflN25fBc8hpmZzRDAFHxma9JjZVH20_5OLVRiP
+ qwIi.UPE810kK7NZl2PUjXEO9AOx3pm22W8p70O1Us9LfGv077jRtv_P4ZTJfxFjWRfwc1XPnbSY
+ PUxNjS4lQksT4yOkQkUQZSw5wr9vG9uhz9AGW3PfpRfMTvh1FAfTS3P8WvSjClExY9Gi2Dx_kLNk
+ bf2an1mH7nOgWpYa3hN3Po0GDi5JrOZExo0YCLl5gnVxxTlbiw7U8Jlx_DCwcVl2APoiNX9Ier3K
+ rnFGGFjC1f7Qf7ffCHW2WkML4.6U1LI.DJKNq.tsrC2BggmfQvysAsQyETSNQLiil4zye2ApJ530
+ lMcYV0fOX7xYt65ZzAqR3qpur.WF9lOkhQFdxQsw7BfRG2HQQv_SYHI16qsZnay.XqYH5Xx8tJ13
+ LWoxl7gTrUpy6P0hYYxybWWHaakpk8neyotpbfIPgPOP9T.8jLrh6LOGeIBu6UBs8di9KOfXSwr3
+ yRmwOmhBO.VcEZmxj6cb6uGzdZoBcubOzcmjlCeDgSe._.GzLIGlx7DOEeqMdeVrpY3oWPcrOvZm
+ 0Qwa2GoNioUBFOG0JEaX8qGhz74kv97nqNZ3KtuwqXSh6DndaqDwrzjTptcXOpDn0U2iZMkCNyQI
+ V4Nkp9NeEJpVf.yDfDZQoHxyDaNrmF5BdOfBt8JKeh0pY.z7U4TWPOpxLr5GNTJZWAoZyC.70.vj
+ 57oErWVMZFC4kdZNI24.Wwwt07a3j94MefBkz6LViQu.fpz5KMt.6yS2V.SB8OHcgkQnteIJYJ94
+ rZWz8zy._3kIT9h3EyUj7LaOlNyebvXuFoAgFIVsyJJ0g1h6z1OxRuXTf4.PBHMDMKtJ1SsEZU4k
+ dx1XDinH0PK7PdBTiKMBDaZGkJCmPFZJwyrKItEwxiO_BFoYTl0oQQkljWf_CQ39B6ou7K5znEDA
+ rxs7vaEGl1nC.Zu_eGkzpUlwQYPrEJT4Fl2VfIWsIjpwwEf2GjKuSMUESvEx1NPeesxkuFiiF3vJ
+ u2ZClwBiB3xrTr6pY.HLPKv2rOc8z1G9m_9znQVHI4bI9qFKkFm5ojhF6mib0ObpMURzRttRUNo7
+ ch8fa6LpF69RcC1HrdDEzWg5FEZy8pvBrdWVbtG.vmN5bBvklEFi0UtNLnQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Thu, 20 Jan 2022 18:09:56 +0000
+Received: by kubenode506.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID b5e679d038464819c66d7c1668eb00a6;
+          Thu, 20 Jan 2022 18:09:55 +0000 (UTC)
+Message-ID: <0c3b5f66-1550-3b67-c5a7-c452ff463b30@schaufler-ca.com>
+Date:   Thu, 20 Jan 2022 10:09:50 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 218490c2-5327-4371-0061-08d9dc3f3fae
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4447:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB444726504EBAFC5411AD923D925A9@SA0PR12MB4447.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OPrFL7yQQDpiW0VnHXjakhuLnD5zBczWYaI40W8lEzO/FtC4xWWW2xU++mrRyT9w3MVTf+19pvSMxiejL2JETsVDK/NiX5acfC7Z+DrK4kJ7i9EMxVZliIkiloSoiT4bfB4Yt9kjUJx1esdAoIBfFRO+Jii4Q+iGycBW0agWQOIGTS6Aq4socrcBNGzjLEC2/OMktMxgK5WLHx4CZvrBanIGcPAQOPRSMoS5IwQp0kfYJ68o2fnFfTix3MKJUlUOT+SdC+ggJq3hBhtAuXBlkVXhJZ33r4Lsa05yJhNCqJuk0RW3TYwjrULAb7vkWuuqeb3fchG7VKKSQJFggkMBGJCm+1FqeDhPA2fvFQGklr22pgKXbwkA0U/abnPso4xrD2HmTQx6M2N3jvuQlfzwyzZnQe8kIH/ON3dfLsGGozD4tGtnfYLCZkzSHyZZJmwpjg/rlvt/PsKw678lB71np5h0UYnsP56eFy/ZQV1IZzr4IMOx/67yX425movAxdAvbXv161W1JEhOM8jdgBmi+mIaU1z6mliJehYg4522RAkvuhVpmyUfypPZzGxh14yI9tGzyCDnn6d92aN732ilzD5t1ll7YLf9X84EVb/8vzwQIVyXT/emd7lql45OzC+OoiQDQ2xHHQ4vVl+15nk+Xo3AEQBLYktvP1l2GHrYFjO1iSDB4MbrqdNDZgDb1ZjtuaJiJzYjmjXRm51Q8TGwUnBssi2V52hJ7D8mqa8oNM3Ky1xPlcJHcfX091VpO0BEY8h642x5bR4VAt9prELy9A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(921005)(44832011)(8676002)(6512007)(508600001)(38100700002)(31696002)(2906002)(2616005)(86362001)(66556008)(6506007)(66476007)(66946007)(6486002)(186003)(6666004)(316002)(5660300002)(83380400001)(8936002)(36756003)(26005)(31686004)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDhWbnNjb0RLTmlSRmpwbDR5RDhQRGZrd3BQWm9wcTJ0S0dKdC9lQXY4bDM0?=
- =?utf-8?B?TWh1SURsOE9BTEtxKzltc0JKdS9QdllCNWxnTTFsZTgvdko3QjFudGZ1ODlR?=
- =?utf-8?B?cnF2d2I4ZDFKeG84QjFNS2UrNDA2bUY3NFRkUDhnekZIWVlSREhTWDl3WWlx?=
- =?utf-8?B?b1RGOEZjN09Mb25WVHdRZGdseTFTZFIzRFhMN0hVRW1LWCtSOTA5bXhvcXhS?=
- =?utf-8?B?aExmUzUyL1o5QzhpaStoMWYyVkIxVGpMLzFpRlBRMURaaE5iWmJOWDhiR2lD?=
- =?utf-8?B?UWwvQ0ZGWEg0NGtVTWg5Ujg5N2dRbXQzWDc3Umc0K1NMUmQxT3VRVlNjS0xB?=
- =?utf-8?B?VklPeVR0dFJOdWlQZ1AraDhuTXBmQ3NlNFplVXZsQzB2S3J3N0JEalNhUTRN?=
- =?utf-8?B?NU9ibkVqN0t2MDIvSHA3QUp2RzlwTldSZWlMTkFjNFZDMndlWWVrL2JaZXpi?=
- =?utf-8?B?dmFUZGRvUHdkby85QXZqK1dFeTg4N1R0cG9GV2pFM2F5YlYrVnFrRkRvVHFs?=
- =?utf-8?B?YXU3Z1RlZ0VoSWdhYmRpS3FOS3d0M0cyYm1XT1RFRXo3dCtOWktKUVNzMHRi?=
- =?utf-8?B?aytFUTJSbzhkL25kNW1URXJxNHE0MENVSkoyVmN0OTZ5TG5TUjFzZWMvWFZq?=
- =?utf-8?B?allXR2RUblZQTmNMaHNNUnVodmhiUjRMSCt6KzFFUTFIbVlVOFBJSmloM1Fw?=
- =?utf-8?B?NC9JZlk2T1pLbldoclptQ1VCZTZHVEo0RGNzbThqMkg4aDYvSW1VTWduUTht?=
- =?utf-8?B?N0cwQnNWbFR1dEkvekZOYlc2WWI5NHUrUG05ekdxS1hsL3VyQ0daM3k3MUNL?=
- =?utf-8?B?YTN0OXloZGpkeGpwMHhkcXZvcnZFOVR0M0VNYzVuYnkyUW9EM2J6bHUvSDMw?=
- =?utf-8?B?dk9OV0FjVEkxbG1tUjEveTBhZklncUpUV1F0QkNDRjAyNDdzRVhLNUZpYmQ1?=
- =?utf-8?B?M0F4TzMvL0JudzV1WDdWNEwwSFFsQjhQV2dETlNBN082LzVBUkEzVG1MT0ZO?=
- =?utf-8?B?Y3JON3BkUVdvY0VqZVNnR0xzaU4xNXVUTU1DTEZ4RU01TW1zc0JDYUpKSFNn?=
- =?utf-8?B?NXNORGV1U1ppemhDek16SWsySDRXYmRDT0h2NVU0WGE2SENCQU5vVUdLWEZZ?=
- =?utf-8?B?ZU13RDRQMTQ1WDVTb1RFc1hDSmNoVWlmVzFORzNkYWF0ayt3VnZuYTVXZ0h1?=
- =?utf-8?B?dDRlS0lMTlN0bnlMWnA2S3BRMERUbjVnVjRtRWRFV0M0Nm12TlhBSGQxMGlR?=
- =?utf-8?B?S0p5cnF0SUs0TytGTFRvcGRmR3RITVlMcmhNU0U5R2FRN0NPeVBPcisyZWlP?=
- =?utf-8?B?Vk9zaVhtanBLRGZQOGppd2VJdmIwRHh6bHlhTThpTGZvSFJBaStiYTJnT1ZR?=
- =?utf-8?B?cUhlckIvelJ5MnYzWmhJUExpOWtXT2pRcUtXdm1JRUIwOElTMTZzVWVEUmlm?=
- =?utf-8?B?K3drQmF2Rnp5MTd6aGgwMU9Wc04vakY4YkpQNkE4Mk13VjVZTVBkN3FWVEgy?=
- =?utf-8?B?OHdUeFlrU0VjdkJpOTVGTFlmWEIzc1ExbTRDd2xCU3ArSDNpZ29YVzVWampD?=
- =?utf-8?B?QmR5Mklyd3dnY1lGYnE1N1V3enNVZXFBajhER3Z3TEdyUHUra2MyU2FMazlv?=
- =?utf-8?B?dXYxMWJNdC9sdnluQlRFZFRieEdVOVNJZlJ5b1h2d3ZkQW5nODBjY29xWm1W?=
- =?utf-8?B?VU9Oc0VpaUhpWng5NmF1Q29IdEg4YTdEYmtaR3JseldLc003eGZ1MjRtNzNN?=
- =?utf-8?B?SHZ3a0ZsYWhJWVhnTFFsWWhuODd4UmpINGE2QWhsdVJsYWNnZW1IWWtDNHp3?=
- =?utf-8?B?STh2dlVpbnAxNXNjak14Z1RBanhadjM4SzRWWG8zVzFZTDN3MHlabUl6UWll?=
- =?utf-8?B?dVhRR1ZWU2xVckF1SjJ4VmJKZ2lJMkVBRlVUa3BML1pSempuY1A3ZVREbDlo?=
- =?utf-8?B?OVV5V3p5U2NOTlZxMXdtdkJDd1lEbjVBR3JTR1hYU0JrYzM2U3RRQ1NtMFNO?=
- =?utf-8?B?b3MwV3lmUW0vU0ZxVXNxenM0VWJOeHRvQjdMd3VVMzBoV05jQUNPV0t0bHR5?=
- =?utf-8?B?WVQrazFycDk0SlNZM3ViSjh6SHVLL012dW1keTQ3ay9CbDdKWjdtOXROU0Zy?=
- =?utf-8?B?WHFVWTNwUjl2WFdpUkRybEZUZ0M0UkpUaU40WVFOdmFuMTlpWVppb0tTWE9v?=
- =?utf-8?Q?LOzwc4riCXznJuqggUwfWo8=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 218490c2-5327-4371-0061-08d9dc3f3fae
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2022 18:04:06.2803
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6CQBGZ19zagKhpisUK30adlr2rA56lM+MWPiljHWRGe0wSO127g43Aggp2WODrl36njz7JPEHrpiJZEorc3DiA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4447
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v3 0/2] Add capabilities file to sysfs
+Content-Language: en-US
+To:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org,
+        Serge Hallyn <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220120180116.167702-1-flaniel@linux.microsoft.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220120180116.167702-1-flaniel@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.19615 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-01-20 um 5:17 a.m. schrieb Miaoqian Lin:
-> Callback function amdgpu_xgmi_hive_release() in kobject_put()
-> calls kfree(hive), So we don't need call kfree(hive) again.
+On 1/20/2022 10:01 AM, Francis Laniel wrote:
+> Hi.
 >
-> Fixes: 7b833d680481 ("drm/amd/amdgpu: fix potential memleak")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>
+> First, I hope you are fine and the same for your relatives.
+>
+> Capabilities are used to check if a thread has the right to perform a given
+> action [1].
+> For example, a thread with CAP_BPF set can use the bpf() syscall.
+>
+> Capabilities are used in the container world.
+> In terms of code, several projects related to container maintain code where the
+> capabilities are written alike include/uapi/linux/capability.h [2][3][4][5].
+> For these projects, their codebase should be updated when a new capability is
+> added to the kernel.
+> Some other projects rely on <sys/capability.h> [6].
+> In this case, this header file should reflect the capabilities offered by the
+> kernel.
+>
+> So, in this series, I added a new file to sysfs:
+> /sys/kernel/security/capabilities.
+> The goal of this file is to be used by "container world" software to know kernel
+> capabilities at run time instead of compile time.
+>
+> The "file" is read-only and its content is the capability number associated with
+> the capability name:
+> root@vm-amd64:~# cat /sys/kernel/security/capabilities
+> 0       CAP_CHOWN
+> 1       CAP_DAC_OVERRIDE
+> ...
+> 40      CAP_CHECKPOINT_RESTORE
+>
+> The kernel already exposes the last capability number under:
+> /proc/sys/kernel/cap_last_cap
+> So, I think there should not be any issue exposing all the capabilities it
+> offers.
+> If there is any, please share it as I do not want to introduce issue with this
+> series.
+>
+> Also, if you see any way to improve this series please share it as it would
+> increase this contribution quality.
+>
+> Change since v2:
+> * Use a char * for cap_string instead of an array, each line of this char *
+> contains the capability number and its name.
+> * Move the file under /sys/kernel/security instead of /sys/kernel.
+>
+> Francis Laniel (2):
+>    capability: Add cap_string.
+>    security/inode.c: Add capabilities file.
+>
+>   include/uapi/linux/capability.h |  1 +
+>   kernel/capability.c             | 45 +++++++++++++++++++++++++++++++++
+>   security/inode.c                | 16 ++++++++++++
+>   3 files changed, 62 insertions(+)
 
-The patch is
+For the series:
 
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Acked-by: Casey Schaufler <casey@schaufler-ca.com>
 
-This kobject_init_and_add error handling semantics is very unintuitive,
-and we keep stumbling over it. I wonder is there is a better way to
-handle this. Basically, this is what it looks like, when done correctly:
-
-    foo = kzalloc(sizeof(*foo), GFP_KERNEL);
-    if (!foo)
-    	return -ENOMEM;
-    r = kobject_init_and_add(&foo->kobj, &foo_type, &parent, "foo_name");
-    if (r) {
-    	/* OK, initialization failed, but I still need to
-    	 * clean up manually as if the call had succeeded.
-    	 */
-    	kobject_put(&foo->kobj);
-    	/* Don't kfree foo, because that's already done by
-    	 * a callback setup by the call that failed above.
-    	 */
-    	return r;
-    }
-
-Given that unintuitive behaviour, I'd argue that kobject_init_and_add
-fails as an abstraction. Code would be clearer, more intuitive and safer
-by calling kobject_init and kobject_add separately itself.
-kobject_init_and_add saves you typing exactly one line of code, and it's
-just not worth it:
-
-    foo = kzalloc(sizeof(*foo), GFP_KERNEL);
-    if (!foo)
-    	return -ENOMEM;
-    kobject_init(&foo->kobj, &foo_type); /* never fails */
-    r = kobject_add(&foo->kobj, &parent, "foo_name");
-    if (r) {
-    	/* since kobj_init succeeded, it's obvious that kobj_put
-    	 * is the right thing to do to handle all the cleanup.
-    	 */
-    	kobject_put(&foo->kobj);
-    	return r;
-    }
-
-Regards,
-  Felix
-
+>
+>
+> Best regards and thank you in advance for your reviews.
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> index e8b8f28c2f72..35d4b966ef2c 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> @@ -393,7 +393,6 @@ struct amdgpu_hive_info *amdgpu_get_xgmi_hive(struct amdgpu_device *adev)
->  	if (ret) {
->  		dev_err(adev->dev, "XGMI: failed initializing kobject for xgmi hive\n");
->  		kobject_put(&hive->kobj);
-> -		kfree(hive);
->  		hive = NULL;
->  		goto pro_end;
->  	}
+> [1] man capabilities
+> [2] https://github.com/containerd/containerd/blob/1a078e6893d07fec10a4940a5664fab21d6f7d1e/pkg/cap/cap_linux.go#L135
+> [3] https://github.com/moby/moby/commit/485cf38d48e7111b3d1f584d5e9eab46a902aabc#diff-2e04625b209932e74c617de96682ed72fbd1bb0d0cb9fb7c709cf47a86b6f9c1
+> moby relies on containerd code.
+> [4] https://github.com/syndtr/gocapability/blob/42c35b4376354fd554efc7ad35e0b7f94e3a0ffb/capability/enum.go#L47
+> [5] https://github.com/opencontainers/runc/blob/00f56786bb220b55b41748231880ba0e6380519a/libcontainer/capabilities/capabilities.go#L12
+> runc relies on syndtr package.
+> [6] https://github.com/containers/crun/blob/fafb556f09e6ffd4690c452ff51856b880c089f1/src/libcrun/linux.c#L35

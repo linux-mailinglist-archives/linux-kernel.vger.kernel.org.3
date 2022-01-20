@@ -2,140 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 019B8495460
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D047495467
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346689AbiATSqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:46:44 -0500
-Received: from mail-4018.proton.ch ([185.70.40.18]:64371 "EHLO
-        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346596AbiATSqj (ORCPT
+        id S1358258AbiATSti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233196AbiATSth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:46:39 -0500
-Date:   Thu, 20 Jan 2022 18:46:28 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1642704395;
-        bh=BrSJa8CL9j+/2ci4r4jMebkxbmilq3QtxhBgHxAwDCA=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
-        b=kce+ma+VdvppR7D7YbXIygpTBXhTec3QFSSUCG0OfJppIwCvXZxShbo0UhIKyMZ/D
-         TCcjS+5IBkoc6wpMH1nbA5qIRi8qIKTQAG5b2QSpOGEblYO3pVI3+0ik+GVJ1XN7Pp
-         uvSw3/nNqIaoJ8AyAnG6HHli1pqU8nAAjBqmHxjQ=
-To:     caleb@connolly.tech, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: [PATCH] arm64: dts: qcom: sdm845-oneplus-*: add fuel gauge
-Message-ID: <20220120184546.499030-1-caleb@connolly.tech>
+        Thu, 20 Jan 2022 13:49:37 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4792EC06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:49:37 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so15901247wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:49:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=PjKjTy7eKMFmfv+qinocmQZR2jNJN1JZ8w0q2u47Vn0=;
+        b=paUwrbhZpOFOr2xyR2soJ0kAo/nNbfubVkLwUSz83Sz4q100u/2m+ldwyqhvP4+ibh
+         LJoQv0pBDZkkBmEmGsTXanXgsY+pbr6Om76/tzDmzfEm+K9YhcvY/MNq/9r77Wq6PE84
+         hDH5fDVjTO2RdutpFbmeFsHefNlQ4X2AqM/DU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=PjKjTy7eKMFmfv+qinocmQZR2jNJN1JZ8w0q2u47Vn0=;
+        b=ukY9TgQeqM99ItMUSSZ8rwLdQbmv7wdr+uTvhb5t20/2wdPIt6uBX4ooDeIr0rhYYu
+         Ryf7PHfIM4DkUV23pX2+Vm8gjocltU1c1qh9jOj6j1p62Y2/sIk53z6klkePhKmhUXA8
+         jnMi936pNCrRrUAkvIs2mYEwR2m7WHGD6llzhz7F2z5CKkQWYV76/F40nneLO4PvsU8j
+         vHMzgV9NjkvIWMxwZ6gi4b5AKJP67VaXZYX9bph7DSuZVZEUDynpXM3BEnuIK2LJ41ih
+         DMxp7DgeMDN6dVA+6M1ajB8T4yMvcuIeQSMkhR4bxBW4iGBtTKxMKkWAePO3Flngxme3
+         LbkA==
+X-Gm-Message-State: AOAM533hEqER+Ipn5euj7wWXBA3m8FWIfWBNaEznkJ4WjkdfWR/s9l1p
+        /IJ8GhSSA6iJhju7qaIropdTLYyfoZdu2g==
+X-Google-Smtp-Source: ABdhPJy/33XhjLc483J2fGdR8q8hYcr38yxjUVZuY1FCf5UdwYkL+OsJLlJHmPsW6ujinOgXviu0Gw==
+X-Received: by 2002:a5d:47ad:: with SMTP id 13mr358168wrb.545.1642704575807;
+        Thu, 20 Jan 2022 10:49:35 -0800 (PST)
+Received: from cloudflare.com ([2a01:110f:4809:d800::e00])
+        by smtp.gmail.com with ESMTPSA id p8sm3781641wre.72.2022.01.20.10.49.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 10:49:35 -0800 (PST)
+References: <20220119014005.1209-1-zhudi2@huawei.com>
+User-agent: mu4e 1.1.0; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Di Zhu <zhudi2@huawei.com>
+Cc:     andrii.nakryiko@gmail.com, ast@kernel.org, davem@davemloft.net,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luzhihao@huawei.com,
+        rose.chen@huawei.com
+Subject: Re: [PATCH bpf-next v6 1/2] bpf: support BPF_PROG_QUERY for progs
+ attached to sockmap
+In-reply-to: <20220119014005.1209-1-zhudi2@huawei.com>
+Date:   Thu, 20 Jan 2022 19:49:34 +0100
+Message-ID: <87wniunsxt.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OnePlus 6 and 6T feature a BQ27411 fuel gauge for reading the
-battery stats. Enable it and add a simple battery to document the
-battery specs of each device.
+On Wed, Jan 19, 2022 at 02:40 AM CET, Di Zhu wrote:
+> Right now there is no way to query whether BPF programs are
+> attached to a sockmap or not.
+>
+> we can use the standard interface in libbpf to query, such as:
+> bpf_prog_query(mapFd, BPF_SK_SKB_STREAM_PARSER, 0, NULL, ...);
+> the mapFd is the fd of sockmap.
+>
+> Signed-off-by: Di Zhu <zhudi2@huawei.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> ---
 
-Signed-off-by: Caleb Connolly <caleb@connolly.tech>
----
- arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi  | 11 +++++++++++
- .../arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts | 12 ++++++++++++
- arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts   | 12 ++++++++++++
- 3 files changed, 35 insertions(+)
+Thanks for adding the annotation.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm=
-64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-index 7f42e5315ecb..08deca53f0b2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-@@ -376,6 +376,17 @@ zap-shader {
- =09};
- };
-
-+&i2c10 {
-+=09status =3D "okay";
-+=09clock-frequency =3D <100000>;
-+
-+=09bq27441_fg: bq27441-battery@55 {
-+=09=09compatible =3D "ti,bq27411";
-+=09=09status =3D "okay";
-+=09=09reg =3D <0x55>;
-+=09};
-+};
-+
- &i2c12 {
- =09status =3D "okay";
- =09clock-frequency =3D <400000>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts b/arch/a=
-rm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-index 5936b47dee5f..bf2cf92e8976 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-@@ -13,6 +13,14 @@ / {
- =09chassis-type =3D "handset";
- =09qcom,msm-id =3D <0x141 0x20001>;
- =09qcom,board-id =3D <8 0 17819 22>;
-+
-+=09battery: battery {
-+=09=09compatible =3D "simple-battery";
-+
-+=09=09charge-full-design-microamp-hours =3D <3300000>;
-+=09=09voltage-min-design-microvolt =3D <3400000>;
-+=09=09voltage-max-design-microvolt =3D <4400000>;
-+=09};
- };
-
- &display_panel {
-@@ -20,3 +28,7 @@ &display_panel {
-
- =09compatible =3D "samsung,sofef00";
- };
-+
-+&bq27441_fg {
-+=09monitored-battery =3D <&battery>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts b/arch/arm6=
-4/boot/dts/qcom/sdm845-oneplus-fajita.dts
-index 78a0b99144e6..1b6b5bf368df 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts
-@@ -13,6 +13,14 @@ / {
- =09chassis-type =3D "handset";
- =09qcom,msm-id =3D <0x141 0x20001>;
- =09qcom,board-id =3D <8 0 18801 41>;
-+
-+=09battery: battery {
-+=09=09compatible =3D "simple-battery";
-+
-+=09=09charge-full-design-microamp-hours =3D <3700000>;
-+=09=09voltage-min-design-microvolt =3D <3400000>;
-+=09=09voltage-max-design-microvolt =3D <4400000>;
-+=09};
- };
-
- &display_panel {
-@@ -21,6 +29,10 @@ &display_panel {
- =09compatible =3D "samsung,s6e3fc2x01";
- };
-
-+&bq27441_fg {
-+=09monitored-battery =3D <&battery>;
-+};
-+
- &rmi4_f12 {
- =09touchscreen-y-mm =3D <148>;
- };
---
-2.34.1
-
-
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>

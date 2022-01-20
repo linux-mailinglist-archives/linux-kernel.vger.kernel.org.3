@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEE8494C00
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E289494BFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376370AbiATKos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S1376364AbiATKnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiATKoq (ORCPT
+        with ESMTP id S243288AbiATKnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:44:46 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8400CC061574;
-        Thu, 20 Jan 2022 02:44:46 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id m4so26689010edb.10;
-        Thu, 20 Jan 2022 02:44:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EAldbO0fY6c4Z69F0zgy5Tqy+hJZ7FajNYzfcG8lzu8=;
-        b=lwbSqh4SLeikP8AenBAz+mJgucOMFhn6+qi40XJf/wKYVo2zz5ZAGvwqwdxvEojzAI
-         JgGkDlMK2QWP3O7fS6JLFVaM0QANG9+1PWJpwn1qDddLR6nbUUSzkVgpp54aL6uqsXgT
-         nKJiiLtDKSTFsVaTdLH4ggrsAdzlfvEMhgS+euHv6FuknqniCl9JaTPwwnHBBNVMJtzO
-         ls6mDoNdCFQefk9og1DtSfY5FF6RQaYeY4TNw1S9BeTTer6+QvdoX3qcyMziU/+zyMs9
-         03qv9y4jIaCOpa0luwW12ltRwgncoale+jJfOIgz0ePs1J86ShFDttgm7KaRLJPiH7LS
-         Dc0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EAldbO0fY6c4Z69F0zgy5Tqy+hJZ7FajNYzfcG8lzu8=;
-        b=W9rtgQtnXq1S6WScgFko0mwYDAUlIr1p0AITQnpZ26r78LaGAz+QV5MI/THv+e+x1t
-         9gk7CLwOc30Q+CLsJO7kLn916b6tMFgaSOUbGAOBSBmlkOZc5M2V4wQy5nC/06nnJBfd
-         30h3SmRBQZAt15zCI6zkXRxAh4muyDvQutqCmgAcTJK6nKskSDnu04Qs+N2YEIQFm7p/
-         B0gC1tewb+DOt5KE7ELw/H4DNoPA/jpvmEEWXPMeaLM5KqwQVxV9xzhIvV4J2fEj3fjY
-         I63gvIHQ78ugrvpyVRMwZ7T7GDBsMoqjiFB2H3TkNhEbsJ1yexsKp1Lu6nZeitGon8SL
-         tQBw==
-X-Gm-Message-State: AOAM531vBI/M5nL4skWWICKIJlkjmdfQDKDyLA3Y+4OeAg9TChrlK0kL
-        bH6p9bryYjCm/Jo3taJ5PAqZC6yowvjVr+/3IU0=
-X-Google-Smtp-Source: ABdhPJzI915PPwkfPJEnAuUAqB1eSmCNb6jxmD2FIagRHCy+t6lJFz807DF7d7pczoMfl+Hj+9jS8/Fr5ibapsuYB8A=
-X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr20301107edc.29.1642675485050;
- Thu, 20 Jan 2022 02:44:45 -0800 (PST)
-MIME-Version: 1.0
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
- <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
- <DM5PR12MB18509C555A8A6F5891F0CC28C05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
- <CAHp75VfVJo=8FPX_Pw15X5B3awFXpuEq+=LryxB6M4Ub-YJ7uA@mail.gmail.com> <DM5PR12MB185098D36F665AC5702D47DDC05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
-In-Reply-To: <DM5PR12MB185098D36F665AC5702D47DDC05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 12:43:02 +0200
-Message-ID: <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of of_*()
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
+        Thu, 20 Jan 2022 05:43:41 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0E6C061574;
+        Thu, 20 Jan 2022 02:43:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RUxAMIPHh8EnpD7PkzX4ApuOdrcdTPZnoa+y0am0Ul0=; b=E5o6FGrXSZ1r9rnEjy8o+ycLlk
+        FAE77GFFmK1xFTUF8V3yI/pRFm9u8ipxwYnGaGMbTSS4vvJbTofWtLgpOv0Xg/uzwmw1yC9KEACRA
+        4We19fE6P33qJcUSpx0jzDb4FYIpO8t1uNWiwvLFWmaJtGSYQRzv1yb8iTpvenavYLHNisQuiQPhy
+        enPckymC/F4GPe1oBe39u2M54k4nAGBJBnN8k/TUBETZttv8W5a95qjZlF69MDS/qGyw3+7JYstY0
+        kVf3lKkPkxzlmUAXQJCvq5QATbtZDqMLPTloG5X5lcH3SAxA5X7d+QFKZXYrxr/S0QqTiXyvI7WsP
+        xgVGvoeg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAUul-00E9Vb-L1; Thu, 20 Jan 2022 10:43:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1045F3002F1;
+        Thu, 20 Jan 2022 11:43:33 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E320C2C4BFBCC; Thu, 20 Jan 2022 11:43:32 +0100 (CET)
+Date:   Thu, 20 Jan 2022 11:43:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mel Gorman <mgorman@suse.de>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Subject: Re: [PATCH] mm/mmzone.c: fix page_cpupid_xchg_last() to READ_ONCE()
+ the page flags
+Message-ID: <Yek81DNvQAXMxHwB@hirez.programming.kicks-ass.net>
+References: <20220118230539.323058-1-pcc@google.com>
+ <Yefh00fKOIPj+kYC@hirez.programming.kicks-ass.net>
+ <CAMn1gO5n6GofyRv6dvpEe0xRekRx=wneQzwP-n=9Qj6Pez6eEg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMn1gO5n6GofyRv6dvpEe0xRekRx=wneQzwP-n=9Qj6Pez6eEg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 12:29 PM Akhil R <akhilrajeev@nvidia.com> wrote:
->
-> > ...
+On Wed, Jan 19, 2022 at 03:28:32PM -0800, Peter Collingbourne wrote:
+> On Wed, Jan 19, 2022 at 2:03 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > > > This change reveals potential issue:
-> > > >
-> > > > > -               irq = of_irq_get_byname(adapter->dev.of_node, "smbus_alert");
-> > > > > +               irq = device_irq_get_byname(adapter->dev.parent,
-> > "smbus_alert");
-> > > >
-> > > > >                 if (irq <= 0)
-> > > >
-> > > > I guess this '= 0' part should be fixed first.
-> > >
-> > > '0' is a failure as per the documentation of of_irq_get_byname() as well as
-> > > of_irq_get(). The case is different for acpi_irq_get(), but it is handled in
-> > > fwnode_irq_get(). If I understood it right, a return value of '0' should be
-> > > considered a failure here.
+> > On Tue, Jan 18, 2022 at 03:05:39PM -0800, Peter Collingbourne wrote:
+> > > After submitting a patch with a compare-exchange loop similar to this
+> > > one to set the KASAN tag in the page flags, Andrey Konovalov pointed
+> > > out that we should be using READ_ONCE() to read the page flags. Fix
+> > > it here.
 > >
-> > Depends. I have no idea what the original code does here. But
-> > returning an error or 0 from this function seems confusing to me.
+> > What does it actually fix? If it manages to split the read and read
+> > garbage the cmpxchg will fail and we go another round, no harm done.
+> 
+> What I wasn't sure about was whether the compiler would be allowed to
+> break this code by hoisting the read of page->flags out of the loop
+> (because nothing in the loop actually writes to page->flags aside from
+> the compare-exchange, and if that succeeds we're *leaving* the loop).
+
+The cmpxchg is a barrier() and as such I don't think it's allowed to
+hoist anything out of the loop. Except perhaps since it's do-while, it
+could try and unroll the first iteration and wreck that something
+fierce.
+
+The bigger problem is I think that page_cpuid_last() usage which does a
+second load of page->flags, and given sufficient races that could
+actually load a different value and then things would be screwy. But
+that's not actually fixed.
+
+> > > Signed-off-by: Peter Collingbourne <pcc@google.com>
+> > > Link: https://linux-review.googlesource.com/id/I2e1f5b5b080ac9c4e0eb7f98768dba6fd7821693
 > >
-> The description in of_irq_get*() says -
-> /* Return: Linux IRQ number on success, or 0 on the IRQ mapping failure, or
->  * -EPROBE_DEFER if the IRQ domain is not yet created, or error code in case
->  * of any other failure.
->  */
-> As I see from the code of fwnode_irq_get(), which is used in this case, returns
-> either the return value of of_irq_get() or error code from acpi_irq_get() when
-> it fails, or res.start if it didn't fail. I guess, any of these would not be 0 unless
-> there is an error.
+> > That's that doing here?
+> 
+> I upload my changes to Gerrit and link to them here so that I (and
+> others) can see the progression of the patch via the web UI.
 
-of_irq_get*() seems inconsistent...
-
-Uwe, what do you think?
-
--- 
-With Best Regards,
-Andy Shevchenko
+What's the life-time guarantee for that URL existing? Because if it
+becomes part of the git commit, it had better stay around 'forever'
+etc..

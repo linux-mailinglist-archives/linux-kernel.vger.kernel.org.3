@@ -2,167 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81973494629
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E5549462B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358372AbiATDcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 22:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234287AbiATDcO (ORCPT
+        id S1358384AbiATDeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 22:34:07 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:41472 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234287AbiATDeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 22:32:14 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35F7C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 19:32:13 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id y27so26561pfa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 19:32:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=6VcCCa/uNyu5klYi1x3xHgmWoLaBIpIlwVyG80i3crM=;
-        b=ULO3DXzfltvoF1pPRTDLBeRyPli2sY9LcwnVN7wBK9Jt7yVlWDQNnb7gYkJNYAxTIu
-         x4NHVSMFt6GAv4NTEBv4gUcyDxZj+iJcP5rp8S69Zp8ABkhsZl/OSJ7pF+5fDappiqZX
-         XBHaDFEQ+tr1diJixNZFQuuELVy0MbHIwpHA+QpA+QVRUHHDcBXeSm7s1NnXD6gdGYju
-         WXQvmIuah5g6h30xHnSUFk7okFOgXJcjjgq9jwvHjXuIpA8pezl0Z0Mg1kuOa7zM+VlJ
-         3UPLXl7bYtU6BlWj2mqWMityaizZgsvCG8jETXUTQgGU/zM2B0gfaTjicKDjj2tVkxrm
-         g6pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=6VcCCa/uNyu5klYi1x3xHgmWoLaBIpIlwVyG80i3crM=;
-        b=YurO39wVaeNfDvPuRtyEsB0SESkWdrlTF0QCa0xv5SQthh3ey8c6/Xr28MZwOhIyCl
-         lqHPmfC7U0yHQ6bgROLp54q+DVogwQaNdQEmCKiwXtCwJ4zdhkPjJ9d2sXhSsGgMRaD5
-         4etHbsuqmwOMp+9jb3gDV8mU3WtzNkIHiiUA0bDMJnXja851vOae0EBeRGrg8Lbs3HJi
-         uytiYefLjOqg1jobdKXlF7uRfD+0MP53sqBh5nZaZc6SX0C9EOVnpI6YUP/48g36m2xs
-         2wlh6BH8eGO9j8gCqvN7QIp8RAe/eUpBaW9PmeA0SSxaBJno9lA8ySmVneKTRIenop8d
-         YIow==
-X-Gm-Message-State: AOAM532LMHamm4M4N15IaAYaMKYTkaBDOCCcXPp/fX+Z9D8oXw6DZzCH
-        6YMGSU++I1o0Ru+w5HTInlKYnXVijLvKDw==
-X-Google-Smtp-Source: ABdhPJyU2wvXBwrRe/LnxztvOS2PjL2olL8B7hpWapZ/PFjhalgfpmkk/8PC41fbNLGwhYQatAoi+g==
-X-Received: by 2002:a05:6a00:803:b0:4c3:37b9:74d8 with SMTP id m3-20020a056a00080300b004c337b974d8mr23024575pfk.60.1642649533338;
-        Wed, 19 Jan 2022 19:32:13 -0800 (PST)
-Received: from bj03382pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id h10sm1035996pfh.49.2022.01.19.19.32.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Jan 2022 19:32:12 -0800 (PST)
-From:   Huangzhaoyang <huangzhaoyang@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [Resend PATCH v3] psi: fix possible trigger missing in the window
-Date:   Thu, 20 Jan 2022 11:31:56 +0800
-Message-Id: <1642649516-15076-1-git-send-email-huangzhaoyang@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Wed, 19 Jan 2022 22:34:06 -0500
+X-UUID: 0e3172ea1eef46cebc6361e5b4b2992f-20220120
+X-UUID: 0e3172ea1eef46cebc6361e5b4b2992f-20220120
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <guangming.cao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1117506135; Thu, 20 Jan 2022 11:34:01 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 20 Jan 2022 11:34:00 +0800
+Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 20 Jan 2022 11:33:59 +0800
+From:   <guangming.cao@mediatek.com>
+To:     <john.stultz@linaro.org>
+CC:     <benjamin.gaignard@linaro.org>, <bo.song@mediatek.com>,
+        <christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+        <guangming.cao@mediatek.com>, <jianjiao.zeng@mediatek.com>,
+        <labbott@redhat.com>, <libo.kang@mediatek.com>,
+        <linaro-mm-sig@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <lmark@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <michael.j.ruhl@intel.com>,
+        <mingyuan.ma@mediatek.com>, <sumit.semwal@linaro.org>,
+        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>,
+        <caoguangming34@gmail.com>, Guangming <Guangming.Cao@mediatek.com>
+Subject: [PATCH v4] dma-buf: system_heap: Add a size check for allocation
+Date:   Thu, 20 Jan 2022 11:34:50 +0800
+Message-ID: <20220120033450.90164-1-guangming.cao@mediatek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CALAqxLUtK8V9LgC-DY+tkzFYyWfzF+JhbrLZk6UhEG57HQBDSA@mail.gmail.com>
+References: <CALAqxLUtK8V9LgC-DY+tkzFYyWfzF+JhbrLZk6UhEG57HQBDSA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+From: Guangming <Guangming.Cao@mediatek.com>
 
-When a new threshold breaching stall happens after a psi event was
-generated and within the window duration, the new event is not
-generated because the events are rate-limited to one per window. If
-after that no new stall is recorded then the event will not be
-generated even after rate-limiting duration has passed. This is
-happening because with no new stall, window_update will not be called
-even though threshold was previously breached. To fix this, record
-threshold breaching occurrence and generate the event once window
-duration is passed.
+Add a size check for allocation since the allocation size should be
+always less than the total DRAM size on system heap.
+And it can prevent consuming too much time for invalid allocations.
 
-Suggested-by: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
 ---
-v2: modify the logic according to Suren's suggestion
-v3: update commit message
----
----
- include/linux/psi_types.h |  2 ++
- kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
- 2 files changed, 25 insertions(+), 15 deletions(-)
+ drivers/dma-buf/heaps/system_heap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index 0a23300..87b694a 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -132,6 +132,8 @@ struct psi_trigger {
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index 23a7e74ef966..bd6f255620e2 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -347,6 +347,13 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 	struct page *page, *tmp_page;
+ 	int i, ret = -ENOMEM;
  
- 	/* Refcounting to prevent premature destruction */
- 	struct kref refcount;
-+
-+	bool threshold_breach;
- };
- 
- struct psi_group {
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 1652f2b..5c67ab9 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 	 */
- 	list_for_each_entry(t, &group->triggers, node) {
- 		u64 growth;
-+		bool trigger_stalled =
-+			group->polling_total[t->state] != total[t->state];
- 
--		/* Check for stall activity */
--		if (group->polling_total[t->state] == total[t->state])
--			continue;
--
--		/*
--		 * Multiple triggers might be looking at the same state,
--		 * remember to update group->polling_total[] once we've
--		 * been through all of them. Also remember to extend the
--		 * polling time if we see new stall activity.
--		 */
--		new_stall = true;
--
--		/* Calculate growth since last update */
--		growth = window_update(&t->win, now, total[t->state]);
--		if (growth < t->threshold)
-+		/* Check for stall activity or a previous threshold breach */
-+		if (!trigger_stalled && !t->threshold_breach)
- 			continue;
- 
-+		if (trigger_stalled) {
-+			/*
-+			 * Multiple triggers might be looking at the same state,
-+			 * remember to update group->polling_total[] once we've
-+			 * been through all of them. Also remember to extend the
-+			 * polling time if we see new stall activity.
-+			 */
-+			new_stall = true;
-+
-+			/* Calculate growth since last update */
-+			growth = window_update(&t->win, now, total[t->state]);
-+			if (growth < t->threshold)
-+				continue;
-+
-+			t->threshold_breach = true;
-+		}
- 		/* Limit event signaling to once per window */
- 		if (now < t->last_event_time + t->win.size)
- 			continue;
-@@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 		if (cmpxchg(&t->event, 0, 1) == 0)
- 			wake_up_interruptible(&t->event_wait);
- 		t->last_event_time = now;
-+		/* Reset threshold breach flag once event got generated */
-+		t->threshold_breach = false;
- 	}
- 
- 	if (new_stall)
-@@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
- 	t->last_event_time = 0;
- 	init_waitqueue_head(&t->event_wait);
- 	kref_init(&t->refcount);
-+	t->threshold_breach = false;
- 
- 	mutex_lock(&group->trigger_lock);
- 
++	/*
++	 * Size check. The "len" should be less than totalram since system_heap
++	 * memory is comes from system. Adding check here can prevent consuming
++	 * too much time for invalid allocations.
++	 */
++	if (len >> PAGE_SHIFT > totalram_pages())
++		return -EINVAL;
+ 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+ 	if (!buffer)
+ 		return ERR_PTR(-ENOMEM);
 -- 
-1.9.1
+2.17.1
 

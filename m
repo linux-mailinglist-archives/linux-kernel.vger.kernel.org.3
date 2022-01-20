@@ -2,128 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E857494A7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE20494A7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236660AbiATJMH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Jan 2022 04:12:07 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:48030 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230202AbiATJMF (ORCPT
+        id S238808AbiATJMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:12:14 -0500
+Received: from 113.196.136.162.ll.static.sparqnet.net ([113.196.136.162]:42006
+        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S240065AbiATJML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:12:05 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-19-bOMb94O0NjOs2-b-Mij-8A-1; Thu, 20 Jan 2022 09:12:03 +0000
-X-MC-Unique: bOMb94O0NjOs2-b-Mij-8A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 20 Jan 2022 09:12:00 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 20 Jan 2022 09:12:00 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Petr Mladek' <pmladek@suse.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-CC:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Thu, 20 Jan 2022 04:12:11 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11289:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Thu, 20 Jan 2022 17:12:12 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Thu, 20 Jan 2022 17:12:11 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Thu, 20 Jan 2022 17:12:11 +0800
+From:   =?big5?B?TGggS3VvILOipE+7qA==?= <lh.Kuo@sunplus.com>
+To:     Mark Brown <broonie@kernel.org>, Li-hao Kuo <lhjeff911@gmail.com>
+CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "andyshevchenko@gmail.com" <andyshevchenko@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        "Mikita Lipski" <mikita.lipski@amd.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Vishal Kulkarni" <vishal@chelsio.com>
-Subject: RE: [PATCH 0/3] lib/string_helpers: Add a few string helpers
-Thread-Topic: [PATCH 0/3] lib/string_helpers: Add a few string helpers
-Thread-Index: AQHYDdkRJfmi1u3vzker6akA52hdRqxrnz8Q
-Date:   Thu, 20 Jan 2022 09:12:00 +0000
-Message-ID: <d63b56112a2249c6b6cdce003dec4967@AcuMS.aculab.com>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <YegPiR7LU8aVisMf@alley> <87tudzbykz.fsf@intel.com> <YekfbKMjOP9ecc5v@alley>
-In-Reply-To: <YekfbKMjOP9ecc5v@alley>
-Accept-Language: en-GB, en-US
+        =?big5?B?V2VsbHMgTHUgp2aq2sTL?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xohrWAgAMbElA=
+Date:   Thu, 20 Jan 2022 09:12:11 +0000
+Message-ID: <d202d04f32b8496293bd98e090322104@sphcmbx02.sunplus.com.tw>
+References: <cover.1642494310.git.lhjeff911@gmail.com>
+ <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
+ <Yeb75aOOckAfNTTG@sirena.org.uk>
+In-Reply-To: <Yeb75aOOckAfNTTG@sirena.org.uk>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...
-> Yeah, and I am sorry for bikeshedding. Honestly, I do not know what is
-> better. This is why I do not want to block this series when others
-> like this.
-> 
-> My main motivation is to point out that:
-> 
->     enabledisable(enable)
-> 
-> might be, for some people, more eye bleeding than
-> 
->     enable ? "enable" : "disable"
-
-Indeed - you need to look the former up, wasting brain time.
-
-> The problem is not that visible with yesno() and onoff(). But as you said,
-> onoff() confliscts with variable names. And enabledisable() sucks.
-> As a result, there is a non-trivial risk of two mass changes:
-> 
-> now:
-> 
-> - contition ? "yes" : "no"
-> + yesno(condition)
-> 
-> a few moths later:
-> 
-> - yesno(condition)
-> + str_yes_no(condition)
-
-Followed by:
-- str_yes_no(x)
-+ no_yes_str(x)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+SGkgTXIuIE1hcmsgQnJvd24gOg0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudCwgSSB3aWxsIG1v
+ZGlmeSBpdCBpbiBuZXh0IG5leHQgc3VibWlzc2lvbg0KDQo+IA0KPiA+ICsJZm9yIChpID0gMDsg
+aSA8PSB4ZmVyX2NudDsgaSsrKSB7DQo+ID4gKwkJbXV0ZXhfbG9jaygmcHNwaW0tPmJ1Zl9sb2Nr
+KTsNCj4gDQo+IFRoaXMgbG9jayBpcyByZWR1bmRhbnQ6IGl0IGlzIG9ubHkgZXZlciBoZWxkIGlu
+IHRoaXMgZnVuY3Rpb24gd2hpY2ggaXMgZ3VhcmFudGVlZCBieSB0aGUgY29yZSB0byBuZXZlciBi
+ZQ0KPiBjYWxsZWQgdHdpY2UgY29uY3VycmVudGx5Lg0KDQpJIHdpbGwgbW9kaWZ5IGl0IGluIG5l
+eHQgbmV4dCBzdWJtaXNzaW9uDQoNCg0KPiA+ICsJcmV0ID0gZGV2bV9yZXF1ZXN0X2lycShkZXYs
+IHBzcGltLT5tX2lycSwgc3A3MDIxX3NwaV9tYXN0ZXJfaXJxLA0KPiA+ICsJCQkgICAgICAgSVJR
+Rl9UUklHR0VSX1JJU0lORywgcGRldi0+bmFtZSwgcHNwaW0pOw0KPiA+ICsJaWYgKHJldCkNCj4g
+PiArCQlyZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArCXJldCA9IGRldm1fcmVxdWVzdF9pcnEoZGV2
+LCBwc3BpbS0+c19pcnEsIHNwNzAyMV9zcGlfc2xhdmVfaXJxLA0KPiA+ICsJCQkgICAgICAgSVJR
+Rl9UUklHR0VSX1JJU0lORywgcGRldi0+bmFtZSwgcHNwaW0pOw0KPiA+ICsJaWYgKHJldCkNCj4g
+PiArCQlyZXR1cm4gcmV0Ow0KPiANCj4gQXJlIHlvdSBzdXJlIHRoZSBkcml2ZXIgaXMgcmVhZHkg
+dG8gaGFuZGxlIGludGVycnVwdHMgd2l0aG91dCBhbnkgb2YgdGhlIG90aGVyIHJlc291cmNlcz8g
+IE5vcm1hbGx5DQo+IGludGVycnVwdHMgYXJlIG9uZSBvZiB0aGUgbGFzdCB0aGluZ3MgdG8gYmUg
+cmVxdWVzdGVkLg0KDQpJIHdpbGwgbW9kaWZ5IGl0IGluIG5leHQgbmV4dCBzdWJtaXNzaW9uDQoN
+Cg0K

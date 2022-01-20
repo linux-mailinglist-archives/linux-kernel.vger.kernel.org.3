@@ -2,217 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F0849479A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BCE49479B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237753AbiATGvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:51:06 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:39946 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233357AbiATGvE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:51:04 -0500
-X-UUID: b058b605a7ac474ba5a1dbe2e68e3817-20220120
-X-UUID: b058b605a7ac474ba5a1dbe2e68e3817-20220120
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 170113334; Thu, 20 Jan 2022 14:50:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 20 Jan 2022 14:50:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 20 Jan 2022 14:50:57 +0800
-Message-ID: <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
-Subject: Re: [PATCH] usb: host: xhci-mtk: Simplify supplies handling with
- regulator_bulk
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <matthias.bgg@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 20 Jan 2022 14:50:57 +0800
-In-Reply-To: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
-References: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S237923AbiATGv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:51:56 -0500
+Received: from mga06.intel.com ([134.134.136.31]:26353 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233357AbiATGvy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 01:51:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642661514; x=1674197514;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ilqR8AM5hMTJ7cchikuVJPybf6bxI+Xb49ivLC7vk7Q=;
+  b=bF/rBuA6uQFtoibUN6SZT3R+jg+S1CAUqHFtGsSn32861OUBbw7Q1b3w
+   kw9NTRd9SoiCD25zsywSjcHQEoHj2wNm4tSW/unsKrf2fe4CpVDi2Zp+z
+   XRoXoYPXwA4RcH8dD7kGZIDwV2+Qn67cGNOi0xmEUa//ldwBgtjAG0kvu
+   CWurtAhnttzq7Dz8yENz7+LSfQkP6ibHyoFh+Bj7b2rKdKvEKjZKod76x
+   GhnoxBcqvmCsA12LvkKvgFRJGZ4e9gEJzbPpB4gJQFwEYySaPHPLN6q3w
+   O3uzGc7BOJxewhn5nGLz/UiM3eWfNbvZ/sBV7nUJXNgLhJC6A6HhfGq7d
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="306017871"
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="306017871"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 22:51:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="626186122"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2022 22:51:52 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nARIV-000E5H-Vp; Thu, 20 Jan 2022 06:51:51 +0000
+Date:   Thu, 20 Jan 2022 14:51:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guangming <Guangming.Cao@mediatek.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/dma-buf/heaps/system_heap.c:357:24: warning: returning 'int'
+ from a function with return type 'struct dma_buf *' makes pointer from
+ integer without a cast
+Message-ID: <202201201448.vJ5izfFs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 14:33 +0100, AngeloGioacchino Del Regno wrote:
-> Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
-> switching to using regulator_bulk to perform the very same thing,
-> as the regulators are always either both enabled or both disabled.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/usb/host/xhci-mtk.c | 56 ++++++++++++-----------------------
-> --
->  drivers/usb/host/xhci-mtk.h |  4 +--
->  2 files changed, 20 insertions(+), 40 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
-> mtk.c
-> index 62c835d446be..3b81931e5b77 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -395,31 +395,6 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk
-> *mtk)
->  	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM,
-> clks);
->  }
->  
-> -static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
-> -{
-> -	int ret;
-> -
-> -	ret = regulator_enable(mtk->vbus);
-> -	if (ret) {
-> -		dev_err(mtk->dev, "failed to enable vbus\n");
-> -		return ret;
-> -	}
-> -
-> -	ret = regulator_enable(mtk->vusb33);
-> -	if (ret) {
-> -		dev_err(mtk->dev, "failed to enable vusb33\n");
-> -		regulator_disable(mtk->vbus);
-> -		return ret;
-> -	}
-> -	return 0;
-> -}
-> -
-> -static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
-> -{
-> -	regulator_disable(mtk->vbus);
-> -	regulator_disable(mtk->vusb33);
-> -}
-> -
->  static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd
-> *xhci)
->  {
->  	struct usb_hcd *hcd = xhci_to_hcd(xhci);
-> @@ -475,6 +450,10 @@ static int xhci_mtk_setup(struct usb_hcd *hcd)
->  	return ret;
->  }
->  
-> +static const char * const xhci_mtk_supply_names[] = {
-> +	"vusb33", "vbus",
-> +};
-> +
->  static const struct xhci_driver_overrides xhci_mtk_overrides
-> __initconst = {
->  	.reset = xhci_mtk_setup,
->  	.add_endpoint = xhci_mtk_add_ep,
-> @@ -507,17 +486,18 @@ static int xhci_mtk_probe(struct
-> platform_device *pdev)
->  		return -ENOMEM;
->  
->  	mtk->dev = dev;
-> -	mtk->vbus = devm_regulator_get(dev, "vbus");
-> -	if (IS_ERR(mtk->vbus)) {
-> -		dev_err(dev, "fail to get vbus\n");
-> -		return PTR_ERR(mtk->vbus);
-> -	}
-> +	mtk->num_supplies = ARRAY_SIZE(xhci_mtk_supply_names);
-> +	mtk->supplies = devm_kcalloc(dev, mtk->num_supplies,
-> +				     sizeof(*mtk->supplies),
-> GFP_KERNEL);
-> +	if (!mtk->supplies)
-> +		return -ENOMEM;
->  
-> -	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
-> -	if (IS_ERR(mtk->vusb33)) {
-> -		dev_err(dev, "fail to get vusb33\n");
-> -		return PTR_ERR(mtk->vusb33);
-> -	}
-> +	regulator_bulk_set_supply_names(mtk->supplies,
-> xhci_mtk_supply_names,
-> +					mtk->num_supplies);
-> +
-> +	ret = devm_regulator_bulk_get(dev, mtk->num_supplies, mtk-
-> >supplies);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to get
-> regulators\n");
->  
->  	ret = xhci_mtk_clks_get(mtk);
->  	if (ret)
-> @@ -558,7 +538,7 @@ static int xhci_mtk_probe(struct platform_device
-> *pdev)
->  	pm_runtime_enable(dev);
->  	pm_runtime_get_sync(dev);
->  
-> -	ret = xhci_mtk_ldos_enable(mtk);
-> +	ret = regulator_bulk_enable(mtk->num_supplies, mtk->supplies);
->  	if (ret)
->  		goto disable_pm;
->  
-> @@ -667,7 +647,7 @@ static int xhci_mtk_probe(struct platform_device
-> *pdev)
->  	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
->  
->  disable_ldos:
-> -	xhci_mtk_ldos_disable(mtk);
-> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
->  
->  disable_pm:
->  	pm_runtime_put_noidle(dev);
-> @@ -695,7 +675,7 @@ static int xhci_mtk_remove(struct platform_device
-> *pdev)
->  	usb_put_hcd(hcd);
->  	xhci_mtk_sch_exit(mtk);
->  	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
-> -	xhci_mtk_ldos_disable(mtk);
-> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
->  
->  	pm_runtime_disable(dev);
->  	pm_runtime_put_noidle(dev);
-> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-
-> mtk.h
-> index 4b1ea89f959a..9b78cd2ba0ac 100644
-> --- a/drivers/usb/host/xhci-mtk.h
-> +++ b/drivers/usb/host/xhci-mtk.h
-> @@ -150,9 +150,9 @@ struct xhci_hcd_mtk {
->  	int num_u3_ports;
->  	int u2p_dis_msk;
->  	int u3p_dis_msk;
-> -	struct regulator *vusb33;
-> -	struct regulator *vbus;
->  	struct clk_bulk_data clks[BULK_CLKS_NUM];
-> +	struct regulator_bulk_data *supplies;
-> +	u8 num_supplies;
-Could you please help to change it like as clock bulk?
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
+head:   d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+commit: d6d3f09d899553b1100b195a91a8f718d1bd6bc2 dma-buf: system_heap: Add a size check for allocation
+date:   3 hours ago
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220120/202201201448.vJ5izfFs-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
+        git checkout d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/dma-buf/heaps/
 
-1. #define BULK_REGULATORS_NUM 2; then define @supplies array,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-        struct regulator_bulk_data supplies[BULK_REGULATORS_NUM];
+All warnings (new ones prefixed by >>):
 
-2. also add a helper to get regulator bulk; e.g.
-
-static int xhci_mtk_regulators_get(struct xhci_hcd_mtk *mtk)
-{
-    struct regulator_bulk_data *supplies = mtk->supplies;
-
-    supplies[0].supply = "vusb33";
-    supplies[1].supply = "vbus";
-
-    return devm_regulator_bulk_get(mtk->dev, BUL
-K_REGULATORS_NUM, supplies);
-}
-
-Thanks a lot
+   drivers/dma-buf/heaps/system_heap.c: In function 'system_heap_allocate':
+>> drivers/dma-buf/heaps/system_heap.c:357:24: warning: returning 'int' from a function with return type 'struct dma_buf *' makes pointer from integer without a cast [-Wint-conversion]
+     357 |                 return -EINVAL;
+         |                        ^
 
 
->  	unsigned int has_ippc:1;
->  	unsigned int lpm_support:1;
->  	unsigned int u2_lpm_disable:1;
+vim +357 drivers/dma-buf/heaps/system_heap.c
 
+   334	
+   335	static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+   336						    unsigned long len,
+   337						    unsigned long fd_flags,
+   338						    unsigned long heap_flags)
+   339	{
+   340		struct system_heap_buffer *buffer;
+   341		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+   342		unsigned long size_remaining = len;
+   343		unsigned int max_order = orders[0];
+   344		struct dma_buf *dmabuf;
+   345		struct sg_table *table;
+   346		struct scatterlist *sg;
+   347		struct list_head pages;
+   348		struct page *page, *tmp_page;
+   349		int i, ret = -ENOMEM;
+   350	
+   351		/*
+   352		 * Size check. The "len" should be less than totalram since system_heap
+   353		 * memory is comes from system. Adding check here can prevent consuming
+   354		 * too much time for invalid allocations.
+   355		 */
+   356		if (len >> PAGE_SHIFT > totalram_pages())
+ > 357			return -EINVAL;
+   358		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+   359		if (!buffer)
+   360			return ERR_PTR(-ENOMEM);
+   361	
+   362		INIT_LIST_HEAD(&buffer->attachments);
+   363		mutex_init(&buffer->lock);
+   364		buffer->heap = heap;
+   365		buffer->len = len;
+   366	
+   367		INIT_LIST_HEAD(&pages);
+   368		i = 0;
+   369		while (size_remaining > 0) {
+   370			/*
+   371			 * Avoid trying to allocate memory if the process
+   372			 * has been killed by SIGKILL
+   373			 */
+   374			if (fatal_signal_pending(current)) {
+   375				ret = -EINTR;
+   376				goto free_buffer;
+   377			}
+   378	
+   379			page = alloc_largest_available(size_remaining, max_order);
+   380			if (!page)
+   381				goto free_buffer;
+   382	
+   383			list_add_tail(&page->lru, &pages);
+   384			size_remaining -= page_size(page);
+   385			max_order = compound_order(page);
+   386			i++;
+   387		}
+   388	
+   389		table = &buffer->sg_table;
+   390		if (sg_alloc_table(table, i, GFP_KERNEL))
+   391			goto free_buffer;
+   392	
+   393		sg = table->sgl;
+   394		list_for_each_entry_safe(page, tmp_page, &pages, lru) {
+   395			sg_set_page(sg, page, page_size(page), 0);
+   396			sg = sg_next(sg);
+   397			list_del(&page->lru);
+   398		}
+   399	
+   400		/* create the dmabuf */
+   401		exp_info.exp_name = dma_heap_get_name(heap);
+   402		exp_info.ops = &system_heap_buf_ops;
+   403		exp_info.size = buffer->len;
+   404		exp_info.flags = fd_flags;
+   405		exp_info.priv = buffer;
+   406		dmabuf = dma_buf_export(&exp_info);
+   407		if (IS_ERR(dmabuf)) {
+   408			ret = PTR_ERR(dmabuf);
+   409			goto free_pages;
+   410		}
+   411		return dmabuf;
+   412	
+   413	free_pages:
+   414		for_each_sgtable_sg(table, sg, i) {
+   415			struct page *p = sg_page(sg);
+   416	
+   417			__free_pages(p, compound_order(p));
+   418		}
+   419		sg_free_table(table);
+   420	free_buffer:
+   421		list_for_each_entry_safe(page, tmp_page, &pages, lru)
+   422			__free_pages(page, compound_order(page));
+   423		kfree(buffer);
+   424	
+   425		return ERR_PTR(ret);
+   426	}
+   427	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

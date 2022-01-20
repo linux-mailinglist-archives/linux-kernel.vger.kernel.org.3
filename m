@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5AC494BC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84997494BB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376319AbiATKcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:32:54 -0500
-Received: from guitar.tcltek.co.il ([84.110.109.230]:55517 "EHLO mx.tkos.co.il"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1359851AbiATKcx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:32:53 -0500
-Received: from tarshish (unknown [10.0.8.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.tkos.co.il (Postfix) with ESMTPS id A83A7440EC4;
-        Thu, 20 Jan 2022 12:32:41 +0200 (IST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
-        s=default; t=1642674762;
-        bh=vLMmNW2zYd4cs+GrkWWq8UgDVQ4AcyicuNf3Ub6yOBM=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=PJf4vnRUn6ZMWWDokawzeHfIXZb+pppxcGRJUNB62fmaSCRCX1CIDwvyWLchN9dcS
-         ksNv22a841TrpPPvuXRhs33vKx/wGpP2FcVXCh2H23lq2D7cm4ekodRlbHLM0s4yTq
-         w4dyVJO2mveUsYlfzvcdJmT+HFsA+IESJTzoTG/vijQQqu0cUkcFoKyX3t43p0vgnR
-         feBJMrb6PkY+rxk7evREegEIXqaDZtBn+zOFns93Xfi0sjklWOvMNaD9oa9/OkQmte
-         52PgdUQkfhMVQ+vPQuIsztHuTzwSPlG5U+bW9ExUdkO8aRuJh23kDqzx+31wzz0JfK
-         AdCw9SLMbl//g==
-References: <20220119002438.106079-1-sean.anderson@seco.com>
- <87ee53fv01.fsf@tarshish>
- <1965fc315525b8ab26cf9f71f939c24d@codeaurora.org>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Baruch Siach <baruch@tkos.co.il>
-To:     Kathiravan T <kathirav@codeaurora.org>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Robert Hancock <robert.hancock@calian.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] usb: dwc3: Calculate REFCLKPER et. al. from
- reference clock
-Date:   Thu, 20 Jan 2022 12:29:32 +0200
-In-reply-to: <1965fc315525b8ab26cf9f71f939c24d@codeaurora.org>
-Message-ID: <871r12g0j2.fsf@tarshish>
+        id S1376277AbiATKaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:30:17 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43758 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359764AbiATKaP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 05:30:15 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K8VU0T007756;
+        Thu, 20 Jan 2022 10:30:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=yRChjvKoG7qtxswec0iJDshzNuJRtiMV9rzF7i/n/n0=;
+ b=EirXxrMyg5NmpQs7tx8eRx0LX1qO1Y961YG6oqjLmZdXLeUwUnDwdCtP7sxMGdETmavK
+ dDNglpt+A+e3OKMa2UUMgMIpcRl8ZNDge+YszQKW+zy+1ryhMLXaGvzcFDb8p05gYD4/
+ xnrGtep00fsvmFKRUY5fIDtJLfUbkbnC6T4GGaytAQpWVQixLaLsKiqbtkaYTWSCGlml
+ c+xARFi20nkT0PZhHDNzSdvVpoPLJHBHDzUEoUsj4pWNaMjV7m/cQA3t5d8/+Ay0/2LY
+ vCW+1OmPKfkUbjVC4IYh2c8uGuF0mamHMkWKnII7Vvgb1MVQruA0g/cBy9gu2ITbj4+K QQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq15w5u5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 10:30:15 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20K8hFvZ000513;
+        Thu, 20 Jan 2022 10:30:15 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq15w5u4r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 10:30:15 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KAO64n009235;
+        Thu, 20 Jan 2022 10:30:13 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dknwa817h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 10:30:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KAU9SH40370464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jan 2022 10:30:09 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 939F011C052;
+        Thu, 20 Jan 2022 10:30:09 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29B0311C069;
+        Thu, 20 Jan 2022 10:30:09 +0000 (GMT)
+Received: from [9.171.35.3] (unknown [9.171.35.3])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Jan 2022 10:30:09 +0000 (GMT)
+Message-ID: <6d3a4e4e-a038-0a30-6846-3f07948dab08@linux.ibm.com>
+Date:   Thu, 20 Jan 2022 11:30:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 02/10] KVM: s390: Honor storage keys when accessing
+ guest memory
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-3-scgl@linux.ibm.com>
+ <e5b06907-471d-fe4f-8461-a7dea37abca2@linux.ibm.com>
+ <d5247a6c-2088-cbfa-20f9-c1c748f90daf@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <d5247a6c-2088-cbfa-20f9-c1c748f90daf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jktopad3-aKLUFRDUQDC5Cibu0GFaRG9
+X-Proofpoint-ORIG-GUID: Q60RhR0WIN1eMZlM16l0CWCZJmaTI9DY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_03,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 adultscore=0 suspectscore=0 phishscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201200050
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kathiravan,
+On 1/20/22 11:27, Christian Borntraeger wrote:
+> 
+> 
+> Am 18.01.22 um 15:38 schrieb Janosch Frank:
+> [...]
+>> /*
+>> We'll do an actual access via the mv instruction which will return access errors to us so we don't need to check here.
+>> */
+> 
+> Be slightly more verbose I guess. Something like
+> We'll do an actual access via the mv instruction which will return access errors to us so we don't need to check here.
+> By using key 0 all checks are skipped and no performance overhead occurs.
+> 
+> ?
 
-On Thu, Jan 20 2022, Kathiravan T wrote:
-> On 2022-01-19 23:44, Baruch Siach wrote:
->> Hi Sean,
->> On Tue, Jan 18 2022, Sean Anderson wrote:
->>> This is a rework of patches 3-5 of [1]. It attempts to correctly program
->>> REFCLKPER and REFCLK_FLADJ based on the reference clock frequency. Since
->>> we no longer need a special property duplicating this configuration,
->>> snps,ref-clock-period-ns is deprecated.
->>> Please test this! Patches 3/4 in this series have the effect of
->>> programming REFCLKPER and REFCLK_FLADJ on boards which already configure
->>> the "ref" clock. I have build tested, but not much else.
->> Tested here on IPQ6010 based system. USB still works. But the with 
->> "ref"
->> clock at 24MHz, period is calculated as 0x29. Previous
->> snps,ref-clock-period-ns value used to be 0x32.
->> Is that expected?
->
-> Yes, it is 0x29 for IPQ60xx based SoCs. In downstream it was wrongly mentioned
-> as 0x32, which was corrected recently.
+Yes, I'll also mention that we implement storage protection override by retrying.
+> 
+>>> +    rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode, 0);
 
-Thanks for the update. This needs fixing in upstream kernel. I'll send a
-patch.
-
-For some reason USB appears to work here with both values. Is it because
-I only use USB2 signals? If this is the case them I can not actually
-test this series on my system.
-
-Thanks,
-baruch
-
->>> [1] 
->>> https://lore.kernel.org/linux-usb/20220114044230.2677283-1-robert.hancock@calian.com/
->>> Changes in v2:
->>> - Document clock members
->>> - Also program GFLADJ.240MHZDECR
->>> - Don't program GFLADJ if the version is < 2.50a
->>> - Add snps,ref-clock-frequency-hz property for ACPI
->>> Sean Anderson (7):
->>>   dt-bindings: usb: dwc3: Deprecate snps,ref-clock-period-ns
->>>   usb: dwc3: Get clocks individually
->>>   usb: dwc3: Calculate REFCLKPER based on reference clock
->>>   usb: dwc3: Program GFLADJ
->>>   usb: dwc3: Add snps,ref-clock-frequency-hz property for ACPI
->>>   arm64: dts: zynqmp: Move USB clocks to dwc3 node
->>>   arm64: dts: ipq6018: Use reference clock to set dwc3 period
->>>  .../devicetree/bindings/usb/snps,dwc3.yaml    |   7 +-
->>>  arch/arm64/boot/dts/qcom/ipq6018.dtsi         |   3 +-
->>>  .../arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi |   4 +-
->>>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   4 +-
->>>  drivers/usb/dwc3/core.c                       | 112 +++++++++++++++---
->>>  drivers/usb/dwc3/core.h                       |  17 ++-
->>>  6 files changed, 120 insertions(+), 27 deletions(-)
-
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -

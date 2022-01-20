@@ -2,186 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD584946FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76824946FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358598AbiATFeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 00:34:15 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:60516 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229989AbiATFeO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 00:34:14 -0500
-X-UUID: 79d0c64fb85748de93dbc62341103159-20220120
-X-UUID: 79d0c64fb85748de93dbc62341103159-20220120
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1240064530; Thu, 20 Jan 2022 13:34:11 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 20 Jan 2022 13:34:09 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 20 Jan 2022 13:34:08 +0800
-Message-ID: <0b6ef0ce05bb92cd458043be2441101e20166242.camel@mediatek.com>
-Subject: Re: [PATCH v4 3/3] mmc: mediatek: add support for SDIO eint IRQ
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Lucas Stach" <dev@lynxeye.de>, Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Date:   Thu, 20 Jan 2022 13:34:08 +0800
-In-Reply-To: <Yehq7L36yfJ8D/j2@smile.fi.intel.com>
-References: <20220119103212.13158-1-axe.yang@mediatek.com>
-         <20220119103212.13158-4-axe.yang@mediatek.com>
-         <Yehq7L36yfJ8D/j2@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S1358604AbiATFfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 00:35:00 -0500
+Received: from mga02.intel.com ([134.134.136.20]:29191 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229989AbiATFe7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 00:34:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642656899; x=1674192899;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t27IesemgHjw9RZFxfYR0WfViB/5r1HZWYSRstYTahs=;
+  b=bL1p0C0jbULoF1xTMU9Fs8RXD7ziCumyAyiKqaST7ESX4DGfno6iPq1C
+   JiC8/ZP/YC8EUBcM8ma7BSmwIsjDp7HHkr2xIhEJUR0ybPECJSmFGSfnI
+   CRSZ+zUlTxY6GFyHVf7gXFNi4Xfcp2Txo4wN8JilAgDe5naR2l3F6EZjC
+   rIgWYpkIO3y6cydBB4l/U73I6FPHHWXc9JrHag90wv8/N2+gtMhBV5i+Q
+   0IJRPOS3bISM5PVkYAz7NanLMTWUkI3svQoMn/nOF5/3bQq4dpxdLVL0h
+   ue1ZmoNUoHGD60OBEOz9hcldbbifOjHnbYwvJEoNkZ9Iru87Utalolkti
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="232638817"
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="232638817"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 21:34:58 -0800
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="532623958"
+Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.238.0.96]) ([10.238.0.96])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 21:34:53 -0800
+Message-ID: <1e285770-ab21-be29-af85-be85b3df5993@intel.com>
+Date:   Thu, 20 Jan 2022 13:34:44 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v5 4/8] KVM: VMX: dump_vmcs() reports
+ tertiary_exec_control field as well
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        Robert Hoo <robert.hu@linux.intel.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-5-guang.zeng@intel.com> <YeCTsVCwEkT2N6kQ@google.com>
+ <7fd4cb11-9920-6432-747e-633b96db0598@intel.com>
+ <Yei1lODnpQTZLa7s@google.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <Yei1lODnpQTZLa7s@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-19 at 21:47 +0200, Andy Shevchenko wrote:
-> On Wed, Jan 19, 2022 at 06:32:12PM +0800, Axe Yang wrote:
-> > Add support for eint IRQ when MSDC is used as an SDIO host. This
-> > feature requires SDIO device support async IRQ function. With this
-> > feature, SDIO host can be awakened by SDIO card in suspend state,
-> > without additional pin.
-> > 
-> > MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> > turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> > resume, switch GPIO function back to DAT1 mode then turn on clock.
-> > 
-> > Some device tree property should be added or modified in MSDC node
-> > to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-> > are mandatory. And cap-sdio-async-irq flag is necessary since this
-> > feature depends on asynchronous interrupt:
-> >         &mmcX {
-> >                 ...
-> >                 pinctrl-names = "default", "state_uhs",
-> > "state_eint",
-> >                                 "state_dat1";
-> >                 ...
-> >                 pinctrl-2 = <&mmc2_pins_eint>;
-> >                 pinctrl-3 = <&mmc2_pins_dat1>;
-> >                 ...
-> >                 cap-sdio-async-irq;
-> >                 ...
-> >         };
-> > 
-> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> 
-> The submitters SoB must be last among all SoB tags. Please, read
-> Submitting
-> Patches document carefully.
-> 
-> > Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-> 
-> Who is they, why their SoB appeared here?
-> 
-
-Yong Mao is the co-developer of this patch, I will reorder the SoB
-chains.
-
-> ...
-> 
-> >  /*
-> > - * Copyright (c) 2014-2015 MediaTek Inc.
-> > + * Copyright (c) 2022 MediaTek Inc.
-> 
-> This doesn't feel right. Why did you remove old years?
-
-I should keep the publish year 2014 of this driver.
-But I still think range 2014-2022 is the most appropriate way to change
-the copyright time. Over these years, mediatek is keeping maintaining
-this driver continuously. What do you think?
-
-> 
-> >   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-> >   */
-> 
-> ...
-> 
-> > +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-> > +	if (IS_ERR(desc))
-> > +		return PTR_ERR(desc);
-> > +	ret = gpiod_to_irq(desc);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	irq = ret;
-> 
-> Since both of them are local variables and there is no specific use
-> of the
-> returned value, I believe it's fine just to
-> 
-> 	irq = gpiod_to_irq(desc);
-> 	...
-
-I agree, will fix in next version.
-
-> Hmm... I was wondering if you can use fwnode_irq_get_byname().
-> Ah, it's not (yet) in upstream.
-> 
-> ...
-> 
-> >  static int __maybe_unused msdc_runtime_suspend(struct device *dev)
-> >  {
-> > +	unsigned long flags;
-> 
-> Can you keep reversed xmas tree order?
-> 
-> >  	struct mmc_host *mmc = dev_get_drvdata(dev);
-> >  	struct msdc_host *host = mmc_priv(mmc);
-> 
-> (it means to add new variable here)
-
-Will fix it in next version.
-
-> 
-> >  	return 0;
-> >  }
-> 
-> ...
-> 
-> >  static int __maybe_unused msdc_runtime_resume(struct device *dev)
-> >  {
-> > +	unsigned long flags;
-> 
-> Ditto.
-
-Will fix it in next version.
-
-> 
-> >  	struct mmc_host *mmc = dev_get_drvdata(dev);
-> >  	struct msdc_host *host = mmc_priv(mmc);
-> >  	int ret;
-> >  	return 0;
-> >  }
-> 
-
---
-Best Regard,
-Axe Yang
-
-
+On 1/20/2022 9:06 AM, Sean Christopherson wrote:
+> On Fri, Jan 14, 2022, Zeng Guang wrote:
+>> On 1/14/2022 5:03 AM, Sean Christopherson wrote:
+>>> Can you provide a sample dump?  It's hard to visualize the output, e.g. I'm worried
+>>> this will be overly log and harder to read than putting tertiary controls on their
+>>> own line.
+>> Sample dump here.
+>> *** Control State ***
+>>
+>>   PinBased=0x000000ff CPUBased=0xb5a26dfa SecondaryExec=0x061037eb
+>> TertiaryExec=0x0000000000000010
+> That's quite the line.  What if we reorganize the code to generate output like:
+>
+>    CPUBased=0xb5a26dfa SecondaryExec=0x061037eb TertiaryExec=0x0000000000000010
+>    PinBased=0x000000ff EntryControls=0000d1ff ExitControls=002befff
+>
+> That keeps the lines reasonable and IMO is better organization too, e.g. it captures
+> the relationship between primary, secondary, and tertiary controls.
+Make sense. I'll change it as your suggestion. Thanks.
+>>   EntryControls=0000d1ff ExitControls=002befff
+>>   ExceptionBitmap=00060042 PFECmask=00000000 PFECmatch=00000000
+>>   VMEntry: intr_info=00000000 errcode=00000000 ilen=00000000
+>>   VMExit: intr_info=00000000 errcode=00000000 ilen=00000003
+>>           reason=00000030 qualification=0000000000000784
+>>>>    	pr_err("EntryControls=%08x ExitControls=%08x\n", vmentry_ctl, vmexit_ctl);
+>>>>    	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
+>>>>    	       vmcs_read32(EXCEPTION_BITMAP),
+>>>> -- 
+>>>> 2.27.0
+>>>>

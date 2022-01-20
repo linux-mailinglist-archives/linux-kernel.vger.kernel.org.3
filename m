@@ -2,154 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E81E2495378
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398C649537A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiATRmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiATRml (ORCPT
+        id S232066AbiATRnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:43:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37234 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbiATRnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:42:41 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E92C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:42:40 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id r29so672650pfl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=siipzw5qPVJE6LD0sjuwipz56WHSg09btQLgfJcwUzw=;
-        b=mu8r0/mBXFnknkfCLySkbX+XsCqQBw7DAX/pnrFPmkiyj/VMPKRZecN7+Fo/Nk2UXq
-         gAEY6BUDFrKyik8DsXdv3uRyjv4xUli2vsq8iq8F33HXsAqdVfwRylI4tEgh+9XREwiN
-         0GOLpeenqRKGWHs3ZVyL6QrZklGh1RlO9gV2G57s2CP5B9qNBHip7zqUGA+iiqoFXVdf
-         EHbJ6zMCX5Y3Fl0pJ8wvVcWzPWhlZ6dh28MkzM7x8KHkaoThkYFrs9D3rVLZd8keKpGx
-         LH/bdye5K3EsY4hqcSmLciVPWcHwzXcWzi9//QgJRIEmZyBwelVCdoztMjprlYB7wYGK
-         oBxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=siipzw5qPVJE6LD0sjuwipz56WHSg09btQLgfJcwUzw=;
-        b=gHj17s+gmFgTVkFkSATUbxXCL2uDpluk2U3QWoy6msCjbTd30d6GrP3P+dF752Ig6K
-         8VXENCC9T/VZLrNtvczxWDdyBtWHVlJYUy39QMcgbF/MbTBfobGhmkaPe6L9tytbPuQ6
-         OY2SKqNNZSGnW6YOkaG/heLhFtSQAXnPdnYbLZoBCYcBdIF43eHD/eDukbsAcjkTfX3R
-         XrNyOuVjcEQSb9pBi3AyPEQDKB1FGZuyDzrZ8qMbkjy1WTtbhlHA498nx6kANRXcKXEA
-         B8DH7J1Bd8UnoqerHNTyDZCIF9iGLM7+dl2SR0wTqerG6U8MZOUJEBNGesTZDxTnNXAy
-         wJBg==
-X-Gm-Message-State: AOAM532wVFaXzh5tux7t4pBzF/0I9dZoXdmakpzdk9M5FRLChC/eZE2z
-        qsjZ/9LcIJraul8/MJuvyDZ27g==
-X-Google-Smtp-Source: ABdhPJx41k3hd3KJSLVFf9u1FAJE0Mg/PY5ptjVA+lOdd1XHy8dCzwGzOkVd6PXrLSh9k8rgPuVwxQ==
-X-Received: by 2002:a62:14d5:0:b0:4c7:43cb:863 with SMTP id 204-20020a6214d5000000b004c743cb0863mr54850pfu.23.1642700560231;
-        Thu, 20 Jan 2022 09:42:40 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z10sm4148214pfh.77.2022.01.20.09.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:42:39 -0800 (PST)
-Date:   Thu, 20 Jan 2022 17:42:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrew Cooper <amc96@srcf.net>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Alexander Graf <graf@amazon.de>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS
- blocking shadow
-Message-ID: <YemfC17ZJyR0CLYr@google.com>
-References: <20220120000624.655815-1-seanjc@google.com>
- <f3239ec0-9fb8-722a-00c5-11b18f19f047@srcf.net>
- <YemPeqpcFDjhGfRQ@google.com>
- <81aebe8e-ff2a-6b56-fe50-b7917a3948ed@srcf.net>
+        Thu, 20 Jan 2022 12:43:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C925B81D84
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 17:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E171C340E0;
+        Thu, 20 Jan 2022 17:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642700585;
+        bh=mhP/PzXnEIshsVfkUkWrpdeuD4+coem5ElvjqkGG6Zo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UArT7mtGUSmO4tDlvt+C3aeIRpTk+3JF//Kk8s0PGhkRjbdiTsv7ZNSChETsHDQNl
+         b7Jgri552jePYEA7ELCdlRlG61woAs3hjRBPNnsS8ZXmxZzvxpBVda+4jow7kv4BxR
+         /FouekDtIPjTWj7pTJ4WP8Xi9Ls+ZlVh1/LLfJDqsygo6Y0Xfy2MPtSw9aIxhl/d9R
+         K4LluCu0bfbhtJTDgRY+jt0phJmHTRXldRkQbDX2A8JCMiPgANMd4AIwynaMMOrxYQ
+         j4eQtjdkpxoeo2RpABLYhch8Uwz3ZvZtTzRAfobMc3H1CiOIiHHuQxtzGum/2BbwLQ
+         HqtZ5y26OtbBQ==
+Date:   Thu, 20 Jan 2022 18:43:01 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [patch v8 01/10] add basic task isolation prctl interface
+Message-ID: <20220120174301.GA213170@lothringen>
+References: <20211208161000.654492429@fuller.cnet>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81aebe8e-ff2a-6b56-fe50-b7917a3948ed@srcf.net>
+In-Reply-To: <20211208161000.654492429@fuller.cnet>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022, Andrew Cooper wrote:
-> On 20/01/2022 16:36, Sean Christopherson wrote:
-> > On Thu, Jan 20, 2022, Andrew Cooper wrote:
-> >> On 20/01/2022 00:06, Sean Christopherson wrote:
-> >>> MOVSS blocking can be initiated by userspace, but can be coincident with
-> >>> a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
-> >>> executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
-> >>> is problematic only for CPL0 (and only if the guest is crazy enough to
-> >>> access a DR in a MOVSS shadow).  All other sources of #DBs are either
-> >>> suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
-> >> It is more complicated than this and undocumented.  Single step is
-> >> discard in a shadow, while data breakpoints are deferred.
-> > But for the purposes of making the consitency check happy, whether they are
-> > deferred or dropped should be irrelevant, no?
-> 
-> From that point of view, yes.  The consistency check is specific to TS. 
-> I suppose I was mostly questioning the wording of the explanation.
-> 
-> >>> are mutually exclusive with MOVSS blocking (T-bit task switch),
-> >> Howso?  MovSS prevents external interrupts from triggering task
-> >> switches, but instruction sources still trigger in a shadow.
-> > T-bit #DBs are traps, and arrive after the task switch has completed.  The switch
-> > can be initiated in the shadow, but the #DB will be delivered after the instruction
-> > retires and so after MOVSS blocking goes away.  Or am I missing something?
-> 
-> Well - this is where the pipeline RTL is needed, in lieu of anything
-> better.  Trap-style #DBs are part of the current instruction, and
-> specifically ahead (in the instruction cycle) of the subsequent intchk.
+On Wed, Dec 08, 2021 at 01:09:07PM -0300, Marcelo Tosatti wrote:
+> +int __copy_task_isolation(struct task_struct *tsk)
+> +{
+> +	struct isol_info *info, *new_info;
+> +
+> +	info = current->isol_info;
+> +	if (!(info->inherit_mask & (ISOL_INHERIT_CONF|ISOL_INHERIT_ACTIVE)))
+> +		return 0;
+> +
+> +	new_info = tsk_isol_alloc_context();
+> +	if (IS_ERR(new_info))
+> +		return PTR_ERR(new_info);
+> +
+> +	new_info->inherit_mask = info->inherit_mask;
 
-And T-bit traps in particular have crazy high priority...
+Ok then it might be worth mentioning in the docs that the inheritance
+propagates to all the descendants and not just the immediate children,
+unless the inheritance is explicitly reconfigured by some children of course.
 
-> There are implementations where NMI/INTR/etc won't be delivered at the
-> head of an exception generated in a shadow, which would suggest that
-> these implementations have the falling edge of the shadow after intchk
-> on the instruction boundary.  (Probably certainly what happens is that
-> intchk is responsible for clearing the shadow, but this is entirely
-> guesswork on my behalf.)
+> +
+> +	if (info->inherit_mask & ISOL_INHERIT_CONF) {
+> +		new_info->quiesce_mask = info->quiesce_mask;
 
-Well, thankfully hardware's behavior should be moot for VM-Entry since task switches
-unconditionally VM-Exit, and KVM has a big fat TODO for handling the T-bit.
+Looks like if the parent has oneshot quiesce features configured, those
+will be inherited as non-oneshot.
 
-> >> and splitlock which is new since I last thought about this problem.
-> > Eww.  Split Lock is trap-like, which begs the question of what happens if the
-> > MOV/POP SS splits a cache line when loading the source data.  I'm guess it's
-> > suppressed, a la data breakpoints, but that'd be a fun one to test.
-> 
-> They're both reads of their memory operand, so aren't eligible to be
-> locked accesses.
+> +		new_info->conf_mask = info->conf_mask;
+> +	}
+> +
+> +	if (info->inherit_mask & ISOL_INHERIT_ACTIVE)
+> +		new_info->active_mask = info->active_mask;
+> +
+> +	tsk->isol_info = new_info;
+> +
+> +	return 0;
+> +}
 
-Hah, right, the "lock" part of "split lock" is just a minor detail...
+Other than that:
 
-> However, a devious kernel can misalign the GDT/LDT such that setting the
-> descriptor access bit does trigger a splitlock.  I suppose "kernel
-> doesn't misalign structures", or "kernel doesn't write a descriptor with
-> the access bit clear" are both valid mitigations.
-> 
-> >>> This bug was originally found by running tests[1] created for XSA-308[2].
-> >>> Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
-> >>> presumably why the Xen bug was deemed to be an exploitable DOS from guest
-> >>> userspace.
-> >> As I recall, the original report to the security team was something
-> >> along the lines of "Steam has just updated game, and now when I start
-> >> it, the VM explodes".
-> > Lovely.  I wonder if the game added some form of anti-cheat?  I don't suppose you
-> > have disassembly from the report?  I'm super curious what on earth a game would
-> > do to trigger this.
-> 
-> Anti-cheat was my guess too, but no disassembly happened.
-> 
-> I was already aware of the STI issue, and had posted
-> https://lore.kernel.org/xen-devel/1528120755-17455-11-git-send-email-andrew.cooper3@citrix.com/
-> more than a year previously.  The security report showed ICEBP pending
-> in the INTR_INFO field, and extending the STI test case in light of this
-> was all of 30s of work to get a working repro.
-> 
-> ~Andrew
+Acked-by: Frederic Weisbecker <frederic@kernel.org>
+
+Thanks.

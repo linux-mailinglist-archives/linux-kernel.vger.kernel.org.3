@@ -2,131 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E524955DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AADC4955DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377793AbiATVMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 16:12:14 -0500
-Received: from foss.arm.com ([217.140.110.172]:53728 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377781AbiATVMM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 16:12:12 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93F2C101E;
-        Thu, 20 Jan 2022 13:12:10 -0800 (PST)
-Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1FD83F774;
-        Thu, 20 Jan 2022 13:12:08 -0800 (PST)
-Date:   Thu, 20 Jan 2022 21:12:02 +0000
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Valentin.Schneider@arm.com, Morten.Rasmussen@arm.com,
-        Chris.Redpath@arm.com, qperret@google.com, Lukasz.Luba@arm.com
-Subject: Re: [PATCH v2 2/7] sched/fair: Decay task PELT values during
- migration
-Message-ID: <YenQIsHJhaEuJFQl@FVFF7649Q05P>
-References: <20220112161230.836326-1-vincent.donnefort@arm.com>
- <20220112161230.836326-3-vincent.donnefort@arm.com>
- <CAKfTPtC2wCw4U9w=saW0dGYHfOKo42nBKU7oHcEM7KeDj7MzWA@mail.gmail.com>
- <Yeac5Y5Fzu/jaUf0@FVFF7649Q05P>
- <CAKfTPtAdTTP+qGruYy8gi6rfhS0W1gAdjgeLCtrLZHxyCEHo9g@mail.gmail.com>
- <Yef8kTnlP5h4I7/1@FVFF7649Q05P>
- <CAKfTPtB=CJNFDrpXY9o8g5XfjBfnVTUgb2rWke1SyWMUxz0M+g@mail.gmail.com>
+        id S1377751AbiATVN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 16:13:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49384 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229568AbiATVNy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 16:13:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642713233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vRYuQT2WQHQUGRTTRZMYZKm7wq26OaWJh74t7a5J6a4=;
+        b=BtB1LxJlQjlG0wi3il3hqzQvLE4PnbBrJ5HBOgVBFxNsro4iI968pqmXi4Y9pujdDaC9f4
+        cH94XgJXQ36Es4/jflnEEcdGmFQ4JWjTbQ0p+okEH4K05RPKY9/3cz90GjS1jZnJJc1Xrq
+        nDmuhLp6yZYToLyhFHkw+5Q57Y0g5W0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-yDXXbYudOPesGXYUTEhrRA-1; Thu, 20 Jan 2022 16:13:52 -0500
+X-MC-Unique: yDXXbYudOPesGXYUTEhrRA-1
+Received: by mail-qk1-f197.google.com with SMTP id u17-20020a05620a431100b004765c0dc33cso5131278qko.14
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:13:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vRYuQT2WQHQUGRTTRZMYZKm7wq26OaWJh74t7a5J6a4=;
+        b=jIIBYIdyQk6MC/HvOjyKlzhIaHrpKO8MkokTZTaG98pld2WrHNX7wx924x+qcStAwz
+         2Aq5wtQB4V014dB1ILXq0k1cxMiSmGEIyNoXv4axhIC7hvm2xnm+DXT/RT8WexGB3DUL
+         BGoBQX8Tafsfw3Otvh09BMvwDJa2OZfukRLrS9Vp5q55XSMxxtHyWGR/pvB+89DFKwfd
+         vIo5nfJC1llvhQSkFl20PNFnmv7ZC4j47xXfT741RULkM0IGD4ct0/n9zdFNad0FlYIR
+         SvdRxgZ5yZDDmeZxtURScfuNlKhV2dP96Xwh3zFsF3uOPM8ynQD0n71cIvXegzQZofWG
+         YTJA==
+X-Gm-Message-State: AOAM531vCtgKIs1Ho6JIKEBfczxiKiYn7F1BrM5n0RDImkip4bkW8QNm
+        9/rcgZ0LreuJYOn8DJCA9Hjb3Dm/A92cYvxwItbs6MvDGi9nLvc83Yp2m6ql/0PeGN0OtEF+dIX
+        PVj0Bt2H1+PoWrd5WjK6c0kK/
+X-Received: by 2002:ac8:7d90:: with SMTP id c16mr862262qtd.306.1642713232005;
+        Thu, 20 Jan 2022 13:13:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykwoKz2Ze5YM+VXKjpWZV0gDNQm5r+Pnb9zjz9fqhgh/xB+6FBjHLGxe7ELWg6v76xEL5TGA==
+X-Received: by 2002:ac8:7d90:: with SMTP id c16mr862230qtd.306.1642713231692;
+        Thu, 20 Jan 2022 13:13:51 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::c])
+        by smtp.gmail.com with ESMTPSA id i142sm1943212qke.30.2022.01.20.13.13.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 13:13:51 -0800 (PST)
+Date:   Thu, 20 Jan 2022 13:13:47 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     bp@alien8.de, aarcange@redhat.com, ak@linux.intel.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [PATCH 2/3] x86/boot: Allow to hook up alternative port I/O
+ helpers
+Message-ID: <20220120211347.6gglputnh7n3wbvw@treble>
+References: <Yehz3eqq670WRVJE@zn.tnic>
+ <20220120021545.7786-1-kirill.shutemov@linux.intel.com>
+ <20220120021545.7786-2-kirill.shutemov@linux.intel.com>
+ <20220120163826.bits6ffbnbal4yse@box.shutemov.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKfTPtB=CJNFDrpXY9o8g5XfjBfnVTUgb2rWke1SyWMUxz0M+g@mail.gmail.com>
+In-Reply-To: <20220120163826.bits6ffbnbal4yse@box.shutemov.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-> > > And if cpu is not idle, you can't apply the diff between clk_pelt and clock_task
-> > >
-> > > >
-> > > > > - (B) doesn't seem to be accurate as you skip irq and steal time
-> > > > > accounting and you don't apply any scale invariance if the cpu is not
-> > > > > idle
-> > > >
-> > > > The missing irq and paravirt time is the reason why it is called "estimator".
-> > > > But maybe there's a chance of improving this part with a lockless version of
-> > > > rq->prev_irq_time and rq->prev_steal_time_rq?
-> > > >
-> > > > > - IIUC your explanation in the commit message above, the (A) period
-> > > > > seems to be a problem only when idle but you apply it unconditionally.
-> > > >
-> > > > If the CPU is idle (and clock_pelt == clock_task), only the B part would be
-> > > > worth something:
-> > > >
-> > > >   A + B = [clock_task - clock_pelt] + [sched_clock_cpu() - clock]
-> > > >                       A                            B
-> > > >
-> > > > > If cpu is idle you can assume that clock_pelt should be equal to
-> > > > > clock_task but you can't if cpu is not idle otherwise your sync will
-> > > > > be inaccurate and defeat the primary goal of this patch. If your
-> > > > > problem with clock_pelt is that the pending idle time is not accounted
-> > > > > for when entering idle but only at the next update (update blocked
-> > > > > load or wakeup of a thread). This patch below should fix this and
-> > > > > remove your A.
-> > > >
-> > > > That would help slightly the current situation, but this part is already
-> > > > covered by the estimator.
-> > >
-> > > But the estimator, as you name it, is wrong beaus ethe A part can't be
-> > > applied unconditionally
-> >
-> > Hum, it is used only in the !active migration. So we know the task was sleeping
-> > before that migration. As a consequence, the time we need to account is "sleeping"
-> > time from the task point of view, which is clock_pelt == clock_task (for
-> > __update_load_avg_blocked_se()). Otherwise, we would only decay with the
-> > "wallclock" idle time instead of the "scaled" one wouldn't we?
+On Thu, Jan 20, 2022 at 07:38:26PM +0300, Kirill A. Shutemov wrote:
+> On Thu, Jan 20, 2022 at 05:15:43AM +0300, Kirill A. Shutemov wrote:
+> > diff --git a/arch/x86/boot/io.h b/arch/x86/boot/io.h
+> > new file mode 100644
+> > index 000000000000..640daa3925fb
+> > --- /dev/null
+> > +++ b/arch/x86/boot/io.h
+> > @@ -0,0 +1,30 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef BOOT_IO_H
+> > +#define BOOT_IO_H
+> > +
+> > +#include <asm/shared/io.h>
+> > +
+> > +struct port_io_ops {
+> > +	unsigned char (*inb)(int port);
+> > +	unsigned short (*inw)(int port);
+> > +	unsigned int (*inl)(int port);
+> > +	void (*outb)(unsigned char v, int port);
+> > +	void (*outw)(unsigned short v, int port);
+> > +	void (*outl)(unsigned int v, int port);
+> > +};
+> > +
+> > +extern struct port_io_ops pio_ops;
+> > +
+> > +static inline void init_io_ops(void)
+> > +{
+> > +	pio_ops = (struct port_io_ops){
+> > +		.inb = inb,
+> > +		.inw = inw,
+> > +		.inl = inl,
+> > +		.outb = outb,
+> > +		.outw = outw,
+> > +		.outl = outl,
+> > +	};
+> > +}
+> > +
+> > +#endif
 > 
-> clock_pelt == clock_task only when cpu is idle and after updating
-> lost_idle_time but you have no idea of the state of the cpu when
-> migrating the task
+> It works fine on x86-64, but breaks on i386:
+> 
+> ld: Unexpected run-time relocations (.rel) detected!
+> 
+> I'll change it to
+> 
+> 	pio_ops.inb = inb;
+> 	pio_ops.inw = inw;
+> 	pio_ops.inl = inl;
+> 	pio_ops.outb = outb;
+> 	pio_ops.outw = outw;
+> 	pio_ops.outl = outl;
+> 
+> It works, but I hate that I don't really have control here. I have no clue
+> why compiler generate different code after the change. It is very fragile.
+> 
+> Do we really have no way to say compiler to avoid relactions here?
 
-I was just applying the time scaling at the task level. Why shall it depends on
-the CPU state?
+This one:
 
-The situation would be as follows:
+	pio_ops = (struct port_io_ops){
+		.inb = inb,
+		.inw = inw,
+		.inl = inl,
+		.outb = outb,
+		.outw = outw,
+		.outl = outl,
+	};
 
-                    <--X--> <--Y-->
-           +-------+-------+-------+
-CPUX    ___|   B   |   A   |   B   |___
-                                  ^
-                               migrate A
-                    
-In a such scenario, CPUX's PELT clock is indeed scaled. The Task A running
-time (X) has already been accounted, so what's left is to get an idle time (Y)
-contribution accurate. We would usually rely on the CPU being idle for the
-catch-up and that time would be Y + (X - scaled(X)). Without the catch-up, we
-would account at the migration, for the sleeping time Y, only (scaled(Y)). Applied
-to the same graph as for update_rq_clock_pelt()'s:
+.. actually allocates an anonymous struct in the .data section, which is
+memcpy'ed at runtime when the assignment occurs.  That anonymous struct
+has .data -> .text relocations which have to be resolved at runtime
+because the distance between .data and .text isn't constant.
 
- clock_task    | 1| 2| 3| 4| 5| 6| 7| 8|
- clock_pelt    | 1   | 2   | 3   | 4   |  (CPU's running, clock_pelt is scaled)
- expected      | 1   | 2   | 5| 6| 7| 8|
-               <---- X ---><--- Y ---->
- Task A -------************----------
-                                   ^ 
-                               migrate A
+The working version:
 
-Contribution for Task A idle time at the migration (as we know we won't have
-another chance to catch-up clock_task later) should be 6, not 2, regardless of
-the CPU state.
+ 	pio_ops.inb = inb;
+ 	pio_ops.inw = inw;
+ 	pio_ops.inl = inl;
+ 	pio_ops.outb = outb;
+ 	pio_ops.outw = outw;
+ 	pio_ops.outl = outl;
 
-_But_ indeed, there would be a risk of hitting the lost_idle_time threshold and
-decay too much... (which is absolutely not handled in the current version). So
-now, if we don't want to bother too much, we could simplify the problem and
-say (which is true with NOHZ_IDLE) that if the CPU is running, the clock must
-not be that old anyway. So we should only care of the idle case, which is
-mitigated with your proposed snippet and I allow to get rid of the [A]
-part (clock_task - clock_pelt).
+... only needs .text -> .text relocations which can be resolved at link
+time.
 
-As per sched_clock_cpu() usage, I haven't measured anything yet but notice it's
-already used in the wakeup path in ttwu_queue_wakelist().
+-- 
+Josh
 

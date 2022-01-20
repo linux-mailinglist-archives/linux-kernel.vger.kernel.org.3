@@ -2,85 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D790449450D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF0C494543
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357901AbiATAsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:48:42 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47094 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345135AbiATAsl (ORCPT
+        id S240698AbiATBBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 20:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230426AbiATBBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:48:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 54977CE1F62;
-        Thu, 20 Jan 2022 00:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76843C004E1;
-        Thu, 20 Jan 2022 00:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642639717;
-        bh=O5FhCiqGotWkfKuDJzbML+belVqsTNSDZFAhG2uKTxI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=O6UsfJaBweTRb3E3PL6BEQkoHr3kW3cWWhSip+v/0YG/LgbVC2IC/yo1nyygZS07Y
-         XEEVSuL1eJAM+ZfR7DwV5czgR4uojE6Vmmima7k9PXH5SgtWqOzZcHPJ46DxqfJy5M
-         KhXHYam7I2JqZmtLuWFCI+5IHmMTfL+/Bb5a3Wq/b+5wNil77kxiCW3vXuxwoX4rKG
-         gBqbrlGr3tW0Lfg6qUNYfayK/jfk8Py0GD9nUSPu25tkl6cd+bhX053wHrLnpxIGoI
-         dktVFQd7LfFvNqGrApnNy+H6xHvVP0g7vsTSkkNBGOTYKyRA5it8OcA8V8xHSnyjxR
-         V4oBicQ8D/Kgw==
-Date:   Wed, 19 Jan 2022 18:55:12 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] USB: serial: garmin_gps: Use struct_size() and
- flex_array_size() helpers in pkt_add()
-Message-ID: <20220120005512.GA72984@embeddedor>
+        Wed, 19 Jan 2022 20:01:48 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37075C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:01:48 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id x16so381034pfu.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:01:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2mfWUUkdEONMpGOlT6Rolu4VTQEpKACj2ssCBbPWHRQ=;
+        b=MZyC4bb/dwsiefnVH0I7NG1POrw6S9lLex8pyoPh9/ZCHIzABO2zi4jvhM5U00TVHj
+         Bdr8TVxSl4z2a/3v9UQcGnaUpRvxtt21TohxflF4DYioyS9WnWoKFac27ha+qMsLRV6a
+         87pbcXdwlTADh+lIgbmb8jySFU0CiUzjB97q4e9ZY2b4oRQDhj73HPMCWtc9CbkAzzcN
+         DXB5swzvsz/4nIqu9EqHLmDd6AQQeYczTOCqz6XWDoe/MUNDGvzsF0RyYqaZaUCMHwCS
+         lfTCJZhbRSW8O20+zf3hPl2hiwWUWfkuG7HuBYjQTRA3XzFLZo1FKVl0hrnwOlZSuTMU
+         LjOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2mfWUUkdEONMpGOlT6Rolu4VTQEpKACj2ssCBbPWHRQ=;
+        b=Try9cuWSSkxSj8OhPxB0/yZBjAhwAFK3bmO+9qVnyH/B+Lup5lA2xq+sKDI8kptT48
+         nJv1nU7ZhbVC14y6frb664lczHCxioqugxLfhYt5e6OAWyuhZJ3Mx0sok/X97hOblvBL
+         Wwn4sen4ji44xQnzffyn4/Xe5XilWZBpajfHj594bWnSYv1r00JABqlk7HvdsTw6DCIV
+         Mu12UAtgQJmDsizbokyNVhq5QCWvp6yF3pDr+JePnw7zVKlBNQRFghm24H5oHo6zPIvq
+         vxOR7g2mEMxveeok/lXzFZ5eR3YYtrhqzZ//92dXY0X719YeBeT9qtWuqwErLaOLLtp1
+         bdjg==
+X-Gm-Message-State: AOAM533Bxj1ElLJX/OkrRMJP5nXvd8tLdaM2ejbkesGTNVtf1xCtjsAg
+        gRDnWqtFkAG6n/40ec5DL15vhQ==
+X-Google-Smtp-Source: ABdhPJzntDENP9AYuT7H4j+098QA18SsfU+Q2JPLu9VgsH1SlSi1UmHfR7SWTzjGW/VtiKk4aFQQ6g==
+X-Received: by 2002:a63:8f09:: with SMTP id n9mr29365981pgd.38.1642640507369;
+        Wed, 19 Jan 2022 17:01:47 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l8sm790580pfc.187.2022.01.19.17.01.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 17:01:46 -0800 (PST)
+Date:   Thu, 20 Jan 2022 01:01:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Message-ID: <Yei0d0KVnNphPrP3@google.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com>
+ <YeCjHbdAikyIFQc9@google.com>
+ <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+ <YeGiVCn0wNH9eqxX@google.com>
+ <67262b95-d577-0620-79bf-20fc37906869@intel.com>
+ <Yeb1vkEclYzD27R/@google.com>
+ <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() and flex_array_size() helpers instead of
-an open-coded version, in order to avoid any potential type mistakes
-or integer overflows that, in the worst scenario, could lead to heap
-overflows.
+On Wed, Jan 19, 2022, Zeng Guang wrote:
+> It's self-adaptive , standalone function module in kvm, no any extra
+> limitation introduced
 
-Also, address the following sparse warnings:
-drivers/usb/serial/garmin_gps.c:270:31: warning: using sizeof on a flexible structure
+I disagree.  Its failure mode on OOM is to degrade guest performance, _that_ is
+a limitation.  OOM is absolutely something that should be immediately communicated
+to userspace in a way that userspace can take action.
 
-Link: https://github.com/KSPP/linux/issues/160
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/usb/serial/garmin_gps.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> and scalable even future extension on KVM_MAX_VCPU_IDS or new apic id
+> implementation released.
+>
+> How do you think ? :)
 
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index e5c75944ebb7..1d806c108efb 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -267,13 +267,12 @@ static int pkt_add(struct garmin_data *garmin_data_p,
- 
- 	/* process only packets containing data ... */
- 	if (data_length) {
--		pkt = kmalloc(sizeof(struct garmin_packet)+data_length,
--								GFP_ATOMIC);
-+		pkt = kmalloc(struct_size(pkt, data, data_length), GFP_ATOMIC);
- 		if (!pkt)
- 			return 0;
- 
- 		pkt->size = data_length;
--		memcpy(pkt->data, data, data_length);
-+		memcpy(pkt->data, data, flex_array_size(pkt, data, pkt->size));
- 
- 		spin_lock_irqsave(&garmin_data_p->lock, flags);
- 		garmin_data_p->flags |= FLAGS_QUEUING;
--- 
-2.27.0
-
+Heh, I think I've made it quite clear that I think it's unnecesary complexity in
+KVM.  It's not a hill I'll die on, e.g. if Paolo and others feel it's the right
+approach then so be it, but I really, really dislike the idea of dynamically
+changing the table, KVM has a long and sordid history of botching those types
+of flows/features.

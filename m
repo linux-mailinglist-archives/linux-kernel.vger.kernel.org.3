@@ -2,172 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC8F4944B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B033C4944D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357819AbiATAew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357874AbiATAeo (ORCPT
+        id S1357936AbiATAhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:37:09 -0500
+Received: from relay037.a.hostedemail.com ([64.99.140.37]:43874 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1357871AbiATAhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:34:44 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7212C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:34:43 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id r138so7069846oie.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PQWbtRSfMI7cW/DhHLCe9Ue9Xg2UF+u+efuIrUmVbXc=;
-        b=HY3JN2cYz9Vn+FroIekigaULfIoV0MBiYUnhUW5W/kBL8/hfrYf5Jy4nth38EXvVK8
-         0Wl1B4dLorFOSy2vffyfMSw5ACZeqefyfeEMjpTRGh1XuLmVoOHTq87i/wSUDHRhJhuh
-         iE5oSDnoNHiekVZp7mUdC1+tJ3U07RVgk5NVsXc5zOUAMhc2hE8y4oHwsbK+Ax1v/C/w
-         EaHtQChiDQyzp27QCjBPKmhUwwFUciWdrQKXhHla8PrCmjyqExQIA/G9Wfnzp/JqOw+N
-         LTmok3Ulqvj7JDHCgzIOGu9vvtlpM7hhl5PZ8u2m1L+r99GK6Pj0sVRFFAC6bFXhbRWm
-         mg4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PQWbtRSfMI7cW/DhHLCe9Ue9Xg2UF+u+efuIrUmVbXc=;
-        b=X1VrPkPZaa8FEtyqFHXYHOxs3ELVnfJTklR12Mbq+foSv88cHiAyqV2IwuA11oDhWd
-         S971iwBIepdB3OypCWbUyert6ea/rTtWaR1iUJRq4i74Q6IvjY0GbMaQ8GcCY/+Tuham
-         NMQ5x4AY7Am+K1hwIOaLwp6h/9CNHn9No/NLOBYj7pmsFlqpqDLJuEe9daLhNYR/0M5N
-         MmOBhdxjWbBLpILEVlrE51tASV4CdIZgoJm0s0W5tgGHpPsP9PvZpOV7khHNcP2a1MiC
-         +XuarW2NY+n1GwiZ4O6OsRAAzDn7DEfJLBTTK139tOJV8N6Dv34tPEVoUjoycCs7IgFt
-         S07A==
-X-Gm-Message-State: AOAM5334kKTSzu0OGhKrWv1uG5ahqgMTFWnUU9f68UE5c4wwwU/6uU+i
-        hpnJU5syUtTRSgRMvbaw4YilkA==
-X-Google-Smtp-Source: ABdhPJx52YvWMWkLgw7UPU1nTlyknc2cYQgXvX5a70ux3nqbMHpQ68EKdDORSWSHJkxbWRxIQV39MQ==
-X-Received: by 2002:a05:6808:999:: with SMTP id a25mr5520344oic.75.1642638883193;
-        Wed, 19 Jan 2022 16:34:43 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id v27sm569715ots.62.2022.01.19.16.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 16:34:42 -0800 (PST)
-Date:   Wed, 19 Jan 2022 16:35:17 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Benjamin Li <benl@squareup.com>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drivers: thermal: tsens: respect thermal_device_mode
- in threshold irq reporting
-Message-ID: <YeiuRXFR1yer9vxe@ripper>
-References: <20220114031730.25621-1-benl@squareup.com>
+        Wed, 19 Jan 2022 19:37:02 -0500
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay13.hostedemail.com (Postfix) with ESMTP id 5752060300;
+        Thu, 20 Jan 2022 00:36:46 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 2A95A2002E;
+        Thu, 20 Jan 2022 00:36:44 +0000 (UTC)
+Message-ID: <7e6d37612af05c7c21fc7b06462ccf0da1b8d062.camel@perches.com>
+Subject: Re: [PATCH] docs: Update the preferred line size to 100 characters
+From:   Joe Perches <joe@perches.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Date:   Wed, 19 Jan 2022 16:36:42 -0800
+In-Reply-To: <d7130556-a8a4-76c0-0fde-b6b1439efda6@infradead.org>
+References: <20220119160642.140e84c6@gandalf.local.home>
+         <d7130556-a8a4-76c0-0fde-b6b1439efda6@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114031730.25621-1-benl@squareup.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.83
+X-Stat-Signature: hunt9abibkxg5nqdgs6sgs7bpubdbfxk
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 2A95A2002E
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18sEW+HDq360VC4B2Ve33z2oG4VjpE/A3k=
+X-HE-Tag: 1642639004-641063
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 13 Jan 19:17 PST 2022, Benjamin Li wrote:
+On Wed, 2022-01-19 at 15:00 -0800, Randy Dunlap wrote:
+> 
+> On 1/19/22 13:06, Steven Rostedt wrote:
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> > 
+> > As commit bdc48fa11e46f ("checkpatch/coding-style: deprecate 80-column
+> > warning") states:
+> > 
+> >     Increase the default limit to 100 characters.  Not because 100
+> >     characters is some hard limit either, but that's certainly a "what are
+> >     you doing" kind of value and less likely to be about the occasional
+> >     slightly longer lines.
+> 
+> 
+> Has Linus has changed his view on this since 2016?
+>   https://lore.kernel.org/all/CA+55aFxaOFoh+Zrm5tNhU4hWu4Z032+nqV3vXK=QPJyhZsU3_A@mail.gmail.com/
+> 
+> Guess we will see.
+> I expect that the answer is "be reasonable," but that's subjective.
+> 
+> To me, it is easier to look below one line for something in context than it is
+> to have to scan several inches to the right and then back to the left (or vice versa).
+> Maybe I'm alone in that, but I doubt it.
 
-> 'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
-> polling mechanism to check for threshold trips. This is used sometimes to
-> run performance test cases.
-> 
-> However, tsens supports an interrupt mechanism to receive notification of
-> trips, implemented in commit 634e11d5b450 ("drivers: thermal: tsens: Add
-> interrupt support").
-> 
-> Currently the thermal zone mode that's set by userspace is not checked
-> before propagating threshold trip events from IRQs. Let's fix this to
-> restore the abilty to disable thermal throttling at runtime.
-> 
-> ====================
-> 
-> Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
-> four thermal zones control cpu0-3 and the last zone is for the other four
-> CPUs together.
-> 
->   for f in /sys/class/thermal/thermal_zone*; do
->     echo "disabled" > $f/mode
->     echo $f | paste - $f/type $f/mode
->   done
-> 
-> /sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
-> /sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
-> /sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
-> /sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
-> /sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
-> 
-> With mitigation thresholds at 75 degC and load running, we can now cruise
-> past temp=75000 without CPU throttling kicking in.
-> 
->   watch -n 1 "grep '' /sys/class/thermal/*/temp
->       /sys/class/thermal/*/cur_state
->       /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
-> 
-> /sys/class/thermal/thermal_zone0/temp:82000
-> /sys/class/thermal/thermal_zone1/temp:84000
-> /sys/class/thermal/thermal_zone2/temp:87000
-> /sys/class/thermal/thermal_zone3/temp:84000
-> /sys/class/thermal/thermal_zone4/temp:84000
-> /sys/class/thermal/cooling_device0/cur_state:0
-> /sys/class/thermal/cooling_device1/cur_state:0
-> /sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
-> /sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
-> /sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
-> /sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
-> 
-> Reported-by: Zac Crosby <zac@squareup.com>
-> Signed-off-by: Benjamin Li <benl@squareup.com>
-> ---
-> Changes in v2:
-> - Reordered sentences in first part of commit message to make sense.
+You are not alone.
 
-Didn't spot the v2 before replying to v1, still looks good :)
+Reading left to right is relatively easy but for long line lengths
+the eye movement to the next appropriate line is not at all easy.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> It's sort of a locality of vision thing.
 
-Regards,
-Bjorn
+Yup.
 
+I think this is not a good patch.
+
+The preferred line length should stay relatively small at 80 and not
+allow an entire file to be wrapped to 100.
+
+I'd still prefer a warning when any new identifier is longer than some
+length like say 20 characters.
+
+> > It's 2022, people are not using 80x24 terminals anymore (well I'm sure
+> > someone is, but they are the small minority).
+> > 
+> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > ---
+> >  Documentation/process/coding-style.rst | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+> > index 03eb53fd029a..73be9edffede 100644
+> > --- a/Documentation/process/coding-style.rst
+> > +++ b/Documentation/process/coding-style.rst
+> > @@ -101,10 +101,10 @@ Get a decent editor and don't leave whitespace at the end of lines.
+> >  Coding style is all about readability and maintainability using commonly
+> >  available tools.
+> >  
+> > -The preferred limit on the length of a single line is 80 columns.
+> > +The preferred limit on the length of a single line is 100 columns.
+> >  
+> > -Statements longer than 80 columns should be broken into sensible chunks,
+> > -unless exceeding 80 columns significantly increases readability and does
+> > +Statements longer than 100 columns should be broken into sensible chunks,
+> > +unless exceeding 100 columns significantly increases readability and does
+> >  not hide information.
+> >  
+> >  Descendants are always substantially shorter than the parent and
 > 
->  drivers/thermal/qcom/tsens.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 99a8d9f3e03c..0b6299512e7c 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -509,13 +509,16 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
->  		spin_unlock_irqrestore(&priv->ul_lock, flags);
->  
->  		if (trigger) {
-> -			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> -				hw_id, __func__, temp);
-> -			thermal_zone_device_update(s->tzd,
-> -						   THERMAL_EVENT_UNSPECIFIED);
-> +			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
-> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> +					hw_id, __func__, temp);
-> +				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
-> +			} else {
-> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped as zone disabled\n",
-> +					hw_id, __func__, temp);
-> +			}
->  		} else {
-> -			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-> -				hw_id, __func__, temp);
-> +			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n", hw_id, __func__, temp);
->  		}
->  
->  		if (tsens_version(priv) < VER_0_1) {
-> -- 
-> 2.17.1
-> 
+
+

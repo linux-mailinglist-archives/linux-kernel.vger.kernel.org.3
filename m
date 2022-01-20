@@ -2,69 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B174A494A5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4E3494A63
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbiATJIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        id S239283AbiATJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:10:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbiATJIa (ORCPT
+        with ESMTP id S231761AbiATJJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:08:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7052C061574;
-        Thu, 20 Jan 2022 01:08:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEC61B81D14;
-        Thu, 20 Jan 2022 09:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 611FBC340E0;
-        Thu, 20 Jan 2022 09:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642669707;
-        bh=Ihaq100gCgC3qd3GwgMReAb8+0jwcjEbXu7rdkTJtc0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CNT1reJdThCtvvwMkvZ+lUnEPa35MUYjYPZoLYTjUd24u0HuwiD9ghv/qrvqaJIO4
-         KcXPgrbuphXsUBw1dTqts6qsCbijv0czWGwVnrlWgIc1VPbOHHZJFcTFu3wl9Mo0Am
-         WOOjcAMAWzEx7sBkPaTt9op2IW52/i42X+fUSCP1/IRt8Vw7stK/46yGIx8tBSZUJy
-         C6hxgYtQT2q1GGOy2jt0CqsCkqmEkGcvk7Lvuy9IBDLNNmLOMGxaP9VQ6549t7Z1Cb
-         i6sOSMEBHzCTfMtlmgpFTbkePoA01Uv5pbZTnW+MFOQVUeX6T8fLIQPIIQr1hP31l3
-         JagJRq3IOSUsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5145EF60798;
-        Thu, 20 Jan 2022 09:08:27 +0000 (UTC)
-Subject: Re: [GIT PULL] Networking for 5.17-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220119182611.400333-1-kuba@kernel.org>
-References: <20220119182611.400333-1-kuba@kernel.org>
-X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220119182611.400333-1-kuba@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc1
-X-PR-Tracked-Commit-Id: ff9fc0a31d85fcf0011eb4bc4ecaf47d3cc9e21c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fa2e1ba3e9e39072fa7a6a9d11ac432c505b4ac7
-Message-Id: <164266970732.26345.11726794577930380253.pr-tracker-bot@kernel.org>
-Date:   Thu, 20 Jan 2022 09:08:27 +0000
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Thu, 20 Jan 2022 04:09:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F08C061574;
+        Thu, 20 Jan 2022 01:09:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ojH90duUrlg/GDFel8G8XOOeQrX2zbxUTaKAoe1bGvs=; b=tCO5lD4il6m52dcPk+/cYpHidp
+        +onLjblS0VrPFPxS9ZGJUQvdyNeZPPGHNAfF+5peIslo4QgfZyN8BmETycomdYalpvi6wzkvq4RyL
+        xpk6fgqFhh41z7Jecw/dPJnI+IIgRJgrJPksZWbTPWwU8R3QsvMLuMlkPHQ3yTy59btCClyFa50/d
+        T+CHX9m/pw3Xmdpesim/0kl6EPfhr0hcZN+/djS0aMkWwifGzbSVu6YPpYkiUaN68OlmHsaX3qOtf
+        0RJQrwayc+fmmfjAoqUshIAxqNkE7rnwubq99z+oFJjmVHdfhSYo6uk3OXvGjR9gwacmvJ57xP/KY
+        f83fZOtA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nATR7-00A4wf-Az; Thu, 20 Jan 2022 09:08:53 +0000
+Date:   Thu, 20 Jan 2022 01:08:53 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-cachefs@redhat.com,
+        Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <smfrench@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] vfs, fscache: Add an IS_KERNEL_FILE() macro for
+ the S_KERNEL_FILE flag
+Message-ID: <YekmpeQvNlGlMvNY@infradead.org>
+References: <YeefizLOGt1Qf35o@infradead.org>
+ <YebpktrcUZOlBHkZ@infradead.org>
+ <164251396932.3435901.344517748027321142.stgit@warthog.procyon.org.uk>
+ <164251409447.3435901.10092442643336534999.stgit@warthog.procyon.org.uk>
+ <3613681.1642527614@warthog.procyon.org.uk>
+ <3765724.1642583885@warthog.procyon.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3765724.1642583885@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 19 Jan 2022 10:26:11 -0800:
+On Wed, Jan 19, 2022 at 09:18:05AM +0000, David Howells wrote:
+> The flag cannot just be dropped - it's an important part of the interaction
+> with cachefilesd with regard to culling.  Culling to free up space is
+> offloaded to userspace rather than being done within the kernel.
+> 
+> Previously, cachefiles, the kernel module, had to maintain a huge tree of
+> records of every backing inode that it was currently using so that it could
+> forbid cachefilesd to cull one when cachefilesd asked.  I've reduced that to a
+> single bit flag on the inode struct, thereby saving both memory and time.  You
+> can argue whether it's worth sacrificing an inode flag bit for that, but the
+> flag can be reused for any other kernel service that wants to similarly mark
+> an inode in use.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc1
+Which is a horrible interface.   But you tricked Linus into merging this
+crap, so let's not pretent it is a "kernel file".  We have plenty of
+those, basically every caller of filp_open is one.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fa2e1ba3e9e39072fa7a6a9d11ac432c505b4ac7
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+It is something like "pinned for fscache/cachefiles", so name it that
+way and add a big fat comment expaining the atrocities.

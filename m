@@ -2,129 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1EE494AEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61258494AF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbiATJjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:39:11 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46852 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiATJjK (ORCPT
+        id S1359586AbiATJjw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Jan 2022 04:39:52 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:38357 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbiATJjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:39:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BD7D81F3A9;
-        Thu, 20 Jan 2022 09:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642671548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pShYaJ0kOe8l7qrjkXEmprDERO8GtSaHvia2RdvVgZM=;
-        b=Y0dQ3AnJpJRwOmkwdAWjmKbLX+H4d5wKnBYLM4LbjwtNmLTW/SEL6IJYulNt78E/4IPPsT
-        uy6EKBwnlbqzRHFhgNccmi1t6w5FqVhTZd7xYPlY0HaRP1OFxwLwoVo5yrJeJDZaGApPYE
-        f8uIngY1GFL33nwwHSwyFthza+QacGo=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 58E99A3C40;
-        Thu, 20 Jan 2022 09:39:02 +0000 (UTC)
-Date:   Thu, 20 Jan 2022 10:39:08 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, kernel@gpiccoli.net,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Message-ID: <YektvNyN6mAHv9jJ@alley>
-References: <20220114183046.428796-1-gpiccoli@igalia.com>
- <20220119071318.GA4977@MiWiFi-R3L-srv>
- <YegytkfED+QI56Y8@alley>
- <94bb12a2-a788-cee6-7d4f-dc0ac581fb39@igalia.com>
+        Thu, 20 Jan 2022 04:39:51 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D5543FF805;
+        Thu, 20 Jan 2022 09:39:47 +0000 (UTC)
+Date:   Thu, 20 Jan 2022 10:39:46 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Trevor Woerner <twoerner@gmail.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH 0/3] mtdblock: Advertise about UBI and UBI block
+Message-ID: <20220120103946.3a18aee7@xps13>
+In-Reply-To: <CAAEAJfD0ctKon7onbj5cCgN9OUnXpQ-gxG=DF6hXD9hW+Pw83A@mail.gmail.com>
+References: <20210801234509.18774-1-ezequiel@collabora.com>
+        <20211026150350.GA5136@localhost>
+        <CAAEAJfD0ctKon7onbj5cCgN9OUnXpQ-gxG=DF6hXD9hW+Pw83A@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94bb12a2-a788-cee6-7d4f-dc0ac581fb39@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-01-19 13:03:15, Guilherme G. Piccoli wrote:
-> Thanks again Petr, for the deep analysis! Much appreciated.
-> Some comments inline below:
-> 
-> 
-> On 19/01/2022 12:48, Petr Mladek wrote:
-> >[...]
-> > From my POV, the function of panic notifiers is not well defined. They
-> > do various things, for example:
-> > [...] 
-> > 
-> > The do more that just providing information. Some are risky. It is not
-> > easy to disable a particular one.
-> 
-> We are trying to change that here:
-> https://lore.kernel.org/lkml/20220108153451.195121-1-gpiccoli@igalia.com/
-> 
-> Your review/comments are very welcome =)
-> 
-> 
-> > [...] 
-> > It might make sense to allow to call kmsg_dump before panic notifiers
-> > to reduce the risk of a breakage. But I do not have enough experience
-> > with them to judge this.
-> > 
-> > I can't remember any bug report in this code. I guess that only
-> > few people use kmsg_dump.
-> 
-> One of the problems doing that is that RCU and hung task detector, for
-> example, have panic notifiers to disable themselves in the panic
-> scenario - if we kmsg_dump() _before_ the panic notifiers, we may have
-> intermixed messages, all messy...so for me it makes sense to keep the
-> kmsg_dump() after panic notifiers.
+Hi Ezequiel,
 
-It makes perfect sense to disable the watchdogs during panic().
-For example, rcu_panic() just sets a variable:
+ezequiel@vanguardiasur.com.ar wrote on Fri, 12 Nov 2021 10:54:36 -0300:
 
-static int rcu_panic(struct notifier_block *this, unsigned long ev, void *ptr)
-{
-	rcu_cpu_stall_suppress = 1;
-	return NOTIFY_DONE;
-}
-
-It is quick and super-safe. It might make sense to implement similar
-thing for other watchdogs and do something like:
-
-void panic_supress_watchdogs(void)
-{
-	rcu_panic();
-	softlockup_watchog_panic();
-	wq_watchog_panic();
-}
-
-It might be caller early in panic().
-
+> Hi Trevor,
 > 
-> > [...]
-> > Yes, panic_print_sys_info() increases the risk that the crash dump
-> > will not succeed. But the change makes sense because:
-> > 
-> >   + panic_print_sys_info() might be useful even with full crash dump.
-> >     For example, ftrace messages are not easy to read from the memory
-> >     dump.
+> I am not reachable at ezequiel at collabora.com, so I missed this
+> thread. Sorry about the delay, replying.
 > 
-> The last point is really good, I didn't consider that before but makes a
-> lot of sense - we can now dump (a hopefully small!) ftrace/event trace
-> buffer to dmesg before a kdump, making it pretty easy to read that later.
-> Cheers,
+> On Tue, 26 Oct 2021 at 12:05, Trevor Woerner <twoerner@gmail.com> wrote:
+> >
+> > On Sun 2021-08-01 @ 08:45:02 PM, Ezequiel Garcia wrote:  
+> > > Hi Richard, and everyone else:
+> > >
+> > > Browsing the internet for "JFFS2 mtd" results in tutorials, articles
+> > > and github.gists0 that point to mtdblock.
+> > >
+> > > In fact, even the MTD wiki mentions that JFFS2
+> > > needs mtdblock to mount a rootfs:
+> > >
+> > >   http://www.linux-mtd.infradead.org/faq/jffs2.html
+> > >
+> > > Moreover, I suspect there may be lots of users
+> > > that still believe mtdblock is somehow needed to
+> > > mount SquashFS.
+> > >
+> > > I've taken a verbose route and added a pr_warn
+> > > warning if the devices are NAND. I don't think using
+> > > NAND without UBI is too wise, and given the amount
+> > > of outdated tutorials I believe some advertising
+> > > will help.  
+> >
+> > Not all NAND partitions on a device will contain linux root filesystems. For a
+> > linux root filesystem perhaps using UBI/UBIFS is preferred, yet these messages
+> > print out for each and every NAND partition:
+> >
+> >         [    0.900827] Creating 8 MTD partitions on "nxp_lpc3220_slc":
+> >         [    0.906431] 0x000000000000-0x000000020000 : "bootrom"
+> >         [    0.913523] mtdblock: MTD device 'bootrom' is NAND, please consider using UBI block devices instead.
+> >         [    0.933334] 0x000000020000-0x000000080000 : "uboot"
+> >         [    0.940439] mtdblock: MTD device 'uboot' is NAND, please consider using UBI block devices instead.
+> >         [    0.963322] 0x000000080000-0x000000440000 : "fbkernel"
+> >         [    0.970655] mtdblock: MTD device 'fbkernel' is NAND, please consider using UBI block devices instead.
+> >         [    0.993361] 0x000000440000-0x000000920000 : "fbrootfs"
+> >         [    1.000725] mtdblock: MTD device 'fbrootfs' is NAND, please consider using UBI block devices instead.
+> >         [    1.023315] 0x000000920000-0x000000ce0000 : "c_kernel"
+> >         [    1.030722] mtdblock: MTD device 'c_kernel' is NAND, please consider using UBI block devices instead.
+> >         [    1.053444] 0x000000ce0000-0x000000d00000 : "c__atags"
+> >         [    1.060742] mtdblock: MTD device 'c__atags' is NAND, please consider using UBI block devices instead.
+> >         [    1.083349] 0x000000d00000-0x000001000000 : "c_rootfs"
+> >         [    1.090702] mtdblock: MTD device 'c_rootfs' is NAND, please consider using UBI block devices instead.
+> >         [    1.113335] 0x000001000000-0x000020000000 : "mender"
+> >         [    1.131627] mtdblock: MTD device 'mender' is NAND, please consider using UBI block devices instead.
+> >
+> > NAND tends to be something found on older devices, the firmware/bootloaders
+> > of older devices couldn't possibly understand UBI/UBIFS so many of these
+> > partitions need be "raw" partitions, or use something that predates UBI.
+> >
+> > Ironically my "mender" partition contains a UBI (with multiple UBIFSes inside)
+> > yet I got the same "please use UBI" message as all the others (lol)
+> >
+> > I'm specifying my partitions in DT with:
+> >
+> > partitions {
+> >         compatible = "fixed-partitions";
+> >         #address-cells = <1>;
+> >         #size-cells = <1>;
+> >
+> >         mtd0@0       { label = "bootrom";   reg = <0x00000000 0x00020000>; };
+> >         mtd1@20000   { label = "uboot";     reg = <0x00020000 0x00060000>; };
+> >         mtd2@80000   { label = "fbkernel";  reg = <0x00080000 0x003c0000>; };
+> >         mtd3@440000  { label = "fbrootfs";  reg = <0x00440000 0x004e0000>; };
+> >         mtd4@920000  { label = "c_kernel";  reg = <0x00920000 0x003c0000>; };
+> >         mtd5@ce0000  { label = "c__atags";  reg = <0x00ce0000 0x00020000>; };
+> >         mtd6@d00000  { label = "c_rootfs";  reg = <0x00d00000 0x00300000>; };
+> >         mtd7@1000000 { label = "mender";    reg = <0x01000000 0x1f000000>; };
+> > };
+> >
+> > which is why, I assume, I'm getting these messages. Is there a UBI-friendly
+> > way to define them to avoid these messages?
+> >  
+> 
+> I feel the messages are actually helping you. You should not have mtdblock
+> on any of these MTD devices, if I understood correctly, since you are not
+> mounting a filesystem on any of them.
+> 
+> Just disable MTDBLOCK on your build and you will be good to go.
+> 
+> I am inclined to just leave the warnings, although they look spammy,
+> precisely to help catch this mis-setups.
 
-JFYI, there is an extension for the crash tool that might be able to read
-the trace log, see https://crash-utility.github.io/extensions.html
+I keep getting complaints about these messages because they are
+spawned several times in a boot (each device or partition, I don't
+recall) while mtdblock is not even used. I understand it would be best
+to have it disabled in this case but could we find a way to be less
+invasive?
 
-I haven't tested it myself yet.
-
-Best Regards,
-Petr
+Thanks,
+Miquèl

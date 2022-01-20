@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A68A4953D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB34B4953D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243318AbiATSDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S238832AbiATSDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236454AbiATSDt (ORCPT
+        with ESMTP id S233042AbiATSDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:03:49 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB60C061574;
-        Thu, 20 Jan 2022 10:03:48 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id a7so5807488plh.1;
-        Thu, 20 Jan 2022 10:03:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=hBdSBn0aY8P5b7CcUgLLwj8ITEo8ulwTDyDNKsj3JU4=;
-        b=a8aewc0V/Mxa2wZG0otBO8Z8iDIGHB/+3V8bw2mJ2XqPnqJ++PYfOnsG42TIZAwmqc
-         YyV98avkWwkZDb6Iaz+XVg7VcoZ7PbAysz/vC05oTQ3r01xOWu1hfo/cJMdXdA88EeD7
-         kilKiQyJczONi7FpcV9v7l58pXiQBuOvjs5cXgXH7mpNn1FZNAxGRQ4vxUxByCgmG/zT
-         +p8VWIM+3swreGU1vQe79490Ru1O3NR1TCvWyoBZ77JTZQLf1ObcHdLln06qRp5C8DMt
-         5q4UT5Y2+l5dS6l6zT03ArlGHFXfK4jMFqhsYuexjlTWK0VeM6NGovoJx0g63VzbD++Q
-         7SaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=hBdSBn0aY8P5b7CcUgLLwj8ITEo8ulwTDyDNKsj3JU4=;
-        b=PBqZzLc7EFx3lpnMBaMQagnwj8ohDq7fLLPoUJm2TnWoe3eqq5uaVA+GBSsVnTRrRl
-         HsCkw/nY3gqM2/WBPiQ5nyxKdNjs1J7vuJL83OTYnNqKTYFIxHodt9DNr77SUSvCWzIP
-         cX50q98zeHyxeA9Ve3j6Qy8HM+JlaFLf5qYQwQB2xRe9h3r+gHbspthbjX74clDiFrBe
-         ukYXav6qB34IGFgPwh3ZbUKKAREPtxR7x5I7vxI3HyFPvB14Fstza1MiXizYg6dCx5at
-         8W/U5Av2d/txxFse44sEPRkY1eugdiz3AN9pd/KIt8BcPZg1SyBJpHLxdu2AmNyEPk9U
-         KP3Q==
-X-Gm-Message-State: AOAM531qsIzFW3wfgArg+UDCjl5Qo5ngEK+t+n7ZESkb4xHCez5gcqv4
-        lfcOULq73RRn5OB4LF5HFPI=
-X-Google-Smtp-Source: ABdhPJzV4sADT3tD7ij7Xb6ez768vZE0npHBW1XWFtG1IZst812poZLDRzFTqJm2siEIPk7w+lZi1g==
-X-Received: by 2002:a17:90a:4305:: with SMTP id q5mr12283473pjg.222.1642701827779;
-        Thu, 20 Jan 2022 10:03:47 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.2])
-        by smtp.gmail.com with ESMTPSA id w10sm3589790pfn.153.2022.01.20.10.03.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Jan 2022 10:03:47 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [RFC][PATCH v2 1/5] mm: Avoid unmapping pinned pages
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220120160822.666778608@infradead.org>
+        Thu, 20 Jan 2022 13:03:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45BC061574;
+        Thu, 20 Jan 2022 10:03:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98C7BB81D74;
+        Thu, 20 Jan 2022 18:03:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA23C340E0;
+        Thu, 20 Jan 2022 18:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642701824;
+        bh=hnCvMNzGWqbC4sL/0zVTHFsSyDTS0wssN9HVuAtSlEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b5HKZ1DiR5MGJUva6SjqfLdFN29GNFkr5XOv88VzjZDFQXBrdd1QySbriErYp4A3y
+         +qbt2fzqWG8LegRWAii4Yu8MGRyqhey3z9gjKULit5ycvchECXktUrUWZrEYIIxmWl
+         4k1vk0uJFHNuX249R2yqJNFIz1fNUqgOAthaezSJxIZbvcduZB0pu03JbAKfSUsW5K
+         a8zotVTBVrwGTwBWBXgc1OkdPxmT1244v7vrufWG6WVIf+01wTpdFW+3dJc08DX2m+
+         hCqkEDcH6uJKt32C4rglP4k4WNbkJpYHME5RUHRJEVy0ARAl+MCDlZxKp6Tltp6kLq
+         rpxrOALfkFFZw==
 Date:   Thu, 20 Jan 2022 10:03:44 -0800
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        Steven Rostedt <rostedt@goodmis.org>, bsegall@google.com,
-        Mel Gorman <mgorman@suse.de>, bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-api@vger.kernel.org,
-        X86 ML <x86@kernel.org>, pjt@google.com, posk@google.com,
-        avagin@google.com, Jann Horn <jannh@google.com>,
-        tdelisle@uwaterloo.ca, mark.rutland@arm.com, posk@posk.io
-Content-Transfer-Encoding: 7bit
-Message-Id: <E63F4045-E624-47FE-A417-5D2FF7923179@gmail.com>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.666778608@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Anthony Iliopoulos <ailiop@suse.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] mount: warn only once about timestamp range
+ expiration
+Message-ID: <20220120180344.GA13499@magnolia>
+References: <20220119202934.26495-1-ailiop@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119202934.26495-1-ailiop@suse.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 19, 2022 at 09:29:34PM +0100, Anthony Iliopoulos wrote:
+> Commit f8b92ba67c5d ("mount: Add mount warning for impending timestamp
+> expiry") introduced a mount warning regarding filesystem timestamp
+> limits, that is printed upon each writable mount or remount.
+> 
+> This can result in a lot of unnecessary messages in the kernel log in
+> setups where filesystems are being frequently remounted (or mounted
+> multiple times).
+> 
+> Avoid this by setting a superblock flag which indicates that the warning
+> has been emitted at least once for any particular mount, as suggested in
+> [1].
+> 
+> Signed-off-by: Anthony Iliopoulos <ailiop@suse.com>
 
+I'm glad someone finally turned down the volume on this.
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-> On Jan 20, 2022, at 7:55 AM, Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> Add a guarantee for Anon pages that pin_user_page*() ensures the
-> user-mapping of these pages stay preserved. In order to ensure this
-> all rmap users have been audited:
-> 
-> vmscan:	already fails eviction due to page_maybe_dma_pinned()
-> 
-> migrate:	migration will fail on pinned pages due to
-> 		expected_page_refs() not matching, however that is
-> 		*after* try_to_migrate() has already destroyed the
-> 		user mapping of these pages. Add an early exit for
-> 		this case.
-> 
-> numa-balance:	as per the above, pinned pages cannot be migrated,
-> 		however numa balancing scanning will happily PROT_NONE
-> 		them to get usage information on these pages. Avoid
-> 		this for pinned pages.
-> 
-> None of the other rmap users (damon,page-idle,mlock,..) unmap the
-> page, they mostly just muck about with reference,dirty flags etc.
-> 
-> This same guarantee cannot be provided for Shared (file) pages due to
-> dirty page tracking.
-> 
-> 
+--D
 
-[ snip ]
-
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -106,6 +106,12 @@ static unsigned long change_pte_range(st
-> 					continue;
 > 
-> 				/*
-> +				 * Can't migrate pinned pages, avoid touching them.
-> +				 */
-> +				if (page_maybe_dma_pinned(page))
-> +					continue;
-> +
-> +				/*
+> [1] https://lore.kernel.org/CAHk-=wim6VGnxQmjfK_tDg6fbHYKL4EFkmnTjVr9QnRqjDBAeA@mail.gmail.com/
+> ---
+>  fs/namespace.c     | 2 ++
+>  include/linux/fs.h | 1 +
+>  2 files changed, 3 insertions(+)
 > 
-
-I have a similar problem with userfaultfd changing protection for
-DMA-pinned pages. For userfaultfd it is important to know how many
-pages were actually modified.
-
-I am working on a vectored UFFDIO_WRITEPROTECTV that aborts once
-a pinned page is encountered, but also returns the number of pages
-that were properly protected. I still need to do some work to
-send patches for that as it requires further changes (to return
-the number of pages that were handled).
-
-But for the matter of your patch, is it possible to make this
-test generic (not migration specific) and rely on a new flag in
-cp_flags? I can of course make this change later if you prefer it
-this way.
-
+> diff --git a/fs/namespace.c b/fs/namespace.c
+> index c6feb92209a6..fec0f79aa2eb 100644
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -2583,6 +2583,7 @@ static void mnt_warn_timestamp_expiry(struct path *mountpoint, struct vfsmount *
+>  	struct super_block *sb = mnt->mnt_sb;
+>  
+>  	if (!__mnt_is_readonly(mnt) &&
+> +	   (!(sb->s_iflags & SB_I_TS_EXPIRY_WARNED)) &&
+>  	   (ktime_get_real_seconds() + TIME_UPTIME_SEC_MAX > sb->s_time_max)) {
+>  		char *buf = (char *)__get_free_page(GFP_KERNEL);
+>  		char *mntpath = buf ? d_path(mountpoint, buf, PAGE_SIZE) : ERR_PTR(-ENOMEM);
+> @@ -2597,6 +2598,7 @@ static void mnt_warn_timestamp_expiry(struct path *mountpoint, struct vfsmount *
+>  			tm.tm_year+1900, (unsigned long long)sb->s_time_max);
+>  
+>  		free_page((unsigned long)buf);
+> +		sb->s_iflags |= SB_I_TS_EXPIRY_WARNED;
+>  	}
+>  }
+>  
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index f3daaea16554..5c537cd9b006 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -1435,6 +1435,7 @@ extern int send_sigurg(struct fown_struct *fown);
+>  
+>  #define SB_I_SKIP_SYNC	0x00000100	/* Skip superblock at global sync */
+>  #define SB_I_PERSB_BDI	0x00000200	/* has a per-sb bdi */
+> +#define SB_I_TS_EXPIRY_WARNED 0x00000400 /* warned about timestamp range expiry */
+>  
+>  /* Possible states of 'frozen' field */
+>  enum {
+> -- 
+> 2.34.1
+> 

@@ -2,155 +2,386 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C44494D2A
+	by mail.lfdr.de (Postfix) with ESMTP id C0297494D2C
 	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiATLkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiATLkh (ORCPT
+        id S231705AbiATLkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:40:45 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52722
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231676AbiATLko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:40:37 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FFDC061574;
-        Thu, 20 Jan 2022 03:40:37 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id l7-20020a4a2707000000b002dde197c749so2070439oof.10;
-        Thu, 20 Jan 2022 03:40:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IURShh+tAODqAiJh+KDJ+01PfxKxuj1xZUOMackfOOk=;
-        b=Vz1pvQALrPt8wZAYERJlR7js9v4/O4ym8VLsubf10xKBms/HSrNyJXsvLUKVPNz2er
-         z9y+6nPpnS1qbFwvKwvJorb0aIcWu63ZFCha1bhWzJH7j1MFpfTrIFzyaQa00g+b1UFg
-         wCO+8ajcrVTlY4dtkpmSgqGqvfxa4zoI31BvQggtxFB/0MXIwL9qG/XyDMZXxGeTkHiK
-         vDn1LtEM2iBH8xCc+4qhPyIX5aK0onRaVfO6k6V2ZgTS6FQ7r+O88jb7LSRI7mYQh0sP
-         kkC0b533v7hmJ/EjyCQ8E4jxwvWW9+JZqK4CRU2XFJCepYw+mCDbLaLCO0yyFAUVRbME
-         bg1w==
+        Thu, 20 Jan 2022 06:40:44 -0500
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DAFAC40018
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642678842;
+        bh=Tcm8ymYnIr/oNK6kxvfZkK1mXF5ZqPJ9vCeOTro3QTA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=u9wPmLdNcIbvimPQywM7UhuR+H4jNUVIDrUcRPeaJuZHQtSQkt/05vOxyICOyUQoz
+         l08RgJtVnSfLtbP8Q70vD6YKJscvtcTi/xQrGehBtop5s2ijH3QCzpRioQrepKC/CO
+         uiGKXh8kUTmq8pORCIb810g8COx+P8PiNgqO72BkSGXu0w0UkGXYH/HBXOjnfsei8b
+         ePzlikSQFGDAMqgwXxcmpx7Gtg1P7/hapJLrFsXm67zM+3bwaW/noX/4zC1aCYoTxF
+         fxr+SQK7Qd5r43076+JMl4pWDDoB4pXTNl3cppK6DCg+sPcZ1sT4eG6ks9ZvhLtSlM
+         9MnFKZEituGwQ==
+Received: by mail-ot1-f69.google.com with SMTP id h11-20020a056830400b00b00591920a8f96so3551711ots.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:40:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IURShh+tAODqAiJh+KDJ+01PfxKxuj1xZUOMackfOOk=;
-        b=CBwg8evbXewTKOVoBhJZHj4P0TqGmS9TjGZIAHe4Ki1FvCnRR1jPaDN6izzBj+rthG
-         7/iB1pLaT7T+7i08Mkq6csNs6XAETHypE3o9zbEDNGSHYEhxJM7+ugLfAsbTW2Vdntuk
-         sEtckbCHAB3x/8fOZMp6CXKbYA9UAvxgEZ5xEuLTm/P5qcJf2s3+UrtgbWbR0Do4zJms
-         5ssKA6k2UKpeY5olaH4n0AgS1YUb7B+9AaPiErn/iPNvgn6YlU685vCm45Kj5eqq5fnY
-         EsCS3aXSSCTKs80IzIMKMDNPBBg6FQUO5N0++lLVVWciqJJ+PnyU0C6rryXq0ah5lVr7
-         VQbg==
-X-Gm-Message-State: AOAM530VHa5L2eJsIWZTUZLAG37JmD/D5TDlARfUHxjFJcrC+6IgYpDx
-        K/HPSmaYGUG8GK0eLrMtubIivo5BJWUPg4UqHe4=
-X-Google-Smtp-Source: ABdhPJzVUuPUA0+dLs3T4/ac9raYhHS1yiR6xjixMRgj1sa6nF5nfrTil5Enm8pp/zVblcBTM7eQu4CMn+laojzaQUo=
-X-Received: by 2002:a05:6808:1b25:: with SMTP id bx37mr7082972oib.129.1642678836132;
- Thu, 20 Jan 2022 03:40:36 -0800 (PST)
+        bh=Tcm8ymYnIr/oNK6kxvfZkK1mXF5ZqPJ9vCeOTro3QTA=;
+        b=krmT/djMBjYuy4Ibej1AZH/R+wSEwdJQLHfIPFtib9pf8SDbttDBbvtHZu9NWBndD5
+         keiZ11SIb42SjaTZWiXujjPDzN0KtVyxIQcLNDsMkZ9DelwyFCmqsWKVZCpojE9GYTJs
+         MrkPu3e9VPYyuhf9WFWg2gDH/pvJjJ6sHLFE4lZz3fSgozMrzbMzO61zjal3TFtRkwvW
+         Gp1XvPRfge5vTxZLYxTHTm1/3BHXZAyBIqi0zorFP8foGtPOoBXMZrjKvgs3nAPbHZef
+         KzebdB+F4MwRMz1MuZCJh1dAMDLQkbZAXmP/0UMySQ1Cc++XhJ+n9yfbaHmPH+xaRBvL
+         aIUg==
+X-Gm-Message-State: AOAM533NK9/moSdqzWoK/SuGOd/14lWdrMtnuVwwaoKnoYSZ6nij5nEh
+        55klAWNIT2RPmAfEPQTzwDIWxaF+ScLI03DA9CeqTQU8JFAWncvprIMBM75eUeTUrEMWd9EAjaF
+        AQyC04IvMzoAQeEla9VzUlB5BSIqe5UjK5eAuMxkpyvHFE4HxpUI0KNUwXQ==
+X-Received: by 2002:a9d:480e:: with SMTP id c14mr3288454otf.233.1642678841740;
+        Thu, 20 Jan 2022 03:40:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz1+ikYRy/rF/6E1fnzu3ef59MO0znpHc0gVmvF3JA834OW1jIq6eKlBU5ARKTnlUsuG/fRFKhs2d/04V53jXw=
+X-Received: by 2002:a9d:480e:: with SMTP id c14mr3288435otf.233.1642678841369;
+ Thu, 20 Jan 2022 03:40:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com> <a370a74a-2548-fc20-20b0-89e48645086f@baylibre.com>
-In-Reply-To: <a370a74a-2548-fc20-20b0-89e48645086f@baylibre.com>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Thu, 20 Jan 2022 12:40:24 +0100
-Message-ID: <CAFqH_52NGQYjtEPvsK+pPM12-U6j9vhVCZCFwh6xAABdd+7hqw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: drop Enric Balletbo i
- Serra from maintainers
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Simon Glass <sjg@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-iio <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com> <57131275-1d55-26f9-f1fa-ee5645c55ead@gmail.com>
+In-Reply-To: <57131275-1d55-26f9-f1fa-ee5645c55ead@gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 20 Jan 2022 19:40:29 +0800
+Message-ID: <CAAd53p5LJC5xGivZgsLL1AY2fY-=mSWNndKCoA1Ae6_M8_yeTQ@mail.gmail.com>
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     andrew@lunn.ch, linux@armlinux.org.uk,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Heiner,
 
-Missatge de Neil Armstrong <narmstrong@baylibre.com> del dia dj., 20
-de gen. 2022 a les 11:52:
+On Thu, Jan 20, 2022 at 3:58 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
 >
-> On 20/01/2022 11:40, Krzysztof Kozlowski wrote:
-> > Enric Balletbo i Serra emails bounce:
+> On 20.01.2022 06:19, Kai-Heng Feng wrote:
+> > BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
+> > instead of setting another value, keep it untouched and restore the saved
+> > value on system resume.
 > >
-> >   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
+> > Introduce config_led() callback in phy_driver() to make the implemtation
+> > generic.
 > >
-> > so drop him from the maintainers, similarly to commit 3119c28634dd
-> > ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").  Add generic DRM
-> > bridge maintainers to Analogix ANX7814.
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > > ---
-> >  .../devicetree/bindings/display/bridge/analogix,anx7814.yaml  | 4 +++-
-> >  .../bindings/display/bridge/google,cros-ec-anx7688.yaml       | 1 -
-> >  Documentation/devicetree/bindings/display/bridge/ps8640.yaml  | 1 -
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
+> > v2:
+> >  - Split with a new helper to find default LED config.
+> >  - Make the patch more generic.
 > >
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
-> > index 8e13f27b28ed..bce96b5b0db0 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
-> > @@ -7,7 +7,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >  title: Analogix ANX7814 SlimPort (Full-HD Transmitter)
+> >  drivers/net/phy/marvell.c    | 43 +++++++++++++++++++++++++++++-------
+> >  drivers/net/phy/phy_device.c | 21 ++++++++++++++++++
+> >  include/linux/phy.h          |  9 ++++++++
+> >  3 files changed, 65 insertions(+), 8 deletions(-)
 > >
-> >  maintainers:
-> > -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> > +  - Andrzej Hajda <andrzej.hajda@intel.com>
-> > +  - Neil Armstrong <narmstrong@baylibre.com>
-> > +  - Robert Foss <robert.foss@linaro.org>
+> > diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+> > index 739859c0dfb18..54ee54a6895c9 100644
+> > --- a/drivers/net/phy/marvell.c
+> > +++ b/drivers/net/phy/marvell.c
+> > @@ -746,10 +746,14 @@ static int m88e1510_config_aneg(struct phy_device *phydev)
+> >       return err;
+> >  }
 > >
-> >  properties:
-> >    compatible:
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> > index 9f7cc6b757cb..a88a5d8c7ba5 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> > @@ -8,7 +8,6 @@ title: ChromeOS EC ANX7688 HDMI to DP Converter through Type-C Port
+> > -static void marvell_config_led(struct phy_device *phydev)
+> > +static int marvell_find_led_config(struct phy_device *phydev)
+> >  {
+> > -     u16 def_config;
+> > -     int err;
+> > +     int def_config;
+> > +
+> > +     if (phydev->dev_flags & PHY_USE_FIRMWARE_LED) {
+> > +             def_config = phy_read_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL);
+> > +             return def_config < 0 ? -1 : def_config;
+> > +     }
 > >
-> >  maintainers:
-> >    - Nicolas Boichat <drinkcat@chromium.org>
-> > -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> >       switch (MARVELL_PHY_FAMILY_ID(phydev->phy_id)) {
+> >       /* Default PHY LED config: LED[0] .. Link, LED[1] .. Activity */
+> > @@ -769,20 +773,30 @@ static void marvell_config_led(struct phy_device *phydev)
+> >                       def_config = MII_88E1510_PHY_LED_DEF;
+> >               break;
+> >       default:
+> > -             return;
+> > +             return -1;
+> >       }
 > >
-> >  description: |
-> >    ChromeOS EC ANX7688 is a display bridge that converts HDMI 2.0 to
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-> > index cdaf7a7a8f88..186e17be51fb 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-> > @@ -8,7 +8,6 @@ title: MIPI DSI to eDP Video Format Converter Device Tree Bindings
+> > +     return def_config;
+> > +}
+> > +
+> > +static void marvell_config_led(struct phy_device *phydev, bool resume)
+> > +{
+> > +     int err;
+> > +
+> > +     if (!resume)
+> > +             phydev->led_config = marvell_find_led_config(phydev);
+> > +
+> > +     if (phydev->led_config == -1)
+> > +             return;
+> > +
+> >       err = phy_write_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL,
+> > -                           def_config);
+> > +                           phydev->led_config);
+> >       if (err < 0)
+> >               phydev_warn(phydev, "Fail to config marvell phy LED.\n");
+> >  }
 > >
-> >  maintainers:
-> >    - Nicolas Boichat <drinkcat@chromium.org>
-> > -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> >  static int marvell_config_init(struct phy_device *phydev)
+> >  {
+> > -     /* Set default LED */
+> > -     marvell_config_led(phydev);
+> > -
+> >       /* Set registers from marvell,reg-init DT property */
+> >       return marvell_of_reg_init(phydev);
+> >  }
+> > @@ -2845,6 +2859,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               /* PHY_GBIT_FEATURES */
+> >               .probe = marvell_probe,
+> >               .config_init = marvell_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1101_config_aneg,
+> >               .config_intr = marvell_config_intr,
+> >               .handle_interrupt = marvell_handle_interrupt,
+> > @@ -2944,6 +2959,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               /* PHY_GBIT_FEATURES */
+> >               .probe = marvell_probe,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1121_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -2965,6 +2981,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               /* PHY_GBIT_FEATURES */
+> >               .probe = marvell_probe,
+> >               .config_init = m88e1318_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1318_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3044,6 +3061,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               /* PHY_GBIT_FEATURES */
+> >               .probe = marvell_probe,
+> >               .config_init = m88e1116r_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_intr = marvell_config_intr,
+> >               .handle_interrupt = marvell_handle_interrupt,
+> >               .resume = genphy_resume,
+> > @@ -3065,6 +3083,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .flags = PHY_POLL_CABLE_TEST,
+> >               .probe = m88e1510_probe,
+> >               .config_init = m88e1510_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1510_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3094,6 +3113,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .flags = PHY_POLL_CABLE_TEST,
+> >               .probe = marvell_probe,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1510_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3120,6 +3140,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               /* PHY_GBIT_FEATURES */
+> >               .flags = PHY_POLL_CABLE_TEST,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1510_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3144,6 +3165,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               /* PHY_BASIC_FEATURES */
+> >               .probe = marvell_probe,
+> >               .config_init = m88e3016_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .aneg_done = marvell_aneg_done,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3165,6 +3187,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .flags = PHY_POLL_CABLE_TEST,
+> >               .probe = marvell_probe,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e6390_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3191,6 +3214,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .flags = PHY_POLL_CABLE_TEST,
+> >               .probe = marvell_probe,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e6390_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3217,6 +3241,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .flags = PHY_POLL_CABLE_TEST,
+> >               .probe = marvell_probe,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1510_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3242,6 +3267,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .probe = marvell_probe,
+> >               /* PHY_GBIT_FEATURES */
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1510_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > @@ -3264,6 +3290,7 @@ static struct phy_driver marvell_drivers[] = {
+> >               .probe = marvell_probe,
+> >               .features = PHY_GBIT_FIBRE_FEATURES,
+> >               .config_init = marvell_1011gbe_config_init,
+> > +             .config_led = marvell_config_led,
+> >               .config_aneg = m88e1510_config_aneg,
+> >               .read_status = marvell_read_status,
+> >               .config_intr = marvell_config_intr,
+> > diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> > index 74d8e1dc125f8..c9e97206aa9e8 100644
+> > --- a/drivers/net/phy/phy_device.c
+> > +++ b/drivers/net/phy/phy_device.c
+> > @@ -12,6 +12,7 @@
+> >  #include <linux/acpi.h>
+> >  #include <linux/bitmap.h>
+> >  #include <linux/delay.h>
+> > +#include <linux/dmi.h>
+> >  #include <linux/errno.h>
+> >  #include <linux/etherdevice.h>
+> >  #include <linux/ethtool.h>
+> > @@ -1157,6 +1158,7 @@ static int phy_poll_reset(struct phy_device *phydev)
+> >  int phy_init_hw(struct phy_device *phydev)
+> >  {
+> >       int ret = 0;
+> > +     bool resume = phydev->suspended;
 > >
-> >  description: |
-> >    The PS8640 is a low power MIPI-to-eDP video format converter supporting
+> >       /* Deassert the reset signal */
+> >       phy_device_reset(phydev, 0);
+> > @@ -1184,6 +1186,9 @@ int phy_init_hw(struct phy_device *phydev)
+> >                       return ret;
+> >       }
 > >
+> > +     if (phydev->drv->config_led)
+> > +             phydev->drv->config_led(phydev, resume);
+> > +
+> >       if (phydev->drv->config_intr) {
+> >               ret = phydev->drv->config_intr(phydev);
+> >               if (ret < 0)
+> > @@ -1342,6 +1347,17 @@ int phy_sfp_probe(struct phy_device *phydev,
+> >  }
+> >  EXPORT_SYMBOL(phy_sfp_probe);
+> >
+> > +static const struct dmi_system_id platform_flags[] = {
+> > +     {
+> > +             .matches = {
+> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Dell EMC"),
+> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Edge Gateway 3200"),
+> > +             },
+> > +             .driver_data = (void *)PHY_USE_FIRMWARE_LED,
+> > +     },
+> > +     {}
+> > +};
+> > +
+> >  /**
+> >   * phy_attach_direct - attach a network device to a given PHY device pointer
+> >   * @dev: network device to attach
+> > @@ -1363,6 +1379,7 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
+> >       struct mii_bus *bus = phydev->mdio.bus;
+> >       struct device *d = &phydev->mdio.dev;
+> >       struct module *ndev_owner = NULL;
+> > +     const struct dmi_system_id *dmi;
+> >       bool using_genphy = false;
+> >       int err;
+> >
+> > @@ -1443,6 +1460,10 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
+> >                       phydev_err(phydev, "error creating 'phy_standalone' sysfs entry\n");
+> >       }
+> >
+> > +     dmi = dmi_first_match(platform_flags);
+> > +     if (dmi)
+> > +             phydev->dev_flags |= (u32)dmi->driver_data;
+> > +
+> >       phydev->dev_flags |= flags;
+> >
+> >       phydev->interface = interface;
+> > diff --git a/include/linux/phy.h b/include/linux/phy.h
+> > index 6de8d7a90d78e..3a944a6564f43 100644
+> > --- a/include/linux/phy.h
+> > +++ b/include/linux/phy.h
+> > @@ -517,6 +517,8 @@ struct phy_c45_device_ids {
+> >  struct macsec_context;
+> >  struct macsec_ops;
+> >
+> > +#define PHY_USE_FIRMWARE_LED 0x1000000
+> > +
+> >  /**
+> >   * struct phy_device - An instance of a PHY
+> >   *
+> > @@ -663,6 +665,7 @@ struct phy_device {
+> >
+> >       struct phy_led_trigger *led_link_trigger;
+> >  #endif
+> > +     int led_config;
+> >
+> >       /*
+> >        * Interrupt number for this PHY
+> > @@ -776,6 +779,12 @@ struct phy_driver {
+> >        */
+> >       int (*config_init)(struct phy_device *phydev);
+> >
+> > +     /**
+> > +      * @config_led: Called to config the PHY LED,
+> > +      * Use the resume flag to indicate init or resume
+> > +      */
+> > +     void (*config_led)(struct phy_device *phydev, bool resume);
+> > +
+> >       /**
+> >        * @probe: Called during discovery.  Used to set
+> >        * up device-specific structures, if any
 >
-> Let's wait for Enric's response, but in any case (removal or new address):
-> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+> All this looks quite hacky to me. Why do we touch the LED config at all
+> in the PHY driver? The current code deals with the LED Function Control
+> register only, for the LED Polarity Control and LED Timer Control we
+> rely on the boot loader anyway.
+
+If it's not advised to touch LED config in the PHY driver, where
+should we do it?
+
+> I see that previous LED-related changes like a93f7fe13454 ("net: phy:
+> marvell: add new default led configure for m88e151x") were committed
+> w/o involvement of the PHY maintainers.
+> Flags like MARVELL_PHY_LED0_LINK_LED1_ACTIVE I see as a workaround
+> because the feature as such isn't Marvell-specific. Most PHY's provide
+> means to configure whether LED pins are triggered by selected link speeds
+> and/or rx/tx activity.
+
+I guess that's why maintainers asked me to make the approach more generic?
+
 >
+> Unfortunately the discussion with the LED subsystem maintainers about
+> how to deal best with MAC/PHY-controlled LEDs (and hw triggers in general)
+> didn't result in anything tangible yet. Latest attempt I'm aware of:
+> https://lore.kernel.org/linux-leds/20211112153557.26941-1-ansuelsmth@gmail.com/T/#t
 
-I'm fine with the removal as I don't have access anymore to this
-hardware so it doesn't really make sense to be there. Sorry for not
-sending the patches myself before.
+This series is overkill for the issue I am addressing. The platform
+only needs two things:
+1) Use whatever LED config handed over by system firmware.
+2) Restore the saved LED config on system resume.
 
-Acked-by: Enric Balletbo i Serra <eballetbo@kernel.org>
-
-Best regards,
-  Enric
-
-> Neil
+Kai-Heng

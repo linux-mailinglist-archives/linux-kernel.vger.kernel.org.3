@@ -2,321 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C79495237
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF2B495240
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376951AbiATQSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:18:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37504 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233059AbiATQR4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:17:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642695476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RC733lFPIHzk3RkK9z52O+U2Hg6U4mWbFhj23dwMdo0=;
-        b=LP+kWovLthlCcJQ68ASA7Wfqev9v2OUnxH6gaTEQ/kyTwJgVnfmDODridSsVg6aYEkHCtp
-        BbZ/Ec6YSHkHQZVr+Qiug4ivkmUx3Hw6l+Q1LOxARZp8pnN6M1l8LMhI3IiKUqQr+8kGCD
-        6Je/JWgrpGlBl+EOFCsh5PqVLwzYUqY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-xEY8GJq5OZ-Ndp6fTR398g-1; Thu, 20 Jan 2022 11:17:53 -0500
-X-MC-Unique: xEY8GJq5OZ-Ndp6fTR398g-1
-Received: by mail-ed1-f72.google.com with SMTP id p17-20020aa7c891000000b004052d1936a5so2005530eds.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:17:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RC733lFPIHzk3RkK9z52O+U2Hg6U4mWbFhj23dwMdo0=;
-        b=rot+KS0qm9rdfJC9TIdgUTAX+6ZrIczZx79MkPhTMUES6YvlzXkWPebf69qgIT8rvS
-         UrQqb33d4Ev38ZcnciofIkOu8//jIkZdFW2S2+pGYj205u3PoLdB8Z1cWzk3ssuZEIQg
-         WaOjyLL+mu+s6jurmxxYwPWtk8+efMyY0BwdUK8JWn29jmUS6Yb6qcT13Bg8CkF9JiUc
-         koZPhn/ZnoMc3ae1qOowwU0cFOJ8P9YpqH09lfw0MueaDRSyhkGk+XNBi4Uw5IxPhtww
-         0L/ONzghL1qIX1MVZDuzUJma/RPXELBEzTywVVUK45IqcVndjTChL2odAYAhAfkqhQmH
-         N8qA==
-X-Gm-Message-State: AOAM530iMWSkhFbCPSEIdQcStNWXsCDj9+xPxlNmu+ys9WgBA5BN1pPA
-        N/9EfIS7jz8Nm3uDWxckj7359L0jH3OU3opBYbvRAC8Y3d4MSPpwfKq2B7H2tUxLuFDjEQEAj0k
-        grV4dTycba4a08lQog7J8daor
-X-Received: by 2002:a17:907:1c0a:: with SMTP id nc10mr20566727ejc.308.1642695471874;
-        Thu, 20 Jan 2022 08:17:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyLhLVVCXZg+uHvh9G2LyVGBe1+f7RJ+iHgGbV2n/0A0kB0ocN0jP+qvMTJsudz1CMuv8VAUw==
-X-Received: by 2002:a17:907:1c0a:: with SMTP id nc10mr20566707ejc.308.1642695471591;
-        Thu, 20 Jan 2022 08:17:51 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id lf15sm1184070ejb.83.2022.01.20.08.17.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 08:17:51 -0800 (PST)
-Message-ID: <9c5ed5ee-7ca1-c1f4-5d9d-a63b4327a4af@redhat.com>
-Date:   Thu, 20 Jan 2022 17:17:50 +0100
+        id S1376953AbiATQWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:22:33 -0500
+Received: from foss.arm.com ([217.140.110.172]:43870 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235587AbiATQWb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:22:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42D7011B3;
+        Thu, 20 Jan 2022 08:22:31 -0800 (PST)
+Received: from [10.57.67.151] (unknown [10.57.67.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E36D13F73D;
+        Thu, 20 Jan 2022 08:22:28 -0800 (PST)
+Subject: Re: [RFC PATCH v2 0/5] topdown with metrics
+To:     John Garry <john.garry@huawei.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, irogers@google.com, ak@linux.intel.com
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <4fefb1bc-49b2-bc5b-23cd-cd8fabe8c588@huawei.com>
+ <20220111150749.13365-1-andrew.kilroy@arm.com>
+ <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
+From:   Al Grant <al.grant@foss.arm.com>
+Message-ID: <b82a3b6a-ec02-09ff-8630-e7647491470c@foss.arm.com>
+Date:   Thu, 20 Jan 2022 16:22:37 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.0.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 6/9] platform/x86: bus-multi-instantiate: Reorganize
- I2C functions
-Content-Language: en-US
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-References: <20220120134326.5295-1-sbinding@opensource.cirrus.com>
- <20220120134326.5295-7-sbinding@opensource.cirrus.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220120134326.5295-7-sbinding@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Sorry some more remarks after all...
-
-On 1/20/22 14:43, Stefan Binding wrote:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+On 20/01/2022 09:26, John Garry wrote:
+> On 11/01/2022 15:07, Andrew Kilroy wrote:
+>> This patch series adds the ability for the --topdown option to use
+>> metrics (defined in json files in the pmu-events directory) to describe
+>> how to calculate and determine the output columns for topdown level 1.
+>>
+>> For this to work, a number of metrics have to be defined for the
+>> relevant processor with the MetricGroup name "TopDownL1".  perf will
+>> arrange for the events defined in each metric to be collected, and each
+>> metric will be displayed in the output, as if
+>>
+>>    perf stat -M 'TopDownL1' --metric-only -- exampleapp
+>>
+>> had been used.
+>>
+>> Topdown was already implemented where certain kernel events are defined.
+>> If these kernel events are defined, the new json metrics behaviour is
+>> not used.  The json metrics approach is only used if the kernel events
+>> are absent.
+>>
+>> The last patch in the series disables the json metrics behaviour on x86.
+>> This is because of concerns that due to SMT it's not straightforward to
+>> express the various formulas as json for certain x86 cpus.  See
 > 
-> Reorganize I2C functions to accommodate SPI support
-> Split the probe and factor out parts of the code
-> that will be used in the SPI support
+> I suppose this solution is ok.
 > 
-> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> ---
->  drivers/platform/x86/bus-multi-instantiate.c | 150 ++++++++++++-------
->  1 file changed, 96 insertions(+), 54 deletions(-)
+> A concern is that today we only have 1x arm64 platform which actually supports this in mainline.
 > 
-> diff --git a/drivers/platform/x86/bus-multi-instantiate.c b/drivers/platform/x86/bus-multi-instantiate.c
-> index 982dfecfd27c..50f1540762e9 100644
-> --- a/drivers/platform/x86/bus-multi-instantiate.c
-> +++ b/drivers/platform/x86/bus-multi-instantiate.c
-> @@ -29,85 +29,129 @@ struct bmi_instance {
->  
->  struct bmi {
->  	int i2c_num;
-> -	struct i2c_client *i2c_devs[];
-> +	struct i2c_client **i2c_devs;
->  };
->  
-> -static int bmi_probe(struct platform_device *pdev)
-> +static int bmi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
-> +		       const struct bmi_instance *inst)
-> +{
-> +	int ret;
-> +
-> +	switch (inst->flags & IRQ_RESOURCE_TYPE) {
-> +	case IRQ_RESOURCE_GPIO:
-> +		ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
-> +		break;
-> +	case IRQ_RESOURCE_APIC:
-> +		ret = platform_get_irq(pdev, inst->irq_idx);
-> +		break;
-> +	default:
-> +		ret = 0;
-> +		break;
-> +	}
-> +
-> +	if (ret < 0)
-> +		dev_err_probe(&pdev->dev, ret, "Error requesting irq at index %d: %d\n",
-> +			      inst->irq_idx, ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static void bmi_devs_unregister(struct bmi *bmi)
-> +{
-> +	while (bmi->i2c_num > 0)
-> +		i2c_unregister_device(bmi->i2c_devs[--bmi->i2c_num]);
-> +}
-> +
-> +/**
-> + * bmi_i2c_probe - Instantiate multiple I2C devices from inst array
-> + * @pdev:	Platform device
-> + * @adev:	ACPI device
-> + * @bmi:	Internal struct for Bus multi instantiate driver
-> + * @inst:	Array of instances to probe
-> + *
-> + * Returns the number of I2C devices instantiate, Zero if none is found or a negative error code.
-> + */
-> +static int bmi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev, struct bmi *bmi,
-> +			 const struct bmi_instance *inst_array)
->  {
->  	struct i2c_board_info board_info = {};
-> -	const struct bmi_instance *inst;
->  	struct device *dev = &pdev->dev;
-> -	struct acpi_device *adev;
-> -	struct bmi *bmi;
->  	char name[32];
-> -	int i, ret;
-> +	int i, ret = 0, count;
->  
-> -	inst = device_get_match_data(dev);
-> -	if (!inst) {
-> -		dev_err(dev, "Error ACPI match data is missing\n");
-> -		return -ENODEV;
-> -	}
-> -
-> -	adev = ACPI_COMPANION(dev);
-> -
-> -	/* Count number of clients to instantiate */
->  	ret = i2c_acpi_client_count(adev);
-> -	if (ret < 0)
-> +	if (ret <= 0)
->  		return ret;
-
-Please change this to:
-
-		return ret == 0 ? -ENODEV : ret;
-
-This helps making return value handler in the caller cleaner,
-also see my upcoming review of patch 7/9.
-
-> +	count = ret;
->  
-> -	bmi = devm_kmalloc(dev, struct_size(bmi, i2c_devs, ret), GFP_KERNEL);
-> -	if (!bmi)
-> +	bmi->i2c_devs = devm_kcalloc(dev, count, sizeof(*bmi->i2c_devs), GFP_KERNEL);
-> +	if (!bmi->i2c_devs)
->  		return -ENOMEM;
->  
-> -	bmi->i2c_num = ret;
-> -
-> -	for (i = 0; i < bmi->i2c_num && inst[i].type; i++) {
-> +	for (i = 0; i < count && inst_array[i].type; i++) {
->  		memset(&board_info, 0, sizeof(board_info));
-> -		strlcpy(board_info.type, inst[i].type, I2C_NAME_SIZE);
-> -		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst[i].type, i);
-> +		strscpy(board_info.type, inst_array[i].type, I2C_NAME_SIZE);
-> +		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst_array[i].type, i);
->  		board_info.dev_name = name;
-> -		switch (inst[i].flags & IRQ_RESOURCE_TYPE) {
-> -		case IRQ_RESOURCE_GPIO:
-> -			ret = acpi_dev_gpio_irq_get(adev, inst[i].irq_idx);
-> -			if (ret < 0) {
-> -				dev_err(dev, "Error requesting irq at index %d: %d\n",
-> -						inst[i].irq_idx, ret);
-> -				goto error;
-> -			}
-> -			board_info.irq = ret;
-> -			break;
-> -		case IRQ_RESOURCE_APIC:
-> -			ret = platform_get_irq(pdev, inst[i].irq_idx);
-> -			if (ret < 0) {
-> -				dev_dbg(dev, "Error requesting irq at index %d: %d\n",
-> -					inst[i].irq_idx, ret);
-> -				goto error;
-> -			}
-> -			board_info.irq = ret;
-> -			break;
-> -		default:
-> -			board_info.irq = 0;
-> -			break;
-> -		}
-> +
-> +		ret = bmi_get_irq(pdev, adev, &inst_array[i]);
-> +		if (ret < 0)
-> +			goto error;
-> +		board_info.irq = ret;
-> +
->  		bmi->i2c_devs[i] = i2c_acpi_new_device(dev, i, &board_info);
->  		if (IS_ERR(bmi->i2c_devs[i])) {
->  			ret = dev_err_probe(dev, PTR_ERR(bmi->i2c_devs[i]),
->  					    "Error creating i2c-client, idx %d\n", i);
->  			goto error;
->  		}
-> +		bmi->i2c_num++;
->  	}
-> -	if (i < bmi->i2c_num) {
-> +	if (bmi->i2c_num < count) {
->  		dev_err(dev, "Error finding driver, idx %d\n", i);
->  		ret = -ENODEV;
->  		goto error;
->  	}
->  
-> -	platform_set_drvdata(pdev, bmi);
-> -	return 0;
-> +	dev_info(dev, "Instantiate %d I2C devices.\n", bmi->i2c_num);
->  
-> +	return bmi->i2c_num;
-
-And change this to return 0.
-
->  error:
-> -	while (--i >= 0)
-> -		i2c_unregister_device(bmi->i2c_devs[i]);
-> +	dev_err_probe(dev, ret, "I2C error %d\n", ret);
-> +	bmi_devs_unregister(bmi);
-> +
-> +	return ret;
-> +}
-> +
-> +static int bmi_probe(struct platform_device *pdev)
-> +{
-> +	const struct bmi_instance *inst_array;
-> +	struct device *dev = &pdev->dev;
-> +	struct acpi_device *adev;
-> +	struct bmi *bmi;
-> +	int ret;
-> +
-> +	inst_array = device_get_match_data(dev);
-> +	if (!inst_array) {
-> +		dev_err(dev, "Error ACPI match data is missing\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	adev = ACPI_COMPANION(dev);
-> +	if (!adev)
-> +		return -ENODEV;
-> +
-> +	bmi = devm_kzalloc(dev, sizeof(*bmi), GFP_KERNEL);
-> +	if (!bmi)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, bmi);
-> +
-> +	ret = bmi_i2c_probe(pdev, adev, bmi, inst_array);
-> +	if (ret > 0)
-> +		return 0;
-> +	if (ret == 0)
-> +		ret = -ENODEV;
->  
->  	return ret;
-
-Then you can simplify the above to just:
-
-	return bmi_i2c_probe(pdev, adev, bmi, inst_array);
-
-:)
-
-Regards,
-
-Hans
-
-
-
->  }
-> @@ -115,10 +159,8 @@ static int bmi_probe(struct platform_device *pdev)
->  static int bmi_remove(struct platform_device *pdev)
->  {
->  	struct bmi *bmi = platform_get_drvdata(pdev);
-> -	int i;
->  
-> -	for (i = 0; i < bmi->i2c_num; i++)
-> -		i2c_unregister_device(bmi->i2c_devs[i]);
-> +	bmi_devs_unregister(bmi);
->  
->  	return 0;
->  }
+> Do you have any more which you plan to support?
 > 
+> I think that it's the frontend bound and fetch_bubble event which doesn't have a standard arm solution.
+> 
+> Note that I do have a series for perf tool which can read arm cpu pmu sysfs events folder to find events which are implemented (I don't think all required events are mandated) and match that against the common arch events JSON, so that we don't need a JSON definition file for each core implementation from all implementators - this would improve scalability.However a concern is that some events - like inst_spec - have imp def meaning, so may not be good to always use by default for all cores metrics.
 
+Sadly the sysfs list isn't complete, it only includes the events
+discoverable from the PMCEIDx registers, and they only cover the
+ranges 0x0000-0x003f and 0x4000-0x403f. Although that covers most
+events used in standard metrics, it doesn't cover all. Most CPUs
+have many more events besides these, and there are now architected
+(common) events in the 0x8000 range.
+
+There's a lot to be said for having the kernel expose the complete
+list to userspace via sysfs. It would save each userspace tool
+needing its own set of vendor-supplied information. But to get
+that complete list, the kernel would need the same vendor
+information the userspace tools are using now.
+
+(And your concern about the metrics varying even when the same
+events are present, is quite valid.)
+
+Al

@@ -2,142 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACA54954CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F094954D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346986AbiATTQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 14:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S231733AbiATTTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 14:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiATTQ1 (ORCPT
+        with ESMTP id S1347177AbiATTTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 14:16:27 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246E3C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:16:27 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id l68so20158671ybl.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:16:27 -0800 (PST)
+        Thu, 20 Jan 2022 14:19:36 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01121C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:19:36 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id r204so4441872iod.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 11:19:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LgnhRIvXZbEoD4dNyz5NkE0CJ53Si0Wk9Up+SOzAYhA=;
-        b=o0PDYUEKjpAJB9YJb3t9C+jB2PyVuPdaf4pkP7QzpQGjwttuO4V6bAkg6ZwhH+0o7n
-         w6rEaAmsW34ThZTLSkfmf3+Ry8zWG5uUJWFGZsqfD68jhT+TpIg+gESR/1ui84iExdXZ
-         pXIz89dINxbGyM1TkNJTcWtPU9VovT8UpDY+CfrT32NrUzsLxSCYHH+q11bvcZzt1FIt
-         /m2zCZ+noC5CtDQj6TEcUJAzkGW4vAY7r5SagGWwt5ugxZktJ1VcSGmLjyp7b1yolR9l
-         mjDjMhtbGrMh0uopZEljedyO2f15zEIvPAKr72Wezz6KjaeA8jirH9oBzuP99x+0pl1E
-         7Izw==
+        bh=z0LGoqq0ndCBpAHeUTP2E36kjG0tFSNdXjmHbPFm9Ts=;
+        b=j8A3AvZAY7/i1/x5PCU2Idd3tOUAkEvI5clskAFjRGlAR+EUynI00v9OTXhBd6fqA8
+         GkBUh8OGCZtxLy6mgRGilYUVxloLm6fyqpmZb3rCCdQbQV1mZDWlP0+PMtRPmTYFk4NR
+         aF1ctfvU7xm8Z8fTBywGYqZTLYxYpR0rpMlspZWjbED7fLIKNkLp2YIaMKWvYLJ3ifed
+         aoqcZ1WPN7V0H3jG3RX02svkb3O60iXnYpmoBtKiAzCDlj/8vKm9q3t1C5DcFS7NtCNJ
+         5+tm2BFDqK+5F4+WJbJPwgAEmUstiDTpHocwkQKVInkgxts8ehzBl+ImfTlUMBK7VAVm
+         HrNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LgnhRIvXZbEoD4dNyz5NkE0CJ53Si0Wk9Up+SOzAYhA=;
-        b=0XygXBkKmnpd9DI1yulFCaCcVzZN936DE0XkrfN2277PvB0aeYBEA9gWPEqUr3CcIt
-         q3VyV1w5R3ZrgGuf4aYwDdbzD47Zel6/Jhjpm6ykT+IwO+YCNdd5uFNzayDXv+/6P7LY
-         tlaWJtqFIkHNSY/qxFsD+iQTO820FtETx4OcSWTVZKGp9vK+Rw8UYSxNQv5HUHsD/9d4
-         pPcRBh8zZA9HNcsVu1pMnncJ0M/4IaBmHsiPQptIu2bTPSJ3gIHAAihjk3UwkLoag0R6
-         E7FkA+N/FQPFkv/X6+QeLbANviUMWjYVRa66a0dxaCpY3x8ICxDoB4GJ5SaJ2Po3i3nA
-         HNdA==
-X-Gm-Message-State: AOAM531QSOQN3GIf/911HGkem52zNecAHf6dbwApUMY/mrw2Idqul58K
-        V8WKX+r8kNJkqu6gq3GZ6GmWF7fFu7T2f8yau78mTg==
-X-Google-Smtp-Source: ABdhPJzXKfVdVRUPzsECQCVgkK1ZzL2Rx2Ozj606e8DptRmlTQ6MsPNzGhGIZvYZBAbyNTeoXXpzxUUp4c3YgUAq71E=
-X-Received: by 2002:a25:d055:: with SMTP id h82mr694673ybg.543.1642706186084;
- Thu, 20 Jan 2022 11:16:26 -0800 (PST)
+        bh=z0LGoqq0ndCBpAHeUTP2E36kjG0tFSNdXjmHbPFm9Ts=;
+        b=6iKPsC+lqJSXw39njbBnhtL4IyA6eZrSV/a1W99oDeI2EExYq4fURDhC1qJ7BC4QLT
+         rcpn8QyLwHeL/Iv97YDAakWMP+JstEdWDpoCqA9xIVvnytHspnzLIONc+xCxcsJz+bD5
+         gg6XpYJYIbU2p3DO8t1aWcNBQGELjEr8LXgCNSSeTuyywdLRJZaDajotwFkAztzTJSlW
+         iCg2ghwKg4d8avfDFj/vYeeOWQOJwMvICuHZlixnSQx0y2zx29wjofxgJfRlwBe03I9e
+         qlRAmYstyPXFagLYgmy0+1gN5TWLfW0EOfp+ZJ+f5nMEsY36E645BENqdWKewYR2i5UY
+         GXBQ==
+X-Gm-Message-State: AOAM530b9dYOIoTEM5N4VBSmkNHjRod4s7Z6RaVOjSWfhxTtIhrBAljm
+        8+KcNiQiWrQf9YHStHEg9+rzadJYkwio883mMXv0vQ==
+X-Google-Smtp-Source: ABdhPJz47WB1CxHkVNXyLkdptdxjlBAMwv0gR1aJgEzNZ16HsBYD6CXpG66pTmb16F7IB6M0adbLYmw2cN6GDQ5i0+Y=
+X-Received: by 2002:a05:6638:2201:: with SMTP id l1mr120278jas.264.1642706375229;
+ Thu, 20 Jan 2022 11:19:35 -0800 (PST)
 MIME-Version: 1.0
-References: <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
- <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
- <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
- <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
- <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
- <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com>
- <YeBfj89mIf8SezfD@google.com> <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
- <YedWUJNnQK3HFrWC@google.com> <CAAeT=FyJAG1dEFLvrQ4UXrwUqBUhY0AKkjzFpyi74zCJZUEYVg@mail.gmail.com>
- <YeisZCJedWYJPLV5@google.com>
-In-Reply-To: <YeisZCJedWYJPLV5@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Thu, 20 Jan 2022 11:16:15 -0800
-Message-ID: <CAJHc60zhRyOad7AqtEFn-Ptro5BGVkfpB2wXWGw5EZMxOHUc=w@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Reiji Watanabe <reijiw@google.com>, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, Peter Shier <pshier@google.com>,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jim Mattson <jmattson@google.com>
+References: <20220120191250.2671557-1-pasha.tatashin@soleen.com> <20220120191250.2671557-3-pasha.tatashin@soleen.com>
+In-Reply-To: <20220120191250.2671557-3-pasha.tatashin@soleen.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 20 Jan 2022 11:19:24 -0800
+Message-ID: <CAAPL-u96G2DUvJ=wzHjR3LJvu-p432QKoHsCP-GjzZJWpXLe2w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] mm/page_table_check: check entries at pud and pmd levels
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, Greg Thelen <gthelen@google.com>,
+        mingo@redhat.com, will@kernel.org, rppt@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
+        songmuchun@bytedance.com, qydwhotmail@gmail.com,
+        Hugh Dickins <hughd@google.com>, Zi Yan <ziy@nvidia.com>,
+        anshuman.khandual@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 4:27 PM Sean Christopherson <seanjc@google.com> wrote:
+On Thu, Jan 20, 2022 at 11:12 AM Pasha Tatashin
+<pasha.tatashin@soleen.com> wrote:
 >
-> On Tue, Jan 18, 2022, Reiji Watanabe wrote:
-> > On Tue, Jan 18, 2022 at 4:07 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Fri, Jan 14, 2022, Reiji Watanabe wrote:
-> > > > The restriction, with which KVM doesn't need to worry about the changes
-> > > > in the registers after KVM_RUN, could potentially protect or be useful
-> > > > to protect KVM and simplify future changes/maintenance of the KVM codes
-> > > > that consumes the values.
-> > >
-> > > That sort of protection is definitely welcome, the previously mentioned CPUID mess
-> > > on x86 would have benefit greatly by KVM being restrictive in the past.  That said,
-> > > hooking KVM_RUN is likely the wrong way to go about implementing any restrictions.
-> > > Running a vCPU is where much of the vCPU's state is explicitly consumed, but it's
-> > > all too easy for KVM to implicity/indirectly consume state via a different ioctl(),
-> > > e.g. if there are side effects that are visible in other registers, than an update
-> > > can also be visible to userspace via KVM_{G,S}ET_{S,}REGS, at which point disallowing
-> > > modifying state after KVM_RUN but not after reading/writing regs is arbitrary and
-> > > inconsitent.
-> >
-> > Thank you for your comments !
-> > I think I understand your concern, and that's a great point.
-> > That's not the case for those pseudo registers though at least for now :)
-> > BTW, is this concern specific to hooking KVM_RUN ? (Wouldn't it be the
-> > same for the option with "if kvm->created_vcpus > 0" ?)
+> syzbot detected a case where the page table counters were not properly
+> updated.
 >
-> Not really?  The goal with created_vcpus is to avoid having inconsistent state in
-> "struct kvm_vcpu" with respect to the VM as whole.  "struct kvm" obvioulsy can't
-> be inconsistent with itself, e.g. even if userspace consumes some side effect,
-> that's simply "the state".  Did that make sense?  Hard to explain in writing :-)
+> syzkaller login:  ------------[ cut here ]------------
+> kernel BUG at mm/page_table_check.c:162!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 3099 Comm: pasha Not tainted 5.16.0+ #48
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO4
+> RIP: 0010:__page_table_check_zero+0x159/0x1a0
+> Code: 7d 3a b2 ff 45 39 f5 74 2a e8 43 38 b2 ff 4d 85 e4 01
+> RSP: 0018:ffff888010667418 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000
+> RDX: ffff88800cea8680 RSI: ffffffff81becaf9 RDI: 0000000003
+> RBP: ffff888010667450 R08: 0000000000000001 R09: 0000000000
+> R10: ffffffff81becaab R11: 0000000000000001 R12: ffff888008
+> R13: 0000000000000001 R14: 0000000000000200 R15: dffffc0000
+> FS:  0000000000000000(0000) GS:ffff888035e00000(0000) knlG0
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffd875cad00 CR3: 00000000094ce000 CR4: 0000000000
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000
+> Call Trace:
+>  <TASK>
+>  free_pcp_prepare+0x3be/0xaa0
+>  free_unref_page+0x1c/0x650
+>  ? trace_hardirqs_on+0x6a/0x1d0
+>  free_compound_page+0xec/0x130
+>  free_transhuge_page+0x1be/0x260
+>  __put_compound_page+0x90/0xd0
+>  release_pages+0x54c/0x1060
+>  ? filemap_remove_folio+0x161/0x210
+>  ? lock_downgrade+0x720/0x720
+>  ? __put_page+0x150/0x150
+>  ? filemap_free_folio+0x164/0x350
+>  __pagevec_release+0x7c/0x110
+>  shmem_undo_range+0x85e/0x1250
+> ...
 >
-> > > If possible, preventing modification if kvm->created_vcpus > 0 is ideal as it's
-> > > a relatively common pattern in KVM, and provides a clear boundary to userpace
-> > > regarding what is/isn't allowed.
-> >
-> > Yes, I agree that would be better in general.  For (pseudo) registers,
+> The repro involved having a huge page that is split due to uprobe event
+> temporarily replacing one of the pages in the huge page. Later the huge
+> page was combined again, but the counters were off, as the PTE level
+> was not properly updated.
 >
-> What exactly are these pseudo registers?  If it's something that's an immutable
-> property of the (virtual) system, then it might make sense to use a separate,
-> non-vCPU mechanism for setting/getting their values.  Then you can easily restrict
-> the <whatever> to pre-created_vcpus, e.g. see x86's KVM_SET_IDENTITY_MAP_ADDR.
+> Make sure that not only huge page but also small pages are updated when
+> a new entry is set or cleared.
 >
-In general, these pseudo-registers are reserved non-architectural
-register spaces, currently being used to represent KVM-as-a-firmware's
-versioning across guests' migrations [1]. That is, the user-space
-configures these registers for the guests to see same 'firmware'
-versions before and after migrations. The model is built over the
-existing KVM_GET_REG_LIST and KVM_[SET|GET]_ONE_REG APIs. Since this
-series' efforts falls into the same realm, the idea was keep this
-consistent with the existing model to which VMMs (such as QEMU) are
-already used to.
+> Fixes: df4e817b7108 ("mm: page table check")
+>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  mm/page_table_check.c | 60 ++++++++++++++++++++++++++-----------------
+>  1 file changed, 36 insertions(+), 24 deletions(-)
+>
+> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> index 7504e7caa2a1..877d967742bc 100644
+> --- a/mm/page_table_check.c
+> +++ b/mm/page_table_check.c
+> @@ -145,6 +145,30 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
+>         }
+>  }
+>
+> +static void pte_clear_level(struct mm_struct *mm, unsigned long addr,
+> +                           pte_t *ptep)
+> +{
+> +       unsigned long i;
+> +
+> +       for (i = 0; i < PTRS_PER_PTE; i++) {
+> +               __page_table_check_pte_clear(mm, addr, *ptep);
+> +               addr += PAGE_SIZE;
+> +               ptep++;
+> +       }
+> +}
+> +
+> +static void pmd_clear_level(struct mm_struct *mm, unsigned long addr,
+> +                           pmd_t *pmdp)
+> +{
+> +       unsigned long i;
+> +
+> +       for (i = 0; i < PTRS_PER_PMD; i++) {
+> +               __page_table_check_pmd_clear(mm, addr, *pmdp);
+> +               addr += PMD_PAGE_SIZE;
+> +               pmdp++;
+> +       }
+> +}
+> +
+>  /*
+>   * page is on free list, or is being allocated, verify that counters are zeroes
+>   * crash if they are not.
+> @@ -186,6 +210,11 @@ void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
+>         if (pmd_user_accessible_page(pmd)) {
+>                 page_table_check_clear(mm, addr, pmd_pfn(pmd),
+>                                        PMD_PAGE_SIZE >> PAGE_SHIFT);
+> +       } else if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
+> +               pte_t *ptep = pte_offset_map(&pmd, addr);
+> +
+> +               pte_clear_level(mm, addr, ptep);
+> +               pte_unmap(ptep);
+>         }
+>  }
+>  EXPORT_SYMBOL(__page_table_check_pmd_clear);
+> @@ -199,6 +228,10 @@ void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+>         if (pud_user_accessible_page(pud)) {
+>                 page_table_check_clear(mm, addr, pud_pfn(pud),
+>                                        PUD_PAGE_SIZE >> PAGE_SHIFT);
+> +       } else if (!pud_bad(pud) && !pud_leaf(pud)) {
+> +               pmd_t *pmdp = pmd_offset(&pud, addr);
+> +
+> +               pmd_clear_level(mm, addr, pmdp);
+>         }
+>  }
+>  EXPORT_SYMBOL(__page_table_check_pud_clear);
+> @@ -206,17 +239,10 @@ EXPORT_SYMBOL(__page_table_check_pud_clear);
+>  void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+>                                 pte_t *ptep, pte_t pte)
+>  {
+> -       pte_t old_pte;
+> -
+>         if (&init_mm == mm)
+>                 return;
+>
+> -       old_pte = *ptep;
+> -       if (pte_user_accessible_page(old_pte)) {
+> -               page_table_check_clear(mm, addr, pte_pfn(old_pte),
+> -                                      PAGE_SIZE >> PAGE_SHIFT);
+> -       }
+> -
+> +       __page_table_check_pte_clear(mm, addr, *ptep);
+>         if (pte_user_accessible_page(pte)) {
+>                 page_table_check_set(mm, addr, pte_pfn(pte),
+>                                      PAGE_SIZE >> PAGE_SHIFT,
+> @@ -228,17 +254,10 @@ EXPORT_SYMBOL(__page_table_check_pte_set);
+>  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+>                                 pmd_t *pmdp, pmd_t pmd)
+>  {
+> -       pmd_t old_pmd;
+> -
+>         if (&init_mm == mm)
+>                 return;
+>
+> -       old_pmd = *pmdp;
+> -       if (pmd_user_accessible_page(old_pmd)) {
+> -               page_table_check_clear(mm, addr, pmd_pfn(old_pmd),
+> -                                      PMD_PAGE_SIZE >> PAGE_SHIFT);
+> -       }
+> -
+> +       __page_table_check_pmd_clear(mm, addr, *pmdp);
+>         if (pmd_user_accessible_page(pmd)) {
+>                 page_table_check_set(mm, addr, pmd_pfn(pmd),
+>                                      PMD_PAGE_SIZE >> PAGE_SHIFT,
+> @@ -250,17 +269,10 @@ EXPORT_SYMBOL(__page_table_check_pmd_set);
+>  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+>                                 pud_t *pudp, pud_t pud)
+>  {
+> -       pud_t old_pud;
+> -
+>         if (&init_mm == mm)
+>                 return;
+>
+> -       old_pud = *pudp;
+> -       if (pud_user_accessible_page(old_pud)) {
+> -               page_table_check_clear(mm, addr, pud_pfn(old_pud),
+> -                                      PUD_PAGE_SIZE >> PAGE_SHIFT);
+> -       }
+> -
+> +       __page_table_check_pud_clear(mm, addr, *pudp);
+>         if (pud_user_accessible_page(pud)) {
+>                 page_table_check_set(mm, addr, pud_pfn(pud),
+>                                      PUD_PAGE_SIZE >> PAGE_SHIFT,
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>
 
-Granted, even though these registers should technically be immutable,
-there was no similar protection employed for the existing
-psuedo-registers. I was wondering if that could be of any value if we
-start providing one; But I guess not, since it may break the
-user-space's expectations of KVM (and probably why we didn't have it
-earlier).
-
-Regards,
-Raghavendra
-
-[1]: https://github.com/torvalds/linux/blob/master/Documentation/virt/kvm/arm/psci.rst
-
-> > I would think preventing modification if kvm->created_vcpus > 0 might
-> > not be a very good option for KVM/ARM though considering usage of
-> > KVM_GET_REG_LIST and KVM_{G,S}ET_ONE_REG.
+Reviewed-by: Wei Xu <weixugc@google.com>

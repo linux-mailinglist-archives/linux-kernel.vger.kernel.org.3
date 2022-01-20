@@ -2,87 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAC549534C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E82C495350
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiATRb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:31:29 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:47087 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiATRb1 (ORCPT
+        id S231694AbiATRby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:31:54 -0500
+Received: from ppsw-43.csi.cam.ac.uk ([131.111.8.143]:37742 "EHLO
+        ppsw-43.csi.cam.ac.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231680AbiATRbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:31:27 -0500
-Received: by mail-oi1-f174.google.com with SMTP id w188so9823831oiw.13;
-        Thu, 20 Jan 2022 09:31:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rtHj/3p1givutdmgN7dfHpHj4Sr+0GQQTmEECUsDQU8=;
-        b=bCIedKnCbDPt0hwbo5Na7E6r+U4vCMqh2xGcTzrB/IXKkW9Y2rXg+D3kBuf9rP33j9
-         ln+7xchKMEYKioHx7wEofy/JA/6HhaHMCGhMQwGJJW9jqhhcsQu0vJgUdXZq2woiHRDH
-         O44MQ5xv9mksulhoPLxqBHuiptbhuW53MaEP6z7ehPxUN2UZMJTngfSAVd5qoPdow72i
-         7VVuVEFa0XmSHK5RNMIQJYvBkhSuAbMbL43Uxw7qxMbXPFVIJgA7Mi6RCdRTtXlki25t
-         hcx2A79xpOhRC/c1xmQE0UfoHvG3JrUEQo9UdAPy3qQy9XU4dZgJm/btmU275H2d4QWx
-         P/VA==
-X-Gm-Message-State: AOAM533yGz7QhiYsfHVwSGSbGKm5CuEFvAHurfx3kdEY9uNaUFhVlS8y
-        uskEOnp3v5Hw4kCCuO32li3Wu5/EcQ==
-X-Google-Smtp-Source: ABdhPJz0JrVrtv/SW1ltBRnOqrsXbV3PfB5TuV4nUvYOLOnOnHc+aEXebylUjJO/OUJECgNeRihxUw==
-X-Received: by 2002:a05:6808:204:: with SMTP id l4mr8476896oie.96.1642699886883;
-        Thu, 20 Jan 2022 09:31:26 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v15sm1618111ote.33.2022.01.20.09.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:31:26 -0800 (PST)
-Received: (nullmailer pid 1641082 invoked by uid 1000);
-        Thu, 20 Jan 2022 17:31:25 -0000
-Date:   Thu, 20 Jan 2022 11:31:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Peter Chen <peter.chen@kernel.org>
-Subject: Re: [PATCH] of: Check 'of_node_reused' flag on of_match_device()
-Message-ID: <YemcbdZnrFevcPZI@robh.at.kernel.org>
-References: <20220118173404.1891800-1-robh@kernel.org>
+        Thu, 20 Jan 2022 12:31:53 -0500
+X-Cam-AntiVirus: no malware found
+X-Cam-ScannerInfo: https://help.uis.cam.ac.uk/email-scanner-virus
+Received: from hades.srcf.societies.cam.ac.uk ([131.111.179.67]:52870)
+        by ppsw-43.csi.cam.ac.uk (ppsw.cam.ac.uk [131.111.8.139]:25)
+        with esmtps (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        id 1nAbHT-000avl-p0 (Exim 4.95)
+        (return-path <amc96@srcf.net>);
+        Thu, 20 Jan 2022 17:31:27 +0000
+Received: from [192.168.1.10] (host-92-12-61-86.as13285.net [92.12.61.86])
+        (Authenticated sender: amc96)
+        by hades.srcf.societies.cam.ac.uk (Postfix) with ESMTPSA id 77E1D1FC61;
+        Thu, 20 Jan 2022 17:31:27 +0000 (GMT)
+Message-ID: <81aebe8e-ff2a-6b56-fe50-b7917a3948ed@srcf.net>
+Date:   Thu, 20 Jan 2022 17:31:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118173404.1891800-1-robh@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-GB
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Alexander Graf <graf@amazon.de>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+References: <20220120000624.655815-1-seanjc@google.com>
+ <f3239ec0-9fb8-722a-00c5-11b18f19f047@srcf.net> <YemPeqpcFDjhGfRQ@google.com>
+From:   Andrew Cooper <amc96@srcf.net>
+Subject: Re: [PATCH] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS
+ blocking shadow
+In-Reply-To: <YemPeqpcFDjhGfRQ@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 11:34:04 -0600, Rob Herring wrote:
-> Commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child
-> device") caused the child device to match on the parent driver
-> instead of the child's driver since the child's DT node pointer matched.
-> The worst case result is a loop of the parent driver probing another
-> instance and creating yet another child device eventually exhausting the
-> stack. If the child driver happens to match first, then everything works
-> fine.
-> 
-> A device sharing the DT node should never do DT based driver matching,
-> so let's simply check of_node_reused in of_match_device() to prevent
-> that.
-> 
-> Fixes: 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
-> Link: https://lore.kernel.org/all/20220114105620.GK18506@ediswmail.ad.cirrus.com/
-> Reported-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Peter Chen <peter.chen@nxp.com>
-> Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/of/device.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+On 20/01/2022 16:36, Sean Christopherson wrote:
+> On Thu, Jan 20, 2022, Andrew Cooper wrote:
+>> On 20/01/2022 00:06, Sean Christopherson wrote:
+>>> MOVSS blocking can be initiated by userspace, but can be coincident with
+>>> a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
+>>> executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
+>>> is problematic only for CPL0 (and only if the guest is crazy enough to
+>>> access a DR in a MOVSS shadow).  All other sources of #DBs are either
+>>> suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
+>> It is more complicated than this and undocumented.  Single step is
+>> discard in a shadow, while data breakpoints are deferred.
+> But for the purposes of making the consitency check happy, whether they are
+> deferred or dropped should be irrelevant, no?
 
-Applied, thanks!
+From that point of view, yes.  The consistency check is specific to TS. 
+I suppose I was mostly questioning the wording of the explanation.
+
+>>> are mutually exclusive with MOVSS blocking (T-bit task switch),
+>> Howso?  MovSS prevents external interrupts from triggering task
+>> switches, but instruction sources still trigger in a shadow.
+> T-bit #DBs are traps, and arrive after the task switch has completed.  The switch
+> can be initiated in the shadow, but the #DB will be delivered after the instruction
+> retires and so after MOVSS blocking goes away.  Or am I missing something?
+
+Well - this is where the pipeline RTL is needed, in lieu of anything
+better.  Trap-style #DBs are part of the current instruction, and
+specifically ahead (in the instruction cycle) of the subsequent intchk.
+
+There are implementations where NMI/INTR/etc won't be delivered at the
+head of an exception generated in a shadow, which would suggest that
+these implementations have the falling edge of the shadow after intchk
+on the instruction boundary.  (Probably certainly what happens is that
+intchk is responsible for clearing the shadow, but this is entirely
+guesswork on my behalf.)
+
+>> and splitlock which is new since I last thought about this problem.
+> Eww.  Split Lock is trap-like, which begs the question of what happens if the
+> MOV/POP SS splits a cache line when loading the source data.  I'm guess it's
+> suppressed, a la data breakpoints, but that'd be a fun one to test.
+
+They're both reads of their memory operand, so aren't eligible to be
+locked accesses.
+
+However, a devious kernel can misalign the GDT/LDT such that setting the
+descriptor access bit does trigger a splitlock.  I suppose "kernel
+doesn't misalign structures", or "kernel doesn't write a descriptor with
+the access bit clear" are both valid mitigations.
+
+>>> This bug was originally found by running tests[1] created for XSA-308[2].
+>>> Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
+>>> presumably why the Xen bug was deemed to be an exploitable DOS from guest
+>>> userspace.
+>> As I recall, the original report to the security team was something
+>> along the lines of "Steam has just updated game, and now when I start
+>> it, the VM explodes".
+> Lovely.  I wonder if the game added some form of anti-cheat?  I don't suppose you
+> have disassembly from the report?  I'm super curious what on earth a game would
+> do to trigger this.
+
+Anti-cheat was my guess too, but no disassembly happened.
+
+I was already aware of the STI issue, and had posted
+https://lore.kernel.org/xen-devel/1528120755-17455-11-git-send-email-andrew.cooper3@citrix.com/
+more than a year previously.  The security report showed ICEBP pending
+in the INTR_INFO field, and extending the STI test case in light of this
+was all of 30s of work to get a working repro.
+
+~Andrew

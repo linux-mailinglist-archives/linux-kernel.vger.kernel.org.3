@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E237494A8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26164494A8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241489AbiATJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:18:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29393 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238582AbiATJSC (ORCPT
+        id S241636AbiATJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:20:07 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:48449 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239702AbiATJUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:18:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642670282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TDl62cJLzLieM8+MJy6Z/f4cSi0IK1TE0za11DkmZ4w=;
-        b=eimzgECqr83IlSQfXnvTfdvvaNK4XmWN2gzW4r/l/NZJzp9+CNbis4WVpRnAUB7MW2tU6t
-        FfqtdFfprJ4bHlkjG/RSflGjhnHfI2Wo2VjZ6CcLhW+Log3dj5cMQPK97RPgBlg9oPIW/g
-        MKxc+iqsJSjic9UByTYCJeUn1QsLdqY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-EpjVWCmvMEqIIaF5Bzm15Q-1; Thu, 20 Jan 2022 04:18:00 -0500
-X-MC-Unique: EpjVWCmvMEqIIaF5Bzm15Q-1
-Received: by mail-wm1-f72.google.com with SMTP id l20-20020a05600c1d1400b0034c29cad547so6352256wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 01:18:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TDl62cJLzLieM8+MJy6Z/f4cSi0IK1TE0za11DkmZ4w=;
-        b=kAoZA7UOfO/x1J9g6+4PibkqOVGamVvq9B7tPuZKdOEOwFZIzipbA0o8IBP4NbJVRL
-         aSuA2gGWzAly+s2+FJ+ogk8oonB7FAtl8fvbydA62/9F7k6mb67tTThthqpGCkNqhlSK
-         iPCHh+cZB6hMBIT24HQqvju2lLI9Z45H2+cEvVGZkkEeT2TTHGfuAMt5gDMlbQP7yWBe
-         3b/sBZ9WKPGVKFNQ71zR8YzTLI68kyohHm9xsUmU/XmEYT3aJNDXeaHd8aI+xSWiwtmW
-         Op4EuzHjX0ZFn5Ns8m6x0dOAPlyhkU7AvSNzKbDdkv8NM86LSDooswALqGiuLGG9Eqe4
-         p7cA==
-X-Gm-Message-State: AOAM532eqvhSlUrcGm86RNSCMGgq6NgOCrUh/u6C7kSoZqo4GncnHf0h
-        ThTyvsTrC2e6LI4WpM17HBSGcydMvjvLn1oh1GHLj+g56IVNOj1awGcAB/TDQ6k8Ryj+IxbRalS
-        hnoXLdFEwP4ZIInFld9rugSZp
-X-Received: by 2002:a05:600c:a47:: with SMTP id c7mr7971029wmq.23.1642670279434;
-        Thu, 20 Jan 2022 01:17:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyRUHrzKn5gxWntlb8Fu8JBKs+vMEpvgw4xk4jSItBmMgSlUdakFidsONjuCM1Y6NcqCzQEdA==
-X-Received: by 2002:a05:600c:a47:: with SMTP id c7mr7971010wmq.23.1642670279201;
-        Thu, 20 Jan 2022 01:17:59 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id k37sm8659384wms.0.2022.01.20.01.17.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 01:17:58 -0800 (PST)
-Message-ID: <19c4168f-c65b-fc9a-fe4c-152284e18d30@redhat.com>
-Date:   Thu, 20 Jan 2022 10:17:55 +0100
+        Thu, 20 Jan 2022 04:20:05 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V2Lw44Q_1642670401;
+Received: from 30.43.104.217(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0V2Lw44Q_1642670401)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 20 Jan 2022 17:20:02 +0800
+Message-ID: <220be582-a2c2-bc3c-ce6b-0eda2a297ba1@linux.alibaba.com>
+Date:   Thu, 20 Jan 2022 17:20:01 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [DROP][PATCH] KVM: x86: Fix the #GP(0) and #UD conditions for
- XSETBV emulation
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [RFC PATCH net-next] net/smc: Introduce receive queue flow
+ control support
 Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Jun Nakajima <jun.nakajima@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220117072456.71155-1-likexu@tencent.com>
- <a133d6e2-34de-8a41-475e-3858fc2902bf@redhat.com>
- <9c655b21-640f-6ce8-61b4-c6444995091e@gmail.com>
- <0d7ed850-8791-42b4-ef9a-bbaa8c52279e@redhat.com>
- <92b16faf-c9a7-4be3-43f7-3450259346e9@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <92b16faf-c9a7-4be3-43f7-3450259346e9@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20220120065140.5385-1-guangguan.wang@linux.alibaba.com>
+ <YekcWYwg399vR18R@unreal>
+From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
+In-Reply-To: <YekcWYwg399vR18R@unreal>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/22 08:48, Like Xu wrote:
+On 2022/1/20 16:24, Leon Romanovsky wrote:
+> On Thu, Jan 20, 2022 at 02:51:40PM +0800, Guangguan Wang wrote:
+>> This implement rq flow control in smc-r link layer. QPs
+>> communicating without rq flow control, in the previous
+>> version, may result in RNR (reveive not ready) error, which
+>> means when sq sends a message to the remote qp, but the
+>> remote qp's rq has no valid rq entities to receive the message.
+>> In RNR condition, the rdma transport layer may retransmit
+>> the messages again and again until the rq has any entities,
+>> which may lower the performance, especially in heavy traffic.
+>> Using credits to do rq flow control can avoid the occurrence
+>> of RNR.
+>>
+>> Test environment:
+>> - CPU Intel Xeon Platinum 8 core, mem 32 GiB, nic Mellanox CX4.
+>> - redis benchmark 6.2.3 and redis server 6.2.3.
+>> - redis server: redis-server --save "" --appendonly no
+>>   --protected-mode no --io-threads 7 --io-threads-do-reads yes
+>> - redis client: redis-benchmark -h 192.168.26.36 -q -t set,get
+>>   -P 1 --threads 7 -n 2000000 -c 200 -d 10
+>>
+>>  Before:
+>>  SET: 205229.23 requests per second, p50=0.799 msec
+>>  GET: 212278.16 requests per second, p50=0.751 msec
+>>
+>>  After:
+>>  SET: 623674.69 requests per second, p50=0.303 msec
+>>  GET: 688326.00 requests per second, p50=0.271 msec
+>>
+>> The test of redis-benchmark shows that more than 3X rps
+>> improvement after the implementation of rq flow control.
+>>
+>> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+>> ---
+>>  net/smc/af_smc.c   | 12 ++++++
+>>  net/smc/smc_cdc.c  | 10 ++++-
+>>  net/smc/smc_cdc.h  |  3 +-
+>>  net/smc/smc_clc.c  |  3 ++
+>>  net/smc/smc_clc.h  |  3 +-
+>>  net/smc/smc_core.h | 17 ++++++++-
+>>  net/smc/smc_ib.c   |  6 ++-
+>>  net/smc/smc_llc.c  | 92 +++++++++++++++++++++++++++++++++++++++++++++-
+>>  net/smc/smc_llc.h  |  5 +++
+>>  net/smc/smc_wr.c   | 30 ++++++++++++---
+>>  net/smc/smc_wr.h   | 54 ++++++++++++++++++++++++++-
+>>  11 files changed, 222 insertions(+), 13 deletions(-)
 > 
-> In the testcase "executing XSETBV with CR4.XSAVE=0",
+> <...>
 > 
-> - on the VMX, #UD delivery does not require vm-exit;
+>> +		// set peer rq credits watermark, if less than init_credits * 2/3,
+>> +		// then credit announcement is needed.
+> 
+> <...>
+> 
+>> +		// set peer rq credits watermark, if less than init_credits * 2/3,
+>> +		// then credit announcement is needed.
+> 
+> <...>
+> 
+>> +	// credits have already been announced to peer
+> 
+> <...>
+> 
+>> +	// set local rq credits high watermark to lnk->wr_rx_cnt / 3,
+>> +	// if local rq credits more than high watermark, announcement is needed.
+> 
+> <...>
+> 
+>> +// get one tx credit, and peer rq credits dec
+> 
+> <...>
+> 
+>> +// put tx credits, when some failures occurred after tx credits got
+>> +// or receive announce credits msgs
+>> +static inline void smc_wr_tx_put_credits(struct smc_link *link, int credits, bool wakeup)
+> 
+> <...>
+> 
+>> +// to check whether peer rq credits is lower than watermark.
+>> +static inline int smc_wr_tx_credits_need_announce(struct smc_link *link)
+> 
+> <...>
+> 
+>> +// get local rq credits and set credits to zero.
+>> +// may called when announcing credits
+>> +static inline int smc_wr_rx_get_credits(struct smc_link *link)
+> 
+> Please try to use C-style comments.
+> 
+> Thanks
 
-Not your fault, it would be nicer if the Intel manual told the truth;
-it says: "The following instructions cause VM exits when they are
-executed in VMX non-root operation: CPUID, GETSEC[1], INVD, and XSETBV."
-
-Footnote [1] says "An execution of GETSEC causes an invalid-opcode
-exception (#UD) if CR4.SMXE[Bit 14] = 0", and there is no such footnote
-for XSETBV.  Nevertheless, when tracing xsave.flat, I see that there's
-a #UD vmexit and not an XSETBV vmexit:
-
-         qemu-kvm-1637698 [019] 758186.750321: kvm_entry:            vcpu 0, rip 0x4028b7
-         qemu-kvm-1637698 [019] 758186.750322: kvm_exit:             vcpu 0 reason EXCEPTION_NMI rip 0x40048d info1 0x0000000000000000 info2 0x0000000000000000 intr_info 0x80000306 error_code 0x00000000
-         qemu-kvm-1637698 [019] 758186.750324: kvm_emulate_insn:     0:40048d:0f 01 d1 (prot64)
-         qemu-kvm-1637698 [019] 758186.750325: kvm_inj_exception:    #UD (0x0)
-
-So while my gut feeling that #UD would not cause a vmexit was correct,
-technically I was reading the SDM incorrectly.
-
-Jun, can you have this fixed?
-
-Paolo
-
-> - on the SVM, #UD is trapped but goes to the ud_interception() path;
-
+Thanks for your advice, I will modify it in the next version of patch.

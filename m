@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A12F4947D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8EB54947E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358851AbiATHGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 02:06:45 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:57476 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237988AbiATHGo (ORCPT
+        id S1358915AbiATHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 02:07:59 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:44794 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238319AbiATHH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 02:06:44 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20K76M65127231;
-        Thu, 20 Jan 2022 01:06:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1642662382;
-        bh=M0/8q05itDPqP6RCFlk98+I7fWpYzKq2/D9K/g5UXrk=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=RwQssu2j63/LXha0sLRtd3tXceuaoQcUS+PHPcH7NCNhJ1G0twth6qtIQMlFkVq6J
-         HlrIbZEYMVSK/McnsqE2ChfjhwIcbUcJUMeq5laTqtrLxOmV35UR/IpaV7VoO16QR7
-         gK4uYyPSA/qET7hirTfLZJ/zkEKlgOVp5nkd+q+4=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20K76Ml1098241
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Jan 2022 01:06:22 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 20
- Jan 2022 01:06:21 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 20 Jan 2022 01:06:21 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20K76L83091901;
-        Thu, 20 Jan 2022 01:06:21 -0600
-Date:   Thu, 20 Jan 2022 12:36:20 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-CC:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+        Thu, 20 Jan 2022 02:07:58 -0500
+X-UUID: 67f177b04d4f4e9dad3fc6fb74513b7a-20220120
+X-UUID: 67f177b04d4f4e9dad3fc6fb74513b7a-20220120
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <guangming.cao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1004976437; Thu, 20 Jan 2022 15:07:54 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 20 Jan 2022 15:07:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 20 Jan
+ 2022 15:07:53 +0800
+Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 20 Jan 2022 15:07:52 +0800
+From:   <guangming.cao@mediatek.com>
+To:     <john.stultz@linaro.org>
+CC:     <benjamin.gaignard@linaro.org>, <bo.song@mediatek.com>,
+        <caoguangming34@gmail.com>, <christian.koenig@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <guangming.cao@mediatek.com>,
+        <jianjiao.zeng@mediatek.com>, <labbott@redhat.com>,
+        <libo.kang@mediatek.com>, <linaro-mm-sig@lists.linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Subject: Re: [PATCH v3 2/4] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <20220120070620.wyeosdstbfcsaplt@ti.com>
-References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
- <20220112100046.68068-3-krzysztof.kozlowski@canonical.com>
- <20220119192758.z3lvlkaeyeiqi73a@ti.com>
- <5f912896-0635-fbe7-4fda-f4cb569190d9@canonical.com>
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <lmark@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <michael.j.ruhl@intel.com>,
+        <mingyuan.ma@mediatek.com>, <sumit.semwal@linaro.org>,
+        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>,
+        Guangming <Guangming.Cao@mediatek.com>
+Subject: [PATCH v5] dma-buf: system_heap: Add a size check for allocation
+Date:   Thu, 20 Jan 2022 15:08:50 +0800
+Message-ID: <20220120070850.95495-1-guangming.cao@mediatek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CALAqxLW5uEZCGHGk3rYoiOGzN5XMKb39JzoPB1iEX9k3UsiT-A@mail.gmail.com>
+References: <CALAqxLW5uEZCGHGk3rYoiOGzN5XMKb39JzoPB1iEX9k3UsiT-A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <5f912896-0635-fbe7-4fda-f4cb569190d9@canonical.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/22 08:49PM, Krzysztof Kozlowski wrote:
-> On 19/01/2022 20:31, Pratyush Yadav wrote:
-> > On 12/01/22 11:00AM, Krzysztof Kozlowski wrote:
-> >> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> >> controller bindings to DT schema format
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> >> ---
-> >>  .../spi/samsung,spi-peripheral-props.yaml     |  35 ++++
-> >>  .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
-> >>  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
-> >>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
-> >>  MAINTAINERS                                   |   2 +-
-> >>  5 files changed, 224 insertions(+), 123 deletions(-)
-> >>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> >>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> >>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> >> new file mode 100644
-> >> index 000000000000..aa5a1f48494b
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> >> @@ -0,0 +1,35 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/spi/samsung,spi-peripheral-props.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Peripheral-specific properties for Samsung S3C/S5P/Exynos SoC SPI controller
-> >> +
-> >> +maintainers:
-> >> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >> +
-> >> +description:
-> >> +  See spi-peripheral-props.yaml for more info.
-> >> +
-> >> +properties:
-> >> +  controller-data:
-> >> +    type: object
-> >> +    additionalProperties: false
-> >> +
-> >> +    properties:
-> >> +      samsung,spi-feedback-delay:
-> >> +        description: |
-> >> +          The sampling phase shift to be applied on the miso line (to account
-> >> +          for any lag in the miso line). Valid values:
-> >> +           - 0: No phase shift.
-> >> +           - 1: 90 degree phase shift sampling.
-> >> +           - 2: 180 degree phase shift sampling.
-> >> +           - 3: 270 degree phase shift sampling.
-> >> +        $ref: /schemas/types.yaml#/definitions/uint32
-> >> +        enum: [0, 1, 2, 3]
-> >> +
-> >> +    required:
-> >> +      - samsung,spi-feedback-delay
-> > 
-> > I am not quite sure if this required would work here. Let's say another 
-> > controller also uses a controller-data node, but it contains a different 
-> > set of properties. Won't this cause an error to be raised for that 
-> > controller since this property is not there?
-> 
-> The controller-data is Samsung SPI specific (does not exist in any other
-> binding), so why would controller-data get added to a different controller?
+From: Guangming <Guangming.Cao@mediatek.com>
 
-It does not as of now, but the name is fairly generic and some 
-controller in the future might use it. I do not think it is a good idea 
-to list required properties in X-peripheral-props.yaml in general since 
-all those will be collected by spi-peripheral-props.yaml and so will 
-apply to _all_ controllers that reference it.
+Add a size check for allocation since the allocation size should be
+always less than the total DRAM size on system heap.
+Adding this check can prevent comsuming too much time for invalid allocations.
 
+Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
+---
+ drivers/dma-buf/heaps/system_heap.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index 23a7e74ef966..459dc18bc4a2 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -347,6 +347,14 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 	struct page *page, *tmp_page;
+ 	int i, ret = -ENOMEM;
+ 
++	/*
++	 * Size check. The "len" should be less than totalram since system_heap
++	 * memory is comes from system. Adding check here can prevent comsuming
++	 * too much time for invalid allocations.
++	 */
++	if (len >> PAGE_SHIFT > totalram_pages())
++		return ERR_PTR(-EINVAL);
++
+ 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+ 	if (!buffer)
+ 		return ERR_PTR(-ENOMEM);
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.17.1
+

@@ -2,158 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A98B49466E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 05:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F78494671
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 05:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358479AbiATE0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 23:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S236453AbiATE1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 23:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358478AbiATEZ5 (ORCPT
+        with ESMTP id S233536AbiATE1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 23:25:57 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC53C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:25:57 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id a5so4260258pfo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bUsgaMBDfG4yraE8r8249vlbvccsa1/qhnf6WMP62oE=;
-        b=nwqLfBerlXM/t3wu+MTn1pHkmv8eg8hwR6iGEhBbOp6h/SP9Gq+xYYPjoNj9y1BH/2
-         6tH9vhty116CXXrQ9xuVtpDYmq985JCfRvYXGfA2kzq4n8I7POihddsMTwF/ITo2ri7p
-         uC88OSZgdgY5IQUqg9dI4ObizFha8W/zuRLqTNr1WJ0fBT4Y5zz2Hq4yBgyeR16Y65rI
-         E2aUsz1peNhVNdoDxIrkOk8/NGjASdoIpY1tOz/bNdsA72yWbalq5SiRCQzXuBaEYrSM
-         mPJo3MZFtmHi6+kF7fIE1kFc0b06QvruVQxmqQqqO+KEnmYhwnKw0wD9/WihCOp5QPvA
-         XzIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bUsgaMBDfG4yraE8r8249vlbvccsa1/qhnf6WMP62oE=;
-        b=GJYv6qNU/XPojBub/v+E1+c7BUhSQdE9opf/175ov4xG8wM3nFh+XbFgmQ9mV1hccE
-         4fbEIPCPfI3AaIMmPdjyCOHP/+/qbGuz0zB9HIFWSIgB2tlhsdhBKhPwRXJJ4Nm79d4J
-         3sWNHkfgacDo4/mEBKNydLhDOb32SHQni0VHQ+2h25a4OTbPChj0Hbp/o2iGgd+qfqhe
-         hcmnb93COhGPdarMqG2KpMw+P39mmDV/mUZw6Bmm2yuCi5TfhhgKYvwf6WCViLe1cC1K
-         8GRk0tzhQHXmvG0i29vIel+WTyaXiYbW/QQJkf55OmiELG5BYjJIofHO6EYo3hk8WUz+
-         7qLg==
-X-Gm-Message-State: AOAM531RBTBr2VlTcnlKiCfxYFd03fkYQqBAjdit6el93v/LJuqqpeXs
-        eSAkBr1OxKP8VBJl5Yi8ao4=
-X-Google-Smtp-Source: ABdhPJzH/JS2rSkDY8jH2Gdz8RB5tDOsyzr+lLveNQLhx0bZybiHHX0Y4Petll4cbI7OKBSjLe5tIA==
-X-Received: by 2002:a63:82c2:: with SMTP id w185mr24283737pgd.264.1642652756888;
-        Wed, 19 Jan 2022 20:25:56 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:b370:1e12:5bf4:801f])
-        by smtp.gmail.com with ESMTPSA id c2sm968852pgi.55.2022.01.19.20.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 20:25:56 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 19 Jan 2022 20:25:54 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        John Dias <joaodias@google.com>
-Subject: Re: [RESEND][PATCH v2] mm: don't call lru draining in the nested
- lru_cache_disable
-Message-ID: <YejkUlnnYeED1pC5@google.com>
-References: <20211230193627.495145-1-minchan@kernel.org>
- <YeVzWlrojI1+buQx@dhcp22.suse.cz>
- <YedXhpwURNTkW1Z3@google.com>
- <YefX1t4owjlx/m5I@dhcp22.suse.cz>
+        Wed, 19 Jan 2022 23:27:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F7DC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HHu2vcmAMjyZdp5l/HlaIQrYa0nqInGDI16V4wpDZxE=; b=kM8gwlss+dLkoAyh97n4QxGefg
+        W3ayn98v6j7vqXuUf2HdhOVDe/4Pw1IEe9C6K7cj/vR4tvnJz4g2iWeHPGS5n4uSG4V07nzyZmDmD
+        vlmxnrh51bIlgl62OXy81cYaqtCxb5w19Pa9y2T9y6FtI359xkpwv/yoT5fSHQRLWxAPdafyAjlOR
+        vspfKJn7E3AyAcarQddnd5vKNG50ghktFogDYSAGeCdHJ4HqTYApThMkVc1XtHe2TUkQPFsLatAQy
+        UxqxJ7woCITKqX3ZDz7gde9pPKSX8P6x+2tK9dZzRHaQvq+Wv2FdtHq2jxXBhLl8lXazb4ZY6De8X
+        8lpHIEIQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAP2t-00DKZK-Vb; Thu, 20 Jan 2022 04:27:36 +0000
+Date:   Thu, 20 Jan 2022 04:27:35 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Uladzislau Rezki <urezki@gmail.com>
+Subject: Re: [PATCH] vmap(): don't allow invalid pages
+Message-ID: <Yejkt/dpUKsaAu4t@casper.infradead.org>
+References: <20220118235244.540103-1-yury.norov@gmail.com>
+ <Yedgj+Lo2eru8197@casper.infradead.org>
+ <cfe4c63e-57c0-2a9d-c3e9-959bc77b87c6@arm.com>
+ <CAAH8bW_=KtrwLpg4tx+1tdMjN2mUiuLOoZH6nvbn8qNjU6aB3A@mail.gmail.com>
+ <5b62ed03-8da8-a94d-cc48-a8cac1eae1c9@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YefX1t4owjlx/m5I@dhcp22.suse.cz>
+In-Reply-To: <5b62ed03-8da8-a94d-cc48-a8cac1eae1c9@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:20:22AM +0100, Michal Hocko wrote:
-> On Tue 18-01-22 16:12:54, Minchan Kim wrote:
-> > On Mon, Jan 17, 2022 at 02:47:06PM +0100, Michal Hocko wrote:
-> > > On Thu 30-12-21 11:36:27, Minchan Kim wrote:
-> > > > lru_cache_disable involves IPIs to drain pagevec of each core,
-> > > > which sometimes takes quite long time to complete depending
-> > > > on cpu's business, which makes allocation too slow up to
-> > > > sveral hundredth milliseconds. Furthermore, the repeated draining
-> > > > in the alloc_contig_range makes thing worse considering caller
-> > > > of alloc_contig_range usually tries multiple times in the loop.
-> > > >
-> > > > This patch makes the lru_cache_disable aware of the fact the
-> > > > pagevec was already disabled. With that, user of alloc_contig_range
-> > > > can disable the lru cache in advance in their context during the
-> > > > repeated trial so they can avoid the multiple costly draining
-> > > > in cma allocation.
-> > > 
-> > > Do you have any numbers on any improvements?
-> > 
-> > The LRU draining consumed above 50% overhead for the 20M CMA alloc.
+On Thu, Jan 20, 2022 at 09:07:11AM +0530, Anshuman Khandual wrote:
 > 
-> This doesn't say much about the improvement itself.
+> 
+> On 1/19/22 10:52 PM, Yury Norov wrote:
+> >> Why should not this just scan over the entire user provided struct page
+> >> array and make sure that all pages there in are valid via above method,
+> >> but in vmap() itself before calling vmap_pages_range(). Because seems
+> >> like a single invalid page detected in vmap_pages_pte_range() will
+> >> anyways abort the entire vmap(). This will also enable us to drop the
+> >> existing NULL check above.
+> >
+> > I can do this, but why is it any better than the current approach?
+> 
+> Because it will just return on the first instance where the valid page
+> check fails, saving us some CPU cycles and an incomplete mapping ?
 
-The improvement is various depending on system state since it's
-timing sensitive. Let me try to get it.
-
->  
-> > > Now to the change. I do not like this much to be honest. LRU cache
-> > > disabling is a complex synchronization scheme implemented in
-> > > __lru_add_drain_all now you are stacking another level on top of that.
-> > > 
-> > > More fundamentally though. I am not sure I understand the problem TBH.
-> > 
-> > The problem is that kinds of IPI using normal prority workqueue to drain
-> > takes much time depending on the system CPU business.
-> 
-> How does this patch address that problem? The IPI has to happen at some
-> point as we need to sync up with pcp caches.
-
-True but the goal is to minimize the IPI overhead. Pleas look at
-alloc_contig_range and what happens if it fails with -EBUSY.
-The caller usually try again and then alloc_contig_range calls
-the drain again. In our workload, it keeps repeated until the
-allocation succeeded and the IPI keeps calling. Totally wasted.
-
-> 
-> > > What prevents you from calling lru_cache_disable at the cma level in the
-> > > first place?
-> > 
-> > You meant moving the call from alloc_contig_range to caller layer?
-> 
-> Yes.
-> 
-> > So, virtio_mem_fake_online, too? It could and make sense from
-> > performance perspective since upper layer usually calls the
-> > alloc_contig_range multiple times on retrial loop.
-> > 
-> > Havid said, semantically, not good in that why upper layer should
-> > know how alloc_contig_range works(LRU disable is too low level stuff)
-> > internally but I chose the performance here.
-> > 
-> > There is an example why the stacking is needed.
-> > cma_alloc also can be called from outside.
-> > A usecase is try to call
-> > 
-> >     lru_cache_disable
-> >     for (order = 10; order >= 0; order) {
-> >         page = cma_alloc(1<<order)
-> >         if (page)
-> >             break;
-> >     }
-> >     lru_cacne_enable
-> > 
-> > Here, putting the disable lru outside of cma_alloc is
-> > much better than inside. That's why I put it outside.
-> 
-> What does prevent you from calling lru_cache_{disable,enable} this way
-> with the existing implementation? AFAICS calls can be nested just fine.
-> Or am I missing something?
-
-It just increases more IPI calls since we drain the lru cache
-both upper layer and lower layer. That's I'd like to avoid
-in this patch. Just disable lru cache one time for entire
-allocation path.
+The valid page check is never intended to fail!  If you're worried about
+the efficiency of doing this, you have seriously confused your priorities.

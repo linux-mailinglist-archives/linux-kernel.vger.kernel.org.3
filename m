@@ -2,185 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7D5494DC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71111494DD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241448AbiATMSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:18:36 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:44738 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237697AbiATMSe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:18:34 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S234830AbiATMVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232146AbiATMVf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 07:21:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA4DC061574;
+        Thu, 20 Jan 2022 04:21:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A0B6F1EC01B5;
-        Thu, 20 Jan 2022 13:18:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642681108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=XO6AT+gIfZtH9EDaR1V0c6Fkovljr0vEcHMLtYZNXi0=;
-        b=ZvS9JkdJCYllJDFBD0tsEGn3u9iKtDu9RRyiFn28RlB9ttb3/cSuVBse0GV9xDiAmJXru1
-        G7WhLPYYU8EKqnivp/dBPCdF6YYQ7q3y6G8vJIsVo2jZaCOyhOigOuYlQCmxRcEn/trNns
-        hHEBxqnny4SO9CJxR0abXyH3IFJubqs=
-Date:   Thu, 20 Jan 2022 13:18:22 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 32/40] x86/compressed: use firmware-validated CPUID
- for SEV-SNP guests
-Message-ID: <YelTDp4gsEyscWTI@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-33-brijesh.singh@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B24A8616B1;
+        Thu, 20 Jan 2022 12:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BCDAC340E0;
+        Thu, 20 Jan 2022 12:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642681294;
+        bh=Rrtb4Z78kZvagGkT+zZbKk4bqZcLdYZB4YKkMxPDgz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n89ufXgxqBQmlVGQINtc9zHNVXP319B7qHybh3Qx+c0L2HqM31avHfgl6wa04P+PS
+         U2a/VDC5IDPuFQ4eiMY82H6dmoHs8ZfK1kB9z7g/dnjdF0aqtH2rwy7iweU7l4nfCd
+         uKCCdHIcWBEv0gR0OI3G7/t0anRLm/mFYQkndcecH0oX/QSV0Suoe05HTp9nWHxadN
+         8tE23CL6HQC4nzhCVsDFmucKj+Hij7vZthIZmYs3fmCqG8MKMk5+rVRjnlI1OXbcca
+         k2+X9OelbzYNhRg4+6sbjOuxpm57c2Blg09udLGHi+J7sZeVubFehVShcW+SAm/zNx
+         OgVkpV0c7w+bQ==
+Date:   Thu, 20 Jan 2022 14:21:29 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Praveen Kannoju <praveen.kannoju@oracle.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
+        Rajesh Sivaramasubramaniom 
+        <rajesh.sivaramasubramaniom@oracle.com>
+Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
+ asynchronous workers to flush the mr pool
+Message-ID: <YelTyePJh0l3U9Gk@unreal>
+References: <1642517238-9912-1-git-send-email-praveen.kannoju@oracle.com>
+ <53D98F26-FC52-4F3E-9700-ED0312756785@oracle.com>
+ <20220118191754.GG8034@ziepe.ca>
+ <CEFD48B4-3360-4040-B41A-49B8046D28E8@oracle.com>
+ <Yee2tMJBd4kC8axv@unreal>
+ <PH0PR10MB5515E99CA5DF423BDEBB038E8C599@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <Yegmm4ksXfWiOMME@unreal>
+ <PH0PR10MB55156B918F0D519B8A935C378C5A9@PH0PR10MB5515.namprd10.prod.outlook.com>
+ <YelDT7AbnXO17PVf@unreal>
+ <PH0PR10MB55154C4363F16B6EE003F8958C5A9@PH0PR10MB5515.namprd10.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-33-brijesh.singh@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR10MB55154C4363F16B6EE003F8958C5A9@PH0PR10MB5515.namprd10.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:43:24AM -0600, Brijesh Singh wrote:
-> Subject: Re: [PATCH v8 32/40] x86/compressed: use firmware-validated CPUID for SEV-SNP guests
-									    ^
-									    leafs
-
-or so.
-
-> From: Michael Roth <michael.roth@amd.com>
+On Thu, Jan 20, 2022 at 11:57:02AM +0000, Praveen Kannoju wrote:
+> > -----Original Message-----
+> > From: Leon Romanovsky [mailto:leon@kernel.org]
+> > Sent: 20 January 2022 04:41 PM
+> > To: Praveen Kannoju <praveen.kannoju@oracle.com>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>; Santosh Shilimkar
+> > <santosh.shilimkar@oracle.com>; David S . Miller <davem@davemloft.net>;
+> > kuba@kernel.org; netdev@vger.kernel.org; linux-rdma@vger.kernel.org;
+> > rds-devel@oss.oracle.com; linux-kernel@vger.kernel.org; Rama
+> > Nichanamatlu <rama.nichanamatlu@oracle.com>; Rajesh
+> > Sivaramasubramaniom <rajesh.sivaramasubramaniom@oracle.com>
+> > Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
+> > asynchronous workers to flush the mr pool
+> > 
+> > On Thu, Jan 20, 2022 at 08:00:54AM +0000, Praveen Kannoju wrote:
+> > > -----Original Message-----
+> > > From: Leon Romanovsky [mailto:leon@kernel.org]
+> > > Sent: 19 January 2022 08:26 PM
+> > > To: Praveen Kannoju <praveen.kannoju@oracle.com>
+> > > Cc: Santosh Shilimkar <santosh.shilimkar@oracle.com>; Jason Gunthorpe
+> > > <jgg@ziepe.ca>; David S . Miller <davem@davemloft.net>;
+> > > kuba@kernel.org; netdev@vger.kernel.org; linux-rdma@vger.kernel.org;
+> > > rds-devel@oss.oracle.com; linux-kernel@vger.kernel.org; Rama
+> > > Nichanamatlu <rama.nichanamatlu@oracle.com>; Rajesh
+> > > Sivaramasubramaniom <rajesh.sivaramasubramaniom@oracle.com>
+> > > Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by the
+> > > asynchronous workers to flush the mr pool
+> > >
+> > > On Wed, Jan 19, 2022 at 11:46:16AM +0000, Praveen Kannoju wrote:
+> > > > -----Original Message-----
+> > > > From: Leon Romanovsky [mailto:leon@kernel.org]
+> > > > Sent: 19 January 2022 12:29 PM
+> > > > To: Santosh Shilimkar <santosh.shilimkar@oracle.com>
+> > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>; Praveen Kannoju
+> > > > <praveen.kannoju@oracle.com>; David S . Miller
+> > > > <davem@davemloft.net>; kuba@kernel.org; netdev@vger.kernel.org;
+> > > > linux-rdma@vger.kernel.org; rds-devel@oss.oracle.com;
+> > > > linux-kernel@vger.kernel.org; Rama Nichanamatlu
+> > > > <rama.nichanamatlu@oracle.com>; Rajesh Sivaramasubramaniom
+> > > > <rajesh.sivaramasubramaniom@oracle.com>
+> > > > Subject: Re: [PATCH RFC] rds: ib: Reduce the contention caused by
+> > > > the asynchronous workers to flush the mr pool
+> > > >
+> > > > On Tue, Jan 18, 2022 at 07:42:54PM +0000, Santosh Shilimkar wrote:
+> > > > > On Jan 18, 2022, at 11:17 AM, Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > > > > >
+> > > > > > On Tue, Jan 18, 2022 at 04:48:43PM +0000, Santosh Shilimkar wrote:
+> > > > > >>
+> > > > > >>> On Jan 18, 2022, at 6:47 AM, Praveen Kannoju
+> > <praveen.kannoju@oracle.com> wrote:
+> > > > > >>>
+> > > > > >>> This patch aims to reduce the number of asynchronous workers
+> > > > > >>> being spawned to execute the function "rds_ib_flush_mr_pool"
+> > > > > >>> during the high I/O situations. Synchronous call path's to this
+> > function "rds_ib_flush_mr_pool"
+> > > > > >>> will be executed without being disturbed. By reducing the
+> > > > > >>> number of processes contending to flush the mr pool, the total
+> > > > > >>> number of D state processes waiting to acquire the mutex lock
+> > > > > >>> will be greatly reduced, which otherwise were causing DB
+> > > > > >>> instance crash as the corresponding processes were not
+> > progressing while waiting to acquire the mutex lock.
+> > > > > >>>
+> > > > > >>> Signed-off-by: Praveen Kumar Kannoju
+> > > > > >>> <praveen.kannoju@oracle.com> —
+> > > > > >>>
+> > > > > >> […]
+> > > > > >>
+> > > > > >>> diff --git a/net/rds/ib_rdma.c b/net/rds/ib_rdma.c index
+> > > > > >>> 8f070ee..6b640b5 100644
+> > > > > >>> +++ b/net/rds/ib_rdma.c
+> > > > > >>> @@ -393,6 +393,8 @@ int rds_ib_flush_mr_pool(struct
+> > rds_ib_mr_pool *pool,
+> > > > > >>> 	 */
+> > > > > >>> 	dirty_to_clean = llist_append_to_list(&pool->drop_list,
+> > &unmap_list);
+> > > > > >>> 	dirty_to_clean += llist_append_to_list(&pool->free_list,
+> > > > > >>> &unmap_list);
+> > > > > >>> +	WRITE_ONCE(pool->flush_ongoing, true);
+> > > > > >>> +	smp_wmb();
+> > > > > >>> 	if (free_all) {
+> > > > > >>> 		unsigned long flags;
+> > > > > >>>
+> > > > > >>> @@ -430,6 +432,8 @@ int rds_ib_flush_mr_pool(struct
+> > rds_ib_mr_pool *pool,
+> > > > > >>> 	atomic_sub(nfreed, &pool->item_count);
+> > > > > >>>
+> > > > > >>> out:
+> > > > > >>> +	WRITE_ONCE(pool->flush_ongoing, false);
+> > > > > >>> +	smp_wmb();
+> > > > > >>> 	mutex_unlock(&pool->flush_lock);
+> > > > > >>> 	if (waitqueue_active(&pool->flush_wait))
+> > > > > >>> 		wake_up(&pool->flush_wait);
+> > > > > >>> @@ -507,8 +511,17 @@ void rds_ib_free_mr(void *trans_private,
+> > > > > >>> int
+> > > > > >>> invalidate)
+> > > > > >>>
+> > > > > >>> 	/* If we've pinned too many pages, request a flush */
+> > > > > >>> 	if (atomic_read(&pool->free_pinned) >= pool-
+> > >max_free_pinned ||
+> > > > > >>> -	    atomic_read(&pool->dirty_count) >= pool->max_items / 5)
+> > > > > >>> -		queue_delayed_work(rds_ib_mr_wq, &pool-
+> > >flush_worker, 10);
+> > > > > >>> +	    atomic_read(&pool->dirty_count) >= pool->max_items / 5)
+> > {
+> > > > > >>> +		smp_rmb();
+> > > > > >> You won’t need these explicit barriers since above atomic and
+> > > > > >> write once already issue them.
+> > > > > >
+> > > > > > No, they don't. Use smp_store_release() and smp_load_acquire if
+> > > > > > you want to do something like this, but I still can't quite
+> > > > > > figure out if this usage of unlocked memory accesses makes any
+> > sense at all.
+> > > > > >
+> > > > > Indeed, I see that now, thanks. Yeah, these multi variable checks
+> > > > > can indeed be racy but they are under lock at least for this code path.
+> > > > > But there are few hot path places where single variable states are
+> > > > > evaluated atomically instead of heavy lock.
+> > > >
+> > > > At least pool->dirty_count is not locked in rds_ib_free_mr() at all.
+> > > >
+> > > > Thanks
+> > > >
+> > > > >
+> > > > > Regards,
+> > > > > Santosh
+> > > > >
+> > > >
+> > > > Thank you Santosh, Leon and Jason for reviewing the Patch.
+> > > >
+> > > > 1. Leon, the bool variable "flush_ongoing " introduced through the patch
+> > has to be accessed only after acquiring the mutex lock. Hence it is well
+> > protected.
+> > >
+> > > I don't see any lock in rds_ib_free_mr() function where your perform "if
+> > (!READ_ONCE(pool->flush_ongoing)) { ...".
+> > >
+> > > >
+> > > > 2. As the commit message already conveys the reason, the check being
+> > made in the function "rds_ib_free_mr" is only to avoid the redundant
+> > asynchronous workers from being spawned.
+> > > >
+> > > > 3. The synchronous flush path's through the function "rds_free_mr" with
+> > either cookie=0 or "invalidate" flag being set, have to be honoured as per the
+> > semantics and hence these paths have to execute the function
+> > "rds_ib_flush_mr_pool" unconditionally.
+> > > >
+> > > > 4. It complicates the patch to identify, where from the function
+> > "rds_ib_flush_mr_pool", has been called. And hence, this patch uses the
+> > state of the bool variable to stop the asynchronous workers.
+> > > >
+> > > > 5. We knew that "queue_delayed_work" will ensures only one work is
+> > running, but avoiding these async workers during high load situations, made
+> > way for the allocation and synchronous callers which would otherwise be
+> > waiting long for the flush to happen. Great reduction in the number of calls
+> > to the function "rds_ib_flush_mr_pool" has been observed with this patch.
+> > >
+> > > So if you understand that there is only one work in progress, why do you
+> > say workerS?
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > > 6. Jason, the only function "rds_ib_free_mr" which accesses the
+> > introduced bool variable "flush_ongoing" to spawn a flush worker does not
+> > crucially impact the availability of MR's, because the flush happens from
+> > allocation path as well when necessary.   Hence the Load-store ordering is
+> > not essentially needed here, because of which we chose smp_rmb() and
+> > smp_wmb() over smp_load_acquire() and smp_store_release().
+> > > >
+> > > > Regards,
+> > > > Praveen.
+> > >
+> > >
+> > > Jason,
+> > >
+> > > 	The relaxed ordering primitives smp_rmb() and smp_wmb() ensure
+> > to provide
+> > > 	guaranteed atomic memory operations READ_ONCE and
+> > WRITE_ONCE, used in the
+> > > 	functions "rds_ib_free_mr" and "rds_ib_flush_mr_pool"
+> > correspondingly.
+> > >
+> > > 	Yes, the memory barrier primitives smp_load_acquire()and
+> > smp_store_release()
+> > > 	are even better. But, because of the simplicity of the use of memory
+> > barrier
+> > > 	in the patch, smp_rmb() and smp_wmb() are chosen.
+> > >
+> > > 	Please let me know if you want me to switch to smp_load_acquire()
+> > and
+> > > 	smp_store_release().
+> > >
+> > > Leon,
+> > >
+> > > 	Avoiding the asynchronous worker from being spawned during the
+> > high load situations,
+> > > 	make way for both synchronous and allocation path to flush the mr
+> > pool and grab the
+> > > 	mr without waiting.
+> > >
+> > > 	Please let me know if you still have any queries with this respect or
+> > any modifications
+> > > 	are needed.
+> > 
+> Thank you for your reply, Leon.
 > 
-> SEV-SNP guests will be provided the location of special 'secrets'
-> 'CPUID' pages via the Confidential Computing blob. This blob is
-> provided to the boot kernel either through an EFI config table entry,
-> or via a setup_data structure as defined by the Linux Boot Protocol.
+> > I didn't get any answer on my questions.
+> > So let's me repeat them.
+> > 1. Where can I see locks in rds_ib_free_mr() that protects concurrent change
+> > of your new flush_ongoing field?
 > 
-> Locate the Confidential Computing from these sources and, if found,
-> use the provided CPUID page/table address to create a copy that the
-> boot kernel will use when servicing cpuid instructions via a #VC
+> flush_ongoing variable is only modified in the function "rds_ib_flush_mr_pool" under mutex lock. It is only being read atomically in the function "rds_ib_free_mr()", with memory barrier in place.  Hence a lock is not essential in this function "rds_ib_free_mr()". Depending on the value being read, decision is taken weather to spawn the asynchronous worker or not. 
 
-CPUID
+This is not how locking works.
 
-> handler.
+ CPU1                                     CPU2      
+  rds_ib_flush_mr_pool
+  lock
+                        context switch -> rds_ib_free_mr
+			                  READ old value of flush_ongoing
+			<- context switch
+  WRITE new value to flush_ongoing
+			              
+
 > 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/boot/compressed/sev.c | 13 ++++++++++
->  arch/x86/include/asm/sev.h     |  1 +
->  arch/x86/kernel/sev-shared.c   | 43 ++++++++++++++++++++++++++++++++++
->  3 files changed, 57 insertions(+)
+> > 2. There is only one same work can be executed/scheduled, where do you
+> > see multiple/parallel workers (plural) and how is it possible?
 > 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index 93e125da12cf..29dfb34b5907 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -415,6 +415,19 @@ bool snp_init(struct boot_params *bp)
->  	if (!cc_info)
->  		return false;
->  
-> +	/*
-> +	 * If SEV-SNP-specific Confidential Computing blob is present, then
-	     ^
-	     a
+> In my earlier comment, I have re-iterated the same point. I would take back my word "workerS". By avoiding this asynchronous worker to participate in flushing, the synchronous flush jobs (cookie=0 and invalidate=1) as well as allocation path worker will be acquiring the mutex lock in the function "rds_ib_flush_mr_pool" quickly, thereby fetching the MR.
 
+This is completely different scenario from what was presented before.
+You are interested to prioritize synchronous operations over async.
+In such case, why don't you simply cancel_delayed_work() in your sync
+flows?
 
-> +	 * firmware/bootloader have indicated SEV-SNP support. Verifying this
-> +	 * involves CPUID checks which will be more reliable if the SEV-SNP
-> +	 * CPUID table is used. See comments for snp_cpuid_info_create() for
-
-s/for/over/ ?
-
-> +	 * more details.
-> +	 */
-> +	snp_cpuid_info_create(cc_info);
-> +
-> +	/* SEV-SNP CPUID table should be set up now. */
-> +	if (!snp_cpuid_active())
-> +		sev_es_terminate(1, GHCB_TERM_CPUID);
-
-Right, that is not needed now.
-
->  	 * Pass run-time kernel a pointer to CC info via boot_params so EFI
->  	 * config table doesn't need to be searched again during early startup
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index cd189c20bcc4..4fa7ca20d7c9 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -157,6 +157,7 @@ bool snp_init(struct boot_params *bp);
->   * sev-shared.c via #include and these declarations can be dropped.
->   */
->  struct cc_blob_sev_info *snp_find_cc_blob_setup_data(struct boot_params *bp);
-> +void snp_cpuid_info_create(const struct cc_blob_sev_info *cc_info);
->  #else
->  static inline void sev_es_ist_enter(struct pt_regs *regs) { }
->  static inline void sev_es_ist_exit(void) { }
-> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-> index bd58a4ce29c8..5cb8f87df4b3 100644
-> --- a/arch/x86/kernel/sev-shared.c
-> +++ b/arch/x86/kernel/sev-shared.c
-> @@ -403,6 +403,23 @@ snp_cpuid_find_validated_func(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
->  	return false;
->  }
->  
-> +static void __init snp_cpuid_set_ranges(void)
-> +{
-> +	const struct snp_cpuid_info *cpuid_info = snp_cpuid_info_get_ptr();
-> +	int i;
-> +
-> +	for (i = 0; i < cpuid_info->count; i++) {
-> +		const struct snp_cpuid_fn *fn = &cpuid_info->fn[i];
-> +
-> +		if (fn->eax_in == 0x0)
-> +			cpuid_std_range_max = fn->eax;
-> +		else if (fn->eax_in == 0x40000000)
-> +			cpuid_hyp_range_max = fn->eax;
-> +		else if (fn->eax_in == 0x80000000)
-> +			cpuid_ext_range_max = fn->eax;
-> +	}
-> +}
-
-Kinda arbitrary to have a separate function which has a single caller.
-You can just as well move the loop into snp_cpuid_info_create() and put
-a comment above it:
-
-	/* Set CPUID ranges. */
-	for (i = 0; i < cpuid_info->count; i++) {
-		...
-
-Also, snp_cpuid_info_create() should be called snp_setup_cpuid_table()
-which is what this thing does.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> I hope I am clear. 
+> 
+> > BTW, please fix your email client to reply inline.
+> Fixed it. Thank you. 
+> > 
+> > >
+> > > Regards,
+> > > Praveen.
+> 
+> 
+> Regards,
+> Praveen.

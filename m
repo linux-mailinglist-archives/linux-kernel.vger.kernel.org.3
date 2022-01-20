@@ -2,199 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CC2494975
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C72494977
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359223AbiATI3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
+        id S1359248AbiATI37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359209AbiATI3c (ORCPT
+        with ESMTP id S1359204AbiATI3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:29:32 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148EDC061401
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:29:32 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f8so4969867pgf.8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:29:32 -0800 (PST)
+        Thu, 20 Jan 2022 03:29:47 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6852BC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:29:46 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id n8so10310219wmk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:29:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=dE3G0xt9hBn8jLKhujOyGZWGMqdM9E2qBax382dXL58=;
-        b=A5rzpbAbJsyhLXuog5IKovarFCFwOt0Ns6nJFVvoH8Ss1qntB8AE9prTmruHWpW7ZP
-         iw/7VJQii1C5A+5AHKpeMrtlXEU7g4fbHzp/stt1115OeM/7RAZPo33wc7ADEfzvvSer
-         5uedFER5hnfAOR/wlnr5NiA35AJwu0GJgKttY=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lRg1Hi7fshLwZOXJunSDXWp8Mi+a04TIBKVjfzILXqc=;
+        b=M6g6UzMtANcIE6R4pMS/wZvbQfFH0RkIxyOzQqhAI5EN/IntkdglHlmWBK62vPP7id
+         vmQbKOeMQsm6tAmbtdp9N9+5FB1ESJ1eFJZrmZqngpPN2G7CzWA7v8wJm4WciJotfe9f
+         3C6m2J0VKRBONU6jHsG4xee3adDuJMIRxucBHV9tylitRlr2WiO25ICuIIvHEUSwid3a
+         3jHTR3fvwAWYe4QCOhzzgztvTzOutWRX7vsbG6dj3dyhFhxOoFhHX2lzLr5M6eyHMg9d
+         1OahmGnGpJVPOS+VoO1jlj52rq+crn4c1xr6XEgJP1ohOuQKkqVq+1cwLN4BwHh5FH1H
+         F3dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=dE3G0xt9hBn8jLKhujOyGZWGMqdM9E2qBax382dXL58=;
-        b=ScSNcwUjQzQKDklLnt0TzJ6GpKhuzP9roE/MJ1bawXAAAh52hOv2ObNQm3wknJLIS0
-         26qSemItnxXoOavjIaAzA4WGObZRMLREZaNGFiU87Kg3OAE/+OrdGVzwvXVV+zEbEBB7
-         /QJ50oMjAWT1Jt3dSiIDVGbsj8aaTtvsY6xi+EjF4wfcyPFT5ihPZhzI0oWdPqcukfNH
-         VZWPEosUAvgjUd5FKHgZszyBp/AQnjZCGujoxSQFwirQcO0+EHb4F9yB7UdbpceQvRER
-         WVaqQqljhR2qmTRpWwhLp++AUEtiIeHnOqxRi1KNxRMmv/iWhVJ4iSYddonPR3Le7qTD
-         mFrw==
-X-Gm-Message-State: AOAM530yw95LLcET8EKNIgCSAE4VKXb08lYYnjMYnOYs4XEVw6OXA1FS
-        aVZUr3Ux0IwazkauQ7w0dZ2+ig==
-X-Google-Smtp-Source: ABdhPJzlRQMP+xrlhuJ01dsfu5oWtmnjFXHj3Z7RoOhyWsg64pmz2NxjLzTathH/pSmYgK/U3/WrHw==
-X-Received: by 2002:a05:6a00:2186:b0:4c6:50ea:6701 with SMTP id h6-20020a056a00218600b004c650ea6701mr1623555pfi.12.1642667371020;
-        Thu, 20 Jan 2022 00:29:31 -0800 (PST)
-Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id g2sm2264068pfc.109.2022.01.20.00.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 00:29:29 -0800 (PST)
-Message-ID: <9db96f20-38fb-46e0-5f33-e5cd36501bf0@broadcom.com>
-Date:   Thu, 20 Jan 2022 09:29:21 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lRg1Hi7fshLwZOXJunSDXWp8Mi+a04TIBKVjfzILXqc=;
+        b=g54PW8f5j+wYNwQsQPq0O2cmF+LShN+3p8kGzY7sf5y24QoTbxZ2Z9wuFlJ4r4qivS
+         2M8UGeoOJjn9rWYmFAYSji+BZ1r8ZtPjZww4YXyZxi5EnA5BIA9i45zmedbu4m0OqdHI
+         v3hyat+RwwiOttHQJnxleeuH3VarECL2vbUZb5Y86paRrOCaMTbuOnxq6uDcYKcIHSRb
+         b00SiLTPH4xYaeZMyw8gBXXqPgrjNWEbyaCxhGCEQl0F01loWKJXesVXCKGZQyaQnTnL
+         mj+Dw3y7d/gXMxvG04vLkbI/uFi/hP+MUGIzv8agswg2xEnzdXWjoY4djDRmMJvSUooL
+         pcmg==
+X-Gm-Message-State: AOAM530vskPTElFcrACNWrzq7HGp0jGGx+j5c4FIipJeh48V1CU46gXK
+        B8wfXds97RMCxg6JGuWRzolgt3beMghVJ5E6F9g0Zw==
+X-Google-Smtp-Source: ABdhPJy/5kiTt1Crf4M9DcuwFpzxOJ8PMTolsMnrwikR8TJcWxjZaNhtDsqGR85pW/LSE9SUMdrZANpkXmv8ZOQ5FGI=
+X-Received: by 2002:a5d:6e8a:: with SMTP id k10mr33643975wrz.113.1642667384748;
+ Thu, 20 Jan 2022 00:29:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/9] brcmfmac: firmware: Do not crash on a NULL
- board_type
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220117142919.207370-1-marcan@marcan.st>
- <20220117142919.207370-4-marcan@marcan.st>
- <be66ea27-c98a-68d3-40b1-f79ab62460d5@gmail.com>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <be66ea27-c98a-68d3-40b1-f79ab62460d5@gmail.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002719ae05d5ff4dd2"
+References: <20220118190922.1557074-1-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 20 Jan 2022 16:29:33 +0800
+Message-ID: <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002719ae05d5ff4dd2
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> This field is only used to pass along the parsed Test object from
+> parse_tests().
+> Everywhere else the `result` field is ignored.
+>
+> Instead make parse_tests() explicitly return a KunitResult and Test so
+> we can retire the `result` field.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-On 1/19/2022 11:02 PM, Dmitry Osipenko wrote:
-> 17.01.2022 17:29, Hector Martin пишет:
->> This unbreaks support for USB devices, which do not have a board_type
->> to create an alt_path out of and thus were running into a NULL
->> dereference.
->>
->> Fixes: 5ff013914c62 ("brcmfmac: firmware: Allow per-board firmware binaries")
->> Signed-off-by: Hector Martin <marcan@marcan.st>
-> 
-> Technically, all patches that are intended to be included into next
-> stable kernel update require the "Cc: stable@vger.kernel.org" tag.
+I personally prefer having the Test as part of the result -- it gives
+a slightly rust-esque sense of needing to check the actual result
+before using anything that's parsed. (Also, I'm still not used to the
+whole multiple return value thing, which is not as clear as an
+explicit named struct member, IMHO).
+That being said, we're not actually checking the result before using
+the Test, and certainly the use of Any and mashing a textual error
+message in the same field is rather unpleasant.
 
-Being the nit picker that I am I would say it is recommended to safe 
-yourself extra work, not required, for the reason you give below.
+My ideal solution would be to rename 'result' to something more
+sensible ('parsed_test', maybe?), and make it explicitly a Test rather
+than Any (and either add a separate field for the textual error
+message, or remove it as in this patch, having noticed that it's
+almost completely redundant to the enum).
 
-> In practice such patches usually auto-picked by the patch bot, so no
-> need to resend.
+That being said, I can live with the current solution, but'd ideally
+like a comment or something to make the return value Tuple a bit more
+obvious.
 
-Regards,
-Arend
+Thoughts?
 
---0000000000002719ae05d5ff4dd2
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDswaLyaz4RhCNyGBrs
-oaX6XrZ1Pa6p7M08uBcr98nWOTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMjAwODI5MzFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFR32UWpILnAN8HA9e92KaAAZsIi5kE39IlXm
-n+sCMWZaqEOub4/JOD3pWt4qEaDml92H0t0S0gC2aC0Tv2WWVTnwyOLPGPc5tnCXG5CU8l2UwR/p
-QwOgcRcYX4PhODVZ3zKpUEmtsJFXVGDSL578ADLwZ3vsKePObgC6pX80h4LNQpeKT2MJFzxmXjSe
-bp9O+iu3meFbJb4t8WGM0vgzv3Vnw4/QZIRVIscg5b/xi1WMoELe0y1tGK1gz5zMpz7w1x1YrE2w
-psPq7G1EmEz8VP5iqxBn4mNxtRg30KkU2om2AIVGiQ2Q/mTEg9Ewn3Yq5Cc11+D5ahpd10J8RTgn
-kA==
---0000000000002719ae05d5ff4dd2--
+-- David
+
+>  tools/testing/kunit/kunit.py | 24 ++++++++----------------
+>  1 file changed, 8 insertions(+), 16 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 7a706f96f68d..9274c6355809 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -17,7 +17,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
+>
+>  from dataclasses import dataclass
+>  from enum import Enum, auto
+> -from typing import Any, Iterable, Sequence, List, Optional
+> +from typing import Iterable, List, Optional, Sequence, Tuple
+>
+>  import kunit_json
+>  import kunit_kernel
+> @@ -32,7 +32,6 @@ class KunitStatus(Enum):
+>  @dataclass
+>  class KunitResult:
+>         status: KunitStatus
+> -       result: Any
+>         elapsed_time: float
+>
+>  @dataclass
+> @@ -82,10 +81,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+>         config_end = time.time()
+>         if not success:
+>                 return KunitResult(KunitStatus.CONFIG_FAILURE,
+> -                                  'could not configure kernel',
+>                                    config_end - config_start)
+>         return KunitResult(KunitStatus.SUCCESS,
+> -                          'configured kernel successfully',
+>                            config_end - config_start)
+>
+>  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> @@ -100,14 +97,11 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>         build_end = time.time()
+>         if not success:
+>                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  'could not build kernel',
+>                                    build_end - build_start)
+>         if not success:
+>                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  'could not build kernel',
+>                                    build_end - build_start)
+>         return KunitResult(KunitStatus.SUCCESS,
+> -                          'built kernel successfully',
+>                            build_end - build_start)
+>
+>  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+> @@ -173,14 +167,14 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                         filter_glob=filter_glob,
+>                         build_dir=request.build_dir)
+>
+> -               result = parse_tests(request, run_result)
+> +               _, test_result = parse_tests(request, run_result)
+>                 # run_kernel() doesn't block on the kernel exiting.
+>                 # That only happens after we get the last line of output from `run_result`.
+>                 # So exec_time here actually contains parsing + execution time, which is fine.
+>                 test_end = time.time()
+>                 exec_time += test_end - test_start
+>
+> -               test_counts.add_subtest_counts(result.result.counts)
+> +               test_counts.add_subtest_counts(test_result.counts)
+>
+>         if len(filter_globs) == 1 and test_counts.crashed > 0:
+>                 bd = request.build_dir
+> @@ -189,7 +183,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                                 bd, bd, kunit_kernel.get_outfile_path(bd), bd, sys.argv[0]))
+>
+>         kunit_status = _map_to_overall_status(test_counts.get_status())
+> -       return KunitResult(status=kunit_status, result=result, elapsed_time=exec_time)
+> +       return KunitResult(status=kunit_status, elapsed_time=exec_time)
+>
+>  def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+>         if test_status in (kunit_parser.TestStatus.SUCCESS, kunit_parser.TestStatus.SKIPPED):
+> @@ -197,7 +191,7 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+>         else:
+>                 return KunitStatus.TEST_FAILURE
+>
+> -def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
+> +def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+>         parse_start = time.time()
+>
+>         test_result = kunit_parser.Test()
+> @@ -231,11 +225,9 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitR
+>                         print(json_obj)
+>
+>         if test_result.status != kunit_parser.TestStatus.SUCCESS:
+> -               return KunitResult(KunitStatus.TEST_FAILURE, test_result,
+> -                                  parse_end - parse_start)
+> +               return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
+>
+> -       return KunitResult(KunitStatus.SUCCESS, test_result,
+> -                               parse_end - parse_start)
+> +       return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
+>
+>  def run_tests(linux: kunit_kernel.LinuxSourceTree,
+>               request: KunitRequest) -> KunitResult:
+> @@ -513,7 +505,7 @@ def main(argv, linux=None):
+>                 request = KunitParseRequest(raw_output=cli_args.raw_output,
+>                                             build_dir='',
+>                                             json=cli_args.json)
+> -               result = parse_tests(request, kunit_output)
+> +               result, _ = parse_tests(request, kunit_output)
+>                 if result.status != KunitStatus.SUCCESS:
+>                         sys.exit(1)
+>         else:
+>
+> base-commit: f079ab01b5609fb0c9acc52c88168bf1eed82373
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>

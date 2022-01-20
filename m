@@ -2,163 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E18B495290
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E991495292
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377067AbiATQpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:45:11 -0500
-Received: from foss.arm.com ([217.140.110.172]:44806 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234766AbiATQpJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:45:09 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79F19ED1;
-        Thu, 20 Jan 2022 08:45:08 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.38.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80FBF3F73D;
-        Thu, 20 Jan 2022 08:45:02 -0800 (PST)
-Date:   Thu, 20 Jan 2022 16:44:55 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, luto@kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paul.walmsley@sifive.com, pbonzini@redhat.com,
-        peterz@infradead.org, seanjc@google.com, suzuki.poulose@arm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, tsbogend@alpha.franken.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH v2 4/7] kvm/mips: rework guest entry logic
-Message-ID: <20220120164455.GA15464@C02TD0UTHF1T.local>
-References: <20220119105854.3160683-1-mark.rutland@arm.com>
- <20220119105854.3160683-5-mark.rutland@arm.com>
+        id S1377095AbiATQpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:45:18 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:12225 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234766AbiATQpP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:45:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642697115; x=1674233115;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QkpJJGQO22rQYol2lb3Srsb4ZvNVuO0m8EXzJsiR5f0=;
+  b=kmMnyotzwezfdHlhy80wbDE8CbxvIVB3GLzcVvRnddqe5PszPvjnQtP1
+   Swwl2IwHUnNIZKVswK/jV+OBVIcRBIpMWyFzfiEaQrDMy54Uy7IZiGen2
+   uUoBh6WEt5PejoNCY+ACEhpklJRJDaGfWkFrJhYiFVaZul3IyfwUG2V/a
+   g=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jan 2022 08:45:14 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 08:45:13 -0800
+Received: from [10.216.49.131] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 20 Jan
+ 2022 08:45:10 -0800
+Message-ID: <b528a922-da84-32c2-963f-458b1e834c15@quicinc.com>
+Date:   Thu, 20 Jan 2022 22:15:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119105854.3160683-5-mark.rutland@arm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] sched/fair: Prefer small idle cores for forkees
+Content-Language: en-US
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <joel@joelfernandes.org>, <linux-arm-msm@vger.kernel.org>,
+        <quic_lingutla@quicinc.com>, <linux-kernel@vger.kernel.org>,
+        <quic_rjendra@quicinc.com>
+References: <20220112143902.13239-1-quic_ctheegal@quicinc.com>
+ <YeBRD9zKSLPBFX+j@FVFF7649Q05P>
+From:   Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+In-Reply-To: <YeBRD9zKSLPBFX+j@FVFF7649Q05P>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:58:51AM +0000, Mark Rutland wrote:
-> In kvm_arch_vcpu_ioctl_run() we use guest_enter_irqoff() and
-> guest_exit_irqoff() directly, with interrupts masked between these. As
-> we don't handle any timer ticks during this window, we will not account
-> time spent within the guest as guest time, which is unfortunate.
-> 
-> Additionally, we do not inform lockdep or tracing that interrupts will
-> be enabled during guest execution, which caan lead to misleading traces
-> and warnings that interrupts have been enabled for overly-long periods.
-> 
-> This patch fixes these issues by using the new timing and context
-> entry/exit helpers to ensure that interrupts are handled during guest
-> vtime but with RCU watching, with a sequence:
-> 
-> 	guest_timing_enter_irqoff();
-> 
-> 	guest_state_enter_irqoff();
-> 	< run the vcpu >
-> 	guest_state_exit_irqoff();
-> 
-> 	< take any pending IRQs >
-> 
-> 	guest_timing_exit_irqoff();
 
-Looking again, this patch isn't sufficient.
 
-On MIPS a guest exit will be handled by kvm_mips_handle_exit() *before*
-returning into the "< run the vcpu >" step above, so we won't call 
-guest_state_exit_irqoff() before using RCU, etc.
+On 1/13/2022 10:05 PM, Vincent Donnefort wrote:
+> On Wed, Jan 12, 2022 at 08:09:02PM +0530, Chitti Babu Theegala wrote:
+>> Newly forked threads don't have any useful utilization data yet and
+>> it's not possible to forecast their impact on energy consumption.
+>> update_pick_idlest These forkees (though very small, most times) end up waking big
+>> cores from deep sleep for that very small durations.
+>>
+>> Bias all forkees to small cores to prevent waking big cores from deep
+>> sleep to save power.
+> 
+> This bias might be interesting for some workloads, but what about the
+> others? (see find_energy_efficient_cpu() comment, which discusses forkees).
+> 
 
-This'll need some more thought...
+Yes, I agree with the find_energy_efficient_cpu() comment that we don't 
+have any useful utilization data yet and hence not possible to forecast. 
+However, I don't see any point in penalizing the power by waking up 
+bigger cores which are in deep sleep state for very small workloads.
 
-Mark.
+This patch helps lighter workloads during idle conditions w.r.t power 
+POV. For active (interactive or heavier) workloads, on most big.Little 
+systems' these foreground tasks get pulled into gold affined cpu-sets 
+where this patch would not play any spoilsport. Even for systems with 
+such cpu-sets not defined, heavy workloads might need just another 1 or 
+2 scheduling windows for ramping to better freq or core.
 
-> Since instrumentation may make use of RCU, we must also ensure that no
-> instrumented code is run during the EQS. I've split out the critical
-> section into a new kvm_mips_enter_exit_vcpu() helper which is marked
-> noinstr.
+>>
+>> Signed-off-by: Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+>> ---
+>>   kernel/sched/fair.c | 16 +++++++++++-----
+>>   1 file changed, 11 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 6e476f6..d407bbc 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -5976,7 +5976,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
+>>   }
+>>   
+>>   static struct sched_group *
+>> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu);
+>> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag);
+>>   
+>>   /*
+>>    * find_idlest_group_cpu - find the idlest CPU among the CPUs in the group.
+>> @@ -6063,7 +6063,7 @@ static inline int find_idlest_cpu(struct sched_domain *sd, struct task_struct *p
+>>   			continue;
+>>   		}
+>>   
+>> -		group = find_idlest_group(sd, p, cpu);
+>> +		group = find_idlest_group(sd, p, cpu, sd_flag);
+>>   		if (!group) {
+>>   			sd = sd->child;
+>>   			continue;
+>> @@ -8997,7 +8997,8 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+>>   static bool update_pick_idlest(struct sched_group *idlest,
+>>   			       struct sg_lb_stats *idlest_sgs,
+>>   			       struct sched_group *group,
+>> -			       struct sg_lb_stats *sgs)
+>> +			       struct sg_lb_stats *sgs,
+>> +			       int sd_flag)
+>>   {
+>>   	if (sgs->group_type < idlest_sgs->group_type)
+>>   		return true;
+>> @@ -9034,6 +9035,11 @@ static bool update_pick_idlest(struct sched_group *idlest,
+>>   		if (idlest_sgs->idle_cpus > sgs->idle_cpus)
+>>   			return false;
+>>   
+>> +		/* Select smaller cpu group for newly woken up forkees */
+>> +		if ((sd_flag & SD_BALANCE_FORK) && (idlest_sgs->idle_cpus &&
+>> +			!capacity_greater(idlest->sgc->max_capacity, group->sgc->max_capacity)))
+>> +			return false;
+>> +
 > 
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/kvm/mips.c | 37 ++++++++++++++++++++++++++++++++++---
->  1 file changed, 34 insertions(+), 3 deletions(-)
+> Energy biased placement should probably be applied only when EAS is enabled.
 > 
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index aa20d074d3883..1a961c2434fee 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -438,6 +438,24 @@ int kvm_arch_vcpu_ioctl_set_guest_debug(struct kvm_vcpu *vcpu,
->  	return -ENOIOCTLCMD;
->  }
->  
-> +/*
-> + * Actually run the vCPU, entering an RCU extended quiescent state (EQS) while
-> + * the vCPU is running.
-> + *
-> + * This must be noinstr as instrumentation may make use of RCU, and this is not
-> + * safe during the EQS.
-> + */
-> +static int noinstr kvm_mips_vcpu_enter_exit(struct kvm_vcpu *vcpu)
-> +{
-> +	int ret;
-> +
-> +	guest_state_enter_irqoff();
-> +	ret = kvm_mips_callbacks->vcpu_run(vcpu);
-> +	guest_state_exit_irqoff();
-> +
-> +	return ret;
-> +}
-> +
->  int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->  {
->  	int r = -EINTR;
-> @@ -458,7 +476,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->  	lose_fpu(1);
->  
->  	local_irq_disable();
-> -	guest_enter_irqoff();
-> +	guest_timing_enter_irqoff();
->  	trace_kvm_enter(vcpu);
->  
->  	/*
-> @@ -469,10 +487,23 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->  	 */
->  	smp_store_mb(vcpu->mode, IN_GUEST_MODE);
->  
-> -	r = kvm_mips_callbacks->vcpu_run(vcpu);
-> +	r = kvm_mips_vcpu_enter_exit(vcpu);
-> +
-> +	/*
-> +	 * We must ensure that any pending interrupts are taken before
-> +	 * we exit guest timing so that timer ticks are accounted as
-> +	 * guest time. Transiently unmask interrupts so that any
-> +	 * pending interrupts are taken.
-> +	 *
-> +	 * TODO: is there a barrier which ensures that pending interrupts are
-> +	 * recognised? Currently this just hopes that the CPU takes any pending
-> +	 * interrupts between the enable and disable.
-> +	 */
-> +	local_irq_enable();
-> +	local_irq_disable();
->  
->  	trace_kvm_out(vcpu);
-> -	guest_exit_irqoff();
-> +	guest_timing_exit_irqoff();
->  	local_irq_enable();
->  
->  out:
-> -- 
-> 2.30.2
+> It's especially true here, if all CPUs have the same capacity, capacity_greater
+> would be always false. So unless I missed something, we wouldn't let the group_util
+> evaluation happen, would we?
+
+True. I am uploading new version patch with a EAS enablement check in place.
+
 > 
-> 
+> [...]

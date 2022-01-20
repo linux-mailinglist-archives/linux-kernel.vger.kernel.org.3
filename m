@@ -2,167 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DAA495472
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9844349547B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377370AbiATSwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377354AbiATSwA (ORCPT
+        id S1358258AbiATS4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:56:10 -0500
+Received: from mail-qk1-f176.google.com ([209.85.222.176]:42691 "EHLO
+        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233413AbiATS4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:52:00 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3504EC061401
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:52:00 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id x11so134051plg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8EtW5aJUkZlLqS6KByBwT87+2IR1JSn6MQ8pl+a1L1I=;
-        b=NQYgEA4M/w5/oPAMr8pOQ9c83buHBZm1EOwnhxvMJD73dViVTwW7SLmFSapT8MzP0k
-         lp1qLzKIbojGpeLkOn1wqY9P1fr3M9lleuPC7xsasrVHWj2ODjuxoLGvzMVW6VwclLHu
-         22vQjx+Zt/s4e0x5Fixv7T+W/WpFZC1ypEv9TEvEW0/cG+4OBEP2mLfdU5m4VnxRSq4h
-         pZs5usczWpG+aEqvRpk0LiNJLQ7uKPzU/QjHZiFDQlWpbKtn0iSnaQDHbLBvkG6eQ9J2
-         hOGCTa95y9r4vAvQ/OHyTOXA3RAGK8CF+2cQ2FazuMfX1SR+dfkWnCG33Gv/9XwxtBkk
-         +sHQ==
+        Thu, 20 Jan 2022 13:56:09 -0500
+Received: by mail-qk1-f176.google.com with SMTP id c190so7099070qkg.9;
+        Thu, 20 Jan 2022 10:56:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=8EtW5aJUkZlLqS6KByBwT87+2IR1JSn6MQ8pl+a1L1I=;
-        b=3aNWPY3+o1c4+fNOYho0Ius49z6zqEIfPPXI6Jz1dcwR3a6a2O9veDswJLzFvBXPmQ
-         l70FmQivJmrVM67Fq0oNWudO1mzLM+ykKOzq7PgFatOZfCeYFhpKf1n4IPRc+QNg9sWQ
-         lpnk3EjKLf2cmmEmrlrL93SLEveHpbXJe80kCgLTzVcZ3Y/ZVCiaBUgzdsnFxE0wo99d
-         PCtDOc+LUhQhMYIFpO2NDCEtwPNVL1jYWzbwH7k7ZW0YjH1QLSerRV7uLdOXxgWxz50J
-         puOYWsjpHOTWenNrxQ5wT30TVo8ziItXAbA8jvvBNInrOP46ZVWzBKOpYgdH39WvUVxV
-         ZLpQ==
-X-Gm-Message-State: AOAM531jDOX5JXQJ6hdjhScUtPhVzsps7b2Mq2+HnjlHEVFJBuXRv9xV
-        KoBW+X9oYRz4nke9D15hzQWISg==
-X-Google-Smtp-Source: ABdhPJwOcKX4q0aXSX3awK4t1GwYFAHIAnuIczRRG34WtbQiXod6hQvEiN93AyBbUWCvMdAzZb7Ngw==
-X-Received: by 2002:a17:902:7401:b0:14b:1339:58cf with SMTP id g1-20020a170902740100b0014b133958cfmr81275pll.66.1642704719518;
-        Thu, 20 Jan 2022 10:51:59 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id q4sm4512124pfu.15.2022.01.20.10.51.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 10:51:59 -0800 (PST)
-Date:   Thu, 20 Jan 2022 10:51:59 -0800 (PST)
-X-Google-Original-Date: Thu, 20 Jan 2022 10:51:23 PST (-0800)
-Subject:     Re: [PATCH v4 3/3] dmaengine: sf-pdma: Get number of channel by device tree
-In-Reply-To: <0d0b0a3ad703f5ef50611e2dd80439675bda666a.1642383007.git.zong.li@sifive.com>
-CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        zong.li@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     zong.li@sifive.com
-Message-ID: <mhng-5b3e2596-3558-4534-9229-26885ee4cc5c@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xRWBDbesgHdt5Xb1VUf1OEE5dZ9gpONo3xSzy6Jbfyo=;
+        b=GJYgAWncVD8cbLwHxq9wcaTYyj3LvZShvgy3Gc5UBw5myRTmSlKbeDb/Kv+1ACgZHV
+         fjx6XK3CbxwrpxOkrgqCsri7S3036mzMy3MeTb5X60guACm8Tz2lSyFrY/KXseKFvFya
+         DRnOSF81T5Ku2yy6UdwLI3ohWlF+ySIgy2hOx70EZhlUv585IasLn8WSfBi5GngwghcF
+         tNfGnX5pRN/AgrWWCmc2EXJ70QyMnBdzBSXMaSddQcBVCTR+HuwKKeOGtErCx9varerr
+         UtDZNtthE5+fI/unDrUzag7nmeOV0L406AW+3TYOL/AXgPMvh0vONPZOpRSGnZKcdaBI
+         dIFw==
+X-Gm-Message-State: AOAM531Hjab1CeMRNGCpqFO4rbqKHP+4Q2XQp6Z1icJRLc8Ut4LRBF65
+        jJlkQIRI5uC+wHBGvRy4gN3lp6T2knoesTg+Bh8=
+X-Google-Smtp-Source: ABdhPJwQWvstaLQAUXELt6rsGZJHy2Qw5ozIJjOpuU8tyRo8LzlaGVcYVU6AOIodMVKLqKupbn97Wb3lefSo54YHXcc=
+X-Received: by 2002:a37:b702:: with SMTP id h2mr151557qkf.135.1642704968644;
+ Thu, 20 Jan 2022 10:56:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
+In-Reply-To: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Jan 2022 19:55:57 +0100
+Message-ID: <CAJZ5v0jBVX9H8d8g4v3W7x9MEKQpudr3NP+LGP57FioFvpq7Jg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: menu: Fix long delay issue when tick stopped
+To:     Shaokun Zhang <zhangshaokun@hisilicon.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Yang <guoyang2@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Jan 2022 17:35:28 PST (-0800), zong.li@sifive.com wrote:
-> It currently assumes that there are always four channels, it would
-> cause the error if there is actually less than four channels. Change
-> that by getting number of channel from device tree.
+On Mon, Jan 17, 2022 at 9:16 AM Shaokun Zhang
+<zhangshaokun@hisilicon.com> wrote:
 >
-> For backwards-compatible, it uses the default value (i.e. 4) when there
-> is no 'dma-channels' information in dts.
-
-Some of the same wording issues here as those I pointed out in the DT 
-bindings patch.
-
-> Signed-off-by: Zong Li <zong.li@sifive.com>
+> From: Guo Yang <guoyang2@huawei.com>
+>
+> The network delay was always big on arm server tested by qperf,
+> the reason was that the cpu entered deep power down idle state(like intel
+> C6) and can't goto a shallow one.
+>
+> The intervals in @get_typical_interval() was much smaller than predicted_ns
+> in @menu_select(), so the predict state is always deepest and cause long
+> time network delay.
+>
+> Every time when the cpu got an interrupt from the network, the cpu was
+> waken up and did the IRQ, after that the cpu enter @menu_select()
+> but the @tick_nohz_tick_stopped() was true and get a big data->next_timer_ns,
+> the cpu can never goto a shallow state util the data->next_timer_ns timeout.
+> Below was the print when the issue occurrence.
+>
+> [   37.082861] intervals = 36us
+> [   37.082875] intervals = 15us
+> [   37.082888] intervals = 22us
+> [   37.082902] intervals = 35us
+> [   37.082915] intervals = 34us
+> [   37.082929] intervals = 39us
+> [   37.082942] intervals = 39us
+> [   37.082956] intervals = 35us
+> [   37.082970] target_residency_ns = 10000, predicted_ns = 35832710
+> [   37.082998] target_residency_ns = 600000, predicted_ns = 35832710
+> [   37.083037] intervals = 36us
+> [   37.083050] intervals = 15us
+> [   37.083064] intervals = 22us
+> [   37.083077] intervals = 35us
+> [   37.083091] intervals = 34us
+> [   37.083104] intervals = 39us
+> [   37.083118] intervals = 39us
+> [   37.083131] intervals = 35us
+> [   37.083145] target_residency_ns = 10000, predicted_ns = 35657420
+> [   37.083174] target_residency_ns = 600000, predicted_ns = 35657420
+> [   37.083212] intervals = 36us
+> [   37.083225] intervals = 15us
+> [   37.083239] intervals = 22us
+> [   37.083253] intervals = 35us
+> [   37.083266] intervals = 34us
+> [   37.083279] intervals = 39us
+> [   37.083293] intervals = 39us
+> [   37.083307] intervals = 35us
+> [   37.083320] target_residency_ns = 10000, predicted_ns = 35482140
+> [   37.083349] target_residency_ns = 600000, predicted_ns = 35482140
+>
+> Add idle tick wakeup judge before change predicted_ns.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Guo Yang <guoyang2@huawei.com>
+> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
 > ---
->  drivers/dma/sf-pdma/sf-pdma.c | 20 +++++++++++++-------
->  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
->  2 files changed, 15 insertions(+), 13 deletions(-)
+>  drivers/cpuidle/governors/menu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-> index f12606aeff87..1264add9897e 100644
-> --- a/drivers/dma/sf-pdma/sf-pdma.c
-> +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
->  static int sf_pdma_probe(struct platform_device *pdev)
->  {
->  	struct sf_pdma *pdma;
-> -	struct sf_pdma_chan *chan;
->  	struct resource *res;
-> -	int len, chans;
->  	int ret;
->  	const enum dma_slave_buswidth widths =
->  		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
->  		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
->  		DMA_SLAVE_BUSWIDTH_64_BYTES;
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
+> index c492268..3f03843 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -313,7 +313,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>                                 get_typical_interval(data, predicted_us)) *
+>                                 NSEC_PER_USEC;
 >
-> -	chans = PDMA_NR_CH;
-> -	len = sizeof(*pdma) + sizeof(*chan) * chans;
-> -	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> +	pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
->  	if (!pdma)
->  		return -ENOMEM;
->
-> -	pdma->n_chans = chans;
-> +	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> +				   &pdma->n_chans);
-> +	if (ret) {
-> +		dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> +		pdma->n_chans = PDMA_MAX_NR_CH;
-> +	}
-> +
-> +	if (pdma->n_chans > PDMA_MAX_NR_CH) {
-> +		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-> +		return -EINVAL;
+> -       if (tick_nohz_tick_stopped()) {
+> +       if (tick_nohz_tick_stopped() && data->tick_wakeup) {
 
-Can we get away with just using only the number of channels the driver 
-actually supports?  ie, just never sending an op to the channels above 
-MAX_NR_CH?  That should leave us with nothing to track.
+data->tick_wakeup is only true if tick_nohz_idle_got_tick() has
+returned true, but I'm not sure how this can happen after stopping the
+tick.
 
-> +	}
+IOW, it looks like the change simply makes the condition be always false.
+
+>                 /*
+>                  * If the tick is already stopped, the cost of possible short
+>                  * idle duration misprediction is much higher, because the CPU
+> --
+> 1.8.3.1
 >
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-> @@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
->  	struct sf_pdma_chan *ch;
->  	int i;
->
-> -	for (i = 0; i < PDMA_NR_CH; i++) {
-> +	for (i = 0; i < pdma->n_chans; i++) {
->  		ch = &pdma->chans[i];
->
->  		devm_free_irq(&pdev->dev, ch->txirq, ch);
-> diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-> index 0c20167b097d..8127d792f639 100644
-> --- a/drivers/dma/sf-pdma/sf-pdma.h
-> +++ b/drivers/dma/sf-pdma/sf-pdma.h
-> @@ -22,11 +22,7 @@
->  #include "../dmaengine.h"
->  #include "../virt-dma.h"
->
-> -#define PDMA_NR_CH					4
-> -
-> -#if (PDMA_NR_CH != 4)
-> -#error "Please define PDMA_NR_CH to 4"
-> -#endif
-> +#define PDMA_MAX_NR_CH					4
->
->  #define PDMA_BASE_ADDR					0x3000000
->  #define PDMA_CHAN_OFFSET				0x1000
-> @@ -118,7 +114,7 @@ struct sf_pdma {
->  	void __iomem            *membase;
->  	void __iomem            *mappedbase;
->  	u32			n_chans;
-> -	struct sf_pdma_chan	chans[PDMA_NR_CH];
-> +	struct sf_pdma_chan	chans[PDMA_MAX_NR_CH];
->  };
->
->  #endif /* _SF_PDMA_H */

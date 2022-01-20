@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7A04945CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 03:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4D84945CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 03:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358201AbiATCWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 21:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S1358208AbiATCZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 21:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiATCWM (ORCPT
+        with ESMTP id S1358204AbiATCZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 21:22:12 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BB9C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:22:12 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id e8so3941638plh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:22:12 -0800 (PST)
+        Wed, 19 Jan 2022 21:25:30 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89493C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:25:30 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x7so15919888lfu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 18:25:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
-         :references:subject:in-reply-to:content-transfer-encoding;
-        bh=rceaFdVjTxyvongrGnOohxq0b18ZsFLz0zQ22QO1D3M=;
-        b=MYd5aeMah7d/2OviOmCdGzim4oA+/yT/Msp+XE+1ULtrdOq9ziZqj8ksolzxTRnTjw
-         x+6RZ0W5QC3kTI6QP54OWyjry4KNDOd8h3Anpxu4BGI6j73LmmfTOG/uhotNV8FvcpmB
-         JJPCKTuU4SadDfPMmX/eHworFkYoYuRwmfBu6h14Bm1MaVMkIZRE5/hQ2PofgbthhJzp
-         IZ02Msxj4aRsFc4Nj9eBAo4wbuBCpZ2WrH922OIGxCMisEaP3LRx3puA3HCZDptuVV7h
-         zbNvKsvCg4mG+7xKeJiY3cQCznXoSpxFg2n3coiQlzfhCMAF0zZ2X2KjrfhsKvgopjcZ
-         h1kA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=py1R6hBTeextxqIqIZAUb6qP1RluD2ICHuOhsBmhdMs=;
+        b=Rs1yORG1XKC8zdQxpvOqgjDUvMir+QHBGCTfgTN6nupgdPiTE1sHhp7CF4yn8C2wi4
+         gL6dZzZ3P1oaAqAkhi5Ea/ztP1WHJ4GVsnZqriZax2ZY6eDUHYiSgjnwrAJ+Jx4QTeP2
+         gd0Jt5fYvLQYKUuYnxuZHG4mReaOOj8SLig/o5t++QXzyAOJs4eHYs7dZBamvaid/sYC
+         WIH+8WjjFdg1L4ZYeioRrbNZmNLjUEPWScnnVJ6v96VTDfkMlITMnZlLJYJvRl7+AFmc
+         UmjVdu37xU3b5TEzHGBWdgGnXjVysrDm4kttltetNCvQI6KOOGnDnjbLTQ119bEZB5N6
+         7w3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:references:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=rceaFdVjTxyvongrGnOohxq0b18ZsFLz0zQ22QO1D3M=;
-        b=0WgeoXd6QanjBrNKQuzCCInBO10XawPtad3JGMyWRJcZ9gAUQEC74xt6QBoii0c5vl
-         UECpkYVpNQfgoriKzr5lBGxE9RFNqHW+wHx+4I9bWQh/G2eaOthMiRAHtl2D3/YUFbqz
-         lu/vHhmvwBVo29I0NMoHVZZc7pkUSUgbSquYcfNOCTExhkpYEE1emgwRYfGlsigk1L/W
-         ad+G6u/Evg1OPPDM3uAp9UxUp+mX4OEZJnUyRvDPBxeuD2swjQ3nM+MR9t+8nwopRKSr
-         b/2K0hNCFq2DSeFtUQmJglA0REdWIWLEAEITcOoDh0789AT9z6oEOrvgUyAB/aLpKqwr
-         IFDg==
-X-Gm-Message-State: AOAM533wwqay4caAhMFNWcwcFyNVx0MPkPGraAPGhZnEaT38VRZtRkcf
-        yYxdH7ftiO2Lh3xEqhd142g1hA==
-X-Google-Smtp-Source: ABdhPJzwwn229Mu62Z8/5utsMy0q3MSItFVp2TrhLOFliAna7qv7forRojpS1kwKqm4zQ2m0fs8Mow==
-X-Received: by 2002:a17:902:f54a:b0:14a:97ad:b877 with SMTP id h10-20020a170902f54a00b0014a97adb877mr26400676plf.152.1642645331817;
-        Wed, 19 Jan 2022 18:22:11 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id b21sm113171pgi.51.2022.01.19.18.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 18:22:11 -0800 (PST)
-Message-ID: <799c3fee-aa4d-1c64-6c14-f6c032d37196@linaro.org>
-Date:   Wed, 19 Jan 2022 18:22:10 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=py1R6hBTeextxqIqIZAUb6qP1RluD2ICHuOhsBmhdMs=;
+        b=1LN81NE/zha51mH62EY72Q59nscqkugRkEI5jIAEuMn9ukodN6RjJ0+QY8rT012rEO
+         d5Jwt+skPgQHqrB8634iabf+XMYeSaK8sxwwWlQaGFIFqk+OF0a2Jpo637LoBjDw/Z5p
+         lCeOOaoOULeQnP/PcknUXNTUmQp1aO8pQke3E4BYmGNpmeObJmhcwxIAj0iMr6EbnWow
+         MK5q1KgrV+GqouD65Gt9HAU+qrwzC9PZyg0UnQyQ6iuSzxWdwfKC/fVWKtLdOqTE/v1S
+         RTr7Fjf+dsTGKCF9ZeqXQgXfEg7/g6hvfYxpX9/pHUd/xfQF35FKTnEr8fC/ejwcDa/P
+         UBgw==
+X-Gm-Message-State: AOAM531Gamd3SSGFW6cvYqAW4IF/IjIN+8PhD1x7CuwKaKDSxmEuQ75r
+        6Bq2OZtw2Z8v5XYXYHRHr3tpgtJoQdYY4TUUKpGMtA==
+X-Google-Smtp-Source: ABdhPJwE2rL4bwMl/8llwM7+/yaIYfui/bPGeEUtXEAvfetfJcgZHU0Qrq7c0XQm5lapUm42+97q1DX2SClu9HzdKIY=
+X-Received: by 2002:a2e:9c10:: with SMTP id s16mr15271700lji.280.1642645527973;
+ Wed, 19 Jan 2022 18:25:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220119012417.299060-1-tadeusz.struk@linaro.org>
- <YefalbN+ApgkQ6zn@hirez.programming.kicks-ass.net>
- <4e13ba95-815a-79a1-e521-5f794963b691@linaro.org>
-Subject: Re: [PATCH] sched/fair: Fix fault in reweight_entity
-In-Reply-To: <4e13ba95-815a-79a1-e521-5f794963b691@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220120000409.2706549-1-rajatja@google.com>
+In-Reply-To: <20220120000409.2706549-1-rajatja@google.com>
+From:   Dmitry Torokhov <dtor@google.com>
+Date:   Wed, 19 Jan 2022 18:25:11 -0800
+Message-ID: <CAE_wzQ_XxONXx5bgDNLAWM_UbV0r8hP9fW6s5sgRYRVSHQWjLw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
+To:     Rajat Jain <rajatja@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajatxjain@gmail.com,
+        jsbarnes@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 07:43, Tadeusz Struk wrote:
->>> Looks like after this change there is a time window, when
->>> task_struct->se.cfs_rq can be NULL. This can be exploited to trigger
->>> null-ptr-deref by calling setpriority on that task.
->> Looks like isn't good enough, either there is, in which case you explain
->> the window, or there isn't in which case what are we doing here?
-> 
-> There surely is something wrong, otherwise it wouldn't crash.
-> I will try to narrow down the reproducer to better understand what causes
-> the fault.
+Hi Rajat,
 
-The race is between sched_post_fork() and setpriority(PRIO_PGRP)
-The scenario is that the main process spawns 3 new threads,
-which then call setpriority(PRIO_PGRP, 0, -20), wait, and exit.
-For each of the new thread the copy_process() gets invoked,
-which then calls sched_fork() and finally sched_post_fork().
+On Wed, Jan 19, 2022 at 4:04 PM Rajat Jain <rajatja@google.com> wrote:
+>
+> Today the pci_dev->untrusted is set for any devices sitting downstream
+> an external facing port (determined via "ExternalFacingPort" property).
+> This however, disallows any internal devices to be marked as untrusted.
+>
+> There are use-cases though, where a platform would like to treat an
+> internal device as untrusted (perhaps because it runs untrusted
+> firmware, or offers an attack surface by handling untrusted network
+> data etc).
+>
+> This patch introduces a new "UntrustedDevice" property that can be used
+> by the firmware to mark any device as untrusted.
+>
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> ---
+>  drivers/pci/pci-acpi.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index a42dbf448860..3d9e5fa49451 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1350,12 +1350,25 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+>                 dev->external_facing = 1;
+>  }
+>
+> +static void pci_acpi_set_untrusted(struct pci_dev *dev)
+> +{
+> +       u8 val;
+> +
+> +       if (device_property_read_u8(&dev->dev, "UntrustedDevice", &val))
+> +               return;
+> +
+> +       /* These PCI devices are not trustworthy */
+> +       if (val)
+> +               dev->untrusted = 1;
 
-There is a possibility that setpriority(PRIO_PGRP)->set_one_prio() will be
-called for a thread in the group that is just being created by copy_process(),
-and for which the sched_post_fork() has not been executed yet.
-This will trigger a null pointer dereference in reweight_entity()
-because it will try to access the CFS run queue pointer, which hasn't been set, 
-resulting it a crash as below:
+Should this all be replaced with:
 
-KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
-CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 
-5.16.0-11201-gb42c5a161ea3-dirty #13
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-RIP: 0010:reweight_entity+0x15d/0x440
-RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
-Call Trace:
-<TASK>
-reweight_task+0xde/0x1c0
-set_load_weight+0x21c/0x2b0
-set_user_nice.part.0+0x2d1/0x519
-set_user_nice.cold+0x8/0xd
-set_one_prio+0x24f/0x263
-__do_sys_setpriority+0x2d3/0x640
-__x64_sys_setpriority+0x84/0x8b
-do_syscall_64+0x35/0xb0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-</TASK>
----[ end trace 9dc80a9d378ed00a ]---
+dev->untrusted = device_property_read_bool(&dev->dev, "UntrustedDevice");
 
-Before the mentioned change the rq pointer has been set in sched_fork(),
-which is called much earlier in copy_process() as opposed to sched_post_fork(),
-before the new task is added to the thread_group.
+?
 
-A stripped down version of the sysbot reproducer can be found here:
-https://termbin.com/axkq
+Also, is this ACPI-specific? Why won't we need this for DT systems (or
+do we already have this)?.
 
-I can consistently reproduce the issue with it in 2-3 runs.
-
-The solution is either we set the pointer p->se.cfs_rq to a dummy rq in 
-sched_fork(), or return from the set_one_prio() without doing anything
-if the rq is NULL, as it is done in the patch.
-I will update the description and resend it tomorrow.
-
--- 
 Thanks,
-Tadeusz
+Dmitry

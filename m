@@ -2,163 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D22349530D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767A249530F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377299AbiATRTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:19:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53932 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243820AbiATRTV (ORCPT
+        id S1377308AbiATRTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377302AbiATRTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:19:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04B4CB81DCA;
-        Thu, 20 Jan 2022 17:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A7B7C340E0;
-        Thu, 20 Jan 2022 17:19:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642699158;
-        bh=0Y/kJB/srmy+r+MEK/5ohc3fkdE7T0+Rn088nWxZJpQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tlsTCW3Srryxw9CRk5M2HtWOeoYrv8BPvnKoSZ4+Ch22FZDBSltUgNOwN/V0wxOgn
-         8a0tOHGKxhuMWhaTBGAqB0e/kWnix9Hv3TvGPRP5oDkdpDGx109Cn4tWaRWk8i+jFi
-         oQ+g2z4/oyrj7MZyMwOlilphbV0SY/NDGomPHhXS+bvzhwCBELuDAAIUqRq3HqAeMS
-         AdkXlknIJSOt0LqqsNbMJ4JIjF/tJKMSEC/S6JCxAhnElnrZSOJ65R2Ocv072GYN0M
-         /3TzoQ31ALsAW/1uy+Lg610vHArzmjGEYaK2WKny41i5qCC0GRzXhoW6ixa9JF7U4o
-         YRnzh1rz3pwNw==
-Received: by pali.im (Postfix)
-        id DFABC791; Thu, 20 Jan 2022 18:19:15 +0100 (CET)
-Date:   Thu, 20 Jan 2022 18:19:15 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 05/11] PCI: mvebu: Correctly configure x1/x4 mode
-Message-ID: <20220120171915.rynfs3hucnfj4kyb@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220112151814.24361-1-pali@kernel.org>
- <20220112151814.24361-6-pali@kernel.org>
- <YemXPQx4F1eRtLxO@robh.at.kernel.org>
+        Thu, 20 Jan 2022 12:19:52 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A537C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:19:52 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id m4so31519556edb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:19:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oApbJYbC2vwY2nc2YKcA8roeaa4QUYOOXYGsFKjSttA=;
+        b=d498xJZB8hN7YfcMY2u7LlRejndB+ZCqdzyTi+57fbLLOuRfkI7skorKmwjeRPFNf9
+         8oziVWInJB3yLnL6XHrhvnjgMtw0k+DPsll2KcI8ZsW1m/X0Vh1tUf6mw6CLHBJ1APj4
+         n6Lc/+CAlHML+MCvr/eZ+cs09QTHDiCIqKfGN6qMpR/88NBhZPk1CVlWBDTt7Pvya3Xi
+         6S3TixkE0pprGH/MWGxhtfQxxzBYRlNhZNjfvxSFO6bjxzveJd9Aphuzz4LrnCRdJMf3
+         UfYcKFDufAkZhDoxaiThuxpEiC+F/lA3xImfigYtLyLhg+GHjE60onUhEU9n872DOyQ6
+         X/XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oApbJYbC2vwY2nc2YKcA8roeaa4QUYOOXYGsFKjSttA=;
+        b=wk/f23bvNx/lCP8tMYHfH8TCTACYJAPzOOefB0qy2UAeAZ/rmJVhCW+4Xi4P6E79og
+         FbtobnfnojMcIysfr5hK9bwwFX3FiJM9vFoFmKqWh0rRqFBjpcWNSK5/z+ztuJXguAe3
+         F51VJgU7Ewd47AbP46ZqRfKau9t+L4DZ8LyybltHEwvYC/DQwYwx+mDMkWV0QwO7xlGH
+         KA10wneMVSfs81YtbM6qJv8LVC5gD6OK80oIZqG0cBc+cbe/F+mKcWqnjsljq4NAdgZ9
+         IHvZcO8+1IoTwY7FQqdgxE50FW/DR3mu3cPUYw/bwcALiR3X3xkziliorPuute3QBHsX
+         jQCA==
+X-Gm-Message-State: AOAM531LWZzY2Rzcx7wyjlTmBpkKNU0LfGgjczeimBqj9ykGy/J1NiUp
+        gAitQMCcKjJPKMglVK0DN4zQUfQopHMR3frAcdt1jg==
+X-Google-Smtp-Source: ABdhPJwud0a7Qw33P4ieVWvZrM2RSisE09WrEtZ56YE7MVgTeP5gpd2DgvOdhX7j4DDLEnixM77I+AYhU+CPYlABqgM=
+X-Received: by 2002:a17:907:7215:: with SMTP id dr21mr3848896ejc.75.1642699190403;
+ Thu, 20 Jan 2022 09:19:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YemXPQx4F1eRtLxO@robh.at.kernel.org>
-User-Agent: NeoMutt/20180716
+References: <20220118190922.1557074-1-dlatypov@google.com> <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
+In-Reply-To: <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 20 Jan 2022 09:19:39 -0800
+Message-ID: <CAGS_qxqx+wcruc7DAD9TQjk27OF+VDo1n9S6atRx+dDG5cr=6g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 20 January 2022 11:09:17 Rob Herring wrote:
-> On Wed, Jan 12, 2022 at 04:18:08PM +0100, Pali Rohár wrote:
-> > If x1/x4 mode is not set correctly then link with endpoint card is not
-> > established.
-> > 
-> > Use DTS property 'num-lanes' to deteriminate x1/x4 mode.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
+On Thu, Jan 20, 2022 at 12:29 AM David Gow <davidgow@google.com> wrote:
+>
+> On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > This field is only used to pass along the parsed Test object from
+> > parse_tests().
+> > Everywhere else the `result` field is ignored.
+> >
+> > Instead make parse_tests() explicitly return a KunitResult and Test so
+> > we can retire the `result` field.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > > ---
-> >  drivers/pci/controller/pci-mvebu.c | 19 ++++++++++++++++++-
-> >  1 file changed, 18 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > index a075ba26cff1..0f2ec0a17874 100644
-> > --- a/drivers/pci/controller/pci-mvebu.c
-> > +++ b/drivers/pci/controller/pci-mvebu.c
-> > @@ -93,6 +93,7 @@ struct mvebu_pcie_port {
-> >  	void __iomem *base;
-> >  	u32 port;
-> >  	u32 lane;
-> > +	bool is_x4;
-> 
-> I would just store the number of lanes.
-> 
-> >  	int devfn;
-> >  	unsigned int mem_target;
-> >  	unsigned int mem_attr;
-> > @@ -233,13 +234,25 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
-> >  
-> >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> >  {
-> > -	u32 ctrl, cmd, dev_rev, mask;
-> > +	u32 ctrl, lnkcap, cmd, dev_rev, mask;
-> >  
-> >  	/* Setup PCIe controller to Root Complex mode. */
-> >  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-> >  	ctrl |= PCIE_CTRL_RC_MODE;
-> >  	mvebu_writel(port, ctrl, PCIE_CTRL_OFF);
-> >  
-> > +	/*
-> > +	 * Set Maximum Link Width to X1 or X4 in Root Port's PCIe Link
-> > +	 * Capability register. This register is defined by PCIe specification
-> > +	 * as read-only but this mvebu controller has it as read-write and must
-> > +	 * be set to number of SerDes PCIe lanes (1 or 4). If this register is
-> > +	 * not set correctly then link with endpoint card is not established.
-> > +	 */
-> > +	lnkcap = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
-> > +	lnkcap &= ~PCI_EXP_LNKCAP_MLW;
-> > +	lnkcap |= (port->is_x4 ? 4 : 1) << 4;
-> 
-> then this is just: lanes << 4
+>
+> I personally prefer having the Test as part of the result -- it gives
+> a slightly rust-esque sense of needing to check the actual result
+> before using anything that's parsed. (Also, I'm still not used to the
+> whole multiple return value thing, which is not as clear as an
+> explicit named struct member, IMHO).
+> That being said, we're not actually checking the result before using
+> the Test, and certainly the use of Any and mashing a textual error
+> message in the same field is rather unpleasant.
+>
+> My ideal solution would be to rename 'result' to something more
+> sensible ('parsed_test', maybe?), and make it explicitly a Test rather
+> than Any (and either add a separate field for the textual error
+> message, or remove it as in this patch, having noticed that it's
+> almost completely redundant to the enum).
 
-As only 1 and 4 are valid valid values, I chose this style (is_x4) to
-ensure that no other (invalid) value is written into mvebu register.
-Setting width to smaller number (if incorrect value is provided) still
-allows controller to work and link should be negotiated. So setting 1 is
-a sane default when controller does not have configured 4 SerDes lines
-to PCIe.
+Yeah, I considered that for a bit, but I don't like having a field
+that is only sometimes set.
+I had thought we were passing back the test object from exec_tests(),
+but I was wrong.
+We were actually passing back a KunitResult with a KunitResult[Test] in it.
 
-> > +	mvebu_writel(port, lnkcap, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
-> > +
-> >  	/* Disable Root Bridge I/O space, memory space and bus mastering. */
-> >  	cmd = mvebu_readl(port, PCIE_CMD_OFF);
-> >  	cmd &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-> > @@ -986,6 +999,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
-> >  	struct device *dev = &pcie->pdev->dev;
-> >  	enum of_gpio_flags flags;
-> >  	int reset_gpio, ret;
-> > +	u32 num_lanes;
-> >  
-> >  	port->pcie = pcie;
-> >  
-> > @@ -998,6 +1012,9 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
-> >  	if (of_property_read_u32(child, "marvell,pcie-lane", &port->lane))
-> >  		port->lane = 0;
-> >  
-> > +	if (!of_property_read_u32(child, "num-lanes", &num_lanes) && num_lanes == 4)
-> > +		port->is_x4 = true;
-> 
-> And this can be:
-> 
-> num_lanes = 1;
-> of_property_read_u32(child, "num-lanes", &num_lanes);
-> 
-> If you want to validate the DT is only 1 or 4, make the DT schema do 
-> that.
+So when I saw only parse_tests() actually wanted to pass back a test
+object, I thought it was cleaner to just use a separate return value.
 
-The problem is that there is no schema for this platform and PCIe yet.
-So adding it would mean to first convert everything to schema and then
-this constrain can be expressed in schema.
+>
+> That being said, I can live with the current solution, but'd ideally
+> like a comment or something to make the return value Tuple a bit more
+> obvious.
 
-I'm planning to look at possibility to write schema for this platform
-but I do not want to do it before open issues with representation of
-other pcie properties in dts schema are resolved.
+A comment to explain that Tuple == multiple return values from a func?
+Or something else?
 
-> 
-> > +
-> >  	port->name = devm_kasprintf(dev, GFP_KERNEL, "pcie%d.%d", port->port,
-> >  				    port->lane);
-> >  	if (!port->name) {
-> > -- 
-> > 2.20.1
-> > 
-> > 
+Also ah, I thought we had more instances of multiple return in kunit.py.
+Looks like the only other is get_source_tree_ops_from_qemu_config().
+isolate_ktap_output() technically shows this off as well, but via yields.
+
+>
+> Thoughts?
+>
+>
+> -- David
+>
+> >  tools/testing/kunit/kunit.py | 24 ++++++++----------------
+> >  1 file changed, 8 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > index 7a706f96f68d..9274c6355809 100755
+> > --- a/tools/testing/kunit/kunit.py
+> > +++ b/tools/testing/kunit/kunit.py
+> > @@ -17,7 +17,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
+> >
+> >  from dataclasses import dataclass
+> >  from enum import Enum, auto
+> > -from typing import Any, Iterable, Sequence, List, Optional
+> > +from typing import Iterable, List, Optional, Sequence, Tuple
+> >
+> >  import kunit_json
+> >  import kunit_kernel
+> > @@ -32,7 +32,6 @@ class KunitStatus(Enum):
+> >  @dataclass
+> >  class KunitResult:
+> >         status: KunitStatus
+> > -       result: Any
+> >         elapsed_time: float
+> >
+> >  @dataclass
+> > @@ -82,10 +81,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+> >         config_end = time.time()
+> >         if not success:
+> >                 return KunitResult(KunitStatus.CONFIG_FAILURE,
+> > -                                  'could not configure kernel',
+> >                                    config_end - config_start)
+> >         return KunitResult(KunitStatus.SUCCESS,
+> > -                          'configured kernel successfully',
+> >                            config_end - config_start)
+> >
+> >  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> > @@ -100,14 +97,11 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> >         build_end = time.time()
+> >         if not success:
+> >                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> > -                                  'could not build kernel',
+> >                                    build_end - build_start)
+> >         if not success:
+> >                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> > -                                  'could not build kernel',
+> >                                    build_end - build_start)
+> >         return KunitResult(KunitStatus.SUCCESS,
+> > -                          'built kernel successfully',
+> >                            build_end - build_start)
+> >
+> >  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+> > @@ -173,14 +167,14 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+> >                         filter_glob=filter_glob,
+> >                         build_dir=request.build_dir)
+> >
+> > -               result = parse_tests(request, run_result)
+> > +               _, test_result = parse_tests(request, run_result)
+> >                 # run_kernel() doesn't block on the kernel exiting.
+> >                 # That only happens after we get the last line of output from `run_result`.
+> >                 # So exec_time here actually contains parsing + execution time, which is fine.
+> >                 test_end = time.time()
+> >                 exec_time += test_end - test_start
+> >
+> > -               test_counts.add_subtest_counts(result.result.counts)
+> > +               test_counts.add_subtest_counts(test_result.counts)
+> >
+> >         if len(filter_globs) == 1 and test_counts.crashed > 0:
+> >                 bd = request.build_dir
+> > @@ -189,7 +183,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+> >                                 bd, bd, kunit_kernel.get_outfile_path(bd), bd, sys.argv[0]))
+> >
+> >         kunit_status = _map_to_overall_status(test_counts.get_status())
+> > -       return KunitResult(status=kunit_status, result=result, elapsed_time=exec_time)
+> > +       return KunitResult(status=kunit_status, elapsed_time=exec_time)
+> >
+> >  def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+> >         if test_status in (kunit_parser.TestStatus.SUCCESS, kunit_parser.TestStatus.SKIPPED):
+> > @@ -197,7 +191,7 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+> >         else:
+> >                 return KunitStatus.TEST_FAILURE
+> >
+> > -def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
+> > +def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+> >         parse_start = time.time()
+> >
+> >         test_result = kunit_parser.Test()
+> > @@ -231,11 +225,9 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitR
+> >                         print(json_obj)
+> >
+> >         if test_result.status != kunit_parser.TestStatus.SUCCESS:
+> > -               return KunitResult(KunitStatus.TEST_FAILURE, test_result,
+> > -                                  parse_end - parse_start)
+> > +               return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
+> >
+> > -       return KunitResult(KunitStatus.SUCCESS, test_result,
+> > -                               parse_end - parse_start)
+> > +       return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
+> >
+> >  def run_tests(linux: kunit_kernel.LinuxSourceTree,
+> >               request: KunitRequest) -> KunitResult:
+> > @@ -513,7 +505,7 @@ def main(argv, linux=None):
+> >                 request = KunitParseRequest(raw_output=cli_args.raw_output,
+> >                                             build_dir='',
+> >                                             json=cli_args.json)
+> > -               result = parse_tests(request, kunit_output)
+> > +               result, _ = parse_tests(request, kunit_output)
+> >                 if result.status != KunitStatus.SUCCESS:
+> >                         sys.exit(1)
+> >         else:
+> >
+> > base-commit: f079ab01b5609fb0c9acc52c88168bf1eed82373
+> > --
+> > 2.34.1.703.g22d0c6ccf7-goog
+> >

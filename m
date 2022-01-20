@@ -2,357 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 950E9495375
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E81E2495378
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbiATRlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:41:32 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:49328 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiATRlb (ORCPT
+        id S230477AbiATRmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbiATRml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:41:31 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0463921923;
-        Thu, 20 Jan 2022 17:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642700490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X7OIZ39Y2cwW5dn4G3sndiX17P1OawheIBBoy4ckQtE=;
-        b=u+OkvcfcFlwcUvEjOwqoI8xVjY5BVE22U16Pw0iVpWTmTyWq0s7keTox+GMdq+JbzeO/RG
-        W1qvVjsIULxMCglqrpylPxGMQMevwzFS4L1Ln3bKBFK7spOUSxCc9fWwHHDQB6zh7846Ce
-        Ypty0+9xcTTFENDz0VmzrNYjCXnlSU4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642700490;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X7OIZ39Y2cwW5dn4G3sndiX17P1OawheIBBoy4ckQtE=;
-        b=Iz6U8z4GA6m2KuFpNGImCuKNCizM8ofOTtRc8XVeD3pJsPyEtlb9CMSTxJLKt3ZWIvkZxe
-        97wYdD5r1/e8E1AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B1A2C13E8A;
-        Thu, 20 Jan 2022 17:41:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wwGgKsme6WGfegAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 20 Jan 2022 17:41:29 +0000
-Message-ID: <5a83c2ad-82d7-9c56-89cf-5a2184386adc@suse.cz>
-Date:   Thu, 20 Jan 2022 18:41:29 +0100
+        Thu, 20 Jan 2022 12:42:41 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E92C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:42:40 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id r29so672650pfl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=siipzw5qPVJE6LD0sjuwipz56WHSg09btQLgfJcwUzw=;
+        b=mu8r0/mBXFnknkfCLySkbX+XsCqQBw7DAX/pnrFPmkiyj/VMPKRZecN7+Fo/Nk2UXq
+         gAEY6BUDFrKyik8DsXdv3uRyjv4xUli2vsq8iq8F33HXsAqdVfwRylI4tEgh+9XREwiN
+         0GOLpeenqRKGWHs3ZVyL6QrZklGh1RlO9gV2G57s2CP5B9qNBHip7zqUGA+iiqoFXVdf
+         EHbJ6zMCX5Y3Fl0pJ8wvVcWzPWhlZ6dh28MkzM7x8KHkaoThkYFrs9D3rVLZd8keKpGx
+         LH/bdye5K3EsY4hqcSmLciVPWcHwzXcWzi9//QgJRIEmZyBwelVCdoztMjprlYB7wYGK
+         oBxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=siipzw5qPVJE6LD0sjuwipz56WHSg09btQLgfJcwUzw=;
+        b=gHj17s+gmFgTVkFkSATUbxXCL2uDpluk2U3QWoy6msCjbTd30d6GrP3P+dF752Ig6K
+         8VXENCC9T/VZLrNtvczxWDdyBtWHVlJYUy39QMcgbF/MbTBfobGhmkaPe6L9tytbPuQ6
+         OY2SKqNNZSGnW6YOkaG/heLhFtSQAXnPdnYbLZoBCYcBdIF43eHD/eDukbsAcjkTfX3R
+         XrNyOuVjcEQSb9pBi3AyPEQDKB1FGZuyDzrZ8qMbkjy1WTtbhlHA498nx6kANRXcKXEA
+         B8DH7J1Bd8UnoqerHNTyDZCIF9iGLM7+dl2SR0wTqerG6U8MZOUJEBNGesTZDxTnNXAy
+         wJBg==
+X-Gm-Message-State: AOAM532wVFaXzh5tux7t4pBzF/0I9dZoXdmakpzdk9M5FRLChC/eZE2z
+        qsjZ/9LcIJraul8/MJuvyDZ27g==
+X-Google-Smtp-Source: ABdhPJx41k3hd3KJSLVFf9u1FAJE0Mg/PY5ptjVA+lOdd1XHy8dCzwGzOkVd6PXrLSh9k8rgPuVwxQ==
+X-Received: by 2002:a62:14d5:0:b0:4c7:43cb:863 with SMTP id 204-20020a6214d5000000b004c743cb0863mr54850pfu.23.1642700560231;
+        Thu, 20 Jan 2022 09:42:40 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z10sm4148214pfh.77.2022.01.20.09.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 09:42:39 -0800 (PST)
+Date:   Thu, 20 Jan 2022 17:42:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Cooper <amc96@srcf.net>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Alexander Graf <graf@amazon.de>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [PATCH] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS
+ blocking shadow
+Message-ID: <YemfC17ZJyR0CLYr@google.com>
+References: <20220120000624.655815-1-seanjc@google.com>
+ <f3239ec0-9fb8-722a-00c5-11b18f19f047@srcf.net>
+ <YemPeqpcFDjhGfRQ@google.com>
+ <81aebe8e-ff2a-6b56-fe50-b7917a3948ed@srcf.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-66-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 65/66] mm: Remove the vma linked list
-In-Reply-To: <20211201142918.921493-66-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <81aebe8e-ff2a-6b56-fe50-b7917a3948ed@srcf.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:30, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On Thu, Jan 20, 2022, Andrew Cooper wrote:
+> On 20/01/2022 16:36, Sean Christopherson wrote:
+> > On Thu, Jan 20, 2022, Andrew Cooper wrote:
+> >> On 20/01/2022 00:06, Sean Christopherson wrote:
+> >>> MOVSS blocking can be initiated by userspace, but can be coincident with
+> >>> a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
+> >>> executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
+> >>> is problematic only for CPL0 (and only if the guest is crazy enough to
+> >>> access a DR in a MOVSS shadow).  All other sources of #DBs are either
+> >>> suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
+> >> It is more complicated than this and undocumented.  Single step is
+> >> discard in a shadow, while data breakpoints are deferred.
+> > But for the purposes of making the consitency check happy, whether they are
+> > deferred or dropped should be irrelevant, no?
 > 
-> Replace any vm_next use with vma_find().
+> From that point of view, yes.  The consistency check is specific to TS. 
+> I suppose I was mostly questioning the wording of the explanation.
 > 
-> Update free_pgtables(), unmap_vmas(), and zap_page_range() to use the
-> maple tree.
-
-> Use the new free_pgtables() and unmap_vmas() in do_mas_align_munmap().
-> At the same time, alter the loop to be more compact.
+> >>> are mutually exclusive with MOVSS blocking (T-bit task switch),
+> >> Howso?  MovSS prevents external interrupts from triggering task
+> >> switches, but instruction sources still trigger in a shadow.
+> > T-bit #DBs are traps, and arrive after the task switch has completed.  The switch
+> > can be initiated in the shadow, but the #DB will be delivered after the instruction
+> > retires and so after MOVSS blocking goes away.  Or am I missing something?
 > 
-> Now that free_pgtables() and unmap_vmas() take a maple tree as an
-> argument, rearrange do_mas_align_munmap() to use the new table to hold
-> the lock
+> Well - this is where the pipeline RTL is needed, in lieu of anything
+> better.  Trap-style #DBs are part of the current instruction, and
+> specifically ahead (in the instruction cycle) of the subsequent intchk.
 
-table or tree?
+And T-bit traps in particular have crazy high priority...
 
-> Remove __vma_link_list() and __vma_unlink_list() as they are exclusively
-> used to update the linked list
+> There are implementations where NMI/INTR/etc won't be delivered at the
+> head of an exception generated in a shadow, which would suggest that
+> these implementations have the falling edge of the shadow after intchk
+> on the instruction boundary.  (Probably certainly what happens is that
+> intchk is responsible for clearing the shadow, but this is entirely
+> guesswork on my behalf.)
+
+Well, thankfully hardware's behavior should be moot for VM-Entry since task switches
+unconditionally VM-Exit, and KVM has a big fat TODO for handling the T-bit.
+
+> >> and splitlock which is new since I last thought about this problem.
+> > Eww.  Split Lock is trap-like, which begs the question of what happens if the
+> > MOV/POP SS splits a cache line when loading the source data.  I'm guess it's
+> > suppressed, a la data breakpoints, but that'd be a fun one to test.
 > 
-> Rework validation of tree as it was depending on the linked list.
+> They're both reads of their memory operand, so aren't eligible to be
+> locked accesses.
+
+Hah, right, the "lock" part of "split lock" is just a minor detail...
+
+> However, a devious kernel can misalign the GDT/LDT such that setting the
+> descriptor access bit does trigger a splitlock.  I suppose "kernel
+> doesn't misalign structures", or "kernel doesn't write a descriptor with
+> the access bit clear" are both valid mitigations.
 > 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-
-git grep shows that some usages of 'vm_next' and 'vm_prev' remain after this
-patch, including some exotic arch code.
-
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -398,12 +398,21 @@ void free_pgd_range(struct mmu_gather *tlb,
->  	} while (pgd++, addr = next, addr != end);
->  }
->  
-> -void free_pgtables(struct mmu_gather *tlb, struct vm_area_struct *vma,
-> -		unsigned long floor, unsigned long ceiling)
-> +void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
-> +		   struct vm_area_struct *vma, unsigned long floor,
-> +		   unsigned long ceiling)
->  {
-> -	while (vma) {
-> -		struct vm_area_struct *next = vma->vm_next;
-> +	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
-> +
-> +	do {
->  		unsigned long addr = vma->vm_start;
-> +		struct vm_area_struct *next;
-> +
-> +		/*
-> +		 * Note: USER_PGTABLES_CEILING may be passed as ceiling and may
-> +		 * be 0.  This will underflow and is okay.
-> +		 */
-> +		next = mas_find(&mas, ceiling - 1);
->  
->  		/*
->  		 * Hide vma from rmap and truncate_pagecache before freeing
-> @@ -422,7 +431,7 @@ void free_pgtables(struct mmu_gather *tlb, struct vm_area_struct *vma,
->  			while (next && next->vm_start <= vma->vm_end + PMD_SIZE
->  			       && !is_vm_hugetlb_page(next)) {
->  				vma = next;
-> -				next = vma->vm_next;
-> +				next = mas_find(&mas, ceiling - 1);
->  				unlink_anon_vmas(vma);
->  				unlink_file_vma(vma);
->  			}
-> @@ -430,7 +439,7 @@ void free_pgtables(struct mmu_gather *tlb, struct vm_area_struct *vma,
->  				floor, next ? next->vm_start : ceiling);
->  		}
->  		vma = next;
-> -	}
-> +	} while (vma);
->  }
->  
->  void pmd_install(struct mm_struct *mm, pmd_t *pmd, pgtable_t *pte)
-> @@ -1602,17 +1611,19 @@ static void unmap_single_vma(struct mmu_gather *tlb,
->   * ensure that any thus-far unmapped pages are flushed before unmap_vmas()
->   * drops the lock and schedules.
->   */
-> -void unmap_vmas(struct mmu_gather *tlb,
-> +void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
->  		struct vm_area_struct *vma, unsigned long start_addr,
->  		unsigned long end_addr)
->  {
->  	struct mmu_notifier_range range;
-> +	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
->  
->  	mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma, vma->vm_mm,
->  				start_addr, end_addr);
->  	mmu_notifier_invalidate_range_start(&range);
-> -	for ( ; vma && vma->vm_start < end_addr; vma = vma->vm_next)
-> +	do {
->  		unmap_single_vma(tlb, vma, start_addr, end_addr, NULL);
-> +	} while ((vma = mas_find(&mas, end_addr - 1)) != NULL);
->  	mmu_notifier_invalidate_range_end(&range);
->  }
->  
-> @@ -1627,8 +1638,11 @@ void unmap_vmas(struct mmu_gather *tlb,
->  void zap_page_range(struct vm_area_struct *vma, unsigned long start,
->  		unsigned long size)
->  {
-> +	struct maple_tree *mt = &vma->vm_mm->mm_mt;
-
-Well looks like that's also an option to avoid a new parameter :)
-
-> +	unsigned long end = start + size;
->  	struct mmu_notifier_range range;
->  	struct mmu_gather tlb;
-> +	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
->  
->  	lru_add_drain();
->  	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
-> @@ -1636,8 +1650,9 @@ void zap_page_range(struct vm_area_struct *vma, unsigned long start,
->  	tlb_gather_mmu(&tlb, vma->vm_mm);
->  	update_hiwater_rss(vma->vm_mm);
->  	mmu_notifier_invalidate_range_start(&range);
-> -	for ( ; vma && vma->vm_start < range.end; vma = vma->vm_next)
-> +	do {
->  		unmap_single_vma(&tlb, vma, start, range.end, NULL);
-> +	} while ((vma = mas_find(&mas, end - 1)) != NULL);
->  	mmu_notifier_invalidate_range_end(&range);
->  	tlb_finish_mmu(&tlb);
->  }
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index dde74e0b195d..e13c6ef76697 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -74,9 +74,10 @@ int mmap_rnd_compat_bits __read_mostly = CONFIG_ARCH_MMAP_RND_COMPAT_BITS;
->  static bool ignore_rlimit_data;
->  core_param(ignore_rlimit_data, ignore_rlimit_data, bool, 0644);
->  
-> -static void unmap_region(struct mm_struct *mm,
-> +static void unmap_region(struct mm_struct *mm, struct maple_tree *mt,
->  		struct vm_area_struct *vma, struct vm_area_struct *prev,
-> -		unsigned long start, unsigned long end);
-> +		struct vm_area_struct *next, unsigned long start,
-> +		unsigned long end);
->  
->  /* description of effects of mapping type and prot in current implementation.
->   * this is due to the limited x86 page protection hardware.  The expected
-> @@ -173,10 +174,8 @@ void unlink_file_vma(struct vm_area_struct *vma)
->  /*
->   * Close a vm structure and free it, returning the next.
-
-No longer returning the next.
-
->   */
-> -static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
-> +static void remove_vma(struct vm_area_struct *vma)
->  {
-> -	struct vm_area_struct *next = vma->vm_next;
-> -
->  	might_sleep();
->  	if (vma->vm_ops && vma->vm_ops->close)
->  		vma->vm_ops->close(vma);
-
-<snip>
-
->   */
->  struct anon_vma *find_mergeable_anon_vma(struct vm_area_struct *vma)
->  {
-> +	MA_STATE(mas, &vma->vm_mm->mm_mt, vma->vm_end, vma->vm_end);
->  	struct anon_vma *anon_vma = NULL;
-> +	struct vm_area_struct *prev, *next;
->  
->  	/* Try next first. */
-> -	if (vma->vm_next) {
-> -		anon_vma = reusable_anon_vma(vma->vm_next, vma, vma->vm_next);
-> +	next = mas_walk(&mas);
-> +	if (next) {
-> +		anon_vma = reusable_anon_vma(next, vma, next);
->  		if (anon_vma)
->  			return anon_vma;
->  	}
->  
-> +	prev = mas_prev(&mas, 0);
-> +	VM_BUG_ON_VMA(prev != vma, vma);
-> +	prev = mas_prev(&mas, 0);
->  	/* Try prev next. */
-> -	if (vma->vm_prev)
-> -		anon_vma = reusable_anon_vma(vma->vm_prev, vma->vm_prev, vma);
-> +	if (prev)
-> +		anon_vma = reusable_anon_vma(prev, prev, vma);
->  
->  	/*
->  	 * We might reach here with anon_vma == NULL if we can't find
-> @@ -1906,10 +1825,10 @@ struct vm_area_struct *find_vma_intersection(struct mm_struct *mm,
->  					     unsigned long start_addr,
->  					     unsigned long end_addr)
->  {
-> -	MA_STATE(mas, &mm->mm_mt, start_addr, start_addr);
-> +	unsigned long index = start_addr;
->  
->  	mmap_assert_locked(mm);
-> -	return mas_find(&mas, end_addr - 1);
-> +	return mt_find(&mm->mm_mt, &index, end_addr - 1);
-
-Why is this now changed again?
-
->  }
->  EXPORT_SYMBOL(find_vma_intersection);
->  
-> @@ -1923,8 +1842,10 @@ EXPORT_SYMBOL(find_vma_intersection);
->   */
->  inline struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->  {
-> -	// Note find_vma_intersection will decrease 0 to underflow to ULONG_MAX
-> -	return find_vma_intersection(mm, addr, 0);
-> +	unsigned long index = addr;
-> +
-> +	mmap_assert_locked(mm);
-> +	return mt_find(&mm->mm_mt, &index, ULONG_MAX);
-
-And here.
-
->  }
->  EXPORT_SYMBOL(find_vma);
->  
-> @@ -2026,7 +1947,7 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
->  	if (gap_addr < address || gap_addr > TASK_SIZE)
->  		gap_addr = TASK_SIZE;
->  
-> -	next = vma->vm_next;
-> +	next = vma_find(mm, vma->vm_end);
->  	if (next && next->vm_start < gap_addr && vma_is_accessible(next)) {
->  		if (!(next->vm_flags & VM_GROWSUP))
->  			return -ENOMEM;
-> @@ -2072,8 +1993,6 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
->  				vma->vm_end = address;
->  				vma_store(mm, vma);
->  				anon_vma_interval_tree_post_update_vma(vma);
-> -				if (!vma->vm_next)
-> -					mm->highest_vm_end = vm_end_gap(vma);
->  				spin_unlock(&mm->page_table_lock);
->  
->  				perf_event_mmap(vma);
-> @@ -2100,7 +2019,7 @@ int expand_downwards(struct vm_area_struct *vma, unsigned long address)
->  		return -EPERM;
->  
->  	/* Enforce stack_guard_gap */
-> -	prev = vma->vm_prev;
-> +	find_vma_prev(mm, vma->vm_start, &prev);
->  	/* Check that both stack segments have the same anon_vma? */
->  	if (prev && !(prev->vm_flags & VM_GROWSDOWN) &&
->  			vma_is_accessible(prev)) {
-> @@ -2235,20 +2154,22 @@ EXPORT_SYMBOL_GPL(find_extend_vma);
->   *
->   * Called with the mm semaphore held.
-
-Above this, the comment talks about vma list, update?
-
->   */
-> -static void remove_vma_list(struct mm_struct *mm, struct vm_area_struct *vma)
-> +static inline void remove_mt(struct mm_struct *mm, struct maple_tree *detached)
->  {
->  	unsigned long nr_accounted = 0;
-> +	unsigned long index = 0;
-> +	struct vm_area_struct *vma;
->  
->  	/* Update high watermark before we lower total_vm */
->  	update_hiwater_vm(mm);
-> -	do {
-> +	mt_for_each(detached, vma, index, ULONG_MAX) {
->  		long nrpages = vma_pages(vma);
->  
->  		if (vma->vm_flags & VM_ACCOUNT)
->  			nr_accounted += nrpages;
->  		vm_stat_account(mm, vma->vm_flags, -nrpages);
-> -		vma = remove_vma(vma);
-> -	} while (vma);
-> +		remove_vma(vma);
-> +	}
->  	vm_unacct_memory(nr_accounted);
->  	validate_mm(mm);
->  }
+> >>> This bug was originally found by running tests[1] created for XSA-308[2].
+> >>> Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
+> >>> presumably why the Xen bug was deemed to be an exploitable DOS from guest
+> >>> userspace.
+> >> As I recall, the original report to the security team was something
+> >> along the lines of "Steam has just updated game, and now when I start
+> >> it, the VM explodes".
+> > Lovely.  I wonder if the game added some form of anti-cheat?  I don't suppose you
+> > have disassembly from the report?  I'm super curious what on earth a game would
+> > do to trigger this.
+> 
+> Anti-cheat was my guess too, but no disassembly happened.
+> 
+> I was already aware of the STI issue, and had posted
+> https://lore.kernel.org/xen-devel/1528120755-17455-11-git-send-email-andrew.cooper3@citrix.com/
+> more than a year previously.  The security report showed ICEBP pending
+> in the INTR_INFO field, and extending the STI test case in light of this
+> was all of 30s of work to get a working repro.
+> 
+> ~Andrew

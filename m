@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF2A4948B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4094948BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357642AbiATHlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 02:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357767AbiATHl0 (ORCPT
+        id S1358130AbiATHlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 02:41:53 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35234 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239682AbiATHld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 02:41:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC1AC06175A;
-        Wed, 19 Jan 2022 23:41:25 -0800 (PST)
+        Thu, 20 Jan 2022 02:41:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B78A9B81CEE;
-        Thu, 20 Jan 2022 07:41:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E956C340E0;
-        Thu, 20 Jan 2022 07:41:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2284B81CEE;
+        Thu, 20 Jan 2022 07:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36F63C340E5;
+        Thu, 20 Jan 2022 07:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642664483;
-        bh=0DWs5iJTfzb/AG7lBwtZhAg40maM1nWs2s2i8EajS74=;
+        s=k20201202; t=1642664490;
+        bh=WKKFJwT/zbXr14n62tvJaQ2yJAifn6O6yK5rrbY11Yk=;
         h=From:To:Cc:Subject:Date:From;
-        b=ohPrm6RhMpzE4PJlBhzIO3QqmUDGTsZfaWa3yx7kYhp77CPkEpEvQD0hxMOddg/sI
-         X+Vh7CX4N/iTsOYZ8VrjPyRGbHwGVnaEcJ+C3ylQMe3oumyRaD65kUkajfLyGkd8UK
-         ZvG57y7Zcx4obNSxVmqlUHQkUgaI3unxJA4Xh6WlaJ3+toi+3veYV5AezAWsrDh/PE
-         8DkpJz5RmxyeX3aH1XLDkYOgusQRgiAVZ2TMieh7eVtq0MhRiXfC/XDCAfV9T1e5Cr
-         TLw2nQmDhnUcV1kzzLVWqm2XfVt7PjqZZIaLUKc7iknEOJTJ+Q+n9RJ1uzH4Y3FIwr
-         AFlRcf0qvQeeg==
+        b=rlwv4PiHxpQ4Q8AXZLu2v5vBM919T2dC3MSYdBA0Yl2BADAVfndtYdvnbfrYXfEnK
+         ugD2B/y7c61Yf5LrmW1BLTBliuh+NqzCjBJlQ8h7J6rki71bb7EFG891kn4u5fWPBq
+         nDeplJX4XNQoKLydFe9sSLfo16UtpVvVG8yX00ulQ83bSWakalEJZ8ajWO4Rbqy0cz
+         463MocL0EbRCotDIMRqjHV1/lK7Lwmzsz37NZx3EQqCcM28fcIUriMcsSTkUGkP8BT
+         9GcWEosJfFD1Q2miK4xR1Le36jnGulPVkfGWXJ5/KaN4YjXYxLpVJksLvVbzJ0EhE2
+         AhxiKxd2W0awg==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         anup@brainfault.org, gregkh@linuxfoundation.org,
@@ -43,9 +40,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         inux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, x86@kernel.org,
         Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 15/17] riscv: compat: Add UXL_32 support in start_thread
-Date:   Thu, 20 Jan 2022 15:39:08 +0800
-Message-Id: <20220120073911.99857-16-guoren@kernel.org>
+Subject: [PATCH V3 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
+Date:   Thu, 20 Jan 2022 15:39:09 +0800
+Message-Id: <20220120073911.99857-17-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,32 +52,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-If the current task is in COMPAT mode, set SR_UXL_32 in status for
-returning userspace.
+Adds initial skeletal COMPAT Kbuild (Runing 32bit U-mode on 64bit
+S-mode) support.
+ - Setup kconfig & dummy functions for compiling.
+ - Implement compat_start_thread by the way.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/riscv/kernel/process.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/riscv/Kconfig | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 03ac3aa611f5..1a666ad299b4 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
- 	}
- 	regs->epc = pc;
- 	regs->sp = sp;
-+
-+#ifdef CONFIG_COMPAT
-+	if (is_compat_task())
-+		regs->status |= SR_UXL_32;
-+#endif
- }
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 4602cfe92a20..d16ab3af3b34 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -73,6 +73,7 @@ config RISCV
+ 	select HAVE_ARCH_KGDB if !XIP_KERNEL
+ 	select HAVE_ARCH_KGDB_QXFER_PKT
+ 	select HAVE_ARCH_MMAP_RND_BITS if MMU
++	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
+ 	select HAVE_ARCH_SECCOMP_FILTER
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
+@@ -123,12 +124,18 @@ config ARCH_MMAP_RND_BITS_MIN
+ 	default 18 if 64BIT
+ 	default 8
  
- void flush_thread(void)
++config ARCH_MMAP_RND_COMPAT_BITS_MIN
++	default 8
++
+ # max bits determined by the following formula:
+ #  VA_BITS - PAGE_SHIFT - 3
+ config ARCH_MMAP_RND_BITS_MAX
+ 	default 24 if 64BIT # SV39 based
+ 	default 17
+ 
++config ARCH_MMAP_RND_COMPAT_BITS_MAX
++	default 17
++
+ # set if we run in machine mode, cleared if we run in supervisor mode
+ config RISCV_M_MODE
+ 	bool
+@@ -428,6 +435,18 @@ config CRASH_DUMP
+ 
+ 	  For more details see Documentation/admin-guide/kdump/kdump.rst
+ 
++config COMPAT
++	bool "Kernel support for 32-bit U-mode"
++	default 64BIT
++	depends on 64BIT && MMU
++	help
++	  This option enables support for a 32-bit U-mode running under a 64-bit
++	  kernel at S-mode. riscv32-specific components such as system calls,
++	  the user helper functions (vdso), signal rt_frame functions and the
++	  ptrace interface are handled appropriately by the kernel.
++
++	  If you want to execute 32-bit userspace applications, say Y.
++
+ endmenu
+ 
+ menu "Boot options"
 -- 
 2.25.1
 

@@ -2,136 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C82049510A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871B549510D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376458AbiATPIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbiATPIS (ORCPT
+        id S1376478AbiATPIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:08:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47799 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376468AbiATPIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:08:18 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F41C061574;
-        Thu, 20 Jan 2022 07:08:17 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so7246297wms.0;
-        Thu, 20 Jan 2022 07:08:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=ddPVCxZ4dU5YjdeoeIUkKx7PGG9W/fGI0TtRqbFtTuw=;
-        b=H6c4pby5QH1o8S7IPDYhT0iMNADpq3fH9CJ1YFaBUTbth7CK+XT0K1kj/KxEW3svMz
-         qgPSkkw0v5ifu7wiTZ5ueesuwmt13mkAyXAHkbUvi5ZKfVSsMWLuc2Swh1ZByGg8Cwgs
-         JCgHJ/p6N0it6jnvmy+yz+X9GiRJHqUyok4tcJwB1VTHCQ0wnhTroDypB1uqiwBLNjKo
-         vLCmGDNpepIE/C0qTpl46MLnWh0+aWCljk+Umg70LvdYmUUHwHO/XvXINwEWnlXSlDnF
-         NHmU9EwfPYCHUxAD5LD6QBcp0IM8253CUgv7gWuYyanHdMTY0yzw9xKdC9DHUQqu2N+H
-         VsfA==
+        Thu, 20 Jan 2022 10:08:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642691328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gYYcMS9ElXmPxhejwGj3w8BFf5deCBvIUvWdoFiI1Oo=;
+        b=EJD7E8ejrHNuxo8LJWUM6ntAyDHLmUFGhweTBZhm9Q3SrYcLFFB1iUOmvvuG+KmIE/IFWW
+        OjaIjEfM6lf3dQYu7NoAbzqge/6cMMR6gQ+lELsyfCcy+Qvo4epMq5Zw+T+C5JYJ7ykf4w
+        AHzs+XX+MNLETDUmD7SiacBdN9gnKrU=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-519-dFKStJAkNh2kSKDNjdZ6WQ-1; Thu, 20 Jan 2022 10:08:47 -0500
+X-MC-Unique: dFKStJAkNh2kSKDNjdZ6WQ-1
+Received: by mail-qk1-f198.google.com with SMTP id 81-20020a370454000000b00478f3a61beeso4284867qke.18
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:08:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=ddPVCxZ4dU5YjdeoeIUkKx7PGG9W/fGI0TtRqbFtTuw=;
-        b=iVpLMaGJZaR7e5Oi3gDcwRTdIJLBBXWr3252t7Ynviausn5dSiOBJJPxECZLNpe4HW
-         MUwS+kaoZQgT06U+L76t76UVlYIJQutAoIsfZCxSo2eR2MCpMzBdGAwSEJBYA9dmBu8e
-         q3WVf6/Mebcgdgzfw2PvjrosS9PNh4AkT4ymdAL58WPMBE2mXZxXyz83hkVPmmhGsRPK
-         qEshXwkRqRTfuY+lPU0PtFIZMpR/2XBeQNPCLZH5KNBlr027rH6Vn784GvTboiy1O/5M
-         Qbvq91gJdPx0xC29XDHPcMIY6+Rv0ol5Egh5/25RqP5ahxqLWBoowz/gEl6EdfUXLz+l
-         dIew==
-X-Gm-Message-State: AOAM532WFhyd018Ao/IaaXdooLbBgwXXjHxhmqxq2FOVvRm1jgpuqRkY
-        vkNij/adjWODgxEAZ1Cm3Xae95Z20EpSarktVjG8Uc0CYho=
-X-Google-Smtp-Source: ABdhPJycTIloH80MYHJgoCdcMS3sJYfpzZW6RfgpOkcOdf2Mub026i47AWJ9yyadXN1Q0Bwely+PGyslLzS6SnFiRN8=
-X-Received: by 2002:a7b:c310:: with SMTP id k16mr9289871wmj.169.1642691296273;
- Thu, 20 Jan 2022 07:08:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gYYcMS9ElXmPxhejwGj3w8BFf5deCBvIUvWdoFiI1Oo=;
+        b=sVXe7a2MpKSfIYp5juG3uZXVNncfyn7NyKoJXP60DZHwTDDCEB0VKsXFQGavUjFaFG
+         UqzbA5hAGUkmmp0PgVmcL6DyHcJ7VzSn2WlqEaEZHqEAfhLnR3CFn8oTmT14HVZ/jH9v
+         L1gC18xL/7WWb7pM5PeTCCylowT3ofLhaTFweqJwm8tAmzi8iigx48NYwo6M6lhdyUoy
+         DUAUB8alAHINSXwTyo7Uzj+Z7IuBUo53Tz7hCBl1n+72pLRXu5RM5FqiCckriNnKS398
+         /owny6eyNGuPnPRmni8aPrb6siFIzWC1Fda/RCnmZUcwKudL8bHpSMQhLe1gDP+mimL9
+         DsOA==
+X-Gm-Message-State: AOAM533DWfNU8+1TbW33nSGZHkuVIfUJT4HF55Tt9R9n1hpDAW6HO3LU
+        OZvt5VCtokEn4+tl6EX/XAJ/FqGql4EXIH2CcadpQ6q44mzlCKkybYI3VurV0AVtBNU2eVRmVOi
+        ayIqftg/cBBUbG1cdXGYb2QMH
+X-Received: by 2002:a37:be05:: with SMTP id o5mr24710546qkf.783.1642691326852;
+        Thu, 20 Jan 2022 07:08:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy5Pi4s98oM6StYysiaSOHyNFUiF/d2WGoxCsgiVXZwqPlJaOX0N2+jgGMV1C+i5MoHhbalXA==
+X-Received: by 2002:a37:be05:: with SMTP id o5mr24710516qkf.783.1642691326552;
+        Thu, 20 Jan 2022 07:08:46 -0800 (PST)
+Received: from steredhat (host-95-238-125-214.retail.telecomitalia.it. [95.238.125.214])
+        by smtp.gmail.com with ESMTPSA id o126sm1512302qke.53.2022.01.20.07.08.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 07:08:45 -0800 (PST)
+Date:   Thu, 20 Jan 2022 16:08:39 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        kvm <kvm@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Jason Wang <jasowang@redhat.com>
+Subject: Re: [PATCH v1] vhost: cache avail index in vhost_enable_notify()
+Message-ID: <CAGxU2F7r6cH9Ywygv1QNxKyfyn=yGoDPNDQ-tHkeFMUcbpfXYA@mail.gmail.com>
+References: <20220114090508.36416-1-sgarzare@redhat.com>
+ <20220114074454-mutt-send-email-mst@kernel.org>
+ <20220114133816.7niyaqygvdveddmi@steredhat>
+ <20220114084016-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-References: <20220120000409.2706549-1-rajatja@google.com> <CAE_wzQ_XxONXx5bgDNLAWM_UbV0r8hP9fW6s5sgRYRVSHQWjLw@mail.gmail.com>
-In-Reply-To: <CAE_wzQ_XxONXx5bgDNLAWM_UbV0r8hP9fW6s5sgRYRVSHQWjLw@mail.gmail.com>
-Reply-To: rajatxjain@gmail.com
-From:   Rajat Jain <rajatxjain@gmail.com>
-Date:   Thu, 20 Jan 2022 07:08:06 -0800
-Message-ID: <CAA93t1pOi9mz9he41E+S+sb7F=0ptaWG4hmi+Nuac=7FXEBi7Q@mail.gmail.com>
-Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
-To:     Dmitry Torokhov <dtor@google.com>
-Cc:     Rajat Jain <rajatja@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jesse Barnes <jsbarnes@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114084016-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry, Bjorn,
-
-Thanks for your review and comments.
-
-On Wed, Jan 19, 2022 at 6:25 PM Dmitry Torokhov <dtor@google.com> wrote:
+On Fri, Jan 14, 2022 at 2:40 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> Hi Rajat,
->
-> On Wed, Jan 19, 2022 at 4:04 PM Rajat Jain <rajatja@google.com> wrote:
+> On Fri, Jan 14, 2022 at 02:38:16PM +0100, Stefano Garzarella wrote:
+> > On Fri, Jan 14, 2022 at 07:45:35AM -0500, Michael S. Tsirkin wrote:
+> > > On Fri, Jan 14, 2022 at 10:05:08AM +0100, Stefano Garzarella wrote:
+> > > > In vhost_enable_notify() we enable the notifications and we read
+> > > > the avail index to check if new buffers have become available in
+> > > > the meantime.
+> > > >
+> > > > We are not caching the avail index, so when the device will call
+> > > > vhost_get_vq_desc(), it will find the old value in the cache and
+> > > > it will read the avail index again.
+> > > >
+> > > > It would be better to refresh the cache every time we read avail
+> > > > index, so let's change vhost_enable_notify() caching the value in
+> > > > `avail_idx` and compare it with `last_avail_idx` to check if there
+> > > > are new buffers available.
+> > > >
+> > > > Anyway, we don't expect a significant performance boost because
+> > > > the above path is not very common, indeed vhost_enable_notify()
+> > > > is often called with unlikely(), expecting that avail index has
+> > > > not been updated.
+> > > >
+> > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > >
+> > > ... and can in theory even hurt due to an extra memory write.
+> > > So ... performance test restults pls?
 > >
-> > Today the pci_dev->untrusted is set for any devices sitting downstream
-> > an external facing port (determined via "ExternalFacingPort" property).
-> > This however, disallows any internal devices to be marked as untrusted.
+> > Right, could be.
 > >
-> > There are use-cases though, where a platform would like to treat an
-> > internal device as untrusted (perhaps because it runs untrusted
-> > firmware, or offers an attack surface by handling untrusted network
-> > data etc).
+> > I'll run some perf test with vsock, about net, do you have a test suite or
+> > common step to follow to test it?
 > >
-> > This patch introduces a new "UntrustedDevice" property that can be used
-> > by the firmware to mark any device as untrusted.
-> >
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > ---
-> >  drivers/pci/pci-acpi.c | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> >
-> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > index a42dbf448860..3d9e5fa49451 100644
-> > --- a/drivers/pci/pci-acpi.c
-> > +++ b/drivers/pci/pci-acpi.c
-> > @@ -1350,12 +1350,25 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
-> >                 dev->external_facing = 1;
-> >  }
-> >
-> > +static void pci_acpi_set_untrusted(struct pci_dev *dev)
-> > +{
-> > +       u8 val;
-> > +
-> > +       if (device_property_read_u8(&dev->dev, "UntrustedDevice", &val))
-> > +               return;
-> > +
-> > +       /* These PCI devices are not trustworthy */
-> > +       if (val)
-> > +               dev->untrusted = 1;
+> > Thanks,
+> > Stefano
 >
-> Should this all be replaced with:
->
-> dev->untrusted = device_property_read_bool(&dev->dev, "UntrustedDevice");
->
-> ?
+> You can use the vhost test as a unit test as well.
 
-Ack, yes, I will do this.
+Thanks for the advice, I did indeed use it!
 
->
-> Also, is this ACPI-specific? Why won't we need this for DT systems (or
-> do we already have this)?.
+I run virtio_test (with vhost_test.ko) using 64 as batch to increase the 
+chance of the path being taken. (I changed bufs=0x1000000 in 
+virtio_test.c to increase the duration).
 
-Good point. Ack, Yes, I don't mind doing this for DT systems also. I
-wanted to get some feedback and acceptance within the PCI subsystem on
-the general idea of this property though. Bjorn?
+I used `perf stat` to take some numbers, running this command:
 
-Thanks & Best Regards,
+   taskset -c 2 perf stat -r 10 --log-fd 1 -- ./virtio_test --batch=64
 
-Rajat
+- Linux v5.16 without the patch applied
 
->
-> Thanks,
-> Dmitry
+ Performance counter stats for './virtio_test --batch=64' (10 runs):
+
+          2,791.70 msec task-clock                #    0.996 CPUs utilized            ( +-  0.36% )
+                23      context-switches          #    8.209 /sec                     ( +-  2.75% )
+                 0      cpu-migrations            #    0.000 /sec
+                79      page-faults               #   28.195 /sec                     ( +-  0.41% )
+     7,249,926,989      cycles                    #    2.587 GHz                      ( +-  0.36% )
+     7,711,999,656      instructions              #    1.06  insn per cycle           ( +-  1.08% )
+     1,838,436,806      branches                  #  656.134 M/sec                    ( +-  1.44% )
+         3,055,439      branch-misses             #    0.17% of all branches          ( +-  6.22% )
+
+            2.8024 +- 0.0100 seconds time elapsed  ( +-  0.36% )
+
+- Linux v5.16 with this patch applied
+
+ Performance counter stats for './virtio_test --batch=64' (10 runs):
+
+          2,753.36 msec task-clock                #    0.998 CPUs utilized            ( +-  0.20% )
+                24      context-switches          #    8.699 /sec                     ( +-  2.86% )
+                 0      cpu-migrations            #    0.000 /sec
+                76      page-faults               #   27.545 /sec                     ( +-  0.56% )
+     7,150,358,721      cycles                    #    2.592 GHz                      ( +-  0.20% )
+     7,420,639,950      instructions              #    1.04  insn per cycle           ( +-  0.76% )
+     1,745,759,193      branches                  #  632.730 M/sec                    ( +-  1.03% )
+         3,022,508      branch-misses             #    0.17% of all branches          ( +-  3.24% )
+
+           2.75952 +- 0.00561 seconds time elapsed  ( +-  0.20% )
+
+
+The difference seems minimal with a slight improvement.
+
+To try to stress the patch more, I modified vhost_test.ko to call 
+vhost_enable_notify()/vhost_disable_notify() on every cycle when calling 
+vhost_get_vq_desc():
+
+- Linux v5.16 modified without the patch applied
+
+ Performance counter stats for './virtio_test --batch=64' (10 runs):
+
+          4,126.66 msec task-clock                #    1.006 CPUs utilized            ( +-  0.25% )
+                28      context-switches          #    6.826 /sec                     ( +-  3.41% )
+                 0      cpu-migrations            #    0.000 /sec
+                85      page-faults               #   20.721 /sec                     ( +-  0.44% )
+    10,716,808,883      cycles                    #    2.612 GHz                      ( +-  0.25% )
+    11,804,381,462      instructions              #    1.11  insn per cycle           ( +-  0.86% )
+     3,138,813,438      branches                  #  765.153 M/sec                    ( +-  1.03% )
+        11,286,860      branch-misses             #    0.35% of all branches          ( +-  1.23% )
+
+            4.1027 +- 0.0103 seconds time elapsed  ( +-  0.25% )
+
+- Linux v5.16 modified with this patch applied
+
+ Performance counter stats for './virtio_test --batch=64' (10 runs):
+
+          3,953.55 msec task-clock                #    1.001 CPUs utilized            ( +-  0.33% )
+                29      context-switches          #    7.345 /sec                     ( +-  2.67% )
+                 0      cpu-migrations            #    0.000 /sec
+                83      page-faults               #   21.021 /sec                     ( +-  0.65% )
+    10,267,242,653      cycles                    #    2.600 GHz                      ( +-  0.33% )
+     7,972,866,579      instructions              #    0.78  insn per cycle           ( +-  0.21% )
+     1,663,770,390      branches                  #  421.377 M/sec                    ( +-  0.45% )
+        16,986,093      branch-misses             #    1.02% of all branches          ( +-  0.47% )
+
+            3.9489 +- 0.0130 seconds time elapsed  ( +-  0.33% )
+
+In this case the difference is bigger, with a reduction in execution 
+time (3.7 %) and fewer branches and instructions. It should be the 
+branch `if (vq->avail_idx == vq->last_avail_idx)` in vhost_get_vq_desc() 
+that is not taken.
+
+Should I resend the patch adding some more performance information?
+
+Thanks,
+Stefano
+

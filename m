@@ -2,124 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4E6495610
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D60495614
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347503AbiATVo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 16:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S1377990AbiATVsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 16:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiATVoy (ORCPT
+        with ESMTP id S231373AbiATVsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 16:44:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FBAC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:44:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8FC0B81E54
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 21:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBABC340E0;
-        Thu, 20 Jan 2022 21:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642715091;
-        bh=FZe+SAxvQtqmayyXIEIlIPrLP6I5xnrdSTWqJ4EPxLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mu3K0U614ZhC262qaahxQtHOBYM9LjQHb1h83zQ0n6vovlWum9+Mx2ukRl7mOHR4j
-         0oDT+BipsYz6Nt2thKg0EAeaFtz4A4TfvgTsoDQ1k2gfiLKJllRaHImWWdeIIm/iXO
-         2svOrq97+mt8krHLcTYHrzALygRIA8O5CiZpd1WK0BEhuvu4mY+LFEUj8nv8c8Wxkf
-         gwZv769Owh0tb+4lHk1XfhhppDvBPoq6/oD+mu8aXUkoKr1lOk2LihpkoOllVwbdF8
-         p8bEzgIYLmIdwkDlgtEz/bilVo36N5qQ7fHus1t+0eX3H6ozvE45APjLJ6uVuN0AmG
-         QGPRpEst2CU2A==
-Date:   Thu, 20 Jan 2022 14:44:47 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
- packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
- an unaligned pointer value
-Message-ID: <YenXz+RznXBuJMSR@dev-arch.archlinux-ax161>
-References: <202201171718.7ZCI4YeQ-lkp@intel.com>
- <20220117101941.00003c68@Huawei.com>
+        Thu, 20 Jan 2022 16:48:52 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B70C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:48:49 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so17232931wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:48:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=JjVDuclbm/fwd2D1p+3vNEJf8jRpvYGorewRrFiM1Nk=;
+        b=BhkPYbE7gJHwnPZPanlfo81NZiNYPU3pUlQRgPPsVwF2iIRRzRA5gL+RYJ2hDgIHb3
+         aRU2eMEqs27g0lDG94wnqyLtTNN2ROeLl4IVsIRyl8hFyeYr6WQPEG2Qi9UXyVs3HHRz
+         RubuD53ZgUcuVHBMhWAPnvqJvPzTPGJETf/mAkMykQaLCc8IRZU87pGIjCQw43fIeCHS
+         WA87ZD/HIQ3sI5dVkDVDMt/g981l0umLfNThnpx1dG+ZSdtHuiPXkpjEF1/uQHd00Vgt
+         TYLJffI9ZQblEFIescsXcuZVPO7gE9Y/f1FRv+oGSB95UJI7BxYMl/11mK5D2phSKWYf
+         XQLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=JjVDuclbm/fwd2D1p+3vNEJf8jRpvYGorewRrFiM1Nk=;
+        b=tHG3rV+pnFPDbC/yMzHEIYl9V52KhnklYX8i3taGOcrxZqUrau+eRlORBvbH8JsU0D
+         5qgDgak8NK/K+Caj5SUwhlTMAt4KTo0+I3dzK9mKheNNchdaIMbBPd5K27SjmpjP7/cG
+         4P1q7jHveuam+E/BLUeeeRHAYxMP76WwlPL00F+ThkaplNR7Q1ojd9DomFLtRYXsCRX6
+         HgWT8Vw4luOFUaSq8jNUIx6dULikgnyFsJuBy+Kn5bMMQG+93MoLArSMb4sUso1VdTRo
+         D63FlkNyoSwYdZR63/Avz/MIW6w96sLbnPLzTxjYgR7+iFdIuDJUBOGFP0IhjugMkYBJ
+         HZuQ==
+X-Gm-Message-State: AOAM531OIzYTTifU73UBm+UhjlpnNKOY/4Tgiq6mtJxVceEOU8FoRu1l
+        3A9OnmIXtu+SkdCb/GJ8hJemfw==
+X-Google-Smtp-Source: ABdhPJyeAzG7rOyZiz2BqoVDEHOnTtESwblpIq6zOwSJ2PM3W38rOTS4SiCV4oVBL9N6rxvZoGT5Mg==
+X-Received: by 2002:a1c:19c1:: with SMTP id 184mr10699464wmz.61.1642715320804;
+        Thu, 20 Jan 2022 13:48:40 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id o15sm4543402wri.86.2022.01.20.13.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 13:48:40 -0800 (PST)
+References: <20220118030911.12815-1-yu.tu@amlogic.com>
+ <20220118030911.12815-4-yu.tu@amlogic.com>
+ <7a8016ba-730b-f599-2032-31cf03990a55@kernel.org>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Jiri Slaby <jirislaby@kernel.org>, Yu Tu <yu.tu@amlogic.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V6 3/5] tty: serial: meson: Describes the calculation of
+ the UART baud rate clock using a clock frame
+Date:   Thu, 20 Jan 2022 22:48:05 +0100
+In-reply-to: <7a8016ba-730b-f599-2032-31cf03990a55@kernel.org>
+Message-ID: <1jbl062i4o.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117101941.00003c68@Huawei.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 10:19:41AM +0000, Jonathan Cameron wrote:
-> On Mon, 17 Jan 2022 18:00:03 +0800
-> kernel test robot <lkp@intel.com> wrote:
-> 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   0c947b893d69231a9add855939da7c66237ab44f
-> > commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
-> > date:   8 months ago
-> > config: mips-randconfig-r002-20220116 (https://download.01.org/0day-ci/archive/20220117/202201171718.7ZCI4YeQ-lkp@intel.com/config)
-> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install mips cross compiling tool for clang build
-> >         # apt-get install binutils-mips-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/adc/ drivers/usb/gadget/
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]  
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> 
-> I'm open to suggestions on what (if anything) to do about this one...
 
-Hi Jonathan,
+On Tue 18 Jan 2022 at 10:39, Jiri Slaby <jirislaby@kernel.org> wrote:
 
--Waddress-of-packed-member is disabled in the main Makefile and this
-particular randconfig has a bunch of these warnings. It comes from the
-fact that arch/mips/loongson64/Platform adds -mno-branch-likely
-unconditionally but clang does not support it so it issues a warning:
+> On 18. 01. 22, 4:09, Yu Tu wrote:
+>> Using the common Clock code to describe the UART baud rate clock
+>> makes it easier for the UART driver to be compatible with the
+>> baud rate requirements of the UART IP on different meson chips.
+> ...
+>> --- a/drivers/tty/serial/meson_uart.c
+>> +++ b/drivers/tty/serial/meson_uart.c
+> ...
+>> @@ -629,57 +640,105 @@ static struct uart_driver meson_uart_driver = {
+>>   	.cons		= MESON_SERIAL_CONSOLE,
+>>   };
+>>   -static inline struct clk *meson_uart_probe_clock(struct device *dev,
+>> -						 const char *id)
+>> -{
+>> -	struct clk *clk = NULL;
+>> -	int ret;
+>> -
+>> -	clk = devm_clk_get(dev, id);
+>> -	if (IS_ERR(clk))
+>> -		return clk;
+>> -
+>> -	ret = clk_prepare_enable(clk);
+>> -	if (ret) {
+>> -		dev_err(dev, "couldn't enable clk\n");
+>> -		return ERR_PTR(ret);
+>> -	}
+>> -
+>> -	devm_add_action_or_reset(dev,
+>> -			(void(*)(void *))clk_disable_unprepare,
+>> -			clk);
+>> -
+>> -	return clk;
+>> -}
+>> +static struct clk_div_table xtal_div_table[] = {
+>
+> This can be const, right?
+>
+>> +	{0, 3},
+>> +	{1, 1},
+>> +	{2, 2},
+>> +	{3, 2},
+>
+> Not sure if you didn't remove too much whitespace. I think it should be
+> like: "{ 0, 3 },". But I actually don't care, it's a minor thing.
 
-clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+Seconds
+It worth fixing in the next version
 
-The presence of this warning causes cascading cc-option failures because
-cc-option adds -Werror, which means that the requested flag never gets
-added to KBUILD_CFLAGS, so we see instances of warnings that should be
-disabled.
+>
+> I cannot comment on the rest (clk and OF part) as my knowledge is pretty
+> limited there. Leaving up to others.
+>
+> thanks,
 
-This has come up in the past because clang has four different ways it
-can react to a flag it does not recognize. One is an error, the other
-three are warnings.  We handle two in scripts/Makefile.clang to try and
-make these failures more obvious in the build but we do not handle this
-warning because there are instances of it in arch/arm [1]. I'll push to
-get that change into mainline so we can avoid this once and for all.
-
-More background:
-
-* 589834b3a009 ("kbuild: Add -Werror=unknown-warning-option to CLANG_FLAGS")
-* 0664684e1ebd ("kbuild: Add -Werror=ignored-optimization-argument to CLANG_FLAGS")
-
-For now, I have sent [2]. It might be nice to clean the kernel up of
-these warnings over time (and I recall seeing a patch fly by recently
-[3]) but I don't think there is much for you to do now.
-
-[1]: https://lore.kernel.org/r/20210928154143.2106903-14-arnd@kernel.org/
-[2]: https://lore.kernel.org/r/20220120214001.1879469-2-nathan@kernel.org/
-[3]: https://lore.kernel.org/r/20220110224656.266536-1-sakari.ailus@linux.intel.com/
-
-Cheers,
-Nathan

@@ -2,93 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3AB495649
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 23:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE7F49564B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 23:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378046AbiATWSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 17:18:06 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:4945 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347534AbiATWSE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 17:18:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642717084; x=1674253084;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=CbvFbjQfwDtoDzlP5NcZT4tKgkqu0dtU0t97oGIQdwY=;
-  b=xYRKuwvUIrlHTGlMPStCkSHdnh4xmwHmE14gYvnvG7hOSU4sXlyrfULh
-   vzJQ3iMMAZbAxgQdXb5AsCbXb2FpdGFKOnCeo8GNnqOtWVIvh4YC6zakP
-   9bdNeqtaVYsaU0chq7gPq/1zYbfEuFJgVW+XXw2KiyKtKDOa9E6G3GGr9
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jan 2022 14:18:03 -0800
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 14:18:01 -0800
-Received: from [10.110.122.217] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 20 Jan
- 2022 14:18:02 -0800
-Subject: Re: [PATCH 3/3] input: misc: pm8941-pwrkey: avoid potential null
- pointer dereference
-To:     Anjelique Melendez <quic_amelende@quicinc.com>,
-        <dmitry.torokhov@gmail.com>
-CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <collinsd@codeaurora.org>,
-        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
-        <skakit@codeaurora.org>
-References: <20220120204132.17875-1-quic_amelende@quicinc.com>
- <20220120204132.17875-4-quic_amelende@quicinc.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-Message-ID: <88e7a6c5-c94e-0b65-173d-5f21109e216e@quicinc.com>
-Date:   Thu, 20 Jan 2022 14:18:01 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1378059AbiATWT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 17:19:27 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:47956 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347534AbiATWTU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 17:19:20 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C8EF11EC0495;
+        Thu, 20 Jan 2022 23:19:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642717155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Sm06uOifofySe0c77atH7w607/k9r2r372tihL26X3I=;
+        b=fX2Z0BqPYajyprJw79CWSKVmEK/S9s5BKiGNX5IpHja2GjoJAhYh3APLamRPY1fc4zCaT4
+        NZYC/UDPhsqKW0E+8ZPCwlR0Tr/3z/F/YF4UPWT2+RHVaQ1ky52Rthe0Ke10y9FOJOoPnu
+        jz5OawPS1wdq7ofn7us1JHoW9YLA0VE=
+Date:   Thu, 20 Jan 2022 23:19:07 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        kirill.shutemov@linux.intel.com, knsathya@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [PATCH 2/3] x86/boot: Allow to hook up alternative port I/O
+ helpers
+Message-ID: <Yenf20Qn9DTvXbbY@zn.tnic>
+References: <Yehz3eqq670WRVJE@zn.tnic>
+ <20220120021545.7786-1-kirill.shutemov@linux.intel.com>
+ <20220120021545.7786-2-kirill.shutemov@linux.intel.com>
+ <20220120163826.bits6ffbnbal4yse@box.shutemov.name>
+ <20220120211347.6gglputnh7n3wbvw@treble>
 MIME-Version: 1.0
-In-Reply-To: <20220120204132.17875-4-quic_amelende@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220120211347.6gglputnh7n3wbvw@treble>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/2022 12:41 PM, Anjelique Melendez wrote:
-> From: David Collins <collinsd@codeaurora.org>
+On Thu, Jan 20, 2022 at 01:13:47PM -0800, Josh Poimboeuf wrote:
+> This one:
 > 
-> Add a null check for the pwrkey->data pointer after it is assigned
-> in pm8941_pwrkey_probe().  This avoids a potential null pointer
-> dereference when pwrkey->data->has_pon_pbs is accessed later in
-> the probe function.
+> 	pio_ops = (struct port_io_ops){
+> 		.inb = inb,
+> 		.inw = inw,
+> 		.inl = inl,
+> 		.outb = outb,
+> 		.outw = outw,
+> 		.outl = outl,
+> 	};
 > 
-> Change-Id: I589c4851e544d79a1863fd110b32a0b45ac03caf
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> ---
->   drivers/input/misc/pm8941-pwrkey.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
-> index 0ce00736e695..ac08ed025802 100644
-> --- a/drivers/input/misc/pm8941-pwrkey.c
-> +++ b/drivers/input/misc/pm8941-pwrkey.c
-> @@ -263,6 +263,10 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
->   
->   	pwrkey->dev = &pdev->dev;
->   	pwrkey->data = of_device_get_match_data(&pdev->dev);
-> +	if (!pwrkey->data) {
-> +		dev_err(&pdev->dev, "match data not found\n");
-> +		return -ENODEV;
-> +	}
->   
+> .. actually allocates an anonymous struct in the .data section, which is
+> memcpy'ed at runtime when the assignment occurs.  That anonymous struct
+> has .data -> .text relocations which have to be resolved at runtime
+> because the distance between .data and .text isn't constant.
 
-I don't understand why this patch is 3rd in the series. Isn't it 
-independent from the debounce time? If not, then why it is not fixed as 
-part of the patch which adds this debounce time support?
+Yap, and this is the key point - decompressor kernel is a -pie
+executable so it needs to resolve .data section relocations at *runtime*
+but we don't have a dynamic linker during early boot.
 
----Trilok Soni
+We could patch at early boot by going through the .data runtime
+relocations and patch in the target locations but that would be probably
+too much just so that we can do those struct initializers.
+
+And, I'm being told, global .data section things should be avoided, if
+possible.
+
+> The working version:
+> 
+>  	pio_ops.inb = inb;
+>  	pio_ops.inw = inw;
+>  	pio_ops.inl = inl;
+>  	pio_ops.outb = outb;
+>  	pio_ops.outw = outw;
+>  	pio_ops.outl = outl;
+> 
+> ... only needs .text -> .text relocations which can be resolved at link
+> time.
+
+So yeah, we can simply do this and forget about it.
+
+If someone is bored and wants to fixup such runtime relocations at,
+well, runtime, sure. But until then...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,108 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBD549527F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C2049527B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377085AbiATQie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:38:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:44576 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376980AbiATQi2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:38:28 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A7FDED1;
-        Thu, 20 Jan 2022 08:38:28 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39FC53F73D;
-        Thu, 20 Jan 2022 08:38:26 -0800 (PST)
-Date:   Thu, 20 Jan 2022 16:38:19 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
-        scott@os.amperecomputing.com, darren@os.amperecomputing.com,
-        james.morse@arm.com
-Subject: Re: [PATCH v3 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
- Dump and Reset device
-Message-ID: <20220120163819.GA8187@lpieralisi>
-References: <20211231033725.21109-1-ilkka@os.amperecomputing.com>
- <20211231033725.21109-3-ilkka@os.amperecomputing.com>
- <20220105104602.GA4752@lpieralisi>
- <alpine.DEB.2.22.394.2201051530290.2489@ubuntu200401>
- <alpine.DEB.2.22.394.2201131801380.3166@ubuntu200401>
+        id S1376983AbiATQiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231576AbiATQh7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:37:59 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA5FC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:37:58 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id m1so23847337lfq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=h/m/F2NnRHmw+s3i6KtA12JmjEsgCsTpng2++DmHCL8=;
+        b=y5eOxJkbWcKuaqZVdz1DUjNmNcraimHw+Pro9FAjfVRZvzZVigHZAMfQepfSot/3cI
+         bBB91Zhc/W0YLBueoaaYsW0JjOQfX3w/wGeV3NSYRKnHas5ZaguVtN3p3BI/qB7C1Hpa
+         8uEfJ0WvETzxZdIvQWUlU1GRjgd97VCMX2EO+Us7r4JPsFyY3npFgPXNfr2myNLzV/2g
+         HqJu/Wq2fqsOBAm9OQqDYSjnofAondLtUk0CyRg6UOAbUDiSONu03gXQhwn/nAd5RYSz
+         2PookWxbJAsZM8hotIfw/bY9NXfwB5Wkp4S3pv5/7DL55sO9be5gKah8nnATxwTYEPLG
+         anwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h/m/F2NnRHmw+s3i6KtA12JmjEsgCsTpng2++DmHCL8=;
+        b=ZdmQqTeeyUWfGnFBiXA97kZL1e8Ksk6msUnSmWBinoKGU5LFEfZ/3nT4/fOdVMMhPs
+         SF+frDc/HZTQyIlJrAVymEP7QqmUWIYfsuo1vo2nh5iJFty8njFRk8TKK5VtTUqqmFXu
+         J8Yn1zof4VGohc0sUgp190+oEa9PorWJurRFhTXFc1JvqFuvZz4DmGqUH9aEDYLZnUB3
+         VDhSbc+ZcY7TpGNVmgEeukjP1J0rqAnjnBszOvU9urslU61xBd4z4LCxWmVwkJ2587w+
+         gjAfHFppF5zJOU5I0dBwdwbSHRwsnUxkhRd2CC08lT43aMTf2xPf6Z86QwvZQLGmwfbl
+         TaTw==
+X-Gm-Message-State: AOAM533MqkuDtPVAlBx7l2AQTPwmIjOJ/yZhwoCjO9IQXMq+39usJTio
+        0geXAhBnMIS69UQiDY8PDUVJ3Q==
+X-Google-Smtp-Source: ABdhPJw9iGkrATKaBESRT/TiPdqro/IDReFNHIhcDEIp0QL20iCiddQOerAnmxQJUtZTy11MFnSICQ==
+X-Received: by 2002:a19:ac03:: with SMTP id g3mr729009lfc.422.1642696677075;
+        Thu, 20 Jan 2022 08:37:57 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id w16sm409638lfk.89.2022.01.20.08.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 08:37:56 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 3F380103725; Thu, 20 Jan 2022 19:38:26 +0300 (+03)
+Date:   Thu, 20 Jan 2022 19:38:26 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     bp@alien8.de
+Cc:     aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [PATCH 2/3] x86/boot: Allow to hook up alternative port I/O
+ helpers
+Message-ID: <20220120163826.bits6ffbnbal4yse@box.shutemov.name>
+References: <Yehz3eqq670WRVJE@zn.tnic>
+ <20220120021545.7786-1-kirill.shutemov@linux.intel.com>
+ <20220120021545.7786-2-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2201131801380.3166@ubuntu200401>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20220120021545.7786-2-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 06:17:13PM -0800, Ilkka Koskinen wrote:
-> 
-> Hi Lorenzo,
-> 
-> On Wed, 5 Jan 2022, Ilkka Koskinen wrote:
-> > 
-> > Hi Lorenzo,
-> > 
-> > On Wed, 5 Jan 2022, Lorenzo Pieralisi wrote:
-> > > [+James, for SDEI bits]
-> > > 
-> > > On Thu, Dec 30, 2021 at 07:37:25PM -0800, Ilkka Koskinen wrote:
-> > > > ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
-> > > > Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
-> > > > issue diagnostic dump and reset via an SDEI event or an interrupt.
-> > > > This patch implements SDEI path.
-> > > > 
-> > > > [0] https://developer.arm.com/documentation/den0093/latest/
-> > > > 
-> > > > Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > > > ---
-> > > >  drivers/acpi/arm64/Kconfig  |   8 +++
-> > > >  drivers/acpi/arm64/Makefile |   1 +
-> > > >  drivers/acpi/arm64/agdi.c   | 125 ++++++++++++++++++++++++++++++++++++
-> > > >  3 files changed, 134 insertions(+)
-> > > >  create mode 100644 drivers/acpi/arm64/agdi.c
-> 
-> <snip>
-> 
-> > > > diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
-> > > > new file mode 100644
-> > > > index 000000000000..6525ccbae5c1
-> > > > --- /dev/null
-> > > > +++ b/drivers/acpi/arm64/agdi.c
-> 
-> <snip>
-> 
-> > > > 
-> > > > +static int __init agdi_init(void)
-> > > > +{
-> > > > +	int ret;
-> > > > +	acpi_status status;
-> > > > +	struct acpi_table_agdi *agdi_table;
-> > > > +	struct agdi_data pdata;
-> > > > +	struct platform_device *pdev;
-> > > > +
-> > > > +	if (acpi_disabled)
-> > > > +		return 0;
-> > > 
-> > > Why don't we call agdi_init() from acpi_init() as we do for IORT/VIOT ?
-> > > 
-> > > I don't think it is necessary to add a device_initcall(), with related
-> > > ordering dependencies.
-> > 
-> > That's a good point. I change it.
-> 
-> Actually, I looked at this more carefully. acpi_init() is called in
-> subsys_initcall() while sdei_init() is called in subsys_initcall_sync().
-> That is, if I call this function in acpi_init(), SDEI driver won't be ready
-> and this driver fails to register the event.
+On Thu, Jan 20, 2022 at 05:15:43AM +0300, Kirill A. Shutemov wrote:
+> diff --git a/arch/x86/boot/io.h b/arch/x86/boot/io.h
+> new file mode 100644
+> index 000000000000..640daa3925fb
+> --- /dev/null
+> +++ b/arch/x86/boot/io.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef BOOT_IO_H
+> +#define BOOT_IO_H
+> +
+> +#include <asm/shared/io.h>
+> +
+> +struct port_io_ops {
+> +	unsigned char (*inb)(int port);
+> +	unsigned short (*inw)(int port);
+> +	unsigned int (*inl)(int port);
+> +	void (*outb)(unsigned char v, int port);
+> +	void (*outw)(unsigned short v, int port);
+> +	void (*outl)(unsigned int v, int port);
+> +};
+> +
+> +extern struct port_io_ops pio_ops;
+> +
+> +static inline void init_io_ops(void)
+> +{
+> +	pio_ops = (struct port_io_ops){
+> +		.inb = inb,
+> +		.inw = inw,
+> +		.inl = inl,
+> +		.outb = outb,
+> +		.outw = outw,
+> +		.outl = outl,
+> +	};
+> +}
+> +
+> +#endif
 
-Maybe this will help:
+It works fine on x86-64, but breaks on i386:
 
-https://lore.kernel.org/linux-arm-kernel/20220120050522.23689-1-xueshuai@linux.alibaba.com/
+ld: Unexpected run-time relocations (.rel) detected!
+
+I'll change it to
+
+	pio_ops.inb = inb;
+	pio_ops.inw = inw;
+	pio_ops.inl = inl;
+	pio_ops.outb = outb;
+	pio_ops.outw = outw;
+	pio_ops.outl = outl;
+
+It works, but I hate that I don't really have control here. I have no clue
+why compiler generate different code after the change. It is very fragile.
+
+Do we really have no way to say compiler to avoid relactions here?
+
+-- 
+ Kirill A. Shutemov

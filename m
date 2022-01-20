@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB3849531F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B4149532C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377326AbiATRYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:24:08 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:38640 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377331AbiATRYF (ORCPT
+        id S231668AbiATR2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:28:14 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:38887 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232006AbiATR0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:24:05 -0500
-Received: by mail-oo1-f49.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so2514483ooj.5;
-        Thu, 20 Jan 2022 09:24:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4wFfi5dvrPs9K8Et4jwF3OW5L3T+FBbrajKxVkpiUl8=;
-        b=jPjpU0eqgM7cXv+FlyEzfgnHohuapiPEDBZPmivNavIM4vmxoqj+rUfpLMKD6PJr8p
-         LQrpRFvwLeQJITb+CJfldM9IJNaxkf+gaBtzHcILtiSYQnAg+WEjTmS74nDis4ToGWP1
-         +TQ0n3nBkdgoXlwD1VoOROkpvBwpRPKpLY84IuxuRQFFtk3hSrvX7+QiKoc9rCxJ9519
-         K2OZ+lv6pLvYT6hV97Kd7JwtITK+tFvFEr9DoHPqIEX93Vek32K60QWSEaUeqLZIi1ZA
-         b1v4Z7mkJdiwxyC8441R52eGHBd5kvuRbQUeu7la8jIMdXtawpVVOmnS+RlKme08aK3n
-         xt9A==
-X-Gm-Message-State: AOAM531LUYz2untJeghftAUMQW7FmqYG+rhLyphfObNFOnmY6eDmiMhP
-        X0q7Cxdq9q/LnK6ofzNq/g==
-X-Google-Smtp-Source: ABdhPJzf1lBCbgaoczLjcM9UyXs2KwEWIOqixZJnvtKEA1iGAADtZoPsfk9lORL/5udRSkr2LcFxAw==
-X-Received: by 2002:a4a:b4cb:: with SMTP id g11mr26820796ooo.46.1642699445132;
-        Thu, 20 Jan 2022 09:24:05 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id x22sm1406405ooo.29.2022.01.20.09.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:24:04 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: imx7ulp: Fix 'assigned-clocks-parents' typo
-Date:   Thu, 20 Jan 2022 11:23:55 -0600
-Message-Id: <20220120172355.1629650-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 20 Jan 2022 12:26:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642699613; x=1674235613;
+  h=from:to:cc:subject:date:message-id;
+  bh=yoXWUpciytUxGVmD3OIc8Emx9Q31wdTLP4aBGRalkQQ=;
+  b=cyUzi8aE1TY06MjKLuJpBCgDnucVRwapDIXdfzOW+donpzG3TWb9Teaa
+   sZT3+Ekpn1wpcjojETtVfnB7vffXlOGmbKnS5waryY5/AVIf0nmfNsZYt
+   d/fV8iXlQuyLWnQC0g7p5e6/T0+q8VIinmweOYoQGJpXpS3rAJjJHS+0I
+   Y=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 20 Jan 2022 09:26:53 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 20 Jan 2022 09:26:51 -0800
+X-QCInternal: smtphost
+Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 20 Jan 2022 22:56:28 +0530
+Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
+        id 27115538E; Thu, 20 Jan 2022 22:56:27 +0530 (IST)
+From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+To:     adrian.hunter@intel.com, quic_asutoshd@quicinc.com,
+        ulf.hansson@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     stummala@codeaurora.org, vbadigan@codeaurora.org,
+        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        sartgarg@codeaurora.org, nitirawa@codeaurora.org,
+        sayalil@codeaurora.org,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V3 0/4] mmc: add error statistics for eMMC and SD card
+Date:   Thu, 20 Jan 2022 22:56:18 +0530
+Message-Id: <1642699582-14785-1-git-send-email-quic_c_sbhanu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The correct property name is 'assigned-clock-parents', not
-'assigned-clocks-parents'. Though if the platform works with the typo, one
-has to wonder if the property is even needed.
+Changes since V2:
+	-Removed userspace error stats clear debug fs entry as suggested by Adrain Hunter.
+	-Split patch into 4 patches
+		[PATCH V3 1/4] : sdhci driver
+		[PATCH V3 2/4] : debug fs entries
+		[PATCH V3 3/4] : core driver
+		[PATCH V3 4/4] : cqhci driver
+	-Used for loop to print error messages instead of using printf
+	 statements for all error messages as suggested by Adrain Hunter.
+	-Introduced one flag to enable error stats feature, if any other
+	 client wants to use this feature, they need to enable that flag.
+	-Moved reset command timeout error statement to card init flow
+	 as suggested by Adrain Hunter.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- arch/arm/boot/dts/imx7ulp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since V1:
+	-Removed sysfs entry for eMMC and SD card error statistics and added
+	 debugfs entry as suggested by Adrian Hunter and Ulf Hansson.
 
-diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
-index b7ea37ad4e55..bcec98b96411 100644
---- a/arch/arm/boot/dts/imx7ulp.dtsi
-+++ b/arch/arm/boot/dts/imx7ulp.dtsi
-@@ -259,7 +259,7 @@ wdog1: watchdog@403d0000 {
- 			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
- 			assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
--			assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
-+			assigned-clock-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
- 			timeout-sec = <40>;
- 		};
- 
+Shaik Sajida Bhanu (4):
+  mmc: sdhci: Capture eMMC and SD card errors
+  mmc: debugfs: Add debug fs entry for mmc driver
+  mmc: core: Capture eMMC and SD card errors
+  mmc: cqhci: Capture eMMC and SD card errors
+
+ drivers/mmc/core/core.c       |  8 +++++
+ drivers/mmc/core/debugfs.c    | 81 +++++++++++++++++++++++++++++++++++++++++++
+ drivers/mmc/core/queue.c      |  3 ++
+ drivers/mmc/host/cqhci-core.c |  9 ++++-
+ drivers/mmc/host/sdhci-msm.c  |  3 ++
+ drivers/mmc/host/sdhci.c      | 72 +++++++++++++++++++++++++++++++-------
+ include/linux/mmc/host.h      | 31 +++++++++++++++++
+ 7 files changed, 194 insertions(+), 13 deletions(-)
+
 -- 
-2.32.0
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 

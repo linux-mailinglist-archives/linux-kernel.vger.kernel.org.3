@@ -2,977 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3060049491A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8C7494907
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358484AbiATIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:06:41 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:53021 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358549AbiATIEd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:04:33 -0500
-Received: from quad ([82.142.13.186]) by mrelayeu.kundenserver.de (mreue107
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1M9nAB-1nFexM2Whx-005pEb; Thu, 20
- Jan 2022 09:03:58 +0100
-From:   Laurent Vivier <laurent@vivier.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        John Stultz <john.stultz@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v11 5/5] m68k: introduce a virtual m68k machine
-Date:   Thu, 20 Jan 2022 09:03:47 +0100
-Message-Id: <20220120080347.1595379-6-laurent@vivier.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220120080347.1595379-1-laurent@vivier.eu>
-References: <20220120080347.1595379-1-laurent@vivier.eu>
+        id S1358130AbiATID5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:03:57 -0500
+Received: from mga17.intel.com ([192.55.52.151]:41765 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240049AbiATID4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 03:03:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642665836; x=1674201836;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zk3qjTgwokdg8NahD1ulTJvIC3IlV/CFaQ42M7QB/rs=;
+  b=ajDSVCqJticLbffce3QrAaTdkghJ4sLNlGDuc/GN++MHiwOfkVryWn4p
+   uzccpZiYeCujYINY4EO4iUnnvBKbVg4GmEtro0kMkNjz10q52BwN2tOwT
+   ADsa883q/pwyB9ZFyCGAB9MFEJjKF3mfKJG1Hb9t9G/SIShUrIXvKHMb8
+   eUpuj7UauMMNYovumim+2l53aSQYZfUUgOg9CFx1DTaDdBblo64BC0mBG
+   xcTPCjUWSUjSMmHzhjlezArPNF3bj5SJljmySIo+KVk3xv3xNoCy0YHSf
+   1pUaIsMkI9FXb6PA5Sf0+/VT56HKNmeZm5y2nFW52NiOYdcSLeSU35clp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="225968301"
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="225968301"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 00:03:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="532667111"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jan 2022 00:03:55 -0800
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 20 Jan 2022 00:03:54 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 20 Jan 2022 00:03:54 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Thu, 20 Jan 2022 00:03:54 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Thu, 20 Jan 2022 00:03:54 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ifTf2seUI32c+/PdMP3HxBi9e25KoGRVcB7Wtfnxs7r82uS0gUtpalcAaIfdA8U4eiOr0EVoamMdfUzQKgmOYvS4D8col+n72QX+Hb6irwYJUbh7Oj/zu0pC4KNEXUO0wN0msM6ubB9iKmSJ2tAQB6e66OHEhDaH9R7ksuNhGXDbyHvTgnbIbNKCyRof3Z4wsO9q69bI6oV+e66+0FW7EVYYY6hfI8B8dsFqyl1SSne9G3KoHdPz0tcNqUBKcDUc19qt2StgGDiP5L3JU8Hk24EpzrgwsXTTNoUcFPPzbroTEAhOL/HNPy1AFKFJK4TxYNdRZ7xZVgiAshXUC3h1Vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KWz6b1YBWmjE6heQOFBvhI6cxb9i7FMa4WFG9d3N7lw=;
+ b=g7ijlK/cBGfLn3G0HQZcLV+/cX4PUAsSVjrtSnH2P+LB+KKSVMr+LTTF3FnAmYmf9xEXbUuExKAy6P8jSf/+iJfMnC+gOTjfrW+sgui5ySo5stVGneIsVpma0WAmoMKmS5rPpZrsvoYt3P5hybiBJThOtblVKX/Ehv6bx5+v8+vC07UZHFdUWuiI1z+rNoPu/ZEOCmwn0YrFtsDhDp1bY1VnrGEAQ8FAeLx4ScWTUcaeA0bR6RxBVMwwwjj27um9Omy8wbf5JRHEwKyImbMH7ZEKN+/BuFNCodNoi4ZuBk2AQvM3IcflnY9th704mJqMSVOTDsP+JexiL/2O0nsn1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from DM8PR11MB5621.namprd11.prod.outlook.com (2603:10b6:8:38::14) by
+ BN6PR11MB1331.namprd11.prod.outlook.com (2603:10b6:404:49::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4909.8; Thu, 20 Jan 2022 08:03:52 +0000
+Received: from DM8PR11MB5621.namprd11.prod.outlook.com
+ ([fe80::fcc9:90bb:b249:e2e9]) by DM8PR11MB5621.namprd11.prod.outlook.com
+ ([fe80::fcc9:90bb:b249:e2e9%8]) with mapi id 15.20.4909.008; Thu, 20 Jan 2022
+ 08:03:52 +0000
+From:   "Jankowski, Konrad0" <konrad0.jankowski@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH] iavf: Remove useless DMA-32 fallback configuration
+Thread-Topic: [PATCH] iavf: Remove useless DMA-32 fallback configuration
+Thread-Index: AQHYDdRD8oH/E9S7X0m7KiBgTxInqQ==
+Date:   Thu, 20 Jan 2022 08:03:52 +0000
+Message-ID: <DM8PR11MB56216BAE634CBAB39F0F88E2AB5A9@DM8PR11MB5621.namprd11.prod.outlook.com>
+References: <afb3317bc87677096e55fc96f317df29f2ff3408.1641752631.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <afb3317bc87677096e55fc96f317df29f2ff3408.1641752631.git.christophe.jaillet@wanadoo.fr>
+Accept-Language: pl-PL, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2d8d5de5-168a-497b-e04a-08d9dbeb6633
+x-ms-traffictypediagnostic: BN6PR11MB1331:EE_
+x-microsoft-antispam-prvs: <BN6PR11MB1331F7A607D02544256BEDEEAB5A9@BN6PR11MB1331.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:590;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DCT7/T/BebPcYPbvpmP5JHaws2T+ifFjgPOzTbkW3Uusrgv+etUvxCDsberK/PI3ZS1TJFpEUe6IWtoKx9te5KohLszCdFtowaRUGbMdS8VvzD+1JIV1jLPaIrdL0lYIXY/0PgvNBDzgKKsxQbBoYUXsiOqH0MNjXjzRCMcynfIoqMry5E7wjH4XuIjOhLDaB/VOBpDeY0OMQjRSbpn9v3aWy2FJiq0JXQnFqOU6jYZoCkG1adjnEycwei0V0ME9JSPl2h4kPSORQbP4KCIxzoc8gDCakO5PRB6ROlr8/zqfB5C1QxheVWLtBGDkHj3iy0GEvm4hO+9CdMwFK2i+Wr14PeeaXZIv5o9m9j5AOPlPxjovsSOun99g2hV3lHXdzAtF9I1D0tRhCSfMub1A/BX0f8ktnkcTvH03Nzs1ziFA1rFTCAD98IniwYibTrJm+o1DYzvS36Ug8KXBDWEJy/8LCYSxcS7UrCo1TrAXsaa2+N+GNgvI36izl/pH0OXQqz3AJEH/9mC3TcvD/SyJc0wf7A5Bf99XkHmVvnGcva/ZHlTNIk2ZXBD312D291xletDFQFZjduzTzm4dmp+E1h6LUn4fDhc9ziQXeQGa3fDWXFRSNy+OxrAFFFBm60mSvUsfMksECFwcAc75iFk5kYvzNQjsqtc+nYcKTGDAHohKN4FGVZmCYQ2/ImkhMFfV2Rokd0vAL+rv8uNdREv1nN06iyaBeGNsMfZ5HvXrc+vneOFwXw5U4BCklpLxuFDUgBvVyu3hx/FbQf05bnImk9zcDyZ72afUOxtcFV5ITw8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5621.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(82960400001)(55016003)(54906003)(508600001)(71200400001)(966005)(83380400001)(52536014)(66556008)(64756008)(66446008)(316002)(110136005)(66946007)(86362001)(66476007)(76116006)(9686003)(186003)(122000001)(33656002)(5660300002)(2906002)(26005)(38070700005)(8936002)(8676002)(4326008)(6506007)(7696005)(53546011)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u22u15VhPT1w+wyD1eWEBnx3rO97HoSukycvAbxTra1td5mtXUV+teMRdNoE?=
+ =?us-ascii?Q?pRmuVwP/DXxn/jT7Uuq1qDNRH1fzcxvvPUlmEVlG4w6fCa3TLoIkz3c+MKvC?=
+ =?us-ascii?Q?pKNtRom+xqa4L13oxmGr1hQh66G0jDfr+ckC/7Cqrf+Bktd6XJ3qprFCe1ZH?=
+ =?us-ascii?Q?1i5Eh0RUCsajd9MHqC6TkGNoBEWTvy/2F8D3bIL4TkMIsArycSWkn6gsyx/K?=
+ =?us-ascii?Q?jhTLerZOqUtrXzqhX39tAZSxrU+1yTr3OYeMRAROyENQ5rQlN5cfpu6tx7H/?=
+ =?us-ascii?Q?mFdX+RKUmSHmSlWyY1b2a/RJrWYB+2uM+CYdybs64qtLRuK1gt2fSJ7oPoml?=
+ =?us-ascii?Q?cBUgO4v1PhBj0Tr+pe3Lk9DSoKP9iAWAf94L6PU3oND/DEuq6yBbROhOUABB?=
+ =?us-ascii?Q?Yb65Tm65c6i4MhAaE4I/Q31ImpX4mFHUpXAA57qUqbMTGP1cndoCgoZxuUKJ?=
+ =?us-ascii?Q?XSCJDXYcepmFkS6WOPsn2PEZHjESKVhdklK+lcxTqsTd+JqYwG1ft32u5lem?=
+ =?us-ascii?Q?toiaa3YMUyBfz6wYaDAZ/prcKax/+3E97HugngjWXK4/jQA0OcSuF/uUGozY?=
+ =?us-ascii?Q?yJvBX6mhHHmcbD7p9yrCyy73fz+pk7f3I2bzDuEe7HIoki9AP1m4NJFQPtzl?=
+ =?us-ascii?Q?oKO7SF0baieLWgBGpwrlkG+XWeffOI7A/M3Nh8JSdaGiSXshrO4UTh35g+h4?=
+ =?us-ascii?Q?Npbircz+9Vf35viJfS3qPITN7YnN7JSlzdKIrRfTD8fwW3vPYbJ7FTbnBFVo?=
+ =?us-ascii?Q?Rjr68/16tVd6WYHF7JRCqFpm4fLtIIUo5dHm9/pW6yfyZ+ExiueiixbTX2YP?=
+ =?us-ascii?Q?WbsNG6nNu1aSrX01boZcfIHo52X129ZMpl5sRmWHh4kH0QAb3eVx0xgN9oTv?=
+ =?us-ascii?Q?kPVRN3y+ClBEXSwJfj+ZwplRqLVS3epalc1r1RRGqMZTyCmLYy4yalagMdnr?=
+ =?us-ascii?Q?P6IWdLl4eRzJE6AxXVzopNhmR2mnqbITIFwH1hl2Bi4nJYdBIuv1BsGhM0o3?=
+ =?us-ascii?Q?cRNWpe0q5aS8p13wLGdER1ga0pqjHfK7GaydXGNxzQ3M0s881b6a+GVkWzyn?=
+ =?us-ascii?Q?07w4gEPlty+1vAUKMDLPwYyVSmn5QPoI9cUW9K2vN4AIcdg71oGOZt5aKDPn?=
+ =?us-ascii?Q?S24j8cxrLtoMAxT9E1p99L9gjFJkbze2vPqqJgSFpXniAciOrRv8Dt0C/Qcq?=
+ =?us-ascii?Q?ZYEuEs6a/skpDfzT8LnueIgl/L4g/laWhUTu5eyhP0RD91dVnmdrSE77KS1R?=
+ =?us-ascii?Q?cgA36HdQtQ2pS8/4kcJFtYd2Iwprse6SlPyS2wxayMokjAPWTph4SLMzfswf?=
+ =?us-ascii?Q?0FCIBniSJwsdFV7nPl9qBDoLZhq580O/J7+VvuamHxysg+weVvNPBLS3LI7I?=
+ =?us-ascii?Q?4ESxLrx8v/ZylklGLGHQvogBd6ivkPbj5qvvhAdrzJ+/f5TvlB4KUJi6qEO4?=
+ =?us-ascii?Q?ZIlGkWghipcbOklYtjDKkN+Lc39iUQ3dVT3T6ygKQBjPdKcrF/bafgjEYKHw?=
+ =?us-ascii?Q?18i5lUmufI+TvFEtcsFxfnmA5/nu+qvOcJFppexcL2L2yYRw77/66GEVrIE9?=
+ =?us-ascii?Q?uhd8IWAOY/VnHJcXTi7Oa6M1eg2Cb7dWkZPX1ALOKZzSifFMdTmWI30k8Jdu?=
+ =?us-ascii?Q?d7+A7gFfNvqZcVyXcPkV7qlOhyOfumKNpQrtIB/syeUzgKTYaQcrx5l9D82C?=
+ =?us-ascii?Q?hKCqeQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:S3C3yLgpgBH80UGlUsf2H0ZYekuKdaeMB+1QQVJAZlY+UuCyhXE
- SYx+CV7tc4IOWAtSk9qMhKz/XSodH4mh9crTHw9fBqKOwyxhuuHu4q5ClMpG4XoJgHvzkWk
- 4SCRNxyi5QjZBgAR6xTSeR745NkqXhajCYR+71PqWzaRbG2Wszeza3r1Xcvhg1/EulsV61q
- hhebyG7B7/VIv8vKN75mQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:V8wjQqN/4o0=:AsafjIfYSGCuT7wOc+0z8D
- KzDEEJOqaXBFvBxBYNENpE2WhrYRk+/hUDSGkd3tF21YlcyUHfCRUJMQqBF7SwaT7oSPFlKOz
- 6WYxYW+338orRJ37A/vMYJ+PBq+ELTwqSZcajIhAfJzi2kSnpixtaVIUb9fgwhK/S35wg4Z9l
- RvXCGhBYqBaHKZvZQ68jKcqrMPys7QmZRcQA9dsQZils2UFZbJOyKOVKEv0qVzERJx0eilKq1
- BUoEyFX5LYJLxskjZvMRle8vJdERvTUyxbSBa8spljc/Pg+DNxiMfyuLd5ordt8o0REfRLYlB
- NRrtsAH/VA2jOrkQC888LPJKSFsOm4dXhqnvjGccwLek/eDzkt54gR2KkB/Hc5EyNF2K86MpZ
- xpAk4FvYhOhMaixwVEszEki1GtfFT4SNCSIsb2BGDNYiwPHyRh85PJvirKoARBHPBqdLrvndP
- +TnLUw12gFQthe1OuBbIoLONOMT1S915jXW8ANC3L/Ga+8XY1ti7jUAlaSBBYJTVcIkts3CSy
- ZIvPs4a5kSrVorq3vrwcT1lW4L3FB5mskFgzOZDlZi2MwF7Ez+cAIDoUNAmF2BEeWaqpyMPFn
- D2z7Fh5iqK4V5lxf5RkDOLxsLTP49VgDLvTjkqRwrtUqQ5w5fZUENKmwMXxm95EiVdby+bJpj
- R8DqYil29z5kRvRg2Z/btIladZJwlIVZn8FoQKaohZeb6XjALs+FuHKxfAHGiuAavfsM=
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5621.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d8d5de5-168a-497b-e04a-08d9dbeb6633
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 08:03:52.7328
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: S+X6if+RQqGcS2Vde1bNOWE97fLzATmG7EJUHa3PeFnh2QCqMtdheXQxgsFndpkBP0+2dMXaJNyef86c6gWbuOfpuDyviwx4AIGS51FQ50s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1331
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This machine allows to have up to 3.2 GiB and 128 Virtio devices.
 
-It is based on android goldfish devices.
 
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- arch/m68k/Kbuild                           |   1 +
- arch/m68k/Kconfig.machine                  |  17 +++
- arch/m68k/configs/virt_defconfig           |  65 ++++++++++
- arch/m68k/include/asm/config.h             |   2 +
- arch/m68k/include/asm/io.h                 |   3 +
- arch/m68k/include/asm/irq.h                |   3 +-
- arch/m68k/include/asm/pgtable_mm.h         |   7 ++
- arch/m68k/include/asm/setup.h              |  44 +++++--
- arch/m68k/include/asm/virt.h               |  25 ++++
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 +++
- arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
- arch/m68k/kernel/Makefile                  |   1 +
- arch/m68k/kernel/head.S                    |  31 +++++
- arch/m68k/kernel/setup_mm.c                |   7 ++
- arch/m68k/mm/kmap.c                        |  23 ++--
- arch/m68k/virt/Makefile                    |   6 +
- arch/m68k/virt/config.c                    | 119 ++++++++++++++++++
- arch/m68k/virt/ints.c                      | 133 +++++++++++++++++++++
- arch/m68k/virt/platform.c                  |  72 +++++++++++
- 19 files changed, 560 insertions(+), 18 deletions(-)
- create mode 100644 arch/m68k/configs/virt_defconfig
- create mode 100644 arch/m68k/include/asm/virt.h
- create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
- create mode 100644 arch/m68k/virt/Makefile
- create mode 100644 arch/m68k/virt/config.c
- create mode 100644 arch/m68k/virt/ints.c
- create mode 100644 arch/m68k/virt/platform.c
+> -----Original Message-----
+> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Sent: niedziela, 9 stycznia 2022 19:24
+> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
+> Jakub Kicinski <kuba@kernel.org>
+> Cc: linux-kernel@vger.kernel.org; kernel-janitors@vger.kernel.org;
+> Christophe JAILLET <christophe.jaillet@wanadoo.fr>; Christoph Hellwig
+> <hch@lst.de>; Lobakin, Alexandr <alexandr.lobakin@intel.com>; intel-wired=
+-
+> lan@lists.osuosl.org; netdev@vger.kernel.org
+> Subject: [PATCH] iavf: Remove useless DMA-32 fallback configuration
+>=20
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+>=20
+> Simplify code and remove some dead code accordingly.
+>=20
+> [1]: https://lkml.org/lkml/2021/6/7/398
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
+>  drivers/net/ethernet/intel/iavf/iavf_main.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c
+> b/drivers/net/ethernet/intel/iavf/iavf_main.c
+> index 8125b9120615..b0bd95c85480 100644
+> --- a/drivers/net/ethernet/intel/iavf/iavf_main.c
+> +++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
 
-diff --git a/arch/m68k/Kbuild b/arch/m68k/Kbuild
-index 18abb35c26a1..7762af9f6def 100644
---- a/arch/m68k/Kbuild
-+++ b/arch/m68k/Kbuild
-@@ -17,3 +17,4 @@ obj-$(CONFIG_M68060)		+= ifpsp060/
- obj-$(CONFIG_M68KFPU_EMU)	+= math-emu/
- obj-$(CONFIG_M68000)		+= 68000/
- obj-$(CONFIG_COLDFIRE)		+= coldfire/
-+obj-$(CONFIG_VIRT)		+= virt/
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index eeab4f3e6c19..13b900bf8eb8 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -149,6 +149,23 @@ config SUN3
- 
- 	  If you don't want to compile a kernel exclusively for a Sun 3, say N.
- 
-+config VIRT
-+	bool "Virtual M68k Machine support"
-+	depends on MMU
-+	select GENERIC_CLOCKEVENTS
-+	select M68040
-+	select MMU_MOTOROLA if MMU
-+	select RTC_CLASS
-+	select GOLDFISH
-+	select RTC_DRV_GOLDFISH
-+	select GOLDFISH_TIMER
-+	select GOLDFISH_TTY
-+	select TTY
-+	select VIRTIO_MMIO
-+	help
-+	  This options enable a pure virtual machine based on m68k,
-+	  VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC)
-+
- config PILOT
- 	bool
- 
-diff --git a/arch/m68k/configs/virt_defconfig b/arch/m68k/configs/virt_defconfig
-new file mode 100644
-index 000000000000..462e51ef69eb
---- /dev/null
-+++ b/arch/m68k/configs/virt_defconfig
-@@ -0,0 +1,65 @@
-+CONFIG_LOCALVERSION="-virt"
-+CONFIG_SYSVIPC=y
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_RDMA=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_VIRT=y
-+CONFIG_PROC_HARDWARE=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_AMIGA_PARTITION=y
-+CONFIG_ATARI_PARTITION=y
-+CONFIG_MAC_PARTITION=y
-+CONFIG_BSD_DISKLABEL=y
-+CONFIG_MINIX_SUBPARTITION=y
-+CONFIG_SOLARIS_X86_PARTITION=y
-+CONFIG_UNIXWARE_DISKLABEL=y
-+CONFIG_LDM_PARTITION=y
-+CONFIG_LDM_DEBUG=y
-+CONFIG_SUN_PARTITION=y
-+CONFIG_SYSV68_PARTITION=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_CGROUP_NET_PRIO=y
-+CONFIG_CGROUP_NET_CLASSID=y
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SR=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_INPUT_MOUSEDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_DRM=y
-+CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_FB=y
-+CONFIG_VIRT_DRIVERS=y
-+CONFIG_VIRTIO_INPUT=y
-+CONFIG_EXT4_FS=y
-+CONFIG_AUTOFS_FS=y
-+CONFIG_ISO9660_FS=y
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_UDF_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_9P_FS=y
-+CONFIG_9P_FS_POSIX_ACL=y
-+CONFIG_9P_FS_SECURITY=y
-+CONFIG_EARLY_PRINTK=y
-diff --git a/arch/m68k/include/asm/config.h b/arch/m68k/include/asm/config.h
-index aae61070628b..b9dacc52f2c8 100644
---- a/arch/m68k/include/asm/config.h
-+++ b/arch/m68k/include/asm/config.h
-@@ -17,6 +17,7 @@ extern int mvme16x_parse_bootinfo(const struct bi_record *record);
- extern int mvme147_parse_bootinfo(const struct bi_record *record);
- extern int hp300_parse_bootinfo(const struct bi_record *record);
- extern int apollo_parse_bootinfo(const struct bi_record *record);
-+extern int virt_parse_bootinfo(const struct bi_record *record);
- 
- extern void config_amiga(void);
- extern void config_atari(void);
-@@ -29,5 +30,6 @@ extern void config_bvme6000(void);
- extern void config_hp300(void);
- extern void config_q40(void);
- extern void config_sun3x(void);
-+extern void config_virt(void);
- 
- #endif /* _M68K_CONFIG_H */
-diff --git a/arch/m68k/include/asm/io.h b/arch/m68k/include/asm/io.h
-index aabe6420ead2..aaeabc65e63c 100644
---- a/arch/m68k/include/asm/io.h
-+++ b/arch/m68k/include/asm/io.h
-@@ -8,6 +8,9 @@
- #include <asm/io_mm.h>
- #endif
- 
-+#define gf_ioread32 ioread32be
-+#define gf_iowrite32 iowrite32be
-+
- #include <asm-generic/io.h>
- 
- #endif /* _M68K_IO_H */
-diff --git a/arch/m68k/include/asm/irq.h b/arch/m68k/include/asm/irq.h
-index 91dd493791d7..7829e955ca04 100644
---- a/arch/m68k/include/asm/irq.h
-+++ b/arch/m68k/include/asm/irq.h
-@@ -12,7 +12,8 @@
-  */
- #if defined(CONFIG_COLDFIRE)
- #define NR_IRQS 256
--#elif defined(CONFIG_VME) || defined(CONFIG_SUN3) || defined(CONFIG_SUN3X)
-+#elif defined(CONFIG_VME) || defined(CONFIG_SUN3) || \
-+      defined(CONFIG_SUN3X) || defined(CONFIG_VIRT)
- #define NR_IRQS 200
- #elif defined(CONFIG_ATARI)
- #define NR_IRQS 141
-diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
-index 143ba7de9bda..9b4e2fe2ac82 100644
---- a/arch/m68k/include/asm/pgtable_mm.h
-+++ b/arch/m68k/include/asm/pgtable_mm.h
-@@ -80,6 +80,9 @@
- #elif defined(CONFIG_COLDFIRE)
- #define KMAP_START	0xe0000000
- #define KMAP_END	0xf0000000
-+#elif defined(CONFIG_VIRT)
-+#define	KMAP_START	0xdf000000
-+#define	KMAP_END	0xff000000
- #else
- #define	KMAP_START	0xd0000000
- #define	KMAP_END	0xf0000000
-@@ -92,6 +95,10 @@ extern unsigned long m68k_vmalloc_end;
- #elif defined(CONFIG_COLDFIRE)
- #define VMALLOC_START	0xd0000000
- #define VMALLOC_END	0xe0000000
-+#elif defined(CONFIG_VIRT)
-+#define VMALLOC_OFFSET	PAGE_SIZE
-+#define VMALLOC_START (((unsigned long) high_memory + VMALLOC_OFFSET) & ~(VMALLOC_OFFSET-1))
-+#define VMALLOC_END     KMAP_START
- #else
- /* Just any arbitrary offset to the start of the vmalloc VM area: the
-  * current 8MB value just means that there will be a 8MB "hole" after the
-diff --git a/arch/m68k/include/asm/setup.h b/arch/m68k/include/asm/setup.h
-index 8f2023f8c1c4..2c99477aaf89 100644
---- a/arch/m68k/include/asm/setup.h
-+++ b/arch/m68k/include/asm/setup.h
-@@ -37,7 +37,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_ATARI) || defined(CONFIG_MAC) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                      \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                  \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_AMIGA (m68k_machtype == MACH_AMIGA)
- #else
- #  define MACH_AMIGA_ONLY
-@@ -50,7 +51,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                      \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                  \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_ATARI (m68k_machtype == MACH_ATARI)
- #else
- #  define MACH_ATARI_ONLY
-@@ -63,7 +65,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_ATARI) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)                 \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                        \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                    \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MAC (m68k_machtype == MACH_MAC)
- #else
- #  define MACH_MAC_ONLY
-@@ -84,7 +87,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)              \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_APOLLO (m68k_machtype == MACH_APOLLO)
- #else
- #  define MACH_APOLLO_ONLY
-@@ -97,7 +101,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME16x)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME16x)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MVME147 (m68k_machtype == MACH_MVME147)
- #else
- #  define MACH_MVME147_ONLY
-@@ -110,7 +115,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MVME16x (m68k_machtype == MACH_MVME16x)
- #else
- #  define MACH_MVME16x_ONLY
-@@ -123,7 +129,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_BVME6000 (m68k_machtype == MACH_BVME6000)
- #else
- #  define MACH_BVME6000_ONLY
-@@ -136,7 +143,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x) \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_Q40) \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147) \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_HP300 (m68k_machtype == MACH_HP300)
- #else
- #  define MACH_HP300_ONLY
-@@ -149,7 +157,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_Q40 (m68k_machtype == MACH_Q40)
- #else
- #  define MACH_Q40_ONLY
-@@ -162,7 +171,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
--	|| defined(CONFIG_Q40) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_Q40) || defined(CONFIG_MVME147)                   \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_SUN3X (m68k_machtype == MACH_SUN3X)
- #else
- #  define CONFIG_SUN3X_ONLY
-@@ -170,6 +180,20 @@ extern unsigned long m68k_machtype;
- #  define MACH_TYPE (MACH_SUN3X)
- #endif
- 
-+#if !defined(CONFIG_VIRT)
-+#  define MACH_IS_VIRT (0)
-+#elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
-+	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
-+	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
-+	|| defined(CONFIG_Q40) || defined(CONFIG_SUN3X)                     \
-+	|| defined(CONFIG_MVME147)
-+#  define MACH_IS_VIRT (m68k_machtype == MACH_VIRT)
-+#else
-+#  define MACH_VIRT_ONLY
-+#  define MACH_IS_VIRT (1)
-+#  define MACH_TYPE (MACH_VIRT)
-+#endif
-+
- #ifndef MACH_TYPE
- #  define MACH_TYPE (m68k_machtype)
- #endif
-diff --git a/arch/m68k/include/asm/virt.h b/arch/m68k/include/asm/virt.h
-new file mode 100644
-index 000000000000..87647c17afd7
---- /dev/null
-+++ b/arch/m68k/include/asm/virt.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_VIRT_H
-+#define __ASM_VIRT_H
-+
-+#define NUM_VIRT_SOURCES 200
-+
-+struct virt_booter_device_data {
-+	unsigned long mmio;
-+	unsigned long irq;
-+};
-+
-+struct virt_booter_data {
-+	unsigned long qemu_version;
-+	struct virt_booter_device_data pic;
-+	struct virt_booter_device_data rtc;
-+	struct virt_booter_device_data tty;
-+	struct virt_booter_device_data ctrl;
-+	struct virt_booter_device_data virtio;
-+};
-+
-+extern struct virt_booter_data virt_bi_data;
-+
-+extern void __init virt_init_IRQ(void);
-+
-+#endif
-diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-new file mode 100644
-index 000000000000..e4db7e2213ab
---- /dev/null
-+++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * asm/bootinfo-virt.h -- Virtual-m68k-specific boot information definitions
-+ */
-+
-+#ifndef _UAPI_ASM_M68K_BOOTINFO_VIRT_H
-+#define _UAPI_ASM_M68K_BOOTINFO_VIRT_H
-+
-+#define BI_VIRT_QEMU_VERSION	0x8000
-+#define BI_VIRT_GF_PIC_BASE	0x8001
-+#define BI_VIRT_GF_RTC_BASE	0x8002
-+#define BI_VIRT_GF_TTY_BASE	0x8003
-+#define BI_VIRT_VIRTIO_BASE	0x8004
-+#define BI_VIRT_CTRL_BASE	0x8005
-+
-+#define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
-+
-+#endif /* _UAPI_ASM_M68K_BOOTINFO_MAC_H */
-diff --git a/arch/m68k/include/uapi/asm/bootinfo.h b/arch/m68k/include/uapi/asm/bootinfo.h
-index 38d3140381fa..203d9cbf9630 100644
---- a/arch/m68k/include/uapi/asm/bootinfo.h
-+++ b/arch/m68k/include/uapi/asm/bootinfo.h
-@@ -83,6 +83,7 @@ struct mem_info {
- #define MACH_SUN3X		11
- #define MACH_M54XX		12
- #define MACH_M5441X		13
-+#define MACH_VIRT		14
- 
- 
-     /*
-diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
-index dbac7f8743fc..c0833da6a2ca 100644
---- a/arch/m68k/kernel/Makefile
-+++ b/arch/m68k/kernel/Makefile
-@@ -11,6 +11,7 @@ extra-$(CONFIG_VME)	:= head.o
- extra-$(CONFIG_HP300)	:= head.o
- extra-$(CONFIG_Q40)	:= head.o
- extra-$(CONFIG_SUN3X)	:= head.o
-+extra-$(CONFIG_VIRT)	:= head.o
- extra-$(CONFIG_SUN3)	:= sun3-head.o
- extra-y			+= vmlinux.lds
- 
-diff --git a/arch/m68k/kernel/head.S b/arch/m68k/kernel/head.S
-index 493c95db0e51..9e812d8606be 100644
---- a/arch/m68k/kernel/head.S
-+++ b/arch/m68k/kernel/head.S
-@@ -262,6 +262,7 @@
- #include <asm/bootinfo-hp300.h>
- #include <asm/bootinfo-mac.h>
- #include <asm/bootinfo-q40.h>
-+#include <asm/bootinfo-virt.h>
- #include <asm/bootinfo-vme.h>
- #include <asm/setup.h>
- #include <asm/entry.h>
-@@ -534,6 +535,7 @@ func_define	putn,1
- #define is_not_apollo(lab) cmpl &MACH_APOLLO,%pc@(m68k_machtype); jne lab
- #define is_not_q40(lab) cmpl &MACH_Q40,%pc@(m68k_machtype); jne lab
- #define is_not_sun3x(lab) cmpl &MACH_SUN3X,%pc@(m68k_machtype); jne lab
-+#define is_not_virt(lab) cmpl &MACH_VIRT,%pc@(m68k_machtype); jne lab
- 
- #define hasnt_leds(lab) cmpl &MACH_HP300,%pc@(m68k_machtype); \
- 			jeq 42f; \
-@@ -647,6 +649,14 @@ ENTRY(__start)
- L(test_notmac):
- #endif /* CONFIG_MAC */
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(L(test_notvirt))
-+
-+	get_bi_record BI_VIRT_GF_TTY_BASE
-+	lea	%pc@(L(virt_gf_tty_base)),%a1
-+	movel	%a0@,%a1@
-+L(test_notvirt):
-+#endif /* CONFIG_VIRT */
- 
- /*
-  * There are ultimately two pieces of information we want for all kinds of
-@@ -1237,6 +1247,13 @@ L(mmu_init_not_mac):
- L(notsun3x):
- #endif
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(L(novirt))
-+	mmu_map_tt	#1,#0xFF000000,#0x01000000,#_PAGE_NOCACHE_S
-+	jbra    L(mmu_init_done)
-+L(novirt):
-+#endif
-+
- #ifdef CONFIG_APOLLO
- 	is_not_apollo(L(notapollo))
- 
-@@ -3186,6 +3203,14 @@ func_start	serial_putc,%d0/%d1/%a0/%a1
- 3:
- #endif
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(1f)
-+
-+	movel L(virt_gf_tty_base),%a1
-+	movel %d0,%a1@(GF_PUT_CHAR)
-+1:
-+#endif
-+
- L(serial_putc_done):
- func_return	serial_putc
- 
-@@ -3865,3 +3890,9 @@ q40_mem_cptr:
- L(q40_do_debug):
- 	.long	0
- #endif
-+
-+#if defined(CONFIG_VIRT)
-+GF_PUT_CHAR = 0x00
-+L(virt_gf_tty_base):
-+	.long 0
-+#endif /* CONFIG_VIRT */
-diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
-index 8228275aae3e..39ba09ccb538 100644
---- a/arch/m68k/kernel/setup_mm.c
-+++ b/arch/m68k/kernel/setup_mm.c
-@@ -182,6 +182,8 @@ static void __init m68k_parse_bootinfo(const struct bi_record *record)
- 				unknown = hp300_parse_bootinfo(record);
- 			else if (MACH_IS_APOLLO)
- 				unknown = apollo_parse_bootinfo(record);
-+			else if (MACH_IS_VIRT)
-+				unknown = virt_parse_bootinfo(record);
- 			else
- 				unknown = 1;
- 		}
-@@ -312,6 +314,11 @@ void __init setup_arch(char **cmdline_p)
- 		cf_mmu_context_init();
- 		config_BSP(NULL, 0);
- 		break;
-+#endif
-+#ifdef CONFIG_VIRT
-+	case MACH_VIRT:
-+		config_virt();
-+		break;
- #endif
- 	default:
- 		panic("No configuration setup");
-diff --git a/arch/m68k/mm/kmap.c b/arch/m68k/mm/kmap.c
-index 20ddf71b43d0..39729f40d106 100644
---- a/arch/m68k/mm/kmap.c
-+++ b/arch/m68k/mm/kmap.c
-@@ -179,6 +179,12 @@ void __iomem *__ioremap(unsigned long physaddr, unsigned long size, int cachefla
- 			return (void __iomem *)physaddr;
- 	}
- #endif
-+#ifdef CONFIG_VIRT
-+	if (MACH_IS_VIRT) {
-+		if (physaddr >= 0xff000000 && cacheflag == IOMAP_NOCACHE_SER)
-+			return (void __iomem *)physaddr;
-+	}
-+#endif
- #ifdef CONFIG_COLDFIRE
- 	if (__cf_internalio(physaddr))
- 		return (void __iomem *) physaddr;
-@@ -292,18 +298,21 @@ EXPORT_SYMBOL(__ioremap);
-  */
- void iounmap(void __iomem *addr)
- {
--#ifdef CONFIG_AMIGA
--	if ((!MACH_IS_AMIGA) ||
--	    (((unsigned long)addr < 0x40000000) ||
--	     ((unsigned long)addr > 0x60000000)))
--			free_io_area((__force void *)addr);
--#else
-+#if defined(CONFIG_AMIGA)
-+	if (MACH_IS_AMIGA &&
-+	    ((unsigned long)addr >= 0x40000000) &&
-+	    ((unsigned long)addr < 0x60000000))
-+		return;
-+#endif
-+#if defined(CONFIG_VIRT)
-+	if (MACH_IS_VIRT && (unsigned long)addr >= 0xff000000)
-+		return;
-+#endif
- #ifdef CONFIG_COLDFIRE
- 	if (cf_internalio(addr))
- 		return;
- #endif
- 	free_io_area((__force void *)addr);
--#endif
- }
- EXPORT_SYMBOL(iounmap);
- 
-diff --git a/arch/m68k/virt/Makefile b/arch/m68k/virt/Makefile
-new file mode 100644
-index 000000000000..54b9b2866654
---- /dev/null
-+++ b/arch/m68k/virt/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Makefile for Linux arch/m68k/virt source directory
-+#
-+
-+obj-y		:= config.o ints.o platform.o
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-new file mode 100644
-index 000000000000..e92a22dad1bc
---- /dev/null
-+++ b/arch/m68k/virt/config.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/serial_core.h>
-+#include <clocksource/timer-goldfish.h>
-+
-+#include <asm/bootinfo.h>
-+#include <asm/bootinfo-virt.h>
-+#include <asm/byteorder.h>
-+#include <asm/machdep.h>
-+#include <asm/virt.h>
-+#include <asm/config.h>
-+
-+struct virt_booter_data virt_bi_data;
-+
-+#define VIRT_CTRL_REG_FEATURES	0x00
-+#define VIRT_CTRL_REG_CMD	0x04
-+
-+enum {
-+	CMD_NOOP,
-+	CMD_RESET,
-+	CMD_HALT,
-+	CMD_PANIC,
-+};
-+
-+static void virt_get_model(char *str)
-+{
-+	/* str is 80 characters long */
-+	sprintf(str, "QEMU Virtual M68K Machine (%u.%u.%u)",
-+		(u8)(virt_bi_data.qemu_version >> 24),
-+		(u8)(virt_bi_data.qemu_version >> 16),
-+		(u8)(virt_bi_data.qemu_version >> 8));
-+}
-+
-+static void virt_halt(void)
-+{
-+	void __iomem *base = (void *)virt_bi_data.ctrl.mmio;
-+
-+	iowrite32be(CMD_HALT, base + VIRT_CTRL_REG_CMD);
-+	local_irq_disable();
-+	while (1)
-+		;
-+}
-+
-+static void virt_reset(void)
-+{
-+	void __iomem *base = (void *)virt_bi_data.ctrl.mmio;
-+
-+	iowrite32be(CMD_RESET, base + VIRT_CTRL_REG_CMD);
-+	local_irq_disable();
-+	while (1)
-+		;
-+}
-+
-+/*
-+ * Parse a virtual-m68k-specific record in the bootinfo
-+ */
-+
-+int __init virt_parse_bootinfo(const struct bi_record *record)
-+{
-+	int unknown = 0;
-+	const void *data = record->data;
-+
-+	switch (be16_to_cpu(record->tag)) {
-+	case BI_VIRT_QEMU_VERSION:
-+		virt_bi_data.qemu_version = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_PIC_BASE:
-+		virt_bi_data.pic.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.pic.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_RTC_BASE:
-+		virt_bi_data.rtc.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.rtc.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_TTY_BASE:
-+		virt_bi_data.tty.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.tty.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_CTRL_BASE:
-+		virt_bi_data.ctrl.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.ctrl.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_VIRTIO_BASE:
-+		virt_bi_data.virtio.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.virtio.irq = be32_to_cpup(data);
-+		break;
-+	default:
-+		unknown = 1;
-+		break;
-+	}
-+	return unknown;
-+}
-+
-+static void __init virt_sched_init(void)
-+{
-+	goldfish_timer_init(virt_bi_data.rtc.irq,
-+			    (void *)virt_bi_data.rtc.mmio);
-+}
-+
-+void __init config_virt(void)
-+{
-+	char earlycon[24];
-+
-+	snprintf(earlycon, sizeof(earlycon), "early_gf_tty,0x%08lx",
-+		 virt_bi_data.tty.mmio);
-+	setup_earlycon(earlycon);
-+
-+	mach_init_IRQ = virt_init_IRQ;
-+	mach_sched_init = virt_sched_init;
-+	mach_get_model = virt_get_model;
-+	mach_reset = virt_reset;
-+	mach_halt = virt_halt;
-+	mach_power_off = virt_halt;
-+}
-diff --git a/arch/m68k/virt/ints.c b/arch/m68k/virt/ints.c
-new file mode 100644
-index 000000000000..c4e6386afeef
---- /dev/null
-+++ b/arch/m68k/virt/ints.c
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/sched/debug.h>
-+#include <linux/types.h>
-+
-+#include <asm/hwtest.h>
-+#include <asm/irq.h>
-+#include <asm/irq_regs.h>
-+#include <asm/virt.h>
-+
-+#define GFPIC_REG_IRQ_PENDING           0x04
-+#define GFPIC_REG_IRQ_DISABLE_ALL       0x08
-+#define GFPIC_REG_IRQ_DISABLE           0x0c
-+#define GFPIC_REG_IRQ_ENABLE            0x10
-+
-+extern void show_registers(struct pt_regs *regs);
-+
-+/*
-+ * 6 goldfish-pic for CPU IRQ #1 to IRQ #6
-+ * CPU IRQ #1 -> PIC #1
-+ *               IRQ #1 to IRQ #31 -> unused
-+ *               IRQ #32 -> goldfish-tty
-+ * CPU IRQ #2 -> PIC #2
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 1 to 32
-+ * CPU IRQ #3 -> PIC #3
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 33 to 64
-+ * CPU IRQ #4 -> PIC #4
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 65 to 96
-+ * CPU IRQ #5 -> PIC #5
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 97 to 128
-+ * CPU IRQ #6 -> PIC #6
-+ *               IRQ #1 -> goldfish-timer
-+ *               IRQ #2 -> goldfish-rtc
-+ *               IRQ #3 to IRQ #32 -> unused
-+ * CPU IRQ #7 -> NMI
-+ */
-+
-+static u32 gfpic_read(int pic, int reg)
-+{
-+	void __iomem *base = (void *)(virt_bi_data.pic.mmio + pic * 0x1000);
-+
-+	return ioread32be(base + reg);
-+}
-+
-+static void gfpic_write(u32 value, int pic, int reg)
-+{
-+	void __iomem *base = (void *)(virt_bi_data.pic.mmio + pic * 0x1000);
-+
-+	iowrite32be(value, base + reg);
-+}
-+
-+#define GF_PIC(irq) ((irq - IRQ_USER) / 32)
-+#define GF_IRQ(irq) ((irq - IRQ_USER) % 32)
-+
-+static void virt_irq_enable(struct irq_data *data)
-+{
-+	gfpic_write(1 << GF_IRQ(data->irq), GF_PIC(data->irq),
-+		    GFPIC_REG_IRQ_ENABLE);
-+}
-+
-+static void virt_irq_disable(struct irq_data *data)
-+{
-+	gfpic_write(1 << GF_IRQ(data->irq), GF_PIC(data->irq),
-+		    GFPIC_REG_IRQ_DISABLE);
-+}
-+
-+static unsigned int virt_irq_startup(struct irq_data *data)
-+{
-+	virt_irq_enable(data);
-+	return 0;
-+}
-+
-+static irqreturn_t virt_nmi_handler(int irq, void *dev_id)
-+{
-+	static int in_nmi;
-+
-+	if (READ_ONCE(in_nmi))
-+		return IRQ_HANDLED;
-+	WRITE_ONCE(in_nmi, 1);
-+
-+	pr_warn("Non-Maskable Interrupt\n");
-+	show_registers(get_irq_regs());
-+
-+	WRITE_ONCE(in_nmi, 0);
-+	return IRQ_HANDLED;
-+}
-+
-+static struct irq_chip virt_irq_chip = {
-+	.name		= "virt",
-+	.irq_enable	= virt_irq_enable,
-+	.irq_disable	= virt_irq_disable,
-+	.irq_startup	= virt_irq_startup,
-+	.irq_shutdown	= virt_irq_disable,
-+};
-+
-+static void goldfish_pic_irq(struct irq_desc *desc)
-+{
-+	u32 irq_pending;
-+	int irq_num;
-+	int pic = desc->irq_data.irq - 1;
-+
-+	irq_pending = gfpic_read(pic, GFPIC_REG_IRQ_PENDING);
-+	irq_num = IRQ_USER + pic * 32;
-+
-+	do {
-+		if (irq_pending & 1)
-+			generic_handle_irq(irq_num);
-+		++irq_num;
-+		irq_pending >>= 1;
-+	} while (irq_pending);
-+}
-+
-+void __init virt_init_IRQ(void)
-+{
-+	int i;
-+
-+	m68k_setup_irq_controller(&virt_irq_chip, handle_simple_irq, IRQ_USER,
-+				  NUM_VIRT_SOURCES - IRQ_USER);
-+
-+	for (i = 0; i < 6; i++) {
-+		irq_set_chained_handler(virt_bi_data.pic.irq + i,
-+					goldfish_pic_irq);
-+	}
-+
-+	if (request_irq(IRQ_AUTO_7, virt_nmi_handler, 0, "NMI",
-+			virt_nmi_handler))
-+		pr_err("Couldn't register NMI\n");
-+}
-diff --git a/arch/m68k/virt/platform.c b/arch/m68k/virt/platform.c
-new file mode 100644
-index 000000000000..f432b90dcd1a
---- /dev/null
-+++ b/arch/m68k/virt/platform.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/platform_device.h>
-+#include <linux/interrupt.h>
-+#include <linux/memblock.h>
-+#include <asm/virt.h>
-+#include <asm/irq.h>
-+
-+#define VIRTIO_BUS_NB	128
-+
-+static int __init virt_virtio_init(int id)
-+{
-+	const struct resource res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.virtio.mmio + id * 0x200, 0x200),
-+		DEFINE_RES_IRQ(virt_bi_data.virtio.irq + id),
-+	};
-+	struct platform_device *pdev;
-+
-+	pdev = platform_device_register_simple("virtio-mmio", id,
-+					       res, ARRAY_SIZE(res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	return 0;
-+}
-+
-+static int __init virt_platform_init(void)
-+{
-+	const struct resource goldfish_tty_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.tty.mmio, 1),
-+		DEFINE_RES_IRQ(virt_bi_data.tty.irq),
-+	};
-+	/* this is the second gf-rtc, the first one is used by the scheduler */
-+	const struct resource goldfish_rtc_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.rtc.mmio + 0x1000, 0x1000),
-+		DEFINE_RES_IRQ(virt_bi_data.rtc.irq + 1),
-+	};
-+	struct platform_device *pdev;
-+	int i;
-+
-+	if (!MACH_IS_VIRT)
-+		return -ENODEV;
-+
-+	/* We need this to have DMA'able memory provided to goldfish-tty */
-+	min_low_pfn = 0;
-+
-+	pdev = platform_device_register_simple("goldfish_tty",
-+					       PLATFORM_DEVID_NONE,
-+					       goldfish_tty_res,
-+					       ARRAY_SIZE(goldfish_tty_res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	pdev = platform_device_register_simple("goldfish_rtc",
-+					       PLATFORM_DEVID_NONE,
-+					       goldfish_rtc_res,
-+					       ARRAY_SIZE(goldfish_rtc_res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	for (i = 0; i < VIRTIO_BUS_NB; i++) {
-+		int err;
-+
-+		err = virt_virtio_init(i);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+arch_initcall(virt_platform_init);
--- 
-2.34.1
-
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>

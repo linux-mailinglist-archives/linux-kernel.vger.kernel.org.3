@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185BF495170
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF337495183
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376641AbiATP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiATP1k (ORCPT
+        id S1376699AbiATPdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:33:51 -0500
+Received: from mail-108-mta11.mxroute.com ([136.175.108.11]:33777 "EHLO
+        mail-108-mta11.mxroute.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376666AbiATPdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:27:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A146C061574;
-        Thu, 20 Jan 2022 07:27:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBD2861840;
-        Thu, 20 Jan 2022 15:27:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F58CC340E0;
-        Thu, 20 Jan 2022 15:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642692459;
-        bh=Pw9woOKfBVJV94yKFOUNOSr0Qw3ODqyl0O2HtAePtz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pOKuNzyOrqoltMx1Os0/MBtmr/0Xb8E2I3GsmntkfouHLWh2rc+3eAmcf3brDY4+t
-         Fbmu+22jcLD8zPsoLRItEYBxaFP/LmFrM+ZNY+7Hu6v4pDwNmCdQmOBa84URMALXbP
-         t0P5+cQEQdYOBsE97ZNpat/tAti3jxnQ18Y+zs6Ym7qyCTeHef5hOeQzXZcVJInPwz
-         /GVflmj6mwk/B0emQh9mlNzIvE/iVZ0lh8yVxwGOrRE3cwmSIjCH0KPcw3OPiUydMC
-         Ey4aZayhMg8op0x5rg+6sjZW9YF+bJzBfJCR6vCSv/xPMKQ/4LpvFwVvlVpa42q4+2
-         EQV2Hzq9pBsJA==
-Date:   Thu, 20 Jan 2022 07:27:36 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Joao Martins <joao.m.martins@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nvdimm@lists.linux.dev
-Subject: Re: Phyr Starter
-Message-ID: <20220120152736.GB383746@dhcp-10-100-145-180.wdc.com>
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
- <20220111004126.GJ2328285@nvidia.com>
- <20220120135602.GA11223@lst.de>
+        Thu, 20 Jan 2022 10:33:47 -0500
+Received: from filter004.mxroute.com ([149.28.56.236] filter004.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta11.mxroute.com (ZoneMTA) with ESMTPSA id 17e781a9fcb000bdf2.004
+ for <linux-kernel@vger.kernel.org>
+ (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256);
+ Thu, 20 Jan 2022 15:28:37 +0000
+X-Zone-Loop: 8b04c47f0568cd3a1f4ee070b5f323d3a2297cbb00ea
+X-Originating-IP: [149.28.56.236]
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ds0.me; s=x
+        ; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From
+        :Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=d4rlcBSsDMSlADxswOGFTDUxcitWqo4M6bUPgSom6w0=; b=Y
+        cBI97RpG7pM4ucvHjBwkZMoxkSbQEsL/zRDaAqKe8oCW+Xjm+WeWmZPxE6+dojhEap9vQkDPhmlug
+        IipZOJ5XutXwm2Y4Plz6ZZHD6oHxwrmva0CqGNz6S/1Yv/X2x9LAR+kDpXoz6KLbEESIP9X090zb/
+        HZH6cHmNYSnExDT2fi8uv4m/fNYHNij6fNQc06E031lSjSgpPG8S8TvVbiZ7Ny+jDRqzAYYaiPQw0
+        f//4DRDFnwqx5jII50eEtWrQru4lCrI5PK/4rozq5nk9CsDU71ZBwqiGz2Pb7phd1Y3cTjgvf8ChM
+        Ws/+MZE9TJdI5ecpWoLa8rK/EWAbpcJtQ==;
+From:   Myrtle Shah <gatecat@ds0.me>
+To:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: 
+Date:   Thu, 20 Jan 2022 15:28:26 +0000
+Message-Id: <20220120152828.4089364-1-gatecat@ds0.me>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120135602.GA11223@lst.de>
+Content-Transfer-Encoding: 8bit
+X-AuthUser: dave@ds0.me
+X-Spam: Yes
+X-Zone-Spam-Resolution: add header
+X-Zone-Spam-Status: Yes, score=11, required=15, tests=[ARC_NA=0,
+ SPAM_FLAG=5, FROM_HAS_DN=0, RCPT_COUNT_THREE=0, R_MISSING_CHARSET=2.5,
+ TO_DN_NONE=0, BROKEN_CONTENT_TYPE=1.5, NEURAL_SPAM=0, MID_CONTAINS_FROM=1,
+ RCVD_COUNT_ZERO=0, FROM_EQ_ENVFROM=0, EMPTY_SUBJECT=1, MIME_TRACE=0]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 02:56:02PM +0100, Christoph Hellwig wrote:
->  - on the input side to dma mapping the bio_vecs (or phyrs) are chained
->    as bios or whatever the containing structure is.  These already exist
->    and have infrastructure at least in the block layer
->  - on the output side I plan for two options:
-> 
-> 	1) we have a sane IOMMU and everyting will be coalesced into a
-> 	   single dma_range.  This requires setting the block layer
-> 	   merge boundary to match the IOMMU page size, but that is
-> 	   a very good thing to do anyway.
+These are some initial patches to bugs I found attempting to
+get a XIP kernel working on hardware:
+ - 32-bit VexRiscv processor
+ - kernel in SPI flash, at 0x00200000
+ - 16MB of RAM at 0x10000000
+ - MMU enabled
+ 
+I still have some more debugging to do, but these at least
+get the kernel as far as initialising the MMU, and I would
+appreciate feedback if anyone else is working on RISC-V XIP.
 
-It doesn't look like IOMMU page sizes are exported, or even necessarily
-consistently sized on at least one arch (power).
+

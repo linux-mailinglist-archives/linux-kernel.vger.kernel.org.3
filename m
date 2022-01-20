@@ -2,88 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D66494D00
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D265494D0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiATLa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:30:26 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:32812 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiATLaQ (ORCPT
+        id S231639AbiATLc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230322AbiATLcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:30:16 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BB84E1F3A9;
-        Thu, 20 Jan 2022 11:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642678215; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hMdsMQ3UDrdB0PRLNa+gMwzIPnRngx5xU9S2kt0+kEY=;
-        b=K0oj/T6SaED8kiu1SBUfv4/4ofe8Yf8K+LUQA206chkyu6eMVprjU9w3+P3QhDYS3OEvvU
-        9KnpG5cEE7bHjza8RaVyY+ZdTwpcWqF62/9mVRiUlgDEuaODV4awVEBltI8JA7MIY9Tc1j
-        mZ5JOahQa7i+slgZtachrZzdl2ZPHkc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642678215;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hMdsMQ3UDrdB0PRLNa+gMwzIPnRngx5xU9S2kt0+kEY=;
-        b=BzDJdcnmDnK6w3Ytgn+LSyczSS7d3QVDE88+AjfxDO8pLlvwZECAYnd5E6FHQo0cjQxIIQ
-        wXSrUKKLYjSK8zBA==
-Received: from quack3.suse.cz (unknown [10.100.200.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D4C00A3B87;
-        Thu, 20 Jan 2022 11:30:09 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 66345A05D9; Thu, 20 Jan 2022 12:30:15 +0100 (CET)
-Date:   Thu, 20 Jan 2022 12:30:15 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     trix@redhat.com
-Cc:     jack@suse.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] quota: cleanup double word in comment
-Message-ID: <20220120113015.clp4qx4h3hzg7dl6@quack3.lan>
-References: <20220116125936.389767-1-trix@redhat.com>
+        Thu, 20 Jan 2022 06:32:25 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DBC061574;
+        Thu, 20 Jan 2022 03:32:24 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so27561886edn.0;
+        Thu, 20 Jan 2022 03:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WwqLFdAqbjzHEvpW1UH/4aQ0iDawRpJsHatZKSEMOk8=;
+        b=cPo6jp4f0KIo9GC4MryHnLdBB3d79OC04LySscCUQzgVHJfgRsxvDxRifOMMyXN2YA
+         2HangN6G4bO4nSooM8s4WBgTcZek0iITbEU29p7sMmNfZNKTqdF+9ElkC1qG7yP88uxa
+         xQYbqNGp15diaAd9PY0pubkt1juVJWACWzjRCP+9rHRHwNlXPwzcKQu8MBrTX3Ln3+Yd
+         rbm4K1nrPXeMLfQljPCtLY+QX9+UGPI3DKWT6WGeKylTs/BwjFCRwssodWGezi4rEe1E
+         o45RslrdeczWVZjSH1NRdUYijqE6TTW+okrp76moFno6wqtlNOFKCymyCHVCkGp6p5ZB
+         rNkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WwqLFdAqbjzHEvpW1UH/4aQ0iDawRpJsHatZKSEMOk8=;
+        b=PNGn8xzUzewLsY3OP3wVIIfrARFF7Yvfw4dmzP2wjmY4YxVKJSZ9LhG1TjHPqvdVmw
+         Don0WMKSf4xjOBdrnyR9Z6g7sVayvKEA4Db+JywjrKXDO2vK+4M4gSTPVV1VH+rihe+P
+         chKu7FQj6cd5RDnWylpUcoKlku48NtDI0R+SHTLVddRb1XuXanXykrADffRKDrJANXEC
+         Er4o6EIy4obq9WdDt4+RVA0cmY2i0wM16ItBrEvE58pHw7x6nQ+gFtuFv12jX1I6zgqf
+         BOoGROaqsNDF5JQAa9kfU5no5g6l0kAhTLOrK1P4X2d8iprGHwTRje8GXMe4P4/4u0YM
+         CmTw==
+X-Gm-Message-State: AOAM531ThnBVsq5MI+QNR3FF7WCojlpGwWTZId87lXqAQu9D6zDa3qKI
+        3ggT+1Hv7XqYQOay95sD1LDZoIiuaEoRKrxsjL7/VGy/OgdZhw==
+X-Google-Smtp-Source: ABdhPJwb6RqXpYiaUV3x8IjDCNXLKolMSHKJFWmmgMamNK4UgHoa7a/w+4nlHP/suS2cjf2Pt1JVcTChIVOUEa/jsGo=
+X-Received: by 2002:a17:906:8693:: with SMTP id g19mr23021785ejx.579.1642678343371;
+ Thu, 20 Jan 2022 03:32:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220116125936.389767-1-trix@redhat.com>
+References: <20220119230626.31560-1-terry.bowman@amd.com>
+In-Reply-To: <20220119230626.31560-1-terry.bowman@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 20 Jan 2022 13:30:40 +0200
+Message-ID: <CAHp75VcUVY+51o0DFhvYTjpydfF=L_rTGan74sZRMPDMmXtsQg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Robert Richter <rrichter@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        sudheesh.mavila@amd.com,
+        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 16-01-22 04:59:36, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Remove the second 'handle'.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Thu, Jan 20, 2022 at 1:06 AM Terry Bowman <terry.bowman@amd.com> wrote:
+>
+> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+> disabled on later AMD processors.
+>
+> This series includes patches with MMIO accesses to registers
+> FCH::PM::DECODEEN and FCH::PM::ISACONTROL. The same registers are also
+> accessed by the sp5100_tco driver.[1] Synchronization to the MMIO
+> registers is required in both drivers.
+>
+> The first patch creates a macro to request MMIO region using the 'muxed'
+> retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
+>
+> The second patch replaces a hardcoded region size with a #define. This is
+> to improve maintainability and was requested from v2 review.
+>
+> The third patch moves duplicated region request/release code into
+> functions. This locates related code into functions and reduces code line
+> count. This will also make adding MMIO support in patch 6 easier.
+>
+> The fourth patch moves SMBus controller address detection into a function.
+> This is in preparation for adding MMIO region support.
+>
+> The fifth patch moves EFCH port selection into a function. This is in
+> preparation for adding MMIO region support.
+>
+> The sixth patch adds MMIO support for region requesting/releasing and
+> mapping. This is necessary for using MMIO to detect SMBus controller
+> address, enable SMBbus controller region, and control the port select.
+>
+> The seventh patch updates the SMBus controller address detection to support
+> using MMIO. This is necessary because the driver accesses registers
+> FCH::PM::DECODEEN and FCH::PM::ISACONTOL during initialization and they are
+> only available using MMIO on later AMD processors.
+>
+> The eighth patch updates the SMBus port selection to support MMIO. This is
+> required because port selection control resides in the
+> FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later AMD
+> processors.
+>
+> The ninth patch enables the EFCH MMIO functionality added earlier in this
+> series. The SMBus controller's PCI revision ID is used to check if EFCH
+> MMIO is supported by HW and should be enabled in the driver.
 
-Thanks. Applied to my tree.
+In general looks good to me, but I believe it will be much better if
+we agreed on converting driver to use iomap_port() +
+ioreadXX()/iowriteXX() (means dropping I/O accessor _p variants for
+good). This would make the series cleaner and less invasive.
 
-								Honza
-
-> ---
->  include/linux/quota.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/quota.h b/include/linux/quota.h
-> index 18ebd39c94871..fd692b4a41d5f 100644
-> --- a/include/linux/quota.h
-> +++ b/include/linux/quota.h
-> @@ -91,7 +91,7 @@ extern bool qid_valid(struct kqid qid);
->   *
->   *	When there is no mapping defined for the user-namespace, type,
->   *	qid tuple an invalid kqid is returned.  Callers are expected to
-> - *	test for and handle handle invalid kqids being returned.
-> + *	test for and handle invalid kqids being returned.
->   *	Invalid kqids may be tested for using qid_valid().
->   */
->  static inline struct kqid make_kqid(struct user_namespace *from,
-> -- 
-> 2.26.3
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+With Best Regards,
+Andy Shevchenko

@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97FE494DAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82165494DBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbiATMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:14:03 -0500
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:39459 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiATMN4 (ORCPT
+        id S233917AbiATMPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:15:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46012 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232764AbiATMPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:13:56 -0500
-Received: by mail-ua1-f41.google.com with SMTP id p7so3224137uao.6;
-        Thu, 20 Jan 2022 04:13:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=olNvo1hlOps7yRNGdWPhIvGrV31s5RQbZPcE1Lfk/FY=;
-        b=DPYJ92Mw1I2q8aKrJ0lGi3LDJ1jkP1hsAXidhUNlxbbp5DKsUBDRIGJaxx5IPBcxMg
-         +scjWssmycN5Mx/pVYF7JzPJU9XG6Y6weUaQdIaOhlZk0UZKesZgibSSNmje79Owdc7R
-         RUAEz/1Z7WNyF7abNMxc64RntmC+jfIfNgD4OxTiI1svXYxrkEdKRNd++0vionl14Asm
-         CwuvONKs/XboBl9WQ6ukcfxOxCmfYE9HP/2ZQCVCvnEL/Mco79R0aaw8BoGW+8NPYmlG
-         i5UJ9syUp9HOJq8QkWYZsBMkJXabSsXy13bDLHS6b6fmoASnzUMvLAAZjictT0qE7ETl
-         XHDA==
-X-Gm-Message-State: AOAM531S3SP+bH4gtBIh+1JIR8vV60yDAxw0nSPN+X1dZbzofPJRCAqm
-        i38lOYLpQhIS9wRIIymrByHvhUTB86ecdQ==
-X-Google-Smtp-Source: ABdhPJz10yFfydZ2MyS/VscLmlnd50fxuJ8Fa/CJ2sGh4z+eWVPfuJo8I+95gQfk3FoXG7IxuBDkHw==
-X-Received: by 2002:a05:6102:94e:: with SMTP id a14mr519914vsi.86.1642680835432;
-        Thu, 20 Jan 2022 04:13:55 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id m6sm420318vsc.28.2022.01.20.04.13.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 04:13:55 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id l1so8555495uap.8;
-        Thu, 20 Jan 2022 04:13:55 -0800 (PST)
-X-Received: by 2002:a67:e055:: with SMTP id n21mr551166vsl.57.1642680834901;
- Thu, 20 Jan 2022 04:13:54 -0800 (PST)
-MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
- <87bl0amc6s.fsf@x1.stackframe.org> <20220118103323.4bae3a7d@eldfell>
- <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org> <CAMuHMdWV+-+Jr7HggbfH_GEDcdep4pJLiMG+15jxBvQ91BCS0w@mail.gmail.com>
- <CAKMK7uEOFg3z2btFERQ5XBQ7hqex6bXCb9X=SdwCjeLfX_SdFw@mail.gmail.com>
-In-Reply-To: <CAKMK7uEOFg3z2btFERQ5XBQ7hqex6bXCb9X=SdwCjeLfX_SdFw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Jan 2022 13:13:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVjv1+UNeXkCBE+80tdtLuNg=5d6N12hNLgJdaS-jxERg@mail.gmail.com>
-Message-ID: <CAMuHMdVjv1+UNeXkCBE+80tdtLuNg=5d6N12hNLgJdaS-jxERg@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sven Schnelle <svens@stackframe.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 20 Jan 2022 07:15:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31142616AF;
+        Thu, 20 Jan 2022 12:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E53C340E0;
+        Thu, 20 Jan 2022 12:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642680933;
+        bh=0zqjRx17jeQjOp1ol5omqJUXW3BnaewnNO4FG3prRkM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ihUgSNX5R5BLdm/EgKc1Xd0m/WUKj/xJJKFgn0xd6tHchDDoW3zUL3mOYEybMoZm1
+         r5yWPtR1q9gLxHv4MXtT9Ss2ZtGIUuljKzpemqUiFFndGkxP1rMzQ9rgP2QXCZIAf/
+         D8puAzQs6H50/JWpUngeFbFb/p2dbxJ+fzRMQtdo55J0M4/jAZrgOBrgBhXl84/fpP
+         39GuC5D9+AlHQoaBMLGe/xBvu0HYUpOYsXt0Y2ikFeo3Y8N2w7cxZvc+Ppd5TO7PaB
+         hE8SEZeWUvrEXUyp2iMqQJRwJ9QUNFrdxZDbCQ+qD+aH6Y6RgVYeLwdGhFqpf6suTU
+         H4WFVYmqI+Smw==
+Date:   Thu, 20 Jan 2022 21:15:27 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v3 7/9] bpf: Add kprobe link for attaching raw
+ kprobes
+Message-Id: <20220120211527.cd46c74ce2ad8f401aec545a@kernel.org>
+In-Reply-To: <Yek9Jq1UVa8fq91n@krava>
+References: <164260419349.657731.13913104835063027148.stgit@devnote2>
+        <164260427009.657731.15292670471943106202.stgit@devnote2>
+        <Yek9Jq1UVa8fq91n@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Thu, 20 Jan 2022 11:44:54 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-On Thu, Jan 20, 2022 at 12:33 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> On Thu, Jan 20, 2022 at 10:06 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Thu, Jan 20, 2022 at 4:29 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
-> > > On Tue, Jan 18, 2022 at 10:33:23AM +0200, Pekka Paalanen wrote:
-> > > > On Mon, 17 Jan 2022 19:47:39 +0100
-> > > > Sven Schnelle <svens@stackframe.org> wrote:
-> > > > > I also tested the speed on my Thinkpad X1 with Intel graphics, and there
-> > > > > a dmesg with 919 lines one the text console took about 2s to display. In
-> > > > > x11, i measure 22ms. This might be unfair because encoding might be
-> > > > > different, but i cannot confirm the 'memcpy' is faster than hardware
-> > > > > blitting' point. I think if that would be the case, no-one would care
-> > > > > about 2D acceleration.
-> > > >
-> > > > I think that is an extremely unfair comparison, because a graphical
-> > > > terminal app is not going to render every line of text streamed to it.
-> > > > It probably renders only the final view alone if you simply run
-> > > > 'dmesg', skipping the first 800-900 lines completely.
-> > >
-> > > Probably more like "render on every vblank", but yes, unlike fbcon it
-> > > surely wouldn't render every single character sent to the terminal.
-> > >
-> > > Also acceleration on modern hardware is more like "compose window
-> > > content using the 3d engine" than "use 2d blitter to scroll the window".
-> > >
-> > > > Maybe fbcon should do the same when presented with a flood of text,
-> > > > but I don't know how or why it works like it works.
-> > >
-> > > fbcon could do the same, i.e. render to fbdev in a 60Hz timer instead of
-> > > doing it synchronously.
-> >
-> > Hopefully only the parts of the screen which need a redraw?
-> >
-> > Not all displays can be updated that fast. For a "modern" example, see
-> > https://patchwork.freedesktop.org/series/93070/.
->
-> drm does damage tracking throughout the stack, e.g.
->
-> https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#damage-tracking-properties
->
-> And unlike fbdev, it's explicit (so less overhead since userspace
-> generally knows what it's drawn) and doesn't rely on page fault
-> intercepting and fun stuff like that.
+> On Wed, Jan 19, 2022 at 11:57:50PM +0900, Masami Hiramatsu wrote:
+> 
+> SNIP
+> 
+> > +static int kprobe_link_prog_run(struct bpf_kprobe_link *kprobe_link,
+> > +				struct pt_regs *regs)
+> > +{
+> > +	struct bpf_trace_run_ctx run_ctx;
+> > +	struct bpf_run_ctx *old_run_ctx;
+> > +	int err;
+> > +
+> > +	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
+> > +		err = 0;
+> > +		goto out;
+> > +	}
+> > +
+> > +	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+> > +	run_ctx.bpf_cookie = kprobe_link->bpf_cookie;
+> > +
+> > +	rcu_read_lock();
+> > +	migrate_disable();
+> > +	err = bpf_prog_run(kprobe_link->link.prog, regs);
+> > +	migrate_enable();
+> > +	rcu_read_unlock();
+> > +
+> > +	bpf_reset_run_ctx(old_run_ctx);
+> > +
+> > + out:
+> > +	__this_cpu_dec(bpf_prog_active);
+> > +	return err;
+> > +}
+> > +
+> > +static void kprobe_link_entry_handler(struct fprobe *fp, unsigned long entry_ip,
+> > +				      struct pt_regs *regs)
+> > +{
+> > +	struct bpf_kprobe_link *kprobe_link;
+> > +
+> > +	/*
+> > +	 * Because fprobe's regs->ip is set to the next instruction of
+> > +	 * dynamic-ftrace insturction, correct entry ip must be set, so
+> > +	 * that the bpf program can access entry address via regs as same
+> > +	 * as kprobes.
+> > +	 */
+> > +	instruction_pointer_set(regs, entry_ip);
+> 
+> ok, so this actually does the stall for me.. it changes
+> the return address back to repeat the call again
 
-My reply was to a paragraph about rendering text by fbcon, not about
-userspace rendering graphics.
+Good catch! and don't mind, this change is introduced me :-P.
+I thought that if I didn't add the FTRACE_FL_IPMODIFY, ftrace
+ignores the updated regs->ip, but it doesn't.
 
-> Like do people actually know what drm can and cannot do, or would that
-> take out all the fun?
+> bu I think it's good idea to carry the original ip in regs
+> (for bpf_get_func_ip helper) so I think we need to save it
+> first and restore after the callback
 
-;-)
+Yes, btw, should I do that fix in fprobe?
 
-Gr{oetje,eeting}s,
+> 
+> I'll make the fix and add cookie change Andrii asked for
+> on top of your ftrace changes and let you know
 
-                        Geert
+OK, thank you!
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> thanks,
+> jirka
+> 
+> > +	kprobe_link = container_of(fp, struct bpf_kprobe_link, fp);
+> > +	kprobe_link_prog_run(kprobe_link, regs);
+> > +}
+> > +
+> 
+> SNIP
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

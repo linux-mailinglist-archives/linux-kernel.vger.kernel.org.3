@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C40B494CBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B1C494CBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiATLUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:20:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26428 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229779AbiATLU2 (ORCPT
+        id S230506AbiATLU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:20:27 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58747 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229929AbiATLUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:20:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642677628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oxb420uCG8aBuWa1aCClpOccejYPa+jGmi+S8D+HWIA=;
-        b=dqZ2bOH7D8vjoQ7O8sfP2d3GQIfozdQ/nufUUfANVRlQO3OgjoLUIVWuPF6O3YwXS5W/pT
-        EsJCBJGjQDGudQrVJPiR7utmCXfSDPJTDeAr7gySpH8E8S1+AY7KpyEDCtQdWUTaSGeGT/
-        rZBiTVldn10ZKj1mdQraGcn99skROcs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-Ob-x14i1MFOoWEmJULK6Xg-1; Thu, 20 Jan 2022 06:20:26 -0500
-X-MC-Unique: Ob-x14i1MFOoWEmJULK6Xg-1
-Received: by mail-wm1-f71.google.com with SMTP id f188-20020a1c1fc5000000b0034d79edde84so2628819wmf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:20:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oxb420uCG8aBuWa1aCClpOccejYPa+jGmi+S8D+HWIA=;
-        b=Yq+lz9Nytanp5UhRNzZ9wCV5Pkmno5XaSPn0wXNE8g5Xf3Ly0YIRHyMOzmZYnY7Xac
-         jEvpdcfmwi+vy3g11TWMpinDaXbGsNCob6IblVo26KZ5ySAyXPCOVKEimLNGlPLtunYj
-         EZpW1Awspwys+OJ8hc2hqWMBY6vZFPqA9ziccMvgmgyaf87VskI6n81OH3LfHrQ1IAfi
-         6z6wBDzn1zsPEQHQrcfCMJ9tyNj/83vhsrDfwzS7BJ4en75Vq3jTt1Gei6Nc5Jxni+bp
-         6DkoTeqbRgzADP/H1fBI3DkJ4vjDBKjE5UDooye4LGZD4ZG3hYj7P6rMBJBypLNzmvCb
-         6kHQ==
-X-Gm-Message-State: AOAM531sK6x35fhvHmkJpoDvUuNKthEazB8lQ/BHh9MDGq9xEWPoXgFj
-        UTrsWsnh2AtK+K9akTNa3POYdJvOHRjPHC58yKpP/7mSVNuJrqYWA03EbfIn65iUNgQuBHgw4AE
-        0nur5EWtyB4wzwbW9KovS0dDw
-X-Received: by 2002:a05:600c:3b9e:: with SMTP id n30mr8578825wms.180.1642677625121;
-        Thu, 20 Jan 2022 03:20:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7Cz1Uxk2SJP0IdOYpHjH87YRl1ckQst1vd6li4i603rWoRBIOUpateX35UnGplxJW3hlwRQ==
-X-Received: by 2002:a05:600c:3b9e:: with SMTP id n30mr8578776wms.180.1642677624854;
-        Thu, 20 Jan 2022 03:20:24 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id l9sm2098284wrs.43.2022.01.20.03.20.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 03:20:24 -0800 (PST)
-Message-ID: <ae988971-4184-36f4-98e8-32936dd7ea85@redhat.com>
-Date:   Thu, 20 Jan 2022 12:20:20 +0100
+        Thu, 20 Jan 2022 06:20:24 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jfg6G5dSqz4y4j;
+        Thu, 20 Jan 2022 22:20:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642677623;
+        bh=iqUsG87yfMvfv/IQ2eoQRriRKCriolP8xFdQ7tWzCgg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qLZCdAbn8YMTxOtWrZ0AEN/zGrCozq9hLO28DhSJhE58gPeXB/Yri080pEkr8riia
+         UTDBpoTm/XXu7hduTigllV0d+vdgJgPf5ep+afAi40/8N/MuN9orPIZuu14lMd5OEt
+         cO0rPut7XmbI4xUTWp7PPdukTdAD2zVCTHFwj08xhxxF+TVTgY9D40Tk7uIg/2NLVs
+         1U3azKnZLVDMg/NFkOsqvC1hDMKdunl9GHMFLU8kIbZE9oMFzKGwcmIT4ic7h8I9JD
+         p5f1Va6Wuy++AzumqJQQsnH0CsN0d4GChWqB2xZHgrw8m7uXho2Wa7lT0jR99/YocI
+         laUEwx9+2ocLQ==
+Date:   Thu, 20 Jan 2022 22:20:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: kvm: fix WARNINGs from api.rst
+Message-ID: <20220120222021.59ed67ae@canb.auug.org.au>
+In-Reply-To: <20220120045003.315177-1-wei.w.wang@intel.com>
+References: <20220120045003.315177-1-wei.w.wang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 7/7] kvm/x86: rework guest entry logic
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org
-Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, luto@kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paul.walmsley@sifive.com, peterz@infradead.org,
-        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220119105854.3160683-1-mark.rutland@arm.com>
- <20220119105854.3160683-8-mark.rutland@arm.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220119105854.3160683-8-mark.rutland@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Id.9yeainmpCH4b7QRU=QLm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 11:58, Mark Rutland wrote:
-> 
-> To minimize duplication and to more clearly balance entry and exit, both
-> entry and exit of guest timing are placed in vcpu_enter_guest(), using
-> the new guest_timing_{enter,exit}_irqoff() helpers. When context
-> tracking is used a small amount of additional time will be accounted
-> towards guests; tick-based accounting is unnaffected as IRQs are
-> disabled at this point and not enabled until after the return from the
-> guest.
-> 
-> This also corrects (benign) mis-balanced context tracking accounting
-> introduced in commits:
-> 
->    ae95f566b3d22ade ("KVM: X86: TSCDEADLINE MSR emulation fastpath")
->    26efe2fd92e50822 ("KVM: VMX: Handle preemption timer fastpath")
-> 
-> Where KVM can enter a guest multiple times, calling vtime_guest_enter()
-> without a corresponding call to vtime_account_guest_exit(), and with
-> vtime_account_system() called when vtime_account_guest() should be used.
-> As account_system_time() checks PF_VCPU and calls account_guest_time(),
-> this doesn't result in any functional problem, but is unnecessarily
-> confusing.
+--Sig_/Id.9yeainmpCH4b7QRU=QLm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I agree.
+Hi Wei,
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+On Wed, 19 Jan 2022 23:50:03 -0500 Wei Wang <wei.w.wang@intel.com> wrote:
+>
+> Use the api number 134 for KVM_GET_XSAVE2, instead of 42, which has been
+> used by KVM_GET_XSAVE.
+> Also, fix the WARNINGs of the underlines being too short.
+>=20
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Paolo
+Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
+> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
+rst
+> index d3791a14eb9a..bb8cfddbb22d 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5545,8 +5545,8 @@ the trailing ``'\0'``, is indicated by ``name_size`=
+` in the header.
+>  The Stats Data block contains an array of 64-bit values in the same order
+>  as the descriptors in Descriptors block.
+> =20
+> -4.42 KVM_GET_XSAVE2
+> -------------------
+> +4.134 KVM_GET_XSAVE2
+> +--------------------
+> =20
+>  :Capability: KVM_CAP_XSAVE2
+>  :Architectures: x86
+> @@ -7363,7 +7363,7 @@ trap and emulate MSRs that are outside of the scope=
+ of KVM as well as
+>  limit the attack surface on KVM's MSR emulation code.
+> =20
+>  8.28 KVM_CAP_ENFORCE_PV_FEATURE_CPUID
+> ------------------------------
+> +-------------------------------------
+> =20
+>  Architectures: x86
+> =20
+
+Thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Id.9yeainmpCH4b7QRU=QLm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHpRXUACgkQAVBC80lX
+0GxZXQf/YsxH1YdREFm5eoVnPU+9ktPp726YUre6oPhAEOU7KHSmISD+Zk/x0ue0
+Vira0f1Vl9el9ChfVVycVVAb0gwqLIt/bgCJVRaiflkPyugwO5xuKWsjIrQcJaCG
+GMFLMp9aCbo79MkbrY1fFmJa3te424Lb2oaDyTDUq2q0LxAfyTnsyWWBUoh6RZQZ
+m44+9Ba5K6DmoC6rMuFiraRkCLalV3NIUnzxmvz7bA2ZGoV6zyTKp+0yqbWDVpOj
+P9qA8exj9Um3pxxrJCjcVmx+nQCN3BI46lT2+aZFYTrHKEwndcToPBngmDy705g+
+B3yCuQJZ0PIUuO2eOLHVIy/I3dxZ+Q==
+=opJj
+-----END PGP SIGNATURE-----
+
+--Sig_/Id.9yeainmpCH4b7QRU=QLm--

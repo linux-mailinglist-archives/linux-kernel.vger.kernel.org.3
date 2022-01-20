@@ -2,147 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3FB494C2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97599494C37
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiATKwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S229741AbiATKyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiATKv5 (ORCPT
+        with ESMTP id S229526AbiATKyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:51:57 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D10C061746
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:51:56 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id p18so11133872wmg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:51:56 -0800 (PST)
+        Thu, 20 Jan 2022 05:54:00 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D93C061574;
+        Thu, 20 Jan 2022 02:54:00 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id cx27so27081209edb.1;
+        Thu, 20 Jan 2022 02:54:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0mEqvDNu9Zk6sTqlde6UJTd4iKTAhS2ZsSWCjtjL8Js=;
-        b=IbMaG71swN4sg6h7akifeOkgqmBmzGXKACVQZ7YeIkKLuvwtXX6p+6UctVNQY/APfF
-         bQqm3tf1/cVG4tduVkPRsNK0yY6hBpMXqtmBMl+cteiTxRv6AEClmvr74ai7lRU76R27
-         3U88OB7w/lEDblM5xJGdIi02EnnM6d2kY/MojR4TSfmNCbsVEUCVsO9fFo0hfM/B6Uvl
-         eeJNrt99WTtMoPozJa45ASMZicDTzwsh8BZkL0q8+S6jBl7Lx9BUo04suJkGEb2gT9g1
-         XVIDjgSG3Ad0UDwiLL+X6gg9rE3VO4BvA/h1Pgcp6OJRlgivxq/eMqUpWh7ANX6Vp4U5
-         7yTw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rueY/jFC2lLrcjtQ698sMwfakQXnY26l1d8Z0p1kGzY=;
+        b=auLHWOAe3eLtUNRB3I/GnroHB9vg/WLVbd9NGSlwq2h+rIeyZH+SKh06qHVXiFcb8f
+         uaP5tk8wF84oK+Hbfr3uMQbhw5K0PhDKKZ3EqCrsccaGA2a9DCYMfk06T+1GVwbfxisi
+         ux+RFoTRcNJYsSVpS0Dx3lDQ57yBbv+lrzCWTBGtW5a2UPrsKrMS37iIwI2CcCz9+rgS
+         rpj42xGjO8qh5hvMJt9pgXsa4TK6tgP2a4wQ8RN9hqBIP5luq1IUSZgiel0Dlt3i+vEl
+         /wcGnxCKVrwphXZ1IbGQKdPCM1yhyDSZJgcADt1jQIEygY43mxzRvVj/GHjhc87yo5CV
+         qiiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=0mEqvDNu9Zk6sTqlde6UJTd4iKTAhS2ZsSWCjtjL8Js=;
-        b=4rBEEM3Lhz1WqT+Sv/B/Knn+aZdvJAwjazDvc4VUr/7SfgaHSPGmFtDubP/ATa7oLZ
-         cmA93o98r1l1vm9WKPPTJtCk83sEbgQQcywhHVmmOUJMGaHefmZAQz6vez24J0t0Kopt
-         Byj6fUKB/eAc3WTT26HagJ/PuKM8U6r0o7DALQN9c0PfpAhPckZ/Jh17xoPXlUYpnCf8
-         yg5tE1+KJglEx0s7r62YcPS3531/LGosVyuDRiEYNwUA+N9udoxudpe46Ketut6uV2BU
-         WBNbzmKua+AT5CAhncAAiYvbusah15OBWmFE2XMfE5oRq43Djzg7iq0vgpbSb2w2+c5F
-         PcaQ==
-X-Gm-Message-State: AOAM533auFtPWOb3WlpRs3gL+jzB4wcgqjHLRpt4iEeqJRP3nC1LtJRi
-        ulPL9RPhPt2qBd4mG3+ncAhNAw==
-X-Google-Smtp-Source: ABdhPJxCmfCA/1jlhXZWdxR9sWvgeiXVFA3T8nw7/QKA41S71Chv5KYtJpjPG5UiXpySFQYrnJk1dQ==
-X-Received: by 2002:a05:6000:1d84:: with SMTP id bk4mr31790024wrb.708.1642675914618;
-        Thu, 20 Jan 2022 02:51:54 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:ced2:397a:bee8:75f5? ([2001:861:44c0:66c0:ced2:397a:bee8:75f5])
-        by smtp.gmail.com with ESMTPSA id b62sm1834642wmb.16.2022.01.20.02.51.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 02:51:53 -0800 (PST)
-Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: drop Enric Balletbo i
- Serra from maintainers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Simon Glass <sjg@chromium.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org
-References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <a370a74a-2548-fc20-20b0-89e48645086f@baylibre.com>
-Date:   Thu, 20 Jan 2022 11:51:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rueY/jFC2lLrcjtQ698sMwfakQXnY26l1d8Z0p1kGzY=;
+        b=sF2HqiVwfIXNqqcGiuBf5nYMOwtvmBhS3b+Issex0v+uLzrEWmOvF1Bs25OWaJwBZc
+         /tU8bVfrktRP6/bByM+q+y6OW/RYZmld0vpIzRAxaG+9Y6BsGZnbfsTP2NIegqcOjNaL
+         LVXr+akzvKrBBDC9RpxiSMO6mIp8hULOPz5kOOO84RB0/iw3ErBTHlReRwoTTdX3D5vY
+         9On2EYfUFV53GUI05sHVXeecsICHXIqOUBf+cBNLhfzytcLFKm+FOuOebv19mFXY3dye
+         qzLyAHWZzO8pcRcUb6lkz+jZtcojLrcqceYbmiGsG5Et0z0dzapzqS4Rc7n7nCRzKEfG
+         udQQ==
+X-Gm-Message-State: AOAM533SwplEnSPyzdyWV5Hny0LArUATWkIHW+xV84kyK7iwOfgd3MG4
+        LlgUySgDypix9AZjx0XEDYK6oHdqBHQ8H2SFpY8=
+X-Google-Smtp-Source: ABdhPJxGiMU1xrv7ZzwueN4iKsoTSUGlAYddhd/BYPDmdrQuY89UiTfUdv/qHPTtG90np5GBNclAJjIoXTK8m1rJRVM=
+X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr27927990ejc.639.1642676038694;
+ Thu, 20 Jan 2022 02:53:58 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220117142919.207370-1-marcan@marcan.st> <20220117142919.207370-8-marcan@marcan.st>
+In-Reply-To: <20220117142919.207370-8-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 20 Jan 2022 12:52:16 +0200
+Message-ID: <CAHp75Vfj-uqzmY24ByXLnhgyhEuaGpZckdczwUf=2OXL3aBuog@mail.gmail.com>
+Subject: Re: [PATCH v3 7/9] brcmfmac: of: Use devm_kstrdup for board_type &
+ check for errors
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2022 11:40, Krzysztof Kozlowski wrote:
-> Enric Balletbo i Serra emails bounce:
-> 
->   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
-> 
-> so drop him from the maintainers, similarly to commit 3119c28634dd
-> ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").  Add generic DRM
-> bridge maintainers to Analogix ANX7814.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/display/bridge/analogix,anx7814.yaml  | 4 +++-
->  .../bindings/display/bridge/google,cros-ec-anx7688.yaml       | 1 -
->  Documentation/devicetree/bindings/display/bridge/ps8640.yaml  | 1 -
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
-> index 8e13f27b28ed..bce96b5b0db0 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7814.yaml
-> @@ -7,7 +7,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Analogix ANX7814 SlimPort (Full-HD Transmitter)
->  
->  maintainers:
-> -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> +  - Andrzej Hajda <andrzej.hajda@intel.com>
-> +  - Neil Armstrong <narmstrong@baylibre.com>
-> +  - Robert Foss <robert.foss@linaro.org>
->  
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> index 9f7cc6b757cb..a88a5d8c7ba5 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> @@ -8,7 +8,6 @@ title: ChromeOS EC ANX7688 HDMI to DP Converter through Type-C Port
->  
->  maintainers:
->    - Nicolas Boichat <drinkcat@chromium.org>
-> -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
->  
->  description: |
->    ChromeOS EC ANX7688 is a display bridge that converts HDMI 2.0 to
-> diff --git a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-> index cdaf7a7a8f88..186e17be51fb 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-> @@ -8,7 +8,6 @@ title: MIPI DSI to eDP Video Format Converter Device Tree Bindings
->  
->  maintainers:
->    - Nicolas Boichat <drinkcat@chromium.org>
-> -  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
->  
->  description: |
->    The PS8640 is a low power MIPI-to-eDP video format converter supporting
-> 
+On Mon, Jan 17, 2022 at 4:31 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> This was missing a NULL check, and we can collapse the strlen/alloc/copy
+> into a devm_kstrdup().
 
-Let's wait for Enric's response, but in any case (removal or new address):
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Nice patch. After dropping the message,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Neil
+>                 /* get rid of '/' in the compatible string to be able to find the FW */
+>                 len = strlen(tmp) + 1;
+> -               board_type = devm_kzalloc(dev, len, GFP_KERNEL);
+> -               strscpy(board_type, tmp, len);
+> +               board_type = devm_kstrdup(dev, tmp, GFP_KERNEL);
+> +               if (!board_type) {
+> +                       brcmf_err("out of memory allocating board_type\n");
+> +                       of_node_put(root);
+> +                       return;
+> +               }
+
+>                 for (i = 0; i < board_type[i]; i++) {
+>                         if (board_type[i] == '/')
+>                                 board_type[i] = '-';
+
+Next step is to replace this with NIH strreplace()
+
+And
+  of_property_read_string_index(root, "compatible", 0, &tmp);
+with
+  of_property_read_string(root, "compatible", &tmp);
+
+And might add an error check, but I believe if there is no compatible
+property present, this can't be called.
+
+-- 
+With Best Regards,
+Andy Shevchenko

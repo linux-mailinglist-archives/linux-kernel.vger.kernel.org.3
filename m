@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BB849474F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34133494751
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358732AbiATG3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S1358744AbiATGbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358720AbiATG3k (ORCPT
+        with ESMTP id S1358734AbiATGbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:29:40 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC28C061574;
-        Wed, 19 Jan 2022 22:29:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 20 Jan 2022 01:31:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8BC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 22:31:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfXfl22hFz4y3h;
-        Thu, 20 Jan 2022 17:29:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1642660177;
-        bh=R8Lod9NCI3CxXO/2uoFfkneQILqcaNlu86/osFgCPZw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=gW8o1nPnWaSH1pl/Q48PFuObAFuQuO44Q1u+3v7D0bT8MRNn9d67w3bhfzPNngK/L
-         eMahvidGZXdGUDyOmAZ75zHT3iSfy+LFaSreoZYPsNsSj7H76oAuPO5oGSfc+dduTo
-         iaOexIEQXOnU9b0BBHXIC7oH/W2A4gY8gamLFzQCZF5DicbhrHCBiQGptGOSuz0Lnv
-         yEks+86Pe2rnmuPaxzrBzPS5BYLviPiPlr3wvcjIG74WkbnS6I41KADbc4o6eLJxGA
-         8JWYs+M6lyOtIzrVTZffJ8b6Ft9heTlm1oFoYLIww2OzIO4Ns2nPEW/A9ICbivLrxC
-         FQn2VQ4J3YZ4w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Maxim <bigunclemax@gmail.com>, vladimir.oltean@nxp.com
-Cc:     andrew@lunn.ch, benh@kernel.crashing.org, bigunclemax@gmail.com,
-        davem@davemloft.net, devicetree@vger.kernel.org, fido_max@inbox.ru,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        paulus@samba.org, robh+dt@kernel.org
-Subject: Re: [PATCH v2] powerpc: dts: t1040rdb: fix ports names for Seville
- Ethernet switch
-In-Reply-To: <20220111173723.26212-1-bigunclemax@gmail.com>
-References: <20220111152947.6zvt7j7366wsg6o2@skbuf>
- <20220111173723.26212-1-bigunclemax@gmail.com>
-Date:   Thu, 20 Jan 2022 17:29:31 +1100
-Message-ID: <87czkmudh0.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B82BB81A74
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 06:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55985C340E0;
+        Thu, 20 Jan 2022 06:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642660271;
+        bh=Irfj9p2ilfq4lKdinTmm7EYh2n65nyXEfW/EZ4F6L88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BxwCDDIoxdIbMOX1Z3bDU4RzztcfdvnPW58QvPUat301IajS76TSK3/rK8qCQR2Zj
+         fe55Pnd7ZkwIlNuXr6GnwRqh7sDposyKCL0WvpbzNDuCFVDUIr354K+tHqL5V7dqOv
+         ctOW3Xtm0WTGIyAf4MRrTrN2beEGs+5UzbCXfzeU=
+Date:   Thu, 20 Jan 2022 07:31:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     keescook@chromium.org, dan.carpenter@oracle.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] lkdtm/bugs: Check for the NULL pointer after calling
+ kmalloc
+Message-ID: <YekBrYDA+/Vxxwwr@kroah.com>
+References: <20220120012552.1851621-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120012552.1851621-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim <bigunclemax@gmail.com> writes:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
->
-> On board rev A, the network interface labels for the switch ports
-> written on the front panel are different than on rev B and later.
->
-> This patch fixes network interface names for the switch ports according
-> to labels that are written on the front panel of the board rev B.
-> They start from ETH3 and end at ETH10.
->
-> This patch also introduces a separate device tree for rev A.
-> The main device tree is supposed to cover rev B and later.
->
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-> Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+On Thu, Jan 20, 2022 at 09:25:51AM +0800, Jiasheng Jiang wrote:
+> As the possible failure of the kmalloc(), the not_checked and checked
+> could be NULL pointer.
+> Therefore, it should be better to check it in order to avoid the
+> dereference of the NULL pointer.
+> Also, we need to explicitly yell about the memory failure and then
+> kfree the 'not_checked' and 'checked' to avoid the memory leak if fails.
+> And since it is just a test, it may directly return without error
+> number.
+> 
+> Fixes: ae2e1aad3e48 ("drivers/misc/lkdtm/bugs.c: add arithmetic overflow and array bounds checks")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > ---
->  arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 30 ++++++++++++++++++++
->  arch/powerpc/boot/dts/fsl/t1040rdb.dts       |  8 +++---
->  2 files changed, 34 insertions(+), 4 deletions(-)
->  create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+> Changelog
+> 
+> v1 -> v2
+> 
+> * Change 1. Add the kfree if fails.
+> 
+> v2 -> v3
+> 
+> * Change 1. Add pr_err if fails.
+> ---
+>  drivers/misc/lkdtm/bugs.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+> index f4cb94a9aa9c..c64ab6f387eb 100644
+> --- a/drivers/misc/lkdtm/bugs.c
+> +++ b/drivers/misc/lkdtm/bugs.c
+> @@ -325,6 +325,12 @@ void lkdtm_ARRAY_BOUNDS(void)
+>  
+>  	not_checked = kmalloc(sizeof(*not_checked) * 2, GFP_KERNEL);
+>  	checked = kmalloc(sizeof(*checked) * 2, GFP_KERNEL);
+> +	if (!not_checked || !checked) {
+> +		pr_err("FAIL: could not allocate required buffers!\n");
 
-I applied this but it generated errors, you should have got some reports
-from the kernel build robot.
+As was pointed out, this is now a checkpatch failure :(
 
-cheers

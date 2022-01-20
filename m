@@ -2,141 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECA64943EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 00:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E50F4943F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344599AbiASXzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 18:55:44 -0500
-Received: from mga12.intel.com ([192.55.52.136]:24224 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230318AbiASXzn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 18:55:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642636543; x=1674172543;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=uCVZjXt17Nfv/G9qw2L3K1mqeAXwrnobzh2GWeu989k=;
-  b=Xq7ZTsMM63DynNcsOqCTWO9FYusqG5qQiUuqKR0FPqhtY4icnujnFHyU
-   uau5jvNDzfRG5GU0jcUokhVqOJPjGfCVFN8Ow/DgXp4QPoZKN/EZXVi1T
-   BPOkrsfGNACQGfrtbbeFZOZiFIEh5pgMSvTygfEkbXrHTHiwswnj8HEju
-   8t4Ps102BqAZ8uKBnuDJCrUwh0ENXwthh4immDu5DUlcvnuFMlIkvHU8T
-   XLgKC9jjM38JX6E9nzbzeXOz+10IeXOlZOem5tOYS0gDG9RTq0mdofhI3
-   mA4HNrE6UKdytsBONN/zKuq26tSj3gEpIna/IwwfebJSmLSog9aAHI6fl
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225208528"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="225208528"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 15:55:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="477585769"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 15:55:42 -0800
-Date:   Wed, 19 Jan 2022 15:55:42 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     David Airlie <airlied@linux.ie>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org,
-        Christian =?utf-8?B?S++/vW5pZw==?= <christian.koenig@amd.com>
-Subject: Re: [PATCH 0/7] DRM kmap() fixes and kmap_local_page() conversions
-Message-ID: <20220119235542.GF209936@iweiny-DESK2.sc.intel.com>
-References: <20211210232404.4098157-1-ira.weiny@intel.com>
- <20220119165356.GD209936@iweiny-DESK2.sc.intel.com>
- <YehJRt+JngIsj+Gd@phenom.ffwll.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YehJRt+JngIsj+Gd@phenom.ffwll.local>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+        id S1344719AbiATAER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344602AbiATAEP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 19:04:15 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687FEC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:04:15 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id v70-20020a25c549000000b006130de5790aso8207860ybe.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=k7+5PtSi2SaE/0SJmGi4QGUE4EmxDvz5Ukuy4725lAE=;
+        b=Iyr+MG88n+iHRt04O0HAxgK5CL4awNioywRv0cYQLtlwJ7Cp2SF2E+wRqKyckrKrSy
+         hmfqoFYVLlfPXiyjZU06fsJiaM/B8aeEaNl3VbXQGhaWdYv6ndFzA8ejdebFsaE4eeIH
+         kEvmt22o01TDRtXrlTgL3RIJthagpYwzNqQ089bNvHagB0KLUVE+3Qebav6fE5W+MVK6
+         0aES0QD7R8qT9H/ciOd7arS2npXxDYv2+lDyzoviHA4D/0fKmtDzFqx3ZZuExjD1dTVD
+         6mRh2ScSTKfbsEbGwT5BFTnd5Hj5sxoVitLpDVQeh5FObEJFXH+HRD6SHTvrHlLmyzbR
+         fK9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=k7+5PtSi2SaE/0SJmGi4QGUE4EmxDvz5Ukuy4725lAE=;
+        b=Vhe8De35opc4KT6heD2TXbkG+L1xVHNCSAOi2uZ7bAklG6Ltly0jtI49wsoJkeNlNi
+         jG02Si3MDwEVJ7m6vq+LRNKqwovRawzj3kM1q2qDf1KMf3vBXsN5iYnqlWlUm1YMnbTW
+         vLkueFIuV2AK5VFV3p7Pib+6nzTll6Vq6otc4GMmcmTayA06aIeCqAWxUW1hG2fZ/gP1
+         P3I9dZ7ZsW8rJqxmuSry7TWPQIn00RlvPyBYLwh69Zj9Ha2BO0drEtArZ6a8vZwZfTxU
+         tz+5zMh/y21j7GSEzjhNPhSzLFZzBKrZxRB4tJWkdb3ZtIrDhvT/Om/NCtiyTQKBJOlh
+         636g==
+X-Gm-Message-State: AOAM5331RcrYljoO9bW5xc2VZU25nYWIJnIlicjRxY+auFJPQj6WlGTd
+        DLVkxcQH30nNf8t9tWRiozzcGfXRh1TR
+X-Google-Smtp-Source: ABdhPJxHY8jtaOES8j1o7rDLaIqeTvHnKwyZJ56vMd87GW+rxIi4jQUMPrzyY5G6j/GnKeYEUMVs8qiGk8ds
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:4305:5632:a281:7eb0])
+ (user=rajatja job=sendgmr) by 2002:a25:7e87:: with SMTP id
+ z129mr45619551ybc.719.1642637054515; Wed, 19 Jan 2022 16:04:14 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:04:09 -0800
+Message-Id: <20220120000409.2706549-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
+From:   Rajat Jain <rajatja@google.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rajat Jain <rajatja@google.com>, rajatxjain@gmail.com,
+        dtor@google.com, jsbarnes@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 06:24:22PM +0100, Daniel Vetter wrote:
-> On Wed, Jan 19, 2022 at 08:53:56AM -0800, Ira Weiny wrote:
-> > On Fri, Dec 10, 2021 at 03:23:57PM -0800, 'Ira Weiny' wrote:
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > This series starts by converting the last easy kmap() uses to
-> > > kmap_local_page().
-> > > 
-> > > There is one more call to kmap() wrapped in ttm_bo_kmap_ttm().  Unfortunately,
-> > > ttm_bo_kmap_ttm() is called in a number of different ways including some which
-> > > are not thread local.  I have a patch to convert that call.  However, it is not
-> > > straight forward so it is not included in this series.
-> > > 
-> > > The final 2 patches fix bugs found while working on the ttm_bo_kmap_ttm()
-> > > conversion.
-> > 
-> > Gentile ping on this series?  Will it make this merge window?
-> 
-> I think this fell through the cracks and so no. Note that generally we
-> feature-freeze drm tree around -rc6 anyway for the upcoming merge window,
-> so you were cutting this all a bit close anyway.
+Today the pci_dev->untrusted is set for any devices sitting downstream
+an external facing port (determined via "ExternalFacingPort" property).
+This however, disallows any internal devices to be marked as untrusted.
 
-Ok, No problem.  I just had not heard if this was picked up or not.
+There are use-cases though, where a platform would like to treat an
+internal device as untrusted (perhaps because it runs untrusted
+firmware, or offers an attack surface by handling untrusted network
+data etc).
 
-> Also looks like the ttm
-> kmap caching question didn't get resolved?
+This patch introduces a new "UntrustedDevice" property that can be used
+by the firmware to mark any device as untrusted.
 
-I'm sorry I thought it was resolve for this series.  Christian said the patches
-in this series were "a good bug fix" even if not strictly necessary.[1]  Beyond
-this series I was discussing where to go from here, and is it possible to go
-further with more changes.[2]  At the moment I don't think I will.
+Signed-off-by: Rajat Jain <rajatja@google.com>
+---
+ drivers/pci/pci-acpi.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Christian did I misunderstand?  I can drop patch 6 and 7 if they are not proper
-bug fixes or at least clarifications to the code.
+diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+index a42dbf448860..3d9e5fa49451 100644
+--- a/drivers/pci/pci-acpi.c
++++ b/drivers/pci/pci-acpi.c
+@@ -1350,12 +1350,25 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+ 		dev->external_facing = 1;
+ }
+ 
++static void pci_acpi_set_untrusted(struct pci_dev *dev)
++{
++	u8 val;
++
++	if (device_property_read_u8(&dev->dev, "UntrustedDevice", &val))
++		return;
++
++	/* These PCI devices are not trustworthy */
++	if (val)
++		dev->untrusted = 1;
++}
++
+ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+ {
+ 	struct pci_dev *pci_dev = to_pci_dev(dev);
+ 
+ 	pci_acpi_optimize_delay(pci_dev, adev->handle);
+ 	pci_acpi_set_external_facing(pci_dev);
++	pci_acpi_set_untrusted(pci_dev);
+ 	pci_acpi_add_edr_notifier(pci_dev);
+ 
+ 	pci_acpi_add_pm_notifier(adev, pci_dev);
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-Ira
-
-[1] https://lore.kernel.org/lkml/c3b173ea-6509-ebbe-b5f9-eeb29f1ce57e@amd.com/
-[2] https://lore.kernel.org/lkml/20211215210949.GW3538886@iweiny-DESK2.sc.intel.com/
-
-> 
-> Anyway if patches are stuck resend with RESEND and if people still don't
-> pick them up poke me and I'll apply as fallback.
-> 
-> Cheers, Daniel
-> 
-> > 
-> > Thanks,
-> > Ira
-> > 
-> > > 
-> > > 
-> > > Ira Weiny (7):
-> > > drm/i915: Replace kmap() with kmap_local_page()
-> > > drm/amd: Replace kmap() with kmap_local_page()
-> > > drm/gma: Remove calls to kmap()
-> > > drm/radeon: Replace kmap() with kmap_local_page()
-> > > drm/msm: Alter comment to use kmap_local_page()
-> > > drm/amdgpu: Ensure kunmap is called on error
-> > > drm/radeon: Ensure kunmap is called on error
-> > > 
-> > > drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
-> > > drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c | 1 +
-> > > drivers/gpu/drm/gma500/gma_display.c | 6 ++----
-> > > drivers/gpu/drm/gma500/mmu.c | 8 ++++----
-> > > drivers/gpu/drm/i915/gem/i915_gem_shmem.c | 4 ++--
-> > > drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 8 ++++----
-> > > drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c | 4 ++--
-> > > drivers/gpu/drm/i915/gt/shmem_utils.c | 4 ++--
-> > > drivers/gpu/drm/i915/i915_gem.c | 8 ++++----
-> > > drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
-> > > drivers/gpu/drm/msm/msm_gem_submit.c | 4 ++--
-> > > drivers/gpu/drm/radeon/radeon_ttm.c | 4 ++--
-> > > drivers/gpu/drm/radeon/radeon_uvd.c | 1 +
-> > > 13 files changed, 32 insertions(+), 32 deletions(-)
-> > > 
-> > > --
-> > > 2.31.1
-> > > 
-> 
-> -- 
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch

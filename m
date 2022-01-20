@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BAF494B89
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1D9494BB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359812AbiATKR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359807AbiATKRy (ORCPT
+        id S1376270AbiATK3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:29:37 -0500
+Received: from mta-64-225.siemens.flowmailer.net ([185.136.64.225]:48837 "EHLO
+        mta-64-225.siemens.flowmailer.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376266AbiATK3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:17:54 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F59AC061401
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:17:54 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so364607pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:17:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=rdBW0j5QQWhMLX1FKpoagwlaHny7USjq4sUZI4cs1fE=;
-        b=okHs6cOUaGLya4BJJW9td244ZQrPan4DTQ8eym4VDUiEE/pliKgmIEijdwdyZbjKfX
-         mbO9y0ZXTKOXQYlnj93QUnGFKN9hmMCtDgqaI2/kDRTchPd1qbd2ucbYDNhjHbtIrsSt
-         v6c/JjbHE8QWG1HDSjc0kSuD7kbZr55DXGG3+KAJvJ0IPLaUz8p/ICXMN+zRSRtNjwYl
-         dQkyi2xomTA+LhCVaw0GMNkuf4fPBbIgKcbQiptNED3agNqudbwo8oHzWg4tDbPfbe76
-         XKVIGzCg9RPq6h636C4I77z7uWQIgLcuk+Tl+JcI0iwtvUApqjJraXuZGfvT7XSZWZ2L
-         urcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=rdBW0j5QQWhMLX1FKpoagwlaHny7USjq4sUZI4cs1fE=;
-        b=R2GO1Jar8zKjU3bgTF/FI6XisLQdZHAEcK+XB28rDVI3wyXHeYcbCWIQi832gEk3a/
-         gfrrLsskR6JKkocqAcdu5H+E+u0P5UmMMjCQB+l5Rp4szxdmrOvVltHEzPwR4JBQl7s5
-         +N9+B7ZCPmK8TKf9TeH8sCRVReHbW46iwIul5wVWSQprQIDtC7vJfbPfsJCIMU8sCc9s
-         +oWBGKhZDkjtgQR05nfcBVhxuVkjpMTBHK0JwZ7wLumMy6ZJYC4KXSF1j2VBXwOPn3be
-         yjrNnf3L1HA1xG0fcN0IfUuH9ZvlBOZTsUuZxXRCvxf76aDq/cpopAMqHcXuVsPo8bTG
-         5l+g==
-X-Gm-Message-State: AOAM532YrZCZ/yn5hMhQIBG6XidAzgrGPR57NS/7n0K3PIW7iBDtRaDL
-        nWR2zDb2ucvNTe+y8XgH3ZY=
-X-Google-Smtp-Source: ABdhPJyeMp9RNX3h2fsUBSP5ombifhj5R4/4Wk9OoG84WlguEkGvIfX/1cSt4nKN2RqGXj+FFM6WKA==
-X-Received: by 2002:a17:90a:d154:: with SMTP id t20mr9972019pjw.43.1642673873398;
-        Thu, 20 Jan 2022 02:17:53 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id h12sm2070618pgh.79.2022.01.20.02.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 02:17:53 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        John Clements <john.clements@amd.com>,
-        Jonathan Kim <jonathan.kim@amd.com>,
-        Bernard Zhao <bernard@vivo.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Kevin Wang <kevin1.wang@amd.com>,
-        shaoyunl <shaoyun.liu@amd.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdgpu: Fix double free in amdgpu_get_xgmi_hive
-Date:   Thu, 20 Jan 2022 10:17:43 +0000
-Message-Id: <20220120101746.24847-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 20 Jan 2022 05:29:36 -0500
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 20220120101929afea3b8f92bbc788e3
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 20 Jan 2022 11:19:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=JnUF520dA6MoqiwuY5pfZTlvR7T/MvYRVU/LqW1MI3k=;
+ b=ihEQCGvjxiuWjujvcWcjAG+XLKapXISTs0IrcZ8ZacEMP7xLpC6wIHihY+MddP+9tao0cz
+ sZeRgVbvf1G6O3e79xUTDKsH1T4MSB2HQdIZzudqKAI/CWYSy7IyRgJhZfp83OgNmBffAd2W
+ ckt28/t3NAHgzpgmiIl0Ey7IXVaEw=;
+From:   daniel.starke@siemens.com
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 1/1] tty: n_gsm: fix SW flow control encoding/handling
+Date:   Thu, 20 Jan 2022 02:18:57 -0800
+Message-Id: <20220120101857.2509-1-daniel.starke@siemens.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-7517:519-21489:flowmailer
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Callback function amdgpu_xgmi_hive_release() in kobject_put()
-calls kfree(hive), So we don't need call kfree(hive) again.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.2.7.3 states that DC1 (XON) and DC3 (XOFF)
+are the control characters defined in ISO/IEC 646. These shall be quoted if
+seen in the data stream to avoid interpretation as flow control characters.
 
-Fixes: 7b833d680481 ("drm/amd/amdgpu: fix potential memleak")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+ISO/IEC 646 refers to the set of ISO standards described as the ISO
+7-bit coded character set for information interchange. Its final version
+is also known as ITU T.50.
+See https://www.itu.int/rec/T-REC-T.50-199209-I/en
+
+To abide the standard it is needed to quote DC1 and DC3 correctly if these
+are seen as data bytes and not as control characters. The current
+implementation already tries to enforce this but fails to catch all
+defined cases. 3GPP 27.010 chapter 5.2.7.3 clearly states that the most
+significant bit shall be ignored for DC1 and DC3 handling. The current
+implementation handles only the case with the most significant bit set 0.
+Cases in which DC1 and DC3 have the most significant bit set 1 are left
+unhandled.
+
+This patch fixes this by masking the data bytes with ISO_IEC_646_MASK (only
+the 7 least significant bits set 1) before comparing them with XON
+(a.k.a. DC1) and XOFF (a.k.a. DC3) when testing which byte values need
+quotation via byte stuffing.
+
+Fixes: e1eaea46bb40 (tty: n_gsm line discipline, 2010-03-26)
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/tty/n_gsm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-index e8b8f28c2f72..35d4b966ef2c 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-@@ -393,7 +393,6 @@ struct amdgpu_hive_info *amdgpu_get_xgmi_hive(struct amdgpu_device *adev)
- 	if (ret) {
- 		dev_err(adev->dev, "XGMI: failed initializing kobject for xgmi hive\n");
- 		kobject_put(&hive->kobj);
--		kfree(hive);
- 		hive = NULL;
- 		goto pro_end;
- 	}
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index ba27b274c967..0b1808e3a912 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -322,6 +322,7 @@ static int addr_cnt;
+ #define GSM1_ESCAPE_BITS	0x20
+ #define XON			0x11
+ #define XOFF			0x13
++#define ISO_IEC_646_MASK	0x7F
+ 
+ static const struct tty_port_operations gsm_port_ops;
+ 
+@@ -531,7 +532,8 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
+ 	int olen = 0;
+ 	while (len--) {
+ 		if (*input == GSM1_SOF || *input == GSM1_ESCAPE
+-		    || *input == XON || *input == XOFF) {
++		    || (*input & ISO_IEC_646_MASK) == XON
++		    || (*input & ISO_IEC_646_MASK) == XOFF) {
+ 			*output++ = GSM1_ESCAPE;
+ 			*output++ = *input++ ^ GSM1_ESCAPE_BITS;
+ 			olen++;
 -- 
-2.17.1
+2.25.1
 

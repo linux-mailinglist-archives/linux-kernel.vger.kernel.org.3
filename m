@@ -2,95 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F301B494AB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3617E494AAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359410AbiATJ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:26:43 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4433 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359226AbiATJ0l (ORCPT
+        id S1359178AbiATJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:26:40 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:35575 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234276AbiATJ0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:26:41 -0500
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JfcWM42WHz682sD;
-        Thu, 20 Jan 2022 17:23:27 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 20 Jan 2022 10:26:37 +0100
-Received: from [10.47.81.141] (10.47.81.141) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 20 Jan
- 2022 09:26:37 +0000
-Subject: Re: [RFC PATCH v2 0/5] topdown with metrics
-To:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>, <irogers@google.com>, <ak@linux.intel.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>
-References: <4fefb1bc-49b2-bc5b-23cd-cd8fabe8c588@huawei.com>
- <20220111150749.13365-1-andrew.kilroy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <7cd7bd11-4900-81c4-de84-6e5fc63ec87c@huawei.com>
-Date:   Thu, 20 Jan 2022 09:26:12 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Thu, 20 Jan 2022 04:26:38 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MqbDs-1mX06m2Ey0-00mfPd; Thu, 20 Jan 2022 10:26:36 +0100
+Received: by mail-oi1-f170.google.com with SMTP id q186so8478481oih.8;
+        Thu, 20 Jan 2022 01:26:35 -0800 (PST)
+X-Gm-Message-State: AOAM530IS6cMCdv3arv1VITiCM41IZlTFYKedU3XPQQraoDSFQvHiYtB
+        lrVraWDG10iuGZ2ZJMFWfUsF1JRzoAeo78l1PK8=
+X-Google-Smtp-Source: ABdhPJwUHTIEKGF9B/deLoD+NLX/BPhPwhEAEkpKqsuu70hdzaWxQnSHkYBLqgySPz6euydrj/73VVU+G7+wmpaPV1k=
+X-Received: by 2002:a05:6808:2206:: with SMTP id bd6mr6829962oib.11.1642670794688;
+ Thu, 20 Jan 2022 01:26:34 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220111150749.13365-1-andrew.kilroy@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.81.141]
-X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20220120073911.99857-5-guoren@kernel.org>
+In-Reply-To: <20220120073911.99857-5-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 20 Jan 2022 10:26:18 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3ixShQBKmdXWxf8QdB_aLeWr7TQB+7MqQBSgh0-shSSQ@mail.gmail.com>
+Message-ID: <CAK8P3a3ixShQBKmdXWxf8QdB_aLeWr7TQB+7MqQBSgh0-shSSQ@mail.gmail.com>
+Subject: Re: [PATCH V3 04/17] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9+M0fmdb5HxFeLZX9pIqezr+U7soQTbqk+JjtRs2FIL6hfst5O4
+ 2BQfFrTCSQVRnaR/fgEHUJOO70yHaGyLxtJj4EYgVaqfAN5xJTyCv/VoAJcfB7BOoxCvwS3
+ MYW00xSfV4tr14+j8/NYptBPa/Ix+5VygRkmhO2iqPTyB03zQLV5vryYNqFPR2w5k4x02Y6
+ TsZpLJc0Xmc1lJsPQZRZg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nUtO5XneSiM=:Dg12rz9J3w1TQnxrs/E87G
+ iesAAgSk2cZqLybrx9KAQoiYkbu8unUjK1VJXdruvwBXb1OyXQoDIfLZsAx0aTt0YXKAa0A/H
+ AOyz1OVRRpVA6uLccCRnnlUoqHceRjCBDgFyH9oWc3Az3c0OXlhJEycCggpc1NDn1t/XBg1Me
+ y4mZNvF3ItCXVn8G2bkjcjRAB2rY64oE/2YNCAGld6AQppFrkRMLtM8gbc1bZgJO2Qdl4/+kX
+ ob38D6pruMcguRg80vHYA+Jq32WcmYbY4LS/8l5l+zfsGcJxhYrjRvtmadwk3qasckMn4iJTV
+ pxpWoWzAPDvrpwGb09ijS0uCUztqlBGZJawiizg10VZQsgtfqELHpw+lhibeUpGzMrlCy5ZK1
+ 3EJDvtMx186UF8Ih7VZRpb2HVKXxry+rF0LdOuVwpsz36Aztw5StTL8I6sqVvpiZkG+syTS5L
+ rvOruz6CL6Qz8wWyrQFKTZda1IwxALpBpan8aHexjjE+yvdbmme6ZAEq/gh57B5cL8ObHte/f
+ rkXz4586yb0YgEBF5V2fX3BzUWrQHpnR13Xga/gVkQy2x4q2MPsdVNlWESuUkZxmZ11YDWL7T
+ a5UQywC02JzoRKEti73luxoQ1K8rwExYfyUaBtzN46VajCjZ2iLa+5DZleXTz0b1CJyNIxDIh
+ XugEsiMi8P1dH8pEa39CHcbWmQgDH8ixCYrx0eOm6xc+HMiKG5QB1HGf1uGLHJyUIqUZV2FKd
+ w99m5jj8ake0mC8UFOr3AjYJsG/rwK2EC4t6lrdKPGrjRlduZQpg97LrkjJrHPD1CJxsdpjgA
+ tivxNThey85wjJQBGsTjaQpN03Y8rBDs/vczTRjQDoJ396CASY=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 15:07, Andrew Kilroy wrote:
-> This patch series adds the ability for the --topdown option to use
-> metrics (defined in json files in the pmu-events directory) to describe
-> how to calculate and determine the output columns for topdown level 1.
-> 
-> For this to work, a number of metrics have to be defined for the
-> relevant processor with the MetricGroup name "TopDownL1".  perf will
-> arrange for the events defined in each metric to be collected, and each
-> metric will be displayed in the output, as if
-> 
->    perf stat -M 'TopDownL1' --metric-only -- exampleapp
-> 
-> had been used.
-> 
-> Topdown was already implemented where certain kernel events are defined.
-> If these kernel events are defined, the new json metrics behaviour is
-> not used.  The json metrics approach is only used if the kernel events
-> are absent.
-> 
-> The last patch in the series disables the json metrics behaviour on x86.
-> This is because of concerns that due to SMT it's not straightforward to
-> express the various formulas as json for certain x86 cpus.  See
+On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Make "uapi asm unistd.h" could be used for architectures' COMPAT
+> mode. The __SYSCALL_COMPAT is first used in riscv.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
 
-I suppose this solution is ok.
-
-A concern is that today we only have 1x arm64 platform which actually 
-supports this in mainline.
-
-Do you have any more which you plan to support?
-
-I think that it's the frontend bound and fetch_bubble event which 
-doesn't have a standard arm solution.
-
-Note that I do have a series for perf tool which can read arm cpu pmu 
-sysfs events folder to find events which are implemented (I don't think 
-all required events are mandated) and match that against the common arch 
-events JSON, so that we don't need a JSON definition file for each core 
-implementation from all implementators - this would improve scalability. 
-However a concern is that some events - like inst_spec - have imp def 
-meaning, so may not be good to always use by default for all cores metrics.
-
-Thanks,
-John
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

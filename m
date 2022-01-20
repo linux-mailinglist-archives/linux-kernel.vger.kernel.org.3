@@ -2,101 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A2A4948BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E744948C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiATHmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 02:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238654AbiATHmk (ORCPT
+        id S235713AbiATHnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 02:43:19 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:59538 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231157AbiATHnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 02:42:40 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4195C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:42:39 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id z22so24716881edd.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m1Ta7YkopCvYMD6WK6F0yOJ093SUahdvNEyiNyngQuw=;
-        b=aeTEQ8X44CtEtcG6Fq+kFY/Pgctr+Njh7GKzsc6WqXi5VaDaEUD4sNvlehuJyT8WwS
-         8use6dOakXUdWZOyqwYmSYarEoQWClM/5cCBAtk6XaJL5ufssi/TlJ6XqTjBYlC9MViv
-         Qf4mS7vZcY2epBgpOhK+L1FgYej1M+/Fgsj0Du3xVzhkO4bZYCJtJLRpfQaeew8Fh213
-         Fdnp/n2WIOaSRSwRQXOx5R6v/yGsxEhuv8WFgv+vrskp1AkU0/6jl9skigW9FRcioS6D
-         m2peDv0hzcvWMx/l1KitskJ/da9yheGgTLFfbEYFWtbIbcV0leTJQJqHMBZwfv2uRoex
-         rT0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m1Ta7YkopCvYMD6WK6F0yOJ093SUahdvNEyiNyngQuw=;
-        b=q6LknfNKKWux3b3Uz3c5uoPMkpwsMkOIh1ILrDmXC0EsNELd+q6FNhd096rs7d8ZG1
-         qb1+fx2cR4WeIAtbqYadOlvSlQvj/WyePS5TvG9BE/ML3YGhY4U9rgP+oViGdgotEc71
-         uBQh+fAW3Q0TrzF4ayaW777wtuVNhtmTybmPOlh+V/hzoFLEU3KsRjLVRnL/ktyShc8o
-         mIfOJWQrapj4/X6y7TRGMfGRio20LLmhkJikCTWgShfq3ETE3GxBAWqjyoXBDJpDcRRR
-         iUUlC+gegesQdJbenhVKbRM8XeNhs+9zgt+pRgIJqfAvQZBdK14mmq/hIa/gnKwNQUlT
-         Ftow==
-X-Gm-Message-State: AOAM532BENm4F5JISf41ta80B/6KEMQohmLPfCVRqEWNam+Yg2BH57ha
-        tEyZWkPF4OQNzGxHsnuhtBBsH2YYhLarZw==
-X-Google-Smtp-Source: ABdhPJyTEHJaBygh0B+Fcr90hP5m4iyLbW95FvAHihrNWilDBGl0qVy5CDgZEcHE0V6l3rPjtezXYQ==
-X-Received: by 2002:aa7:c3d7:: with SMTP id l23mr34056517edr.258.1642664558251;
-        Wed, 19 Jan 2022 23:42:38 -0800 (PST)
-Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id fn3sm630479ejc.47.2022.01.19.23.42.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 23:42:37 -0800 (PST)
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        David Laight <David.Laight@aculab.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v2] optee: add error checks in optee_ffa_do_call_with_arg()
-Date:   Thu, 20 Jan 2022 08:42:32 +0100
-Message-Id: <20220120074232.1084967-1-jens.wiklander@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        Thu, 20 Jan 2022 02:43:18 -0500
+X-UUID: d04441ec44884272a7ebe7a6be7d5a58-20220120
+X-UUID: d04441ec44884272a7ebe7a6be7d5a58-20220120
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1529106870; Thu, 20 Jan 2022 15:43:15 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 20 Jan 2022 15:43:14 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 20 Jan 2022 15:43:13 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+Subject: [PATCH v1, 0/1] soc: mediatek: cmdq: add cmdq_pkt_poll_addr function
+Date:   Thu, 20 Jan 2022 15:43:10 +0800
+Message-ID: <20220120074311.2243-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds error checking in optee_ffa_do_call_with_arg() for correctness.
+add cmdq_pkt_poll_addr function
 
-Fixes: 4615e5a34b95 ("optee: add FF-A support")
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
----
- drivers/tee/optee/ffa_abi.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+mtk18742 (1):
+  soc: mediatek: cmdq: add cmdq_pkt_poll_addr function
 
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index 20a1b1a3d965..0775759a29c0 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -619,9 +619,18 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
- 		.data2 = (u32)(shm->sec_world_id >> 32),
- 		.data3 = shm->offset,
- 	};
--	struct optee_msg_arg *arg = tee_shm_get_va(shm, 0);
--	unsigned int rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
--	struct optee_msg_arg *rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-+	struct optee_msg_arg *arg;
-+	unsigned int rpc_arg_offs;
-+	struct optee_msg_arg *rpc_arg;
-+
-+	arg = tee_shm_get_va(shm, 0);
-+	if (IS_ERR(arg))
-+		return PTR_ERR(arg);
-+
-+	rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-+	rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-+	if (IS_ERR(rpc_arg))
-+		return PTR_ERR(rpc_arg);
- 
- 	return optee_ffa_yielding_call(ctx, &data, rpc_arg);
- }
+ drivers/soc/mediatek/mtk-cmdq-helper.c   | 39 ++++++++++++++++++++++++
+ include/linux/mailbox/mtk-cmdq-mailbox.h |  1 +
+ include/linux/soc/mediatek/mtk-cmdq.h    |  2 ++
+ 3 files changed, 42 insertions(+)
+
 -- 
-2.31.1
+2.25.1
 

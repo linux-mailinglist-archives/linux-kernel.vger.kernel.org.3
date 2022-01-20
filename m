@@ -2,254 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4058495023
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D70495027
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346481AbiATOay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 09:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S1347732AbiATObI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 09:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345321AbiATOax (ORCPT
+        with ESMTP id S1345897AbiATObH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 09:30:53 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B995C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 06:30:53 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id l5so12421521edv.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 06:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SCDpb+26SFz1wQvYU9DSOHXua0IKyerUiHHc0Cwap8E=;
-        b=gfQd4+TvEmiS7NJiLo0g/BkOlizTO8gxf2GzXSbGpo1prZjzVybvWf1M5hWUn5D5yN
-         YGmMY2GavTgDlVV1BFUJtZ7fGvzAIk8mPX/sAQzp7z1G2wl70nUSmbrlx3o6B2UBsEAx
-         G3aPDDiDCk4/IZZeHhu8j62PfyWAGfRidHFqY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=SCDpb+26SFz1wQvYU9DSOHXua0IKyerUiHHc0Cwap8E=;
-        b=bl+S5VHQHHUoThJaTDNtW5Mu2NgkdAfJzJ3KaQlXTFqw7wpaguBBlcSaC+Qq+i9q0P
-         /CLZcW384Ma2c396iTOMJPqeuTlWde01KVR75kz7aC2VbUgxLcEsJriXOe99f4Hcw3ry
-         oFyxvqgULZFaxVFNMImrVtmbF/3Qnc9VC1N8LgLaRmEITiCIOZAwlAGeEc8kndcaSI9k
-         gEzLl+qWNAA4fxt9UnpKGox08UEbaOnU/dRMiY6KzFqDJvz+txRtEZpc1dNYitPEHP5m
-         sVLmSaD2b5uFKba+lDHf0ugZMHSEHYOq7MO9ad2PuZBNAFGtD8doXWTIsxS8fe0ibTp1
-         KjVw==
-X-Gm-Message-State: AOAM533bvtqGSPSuHlNFQMtj6RxM92oUy4WT59BtwqkHT6PWJ8sHSpcI
-        aGR+Jl/3UeDVfqlr53rrKxHzdg==
-X-Google-Smtp-Source: ABdhPJxM9+iY32WnseakJpGa48pZv+dmbkVgLjm00azuMpDBLB/BXqsdyqEiyGJ1pFUzd4wpawDQsA==
-X-Received: by 2002:a17:907:168d:: with SMTP id hc13mr18067115ejc.470.1642689051681;
-        Thu, 20 Jan 2022 06:30:51 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id rl11sm1123297ejb.15.2022.01.20.06.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 06:30:50 -0800 (PST)
-Date:   Thu, 20 Jan 2022 15:30:48 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-Message-ID: <YelyGDNDTn1Aq/hm@phenom.ffwll.local>
-Mail-Followup-To: Helge Deller <deller@gmx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de>
+        Thu, 20 Jan 2022 09:31:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E60C061574;
+        Thu, 20 Jan 2022 06:31:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8412C61781;
+        Thu, 20 Jan 2022 14:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 967F1C340E5;
+        Thu, 20 Jan 2022 14:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642689064;
+        bh=NShk8RaJDMXxjgVwj9BZLOszW8jcivZ7vAl+s4zqy2M=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uaI6ZB/bBbm1jH1gtP5MVuSGxXrH/JfmJRN1zv2Qm/pCxmJjQIiFn2tm09aBTRLM+
+         fCU3BQBk5ro4UZKNOtM2b0S3+LZ3BuWmbVQ1x1AwFTdsenJtYyeztEr6CGa9oPNmV8
+         CpKYgSdsA3gFPs5a4zXDqfjEO/8srsVhAwTozJ/O50gNzP14bGf2dtHg6M3pZb0NWo
+         Ew/Zyx46T/Vp0ivgx+CJrsqeSsXAPFDr23EVvfcMAY3PO9fJ98zxkVqQLS7b8vv0q4
+         TIdFk3G7dpRrhy0jAbLhzGcmLExy0hUSTRbS+JQESC4i2ikqoEyiQrQ9i1qHjA0QqS
+         QZgrg4PzEn/3Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 60C6040714; Thu, 20 Jan 2022 11:31:01 -0300 (-03)
+Date:   Thu, 20 Jan 2022 11:31:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 1/1 FYI] tools headers UAPI: Sync files changed by new
+ set_mempolicy_home_node syscall
+Message-ID: <YelyJcmhLKY/LlBR@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220119110839.33187-3-deller@gmx.de>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 12:08:39PM +0100, Helge Deller wrote:
-> This reverts commit 39aead8373b3c20bb5965c024dfb51a94e526151.
-> 
-> Revert this patch.  This patch started to introduce the regression that
-> all hardware acceleration of more than 35 existing fbdev drivers were
-> bypassed and thus fbcon console output for those was dramatically slowed
-> down by factor of 10 and more.
-> 
-> Reverting this commit has no impact on DRM, since none of the DRM drivers are
-> tagged with the acceleration flags FBINFO_HWACCEL_COPYAREA,
-> FBINFO_HWACCEL_FILLRECT or others.
-> 
-> Signed-off-by: Helge Deller <deller@gmx.de>
-> Cc: stable@vger.kernel.org # v5.16
+To pick the changes in these csets:
 
-So if this really has to come back then I think the pragmatic approach is
-to do it behind a CONFIG_FBCON_ACCEL, default n, and with a huge warning
-that enabling that shouldn't be done for any distro which only enables
-firmware and drm fbdev drivers.
+  21b084fdf2a49ca1 ("mm/mempolicy: wire up syscall set_mempolicy_home_node")
 
-Plus adjusting the todo to limit it to drm drivers. Maybe also #ifdef out
-the code that's then dead from fbcon.
+That add support for this new syscall in tools such as 'perf trace'.
 
-Also in that case I guess it's ok to cc: stable, and really if you cc:
-stable it needs to go down to 5.11, not 5.16.
+For instance, this is now possible:
 
-And if we do that, I think that should go in through a -next cycle, or at
-least quite some soaking before it's cherry-picked over. Enough to give
-syzbot a chance to discover any path we've missed at least.
--Daniel
+  [root@five ~]# perf trace -e set_mempolicy_home_node
+  ^C[root@five ~]#
+  [root@five ~]# perf trace -v -e set_mempolicy_home_node
+  Using CPUID AuthenticAMD-25-21-0
+  event qualifier tracepoint filter: (common_pid != 253729 && common_pid != 3585) && (id == 450)
+  mmap size 528384B
+  ^C[root@five ~]
+  [root@five ~]# perf trace -v -e set*  --max-events 5
+  Using CPUID AuthenticAMD-25-21-0
+  event qualifier tracepoint filter: (common_pid != 253734 && common_pid != 3585) && (id == 38 || id == 54 || id == 105 || id == 106 || id == 109 || id == 112 || id == 113 || id == 114 || id == 116 || id == 117 || id == 119 || id == 122 || id == 123 || id == 141 || id == 160 || id == 164 || id == 170 || id == 171 || id == 188 || id == 205 || id == 218 || id == 238 || id == 273 || id == 308 || id == 450)
+  mmap size 528384B
+       0.000 ( 0.008 ms): bash/253735 setpgid(pid: 253735 (bash), pgid: 253735 (bash))      = 0
+    6849.011 ( 0.008 ms): bash/16046 setpgid(pid: 253736 (bash), pgid: 253736 (bash))       = 0
+    6849.080 ( 0.005 ms): bash/253736 setpgid(pid: 253736 (bash), pgid: 253736 (bash))      = 0
+    7437.718 ( 0.009 ms): gnome-shell/253737 set_robust_list(head: 0x7f34b527e920, len: 24) = 0
+   13445.986 ( 0.010 ms): bash/16046 setpgid(pid: 253738 (bash), pgid: 253738 (bash))       = 0
+  [root@five ~]#
 
-> ---
->  Documentation/gpu/todo.rst       | 21 ---------------
->  drivers/video/fbdev/core/fbcon.c | 45 ++++++++++++++++++++++++++------
->  2 files changed, 37 insertions(+), 29 deletions(-)
-> 
-> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-> index 29506815d24a..a1212b5b3026 100644
-> --- a/Documentation/gpu/todo.rst
-> +++ b/Documentation/gpu/todo.rst
-> @@ -300,27 +300,6 @@ Contact: Daniel Vetter, Noralf Tronnes
-> 
->  Level: Advanced
-> 
-> -Garbage collect fbdev scrolling acceleration
-> ---------------------------------------------
-> -
-> -Scroll acceleration is disabled in fbcon by hard-wiring p->scrollmode =
-> -SCROLL_REDRAW. There's a ton of code this will allow us to remove:
-> -
-> -- lots of code in fbcon.c
-> -
-> -- a bunch of the hooks in fbcon_ops, maybe the remaining hooks could be called
-> -  directly instead of the function table (with a switch on p->rotate)
-> -
-> -- fb_copyarea is unused after this, and can be deleted from all drivers
-> -
-> -Note that not all acceleration code can be deleted, since clearing and cursor
-> -support is still accelerated, which might be good candidates for further
-> -deletion projects.
-> -
-> -Contact: Daniel Vetter
-> -
-> -Level: Intermediate
-> -
->  idr_init_base()
->  ---------------
-> 
-> diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-> index 22bb3892f6bd..b813985f1403 100644
-> --- a/drivers/video/fbdev/core/fbcon.c
-> +++ b/drivers/video/fbdev/core/fbcon.c
-> @@ -1025,7 +1025,7 @@ static void fbcon_init(struct vc_data *vc, int init)
->  	struct vc_data *svc = *default_mode;
->  	struct fbcon_display *t, *p = &fb_display[vc->vc_num];
->  	int logo = 1, new_rows, new_cols, rows, cols;
-> -	int ret;
-> +	int cap, ret;
-> 
->  	if (WARN_ON(info_idx == -1))
->  	    return;
-> @@ -1034,6 +1034,7 @@ static void fbcon_init(struct vc_data *vc, int init)
->  		con2fb_map[vc->vc_num] = info_idx;
-> 
->  	info = registered_fb[con2fb_map[vc->vc_num]];
-> +	cap = info->flags;
-> 
->  	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
->  		logo_shown = FBCON_LOGO_DONTSHOW;
-> @@ -1135,13 +1136,11 @@ static void fbcon_init(struct vc_data *vc, int init)
-> 
->  	ops->graphics = 0;
-> 
-> -	/*
-> -	 * No more hw acceleration for fbcon.
-> -	 *
-> -	 * FIXME: Garbage collect all the now dead code after sufficient time
-> -	 * has passed.
-> -	 */
-> -	p->scrollmode = SCROLL_REDRAW;
-> +	if ((cap & FBINFO_HWACCEL_COPYAREA) &&
-> +	    !(cap & FBINFO_HWACCEL_DISABLED))
-> +		p->scrollmode = SCROLL_MOVE;
-> +	else /* default to something safe */
-> +		p->scrollmode = SCROLL_REDRAW;
-> 
->  	/*
->  	 *  ++guenther: console.c:vc_allocate() relies on initializing
-> @@ -1953,15 +1952,45 @@ static void updatescrollmode(struct fbcon_display *p,
->  {
->  	struct fbcon_ops *ops = info->fbcon_par;
->  	int fh = vc->vc_font.height;
-> +	int cap = info->flags;
-> +	u16 t = 0;
-> +	int ypan = FBCON_SWAP(ops->rotate, info->fix.ypanstep,
-> +				  info->fix.xpanstep);
-> +	int ywrap = FBCON_SWAP(ops->rotate, info->fix.ywrapstep, t);
->  	int yres = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
->  	int vyres = FBCON_SWAP(ops->rotate, info->var.yres_virtual,
->  				   info->var.xres_virtual);
-> +	int good_pan = (cap & FBINFO_HWACCEL_YPAN) &&
-> +		divides(ypan, vc->vc_font.height) && vyres > yres;
-> +	int good_wrap = (cap & FBINFO_HWACCEL_YWRAP) &&
-> +		divides(ywrap, vc->vc_font.height) &&
-> +		divides(vc->vc_font.height, vyres) &&
-> +		divides(vc->vc_font.height, yres);
-> +	int reading_fast = cap & FBINFO_READS_FAST;
-> +	int fast_copyarea = (cap & FBINFO_HWACCEL_COPYAREA) &&
-> +		!(cap & FBINFO_HWACCEL_DISABLED);
-> +	int fast_imageblit = (cap & FBINFO_HWACCEL_IMAGEBLIT) &&
-> +		!(cap & FBINFO_HWACCEL_DISABLED);
-> 
->  	p->vrows = vyres/fh;
->  	if (yres > (fh * (vc->vc_rows + 1)))
->  		p->vrows -= (yres - (fh * vc->vc_rows)) / fh;
->  	if ((yres % fh) && (vyres % fh < yres % fh))
->  		p->vrows--;
-> +
-> +	if (good_wrap || good_pan) {
-> +		if (reading_fast || fast_copyarea)
-> +			p->scrollmode = good_wrap ?
-> +				SCROLL_WRAP_MOVE : SCROLL_PAN_MOVE;
-> +		else
-> +			p->scrollmode = good_wrap ? SCROLL_REDRAW :
-> +				SCROLL_PAN_REDRAW;
-> +	} else {
-> +		if (reading_fast || (fast_copyarea && !fast_imageblit))
-> +			p->scrollmode = SCROLL_MOVE;
-> +		else
-> +			p->scrollmode = SCROLL_REDRAW;
-> +	}
->  }
-> 
->  #define PITCH(w) (((w) + 7) >> 3)
-> --
-> 2.31.1
-> 
+That is the filter expression attached to the raw_syscalls:sys_{enter,exit}
+tracepoints.
 
+  $ find tools/perf/arch/ -name "syscall*tbl" | xargs grep -w set_mempolicy_home_node
+  tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl:450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+  tools/perf/arch/powerpc/entry/syscalls/syscall.tbl:450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
+  tools/perf/arch/s390/entry/syscalls/syscall.tbl:450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
+  tools/perf/arch/x86/entry/syscalls/syscall_64.tbl:450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+  $
+
+  $ grep -w set_mempolicy_home_node /tmp/build/perf/arch/x86/include/generated/asm/syscalls_64.c
+	[450] = "set_mempolicy_home_node",
+  $
+
+This addresses these perf build warnings:
+
+  Warning: Kernel ABI header at 'tools/include/uapi/asm-generic/unistd.h' differs from latest version at 'include/uapi/asm-generic/unistd.h'
+  diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm-generic/unistd.h
+  Warning: Kernel ABI header at 'tools/perf/arch/x86/entry/syscalls/syscall_64.tbl' differs from latest version at 'arch/x86/entry/syscalls/syscall_64.tbl'
+  diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/x86/entry/syscalls/syscall_64.tbl
+  Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
+  diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
+  Warning: Kernel ABI header at 'tools/perf/arch/s390/entry/syscalls/syscall.tbl' differs from latest version at 'arch/s390/kernel/syscalls/syscall.tbl'
+  diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
+  Warning: Kernel ABI header at 'tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl' differs from latest version at 'arch/mips/kernel/syscalls/syscall_n64.tbl'
+  diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
+
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/uapi/asm-generic/unistd.h             | 5 ++++-
+ tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 1 +
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 1 +
+ tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 1 +
+ tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 1 +
+ 5 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
+index 4557a8b6086f4ffe..1c48b0ae3ba30229 100644
+--- a/tools/include/uapi/asm-generic/unistd.h
++++ b/tools/include/uapi/asm-generic/unistd.h
+@@ -883,8 +883,11 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
+ #define __NR_futex_waitv 449
+ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ 
++#define __NR_set_mempolicy_home_node 450
++__SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 450
++#define __NR_syscalls 451
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+index e2c481fcede6bd11..3f1886ad9d8060b4 100644
+--- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
++++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+@@ -364,3 +364,4 @@
+ # 447 reserved for memfd_secret
+ 448	n64	process_mrelease		sys_process_mrelease
+ 449	n64	futex_waitv			sys_futex_waitv
++450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+index 15109af9d0754d5f..2600b4237292c78c 100644
+--- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+@@ -529,3 +529,4 @@
+ # 447 reserved for memfd_secret
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
++450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
+diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+index ed9c5c2eafad700c..799147658dee20dd 100644
+--- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+@@ -452,3 +452,4 @@
+ # 447 reserved for memfd_secret
+ 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
+ 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
++450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
+diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+index fe8f8dd157b4d49c..c84d12608cd2de9e 100644
+--- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -371,6 +371,7 @@
+ 447	common	memfd_secret		sys_memfd_secret
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
++450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+

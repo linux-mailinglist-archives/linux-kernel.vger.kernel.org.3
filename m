@@ -2,120 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BEE495410
+	by mail.lfdr.de (Postfix) with ESMTP id 10CA949540F
 	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346559AbiATST5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:19:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50751 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233514AbiATST4 (ORCPT
+        id S1346467AbiATSTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233514AbiATSTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:19:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642702795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rKxyIeZW7RYW3u4+X955jRymBZg+th+EIWA7v064V2E=;
-        b=cAUtShJbQ+jTNurs/x79rMhXzP44gJ15ynQgkbwKWZyrYtfEIn8O9h/c1Gk7/zZCbWge0p
-        MTkvegqKUPPKlSB1Fo1BmDs3tWiXz5Z0O+tTTAUCnr3ye4Tb3Q2kvrz3++i4h3So2jABdi
-        RFiM00h8+sYRauNfpCX7fSR2oChB9UU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-c0gIOMpuMJ2JZ6CTwJwVew-1; Thu, 20 Jan 2022 13:19:54 -0500
-X-MC-Unique: c0gIOMpuMJ2JZ6CTwJwVew-1
-Received: by mail-ed1-f72.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso6676964edb.10
+        Thu, 20 Jan 2022 13:19:53 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5DBC061574
         for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:19:53 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id f13so5882350plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:19:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7I5OODOa5piQNsKmLmbhAnVs29y4MT3sx3I0fLDPy2w=;
+        b=qAcObxObCDq1N919u4ec4prmW472518LnFhDPyYfYOqdct9Jvu/bgC6p9ASucwA6xR
+         pKbhJ/cMqkrdIq00r96VE6qFmsYm0U+x8Day96Wq46xWEjKT+JNUnI8Sjs2q5BP/uagl
+         E5iz5A8s/Szvs6xgy7BC6WS1V27HLVpTVkPrroIj8sDaxnU+18uGbeO1GN9HbCl2pW3T
+         DYPaN/7V+BL0N6A1sAE8gWk1WzxljeeKtMn1Wd7FZ1IgonzdiBLmHtqz6TWl4nMgnCOG
+         5cp5Ns4zrtkIPeVZ1ceUH9FchijSaTAlpNlLm9DlhQoF5cSxjr7sbHlz5YNaZwY/z8KO
+         Dw3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=rKxyIeZW7RYW3u4+X955jRymBZg+th+EIWA7v064V2E=;
-        b=YeVEH95dHj94zxU6bRGjS7s3Gop/fCId4tOB1lPjG5KWJm9tO17Db6vCa96A3kjnZ2
-         oa7Fvw4TwIrbJqKXXpEchyvDYOTGsab9ZPmYerMKpz8BRWNW6qejBjzGvbfG95F2WMsB
-         u33XClW5S1DHZq0dTswe6rMvQb0zTWDO71ErKIVojrYTa93h0xvSHQIo92U6eKeXcuuy
-         +P1CGaKaZH0/06Hb6Ruth5G1vzOzltkQVzI82fQOPUM1SkcU0seaf42F5HfykT0zIbIu
-         udK310uBd7rConzNEaNYi6mY3MSMlMXa/o1e4TQTo94VqUzQJvBmpvKnfVXlt+0SUv8f
-         Z1Zg==
-X-Gm-Message-State: AOAM532StVcUQ5wrmoJA9GPXp24aalSzcVVM8qjEwcBa5BkQC8mRoIiq
-        1PHooLg9+ozGCwE6OOhuiIggHxdnt0ypFdDfmPjwqIs6b2icnoBWdtbTLS+oJaTp2oUKRHgyMqH
-        6fL4YUkHbfY/XvSmYtwhlqZhn
-X-Received: by 2002:a17:907:7d8a:: with SMTP id oz10mr113652ejc.320.1642702792938;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=7I5OODOa5piQNsKmLmbhAnVs29y4MT3sx3I0fLDPy2w=;
+        b=Sh5utQMwMFeTat7HEf2iFpyFbuoNgxnQCIcdcvlE87Su1K/0DZX/zt4DW/TYfeLZBP
+         p3XHMyZ/xhVMJZ15rte1aAPMTFkJoKo03Ex0CR1JeeSCVhFQM01sq7I47i2zBmWCQY7x
+         tEZpf5OJNYu15E1WZwMIJodSe2w0DEV++lF4G6/2w5GHvRLhFUhwPRnT+79ZKAg2O6+n
+         Oi2FsTW5blZ7Lf+oXntAr+6FGuXNE0Dk5VjY6a+vnkWJVPxl7WKxIYoQBi0ZnhGC4WvO
+         5Nw05HlmZEe+4AxSYxU4KyG+4yai6L4YPWHwtCM6cihHMLV5P8UxoWA6dX2l9Uxmf4mb
+         JPeg==
+X-Gm-Message-State: AOAM531L3gzuVCdYd+kgiBbp9273XMJ0Ug/KVJ2Ao3R+WvVGL3TYuyqT
+        spOV54x/vk3tDKRmPePLcClv3g==
+X-Google-Smtp-Source: ABdhPJwb05nkzkp2TpQCijXSNYaPtKpZw3Qs733bSdJ9zS0nGG4S4+IbLGn7RLmphX1r0U7O10Ihuw==
+X-Received: by 2002:a17:902:f54a:b0:14a:97ad:b877 with SMTP id h10-20020a170902f54a00b0014a97adb877mr203886plf.152.1642702792943;
         Thu, 20 Jan 2022 10:19:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwU9TWkRnVmK3HK4zfioqdII11rqxD40tMTTzfgBpEJQdwiaFvEt+7U82gMa0IM1APSiHIlfg==
-X-Received: by 2002:a17:907:7d8a:: with SMTP id oz10mr113628ejc.320.1642702792649;
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id t31sm4200143pfg.92.2022.01.20.10.19.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 20 Jan 2022 10:19:52 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
-        by smtp.gmail.com with ESMTPSA id g9sm1287766ejf.33.2022.01.20.10.19.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 10:19:52 -0800 (PST)
-Message-ID: <0b734af9-d2c3-acef-3804-3a87e1e61a59@redhat.com>
-Date:   Thu, 20 Jan 2022 19:19:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Content-Language: en-US
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wangzhigang17@huawei.com, Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220113140318.11117-1-zhangliang5@huawei.com>
- <YeA5oP/iaxtVPHb3@casper.infradead.org>
- <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
- <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com>
- <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
- <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
- <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
- <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
- <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
- <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
- <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
- <8931808d-db61-0f06-ceb3-f48a83b1f74c@redhat.com>
- <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date:   Thu, 20 Jan 2022 10:19:52 -0800 (PST)
+X-Google-Original-Date: Thu, 20 Jan 2022 10:19:24 PST (-0800)
+Subject:     Re: [PATCH 12/12] RISC-V: defconfigs: Remove redundant K210 DT source
+In-Reply-To: <DM6PR04MB70816AD80E3D9BD56A59FEFFE74D9@DM6PR04MB7081.namprd04.prod.outlook.com>
+CC:     linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        heinrich.schuchardt@canonical.com,
+        Atish Patra <atishp@rivosinc.com>, bin.meng@windriver.com,
+        sagar.kadam@sifive.com, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Damien.LeMoal@wdc.com
+Message-ID: <mhng-f042ecd2-dc39-4212-a2c6-3ea842c20e3c@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Sounds good? At least to me. If only swap/migration entries wouldn't be
->> harder to handle than I'd wish, that's why it's taking a little and will
->> take a little longer.
-> 
-> Thanks for the quick response. I would have to see the logic to set/clear
-> PageAnonExclusive to fully understand how things are handled.
-> 
+On Thu, 06 Jan 2022 18:14:00 PST (-0800), Damien.LeMoal@wdc.com wrote:
 
-I'll let you know as soon as I have something. I'll most probably share
-a document explaining the design first.
-
-> BTW, I just saw this patch form PeterZ [1] that seems to be related, as
-> it deals with changing protection on pinned pages.
-
-Unfortunately the use of page_maybe_dma_pinned() is racy, as we can race
-with GUP fast. It's a problem for vmscan which currently relies on it
-for correctness. For migration, it might be good enough as we should
-fail later when trying to freeze the refcount.
-
-> 
-> 
-> [1] https://lore.kernel.org/linux-mm/20220120160822.666778608@infradead.org/
-> 
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+I just see an empty message here.  Not sure if it's something wrong with 
+my mail client, it's always a bit confused by yours -- it's usually not 
+this confused, but it is generally a broken mess so I wouldn't be 
+surprised by anything ;)

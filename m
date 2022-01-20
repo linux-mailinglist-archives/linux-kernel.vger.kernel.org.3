@@ -2,64 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D18D49539B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB00F4953A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbiATRzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:55:08 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:50149 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbiATRzH (ORCPT
+        id S233185AbiATR4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:56:12 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:37138 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233102AbiATR4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:55:07 -0500
-Received: by mail-io1-f70.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso4435816iov.16
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:55:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=PgHxSdlHdOrLmXID6kwrwLEwhOW4ZwdFFAu3sMkS4us=;
-        b=qTrn6w3Zpiix7NL0DHywBFUSdYJbDyiUJOPyOR9qXe4JN2KgvW/CUSaC5mZiF60Fin
-         eJPXndEswzpObGRv6Z3qmKY8ASdpE7uq8oJ8J6u8tycn+V5eyKQY1oKl85kE/JB5sWXz
-         a14ULCgimgKcQtKAAMRB1C4NUq9NK2A6FHZ71tt8fTmsiFXnhaFX5+zkkbyY7MCKkXHE
-         6TtsvZRvBokhfNmVf0ld3Ct/gw6T3uS89P/K21UBBl6Oh38HrzO6lWNY5S7sdC0z9ep3
-         iw7AczUzaykbZ+/sr8STpE6SZMbno9rJJ86W12isDIWMX7OW/dd3G0GnNhEq9dzzTvww
-         /m0g==
-X-Gm-Message-State: AOAM5326oYhq9veH6lw2cgaooVCWXxYDFyCXqmlBil6CWSH9gMN8aDP4
-        ZLWtXMZ1TrJTbOkN37eRLrQIGeI1egN0DYzQkYAVsBU4zndQ
-X-Google-Smtp-Source: ABdhPJwYKv/aqTjtiFeKjgHzsrq4lX7eFkoOPieYwlVboN334XuAVGOTylthd+c/LVLblNC0nJaUNyuIGZNe44NNe6cnKynDC/Nu
+        Thu, 20 Jan 2022 12:56:06 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K5Ip9w022340;
+        Thu, 20 Jan 2022 11:55:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=/IA9aYK9SVb9BvHEuwQJnvbzmEGlO38e5B5sMd74PEs=;
+ b=CbICzOYPKbjJcZ5Y39rvRaJd5MksGxO26iFQxXR509EmiVXIc2oEptleua5XaDz9lWpy
+ mbEf8qkke+5KTppMduYiSCw8JvPRTiokkaw0vw4CmKuMBRW3xLrU1KoHw3CFdHOlHd5b
+ wptJiq9DKmu1AoP6TCFK8k85poc7hpONOHOar79Mu3/GHSYHWG1o1l2Pxh4UhnUcxS52
+ 9Cd8twaMYLTf2lANJxVJq/Y+tmje9S7oq6Umv7tH7/aZnHMqeRuQcEPOd0CyBc4YLRiW
+ JQkrp0R6O2muqc7RJ8VBpZGtttB84rjjokFf2OXtrBkI1D5DCpHZo8WZbRg5DVadcR8n rw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dpms0hh17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 20 Jan 2022 11:55:57 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 20 Jan
+ 2022 17:55:53 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 20 Jan 2022 17:55:53 +0000
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.33])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 35050B13;
+        Thu, 20 Jan 2022 17:55:53 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH 0/3] ASOC: cs42l42: Add support for system suspend
+Date:   Thu, 20 Jan 2022 17:55:46 +0000
+Message-ID: <20220120175549.671831-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca0c:: with SMTP id j12mr39083ils.105.1642701307187;
- Thu, 20 Jan 2022 09:55:07 -0800 (PST)
-Date:   Thu, 20 Jan 2022 09:55:07 -0800
-In-Reply-To: <YembypBPqEXg+YB+@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e3395b05d607330c@google.com>
-Subject: Re: [syzbot] INFO: task hung in hub_port_init (2)
-From:   syzbot <syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hdanton@sina.com, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        paskripkin@gmail.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: -0qIb_fGy_rUEMofCkMELgRt3ynZ0UbZ
+X-Proofpoint-GUID: -0qIb_fGy_rUEMofCkMELgRt3ynZ0UbZ
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add system suspend and resume handlers so that the cs42l42 is cleanly
+put into power-off state during system suspend and the registers are
+restored in resume.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+The first two patches separate out two small changes that can stand
+alone and are needed to enable the system suspend implementation:
 
-Reported-and-tested-by: syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
+1) Don't rely on there being a jack unplug IRQ before a plug IRQ.
+There won't be if the unplug and plug happened while in system suspend.
 
-Tested on:
+2) Put a mutex around the entire IRQ handling so that the suspend can
+ensure the last run of the IRQ handler has completed before it powers
+down.
 
-commit:         6f59bc24 Add linux-next specific files for 20220118
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=94e8da4df9ab6319
-dashboard link: https://syzkaller.appspot.com/bug?extid=76629376e06e2c2ad626
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1596bbdfb00000
+Richard Fitzgerald (3):
+  ASoC: cs42l42: Report full jack status when plug is detected
+  ASoC: cs42l42: Change jack_detect_mutex to a lock of all IRQ handling
+  ASoC: cs42l42: Handle system suspend
 
-Note: testing is done by a robot and is best-effort only.
+ sound/soc/codecs/cs42l42.c | 164 ++++++++++++++++++++++++++++++++++++++++++---
+ sound/soc/codecs/cs42l42.h |   7 +-
+ 2 files changed, 161 insertions(+), 10 deletions(-)
+
+-- 
+2.11.0
+

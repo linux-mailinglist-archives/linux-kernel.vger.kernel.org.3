@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E3E494DD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63145494DD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237223AbiATMWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:22:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:35958 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232146AbiATMWn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:22:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91B2FED1;
-        Thu, 20 Jan 2022 04:22:42 -0800 (PST)
-Received: from [10.57.68.26] (unknown [10.57.68.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97FE53F774;
-        Thu, 20 Jan 2022 04:22:40 -0800 (PST)
-Message-ID: <319b09bc-56a2-207f-6180-3cc7d8cd43d1@arm.com>
-Date:   Thu, 20 Jan 2022 12:22:35 +0000
+        id S241857AbiATMXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232146AbiATMXJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 07:23:09 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA029C061574;
+        Thu, 20 Jan 2022 04:23:08 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id n10so12274213edv.2;
+        Thu, 20 Jan 2022 04:23:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XHbVxPVvQxKFGbV2gO92+uYdrWX0wSKGNZ+qAac9RH8=;
+        b=mJstJer94oSZPY77xchw20ydWv6462Svb1zFv5diZWooveJU9tqXs2kOSY7V5mHXpj
+         emKeJAo8rItxJ13PcQy57kE4GSvx4FXZYbdzUYOx01x8Qzp6ezt+fDgj75/+pjPIvgth
+         DfaudXa7VyjI5qdB9LRszLnIOkoYHbTKv/y76XCeoJUxeOi06FS4c6svi2w7k8j1at57
+         +8uaAaVjqTcxJxdNz2pEJz90g3SzBtoGCsz4UoLexzMufzAlgL9sGGR1O/m8S2+z4m7h
+         m+2tmcQXZvli87AW++6tgNSVpsTQ6UMp1Pe2wERnjXdXy3E1c9Vt3rqvXed+n1VxhaE7
+         1x+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XHbVxPVvQxKFGbV2gO92+uYdrWX0wSKGNZ+qAac9RH8=;
+        b=AbSHh4dLqdGslEfOBEZlxN1e9bWnUjhJcqoEcIxLnwWRKXXPWNAswbJJu6Nx5Y1qUc
+         +b+l4hmwSq7XIoxlrwp1vAhsi44NICC6aa958/zmVgaU3b3jZAuEB8e15jbDu/jaSnHF
+         Ap423qpulrTqWbu/r8m8WtZSZJ9kcXaYFHNxxjr43PwSNRKMdwIhNWHE3FmIlaLSUP/f
+         GI16tEe9NsRFZWJVeKmZc8slOm7foRddAvFtpNiUqgr11EiXLikPfaVg3rKAiIFBlFKW
+         SCVsW3KqnHdqqe6TBj1G+Pq0Mu5CZ80u4rGRjeiMgs3YdGhw5CI2xbLeRSqq+C1E5rZ0
+         YC2g==
+X-Gm-Message-State: AOAM531SEZ+e1pd64w5sYG+3xZD3KysJFWN0iBRD5vpTXNIIWAgGJg33
+        v3CHeDC/WwX3AsOLm7frcA==
+X-Google-Smtp-Source: ABdhPJxlCJUR7xftN7+m7al79PN2IVfj6sbEGegLH6cIpmE+tKGZPk+TlxL89oTc2bBU0YwbUXtPzg==
+X-Received: by 2002:a17:906:a103:: with SMTP id t3mr27826817ejy.567.1642681387287;
+        Thu, 20 Jan 2022 04:23:07 -0800 (PST)
+Received: from localhost.localdomain ([46.53.254.155])
+        by smtp.gmail.com with ESMTPSA id gz19sm949362ejc.10.2022.01.20.04.23.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 04:23:06 -0800 (PST)
+Date:   Thu, 20 Jan 2022 15:23:04 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, ebiederm@xmission.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, stephen.s.brennan@oracle.com,
+        legion@kernel.org, cyphar@cyphar.com
+Subject: Re: [PATCH v2] proc: "mount -o lookup=" support
+Message-ID: <YelUKIOjLd7A9XQN@localhost.localdomain>
+References: <YegysyqL3LvljK66@localhost.localdomain>
+ <20220119162423.eqbyefywhtzm22tr@wittgenstein>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-Content-Language: en-GB
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220118235244.540103-1-yury.norov@gmail.com>
- <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
- <Yeg79CcofyNuVLid@casper.infradead.org>
- <e9226eb4-4ecf-ac01-e823-ff507a354ac5@arm.com>
- <YehilqRvYLhryUk4@shell.armlinux.org.uk>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YehilqRvYLhryUk4@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220119162423.eqbyefywhtzm22tr@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-19 19:12, Russell King (Oracle) wrote:
-> On Wed, Jan 19, 2022 at 06:43:10PM +0000, Robin Murphy wrote:
->> Indeed, my impression is that the only legitimate way to get hold of a page
->> pointer without assumed provenance is via pfn_to_page(), which is where
->> pfn_valid() comes in. Thus pfn_valid(page_to_pfn()) really *should* be a
->> tautology.
+On Wed, Jan 19, 2022 at 05:24:23PM +0100, Christian Brauner wrote:
+> On Wed, Jan 19, 2022 at 06:48:03PM +0300, Alexey Dobriyan wrote:
+> > From 61376c85daab50afb343ce50b5a97e562bc1c8d3 Mon Sep 17 00:00:00 2001
+> > From: Alexey Dobriyan <adobriyan@gmail.com>
+> > Date: Mon, 22 Nov 2021 20:41:06 +0300
+> > Subject: [PATCH 1/1] proc: "mount -o lookup=..." support
+> > 
+> > Docker implements MaskedPaths configuration option
+> > 
+> > 	https://github.com/estesp/docker/blob/9c15e82f19b0ad3c5fe8617a8ec2dddc6639f40a/oci/defaults.go#L97
+> > 
+> > to disable certain /proc files. It overmounts them with /dev/null.
+> > 
+> > Implement proper mount option which selectively disables lookup/readdir
+> > in the top level /proc directory so that MaskedPaths doesn't need
+> > to be updated as time goes on.
 > 
-> That can only be true if pfn == page_to_pfn(pfn_to_page(pfn)) for all
-> values of pfn.
+> I might've missed this when this was sent the last time so maybe it was
+> clearly explained in an earlier thread: What's the reason this needs to
+> live in the kernel?
 > 
-> Given how pfn_to_page() is defined in the sparsemem case:
+> The MaskedPaths entry is optional so runtimes aren't required to block
+> anything by default and this mostly makes sense for workloads that run
+> privileged.
 > 
-> #define __pfn_to_page(pfn)                              \
-> ({	unsigned long __pfn = (pfn);                    \
-> 	struct mem_section *__sec = __pfn_to_section(__pfn);    \
-> 	__section_mem_map_addr(__sec) + __pfn;          \
-> })
-> #define page_to_pfn __page_to_pfn
-> 
-> that isn't the case, especially when looking at page_to_pfn():
-> 
-> #define __page_to_pfn(pg)                                       \
-> ({      const struct page *__pg = (pg);                         \
->          int __sec = page_to_section(__pg);                      \
-> 	(unsigned long)(__pg - __section_mem_map_addr(__nr_to_section(__sec))); \
-> })
-> 
-> Where:
-> 
-> static inline unsigned long page_to_section(const struct page *page)
-> {
-> 	return (page->flags >> SECTIONS_PGSHIFT) & SECTIONS_MASK;
-> }
-> 
-> So if page_to_section() returns something that is, e.g. zero for an
-> invalid page in a non-zero section, you're not going to end up with
-> the right pfn from page_to_pfn().
+> In addition MaskedPaths is a generic option which allows to hide any
+> existing path, not just proc. Even in the very docker-specific defaults
+> /sys/firmware is covered.
 
-Right, I emphasised "should" in an attempt to imply "in the absence of 
-serious bugs that have further-reaching consequences anyway".
+MaskedPaths is not future proof, new entries might pop up and nobody
+will update the MaskedPaths list.
 
-> As I've said now a couple of times, trying to determine of a struct
-> page pointer is valid is the wrong question to be asking.
+> I do see clear value in the subset= and hidepid= options. They are
+> generally useful independent of opinionated container workloads. I don't
+> see the same for lookup=.
 
-And doing so in one single place, on the justification of avoiding an 
-incredibly niche symptom, is even more so. Not to mention that an 
-address size fault is one of the best possible outcomes anyway, vs. the 
-untold damage that may stem from accesses actually going through to 
-random parts of the physical memory map.
+The value is if you get /proc/cpuinfo you get everything else
+but you might not want everything else given that "everything else"
+changes over time.
 
-Robin.
+> An alternative I find more sensible is to add a new value for subset=
+> that hides anything(?) that only global root should have read/write
+> access too.

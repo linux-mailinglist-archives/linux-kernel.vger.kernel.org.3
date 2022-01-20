@@ -2,92 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BB7494DEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF22494DED
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242325AbiATM3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S242362AbiATMaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbiATM3C (ORCPT
+        with ESMTP id S242140AbiATM36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:29:02 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC55DC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 04:29:01 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id v124-20020a4a5a82000000b002e303ad3241so2252160ooa.8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 04:29:01 -0800 (PST)
+        Thu, 20 Jan 2022 07:29:58 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E91BC06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 04:29:58 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id d5so3217784pjk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 04:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H6QsODldDl5vUgs0b13/9aR4jGe2tT2snE0u6JkjQn0=;
-        b=bRYyD/20jPnVHwXJmaGTX2YCs+KqgLPib7Z/rbv0dldagVrFIPz+H41ONzcGaNucFo
-         OQyzpSyQaLbKHpT/DKw0GYF4hbcmllmux8krdcoQ4lQf5jJasFMrlaSfcjz+nG8gtzLg
-         hkPJqVsKb7hNA4diqJOApKL9/Uk1JtR7+zKzcKQbnzhii5ZFILXhHvFjHtZyHum17ljo
-         iAzlFpRJccy6CeEre/amrfejwXnKnQR/fFqnGUYBNs8t0HQaqybTmmut/01DG2ue6q49
-         fmWDwdNewwcebVTlhHZ/wNU8yfi80s+/+CKX+M3jl8DiGVIAlRD5OOS5u4yhlVxkTk+F
-         TWNA==
+         :cc:content-transfer-encoding;
+        bh=bJc7E0ZK2JilQOtCTnLnbaOln2zvVu8F3m2cBRki6mg=;
+        b=64qhvyb0dK0pjpg+ZKWlzXCu1XNj46fAUmpwCTvrDsRSMSZ3T52tt0/m2CGv5efY3g
+         leBpis2cE5RxEeOAwkzExgtcpswZf4/uX6/MZrGYsMGqLUPPdxJbZV85kNDCC5FWcBAb
+         yuXRVTtEhpwv/b6bG8zjLgukv8VM2ToH1lODoxRxLiO/UvCGGxbj6kY/zrFbfNpR+o4A
+         Ao5vMlJsjgx1evw/di23lhRYi3bMysCKMWNupGYqsehWjOnTP9EOp5Jd14jb+oYyfCEf
+         iz51uWtJxzYjpuxsBmSBGrI862pGyLVj2j1PhCDUNAN2v5RtbdMzvlotA20nU9YPk7G7
+         eVEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H6QsODldDl5vUgs0b13/9aR4jGe2tT2snE0u6JkjQn0=;
-        b=EUcAs6UMaxP+w3xbCBlTjFoSM+LjHQ0bgnvPwijzWRPWnFDzvgNGxu/Qg+edt/yrRc
-         swp6ehD4oVgXe2VCV1dXkwNR5J9K6U9qjfxtJfM3KydYgx1ZT/OYcC+/JzWCE7RFh7EO
-         k//0qoaUMftC4BZmFvjSuqf9Na0hC8gXxML6eFZvifPpXdXFPKPyo39GvL42Bgtl99kg
-         OcQqfnx4eAIgzhPmD/toS7u6OvBigrYsktudQ6CDJ97U/ToG8/e1ZvyUDdeHbR1sM4Mm
-         CAuarZiB4KNPjxdmIJHT9H+Aq0JQOn6baGQ++Mrv9I5ELh60Z0G2xj4CFGYJnSM5+EWK
-         nJgA==
-X-Gm-Message-State: AOAM533Q9Nv9shFCe3sz6U/VfAmRqibMyo6UsgAr3RNE5O7FkGkHWENE
-        Ufl8Gqs1U/KRPQc/qfj1oFexF9FOoOmiQtDYVvoMMiOEjJjquQ==
-X-Google-Smtp-Source: ABdhPJwq+Q1G+48YsvpIZjULWllI1ZZq8IxUCv3NoC6RCpfoN12YDpvhjJHY2y/Fk/0gKRLrY7mIKHTWU2iTepMCcEw=
-X-Received: by 2002:a4a:b4cb:: with SMTP id g11mr25861335ooo.46.1642681741170;
- Thu, 20 Jan 2022 04:29:01 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bJc7E0ZK2JilQOtCTnLnbaOln2zvVu8F3m2cBRki6mg=;
+        b=wN1lqDmZq2dxwSZGE01g4pSZXT/Z5ms+RcKuYyxwVkhHr6Hn432SKLtlT5Vrnl9awv
+         np6ub9k2XlgXL9p1Nc7SbOdKV+DyhTxEDV/20Ro5dwFkG7S+pMPi8KFtul1ivoEN/Yui
+         EKTAU0t0LvwncHa51NCgnOXchPzp/XRiehh7r6Gi+iRnZh7SlnxNyo7dG/UmV3aiPPIT
+         Q6I5B91y55HYrpA7vdG23CoOlJdh1LGv4Peb0hrwUyGmU6Hps8i47Bloq/RFjJ1VHFOD
+         vSdBAMcJhFv7khskR+YtBC339d092Xj2Cj9WqHCgzKZ4ct1tCz69Vm45PNJqhy76AuGq
+         pX1w==
+X-Gm-Message-State: AOAM530/orGCeVkPGEZF3NaJp5cQR84HyMbRO+CtG5aV6y4zofhs9Tf4
+        vOcp11FKHcDbOtfGqOJDkhT6420xyOohX4Ei/x8z6Q==
+X-Google-Smtp-Source: ABdhPJwwldgLR3Q8ZK3JlqDBoC69a2fzONh0YE19VpOVYJm+HkSixlLL4VoTULoPUl8unZ+IT10oI5oFLZ78XmnumDw=
+X-Received: by 2002:a17:903:2451:b0:14a:8c5c:97fe with SMTP id
+ l17-20020a170903245100b0014a8c5c97femr32901956pls.145.1642681797692; Thu, 20
+ Jan 2022 04:29:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20220116192611.19224-1-makvihas@gmail.com> <20220118150728.GJ1951@kadam>
-In-Reply-To: <20220118150728.GJ1951@kadam>
-From:   Vihas Mak <makvihas@gmail.com>
-Date:   Thu, 20 Jan 2022 17:58:50 +0530
-Message-ID: <CAH1kMwThGSp7v5BuPvRiY44i6TvLbK2an0iqGw-_r3RZYOADzQ@mail.gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: handle rtw_init_netdev_name() failure appropriately
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Larry.Finger@lwfinger.net, Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>, martin@kaiser.cx,
-        straube.linux@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+References: <20220120001621.705352-1-jsd@semihalf.com> <2f7610dc-ab57-ddbf-277f-e84680da71bd@redhat.com>
+In-Reply-To: <2f7610dc-ab57-ddbf-277f-e84680da71bd@redhat.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Thu, 20 Jan 2022 13:29:46 +0100
+Message-ID: <CAOtMz3MDntus2OzRS_QDfnFpzrVjj4swQjTkgkFYMGuwgbZcWA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] i2c-designware: Add support for AMD PSP semaphore
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> This doesn't really fix the bug.  Better to re-write the error handling.
->> See my error handling guide here:
+Hi Hans,
 
-Thanks Dan for the guide. Will submit a v2 soon.
 
-On Tue, Jan 18, 2022 at 8:37 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+czw., 20 sty 2022 o 12:15 Hans de Goede <hdegoede@redhat.com> napisa=C5=82(=
+a):
 >
-> On Mon, Jan 17, 2022 at 12:56:11AM +0530, Vihas Mak wrote:
-> > rtw_init_netdev_name() calls dev_alloc_name() which allocates the name
-> > for the device as per the given name format.
-> > It returns a negative err code if the format is invalid. Currently the
-> > name format is specified by the module parameter "ifname".
-> > Warn the user if "ifname" is invalid.
+> Hi Jan,
+>
+> On 1/20/22 01:16, Jan Dabros wrote:
+> > This patchset comprises support for new i2c-designware controller setup=
+ on some
+> > AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the s=
+ame
+> > controller and acts as an i2c arbitrator there (x86 is leasing bus from=
+ it).
 > >
-> > Signed-off-by: Vihas Mak <makvihas@gmail.com>
-> > ---
+> > First commit aims to improve generic i2c-designware code by adding extr=
+a locking
+> > on probe() and disable() paths. I would like to ask someone with access=
+ to
+> > boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to veri=
+fy
+> > behavior of my changes on such setup.
+> >
+> > Second commit adds support for new PSP semaphore arbitration mechanism.
+> > Implementation is similar to the one from i2c-designware-baytrail.c how=
+ever
+> > there are two main differences:
+> > 1) Add new ACPI ID in order to protect against silent binding of the ol=
+d driver
+> > to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added=
+ to this
+> > new _HID allows to recognize setup with PSP.
+> > 2) Beside acquire_lock() and release_lock() methods we are also applyin=
+g quirks
+> > to the lock_bus() and unlock_bus() global adapter methods. With this in=
+ place
+> > all i2c clients drivers may lock i2c bus for a desired number of i2c
+> > transactions (e.g. write-wait-read) without being aware of that such bu=
+s is
+> > shared with another entity.
+> >
+> > This patchset is a follow-up to the RFC sent earlier on LKML [1], with =
+review
+> > comments applied.
+> >
+> > Looking forward to some feedback.
+> >
+> > [1] https://lkml.org/lkml/2021/12/22/219
 >
-> This doesn't really fix the bug.  Better to re-write the error handling.
-> See my error handling guide here:
 >
-> https://lore.kernel.org/all/20210831084735.GL12231@kadam/
+> Thank you for your patch series.
 >
-> regards,
-> dan carpenter
+> As you may have seen I've done a lot of work on the Bay Trail semaphore
+> thing. I also own several Bay Trail and Cherry Trail based devices which
+> use this setup.
 >
+> I'll add your patches to my personal WIP tree which I regularly run
+> on these devices and I'll report back if I notice any issues.
 
+Thanks in advance, this will be really helpful! I don't have Bay
+Trail/Cherry Trail, so I've only tested that build of Bay Trail
+semaphore isn't broken.
 
--- 
-Thanks,
-Vihas
+I would like to point to new locks in i2c_dw_disable() method as
+something to be the most fragile and error-prone, will be great if you
+can verify this thoroughly. This function is invoked on both
+dw_i2c_driver.remove() and dw_i2c_plat_suspend() paths. Considering
+that Bay Trail semaphore means that i2c bus is shared with PMIC, I'm
+not sure whether all corner cases are secured especially on platform
+suspend.
+
+>
+> One remark, I notice that there are no AMD people in the Cc, it
+> would be good if you can find someone from AMD to look at this,
+> also see my remarks to the 2nd patch in my reply to that patch.
+
+This was partially discussed with AMD folks and you are right that I
+should include someone from AMD to take a look at this. Thanks for all
+your comments!
+
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+> >
+> > Jan Dabros (2):
+> >   i2c: designware: Add missing locks
+> >   i2c: designware: Add AMD PSP I2C bus support
+> >
+> >  MAINTAINERS                                  |   1 +
+> >  drivers/acpi/acpi_apd.c                      |   1 +
+> >  drivers/i2c/busses/Kconfig                   |  10 +
+> >  drivers/i2c/busses/Makefile                  |   1 +
+> >  drivers/i2c/busses/i2c-designware-amdpsp.c   | 357 +++++++++++++++++++
+> >  drivers/i2c/busses/i2c-designware-baytrail.c |  10 +-
+> >  drivers/i2c/busses/i2c-designware-common.c   |  12 +
+> >  drivers/i2c/busses/i2c-designware-core.h     |  18 +-
+> >  drivers/i2c/busses/i2c-designware-master.c   |   6 +
+> >  drivers/i2c/busses/i2c-designware-platdrv.c  |  61 ++++
+> >  10 files changed, 469 insertions(+), 8 deletions(-)
+> >  create mode 100644 drivers/i2c/busses/i2c-designware-amdpsp.c
+> >
+>

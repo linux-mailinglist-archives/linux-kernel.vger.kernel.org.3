@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD8D495318
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38C949531B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377318AbiATRXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:23:33 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:47097 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377233AbiATRX3 (ORCPT
+        id S1377333AbiATRXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:23:46 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:43917 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377233AbiATRXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:23:29 -0500
-Received: by mail-oi1-f178.google.com with SMTP id w188so9789743oiw.13;
-        Thu, 20 Jan 2022 09:23:28 -0800 (PST)
+        Thu, 20 Jan 2022 12:23:44 -0500
+Received: by mail-ot1-f45.google.com with SMTP id q13-20020a9d4b0d000000b0059b1209d708so8428050otf.10;
+        Thu, 20 Jan 2022 09:23:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=EAkSVry5IOKbh3mNYVa4dyjbmMK+FV1ismL7QMeIYBE=;
-        b=Rptlzddy9PZ3Cr+6vypCu7VicwqrXXQ3cMCvGs31Urw8F+R404lSNVoWIYjwyesCjx
-         wja1SFdrlj80ALz6NJTEhXPcSegQ3i4uOp7fY9qxroG13okfb7cVQwIk7YHeFw0n51vn
-         zueHNJhZCETaxFgvW9JMK//B+rRkJEtL5P8j8t5Wd0PZWdBiuW51OkiDLmNgINuInkGX
-         5uxQWVdibRo+si2n9udAdzVdETR3C0aZq/jlXXh+KFoVssbRVXxvAHPJ3rDqRFX9kvjL
-         BLcJ1/Zdrnkte4zk2dFbDPi22yo6ih5FyClm2NRfG6FgnEF7p1y4+QFU5rrG86srqkf7
-         8N/g==
-X-Gm-Message-State: AOAM533EhRkjM2T1JjMzSW4G+46z7TK6PlGONtFrYCk9GtXz1FQ11yB9
-        6uM3+B6hYk9bKLMleGhG62g64J1eLw==
-X-Google-Smtp-Source: ABdhPJyYaRqYHbwwgMxnSR9Jr/rVi95SCT70cluMn3mT6CUbGRyJY7P7Clqm4Rmuay1WMOaEjLEJJA==
-X-Received: by 2002:aca:1311:: with SMTP id e17mr8321961oii.119.1642699408514;
-        Thu, 20 Jan 2022 09:23:28 -0800 (PST)
+        bh=Yz8oe3/XyaBDZ1FQ+X/VGUOc8sD+gbn465Mchm1UfqQ=;
+        b=1TGnIsFB08oMr2j6jyQflrUpdNJtKbWo5QJWVZpw4op8xYi61770CjQAq+tWBQ1R2G
+         lUYnIPIc72ulBazYUvEJ3Y+/cBfMeLoRAh+2pL/eiJpJ8KPv2gyQnQKiE4vHLBfFZiAq
+         ZWCLBBWtqLEWNCidq2YIjtHgd0vfMgv1XV49d8XM4pRA+mPyQmdPVCAbyt3JMeIsHs8U
+         J/UXEqsr8gjsnAVaHbqgV01WbC+TTSmGOdQgD0QN1EwCxYmX+DNR4Tg7p0RNFWf1W92v
+         XKTkpSgd/kv7GV2ZbNFX76VkjzclNLv9ZSbYMZwPlUp9GIe/fFmthPTv8vluj3ZVDkHA
+         hg2Q==
+X-Gm-Message-State: AOAM531MI9p2ty7ppfPTO3Hkpe4lc8Cfo26zP7ejSZpLzDGd1u157DGV
+        VqQTPDWwuGujy+Cc2JewCA==
+X-Google-Smtp-Source: ABdhPJyblAA+uazX1XKWS4X8uBADnmian8HYprDWsr/jbPO9u1MTKLJ7kUh/QsbpMphF8X02EjzEPA==
+X-Received: by 2002:a9d:6255:: with SMTP id i21mr21988579otk.363.1642699424031;
+        Thu, 20 Jan 2022 09:23:44 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id i19sm1350172oou.36.2022.01.20.09.23.27
+        by smtp.googlemail.com with ESMTPSA id t3sm1278960oou.48.2022.01.20.09.23.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:23:27 -0800 (PST)
+        Thu, 20 Jan 2022 09:23:43 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: net: ti,k3-am654-cpts: Fix assigned-clock-parents
-Date:   Thu, 20 Jan 2022 11:23:18 -0600
-Message-Id: <20220120172319.1628500-1-robh@kernel.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: fsl-imx7ulp-wdt: Fix assigned-clock-parents
+Date:   Thu, 20 Jan 2022 11:23:32 -0600
+Message-Id: <20220120172333.1628990-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,29 +57,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The schema has a typo with 'assigned-clocks-parents'. As it is not
 required to list assigned clocks in bindings, just drop the assigned-clocks
-property definitions to fix this
+property definitions to fix this.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml | 6 ------
- 1 file changed, 6 deletions(-)
+ .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml     | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
-index 1a81bf70c88c..a30419ef550a 100644
---- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
-@@ -103,12 +103,6 @@ properties:
-       clocks:
-         maxItems: 8
+diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+index fb603a20e396..4ca8a31359a5 100644
+--- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+@@ -29,12 +29,6 @@ properties:
+   clocks:
+     maxItems: 1
  
--      assigned-clocks:
--        maxItems: 1
+-  assigned-clocks:
+-    maxItems: 1
 -
--      assigned-clocks-parents:
--        maxItems: 1
+-  assigned-clocks-parents:
+-    maxItems: 1
 -
-     required:
-       - clocks
+   timeout-sec: true
+ 
+ required:
+@@ -56,7 +50,7 @@ examples:
+         interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+         clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+         assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+-        assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
++        assigned-clock-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
+         timeout-sec = <40>;
+     };
  
 -- 
 2.32.0

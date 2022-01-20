@@ -2,191 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8C7494907
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF19494914
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358130AbiATID5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:03:57 -0500
-Received: from mga17.intel.com ([192.55.52.151]:41765 "EHLO mga17.intel.com"
+        id S1358653AbiATIEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:04:51 -0500
+Received: from comms.puri.sm ([159.203.221.185]:39846 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240049AbiATID4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:03:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642665836; x=1674201836;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=zk3qjTgwokdg8NahD1ulTJvIC3IlV/CFaQ42M7QB/rs=;
-  b=ajDSVCqJticLbffce3QrAaTdkghJ4sLNlGDuc/GN++MHiwOfkVryWn4p
-   uzccpZiYeCujYINY4EO4iUnnvBKbVg4GmEtro0kMkNjz10q52BwN2tOwT
-   ADsa883q/pwyB9ZFyCGAB9MFEJjKF3mfKJG1Hb9t9G/SIShUrIXvKHMb8
-   eUpuj7UauMMNYovumim+2l53aSQYZfUUgOg9CFx1DTaDdBblo64BC0mBG
-   xcTPCjUWSUjSMmHzhjlezArPNF3bj5SJljmySIo+KVk3xv3xNoCy0YHSf
-   1pUaIsMkI9FXb6PA5Sf0+/VT56HKNmeZm5y2nFW52NiOYdcSLeSU35clp
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="225968301"
-X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="225968301"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 00:03:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="532667111"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jan 2022 00:03:55 -0800
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 20 Jan 2022 00:03:54 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 20 Jan 2022 00:03:54 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Thu, 20 Jan 2022 00:03:54 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Thu, 20 Jan 2022 00:03:54 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ifTf2seUI32c+/PdMP3HxBi9e25KoGRVcB7Wtfnxs7r82uS0gUtpalcAaIfdA8U4eiOr0EVoamMdfUzQKgmOYvS4D8col+n72QX+Hb6irwYJUbh7Oj/zu0pC4KNEXUO0wN0msM6ubB9iKmSJ2tAQB6e66OHEhDaH9R7ksuNhGXDbyHvTgnbIbNKCyRof3Z4wsO9q69bI6oV+e66+0FW7EVYYY6hfI8B8dsFqyl1SSne9G3KoHdPz0tcNqUBKcDUc19qt2StgGDiP5L3JU8Hk24EpzrgwsXTTNoUcFPPzbroTEAhOL/HNPy1AFKFJK4TxYNdRZ7xZVgiAshXUC3h1Vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KWz6b1YBWmjE6heQOFBvhI6cxb9i7FMa4WFG9d3N7lw=;
- b=g7ijlK/cBGfLn3G0HQZcLV+/cX4PUAsSVjrtSnH2P+LB+KKSVMr+LTTF3FnAmYmf9xEXbUuExKAy6P8jSf/+iJfMnC+gOTjfrW+sgui5ySo5stVGneIsVpma0WAmoMKmS5rPpZrsvoYt3P5hybiBJThOtblVKX/Ehv6bx5+v8+vC07UZHFdUWuiI1z+rNoPu/ZEOCmwn0YrFtsDhDp1bY1VnrGEAQ8FAeLx4ScWTUcaeA0bR6RxBVMwwwjj27um9Omy8wbf5JRHEwKyImbMH7ZEKN+/BuFNCodNoi4ZuBk2AQvM3IcflnY9th704mJqMSVOTDsP+JexiL/2O0nsn1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from DM8PR11MB5621.namprd11.prod.outlook.com (2603:10b6:8:38::14) by
- BN6PR11MB1331.namprd11.prod.outlook.com (2603:10b6:404:49::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4909.8; Thu, 20 Jan 2022 08:03:52 +0000
-Received: from DM8PR11MB5621.namprd11.prod.outlook.com
- ([fe80::fcc9:90bb:b249:e2e9]) by DM8PR11MB5621.namprd11.prod.outlook.com
- ([fe80::fcc9:90bb:b249:e2e9%8]) with mapi id 15.20.4909.008; Thu, 20 Jan 2022
- 08:03:52 +0000
-From:   "Jankowski, Konrad0" <konrad0.jankowski@intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH] iavf: Remove useless DMA-32 fallback configuration
-Thread-Topic: [PATCH] iavf: Remove useless DMA-32 fallback configuration
-Thread-Index: AQHYDdRD8oH/E9S7X0m7KiBgTxInqQ==
-Date:   Thu, 20 Jan 2022 08:03:52 +0000
-Message-ID: <DM8PR11MB56216BAE634CBAB39F0F88E2AB5A9@DM8PR11MB5621.namprd11.prod.outlook.com>
-References: <afb3317bc87677096e55fc96f317df29f2ff3408.1641752631.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <afb3317bc87677096e55fc96f317df29f2ff3408.1641752631.git.christophe.jaillet@wanadoo.fr>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2d8d5de5-168a-497b-e04a-08d9dbeb6633
-x-ms-traffictypediagnostic: BN6PR11MB1331:EE_
-x-microsoft-antispam-prvs: <BN6PR11MB1331F7A607D02544256BEDEEAB5A9@BN6PR11MB1331.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:590;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DCT7/T/BebPcYPbvpmP5JHaws2T+ifFjgPOzTbkW3Uusrgv+etUvxCDsberK/PI3ZS1TJFpEUe6IWtoKx9te5KohLszCdFtowaRUGbMdS8VvzD+1JIV1jLPaIrdL0lYIXY/0PgvNBDzgKKsxQbBoYUXsiOqH0MNjXjzRCMcynfIoqMry5E7wjH4XuIjOhLDaB/VOBpDeY0OMQjRSbpn9v3aWy2FJiq0JXQnFqOU6jYZoCkG1adjnEycwei0V0ME9JSPl2h4kPSORQbP4KCIxzoc8gDCakO5PRB6ROlr8/zqfB5C1QxheVWLtBGDkHj3iy0GEvm4hO+9CdMwFK2i+Wr14PeeaXZIv5o9m9j5AOPlPxjovsSOun99g2hV3lHXdzAtF9I1D0tRhCSfMub1A/BX0f8ktnkcTvH03Nzs1ziFA1rFTCAD98IniwYibTrJm+o1DYzvS36Ug8KXBDWEJy/8LCYSxcS7UrCo1TrAXsaa2+N+GNgvI36izl/pH0OXQqz3AJEH/9mC3TcvD/SyJc0wf7A5Bf99XkHmVvnGcva/ZHlTNIk2ZXBD312D291xletDFQFZjduzTzm4dmp+E1h6LUn4fDhc9ziQXeQGa3fDWXFRSNy+OxrAFFFBm60mSvUsfMksECFwcAc75iFk5kYvzNQjsqtc+nYcKTGDAHohKN4FGVZmCYQ2/ImkhMFfV2Rokd0vAL+rv8uNdREv1nN06iyaBeGNsMfZ5HvXrc+vneOFwXw5U4BCklpLxuFDUgBvVyu3hx/FbQf05bnImk9zcDyZ72afUOxtcFV5ITw8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5621.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(82960400001)(55016003)(54906003)(508600001)(71200400001)(966005)(83380400001)(52536014)(66556008)(64756008)(66446008)(316002)(110136005)(66946007)(86362001)(66476007)(76116006)(9686003)(186003)(122000001)(33656002)(5660300002)(2906002)(26005)(38070700005)(8936002)(8676002)(4326008)(6506007)(7696005)(53546011)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u22u15VhPT1w+wyD1eWEBnx3rO97HoSukycvAbxTra1td5mtXUV+teMRdNoE?=
- =?us-ascii?Q?pRmuVwP/DXxn/jT7Uuq1qDNRH1fzcxvvPUlmEVlG4w6fCa3TLoIkz3c+MKvC?=
- =?us-ascii?Q?pKNtRom+xqa4L13oxmGr1hQh66G0jDfr+ckC/7Cqrf+Bktd6XJ3qprFCe1ZH?=
- =?us-ascii?Q?1i5Eh0RUCsajd9MHqC6TkGNoBEWTvy/2F8D3bIL4TkMIsArycSWkn6gsyx/K?=
- =?us-ascii?Q?jhTLerZOqUtrXzqhX39tAZSxrU+1yTr3OYeMRAROyENQ5rQlN5cfpu6tx7H/?=
- =?us-ascii?Q?mFdX+RKUmSHmSlWyY1b2a/RJrWYB+2uM+CYdybs64qtLRuK1gt2fSJ7oPoml?=
- =?us-ascii?Q?cBUgO4v1PhBj0Tr+pe3Lk9DSoKP9iAWAf94L6PU3oND/DEuq6yBbROhOUABB?=
- =?us-ascii?Q?Yb65Tm65c6i4MhAaE4I/Q31ImpX4mFHUpXAA57qUqbMTGP1cndoCgoZxuUKJ?=
- =?us-ascii?Q?XSCJDXYcepmFkS6WOPsn2PEZHjESKVhdklK+lcxTqsTd+JqYwG1ft32u5lem?=
- =?us-ascii?Q?toiaa3YMUyBfz6wYaDAZ/prcKax/+3E97HugngjWXK4/jQA0OcSuF/uUGozY?=
- =?us-ascii?Q?yJvBX6mhHHmcbD7p9yrCyy73fz+pk7f3I2bzDuEe7HIoki9AP1m4NJFQPtzl?=
- =?us-ascii?Q?oKO7SF0baieLWgBGpwrlkG+XWeffOI7A/M3Nh8JSdaGiSXshrO4UTh35g+h4?=
- =?us-ascii?Q?Npbircz+9Vf35viJfS3qPITN7YnN7JSlzdKIrRfTD8fwW3vPYbJ7FTbnBFVo?=
- =?us-ascii?Q?Rjr68/16tVd6WYHF7JRCqFpm4fLtIIUo5dHm9/pW6yfyZ+ExiueiixbTX2YP?=
- =?us-ascii?Q?WbsNG6nNu1aSrX01boZcfIHo52X129ZMpl5sRmWHh4kH0QAb3eVx0xgN9oTv?=
- =?us-ascii?Q?kPVRN3y+ClBEXSwJfj+ZwplRqLVS3epalc1r1RRGqMZTyCmLYy4yalagMdnr?=
- =?us-ascii?Q?P6IWdLl4eRzJE6AxXVzopNhmR2mnqbITIFwH1hl2Bi4nJYdBIuv1BsGhM0o3?=
- =?us-ascii?Q?cRNWpe0q5aS8p13wLGdER1ga0pqjHfK7GaydXGNxzQ3M0s881b6a+GVkWzyn?=
- =?us-ascii?Q?07w4gEPlty+1vAUKMDLPwYyVSmn5QPoI9cUW9K2vN4AIcdg71oGOZt5aKDPn?=
- =?us-ascii?Q?S24j8cxrLtoMAxT9E1p99L9gjFJkbze2vPqqJgSFpXniAciOrRv8Dt0C/Qcq?=
- =?us-ascii?Q?ZYEuEs6a/skpDfzT8LnueIgl/L4g/laWhUTu5eyhP0RD91dVnmdrSE77KS1R?=
- =?us-ascii?Q?cgA36HdQtQ2pS8/4kcJFtYd2Iwprse6SlPyS2wxayMokjAPWTph4SLMzfswf?=
- =?us-ascii?Q?0FCIBniSJwsdFV7nPl9qBDoLZhq580O/J7+VvuamHxysg+weVvNPBLS3LI7I?=
- =?us-ascii?Q?4ESxLrx8v/ZylklGLGHQvogBd6ivkPbj5qvvhAdrzJ+/f5TvlB4KUJi6qEO4?=
- =?us-ascii?Q?ZIlGkWghipcbOklYtjDKkN+Lc39iUQ3dVT3T6ygKQBjPdKcrF/bafgjEYKHw?=
- =?us-ascii?Q?18i5lUmufI+TvFEtcsFxfnmA5/nu+qvOcJFppexcL2L2yYRw77/66GEVrIE9?=
- =?us-ascii?Q?uhd8IWAOY/VnHJcXTi7Oa6M1eg2Cb7dWkZPX1ALOKZzSifFMdTmWI30k8Jdu?=
- =?us-ascii?Q?d7+A7gFfNvqZcVyXcPkV7qlOhyOfumKNpQrtIB/syeUzgKTYaQcrx5l9D82C?=
- =?us-ascii?Q?hKCqeQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1358348AbiATIEZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 03:04:25 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id E17D9DF89E;
+        Thu, 20 Jan 2022 00:04:23 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TEDNyp5EBpIu; Thu, 20 Jan 2022 00:04:23 -0800 (PST)
+Message-ID: <98d12c1acaf77772f51361b079dde7e982a6dafd.camel@puri.sm>
+Subject: Re: [PATCH v3] media: i2c: dw9714: add optional regulator support
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     broonie@kernel.org, sakari.ailus@linux.intel.com
+Cc:     angus@akkea.ca, kernel@puri.sm, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        mchehab@kernel.org
+Date:   Thu, 20 Jan 2022 09:04:17 +0100
+In-Reply-To: <8f4c0f74523ea615786942fe2a30f83a2d0e8c16.camel@puri.sm>
+References: <20211129120754.1766570-1-martin.kepplinger@puri.sm>
+         <8f4c0f74523ea615786942fe2a30f83a2d0e8c16.camel@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5621.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d8d5de5-168a-497b-e04a-08d9dbeb6633
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 08:03:52.7328
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: S+X6if+RQqGcS2Vde1bNOWE97fLzATmG7EJUHa3PeFnh2QCqMtdheXQxgsFndpkBP0+2dMXaJNyef86c6gWbuOfpuDyviwx4AIGS51FQ50s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1331
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Dienstag, dem 21.12.2021 um 18:33 +0100 schrieb Martin Kepplinger:
+> Am Montag, dem 29.11.2021 um 13:07 +0100 schrieb Martin Kepplinger:
+> > From: Angus Ainslie <angus@akkea.ca>
+> > 
+> > Allow the dw9714 to control a regulator and adjust suspend() and
+> > resume()
+> > to support both runtime and system pm.
+> > 
+> > Signed-off-by: Angus Ainslie <angus@akkea.ca>
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > ---
+> > 
+> > 
+> > revision history
+> > ----------------
+> > v3: (thank you Mark and Sakari)
+> >  * use regulator_get() instead of regulator_get_optional()
+> > 
+> > v2: (thank you Mark)
+> >  * simplify the regulator_get_optional() error path
+> >  * fix regulator usage during probe()
+> > https://lore.kernel.org/linux-media/20211126090107.1243558-1-martin.kepplinger@puri.sm/
+> > 
+> > v1:
+> > https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
+> > 
+> > 
+> > 
+> >  drivers/media/i2c/dw9714.c | 32 +++++++++++++++++++++++++++++++-
+> >  1 file changed, 31 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/i2c/dw9714.c
+> > b/drivers/media/i2c/dw9714.c
+> > index 3863dfeb8293..81170bbe0e55 100644
+> > --- a/drivers/media/i2c/dw9714.c
+> > +++ b/drivers/media/i2c/dw9714.c
+> > @@ -5,6 +5,7 @@
+> >  #include <linux/i2c.h>
+> >  #include <linux/module.h>
+> >  #include <linux/pm_runtime.h>
+> > +#include <linux/regulator/consumer.h>
+> >  #include <media/v4l2-ctrls.h>
+> >  #include <media/v4l2-device.h>
+> >  #include <media/v4l2-event.h>
+> > @@ -36,6 +37,7 @@ struct dw9714_device {
+> >         struct v4l2_ctrl_handler ctrls_vcm;
+> >         struct v4l2_subdev sd;
+> >         u16 current_val;
+> > +       struct regulator *vcc;
+> >  };
+> >  
+> >  static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl
+> > *ctrl)
+> > @@ -145,6 +147,16 @@ static int dw9714_probe(struct i2c_client
+> > *client)
+> >         if (dw9714_dev == NULL)
+> >                 return -ENOMEM;
+> >  
+> > +       dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
+> > +       if (IS_ERR(dw9714_dev->vcc))
+> > +               return PTR_ERR(dw9714_dev->vcc);
+> > +
+> > +       rval = regulator_enable(dw9714_dev->vcc);
+> > +       if (rval < 0) {
+> > +               dev_err(&client->dev, "failed to enable vcc: %d\n",
+> > rval);
+> > +               return rval;
+> > +       }
+> > +
+> >         v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
+> >         dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> >                                 V4L2_SUBDEV_FL_HAS_EVENTS;
+> > @@ -200,6 +212,9 @@ static int __maybe_unused
+> > dw9714_vcm_suspend(struct device *dev)
+> >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+> >         int ret, val;
+> >  
+> > +       if (pm_runtime_suspended(&client->dev))
+> > +               return 0;
+> > +
+> >         for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS -
+> > 1);
+> >              val >= 0; val -= DW9714_CTRL_STEPS) {
+> >                 ret = dw9714_i2c_write(client,
+> > @@ -208,7 +223,12 @@ static int __maybe_unused
+> > dw9714_vcm_suspend(struct device *dev)
+> >                         dev_err_once(dev, "%s I2C failure: %d",
+> > __func__, ret);
+> >                 usleep_range(DW9714_CTRL_DELAY_US,
+> > DW9714_CTRL_DELAY_US + 10);
+> >         }
+> > -       return 0;
+> > +
+> > +       ret = regulator_disable(dw9714_dev->vcc);
+> > +       if (ret)
+> > +               dev_err(dev, "Failed to disable vcc: %d\n", ret);
+> > +
+> > +       return ret;
+> >  }
+> >  
+> >  /*
+> > @@ -224,6 +244,16 @@ static int  __maybe_unused
+> > dw9714_vcm_resume(struct device *dev)
+> >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+> >         int ret, val;
+> >  
+> > +       if (pm_runtime_suspended(&client->dev))
+> > +               return 0;
+> > +
+> > +       ret = regulator_enable(dw9714_dev->vcc);
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to enable vcc: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +       usleep_range(1000, 2000);
+> > +
+> >         for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
+> >              val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
+> >              val += DW9714_CTRL_STEPS) {
+> 
+> hi Sakari and all interested,
+> 
+> any objection to this addition? I run it for a long time now.
+> 
+> thank you,
+> 
+>                               martin
+> 
+> 
+
+hi all, patchwork marked this as "changes requested":
+https://patchwork.linuxtv.org/project/linux-media/patch/20211129120754.1766570-1-martin.kepplinger@puri.sm/
+
+I'm not aware of changes you wish to this. What do you think?
+
+thank you,
+
+                           martin
 
 
-> -----Original Message-----
-> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Sent: niedziela, 9 stycznia 2022 19:24
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
-> Jakub Kicinski <kuba@kernel.org>
-> Cc: linux-kernel@vger.kernel.org; kernel-janitors@vger.kernel.org;
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr>; Christoph Hellwig
-> <hch@lst.de>; Lobakin, Alexandr <alexandr.lobakin@intel.com>; intel-wired=
--
-> lan@lists.osuosl.org; netdev@vger.kernel.org
-> Subject: [PATCH] iavf: Remove useless DMA-32 fallback configuration
->=20
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
->=20
-> Simplify code and remove some dead code accordingly.
->=20
-> [1]: https://lkml.org/lkml/2021/6/7/398
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  drivers/net/ethernet/intel/iavf/iavf_main.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c
-> b/drivers/net/ethernet/intel/iavf/iavf_main.c
-> index 8125b9120615..b0bd95c85480 100644
-> --- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-> +++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>

@@ -2,201 +2,651 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BE8494748
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73D549474B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358713AbiATG0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S237249AbiATG1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiATG0P (ORCPT
+        with ESMTP id S229774AbiATG1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:26:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB056C061574;
-        Wed, 19 Jan 2022 22:26:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81D68B81A7F;
-        Thu, 20 Jan 2022 06:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89758C340E0;
-        Thu, 20 Jan 2022 06:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642659972;
-        bh=50/ufx0m6AcTfkIB8K9DDFKGidfKTV/nhrA30Cc07/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s/ZPvrSdEGRvqIbHqfd/hIsBCAgwOz+MCwUrDdPGBERcgEGzFn+0JdJuAz5sIiGiK
-         PxgpXylLkdM4zR64eAkqto5hzA3Yk8fo7WLqT0NkwZMGrzbDUiebIgOI2NgoZMLpal
-         sxgSjhuneGdSUR79b5yBDSBQAhR+kf36OC3u8WAI=
-Date:   Thu, 20 Jan 2022 07:26:09 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vikash Bansal <bvikas@vmware.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, srivatsab@vmware.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com, srinidhir@vmware.com,
-        anishs@vmware.com, vsirnapalli@vmware.com, akaher@vmware.com
-Subject: Re: [PATCH] PCI: Speed up device init by parsing capabilities all at
- once
-Message-ID: <YekAgfkDgV6z6hYV@kroah.com>
-References: <1642526161-22499-1-git-send-email-bvikas@vmware.com>
+        Thu, 20 Jan 2022 01:27:04 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D7FC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 22:27:03 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id n10so8512306edv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 22:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RFmjgHfLJUWnV7Qn5kkhmeJMJ9N6Wi1gBrX6Yzqq6s4=;
+        b=NOhBd8DBEsPtzKkaMHiWGBI06alNXGRbtaYcVQ/XYpsd4bPZz6sQCpaK8eJFbkugbV
+         7duaOl/w2PKuya5QjCcARZTGYBVFgx+EBml4cMSpzimuFjzfBazElT9NvMuHMiP+ITXt
+         GY/YYzsNRbSQqb3H/dxkbOlCSsVvavwNjT4N4zVpNWYepKSXwDA4KM1jPvDdgbvCPC0Y
+         qqsO/ppjxvTTBKCH3oiNifA2Vl+l0b5VtENIs220rSob3/+4jRJGk+vB6fCNoBTccswk
+         w10/3zgOjFINr3jPFEb84RVRyNBC7CsE3UtkUIYWpEmBtG2LhndriimTDViMgZyiNwb4
+         l6lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RFmjgHfLJUWnV7Qn5kkhmeJMJ9N6Wi1gBrX6Yzqq6s4=;
+        b=B6lVxBcmA9vcqML1Afdyrv77SHaNhG9v5Z/1gtgiuf5SfzP6p4+odQwnLCm4BgTrLP
+         3Wf9QvRJHIySvcepp0BBHl3W11MvhRLp01f+2+g6dF/jt2s4X5ivEWJ8pYCZ2rWFrJD1
+         LNk+ykfoeV8pXN9hN+U0bCI6F/Q4YARMmIJXNtO4WXzS4Ix1NAUfIQ35CkADBwitlRpq
+         FeddkvLMsOONQifr66sH8COWqsSnwEfUXmq8WdhvtdVtPFOQ22tNw/URqIfiTYMviwQX
+         5cc8o4Y975cbJWPDZlr+wIg6Y7JQUZe2cUZVCIVsSPONjKL0izg7GNoeI9Eju0AqjLiX
+         S8hA==
+X-Gm-Message-State: AOAM530koavb4Z5ORsQl/8XobF+k0EHbuVYdEGmOt0hdZsZfYla++J3n
+        tkKbRvHbzNaBix2tnwrIl/NEpAr3kKpcd1fVtAMQrA==
+X-Google-Smtp-Source: ABdhPJx2uxNAqDbQ38pk3vSVFQaZXnp2TzhRt62urgSck+VK2Foh8PrLAFAG8qfcXOo8lcSa8sKH6ks8HkniLgRmad0=
+X-Received: by 2002:a05:6402:1e91:: with SMTP id f17mr32501596edf.229.1642660021400;
+ Wed, 19 Jan 2022 22:27:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1642526161-22499-1-git-send-email-bvikas@vmware.com>
+References: <20220120052303.2098394-1-sboyd@kernel.org>
+In-Reply-To: <20220120052303.2098394-1-sboyd@kernel.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 19 Jan 2022 22:26:50 -0800
+Message-ID: <CAGS_qxoMRsvx8HDex9Aq9KUALAQrdNe3VVYikyzT59TEYfbLdg@mail.gmail.com>
+Subject: Re: [PATCH v2] clk: gate: Add some kunit test suites
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:16:01AM -0800, Vikash Bansal wrote:
-> In the current implementation, the PCI capability list is parsed from
-> the beginning to find each capability, which results in a large number
-> of redundant PCI reads.
-> 
-> Instead, we can parse the complete list just once, store it in the
-> pci_dev structure, and get the offset of each capability directly from
-> the pci_dev structure.
-> 
-> This implementation improves pci devices initialization time  by ~2-3% in
-> case of bare metal and 7-8% in case of VM running on ESXi.
-
-What is that in terms of "wall clock" time?  % is hard to know here, and
-of course it will depend on the PCI bus speed, right?
-
-> It also adds a memory overhead of 20bytes (value of PCI_CAP_ID_MAX) per
-> PCI device.
-> 
-> Signed-off-by: Vikash Bansal <bvikas@vmware.com>
+ On Wed, Jan 19, 2022 at 9:23 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Test various parts of the clk gate implementation with the kunit testing
+> framework.
+>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Cc: <kunit-dev@googlegroups.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
->  drivers/pci/pci.c   | 43 ++++++++++++++++++++++++++++++++++++-------
->  drivers/pci/probe.c |  5 +++++
->  include/linux/pci.h |  2 ++
->  3 files changed, 43 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 3d2fb394986a..8e024db30262 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -468,6 +468,41 @@ static u8 __pci_bus_find_cap_start(struct pci_bus *bus,
->  	return 0;
->  }
->  
+>
+> Changes from v1 (https://lore.kernel.org/r/20220115080657.2780989-1-sboyd@kernel.org):
+>  * Changed file name to semi-match convention
+>  * Changed Kconfig symbol name to match convention
+>  * Changed kzalloc to test managed allocation
+>  * Inlined check for ret where possible
+>
+>  drivers/clk/.kunitconfig    |   3 +
+>  drivers/clk/Kconfig         |   8 +
+>  drivers/clk/Makefile        |   1 +
+>  drivers/clk/clk-gate_test.c | 469 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 481 insertions(+)
+>  create mode 100644 drivers/clk/.kunitconfig
+>  create mode 100644 drivers/clk/clk-gate_test.c
+>
+> diff --git a/drivers/clk/.kunitconfig b/drivers/clk/.kunitconfig
+> new file mode 100644
+> index 000000000000..3754fdb9485a
+> --- /dev/null
+> +++ b/drivers/clk/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_COMMON_CLK=y
+> +CONFIG_CLK_GATE_KUNIT_TEST=y
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index c5b3dc97396a..947cd0b12dbd 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -421,4 +421,12 @@ source "drivers/clk/x86/Kconfig"
+>  source "drivers/clk/xilinx/Kconfig"
+>  source "drivers/clk/zynqmp/Kconfig"
+>
+> +# Kunit test cases
+> +config CLK_GATE_KUNIT_TEST
+> +       tristate "Basic gate type Kunit test" if !KUNIT_ALL_TESTS
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Kunit test for the basic clk gate type.
 > +
-> +/**
-> + * pci_find_all_capabilities - Read all capabilities
-> + * @dev: the PCI device
-> + *
-> + * Read all capabilities and store offsets in cap_off
-> + * array in pci_dev structure.
+>  endif
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index e42312121e51..52faef37bc9b 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -6,6 +6,7 @@ obj-$(CONFIG_COMMON_CLK)        += clk-divider.o
+>  obj-$(CONFIG_COMMON_CLK)       += clk-fixed-factor.o
+>  obj-$(CONFIG_COMMON_CLK)       += clk-fixed-rate.o
+>  obj-$(CONFIG_COMMON_CLK)       += clk-gate.o
+> +obj-$(CONFIG_CLK_GATE_KUNIT_TEST) += clk-gate_test.o
+>  obj-$(CONFIG_COMMON_CLK)       += clk-multiplier.o
+>  obj-$(CONFIG_COMMON_CLK)       += clk-mux.o
+>  obj-$(CONFIG_COMMON_CLK)       += clk-composite.o
+> diff --git a/drivers/clk/clk-gate_test.c b/drivers/clk/clk-gate_test.c
+> new file mode 100644
+> index 000000000000..2448ff0d1d68
+> --- /dev/null
+> +++ b/drivers/clk/clk-gate_test.c
+> @@ -0,0 +1,469 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Kunit test for clk gate basic type
 > + */
-> +void pci_find_all_capabilities(struct pci_dev *dev)
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <kunit/test.h>
+> +
+> +static void clk_gate_register_test_dev(struct kunit *test)
 > +{
-> +	int ttl = PCI_FIND_CAP_TTL;
-> +	u16 ent;
-> +	u8 pos;
-> +	u8 id;
+> +       struct clk_hw *ret;
+> +       struct platform_device *pdev;
 > +
-> +	pos = __pci_bus_find_cap_start(dev->bus, dev->devfn, dev->hdr_type);
-> +	if (!pos)
-> +		return;
-> +	pci_bus_read_config_byte(dev->bus, dev->devfn, pos, &pos);
-> +	while (ttl--) {
-> +		if (pos < 0x40)
-
-What is this magic value of 0x40?
-
-> +			break;
-> +		pos &= ~3;
-
-Why ~3?
-
-> +		pci_bus_read_config_word(dev->bus, dev->devfn, pos, &ent);
-> +		id = ent & 0xff;
-
-Do you really need the & if you are truncating it?
-
-> +		if (id == 0xff)
-> +			break;
+> +       pdev = platform_device_register_simple("test_gate_device", -1, NULL, 0);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
 > +
-> +		/* Read first instance of capability */
-> +		if (!(dev->cap_off[id]))
-> +			dev->cap_off[id] = pos;
-
-Shouldn't you have checked this before you read the value?
-
-> +		pos = (ent >> 8);
-
-What about walking the list using __pci_find_next_cap() like before?
-Why is this somehow the same as the old function?
-
-> +	}
+> +       ret = clk_hw_register_gate(&pdev->dev, "test_gate", NULL, 0, NULL,
+> +                                  0, 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
+> +       KUNIT_EXPECT_STREQ(test, "test_gate", clk_hw_get_name(ret));
+> +       KUNIT_EXPECT_EQ(test, 0UL, clk_hw_get_flags(ret));
+> +
+> +       clk_hw_unregister_gate(ret);
+> +       platform_device_put(pdev);
 > +}
 > +
->  /**
->   * pci_find_capability - query for devices' capabilities
->   * @dev: PCI device to query
-> @@ -489,13 +524,7 @@ static u8 __pci_bus_find_cap_start(struct pci_bus *bus,
->   */
->  u8 pci_find_capability(struct pci_dev *dev, int cap)
->  {
-> -	u8 pos;
-> -
-> -	pos = __pci_bus_find_cap_start(dev->bus, dev->devfn, dev->hdr_type);
-> -	if (pos)
-> -		pos = __pci_find_next_cap(dev->bus, dev->devfn, pos, cap);
-> -
-> -	return pos;
-> +	return dev->cap_off[cap];
->  }
->  EXPORT_SYMBOL(pci_find_capability);
->  
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 087d3658f75c..bacab12cedbb 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -1839,6 +1839,11 @@ int pci_setup_device(struct pci_dev *dev)
->  	dev->hdr_type = hdr_type & 0x7f;
->  	dev->multifunction = !!(hdr_type & 0x80);
->  	dev->error_state = pci_channel_io_normal;
-> +	/*
-> +	 * Read all capabilities and store offsets in cap_off
-> +	 * array in pci_dev structure.
-> +	 */
+> +static void clk_gate_register_test_parent_names(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *ret;
+> +
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           1000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +
+> +       ret = clk_hw_register_gate(NULL, "test_gate", "test_parent", 0, NULL,
+> +                                  0, 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
+> +       KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
+> +
+> +       clk_hw_unregister_gate(ret);
+> +       clk_hw_unregister_fixed_rate(parent);
+> +}
+> +
+> +static void clk_gate_register_test_parent_data(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *ret;
+> +       struct clk_parent_data pdata = { };
+> +
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           1000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +       pdata.hw = parent;
+> +
+> +       ret = clk_hw_register_gate_parent_data(NULL, "test_gate", &pdata, 0,
+> +                                              NULL, 0, 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
+> +       KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
+> +
+> +       clk_hw_unregister_gate(ret);
+> +       clk_hw_unregister_fixed_rate(parent);
+> +}
+> +
+> +static void clk_gate_register_test_parent_data_legacy(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *ret;
+> +       struct clk_parent_data pdata = { };
+> +
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           1000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +       pdata.name = "test_parent";
+> +
+> +       ret = clk_hw_register_gate_parent_data(NULL, "test_gate", &pdata, 0,
+> +                                              NULL, 0, 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
+> +       KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
+> +
+> +       clk_hw_unregister_gate(ret);
+> +       clk_hw_unregister_fixed_rate(parent);
+> +}
+> +
+> +static void clk_gate_register_test_parent_hw(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *ret;
+> +
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           1000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +
+> +       ret = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0, NULL,
+> +                                            0, 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
+> +       KUNIT_EXPECT_PTR_EQ(test, parent, clk_hw_get_parent(ret));
+> +
+> +       clk_hw_unregister_gate(ret);
+> +       clk_hw_unregister_fixed_rate(parent);
+> +}
+> +
+> +static void clk_gate_register_test_hiword_invalid(struct kunit *test)
+> +{
+> +       struct clk_hw *ret;
+> +
+> +       ret = clk_hw_register_gate(NULL, "test_gate", NULL, 0, NULL,
+> +                                  20, CLK_GATE_HIWORD_MASK, NULL);
+> +
+> +       KUNIT_EXPECT_TRUE(test, IS_ERR(ret));
+> +}
+> +
+> +static struct kunit_case clk_gate_register_test_cases[] = {
+> +       KUNIT_CASE(clk_gate_register_test_dev),
+> +       KUNIT_CASE(clk_gate_register_test_parent_names),
+> +       KUNIT_CASE(clk_gate_register_test_parent_data),
+> +       KUNIT_CASE(clk_gate_register_test_parent_data_legacy),
+> +       KUNIT_CASE(clk_gate_register_test_parent_hw),
+> +       KUNIT_CASE(clk_gate_register_test_hiword_invalid),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite clk_gate_register_test_suite = {
+> +       .name = "clk-gate-register-test",
+> +       .test_cases = clk_gate_register_test_cases,
+> +};
+> +
+> +struct clk_gate_test_context {
+> +       void __iomem *fake_mem;
+> +       struct clk_hw *hw;
+> +       struct clk_hw *parent;
+> +       u32 fake_reg; /* Keep at end, KASAN can detect out of bounds */
+> +};
+> +
+> +static struct clk_gate_test_context *clk_gate_test_alloc_ctx(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       test->priv = ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+> +       ctx->fake_mem = (void __force __iomem *)&ctx->fake_reg;
+> +
+> +       return ctx;
+> +}
+> +
+> +static void clk_gate_test_parent_rate(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       unsigned long prate = clk_hw_get_rate(parent);
+> +       unsigned long rate = clk_hw_get_rate(hw);
+> +
+> +       KUNIT_EXPECT_EQ(test, prate, rate);
+> +}
+> +
+> +static void clk_gate_test_enable(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       struct clk *clk = hw->clk;
+> +       u32 enable_val = BIT(5);
+> +
+> +       KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+> +
+> +       KUNIT_EXPECT_EQ(test, enable_val, ctx->fake_reg);
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(hw));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(hw));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(parent));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(parent));
+> +}
+> +
+> +static void clk_gate_test_disable(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       struct clk *clk = hw->clk;
+> +       u32 enable_val = BIT(5);
+> +       u32 disable_val = 0;
+> +
+> +       KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+> +       KUNIT_ASSERT_EQ(test, enable_val, ctx->fake_reg);
+> +
+> +       clk_disable_unprepare(clk);
+> +       KUNIT_EXPECT_EQ(test, disable_val, ctx->fake_reg);
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(hw));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(hw));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(parent));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(parent));
+> +}
+> +
+> +static struct kunit_case clk_gate_test_cases[] = {
+> +       KUNIT_CASE(clk_gate_test_parent_rate),
+> +       KUNIT_CASE(clk_gate_test_enable),
+> +       KUNIT_CASE(clk_gate_test_disable),
+> +       {}
+> +};
+> +
+> +static int clk_gate_test_init(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           2000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +
+> +       hw = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0,
+> +                                           ctx->fake_mem, 5, 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +
+> +       ctx->hw = hw;
+> +       ctx->parent = parent;
+> +
+> +       return 0;
+> +}
+> +
+> +static void clk_gate_test_exit(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +
+> +       clk_hw_unregister_gate(ctx->hw);
+> +       clk_hw_unregister_fixed_rate(ctx->parent);
+> +       kfree(ctx);
 
-Comment is not needed if the function name is descriptive.
+I think we forgot to drop some kfree's now that we're using
+test->priv = ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
 
-> +	pci_find_all_capabilities(dev);
+This will result in duplicate kfree's.
 
-And it is, so no need for the comment.
+Running with KASAN surfaces this, e.g
+$ git rebase torvalds/master  # or really, I just want bf4eebf8cfa2r
+$ run_kunit --kunitconfig=drivers/clk --kconfig_add=CONFIG_KASAN=y
+--arch=x86_64 --build_dir=kunit_x86/
+...
+BUG: KASAN: double-free or invalid-free in kunit_remove_resource+0xb3/0xe0
+...
+Freed by task 36:
+ kasan_save_stack+0x1e/0x50
+ kasan_set_track+0x20/0x30
+ kasan_set_free_info+0x20/0x30
+ __kasan_slab_free+0xfb/0x130
+ kfree+0x80/0x1e0
+ clk_gate_test_is_disabled_inverted+0x18d/0x1e0  <----- leftover kfree()
+ kunit_try_run_case+0x88/0xc0
+ kunit_generic_run_threadfn_adapter+0x24/0x40
+ kthread+0x1fe/0x230
+ ret_from_fork+0x22/0x30
+...
 
->  	set_pcie_port_type(dev);
->  
->  	pci_set_of_node(dev);
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 18a75c8e615c..d221c73e67f8 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -326,6 +326,7 @@ struct pci_dev {
->  	unsigned int	class;		/* 3 bytes: (base,sub,prog-if) */
->  	u8		revision;	/* PCI revision, low byte of class word */
->  	u8		hdr_type;	/* PCI header type (`multi' flag masked out) */
-> +	u8              cap_off[PCI_CAP_ID_MAX]; /* Offsets of all pci capabilities */
+I generally find this little recipe very useful, so here's some
+explanations in case they're useful:
+1. I'm using the bash function from
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.html#running-from-any-directory
+2. --kconfig_add is a new feature in torvalds/master for 5.17
+3. KASAN doesn't work on UML right now, hence --arch=x86_64
+4. I also like to use a different --build_dir for x86 builds so I
+minimize rebuilding when I switch between UML and x86
 
-Did you run 'pahole' to ensure you are not adding extra padding bytes
-here?
+> +}
+> +
+> +static struct kunit_suite clk_gate_test_suite = {
+> +       .name = "clk-gate-test",
+> +       .init = clk_gate_test_init,
+> +       .exit = clk_gate_test_exit,
+> +       .test_cases = clk_gate_test_cases,
+> +};
+> +
+> +static void clk_gate_test_invert_enable(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       struct clk *clk = hw->clk;
+> +       u32 enable_val = 0;
+> +
+> +       KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+> +
+> +       KUNIT_EXPECT_EQ(test, enable_val, ctx->fake_reg);
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(hw));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(hw));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(parent));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(parent));
+> +}
+> +
+> +static void clk_gate_test_invert_disable(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       struct clk *clk = hw->clk;
+> +       u32 enable_val = 0;
+> +       u32 disable_val = BIT(15);
+> +
+> +       KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+> +       KUNIT_ASSERT_EQ(test, enable_val, ctx->fake_reg);
+> +
+> +       clk_disable_unprepare(clk);
+> +       KUNIT_EXPECT_EQ(test, disable_val, ctx->fake_reg);
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(hw));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(hw));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(parent));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(parent));
+> +}
+> +
+> +static struct kunit_case clk_gate_test_invert_cases[] = {
+> +       KUNIT_CASE(clk_gate_test_invert_enable),
+> +       KUNIT_CASE(clk_gate_test_invert_disable),
+> +       {}
+> +};
+> +
+> +static int clk_gate_test_invert_init(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           2000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +
+> +       ctx->fake_reg = BIT(15); /* Default to off */
+> +       hw = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0,
+> +                                           ctx->fake_mem, 15,
+> +                                           CLK_GATE_SET_TO_DISABLE, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +
+> +       ctx->hw = hw;
+> +       ctx->parent = parent;
+> +
+> +       return 0;
+> +}
+> +
+> +static struct kunit_suite clk_gate_test_invert_suite = {
+> +       .name = "clk-gate-invert-test",
+> +       .init = clk_gate_test_invert_init,
+> +       .exit = clk_gate_test_exit,
+> +       .test_cases = clk_gate_test_invert_cases,
+> +};
+> +
+> +static void clk_gate_test_hiword_enable(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       struct clk *clk = hw->clk;
+> +       u32 enable_val = BIT(9) | BIT(9 + 16);
+> +
+> +       KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+> +
+> +       KUNIT_EXPECT_EQ(test, enable_val, ctx->fake_reg);
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(hw));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(hw));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_enabled(parent));
+> +       KUNIT_EXPECT_TRUE(test, clk_hw_is_prepared(parent));
+> +}
+> +
+> +static void clk_gate_test_hiword_disable(struct kunit *test)
+> +{
+> +       struct clk_gate_test_context *ctx = test->priv;
+> +       struct clk_hw *parent = ctx->parent;
+> +       struct clk_hw *hw = ctx->hw;
+> +       struct clk *clk = hw->clk;
+> +       u32 enable_val = BIT(9) | BIT(9 + 16);
+> +       u32 disable_val = BIT(9 + 16);
+> +
+> +       KUNIT_ASSERT_EQ(test, clk_prepare_enable(clk), 0);
+> +       KUNIT_ASSERT_EQ(test, enable_val, ctx->fake_reg);
+> +
+> +       clk_disable_unprepare(clk);
+> +       KUNIT_EXPECT_EQ(test, disable_val, ctx->fake_reg);
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(hw));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(hw));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_enabled(parent));
+> +       KUNIT_EXPECT_FALSE(test, clk_hw_is_prepared(parent));
+> +}
+> +
+> +static struct kunit_case clk_gate_test_hiword_cases[] = {
+> +       KUNIT_CASE(clk_gate_test_hiword_enable),
+> +       KUNIT_CASE(clk_gate_test_hiword_disable),
+> +       {}
+> +};
+> +
+> +static int clk_gate_test_hiword_init(struct kunit *test)
+> +{
+> +       struct clk_hw *parent;
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       parent = clk_hw_register_fixed_rate(NULL, "test_parent", NULL, 0,
+> +                                           2000000);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
+> +
+> +       hw = clk_hw_register_gate_parent_hw(NULL, "test_gate", parent, 0,
+> +                                           ctx->fake_mem, 9,
+> +                                           CLK_GATE_HIWORD_MASK, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +
+> +       ctx->hw = hw;
+> +       ctx->parent = parent;
+> +
+> +       return 0;
+> +}
+> +
+> +static struct kunit_suite clk_gate_test_hiword_suite = {
+> +       .name = "clk-gate-hiword-test",
+> +       .init = clk_gate_test_hiword_init,
+> +       .exit = clk_gate_test_exit,
+> +       .test_cases = clk_gate_test_hiword_cases,
+> +};
+> +
+> +static void clk_gate_test_is_enabled(struct kunit *test)
+> +{
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       ctx->fake_reg = BIT(7);
+> +       hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 7,
+> +                                 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +       KUNIT_ASSERT_TRUE(test, clk_hw_is_enabled(hw));
+> +
+> +       clk_hw_unregister_gate(hw);
+> +       kfree(ctx);
 
->  #ifdef CONFIG_PCIEAER
->  	u16		aer_cap;	/* AER capability offset */
->  	struct aer_stats *aer_stats;	/* AER stats for this device */
-> @@ -1128,6 +1129,7 @@ void pci_sort_breadthfirst(void);
->  
->  u8 pci_bus_find_capability(struct pci_bus *bus, unsigned int devfn, int cap);
->  u8 pci_find_capability(struct pci_dev *dev, int cap);
-> +void pci_find_all_capabilities(struct pci_dev *dev);
+ditto
 
-Why is this now a global function and not one just local to the pci
-core?  Who else would ever need to call it?
 
-thanks,
+> +}
+> +
+> +static void clk_gate_test_is_disabled(struct kunit *test)
+> +{
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       ctx->fake_reg = BIT(4);
+> +       hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 7,
+> +                                 0, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +       KUNIT_ASSERT_FALSE(test, clk_hw_is_enabled(hw));
+> +
+> +       clk_hw_unregister_gate(hw);
+> +       kfree(ctx);
+> +}
+> +
+> +static void clk_gate_test_is_enabled_inverted(struct kunit *test)
+> +{
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       ctx->fake_reg = BIT(31);
+> +       hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 2,
+> +                                 CLK_GATE_SET_TO_DISABLE, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +       KUNIT_ASSERT_TRUE(test, clk_hw_is_enabled(hw));
+> +
+> +       clk_hw_unregister_gate(hw);
+> +       kfree(ctx);
 
-greg k-h
+ditto
+
+> +}
+> +
+> +static void clk_gate_test_is_disabled_inverted(struct kunit *test)
+> +{
+> +       struct clk_hw *hw;
+> +       struct clk_gate_test_context *ctx;
+> +
+> +       ctx = clk_gate_test_alloc_ctx(test);
+> +       ctx->fake_reg = BIT(29);
+> +       hw = clk_hw_register_gate(NULL, "test_gate", NULL, 0, ctx->fake_mem, 29,
+> +                                 CLK_GATE_SET_TO_DISABLE, NULL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
+> +       KUNIT_ASSERT_FALSE(test, clk_hw_is_enabled(hw));
+> +
+> +       clk_hw_unregister_gate(hw);
+> +       kfree(ctx);
+
+ditto
+
+> +}
+> +
+> +static struct kunit_case clk_gate_test_enabled_cases[] = {
+> +       KUNIT_CASE(clk_gate_test_is_enabled),
+> +       KUNIT_CASE(clk_gate_test_is_disabled),
+> +       KUNIT_CASE(clk_gate_test_is_enabled_inverted),
+> +       KUNIT_CASE(clk_gate_test_is_disabled_inverted),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite clk_gate_test_enabled_suite = {
+> +       .name = "clk-gate-is_enabled-test",
+> +       .test_cases = clk_gate_test_enabled_cases,
+> +};
+> +
+> +kunit_test_suites(
+> +       &clk_gate_register_test_suite,
+> +       &clk_gate_test_suite,
+> +       &clk_gate_test_invert_suite,
+> +       &clk_gate_test_hiword_suite,
+> +       &clk_gate_test_enabled_suite
+> +);
+> +MODULE_LICENSE("GPL v2");
+>
+> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+> --
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+>

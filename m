@@ -2,397 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6C2494BA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DB0494B68
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359866AbiATK1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:27:12 -0500
-Received: from sender4-pp-o95.zoho.com ([136.143.188.95]:25592 "EHLO
-        sender4-pp-o95.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359844AbiATK1E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:27:04 -0500
-X-Greylist: delayed 914 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jan 2022 05:27:04 EST
-ARC-Seal: i=1; a=rsa-sha256; t=1642673499; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=kYa9uG1/jCWZP/JiN5Nz1V/eoXA1rrqvmgP2jh6Vra6ynd9glF7t8YtDpEbS7wMhJCR2sTiNXTWcVblQSAw3BDilYgQQBiB5WRn1f79nxrxnJjL85W/lur0DIesBAlP7nh91kRcyT7BserpCG2fiUrVH94jH4sQ+Hg4coeG5rF4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1642673499; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=hUkAjx8bXAZHxayySh1n5KbdoqxfTn8BaHNZ/mTgqV8=; 
-        b=F7IvsDPK7BSE2Y+RZQcD80a+HJH0wvCK+cOMhLlSqwAg7Xs7c3VbZZg2EfjBn0HHesyQKM1W6sskyqBXBDK/lbev3kD3QC03u0KALCQlkrcCyoXZ2oFeBOXmdm/vwSdI3bJTtMuUjGQzKBsUG3F+y3Zf3D34d0d7iJbMkujEn6o=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
-        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1642673499;
-        s=zm2020; d=zohomail.com; i=lchen.firstlove@zohomail.com;
-        h=Date:From:To:Message-ID:In-Reply-To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=hUkAjx8bXAZHxayySh1n5KbdoqxfTn8BaHNZ/mTgqV8=;
-        b=CO4uu37ZCfH1Jfj2cw2XR7HIjgICak66y2o8SZQcJ/RyA3UiP2xD7JqPUS2i1hTI
-        ykAu2PppvTQH7taDHGPLZrcYm/GzHCMGwmpTqOnwEjCCcsUxMstZv3lPxxooxR/dDvE
-        zZs4yauUZ+8v6v8/UNak2pFgcO2AqxDWpL8SUOL0=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1642673496435189.80323781141738; Thu, 20 Jan 2022 02:11:36 -0800 (PST)
-Received: from  [203.218.243.128] by mail.zoho.com
-        with HTTP;Thu, 20 Jan 2022 02:11:36 -0800 (PST)
-Date:   Thu, 20 Jan 2022 18:11:36 +0800
-From:   Li Chen <lchen.firstlove@zohomail.com>
-To:     "Kishon Vijay Abraham I" <kishon@ti.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "linux-pci" <linux-pci@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <17e76f86155.1222b3923123229.7199263965880267375@zohomail.com>
-In-Reply-To: 
-Subject: [PATCH V3] misc: pci_endpoint_test: simplify endpoint test read and
- write operations
+        id S1359756AbiATKJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:09:44 -0500
+Received: from mail-bn8nam12on2049.outbound.protection.outlook.com ([40.107.237.49]:27936
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234793AbiATKJn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 05:09:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EW6vlH+Qw93J4evHiZGxDLTn0sEzttafBiWh4+t2kVl3qaGU1dTd0L/Okqtrw2hIjLbyOFAFew1l13pVeEfzsvC1a8KsfcWv5+ZiN1D3PkcjKR2Xt7RGqa1Ipd/RpK8VuoOBAhiYj19y4pMdO8jvSrshOB5PcdKsUvUwyee0L5xrgzICRSunvt2iEZLYTUu3k4m+H41FKvSEVcuwiuvVaWiMvgO4giLo6e/yIAjPJoBbSdkA9HIVjngcEBel/fiN1qxrfTbm4NSKu11d3a/shymZVfmfg3gy+JADN2uOOxKzfmPaJPMyO3Vv1v7zvQ7/ZAZR2+wRFvkdaA8uG3b+jQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w3fiCp/p+PA/hlhAEiW5b1I2rwvFkyhwDZS2D6kP/Mc=;
+ b=jcto6MTQkctj8Bm16H1NWUI+p1lzpzdhmDorm7PDdRhjh76d2UQgDbX5InroowOjI/Uxr+9cg5kaNj/apUnV4znV5rk02WLb/oUQs/a499UvmmmtL6VayaL0e8qlQ5l84qNWReYPzkB6cRZe/SON4Fpfd4V9avt1rXXaod6MLOCBmSNA4dwDgW/HGEzanK2Cx6U4+gv9UNrr7ile+sbdGGMKL7uXB0lg++D5c3/+oTiUQU2UgEd1FSvutrN6pOZehgbjpOtAF3Y3RCSV4wagLMtKjety7A5grdpkZthjSkdtVXWJ915Cmn617S+bLeumnaHyM4YycoI9jm2n8/8hDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w3fiCp/p+PA/hlhAEiW5b1I2rwvFkyhwDZS2D6kP/Mc=;
+ b=kf7dlIyV51Jg1ut6ptlxFf1DgR6mKi9IXT6rBpvo2kfaR2hhiehnX9a82WQ4vxHE+lm4HYFGR4Dd5XOasuv3+Jh92lUP9qG3uaE9lEgiDtaD/0f8EsTKLKEPf9Rpp09FJWnmwex+ebvfSGe81Ln3uEeDAp2RJZepqmfOXNyaaTtjVZixVL2hMDjfLezHlrYjqLhSgNS4su3r9QlnW/HCP4l4mls5ZZouLdSqGftS3cPkpW/G8me45NVgOcWujM7rXZU0AliBAt+eQb0+oNhTv1i16VAzhSWXr817WY+1a9fU1uC040zuGZ9HH/RijjecIp4Zj/Q3aNVKuW1Kk/xmIQ==
+Received: from BN7PR02CA0012.namprd02.prod.outlook.com (2603:10b6:408:20::25)
+ by DM5PR12MB2454.namprd12.prod.outlook.com (2603:10b6:4:ba::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Thu, 20 Jan
+ 2022 10:09:41 +0000
+Received: from BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:20:cafe::e7) by BN7PR02CA0012.outlook.office365.com
+ (2603:10b6:408:20::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
+ Transport; Thu, 20 Jan 2022 10:09:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ BN8NAM11FT040.mail.protection.outlook.com (10.13.177.166) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Thu, 20 Jan 2022 10:09:40 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 Jan
+ 2022 10:09:39 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 Jan
+ 2022 10:09:39 +0000
+Received: from kkartik-desktop.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 20 Jan 2022 10:09:37 +0000
+From:   Kartik <kkartik@nvidia.com>
+To:     <robh+dt@kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
+        <mperttunen@nvidia.com>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kkartik@nvidia.com>
+Subject: [PATCH] arm64: tegra: enable uart instance on 40-pin header
+Date:   Thu, 20 Jan 2022 15:41:51 +0530
+Message-ID: <1642673511-8267-1-git-send-email-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d4a00620-538c-48f5-4463-08d9dbfcf929
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2454:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2454CF3EE42235AD82EEE482CD5A9@DM5PR12MB2454.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: st5RrF2eoLwpJBCcOeCd8YGd1cSiWRLZdzrNvXPK28k4D13gSCpkGUNhF16gOHf39jCwV4t4bNaJGORIVHYaFM5O7kjRpD1lH/K+kp7upo+oZ6k8PS0svWGZdJm2Wmdi8T/wSip4ONQohl3kZgXw/ok9IoWtOxqA9Xn6LXz8HCa0zNjIm2tRuzl2oqX4lsOaaNsxv39i1shcmSIBplHRO5sGme4GjEMMdo6PKcVzB1CrKTfr8y2h77yV1A37a094XUw+jHasXpFmfxpCoCLJVt1OzOd2U57kRgVUj6A7siK1ZDG5Wjx7s1v7ZFDjgE9Q2ecBA4jKy47n8EoaDwakUUGItsVszfv8fZuE5Sq9ixVPSG8fQkVEbN0H+f7Y+r2sjCgi14cJwNeh3u1zyYQEPb4ixEm3DecG5eSiMHtSu7VqDouhGO5DhD+xqM/5L26q4lFLrhlPCvzlYeZ9+smGLE50etV+0dh3j/FLMJ8Nabj36hVzCS4FUVI9uFTmJFbIciam8WT6TfXgh6A4sdDb/rcLGZEXyoahlhfchBovtxr4OjfQTrffP1gkHZsVAXUiAOu4ajxtiQuDwcFCeMgs9CbwUtU22JW0+wi6Ey7OZCFWlOSjK/EdTHtI9SA4jp7FGK3tUQp1pfQgpi64hmUOqbl+4G9DUIF1GqQGd6De/31iUNnMXigSoMGRd6khKq4430xIT+IJbhJKSSGz/ubKH8WslfYD0kOpiKNiJ+T2RmcZpM49Ir3u86xlwdXMWq68YJ6LF8lnTbltm6Xq5XW4g98/bs4+UPuaz4zpP6sjgKY=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(82310400004)(356005)(47076005)(70206006)(5660300002)(6666004)(70586007)(36860700001)(8936002)(316002)(40460700001)(86362001)(36756003)(336012)(2906002)(2616005)(426003)(508600001)(186003)(26005)(7696005)(81166007)(8676002)(7049001)(110136005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2022 10:09:40.6389
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4a00620-538c-48f5-4463-08d9dbfcf929
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2454
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce pci_endpoint_epf_transfer_data to simplify
-read and write operations.
+From: kartik <kkartik@nvidia.com>
 
-Signed-off-by: Li Chen <lchen@ambarella.com>
+On P3737 board, UART-A is available on 40-pin header.
+
+Enable UART-A for P3737 and change the compatible string to
+"nvidia,tegra194-hsuart". This enables serial-tegra driver, which
+supports HW flow control and is the preffered driver for higher
+baud rates.
+
+Signed-off-by: kartik <kkartik@nvidia.com>
 ---
-Changes in V2:
-fix WARNING: line length of 108 exceeds 100 columns
-#128: FILE: drivers/misc/pci_endpoint_test.c:243:
-Changes in V3:
-This patch context doesn't change but resend with my Zoho mail account in that previous 
-company mail will contain un-removeable proprietary messages.
+ arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- drivers/misc/pci_endpoint_test.c | 289 ++++++++++++-------------------
- 1 file changed, 109 insertions(+), 180 deletions(-)
-
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 2ed7e3aaff3a8..b6b0b19b251b3 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -103,6 +103,11 @@ enum pci_barno {
- 	BAR_5,
- };
+diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+index efbbb87..4eda238 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+@@ -11,6 +11,7 @@
+ 	aliases {
+ 		mmc3 = "/bus@0/mmc@3460000";
+ 		serial0 = &tcu;
++		serial1 = &uarta;
+ 	};
  
-+enum operation {
-+	EPF_READ,
-+	EPF_WRITE,
-+};
-+
- struct pci_endpoint_test {
- 	struct pci_dev	*pdev;
- 	void __iomem	*base;
-@@ -142,6 +147,108 @@ static inline u32 pci_endpoint_test_bar_readl(struct pci_endpoint_test *test,
- {
- 	return readl(test->bar[bar] + offset);
- }
-+static bool pci_endpoint_test_transfer_data(struct pci_endpoint_test *test,
-+				unsigned long arg, const enum operation operation)
-+{
-+	struct pci_endpoint_test_xfer_param param;
-+	bool ret = false;
-+	u32 flags = 0;
-+	bool use_dma;
-+	void *addr;
-+	dma_addr_t phys_addr;
-+	struct pci_dev *pdev = test->pdev;
-+	struct device *dev = &pdev->dev;
-+	void *orig_addr;
-+	dma_addr_t orig_phys_addr;
-+	size_t offset;
-+	size_t alignment = test->alignment;
-+	int irq_type = test->irq_type;
-+	size_t size;
-+	int err;
-+
-+	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
-+	if (err != 0) {
-+		dev_err(dev, "Failed to get transfer param\n");
-+		return false;
-+	}
-+
-+	size = param.size;
-+	if (size > SIZE_MAX - alignment)
-+		goto err;
-+
-+	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
-+	if (use_dma)
-+		flags |= FLAG_USE_DMA;
-+
-+	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
-+		dev_err(dev, "Invalid IRQ type option\n");
-+		goto err;
-+	}
-+
-+	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
-+	if (!orig_addr)
-+		goto err;
-+
-+	get_random_bytes(orig_addr, size + alignment);
-+
-+	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
-+					operation == EPF_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
-+	if (dma_mapping_error(dev, orig_phys_addr)) {
-+		dev_err(dev, "failed to map source buffer address\n");
-+		goto err_phys_addr;
-+	}
-+
-+	if (alignment && !IS_ALIGNED(orig_phys_addr, alignment)) {
-+		phys_addr = PTR_ALIGN(orig_phys_addr, alignment);
-+		offset = phys_addr - orig_phys_addr;
-+		addr = orig_addr + offset;
-+	} else {
-+		phys_addr = orig_phys_addr;
-+		addr = orig_addr;
-+	}
-+
-+	if (operation == EPF_WRITE) {
-+
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_CHECKSUM,
-+				 crc32_le(~0, addr, size));
-+
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_SRC_ADDR,
-+								lower_32_bits(phys_addr));
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_SRC_ADDR,
-+								upper_32_bits(phys_addr));
-+	} else {
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_DST_ADDR,
-+								lower_32_bits(phys_addr));
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_DST_ADDR,
-+								upper_32_bits(phys_addr));
-+	}
-+
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
-+
-+	// if we ask rc to write to ep, then ep should do read operation, and vice versa.
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
-+				 operation == EPF_WRITE ? COMMAND_READ : COMMAND_WRITE);
-+
-+	wait_for_completion(&test->irq_raised);
-+
-+	dma_unmap_single(dev, orig_phys_addr, size + alignment,
-+					 operation == EPF_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
-+
-+	if (operation == WRITE)
-+		ret = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS) & STATUS_READ_SUCCESS;
-+	else
-+		ret = crc32_le(~0, addr, size) ==
-+			pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM);
-+
-+err_phys_addr:
-+	kfree(orig_addr);
-+
-+err:
-+	return ret;
-+}
+ 	chosen {
+@@ -18,6 +19,13 @@
+ 		stdout-path = "serial0:115200n8";
+ 	};
  
- static inline void pci_endpoint_test_bar_writel(struct pci_endpoint_test *test,
- 						int bar, u32 offset, u32 value)
-@@ -473,191 +580,13 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 				    unsigned long arg)
- {
--	struct pci_endpoint_test_xfer_param param;
--	bool ret = false;
--	u32 flags = 0;
--	bool use_dma;
--	u32 reg;
--	void *addr;
--	dma_addr_t phys_addr;
--	struct pci_dev *pdev = test->pdev;
--	struct device *dev = &pdev->dev;
--	void *orig_addr;
--	dma_addr_t orig_phys_addr;
--	size_t offset;
--	size_t alignment = test->alignment;
--	int irq_type = test->irq_type;
--	size_t size;
--	u32 crc32;
--	int err;
--
--	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
--	if (err != 0) {
--		dev_err(dev, "Failed to get transfer param\n");
--		return false;
--	}
--
--	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
--
--	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
--	if (use_dma)
--		flags |= FLAG_USE_DMA;
--
--	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
--		dev_err(dev, "Invalid IRQ type option\n");
--		goto err;
--	}
--
--	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
--	if (!orig_addr) {
--		dev_err(dev, "Failed to allocate address\n");
--		ret = false;
--		goto err;
--	}
--
--	get_random_bytes(orig_addr, size + alignment);
--
--	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
--					DMA_TO_DEVICE);
--	if (dma_mapping_error(dev, orig_phys_addr)) {
--		dev_err(dev, "failed to map source buffer address\n");
--		ret = false;
--		goto err_phys_addr;
--	}
--
--	if (alignment && !IS_ALIGNED(orig_phys_addr, alignment)) {
--		phys_addr =  PTR_ALIGN(orig_phys_addr, alignment);
--		offset = phys_addr - orig_phys_addr;
--		addr = orig_addr + offset;
--	} else {
--		phys_addr = orig_phys_addr;
--		addr = orig_addr;
--	}
--
--	crc32 = crc32_le(~0, addr, size);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_CHECKSUM,
--				 crc32);
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_SRC_ADDR,
--				 lower_32_bits(phys_addr));
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_SRC_ADDR,
--				 upper_32_bits(phys_addr));
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
--				 COMMAND_READ);
--
--	wait_for_completion(&test->irq_raised);
--
--	reg = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
--	if (reg & STATUS_READ_SUCCESS)
--		ret = true;
--
--	dma_unmap_single(dev, orig_phys_addr, size + alignment,
--			 DMA_TO_DEVICE);
--
--err_phys_addr:
--	kfree(orig_addr);
--
--err:
--	return ret;
-+	return pci_endpoint_test_transfer_data(test, arg, EPF_WRITE);
- }
- 
- static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 				   unsigned long arg)
- {
--	struct pci_endpoint_test_xfer_param param;
--	bool ret = false;
--	u32 flags = 0;
--	bool use_dma;
--	size_t size;
--	void *addr;
--	dma_addr_t phys_addr;
--	struct pci_dev *pdev = test->pdev;
--	struct device *dev = &pdev->dev;
--	void *orig_addr;
--	dma_addr_t orig_phys_addr;
--	size_t offset;
--	size_t alignment = test->alignment;
--	int irq_type = test->irq_type;
--	u32 crc32;
--	int err;
--
--	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
--	if (err) {
--		dev_err(dev, "Failed to get transfer param\n");
--		return false;
--	}
--
--	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
--
--	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
--	if (use_dma)
--		flags |= FLAG_USE_DMA;
--
--	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
--		dev_err(dev, "Invalid IRQ type option\n");
--		goto err;
--	}
--
--	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
--	if (!orig_addr) {
--		dev_err(dev, "Failed to allocate destination address\n");
--		ret = false;
--		goto err;
--	}
--
--	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
--					DMA_FROM_DEVICE);
--	if (dma_mapping_error(dev, orig_phys_addr)) {
--		dev_err(dev, "failed to map source buffer address\n");
--		ret = false;
--		goto err_phys_addr;
--	}
--
--	if (alignment && !IS_ALIGNED(orig_phys_addr, alignment)) {
--		phys_addr = PTR_ALIGN(orig_phys_addr, alignment);
--		offset = phys_addr - orig_phys_addr;
--		addr = orig_addr + offset;
--	} else {
--		phys_addr = orig_phys_addr;
--		addr = orig_addr;
--	}
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_DST_ADDR,
--				 lower_32_bits(phys_addr));
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_DST_ADDR,
--				 upper_32_bits(phys_addr));
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
--				 COMMAND_WRITE);
--
--	wait_for_completion(&test->irq_raised);
--
--	dma_unmap_single(dev, orig_phys_addr, size + alignment,
--			 DMA_FROM_DEVICE);
--
--	crc32 = crc32_le(~0, addr, size);
--	if (crc32 == pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM))
--		ret = true;
--
--err_phys_addr:
--	kfree(orig_addr);
--err:
--	return ret;
-+	return pci_endpoint_test_transfer_data(test, arg, EPF_READ);
- }
- 
- static bool pci_endpoint_test_clear_irq(struct pci_endpoint_test *test)
++	bus@0 {
++		serial@3100000 {
++			compatible = "nvidia,tegra194-hsuart";
++			status = "okay";
++		};
++	};
++
+ 	serial {
+ 		status = "okay";
+ 	};
 -- 
-2.34.1
+2.7.4
 

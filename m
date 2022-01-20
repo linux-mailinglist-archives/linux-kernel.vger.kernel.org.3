@@ -2,308 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694D2494C51
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1E4494C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiATK5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiATK5F (ORCPT
+        id S229960AbiATK5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:57:06 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:13254 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229951AbiATK5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:57:05 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F123AC061574;
-        Thu, 20 Jan 2022 02:57:04 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id c24so24592761edy.4;
-        Thu, 20 Jan 2022 02:57:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VJFSujY0gawm0vuS1B+3onnPwXQ2aVqz3AH1Ci+gepI=;
-        b=H4/nz/vo+kTO/K3uRtiAAeZz3SGXVBo6YrTUQ+W7Ycvfez1rGht/zH9RmQP+HGdFVo
-         PnPybtNQi65V3jbC6OUUkg0QCQGp1ESHk1FiyBpqZnbsNCXh+d537X9sBIdC3X5SK4OP
-         aoKsZ8v/+4WDjUPIiGXHYsMqOrZHiI28+oBNcbduAjTz8iaG91Fb+v03qy7ZZIzVlLHC
-         cwjjuRyc1pANbTp2GCyJTe2zmO5dmbTDwqqLU+/pcUkp4v/9wqCyrgi3VTHQ7eF5iSxM
-         Dw63NjJxMZRWEjyGRa5kWakrI4w1Nixt3l4CGBIMqEYa8fQgncrQoeikSbKMFxufKjto
-         0boA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VJFSujY0gawm0vuS1B+3onnPwXQ2aVqz3AH1Ci+gepI=;
-        b=bu3G0KOm4o0ScV1wq8T9q7rEoCc6FNxFFvoLt51PmE6pIoYeOISKSOBeC07nkskbvm
-         JzgiIoSaKAcPsNMHMqSFL2OjO+kWCG9XeKtFNk7TvfkzMh8F1bPBaIVaOHwZ2w3kZGEA
-         fGb3QuWz05xE8lrQeo9I/uhrn18Wur2cb8lKMNRyMnBTpQX8U8af9PBOnQfxw0QjGz0k
-         ZvqtDpoktEmjwVW2nR/oTXfiUdNpWvRC/HdCYDxbl2O+kSMtgpgZF4QjYWUSzn1GJmBJ
-         /jhqNPIbg9EEFEanYQBvOKKCaC+EzlSdy1b31cQUGCBBXkZpTVVMPx2EtwXsPlaf+pI5
-         C+/g==
-X-Gm-Message-State: AOAM533Qi6+i8RAx7epgByEGRqKmactAV7XiF3RBCUv/dqmvNwuWopgd
-        9t6f4bglCTTI6916KDJawwXSGTRjnn2Bs2tvCTI=
-X-Google-Smtp-Source: ABdhPJy3XM0de+IEVOkIlJ0EiHVt6il1s31sj3OZSQPpdqexZ1vW8TAK6qllKAhg9nSYkjHK1td5+VScKb3gWzGNMgM=
-X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr20345363edc.29.1642676223381;
- Thu, 20 Jan 2022 02:57:03 -0800 (PST)
+        Thu, 20 Jan 2022 05:57:04 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K4mpaE024668;
+        Thu, 20 Jan 2022 04:56:21 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=euN68nd5YAlW/BA+lmkUTwFBJNJ7HjWDXKMiti0Rxx8=;
+ b=j2znbKDN76IjBz6yq+D/KpT5bFOxq8fL2wOR6BQlY0S+MHHB9Pd9+4b2W2x7ohYkKUzx
+ FIPMv44D1CnX4JT3rsM696qJp9LXd17Vwz1Kn8gY+H/v8OveYm1rezpfQjKedgSBfL+x
+ L5b7vs9MwLekBCplPONGeTs4T0vV0dndDorHLwEyUW4LGfy4zaJPXyb6rvb26BsVC8Qs
+ Yp/SfV8RLvAEZH2JzXrG4kbSYqCLSHcqPoEhoOkv6/vVZKeDySN9vdAdmeyfTZ3vqVMB
+ qOKfrV3WSQcjYofJwsvC3AS6Wx9/a4pbebmVT1DJ9FNlJzNQOX94ZWQ1feAiaRDYsG9L rA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dpk9mh39e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 20 Jan 2022 04:56:21 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 20 Jan
+ 2022 10:56:19 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 20 Jan 2022 10:56:19 +0000
+Received: from vitaly-Inspiron-5415.ad.cirrus.com (unknown [198.90.238.196])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D099546D;
+        Thu, 20 Jan 2022 10:56:18 +0000 (UTC)
+From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ALSA: hda/cs8409: Add new Warlock SKUs to patch_cs8409
+Date:   Thu, 20 Jan 2022 10:56:18 +0000
+Message-ID: <20220120105618.249144-1-vitalyr@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220117142919.207370-1-marcan@marcan.st> <20220117142919.207370-9-marcan@marcan.st>
-In-Reply-To: <20220117142919.207370-9-marcan@marcan.st>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 12:55:21 +0200
-Message-ID: <CAHp75Vd1VJhwTey=8FmmX=UaTCFnWzVjf0Y4Ctq=eLyVqi7_ig@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] brcmfmac: fwil: Constify iovar name arguments
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: UnC3zu0dMcrNO6GV0JL1xls1YwvMcDeG
+X-Proofpoint-GUID: UnC3zu0dMcrNO6GV0JL1xls1YwvMcDeG
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 4:31 PM Hector Martin <marcan@marcan.st> wrote:
->
-> Make all the iovar name arguments const char * instead of just char *.
+From: Stefan Binding <sbinding@opensource.cirrus.com>
 
-Makes sense.
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+---
+ sound/pci/hda/patch_cs8409-tables.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../broadcom/brcm80211/brcmfmac/fwil.c        | 34 +++++++++----------
->  .../broadcom/brcm80211/brcmfmac/fwil.h        | 28 +++++++--------
->  2 files changed, 31 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.c
-> index d5578ca681bb..72fe8bce6eaf 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.c
-> @@ -192,7 +192,7 @@ brcmf_fil_cmd_int_get(struct brcmf_if *ifp, u32 cmd, u32 *data)
->  }
->
->  static u32
-> -brcmf_create_iovar(char *name, const char *data, u32 datalen,
-> +brcmf_create_iovar(const char *name, const char *data, u32 datalen,
->                    char *buf, u32 buflen)
->  {
->         u32 len;
-> @@ -213,7 +213,7 @@ brcmf_create_iovar(char *name, const char *data, u32 datalen,
->
->
->  s32
-> -brcmf_fil_iovar_data_set(struct brcmf_if *ifp, char *name, const void *data,
-> +brcmf_fil_iovar_data_set(struct brcmf_if *ifp, const char *name, const void *data,
->                          u32 len)
->  {
->         struct brcmf_pub *drvr = ifp->drvr;
-> @@ -241,7 +241,7 @@ brcmf_fil_iovar_data_set(struct brcmf_if *ifp, char *name, const void *data,
->  }
->
->  s32
-> -brcmf_fil_iovar_data_get(struct brcmf_if *ifp, char *name, void *data,
-> +brcmf_fil_iovar_data_get(struct brcmf_if *ifp, const char *name, void *data,
->                          u32 len)
->  {
->         struct brcmf_pub *drvr = ifp->drvr;
-> @@ -272,7 +272,7 @@ brcmf_fil_iovar_data_get(struct brcmf_if *ifp, char *name, void *data,
->  }
->
->  s32
-> -brcmf_fil_iovar_int_set(struct brcmf_if *ifp, char *name, u32 data)
-> +brcmf_fil_iovar_int_set(struct brcmf_if *ifp, const char *name, u32 data)
->  {
->         __le32 data_le = cpu_to_le32(data);
->
-> @@ -280,7 +280,7 @@ brcmf_fil_iovar_int_set(struct brcmf_if *ifp, char *name, u32 data)
->  }
->
->  s32
-> -brcmf_fil_iovar_int_get(struct brcmf_if *ifp, char *name, u32 *data)
-> +brcmf_fil_iovar_int_get(struct brcmf_if *ifp, const char *name, u32 *data)
->  {
->         __le32 data_le = cpu_to_le32(*data);
->         s32 err;
-> @@ -292,7 +292,7 @@ brcmf_fil_iovar_int_get(struct brcmf_if *ifp, char *name, u32 *data)
->  }
->
->  static u32
-> -brcmf_create_bsscfg(s32 bsscfgidx, char *name, char *data, u32 datalen,
-> +brcmf_create_bsscfg(s32 bsscfgidx, const char *name, char *data, u32 datalen,
->                     char *buf, u32 buflen)
->  {
->         const s8 *prefix = "bsscfg:";
-> @@ -337,7 +337,7 @@ brcmf_create_bsscfg(s32 bsscfgidx, char *name, char *data, u32 datalen,
->  }
->
->  s32
-> -brcmf_fil_bsscfg_data_set(struct brcmf_if *ifp, char *name,
-> +brcmf_fil_bsscfg_data_set(struct brcmf_if *ifp, const char *name,
->                           void *data, u32 len)
->  {
->         struct brcmf_pub *drvr = ifp->drvr;
-> @@ -366,7 +366,7 @@ brcmf_fil_bsscfg_data_set(struct brcmf_if *ifp, char *name,
->  }
->
->  s32
-> -brcmf_fil_bsscfg_data_get(struct brcmf_if *ifp, char *name,
-> +brcmf_fil_bsscfg_data_get(struct brcmf_if *ifp, const char *name,
->                           void *data, u32 len)
->  {
->         struct brcmf_pub *drvr = ifp->drvr;
-> @@ -396,7 +396,7 @@ brcmf_fil_bsscfg_data_get(struct brcmf_if *ifp, char *name,
->  }
->
->  s32
-> -brcmf_fil_bsscfg_int_set(struct brcmf_if *ifp, char *name, u32 data)
-> +brcmf_fil_bsscfg_int_set(struct brcmf_if *ifp, const char *name, u32 data)
->  {
->         __le32 data_le = cpu_to_le32(data);
->
-> @@ -405,7 +405,7 @@ brcmf_fil_bsscfg_int_set(struct brcmf_if *ifp, char *name, u32 data)
->  }
->
->  s32
-> -brcmf_fil_bsscfg_int_get(struct brcmf_if *ifp, char *name, u32 *data)
-> +brcmf_fil_bsscfg_int_get(struct brcmf_if *ifp, const char *name, u32 *data)
->  {
->         __le32 data_le = cpu_to_le32(*data);
->         s32 err;
-> @@ -417,7 +417,7 @@ brcmf_fil_bsscfg_int_get(struct brcmf_if *ifp, char *name, u32 *data)
->         return err;
->  }
->
-> -static u32 brcmf_create_xtlv(char *name, u16 id, char *data, u32 len,
-> +static u32 brcmf_create_xtlv(const char *name, u16 id, char *data, u32 len,
->                              char *buf, u32 buflen)
->  {
->         u32 iolen;
-> @@ -438,7 +438,7 @@ static u32 brcmf_create_xtlv(char *name, u16 id, char *data, u32 len,
->         return iolen;
->  }
->
-> -s32 brcmf_fil_xtlv_data_set(struct brcmf_if *ifp, char *name, u16 id,
-> +s32 brcmf_fil_xtlv_data_set(struct brcmf_if *ifp, const char *name, u16 id,
->                             void *data, u32 len)
->  {
->         struct brcmf_pub *drvr = ifp->drvr;
-> @@ -466,7 +466,7 @@ s32 brcmf_fil_xtlv_data_set(struct brcmf_if *ifp, char *name, u16 id,
->         return err;
->  }
->
-> -s32 brcmf_fil_xtlv_data_get(struct brcmf_if *ifp, char *name, u16 id,
-> +s32 brcmf_fil_xtlv_data_get(struct brcmf_if *ifp, const char *name, u16 id,
->                             void *data, u32 len)
->  {
->         struct brcmf_pub *drvr = ifp->drvr;
-> @@ -495,7 +495,7 @@ s32 brcmf_fil_xtlv_data_get(struct brcmf_if *ifp, char *name, u16 id,
->         return err;
->  }
->
-> -s32 brcmf_fil_xtlv_int_set(struct brcmf_if *ifp, char *name, u16 id, u32 data)
-> +s32 brcmf_fil_xtlv_int_set(struct brcmf_if *ifp, const char *name, u16 id, u32 data)
->  {
->         __le32 data_le = cpu_to_le32(data);
->
-> @@ -503,7 +503,7 @@ s32 brcmf_fil_xtlv_int_set(struct brcmf_if *ifp, char *name, u16 id, u32 data)
->                                          sizeof(data_le));
->  }
->
-> -s32 brcmf_fil_xtlv_int_get(struct brcmf_if *ifp, char *name, u16 id, u32 *data)
-> +s32 brcmf_fil_xtlv_int_get(struct brcmf_if *ifp, const char *name, u16 id, u32 *data)
->  {
->         __le32 data_le = cpu_to_le32(*data);
->         s32 err;
-> @@ -514,12 +514,12 @@ s32 brcmf_fil_xtlv_int_get(struct brcmf_if *ifp, char *name, u16 id, u32 *data)
->         return err;
->  }
->
-> -s32 brcmf_fil_xtlv_int8_get(struct brcmf_if *ifp, char *name, u16 id, u8 *data)
-> +s32 brcmf_fil_xtlv_int8_get(struct brcmf_if *ifp, const char *name, u16 id, u8 *data)
->  {
->         return brcmf_fil_xtlv_data_get(ifp, name, id, data, sizeof(*data));
->  }
->
-> -s32 brcmf_fil_xtlv_int16_get(struct brcmf_if *ifp, char *name, u16 id, u16 *data)
-> +s32 brcmf_fil_xtlv_int16_get(struct brcmf_if *ifp, const char *name, u16 id, u16 *data)
->  {
->         __le16 data_le = cpu_to_le16(*data);
->         s32 err;
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.h
-> index cb26f8c59c21..bc693157c4b1 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.h
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.h
-> @@ -84,26 +84,26 @@ s32 brcmf_fil_cmd_data_get(struct brcmf_if *ifp, u32 cmd, void *data, u32 len);
->  s32 brcmf_fil_cmd_int_set(struct brcmf_if *ifp, u32 cmd, u32 data);
->  s32 brcmf_fil_cmd_int_get(struct brcmf_if *ifp, u32 cmd, u32 *data);
->
-> -s32 brcmf_fil_iovar_data_set(struct brcmf_if *ifp, char *name, const void *data,
-> +s32 brcmf_fil_iovar_data_set(struct brcmf_if *ifp, const char *name, const void *data,
->                              u32 len);
-> -s32 brcmf_fil_iovar_data_get(struct brcmf_if *ifp, char *name, void *data,
-> +s32 brcmf_fil_iovar_data_get(struct brcmf_if *ifp, const char *name, void *data,
->                              u32 len);
-> -s32 brcmf_fil_iovar_int_set(struct brcmf_if *ifp, char *name, u32 data);
-> -s32 brcmf_fil_iovar_int_get(struct brcmf_if *ifp, char *name, u32 *data);
-> +s32 brcmf_fil_iovar_int_set(struct brcmf_if *ifp, const char *name, u32 data);
-> +s32 brcmf_fil_iovar_int_get(struct brcmf_if *ifp, const char *name, u32 *data);
->
-> -s32 brcmf_fil_bsscfg_data_set(struct brcmf_if *ifp, char *name, void *data,
-> +s32 brcmf_fil_bsscfg_data_set(struct brcmf_if *ifp, const char *name, void *data,
->                               u32 len);
-> -s32 brcmf_fil_bsscfg_data_get(struct brcmf_if *ifp, char *name, void *data,
-> +s32 brcmf_fil_bsscfg_data_get(struct brcmf_if *ifp, const char *name, void *data,
->                               u32 len);
-> -s32 brcmf_fil_bsscfg_int_set(struct brcmf_if *ifp, char *name, u32 data);
-> -s32 brcmf_fil_bsscfg_int_get(struct brcmf_if *ifp, char *name, u32 *data);
-> -s32 brcmf_fil_xtlv_data_set(struct brcmf_if *ifp, char *name, u16 id,
-> +s32 brcmf_fil_bsscfg_int_set(struct brcmf_if *ifp, const char *name, u32 data);
-> +s32 brcmf_fil_bsscfg_int_get(struct brcmf_if *ifp, const char *name, u32 *data);
-> +s32 brcmf_fil_xtlv_data_set(struct brcmf_if *ifp, const char *name, u16 id,
->                             void *data, u32 len);
-> -s32 brcmf_fil_xtlv_data_get(struct brcmf_if *ifp, char *name, u16 id,
-> +s32 brcmf_fil_xtlv_data_get(struct brcmf_if *ifp, const char *name, u16 id,
->                             void *data, u32 len);
-> -s32 brcmf_fil_xtlv_int_set(struct brcmf_if *ifp, char *name, u16 id, u32 data);
-> -s32 brcmf_fil_xtlv_int_get(struct brcmf_if *ifp, char *name, u16 id, u32 *data);
-> -s32 brcmf_fil_xtlv_int8_get(struct brcmf_if *ifp, char *name, u16 id, u8 *data);
-> -s32 brcmf_fil_xtlv_int16_get(struct brcmf_if *ifp, char *name, u16 id, u16 *data);
-> +s32 brcmf_fil_xtlv_int_set(struct brcmf_if *ifp, const char *name, u16 id, u32 data);
-> +s32 brcmf_fil_xtlv_int_get(struct brcmf_if *ifp, const char *name, u16 id, u32 *data);
-> +s32 brcmf_fil_xtlv_int8_get(struct brcmf_if *ifp, const char *name, u16 id, u8 *data);
-> +s32 brcmf_fil_xtlv_int16_get(struct brcmf_if *ifp, const char *name, u16 id, u16 *data);
->
->  #endif /* _fwil_h_ */
-> --
-> 2.33.0
->
-
-
+diff --git a/sound/pci/hda/patch_cs8409-tables.c b/sound/pci/hda/patch_cs8409-tables.c
+index df0b4522babf..2d1fa706327b 100644
+--- a/sound/pci/hda/patch_cs8409-tables.c
++++ b/sound/pci/hda/patch_cs8409-tables.c
+@@ -490,6 +490,8 @@ const struct snd_pci_quirk cs8409_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1028, 0x0ADC, "Warlock", CS8409_WARLOCK),
+ 	SND_PCI_QUIRK(0x1028, 0x0AF4, "Warlock", CS8409_WARLOCK),
+ 	SND_PCI_QUIRK(0x1028, 0x0AF5, "Warlock", CS8409_WARLOCK),
++	SND_PCI_QUIRK(0x1028, 0x0BB5, "Warlock N3 15 TGL-U Nuvoton EC", CS8409_WARLOCK),
++	SND_PCI_QUIRK(0x1028, 0x0BB6, "Warlock V3 15 TGL-U Nuvoton EC", CS8409_WARLOCK),
+ 	SND_PCI_QUIRK(0x1028, 0x0A77, "Cyborg", CS8409_CYBORG),
+ 	SND_PCI_QUIRK(0x1028, 0x0A78, "Cyborg", CS8409_CYBORG),
+ 	SND_PCI_QUIRK(0x1028, 0x0A79, "Cyborg", CS8409_CYBORG),
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

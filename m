@@ -2,82 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53AB494945
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0650494948
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359136AbiATIRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:17:16 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48234 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiATIRP (ORCPT
+        id S1359146AbiATIRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:17:42 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:48349 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231338AbiATIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:17:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 20 Jan 2022 03:17:42 -0500
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5296EB81902;
-        Thu, 20 Jan 2022 08:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAA7C340E4;
-        Thu, 20 Jan 2022 08:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642666633;
-        bh=eN7SR8EJMEw4KBhQxgsC2D8EgAJNSNfydzmKNgI1zDY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gKp2VxHd9G7cfRG41KMFGWvtoRs/XEuH+CevmKDBWPNsWSmMJeTH9h1gA7qov0x5s
-         UE1u72vfIa2tqcNo8P+kofYJATlwkFbiXBpcfd9hgZdSP3JguYpC4MOhuTtQ0EAr1q
-         FRjHlPzdwS3NGB0pJTOl97n0Jn/Lo03GH35WoK8c=
-Date:   Thu, 20 Jan 2022 09:17:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Li Chen <lchen@ambarella.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH] misc: pci_endpoint_test: simplify endpoint
- test read and write operations
-Message-ID: <Yekahmtc0bsaUMhi@kroah.com>
-References: <SA1PR19MB5572EAD4025173FA9F3B3937A05A9@SA1PR19MB5572.namprd19.prod.outlook.com>
- <YekYAAHPEBeJflZN@kroah.com>
- <SA1PR19MB5572A56F07CC46A064330408A05A9@SA1PR19MB5572.namprd19.prod.outlook.com>
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 77D0122247;
+        Thu, 20 Jan 2022 09:17:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1642666659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rUSKoJKnfr9VtGdXeTwdINopXvfCSmlllrWq+Z4vsNs=;
+        b=P3xM356wk08R6UjXhlYdqVg5BFs6bGhkJ2DaHSxsF7jbeY0vXXExbRRSgoEaO8g/Gut+wk
+        JP/58O832a6+xsiIqfeVcNRpCPh0jKZLOpIPT6OMeUzPyOzH9djngMlnsNVNpA4VGgZEzE
+        AVgrwAQbhW5H+jPPaqYYjBBDRPcQaHw=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SA1PR19MB5572A56F07CC46A064330408A05A9@SA1PR19MB5572.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 20 Jan 2022 09:17:37 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Leo Li <leoyang.li@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH 2/7] arm64: dts: ls1028a: move Mali DP500 node into /soc
+In-Reply-To: <AS8PR04MB89460673836CDB9AEFC0C09A8F5A9@AS8PR04MB8946.eurprd04.prod.outlook.com>
+References: <20210831134013.1625527-1-michael@walle.cc>
+ <20210831134013.1625527-3-michael@walle.cc>
+ <AS8PR04MB89460673836CDB9AEFC0C09A8F5A9@AS8PR04MB8946.eurprd04.prod.outlook.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <ad65d1782c051a51534ad0197cc374d8@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 08:09:20AM +0000, Li Chen wrote:
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman [mailto:gregkh@linuxfoundation.org]
-> > Sent: Thursday, January 20, 2022 4:06 PM
-> > To: Li Chen
-> > Cc: Kishon Vijay Abraham I; Lorenzo Pieralisi; Krzysztof Wilczyński; Arnd
-> > Bergmann; Bjorn Helgaas; linux-pci@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: [EXT] Re: [PATCH] misc: pci_endpoint_test: simplify endpoint test read
-> > and write operations
-> > 
-> > On Thu, Jan 20, 2022 at 08:03:17AM +0000, Li Chen wrote:
-> > >
-> > **************************************************************
-> > ********
-> > > This email and attachments contain Ambarella Proprietary and/or Confidential
-> > Information and is intended solely for the use of the individual(s) to whom it is
-> > addressed. Any unauthorized review, use, disclosure, distribute, copy, or print is
-> > prohibited. If you are not an intended recipient, please contact the sender by
-> > reply email and destroy all copies of the original message. Thank you.
-> > 
-> > Now deleted.
+Am 2022-01-20 09:06, schrieb Leo Li:
+>> -----Original Message-----
+>> From: Michael Walle <michael@walle.cc>
+>> Sent: Tuesday, August 31, 2021 9:40 PM
+>> To: linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org; 
+>> linux-
+>> kernel@vger.kernel.org
+>> Cc: Shawn Guo <shawnguo@kernel.org>; Leo Li <leoyang.li@nxp.com>; Rob
+>> Herring <robh+dt@kernel.org>; Vladimir Oltean 
+>> <vladimir.oltean@nxp.com>;
+>> Michael Walle <michael@walle.cc>
+>> Subject: [PATCH 2/7] arm64: dts: ls1028a: move Mali DP500 node into 
+>> /soc
+>> 
+>> Move it inside the /soc subnode because it is part of the CCSR space.
 > 
-> Hi, Greg
-> 
-> I'm sorry that I have no way to remove this message by myself.
+> I just noticed that the dp0_out label has been changed to dpi0_out
+> besides the move.  Is this an intentional change or a typo?  If
+> intentional we probably should mention it, otherwise we should change
+> it back as it is breaking build for off-tree patch that uses the
+> label.
 
-Sorry, but patches/emails with that notice on it are not allowed to be
-accepted for obvious reasons.  Please work with your company to fix
-this.
+It's intentional, because dp0_out might sound like displayport. And
+from what I've found the output is a display pixel interface, hence dpi.
+
+I agree, that this should have been two patches, must have slipped.
+But this series was merged months ago, so we can't change anything
+anymore.
+
+Besides, given the fact that there is no support for the DisplayPort
+PHY in upstream (yet, I'm working on that), I doubt there are any
+out-of-tree device trees, which don't use the proprietary NXP
+driver.
+
+Also, if there is an out-of-tree device tree, it should be easy
+enough for NXP to change that :)
+
+-michael

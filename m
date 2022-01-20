@@ -2,142 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82165494DBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5983A494DBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiATMPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:15:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46012 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiATMPe (ORCPT
+        id S235192AbiATMQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:16:23 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43602 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232764AbiATMQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:15:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 20 Jan 2022 07:16:21 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31142616AF;
-        Thu, 20 Jan 2022 12:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E53C340E0;
-        Thu, 20 Jan 2022 12:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642680933;
-        bh=0zqjRx17jeQjOp1ol5omqJUXW3BnaewnNO4FG3prRkM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ihUgSNX5R5BLdm/EgKc1Xd0m/WUKj/xJJKFgn0xd6tHchDDoW3zUL3mOYEybMoZm1
-         r5yWPtR1q9gLxHv4MXtT9Ss2ZtGIUuljKzpemqUiFFndGkxP1rMzQ9rgP2QXCZIAf/
-         D8puAzQs6H50/JWpUngeFbFb/p2dbxJ+fzRMQtdo55J0M4/jAZrgOBrgBhXl84/fpP
-         39GuC5D9+AlHQoaBMLGe/xBvu0HYUpOYsXt0Y2ikFeo3Y8N2w7cxZvc+Ppd5TO7PaB
-         hE8SEZeWUvrEXUyp2iMqQJRwJ9QUNFrdxZDbCQ+qD+aH6Y6RgVYeLwdGhFqpf6suTU
-         H4WFVYmqI+Smw==
-Date:   Thu, 20 Jan 2022 21:15:27 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v3 7/9] bpf: Add kprobe link for attaching raw
- kprobes
-Message-Id: <20220120211527.cd46c74ce2ad8f401aec545a@kernel.org>
-In-Reply-To: <Yek9Jq1UVa8fq91n@krava>
-References: <164260419349.657731.13913104835063027148.stgit@devnote2>
-        <164260427009.657731.15292670471943106202.stgit@devnote2>
-        <Yek9Jq1UVa8fq91n@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0FF182170E;
+        Thu, 20 Jan 2022 12:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642680980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KxjCyPB/TvQhq50NprkltYrk8TlOycec4dlTnsG9qZA=;
+        b=3bjfKDfvTfOlzkQJwrpwAEUvihELw0gZRTvUB6I23XJKhAXD4mvd2hiDua9ewpcYwTtWM9
+        o6rQhsWN0rywimL7gzTiM/GXxKsTXtol0nZbtRx1vNmqt3PcWG2DMUb2en7KPGaQzISEAo
+        F4phEP5uKwWJDD7XmYcJGwCUEJGS2OA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642680980;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KxjCyPB/TvQhq50NprkltYrk8TlOycec4dlTnsG9qZA=;
+        b=j5evB57e9KE/c3hUml0HBRtDbIzfe9UP68bVpR78IE9oBWnAmEBSXbC+AML0tYWh9Dc5Jj
+        p30R0xWifY46M+Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9909413B51;
+        Thu, 20 Jan 2022 12:16:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id G9aoJJNS6WGlWQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 20 Jan 2022 12:16:19 +0000
+Message-ID: <75a30665-9884-ac6d-c526-e7deb1e4e879@suse.cz>
+Date:   Thu, 20 Jan 2022 13:16:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-57-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 56/66] mm/mlock: Use maple tree iterators instead of
+ vma linked list
+In-Reply-To: <20211201142918.921493-57-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022 11:44:54 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
-
-> On Wed, Jan 19, 2022 at 11:57:50PM +0900, Masami Hiramatsu wrote:
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> SNIP
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> ---
+>  mm/mlock.c | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
 > 
-> > +static int kprobe_link_prog_run(struct bpf_kprobe_link *kprobe_link,
-> > +				struct pt_regs *regs)
-> > +{
-> > +	struct bpf_trace_run_ctx run_ctx;
-> > +	struct bpf_run_ctx *old_run_ctx;
-> > +	int err;
-> > +
-> > +	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
-> > +		err = 0;
-> > +		goto out;
-> > +	}
-> > +
-> > +	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
-> > +	run_ctx.bpf_cookie = kprobe_link->bpf_cookie;
-> > +
-> > +	rcu_read_lock();
-> > +	migrate_disable();
-> > +	err = bpf_prog_run(kprobe_link->link.prog, regs);
-> > +	migrate_enable();
-> > +	rcu_read_unlock();
-> > +
-> > +	bpf_reset_run_ctx(old_run_ctx);
-> > +
-> > + out:
-> > +	__this_cpu_dec(bpf_prog_active);
-> > +	return err;
-> > +}
-> > +
-> > +static void kprobe_link_entry_handler(struct fprobe *fp, unsigned long entry_ip,
-> > +				      struct pt_regs *regs)
-> > +{
-> > +	struct bpf_kprobe_link *kprobe_link;
-> > +
-> > +	/*
-> > +	 * Because fprobe's regs->ip is set to the next instruction of
-> > +	 * dynamic-ftrace insturction, correct entry ip must be set, so
-> > +	 * that the bpf program can access entry address via regs as same
-> > +	 * as kprobes.
-> > +	 */
-> > +	instruction_pointer_set(regs, entry_ip);
-> 
-> ok, so this actually does the stall for me.. it changes
-> the return address back to repeat the call again
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index e263d62ae2d0..feb691eb4c64 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -563,6 +563,7 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  	unsigned long nstart, end, tmp;
+>  	struct vm_area_struct *vma, *prev;
+>  	int error;
+> +	MA_STATE(mas, &current->mm->mm_mt, start, start);
+>  
+>  	VM_BUG_ON(offset_in_page(start));
+>  	VM_BUG_ON(len != PAGE_ALIGN(len));
+> @@ -571,11 +572,11 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  		return -EINVAL;
+>  	if (end == start)
+>  		return 0;
+> -	vma = find_vma(current->mm, start);
+> -	if (!vma || vma->vm_start > start)
+> +	vma = mas_walk(&mas);
+> +	if (!vma)
+>  		return -ENOMEM;
+>  
+> -	prev = vma->vm_prev;
+> +	prev = mas_prev(&mas, 0);
 
-Good catch! and don't mind, this change is introduced me :-P.
-I thought that if I didn't add the FTRACE_FL_IPMODIFY, ftrace
-ignores the updated regs->ip, but it doesn't.
+Could be only done as an 'else' of the 'if' below?
 
-> bu I think it's good idea to carry the original ip in regs
-> (for bpf_get_func_ip helper) so I think we need to save it
-> first and restore after the callback
+>  	if (start > vma->vm_start)
+>  		prev = vma;
+>  
+> @@ -597,7 +598,7 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  		if (nstart >= end)
+>  			break;
+>  
+> -		vma = prev->vm_next;
+> +		vma = find_vma(prev->vm_mm, prev->vm_end);
+>  		if (!vma || vma->vm_start != nstart) {
+>  			error = -ENOMEM;
+>  			break;
+> @@ -618,15 +619,12 @@ static unsigned long count_mm_mlocked_page_nr(struct mm_struct *mm,
+>  {
+>  	struct vm_area_struct *vma;
+>  	unsigned long count = 0;
+> +	MA_STATE(mas, &mm->mm_mt, start, start);
+>  
+>  	if (mm == NULL)
+>  		mm = current->mm;
+>  
+> -	vma = find_vma(mm, start);
+> -	if (vma == NULL)
+> -		return 0;
+> -
+> -	for (; vma ; vma = vma->vm_next) {
+> +	mas_for_each(&mas, vma, start + len) {
 
-Yes, btw, should I do that fix in fprobe?
+Could be for_each_vma_range()?
 
-> 
-> I'll make the fix and add cookie change Andrii asked for
-> on top of your ftrace changes and let you know
+>  		if (start >= vma->vm_end)
+>  			continue;
 
-OK, thank you!
+Unnecessary? (even before this patch, I think?)
 
-> 
-> thanks,
-> jirka
-> 
-> > +	kprobe_link = container_of(fp, struct bpf_kprobe_link, fp);
-> > +	kprobe_link_prog_run(kprobe_link, regs);
-> > +}
-> > +
-> 
-> SNIP
-> 
+>  		if (start + len <=  vma->vm_start)
 
+Unnecessary after your patch?
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> @@ -741,6 +739,7 @@ static int apply_mlockall_flags(int flags)
+>  {
+>  	struct vm_area_struct *vma, *prev = NULL;
+>  	vm_flags_t to_add = 0;
+> +	unsigned long addr = 0;
+>  
+>  	current->mm->def_flags &= VM_LOCKED_CLEAR_MASK;
+>  	if (flags & MCL_FUTURE) {
+> @@ -759,7 +758,7 @@ static int apply_mlockall_flags(int flags)
+>  			to_add |= VM_LOCKONFAULT;
+>  	}
+>  
+> -	for (vma = current->mm->mmap; vma ; vma = prev->vm_next) {
+> +	mt_for_each(&current->mm->mm_mt, vma, addr, ULONG_MAX) {
+>  		vm_flags_t newflags;
+>  
+>  		newflags = vma->vm_flags & VM_LOCKED_CLEAR_MASK;
+

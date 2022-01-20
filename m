@@ -2,144 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3044955C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A0C4955C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377742AbiATVFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 16:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347149AbiATVFr (ORCPT
+        id S1377751AbiATVGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 16:06:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50282 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347149AbiATVGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 16:05:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A43C061574;
-        Thu, 20 Jan 2022 13:05:47 -0800 (PST)
+        Thu, 20 Jan 2022 16:06:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6AD461881;
-        Thu, 20 Jan 2022 21:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0807DC340E0;
-        Thu, 20 Jan 2022 21:05:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD6FB81E59;
+        Thu, 20 Jan 2022 21:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1258DC340E0;
+        Thu, 20 Jan 2022 21:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642712746;
-        bh=QG0w1QxyWXBXF08ydmzYpj/kUSr7oA+nVV6K7TKRTlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=plnjsfwST8po8W1XACJ8CrFOfSxWQC0R8tRaUIuiE0ncoDtJPlQ8kKoPmZcr1mHLr
-         e3lGfQG2P4/lV4vP8xSrRv7QuuyLfHjAqJA54y7kgEpX9bDBpNyUgPJUrSP/rxgge/
-         bV5IkyL6exYoIrx8mcqylkRYoguCp8jynLI2e3dFUrfvfWB8S+GSmd72FESgU5T67z
-         9+4vRyCpsTB6Ju/uNyUx2UFLywzM0+LBsRie6g61Wacodo1iBEaROVFQxoCbCtf4kV
-         H0b5oU8FPI6J12ig1kF0ViWt80UxDHBaVfk2T2NIXXMeG7F9Dro9UI6OUmo5UKfMA+
-         g2qPSOjQHWylA==
-Date:   Thu, 20 Jan 2022 13:05:44 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
- signatures
-Message-ID: <YenOqJtjS/Y2zBQC@sol.localdomain>
-References: <YalDvGjq0inMFKln@sol.localdomain>
- <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
- <YdYrw4eiQPryOMkZ@gmail.com>
- <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
- <YdtOhsv/A5dqlApY@sol.localdomain>
- <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
- <YeJn7hxLEfdVrUQT@sol.localdomain>
- <bc803a35d914dde65640428d2b29cc6e89d176d4.camel@linux.ibm.com>
- <Yedd0CKCHSq1ugFk@sol.localdomain>
- <c0676336a7992b6495c5f5dec7ca1897fb4005eb.camel@linux.ibm.com>
+        s=k20201202; t=1642712797;
+        bh=S9QnDhcgdyuPZyPA8X/jn7u7JAnGBTg9Yxm2/sK9Nlg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=npEotK2Uq41vIQFgwRUxSIun0qx3U8zC+2bXqFKmLY0iZ0VQFe68BPvD3YXXHt9kK
+         SaXq1lfPxdLNVIEcs5D1LBxpCTYHIgDofF6bmOduZ2p0etVtrA6XjXY0oP7ANDTN8F
+         YQy/YfOoSfd0VtgFPSNuJm25XUWcGZ/eI4pya+3VCUHNGEcm7yICYpokPQbmd+3MAC
+         Yseo2cfGmJ5cz1XjpTYMUIRfsgj0fZ945Okr/wNR5wUBl5fIPEKoZ4HEF4jbMjuFoS
+         uu9PKQn0DZikp2p/p+qMaGmehpnzvjQPbUH+DiSZTWgyTRaxe+nmsQmXKCoZjICYf8
+         FF/U3gIJs3KQA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C68835C0367; Thu, 20 Jan 2022 13:06:36 -0800 (PST)
+Date:   Thu, 20 Jan 2022 13:06:36 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other
+ failures
+Message-ID: <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+ <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
+ <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
+ <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
+ <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2yffDyg31smcCyqENFBvQPfmFCT_YwDM_DJ=S-3rjxKuQ@mail.gmail.com>
+ <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1>
+ <20220119182143.GA2183703@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c0676336a7992b6495c5f5dec7ca1897fb4005eb.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 11:39:56AM -0500, Mimi Zohar wrote:
-> Eric, Vitaly,
-> 
-> On Tue, 2022-01-18 at 16:39 -0800, Eric Biggers wrote:
-> 
-> > > > The easiest way to do this would be sign/verify the following struct:
-> > > > 	struct ima_file_id {
-> > > > 		u8 is_fsverity;
-> > > > 		u8 hash_algorithm;
-> > > > 		u8 hash[];
-> > > > 	};
-> 
-> 
-> > > This would be the *data* that is signed/verified -- meaning that it
-> would be
-> > > > hashed again as part of the signature algorithm (whether that hash is built-in
-> > > > to the signature algorithm, as is the case for modern algorithms, or handled by
-> > > > the caller as is the case for legacy algorithms).
-> > > 
-> > > There seems to be an inconsistency, here, with what you said above,
-> > > "... ECDSA just signs/verifies a raw hash, and in fact it *must* be a
-> > > raw hash for it to be secure."
-> > 
-> > There isn't an inconsistency.  ECDSA is among the algorithms where the caller is
-> > expected to handle the hash.
-> > 
-> > It is confusing dealing with all these different signature algorithms.  I think
-> > the right way to think about this is in terms of what *data* is being
-> > signed/verified.  Currently the data is the full file contents.  I think it
-> > needs to be made into an annotated hash, e.g. the struct I gave.
-> > 
-> > public_key_verify_signature() also needs to be fixed to support both types of
-> > signature algorithms (caller-provided hash and internal hash) in a logical way.
-> > Originally it only supported caller-provided hashes, but then SM2 support was
-> > added and now it is super broken.
-> 
-> Eric, did you say you're working on fixes to address these problems?
+On Thu, Jan 20, 2022 at 03:30:54AM +0800, Zhouyi Zhou wrote:
+> On Thu, Jan 20, 2022 at 2:21 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Tue, Jan 18, 2022 at 08:46:49PM -0800, Paul E. McKenney wrote:
+> > > On Wed, Jan 19, 2022 at 10:07:42AM +0800, Zhouyi Zhou wrote:
+> > > > Thanks Paul for looking into this
+> > > >
+> > > > On Wed, Jan 19, 2022 at 7:46 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, Jan 18, 2022 at 09:29:04AM -0800, Paul E. McKenney wrote:
+> > > > > > On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
+> > > > > > > Dear Zhouyi,
+> > > > > > >
+> > > > > > >
+> > > > > > > Thank you for your quick response.
+> > > > > > >
+> > > > > > >
+> > > > > > > Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
+> > > > > > >
+> > > > > > > > I have studied the rcu torture test recently. I am also interested in
+> > > > > > > > this topic.
+> > > > > > > > But I can't open
+> > > > > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
+> > > > > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
+> > > > > > >
+> > > > > > > Sorry, about that. I should have checked those. I had put them into a
+> > > > > > > directory:
+> > > > > > >
+> > > > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
+> > > > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
+> > > > > > >
+> > > > > > > I am going to try to test your suggestions at the end of the day.
+> > > > > >
+> > > > > > On x86 rcutorture builds successfully.  However, allmodconfig
+> > > > > > on semi-recent -next got me "Can't open perl script
+> > > > > > "./usr/include/headers_check.pl": No such file or directory".
+> > > > > > Which might well be a local problem or might well be fixed by now.
+> > > > >
+> > > > > Not fixed as of next-20220118.  Chasing it down...  ;-)
+> > > > I can do allmodconfig on -next,
+> > > > $git describe
+> > > > next-20220118
+> > > > $tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+> > > >  ---  tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+> > > >  --- Results directory:  2022.01.19-09.14.39-torture
+> > > > $ ps -aux|grep qemu-system
+> > > > zzy       470309  773  0.3 1876544 153936 pts/0  Sl+  09:55  31:27
+> > > > qemu-system-x86_64 -enable-kvm -nographic -smp 16 -net none -machine
+> > > > q35,accel=kvm -cpu kvm64 -serial
+> > > > file:/tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/console.log
+> > > > -m 512 -kernel /tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/bzImage
+> > > > -append debug_boot_weak_hash panic=-1 selinux=0 initcall_debug debug
+> > > > console=ttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=1
+> > > > torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000
+> > > > rcutorture.onoff_interval=200 rcutorture.onoff_holdoff=30
+> > > > rcutree.gp_preinit_delay=12 rcutree.gp_init_delay=3
+> > > > rcutree.gp_cleanup_delay=3 rcutree.kthread_prio=2 threadirqs
+> > > > tree.use_softirq=0 rcutorture.n_barrier_cbs=4
+> > > > rcutorture.stat_interval=15 rcutorture.shutdown_secs=420
+> > > > rcutorture.test_no_idle_hz=1 rcutorture.verbose=1
+> > > > zzy       755865  0.0  0.0  17676  2876 pts/2    S+   09:59   0:00
+> > > > grep --color=auto qemu-system
+> > > > $ ls -l vmlinux
+> > > > -rwxrwxr-x 1 zzy zzy 69349872 1月  19 09:55 vmlinux
+> > > >
+> > > > Could you please try the following command ?
+> > > > linux-next$ perl ./usr/include/headers_check.pl usr/include x86
+> > > > usr/include/rdma/hfi/hfi1_user.h
+> > > > linux-next$ echo $?
+> > > > 0
+> > > > The headers_check.pl in linux-next
+> > > > (https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/usr/include/headers_check.pl)
+> > > > is used to check the validity of head files in ./usr/include
+> > >
+> > > I am currently bisecting, but once that finishes I will give this a
+> > > try, thank you!
+> >
+> > And the bisection converged badly due to there being more than one build
+> > failure.
+> Sorry to hear the bisection is not successful.
+> >
+> > So I ran the command above and then the build succeeded.
+> I'm very happy that the command works.
+> >
+> > Though it would be good if the build worked from "make distclean"...
+> I would be very honored if I could join the efforts to make the -next better.
 
-Yes, I was working on some patches at
-https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=wip-keys-fixes
-but got distracted by other things, as well as finding the problems with SM2
-which will take some time to decide what to do with.  I'll try to get some
-patches ready, but there are a lot of things to fix.
+One approach would be to download the -next kernels as they appear and
+run tests on them.  Reporting bugs is good, and of course fixing them
+even better.
 
-> 
-> Instead of using a flexible array, Vitaly suggested defining the hash
-> as FS_VERITY_MAX_DIGEST_SIZE, so that it could be allocated temporarily
-> on stack
-> instead of kalloc.
-> 
-> As the above struct is not limited to fsverity, we could use
-> MAX_HASH_DIGESTSIZE, if it was exported, but it isn't.  Would the
-> following work for you?
-> 
-> /*
->  * IMA signature header version 3 disambiguates the data that is signed
-> by
->  * indirectly signing the hash of this structure, containing either the
->  * fsverity_descriptor struct digest or, in the future, the traditional
-> IMA
->  * file hash.
->  */
-> struct ima_file_id {
->         __u8 is_fsverity;       /* set to 1 for IMA_VERITY_DIGSIG */
->         __u8 hash_algorithm;    /* Digest algorithm [enum hash_algo] */
-> #ifdef __KERNEL__
->         __u8 hash[HASH_MAX_DIGESTSIZE];
-> #else
->         __u8 hash[];
-> #endif
-> };
+You can clone -next from here:
 
-You could certainly declare a fixed-length struct, but only sign/verify the used
-portion of it.  The fixed-length struct would just be an implementation detail.
+	git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
-Alternatively, you could always sign/verify a fixed-length struct, with any
-shorter hashes zero-padded to HASH_MAX_DIGESTSIZE (64 bytes).  This would be
-fine if you're confident that hashes longer than 64 bytes will never be used.
-(They don't make sense cryptographically, but who knows.)
+Individual -next releases are tagged, for example, "next-20220118".
 
-For future extensibility, you might want to call the 'is_fsverity' field
-something like 'hash_type', so it would be like an enum rather than a bool.  I
-just used 'is_fsverity' as a minimal example.
+Me, I run torture.sh on them from time to time, depending on how much
+other testing I am doing.  So maybe once or twice a week.  ;-)
 
-- Eric
+						Thanx, Paul
+
+> Many thanks
+> Zhouyi
+> >
+> >                                                         Thanx, Paul
+> >
+> > > > > > Either way, it looks like I need to upgrade the torture.sh script's
+> > > > > > checks for failed builds.  Thank you for reporting this!
+> > > > >
+> > > > > Does this make torture.sh more reliably report build failures?
+> > > > I studied this commit line by line several times and benefited a lot. Thank you!
+> > > > >
+> > > > >                                                 Thanx, Paul
+> > > > >
+> > > > > ------------------------------------------------------------------------
+> > > > >
+> > > > > commit 0d302830515307ceb58e89d5fb91e81b6d22e0bf
+> > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > Date:   Tue Jan 18 15:40:49 2022 -0800
+> > > > >
+> > > > >     torture: Make kvm-find-errors.sh notice missing vmlinux file
+> > > > >
+> > > > >     Currently, an obtuse compiler diagnostic can fool kvm-find-errors.sh
+> > > > >     into believing that the build was successful.  This commit therefore
+> > > > >     adds a check for a missing vmlinux file.
+> > > > >
+> > > > >     Link: https://lore.kernel.org/lkml/36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de/
+> > > > >     Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > >
+> > > > > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> > > > > index 2e9e9e2eedb69..7d3e11a6b8290 100755
+> > > > > --- a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> > > > > +++ b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> > > > > @@ -30,10 +30,15 @@ editor=${EDITOR-vi}
+> > > > >  files=
+> > > > >  for i in ${rundir}/*/Make.out
+> > > > >  do
+> > > > > +       scenariodir="`dirname $i`"
+> > > > >         if egrep -q "error:|warning:|^ld: .*undefined reference to" < $i
+> > > > >         then
+> > > > >                 egrep "error:|warning:|^ld: .*undefined reference to" < $i > $i.diags
+> > > > >                 files="$files $i.diags $i"
+> > > > > +       elif ! test -f ${scenariodir}/vmlinux
+> > > > > +       then
+> > > > > +               echo No ${scenariodir}/vmlinux file > $i.diags
+> > > > > +               files="$files $i.diags $i"
+> > > > >         fi
+> > > > >  done
+> > > > >  if test -n "$files"
+> > > > Thanks
+> > > > Zhouyi

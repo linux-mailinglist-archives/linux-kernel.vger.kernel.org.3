@@ -2,145 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27643494736
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E731749473E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358704AbiATGPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358755AbiATGOu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:14:50 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84900C061574;
-        Wed, 19 Jan 2022 22:14:50 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id o12so17504656lfu.12;
-        Wed, 19 Jan 2022 22:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=wgY9n1o9EyMchovL77wDX3vrku6A63uyxJQ/2t6Yg0c=;
-        b=BBstiArjsJqkDPaqoi3fGDp5rtNc24jxKhipe7OoBosoipcFnYrOoJZDWKy3bYhlWV
-         /PMpUOz4Dt9fyV4d8KqKB1Ovbzm8gnKnjH/uSkvc6ff3uDzB9gGqfLoTvjU7VoXPLqyj
-         dw55kKHTRYVXpPu8ieTTMmn5r1FAU8/IrdZC3eVBPRucw0VGL5IGzbo95xUdiqgDZLOj
-         bSwn8VpLmb7NAshZ/oGXPl5Xsv5BmYHj16KpDptVXru8qmAOV6XLs1zSY/HhaKTmvkOL
-         9gVFhKq4HQnJNUmVf1GM6KWS54Qx+yF4MK0O5rvtobPXq9glkOqqMDOudUJ+gJ98GLKH
-         XOvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=wgY9n1o9EyMchovL77wDX3vrku6A63uyxJQ/2t6Yg0c=;
-        b=GNIciGJvIxdDYt6geQ2+EcAMEY4BkEALd8u4Tp0932qA4vYsu8e7oqU98ZOSYcbatM
-         QjJIHLTzC3qjZsU4adNaImZrxmB8SvJIOuZAz99SrurobGHxDNv/AmzbmnGNpGiyk8/U
-         cGZzQeEb4sqNZnkKxJijnD10DSOXdYr04CJ+RHzNzLKpo/dwnh3BNNU6FRSDE+b4HHcU
-         nH3Io3Bh/OWWEcBq7+MVDredFKtIGQh9yTLa7E4zSjrGUEf9STdkjwhVNMb4CZ+SIXGe
-         CqxLLJtiuSpoH8tJRFevQnApD5r6G4aoYdV2o2CN8eJcPY3Epj38crPT3NRzSSk203Vc
-         s7GA==
-X-Gm-Message-State: AOAM532OXr4UVFp+hBi7GKDcH1bFj9krs6qqKQZJCrE8EZpUGqzXAVKJ
-        7AMUB1BwMz0kC1QUHoyncz7whDrORoOHyPQ1g5g=
-X-Google-Smtp-Source: ABdhPJzLoRuOcV4/elu+oUsKnT0Mkak19wVZN8NSKanF0/XRoQ3JagCm83txHRsk0u8R+c3CybPttRYP/cUYd80aO1U=
-X-Received: by 2002:a05:6512:74a:: with SMTP id c10mr32122660lfs.234.1642659288815;
- Wed, 19 Jan 2022 22:14:48 -0800 (PST)
+        id S1358472AbiATGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:20:56 -0500
+Received: from mga07.intel.com ([134.134.136.100]:36210 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229774AbiATGU4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 01:20:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642659655; x=1674195655;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lfcXF0n+wgORhFZstyBmo8jXXAAoJUjEVyLoYX4m4HU=;
+  b=T41P6ciQN9fHtPSDzCHBkAX+8zBesJ4epA15oiN0g0EBYTsnQ/GaxX6q
+   HZ6WD5fOZSUsSVlP9FM+SEFHqIKYutYIfPsmtJe+KE6VXWY9gUeVwkqhC
+   /Uljw5X0SD1TTlm6xY7VRJn2lQMflzta5oicgd/C/us8HMhzOTdZGVjKP
+   W8PmpoDeg0q5IGChbZy+xOCVSG2MYWjnddOAzgvMz4fZL0Ow+uUDDnb5R
+   S7bjX7HXIedgFeALSfpzQhUTbWE/YCE+XqzqOHBWgoL18kzP2qFRZ0Bhq
+   jcy3bOf/9U9x1hItx+exNH7yGOPa5VO4s58TKYrsxvhR1QVuBylf/kU7W
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="308617728"
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="308617728"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 22:20:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
+   d="scan'208";a="475414110"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2022 22:20:52 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAQoV-000E4L-Hv; Thu, 20 Jan 2022 06:20:51 +0000
+Date:   Thu, 20 Jan 2022 14:20:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guangming <Guangming.Cao@mediatek.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: drivers/dma-buf/heaps/system_heap.c:357:10: warning: incompatible
+ integer to pointer conversion returning 'int' from a function with result
+ type 'struct dma_buf *'
+Message-ID: <202201201459.LzpimBE3-lkp@intel.com>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 20 Jan 2022 00:14:38 -0600
-Message-ID: <CAH2r5mthCbxAM-OOjwK01YGiqU7SMexco1vgTFp6tcC-XHAbVw@mail.gmail.com>
-Subject: [GIT PULL] ksmbd fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
+head:   d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+commit: d6d3f09d899553b1100b195a91a8f718d1bd6bc2 dma-buf: system_heap: Add a size check for allocation
+date:   3 hours ago
+config: x86_64-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220120/202201201459.LzpimBE3-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
+        git checkout d6d3f09d899553b1100b195a91a8f718d1bd6bc2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/heaps/
 
-  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-are available in the Git repository at:
+All warnings (new ones prefixed by >>):
 
-  git://git.samba.org/ksmbd.git tags/5.17-rc-ksmbd-server-fixes
+>> drivers/dma-buf/heaps/system_heap.c:357:10: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct dma_buf *' [-Wint-conversion]
+                   return -EINVAL;
+                          ^~~~~~~
+   1 warning generated.
 
-for you to fetch changes up to ac090d9c90b087d6fb714e54b2a6dd1e6c373ed6:
 
-  ksmbd: fix guest connection failure with nautilus (2022-01-18 16:53:20 -0600)
+vim +357 drivers/dma-buf/heaps/system_heap.c
 
-----------------------------------------------------------------
-23 ksmbd server fixes, 2 for stable
-- authentication fix
-- 7 RDMA (smbdirect) fixes (including fix for a memory corruption, and
-some performance improvements)
-- multiple improvements for multichannel
-- misc fixes including for 3 for crediting (flow control) improvements
-- 5 cleanup fixes, including 3 kernel doc fixes
+   334	
+   335	static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+   336						    unsigned long len,
+   337						    unsigned long fd_flags,
+   338						    unsigned long heap_flags)
+   339	{
+   340		struct system_heap_buffer *buffer;
+   341		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+   342		unsigned long size_remaining = len;
+   343		unsigned int max_order = orders[0];
+   344		struct dma_buf *dmabuf;
+   345		struct sg_table *table;
+   346		struct scatterlist *sg;
+   347		struct list_head pages;
+   348		struct page *page, *tmp_page;
+   349		int i, ret = -ENOMEM;
+   350	
+   351		/*
+   352		 * Size check. The "len" should be less than totalram since system_heap
+   353		 * memory is comes from system. Adding check here can prevent consuming
+   354		 * too much time for invalid allocations.
+   355		 */
+   356		if (len >> PAGE_SHIFT > totalram_pages())
+ > 357			return -EINVAL;
+   358		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+   359		if (!buffer)
+   360			return ERR_PTR(-ENOMEM);
+   361	
+   362		INIT_LIST_HEAD(&buffer->attachments);
+   363		mutex_init(&buffer->lock);
+   364		buffer->heap = heap;
+   365		buffer->len = len;
+   366	
+   367		INIT_LIST_HEAD(&pages);
+   368		i = 0;
+   369		while (size_remaining > 0) {
+   370			/*
+   371			 * Avoid trying to allocate memory if the process
+   372			 * has been killed by SIGKILL
+   373			 */
+   374			if (fatal_signal_pending(current)) {
+   375				ret = -EINTR;
+   376				goto free_buffer;
+   377			}
+   378	
+   379			page = alloc_largest_available(size_remaining, max_order);
+   380			if (!page)
+   381				goto free_buffer;
+   382	
+   383			list_add_tail(&page->lru, &pages);
+   384			size_remaining -= page_size(page);
+   385			max_order = compound_order(page);
+   386			i++;
+   387		}
+   388	
+   389		table = &buffer->sg_table;
+   390		if (sg_alloc_table(table, i, GFP_KERNEL))
+   391			goto free_buffer;
+   392	
+   393		sg = table->sgl;
+   394		list_for_each_entry_safe(page, tmp_page, &pages, lru) {
+   395			sg_set_page(sg, page, page_size(page), 0);
+   396			sg = sg_next(sg);
+   397			list_del(&page->lru);
+   398		}
+   399	
+   400		/* create the dmabuf */
+   401		exp_info.exp_name = dma_heap_get_name(heap);
+   402		exp_info.ops = &system_heap_buf_ops;
+   403		exp_info.size = buffer->len;
+   404		exp_info.flags = fd_flags;
+   405		exp_info.priv = buffer;
+   406		dmabuf = dma_buf_export(&exp_info);
+   407		if (IS_ERR(dmabuf)) {
+   408			ret = PTR_ERR(dmabuf);
+   409			goto free_pages;
+   410		}
+   411		return dmabuf;
+   412	
+   413	free_pages:
+   414		for_each_sgtable_sg(table, sg, i) {
+   415			struct page *p = sg_page(sg);
+   416	
+   417			__free_pages(p, compound_order(p));
+   418		}
+   419		sg_free_table(table);
+   420	free_buffer:
+   421		list_for_each_entry_safe(page, tmp_page, &pages, lru)
+   422			__free_pages(page, compound_order(page));
+   423		kfree(buffer);
+   424	
+   425		return ERR_PTR(ret);
+   426	}
+   427	
 
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/98
-----------------------------------------------------------------
-Dan Carpenter (1):
-      ksmbd: uninitialized variable in create_socket()
-
-Hyunchul Lee (6):
-      ksmbd: use oid registry functions to decode OIDs
-      ksmbd: register ksmbd ib client with ib_register_client()
-      ksmbd: smbd: call rdma_accept() under CM handler
-      ksmbd: smbd: create MR pool
-      ksmbd: smbd: change the default maximum read/write, receive size
-      ksmbd: smbd: fix missing client's memory region invalidation
-
-Marios Makassikis (2):
-      ksmbd: Remove unused parameter from smb2_get_name()
-      ksmbd: Remove unused fields from ksmbd_file struct definition
-
-Namjae Jeon (9):
-      ksmbd: set RSS capable in FSCTL_QUERY_NETWORK_INTERFACE_INFO
-      ksmbd: set both ipv4 and ipv6 in FSCTL_QUERY_NETWORK_INTERFACE_INFO
-      ksmbd: fix multi session connection failure
-      ksmbd: set 445 port to smbdirect port by default
-      ksmbd: add support for smb2 max credit parameter
-      ksmbd: move credit charge deduction under processing request
-      ksmbd: limits exceeding the maximum allowable outstanding requests
-      ksmbd: add reserved room in ipc request/response
-      ksmbd: fix guest connection failure with nautilus
-
-Yang Li (4):
-      ksmbd: Fix buffer_check_err() kernel-doc comment
-      ksmbd: Fix smb2_set_info_file() kernel-doc comment
-      ksmbd: Delete an invalid argument description in
-smb2_populate_readdir_entry()
-      ksmbd: Fix smb2_get_name() kernel-doc comment
-
-Yufan Chen (1):
-      ksmbd: add smb-direct shutdown
-
- fs/ksmbd/asn1.c              | 142 +++++--------------------------
- fs/ksmbd/auth.c              |  27 +++---
- fs/ksmbd/auth.h              |  10 +--
- fs/ksmbd/connection.c        |  10 ++-
- fs/ksmbd/connection.h        |  12 +--
- fs/ksmbd/ksmbd_netlink.h     |  12 ++-
- fs/ksmbd/mgmt/user_config.c  |  10 +++
- fs/ksmbd/mgmt/user_config.h  |   1 +
- fs/ksmbd/mgmt/user_session.h |   1 -
- fs/ksmbd/smb2misc.c          |  18 ++--
- fs/ksmbd/smb2ops.c           |  16 +++-
- fs/ksmbd/smb2pdu.c           | 222
-++++++++++++++++++++++++++----------------------
- fs/ksmbd/smb2pdu.h           |   1 +
- fs/ksmbd/smb_common.h        |   1 +
- fs/ksmbd/transport_ipc.c     |   2 +
- fs/ksmbd/transport_rdma.c    | 261
-++++++++++++++++++++++++++++++++++++++++++++-------------
- fs/ksmbd/transport_rdma.h    |   4 +-
- fs/ksmbd/transport_tcp.c     |   3 +-
- fs/ksmbd/vfs_cache.h         |  10 ---
- 19 files changed, 429 insertions(+), 334 deletions(-)
-
--- 
-Thanks,
-
-Steve
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

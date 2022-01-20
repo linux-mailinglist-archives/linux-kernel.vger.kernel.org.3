@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8145495165
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB28495167
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376638AbiATP0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:26:06 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35544 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376574AbiATPZ6 (ORCPT
+        id S1376653AbiATP0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:26:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28997 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376686AbiATP01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:25:58 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 20AE41F45362
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642692356;
-        bh=8+iuI55GEe2f55qKCFzj4slDIPT5+kv1gU6x/pdsBWs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GTb4GYgETr0dGmKkiXlgmJg7q/i9Jobg8xDglDVLE1yiD9nqSCfbJ6YOsd7BirHkD
-         MpqsMfqmuNcZ+/1ceXPqJt5YiQxspgDj8/6fwrcKtbxzqDMxkf0CJd+BvzYKQk1wCa
-         znonQ211B4GgUX0BhXhUSWLOh0spevMCXUj4FkR3Hs2qri6R4TuaWaDpcmVZmfnE84
-         N6QN0FEQe2Vx+L2ongu551azvIgenLYGdYwfHrlOJz7/5zAPq6bHoPz1y5cyXrCzIo
-         EyzdhCTvcMM3srz9WawMdAtHs/6Gs83C9GqliWKX7cG1GQ5+h/XPDjwyc/QfyJOinP
-         MCe8ry4JrqplA==
-Subject: Re: [PATCH v11] drm/bridge: add it6505 driver
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Hsin-yi Wang <hsinyi@chromium.org>,
-        Hsin-Yi Wang <hsinyi@google.com>
-References: <20220114091502.333083-1-allen.chen@ite.com.tw>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <f4696a8d-5c1d-1007-7814-b2e6cbe334ae@collabora.com>
-Date:   Thu, 20 Jan 2022 16:25:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 20 Jan 2022 10:26:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642692386;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JcFuUx6JnIuoyTsFkMKn2U/95+8ifvkCP1zZpo98AmA=;
+        b=EW4VcAlknIDCc3AD6qlmFJNmw9e8SMaHXop1M+QPNpH1DJKY3+NlNcBCwV3JtAyxMwdXIP
+        W2Uin48XiwK6fQyKonmBwq5FAzr0DO/G+SAkyzrIi0cIlBWlAa+oiNZpFW8J26wRgmTNth
+        6XqxnXKR0Z14hCOoEv9d+FAXhDmRadQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-lFGzwTswPgKdWNsJ7IYQww-1; Thu, 20 Jan 2022 10:26:25 -0500
+X-MC-Unique: lFGzwTswPgKdWNsJ7IYQww-1
+Received: by mail-ed1-f69.google.com with SMTP id bs4-20020a056402304400b004032af6b7ebso6204710edb.16
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:26:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=JcFuUx6JnIuoyTsFkMKn2U/95+8ifvkCP1zZpo98AmA=;
+        b=lr3YemTaUC+ik2Yu3cMJwOTxZGOMjyWQLvNS+FoYkVwoaa90SPvd3ut0BCW6loOgBj
+         hqO7pmFzG4DQZHumdKmjbHNI33SET7MReUzpUstDlwy9NCYkklBdK7ADzXDaZvfwU+Sg
+         x/aSqwQGsiFGloUXNRQ8eb5D7ATjyoDvOfZHA4dAL0nDKnYfaqMVnSuonpyPQhZh5jkj
+         OEZ2ygMhaba0KeO4lHMEsST9TXFV7VTzY3c1cL1Bzg9a/nVM2hnnHMgdMWukrUcOYnVt
+         4nhI06kXxTABvzSnmDO+TnFturHp4ZVehNIaNqcGqA64KCtoAbMhrlt4e6VS5QPmZMD2
+         CSTw==
+X-Gm-Message-State: AOAM5336OIaotzt4n6Q7TW214CBsOvUBEFsYKGzDytL0Z03BMV5QaSWF
+        y8IkCnZTQGvA6ZLOYCMFX+UPgKDJEfR+eVqhOKa8VPqY7hGEp5ZAZBLbDJWIIr3KZg320yeurFP
+        dBzUPSg0WDRbthSLw8io4sgqs
+X-Received: by 2002:a17:906:4795:: with SMTP id cw21mr10414542ejc.39.1642692383922;
+        Thu, 20 Jan 2022 07:26:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy4ABnzPg+275IpNEeFqOv2Bl3qkyZQ/tUMXHw6wdfpQpRGOsWTlX1Ux9PRNpnvv2mEvqAvqA==
+X-Received: by 2002:a17:906:4795:: with SMTP id cw21mr10414523ejc.39.1642692383651;
+        Thu, 20 Jan 2022 07:26:23 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
+        by smtp.gmail.com with ESMTPSA id gr24sm1107372ejb.185.2022.01.20.07.26.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 07:26:23 -0800 (PST)
+Message-ID: <e2580cfa-a529-934d-861a-091c4a9714d4@redhat.com>
+Date:   Thu, 20 Jan 2022 16:26:22 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220114091502.333083-1-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
 Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
+ <YeA5oP/iaxtVPHb3@casper.infradead.org>
+ <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+ <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com>
+ <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
+ <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
+ <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
+ <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
+ <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
+ <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
+ <Yel0BXVyj8uvsWJX@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+In-Reply-To: <Yel0BXVyj8uvsWJX@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/01/22 10:14, allen ha scritto:
-> This adds support for the iTE IT6505.
-> This device can convert DPI signal to DP output.
+On 20.01.22 15:39, Matthew Wilcox wrote:
+> On Thu, Jan 20, 2022 at 03:15:37PM +0100, David Hildenbrand wrote:
+>> On 17.01.22 14:31, zhangliang (AG) wrote:
+>>> Sure, I will do that :)
+>>
+>> I'm polishing up / testing the patches and might send something out for discussion shortly.
+>> Just a note that on my branch was a version with a wrong condition that should have been fixed now.
+>>
+>> I am still thinking about PTE mapped THP. For these, we'll always
+>> have page_count() > 1, essentially corresponding to the number of still-mapped sub-pages.
+>>
+>> So if we end up with a R/O mapped part of a THP, we'll always have to COW and cannot reuse ever,
+>> although it's really just a single process mapping the THP via PTEs.
+>>
+>> One approach would be to scan the currently locked page table for entries mapping
+>> this same page. If page_count() corresponds to that value, we know that only we are
+>> mapping the THP and there are no additional references. That would be a special case
+>> if we find an anon THP in do_wp_page(). Hm.
 > 
-> From: Allen Chen <allen.chen@ite.com.tw>
-> Tested-by: Hsin-yi Wang <hsinyi@chromium.org>
-> Signed-off-by: Hermes Wu <hermes.wu@ite.com.tw>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> ---
-> v10 -> v11 : remove drm_bridge_new_crtc_state
-> ---
->   drivers/gpu/drm/bridge/Kconfig      |    8 +
->   drivers/gpu/drm/bridge/Makefile     |    1 +
->   drivers/gpu/drm/bridge/ite-it6505.c | 3352 +++++++++++++++++++++++++++
->   3 files changed, 3361 insertions(+)
->   create mode 100644 drivers/gpu/drm/bridge/ite-it6505.c
-> 
+> You're starting to optimise for some pretty weird cases at that point.
 
-...snip...
+So your claim is that read-only, PTE mapped pages are weird? How do you
+come to that conclusion?
 
-> +static const struct of_device_id it6505_of_match[] = {
-> +	{ .compatible = "ite,it6505" },
-> +	{ }
-> +};
+If we adjust the THP reuse logic to split on additional references
+(page_count() == 1) -- similarly as suggested by Linus to fix the CVE --
+we're going to end up with exactly that more frequently.
 
-If you want to have a DT compatible and DT properties, you have to also add
-dt-bindings (yaml) for this driver, otherwise, any SoC/device DT will fail
-the dt binding check.... So, please, add that.
+> Anon THP is always going to start out aligned (and can be moved by
+> mremap()).  Arguably it should be broken up if it's moved so it can be
+> reformed into aligned THPs by khugepaged.
 
-For the driver by itself, though:
+Can you elaborate, I'm missing the point where something gets moved. I
+don't care about mremap() at all here.
 
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> +
-> +static struct i2c_driver it6505_i2c_driver = {
-> +	.driver = {
-> +		.name = "it6505",
-> +		.of_match_table = it6505_of_match,
-> +		.pm = &it6505_bridge_pm_ops,
-> +	},
-> +	.probe = it6505_i2c_probe,
-> +	.remove = it6505_i2c_remove,
-> +	.shutdown = it6505_shutdown,
-> +	.id_table = it6505_id,
-> +};
-> +
-> +module_i2c_driver(it6505_i2c_driver);
-> +
-> +MODULE_AUTHOR("Allen Chen <allen.chen@ite.com.tw>");
-> +MODULE_DESCRIPTION("IT6505 DisplayPort Transmitter driver");
-> +MODULE_LICENSE("GPL v2");
-> 
+1. You have a read-only, PTE mapped THP
+2. Write fault on the THP
+3. We PTE-map the THP because we run into a false positive in our COW
+   logic to handle COW on PTE
+4. Write fault on the PTE
+5. We always have to COW each and every sub-page and can never reuse,
+   because page_count() > 1
+
+That's essentially what reuse_swap_page() tried to handle before.
+Eventually optimizing for this is certainly the next step, but I'd like
+to document which effect the removal of reuse_swap_page() will have to THP.
+
+-- 
+Thanks,
+
+David / dhildenb
 

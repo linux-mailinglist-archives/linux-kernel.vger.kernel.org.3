@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FFD494ABD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365CD494ABF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235995AbiATJ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:29:57 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:56041 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiATJ3x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:29:53 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MxHLs-1mM64N2A7E-00xZbC; Thu, 20 Jan 2022 10:29:52 +0100
-Received: by mail-ot1-f49.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so6794249oto.4;
-        Thu, 20 Jan 2022 01:29:51 -0800 (PST)
-X-Gm-Message-State: AOAM533xER4vvYSSkjzmC84ll/yfTWD7ob6qgWmVDwQObMLSwsyifYc2
-        qzShOwSIGZ73Rfj6YIcWcbWfXHW8GdgvURhjqn0=
-X-Google-Smtp-Source: ABdhPJw23cQjee+wzKe1BZuP5Egl38StW0xVS2Lx2CrxQkm8C96LIXXcbD+ld7BJcIRLzViPyYDZ1TVXzpuf+zNTwjI=
-X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr25066257otq.368.1642670990087;
- Thu, 20 Jan 2022 01:29:50 -0800 (PST)
+        id S1359581AbiATJaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:30:02 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:48602 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239847AbiATJaA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 04:30:00 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowACni0GBK+lhs7SRBg--.8229S2;
+        Thu, 20 Jan 2022 17:29:37 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     keescook@chromium.org, dan.carpenter@oracle.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v4] lkdtm/bugs: Check for the NULL pointer after calling kmalloc
+Date:   Thu, 20 Jan 2022 17:29:36 +0800
+Message-Id: <20220120092936.1874264-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220120073911.99857-7-guoren@kernel.org>
-In-Reply-To: <20220120073911.99857-7-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 20 Jan 2022 10:29:33 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
-Message-ID: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
-Subject: Re: [PATCH V3 06/17] riscv: compat: Add basic compat date type implementation
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:s4Q1DH9lXoshZS2vFPndUrTFcam5Cmc6PQRo9r/B1zlXxInFnE1
- F+WnEDzyOzIcqIxXnbIMAISLi6dWUeMtvJyKdckn8IHL/4qX25H4kMkNiQImQIyFf+8hSy9
- Y5ozmkK8x66ILoDsEH8O+iA8WW/zV2ruLmnetp15zjcsw2Il2KV0pX7TTYBFWR39AIINnAw
- JwfZabmoF5S81gPFtdGdA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tFyRVOEcZwM=:qB6pa6wjmW7sOov+3Oy63P
- qhLvcRdEAyI2JHdWOhXN0KVUd5LcQCqSMlxojtTVHH5NlhaeYDI3YN20ZZtj9BqUCUHbBstEt
- RFtY+1XxxuS2LRziFfQs/I+yOWGVo2WMcUPzk1py0bid8B2he1vxxjUCWlC+uGvra3SoRkZyP
- vT/H6WHjXdtoJLEVDADkBRSbTBqskUpgkP6eGPku/LOCz7YoR7VumF/XdSnQnTeR2+HG6K73e
- ondxUGsUMkyPHdI73PvpO6ZNDyi/IUFiMBymMEERJRUNPoybyH1KEvZ0K+QNY7wX6IAzOIGd5
- qeR4mcyzzYS7MCwW2s2RUV2yBIpTNrrkhdr/NG8nU/An0inMBVIpE6NPmwBX6sWp4HB6Gs/+5
- U+4R7Dqh4Rz2UPOL4mIIdznpg8JfbBVIG/rH9HZA08VIlpAXOUwBBy3OjR8IplUCXhrwWXWgz
- fXLNHHCqi8cY/q6q1DhyDUfDvU3ccxREuPCrxHAGkHk1jsl5lDGe1Wvkez/h89zCp21eG/S5S
- m1oDpE5awDdfTYGEoMGTjgBJjxlwuY2Phlrx9WtacNq2P1fh5p9MmIaqp7bz8s17iRZqyKEdt
- Ntm1VMcJYqmXkOXgTk7FSEbjYDIlyTYSVofFmw8/EEyL6HQr9MXa2nb1hWWG/Xwq3ZZMWa//N
- UUSINH0KVs7WUYaySx+LIn63vHhdA1HPx86zxX0Bl8TiesDVGN74NaGNtBst/q3OYhJDtSxnC
- 73aWMI72TfkeooR7e2/pVSUDcfadDcqjhxjwwXqE2rbpYLYtZpVFjJDwHPX4+WtJsWQQUV3MR
- 5egODidWF3U0KJH7RFZvqsz9+sq/141RlqaXW2+tXh0f3BS128=
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowACni0GBK+lhs7SRBg--.8229S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFy3Wr1DAFyfJw1rtrW7twb_yoW8Jw48pw
+        4vgr1YqFn8Wan7uF4qkw13KF95Gan7tFWfW34Sva95Zrn8AryUAa4ftayj9r1kurZ3J3yI
+        vF4rtF93Ga4UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjItC5UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
+As the possible failure of the kmalloc(), the not_checked and checked
+could be NULL pointer.
+Therefore, it should be better to check it in order to avoid the
+dereference of the NULL pointer.
+Also, we need to kfree the 'not_checked' and 'checked' to avoid
+the memory leak if fails.
+And since it is just a test, it may directly return without error
+number.
 
-> @@ -0,0 +1,136 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef __ASM_COMPAT_H
-> +#define __ASM_COMPAT_H
-> +
-> +#define compat_mode_t  compat_mode_t
-> +typedef u16            compat_mode_t;
+Fixes: ae2e1aad3e48 ("drivers/misc/lkdtm/bugs.c: add arithmetic overflow and array bounds checks")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
 
-I think this one is wrong, as rv32 should get the native definition from
+v1 -> v2
 
-include/uapi/asm-generic/posix_types.h:typedef unsigned int     __kernel_mode_t;
+* Change 1. Add the kfree if fails.
 
-I think it works if you just remove those two lines. The rest looks good to me.
+v2 -> v3
 
-       Arnd
+* Change 1. Add pr_err if fails.
+
+v3 -> v4
+
+* Change 1. Revert to v2 that remove the pr_err.
+---
+ drivers/misc/lkdtm/bugs.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index 4282b625200f..072e3b742edf 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -248,6 +248,11 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 
+ 	not_checked = kmalloc(sizeof(*not_checked) * 2, GFP_KERNEL);
+ 	checked = kmalloc(sizeof(*checked) * 2, GFP_KERNEL);
++	if (!not_checked || !checked) {
++		kfree(not_checked);
++		kfree(checked);
++		return;
++	}
+ 
+ 	pr_info("Array access within bounds ...\n");
+ 	/* For both, touch all bytes in the actual member size. */
+-- 
+2.25.1
+

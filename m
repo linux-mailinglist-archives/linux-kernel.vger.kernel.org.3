@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 365CD494ABF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E4E494AC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359581AbiATJaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:30:02 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:48602 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239847AbiATJaA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:30:00 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACni0GBK+lhs7SRBg--.8229S2;
-        Thu, 20 Jan 2022 17:29:37 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     keescook@chromium.org, dan.carpenter@oracle.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v4] lkdtm/bugs: Check for the NULL pointer after calling kmalloc
-Date:   Thu, 20 Jan 2022 17:29:36 +0800
-Message-Id: <20220120092936.1874264-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1359583AbiATJbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:31:07 -0500
+Received: from mga01.intel.com ([192.55.52.88]:42202 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229687AbiATJbG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 04:31:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642671066; x=1674207066;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xsLxbcvug6yuYBnZbk4YIkMK+aPFfKOo/QWL7Rz1Tog=;
+  b=Lu4k1qPmeZNwLkWR0SojCSwHn9+IB50XpimZOUiTke6xbEn7pIKYHXPh
+   FFnBzCOoYnrqX5tXFcmdN25A85PMW6xvjYmU1Crj51Y7hO4hQlaiWABXX
+   mM/DOy0/dXBb2Uw9VH8cQqC5PBQADZRMt6+brl4BILCzDw36phGZUgzrd
+   G+OuDppSzzP737Rszzv1Cps8+Wolx7hJxDjektX56uKtVIQKs5afXKbjv
+   b5wJVNfRbEKfFwCGKiED33lFhdcPfMs1pXkT2o8452wGR1Lf1QD+VmPY6
+   /VUSUg728+1vXe9PTPkYHpnXDlaVVx2MqnVp0gm1MqdueuJr5nEM7Nta0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="269709792"
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="269709792"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:31:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="626229514"
+Received: from xiaoyaol-mobl.ccr.corp.intel.com (HELO [10.255.29.51]) ([10.255.29.51])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:31:03 -0800
+Message-ID: <d0855fb0-4e98-1090-a230-132b08864ed3@intel.com>
+Date:   Thu, 20 Jan 2022 17:31:00 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [DROP][PATCH] KVM: x86: Fix the #GP(0) and #UD conditions for
+ XSETBV emulation
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jun Nakajima <jun.nakajima@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220117072456.71155-1-likexu@tencent.com>
+ <a133d6e2-34de-8a41-475e-3858fc2902bf@redhat.com>
+ <9c655b21-640f-6ce8-61b4-c6444995091e@gmail.com>
+ <0d7ed850-8791-42b4-ef9a-bbaa8c52279e@redhat.com>
+ <92b16faf-c9a7-4be3-43f7-3450259346e9@gmail.com>
+ <19c4168f-c65b-fc9a-fe4c-152284e18d30@redhat.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <19c4168f-c65b-fc9a-fe4c-152284e18d30@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACni0GBK+lhs7SRBg--.8229S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFy3Wr1DAFyfJw1rtrW7twb_yoW8Jw48pw
-        4vgr1YqFn8Wan7uF4qkw13KF95Gan7tFWfW34Sva95Zrn8AryUAa4ftayj9r1kurZ3J3yI
-        vF4rtF93Ga4UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjItC5UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the kmalloc(), the not_checked and checked
-could be NULL pointer.
-Therefore, it should be better to check it in order to avoid the
-dereference of the NULL pointer.
-Also, we need to kfree the 'not_checked' and 'checked' to avoid
-the memory leak if fails.
-And since it is just a test, it may directly return without error
-number.
+On 1/20/2022 5:17 PM, Paolo Bonzini wrote:
+> On 1/20/22 08:48, Like Xu wrote:
+>>
+>> In the testcase "executing XSETBV with CR4.XSAVE=0",
+>>
+>> - on the VMX, #UD delivery does not require vm-exit;
+> 
+> Not your fault, it would be nicer if the Intel manual told the truth;
+> it says: "The following instructions cause VM exits when they are
+> executed in VMX non-root operation: CPUID, GETSEC[1], INVD, and XSETBV."
+> 
+> Footnote [1] says "An execution of GETSEC causes an invalid-opcode
+> exception (#UD) if CR4.SMXE[Bit 14] = 0", and there is no such footnote
+> for XSETBV.  Nevertheless, when tracing xsave.flat, I see that there's
+> a #UD vmexit and not an XSETBV vmexit:
+> 
+>          qemu-kvm-1637698 [019] 758186.750321: kvm_entry:            
+> vcpu 0, rip 0x4028b7
+>          qemu-kvm-1637698 [019] 758186.750322: kvm_exit:             
+> vcpu 0 reason EXCEPTION_NMI rip 0x40048d info1 0x0000000000000000 info2 
+> 0x0000000000000000 intr_info 0x80000306 error_code 0x00000000
+>          qemu-kvm-1637698 [019] 758186.750324: kvm_emulate_insn:     
+> 0:40048d:0f 01 d1 (prot64)
+>          qemu-kvm-1637698 [019] 758186.750325: kvm_inj_exception:    #UD 
+> (0x0)
+> 
+> So while my gut feeling that #UD would not cause a vmexit was correct,
+> technically I was reading the SDM incorrectly.
 
-Fixes: ae2e1aad3e48 ("drivers/misc/lkdtm/bugs.c: add arithmetic overflow and array bounds checks")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog
+SDM also states
 
-v1 -> v2
+   Certain exceptions have priority over VM exits. These include
+   invalid-opcode exception, faults based on privilege level,
+   and general-protection exceptions that are based on checking
+   I/O permission bits in the task-state segment(TSS)
 
-* Change 1. Add the kfree if fails.
+in "Relative Priority of Faults and VM Exits"
 
-v2 -> v3
+So my understanding is that the architectural check always takes the 
+higher priority than VM exit.
 
-* Change 1. Add pr_err if fails.
-
-v3 -> v4
-
-* Change 1. Revert to v2 that remove the pr_err.
----
- drivers/misc/lkdtm/bugs.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-index 4282b625200f..072e3b742edf 100644
---- a/drivers/misc/lkdtm/bugs.c
-+++ b/drivers/misc/lkdtm/bugs.c
-@@ -248,6 +248,11 @@ void lkdtm_ARRAY_BOUNDS(void)
- 
- 	not_checked = kmalloc(sizeof(*not_checked) * 2, GFP_KERNEL);
- 	checked = kmalloc(sizeof(*checked) * 2, GFP_KERNEL);
-+	if (!not_checked || !checked) {
-+		kfree(not_checked);
-+		kfree(checked);
-+		return;
-+	}
- 
- 	pr_info("Array access within bounds ...\n");
- 	/* For both, touch all bytes in the actual member size. */
--- 
-2.25.1
+> Jun, can you have this fixed?
+> 
+> Paolo
+> 
+>> - on the SVM, #UD is trapped but goes to the ud_interception() path;
+> 
 

@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B596B494755
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C9149475C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358755AbiATGcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:32:06 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:37972 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1358734AbiATGcA (ORCPT
+        id S1358758AbiATGhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:37:18 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:36478 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232502AbiATGhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:32:00 -0500
-X-UUID: 3d966be7bc2f400a8fac4100e6b395ce-20220120
-X-UUID: 3d966be7bc2f400a8fac4100e6b395ce-20220120
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1493656480; Thu, 20 Jan 2022 14:31:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 20 Jan 2022 14:31:56 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 20 Jan 2022 14:31:55 +0800
-Message-ID: <b7d0e7572ce7f7958f579ac564d25cbfee497cdc.camel@mediatek.com>
-Subject: Re: [PATCH][next] usb: xhci-mtk: Use struct_size() helper in
- create_sch_ep()
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-Date:   Thu, 20 Jan 2022 14:31:55 +0800
-In-Reply-To: <20220120015546.GA75917@embeddedor>
-References: <20220120015546.GA75917@embeddedor>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 20 Jan 2022 01:37:17 -0500
+Received: by mail-io1-f69.google.com with SMTP id 85-20020a6b0258000000b006079e46159fso3278513ioc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 22:37:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=UEInTtfNisGGLNBrKhERkfyR+uWPZmiP7HXeUQKkbQ0=;
+        b=xL59Q9noE41i+K/JXihaNV0ZyyF+vz1WJ0rYxKR2uH+VDX/DRTsNPoFqHpzjPEIfMu
+         vb6MZj11PVC26skOJ9zcH3ulYWHx0x01NU/Cra+lbmP2/NU+WjNAuUQcb5O52CtDRpYd
+         bAGNk+YP1BIoT23UwjVaMSdEtvTBWNzkP2Yrgcy7lMcp/WkzYhUawwCqsBGPH+v+/oLE
+         T5TxzU9RFAgfJSrfCLlo+o4lCexh2X5o9/Tui4/7bsHsjKgxu4LnANZ/C5dpgNYxIXvR
+         XA19scXo2hS4TL2vb/LP0CyjNmtSY6HqqJqMaRz9Bb3QF0YIX8VAm87vcmK5ouxKNjEk
+         xSyw==
+X-Gm-Message-State: AOAM533VVxw74xg3mqXrPT/f3EDYr/W8t+/xcfw80D9kxs59XTM5k/nk
+        H5ao8o5yoDZviqQcqTGQTDLujWqugwZAwXmigniDxGQI0K16
+X-Google-Smtp-Source: ABdhPJzbIfYwA0lep5uvW+KigMItbjJh86sBnRCq6/clwau6EN1n4eZnnJW6KSuQWyt27PspVZETMqT9DmXLcs5Nnoi5p+DjJnsH
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+X-Received: by 2002:a02:62c2:: with SMTP id d185mr15523435jac.76.1642660636945;
+ Wed, 19 Jan 2022 22:37:16 -0800 (PST)
+Date:   Wed, 19 Jan 2022 22:37:16 -0800
+In-Reply-To: <000000000000c9c00e05d5bbe887@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c077c605d5fdbb29@google.com>
+Subject: Re: [syzbot] WARNING in __cleanup_sighand
+From:   syzbot <syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        axboe@kernel.dk, bpf@vger.kernel.org, christian@brauner.io,
+        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
+        ebiggers@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, legion@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        peterz@infradead.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-19 at 19:55 -0600, Gustavo A. R. Silva wrote:
-> Make use of the struct_size() helper instead of an open-coded
-> version,
-> in order to avoid any potential type mistakes or integer overflows
-> that,
-> in the worst scenario, could lead to heap overflows.
-> 
-> Also, address the following sparse warnings:
-> drivers/usb/host/xhci-mtk-sch.c:265:20: warning: using sizeof on a
-> flexible structure
-> 
-> Link: https://github.com/KSPP/linux/issues/160
-> Link: https://github.com/KSPP/linux/issues/174
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/usb/host/xhci-mtk-sch.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-
-> mtk-sch.c
-> index edbfa82c6565..f3139ce7b0a9 100644
-> --- a/drivers/usb/host/xhci-mtk-sch.c
-> +++ b/drivers/usb/host/xhci-mtk-sch.c
-> @@ -248,7 +248,6 @@ create_sch_ep(struct xhci_hcd_mtk *mtk, struct
-> usb_device *udev,
->  	struct mu3h_sch_bw_info *bw_info;
->  	struct mu3h_sch_tt *tt = NULL;
->  	u32 len_bw_budget_table;
-> -	size_t mem_size;
->  
->  	bw_info = get_bw_info(mtk, udev, ep);
->  	if (!bw_info)
-> @@ -262,9 +261,9 @@ create_sch_ep(struct xhci_hcd_mtk *mtk, struct
-> usb_device *udev,
->  	else
->  		len_bw_budget_table = 1;
->  
-> -	mem_size = sizeof(struct mu3h_sch_ep_info) +
-> -			len_bw_budget_table * sizeof(u32);
-> -	sch_ep = kzalloc(mem_size, GFP_KERNEL);
-> +	sch_ep = kzalloc(struct_size(sch_ep, bw_budget_table,
-> +				     len_bw_budget_table),
-> +			 GFP_KERNEL);
->  	if (!sch_ep)
->  		return ERR_PTR(-ENOMEM);
-Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+syzbot has found a reproducer for the following issue on:
 
-Thanks a lot
+HEAD commit:    1d1df41c5a33 Merge tag 'f2fs-for-5.17-rc1' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=135e0637b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a8db61f521ec3155
+dashboard link: https://syzkaller.appspot.com/bug?extid=985a662ba46639a7897f
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13381237b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15160867b00000
 
->  
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3600 at kernel/sched/wait.c:245 __wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:246
+Modules linked in:
+CPU: 1 PID: 3600 Comm: syz-executor582 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:245
+Code: 0d 00 00 c6 44 08 0f 00 65 48 8b 04 25 28 00 00 00 48 3b 84 24 a0 00 00 00 75 13 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 <0f> 0b eb a7 e8 f0 89 b1 08 55 41 57 41 56 41 55 41 54 53 48 83 ec
+RSP: 0018:ffffc90001aaf760 EFLAGS: 00010016
+RAX: ffff8880787693f0 RBX: 0000000000000046 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000001
+RBP: ffffc90001aaf848 R08: dffffc0000000000 R09: ffffed10046325d2
+R10: ffffed10046325d2 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffc90001aaf7a0 R14: 1ffff92000355ef4 R15: ffff888023192ec8
+FS:  000055555695d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000200000c0 CR3: 000000002374c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __cleanup_sighand+0x48/0xa0 kernel/fork.c:1588
+ __exit_signal kernel/exit.c:159 [inline]
+ release_task+0x115f/0x15d0 kernel/exit.c:200
+ wait_task_zombie kernel/exit.c:1121 [inline]
+ wait_consider_task+0x1995/0x3020 kernel/exit.c:1348
+ do_wait_thread kernel/exit.c:1411 [inline]
+ do_wait+0x291/0x9d0 kernel/exit.c:1528
+ kernel_wait4+0x2a3/0x3c0 kernel/exit.c:1691
+ __do_sys_wait4 kernel/exit.c:1719 [inline]
+ __se_sys_wait4 kernel/exit.c:1715 [inline]
+ __x64_sys_wait4+0x130/0x1e0 kernel/exit.c:1715
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fb66a5bb386
+Code: 0f 1f 40 00 31 c9 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 49 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 11 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 90 48 83 ec 28 89 54 24 14 48 89 74 24
+RSP: 002b:00007ffe9339ed58 EFLAGS: 00000246 ORIG_RAX: 000000000000003d
+RAX: ffffffffffffffda RBX: 000000000000ce97 RCX: 00007fb66a5bb386
+RDX: 0000000040000001 RSI: 00007ffe9339ed74 RDI: 00000000ffffffff
+RBP: 0000000000001284 R08: 00007ffe933e2080 R09: 0000000000000010
+R10: 0000000000000000 R11: 0000000000000246 R12: 431bde82d7b634db
+R13: 00007ffe9339ed74 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 

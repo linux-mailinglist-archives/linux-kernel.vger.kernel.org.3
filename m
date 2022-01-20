@@ -2,128 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE2C494788
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA6B494795
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358828AbiATGn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358788AbiATGnR (ORCPT
+        id S237565AbiATGpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:45:08 -0500
+Received: from esa.hc3962-90.iphmx.com ([216.71.140.77]:48342 "EHLO
+        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237373AbiATGpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:43:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB10C061574;
-        Wed, 19 Jan 2022 22:43:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0200B81C44;
-        Thu, 20 Jan 2022 06:43:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB28DC340E0;
-        Thu, 20 Jan 2022 06:43:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642660994;
-        bh=FEXEPKefP/ijJPjVHIn3d1mkGH1oqzeuQ1HMWhIvXXM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UfduzXxGCBBQrYnjwboRahmRKr9Yo25M8hE/xB75CNycfLiv+uw+/VO9QQB9urRAH
-         21E7OxA8f6/l6W8Rxxpm5iZG1oiaAGxE1tQIMzguHEUZ5/hcwPJvknZqbdwUvzJ+zC
-         FI20zxH9fChdSZI8tj7Hg+GHd0RSDtqBMw/w2y6hUy8qqUuW81b/PLHWbY7bwAwmHt
-         etUsBjvVkHt8hi2kKz0gwfmL6ocDx3vxv8Xzkb4ph+AWUB1p6L9fqDPgkCshonujKj
-         7eVridtsat/FeupNiWtYcWR8rnuszQRHmqChfcS8CjHUZAHQTD6sXRPALSPKd+bSki
-         g8O89i+jVzJ5A==
-Date:   Wed, 19 Jan 2022 22:43:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     syzbot <syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
-        axboe@kernel.dk, bpf@vger.kernel.org, christian@brauner.io,
-        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        legion@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, peterz@infradead.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Subject: Re: [syzbot] WARNING in __cleanup_sighand
-Message-ID: <YekEgHGXj8fpZz0l@sol.localdomain>
-References: <000000000000c9c00e05d5bbe887@google.com>
- <YecK0A+Qo431D8Jm@sol.localdomain>
+        Thu, 20 Jan 2022 01:45:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1642661106; x=1643265906;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=esTke/buRky0QlqYuyzkjuIRPNVH7SJHk6d7WNj6fvY=;
+  b=EFR8aFyHTJvRLUSQypsYVFMwuLAEEgAK92Y1NxEqcHPkcef0wCtz29AK
+   rsYA4M53pbfsu3QN7QeuoNw/IppP6dbS9rKUWEf0WmYjkl+AZhWQAShbq
+   Scio7Mc9rmaBpu9vQ9rlGKTf3ed5TFkRzG43RQ0dNrAovLid8VdBUvLSb
+   Q=;
+Received: from mail-mw2nam10lp2100.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) ([104.47.55.100])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 06:45:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YnbPeNig8awz7rMLg3y/HnzwesolIxAvitPNODawybFirwxzeWGaHP0t4sCFb6DjXXEDfuwNZ2mQL+NMSymEfPh3D5Ss20+aWdiicR8ZJO4dcn1jbv9widIiI9y6U5P8S/p8I3e03wQ1VKl+8Fs9mW5ByLBZT4/tgip6k8BZJGnEH+SYTxtQL913u4M/w9AJeWSEVaCYiMC0ApkT6Ey6GdurWm4Pu7sLhGyM/Hk8ZfswNEyHvuLP0ZRskE4uagzl2ZQL4nvdg3ST4eaVnwECTFR1l2xkOSSxcwslppmNXFz6+72tu5hXATZ+AuL0+PdtrLw1GMfG0BpDDXkkl1vHVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=esTke/buRky0QlqYuyzkjuIRPNVH7SJHk6d7WNj6fvY=;
+ b=RbgOZ8bk5kaOChYVKJcD9KqeKhHuss5cVBYv+pSSGdB48qkVQFsmqraUHy1HBIuYQ+rtPz8XP0kKdpXERP0IStpAWjLyjDny3OkykpdKBc7FqD8HcqcOLWj13hBTZOucZeFrFrSU4ndG429inN8vmCeSFMZn5oyS5rUoyGW6x86756nAzY+4wyx3tvB0iM27BuAVS39mZjnzOGmRIBfeQzbHD5TwZVItnPOSLj00qK+Pt6GcemTJteTWvKLmwGP5L6Q0LRmqRtgyF8gZYMdeyq+gBharFkp6TgashRcKJOGLQMxolOE3dHIlXTRCJFpHFtwaJGlLbw2pWotZ9aouwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from SJ0PR02MB8449.namprd02.prod.outlook.com (2603:10b6:a03:3f5::8)
+ by SJ0PR02MB7534.namprd02.prod.outlook.com (2603:10b6:a03:320::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Thu, 20 Jan
+ 2022 06:45:01 +0000
+Received: from SJ0PR02MB8449.namprd02.prod.outlook.com
+ ([fe80::481d:88c5:eab3:21c7]) by SJ0PR02MB8449.namprd02.prod.outlook.com
+ ([fe80::481d:88c5:eab3:21c7%5]) with mapi id 15.20.4909.008; Thu, 20 Jan 2022
+ 06:45:01 +0000
+From:   "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     "Tudor.Ambarus@microchip.com" <Tudor.Ambarus@microchip.com>,
+        "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stummala@codeaurora.org" <stummala@codeaurora.org>,
+        "vbadigan@codeaurora.org" <vbadigan@codeaurora.org>,
+        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
+        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
+        "sartgarg@codeaurora.org" <sartgarg@codeaurora.org>
+Subject: RE: [PATCH V3] mtd: spi-nor: winbond: Add support for winbond chip
+Thread-Topic: [PATCH V3] mtd: spi-nor: winbond: Add support for winbond chip
+Thread-Index: AQHX8NO+WlpZqE5WH0ySDSUiuNAdtawx1mGAgDgzhrCAAK1jgIAA+YpA
+Date:   Thu, 20 Jan 2022 06:45:01 +0000
+Message-ID: <SJ0PR02MB8449C8C63E8915A170B61E0DCD5A9@SJ0PR02MB8449.namprd02.prod.outlook.com>
+References: <1639476991-25676-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ <488aafc3-2fa9-198b-c448-d1ca7ef52f35@microchip.com>
+ <PH0PR02MB84557EA76BD8DDD35A99B915CD599@PH0PR02MB8455.namprd02.prod.outlook.com>
+ <b4aad212d86b2d4dd27602db6add82e3@walle.cc>
+In-Reply-To: <b4aad212d86b2d4dd27602db6add82e3@walle.cc>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1bb60d1f-3a05-470c-f8e5-08d9dbe06223
+x-ms-traffictypediagnostic: SJ0PR02MB7534:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <SJ0PR02MB753400D93F1634E0FA9CAEEBB15A9@SJ0PR02MB7534.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Bdu4s5oPBmzVZZdgt4zK0Nsqj6mMUl7Y8iuqS66L6IaeZ15u0CoG+9cYuzPE6e55bkIQWQpiZhlz0AWQCXJz/V3nTsRyEXsl7sa/pX0xNNQfuNGVCU6XRqDCyuhKksnGfvVLFwpOXo5+JIM7LpbS1+zZjdi0D34YUFjULgwsDyfHLNfPAWs8oVhlDcP7risfaHnACX//T9jZeY4kA3/gscntvVpVjJoKaP4XCrX4cfT26dPaobRMCUc9EzL6Mf/OZErAO5x/EXHnQCfN2V8VR4kv3KW5sxmwr2+b2gGM5XXsLO6ezX+hkMT9I75Nx0V2Oiyo1niZP4yzTUv9lZG7ucVR3Ao9wHzPBz3Xv9gBQFlX4qZM1tunkjTEuaASJ7eaFKH8njp+wZKKpVb5GAvixeVKQnqqXIaGnpxGTPWxswrFOF9Z4oRYnMlBY1X9ahtj8/sA2FAAyIaL/OtR49oR1yBWUeN/uY+rLGDwqU3G4mF2e0HktJniDjI7aXpZ4ouvT2D67buVlPblG3YjjCtdTDwDto7h5uyT2mYVC029tq7kw4WO6LTxZ4+gCaeYfOu/ktTIGULiMwmVudUsCetdUoJFDy1EgA8EIXybMRxz1MzayqoakNzp1C4GCKFWmAiZuQ+xHJc0vQcgSgNkE9yo2Nl/SqmLe37d7hp8mVCGkroHrFvT3CzHc8kakeDip0QBas+tzhuxfMXqBEjuGi653w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB8449.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(76116006)(66946007)(4744005)(6916009)(7416002)(508600001)(122000001)(33656002)(83380400001)(66556008)(66446008)(64756008)(86362001)(54906003)(26005)(38100700002)(6506007)(55016003)(71200400001)(53546011)(316002)(7696005)(2906002)(186003)(8676002)(9686003)(52536014)(4326008)(38070700005)(8936002)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?i1WBiBpTGQ91Mla7Qi8uSGLGBCv2T0bKYGPMy5+4swZM7ncHDboS+ygo9eM4?=
+ =?us-ascii?Q?X7FoqmjQuG996lwZmjRU6pKL2A6MXJCYD4P1yK7TKE9pYISFnJqgzVo2Rw67?=
+ =?us-ascii?Q?xpJc3ByxQipw0RZ6yfHksCsgIT2cCtlUESNanGp/jk8s7l+Lf+gXTJR9yjXS?=
+ =?us-ascii?Q?/0DmzIKquoASTlHo5EDfSwBEeb50+RPzvh561AUo9Ek26375S9BsgkKjzp0b?=
+ =?us-ascii?Q?Z10kLIYFhKoUELC2KDj8ldZLc0uuTu2/W1v9Mi2BQ3xAlcD3EBv3/Rntv4+2?=
+ =?us-ascii?Q?oSMuDz2hEPNJ0mEG9MGoGky5Oq9flXEowbKS4Tm5w6fv80t3WE+iYUPjDX3v?=
+ =?us-ascii?Q?K0BQMT0RSfDnRafhzw3c1V/EHO002OZpFDA8jQNeUeyLtzZzo5TUbkmeKD2e?=
+ =?us-ascii?Q?rtr7q2eOPuWjkq1Ma0ZZvqQvaU3leYwa1+04e0AdEEugHJu6BGo6vV9DlGNm?=
+ =?us-ascii?Q?X731127Y3NDb8jGnf410wReoCz4rER7WlWP/khUXrx+rdluRQBBnhKA/aQLF?=
+ =?us-ascii?Q?nXYi12+x9vR8iqv/tdD4VYeJpw4yW8Q9atLAjqOQKMrFuvnB0uQ5KYBkKOOM?=
+ =?us-ascii?Q?U82GrdNaojY/kK0SOouarkjQ/RL3fNzPSwPI4YPgamX8qLelW1y9UcvxWAra?=
+ =?us-ascii?Q?hHrXaaUpxSAR5hR9dE2l581UKCg1qb3nUtiH9mKBmYAgZ02HPbK3zaAdSLW4?=
+ =?us-ascii?Q?MKvce0byOPQCfweqqgdFtXOdFSNMHC4d9gGEMYk3qqvjpVgbbund1aJfFGsW?=
+ =?us-ascii?Q?bVLOeB1+ss3QpirfbpfFN3seSSpAykS6tbXDczwhyKsEj4d2P5mtfZrSZ9BP?=
+ =?us-ascii?Q?aVw0LE5Hzw68AdYEqrtTHQ67W2B62Lq0BLM/OlR0ADY6Zvv0SHyVtUkvFLe0?=
+ =?us-ascii?Q?cM6PQfIAxgKRB26hY9WQZN2513khz/7e60Q129n9DaAVCfwf1V8bw176NHB6?=
+ =?us-ascii?Q?9twOV3UgLDUggISKNftgq2tXGQCuC8peJ71A49Mc/7zXUBT7A6wQ2Dc7QhLE?=
+ =?us-ascii?Q?IRTw6ZhbJWslBdouQQHfFmzCv5THmVeLyk5kQmEv1D7D3R/ssdg/SMgo+0RW?=
+ =?us-ascii?Q?xXtHILPyYCB2Mh1VpEW13+XfDvYzzDGiDIAKeADQXGV+82Efyil1UFLmxLtn?=
+ =?us-ascii?Q?brRfnFY143AaDPBTUKmoofRrb1hT6M8NK7ezp6Kf1k4bpxyOVi4P16BfdOx+?=
+ =?us-ascii?Q?bh1N9KFTTGCieQq+g6hnkXw/TYsv9Rmo18hFDSuHvNsCMGbB4XptD2AIVPTk?=
+ =?us-ascii?Q?2wk4ol8uHL3Bd+Um5W+nW6XuvUdCJiJl+yDi+deGshDH3YNZlGVsbdKsrpBa?=
+ =?us-ascii?Q?N0Zh3/L6mkD2jomIyMXg9vGDqj84B7/qPMjC/waZ6CFErh5FXXzAAFO+6evo?=
+ =?us-ascii?Q?YcvxxwPPqaaFYeus80dh0KDbxLYYYTWTR8ImJsxHJArNBAwnweJqJs+LgCvN?=
+ =?us-ascii?Q?pNc1pIuWfcBpYhoHc3MY2ssNwdiFDN8CRpTdlgN7EFTGf4tDT+BFQow9vslz?=
+ =?us-ascii?Q?smZaxovcouKD4SqrJBAU6rDtSw9gGPer8JsxZGotncdu/SHSqLf/75hWKmBq?=
+ =?us-ascii?Q?oO55ENUOqdMY+kr9xlvrVQl8UaLn8jRokC26mNqShu/fXt4uYqe1IGYAxSFr?=
+ =?us-ascii?Q?61qYyQHLgZCSOS3/dueTC/VG/d96BEAHbm6w+rq+UFQnD9P3KouTXgUfmvXT?=
+ =?us-ascii?Q?HHSDVg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YecK0A+Qo431D8Jm@sol.localdomain>
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB8449.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1bb60d1f-3a05-470c-f8e5-08d9dbe06223
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 06:45:01.3286
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XPcbytWsAZ/pu3trglSJeLthihsNEu5zjOXFOJdi6Bc526sb+FtG1EnAuoADlMXZD7ez29U1T8cM+6xyCi5STala2U2/gOcXJpcrRv32qak=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7534
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:45:38AM -0800, Eric Biggers wrote:
-> On Sun, Jan 16, 2022 at 04:05:24PM -0800, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    79e06c4c4950 Merge tag 'for-linus' of git://git.kernel.org..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1285ed28700000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=afd3ce8cd5cf174b
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=985a662ba46639a7897f
-> > compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com
-> > 
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 0 PID: 3640 at kernel/sched/wait.c:245 __wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:246
-> > Modules linked in:
-> > CPU: 0 PID: 3640 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:__wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:245
-> > Code: 0d 00 00 c6 44 08 0f 00 65 48 8b 04 25 28 00 00 00 48 3b 84 24 a0 00 00 00 75 13 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 <0f> 0b eb a7 e8 60 3e b0 08 55 41 57 41 56 41 55 41 54 53 48 83 ec
-> > RSP: 0018:ffffc900028cf760 EFLAGS: 00010097
-> > RAX: ffff88801ec1b130 RBX: 0000000000000046 RCX: dffffc0000000000
-> > RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000001
-> > RBP: ffffc900028cf848 R08: dffffc0000000000 R09: ffffed100850025a
-> > R10: ffffed100850025a R11: 0000000000000000 R12: 0000000000000000
-> > R13: ffffc900028cf7a0 R14: 1ffff92000519ef4 R15: ffff888042801308
-> > FS:  0000555556549400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fed83b131b8 CR3: 000000004a82a000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 000000000000802e DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  __cleanup_sighand+0x48/0xa0 kernel/fork.c:1590
-> >  __exit_signal kernel/exit.c:159 [inline]
-> >  release_task+0x115f/0x15d0 kernel/exit.c:200
-> >  wait_task_zombie kernel/exit.c:1114 [inline]
-> >  wait_consider_task+0x1995/0x2fb0 kernel/exit.c:1341
-> >  do_wait_thread kernel/exit.c:1404 [inline]
-> >  do_wait+0x291/0x9d0 kernel/exit.c:1521
-> >  kernel_wait4+0x2a3/0x3c0 kernel/exit.c:1684
-> >  __do_sys_wait4 kernel/exit.c:1712 [inline]
-> >  __se_sys_wait4 kernel/exit.c:1708 [inline]
-> >  __x64_sys_wait4+0x130/0x1e0 kernel/exit.c:1708
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7f2aff29e487
-> > Code: 89 7c 24 10 48 89 4c 24 18 e8 35 50 02 00 4c 8b 54 24 18 8b 54 24 14 41 89 c0 48 8b 74 24 08 8b 7c 24 10 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 89 44 24 10 e8 65 50 02 00 8b 44
-> > RSP: 002b:00007ffeabee34f0 EFLAGS: 00000293 ORIG_RAX: 000000000000003d
-> > RAX: ffffffffffffffda RBX: 0000000000000932 RCX: 00007f2aff29e487
-> > RDX: 0000000040000001 RSI: 00007ffeabee357c RDI: 00000000ffffffff
-> > RBP: 00007ffeabee357c R08: 0000000000000000 R09: 0000000000000010
-> > R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000032
-> > R13: 00000000000af2e3 R14: 0000000000000009 R15: 00007ffeabee35e0
-> >  </TASK>
-> > 
-> > 
-> 
-> This is probably caused by io_uring not handling POLLFREE notifications,
-> i.e. this is probably a duplicate of the previous syzbot report
-> https://lore.kernel.org/lkml/000000000000c9a3fb05d4d787a3@google.com/T/#u
-> ("WARNING in signalfd_cleanup").  It's impossible to be certain without a
-> reproducer, but based on the console output here, some of the programs that
-> syzkaller executed use io_uring.  So it's at least plausible.
-> 
+Sure thanks , will rebase on latest and post next  patch series.
 
-#syz dup: WARNING in signalfd_cleanup
+Thanks,
+Sajida
+-----Original Message-----
+From: Michael Walle <michael@walle.cc>=20
+Sent: Wednesday, January 19, 2022 9:22 PM
+To: Sajida Bhanu (Temp) <c_sbhanu@qti.qualcomm.com>
+Cc: Tudor.Ambarus@microchip.com; Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@=
+quicinc.com>; dianders@chromium.org; p.yadav@ti.com; miquel.raynal@bootlin.=
+com; richard@nod.at; vigneshr@ti.com; linux-mtd@lists.infradead.org; linux-=
+kernel@vger.kernel.org; stummala@codeaurora.org; vbadigan@codeaurora.org; R=
+am Prakash Gupta (QUIC) <quic_rampraka@quicinc.com>; Pradeep Pragallapati (=
+QUIC) <quic_pragalla@quicinc.com>; sartgarg@codeaurora.org
+Subject: Re: [PATCH V3] mtd: spi-nor: winbond: Add support for winbond chip
+
+Hi,
+
+Am 2022-01-19 06:34, schrieb Sajida Bhanu (Temp):
+> Gentle Reminder.
+
+As Tudor mentioned, you'd need to rebase your patch to the latest next.
+
+Thanks,
+-michael

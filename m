@@ -2,75 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 625CF494AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2FC494B01
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359622AbiATJoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:44:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51762 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiATJoI (ORCPT
+        id S1359642AbiATJp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:45:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30257 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359635AbiATJp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:44:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4539A604EF;
-        Thu, 20 Jan 2022 09:44:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7B8C340E7;
-        Thu, 20 Jan 2022 09:44:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fssD5vvD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642671844;
+        Thu, 20 Jan 2022 04:45:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642671957;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=G1vhBKyxUeexYoEpFA7C2RgBVPR3wFJ965AiyzZ7d1Y=;
-        b=fssD5vvDonTjf+Ob+Bpl1G3vPKMhEseK8iREJoFAg6ynOzq+BSSo6lVquWfZvAcYlh6Lvu
-        bkC7lhUCYYe16qmc0QIe3GrcAbiqnG1eqnXBufblVHz5zhcqCzPLluqfWpy6rtBhSxckFH
-        s+P22Zx6skyLld3jyUnagQF/dm3ahQs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b2b4eba4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 20 Jan 2022 09:44:04 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id k31so14428811ybj.4;
-        Thu, 20 Jan 2022 01:44:03 -0800 (PST)
-X-Gm-Message-State: AOAM533MBGqBZGy49Epfeg2tbh5MtDXIxDtZPFOCerVwbIxk77sOKcT8
-        TGTxj8a5ejcoskN2pHOkdp2sWGj9qtz0Zd5lE3w=
-X-Google-Smtp-Source: ABdhPJzg1g/gym62qyvrV0DrQk1jKs3WkH/OEe7OV9zyQPzVSRgVDI0hITqpB3HjmG/WYqbbT3zIOQtxb62GLCP4W9k=
-X-Received: by 2002:a25:854f:: with SMTP id f15mr45690101ybn.121.1642671843070;
- Thu, 20 Jan 2022 01:44:03 -0800 (PST)
+        bh=AnozGUjZxfRbxL/uXbhZzAjPZpfXbAj0xuaYn46Ym1Q=;
+        b=NJjkkARJZezA/0RNYzYtAyUaELpC13zuVbpPYd71OXyj70UzLoMWexlc36tM7JQoslamGY
+        AHYCJ65dGQihq2v+EWjLcM3uqwIoCBcdVlmfJDbqECw1fgs/57OTgiXgigB0/5C3H8cyuq
+        AunP6l6IPuhHjPSRScLhZ+h1MXbcyZI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-Q1acZg4LMjWZJjJMpLE5jw-1; Thu, 20 Jan 2022 04:45:52 -0500
+X-MC-Unique: Q1acZg4LMjWZJjJMpLE5jw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7497D108087A;
+        Thu, 20 Jan 2022 09:45:49 +0000 (UTC)
+Received: from localhost (ovpn-13-177.pek2.redhat.com [10.72.13.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F2C510013C1;
+        Thu, 20 Jan 2022 09:45:42 +0000 (UTC)
+Date:   Thu, 20 Jan 2022 17:45:39 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Eric Biederman <ebiederm@xmission.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kexec@lists.infradead.org,
+        Alexandre ghiti <alex@ghiti.fr>
+Subject: Re: [PATCH v2 0/5] kexec: use IS_ENABLED(CONFIG_KEXEC_CORE) instead
+ of #ifdef
+Message-ID: <20220120094539.GC18398@MiWiFi-R3L-srv>
+References: <20211206160514.2000-1-jszhang@kernel.org>
+ <20220116133847.GE2388@MiWiFi-R3L-srv>
+ <YebK70Sx4w8zLfj/@xhacker>
+ <20220119080859.GB4977@MiWiFi-R3L-srv>
+ <CA+zEjCvqYAWaWW9hVbHqYm_GbV-BaiOM4c77WHnxDNh+SRDUuw@mail.gmail.com>
+ <20220119093322.GC4977@MiWiFi-R3L-srv>
+ <Yef5oz/XiZT/Pxfy@xhacker>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:209:b0:11c:1b85:d007 with HTTP; Thu, 20 Jan 2022
- 01:44:02 -0800 (PST)
-In-Reply-To: <YeiPn8Mo1AM7X9Ud@archlinux-ax161>
-References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
- <20220119135450.564115-1-Jason@zx2c4.com> <YeiPn8Mo1AM7X9Ud@archlinux-ax161>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Jan 2022 10:44:02 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rPy=T=0Ddbw+01bFycXNPfuxgMm+U80DzDSLy0Cdh_Gg@mail.gmail.com>
-Message-ID: <CAHmME9rPy=T=0Ddbw+01bFycXNPfuxgMm+U80DzDSLy0Cdh_Gg@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
- function for Clang CFI
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Miles Chen <miles.chen@mediatek.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yef5oz/XiZT/Pxfy@xhacker>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22, Nathan Chancellor <nathan@kernel.org> wrote:
-> On Wed, Jan 19, 2022 at 02:54:50PM +0100, Jason A. Donenfeld wrote:
->> blake2s_compress_generic is weakly aliased to blake2s_generic. The
->
-> Isn't it the other way around?
+On 01/19/22 at 07:44pm, Jisheng Zhang wrote:
+> On Wed, Jan 19, 2022 at 05:33:22PM +0800, Baoquan He wrote:
+> > On 01/19/22 at 09:52am, Alexandre Ghiti wrote:
+> > > Hi Baoquan,
+> > > 
+> > > On Wed, Jan 19, 2022 at 9:11 AM Baoquan He <bhe@redhat.com> wrote:
+> > > >
+> > > > On 01/18/22 at 10:13pm, Jisheng Zhang wrote:
+> > > > > On Sun, Jan 16, 2022 at 09:38:47PM +0800, Baoquan He wrote:
+> > > > > > Hi Jisheng,
+> > > > >
+> > > > > Hi Baoquan,
+> > > > >
+> > > > > >
+> > > > > > On 12/07/21 at 12:05am, Jisheng Zhang wrote:
+> > > > > > > Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE"
+> > > > > > > by a check for "IS_ENABLED(CONFIG_KEXEC_CORE)", to simplify the code
+> > > > > > > and increase compile coverage.
+> > > > > >
+> > > > > > I go through this patchset, You mention the benefits it brings are
+> > > > > > 1) simplity the code;
+> > > > > > 2) increase compile coverage;
+> > > > > >
+> > > > > > For benefit 1), it mainly removes the dummy function in x86, arm and
+> > > > > > arm64, right?
+> > > > >
+> > > > > Another benefit: remove those #ifdef #else #endif usage. Recently, I
+> > > > > fixed a bug due to lots of "#ifdefs":
+> > > > > http://lists.infradead.org/pipermail/linux-riscv/2021-December/010607.html
+> > > >
+> > > > Glad to know the fix. While, sometime the ifdeffery is necessary. I am
+> > > > sorry about the one in riscv and you have fixed, it's truly a bug . But,
+> > > > the increasing compile coverage at below you tried to make, it may cause
+> > > > issue. Please see below my comment.
+> > > >
+> > > > >
+> > > > > >
+> > > > > > For benefit 2), increasing compile coverage, could you tell more how it
+> > > > > > achieves and why it matters? What if people disables CONFIG_KEXEC_CORE in
+> > > > > > purpose? Please forgive my poor compiling knowledge.
+> > > > >
+> > > > > Just my humble opinion, let's compare the code::
+> > > > >
+> > > > > #ifdef CONFIG_KEXEC_CORE
+> > > > >
+> > > > > code block A;
+> > > > >
+> > > > > #endif
+> > > > >
+> > > > > If KEXEC_CORE is disabled, code block A won't be compiled at all, the
+> > > > > preprocessor will remove code block A;
+> > > > >
+> > > > > If we convert the code to:
+> > > > >
+> > > > > if (IS_ENABLED(CONFIG_KEXEC_CORE)) {
+> > > > >       code block A;
+> > > > > }
+> > > > >
+> > > > > Even if KEXEC_CORE is disabled, code block A is still compiled.
+> > > >
+> > > > This is what I am worried about. Before, if CONFIG_KEXEC_CORE is
+> > > > unset, those relevant codes are not compiled in. I can't see what
+> > > > benefit is brought in if compiled in the unneeded code block. Do I miss
+> > > > anything?
+> > > >
+> > > 
+> > > This is explained in Documentation/process/coding-style.rst "21)
+> > > Conditional Compilation".
+> > 
+> > Thanks for the pointer, Alex.
+> > 
+> > I read that part, while my confusion isn't gone. With the current code,
+> > CONFIG_KEXEC_CORE is set,
+> >   - reserve_crashkernel_low() and reserve_crashkernel() compiled in.
+> 
+> Although the code block will be compiled, but the code block will be
+> optimized out.
+> 
+> > CONFIG_KEXEC_CORE is unset,
+> >   - reserve_crashkernel_low() and reserve_crashkernel() compiled out. 
+> > 
+> > After this patch applied, does it have the same effect as the old code?
+> 
+> I compared the .o, and can confirm they acchieve the same effect.
 
-Thanks. Changed that 'to' to a 'by'.
+Checked the .o, it's truly as you said. I didn't know this before,
+thank you and Alex, learned this now.
 
-Jason
+Seems only static function has this effect. I tested your x86 patch,
+those two functions are all optimized out. If I remove the static,
+the entire reserve_crashkernel_low() exists, while reserve_crashkernel()
+will be optimized as a empty function. 
+

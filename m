@@ -2,273 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D99A0495274
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB5B495277
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377058AbiATQes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:34:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34611 "EHLO
+        id S1377063AbiATQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:35:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45497 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1377050AbiATQeq (ORCPT
+        by vger.kernel.org with ESMTP id S1377048AbiATQfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:34:46 -0500
+        Thu, 20 Jan 2022 11:35:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642696485;
+        s=mimecast20190719; t=1642696530;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AM0qBCzLEFCiAWlXq2pEOv2LGLsPZzb4j9Jyt3qne9Y=;
-        b=FtCIffOBIVnuYHHbIOM0Oaa9dtkrbP4st18gg82niOR624D+nXJJ66j8HPHVY9hOzVlohq
-        vlWF/LSnl7N9PXY2BG7/KaPoo+Y6TeMsn76HWwQ0jI6YfgDVXUxnviUGxYGD2LjfM60Lct
-        dBiJ1jI/+mdPWiSLNu3ghjTGUfMseWY=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7Cv4ecf7GNT/p9vmHS5xcSabCvV+bpl0vkADyXi+gD8=;
+        b=BnxHWWDKo0WzCmneTRSNhSD5Epob2x3rfUIeleb+cjCJeUV1m5SK2VHz5r5deeHAsdvnCX
+        fawWQ4dA9VW95sBCTEWNVQ/mPRcP+++Qd+sT4fGZx521LnUssD8bec4YfzCJhnDmsoUy1/
+        0iHESivWND+l+nCTVibbzWIrl0M1Vnw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-UA0nsKn1MwWS6ZInQHL3Bw-1; Thu, 20 Jan 2022 11:34:43 -0500
-X-MC-Unique: UA0nsKn1MwWS6ZInQHL3Bw-1
-Received: by mail-qk1-f197.google.com with SMTP id b13-20020a05620a270d00b0047ba5ddde8dso4549993qkp.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:34:43 -0800 (PST)
+ us-mta-442-Bd4JDC78MZa_80u-xQ8tIQ-1; Thu, 20 Jan 2022 11:35:27 -0500
+X-MC-Unique: Bd4JDC78MZa_80u-xQ8tIQ-1
+Received: by mail-wm1-f71.google.com with SMTP id f187-20020a1c38c4000000b0034d5c66d8f5so4907617wma.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:35:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AM0qBCzLEFCiAWlXq2pEOv2LGLsPZzb4j9Jyt3qne9Y=;
-        b=HieRkUsRY4/zx6TZU24F8xc9HhaEEUZHdpwb9snh9CxS2DNKaJ7WBbkrPezs5b3zX0
-         XyOMex1xbQMG7LGDLeeu01NOqnQkSEFQR3IylMcTVl2x4efesY+RrWT/QWHXfQ3qNG4T
-         Hrn08J3u/DClLRXSVZzwJbKKOjTPqY4h/maqOWVoRGNh8KKKvzCXyzulffqx/5H/CGEK
-         AQ59mvfmfwKelHJznyQ47AhyZ4Coul1gtZzPfUO6MVIOx0P/HARktisP9dx95YQ1UMQl
-         tuLc11QKQyZ3cSBKv59fTkda/kyVzEOijmLvP9X88d6cTlHUHKyN3wDhsZtvtYiMo0I8
-         DLgg==
-X-Gm-Message-State: AOAM5324bMMlKIEjreWImkF363Qz+OYqzsCeEyzOHps8P77/79fGCTYb
-        QZ408bCD8JnrChisIPbj+3R6r7O9xAFP5H2/lNQOS5Ky1caeUNOQ57SEWSyM460aCaiq4mRDtVS
-        DsjcnvqrptPhm+qvkOrVVUVtC
-X-Received: by 2002:a05:620a:10b9:: with SMTP id h25mr16226328qkk.86.1642696482747;
-        Thu, 20 Jan 2022 08:34:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy45hLLlEXDgJWQCyIgVrfOzyLo/XgfbESOk0FLkRWp9iKdgAICffqFgQ1ngztp251f5dHScg==
-X-Received: by 2002:a05:620a:10b9:: with SMTP id h25mr16226303qkk.86.1642696482419;
-        Thu, 20 Jan 2022 08:34:42 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id az13sm1698420qkb.99.2022.01.20.08.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 08:34:42 -0800 (PST)
-Date:   Thu, 20 Jan 2022 11:34:39 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YemPH7vT+VW7xoCT@bfoster>
-References: <YeV+zseKGNqnSuKR@bfoster>
- <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
- <20220118030041.GB59729@dread.disaster.area>
- <YeYxOadA0HgYfBjt@zeniv-ca.linux.org.uk>
- <20220118041253.GC59729@dread.disaster.area>
- <YeZW9s7x2uCBfNJD@zeniv-ca.linux.org.uk>
- <20220118232547.GD59729@dread.disaster.area>
- <YegbVhxSNtQFlSCr@bfoster>
- <20220119220747.GF59729@dread.disaster.area>
- <YemH0LML9ZVUnrEX@bfoster>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=7Cv4ecf7GNT/p9vmHS5xcSabCvV+bpl0vkADyXi+gD8=;
+        b=dWAFoJE+pp9n5mRzuR0/TUr8v0CqsPMLbSumvyTlRZVqxf1LGmP+ogumnRpXjTh8Se
+         jgMXgDjKYsRiyJzmF033GgfdDaUQWYfjWMbc6rjWlyD7s1avvFWQ9JV72li8FQXxT1dX
+         zfByxR+Ji8sGiuEi8xJwa7Yq06oB+l9yEvcOnM7RIi5ytlrelMRp7ix5qlbDTUAdQ4HC
+         KcKatG88fsFs01OPx+6zc54QAwQg2wro2cYKPQfL4c1SxKwInG5iyMSzui/b078zSt5/
+         g00RBt7SnuPepv0i693m5NaD8ZuWLGhN9i9nxV8laE4laRoRP4IM4ExpOS9qpLcoz0fn
+         2S5w==
+X-Gm-Message-State: AOAM530vG0Jv/bPB6aoSUaBzU5vkQUdbJvwhnC6Bfbav6R+qXwydQgeA
+        gLZt1YSgSCy58jUA90EXYtIdkDZhRu658v6bWUNmEWJfxmEaukwwMlhL4BRKriyIiBm2cLo12zE
+        9fqjgwvJwn3ZEv8FlzeoT1O4Y
+X-Received: by 2002:a05:600c:3843:: with SMTP id s3mr5749074wmr.150.1642696525979;
+        Thu, 20 Jan 2022 08:35:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwMb3IqTVFLfQdg4IWw3BqbA+NKZnfLxu9CZU6PoSYNSOuBGcrB/a08RW5NoiZLqF3sZR88Jw==
+X-Received: by 2002:a05:600c:3843:: with SMTP id s3mr5749054wmr.150.1642696525736;
+        Thu, 20 Jan 2022 08:35:25 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
+        by smtp.gmail.com with ESMTPSA id i17sm3055553wru.107.2022.01.20.08.35.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 08:35:25 -0800 (PST)
+Message-ID: <6ccfce39-d022-0c85-cfee-3070d9dfc9a1@redhat.com>
+Date:   Thu, 20 Jan 2022 17:35:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YemH0LML9ZVUnrEX@bfoster>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
+ <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
+ <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
+ <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
+ <Yel0BXVyj8uvsWJX@casper.infradead.org>
+ <e2580cfa-a529-934d-861a-091c4a9714d4@redhat.com>
+ <YemBl4ZVtJqtAVwV@casper.infradead.org>
+ <759f9bc8-0b10-7f0f-28a6-f292bed9053f@redhat.com>
+ <YemDry2rkD2VUcw9@casper.infradead.org>
+ <88a8b1a3-232d-df9c-d7f6-0ea9f2dd4b36@redhat.com>
+ <YemJLR08tsY4s/nN@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+In-Reply-To: <YemJLR08tsY4s/nN@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 11:03:28AM -0500, Brian Foster wrote:
-> On Thu, Jan 20, 2022 at 09:07:47AM +1100, Dave Chinner wrote:
-> > On Wed, Jan 19, 2022 at 09:08:22AM -0500, Brian Foster wrote:
-> > > On Wed, Jan 19, 2022 at 10:25:47AM +1100, Dave Chinner wrote:
-> > > > On Tue, Jan 18, 2022 at 05:58:14AM +0000, Al Viro wrote:
-> > > > > On Tue, Jan 18, 2022 at 03:12:53PM +1100, Dave Chinner wrote:
-> > > > Unfortunately, the simple fix of adding syncronize_rcu() to
-> > > > xfs_iget_recycle() causes significant performance regressions
-> > > > because we hit this path quite frequently when workloads use lots of
-> > > > temporary files - the on-disk inode allocator policy tends towards
-> > > > aggressive re-use of inodes for small sets of temporary files.
-> > > > 
-> > > > The problem XFS is trying to address is that the VFS inode lifecycle
-> > > > does not cater for filesystems that need to both dirty and then
-> > > > clean unlinked inodes between iput_final() and ->destroy_inode. It's
-> > > > too late to be able to put the inode back on the LRU once we've
-> > > > decided to drop the inode if we need to dirty it again. ANd because
-> > > > evict() is part of the non-blocking memory reclaim, we aren't
-> > > > supposed to block for arbitrarily long periods of time or create
-> > > > unbound memory demand processing inode eviction (both of which XFS
-> > > > can do in inactivation).
-> > > > 
-> > > > IOWs, XFS can't free the inode until it's journal releases the
-> > > > internal reference on the dirty inode. ext4 doesn't track inodes in
-> > > > it's journal - it only tracks inode buffers that contain the changes
-> > > > made to the inode, so once the transaction is committed in
-> > > > ext4_evict_inode() the inode can be immediately freed via either
-> > > > ->destroy_inode or ->free_inode. That option does not exist for XFS
-> > > > because we have to wait for the journal to finish with the inode
-> > > > before it can be freed. Hence all the background reclaim stuff.
-> > > > 
-> > > > We've recently solved several of the problems we need to solve to
-> > > > reduce the mismatch; avoiding blocking on inode writeback in reclaim
-> > > > and background inactivation are two of the major pieces of work we
-> > > > needed done before we could even consider more closely aligning XFS
-> > > > to the VFS inode cache life cycle model.
-> > > > 
-> > > 
-> > > The background inactivation work facilitates an incremental improvement
-> > > by nature because destroyed inodes go directly to a queue instead of
-> > > being processed synchronously. My most recent test to stamp the grace
-> > > period info at inode destroy time and conditionally sync at reuse time
-> > > shows pretty much no major cost because the common case is that a grace
-> > > period has already expired by the time the queue populates, is processed
-> > > and said inodes become reclaimable and reallocated.
-> > 
-> > Yup. Remember that I suggested these conditional variants in the
-> > first place - I do understand what this code does...
-> > 
-> > > To go beyond just
-> > > the performance result, if I open code the conditional sync for tracking
-> > > purposes I only see something like 10-15 rcu waits out of the 36k
-> > > allocation cycles. If I increase the background workload 4x, the
-> > > allocation rate drops to ~33k cycles (which is still pretty much in line
-> > > with baseline) and the rcu sync count increases to 70, which again is
-> > > relatively nominal over tens of thousands of cycles.
-> > 
-> > Yup. But that doesn't mean that the calls that trigger are free from
-> > impact. The cost and latency of waiting for an RCU grace period to
-> > expire goes up as the CPU count goes up. e.g. it requires every CPU
-> > running a task goes through a context switch before it returns.
-> > Hence if we end up with situations like, say, the ioend completion
-> > scheduling holdoffs, then that will prevent the RCU sync from
-> > returning for seconds.
-> > 
+>>
+>> Sorry, I was less verbose because I was just sending out the
+>> patch+description to Linus' reply and was assuming you're going to read
+>> it anyways ;)
 > 
-> Sure... this is part of the reason the tests I've run so far have all
-> tried to incorporate background rcuwalk activity, run on a higher cpu
-> count box, etc. And from the XFS side of the coin, the iget code can
-> invoke xfs_inodegc_queue_all() in the needs_inactive case before
-> reclaimable state is a possibility, which queues a work on every cpu
-> with pending inactive inodes. That is probably unlikely in the
-> free/alloc case (since needs_inactive inodes are not yet free on disk),
-> but the broader points are that the inactive processing work has to
-> complete one way or another before reclaimable state is possible and
-> that we can probably accommodate a synchronization point here if it's
-> reasonably filtered. Otherwise...
-> 
-> > IOWs, we're effectively adding unpredictable and non-deterministic
-> > latency into the recycle path that is visible to userspace
-> > applications, and those latencies can be caused by subsystem
-> > functionality not related to XFS. Hence we need to carefully
-> > consider unexpected side-effects of adding a kernel global
-> > synchronisation point into a XFS icache lookup fast path, and these
-> > issues may not be immediately obvious from testing...
-> > 
-> 
-> ... agreed. I think at this point we've also discussed various potential
-> ways to shift or minimize latency/cost further, so there's probably
-> still room for refinement if such unexpected things crop up before...
-> 
-> > > This all requires some more thorough testing, but I'm sure it won't be
-> > > absolutely free for every possible workload or environment. But given
-> > > that we know this infrastructure is fundamentally broken (by subtle
-> > > compatibilities between XFS and the VFS that have evolved over time),
-> > > will require some thought and time to fix properly in the filesystem,
-> > > that users are running into problems very closely related to it, why not
-> > > try to address the fundamental breakage if we can do so with an isolated
-> > > change with minimal (but probably not zero) performance impact?
-> > > 
-> > > I agree that the unconditional synchronize_rcu() on reuse approach is
-> > > just not viable, but so far tests using cond_synchronize_rcu() seem
-> > > fairly reasonable. Is there some other problem or concern with such an
-> > > approach?
-> > 
-> > Just that the impact of adding RCU sync points means that bad
-> > behaviour outside XFS have a new point where they can adversely
-> > impact on applications doing filesystem operations.
-> > 
-> > As a temporary mitigation strategy I think it will probably be fine,
-> > but I'd much prefer we get rid of the need for such an RCU sync
-> > point rather than try to maintain a mitigation like this in fast
-> > path code forever.
-> > 
-> 
-> ... we end up here. All in all, this is intended to be a
-> practical/temporary step toward functional correctness that minimizes
-> performance impact and disruption (i.e. just as easy to remove when made
-> unnecessary).
-> 
-> Al,
-> 
-> The caveat to this is I think the practicality of a conditional sync in
-> the iget recycle code sort of depends on the queueing/batching nature of
-> inactive inode processing in XFS. If you look at xfs_fs_destroy_inode()
-> for example, you'll see this is all fairly recent feature/infrastructure
-> code and that historically we completed most of this transition to
-> reclaimable state before ->destroy_inode() returns. Therefore, the
-> concern I have is that on older/stable kernels (where users are hitting
-> this NULL ->get_link() BUG) the reuse code is far more likely to stall
-> and slow down here with this change alone (see my earlier numbers on the
-> unconditional sync_rcu() test for prospective worst case). For that
-> reason, I'm not sure this is really a backportable solution.
-> 
-> So getting back to your concern around Ian's patch being a
-> stopgap/bandaid type solution, would you be willing to pull something
-> like Ian's patch to the vfs if upstream XFS adopts this conditional rcu
-> sync in the iget reuse code? I think that would ensure that no further
-> bandaid fixes will be required in the vfs due to XFS inode reuse, but
-> would also provide an isolated variant of the fix in the VFS that is
-> more easily backported to stable kernels. Thoughts?
-> 
-> Brian
-> 
+> This reply arrived before your reply to Linus ;-)  Anyway ...
 
-Oh and I meant to throw up a diff of what I was testing for reference.
-My test code was significantly more hacked up with debug code and such,
-but if I clean it up a bit the change reduces to the diff below.
+Yes, I could just have added that I'm going to reply with the patch to
+Linus after Linus' mail flew in and I made up my mind how to proceed,
+that would have been nicer :)
 
-Brian
+> 
+>> Yes, I'm speaking about exactly that fallback path.
+> 
+> OK, so in that fallback path, we're already determined the THP has
+> more than one reference to it (ok, maybe that extra reference was
+> temporary and now gone), but we've already split the PMD down into
 
---- 8< ---
+Yes, any extra references or concurrent writeback. Swapcache was once
+example that my patch hopefully handles properly.
 
-diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
-index d019c98eb839..8a24ced4d73a 100644
---- a/fs/xfs/xfs_icache.c
-+++ b/fs/xfs/xfs_icache.c
-@@ -349,6 +349,10 @@ xfs_iget_recycle(
- 	spin_unlock(&ip->i_flags_lock);
- 	rcu_read_unlock();
- 
-+	ASSERT(ip->i_destroy_gp != 0);
-+	cond_synchronize_rcu(ip->i_destroy_gp);
-+	ip->i_destroy_gp = 0;
-+
- 	ASSERT(!rwsem_is_locked(&inode->i_rwsem));
- 	error = xfs_reinit_inode(mp, inode);
- 	if (error) {
-@@ -2019,6 +2023,7 @@ xfs_inodegc_queue(
- 	trace_xfs_inode_set_need_inactive(ip);
- 	spin_lock(&ip->i_flags_lock);
- 	ip->i_flags |= XFS_NEED_INACTIVE;
-+	ip->i_destroy_gp = start_poll_synchronize_rcu();
- 	spin_unlock(&ip->i_flags_lock);
- 
- 	gc = get_cpu_ptr(mp->m_inodegc);
-diff --git a/fs/xfs/xfs_inode.h b/fs/xfs/xfs_inode.h
-index c447bf04205a..a978da2332a0 100644
---- a/fs/xfs/xfs_inode.h
-+++ b/fs/xfs/xfs_inode.h
-@@ -75,6 +75,8 @@ typedef struct xfs_inode {
- 	spinlock_t		i_ioend_lock;
- 	struct work_struct	i_ioend_work;
- 	struct list_head	i_ioend_list;
-+
-+	unsigned long		i_destroy_gp;
- } xfs_inode_t;
- 
- /* Convert from vfs inode to xfs inode */
+> PTEs, and COWed one of the other pages that was in the THP.  If
+> anything, we should be more aggressive about COWing the remaining
+> pages in the THP, not looking for reasons why we might be able to
+> avoid COWing this particular page.
+
+At that point in time we didn't COW yet, we only PTE-mapped the THP, but
+yes, once we reach do_wp_page() we will always COW, even if there are no
+additional references anymore.
+
+Ideas I had what we could do once we're in do_cow_page() and we spot
+that we do have a PTE-mapped THP:
+* Count the mappings in the process page table and use that as baseline
+ (instead of 1). Would fail if there are additional references.
+* Try to split the compound page immediately. Will also fail if there
+  are additional references.
+
+COWing more extremely sounds like an interesting idea to free up the
+compound page after we fragmented it -- which will succeed once
+additional references are gone.
+
+-- 
+Thanks,
+
+David / dhildenb
 

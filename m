@@ -2,130 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAB24951C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C594E4951CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376781AbiATPuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346240AbiATPuN (ORCPT
+        id S1376796AbiATPvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:51:52 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:37778 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235621AbiATPvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:50:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8536BC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+OqexFoNCw32h57DcgoxO/vo70BrOjYwfG6rLAmWBFk=; b=hpYJa8iURpESRfETFsBuVnmNao
-        5TNej4O57CGbRr8rVRkuB1yNHsu02X5/nl/cpjO/VIHtqaNXy/cfO4VXXpw0lHkRlYPW9IGNt+Mwl
-        wi/QPhzbw5zP5kQwPWvBBcthI5gUG0Ub0e7/afSo3swET/a7d94V5/S0Lj18ekylHxfyIvn8UdT/R
-        GIbnv/mxwdb4Kw2MOl//pKSTL4Pfi8eQsBueheUVHLpuYaEYLNX2y/+WPa5498YYhJPhLzkCChv90
-        pexyEMGXpqJE5vQrDGwtKJ/RW11j56Q6vu/cnJHwNHFTtqbFueGtipqGz5O+UYh0GWcCEj8MEvEHk
-        xHpZBd+A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAZhJ-00EOay-4L; Thu, 20 Jan 2022 15:50:01 +0000
-Date:   Thu, 20 Jan 2022 15:50:01 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-Subject: Re: [PATCH v4 63/66] i915: Use the VMA iterator
-Message-ID: <YemEqYFu1xdaTeHd@casper.infradead.org>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-64-Liam.Howlett@oracle.com>
- <807fa53c-6492-52ca-abf3-ce58cc84ca08@suse.cz>
+        Thu, 20 Jan 2022 10:51:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hTTIoKDQe0uKDwlKxKFNYq4zkC7rRGIvXgj05n1s++4=; b=gpiLWnMTEWdS8YrXW2tzskQvA3
+        SU1Pzwgmm2jDi0zXhMdQwSl+JRJ1jzFLkevBI9g6arnlP4T6u8RwU6byZKWp5t4ldEnEXhsoCycOi
+        4Nfsk2XaXp4+C8/uA9RKJcsTphKfdRVWRA/6AaaYbsDgZlAtJy3VbdCQ2hV0unzmmesz6pWzAvLeN
+        r79BTxBA27NyUW9W5kxpxQ2rHJqFxVtP1zs2y9r08Q0G7IY3HDTERjvezi+zPQtOlghAFpc/vznjn
+        xfwWdnyTEWbH2asbc4jdhkQ57W98XMtccNniGWc0DzDdSkHT8ajKDhZdR/z5xKBNrV0Gv3uNQIA8Y
+        K8Gls8hQ==;
+Received: from [179.98.77.138] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nAZiu-00014r-D0; Thu, 20 Jan 2022 16:51:40 +0100
+Message-ID: <4de89aeb-c127-908c-b403-f9cea128a0b0@igalia.com>
+Date:   Thu, 20 Jan 2022 12:51:11 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <807fa53c-6492-52ca-abf3-ce58cc84ca08@suse.cz>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, kernel@gpiccoli.net,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+References: <20220114183046.428796-1-gpiccoli@igalia.com>
+ <20220119071318.GA4977@MiWiFi-R3L-srv> <YegytkfED+QI56Y8@alley>
+ <94bb12a2-a788-cee6-7d4f-dc0ac581fb39@igalia.com> <YektvNyN6mAHv9jJ@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YektvNyN6mAHv9jJ@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 03:59:11PM +0100, Vlastimil Babka wrote:
-> On 12/1/21 15:30, Liam Howlett wrote:
-> > From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> > 
-> > Replace the O(n.log(n)) loop with an O(n) loop.
+On 20/01/2022 06:39, Petr Mladek wrote:
+> [...]
+> It makes perfect sense to disable the watchdogs during panic().
+> For example, rcu_panic() just sets a variable:
 > 
-> Not true?
+> static int rcu_panic(struct notifier_block *this, unsigned long ev, void *ptr)
+> {
+> 	rcu_cpu_stall_suppress = 1;
+> 	return NOTIFY_DONE;
+> }
+> 
+> It is quick and super-safe. It might make sense to implement similar
+> thing for other watchdogs and do something like:
+> 
+> void panic_supress_watchdogs(void)
+> {
+> 	rcu_panic();
+> 	softlockup_watchog_panic();
+> 	wq_watchog_panic();
+> }
+> 
+> It might be caller early in panic().
+> 
 
-Oh, right, that should have been just the linked-list walk.
-I misread it as calling find_vma() for each iteration instead
-of just the first one.  Liam, do you mind updating the changelog
-here?
+For reference, I saw your great input about this subject in another
+related thread, which I think we should mention here:
 
-I wonder whether we want a "for_each_contiguous_vma()" that
-will stop on a hole.  It seems like a relatively sensible thing
-to do -- walk across a contiguous range of memory and stop if
-there's no VMA mapping a page.  Like gup(), for example.
+https://lore.kernel.org/lkml/Yel8WQiBn%2FHNQN83@alley/
 
-> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+
+> JFYI, there is an extension for the crash tool that might be able to read
+> the trace log, see https://crash-utility.github.io/extensions.html
 > 
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> 
-> > ---
-> >  drivers/gpu/drm/i915/gem/i915_gem_userptr.c | 14 +++++---------
-> >  1 file changed, 5 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-> > index 3173c9f9a040..39960973c130 100644
-> > --- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-> > +++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-> > @@ -425,12 +425,11 @@ static const struct drm_i915_gem_object_ops i915_gem_userptr_ops = {
-> >  static int
-> >  probe_range(struct mm_struct *mm, unsigned long addr, unsigned long len)
-> >  {
-> > -	const unsigned long end = addr + len;
-> > +	VMA_ITERATOR(vmi, mm, addr);
-> >  	struct vm_area_struct *vma;
-> > -	int ret = -EFAULT;
-> >  
-> >  	mmap_read_lock(mm);
-> > -	for (vma = find_vma(mm, addr); vma; vma = vma->vm_next) {
-> > +	for_each_vma_range(vmi, vma, addr + len) {
-> >  		/* Check for holes, note that we also update the addr below */
-> >  		if (vma->vm_start > addr)
-> >  			break;
-> > @@ -438,16 +437,13 @@ probe_range(struct mm_struct *mm, unsigned long addr, unsigned long len)
-> >  		if (vma->vm_flags & (VM_PFNMAP | VM_MIXEDMAP))
-> >  			break;
-> >  
-> > -		if (vma->vm_end >= end) {
-> > -			ret = 0;
-> > -			break;
-> > -		}
-> > -
-> >  		addr = vma->vm_end;
-> >  	}
-> >  	mmap_read_unlock(mm);
-> >  
-> > -	return ret;
-> > +	if (vma)
-> > +		return -EFAULT;
-> > +	return 0;
-> >  }
-> >  
-> >  /*
-> 
+> I haven't tested it myself yet.
+
+Thanks, nice to know =)
